@@ -1,0 +1,15 @@
+import { copyFileSync, mkdirSync, rmSync } from "node:fs";
+import { join } from "node:path";
+const root = import.meta.dir;
+const out = join(root, "dist");
+rmSync(out, { recursive: true, force: true });
+mkdirSync(out, { recursive: true });
+async function bundle(entry: string, target: "node" | "browser", format: "cjs" | "iife") {
+  const result = await Bun.build({ entrypoints: [join(root, "src", entry)], outdir: out, target, format, minify: false, naming: entry.replace(/\.tsx?$/, ".js"), external: target === "node" ? ["electron"] : [] });
+  if (!result.success) throw new AggregateError(result.logs, `Failed to build ${entry}`);
+}
+await bundle("main.ts", "node", "cjs");
+await bundle("preload.ts", "node", "cjs");
+await bundle("renderer.tsx", "browser", "iife");
+copyFileSync(join(root, "src", "index.html"), join(out, "index.html"));
+console.log(`built ${out}`);
