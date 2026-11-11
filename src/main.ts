@@ -110,9 +110,12 @@ function registerIpc(): void {
     enabled: !!PROBE_PATH,
     ...(PROBE_PATH ? { readinessMs: Number(process.hrtime.bigint() - nativeEntry) / 1e6 } : {})
   }));
-  ipcMain.handle("probe:finish", (_event, result: unknown) => {
+  ipcMain.handle("probe:finish", async (_event, result: unknown) => {
     if (!PROBE_PATH) throw new Error("Probe mode is disabled");
     mkdirSync(join(PROBE_PATH, ".."), { recursive: true });
+    if (!window) throw new Error("Probe window is unavailable");
+    const screenshot = await window.webContents.capturePage();
+    writeFileSync(join(PROBE_PATH, "..", "electron-chat.png"), screenshot.toPNG());
     writeFileSync(PROBE_PATH, `${JSON.stringify({ shell: "electron", ...record(result) }, null, 2)}\n`);
     setImmediate(() => app.quit());
   });
