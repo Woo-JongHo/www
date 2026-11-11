@@ -24,7 +24,7 @@ describe("JsonRpcClient", () => {
   test("preserves numeric server request IDs in approval responses", async () => {
     const child = new FakeChild(); const rpc = new JsonRpcClient(child as never);
     child.stdout.write('{"jsonrpc":"2.0","id":42,"method":"item/commandExecution/requestApproval","params":{}}\n');
-    await tick(); rpc.respond(42, { decision: "decline" }); await tick();
+    await tick(); await rpc.respond(42, { decision: "decline" });
     expect(JSON.parse(child.writes[0]!)).toEqual({ jsonrpc: "2.0", id: 42, result: { decision: "decline" } });
   });
 
@@ -34,5 +34,6 @@ describe("JsonRpcClient", () => {
     await expect(pending).rejects.toBeInstanceOf(RpcClosedError);
     expect(child.writes).toHaveLength(1);
     expect(() => rpc.notify("initialized", {})).toThrow(RpcClosedError);
+    await expect(rpc.respond("closed", { decision: "decline" })).rejects.toBeInstanceOf(RpcClosedError);
   });
 });

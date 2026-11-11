@@ -6,6 +6,8 @@
 
 어느 소스가 더 우수하다는 결론은 내리지 않는다. 이름이 비슷해도 “리뷰 프롬프트”, “실행한 테스트의 증거”, “플러그인 런타임”은 서로 다른 능력이다. 원본 URL, 전체 40자리 커밋, 선택 파일, MIT 라이선스, SHA-256은 `skill-library/sources.json`과 `skill-library/inventory.json`에 있다.
 
+현재 공개 코드의 실행·검증은 이 원본 보관소에 의존하지 않는다. `skill-library/`와 `scripts/check-skill-library.mjs`는 이번 Chat 게시 범위에서 제외한 로컬 연구 자료다. 아래 원본 경로·해시 검사 명령은 해당 자료가 있는 로컬 작업 환경에 한하며, 새 checkout에 포함되어 있다고 가정하지 않는다. WWW Skills의 정본은 `skills/www/`다.
+
 ## 네 단계 비교
 
 표의 경로는 각 `skill-library/upstream/<source>/` 아래 원본 상대 경로다. `—`는 독립된 정식 단계가 관찰되지 않았다는 뜻이며, 억지로 다른 기능을 재분류하지 않았다.

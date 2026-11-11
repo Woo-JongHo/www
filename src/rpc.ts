@@ -36,7 +36,16 @@ export class JsonRpcClient extends EventEmitter {
 
   notify(method: string, params: unknown): void { this.write({ jsonrpc: "2.0", method, params }); }
 
-  respond(id: RpcId, result: unknown): void { this.write({ jsonrpc: "2.0", id, result }); }
+  respond(id: RpcId, result: unknown): Promise<void> {
+    if (this.closed) return Promise.reject(new RpcClosedError("Codex app-server is closed", false));
+    const payload = `${JSON.stringify({ jsonrpc: "2.0", id, result })}\n`;
+    return new Promise((resolve, reject) => {
+      this.child.stdin.write(payload, (error?: Error | null) => {
+        if (error) reject(new RpcClosedError(`Codex app-server response write failed: ${error.message}`, true));
+        else resolve();
+      });
+    });
+  }
 
   private write(message: RpcMessage): void {
     if (this.closed) throw new RpcClosedError("Codex app-server is closed", false);

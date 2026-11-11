@@ -4,7 +4,7 @@
 
 ## 범위와 초기 흐름
 
-이 저장소는 기존 WWW 기능을 계승하지 않고 빈 저장소에서 시작한 Electron 데스크톱 앱이다. 현재 범위는 기존 화면의 3열 배치와 어두운 시각 스타일, 그리고 로컬 `codex app-server`와의 최소 연결뿐이다. 레이아웃은 [runkids/skillshare의 herdr/skillshare](https://github.com/runkids/skillshare/tree/main/herdr/skillshare)를 디자인 참고 자료로만 사용했고 코드는 가져오지 않았다.
+이 저장소는 기존 WWW 기능을 계승하지 않고 빈 저장소에서 시작한 Electron 데스크톱 앱이다. 현재 범위는 3열 React 화면에서 로컬 `codex app-server`의 대화·공개 설명·실행 박스·승인·중단·결과를 관찰하고 통제하는 것이다. 레이아웃은 [runkids/skillshare의 herdr/skillshare](https://github.com/runkids/skillshare/tree/main/herdr/skillshare)를 디자인 참고 자료로만 사용했고 코드는 가져오지 않았다.
 
 사용자는 첫 스레드 전 작업 폴더를 고른 뒤 메시지를 보낸다. 앱은 `initialize`/`initialized`, `thread/start`, `turn/start`, `turn/interrupt`를 수행하고 알림을 화면에 투영한다. 명령 실행과 파일 변경을 표시하며, 지원하는 명령/파일 승인 요청에는 원래 JSON-RPC ID(문자열 또는 숫자)를 보존해 응답한다. 그 외 구조화 요청은 임의 결정을 만들지 않고 지원하지 않는 요청으로 표시한다. 계정 로그인이나 자격 증명 저장·전달은 다루지 않는다.
 
@@ -19,6 +19,12 @@ npm start
 ```
 
 `WWW_CODEX_BIN`은 실행 파일 경로만 바꾼다. 사용자 입력으로 임의 spawn 옵션이나 환경을 받지 않는다.
+
+## BoxBox 작성·검증 경계
+
+BoxBox는 제품 의존성이 아니라 작성 시 가독성 검사 도구다. TypeScript·Python·strict JSON·YAML을 새로 쓰거나 구조적으로 수정할 때는 저장소에 준비된 로컬 런처 경로를 명시적으로 전달해 파일별 `guide --file <파일> --authoring --json`과 `check --source --file <파일> --json`을 먼저 실행한다. `columnSets`와 `axisNotes`로 같은 역할의 행과 실제 구문 경계를 확인한 뒤 작성하고, 수정 후 다시 source check를 실행해 구문 상태와 `PASS`·`FIXABLE`·`REFUSE`, 누락 축을 기록한다.
+
+이 절차는 GJC 자동 훅이 활성화됐다는 뜻이 아니다. 프로젝트의 명시적 CLI 호출과 자동 훅을 구분한다. `.mjs`, Markdown, HTML, Rust 등 미지원 파일은 지원된 것처럼 정렬 완료로 쓰지 않는다. `FIXABLE`이나 감지 그룹 0은 기능·가독성 완료가 아니며, 승인되지 않은 `REFUSE`를 수동 공백 정렬·format·align으로 우회하지 않는다. align 모드나 formatter 실행은 별도 명시 승인 없이는 켜지 않는다.
 
 - `src/main.ts`: Electron 생명주기, 폴더 선택, 검증된 IPC, Codex 프로세스 연결
 - `src/rpc.ts`: 크기 제한 JSONL/JSON-RPC 전송, 요청 라우팅, EOF/오류 처리
@@ -37,7 +43,17 @@ WWW 프로젝트 유형(Desktop 포함)의 `www-spec`, `www-design`, `www-build`
 
 첫 제품 목표와 연결 작업의 실행 순서는 [Chat 통합 실행 계획](work/Chat/001-Native%20흐름%20통제와%20가독성/tasks.md)에 모은다. 이는 준비·BoxBox·개발 하네스·Chat 구현·실제 검증·승인된 게시를 잇는 계획이며 현재 구현 완료를 뜻하지 않는다.
 
-개발 세션에서 요청 의도·명시 권한·작업 상태에 맞춰 이 Skills를 불러오고 설계·개발·명세 기록을 잇는 실행 하네스는 [별도 설계 작업](work/Workflow/001-Skills%20실행과%20개발%20기록%20자동화/spec.md)이다. 현재는 설계 초안이며 자동 실행, 전역 훅 설치, 모델 전환, 제품 Chat의 Native 주입이 활성화되지 않았다. 최소 구현안도 프로젝트별 명시 실행 런처와 기록·검증 CLI부터 시작하고, 호스트 adapter는 실제 지원 표면을 검증한 뒤 연결한다.
+개발 세션의 [프로젝트 opt-in 하네스](work/Workflow/001-Skills%20실행과%20개발%20기록%20자동화/spec.md)는 `npm run workflow`로 명시 실행한다. 의도·작업 UUID·정본 Skill·승인·binding을 연결하고 GJC 비대화형 실행과 verifier 결과를 `.www/runtime/<work-id>/`에 기록한다. 전역 훅, 자동 모델 전환, 제품 Chat의 Native 주입은 활성화하지 않는다. `context` 로드는 native Skill invoke가 아니고, GJC tool interception은 advisory이므로 OS sandbox나 모든 쓰기의 hard gate를 보장하지 않는다.
+
+저장소 루트에서 실행 가능한 아래 예제는 **preview만 수행하며 모델을 호출하지 않는다.**
+
+```sh
+npm run workflow -- '{"workId":"work-e2419fa7-3d27-4c77-812b-2b825326dc70","request":"현재 Chat 검증 범위를 확인해줘","direct":true,"explicitSkill":"www-verify","preview":true}'
+```
+
+실제 실행에는 `execute: true`, 재사용 가능한 안정적 `eventId`, 작업 종류에 맞는 명시 승인, 승인된 `writes`·`surfaces`, 실제 `verifier`의 `command`·`args`·`criteria`가 필요하다. `approval.verifierCommands`는 허용한 command/args 배열의 JSON 문자열 목록이다. 실패·중복·불명확 결과는 같은 변경 명령을 자동 재실행하지 않는다. `boxboxLauncher`와 `boxboxFiles`를 명시하면 설치된 로컬 런처의 파일별 guide를 호스트에 전달하고 pre/post source 검사를 수행한다. 런처를 자동 설치하거나 미승인 정렬을 수행하지 않는다.
+
+런타임 세션 `done`은 작업의 `work.json` 완료가 아니다. verifier의 기준 매핑은 호출자가 지정한 검사 범위이며 최종 수용은 검증 기록과 대조한다. 원본 요청·컨텍스트·verifier argv는 사건에 남기지 않으며, Skill hash와 승인 범위·명령 hash·실제 exit를 기록한다. 상세 한계와 테스트는 해당 작업의 [재검증 기록](work/Workflow/001-Skills%20실행과%20개발%20기록%20자동화/verification.md)에 있다.
 
 장기 제품 방향은 별도 브라우저 UI가 아닌 하나의 WWW 데스크톱 앱에서 shared React view와 로컬 Codex 실행·승인을 제공하고, 이후 GitHub의 코드·구조화 기록을 Mac mini가 지정 브랜치별로 검증·색인해 Roadmap/Node/Canvas API 보기를 제공하는 것이다. 이는 목표 설계이며 현재 제품은 메모리 전용이고 서버 통합이 없다. Electron과 Tauri 중 선택도 확정되지 않았다. push 성공과 서버의 commit 색인은 별개이며 원격 실행·소스 동기화는 범위 밖이다.
 
@@ -49,7 +65,7 @@ WWW 프로젝트 유형(Desktop 포함)의 `www-spec`, `www-design`, `www-build`
 
 검증은 `npm run check`로 타입 검사, fake JSONL transport 테스트, 이벤트 투영 테스트, Bun 번들을 수행한다. 테스트는 응답/알림 라우팅, 스트리밍 완료, 숫자 승인 ID 보존, EOF 시 불확실 실패와 무재시도, 지원하지 않는 요청 표시를 다룬다. 합성 fixture 기반이라 실제 사용자 내용은 포함하지 않는다.
 
-주간 사용량을 소비하지 않기 위해 실제 Codex 추론은 실행하지 않았다. 따라서 설치된 CLI의 schema/help로 프로토콜을 확인했지만 live Codex 세션, 실제 승인 왕복, 플랫폼별 샌드박스 동작과 headless Electron 화면은 아직 검증하지 않았다.
+초기 비교에서는 주간 사용량을 소비하지 않기 위해 실제 추론을 생략했다. 이후 첫 Chat 검증에서는 인증·사용량 확인 뒤 현재 Electron 앱에서 실제 Codex의 `READY` 단문 응답을 확인했다. 승인 왕복·긴 출력·실패·중단·읽기 상태는 실제 Electron 창과 합성 app-server fixture로 별도 확인했다. 실제 Native 승인·변경 작업, Windows·한국어 IME 실기, 플랫폼 sandbox 전체는 미검증이다. [Chat 검증 기록](work/Chat/001-Native%20흐름%20통제와%20가독성/verification.md)의 증거 범위를 따른다. 이벤트는 최근 2,000개, 명령 출력은 최근 32,768 UTF-16 코드 단위만 보관하며 완전한 원본 복원을 보장하지 않는다.
 
 ## Electron과 Tauri v2 비교 스파이크
 

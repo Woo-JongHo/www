@@ -21,9 +21,10 @@ description: 명확히 승인된 WWW 작업을 작은 동작 단위로 구현하
 
 1. [공통 계약](../../../docs/skills/WORKFLOW.md), [모델·추론 노력 권고](../../../docs/skills/MODEL_POLICY.md), [데스크톱 프로필](../../../docs/skills/profiles/desktop.md)을 읽고 예상 밖 변경을 보존한다.
 2. `status`를 사실에 맞게 `in_progress`로 갱신한다.
-3. 끝까지 동작하는 가장 작은 단위를 구현하고 직접 영향받는 호출부·테스트·문서를 함께 갱신한다.
-4. stub, 가짜 fallback, TODO 전용 구현, 자동 dirty 덮어쓰기를 남기지 않는다.
-5. 관련 기준을 확인할 수 있는 집중 검사를 실행한다. 실제 검증 기록과 최종 판정은 `www-verify`에 인계한다.
+3. BoxBox 지원 파일은 [개발 문서의 작성·검증 경계](../../../docs/DEVELOPMENT.md#boxbox-작성검증-경계)에 따라 수정 전에 파일별 authoring guide와 source check를 실행하고 역할 행·열 경계를 검토한다. 미지원 파일과 거부된 모양을 수동 정렬로 우회하지 않는다.
+4. 끝까지 동작하는 가장 작은 단위를 구현하고 직접 영향받는 호출부·테스트·문서를 함께 갱신한다.
+5. stub, 가짜 fallback, TODO 전용 구현, 자동 dirty 덮어쓰기를 남기지 않는다.
+6. 관련 기준을 확인할 수 있는 집중 검사와 수정한 지원 파일의 BoxBox source check를 실행한다. 실제 검증 기록과 최종 판정은 `www-verify`에 인계한다.
 
 ## 출력 경로
 

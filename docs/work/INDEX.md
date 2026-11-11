@@ -12,17 +12,19 @@ Native와의 대화에서 실행 흐름을 통제하고 진행·근거·승인·
 - [설계](Chat/001-Native%20%ED%9D%90%EB%A6%84%20%ED%86%B5%EC%A0%9C%EC%99%80%20%EA%B0%80%EB%8F%85%EC%84%B1/design.md)
 - [통합 실행 계획과 구현 작업](Chat/001-Native%20%ED%9D%90%EB%A6%84%20%ED%86%B5%EC%A0%9C%EC%99%80%20%EA%B0%80%EB%8F%85%EC%84%B1/tasks.md)
 - [작업 레코드](Chat/001-Native%20%ED%9D%90%EB%A6%84%20%ED%86%B5%EC%A0%9C%EC%99%80%20%EA%B0%80%EB%8F%85%EC%84%B1/work.json)
+- [검증 기록](Chat/001-Native%20%ED%9D%90%EB%A6%84%20%ED%86%B5%EC%A0%9C%EC%99%80%20%EA%B0%80%EB%8F%85%EC%84%B1/verification.md)
 
 ## Workflow
 
 ### 001 — Skills 실행과 개발 기록 자동화
 
-개발 세션에서 WWW Skills를 명시적으로 실행하고 같은 작업 기록을 안전하게 이어 주는 하네스를 설계한다.
+개발 세션에서 WWW Skills를 명시적으로 실행하고 같은 작업 기록을 안전하게 이어 주는 프로젝트 opt-in 하네스를 만든다. 런타임 실행 결과와 작업 수용 상태는 구분한다.
 
 - [명세](Workflow/001-Skills%20%EC%8B%A4%ED%96%89%EA%B3%BC%20%EA%B0%9C%EB%B0%9C%20%EA%B8%B0%EB%A1%9D%20%EC%9E%90%EB%8F%99%ED%99%94/spec.md)
 - [설계](Workflow/001-Skills%20%EC%8B%A4%ED%96%89%EA%B3%BC%20%EA%B0%9C%EB%B0%9C%20%EA%B8%B0%EB%A1%9D%20%EC%9E%90%EB%8F%99%ED%99%94/design.md)
 - [구현 작업](Workflow/001-Skills%20%EC%8B%A4%ED%96%89%EA%B3%BC%20%EA%B0%9C%EB%B0%9C%20%EA%B8%B0%EB%A1%9D%20%EC%9E%90%EB%8F%99%ED%99%94/tasks.md)
 - [작업 레코드](Workflow/001-Skills%20%EC%8B%A4%ED%96%89%EA%B3%BC%20%EA%B0%9C%EB%B0%9C%20%EA%B8%B0%EB%A1%9D%20%EC%9E%90%EB%8F%99%ED%99%94/work.json)
+- [검증 기록](Workflow/001-Skills%20%EC%8B%A4%ED%96%89%EA%B3%BC%20%EA%B0%9C%EB%B0%9C%20%EA%B8%B0%EB%A1%9D%20%EC%9E%90%EB%8F%99%ED%99%94/verification.md)
 
 ### 002 — 선택 변경의 안전한 커밋 절차
 

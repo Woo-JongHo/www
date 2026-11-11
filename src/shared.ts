@@ -10,10 +10,11 @@ export interface AppEvent {
   supported?: boolean;
 }
 
-export type TransportState = "connected" | "closed" | "error";
-export type TurnState = "idle" | "running" | "completed" | "interrupted" | "failed";
+export type TransportState = "disconnected" | "connected" | "closed" | "error";
+export type TurnState = "idle" | "starting" | "running" | "completed" | "interrupted" | "failed" | "unknown";
 export type InterruptState = "idle" | "requested" | "acknowledged" | "uncertain";
 export type ApprovalState = "open" | "responding" | "responded" | "uncertain";
+export type RequestState = "sending" | "accepted" | "failed";
 
 export interface WorkspaceInfo {
   name: string;

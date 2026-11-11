@@ -5,6 +5,7 @@
 - 관련 없거나 예상하지 못한 변경을 보존한다. 되돌리기, stash, 삭제, commit, push를 하지 않는다.
 - 작업에서 다른 브랜치나 worktree를 명시적으로 요구하지 않으면 현재 브랜치에서 작업한다.
 - 완료 전에 집중 테스트, 타입 검사, 빌드로 영향받는 동작을 검증한다.
+- BoxBox를 적용하는 TypeScript·Python·JSON·YAML 작성은 설치된 프로젝트 로컬 런처로 파일별 `guide --authoring --json`과 `check --source --json`을 수정 전에 실행하고, 반환된 역할 행·열 경계를 검토한 뒤 작성한다. 수정 후 같은 source check를 다시 실행한다. 미지원 언어와 `REFUSE`·`FIXABLE`은 그대로 보고하며 수동 공백 정렬이나 자동 format·align으로 우회하지 않는다.
 - 커밋 실행 요청 없이 commit·push하지 않는다. 합의된 기본값은 “커밋해” = commit + push이며 “로컬에만 커밋해”는 push를 생략한다. 준비·계획·스킬 수정 요청은 실행 승인이 아니다.
 - 사용자 답변과 직접 작성·수정하는 모든 문서(명세·설계·작업·분석·Skills·템플릿·검증 보고서)는 한국어로 작성한다. 기술 식별자, API 필드, 경로, JSON enum, 원본 오류와 보존용 업스트림 원문은 정확히 유지한다.
 - 명시적으로 이름을 지정해 사용하는 `skills/www/`의 여섯 Skills와 기록 규칙은 [공통 작업 기록 계약](docs/skills/WORKFLOW.md)을 따른다.

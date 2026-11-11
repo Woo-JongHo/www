@@ -1,5 +1,6 @@
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import { spawn, execFileSync } from "node:child_process";
+import { randomUUID } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { JsonRpcClient, type RpcMessage } from "./rpc";
@@ -16,6 +17,7 @@ let threadStarted = false;
 let seq = 0;
 const eventLog: AppEvent[] = [];
 const pendingApprovals = new Map<RpcId, string>();
+const approvalAttempts = new Set<RpcId>();
 const SUPPORTED = new Set(["item/commandExecution/requestApproval", "item/fileChange/requestApproval"]);
 const DECISIONS = new Set(["accept", "acceptForSession", "decline", "cancel"]);
 
@@ -32,7 +34,16 @@ function connect(): Promise<JsonRpcClient> {
     const child = spawn(CODEX, ["app-server"], { stdio: ["pipe", "pipe", "pipe"] });
     const client = new JsonRpcClient(child);
     let settled = false;
-    client.once("closed", (error: Error) => { rpc = null; publish({ kind: "transport", method: "transport/closed", params: { message: error.message } }); if (!settled) reject(error); });
+    client.once("closed", (error: Error) => {
+      rpc = null;
+      for (const requestId of pendingApprovals.keys()) {
+        publish({ kind: "notification", method: "approval/uncertain", params: { message: error.message }, requestId });
+      }
+      pendingApprovals.clear();
+      approvalAttempts.clear();
+      publish({ kind: "transport", method: "transport/closed", params: { message: error.message } });
+      if (!settled) reject(error);
+    });
     client.on("stderr", (text: string) => publish({ kind: "transport", method: "transport/stderr", params: { text } }));
     client.on("protocolError", (message: string) => publish({ kind: "transport", method: "transport/error", params: { message } }));
     client.on("message", (message: RpcMessage) => {
@@ -40,12 +51,25 @@ function connect(): Promise<JsonRpcClient> {
       const id = message.id;
       if (typeof id === "string" || typeof id === "number") {
         const supported = SUPPORTED.has(method);
-        if (supported) pendingApprovals.set(id, method);
-        publish({ kind: "request", method, params: message.params, requestId: id, supported });
+        if (supported && (pendingApprovals.has(id) || approvalAttempts.has(id))) {
+          const params = message.params && typeof message.params === "object" && !Array.isArray(message.params)
+            ? message.params as Record<string, unknown>
+            : {};
+          publish({ kind: "request", method, params: { ...params, duplicateRequestId: true }, requestId: id, supported: false });
+        } else {
+          if (supported) pendingApprovals.set(id, method);
+          publish({ kind: "request", method, params: message.params, requestId: id, supported });
+        }
       } else publish({ kind: "notification", method, params: message.params });
     });
     void client.request("initialize", { clientInfo: { name: "www", title: "WWW", version: app.getVersion() }, capabilities: { experimentalApi: false } })
-      .then(() => { client.notify("initialized", {}); rpc = client; settled = true; resolveClient(client); })
+      .then(() => {
+        client.notify("initialized", {});
+        rpc = client;
+        settled = true;
+        publish({ kind: "transport", method: "transport/connected", params: {} });
+        resolveClient(client);
+      })
       .catch((error) => { settled = true; reject(error); });
   });
 }
@@ -75,10 +99,20 @@ function registerIpc(): void {
     return { threadId };
   });
   ipcMain.handle("turn:start", async (_event, threadId: unknown, text: unknown) => {
-    requiredString(threadId, "thread ID");
+    const validThreadId = requiredString(threadId, "thread ID");
     if (typeof text !== "string" || !text.trim() || text.length > 100_000) throw new Error("Invalid prompt");
-    const result = record(await (await connect()).request("turn/start", { threadId, input: [{ type: "text", text: text.trim(), text_elements: [] }] }));
-    return { turnId: requiredString(record(result.turn).id, "turn ID") };
+    const prompt = text.trim();
+    const clientRequestId = randomUUID();
+    publish({ kind: "notification", method: "turn/userPrompt", params: { clientRequestId, threadId: validThreadId, text: prompt } });
+    try {
+      const result = record(await (await connect()).request("turn/start", { threadId: validThreadId, input: [{ type: "text", text: prompt, text_elements: [] }] }));
+      const turnId = requiredString(record(result.turn).id, "turn ID");
+      publish({ kind: "notification", method: "turn/startAccepted", params: { clientRequestId, threadId: validThreadId, turnId } });
+      return { turnId };
+    } catch (error) {
+      publish({ kind: "notification", method: "turn/startFailed", params: { clientRequestId, threadId: validThreadId, message: String(error) } });
+      throw error;
+    }
   });
   ipcMain.handle("turn:interrupt", async (_event, threadId: unknown, turnId: unknown) => {
     requiredString(threadId, "thread ID"); requiredString(turnId, "turn ID");
@@ -95,12 +129,15 @@ function registerIpc(): void {
     validId(requestId);
     if (typeof decision !== "string" || !DECISIONS.has(decision)) throw new Error("Unsupported approval decision");
     if (!pendingApprovals.has(requestId)) throw new Error("Unknown or unsupported approval request");
-    pendingApprovals.delete(requestId);
+    if (approvalAttempts.has(requestId)) throw new Error("Approval response has already been attempted");
+    approvalAttempts.add(requestId);
     publish({ kind: "notification", method: "approval/responding", params: { decision }, requestId });
     try {
-      (await connect()).respond(requestId, { decision });
+      await (await connect()).respond(requestId, { decision });
+      pendingApprovals.delete(requestId);
       publish({ kind: "notification", method: "approval/responded", params: { decision }, requestId });
     } catch (error) {
+      pendingApprovals.delete(requestId);
       publish({ kind: "notification", method: "approval/uncertain", params: { decision, message: String(error) }, requestId });
       throw error;
     }

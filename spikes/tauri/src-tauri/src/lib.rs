@@ -1,11 +1,11 @@
 use serde::{Deserialize, Serialize};
-use serde_json::{Value, json};
+use serde_json::{json, Value};
 use std::{
     collections::{HashMap, HashSet},
     io::{BufRead, BufReader, Write},
     path::PathBuf,
     process::{Child, ChildStdin, Command, Stdio},
-    sync::{Arc, Mutex, mpsc},
+    sync::{mpsc, Arc, Mutex},
     thread,
     time::Instant,
 };
@@ -233,6 +233,7 @@ struct Backend {
     seq: u64,
     events: Vec<AppEvent>,
     approvals: HashSet<String>,
+    approval_attempts: HashSet<String>,
     native_entry: Instant,
 }
 
@@ -297,12 +298,14 @@ fn connect(state: &BackendState) -> Result<Arc<RpcClient>, String> {
             .cloned()
             .filter(|id| id.is_string() || id.is_number());
         if let Some(id) = request_id {
-            let supported = matches!(
+            let mut supported = matches!(
                 method.as_str(),
                 "item/commandExecution/requestApproval" | "item/fileChange/requestApproval"
             );
             if supported {
-                backend.approvals.insert(id_key(&id).unwrap());
+                let key = id_key(&id).unwrap();
+                supported =
+                    !backend.approval_attempts.contains(&key) && backend.approvals.insert(key);
             }
             publish(
                 &mut backend,
@@ -320,7 +323,16 @@ fn connect(state: &BackendState) -> Result<Arc<RpcClient>, String> {
     let rpc = RpcClient::spawn(&binary, &["app-server"], callback)?;
     rpc.request("initialize", json!({"clientInfo":{"name":"www","title":"WWW","version":"0.1.0"},"capabilities":{"experimentalApi":false}}))?;
     rpc.notify("initialized", json!({}))?;
-    state.lock().unwrap().rpc = Some(rpc.clone());
+    let mut backend = state.lock().unwrap();
+    backend.rpc = Some(rpc.clone());
+    publish(
+        &mut backend,
+        "transport",
+        "transport/connected".into(),
+        json!({}),
+        None,
+        None,
+    );
     Ok(rpc)
 }
 
@@ -372,21 +384,58 @@ fn start_turn(
     text: String,
     state: State<BackendState>,
 ) -> Result<Value, String> {
-    let text = text.trim();
+    let text = text.trim().to_string();
     if thread_id.is_empty() {
         return Err("Invalid thread ID".into());
     }
     if text.is_empty() || text.len() > 100_000 {
         return Err("Invalid prompt".into());
     }
-    let result = connect(&state)?.request(
-        "turn/start",
-        json!({"threadId":thread_id,"input":[{"type":"text","text":text,"text_elements":[]}]}),
-    )?;
+    let client_request_id = {
+        let mut backend = state.lock().unwrap();
+        let id = format!("tauri-request-{}", backend.seq + 1);
+        publish(
+            &mut backend,
+            "notification",
+            "turn/userPrompt".into(),
+            json!({"clientRequestId":id,"threadId":thread_id,"text":text}),
+            None,
+            None,
+        );
+        id
+    };
+    let result = connect(&state).and_then(|rpc| {
+        rpc.request(
+            "turn/start",
+            json!({"threadId":thread_id,"input":[{"type":"text","text":text,"text_elements":[]}]}),
+        )
+    });
+    let result = match result {
+        Ok(result) => result,
+        Err(error) => {
+            publish(
+                &mut state.lock().unwrap(),
+                "notification",
+                "turn/startFailed".into(),
+                json!({"clientRequestId":client_request_id,"threadId":thread_id,"message":error}),
+                None,
+                None,
+            );
+            return Err(error);
+        }
+    };
     let id = result
         .pointer("/turn/id")
         .and_then(Value::as_str)
         .ok_or("Invalid turn ID")?;
+    publish(
+        &mut state.lock().unwrap(),
+        "notification",
+        "turn/startAccepted".into(),
+        json!({"clientRequestId":client_request_id,"threadId":thread_id,"turnId":id}),
+        None,
+        None,
+    );
     Ok(json!({"turnId":id}))
 }
 
@@ -395,11 +444,44 @@ fn interrupt(thread_id: String, turn_id: String, state: State<BackendState>) -> 
     if thread_id.is_empty() || turn_id.is_empty() {
         return Err("Invalid turn ID".into());
     }
-    connect(&state)?.request(
-        "turn/interrupt",
+    publish(
+        &mut state.lock().unwrap(),
+        "notification",
+        "turn/interruptRequested".into(),
         json!({"threadId":thread_id,"turnId":turn_id}),
-    )?;
-    Ok(())
+        None,
+        None,
+    );
+    let result = connect(&state).and_then(|rpc| {
+        rpc.request(
+            "turn/interrupt",
+            json!({"threadId":thread_id,"turnId":turn_id}),
+        )
+    });
+    match result {
+        Ok(_) => {
+            publish(
+                &mut state.lock().unwrap(),
+                "notification",
+                "turn/interruptAcknowledged".into(),
+                json!({"threadId":thread_id,"turnId":turn_id}),
+                None,
+                None,
+            );
+            Ok(())
+        }
+        Err(error) => {
+            publish(
+                &mut state.lock().unwrap(),
+                "notification",
+                "turn/interruptUncertain".into(),
+                json!({"threadId":thread_id,"turnId":turn_id,"message":error}),
+                None,
+                None,
+            );
+            Err(error)
+        }
+    }
 }
 
 #[tauri::command]
@@ -411,10 +493,46 @@ fn respond(request_id: Value, decision: String, state: State<BackendState>) -> R
         return Err("Unsupported approval decision".into());
     }
     let key = id_key(&request_id)?;
-    if !state.lock().unwrap().approvals.remove(&key) {
-        return Err("Unknown or unsupported approval request".into());
+    {
+        let mut backend = state.lock().unwrap();
+        if !backend.approvals.remove(&key) || !backend.approval_attempts.insert(key) {
+            return Err("Unknown or unsupported approval request".into());
+        }
     }
-    connect(&state)?.respond(request_id, json!({"decision":decision}))
+    publish(
+        &mut state.lock().unwrap(),
+        "notification",
+        "approval/responding".into(),
+        json!({"decision":decision}),
+        Some(request_id.clone()),
+        None,
+    );
+    let result = connect(&state)
+        .and_then(|rpc| rpc.respond(request_id.clone(), json!({"decision":decision})));
+    match result {
+        Ok(()) => {
+            publish(
+                &mut state.lock().unwrap(),
+                "notification",
+                "approval/responded".into(),
+                json!({"decision":decision}),
+                Some(request_id),
+                None,
+            );
+            Ok(())
+        }
+        Err(error) => {
+            publish(
+                &mut state.lock().unwrap(),
+                "notification",
+                "approval/uncertain".into(),
+                json!({"decision":decision,"message":error}),
+                Some(request_id),
+                None,
+            );
+            Err(error)
+        }
+    }
 }
 
 #[tauri::command]
@@ -502,6 +620,7 @@ pub fn run() {
                 seq: 0,
                 events: vec![],
                 approvals: HashSet::new(),
+                approval_attempts: HashSet::new(),
                 native_entry,
             }));
             Ok(())
@@ -555,34 +674,26 @@ mod tests {
         rpc.request("turn/interrupt", json!({})).unwrap();
         thread::sleep(Duration::from_millis(30));
         let values = messages.lock().unwrap();
-        assert!(
-            values
-                .iter()
-                .any(|value| value["method"] == "item/agentMessage/delta")
-        );
-        assert!(
-            values
-                .iter()
-                .any(|value| value["method"] == "item/completed")
-        );
-        assert!(
-            values
-                .iter()
-                .any(|value| value["method"] == "fixture/approvalResponse"
-                    && value["params"]["idType"] == "number")
-        );
+        assert!(values
+            .iter()
+            .any(|value| value["method"] == "item/agentMessage/delta"));
+        assert!(values
+            .iter()
+            .any(|value| value["method"] == "item/completed"));
+        assert!(values
+            .iter()
+            .any(|value| value["method"] == "fixture/approvalResponse"
+                && value["params"]["idType"] == "number"));
     }
 
     #[test]
     fn missing_binary_and_eof_are_errors_without_retry() {
-        assert!(
-            RpcClient::spawn(
-                "/definitely/missing/www-codex",
-                &["app-server"],
-                Arc::new(|_| {})
-            )
-            .is_err()
-        );
+        assert!(RpcClient::spawn(
+            "/definitely/missing/www-codex",
+            &["app-server"],
+            Arc::new(|_| {})
+        )
+        .is_err());
         let fixture = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
             .join("../../../test/fixtures/fake-app-server.mjs");
         let script = fixture.to_string_lossy().into_owned();

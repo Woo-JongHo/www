@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 
-export const INTENTS = Object.freeze(["answer", "spec", "design", "build", "diagnose", "verify"]);
+export const INTENTS = Object.freeze(["answer", "spec", "design", "build", "diagnose", "verify", "commit"]);
 const SKILLS = new Set(INTENTS.filter((intent) => intent !== "answer").map((intent) => `www-${intent}`));
 
 export function hashRequest(value) {
@@ -10,40 +10,49 @@ export function hashRequest(value) {
 
 export function namedSkill(request) {
   if (typeof request !== "string") return null;
-  const matches = [...request.matchAll(/\bwww-(spec|design|build|diagnose|verify)\b/gi)];
-  if (matches.length !== 1) return null;
-  const skill = matches[0][0].toLowerCase();
+  const match = request.match(/^\s*(?:\/skill:)?(www-(?:spec|design|build|diagnose|verify|commit))(?:\s|$)/i);
+  if (!match) return null;
+  const skill = match[1].toLowerCase();
   return SKILLS.has(skill) ? skill : null;
 }
 
-export function classifyIntent({ request, status, approval = {}, direct = true } = {}) {
+export function normalizeApproval(approval = {}) {
+  if (!approval || typeof approval !== "object" || Array.isArray(approval)) return Object.freeze({ implementation: false, writePaths: [], mutationSurfaces: [], verifierCommands: [], commit: false, publish: false });
+  return Object.freeze({
+    implementation: approval.implementation === true,
+    writePaths: Array.isArray(approval.writePaths) ? approval.writePaths.filter((item) => typeof item === "string") : [],
+    mutationSurfaces: Array.isArray(approval.mutationSurfaces) ? approval.mutationSurfaces.filter((item) => typeof item === "string") : [],
+    verifierCommands: Array.isArray(approval.verifierCommands) ? approval.verifierCommands.filter((item) => typeof item === "string") : [],
+    commit: approval.commit === true,
+    publish: approval.publish === true,
+  });
+}
+
+export function classifyIntent({ request, status, approval = {}, direct = true, explicitSkill, publishRequested = false } = {}) {
   if (typeof request !== "string" || !request.trim()) return { intent: null, reason: "invalid_request", question: "실행할 요청을 구체적으로 적어야 합니다." };
   if (direct !== true) return { intent: "answer", skill: null, reason: "untrusted_request_content" };
-  const explicit = namedSkill(request);
-  if (explicit) return { intent: explicit.slice(4), skill: explicit, reason: "named_skill" };
-  const text = request.toLowerCase();
-  if (/(?:\b(?:why|error|bug|diagnos)\b|원인|증상|오류|버그)/i.test(text)) return { intent: "diagnose", skill: "www-diagnose", reason: "diagnosis_request" };
-  if (/(?:\b(?:verify|test)\b|검증|확인)/i.test(text)) return { intent: "verify", skill: "www-verify", reason: "verification_request" };
-  if (/(?:\b(?:spec|requirement)\b|명세|요구사항)/i.test(text)) return { intent: "spec", skill: "www-spec", reason: "specification_request" };
-  if (/(?:\b(?:design|architecture)\b|설계)/i.test(text)) return { intent: "design", skill: "www-design", reason: "design_request" };
-  if (/(?:\b(?:implement|build|code)\b|수정|구현)/i.test(text)) {
-    if (approval?.implementation === true && ["ready", "in_progress", "verifying"].includes(status)) return { intent: "build", skill: "www-build", reason: "approved_implementation" };
-    return { intent: null, reason: "implementation_not_approved", question: "구현 범위와 쓰기 승인이 필요합니다." };
+  const skill = explicitSkill ?? namedSkill(request);
+  if (skill != null && (!SKILLS.has(skill) || typeof skill !== "string")) return { intent: null, reason: "invalid_explicit_skill", confirmation: true, question: "허용된 www Skill을 명시적으로 선택해야 합니다." };
+  if (!skill) {
+    if (/[?？]\s*$/.test(request) || /^(?:왜|무엇|어떻게|설명|알려|what|why|how|explain)/i.test(request.trim())) {
+      return { intent: "answer", skill: null, reason: "information_request" };
+    }
+    return { intent: null, skill: null, reason: "ambiguous_request", confirmation: true, question: "실행할 www Skill을 명시적으로 선택해야 합니다." };
   }
-  return { intent: "answer", skill: null, reason: "information_request" };
+  const normalized = normalizeApproval(approval);
+  const intent = skill.slice(4);
+  if (intent === "build") {
+    if (!normalized.implementation || !["ready", "in_progress", "verifying"].includes(status) || !normalized.writePaths.length || !normalized.mutationSurfaces.length) {
+      return { intent: null, skill, reason: "implementation_not_approved", confirmation: true, question: "www-build에는 작업 상태, 구현 승인, 쓰기 경로와 mutation 표면 승인이 필요합니다." };
+    }
+  }
+  if (intent === "commit" && !normalized.commit) return { intent: null, skill, reason: "commit_not_approved", confirmation: true, question: "www-commit에는 commit 승인이 필요합니다." };
+  if (intent === "commit" && publishRequested && !normalized.publish) return { intent: null, skill, reason: "publish_not_approved", confirmation: true, question: "원격 게시에는 publish 승인이 별도로 필요합니다." };
+  return { intent, skill, reason: "explicit_skill" };
 }
 
 export function routeRequest(input = {}) {
-  const classification = classifyIntent(input);
-  const requestHash = typeof input.request === "string" && input.request.trim() ? hashRequest(input.request) : null;
-  return Object.freeze({ ...classification, requestHash, workId: input.workId ?? null, status: input.status ?? null, direct: input.direct !== false, approval: normalizeApproval(input.approval) });
-}
-
-export function normalizeApproval(approval = {}) {
-  if (!approval || typeof approval !== "object" || Array.isArray(approval)) return Object.freeze({ implementation: false, writePaths: [], mutationSurfaces: [] });
-  return Object.freeze({
-    implementation: approval.implementation === true,
-    writePaths: Array.isArray(approval.writePaths) ? approval.writePaths.filter((path) => typeof path === "string") : [],
-    mutationSurfaces: Array.isArray(approval.mutationSurfaces) ? approval.mutationSurfaces.filter((surface) => typeof surface === "string") : [],
-  });
+  const approval = normalizeApproval(input.approval);
+  const classification = classifyIntent({ ...input, approval });
+  return Object.freeze({ ...classification, requestHash: typeof input.request === "string" && input.request.trim() ? hashRequest(input.request) : null, workId: input.workId ?? null, status: input.status ?? null, direct: input.direct === true, approval });
 }

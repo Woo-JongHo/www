@@ -10,7 +10,7 @@ WWW는 별도 브라우저 웹 UI가 아닌 하나의 데스크톱 앱이다. Re
 
 장기 목표는 로컬 `codex app-server` 실행·승인·중단과 서버 API의 Roadmap/Node/Canvas 보기를 한 앱에 제공하는 것이다. 각 컴퓨터는 로컬 브랜치에서 개발한다. GitHub에 게시된 코드와 구조화된 작업 기록이 공유 원본이며, Mac mini는 지정 브랜치를 수집·검증·색인하고 재현 가능한 DB 투영 API를 제공한다. 공유 뷰는 같은 Git 기록을 읽으며 세 개의 독립 데이터 원본을 만들지 않는다. Canvas 쓰기는 저장소에 다시 기록하거나 별도 미래 결정을 거쳐야 하고 DB를 조용히 경쟁 원본으로 만들 수 없다.
 
-현재 구현은 메모리 전용 Electron 기준선과 Tauri 비교 스파이크뿐이다. 서버 연동, DB·동기화 outbox·원격 실행·소스 동기화·다중 팀 오케스트레이션은 없다. live Codex 검증도 없다. 기본 공유 브랜치는 `main`이지만 다른 컴퓨터는 각자 브랜치에서 작업하며 dirty 작업을 자동 덮어쓰지 않는다. 브랜치별 서버 보기는 미래 범위다. `push 성공`과 `서버가 해당 commit을 색인함`은 별개 상태다.
+현재 구현은 메모리 전용 Electron 기준선과 Tauri 비교 스파이크다. Electron에서 실제 Codex 단문 응답을 확인했고 승인·중단·파일 변경 표시·읽기 상태는 실제 GUI와 fixture로 구분해 검증했다. 실제 Native 변경·승인 왕복, Windows와 IME까지 검증한 것은 아니다. 상세 범위는 [Chat 검증 기록](../work/Chat/001-Native%20흐름%20통제와%20가독성/verification.md)에 남긴다. 서버 연동, DB·동기화 outbox·원격 실행·소스 동기화·다중 팀 오케스트레이션은 없다. 기본 공유 브랜치는 `main`이지만 다른 컴퓨터는 각자 브랜치에서 작업하며 dirty 작업을 자동 덮어쓰지 않는다. 브랜치별 서버 보기는 미래 범위다. `push 성공`과 `서버가 해당 commit을 색인함`은 별개 상태다.
 
 ## 기록 위치와 생성 시점
 
@@ -62,6 +62,6 @@ WWW는 별도 브라우저 웹 UI가 아닌 하나의 데스크톱 앱이다. Re
 
 어떤 스킬도 요청 없이 commit·push·브랜치 생성·원격 실행을 하지 않는다. `www-commit`의 명시 실행 요청에 따른 기본 push와 무단 자동 게시는 다르다. 준비·계획·스킬 생성은 실행 승인이 아니다. 커밋은 업무 완료·검증 통과·원격 게시·서버 색인을 대신하지 않는다. 준비 양식은 [commit.md](templates/commit.md)이며 작은 변경은 대화 요약으로 갈음할 수 있다. 저장소 안전 규칙과 [데스크톱 프로필](profiles/desktop.md)을 함께 따른다. 템플릿은 [templates](templates/)에 있다.
 
-## 개발 세션 하네스 제안
+## opt-in 개발 세션 하네스
 
-WWW를 개발하는 agent 세션에서 요청 의도와 작업 상태에 따라 정본 Skill을 불러오고 같은 작업 ID로 기록·검증을 잇는 opt-in 하네스를 별도 작업 [`work-e6fb4bac-a332-4515-b3f0-b8fb2adf6529`](../work/Workflow/001-Skills%20%EC%8B%A4%ED%96%89%EA%B3%BC%20%EA%B0%9C%EB%B0%9C%20%EA%B8%B0%EB%A1%9D%20%EC%9E%90%EB%8F%99%ED%99%94/spec.md)에서 설계한다. 이는 현재 실행 중인 자동화가 아니며, 기존의 “사용자가 Skill 이름을 명시할 때만 적용” 계약을 바꾸지 않는다. 호스트 선택·활성화와 전역 훅 설치는 별도 승인과 실제 지원 검증이 필요하다.
+WWW를 개발하는 agent 세션에서 정본 Skill을 context로 전달하고 같은 작업 ID로 기록·검증을 잇는 opt-in CLI를 구현했다. 범위와 실제 fixture subprocess 검증은 [`work-e6fb4bac-a332-4515-b3f0-b8fb2adf6529`](../work/Workflow/001-Skills%20%EC%8B%A4%ED%96%89%EA%B3%BC%20%EA%B0%9C%EB%B0%9C%20%EA%B8%B0%EB%A1%9D%20%EC%9E%90%EB%8F%99%ED%99%94/verification.md)에 남긴다. CLI 실행은 별도 승인이 필요하고 native invoke나 자동 모델 전환, OS hard gate가 아니다. 기존의 “사용자가 Skill 이름을 명시할 때만 적용” 계약과 제품 Native Chat을 바꾸지 않는다. 전역 훅은 설치하지 않았으며 자동 활성화를 주장하지 않는다.
