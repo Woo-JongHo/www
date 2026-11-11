@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "id": "work-e6fb4bac-a332-4515-b3f0-b8fb2adf6529",
+  "title": "WWW 개발 세션의 opt-in Skills 실행 하네스",
+  "kind": "feature",
+  "areas": [
+    "dev",
+    "ops"
+  ],
+  "owner": "dev",
+  "status": "done",
+  "blockedReason": null,
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-e2419fa7-3d27-4c77-812b-2b825326dc70"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-1",
+      "description": "사용자의 명시 범위, 저장소·브랜치·worktree binding, 현재 작업 상태와 권한을 근거로 요청 의도를 분류하며 불확실하면 좁게 확인하고 범위나 권한을 확대하지 않는다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-opt-in-하네스-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    },
+    {
+      "id": "AC-2",
+      "description": "선택한 WWW Skill 정본의 경로·내용 hash·로드 성공과 요청/관측 모델 정보를 같은 work-id에 기록하고, 발견 링크나 프롬프트 전달을 native invoke 성공으로 오인하지 않는다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-opt-in-하네스-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    },
+    {
+      "id": "AC-3",
+      "description": "모든 단계와 모델 전환이 같은 work-id, 승인 범위, 관측 사실과 증거를 인계하며 각 작업의 design.md와 tasks.md 외에 경쟁 계획 원장을 만들지 않는다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-opt-in-하네스-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    },
+    {
+      "id": "AC-4",
+      "description": "지원하는 mutation 표면에서 승인되지 않은 쓰기를 거부하고 bash 등 우회 표면이나 지원하지 않는 호스트에서는 hard gate 보장 범위를 과장하지 않는다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-opt-in-하네스-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    },
+    {
+      "id": "AC-5",
+      "description": "실제로 실행한 검사와 수용 기준 증거가 있어야 완료할 수 있고 agent 종료, turn 종료, 명령 성공을 검증 통과로 승격하지 않는다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-opt-in-하네스-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    },
+    {
+      "id": "AC-6",
+      "description": "event와 stop 처리는 멱등이고 동시 수정·중복 stop·후처리 실패를 구분하며 성공 여부가 불명확한 mutation을 자동 재실행하지 않는다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-opt-in-하네스-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    },
+    {
+      "id": "AC-7",
+      "description": "지원하지 않는 host hook, model, effort, tool interception과 activation 상태를 명시적으로 진단하며 조용히 대체하거나 실행 중이라고 주장하지 않는다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-opt-in-하네스-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    },
+    {
+      "id": "AC-8",
+      "description": "공개 문서와 추적 기록에는 비밀·원본 개인 로그를 넣지 않고 민감 증거 위치와 보존 정책을 적용한다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-opt-in-하네스-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    }
+  ]
+}

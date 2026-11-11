@@ -10,6 +10,11 @@ export interface AppEvent {
   supported?: boolean;
 }
 
+export type TransportState = "connected" | "closed" | "error";
+export type TurnState = "idle" | "running" | "completed" | "interrupted" | "failed";
+export type InterruptState = "idle" | "requested" | "acknowledged" | "uncertain";
+export type ApprovalState = "open" | "responding" | "responded" | "uncertain";
+
 export interface WorkspaceInfo {
   name: string;
   path: string;
@@ -26,4 +31,6 @@ export interface WwwApi {
   respond(requestId: RpcId, decision: string): Promise<void>;
   events(): Promise<AppEvent[]>;
   onEvent(listener: (event: AppEvent) => void): () => void;
+  probeReady(): Promise<{ enabled: boolean; readinessMs?: number }>;
+  probeFinish(result: Record<string, unknown>): Promise<void>;
 }

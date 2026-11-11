@@ -1,11 +1,14 @@
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import { spawn, execFileSync } from "node:child_process";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { JsonRpcClient, type RpcMessage } from "./rpc";
 import type { AppEvent, RpcId, WorkspaceInfo } from "./shared";
 
 const DIST = join(app.getAppPath(), "dist");
 const CODEX = process.env.WWW_CODEX_BIN || "codex";
+const PROBE_PATH = process.env.WWW_PROBE_PATH;
+const nativeEntry = process.hrtime.bigint();
 let workspace = app.getPath("home");
 let rpc: JsonRpcClient | null = null;
 let window: BrowserWindow | null = null;
@@ -79,16 +82,40 @@ function registerIpc(): void {
   });
   ipcMain.handle("turn:interrupt", async (_event, threadId: unknown, turnId: unknown) => {
     requiredString(threadId, "thread ID"); requiredString(turnId, "turn ID");
-    await (await connect()).request("turn/interrupt", { threadId, turnId });
+    publish({ kind: "notification", method: "turn/interruptRequested", params: { threadId, turnId } });
+    try {
+      await (await connect()).request("turn/interrupt", { threadId, turnId });
+      publish({ kind: "notification", method: "turn/interruptAcknowledged", params: { threadId, turnId } });
+    } catch (error) {
+      publish({ kind: "notification", method: "turn/interruptUncertain", params: { threadId, turnId, message: String(error) } });
+      throw error;
+    }
   });
   ipcMain.handle("approval:respond", async (_event, requestId: unknown, decision: unknown) => {
     validId(requestId);
     if (typeof decision !== "string" || !DECISIONS.has(decision)) throw new Error("Unsupported approval decision");
     if (!pendingApprovals.has(requestId)) throw new Error("Unknown or unsupported approval request");
-    (await connect()).respond(requestId, { decision });
     pendingApprovals.delete(requestId);
+    publish({ kind: "notification", method: "approval/responding", params: { decision }, requestId });
+    try {
+      (await connect()).respond(requestId, { decision });
+      publish({ kind: "notification", method: "approval/responded", params: { decision }, requestId });
+    } catch (error) {
+      publish({ kind: "notification", method: "approval/uncertain", params: { decision, message: String(error) }, requestId });
+      throw error;
+    }
   });
   ipcMain.handle("events:get", () => [...eventLog]);
+  ipcMain.handle("probe:ready", () => ({
+    enabled: !!PROBE_PATH,
+    ...(PROBE_PATH ? { readinessMs: Number(process.hrtime.bigint() - nativeEntry) / 1e6 } : {})
+  }));
+  ipcMain.handle("probe:finish", (_event, result: unknown) => {
+    if (!PROBE_PATH) throw new Error("Probe mode is disabled");
+    mkdirSync(join(PROBE_PATH, ".."), { recursive: true });
+    writeFileSync(PROBE_PATH, `${JSON.stringify({ shell: "electron", ...record(result) }, null, 2)}\n`);
+    setImmediate(() => app.quit());
+  });
 }
 
 function createWindow(): void {

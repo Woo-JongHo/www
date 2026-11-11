@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "id": "work-e2419fa7-3d27-4c77-812b-2b825326dc70",
+  "title": "WWW Desktop Chat의 Native 흐름 통제와 가독성",
+  "kind": "feature",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner": "ui",
+  "status": "verifying",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id": "AC-1",
+      "description": "사용자가 선택한 작업 공간에서 요청을 보내면 동일 스레드의 식별 가능한 턴이 시작되고 assistant 응답이 스트리밍되며 빈 입력·전송 오류·연결 끊김이 성공이나 대기로 오인되지 않는다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    },
+    {
+      "id": "AC-2",
+      "description": "UI가 관찰된 Native 명령 실행·파일 변경·구조화 요청을 순서와 출처 및 request/thread/turn ID 보존 규칙에 따라 표시하고 제공되지 않은 내부 사고를 생성하지 않는다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    },
+    {
+      "id": "AC-3",
+      "description": "지원되는 승인 요청은 허용·세션 허용·거절·중단 응답을 원래 문자열 또는 숫자 JSON-RPC ID로 한 번만 전달하고, 지원하지 않는 요청은 명시적으로 미지원으로 표시한다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    },
+    {
+      "id": "AC-4",
+      "description": "중단 요청과 중단 확인, 연결 상태, 실행 상태, 입력·승인 대기, 업무 수용, 테스트 검증, 게시·색인 상태가 서로 다른 축으로 표현되며 EOF나 불명확한 결과를 완료로 확정하거나 변경 요청을 자동 재시도하지 않는다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    },
+    {
+      "id": "AC-5",
+      "description": "Chat 기록 정책 결정에 맞춰 재시작 후 로컬 대화 목록·내용 복원 또는 Native 동일 스레드 재개 범위를 관찰 가능하게 제공하고, 지원하지 않는 경로는 명시적으로 제한한다.",
+      "required": false,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "AC-6",
+      "description": "renderer는 임의 프로세스 실행 권한을 얻지 않고 Native 출력은 신뢰하지 않는 데이터로 렌더링되며 승인 UI가 sandbox 보장을 뜻하지 않음을 한국어 UI에서 오해 없이 알 수 있다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    },
+    {
+      "id": "AC-7",
+      "description": "일반 대화와 구분된 실행 박스에 동일 명령의 수신 출력과 관측 상태를 갱신하고, 제공된 경로·종료 코드만 표시하며 긴 출력의 접힘·절단·상세 조회 가능 범위를 명시한다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "path": "verification.md#2026-11-12-구현-검증",
+          "summary": "2026-11-12 구현 및 검증 기록"
+        }
+      ]
+    },
+    {
+      "id": "AC-8",
+      "description": "Native가 제공한 현재 작업의 공개 설명과 실제 실행 관측·WWW 파생 요약을 구분하고, 설명이 없으면 미제공으로 표시하며 승인·실패·차단을 일반 진행 내용에 묻지 않는다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "AC-9",
+      "description": "요청 단위로 핵심 결과·변경 사항·실제로 실행한 검사와 결과·미해결을 구분해 정리하고, 실행 근거와 대조할 수 있으며 AI의 완료 보고를 검증 통과로 표시하지 않는다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "AC-10",
+      "description": "스트리밍과 실행 박스 갱신 중 입력 초안·선택·과거 읽기 위치를 보존하고, 새 출력이 읽기 위치를 강제로 이동시키지 않으며 새 내용 확인 동작을 제공한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    }
+  ]
+}

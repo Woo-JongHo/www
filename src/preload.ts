@@ -9,6 +9,8 @@ const api: WwwApi = {
   interrupt: (threadId, turnId) => ipcRenderer.invoke("turn:interrupt", threadId, turnId),
   respond: (requestId: RpcId, decision: string) => ipcRenderer.invoke("approval:respond", requestId, decision),
   events: () => ipcRenderer.invoke("events:get"),
+  probeReady: () => ipcRenderer.invoke("probe:ready"),
+  probeFinish: (result) => ipcRenderer.invoke("probe:finish", result),
   onEvent: (listener) => {
     const handler = (_event: Electron.IpcRendererEvent, entry: AppEvent) => listener(entry);
     ipcRenderer.on("app:event", handler);

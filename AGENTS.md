@@ -1,7 +1,12 @@
-# Repository guidance
+# 저장소 지침
 
-- Before changing files, check the repository root, current branch, and working-tree status.
-- Preserve unrelated and unexpected changes; never revert, stash, delete, commit, or push them.
-- Work on the current branch unless the task explicitly requires another branch or worktree.
-- Verify affected behavior with focused tests, type checking, and a build before completion.
-- Never commit or push unless the user explicitly authorizes it.
+- 작업 시작·재개 시 이 문서를 먼저 읽고, WWW Skills를 사용할 때는 공통 작업 기록 계약도 읽는다.
+- 파일을 변경하기 전에 저장소 루트, 현재 브랜치, 작업 트리 상태를 확인한다.
+- 관련 없거나 예상하지 못한 변경을 보존한다. 되돌리기, stash, 삭제, commit, push를 하지 않는다.
+- 작업에서 다른 브랜치나 worktree를 명시적으로 요구하지 않으면 현재 브랜치에서 작업한다.
+- 완료 전에 집중 테스트, 타입 검사, 빌드로 영향받는 동작을 검증한다.
+- 커밋 실행 요청 없이 commit·push하지 않는다. 합의된 기본값은 “커밋해” = commit + push이며 “로컬에만 커밋해”는 push를 생략한다. 준비·계획·스킬 수정 요청은 실행 승인이 아니다.
+- 사용자 답변과 직접 작성·수정하는 모든 문서(명세·설계·작업·분석·Skills·템플릿·검증 보고서)는 한국어로 작성한다. 기술 식별자, API 필드, 경로, JSON enum, 원본 오류와 보존용 업스트림 원문은 정확히 유지한다.
+- 명시적으로 이름을 지정해 사용하는 `skills/www/`의 여섯 Skills와 기록 규칙은 [공통 작업 기록 계약](docs/skills/WORKFLOW.md)을 따른다.
+- 커밋 준비·실행을 요청받으면 `skills/www/www-commit/SKILL.md`를 따른다. 원격 대상과 함께 게시될 미게시 커밋을 확인하며 force push·merge·release는 기본 흐름에 포함하지 않는다.
+- 작업 문서는 `docs/work/<영역>/<최소 3자리 번호>-<작업명>/`에 두고 UUID는 `work.json`의 기계 식별자로 유지한다. 사람이 보는 목록은 [작업 목차](docs/work/INDEX.md)다.

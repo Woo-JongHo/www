@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "work-caed8353-eaf4-43b2-8662-279ca796fa8f",
+  "title": "커밋과 Push의 기본 게시 정책",
+  "kind": "maintenance",
+  "areas": ["dev", "ops"],
+  "owner": "dev",
+  "status": "done",
+  "blockedReason": null,
+  "relations": [
+    { "type": "relates_to", "target": "work-92ab328d-5384-4758-85f7-dc6cffae853f" },
+    { "type": "relates_to", "target": "work-e2419fa7-3d27-4c77-812b-2b825326dc70" }
+  ],
+  "criteria": [
+    {
+      "id": "AC-1",
+      "description": "커밋 스킬과 연결 문서가 기본 push·로컬 전용·준비 전용·원격 안전성과 결과 구분을 일관되게 설명한다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [{ "path": "verification.md#attempt-1", "summary": "스킬·양식·지침·공통 계약의 기본 push와 예외·원격 확인 정책 직접 검토" }]
+    },
+    {
+      "id": "AC-2",
+      "description": "Chat의 단일 실행 계획에 목표·단계·증거·권한·차단 조건을 연결하고 기존 구현 단위와 기준을 보존한다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [{ "path": "verification.md#attempt-1", "summary": "Chat tasks.md의 목표·연결 작업·단계별 증거·구현 단위·실행 한계 직접 검토" }]
+    },
+    {
+      "id": "AC-3",
+      "description": "문서 계약·원본 무결성·테스트·타입 검사·빌드를 통과하고 실제 Git 게시와 제품 구현을 수행하지 않는다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [{ "path": "verification.md#attempt-1", "summary": "문서 계약·무결성·Bun 테스트 29개·타입·빌드·diff 검사 통과, 실제 게시·제품 구현 미수행" }]
+    }
+  ]
+}
