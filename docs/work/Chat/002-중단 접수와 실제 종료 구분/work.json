@@ -1,0 +1,757 @@
+{
+  "schemaVersion": 2,
+  "id": "work-30f5fdee-a4a9-4e16-aac8-636e7d8379b0",
+  "title": "중단 접수와 실제 종료 구분",
+  "kind": "bug",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner": "ui",
+  "status": "done",
+  "blockedReason": null,
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-d5528c42-2849-48bd-9a9f-d8c80bf67f07"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-1",
+      "description": "중단 RPC 접수 응답만 받은 running 구간은 중단 대기를 유지해 중복 제출을 막는다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-c1b85ef3-2515-4c17-83bc-f73b1e935bd0",
+          "path": "verification.md#attempt-c1b85ef3-2515-4c17-83bc-f73b1e935bd0",
+          "summary": "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-3859ce07-31e5-404a-a326-e471de017758",
+          "path": "verification.md#attempt-3859ce07-31e5-404a-a326-e471de017758",
+          "summary": "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-55cc8e67-fdea-4ca6-bf9e-e5ac004a9677",
+          "path": "verification.md#attempt-55cc8e67-fdea-4ca6-bf9e-e5ac004a9677",
+          "summary": "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-fbe6fcbe-9e9f-44f7-b723-31323dddfaae",
+          "path": "verification.md#attempt-fbe6fcbe-9e9f-44f7-b723-31323dddfaae",
+          "summary": "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-ff875fe7-5a93-4942-8586-3a0a4cdb1097",
+          "path": "verification.md#attempt-ff875fe7-5a93-4942-8586-3a0a4cdb1097",
+          "summary": "실제 검증 passed; 현재 적용 가능"
+        }
+      ],
+      "requirementRefs": [
+        "docs/specs/chat.md#chat-stop-01"
+      ]
+    },
+    {
+      "id": "AC-2",
+      "description": "실제 interrupted 완료만 중단 확인으로 판정하고 정상·실패·미확인 종료, 늦은 응답과 다른 턴의 응답을 구분한다.",
+      "required": true,
+      "result": "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-c1b85ef3-2515-4c17-83bc-f73b1e935bd0",
+          "path": "verification.md#attempt-c1b85ef3-2515-4c17-83bc-f73b1e935bd0",
+          "summary": "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-3859ce07-31e5-404a-a326-e471de017758",
+          "path": "verification.md#attempt-3859ce07-31e5-404a-a326-e471de017758",
+          "summary": "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-55cc8e67-fdea-4ca6-bf9e-e5ac004a9677",
+          "path": "verification.md#attempt-55cc8e67-fdea-4ca6-bf9e-e5ac004a9677",
+          "summary": "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-fbe6fcbe-9e9f-44f7-b723-31323dddfaae",
+          "path": "verification.md#attempt-fbe6fcbe-9e9f-44f7-b723-31323dddfaae",
+          "summary": "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-ff875fe7-5a93-4942-8586-3a0a4cdb1097",
+          "path": "verification.md#attempt-ff875fe7-5a93-4942-8586-3a0a4cdb1097",
+          "summary": "실제 검증 passed; 현재 적용 가능"
+        }
+      ],
+      "requirementRefs": [
+        "docs/specs/chat.md#chat-stop-01"
+      ]
+    }
+  ],
+  "workflow": {
+    "role": "www-dev",
+    "requestId": "www-dev-chat-interrupt-20261112",
+    "requestHash": "18c39589cbccc2cd165a2b056578b6db8c59e4053173253e71398257628acf93",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "src/projection.ts",
+        "test/projection.test.ts"
+      ],
+      "mutationSurfaces": [
+        "edit"
+      ],
+      "verifierCommands": [
+        "[\"bun\",\"test\",\"test/projection.test.ts\"]"
+      ],
+      "commit": false,
+      "publish": false,
+      "source": "direct_user_request",
+      "requestHash": "18c39589cbccc2cd165a2b056578b6db8c59e4053173253e71398257628acf93"
+    },
+    "inputs": [
+      "docs/specs/chat.md",
+      "package-lock.json",
+      "package.json",
+      "src/projection.ts",
+      "src/renderer.tsx",
+      "src/shared.ts",
+      "test/projection.test.ts",
+      "tsconfig.json"
+    ],
+    "nextAction": "complete",
+    "verifications": [
+      {
+        "id": "attempt-c1b85ef3-2515-4c17-83bc-f73b1e935bd0",
+        "startedAt": "2026-11-12T00:44:08.069Z",
+        "completedAt": "2026-11-12T00:44:08.159Z",
+        "source": {
+          "head": "012b4f8c67321b26c12b81b85e5da9754fb601da",
+          "digest": "6c0f7df08b8ae8e2d2ce6f304ed8c38e50a703678f86d99f8cfc269db22acfc2",
+          "inputs": [
+            "package-lock.json",
+            "package.json",
+            "src/projection.ts",
+            "src/renderer.tsx",
+            "src/shared.ts",
+            "test/projection.test.ts",
+            "tsconfig.json"
+          ],
+          "files": [
+            {
+              "path": "package-lock.json",
+              "type": "file",
+              "digest": "73e33b1bc08ba5c7d8c81916e94c204f307a1eb51918920268ca084b65a1795d",
+              "mode": 420
+            },
+            {
+              "path": "package.json",
+              "type": "file",
+              "digest": "71f5ae1ee8724d264214a0218894d32f327e283ae636f1bd2005281f2f4f2538",
+              "mode": 420
+            },
+            {
+              "path": "src/projection.ts",
+              "type": "file",
+              "digest": "f114d7dce45a664464c022d4a3813fca89fc84604b293953cfdefa464583943d",
+              "mode": 420
+            },
+            {
+              "path": "src/renderer.tsx",
+              "type": "file",
+              "digest": "7e6ed2a942247f3f2b33183c5977222a6c026ad131176ab4c5629c8a34710487",
+              "mode": 420
+            },
+            {
+              "path": "src/shared.ts",
+              "type": "file",
+              "digest": "0f25fe50397b7d35c788f362d4d6b4f05ccfac9a6f93b65e41540393f59363d4",
+              "mode": 420
+            },
+            {
+              "path": "test/projection.test.ts",
+              "type": "file",
+              "digest": "c1ab35d5d69c81edc800ffdb3cfd41426cdc7ed0c3822e8e81acb98d97544b43",
+              "mode": 420
+            },
+            {
+              "path": "tsconfig.json",
+              "type": "file",
+              "digest": "159fb66d72e45187f6149b20bee514075318f53f8337d92dbba5cca8d49ffef3",
+              "mode": 420
+            }
+          ]
+        },
+        "criteriaDigest": "c8ae71b6600f9bb5778281db43b21e6c9245628a5afa064c9f92babb044fd4b5",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/projection.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode": 1,
+        "signal": null,
+        "error": null,
+        "result": "failed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes": 28,
+            "digest": "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated": false,
+            "retainedBytes": 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes": 11160,
+            "digest": "8422d0b93b2232c9c52986708858989d578b765f7906c3d1b7aea15960a4a36b",
+            "truncated": false,
+            "retainedBytes": 11160,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id": "attempt-3859ce07-31e5-404a-a326-e471de017758",
+        "startedAt": "2026-11-12T00:45:47.552Z",
+        "completedAt": "2026-11-12T00:45:47.681Z",
+        "source": {
+          "head": "012b4f8c67321b26c12b81b85e5da9754fb601da",
+          "digest": "fac153904ebbdd07cf627972013e9c2d3f274e4b2ee04d486abc844442243b56",
+          "inputs": [
+            "package-lock.json",
+            "package.json",
+            "src/projection.ts",
+            "src/renderer.tsx",
+            "src/shared.ts",
+            "test/projection.test.ts",
+            "tsconfig.json"
+          ],
+          "files": [
+            {
+              "path": "package-lock.json",
+              "type": "file",
+              "digest": "73e33b1bc08ba5c7d8c81916e94c204f307a1eb51918920268ca084b65a1795d",
+              "mode": 420
+            },
+            {
+              "path": "package.json",
+              "type": "file",
+              "digest": "71f5ae1ee8724d264214a0218894d32f327e283ae636f1bd2005281f2f4f2538",
+              "mode": 420
+            },
+            {
+              "path": "src/projection.ts",
+              "type": "file",
+              "digest": "673e8e34236d551af5a72dce3b42aee43865abec41770f66c8a15b2960b3cc66",
+              "mode": 420
+            },
+            {
+              "path": "src/renderer.tsx",
+              "type": "file",
+              "digest": "7e6ed2a942247f3f2b33183c5977222a6c026ad131176ab4c5629c8a34710487",
+              "mode": 420
+            },
+            {
+              "path": "src/shared.ts",
+              "type": "file",
+              "digest": "0f25fe50397b7d35c788f362d4d6b4f05ccfac9a6f93b65e41540393f59363d4",
+              "mode": 420
+            },
+            {
+              "path": "test/projection.test.ts",
+              "type": "file",
+              "digest": "c1ab35d5d69c81edc800ffdb3cfd41426cdc7ed0c3822e8e81acb98d97544b43",
+              "mode": 420
+            },
+            {
+              "path": "tsconfig.json",
+              "type": "file",
+              "digest": "159fb66d72e45187f6149b20bee514075318f53f8337d92dbba5cca8d49ffef3",
+              "mode": 420
+            }
+          ]
+        },
+        "criteriaDigest": "c8ae71b6600f9bb5778281db43b21e6c9245628a5afa064c9f92babb044fd4b5",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/projection.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode": 0,
+        "signal": null,
+        "error": null,
+        "result": "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes": 28,
+            "digest": "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated": false,
+            "retainedBytes": 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes": 3101,
+            "digest": "bf4a096f2527fd79b3ae590a493c7d9368d66bac40c7de302b07c104de46b893",
+            "truncated": false,
+            "retainedBytes": 3101,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id": "attempt-55cc8e67-fdea-4ca6-bf9e-e5ac004a9677",
+        "startedAt": "2026-11-12T00:49:47.701Z",
+        "completedAt": "2026-11-12T00:49:47.864Z",
+        "source": {
+          "head": "012b4f8c67321b26c12b81b85e5da9754fb601da",
+          "digest": "250b535c8a6e66ad84e03b2a993ba570fe4251ccad10619ee8e8136c927eedab",
+          "inputs": [
+            "package-lock.json",
+            "package.json",
+            "src/projection.ts",
+            "src/renderer.tsx",
+            "src/shared.ts",
+            "test/projection.test.ts",
+            "tsconfig.json"
+          ],
+          "files": [
+            {
+              "path": "package-lock.json",
+              "type": "file",
+              "digest": "73e33b1bc08ba5c7d8c81916e94c204f307a1eb51918920268ca084b65a1795d",
+              "mode": 420
+            },
+            {
+              "path": "package.json",
+              "type": "file",
+              "digest": "441e51f961eb4bfec3307f17a166826e59fc36b6b93586b86c4bdf76ea7a2988",
+              "mode": 420
+            },
+            {
+              "path": "src/projection.ts",
+              "type": "file",
+              "digest": "673e8e34236d551af5a72dce3b42aee43865abec41770f66c8a15b2960b3cc66",
+              "mode": 420
+            },
+            {
+              "path": "src/renderer.tsx",
+              "type": "file",
+              "digest": "1ca827fd718669b6a404c3848a8fa5bfd29f27fda7b0bdcd998f7d54cb67fbf0",
+              "mode": 420
+            },
+            {
+              "path": "src/shared.ts",
+              "type": "file",
+              "digest": "6c0d89a1105ca8b03b5b3f3948389122645808ab67bd07a3229fd90603206a5d",
+              "mode": 420
+            },
+            {
+              "path": "test/projection.test.ts",
+              "type": "file",
+              "digest": "c1ab35d5d69c81edc800ffdb3cfd41426cdc7ed0c3822e8e81acb98d97544b43",
+              "mode": 420
+            },
+            {
+              "path": "tsconfig.json",
+              "type": "file",
+              "digest": "159fb66d72e45187f6149b20bee514075318f53f8337d92dbba5cca8d49ffef3",
+              "mode": 420
+            }
+          ]
+        },
+        "criteriaDigest": "c8ae71b6600f9bb5778281db43b21e6c9245628a5afa064c9f92babb044fd4b5",
+        "criteriaSnapshot": [
+          {
+            "id": "AC-1",
+            "description": "중단 RPC 접수 응답만 받은 running 구간은 중단 대기를 유지해 중복 제출을 막는다.",
+            "required": true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-stop-01"
+            ]
+          },
+          {
+            "id": "AC-2",
+            "description": "실제 interrupted 완료만 중단 확인으로 판정하고 정상·실패·미확인 종료, 늦은 응답과 다른 턴의 응답을 구분한다.",
+            "required": true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-stop-01"
+            ]
+          }
+        ],
+        "command": "bun",
+        "args": [
+          "test",
+          "test/projection.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode": 0,
+        "signal": null,
+        "error": null,
+        "result": "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes": 28,
+            "digest": "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated": false,
+            "retainedBytes": 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes": 3074,
+            "digest": "f65d34286872212272845e9ed2238fcb27693566e61f92b2bdfe985f44e1e846",
+            "truncated": false,
+            "retainedBytes": 3074,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id": "attempt-fbe6fcbe-9e9f-44f7-b723-31323dddfaae",
+        "startedAt": "2026-11-12T00:56:21.769Z",
+        "completedAt": "2026-11-12T00:56:21.949Z",
+        "source": {
+          "head": "012b4f8c67321b26c12b81b85e5da9754fb601da",
+          "digest": "d30ed99db4168811e4e59809fe6d9615acfed2f4625bd8459583ff79631d8b38",
+          "inputs": [
+            "docs/specs/chat.md",
+            "package-lock.json",
+            "package.json",
+            "src/projection.ts",
+            "src/renderer.tsx",
+            "src/shared.ts",
+            "test/projection.test.ts",
+            "tsconfig.json"
+          ],
+          "files": [
+            {
+              "path": "docs/specs/chat.md",
+              "type": "file",
+              "digest": "fa29a3ed3b6b111366226661b5b8b6f80b31ebc0a5d93a501e1d6f8442fbbe33",
+              "mode": 420
+            },
+            {
+              "path": "package-lock.json",
+              "type": "file",
+              "digest": "73e33b1bc08ba5c7d8c81916e94c204f307a1eb51918920268ca084b65a1795d",
+              "mode": 420
+            },
+            {
+              "path": "package.json",
+              "type": "file",
+              "digest": "441e51f961eb4bfec3307f17a166826e59fc36b6b93586b86c4bdf76ea7a2988",
+              "mode": 420
+            },
+            {
+              "path": "src/projection.ts",
+              "type": "file",
+              "digest": "673e8e34236d551af5a72dce3b42aee43865abec41770f66c8a15b2960b3cc66",
+              "mode": 420
+            },
+            {
+              "path": "src/renderer.tsx",
+              "type": "file",
+              "digest": "1ca827fd718669b6a404c3848a8fa5bfd29f27fda7b0bdcd998f7d54cb67fbf0",
+              "mode": 420
+            },
+            {
+              "path": "src/shared.ts",
+              "type": "file",
+              "digest": "6c0d89a1105ca8b03b5b3f3948389122645808ab67bd07a3229fd90603206a5d",
+              "mode": 420
+            },
+            {
+              "path": "test/projection.test.ts",
+              "type": "file",
+              "digest": "c1ab35d5d69c81edc800ffdb3cfd41426cdc7ed0c3822e8e81acb98d97544b43",
+              "mode": 420
+            },
+            {
+              "path": "tsconfig.json",
+              "type": "file",
+              "digest": "159fb66d72e45187f6149b20bee514075318f53f8337d92dbba5cca8d49ffef3",
+              "mode": 420
+            }
+          ]
+        },
+        "criteriaDigest": "c8ae71b6600f9bb5778281db43b21e6c9245628a5afa064c9f92babb044fd4b5",
+        "criteriaSnapshot": [
+          {
+            "id": "AC-1",
+            "description": "중단 RPC 접수 응답만 받은 running 구간은 중단 대기를 유지해 중복 제출을 막는다.",
+            "required": true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-stop-01"
+            ]
+          },
+          {
+            "id": "AC-2",
+            "description": "실제 interrupted 완료만 중단 확인으로 판정하고 정상·실패·미확인 종료, 늦은 응답과 다른 턴의 응답을 구분한다.",
+            "required": true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-stop-01"
+            ]
+          }
+        ],
+        "command": "bun",
+        "args": [
+          "test",
+          "test/projection.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode": 0,
+        "signal": null,
+        "error": null,
+        "result": "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes": 28,
+            "digest": "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated": false,
+            "retainedBytes": 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes": 3065,
+            "digest": "90a03fc7fa38e995ed0601fc555d9d6590cd09dba596d4ff403e0cf5551ed34b",
+            "truncated": false,
+            "retainedBytes": 3065,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id": "attempt-ff875fe7-5a93-4942-8586-3a0a4cdb1097",
+        "startedAt": "2026-11-12T01:12:31.029Z",
+        "completedAt": "2026-11-12T01:12:31.321Z",
+        "source": {
+          "head": "012b4f8c67321b26c12b81b85e5da9754fb601da",
+          "digest": "9691695691164b302ee2c9180fc1e1338e1d60efdea7656f8b5afe466634ffbc",
+          "inputs": [
+            "docs/specs/chat.md",
+            "package-lock.json",
+            "package.json",
+            "src/projection.ts",
+            "src/renderer.tsx",
+            "src/shared.ts",
+            "test/projection.test.ts",
+            "tsconfig.json"
+          ],
+          "files": [
+            {
+              "path": "docs/specs/chat.md",
+              "type": "file",
+              "digest": "fa29a3ed3b6b111366226661b5b8b6f80b31ebc0a5d93a501e1d6f8442fbbe33",
+              "mode": 420
+            },
+            {
+              "path": "package-lock.json",
+              "type": "file",
+              "digest": "73e33b1bc08ba5c7d8c81916e94c204f307a1eb51918920268ca084b65a1795d",
+              "mode": 420
+            },
+            {
+              "path": "package.json",
+              "type": "file",
+              "digest": "441e51f961eb4bfec3307f17a166826e59fc36b6b93586b86c4bdf76ea7a2988",
+              "mode": 420
+            },
+            {
+              "path": "src/projection.ts",
+              "type": "file",
+              "digest": "673e8e34236d551af5a72dce3b42aee43865abec41770f66c8a15b2960b3cc66",
+              "mode": 420
+            },
+            {
+              "path": "src/renderer.tsx",
+              "type": "file",
+              "digest": "50e302c02bf54573570af5b90b112f78b89d26c32ba03ce0f34fe2ba1e4ac349",
+              "mode": 420
+            },
+            {
+              "path": "src/shared.ts",
+              "type": "file",
+              "digest": "d9a729d53810a795c81d36898b443ac24ee7dd7f9b2e57a45381eaf7dd1b2369",
+              "mode": 420
+            },
+            {
+              "path": "test/projection.test.ts",
+              "type": "file",
+              "digest": "c1ab35d5d69c81edc800ffdb3cfd41426cdc7ed0c3822e8e81acb98d97544b43",
+              "mode": 420
+            },
+            {
+              "path": "tsconfig.json",
+              "type": "file",
+              "digest": "159fb66d72e45187f6149b20bee514075318f53f8337d92dbba5cca8d49ffef3",
+              "mode": 420
+            }
+          ]
+        },
+        "criteriaDigest": "c8ae71b6600f9bb5778281db43b21e6c9245628a5afa064c9f92babb044fd4b5",
+        "criteriaSnapshot": [
+          {
+            "id": "AC-1",
+            "description": "중단 RPC 접수 응답만 받은 running 구간은 중단 대기를 유지해 중복 제출을 막는다.",
+            "required": true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-stop-01"
+            ]
+          },
+          {
+            "id": "AC-2",
+            "description": "실제 interrupted 완료만 중단 확인으로 판정하고 정상·실패·미확인 종료, 늦은 응답과 다른 턴의 응답을 구분한다.",
+            "required": true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-stop-01"
+            ]
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/projection.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode": 0,
+        "signal": null,
+        "error": null,
+        "result": "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes": 28,
+            "digest": "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated": false,
+            "retainedBytes": 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes": 3074,
+            "digest": "b87562d9e7062cbce6c6eabc7696df4cee138a14809ab9426bbc9730f4cdb816",
+            "truncated": false,
+            "retainedBytes": 3074,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id": "review-74fc2b2f-d263-48c8-a9b5-983315625650",
+        "provider": "anthropic",
+        "model": "opus",
+        "observedModel": "claude-opus-5-5",
+        "verdict": "pass",
+        "readOnly": true,
+        "sourceDigest": "9691695691164b302ee2c9180fc1e1338e1d60efdea7656f8b5afe466634ffbc",
+        "criteriaDigest": "c8ae71b6600f9bb5778281db43b21e6c9245628a5afa064c9f92babb044fd4b5",
+        "policyHash": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor": "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "receiptHash": "66b6372542d82da621bbbc6dee0af17e5dbf982085bd9927da12efd3c3171afb"
+        },
+        "failure": null,
+        "findings": [
+          "[정상] src/projection.ts:129-133 — 현재 projection은 `turn/interruptAcknowledged`(RPC 접수)로 상태를 바꾸지 않는다. 그래서 interrupt는 `requested`로 남고, `turn/completed`가 현재 턴(activeTurn)에서 status=interrupted로 왔을 때만 `acknowledged`가 된다. 그 밖의 종료(completed/failed/unknown)는 `uncertain`이 된다. 이는 AC-1(접수 응답만 받은 running 구간은 중단 대기를 유지)과 AC-2(실제 interrupted 완료만 중단 확인으로 판정)를 만족한다.",
+          "[정상] src/renderer.tsx:303 — 중단 버튼은 `projection.interrupt === \"requested\"`일 때 비활성이다. projection이 RPC 접수 후에도 `requested`를 유지하므로 접수 후 반복 클릭이 다시 제출되지 않는다. probe.json의 interruptPending(rpcAccepted=true, buttonDisabled=true, duplicateClickAttempted=true, requestCount=1)과 fixture 이벤트 순서(interruptRequested → fixture/interruptRequest 1회 → interruptAcknowledged → turn/completed)도 이와 맞는다.",
+          "[정상] test/projection.test.ts:124-176 — 회귀 테스트가 다음 경우를 각각 확인한다. 접수 전후의 running 유지, 4가지 종료 상태 × 접수 응답 유무, 완료 뒤 늦게 온 ACK, 다른 턴 ID의 ACK·Uncertain·completed 무시. 이 테스트 파일의 digest(c1ab35d5…)는 실패한 첫 시도부터 지금까지 같다. projection.ts만 f114d7dc… → 673e8e34…로 바뀐 뒤 통과했으므로, 테스트가 수정 전 결함을 실제로 잡아냈다는 근거로 볼 수 있다.",
+          "[근거 대조] work.json의 마지막 검증 시도(attempt-ff875fe7…)의 sourceDigest와 파일별 digest는 이번 검토 입력(9691695…, chat.md fa29…, package.json 441e…, projection.ts 673e…, renderer.tsx 50e3…, shared.ts d9a7…, test c1ab…, tsconfig 159f…)과 모두 같다. criteriaDigest(c8ae71b6…)도 같다. 즉 통과 기록은 현재 소스와 현재 기준에 그대로 적용된다. probe.json의 developmentStatus.sourceDigest도 같은 값이며, 완료 거부 사유는 '필수 독립 검토 없음' 하나뿐이다.",
+          "[남은 위험·사양 해석] docs/specs/chat.md:39는 '요청 중·호스트의 접수·최종 턴 결과를 구분'하라고 한다. 그런데 이번 수정 후 projection과 UI(버튼 문구 '중단 요청 중', 상태 문구 '중단 requested')는 요청 중과 호스트 접수 후를 같은 `requested`로 보여준다. 수정 전에는 접수 응답만으로 `acknowledged`가 되어 버튼이 다시 켜졌으므로 이번 수정 방향은 맞다. 다만 접수 상태를 따로 표시하지는 않는다. 원본 이벤트(turn/interruptAcknowledged)는 이벤트 로그에 남지만 요약 상태에는 드러나지 않는다. AC-1·AC-2가 이 범위로 좁혀져 있어 결함으로 판정하지 않았다. 대신 별도 `accepted` 상태(버튼 비활성 유지)를 두어 사양의 세 단계를 구분할지 후속으로 정해야 한다.",
+          "[남은 위험] src/projection.ts:133-134, 129 — 실행 중에 `turn/interruptUncertain`이 오면 interrupt가 `uncertain`이 되어 버튼이 다시 켜진다. 재시도를 허용하는 의도로 보인다. 이 상태에서 턴이 interrupted로 끝나도 interrupt는 `uncertain`으로 남는다(턴 라벨은 '중단 확인'). 연결이 끊겨(transport/closed) 턴이 unknown이 되면 interrupt는 `requested`로 남는다. 성공으로 표시하지는 않으므로 사양 위반은 아니지만, 이 조합을 확인하는 테스트는 없다.",
+          "[범위 관찰] work.json의 authorization.writePaths는 src/projection.ts와 test/projection.test.ts뿐이다. 그런데 검증 시도 사이에 범위 밖 입력인 src/renderer.tsx(7e6e→1ca8→50e3), src/shared.ts(0f25→6c0d→d9a7), package.json(71f5→441e)도 바뀌었다. 작업 트리에 다른 작업(Workflow 004/005 등)의 미커밋 변경이 함께 있어, 이 변경이 어느 작업에서 나왔는지 이번 검토로는 가릴 수 없다. probe.json이 근거로 삼는 probe 코드(renderer.tsx:224-263)도 이 범위 밖 변경에 들어 있다. 커밋할 때는 이 작업의 변경을 projection.ts 한 곳으로 분리해야 한다.",
+          "[증거 범위] verification.md는 Electron과 fixture 서버 사이에서 관찰한 결과이며 실제 Native Codex 경로 전체를 검증한 것이 아니라고 스스로 밝히고 있다. 범위를 부풀려 쓴 서술은 없다. 다만 새 세션에서 재개했다는 결과 파일(.www/scratchpad/www-dev-architecture/fresh-resume-result.json)은 이번 검토 입력에 없어 확인하지 못했다. 테스트의 stdout·stderr 원문은 보관하지 않았으므로 통과 여부는 종료 코드와 digest로만 판단할 수 있다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-74fc2b2f-d263-48c8-a9b5-983315625650/opus.json",
+        "startedAt": "2026-11-12T01:15:24.373Z",
+        "completedAt": "2026-11-12T01:16:23.113Z"
+      }
+    ]
+  }
+}

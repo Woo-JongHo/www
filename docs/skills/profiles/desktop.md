@@ -4,7 +4,7 @@
 
 ## 조건부 스택 경계
 
-데스크톱 백엔드는 확정되지 않았다. 선택된 백엔드가 Electron이면 main/preload/renderer, context isolation, IPC 허용 목록과 프로세스 수명주기를 검토한다. Tauri이면 Rust command/event 경계, capability, sidecar 또는 직접 spawn 정책을 검토한다. 두 구현을 동시에 의무화하거나 Tauri 이주를 전제하지 않는다. React 뷰와 공유 계약은 가능한 한 백엔드 중립으로 유지한다.
+WWW의 정식 백엔드는 Electron + TypeScript로 확정했다. main/preload/renderer, context isolation, IPC 허용 목록과 프로세스 수명주기를 검토한다. 선택 근거는 [개발 안내](../../DEVELOPMENT.md#기술-결정-electron과-typescript)가 소유한다. 기존 Tauri 비교 스파이크는 선택 이력이며 제품 이주나 동시 구현을 전제하지 않는다. 이후 다른 데스크톱 프로젝트에 이 프로필을 적용할 때는 그 프로젝트에서 채택한 백엔드와 권한 경계를 먼저 확인한다.
 
 ## 필수 관점
 

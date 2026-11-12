@@ -5,6 +5,10 @@ import { createGjcInvocation, gjcCapabilities, spawnGjc, waitForChild } from "./
 import { createSessionBinding, findWorkRecord, loadCanonicalSkill, preflightMutation, validateSessionBinding, validateWritePaths } from "./preflight.mjs";
 import { appendEvent } from "./record.mjs";
 import { routeRequest } from "./route.mjs";
+import { createCodexInvocation, codexCapabilities, runCodex } from "./adapters/codex.mjs";
+import { advanceWork, completeWork, openWork, readWork, recordReview, resumeWork, verifyWork } from "./work.mjs";
+import { captureSource, criteriaDigest } from "./evidence.mjs";
+import { loadReviewPolicy, runReview } from "./review.mjs";
 
 const BOXBOX_EXTENSIONS = new Set([".ts", ".tsx", ".py", ".json", ".yaml", ".yml"]);
 
@@ -40,7 +44,97 @@ function publicPrepared(prepared) {
 }
 
 export async function runProcess(invocation, options = {}) {
+  if (invocation.mode === "codex-exec") return runCodex(invocation, options);
   return waitForChild(spawnGjc(invocation, options), { captureOutput: options.captureOutput === true });
+}
+
+async function developmentContext(repo, work, skill) {
+  const sources = ["AGENTS.md", "agents/www/AGENT.md", "docs/skills/WORKFLOW.md", `skills/www/${skill}/SKILL.md`];
+  const documents = await Promise.all(sources.map(async (relative) => {
+    const absolute = await fs.realpath(path.join(repo, relative));
+    if (!absolute.startsWith(`${repo}${path.sep}`)) throw new Error("역할 컨텍스트가 저장소를 벗어납니다.");
+    const source = await fs.readFile(absolute, "utf8");
+    return { path: relative, hash: createHash("sha256").update(source).digest("hex"), source };
+  }));
+  return {
+    sources: documents.map(({ path: file, hash }) => ({ path: file, hash })),
+    text: [
+      "www-dev 역할이 직접 요청을 받아 선택한 실행 단계다. 기존 요청의 권한을 유지하며 아래 작업 UUID를 재사용한다.",
+      "진행 중인 작업을 중복 접수하지 않는다. 현재 범위의 구현·검사·실패 수정은 이어가되 commit·push는 명시 요청이 없으면 수행하지 않는다.",
+      `작업 정본: ${work.path}`,
+      `작업 UUID: ${work.record.id}`,
+      `허용 범위: ${JSON.stringify(work.record.workflow.authorization)}`,
+      `현재 기준: ${JSON.stringify(work.record.criteria.map(({ id, description, required, requirementRefs }) => ({ id, description, required, requirementRefs })))}`,
+      "단계의 결과는 실행 사실과 한계를 보고한다. 부모 실행부가 검증과 검토를 연결하므로 스스로 작업을 done으로 바꾸거나 기준을 약화하지 않는다.",
+      ...documents.map((document) => `\n--- ${document.path} (${document.hash}) ---\n${document.source}`),
+    ].join("\n"),
+  };
+}
+
+export async function runDevelopmentWorkflow(options = {}, dependencies = {}) {
+  const repo = await fs.realpath(options.repo ?? process.cwd());
+  if (options.direct !== true || options.role !== "www-dev") throw new Error("직접 요청을 받은 www-dev 역할이 필요합니다.");
+  if (typeof options.request !== "string" || !options.request.trim()) throw new Error("직접 받은 요청이 필요합니다.");
+  if (options.decision?.intent === "answer") return { executed: false, route: { intent: "answer", reason: "role_information_request" } };
+  if (options.preview === true) return { executed: false, preview: true, role: "www-dev", proposedDecision: options.decision ?? null };
+  if (options.execute !== true) throw new Error("역할 실행에는 execute: true가 필요합니다.");
+  if (typeof options.eventId !== "string" || !options.eventId.trim()) throw new Error("역할 실행을 구분할 안정적인 eventId가 필요합니다.");
+  const work = await openWork({ ...options, repo });
+  if (work.legacy) throw new Error("legacy 작업은 기존 호출을 지원합니다. 현재 권한·입력·접수 ID를 연결하고 decision.adoptLegacy를 명시하면 같은 UUID로 현재 증거 계약을 적용합니다.");
+  if (options.resume === true) return { executed: true, resumed: true, work: await resumeWork({ repo, workId: work.record.id }) };
+  const intent = options.decision?.intent;
+  if (intent === "complete") return { executed: true, work: await completeWork({ repo, workId: work.record.id }) };
+  if (intent === "review") {
+    const current = await readWork({ repo, workId: work.record.id });
+    const source = await captureSource({ repo, inputs: current.record.workflow.inputs });
+    const policyInfo = await loadReviewPolicy({ root: repo });
+    const review = await runReview({ repo, source, criteriaDigest: criteriaDigest(current.record), policyInfo, inputPaths: [...current.record.workflow.inputs, path.relative(repo, current.path), path.relative(repo, path.join(path.dirname(current.path), "verification.md"))] });
+    return { executed: true, review, work: await recordReview({ repo, workId: work.record.id, review }) };
+  }
+  if (intent === "verify") {
+    const attempt = await verifyWork({ repo, workId: work.record.id, ...options.verifier });
+    return { executed: true, workId: work.record.id, verification: attempt };
+  }
+  const route = routeRequest({ ...options, workId: work.record.id, status: work.record.status, approval: work.record.workflow.authorization });
+  if (!route.skill) return { executed: false, workId: work.record.id, route };
+  const writes = options.writes ?? [];
+  const surfaces = options.surfaces ?? [];
+  const mutation = preflightMutation({ approval: work.record.workflow.authorization, writes, surfaces, host: codexCapabilities(), requireHardGate: options.requireHardGate === true });
+  if (!mutation.ok) return { executed: false, workId: work.record.id, route, mutation };
+  await validateWritePaths(repo, writes);
+  const context = await developmentContext(repo, work, route.skill);
+  if (options.sandbox !== undefined && !["read-only", "workspace-write"].includes(options.sandbox)) throw new Error("WWW 개발 역할은 read-only 또는 workspace-write 호스트 정책을 사용합니다.");
+  const invocation = createCodexInvocation({ repo, systemPrompt: context.text, request: options.request, model: options.model, sandbox: options.sandbox ?? "workspace-write" });
+  const runtimeDirectory = path.join(repo, ".www", "runtime", work.record.id);
+  await validateWritePaths(repo, [path.relative(repo, runtimeDirectory)]);
+  await fs.mkdir(runtimeDirectory, { recursive: true });
+  const leaseFile = path.join(runtimeDirectory, "execution.lock");
+  let lease;
+  try { lease = await fs.open(leaseFile, "wx", 0o600); }
+  catch (error) {
+    if (error.code === "EEXIST") throw new Error("같은 작업이 실행 중입니다. 불명확한 이전 실행을 자동 재시도하지 않습니다.");
+    throw error;
+  }
+  try {
+    await lease.writeFile(JSON.stringify({ eventId: options.eventId, pid: process.pid, startedAt: new Date().toISOString() }));
+    const started = await appendEvent({ repo, workId: work.record.id, event: { id: options.eventId, type: "status", status: "running", role: "www-dev", skill: route.skill, sources: context.sources, requestedModel: invocation.requestedModel } });
+    if (started.duplicate) return { executed: false, duplicate: true, workId: work.record.id };
+    await advanceWork({ repo, workId: work.record.id, intent: route.intent, writes, surfaces });
+    const host = await (dependencies.runProcess ?? runProcess)(invocation, { cwd: repo, env: options.env, captureOutput: true });
+    await appendEvent({ repo, workId: work.record.id, event: { id: `${options.eventId}-host`, type: host.ok ? "host_result" : "post_failure", outcome: host.outcome, exitCode: host.code, threadId: host.threadId ?? null, injected: Boolean(dependencies.runProcess) } });
+    await appendEvent({ repo, workId: work.record.id, event: { id: `${options.eventId}-stage`, type: "status", status: host.ok ? "completed" : "failed" } });
+    const receiptDirectory = path.join(repo, ".www", "evidence", work.record.id);
+    await validateWritePaths(repo, [path.relative(repo, receiptDirectory)]);
+    await fs.mkdir(receiptDirectory, { recursive: true });
+    const receiptId = createHash("sha256").update(options.eventId).digest("hex");
+    await fs.writeFile(path.join(receiptDirectory, `${receiptId}.json`), `${JSON.stringify({ eventId: options.eventId, workId: work.record.id, sources: context.sources, host }, null, 2)}\n`, { flag: "wx", mode: 0o600 });
+    if (!host.ok || !options.verifier) return { executed: true, workId: work.record.id, route, mutation, host, sources: context.sources };
+    const verification = await verifyWork({ repo, workId: work.record.id, ...options.verifier });
+    return { executed: true, workId: work.record.id, route, mutation, host, sources: context.sources, verification };
+  } finally {
+    await lease.close();
+    await fs.unlink(leaseFile);
+  }
 }
 
 export async function prepareRun({ binding, skill: skillName, expectedSkillHash, request, model, thinking, facts, evidence, route } = {}) {
@@ -165,6 +259,7 @@ function verificationSummary(record, verifier, result) {
 }
 
 export async function runWorkflow(options = {}, dependencies = {}) {
+  if (options.role === "www-dev") return runDevelopmentWorkflow(options, dependencies);
   if (typeof options.request !== "string" || !options.request.trim()) throw new TypeError("원문 사용자 request가 필요합니다.");
   const work = await findWorkRecord({
     repo: options.repo ?? process.cwd(),
@@ -350,10 +445,13 @@ export async function runWorkflow(options = {}, dependencies = {}) {
 async function main() {
   const raw = process.argv[2];
   if (!raw) throw new Error("JSON 옵션 하나가 필요합니다.");
-  const result = await runWorkflow(JSON.parse(raw));
+  const options = JSON.parse(raw);
+  const result = await runWorkflow(options);
   process.stdout.write(`${JSON.stringify(result)}\n`);
   if (result.mutation?.ok === false || result.confirmation === true) process.exitCode = 2;
-  else if (result.executed && (!result.host?.ok || result.postError || result.verificationSummary?.result !== "passed")) process.exitCode = 1;
+  else if (options.role === "www-dev") {
+    if (result.host?.ok === false || result.verification?.result === "failed" || (result.review && result.review.verdict !== "pass")) process.exitCode = 1;
+  } else if (result.executed && (!result.host?.ok || result.postError || result.verificationSummary?.result !== "passed")) process.exitCode = 1;
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

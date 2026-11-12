@@ -23,6 +23,23 @@ export interface WorkspaceInfo {
   changes: number;
 }
 
+export interface DevelopmentPolicyInfo {
+  id: string;
+  version: number;
+  hash: string;
+  primaryModel: string;
+  fallbackModel: string;
+}
+
+export interface DevelopmentWorkStatus {
+  workId: string;
+  status: string;
+  canComplete: boolean;
+  reasons: string[];
+  nextAction: string;
+  sourceDigest: string | null;
+}
+
 export interface WwwApi {
   chooseWorkspace(): Promise<WorkspaceInfo | null>;
   workspace(): Promise<WorkspaceInfo>;
@@ -32,6 +49,9 @@ export interface WwwApi {
   respond(requestId: RpcId, decision: string): Promise<void>;
   events(): Promise<AppEvent[]>;
   onEvent(listener: (event: AppEvent) => void): () => void;
-  probeReady(): Promise<{ enabled: boolean; readinessMs?: number }>;
+  probeReady(): Promise<{ enabled: boolean; readinessMs?: number; developmentPolicyAvailable?: boolean; developmentWorkId?: string; expectDevelopmentComplete?: boolean; checkInterruptPending?: boolean }>;
   probeFinish(result: Record<string, unknown>): Promise<void>;
+  developmentPolicy(): Promise<DevelopmentPolicyInfo>;
+  developmentStatus(workId: string): Promise<DevelopmentWorkStatus>;
+  completeDevelopmentWork(workId: string): Promise<{ workId: string; status: string }>;
 }

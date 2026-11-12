@@ -3,6 +3,9 @@ import { createInterface } from "node:readline";
 
 const modeArgument = process.argv[2];
 const mode = modeArgument && modeArgument !== "app-server" ? modeArgument : process.env.WWW_FAKE_MODE ?? "normal";
+const interruptDelay = Number(process.env.WWW_FIXTURE_INTERRUPT_DELAY_MS ?? 0);
+if (!Number.isFinite(interruptDelay) || interruptDelay < 0 || interruptDelay > 10_000) throw new Error("중단 완료 지연은 0~10000ms여야 합니다.");
+let interruptRequests = 0;
 const lines = createInterface({ input: process.stdin });
 const send = (message) => process.stdout.write(`${JSON.stringify(message)}\n`);
 
@@ -30,8 +33,12 @@ lines.on("line", (line) => {
     }
     send({ jsonrpc: "2.0", id: 42, method: "item/commandExecution/requestApproval", params: { threadId: "thread-fixture", turnId: "turn-fixture", command: "printf fixture" } });
   } else if (message.method === "turn/interrupt") {
+    interruptRequests += 1;
     send({ jsonrpc: "2.0", id: message.id, result: {} });
-    send({ jsonrpc: "2.0", method: "turn/completed", params: { turn: { id: "turn-fixture", status: "interrupted" } } });
+    if (interruptDelay > 0) send({ jsonrpc: "2.0", method: "fixture/interruptRequest", params: { threadId: "thread-fixture", turnId: "turn-fixture", count: interruptRequests } });
+    const completeInterrupt = () => send({ jsonrpc: "2.0", method: "turn/completed", params: { turn: { id: "turn-fixture", status: "interrupted" } } });
+    if (interruptDelay > 0) setTimeout(completeInterrupt, interruptDelay);
+    else completeInterrupt();
   } else if (message.id === 42) {
     send({ jsonrpc: "2.0", method: "item/completed", params: { threadId: "thread-fixture", turnId: "turn-fixture", item: { id: "command-1", type: "commandExecution", command: "printf fixture", aggregatedOutput: "fixture", exitCode: 0 } } });
     send({ jsonrpc: "2.0", method: "fixture/approvalResponse", params: { idType: typeof message.id, decision: message.result?.decision } });

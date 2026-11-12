@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "id": "work-00000000-0000-4000-8000-000000000000",
   "title": "[템플릿] 실제 요청 제목으로 교체",
   "kind": "feature",
@@ -16,5 +16,24 @@
       "result": "unverified",
       "evidence": []
     }
-  ]
+  ],
+  "workflow": {
+    "role": "www-dev",
+    "requestId": "[템플릿] 호스트 접수 ID로 교체",
+    "requestHash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "authorization": {
+      "implementation": false,
+      "writePaths": [],
+      "mutationSurfaces": [],
+      "verifierCommands": [],
+      "commit": false,
+      "publish": false,
+      "source": "direct_user_request",
+      "requestHash": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "inputs": ["src", "test", "package.json", "package-lock.json", "tsconfig.json"],
+    "nextAction": "spec",
+    "verifications": [],
+    "reviews": []
+  }
 }

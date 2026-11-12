@@ -4,13 +4,14 @@ import { randomUUID } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { JsonRpcClient, type RpcMessage } from "./rpc";
+import { createDevelopmentService } from "./development";
 import type { AppEvent, RpcId, WorkspaceInfo } from "./shared";
 
 const DIST = join(app.getAppPath(), "dist");
 const CODEX = process.env.WWW_CODEX_BIN || "codex";
 const PROBE_PATH = process.env.WWW_PROBE_PATH;
 const nativeEntry = process.hrtime.bigint();
-let workspace = app.getPath("home");
+let workspace = PROBE_PATH && process.env.WWW_PROBE_WORKSPACE ? resolve(process.env.WWW_PROBE_WORKSPACE) : app.getPath("home");
 let rpc: JsonRpcClient | null = null;
 let window: BrowserWindow | null = null;
 let threadStarted = false;
@@ -83,6 +84,10 @@ function requiredString(value: unknown, name: string): string { if (typeof value
 function validId(value: unknown): asserts value is RpcId { if (typeof value !== "string" && typeof value !== "number") throw new Error("Invalid request ID"); }
 
 function registerIpc(): void {
+  const development = createDevelopmentService({ policyRoot: DIST, workspace: () => workspace });
+  ipcMain.handle("development:policy", () => development.policy());
+  ipcMain.handle("development:status", (_event, workId: unknown) => development.status(workId));
+  ipcMain.handle("development:complete", (_event, workId: unknown) => development.complete(workId));
   ipcMain.handle("workspace:get", () => workspaceInfo());
   ipcMain.handle("workspace:choose", async () => {
     if (threadStarted) throw new Error("작업 폴더는 첫 스레드 전에만 변경할 수 있습니다.");
@@ -145,7 +150,10 @@ function registerIpc(): void {
   ipcMain.handle("events:get", () => [...eventLog]);
   ipcMain.handle("probe:ready", () => ({
     enabled: !!PROBE_PATH,
-    ...(PROBE_PATH ? { readinessMs: Number(process.hrtime.bigint() - nativeEntry) / 1e6 } : {})
+    ...(PROBE_PATH ? { readinessMs: Number(process.hrtime.bigint() - nativeEntry) / 1e6, developmentPolicyAvailable: true } : {}),
+    ...(PROBE_PATH && process.env.WWW_PROBE_DEVELOPMENT_WORK_ID ? { developmentWorkId: process.env.WWW_PROBE_DEVELOPMENT_WORK_ID } : {}),
+    ...(PROBE_PATH && process.env.WWW_PROBE_EXPECT_DEVELOPMENT_COMPLETE === "1" ? { expectDevelopmentComplete: true } : {}),
+    ...(PROBE_PATH && process.env.WWW_PROBE_INTERRUPT_PENDING === "1" ? { checkInterruptPending: true } : {})
   }));
   ipcMain.handle("probe:finish", async (_event, result: unknown) => {
     if (!PROBE_PATH) throw new Error("Probe mode is disabled");

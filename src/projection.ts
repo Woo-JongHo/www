@@ -131,7 +131,6 @@ export function project(events: readonly AppEvent[]): Projection {
       }
     }
     if (event.method === "turn/interruptRequested" && activeTurn) interrupt = "requested";
-    if (event.method === "turn/interruptAcknowledged" && activeTurn) interrupt = "acknowledged";
     if (event.method === "turn/interruptUncertain" && activeTurn) interrupt = "uncertain";
     if (event.method === "transport/connected") transport = "connected";
     if (event.method === "transport/closed") {

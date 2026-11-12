@@ -28,10 +28,13 @@ export function normalizeApproval(approval = {}) {
   });
 }
 
-export function classifyIntent({ request, status, approval = {}, direct = true, explicitSkill, publishRequested = false } = {}) {
+export function classifyIntent({ request, status, approval = {}, direct = true, explicitSkill, publishRequested = false, role, decision } = {}) {
   if (typeof request !== "string" || !request.trim()) return { intent: null, reason: "invalid_request", question: "실행할 요청을 구체적으로 적어야 합니다." };
   if (direct !== true) return { intent: "answer", skill: null, reason: "untrusted_request_content" };
-  const skill = explicitSkill ?? namedSkill(request);
+  if (role === "www-dev" && decision?.intent === "answer" && !explicitSkill) return { intent: "answer", skill: null, reason: "role_information_request" };
+  const selected = role === "www-dev" && decision && INTENTS.includes(decision.intent) && decision.intent !== "answer" ? `www-${decision.intent}` : null;
+  if (role === "www-dev" && decision && !INTENTS.includes(decision.intent)) return { intent: null, skill: null, reason: "invalid_role_decision", confirmation: true, question: "개발 역할은 허용된 단계 중 하나를 선택해야 합니다." };
+  const skill = explicitSkill ?? namedSkill(request) ?? selected;
   if (skill != null && (!SKILLS.has(skill) || typeof skill !== "string")) return { intent: null, reason: "invalid_explicit_skill", confirmation: true, question: "허용된 www Skill을 명시적으로 선택해야 합니다." };
   if (!skill) {
     if (/[?？]\s*$/.test(request) || /^(?:왜|무엇|어떻게|설명|알려|what|why|how|explain)/i.test(request.trim())) {
@@ -48,7 +51,7 @@ export function classifyIntent({ request, status, approval = {}, direct = true, 
   }
   if (intent === "commit" && !normalized.commit) return { intent: null, skill, reason: "commit_not_approved", confirmation: true, question: "www-commit에는 commit 승인이 필요합니다." };
   if (intent === "commit" && publishRequested && !normalized.publish) return { intent: null, skill, reason: "publish_not_approved", confirmation: true, question: "원격 게시에는 publish 승인이 별도로 필요합니다." };
-  return { intent, skill, reason: "explicit_skill" };
+  return { intent, skill, reason: selected && !explicitSkill && !namedSkill(request) ? "development_role_selection" : "explicit_skill" };
 }
 
 export function routeRequest(input = {}) {

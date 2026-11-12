@@ -11,6 +11,9 @@ const api: WwwApi = {
   events: () => ipcRenderer.invoke("events:get"),
   probeReady: () => ipcRenderer.invoke("probe:ready"),
   probeFinish: (result) => ipcRenderer.invoke("probe:finish", result),
+  developmentPolicy: () => ipcRenderer.invoke("development:policy"),
+  developmentStatus: (workId) => ipcRenderer.invoke("development:status", workId),
+  completeDevelopmentWork: (workId) => ipcRenderer.invoke("development:complete", workId),
   onEvent: (listener) => {
     const handler = (_event: Electron.IpcRendererEvent, entry: AppEvent) => listener(entry);
     ipcRenderer.on("app:event", handler);

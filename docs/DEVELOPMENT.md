@@ -1,5 +1,7 @@
 # WWW 개발
 
+제품의 목적·범위는 [제품 기준](PRODUCT.md), 모듈 책임·데이터 흐름은 [아키텍처](ARCHITECTURE.md), 의도된 Chat 동작은 [현행 기능 명세](specs/chat.md)에서 읽는다. 이 문서는 개발 환경·실행·검사 방법과 기술 선택의 근거를 다룬다. 일반 개발 요청과 작업 재개는 [WWW 개발 역할](../agents/www/AGENT.md), 기록·권한·완료 규칙은 [공통 계약](skills/WORKFLOW.md)을 따른다.
+
 작업 문서는 `docs/work/<영역>/<최소 3자리 번호>-<작업명>/`에 두며 UUID는 폴더명이 아니라 `work.json`의 기계 식별자다. 기존 작업은 UUID로 스캔해 실제 경로를 찾고, 사람이 보는 목록은 [작업 목차](work/INDEX.md)에서 확인한다. 세부 생성·충돌 규칙은 [공통 작업 기록 계약](skills/WORKFLOW.md)을 따른다.
 
 ## 범위와 초기 흐름
@@ -7,6 +9,17 @@
 이 저장소는 기존 WWW 기능을 계승하지 않고 빈 저장소에서 시작한 Electron 데스크톱 앱이다. 현재 범위는 3열 React 화면에서 로컬 `codex app-server`의 대화·공개 설명·실행 박스·승인·중단·결과를 관찰하고 통제하는 것이다. 레이아웃은 [runkids/skillshare의 herdr/skillshare](https://github.com/runkids/skillshare/tree/main/herdr/skillshare)를 디자인 참고 자료로만 사용했고 코드는 가져오지 않았다.
 
 사용자는 첫 스레드 전 작업 폴더를 고른 뒤 메시지를 보낸다. 앱은 `initialize`/`initialized`, `thread/start`, `turn/start`, `turn/interrupt`를 수행하고 알림을 화면에 투영한다. 명령 실행과 파일 변경을 표시하며, 지원하는 명령/파일 승인 요청에는 원래 JSON-RPC ID(문자열 또는 숫자)를 보존해 응답한다. 그 외 구조화 요청은 임의 결정을 만들지 않고 지원하지 않는 요청으로 표시한다. 계정 로그인이나 자격 증명 저장·전달은 다루지 않는다.
+
+## 기술 결정: Electron과 TypeScript
+
+2026-11-12 사용자 결정으로 WWW의 정식 데스크톱 기반을 **Electron + TypeScript**로 확정했다. Tauri/Rust는 제품 개발 대안으로 계속 추진하지 않으며 기존 비교 스파이크와 측정 기록은 선택 과정의 이력으로 보존한다.
+
+- WWW는 유지자가 직접 사용하는 개인용 앱이다. 불특정 사용자를 위한 범용성을 먼저 최적화하기보다 현재 사용 목적과 직접 유지보수할 수 있는 구성을 우선한다.
+- 현재 요구와 개인 사용 흐름에서는 Rust를 선택해야 할 뚜렷한 이유가 없으며, 체감 속도 차이도 언어·프레임워크 전환과 추가 유지비용을 정당화할 만큼 크지 않다고 판단했다.
+- 유지자는 Rust에 대한 이해도가 낮고 TypeScript에 익숙하다. Rust를 추가하면 언어·도구체인·프로세스 연동을 이해하고 수정하는 유지비용이 늘어날 수 있으므로 익숙한 TypeScript 중심 구성을 택한다.
+- 비슷한 계열의 실사용 데스크톱 앱인 VS Code의 Electron·TypeScript 중심 구조를 참고한다. [VS Code 공식 코드 구조](https://github.com/microsoft/vscode/wiki/Source-Code-Organization)는 core가 TypeScript로 구현되고 데스크톱 workbench가 Electron을 사용하며 main·browser·Node 실행 환경을 분리한다고 설명한다. WWW도 화면과 권한 있는 프로세스, 외부 실행 프로세스의 경계를 명확히 유지하는 방향을 따른다.
+
+이 결정은 이 프로젝트와 유지자의 비용·친숙도에 대한 판단이지 Rust와 TypeScript의 일반 성능이 같거나 Electron이 모든 용도에서 더 빠르다는 주장이 아니다. 아래 비교의 번들 크기·readiness 수치와 측정 한계는 그대로 유효하다. VS Code를 참고한다는 것도 WWW가 VS Code의 전체 계층·Monaco·확장 호스트를 도입하거나 같은 UI 프레임워크를 사용한다는 뜻은 아니다.
 
 ## 실행과 구성
 
@@ -39,23 +52,47 @@ BoxBox는 제품 의존성이 아니라 작성 시 가독성 검사 도구다. T
 
 기존 TUI/PTY 탭, xterm/node-pty, 요청/REPORT/WES 7단계 체계, 기존 에픽·규칙·영수증 훅·런타임 파일과 제어판 기능은 가져오지 않았다. 이 저장소의 `AGENTS.md`가 일반적인 저장소/브랜치/dirty 확인과 변경 보존, 검증, 커밋·푸시 제한을 직접 규정하므로 `woo-entry`는 대체됐다. `woo-feature-template`과 `session-goal`은 옛 TUI 흐름, `woo-commit`·`woo-issue`·`woo-pr`은 옛 control-plane, `html-error-report`는 현재 필요가 없어 제외했다. 깨진 `woo-code-readability` 심볼릭 링크도 복사하지 않았다.
 
-WWW 프로젝트 유형(Desktop 포함)의 `www-spec`, `www-design`, `www-build`, `www-diagnose`, `www-verify`, `www-commit` 여섯 Skills를 `skills/www/`에 채택했다. `.agents/skills/`에는 Codex 호환 클라이언트가 발견할 수 있도록 저장소 내부 정본을 가리키는 상대 심볼릭 링크만 둔다. 이는 현재 GJC 세션을 포함한 모든 클라이언트의 동적 호출 지원을 보장하지 않는다. 이들은 자동 워크플로가 아니며 사용자가 이름을 명시한 경우에 적용한다. `www-commit`은 커밋 준비·실행의 직접 요청에도 적용한다. 준비 요청은 실행하지 않으며 명시적 “커밋해” 요청은 기본 commit + push, “로컬에만” 요청은 commit만 수행한다. 원격 대상·미게시 이력·공개 안전성을 확인하고 force push·merge·release는 제외한다. 상태·증거·파일 생성 시점은 [공통 작업 기록 계약](skills/WORKFLOW.md), 현재 프로젝트 유형의 추가 경계는 [데스크톱 프로필](skills/profiles/desktop.md), 실제 요청의 상세 흐름은 [승인 대기 카드 합성 예시](skills/examples/approval-waiting.md)를 따른다. 미래의 `skills/rpa/`, `skills/web/`, `skills/plugin/`은 필요할 때 별도 채택하며 현재 생성하지 않는다.
+WWW 프로젝트 유형(Desktop 포함)의 여섯 Skills 정본은 `skills/www/`이고 `.agents/skills/`에는 발견용 상대 심볼릭 링크만 둔다. 이것이 모든 클라이언트의 동적 호출을 보장하지는 않는다. `www-dev` 역할로 접수한 개발 요청에서는 필요한 스킬을 선택하고 사용자 명시 호출도 유지한다. 호출·권한·커밋·증거의 정본은 [공통 계약](skills/WORKFLOW.md)이다. 프로젝트 유형의 추가 검토는 [데스크톱 프로필](skills/profiles/desktop.md), 실제 요청의 합성 흐름은 [승인 대기 카드 예시](skills/examples/approval-waiting.md)를 참고한다. 미래의 `skills/rpa/`, `skills/web/`, `skills/plugin/`은 필요할 때 별도 채택하며 현재 생성하지 않는다.
 
 첫 제품 목표와 연결 작업의 실행 순서는 [Chat 통합 실행 계획](work/Chat/001-Native%20흐름%20통제와%20가독성/tasks.md)에 모은다. 이는 준비·BoxBox·개발 하네스·Chat 구현·실제 검증·승인된 게시를 잇는 계획이며 현재 구현 완료를 뜻하지 않는다.
 
-개발 세션의 [프로젝트 opt-in 하네스](work/Workflow/001-Skills%20실행과%20개발%20기록%20자동화/spec.md)는 `npm run workflow`로 명시 실행한다. 의도·작업 UUID·정본 Skill·승인·binding을 연결하고 GJC 비대화형 실행과 verifier 결과를 `.www/runtime/<work-id>/`에 기록한다. 전역 훅, 자동 모델 전환, 제품 Chat의 Native 주입은 활성화하지 않는다. `context` 로드는 native Skill invoke가 아니고, GJC tool interception은 advisory이므로 OS sandbox나 모든 쓰기의 hard gate를 보장하지 않는다.
+기존 [프로젝트 opt-in 하네스](work/Workflow/001-Skills%20실행과%20개발%20기록%20자동화/spec.md)는 `npm run workflow`로 명시 실행한다. 의도·작업 UUID·정본 Skill·승인·binding을 연결하고 GJC 비대화형 실행과 verifier 결과를 `.www/runtime/<work-id>/`에 기록한다. 전역 훅, 자동 모델 전환, 제품 Chat의 Native 주입은 활성화하지 않는다. `context` 로드는 native Skill invoke가 아니고, GJC tool interception은 advisory이므로 OS sandbox나 모든 쓰기의 hard gate를 보장하지 않는다.
 
-저장소 루트에서 실행 가능한 아래 예제는 **preview만 수행하며 모델을 호출하지 않는다.**
+새 WWW 개발 경로는 일반 요청의 접수·재개, `www-dev` 역할과 Codex 호스트, 소스·기준에 연결한 검증 증거를 잇는 작업이다. 역할 문서를 실제로 읽었는지와 요청에 맞는 다음 행동을 실제 수행했는지는 해당 Workflow·Chat 작업의 검증 기록으로 확인한다. 기존 GJC fixture 성공을 새 Codex 경로의 통과로 사용하지 않는다. 현재 인터페이스는 실행부 도움말·소스와 검증 기록을 함께 확인하며 미구현 옵션을 실행 가능한 예제로 제시하지 않는다.
+
+## 개발 역할의 작업 인터페이스
+
+현재 작업 접수·재개의 CLI는 `node scripts/workflow/work.mjs '<JSON>'`이며 `action`으로 동작을 선택한다. 이 인터페이스가 구현돼 있다는 사실과 실제 Codex·GUI·검토 흐름의 통합 검증은 구분한다. 입력의 권한 정보는 사용자의 유효한 요청에서 정하며, 예제나 역할 선택이 실행 승인을 만들지 않는다.
+
+| `action` | 입력과 동작 |
+|---|---|
+| `open` | 직접 요청을 받은 `www-dev` 역할이 `requestId`, `request`, `decision`, `approval`, `inputs`로 새 작업을 등록. 기존 UUID는 `decision.workId`로 읽음. `decision.adoptLegacy: true`는 아래 명시 연결을 선택. 같은 접수 ID·요청의 중복 등록을 구분 |
+| `adopt` | 현재 직접 요청·`requestId`·권한·`inputs`·`intent`를 기존 `workId`에 연결. 같은 UUID로 schema2를 사용하고 원래 레코드는 `workflow.legacyRecord`에 보존. 과거 통과를 현재 증거로 승격하지 않음 |
+| `read` | `workId`의 레코드를 읽고 구조를 확인. legacy1을 새 증거로 자동 변환하지 않음 |
+| `advance` | `workId`, `intent`, 필요한 `writes`·`surfaces`로 허용된 다음 단계를 기록. 완료는 별도 판정으로만 수행 |
+| `inputs` | `workId`와 검사 의존 `inputs`를 지정해 범위를 갱신. 현재 기준 결과를 미검증으로 바꾸고 과거 시도는 보존 |
+| `verify` | `workId`, `command`, `args`, `criterionIds`로 해당 작업에서 허용한 실제 검사를 수행하고 검증 시도·관찰 요약·결과 연결을 기록 |
+| `status` | 현재 소스·기준·필수 검토의 적용 가능성을 읽기 전용으로 판정 |
+| `resume` | 같은 UUID의 현재 적용성을 재평가하고 작업 상태·다음 행동을 갱신. 과거 시도 보존 |
+| `complete` | 현재 소스·기준·필수 검토를 다시 확인하고 충족한 작업만 완료 기록 |
+
+`open.decision`은 역할이 정리한 `intent`, `area`, `title`, `kind`, `areas`, `owner`, `criteria`와 필요한 기존 `workId`를 전달한다. 각 기준은 ID·설명·필수 여부와 선택적 `requirementRefs`를 가진다. `approval`은 구현·쓰기 경로·변경 표면·허용 검증 명령·커밋·게시 범위이고, `inputs`는 검사 의존 파일·디렉터리의 저장소 상대 경로다. 사용자 원문을 단순 키워드만으로 구현 승인으로 바꾸지 않는다.
+
+기존 schema1은 기본 읽기와 기존 직접 호출을 유지한다. 현재 요청을 `adopt` 또는 `open.decision`의 `workId`·`adoptLegacy`·`intent`로 명시 연결하면 과거 레코드 전체와 기존 검증 문서를 남긴 채 현재 결과를 `unverified`에서 다시 확인한다. 신규 접수와 입력 갱신은 `requirementRefs`가 가리키는 문서 파일도 검사 범위에 자동 포함한다.
+
+다음은 현재 Workflow 작업의 **레코드 읽기만 수행하며 모델을 호출하지 않는** 예제다.
 
 ```sh
-npm run workflow -- '{"workId":"work-e2419fa7-3d27-4c77-812b-2b825326dc70","request":"현재 Chat 검증 범위를 확인해줘","direct":true,"explicitSkill":"www-verify","preview":true}'
+node scripts/workflow/work.mjs '{"action":"read","workId":"work-d5528c42-2849-48bd-9a9f-d8c80bf67f07"}'
 ```
 
-실제 실행에는 `execute: true`, 재사용 가능한 안정적 `eventId`, 작업 종류에 맞는 명시 승인, 승인된 `writes`·`surfaces`, 실제 `verifier`의 `command`·`args`·`criteria`가 필요하다. `approval.verifierCommands`는 허용한 command/args 배열의 JSON 문자열 목록이다. 실패·중복·불명확 결과는 같은 변경 명령을 자동 재실행하지 않는다. `boxboxLauncher`와 `boxboxFiles`를 명시하면 설치된 로컬 런처의 파일별 guide를 호스트에 전달하고 pre/post source 검사를 수행한다. 런처를 자동 설치하거나 미승인 정렬을 수행하지 않는다.
+기존 GJC 경로의 실제 실행에는 `execute: true`, 안정적인 `eventId`, 유효한 권한, `writes`·`surfaces`, 실제 `verifier`가 필요하다. 해당 경로의 `approval.verifierCommands`는 허용한 command/args 배열의 JSON 문자열 목록이다. `run.mjs`의 새 역할 분기는 같은 접수·권한·증거 계약과 연결하며 현재 소스와 작업 검증 기록으로 지원 범위를 확인한다. 실패·중복·불명확 결과를 같은 변경 명령의 자동 재실행으로 해결하지 않는다.
+
+`boxboxLauncher`와 `boxboxFiles`를 명시하면 설치된 로컬 런처의 파일별 guide를 호스트에 전달하고 pre/post source 검사를 수행한다. 런처를 자동 설치하거나 미승인 정렬을 수행하지 않는다.
 
 런타임 세션 `done`은 작업의 `work.json` 완료가 아니다. verifier의 기준 매핑은 호출자가 지정한 검사 범위이며 최종 수용은 검증 기록과 대조한다. 원본 요청·컨텍스트·verifier argv는 사건에 남기지 않으며, Skill hash와 승인 범위·명령 hash·실제 exit를 기록한다. 상세 한계와 테스트는 해당 작업의 [재검증 기록](work/Workflow/001-Skills%20실행과%20개발%20기록%20자동화/verification.md)에 있다.
 
-장기 제품 방향은 별도 브라우저 UI가 아닌 하나의 WWW 데스크톱 앱에서 shared React view와 로컬 Codex 실행·승인을 제공하고, 이후 GitHub의 코드·구조화 기록을 Mac mini가 지정 브랜치별로 검증·색인해 Roadmap/Node/Canvas API 보기를 제공하는 것이다. 이는 목표 설계이며 현재 제품은 메모리 전용이고 서버 통합이 없다. Electron과 Tauri 중 선택도 확정되지 않았다. push 성공과 서버의 commit 색인은 별개이며 원격 실행·소스 동기화는 범위 밖이다.
+장기 제품 방향은 별도 브라우저 UI가 아닌 하나의 WWW 데스크톱 앱에서 shared React view와 로컬 Codex 실행·승인을 제공하고, 이후 GitHub의 코드·구조화 기록을 Mac mini가 지정 브랜치별로 검증·색인해 Roadmap/Node/Canvas API 보기를 제공하는 것이다. 이는 목표 설계이며 현재 제품은 메모리 전용이고 서버 통합이 없다. 정식 데스크톱 기반은 위 결정에 따라 Electron과 TypeScript다. push 성공과 서버의 commit 색인은 별개이며 원격 실행·소스 동기화는 범위 밖이다.
 
 ## 샌드박스 한계
 
@@ -67,7 +104,7 @@ npm run workflow -- '{"workId":"work-e2419fa7-3d27-4c77-812b-2b825326dc70","requ
 
 초기 비교에서는 주간 사용량을 소비하지 않기 위해 실제 추론을 생략했다. 이후 첫 Chat 검증에서는 인증·사용량 확인 뒤 현재 Electron 앱에서 실제 Codex의 `READY` 단문 응답을 확인했다. 승인 왕복·긴 출력·실패·중단·읽기 상태는 실제 Electron 창과 합성 app-server fixture로 별도 확인했다. 실제 Native 승인·변경 작업, Windows·한국어 IME 실기, 플랫폼 sandbox 전체는 미검증이다. [Chat 검증 기록](work/Chat/001-Native%20흐름%20통제와%20가독성/verification.md)의 증거 범위를 따른다. 이벤트는 최근 2,000개, 명령 출력은 최근 32,768 UTF-16 코드 단위만 보관하며 완전한 원본 복원을 보장하지 않는다.
 
-## Electron과 Tauri v2 비교 스파이크
+## 과거 Electron과 Tauri v2 비교 스파이크
 
 `spikes/tauri`는 제품 마이그레이션이 아니라 격리된 비교 구현이다. `src/renderer.tsx`, `src/projection.ts`, `src/index.html`의 React UI·투영·스타일을 그대로 빌드하고, `src/shared.ts`의 `WwwApi`와 동일한 API를 `@tauri-apps/api` invoke/event 위에 얇게 연결한다. 기존 Electron 실행 경로는 바꾸지 않았다. Tauri 백엔드는 Node sidecar가 아니라 Rust가 직접 `codex app-server`를 spawn하고 JSONL JSON-RPC를 처리한다.
 
@@ -136,4 +173,4 @@ npm run benchmark:comparison
 
 587 대 204는 단순 원시 물리 줄 수일 뿐 유지보수 비용의 2.8배라는 증거가 아니다. Rust 수치에는 이 파일에 함께 둔 embedded tests, 더 세로로 펼쳐지는 `rustfmt` 형식, 명시적인 타입·오류 처리도 포함되고 두 경로의 코드 구성도 다르다. 다만 이 스파이크에서 Tauri 쪽이 Rust 소유권·스레드·동기화와 command/event 직렬화를 추가로 가진다는 정성적 차이는 있다. 반면 배포 앱은 훨씬 작았다. Rust 자체가 안전을 보장하지는 않는다. child lifecycle, 승인 ID 검증, IPC 입력 검증, uncertain mutation 무재시도 정책이 실제 안전 경계이며 두 구현 모두 계속 테스트해야 한다.
 
-현재 근거만으로는 **제품을 즉시 Tauri로 전환하지 않는 것**을 권고한다. 앱 크기만이 최우선이면 Tauri의 이점이 크지만, 제한된 readiness 표본은 이 장비에서 Electron 쪽이 짧았고 코드량만으로 유지보수 비용 배수를 산정할 수는 없다. 전체 process-tree 메모리, 실제 Codex 세션, macOS 한국어 IME 수동 입력, Windows 빌드·WebView2·샌드박스가 검증된 뒤 기술 선택을 다시 판단해야 한다. 이 스파이크는 macOS arm64만 빌드했으므로 Windows 동작을 추론하거나 인증하지 않는다.
+비교 당시에는 **제품을 즉시 Tauri로 전환하지 않는 것**을 권고했다. 앱 크기만이 최우선이면 Tauri의 이점이 크지만, 제한된 readiness 표본은 이 장비에서 Electron 쪽이 짧았고 코드량만으로 유지보수 비용 배수를 산정할 수는 없었다. 전체 process-tree 메모리, 실제 Codex 세션, macOS 한국어 IME 수동 입력, Windows 빌드·WebView2·샌드박스에는 추가 검증이 필요했다. 이 스파이크는 macOS arm64만 빌드했으므로 Windows 동작을 추론하거나 인증하지 않는다. 현재의 제품 선택은 위 기술 결정에 따라 Electron으로 확정했으며, 이 과거 비교가 진행 중인 셸 선택이나 Tauri 마이그레이션 계획을 뜻하지 않는다.

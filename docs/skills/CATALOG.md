@@ -49,7 +49,7 @@
 
 업스트림을 그대로 설치하지 않고 WWW 계약에 맞춘 여섯 Skills를 채택했다. 요구사항의 관찰 가능한 기준은 spec-kit·Addy Osmani·Matt Pocock의 명세 관행, 기존 구조 우선 설계는 feature-dev·pstack, 작은 동작 단위 구현은 superpowers·pstack·Addy Osmani, 증상과 원인을 나누는 진단은 superpowers·Matt Pocock, 실제 실행 증거는 superpowers·pstack의 관행을 참고했다. 커밋은 기존 사용자 변경과 index 보존·명시 승인에 맞춘 WWW 자체 절차다. 업스트림의 자동 훅·도구 명령·텔레메트리·commit·push 규칙은 가져오지 않았다.
 
-여섯 Skills는 작업 UUID를 폴더명으로 사용하지 않는다. `www-spec`이 기능 영역·영역별 번호·읽기 좋은 제목을 정해 `docs/work/<영역>/<번호>-<작업명>/`을 만들고, 이후 Skills는 UUID로 스캔해 그 실제 경로를 재사용한다. 상세 규칙과 사람용 목차는 [공통 계약](WORKFLOW.md)과 [작업 목차](../work/INDEX.md)에 있다.
+여섯 Skills는 작업 UUID를 폴더명으로 사용하지 않는다. [WWW 개발 역할](../../agents/www/AGENT.md)이 신규 접수와 기존 작업 재개를 판단하고, 접수 기능 또는 직접 호출한 `www-spec`이 기능 영역·표시 번호·읽기 좋은 제목을 정한다. `docs/work/<영역>/<번호>-<작업명>/`에 기록하고 UUID로 실제 경로를 재사용한다. 상세 규칙과 사람용 목차는 [공통 계약](WORKFLOW.md)과 [작업 목차](../work/INDEX.md)에 있다.
 
 | 채택 이름 | 역할 | 파일 |
 |---|---|---|
@@ -62,7 +62,7 @@
 
 `skills/www/`가 WWW 프로젝트 유형(Desktop 포함)의 정본이다. `.agents/skills/`에는 Codex 호환 발견을 위한 저장소 내부 상대 심볼릭 링크만 두며 복사본을 두지 않는다. 발견 링크는 모든 클라이언트나 현재 GJC 세션의 동적 호출 지원을 보장하지 않는다. 미래의 `skills/rpa/`, `skills/web/`, `skills/plugin/`은 아직 만들지 않았다.
 
-모든 Skills는 [공통 작업 기록 계약](WORKFLOW.md), [모델·추론 노력 권고](MODEL_POLICY.md), [템플릿](templates/), stack-neutral [데스크톱 프로필](profiles/desktop.md)을 참조한다. 명시적으로 호출할 때만 사용한다. UI/Dev/Ops는 다중 선택 영향 영역과 단일 주 책임이지 의무 팀이나 독립 수명주기가 아니다. 작은 수정은 같은 작업 기록의 짧은 절로 처리한다.
+모든 Skills는 [공통 작업 계약](WORKFLOW.md), [모델·추론 노력 권고](MODEL_POLICY.md), [템플릿](templates/), [데스크톱 프로필](profiles/desktop.md)을 참조한다. 사용자 명시 호출과 `www-dev` 역할이 접수한 요청의 스킬 선택을 지원한다. 역할 밖에서는 기존 명시 선택을 유지하며, 선택 자체가 구현·커밋·게시 권한을 만들지 않는다. UI/Dev/Ops는 다중 선택 영향 영역과 단일 주 책임이지 의무 팀이나 독립 수명주기가 아니다. 작은 수정은 같은 작업 기록의 짧은 절로 처리한다.
 
 ## 오프라인 검증
 

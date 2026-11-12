@@ -118,7 +118,61 @@ test("승인 응답 상태와 중단 요청·확인을 독립적으로 투영한
     event(5, "turn/interruptAcknowledged", { turnId: "turn-1" })
   ]);
   expect(result.blocks[0]).toMatchObject({ kind: "approval", requestId: 0, state: "responding", open: false });
-  expect(result.interrupt).toBe("acknowledged");
+  expect(result).toMatchObject({ turn: "running", working: true, interrupt: "requested" });
+});
+
+test("중단 RPC 접수 뒤에도 실행 중인 턴은 중단 대기를 유지한다", () => {
+  const events = [
+    event(1, "turn/started", { turn: { id: "turn-1" } }),
+    event(2, "turn/interruptRequested", { turnId: "turn-1" }),
+    event(3, "turn/interruptAcknowledged", { turnId: "turn-1" })
+  ];
+  expect(project(events.slice(0, 2))).toMatchObject({ turn: "running", working: true, interrupt: "requested" });
+  expect(project(events)).toMatchObject({ turn: "running", working: true, interrupt: "requested" });
+});
+
+for (const status of ["interrupted", "completed", "failed", "unknown"]) {
+  for (const accepted of [false, true]) {
+    test(`중단 요청 뒤 ${status} 완료를 접수 응답 ${accepted ? "있음" : "없음"}과 구분한다`, () => {
+      const events = [
+        event(1, "turn/started", { turn: { id: "turn-1" } }),
+        event(2, "turn/interruptRequested", { turnId: "turn-1" })
+      ];
+      if (accepted) events.push(event(3, "turn/interruptAcknowledged", { turnId: "turn-1" }));
+      events.push(event(4, "turn/completed", { turn: { id: "turn-1", status } }));
+      expect(project(events)).toMatchObject({
+        turn: status,
+        working: false,
+        interrupt: status === "interrupted" ? "acknowledged" : "uncertain"
+      });
+    });
+  }
+
+  test(`${status} 완료 뒤 늦은 중단 ACK는 최종 상태를 바꾸지 않는다`, () => {
+    const events = [
+      event(1, "turn/started", { turn: { id: "turn-1" } }),
+      event(2, "turn/interruptRequested", { turnId: "turn-1" }),
+      event(3, "turn/completed", { turn: { id: "turn-1", status } })
+    ];
+    const expected = { turn: status, working: false, interrupt: status === "interrupted" ? "acknowledged" : "uncertain" };
+    expect(project(events)).toMatchObject(expected);
+    events.push(event(4, "turn/interruptAcknowledged", { turnId: "turn-1" }));
+    expect(project(events)).toMatchObject(expected);
+  });
+}
+
+test("다른 턴의 중단 응답과 완료는 현재 턴의 중단 대기와 최종 상태를 바꾸지 않는다", () => {
+  const events = [
+    event(1, "turn/started", { threadId: "thread-1", turn: { id: "current" } }),
+    event(2, "turn/interruptRequested", { threadId: "thread-1", turnId: "current" }),
+    event(3, "turn/interruptAcknowledged", { threadId: "thread-1", turnId: "old" }),
+    event(4, "turn/interruptUncertain", { threadId: "thread-1", turnId: "old" }),
+    event(5, "turn/completed", { threadId: "thread-1", turn: { id: "old", status: "interrupted" } })
+  ];
+  expect(project(events)).toMatchObject({ turnId: "current", turn: "running", working: true, interrupt: "requested" });
+  events.push(event(6, "turn/completed", { threadId: "thread-1", turn: { id: "current", status: "completed" } }));
+  events.push(event(7, "turn/interruptAcknowledged", { threadId: "thread-1", turnId: "old" }));
+  expect(project(events)).toMatchObject({ turnId: "current", turn: "completed", working: false, interrupt: "uncertain" });
 });
 
 test("중복 승인 ID는 원래 요청을 덮어쓰거나 두 번 응답 가능하게 만들지 않는다", () => {

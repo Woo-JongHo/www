@@ -174,6 +174,27 @@ function App() {
       await afterTwoFrames();
       const ready = await window.www.probeReady();
       if (!ready.enabled) return;
+      const developmentPolicy = ready.developmentPolicyAvailable ? await window.www.developmentPolicy() : null;
+      if (ready.developmentPolicyAvailable && (!developmentPolicy || developmentPolicy.id !== "www-dev-review" || developmentPolicy.primaryModel !== "opus" || !/^[a-f0-9]{64}$/.test(developmentPolicy.hash))) throw new Error("Probe did not receive the bundled development policy");
+      if (ready.expectDevelopmentComplete && !ready.developmentWorkId) throw new Error("Probe completion verification requires a development work UUID");
+      const developmentStatus = ready.developmentWorkId ? await window.www.developmentStatus(ready.developmentWorkId) : null;
+      let developmentCompletion: { rejected: true; reason: string } | { rejected: false; workId: string; status: string; statusAfter: string; canCompleteAfter: boolean } | null = null;
+      if (ready.developmentWorkId) {
+        if (!developmentStatus || developmentStatus.workId !== ready.developmentWorkId.toLowerCase() || developmentStatus.canComplete !== (ready.expectDevelopmentComplete === true)) throw new Error("Probe development status did not match the requested completion scenario");
+        if (typeof window.www.completeDevelopmentWork !== "function") throw new Error("Probe development completion bridge is unavailable");
+        if (ready.expectDevelopmentComplete) {
+          const result = await window.www.completeDevelopmentWork(ready.developmentWorkId);
+          const after = await window.www.developmentStatus(ready.developmentWorkId);
+          if (result.workId !== developmentStatus.workId || result.status !== "done" || after.status !== "done" || after.canComplete !== true) throw new Error("Probe did not observe canonical development completion through IPC");
+          developmentCompletion = { rejected: false, workId: result.workId, status: result.status, statusAfter: after.status, canCompleteAfter: after.canComplete };
+        } else {
+          let rejection: string | null = null;
+          try { await window.www.completeDevelopmentWork(ready.developmentWorkId); }
+          catch (failure) { rejection = String(failure); }
+          if (!rejection?.includes("현재 증거로 완료할 수 없습니다")) throw new Error("Probe did not receive the development completion gate rejection");
+          developmentCompletion = { rejected: true, reason: rejection };
+        }
+      }
       const textarea = document.querySelector('[data-testid="prompt-input"]');
       if (!(textarea instanceof HTMLTextAreaElement)) throw new Error("Probe expected textarea");
       setTextareaValue(textarea, "fixture probe");
@@ -203,7 +224,23 @@ function App() {
       const interruptButton = document.querySelector('[data-testid="interrupt-button"]');
       if (!(interruptButton instanceof HTMLButtonElement)) throw new Error("Probe expected interrupt button");
       interruptButton.click();
+      let interruptPending: { rpcAccepted: boolean; buttonDisabled: boolean; duplicateClickAttempted: boolean; requestCount: number } | null = null;
+      if (ready.checkInterruptPending) {
+        await waitForEvent("turn/interruptAcknowledged");
+        await afterTwoFrames();
+        if ((await window.www.events()).some((event) => event.method === "turn/completed")) throw new Error("Probe fixture completed before the pending interval could be inspected");
+        if (!interruptButton.isConnected || !interruptButton.disabled) throw new Error("Probe enabled interrupt again before the turn completed");
+        interruptButton.click();
+        await afterTwoFrames();
+        const counts = (await window.www.events()).filter((event) => event.method === "fixture/interruptRequest").map((event) => (event.params as { count?: number }).count);
+        if (counts.length !== 1 || counts[0] !== 1) throw new Error("Probe expected one Native fixture interrupt request");
+        interruptPending = { rpcAccepted: true, buttonDisabled: interruptButton.disabled, duplicateClickAttempted: true, requestCount: 1 };
+      }
       const completed = await waitForEvent("turn/completed");
+      if (ready.checkInterruptPending) {
+        const counts = (await window.www.events()).filter((event) => event.method === "fixture/interruptRequest").map((event) => (event.params as { count?: number }).count);
+        if (counts.length !== 1 || counts[0] !== 1 || (completed.params as { turn?: { status?: string } }).turn?.status !== "interrupted") throw new Error("Probe did not confirm a single interrupt and interrupted completion");
+      }
       await afterTwoFrames();
       const command = document.querySelector('[data-testid="command-card"]');
       const userRequest = document.querySelector('[data-testid="user-request"]');
@@ -216,6 +253,10 @@ function App() {
         readinessMs: ready.readinessMs,
         readinessDefinition: "native entry to the second requestAnimationFrame callback after React mount",
         interactionPath: "rendered controls",
+        developmentPolicy,
+        developmentStatus,
+        developmentCompletion,
+        interruptPending,
         approvalId: approval.requestId,
         approvalIdType: typeof approval.requestId,
         approvalRoundtrip: true,

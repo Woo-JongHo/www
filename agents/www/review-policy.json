@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "www-dev-review",
+  "version": 1,
+  "scope": "www-dev",
+  "primary": {
+    "provider": "anthropic",
+    "model": "opus"
+  },
+  "fallback": {
+    "provider": "openai",
+    "model": "gpt-6.1-terra",
+    "when": "primary_quota_exhausted"
+  },
+  "readOnly": true,
+  "required": true
+}

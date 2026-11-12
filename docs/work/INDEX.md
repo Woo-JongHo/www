@@ -14,6 +14,12 @@ Native와의 대화에서 실행 흐름을 통제하고 진행·근거·승인·
 - [작업 레코드](Chat/001-Native%20%ED%9D%90%EB%A6%84%20%ED%86%B5%EC%A0%9C%EC%99%80%20%EA%B0%80%EB%8F%85%EC%84%B1/work.json)
 - [검증 기록](Chat/001-Native%20%ED%9D%90%EB%A6%84%20%ED%86%B5%EC%A0%9C%EC%99%80%20%EA%B0%80%EB%8F%85%EC%84%B1/verification.md)
 
+### 002 — 중단 접수와 실제 종료 구분
+
+- [명세](Chat/002-%EC%A4%91%EB%8B%A8%20%EC%A0%91%EC%88%98%EC%99%80%20%EC%8B%A4%EC%A0%9C%20%EC%A2%85%EB%A3%8C%20%EA%B5%AC%EB%B6%84/spec.md)
+- [작업 레코드](Chat/002-%EC%A4%91%EB%8B%A8%20%EC%A0%91%EC%88%98%EC%99%80%20%EC%8B%A4%EC%A0%9C%20%EC%A2%85%EB%A3%8C%20%EA%B5%AC%EB%B6%84/work.json)
+- [검증 기록](Chat/002-%EC%A4%91%EB%8B%A8%20%EC%A0%91%EC%88%98%EC%99%80%20%EC%8B%A4%EC%A0%9C%20%EC%A2%85%EB%A3%8C%20%EA%B5%AC%EB%B6%84/verification.md)
+
 ## Workflow
 
 ### 001 — Skills 실행과 개발 기록 자동화
@@ -41,3 +47,13 @@ Native와의 대화에서 실행 흐름을 통제하고 진행·근거·승인·
 - [명세](Workflow/003-커밋과%20Push의%20기본%20게시%20정책/spec.md)
 - [작업 레코드](Workflow/003-커밋과%20Push의%20기본%20게시%20정책/work.json)
 - [검증 기록](Workflow/003-커밋과%20Push의%20기본%20게시%20정책/verification.md)
+
+### 004 — WWW 개발 역할과 검증 증거 연결
+
+제품·구조·기능 기준과 개발 역할을 연결하고 신규 접수·실행·검증·재개 및 공유 검토 정책을 실제 작은 Chat 변경으로 확인한다.
+
+- [명세](Workflow/004-WWW%20개발%20역할과%20검증%20증거%20연결/spec.md)
+- [설계](Workflow/004-WWW%20개발%20역할과%20검증%20증거%20연결/design.md)
+- [구현 작업](Workflow/004-WWW%20개발%20역할과%20검증%20증거%20연결/tasks.md)
+- [작업 레코드](Workflow/004-WWW%20개발%20역할과%20검증%20증거%20연결/work.json)
+- [검증 기록](Workflow/004-WWW%20개발%20역할과%20검증%20증거%20연결/verification.md)

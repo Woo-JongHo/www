@@ -12,4 +12,7 @@ await bundle("main.ts", "node", "cjs");
 await bundle("preload.ts", "node", "cjs");
 await bundle("renderer.tsx", "browser", "iife");
 copyFileSync(join(root, "src", "index.html"), join(out, "index.html"));
+const policyDirectory = join(out, "agents", "www");
+mkdirSync(policyDirectory, { recursive: true });
+copyFileSync(join(root, "agents", "www", "review-policy.json"), join(policyDirectory, "review-policy.json"));
 console.log(`built ${out}`);
