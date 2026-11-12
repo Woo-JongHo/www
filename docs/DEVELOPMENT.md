@@ -237,3 +237,11 @@ Native 자동 보고서의 집중 검사는 test/native-report-input.test.ts, te
 `src/native-chat.ts`의 params 함수를 main이 실제 `thread/start`·`turn/start`에 사용한다. 스레드의 `developerInstructions`에 한국어 진행 설명 지침을 더하고 턴에서 `summary: "detailed"`를 요청한다. 기존 cwd·`workspace-write`·`on-request`와 text 입력 구조를 보존하며 baseInstructions·모델·effort·전역 설정은 바꾸지 않는다. 로컬 codex-cli 0.167.2 생성 스키마에서 해당 필드를 확인했다.
 
 `bun test test/projection.test.ts test/native-chat.test.ts test/native-activity.test.ts test/input.test.ts test/native-report-input.test.ts`로 실제 main params 배선, 공개 요약 lifecycle·섹션·중복·snapshot·잘못된 입력·턴 격리·종료·절단과 기존 경로를 검사한다. `test/fixtures/fake-app-server.ts`는 기존 MODE에 공개 summary와 private sentinel 사건을 추가해 Electron probe에서 공개 요약 표시와 원문 미노출을 점검할 수 있게 한다. 합성 fixture·투영 검사와 실제 Native의 설명 빈도·요약 제공, 실제 DOM 확인은 구분해 기록한다. 이번 변경 자체가 새 실제 GUI·Native 검증 완료를 뜻하지 않는다.
+
+## 오픈소스 채팅 통합 검증
+
+Chat은 Ovis revision d505c75e26c54f31573057d1e9aa431ecc56677f의 행 상태·입력·인용 처리를 WWW에 맞게 개작한다. 코드와 라이선스 고지는 docs/third-party/ovis.md에 둔다. 전체 Herdr PTY runtime으로 이주한 것은 아니다. Markdown/GFM 의존성은 package.json과 lockfile의 고정 버전을 따른다.
+
+집중 검사는 bun test test/chat-state.test.ts test/conversations.test.ts test/projection.test.ts test/input.test.ts다. Native thread/list/read/resume/turns/list 필드는 설치된 codex app-server generate-json-schema 결과와 대조한다. 새 프로토콜이 없으면 응답을 꾸며 완전 복원으로 표시하지 않는다.
+
+node scripts/verify-chat.ts는 빌드된 실제 Electron을 고립 profile과 cwd에서 실행하고 외부 CDP로 저장 대화·Markdown·코드복사·인용·대화별 상태·동일 thread 후속 요청·승인·중단·앱 재시작을 조작한다. 서버는 test/fixtures/chat-ui-app-server.ts의 합성 stdio subprocess다. 성공·실패 원문과 화면은 .www/evidence/chat-ui-*에 저장하며 실제 모델·Windows·IME 실기로 확대하지 않는다. 실행 전에 npm run build를 수행하고 검사 중 다른 빌드로 dist를 바꾸지 않는다.

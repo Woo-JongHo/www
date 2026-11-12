@@ -8,6 +8,7 @@ export interface AppEvent {
   params     : unknown                                  ;
   requestId? : RpcId                                    ;
   supported? : boolean                                  ;
+  historical?: boolean                                  ;
 }
 
 export type TransportState = "disconnected" | "connected" | "closed" | "error"                                    ;
@@ -76,7 +77,25 @@ export interface NativeReportJob {
   retryAvailable? : boolean                                                               ;
 }
 
+export interface ConversationSummary {
+  id        : string                      ;
+  title     : string                      ;
+  preview   : string                      ;
+  cwd       : string                      ;
+  updatedAt : number | null               ;
+  status    : "idle" | "active" | "unknown";
+}
+
+export interface ConversationCatalog {
+  threads    : ConversationSummary[] ;
+  nextCursor : string | null         ;
+}
+
 export interface WwwApi {
+  listConversations      (cursor?: string                     ): Promise<ConversationCatalog>;
+  openConversation       (threadId: string                     ): Promise<{ threadId: string; events: AppEvent[] }>;
+  newConversation        ()                                   : Promise<void>;
+  openExternal           (url: string                          ): Promise<void>;
   chooseWorkspace        ()                                   : Promise<WorkspaceInfo | null>;
   workspace              ()                                   : Promise<WorkspaceInfo>;
   startThread            ()                                   : Promise<{ threadId: string }>;

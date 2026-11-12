@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "id": "report-3dd70732-13f2-4162-9500-d13b03fdfb0d",
+  "workId": "work-baa0963b-ea71-48e7-a34f-0d229ba704b1",
+  "title": "오픈소스 채팅 뼈대와 Native 대화 재개 통합",
+  "summary": "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome": "blocked",
+  "kind": "snapshot",
+  "event": "verify",
+  "createdAt": "2026-11-12T22:58:08.250Z",
+  "workRecordHash": "f34cfcfbc3a44f18ac54d3beffc5302616928e5a47eae8400d83b1c848d9046d",
+  "sourceDigest": "977e009428c53807ea5dcc96850bc5fc890c721b807647b7bd1e558916cd49e0",
+  "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101",
+  "semanticHash": "9810e484821abf21dbb67584dfa807ab5e855a3d72804876c03d377c67a5fde7",
+  "narrative": null,
+  "work": {
+    "status": "verifying",
+    "blockedReason": "verification_failed; artifacts_changed",
+    "criteria": [
+      {
+        "id": "AC-1",
+        "description": "실제 upstream 출처·revision·라이선스를 보존한 채팅 코드가 Native 답변·공개 설명·도구·변경·승인을 표현하고 Markdown·코드복사·인용 입력을 제공한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-2",
+        "description": "프로젝트 대화 목록·새 대화·저장 이력 재열기·동일 Native thread 후속 요청을 지원하며 과거 이력을 현재 실행·승인으로 재생하지 않는다.",
+        "required": true,
+        "result": "failed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-14994d5d-6e05-43fe-a15b-bd8df5824e8b",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          }
+        ]
+      },
+      {
+        "id": "AC-3",
+        "description": "대화별 초안·읽기 위치·펼침 상태를 보존하고 전송 실패·중복·중단·한국어 입력의 기존 의미를 유지한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-4",
+        "description": "집중 테스트·타입·빌드와 실제 Electron 합성 경계 검증을 수행하고 기존 사이드바 변경 및 Native 실기·독립 검토 한계를 구분한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-d6a44bcb-190c-4954-9e8e-550ffa6f0b59",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-e35dc33c-616e-40db-90bd-9aba9b30614c",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-d6a44bcb-190c-4954-9e8e-550ffa6f0b59",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T22:53:24.543Z"
+      },
+      {
+        "id": "attempt-e35dc33c-616e-40db-90bd-9aba9b30614c",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T22:55:06.171Z"
+      },
+      {
+        "id": "attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee",
+        "command": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T22:55:11.829Z"
+      },
+      {
+        "id": "attempt-14994d5d-6e05-43fe-a15b-bd8df5824e8b",
+        "command": "bun",
+        "args": [
+          "test/verify-chat-live.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T22:58:08.168Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "review-32355cdb-ad40-446b-ba2b-69999fd7ee61",
+        "verdict": "not_run",
+        "model": null,
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-32355cdb-ad40-446b-ba2b-69999fd7ee61/opus.json",
+        "findings": []
+      }
+    ]
+  },
+  "source": {
+    "recordPath": "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/work.json",
+    "workRecordHash": "f34cfcfbc3a44f18ac54d3beffc5302616928e5a47eae8400d83b1c848d9046d",
+    "sourceDigest": "977e009428c53807ea5dcc96850bc5fc890c721b807647b7bd1e558916cd49e0",
+    "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101"
+  }
+}

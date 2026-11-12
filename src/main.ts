@@ -1,9 +1,10 @@
-import { app, BrowserWindow, dialog, ipcMain } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
 import { spawn, execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { JsonRpcClient, type RpcMessage } from "./rpc";
+import { createConversationService, type ConversationEvent } from "./conversations";
 import { createDevelopmentService } from "./development";
 import { createReportService } from "./reports-service";
 import { createNativeReportHarness } from "./native-reports";
@@ -22,6 +23,12 @@ let workspace     = PROBE_PATH && process.env.WWW_PROBE_WORKSPACE ? resolve(proc
 let rpc    : JsonRpcClient | null = null  ;
 let window : BrowserWindow | null = null  ;
 let threadStarted                 = false ;
+let connecting : Promise<JsonRpcClient> | null = null;
+let activeThreadId : string | null = null;
+let activeTurnId   : string | null = null;
+let turnStarting                  = false;
+let switchingConversation         = false;
+const endedTurns = new Set<string>();
 
 let reportRepository : string | null                                       = null ;
 let nativeReports    : ReturnType<typeof createNativeReportHarness> | null = null ;
@@ -30,7 +37,8 @@ let autoReportsEnabled  = !PROBE_PATH || process.env.WWW_PROBE_NATIVE_REPORTS ==
 const reportAbort       = new AbortController()                                       ;
 const nativeCompletions = new NativeCompletionCollector()                             ;
 
-let seq                     = 0                        ;
+let seq                       = 0                        ;
+let connectionGeneration      = 0                        ;
 const eventLog : AppEvent[] = []                       ;
 const pendingApprovals      = new Map<RpcId, string>() ;
 const approvalAttempts      = new Set<RpcId>()         ;
@@ -53,12 +61,15 @@ function publish(event: Omit<AppEvent, "seq" | "at">): void {
 
 function connect(): Promise<JsonRpcClient> {
   if (rpc) return Promise.resolve(rpc);
-  return new Promise((resolveClient, reject) => {
+  if (connecting) return connecting;
+  connecting = new Promise<JsonRpcClient>((resolveClient, reject) => {
     const child  = spawn(resolveNativeCodex(), ["app-server"], { stdio: ["pipe", "pipe", "pipe"] }) ;
     const client = new JsonRpcClient(child)                                                         ;
     let settled  = false                                                                            ;
     client.once("closed", (error: Error) => {
       rpc = null;
+      activeTurnId = null;
+      turnStarting = false;
       for (const requestId of pendingApprovals.keys()) {
         publish({ kind: "notification", method: "approval/uncertain", params: { message: error.message }, requestId });
       }
@@ -72,6 +83,13 @@ function connect(): Promise<JsonRpcClient> {
     client.on("message", (message: RpcMessage) => {
       const method = String(message.method) ;
       const id     = message.id             ;
+      const params = optionalRecord(message.params);
+      const turn   = params && optionalRecord(params.turn);
+      if (method === "turn/started" && params?.threadId === activeThreadId && turn && typeof turn.id === "string") activeTurnId = turn.id;
+      if (method === "turn/completed" && params && turn && typeof turn.id === "string") {
+        endedTurns.add(`${String(params.threadId)}:${turn.id}`);
+        if (params.threadId === activeThreadId && activeTurnId === turn.id) activeTurnId = null;
+      }
       if (typeof id === "string" || typeof id === "number") {
         const supported = SUPPORTED.has(method);
         if (supported && (pendingApprovals.has(id) || approvalAttempts.has(id))) {
@@ -90,12 +108,26 @@ function connect(): Promise<JsonRpcClient> {
         client.notify("initialized", {});
         rpc = client;
         settled = true;
-        publish({ kind: "transport", method: "transport/connected", params: {} });
+        connectionGeneration += 1;
+        publish({ kind: "transport", method: "transport/connected", params: { connectionGeneration } });
         resolveClient(client);
         void loadRateLimits(client);
       })
       .catch((error) => { settled = true; reject(error); });
-  });
+  }).finally(() => { connecting = null; });
+  return connecting;
+}
+
+function assertConversationIdle(): void {
+  if (switchingConversation) throw new Error("대화를 전환하고 있습니다. 잠시 기다려 주세요.");
+  if (turnStarting || activeTurnId !== null || pendingApprovals.size > 0) throw new Error("실행 또는 승인 요청이 끝난 뒤 대화를 전환할 수 있습니다.");
+}
+
+function replaceConversationEvents(records: readonly ConversationEvent[]): AppEvent[] {
+  eventLog.splice(0);
+  for (const value of records) eventLog.push({ ...value, seq: ++seq, at: new Date().toISOString() });
+  if (eventLog.length > 2000) eventLog.splice(0, eventLog.length - 2000);
+  return [...eventLog];
 }
 
 function workspaceInfo(): WorkspaceInfo {
@@ -130,6 +162,10 @@ async function loadRateLimits(client: JsonRpcClient): Promise<void> {
   } catch {
     if (rpc === client) publish({ kind: "notification", method: "account/rateLimits/unavailable", params: {} });
   } finally { clearTimeout(timeout); }
+}
+
+function optionalRecord(value: unknown): Record<string, unknown> | null {
+  return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : null;
 }
 
 function registerIpc(): void {
@@ -175,6 +211,40 @@ function registerIpc(): void {
   ipcMain.handle("development:policy", () => development.policy());
   ipcMain.handle("development:status", (_event, workId: unknown) => development.status(workId));
   ipcMain.handle("development:complete", (_event, workId: unknown) => development.complete(workId));
+  ipcMain.handle("link:open", async (_event, value: unknown) => {
+    if (typeof value !== "string" || value.length > 8192) throw new Error("외부 링크가 올바르지 않습니다.");
+    const url = new URL(value);
+    if (url.protocol !== "https:" && url.protocol !== "http:") throw new Error("웹 링크만 열 수 있습니다.");
+    await shell.openExternal(url.href);
+  });
+  ipcMain.handle("conversations:list", async (_event, cursor: unknown) => createConversationService(await connect(), workspace).list(cursor));
+  ipcMain.handle("conversations:open", async (_event, value: unknown) => {
+    assertConversationIdle();
+    switchingConversation = true;
+    try {
+      const client = await connect();
+      const restored = await createConversationService(client, workspace).open(value);
+      activeThreadId = restored.threadId;
+      activeTurnId = null;
+      threadStarted = true;
+      const events = replaceConversationEvents([
+        { kind: "transport", method: "transport/status", params: { state: "connected", connectionGeneration }, historical: true },
+        { kind: "notification", method: "thread/configured", params: { threadId: restored.threadId, model: restored.model, modelProvider: restored.provider, approvalPolicy: restored.approvalPolicy, sandbox: restored.sandbox, isNew: false }, historical: true },
+        ...restored.events
+      ]);
+      return { threadId: restored.threadId, events };
+    } finally { switchingConversation = false; }
+  });
+  ipcMain.handle("conversations:new", () => {
+    assertConversationIdle();
+    activeThreadId = null;
+    activeTurnId = null;
+    threadStarted = false;
+    replaceConversationEvents([
+      { kind: "notification", method: "conversation/restored", params: { threadId: null, complete: true }, historical: true },
+      { kind: "transport", method: "transport/status", params: { state: rpc ? "connected" : "closed", connectionGeneration }, historical: true }
+    ]);
+  });
   ipcMain.handle("workspace:get", () => workspaceInfo());
   ipcMain.handle("workspace:choose", async () => {
     if (threadStarted) throw new Error("작업 폴더는 첫 스레드 전에만 변경할 수 있습니다.");
@@ -184,28 +254,39 @@ function registerIpc(): void {
     return workspaceInfo();
   });
   ipcMain.handle("thread:start", async () => {
-    const client   = await connect()                                                                  ;
-    const result   = record(await client.request("thread/start", nativeThreadStartParams(workspace))) ;
-    const threadId = requiredString(record(result.thread).id, "thread ID")                            ;
-    threadStarted = true;
-    publish({ kind: "notification", method: "thread/configured", params: { threadId, model: typeof result.model === "string" ? result.model : null, modelProvider: typeof result.modelProvider === "string" ? result.modelProvider : null, isNew: true } });
-    return { threadId };
+    assertConversationIdle();
+    if (activeThreadId !== null) throw new Error("새 스레드를 시작하기 전에 새 대화를 선택해 주세요.");
+    switchingConversation = true;
+    try {
+      const client   = await connect()                                                                  ;
+      const result   = record(await client.request("thread/start", nativeThreadStartParams(workspace))) ;
+      const threadId = requiredString(record(result.thread).id, "thread ID")                            ;
+      threadStarted = true;
+      activeThreadId = threadId;
+      publish({ kind: "notification", method: "thread/configured", params: { threadId, model: typeof result.model === "string" ? result.model : null, modelProvider: typeof result.modelProvider === "string" ? result.modelProvider : null, isNew: true } });
+      return { threadId };
+    } finally { switchingConversation = false; }
   });
   ipcMain.handle("turn:start", async (_event, threadId: unknown, text: unknown) => {
     const validThreadId = requiredString(threadId, "thread ID");
+    assertConversationIdle();
+    if (validThreadId !== activeThreadId) throw new Error("현재 선택한 대화에만 요청을 보낼 수 있습니다.");
     if (typeof text !== "string" || !text.trim() || text.length > 100_000) throw new Error("Invalid prompt");
     const prompt          = text.trim () ;
     const clientRequestId = randomUUID() ;
+    turnStarting = true;
+    endedTurns.clear();
     publish({ kind: "notification", method: "turn/userPrompt", params: { clientRequestId, threadId: validThreadId, text: prompt } });
     try {
       const result = record        (await (await connect()).request("turn/start", nativeTurnStartParams(validThreadId, prompt))) ;
       const turnId = requiredString(record(result.turn).id, "turn ID"                                                          ) ;
+      if (!endedTurns.has(`${validThreadId}:${turnId}`)) activeTurnId = turnId;
       publish({ kind: "notification", method: "turn/startAccepted", params: { clientRequestId, threadId: validThreadId, turnId } });
       return { turnId };
     } catch (error) {
       publish({ kind: "notification", method: "turn/startFailed", params: { clientRequestId, threadId: validThreadId, message: String(error) } });
       throw error;
-    }
+    } finally { turnStarting = false; }
   });
   ipcMain.handle("turn:interrupt", async (_event, threadId: unknown, turnId: unknown) => {
     requiredString(threadId, "thread ID"); requiredString(turnId, "turn ID");
@@ -338,6 +419,8 @@ function registerIpc(): void {
 function createWindow(): void {
   window = new BrowserWindow({ show: !(PROBE_PATH && process.env.WWW_NATIVE_PROBE === "1"), width: 1440, height: 900, minWidth: 1040, minHeight: 680, backgroundColor: "#0b0b0c", webPreferences: { preload: join(DIST, "preload.js"), contextIsolation: true, nodeIntegration: false, sandbox: true } });
   if (PROBE_PATH && process.env.WWW_PROBE_REPORTS === "1") window.webContents.on("console-message", (_event, ...details) => console.log("report-probe-console", ...details));
+  window.webContents.on("will-navigate", (event) => event.preventDefault());
+  window.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
   void window.loadFile(join(DIST, "index.html"));
 }
 

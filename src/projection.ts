@@ -224,6 +224,7 @@ export function project(events: readonly AppEvent[]): Projection {
     if (event.method === "turn/interruptAcknowledged" && activeTurn && turn === "running" && interrupt === "requested") interrupt = "accepted";
     if (event.method === "turn/interruptUncertain" && activeTurn && turn === "running" && interrupt !== "idle"        ) interrupt = "uncertain";
     if (event.method === "transport/connected") transport = "connected";
+    if (event.method === "transport/status" && (params.state === "connected" || params.state === "closed" || params.state === "error" || params.state === "disconnected")) transport = params.state;
     if (event.method === "transport/closed") {
       transport = "closed";
       closedTurns.add(turnKey(threadId, turnId));
@@ -427,7 +428,7 @@ export function project(events: readonly AppEvent[]): Projection {
       files.status = string(item.status) === "failed" ? "failed" : string(item.status) && string(item.status) !== "completed" ? "unknown" : "completed";
     }
 
-    if (event.kind === "request" && event.requestId !== undefined) {
+    if (event.kind === "request" && event.requestId !== undefined && !event.historical) {
       blocks.push({
         kind      : "approval"                                                                   ,
         id        : `approval-${typeof event.requestId}-${String(event.requestId)}-${event.seq}` ,
@@ -454,7 +455,8 @@ export function project(events: readonly AppEvent[]): Projection {
   }
 
   const working          = turn === "starting" || turn === "running" ;
-  const historyTruncated = events.length > 0 && events[0]!.seq > 1   ;
+  const restored = events.find((event) => event.method === "conversation/restored" && event.historical);
+  const historyTruncated = restored ? object(restored.params).complete !== true : events.length > 0 && events[0]!.seq > 1;
   return {
     blocks           ,
     working          ,

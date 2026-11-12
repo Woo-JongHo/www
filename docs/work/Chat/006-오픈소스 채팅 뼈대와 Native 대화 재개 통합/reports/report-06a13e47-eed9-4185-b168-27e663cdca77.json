@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "id": "report-06a13e47-eed9-4185-b168-27e663cdca77",
+  "workId": "work-baa0963b-ea71-48e7-a34f-0d229ba704b1",
+  "title": "오픈소스 채팅 뼈대와 Native 대화 재개 통합",
+  "summary": "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome": "blocked",
+  "kind": "snapshot",
+  "event": "review",
+  "createdAt": "2026-11-12T22:52:03.742Z",
+  "workRecordHash": "b8d02c40d8de4b09a048ed9704629e57dcfef1b5ca522bc21572c4dff5c7b815",
+  "sourceDigest": "f1769b9551c2aec8fb73578c59bb10b85bc05a5a088cdaf25e884b0e7c3da06f",
+  "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101",
+  "semanticHash": "7bcd272420fbcc8d137ca70afee243043a877e2b6c068a3db111725533b18116",
+  "narrative": null,
+  "work": {
+    "status": "verifying",
+    "blockedReason": "독립 검토 not_run: authentication",
+    "criteria": [
+      {
+        "id": "AC-1",
+        "description": "실제 upstream 출처·revision·라이선스를 보존한 채팅 코드가 Native 답변·공개 설명·도구·변경·승인을 표현하고 Markdown·코드복사·인용 입력을 제공한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-2",
+        "description": "프로젝트 대화 목록·새 대화·저장 이력 재열기·동일 Native thread 후속 요청을 지원하며 과거 이력을 현재 실행·승인으로 재생하지 않는다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-3",
+        "description": "대화별 초안·읽기 위치·펼침 상태를 보존하고 전송 실패·중복·중단·한국어 입력의 기존 의미를 유지한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-4",
+        "description": "집중 테스트·타입·빌드와 실제 Electron 합성 경계 검증을 수행하고 기존 사이드바 변경 및 Native 실기·독립 검토 한계를 구분한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      }
+    ],
+    "verifications": [],
+    "reviews": [
+      {
+        "id": "review-32355cdb-ad40-446b-ba2b-69999fd7ee61",
+        "verdict": "not_run",
+        "model": null,
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-32355cdb-ad40-446b-ba2b-69999fd7ee61/opus.json",
+        "findings": []
+      }
+    ]
+  },
+  "source": {
+    "recordPath": "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/work.json",
+    "workRecordHash": "b8d02c40d8de4b09a048ed9704629e57dcfef1b5ca522bc21572c4dff5c7b815",
+    "sourceDigest": "f1769b9551c2aec8fb73578c59bb10b85bc05a5a088cdaf25e884b0e7c3da06f",
+    "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101"
+  }
+}

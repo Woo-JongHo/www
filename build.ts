@@ -21,6 +21,7 @@ await bundle( "preload.ts" ,  "node"  , "cjs" );
 await bundle("renderer.tsx", "browser", "iife");
 copyFileSync(join(root, "src", "index.html"), join(out, "index.html"));
 copyFileSync(join(root, "src", "native-activity.css"), join(out, "native-activity.css"));
+copyFileSync(join(root, "src", "chat.css"), join(out, "chat.css"));
 const policyDirectory = join(out, "agents", "www");
 mkdirSync(policyDirectory, { recursive: true });
 copyFileSync(join(root, "agents", "www", "review-policy.json"), join(policyDirectory, "review-policy.json"));

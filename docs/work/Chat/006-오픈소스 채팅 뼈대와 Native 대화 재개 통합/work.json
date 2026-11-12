@@ -1,0 +1,3105 @@
+{
+  "schemaVersion": 2,
+  "id": "work-baa0963b-ea71-48e7-a34f-0d229ba704b1",
+  "title": "오픈소스 채팅 뼈대와 Native 대화 재개 통합",
+  "kind": "feature",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner": "ui",
+  "status": "verifying",
+  "blockedReason": "채팅 기능 구현·Native/Electron 표본 검증은 끝났으나 BoxBox 정렬/REFUSE 미해결 및 다른 세션의 사이드바 소스 변경으로 현재 통합본 최종 검증·감사 적용성이 미충족이다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id": "AC-1",
+      "description": "실제 upstream 출처·revision·라이선스를 보존한 채팅 코드가 Native 답변·공개 설명·도구·변경·승인을 표현하고 Markdown·코드복사·인용 입력을 제공한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": [
+        {
+          "attemptId": "attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee",
+          "path": "verification.md#attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee",
+          "summary": "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id": "AC-2",
+      "description": "프로젝트 대화 목록·새 대화·저장 이력 재열기·동일 Native thread 후속 요청을 지원하며 과거 이력을 현재 실행·승인으로 재생하지 않는다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": [
+        {
+          "attemptId": "attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee",
+          "path": "verification.md#attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee",
+          "summary": "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-14994d5d-6e05-43fe-a15b-bd8df5824e8b",
+          "path": "verification.md#attempt-14994d5d-6e05-43fe-a15b-bd8df5824e8b",
+          "summary": "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-756411e7-de22-46fc-a831-cabafd00a940",
+          "path": "verification.md#attempt-756411e7-de22-46fc-a831-cabafd00a940",
+          "summary": "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    },
+    {
+      "id": "AC-3",
+      "description": "대화별 초안·읽기 위치·펼침 상태를 보존하고 전송 실패·중복·중단·한국어 입력의 기존 의미를 유지한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": [
+        {
+          "attemptId": "attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee",
+          "path": "verification.md#attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee",
+          "summary": "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id": "AC-4",
+      "description": "집중 테스트·타입·빌드와 실제 Electron 합성 경계 검증을 수행하고 기존 사이드바 변경 및 Native 실기·독립 검토 한계를 구분한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": [
+        {
+          "attemptId": "attempt-d6a44bcb-190c-4954-9e8e-550ffa6f0b59",
+          "path": "verification.md#attempt-d6a44bcb-190c-4954-9e8e-550ffa6f0b59",
+          "summary": "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-e35dc33c-616e-40db-90bd-9aba9b30614c",
+          "path": "verification.md#attempt-e35dc33c-616e-40db-90bd-9aba9b30614c",
+          "summary": "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role": "www-dev",
+    "requestId": "chat-oss-integrate-woojongho-20261112",
+    "requestHash": "c7bb9fbd831822812991fbd319081464986c2cef73ac670d18c149c797456d3d",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "src",
+        "test",
+        "package.json",
+        "package-lock.json",
+        "build.ts",
+        "docs",
+        "scripts/verify-chat.ts"
+      ],
+      "mutationSurfaces": [
+        "ui",
+        "native",
+        "projection",
+        "ipc",
+        "tests",
+        "docs"
+      ],
+      "verifierCommands": [
+        "[\"npm\",\"run\",\"check\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"npm\",\"run\",\"build\"]",
+        "[\"bun\",\"test\",\"test/conversations.test.ts\",\"test/chat-state.test.ts\"]",
+        "[\"node\",\"scripts/verify-chat.ts\"]",
+        "[\"bun\",\"test/verify-chat-live.ts\"]"
+      ],
+      "commit": false,
+      "publish": false,
+      "source": "direct_user_request",
+      "requestHash": "c7bb9fbd831822812991fbd319081464986c2cef73ac670d18c149c797456d3d"
+    },
+    "inputs": [
+      "build.ts",
+      "docs/ARCHITECTURE.md",
+      "docs/DEVELOPMENT.md",
+      "docs/PRODUCT.md",
+      "docs/specs/chat.md",
+      "docs/third-party/ovis.md",
+      "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md",
+      "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md",
+      "package-lock.json",
+      "package.json",
+      "scripts/verify-chat.ts",
+      "src",
+      "test"
+    ],
+    "nextAction": "verify",
+    "verifications": [
+      {
+        "id": "attempt-d6a44bcb-190c-4954-9e8e-550ffa6f0b59",
+        "startedAt": "2026-11-12T22:53:23.810Z",
+        "completedAt": "2026-11-12T22:53:24.543Z",
+        "source": {
+          "head": "4ef13d29b18188642bf7f7bef6c7d1bb60bfc3c8",
+          "digest": "d126edd7f7418346672ef6622b75b5671ba310b6adc8a85e978d0c9b6828c26a",
+          "inputs": [
+            "build.ts",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/specs/chat.md",
+            "docs/third-party/ovis.md",
+            "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md",
+            "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md",
+            "package-lock.json",
+            "package.json",
+            "scripts/verify-chat.ts",
+            "src",
+            "test"
+          ],
+          "files": [
+            {
+              "path": "build.ts",
+              "type": "file",
+              "digest": "277839aa866d8dc1cb8de89c65d0039750990f38cc04d67a23345c8190af0ce8",
+              "mode": 420
+            },
+            {
+              "path": "docs/ARCHITECTURE.md",
+              "type": "file",
+              "digest": "400ba412ef6d7c14ce65774f21d2912022823863e7df3d9798bfa312c75d7fc2",
+              "mode": 420
+            },
+            {
+              "path": "docs/DEVELOPMENT.md",
+              "type": "file",
+              "digest": "433b7999fbbcd78b366b036a79888f5c51309c120b299ad7adfc75ecf0c78eaf",
+              "mode": 420
+            },
+            {
+              "path": "docs/PRODUCT.md",
+              "type": "file",
+              "digest": "d0c52010a4e179780d78841a754834a57c18121c2dfc69bdaec6c77ab7d382b1",
+              "mode": 420
+            },
+            {
+              "path": "docs/specs/chat.md",
+              "type": "file",
+              "digest": "b4ee3c43555f963e5c07b7209e1c8b6076bc1d3467b559dd1e80ebe9b6a5e549",
+              "mode": 420
+            },
+            {
+              "path": "docs/third-party/ovis.md",
+              "type": "file",
+              "digest": "e82044a91d8e810f9c43feb75bb9c5bc1256f0d84be43ae9983e6608d14a21c6",
+              "mode": 420
+            },
+            {
+              "path": "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md",
+              "type": "file",
+              "digest": "4b4706bc1f31548159bdb0fe4539ca3d13a4119d5ae5f8120eb19fc86bea48cb",
+              "mode": 420
+            },
+            {
+              "path": "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md",
+              "type": "file",
+              "digest": "1b0e27b046e6deeff4e8b83bb4460a5bc01c3e96507a37e0bd72031b81667c4a",
+              "mode": 384
+            },
+            {
+              "path": "package-lock.json",
+              "type": "file",
+              "digest": "f4209136de49f3649cd1bdb7af1002b2c2d01405a0b381d4897ea4e549c1eb51",
+              "mode": 420
+            },
+            {
+              "path": "package.json",
+              "type": "file",
+              "digest": "5c5f59dcfe3519b306b8ff058a416a8c1dcd7ed9bbca8a727cbc08fba5f0accc",
+              "mode": 420
+            },
+            {
+              "path": "scripts/verify-chat.ts",
+              "type": "file",
+              "digest": "b17491a56272a2728ae9473278acb2292e98489667bf69e6a13f9c32c6dc2cf2",
+              "mode": 493
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path": "src/activity-sidebar.ts",
+              "type": "file",
+              "digest": "32ef1470b8519ce5012064a07c85b7b66f58c9d052b923d40c81612aa41d2125",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-message.tsx",
+              "type": "file",
+              "digest": "5a482b06b912db5629d6ebc10e3879811330280a57f86293f8439e31b793331a",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-row-state.tsx",
+              "type": "file",
+              "digest": "01cb8c0ccc96eda8a809cfd046b32a903966027375943a66c56d0b99d248ac2e",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-state.ts",
+              "type": "file",
+              "digest": "eed9e3608b6525638119859c096d6fb46bfba1ec0111acb3e6ca96aede6ac0d7",
+              "mode": 420
+            },
+            {
+              "path": "src/chat.css",
+              "type": "file",
+              "digest": "01e023ef99943bfae5f54423b0453082af3b46a1bdd2d9444092192958148d9c",
+              "mode": 420
+            },
+            {
+              "path": "src/conversations.ts",
+              "type": "file",
+              "digest": "6fede61cb4ebd6126398151a2470cb0e62db12fe69569fb0b387211b73283259",
+              "mode": 420
+            },
+            {
+              "path": "src/development.ts",
+              "type": "file",
+              "digest": "f8301dbe318351b745a8ffb70ded6b3cde7cdc02ac4ff617040f14281ba96ca1",
+              "mode": 420
+            },
+            {
+              "path": "src/ecosystem-view.tsx",
+              "type": "file",
+              "digest": "c795e145edd18508ee7e44e9bc830426e7064d9b159350b013c8ede2f61e0333",
+              "mode": 420
+            },
+            {
+              "path": "src/ecosystem.ts",
+              "type": "file",
+              "digest": "9503bd32b21f7630b9ff2329e10c1f9bfda746d85ef90d5b3fcc6fd8e0d60e4b",
+              "mode": 420
+            },
+            {
+              "path": "src/index.html",
+              "type": "file",
+              "digest": "31e347810ea1aea8cb1ee0b2a44a0e2b09d3dfaa103e712e2f8c811a04ad7732",
+              "mode": 420
+            },
+            {
+              "path": "src/input.ts",
+              "type": "file",
+              "digest": "d915ba1a024a6c930d1acebf93a7257cb35b16ad9f2f48ddf54013cd5929b0d0",
+              "mode": 420
+            },
+            {
+              "path": "src/main.ts",
+              "type": "file",
+              "digest": "357b6525850445377c4c609034fa735ba1553f8f585203e1733eec15479e55de",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity-view.tsx",
+              "type": "file",
+              "digest": "3e0f1cc15591a0888f22a9933c06136faa96df9f5cb91cf08b96f90fe4474125",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity.css",
+              "type": "file",
+              "digest": "e7e431790f1c717ce974693d437c8fc3588ba4ce9bda560cbd9325450c464784",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity.ts",
+              "type": "file",
+              "digest": "19af9b32ace5cd9014d7ba6dec1aac37eb4d093d5ee0e2a1226bb55defd73aac",
+              "mode": 420
+            },
+            {
+              "path": "src/native-chat.ts",
+              "type": "file",
+              "digest": "5593df6914c6002ff3232bb6f318b02fe661cbba7d7aa8ec002ff85e7410bb7b",
+              "mode": 420
+            },
+            {
+              "path": "src/native-command.ts",
+              "type": "file",
+              "digest": "1649309ed54ab42b20a72b250cc6dd87b7dde096ff781abd5bf6802aee91e282",
+              "mode": 420
+            },
+            {
+              "path": "src/native-report-input.ts",
+              "type": "file",
+              "digest": "68f3fc6e15486b0daa7583cbb08ea4549f59afd0740e963e44b9c7921aa849c2",
+              "mode": 420
+            },
+            {
+              "path": "src/native-reports.ts",
+              "type": "file",
+              "digest": "c0c6603a4109dccaae77585ac4891c8542ae993ed94f89c665fb9cb412654dd9",
+              "mode": 420
+            },
+            {
+              "path": "src/preload.ts",
+              "type": "file",
+              "digest": "69a22504d09834b12d285d27062c2be95ba6f24e81aa4d79578c2bc077e914e5",
+              "mode": 420
+            },
+            {
+              "path": "src/projection.ts",
+              "type": "file",
+              "digest": "d6403548745f27b4dedf2833923eb0ac95b97698c135d4a4858ba1ce953d1c54",
+              "mode": 420
+            },
+            {
+              "path": "src/renderer.tsx",
+              "type": "file",
+              "digest": "fc4e011d54de1b08f1f45fcd7f3e4213cf9eab8beaa801ad2aca7ce21a4c9d9f",
+              "mode": 420
+            },
+            {
+              "path": "src/report-judge.ts",
+              "type": "file",
+              "digest": "80170d3852300e57cd1516ca938d081bd27cb600d8ad71104b77ac89486680e3",
+              "mode": 420
+            },
+            {
+              "path": "src/reports-service.ts",
+              "type": "file",
+              "digest": "896d4dedf42bf6f0b1c34b441d9b4c519459b830c476696a669d6e175acf8614",
+              "mode": 420
+            },
+            {
+              "path": "src/reports-view.tsx",
+              "type": "file",
+              "digest": "7eb88244000f916880a190f849579d39c7c25abaec6fa7091166e8849f4098d3",
+              "mode": 420
+            },
+            {
+              "path": "src/rpc.ts",
+              "type": "file",
+              "digest": "6ce78a35de91ce6d52aa8782627f96f18e77719c68e36d16fcd0f4347c6da24b",
+              "mode": 420
+            },
+            {
+              "path": "src/shared.ts",
+              "type": "file",
+              "digest": "a483d866bc3fdead1986e20dc6aac26ee07d2f9e6b557daa058ee8f322a36731",
+              "mode": 420
+            },
+            {
+              "path": "test",
+              "type": "directory"
+            },
+            {
+              "path": "test/activity-sidebar.test.ts",
+              "type": "file",
+              "digest": "d5d66b076c32038b103d65d73f9b7705c5c0444bf189b06c390d359b1c05a584",
+              "mode": 420
+            },
+            {
+              "path": "test/chat-state.test.ts",
+              "type": "file",
+              "digest": "2fa021f8bf4cbc72e2c40618659fdb77d7735c35b021dbc76fdea33d0709227d",
+              "mode": 420
+            },
+            {
+              "path": "test/conversations.test.ts",
+              "type": "file",
+              "digest": "8919770ec62ba45cbf8e894bde8a951ebed9d597d64e1b967e0139b9ea00c240",
+              "mode": 420
+            },
+            {
+              "path": "test/development-policy.test.ts",
+              "type": "file",
+              "digest": "b0229deed223f9e57bf6bb84ba9ba3116b73c964f54b388564e4cd92990616f9",
+              "mode": 420
+            },
+            {
+              "path": "test/ecosystem.test.ts",
+              "type": "file",
+              "digest": "652ef6a265ee03d56edf56a79b603d5664deb9cffa207893ba94be52956b6a5e",
+              "mode": 420
+            },
+            {
+              "path": "test/fixtures",
+              "type": "directory"
+            },
+            {
+              "path": "test/fixtures/activity-app-server.ts",
+              "type": "file",
+              "digest": "144ecf5bd84f6e83746cebff955ed926a6b480e3038f4c558ffdeab611e06f67",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/chat-ui-app-server.ts",
+              "type": "file",
+              "digest": "72c6651834727c1235265b95a5926410d293a27a38104884f2f35d718a6d2cce",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/conversations-app-server.ts",
+              "type": "file",
+              "digest": "cf35fafea7c778e67459b864549198983ff640628fdecec6a3d3632771a2aa67",
+              "mode": 420
+            },
+            {
+              "path": "test/fixtures/fake-app-server.ts",
+              "type": "file",
+              "digest": "f7e19e00f4a0c81d368af1ce4c8280186f235059f6935d0a4dac36ac40352332",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/fake-workflow-host.ts",
+              "type": "file",
+              "digest": "577b1015eb64e7372e73bef353c7df14d23775e7ab0e394ee5cd83fc5cc50da4",
+              "mode": 420
+            },
+            {
+              "path": "test/input.test.ts",
+              "type": "file",
+              "digest": "fcc9359f0e74893d369743f6c49b5a98cba7d952dab35c7e2683f4234c5a4424",
+              "mode": 420
+            },
+            {
+              "path": "test/native-activity.test.ts",
+              "type": "file",
+              "digest": "7e0b0818ab117c119f1e5e4a6f4ac5028c186cfb4b263d1f76ccc9694eefa5f8",
+              "mode": 420
+            },
+            {
+              "path": "test/native-chat.test.ts",
+              "type": "file",
+              "digest": "36c30797bb2a6739975d9b0b0b8d1ae2d8ed1f3c56d45369b2b0f460096d68a3",
+              "mode": 420
+            },
+            {
+              "path": "test/native-report-input.test.ts",
+              "type": "file",
+              "digest": "d96fce5d73c75ed3813dbf13827aafed06867bb82e0902cf81a8c6f93cf98d11",
+              "mode": 420
+            },
+            {
+              "path": "test/native-reports.test.ts",
+              "type": "file",
+              "digest": "39a02200ab7b49a75c1eea7010d8c33b003d60db4649e3181e81a0d849a431ad",
+              "mode": 420
+            },
+            {
+              "path": "test/package.json",
+              "type": "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode": 420
+            },
+            {
+              "path": "test/projection.test.ts",
+              "type": "file",
+              "digest": "37c940a46c794710d08251dd19513e790636234e277c677bcee8a86a318fb795",
+              "mode": 420
+            },
+            {
+              "path": "test/report-judge.test.ts",
+              "type": "file",
+              "digest": "07851826ef464b7486cba6877421382f6976db7b7da35a1cf317b51cbfb43872",
+              "mode": 420
+            },
+            {
+              "path": "test/report-lifecycle.test.ts",
+              "type": "file",
+              "digest": "0482efa261d317fe5d80edd62bf2be8603eaf211e808c22d9fd1c3b4fd5bebad",
+              "mode": 420
+            },
+            {
+              "path": "test/report-service.test.ts",
+              "type": "file",
+              "digest": "252a3ed411044289edb58486cbeb20347712dee16323874ef83f4922c109a562",
+              "mode": 420
+            },
+            {
+              "path": "test/rpc.fixture.test.ts",
+              "type": "file",
+              "digest": "0cf628f7427645e917ee288fb540b57136a75d189b904907a14e7e64957c65ff",
+              "mode": 420
+            },
+            {
+              "path": "test/rpc.test.ts",
+              "type": "file",
+              "digest": "a3ccecd21e339c1ebc85145d526890e0d2fd94bbe646c4ce9d2313f230b1d91f",
+              "mode": 420
+            },
+            {
+              "path": "test/skill-library.test.ts",
+              "type": "file",
+              "digest": "e8a4b52a45aae4a61104f197bd0cb94c5c0e6d5410fc3a5642bd5251270c9cd4",
+              "mode": 420
+            },
+            {
+              "path": "test/source-policy.test.ts",
+              "type": "file",
+              "digest": "eb871fd6de1674772dcdf8af0373e7f8ab24c7bb8ea3311de5ef1a7255696089",
+              "mode": 420
+            },
+            {
+              "path": "test/typed-workflow.test.ts",
+              "type": "file",
+              "digest": "b6dcf02a68677ea7f71502a1d44b9c314ec02903970451609d3a2d1fb3b8165f",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-chat-live.ts",
+              "type": "file",
+              "digest": "99b6aad9301053e51af92194c12202dad6b99bedd85d792d500002be9c63c6b9",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-native-activity-live.ts",
+              "type": "file",
+              "digest": "ff733010722f0da4a23f0a03b1c28ece29b78bd1a16a9df1bae69c3bb1845970",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-native-report-live.ts",
+              "type": "file",
+              "digest": "d20808d46845aa62ae9b97132188836d8cc1b06db07c651bd96f33bdbea2399b",
+              "mode": 420
+            },
+            {
+              "path": "test/windows-native.test.ts",
+              "type": "file",
+              "digest": "749cecd302e70fa844f33ed98f38d056bd39ab0d70e1708606c98b82486eaac4",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-codex.test.ts",
+              "type": "file",
+              "digest": "55214f24dd6300fa2960247b59b3625f86937edb6fa7b686e8f680f042888421",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-contract.test.ts",
+              "type": "file",
+              "digest": "8587252e9e8208a390d04e6b0ac0b0939de0e6e3428a282d0f401c0af80a464b",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-development.test.ts",
+              "type": "file",
+              "digest": "76604b218991765beb9227109fb20d7e2379b5e311f06537ddade0a4c3ebb015",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-evidence.test.ts",
+              "type": "file",
+              "digest": "f24735f359962b2f985e3ccb889727e79b6087835604bdd0d0f3374a5367ffe6",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-harness.test.ts",
+              "type": "file",
+              "digest": "c51d0742d23c8f296e67e7cd5c955e311cdd3d5ac9cb331873bb427a58889651",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-reports.test.ts",
+              "type": "file",
+              "digest": "5b8021691243d95b2217df8d9e2f07b6af42902c53c13a89817f3d4307a15a91",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-review.test.ts",
+              "type": "file",
+              "digest": "9dc84e63b24fdcb5c6e8f99dcb1fbbc53cb420509a2a447ffe2277d7cb5a943f",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-windows-command.test.ts",
+              "type": "file",
+              "digest": "1cc83762d3450ca8d703282a5cccd067983160d2b64002ded3455bf5389f3c4c",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-work.test.ts",
+              "type": "file",
+              "digest": "dd93b4bd4e8983ce2c30ec27e5a648b8c20b37f16d86e176118262add439cb9e",
+              "mode": 420
+            }
+          ]
+        },
+        "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101",
+        "criteriaSnapshot": [
+          {
+            "id": "AC-1",
+            "description": "실제 upstream 출처·revision·라이선스를 보존한 채팅 코드가 Native 답변·공개 설명·도구·변경·승인을 표현하고 Markdown·코드복사·인용 입력을 제공한다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-2",
+            "description": "프로젝트 대화 목록·새 대화·저장 이력 재열기·동일 Native thread 후속 요청을 지원하며 과거 이력을 현재 실행·승인으로 재생하지 않는다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-3",
+            "description": "대화별 초안·읽기 위치·펼침 상태를 보존하고 전송 실패·중복·중단·한국어 입력의 기존 의미를 유지한다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-4",
+            "description": "집중 테스트·타입·빌드와 실제 Electron 합성 경계 검증을 수행하고 기존 사이드바 변경 및 Native 실기·독립 검토 한계를 구분한다.",
+            "required": true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "argumentsRedacted": false,
+        "exitCode": 1,
+        "signal": null,
+        "error": null,
+        "result": "failed",
+        "criterionIds": [
+          "AC-4"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes": 299,
+            "digest": "5d10a42047c77d7a5db5987f4a997435c648caf906bf8d72a1736c4ae2e588a5",
+            "truncated": false,
+            "retainedBytes": 299,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes": 1066,
+            "digest": "59b997989f51068c031036b7ae40836cafbf15fcd3a9d43da2f2a0e66eb220ca",
+            "truncated": false,
+            "retainedBytes": 1066,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id": "attempt-e35dc33c-616e-40db-90bd-9aba9b30614c",
+        "startedAt": "2026-11-12T22:54:38.387Z",
+        "completedAt": "2026-11-12T22:55:06.171Z",
+        "source": {
+          "head": "4ef13d29b18188642bf7f7bef6c7d1bb60bfc3c8",
+          "digest": "d126edd7f7418346672ef6622b75b5671ba310b6adc8a85e978d0c9b6828c26a",
+          "inputs": [
+            "build.ts",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/specs/chat.md",
+            "docs/third-party/ovis.md",
+            "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md",
+            "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md",
+            "package-lock.json",
+            "package.json",
+            "scripts/verify-chat.ts",
+            "src",
+            "test"
+          ],
+          "files": [
+            {
+              "path": "build.ts",
+              "type": "file",
+              "digest": "277839aa866d8dc1cb8de89c65d0039750990f38cc04d67a23345c8190af0ce8",
+              "mode": 420
+            },
+            {
+              "path": "docs/ARCHITECTURE.md",
+              "type": "file",
+              "digest": "400ba412ef6d7c14ce65774f21d2912022823863e7df3d9798bfa312c75d7fc2",
+              "mode": 420
+            },
+            {
+              "path": "docs/DEVELOPMENT.md",
+              "type": "file",
+              "digest": "433b7999fbbcd78b366b036a79888f5c51309c120b299ad7adfc75ecf0c78eaf",
+              "mode": 420
+            },
+            {
+              "path": "docs/PRODUCT.md",
+              "type": "file",
+              "digest": "d0c52010a4e179780d78841a754834a57c18121c2dfc69bdaec6c77ab7d382b1",
+              "mode": 420
+            },
+            {
+              "path": "docs/specs/chat.md",
+              "type": "file",
+              "digest": "b4ee3c43555f963e5c07b7209e1c8b6076bc1d3467b559dd1e80ebe9b6a5e549",
+              "mode": 420
+            },
+            {
+              "path": "docs/third-party/ovis.md",
+              "type": "file",
+              "digest": "e82044a91d8e810f9c43feb75bb9c5bc1256f0d84be43ae9983e6608d14a21c6",
+              "mode": 420
+            },
+            {
+              "path": "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md",
+              "type": "file",
+              "digest": "4b4706bc1f31548159bdb0fe4539ca3d13a4119d5ae5f8120eb19fc86bea48cb",
+              "mode": 420
+            },
+            {
+              "path": "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md",
+              "type": "file",
+              "digest": "1b0e27b046e6deeff4e8b83bb4460a5bc01c3e96507a37e0bd72031b81667c4a",
+              "mode": 384
+            },
+            {
+              "path": "package-lock.json",
+              "type": "file",
+              "digest": "f4209136de49f3649cd1bdb7af1002b2c2d01405a0b381d4897ea4e549c1eb51",
+              "mode": 420
+            },
+            {
+              "path": "package.json",
+              "type": "file",
+              "digest": "5c5f59dcfe3519b306b8ff058a416a8c1dcd7ed9bbca8a727cbc08fba5f0accc",
+              "mode": 420
+            },
+            {
+              "path": "scripts/verify-chat.ts",
+              "type": "file",
+              "digest": "b17491a56272a2728ae9473278acb2292e98489667bf69e6a13f9c32c6dc2cf2",
+              "mode": 493
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path": "src/activity-sidebar.ts",
+              "type": "file",
+              "digest": "32ef1470b8519ce5012064a07c85b7b66f58c9d052b923d40c81612aa41d2125",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-message.tsx",
+              "type": "file",
+              "digest": "5a482b06b912db5629d6ebc10e3879811330280a57f86293f8439e31b793331a",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-row-state.tsx",
+              "type": "file",
+              "digest": "01cb8c0ccc96eda8a809cfd046b32a903966027375943a66c56d0b99d248ac2e",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-state.ts",
+              "type": "file",
+              "digest": "eed9e3608b6525638119859c096d6fb46bfba1ec0111acb3e6ca96aede6ac0d7",
+              "mode": 420
+            },
+            {
+              "path": "src/chat.css",
+              "type": "file",
+              "digest": "01e023ef99943bfae5f54423b0453082af3b46a1bdd2d9444092192958148d9c",
+              "mode": 420
+            },
+            {
+              "path": "src/conversations.ts",
+              "type": "file",
+              "digest": "6fede61cb4ebd6126398151a2470cb0e62db12fe69569fb0b387211b73283259",
+              "mode": 420
+            },
+            {
+              "path": "src/development.ts",
+              "type": "file",
+              "digest": "f8301dbe318351b745a8ffb70ded6b3cde7cdc02ac4ff617040f14281ba96ca1",
+              "mode": 420
+            },
+            {
+              "path": "src/ecosystem-view.tsx",
+              "type": "file",
+              "digest": "c795e145edd18508ee7e44e9bc830426e7064d9b159350b013c8ede2f61e0333",
+              "mode": 420
+            },
+            {
+              "path": "src/ecosystem.ts",
+              "type": "file",
+              "digest": "9503bd32b21f7630b9ff2329e10c1f9bfda746d85ef90d5b3fcc6fd8e0d60e4b",
+              "mode": 420
+            },
+            {
+              "path": "src/index.html",
+              "type": "file",
+              "digest": "31e347810ea1aea8cb1ee0b2a44a0e2b09d3dfaa103e712e2f8c811a04ad7732",
+              "mode": 420
+            },
+            {
+              "path": "src/input.ts",
+              "type": "file",
+              "digest": "d915ba1a024a6c930d1acebf93a7257cb35b16ad9f2f48ddf54013cd5929b0d0",
+              "mode": 420
+            },
+            {
+              "path": "src/main.ts",
+              "type": "file",
+              "digest": "357b6525850445377c4c609034fa735ba1553f8f585203e1733eec15479e55de",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity-view.tsx",
+              "type": "file",
+              "digest": "3e0f1cc15591a0888f22a9933c06136faa96df9f5cb91cf08b96f90fe4474125",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity.css",
+              "type": "file",
+              "digest": "e7e431790f1c717ce974693d437c8fc3588ba4ce9bda560cbd9325450c464784",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity.ts",
+              "type": "file",
+              "digest": "19af9b32ace5cd9014d7ba6dec1aac37eb4d093d5ee0e2a1226bb55defd73aac",
+              "mode": 420
+            },
+            {
+              "path": "src/native-chat.ts",
+              "type": "file",
+              "digest": "5593df6914c6002ff3232bb6f318b02fe661cbba7d7aa8ec002ff85e7410bb7b",
+              "mode": 420
+            },
+            {
+              "path": "src/native-command.ts",
+              "type": "file",
+              "digest": "1649309ed54ab42b20a72b250cc6dd87b7dde096ff781abd5bf6802aee91e282",
+              "mode": 420
+            },
+            {
+              "path": "src/native-report-input.ts",
+              "type": "file",
+              "digest": "68f3fc6e15486b0daa7583cbb08ea4549f59afd0740e963e44b9c7921aa849c2",
+              "mode": 420
+            },
+            {
+              "path": "src/native-reports.ts",
+              "type": "file",
+              "digest": "c0c6603a4109dccaae77585ac4891c8542ae993ed94f89c665fb9cb412654dd9",
+              "mode": 420
+            },
+            {
+              "path": "src/preload.ts",
+              "type": "file",
+              "digest": "69a22504d09834b12d285d27062c2be95ba6f24e81aa4d79578c2bc077e914e5",
+              "mode": 420
+            },
+            {
+              "path": "src/projection.ts",
+              "type": "file",
+              "digest": "d6403548745f27b4dedf2833923eb0ac95b97698c135d4a4858ba1ce953d1c54",
+              "mode": 420
+            },
+            {
+              "path": "src/renderer.tsx",
+              "type": "file",
+              "digest": "fc4e011d54de1b08f1f45fcd7f3e4213cf9eab8beaa801ad2aca7ce21a4c9d9f",
+              "mode": 420
+            },
+            {
+              "path": "src/report-judge.ts",
+              "type": "file",
+              "digest": "80170d3852300e57cd1516ca938d081bd27cb600d8ad71104b77ac89486680e3",
+              "mode": 420
+            },
+            {
+              "path": "src/reports-service.ts",
+              "type": "file",
+              "digest": "896d4dedf42bf6f0b1c34b441d9b4c519459b830c476696a669d6e175acf8614",
+              "mode": 420
+            },
+            {
+              "path": "src/reports-view.tsx",
+              "type": "file",
+              "digest": "7eb88244000f916880a190f849579d39c7c25abaec6fa7091166e8849f4098d3",
+              "mode": 420
+            },
+            {
+              "path": "src/rpc.ts",
+              "type": "file",
+              "digest": "6ce78a35de91ce6d52aa8782627f96f18e77719c68e36d16fcd0f4347c6da24b",
+              "mode": 420
+            },
+            {
+              "path": "src/shared.ts",
+              "type": "file",
+              "digest": "a483d866bc3fdead1986e20dc6aac26ee07d2f9e6b557daa058ee8f322a36731",
+              "mode": 420
+            },
+            {
+              "path": "test",
+              "type": "directory"
+            },
+            {
+              "path": "test/activity-sidebar.test.ts",
+              "type": "file",
+              "digest": "d5d66b076c32038b103d65d73f9b7705c5c0444bf189b06c390d359b1c05a584",
+              "mode": 420
+            },
+            {
+              "path": "test/chat-state.test.ts",
+              "type": "file",
+              "digest": "2fa021f8bf4cbc72e2c40618659fdb77d7735c35b021dbc76fdea33d0709227d",
+              "mode": 420
+            },
+            {
+              "path": "test/conversations.test.ts",
+              "type": "file",
+              "digest": "8919770ec62ba45cbf8e894bde8a951ebed9d597d64e1b967e0139b9ea00c240",
+              "mode": 420
+            },
+            {
+              "path": "test/development-policy.test.ts",
+              "type": "file",
+              "digest": "b0229deed223f9e57bf6bb84ba9ba3116b73c964f54b388564e4cd92990616f9",
+              "mode": 420
+            },
+            {
+              "path": "test/ecosystem.test.ts",
+              "type": "file",
+              "digest": "652ef6a265ee03d56edf56a79b603d5664deb9cffa207893ba94be52956b6a5e",
+              "mode": 420
+            },
+            {
+              "path": "test/fixtures",
+              "type": "directory"
+            },
+            {
+              "path": "test/fixtures/activity-app-server.ts",
+              "type": "file",
+              "digest": "144ecf5bd84f6e83746cebff955ed926a6b480e3038f4c558ffdeab611e06f67",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/chat-ui-app-server.ts",
+              "type": "file",
+              "digest": "72c6651834727c1235265b95a5926410d293a27a38104884f2f35d718a6d2cce",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/conversations-app-server.ts",
+              "type": "file",
+              "digest": "cf35fafea7c778e67459b864549198983ff640628fdecec6a3d3632771a2aa67",
+              "mode": 420
+            },
+            {
+              "path": "test/fixtures/fake-app-server.ts",
+              "type": "file",
+              "digest": "f7e19e00f4a0c81d368af1ce4c8280186f235059f6935d0a4dac36ac40352332",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/fake-workflow-host.ts",
+              "type": "file",
+              "digest": "577b1015eb64e7372e73bef353c7df14d23775e7ab0e394ee5cd83fc5cc50da4",
+              "mode": 420
+            },
+            {
+              "path": "test/input.test.ts",
+              "type": "file",
+              "digest": "fcc9359f0e74893d369743f6c49b5a98cba7d952dab35c7e2683f4234c5a4424",
+              "mode": 420
+            },
+            {
+              "path": "test/native-activity.test.ts",
+              "type": "file",
+              "digest": "7e0b0818ab117c119f1e5e4a6f4ac5028c186cfb4b263d1f76ccc9694eefa5f8",
+              "mode": 420
+            },
+            {
+              "path": "test/native-chat.test.ts",
+              "type": "file",
+              "digest": "36c30797bb2a6739975d9b0b0b8d1ae2d8ed1f3c56d45369b2b0f460096d68a3",
+              "mode": 420
+            },
+            {
+              "path": "test/native-report-input.test.ts",
+              "type": "file",
+              "digest": "d96fce5d73c75ed3813dbf13827aafed06867bb82e0902cf81a8c6f93cf98d11",
+              "mode": 420
+            },
+            {
+              "path": "test/native-reports.test.ts",
+              "type": "file",
+              "digest": "39a02200ab7b49a75c1eea7010d8c33b003d60db4649e3181e81a0d849a431ad",
+              "mode": 420
+            },
+            {
+              "path": "test/package.json",
+              "type": "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode": 420
+            },
+            {
+              "path": "test/projection.test.ts",
+              "type": "file",
+              "digest": "37c940a46c794710d08251dd19513e790636234e277c677bcee8a86a318fb795",
+              "mode": 420
+            },
+            {
+              "path": "test/report-judge.test.ts",
+              "type": "file",
+              "digest": "07851826ef464b7486cba6877421382f6976db7b7da35a1cf317b51cbfb43872",
+              "mode": 420
+            },
+            {
+              "path": "test/report-lifecycle.test.ts",
+              "type": "file",
+              "digest": "0482efa261d317fe5d80edd62bf2be8603eaf211e808c22d9fd1c3b4fd5bebad",
+              "mode": 420
+            },
+            {
+              "path": "test/report-service.test.ts",
+              "type": "file",
+              "digest": "252a3ed411044289edb58486cbeb20347712dee16323874ef83f4922c109a562",
+              "mode": 420
+            },
+            {
+              "path": "test/rpc.fixture.test.ts",
+              "type": "file",
+              "digest": "0cf628f7427645e917ee288fb540b57136a75d189b904907a14e7e64957c65ff",
+              "mode": 420
+            },
+            {
+              "path": "test/rpc.test.ts",
+              "type": "file",
+              "digest": "a3ccecd21e339c1ebc85145d526890e0d2fd94bbe646c4ce9d2313f230b1d91f",
+              "mode": 420
+            },
+            {
+              "path": "test/skill-library.test.ts",
+              "type": "file",
+              "digest": "e8a4b52a45aae4a61104f197bd0cb94c5c0e6d5410fc3a5642bd5251270c9cd4",
+              "mode": 420
+            },
+            {
+              "path": "test/source-policy.test.ts",
+              "type": "file",
+              "digest": "eb871fd6de1674772dcdf8af0373e7f8ab24c7bb8ea3311de5ef1a7255696089",
+              "mode": 420
+            },
+            {
+              "path": "test/typed-workflow.test.ts",
+              "type": "file",
+              "digest": "b6dcf02a68677ea7f71502a1d44b9c314ec02903970451609d3a2d1fb3b8165f",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-chat-live.ts",
+              "type": "file",
+              "digest": "99b6aad9301053e51af92194c12202dad6b99bedd85d792d500002be9c63c6b9",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-native-activity-live.ts",
+              "type": "file",
+              "digest": "ff733010722f0da4a23f0a03b1c28ece29b78bd1a16a9df1bae69c3bb1845970",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-native-report-live.ts",
+              "type": "file",
+              "digest": "d20808d46845aa62ae9b97132188836d8cc1b06db07c651bd96f33bdbea2399b",
+              "mode": 420
+            },
+            {
+              "path": "test/windows-native.test.ts",
+              "type": "file",
+              "digest": "749cecd302e70fa844f33ed98f38d056bd39ab0d70e1708606c98b82486eaac4",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-codex.test.ts",
+              "type": "file",
+              "digest": "55214f24dd6300fa2960247b59b3625f86937edb6fa7b686e8f680f042888421",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-contract.test.ts",
+              "type": "file",
+              "digest": "8587252e9e8208a390d04e6b0ac0b0939de0e6e3428a282d0f401c0af80a464b",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-development.test.ts",
+              "type": "file",
+              "digest": "76604b218991765beb9227109fb20d7e2379b5e311f06537ddade0a4c3ebb015",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-evidence.test.ts",
+              "type": "file",
+              "digest": "f24735f359962b2f985e3ccb889727e79b6087835604bdd0d0f3374a5367ffe6",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-harness.test.ts",
+              "type": "file",
+              "digest": "c51d0742d23c8f296e67e7cd5c955e311cdd3d5ac9cb331873bb427a58889651",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-reports.test.ts",
+              "type": "file",
+              "digest": "5b8021691243d95b2217df8d9e2f07b6af42902c53c13a89817f3d4307a15a91",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-review.test.ts",
+              "type": "file",
+              "digest": "9dc84e63b24fdcb5c6e8f99dcb1fbbc53cb420509a2a447ffe2277d7cb5a943f",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-windows-command.test.ts",
+              "type": "file",
+              "digest": "1cc83762d3450ca8d703282a5cccd067983160d2b64002ded3455bf5389f3c4c",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-work.test.ts",
+              "type": "file",
+              "digest": "dd93b4bd4e8983ce2c30ec27e5a648b8c20b37f16d86e176118262add439cb9e",
+              "mode": 420
+            }
+          ]
+        },
+        "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101",
+        "criteriaSnapshot": [
+          {
+            "id": "AC-1",
+            "description": "실제 upstream 출처·revision·라이선스를 보존한 채팅 코드가 Native 답변·공개 설명·도구·변경·승인을 표현하고 Markdown·코드복사·인용 입력을 제공한다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-2",
+            "description": "프로젝트 대화 목록·새 대화·저장 이력 재열기·동일 Native thread 후속 요청을 지원하며 과거 이력을 현재 실행·승인으로 재생하지 않는다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-3",
+            "description": "대화별 초안·읽기 위치·펼침 상태를 보존하고 전송 실패·중복·중단·한국어 입력의 기존 의미를 유지한다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-4",
+            "description": "집중 테스트·타입·빌드와 실제 Electron 합성 경계 검증을 수행하고 기존 사이드바 변경 및 Native 실기·독립 검토 한계를 구분한다.",
+            "required": true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "argumentsRedacted": false,
+        "exitCode": 0,
+        "signal": null,
+        "error": null,
+        "result": "passed",
+        "criterionIds": [
+          "AC-4"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes": 36890,
+            "digest": "10da7488e9b6f909443a43c092383af247ef95dc72ffc28dc8a4b1938096069e",
+            "truncated": false,
+            "retainedBytes": 36890,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes": 24030,
+            "digest": "8ee774adab5f22020cb70f7acdc22649ac187f468133742af40550a631a14f5d",
+            "truncated": false,
+            "retainedBytes": 24030,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id": "attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee",
+        "startedAt": "2026-11-12T22:55:06.518Z",
+        "completedAt": "2026-11-12T22:55:11.829Z",
+        "source": {
+          "head": "4ef13d29b18188642bf7f7bef6c7d1bb60bfc3c8",
+          "digest": "d126edd7f7418346672ef6622b75b5671ba310b6adc8a85e978d0c9b6828c26a",
+          "inputs": [
+            "build.ts",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/specs/chat.md",
+            "docs/third-party/ovis.md",
+            "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md",
+            "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md",
+            "package-lock.json",
+            "package.json",
+            "scripts/verify-chat.ts",
+            "src",
+            "test"
+          ],
+          "files": [
+            {
+              "path": "build.ts",
+              "type": "file",
+              "digest": "277839aa866d8dc1cb8de89c65d0039750990f38cc04d67a23345c8190af0ce8",
+              "mode": 420
+            },
+            {
+              "path": "docs/ARCHITECTURE.md",
+              "type": "file",
+              "digest": "400ba412ef6d7c14ce65774f21d2912022823863e7df3d9798bfa312c75d7fc2",
+              "mode": 420
+            },
+            {
+              "path": "docs/DEVELOPMENT.md",
+              "type": "file",
+              "digest": "433b7999fbbcd78b366b036a79888f5c51309c120b299ad7adfc75ecf0c78eaf",
+              "mode": 420
+            },
+            {
+              "path": "docs/PRODUCT.md",
+              "type": "file",
+              "digest": "d0c52010a4e179780d78841a754834a57c18121c2dfc69bdaec6c77ab7d382b1",
+              "mode": 420
+            },
+            {
+              "path": "docs/specs/chat.md",
+              "type": "file",
+              "digest": "b4ee3c43555f963e5c07b7209e1c8b6076bc1d3467b559dd1e80ebe9b6a5e549",
+              "mode": 420
+            },
+            {
+              "path": "docs/third-party/ovis.md",
+              "type": "file",
+              "digest": "e82044a91d8e810f9c43feb75bb9c5bc1256f0d84be43ae9983e6608d14a21c6",
+              "mode": 420
+            },
+            {
+              "path": "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md",
+              "type": "file",
+              "digest": "4b4706bc1f31548159bdb0fe4539ca3d13a4119d5ae5f8120eb19fc86bea48cb",
+              "mode": 420
+            },
+            {
+              "path": "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md",
+              "type": "file",
+              "digest": "1b0e27b046e6deeff4e8b83bb4460a5bc01c3e96507a37e0bd72031b81667c4a",
+              "mode": 384
+            },
+            {
+              "path": "package-lock.json",
+              "type": "file",
+              "digest": "f4209136de49f3649cd1bdb7af1002b2c2d01405a0b381d4897ea4e549c1eb51",
+              "mode": 420
+            },
+            {
+              "path": "package.json",
+              "type": "file",
+              "digest": "5c5f59dcfe3519b306b8ff058a416a8c1dcd7ed9bbca8a727cbc08fba5f0accc",
+              "mode": 420
+            },
+            {
+              "path": "scripts/verify-chat.ts",
+              "type": "file",
+              "digest": "b17491a56272a2728ae9473278acb2292e98489667bf69e6a13f9c32c6dc2cf2",
+              "mode": 493
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path": "src/activity-sidebar.ts",
+              "type": "file",
+              "digest": "32ef1470b8519ce5012064a07c85b7b66f58c9d052b923d40c81612aa41d2125",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-message.tsx",
+              "type": "file",
+              "digest": "5a482b06b912db5629d6ebc10e3879811330280a57f86293f8439e31b793331a",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-row-state.tsx",
+              "type": "file",
+              "digest": "01cb8c0ccc96eda8a809cfd046b32a903966027375943a66c56d0b99d248ac2e",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-state.ts",
+              "type": "file",
+              "digest": "eed9e3608b6525638119859c096d6fb46bfba1ec0111acb3e6ca96aede6ac0d7",
+              "mode": 420
+            },
+            {
+              "path": "src/chat.css",
+              "type": "file",
+              "digest": "01e023ef99943bfae5f54423b0453082af3b46a1bdd2d9444092192958148d9c",
+              "mode": 420
+            },
+            {
+              "path": "src/conversations.ts",
+              "type": "file",
+              "digest": "6fede61cb4ebd6126398151a2470cb0e62db12fe69569fb0b387211b73283259",
+              "mode": 420
+            },
+            {
+              "path": "src/development.ts",
+              "type": "file",
+              "digest": "f8301dbe318351b745a8ffb70ded6b3cde7cdc02ac4ff617040f14281ba96ca1",
+              "mode": 420
+            },
+            {
+              "path": "src/ecosystem-view.tsx",
+              "type": "file",
+              "digest": "c795e145edd18508ee7e44e9bc830426e7064d9b159350b013c8ede2f61e0333",
+              "mode": 420
+            },
+            {
+              "path": "src/ecosystem.ts",
+              "type": "file",
+              "digest": "9503bd32b21f7630b9ff2329e10c1f9bfda746d85ef90d5b3fcc6fd8e0d60e4b",
+              "mode": 420
+            },
+            {
+              "path": "src/index.html",
+              "type": "file",
+              "digest": "31e347810ea1aea8cb1ee0b2a44a0e2b09d3dfaa103e712e2f8c811a04ad7732",
+              "mode": 420
+            },
+            {
+              "path": "src/input.ts",
+              "type": "file",
+              "digest": "d915ba1a024a6c930d1acebf93a7257cb35b16ad9f2f48ddf54013cd5929b0d0",
+              "mode": 420
+            },
+            {
+              "path": "src/main.ts",
+              "type": "file",
+              "digest": "357b6525850445377c4c609034fa735ba1553f8f585203e1733eec15479e55de",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity-view.tsx",
+              "type": "file",
+              "digest": "3e0f1cc15591a0888f22a9933c06136faa96df9f5cb91cf08b96f90fe4474125",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity.css",
+              "type": "file",
+              "digest": "e7e431790f1c717ce974693d437c8fc3588ba4ce9bda560cbd9325450c464784",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity.ts",
+              "type": "file",
+              "digest": "19af9b32ace5cd9014d7ba6dec1aac37eb4d093d5ee0e2a1226bb55defd73aac",
+              "mode": 420
+            },
+            {
+              "path": "src/native-chat.ts",
+              "type": "file",
+              "digest": "5593df6914c6002ff3232bb6f318b02fe661cbba7d7aa8ec002ff85e7410bb7b",
+              "mode": 420
+            },
+            {
+              "path": "src/native-command.ts",
+              "type": "file",
+              "digest": "1649309ed54ab42b20a72b250cc6dd87b7dde096ff781abd5bf6802aee91e282",
+              "mode": 420
+            },
+            {
+              "path": "src/native-report-input.ts",
+              "type": "file",
+              "digest": "68f3fc6e15486b0daa7583cbb08ea4549f59afd0740e963e44b9c7921aa849c2",
+              "mode": 420
+            },
+            {
+              "path": "src/native-reports.ts",
+              "type": "file",
+              "digest": "c0c6603a4109dccaae77585ac4891c8542ae993ed94f89c665fb9cb412654dd9",
+              "mode": 420
+            },
+            {
+              "path": "src/preload.ts",
+              "type": "file",
+              "digest": "69a22504d09834b12d285d27062c2be95ba6f24e81aa4d79578c2bc077e914e5",
+              "mode": 420
+            },
+            {
+              "path": "src/projection.ts",
+              "type": "file",
+              "digest": "d6403548745f27b4dedf2833923eb0ac95b97698c135d4a4858ba1ce953d1c54",
+              "mode": 420
+            },
+            {
+              "path": "src/renderer.tsx",
+              "type": "file",
+              "digest": "fc4e011d54de1b08f1f45fcd7f3e4213cf9eab8beaa801ad2aca7ce21a4c9d9f",
+              "mode": 420
+            },
+            {
+              "path": "src/report-judge.ts",
+              "type": "file",
+              "digest": "80170d3852300e57cd1516ca938d081bd27cb600d8ad71104b77ac89486680e3",
+              "mode": 420
+            },
+            {
+              "path": "src/reports-service.ts",
+              "type": "file",
+              "digest": "896d4dedf42bf6f0b1c34b441d9b4c519459b830c476696a669d6e175acf8614",
+              "mode": 420
+            },
+            {
+              "path": "src/reports-view.tsx",
+              "type": "file",
+              "digest": "7eb88244000f916880a190f849579d39c7c25abaec6fa7091166e8849f4098d3",
+              "mode": 420
+            },
+            {
+              "path": "src/rpc.ts",
+              "type": "file",
+              "digest": "6ce78a35de91ce6d52aa8782627f96f18e77719c68e36d16fcd0f4347c6da24b",
+              "mode": 420
+            },
+            {
+              "path": "src/shared.ts",
+              "type": "file",
+              "digest": "a483d866bc3fdead1986e20dc6aac26ee07d2f9e6b557daa058ee8f322a36731",
+              "mode": 420
+            },
+            {
+              "path": "test",
+              "type": "directory"
+            },
+            {
+              "path": "test/activity-sidebar.test.ts",
+              "type": "file",
+              "digest": "d5d66b076c32038b103d65d73f9b7705c5c0444bf189b06c390d359b1c05a584",
+              "mode": 420
+            },
+            {
+              "path": "test/chat-state.test.ts",
+              "type": "file",
+              "digest": "2fa021f8bf4cbc72e2c40618659fdb77d7735c35b021dbc76fdea33d0709227d",
+              "mode": 420
+            },
+            {
+              "path": "test/conversations.test.ts",
+              "type": "file",
+              "digest": "8919770ec62ba45cbf8e894bde8a951ebed9d597d64e1b967e0139b9ea00c240",
+              "mode": 420
+            },
+            {
+              "path": "test/development-policy.test.ts",
+              "type": "file",
+              "digest": "b0229deed223f9e57bf6bb84ba9ba3116b73c964f54b388564e4cd92990616f9",
+              "mode": 420
+            },
+            {
+              "path": "test/ecosystem.test.ts",
+              "type": "file",
+              "digest": "652ef6a265ee03d56edf56a79b603d5664deb9cffa207893ba94be52956b6a5e",
+              "mode": 420
+            },
+            {
+              "path": "test/fixtures",
+              "type": "directory"
+            },
+            {
+              "path": "test/fixtures/activity-app-server.ts",
+              "type": "file",
+              "digest": "144ecf5bd84f6e83746cebff955ed926a6b480e3038f4c558ffdeab611e06f67",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/chat-ui-app-server.ts",
+              "type": "file",
+              "digest": "72c6651834727c1235265b95a5926410d293a27a38104884f2f35d718a6d2cce",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/conversations-app-server.ts",
+              "type": "file",
+              "digest": "cf35fafea7c778e67459b864549198983ff640628fdecec6a3d3632771a2aa67",
+              "mode": 420
+            },
+            {
+              "path": "test/fixtures/fake-app-server.ts",
+              "type": "file",
+              "digest": "f7e19e00f4a0c81d368af1ce4c8280186f235059f6935d0a4dac36ac40352332",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/fake-workflow-host.ts",
+              "type": "file",
+              "digest": "577b1015eb64e7372e73bef353c7df14d23775e7ab0e394ee5cd83fc5cc50da4",
+              "mode": 420
+            },
+            {
+              "path": "test/input.test.ts",
+              "type": "file",
+              "digest": "fcc9359f0e74893d369743f6c49b5a98cba7d952dab35c7e2683f4234c5a4424",
+              "mode": 420
+            },
+            {
+              "path": "test/native-activity.test.ts",
+              "type": "file",
+              "digest": "7e0b0818ab117c119f1e5e4a6f4ac5028c186cfb4b263d1f76ccc9694eefa5f8",
+              "mode": 420
+            },
+            {
+              "path": "test/native-chat.test.ts",
+              "type": "file",
+              "digest": "36c30797bb2a6739975d9b0b0b8d1ae2d8ed1f3c56d45369b2b0f460096d68a3",
+              "mode": 420
+            },
+            {
+              "path": "test/native-report-input.test.ts",
+              "type": "file",
+              "digest": "d96fce5d73c75ed3813dbf13827aafed06867bb82e0902cf81a8c6f93cf98d11",
+              "mode": 420
+            },
+            {
+              "path": "test/native-reports.test.ts",
+              "type": "file",
+              "digest": "39a02200ab7b49a75c1eea7010d8c33b003d60db4649e3181e81a0d849a431ad",
+              "mode": 420
+            },
+            {
+              "path": "test/package.json",
+              "type": "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode": 420
+            },
+            {
+              "path": "test/projection.test.ts",
+              "type": "file",
+              "digest": "37c940a46c794710d08251dd19513e790636234e277c677bcee8a86a318fb795",
+              "mode": 420
+            },
+            {
+              "path": "test/report-judge.test.ts",
+              "type": "file",
+              "digest": "07851826ef464b7486cba6877421382f6976db7b7da35a1cf317b51cbfb43872",
+              "mode": 420
+            },
+            {
+              "path": "test/report-lifecycle.test.ts",
+              "type": "file",
+              "digest": "0482efa261d317fe5d80edd62bf2be8603eaf211e808c22d9fd1c3b4fd5bebad",
+              "mode": 420
+            },
+            {
+              "path": "test/report-service.test.ts",
+              "type": "file",
+              "digest": "252a3ed411044289edb58486cbeb20347712dee16323874ef83f4922c109a562",
+              "mode": 420
+            },
+            {
+              "path": "test/rpc.fixture.test.ts",
+              "type": "file",
+              "digest": "0cf628f7427645e917ee288fb540b57136a75d189b904907a14e7e64957c65ff",
+              "mode": 420
+            },
+            {
+              "path": "test/rpc.test.ts",
+              "type": "file",
+              "digest": "a3ccecd21e339c1ebc85145d526890e0d2fd94bbe646c4ce9d2313f230b1d91f",
+              "mode": 420
+            },
+            {
+              "path": "test/skill-library.test.ts",
+              "type": "file",
+              "digest": "e8a4b52a45aae4a61104f197bd0cb94c5c0e6d5410fc3a5642bd5251270c9cd4",
+              "mode": 420
+            },
+            {
+              "path": "test/source-policy.test.ts",
+              "type": "file",
+              "digest": "eb871fd6de1674772dcdf8af0373e7f8ab24c7bb8ea3311de5ef1a7255696089",
+              "mode": 420
+            },
+            {
+              "path": "test/typed-workflow.test.ts",
+              "type": "file",
+              "digest": "b6dcf02a68677ea7f71502a1d44b9c314ec02903970451609d3a2d1fb3b8165f",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-chat-live.ts",
+              "type": "file",
+              "digest": "99b6aad9301053e51af92194c12202dad6b99bedd85d792d500002be9c63c6b9",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-native-activity-live.ts",
+              "type": "file",
+              "digest": "ff733010722f0da4a23f0a03b1c28ece29b78bd1a16a9df1bae69c3bb1845970",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-native-report-live.ts",
+              "type": "file",
+              "digest": "d20808d46845aa62ae9b97132188836d8cc1b06db07c651bd96f33bdbea2399b",
+              "mode": 420
+            },
+            {
+              "path": "test/windows-native.test.ts",
+              "type": "file",
+              "digest": "749cecd302e70fa844f33ed98f38d056bd39ab0d70e1708606c98b82486eaac4",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-codex.test.ts",
+              "type": "file",
+              "digest": "55214f24dd6300fa2960247b59b3625f86937edb6fa7b686e8f680f042888421",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-contract.test.ts",
+              "type": "file",
+              "digest": "8587252e9e8208a390d04e6b0ac0b0939de0e6e3428a282d0f401c0af80a464b",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-development.test.ts",
+              "type": "file",
+              "digest": "76604b218991765beb9227109fb20d7e2379b5e311f06537ddade0a4c3ebb015",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-evidence.test.ts",
+              "type": "file",
+              "digest": "f24735f359962b2f985e3ccb889727e79b6087835604bdd0d0f3374a5367ffe6",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-harness.test.ts",
+              "type": "file",
+              "digest": "c51d0742d23c8f296e67e7cd5c955e311cdd3d5ac9cb331873bb427a58889651",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-reports.test.ts",
+              "type": "file",
+              "digest": "5b8021691243d95b2217df8d9e2f07b6af42902c53c13a89817f3d4307a15a91",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-review.test.ts",
+              "type": "file",
+              "digest": "9dc84e63b24fdcb5c6e8f99dcb1fbbc53cb420509a2a447ffe2277d7cb5a943f",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-windows-command.test.ts",
+              "type": "file",
+              "digest": "1cc83762d3450ca8d703282a5cccd067983160d2b64002ded3455bf5389f3c4c",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-work.test.ts",
+              "type": "file",
+              "digest": "dd93b4bd4e8983ce2c30ec27e5a648b8c20b37f16d86e176118262add439cb9e",
+              "mode": 420
+            }
+          ]
+        },
+        "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101",
+        "criteriaSnapshot": [
+          {
+            "id": "AC-1",
+            "description": "실제 upstream 출처·revision·라이선스를 보존한 채팅 코드가 Native 답변·공개 설명·도구·변경·승인을 표현하고 Markdown·코드복사·인용 입력을 제공한다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-2",
+            "description": "프로젝트 대화 목록·새 대화·저장 이력 재열기·동일 Native thread 후속 요청을 지원하며 과거 이력을 현재 실행·승인으로 재생하지 않는다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-3",
+            "description": "대화별 초안·읽기 위치·펼침 상태를 보존하고 전송 실패·중복·중단·한국어 입력의 기존 의미를 유지한다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-4",
+            "description": "집중 테스트·타입·빌드와 실제 Electron 합성 경계 검증을 수행하고 기존 사이드바 변경 및 Native 실기·독립 검토 한계를 구분한다.",
+            "required": true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.hermes/node/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode": 0,
+        "signal": null,
+        "error": null,
+        "result": "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.hermes/node/bin/node",
+            "digest": "2e3f1286a7eb3736346ed1803e458a0ff909e2b2d5bc746144dcb76970e9b99d"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes": 944,
+            "digest": "722a8bc74940034a377e6d79762a37c4c55f0ef8efe659bb29fcb7d5b6d22bb8",
+            "truncated": false,
+            "retainedBytes": 944,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes": 0,
+            "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated": false,
+            "retainedBytes": 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id": "attempt-14994d5d-6e05-43fe-a15b-bd8df5824e8b",
+        "startedAt": "2026-11-12T22:57:58.542Z",
+        "completedAt": "2026-11-12T22:58:08.168Z",
+        "source": {
+          "head": "4ef13d29b18188642bf7f7bef6c7d1bb60bfc3c8",
+          "digest": "977e009428c53807ea5dcc96850bc5fc890c721b807647b7bd1e558916cd49e0",
+          "inputs": [
+            "build.ts",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/specs/chat.md",
+            "docs/third-party/ovis.md",
+            "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md",
+            "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md",
+            "package-lock.json",
+            "package.json",
+            "scripts/verify-chat.ts",
+            "src",
+            "test"
+          ],
+          "files": [
+            {
+              "path": "build.ts",
+              "type": "file",
+              "digest": "277839aa866d8dc1cb8de89c65d0039750990f38cc04d67a23345c8190af0ce8",
+              "mode": 420
+            },
+            {
+              "path": "docs/ARCHITECTURE.md",
+              "type": "file",
+              "digest": "400ba412ef6d7c14ce65774f21d2912022823863e7df3d9798bfa312c75d7fc2",
+              "mode": 420
+            },
+            {
+              "path": "docs/DEVELOPMENT.md",
+              "type": "file",
+              "digest": "433b7999fbbcd78b366b036a79888f5c51309c120b299ad7adfc75ecf0c78eaf",
+              "mode": 420
+            },
+            {
+              "path": "docs/PRODUCT.md",
+              "type": "file",
+              "digest": "d0c52010a4e179780d78841a754834a57c18121c2dfc69bdaec6c77ab7d382b1",
+              "mode": 420
+            },
+            {
+              "path": "docs/specs/chat.md",
+              "type": "file",
+              "digest": "b4ee3c43555f963e5c07b7209e1c8b6076bc1d3467b559dd1e80ebe9b6a5e549",
+              "mode": 420
+            },
+            {
+              "path": "docs/third-party/ovis.md",
+              "type": "file",
+              "digest": "e82044a91d8e810f9c43feb75bb9c5bc1256f0d84be43ae9983e6608d14a21c6",
+              "mode": 420
+            },
+            {
+              "path": "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md",
+              "type": "file",
+              "digest": "4b4706bc1f31548159bdb0fe4539ca3d13a4119d5ae5f8120eb19fc86bea48cb",
+              "mode": 420
+            },
+            {
+              "path": "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md",
+              "type": "file",
+              "digest": "1b0e27b046e6deeff4e8b83bb4460a5bc01c3e96507a37e0bd72031b81667c4a",
+              "mode": 384
+            },
+            {
+              "path": "package-lock.json",
+              "type": "file",
+              "digest": "f4209136de49f3649cd1bdb7af1002b2c2d01405a0b381d4897ea4e549c1eb51",
+              "mode": 420
+            },
+            {
+              "path": "package.json",
+              "type": "file",
+              "digest": "5c5f59dcfe3519b306b8ff058a416a8c1dcd7ed9bbca8a727cbc08fba5f0accc",
+              "mode": 420
+            },
+            {
+              "path": "scripts/verify-chat.ts",
+              "type": "file",
+              "digest": "b17491a56272a2728ae9473278acb2292e98489667bf69e6a13f9c32c6dc2cf2",
+              "mode": 493
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path": "src/activity-sidebar.ts",
+              "type": "file",
+              "digest": "32ef1470b8519ce5012064a07c85b7b66f58c9d052b923d40c81612aa41d2125",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-message.tsx",
+              "type": "file",
+              "digest": "5a482b06b912db5629d6ebc10e3879811330280a57f86293f8439e31b793331a",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-row-state.tsx",
+              "type": "file",
+              "digest": "01cb8c0ccc96eda8a809cfd046b32a903966027375943a66c56d0b99d248ac2e",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-state.ts",
+              "type": "file",
+              "digest": "eed9e3608b6525638119859c096d6fb46bfba1ec0111acb3e6ca96aede6ac0d7",
+              "mode": 420
+            },
+            {
+              "path": "src/chat.css",
+              "type": "file",
+              "digest": "01e023ef99943bfae5f54423b0453082af3b46a1bdd2d9444092192958148d9c",
+              "mode": 420
+            },
+            {
+              "path": "src/conversations.ts",
+              "type": "file",
+              "digest": "6fede61cb4ebd6126398151a2470cb0e62db12fe69569fb0b387211b73283259",
+              "mode": 420
+            },
+            {
+              "path": "src/development.ts",
+              "type": "file",
+              "digest": "f8301dbe318351b745a8ffb70ded6b3cde7cdc02ac4ff617040f14281ba96ca1",
+              "mode": 420
+            },
+            {
+              "path": "src/ecosystem-view.tsx",
+              "type": "file",
+              "digest": "c795e145edd18508ee7e44e9bc830426e7064d9b159350b013c8ede2f61e0333",
+              "mode": 420
+            },
+            {
+              "path": "src/ecosystem.ts",
+              "type": "file",
+              "digest": "9503bd32b21f7630b9ff2329e10c1f9bfda746d85ef90d5b3fcc6fd8e0d60e4b",
+              "mode": 420
+            },
+            {
+              "path": "src/index.html",
+              "type": "file",
+              "digest": "31e347810ea1aea8cb1ee0b2a44a0e2b09d3dfaa103e712e2f8c811a04ad7732",
+              "mode": 420
+            },
+            {
+              "path": "src/input.ts",
+              "type": "file",
+              "digest": "d915ba1a024a6c930d1acebf93a7257cb35b16ad9f2f48ddf54013cd5929b0d0",
+              "mode": 420
+            },
+            {
+              "path": "src/main.ts",
+              "type": "file",
+              "digest": "357b6525850445377c4c609034fa735ba1553f8f585203e1733eec15479e55de",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity-view.tsx",
+              "type": "file",
+              "digest": "3e0f1cc15591a0888f22a9933c06136faa96df9f5cb91cf08b96f90fe4474125",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity.css",
+              "type": "file",
+              "digest": "e7e431790f1c717ce974693d437c8fc3588ba4ce9bda560cbd9325450c464784",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity.ts",
+              "type": "file",
+              "digest": "19af9b32ace5cd9014d7ba6dec1aac37eb4d093d5ee0e2a1226bb55defd73aac",
+              "mode": 420
+            },
+            {
+              "path": "src/native-chat.ts",
+              "type": "file",
+              "digest": "5593df6914c6002ff3232bb6f318b02fe661cbba7d7aa8ec002ff85e7410bb7b",
+              "mode": 420
+            },
+            {
+              "path": "src/native-command.ts",
+              "type": "file",
+              "digest": "1649309ed54ab42b20a72b250cc6dd87b7dde096ff781abd5bf6802aee91e282",
+              "mode": 420
+            },
+            {
+              "path": "src/native-report-input.ts",
+              "type": "file",
+              "digest": "68f3fc6e15486b0daa7583cbb08ea4549f59afd0740e963e44b9c7921aa849c2",
+              "mode": 420
+            },
+            {
+              "path": "src/native-reports.ts",
+              "type": "file",
+              "digest": "c0c6603a4109dccaae77585ac4891c8542ae993ed94f89c665fb9cb412654dd9",
+              "mode": 420
+            },
+            {
+              "path": "src/preload.ts",
+              "type": "file",
+              "digest": "69a22504d09834b12d285d27062c2be95ba6f24e81aa4d79578c2bc077e914e5",
+              "mode": 420
+            },
+            {
+              "path": "src/projection.ts",
+              "type": "file",
+              "digest": "d6403548745f27b4dedf2833923eb0ac95b97698c135d4a4858ba1ce953d1c54",
+              "mode": 420
+            },
+            {
+              "path": "src/renderer.tsx",
+              "type": "file",
+              "digest": "fc4e011d54de1b08f1f45fcd7f3e4213cf9eab8beaa801ad2aca7ce21a4c9d9f",
+              "mode": 420
+            },
+            {
+              "path": "src/report-judge.ts",
+              "type": "file",
+              "digest": "80170d3852300e57cd1516ca938d081bd27cb600d8ad71104b77ac89486680e3",
+              "mode": 420
+            },
+            {
+              "path": "src/reports-service.ts",
+              "type": "file",
+              "digest": "896d4dedf42bf6f0b1c34b441d9b4c519459b830c476696a669d6e175acf8614",
+              "mode": 420
+            },
+            {
+              "path": "src/reports-view.tsx",
+              "type": "file",
+              "digest": "7eb88244000f916880a190f849579d39c7c25abaec6fa7091166e8849f4098d3",
+              "mode": 420
+            },
+            {
+              "path": "src/rpc.ts",
+              "type": "file",
+              "digest": "6ce78a35de91ce6d52aa8782627f96f18e77719c68e36d16fcd0f4347c6da24b",
+              "mode": 420
+            },
+            {
+              "path": "src/shared.ts",
+              "type": "file",
+              "digest": "a483d866bc3fdead1986e20dc6aac26ee07d2f9e6b557daa058ee8f322a36731",
+              "mode": 420
+            },
+            {
+              "path": "test",
+              "type": "directory"
+            },
+            {
+              "path": "test/activity-sidebar.test.ts",
+              "type": "file",
+              "digest": "c834e864198381a9921bb099a9a7e06c462b2b7aa9431790606b7751a55d1512",
+              "mode": 420
+            },
+            {
+              "path": "test/chat-state.test.ts",
+              "type": "file",
+              "digest": "2fa021f8bf4cbc72e2c40618659fdb77d7735c35b021dbc76fdea33d0709227d",
+              "mode": 420
+            },
+            {
+              "path": "test/conversations.test.ts",
+              "type": "file",
+              "digest": "8919770ec62ba45cbf8e894bde8a951ebed9d597d64e1b967e0139b9ea00c240",
+              "mode": 420
+            },
+            {
+              "path": "test/development-policy.test.ts",
+              "type": "file",
+              "digest": "b0229deed223f9e57bf6bb84ba9ba3116b73c964f54b388564e4cd92990616f9",
+              "mode": 420
+            },
+            {
+              "path": "test/ecosystem.test.ts",
+              "type": "file",
+              "digest": "652ef6a265ee03d56edf56a79b603d5664deb9cffa207893ba94be52956b6a5e",
+              "mode": 420
+            },
+            {
+              "path": "test/fixtures",
+              "type": "directory"
+            },
+            {
+              "path": "test/fixtures/activity-app-server.ts",
+              "type": "file",
+              "digest": "144ecf5bd84f6e83746cebff955ed926a6b480e3038f4c558ffdeab611e06f67",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/chat-ui-app-server.ts",
+              "type": "file",
+              "digest": "72c6651834727c1235265b95a5926410d293a27a38104884f2f35d718a6d2cce",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/conversations-app-server.ts",
+              "type": "file",
+              "digest": "cf35fafea7c778e67459b864549198983ff640628fdecec6a3d3632771a2aa67",
+              "mode": 420
+            },
+            {
+              "path": "test/fixtures/fake-app-server.ts",
+              "type": "file",
+              "digest": "f7e19e00f4a0c81d368af1ce4c8280186f235059f6935d0a4dac36ac40352332",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/fake-workflow-host.ts",
+              "type": "file",
+              "digest": "577b1015eb64e7372e73bef353c7df14d23775e7ab0e394ee5cd83fc5cc50da4",
+              "mode": 420
+            },
+            {
+              "path": "test/input.test.ts",
+              "type": "file",
+              "digest": "fcc9359f0e74893d369743f6c49b5a98cba7d952dab35c7e2683f4234c5a4424",
+              "mode": 420
+            },
+            {
+              "path": "test/native-activity.test.ts",
+              "type": "file",
+              "digest": "7e0b0818ab117c119f1e5e4a6f4ac5028c186cfb4b263d1f76ccc9694eefa5f8",
+              "mode": 420
+            },
+            {
+              "path": "test/native-chat.test.ts",
+              "type": "file",
+              "digest": "36c30797bb2a6739975d9b0b0b8d1ae2d8ed1f3c56d45369b2b0f460096d68a3",
+              "mode": 420
+            },
+            {
+              "path": "test/native-report-input.test.ts",
+              "type": "file",
+              "digest": "d96fce5d73c75ed3813dbf13827aafed06867bb82e0902cf81a8c6f93cf98d11",
+              "mode": 420
+            },
+            {
+              "path": "test/native-reports.test.ts",
+              "type": "file",
+              "digest": "39a02200ab7b49a75c1eea7010d8c33b003d60db4649e3181e81a0d849a431ad",
+              "mode": 420
+            },
+            {
+              "path": "test/package.json",
+              "type": "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode": 420
+            },
+            {
+              "path": "test/projection.test.ts",
+              "type": "file",
+              "digest": "37c940a46c794710d08251dd19513e790636234e277c677bcee8a86a318fb795",
+              "mode": 420
+            },
+            {
+              "path": "test/report-judge.test.ts",
+              "type": "file",
+              "digest": "07851826ef464b7486cba6877421382f6976db7b7da35a1cf317b51cbfb43872",
+              "mode": 420
+            },
+            {
+              "path": "test/report-lifecycle.test.ts",
+              "type": "file",
+              "digest": "0482efa261d317fe5d80edd62bf2be8603eaf211e808c22d9fd1c3b4fd5bebad",
+              "mode": 420
+            },
+            {
+              "path": "test/report-service.test.ts",
+              "type": "file",
+              "digest": "252a3ed411044289edb58486cbeb20347712dee16323874ef83f4922c109a562",
+              "mode": 420
+            },
+            {
+              "path": "test/rpc.fixture.test.ts",
+              "type": "file",
+              "digest": "0cf628f7427645e917ee288fb540b57136a75d189b904907a14e7e64957c65ff",
+              "mode": 420
+            },
+            {
+              "path": "test/rpc.test.ts",
+              "type": "file",
+              "digest": "a3ccecd21e339c1ebc85145d526890e0d2fd94bbe646c4ce9d2313f230b1d91f",
+              "mode": 420
+            },
+            {
+              "path": "test/skill-library.test.ts",
+              "type": "file",
+              "digest": "e8a4b52a45aae4a61104f197bd0cb94c5c0e6d5410fc3a5642bd5251270c9cd4",
+              "mode": 420
+            },
+            {
+              "path": "test/source-policy.test.ts",
+              "type": "file",
+              "digest": "eb871fd6de1674772dcdf8af0373e7f8ab24c7bb8ea3311de5ef1a7255696089",
+              "mode": 420
+            },
+            {
+              "path": "test/typed-workflow.test.ts",
+              "type": "file",
+              "digest": "b6dcf02a68677ea7f71502a1d44b9c314ec02903970451609d3a2d1fb3b8165f",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-chat-live.ts",
+              "type": "file",
+              "digest": "99b6aad9301053e51af92194c12202dad6b99bedd85d792d500002be9c63c6b9",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-native-activity-live.ts",
+              "type": "file",
+              "digest": "ff733010722f0da4a23f0a03b1c28ece29b78bd1a16a9df1bae69c3bb1845970",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-native-report-live.ts",
+              "type": "file",
+              "digest": "d20808d46845aa62ae9b97132188836d8cc1b06db07c651bd96f33bdbea2399b",
+              "mode": 420
+            },
+            {
+              "path": "test/windows-native.test.ts",
+              "type": "file",
+              "digest": "749cecd302e70fa844f33ed98f38d056bd39ab0d70e1708606c98b82486eaac4",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-codex.test.ts",
+              "type": "file",
+              "digest": "55214f24dd6300fa2960247b59b3625f86937edb6fa7b686e8f680f042888421",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-contract.test.ts",
+              "type": "file",
+              "digest": "8587252e9e8208a390d04e6b0ac0b0939de0e6e3428a282d0f401c0af80a464b",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-development.test.ts",
+              "type": "file",
+              "digest": "76604b218991765beb9227109fb20d7e2379b5e311f06537ddade0a4c3ebb015",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-evidence.test.ts",
+              "type": "file",
+              "digest": "f24735f359962b2f985e3ccb889727e79b6087835604bdd0d0f3374a5367ffe6",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-harness.test.ts",
+              "type": "file",
+              "digest": "c51d0742d23c8f296e67e7cd5c955e311cdd3d5ac9cb331873bb427a58889651",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-reports.test.ts",
+              "type": "file",
+              "digest": "5b8021691243d95b2217df8d9e2f07b6af42902c53c13a89817f3d4307a15a91",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-review.test.ts",
+              "type": "file",
+              "digest": "9dc84e63b24fdcb5c6e8f99dcb1fbbc53cb420509a2a447ffe2277d7cb5a943f",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-windows-command.test.ts",
+              "type": "file",
+              "digest": "1cc83762d3450ca8d703282a5cccd067983160d2b64002ded3455bf5389f3c4c",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-work.test.ts",
+              "type": "file",
+              "digest": "dd93b4bd4e8983ce2c30ec27e5a648b8c20b37f16d86e176118262add439cb9e",
+              "mode": 420
+            }
+          ]
+        },
+        "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101",
+        "criteriaSnapshot": [
+          {
+            "id": "AC-1",
+            "description": "실제 upstream 출처·revision·라이선스를 보존한 채팅 코드가 Native 답변·공개 설명·도구·변경·승인을 표현하고 Markdown·코드복사·인용 입력을 제공한다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-2",
+            "description": "프로젝트 대화 목록·새 대화·저장 이력 재열기·동일 Native thread 후속 요청을 지원하며 과거 이력을 현재 실행·승인으로 재생하지 않는다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-3",
+            "description": "대화별 초안·읽기 위치·펼침 상태를 보존하고 전송 실패·중복·중단·한국어 입력의 기존 의미를 유지한다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-4",
+            "description": "집중 테스트·타입·빌드와 실제 Electron 합성 경계 검증을 수행하고 기존 사이드바 변경 및 Native 실기·독립 검토 한계를 구분한다.",
+            "required": true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test/verify-chat-live.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode": 0,
+        "signal": null,
+        "error": null,
+        "result": "failed",
+        "criterionIds": [
+          "AC-2"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path": ".www/evidence/work-baa0963b-ea71-48e7-a34f-0d229ba704b1/chat-native-live.json",
+            "size": 489,
+            "digest": "e829512097cd41f337e1979b70dcc7e6e7820349a8116071352190bef351d2ef"
+          }
+        ],
+        "artifactsStable": false,
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes": 420,
+            "digest": "0825bc598d3b9049a661028b8e29015bf618430494a90682532e90f639393be8",
+            "truncated": false,
+            "retainedBytes": 420,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes": 0,
+            "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated": false,
+            "retainedBytes": 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id": "attempt-756411e7-de22-46fc-a831-cabafd00a940",
+        "startedAt": "2026-11-12T22:58:28.565Z",
+        "completedAt": "2026-11-12T22:58:37.183Z",
+        "source": {
+          "head": "4ef13d29b18188642bf7f7bef6c7d1bb60bfc3c8",
+          "digest": "977e009428c53807ea5dcc96850bc5fc890c721b807647b7bd1e558916cd49e0",
+          "inputs": [
+            "build.ts",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/specs/chat.md",
+            "docs/third-party/ovis.md",
+            "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md",
+            "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md",
+            "package-lock.json",
+            "package.json",
+            "scripts/verify-chat.ts",
+            "src",
+            "test"
+          ],
+          "files": [
+            {
+              "path": "build.ts",
+              "type": "file",
+              "digest": "277839aa866d8dc1cb8de89c65d0039750990f38cc04d67a23345c8190af0ce8",
+              "mode": 420
+            },
+            {
+              "path": "docs/ARCHITECTURE.md",
+              "type": "file",
+              "digest": "400ba412ef6d7c14ce65774f21d2912022823863e7df3d9798bfa312c75d7fc2",
+              "mode": 420
+            },
+            {
+              "path": "docs/DEVELOPMENT.md",
+              "type": "file",
+              "digest": "433b7999fbbcd78b366b036a79888f5c51309c120b299ad7adfc75ecf0c78eaf",
+              "mode": 420
+            },
+            {
+              "path": "docs/PRODUCT.md",
+              "type": "file",
+              "digest": "d0c52010a4e179780d78841a754834a57c18121c2dfc69bdaec6c77ab7d382b1",
+              "mode": 420
+            },
+            {
+              "path": "docs/specs/chat.md",
+              "type": "file",
+              "digest": "b4ee3c43555f963e5c07b7209e1c8b6076bc1d3467b559dd1e80ebe9b6a5e549",
+              "mode": 420
+            },
+            {
+              "path": "docs/third-party/ovis.md",
+              "type": "file",
+              "digest": "e82044a91d8e810f9c43feb75bb9c5bc1256f0d84be43ae9983e6608d14a21c6",
+              "mode": 420
+            },
+            {
+              "path": "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md",
+              "type": "file",
+              "digest": "4b4706bc1f31548159bdb0fe4539ca3d13a4119d5ae5f8120eb19fc86bea48cb",
+              "mode": 420
+            },
+            {
+              "path": "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md",
+              "type": "file",
+              "digest": "1b0e27b046e6deeff4e8b83bb4460a5bc01c3e96507a37e0bd72031b81667c4a",
+              "mode": 384
+            },
+            {
+              "path": "package-lock.json",
+              "type": "file",
+              "digest": "f4209136de49f3649cd1bdb7af1002b2c2d01405a0b381d4897ea4e549c1eb51",
+              "mode": 420
+            },
+            {
+              "path": "package.json",
+              "type": "file",
+              "digest": "5c5f59dcfe3519b306b8ff058a416a8c1dcd7ed9bbca8a727cbc08fba5f0accc",
+              "mode": 420
+            },
+            {
+              "path": "scripts/verify-chat.ts",
+              "type": "file",
+              "digest": "b17491a56272a2728ae9473278acb2292e98489667bf69e6a13f9c32c6dc2cf2",
+              "mode": 493
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path": "src/activity-sidebar.ts",
+              "type": "file",
+              "digest": "32ef1470b8519ce5012064a07c85b7b66f58c9d052b923d40c81612aa41d2125",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-message.tsx",
+              "type": "file",
+              "digest": "5a482b06b912db5629d6ebc10e3879811330280a57f86293f8439e31b793331a",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-row-state.tsx",
+              "type": "file",
+              "digest": "01cb8c0ccc96eda8a809cfd046b32a903966027375943a66c56d0b99d248ac2e",
+              "mode": 420
+            },
+            {
+              "path": "src/chat-state.ts",
+              "type": "file",
+              "digest": "eed9e3608b6525638119859c096d6fb46bfba1ec0111acb3e6ca96aede6ac0d7",
+              "mode": 420
+            },
+            {
+              "path": "src/chat.css",
+              "type": "file",
+              "digest": "01e023ef99943bfae5f54423b0453082af3b46a1bdd2d9444092192958148d9c",
+              "mode": 420
+            },
+            {
+              "path": "src/conversations.ts",
+              "type": "file",
+              "digest": "6fede61cb4ebd6126398151a2470cb0e62db12fe69569fb0b387211b73283259",
+              "mode": 420
+            },
+            {
+              "path": "src/development.ts",
+              "type": "file",
+              "digest": "f8301dbe318351b745a8ffb70ded6b3cde7cdc02ac4ff617040f14281ba96ca1",
+              "mode": 420
+            },
+            {
+              "path": "src/ecosystem-view.tsx",
+              "type": "file",
+              "digest": "c795e145edd18508ee7e44e9bc830426e7064d9b159350b013c8ede2f61e0333",
+              "mode": 420
+            },
+            {
+              "path": "src/ecosystem.ts",
+              "type": "file",
+              "digest": "9503bd32b21f7630b9ff2329e10c1f9bfda746d85ef90d5b3fcc6fd8e0d60e4b",
+              "mode": 420
+            },
+            {
+              "path": "src/index.html",
+              "type": "file",
+              "digest": "31e347810ea1aea8cb1ee0b2a44a0e2b09d3dfaa103e712e2f8c811a04ad7732",
+              "mode": 420
+            },
+            {
+              "path": "src/input.ts",
+              "type": "file",
+              "digest": "d915ba1a024a6c930d1acebf93a7257cb35b16ad9f2f48ddf54013cd5929b0d0",
+              "mode": 420
+            },
+            {
+              "path": "src/main.ts",
+              "type": "file",
+              "digest": "357b6525850445377c4c609034fa735ba1553f8f585203e1733eec15479e55de",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity-view.tsx",
+              "type": "file",
+              "digest": "3e0f1cc15591a0888f22a9933c06136faa96df9f5cb91cf08b96f90fe4474125",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity.css",
+              "type": "file",
+              "digest": "e7e431790f1c717ce974693d437c8fc3588ba4ce9bda560cbd9325450c464784",
+              "mode": 420
+            },
+            {
+              "path": "src/native-activity.ts",
+              "type": "file",
+              "digest": "19af9b32ace5cd9014d7ba6dec1aac37eb4d093d5ee0e2a1226bb55defd73aac",
+              "mode": 420
+            },
+            {
+              "path": "src/native-chat.ts",
+              "type": "file",
+              "digest": "5593df6914c6002ff3232bb6f318b02fe661cbba7d7aa8ec002ff85e7410bb7b",
+              "mode": 420
+            },
+            {
+              "path": "src/native-command.ts",
+              "type": "file",
+              "digest": "1649309ed54ab42b20a72b250cc6dd87b7dde096ff781abd5bf6802aee91e282",
+              "mode": 420
+            },
+            {
+              "path": "src/native-report-input.ts",
+              "type": "file",
+              "digest": "68f3fc6e15486b0daa7583cbb08ea4549f59afd0740e963e44b9c7921aa849c2",
+              "mode": 420
+            },
+            {
+              "path": "src/native-reports.ts",
+              "type": "file",
+              "digest": "c0c6603a4109dccaae77585ac4891c8542ae993ed94f89c665fb9cb412654dd9",
+              "mode": 420
+            },
+            {
+              "path": "src/preload.ts",
+              "type": "file",
+              "digest": "69a22504d09834b12d285d27062c2be95ba6f24e81aa4d79578c2bc077e914e5",
+              "mode": 420
+            },
+            {
+              "path": "src/projection.ts",
+              "type": "file",
+              "digest": "d6403548745f27b4dedf2833923eb0ac95b97698c135d4a4858ba1ce953d1c54",
+              "mode": 420
+            },
+            {
+              "path": "src/renderer.tsx",
+              "type": "file",
+              "digest": "fc4e011d54de1b08f1f45fcd7f3e4213cf9eab8beaa801ad2aca7ce21a4c9d9f",
+              "mode": 420
+            },
+            {
+              "path": "src/report-judge.ts",
+              "type": "file",
+              "digest": "80170d3852300e57cd1516ca938d081bd27cb600d8ad71104b77ac89486680e3",
+              "mode": 420
+            },
+            {
+              "path": "src/reports-service.ts",
+              "type": "file",
+              "digest": "896d4dedf42bf6f0b1c34b441d9b4c519459b830c476696a669d6e175acf8614",
+              "mode": 420
+            },
+            {
+              "path": "src/reports-view.tsx",
+              "type": "file",
+              "digest": "7eb88244000f916880a190f849579d39c7c25abaec6fa7091166e8849f4098d3",
+              "mode": 420
+            },
+            {
+              "path": "src/rpc.ts",
+              "type": "file",
+              "digest": "6ce78a35de91ce6d52aa8782627f96f18e77719c68e36d16fcd0f4347c6da24b",
+              "mode": 420
+            },
+            {
+              "path": "src/shared.ts",
+              "type": "file",
+              "digest": "a483d866bc3fdead1986e20dc6aac26ee07d2f9e6b557daa058ee8f322a36731",
+              "mode": 420
+            },
+            {
+              "path": "test",
+              "type": "directory"
+            },
+            {
+              "path": "test/activity-sidebar.test.ts",
+              "type": "file",
+              "digest": "c834e864198381a9921bb099a9a7e06c462b2b7aa9431790606b7751a55d1512",
+              "mode": 420
+            },
+            {
+              "path": "test/chat-state.test.ts",
+              "type": "file",
+              "digest": "2fa021f8bf4cbc72e2c40618659fdb77d7735c35b021dbc76fdea33d0709227d",
+              "mode": 420
+            },
+            {
+              "path": "test/conversations.test.ts",
+              "type": "file",
+              "digest": "8919770ec62ba45cbf8e894bde8a951ebed9d597d64e1b967e0139b9ea00c240",
+              "mode": 420
+            },
+            {
+              "path": "test/development-policy.test.ts",
+              "type": "file",
+              "digest": "b0229deed223f9e57bf6bb84ba9ba3116b73c964f54b388564e4cd92990616f9",
+              "mode": 420
+            },
+            {
+              "path": "test/ecosystem.test.ts",
+              "type": "file",
+              "digest": "652ef6a265ee03d56edf56a79b603d5664deb9cffa207893ba94be52956b6a5e",
+              "mode": 420
+            },
+            {
+              "path": "test/fixtures",
+              "type": "directory"
+            },
+            {
+              "path": "test/fixtures/activity-app-server.ts",
+              "type": "file",
+              "digest": "144ecf5bd84f6e83746cebff955ed926a6b480e3038f4c558ffdeab611e06f67",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/chat-ui-app-server.ts",
+              "type": "file",
+              "digest": "72c6651834727c1235265b95a5926410d293a27a38104884f2f35d718a6d2cce",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/conversations-app-server.ts",
+              "type": "file",
+              "digest": "cf35fafea7c778e67459b864549198983ff640628fdecec6a3d3632771a2aa67",
+              "mode": 420
+            },
+            {
+              "path": "test/fixtures/fake-app-server.ts",
+              "type": "file",
+              "digest": "f7e19e00f4a0c81d368af1ce4c8280186f235059f6935d0a4dac36ac40352332",
+              "mode": 493
+            },
+            {
+              "path": "test/fixtures/fake-workflow-host.ts",
+              "type": "file",
+              "digest": "577b1015eb64e7372e73bef353c7df14d23775e7ab0e394ee5cd83fc5cc50da4",
+              "mode": 420
+            },
+            {
+              "path": "test/input.test.ts",
+              "type": "file",
+              "digest": "fcc9359f0e74893d369743f6c49b5a98cba7d952dab35c7e2683f4234c5a4424",
+              "mode": 420
+            },
+            {
+              "path": "test/native-activity.test.ts",
+              "type": "file",
+              "digest": "7e0b0818ab117c119f1e5e4a6f4ac5028c186cfb4b263d1f76ccc9694eefa5f8",
+              "mode": 420
+            },
+            {
+              "path": "test/native-chat.test.ts",
+              "type": "file",
+              "digest": "36c30797bb2a6739975d9b0b0b8d1ae2d8ed1f3c56d45369b2b0f460096d68a3",
+              "mode": 420
+            },
+            {
+              "path": "test/native-report-input.test.ts",
+              "type": "file",
+              "digest": "d96fce5d73c75ed3813dbf13827aafed06867bb82e0902cf81a8c6f93cf98d11",
+              "mode": 420
+            },
+            {
+              "path": "test/native-reports.test.ts",
+              "type": "file",
+              "digest": "39a02200ab7b49a75c1eea7010d8c33b003d60db4649e3181e81a0d849a431ad",
+              "mode": 420
+            },
+            {
+              "path": "test/package.json",
+              "type": "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode": 420
+            },
+            {
+              "path": "test/projection.test.ts",
+              "type": "file",
+              "digest": "37c940a46c794710d08251dd19513e790636234e277c677bcee8a86a318fb795",
+              "mode": 420
+            },
+            {
+              "path": "test/report-judge.test.ts",
+              "type": "file",
+              "digest": "07851826ef464b7486cba6877421382f6976db7b7da35a1cf317b51cbfb43872",
+              "mode": 420
+            },
+            {
+              "path": "test/report-lifecycle.test.ts",
+              "type": "file",
+              "digest": "0482efa261d317fe5d80edd62bf2be8603eaf211e808c22d9fd1c3b4fd5bebad",
+              "mode": 420
+            },
+            {
+              "path": "test/report-service.test.ts",
+              "type": "file",
+              "digest": "252a3ed411044289edb58486cbeb20347712dee16323874ef83f4922c109a562",
+              "mode": 420
+            },
+            {
+              "path": "test/rpc.fixture.test.ts",
+              "type": "file",
+              "digest": "0cf628f7427645e917ee288fb540b57136a75d189b904907a14e7e64957c65ff",
+              "mode": 420
+            },
+            {
+              "path": "test/rpc.test.ts",
+              "type": "file",
+              "digest": "a3ccecd21e339c1ebc85145d526890e0d2fd94bbe646c4ce9d2313f230b1d91f",
+              "mode": 420
+            },
+            {
+              "path": "test/skill-library.test.ts",
+              "type": "file",
+              "digest": "e8a4b52a45aae4a61104f197bd0cb94c5c0e6d5410fc3a5642bd5251270c9cd4",
+              "mode": 420
+            },
+            {
+              "path": "test/source-policy.test.ts",
+              "type": "file",
+              "digest": "eb871fd6de1674772dcdf8af0373e7f8ab24c7bb8ea3311de5ef1a7255696089",
+              "mode": 420
+            },
+            {
+              "path": "test/typed-workflow.test.ts",
+              "type": "file",
+              "digest": "b6dcf02a68677ea7f71502a1d44b9c314ec02903970451609d3a2d1fb3b8165f",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-chat-live.ts",
+              "type": "file",
+              "digest": "99b6aad9301053e51af92194c12202dad6b99bedd85d792d500002be9c63c6b9",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-native-activity-live.ts",
+              "type": "file",
+              "digest": "ff733010722f0da4a23f0a03b1c28ece29b78bd1a16a9df1bae69c3bb1845970",
+              "mode": 420
+            },
+            {
+              "path": "test/verify-native-report-live.ts",
+              "type": "file",
+              "digest": "d20808d46845aa62ae9b97132188836d8cc1b06db07c651bd96f33bdbea2399b",
+              "mode": 420
+            },
+            {
+              "path": "test/windows-native.test.ts",
+              "type": "file",
+              "digest": "749cecd302e70fa844f33ed98f38d056bd39ab0d70e1708606c98b82486eaac4",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-codex.test.ts",
+              "type": "file",
+              "digest": "55214f24dd6300fa2960247b59b3625f86937edb6fa7b686e8f680f042888421",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-contract.test.ts",
+              "type": "file",
+              "digest": "8587252e9e8208a390d04e6b0ac0b0939de0e6e3428a282d0f401c0af80a464b",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-development.test.ts",
+              "type": "file",
+              "digest": "76604b218991765beb9227109fb20d7e2379b5e311f06537ddade0a4c3ebb015",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-evidence.test.ts",
+              "type": "file",
+              "digest": "f24735f359962b2f985e3ccb889727e79b6087835604bdd0d0f3374a5367ffe6",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-harness.test.ts",
+              "type": "file",
+              "digest": "c51d0742d23c8f296e67e7cd5c955e311cdd3d5ac9cb331873bb427a58889651",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-reports.test.ts",
+              "type": "file",
+              "digest": "5b8021691243d95b2217df8d9e2f07b6af42902c53c13a89817f3d4307a15a91",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-review.test.ts",
+              "type": "file",
+              "digest": "9dc84e63b24fdcb5c6e8f99dcb1fbbc53cb420509a2a447ffe2277d7cb5a943f",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-windows-command.test.ts",
+              "type": "file",
+              "digest": "1cc83762d3450ca8d703282a5cccd067983160d2b64002ded3455bf5389f3c4c",
+              "mode": 420
+            },
+            {
+              "path": "test/workflow-work.test.ts",
+              "type": "file",
+              "digest": "dd93b4bd4e8983ce2c30ec27e5a648b8c20b37f16d86e176118262add439cb9e",
+              "mode": 420
+            }
+          ]
+        },
+        "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101",
+        "criteriaSnapshot": [
+          {
+            "id": "AC-1",
+            "description": "실제 upstream 출처·revision·라이선스를 보존한 채팅 코드가 Native 답변·공개 설명·도구·변경·승인을 표현하고 Markdown·코드복사·인용 입력을 제공한다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-2",
+            "description": "프로젝트 대화 목록·새 대화·저장 이력 재열기·동일 Native thread 후속 요청을 지원하며 과거 이력을 현재 실행·승인으로 재생하지 않는다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-3",
+            "description": "대화별 초안·읽기 위치·펼침 상태를 보존하고 전송 실패·중복·중단·한국어 입력의 기존 의미를 유지한다.",
+            "required": true,
+            "requirementRefs": []
+          },
+          {
+            "id": "AC-4",
+            "description": "집중 테스트·타입·빌드와 실제 Electron 합성 경계 검증을 수행하고 기존 사이드바 변경 및 Native 실기·독립 검토 한계를 구분한다.",
+            "required": true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test/verify-chat-live.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode": 0,
+        "signal": null,
+        "error": null,
+        "result": "failed",
+        "criterionIds": [
+          "AC-2"
+        ],
+        "sourceStable": false,
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes": 420,
+            "digest": "5f16fcacdd370cd8408fb805a5fc7c83cea85dd368710078d4b254e4efe84014",
+            "truncated": false,
+            "retainedBytes": 420,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes": 0,
+            "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated": false,
+            "retainedBytes": 0,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id": "review-32355cdb-ad40-446b-ba2b-69999fd7ee61",
+        "provider": "anthropic",
+        "model": "opus",
+        "observedModel": null,
+        "verdict": "not_run",
+        "readOnly": true,
+        "sourceDigest": "70f3700bcc9c5503efc85e7f857be005519e01b3396d095ac1fc79ccbd946c76",
+        "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101",
+        "policyHash": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor": "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode": 1,
+          "signal": null,
+          "error": null,
+          "receiptHash": "1bd8f45f6eb64193337da0d472e31c28d09ba6278955f9aaa77ee6ca367cdab0"
+        },
+        "failure": {
+          "kind": "authentication",
+          "verified": false,
+          "receiptHash": "1bd8f45f6eb64193337da0d472e31c28d09ba6278955f9aaa77ee6ca367cdab0"
+        },
+        "findings": [],
+        "receiptPath": ".www/evidence/reviews/review-32355cdb-ad40-446b-ba2b-69999fd7ee61/opus.json",
+        "startedAt": "2026-11-12T22:52:02.582Z",
+        "completedAt": "2026-11-12T22:52:03.680Z"
+      },
+      {
+        "id": "review-bf7a0192-d57f-4422-b3cb-0a243bd91dd1",
+        "provider": "anthropic",
+        "model": "opus",
+        "observedModel": "claude-opus-5-5",
+        "verdict": "pass",
+        "readOnly": true,
+        "sourceDigest": "aea9e85e8c9d166bc1650d9b55ae5b014ca7a9802635520c092e643a2d942c7d",
+        "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101",
+        "policyHash": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor": "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "receiptHash": "009ac606ea29a9b6f2579b524db9df98448b3bfd6dc2a956ec9ad3867991ad80"
+        },
+        "failure": null,
+        "findings": [
+          "판정 근거(소스 대조): 현재 입력의 개별 파일 digest(src/conversations.ts 6fede61c…, src/native-chat.ts 5593df69…, src/main.ts 357b6525…, test/fixtures/conversations-app-server.ts cf35fafe…, scripts/verify-chat.ts b17491a5… 등)는 work.json의 세 검증 시도(d126edd7… 소스)에 기록된 값과 같다. 전체 sourceDigest(aea9e85e…)가 다른 것은 이번 검토 입력에 docs/skills/WORKFLOW.md·work.json·verification.md·evidence JSON이 추가됐기 때문으로 보이며, 검증 이후 제품 소스가 바뀐 흔적은 없다. criteriaDigest e58ba493…도 일치한다.",
+          "AC-1: src/chat-row-state.tsx:1-3과 src/chat-state.ts:1-3에 devswha/ovis@d505c75e… 출처와 MIT 고지가 있다. docs/third-party/ovis.md에는 반입 파일, 제외 범위, 라이선스 전문이 있다. Markdown·코드복사·인용은 합성 Electron 검증(attempt-9ca37ad6, exit 0)의 범위로 기록돼 있다.",
+          "AC-2 경계: src/conversations.ts:150은 목록을 cwd·originator==='www'·ephemeral 기준으로 거르고, :55-63 threadRecord는 read·resume 응답에서 같은 조건과 같은 ID를 다시 검사한다. :79-107 publicItem은 analysis/reasoning 원문과 승인 요청을 복원하지 않는다. main.ts:130-135는 복원 이벤트를 publish를 거치지 않고 eventLog에 넣으므로 자동보고·승인 상태(pendingApprovals)가 재생되지 않는다. projection.ts:431도 historical 요청을 승인 대상에서 뺀다. 실행·승인·전환 중 선택 차단(main.ts:125-128)과 다른 thread로의 turn:start 거부(main.ts:338)를 확인했다.",
+          "sourceKinds 수정: verification.md의 native-source-diagnosis 기록(실제 source=vscode, originator=clientInfo.name)과 conversations.ts:147의 sourceKinds:['appServer','vscode'], :150의 originator==='www' 필터가 일치한다. main.ts:110에서 clientInfo.name이 'www'로 설정돼 있다.",
+          "증거 범위(결함 아님, 한계): AC-1~3의 공식 receipt(attempt-9ca37ad6)는 합성 app-server 기반이다. 실제 Native 재시작→목록→동일 thread resume→후속 응답의 근거인 chat-native-live.json(22:52:28~22:52:37)에는 소스 digest가 연결돼 있지 않고 공식 attempt로도 등록되지 않았다. 이 실행이 d126edd7 소스에서 이뤄졌는지는 기록만으로 확정할 수 없다. 또 verify-chat-live.ts:121은 approvalPolicy:'never', sandbox:'read-only'로 시작해 제품 경로(nativeThreadStartParams)의 on-request/workspace-write를 재현하지 않는다. 따라서 실제 Native 재개 성공은 '읽기 전용 단문 표본'으로 한정해 보고해야 한다. verification.md는 이미 합성/실기를 구분하므로 현재 기술은 확대 주장이 아니다.",
+          "잔여 위험(미확인, 수정 필수 아님): conversations.ts:158-160의 thread/resume은 approvalPolicy·sandbox·developerInstructions를 넘기지 않는다. docs/specs/chat.md:109는 '저장 설정을 덮어쓰지 않는다'고 정했지만, Codex app-server가 resume 때 원래 thread의 승인·sandbox를 복원하는지, 아니면 현재 config.toml 기본값을 적용하는지는 이번 증거로 확인되지 않는다. 기본값이 적용된다면 재개 대화가 새 대화의 on-request/workspace-write 정책과 다르게 실행될 수 있다. main.ts:293이 resume 응답의 approvalPolicy·sandbox를 표시하지만 검증하거나 강제하지는 않으며, 실기 표본도 resume 후 정책 값을 기록하지 않았다. 후속 검증에서 resume 응답의 정책 값을 관측해 기록하기를 권한다.",
+          "AC-4: npm run check의 첫 시도(attempt-d6a44bcb, exit 1)는 실패로 보존됐다. 원인은 입력 범위 밖인 Chat 005 문서의 링크 계약 위반이며, 수정 후 재시도(attempt-e35dc33c, exit 0)가 같은 소스 digest에서 통과했다. 원격 Opus 검토 not_run(authentication)과 BoxBox misaligned/REFUSE 잔존도 통과로 바꾸지 않고 기록돼 있어 한계 구분 요건에 맞는다. 이 검토는 읽기 전용이며 어떤 테스트도 직접 실행하지 않았다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-bf7a0192-d57f-4422-b3cb-0a243bd91dd1/opus.json",
+        "startedAt": "2026-11-12T22:55:47.916Z",
+        "completedAt": "2026-11-12T22:57:13.038Z"
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id": "documentation-186b7f1d-ad6b-468a-9b29-5785a3a2c4c3",
+        "version": 1,
+        "reviewedAt": "2026-11-12T22:52:01.360Z",
+        "sourceDigest": "f1769b9551c2aec8fb73578c59bb10b85bc05a5a088cdaf25e884b0e7c3da06f",
+        "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101",
+        "documentsDigest": "0e7e2841b3d75676d0e677315c5b7523d0b6a8600ca9a0ee4eaf1c74cf096dd6",
+        "documents": [
+          {
+            "path": "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason": "채팅 표현·대화 원장과 재개·검사방법·실제 출처를 현재 구현 범위로 반영하고 미검증 실기는 검증기록과 구분한다."
+          },
+          {
+            "path": "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason": "채팅 표현·대화 원장과 재개·검사방법·실제 출처를 현재 구현 범위로 반영하고 미검증 실기는 검증기록과 구분한다."
+          },
+          {
+            "path": "docs/PRODUCT.md",
+            "decision": "updated",
+            "reason": "채팅 표현·대화 원장과 재개·검사방법·실제 출처를 현재 구현 범위로 반영하고 미검증 실기는 검증기록과 구분한다."
+          },
+          {
+            "path": "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason": "기존 권한·증거·독립 검토·종료 보고 계약은 유지한다."
+          },
+          {
+            "path": "docs/specs/chat.md",
+            "decision": "updated",
+            "reason": "채팅 표현·대화 원장과 재개·검사방법·실제 출처를 현재 구현 범위로 반영하고 미검증 실기는 검증기록과 구분한다."
+          },
+          {
+            "path": "docs/third-party/ovis.md",
+            "decision": "updated",
+            "reason": "채팅 표현·대화 원장과 재개·검사방법·실제 출처를 현재 구현 범위로 반영하고 미검증 실기는 검증기록과 구분한다."
+          }
+        ]
+      },
+      {
+        "id": "documentation-19855900-eeeb-4d54-9314-b8a080a3ab59",
+        "version": 1,
+        "reviewedAt": "2026-11-12T22:55:37.223Z",
+        "sourceDigest": "d126edd7f7418346672ef6622b75b5671ba310b6adc8a85e978d0c9b6828c26a",
+        "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101",
+        "documentsDigest": "37e54e9d1ff248731c570672c40f2be071ad3436609445a0cea289a9d28e9d9c",
+        "documents": [
+          {
+            "path": "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason": "실제 Native source/WWW originator 경계를 포함한 채팅 표현·저장 대화·검사·출처를 현재 구현에 맞췄다."
+          },
+          {
+            "path": "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason": "실제 Native source/WWW originator 경계를 포함한 채팅 표현·저장 대화·검사·출처를 현재 구현에 맞췄다."
+          },
+          {
+            "path": "docs/PRODUCT.md",
+            "decision": "updated",
+            "reason": "실제 Native source/WWW originator 경계를 포함한 채팅 표현·저장 대화·검사·출처를 현재 구현에 맞췄다."
+          },
+          {
+            "path": "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason": "권한·증거·검토 계약은 유지한다."
+          },
+          {
+            "path": "docs/specs/chat.md",
+            "decision": "updated",
+            "reason": "실제 Native source/WWW originator 경계를 포함한 채팅 표현·저장 대화·검사·출처를 현재 구현에 맞췄다."
+          },
+          {
+            "path": "docs/third-party/ovis.md",
+            "decision": "updated",
+            "reason": "실제 Native source/WWW originator 경계를 포함한 채팅 표현·저장 대화·검사·출처를 현재 구현에 맞췄다."
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
+  }
+}

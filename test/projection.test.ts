@@ -258,6 +258,11 @@ test("로컬 요청만으로 연결 성공을 만들지 않고 실제 연결·�
   ]).toEqual(["disconnected", "connected", "closed"]);
 });
 
+test("대화 복원용 transport 상태는 실제 연결 표시는 보존한다", () => {
+  const restored = event(1, "transport/status", { state: "connected", connectionGeneration: 4 }, { kind: "transport" });
+  expect(project([restored]).transport).toBe("connected");
+});
+
 for (const phase of ["requested", "accepted", "uncertain"] as const) {
   test(`중단 ${phase} 후 연결 종료는 성공이나 대기 고착으로 표시하지 않는다`, () => {
     const events = [event(1, "turn/started", { turn: { id: "t" } }), event(2, "turn/interruptRequested", { turnId: "t" })];

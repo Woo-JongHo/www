@@ -1,0 +1,210 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>오픈소스 채팅 뼈대와 Native 대화 재개 통합 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 13일 AM 8:00 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>오픈소스 채팅 뼈대와 Native 대화 재개 통합</h1><p class="lead">Ovis의 실제 채팅 행 상태·입력·인용 코드를 WWW Native 흐름에 통합했다. Markdown·복사·인용과 저장 대화 목록·재개를 원격에 반영했고 실제 Native 맥락 유지도 확인했다. BoxBox와 동시 작업의 변경 때문에 현재 통합본의 정식 완료 판정은 보류한다.</p><div id="report-story" class="story">답변은 일반 텍스트였고 창의 최근 사건만 있어 저장 대화를 목록에서 다시 열거나 동일 Native thread로 이어갈 수 없었다.
+
+Markdown·표·코드 복사·답변 인용과 대화별 초안·읽기 위치·펼침을 사용할 수 있다. Native 원장을 목록·읽기·재개에 연결해 앱 재시작 후 같은 대화로 후속 요청을 보낼 수 있다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 2 · 실패 3 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 현재 원격 코드를 사용해 기능을 살펴볼 수 있다. 커밋·push는 하지 않았다.</p><p class="blocker"><strong>남은 차단 사항</strong> 채팅 기능 구현·Native/Electron 표본 검증은 끝났으나 BoxBox 정렬/REFUSE 미해결 및 다른 세션의 사이드바 소스 변경으로 현재 통합본 최종 검증·감사 적용성이 미충족이다.</p><p class="state-note">저장 당시 기준 중 4개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>Ovis 고정 revision의 Map/Context 기반 행 상태, composerFull·pasteOverflow·draftWithQuote를 WWW 요구에 맞게 개작하고 MIT 고지를 보존했다.</li><li>Native thread/list·read·resume·turns/list를 연결하고 공개 이력만 historical로 복원한다. 기존 승인·중단·사이드바 변경을 보존한다.</li><li>실제 Native source:vscode와 originator:www를 확인해 목록 누락을 수정하고 비소유 기록 제외·권한 override 방지·긴 출력 절단 안내를 검증했다.</li></ul></div></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>실제 upstream 출처·revision·라이선스를 보존한 채팅 코드가 Native 답변·공개 설명·도구·변경·승인을 표현하고 Markdown·코드복사·인용 입력을 제공한다.</dt><dd>미검증으로 기록</dd></div><div><dt>프로젝트 대화 목록·새 대화·저장 이력 재열기·동일 Native thread 후속 요청을 지원하며 과거 이력을 현재 실행·승인으로 재생하지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>대화별 초안·읽기 위치·펼침 상태를 보존하고 전송 실패·중복·중단·한국어 입력의 기존 의미를 유지한다.</dt><dd>미검증으로 기록</dd></div><div><dt>집중 테스트·타입·빌드와 실제 Electron 합성 경계 검증을 수행하고 기존 사이드바 변경 및 Native 실기·독립 검토 한계를 구분한다.</dt><dd>미검증으로 기록</dd></div></dl></section><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>Herdr 전체 Rust/PTY 실행 기반으로 이주하는 대신 Ovis의 실제 채팅 상태·입력 코드를 현재 Electron·Native 사건 구조에 연결했다.</li><li>대화 원본은 Native 저장 원장으로 유지하고 별도 메시지 DB·과거 승인 재실행·비공개 reasoning 복원을 만들지 않았다.</li><li>원격 Opus 인증 실패를 다른 모델로 대체하지 않고 같은 내용 지문을 검증한 사본에서 기존 인증의 같은 Opus를 읽기 전용 실행했다.</li></ul></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 2건, 실패 3건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>BoxBox source 문법은 유효하지만 정렬 및 미지원/미승인 REFUSE가 남아 정식 완료가 아니다.</li><li>다른 세션의 활동 사이드바 및 테스트가 검토·검사 중 바뀌어 현재 전체 source에 과거 통과를 그대로 적용하지 않는다.</li><li>실제 Native는 읽기 전용·승인금지 단문 표본이다. 실제 Native 변경·승인 왕복 전체와 Windows·실제 한국어 IME 실기는 확인하지 않았다.</li><li>재개 요청에서 모델·승인·sandbox를 명시적으로 override하지 않지만 Native가 저장 정책과 현재 구성 기본값을 적용하는 상세 의미는 추가 관찰이 필요하다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><ul><li>현재 원격 코드를 사용해 기능을 살펴볼 수 있다. 커밋·push는 하지 않았다.</li><li>두 작업의 소스가 고정된 뒤 같은 UUID에서 현재 전체·GUI 검사와 Opus 적용성을 확인한다.</li><li>BoxBox의 정렬/REFUSE 원문을 기준으로 허용된 저작 범위의 미해결을 처리한 뒤 정식 완료를 판정한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-baa0963b-ea71-48e7-a34f-0d229ba704b1<br>report-ccd22113-6e1f-4cce-981c-45856a3c460b</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>1a3c343169f57a912de07e031e255675144a8aa1ba92a4d5582fd5eaa25e78c1</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>a31449d96f42fd63b1c62202f7b36ea80315f0ef0465153128fb0bdcc416a356</code></dd></div><div><dt>기준 지문</dt><dd><code>e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;채팅 기능 구현·Native/Electron 표본 검증은 끝났으나 BoxBox 정렬/REFUSE 미해결 및 다른 세션의 사이드바 소스 변경으로 현재 통합본 최종 검증·감사 적용성이 미충족이다.&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;실제 upstream 출처·revision·라이선스를 보존한 채팅 코드가 Native 답변·공개 설명·도구·변경·승인을 표현하고 Markdown·코드복사·인용 입력을 제공한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;프로젝트 대화 목록·새 대화·저장 이력 재열기·동일 Native thread 후속 요청을 지원하며 과거 이력을 현재 실행·승인으로 재생하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-14994d5d-6e05-43fe-a15b-bd8df5824e8b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-756411e7-de22-46fc-a831-cabafd00a940&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;대화별 초안·읽기 위치·펼침 상태를 보존하고 전송 실패·중복·중단·한국어 입력의 기존 의미를 유지한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;집중 테스트·타입·빌드와 실제 Electron 합성 경계 검증을 수행하고 기존 사이드바 변경 및 Native 실기·독립 검토 한계를 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d6a44bcb-190c-4954-9e8e-550ffa6f0b59&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e35dc33c-616e-40db-90bd-9aba9b30614c&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-d6a44bcb-190c-4954-9e8e-550ffa6f0b59&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T22:53:24.543Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e35dc33c-616e-40db-90bd-9aba9b30614c&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T22:55:06.171Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-chat.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T22:55:11.829Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-14994d5d-6e05-43fe-a15b-bd8df5824e8b&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test/verify-chat-live.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T22:58:08.168Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-756411e7-de22-46fc-a831-cabafd00a940&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test/verify-chat-live.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: false,
+      &quot;completedAt&quot;: &quot;2026-11-12T22:58:37.183Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-32355cdb-ad40-446b-ba2b-69999fd7ee61&quot;,
+      &quot;verdict&quot;: &quot;not_run&quot;,
+      &quot;model&quot;: null,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-32355cdb-ad40-446b-ba2b-69999fd7ee61/opus.json&quot;,
+      &quot;findings&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;review-bf7a0192-d57f-4422-b3cb-0a243bd91dd1&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-bf7a0192-d57f-4422-b3cb-0a243bd91dd1/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;판정 근거(소스 대조): 현재 입력의 개별 파일 digest(src/conversations.ts 6fede61c…, src/native-chat.ts 5593df69…, src/main.ts 357b6525…, test/fixtures/conversations-app-server.ts cf35fafe…, scripts/verify-chat.ts b17491a5… 등)는 work.json의 세 검증 시도(d126edd7… 소스)에 기록된 값과 같다. 전체 sourceDigest(aea9e85e…)가 다른 것은 이번 검토 입력에 docs/skills/WORKFLOW.md·work.json·verification.md·evidence JSON이 추가됐기 때문으로 보이며, 검증 이후 제품 소스가 바뀐 흔적은 없다. criteriaDigest e58ba493…도 일치한다.&quot;,
+        &quot;AC-1: src/chat-row-state.tsx:1-3과 src/chat-state.ts:1-3에 devswha/ovis@d505c75e… 출처와 MIT 고지가 있다. docs/third-party/ovis.md에는 반입 파일, 제외 범위, 라이선스 전문이 있다. Markdown·코드복사·인용은 합성 Electron 검증(attempt-9ca37ad6, exit 0)의 범위로 기록돼 있다.&quot;,
+        &quot;AC-2 경계: src/conversations.ts:150은 목록을 cwd·originator===&#39;www&#39;·ephemeral 기준으로 거르고, :55-63 threadRecord는 read·resume 응답에서 같은 조건과 같은 ID를 다시 검사한다. :79-107 publicItem은 analysis/reasoning 원문과 승인 요청을 복원하지 않는다. main.ts:130-135는 복원 이벤트를 publish를 거치지 않고 eventLog에 넣으므로 자동보고·승인 상태(pendingApprovals)가 재생되지 않는다. projection.ts:431도 historical 요청을 승인 대상에서 뺀다. 실행·승인·전환 중 선택 차단(main.ts:125-128)과 다른 thread로의 turn:start 거부(main.ts:338)를 확인했다.&quot;,
+        &quot;sourceKinds 수정: verification.md의 native-source-diagnosis 기록(실제 source=vscode, originator=clientInfo.name)과 conversations.ts:147의 sourceKinds:[&#39;appServer&#39;,&#39;vscode&#39;], :150의 originator===&#39;www&#39; 필터가 일치한다. main.ts:110에서 clientInfo.name이 &#39;www&#39;로 설정돼 있다.&quot;,
+        &quot;증거 범위(결함 아님, 한계): AC-1~3의 공식 receipt(attempt-9ca37ad6)는 합성 app-server 기반이다. 실제 Native 재시작→목록→동일 thread resume→후속 응답의 근거인 chat-native-live.json(22:52:28~22:52:37)에는 소스 digest가 연결돼 있지 않고 공식 attempt로도 등록되지 않았다. 이 실행이 d126edd7 소스에서 이뤄졌는지는 기록만으로 확정할 수 없다. 또 verify-chat-live.ts:121은 approvalPolicy:&#39;never&#39;, sandbox:&#39;read-only&#39;로 시작해 제품 경로(nativeThreadStartParams)의 on-request/workspace-write를 재현하지 않는다. 따라서 실제 Native 재개 성공은 &#39;읽기 전용 단문 표본&#39;으로 한정해 보고해야 한다. verification.md는 이미 합성/실기를 구분하므로 현재 기술은 확대 주장이 아니다.&quot;,
+        &quot;잔여 위험(미확인, 수정 필수 아님): conversations.ts:158-160의 thread/resume은 approvalPolicy·sandbox·developerInstructions를 넘기지 않는다. docs/specs/chat.md:109는 &#39;저장 설정을 덮어쓰지 않는다&#39;고 정했지만, Codex app-server가 resume 때 원래 thread의 승인·sandbox를 복원하는지, 아니면 현재 config.toml 기본값을 적용하는지는 이번 증거로 확인되지 않는다. 기본값이 적용된다면 재개 대화가 새 대화의 on-request/workspace-write 정책과 다르게 실행될 수 있다. main.ts:293이 resume 응답의 approvalPolicy·sandbox를 표시하지만 검증하거나 강제하지는 않으며, 실기 표본도 resume 후 정책 값을 기록하지 않았다. 후속 검증에서 resume 응답의 정책 값을 관측해 기록하기를 권한다.&quot;,
+        &quot;AC-4: npm run check의 첫 시도(attempt-d6a44bcb, exit 1)는 실패로 보존됐다. 원인은 입력 범위 밖인 Chat 005 문서의 링크 계약 위반이며, 수정 후 재시도(attempt-e35dc33c, exit 0)가 같은 소스 digest에서 통과했다. 원격 Opus 검토 not_run(authentication)과 BoxBox misaligned/REFUSE 잔존도 통과로 바꾸지 않고 기록돼 있어 한계 구분 요건에 맞는다. 이 검토는 읽기 전용이며 어떤 테스트도 직접 실행하지 않았다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;Ovis의 실제 채팅 행 상태·입력·인용 코드를 WWW Native 흐름에 통합했다. Markdown·복사·인용과 저장 대화 목록·재개를 원격에 반영했고 실제 Native 맥락 유지도 확인했다. BoxBox와 동시 작업의 변경 때문에 현재 통합본의 정식 완료 판정은 보류한다.&quot;,
+  &quot;before&quot;: &quot;답변은 일반 텍스트였고 창의 최근 사건만 있어 저장 대화를 목록에서 다시 열거나 동일 Native thread로 이어갈 수 없었다.&quot;,
+  &quot;after&quot;: &quot;Markdown·표·코드 복사·답변 인용과 대화별 초안·읽기 위치·펼침을 사용할 수 있다. Native 원장을 목록·읽기·재개에 연결해 앱 재시작 후 같은 대화로 후속 요청을 보낼 수 있다.&quot;,
+  &quot;changes&quot;: [
+    &quot;Ovis 고정 revision의 Map/Context 기반 행 상태, composerFull·pasteOverflow·draftWithQuote를 WWW 요구에 맞게 개작하고 MIT 고지를 보존했다.&quot;,
+    &quot;Native thread/list·read·resume·turns/list를 연결하고 공개 이력만 historical로 복원한다. 기존 승인·중단·사이드바 변경을 보존한다.&quot;,
+    &quot;실제 Native source:vscode와 originator:www를 확인해 목록 누락을 수정하고 비소유 기록 제외·권한 override 방지·긴 출력 절단 안내를 검증했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;Herdr 전체 Rust/PTY 실행 기반으로 이주하는 대신 Ovis의 실제 채팅 상태·입력 코드를 현재 Electron·Native 사건 구조에 연결했다.&quot;,
+    &quot;대화 원본은 Native 저장 원장으로 유지하고 별도 메시지 DB·과거 승인 재실행·비공개 reasoning 복원을 만들지 않았다.&quot;,
+    &quot;원격 Opus 인증 실패를 다른 모델로 대체하지 않고 같은 내용 지문을 검증한 사본에서 기존 인증의 같은 Opus를 읽기 전용 실행했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;BoxBox source 문법은 유효하지만 정렬 및 미지원/미승인 REFUSE가 남아 정식 완료가 아니다.&quot;,
+    &quot;다른 세션의 활동 사이드바 및 테스트가 검토·검사 중 바뀌어 현재 전체 source에 과거 통과를 그대로 적용하지 않는다.&quot;,
+    &quot;실제 Native는 읽기 전용·승인금지 단문 표본이다. 실제 Native 변경·승인 왕복 전체와 Windows·실제 한국어 IME 실기는 확인하지 않았다.&quot;,
+    &quot;재개 요청에서 모델·승인·sandbox를 명시적으로 override하지 않지만 Native가 저장 정책과 현재 구성 기본값을 적용하는 상세 의미는 추가 관찰이 필요하다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;현재 원격 코드를 사용해 기능을 살펴볼 수 있다. 커밋·push는 하지 않았다.&quot;,
+    &quot;두 작업의 소스가 고정된 뒤 같은 UUID에서 현재 전체·GUI 검사와 Opus 적용성을 확인한다.&quot;,
+    &quot;BoxBox의 정렬/REFUSE 원문을 기준으로 허용된 저작 범위의 미해결을 처리한 뒤 정식 완료를 판정한다.&quot;
+  ]
+}</pre></div></details></section></main></body></html>

@@ -138,3 +138,11 @@ src/reports-service.ts가 선택 저장소와 report ID만 사용해 읽는다. 
 Native 자동 보고서는 src/native-report-input.ts의 공개 사건 수집 → src/native-reports.ts의 프로젝트별 중복 억제·직렬 큐 → src/report-judge.ts의 별도 읽기 전용 Codex subprocess → 구조화 보고서 저장으로 연결된다. main이 수명주기와 취소를 소유하며 renderer는 상태·이유·토글·재시도를 제공한다. 원문 재시도 입력은 메모리에만 보관하고 디스크에는 상태 메타데이터만 남긴다. Native 종료는 신규 작업의 수용·검증 결과를 만들지 않는다.
 
 보고서의 선택적인 narrative.reader는 독자용 이야기·요구와 결과·검사 시나리오·주요 결정·목적 있는 자료·해소 행동을 보존한다. 파서는 scripts/workflow/reports.ts가 소유하고 수동 저작·Native 판단·큐가 같은 타입을 보존한다. scripts/workflow/report-view.ts는 안전한 정적 HTML을 생성하며 구형 JSON의 재배치는 원본을 수정하지 않는다. 보고서 현재성과 저장된 검증 이력의 현재 적용성을 같은 판정으로 설명하지 않는다.
+
+## 오픈소스 채팅과 저장 대화 연결
+
+src/conversations.ts는 Native thread/list·read·resume·turns/list 응답을 검증하고 공개 이력을 AppEvent snapshot으로 변환한다. Native가 대화 저장의 원본이며 WWW는 새 메시지 DB를 만들지 않는다. main은 현재 선택·진행 중 턴·승인·전환 guard를 소유하고 preload는 제한된 목록·선택·신규·외부 링크 IPC만 노출한다.
+
+renderer는 thread/cwd별 초안·읽기 위치·따라가기와 logical row 상태를 소유한다. 전환 세대와 사건 seq로 복원 snapshot·전환 중 도착한 live 사건을 병합하며 historical은 복원 표지로 live 사건과 구분한다. src/chat-row-state.tsx와 chat-state.ts는 Ovis의 행 상태·입력·인용 코드를 개작하고 chat-message.tsx는 react-markdown/GFM을 실제 메시지에 연결한다. 출처·고정 revision·변형은 docs/third-party/ovis.md가 소유한다.
+
+복원은 기존 publish의 실시간 자동보고 경로를 항목마다 재호출하지 않는다. 원문 reasoning·과거 승인 요청은 복원 대상이 아니다. 완전한 snapshot marker와 실제 이력 절단을 구분하며 사용자 전송 결과 불확실을 자동 재전송으로 해결하지 않는다. 재개 정책은 Native 저장 설정을 보존한다.

@@ -2,6 +2,10 @@ import { contextBridge, ipcRenderer } from "electron";
 import type { AppEvent, WwwApi } from "./shared";
 
 const api: WwwApi = {
+  listConversations       : (cursor) => ipcRenderer.invoke("conversations:list", cursor)                          ,
+  openConversation        : (threadId) => ipcRenderer.invoke("conversations:open", threadId)                      ,
+  newConversation         : () => ipcRenderer.invoke("conversations:new")                                        ,
+  openExternal            : (url) => ipcRenderer.invoke("link:open", url)                                        ,
   chooseWorkspace         : () => ipcRenderer.invoke("workspace:choose")                                         ,
   workspace               : () => ipcRenderer.invoke("workspace:get")                                            ,
   startThread             : () => ipcRenderer.invoke("thread:start")                                             ,
