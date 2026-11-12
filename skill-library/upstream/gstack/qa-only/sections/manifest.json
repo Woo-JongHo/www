@@ -1,0 +1,19 @@
+{
+  "$schema": "https://gstack.dev/schemas/section-manifest.json",
+  "skill"  : "qa-only",
+  "version": 1,
+  "sections": [
+    {
+      "id"     : "exploratory",
+      "file"   : "exploratory.md",
+      "title"  : "보고 전용 탐색 QA",
+      "trigger": "대상 표면을 선택한 뒤 보고 전용 점검 실행(Read 한 번으로 두 과정 모두 확인)"
+    },
+    {
+      "id"     : "reporting",
+      "file"   : "reporting.md",
+      "title"  : "증거에 근거한 최종 보고",
+      "trigger": "점검을 종료한 뒤 보고서 확정"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-c70c4563-123f-4156-b836-0a71fcfe8b40",
+  "title"        : "BoxBox 훅 오류와 작성 범위 진단",
+  "kind"         : "bug",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "생성 런타임 파일 경합과 source readability·지원 언어·승인 규칙의 공백을 실제 검사로 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-2",
+      "description": "ignored 런타임 변경은 제외하고 실제 소스 변경 감지는 유지하는 훅 수정본을 검증·설치한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-3",
+      "description": "새 호스트 세션에서 실제 등록된 수정 훅이 수용되는지 확인하며 미승인 정렬·언어 변경은 완료로 주장하지 않는다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "www-boxbox-errors-20261112",
+    "requestHash": "7542fb887ff172704d0f708448355b1313a0c80962d9ea7e16efc5a9d07e64fe",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "docs/DEVELOPMENT.md"
+      ],
+      "mutationSurfaces": [
+        "edit"
+      ],
+      "verifierCommands": [],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "7542fb887ff172704d0f708448355b1313a0c80962d9ea7e16efc5a9d07e64fe"
+    },
+    "inputs": [
+      "docs/DEVELOPMENT.md"
+    ],
+    "nextAction": "verify",
+    "verifications": [],
+    "reviews": []
+  }
+}

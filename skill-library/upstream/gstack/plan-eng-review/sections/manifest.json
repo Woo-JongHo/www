@@ -1,0 +1,23 @@
+{
+  "$schema": "https://gstack.dev/schemas/section-manifest.json",
+  "skill"  : "plan-eng-review",
+  "version": 1,
+  "note"   : "수동형(PASSIVE) 레지스트리(v2 계획 T9 / CM2)입니다. id/file/title/trigger 문구만 포함하며 읽는 시점은 skeleton의 의사결정 트리 설명에서 정합니다. 대화형 렌더링에 적용할 기계적 판정식은 없습니다. docs/designs/v2_PLAN.md를 참고하세요. 선택 필드 scope(always | ui | dx | db | perf | security | incident, 기본값 always)와 runner_only(true이면 Section index에서 제외)는 bin/gstack-autoplan만 읽습니다(계획 B4). 무인 실행이나 가벼운 실행은 체크리스트와 감지된 범위에 필요한 절을 읽고 `Skipped sections: <ids> (scope: <detected>)`를 출력합니다.",
+  "sections": [
+    {
+      "id"     : "review-sections",
+      "file"   : "review-sections.md",
+      "title"  : "아키텍처·코드·테스트·성능 검토, 외부 관점, 필수 산출물과 검토 보고서",
+      "trigger": "범위에 이의를 제기하는 검토와 전체 검토 시작(대상 선택과 초기 준비 후)",
+      "scope"  : "always"
+    },
+    {
+      "id"         : "checklist",
+      "file"       : "checklist.md",
+      "title"      : "실행 체크리스트: 단계·필수 산출물과 이를 만드는 절의 대응",
+      "trigger"    : "runner 프로필만 해당(무인 또는 가벼운 autoplan 실행); 대화형 실행은 review-sections.md 전체를 읽음",
+      "scope"      : "always",
+      "runner_only": true
+    }
+  ]
+}

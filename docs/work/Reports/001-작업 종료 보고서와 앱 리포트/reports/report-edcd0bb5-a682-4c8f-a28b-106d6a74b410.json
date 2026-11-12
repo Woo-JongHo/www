@@ -1,0 +1,120 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-edcd0bb5-a682-4c8f-a28b-106d6a74b410",
+  "workId"        : "work-82e8475f-380f-460c-9cd2-5bbef0126625",
+  "title"         : "작업 종료 보고서와 앱 리포트",
+  "summary"       : "일부 확인 · 후속 작업 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome"       : "partial",
+  "kind"          : "snapshot",
+  "event"         : "verify",
+  "createdAt"     : "2026-11-12T04:31:30.460Z",
+  "workRecordHash": "d068208bf7ebf08dae912c4584e1b3f00e178a7cc116e1f11858373f6e7624a3",
+  "sourceDigest"  : "6d739605c13515f4b05d142c34d9bdd320d26dfe153f1d2ebeca709f7312b3b2",
+  "criteriaDigest": "9e5ffa587390fd87fdeffac0c3353d0691050c91f52b7128600fbc6bd558203e",
+  "semanticHash"  : "4290ed14ecb42549681db626b0ccce622f939202ad7e81e850f290f0a4f94116",
+  "narrative"     : null,
+  "work": {
+    "status": "verifying",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id"         : "AC-1",
+        "description": "사이드바 리포트에서 실제 작업 보고서와 이력·빈 상태·오류를 읽고 대화 상태를 보존한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-2",
+        "description": "저자가 작성한 작업 설명과 검증·검토 근거를 구분한 독립 HTML 보고서를 저장하고 안전하게 내보낸다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-3",
+        "description": "검증·검토·하네스 종료 훅이 보고서를 실제 저장하며 중복 실행·생성 실패·미완료 상태를 구분한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-4",
+        "description": "신규 작업 완료 판정은 현행 소스·기준의 저작 보고서가 필요하며 기존 검증·검토 조건을 유지한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-5",
+        "description": "집중 행동·보안 검사, 타입·빌드와 Electron 통합 및 인쇄·좁은 화면 검증을 수행한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-6",
+        "description": "Native 공개 답변 종료 뒤 실제 LLM의 필요 여부 판단과 자동 보고서 저장을 연결하고 생략·중복·실패·재시도·재시작을 구분한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+        "command": "node",
+        "args": [
+          "scripts/verify-reports.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T04:31:30.140Z"
+      }
+    ],
+    "reviews": []
+  },
+  "source": {
+    "recordPath"    : "docs/work/Reports/001-작업 종료 보고서와 앱 리포트/work.json",
+    "workRecordHash": "d068208bf7ebf08dae912c4584e1b3f00e178a7cc116e1f11858373f6e7624a3",
+    "sourceDigest"  : "6d739605c13515f4b05d142c34d9bdd320d26dfe153f1d2ebeca709f7312b3b2",
+    "criteriaDigest": "9e5ffa587390fd87fdeffac0c3353d0691050c91f52b7128600fbc6bd558203e"
+  }
+}

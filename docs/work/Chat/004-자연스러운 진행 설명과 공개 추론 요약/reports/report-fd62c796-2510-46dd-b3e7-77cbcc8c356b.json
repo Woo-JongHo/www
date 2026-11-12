@@ -1,0 +1,256 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-fd62c796-2510-46dd-b3e7-77cbcc8c356b",
+  "workId"        : "work-17ba7e7d-64e2-4450-b637-2c5f1c7ce0b2",
+  "title"         : "자연스러운 진행 설명과 공개 추론 요약",
+  "summary"       : "채팅에 자연스러운 한국어 진행 설명 지침과 Native의 공개 추론 요약 표시를 구현했다. 고정 단계 라벨을 제거하고 중요한 발견·실패·방향 전환의 이유와 결과를 설명하도록 요청한다. 집중 테스트 86개·타입·소스 정책·빌드와 최종 합성 Electron 회귀, 실제 Native 표본 및 독립 Opus 감사를 수행했다. 기능 검사와 감사는 통과했지만 BoxBox 미해결로 전체 완료는 보류한다.",
+  "outcome"       : "blocked",
+  "kind"          : "authored",
+  "event"         : "finish",
+  "createdAt"     : "2026-11-12T07:24:21.276Z",
+  "workRecordHash": "f74aeebee3b5cf32da7e7da8965d22ccd2a5d1cca64ea16f03bb81da04426c47",
+  "sourceDigest"  : "05c8f923f5ae1ad373c6f3e3d4e83bd7c1d4924264b8616f9fe2223057ca63b7",
+  "criteriaDigest": "e75249ba0eefaf305d5c4a12a3345d82c9560bd26f43400a0a34911254183023",
+  "semanticHash"  : "7abcc07534bb2cd3bcc9feee5db44ffaf2a6f186d17671d664002b9be7569482",
+  "narrative": {
+    "summary": "채팅에 자연스러운 한국어 진행 설명 지침과 Native의 공개 추론 요약 표시를 구현했다. 고정 단계 라벨을 제거하고 중요한 발견·실패·방향 전환의 이유와 결과를 설명하도록 요청한다. 집중 테스트 86개·타입·소스 정책·빌드와 최종 합성 Electron 회귀, 실제 Native 표본 및 독립 Opus 감사를 수행했다. 기능 검사와 감사는 통과했지만 BoxBox 미해결로 전체 완료는 보류한다.",
+    "before" : "기존 채팅은 Native의 commentary를 출처 라벨과 함께 표시했고 reasoning 항목을 모두 제외해 공개 summary도 보이지 않았다. 진행 설명을 더 자세히 요청하는 앱 지침이 없었다.",
+    "after"  : "새 앱의 새 스레드에는 자연스러운 한국어 진행 설명 지침을 추가하고 턴마다 detailed 공개 요약을 요청한다. 채팅은 제공된 summary와 commentary를 고정 가시 라벨 없이 본문으로 표시한다. 원문 reasoning·analysis는 제외하며 중복·턴 격리·완료·종료·절단을 처리한다.",
+    "changes": [
+      "src/native-chat.ts의 params 구성을 실제 main RPC에 연결했다. 기존 cwd·승인·sandbox·사용자 입력은 보존한다.",
+      "projection에서 공개 summary를 문단별로 스트리밍하고 완료 snapshot으로 대체한다. raw textDelta와 content는 표시하지 않는다.",
+      "renderer에서 공개 설명의 가시 출처 라벨을 제거하고 접근성 이름은 보존했다.",
+      "원문 미노출 검사를 유지하면서 활동 fixture의 공개·비공개 자료를 분리하고 실제 stdio 통합 검사를 추가했다.",
+      "Chat 명세·제품·구조·개발 안내와 같은 UUID의 명세·설계·검증 기록을 갱신했다."
+    ],
+    "decisions": [
+      "모델의 내부 원문 사고를 요청하지 않고 공개 요약과 작업상 이유·관찰·다음 행동만 요청했다.",
+      "baseInstructions나 모델·effort·전역 Codex 설정을 바꾸지 않고 앱 스레드의 developerInstructions를 추가했다.",
+      "설명 빈도는 모델 행동으로 남긴다. 실제 실패 표본에서 추가 commentary가 없었다는 관측을 숨기거나 매 실패 설명을 보장하지 않는다.",
+      "Opus 감사가 지적한 이전 검증의 현재성 문구를 바로잡고 BoxBox 미해결을 work.json의 차단 사유에 반영했다."
+    ],
+    "limitations": [
+      "공식 저작 하네스의 BoxBox FIXABLE·REFUSE가 미해결이어서 전체 작업 상태는 verifying이며 done이 아니다. 정렬·formatter 또는 미승인 수동 공백 수정으로 우회하지 않았다.",
+      "실제 Native 표본은 제한된 읽기 전용 작업 두 건이며 모든 모델·모든 실패·장기 작업의 설명 빈도나 품질을 보장하지 않는다.",
+      "Windows와 실제 한국어 IME 조합 입력 전체는 검사하지 않았다. 최종 GUI 검사는 실제 Electron+합성 Native이며 실제 모델 검사와 구분한다.",
+      "첫 하네스는 병행 작업의 scripts/verify-eight-items.ts·tsconfig 변경도 감지했다. 다른 작업의 변경은 보존했다."
+    ],
+    "next": [
+      "미해결 BoxBox 형식과 기존 REFUSE의 처리 범위를 정해 정상 작성 검사 통과를 확보한 뒤 같은 UUID에서 재검증한다.",
+      "앱을 다시 실행한 새 대화에서 실제 사용 중의 설명 빈도·상세함을 확인한다. 모델이 제공하지 않은 요약은 앱에서 만들어 넣지 않는다."
+    ]
+  },
+  "work": {
+    "status": "verifying",
+    "blockedReason": "기능 검사와 Opus 감사는 통과했으나 공식 저작 하네스의 BoxBox FIXABLE·REFUSE가 미해결이다. 미승인 형태의 정렬·formatter 우회 없이 보류한다.",
+    "criteria": [
+      {
+        "id"         : "AC-1",
+        "description": "Native 대화에 한국어의 자연스러운 진행 설명 지침을 전달하고 중요한 발견·실패·방향 전환의 이유와 결과를 설명하도록 요청하며 고정 단계 라벨을 강제하지 않는다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-50e5eaf8-4399-4172-bf71-ca7c004088a5",
+            "summary": "이전 소스에서 실제 검증 통과; 현재 소스에는 이후 검증 시도를 적용한다."
+          },
+          {
+            "path": "verification.md#attempt-7655d366-45e1-41dd-9a00-3a8f36e7bdb9",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-2",
+        "description": "공개 reasoning summary만 채팅에 시간순 스트리밍하며 section·turn 격리, 중복 수신, 완료 snapshot, EOF·턴 종료 및 절단을 처리하고 raw reasoning·analysis를 노출하지 않는다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-50e5eaf8-4399-4172-bf71-ca7c004088a5",
+            "summary": "이전 소스에서 실제 검증 통과; 현재 소스에는 이후 검증 시도를 적용한다."
+          },
+          {
+            "path": "verification.md#attempt-7655d366-45e1-41dd-9a00-3a8f36e7bdb9",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-3",
+        "description": "기존 입력·승인·중단·활동·자동 보고서 경로를 보존하며 집중 테스트·타입 검사·빌드와 실제 화면 또는 실제 Native 표본의 확인 범위·미확인을 구분해 기록한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-50e5eaf8-4399-4172-bf71-ca7c004088a5",
+            "summary": "이전 소스에서 실제 검증 통과; 현재 소스에는 이후 검증 시도를 적용한다."
+          },
+          {
+            "path": "verification.md#attempt-85ffa423-0d53-4492-b205-dc570a985162",
+            "summary": "이전 소스에서 실제 검증 통과; 현재 소스에는 이후 검증 시도를 적용한다."
+          },
+          {
+            "path": "verification.md#attempt-7655d366-45e1-41dd-9a00-3a8f36e7bdb9",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-438d245b-5ce3-49f2-bfbc-668435185655",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-96852d0a-7a77-4fce-a706-21908bfd682b",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-de3c6f80-848b-46a9-aa00-815170cb10cd",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-50e5eaf8-4399-4172-bf71-ca7c004088a5",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/projection.test.ts",
+          "test/native-chat.test.ts",
+          "test/native-activity.test.ts",
+          "test/input.test.ts",
+          "test/native-report-input.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T07:11:38.005Z"
+      },
+      {
+        "id": "attempt-85ffa423-0d53-4492-b205-dc570a985162",
+        "command": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T07:12:25.706Z"
+      },
+      {
+        "id": "attempt-7655d366-45e1-41dd-9a00-3a8f36e7bdb9",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/projection.test.ts",
+          "test/native-chat.test.ts",
+          "test/native-activity.test.ts",
+          "test/input.test.ts",
+          "test/native-report-input.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T07:17:50.924Z"
+      },
+      {
+        "id": "attempt-438d245b-5ce3-49f2-bfbc-668435185655",
+        "command": "npm",
+        "args": [
+          "run",
+          "build"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T07:17:52.096Z"
+      },
+      {
+        "id": "attempt-96852d0a-7a77-4fce-a706-21908bfd682b",
+        "command": "npm",
+        "args": [
+          "run",
+          "check:source"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T07:18:13.251Z"
+      },
+      {
+        "id": "attempt-de3c6f80-848b-46a9-aa00-815170cb10cd",
+        "command": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T07:19:18.235Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id"         : "review-122ebbfc-0b5e-4b01-ba9b-a1df18d4c759",
+        "verdict"    : "pass",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-122ebbfc-0b5e-4b01-ba9b-a1df18d4c759/opus.json",
+        "findings": [
+          "AC-1 충족: src/native-chat.ts:2-18이 thread/start에 developerInstructions만 추가하고 cwd·approvalPolicy(on-request)·sandbox(workspace-write)를 그대로 둔다. baseInstructions·모델·effort는 바꾸지 않는다. 지침은 자연스러운 한국어 설명, 중요한 발견·실패·방향 전환의 이유와 결과, 사실과 추정의 구분을 요청한다. 고정 단계 라벨과 상투적 반복은 금지한다. nativeTurnStartParams(src/native-chat.ts:20-26)는 사용자 원문을 trim 없이 보존하고 summary: \"detailed\"만 추가한다. src/main.ts:188과 src/main.ts:201에서 두 함수를 실제로 사용한다. docs/specs/chat.md:25의 서술과 일치한다.",
+          "AC-2 충족: src/projection.ts:251-309는 summaryTextDelta와 reasoning 항목 시작·완료의 summary(string[] 검증, isSummary)만 본문으로 사용한다. publicMessageKind(src/projection.ts:107-116)는 item/reasoning/* 메서드, reasoning type, reasoning·analysis phase를 모두 제외하므로 raw content·textDelta·analysis는 채팅 블록에 들어가지 않는다. 요약 ID는 [threadId, turnId, itemId]로 격리된다. 명시적 threadId·turnId·itemId가 없는 사건은 버린다. seq 중복은 seen 집합(src/projection.ts:155)이 막는다. 완료 snapshot은 빈 배열을 포함해 권위값으로 대체한다. turn 종료·EOF(transport/closed)·비활성 턴 이후의 늦은 delta는 무시한다. 32768 코드 단위 제한은 구분자를 포함해 계산하고 summaryTruncated로 표시한다.",
+          "AC-2 테스트 대응: test/projection.test.ts:296-400이 섹션 순서, commentary와의 시간순, 중복 seq, 완료 snapshot 대체와 빈 snapshot 제거를 다룬다. 잘못된 summary·summaryIndex, textDelta·analysis 비노출, thread·turn·item 격리, completed·interrupted·failed·EOF 종료, 재연결 후 재개 금지, 절단도 결정론적으로 검사한다. test/native-chat.test.ts:18-57은 실제 subprocess(fake-app-server.ts)와 JsonRpcClient·project를 거친다. 이 경로에서 PRIVATE_REASONING_SENTINEL이 사건에는 존재하지만 블록에는 없음을 확인한다.",
+          "AC-3 경로 보존: renderer(src/renderer.tsx:53)는 출처를 aria-label로만 구분하고 본문에 라벨을 붙이지 않는다. 텍스트는 React 텍스트 노드로 렌더링된다. native-activity.ts:187·421·446은 reasoning 텍스트를 계속 보관하지 않는다. native-report-input.ts에는 reasoning 처리 변경이 없다. 입력·승인·중단 경로(src/main.ts:194-229)는 params 생성 함수 교체 외에 변경이 없다.",
+          "증거 대조: 현재 sourceDigest 6fd42e8…의 각 파일 digest가 attempt-7655d366(집중 테스트), 438d245b(build), 96852d0a(check:source), de3c6f80(typecheck)의 입력 digest와 모두 일치한다. 따라서 현재 소스에 대해 테스트·타입·소스 정책·빌드의 실제 통과 근거가 있다.",
+          "비차단(증거 표기): work.json의 AC-1·AC-2·AC-3 evidence에 attempt-50e5eaf8과 attempt-85ffa423도 '현재 적용 가능'으로 연결돼 있다. 두 시도의 소스 digest e95f927…에서는 src/native-chat.ts(068e3e…)와 test/native-chat.test.ts(23f00f…)가 현재 파일(28a8ff…, ab7f78…)과 다르다. 따라서 현재 소스에는 적용되지 않는다. 동일 명령이 현재 소스에서 다시 통과했으므로 판정에는 영향이 없다. 다만 요약 문구는 이전 소스 근거로 표기하는 편이 정확하다.",
+          "비차단(범위 기록): verifierCommands의 node scripts/check-workflow.ts는 기록된 실행 시도가 없다. verification.md:39는 저작 하네스의 harness.ok=false와 BoxBox의 FIXABLE·REFUSE 미해결을 차단 사유로 남긴다고 적었다. 그러나 work.json은 blockedReason이 null이고 nextAction이 review이다. 기능 검증과 별개로, 완료 처리 전에 이 미해결 사항이 작업 상태에 반영되는지 확인해야 한다.",
+          "비차단(관측 범위): verification.md:17의 Electron 화면 관측은 최종 지침 문장(native-chat.ts:6) 추가 전 빌드에서 수행됐다. 그러나 renderer·projection digest는 최종 소스와 같아 화면 표시 범위의 관측은 유효하다. 실제 Native 표본 두 건은 실패 직후 추가 설명이 없었음을 그대로 기록했고 설명 빈도 보장으로 확대하지 않았다. 한국어 IME 조합 입력과 Windows 실기는 미확인으로 명시했다."
+        ]
+      }
+    ]
+  },
+  "source": {
+    "recordPath"    : "docs/work/Chat/004-자연스러운 진행 설명과 공개 추론 요약/work.json",
+    "workRecordHash": "f74aeebee3b5cf32da7e7da8965d22ccd2a5d1cca64ea16f03bb81da04426c47",
+    "sourceDigest"  : "05c8f923f5ae1ad373c6f3e3d4e83bd7c1d4924264b8616f9fe2223057ca63b7",
+    "criteriaDigest": "e75249ba0eefaf305d5c4a12a3345d82c9560bd26f43400a0a34911254183023"
+  }
+}

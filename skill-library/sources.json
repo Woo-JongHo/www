@@ -1,0 +1,379 @@
+{
+  "schemaVersion": 2,
+  "generatedBy": "기존 문서를 한국어로 대체한 정적 연구 목록; scripts/check-skill-library.ts로 구조·해시 검사",
+  "translation": {
+    "mode": "replace",
+    "language": "ko"
+  },
+  "sources": [
+    {
+      "id"           : "superpowers",
+      "url"          : "https://github.com/obra/superpowers",
+      "commit"       : "22f0b463e7a5e579904dd6211a520321035526f7",
+      "sourceSubtree": "skills",
+      "snapshotRoot" : "skill-library/upstream/superpowers",
+      "copiedPaths": [
+        "LICENSE",
+        "README.md",
+        "skills/brainstorming/SKILL.md",
+        "skills/brainstorming/builder-check-prompt.md",
+        "skills/brainstorming/visual-companion.md",
+        "skills/requesting-code-review/SKILL.md",
+        "skills/requesting-code-review/code-reviewer.md",
+        "skills/systematic-debugging/SKILL.md",
+        "skills/systematic-debugging/condition-based-waiting.md",
+        "skills/systematic-debugging/defense-in-depth.md",
+        "skills/systematic-debugging/root-cause-tracing.md",
+        "skills/test-driven-development/SKILL.md",
+        "skills/test-driven-development/writing-good-tests.md",
+        "skills/verification-before-completion/SKILL.md",
+        "skills/writing-plans/SKILL.md"
+      ],
+      "license": "MIT",
+      "copiedLicenseFiles": [
+        "LICENSE"
+      ],
+      "categories": [
+        "requirements",
+        "design",
+        "implementation",
+        "verification"
+      ],
+      "missingRuntimeDependencies": [
+        "일부 스킬은 이 선택 수집본에 포함하지 않은 업스트림 superpowers 런타임과 다른 스킬을 참조합니다."
+      ]
+    },
+    {
+      "id"           : "gstack",
+      "url"          : "https://github.com/garrytan/gstack",
+      "commit"       : "f0cd9f8c4b453c1eadd714e4149174ee01179eae",
+      "sourceSubtree": "선택한 루트 스킬 디렉터리",
+      "snapshotRoot" : "skill-library/upstream/gstack",
+      "copiedPaths": [
+        "LICENSE",
+        "NOTICE.md",
+        "licenses/Apache-2.0.txt",
+        "licenses/MIT-elaya.txt",
+        "licenses/MIT-hallmark.txt",
+        "licenses/MIT-pstack.txt",
+        "licenses/MIT-skill-diet.txt",
+        "licenses/MIT-tstack.txt",
+        "README.md",
+        "design-review/SKILL.md",
+        "design-review/sections/build-loop.md",
+        "design-review/sections/craft-audit.md",
+        "design-review/sections/manifest.json",
+        "design-review/sections/outside-voices.md",
+        "design-review/sections/preamble.md",
+        "design-review/sections/test-bootstrap.md",
+        "office-hours/SKILL.md",
+        "office-hours/sections/design-and-handoff.md",
+        "office-hours/sections/manifest.json",
+        "office-hours/sections/phase-2a-startup-diagnostic.md",
+        "office-hours/sections/phase-2b-builder-brainstorm.md",
+        "office-hours/sections/preamble.md",
+        "office-hours/sections/second-opinion.md",
+        "office-hours/sections/visual-design.md",
+        "plan-ceo-review/SKILL.md",
+        "plan-ceo-review/sections/checklist.md",
+        "plan-ceo-review/sections/manifest.json",
+        "plan-ceo-review/sections/preamble.md",
+        "plan-ceo-review/sections/review-sections.md",
+        "plan-design-review/SKILL.md",
+        "plan-design-review/sections/checklist.md",
+        "plan-design-review/sections/manifest.json",
+        "plan-design-review/sections/preamble.md",
+        "plan-design-review/sections/review-sections.md",
+        "plan-eng-review/SKILL.md",
+        "plan-eng-review/sections/checklist.md",
+        "plan-eng-review/sections/manifest.json",
+        "plan-eng-review/sections/preamble.md",
+        "plan-eng-review/sections/review-sections.md",
+        "qa-only/SKILL.md",
+        "qa-only/sections/exploratory.md",
+        "qa-only/sections/manifest.json",
+        "qa-only/sections/preamble.md",
+        "qa-only/sections/reporting.md",
+        "qa/SKILL.md",
+        "qa/references/issue-taxonomy.md",
+        "qa/sections/browser-setup.md",
+        "qa/sections/browser-verify.md",
+        "qa/sections/exploratory.md",
+        "qa/sections/manifest.json",
+        "qa/sections/preamble.md",
+        "qa/sections/qa-patterns.md",
+        "qa/sections/scope.md",
+        "qa/sections/system-functional.md",
+        "qa/sections/test-bootstrap.md",
+        "qa/templates/functional-report-template.md",
+        "qa/templates/qa-report-template.md",
+        "review/SKILL.md",
+        "review/TODOS-format.md",
+        "review/checklist.md",
+        "review/design-checklist.md",
+        "review/gate-integrity.md",
+        "review/greptile-triage.md",
+        "review/sections/adversarial.md",
+        "review/sections/manifest.json",
+        "review/sections/plan-completion.md",
+        "review/sections/preamble.md",
+        "review/sections/review-army.md",
+        "review/sections/shared-code-reuse.md",
+        "review/specialists/api-contract.md",
+        "review/specialists/data-migration.md",
+        "review/specialists/maintainability.md",
+        "review/specialists/performance.md",
+        "review/specialists/red-team.md",
+        "review/specialists/security.md",
+        "review/specialists/simplification.md",
+        "review/specialists/state-machines.md",
+        "review/specialists/targeted.md",
+        "review/specialists/testing.md",
+        "ship/DRIVER.md",
+        "ship/SKILL.md",
+        "ship/sections/adversarial.md",
+        "ship/sections/apple-release.md",
+        "ship/sections/budget-handoff.md",
+        "ship/sections/capy-pr.md",
+        "ship/sections/changelog.md",
+        "ship/sections/documentation.md",
+        "ship/sections/greptile-early.md",
+        "ship/sections/greptile.md",
+        "ship/sections/handoff.md",
+        "ship/sections/manifest.json",
+        "ship/sections/measure.md",
+        "ship/sections/plan-completion.md",
+        "ship/sections/pr-body.md",
+        "ship/sections/preamble.md",
+        "ship/sections/review-army.md",
+        "ship/sections/shared-code-reuse.md",
+        "ship/sections/test-coverage.md",
+        "ship/sections/tests.md"
+      ],
+      "license": "MIT",
+      "copiedLicenseFiles": [
+        "LICENSE",
+        "NOTICE.md",
+        "licenses/Apache-2.0.txt",
+        "licenses/MIT-elaya.txt",
+        "licenses/MIT-hallmark.txt",
+        "licenses/MIT-pstack.txt",
+        "licenses/MIT-skill-diet.txt",
+        "licenses/MIT-tstack.txt"
+      ],
+      "additionalLicenses": [
+        { "license": "Apache-2.0", "file": "licenses/Apache-2.0.txt" },
+        { "license": "MIT", "file": "licenses/MIT-elaya.txt" },
+        { "license": "MIT", "file": "licenses/MIT-hallmark.txt" },
+        { "license": "MIT", "file": "licenses/MIT-pstack.txt" },
+        { "license": "MIT", "file": "licenses/MIT-skill-diet.txt" },
+        { "license": "MIT", "file": "licenses/MIT-tstack.txt" }
+      ],
+      "categories": [
+        "requirements",
+        "design",
+        "implementation",
+        "verification"
+      ],
+      "missingRuntimeDependencies": [
+        "생성된 스킬에는 gstack 전용 ~/.claude·~/.gstack 절대 경로, 공통 프리앰블, 브라우저 도우미, 텔레메트리·업데이트 훅과 실행 의존성이 있습니다. 이 수집본은 실행하지 않는 정적 참고 자료입니다."
+      ]
+    },
+    {
+      "id"           : "matt-pocock",
+      "url"          : "https://github.com/mattpocock/skills",
+      "commit"       : "4ae2317ddb22b046e26455e4f9c9b3aaaf62212d",
+      "sourceSubtree": "skills/engineering 및 skills/productivity",
+      "snapshotRoot" : "skill-library/upstream/matt-pocock",
+      "copiedPaths": [
+        "LICENSE",
+        "README.md",
+        "skills/engineering/code-review/SKILL.md",
+        "skills/engineering/code-review/agents/openai.yaml",
+        "skills/engineering/codebase-design/DEEPENING.md",
+        "skills/engineering/codebase-design/DESIGN-IT-TWICE.md",
+        "skills/engineering/codebase-design/SKILL.md",
+        "skills/engineering/codebase-design/agents/openai.yaml",
+        "skills/engineering/diagnosing-bugs/SKILL.md",
+        "skills/engineering/diagnosing-bugs/agents/openai.yaml",
+        "skills/engineering/grill-with-docs/SKILL.md",
+        "skills/engineering/grill-with-docs/agents/openai.yaml",
+        "skills/engineering/implement-spec/SKILL.md",
+        "skills/engineering/implement-spec/agents/openai.yaml",
+        "skills/engineering/implement/SKILL.md",
+        "skills/engineering/implement/agents/openai.yaml",
+        "skills/engineering/tdd/SKILL.md",
+        "skills/engineering/tdd/agents/openai.yaml",
+        "skills/engineering/tdd/mocking.md",
+        "skills/engineering/tdd/tests.md",
+        "skills/engineering/to-spec/SKILL.md",
+        "skills/engineering/to-spec/agents/openai.yaml",
+        "skills/productivity/grilling/SKILL.md",
+        "skills/productivity/grilling/agents/openai.yaml"
+      ],
+      "license": "MIT",
+      "copiedLicenseFiles": [
+        "LICENSE"
+      ],
+      "categories": [
+        "requirements",
+        "design",
+        "implementation",
+        "verification"
+      ],
+      "missingRuntimeDependencies": [
+        "업스트림 오케스트레이션이나 이 선택 수집본 밖의 스킬을 가리키는 교차 참조는 연결되지 않을 수 있습니다."
+      ]
+    },
+    {
+      "id"           : "addy-osmani",
+      "url"          : "https://github.com/addyosmani/agent-skills",
+      "commit"       : "301b02b12bff98e4688e6984af6556802322bbde",
+      "sourceSubtree": "선택한 스킬과 공용 references",
+      "snapshotRoot" : "skill-library/upstream/addy-osmani",
+      "copiedPaths": [
+        "LICENSE",
+        "README.md",
+        "references/accessibility-checklist.md",
+        "references/definition-of-done.md",
+        "references/observability-checklist.md",
+        "references/orchestration-patterns.md",
+        "references/performance-checklist.md",
+        "references/security-checklist.md",
+        "references/testing-patterns.md",
+        "skills/api-and-interface-design/SKILL.md",
+        "skills/browser-testing-with-devtools/SKILL.md",
+        "skills/code-review-and-quality/SKILL.md",
+        "skills/debugging-and-error-recovery/SKILL.md",
+        "skills/incremental-implementation/SKILL.md",
+        "skills/interview-me/SKILL.md",
+        "skills/planning-and-task-breakdown/SKILL.md",
+        "skills/spec-driven-development/SKILL.md"
+      ],
+      "license": "MIT",
+      "copiedLicenseFiles": [
+        "LICENSE"
+      ],
+      "categories": [
+        "requirements",
+        "design",
+        "implementation",
+        "verification"
+      ],
+      "missingRuntimeDependencies": [
+        "명령·에이전트·훅·설치 스크립트와 에디터별 플러그인 래퍼는 의도적으로 제외했습니다."
+      ]
+    },
+    {
+      "id"           : "pstack",
+      "url"          : "https://github.com/cursor/plugins/tree/main/pstack",
+      "commit"       : "63912a91d52c43946f974f2aaf661334a6116a82",
+      "sourceSubtree": "pstack",
+      "snapshotRoot" : "skill-library/upstream/pstack",
+      "copiedPaths": [
+        "pstack/LICENSE",
+        "pstack/README.md",
+        "pstack/docs/guide/01-setup.md",
+        "pstack/docs/guide/02-poteto-mode.md",
+        "pstack/docs/guide/03-understand.md",
+        "pstack/docs/guide/04-design.md",
+        "pstack/docs/guide/05-build-and-clean.md",
+        "pstack/docs/guide/06-verify-and-ship.md",
+        "pstack/docs/guide/07-overnight.md",
+        "pstack/docs/guide/08-principles.md",
+        "pstack/docs/guide/09-make-it-yours.md",
+        "pstack/docs/guide/10-recipes-and-pitfalls.md",
+        "pstack/docs/guide/README.md",
+        "pstack/docs/harness/claude-code.md",
+        "pstack/skills/principle-boundary-discipline/SKILL.md",
+        "pstack/skills/principle-explain-the-number/SKILL.md",
+        "pstack/skills/principle-fix-root-causes/SKILL.md",
+        "pstack/skills/principle-model-the-domain/SKILL.md",
+        "pstack/skills/principle-prove-it-works/SKILL.md",
+        "pstack/skills/principle-sequence-verifiable-units/SKILL.md",
+        "pstack/skills/principle-test-behavior-not-implementation/SKILL.md",
+        "pstack/skills/tdd/SKILL.md"
+      ],
+      "license": "MIT",
+      "copiedLicenseFiles": [
+        "pstack/LICENSE"
+      ],
+      "categories": [
+        "design",
+        "implementation",
+        "verification"
+      ],
+      "missingRuntimeDependencies": [
+        "Cursor 플러그인 설치, cursor-team-kit 의존성, 자동화·모델 설정, 자산과 실행 스크립트는 제외했습니다."
+      ]
+    },
+    {
+      "id"           : "feature-dev",
+      "url"          : "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/feature-dev",
+      "commit"       : "43fd1f9db0941b2b83cb62268e35970d4a67c202",
+      "sourceSubtree": "plugins/feature-dev",
+      "snapshotRoot" : "skill-library/upstream/feature-dev",
+      "copiedPaths": [
+        "plugins/feature-dev/LICENSE",
+        "plugins/feature-dev/README.md",
+        "plugins/feature-dev/agents/code-architect.md",
+        "plugins/feature-dev/agents/code-explorer.md",
+        "plugins/feature-dev/agents/code-reviewer.md",
+        "plugins/feature-dev/commands/feature-dev.md"
+      ],
+      "license": "Apache-2.0",
+      "copiedLicenseFiles": [
+        "plugins/feature-dev/LICENSE"
+      ],
+      "categories": [
+        "requirements",
+        "design",
+        "implementation",
+        "verification"
+      ],
+      "missingRuntimeDependencies": [
+        "Claude 플러그인의 명령·에이전트 런타임은 포함하지 않습니다. 이 파일들은 참고 프롬프트이지 설치된 SKILL.md 패키지가 아닙니다."
+      ]
+    },
+    {
+      "id"           : "spec-kit",
+      "url"          : "https://github.com/github/spec-kit",
+      "commit"       : "f29319d550d1f05404f7184b92e995600ca2293f",
+      "sourceSubtree": "templates와 선택한 문서",
+      "snapshotRoot" : "skill-library/upstream/spec-kit",
+      "copiedPaths": [
+        "LICENSE",
+        "README.md",
+        "spec-driven.md",
+        "templates/checklist-template.md",
+        "templates/commands/analyze.md",
+        "templates/commands/checklist.md",
+        "templates/commands/clarify.md",
+        "templates/commands/constitution.md",
+        "templates/commands/converge.md",
+        "templates/commands/implement.md",
+        "templates/commands/plan.md",
+        "templates/commands/specify.md",
+        "templates/commands/tasks.md",
+        "templates/constitution-template.md",
+        "templates/plan-template.md",
+        "templates/spec-template.md",
+        "templates/tasks-template.md",
+        "templates/vscode-settings.json"
+      ],
+      "license": "MIT",
+      "copiedLicenseFiles": [
+        "LICENSE"
+      ],
+      "categories": [
+        "requirements",
+        "design",
+        "implementation",
+        "verification"
+      ],
+      "missingRuntimeDependencies": [
+        "Python CLI·셸 스크립트·확장과 에이전트 통합 런타임은 제외했습니다. 템플릿은 해당 런타임이 제공하는 생성 경로와 명령을 언급할 수 있습니다."
+      ]
+    }
+  ]
+}

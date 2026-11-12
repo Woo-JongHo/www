@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-f40cbde5-04ba-4e0a-9c8b-e604be629328",
+  "title"        : "Skills 라이브러리 한국어 대체",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "in_progress",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "기존 선택 라이브러리의 문서 본문·UI 설명·절 manifest 자연어를 한국어로 대체하고 생략·중복 영어 읽기판 없이 코드·명령·식별자와 문서 구조를 보존한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-2",
+      "description": "고정 출처 커밋과 원문·로컬 파일 해시·크기를 구분하고 실제 라이선스·저작권 고지·필요한 제3자 법문과 수정 고지를 보존한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-3",
+      "description": "라이브러리 검증기와 집중 회귀 검사를 실제 실행해 경로 탈출·심볼릭 링크·해시 불일치·라이선스 오표기·미검토 파일과 불완전 번역 표기를 거부한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-4",
+      "description": "번역 완전성과 공개 게시 범위·남은 검토 한계를 확인하고 관련 없는 변경·비밀·원시 로그·생성물을 제외한 커밋 후보와 한국어 메시지를 사용자 검사에 제출하며 실제 commit·push하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "skills-korean-replace-20261112",
+    "requestHash": "6b42f066c45be643bfac1e32ae6d90a611e0db39bc457bf4a6a8844c4b07d2f8",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "skill-library",
+        "scripts/check-skill-library.mjs",
+        "test/skill-library.test.mjs",
+        "docs/skills/CATALOG.md",
+        "package.json",
+        "docs/work/Workflow/005-Skills 라이브러리 한국어 대체",
+        "docs/work/INDEX.md"
+      ],
+      "mutationSurfaces": [
+        "filesystem"
+      ],
+      "verifierCommands": [
+        "[\"node\",\"--test\",\"test/skill-library.test.mjs\"]",
+        "[\"node\",\"scripts/check-skill-library.mjs\"]",
+        "[\"node\",\"scripts/check-workflow.mjs\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "6b42f066c45be643bfac1e32ae6d90a611e0db39bc457bf4a6a8844c4b07d2f8"
+    },
+    "inputs": [
+      "docs/skills/CATALOG.md",
+      "package.json",
+      "scripts/check-skill-library.mjs",
+      "skill-library",
+      "test/skill-library.test.mjs"
+    ],
+    "nextAction": "build",
+    "verifications": [],
+    "reviews": []
+  }
+}

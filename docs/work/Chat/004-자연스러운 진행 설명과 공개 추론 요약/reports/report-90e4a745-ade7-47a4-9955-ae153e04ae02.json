@@ -1,0 +1,111 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-90e4a745-ade7-47a4-9955-ae153e04ae02",
+  "workId"        : "work-17ba7e7d-64e2-4450-b637-2c5f1c7ce0b2",
+  "title"         : "자연스러운 진행 설명과 공개 추론 요약",
+  "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome"       : "in_progress",
+  "kind"          : "snapshot",
+  "event"         : "build",
+  "createdAt"     : "2026-11-12T07:16:26.990Z",
+  "workRecordHash": "d8983c391568e84acb7a92065f4df179c41e456713c7beef133672a6df85e59e",
+  "sourceDigest"  : "05c8f923f5ae1ad373c6f3e3d4e83bd7c1d4924264b8616f9fe2223057ca63b7",
+  "criteriaDigest": "e75249ba0eefaf305d5c4a12a3345d82c9560bd26f43400a0a34911254183023",
+  "semanticHash"  : "999ebe6e250c647f64dadba25a92453cd0a91f6968429e9c8c3bda7863b99720",
+  "narrative"     : null,
+  "work": {
+    "status": "in_progress",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id"         : "AC-1",
+        "description": "Native 대화에 한국어의 자연스러운 진행 설명 지침을 전달하고 중요한 발견·실패·방향 전환의 이유와 결과를 설명하도록 요청하며 고정 단계 라벨을 강제하지 않는다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-50e5eaf8-4399-4172-bf71-ca7c004088a5",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-2",
+        "description": "공개 reasoning summary만 채팅에 시간순 스트리밍하며 section·turn 격리, 중복 수신, 완료 snapshot, EOF·턴 종료 및 절단을 처리하고 raw reasoning·analysis를 노출하지 않는다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-50e5eaf8-4399-4172-bf71-ca7c004088a5",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-3",
+        "description": "기존 입력·승인·중단·활동·자동 보고서 경로를 보존하며 집중 테스트·타입 검사·빌드와 실제 화면 또는 실제 Native 표본의 확인 범위·미확인을 구분해 기록한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-50e5eaf8-4399-4172-bf71-ca7c004088a5",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-85ffa423-0d53-4492-b205-dc570a985162",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-50e5eaf8-4399-4172-bf71-ca7c004088a5",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/projection.test.ts",
+          "test/native-chat.test.ts",
+          "test/native-activity.test.ts",
+          "test/input.test.ts",
+          "test/native-report-input.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T07:11:38.005Z"
+      },
+      {
+        "id": "attempt-85ffa423-0d53-4492-b205-dc570a985162",
+        "command": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T07:12:25.706Z"
+      }
+    ],
+    "reviews": []
+  },
+  "source": {
+    "recordPath"    : "docs/work/Chat/004-자연스러운 진행 설명과 공개 추론 요약/work.json",
+    "workRecordHash": "d8983c391568e84acb7a92065f4df179c41e456713c7beef133672a6df85e59e",
+    "sourceDigest"  : "05c8f923f5ae1ad373c6f3e3d4e83bd7c1d4924264b8616f9fe2223057ca63b7",
+    "criteriaDigest": "e75249ba0eefaf305d5c4a12a3345d82c9560bd26f43400a0a34911254183023"
+  }
+}

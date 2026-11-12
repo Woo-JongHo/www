@@ -648,7 +648,7 @@ mod tests {
     #[test]
     fn shared_fixture_covers_stdio_streams_numeric_approval_interrupt_and_eof() {
         let fixture = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("../../../test/fixtures/fake-app-server.mjs");
+            .join("../../../test/fixtures/fake-app-server.ts");
         let messages = Arc::new(Mutex::new(Vec::new()));
         let captured = messages.clone();
         let script = fixture.to_string_lossy().into_owned();
@@ -695,7 +695,7 @@ mod tests {
         )
         .is_err());
         let fixture = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("../../../test/fixtures/fake-app-server.mjs");
+            .join("../../../test/fixtures/fake-app-server.ts");
         let script = fixture.to_string_lossy().into_owned();
         let rpc = RpcClient::spawn("node", &[&script, "eof"], Arc::new(|_| {})).unwrap();
         let error = rpc.request("initialize", json!({})).unwrap_err();

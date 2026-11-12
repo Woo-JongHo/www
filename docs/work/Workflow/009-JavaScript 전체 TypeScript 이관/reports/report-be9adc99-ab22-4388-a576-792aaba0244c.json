@@ -1,0 +1,578 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-be9adc99-ab22-4388-a576-792aaba0244c",
+  "workId"        : "work-62c5ae92-bd4f-4b0c-8ad3-f38c4424308e",
+  "title"         : "JavaScript 전체 TypeScript 이관",
+  "summary"       : "직접 관리하던 mjs33개를 TS로 이관했다. 실행 경로와 타입·테스트를 정리했으며 검사 명령은 정상 종료했다. BoxBox의 병행 파일 수정으로 현재 소스에 대한 증거 확정과 Opus 재감사는 대기 중이다.",
+  "outcome"       : "blocked",
+  "kind"          : "authored",
+  "event"         : "finish",
+  "createdAt"     : "2026-11-12T06:32:05.017Z",
+  "workRecordHash": "7b6bf4142f66824175516a60fcbea11be87f6671a2ebcd8ea726c2fd387c7fb3",
+  "sourceDigest"  : "f41950645eb6bc04948d974fbbf93aea2707c79ccdcc7ded1ba1ec577b3eaa3f",
+  "criteriaDigest": "6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021",
+  "semanticHash"  : "8504cfd31caf7e7f2dd5a165dd4d0f727e2efa6b4c5b8bbfe7b311d965e5e2e6",
+  "narrative": {
+    "summary": "직접 관리하던 mjs33개를 TS로 이관했다. 실행 경로와 타입·테스트를 정리했으며 검사 명령은 정상 종료했다. BoxBox의 병행 파일 수정으로 현재 소스에 대한 증거 확정과 Opus 재감사는 대기 중이다.",
+    "before" : "실행 도구·workflow core·테스트와 fixture가 mjs와 TS로 나뉘고 구현과 별도 d.mts 선언이 공존했다.",
+    "after"  : "직접 관리하는 mjs는 TS로 통일했고 d.mts7개를 구현 타입으로 흡수했다. npm·CLI·앱 import·패키징·Rust fixture 경로를 연결했으며 현재 완료 판정은 보류했다.",
+    "changes": [
+      "mjs33개를 TS로 이관하고 공용 작업·증거·실행·검토 타입을 정의했다.",
+      "allowJs/checkJs 예외와 JavaScript legacy 허용 항목을 제거했다.",
+      "Node 전용 테스트와 기존 Bun 테스트를 원래 실행기로 실행하고 test:comparison도 이를 재사용한다.",
+      "POSIX fixture의 원래 100755 모드를 복구하고 직접 실행 JSON-RPC 회귀 테스트를 추가했다.",
+      "현행 구조·개발·Windows·작업 계약의 모듈 경로를 갱신했다."
+    ],
+    "decisions": [
+      "생성물·vendor·과거 실행 근거는 변환하지 않고 직접 관리하는 소스를 이관했다.",
+      "Electron의 CommonJS 번들을 유지하고 scripts·test·비교 도구의 ESM 경계를 별도로 명시했다.",
+      "첫 Opus 감사의 비교 명령·실행 비트 지적은 수정했지만 현재 소스의 재감사 PASS를 주장하지 않는다.",
+      "사용자가 BoxBox 작업의 진행 중 상태를 확인했으므로 다른 변경을 되돌리지 않고 source_changed 증거를 보존했다."
+    ],
+    "limitations": [
+      "BoxBox 병행 수정이 계속돼 최종 소스의 검증 증거와 재감사는 아직 확정하지 못했다.",
+      "실제 Windows 데스크톱·원격 배포·패키지 앱 GUI의 새 실기는 수행하지 않았다.",
+      "커밋·push는 수행하지 않았다."
+    ],
+    "next": [
+      "BoxBox 파일 수정 종료 후 같은 UUID의 verify 단계에서 다섯 검증 명령을 재실행한다.",
+      "현재 지문에 맞는 문서 영향 검토와 실제 Opus 재감사를 수행한다.",
+      "저작 보고서를 갱신하고 적용 가능한 증거와 감사가 모두 충족할 때만 완료 처리한다."
+    ]
+  },
+  "work": {
+    "status": "verifying",
+    "blockedReason": "AC-1: source_changed; AC-2: verification_failed, source_changed; AC-3: source_changed; 문서 검토 후 소스 변경; review_not_passed; source_changed; receipt_context_mismatch",
+    "criteria": [
+      {
+        "id"         : "AC-1",
+        "description": "직접 관리하는 mjs 실행 소스·테스트·fixture가 TS로 이관되고 legacy JavaScript 허용 항목과 실행 참조가 제거된다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-04488751-0704-4621-ab42-f2dfaa022e93",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-870d0d91-bff3-4f5a-8c13-8a883666c7a4",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-bebb1be8-0227-4bd7-a340-4d3263686ef8",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-acd2f2cb-c44a-474d-864c-a0364060468a",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-2d0d140b-0030-464f-80e2-26d3be01b82c",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-f482c90d-004e-434f-867e-b1e00fe1e3e3",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-526285c2-1dfa-410a-ac04-60a0f9b79082",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-db36649e-5413-410f-b8bb-c0c802b58bc1",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e674186d-419f-4612-aab3-1333e42f03c8",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-660c8374-10b7-41e3-a91b-dee984b35d19",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-2",
+        "description": "이관 소스가 strict 타입 검사를 통과하고 우회 지시문·any 도배·검사 완화 없이 기존 테스트가 통과한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-555ed98e-2fd1-4629-a236-f3866d9b31b9",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-0120dbf7-4e21-47de-ba07-8c2870d6a4c6",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-a019fae0-f55b-4144-a46e-61c708dbf270",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-39ddfd71-2168-48bd-af4b-ec2c14123c7e",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-de648515-d0c7-49ef-b87a-d393554e7b24",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-ddb8fae2-a858-4ead-ad3d-fd839c4b5fe9",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-778cf00a-b644-4e1f-8ba1-9aa181bffd96",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e2e34184-9669-4aa2-beb3-229776f5c4dc",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-3",
+        "description": "공식 CLI·Node fixture와 Electron 번들이 전환 경로로 동작하고 현행 구조·개발 문서가 일치한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-39ddfd71-2168-48bd-af4b-ec2c14123c7e",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-ff79c947-2b22-41ba-8e2e-daed87f30326",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-95cd8dce-00c7-4ad4-afa0-95165f0b46c9",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-db36649e-5413-410f-b8bb-c0c802b58bc1",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-ddb8fae2-a858-4ead-ad3d-fd839c4b5fe9",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-1469409f-d243-492e-8fea-f94c7526b693",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-650d9453-26b1-410f-8140-d354eee21dc6",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-660c8374-10b7-41e3-a91b-dee984b35d19",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e2e34184-9669-4aa2-beb3-229776f5c4dc",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-6627800f-77e2-4e9a-aef3-31277bef115d",
+            "summary": "실제 검증 passed; 현재 적용 불가"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-bebb1be8-0227-4bd7-a340-4d3263686ef8",
+        "command": "npm",
+        "args": [
+          "run",
+          "check:source"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:10:40.273Z"
+      },
+      {
+        "id": "attempt-acd2f2cb-c44a-474d-864c-a0364060468a",
+        "command": "npm",
+        "args": [
+          "run",
+          "check:workflow"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:10:41.810Z"
+      },
+      {
+        "id": "attempt-0120dbf7-4e21-47de-ba07-8c2870d6a4c6",
+        "command": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "failed",
+        "executor"    : "process",
+        "exitCode"    : 2,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:10:55.831Z"
+      },
+      {
+        "id": "attempt-2d0d140b-0030-464f-80e2-26d3be01b82c",
+        "command": "npm",
+        "args": [
+          "run",
+          "check:source"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:13:02.556Z"
+      },
+      {
+        "id": "attempt-f482c90d-004e-434f-867e-b1e00fe1e3e3",
+        "command": "npm",
+        "args": [
+          "run",
+          "check:workflow"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:13:03.166Z"
+      },
+      {
+        "id": "attempt-a019fae0-f55b-4144-a46e-61c708dbf270",
+        "command": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:13:10.206Z"
+      },
+      {
+        "id": "attempt-39ddfd71-2168-48bd-af4b-ec2c14123c7e",
+        "command": "npm",
+        "args": [
+          "test"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "failed",
+        "executor"    : "process",
+        "exitCode"    : 1,
+        "sourceStable": false,
+        "completedAt" : "2026-11-12T06:13:51.775Z"
+      },
+      {
+        "id": "attempt-ff79c947-2b22-41ba-8e2e-daed87f30326",
+        "command": "npm",
+        "args": [
+          "run",
+          "build"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:13:53.151Z"
+      },
+      {
+        "id": "attempt-95cd8dce-00c7-4ad4-afa0-95165f0b46c9",
+        "command": "<USER_HOME>/.cargo/bin/cargo",
+        "args": [
+          "test",
+          "--manifest-path",
+          "spikes/tauri/src-tauri/Cargo.toml"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "failed",
+        "executor"    : "process",
+        "exitCode"    : 1,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:13:53.459Z"
+      },
+      {
+        "id": "attempt-526285c2-1dfa-410a-ac04-60a0f9b79082",
+        "command": "npm",
+        "args": [
+          "run",
+          "check:source"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:18:01.513Z"
+      },
+      {
+        "id": "attempt-db36649e-5413-410f-b8bb-c0c802b58bc1",
+        "command": "npm",
+        "args": [
+          "run",
+          "check:workflow"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:18:04.228Z"
+      },
+      {
+        "id": "attempt-de648515-d0c7-49ef-b87a-d393554e7b24",
+        "command": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:18:29.973Z"
+      },
+      {
+        "id": "attempt-ddb8fae2-a858-4ead-ad3d-fd839c4b5fe9",
+        "command": "npm",
+        "args": [
+          "test"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:19:20.027Z"
+      },
+      {
+        "id": "attempt-1469409f-d243-492e-8fea-f94c7526b693",
+        "command": "npm",
+        "args": [
+          "run",
+          "build"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:19:21.343Z"
+      },
+      {
+        "id": "attempt-650d9453-26b1-410f-8140-d354eee21dc6",
+        "command": "<USER_HOME>/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+        "args": [
+          "test",
+          "--manifest-path",
+          "spikes/tauri/src-tauri/Cargo.toml"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:19:54.359Z"
+      },
+      {
+        "id": "attempt-e674186d-419f-4612-aab3-1333e42f03c8",
+        "command": "npm",
+        "args": [
+          "run",
+          "check:source"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:26:07.538Z"
+      },
+      {
+        "id": "attempt-660c8374-10b7-41e3-a91b-dee984b35d19",
+        "command": "npm",
+        "args": [
+          "run",
+          "check:workflow"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:26:08.845Z"
+      },
+      {
+        "id": "attempt-778cf00a-b644-4e1f-8ba1-9aa181bffd96",
+        "command": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:26:16.084Z"
+      },
+      {
+        "id": "attempt-e2e34184-9669-4aa2-beb3-229776f5c4dc",
+        "command": "npm",
+        "args": [
+          "run",
+          "test:comparison"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "failed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": false,
+        "completedAt" : "2026-11-12T06:27:12.026Z"
+      },
+      {
+        "id": "attempt-6627800f-77e2-4e9a-aef3-31277bef115d",
+        "command": "npm",
+        "args": [
+          "run",
+          "build"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T06:27:12.562Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id"         : "review-03bb6fb5-f1c2-49ae-9a05-36510faec0e0",
+        "verdict"    : "fail",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-03bb6fb5-f1c2-49ae-9a05-36510faec0e0/opus.json",
+        "findings": [
+          "[결함] package.json:18 `test:comparison`이 아직 `bun test test spikes/tauri/test`입니다. Bun은 문서상 `*.test.{js,jsx,ts,tsx}`만 자동으로 찾으므로 이관 전에는 `.mjs`였던 Node 전용 테스트 10개가 이 명령에 포함되지 않았습니다. 이제 `test/workflow-*.test.ts`, `skill-library.test.ts`, `windows-native.test.ts`가 모두 Bun으로 실행됩니다. 이 작업의 근거 문서에도 Bun에서 Node 테스트가 시간 초과했다는 관찰이 있습니다(design.md:13). verification.md:244에는 같은 실행기로 실행했을 때 실패했다고 적혀 있고, runtime.md:28에는 workflow-development 첫 테스트에서 멈췄다고 적혀 있습니다. 이 작업은 scripts/test.ts에서 실행기를 나누었지만 DEVELOPMENT.md:171이 안내하는 `npm run test:comparison`에는 같은 분리를 적용하지 않았습니다. 이 명령은 수용 검증 명령 목록(attempt 526285c2…650d9453)에 들어 있지 않아 회귀가 증거로 드러나지 않았습니다. 고치려면 Bun 대상을 Bun 테스트 목록으로 한정하거나 `node scripts/test.ts`를 재사용해야 합니다.",
+          "[결함] test/fixtures/fake-app-server.ts의 파일 모드가 0644(420)입니다. 파일에 `#!/usr/bin/env node` shebang이 있고, scripts/verify-ecosystem.ts:48과 scripts/verify-reports.ts:61이 이 경로를 `WWW_CODEX_BIN`으로 지정합니다. 앱은 src/main.ts:51의 `spawn(resolveNativeCodex(), [\"app-server\"])`(src/report-judge.ts:241도 같은 방식)로 이 파일을 인터프리터 없이 직접 실행하므로 실행 권한이 없으면 EACCES로 연결에 실패합니다. 직접 실행하도록 만든 activity-app-server.ts와 verify-native-activity.ts는 0755(493)여서 대비됩니다. DEVELOPMENT.md:195에 `.mjs` fixture를 `WWW_CODEX_BIN`으로 직접 실행한 기록이 있으므로, 이관 과정에서 새 파일을 쓰며 실행 비트를 잃었을 가능성이 높습니다. 다만 원래 `.mjs`의 모드는 git 객체에서 직접 확인하지 못했습니다. Rust 테스트(lib.rs:656, 700)와 rpc.fixture.test.ts는 `node`나 `process.execPath`를 거쳐 실행하므로 이 결함을 잡지 못합니다. 수용 검증에도 verify-reports와 verify-ecosystem 실행은 없습니다.",
+          "[관찰] 수용 근거 자체는 일관됩니다. source-mapping-proof.json의 6개 시도는 모두 source `e14bccc9…`와 검토 digest `a3abf137…`가 파일별로 같다고 기록합니다. verification.md에도 source_changed 시도, rustup 직접 실행 실패, Bun 혼합 실행 실패를 통과로 승격하지 않았다고 적혀 있습니다. 저는 어떤 명령도 다시 실행하지 않았습니다.",
+          "[관찰] source-policy.json은 `legacyJavaScript`를 비웠고 `archivedTypeScript`는 기존 두 파일 SHA 동결만 유지합니다. scripts/test.ts는 Node 테스트 목록에 있는 파일이 없으면 실패하도록 막고, 비정상 종료와 signal을 실패로 전달합니다. 실행기 분리 설계(design.md:13)는 `npm test` 경로에서는 올바르게 구현되어 있습니다.",
+          "[경미] scripts/verify-eight-items.ts:49는 과거 스냅샷 비교용으로 여전히 `test/skill-library.test.mjs`를 제외합니다. 과거 증거를 대조하는 용도라 의도된 것으로 볼 수 있지만, 이관 뒤 현재 소스에는 이 경로가 없습니다. 따라서 이 검증기의 현재 소스 대조(73행 `assert.deepEqual`)는 더 이상 통과할 수 없는 상태이므로 보존 의도를 문서에 명시하는 편이 좋습니다."
+        ]
+      }
+    ],
+    "omitted": {
+      "criteria"     : 0,
+      "evidence"     : 6,
+      "verifications": 5,
+      "reviews"      : 0,
+      "arguments"    : 10,
+      "findings"     : 0,
+      "unresolved"   : 2
+    }
+  },
+  "source": {
+    "recordPath"    : "docs/work/Workflow/009-JavaScript 전체 TypeScript 이관/work.json",
+    "workRecordHash": "7b6bf4142f66824175516a60fcbea11be87f6671a2ebcd8ea726c2fd387c7fb3",
+    "sourceDigest"  : "f41950645eb6bc04948d974fbbf93aea2707c79ccdcc7ded1ba1ec577b3eaa3f",
+    "criteriaDigest": "6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021"
+  }
+}

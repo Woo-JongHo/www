@@ -1,0 +1,182 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-080d6b3e-eb09-4bd0-85d6-fe37919af1ec",
+  "workId"        : "work-fc3f6aea-c842-45f3-821b-5fc448809d35",
+  "title"         : "독자의 판단을 돕는 보고서 양식",
+  "summary"       : "일부 확인 · 후속 작업 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome"       : "partial",
+  "kind"          : "snapshot",
+  "event"         : "verify",
+  "createdAt"     : "2026-11-12T05:05:19.959Z",
+  "workRecordHash": "d707aa75c6574016fa314fefae0a299e2345f2eef7712fc94e3b49f3122caf27",
+  "sourceDigest"  : "b2b451339a342b90639ef099f5f0f43f978f244b307f3da3d07c1deafbcd2873",
+  "criteriaDigest": "a95cc49709ff393fba70c298409011afd740e431bfcb43acdbe37069f5a7d7cb",
+  "semanticHash"  : "fd44c10fd394b7977a3ee1e826c70aca2078c0f9f606cdfa965bb30ac487a0f2",
+  "narrative"     : null,
+  "work": {
+    "status": "verifying",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id"         : "AC-1",
+        "description": "상단의 자연스러운 작업 이야기와 결론·확인 범위·완료 차단·다음 행동을 읽고 결과를 판단한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-76964439-b1e6-48fd-90b9-e7366d4d2f08",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-f9275c63-f8a1-4484-954c-d76d650ccd24",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-2",
+        "description": "요구별 결과와 구체적인 검사 대상·방법·기대·관측·한계를 대응하고 없는 기록은 미기록으로 표시한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-76964439-b1e6-48fd-90b9-e7366d4d2f08",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-f9275c63-f8a1-4484-954c-d76d650ccd24",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-3",
+        "description": "과거 통과·현행 적용성·독립 검토·업무 완료를 구분하며 이전 현재 적용 가능 문구가 현재 판정으로 노출되지 않는다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-76964439-b1e6-48fd-90b9-e7366d4d2f08",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-f9275c63-f8a1-4484-954c-d76d650ccd24",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-4",
+        "description": "중요한 선택과 관련 근거만 조건부로 표시하고 UUID·해시·원시 이력을 상세로 내리며 실제 생략만 알린다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-76964439-b1e6-48fd-90b9-e7366d4d2f08",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-f9275c63-f8a1-4484-954c-d76d650ccd24",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-5",
+        "description": "기존 보고서를 변형 없이 새 보기로 읽고 신규 LLM·수동 저작의 개선 서술을 끝까지 보존한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-b645afe4-2b75-4adc-82a9-21266b864fcf",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-76964439-b1e6-48fd-90b9-e7366d4d2f08",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-f9275c63-f8a1-4484-954c-d76d650ccd24",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-6",
+        "description": "집중 회귀·타입·빌드와 실제 Electron·360px·인쇄에서 개선 보고서를 검증한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-76964439-b1e6-48fd-90b9-e7366d4d2f08",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-f9275c63-f8a1-4484-954c-d76d650ccd24",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-b645afe4-2b75-4adc-82a9-21266b864fcf",
+        "command": "bun",
+        "args": [
+          "test/verify-native-report-live.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T05:03:00.693Z"
+      },
+      {
+        "id": "attempt-76964439-b1e6-48fd-90b9-e7366d4d2f08",
+        "command": "node",
+        "args": [
+          "scripts/verify-reports.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "failed",
+        "executor"    : "process",
+        "exitCode"    : 1,
+        "sourceStable": false,
+        "completedAt" : "2026-11-12T05:04:48.979Z"
+      },
+      {
+        "id": "attempt-f9275c63-f8a1-4484-954c-d76d650ccd24",
+        "command": "node",
+        "args": [
+          "scripts/verify-reports.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T05:05:19.833Z"
+      }
+    ],
+    "reviews": []
+  },
+  "source": {
+    "recordPath"    : "docs/work/Reports/002-독자의 판단을 돕는 보고서 양식/work.json",
+    "workRecordHash": "d707aa75c6574016fa314fefae0a299e2345f2eef7712fc94e3b49f3122caf27",
+    "sourceDigest"  : "b2b451339a342b90639ef099f5f0f43f978f244b307f3da3d07c1deafbcd2873",
+    "criteriaDigest": "a95cc49709ff393fba70c298409011afd740e431bfcb43acdbe37069f5a7d7cb"
+  }
+}

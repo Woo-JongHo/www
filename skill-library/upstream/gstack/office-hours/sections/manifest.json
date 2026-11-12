@@ -1,0 +1,38 @@
+{
+  "$schema": "https://gstack.dev/schemas/section-manifest.json",
+  "skill"  : "office-hours",
+  "version": 1,
+  "note"   : "수동형(PASSIVE) 레지스트리(v2 계획 T9 / CM2)입니다. 필드에는 ID·파일 경로·사람용 제목·사람이 읽는 실행 조건 문구만 둡니다. 절을 언제 읽을지 결정하는 유일한 곳은 skeleton의 의사결정 트리 설명입니다. 기계적 판정식은 없으며 docs/designs/v2_PLAN.md를 참고하세요.",
+  "sections": [
+    {
+      "id"     : "phase-2a-startup-diagnostic",
+      "file"   : "phase-2a-startup-diagnostic.md",
+      "title"  : "2A단계 스타트업 모드 진단",
+      "trigger": "스타트업 모드 진단 실행(2A단계: 운영 원칙, 반론 제기 방식, 답을 구체화하는 여섯 질문)"
+    },
+    {
+      "id"     : "phase-2b-builder-brainstorm",
+      "file"   : "phase-2b-builder-brainstorm.md",
+      "title"  : "2B단계 제작자 모드 아이디어 탐색",
+      "trigger": "제작자 모드의 모든 응답(2B단계: 아이디어 탐색 질문과 각 제안·인접 가능성·확장 아이디어; 운영 원칙, 대담한 예시, 응답 태도와 발상 질문 포함)"
+    },
+    {
+      "id"     : "second-opinion",
+      "file"   : "second-opinion.md",
+      "title"  : "3.5단계 다른 모델의 추가 의견",
+      "trigger": "사용자가 수락한 3.5단계의 추가 의견 수집(제공자 사전 점검, 선입견 없이 읽는 프롬프트, 요청과 종합)"
+    },
+    {
+      "id"     : "visual-design",
+      "file"   : "visual-design.md",
+      "title"  : "4.25단계 시각 목업과 스케치",
+      "trigger": "사용자 화면이 있는 승인된 접근법의 4.25단계 시각 설계(디자이너 목업, 디자이너를 사용할 수 없을 때 HTML 스케치)"
+    },
+    {
+      "id"     : "design-and-handoff",
+      "file"   : "design-and-handoff.md",
+      "title"  : "5단계 설계 문서와 6단계 관계 인계",
+      "trigger": "설계 문서 작성과 단계별 관계 인계(5~6단계, 대화와 대안 검토를 마친 뒤)"
+    }
+  ]
+}

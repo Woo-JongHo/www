@@ -1,0 +1,3512 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-e9007dfb-f546-426b-88c6-58174641acc8",
+  "title"        : "Mac과 Windows 실사용 및 검증 신뢰성 완성",
+  "kind"         : "feature",
+  "areas": [
+    "ui",
+    "dev",
+    "ops"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "AC-4: 검증 시도 없음",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "실제 앱과 Native로 파일 읽기·변경·출력·승인 허용/거절·중단·실패를 실제 관찰한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-437dcc1d-0d5e-47c1-b548-5d732ecccd8c",
+          "path"     : "verification.md#attempt-437dcc1d-0d5e-47c1-b548-5d732ecccd8c",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-e6238218-50cd-408b-ae32-b706e7f839d0",
+          "path"     : "verification.md#attempt-e6238218-50cd-408b-ae32-b706e7f839d0",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-2",
+      "description": "Windows x64 네이티브 패키지를 생성하고 실제 앱 실행과 배포 정책을 확인한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-437dcc1d-0d5e-47c1-b548-5d732ecccd8c",
+          "path"     : "verification.md#attempt-437dcc1d-0d5e-47c1-b548-5d732ecccd8c",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-e6238218-50cd-408b-ae32-b706e7f839d0",
+          "path"     : "verification.md#attempt-e6238218-50cd-408b-ae32-b706e7f839d0",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-3",
+      "description": "Windows Codex·도구 실행과 한글·공백 경로 및 종료 처리를 실제 검사한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-437dcc1d-0d5e-47c1-b548-5d732ecccd8c",
+          "path"     : "verification.md#attempt-437dcc1d-0d5e-47c1-b548-5d732ecccd8c",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-e6238218-50cd-408b-ae32-b706e7f839d0",
+          "path"     : "verification.md#attempt-e6238218-50cd-408b-ae32-b706e7f839d0",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-4",
+      "description": "Mac과 Windows에서 한국어 조합 중 Enter·줄바꿈·포커스를 실기하고 자동 입력 회귀도 검사한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": [],
+      "requirementRefs": [
+        "docs/specs/chat.md#chat-input-01"
+      ]
+    },
+    {
+      "id"         : "AC-5",
+      "description": "중단 요청·접수·불확실·최종 결과가 구분되며 중복 요청과 늦은 사건을 회귀 검사한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+          "path"     : "verification.md#attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-1b323074-4ff3-4397-a8c5-129e01f087d0",
+          "path"     : "verification.md#attempt-1b323074-4ff3-4397-a8c5-129e01f087d0",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-7fd656db-0fbd-4db8-ab93-d4253ab3e96c",
+          "path"     : "verification.md#attempt-7fd656db-0fbd-4db8-ab93-d4253ab3e96c",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ],
+      "requirementRefs": [
+        "docs/specs/chat.md#chat-stop-01"
+      ]
+    },
+    {
+      "id"         : "AC-6",
+      "description": "강제 종료 후 죽은 소유자의 잠금만 안전하게 회수하고 실제 동시 실행을 보호한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+          "path"     : "verification.md#attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-1b323074-4ff3-4397-a8c5-129e01f087d0",
+          "path"     : "verification.md#attempt-1b323074-4ff3-4397-a8c5-129e01f087d0",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-7fd656db-0fbd-4db8-ab93-d4253ab3e96c",
+          "path"     : "verification.md#attempt-7fd656db-0fbd-4db8-ab93-d4253ab3e96c",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-7",
+      "description": "검토 모델 누락·불일치의 완료를 거부하고 실제 Opus 관측을 검사한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+          "path"     : "verification.md#attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-4a1d3f8e-1c1b-47bc-a961-8f8dbbe71216",
+          "path"     : "verification.md#attempt-4a1d3f8e-1c1b-47bc-a961-8f8dbbe71216",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-8",
+      "description": "기능 검증과 전체 저장소 일관성 검사의 적용 범위·오래된 결과를 구분한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+          "path"     : "verification.md#attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-1b323074-4ff3-4397-a8c5-129e01f087d0",
+          "path"     : "verification.md#attempt-1b323074-4ff3-4397-a8c5-129e01f087d0",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-7fd656db-0fbd-4db8-ab93-d4253ab3e96c",
+          "path"     : "verification.md#attempt-7fd656db-0fbd-4db8-ab93-d4253ab3e96c",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "www-eight-items-20261112",
+    "requestHash": "4488349b9816a1dd391dd072da1de5e8004bf47b67ac6fd992821f47dfbf29df",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "src",
+        "scripts",
+        "test",
+        "docs/DEVELOPMENT.md",
+        "docs/ARCHITECTURE.md",
+        "docs/specs/chat.md",
+        "docs/skills/WORKFLOW.md",
+        "package.json",
+        "agents/www",
+        ".gitattributes",
+        "docs/windows.md"
+      ],
+      "mutationSurfaces": [
+        "edit"
+      ],
+      "verifierCommands": [
+        "[\"npm\",\"run\",\"check\"]",
+        "[\"node\",\"scripts/verify-eight-items.mjs\"]",
+        "[\"node\",\"scripts/verify-eight-items.mjs\",\"--review\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "4488349b9816a1dd391dd072da1de5e8004bf47b67ac6fd992821f47dfbf29df"
+    },
+    "inputs": [
+      ".gitattributes",
+      "AGENTS.md",
+      "agents/www",
+      "build.ts",
+      "docs/DEVELOPMENT.md",
+      "docs/skills/WORKFLOW.md",
+      "docs/specs/chat.md",
+      "docs/windows.md",
+      "package-lock.json",
+      "package.json",
+      "scripts/check-workflow.mjs",
+      "scripts/verify-eight-items.mjs",
+      "scripts/windows-package.mjs",
+      "scripts/windows-setup.mjs",
+      "scripts/workflow",
+      "src",
+      "test",
+      "tsconfig.json"
+    ],
+    "nextAction": "verify",
+    "verifications": [
+      {
+        "id"         : "attempt-437dcc1d-0d5e-47c1-b548-5d732ecccd8c",
+        "startedAt"  : "2026-11-12T01:47:31.205Z",
+        "completedAt": "2026-11-12T01:47:31.305Z",
+        "source": {
+          "head": "a0076fd7d825771902256fa243b902358eaf6b6f",
+          "digest": "8893e2ef46c3ea9c8b1100e4e2afa37982f0ac9fd3bbc8aac6eefa4fe69ea25d",
+          "inputs": [
+            ".gitattributes",
+            "agents/www",
+            "build.ts",
+            "docs/DEVELOPMENT.md",
+            "docs/skills/WORKFLOW.md",
+            "docs/specs/chat.md",
+            "docs/windows.md",
+            "package-lock.json",
+            "package.json",
+            "scripts/check-workflow.mjs",
+            "scripts/verify-eight-items.mjs",
+            "scripts/windows-package.mjs",
+            "scripts/windows-setup.mjs",
+            "scripts/workflow",
+            "src",
+            "test",
+            "tsconfig.json"
+          ],
+          "files": [
+            {
+              "path"  : ".gitattributes",
+              "type"  : "file",
+              "digest": "33b9bb34d1b3e1dc50f14460905a0380cb8766a0383ef85149053fb13d647871",
+              "mode"  : 420
+            },
+            {
+              "path": "agents/www",
+              "type": "directory"
+            },
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "342b7c05dcffc7ec38728587dd51c89e2d195d43b78c5a3a472d23e6d22b7701",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "build.ts",
+              "type"  : "file",
+              "digest": "709b6af82b32409a7aa97fa6f3786f0a1fc5ccb0e475484c9a4dc4e0f8014056",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "a1bf7ffa0761962e98255a8abe6b7297663c96083ad061a2299831af080f87c0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "fa6c6b20be6ececd6d06cbc2049b908b6f0bec052f257561ba7f6b34b773c542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "a1a1ff9dd162050ca9beb531e92a051caa51ecb2445a7023504d2b9c19c13312",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/windows.md",
+              "type"  : "file",
+              "digest": "bb2c82b370d5afe390c6c58cc5c59db0df8d85c88eacb48bc0a1021af2f72922",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package-lock.json",
+              "type"  : "file",
+              "digest": "73e33b1bc08ba5c7d8c81916e94c204f307a1eb51918920268ca084b65a1795d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "441e51f961eb4bfec3307f17a166826e59fc36b6b93586b86c4bdf76ea7a2988",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.mjs",
+              "type"  : "file",
+              "digest": "05b58f48eec378aeba4bc14d76e5895a8ddb1735e951e984157050b9fff542b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.mjs",
+              "type"  : "file",
+              "digest": "e45b494286f5505c37b0dfd0fe1ef7cb0084b2e8fb1d62a41a2e64b31920a421",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.mjs",
+              "type"  : "file",
+              "digest": "50f481d4fe508ed8a9bfb6be23a0c1327e690eb02747b86f9839ba6df4629d67",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.mjs",
+              "type"  : "file",
+              "digest": "4d43a6caba6b1474d00863f92afe5a50a05ac35a8d18b57b89e0b5862423a884",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.mjs",
+              "type"  : "file",
+              "digest": "c9538e0e2aa66dd9c236611462df993580dfe21d308321d8a03d8fe1bb2f49a3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.mjs",
+              "type"  : "file",
+              "digest": "1cecdbb1f9c6afffb19bcf3bc3df43392f5a89df0e8b5b90deaecc1396c27662",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.d.mts",
+              "type"  : "file",
+              "digest": "178ed075b248b36554dab4a916912e791aca1242eeb054e881055e4800eece5f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.mjs",
+              "type"  : "file",
+              "digest": "b784c372d2429d3e6920bfe05f9d29f37f3efa547bc5b8bb70b3102b7b50e132",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.mjs",
+              "type"  : "file",
+              "digest": "316503fe5247c911448fa7cb9dcdedbe0a35ee2b64f163ee8c2a86f4b4b90c5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.mjs",
+              "type"  : "file",
+              "digest": "6cf347f8c5edd3c9fbbd967ed994f61f7d3c1036d6af5baf8fa76a05e5f74758",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.mjs",
+              "type"  : "file",
+              "digest": "c8d4bf9177e009171cdbf01f49e8c9b0d394388aa65179ba7d0e9ad3d1dd076b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.mjs",
+              "type"  : "file",
+              "digest": "e9167eb0e34a0d5a3a41539392029d6dc01c45d12c74505ec25400622b3732b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.mjs",
+              "type"  : "file",
+              "digest": "1b24e90523a22eb9dba80c92f9f89a31b03c3a566daa75fef44cc9b4fa6a01ee",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.d.mts",
+              "type"  : "file",
+              "digest": "0cb41bb92be4382b6c9c626cbd970b5171cf7f3e34e7c1a99901b5cd21fc6f12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.mjs",
+              "type"  : "file",
+              "digest": "85ce194b4b1d5d1a046cecc44df827a9816bbffa0e0367342971a42c952d0a0f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.mjs",
+              "type"  : "file",
+              "digest": "59aa3a24097df0778d75325591a508b1d73d5e55f7f2f81db4c93163d063ab56",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.mjs",
+              "type"  : "file",
+              "digest": "9d04618bb2e8ff00c15b96ac5b11b2425b3fc74183db796b3250e9b015425448",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.mjs",
+              "type"  : "file",
+              "digest": "490c3fd6a8e4e5fef4044a24587dc73a4978c974638b636af9842b4036a8f625",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.d.mts",
+              "type"  : "file",
+              "digest": "931670b4998cfb02f695e88a9c32598c804ebb37e7a0234de204257dd8596c07",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.mjs",
+              "type"  : "file",
+              "digest": "772e040e8ba07885d37b1c710e70edd6615a12bb648b1ea588446ccd5ad3eeb9",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "c5a070b82db69197a6aa9224a320614d5d8bb7112cbc84ff733a4dcbba544cda",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "f06ceddb319669b104005f2b516a3fae9eb87fc896caa8b4f98429a753f2762f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "a83e36e09fa6799742de016b578e36fe78d1a96352e2faf93bc327ed7a824633",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "c25ac5a7e58b98475a896884ffc9b49361543b72829aa77b230b2976f7d43ff2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "81a62c80c01d267cb45a8cff69e32cf2df02912830bb768ba8a3ea68ceb0f84b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "cc2424b25ac439179a6f3d8b8f606a809e0b14313358990add813742cfb980fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "f0d44583a8dff552ac65db9d108ed6bc0e3256a075e3aac2442c2e0c09ae82b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "87b44ac7ebf0c708f1f7b4cdcba2be3d892bcdeaa35f91b49a82f9a0bf92289a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "6ce78a35de91ce6d52aa8782627f96f18e77719c68e36d16fcd0f4347c6da24b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "97c5faefbf70a54a7f240afc1504da58f6bbb944055661de137df76169a1ddb7",
+              "mode"  : 420
+            },
+            {
+              "path": "test",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/development-policy.test.ts",
+              "type"  : "file",
+              "digest": "70263c087970ab6607445c5f9334c0ae743bff980601432e30a11d1eedc84f10",
+              "mode"  : 420
+            },
+            {
+              "path": "test/fixtures",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/fixtures/fake-app-server.mjs",
+              "type"  : "file",
+              "digest": "09c0f3770a980bca0de9772bc74d312f8418368716cf97f8818f7822023c1045",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/fake-workflow-host.mjs",
+              "type"  : "file",
+              "digest": "577b1015eb64e7372e73bef353c7df14d23775e7ab0e394ee5cd83fc5cc50da4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/input.test.ts",
+              "type"  : "file",
+              "digest": "d2233ddf6da176262170737eb458dcf658a70bcc667c3080895f69e28d64d97f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/projection.test.ts",
+              "type"  : "file",
+              "digest": "8d9ae0c713cfa9eaf994be6cc6c086f3e2d26b8c8a7d4fd4f60ba041ebff33e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.fixture.test.ts",
+              "type"  : "file",
+              "digest": "7322ebad6829b8b07bdb2155fe16aed8465b2283be4b93e2864c177ef83fea54",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.test.ts",
+              "type"  : "file",
+              "digest": "a3ccecd21e339c1ebc85145d526890e0d2fd94bbe646c4ce9d2313f230b1d91f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/skill-library.test.mjs",
+              "type"  : "file",
+              "digest": "a5ad1e7a86860a0e04dbf137aaa4725135cfe4cc0efebcfc5fd9844abf7e03ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/windows-native.test.mjs",
+              "type"  : "file",
+              "digest": "6eb721bc048ce9e8244a9d1da33c42d8b4122ffbb179488205978851e1c172e7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-codex.test.mjs",
+              "type"  : "file",
+              "digest": "e924be45db286b46fc2badb318622d26df1ee4c6340ade6ef0ade1543a2eb4b0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-contract.test.mjs",
+              "type"  : "file",
+              "digest": "57f918e12d37accee4091d39a7797735d12530fbd7ed222e05d152ba1347577c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.mjs",
+              "type"  : "file",
+              "digest": "d10b36930ccb0fae73ac6c5aa311f84df75cc73b420b01f503e59abfa5d66995",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-evidence.test.mjs",
+              "type"  : "file",
+              "digest": "b19bcb8acd7870152b2d899462940a1d1eb285c688748200739abaf5c882830f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-harness.test.mjs",
+              "type"  : "file",
+              "digest": "70ba35b9d72af77e7965b67afc651197883881ce2116386c7216749be0c13651",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-review.test.mjs",
+              "type"  : "file",
+              "digest": "8fe61a4717f5ed600b8849dc8c2b2551064c2bb6a363323517b425d1ffab4aa9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-windows-command.test.mjs",
+              "type"  : "file",
+              "digest": "021dd3c96db53af2903de44cc916d8dc7de77e9c0a2857bbc1120ada6acf8f1b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.mjs",
+              "type"  : "file",
+              "digest": "97c7ccef2f4558b283f85df919014762b76852c1bd94641d667fdfd2a45db8b1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "159fb66d72e45187f6149b20bee514075318f53f8337d92dbba5cca8d49ffef3",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "실제 앱과 Native로 파일 읽기·변경·출력·승인 허용/거절·중단·실패를 실제 관찰한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "Windows x64 네이티브 패키지를 생성하고 실제 앱 실행과 배포 정책을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Windows Codex·도구 실행과 한글·공백 경로 및 종료 처리를 실제 검사한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Mac과 Windows에서 한국어 조합 중 Enter·줄바꿈·포커스를 실기하고 자동 입력 회귀도 검사한다.",
+            "required"   : true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-input-01"
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "중단 요청·접수·불확실·최종 결과가 구분되며 중복 요청과 늦은 사건을 회귀 검사한다.",
+            "required"   : true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-stop-01"
+            ]
+          },
+          {
+            "id"         : "AC-6",
+            "description": "강제 종료 후 죽은 소유자의 잠금만 안전하게 회수하고 실제 동시 실행을 보호한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-7",
+            "description": "검토 모델 누락·불일치의 완료를 거부하고 실제 Opus 관측을 검사한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-8",
+            "description": "기능 검증과 전체 저장소 일관성 검사의 적용 범위·오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-eight-items.mjs"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 131,
+            "digest"         : "623175f585d7bd9390c62c8231ba3c8d3b2ed8099dc9aa6611f616533fc7453e",
+            "truncated"      : false,
+            "retainedBytes"  : 131,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+        "startedAt"  : "2026-11-12T01:47:31.659Z",
+        "completedAt": "2026-11-12T01:47:50.837Z",
+        "source": {
+          "head": "a0076fd7d825771902256fa243b902358eaf6b6f",
+          "digest": "8893e2ef46c3ea9c8b1100e4e2afa37982f0ac9fd3bbc8aac6eefa4fe69ea25d",
+          "inputs": [
+            ".gitattributes",
+            "agents/www",
+            "build.ts",
+            "docs/DEVELOPMENT.md",
+            "docs/skills/WORKFLOW.md",
+            "docs/specs/chat.md",
+            "docs/windows.md",
+            "package-lock.json",
+            "package.json",
+            "scripts/check-workflow.mjs",
+            "scripts/verify-eight-items.mjs",
+            "scripts/windows-package.mjs",
+            "scripts/windows-setup.mjs",
+            "scripts/workflow",
+            "src",
+            "test",
+            "tsconfig.json"
+          ],
+          "files": [
+            {
+              "path"  : ".gitattributes",
+              "type"  : "file",
+              "digest": "33b9bb34d1b3e1dc50f14460905a0380cb8766a0383ef85149053fb13d647871",
+              "mode"  : 420
+            },
+            {
+              "path": "agents/www",
+              "type": "directory"
+            },
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "342b7c05dcffc7ec38728587dd51c89e2d195d43b78c5a3a472d23e6d22b7701",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "build.ts",
+              "type"  : "file",
+              "digest": "709b6af82b32409a7aa97fa6f3786f0a1fc5ccb0e475484c9a4dc4e0f8014056",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "a1bf7ffa0761962e98255a8abe6b7297663c96083ad061a2299831af080f87c0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "fa6c6b20be6ececd6d06cbc2049b908b6f0bec052f257561ba7f6b34b773c542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "a1a1ff9dd162050ca9beb531e92a051caa51ecb2445a7023504d2b9c19c13312",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/windows.md",
+              "type"  : "file",
+              "digest": "bb2c82b370d5afe390c6c58cc5c59db0df8d85c88eacb48bc0a1021af2f72922",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package-lock.json",
+              "type"  : "file",
+              "digest": "73e33b1bc08ba5c7d8c81916e94c204f307a1eb51918920268ca084b65a1795d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "441e51f961eb4bfec3307f17a166826e59fc36b6b93586b86c4bdf76ea7a2988",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.mjs",
+              "type"  : "file",
+              "digest": "05b58f48eec378aeba4bc14d76e5895a8ddb1735e951e984157050b9fff542b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.mjs",
+              "type"  : "file",
+              "digest": "e45b494286f5505c37b0dfd0fe1ef7cb0084b2e8fb1d62a41a2e64b31920a421",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.mjs",
+              "type"  : "file",
+              "digest": "50f481d4fe508ed8a9bfb6be23a0c1327e690eb02747b86f9839ba6df4629d67",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.mjs",
+              "type"  : "file",
+              "digest": "4d43a6caba6b1474d00863f92afe5a50a05ac35a8d18b57b89e0b5862423a884",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.mjs",
+              "type"  : "file",
+              "digest": "c9538e0e2aa66dd9c236611462df993580dfe21d308321d8a03d8fe1bb2f49a3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.mjs",
+              "type"  : "file",
+              "digest": "1cecdbb1f9c6afffb19bcf3bc3df43392f5a89df0e8b5b90deaecc1396c27662",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.d.mts",
+              "type"  : "file",
+              "digest": "178ed075b248b36554dab4a916912e791aca1242eeb054e881055e4800eece5f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.mjs",
+              "type"  : "file",
+              "digest": "b784c372d2429d3e6920bfe05f9d29f37f3efa547bc5b8bb70b3102b7b50e132",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.mjs",
+              "type"  : "file",
+              "digest": "316503fe5247c911448fa7cb9dcdedbe0a35ee2b64f163ee8c2a86f4b4b90c5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.mjs",
+              "type"  : "file",
+              "digest": "6cf347f8c5edd3c9fbbd967ed994f61f7d3c1036d6af5baf8fa76a05e5f74758",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.mjs",
+              "type"  : "file",
+              "digest": "c8d4bf9177e009171cdbf01f49e8c9b0d394388aa65179ba7d0e9ad3d1dd076b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.mjs",
+              "type"  : "file",
+              "digest": "e9167eb0e34a0d5a3a41539392029d6dc01c45d12c74505ec25400622b3732b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.mjs",
+              "type"  : "file",
+              "digest": "1b24e90523a22eb9dba80c92f9f89a31b03c3a566daa75fef44cc9b4fa6a01ee",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.d.mts",
+              "type"  : "file",
+              "digest": "0cb41bb92be4382b6c9c626cbd970b5171cf7f3e34e7c1a99901b5cd21fc6f12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.mjs",
+              "type"  : "file",
+              "digest": "85ce194b4b1d5d1a046cecc44df827a9816bbffa0e0367342971a42c952d0a0f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.mjs",
+              "type"  : "file",
+              "digest": "59aa3a24097df0778d75325591a508b1d73d5e55f7f2f81db4c93163d063ab56",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.mjs",
+              "type"  : "file",
+              "digest": "9d04618bb2e8ff00c15b96ac5b11b2425b3fc74183db796b3250e9b015425448",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.mjs",
+              "type"  : "file",
+              "digest": "490c3fd6a8e4e5fef4044a24587dc73a4978c974638b636af9842b4036a8f625",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.d.mts",
+              "type"  : "file",
+              "digest": "931670b4998cfb02f695e88a9c32598c804ebb37e7a0234de204257dd8596c07",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.mjs",
+              "type"  : "file",
+              "digest": "772e040e8ba07885d37b1c710e70edd6615a12bb648b1ea588446ccd5ad3eeb9",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "c5a070b82db69197a6aa9224a320614d5d8bb7112cbc84ff733a4dcbba544cda",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "f06ceddb319669b104005f2b516a3fae9eb87fc896caa8b4f98429a753f2762f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "a83e36e09fa6799742de016b578e36fe78d1a96352e2faf93bc327ed7a824633",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "c25ac5a7e58b98475a896884ffc9b49361543b72829aa77b230b2976f7d43ff2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "81a62c80c01d267cb45a8cff69e32cf2df02912830bb768ba8a3ea68ceb0f84b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "cc2424b25ac439179a6f3d8b8f606a809e0b14313358990add813742cfb980fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "f0d44583a8dff552ac65db9d108ed6bc0e3256a075e3aac2442c2e0c09ae82b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "87b44ac7ebf0c708f1f7b4cdcba2be3d892bcdeaa35f91b49a82f9a0bf92289a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "6ce78a35de91ce6d52aa8782627f96f18e77719c68e36d16fcd0f4347c6da24b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "97c5faefbf70a54a7f240afc1504da58f6bbb944055661de137df76169a1ddb7",
+              "mode"  : 420
+            },
+            {
+              "path": "test",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/development-policy.test.ts",
+              "type"  : "file",
+              "digest": "70263c087970ab6607445c5f9334c0ae743bff980601432e30a11d1eedc84f10",
+              "mode"  : 420
+            },
+            {
+              "path": "test/fixtures",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/fixtures/fake-app-server.mjs",
+              "type"  : "file",
+              "digest": "09c0f3770a980bca0de9772bc74d312f8418368716cf97f8818f7822023c1045",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/fake-workflow-host.mjs",
+              "type"  : "file",
+              "digest": "577b1015eb64e7372e73bef353c7df14d23775e7ab0e394ee5cd83fc5cc50da4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/input.test.ts",
+              "type"  : "file",
+              "digest": "d2233ddf6da176262170737eb458dcf658a70bcc667c3080895f69e28d64d97f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/projection.test.ts",
+              "type"  : "file",
+              "digest": "8d9ae0c713cfa9eaf994be6cc6c086f3e2d26b8c8a7d4fd4f60ba041ebff33e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.fixture.test.ts",
+              "type"  : "file",
+              "digest": "7322ebad6829b8b07bdb2155fe16aed8465b2283be4b93e2864c177ef83fea54",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.test.ts",
+              "type"  : "file",
+              "digest": "a3ccecd21e339c1ebc85145d526890e0d2fd94bbe646c4ce9d2313f230b1d91f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/skill-library.test.mjs",
+              "type"  : "file",
+              "digest": "a5ad1e7a86860a0e04dbf137aaa4725135cfe4cc0efebcfc5fd9844abf7e03ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/windows-native.test.mjs",
+              "type"  : "file",
+              "digest": "6eb721bc048ce9e8244a9d1da33c42d8b4122ffbb179488205978851e1c172e7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-codex.test.mjs",
+              "type"  : "file",
+              "digest": "e924be45db286b46fc2badb318622d26df1ee4c6340ade6ef0ade1543a2eb4b0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-contract.test.mjs",
+              "type"  : "file",
+              "digest": "57f918e12d37accee4091d39a7797735d12530fbd7ed222e05d152ba1347577c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.mjs",
+              "type"  : "file",
+              "digest": "d10b36930ccb0fae73ac6c5aa311f84df75cc73b420b01f503e59abfa5d66995",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-evidence.test.mjs",
+              "type"  : "file",
+              "digest": "b19bcb8acd7870152b2d899462940a1d1eb285c688748200739abaf5c882830f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-harness.test.mjs",
+              "type"  : "file",
+              "digest": "70ba35b9d72af77e7965b67afc651197883881ce2116386c7216749be0c13651",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-review.test.mjs",
+              "type"  : "file",
+              "digest": "8fe61a4717f5ed600b8849dc8c2b2551064c2bb6a363323517b425d1ffab4aa9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-windows-command.test.mjs",
+              "type"  : "file",
+              "digest": "021dd3c96db53af2903de44cc916d8dc7de77e9c0a2857bbc1120ada6acf8f1b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.mjs",
+              "type"  : "file",
+              "digest": "97c7ccef2f4558b283f85df919014762b76852c1bd94641d667fdfd2a45db8b1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "159fb66d72e45187f6149b20bee514075318f53f8337d92dbba5cca8d49ffef3",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "실제 앱과 Native로 파일 읽기·변경·출력·승인 허용/거절·중단·실패를 실제 관찰한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "Windows x64 네이티브 패키지를 생성하고 실제 앱 실행과 배포 정책을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Windows Codex·도구 실행과 한글·공백 경로 및 종료 처리를 실제 검사한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Mac과 Windows에서 한국어 조합 중 Enter·줄바꿈·포커스를 실기하고 자동 입력 회귀도 검사한다.",
+            "required"   : true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-input-01"
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "중단 요청·접수·불확실·최종 결과가 구분되며 중복 요청과 늦은 사건을 회귀 검사한다.",
+            "required"   : true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-stop-01"
+            ]
+          },
+          {
+            "id"         : "AC-6",
+            "description": "강제 종료 후 죽은 소유자의 잠금만 안전하게 회수하고 실제 동시 실행을 보호한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-7",
+            "description": "검토 모델 누락·불일치의 완료를 거부하고 실제 Opus 관측을 검사한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-8",
+            "description": "기능 검증과 전체 저장소 일관성 검사의 적용 범위·오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-5",
+          "AC-6",
+          "AC-7",
+          "AC-8"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 437,
+            "digest"         : "0fe6bd03197d411b18348ba6be043df51042cfcae015169bf751ba716807e7c4",
+            "truncated"      : false,
+            "retainedBytes"  : 437,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 19487,
+            "digest"         : "0524f132d3072c43f044ec4bc44cb9e91ea2c81cd2b50573a18b98ead57ffae8",
+            "truncated"      : false,
+            "retainedBytes"  : 19487,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-1b323074-4ff3-4397-a8c5-129e01f087d0",
+        "startedAt"  : "2026-11-12T02:18:43.980Z",
+        "completedAt": "2026-11-12T02:19:02.725Z",
+        "source": {
+          "head": "a0076fd7d825771902256fa243b902358eaf6b6f",
+          "digest": "bc736e824479bad3f0982f1651773fcb5c96dbf38e41a4a4efdb257ae7f2c877",
+          "inputs": [
+            ".gitattributes",
+            "agents/www",
+            "build.ts",
+            "docs/DEVELOPMENT.md",
+            "docs/skills/WORKFLOW.md",
+            "docs/specs/chat.md",
+            "docs/windows.md",
+            "package-lock.json",
+            "package.json",
+            "scripts/check-workflow.mjs",
+            "scripts/verify-eight-items.mjs",
+            "scripts/windows-package.mjs",
+            "scripts/windows-setup.mjs",
+            "scripts/workflow",
+            "src",
+            "test",
+            "tsconfig.json"
+          ],
+          "files": [
+            {
+              "path"  : ".gitattributes",
+              "type"  : "file",
+              "digest": "33b9bb34d1b3e1dc50f14460905a0380cb8766a0383ef85149053fb13d647871",
+              "mode"  : 420
+            },
+            {
+              "path": "agents/www",
+              "type": "directory"
+            },
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "342b7c05dcffc7ec38728587dd51c89e2d195d43b78c5a3a472d23e6d22b7701",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "build.ts",
+              "type"  : "file",
+              "digest": "709b6af82b32409a7aa97fa6f3786f0a1fc5ccb0e475484c9a4dc4e0f8014056",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "a1bf7ffa0761962e98255a8abe6b7297663c96083ad061a2299831af080f87c0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "fa6c6b20be6ececd6d06cbc2049b908b6f0bec052f257561ba7f6b34b773c542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "a1a1ff9dd162050ca9beb531e92a051caa51ecb2445a7023504d2b9c19c13312",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/windows.md",
+              "type"  : "file",
+              "digest": "bb2c82b370d5afe390c6c58cc5c59db0df8d85c88eacb48bc0a1021af2f72922",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package-lock.json",
+              "type"  : "file",
+              "digest": "73e33b1bc08ba5c7d8c81916e94c204f307a1eb51918920268ca084b65a1795d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "441e51f961eb4bfec3307f17a166826e59fc36b6b93586b86c4bdf76ea7a2988",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.mjs",
+              "type"  : "file",
+              "digest": "05b58f48eec378aeba4bc14d76e5895a8ddb1735e951e984157050b9fff542b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.mjs",
+              "type"  : "file",
+              "digest": "037170085a3d40cb2c3739c2102bc1557b93ab095d4dc74f747c4db99e7135aa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.mjs",
+              "type"  : "file",
+              "digest": "50f481d4fe508ed8a9bfb6be23a0c1327e690eb02747b86f9839ba6df4629d67",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.mjs",
+              "type"  : "file",
+              "digest": "ac684780e786369a2f7066d0e1c17eeef26d7e158a4ce1cba23ebf4f8922dbf4",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.mjs",
+              "type"  : "file",
+              "digest": "c9538e0e2aa66dd9c236611462df993580dfe21d308321d8a03d8fe1bb2f49a3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.mjs",
+              "type"  : "file",
+              "digest": "1cecdbb1f9c6afffb19bcf3bc3df43392f5a89df0e8b5b90deaecc1396c27662",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.d.mts",
+              "type"  : "file",
+              "digest": "0c0be616407f61e0ab5b49e326efff76db6d286354991e7c710946887f618ed0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.mjs",
+              "type"  : "file",
+              "digest": "d849bcc328ff80577932eb4b8caf2b975be439c2419e1d569ea5894c423eb08f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.mjs",
+              "type"  : "file",
+              "digest": "316503fe5247c911448fa7cb9dcdedbe0a35ee2b64f163ee8c2a86f4b4b90c5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.mjs",
+              "type"  : "file",
+              "digest": "81c4a1edd48f57c9425f91181dcd1625eb81f76ad2b2b17c92737da94641d0df",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.mjs",
+              "type"  : "file",
+              "digest": "c8d4bf9177e009171cdbf01f49e8c9b0d394388aa65179ba7d0e9ad3d1dd076b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.mjs",
+              "type"  : "file",
+              "digest": "e9167eb0e34a0d5a3a41539392029d6dc01c45d12c74505ec25400622b3732b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.mjs",
+              "type"  : "file",
+              "digest": "1b24e90523a22eb9dba80c92f9f89a31b03c3a566daa75fef44cc9b4fa6a01ee",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.d.mts",
+              "type"  : "file",
+              "digest": "0cb41bb92be4382b6c9c626cbd970b5171cf7f3e34e7c1a99901b5cd21fc6f12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.mjs",
+              "type"  : "file",
+              "digest": "64f20864619179261a271c5309673f833d86870c88c0531241ca6b8fa6b2aaf3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.mjs",
+              "type"  : "file",
+              "digest": "59aa3a24097df0778d75325591a508b1d73d5e55f7f2f81db4c93163d063ab56",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.mjs",
+              "type"  : "file",
+              "digest": "9d04618bb2e8ff00c15b96ac5b11b2425b3fc74183db796b3250e9b015425448",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.mjs",
+              "type"  : "file",
+              "digest": "490c3fd6a8e4e5fef4044a24587dc73a4978c974638b636af9842b4036a8f625",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.d.mts",
+              "type"  : "file",
+              "digest": "931670b4998cfb02f695e88a9c32598c804ebb37e7a0234de204257dd8596c07",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.mjs",
+              "type"  : "file",
+              "digest": "8857f2f975eec26efa5d42f37a3d9d28bda6d26cc4e8f3103a7b3eda6a6cba88",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "c5a070b82db69197a6aa9224a320614d5d8bb7112cbc84ff733a4dcbba544cda",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "f06ceddb319669b104005f2b516a3fae9eb87fc896caa8b4f98429a753f2762f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "0e0b1632cdfef4c1360aa6b798c5c4a54c042b9ed7a07ee1e4bbe2e86e400738",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "601b54bb0235068978baa643d4910010cdc3caf103218c4f44dc1ff4c0bd4d39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "81a62c80c01d267cb45a8cff69e32cf2df02912830bb768ba8a3ea68ceb0f84b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "cc2424b25ac439179a6f3d8b8f606a809e0b14313358990add813742cfb980fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "f0d44583a8dff552ac65db9d108ed6bc0e3256a075e3aac2442c2e0c09ae82b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "609d9ae50bfeb25b190e7687a09669d4723427edcd53a187c7e818b05c4a1ca4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "6ce78a35de91ce6d52aa8782627f96f18e77719c68e36d16fcd0f4347c6da24b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "97c5faefbf70a54a7f240afc1504da58f6bbb944055661de137df76169a1ddb7",
+              "mode"  : 420
+            },
+            {
+              "path": "test",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/development-policy.test.ts",
+              "type"  : "file",
+              "digest": "70263c087970ab6607445c5f9334c0ae743bff980601432e30a11d1eedc84f10",
+              "mode"  : 420
+            },
+            {
+              "path": "test/fixtures",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/fixtures/fake-app-server.mjs",
+              "type"  : "file",
+              "digest": "09c0f3770a980bca0de9772bc74d312f8418368716cf97f8818f7822023c1045",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/fake-workflow-host.mjs",
+              "type"  : "file",
+              "digest": "577b1015eb64e7372e73bef353c7df14d23775e7ab0e394ee5cd83fc5cc50da4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/input.test.ts",
+              "type"  : "file",
+              "digest": "d1f5f2ec3fb91b398ca870721acb765aeaff85f288f6808f25b530d1f5bc4612",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/projection.test.ts",
+              "type"  : "file",
+              "digest": "8d9ae0c713cfa9eaf994be6cc6c086f3e2d26b8c8a7d4fd4f60ba041ebff33e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.fixture.test.ts",
+              "type"  : "file",
+              "digest": "7322ebad6829b8b07bdb2155fe16aed8465b2283be4b93e2864c177ef83fea54",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.test.ts",
+              "type"  : "file",
+              "digest": "a3ccecd21e339c1ebc85145d526890e0d2fd94bbe646c4ce9d2313f230b1d91f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/skill-library.test.mjs",
+              "type"  : "file",
+              "digest": "a5ad1e7a86860a0e04dbf137aaa4725135cfe4cc0efebcfc5fd9844abf7e03ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/windows-native.test.mjs",
+              "type"  : "file",
+              "digest": "6eb721bc048ce9e8244a9d1da33c42d8b4122ffbb179488205978851e1c172e7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-codex.test.mjs",
+              "type"  : "file",
+              "digest": "e924be45db286b46fc2badb318622d26df1ee4c6340ade6ef0ade1543a2eb4b0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-contract.test.mjs",
+              "type"  : "file",
+              "digest": "57f918e12d37accee4091d39a7797735d12530fbd7ed222e05d152ba1347577c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.mjs",
+              "type"  : "file",
+              "digest": "d10b36930ccb0fae73ac6c5aa311f84df75cc73b420b01f503e59abfa5d66995",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-evidence.test.mjs",
+              "type"  : "file",
+              "digest": "18ab5fe771377e7d8a7c9ca93987586ed4214c512658c642b21db9a6ba3979a8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-harness.test.mjs",
+              "type"  : "file",
+              "digest": "70ba35b9d72af77e7965b67afc651197883881ce2116386c7216749be0c13651",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-review.test.mjs",
+              "type"  : "file",
+              "digest": "8fe61a4717f5ed600b8849dc8c2b2551064c2bb6a363323517b425d1ffab4aa9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-windows-command.test.mjs",
+              "type"  : "file",
+              "digest": "43647f05fc2294cc7bd62230f1448120ad71ad28a37d707f1ee6403b770b44ad",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.mjs",
+              "type"  : "file",
+              "digest": "97c7ccef2f4558b283f85df919014762b76852c1bd94641d667fdfd2a45db8b1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "159fb66d72e45187f6149b20bee514075318f53f8337d92dbba5cca8d49ffef3",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "실제 앱과 Native로 파일 읽기·변경·출력·승인 허용/거절·중단·실패를 실제 관찰한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "Windows x64 네이티브 패키지를 생성하고 실제 앱 실행과 배포 정책을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Windows Codex·도구 실행과 한글·공백 경로 및 종료 처리를 실제 검사한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Mac과 Windows에서 한국어 조합 중 Enter·줄바꿈·포커스를 실기하고 자동 입력 회귀도 검사한다.",
+            "required"   : true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-input-01"
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "중단 요청·접수·불확실·최종 결과가 구분되며 중복 요청과 늦은 사건을 회귀 검사한다.",
+            "required"   : true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-stop-01"
+            ]
+          },
+          {
+            "id"         : "AC-6",
+            "description": "강제 종료 후 죽은 소유자의 잠금만 안전하게 회수하고 실제 동시 실행을 보호한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-7",
+            "description": "검토 모델 누락·불일치의 완료를 거부하고 실제 Opus 관측을 검사한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-8",
+            "description": "기능 검증과 전체 저장소 일관성 검사의 적용 범위·오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-5",
+          "AC-6",
+          "AC-8"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 437,
+            "digest"         : "0fe6bd03197d411b18348ba6be043df51042cfcae015169bf751ba716807e7c4",
+            "truncated"      : false,
+            "retainedBytes"  : 437,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 20877,
+            "digest"         : "a8a6bd489d60ca7d04213930df56060c4b09fc2d3a02361d21f407da15bfb885",
+            "truncated"      : false,
+            "retainedBytes"  : 20877,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-7fd656db-0fbd-4db8-ab93-d4253ab3e96c",
+        "startedAt"  : "2026-11-12T02:25:32.270Z",
+        "completedAt": "2026-11-12T02:25:51.362Z",
+        "source": {
+          "head": "a0076fd7d825771902256fa243b902358eaf6b6f",
+          "digest": "f2da9c19a685dad54cea9f982c78a1d072dea58c5a31f0076357c45bb05c9d80",
+          "inputs": [
+            ".gitattributes",
+            "AGENTS.md",
+            "agents/www",
+            "build.ts",
+            "docs/DEVELOPMENT.md",
+            "docs/skills/WORKFLOW.md",
+            "docs/specs/chat.md",
+            "docs/windows.md",
+            "package-lock.json",
+            "package.json",
+            "scripts/check-workflow.mjs",
+            "scripts/verify-eight-items.mjs",
+            "scripts/windows-package.mjs",
+            "scripts/windows-setup.mjs",
+            "scripts/workflow",
+            "src",
+            "test",
+            "tsconfig.json"
+          ],
+          "files": [
+            {
+              "path"  : ".gitattributes",
+              "type"  : "file",
+              "digest": "33b9bb34d1b3e1dc50f14460905a0380cb8766a0383ef85149053fb13d647871",
+              "mode"  : 420
+            },
+            {
+              "path"  : "AGENTS.md",
+              "type"  : "file",
+              "digest": "fd6503666259e4c6f5243dda06575d62481ac6b9354f3aa1fd15a945541ffb49",
+              "mode"  : 420
+            },
+            {
+              "path": "agents/www",
+              "type": "directory"
+            },
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "342b7c05dcffc7ec38728587dd51c89e2d195d43b78c5a3a472d23e6d22b7701",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "build.ts",
+              "type"  : "file",
+              "digest": "709b6af82b32409a7aa97fa6f3786f0a1fc5ccb0e475484c9a4dc4e0f8014056",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "a1bf7ffa0761962e98255a8abe6b7297663c96083ad061a2299831af080f87c0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "fa6c6b20be6ececd6d06cbc2049b908b6f0bec052f257561ba7f6b34b773c542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "a1a1ff9dd162050ca9beb531e92a051caa51ecb2445a7023504d2b9c19c13312",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/windows.md",
+              "type"  : "file",
+              "digest": "bb2c82b370d5afe390c6c58cc5c59db0df8d85c88eacb48bc0a1021af2f72922",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package-lock.json",
+              "type"  : "file",
+              "digest": "73e33b1bc08ba5c7d8c81916e94c204f307a1eb51918920268ca084b65a1795d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "441e51f961eb4bfec3307f17a166826e59fc36b6b93586b86c4bdf76ea7a2988",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.mjs",
+              "type"  : "file",
+              "digest": "05b58f48eec378aeba4bc14d76e5895a8ddb1735e951e984157050b9fff542b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.mjs",
+              "type"  : "file",
+              "digest": "779e68a4ae89d06c06a6c30f477f9770fb05f8e8df24fe879f66935e2eb29495",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.mjs",
+              "type"  : "file",
+              "digest": "50f481d4fe508ed8a9bfb6be23a0c1327e690eb02747b86f9839ba6df4629d67",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.mjs",
+              "type"  : "file",
+              "digest": "ac684780e786369a2f7066d0e1c17eeef26d7e158a4ce1cba23ebf4f8922dbf4",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.mjs",
+              "type"  : "file",
+              "digest": "c9538e0e2aa66dd9c236611462df993580dfe21d308321d8a03d8fe1bb2f49a3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.mjs",
+              "type"  : "file",
+              "digest": "1cecdbb1f9c6afffb19bcf3bc3df43392f5a89df0e8b5b90deaecc1396c27662",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.d.mts",
+              "type"  : "file",
+              "digest": "0c0be616407f61e0ab5b49e326efff76db6d286354991e7c710946887f618ed0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.mjs",
+              "type"  : "file",
+              "digest": "d849bcc328ff80577932eb4b8caf2b975be439c2419e1d569ea5894c423eb08f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.mjs",
+              "type"  : "file",
+              "digest": "316503fe5247c911448fa7cb9dcdedbe0a35ee2b64f163ee8c2a86f4b4b90c5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.mjs",
+              "type"  : "file",
+              "digest": "81c4a1edd48f57c9425f91181dcd1625eb81f76ad2b2b17c92737da94641d0df",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.mjs",
+              "type"  : "file",
+              "digest": "c8d4bf9177e009171cdbf01f49e8c9b0d394388aa65179ba7d0e9ad3d1dd076b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.mjs",
+              "type"  : "file",
+              "digest": "e9167eb0e34a0d5a3a41539392029d6dc01c45d12c74505ec25400622b3732b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.mjs",
+              "type"  : "file",
+              "digest": "1b24e90523a22eb9dba80c92f9f89a31b03c3a566daa75fef44cc9b4fa6a01ee",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.d.mts",
+              "type"  : "file",
+              "digest": "0cb41bb92be4382b6c9c626cbd970b5171cf7f3e34e7c1a99901b5cd21fc6f12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.mjs",
+              "type"  : "file",
+              "digest": "64f20864619179261a271c5309673f833d86870c88c0531241ca6b8fa6b2aaf3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.mjs",
+              "type"  : "file",
+              "digest": "59aa3a24097df0778d75325591a508b1d73d5e55f7f2f81db4c93163d063ab56",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.mjs",
+              "type"  : "file",
+              "digest": "9d04618bb2e8ff00c15b96ac5b11b2425b3fc74183db796b3250e9b015425448",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.mjs",
+              "type"  : "file",
+              "digest": "490c3fd6a8e4e5fef4044a24587dc73a4978c974638b636af9842b4036a8f625",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.d.mts",
+              "type"  : "file",
+              "digest": "931670b4998cfb02f695e88a9c32598c804ebb37e7a0234de204257dd8596c07",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.mjs",
+              "type"  : "file",
+              "digest": "8857f2f975eec26efa5d42f37a3d9d28bda6d26cc4e8f3103a7b3eda6a6cba88",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "c5a070b82db69197a6aa9224a320614d5d8bb7112cbc84ff733a4dcbba544cda",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "f06ceddb319669b104005f2b516a3fae9eb87fc896caa8b4f98429a753f2762f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "0e0b1632cdfef4c1360aa6b798c5c4a54c042b9ed7a07ee1e4bbe2e86e400738",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "601b54bb0235068978baa643d4910010cdc3caf103218c4f44dc1ff4c0bd4d39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "81a62c80c01d267cb45a8cff69e32cf2df02912830bb768ba8a3ea68ceb0f84b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "cc2424b25ac439179a6f3d8b8f606a809e0b14313358990add813742cfb980fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "f0d44583a8dff552ac65db9d108ed6bc0e3256a075e3aac2442c2e0c09ae82b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "609d9ae50bfeb25b190e7687a09669d4723427edcd53a187c7e818b05c4a1ca4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "6ce78a35de91ce6d52aa8782627f96f18e77719c68e36d16fcd0f4347c6da24b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "97c5faefbf70a54a7f240afc1504da58f6bbb944055661de137df76169a1ddb7",
+              "mode"  : 420
+            },
+            {
+              "path": "test",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/development-policy.test.ts",
+              "type"  : "file",
+              "digest": "70263c087970ab6607445c5f9334c0ae743bff980601432e30a11d1eedc84f10",
+              "mode"  : 420
+            },
+            {
+              "path": "test/fixtures",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/fixtures/fake-app-server.mjs",
+              "type"  : "file",
+              "digest": "09c0f3770a980bca0de9772bc74d312f8418368716cf97f8818f7822023c1045",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/fake-workflow-host.mjs",
+              "type"  : "file",
+              "digest": "577b1015eb64e7372e73bef353c7df14d23775e7ab0e394ee5cd83fc5cc50da4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/input.test.ts",
+              "type"  : "file",
+              "digest": "d1f5f2ec3fb91b398ca870721acb765aeaff85f288f6808f25b530d1f5bc4612",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/projection.test.ts",
+              "type"  : "file",
+              "digest": "8d9ae0c713cfa9eaf994be6cc6c086f3e2d26b8c8a7d4fd4f60ba041ebff33e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.fixture.test.ts",
+              "type"  : "file",
+              "digest": "7322ebad6829b8b07bdb2155fe16aed8465b2283be4b93e2864c177ef83fea54",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.test.ts",
+              "type"  : "file",
+              "digest": "a3ccecd21e339c1ebc85145d526890e0d2fd94bbe646c4ce9d2313f230b1d91f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/skill-library.test.mjs",
+              "type"  : "file",
+              "digest": "a5ad1e7a86860a0e04dbf137aaa4725135cfe4cc0efebcfc5fd9844abf7e03ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/windows-native.test.mjs",
+              "type"  : "file",
+              "digest": "6eb721bc048ce9e8244a9d1da33c42d8b4122ffbb179488205978851e1c172e7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-codex.test.mjs",
+              "type"  : "file",
+              "digest": "e924be45db286b46fc2badb318622d26df1ee4c6340ade6ef0ade1543a2eb4b0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-contract.test.mjs",
+              "type"  : "file",
+              "digest": "57f918e12d37accee4091d39a7797735d12530fbd7ed222e05d152ba1347577c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.mjs",
+              "type"  : "file",
+              "digest": "d10b36930ccb0fae73ac6c5aa311f84df75cc73b420b01f503e59abfa5d66995",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-evidence.test.mjs",
+              "type"  : "file",
+              "digest": "18ab5fe771377e7d8a7c9ca93987586ed4214c512658c642b21db9a6ba3979a8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-harness.test.mjs",
+              "type"  : "file",
+              "digest": "70ba35b9d72af77e7965b67afc651197883881ce2116386c7216749be0c13651",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-review.test.mjs",
+              "type"  : "file",
+              "digest": "8fe61a4717f5ed600b8849dc8c2b2551064c2bb6a363323517b425d1ffab4aa9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-windows-command.test.mjs",
+              "type"  : "file",
+              "digest": "43647f05fc2294cc7bd62230f1448120ad71ad28a37d707f1ee6403b770b44ad",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.mjs",
+              "type"  : "file",
+              "digest": "97c7ccef2f4558b283f85df919014762b76852c1bd94641d667fdfd2a45db8b1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "159fb66d72e45187f6149b20bee514075318f53f8337d92dbba5cca8d49ffef3",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "실제 앱과 Native로 파일 읽기·변경·출력·승인 허용/거절·중단·실패를 실제 관찰한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "Windows x64 네이티브 패키지를 생성하고 실제 앱 실행과 배포 정책을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Windows Codex·도구 실행과 한글·공백 경로 및 종료 처리를 실제 검사한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Mac과 Windows에서 한국어 조합 중 Enter·줄바꿈·포커스를 실기하고 자동 입력 회귀도 검사한다.",
+            "required"   : true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-input-01"
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "중단 요청·접수·불확실·최종 결과가 구분되며 중복 요청과 늦은 사건을 회귀 검사한다.",
+            "required"   : true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-stop-01"
+            ]
+          },
+          {
+            "id"         : "AC-6",
+            "description": "강제 종료 후 죽은 소유자의 잠금만 안전하게 회수하고 실제 동시 실행을 보호한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-7",
+            "description": "검토 모델 누락·불일치의 완료를 거부하고 실제 Opus 관측을 검사한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-8",
+            "description": "기능 검증과 전체 저장소 일관성 검사의 적용 범위·오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-5",
+          "AC-6",
+          "AC-8"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 437,
+            "digest"         : "0fe6bd03197d411b18348ba6be043df51042cfcae015169bf751ba716807e7c4",
+            "truncated"      : false,
+            "retainedBytes"  : 437,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 20878,
+            "digest"         : "6f81de17424ea4045dc4bdcd0754904cbf2498b5d2205ba07ce6e6d9affbde17",
+            "truncated"      : false,
+            "retainedBytes"  : 20878,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-e6238218-50cd-408b-ae32-b706e7f839d0",
+        "startedAt"  : "2026-11-12T02:34:01.021Z",
+        "completedAt": "2026-11-12T02:34:01.222Z",
+        "source": {
+          "head": "a0076fd7d825771902256fa243b902358eaf6b6f",
+          "digest": "f2da9c19a685dad54cea9f982c78a1d072dea58c5a31f0076357c45bb05c9d80",
+          "inputs": [
+            ".gitattributes",
+            "AGENTS.md",
+            "agents/www",
+            "build.ts",
+            "docs/DEVELOPMENT.md",
+            "docs/skills/WORKFLOW.md",
+            "docs/specs/chat.md",
+            "docs/windows.md",
+            "package-lock.json",
+            "package.json",
+            "scripts/check-workflow.mjs",
+            "scripts/verify-eight-items.mjs",
+            "scripts/windows-package.mjs",
+            "scripts/windows-setup.mjs",
+            "scripts/workflow",
+            "src",
+            "test",
+            "tsconfig.json"
+          ],
+          "files": [
+            {
+              "path"  : ".gitattributes",
+              "type"  : "file",
+              "digest": "33b9bb34d1b3e1dc50f14460905a0380cb8766a0383ef85149053fb13d647871",
+              "mode"  : 420
+            },
+            {
+              "path"  : "AGENTS.md",
+              "type"  : "file",
+              "digest": "fd6503666259e4c6f5243dda06575d62481ac6b9354f3aa1fd15a945541ffb49",
+              "mode"  : 420
+            },
+            {
+              "path": "agents/www",
+              "type": "directory"
+            },
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "342b7c05dcffc7ec38728587dd51c89e2d195d43b78c5a3a472d23e6d22b7701",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "build.ts",
+              "type"  : "file",
+              "digest": "709b6af82b32409a7aa97fa6f3786f0a1fc5ccb0e475484c9a4dc4e0f8014056",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "a1bf7ffa0761962e98255a8abe6b7297663c96083ad061a2299831af080f87c0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "fa6c6b20be6ececd6d06cbc2049b908b6f0bec052f257561ba7f6b34b773c542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "a1a1ff9dd162050ca9beb531e92a051caa51ecb2445a7023504d2b9c19c13312",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/windows.md",
+              "type"  : "file",
+              "digest": "bb2c82b370d5afe390c6c58cc5c59db0df8d85c88eacb48bc0a1021af2f72922",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package-lock.json",
+              "type"  : "file",
+              "digest": "73e33b1bc08ba5c7d8c81916e94c204f307a1eb51918920268ca084b65a1795d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "441e51f961eb4bfec3307f17a166826e59fc36b6b93586b86c4bdf76ea7a2988",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.mjs",
+              "type"  : "file",
+              "digest": "05b58f48eec378aeba4bc14d76e5895a8ddb1735e951e984157050b9fff542b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.mjs",
+              "type"  : "file",
+              "digest": "779e68a4ae89d06c06a6c30f477f9770fb05f8e8df24fe879f66935e2eb29495",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.mjs",
+              "type"  : "file",
+              "digest": "50f481d4fe508ed8a9bfb6be23a0c1327e690eb02747b86f9839ba6df4629d67",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.mjs",
+              "type"  : "file",
+              "digest": "ac684780e786369a2f7066d0e1c17eeef26d7e158a4ce1cba23ebf4f8922dbf4",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.mjs",
+              "type"  : "file",
+              "digest": "c9538e0e2aa66dd9c236611462df993580dfe21d308321d8a03d8fe1bb2f49a3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.mjs",
+              "type"  : "file",
+              "digest": "1cecdbb1f9c6afffb19bcf3bc3df43392f5a89df0e8b5b90deaecc1396c27662",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.d.mts",
+              "type"  : "file",
+              "digest": "0c0be616407f61e0ab5b49e326efff76db6d286354991e7c710946887f618ed0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.mjs",
+              "type"  : "file",
+              "digest": "d849bcc328ff80577932eb4b8caf2b975be439c2419e1d569ea5894c423eb08f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.mjs",
+              "type"  : "file",
+              "digest": "316503fe5247c911448fa7cb9dcdedbe0a35ee2b64f163ee8c2a86f4b4b90c5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.mjs",
+              "type"  : "file",
+              "digest": "81c4a1edd48f57c9425f91181dcd1625eb81f76ad2b2b17c92737da94641d0df",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.mjs",
+              "type"  : "file",
+              "digest": "c8d4bf9177e009171cdbf01f49e8c9b0d394388aa65179ba7d0e9ad3d1dd076b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.mjs",
+              "type"  : "file",
+              "digest": "e9167eb0e34a0d5a3a41539392029d6dc01c45d12c74505ec25400622b3732b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.mjs",
+              "type"  : "file",
+              "digest": "1b24e90523a22eb9dba80c92f9f89a31b03c3a566daa75fef44cc9b4fa6a01ee",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.d.mts",
+              "type"  : "file",
+              "digest": "0cb41bb92be4382b6c9c626cbd970b5171cf7f3e34e7c1a99901b5cd21fc6f12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.mjs",
+              "type"  : "file",
+              "digest": "64f20864619179261a271c5309673f833d86870c88c0531241ca6b8fa6b2aaf3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.mjs",
+              "type"  : "file",
+              "digest": "59aa3a24097df0778d75325591a508b1d73d5e55f7f2f81db4c93163d063ab56",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.mjs",
+              "type"  : "file",
+              "digest": "9d04618bb2e8ff00c15b96ac5b11b2425b3fc74183db796b3250e9b015425448",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.mjs",
+              "type"  : "file",
+              "digest": "490c3fd6a8e4e5fef4044a24587dc73a4978c974638b636af9842b4036a8f625",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.d.mts",
+              "type"  : "file",
+              "digest": "931670b4998cfb02f695e88a9c32598c804ebb37e7a0234de204257dd8596c07",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.mjs",
+              "type"  : "file",
+              "digest": "8857f2f975eec26efa5d42f37a3d9d28bda6d26cc4e8f3103a7b3eda6a6cba88",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "c5a070b82db69197a6aa9224a320614d5d8bb7112cbc84ff733a4dcbba544cda",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "f06ceddb319669b104005f2b516a3fae9eb87fc896caa8b4f98429a753f2762f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "0e0b1632cdfef4c1360aa6b798c5c4a54c042b9ed7a07ee1e4bbe2e86e400738",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "601b54bb0235068978baa643d4910010cdc3caf103218c4f44dc1ff4c0bd4d39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "81a62c80c01d267cb45a8cff69e32cf2df02912830bb768ba8a3ea68ceb0f84b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "cc2424b25ac439179a6f3d8b8f606a809e0b14313358990add813742cfb980fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "f0d44583a8dff552ac65db9d108ed6bc0e3256a075e3aac2442c2e0c09ae82b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "609d9ae50bfeb25b190e7687a09669d4723427edcd53a187c7e818b05c4a1ca4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "6ce78a35de91ce6d52aa8782627f96f18e77719c68e36d16fcd0f4347c6da24b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "97c5faefbf70a54a7f240afc1504da58f6bbb944055661de137df76169a1ddb7",
+              "mode"  : 420
+            },
+            {
+              "path": "test",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/development-policy.test.ts",
+              "type"  : "file",
+              "digest": "70263c087970ab6607445c5f9334c0ae743bff980601432e30a11d1eedc84f10",
+              "mode"  : 420
+            },
+            {
+              "path": "test/fixtures",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/fixtures/fake-app-server.mjs",
+              "type"  : "file",
+              "digest": "09c0f3770a980bca0de9772bc74d312f8418368716cf97f8818f7822023c1045",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/fake-workflow-host.mjs",
+              "type"  : "file",
+              "digest": "577b1015eb64e7372e73bef353c7df14d23775e7ab0e394ee5cd83fc5cc50da4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/input.test.ts",
+              "type"  : "file",
+              "digest": "d1f5f2ec3fb91b398ca870721acb765aeaff85f288f6808f25b530d1f5bc4612",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/projection.test.ts",
+              "type"  : "file",
+              "digest": "8d9ae0c713cfa9eaf994be6cc6c086f3e2d26b8c8a7d4fd4f60ba041ebff33e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.fixture.test.ts",
+              "type"  : "file",
+              "digest": "7322ebad6829b8b07bdb2155fe16aed8465b2283be4b93e2864c177ef83fea54",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.test.ts",
+              "type"  : "file",
+              "digest": "a3ccecd21e339c1ebc85145d526890e0d2fd94bbe646c4ce9d2313f230b1d91f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/skill-library.test.mjs",
+              "type"  : "file",
+              "digest": "a5ad1e7a86860a0e04dbf137aaa4725135cfe4cc0efebcfc5fd9844abf7e03ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/windows-native.test.mjs",
+              "type"  : "file",
+              "digest": "6eb721bc048ce9e8244a9d1da33c42d8b4122ffbb179488205978851e1c172e7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-codex.test.mjs",
+              "type"  : "file",
+              "digest": "e924be45db286b46fc2badb318622d26df1ee4c6340ade6ef0ade1543a2eb4b0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-contract.test.mjs",
+              "type"  : "file",
+              "digest": "57f918e12d37accee4091d39a7797735d12530fbd7ed222e05d152ba1347577c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.mjs",
+              "type"  : "file",
+              "digest": "d10b36930ccb0fae73ac6c5aa311f84df75cc73b420b01f503e59abfa5d66995",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-evidence.test.mjs",
+              "type"  : "file",
+              "digest": "18ab5fe771377e7d8a7c9ca93987586ed4214c512658c642b21db9a6ba3979a8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-harness.test.mjs",
+              "type"  : "file",
+              "digest": "70ba35b9d72af77e7965b67afc651197883881ce2116386c7216749be0c13651",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-review.test.mjs",
+              "type"  : "file",
+              "digest": "8fe61a4717f5ed600b8849dc8c2b2551064c2bb6a363323517b425d1ffab4aa9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-windows-command.test.mjs",
+              "type"  : "file",
+              "digest": "43647f05fc2294cc7bd62230f1448120ad71ad28a37d707f1ee6403b770b44ad",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.mjs",
+              "type"  : "file",
+              "digest": "97c7ccef2f4558b283f85df919014762b76852c1bd94641d667fdfd2a45db8b1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "159fb66d72e45187f6149b20bee514075318f53f8337d92dbba5cca8d49ffef3",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "실제 앱과 Native로 파일 읽기·변경·출력·승인 허용/거절·중단·실패를 실제 관찰한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "Windows x64 네이티브 패키지를 생성하고 실제 앱 실행과 배포 정책을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Windows Codex·도구 실행과 한글·공백 경로 및 종료 처리를 실제 검사한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Mac과 Windows에서 한국어 조합 중 Enter·줄바꿈·포커스를 실기하고 자동 입력 회귀도 검사한다.",
+            "required"   : true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-input-01"
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "중단 요청·접수·불확실·최종 결과가 구분되며 중복 요청과 늦은 사건을 회귀 검사한다.",
+            "required"   : true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-stop-01"
+            ]
+          },
+          {
+            "id"         : "AC-6",
+            "description": "강제 종료 후 죽은 소유자의 잠금만 안전하게 회수하고 실제 동시 실행을 보호한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-7",
+            "description": "검토 모델 누락·불일치의 완료를 거부하고 실제 Opus 관측을 검사한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-8",
+            "description": "기능 검증과 전체 저장소 일관성 검사의 적용 범위·오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-eight-items.mjs"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/scratchpad/eight-items/background/host-runner.ps1",
+            "size"  : 694,
+            "digest": "f9bdb23799fb1b8c91bdef5a0986726047fa1a83202fc8ce9f739bb13313f714"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/background/host-verify.mjs",
+            "size"  : 5123,
+            "digest": "c18aadb44e6ee0f2aef2a6504f5f59db6c7e21c5404f708794dd75a35134f54f"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/current-source-proof.json",
+            "size"  : 29569,
+            "digest": "adad95684895584f2917dd267aefa9ac74c0455114b19064bdbfc9317552df4c"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/accept-result.json",
+            "size"  : 41243,
+            "digest": "38437e3c095ec018e1cc39e33ed1308bf0254e5d67bca7e580d1acf3e0ced1ab"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/approvals-ui.mjs",
+            "size"  : 2381,
+            "digest": "114f564dde2072525f8b6ace971be789d70d9d1de9143b7aa5e6a0588c46580e"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/approvals.mjs",
+            "size"  : 2272,
+            "digest": "b32695e05c7ed9dc6b66d441864f171497cb6719065510d17b8d510dfca2013c"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/assert-results.mjs",
+            "size"  : 2502,
+            "digest": "95438ac8e1428aac28c475d7580dce13d74569ea29deb5f7a7de35e4d50a3088"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/assertion-summary.json",
+            "size"  : 844,
+            "digest": "54bc87cd60d46f0bce676d18287767e53985cbd3c5976f73902843976d4a2510"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/cdp.mjs",
+            "size"  : 934,
+            "digest": "6cfc7645a6ecd4ca57eba032479f281d617f1baf1fe0f0edcdfa8472f7cdb843"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/decline-result.json",
+            "size"  : 35391,
+            "digest": "67306293c57f9515dc6b797c41dea422edce6ffb069dee03d3a9115fb9264bff"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/duplicate-response-result.json",
+            "size"  : 139,
+            "digest": "9658a46a7e76a56126aeca034353fdcf055df4fabea625c3238130e3cbb94cfc"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/final-events.json",
+            "size"  : 244290,
+            "digest": "96187f4a876e28404ef907446484f84aac875985045553150331c726f2c3b101"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/initial-result.json",
+            "size"  : 92112,
+            "digest": "27449cb1b1f58a5b4357803efd883e63eeb082a2c400484a9c158fffd631dc08"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/interrupt-result.json",
+            "size"  : 23881,
+            "digest": "98f5a144ab9a950e9c5aef362128e774ac325d24bbd9ef0c9f11eb388240a7e4"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/interrupt-ui.mjs",
+            "size"  : 1958,
+            "digest": "e3c856fcd8127c6345528ab500e2f5e850793808a38cf1793958bac6f8f7374c"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/interrupt.mjs",
+            "size"  : 1909,
+            "digest": "74e48099774b6e299aff94f35d7196103b89c5b0f2a31b965a5e16f7af4acd2f"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/launch.json",
+            "size"  : 111,
+            "digest": "11ba184e8d0e63ae6d342bd910a6845ce95068e2566decca4608d3418de4c0bd"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/ready.json",
+            "size"  : 240,
+            "digest": "8e59a77e5616573eaa8be9026398bb825e209d253a65716b8991767148fab18a"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/run-all.mjs",
+            "size"  : 3362,
+            "digest": "fd4c4f0bd72721111e8a533ada867f7a72edb441c28d9919f8b0d7160f65aa3b"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/run-proof.mjs",
+            "size"  : 2519,
+            "digest": "96d49c2b7c11fefa93e6759df4d433c5b902bea22b394372a31d7820ddf6c31e"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/run.mjs",
+            "size"  : 4421,
+            "digest": "79e0478b5f1890c69def49c38d544f024d69b745f8a6419e50eeb8e945db7479"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/ui-accept-result.json",
+            "size"  : 43057,
+            "digest": "1cb28ac2544dbb35f40c398d320493b9284c0448ce1233df2a983a8f01cc0514"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/ui-decline-result.json",
+            "size"  : 38340,
+            "digest": "e8ad5e5c869851d033f9b053bc53f5b33a0039c4ca69aa573e599cf745e5577e"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/native/final/ui-interrupt-result.json",
+            "size"  : 25998,
+            "digest": "86270c8421f375bf174ee02dbbc63c911e9d2e37f1db0244b3a4163a6f83d919"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/windows/approved-inputs/.www/final-metadata.mjs",
+            "size"  : 1852,
+            "digest": "ecbb607d0bdf95a4728cca7826f76e667a79592c279d0881725a467251982645"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/windows/approved-inputs/.www/native-cdp-probe.mjs",
+            "size"  : 3786,
+            "digest": "133d0fed7c7860170b9944ae9cc105609fa2c3faad8d141515415c48d584b356"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/windows/approved-inputs/.www/parent-work-criteria.json",
+            "size"  : 3569,
+            "digest": "a97139edf01bbcd89db09037a104b31a130148e2886b9e6e6b367fae08550405"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/windows/approved-source.json",
+            "size"  : 8992,
+            "digest": "c457af248c857b54f3d6244891b3bdf6381d7b6e4a9b790e7b0cbf3c103b9c3f"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/windows/current-source-proof.json",
+            "size"  : 50066,
+            "digest": "8a9788c9e3fb055d18337c340a24a7bbc8dc53295e1efc76aa66d8f56c5eace8"
+          },
+          {
+            "path"  : ".www/scratchpad/eight-items/windows/final-metadata.json",
+            "size"  : 4129,
+            "digest": "c0bd0fe027123459b919666791da3bc55ba102baa5afe07e9ce8a406b8877ec7"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 131,
+            "digest"         : "623175f585d7bd9390c62c8231ba3c8d3b2ed8099dc9aa6611f616533fc7453e",
+            "truncated"      : false,
+            "retainedBytes"  : 131,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-4a1d3f8e-1c1b-47bc-a961-8f8dbbe71216",
+        "startedAt"  : "2026-11-12T02:37:30.937Z",
+        "completedAt": "2026-11-12T02:37:31.066Z",
+        "source": {
+          "head": "a0076fd7d825771902256fa243b902358eaf6b6f",
+          "digest": "f2da9c19a685dad54cea9f982c78a1d072dea58c5a31f0076357c45bb05c9d80",
+          "inputs": [
+            ".gitattributes",
+            "AGENTS.md",
+            "agents/www",
+            "build.ts",
+            "docs/DEVELOPMENT.md",
+            "docs/skills/WORKFLOW.md",
+            "docs/specs/chat.md",
+            "docs/windows.md",
+            "package-lock.json",
+            "package.json",
+            "scripts/check-workflow.mjs",
+            "scripts/verify-eight-items.mjs",
+            "scripts/windows-package.mjs",
+            "scripts/windows-setup.mjs",
+            "scripts/workflow",
+            "src",
+            "test",
+            "tsconfig.json"
+          ],
+          "files": [
+            {
+              "path"  : ".gitattributes",
+              "type"  : "file",
+              "digest": "33b9bb34d1b3e1dc50f14460905a0380cb8766a0383ef85149053fb13d647871",
+              "mode"  : 420
+            },
+            {
+              "path"  : "AGENTS.md",
+              "type"  : "file",
+              "digest": "fd6503666259e4c6f5243dda06575d62481ac6b9354f3aa1fd15a945541ffb49",
+              "mode"  : 420
+            },
+            {
+              "path": "agents/www",
+              "type": "directory"
+            },
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "342b7c05dcffc7ec38728587dd51c89e2d195d43b78c5a3a472d23e6d22b7701",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "build.ts",
+              "type"  : "file",
+              "digest": "709b6af82b32409a7aa97fa6f3786f0a1fc5ccb0e475484c9a4dc4e0f8014056",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "a1bf7ffa0761962e98255a8abe6b7297663c96083ad061a2299831af080f87c0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "fa6c6b20be6ececd6d06cbc2049b908b6f0bec052f257561ba7f6b34b773c542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "a1a1ff9dd162050ca9beb531e92a051caa51ecb2445a7023504d2b9c19c13312",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/windows.md",
+              "type"  : "file",
+              "digest": "bb2c82b370d5afe390c6c58cc5c59db0df8d85c88eacb48bc0a1021af2f72922",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package-lock.json",
+              "type"  : "file",
+              "digest": "73e33b1bc08ba5c7d8c81916e94c204f307a1eb51918920268ca084b65a1795d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "441e51f961eb4bfec3307f17a166826e59fc36b6b93586b86c4bdf76ea7a2988",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.mjs",
+              "type"  : "file",
+              "digest": "05b58f48eec378aeba4bc14d76e5895a8ddb1735e951e984157050b9fff542b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.mjs",
+              "type"  : "file",
+              "digest": "779e68a4ae89d06c06a6c30f477f9770fb05f8e8df24fe879f66935e2eb29495",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.mjs",
+              "type"  : "file",
+              "digest": "50f481d4fe508ed8a9bfb6be23a0c1327e690eb02747b86f9839ba6df4629d67",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.mjs",
+              "type"  : "file",
+              "digest": "ac684780e786369a2f7066d0e1c17eeef26d7e158a4ce1cba23ebf4f8922dbf4",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.mjs",
+              "type"  : "file",
+              "digest": "c9538e0e2aa66dd9c236611462df993580dfe21d308321d8a03d8fe1bb2f49a3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.mjs",
+              "type"  : "file",
+              "digest": "1cecdbb1f9c6afffb19bcf3bc3df43392f5a89df0e8b5b90deaecc1396c27662",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.d.mts",
+              "type"  : "file",
+              "digest": "0c0be616407f61e0ab5b49e326efff76db6d286354991e7c710946887f618ed0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.mjs",
+              "type"  : "file",
+              "digest": "d849bcc328ff80577932eb4b8caf2b975be439c2419e1d569ea5894c423eb08f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.mjs",
+              "type"  : "file",
+              "digest": "316503fe5247c911448fa7cb9dcdedbe0a35ee2b64f163ee8c2a86f4b4b90c5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.mjs",
+              "type"  : "file",
+              "digest": "81c4a1edd48f57c9425f91181dcd1625eb81f76ad2b2b17c92737da94641d0df",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.mjs",
+              "type"  : "file",
+              "digest": "c8d4bf9177e009171cdbf01f49e8c9b0d394388aa65179ba7d0e9ad3d1dd076b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.mjs",
+              "type"  : "file",
+              "digest": "e9167eb0e34a0d5a3a41539392029d6dc01c45d12c74505ec25400622b3732b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.mjs",
+              "type"  : "file",
+              "digest": "1b24e90523a22eb9dba80c92f9f89a31b03c3a566daa75fef44cc9b4fa6a01ee",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.d.mts",
+              "type"  : "file",
+              "digest": "0cb41bb92be4382b6c9c626cbd970b5171cf7f3e34e7c1a99901b5cd21fc6f12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.mjs",
+              "type"  : "file",
+              "digest": "64f20864619179261a271c5309673f833d86870c88c0531241ca6b8fa6b2aaf3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.mjs",
+              "type"  : "file",
+              "digest": "59aa3a24097df0778d75325591a508b1d73d5e55f7f2f81db4c93163d063ab56",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.mjs",
+              "type"  : "file",
+              "digest": "9d04618bb2e8ff00c15b96ac5b11b2425b3fc74183db796b3250e9b015425448",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.mjs",
+              "type"  : "file",
+              "digest": "490c3fd6a8e4e5fef4044a24587dc73a4978c974638b636af9842b4036a8f625",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.d.mts",
+              "type"  : "file",
+              "digest": "931670b4998cfb02f695e88a9c32598c804ebb37e7a0234de204257dd8596c07",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.mjs",
+              "type"  : "file",
+              "digest": "8857f2f975eec26efa5d42f37a3d9d28bda6d26cc4e8f3103a7b3eda6a6cba88",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "c5a070b82db69197a6aa9224a320614d5d8bb7112cbc84ff733a4dcbba544cda",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "f06ceddb319669b104005f2b516a3fae9eb87fc896caa8b4f98429a753f2762f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "0e0b1632cdfef4c1360aa6b798c5c4a54c042b9ed7a07ee1e4bbe2e86e400738",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "601b54bb0235068978baa643d4910010cdc3caf103218c4f44dc1ff4c0bd4d39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "81a62c80c01d267cb45a8cff69e32cf2df02912830bb768ba8a3ea68ceb0f84b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "cc2424b25ac439179a6f3d8b8f606a809e0b14313358990add813742cfb980fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "f0d44583a8dff552ac65db9d108ed6bc0e3256a075e3aac2442c2e0c09ae82b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "609d9ae50bfeb25b190e7687a09669d4723427edcd53a187c7e818b05c4a1ca4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "6ce78a35de91ce6d52aa8782627f96f18e77719c68e36d16fcd0f4347c6da24b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "97c5faefbf70a54a7f240afc1504da58f6bbb944055661de137df76169a1ddb7",
+              "mode"  : 420
+            },
+            {
+              "path": "test",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/development-policy.test.ts",
+              "type"  : "file",
+              "digest": "70263c087970ab6607445c5f9334c0ae743bff980601432e30a11d1eedc84f10",
+              "mode"  : 420
+            },
+            {
+              "path": "test/fixtures",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/fixtures/fake-app-server.mjs",
+              "type"  : "file",
+              "digest": "09c0f3770a980bca0de9772bc74d312f8418368716cf97f8818f7822023c1045",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/fake-workflow-host.mjs",
+              "type"  : "file",
+              "digest": "577b1015eb64e7372e73bef353c7df14d23775e7ab0e394ee5cd83fc5cc50da4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/input.test.ts",
+              "type"  : "file",
+              "digest": "d1f5f2ec3fb91b398ca870721acb765aeaff85f288f6808f25b530d1f5bc4612",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/projection.test.ts",
+              "type"  : "file",
+              "digest": "8d9ae0c713cfa9eaf994be6cc6c086f3e2d26b8c8a7d4fd4f60ba041ebff33e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.fixture.test.ts",
+              "type"  : "file",
+              "digest": "7322ebad6829b8b07bdb2155fe16aed8465b2283be4b93e2864c177ef83fea54",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.test.ts",
+              "type"  : "file",
+              "digest": "a3ccecd21e339c1ebc85145d526890e0d2fd94bbe646c4ce9d2313f230b1d91f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/skill-library.test.mjs",
+              "type"  : "file",
+              "digest": "a5ad1e7a86860a0e04dbf137aaa4725135cfe4cc0efebcfc5fd9844abf7e03ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/windows-native.test.mjs",
+              "type"  : "file",
+              "digest": "6eb721bc048ce9e8244a9d1da33c42d8b4122ffbb179488205978851e1c172e7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-codex.test.mjs",
+              "type"  : "file",
+              "digest": "e924be45db286b46fc2badb318622d26df1ee4c6340ade6ef0ade1543a2eb4b0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-contract.test.mjs",
+              "type"  : "file",
+              "digest": "57f918e12d37accee4091d39a7797735d12530fbd7ed222e05d152ba1347577c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.mjs",
+              "type"  : "file",
+              "digest": "d10b36930ccb0fae73ac6c5aa311f84df75cc73b420b01f503e59abfa5d66995",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-evidence.test.mjs",
+              "type"  : "file",
+              "digest": "18ab5fe771377e7d8a7c9ca93987586ed4214c512658c642b21db9a6ba3979a8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-harness.test.mjs",
+              "type"  : "file",
+              "digest": "70ba35b9d72af77e7965b67afc651197883881ce2116386c7216749be0c13651",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-review.test.mjs",
+              "type"  : "file",
+              "digest": "8fe61a4717f5ed600b8849dc8c2b2551064c2bb6a363323517b425d1ffab4aa9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-windows-command.test.mjs",
+              "type"  : "file",
+              "digest": "43647f05fc2294cc7bd62230f1448120ad71ad28a37d707f1ee6403b770b44ad",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.mjs",
+              "type"  : "file",
+              "digest": "97c7ccef2f4558b283f85df919014762b76852c1bd94641d667fdfd2a45db8b1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "159fb66d72e45187f6149b20bee514075318f53f8337d92dbba5cca8d49ffef3",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "실제 앱과 Native로 파일 읽기·변경·출력·승인 허용/거절·중단·실패를 실제 관찰한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "Windows x64 네이티브 패키지를 생성하고 실제 앱 실행과 배포 정책을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Windows Codex·도구 실행과 한글·공백 경로 및 종료 처리를 실제 검사한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Mac과 Windows에서 한국어 조합 중 Enter·줄바꿈·포커스를 실기하고 자동 입력 회귀도 검사한다.",
+            "required"   : true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-input-01"
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "중단 요청·접수·불확실·최종 결과가 구분되며 중복 요청과 늦은 사건을 회귀 검사한다.",
+            "required"   : true,
+            "requirementRefs": [
+              "docs/specs/chat.md#chat-stop-01"
+            ]
+          },
+          {
+            "id"         : "AC-6",
+            "description": "강제 종료 후 죽은 소유자의 잠금만 안전하게 회수하고 실제 동시 실행을 보호한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-7",
+            "description": "검토 모델 누락·불일치의 완료를 거부하고 실제 Opus 관측을 검사한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-8",
+            "description": "기능 검증과 전체 저장소 일관성 검사의 적용 범위·오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-eight-items.mjs",
+          "--review"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-7"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/evidence/reviews/review-888234b4-8571-4806-aa75-82c85ace799c/opus.json",
+            "size"  : 10531,
+            "digest": "f12fc5de85e2201203a08c4d5b9016606f99b01d702c373d092d1062c0fd50f2"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 84,
+            "digest"         : "7a8085445d8c3cb3de5e9861b477f836ff4adbc660714c1977c8efeb04bb6eb7",
+            "truncated"      : false,
+            "retainedBytes"  : 84,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id"            : "review-349cd6aa-b13b-4085-a693-b45d7b578fed",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "8893e2ef46c3ea9c8b1100e4e2afa37982f0ac9fd3bbc8aac6eefa4fe69ea25d",
+        "criteriaDigest": "656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "87ef32e5b2c74a15e14597ddde58e0a5d307e2b9d1936965d294c129b3b1493d"
+        },
+        "failure": null,
+        "findings": [
+          "[증거 범위 확대·AC-2/AC-3] work.json은 AC-2·AC-3를 attempt-437dcc1d(소스 digest 8893…)로 묶고 'passed; 현재 적용 가능'이라고 기록했다. 그런데 .www/scratchpad/eight-items/windows/report.md:56에는 177 tests 통과, packaged exe 실행, WINDOWS_NATIVE_READY 결과가 모두 '마지막 전달 이전 snapshot'의 기록이라고 적혀 있다. 이후 src/input.ts, src/renderer.tsx, scripts/verify-eight-items.mjs가 바뀌었고, 바뀐 소스로 Windows에서 다시 검증한 결과는 아직 회수되지 않았다. scripts/verify-eight-items.mjs:34-56은 windows/source-snapshot.json의 fingerprint를 현재 소스와 비교하지 않는다. 그래서 이 검사는 예전 소스의 실행 기록만으로 현재 소스에서 AC-2·AC-3이 통과했다는 판정을 만든다.",
+          "[증거 신선도 경계 누락] verify-eight-items.mjs는 .www/scratchpad/eight-items/{native,windows}/*.json을 읽는다. 하지만 work.json의 workflow.inputs와 verifications[].source.inputs에는 .www/scratchpad가 없다. 근거 원문 파일이 바뀌거나 다시 생성돼도 sourceDigest가 그대로라서 AC-1~AC-3 증거가 오래된 것으로 표시되지 않는다. 근거 파일을 검증 입력에 넣고 digest로 고정하거나, 원문에 기록된 소스 지문을 현재 소스와 대조해야 한다.",
+          "[AC-3 기준 미검사] AC-3 정의는 'Windows Codex·도구 실행과 한글·공백 경로 및 종료 처리를 실제 검사한다'이다. 그런데 연결된 scripts/verify-eight-items.mjs:40-56은 provider --version 종료 0, exe 경로와 지문, 단문 WINDOWS_NATIVE_READY 응답만 확인한다. 한글·공백·& 경로, 도구 실행, 종료와 signal 처리는 확인하지 않는다. 이 항목들은 Windows에서 돈 test/windows-native.test.mjs에 있지만, 그 실행은 이번 소스 이전 snapshot의 원격 로그다. 현재 연결된 Mac npm run check(attempt-de5bef50, darwin)는 AC-3에 연결되지 않았고 Windows 실행도 아니다. AC-3 passed는 실제 검사 범위보다 넓게 주장된 것이다.",
+          "[증거 범위 확대·AC-7] AC-7은 '실제 Opus 관측을 검사한다'를 요구한다. 그러나 근거는 Mac의 npm run check 단위 테스트 실행(attempt-de5bef50) 하나뿐이고, work.json의 workflow.reviews는 []다. 실제 Opus 검토 영수증으로 observedModel을 확인한 기록이 없는데 passed로 표시됐다. verification.md:14도 '독립 실제 Opus 감사는 통합 후 수행한다'고 적고 있어 work.json의 판정과 맞지 않는다.",
+          "[입력 경계·낮음] src/input.ts:10-13: compositionend의 timeStamp가 0, 음수, NaN이면 lastCompositionEnd에 그 값이 저장된다. 이 경우 shouldSubmitPrompt는 항상 false를 반환한다. renderer.tsx:306은 이 ref를 다시 초기화하지 않으므로 그 뒤로 Enter 전송이 계속 막힌다. 안전 쪽으로 막는 것은 맞지만 복구할 경로가 없다. 비정상 timestamp는 null로 저장해 무시하거나, 그 직후 Enter 한 번만 차단하도록 범위를 줄이는 편이 맞다. 실제 user-keyboard.json 이벤트열(Enter 136599.8 ≤ compositionend 136608)에서 늦게 도착한 Enter를 막는 판정 자체는 타당하다.",
+          "[Windows 영수증 경계·낮음] scripts/workflow/adapters/windows-command.mjs:40: providerExecution이 options.platform이 아니라 process.platform으로 actualInvocation을 만든다. 그래서 resolver에는 win32를 주입하고 영수증은 null이 되는 불일치가 생길 수 있다. 같은 파일 :47의 providerExecutionMatches는 actual이 null이면 플랫폼과 관계없이 true를 반환한다. 따라서 Windows에서 만든 검토 영수증에 actualInvocation이 빠져도 review.mjs:133·140이 receipt_execution_mismatch로 거부하지 않는다. 영수증에 플랫폼을 기록하고, win32 영수증에서는 actualInvocation을 필수로 해야 한다.",
+          "[잠금·참고] scripts/workflow/lock.mjs:43-58: 복구하던 프로세스가 강제 종료되면 work-records.lock.recovery가 남는다. 이 파일을 확인하거나 회수하는 API가 없어서, 이후 모든 recover-lock 호출이 EEXIST로 실패한다. verification.md:13에 한계로 적혀 있어 결함으로 세지는 않았지만, lock-status가 이 gate 파일의 존재도 보고하도록 하는 편이 낫다. 일반 잠금은 hard link로 원자적으로 공개되고, 소유자가 종료된 경우(ESRCH)에만 token이 일치할 때 회수한다. 이 동작은 타당하다.",
+          "[확인한 범위] 이 검토는 소스와 기록 원문만 읽었다. 테스트, 패키징, GUI는 실행하지 않았다. AC-4가 unverified이고 원격 background 작업의 수용을 완료로 쓰지 않은 점은 brief와 맞는다. 판정을 fail로 한 근거는 위 1~4번의 증거 적용 범위 문제다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-349cd6aa-b13b-4085-a693-b45d7b578fed/opus.json",
+        "startedAt"  : "2026-11-12T01:48:23.982Z",
+        "completedAt": "2026-11-12T01:50:03.490Z"
+      },
+      {
+        "id"            : "review-9f73062c-55cb-4333-8e03-447ad4089c52",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "bc736e824479bad3f0982f1651773fcb5c96dbf38e41a4a4efdb257ae7f2c877",
+        "criteriaDigest": "656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "8b5f6aa26a08e918febdc19e0adf56b0968be2d34f9a21edb9c716550ef6cab3"
+        },
+        "failure": null,
+        "findings": [
+          "[결함] Windows 증거의 검사 원문(하네스)이 고정되지 않아 Mac 증거와 같은 수준으로 확인되지 않는다. 브리프는 'artifactPaths로 검사 원문을 source와 별도로 실행 전후 hash/size 고정'했다고 하지만, `.www/scratchpad/eight-items/background/host-verify.mjs:58`의 `verify({ repo, record, inputs, command: process.execPath, args, criterionIds })` 호출에는 artifactPaths가 없다. 그래서 실제로 실행되는 `.www/native-cdp-probe.mjs`, `.www/final-metadata.mjs`, `.www/parent-work-criteria.json`의 digest가 attempt에 남지 않는다. `.www`는 evidence.mjs의 EXCLUDED에 들어 있어 source.inputs에도 포함되지 않는다. 또 `scripts/verify-eight-items.mjs:44-48`은 `platform === \"darwin\"`일 때만 artifacts·artifactsStable을 요구하므로, win32 attempt는 원문 고정이 없어도 통과한다.",
+          "[결함, 이어짐] `scripts/verify-eight-items.mjs:89-119`는 windowsProof의 `approvedManifestDigest`, `before`, `after`도 검사하지 않는다. 이 값들은 host-verify.mjs:36,46,72가 기록한다. 따라서 Native 시도가 승인된 probe 스크립트(host-deployment.json의 133d0fed…)로 실행됐다는 사실을 공개 검증기가 확인하지 못한다. 재현 근거: 내용이 다른 `.www/native-cdp-probe.mjs`로 실행해 'WINDOWS_NATIVE_READY'를 담은 proof와 metadata를 만들어도, attempt에는 그 스크립트 경로만 args로 남고 digest가 없다. 그러면 verify-eight-items의 win32 분기는 모두 통과한다. 수정 제안: host-verify의 각 verify 호출에 위 세 private 입력을 artifactPaths로 넘긴다. verify-eight-items는 win32에서도 artifactsStable과 기대 digest를 확인하고, proof.before === proof.after와 manifest digest(baa07cb5…)도 대조해야 한다. 원격 proof는 아직 만들어지지 않았으므로 지금 고치는 비용이 가장 작다.",
+          "[확인, 결함 아님] Native proof와 현재 소스가 일치한다. `.www/scratchpad/eight-items/native/current-source-proof.json`의 attempt.source 파일 digest(예: src/input.ts 0e0b1632…, scripts/workflow/evidence.mjs 81c4a1ed…, review.mjs 64f20864…)가 이번 검토 입력 JSON의 현재 digest와 같다. before/after/attempt.source.digest(4dde4f29…)도 서로 같고, artifacts 9개의 digest는 harnessDigests와 같다. 다만 결과 JSON의 digest(artifactDigests)는 실행 결과물이므로 사전에 고정할 수 없고, proof 생성기가 직접 써 넣은 값이다. 보고할 때 이 한계를 함께 밝히면 된다.",
+          "[확인, 결함 아님] `src/input.ts`의 IME 처리는 브리프 설명과 같다. normalizeCompositionEnd는 0, 음수, NaN, null을 null로 바꿔 Enter가 영구히 막히는 문제를 해소한다. handlePromptKeyDown은 compositionend 이전이나 같은 시각에 다시 전달된 Enter에 대해 preventDefault만 하고 전송하지 않는다. Shift+Enter와 isComposing·keyCode 229 경로는 preventDefault 없이 기본 동작이 유지된다. renderer.tsx:306도 nativeEvent.timeStamp를 정규화해 저장한다. 실제 양쪽 OS의 IME 실기(AC-4)는 미검증으로 정직하게 표시돼 있고, 이를 통과로 주장하지 않는다.",
+          "[확인, 결함 아님] `scripts/workflow/adapters/windows-command.mjs`의 providerExecution은 platform·isFile 주입을 거부하고, executionPlatform에 실제 process.platform을 기록한다. providerExecutionMatches는 executionPlatform이 'win32'인데 actualInvocation이 없는 receipt를 거부한다. actual이 있으면 win32 절대 경로, `<logical>.exe` 파일명, sha256, logical argv와의 완전 일치를 요구한다. 필드가 없는 과거 POSIX 형식만 호환한다. review.mjs:133,140에서 primary와 quota receipt 모두에 이 검사를 적용한다. `verify-eight-items.mjs --review` 분기는 AC-7을 validateReview 결과로만 판정하며, 브리프대로 이번 감사 뒤 실행할 예정이라 아직 미검증이다.",
+          "[참고] 검토자는 읽기 전용으로 소스와 기록만 대조했고, 테스트나 스크립트는 실행하지 않았다. host-local-source-comparison.json의 mismatches(scripts/verify-eight-items.mjs, scripts/windows-start.mjs, AGENTS.md)는 Windows attempt 입력 범위 밖이어서 위 판정에 영향이 없다. 다만 approved manifest의 verify-eight-items.mjs digest(e45b4942…)는 현재 파일(03717008…)과 다르다. host-verify를 다시 배포할 때 manifest도 함께 갱신해야 한다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-9f73062c-55cb-4333-8e03-447ad4089c52/opus.json",
+        "startedAt"  : "2026-11-12T02:20:56.959Z",
+        "completedAt": "2026-11-12T02:22:23.085Z"
+      },
+      {
+        "id"            : "review-888234b4-8571-4806-aa75-82c85ace799c",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "f2da9c19a685dad54cea9f982c78a1d072dea58c5a31f0076357c45bb05c9d80",
+        "criteriaDigest": "656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "f12fc5de85e2201203a08c4d5b9016606f99b01d702c373d092d1062c0fd50f2"
+        },
+        "failure": null,
+        "findings": [
+          "읽기 전용 정적 대조만 했다. 공개 검증기, 테스트, 원격 실행 중 어느 것도 직접 실행하지 않았다.",
+          "scripts/verify-eight-items.mjs:36-59의 currentAttempt는 각 attempt에 대해 다음을 요구한다: executor=process, result=passed, exitCode=0, sourceStable=true, 실행 플랫폼, 현재 criteriaDigest, 필수 입력 포함, 현재 파일 digest와의 일치(test/skill-library.test.mjs만 명시적으로 제외). Windows attempt는 여기에 더해 artifactsStable=true와 비공개 원문 3개(.www/native-cdp-probe.mjs, .www/final-metadata.mjs, .www/parent-work-criteria.json)의 digest가 승인 manifest와 같은지 대조한다. 2차 지적이었던 Windows 원문 고정 누락은 해소됐다.",
+          "windows/current-source-proof.json의 attempts 3개(check, package, native)는 모두 win32, passed, exitCode 0, sourceStable/artifactsStable=true다. 비공개 원문 digest는 ecbb607d, 133d0fed, a97139ed로, approved-source.json entries와 같다. source 파일 digest도 이번 입력 JSON의 현재 파일 digest와 같다(예: src/main.ts 601b54bb, scripts/workflow/evidence.mjs 81c4a1ed, scripts/verify-eight-items.mjs 779e68a4). proof의 before와 after가 같은 값(7132767f)인 점도 host-verify.mjs:30-35, 46, 73의 정렬 entries 지문 계산 방식과 맞는다.",
+          "host-verify.mjs는 manifest의 directories/files를 실제로 다시 순회해 승인 entries와 정확히 같은지 확인한다. 그래서 미검토 파일 추가나 링크를 거부하고, 매 단계 전후에 assertApproved를 호출한다. 실행 명령도 check/package/native 고정 argv이고 외부 인자를 받지 않는다(host-runner.ps1은 marker 존재만 확인). 브리프의 '일반 args를 받지 않는다'는 설명과 일치한다.",
+          "native 시각 재사용 방지도 맞는다. final-metadata.json의 turn.startedAt=1794450674(2026-11-12T02:31:14Z)는 native attempt의 startedAt 02:31:11.525Z 이후라서 verify-eight-items.mjs:137의 하한 검사를 통과하는 구조다. final-metadata.mjs는 policy의 source/dist/asar 일치, codex/claude 실제 invocation, WINDOWS_NATIVE_READY를 다시 확인한다.",
+          "evidence.mjs:186-233의 verify는 artifactPaths를 source와 별도로 실행 전후 path/size/digest로 고정한다. artifactsStable=false이면 result를 passed로 만들지 않는다. evaluateEvidence(253-262)도 현재 원문과 다시 대조한다. captureArtifacts는 절대경로, 드라이브 문자, 백슬래시, '..'를 거부하고 O_NOFOLLOW로 읽어 경로 우회를 막는다.",
+          "참고(결함 아님): native/current-source-proof.json의 attempt ID는 attempt-96cd77e6이고 원문 artifacts는 9개다. 브리프가 말하는 attempt-e6238218(원문 30개)은 work.json 쪽 별도 attempt로 보이는데, 이번 검토에서는 그 기록을 열어 보지 않았다. 공개 검증기도 work.json 최신 attempt가 아니라 native proof의 attempt를 대조하므로, 이 수치 차이는 문서 표현 차이로만 판단했다.",
+          "참고(결함 아님): currentAttempt는 environmentStable을 직접 검사하지 않는다. 다만 evidence.verify에서 result=passed가 되려면 environmentStable이 참이어야 하므로 우회 경로는 아니다.",
+          "브리프는 범위를 넓혀 주장하지 않는다. AC-4(실제 양 OS IME와 수정 후 수동 재실기)와 AC-7(--review 실제 실행)은 미검증으로 유지되고 전체 done도 주장하지 않는다. 공개 검증기의 마지막 출력문(line 141)도 OS IME와 수동 재실기를 범위 밖으로 명시한다. 코드 수정이 필요한 구체적 결함, 완료 판정 위조, 검사 우회는 찾지 못했다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-888234b4-8571-4806-aa75-82c85ace799c/opus.json",
+        "startedAt"  : "2026-11-12T02:34:32.990Z",
+        "completedAt": "2026-11-12T02:35:33.034Z"
+      }
+    ]
+  }
+}

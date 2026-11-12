@@ -1,0 +1,32 @@
+{
+  "$schema": "https://gstack.dev/schemas/section-manifest.json",
+  "skill"  : "design-review",
+  "version": 1,
+  "note"   : "수동형(PASSIVE) 레지스트리(v2 계획 T9 / CM2)입니다. 필드에는 ID·파일 경로·사람용 제목·사람이 읽는 실행 조건 문구만 둡니다. 절을 언제 읽을지 결정하는 유일한 곳은 skeleton의 의사결정 트리 설명입니다. 모든 호스트에서 절을 분리합니다(scripts/resolvers/sections.ts의 CARVED_ON_EVERY_HOST).",
+  "sections": [
+    {
+      "id"     : "build-loop",
+      "file"   : "build-loop.md",
+      "title"  : "구현 반복: /design-review --build",
+      "trigger": "--build 실행"
+    },
+    {
+      "id"     : "craft-audit",
+      "file"   : "craft-audit.md",
+      "title"  : "완성도 검토: Persuade 페이지와 재설계",
+      "trigger": "완성도·Persuade·재설계 검토"
+    },
+    {
+      "id"     : "outside-voices",
+      "file"   : "outside-voices.md",
+      "title"  : "외부 관점의 디자인 검토",
+      "trigger": "7단계 우선순위 분류 전 외부 관점 검토(Codex 사용 가능 여부, 동의, 두 관점과 종합)"
+    },
+    {
+      "id"     : "test-bootstrap",
+      "file"   : "test-bootstrap.md",
+      "title"  : "테스트 프레임워크 초기 구성",
+      "trigger": "알려진 테스트 명령 없이 8e.5단계의 회귀 검사를 작성할 때(프레임워크를 감지하거나 초기 구성을 제안)"
+    }
+  ]
+}

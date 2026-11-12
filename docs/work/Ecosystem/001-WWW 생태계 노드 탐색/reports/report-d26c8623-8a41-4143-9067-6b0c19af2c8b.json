@@ -1,0 +1,126 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-d26c8623-8a41-4143-9067-6b0c19af2c8b",
+  "workId"        : "work-566dd8f2-1121-4ae7-8c98-182283693c92",
+  "title"         : "WWW 생태계 노드 탐색",
+  "summary"       : "WWW의 실행·개발·기록·검토 구조를 사이드바에서 노드와 관계로 탐색할 수 있게 만들었습니다.",
+  "outcome"       : "blocked",
+  "kind"          : "authored",
+  "event"         : "finish",
+  "createdAt"     : "2026-11-12T04:33:02.931Z",
+  "workRecordHash": "06e5be51d6cd1526970848b371d70feba1ba9426626bcc5d251764a541d153f2",
+  "sourceDigest"  : "b6da700bffc0494469863b9f619aaea63231d472853570e1ba259836d01ae97c",
+  "criteriaDigest": "c6bf19975fc9cd9096600c89e9f5e4b01e0c4c19ab1dbed9d6dc7b64560c61ff",
+  "semanticHash"  : "28472fe19639e663b6ec8a02e040112139309ffc77762baceb1b737766d5bf2c",
+  "narrative": {
+    "summary": "WWW의 실행·개발·기록·검토 구조를 사이드바에서 노드와 관계로 탐색할 수 있게 만들었습니다.",
+    "before" : "WWW 구조를 문서와 경로 목록으로 읽어야 했고 연결 방향을 한눈에 보기 어려웠습니다.",
+    "after"  : "생태계 화면에서 노드와 관계를 탐색하고 역할·출처·현재와 후속 방향을 확인한 뒤 대화로 돌아갑니다.",
+    "changes": [
+      "정적 생태계 데이터와 SVG 노드 지도를 추가했습니다.",
+      "검색·영역 필터·노드 선택·배율·상세 출처를 연결했습니다.",
+      "대화 DOM을 보존해 초안·선택·명령 펼침과 읽기 위치를 유지했습니다."
+    ],
+    "decisions": [
+      "실시간 상태처럼 보이지 않도록 구조 안내 지도와 실행 상태를 구분했습니다.",
+      "외부 그래프 서비스 없이 앱 안의 SVG와 출처 경로로 구조를 설명했습니다."
+    ],
+    "limitations": [
+      "이 작업의 이전 Opus 감사는 CLI 로그인 오류로 미실행이며 완료로 판정하지 않았습니다.",
+      "저장된 이전 검증의 소스와 현재 소스는 다를 수 있습니다. 당시 증거는 .www/evidence/ecosystem-huPrBW/electron-probe.json입니다.",
+      "Windows와 한국어 IME 실기는 확인하지 않았습니다."
+    ],
+    "next": [
+      "필수 Opus 독립 감사를 실행하고 현재 소스에서 검증 적용성을 다시 확인합니다."
+    ]
+  },
+  "work": {
+    "status": "verifying",
+    "blockedReason": "독립 검토 not_run: unknown",
+    "criteria": [
+      {
+        "id"         : "AC-1",
+        "description": "사이드바에서 생태계 지도를 열고 돌아와도 대화와 초안이 유지된다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-2",
+        "description": "실행·개발·기록과 검토·후속 방향을 출처가 있는 노드와 방향 관계로 구분한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-3",
+        "description": "노드 선택·연결 탐색·검색·영역 필터·확대·축소·초기화가 동작한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-4",
+        "description": "타입 검사·집중 테스트·빌드 및 Electron 화면에서 회귀가 없다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+        "command": "node",
+        "args": [
+          "scripts/verify-ecosystem.mjs"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T03:44:54.400Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id"         : "review-683a52c6-7026-4e93-b1fd-90bda5d09ef2",
+        "verdict"    : "not_run",
+        "model"      : null,
+        "executor"   : "process",
+        "receiptPath": ".www/scratchpad/ecosystem/opus-1794455137781/opus.json",
+        "findings": []
+      }
+    ]
+  },
+  "source": {
+    "recordPath"    : "docs/work/Ecosystem/001-WWW 생태계 노드 탐색/work.json",
+    "workRecordHash": "06e5be51d6cd1526970848b371d70feba1ba9426626bcc5d251764a541d153f2",
+    "sourceDigest"  : "b6da700bffc0494469863b9f619aaea63231d472853570e1ba259836d01ae97c",
+    "criteriaDigest": "c6bf19975fc9cd9096600c89e9f5e4b01e0c4c19ab1dbed9d6dc7b64560c61ff"
+  }
+}

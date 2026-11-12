@@ -67,10 +67,10 @@ test("command와 file 사건을 순서와 중복에 관계없이 upsert한다", 
     event(7, "item/started", { threadId: "thread-1", turnId: "turn-1", item: { id: "files", type: "fileChange", changes: [{ path: "a.ts" }] } }),
     event(8, "item/completed", { threadId: "thread-1", turnId: "turn-1", item: { id: "files", type: "fileChange", changes: [{ path: "a.ts" }] } })
   ]);
-  expect(result.blocks.filter((block) => block.kind === "command")).toHaveLength(1);
-  expect(result.blocks.filter((block) => block.kind === "files")).toHaveLength(1);
-  expect(result.blocks[0]).toMatchObject({ kind: "command", command: "printf", output: "완료 출력", status: "completed" });
-  expect(result.blocks[1]).toMatchObject({ kind: "files", changes: [{ path: "a.ts", diff: null, truncated: false }], status: "completed" });
+  expect(result.blocks.filter((block) => block.kind === "command")).toHaveLength (1                                                                                                ) ;
+  expect(result.blocks.filter((block) => block.kind === "files")  ).toHaveLength (1                                                                                                ) ;
+  expect(result.blocks[0]                                         ).toMatchObject({ kind: "command", command: "printf", output: "완료 출력", status: "completed" }                 ) ;
+  expect(result.blocks[1]                                         ).toMatchObject({ kind: "files", changes: [{ path: "a.ts", diff: null, truncated: false }], status: "completed" }) ;
 });
 
 test("큰 aggregatedOutput도 같은 코드 단위 제한을 적용한다", () => {
@@ -118,7 +118,7 @@ test("승인 응답 상태와 중단 요청·확인을 독립적으로 투영한
     event(5, "turn/interruptAcknowledged", { turnId: "turn-1" })
   ]);
   expect(result.blocks[0]).toMatchObject({ kind: "approval", requestId: 0, state: "responding", open: false });
-  expect(result).toMatchObject({ turn: "running", working: true, interrupt: "requested" });
+  expect(result).toMatchObject({ turn: "running", working: true, interrupt: "accepted" });
 });
 
 test("중단 RPC 접수 뒤에도 실행 중인 턴은 중단 대기를 유지한다", () => {
@@ -128,7 +128,7 @@ test("중단 RPC 접수 뒤에도 실행 중인 턴은 중단 대기를 유지�
     event(3, "turn/interruptAcknowledged", { turnId: "turn-1" })
   ];
   expect(project(events.slice(0, 2))).toMatchObject({ turn: "running", working: true, interrupt: "requested" });
-  expect(project(events)).toMatchObject({ turn: "running", working: true, interrupt: "requested" });
+  expect(project(events)).toMatchObject({ turn: "running", working: true, interrupt: "accepted" });
 });
 
 for (const status of ["interrupted", "completed", "failed", "unknown"]) {
@@ -141,9 +141,9 @@ for (const status of ["interrupted", "completed", "failed", "unknown"]) {
       if (accepted) events.push(event(3, "turn/interruptAcknowledged", { turnId: "turn-1" }));
       events.push(event(4, "turn/completed", { turn: { id: "turn-1", status } }));
       expect(project(events)).toMatchObject({
-        turn: status,
-        working: false,
-        interrupt: status === "interrupted" ? "acknowledged" : "uncertain"
+        turn      : status ,
+        working   : false  ,
+        interrupt : status === "interrupted" ? "acknowledged" : "uncertain"
       });
     });
   }
@@ -248,12 +248,153 @@ test("파일 변경 내용을 별도로 보존하며 큰 diff 제한과 중복 �
 });
 
 test("로컬 요청만으로 연결 성공을 만들지 않고 실제 연결·종료 사건을 따른다", () => {
-  const request = event(1, "turn/userPrompt", { threadId: "thread", clientRequestId: "request", text: "요청" });
-  const connected = event(2, "transport/connected", {}, { kind: "transport" });
-  const closed = event(3, "transport/closed", {}, { kind: "transport" });
+  const request   = event(1, "turn/userPrompt", { threadId: "thread", clientRequestId: "request", text: "요청" }) ;
+  const connected = event(2, "transport/connected", {}, { kind: "transport" }                                   ) ;
+  const closed    = event(3, "transport/closed", {}, { kind: "transport" }                                      ) ;
   expect([
     project([request]).transport,
     project([request, connected]).transport,
     project([request, connected, closed]).transport
   ]).toEqual(["disconnected", "connected", "closed"]);
+});
+
+for (const phase of ["requested", "accepted", "uncertain"] as const) {
+  test(`중단 ${phase} 후 연결 종료는 성공이나 대기 고착으로 표시하지 않는다`, () => {
+    const events = [event(1, "turn/started", { turn: { id: "t" } }), event(2, "turn/interruptRequested", { turnId: "t" })];
+    if (phase === "accepted") events.push(event(3, "turn/interruptAcknowledged", { turnId: "t" }));
+    if (phase === "uncertain") events.push(event(3, "turn/interruptUncertain", { turnId: "t" }));
+    events.push(event(4, "transport/closed", {}), event(5, "turn/interruptAcknowledged", { turnId: "t" }));
+    expect(project(events)).toMatchObject({ transport: "closed", turn: "unknown", working: false, interrupt: "uncertain" });
+  });
+}
+
+for (const status of ["interrupted", "completed", "failed", "unknown"]) {
+  test(`중단 전송 결과가 불확실해도 실제 ${status} 종료를 반영한다`, () => {
+    const events = [
+      event(1, "turn/started", { turn: { id: "t" } }),
+      event(2, "turn/interruptRequested", { turnId: "t" }),
+      event(3, "turn/interruptUncertain", { turnId: "t" }),
+      event(4, "turn/completed", { turn: { id: "t", status } }),
+      event(5, "turn/interruptUncertain", { turnId: "t" })
+    ];
+    expect(project(events)).toMatchObject({ turn: status, working: false, interrupt: status === "interrupted" ? "acknowledged" : "uncertain" });
+  });
+}
+
+test("접수 뒤 중복 ACK와 늦은 요청은 종료 상태를 바꾸지 않는다", () => {
+  const events = [event(1, "turn/started", { turn: { id: "t" } }), event(2, "turn/interruptRequested", { turnId: "t" }), event(3, "turn/interruptAcknowledged", { turnId: "t" })];
+  events.push(event(4, "turn/interruptAcknowledged", { turnId: "t" }));
+  expect(project(events)).toMatchObject({ interrupt: "accepted", working: true });
+  events.push(event(5, "turn/completed", { turn: { id: "t", status: "interrupted" } }), event(6, "turn/interruptRequested", { turnId: "t" }));
+  expect(project(events)).toMatchObject({ interrupt: "acknowledged", turn: "interrupted", working: false });
+});
+
+const summaryEvent = (seq: number, method: string, params: Record<string, unknown> = {}) =>
+  event(seq, method, { threadId: "thread", turnId: "turn", itemId: "summary", ...params });
+const summaryStart = event(1, "turn/started", { threadId: "thread", turn: { id: "turn" } });
+
+test("공개 요약의 섹션·중복 seq·완료 snapshot과 commentary의 시간순을 보존한다", () => {
+  const events = [
+    summaryStart,
+    summaryEvent(2, "item/started", { item: { id: "summary", type: "reasoning", summary: [], content: ["PRIVATE"] } }),
+    summaryEvent(3, "item/reasoning/summaryPartAdded", { summaryIndex: 0 }),
+    summaryEvent(4, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "먼저" }),
+    summaryEvent(4, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "중복" }),
+    summaryEvent(5, "item/agentMessage/delta", { itemId: "comment", phase: "commentary", delta: "확인했습니다." }),
+    summaryEvent(6, "item/reasoning/summaryTextDelta", { summaryIndex: 1, delta: "다음" }),
+    summaryEvent(7, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: " 확인" })
+  ];
+  expect(project(events.slice(0, 3)).blocks).toEqual([]);
+  expect(project(events).blocks).toMatchObject([
+    { kind: "explanation", source: "reasoningSummary", text: "먼저 확인\n\n다음", streaming: true },
+    { kind: "explanation", source: "commentary", text: "확인했습니다." }
+  ]);
+  events.push(summaryEvent(8, "item/completed", { item: { id: "summary", type: "reasoning", summary: ["최종 첫 문단", "최종 다음 문단"], content: ["PRIVATE"] } }));
+  events.push(summaryEvent(9, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "늦음" }));
+  expect(project(events).blocks[0]).toMatchObject({ text: "최종 첫 문단\n\n최종 다음 문단", streaming: false });
+  expect(JSON.stringify(project(events).blocks)).not.toContain("PRIVATE");
+});
+
+test("완료 snapshot만으로 요약을 표시하고 빈 authoritative snapshot은 기존 본문을 제거한다", () => {
+  const events = [summaryEvent(1, "item/completed", { item: { id: "summary", type: "reasoning", summary: ["공개 요약"], content: "PRIVATE" } })];
+  expect(project(events).blocks).toMatchObject([{ source: "reasoningSummary", text: "공개 요약", streaming: false }]);
+  events.push(summaryEvent(2, "item/completed", { item: { id: "summary", type: "reasoning", summary: [] } }));
+  expect(project(events).blocks).toEqual([]);
+});
+
+test("잘못된 summary와 index·raw reasoning·analysis에서 본문을 추출하지 않는다", () => {
+  const events = [summaryStart] ;
+  let seq      = 2              ;
+  for (const summary of [undefined, "PRIVATE", ["공개처럼 보임", { text: "PRIVATE" }], [null], new Array(2)]) {
+    events.push(summaryEvent(seq++, "item/completed", { item: { id: `bad-${seq}`, type: "reasoning", summary, text: "PRIVATE", content: ["PRIVATE"] } }));
+  }
+  for (const summaryIndex of [undefined, -1, 0.5, NaN, Infinity, "0", 1e12]) {
+    events.push(summaryEvent(seq++, "item/reasoning/summaryTextDelta", { summaryIndex, delta: "PRIVATE" }));
+    events.push(summaryEvent(seq++, "item/reasoning/summaryPartAdded", { summaryIndex }));
+  }
+  events.push(summaryEvent(seq++, "item/reasoning/textDelta", { delta: "PRIVATE" }));
+  events.push(summaryEvent(seq++, "item/reasoning/summaryTextDelta", { summaryIndex: 0, phase: "analysis", delta: "PRIVATE" }));
+  events.push(summaryEvent(seq++, "item/completed", { item: { id: "analysis", type: "agentMessage", phase: "analysis", text: "PRIVATE" } }));
+  expect(project(events).blocks).toEqual([]);
+});
+
+test("thread·turn·item별 요약을 격리하고 늦은 이전 턴 델타를 무시한다", () => {
+  const events = [summaryStart, summaryEvent(2, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "첫째" }),
+    event(3, "turn/started", { threadId: "other", turn: { id: "turn" } }),
+    summaryEvent(4, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "이전 턴 늦음" }),
+    summaryEvent(5, "item/reasoning/summaryTextDelta", { threadId: "other", summaryIndex: 0, delta: "둘째" }),
+    summaryEvent(6, "item/reasoning/summaryTextDelta", { threadId: "other", itemId: "another", summaryIndex: 0, delta: "별도 항목" })];
+  expect(project(events).blocks).toMatchObject([
+    { threadId : "thread" , text : "첫째"      , streaming : false },
+    { threadId : "other"  , text : "둘째"      , streaming : true  },
+    { threadId : "other"  , text : "별도 항목" , streaming : true  }
+  ]);
+});
+
+for (const ending of ["completed", "interrupted", "failed", "EOF"]) {
+  test(`${ending} 뒤 요약 스트리밍을 닫고 늦은 delta로 재시작하지 않는다`, () => {
+    const events = [summaryStart, summaryEvent(2, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "진행" }),
+      ending === "EOF" ? event(3, "transport/closed", {}) : summaryEvent(3, "turn/completed", { turn: { id: "turn", status: ending } }),
+      summaryEvent(4, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "늦음" })];
+    expect(project(events).blocks).toMatchObject([{ text: "진행", streaming: false }]);
+  });
+}
+
+test("긴 요약은 섹션 구분자를 포함해 32768로 제한하고 절단 여부를 보존한다", () => {
+  const events = [summaryStart, summaryEvent(2, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "가".repeat(32_767) }),
+    summaryEvent(3, "item/reasoning/summaryTextDelta", { summaryIndex: 1, delta: "나".repeat(40_000) })];
+  expect(project(events).blocks[0]).toMatchObject({ text: "가".repeat(32_767), summaryTruncated: true });
+  events.push(summaryEvent(4, "item/completed", { item: { id: "summary", type: "reasoning", summary: ["나".repeat(40_000)] } }));
+  expect(project(events).blocks[0]).toMatchObject({ text: "나".repeat(32_768), summaryTruncated: true, streaming: false });
+});
+
+test("정확한 scope 없는 요약을 버리고 같은 thread의 다음 turn을 분리한다", () => {
+  const events = [summaryStart,
+    event(2, "item/reasoning/summaryTextDelta", { itemId: "summary", summaryIndex: 0, delta: "scope 없음" }),
+    summaryEvent(3, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "첫 턴" }),
+    summaryEvent(4, "turn/startAccepted", { turnId: "next" }),
+    summaryEvent(5, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "과거" }),
+    summaryEvent(6, "item/reasoning/summaryTextDelta", { turnId: "next", summaryIndex: 0, delta: "다음 턴" })];
+  expect(project(events).blocks).toMatchObject([{ text: "첫 턴", streaming: false }, { text: "다음 턴", streaming: true }]);
+});
+
+test("EOF 이후 재연결해도 닫힌 요약을 다시 열지 않으며 malformed 완료도 닫는다", () => {
+  const events = [summaryStart, summaryEvent(2, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "공개" }),
+    event(3, "transport/closed", {}), event(4, "transport/connected", {}),
+    summaryEvent(5, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "늦음" })];
+  expect(project(events).blocks).toMatchObject([{ text: "공개", streaming: false }]);
+  const malformed = [summaryStart, summaryEvent(2, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "공개" }),
+    summaryEvent(3, "item/completed", { item: { id: "summary", type: "reasoning", summary: "PRIVATE", content: "PRIVATE" } }),
+    summaryEvent(4, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "늦음" })];
+  expect(project(malformed).blocks).toMatchObject([{ text: "공개", streaming: false }]);
+});
+
+
+test("공개 본문이 아직 없던 턴도 EOF 재연결 뒤 늦은 요약을 시작하지 않는다", () => {
+  const events = [summaryStart,
+    summaryEvent(2, "item/started", { item: { id: "summary", type: "reasoning", summary: [] } }),
+    event(3, "transport/closed", {}), event(4, "transport/connected", {}),
+    summaryEvent(5, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "늦음" }),
+    summaryEvent(6, "item/reasoning/delta", { phase: "commentary", delta: "PRIVATE" })];
+  expect(project(events).blocks).toEqual([]);
 });

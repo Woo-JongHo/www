@@ -1,0 +1,683 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-b57b94cb-26af-45c3-9a72-502bf9141fdf",
+  "title"        : "완료 전 문서 영향 검토",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "done",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "문서 검토의 필수 범위·안전한 경로·이유를 기록하며 검토가 없으면 완료하지 못한다",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-6cd3741d-d4a0-493e-b51b-d6202c736dc5",
+          "path"     : "verification.md#attempt-6cd3741d-d4a0-493e-b51b-d6202c736dc5",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-7172d7e8-fcd9-488f-b6c5-397a682bf509",
+          "path"     : "verification.md#attempt-7172d7e8-fcd9-488f-b6c5-397a682bf509",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-2",
+      "description": "소스·기준·문서 변경 후 이전 검토와 최종 감사를 재사용하지 않으며 과거 기록은 보존한다",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-6cd3741d-d4a0-493e-b51b-d6202c736dc5",
+          "path"     : "verification.md#attempt-6cd3741d-d4a0-493e-b51b-d6202c736dc5",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-7172d7e8-fcd9-488f-b6c5-397a682bf509",
+          "path"     : "verification.md#attempt-7172d7e8-fcd9-488f-b6c5-397a682bf509",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-3",
+      "description": "CLI와 앱이 공유하는 완료 판단이 유효한 문서 검토와 검증을 수용하고 문서 전용 수정은 무관한 제품 검증을 무효화하지 않는다",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-6cd3741d-d4a0-493e-b51b-d6202c736dc5",
+          "path"     : "verification.md#attempt-6cd3741d-d4a0-493e-b51b-d6202c736dc5",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-7172d7e8-fcd9-488f-b6c5-397a682bf509",
+          "path"     : "verification.md#attempt-7172d7e8-fcd9-488f-b6c5-397a682bf509",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "www-document-impact-20261112",
+    "requestHash": "17ce9d5f0b00a3784220164c685866683aea11645d7141139b4bc34bf438ea3b",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "scripts/workflow",
+        "test/workflow-work.test.mjs",
+        "agents/www/AGENT.md",
+        "docs/PRODUCT.md",
+        "docs/ARCHITECTURE.md",
+        "docs/DEVELOPMENT.md",
+        "docs/skills/WORKFLOW.md",
+        "docs/skills/MODEL_POLICY.md",
+        "skills/www/www-build/SKILL.md",
+        "skills/www/www-verify/SKILL.md"
+      ],
+      "mutationSurfaces": [
+        "edit"
+      ],
+      "verifierCommands": [
+        "[\"/opt/homebrew/Cellar/node@22/22.22.3/bin/node\",\"--test\",\"test/workflow-work.test.mjs\",\"test/workflow-development.test.mjs\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"npm\",\"run\",\"build\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "17ce9d5f0b00a3784220164c685866683aea11645d7141139b4bc34bf438ea3b"
+    },
+    "inputs": [
+      "scripts/workflow",
+      "test/workflow-development.test.mjs",
+      "test/workflow-work.test.mjs"
+    ],
+    "nextAction": "complete",
+    "verifications": [
+      {
+        "id"         : "attempt-6cd3741d-d4a0-493e-b51b-d6202c736dc5",
+        "startedAt"  : "2026-11-12T02:58:17.887Z",
+        "completedAt": "2026-11-12T02:58:26.006Z",
+        "source": {
+          "head": "a0076fd7d825771902256fa243b902358eaf6b6f",
+          "digest": "25962e1732603245911b91d2643c42afbf639ff99add2c2cc69dc82382646fff",
+          "inputs": [
+            "scripts/workflow",
+            "test/workflow-development.test.mjs",
+            "test/workflow-work.test.mjs"
+          ],
+          "files": [
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.mjs",
+              "type"  : "file",
+              "digest": "c9538e0e2aa66dd9c236611462df993580dfe21d308321d8a03d8fe1bb2f49a3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.mjs",
+              "type"  : "file",
+              "digest": "1cecdbb1f9c6afffb19bcf3bc3df43392f5a89df0e8b5b90deaecc1396c27662",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.d.mts",
+              "type"  : "file",
+              "digest": "0c0be616407f61e0ab5b49e326efff76db6d286354991e7c710946887f618ed0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.mjs",
+              "type"  : "file",
+              "digest": "d849bcc328ff80577932eb4b8caf2b975be439c2419e1d569ea5894c423eb08f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.mjs",
+              "type"  : "file",
+              "digest": "316503fe5247c911448fa7cb9dcdedbe0a35ee2b64f163ee8c2a86f4b4b90c5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.mjs",
+              "type"  : "file",
+              "digest": "d24380aa2128b75f68b1aefe33cc9ce7d3727d439aa81f31fb77a888ad7d1626",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.mjs",
+              "type"  : "file",
+              "digest": "81c4a1edd48f57c9425f91181dcd1625eb81f76ad2b2b17c92737da94641d0df",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.mjs",
+              "type"  : "file",
+              "digest": "c8d4bf9177e009171cdbf01f49e8c9b0d394388aa65179ba7d0e9ad3d1dd076b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.mjs",
+              "type"  : "file",
+              "digest": "e9167eb0e34a0d5a3a41539392029d6dc01c45d12c74505ec25400622b3732b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.mjs",
+              "type"  : "file",
+              "digest": "1b24e90523a22eb9dba80c92f9f89a31b03c3a566daa75fef44cc9b4fa6a01ee",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.d.mts",
+              "type"  : "file",
+              "digest": "0cb41bb92be4382b6c9c626cbd970b5171cf7f3e34e7c1a99901b5cd21fc6f12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.mjs",
+              "type"  : "file",
+              "digest": "64f20864619179261a271c5309673f833d86870c88c0531241ca6b8fa6b2aaf3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.mjs",
+              "type"  : "file",
+              "digest": "59aa3a24097df0778d75325591a508b1d73d5e55f7f2f81db4c93163d063ab56",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.mjs",
+              "type"  : "file",
+              "digest": "414836d6222c43425f56461769600bd2b0e8376bb7a919e8f36fa05e71ebf172",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.mjs",
+              "type"  : "file",
+              "digest": "cf3f43a1be80dc182194ce1328f494849087ef54d1cacfb25a928f626b03a7e8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.d.mts",
+              "type"  : "file",
+              "digest": "931670b4998cfb02f695e88a9c32598c804ebb37e7a0234de204257dd8596c07",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.mjs",
+              "type"  : "file",
+              "digest": "ead4757d8b0684033357cc81107d381a91d3a4ca4b3026d3da3da8e43d196f2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.mjs",
+              "type"  : "file",
+              "digest": "d10b36930ccb0fae73ac6c5aa311f84df75cc73b420b01f503e59abfa5d66995",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.mjs",
+              "type"  : "file",
+              "digest": "1caf9f550144a4d459ffc4a9642376e16d4725a495bcc3a6a06925d18133abee",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "e204c96731aba236dc2bbdb0ed834839cc678f46bc6b491a70bd44c2b4fff61f",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "문서 검토의 필수 범위·안전한 경로·이유를 기록하며 검토가 없으면 완료하지 못한다",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "소스·기준·문서 변경 후 이전 검토와 최종 감사를 재사용하지 않으며 과거 기록은 보존한다",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "CLI와 앱이 공유하는 완료 판단이 유효한 문서 검토와 검증을 수용하고 문서 전용 수정은 무관한 제품 검증을 무효화하지 않는다",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "args": [
+          "--test",
+          "test/workflow-work.test.mjs",
+          "test/workflow-development.test.mjs"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 10486,
+            "digest"         : "8f6d9fdc647fbe81a705fe67a410f44258180b667abfedbfc547cc6837f9df39",
+            "truncated"      : false,
+            "retainedBytes"  : 10486,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-7172d7e8-fcd9-488f-b6c5-397a682bf509",
+        "startedAt"  : "2026-11-12T03:01:49.189Z",
+        "completedAt": "2026-11-12T03:02:04.795Z",
+        "source": {
+          "head": "a0076fd7d825771902256fa243b902358eaf6b6f",
+          "digest": "af1b4976a6472b04a68778975346d767103401338edbc240e194a793bf747644",
+          "inputs": [
+            "scripts/workflow",
+            "test/workflow-development.test.mjs",
+            "test/workflow-work.test.mjs"
+          ],
+          "files": [
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.mjs",
+              "type"  : "file",
+              "digest": "c9538e0e2aa66dd9c236611462df993580dfe21d308321d8a03d8fe1bb2f49a3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.mjs",
+              "type"  : "file",
+              "digest": "1cecdbb1f9c6afffb19bcf3bc3df43392f5a89df0e8b5b90deaecc1396c27662",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.d.mts",
+              "type"  : "file",
+              "digest": "0c0be616407f61e0ab5b49e326efff76db6d286354991e7c710946887f618ed0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.mjs",
+              "type"  : "file",
+              "digest": "d849bcc328ff80577932eb4b8caf2b975be439c2419e1d569ea5894c423eb08f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.mjs",
+              "type"  : "file",
+              "digest": "316503fe5247c911448fa7cb9dcdedbe0a35ee2b64f163ee8c2a86f4b4b90c5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.mjs",
+              "type"  : "file",
+              "digest": "c44692733bd97e73c1dd90bab483bda93d2621f10350d5c22d15ee58e9c31e9c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.mjs",
+              "type"  : "file",
+              "digest": "81c4a1edd48f57c9425f91181dcd1625eb81f76ad2b2b17c92737da94641d0df",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.mjs",
+              "type"  : "file",
+              "digest": "c8d4bf9177e009171cdbf01f49e8c9b0d394388aa65179ba7d0e9ad3d1dd076b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.mjs",
+              "type"  : "file",
+              "digest": "e9167eb0e34a0d5a3a41539392029d6dc01c45d12c74505ec25400622b3732b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.mjs",
+              "type"  : "file",
+              "digest": "1b24e90523a22eb9dba80c92f9f89a31b03c3a566daa75fef44cc9b4fa6a01ee",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.d.mts",
+              "type"  : "file",
+              "digest": "0cb41bb92be4382b6c9c626cbd970b5171cf7f3e34e7c1a99901b5cd21fc6f12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.mjs",
+              "type"  : "file",
+              "digest": "64f20864619179261a271c5309673f833d86870c88c0531241ca6b8fa6b2aaf3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.mjs",
+              "type"  : "file",
+              "digest": "59aa3a24097df0778d75325591a508b1d73d5e55f7f2f81db4c93163d063ab56",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.mjs",
+              "type"  : "file",
+              "digest": "414836d6222c43425f56461769600bd2b0e8376bb7a919e8f36fa05e71ebf172",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.mjs",
+              "type"  : "file",
+              "digest": "cf3f43a1be80dc182194ce1328f494849087ef54d1cacfb25a928f626b03a7e8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.d.mts",
+              "type"  : "file",
+              "digest": "931670b4998cfb02f695e88a9c32598c804ebb37e7a0234de204257dd8596c07",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.mjs",
+              "type"  : "file",
+              "digest": "ead4757d8b0684033357cc81107d381a91d3a4ca4b3026d3da3da8e43d196f2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.mjs",
+              "type"  : "file",
+              "digest": "d10b36930ccb0fae73ac6c5aa311f84df75cc73b420b01f503e59abfa5d66995",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.mjs",
+              "type"  : "file",
+              "digest": "b15da3a9d0ce5e8b13a41db99cacdc7b6f545031e0c312b722321ee581e66ca8",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "e204c96731aba236dc2bbdb0ed834839cc678f46bc6b491a70bd44c2b4fff61f",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "문서 검토의 필수 범위·안전한 경로·이유를 기록하며 검토가 없으면 완료하지 못한다",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "소스·기준·문서 변경 후 이전 검토와 최종 감사를 재사용하지 않으며 과거 기록은 보존한다",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "CLI와 앱이 공유하는 완료 판단이 유효한 문서 검토와 검증을 수용하고 문서 전용 수정은 무관한 제품 검증을 무효화하지 않는다",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "args": [
+          "--test",
+          "test/workflow-work.test.mjs",
+          "test/workflow-development.test.mjs"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 10798,
+            "digest"         : "5ed175275552a7ed3e2083ad5db2128f875436bb7b1315305a372ca9037f1764",
+            "truncated"      : false,
+            "retainedBytes"  : 10798,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id"            : "review-79f69d1b-b0c0-48b5-b112-058eeb0a0d13",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "adb72f3531a0a8809c816be65ade733133f002ca15bf8c3700b34c41825a9a10",
+        "criteriaDigest": "e204c96731aba236dc2bbdb0ed834839cc678f46bc6b491a70bd44c2b4fff61f",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "fa167d6496352613c02903998e15f3014a8550ef81a0f67725c9769c12f0f76e"
+        },
+        "failure": null,
+        "findings": [
+          "[결함] scripts/workflow/documentation.mjs:61 — 필수 문서 목록을 계산하는 `requiredDocumentation(record)`가 try 블록 밖에서 호출된다. 이 함수 안의 `documentPath`(8-15행)는 `docs/work/` 경로, `.md`가 아닌 참조, 잘못된 퍼센트 인코딩(decodeURIComponent의 URIError)에서 예외를 던진다. 반면 기존 검사 `validateRequirementRefs`(schema.mjs:19-35)는 `docs/work/<영역>/<작업>/spec.md#AC-1`처럼 저장소 안에 있고 앵커가 있는 참조를 정상으로 받는다. `openWork`(work.mjs:87-153)도 이런 참조를 막지 않는다. 재현: requirementRefs가 `[\"docs/work/Chat/001-x/spec.md#AC-1\"]`이고 앵커가 실제로 있는 schema2 작업을 만든 뒤 `assessWork`를 호출하면 `complete:false`와 이유 목록을 돌려주는 대신 '문서 검토 대상은 docs/work/ 밖의…' 예외로 중단된다. `resumeWork`와 `completeWork`도 같은 경로(work.mjs:260)로 예외가 나며, 앱의 `src/development.ts:19` readStatus도 상태를 표시하지 못하고 실패한다. 또 같은 이유로 `recordDocumentReview`가 항상 거부되므로, 참조 자체는 올바른 작업이 영구히 완료 불가능해진다. 형식이 잘못된 참조(예: `CHAT-REQUEST-01`)도 이전에는 assessWork가 '요구사항 참조가 올바르지 않습니다' 이유를 돌려줬지만, 이제는 예외로 바뀌어 진단 정보가 사라진다. 완료가 막히는 쪽으로 실패하므로 잘못된 완료가 생기지는 않지만, 상태 조회와 재개 경계가 무너진다. 수정 방향: 참조를 필수 문서로 변환할 때 `docs/work/`·형식 오류 참조를 제외하거나 이유로 수집하고, assessDocumentation의 required 계산을 try 안으로 옮기거나 실패 시 BASE_DOCUMENTS로 대체한다.",
+          "[확인] documentation.mjs의 validateDocuments와 captureDocuments는 다음을 거부한다: 필수 문서 누락, 경로 탈출, 절대 경로와 드라이브 경로, 역슬래시, `docs/work/`, 중복 경로, 빈 이유, 존재하지 않는 문서를 updated/unchanged로 기록한 판단. test/workflow-work.test.mjs:593-610이 이 경우들을 대조하며, 거부 뒤 이력 길이가 1로 유지되는 것도 확인한다.",
+          "[확인] assessDocumentation은 다음 네 가지 변경을 각각 별도 이유로 표시해 이전 문서 검토의 재사용을 막는다: 소스(review.sourceDigest와 workflow.inputs 비교), 기준(criteriaDigest), 문서(documentsDigest), 버전. work.mjs:262는 최종 감사 소스를 검사 입력과 문서 경로의 합집합으로 구성하므로 문서만 바뀌어도 기존 독립 검토가 무효화된다. 검증 시도는 원래 입력만 포착하므로 문서만 수정해도 제품 검사 증거는 유지된다(테스트 612-633). documentationReviews는 push만 하는 append-only 이력이고, schema.mjs:98-108이 구조를 검증한다.",
+          "[확인] work.json의 검증 시도 attempt-6cd3741d는 이번 검토 입력과 소스가 같다. 시도의 source.files 다이제스트(scripts/workflow/*, test/workflow-*.test.mjs)가 이번 검토 입력 목록의 다이제스트와 일치하고, 기준 다이제스트 e204c967…도 같다. 다만 이 증거는 node --test 1회 실행에 대한 것이다. typecheck와 build 결과는 work.json의 시도로 연결되지 않고 scratchpad 로그로만 언급되며, verification.md도 그 한계를 명시한다.",
+          "[참고] recordDocumentReview(work.mjs:279-287)는 blockedReason을 조건 없이 null로 바꾸고 nextAction을 review로 설정한다. 그래서 실패한 독립 검토나 적용 불가 검증이 남긴 blockedReason 문구도 지워진다. 완료 판정은 개별 증거를 다시 평가하므로 잘못된 완료로 이어지지는 않지만, 상태 표시가 한 단계 낙관적이 될 수 있다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-79f69d1b-b0c0-48b5-b112-058eeb0a0d13/opus.json",
+        "startedAt"  : "2026-11-12T02:59:31.916Z",
+        "completedAt": "2026-11-12T03:00:49.668Z"
+      },
+      {
+        "id"            : "review-e7522151-78be-4ce8-be23-0d687c67c285",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "4a8e54d067d9fc3fd5cedbcd59ba13011aa122fde106d50f98d1a7d35bb1cebe",
+        "criteriaDigest": "e204c96731aba236dc2bbdb0ed834839cc678f46bc6b491a70bd44c2b4fff61f",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "46e17839117d861efc46b2240a420b5269fba9a7773df7abde8706aaa79dd757"
+        },
+        "failure": null,
+        "findings": [
+          "[확인] 이전 Opus 감사(review-79f69d1b)가 지적한 결함은 해소됐다. scripts/workflow/documentation.mjs:17-25의 requiredDocumentation은 이제 참조마다 documentPath·decodeURIComponent를 try/catch로 감싼다. 그래서 `docs/work/` 참조, `#`이 없는 참조, 잘못된 퍼센트 인코딩 참조는 필수 문서에서 빠지고 예외를 던지지 않는다. 참조의 유효성 보고는 여전히 validateRequirementRefs(work.mjs:252)가 이유 목록으로 맡는다. assessDocumentation:66의 required 계산도 더 이상 예외를 던지지 않으므로, assessWork·resumeWork·completeWork·앱 상태 조회가 중단되는 경로는 사라졌다. test/workflow-work.test.mjs:651-669가 `docs/work/prior.md#PAST-01`, `CHAT-REQUEST-01`, `docs/specs/%ZZ.md#INVALID`를 사용해 이 동작을 재현한다(이 검토에서 테스트를 직접 실행하지는 않았다).",
+          "[확인] validateDocuments와 captureDocuments(documentation.mjs:27-51)는 다음을 거부한다: 필수 문서 누락, 중복, 경로 탈출, 절대·드라이브·역슬래시 경로, `docs/work/` 경로, 빈 이유, 없는 문서를 updated/unchanged로 기록한 판단. 거부된 뒤 이력이 늘지 않는다는 점은 테스트 593-610이 확인한다. 이것으로 AC-1의 범위·경로·이유 경계와 '검토가 없으면 완료 불가'(599행)를 뒷받침한다.",
+          "[확인] assessDocumentation은 버전·소스·기준·문서 지문 불일치를 각각 별도 이유로 표시한다. work.mjs:262는 최종 감사 소스를 검사 입력과 문서 경로의 합집합으로 계산하므로, 문서만 바뀌어도 이전 독립 검토를 재사용할 수 없다. documentationReviews는 push만 하는 append-only 이력이며 schema.mjs:98-108이 구조를 검증한다. AC-2는 테스트 612-649와 대응한다.",
+          "[확인] 검증 시도는 workflow.inputs만 포착한다(work.mjs:228). 그래서 문서만 수정하면 제품 검사 증거는 유지되고(테스트 626-627행), 문서 검토와 최종 감사만 다시 하면 된다. CLI의 document-review/status/complete와 앱은 같은 assessRecord를 사용한다. AC-3의 주장과 일치한다.",
+          "[확인] 증거 범위: 마지막 시도 attempt-7172d7e8의 source.files 다이제스트가 이번 검토 입력과 일치한다(documentation.mjs c44692…, workflow-work.test.mjs b15da3…). 기준 다이제스트 e204c967…도 같다. 두 번째 문서 검토(documentation-00e80756)의 sourceDigest af1b49…도 이 시도와 같다. 반면 첫 시도 attempt-6cd3741d는 수정 전 소스(documentation.mjs d24380…)에 대한 증거로 현재 소스에는 적용되지 않는다. 다만 각 기준의 최신 시도가 7172d7e8이므로 판정에는 문제가 없다. typecheck·build는 work.json의 시도에 연결되지 않고 scratchpad 로그로만 언급된다. verification.md:24가 이를 실행 기록으로만 적고 기준 증거로 내세우지 않으므로 증거 범위를 부풀린 것은 아니다.",
+          "[참고] docs/skills/WORKFLOW.md:114는 '과거 완료 기록은 현재 검토로 간주하지 않는다'고 명시한다. 그래서 문서 검토가 없는 기존 schema2 done 작업은 resumeWork(work.mjs:305)를 거치면 verifying으로 되돌아간다. 문서화된 의도된 동작이며 결함으로 보지 않는다.",
+          "[참고] recordDocumentReview(work.mjs:284)는 이전 감사 fail이 남긴 blockedReason을 null로 지운다. 하지만 완료 판정은 assessRecord가 최신 review의 verdict와 지문을 다시 평가하므로 잘못된 완료로 이어지지 않는다. 상태 문구가 일시적으로 낙관적으로 보일 수 있는 정도다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-e7522151-78be-4ce8-be23-0d687c67c285/opus.json",
+        "startedAt"  : "2026-11-12T03:02:29.379Z",
+        "completedAt": "2026-11-12T03:03:14.330Z"
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-ef17c2ba-b717-44e6-8e4d-f02d70836d05",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-12T02:59:17.053Z",
+        "sourceDigest"   : "25962e1732603245911b91d2643c42afbf639ff99add2c2cc69dc82382646fff",
+        "criteriaDigest" : "e204c96731aba236dc2bbdb0ed834839cc678f46bc6b491a70bd44c2b4fff61f",
+        "documentsDigest": "09670d1861ef13b2df4b47cda641ecb314f5311139e3fc9a6ef23cd8a37b4aba",
+        "documents": [
+          {
+            "path"    : "agents/www/AGENT.md",
+            "decision": "updated",
+            "reason"  : "완료 전 문서 영향 검토의 정본으로 역할을 연결했다."
+          },
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "documentation 모듈 책임과 완료·최종 감사의 문서 지문 연결을 추가했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "document-review CLI와 필수 대상·검토 기록 안내를 추가했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "제품 목적·사용자·실행 기능 범위는 유지되며 이번 변경은 저장소 개발 완료 절차다."
+          },
+          {
+            "path"    : "docs/skills/MODEL_POLICY.md",
+            "decision": "updated",
+            "reason"  : "문서 반복 작업은 Luna 후보, 구조 판단은 저자 Codex, 최종 검토는 기존 정책으로 구분했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "문서 검토 책임·이력·현재 적용성과 schema2 완료 계약의 정본을 추가했다."
+          },
+          {
+            "path"    : "skills/www/www-build/SKILL.md",
+            "decision": "updated",
+            "reason"  : "구현 단계에서 공통 문서 검토 계약을 참조한다."
+          },
+          {
+            "path"    : "skills/www/www-verify/SKILL.md",
+            "decision": "updated",
+            "reason"  : "완료 전 검토 적용성의 공통 계약을 참조한다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-00e80756-f817-402f-990e-13c7cfd80b2c",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-12T03:02:05.066Z",
+        "sourceDigest"   : "af1b4976a6472b04a68778975346d767103401338edbc240e194a793bf747644",
+        "criteriaDigest" : "e204c96731aba236dc2bbdb0ed834839cc678f46bc6b491a70bd44c2b4fff61f",
+        "documentsDigest": "09670d1861ef13b2df4b47cda641ecb314f5311139e3fc9a6ef23cd8a37b4aba",
+        "documents": [
+          {
+            "path"    : "agents/www/AGENT.md",
+            "decision": "updated",
+            "reason"  : "완료 전 문서 영향 검토의 정본으로 역할을 연결했다."
+          },
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "documentation 모듈 책임과 완료·최종 감사의 문서 지문 연결을 추가했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "document-review CLI와 필수 대상·검토 기록 안내를 추가했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "제품 목적·사용자·실행 기능 범위는 유지되며 이번 변경은 저장소 개발 완료 절차다."
+          },
+          {
+            "path"    : "docs/skills/MODEL_POLICY.md",
+            "decision": "updated",
+            "reason"  : "문서 반복 작업은 Luna 후보, 구조 판단은 저자 Codex, 최종 검토는 기존 정책으로 구분했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "문서 검토 책임·이력·현재 적용성과 schema2 완료 계약의 정본을 추가했다."
+          },
+          {
+            "path"    : "skills/www/www-build/SKILL.md",
+            "decision": "updated",
+            "reason"  : "구현 단계에서 공통 문서 검토 계약을 참조한다."
+          },
+          {
+            "path"    : "skills/www/www-verify/SKILL.md",
+            "decision": "updated",
+            "reason"  : "완료 전 검토 적용성의 공통 계약을 참조한다."
+          }
+        ]
+      }
+    ]
+  }
+}

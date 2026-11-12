@@ -1,0 +1,209 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>자연스러운 진행 설명과 공개 추론 요약 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 12일 오후 4:21 · 한국 시간 · 자동 기록</span></header><section class="hero" id="report-conclusion"><h1>자연스러운 진행 설명과 공개 추론 요약</h1><p class="lead">일부 확인 · 후속 작업 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</p><div id="report-story" class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 6 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>Native 대화에 한국어의 자연스러운 진행 설명 지침을 전달하고 중요한 발견·실패·방향 전환의 이유와 결과를 설명하도록 요청하며 고정 단계 라벨을 강제하지 않는다.</dt><dd>당시 통과로 기록</dd></div><div><dt>공개 reasoning summary만 채팅에 시간순 스트리밍하며 section·turn 격리, 중복 수신, 완료 snapshot, EOF·턴 종료 및 절단을 처리하고 raw reasoning·analysis를 노출하지 않는다.</dt><dd>당시 통과로 기록</dd></div><div><dt>기존 입력·승인·중단·활동·자동 보고서 경로를 보존하며 집중 테스트·타입 검사·빌드와 실제 화면 또는 실제 Native 표본의 확인 범위·미확인을 구분해 기록한다.</dt><dd>당시 통과로 기록</dd></div></dl></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 6건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/004-자연스러운 진행 설명과 공개 추론 요약/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-17ba7e7d-64e2-4450-b637-2c5f1c7ce0b2<br>report-2a3b4034-677b-4b68-aab3-b8a775d8ed14</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>fbea45aab6ebfa5def25e3b5698e827b9feca32d759c082172bbebed15fa79ab</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>05c8f923f5ae1ad373c6f3e3d4e83bd7c1d4924264b8616f9fe2223057ca63b7</code></dd></div><div><dt>기준 지문</dt><dd><code>e75249ba0eefaf305d5c4a12a3345d82c9560bd26f43400a0a34911254183023</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;Native 대화에 한국어의 자연스러운 진행 설명 지침을 전달하고 중요한 발견·실패·방향 전환의 이유와 결과를 설명하도록 요청하며 고정 단계 라벨을 강제하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-50e5eaf8-4399-4172-bf71-ca7c004088a5&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7655d366-45e1-41dd-9a00-3a8f36e7bdb9&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;공개 reasoning summary만 채팅에 시간순 스트리밍하며 section·turn 격리, 중복 수신, 완료 snapshot, EOF·턴 종료 및 절단을 처리하고 raw reasoning·analysis를 노출하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-50e5eaf8-4399-4172-bf71-ca7c004088a5&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7655d366-45e1-41dd-9a00-3a8f36e7bdb9&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;기존 입력·승인·중단·활동·자동 보고서 경로를 보존하며 집중 테스트·타입 검사·빌드와 실제 화면 또는 실제 Native 표본의 확인 범위·미확인을 구분해 기록한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-50e5eaf8-4399-4172-bf71-ca7c004088a5&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-85ffa423-0d53-4492-b205-dc570a985162&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7655d366-45e1-41dd-9a00-3a8f36e7bdb9&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-438d245b-5ce3-49f2-bfbc-668435185655&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-96852d0a-7a77-4fce-a706-21908bfd682b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-de3c6f80-848b-46a9-aa00-815170cb10cd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-50e5eaf8-4399-4172-bf71-ca7c004088a5&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/projection.test.ts&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/native-activity.test.ts&quot;,
+        &quot;test/input.test.ts&quot;,
+        &quot;test/native-report-input.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T07:11:38.005Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-85ffa423-0d53-4492-b205-dc570a985162&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T07:12:25.706Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-7655d366-45e1-41dd-9a00-3a8f36e7bdb9&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/projection.test.ts&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/native-activity.test.ts&quot;,
+        &quot;test/input.test.ts&quot;,
+        &quot;test/native-report-input.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T07:17:50.924Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-438d245b-5ce3-49f2-bfbc-668435185655&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T07:17:52.096Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-96852d0a-7a77-4fce-a706-21908bfd682b&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T07:18:13.251Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-de3c6f80-848b-46a9-aa00-815170cb10cd&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T07:19:18.235Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-122ebbfc-0b5e-4b01-ba9b-a1df18d4c759&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-122ebbfc-0b5e-4b01-ba9b-a1df18d4c759/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;AC-1 충족: src/native-chat.ts:2-18이 thread/start에 developerInstructions만 추가하고 cwd·approvalPolicy(on-request)·sandbox(workspace-write)를 그대로 둔다. baseInstructions·모델·effort는 바꾸지 않는다. 지침은 자연스러운 한국어 설명, 중요한 발견·실패·방향 전환의 이유와 결과, 사실과 추정의 구분을 요청한다. 고정 단계 라벨과 상투적 반복은 금지한다. nativeTurnStartParams(src/native-chat.ts:20-26)는 사용자 원문을 trim 없이 보존하고 summary: \&quot;detailed\&quot;만 추가한다. src/main.ts:188과 src/main.ts:201에서 두 함수를 실제로 사용한다. docs/specs/chat.md:25의 서술과 일치한다.&quot;,
+        &quot;AC-2 충족: src/projection.ts:251-309는 summaryTextDelta와 reasoning 항목 시작·완료의 summary(string[] 검증, isSummary)만 본문으로 사용한다. publicMessageKind(src/projection.ts:107-116)는 item/reasoning/* 메서드, reasoning type, reasoning·analysis phase를 모두 제외하므로 raw content·textDelta·analysis는 채팅 블록에 들어가지 않는다. 요약 ID는 [threadId, turnId, itemId]로 격리된다. 명시적 threadId·turnId·itemId가 없는 사건은 버린다. seq 중복은 seen 집합(src/projection.ts:155)이 막는다. 완료 snapshot은 빈 배열을 포함해 권위값으로 대체한다. turn 종료·EOF(transport/closed)·비활성 턴 이후의 늦은 delta는 무시한다. 32768 코드 단위 제한은 구분자를 포함해 계산하고 summaryTruncated로 표시한다.&quot;,
+        &quot;AC-2 테스트 대응: test/projection.test.ts:296-400이 섹션 순서, commentary와의 시간순, 중복 seq, 완료 snapshot 대체와 빈 snapshot 제거를 다룬다. 잘못된 summary·summaryIndex, textDelta·analysis 비노출, thread·turn·item 격리, completed·interrupted·failed·EOF 종료, 재연결 후 재개 금지, 절단도 결정론적으로 검사한다. test/native-chat.test.ts:18-57은 실제 subprocess(fake-app-server.ts)와 JsonRpcClient·project를 거친다. 이 경로에서 PRIVATE_REASONING_SENTINEL이 사건에는 존재하지만 블록에는 없음을 확인한다.&quot;,
+        &quot;AC-3 경로 보존: renderer(src/renderer.tsx:53)는 출처를 aria-label로만 구분하고 본문에 라벨을 붙이지 않는다. 텍스트는 React 텍스트 노드로 렌더링된다. native-activity.ts:187·421·446은 reasoning 텍스트를 계속 보관하지 않는다. native-report-input.ts에는 reasoning 처리 변경이 없다. 입력·승인·중단 경로(src/main.ts:194-229)는 params 생성 함수 교체 외에 변경이 없다.&quot;,
+        &quot;증거 대조: 현재 sourceDigest 6fd42e8…의 각 파일 digest가 attempt-7655d366(집중 테스트), 438d245b(build), 96852d0a(check:source), de3c6f80(typecheck)의 입력 digest와 모두 일치한다. 따라서 현재 소스에 대해 테스트·타입·소스 정책·빌드의 실제 통과 근거가 있다.&quot;,
+        &quot;비차단(증거 표기): work.json의 AC-1·AC-2·AC-3 evidence에 attempt-50e5eaf8과 attempt-85ffa423도 &#39;현재 적용 가능&#39;으로 연결돼 있다. 두 시도의 소스 digest e95f927…에서는 src/native-chat.ts(068e3e…)와 test/native-chat.test.ts(23f00f…)가 현재 파일(28a8ff…, ab7f78…)과 다르다. 따라서 현재 소스에는 적용되지 않는다. 동일 명령이 현재 소스에서 다시 통과했으므로 판정에는 영향이 없다. 다만 요약 문구는 이전 소스 근거로 표기하는 편이 정확하다.&quot;,
+        &quot;비차단(범위 기록): verifierCommands의 node scripts/check-workflow.ts는 기록된 실행 시도가 없다. verification.md:39는 저작 하네스의 harness.ok=false와 BoxBox의 FIXABLE·REFUSE 미해결을 차단 사유로 남긴다고 적었다. 그러나 work.json은 blockedReason이 null이고 nextAction이 review이다. 기능 검증과 별개로, 완료 처리 전에 이 미해결 사항이 작업 상태에 반영되는지 확인해야 한다.&quot;,
+        &quot;비차단(관측 범위): verification.md:17의 Electron 화면 관측은 최종 지침 문장(native-chat.ts:6) 추가 전 빌드에서 수행됐다. 그러나 renderer·projection digest는 최종 소스와 같아 화면 표시 범위의 관측은 유효하다. 실제 Native 표본 두 건은 실패 직후 추가 설명이 없었음을 그대로 기록했고 설명 빈도 보장으로 확대하지 않았다. 한국어 IME 조합 입력과 Windows 실기는 미확인으로 명시했다.&quot;
+      ]
+    }
+  ]
+}</pre></div></details></section></main></body></html>

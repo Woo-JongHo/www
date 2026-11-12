@@ -1,0 +1,391 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-566dd8f2-1121-4ae7-8c98-182283693c92",
+  "title"        : "WWW 생태계 노드 탐색",
+  "kind"         : "feature",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner"        : "ui",
+  "status"       : "verifying",
+  "blockedReason": "독립 검토 not_run: unknown",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "사이드바에서 생태계 지도를 열고 돌아와도 대화와 초안이 유지된다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+          "path"     : "verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-2",
+      "description": "실행·개발·기록과 검토·후속 방향을 출처가 있는 노드와 방향 관계로 구분한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+          "path"     : "verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-3",
+      "description": "노드 선택·연결 탐색·검색·영역 필터·확대·축소·초기화가 동작한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+          "path"     : "verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-4",
+      "description": "타입 검사·집중 테스트·빌드 및 Electron 화면에서 회귀가 없다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+          "path"     : "verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "ecosystem-node-20261112",
+    "requestHash": "8354aefce313233b20f5a8ae244706a119ad7a8ec1392bd9fec96c1eb24d9f51",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "src/renderer.tsx",
+        "src/index.html",
+        "src/ecosystem.ts",
+        "src/ecosystem-view.tsx",
+        "test/ecosystem.test.ts",
+        "scripts/verify-ecosystem.mjs",
+        "docs/specs/ecosystem.md",
+        "docs/PRODUCT.md",
+        "docs/ARCHITECTURE.md",
+        "docs/DEVELOPMENT.md",
+        "docs/work"
+      ],
+      "mutationSurfaces": [
+        "ui",
+        "docs",
+        "tests"
+      ],
+      "verifierCommands": [
+        "[\"npm\",\"run\",\"check\"]",
+        "[\"bun\",\"test\",\"test/ecosystem.test.ts\"]",
+        "[\"node\",\"scripts/verify-ecosystem.mjs\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "8354aefce313233b20f5a8ae244706a119ad7a8ec1392bd9fec96c1eb24d9f51"
+    },
+    "inputs": [
+      "build.ts",
+      "docs/specs/ecosystem.md",
+      "package.json",
+      "scripts/verify-ecosystem.mjs",
+      "src",
+      "test/ecosystem.test.ts",
+      "tsconfig.json"
+    ],
+    "nextAction": "review",
+    "verifications": [
+      {
+        "id"         : "attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+        "startedAt"  : "2026-11-12T03:44:22.509Z",
+        "completedAt": "2026-11-12T03:44:54.400Z",
+        "source": {
+          "head": "a0076fd7d825771902256fa243b902358eaf6b6f",
+          "digest": "dc9d17acdf7a6c763619c1a76160ba41662357241b9969e3d8d893ea3cdd318c",
+          "inputs": [
+            "build.ts",
+            "docs/specs/ecosystem.md",
+            "package.json",
+            "scripts/verify-ecosystem.mjs",
+            "src",
+            "test/ecosystem.test.ts",
+            "tsconfig.json"
+          ],
+          "files": [
+            {
+              "path"  : "build.ts",
+              "type"  : "file",
+              "digest": "709b6af82b32409a7aa97fa6f3786f0a1fc5ccb0e475484c9a4dc4e0f8014056",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/ecosystem.md",
+              "type"  : "file",
+              "digest": "3ec132adb679c3748d29943176e40bc3fb27ca827fa45166989aac1926f77f67",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "7fed1ac39bb88173ff53f69d0e67d27365e1e43b282528763360577fa57d0914",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.mjs",
+              "type"  : "file",
+              "digest": "d86a82ed0882d554504ea5a4784f996c3857a0b2ff01e93d26b0ce0ca12f2a47",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "c5a070b82db69197a6aa9224a320614d5d8bb7112cbc84ff733a4dcbba544cda",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "795a4d39085163c65d9d20502249dfed664811e2d5c1279286b896c93ac29a54",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "d835435d6400745c704b972f88088e22910f20bb1be8c60c645a8a28ad727963",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "2785a0280f3d0674330a66eb85ab0e11e08f7fe90a7a7ed3903a0a1db5efd516",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "0e0b1632cdfef4c1360aa6b798c5c4a54c042b9ed7a07ee1e4bbe2e86e400738",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "601b54bb0235068978baa643d4910010cdc3caf103218c4f44dc1ff4c0bd4d39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "81a62c80c01d267cb45a8cff69e32cf2df02912830bb768ba8a3ea68ceb0f84b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "cc2424b25ac439179a6f3d8b8f606a809e0b14313358990add813742cfb980fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "f0d44583a8dff552ac65db9d108ed6bc0e3256a075e3aac2442c2e0c09ae82b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "f6053b7eb74caa6a094961f812b122ab0f5aa3c2c6bf14394ef4dc96cb5eda64",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "6ce78a35de91ce6d52aa8782627f96f18e77719c68e36d16fcd0f4347c6da24b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "97c5faefbf70a54a7f240afc1504da58f6bbb944055661de137df76169a1ddb7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/ecosystem.test.ts",
+              "type"  : "file",
+              "digest": "c21a05a84a57d23c5346b034f284fdaca8cf200557090ea5ed4cd294bfede43a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "159fb66d72e45187f6149b20bee514075318f53f8337d92dbba5cca8d49ffef3",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c6bf19975fc9cd9096600c89e9f5e4b01e0c4c19ab1dbed9d6dc7b64560c61ff",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "사이드바에서 생태계 지도를 열고 돌아와도 대화와 초안이 유지된다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "실행·개발·기록과 검토·후속 방향을 출처가 있는 노드와 방향 관계로 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "노드 선택·연결 탐색·검색·영역 필터·확대·축소·초기화가 동작한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "타입 검사·집중 테스트·빌드 및 Electron 화면에서 회귀가 없다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-ecosystem.mjs"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 236,
+            "digest"         : "fe508218b284ebc64a639e6418705311a228630343adc7502cf156d74728f607",
+            "truncated"      : false,
+            "retainedBytes"  : 236,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id"            : "review-683a52c6-7026-4e93-b1fd-90bda5d09ef2",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : null,
+        "verdict"       : "not_run",
+        "readOnly"      : true,
+        "sourceDigest"  : "8dfc8873954ad138e70cfb6da9b91b98977f8c600aedd67fbf5bed227922a0ae",
+        "criteriaDigest": "c6bf19975fc9cd9096600c89e9f5e4b01e0c4c19ab1dbed9d6dc7b64560c61ff",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 1,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "01136b789a8d1a08e655461891c0d5b8364a9ace449c51c815fc5195a0b803cc"
+        },
+        "failure": {
+          "kind"       : "unknown",
+          "verified"   : false,
+          "receiptHash": "01136b789a8d1a08e655461891c0d5b8364a9ace449c51c815fc5195a0b803cc"
+        },
+        "findings": [],
+        "receiptPath": ".www/scratchpad/ecosystem/opus-1794455137781/opus.json",
+        "startedAt"  : "2026-11-12T03:45:37.828Z",
+        "completedAt": "2026-11-12T03:45:55.870Z"
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-d4907a24-b59f-4fe4-9e73-e5cd42f5d16f",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-12T03:45:35.007Z",
+        "sourceDigest"   : "dc9d17acdf7a6c763619c1a76160ba41662357241b9969e3d8d893ea3cdd318c",
+        "criteriaDigest" : "c6bf19975fc9cd9096600c89e9f5e4b01e0c4c19ab1dbed9d6dc7b64560c61ff",
+        "documentsDigest": "05da2cec176461aecfd97b8c3c87e63c30bc74822aa577949b0a2f0ee2f85010",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "정적 그래프 모델과 화면 책임 및 기존 IPC 유지 경계를 추가했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "지도 구조 변경 시 데이터·출처·집중 검사와 UI 검증 방법을 추가했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "updated",
+            "reason"  : "로컬 생태계 안내를 현재 범위에 추가하고 서버 색인 목표와 구분했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "지도는 기존 역할과 기록 계약을 설명하며 작업·검토 권한이나 완료 규칙을 변경하지 않는다."
+          },
+          {
+            "path"    : "docs/specs/chat.md",
+            "decision": "unchanged",
+            "reason"  : "기존 Chat 요구를 유지하며 지도 전환의 대화 보존은 별도 지도 명세에서 정의했다."
+          },
+          {
+            "path"    : "docs/specs/ecosystem.md",
+            "decision": "updated",
+            "reason"  : "사이드바·탐색·상태 보존과 정적 안내 경계를 새 기능 요구로 기록했다."
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
+  }
+}

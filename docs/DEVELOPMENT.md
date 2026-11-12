@@ -33,11 +33,37 @@ npm start
 
 `WWW_CODEX_BIN`은 실행 파일 경로만 바꾼다. 사용자 입력으로 임의 spawn 옵션이나 환경을 받지 않는다.
 
-## BoxBox 작성·검증 경계
+## TypeScript 작성 및 하네스
 
-BoxBox는 제품 의존성이 아니라 작성 시 가독성 검사 도구다. TypeScript·Python·strict JSON·YAML을 새로 쓰거나 구조적으로 수정할 때는 저장소에 준비된 로컬 런처 경로를 명시적으로 전달해 파일별 `guide --file <파일> --authoring --json`과 `check --source --file <파일> --json`을 먼저 실행한다. `columnSets`와 `axisNotes`로 같은 역할의 행과 실제 구문 경계를 확인한 뒤 작성하고, 수정 후 다시 source check를 실행해 구문 상태와 `PASS`·`FIXABLE`·`REFUSE`, 누락 축을 기록한다.
+WWW가 소유하는 새 실행 코드·테스트·개발 도구는 TypeScript(`.ts`, `.tsx`, 명시적 ESM 확장자가 필요할 때 `.mts`)로 작성하고 실제 strict 타입 검사 대상에 포함한다. 새 `.js`·`.jsx`·`.mjs`·`.cjs`는 허용하지 않는다. 기존 JavaScript는 `source-policy.json`의 정확한 경로와 SHA로 현재 내용을 동결한다. 그 파일을 수정해야 하면 호출부·테스트와 함께 TypeScript로 이관하며, baseline 자동 갱신이나 새 JavaScript 허용으로 검사를 통과시키지 않는다. 하네스는 저작 전 동결 목록을 보관하고, `source-policy.json`을 쓰기 계획에 선언했더라도 허용 항목 추가·해시 갱신은 거부한다. 예외 제거는 선언된 파일 삭제 또는 과거 TS 실험의 실제 검사 편입에만 허용한다. 직접 관리하던 JavaScript 소스·테스트·fixture·비교 도구는 TypeScript로 이관했고 현재 legacyJavaScript 허용 목록은 비어 있다. 외부 vendor와 빌드 생성물은 이관 대상이 아니다.
 
-이 절차는 GJC 자동 훅이 활성화됐다는 뜻이 아니다. 프로젝트의 명시적 CLI 호출과 자동 훅을 구분한다. `.mjs`, Markdown, HTML, Rust 등 미지원 파일은 지원된 것처럼 정렬 완료로 쓰지 않는다. `FIXABLE`이나 감지 그룹 0은 기능·가독성 완료가 아니며, 승인되지 않은 `REFUSE`를 수동 공백 정렬·format·align으로 우회하지 않는다. align 모드나 formatter 실행은 별도 명시 승인 없이는 켜지 않는다.
+소스 정책은 Git에 보이는 추적·미추적 파일을 함께 검사하고 Git이 무시하는 생성물과 `skill-library/`의 vendor 자료는 제외한다. 현행 앱·Node 소스는 실제 `strict: true`, `noEmit: true` 프로젝트의 파일 목록에 포함돼야 한다. 과거 비교 실험인 `spikes/tauri/build.ts`와 `spikes/tauri/src/bridge.ts` 두 파일만 `source-policy.json`의 `archivedTypeScript`에 정확한 경로와 SHA로 동결한다. 현행 `WwwApi`의 개발·보고서 메서드를 구현하지 않은 당시 실험을 그대로 보존하는 예외이며 디렉터리 전체 제외가 아니다. 두 파일을 수정하려면 실제 타입 검사 프로젝트에 편입하고 예외를 제거한다. 새 `spikes/**/*.ts`를 포함해 새 파일이 타입 검사 `include` 밖에 있으면 실패한다. 경계 입력은 `unknown`에서 좁히고 타입 assertion으로 검사를 우회하지 않는다. 실제 `@ts-nocheck`, `@ts-ignore` 지시문과 `noCheck`, strict 하위 옵션의 명시적 해제는 허용하지 않으며 정당한 타입 negative test의 설명 있는 `@ts-expect-error`만 허용한다.
+
+루트 `Bundler` 프로젝트는 `src`·`test`·`build.ts`를, 도구용 `NodeNext` 프로젝트는 `scripts/`와 `spikes/tauri/scripts/`를 실제 strict 타입 검사한다. `allowJs`·`checkJs` 예외는 제거했고 새 JavaScript는 소스 정책이 거부한다. 기존 `.d.mts`의 독립 선언은 해당 `.ts` 구현에 흡수해 구현과 타입 정의를 함께 검사한다. 개발 도구의 모듈 경계는 `scripts/package.json`의 `type: "module"`과 `tsconfig.tools.json`의 `NodeNext`, `allowImportingTsExtensions`, `erasableSyntaxOnly` 설정이 소유한다. `scripts/*.ts`는 Node로 직접 실행하고 Bun은 기존 테스트·빌드 역할을 유지한다. 이 방식에 `.mjs` 확장자는 필요하지 않다. 실행 전 Node 버전을 확인하며 이 작업에서 확인한 런타임은 Node 22.22.3이다.
+
+- `npm run check:source`는 `node scripts/source-policy.ts`로 소스 정책을 검사한다.
+- `npm run typecheck`는 기존 타입 검사와 도구 프로젝트 검사를 함께 실행한다.
+- `npm run check`는 소스 정책·타입 검사와 기존 테스트·빌드를 함께 실행한다.
+- `npm test`는 `scripts/test.ts`로 테스트를 찾는다. `.mjs`에서 이관한 Node 전용 테스트 목록은 실제 `node --test`로, 기존 TS 테스트와 새 테스트는 Bun으로 실행한다. Node 전용 테스트를 추가하거나 이름을 바꾸면 같은 실행기의 목록도 갱신한다. 목록에 지정한 테스트 파일이 없으면 조용히 생략하지 않고 실패한다.
+- 구현 실행의 공식 진입점은 `npm run workflow -- '<JSON>'` 또는 `node scripts/workflow.ts '<JSON>'`다. 기존 `scripts/workflow/run.ts`는 내부 실행부로 남는다.
+
+typed 진입점은 `build` 또는 `writes`·`deletePaths` 계획이 있는 authoring 실행에서 사전·사후 검사를 수행한다. 코드 수정이 필요한 build는 변경 계획이 필수이며 새 TypeScript는 `writes`, 삭제할 기존 JavaScript·TypeScript는 `deletePaths: string[]`에 선언한다. 내부 legacy 권한 검증에는 두 목록의 합집합을 전달한다. `writes`의 JavaScript 대상과 안전하지 않은 경로는 실행 전에 거부한다. 사후에는 삭제 대상이 실제 없어졌는지와 선언하지 않은 TS·기존 JS·소스 정책·명시 프로젝트 설정 변경도 확인한다. 기존 JavaScript를 수정한 채 남기면 소스 정책 실패다.
+
+사전 소스 정책·타입·BoxBox 검사에서 발견한 기존 오류는 호스트의 작성 context로 전달해 수정할 수 있게 하며, 기존 오류 자체로 호스트 실행을 막지 않는다. 로컬 설정 누락, 도구 실행·JSON 파싱 실패와 안전하지 않은 쓰기 계획은 실행 전 실패한다. 사후 소스 정책·타입·BoxBox의 미해결 오류는 전체 하네스의 `harness.ok: false`와 CLI exit 1로 판정한다. 사후 검사 전후의 TS·기존 JS·소스 정책·명시 프로젝트 설정 지문이 달라져도 실패한다. 실행 결과의 `executor`와 `toolExecutor`는 실제 프로세스와 주입 시험을 구분하며, 주입 시험의 성공을 실제 모델 실행으로 보고하지 않는다.
+
+정보 답변·preview·실행 없는 호출은 모델을 실행하지 않으며 검사를 위한 호출이 구현·쓰기·명령 실행 권한을 확대하지 않는다. `verify`·`review`·`read`·`complete`는 기존 core로 위임하며 authoring의 전후 검사를 모든 단계의 gate로 확대하지 않는다. 프로젝트 전체 소스 정책·타입 검사는 `npm run check`에서 별도로 강제한다. 공식 typed 진입점은 `npm run workflow`이며 low-level legacy API는 내부 구현으로 유지한다. 이 경로들은 호스트의 모든 쓰기를 차단하는 OS sandbox를 제공하지 않는다. 작업 완료의 문서 영향 검토와 독립 검토 책임은 [공통 계약](skills/WORKFLOW.md)을 유지한다.
+
+`skipLibCheck: true`는 외부 라이브러리 선언 검사를 생략하는 기존 설정으로 유지한다. 직접 관리하던 `.d.mts`는 구현 `.ts`에 통합했다. 외부 선언 파일 본문까지 검증했다는 뜻은 아니다.
+
+### BoxBox 작성·검증 경계
+
+BoxBox는 제품 의존성이 아니라 작성 시 가독성 검사 도구다. 머신별 설치 경로는 Git에서 무시하는 `.www/development.local.json`의 `boxboxLauncher`, `boxboxNode`에 각각 절대경로로 둔다. 런처와 Node의 파일 실재를 확인하고 저장소 내부에 복사한 런처 대신 외부 설치본을 사용한다. BoxBox가 고정한 Node는 설치본의 `runtime.json`과 대조한다. 이 작업에서 확인한 설치본 런타임은 Node 22.22.3이다. 로컬 설정 누락이나 도구 고장은 성공으로 건너뛰지 않는다.
+
+TypeScript·Python·strict JSON·YAML 작성은 파일별 `guide --file <파일> --authoring --json`과 `check --source --file <파일> --json`을 먼저 실행해 `columnSets`·`axisNotes`의 역할 행·열과 구문 경계를 읽고, 수정 후 같은 source check를 실행한다. 하네스는 코드 대상 `writes`의 `.ts`·`.tsx`·`.mts`·`.cts` 파일에 guide와 사전 검사 결과를 호스트 context로 전달한다. 사후 검사에서 `misaligned`, `REFUSE`, invalid 또는 errors가 나오면 하네스 결과는 실패이고 CLI는 exit 1로 끝난다. `FIXABLE`을 통과로 바꾸지 않는다.
+
+`NO_GROUPS`는 검사기가 읽은 범위만 표시하며 전체 가독성 PASS 근거가 아니다. 미지원 언어는 미지원으로 보고하고 승인되지 않은 형태를 수동 공백 정렬·format·align으로 우회하지 않는다. align이나 formatter는 별도 명시 승인 없이 실행하지 않는다. 현재 승인되지 않은 BoxBox 형태는 별도 미해결 사항이며 TypeScript 전환만으로 모든 스타일 개선이 완료됐다고 쓰지 않는다. 실제 호스트가 guide·사전 검사 context를 수용했는지도 실행 근거로 확인하며 전역 자동 훅의 활성화를 주장하지 않는다.
+
+### 제품 파일과 전송 경계
 
 - `src/main.ts`: Electron 생명주기, 폴더 선택, 검증된 IPC, Codex 프로세스 연결
 - `src/rpc.ts`: 크기 제한 JSONL/JSON-RPC 전송, 요청 라우팅, EOF/오류 처리
@@ -62,7 +88,7 @@ WWW 프로젝트 유형(Desktop 포함)의 여섯 Skills 정본은 `skills/www/`
 
 ## 개발 역할의 작업 인터페이스
 
-현재 작업 접수·재개의 CLI는 `node scripts/workflow/work.mjs '<JSON>'`이며 `action`으로 동작을 선택한다. 이 인터페이스가 구현돼 있다는 사실과 실제 Codex·GUI·검토 흐름의 통합 검증은 구분한다. 입력의 권한 정보는 사용자의 유효한 요청에서 정하며, 예제나 역할 선택이 실행 승인을 만들지 않는다.
+현재 작업 접수·재개의 CLI는 `node scripts/workflow.ts '<JSON>'`이며 `action`으로 동작을 선택한다. 이 인터페이스가 구현돼 있다는 사실과 실제 Codex·GUI·검토 흐름의 통합 검증은 구분한다. 입력의 권한 정보는 사용자의 유효한 요청에서 정하며, 예제나 역할 선택이 실행 승인을 만들지 않는다.
 
 | `action` | 입력과 동작 |
 |---|---|
@@ -75,20 +101,29 @@ WWW 프로젝트 유형(Desktop 포함)의 여섯 Skills 정본은 `skills/www/`
 | `status` | 현재 소스·기준·필수 검토의 적용 가능성을 읽기 전용으로 판정 |
 | `resume` | 같은 UUID의 현재 적용성을 재평가하고 작업 상태·다음 행동을 갱신. 과거 시도 보존 |
 | `complete` | 현재 소스·기준·필수 검토를 다시 확인하고 충족한 작업만 완료 기록 |
+| `document-review` | `workId`, `documents`의 문서 영향 판단을 digest에 연결해 이력에 추가. 각 문서는 `path`, `decision` (`updated` | `unchanged` | `not_applicable`), 비어 있지 않은 `reason`을 받음 |
+| `lock-status` | 잠금 소유 프로세스·호스트와 현재 생존 상태를 읽고 복구 가능 여부를 확인 |
+| `recover-lock` | 관찰한 소유 token을 지정해 같은 호스트의 종료된 소유자 잠금만 명시 복구 |
+| `check-repository` | 전체 저장소 검사를 실제 실행하고 작업 레코드와 분리한 로컬 영수증을 보존 |
+| `repository-status` | 전체 검사 이후 Git 파일·작업 기록이 달라졌는지 읽기 전용으로 확인 |
+
+`status.repositoryConsistency`는 작업의 기능 증거와 별개의 전체 저장소 검사 상태다. 작업이 완료돼도 이후 다른 작업 기록이 바뀌면 전체 검사는 오래된 상태일 수 있다. 최종 기록 갱신 후 `check-repository`에 `command`, `args`를 지정해 다시 검사한다. 기본 명령은 현재 Node로 작업 계약 검사기를 실행한다. 상세 정책과 잠금 복구의 한계는 [공통 계약](skills/WORKFLOW.md)을 따른다.
 
 `open.decision`은 역할이 정리한 `intent`, `area`, `title`, `kind`, `areas`, `owner`, `criteria`와 필요한 기존 `workId`를 전달한다. 각 기준은 ID·설명·필수 여부와 선택적 `requirementRefs`를 가진다. `approval`은 구현·쓰기 경로·변경 표면·허용 검증 명령·커밋·게시 범위이고, `inputs`는 검사 의존 파일·디렉터리의 저장소 상대 경로다. 사용자 원문을 단순 키워드만으로 구현 승인으로 바꾸지 않는다.
+
+문서 영향 검토의 정본과 필수 문서 범위는 [공통 계약](skills/WORKFLOW.md#문서-영향-검토)을 따른다. 아래는 항목 형식의 부분 예시이며, 실제 호출에는 필수 문서 전체와 해당 작업의 요구 참조 문서를 포함한다. 판단 기록은 `node scripts/workflow/work.ts '{"action":"document-review","workId":"work-UUID","documents":[{"path":"docs/ARCHITECTURE.md","decision":"unchanged","reason":"모듈 책임과 데이터 흐름이 유지됨"}]}'`로 남긴다. 완료 시 현재 source·criteria·문서 digest에 맞는 기록이 요구된다.
 
 기존 schema1은 기본 읽기와 기존 직접 호출을 유지한다. 현재 요청을 `adopt` 또는 `open.decision`의 `workId`·`adoptLegacy`·`intent`로 명시 연결하면 과거 레코드 전체와 기존 검증 문서를 남긴 채 현재 결과를 `unverified`에서 다시 확인한다. 신규 접수와 입력 갱신은 `requirementRefs`가 가리키는 문서 파일도 검사 범위에 자동 포함한다.
 
 다음은 현재 Workflow 작업의 **레코드 읽기만 수행하며 모델을 호출하지 않는** 예제다.
 
 ```sh
-node scripts/workflow/work.mjs '{"action":"read","workId":"work-d5528c42-2849-48bd-9a9f-d8c80bf67f07"}'
+node scripts/workflow/work.ts '{"action":"read","workId":"work-d5528c42-2849-48bd-9a9f-d8c80bf67f07"}'
 ```
 
-기존 GJC 경로의 실제 실행에는 `execute: true`, 안정적인 `eventId`, 유효한 권한, `writes`·`surfaces`, 실제 `verifier`가 필요하다. 해당 경로의 `approval.verifierCommands`는 허용한 command/args 배열의 JSON 문자열 목록이다. `run.mjs`의 새 역할 분기는 같은 접수·권한·증거 계약과 연결하며 현재 소스와 작업 검증 기록으로 지원 범위를 확인한다. 실패·중복·불명확 결과를 같은 변경 명령의 자동 재실행으로 해결하지 않는다.
+기존 GJC 경로의 실제 실행에는 `execute: true`, 안정적인 `eventId`, 유효한 권한, `writes`·`surfaces`, 실제 `verifier`가 필요하다. 해당 경로의 `approval.verifierCommands`는 허용한 command/args 배열의 JSON 문자열 목록이다. `run.ts`의 새 역할 분기는 같은 접수·권한·증거 계약과 연결하며 현재 소스와 작업 검증 기록으로 지원 범위를 확인한다. 실패·중복·불명확 결과를 같은 변경 명령의 자동 재실행으로 해결하지 않는다.
 
-`boxboxLauncher`와 `boxboxFiles`를 명시하면 설치된 로컬 런처의 파일별 guide를 호스트에 전달하고 pre/post source 검사를 수행한다. 런처를 자동 설치하거나 미승인 정렬을 수행하지 않는다.
+구현 하네스와 BoxBox 로컬 설정·실패 판정은 [TypeScript 작성 및 하네스](#typescript-작성-및-하네스)를 따른다.
 
 런타임 세션 `done`은 작업의 `work.json` 완료가 아니다. verifier의 기준 매핑은 호출자가 지정한 검사 범위이며 최종 수용은 검증 기록과 대조한다. 원본 요청·컨텍스트·verifier argv는 사건에 남기지 않으며, Skill hash와 승인 범위·명령 hash·실제 exit를 기록한다. 상세 한계와 테스트는 해당 작업의 [재검증 기록](work/Workflow/001-Skills%20실행과%20개발%20기록%20자동화/verification.md)에 있다.
 
@@ -100,7 +135,7 @@ node scripts/workflow/work.mjs '{"action":"read","workId":"work-d5528c42-2849-48
 
 ## 검증과 알려진 한계
 
-검증은 `npm run check`로 타입 검사, fake JSONL transport 테스트, 이벤트 투영 테스트, Bun 번들을 수행한다. 테스트는 응답/알림 라우팅, 스트리밍 완료, 숫자 승인 ID 보존, EOF 시 불확실 실패와 무재시도, 지원하지 않는 요청 표시를 다룬다. 합성 fixture 기반이라 실제 사용자 내용은 포함하지 않는다.
+검증은 `npm run check`로 소스 정책, 앱·도구 타입 검사, fake JSONL transport 테스트, 이벤트 투영 테스트, Bun 번들을 수행한다. 테스트는 응답/알림 라우팅, 스트리밍 완료, 숫자 승인 ID 보존, EOF 시 불확실 실패와 무재시도, 지원하지 않는 요청 표시를 다룬다. 합성 fixture 기반이라 실제 사용자 내용은 포함하지 않는다.
 
 초기 비교에서는 주간 사용량을 소비하지 않기 위해 실제 추론을 생략했다. 이후 첫 Chat 검증에서는 인증·사용량 확인 뒤 현재 Electron 앱에서 실제 Codex의 `READY` 단문 응답을 확인했다. 승인 왕복·긴 출력·실패·중단·읽기 상태는 실제 Electron 창과 합성 app-server fixture로 별도 확인했다. 실제 Native 승인·변경 작업, Windows·한국어 IME 실기, 플랫폼 sandbox 전체는 미검증이다. [Chat 검증 기록](work/Chat/001-Native%20흐름%20통제와%20가독성/verification.md)의 증거 범위를 따른다. 이벤트는 최근 2,000개, 명령 출력은 최근 32,768 UTF-16 코드 단위만 보관하며 완전한 원본 복원을 보장하지 않는다.
 
@@ -139,7 +174,7 @@ npm run package:tauri
 npm run benchmark:comparison
 ```
 
-`test/fixtures/fake-app-server.mjs`는 두 백엔드가 공통으로 실제 stdio 프로세스 경계를 통과해 사용하는 fixture다. 스트리밍 delta, 명령 완료, 파일 이벤트, 숫자 ID `42` 승인 응답, interrupt, EOF와 존재하지 않는 CLI를 다룬다. EOF에서 대기 요청은 결과 불확실 오류가 되고 자동 재시도하지 않는다. 렌더러 투영은 기존 테스트를 그대로 공유한다. fixture는 `codex`를 실행하지 않으므로 비교 테스트가 실제 추론을 시작하지 않는다.
+`test/fixtures/fake-app-server.ts`는 두 백엔드가 공통으로 실제 stdio 프로세스 경계를 통과해 사용하는 fixture다. 스트리밍 delta, 명령 완료, 파일 이벤트, 숫자 ID `42` 승인 응답, interrupt, EOF와 존재하지 않는 CLI를 다룬다. EOF에서 대기 요청은 결과 불확실 오류가 되고 자동 재시도하지 않는다. 렌더러 투영은 기존 테스트를 그대로 공유한다. fixture는 `codex`를 실행하지 않으므로 비교 테스트가 실제 추론을 시작하지 않는다.
 
 ### 관찰 결과
 
@@ -174,3 +209,31 @@ npm run benchmark:comparison
 587 대 204는 단순 원시 물리 줄 수일 뿐 유지보수 비용의 2.8배라는 증거가 아니다. Rust 수치에는 이 파일에 함께 둔 embedded tests, 더 세로로 펼쳐지는 `rustfmt` 형식, 명시적인 타입·오류 처리도 포함되고 두 경로의 코드 구성도 다르다. 다만 이 스파이크에서 Tauri 쪽이 Rust 소유권·스레드·동기화와 command/event 직렬화를 추가로 가진다는 정성적 차이는 있다. 반면 배포 앱은 훨씬 작았다. Rust 자체가 안전을 보장하지는 않는다. child lifecycle, 승인 ID 검증, IPC 입력 검증, uncertain mutation 무재시도 정책이 실제 안전 경계이며 두 구현 모두 계속 테스트해야 한다.
 
 비교 당시에는 **제품을 즉시 Tauri로 전환하지 않는 것**을 권고했다. 앱 크기만이 최우선이면 Tauri의 이점이 크지만, 제한된 readiness 표본은 이 장비에서 Electron 쪽이 짧았고 코드량만으로 유지보수 비용 배수를 산정할 수는 없었다. 전체 process-tree 메모리, 실제 Codex 세션, macOS 한국어 IME 수동 입력, Windows 빌드·WebView2·샌드박스에는 추가 검증이 필요했다. 이 스파이크는 macOS arm64만 빌드했으므로 Windows 동작을 추론하거나 인증하지 않는다. 현재의 제품 선택은 위 기술 결정에 따라 Electron으로 확정했으며, 이 과거 비교가 진행 중인 셸 선택이나 Tauri 마이그레이션 계획을 뜻하지 않는다.
+
+## Native 활동 패널 검증
+
+채팅 오른쪽의 답변 흐름은 `src/native-activity.ts`의 사건 투영과 `src/native-activity-view.tsx`의 화면으로 구성한다. `bun test test/native-activity.test.ts test/projection.test.ts`로 턴 귀속·중복·사용량 차이·승인·이력 절단을 검사한다. `node scripts/verify-native-activity.ts`는 타입 검사·집중 검사·빌드 후 실제 Electron과 합성 Native subprocess로 두 답변의 선택 유지, Skill 읽기, 동기 Hook, 토큰 중복 방지, 모델 전환과 비공개 추론 미노출을 확인한다. 명시적 `--ui-only`는 집중 검사·빌드·GUI만 실행하고 전체 타입 검사는 `not_run`으로 기록하는 별도 범위다. 전체 검사 실패를 자동으로 이 모드의 통과로 바꾸지 않는다. 검사 중 다른 빌드로 `dist`를 바꾸지 않는다.
+
+`bun test/verify-native-activity-live.ts`는 실제 인증과 모델 사용량을 쓰는 명시적 검사다. 임시 읽기 전용 작업 폴더에서 공개 답변·토큰·구조화된 Skill 문서 읽기·Hook 관측을 확인하고 요약만 증거 폴더에 저장한다. 일반 `bun test`에는 포함하지 않는다. 합성 시나리오의 성공과 실제 Native 표본을 구분하고, 비동기 Hook·모델별 청구 비용·모든 플랫폼 동작까지 확인했다고 확대하지 않는다.
+
+## 생태계 지도 유지보수
+
+사이드바의 생태계는 src/ecosystem.ts의 정적 안내와 src/ecosystem-view.tsx의 SVG 화면으로 구성된다. 구조 변경 시 노드의 역할·근거 경로·방향 관계·후속 구분을 갱신한다. bun test test/ecosystem.test.ts로 출처 경로·관계 무결성과 검색을 확인하고, 실제 Electron에서 전환·초안 보존·노드·필터·배율을 확인한다. 정적 지도와 실시간 상태는 구분한다.
+
+## 작업 보고서 실행과 유지보수
+
+저자는 [작업 종료 보고서 계약](skills/REPORTS.md)에 따라 work CLI의 report action으로 서술을 저장한다. reports 서비스·sandbox iframe·독립 HTML은 같은 구조화 데이터를 사용한다. 개발 역할의 core·하네스 사건이 자동 기록을 만들며 전역 호스트 Stop 등록은 전제하지 않는다. 보고서 생성에 실패한 reportHook 결과를 검사 성공으로 숨기지 않는다.
+
+집중 검사 위치는 test/workflow-reports.test.ts, test/report-service.test.ts, test/workflow-work.test.ts, test/workflow-development.test.ts다. scripts/verify-reports.ts는 실제 Electron과 합성 Native로 리포트 IPC·화면 전환을 확인한다. 보고서 HTML은 좁은 화면·키보드·모션 축소·인쇄를 별도로 확인한다.
+
+Native 자동 보고서의 집중 검사는 test/native-report-input.test.ts, test/native-reports.test.ts, test/report-judge.test.ts다. 실제 별도 subprocess 프로토콜·판단 거부·타임아웃·취소·큐·중복·재시작을 검사한다. scripts/verify-reports.ts는 실제 Electron에서 합성 Native 종료→합성 판단 subprocess→저장→sandbox iframe 표시를 확인한다. 실제 모델의 필요/생략 판단은 별도 실행 증거로 구분하며 합성 실행으로 판단 품질을 입증하지 않는다. probe에서는 자동 판단이 기본으로 꺼지고 WWW_PROBE_NATIVE_REPORTS=1일 때만 켠다. 판단 바이너리 주입은 probe 모드에서만 허용한다.
+
+실제 모델 검사는 `bun test/verify-native-report-live.ts`로 명시 실행한다. 별도 읽기 전용 Codex 판단에 인사와 설계의 합성 공개 답변을 전달하고 각각 생략·저장 결과와 실제 생성된 보고서를 확인한다. 인증·모델 사용량을 사용하는 검사이며 일반 bun test에는 포함되지 않는다. 합성 Electron 연결 검사와 별도 검증 시도로 work.json에 연결한다.
+
+독자용 보고서 확장은 narrative.reader를 사용한다. story와 요구별 결과·검사 내용은 실제 입력과 원장에 근거하고 누락은 null/빈 배열로 남긴다. 기존 fields와 과거 JSON/HTML은 유지한다. 파싱·저장·완료 이력·Native 큐 보존을 함께 검사한다. report-view의 raw details에만 긴 식별자·명령·당시 적용성 요약을 보존하며, 실제 자료가 잘렸을 때만 생략을 알린다. scripts/verify-reports.ts는 실제 iframe의 report-story 본문과 양수 box 높이를 확인한다. 동일 HTML의 주기 갱신은 프레임을 다시 로드하지 않고, 현재성 때문에 HTML이 바뀌면 갱신해 본문과 배너가 어긋나지 않게 한다.
+
+## 자연스러운 진행 설명과 공개 추론 요약
+
+`src/native-chat.ts`의 params 함수를 main이 실제 `thread/start`·`turn/start`에 사용한다. 스레드의 `developerInstructions`에 한국어 진행 설명 지침을 더하고 턴에서 `summary: "detailed"`를 요청한다. 기존 cwd·`workspace-write`·`on-request`와 text 입력 구조를 보존하며 baseInstructions·모델·effort·전역 설정은 바꾸지 않는다. 로컬 codex-cli 0.167.2 생성 스키마에서 해당 필드를 확인했다.
+
+`bun test test/projection.test.ts test/native-chat.test.ts test/native-activity.test.ts test/input.test.ts test/native-report-input.test.ts`로 실제 main params 배선, 공개 요약 lifecycle·섹션·중복·snapshot·잘못된 입력·턴 격리·종료·절단과 기존 경로를 검사한다. `test/fixtures/fake-app-server.ts`는 기존 MODE에 공개 summary와 private sentinel 사건을 추가해 Electron probe에서 공개 요약 표시와 원문 미노출을 점검할 수 있게 한다. 합성 fixture·투영 검사와 실제 Native의 설명 빈도·요약 제공, 실제 DOM 확인은 구분해 기록한다. 이번 변경 자체가 새 실제 GUI·Native 검증 완료를 뜻하지 않는다.

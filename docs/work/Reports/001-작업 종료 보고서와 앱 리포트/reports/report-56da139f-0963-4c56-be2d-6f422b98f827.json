@@ -1,0 +1,305 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-56da139f-0963-4c56-be2d-6f422b98f827",
+  "workId"        : "work-82e8475f-380f-460c-9cd2-5bbef0126625",
+  "title"         : "작업 종료 보고서와 앱 리포트",
+  "summary"       : "일부 확인 · 후속 작업 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome"       : "partial",
+  "kind"          : "snapshot",
+  "event"         : "review",
+  "createdAt"     : "2026-11-12T04:46:09.663Z",
+  "workRecordHash": "736e7b380d72bd396d0141e227d33c16f231e673cb054a507c6e196bb65973a9",
+  "sourceDigest"  : "170e88e980d2a24fd5bc2a448444582e1c148168eb327083122e32a4bcfe8739",
+  "criteriaDigest": "9e5ffa587390fd87fdeffac0c3353d0691050c91f52b7128600fbc6bd558203e",
+  "semanticHash"  : "0fe753750db4297e7d58e508b34015a35337b3973ce01c4ec4e2e8d8b4966b07",
+  "narrative"     : null,
+  "work": {
+    "status": "verifying",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id"         : "AC-1",
+        "description": "사이드바 리포트에서 실제 작업 보고서와 이력·빈 상태·오류를 읽고 대화 상태를 보존한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-d68c8a71-29f0-43d4-a460-7dabee569117",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-3d106558-8a2e-4f6e-8b94-1a74c42f0f88",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-2",
+        "description": "저자가 작성한 작업 설명과 검증·검토 근거를 구분한 독립 HTML 보고서를 저장하고 안전하게 내보낸다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-d68c8a71-29f0-43d4-a460-7dabee569117",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-3d106558-8a2e-4f6e-8b94-1a74c42f0f88",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-3",
+        "description": "검증·검토·하네스 종료 훅이 보고서를 실제 저장하며 중복 실행·생성 실패·미완료 상태를 구분한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-d68c8a71-29f0-43d4-a460-7dabee569117",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-3d106558-8a2e-4f6e-8b94-1a74c42f0f88",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-4",
+        "description": "신규 작업 완료 판정은 현행 소스·기준의 저작 보고서가 필요하며 기존 검증·검토 조건을 유지한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-d68c8a71-29f0-43d4-a460-7dabee569117",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-3d106558-8a2e-4f6e-8b94-1a74c42f0f88",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-5",
+        "description": "집중 행동·보안 검사, 타입·빌드와 Electron 통합 및 인쇄·좁은 화면 검증을 수행한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-d68c8a71-29f0-43d4-a460-7dabee569117",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-3d106558-8a2e-4f6e-8b94-1a74c42f0f88",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-6",
+        "description": "Native 공개 답변 종료 뒤 실제 LLM의 필요 여부 판단과 자동 보고서 저장을 연결하고 생략·중복·실패·재시도·재시작을 구분한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-266da281-ccd5-447a-bb29-7a6ec7c4a7dd",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-9604fbc3-9e22-4940-a4e2-1658ea0b7816",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-121694fb-592a-4270-bdb0-d61b4b5dab77",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-402e0a66-d28f-477c-b08e-fb6fe95fe8d2",
+        "command": "node",
+        "args": [
+          "scripts/verify-reports.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T04:31:30.140Z"
+      },
+      {
+        "id": "attempt-266da281-ccd5-447a-bb29-7a6ec7c4a7dd",
+        "command": "bun",
+        "args": [
+          "test/verify-native-report-live.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "failed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": false,
+        "completedAt" : "2026-11-12T04:34:55.315Z"
+      },
+      {
+        "id": "attempt-d68c8a71-29f0-43d4-a460-7dabee569117",
+        "command": "node",
+        "args": [
+          "scripts/verify-reports.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T04:38:24.193Z"
+      },
+      {
+        "id": "attempt-9604fbc3-9e22-4940-a4e2-1658ea0b7816",
+        "command": "bun",
+        "args": [
+          "test/verify-native-report-live.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T04:38:25.139Z"
+      },
+      {
+        "id": "attempt-121694fb-592a-4270-bdb0-d61b4b5dab77",
+        "command": "bun",
+        "args": [
+          "test/verify-native-report-live.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T04:44:15.658Z"
+      },
+      {
+        "id": "attempt-3d106558-8a2e-4f6e-8b94-1a74c42f0f88",
+        "command": "node",
+        "args": [
+          "scripts/verify-reports.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T04:44:20.213Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id"         : "review-dfb10dbc-5a8c-4bc0-ad7f-cc7e88a4675d",
+        "verdict"    : "fail",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-dfb10dbc-5a8c-4bc0-ad7f-cc7e88a4675d/opus.json",
+        "findings": [
+          "[결함] src/native-reports.ts:269-275 — execute()의 catch가 오류 객체를 버리고, 모든 실패에 같은 status \"failed\"와 같은 reason(\"자동 보고서 판단 또는 저장에 실패했습니다…\")을 기록한다. src/report-judge.ts:185는 시간 초과(\"보고서 LLM 판단 시간이 초과되었습니다.\")를, 90·93행은 판단 JSON 형식 오류를 서로 다른 메시지로 던지고, registerWork/publishWorkReport의 저장 실패도 다른 예외다. 그런데 이 셋이 앱에서 구분되지 않는다. docs/specs/reports.md REPORTS-5는 \"모델 판단 오류·타임아웃·저장 실패를 별도 상태로 표시한다\"고 명시하고, work.json의 documentationReviews도 이 문서를 실제 경계를 반영해 updated했다고 기록한다. 재현: judge가 timeout으로 reject하는 경우와 publishWorkReport가 throw하는 경우의 NativeReportJob을 비교하면 status와 reason이 같다. 수정 방향은 둘 중 하나다. 코드에서 실패 유형(judge_error/timeout/save_failed 등)을 원문 노출 없이 구분해 저장하거나, 명세의 주장을 실제 동작으로 축소한다.",
+          "[결함·부수] src/main.ts:281의 before-quit에서 reportAbort.abort()를 호출하면 report-judge.ts:123의 \"취소\" 예외가 위 catch로 들어가 디스크 상태가 \"failed\"로 저장된다. 재시작 뒤 native-reports.ts:324의 interrupted 전환은 queued/judging만 대상이므로, 정상 종료로 중단된 항목은 interrupted가 아니라 '명시적으로 재시도할 수 있습니다'라는 failed로 남는다. 하지만 메모리 원문이 없어 retry는 344행에서 항상 거부된다. docs/skills/REPORTS.md:36의 '재시작한 미완료 항목은 interrupted로 표시한다'와 맞지 않고, 안내 문구가 사용자를 오도한다.",
+          "[증거 범위] work.json의 AC-6(\"실제 LLM의 필요 여부 판단과 자동 보고서 저장을 연결\")이 attempt-402e0a66으로 passed 처리돼 있다. 그런데 scripts/verify-reports.ts:50-54는 WWW_PROBE_REPORT_JUDGE_BIN에 합성 judge fixture를 주입하고, 서술 자체도 '실제 모델이 아닌 합성 판단 fixture'라고 밝힌다. 실제 Codex app-server 판단 경로(report-judge.ts의 기본 binary 해석·읽기 전용 정책)는 이 검증에서 실행되지 않았다. 기준 요약 '실제 검증 passed; 현재 적용 가능'은 증거 범위를 넘는다. 기준 문구를 '연결 경계'로 좁히거나 한계를 evidence summary에 남겨야 한다.",
+          "[확인·문제 없음] scripts/workflow/reports.ts의 보고서 읽기 경로는 inside()의 lstat 단계별 symlink 거부, O_NOFOLLOW, 1 MiB/2 MiB 제한, REPORT_ID 정규식을 적용한다. renderWorkReport는 모든 사용자 값을 escape하고 CSP default-src 'none'을 둔다. 내보내기(src/main.ts:124-130)는 ID만 받아 main의 showSaveDialog 경로에 쓴다. REPORTS-3의 경계와 일치한다.",
+          "[확인·문제 없음] 완료 게이트: scripts/workflow/report-lifecycle.ts:142가 www-dev+complete+workId 경로를 completeReportedWork로 가로챈다. workId 없이 requestId만 쓰는 complete는 work.mjs:80의 assertNewRequest가 거부하므로 typed 경로의 우회는 확인되지 않았다. src/development.ts도 completeReportedWork를 사용한다. 단, scripts/workflow/work.mjs의 CLI action 'complete'는 reportingRequired를 검사하지 않는다. 명세가 '공식 typed 경로'로 범위를 한정하므로 결함으로 보지는 않는다.",
+          "[미실행] 이 검토는 읽기 전용으로 수행했다. scripts/verify-reports.ts, bun test, npm run check를 직접 실행하지 않았다. 통과 여부는 work.json에 기록된 attempt-402e0a66(종료 코드 0, stdout 원문 미보관)에만 근거한다. work.json에 기록된 검증 입력 digest는 요청에 제공된 파일 digest와 일치한다."
+        ]
+      },
+      {
+        "id"         : "review-225465b3-7272-445f-91d4-ce864d4c916c",
+        "verdict"    : "fail",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-225465b3-7272-445f-91d4-ce864d4c916c/opus.json",
+        "findings": [
+          "[결함] src/native-reports.ts:62-70 executionFailure는 judge 단계 오류를 report-judge.ts의 한국어 문구 일부(\"LLM 보고서 판단 JSON이 올바르지 않습니다.\", '보고서 판단 '으로 시작하고 '올바르지 않습니다.'로 끝나는 문구, SyntaxError)로만 invalid_response로 분류한다. 그런데 실제 판단기의 응답 형식 위반 일부는 이 패턴에 맞지 않는다. ① src/report-judge.ts:93 needed=false인데 narrative가 null이 아닐 때 나오는 \"보고서 불필요 판단에는 서술을 만들 수 없습니다.\" ② src/report-judge.ts:149 최종 응답이 비었거나 너무 길 때 나오는 \"보고서 판단의 최종 응답이 없거나 제한을 넘었습니다.\" 이 두 경우는 judge_error(\"보고서 LLM 판단 실행에 실패했습니다.\")로 표시된다. 반대로 src/report-judge.ts:98·105의 입력 검증 오류(\"보고서 판단 입력이 올바르지 않습니다.\" 등)는 모델 응답 문제가 아닌데도 invalid_response로 분류된다. 재현: judgeNativeReport에 needed=false, narrative={...}를 최종 메시지로 반환하는 fake app-server를 연결하면 실패 사유가 'JSON 또는 서술 형식'이 아니라 '실행에 실패'로 저장된다. 첫 Opus 검토가 지적한 '형식 오류·실행 실패가 하나로 뭉침' 문제와 AC-6의 '실패 구분'이 실제 판단기 경로에서는 일부만 해결됐다.",
+          "[근거 범위] test/native-reports.test.ts:235-251의 분류 테스트는 judge 대신 임의의 Error/SyntaxError를 직접 던진다. 실제 judgeNativeReport가 내는 오류 문구와 분류가 맞는지는 검증하지 않는다. 그래서 위 오분류는 13개 집중 검사와 attempt-d68c8a71·attempt-9604fbc3 통과로 드러나지 않는다. 문구 문자열을 맞춰 보는 방식 대신 판단기가 오류 종류를 타입·code로 넘기고 실제 판단기 오류 경로를 테스트하는 방식을 권장한다.",
+          "[확인] 현재 소스의 파일 digest(native-reports.ts 9825e1a1…, reports-view.tsx 6272eb68…, shared.ts d41348da…, verify-native-report-live.ts eb925225…, typed-workflow.test.ts aff8e69e…, scripts/workflow.ts e3015df8…)는 work.json의 attempt-d68c8a71(AC-1~5)·attempt-9604fbc3(AC-6) 기록과 일치한다. 두 시도는 exitCode 0, sourceStable=true다. sourceStable=false인 attempt-266da281은 failed로 남아 있고, 통과로 재사용되지 않았다.",
+          "[확인·참고] attempt-402e0a66은 합성 fixture인 verify-reports.ts인데 AC-6까지 연결했다. 소스 digest도 6d7396…으로 현행과 다르다. 그런데 work.json의 AC-1~AC-6 evidence에는 기록 당시 요약인 '현재 적용 가능'이 그대로 남아 있다. 이후 시도는 AC-6을 빼서 범위를 좁혔고, schema.mjs:120은 기준별 최근 시도만 완료 판정에 쓰므로 판정 자체는 영향받지 않는다. 다만 이 요약 문구를 현재 적용성 근거로 인용하면 안 된다.",
+          "[확인] 취소(AbortError, \"보고서 판단이 취소됐습니다.\")는 interrupted로 저장되고 메모리에서 원문이 제거된다. retryAvailable은 failed이면서 메모리에 원문이 있을 때만 true이고, 화면(reports-view.tsx:128)은 이 경우에만 '다시 판단' 버튼을 보여 준다. 재시작한 뒤 list()는 queued·judging을 interrupted로, 원문 없는 failed를 '재시도할 수 없습니다' 문구로 다시 쓴다. 이 경계는 소스와 테스트 모두에서 확인했다. 이번 검토에서 명령이나 테스트를 직접 실행하지는 않았다.",
+          "[참고·경미] main.ts:281은 before-quit에서 공유 reportAbort를 한 번만 abort한다. 다른 핸들러가 종료를 취소하면 이후의 모든 자동 판단이 즉시 '취소됨'(interrupted)으로 끝나고, 앱을 다시 시작할 때까지 회복되지 않는다. 또 execute에서 publishWorkReport가 성공한 뒤 state(saved) 저장만 실패하면 failed·재시도 가능으로 남는다. 이때 재시도하면 같은 작업에 보고서가 한 번 더 발행될 수 있다. publishWorkReport의 멱등성은 확인하지 않았다."
+        ]
+      },
+      {
+        "id"         : "review-376b178f-7b33-43c5-880e-c92814731c2f",
+        "verdict"    : "pass",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-376b178f-7b33-43c5-880e-c92814731c2f/opus.json",
+        "findings": [
+          "[확인] 두 번째 Opus 검토(review-225465b3)가 지적한 오분류를 수정했다. src/report-judge.ts:26-31은 ReportJudgeError와 REPORT_JUDGE_INVALID_RESPONSE / INVALID_INPUT / TIMEOUT / CANCELLED 코드를 정의한다. 다음 경로는 모두 INVALID_RESPONSE 코드로 감싼다: 불필요 판단인데 narrative가 있는 경우(100행), 빈 최종 응답이나 과대 최종 응답(158행), decision() 파싱 오류(162행), 최종 메시지 형식 위반(185행), protocolError(192행). 입력 검증 오류는 INVALID_INPUT(131·134행), 시간 초과는 TIMEOUT(194행), 취소는 CANCELLED(132·148행)다. src/native-reports.ts:63-77의 executionFailure는 더 이상 문구 일부로 종류를 추측하지 않고 실행 단계(state/judge/decision/save)와 code만으로 분류한다.",
+          "[확인] 실제 판단기 subprocess에서 저장 하네스까지 이어지는 오류 경로를 통합 테스트로 확인한다. test/report-judge.test.ts:149-159는 fake binary의 형식 위반 응답이 '응답의 JSON 또는 서술 형식' 안내로 저장되는지 본다. 같은 파일 169-178은 timeoutMs=1 입력 오류가 '입력의 형식 또는 범위' 안내로 저장되는지 본다. 앞 검토의 근거 범위 지적(임의 Error를 직접 던지는 테스트만 있음)이 보완됐다. 이번 검토에서 이 테스트를 직접 실행하지는 않았다.",
+          "[확인] 취소는 interrupted로 저장되고 메모리 원문이 제거된다(native-reports.ts:321-325). 재시작 뒤 list()는 queued·judging을 interrupted로 바꾼다. 메모리에 원문이 없는 failed는 failureKind 접두 판별로 '재시도할 수 없습니다' 안내로 다시 쓴다(380-395행). retryAvailable은 failed이면서 메모리에 원문이 있을 때만 true다(396행). src/main.ts에는 before-quit 취소(preventDefault) 경로가 없다. 따라서 공유 reportAbort가 종료 취소 뒤 영구 abort 상태로 남는 시나리오는 현재 소스에서 재현되지 않는다.",
+          "[확인·경미] 앞 검토에서 참고로 남긴 저장 후 재시도 중복 발행을 확인했다. publishWorkReport는 scripts/workflow/reports.ts:384-398에서 semanticHash(kind·event·workRecordHash·sourceIdentity·narrative)가 같은 기존 보고서를 재사용한다. registerWork도 native.key로 기존 작업 폴더를 찾는다. 따라서 saved 상태 저장만 실패한 뒤 같은 decision으로 재시도해도 같은 보고서를 다시 쓰지 않을 가능성이 높다. 다만 그 사이 work.json이 바뀌면 새 보고서가 생길 수 있다. 결함으로 보지는 않는다.",
+          "[확인] 현재 파일 digest가 work.json의 최신 시도 source 기록(5868f0b3…)과 일치한다: src/native-reports.ts 7c74bbd7…, src/report-judge.ts f01ebb6e…, src/reports-view.tsx 6272eb68…, src/shared.ts d41348da…, test/report-judge.test.ts 14a3e4ea…, test/native-reports.test.ts c8aff55a…, test/verify-native-report-live.ts eb925225…, scripts/workflow.ts e3015df8…, docs/skills/REPORTS.md 214912f0…. AC-1~5 시도 attempt-3d106558과 AC-6 실제 모델 시도 attempt-121694fb는 두 시도 모두 exitCode 0, sourceStable=true다. sourceStable=false인 attempt-266da281은 failed로 남아 있고, 통과로 재사용하지 않았다.",
+          "[참고] work.json의 AC-1~6 evidence에는 과거 시도 attempt-402e0a66·d68c8a71·9604fbc3의 기록 당시 요약 '현재 적용 가능'이 그대로 남아 있다. 특히 402e0a66은 합성 판단 fixture인데 AC-6에 연결돼 있다. verification.md:103과 schema가 기준별 최신 시도와 지문으로 판정한다고 밝히므로 완료 판정에는 영향이 없다. 다만 이 요약을 현재 적용성 근거로 인용하면 안 된다.",
+          "[참고·범위] AC-6의 실제 모델 근거(test/verify-native-report-live.ts)는 합성 공개 답변 두 개(인사→skipped, 설계 답변→saved)를 실제 Codex에 보낸 표본이다. 이 근거는 일반 판단 품질, 실제 변경 작업 수행, Windows 실기 검증을 포함하지 않는다. verification.md:95·98과 스크립트의 limitation 필드도 이 한계를 명시하므로 증거 범위를 넓혀 쓴 것으로 보지 않는다. docs/specs/reports.md REPORTS-5의 '판단 오류·타임아웃·저장 실패를 별도 상태로 표시' 요구는 현재 코드 분류와 맞는다.",
+          "[미실행] 이 검토는 읽기 전용이다. scripts/verify-reports.ts, bun test, npm run check, test/verify-native-report-live.ts를 직접 실행하지 않았다. 통과 여부는 work.json의 시도 기록과 verification.md의 서술에만 근거한다."
+        ]
+      }
+    ]
+  },
+  "source": {
+    "recordPath"    : "docs/work/Reports/001-작업 종료 보고서와 앱 리포트/work.json",
+    "workRecordHash": "736e7b380d72bd396d0141e227d33c16f231e673cb054a507c6e196bb65973a9",
+    "sourceDigest"  : "170e88e980d2a24fd5bc2a448444582e1c148168eb327083122e32a4bcfe8739",
+    "criteriaDigest": "9e5ffa587390fd87fdeffac0c3353d0691050c91f52b7128600fbc6bd558203e"
+  }
+}
