@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-2c2a8b5b-2040-442e-909b-e48a523e2af4",
+  "title"        : "용도와 역할별 커밋 후보 분리",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "전역 포인터가 실제 WWW 정본과 목적별 커밋 분리 기준으로 연결된다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-2",
+      "description": "커밋 스킬과 양식이 목적·검증·되돌리기 경계·의존 순서를 정하고 후보별 stage·commit을 요구한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-3e1c3248-30bd-494c-a88e-9686ecf0d513",
+          "path"     : "verification.md#attempt-3e1c3248-30bd-494c-a88e-9686ecf0d513",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-3",
+      "description": "전체 변경 승인·단일 파일·종속 변경의 예외와 기존 승인 승계를 다루며 이력을 재작성하거나 commit·push하지 않는다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-3e1c3248-30bd-494c-a88e-9686ecf0d513",
+          "path"     : "verification.md#attempt-3e1c3248-30bd-494c-a88e-9686ecf0d513",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "purpose-scoped-commit-20261112",
+    "requestHash": "4dd35c222f1b1c276ae443017dfe1d4b0737db865ad51cfa8acb437c1e379967",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "AGENTS.md",
+        "skills/www/www-commit/SKILL.md",
+        "docs/skills/templates/commit.md"
+      ],
+      "mutationSurfaces": [
+        "edit"
+      ],
+      "verifierCommands": [
+        "[\"node\",\"scripts/check-workflow.ts\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "4dd35c222f1b1c276ae443017dfe1d4b0737db865ad51cfa8acb437c1e379967"
+    },
+    "inputs": [
+      "AGENTS.md",
+      "docs/skills/templates/commit.md",
+      "skills/www/www-commit/SKILL.md"
+    ],
+    "nextAction": "review",
+    "verifications": [
+      {
+        "id"         : "attempt-3e1c3248-30bd-494c-a88e-9686ecf0d513",
+        "startedAt"  : "2026-11-12T07:58:39.078Z",
+        "completedAt": "2026-11-12T07:58:39.271Z",
+        "source": {
+          "head": "4ef13d29b18188642bf7f7bef6c7d1bb60bfc3c8",
+          "digest": "4681d3f62e0cf53c32c3d5240864d5c7b6f8ec128ca991c6c7197f161decfa0b",
+          "inputs": [
+            "AGENTS.md",
+            "docs/skills/templates/commit.md",
+            "skills/www/www-commit/SKILL.md"
+          ],
+          "files": [
+            {
+              "path"  : "AGENTS.md",
+              "type"  : "file",
+              "digest": "27f8bfff8c68fa78bb8b20e53d4f341753f943ecd28819f17d86e095bf86f1f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-commit/SKILL.md",
+              "type"  : "file",
+              "digest": "1bc4a0ce3157cd533738857b56809d8ea4ea0351228cff51225aaeb93d76ee04",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "7e8d8023b5bcfd9ada3a5d1b266ee1130c2d3c9e25e3d4ac08a599930ce0e51b",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "전역 포인터가 실제 WWW 정본과 목적별 커밋 분리 기준으로 연결된다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "커밋 스킬과 양식이 목적·검증·되돌리기 경계·의존 순서를 정하고 후보별 stage·commit을 요구한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "전체 변경 승인·단일 파일·종속 변경의 예외와 기존 승인 승계를 다루며 이력을 재작성하거나 commit·push하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/check-workflow.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-2",
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 96,
+            "digest"         : "63b443e7d5abc2eb0513b7375e27d3ed1bfbb9110abb5ccf34a85adfb3c4fd5e",
+            "truncated"      : false,
+            "retainedBytes"  : 96,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [],
+    "reportingRequired": true
+  }
+}

@@ -112,6 +112,11 @@ Native와의 대화에서 실행 흐름을 통제하고 진행·근거·승인·
 - [명세](Workflow/010-BoxBox%20%EC%A0%80%EC%9E%91%EA%B3%BC%20%EC%A0%84%EC%B2%B4%20%EB%B3%80%EA%B2%BD%20%EA%B2%80%EC%A6%9D/spec.md)
 - [작업 레코드](Workflow/010-BoxBox%20%EC%A0%80%EC%9E%91%EA%B3%BC%20%EC%A0%84%EC%B2%B4%20%EB%B3%80%EA%B2%BD%20%EA%B2%80%EC%A6%9D/work.json)
 
+### 011 — 용도와 역할별 커밋 후보 분리
+
+- [명세](Workflow/011-%EC%9A%A9%EB%8F%84%EC%99%80%20%EC%97%AD%ED%95%A0%EB%B3%84%20%EC%BB%A4%EB%B0%8B%20%ED%9B%84%EB%B3%B4%20%EB%B6%84%EB%A6%AC/spec.md)
+- [작업 레코드](Workflow/011-%EC%9A%A9%EB%8F%84%EC%99%80%20%EC%97%AD%ED%95%A0%EB%B3%84%20%EC%BB%A4%EB%B0%8B%20%ED%9B%84%EB%B3%B4%20%EB%B6%84%EB%A6%AC/work.json)
+
 ## Development
 
 ### 001 — Mac과 Windows 실사용 및 검증 신뢰성 완성

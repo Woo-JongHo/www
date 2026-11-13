@@ -1,0 +1,81 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>용도와 역할별 커밋 후보 분리 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 12일 오후 4:59 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>용도와 역할별 커밋 후보 분리</h1><p class="lead">다음 작업부터 용도·역할별 커밋 후보를 먼저 나누고 하나씩 실행하도록 환경에 반영했다.</p><div id="report-story" class="story">전체 변경을 저장소별 한 커밋으로 묶어 목적별 검토와 선택적 되돌리기가 어려웠다. 전역 정본 포인터도 낡은 위치를 가리켰다.
+
+전역 정본 경로와 분리 기준 연결, WWW 커밋 스킬, 준비 양식을 수정했다. 후보별 목적·경로·검증·의존 순서와 순차 stage·commit을 요구한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 1 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 다음 커밋 요청에서 목적별 후보와 실행 순서를 먼저 제시한다.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>머신 전역 지침은 정본의 후보 분리 기준으로 연결하고 실제 WWW 경로를 사용한다.</li><li>전체 범위 승인을 단일 커밋 지시로 해석하지 않으며 관련 구현·테스트·문서는 함께 둘 수 있다.</li><li>기존 승인 승계와 필요한 검증 재사용을 유지한다.</li></ul></div></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>전역 포인터가 실제 WWW 정본과 목적별 커밋 분리 기준으로 연결된다.</dt><dd>미검증으로 기록</dd></div><div><dt>커밋 스킬과 양식이 목적·검증·되돌리기 경계·의존 순서를 정하고 후보별 stage·commit을 요구한다.</dt><dd>당시 통과로 기록</dd></div><div><dt>전체 변경 승인·단일 파일·종속 변경의 예외와 기존 승인 승계를 다루며 이력을 재작성하거나 commit·push하지 않는다.</dt><dd>당시 통과로 기록</dd></div></dl></section><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>기존 게시 커밋은 유지하고 이번 환경 변경에서는 stage·commit·push를 실행하지 않는다.</li><li>의미 분류를 파일 수나 디렉터리 기반 Git hook으로 강제하지 않고 에이전트 절차로 적용한다.</li></ul></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>형식·문서 계약·경로 연결과 수동 절차 대조를 확인했다. 새 세션의 실제 커밋 행동 시험과 독립 감사는 수행하지 않았다.</li><li>머신 전역 파일은 이 저장소 밖에 있으며 다른 기기로 자동 동기화되지 않는다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><ul><li>다음 커밋 요청에서 목적별 후보와 실행 순서를 먼저 제시한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Workflow/011-용도와 역할별 커밋 후보 분리/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-2c2a8b5b-2040-442e-909b-e48a523e2af4<br>report-522434dd-7e42-4730-b555-f41ce882cced</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>efd070edcbaa771f5010a4271cf90cdcef02b611eeea9a84f0bdf1b36d9b40ef</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>4681d3f62e0cf53c32c3d5240864d5c7b6f8ec128ca991c6c7197f161decfa0b</code></dd></div><div><dt>기준 지문</dt><dd><code>7e8d8023b5bcfd9ada3a5d1b266ee1130c2d3c9e25e3d4ac08a599930ce0e51b</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;전역 포인터가 실제 WWW 정본과 목적별 커밋 분리 기준으로 연결된다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;커밋 스킬과 양식이 목적·검증·되돌리기 경계·의존 순서를 정하고 후보별 stage·commit을 요구한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-3e1c3248-30bd-494c-a88e-9686ecf0d513&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;전체 변경 승인·단일 파일·종속 변경의 예외와 기존 승인 승계를 다루며 이력을 재작성하거나 commit·push하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-3e1c3248-30bd-494c-a88e-9686ecf0d513&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-3e1c3248-30bd-494c-a88e-9686ecf0d513&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-workflow.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T07:58:39.271Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;다음 작업부터 용도·역할별 커밋 후보를 먼저 나누고 하나씩 실행하도록 환경에 반영했다.&quot;,
+  &quot;before&quot;: &quot;전체 변경을 저장소별 한 커밋으로 묶어 목적별 검토와 선택적 되돌리기가 어려웠다. 전역 정본 포인터도 낡은 위치를 가리켰다.&quot;,
+  &quot;after&quot;: &quot;전역 정본 경로와 분리 기준 연결, WWW 커밋 스킬, 준비 양식을 수정했다. 후보별 목적·경로·검증·의존 순서와 순차 stage·commit을 요구한다.&quot;,
+  &quot;changes&quot;: [
+    &quot;머신 전역 지침은 정본의 후보 분리 기준으로 연결하고 실제 WWW 경로를 사용한다.&quot;,
+    &quot;전체 범위 승인을 단일 커밋 지시로 해석하지 않으며 관련 구현·테스트·문서는 함께 둘 수 있다.&quot;,
+    &quot;기존 승인 승계와 필요한 검증 재사용을 유지한다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;기존 게시 커밋은 유지하고 이번 환경 변경에서는 stage·commit·push를 실행하지 않는다.&quot;,
+    &quot;의미 분류를 파일 수나 디렉터리 기반 Git hook으로 강제하지 않고 에이전트 절차로 적용한다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;형식·문서 계약·경로 연결과 수동 절차 대조를 확인했다. 새 세션의 실제 커밋 행동 시험과 독립 감사는 수행하지 않았다.&quot;,
+    &quot;머신 전역 파일은 이 저장소 밖에 있으며 다른 기기로 자동 동기화되지 않는다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;다음 커밋 요청에서 목적별 후보와 실행 순서를 먼저 제시한다.&quot;
+  ]
+}</pre></div></details></section></main></body></html>

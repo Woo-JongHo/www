@@ -10,5 +10,5 @@
 - 사용자 답변과 직접 작성·수정하는 모든 문서(명세·설계·작업·분석·Skills·템플릿·검증 보고서)는 한국어로 작성한다. 기술 식별자, API 필드, 경로, JSON enum, 원본 오류와 보존용 업스트림 원문은 정확히 유지한다.
 - WWW의 개발·진단·검증·작업 재개 요청은 먼저 [WWW 개발 에이전트](agents/www/AGENT.md)를 읽고 `www-dev` 역할로 접수·맥락·단계를 선택한다. 사용자 명시 스킬 호출도 지원하며 호출·권한·기록은 [공통 작업 계약](docs/skills/WORKFLOW.md)을 따른다.
 - WWW 개발 역할의 검토와 완료 판단은 [프로젝트 검토 정책](agents/www/review-policy.json)과 공통 계약의 독립 검토 책임을 확인한다. 정책 적용·모델 선택·결과 수용은 공유 검토 core를 사용하며 실제 실행 증거를 기록한다.
-- 커밋 준비·실행을 요청받으면 `skills/www/www-commit/SKILL.md`를 따른다. 원격 대상과 함께 게시될 미게시 커밋을 확인하며 force push·merge·release는 기본 흐름에 포함하지 않는다.
+- 커밋 준비·실행을 요청받으면 `skills/www/www-commit/SKILL.md`의 용도·역할별 후보 분리와 실행 절차를 따른다. 원격 대상과 함께 게시될 미게시 커밋을 확인하며 force push·merge·release는 기본 흐름에 포함하지 않는다.
 - 작업 문서는 `docs/work/<영역>/<최소 3자리 번호>-<작업명>/`에 두고 UUID는 `work.json`의 기계 식별자로 유지한다. 사람이 보는 목록은 [작업 목차](docs/work/INDEX.md)다.
