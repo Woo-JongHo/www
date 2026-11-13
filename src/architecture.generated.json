@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "digest": "cac787c0087fb4c669e197f32106b265696a4219e940f906ac8c9fe00cf65bd5",
+  "digest": "e5aa2a82eeb96a648dbcf8e0f41755f99b388a0cb4c0f99f095c83aea92d2f0d",
   "scope": "src/**/*.ts(x), scripts/workflow/**/*.ts, workflow.ts, source-policy.ts, generate-architecture.ts, build.ts",
   "layers": [
     {
@@ -312,6 +312,26 @@
       "digest": "eed9e3608b6525638119859c096d6fb46bfba1ec0111acb3e6ca96aede6ac0d7"
     },
     {
+      "id": "src/command-card.tsx",
+      "file": "src/command-card.tsx",
+      "title": "command-card",
+      "layer": "presentation",
+      "role": "앱 모듈 · command-card",
+      "line": 1,
+      "lines": 42,
+      "digest": "28f08af51e65f82a4e84bbfc16d16862750816f1ee45146161d4ab04239d01fe"
+    },
+    {
+      "id": "src/command-preview.ts",
+      "file": "src/command-preview.ts",
+      "title": "command-preview",
+      "layer": "host",
+      "role": "앱 모듈 · command-preview",
+      "line": 1,
+      "lines": 10,
+      "digest": "e4e2a38fdb1dd2014a262a7ec4940268cb16f4d583079c383bd79acd2ebfade1"
+    },
+    {
       "id": "src/conversations.ts",
       "file": "src/conversations.ts",
       "title": "conversations",
@@ -319,7 +339,7 @@
       "role": "Native 대화 목록·이력 복원",
       "line": 1,
       "lines": 197,
-      "digest": "fd85d613f1758aa7c4aae530c1f9a7faa3fd562b177c57a4ab0ec378a3dde378"
+      "digest": "4d4d1557270239b352a1904c5aac0cc95c8f172198e44bdc5caf4c489c2facc9"
     },
     {
       "id": "src/development.ts",
@@ -378,8 +398,8 @@
       "layer": "presentation",
       "role": "앱 모듈 · native-activity-view",
       "line": 1,
-      "lines": 116,
-      "digest": "3e0f1cc15591a0888f22a9933c06136faa96df9f5cb91cf08b96f90fe4474125"
+      "lines": 294,
+      "digest": "706069639661194da7104faecdbd639efbf4416ce0af9aee93e404aba5037107"
     },
     {
       "id": "src/native-activity.ts",
@@ -388,8 +408,8 @@
       "layer": "model",
       "role": "앱 모듈 · native-activity",
       "line": 1,
-      "lines": 480,
-      "digest": "19af9b32ace5cd9014d7ba6dec1aac37eb4d093d5ee0e2a1226bb55defd73aac"
+      "lines": 556,
+      "digest": "aec9fb5bd371925ffc820343ff51055bfe5eaa9d238095a5d02e71953190af72"
     },
     {
       "id": "src/native-chat.ts",
@@ -448,8 +468,8 @@
       "layer": "model",
       "role": "공개 사건을 읽을 수 있는 블록으로 투영",
       "line": 1,
-      "lines": 492,
-      "digest": "d6403548745f27b4dedf2833923eb0ac95b97698c135d4a4858ba1ce953d1c54"
+      "lines": 527,
+      "digest": "bf733dabd96a2008fa6f8494e90238e982222d461e7b2a25c541c5a3cc9c817f"
     },
     {
       "id": "src/renderer.tsx",
@@ -458,8 +478,8 @@
       "layer": "presentation",
       "role": "화면 전환과 대화 상태 통합",
       "line": 1,
-      "lines": 723,
-      "digest": "53c2151f7c4395ff1ef9f6ea04969e453f671d5f7a2734b46cacdcbd36716d76"
+      "lines": 750,
+      "digest": "8aa91600a2f5a134a30a2e39edf39e9e3d05901231523ea686358561fcb408ce"
     },
     {
       "id": "src/report-judge.ts",
@@ -510,6 +530,16 @@
       "line": 1,
       "lines": 121,
       "digest": "a483d866bc3fdead1986e20dc6aac26ee07d2f9e6b557daa058ee8f322a36731"
+    },
+    {
+      "id": "src/www-activity.ts",
+      "file": "src/www-activity.ts",
+      "title": "www-activity",
+      "layer": "host",
+      "role": "앱 모듈 · www-activity",
+      "line": 1,
+      "lines": 113,
+      "digest": "8109fa33c7e76fc499b216991ca3934937133e6bb08b7a617c9349c9e85af335"
     }
   ],
   "edges": [
@@ -1163,6 +1193,39 @@
       "statement": "import type { AppEvent } from \"./shared\";"
     },
     {
+      "id": "src/command-card.tsx:45",
+      "from": "src/command-card.tsx",
+      "to": "src/chat-row-state.tsx",
+      "mode": "runtime",
+      "syntax": "import",
+      "specifier": "./chat-row-state",
+      "line": 2,
+      "endLine": 2,
+      "statement": "import { useChatRowToggle } from \"./chat-row-state\";"
+    },
+    {
+      "id": "src/command-card.tsx:98",
+      "from": "src/command-card.tsx",
+      "to": "src/command-preview.ts",
+      "mode": "runtime",
+      "syntax": "import",
+      "specifier": "./command-preview",
+      "line": 3,
+      "endLine": 3,
+      "statement": "import { commandPreview } from \"./command-preview\";"
+    },
+    {
+      "id": "src/command-card.tsx:150",
+      "from": "src/command-card.tsx",
+      "to": "src/projection.ts",
+      "mode": "mixed",
+      "syntax": "import",
+      "specifier": "./projection",
+      "line": 4,
+      "endLine": 4,
+      "statement": "import { MAX_OUTPUT_CODE_UNITS, type Block } from \"./projection\";"
+    },
+    {
       "id": "src/conversations.ts:37",
       "from": "src/conversations.ts",
       "to": "src/shared.ts",
@@ -1358,10 +1421,10 @@
       "specifier": "./activity-sidebar",
       "line": 2,
       "endLine": 2,
-      "statement": "import { projectActivitySidebarState, type ActivitySidebarRow, type ActivitySidebarState } from \"./activity-sidebar\";"
+      "statement": "import { projectActivitySidebar, projectActivitySidebarState, type ActivitySidebarRow, type ActivitySidebarState } from \"./activity-sidebar\";"
     },
     {
-      "id": "src/native-activity-view.tsx:180",
+      "id": "src/native-activity-view.tsx:204",
       "from": "src/native-activity-view.tsx",
       "to": "src/shared.ts",
       "mode": "type",
@@ -1372,6 +1435,28 @@
       "statement": "import type { AppEvent } from \"./shared\";"
     },
     {
+      "id": "src/native-activity-view.tsx:246",
+      "from": "src/native-activity-view.tsx",
+      "to": "src/native-activity.ts",
+      "mode": "mixed",
+      "syntax": "import",
+      "specifier": "./native-activity",
+      "line": 4,
+      "endLine": 4,
+      "statement": "import { projectNativeActivity, type ActivityEntry, type ActivityStatus, type ActivityTurn, type NativeActivityProjection, type UsageBreakdown } from \"./native-activity\";"
+    },
+    {
+      "id": "src/native-activity-view.tsx:417",
+      "from": "src/native-activity-view.tsx",
+      "to": "src/www-activity.ts",
+      "mode": "mixed",
+      "syntax": "import",
+      "specifier": "./www-activity",
+      "line": 5,
+      "endLine": 5,
+      "statement": "import { WWW_ARTIFACTS, type WwwArtifact } from \"./www-activity\";"
+    },
+    {
       "id": "src/native-activity.ts:0",
       "from": "src/native-activity.ts",
       "to": "src/shared.ts",
@@ -1380,7 +1465,18 @@
       "specifier": "./shared",
       "line": 1,
       "endLine": 1,
-      "statement": "import type { AppEvent } from \"./shared\";"
+      "statement": "import type { AppEvent, TransportState } from \"./shared\";"
+    },
+    {
+      "id": "src/native-activity.ts:58",
+      "from": "src/native-activity.ts",
+      "to": "src/www-activity.ts",
+      "mode": "mixed",
+      "syntax": "import",
+      "specifier": "./www-activity",
+      "line": 2,
+      "endLine": 2,
+      "statement": "import { identifyWwwArtifact, referencedWwwArtifacts, type WwwArtifact } from \"./www-activity\";"
     },
     {
       "id": "src/native-command.ts:36",
@@ -1484,111 +1580,133 @@
     {
       "id": "src/renderer.tsx:0",
       "from": "src/renderer.tsx",
+      "to": "src/native-activity.ts",
+      "mode": "runtime",
+      "syntax": "import",
+      "specifier": "./native-activity",
+      "line": 1,
+      "endLine": 1,
+      "statement": "import { projectNativeActivity } from \"./native-activity\";"
+    },
+    {
+      "id": "src/renderer.tsx:59",
+      "from": "src/renderer.tsx",
+      "to": "src/command-card.tsx",
+      "mode": "runtime",
+      "syntax": "import",
+      "specifier": "./command-card",
+      "line": 2,
+      "endLine": 2,
+      "statement": "import { CommandView } from \"./command-card\";"
+    },
+    {
+      "id": "src/renderer.tsx:105",
+      "from": "src/renderer.tsx",
       "to": "src/native-activity-view.tsx",
       "mode": "runtime",
       "syntax": "import",
       "specifier": "./native-activity-view",
-      "line": 1,
-      "endLine": 1,
+      "line": 3,
+      "endLine": 3,
       "statement": "import { NativeActivityView } from \"./native-activity-view\";"
     },
     {
-      "id": "src/renderer.tsx:61",
+      "id": "src/renderer.tsx:166",
       "from": "src/renderer.tsx",
       "to": "src/chat-message.tsx",
       "mode": "runtime",
       "syntax": "import",
       "specifier": "./chat-message",
-      "line": 2,
-      "endLine": 2,
+      "line": 4,
+      "endLine": 4,
       "statement": "import { ChatMessage } from \"./chat-message\";"
     },
     {
-      "id": "src/renderer.tsx:107",
+      "id": "src/renderer.tsx:212",
       "from": "src/renderer.tsx",
       "to": "src/chat-row-state.tsx",
       "mode": "mixed",
       "syntax": "import",
       "specifier": "./chat-row-state",
-      "line": 3,
-      "endLine": 3,
-      "statement": "import { ChatDetails, ChatRowMemoryContext, useChatRowToggle, type ChatRowMemory } from \"./chat-row-state\";"
+      "line": 5,
+      "endLine": 5,
+      "statement": "import { ChatDetails, ChatRowMemoryContext, type ChatRowMemory } from \"./chat-row-state\";"
     },
     {
-      "id": "src/renderer.tsx:215",
+      "id": "src/renderer.tsx:302",
       "from": "src/renderer.tsx",
       "to": "src/chat-state.ts",
       "mode": "mixed",
       "syntax": "import",
       "specifier": "./chat-state",
-      "line": 4,
-      "endLine": 4,
+      "line": 6,
+      "endLine": 6,
       "statement": "import { blankReadingState, belongsToConversation, composerFull, conversationKey, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, pasteOverflow, type ConversationReadingState } from \"./chat-state\";"
     },
     {
-      "id": "src/renderer.tsx:414",
+      "id": "src/renderer.tsx:501",
       "from": "src/renderer.tsx",
       "to": "src/activity-sidebar.ts",
       "mode": "runtime",
       "syntax": "import",
       "specifier": "./activity-sidebar",
-      "line": 5,
-      "endLine": 5,
+      "line": 7,
+      "endLine": 7,
       "statement": "import { ActivitySnapshotBoundary, createActivitySidebarState, projectActivitySidebar, updateActivitySidebarSnapshot, updateActivitySidebarState } from \"./activity-sidebar\";"
     },
     {
-      "id": "src/renderer.tsx:588",
+      "id": "src/renderer.tsx:675",
       "from": "src/renderer.tsx",
       "to": "src/reports-view.tsx",
       "mode": "runtime",
       "syntax": "import",
       "specifier": "./reports-view",
-      "line": 6,
-      "endLine": 6,
+      "line": 8,
+      "endLine": 8,
       "statement": "import { ReportsView } from \"./reports-view\";"
     },
     {
-      "id": "src/renderer.tsx:634",
+      "id": "src/renderer.tsx:721",
       "from": "src/renderer.tsx",
       "to": "src/ecosystem-view.tsx",
       "mode": "runtime",
       "syntax": "import",
       "specifier": "./ecosystem-view",
-      "line": 7,
-      "endLine": 7,
+      "line": 9,
+      "endLine": 9,
       "statement": "import { EcosystemView } from \"./ecosystem-view\";"
     },
     {
-      "id": "src/renderer.tsx:684",
+      "id": "src/renderer.tsx:771",
       "from": "src/renderer.tsx",
       "to": "src/input.ts",
       "mode": "runtime",
       "syntax": "import",
       "specifier": "./input",
-      "line": 8,
-      "endLine": 8,
+      "line": 10,
+      "endLine": 10,
       "statement": "import { handlePromptKeyDown, normalizeCompositionEnd } from \"./input\";"
     },
     {
-      "id": "src/renderer.tsx:878",
+      "id": "src/renderer.tsx:965",
       "from": "src/renderer.tsx",
       "to": "src/projection.ts",
       "mode": "mixed",
       "syntax": "import",
       "specifier": "./projection",
-      "line": 11,
-      "endLine": 11,
+      "line": 13,
+      "endLine": 13,
       "statement": "import { MAX_OUTPUT_CODE_UNITS, project, type Block } from \"./projection\";"
     },
     {
-      "id": "src/renderer.tsx:953",
+      "id": "src/renderer.tsx:1040",
       "from": "src/renderer.tsx",
       "to": "src/shared.ts",
       "mode": "type",
       "syntax": "import",
       "specifier": "./shared",
-      "line": 12,
-      "endLine": 12,
+      "line": 14,
+      "endLine": 14,
       "statement": "import type { AppEvent, ConversationSummary, TurnState, WorkspaceInfo, WwwApi } from \"./shared\";"
     },
     {
@@ -2145,6 +2263,12 @@
       "reason": "external"
     },
     {
+      "file": "src/command-card.tsx",
+      "line": 1,
+      "specifier": "react",
+      "reason": "external"
+    },
+    {
       "file": "src/conversations.ts",
       "line": 1,
       "specifier": "node:path",
@@ -2224,13 +2348,13 @@
     },
     {
       "file": "src/renderer.tsx",
-      "line": 9,
+      "line": 11,
       "specifier": "react",
       "reason": "external"
     },
     {
       "file": "src/renderer.tsx",
-      "line": 10,
+      "line": 12,
       "specifier": "react-dom/client",
       "reason": "external"
     },

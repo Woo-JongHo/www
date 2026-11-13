@@ -1,0 +1,1027 @@
+{
+  "schemaVersion": 1,
+  "id": "report-8e08f571-13e3-4c62-85aa-aa3ff569cb8b",
+  "workId": "work-eed41da3-f22e-4fb9-b9df-9a1a7d76c44f",
+  "title": "실시간 세션 모니터와 채팅 가독성",
+  "summary": "사용자가 원한 WWW 전용 에이전트·스킬 중심으로 오른쪽 화면을 바꿨다. 일반 Hook·명령·모델 정보는 기본 접힘으로 두고, 문서 읽기와 리터럴 cat 참조를 실제 적용과 구별한다. 현재 Hook 실패는 플러그인 변경 후 신뢰 검토 요구로 재현했으며, 원문 오류를 표시하되 trust 설정은 변경하지 않았다. 실제 Electron과 최종 Opus 검토가 통과했다.",
+  "outcome": "blocked",
+  "kind": "authored",
+  "event": "finish",
+  "createdAt": "2026-11-13T02:43:59.548Z",
+  "workRecordHash": "a3e4809f2701c23e091c421f9b139b7a140bb45b8d4d0a26993bdad66d853547",
+  "sourceDigest": "9cb48df053b884680eb61f1c684b2f010ebbd3743fb66a90b9c22cf64a55fe51",
+  "criteriaDigest": "772044fccf72bd02d84b48fd2ed1c299972102805b280aa760f6ed7bcaa45f42",
+  "semanticHash": "0b4e93602807c78df6ae176a67fab4392b2d53df251d135ab509deac96ae8919",
+  "narrative": {
+    "summary": "사용자가 원한 WWW 전용 에이전트·스킬 중심으로 오른쪽 화면을 바꿨다. 일반 Hook·명령·모델 정보는 기본 접힘으로 두고, 문서 읽기와 리터럴 cat 참조를 실제 적용과 구별한다. 현재 Hook 실패는 플러그인 변경 후 신뢰 검토 요구로 재현했으며, 원문 오류를 표시하되 trust 설정은 변경하지 않았다. 실제 Electron과 최종 Opus 검토가 통과했다.",
+    "before": "범용 sessionStart/postToolUse/stop 실패와 긴 명령 목록이 화면을 채웠다. WWW 전용 역할 문서를 읽은 다중 cat은 Native의 unknown 분류 때문에 놓쳤고 Hook 실패의 실제 원인도 보이지 않았다.",
+    "after": "www-dev·www-design-agent와 여섯 www-* 스킬을 기본 화면에 두고 요청·읽는 중·읽기 완료·읽기 명령 관측·미관측을 구별한다. 일반 Hook 상세의 실패 수·신뢰 검토 필요 수와 실제 오류를 보존한다.",
+    "changes": [
+      "WWW 역할2·스킬6 정본 목록과 선택 저장소/cwd 범위의 읽기 식별을 추가했다.",
+      "확장·연쇄·리디렉션 없는 리터럴 cat만 약한 문서 참조 관측으로 처리하고 적용 성공을 합성하지 않는다.",
+      "WWW 전용 흐름을 기본으로, 일반 Native 활동과 모델·토큰을 접힌 상세로 재배치했다.",
+      "Hook statusMessage/error·warning·stop만 제한해서 표시하고 context는 제외한다. 늦은 시작이 이미 확인한 실패를 지우지 않는다.",
+      "질문별 전용 문서·일반 활동 펼침을 현재 창에서 보존한다."
+    ],
+    "decisions": [
+      "Native Hook failed를 성공으로 바꾸거나 전역 trust hash를 덮어쓰지 않았다.",
+      "실제 다중 cat의 Native unknown 분류는 문서 읽기 명령 관측으로만 보완하고 개별 읽기 성공·실제 적용으로 올리지 않았다.",
+      "정보 확인 질문처럼 스킬 호출 근거가 없는 경우는 관측 없음으로 둔다."
+    ],
+    "limitations": [
+      "현재 설정에서 실제1턴의 sessionStart4·stop1이 신뢰 게이트에서 실패했다. postToolUse와 원래 사용자 턴의 상세 원문은 직접 재현·회수하지 않아 구별했다.",
+      "플러그인 내용 변경 후 재승인이 필요하다. 전역 설정·승인값은 변경하지 않았다.",
+      "실제 역할 적용 확인의 구조화 사건은 현재 없어 읽기와 실제 적용을 구별한다. 복잡한 셸 연쇄의 문서 참조는 관측하지 않는다.",
+      "기존 실제 OS 한국어 IME·Windows·BoxBox 미해결로 전체 Chat007은 verifying이다.",
+      "전체 npm check는 현재 제품 소스에서 직접 실행해382테스트·타입·빌드가 통과했으나 공식 work 시도의 엄격한 소스 연결이라고 확대하지 않는다."
+    ],
+    "next": [
+      "변경된 플러그인 내용을 정식으로 검토하고 신뢰 승인한 뒤 실제 Hook 실행·호스트 수용을 재검증한다.",
+      "기존 IME·Windows·BoxBox 잔여 기준을 같은 작업 ID에서 이어간다."
+    ],
+    "reader": {
+      "story": "사용자가 원한 WWW 전용 에이전트·스킬 중심으로 오른쪽 화면을 바꿨다. 일반 Hook·명령·모델 정보는 기본 접힘으로 두고, 문서 읽기와 리터럴 cat 참조를 실제 적용과 구별한다. 현재 Hook 실패는 플러그인 변경 후 신뢰 검토 요구로 재현했으며, 원문 오류를 표시하되 trust 설정은 변경하지 않았다. 실제 Electron과 최종 Opus 검토가 통과했다.",
+      "requirements": [
+        {
+          "requirement": "WWW 전용 에이전트·스킬을 중심으로 보고 싶다.",
+          "result": "두 역할과 여섯 개발 스킬의 문서 관측을 기본 화면에 배치했다. 일반 Hook·명령과 모델은 접힘 상세다.",
+          "evidence": "AC-11/12 실제 Electron probe와 review-922c1d5d-4560-4c4a-a20c-d6ec69912c52",
+          "limitations": "읽기·참조를 실제 역할 적용으로 표시하지 않는다."
+        },
+        {
+          "requirement": "Hook이 전부 실패하는 이유를 확인한다.",
+          "result": "현재 Native에서 plugin contents changed; hook approval required를 실제 재현했다. 오류본문·신뢰 검토 수를 UI에 연결했다.",
+          "evidence": "로컬 hook-diagnosis-20261113.md의 현재1턴 관측 및 AC-12 GUI 근거",
+          "limitations": "현재5개실제실패와 해당사용자원래턴의미회수원문을구분했다. 승인값은 바꾸지 않았다."
+        },
+        {
+          "requirement": "기존 질문 선택·초안·읽기 위치와 명령·긴 답변을 유지한다.",
+          "result": "최종 소스의 Chat GUI를 AC-01/06/07에 연결해 통과했다.",
+          "evidence": "attempt-92920f2f 및 work.json의 최신 연결",
+          "limitations": "실제 OS IME·Windows는 여전히 미검증이다."
+        }
+      ],
+      "checks": [
+        {
+          "target": "집중 관측·분류",
+          "method": "Bun 새 전용/뷰/활동 테스트",
+          "expected": "이름 언급을 사용으로 만들지 않고 실제 문서 관측·오류를 보존",
+          "observed": "36개 통과, 타입 검사 통과",
+          "limitations": "BoxBox FIXABLE은 별도 미해결이다."
+        },
+        {
+          "target": "실제 Electron",
+          "method": "합성 Native·실제 IPC/stdio/DOM",
+          "expected": "WWW 역할/스킬 관측, 일반 활동 기본 접힘, 실패 사유와 기존 대화 상태 보존",
+          "observed": "새 WWW4개 관측과 기존 활동/Chat 검사가 통과했다.",
+          "limitations": "합성 사건을 실제 모델·Windows 실기로 확대하지 않는다."
+        },
+        {
+          "target": "실제 Native Hook",
+          "method": "임시 빈 cwd의 읽기 전용1턴·도구금지",
+          "expected": "현실패사유관측과설정불변",
+          "observed": "정상답변·턴종료, 도구0, 설정SHA불변, Hook5개모두재승인요구",
+          "limitations": "postToolUse는 이 도구금지턴에서 미실행이다."
+        },
+        {
+          "target": "최종 독립 검토",
+          "method": "공유core·읽기전용Opus",
+          "expected": "소스/기준/실행근거연결확인",
+          "observed": "claude-opus-5-5 pass",
+          "limitations": "검토자가 테스트를 직접 실행했다고 주장하지 않는다."
+        }
+      ],
+      "decisions": [
+        {
+          "problem": "범용 Hook 실패와 WWW 개발 흐름을 어떻게 구별할 것인가",
+          "basis": "Hook실패는 설치 플러그인의 신뢰 게이트였고 WWW역할읽기는 unknown 분류라 누락됐다.",
+          "alternatives": [
+            "기존 범용 사건 목록 유지",
+            "WWW 전용 관측을 기본, 범용 진단을 상세로 분리"
+          ],
+          "choice": "전용 관측을 기본으로 두고 일반 실패와 오류 원문은 별도로 보존한다.",
+          "tradeoff": "역할 적용 자체의 실행 계측은 없으므로 문서 관측 범위로 정확히 표시한다."
+        }
+      ],
+      "references": [
+        {
+          "path": "verification.md",
+          "purpose": "최신 기준 연결·GUI·독립 검토와 이전 실패를 확인한다."
+        },
+        {
+          "path": "diagnosis.md",
+          "purpose": "실제 Hook 신뢰 게이트와 다중 cat 분류 누락의 원인을 확인한다."
+        },
+        {
+          "path": "https://developers.openai.com/plugins/build/plugins",
+          "purpose": "플러그인 활성화와 현재 Hook 정의에 대한 신뢰가 별도임을 확인한다."
+        }
+      ],
+      "nextActions": [
+        {
+          "action": "현재 플러그인 내용을 검토한 뒤 정식 신뢰 승인과 실제 Hook 검증을 수행한다.",
+          "owner": null,
+          "doneWhen": "현재 정의가 승인되고 실제 실행·호스트 수용이 확인된다.",
+          "impact": "재승인 전 일반 Hook은 계속 차단될 수 있다."
+        },
+        {
+          "action": "기존 IME·Windows·BoxBox 잔여 검증을 수행한다.",
+          "owner": null,
+          "doneWhen": "AC-05/10의 실제 증거가 충족된다.",
+          "impact": "전체 작업은 그 전까지 done이 아니다."
+        }
+      ]
+    }
+  },
+  "work": {
+    "status": "verifying",
+    "blockedReason": "WWW 전용 흐름 피드백 구현·Electron·Opus 검토는 통과. 기존 실제 OS IME·Windows·BoxBox 미해결과 외부 플러그인 Hook 재승인 필요는 남아 있음.",
+    "criteria": [
+      {
+        "id": "AC-01",
+        "description": "오른쪽 패널은 세션 현재 상태와 질문별 이력을 제공하고 과거 턴 선택·최신 복귀·초안·읽기 위치를 보존한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-bfd7b6ce-6e35-4a46-bf5b-8f68988f64e2",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-d54d0857-b8a0-4900-9461-45610dba3ba7",
+            "summary": "이 시도 종료 당시: 실제 검증 failed; 현재 적용 불가; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-6674b719-8938-431e-84fb-1f515dfe848e",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-0985aae5-d906-4299-bad5-3f40ca5d2d5c",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-d4f5d53d-fbb3-41a9-836b-22bb101a6042",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-d943484f-ac89-4167-9dbd-2d465a9da726",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-2df0cfe5-f3c2-4246-a2cc-5ebe9616c447",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-83c82b55-2c1c-45ae-bb75-318c34372987",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-92920f2f-c5fc-401b-9d91-166f7b225d18",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-02",
+        "description": "Skill 요청·읽기 관측·적용 확인과 Hook 실제 실행 상태를 구분하고 실시간 표시하며, 과거 복원·중복·늦은 사건으로 새 호출 효과를 재생하지 않는다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-76ae14c8-628e-4e4a-a798-9eb1a4ba18c2",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-157a9ae9-9581-4bf6-9c0a-46b2757c60f1",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-68e6d56f-14d1-406b-b29a-1139bcb618a8",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-713a2b14-a1d1-4656-9770-550bba6ef820",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-0c5de038-128e-4b9a-91bd-ae0999ef49f1",
+            "summary": "이 시도 종료 당시: 실제 검증 failed; 현재 적용 불가; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-5086f6e4-10a2-4c47-a2e0-e8357c244283",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-36c8a862-db9f-4ae0-864f-22c0559402ba",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-15cd6138-7552-44d6-acb1-5feac956b02e",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-2df0cfe5-f3c2-4246-a2cc-5ebe9616c447",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-83c82b55-2c1c-45ae-bb75-318c34372987",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          }
+        ]
+      },
+      {
+        "id": "AC-03",
+        "description": "현재 작업·경과 시간·마지막 활동·승인 대기·오류·연결 상태를 사람이 읽는 문장과 상세 근거로 제공하고 미확인을 성공으로 추정하지 않는다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-76ae14c8-628e-4e4a-a798-9eb1a4ba18c2",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-157a9ae9-9581-4bf6-9c0a-46b2757c60f1",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-68e6d56f-14d1-406b-b29a-1139bcb618a8",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-713a2b14-a1d1-4656-9770-550bba6ef820",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-0c5de038-128e-4b9a-91bd-ae0999ef49f1",
+            "summary": "이 시도 종료 당시: 실제 검증 failed; 현재 적용 불가; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-5086f6e4-10a2-4c47-a2e0-e8357c244283",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-36c8a862-db9f-4ae0-864f-22c0559402ba",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-15cd6138-7552-44d6-acb1-5feac956b02e",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-2df0cfe5-f3c2-4246-a2cc-5ebe9616c447",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-83c82b55-2c1c-45ae-bb75-318c34372987",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          }
+        ]
+      },
+      {
+        "id": "AC-04",
+        "description": "공개 진행 설명·공개 요약·도구 출력·최종 답변이 턴 종료 전 점진적으로 갱신되며 본문과 패널이 동일 실행을 가리킨다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-76ae14c8-628e-4e4a-a798-9eb1a4ba18c2",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-157a9ae9-9581-4bf6-9c0a-46b2757c60f1",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-68e6d56f-14d1-406b-b29a-1139bcb618a8",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-713a2b14-a1d1-4656-9770-550bba6ef820",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-0c5de038-128e-4b9a-91bd-ae0999ef49f1",
+            "summary": "이 시도 종료 당시: 실제 검증 failed; 현재 적용 불가; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-5086f6e4-10a2-4c47-a2e0-e8357c244283",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-36c8a862-db9f-4ae0-864f-22c0559402ba",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-15cd6138-7552-44d6-acb1-5feac956b02e",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-2df0cfe5-f3c2-4246-a2cc-5ebe9616c447",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-83c82b55-2c1c-45ae-bb75-318c34372987",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          }
+        ]
+      },
+      {
+        "id": "AC-05",
+        "description": "한국어 조합 확정과 전송을 구별하고 Enter·Shift+Enter·반복 입력·전송 실패 시 초안 및 중복 방지를 실제 앱에서 검증한다.",
+        "required": true,
+        "result": "blocked",
+        "evidence": []
+      },
+      {
+        "id": "AC-06",
+        "description": "긴 답변·표·코드·스트리밍 완료 뒤 마지막 문장까지 접근 가능하고 입력창·패널·스크롤 컨테이너가 내용을 가리지 않으며 보관 한계는 명시한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-bfd7b6ce-6e35-4a46-bf5b-8f68988f64e2",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-d54d0857-b8a0-4900-9461-45610dba3ba7",
+            "summary": "이 시도 종료 당시: 실제 검증 failed; 현재 적용 불가; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-6674b719-8938-431e-84fb-1f515dfe848e",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-0985aae5-d906-4299-bad5-3f40ca5d2d5c",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-d4f5d53d-fbb3-41a9-836b-22bb101a6042",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-d943484f-ac89-4167-9dbd-2d465a9da726",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-f5936183-215e-476e-90ce-2484fb96ebf8",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-92920f2f-c5fc-401b-9d91-166f7b225d18",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-07",
+        "description": "명령 실행 카드가 명령·경로·실제 상태·들여쓰기를 보존한 10줄 출력 미리보기·전체 보관 출력 접근·실패·중단·미확인을 제공한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-e567b6b8-150c-4549-b2b1-8dbe3f8e3b6e",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-0985aae5-d906-4299-bad5-3f40ca5d2d5c",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-1dccc412-7631-434d-8c51-524e895ccfb4",
+            "summary": "이 시도 종료 당시: 실제 검증 failed; 현재 적용 불가; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-43da63fa-73e3-40b7-85c8-54acdbd5fca3",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-8ca1e96a-bfe1-43ad-8273-7e5e926d2603",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-d4f5d53d-fbb3-41a9-836b-22bb101a6042",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-50ff99ea-bd41-4791-85e2-7e12a2b456f7",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-d943484f-ac89-4167-9dbd-2d465a9da726",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-f5936183-215e-476e-90ce-2484fb96ebf8",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-92920f2f-c5fc-401b-9d91-166f7b225d18",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-08",
+        "description": "WWW Design 역할의 입력·산출물·권한·개발 및 검토 역할과의 인계, 토큰과 컴포넌트의 정본·접근성·상태 규칙을 정의하고 파일럿에 적용한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-dfb5674d-239f-468d-90c5-0bb06483144f",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-df937794-992b-4bbc-bce8-354e3221db82",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-72ec6192-0627-4707-9068-634258605a0b",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-49465571-bcb0-496e-8122-2b7662a8a9a7",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-a4d7a557-23b8-464c-817f-55c743c133a8",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-c9da5764-dfef-4927-b476-210c39767f3b",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-1e21ced6-a95d-4abc-a4c2-3019e223723c",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-245e022d-8507-4af6-9d7d-ed46101da889",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          }
+        ]
+      },
+      {
+        "id": "AC-09",
+        "description": "GJC 실제 참조와 오픈소스 후보 3개 이상의 공식 저장소·고정 revision·라이선스·채택 및 제외 이유를 기록하고 사용하는 코드의 고지를 유지한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-dfb5674d-239f-468d-90c5-0bb06483144f",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-df937794-992b-4bbc-bce8-354e3221db82",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-72ec6192-0627-4707-9068-634258605a0b",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-49465571-bcb0-496e-8122-2b7662a8a9a7",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-a4d7a557-23b8-464c-817f-55c743c133a8",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-c9da5764-dfef-4927-b476-210c39767f3b",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-1e21ced6-a95d-4abc-a4c2-3019e223723c",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-245e022d-8507-4af6-9d7d-ed46101da889",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          }
+        ]
+      },
+      {
+        "id": "AC-10",
+        "description": "현재 소스에서 합성 사건·실제 Native·Electron GUI 및 대상 플랫폼 결과를 구분하고 필수 기준의 실제 증거와 읽기 전용 Opus 독립 검토로 구현 수용을 판단한다.",
+        "required": true,
+        "result": "blocked",
+        "evidence": []
+      },
+      {
+        "id": "AC-11",
+        "description": "오른쪽 기본 화면은 WWW 전용 역할과 여섯 개발 스킬을 중심으로 보여주고, 요청·문서 읽기·읽기 명령 관측과 적용 확인을 구별한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-2df0cfe5-f3c2-4246-a2cc-5ebe9616c447",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-83c82b55-2c1c-45ae-bb75-318c34372987",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          }
+        ]
+      },
+      {
+        "id": "AC-12",
+        "description": "일반 Native Hook과 전체 도구 사건은 별도 상세에서 실패 수와 실제 오류 근거를 보존하며 WWW 역할·스킬의 실패로 오인시키지 않는다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-2df0cfe5-f3c2-4246-a2cc-5ebe9616c447",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          },
+          {
+            "path": "verification.md#attempt-83c82b55-2c1c-45ae-bb75-318c34372987",
+            "summary": "이 시도 종료 당시: 실제 검증 passed; 현재 적용 가능; 현행 적용성은 공유 status에서 별도로 판정한다."
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-0985aae5-d906-4299-bad5-3f40ca5d2d5c",
+        "command": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T01:55:39.230Z"
+      },
+      {
+        "id": "attempt-0c5de038-128e-4b9a-91bd-ae0999ef49f1",
+        "command": "node",
+        "args": [
+          "scripts/verify-native-activity.ts",
+          "--ui-only"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T01:57:45.658Z"
+      },
+      {
+        "id": "attempt-49465571-bcb0-496e-8122-2b7662a8a9a7",
+        "command": "node",
+        "args": [
+          "scripts/check-workflow.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T01:57:46.104Z"
+      },
+      {
+        "id": "attempt-1dccc412-7631-434d-8c51-524e895ccfb4",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": false,
+        "completedAt": "2026-11-13T01:58:09.512Z"
+      },
+      {
+        "id": "attempt-5086f6e4-10a2-4c47-a2e0-e8357c244283",
+        "command": "node",
+        "args": [
+          "scripts/verify-native-activity.ts",
+          "--ui-only"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T01:58:28.328Z"
+      },
+      {
+        "id": "attempt-a4d7a557-23b8-464c-817f-55c743c133a8",
+        "command": "node",
+        "args": [
+          "scripts/check-workflow.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T01:58:29.072Z"
+      },
+      {
+        "id": "attempt-43da63fa-73e3-40b7-85c8-54acdbd5fca3",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T01:58:59.063Z"
+      },
+      {
+        "id": "attempt-36c8a862-db9f-4ae0-864f-22c0559402ba",
+        "command": "node",
+        "args": [
+          "scripts/verify-native-activity.ts",
+          "--ui-only"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T01:59:39.407Z"
+      },
+      {
+        "id": "attempt-c9da5764-dfef-4927-b476-210c39767f3b",
+        "command": "node",
+        "args": [
+          "scripts/check-workflow.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T01:59:39.995Z"
+      },
+      {
+        "id": "attempt-8ca1e96a-bfe1-43ad-8273-7e5e926d2603",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:00:13.964Z"
+      },
+      {
+        "id": "attempt-d4f5d53d-fbb3-41a9-836b-22bb101a6042",
+        "command": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:01:00.188Z"
+      },
+      {
+        "id": "attempt-15cd6138-7552-44d6-acb1-5feac956b02e",
+        "command": "node",
+        "args": [
+          "scripts/verify-native-activity.ts",
+          "--ui-only"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:05:48.707Z"
+      },
+      {
+        "id": "attempt-1e21ced6-a95d-4abc-a4c2-3019e223723c",
+        "command": "node",
+        "args": [
+          "scripts/check-workflow.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:05:49.385Z"
+      },
+      {
+        "id": "attempt-50ff99ea-bd41-4791-85e2-7e12a2b456f7",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:06:22.900Z"
+      },
+      {
+        "id": "attempt-d943484f-ac89-4167-9dbd-2d465a9da726",
+        "command": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:06:46.303Z"
+      },
+      {
+        "id": "attempt-2df0cfe5-f3c2-4246-a2cc-5ebe9616c447",
+        "command": "node",
+        "args": [
+          "scripts/verify-native-activity.ts",
+          "--ui-only"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:29:14.228Z"
+      },
+      {
+        "id": "attempt-83c82b55-2c1c-45ae-bb75-318c34372987",
+        "command": "node",
+        "args": [
+          "scripts/verify-native-activity.ts",
+          "--ui-only"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:30:04.796Z"
+      },
+      {
+        "id": "attempt-245e022d-8507-4af6-9d7d-ed46101da889",
+        "command": "node",
+        "args": [
+          "scripts/check-workflow.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:31:25.212Z"
+      },
+      {
+        "id": "attempt-f5936183-215e-476e-90ce-2484fb96ebf8",
+        "command": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:31:34.545Z"
+      },
+      {
+        "id": "attempt-92920f2f-c5fc-401b-9d91-166f7b225d18",
+        "command": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.22.3"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:38:49.484Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "review-fa121356-dc5f-4027-98d5-fd3b1b38d4d0",
+        "verdict": "not_run",
+        "model": null,
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-fa121356-dc5f-4027-98d5-fd3b1b38d4d0/opus.json",
+        "findings": []
+      },
+      {
+        "id": "review-d5e4d064-a30e-4b62-b393-a54bd003d127",
+        "verdict": "fail",
+        "model": "claude-opus-5-5",
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-d5e4d064-a30e-4b62-b393-a54bd003d127/opus.json",
+        "findings": [
+          "[결함·AC-07] 명령 카드에 '중단' 상태 표시가 없다. src/projection.ts:13의 ItemStatus는 running|completed|failed|unknown뿐이다. itemStatus(src/projection.ts:134-141)는 Native item.status가 declined나 interrupted일 때 unknown을 반환한다. 턴이 중단으로 끝날 때 실행 중이던 명령도 turn/completed 처리(src/projection.ts:216-219)에서 status:'unknown'이 된다. src/command-card.tsx:19-21은 이 경우를 모두 '결과 미확인'으로 표시하므로 중단과 종료 누락을 구분할 수 없다. 그런데 AC-07 정의('실패·중단·미확인을 제공')와 design.md:30('실패·중단·종료 누락과 출력 없음은 별도 안내')은 둘을 구분하라고 요구한다. 이 요구를 만족하지 못하는데도 work.json은 AC-07을 passed로 기록했다. 근거로 연결한 시도 attempt-bfd7b6ce(scripts/verify-chat.ts)에서 '중단'이 나오는 곳은 233-237행의 턴 중단 상태 확인뿐이고 명령 카드의 중단 표시는 검사하지 않는다. 증거가 실제 검증 범위보다 넓게 쓰였다.",
+          "[결함·AC-07] 출력 보관 한도를 넘은 뒤에는 미리보기 안내가 사실과 다르다. limitOutput(src/projection.ts:104-107)은 출력의 마지막 32,768 코드 단위만 남긴다. 그런데 commandPreview(src/command-preview.ts:6-7)는 종료 뒤 남은 문자열의 앞 10줄을 보여 주고, 생략 줄 수도 남은 줄만으로 계산한다. src/command-card.tsx:33은 이를 그대로 '앞 10줄 미리보기 · N줄 생략'으로 표시한다. 재현: 줄 수가 많아 32,768 코드 단위를 넘는 출력을 보낸 뒤 명령을 종료한다. 미리보기 첫 줄은 원본 출력의 중간 줄이고, 앞부분이 잘린 조각일 수도 있다. 생략 수에는 버려진 줄이 들어가지 않는다. 명세는 '미리보기 생략과 원본 보관 한도 초과를 구별'하라고 요구하므로(spec.md:114) 위반이다. outputTruncated일 때는 '보관된 출력의 앞 10줄'처럼 안내 문구와 생략 수 계산을 따로 해야 한다. command-preview.test.ts에는 한도를 넘는 경우의 테스트가 없다.",
+          "[결함·AC-07] 시스템이 자동으로 정한 펼침 상태가 사용자 선택으로 오인될 수 있다. src/command-card.tsx:16-18의 effect는 마운트 직후 setOpen(failed)을 호출한다. 이 setter(src/chat-row-state.tsx:12-15)는 memory.set(key, false)를 대화별 rowMemory에 기록한다. 이 rowMemory는 대화를 전환해도 유지된다(src/renderer.tsx:166-173). 재현: 실행 중인 명령 카드가 마운트된 뒤 다른 대화로 전환했다가 돌아오면 memory.has(key)가 true가 되어 remembered=true, 따라서 userToggled=true로 초기화된다. 이후 명령이 실패해도 카드가 자동으로 펼쳐지지 않는다. 명세는 사용자가 직접 펼치거나 접은 상태만 보존하고 실패하면 오류 출력을 우선 펼치라고 요구하므로(spec.md:112-114) 위반이다. 자동 상태는 memory에 쓰지 않는 별도 경로로 처리해야 한다."
+        ]
+      },
+      {
+        "id": "review-07734ab9-3489-4c5a-988b-1864c87a81ea",
+        "verdict": "fail",
+        "model": "claude-opus-5-5",
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-07734ab9-3489-4c5a-988b-1864c87a81ea/opus.json",
+        "findings": [
+          "[결함·AC-07/AC-02 경계] src/projection.ts:361-393의 명령 블록 생성 경로는 closedTurns·transport 종료·비활성 턴을 확인하지 않는다. 메시지(338-340행)와 공개 요약(276-277행)에는 이 검사가 있다. 재현 순서(소스 대조로 판단, 실행하지 않음): turn/started(t,a) → turn/completed(t,a,completed) → item/commandExecution/outputDelta{threadId:t,turnId:a,itemId:x} 또는 늦은 item/started(commandExecution). 그러면 running:true, status:'running'인 새 명령 블록이 생긴다. 이 턴의 turn/completed는 이미 처리됐으므로 이후 이 블록을 종료할 사건이 없다. src/command-card.tsx:11-23은 이 카드를 '● 실행 중'으로 계속 표시하고 1초 타이머를 끝없이 돌린다. 이는 spec.md 80행의 '중복·늦은 사건·다른 스레드 사건을 분리'와 66행의 '시작만 있고 종료 없음 → 결과 미확인' 요구에 어긋난다. 닫힌 턴의 늦은 명령 사건은 running이 아닌 미확인으로 만들거나 무시해야 한다.",
+          "[결함·테스트가 잘못된 동작을 고정] test/projection.test.ts:213-221은 item/completed의 aggregatedOutput '앞' 뒤에 늦은 outputDelta '뒤'를 이어 붙여 output이 '앞뒤'가 되는 것을 기대한다. 그런데 aggregatedOutput은 완료 시점의 전체 집계 출력이다. 완료 뒤 도착한 델타는 이미 집계에 포함된 내용일 수 있으므로 지금의 이어 붙이기(projection.ts:388-392)는 실제 경로에서 출력 꼬리를 중복 표시할 수 있다. '완료 뒤 늦은 출력이 상태를 바꾸지 않는다'는 테스트 의도와 달리 내용은 바뀐다. 완료 후 델타를 무시할지 별도로 표시할지 정하고 테스트를 그에 맞춰야 한다.",
+          "[경미·일관성] src/conversations.ts:96, 134-135의 복원 경로는 저장된 inProgress 명령을 item/completed{status:'unknown'}로 먼저 닫는다. 그래서 projection.ts:219-221의 turn/completed(interrupted) 처리가 이 블록에 turnInterrupted를 설정하지 않는다. 결과적으로 같은 상황이 실시간에서는 '턴 중단 · 명령 결과 미확인', 복원에서는 '결과 미확인'으로 다르게 표시된다. 두 문구 모두 성공으로 추정하지는 않으므로 차단 사유는 아니다.",
+          "[확인·근거 일치] 리뷰 입력 파일 digest(src/renderer.tsx 2366abb…, docs/specs/chat.md 9f9b87e…, src/projection.ts d75ed24…, src/command-card.tsx 28f08af… 등)가 work.json의 마지막 공식 시도 attempt-6674b719와 attempt-5d4b01d2(source digest 2c331fd…)에 기록된 파일 digest와 일치한다. 최종 통과 시도 이후 대상 소스가 바뀐 흔적은 없다. sourceDigest가 fcc0e09…로 다른 것은 이번 리뷰 입력에 work.json과 verification.md가 추가됐기 때문으로 판단했다.",
+          "[확인] 1차 Opus 지적의 수정 내용을 소스에서 확인했다. 첫째, declined를 보존하고 턴 중단 시 명령 결과를 미확인으로 표시한다(projection.ts:136, 220; command-card.tsx:16-20). 둘째, 보관 범위가 잘렸을 때 미리보기가 '보관된 출력의' 범위와 생략 줄 수를 안내한다(command-card.tsx:32-39). 셋째, 실패 시 자동 펼침은 effect 없이 파생되고 수동 조작만 기억된다(command-card.tsx:8-9, 35). 모두 verification.md 86-90행의 설명과 일치한다.",
+          "[증거 범위] AC-05(실제 OS 한국어 IME·Windows 미실행)와 AC-10(BoxBox 미해결, 독립 검토 미완)은 work.json에서 blocked이고 status는 verifying이다. verification.md도 이를 통과로 승격하지 않는다. 다만 AC-07의 passed는 위 늦은 명령 사건 결함이 수정·재검증될 때까지 '미확인 상태 제공'과 '늦은 사건 분리' 요구를 완전히 충족한다고 보기 어렵다."
+        ]
+      },
+      {
+        "id": "review-eef443fd-b771-4a50-a90f-ac802f921334",
+        "verdict": "fail",
+        "model": "claude-opus-5-5",
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-eef443fd-b771-4a50-a90f-ac802f921334/opus.json",
+        "findings": [
+          "[결함·AC-04/AC-07] src/projection.ts:363-365의 새 늦은 명령 가드는 `transport === \"error\"`일 때 `item/started`(commandExecution)와 `item/commandExecution/outputDelta`를 모두 버린다. 하지만 `transport/error`는 연결 종료가 아니다. src/rpc.ts:70은 잘못된 JSON 한 줄에 `protocolError`를 내보낸 뒤 `continue`로 같은 연결의 처리를 이어 간다. src/main.ts:82는 이를 `transport/error`로만 발행하고 rpc를 닫지 않는다. projection의 transport는 새 연결의 `transport/connected`(main.ts:112)가 올 때까지 \"error\"로 남는다(projection.ts:244·267). 재현 순서: transport/connected → transport/error → turn/started(새 턴) → item/started commandExecution → outputDelta × N. 이때 실행 중 명령 카드가 만들어지지 않고 출력 델타도 버려진다. 카드는 `item/completed` 때(projection.ts:399-421) 처음 나타난다. 같은 조건에서 답변·설명 경로(projection.ts:339-341)는 \"error\"를 닫힘으로 보지 않아 계속 스트리밍된다. 그래서 본문 답변은 갱신되지만 명령 실행 상태와 출력은 보이지 않는다. 이는 AC-04 '도구 출력이 턴 종료 전 점진 갱신'과 AC-07 '실행 중 최근 10줄 갱신'을 어긴다. 전송은 막히지 않으므로(renderer.tsx:629는 tone만 failed로 바꿈) 사용자가 이 상태로 계속 작업할 수 있다. 수정 방향: 명령 가드에서 `transport === \"error\"`를 빼고 실제 연결 종료(`closed`)와 닫힌 턴만 기준으로 삼는다. 이 경계의 projection 회귀 테스트도 추가한다. 현재 test/projection.test.ts에는 transport/error 시나리오가 없다(grep 결과 native-activity.test.ts:238에만 존재).",
+          "[확인] Opus 2차 지적 중 나머지는 수정을 확인했다. 닫힌 턴·이전 턴의 늦은 명령 시작/델타 무시(projection.ts:363-365), 완료 명령의 후속 시작/델타 무시(projection.ts:370), 늦은 `item/completed` snapshot 수용 유지(projection.ts:399-433), 복원된 종료 미확인 명령에 턴 중단 맥락 보존(projection.ts:219)이다. 복원 경로(conversations.ts:119-139)는 `item/completed`만 발행하므로 새 가드가 과거 이력을 버리지 않는다.",
+          "[확인] work.json은 AC-05·AC-10을 blocked로 두고 status를 verifying으로 유지한다. 실제 OS 한국어 IME·Windows 미실행과 BoxBox 미해결을 통과로 승격하지 않았다. verification.md의 증거 범위 서술(합성 GUI·CDP 860폭·59ms 합성 수치·설정 모델 한정)도 과대 주장이 없다.",
+          "[경미·문서] verification.md:249는 Chat 관측을 '64개'로, :338은 '65개'로 적었다. 시도별 수치라면 어느 시도의 값인지 명시해야 한다. work.json의 AC-01/06/07 evidence에는 이전 source digest(430aef…, 57f2f1…) 시도도 '현재 적용 가능' 요약으로 남아 있다. 최신 digest(2420d31d…) 시도와 구분되도록 요약이 갱신되는지 공유 core의 현재성 판정을 함께 확인해야 한다. 이 리뷰는 명령을 실행하지 않았고 테스트 결과는 문서에 적힌 기록만 대조했다."
+        ]
+      },
+      {
+        "id": "review-419c64f4-5056-4283-b2e7-f61dd4cf8267",
+        "verdict": "fail",
+        "model": "claude-opus-5-5",
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-419c64f4-5056-4283-b2e7-f61dd4cf8267/opus.json",
+        "findings": [
+          "[결함·AC-03] 복구 가능한 protocolError 뒤에도 연결이 살아 있는데 화면은 '연결 오류'와 실패 색을 계속 표시한다. 재현: `src/rpc.ts:70`은 잘못된 JSON 한 줄에서 protocolError를 내보낸 뒤 `continue`로 같은 연결을 계속 처리하고, `src/main.ts:82`는 이를 `transport/error`로 게시한다. `src/projection.ts:267`과 `src/native-activity.ts:340-342`는 transport를 'error'로 바꾸며, 이 값은 `transport/connected`나 `transport/status`가 다시 올 때만 바뀐다. 실시간 세션에서는 연결이 실제로 닫혀야 `main.ts:112`의 재연결이 일어나므로, 같은 대화를 계속 쓰는 동안 오류 표시가 남는다(`main.ts:231/245`의 status는 대화 복원·전환 때만 발행된다). 그 결과 `src/native-activity-view.tsx:80`은 턴이 정상 진행·완료되는 동안에도 '연결 오류'를 표시한다. `src/renderer.tsx:629`는 statusTone을 'failed'로, 개요 '미해결' 칸을 '연결 error'로 표시하고 하단 상태줄도 '연결 error'를 유지한다. 이는 `docs/DEVELOPMENT.md:257`의 '화면은 통신 경고를 남기되 진행 중 턴·명령을 종료시키지 않는다'는 설명보다 강한 실패 단정이다. 또한 스펙 '오른쪽 세션 모니터' 절의 '실패·정지를 단정하지 않는다'는 원칙과 AC-03의 연결 상태 정확성에 어긋난다. `test/native-activity.test.ts:242-251`은 턴이 completed된 뒤에도 `transport`가 'error'인 상태를 그대로 허용해 이 결함을 고정한다. 'error'를 연결 상태가 아닌 일회성 통신 경고(마지막 경고 시각 포함)로 분리하거나, 이후 정상 메시지를 받으면 connected로 복귀시키는 처리와 회귀 테스트가 필요하다.",
+          "[보조·AC-03] `src/native-activity.ts:283`은 `transport/status`의 state가 'connected'가 아니면 모두 'closed'로 바꾼다. 'error'·'disconnected'도 '연결 끊김'으로 표시되지만, `src/projection.ts:245`는 네 값을 그대로 보존한다. 본문 개요와 오른쪽 모니터의 연결 표현이 같은 사건에서 달라질 수 있다. 현재 main은 connected·closed만 발행하므로 실제 영향은 제한적이다.",
+          "[확인] protocolError 뒤 projection 명령 가드에서 error를 제거한 변경(`src/projection.ts:363-365`)과 활동 투영의 transport/error 분리(`src/native-activity.ts:340-356`)는 rpc.ts의 continue 동작과 일치한다. 실제 종료는 `client.once('closed')`→`transport/closed`만 소유하도록 정리됐다. 2차 리뷰가 지적한 닫힌 턴·완료 명령 뒤의 늦은 시작·델타 무시(`projection.ts:365,370`)와 interrupted 턴의 명령 미확인 표시(`projection.ts:219-221`)도 소스에서 확인했다.",
+          "[증거 범위] verification.md는 7번째 시도 4건(attempt-8ca1e96a, 36c8a862, c9da5764, d4f5d53d)을 현재 근거로 기록한다. 실패 시도(d54d0857, 0c5de038, 1dccc412)도 work.json evidence에 '현재 적용 불가'로 보존되어 있어 승격 오류는 없다. 다만 위 연결 상태 결함은 테스트가 통과를 허용하는 형태라 시도 통과만으로는 드러나지 않는다. 이 검토는 소스·문서 대조만 수행했고 테스트나 GUI를 실행하지 않았다.",
+          "[확인] AC-05·AC-10을 blocked로 둔 것은 실제 OS 한국어 IME·Windows 미실행 및 BoxBox FIXABLE 미해결 기록과 일치한다. 따라서 작업 status를 'verifying'으로 둔 것은 적절하다."
+        ]
+      },
+      {
+        "id": "review-899fec1e-ebc5-498e-bc66-a4a278651a35",
+        "verdict": "pass",
+        "model": "claude-opus-5-5",
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-899fec1e-ebc5-498e-bc66-a4a278651a35/opus.json",
+        "findings": [
+          "4차 결함(복구 가능한 경고가 연결 오류 상태로 남는 문제)의 수정을 소스에서 확인했다. src/projection.ts:269와 src/native-activity.ts:347-350은 `transport/error`를 `protocolWarning {at,message}`로만 저장하고 `transport`와 턴·명령 상태는 바꾸지 않는다. 실제 종료 처리는 `transport/closed`(projection.ts:248-268, native-activity.ts:351-362)에만 남아 있다.",
+          "src/rpc.ts:70은 잘못된 JSON을 만나면 고정 문구 'Codex app-server sent invalid JSON'을 내보낸 뒤 continue한다. src/main.ts:82는 이를 `transport/error`로만 전달한다. 원본 프레임은 UI로 가지 않고 같은 연결에서 계속 처리된다는 verification.md의 설명이 소스와 맞는다.",
+          "`transport/status`의 네 상태는 두 투영이 같은 방식으로 보존한다(projection.ts:247, native-activity.ts:288-292). src/main.ts는 실제로 connected와 closed만 발행하므로 renderer.tsx:629와 native-activity-view.tsx:80의 'error' 분기는 지금 경로에서 경고로는 켜지지 않는다. 경고 표시는 renderer.tsx:642와 native-activity-view.tsx:86에서 연결 상태와 따로 그린다.",
+          "회귀 근거를 확인했다. test/projection.test.ts:245-257은 오류 뒤 새 턴의 명령 스트리밍, connected 유지, 경고 보존을 검사하고 test/native-activity.test.ts:248-254도 경고를 검사한다. test/fixtures/chat-ui-app-server.ts:75는 실제로 `{broken-json`을 내보낸다. scripts/verify-chat.ts:236은 'Native 연결됨'과 '최근 통신 경고'가 함께 보이는지, '연결 error'가 없는지를 DOM에서 확인한다.",
+          "늦은 명령 사건 가드도 유지된다(projection.ts:364-372). 닫힌 턴, 실제 closed 연결, 이전 턴의 새 시작·델타, 이미 끝난 명령의 후속 델타를 무시한다. 완료 snapshot은 계속 받는다(401-436).",
+          "증거 범위는 과장되지 않았다. AC-05와 AC-10은 실제 OS 한국어 IME 미재현, Windows 미실행, BoxBox FIXABLE 미해결 때문에 work.json에서 blocked이고 작업 status도 verifying이다. 500ms 목표 실측, 호스트 자동 등록, GJC 픽셀 비교를 하지 않았다는 점도 verification.md에 한계로 적혀 있다.",
+          "참고(결함 아님): 과거 시도 evidence summary의 '현재 적용 가능' 문구는 그 시도가 끝난 당시의 판정이다. 같은 문장에 현행 적용성은 따로 판정한다고 적혀 있으므로, 최신 판정은 마지막 8번 시도(source digest 009274…)를 기준으로 봐야 한다.",
+          "이 검토는 읽기 전용 소스 대조였다. 테스트, 빌드, GUI 검사는 직접 실행하지 않았고 verification.md의 시도 기록을 검토 대상 데이터로만 다뤘다."
+        ]
+      },
+      {
+        "id": "review-24215cee-bcac-42a9-94bf-e10c7bcb168c",
+        "verdict": "fail",
+        "model": "claude-opus-5-5",
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-24215cee-bcac-42a9-94bf-e10c7bcb168c/opus.json",
+        "findings": [
+          "[결함·증거 범위 확대] AC-01(work.json:21-69)의 현재 근거가 기준 범위를 다 덮지 않는다. AC-01 정의는 '과거 턴 선택·최신 복귀·초안·읽기 위치를 보존한다'이다. 최종 소스 지문 9cb48df0…에서 AC-01에 연결된 시도는 attempt-83c82b55(scripts/verify-native-activity.ts --ui-only)뿐이다. 이 스크립트의 필수 키(scripts/verify-native-activity.ts:70, src/renderer.tsx:147)는 turnGrouping·historySelectionPreserved·www* 등이며 초안·읽기 위치는 검사하지 않는다. 같은 스크립트에서 draft·초안·scrollTop은 검색되지 않았다. 초안·읽기 위치를 검사하는 scripts/verify-chat.ts는 같은 소스에서 attempt-f5936183로 통과했지만, 이번 회차에서 관련 기준이 `AC-06`, `AC-07`로만 기록돼 AC-01이 빠졌다. 반면 직전 chat 시도 d943484f 등은 AC-01을 포함했다. 이번 회차에서 패널 구조(src/native-activity-view.tsx의 WwwFlow·www-native-details)와 renderer.tsx가 바뀌었으므로, 이전 소스의 초안·읽기 위치 근거를 현재 통과로 옮길 수 없다. 수정 방법은 둘 중 하나다. (a) 최종 소스에서 verify-chat 시도를 AC-01과 연결해 다시 기록한다. (b) AC-01의 현재 결과를 미검증으로 되돌린다.",
+          "[확인·타당] src/www-activity.ts의 정본 목록은 실제 파일 agents/www/AGENT.md, agents/www-design/AGENT.md, skills/www/{spec,design,build,diagnose,verify,commit}/SKILL.md와 일치한다(Glob으로 확인). canonicalRelative는 저장소 루트 접두와 '/'를 함께 비교하므로 유사 접두(/projects/www-other)와 저장소 밖 경로를 배제한다. 루트를 넘는 '..'는 null로 처리한다. literalArguments는 `| ; & < > $ \\` ( ) { } * ? [ ] ~ # ! ^ =`, 개행·NBSP, 닫히지 않은 따옴표, 옵션 인자를 거부한다. bash/zsh 래퍼도 정확히 `-lc` + 단일 인자일 때만 받는다. echo·grep·연쇄·치환·glob·heredoc 거부 테스트(test/www-activity.test.ts:45-65)도 구현과 일치한다.",
+          "[확인·타당] native-activity.ts:510-540에서 구조화된 commandActions read는 file_read, 리터럴 cat 참조는 command_reference로 분리한다. 같은 item의 file_read가 있으면 참조를 건너뛴다. finish 라벨은 '읽기 확인/실패/미확인'이고, 뷰의 artifactStatus(native-activity-view.tsx:72-80)는 command_reference를 '읽기 명령 관측/실패'로만 표시한다. 어느 경로도 '적용 확인'을 만들지 않으므로 AC-11의 요청·읽기·명령 관측·적용 구별은 소스에서 성립한다.",
+          "[확인·타당] AC-12 관련으로, Hook은 wwwArtifact를 갖지 않아 WWW 흐름에 섞이지 않는다. 일반 Native 상세(native-activity-view.tsx:154-172)에는 턴·세션 Hook의 실패 수와 'hook approval required'에 근거한 신뢰 검토 수를 표시한다. Hook 설명에는 sourcePath·statusMessage·error/warning/stop 본문을 최대 4개, 각 800자까지 보존한다(native-activity.ts:377-380). 종료 뒤 늦게 온 hook/started는 무시해 실패를 지우지 않는다(374행).",
+          "[비차단·UX] native-activity.css:40-42에서 WWW 표시등은 running과 completed가 같은 accent 채움이다. pending(요청됨)과 unknown(결과 미확인)은 관측 없음과 같은 빈 원이다. 문구로는 구별되지만, 명세의 '시작 때 켜지고 종료 때 완료 흔적으로 바뀌는' 신호등 표현이 색·모양만으로는 드러나지 않는다. 같은 파일 52행은 `.www-native-details>summary span`에 실패가 없을 때도 warm 색을 적용해, 정상 상태 요약('명령·공개 과정')이 경고처럼 보일 수 있다.",
+          "[비차단] ArtifactRow(native-activity-view.tsx:83)는 같은 턴의 마지막 관측만 표시한다. 같은 산출물의 읽기 실패 뒤에 다른 명령 참조나 요청이 관측되면 앞선 실패는 기본 행에서 사라지고 일반 상세에서만 보인다. 실패를 숨기지 않는다는 취지에 맞추려면 실패 이력 표시를 고려할 만하다.",
+          "[기록 확인] verification.md:704는 최종 `npm run check`(Bun235/Node147)를 로컬 로그로만 남기고 엄격한 소스 연결을 주장하지 않는다. 실제 IME·Windows 미실행, BoxBox FIXABLE 잔존, AC-05·AC-10 blocked, done 아님도 일관되게 기록돼 있다. 이 검토는 테스트를 실행하지 않았고 소스·문서·기록만 대조했다."
+        ]
+      },
+      {
+        "id": "review-922c1d5d-4560-4c4a-a20c-d6ec69912c52",
+        "verdict": "pass",
+        "model": "claude-opus-5-5",
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-922c1d5d-4560-4c4a-a20c-d6ec69912c52/opus.json",
+        "findings": [
+          "판정: pass. 최신 변경인 WWW 전용 흐름(AC-11·AC-12)의 소스와 검증 근거를 대조한 결과, 수정이 필요한 기능 결함은 찾지 못했다. 테스트와 앱은 직접 실행하지 않았고, 소스·테스트 코드와 verification.md·work.json 기록만 읽었다.",
+          "AC-11 정본 식별: src/www-activity.ts:9-18에 역할 2개(www-dev, www-design-agent)와 스킬 6개가 고정 경로로 정의돼 있다. src/www-activity.ts:38-52의 canonicalRelative는 workspacePath가 없거나 결과 경로가 저장소 루트 밖이면 null을 반환한다. 그래서 이름만 같은 파일이나 www-other처럼 접두어만 같은 경로는 WWW 역할로 분류되지 않는다. test/www-activity.test.ts:22-29가 이 경계를 다룬다.",
+          "AC-11 cat 리터럴 관측: src/www-activity.ts:65-91은 파이프·연쇄·치환·리디렉션·glob·히스토리·`=`·NBSP·따옴표 불일치가 있으면 판별 자체를 거부한다. src/www-activity.ts:94-112는 단독 cat과 `bash/zsh -lc '<cat ...>'` 형태만 허용한다. test/www-activity.test.ts:45-65의 echo·grep·`$()`·heredoc·python 같은 거부 사례가 spec.md:179의 '엄격한 리터럴 cat만 허용' 요구와 일치한다.",
+          "AC-11 요청·읽기·명령 관측·적용 구별: src/native-activity.ts:528-539는 같은 itemId에 구조화된 file_read가 있으면 command_reference를 만들지 않는다. command_reference는 finish()의 라벨 재작성 대상에서 빠져 있어(src/native-activity.ts:185) '읽기 명령 관측' 라벨이 유지된다. 화면 쪽에서는 src/native-activity-view.tsx:72-80이 '요청됨 / 읽기 명령 관측 / 읽는 중 / 읽기 완료 / 읽기 실패 / 미확인'을 구분하고, :86·:98·:179에서 적용 완료가 아니라는 문구를 보여준다. src/native-activity.css:56은 command_reference 신호를 속이 빈 사각형으로 그려 '읽기 완료'의 채운 원과 모양을 다르게 한다.",
+          "AC-12 일반 Hook 분리: src/native-activity-view.tsx:154-171은 일반 Hook과 전체 도구 기록을 기본 접힘 상태의 '일반 Native 활동' 상세에 둔다. 요약 줄에는 실패 수와 신뢰 검토 필요 수를 보존하고, 'WWW 에이전트·스킬 적용 실패와 별개'라는 안내를 붙인다. src/native-activity.ts:377은 Hook 출력 중 error·warning·stop만 최대 4개, 각 800자까지 보존하고 context 종류는 버린다. test/www-activity-view.test.ts:13-22가 PRIVATE_CONTEXT가 화면에 나오지 않는 것을 확인한다.",
+          "검증 근거 연결: 최신 기준 정의 식별(772044…)에서 AC-11·12는 verify-native-activity --ui-only 시도(attempt-2df0cfe5, attempt-83c82b55)와 연결돼 있다. 이 하네스는 scripts/verify-native-activity.ts:70에서 wwwRolesObserved, wwwSkillsObserved, generalHooksSecondary, hookFailureExplained를 실제 항목으로 검사한다. 직전 Opus 검토가 지적한 AC-01 기준 연결 누락은 attempt-92920f2f(verify-chat, AC-01/06/07, 통과, 소스 유지)로 보완됐다.",
+          "증거 범위(비차단): 현재 소스 식별(9cb48df…)에서 `npm run check`의 공식 시도는 없다. verification.md:704는 로컬 로그의 전체 테스트 통과(382건)를 '같은 제품 코드 결과 재사용'으로 쓰면서 엄격한 소스 연결이 없다고 스스로 밝힌다. AC-07의 npm check 근거는 이전 기준 정의의 시도이므로, 현재 소스의 전체 타입·빌드 통과를 공식 근거로 확대해 읽어서는 안 된다. 기록이 이 점을 명시하고 있어 결함으로 보지는 않는다.",
+          "남은 차단 항목: AC-05(실제 OS 한국어 IME와 Windows 실기 미실행)와 AC-10(BoxBox FIXABLE 미해결)은 blocked로 남아 있다. 작업 상태를 done이 아니라 verifying으로 둔 판단은 기록과 일치한다.",
+          "비차단 개선 후보 1: '일반 Native 활동' 요약(src/native-activity-view.tsx:168)은 Hook 건수와 실패 수만 보여주고, 실행 중인 Hook이 있다는 신호는 기본 화면에 없다. 사용자 정정(spec.md:177)에 따라 상세로 내린 것이므로 결함은 아니지만, 짧은 실행 중 표시를 추가하는 것을 검토할 만하다.",
+          "비차단 개선 후보 2: 한 번 읽기에 실패한 뒤 다시 읽어 성공하면 ArtifactRow가 마지막 관측(.at(-1), src/native-activity-view.tsx:83)만 보여줘 앞선 실패가 기본 행에서 사라진다. 이 기록은 일반 Native 상세에는 남는다. 이전 Opus 검토도 같은 점을 '이전 실패 이력 요약' 후속 후보로 남겼다."
+        ]
+      }
+    ],
+    "omitted": {
+      "criteria": 0,
+      "evidence": 6,
+      "verifications": 14,
+      "reviews": 0,
+      "arguments": 22,
+      "findings": 0,
+      "unresolved": 1
+    }
+  },
+  "source": {
+    "recordPath": "docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/work.json",
+    "workRecordHash": "a3e4809f2701c23e091c421f9b139b7a140bb45b8d4d0a26993bdad66d853547",
+    "sourceDigest": "9cb48df053b884680eb61f1c684b2f010ebbd3743fb66a90b9c22cf64a55fe51",
+    "criteriaDigest": "772044fccf72bd02d84b48fd2ed1c299972102805b280aa760f6ed7bcaa45f42"
+  }
+}

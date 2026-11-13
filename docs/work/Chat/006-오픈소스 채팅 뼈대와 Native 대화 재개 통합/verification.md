@@ -138,3 +138,16 @@
 - BoxBox 최종 source check는 19개 대상 모두 syntax valid지만 정렬·REFUSE가 남았다. 원문 .www/evidence/work-baa0963b-ea71-48e7-a34f-0d229ba704b1/boxbox-final.json. 승인 데이터를 조작하거나 Align/formatter로 우회하지 않았다. 이 상태에서는 정식 done으로 종료하지 않는다.
 - 신규 채팅·Native·검증 코드 9개에서 TODO/test.skip/test.only/it.skip/it.only 표식을 직접 찾았고 없었다. 최초 표식 검색 명령은 정규식 이스케이프 오류로 실패해 문자열 검색으로 교정했다.
 - 커밋·push하지 않았다. 같은 UUID에서 두 세션의 최종 소스가 고정되면 현재 전체/GUI 검증·문서 영향·Opus 적용성을 확인하고 BoxBox 미해결을 처리한다.
+
+
+<a id="critical-review-20261113"></a>
+## Claude Code 비판 검토 — 2026-11-13
+
+- 직접 요청: “Claude Code에게 006에 관해서 비판적인 리뷰 한번 받아보자”. 이번 권한은 읽기 전용 검토와 결과 기록이며 제품 수정·커밋·push는 수행하지 않았다.
+- 공유 review core로 Opus 요청, 실제 관측 모델 claude-opus-5-5, 판정 fail, 실행 종료 코드 0. 검토 ID review-8dc45833-b9b7-4b5a-ba92-b758c774723c.
+- 대상 HEAD 1509280, source digest cea65e2f0743a60526df496dc4baacc6d5c0e0f9b60d8e978cb0f568ee6987f5. 검토 전후 소스 지문 동일. 전체 원문: .www/scratchpad/chat-006-critical-review-20261113/receipt-keychain/opus.json, 구조화 결과: .www/scratchpad/chat-006-critical-review-20261113/review-keychain.json.
+- 첫 샌드박스 실행은 Not logged in으로 모델 미실행. macOS 기존 인증 접근을 허용받아 같은 읽기 전용 실행을 재시도했다. 모델 대체는 하지 않았다.
+- 핵심 지적: 현행 파일 지문이 과거 검사·Opus 검토 대상과 달라 당시 pass를 현재 통합본에 적용할 수 없다. 과거 evidence 문구는 저장 당시 사실과 현행 적용성 판정을 구분해야 한다.
+- 코드상 확인한 미확인 위험: 연결 종료 뒤 activeThreadId가 남고 turn/start가 새 연결에서 resume 없이 호출된다(main.ts:69,281). 같은 대화 클릭은 반환한다(renderer.tsx:255). 승인 대기 중 중단 뒤 pendingApprovals가 남을 위험도 제기됐으나 Native 해소 알림과 실제 재현은 확인하지 않았다. 긴 이력의 원문 payload와 턴 중간 절단도 검토 지적이다.
+- 검토자의 커밋 기록 지적 해석: 현재 HEAD에 통합 커밋은 있지만 과거 보고서의 미커밋 서술만으로 무단 커밋을 단정할 수 없다. 후속 승인·게시·검증 기록의 연결을 확인해야 한다.
+- 이 검토에서는 테스트·Electron·실제 Native·BoxBox를 실행하지 않았다. 기존 원격 실기 원문은 이 로컬 사본에 없었다. 이전 BoxBox 미해결과 미검증 한계는 해소하지 않았다. 제품 수정 없이 verifying을 유지한다.

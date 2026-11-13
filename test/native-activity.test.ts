@@ -1,4 +1,7 @@
 import { describe, expect, test } from "bun:test";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { NativeActivityView } from "../src/native-activity-view";
 import { projectNativeActivity } from "../src/native-activity";
 import type { AppEvent } from "../src/shared";
 
@@ -85,6 +88,41 @@ describe("실시간 Native 활동 투영", () => {
     const skills = result.turns[0]?.entries.filter((row) => row.kind === "skill");
     expect(skills?.map((row) => row.source)).toEqual(["file_read", "file_read", "request"]);
     expect(skills?.map((row) => row.status)).toEqual(["completed", "failed", "pending"]);
+  });
+
+  test("선택 저장소의 전용 역할·스킬 읽기를 이름과 근거로 보존한다", () => {
+    const root = "/projects/www";
+    const role = item(3, "item/started", { id: "role", type: "commandExecution", cwd: root, commandActions: [{ type: "read", path: `${root}/agents/www/AGENT.md` }] });
+    const skill = item(4, "item/started", { id: "skill", type: "commandExecution", cwd: root, commandActions: [{ type: "read", path: `${root}/skills/www/www-build/SKILL.md` }] });
+    const before = projectNativeActivity([configured, started(2), role, skill], "t", root);
+    expect(before.turns[0]?.entries.find((row) => row.wwwArtifact?.id === "www-dev")).toMatchObject({ kind: "role", label: "www-dev 읽는 중", source: "file_read", status: "running" });
+    const after = projectNativeActivity([configured, started(2), role, skill, item(5, "item/completed", { id: "role", type: "commandExecution", exitCode: 0 }), item(6, "item/completed", { id: "skill", type: "commandExecution", exitCode: 1 })], "t", root);
+    expect(after.turns[0]?.entries.find((row) => row.wwwArtifact?.id === "www-dev")).toMatchObject({ label: "www-dev 읽기 확인", status: "completed" });
+    expect(after.turns[0]?.entries.find((row) => row.wwwArtifact?.id === "www-build")).toMatchObject({ label: "www-build 읽기 실패", status: "failed" });
+  });
+
+  test("전용 문서 cat 참조는 구조화 읽기와 구별하고 완료 때 명령 상태만 갱신한다", () => {
+    const root = "/projects/www";
+    const read = item(3, "item/started", { id: "multi", type: "commandExecution", cwd: root, command: "/bin/zsh -lc 'cat AGENTS.md agents/www/AGENT.md skills/www/www-verify/SKILL.md'", commandActions: [{ type: "unknown" }] });
+    const result = projectNativeActivity([configured, started(2), read, item(4, "item/completed", { id: "multi", type: "commandExecution", exitCode: 0 })], "t", root);
+    const references = result.turns[0]?.entries.filter((row) => row.source === "command_reference");
+    expect(references?.map((row) => row.wwwArtifact?.id)).toEqual(["www-dev", "www-verify"]);
+    expect(references?.every((row) => row.label.endsWith("읽기 명령 관측") && row.status === "completed")).toBe(true);
+    expect(references?.every((row) => row.description?.includes("개별 문서 읽기·적용은 확인되지 않았습니다."))).toBe(true);
+    expect(result.turns[0]?.entries.some((row) => row.source === "file_read")).toBe(false);
+  });
+
+  test("타 저장소 문서와 echo 언급은 WWW 사용으로 올리지 않고 구조화 읽기에는 중복 참조를 만들지 않는다", () => {
+    const root = "/projects/www";
+    const result = projectNativeActivity([
+      configured, started(2),
+      item(3, "item/completed", { id: "other", type: "commandExecution", cwd: root, command: "cat /other/agents/www/AGENT.md", commandActions: [{ type: "read", path: "/other/agents/www/AGENT.md" }], exitCode: 0 }),
+      item(4, "item/completed", { id: "echo", type: "commandExecution", cwd: root, command: "echo www-build skills/www/www-build/SKILL.md", exitCode: 0 }),
+      item(5, "item/completed", { id: "known", type: "commandExecution", cwd: root, command: "cat skills/www/www-build/SKILL.md", commandActions: [{ type: "read", path: "skills/www/www-build/SKILL.md" }], exitCode: 0 }),
+    ], "t", root);
+    const documents = result.turns[0]?.entries.filter((row) => row.wwwArtifact);
+    expect(documents).toHaveLength(1);
+    expect(documents?.[0]).toMatchObject({ source: "file_read", wwwArtifact: { id: "www-build" } });
   });
 
   test("thread 없는 Hook은 세션에만 두고 동기 run ID를 중복 억제한다", () => {
@@ -215,6 +253,97 @@ describe("실시간 Native 활동 투영", () => {
     const next = projectNativeActivity([configured, started(2), update(3, "a", 10), update(4, "a", 8, 3), completed, started(6, "b"), update(7, "b", 12)]);
     expect(next.usage?.totalTokens).toBe(12);
     expect(next.turns[1]?.usage).toBeNull();
+  });
+
+  test("현재 턴 마지막 활동은 다른 턴의 늦은 사건으로 이동하지 않고 종료 뒤 고정된다", () => {
+    const result = projectNativeActivity([
+      configured, started(2),
+      event(3, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }),
+      started(4, "b"),
+      event(5, "item/commandExecution/outputDelta", { threadId: "t", turnId: "b", itemId: "cmd", delta: "실행 중" }),
+      item(6, "item/completed", { id: "late", type: "commandExecution", exitCode: 0 }),
+    ]);
+    expect(result.turns[0]?.lastActivityAt).toBe("2026-11-12T00:00:03Z");
+    expect(result.turns[1]?.lastActivityAt).toBe("2026-11-12T00:00:05Z");
+  });
+
+  test("연결 상태는 명시적 transport 사건으로만 정하고 복원 상태도 반영한다", () => {
+    expect(projectNativeActivity([configured, started(2)]).transport).toBe("disconnected");
+    expect(projectNativeActivity([event(1, "transport/connected", {})]).transport).toBe("connected");
+    expect(projectNativeActivity([event(1, "transport/error", {})]).transport).toBe("disconnected");
+    expect(projectNativeActivity([event(1, "transport/connected", {}), event(2, "transport/error", {})]).transport).toBe("connected");
+    for (const state of ["connected", "closed", "error", "disconnected"] as const) expect(projectNativeActivity([event(1, "transport/status", { state })]).transport).toBe(state);
+    expect(projectNativeActivity([{ ...event(1, "transport/status", { state: "closed" }), historical: true }]).transport).toBe("closed");
+  });
+
+  test("복구 가능한 JSON 경고는 현재 턴과 명령을 종료하지 않는다", () => {
+    const before = [configured, started(2), item(3, "item/started", { id: "live", type: "commandExecution", command: "printf live" }), event(4, "transport/error", { message: "잘못된 JSON 한 줄" })];
+    const running = projectNativeActivity(before);
+    expect(running.transport).toBe("disconnected");
+    expect(running.protocolWarning?.message).toBe("잘못된 JSON 한 줄");
+    expect(running.turns[0]).toMatchObject({ status: "running", endedAt: null });
+    expect(running.turns[0]?.entries[0]?.status).toBe("running");
+    const completed = projectNativeActivity([...before, item(5, "item/completed", { id: "live", type: "commandExecution", exitCode: 0 }), event(6, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } })]);
+    expect(completed.turns[0]?.status).toBe("completed");
+    expect(completed.turns[0]?.entries[0]?.status).toBe("completed");
+    expect(completed.protocolWarning).toEqual(running.protocolWarning);
+  });
+
+  test("복원한 턴과 Hook은 실시간 활동으로 재생하지 않고 미종료 Hook을 미확인으로 둔다", () => {
+    const result = projectNativeActivity([
+      configured,
+      { ...started(2), historical: true },
+      { ...event(3, "hook/started", { run: { id: "old", executionMode: "sync", status: "running", eventName: "Stop" } }), historical: true },
+    ]);
+    expect(result.turns[0]?.historical).toBe(true);
+    expect(result.turns[0]?.status).toBe("unknown");
+    expect(result.sessionEntries[0]?.historical).toBe(true);
+    expect(result.sessionEntries[0]?.status).toBe("unknown");
+  });
+
+  test("공개 진행 설명은 완료 전 누적하고 snapshot으로 대체하며 analysis는 노출하지 않는다", () => {
+    const before = [configured, started(2), item(3, "item/started", { id: "p", type: "agentMessage", phase: "commentary" }), event(4, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase: "commentary", delta: "파일 확인 중" })];
+    expect(projectNativeActivity(before).turns[0]?.entries[0]?.description).toBe("파일 확인 중");
+    const result = projectNativeActivity([...before, item(5, "item/completed", { id: "p", type: "agentMessage", phase: "commentary", text: "파일을 확인했습니다." }), item(6, "item/completed", { id: "secret", type: "agentMessage", phase: "analysis", text: "숨김 원문" })]);
+    expect(result.turns[0]?.entries).toHaveLength(1);
+    expect(result.turns[0]?.entries[0]?.kind).toBe("progress");
+    expect(result.turns[0]?.entries[0]?.description).toBe("파일을 확인했습니다.");
+    expect(result.turns[0]?.entries[0]?.status).toBe("completed");
+    expect(result.turns[0]?.answer).toBeNull();
+    expect(JSON.stringify(result)).not.toContain("숨김 원문");
+  });
+
+  test("패널은 WWW 전용 흐름을 중심에 두고 일반 활동과 토큰은 보조 펼침으로 둔다", () => {
+    const events = [configured, event(2, "transport/connected", {}), started(3), item(4, "item/completed", { id: "u", type: "userMessage", content: [{ type: "skill", name: "demo" }] })];
+    const html = renderToStaticMarkup(createElement(NativeActivityView, { events, threadId: "t" }));
+    expect(html).toContain("현재 세션 모니터");
+    expect(html).toContain("Native 연결됨");
+    expect(html).toContain("WWW 개발 흐름");
+    expect(html).toContain("전용 에이전트");
+    expect(html).toContain("일반 Native 활동");
+    expect(html).toContain("요청됨");
+    expect(html).toContain("모델·토큰·계정 관측");
+    expect(html).toContain("공개 진행 설명 미제공");
+  });
+
+  test("복원된 진행 턴은 패널에서 실시간 점멸하지 않는다", () => {
+    const html = renderToStaticMarkup(createElement(NativeActivityView, { events: [configured, { ...started(2), historical: true }], threadId: "t" }));
+    expect(html).toContain("복원된 이력");
+    expect(html).not.toContain('na-live-state na-live');
+  });
+
+  test("완전 복원 표식은 전역 seq 간격을 절단으로 오인하지 않고 불완전 복원은 알린다", () => {
+    const complete = { ...event(20, "conversation/restored", { threadId: "t", complete: true }), historical: true };
+    expect(projectNativeActivity([complete, started(21)]).historyTruncated).toBe(false);
+    const incomplete = { ...complete, params: { threadId: "t", complete: false } };
+    expect(projectNativeActivity([incomplete, started(21)]).historyTruncated).toBe(true);
+    expect(projectNativeActivity([started(21)]).historyTruncated).toBe(true);
+  });
+
+  test("완전 복원 표식도 실제 2000건 보관 경계에서 제거되면 절단을 숨기지 않는다", () => {
+    const complete = { ...event(20, "conversation/restored", { threadId: "t", complete: true }), historical: true };
+    const after = Array.from({ length: 2_000 }, (_, index) => event(21 + index, "irrelevant", {}));
+    expect(projectNativeActivity([complete, ...after]).historyTruncated).toBe(true);
   });
 
 });

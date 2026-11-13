@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "id": "report-a2f0e844-cd72-48cd-afaf-65f1793df84c",
+  "workId": "work-eed41da3-f22e-4fb9-b9df-9a1a7d76c44f",
+  "title": "실시간 세션 모니터와 채팅 가독성",
+  "summary": "실시간 세션 모니터와 채팅 가독성 개선의 개발 명세를 작성했다. 사용자 요구와 작성자 제안을 구별하고 기능 동작·수용 기준 10개·검증 시나리오·실행 순서를 연결했다. 문서 계약 검사는 통과했지만 Opus 독립 검토는 로그인 부재로 미실행이며 제품 구현은 시작하지 않았다.",
+  "outcome": "blocked",
+  "kind": "authored",
+  "event": "finish",
+  "createdAt": "2026-11-13T01:09:43.574Z",
+  "workRecordHash": "90bb927f71532b654c84150df23b1aad1ee4ac0dabe32560a9b8724a413b41c9",
+  "sourceDigest": "525fce737f04faac11e0c64d7eb152980fd774876df31d293fd01be2dc64a08b",
+  "criteriaDigest": "5a7d39cb29e25884c076760aaf95ef3e18ef82553164958a74f1cc5232548bf9",
+  "semanticHash": "6128d08252629f116573bec144aca44705cf50122b9b1de8c26d74ca21055b59",
+  "narrative": {
+    "summary": "실시간 세션 모니터와 채팅 가독성 개선의 개발 명세를 작성했다. 사용자 요구와 작성자 제안을 구별하고 기능 동작·수용 기준 10개·검증 시나리오·실행 순서를 연결했다. 문서 계약 검사는 통과했지만 Opus 독립 검토는 로그인 부재로 미실행이며 제품 구현은 시작하지 않았다.",
+    "before": "오른쪽 세션 흐름, 실시간 과정, Enter 누락, 답변 잘림, Design 역할과 GJC 카드 요구가 대화에만 있었다.",
+    "after": "Chat 007 명세와 작업 레코드 및 목차에서 범위·권한·기준·후속 개발 순서를 확인할 수 있다.",
+    "changes": [
+      "오른쪽 현재 상태와 질문별 이력, Skill·Hook 관측 상태와 상세를 정의했다.",
+      "Enter·답변 잘림·실시간 진행의 재현 및 검증 시나리오를 정의했다.",
+      "10줄 명령 카드, WWW Design 역할, 디자인 시스템과 오픈소스 비교 요구를 정의했다."
+    ],
+    "decisions": [
+      "명세 작성 권한과 후속 구현 권한을 구분하고 구현 기준은 전부 unverified로 유지한다.",
+      "10줄 표시 방식·500ms 반영 목표·역할 이름은 사용자 확정이 아닌 제안 기본값으로 기록했다.",
+      "현행 제품·구조·기능 문서는 미래 목표로 덮어쓰지 않는다."
+    ],
+    "limitations": [
+      "제품 코드 수정, 실제 UI 재현, Native 실기·IME 검증, 오픈소스 후보 조사·선정은 수행하지 않았다.",
+      "Opus 검토 호출은 Not logged in · Please run /login으로 종료되어 관측 모델과 판정이 없다. 원문은 .www/evidence/reviews/review-fa121356-dc5f-4027-98d5-fd3b1b38d4d0/opus.json에 있다.",
+      "BoxBox는 자동 생성 work.json 구문 valid, 정렬 FIXABLE 24개를 보고했다. 자동 정렬은 실행하지 않았으며 전체 스타일 통과를 주장하지 않는다."
+    ],
+    "next": [
+      "Opus 인증 복구 후 명세 독립 검토를 실행한다.",
+      "후속 구현 권한을 연결하면 같은 작업 ID로 Enter·잘림·스트리밍 진단과 Design 파일럿 설계를 진행한다."
+    ]
+  },
+  "work": {
+    "status": "ready",
+    "blockedReason": "명세 작성됨; 독립 Opus 검토 미실행(Claude 로그인 없음). 자동 생성 JSON BoxBox 정렬 FIXABLE 미해결. 제품 구현은 미실행.",
+    "criteria": [
+      {
+        "id": "AC-01",
+        "description": "오른쪽 패널은 세션 현재 상태와 질문별 이력을 제공하고 과거 턴 선택·최신 복귀·초안·읽기 위치를 보존한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-02",
+        "description": "Skill 요청·읽기 관측·적용 확인과 Hook 실제 실행 상태를 구분하고 실시간 표시하며, 과거 복원·중복·늦은 사건으로 새 호출 효과를 재생하지 않는다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-03",
+        "description": "현재 작업·경과 시간·마지막 활동·승인 대기·오류·연결 상태를 사람이 읽는 문장과 상세 근거로 제공하고 미확인을 성공으로 추정하지 않는다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-04",
+        "description": "공개 진행 설명·공개 요약·도구 출력·최종 답변이 턴 종료 전 점진적으로 갱신되며 본문과 패널이 동일 실행을 가리킨다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-05",
+        "description": "한국어 조합 확정과 전송을 구별하고 Enter·Shift+Enter·반복 입력·전송 실패 시 초안 및 중복 방지를 실제 앱에서 검증한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-06",
+        "description": "긴 답변·표·코드·스트리밍 완료 뒤 마지막 문장까지 접근 가능하고 입력창·패널·스크롤 컨테이너가 내용을 가리지 않으며 보관 한계는 명시한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-07",
+        "description": "명령 실행 카드가 명령·경로·실제 상태·들여쓰기를 보존한 10줄 출력 미리보기·전체 보관 출력 접근·실패·중단·미확인을 제공한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-08",
+        "description": "WWW Design 역할의 입력·산출물·권한·개발 및 검토 역할과의 인계, 토큰과 컴포넌트의 정본·접근성·상태 규칙을 정의하고 파일럿에 적용한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-09",
+        "description": "GJC 실제 참조와 오픈소스 후보 3개 이상의 공식 저장소·고정 revision·라이선스·채택 및 제외 이유를 기록하고 사용하는 코드의 고지를 유지한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-10",
+        "description": "현재 소스에서 합성 사건·실제 Native·Electron GUI 및 대상 플랫폼 결과를 구분하고 필수 기준의 실제 증거와 읽기 전용 Opus 독립 검토로 구현 수용을 판단한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      }
+    ],
+    "verifications": [],
+    "reviews": [
+      {
+        "id": "review-fa121356-dc5f-4027-98d5-fd3b1b38d4d0",
+        "verdict": "not_run",
+        "model": null,
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-fa121356-dc5f-4027-98d5-fd3b1b38d4d0/opus.json",
+        "findings": []
+      }
+    ]
+  },
+  "source": {
+    "recordPath": "docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/work.json",
+    "workRecordHash": "90bb927f71532b654c84150df23b1aad1ee4ac0dabe32560a9b8724a413b41c9",
+    "sourceDigest": "525fce737f04faac11e0c64d7eb152980fd774876df31d293fd01be2dc64a08b",
+    "criteriaDigest": "5a7d39cb29e25884c076760aaf95ef3e18ef82553164958a74f1cc5232548bf9"
+  }
+}

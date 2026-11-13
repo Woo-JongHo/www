@@ -109,6 +109,22 @@ test("긴 출력과 불완전한 이력은 절단을 표시하고 저장된 inPr
   expect(project([historicalRequest]).blocks).toEqual([]);
 });
 
+for (const status of ["completed", "failed", "interrupted", "declined", "inProgress"]) {
+  test(`저장 명령의 ${status} 상태를 복원하고 파일 변경의 기존 상태 경계를 유지한다`, () => {
+    const restored = restoreConversationEvents("thread-1", [{
+      id: "saved-turn", status: "completed", items: [
+        { id: "command", type: "commandExecution", command: "example", status },
+        { id: "files", type: "fileChange", status, changes: [{ path: "a.ts" }] }
+      ]
+    }], true);
+    const view = project(events(restored));
+    const commandStatus = status === "inProgress" || status === "interrupted" ? "unknown" : status;
+    expect(view.blocks).toContainEqual(expect.objectContaining({ kind: "command", running: false, status: commandStatus, startedAt: null, endedAt: null }));
+    const fileStatus = status === "completed" || status === "failed" ? status : "unknown";
+    expect(view.blocks).toContainEqual(expect.objectContaining({ kind: "files", running: false, status: fileStatus }));
+  });
+}
+
 test("실제 stdio subprocess를 재시작한 뒤 같은 Native thread ID와 누적 대화를 다시 연다", async () => {
   const directory = await mkdtemp(join(tmpdir(), "www-conversations-"));
   const store = join(directory, "history.json");

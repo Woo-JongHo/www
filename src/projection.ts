@@ -10,7 +10,7 @@ import type {
 
 export const MAX_OUTPUT_CODE_UNITS = 32_768;
 
-type ItemStatus = "running" | "completed" | "failed" | "unknown";
+type ItemStatus = "running" | "completed" | "failed" | "declined" | "unknown";
 
 export type Block =
   | {
@@ -52,6 +52,9 @@ export type Block =
       running         : boolean       ;
       status          : ItemStatus    ;
       exitCode        : number | null ;
+      startedAt       : number | null ;
+      endedAt         : number | null ;
+      turnInterrupted?: boolean;
     }
   | {
       kind     : "files"       ;
@@ -88,6 +91,7 @@ export interface Projection {
   turn             : TurnState      ;
   interrupt        : InterruptState ;
   historyTruncated : boolean        ;
+  protocolWarning: { at: string; message: string } | null;
 }
 
 const object = (value: unknown): Record<string, unknown> =>
@@ -102,6 +106,12 @@ const eventThreadId = (params: Record<string, unknown>, fallback: string | null)
 function limitOutput(value: string): { output: string; truncated: boolean } {
   if (value.length <= MAX_OUTPUT_CODE_UNITS) return { output: value, truncated: false };
   return { output: value.slice(-MAX_OUTPUT_CODE_UNITS), truncated: true };
+}
+
+function observedTime(event: AppEvent): number | null {
+  if (event.historical) return null;
+  const timestamp = Date.parse(event.at);
+  return Number.isFinite(timestamp) ? timestamp : null;
 }
 
 function publicMessageKind(method: string, item: Record<string, unknown>, params: Record<string, unknown>): "answer" | "commentary" | "publicPlan" | null {
@@ -124,6 +134,7 @@ function isSummary(value: unknown): value is string[] {
 }
 
 function itemStatus(item: Record<string, unknown>): ItemStatus {
+  if (item.status === "declined") return "declined";
   const exitCode = item.exitCode;
   if (typeof exitCode === "number") return exitCode === 0 ? "completed" : "failed";
   const status = string(item.status);
@@ -137,6 +148,7 @@ export function project(events: readonly AppEvent[]): Projection {
   let threadId  : string | null  = null           ;
   let turnId    : string | null  = null           ;
   let transport : TransportState = "disconnected" ;
+  let protocolWarning: Projection["protocolWarning"] = null;
   let turn      : TurnState      = "idle"         ;
   let interrupt : InterruptState = "idle"         ;
 
@@ -203,7 +215,15 @@ export function project(events: readonly AppEvent[]): Projection {
       if (!turnId) turn = "failed";
     }
     if (event.method === "turn/started" && !activeTurn && turnId !== null) closeMessages(threadId, turnId);
-    if (event.method === "turn/completed") closeMessages(relatedThreadId, relatedTurnId);
+    if (event.method === "turn/completed") {
+      closeMessages(relatedThreadId, relatedTurnId);
+      for (const block of blocks) {
+        if (block.kind === "command" && block.status === "unknown" && block.threadId === relatedThreadId && block.turnId === relatedTurnId && object(params.turn).status === "interrupted") block.turnInterrupted = true;
+        if (block.kind === "command" && block.running && block.threadId === relatedThreadId && block.turnId === relatedTurnId) {
+          Object.assign(block, { running: false, status: "unknown", endedAt: observedTime(event), turnInterrupted: object(params.turn).status === "interrupted" });
+        }
+      }
+    }
     if (event.method === "turn/started"                ) {
       threadId  = relatedThreadId ;
       turnId    = relatedTurnId   ;
@@ -238,8 +258,7 @@ export function project(events: readonly AppEvent[]): Projection {
           block.streaming = false;
         }
         if (block.kind === "command" && block.running              ) {
-          block.running = false;
-          block.status = "unknown";
+          Object.assign(block, { running: false, status: "unknown", endedAt: observedTime(event) });
         }
         if (block.kind === "files" && block.running                ) {
           block.running = false;
@@ -247,7 +266,7 @@ export function project(events: readonly AppEvent[]): Projection {
         }
       }
     }
-    if (event.method === "transport/error") transport = "error";
+    if (event.method === "transport/error") protocolWarning = { at: event.at, message: string(params.message).slice(0, 500) || "프로토콜 경고" };
 
     const summaryDelta    = event.method === "item/reasoning/summaryTextDelta"                                                  ;
     const summaryPart     = event.method === "item/reasoning/summaryPartAdded"                                                  ;
@@ -319,29 +338,38 @@ export function project(events: readonly AppEvent[]): Projection {
       );
       const prior    = blocks[existingIndex]                                                         ;
       const existing = prior?.kind === "answer" || prior?.kind === "explanation" ? prior : undefined ;
-      const phase    = string(params.phase) || string(item.phase)                                    ;
-      const source   = !phase && existing?.kind === "explanation" ? existing.source : messageKind    ;
-      const kind     = source === "answer" ? "answer" : "explanation"                                ;
-      const text     = isDelta ? string(params.delta) : string(item.text) || string(item.content)    ;
-      const message = {
-        id        : blockId                                                                ,
-        threadId  : relatedThreadId                                                        ,
-        turnId    : relatedTurnId                                                          ,
-        text      : isDelta ? (existing?.text ?? "") + text : text || existing?.text || "" ,
-        streaming : isCompleted ? false : existing?.streaming ?? true                      ,
-      };
-      const replacement: Block = kind === "answer"
-        ? { ...message, kind: "answer" }
-        : { ...message, kind: "explanation", source: source === "publicPlan" ? "publicPlan" : "commentary" };
-      if (existingIndex < 0) blocks.push(replacement);
-      else blocks[existingIndex] = replacement;
+      const closed = closedTurns.has(turnKey(relatedThreadId, relatedTurnId)) || transport === "closed" ||
+        (turnId !== null && !activeTurn);
+      if (isCompleted || (!closed && existing?.streaming !== false)) {
+        const phase    = string(params.phase) || string(item.phase)                                    ;
+        const source   = !phase && existing?.kind === "explanation" ? existing.source : messageKind    ;
+        const kind     = source === "answer" ? "answer" : "explanation"                                ;
+        const text     = isDelta ? string(params.delta) : string(item.text) || string(item.content)    ;
+        const message = {
+          id        : blockId                                                                ,
+          threadId  : relatedThreadId                                                        ,
+          turnId    : relatedTurnId                                                          ,
+          text      : isDelta ? (existing?.text ?? "") + text : text || existing?.text || "" ,
+          streaming : isCompleted ? false : existing?.streaming ?? true                      ,
+        };
+        if (isMessageStarted && existing) message.text = existing.text;
+        const replacement: Block = kind === "answer"
+          ? { ...message, kind: "answer" }
+          : { ...message, kind: "explanation", source: source === "publicPlan" ? "publicPlan" : "commentary" };
+        if (existingIndex < 0) blocks.push(replacement);
+        else blocks[existingIndex] = replacement;
+      }
     }
 
     if ((event.method === "item/started" && item.type === "commandExecution") || event.method === "item/commandExecution/outputDelta") {
+      const closed = closedTurns.has(turnKey(relatedThreadId, relatedTurnId)) || transport === "closed" ||
+        (turnId !== null && !activeTurn);
+      if (closed) continue;
       let command = blocks.find(
         (block): block is Extract<Block, { kind: "command" }> =>
           block.kind === "command" && block.id === blockId
       );
+      if (command && !command.running) continue;
       if (!command) {
         command = {
           kind            : "command"                ,
@@ -355,11 +383,14 @@ export function project(events: readonly AppEvent[]): Projection {
           running         : true                     ,
           status          : "running"                ,
           exitCode        : null                     ,
+          startedAt: event.method === "item/started" ? observedTime(event) : null,
+          endedAt: null,
         };
         blocks.push(command);
       } else {
         command.command ||= string(item.command);
         command.cwd ||= nullableString(item.cwd);
+        if (command.running && event.method === "item/started") command.startedAt ??= observedTime(event);
       }
       if (event.method === "item/commandExecution/outputDelta") {
         const limited = limitOutput(command.output + string(params.delta));
@@ -385,11 +416,14 @@ export function project(events: readonly AppEvent[]): Projection {
           running         : false                    ,
           status          : "unknown"                ,
           exitCode        : null                     ,
+          startedAt       : null,
+          endedAt         : null,
         };
         blocks.push(command);
       }
       command.command ||= string(item.command);
       command.cwd ||= nullableString(item.cwd);
+      command.endedAt ??= observedTime(event);
       command.running  = false                                                    ;
       command.exitCode = typeof item.exitCode === "number" ? item.exitCode : null ;
       command.status   = itemStatus(item)                                         ;
@@ -466,6 +500,7 @@ export function project(events: readonly AppEvent[]): Projection {
     turn             ,
     interrupt        ,
     historyTruncated ,
+    protocolWarning,
   };
 }
 

@@ -1,16 +1,19 @@
-import type { AppEvent } from "./shared";
+import type { AppEvent, TransportState } from "./shared";
+import { identifyWwwArtifact, referencedWwwArtifacts, type WwwArtifact } from "./www-activity";
 
 export type ActivityStatus = "pending" | "running" | "completed" | "failed" | "blocked" | "interrupted" | "unknown";
 export interface ActivityEntry {
   id          : string                                                                                          ;
-  kind        : "skill" | "hook" | "command" | "tool" | "files" | "answer" | "model" | "compaction" | "request" ;
+  kind        : "role" | "skill" | "hook" | "command" | "tool" | "files" | "answer" | "model" | "compaction" | "request" | "progress" ;
   label       : string                                                                                          ;
   description : string | null                                                                                   ;
   status      : ActivityStatus                                                                                  ;
   at          : string                                                                                          ;
   endedAt     : string | null                                                                                   ;
   durationMs  : number | null                                                                                   ;
-  source      : "native" | "request" | "file_read"                                                              ;
+  source      : "native" | "request" | "file_read" | "command_reference"                                        ;
+  historical?: boolean;
+  wwwArtifact?: WwwArtifact;
 }
 export interface UsageBreakdown {
   inputTokens            : number ;
@@ -46,6 +49,8 @@ export interface ActivityTurn {
   usageBasis       : "total_delta" | "unavailable" ;
   lastRequestUsage : UsageBreakdown | null         ;
   usageSeries      : number[]                      ;
+  lastActivityAt: string;
+  historical: boolean;
 }
 export interface LimitWindow {
   usedPercent        : number        ;
@@ -67,6 +72,8 @@ export interface NativeActivityProjection {
   limits           : LimitBucket[]         ;
   historyTruncated : boolean               ;
   updatedAt        : string | null         ;
+  transport: TransportState;
+  protocolWarning: { at: string; message: string } | null;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -175,19 +182,23 @@ function finish(item: ActivityEntry, next: ActivityStatus, at: string, duration:
   item.status = next;
   if (next !== "running" && next !== "pending") item.endedAt = at;
   item.durationMs = integer(duration) ?? item.durationMs;
-  if (item.kind === "skill" && item.source === "file_read") {
-    item.label = next === "completed" ? "SKILL.md 읽기 확인"
-      : next === "failed" ? "SKILL.md 읽기 실패"
-      : next === "running" ? "SKILL.md 읽는 중"
-      : next === "interrupted" ? "SKILL.md 읽기 중단"
-      : "SKILL.md 읽기 결과 미확인";
+  if ((item.kind === "skill" || item.kind === "role") && item.source === "file_read") {
+    const name = item.wwwArtifact?.id ?? "SKILL.md";
+    item.label = next === "completed" ? `${name} 읽기 확인`
+      : next === "failed" ? `${name} 읽기 실패`
+      : next === "running" ? `${name} 읽는 중`
+      : next === "interrupted" ? `${name} 읽기 중단`
+      : `${name} 읽기 결과 미확인`;
   }
 }
 
 /** 서버 사건만 투영하며 reasoning 텍스트와 도구 출력 본문은 보관하지 않는다. */
-export function projectNativeActivity(events: readonly AppEvent[], selectedThreadId?: string | null): NativeActivityProjection {
-  const sorted           = [...events].sort((left, right) => left.seq - right.seq).slice(-2_000) ;
-  const historyTruncated = events.length > 2_000 || (sorted[0]?.seq ?? 1) > 1                    ;
+export function projectNativeActivity(events: readonly AppEvent[], selectedThreadId?: string | null, workspacePath?: string): NativeActivityProjection {
+  const sorted = [...events].sort((left, right) => left.seq - right.seq).slice(-2_000);
+
+  const restored = sorted.find((event) => event.method === "conversation/restored" && event.historical);
+
+  const historyTruncated = restored ? record(restored.params).complete !== true : events.length > 2_000 || (sorted[0]?.seq ?? 1) > 1;
 
   const turns          : ActivityTurn[]  = [] ;
   const sessionEntries : ActivityEntry[] = [] ;
@@ -207,7 +218,10 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
   let activeThread : string | null = selectedThreadId ?? null ;
   let updatedAt    : string | null = null                     ;
 
-  function create(threadId: string, turnId: string | null, at: string, id: string): ActivityTurn {
+  let transport: TransportState = "disconnected";
+  let protocolWarning: NativeActivityProjection["protocolWarning"] = null;
+
+  function create(threadId: string, turnId: string | null, at: string, id: string, historical = false): ActivityTurn {
     const previous = turns.filter((turn) => turn.threadId === threadId).at(-1)                                              ;
     const baseline = previous ? (previous.endedAt ? turnTotals.get(previous) ?? null : null) : totals.get(threadId) ?? null ;
     const turn: ActivityTurn = {
@@ -227,15 +241,20 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
       usageBasis       : "unavailable"                ,
       lastRequestUsage : null                         ,
       usageSeries      : []                           ,
+      lastActivityAt: at,
+      historical,
     };
     baselines.set(turn, historyTruncated || unsafeUsageThreads.has(threadId) ? null : baseline);
     turns.push(turn);
     return turn;
   }
-  function locate(threadId: string, turnId: string, at: string): ActivityTurn | undefined {
+  function locate(threadId: string, turnId: string, at: string, historical = false): ActivityTurn | undefined {
     if (!threadId || !turnId) return undefined;
-    return turns.find((turn) => turn.threadId === threadId && turn.turnId === turnId)
-      ?? create(threadId, turnId, at, `${threadId}:${turnId}`);
+    const turn = turns.find((candidate) => candidate.threadId === threadId && candidate.turnId === turnId)
+      ?? create(threadId, turnId, at, `${threadId}:${turnId}`, historical);
+    if (!turn.endedAt) turn.lastActivityAt = at;
+    if (!historical && !turn.endedAt) turn.historical = false;
+    return turn;
   }
 
   for (const event of sorted) {
@@ -265,12 +284,22 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
       }
       continue;
     }
+    if (event.method === "transport/connected") {
+      transport = "connected";
+      continue;
+    }
+    if (event.method === "transport/status") {
+      const state = data.state;
+      if (state === "connected" || state === "closed" || state === "error" || state === "disconnected") transport = state;
+      continue;
+    }
     const requestId  = text(data.clientRequestId)                                                                    ;
     const approvalId = event.requestId === undefined ? null : `request:${typeof event.requestId}:${event.requestId}` ;
     if (event.method.startsWith("approval/") && approvalId                       ) {
       const owner    = approvals.get(approvalId)                           ;
       const approval = owner?.entries.find((row) => row.id === approvalId) ;
       if (owner && approval) {
+        if (!owner.endedAt) owner.lastActivityAt = event.at;
         if (event.method === "approval/responding") approval.description = "응답 전송 중";
         if (event.method === "approval/responded") {
           finish(approval, "completed", event.at, null);
@@ -287,7 +316,7 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     if (event.method === "turn/userPrompt" && threadId                           ) {
       const requestKey = `${threadId}:${requestId || event.seq}`;
       if (!requests.has(requestKey)) {
-        const turn = create(threadId, null, event.at, requestKey);
+        const turn = create(threadId, null, event.at, requestKey, event.historical === true);
         turn.prompt = text(data.text)                       ;
         turn.title  = turn.prompt.slice(0, 72) || "답변 턴" ;
         turn.status = "pending"                             ;
@@ -309,8 +338,8 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
         existing.title = pending.title;
         requests.set(`${threadId}:${requestId}`, existing);
         turns.splice(turns.indexOf(pending), 1);
-      } else if (pending) pending.turnId = turnId;
-      else locate(threadId, turnId, event.at);
+      } else if (pending) { pending.turnId = turnId; if (!pending.endedAt) pending.lastActivityAt = event.at; }
+      else locate(threadId, turnId, event.at, event.historical === true);
       continue;
     }
     if (event.method === "turn/startFailed"                                      ) {
@@ -318,9 +347,15 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
       if (pending && pending.turnId === null) { pending.status = "failed"; pending.endedAt = event.at; }
       continue;
     }
-    if (event.method === "transport/closed" || event.method === "transport/error") {
+    if (event.method === "transport/error") {
+      protocolWarning = { at: event.at, message: text(data.message).slice(0, 500) || "프로토콜 경고" };
+      continue;
+    }
+    if (event.method === "transport/closed") {
+      transport = "closed";
       for (const turn of turns) {
         if (turn.status === "running" || turn.status === "pending" || turn.status === "blocked") {
+          turn.lastActivityAt = event.at;
           turn.status = "unknown";
           turn.endedAt = event.at;
         }
@@ -333,16 +368,21 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
       const run   = record(data.run) ;
       const runId = text  (run.id  ) ;
       if (!runId || run.executionMode !== "sync") continue;
-      const target = threadId && turnId ? locate(threadId, turnId, event.at)?.entries : sessionEntries;
+      const target = threadId && turnId ? locate(threadId, turnId, event.at, event.historical === true)?.entries : sessionEntries;
       if (!target) continue;
       const hook = entry(target, `hook:${threadId}:${turnId}:${runId}`, "hook", text(run.eventName) || "Hook", event.at);
+      if (hook.endedAt && event.method === "hook/started") continue;
       if (target === sessionEntries) sessionThreads.set(hook, threadId || null);
-      hook.description = text(run.sourcePath) || null;
-      finish(hook, status(run.status), event.at, run.durationMs);
+      hook.historical = event.historical === true;
+      const messages = list(run.entries).map(record).filter((output) => ["error", "warning", "stop"].includes(text(output.kind))).slice(0, 4).map((output) => text(output.text).slice(0, 800));
+      const trustRequired = messages.some((message) => message.includes("hook approval required"));
+      const details = [trustRequired ? "플러그인 변경으로 신뢰 검토 필요 · Hook 실행 전 차단" : "", text(run.sourcePath).slice(0, 500), text(run.statusMessage).slice(0, 800), ...messages].filter(Boolean);
+      hook.description = details.join("\n") || null;
+      finish(hook, event.historical && status(run.status) === "running" ? "unknown" : status(run.status), event.at, run.durationMs);
       continue;
     }
     if (!threadId || !turnId) continue;
-    const turn = locate(threadId, turnId, event.at);
+    const turn = locate(threadId, turnId, event.at, event.historical === true);
     if (!turn) continue;
     if (event.method === "turn/started" && !turn.endedAt) turn.status = "running";
     if (event.method === "turn/completed"                                   ) {
@@ -418,6 +458,10 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     }
     const itemId = text(item.id) || text(data.itemId);
     if (!itemId) continue;
+    if (event.method === "item/agentMessage/delta" && data.phase === "commentary") {
+      const progress = entry(turn.entries, `item:${itemId}`, "progress", "진행 설명", event.at);
+      progress.description = (progress.description ?? "") + text(data.delta);
+    }
     if (event.method === "item/agentMessage/delta" && data.phase !== "analysis" && data.phase !== "reasoning" && data.phase !== "commentary") {
       const answer = entry(turn.entries, `item:${itemId}`, "answer", "답변 작성", event.at);
       answer.description = (answer.description ?? "") + text(data.delta);
@@ -431,6 +475,9 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
         const input = record(value);
         if (input.type !== "skill" || !text(input.name)) continue;
         const skill = entry(turn.entries, `skill-request:${itemId}:${text(input.path) || text(input.name)}`, "skill", text(input.name), event.at);
+        const inputPath = text(input.path);
+        const artifact = identifyWwwArtifact(/[\\/]SKILL\.md$/.test(inputPath) ? inputPath : `${inputPath.replace(/[\\/]$/, "")}/SKILL.md`, workspacePath);
+        if (artifact?.kind === "skill") skill.wwwArtifact = artifact;
         skill.description = "명시적 Skill 요청" ;
         skill.source      = "request"           ;
         skill.status      = "pending"           ;
@@ -443,17 +490,19 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     if (type === "fileChange"                                                                                            ) { kind = "files"; label = "파일 변경"; }
     if (["mcpToolCall", "dynamicToolCall", "collabAgentToolCall", "webSearch", "imageGeneration", "sleep"].includes(type)) { kind = "tool"; label = text(item.tool) || type; }
     if (type === "contextCompaction"                                                                                     ) { kind = "compaction"; label = "컨텍스트 압축"; }
+    if (type === "agentMessage" && item.phase === "commentary") { kind = "progress"; label = "진행 설명"; }
     if (type === "agentMessage" && item.phase !== "analysis" && item.phase !== "reasoning" && item.phase !== "commentary") { kind = "answer"; label = "답변 작성"; }
     if (!kind) continue;
     const activity = entry(turn.entries, `item:${itemId}`, kind, label, event.at);
     activity.label = label;
+    if (kind === "progress") activity.description = text(item.text) || activity.description;
     if (kind === "answer"          ) {
       activity.description = text(item.text) || activity.description;
       turn.answer = turn.entries.filter((row) => row.kind === "answer").map((row) => row.description ?? "").join("\n");
     }
     if (complete                   ) {
       let outcome = status(item.status);
-      if (kind === "answer" || kind === "compaction") outcome = "completed";
+      if (kind === "answer" || kind === "compaction" || kind === "progress") outcome = "completed";
       if (type === "commandExecution" && typeof item.exitCode === "number" && Number.isSafeInteger(item.exitCode)) outcome = item.exitCode === 0 ? "completed" : "failed";
       if (item.success === false || item.error) outcome = "failed";
       finish(activity, outcome, event.at, item.durationMs);
@@ -462,18 +511,45 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
       for (const value of list(item.commandActions)) {
         const action = record(value      ) ;
         const path   = text  (action.path) ;
-        if (action.type !== "read" || !/(^|[\\/])SKILL\.md$/.test(path)) continue;
-        const skill = entry(turn.entries, `skill-read:${itemId}:${path}`, "skill", "SKILL.md 읽는 중", event.at);
-        skill.description = path;
-        skill.source = "file_read";
+        if (action.type !== "read") continue;
+        const artifact = identifyWwwArtifact(path, workspacePath, text(item.cwd));
+        if (!artifact && !/(^|[\\/])SKILL\.md$/.test(path)) continue;
+        const kind = artifact?.kind === "role" ? "role" : "skill";
+        const document = entry(turn.entries, `${kind}-read:${itemId}:${path}`, kind, `${artifact?.id ?? "SKILL.md"} 읽는 중`, event.at);
+        document.description = path;
+        document.source = "file_read";
+        document.historical = event.historical === true;
+        if (artifact) document.wwwArtifact = artifact;
       }
-      for (const skill of turn.entries) {
-        if (skill.source !== "file_read" || !skill.id.startsWith(`skill-read:${itemId}:`)) continue;
-        if (complete || !skill.endedAt) finish(skill, activity.status, event.at, null);
+      for (const document of turn.entries) {
+        if (document.source !== "file_read" || !(document.id.startsWith(`skill-read:${itemId}:`) || document.id.startsWith(`role-read:${itemId}:`))) continue;
+        if (complete || !document.endedAt) finish(document, activity.status, event.at, null);
       }
+      for (const artifact of referencedWwwArtifacts(text(item.command), workspacePath, text(item.cwd))) {
+        if (turn.entries.some((row) => row.source === "file_read" && row.wwwArtifact?.id === artifact.id && (row.id.startsWith(`skill-read:${itemId}:`) || row.id.startsWith(`role-read:${itemId}:`)))) continue;
+        const reference = entry(turn.entries, `www-reference:${itemId}:${artifact.id}`, artifact.kind, `${artifact.id} 읽기 명령 관측`, event.at);
+        reference.wwwArtifact = artifact;
+        reference.source = "command_reference";
+        reference.historical = event.historical === true;
+        reference.description = `${artifact.path}\n명령의 문서 참조만 관측했습니다. 개별 문서 읽기·적용은 확인되지 않았습니다.`;
+      }
+      for (const reference of turn.entries) {
+        if (reference.source !== "command_reference" || !reference.id.startsWith(`www-reference:${itemId}:`)) continue;
+        if (complete || !reference.endedAt) finish(reference, activity.status, event.at, null);
+      }
+    }
+  }
+  for (const turn of turns) {
+    if (!turn.historical) continue;
+    if (!turn.endedAt) {
+      turn.status = "unknown";
+      turn.endedAt = turn.lastActivityAt;
+    }
+    for (const activity of turn.entries) {
+      if (activity.status === "running" || activity.status === "blocked") finish(activity, "unknown", turn.lastActivityAt, null);
     }
   }
   const threadId               = selectedThreadId ?? activeThread                                                                                 ;
   const selectedSessionEntries = sessionEntries.filter((item) => !threadId || !sessionThreads.get(item) || sessionThreads.get(item) === threadId) ;
-  return { threadId, turns: turns.filter((turn) => !threadId || turn.threadId === threadId), sessionEntries: selectedSessionEntries, usage: threadId ? totals.get(threadId) ?? null : null, limits, historyTruncated, updatedAt };
+  return { threadId, turns: turns.filter((turn) => !threadId || turn.threadId === threadId), sessionEntries: selectedSessionEntries, usage: threadId ? totals.get(threadId) ?? null : null, limits, historyTruncated, updatedAt, transport, protocolWarning };
 }

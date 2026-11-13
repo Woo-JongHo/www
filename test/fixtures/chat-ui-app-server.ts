@@ -51,7 +51,10 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
   if (message.method === "initialize") result(message.id, { userAgent: "fixture" });
   else if (message.method === "thread/list") result(message.id, { data: Object.keys(histories).map((id) => ({ id, name: id === "history-a" ? "저장 작업 A" : id === "history-b" ? "저장 작업 B" : "새 작업", preview: "복원 가능한 대화", cwd, updatedAt: 1794470000, source: "vscode", originator: "www", status: { type: "idle" } })), nextCursor: null });
   else if (message.method === "thread/read" || message.method === "thread/resume") result(message.id, { thread: { id: params.threadId, cwd, originator: "www", source: "vscode", status: { type: "idle" }, turns: [] }, model: "fixture", modelProvider: "fixture" });
-  else if (message.method === "thread/turns/list") result(message.id, { data: [...(histories[String(params.threadId)] ?? [])].reverse(), nextCursor: null });
+  else if (message.method === "thread/turns/list") {
+    histories = JSON.parse(readFileSync(storePath, "utf8"));
+    result(message.id, { data: [...(histories[String(params.threadId)] ?? [])].reverse(), nextCursor: null });
+  }
   else if (message.method === "thread/start") {
     histories["thread-new"] ??= [];
     writeFileSync(storePath, JSON.stringify(histories));
@@ -59,12 +62,40 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
   } else if (message.method === "turn/start") {
     const input = Array.isArray(params.input) ? object(params.input[0]) : {};
     const prompt = typeof input.text === "string" ? input.text : "";
+    if (prompt.includes("전송 실패 확인")) {
+      send({ jsonrpc: "2.0", id: message.id, error: { code: -32603, message: "합성 전송 실패" } });
+      continue;
+    }
     const threadId = String(params.threadId);
     const turnId = "live-" + Date.now() + "-" + ++turnCounter;
     pending = { threadId, turnId, prompt };
     result(message.id, { turn: { id: turnId } });
     notify("turn/started", { threadId, turn: { id: turnId } });
-    if (prompt.includes("승인 확인")) send({ jsonrpc: "2.0", id: 42, method: "item/commandExecution/requestApproval", params: { threadId, turnId, command: "printf approved" } });
+    if (prompt.includes("실시간 카드 확인")) {
+      process.stdout.write("{broken-json\n");
+      const id = turnId + "-command";
+
+      const output = Array.from({ length: 11 }, (_, index) => `    실시간 출력 ${index + 1}`).join("\n");
+      notify("item/started", { threadId, turnId, item: { id, type: "commandExecution", command: "printf live", cwd, status: "inProgress" } });
+      notify("item/commandExecution/outputDelta", { threadId, turnId, itemId: id, delta: output });
+      notify("item/agentMessage/delta", { threadId, turnId, itemId: turnId + "-commentary", delta: "출력을 확인하고 있습니다.", phase: "commentary" });
+      setTimeout(() => {
+        notify("item/completed", { threadId, turnId, item: { id, type: "commandExecution", command: "printf live", cwd, status: "failed", exitCode: 1, aggregatedOutput: output } });
+        finish();
+      }, 1200);
+    }
+    else if (["명령 거절 확인", "턴 중단 확인"].includes(prompt)) {
+      const item = {
+        id: turnId + "-status-command", type: "commandExecution", cwd,
+        command: prompt === "명령 거절 확인" ? "printf declined" : "printf unfinished"
+      };
+      notify("item/started", { threadId, turnId, item: { ...item, status: "inProgress" } });
+      setTimeout(() => {
+        if (prompt !== "턴 중단 확인") notify("item/completed", { threadId, turnId, item: { ...item, status: "declined" } });
+        finish(prompt === "턴 중단 확인" ? "interrupted" : "completed");
+      }, 80);
+    }
+    else if (prompt.includes("승인 확인")) send({ jsonrpc: "2.0", id: 42, method: "item/commandExecution/requestApproval", params: { threadId, turnId, command: "printf approved" } });
     else if (!prompt.includes("중단 확인")) setTimeout(() => finish(), 80);
   } else if (message.method === "turn/interrupt") { result(message.id, {}); finish("interrupted"); }
   else if (message.method === "skills/list" || message.method === "hooks/list") result(message.id, { data: [{ cwd, skills: [], hooks: [], errors: [] }] });

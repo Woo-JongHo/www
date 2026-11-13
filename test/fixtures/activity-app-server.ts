@@ -21,6 +21,7 @@ let turnId = "turn-fixture";
 
 
 const threadId = "thread-fixture";
+const fixtureWorkspace = process.env.WWW_PROBE_WORKSPACE ?? "/fixture";
 
 
 let catalogCwd = process.env.WWW_PROBE_WORKSPACE ?? "/fixture";
@@ -60,20 +61,24 @@ function hook(id: string, eventName: string, scoped: boolean): void {
 
   const params = scoped ? { threadId, turnId } : { threadId };
   notify("hook/started", { ...params, run: { ...run, status: "running" } });
-  notify("hook/completed", { ...params, run: { ...run, status: "completed", completedAt: startedAt, durationMs: 12 } });
+  notify("hook/completed", { ...params, run: { ...run, status: eventName === "preToolUse" ? "failed" : "completed", entries: eventName === "preToolUse" ? [{ kind: "error", text: "plugin contents changed; hook approval required" }] : [], completedAt: startedAt, durationMs: 12 } });
 }
 
 function injectActivity(): void {
   notify("turn/plan/updated", { threadId, turnId, plan: [{ step: "자료 확인", status: "completed" }, { step: "구현·검사", status: "inProgress" }, { step: "답변 정리", status: "pending" }] });
   hook(`hook-${turnId}`, "preToolUse", true);
-  const command = "cat /fixture/skills/www-design/SKILL.md";
+  const command = `cat ${fixtureWorkspace}/skills/www/www-design/SKILL.md`;
 
 
   const commandActions = [{ type: "read", path: "/fixture/skills/www-design/SKILL.md", name: "SKILL.md", command }];
   if (turns > 1) commandActions.push({ type: "read", path: "/fixture/skills/unused/SKILL.md", name: "SKILL.md", command });
-  const item = { id: `skill-${turnId}`, type: "commandExecution", command, commandActions };
+  commandActions.push({ type: "read", path: `${fixtureWorkspace}/skills/www/www-design/SKILL.md`, name: "SKILL.md", command });
+  const item = { id: `skill-${turnId}`, type: "commandExecution", command, cwd: fixtureWorkspace, commandActions };
   notify("item/started", { threadId, turnId, item: { ...item, status: "inProgress" } });
   notify("item/completed", { threadId, turnId, item: { ...item, status: "completed", exitCode: 0 } });
+  const role = { id: `role-${turnId}`, type: "commandExecution", command: "cat AGENTS.md agents/www/AGENT.md", cwd: fixtureWorkspace, commandActions: [{ type: "unknown", command: "cat AGENTS.md agents/www/AGENT.md" }] };
+  notify("item/started", { threadId, turnId, item: { ...role, status: "inProgress" } });
+  notify("item/completed", { threadId, turnId, item: { ...role, status: "completed", exitCode: 0 } });
   notify("item/completed", { threadId, turnId, item: { id: `private-${turnId}`, type: "reasoning", summary: ["공개 요약: 작업 흐름과 확인한 결과를 정리했습니다."], content: ["PRIVATE_REASONING_DO_NOT_RENDER"] } });
   const first = { inputTokens: 800, outputTokens: 200, cachedInputTokens: 200, reasoningOutputTokens: 50, totalTokens: 1000 };
 

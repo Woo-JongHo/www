@@ -41,7 +41,7 @@ lines.on("line", (line) => {
     interruptRequests += 1;
     send({ jsonrpc: "2.0", id: message.id, result: {} });
     if (interruptDelay > 0) send({ jsonrpc: "2.0", method: "fixture/interruptRequest", params: { threadId: "thread-fixture", turnId: "turn-fixture", count: interruptRequests } });
-    const completeInterrupt = () => send({ jsonrpc: "2.0", method: "turn/completed", params: { turn: { id: "turn-fixture", status: "interrupted" } } });
+    const completeInterrupt = () => send({ jsonrpc: "2.0", method: "turn/completed", params: { threadId: "thread-fixture", turn: { id: "turn-fixture", status: "interrupted" } } });
     if (interruptDelay > 0) setTimeout(completeInterrupt, interruptDelay);
     else completeInterrupt();
   } else if (message.id === 42) {

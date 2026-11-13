@@ -250,6 +250,24 @@ Chat은 Ovis revision d505c75e26c54f31573057d1e9aa431ecc56677f의 행 상태·�
 
 node scripts/verify-chat.ts는 빌드된 실제 Electron을 고립 profile과 cwd에서 실행하고 외부 CDP로 저장 대화·Markdown·코드복사·인용·대화별 상태·동일 thread 후속 요청·승인·중단·앱 재시작을 조작한다. 서버는 test/fixtures/chat-ui-app-server.ts의 합성 stdio subprocess다. 성공·실패 원문과 화면은 .www/evidence/chat-ui-*에 저장하며 실제 모델·Windows·IME 실기로 확대하지 않는다. 실행 전에 npm run build를 수행하고 검사 중 다른 빌드로 dist를 바꾸지 않는다.
 
+## Chat 표시 변경의 확인
+
+Chat 카드·본문·모니터 변경은 `bun test test/command-preview.test.ts test/projection.test.ts test/input.test.ts test/native-activity.test.ts`로 집중 검사한다. `node scripts/verify-chat.ts`는 별도 임시 원장과 합성 서버를 실제 Electron에 연결해 복원·입력·긴 본문·명령 카드·창 배치를 확인한다. `node scripts/verify-native-activity.ts --ui-only`는 별도 합성 서버로 Skill·Hook·턴 선택과 표시를 확인한다. 실제 Native 사건의 관측은 `bun run test/verify-native-activity-live.ts`로 분리하며 인증과 모델 사용량이 필요하다. CDP 키·composition 합성은 실제 OS 한국어 IME·Windows 실기를 대신하지 않는다.
+
+WWW 디자인 역할의 계약은 `agents/www-design/AGENT.md`, 상태·토큰 정본 안내는 `docs/design-system.md`다. 호스트 자동 등록·활성화는 문서 존재와 별도로 검증한다.
+
+### 복구 가능한 Native 프로토콜 경고
+
+`transport/error`는 잘못된 JSON 한 줄의 `protocolError`로도 발생한다. `rpc.ts`는 그 줄을 경고하고 같은 연결의 후속 줄을 계속 처리하므로 이를 EOF로 해석하지 않는다. 화면은 통신 경고를 남기되 진행 중 턴·명령을 종료시키거나 새 턴의 출력을 막지 않는다. 실제 연결 종료는 `transport/closed`, 턴 종료는 해당 `turn/completed`로 구분한다. 이 경계는 projection과 native-activity의 회귀 테스트가 함께 확인한다.
+
+## WWW 전용 흐름과 Hook 진단
+
+`src/www-activity.ts`의 정본 목록은 역할 둘·스킬 여섯이다. renderer가 선택 workspacePath를 활동 투영에 넘기며, 구조화 read 경로를 cwd와 함께 해당 저장소 안에서 식별한다. unknown으로 분류된 단일 리터럴 cat(여러 파일 인자 가능)은 약한 command_reference로만 보존한다. 셸 연쇄·확장·리디렉션·검색·문자열 언급은 거부한다. 읽기 명령 관측은 개별 파일 읽기나 실제 적용의 성공을 뜻하지 않는다.
+
+집중 검사에는 `bun test test/www-activity.test.ts test/www-activity-view.test.ts test/native-activity.test.ts`를 사용한다. `scripts/verify-native-activity.ts --ui-only`의 실제 Electron probe는 WWW 역할 참조·스킬 읽기, 일반 활동의 기본 접힘, Hook의 신뢰 검토 사유를 확인한다. 합성 Hook이므로 현재 플러그인 신뢰 상태의 실제 원인은 별도 Native probe로 확인한다.
+
+HookRunSummary의 statusMessage와 entries 중 error/warning/stop만 제한된 진단에 포함하며 context 등 지침은 표시하지 않는다. `plugin contents changed; hook approval required`는 실제 Native에서 신뢰 게이트가 실행 전에 거부한 경우로 관측됐다. 설치·enabled와 현재 내용에 대한 trust는 별도다. 전역 trust hash를 제품이 자동 변경하거나 보안 검토를 우회하지 않는다.
+
 ## 코드 설계도 생성과 검사
 
 `node scripts/generate-architecture.ts`는 현재 WWW TypeScript의 실제 모듈 참조와 파일·행·원문·내용 해시를 `src/architecture.generated.json`에 생성한다. `--check`는 소스를 바꾸지 않고 생성 자료가 현재 소스와 일치하는지 확인한다. `npm run build`는 번들 전에 같은 생성을 수행한다. 생성 JSON을 손으로 수정하지 않는다. 분석 범위·제외와 수동 계층 분류는 [코드 설계도](CODE_BLUEPRINT.md)에 설명한다.

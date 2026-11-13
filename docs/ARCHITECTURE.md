@@ -153,3 +153,11 @@ src/conversations.ts는 Native thread/list·read·resume·turns/list 응답을 �
 renderer는 thread/cwd별 초안·읽기 위치·따라가기와 logical row 상태를 소유한다. 전환 세대와 사건 seq로 복원 snapshot·전환 중 도착한 live 사건을 병합하며 historical은 liveEvents에서 제외한다. src/chat-row-state.tsx와 chat-state.ts는 Ovis의 행 상태·입력·인용 코드를 개작하고 chat-message.tsx는 react-markdown/GFM을 실제 메시지에 연결한다. 출처·고정 revision·변형은 docs/third-party/ovis.md가 소유한다.
 
 복원은 기존 publish의 실시간 자동보고 경로를 항목마다 재호출하지 않는다. 원문 reasoning·과거 승인 요청은 복원 대상이 아니다. 완전한 snapshot marker와 실제 이력 절단을 구분하며 사용자 전송 결과 불확실을 자동 재전송으로 해결하지 않는다. 재개 정책은 Native 저장 설정을 보존한다.
+
+## Chat 표시 컴포넌트와 디자인 역할
+
+`src/command-card.tsx`는 투영의 명령 상태와 관측 시각을 읽고 펼침을 기존 대화별 행 메모리에 보존한다. `src/command-preview.ts`가 논리 줄 미리보기 경계를 소유하며 원본 보관 한도는 `projection.ts`가 계속 소유한다. `renderer.tsx`는 모니터 접힘과 본문 크기 변경 시 따라가기를 연결한다. `native-activity.ts`는 최신 작업과 과거 선택을 위한 사건 투영·연결·마지막 활동을 제공하고 뷰는 공개 과정과 실시간 상태를 구분한다.
+
+[WWW 디자인 역할](../agents/www-design/AGENT.md)은 디자인 산출물·상태 규칙·개발 인계를 맡는 계약이다. 기존 `www-design` 단계 스킬과 다른 역할이며 파일 존재만으로 호스트 자동 등록을 뜻하지 않는다. 제품 Native의 모델·권한을 변경하지 않는다. 토큰과 컴포넌트 규칙은 [디자인 시스템](design-system.md)에 기록한다.
+
+`src/www-activity.ts`는 WWW 정본 역할·스킬 목록과 선택 저장소 범위의 경로 식별, 확장 없는 리터럴 cat 참조 식별을 소유한다. native-activity는 근거를 `wwwArtifact`와 source로 보존하고 renderer가 workspacePath를 전달한다. 뷰는 전용 흐름과 범용 Native 진단을 분리하며 실제 적용을 추론하지 않는다.

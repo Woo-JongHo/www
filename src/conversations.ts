@@ -93,7 +93,7 @@ function publicItem(value: unknown): Record<string, unknown> | null {
       command          : text(value.command).slice(0, MAX_PUBLIC_TEXT)           ,
       cwd              : text(value.cwd) || null                                ,
       aggregatedOutput : text(value.aggregatedOutput)            ,
-      status           : value.status === "completed" || value.status === "failed" ? value.status : "unknown",
+      status           : value.status === "completed" || value.status === "failed" || value.status === "declined" ? value.status : "unknown",
       exitCode         : typeof value.exitCode === "number" && Number.isFinite(value.exitCode) ? value.exitCode : null
     };
   }

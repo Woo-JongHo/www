@@ -1,0 +1,114 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>실시간 세션 모니터와 채팅 가독성 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 13일 오전 10:09 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>실시간 세션 모니터와 채팅 가독성</h1><p class="lead">실시간 세션 모니터와 채팅 가독성 개선의 개발 명세를 작성했다. 사용자 요구와 작성자 제안을 구별하고 기능 동작·수용 기준 10개·검증 시나리오·실행 순서를 연결했다. 문서 계약 검사는 통과했지만 Opus 독립 검토는 로그인 부재로 미실행이며 제품 구현은 시작하지 않았다.</p><div id="report-story" class="story">오른쪽 세션 흐름, 실시간 과정, Enter 누락, 답변 잘림, Design 역할과 GJC 카드 요구가 대화에만 있었다.
+
+Chat 007 명세와 작업 레코드 및 목차에서 범위·권한·기준·후속 개발 순서를 확인할 수 있다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 원인 미확인</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> Opus 인증 복구 후 명세 독립 검토를 실행한다.</p><p class="blocker"><strong>남은 차단 사항</strong> 명세 작성됨; 독립 Opus 검토 미실행(Claude 로그인 없음). 자동 생성 JSON BoxBox 정렬 FIXABLE 미해결. 제품 구현은 미실행.</p><p class="state-note">저장 당시 기준 중 10개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>오른쪽 현재 상태와 질문별 이력, Skill·Hook 관측 상태와 상세를 정의했다.</li><li>Enter·답변 잘림·실시간 진행의 재현 및 검증 시나리오를 정의했다.</li><li>10줄 명령 카드, WWW Design 역할, 디자인 시스템과 오픈소스 비교 요구를 정의했다.</li></ul></div></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>오른쪽 패널은 세션 현재 상태와 질문별 이력을 제공하고 과거 턴 선택·최신 복귀·초안·읽기 위치를 보존한다.</dt><dd>미검증으로 기록</dd></div><div><dt>Skill 요청·읽기 관측·적용 확인과 Hook 실제 실행 상태를 구분하고 실시간 표시하며, 과거 복원·중복·늦은 사건으로 새 호출 효과를 재생하지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>현재 작업·경과 시간·마지막 활동·승인 대기·오류·연결 상태를 사람이 읽는 문장과 상세 근거로 제공하고 미확인을 성공으로 추정하지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>공개 진행 설명·공개 요약·도구 출력·최종 답변이 턴 종료 전 점진적으로 갱신되며 본문과 패널이 동일 실행을 가리킨다.</dt><dd>미검증으로 기록</dd></div><div><dt>한국어 조합 확정과 전송을 구별하고 Enter·Shift+Enter·반복 입력·전송 실패 시 초안 및 중복 방지를 실제 앱에서 검증한다.</dt><dd>미검증으로 기록</dd></div><div><dt>긴 답변·표·코드·스트리밍 완료 뒤 마지막 문장까지 접근 가능하고 입력창·패널·스크롤 컨테이너가 내용을 가리지 않으며 보관 한계는 명시한다.</dt><dd>미검증으로 기록</dd></div><div><dt>명령 실행 카드가 명령·경로·실제 상태·들여쓰기를 보존한 10줄 출력 미리보기·전체 보관 출력 접근·실패·중단·미확인을 제공한다.</dt><dd>미검증으로 기록</dd></div><div><dt>WWW Design 역할의 입력·산출물·권한·개발 및 검토 역할과의 인계, 토큰과 컴포넌트의 정본·접근성·상태 규칙을 정의하고 파일럿에 적용한다.</dt><dd>미검증으로 기록</dd></div><div><dt>GJC 실제 참조와 오픈소스 후보 3개 이상의 공식 저장소·고정 revision·라이선스·채택 및 제외 이유를 기록하고 사용하는 코드의 고지를 유지한다.</dt><dd>미검증으로 기록</dd></div><div><dt>현재 소스에서 합성 사건·실제 Native·Electron GUI 및 대상 플랫폼 결과를 구분하고 필수 기준의 실제 증거와 읽기 전용 Opus 독립 검토로 구현 수용을 판단한다.</dt><dd>미검증으로 기록</dd></div></dl></section><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>명세 작성 권한과 후속 구현 권한을 구분하고 구현 기준은 전부 unverified로 유지한다.</li><li>10줄 표시 방식·500ms 반영 목표·역할 이름은 사용자 확정이 아닌 제안 기본값으로 기록했다.</li><li>현행 제품·구조·기능 문서는 미래 목표로 덮어쓰지 않는다.</li></ul></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 미실행으로 기록 · 관측 모델 미확인.</p><h3>확인하지 못한 범위</h3><ul><li>제품 코드 수정, 실제 UI 재현, Native 실기·IME 검증, 오픈소스 후보 조사·선정은 수행하지 않았다.</li><li>Opus 검토 호출은 Not logged in · Please run /login으로 종료되어 관측 모델과 판정이 없다. 원문은 .www/evidence/reviews/review-fa121356-dc5f-4027-98d5-fd3b1b38d4d0/opus.json에 있다.</li><li>BoxBox는 자동 생성 work.json 구문 valid, 정렬 FIXABLE 24개를 보고했다. 자동 정렬은 실행하지 않았으며 전체 스타일 통과를 주장하지 않는다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><ul><li>Opus 인증 복구 후 명세 독립 검토를 실행한다.</li><li>후속 구현 권한을 연결하면 같은 작업 ID로 Enter·잘림·스트리밍 진단과 Design 파일럿 설계를 진행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-eed41da3-f22e-4fb9-b9df-9a1a7d76c44f<br>report-a2f0e844-cd72-48cd-afaf-65f1793df84c</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>90bb927f71532b654c84150df23b1aad1ee4ac0dabe32560a9b8724a413b41c9</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>525fce737f04faac11e0c64d7eb152980fd774876df31d293fd01be2dc64a08b</code></dd></div><div><dt>기준 지문</dt><dd><code>5a7d39cb29e25884c076760aaf95ef3e18ef82553164958a74f1cc5232548bf9</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>ready</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;ready&quot;,
+  &quot;blockedReason&quot;: &quot;명세 작성됨; 독립 Opus 검토 미실행(Claude 로그인 없음). 자동 생성 JSON BoxBox 정렬 FIXABLE 미해결. 제품 구현은 미실행.&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-01&quot;,
+      &quot;description&quot;: &quot;오른쪽 패널은 세션 현재 상태와 질문별 이력을 제공하고 과거 턴 선택·최신 복귀·초안·읽기 위치를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-02&quot;,
+      &quot;description&quot;: &quot;Skill 요청·읽기 관측·적용 확인과 Hook 실제 실행 상태를 구분하고 실시간 표시하며, 과거 복원·중복·늦은 사건으로 새 호출 효과를 재생하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-03&quot;,
+      &quot;description&quot;: &quot;현재 작업·경과 시간·마지막 활동·승인 대기·오류·연결 상태를 사람이 읽는 문장과 상세 근거로 제공하고 미확인을 성공으로 추정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-04&quot;,
+      &quot;description&quot;: &quot;공개 진행 설명·공개 요약·도구 출력·최종 답변이 턴 종료 전 점진적으로 갱신되며 본문과 패널이 동일 실행을 가리킨다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-05&quot;,
+      &quot;description&quot;: &quot;한국어 조합 확정과 전송을 구별하고 Enter·Shift+Enter·반복 입력·전송 실패 시 초안 및 중복 방지를 실제 앱에서 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-06&quot;,
+      &quot;description&quot;: &quot;긴 답변·표·코드·스트리밍 완료 뒤 마지막 문장까지 접근 가능하고 입력창·패널·스크롤 컨테이너가 내용을 가리지 않으며 보관 한계는 명시한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-07&quot;,
+      &quot;description&quot;: &quot;명령 실행 카드가 명령·경로·실제 상태·들여쓰기를 보존한 10줄 출력 미리보기·전체 보관 출력 접근·실패·중단·미확인을 제공한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-08&quot;,
+      &quot;description&quot;: &quot;WWW Design 역할의 입력·산출물·권한·개발 및 검토 역할과의 인계, 토큰과 컴포넌트의 정본·접근성·상태 규칙을 정의하고 파일럿에 적용한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-09&quot;,
+      &quot;description&quot;: &quot;GJC 실제 참조와 오픈소스 후보 3개 이상의 공식 저장소·고정 revision·라이선스·채택 및 제외 이유를 기록하고 사용하는 코드의 고지를 유지한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-10&quot;,
+      &quot;description&quot;: &quot;현재 소스에서 합성 사건·실제 Native·Electron GUI 및 대상 플랫폼 결과를 구분하고 필수 기준의 실제 증거와 읽기 전용 Opus 독립 검토로 구현 수용을 판단한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-fa121356-dc5f-4027-98d5-fd3b1b38d4d0&quot;,
+      &quot;verdict&quot;: &quot;not_run&quot;,
+      &quot;model&quot;: null,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-fa121356-dc5f-4027-98d5-fd3b1b38d4d0/opus.json&quot;,
+      &quot;findings&quot;: []
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;실시간 세션 모니터와 채팅 가독성 개선의 개발 명세를 작성했다. 사용자 요구와 작성자 제안을 구별하고 기능 동작·수용 기준 10개·검증 시나리오·실행 순서를 연결했다. 문서 계약 검사는 통과했지만 Opus 독립 검토는 로그인 부재로 미실행이며 제품 구현은 시작하지 않았다.&quot;,
+  &quot;before&quot;: &quot;오른쪽 세션 흐름, 실시간 과정, Enter 누락, 답변 잘림, Design 역할과 GJC 카드 요구가 대화에만 있었다.&quot;,
+  &quot;after&quot;: &quot;Chat 007 명세와 작업 레코드 및 목차에서 범위·권한·기준·후속 개발 순서를 확인할 수 있다.&quot;,
+  &quot;changes&quot;: [
+    &quot;오른쪽 현재 상태와 질문별 이력, Skill·Hook 관측 상태와 상세를 정의했다.&quot;,
+    &quot;Enter·답변 잘림·실시간 진행의 재현 및 검증 시나리오를 정의했다.&quot;,
+    &quot;10줄 명령 카드, WWW Design 역할, 디자인 시스템과 오픈소스 비교 요구를 정의했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;명세 작성 권한과 후속 구현 권한을 구분하고 구현 기준은 전부 unverified로 유지한다.&quot;,
+    &quot;10줄 표시 방식·500ms 반영 목표·역할 이름은 사용자 확정이 아닌 제안 기본값으로 기록했다.&quot;,
+    &quot;현행 제품·구조·기능 문서는 미래 목표로 덮어쓰지 않는다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;제품 코드 수정, 실제 UI 재현, Native 실기·IME 검증, 오픈소스 후보 조사·선정은 수행하지 않았다.&quot;,
+    &quot;Opus 검토 호출은 Not logged in · Please run /login으로 종료되어 관측 모델과 판정이 없다. 원문은 .www/evidence/reviews/review-fa121356-dc5f-4027-98d5-fd3b1b38d4d0/opus.json에 있다.&quot;,
+    &quot;BoxBox는 자동 생성 work.json 구문 valid, 정렬 FIXABLE 24개를 보고했다. 자동 정렬은 실행하지 않았으며 전체 스타일 통과를 주장하지 않는다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;Opus 인증 복구 후 명세 독립 검토를 실행한다.&quot;,
+    &quot;후속 구현 권한을 연결하면 같은 작업 ID로 Enter·잘림·스트리밍 진단과 Design 파일럿 설계를 진행한다.&quot;
+  ]
+}</pre></div></details></section></main></body></html>

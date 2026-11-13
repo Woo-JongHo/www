@@ -49,3 +49,36 @@
 .chat-compose-note{padding:0 14px 10px;font-size:10px;line-height:1.5;color:var(--muted);min-height:15px}
 @media(max-width:1000px){.chat-conversations{padding:0 8px}.chat-conversation-heading{flex-wrap:wrap}.chat-message{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.chat-message *{scroll-behavior:auto!important;animation:none!important}}
+
+/* Chat 007: 읽기 영역만 늘어나고 입력과 안내는 화면 안에 남는다. */
+:root{--chat-card-surface:var(--surface);--chat-card-border:var(--border);--chat-card-radius:8px;--chat-state-running:var(--accent);--chat-state-failed:var(--error);--chat-state-unknown:var(--warn);--chat-space:16px;--chat-font-mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+#root:has(.work:not([hidden])){grid-template-columns:220px minmax(0,1fr) 360px;grid-template-rows:minmax(0,1fr) 28px}
+#root:has(.work:not([hidden])):not(:has(:is(.panel,.native-activity-panel):not([hidden]))){grid-template-columns:220px minmax(0,1fr) 0}
+.work{grid-template-rows:44px minmax(0,1fr)}
+.pane{grid-template-rows:35px minmax(0,1fr);min-width:0}
+.conversation{display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.transcript{flex:1;min-height:0;min-width:0;overflow-x:hidden;overflow-y:auto;scrollbar-gutter:stable;overflow-anchor:none;font-family:inherit;padding:var(--chat-space)}
+.transcript>*,.compose,.chat-compose-note,.new-content{flex-shrink:0}
+.transcript :is(.user,.agent,.explanation,.files){min-width:0;max-width:100%;overflow-wrap:anywhere}
+.transcript:focus-visible,.command-card :is(summary,pre):focus-visible,.compose textarea:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.compose{grid-template-columns:auto minmax(0,1fr) auto;min-width:0}
+.compose textarea{min-width:0;max-height:160px}
+.command-card{border:1px solid var(--chat-card-border);border-radius:var(--chat-card-radius);padding:12px 14px;background:var(--chat-card-surface);min-width:0;max-width:100%;font:12px/1.65 var(--chat-font-mono)}
+.command-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.command-state{font-family:system-ui,sans-serif;color:var(--chat-state-running)}
+.command-card.item-completed .command-state{color:var(--ok)}
+.command-card.item-failed .command-state{color:var(--chat-state-failed)}
+.command-card.item-unknown .command-state{color:var(--chat-state-unknown)}
+.command-card .cmdline{white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;color:var(--text)}
+.command-path,.command-note{font:11px/1.6 system-ui,sans-serif;color:var(--muted);overflow-wrap:anywhere;margin-top:5px}
+.command-card pre{margin:10px 0 0;padding:8px 10px;max-height:none;max-width:100%;overflow:auto;white-space:pre;background:var(--bg);color:var(--text);tab-size:4;border-radius:4px;font:12px/1.65 var(--chat-font-mono)}
+.command-output{margin-top:10px;min-width:0}
+.command-output summary{display:list-item;cursor:pointer;color:var(--accent);font:11px/1.6 system-ui,sans-serif}
+.command-output pre{max-height:360px}
+@media(max-width:1100px){#root:has(.work:not([hidden])){grid-template-columns:180px minmax(0,1fr) 300px}}
+@media(max-width:999px){#root:has(.work:not([hidden])),#root:has(.work:not([hidden])):not(:has(:is(.panel,.native-activity-panel):not([hidden]))){grid-template-columns:160px minmax(0,1fr) 0}.work:not([hidden])~:is(.panel,.native-activity-panel):not([hidden]){position:fixed;z-index:5;right:0;top:44px;bottom:28px;width:min(360px,90vw);background:var(--surface);box-shadow:-8px 0 32px #0008}.tabrow .tool{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.transcript{scroll-behavior:auto!important}}
+
+.command-card.item-declined .command-state{color:var(--chat-state-unknown)}
+
+.comm-warning{color:var(--warn);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

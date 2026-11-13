@@ -67,7 +67,7 @@ try {
   if (!object(result)) throw new Error("Electron probe 객체가 없습니다.");
   if (result.error) throw new Error(String(result.error));
   if (!object(result.nativeActivity)) throw new Error("활동 시나리오 결과가 없습니다.");
-  for (const key of ["skillsListed", "hooksListed", "inventoryRaceSuppressed", "skillsObserved", "multipleSkillsObserved", "hooksObserved", "fixedOrder", "extendedHighlight", "historyNotReplayed", "conversationRestoreDedupe", "privateReasoningHidden"]) {
+  for (const key of ["skillsListed", "hooksListed", "inventoryRaceSuppressed", "skillsObserved", "multipleSkillsObserved", "hooksObserved", "fixedOrder", "extendedHighlight", "historyNotReplayed", "conversationRestoreDedupe", "privateReasoningHidden", "turnGrouping", "historySelectionPreserved", "usageNotDuplicated", "modelRerouted", "wwwRolesObserved", "wwwSkillsObserved", "generalHooksSecondary", "hookFailureExplained"]) {
     if (result.nativeActivity[key] !== true) throw new Error(`활동 시나리오 실패: ${key}`);
   }
   const artifacts = object(result.activityArtifacts) ? result.activityArtifacts : {};

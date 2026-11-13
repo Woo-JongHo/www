@@ -3,6 +3,19 @@ import { project } from "../src/projection";
 import type { AppEvent } from "../src/shared";
 const event = (seq: number, method: string, params: unknown, extra: Partial<AppEvent> = {}): AppEvent => ({ seq, at: "2026-01-01T00:00:00Z", kind: "notification", method, params, ...extra });
 
+test("명시적 명령 거절과 턴 중단의 명령 결과 미확인을 구별한다", () => {
+  for (const status of ["declined"]) {
+    const result = project([event(1, "item/completed", { item: { id: "stop", type: "commandExecution", status, exitCode: -1 } })]);
+    expect(result.blocks[0]).toMatchObject({ kind: "command", status });
+  }
+  const result = project([
+    event(1, "turn/started", { threadId: "t", turn: { id: "a" } }),
+    event(2, "item/started", { threadId: "t", turnId: "a", item: { id: "unfinished", type: "commandExecution" } }),
+    event(3, "turn/completed", { threadId: "t", turn: { id: "a", status: "interrupted" } })
+  ]);
+  expect(result.blocks[0]).toMatchObject({ kind: "command", status: "unknown", turnInterrupted: true, running: false });
+});
+
 test("projects streaming answer and completion", () => {
   const result = project([
     event(1, "turn/started", { turn: { id: "turn-1" } }),
@@ -204,7 +217,43 @@ test("완료 뒤 늦은 출력과 중복 시작은 명령을 다시 실행 중�
     event(3, "item/started", { item: { id: "done", type: "commandExecution", command: "true" } })
   ]);
   expect(result.blocks).toHaveLength(1);
-  expect(result.blocks[0]).toMatchObject({ kind: "command", running: false, status: "completed", output: "앞뒤", exitCode: 0 });
+  expect(result.blocks[0]).toMatchObject({ kind: "command", running: false, status: "completed", output: "앞", exitCode: 0 });
+});
+
+test("닫힌 턴이나 연결의 늦은 명령 시작·출력이 새 실행을 만들지 않는다", () => {
+  for (const ending of ["completed", "interrupted", "closed"]) {
+    const ended = ending === "closed"
+      ? event(2, `transport/${ending}`, {})
+      : event(2, "turn/completed", { threadId: "t", turn: { id: "a", status: ending } });
+    const result = project([
+      event(1, "turn/started", { threadId: "t", turn: { id: "a" } }), ended,
+      event(3, "item/commandExecution/outputDelta", { threadId: "t", turnId: "a", itemId: "late", delta: "늦은 출력" }),
+      event(4, "item/started", { threadId: "t", turnId: "a", item: { id: "late", type: "commandExecution", command: "late" } })
+    ]);
+    expect(result.blocks.filter((block) => block.kind === "command")).toEqual([]);
+  }
+});
+
+test("복원된 종료 미확인 명령도 턴 중단의 맥락을 보존한다", () => {
+  const result = project([
+    event(1, "item/completed", { threadId: "t", turnId: "a", item: { id: "saved", type: "commandExecution", status: "unknown" } }, { historical: true }),
+    event(2, "turn/completed", { threadId: "t", turn: { id: "a", status: "interrupted" } }, { historical: true })
+  ]);
+  expect(result.blocks[0]).toMatchObject({ kind: "command", status: "unknown", turnInterrupted: true, running: false });
+});
+
+test("복구 가능한 프로토콜 오류 뒤 새 턴의 명령은 같은 연결에서 계속 스트리밍한다", () => {
+  const result = project([
+    event(1, "transport/connected", {}),
+    event(2, "turn/started", { threadId: "t", turn: { id: "old" } }),
+    event(3, "transport/error", { message: "잘못된 JSON 한 줄" }),
+    event(4, "turn/started", { threadId: "t", turn: { id: "new" } }),
+    event(5, "item/started", { threadId: "t", turnId: "new", item: { id: "live", type: "commandExecution", command: "printf live" } }),
+    event(6, "item/commandExecution/outputDelta", { threadId: "t", turnId: "new", itemId: "live", delta: "즉시 읽는 출력" })
+  ]);
+  expect(result.blocks[0]).toMatchObject({ kind: "command", turnId: "new", running: true, status: "running", output: "즉시 읽는 출력" });
+  expect(result.transport).toBe("connected");
+  expect(result.protocolWarning?.message).toBe("잘못된 JSON 한 줄");
 });
 
 test("시작에서 제공된 공개 설명 phase를 델타와 완료에도 보존한다", () => {
@@ -403,3 +452,59 @@ test("공개 본문이 아직 없던 턴도 EOF 재연결 뒤 늦은 요약을 �
     summaryEvent(6, "item/reasoning/delta", { phase: "commentary", delta: "PRIVATE" })];
   expect(project(events).blocks).toEqual([]);
 });
+
+test("늦은 시작과 델타가 완료 답변을 덮어쓰거나 다시 열지 않는다", () => {
+  const events = [
+    event(1, "turn/started", { turn: { id: "turn" } }),
+    event(2, "item/agentMessage/delta", { itemId: "answer", delta: "완성된 답변" }),
+    event(3, "item/started", { item: { id: "answer", type: "agentMessage", text: "앞부분" } })
+  ];
+  expect(project(events).blocks[0]).toMatchObject({ text: "완성된 답변", streaming: true });
+  events.push(event(4, "item/completed", { item: { id: "answer", type: "agentMessage", text: "최종 답변" } }));
+  events.push(event(5, "item/agentMessage/delta", { itemId: "answer", delta: "중복" }));
+  events.push(event(6, "item/started", { item: { id: "answer", type: "agentMessage", text: "앞부분" } }));
+  expect(project(events).blocks[0]).toMatchObject({ text: "최종 답변", streaming: false });
+});
+
+for (const ending of ["completed", "interrupted", "failed", "EOF"]) {
+  test(`${ending} 뒤 늦은 공개 메시지를 표시하지 않고 완료 snapshot은 복원한다`, () => {
+    const events = [event(1, "turn/started", { turn: { id: "turn" } }),
+      event(2, "item/agentMessage/delta", { itemId: "answer", delta: "스트리밍" }),
+      ending === "EOF" ? event(3, "transport/closed", {}) : event(3, "turn/completed", { turn: { id: "turn", status: ending } }),
+      event(4, "item/agentMessage/delta", { itemId: "answer", delta: "늦음" }),
+      event(5, "item/agentMessage/delta", { itemId: "another", delta: "늦은 새 항목" })];
+    expect(project(events).blocks).toMatchObject([{ text: "스트리밍", streaming: false }]);
+    expect(project(events).blocks).toHaveLength(1);
+    events.push(event(6, "item/completed", { item: { id: "answer", type: "agentMessage", text: "최종 전체 본문" } }));
+    expect(project(events).blocks[0]).toMatchObject({ text: "최종 전체 본문", streaming: false });
+  });
+}
+
+test("긴 최종 답변과 공개 설명은 요약·명령의 32768 제한으로 잘리지 않는다", () => {
+  const text = "가".repeat(40_000) + "\n마지막 문장";
+  const events = [event(1, "turn/started", { turn: { id: "turn" } }),
+    event(2, "item/agentMessage/delta", { itemId: "answer", delta: text }),
+    event(3, "item/completed", { item: { id: "answer", type: "agentMessage", text } }),
+    event(4, "item/completed", { item: { id: "comment", type: "agentMessage", phase: "commentary", text } })];
+  expect(project(events).blocks.map((block) => "text" in block ? block.text : null)).toEqual([text, text]);
+});
+
+test("명령 경과 시간은 실제 시작·종료 수신 시각만 사용하고 중복 완료로 바뀌지 않는다", () => {
+  const events = [
+    event(1, "item/started", { item: { id: "cmd", type: "commandExecution", command: "true" } }, { at: "2026-01-01T00:00:01Z" }),
+    event(2, "item/completed", { item: { id: "cmd", type: "commandExecution", exitCode: 0 } }, { at: "2026-01-01T00:00:04Z" }),
+    event(3, "item/completed", { item: { id: "cmd", type: "commandExecution", exitCode: 0 } }, { at: "2026-01-01T00:00:09Z" })
+  ];
+  expect(project(events).blocks[0]).toMatchObject({ startedAt: Date.parse("2026-01-01T00:00:01Z"), endedAt: Date.parse("2026-01-01T00:00:04Z") });
+  const restored = events.map((entry) => ({ ...entry, historical: true }));
+  expect(project(restored).blocks[0]).toMatchObject({ startedAt: null, endedAt: null });
+});
+
+for (const ending of ["completed", "EOF"]) {
+  test(`${ending} 뒤 종료 누락 명령의 경과 시간을 고정하고 성공으로 추정하지 않는다`, () => {
+    const events = [event(1, "turn/started", { turn: { id: "turn" } }),
+      event(2, "item/started", { item: { id: "cmd", type: "commandExecution", command: "wait" } }),
+      ending === "EOF" ? event(3, "transport/closed", {}, { at: "2026-01-01T00:00:03Z" }) : event(3, "turn/completed", { turn: { id: "turn", status: ending } }, { at: "2026-01-01T00:00:03Z" })];
+    expect(project(events).blocks[0]).toMatchObject({ running: false, status: "unknown", endedAt: Date.parse("2026-01-01T00:00:03Z") });
+  });
+}

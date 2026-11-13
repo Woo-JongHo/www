@@ -9,7 +9,7 @@
   ],
   "owner": "ui",
   "status": "verifying",
-  "blockedReason": "채팅 기능 구현·Native/Electron 표본 검증은 끝났으나 BoxBox 정렬/REFUSE 미해결 및 다른 세션의 사이드바 소스 변경으로 현재 통합본 최종 검증·감사 적용성이 미충족이다.",
+  "blockedReason": "독립 검토 fail: 수정 또는 검토 재실행 필요",
   "relations": [],
   "criteria": [
     {
@@ -131,7 +131,7 @@
       "src",
       "test"
     ],
-    "nextAction": "verify",
+    "nextAction": "build",
     "verifications": [
       {
         "id": "attempt-d6a44bcb-190c-4954-9e8e-550ffa6f0b59",
@@ -3016,6 +3016,41 @@
         "receiptPath": ".www/evidence/reviews/review-bf7a0192-d57f-4422-b3cb-0a243bd91dd1/opus.json",
         "startedAt": "2026-11-12T22:55:47.916Z",
         "completedAt": "2026-11-12T22:57:13.038Z"
+      },
+      {
+        "id": "review-8dc45833-b9b7-4b5a-ba92-b758c774723c",
+        "provider": "anthropic",
+        "model": "opus",
+        "observedModel": "claude-opus-5-5",
+        "verdict": "fail",
+        "readOnly": true,
+        "sourceDigest": "cea65e2f0743a60526df496dc4baacc6d5c0e0f9b60d8e978cb0f568ee6987f5",
+        "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101",
+        "policyHash": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor": "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode": 0,
+          "signal": null,
+          "error": null,
+          "receiptHash": "f531f2fba029c1dbf52ef3189a714e884958052f459f490f02a46b666516be3a"
+        },
+        "failure": null,
+        "findings": [
+          "[결함·증거 범위 확대] 현재 검토 대상(HEAD 1509280, sourceDigest cea65e2f…)을 검증한 공식 시도는 하나도 없다. work.json의 다섯 시도는 모두 HEAD 4ef13d29의 소스 d126edd7… 또는 977e0094…에서 실행됐다. 현재 핵심 파일의 digest는 그때와 다르다: src/conversations.ts fd85d613 (검증 시 6fede61c), src/main.ts 34952bd1 (357b6525), src/renderer.tsx c186f81c (fc4e011d), src/preload.ts 7330b041 (69a22504), src/shared.ts a204c69a (a483d866), src/native-activity-view.tsx·native-activity.css, test/conversations.test.ts c4508904 (8919770e), test/fixtures/conversations-app-server.ts b086bcb5 (cf35fafe), test/verify-chat-live.ts 0f9de563 (99b6aad9), docs/specs/chat.md, ARCHITECTURE, DEVELOPMENT, PRODUCT, third-party/ovis.md도 바뀌었다. 검증 당시 있던 src/activity-sidebar.ts와 test/activity-sidebar.test.ts는 현재 없다. 그런데도 work.json의 AC-1·AC-2·AC-3 evidence(attempt-9ca37ad6)와 AC-4 evidence(attempt-e35dc33c)는 여전히 '실제 검증 passed; 현재 적용 가능'으로 적혀 있다. 이 표시는 현재 소스에는 맞지 않으므로 고치거나 현재 소스로 다시 검증해야 한다.",
+          "[결함·기록 불일치] work.json의 workflow.authorization은 commit:false, publish:false다. verification.md handoff-20261113도 '커밋·push하지 않았다'고 적었다. 그러나 현재 main HEAD 1509280의 커밋 '오픈소스 채팅과 Native 대화 재개를 통합한다'에 이 작업이 들어가 있다. 별도 권한으로 커밋했다면 그 근거와 커밋된 소스의 검증 상태가 기록돼야 하는데 work.json·verification.md·보고서(report-ccd22113, sourceDigest a31449d9…)에 반영돼 있지 않다.",
+          "[결함·독립 검토 적용성] 기존 Opus 검토 review-bf7a0192는 판정 근거로 src/conversations.ts 6fede61c… 와 src/main.ts 357b6525… 의 digest·행 번호를 인용했다(예: main.ts:338 turn:start 거부, main.ts:130-135 replaceConversationEvents). 현재 main.ts에서 같은 로직은 :273과 :126-131에 있다. 약 65행이 줄어 내용이 바뀐 것이 확인되므로 이 pass 판정을 현재 커밋에 옮겨 적용할 수 없다. 보고서는 Skill/Hook pulse를 다시 실행하지 않는다고 주장하는데, 이 주장도 activity-sidebar.ts가 있던 소스에서만 확인됐다. 사이드바가 빠진 현재 구성에서는 다시 확인해야 한다.",
+          "[코드 대조·문제 없음] src/conversations.ts:147,150,55-63의 sourceKinds [appServer,vscode], cwd 검사, originator==='www' 검사, ephemeral 검사는 design.md의 '실제 Native 목록 출처 보정'과 일치한다. publicItem(:79-107)은 reasoning 본문과 승인 요청을 버린다. src/native-chat.ts:20-26의 turn/start에는 approvalPolicy·sandbox override가 없다. src/main.ts:126-131은 복원 사건을 publish를 거치지 않고 eventLog에 넣으므로 자동 보고서가 다시 실행되지 않는다. projection.ts:431은 historical 요청을 승인 블록에서 뺀다. 렌더러 src/renderer.tsx:254-285는 switchingRef와 generation으로 전환을 직렬화한다. 이 경계들은 소스상 명세와 맞는다. 단, 위의 이유로 현재 소스에서 실행 근거는 없다.",
+          "[미확인 위험] src/main.ts:43,73-77,302-318에서 pendingApprovals는 사용자 응답이나 연결 종료 때만 지워진다. Native가 승인 대기 중 중단 등으로 서버 요청을 스스로 해소해도 이를 처리하는 코드가 없다(저장소 안에 serverRequest/resolved 처리 없음). 이번 작업에서 assertConversationIdle(:121-124)은 turn:start(:272)·thread:start·대화 전환까지 막는다. 따라서 '승인 대기 → 중단' 뒤 이전 승인 블록에 응답하기 전까지 새 요청과 대화 전환이 막힐 수 있다. scripts/verify-chat.ts:142-152는 승인과 중단을 따로 검사하고 승인 대기 중 중단은 검사하지 않는다. Codex 0.166.0의 실제 해소 알림 여부를 schema로 확인해야 한다.",
+          "[미확인 위험] app-server가 실행 중 종료되면 src/main.ts:69-80에서 rpc만 null이 되고 activeThreadId는 남는다. 다음 turn:start는 새 프로세스에 resume 없이 turn/start를 보낸다. 렌더러 selectConversation(src/renderer.tsx:255)은 같은 id를 다시 선택하면 바로 반환하므로 같은 대화를 다시 열어 복구할 수도 없다. 기존 동작에서 이어진 문제일 수 있지만, 이번 재개 기능이 있는데도 연결 재생성 경로에 resume을 하지 않는다.",
+          "[경미] src/conversations.ts:158-162는 thread/resume을 보낸 뒤 응답이 active이거나 검증에 실패하면 예외를 던진다. 이때 Native 쪽 thread는 이미 load된 상태로 남고 main의 activeThreadId는 바뀌지 않는다. :95는 aggregatedOutput을, :102는 diff를 길이 제한 없이 IPC로 넘긴다(command만 100k로 자른다). 화면 표시는 projection.ts:102-105에서 32,768로 잘리지만, 복원 payload와 메모리는 최대 1,990개 사건 × 원문 크기까지 커질 수 있다. 또 :137의 slice(-1990)는 턴 중간을 자를 수 있어서, 복원된 첫 턴에 turn/started나 turn/userPrompt 없이 이후 사건만 남을 수 있다.",
+          "[검토 한계] 이 검토는 읽기 전용 소스·문서 대조다. npm run check, scripts/verify-chat.ts, test/verify-chat-live.ts를 포함해 어떤 테스트도 실행하지 않았다. 실제 Native·Electron 동작과 BoxBox 상태도 직접 확인하지 않았다. 통과로 판정하려면 현재 HEAD 소스(cea65e2f…)에서 npm run check, node scripts/verify-chat.ts, 실제 Native 재개 검증을 다시 실행해야 한다. 그다음 work.json evidence의 적용 표시와 커밋 기록을 고쳐야 한다."
+        ],
+        "receiptPath": ".www/scratchpad/chat-006-critical-review-20261113/receipt-keychain/opus.json",
+        "startedAt": "2026-11-13T00:02:36.620Z",
+        "completedAt": "2026-11-13T00:05:37.709Z",
+        "sourceStable": true,
+        "currentSourceDigest": "cea65e2f0743a60526df496dc4baacc6d5c0e0f9b60d8e978cb0f568ee6987f5"
       }
     ],
     "documentationReviews": [
