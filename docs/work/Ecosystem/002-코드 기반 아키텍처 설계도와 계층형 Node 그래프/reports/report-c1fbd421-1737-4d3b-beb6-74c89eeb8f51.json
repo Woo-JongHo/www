@@ -1,0 +1,389 @@
+{
+  "schemaVersion": 1,
+  "id": "report-c1fbd421-1737-4d3b-beb6-74c89eeb8f51",
+  "workId": "work-9727de0a-072d-47d9-874c-cf79b3de8526",
+  "title": "코드 기반 아키텍처 설계도와 계층형 Node 그래프",
+  "summary": "실패 관찰. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome": "failed",
+  "kind": "snapshot",
+  "event": "verify",
+  "createdAt": "2026-11-13T03:14:02.698Z",
+  "workRecordHash": "6dd7689abeb591f402a07951a44643113aba2b79fa1766fbe08303d35f6a63eb",
+  "sourceDigest": "08d55dbb47575a56cbac1db53a9bf5733d7bf9a1c793b7fb771b272560f9ddf7",
+  "criteriaDigest": "43484fe65ac2cba0bbad71a5617e5580fcc141a05be4361ea8acded360b47bcf",
+  "semanticHash": "d0363336b42d218295a1c554f2839807f7d50b2b9fc78b33a5e85f11175bcf94",
+  "narrative": null,
+  "work": {
+    "status": "verifying",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id": "AC-1",
+        "description": "현재 TypeScript 코드의 실제 import 관계를 재현 가능하게 추출하고 노드·연결의 파일과 행 근거를 제공한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-56ce8fb3-660d-4772-9dc9-731d32f82b18",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-181b7f09-a94c-46ff-b3ac-cbd8478d9643",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e48507b1-53c8-4a1f-8799-fd436232e0b1",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-2",
+        "description": "아키텍처 설계도에 계층별 그룹과 정돈된 방향 연결선을 표시하고 기존 생태계 안내와 코드 근거를 구분한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-181b7f09-a94c-46ff-b3ac-cbd8478d9643",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e48507b1-53c8-4a1f-8799-fd436232e0b1",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-3",
+        "description": "검색·계층 필터·노드 선택·관련 연결 강조·확대·축소·전체 보기·키보드 탐색이 동작하고 좁은 창에서도 접근 가능하다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-181b7f09-a94c-46ff-b3ac-cbd8478d9643",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e48507b1-53c8-4a1f-8799-fd436232e0b1",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-4",
+        "description": "생태계 화면 전환에서 기존 대화 초안과 읽기 상태를 유지하고 집중 테스트·타입 검사·빌드·실제 Electron 시나리오를 통과한다.",
+        "required": true,
+        "result": "failed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-717e805e-5a00-47f6-8a63-8248e19a490e",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-fb94f643-2679-44dd-8d68-f06f2ace5b47",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-622a2eb7-734f-4984-8817-17d6f4942f66",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-a4bc5e59-3d85-4127-b0b7-4ddcb83ff405",
+            "summary": "실제 검증 passed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-f1161db7-24e8-4305-8640-d8d866ca79a0",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-5f380ada-d301-46e2-875d-d92719cab793",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-b63007bb-ada6-47b2-ad5b-9d6c0ffd5bb1",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-0cba5a1f-5ef9-4728-bbe9-1a6104d90317",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-2504c6a4-4004-4441-b891-d7d35d7bc4e7",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          }
+        ]
+      },
+      {
+        "id": "AC-5",
+        "description": "Mac mini의 분리된 백그라운드 프로세스에서 실제 저작·검사를 수행하며 실행 상태·로그·재개 경로를 남긴다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-f1161db7-24e8-4305-8640-d8d866ca79a0",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-717e805e-5a00-47f6-8a63-8248e19a490e",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:50:36.672Z"
+      },
+      {
+        "id": "attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:50:43.803Z"
+      },
+      {
+        "id": "attempt-fb94f643-2679-44dd-8d68-f06f2ace5b47",
+        "command": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:50:45.935Z"
+      },
+      {
+        "id": "attempt-622a2eb7-734f-4984-8817-17d6f4942f66",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:54:21.007Z"
+      },
+      {
+        "id": "attempt-a4bc5e59-3d85-4127-b0b7-4ddcb83ff405",
+        "command": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:54:24.641Z"
+      },
+      {
+        "id": "attempt-56ce8fb3-660d-4772-9dc9-731d32f82b18",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/architecture.test.ts",
+          "test/ecosystem.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:55:59.136Z"
+      },
+      {
+        "id": "attempt-f1161db7-24e8-4305-8640-d8d866ca79a0",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:57:21.265Z"
+      },
+      {
+        "id": "attempt-5f380ada-d301-46e2-875d-d92719cab793",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T03:02:59.864Z"
+      },
+      {
+        "id": "attempt-181b7f09-a94c-46ff-b3ac-cbd8478d9643",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T03:03:06.327Z"
+      },
+      {
+        "id": "attempt-b63007bb-ada6-47b2-ad5b-9d6c0ffd5bb1",
+        "command": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T03:03:08.531Z"
+      },
+      {
+        "id": "attempt-0cba5a1f-5ef9-4728-bbe9-1a6104d90317",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T03:06:36.615Z"
+      },
+      {
+        "id": "attempt-2504c6a4-4004-4441-b891-d7d35d7bc4e7",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T03:13:56.171Z"
+      },
+      {
+        "id": "attempt-e48507b1-53c8-4a1f-8799-fd436232e0b1",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T03:14:02.604Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "review-54d25cab-98f0-4f31-949b-40f0b7cd17ca",
+        "verdict": "not_run",
+        "model": null,
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-54d25cab-98f0-4f31-949b-40f0b7cd17ca/opus.json",
+        "findings": []
+      }
+    ]
+  },
+  "source": {
+    "recordPath": "docs/work/Ecosystem/002-코드 기반 아키텍처 설계도와 계층형 Node 그래프/work.json",
+    "workRecordHash": "6dd7689abeb591f402a07951a44643113aba2b79fa1766fbe08303d35f6a63eb",
+    "sourceDigest": "08d55dbb47575a56cbac1db53a9bf5733d7bf9a1c793b7fb771b272560f9ddf7",
+    "criteriaDigest": "43484fe65ac2cba0bbad71a5617e5580fcc141a05be4361ea8acded360b47bcf"
+  }
+}

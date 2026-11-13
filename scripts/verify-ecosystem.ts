@@ -34,7 +34,7 @@ function run(command: string, args: string[], options: SpawnOptionsWithoutStdio 
 try {
   await Promise.all([
     run("npm", ["run", "typecheck"]).then((output) => fs.writeFile(path.join(directory, "typecheck.log"), output)),
-    run("bun", ["test", "test/ecosystem.test.ts"]).then((output) => fs.writeFile(path.join(directory, "model-test.log"), output)),
+    run("bun", ["test", "test/architecture.test.ts", "test/ecosystem.test.ts"]).then((output) => fs.writeFile(path.join(directory, "model-test.log"), output)),
   ]);
   await fs.writeFile(path.join(directory, "build.log"), await run("npm", ["run", "build"]));
   const reportPath = path.join(directory, "electron-probe.json");

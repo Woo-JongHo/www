@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "id": "report-b7338f57-a57e-44ea-ba0a-80e7126e5f6f",
+  "workId": "work-9727de0a-072d-47d9-874c-cf79b3de8526",
+  "title": "코드 기반 아키텍처 설계도와 계층형 Node 그래프",
+  "summary": "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome": "blocked",
+  "kind": "snapshot",
+  "event": "verify",
+  "createdAt": "2026-11-13T02:50:46.005Z",
+  "workRecordHash": "281715bf42e47509dfe63dcf9cd78d4aae24dd4c1971e9465c6f285bdd839ff4",
+  "sourceDigest": "c05742c19edd8750c3dc1d8cb79d716adc7971400e63cc9f2b6e3ac1b59e58ff",
+  "criteriaDigest": "43484fe65ac2cba0bbad71a5617e5580fcc141a05be4361ea8acded360b47bcf",
+  "semanticHash": "e4cbeec0ce8b2880d63af1a789a7f5c171c512895bc6304d21d1e72e1279ab7c",
+  "narrative": null,
+  "work": {
+    "status": "verifying",
+    "blockedReason": "verification_failed",
+    "criteria": [
+      {
+        "id": "AC-1",
+        "description": "현재 TypeScript 코드의 실제 import 관계를 재현 가능하게 추출하고 노드·연결의 파일과 행 근거를 제공한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-2",
+        "description": "아키텍처 설계도에 계층별 그룹과 정돈된 방향 연결선을 표시하고 기존 생태계 안내와 코드 근거를 구분한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-3",
+        "description": "검색·계층 필터·노드 선택·관련 연결 강조·확대·축소·전체 보기·키보드 탐색이 동작하고 좁은 창에서도 접근 가능하다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-4",
+        "description": "생태계 화면 전환에서 기존 대화 초안과 읽기 상태를 유지하고 집중 테스트·타입 검사·빌드·실제 Electron 시나리오를 통과한다.",
+        "required": true,
+        "result": "failed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-717e805e-5a00-47f6-8a63-8248e19a490e",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-fb94f643-2679-44dd-8d68-f06f2ace5b47",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          }
+        ]
+      },
+      {
+        "id": "AC-5",
+        "description": "Mac mini의 분리된 백그라운드 프로세스에서 실제 저작·검사를 수행하며 실행 상태·로그·재개 경로를 남긴다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-717e805e-5a00-47f6-8a63-8248e19a490e",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:50:36.672Z"
+      },
+      {
+        "id": "attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:50:43.803Z"
+      },
+      {
+        "id": "attempt-fb94f643-2679-44dd-8d68-f06f2ace5b47",
+        "command": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:50:45.935Z"
+      }
+    ],
+    "reviews": []
+  },
+  "source": {
+    "recordPath": "docs/work/Ecosystem/002-코드 기반 아키텍처 설계도와 계층형 Node 그래프/work.json",
+    "workRecordHash": "281715bf42e47509dfe63dcf9cd78d4aae24dd4c1971e9465c6f285bdd839ff4",
+    "sourceDigest": "c05742c19edd8750c3dc1d8cb79d716adc7971400e63cc9f2b6e3ac1b59e58ff",
+    "criteriaDigest": "43484fe65ac2cba0bbad71a5617e5580fcc141a05be4361ea8acded360b47bcf"
+  }
+}

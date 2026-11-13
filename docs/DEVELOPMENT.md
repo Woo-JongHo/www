@@ -249,3 +249,11 @@ Chat은 Ovis revision d505c75e26c54f31573057d1e9aa431ecc56677f의 행 상태·�
 집중 검사는 bun test test/chat-state.test.ts test/conversations.test.ts test/projection.test.ts test/input.test.ts다. Native thread/list/read/resume/turns/list 필드는 설치된 codex app-server generate-json-schema 결과와 대조한다. 새 프로토콜이 없으면 응답을 꾸며 완전 복원으로 표시하지 않는다.
 
 node scripts/verify-chat.ts는 빌드된 실제 Electron을 고립 profile과 cwd에서 실행하고 외부 CDP로 저장 대화·Markdown·코드복사·인용·대화별 상태·동일 thread 후속 요청·승인·중단·앱 재시작을 조작한다. 서버는 test/fixtures/chat-ui-app-server.ts의 합성 stdio subprocess다. 성공·실패 원문과 화면은 .www/evidence/chat-ui-*에 저장하며 실제 모델·Windows·IME 실기로 확대하지 않는다. 실행 전에 npm run build를 수행하고 검사 중 다른 빌드로 dist를 바꾸지 않는다.
+
+## 코드 설계도 생성과 검사
+
+`node scripts/generate-architecture.ts`는 현재 WWW TypeScript의 실제 모듈 참조와 파일·행·원문·내용 해시를 `src/architecture.generated.json`에 생성한다. `--check`는 소스를 바꾸지 않고 생성 자료가 현재 소스와 일치하는지 확인한다. `npm run build`는 번들 전에 같은 생성을 수행한다. 생성 JSON을 손으로 수정하지 않는다. 분석 범위·제외와 수동 계층 분류는 [코드 설계도](CODE_BLUEPRINT.md)에 설명한다.
+
+코드 편집 후에는 생성 명령, `bun test test/architecture.test.ts test/ecosystem.test.ts`, `npm run typecheck`, `npm run build`를 실행한다. `node scripts/verify-architecture.ts`는 빌드된 실제 Electron에 CDP로 연결해 기본 계층 개요·검색·필터·키보드·참조 근거·배율·좁은 화면을 검사하고 `.www/evidence/architecture-*`에 JSON과 PNG를 남긴다. 먼저 현재 소스 snapshot을 대조하므로 편집 후 재생성을 생략하면 실패한다. `node scripts/verify-ecosystem.ts`는 별도 생태계 안내와 기존 대화 초안·읽기 위치 보존을 확인한다. Native는 합성 fixture이며 실제 모델·계정 검증과 구분한다.
+
+GUI 프로세스와 루프백 디버깅 포트를 허용하는 데스크톱 실행 환경이 필요하다. 포트·프로세스 권한이 제한된 자식 샌드박스에서 실패하면 해당 원문과 증거 경로를 보존하고 허용된 부모 실행 환경에서 검사를 이어간다. 정적 테스트·타입 검사만으로 Electron 시나리오를 통과했다고 기록하지 않는다.

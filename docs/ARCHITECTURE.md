@@ -130,9 +130,11 @@ Codex 경로의 역할 로딩·일반 요청·같은 작업의 재개는 실제 
 
 모듈 책임·상태 소유·프로세스·외부 연결이 달라질 때 이 문서를 갱신한다. 실행 환경과 명령은 [개발 안내](DEVELOPMENT.md), 개별 변경의 판단과 과거 소스 검증은 작업 기록에서 찾는다.
 
-## 생태계 안내 화면
+## 코드 설계도와 생태계 안내
 
-src/ecosystem.ts는 정본 문서와 실제 경로를 근거로 정적 노드·방향 관계·후속 방향을 정의한다. src/ecosystem-view.tsx는 SVG 탐색·검색·영역 강조·배율과 노드 상세를 표현한다. renderer는 대화 DOM을 유지한 채 화면을 전환하며 기존 IPC 권한과 Native 실행 경로를 확장하지 않는다. 이 지도는 실시간 실행 그래프나 서버 색인 결과가 아니다. 구조 변경 시 안내 데이터와 [생태계 명세](specs/ecosystem.md)를 함께 검토한다.
+scripts/generate-architecture.ts는 TypeScript compiler API로 현재 src와 개발 workflow 핵심 모듈의 참조·파일·행·원문·내용 해시를 추출한다. build.ts는 번들 전에 결정적인 src/architecture.generated.json을 생성하며 추출 실패를 빌드 실패로 전달한다. src/architecture.ts가 계층·모듈 검색과 참조 탐색·결정적 배치를, src/ecosystem-view.tsx와 src/ecosystem.css가 계층 개요·모듈 상세와 직각 방향 연결을 표현한다. 모듈 보기에서는 선택한 모듈의 직접 참조만 연결선으로 보여 준다. 계층·역할 이름은 수동 분류이고 타입 전용 참조는 값·혼합 참조와 구분한다.
+
+src/ecosystem.ts의 정적 노드·방향 관계·후속 방향은 별도 생태계 안내에 보존한다. renderer는 대화 DOM을 유지한 채 화면을 전환하며 기존 IPC 권한과 Native 실행 경로를 확장하지 않는다. 이 지도는 실시간 실행 그래프나 서버 색인 결과가 아니다. 구조 변경 시 [코드 설계도](CODE_BLUEPRINT.md), 생성 자료와 [생태계 명세](specs/ecosystem.md)를 함께 검토한다.
 
 ## 작업 보고서 저장과 보기
 

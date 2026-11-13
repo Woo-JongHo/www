@@ -1,0 +1,296 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>코드 기반 아키텍처 설계도와 계층형 Node 그래프 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 13일 오후 12:03 · 한국 시간 · 자동 기록</span></header><section class="hero" id="report-conclusion"><h1>코드 기반 아키텍처 설계도와 계층형 Node 그래프</h1><p class="lead">차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</p><div id="report-story" class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 6 · 실패 4 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 원인 미확인</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="blocker"><strong>남은 차단 사항</strong> verification_failed</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 TypeScript 코드의 실제 import 관계를 재현 가능하게 추출하고 노드·연결의 파일과 행 근거를 제공한다.</dt><dd>당시 통과로 기록</dd></div><div><dt>아키텍처 설계도에 계층별 그룹과 정돈된 방향 연결선을 표시하고 기존 생태계 안내와 코드 근거를 구분한다.</dt><dd>당시 통과로 기록</dd></div><div><dt>검색·계층 필터·노드 선택·관련 연결 강조·확대·축소·전체 보기·키보드 탐색이 동작하고 좁은 창에서도 접근 가능하다.</dt><dd>당시 통과로 기록</dd></div><div><dt>생태계 화면 전환에서 기존 대화 초안과 읽기 상태를 유지하고 집중 테스트·타입 검사·빌드·실제 Electron 시나리오를 통과한다.</dt><dd>당시 실패로 기록</dd></div><div><dt>Mac mini의 분리된 백그라운드 프로세스에서 실제 저작·검사를 수행하며 실행 상태·로그·재개 경로를 남긴다.</dt><dd>당시 통과로 기록</dd></div></dl></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 6건, 실패 4건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 미실행으로 기록 · 관측 모델 미확인.</p></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><p>차단 사항은 남아 있지만 구체적인 해소 행동이 기록되지 않았습니다.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Ecosystem/002-코드 기반 아키텍처 설계도와 계층형 Node 그래프/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-9727de0a-072d-47d9-874c-cf79b3de8526<br>report-723a9dcb-6a7f-4669-a168-f58df8823b7e</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>cc34250b6529b0071fe8f1d44204f5cebd2b27b6e952317dbee69503010a1621</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>08d55dbb47575a56cbac1db53a9bf5733d7bf9a1c793b7fb771b272560f9ddf7</code></dd></div><div><dt>기준 지문</dt><dd><code>43484fe65ac2cba0bbad71a5617e5580fcc141a05be4361ea8acded360b47bcf</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;verification_failed&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;현재 TypeScript 코드의 실제 import 관계를 재현 가능하게 추출하고 노드·연결의 파일과 행 근거를 제공한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-56ce8fb3-660d-4772-9dc9-731d32f82b18&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-181b7f09-a94c-46ff-b3ac-cbd8478d9643&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;아키텍처 설계도에 계층별 그룹과 정돈된 방향 연결선을 표시하고 기존 생태계 안내와 코드 근거를 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-181b7f09-a94c-46ff-b3ac-cbd8478d9643&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;검색·계층 필터·노드 선택·관련 연결 강조·확대·축소·전체 보기·키보드 탐색이 동작하고 좁은 창에서도 접근 가능하다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-181b7f09-a94c-46ff-b3ac-cbd8478d9643&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;생태계 화면 전환에서 기존 대화 초안과 읽기 상태를 유지하고 집중 테스트·타입 검사·빌드·실제 Electron 시나리오를 통과한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-717e805e-5a00-47f6-8a63-8248e19a490e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fb94f643-2679-44dd-8d68-f06f2ace5b47&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-622a2eb7-734f-4984-8817-17d6f4942f66&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a4bc5e59-3d85-4127-b0b7-4ddcb83ff405&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f1161db7-24e8-4305-8640-d8d866ca79a0&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5f380ada-d301-46e2-875d-d92719cab793&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-b63007bb-ada6-47b2-ad5b-9d6c0ffd5bb1&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;Mac mini의 분리된 백그라운드 프로세스에서 실제 저작·검사를 수행하며 실행 상태·로그·재개 경로를 남긴다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f1161db7-24e8-4305-8640-d8d866ca79a0&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-717e805e-5a00-47f6-8a63-8248e19a490e&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v24.9.0&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-13T02:50:36.672Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-architecture.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v24.9.0&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-13T02:50:43.803Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-fb94f643-2679-44dd-8d68-f06f2ace5b47&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-ecosystem.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v24.9.0&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-13T02:50:45.935Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-622a2eb7-734f-4984-8817-17d6f4942f66&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v24.9.0&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-13T02:54:21.007Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-a4bc5e59-3d85-4127-b0b7-4ddcb83ff405&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-ecosystem.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v24.9.0&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-13T02:54:24.641Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-56ce8fb3-660d-4772-9dc9-731d32f82b18&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/architecture.test.ts&quot;,
+        &quot;test/ecosystem.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-13T02:55:59.136Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f1161db7-24e8-4305-8640-d8d866ca79a0&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-13T02:57:21.265Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-5f380ada-d301-46e2-875d-d92719cab793&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v24.9.0&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-13T03:02:59.864Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-181b7f09-a94c-46ff-b3ac-cbd8478d9643&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-architecture.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v24.9.0&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-13T03:03:06.327Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-b63007bb-ada6-47b2-ad5b-9d6c0ffd5bb1&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-ecosystem.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v24.9.0&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-13T03:03:08.531Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-54d25cab-98f0-4f31-949b-40f0b7cd17ca&quot;,
+      &quot;verdict&quot;: &quot;not_run&quot;,
+      &quot;model&quot;: null,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-54d25cab-98f0-4f31-949b-40f0b7cd17ca/opus.json&quot;,
+      &quot;findings&quot;: []
+    }
+  ]
+}</pre></div></details></section></main></body></html>

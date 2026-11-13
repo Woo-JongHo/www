@@ -1,0 +1,274 @@
+{
+  "schemaVersion": 1,
+  "id": "report-e9303cfa-b019-49cf-9276-44bf881e29f0",
+  "workId": "work-9727de0a-072d-47d9-874c-cf79b3de8526",
+  "title": "코드 기반 아키텍처 설계도와 계층형 Node 그래프",
+  "summary": "WWW 생태계의 기본 화면을 현재 TypeScript에서 추출한 코드 설계도로 바꿨다. 47개 모듈·105개 참조의 파일·행·원문과 계층별 방향 관계를 읽고 기존 수동 안내로 전환할 수 있다. 통합은 실제 코드와 화면 캡처를 읽고 확장 입력의 집중 검사·전체 검사를 통과시켰다. BoxBox 미해결과 수정 호스트의 권한 오류, 확장 입력의 GUI·추가 Chat 검사 및 Opus 인증 실패가 남아 업무 완료를 보류한다.",
+  "outcome": "blocked",
+  "kind": "authored",
+  "event": "finish",
+  "createdAt": "2026-11-13T02:59:54.841Z",
+  "workRecordHash": "3099c85acacb0ef217c8202e7aeed4787699fb931f4ac8539ee021cd84eff7fe",
+  "sourceDigest": "08d55dbb47575a56cbac1db53a9bf5733d7bf9a1c793b7fb771b272560f9ddf7",
+  "criteriaDigest": "43484fe65ac2cba0bbad71a5617e5580fcc141a05be4361ea8acded360b47bcf",
+  "semanticHash": "818e69e1b51f951c27bf523965d335c251b3c9def3b99e8a4c85405b65ab94f0",
+  "narrative": {
+    "summary": "WWW 생태계의 기본 화면을 현재 TypeScript에서 추출한 코드 설계도로 바꿨다. 47개 모듈·105개 참조의 파일·행·원문과 계층별 방향 관계를 읽고 기존 수동 안내로 전환할 수 있다. 통합은 실제 코드와 화면 캡처를 읽고 확장 입력의 집중 검사·전체 검사를 통과시켰다. BoxBox 미해결과 수정 호스트의 권한 오류, 확장 입력의 GUI·추가 Chat 검사 및 Opus 인증 실패가 남아 업무 완료를 보류한다.",
+    "before": "생태계를 열면 수동으로 정의한 고정 구조 안내가 표시되어 현재 코드의 import 근거를 읽을 수 없었다.",
+    "after": "생태계를 열면 코드 기반 계층 개요가 먼저 표시된다. 파일 검색·계층 필터·모듈 선택에서 실제 참조와 원문 근거로 이동하며, 수동 생태계 안내는 별도 탭에서 읽는다. 현재 구현의 기능 관찰과 미완료 검증을 구분해 기록했다.",
+    "changes": [
+      "TypeScript AST 분석·결정적 생성 JSON과 현재성 검사, 빌드 전 생성을 연결했다.",
+      "계층 개요·선택 모듈 참조·상세 근거·검색·필터·빈 결과·배율·fit·키보드·드래그와 좁은 창 배치를 구현했다.",
+      "코드 설계도 문서와 제품·구조·개발·생태계 정본을 갱신했고 기존 Chat/sidebar 변경을 보존했다.",
+      "검사 입력을 생성 자료·CSS·전체 scripts/test와 관련 문서까지 확장하고 공식 verify의 실제 검사·분리 실행 원문을 연결했다. 통합에서 제품 코드를 추가 변경하지 않았다."
+    ],
+    "decisions": [
+      "자동 import 참조와 수동으로 설명한 IPC/JSON-RPC 실행 흐름을 구분했다. 그래프를 실제 호출 tracing으로 설명하지 않는다.",
+      "입력 범위가 다른 첫 호스트 GUI 통과는 과거 관찰로 보존했다. 같은 코드 내용이라는 이유로 현재 입력의 성공으로 승격하지 않았다.",
+      "권한 오류로 실패한 공식 수정 실행을 기록하고 하네스 밖 제품 저작·자동 정렬로 우회하지 않았다.",
+      "Opus 인증 실패에는 quota 소진 근거가 없어 Terra 대체를 실행하지 않았다."
+    ],
+    "limitations": [
+      "BoxBox 미정렬 22건·REFUSE 24건이 남아 첫 저작 하네스와 공식 수정 하네스는 통과하지 않았다. renderer REFUSE 20건은 사전부터 존재한다.",
+      "수정용 실제 자식 Codex가 in-process app-server 초기화의 권한 오류로 실행되지 않았다.",
+      "첫 호스트 Electron 20개 관찰과 생태계 보존 검사는 당시 입력에서 통과했다. 확장 입력의 architecture/ecosystem 및 추가 Chat probe는 호스트에서 다시 실행해야 한다.",
+      "정책의 읽기 전용 Opus 요청은 OAuth 만료로 exit 1·not_run·observedModel=null이었다. 필수 독립 검토를 충족하지 못했다.",
+      "시각 확인은 보존된 설계도 네 장과 대화 한 장의 범위다. 모든 연결선 상태·스크린리더·실제 Native 변경 왕복을 확인하지 않았다.",
+      "Mac mini 분리 tmux·서버 PPID 1·Codex PID·로그·종료를 호스트 원문으로 확인했다. 노트북 실제 덮개 닫기나 재부팅 후 자동 복구를 시험하지 않았다."
+    ],
+    "next": [
+      "호스트에서 integration-repair.json의 같은 요청·권한과 새 eventId로 공식 수정 하네스를 실행해 구조적 미해결을 처리한다.",
+      "수정 후 Bun PATH를 보완한 동일 호스트에서 전체 검사와 architecture·ecosystem·Chat GUI probe를 순차 실행하고 새 화면을 직접 읽는다.",
+      "Opus 인증 복구 뒤 공식 공유 review를 실행하고 실제 지적을 해결·재검증한다. 모든 필수 기준과 현재 검토가 충족할 때만 report-complete를 실행한다.",
+      "상세 재개 절차는 .www/background/architecture/needs-host-verification.md, 검증과 한계는 같은 작업 verification.md#integration-1에서 확인한다."
+    ]
+  },
+  "work": {
+    "status": "verifying",
+    "blockedReason": "AC-2: scope_changed; AC-3: scope_changed; review_not_passed; observed_model_missing; receipt_result_mismatch",
+    "criteria": [
+      {
+        "id": "AC-1",
+        "description": "현재 TypeScript 코드의 실제 import 관계를 재현 가능하게 추출하고 노드·연결의 파일과 행 근거를 제공한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-56ce8fb3-660d-4772-9dc9-731d32f82b18",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-2",
+        "description": "아키텍처 설계도에 계층별 그룹과 정돈된 방향 연결선을 표시하고 기존 생태계 안내와 코드 근거를 구분한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-3",
+        "description": "검색·계층 필터·노드 선택·관련 연결 강조·확대·축소·전체 보기·키보드 탐색이 동작하고 좁은 창에서도 접근 가능하다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-4",
+        "description": "생태계 화면 전환에서 기존 대화 초안과 읽기 상태를 유지하고 집중 테스트·타입 검사·빌드·실제 Electron 시나리오를 통과한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-717e805e-5a00-47f6-8a63-8248e19a490e",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-fb94f643-2679-44dd-8d68-f06f2ace5b47",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-622a2eb7-734f-4984-8817-17d6f4942f66",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-a4bc5e59-3d85-4127-b0b7-4ddcb83ff405",
+            "summary": "실제 검증 passed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-f1161db7-24e8-4305-8640-d8d866ca79a0",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-5",
+        "description": "Mac mini의 분리된 백그라운드 프로세스에서 실제 저작·검사를 수행하며 실행 상태·로그·재개 경로를 남긴다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-f1161db7-24e8-4305-8640-d8d866ca79a0",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-717e805e-5a00-47f6-8a63-8248e19a490e",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:50:36.672Z"
+      },
+      {
+        "id": "attempt-5d196d6a-e2c8-4f5b-b89b-61ab217ff09f",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:50:43.803Z"
+      },
+      {
+        "id": "attempt-fb94f643-2679-44dd-8d68-f06f2ace5b47",
+        "command": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:50:45.935Z"
+      },
+      {
+        "id": "attempt-622a2eb7-734f-4984-8817-17d6f4942f66",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:54:21.007Z"
+      },
+      {
+        "id": "attempt-a4bc5e59-3d85-4127-b0b7-4ddcb83ff405",
+        "command": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v24.9.0"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:54:24.641Z"
+      },
+      {
+        "id": "attempt-56ce8fb3-660d-4772-9dc9-731d32f82b18",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/architecture.test.ts",
+          "test/ecosystem.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:55:59.136Z"
+      },
+      {
+        "id": "attempt-f1161db7-24e8-4305-8640-d8d866ca79a0",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-13T02:57:21.265Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "review-54d25cab-98f0-4f31-949b-40f0b7cd17ca",
+        "verdict": "not_run",
+        "model": null,
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-54d25cab-98f0-4f31-949b-40f0b7cd17ca/opus.json",
+        "findings": []
+      }
+    ]
+  },
+  "source": {
+    "recordPath": "docs/work/Ecosystem/002-코드 기반 아키텍처 설계도와 계층형 Node 그래프/work.json",
+    "workRecordHash": "3099c85acacb0ef217c8202e7aeed4787699fb931f4ac8539ee021cd84eff7fe",
+    "sourceDigest": "08d55dbb47575a56cbac1db53a9bf5733d7bf9a1c793b7fb771b272560f9ddf7",
+    "criteriaDigest": "43484fe65ac2cba0bbad71a5617e5580fcc141a05be4361ea8acded360b47bcf"
+  }
+}

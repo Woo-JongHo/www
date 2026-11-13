@@ -565,6 +565,11 @@ function App() {
       ecosystemNavigation.click();
       await afterTwoFrames();
       if (!document.querySelector('.ecosystem-work') || !document.querySelector('.work[hidden]')) throw new Error("Probe did not open ecosystem view");
+      if (!document.querySelector('.blueprint-work')) throw new Error("Probe did not open code blueprint by default");
+      const guideTab = document.querySelector('[data-testid="ecosystem-guide-tab"]');
+      if (!(guideTab instanceof HTMLButtonElement)) throw new Error("Probe expected ecosystem guide tab");
+      guideTab.click();
+      await afterTwoFrames();
       const reviewNode = document.querySelector('.eco-node[aria-label^="독립 검토,"]');
       if (!(reviewNode instanceof SVGElement)) throw new Error("Probe expected review node");
       reviewNode.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
