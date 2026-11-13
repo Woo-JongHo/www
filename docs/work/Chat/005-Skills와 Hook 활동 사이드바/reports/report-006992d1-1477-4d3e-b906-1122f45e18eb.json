@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "id": "report-006992d1-1477-4d3e-b906-1122f45e18eb",
+  "workId": "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+  "title": "Skills와 Hook 활동 사이드바",
+  "summary": "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome": "blocked",
+  "kind": "snapshot",
+  "event": "host_failed",
+  "createdAt": "2026-11-12T08:16:08.030Z",
+  "workRecordHash": "98f97b324cdda7a927a189ce4e0029a97f55693e2d38f84672e42ab7696faed7",
+  "sourceDigest": "5a83b8f7587ab6a5fb7757142c69a2f9e1ad1352fe8e0d8cfbb8aceb4af168bc",
+  "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+  "semanticHash": "6f8c2380ffb889c4c43e0ac8fc85efb6ecdcfe00d048e697260660a087bef69a",
+  "narrative": null,
+  "work": {
+    "status": "in_progress",
+    "blockedReason": "개발 호스트 실행 실패: nonzero",
+    "criteria": [
+      {
+        "id": "AC-1",
+        "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-2",
+        "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-3",
+        "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-4",
+        "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-5",
+        "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      }
+    ],
+    "verifications": [],
+    "reviews": []
+  },
+  "source": {
+    "recordPath": "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+    "workRecordHash": "98f97b324cdda7a927a189ce4e0029a97f55693e2d38f84672e42ab7696faed7",
+    "sourceDigest": "5a83b8f7587ab6a5fb7757142c69a2f9e1ad1352fe8e0d8cfbb8aceb4af168bc",
+    "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+  }
+}

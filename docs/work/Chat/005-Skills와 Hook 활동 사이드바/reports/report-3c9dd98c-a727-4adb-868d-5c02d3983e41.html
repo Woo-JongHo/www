@@ -1,0 +1,329 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>Skills와 Hook 활동 사이드바 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 12일 PM 5:40 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>Skills와 Hook 활동 사이드바</h1><p class="lead">Skills와 Hooks를 고정 목록으로 보여 주고 새 구조화 활동이 생긴 해당 행만 반응하는 최소 사이드바를 구현했습니다. 순수 투영과 기존 대화 회귀 76건 및 번들은 통과했지만, 의존성 설치 실패로 전체 타입 검사와 Electron GUI가 완료되지 않았습니다. 실제 Native 목록 표본과 BoxBox 후검사도 현재 환경에서 실행하지 못했고, 필수 Opus 검토는 인증 오류로 미실행 상태입니다. 따라서 변경은 구현되어 있으나 작업은 완료가 아닌 검증·감사 대기로 남깁니다.</p><div id="report-story" class="story">요청의 확정 범위인 Skills·Hooks 목록과 해당 행의 짧은 새 활동 반응을 기존 넓은 활동 패널에서 분리해 구현했습니다. 목록 출처와 구조화 활동의 의미를 구분하고, 중복·이력 복원·다른 스레드·늦은 Hook 시작이 현재 행을 잘못 켜지 않도록 순수 투영에서 차단했습니다. 집중 회귀와 번들은 통과했으나 이 머신의 부분 설치와 실행 권한 제약 때문에 실제 GUI·Native 표본·전체 타입·BoxBox를 끝내지 못했습니다. 정책상 필수 Opus 검토도 인증 오류라 완료 판정을 내리지 않았습니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 2 · 실패 2 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 원인 미확인</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 의존성과 Electron 실행물을 정상 복구한 뒤 typecheck와 UI probe를 재실행합니다.</p><p class="blocker"><strong>남은 차단 사항</strong> 필수 독립 검토가 미실행입니다. 이 시도의 원인은 기록에서 확인되지 않았습니다.</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>등록 Skills·Hooks 목록과 부분 목록 표시</h3><p class="result">수집·검증·표시 코드와 fixture를 구현했으나 실제 Electron 및 설치 Native 표본은 미실행입니다.</p><p class="support"><strong>근거</strong> src/main.ts, src/activity-sidebar.ts, test/fixtures/activity-app-server.ts, verification.md의 attempt-4e37e5fe-da15-4405-943e-61b078634470</p><p class="limit">Electron ENOENT와 app-server Operation not permitted 때문에 AC-1은 실패 상태입니다.</p></article><article class="requirement"><h3>구조화 Skill 읽기와 동기 Hook 시작만 해당 행 반응</h3><p class="result">이름 언급·문자열·완료·비동기 실행을 제외하는 순수 투영 검사가 통과했습니다.</p><p class="support"><strong>근거</strong> verification.md의 attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad</p><p class="limit">GUI 반응 자체는 Electron 부재로 보지 못했습니다.</p></article><article class="requirement"><h3>중복·늦은 시작·복원·다른 스레드 오귀속 방지</h3><p class="result">경로, Hook 단일 tuple, run ID, thread, live 사건 경계를 구현하고 집중 검사를 통과했습니다.</p><p class="support"><strong>근거</strong> test/activity-sidebar.test.ts와 verification.md의 attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad</p><p class="limit">리렌더·패널 재진입은 probe 코드만 갱신됐고 실제 GUI 실행은 남았습니다.</p></article><article class="requirement"><h3>고정 순서, 짧은 반응, 모션 축소와 기존 화면 보존</h3><p class="result">UI와 probe를 구현했으나 실제 Electron 검사가 실행물 부재로 실패했습니다.</p><p class="support"><strong>근거</strong> src/native-activity-view.tsx, src/native-activity.css, src/renderer.tsx, .www/evidence/native-activity-I7l83M/failure.txt</p><p class="limit">AC-4와 AC-5는 완료 기준을 충족하지 못했습니다.</p></article></section><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>목록 key가 Hook 시작 알림에 없는 상태에서 등록 행을 어떻게 연결할지</h3><p><strong>선택</strong> eventName·sourcePath·displayOrder·handlerType이 정확히 하나와 일치할 때만 등록 행에 연결하고 나머지는 감지 행으로 분리했습니다.</p><p><strong>판단 근거</strong> codex-cli 0.166.0 생성 스키마에서 목록과 시작 알림의 공통 필드를 대조했습니다.</p><h4>함께 검토한 대안</h4><ul><li>eventName만으로 연결</li><li>모든 시작을 새 감지 행으로 표시</li></ul><p class="limit"><strong>감수한 점</strong> 동일 tuple의 등록 Hook이 여러 개면 기존 행 반응 대신 별도 감지 행이 생깁니다.</p></article><article class="decision"><h3>복원 이력과 실시간 반응을 어떻게 구분할지</h3><p><strong>선택</strong> snapshot은 상태 복원에만 사용하고 onEvent로 받은 live 사건만 pulse 입력에 넣었습니다.</p><p><strong>판단 근거</strong> events/get snapshot을 pulse로 쓰면 재시작·리렌더·패널 재진입 때 과거 활동이 새 활동처럼 보입니다.</p><h4>함께 검토한 대안</h4><ul><li>모든 최신 관측을 다시 애니메이션</li><li>마지막 시각 기준 휴리스틱</li></ul><p class="limit"><strong>감수한 점</strong> 패널이 숨겨진 동안의 활동은 최근 관측 상태로 남지만 다시 열 때 애니메이션하지 않습니다.</p></article></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>순수 활동·기존 대화 투영</h3><dl><div><dt>확인 방법</dt><dd>bun test test/activity-sidebar.test.ts test/native-activity.test.ts test/projection.test.ts</dd></div><div><dt>기대 결과</dt><dd>목록·매핑·중복·thread 경계와 기존 회귀 통과</dd></div><div><dt>실제 관측</dt><dd>76건 통과, 실패 0건</dd></div><div><dt>확인 범위와 한계</dt><dd>DOM·실제 app-server 동작은 포함하지 않습니다.</dd></div></dl></article><article class="check"><h3>번들 생성</h3><dl><div><dt>확인 방법</dt><dd>npm run build</dd></div><div><dt>기대 결과</dt><dd>Electron renderer/main 번들 생성</dd></div><div><dt>실제 관측</dt><dd>종료 코드 0</dd></div><div><dt>확인 범위와 한계</dt><dd>타입 검사나 GUI 실행을 대신하지 않습니다.</dd></div></dl></article><article class="check"><h3>소스 정책과 격리 타입</h3><dl><div><dt>확인 방법</dt><dd>npm run check:source 및 activity-sidebar.ts·shared.ts의 별도 strict tsc</dd></div><div><dt>기대 결과</dt><dd>TypeScript 정책과 새 순수 모듈 타입 확인</dd></div><div><dt>실제 관측</dt><dd>소스 정책 통과, 격리 strict tsc 통과</dd></div><div><dt>확인 범위와 한계</dt><dd>공식 전체 typecheck는 타입 패키지 부재로 실패했습니다.</dd></div></dl></article><article class="check"><h3>전체 타입 검사</h3><dl><div><dt>확인 방법</dt><dd>npm run typecheck</dd></div><div><dt>기대 결과</dt><dd>프로젝트·도구 TypeScript 검사 통과</dd></div><div><dt>실제 관측</dt><dd>TS2688: bun과 node 타입 정의를 찾지 못해 종료 코드 2</dd></div><div><dt>확인 범위와 한계</dt><dd>npm install이 네트워크 ENOTFOUND로 끝나 부분 node_modules만 남은 환경입니다.</dd></div></dl></article><article class="check"><h3>실제 Electron+합성 Native GUI</h3><dl><div><dt>확인 방법</dt><dd>node scripts/verify-native-activity.ts --ui-only</dd></div><div><dt>기대 결과</dt><dd>목록·대상 행 반응·고정 순서·재진입 무재생·모션 축소 확인</dd></div><div><dt>실제 관측</dt><dd>집중 검사와 빌드는 먼저 통과했으나 Electron 실행 파일 ENOENT로 GUI 시작 전 실패</dd></div><div><dt>확인 범위와 한계</dt><dd>화면 동작을 통과로 주장하지 않습니다.</dd></div></dl></article><article class="check"><h3>독립 읽기 전용 검토</h3><dl><div><dt>확인 방법</dt><dd>공유 review core의 Anthropic Opus 실행</dd></div><div><dt>기대 결과</dt><dd>관측 Opus 모델의 pass/fail 판정</dd></div><div><dt>실제 관측</dt><dd>인증 오류, observedModel 없음, verdict not_run</dd></div><div><dt>확인 범위와 한계</dt><dd>정책상 인증 실패는 Terra 대체 조건이 아닙니다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 2건, 실패 2건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 미실행으로 기록 · 관측 모델 미확인.</p><h3>확인하지 못한 범위</h3><ul><li>npm install이 제한된 네트워크의 ENOTFOUND와 npm 종료 처리 오류로 완료되지 않아 @types/bun·@types/node가 비었고 npm run typecheck가 실패했습니다.</li><li>Electron 실행 파일이 node_modules에 없어 실제 Electron+합성 Native GUI, 좁은 패널, 모션 축소 computed style, 초안·패널 재진입 시나리오는 실행되지 않았습니다.</li><li>샌드박스에서 실제 codex app-server 프로세스 시작이 Operation not permitted로 막혀 설치 Native의 skills/list·hooks/list 표본을 확인하지 못했습니다.</li><li>.www/development.local.json과 검증된 BoxBox 설치 runtime이 없어 요구된 BoxBox 작성 후 검사를 실행하지 못했습니다.</li><li>정책상 Opus 읽기 전용 검토는 인증 오류로 not_run이며, 사용량 소진이 아니므로 Terra 대체는 수행하지 않았습니다.</li><li>커밋·push·배포는 요청 범위가 아니어서 수행하지 않았습니다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>의존성과 Electron 실행물을 정상 복구한 뒤 typecheck와 UI probe를 재실행합니다.</h3><dl><div><dt>담당</dt><dd>다음 WWW 작업 세션</dd></div><div><dt>해소 조건</dt><dd>npm run typecheck와 node scripts/verify-native-activity.ts --ui-only가 종료 코드 0이며 GUI 증거가 생성됩니다.</dd></div><div><dt>영향</dt><dd>AC-1·AC-4·AC-5의 현재 실패 상태를 실제 동작 근거로 재판정할 수 있습니다.</dd></div></dl></article><article class="next"><h3>실제 codex app-server가 시작 가능한 호스트에서 목록 응답과 행 매핑 표본을 확인합니다.</h3><dl><div><dt>담당</dt><dd>다음 WWW 작업 세션</dd></div><div><dt>해소 조건</dt><dd>설치 Native의 skills/list·hooks/list 응답 범위와 화면 목록이 같은 증거에 기록됩니다.</dd></div><div><dt>영향</dt><dd>합성 fixture를 실제 Native 전체 동작으로 확대하는 위험을 해소합니다.</dd></div></dl></article><article class="next"><h3>BoxBox 설정과 Anthropic 인증을 복구하고 후검사·Opus 감사를 다시 수행합니다.</h3><dl><div><dt>담당</dt><dd>환경 관리자와 다음 WWW 작업 세션</dd></div><div><dt>해소 조건</dt><dd>변경 TypeScript 후검사와 관측 Opus 검토가 실제 통과 또는 구체적 결함으로 기록됩니다.</dd></div><div><dt>영향</dt><dd>저작과 독립 검토를 분리한 완료 게이트를 충족할 수 있습니다.</dd></div></dl></article></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><ol class="references"><li><p>요청 범위와 수용 기준 해석</p><code>docs/work/Chat/005-Skills와 Hook 활동 사이드바/spec.md</code></li><li><p>실제 검사 시도와 적용성 기록</p><code>docs/work/Chat/005-Skills와 Hook 활동 사이드바/verification.md</code></li><li><p>Electron 실행 파일 부재 원문</p><code>.www/evidence/native-activity-I7l83M/failure.txt</code></li><li><p>Opus 인증 실패와 읽기 전용 호출 영수증</p><code>.www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json</code></li><li><p>인계 원문 축자 보존본</p><code>.www/scratchpad/sidebar-handoff-20261112/source.md</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-16362e60-e269-4d5d-bf38-2869496efd2c<br>report-3c9dd98c-a727-4adb-868d-5c02d3983e41</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>6c57abdc7e01cbc26390ac3ac1238f103396e73f5dd496d02c4d2ed7607d1421</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>d26206576c16bfa55d5a0139b201c460ea680c552090a9433c1b52b7d319406f</code></dd></div><div><dt>기준 지문</dt><dd><code>7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;독립 검토 not_run: authentication&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-faee1650-a05f-4851-8ede-b1d10e41bcab&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/activity-sidebar.test.ts&quot;,
+        &quot;test/native-activity.test.ts&quot;,
+        &quot;test/projection.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T08:37:40.510Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T08:37:50.755Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-faee1650-a05f-4851-8ede-b1d10e41bcab&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 2,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T08:37:55.112Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-4e37e5fe-da15-4405-943e-61b078634470&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-native-activity.ts&quot;,
+        &quot;--ui-only&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T08:38:05.512Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-a5a7ac26-28b4-42fe-9540-d2ddf2178189&quot;,
+      &quot;verdict&quot;: &quot;not_run&quot;,
+      &quot;model&quot;: null,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json&quot;,
+      &quot;findings&quot;: []
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;Skills와 Hooks를 고정 목록으로 보여 주고 새 구조화 활동이 생긴 해당 행만 반응하는 최소 사이드바를 구현했습니다. 순수 투영과 기존 대화 회귀 76건 및 번들은 통과했지만, 의존성 설치 실패로 전체 타입 검사와 Electron GUI가 완료되지 않았습니다. 실제 Native 목록 표본과 BoxBox 후검사도 현재 환경에서 실행하지 못했고, 필수 Opus 검토는 인증 오류로 미실행 상태입니다. 따라서 변경은 구현되어 있으나 작업은 완료가 아닌 검증·감사 대기로 남깁니다.&quot;,
+  &quot;before&quot;: &quot;오른쪽 패널은 계획·모델·토큰·긴 활동 흐름을 한 화면에 표시했고, 현재 작업공간의 등록 Skills·Hooks 전체 목록과 행별 짧은 반응을 기본 표면으로 제공하지 않았습니다.&quot;,
+  &quot;after&quot;: &quot;main이 app-server의 skills/list와 hooks/list를 독립 조회해 최소 snapshot 사건으로 게시하고, 사이드바는 등록 순서 목록과 정확히 매핑된 구조화 Skill 읽기·동기 Hook 시작만 해당 행에서 약 0.7초 반응하도록 구성됩니다. 목록이 불완전하면 감지된 목록으로 밝히며 과거 snapshot·재진입·중복·다른 스레드 사건은 새 반응으로 재생하지 않습니다.&quot;,
+  &quot;changes&quot;: [
+    &quot;Skills·Hooks 목록 수집 IPC와 skills/changed·스레드 생성 재조회 경계를 추가했습니다.&quot;,
+    &quot;경로·Hook tuple·run ID·thread를 사용하는 순수 활동 투영과 중복·늦은 시작·불명확 매핑 방지를 구현했습니다.&quot;,
+    &quot;기본 오른쪽 패널을 고정 목록·연결 상태·행 반응·모션 축소 안내로 단순화했습니다.&quot;,
+    &quot;합성 app-server와 Electron probe, 투영 회귀 테스트 및 제품·구조·개발·Chat 정본을 갱신했습니다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;등록 목록 응답 순서를 유지하고 활동 때문에 정렬하지 않으며, 등록 밖 관측만 뒤에 붙였습니다.&quot;,
+    &quot;Skill 이름 언급이나 명령 문자열 검색은 사용 근거에서 제외하고 구조화된 SKILL.md read 시작만 반응 근거로 삼았습니다.&quot;,
+    &quot;Hook 알림에 목록 key가 없으므로 event name·source path·display order·handler type이 정확히 하나와 일치할 때만 기존 행에 연결했습니다.&quot;,
+    &quot;복원 snapshot은 정적 상태만 구성하고 renderer의 live 구독 사건만 pulse를 만들도록 분리했습니다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;npm install이 제한된 네트워크의 ENOTFOUND와 npm 종료 처리 오류로 완료되지 않아 @types/bun·@types/node가 비었고 npm run typecheck가 실패했습니다.&quot;,
+    &quot;Electron 실행 파일이 node_modules에 없어 실제 Electron+합성 Native GUI, 좁은 패널, 모션 축소 computed style, 초안·패널 재진입 시나리오는 실행되지 않았습니다.&quot;,
+    &quot;샌드박스에서 실제 codex app-server 프로세스 시작이 Operation not permitted로 막혀 설치 Native의 skills/list·hooks/list 표본을 확인하지 못했습니다.&quot;,
+    &quot;.www/development.local.json과 검증된 BoxBox 설치 runtime이 없어 요구된 BoxBox 작성 후 검사를 실행하지 못했습니다.&quot;,
+    &quot;정책상 Opus 읽기 전용 검토는 인증 오류로 not_run이며, 사용량 소진이 아니므로 Terra 대체는 수행하지 않았습니다.&quot;,
+    &quot;커밋·push·배포는 요청 범위가 아니어서 수행하지 않았습니다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;네트워크가 가능한 환경에서 npm 의존성을 정상 설치하고 전체 타입 검사를 다시 실행합니다.&quot;,
+    &quot;Electron 실행물을 복구한 뒤 UI 전용 probe와 가능한 실제 Native 목록 표본을 실행합니다.&quot;,
+    &quot;검증된 BoxBox 로컬 설정을 제공해 변경한 TypeScript 파일의 후검사를 수행합니다.&quot;,
+    &quot;Anthropic 인증을 복구한 뒤 Opus 읽기 전용 독립 검토를 다시 실행하고 남은 기준을 재판정합니다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;요청의 확정 범위인 Skills·Hooks 목록과 해당 행의 짧은 새 활동 반응을 기존 넓은 활동 패널에서 분리해 구현했습니다. 목록 출처와 구조화 활동의 의미를 구분하고, 중복·이력 복원·다른 스레드·늦은 Hook 시작이 현재 행을 잘못 켜지 않도록 순수 투영에서 차단했습니다. 집중 회귀와 번들은 통과했으나 이 머신의 부분 설치와 실행 권한 제약 때문에 실제 GUI·Native 표본·전체 타입·BoxBox를 끝내지 못했습니다. 정책상 필수 Opus 검토도 인증 오류라 완료 판정을 내리지 않았습니다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;등록 Skills·Hooks 목록과 부분 목록 표시&quot;,
+        &quot;result&quot;: &quot;수집·검증·표시 코드와 fixture를 구현했으나 실제 Electron 및 설치 Native 표본은 미실행입니다.&quot;,
+        &quot;evidence&quot;: &quot;src/main.ts, src/activity-sidebar.ts, test/fixtures/activity-app-server.ts, verification.md의 attempt-4e37e5fe-da15-4405-943e-61b078634470&quot;,
+        &quot;limitations&quot;: &quot;Electron ENOENT와 app-server Operation not permitted 때문에 AC-1은 실패 상태입니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;구조화 Skill 읽기와 동기 Hook 시작만 해당 행 반응&quot;,
+        &quot;result&quot;: &quot;이름 언급·문자열·완료·비동기 실행을 제외하는 순수 투영 검사가 통과했습니다.&quot;,
+        &quot;evidence&quot;: &quot;verification.md의 attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad&quot;,
+        &quot;limitations&quot;: &quot;GUI 반응 자체는 Electron 부재로 보지 못했습니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;중복·늦은 시작·복원·다른 스레드 오귀속 방지&quot;,
+        &quot;result&quot;: &quot;경로, Hook 단일 tuple, run ID, thread, live 사건 경계를 구현하고 집중 검사를 통과했습니다.&quot;,
+        &quot;evidence&quot;: &quot;test/activity-sidebar.test.ts와 verification.md의 attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad&quot;,
+        &quot;limitations&quot;: &quot;리렌더·패널 재진입은 probe 코드만 갱신됐고 실제 GUI 실행은 남았습니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;고정 순서, 짧은 반응, 모션 축소와 기존 화면 보존&quot;,
+        &quot;result&quot;: &quot;UI와 probe를 구현했으나 실제 Electron 검사가 실행물 부재로 실패했습니다.&quot;,
+        &quot;evidence&quot;: &quot;src/native-activity-view.tsx, src/native-activity.css, src/renderer.tsx, .www/evidence/native-activity-I7l83M/failure.txt&quot;,
+        &quot;limitations&quot;: &quot;AC-4와 AC-5는 완료 기준을 충족하지 못했습니다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;순수 활동·기존 대화 투영&quot;,
+        &quot;method&quot;: &quot;bun test test/activity-sidebar.test.ts test/native-activity.test.ts test/projection.test.ts&quot;,
+        &quot;expected&quot;: &quot;목록·매핑·중복·thread 경계와 기존 회귀 통과&quot;,
+        &quot;observed&quot;: &quot;76건 통과, 실패 0건&quot;,
+        &quot;limitations&quot;: &quot;DOM·실제 app-server 동작은 포함하지 않습니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;번들 생성&quot;,
+        &quot;method&quot;: &quot;npm run build&quot;,
+        &quot;expected&quot;: &quot;Electron renderer/main 번들 생성&quot;,
+        &quot;observed&quot;: &quot;종료 코드 0&quot;,
+        &quot;limitations&quot;: &quot;타입 검사나 GUI 실행을 대신하지 않습니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;소스 정책과 격리 타입&quot;,
+        &quot;method&quot;: &quot;npm run check:source 및 activity-sidebar.ts·shared.ts의 별도 strict tsc&quot;,
+        &quot;expected&quot;: &quot;TypeScript 정책과 새 순수 모듈 타입 확인&quot;,
+        &quot;observed&quot;: &quot;소스 정책 통과, 격리 strict tsc 통과&quot;,
+        &quot;limitations&quot;: &quot;공식 전체 typecheck는 타입 패키지 부재로 실패했습니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;전체 타입 검사&quot;,
+        &quot;method&quot;: &quot;npm run typecheck&quot;,
+        &quot;expected&quot;: &quot;프로젝트·도구 TypeScript 검사 통과&quot;,
+        &quot;observed&quot;: &quot;TS2688: bun과 node 타입 정의를 찾지 못해 종료 코드 2&quot;,
+        &quot;limitations&quot;: &quot;npm install이 네트워크 ENOTFOUND로 끝나 부분 node_modules만 남은 환경입니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;실제 Electron+합성 Native GUI&quot;,
+        &quot;method&quot;: &quot;node scripts/verify-native-activity.ts --ui-only&quot;,
+        &quot;expected&quot;: &quot;목록·대상 행 반응·고정 순서·재진입 무재생·모션 축소 확인&quot;,
+        &quot;observed&quot;: &quot;집중 검사와 빌드는 먼저 통과했으나 Electron 실행 파일 ENOENT로 GUI 시작 전 실패&quot;,
+        &quot;limitations&quot;: &quot;화면 동작을 통과로 주장하지 않습니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;독립 읽기 전용 검토&quot;,
+        &quot;method&quot;: &quot;공유 review core의 Anthropic Opus 실행&quot;,
+        &quot;expected&quot;: &quot;관측 Opus 모델의 pass/fail 판정&quot;,
+        &quot;observed&quot;: &quot;인증 오류, observedModel 없음, verdict not_run&quot;,
+        &quot;limitations&quot;: &quot;정책상 인증 실패는 Terra 대체 조건이 아닙니다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;목록 key가 Hook 시작 알림에 없는 상태에서 등록 행을 어떻게 연결할지&quot;,
+        &quot;basis&quot;: &quot;codex-cli 0.166.0 생성 스키마에서 목록과 시작 알림의 공통 필드를 대조했습니다.&quot;,
+        &quot;alternatives&quot;: [
+          &quot;eventName만으로 연결&quot;,
+          &quot;모든 시작을 새 감지 행으로 표시&quot;
+        ],
+        &quot;choice&quot;: &quot;eventName·sourcePath·displayOrder·handlerType이 정확히 하나와 일치할 때만 등록 행에 연결하고 나머지는 감지 행으로 분리했습니다.&quot;,
+        &quot;tradeoff&quot;: &quot;동일 tuple의 등록 Hook이 여러 개면 기존 행 반응 대신 별도 감지 행이 생깁니다.&quot;
+      },
+      {
+        &quot;problem&quot;: &quot;복원 이력과 실시간 반응을 어떻게 구분할지&quot;,
+        &quot;basis&quot;: &quot;events/get snapshot을 pulse로 쓰면 재시작·리렌더·패널 재진입 때 과거 활동이 새 활동처럼 보입니다.&quot;,
+        &quot;alternatives&quot;: [
+          &quot;모든 최신 관측을 다시 애니메이션&quot;,
+          &quot;마지막 시각 기준 휴리스틱&quot;
+        ],
+        &quot;choice&quot;: &quot;snapshot은 상태 복원에만 사용하고 onEvent로 받은 live 사건만 pulse 입력에 넣었습니다.&quot;,
+        &quot;tradeoff&quot;: &quot;패널이 숨겨진 동안의 활동은 최근 관측 상태로 남지만 다시 열 때 애니메이션하지 않습니다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;docs/work/Chat/005-Skills와 Hook 활동 사이드바/spec.md&quot;,
+        &quot;purpose&quot;: &quot;요청 범위와 수용 기준 해석&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Chat/005-Skills와 Hook 활동 사이드바/verification.md&quot;,
+        &quot;purpose&quot;: &quot;실제 검사 시도와 적용성 기록&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/evidence/native-activity-I7l83M/failure.txt&quot;,
+        &quot;purpose&quot;: &quot;Electron 실행 파일 부재 원문&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json&quot;,
+        &quot;purpose&quot;: &quot;Opus 인증 실패와 읽기 전용 호출 영수증&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/scratchpad/sidebar-handoff-20261112/source.md&quot;,
+        &quot;purpose&quot;: &quot;인계 원문 축자 보존본&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;의존성과 Electron 실행물을 정상 복구한 뒤 typecheck와 UI probe를 재실행합니다.&quot;,
+        &quot;owner&quot;: &quot;다음 WWW 작업 세션&quot;,
+        &quot;doneWhen&quot;: &quot;npm run typecheck와 node scripts/verify-native-activity.ts --ui-only가 종료 코드 0이며 GUI 증거가 생성됩니다.&quot;,
+        &quot;impact&quot;: &quot;AC-1·AC-4·AC-5의 현재 실패 상태를 실제 동작 근거로 재판정할 수 있습니다.&quot;
+      },
+      {
+        &quot;action&quot;: &quot;실제 codex app-server가 시작 가능한 호스트에서 목록 응답과 행 매핑 표본을 확인합니다.&quot;,
+        &quot;owner&quot;: &quot;다음 WWW 작업 세션&quot;,
+        &quot;doneWhen&quot;: &quot;설치 Native의 skills/list·hooks/list 응답 범위와 화면 목록이 같은 증거에 기록됩니다.&quot;,
+        &quot;impact&quot;: &quot;합성 fixture를 실제 Native 전체 동작으로 확대하는 위험을 해소합니다.&quot;
+      },
+      {
+        &quot;action&quot;: &quot;BoxBox 설정과 Anthropic 인증을 복구하고 후검사·Opus 감사를 다시 수행합니다.&quot;,
+        &quot;owner&quot;: &quot;환경 관리자와 다음 WWW 작업 세션&quot;,
+        &quot;doneWhen&quot;: &quot;변경 TypeScript 후검사와 관측 Opus 검토가 실제 통과 또는 구체적 결함으로 기록됩니다.&quot;,
+        &quot;impact&quot;: &quot;저작과 독립 검토를 분리한 완료 게이트를 충족할 수 있습니다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></section></main></body></html>

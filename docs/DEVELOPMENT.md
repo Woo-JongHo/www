@@ -212,7 +212,11 @@ npm run benchmark:comparison
 
 ## Native 활동 패널 검증
 
-채팅 오른쪽의 답변 흐름은 `src/native-activity.ts`의 사건 투영과 `src/native-activity-view.tsx`의 화면으로 구성한다. `bun test test/native-activity.test.ts test/projection.test.ts`로 턴 귀속·중복·사용량 차이·승인·이력 절단을 검사한다. `node scripts/verify-native-activity.ts`는 타입 검사·집중 검사·빌드 후 실제 Electron과 합성 Native subprocess로 두 답변의 선택 유지, Skill 읽기, 동기 Hook, 토큰 중복 방지, 모델 전환과 비공개 추론 미노출을 확인한다. 명시적 `--ui-only`는 집중 검사·빌드·GUI만 실행하고 전체 타입 검사는 `not_run`으로 기록하는 별도 범위다. 전체 검사 실패를 자동으로 이 모드의 통과로 바꾸지 않는다. 검사 중 다른 빌드로 `dist`를 바꾸지 않는다.
+채팅 오른쪽의 최소 활동 목록은 `src/activity-sidebar.ts`의 연결 수명주기 상태와 순수 투영, `src/native-activity-view.tsx`의 화면으로 구성한다. main은 app-server의 비실험 `skills/list`·`hooks/list` 응답을 cwd·필수 shape까지 검증하고 요청 세대·scope가 있는 최소 snapshot 사건으로 게시한다. `bun test test/activity-sidebar.test.ts test/native-activity.test.ts test/projection.test.ts`로 등록 순서·부분 목록·2,000건 절단 뒤 목록 유지·요청 세대와 thread 우선순위·한 사건의 여러 Skill 읽기·Hook tuple/run ID·완료 뒤 늦은 시작·연결 수명주기 중복·thread 격리와 기존 활동·대화 투영을 검사한다. 같은 검사에서 일반 사건 20,000개의 scalar watermark, 고유 Hook run 20,000개 전부의 정확한 반응, 오래된 동일 ID·완료 뒤 늦은 시작 억제, 64개 exact bucket의 copy-on-write 불변성을 확인한다. exact 상태는 실제 연결 세대의 고유 읽기/run ID 수만큼 필요하게 증가하며 새 transport 연결에서 회수된다.
+
+renderer는 초기 bootstrap과 대화 전환 전에 활동 snapshot 경계를 열고, 요청 중 도착한 live 사건을 snapshot과 seq 순서로 병합한다. snapshot에 실제 포함된 사건은 pulse 없이 복원하고, snapshot에 없는 큐의 live 사건은 seq가 낮아도 새 반응으로 적용한다. 집중 검사는 snapshot보다 먼저 도착한 live, snapshot 실패, 취소된 effect 뒤 재진입, 다른 thread 전환을 실제 경계 객체와 renderer 호출 순서에서 확인한다.
+
+`node scripts/verify-native-activity.ts`는 타입 검사·집중 검사·빌드 후 실제 Electron과 합성 Native subprocess로 Skills·Hooks 등록 목록, 새 요청 대기 중 오래된 목록 응답 억제, 대화 복원·재전환 뒤 같은 Hook run 무재생, 한 사건의 두 Skill 행 반응, 730ms 뒤 재활동으로 연장된 강조, Hook 행 반응, 고정 순서, 패널 재진입 무재생, 비공개 추론 미노출, 좁은 패널과 모션 축소를 확인한다. 명시적 `--ui-only`는 집중 검사·빌드·GUI만 실행하고 전체 타입 검사는 `not_run`으로 기록하는 별도 범위다. 전체 검사 실패를 자동으로 이 모드의 통과로 바꾸지 않는다. 검사 중 다른 빌드로 `dist`를 바꾸지 않는다. 생성 스키마나 합성 fixture의 목록 응답을 실제 설치 Native의 전체 등록 목록 검증으로 확대하지 않는다.
 
 `bun test/verify-native-activity-live.ts`는 실제 인증과 모델 사용량을 쓰는 명시적 검사다. 임시 읽기 전용 작업 폴더에서 공개 답변·토큰·구조화된 Skill 문서 읽기·Hook 관측을 확인하고 요약만 증거 폴더에 저장한다. 일반 `bun test`에는 포함하지 않는다. 합성 시나리오의 성공과 실제 Native 표본을 구분하고, 비동기 Hook·모델별 청구 비용·모든 플랫폼 동작까지 확인했다고 확대하지 않는다.
 

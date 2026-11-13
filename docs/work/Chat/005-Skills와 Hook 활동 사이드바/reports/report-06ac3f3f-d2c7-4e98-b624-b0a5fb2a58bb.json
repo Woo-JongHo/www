@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "id": "report-06ac3f3f-d2c7-4e98-b624-b0a5fb2a58bb",
+  "workId": "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+  "title": "Skills와 Hook 활동 사이드바",
+  "summary": "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome": "blocked",
+  "kind": "snapshot",
+  "event": "review",
+  "createdAt": "2026-11-12T08:39:06.937Z",
+  "workRecordHash": "6c57abdc7e01cbc26390ac3ac1238f103396e73f5dd496d02c4d2ed7607d1421",
+  "sourceDigest": "d26206576c16bfa55d5a0139b201c460ea680c552090a9433c1b52b7d319406f",
+  "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+  "semanticHash": "7abdfe192f9faf18cd15ece69c56ad5a2e30cb8aea56255997d0d7ffac8a50eb",
+  "narrative": null,
+  "work": {
+    "status": "verifying",
+    "blockedReason": "독립 검토 not_run: authentication",
+    "criteria": [
+      {
+        "id": "AC-1",
+        "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+        "required": true,
+        "result": "failed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          }
+        ]
+      },
+      {
+        "id": "AC-2",
+        "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-3",
+        "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-4",
+        "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+        "required": true,
+        "result": "failed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          }
+        ]
+      },
+      {
+        "id": "AC-5",
+        "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+        "required": true,
+        "result": "failed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/activity-sidebar.test.ts",
+          "test/native-activity.test.ts",
+          "test/projection.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T08:37:40.510Z"
+      },
+      {
+        "id": "attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+        "command": "npm",
+        "args": [
+          "run",
+          "build"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T08:37:50.755Z"
+      },
+      {
+        "id": "attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+        "command": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 2,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T08:37:55.112Z"
+      },
+      {
+        "id": "attempt-4e37e5fe-da15-4405-943e-61b078634470",
+        "command": "node",
+        "args": [
+          "scripts/verify-native-activity.ts",
+          "--ui-only"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T08:38:05.512Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "review-a5a7ac26-28b4-42fe-9540-d2ddf2178189",
+        "verdict": "not_run",
+        "model": null,
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json",
+        "findings": []
+      }
+    ]
+  },
+  "source": {
+    "recordPath": "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+    "workRecordHash": "6c57abdc7e01cbc26390ac3ac1238f103396e73f5dd496d02c4d2ed7607d1421",
+    "sourceDigest": "d26206576c16bfa55d5a0139b201c460ea680c552090a9433c1b52b7d319406f",
+    "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+  }
+}

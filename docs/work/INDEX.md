@@ -31,6 +31,11 @@ Native와의 대화에서 실행 흐름을 통제하고 진행·근거·승인·
 - [설계](Chat/004-%EC%9E%90%EC%97%B0%EC%8A%A4%EB%9F%AC%EC%9A%B4%20%EC%A7%84%ED%96%89%20%EC%84%A4%EB%AA%85%EA%B3%BC%20%EA%B3%B5%EA%B0%9C%20%EC%B6%94%EB%A1%A0%20%EC%9A%94%EC%95%BD/design.md)
 - [작업 레코드](Chat/004-%EC%9E%90%EC%97%B0%EC%8A%A4%EB%9F%AC%EC%9A%B4%20%EC%A7%84%ED%96%89%20%EC%84%A4%EB%AA%85%EA%B3%BC%20%EA%B3%B5%EA%B0%9C%20%EC%B6%94%EB%A1%A0%20%EC%9A%94%EC%95%BD/work.json)
 
+### 005 — Skills와 Hook 활동 사이드바
+
+- [명세](Chat/005-Skills%EC%99%80%20Hook%20%ED%99%9C%EB%8F%99%20%EC%82%AC%EC%9D%B4%EB%93%9C%EB%B0%94/spec.md)
+- [작업 레코드](Chat/005-Skills%EC%99%80%20Hook%20%ED%99%9C%EB%8F%99%20%EC%82%AC%EC%9D%B4%EB%93%9C%EB%B0%94/work.json)
+
 ### 006 — 오픈소스 채팅 뼈대와 Native 대화 재개 통합
 
 - [명세](Chat/006-%EC%98%A4%ED%94%88%EC%86%8C%EC%8A%A4%20%EC%B1%84%ED%8C%85%20%EB%BC%88%EB%8C%80%EC%99%80%20Native%20%EB%8C%80%ED%99%94%20%EC%9E%AC%EA%B0%9C%20%ED%86%B5%ED%95%A9/spec.md)

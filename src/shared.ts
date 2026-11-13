@@ -103,6 +103,7 @@ export interface WwwApi {
   interrupt              (threadId: string, turnId: string   ): Promise<void>;
   respond                (requestId: RpcId, decision: string ): Promise<void>;
   events                 ()                                   : Promise<AppEvent[]>;
+  refreshActivity        ()                                   : Promise<void>;
   onEvent                (listener: (event: AppEvent) => void): () => void;
   probeReady             ()                                   : Promise<{ enabled: boolean; readinessMs?: number; developmentPolicyAvailable?: boolean; developmentWorkId?: string; expectDevelopmentComplete?: boolean; checkInterruptPending?: boolean; checkReports?: boolean; checkNativeReports?: boolean; checkActivity?: boolean }>;
   probeFinish            (result: Record<string, unknown>    ): Promise<void>;

@@ -1,0 +1,383 @@
+{
+  "schemaVersion": 1,
+  "id": "report-202518e3-38f9-4c0a-b49f-d4a6fd6f4be7",
+  "workId": "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+  "title": "Skills와 Hook 활동 사이드바",
+  "summary": "Terra가 찾은 사이드바 결함 6건을 수정하고 현재 소스에서 전체 검사와 실제 Electron·Native 표본을 통과했습니다. 작업은 독립 Terra 재검토 전이라 verifying으로 남겨 둡니다.",
+  "outcome": "partial",
+  "kind": "authored",
+  "event": "finish",
+  "createdAt": "2026-11-12T10:18:12.240Z",
+  "workRecordHash": "9cd903a1dee203f0338a823214400e129f2381b4b53fea6dc73a45a779a34f58",
+  "sourceDigest": "434baba61d5ad5b9f6dc6573ec32d9f2ad39594297a3d25bacc592b375441eb7",
+  "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+  "semanticHash": "fe79bae991b73cc01f644dd0f052381801ee39d3d9e81210836477b371309533",
+  "narrative": {
+    "summary": "Terra가 찾은 사이드바 결함 6건을 수정하고 현재 소스에서 전체 검사와 실제 Electron·Native 표본을 통과했습니다. 작업은 독립 Terra 재검토 전이라 verifying으로 남겨 둡니다.",
+    "before": "최근 사건 절단과 늦은 목록 응답이 등록 목록을 잃거나 덮었고, 여러 Skill 읽기와 Hook 중복 경계, 연속 강조, 잘못된 목록 응답의 완전성 판정이 실제 경계에서 깨졌습니다.",
+    "after": "등록 목록·관측·pulse·연결 수명주기 중복 상태를 분리하고 요청 세대와 scope, 엄격한 Native 응답 검증을 연결했습니다. 여섯 회귀와 전체 저장소 검사, 실제 Electron 합성 GUI, 실제 설치 Native 목록과 읽기 전용 Skill 활동 표본이 통과했습니다.",
+    "changes": [
+      "최근 2,000개 사건 ring과 독립해 최신 Skills·Hooks catalog를 유지합니다.",
+      "선택 thread Hook 목록이 workspace보다 우선하고 요청 세대로 늦은 응답을 거릅니다.",
+      "한 commandActions의 여러 SKILL.md 읽기에 안정적인 pulse를 각각 보존합니다.",
+      "Hook run과 Skill read 중복 억제를 연결 수명주기에 두고 완료 뒤 늦은 시작을 막습니다.",
+      "연속 활동마다 CSS animation phase와 760ms 타이머를 다시 시작해 720~760ms 경계의 강조를 유지합니다.",
+      "cwd·필수 배열·필수 항목 shape·errors·warnings를 엄격히 검증해 잘못된 목록을 incomplete로 표시합니다."
+    ],
+    "decisions": [
+      "화면 이력, 등록 catalog, 관측, pulse, 연결 수명주기 중복 상태를 서로 다른 소유 상태로 분리했습니다.",
+      "사용자 지정 Terra 재검토는 부모의 읽기 전용 별도 context가 소유하므로 이 저자 context에서 자체 승인하지 않았습니다.",
+      "전역 BoxBox 관습이나 설정을 변경하지 않고 승인 없는 자동 정렬을 실행하지 않았습니다."
+    ],
+    "limitations": [
+      "실제 설치 Native의 최소 활동 표본에서는 Hook 알림이 0건이었고 Hook 동작은 실제 Electron+합성 Native로 확인했습니다.",
+      "BoxBox는 핵심 새 상태 파일의 import와 표 정렬을 통과했지만 프로젝트 관습 승인이 없는 2행·논리식 표 25개를 안전 거부했습니다.",
+      "최신 수정 source digest에 대한 사용자 지정 Terra 독립 검토는 아직 실행하지 않았습니다.",
+      "Windows 실기와 모든 실제 Hook 구성은 확인하지 않았습니다."
+    ],
+    "next": [
+      "부모가 최신 소스와 기준 digest로 Terra 읽기 전용 독립 검토를 실행하고, 발견이 있으면 같은 범위에서 수정·재검증합니다."
+    ],
+    "reader": {
+      "story": "등록 목록이 오래된 사건과 함께 사라지거나 늦은 응답에 덮이고, 같은 사건의 여러 Skill 읽기와 Hook 중복이 화면 반응에서 손실되던 여섯 경계를 고쳤습니다. 최신 목록은 ring과 독립해 유지하고 thread scope·요청 세대·연결 수명주기 dedupe를 별도 상태로 관리합니다. 실제 Electron 화면에서는 두 Skill 행, Hook 행, 연속 강조와 모션 축소를 관찰했고 실제 설치 Native에서는 36개 Skill·3개 Hook 목록과 읽기 전용 Skill 읽기를 확인했습니다. 다만 저자와 독립된 Terra 재검토가 남아 있어 작업 완료로 전환하지 않았습니다.",
+      "requirements": [
+        {
+          "requirement": "Terra가 지적한 여섯 결함 수정",
+          "result": "각 결함의 실제 경계를 회귀로 추가하고 catalog·scope·pulse·dedupe·animation·parser를 수정했습니다.",
+          "evidence": "verification.md의 결함 수정 뒤 보조 실행 증거와 attempt-297fa9e1-d696-446b-a325-11b73539a194",
+          "limitations": null
+        },
+        {
+          "requirement": "전체 저장소와 실제 화면·Native 검증",
+          "result": "npm run check, 실제 Electron+합성 Native, 실제 설치 Native 목록과 읽기 전용 Skill 활동 표본이 통과했습니다.",
+          "evidence": ".www/evidence/native-activity-4kQt4y 및 .www/evidence/native-activity-live-xYnxHr",
+          "limitations": "실제 Hook 알림은 최소 Native 표본에서 관측되지 않았습니다."
+        },
+        {
+          "requirement": "독립 Terra 검토 전 완료 금지",
+          "result": "상태를 verifying과 nextAction review로 유지했습니다.",
+          "evidence": "work.json과 tasks.md의 재개할 다음 행동",
+          "limitations": "최신 독립 검토 결과는 아직 없습니다."
+        }
+      ],
+      "checks": [
+        {
+          "target": "여섯 결함과 기존 투영 회귀",
+          "method": "bun 회귀와 npm run check를 포함한 공식 전체 probe",
+          "expected": "전체 테스트·타입·빌드 통과와 실제 경계 보존",
+          "observed": "공식 시도 attempt-297fa9e1-d696-446b-a325-11b73539a194 통과",
+          "limitations": "검사 입력에 연결된 현재 소스에 한정됩니다."
+        },
+        {
+          "target": "실제 Electron 사이드바",
+          "method": "합성 Native subprocess를 연결한 Electron GUI probe",
+          "expected": "두 Skill·Hook 반응, 고정 순서, 강조 연장, 무재생, reduced motion",
+          "observed": "모든 boolean 관측 true, 340px overflow false, rowAnimation none",
+          "limitations": "합성 Native 사건이며 Windows 실기가 아닙니다."
+        },
+        {
+          "target": "실제 설치 Native",
+          "method": "skills/list·hooks/list 엄격 파싱과 읽기 전용 단일 turn",
+          "expected": "현재 cwd 목록과 정확한 SKILL.md 읽기 관측",
+          "observed": "Skill 36개, Hook 3개, command read와 공개 답변·사용량·모델 관측",
+          "limitations": "실제 Hook 알림 0건, 단일 표본입니다."
+        },
+        {
+          "target": "TypeScript 가독성",
+          "method": "import 정규화 검사, align-tables, BoxBox source check",
+          "expected": "핵심 상태 파일의 import·표 정렬과 구문 통과",
+          "observed": "changed 0, misaligned 0, syntax valid",
+          "limitations": "프로젝트 관습 미승인 안전 거부 25개가 남았습니다."
+        }
+      ],
+      "decisions": [
+        {
+          "problem": "절단 가능한 이력과 장기 상태가 같은 수명주기를 공유했습니다.",
+          "basis": "2,000건 뒤 catalog와 Hook run 중복 억제가 사라지는 재현이 있었습니다.",
+          "alternatives": [
+            "ring 크기만 늘리기",
+            "catalog와 dedupe를 별도 상태로 유지하기"
+          ],
+          "choice": "catalog·관측·pulse·연결 수명주기 dedupe를 분리했습니다.",
+          "tradeoff": "renderer 상태 구조가 늘지만 각 상태의 만료 조건이 명확해졌습니다."
+        },
+        {
+          "problem": "빠른 연속 활동이 같은 CSS animation 이름을 재시작하지 못했습니다.",
+          "basis": "730ms 재활동 뒤 기존 760ms 경계에서 강조가 사라지는 GUI 재현이 있었습니다.",
+          "alternatives": [
+            "단일 class 재부여",
+            "두 animation phase와 타이머 재설정"
+          ],
+          "choice": "pulse마다 phase를 교대하고 760ms 타이머를 다시 시작했습니다.",
+          "tradeoff": "행별 반응 상태를 추가로 유지합니다."
+        }
+      ],
+      "references": [
+        {
+          "path": "docs/work/Chat/005-Skills와 Hook 활동 사이드바/terra-review.md",
+          "purpose": "수정 전 독립 Terra 발견 6건의 원문"
+        },
+        {
+          "path": "docs/work/Chat/005-Skills와 Hook 활동 사이드바/verification.md",
+          "purpose": "공식 시도와 실제 Electron·Native·BoxBox 범위"
+        },
+        {
+          "path": "docs/specs/chat.md#chat-activity-01",
+          "purpose": "현재 지속 요구와 활동 의미 경계"
+        },
+        {
+          "path": "src/activity-sidebar.ts",
+          "purpose": "catalog·scope·pulse·dedupe·응답 검증의 핵심 상태"
+        }
+      ],
+      "nextActions": [
+        {
+          "action": "최신 source digest와 criteria digest로 Terra 읽기 전용 독립 검토를 실행합니다.",
+          "owner": "부모/root의 별도 Terra 검토 context",
+          "doneWhen": "새 검토가 현재 소스와 기준에 연결되고 발견이 없거나 발견 수정 뒤 재검증됩니다.",
+          "impact": "그 전에는 작업을 done으로 전환하지 않습니다."
+        }
+      ]
+    }
+  },
+  "work": {
+    "status": "verifying",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id": "AC-1",
+        "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-2",
+        "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-3",
+        "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-4",
+        "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id": "AC-5",
+        "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+        "required": true,
+        "result": "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/activity-sidebar.test.ts",
+          "test/native-activity.test.ts",
+          "test/projection.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T08:37:40.510Z"
+      },
+      {
+        "id": "attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+        "command": "npm",
+        "args": [
+          "run",
+          "build"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T08:37:50.755Z"
+      },
+      {
+        "id": "attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+        "command": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 2,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T08:37:55.112Z"
+      },
+      {
+        "id": "attempt-4e37e5fe-da15-4405-943e-61b078634470",
+        "command": "node",
+        "args": [
+          "scripts/verify-native-activity.ts",
+          "--ui-only"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "failed",
+        "executor": "process",
+        "exitCode": 1,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T08:38:05.512Z"
+      },
+      {
+        "id": "attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+        "command": "node",
+        "args": [
+          "scripts/verify-native-activity.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T10:14:40.567Z"
+      },
+      {
+        "id": "attempt-297fa9e1-d696-446b-a325-11b73539a194",
+        "command": "node",
+        "args": [
+          "scripts/verify-native-activity.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch": "arm64",
+          "node": "v22.23.1"
+        },
+        "result": "passed",
+        "executor": "process",
+        "exitCode": 0,
+        "sourceStable": true,
+        "completedAt": "2026-11-12T10:16:21.177Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "review-a5a7ac26-28b4-42fe-9540-d2ddf2178189",
+        "verdict": "not_run",
+        "model": null,
+        "executor": "process",
+        "receiptPath": ".www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json",
+        "findings": []
+      }
+    ]
+  },
+  "source": {
+    "recordPath": "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+    "workRecordHash": "9cd903a1dee203f0338a823214400e129f2381b4b53fea6dc73a45a779a34f58",
+    "sourceDigest": "434baba61d5ad5b9f6dc6573ec32d9f2ad39594297a3d25bacc592b375441eb7",
+    "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+  }
+}

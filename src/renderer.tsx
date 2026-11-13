@@ -2,7 +2,7 @@ import { NativeActivityView } from "./native-activity-view";
 import { ChatMessage } from "./chat-message";
 import { ChatDetails, ChatRowMemoryContext, useChatRowToggle, type ChatRowMemory } from "./chat-row-state";
 import { blankReadingState, belongsToConversation, composerFull, conversationKey, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, pasteOverflow, type ConversationReadingState } from "./chat-state";
-import { projectNativeActivity } from "./native-activity";
+import { ActivitySnapshotBoundary, createActivitySidebarState, projectActivitySidebar, updateActivitySidebarSnapshot, updateActivitySidebarState } from "./activity-sidebar";
 import { ReportsView } from "./reports-view";
 import { EcosystemView } from "./ecosystem-view";
 import { handlePromptKeyDown, normalizeCompositionEnd } from "./input";
@@ -99,60 +99,111 @@ function setTextareaValue(textarea: HTMLTextAreaElement, value: string): void {
 }
 
 async function verifyNativeActivity(textarea: HTMLTextAreaElement, send: HTMLButtonElement) {
-  const before = projectNativeActivity(await window.www.events(), null) ;
-  const first  = before.turns.at      (-1                             ) ;
-  if (!first) throw new Error("Activity probe expected the first observed turn");
-  const select = document.querySelector('[data-testid="activity-turn-select"]');
-  if (!(select instanceof HTMLSelectElement)) throw new Error("Activity probe expected the turn selector");
-  select.value = first.id;
-  select.dispatchEvent(new Event("change", { bubbles: true }));
-  await afterTwoFrames();
+  await waitForEvent("fixture/inventoryRaceComplete");
+  const inventoryDeadline = performance.now() + 5_000;
+  let snapshot = await window.www.events();
+  while (performance.now() < inventoryDeadline && !snapshot.some((entry) => entry.method === "activity/skillsListed" && JSON.stringify(entry.params).includes("www-design"))) {
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    snapshot = await window.www.events();
+  }
+  const configured = [...snapshot].reverse().find((event) => event.method === "thread/configured");
+  const params     = configured?.params && typeof configured.params === "object" && !Array.isArray(configured.params) ? configured.params as Record<string, unknown> : {};
+  const threadId   = typeof params.threadId === "string" ? params.threadId : null;
+  if (!threadId) throw new Error("Activity probe expected a configured thread");
+  await waitForEvent("turn/completed");
+  const before = projectActivitySidebar(snapshot, threadId);
+  const panel  = document.querySelector('[data-testid="activity-panel"]');
+  if (!(panel instanceof HTMLElement) || panel.hidden) throw new Error("Activity probe expected the visible activity panel");
+  const skillLabels = [...panel.querySelectorAll('[data-testid="activity-skill-row"] .na-row-copy strong')].map((node) => node.textContent);
+  const hookLabels  = [...panel.querySelectorAll('[data-testid="activity-hook-row"] .na-row-copy strong')].map((node) => node.textContent);
+  const skillsListed = before.skillsComplete && skillLabels.join("|") === "www-design|unused-skill";
+  const hooksListed  = before.hooksComplete && hookLabels.join("|") === "sessionStart|preToolUse";
+  const raceStarted  = snapshot.find((event) => event.method === "fixture/inventoryRequest2Started")?.seq ?? 0;
+  const raceFailed   = snapshot.find((event) => event.method === "fixture/inventoryRequest2Failed")?.seq ?? 0;
+  const raceComplete = snapshot.find((event) => event.method === "fixture/inventoryRaceComplete")?.seq ?? 0;
+  const skillLists   = snapshot.filter((event) => event.method === "activity/skillsListed");
+  const inventoryRaceSuppressed = raceStarted > 0
+    && raceFailed > raceStarted
+    && raceComplete > raceFailed
+    && !skillLists.some((entry) => JSON.stringify(entry.params).includes("stale-skill"))
+    && skillLists.some((entry) => JSON.stringify(entry.params).includes("www-design"));
   const draft          = textarea.value          ;
   const selectionStart = textarea.selectionStart ;
   const selectionEnd   = textarea.selectionEnd   ;
   setTextareaValue(textarea, "활동 패널 두 번째 답변 검증");
   await afterTwoFrames();
   send.click();
-  const deadline = performance.now() + 5000                                         ;
-  let observed   = projectNativeActivity(await window.www.events(), first.threadId) ;
+  const deadline = performance.now() + 5000;
+  let observed   = projectActivitySidebar(await window.www.events(), threadId);
+  let skillsReacted = false;
+  let secondSkillReacted = false;
+  let hooksReacted  = false;
   while (performance.now() < deadline) {
-    observed = projectNativeActivity(await window.www.events(), first.threadId);
-    if (observed.turns.length === 2 && observed.turns.at(-1)?.model?.basis === "rerouted") break;
+    observed      = projectActivitySidebar(await window.www.events(), threadId);
+    skillsReacted = skillsReacted || panel.querySelector('[data-row-id="skill:/fixture/skills/www-design/SKILL.md"].is-reacting') !== null;
+    secondSkillReacted = secondSkillReacted || panel.querySelector('[data-row-id="skill:/fixture/skills/unused/SKILL.md"].is-reacting') !== null;
+    hooksReacted  = hooksReacted || panel.querySelector('[data-row-id="hook:pre-tool"].is-reacting') !== null;
+    if (observed.pulses.length >= before.pulses.length + 3 && skillsReacted && secondSkillReacted && hooksReacted) break;
     await new Promise((resolve) => setTimeout(resolve, 20));
   }
-  await afterTwoFrames();
-  const second                    = observed.turns.at(-1)                                                                         ;
-  const turnGrouping              = observed.turns.length === 2 && first.turnId !== second?.turnId && select.options.length === 2 ;
-  const historySelectionPreserved = select.value === first.id                                                                     ;
-  const panel                     = document.querySelector('[data-testid="activity-panel"]')                                      ;
-  if (!(panel instanceof HTMLElement) || panel.hidden) throw new Error("Activity probe expected the visible activity panel");
-  const skillsObserved =
-       observed.turns.every((turn) => turn.entries.some((entry) => entry.kind === "skill" && entry.source === "file_read"))
-    && panel.textContent?.includes("문서 읽기 관측") === true;
-  const hooksObserved =
-       observed.turns.every((turn) => turn.entries.some((entry) => entry.kind === "hook"))
-    && observed.sessionEntries.some((entry) => entry.kind === "hook")
-    && panel.textContent?.includes("preToolUse") === true;
-  const usageNotDuplicated =
-       observed.usage?.totalTokens                                                                 === 2000
-    && observed.turns.every((turn) => turn.usage?.totalTokens === 1000)
-    && second?.lastRequestUsage?.totalTokens                                                       === 1000
-    && panel.querySelector('[data-testid="activity-token-stats"]')?.textContent?.includes("1,000") === true;
-  select.value = second?.id ?? "";
-  select.dispatchEvent(new Event("change", { bubbles: true }));
-  await afterTwoFrames();
-  const modelRerouted =
-       second?.model?.basis                                               === "rerouted"
-    && second.model.name                                                  === "fixture-model-b"
-    && panel.querySelector('[data-testid="activity-model"]')?.textContent === "fixture-model-b";
+  const skillsObserved = observed.skills.find((row) => row.label === "www-design")?.lastActivityLabel === "읽기" && skillsReacted;
+  const multipleSkillsObserved = observed.skills.find((row) => row.label === "unused-skill")?.lastActivityLabel === "읽기" && secondSkillReacted;
+  const hooksObserved  = observed.hooks.find((row) => row.label === "preToolUse")?.lastActivityLabel === "시작" && hooksReacted;
+  const fixedOrder     = skillLabels.join("|") === [...panel.querySelectorAll('[data-testid="activity-skill-row"] .na-row-copy strong')].map((node) => node.textContent).join("|")
+    && hookLabels.join("|") === [...panel.querySelectorAll('[data-testid="activity-hook-row"] .na-row-copy strong')].map((node) => node.textContent).join("|");
   const privateReasoningHidden = !document.body.textContent?.includes("PRIVATE_REASONING_DO_NOT_RENDER");
-  select.value = first.id;
-  select.dispatchEvent(new Event("change", { bubbles: true }));
+  await new Promise((resolve) => setTimeout(resolve, 820));
+  const extendedRow = panel.querySelector('[data-row-id="skill:/fixture/skills/www-design/SKILL.md"]');
+  const extendedHighlight = extendedRow instanceof HTMLElement
+    && extendedRow.classList.contains("is-reacting")
+    && getComputedStyle(extendedRow).backgroundColor !== "rgba(0, 0, 0, 0)";
+  const overview = panel.querySelector(".na-nav button");
+  if (!(overview instanceof HTMLButtonElement)) throw new Error("Activity probe expected overview navigation");
+  overview.click();
+  await afterTwoFrames();
+  const activityTab = document.querySelector(".panel .ptab");
+  if (!(activityTab instanceof HTMLButtonElement)) throw new Error("Activity probe expected activity navigation");
+  activityTab.click();
+  await afterTwoFrames();
+  const historyNotReplayed = panel.querySelector(".is-reacting") === null;
+  const completionBaseline = Math.max(0, ...(await window.www.events()).filter((event) => event.method === "turn/completed").map((event) => event.seq));
+  const finishButton = document.querySelector<HTMLElement>("[data-testid=interrupt-button]");
+  if (!(finishButton instanceof HTMLButtonElement) || finishButton.disabled) throw new Error("Activity probe expected the second running turn");
+  finishButton.click();
+  const finishDeadline = performance.now() + 5_000;
+  let secondTurnFinished = false;
+  while (performance.now() < finishDeadline) {
+    secondTurnFinished = (await window.www.events()).some((event) => event.method === "turn/completed" && event.seq > completionBaseline);
+    if (secondTurnFinished) break;
+    await new Promise((resolve) => setTimeout(resolve, 20));
+  }
+  if (!secondTurnFinished) throw new Error("Activity probe did not finish the second turn before conversation restore");
+  await afterTwoFrames();
+  const selectConversationForProbe = async (id: string): Promise<void> => {
+    const deadline = performance.now() + 5_000;
+    let clicked = false;
+    while (performance.now() < deadline) {
+      const current = document.querySelector(`[data-testid="conversation-item"][data-thread-id="${id}"]`);
+      if (current?.getAttribute("aria-current") === "true") return;
+      if (!clicked && current instanceof HTMLButtonElement && !current.disabled) {
+        current.click();
+        clicked = true;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 20));
+    }
+    throw new Error(`Activity probe did not switch to conversation ${id}`);
+  };
+  await selectConversationForProbe("thread-saved");
+  await waitForEvent("fixture/lateHookAfterRestore");
+  await selectConversationForProbe(threadId);
+  await afterTwoFrames();
+  const restoredHook = panel.querySelector('[data-row-id="hook:session-start"]');
+  const conversationRestoreDedupe = restoredHook instanceof HTMLElement && !restoredHook.classList.contains("is-reacting");
   setTextareaValue(textarea, draft);
   await afterTwoFrames();
   textarea.setSelectionRange(selectionStart, selectionEnd);
   if (textarea.value !== draft || textarea.selectionStart !== selectionStart || textarea.selectionEnd !== selectionEnd) throw new Error("Activity probe lost draft or selection after the second turn");
-  const result = { turnGrouping, skillsObserved, hooksObserved, usageNotDuplicated, modelRerouted, historySelectionPreserved, privateReasoningHidden };
+  const result = { skillsListed, hooksListed, inventoryRaceSuppressed, skillsObserved, multipleSkillsObserved, hooksObserved, fixedOrder, extendedHighlight, historyNotReplayed, conversationRestoreDedupe, privateReasoningHidden };
   if (Object.values(result).some((value) => !value)) throw new Error(`Activity probe failed: ${JSON.stringify(result)}`);
   return result;
 }
@@ -162,6 +213,7 @@ function App() {
   const [autoReportHint, setAutoReportHint] = useState("");
   const [workspace, setWorkspace] = useState<WorkspaceInfo | null>(null);
   const [events, setEvents] = useState<AppEvent[]>([]);
+  const [activityState, setActivityState] = useState(createActivitySidebarState);
   const [threadId, setThreadId] = useState<string | null>(null);
   const [prompt, setPrompt] = useState("");
   const [conversations, setConversations] = useState<ConversationSummary[]>([]);
@@ -176,6 +228,7 @@ function App() {
   const switchingRef = useRef(false);
   const switchGeneration = useRef(0);
   const queuedEvents = useRef<AppEvent[]>([]);
+  const activityBoundary = useRef(new ActivitySnapshotBoundary());
   const listGeneration = useRef(0);
   const readingStates = useRef(new Map<string, ConversationReadingState>());
   const rowMemories = useRef(new Map<string, ChatRowMemory>());
@@ -258,6 +311,7 @@ function App() {
     setSwitching(true);
     queuedEvents.current = [];
     const generation = ++switchGeneration.current;
+    const activityToken = activityBoundary.current.begin();
     setError("");
     try {
       const restored = id === null
@@ -269,13 +323,18 @@ function App() {
       setThreadId(restored.threadId);
       const arrived = queuedEvents.current.filter((event) => belongsToConversation(event, restored.threadId));
       setEvents(mergeEvents(restored.events, arrived));
+      const activityBatch = activityBoundary.current.complete(activityToken, restored.events);
+      if (activityBatch) setActivityState((current) => updateActivitySidebarSnapshot(current, activityBatch));
       setView("chat");
       void refreshConversations();
     } catch (failure) {
       const arrived = queuedEvents.current.filter((event) => belongsToConversation(event, threadRef.current));
       setEvents((current) => mergeEvents(current, arrived));
+      const activityBatch = activityBoundary.current.fail(activityToken);
+      if (activityBatch) setActivityState((current) => updateActivitySidebarSnapshot(current, activityBatch));
       setError(String(failure));
     } finally {
+      activityBoundary.current.cancel(activityToken);
       if (generation === switchGeneration.current) {
         queuedEvents.current = [];
         switchingRef.current = false;
@@ -299,8 +358,12 @@ function App() {
 
   useEffect(() => {
     let disposed = false;
+    const activityToken = activityBoundary.current.begin();
     const unsubscribe = window.www.onEvent((event) => {
       if (disposed) return;
+      if (!activityBoundary.current.queue(event)) {
+        setActivityState((current) => updateActivitySidebarState(current, [event], { emitPulses: !event.historical }));
+      }
       if (switchingRef.current) {
         queuedEvents.current.push(event);
         return;
@@ -325,12 +388,18 @@ function App() {
         threadRef.current = id;
         setThreadId(id);
       }
+      const activityBatch = activityBoundary.current.complete(activityToken, snapshot);
+      if (activityBatch) setActivityState((current) => updateActivitySidebarSnapshot(current, activityBatch));
       setEvents((current) => mergeEvents(current, snapshot.filter((event) => belongsToConversation(event, threadRef.current))));
     }).catch((failure: unknown) => {
+      const activityBatch = activityBoundary.current.fail(activityToken);
+      if (activityBatch) setActivityState((current) => updateActivitySidebarSnapshot(current, activityBatch));
       if (!disposed) setError(String(failure));
     });
+    void window.www.refreshActivity().catch((failure: unknown) => { if (!disposed) setError(String(failure)); });
     return () => {
       disposed = true;
+      activityBoundary.current.cancel(activityToken);
       unsubscribe();
     };
   }, []);
@@ -378,6 +447,8 @@ function App() {
       const value = await window.www.chooseWorkspace();
       if (value) {
         setWorkspace(value);
+        setActivityState(createActivitySidebarState());
+        await window.www.refreshActivity();
       }
     } catch (failure) {
       setError(String(failure));
@@ -635,7 +706,7 @@ function App() {
   return <>
     <aside className="sidebar"><div className="brand">WWW</div><div className="sec">작업 공간 <button className="icon" onClick={choose} disabled={!!threadId}>＋</button></div><div><div className="srow active"><span className="avatar">W</span><span className="name">{workspace?.name ?? "선택 중"}</span><span className="right">{workspace?.branch ?? "git 아님"}</span></div><nav className="workspace-nav" aria-label="화면 선택"><button aria-current={view === "chat" ? "page" : undefined} onClick={() => setView("chat")}><span aria-hidden="true">◉</span>대화</button><button aria-current={view === "ecosystem" ? "page" : undefined} onClick={() => setView("ecosystem")} data-testid="ecosystem-nav"><span aria-hidden="true">◇</span>생태계<span className="nav-hint">구조 지도</span></button><button aria-current={view === "reports" ? "page" : undefined} onClick={() => { setView("reports"); setAutoReportHint(""); }} data-testid="reports-nav"><span aria-hidden="true">▤</span>리포트<span className="nav-hint">{autoReportHint || "작업 이야기"}</span></button></nav></div><div className="agents"><div className="group">CODEX</div><div className="srow"><span className="agentmark"/><span>{statusText}</span></div><section className="chat-conversations" aria-label="저장된 대화"><div className="chat-conversation-heading"><strong>대화</strong><button type="button" data-testid="new-conversation" disabled={selectionBlocked} onClick={() => { void selectConversation(null); }}>새 대화</button></div><label className="chat-search"><span className="sr-only">불러온 대화 검색</span><input data-testid="conversation-search" value={conversationSearch} onChange={(event) => setConversationSearch(event.target.value)} placeholder="불러온 대화 검색"/></label><div className="chat-list-tools"><span>{listLoading ? "불러오는 중…" : `불러온 대화 ${conversations.length}개`}</span><button type="button" disabled={listLoading || switching} onClick={() => { void refreshConversations(); }} aria-label="대화 목록 새로고침">새로고침</button></div>{listError && <div role="status" className="chat-list-error">{listError}</div>}<div className="chat-conversation-list" data-testid="conversation-list">{conversations.filter((item) => `${item.title} ${item.preview}`.toLocaleLowerCase("ko-KR").includes(conversationSearch.toLocaleLowerCase("ko-KR"))).map((item) => <button type="button" key={item.id} data-testid="conversation-item" data-thread-id={item.id} className={item.id === threadId ? "is-current" : ""} aria-current={item.id === threadId ? "true" : undefined} disabled={selectionBlocked} onClick={() => { void selectConversation(item.id); }}><strong>{item.title || item.preview || "제목 없는 대화"}</strong><span>{item.preview || "내용 미제공"}</span>{item.updatedAt !== null && Number.isFinite(new Date(item.updatedAt * 1000).getTime()) && <time dateTime={new Date(item.updatedAt * 1000).toISOString()}>{new Date(item.updatedAt * 1000).toLocaleDateString("ko-KR")}</time>}</button>)}</div>{!listLoading && conversations.length === 0 && !listError && <p className="muted">이 작업 폴더에 저장된 대화가 없습니다.</p>}{conversations.length > 0 && conversationSearch && !conversations.some((item) => `${item.title} ${item.preview}`.toLocaleLowerCase("ko-KR").includes(conversationSearch.toLocaleLowerCase("ko-KR"))) && <p className="muted">불러온 대화 중 일치하는 항목이 없습니다.</p>}{listCursor && <button type="button" className="chat-load-more" data-testid="load-more-conversations" disabled={listLoading || switching} onClick={() => { void refreshConversations(listCursor); }}>이전 대화 더 불러오기</button>}</section></div><div className="footer"><span className="muted">{workspace?.path}</span><span>{workspace?.changes ?? 0} changes</span></div></aside>
     <main className="work" hidden={view !== "chat"}><div className="tabrow"><button className="tab active">대화</button><span className="spacer"/><button className="tool selected">Codex app-server</button></div><section className="stage"><div className="pane focused"><div className="title"><span className="name">Codex</span><span className="path">{workspace?.name}</span></div><div className="body conversation"><div className="transcript" ref={transcriptRef} onScroll={(event) => { if (view !== "chat") return; const element = event.currentTarget; transcriptScrollTop.current = element.scrollTop; followTail.current = element.scrollHeight - element.scrollTop - element.clientHeight < 48; readingStates.current.set(currentKey, { draft: promptRef.current, scrollTop: element.scrollTop, followTail: followTail.current }); if (followTail.current) setNewContent(false); }}>{projection.historyTruncated && <div className="history-warning">최근 {MAX_RAW_EVENTS.toLocaleString("ko-KR")}개 사건만 있어 이전 흐름은 완전히 복원할 수 없습니다.</div>}<ChatRowMemoryContext.Provider value={rowMemory}>{projection.blocks.length === 0 ? <div className="empty">{switching ? "대화를 불러오는 중입니다." : "작업 폴더를 확인하고 메시지를 입력하거나 저장된 대화를 여세요."}</div> : projection.blocks.map((block) => <BlockView key={`${currentKey}:${blockKey(block)}`} block={block} decide={decide} quote={quote}/>)}</ChatRowMemoryContext.Provider></div>{newContent && <button className="secondary new-content" onClick={() => { followTail.current = true; transcriptRef.current?.scrollTo({ top: transcriptRef.current.scrollHeight, behavior: "smooth" }); setNewContent(false); }}>새 내용으로 이동</button>}<div className="compose"><span className="prompt">›</span><textarea ref={promptInput} data-testid="prompt-input" value={prompt} maxLength={MAX_PROMPT_CHARS} disabled={switching} aria-label="Codex에게 작업 요청" onChange={(event) => { setPrompt(event.target.value); setInputNotice(composerFull(event.target.value.length, MAX_PROMPT_CHARS) ? "입력 한도에 도달했습니다." : ""); }} onPaste={(event) => { const count = pasteOverflow(prompt, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, event.clipboardData.getData("text/plain"), MAX_PROMPT_CHARS); if (count > 0) { event.preventDefault(); setInputNotice(`붙여넣을 내용이 입력 한도를 ${count.toLocaleString("ko-KR")}자 넘어서 추가하지 않았습니다.`); } }} onCompositionStart={() => { composing.current = true; }} onCompositionEnd={(event) => { composing.current = false; lastCompositionEnd.current = normalizeCompositionEnd(event.nativeEvent.timeStamp); }} onBlur={() => { composing.current = false; }} onKeyDown={(event) => { handlePromptKeyDown(event, () => { void run(); }, composing.current, lastCompositionEnd.current); }} placeholder="Codex에게 작업 요청"/><div className="actions">{projection.working && <button data-testid="interrupt-button" className="secondary" onClick={interrupt} disabled={projection.interrupt === "requested" || projection.interrupt === "accepted"}>{projection.interrupt === "accepted" ? "중단 접수됨" : projection.interrupt === "requested" ? "중단 요청 중" : "중단"}</button>}<button data-testid="send-button" className="primary" onClick={run} disabled={!prompt.trim() || sending || switching || prompt.length > MAX_PROMPT_CHARS}>{sending ? "전송 중" : "보내기"}</button></div></div><div className="chat-compose-note" role="status">{inputNotice || (switching ? "저장된 대화를 여는 중입니다." : `Enter 전송 · Shift+Enter 줄바꿈 · ${prompt.length.toLocaleString("ko-KR")}/${MAX_PROMPT_CHARS.toLocaleString("ko-KR")}`)}</div></div></div></section></main>
-    <NativeActivityView events={events} threadId={threadId} hidden={view !== "chat" || panel !== "activity"} onShowOverview={() => setPanel("overview")} onShowEvents={() => setPanel("events")}/>
+    <NativeActivityView activityState={activityState} events={events} threadId={threadId} hidden={view !== "chat" || panel !== "activity"} onShowOverview={() => setPanel("overview")} onShowEvents={() => setPanel("events")}/>
     <aside className="panel" hidden={view !== "chat" || panel === "activity"}><div className="phead"><span className="logo"/><span className="title">Codex</span><span className="pill">{threadId ?? "새 스레드"}</span></div><div className="ptabs"><button className="ptab" onClick={() => setPanel("activity")}>흐름</button><button className={`ptab ${panel === "overview" ? "active" : ""}`} onClick={() => setPanel("overview")}>개요</button><button className={`ptab ${panel === "events" ? "active" : ""}`} onClick={() => setPanel("events")}>이벤트</button><span className="aside">{events.length}{projection.historyTruncated ? "+" : ""}</span></div><div className="pbody">{panel === "overview" ? <><div className={`headline t-${statusTone}`}><span className="glyph">{approvals.length ? "!" : projection.working ? "·" : projection.turn === "failed" ? "×" : "○"}</span><div><div className="h">{statusText}</div><div className="sub">연결 {projection.transport} · 중단 {projection.interrupt === "accepted" ? "접수됨 · 최종 결과 대기" : projection.interrupt} · 턴 {projection.turn}</div></div></div><div className="counts"><div className="count"><div className="n">{commands.length}</div><div className="l">현재 명령</div></div><div className="count blocked"><div className="n">{approvals.length}</div><div className="l">현재 요청</div></div><div className="count"><div className="n">{files.length}</div><div className="l">현재 변경</div></div></div><div className="ledger"><div className="entry"><span className="prov">공개 설명</span><span>{explanations.length ? explanations.map((block) => block.text).filter(Boolean).join(" · ") : "Native 공개 설명 미제공"}</span></div><div className="entry"><span className="prov">관측 결과</span><span>현재 턴 명령 {commands.length} · 파일 변경 {files.length} · 실패 {failedCommands.length} · 미확인 {unresolvedCommands.length}</span></div><div className="entry"><span className="prov">실제 검증</span><span>{verificationText}</span></div><div className="entry"><span className="prov">미해결</span><span>{approvals.length ? `승인 ${approvals.length}건 대기` : failedCommands.length ? `실패 명령 ${failedCommands.length}건` : unresolvedCommands.length ? `결과 미확인 명령 ${unresolvedCommands.length}건` : projection.transport !== "connected" ? `연결 ${projection.transport}` : "현재 턴에서 관측된 차단 없음"}</span></div></div></> : <div className="ledger">{projection.historyTruncated && <div className="history-warning">이벤트 앞부분이 없어 완전한 기록이 아닙니다.</div>}{events.map((event) => <div className="entry" key={event.seq}><span className="seq">{event.seq}</span><span className="prov">{event.kind}</span><span>{event.method}</span></div>)}</div>}</div><div className="pfooter"><span className="src">로컬 Codex CLI · Native 출력은 신뢰하지 않는 데이터 · 승인 UI는 OS sandbox 보장이 아님</span></div></aside>
     {view === "ecosystem" && <EcosystemView/>}
     {view === "reports" && <ReportsView/>}

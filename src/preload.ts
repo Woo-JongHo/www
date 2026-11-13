@@ -13,6 +13,7 @@ const api: WwwApi = {
   interrupt               : (threadId, turnId) => ipcRenderer.invoke("turn:interrupt", threadId, turnId)         ,
   respond                 : (requestId, decision) => ipcRenderer.invoke("approval:respond", requestId, decision) ,
   events                  : () => ipcRenderer.invoke("events:get")                                               ,
+  refreshActivity         : () => ipcRenderer.invoke("activity:refresh")                                        ,
   probeReady              : () => ipcRenderer.invoke("probe:ready")                                              ,
   probeFinish             : (result) => ipcRenderer.invoke("probe:finish", result)                               ,
   developmentPolicy       : () => ipcRenderer.invoke("development:policy")                                       ,

@@ -23,16 +23,39 @@ let turnId = "turn-fixture";
 const threadId = "thread-fixture";
 
 
+let catalogCwd = process.env.WWW_PROBE_WORKSPACE ?? "/fixture";
+
+
+let skillsListRequests = 0;
+
+
+let pendingSkillsRequest: Record<string, unknown> | null = null;
+
+
+let lateRestoreHookSent = false;
+
+
 const send = (message: unknown): void => { process.stdout.write(`${JSON.stringify(message)}\n`); };
 
 
 const notify = (method: string, params: Record<string, unknown>): void => send({ jsonrpc: "2.0", method, params });
 
+
+function skillsResult(id: unknown, cwd: string, names: readonly string[]): void {
+  send({ jsonrpc: "2.0", id, result: { data: [{ cwd, errors: [], skills: names.map((name) => ({
+    name,
+    path: `/fixture/skills/${name === "unused-skill" ? "unused" : name}/SKILL.md`,
+    enabled: true,
+    scope: name === "unused-skill" ? "user" : "repo",
+    description: "fixture",
+  })) }] } });
+}
+
 function hook(id: string, eventName: string, scoped: boolean): void {
   const startedAt = Math.floor(Date.now() / 1000);
 
 
-  const run = { id, eventName, handlerType: "command", scope: scoped ? "turn" : "thread", executionMode: "sync", source: "project", sourcePath: "fixture-hooks.json", startedAt, displayOrder: 1, entries: [] };
+  const run = { id, eventName, handlerType: "command", scope: scoped ? "turn" : "thread", executionMode: "sync", source: "project", sourcePath: "/fixture/hooks.json", startedAt, displayOrder: 1, entries: [] };
 
 
   const params = scoped ? { threadId, turnId } : { threadId };
@@ -46,7 +69,9 @@ function injectActivity(): void {
   const command = "cat /fixture/skills/www-design/SKILL.md";
 
 
-  const item = { id: `skill-${turnId}`, type: "commandExecution", command, commandActions: [{ type: "read", path: "/fixture/skills/www-design/SKILL.md", name: "SKILL.md", command }] };
+  const commandActions = [{ type: "read", path: "/fixture/skills/www-design/SKILL.md", name: "SKILL.md", command }];
+  if (turns > 1) commandActions.push({ type: "read", path: "/fixture/skills/unused/SKILL.md", name: "SKILL.md", command });
+  const item = { id: `skill-${turnId}`, type: "commandExecution", command, commandActions };
   notify("item/started", { threadId, turnId, item: { ...item, status: "inProgress" } });
   notify("item/completed", { threadId, turnId, item: { ...item, status: "completed", exitCode: 0 } });
   notify("item/completed", { threadId, turnId, item: { id: `private-${turnId}`, type: "reasoning", summary: ["공개 요약: 작업 흐름과 확인한 결과를 정리했습니다."], content: ["PRIVATE_REASONING_DO_NOT_RENDER"] } });
@@ -63,18 +88,86 @@ function injectActivity(): void {
   notify("thread/tokenUsage/updated", { threadId, turnId, tokenUsage });
   notify("thread/tokenUsage/updated", { threadId, turnId, tokenUsage });
   if (turns > 1) notify("model/rerouted", { threadId, turnId, fromModel: "fixture-model-a", toModel: "fixture-model-b", reason: "highRiskCyberActivity" });
+  if (turns > 1) setTimeout(() => notify("item/started", { threadId, turnId, item: { id: `skill-late-${turnId}`, type: "commandExecution", status: "inProgress", commandActions: [{ type: "read", path: "/fixture/skills/www-design/SKILL.md" }] } }), 730);
 }
 
 const input = createInterface({ input: process.stdin });
 input.on("line", (line) => {
   const message: unknown = JSON.parse(line);
   if (!object(message)) throw new Error("fixture 요청 객체가 필요합니다.");
+  if (message.method === "skills/list") {
+    const params = object(message.params) ? message.params : {};
+    const cwd    = Array.isArray(params.cwds) && typeof params.cwds[0] === "string" ? params.cwds[0] : "/fixture";
+    catalogCwd = cwd;
+    skillsListRequests += 1;
+    if (skillsListRequests === 1) {
+      pendingSkillsRequest = message;
+      notify("skills/changed", { cwd });
+      return;
+    }
+    if (skillsListRequests === 2 && pendingSkillsRequest) {
+      notify("fixture/inventoryRequest2Started", { cwd });
+      skillsResult(pendingSkillsRequest.id, cwd, ["stale-skill"]);
+      pendingSkillsRequest = null;
+      setTimeout(() => {
+        send({ jsonrpc: "2.0", id: message.id, error: { code: -32000, message: "fixture request 2 failed" } });
+        notify("fixture/inventoryRequest2Failed", { cwd });
+        setTimeout(() => notify("skills/changed", { cwd }), 20);
+      }, 80);
+      return;
+    }
+    skillsResult(message.id, cwd, ["www-design", "unused-skill"]);
+    notify("fixture/inventoryRaceComplete", { cwd, requests: skillsListRequests });
+    return;
+  }
+  if (message.method === "hooks/list") {
+    const params = object(message.params) ? message.params : {};
+    const cwd    = Array.isArray(params.cwds) && typeof params.cwds[0] === "string" ? params.cwds[0] : catalogCwd;
+    catalogCwd = cwd;
+    send({ jsonrpc: "2.0", id: message.id, result: { data: [{ cwd, errors: [], warnings: [], hooks: [
+      { key: "session-start", eventName: "sessionStart", sourcePath: "/fixture/hooks.json", displayOrder: 1, handlerType: "command", enabled: true, source: "project", currentHash: "a", isManaged: false, timeoutSec: 5, trustStatus: "trusted", command: "fixture", async: false },
+      { key: "pre-tool", eventName: "preToolUse", sourcePath: "/fixture/hooks.json", displayOrder: 1, handlerType: "command", enabled: true, source: "project", currentHash: "b", isManaged: false, timeoutSec: 5, trustStatus: "trusted", command: "fixture", async: false },
+    ] }] } });
+    return;
+  }
   if (message.method === "account/rateLimits/read") {
     const resetsAt = Math.floor(Date.now() / 1000) + 3600;
 
 
     const rateLimits = { limitId: "codex", limitName: "fixture 계정", primary: { usedPercent: 25, windowDurationMins: 300, resetsAt }, secondary: { usedPercent: 40, windowDurationMins: 10080, resetsAt } };
     send({ jsonrpc: "2.0", id: message.id, result: { rateLimits, rateLimitsByLimitId: { codex: rateLimits } } });
+    return;
+  }
+  if (message.method === "thread/list") {
+    send({ jsonrpc: "2.0", id: message.id, result: { data: [
+      { id: threadId, name: "Fixture current", preview: "current", cwd: catalogCwd, updatedAt: 2, status: { type: "idle" }, ephemeral: false, originator: "www" },
+      { id: "thread-saved", name: "Fixture saved", preview: "saved", cwd: catalogCwd, updatedAt: 1, status: { type: "idle" }, ephemeral: false, originator: "www" },
+    ], nextCursor: null } });
+    return;
+  }
+  if (message.method === "thread/read" || message.method === "thread/resume") {
+    const params = object(message.params) ? message.params : {};
+    const requestedThread = typeof params.threadId === "string" ? params.threadId : "thread-saved";
+    send({ jsonrpc: "2.0", id: message.id, result: {
+      thread: { id: requestedThread, cwd: catalogCwd, status: { type: "idle" }, ephemeral: false, originator: "www" },
+      model: "fixture-model-a",
+      modelProvider: "fixture",
+      approvalPolicy: "on-request",
+      sandbox: { type: "workspace-write" },
+    } });
+    return;
+  }
+  if (message.method === "thread/turns/list") {
+    const params = object(message.params) ? message.params : {};
+    const requestedThread = typeof params.threadId === "string" ? params.threadId : "thread-saved";
+    send({ jsonrpc: "2.0", id: message.id, result: { data: [], nextCursor: null } });
+    if (requestedThread === "thread-saved" && !lateRestoreHookSent) {
+      lateRestoreHookSent = true;
+      setTimeout(() => {
+        notify("hook/started", { threadId, run: { id: "hook-session-start", eventName: "sessionStart", handlerType: "command", executionMode: "sync", source: "project", sourcePath: "/fixture/hooks.json", startedAt: Math.floor(Date.now() / 1000), displayOrder: 1, entries: [], status: "running" } });
+        notify("fixture/lateHookAfterRestore", { threadId });
+      }, 100);
+    }
     return;
   }
   if (message.method === "thread/start") threadRequests.add(message.id);
@@ -90,6 +183,7 @@ createInterface({ input: child.stdout }).on("line", (line) => {
   const message: unknown = JSON.parse(line);
   if (!object(message)) throw new Error("fixture 응답 객체가 필요합니다.");
   if (object(message.params)) {
+    if (message.method === "turn/completed" && typeof message.params.threadId !== "string") message.params.threadId = threadId;
     if (message.params.turnId === "turn-fixture") message.params.turnId = turnId;
     if (object(message.params.turn) && message.params.turn.id === "turn-fixture") message.params.turn.id = turnId;
   }

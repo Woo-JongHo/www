@@ -44,7 +44,7 @@ async function run(name: string, command: string, args: string[], env: NodeJS.Pr
 try {
   if (process.platform === "win32") throw new Error("이 합성 fixture의 직접 실행은 Windows 실기에서 지원·검증하지 않았습니다.");
   if (uiOnly) {
-    await run("focused", "bun", ["test", "test/native-activity.test.ts", "test/projection.test.ts", "--timeout", "30000"]);
+    await run("focused", "bun", ["test", "test/activity-sidebar.test.ts", "test/native-activity.test.ts", "test/projection.test.ts", "--timeout", "30000"]);
     await run("build", "npm", ["run", "build"]);
   } else {
     await run("repository", "npm", ["run", "check"]);
@@ -67,7 +67,7 @@ try {
   if (!object(result)) throw new Error("Electron probe 객체가 없습니다.");
   if (result.error) throw new Error(String(result.error));
   if (!object(result.nativeActivity)) throw new Error("활동 시나리오 결과가 없습니다.");
-  for (const key of ["turnGrouping", "skillsObserved", "hooksObserved", "usageNotDuplicated", "modelRerouted", "historySelectionPreserved", "privateReasoningHidden"]) {
+  for (const key of ["skillsListed", "hooksListed", "inventoryRaceSuppressed", "skillsObserved", "multipleSkillsObserved", "hooksObserved", "fixedOrder", "extendedHighlight", "historyNotReplayed", "conversationRestoreDedupe", "privateReasoningHidden"]) {
     if (result.nativeActivity[key] !== true) throw new Error(`활동 시나리오 실패: ${key}`);
   }
   const artifacts = object(result.activityArtifacts) ? result.activityArtifacts : {};
@@ -76,7 +76,7 @@ try {
     || artifacts.width           <=  0
     || artifacts.overflow        !== false
     || artifacts.reducedMotion   !== true
-    || artifacts.beaconAnimation !== "none"
+    || artifacts.rowAnimation    !== "none"
   ) throw new Error("좁은 활동 패널·모션 축소 관측이 없습니다.");
   const captures = (await fs.readdir(directory)).filter((name) => name.endsWith(".png"));
   if (captures.length === 0) throw new Error("Electron 화면 캡처가 없습니다.");

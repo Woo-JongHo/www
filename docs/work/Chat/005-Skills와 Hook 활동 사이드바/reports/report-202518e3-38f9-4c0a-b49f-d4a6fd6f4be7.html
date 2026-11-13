@@ -1,0 +1,363 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>Skills와 Hook 활동 사이드바 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 12일 PM 7:18 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>Skills와 Hook 활동 사이드바</h1><p class="lead">Terra가 찾은 사이드바 결함 6건을 수정하고 현재 소스에서 전체 검사와 실제 Electron·Native 표본을 통과했습니다. 작업은 독립 Terra 재검토 전이라 verifying으로 남겨 둡니다.</p><div id="report-story" class="story">등록 목록이 오래된 사건과 함께 사라지거나 늦은 응답에 덮이고, 같은 사건의 여러 Skill 읽기와 Hook 중복이 화면 반응에서 손실되던 여섯 경계를 고쳤습니다. 최신 목록은 ring과 독립해 유지하고 thread scope·요청 세대·연결 수명주기 dedupe를 별도 상태로 관리합니다. 실제 Electron 화면에서는 두 Skill 행, Hook 행, 연속 강조와 모션 축소를 관찰했고 실제 설치 Native에서는 36개 Skill·3개 Hook 목록과 읽기 전용 Skill 읽기를 확인했습니다. 다만 저자와 독립된 Terra 재검토가 남아 있어 작업 완료로 전환하지 않았습니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 4 · 실패 2 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 원인 미확인</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 최신 source digest와 criteria digest로 Terra 읽기 전용 독립 검토를 실행합니다.</p></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>Terra가 지적한 여섯 결함 수정</h3><p class="result">각 결함의 실제 경계를 회귀로 추가하고 catalog·scope·pulse·dedupe·animation·parser를 수정했습니다.</p><p class="support"><strong>근거</strong> verification.md의 결함 수정 뒤 보조 실행 증거와 attempt-297fa9e1-d696-446b-a325-11b73539a194</p></article><article class="requirement"><h3>전체 저장소와 실제 화면·Native 검증</h3><p class="result">npm run check, 실제 Electron+합성 Native, 실제 설치 Native 목록과 읽기 전용 Skill 활동 표본이 통과했습니다.</p><p class="support"><strong>근거</strong> .www/evidence/native-activity-4kQt4y 및 .www/evidence/native-activity-live-xYnxHr</p><p class="limit">실제 Hook 알림은 최소 Native 표본에서 관측되지 않았습니다.</p></article><article class="requirement"><h3>독립 Terra 검토 전 완료 금지</h3><p class="result">상태를 verifying과 nextAction review로 유지했습니다.</p><p class="support"><strong>근거</strong> work.json과 tasks.md의 재개할 다음 행동</p><p class="limit">최신 독립 검토 결과는 아직 없습니다.</p></article></section><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>절단 가능한 이력과 장기 상태가 같은 수명주기를 공유했습니다.</h3><p><strong>선택</strong> catalog·관측·pulse·연결 수명주기 dedupe를 분리했습니다.</p><p><strong>판단 근거</strong> 2,000건 뒤 catalog와 Hook run 중복 억제가 사라지는 재현이 있었습니다.</p><h4>함께 검토한 대안</h4><ul><li>ring 크기만 늘리기</li><li>catalog와 dedupe를 별도 상태로 유지하기</li></ul><p class="limit"><strong>감수한 점</strong> renderer 상태 구조가 늘지만 각 상태의 만료 조건이 명확해졌습니다.</p></article><article class="decision"><h3>빠른 연속 활동이 같은 CSS animation 이름을 재시작하지 못했습니다.</h3><p><strong>선택</strong> pulse마다 phase를 교대하고 760ms 타이머를 다시 시작했습니다.</p><p><strong>판단 근거</strong> 730ms 재활동 뒤 기존 760ms 경계에서 강조가 사라지는 GUI 재현이 있었습니다.</p><h4>함께 검토한 대안</h4><ul><li>단일 class 재부여</li><li>두 animation phase와 타이머 재설정</li></ul><p class="limit"><strong>감수한 점</strong> 행별 반응 상태를 추가로 유지합니다.</p></article></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>여섯 결함과 기존 투영 회귀</h3><dl><div><dt>확인 방법</dt><dd>bun 회귀와 npm run check를 포함한 공식 전체 probe</dd></div><div><dt>기대 결과</dt><dd>전체 테스트·타입·빌드 통과와 실제 경계 보존</dd></div><div><dt>실제 관측</dt><dd>공식 시도 attempt-297fa9e1-d696-446b-a325-11b73539a194 통과</dd></div><div><dt>확인 범위와 한계</dt><dd>검사 입력에 연결된 현재 소스에 한정됩니다.</dd></div></dl></article><article class="check"><h3>실제 Electron 사이드바</h3><dl><div><dt>확인 방법</dt><dd>합성 Native subprocess를 연결한 Electron GUI probe</dd></div><div><dt>기대 결과</dt><dd>두 Skill·Hook 반응, 고정 순서, 강조 연장, 무재생, reduced motion</dd></div><div><dt>실제 관측</dt><dd>모든 boolean 관측 true, 340px overflow false, rowAnimation none</dd></div><div><dt>확인 범위와 한계</dt><dd>합성 Native 사건이며 Windows 실기가 아닙니다.</dd></div></dl></article><article class="check"><h3>실제 설치 Native</h3><dl><div><dt>확인 방법</dt><dd>skills/list·hooks/list 엄격 파싱과 읽기 전용 단일 turn</dd></div><div><dt>기대 결과</dt><dd>현재 cwd 목록과 정확한 SKILL.md 읽기 관측</dd></div><div><dt>실제 관측</dt><dd>Skill 36개, Hook 3개, command read와 공개 답변·사용량·모델 관측</dd></div><div><dt>확인 범위와 한계</dt><dd>실제 Hook 알림 0건, 단일 표본입니다.</dd></div></dl></article><article class="check"><h3>TypeScript 가독성</h3><dl><div><dt>확인 방법</dt><dd>import 정규화 검사, align-tables, BoxBox source check</dd></div><div><dt>기대 결과</dt><dd>핵심 상태 파일의 import·표 정렬과 구문 통과</dd></div><div><dt>실제 관측</dt><dd>changed 0, misaligned 0, syntax valid</dd></div><div><dt>확인 범위와 한계</dt><dd>프로젝트 관습 미승인 안전 거부 25개가 남았습니다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 4건, 실패 2건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 미실행으로 기록 · 관측 모델 미확인.</p><h3>확인하지 못한 범위</h3><ul><li>실제 설치 Native의 최소 활동 표본에서는 Hook 알림이 0건이었고 Hook 동작은 실제 Electron+합성 Native로 확인했습니다.</li><li>BoxBox는 핵심 새 상태 파일의 import와 표 정렬을 통과했지만 프로젝트 관습 승인이 없는 2행·논리식 표 25개를 안전 거부했습니다.</li><li>최신 수정 source digest에 대한 사용자 지정 Terra 독립 검토는 아직 실행하지 않았습니다.</li><li>Windows 실기와 모든 실제 Hook 구성은 확인하지 않았습니다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>최신 source digest와 criteria digest로 Terra 읽기 전용 독립 검토를 실행합니다.</h3><dl><div><dt>담당</dt><dd>부모/root의 별도 Terra 검토 context</dd></div><div><dt>해소 조건</dt><dd>새 검토가 현재 소스와 기준에 연결되고 발견이 없거나 발견 수정 뒤 재검증됩니다.</dd></div><div><dt>영향</dt><dd>그 전에는 작업을 done으로 전환하지 않습니다.</dd></div></dl></article></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><ol class="references"><li><p>수정 전 독립 Terra 발견 6건의 원문</p><code>docs/work/Chat/005-Skills와 Hook 활동 사이드바/terra-review.md</code></li><li><p>공식 시도와 실제 Electron·Native·BoxBox 범위</p><code>docs/work/Chat/005-Skills와 Hook 활동 사이드바/verification.md</code></li><li><p>현재 지속 요구와 활동 의미 경계</p><code>docs/specs/chat.md#chat-activity-01</code></li><li><p>catalog·scope·pulse·dedupe·응답 검증의 핵심 상태</p><code>src/activity-sidebar.ts</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-16362e60-e269-4d5d-bf38-2869496efd2c<br>report-202518e3-38f9-4c0a-b49f-d4a6fd6f4be7</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>9cd903a1dee203f0338a823214400e129f2381b4b53fea6dc73a45a779a34f58</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>434baba61d5ad5b9f6dc6573ec32d9f2ad39594297a3d25bacc592b375441eb7</code></dd></div><div><dt>기준 지문</dt><dd><code>7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-faee1650-a05f-4851-8ede-b1d10e41bcab&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/activity-sidebar.test.ts&quot;,
+        &quot;test/native-activity.test.ts&quot;,
+        &quot;test/projection.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T08:37:40.510Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T08:37:50.755Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-faee1650-a05f-4851-8ede-b1d10e41bcab&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 2,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T08:37:55.112Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-4e37e5fe-da15-4405-943e-61b078634470&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-native-activity.ts&quot;,
+        &quot;--ui-only&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T08:38:05.512Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-native-activity.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T10:14:40.567Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-297fa9e1-d696-446b-a325-11b73539a194&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-native-activity.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T10:16:21.177Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-a5a7ac26-28b4-42fe-9540-d2ddf2178189&quot;,
+      &quot;verdict&quot;: &quot;not_run&quot;,
+      &quot;model&quot;: null,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json&quot;,
+      &quot;findings&quot;: []
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;Terra가 찾은 사이드바 결함 6건을 수정하고 현재 소스에서 전체 검사와 실제 Electron·Native 표본을 통과했습니다. 작업은 독립 Terra 재검토 전이라 verifying으로 남겨 둡니다.&quot;,
+  &quot;before&quot;: &quot;최근 사건 절단과 늦은 목록 응답이 등록 목록을 잃거나 덮었고, 여러 Skill 읽기와 Hook 중복 경계, 연속 강조, 잘못된 목록 응답의 완전성 판정이 실제 경계에서 깨졌습니다.&quot;,
+  &quot;after&quot;: &quot;등록 목록·관측·pulse·연결 수명주기 중복 상태를 분리하고 요청 세대와 scope, 엄격한 Native 응답 검증을 연결했습니다. 여섯 회귀와 전체 저장소 검사, 실제 Electron 합성 GUI, 실제 설치 Native 목록과 읽기 전용 Skill 활동 표본이 통과했습니다.&quot;,
+  &quot;changes&quot;: [
+    &quot;최근 2,000개 사건 ring과 독립해 최신 Skills·Hooks catalog를 유지합니다.&quot;,
+    &quot;선택 thread Hook 목록이 workspace보다 우선하고 요청 세대로 늦은 응답을 거릅니다.&quot;,
+    &quot;한 commandActions의 여러 SKILL.md 읽기에 안정적인 pulse를 각각 보존합니다.&quot;,
+    &quot;Hook run과 Skill read 중복 억제를 연결 수명주기에 두고 완료 뒤 늦은 시작을 막습니다.&quot;,
+    &quot;연속 활동마다 CSS animation phase와 760ms 타이머를 다시 시작해 720~760ms 경계의 강조를 유지합니다.&quot;,
+    &quot;cwd·필수 배열·필수 항목 shape·errors·warnings를 엄격히 검증해 잘못된 목록을 incomplete로 표시합니다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;화면 이력, 등록 catalog, 관측, pulse, 연결 수명주기 중복 상태를 서로 다른 소유 상태로 분리했습니다.&quot;,
+    &quot;사용자 지정 Terra 재검토는 부모의 읽기 전용 별도 context가 소유하므로 이 저자 context에서 자체 승인하지 않았습니다.&quot;,
+    &quot;전역 BoxBox 관습이나 설정을 변경하지 않고 승인 없는 자동 정렬을 실행하지 않았습니다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;실제 설치 Native의 최소 활동 표본에서는 Hook 알림이 0건이었고 Hook 동작은 실제 Electron+합성 Native로 확인했습니다.&quot;,
+    &quot;BoxBox는 핵심 새 상태 파일의 import와 표 정렬을 통과했지만 프로젝트 관습 승인이 없는 2행·논리식 표 25개를 안전 거부했습니다.&quot;,
+    &quot;최신 수정 source digest에 대한 사용자 지정 Terra 독립 검토는 아직 실행하지 않았습니다.&quot;,
+    &quot;Windows 실기와 모든 실제 Hook 구성은 확인하지 않았습니다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;부모가 최신 소스와 기준 digest로 Terra 읽기 전용 독립 검토를 실행하고, 발견이 있으면 같은 범위에서 수정·재검증합니다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;등록 목록이 오래된 사건과 함께 사라지거나 늦은 응답에 덮이고, 같은 사건의 여러 Skill 읽기와 Hook 중복이 화면 반응에서 손실되던 여섯 경계를 고쳤습니다. 최신 목록은 ring과 독립해 유지하고 thread scope·요청 세대·연결 수명주기 dedupe를 별도 상태로 관리합니다. 실제 Electron 화면에서는 두 Skill 행, Hook 행, 연속 강조와 모션 축소를 관찰했고 실제 설치 Native에서는 36개 Skill·3개 Hook 목록과 읽기 전용 Skill 읽기를 확인했습니다. 다만 저자와 독립된 Terra 재검토가 남아 있어 작업 완료로 전환하지 않았습니다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;Terra가 지적한 여섯 결함 수정&quot;,
+        &quot;result&quot;: &quot;각 결함의 실제 경계를 회귀로 추가하고 catalog·scope·pulse·dedupe·animation·parser를 수정했습니다.&quot;,
+        &quot;evidence&quot;: &quot;verification.md의 결함 수정 뒤 보조 실행 증거와 attempt-297fa9e1-d696-446b-a325-11b73539a194&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;전체 저장소와 실제 화면·Native 검증&quot;,
+        &quot;result&quot;: &quot;npm run check, 실제 Electron+합성 Native, 실제 설치 Native 목록과 읽기 전용 Skill 활동 표본이 통과했습니다.&quot;,
+        &quot;evidence&quot;: &quot;.www/evidence/native-activity-4kQt4y 및 .www/evidence/native-activity-live-xYnxHr&quot;,
+        &quot;limitations&quot;: &quot;실제 Hook 알림은 최소 Native 표본에서 관측되지 않았습니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;독립 Terra 검토 전 완료 금지&quot;,
+        &quot;result&quot;: &quot;상태를 verifying과 nextAction review로 유지했습니다.&quot;,
+        &quot;evidence&quot;: &quot;work.json과 tasks.md의 재개할 다음 행동&quot;,
+        &quot;limitations&quot;: &quot;최신 독립 검토 결과는 아직 없습니다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;여섯 결함과 기존 투영 회귀&quot;,
+        &quot;method&quot;: &quot;bun 회귀와 npm run check를 포함한 공식 전체 probe&quot;,
+        &quot;expected&quot;: &quot;전체 테스트·타입·빌드 통과와 실제 경계 보존&quot;,
+        &quot;observed&quot;: &quot;공식 시도 attempt-297fa9e1-d696-446b-a325-11b73539a194 통과&quot;,
+        &quot;limitations&quot;: &quot;검사 입력에 연결된 현재 소스에 한정됩니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;실제 Electron 사이드바&quot;,
+        &quot;method&quot;: &quot;합성 Native subprocess를 연결한 Electron GUI probe&quot;,
+        &quot;expected&quot;: &quot;두 Skill·Hook 반응, 고정 순서, 강조 연장, 무재생, reduced motion&quot;,
+        &quot;observed&quot;: &quot;모든 boolean 관측 true, 340px overflow false, rowAnimation none&quot;,
+        &quot;limitations&quot;: &quot;합성 Native 사건이며 Windows 실기가 아닙니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;실제 설치 Native&quot;,
+        &quot;method&quot;: &quot;skills/list·hooks/list 엄격 파싱과 읽기 전용 단일 turn&quot;,
+        &quot;expected&quot;: &quot;현재 cwd 목록과 정확한 SKILL.md 읽기 관측&quot;,
+        &quot;observed&quot;: &quot;Skill 36개, Hook 3개, command read와 공개 답변·사용량·모델 관측&quot;,
+        &quot;limitations&quot;: &quot;실제 Hook 알림 0건, 단일 표본입니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;TypeScript 가독성&quot;,
+        &quot;method&quot;: &quot;import 정규화 검사, align-tables, BoxBox source check&quot;,
+        &quot;expected&quot;: &quot;핵심 상태 파일의 import·표 정렬과 구문 통과&quot;,
+        &quot;observed&quot;: &quot;changed 0, misaligned 0, syntax valid&quot;,
+        &quot;limitations&quot;: &quot;프로젝트 관습 미승인 안전 거부 25개가 남았습니다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;절단 가능한 이력과 장기 상태가 같은 수명주기를 공유했습니다.&quot;,
+        &quot;basis&quot;: &quot;2,000건 뒤 catalog와 Hook run 중복 억제가 사라지는 재현이 있었습니다.&quot;,
+        &quot;alternatives&quot;: [
+          &quot;ring 크기만 늘리기&quot;,
+          &quot;catalog와 dedupe를 별도 상태로 유지하기&quot;
+        ],
+        &quot;choice&quot;: &quot;catalog·관측·pulse·연결 수명주기 dedupe를 분리했습니다.&quot;,
+        &quot;tradeoff&quot;: &quot;renderer 상태 구조가 늘지만 각 상태의 만료 조건이 명확해졌습니다.&quot;
+      },
+      {
+        &quot;problem&quot;: &quot;빠른 연속 활동이 같은 CSS animation 이름을 재시작하지 못했습니다.&quot;,
+        &quot;basis&quot;: &quot;730ms 재활동 뒤 기존 760ms 경계에서 강조가 사라지는 GUI 재현이 있었습니다.&quot;,
+        &quot;alternatives&quot;: [
+          &quot;단일 class 재부여&quot;,
+          &quot;두 animation phase와 타이머 재설정&quot;
+        ],
+        &quot;choice&quot;: &quot;pulse마다 phase를 교대하고 760ms 타이머를 다시 시작했습니다.&quot;,
+        &quot;tradeoff&quot;: &quot;행별 반응 상태를 추가로 유지합니다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;docs/work/Chat/005-Skills와 Hook 활동 사이드바/terra-review.md&quot;,
+        &quot;purpose&quot;: &quot;수정 전 독립 Terra 발견 6건의 원문&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Chat/005-Skills와 Hook 활동 사이드바/verification.md&quot;,
+        &quot;purpose&quot;: &quot;공식 시도와 실제 Electron·Native·BoxBox 범위&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/specs/chat.md#chat-activity-01&quot;,
+        &quot;purpose&quot;: &quot;현재 지속 요구와 활동 의미 경계&quot;
+      },
+      {
+        &quot;path&quot;: &quot;src/activity-sidebar.ts&quot;,
+        &quot;purpose&quot;: &quot;catalog·scope·pulse·dedupe·응답 검증의 핵심 상태&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;최신 source digest와 criteria digest로 Terra 읽기 전용 독립 검토를 실행합니다.&quot;,
+        &quot;owner&quot;: &quot;부모/root의 별도 Terra 검토 context&quot;,
+        &quot;doneWhen&quot;: &quot;새 검토가 현재 소스와 기준에 연결되고 발견이 없거나 발견 수정 뒤 재검증됩니다.&quot;,
+        &quot;impact&quot;: &quot;그 전에는 작업을 done으로 전환하지 않습니다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></section></main></body></html>

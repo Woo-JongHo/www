@@ -12,6 +12,7 @@ import { judgeNativeReport } from "./report-judge";
 import { NativeCompletionCollector } from "./native-report-input";
 import { resolveNativeCodex } from "./native-command";
 import { nativeThreadStartParams, nativeTurnStartParams } from "./native-chat";
+import { parseHooksListResponse, parseSkillsListResponse } from "./activity-sidebar";
 import type { AppEvent, RpcId, WorkspaceInfo } from "./shared";
 
 const DIST = join(app.getAppPath(), "dist");
@@ -39,9 +40,11 @@ const nativeCompletions = new NativeCompletionCollector()                       
 
 let seq                       = 0                        ;
 let connectionGeneration      = 0                        ;
+let activityRequestGeneration = 0                        ;
 const eventLog : AppEvent[] = []                       ;
 const pendingApprovals      = new Map<RpcId, string>() ;
 const approvalAttempts      = new Set<RpcId>()         ;
+const latestActivityRequests = new Map<string, number>();
 
 const SUPPORTED = new Set(["item/commandExecution/requestApproval", "item/fileChange/requestApproval"]) ;
 const DECISIONS = new Set(["accept", "acceptForSession", "decline", "cancel"])                          ;
@@ -102,6 +105,7 @@ function connect(): Promise<JsonRpcClient> {
           publish({ kind: "request", method, params: message.params, requestId: id, supported });
         }
       } else publish({ kind: "notification", method, params: method === "account/rateLimits/updated" ? rateLimitPayload(message.params) : message.params });
+      if (method === "skills/changed") void loadSkills(client, true);
     });
     void client.request("initialize", { clientInfo: { name: "www", title: "WWW", version: app.getVersion() }, capabilities: { experimentalApi: false } })
       .then(() => {
@@ -164,8 +168,65 @@ async function loadRateLimits(client: JsonRpcClient): Promise<void> {
   } finally { clearTimeout(timeout); }
 }
 
+function beginActivityRequest(scope: string): number {
+  const generation = ++activityRequestGeneration;
+  latestActivityRequests.set(scope, generation);
+  return generation;
+}
+
+function currentActivityRequest(scope: string, generation: number): boolean {
+  return latestActivityRequests.get(scope) === generation;
+}
+
+function finishActivityRequest(scope: string, generation: number): void {
+  if (currentActivityRequest(scope, generation)) latestActivityRequests.delete(scope);
+}
+
 function optionalRecord(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : null;
+}
+
+async function loadSkills(client: JsonRpcClient, forceReload = false): Promise<void> {
+  const cwd               = workspace                              ;
+  const requestScope      = `skills\u0000${cwd}`                   ;
+  const requestGeneration = beginActivityRequest(requestScope)     ;
+  try {
+    const result = parseSkillsListResponse(await client.request("skills/list", { cwds: [cwd], forceReload }), cwd);
+    if (rpc === client && workspace === cwd && currentActivityRequest(requestScope, requestGeneration)) publish({ kind: "notification", method: "activity/skillsListed", params: { cwd, scope: "workspace", requestGeneration, ...result } });
+  } catch {
+    if (rpc === client && workspace === cwd && currentActivityRequest(requestScope, requestGeneration)) publish({ kind: "notification", method: "activity/skillsListed", params: { cwd, scope: "workspace", requestGeneration, complete: false, skills: [] } });
+  } finally { finishActivityRequest(requestScope, requestGeneration); }
+}
+
+async function loadHooks(client: JsonRpcClient, threadId: string | null = null): Promise<void> {
+  const cwd               = workspace                                         ;
+  const scope             = threadId === null ? "workspace" : "thread"       ;
+  const requestScope      = `hooks\u0000${cwd}\u0000${threadId ?? "workspace"}` ;
+  const requestGeneration = beginActivityRequest(requestScope)                ;
+  try {
+    const params = threadId === null ? { cwds: [cwd] } : { threadId };
+    const result = parseHooksListResponse(await client.request("hooks/list", params), cwd);
+    if (rpc === client && workspace === cwd && currentActivityRequest(requestScope, requestGeneration)) publish({ kind: "notification", method: "activity/hooksListed", params: { cwd, scope, threadId, requestGeneration, ...result } });
+  } catch {
+    if (rpc === client && workspace === cwd && currentActivityRequest(requestScope, requestGeneration)) publish({ kind: "notification", method: "activity/hooksListed", params: { cwd, scope, threadId, requestGeneration, complete: false, hooks: [] } });
+  } finally { finishActivityRequest(requestScope, requestGeneration); }
+}
+
+async function refreshActivityInventory(): Promise<void> {
+  try {
+    const client = await connect();
+    await Promise.all([loadSkills(client), loadHooks(client)]);
+  } catch {
+    const cwd              = workspace                         ;
+    const skillsScope      = `skills\u0000${cwd}`              ;
+    const hooksScope       = `hooks\u0000${cwd}\u0000workspace` ;
+    const skillsGeneration = beginActivityRequest(skillsScope) ;
+    const hooksGeneration  = beginActivityRequest(hooksScope)  ;
+    publish({ kind: "notification", method: "activity/skillsListed", params: { cwd, scope: "workspace", requestGeneration: skillsGeneration, complete: false, skills: [] } });
+    publish({ kind: "notification", method: "activity/hooksListed", params: { cwd, scope: "workspace", threadId: null, requestGeneration: hooksGeneration, complete: false, hooks: [] } });
+    finishActivityRequest(skillsScope, skillsGeneration);
+    finishActivityRequest(hooksScope, hooksGeneration);
+  }
 }
 
 function registerIpc(): void {
@@ -232,6 +293,8 @@ function registerIpc(): void {
         { kind: "notification", method: "thread/configured", params: { threadId: restored.threadId, model: restored.model, modelProvider: restored.provider, approvalPolicy: restored.approvalPolicy, sandbox: restored.sandbox, isNew: false }, historical: true },
         ...restored.events
       ]);
+      void loadSkills(client);
+      void loadHooks(client, restored.threadId);
       return { threadId: restored.threadId, events };
     } finally { switchingConversation = false; }
   });
@@ -246,6 +309,7 @@ function registerIpc(): void {
     ]);
   });
   ipcMain.handle("workspace:get", () => workspaceInfo());
+  ipcMain.handle("activity:refresh", () => refreshActivityInventory());
   ipcMain.handle("workspace:choose", async () => {
     if (threadStarted) throw new Error("작업 폴더는 첫 스레드 전에만 변경할 수 있습니다.");
     const result = await dialog.showOpenDialog(window!, { properties: ["openDirectory", "createDirectory"] });
@@ -264,6 +328,7 @@ function registerIpc(): void {
       threadStarted = true;
       activeThreadId = threadId;
       publish({ kind: "notification", method: "thread/configured", params: { threadId, model: typeof result.model === "string" ? result.model : null, modelProvider: typeof result.modelProvider === "string" ? result.modelProvider : null, isNew: true } });
+      void loadHooks(client, threadId);
       return { threadId };
     } finally { switchingConversation = false; }
   });
@@ -406,10 +471,10 @@ function registerIpc(): void {
       window.webContents.debugger.attach("1.3");
       try {
         await window.webContents.debugger.sendCommand("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
-        activityArtifacts = await window.webContents.executeJavaScript("(() => { const panel=document.querySelector('.native-activity-panel'); const indicator=panel?.querySelector('.na-live-state'); if(!panel||!indicator) throw Error('활동 패널 없음'); const wasLive=indicator.classList.contains('na-live'); indicator.classList.add('na-live'); const animation=getComputedStyle(indicator.querySelector('i')).animationName; if(!wasLive) indicator.classList.remove('na-live'); return {width:panel.getBoundingClientRect().width,overflow:panel.scrollWidth>panel.clientWidth,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches,beaconAnimation:animation}; })()");
+        activityArtifacts = await window.webContents.executeJavaScript("(() => { const panel=document.querySelector('.native-activity-panel'); const row=panel?.querySelector('.na-row'); if(!panel||!row) throw Error('활동 패널 행 없음'); const wasReacting=row.classList.contains('is-reacting'); row.classList.add('has-activity','is-reacting'); const animation=getComputedStyle(row).animationName; if(!wasReacting) row.classList.remove('is-reacting'); return {width:panel.getBoundingClientRect().width,overflow:panel.scrollWidth>panel.clientWidth,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches,rowAnimation:animation}; })()");
       } finally { window.webContents.debugger.detach(); }
       const observed = record(activityArtifacts);
-      if (observed.overflow !== false || observed.reducedMotion !== true || observed.beaconAnimation !== "none") throw new Error("활동 패널 좁은 화면·모션 축소 검사 실패");
+      if (observed.overflow !== false || observed.reducedMotion !== true || observed.rowAnimation !== "none") throw new Error("활동 패널 좁은 화면·모션 축소 검사 실패");
     }
     writeFileSync(PROBE_PATH, `${JSON.stringify({ shell: "electron", ...record(result), reportArtifacts, activityArtifacts }, null, 2)}\n`);
     setImmediate(() => app.quit());
