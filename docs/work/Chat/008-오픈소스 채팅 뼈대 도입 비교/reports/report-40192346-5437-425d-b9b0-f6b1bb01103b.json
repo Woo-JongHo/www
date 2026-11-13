@@ -1,0 +1,89 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-40192346-5437-425d-b9b0-f6b1bb01103b",
+  "workId"        : "work-029fb7e2-61fa-4014-9362-5e915ab13197",
+  "title"         : "오픈소스 채팅 뼈대 도입 비교",
+  "summary"       : "현재 Chat 기능과 공개 오픈소스 뼈대를 비교했다. WWW 안의 채팅 뼈대 도입은 assistant-ui, 전체 앱 기반 교체는 T3 Code를 우선 후보로 제안한다.",
+  "outcome"       : "in_progress",
+  "kind"          : "authored",
+  "event"         : "finish",
+  "createdAt"     : "2026-11-12T09:36:44.942Z",
+  "workRecordHash": "ecc915c2efc2ff2fc8d01673496b91ad2f1aa6da11c79282162f24366369aba7",
+  "sourceDigest"  : "27e6dcc32ff494803b6132b08bacfbbabc23961b5e12fe348bfb6ec0ce041541",
+  "criteriaDigest": "ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0",
+  "semanticHash"  : "13541388f2b360b6148eeb6300f6a114b784fe2a565125a0992aee97585da408",
+  "narrative": {
+    "summary": "현재 Chat 기능과 공개 오픈소스 뼈대를 비교했다. WWW 안의 채팅 뼈대 도입은 assistant-ui, 전체 앱 기반 교체는 T3 Code를 우선 후보로 제안한다.",
+    "before" : "현재 WWW에는 Native 실행·승인·중단·활동·보고서가 있으나 일반 텍스트 답변과 메모리 사건만 제공해 대화 저장·재열기가 부족하다.",
+    "after"  : "현행 기능과 공백, 후보의 고정 SHA·라이선스·실제 코드 경계를 비교 문서에 기록했다. 제품 코드와 의존성은 그대로이며 도입 방식 선택과 실행 실험이 남아 있다.",
+    "changes": [
+      "Chat 005 작업·비교 문서·검증 기록과 목차를 등록했다.",
+      "assistant-ui·T3 Code·AionUi/Core·Cline/UI의 실제 공개 코드와 이식 경계를 확인했다."
+    ],
+    "decisions": [
+      "기존 앱 안의 도입을 우선 권장한다. assistant-ui의 외부 상태 연결로 현재 Native 상태 소유를 유지할 수 있고 전체 앱 교체 범위가 작기 때문이다.",
+      "UI 저장과 동일 Native thread 재개를 별도 수용 시나리오로 둔다."
+    ],
+    "limitations": [
+      "후보 설치·실행·실제 이식은 수행하지 않았다.",
+      "이번 전체 check는 코드 기준선이며 GUI·Native 승인·Windows·IME 실기는 미실행이다.",
+      "기준별 실제 증거의 기계 연결과 사용자 도입 선택이 남아 업무 상태를 완료로 바꾸지 않았다."
+    ],
+    "next": [
+      "사용자에게 제시한 도입 방식 선택을 반영한다.",
+      "선택한 뼈대와 현재 Native 상태를 실제 Electron에서 연결하고 저장·재개까지 검증한다."
+    ]
+  },
+  "work": {
+    "status": "verifying",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id"         : "AC-1",
+        "description": "현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-2",
+        "description": "후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-3",
+        "description": "권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      }
+    ],
+    "verifications": [],
+    "reviews": [
+      {
+        "id"         : "review-e3af38b2-a1a7-454c-8e59-4966e9410195",
+        "verdict"    : "pass",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-e3af38b2-a1a7-454c-8e59-4966e9410195/opus.json",
+        "findings": [
+          "판정 pass: 이번 수정은 조사·권장 문서와 작업 레코드에 한정된다. 제품 코드와 의존성은 바뀌지 않았다. package.json의 dependencies는 react·react-dom뿐이고 assistant-ui·T3 Code 관련 패키지가 없다. 이는 work.json의 authorization.implementation=false, writePaths(docs/work/Chat, docs/work/INDEX.md)와 일치한다.",
+          "AC-1 현황표의 주장은 소스와 맞다. renderer.tsx:205-226에서 sendingRef로 중복 제출을 막고, 실패하면 setPrompt((current) => current || text)로 초안을 복구한다. main.ts:180은 threadStarted 뒤 작업 폴더 변경을 거부한다. main.ts:186-209는 thread/start와 turn/start만 사용한다. main.ts:44는 메모리 eventLog를 최근 2000개 사건으로 제한한다. src 전체에 thread/resume·thread/list·thread/read 호출이 없으므로 '목록·영속 저장·읽기·동일 Native thread 복구 없음'은 타당하다. Markdown 렌더러나 클립보드 UI도 src에 없어 '본문은 일반 텍스트'와 일치한다.",
+          "증거 범위 확대가 없다. comparison.md:23과 verification.md는 npm run check exit 0과 Node 테스트 147개를 현재 코드의 기준선으로만 둔다. Electron GUI·Native 승인·Windows·IME 실기와 후보 앱 실행·설치·이식은 미실행으로 명시돼 있다. comparison.md:93과 spec.md:21-23도 채팅 완성 보고가 아니라는 점과 사용자 선택이 남았다는 점을 유지한다. 이 검토에서는 npm run check를 다시 실행하지 않았다. 147개라는 수치는 문서에 기록된 관찰로만 확인했다.",
+          "work.json의 criteria는 AC-1~3 모두 result=unverified, evidence=[]이고 verifications=[], status=verifying, nextAction=review다. 통과를 미리 주장하지 않으므로 결함은 아니다. 다만 완료하려면 verification.md의 앵커 baseline-20261112·source-inspection-20261112를 workflow 검증 시도와 기준 증거로 실제 연결해야 한다. 현재 sourceDigest(585a…)는 documentationReviews에 기록된 sourceDigest(27e6…)와 다르다. 따라서 완료 전에 문서 영향 검토를 현재 입력 기준으로 다시 기록해야 한다(WORKFLOW.md:112 '검토 뒤 소스·기준…이 바뀌면 다시 검토').",
+          "보완 권고(차단 아님): comparison.md:56과 verification.md:14는 AionUi·Cline 조사 전문의 보존 위치로 .www/scratchpad/chat-skeleton-upstream.md를 인용한다. .www는 captureSource 자동 제외 경로이자 비추적 작업 영역이라 다른 환경에서는 재현할 수 없다. 해당 행의 실제 판단 근거는 고정 SHA 링크로 남아 있다. 다만 조사 담당자의 'npm view 0.2.0' 같은 관찰은 이 파일에만 의존하므로, 필요하면 요약을 추적 문서에 옮기는 편이 낫다.",
+          "외부 고정 SHA 링크(assistant-ui 53ab9cb…, T3 Code ee90bdc…, AionUi e108b6b…, AionCore 503a871…, Cline 50e77bc…)의 내용과 라이선스는 이 읽기 전용 검토에서 네트워크로 확인하지 않았다. 문서와 소스 사이의 내부 일관성만 대조했다.",
+          "docs/work/INDEX.md:34-37에 Chat 005 항목과 spec.md·work.json 링크가 등록돼 있다. spec.md는 수용 기준의 정본을 work.json으로 지정하고 AC-1~3을 comparison.md의 각 절과 연결하므로 WORKFLOW.md:86 계약을 따른다."
+        ]
+      }
+    ]
+  },
+  "source": {
+    "recordPath"    : "docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/work.json",
+    "workRecordHash": "ecc915c2efc2ff2fc8d01673496b91ad2f1aa6da11c79282162f24366369aba7",
+    "sourceDigest"  : "27e6dcc32ff494803b6132b08bacfbbabc23961b5e12fe348bfb6ec0ce041541",
+    "criteriaDigest": "ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0"
+  }
+}
