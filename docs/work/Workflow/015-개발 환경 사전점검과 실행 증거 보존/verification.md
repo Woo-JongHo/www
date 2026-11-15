@@ -105,3 +105,103 @@ src/scripts/test 전체와 build.ts, package·lock, strict tsconfig, source-poli
 - 검증 중 원문 유지: 확인
 - 출력: stdout 5022바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-b6ce8873-b722-4717-b268-8c8aea7ecedd"></a>
+## 검증 시도 — 2026-11-15T15:53:37.492Z
+
+- 시도 ID: `attempt-b6ce8873-b722-4717-b268-8c8aea7ecedd`
+- 실행 시각: 2026-11-15T15:53:29.223Z ~ 2026-11-15T15:53:37.492Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","--test","test/workflow-environment.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `ENV1`, `ENV2`, `ENV3`
+- 소스 HEAD: `0f7661ded359b69a95cbdde67392287d63fffb69`
+- 검증 입력: `docs/architecture/structure.json`, `package.json`, `scripts/check-environment.ts`, `scripts/source-policy.ts`, `scripts/test.ts`, `scripts/workflow/adapters/codex.ts`, `scripts/workflow/adapters/gjc.ts`, `scripts/workflow/environment.ts`, `scripts/workflow/run.ts`, `source-policy.json`, `test/workflow-environment.test.ts`, `tsconfig.tools.json`
+- 소스 식별: `0141b33e860c00fdedf399c445b55d793ef8665aa610b48e2cc6f8bbc49cecea`
+- 기준 정의 식별: `ec83a61df45f44cf7409b18592f6dcd7f9014ed47e618dd18736953cfdbe1410`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 3418바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+## 최종 직접 검증과 전체 검사 (2026-11-16)
+
+게시된 0f7661d의 고정 사본에서 npm run check 전체 명령 exit0을 확인했다. 같은 관리 코드·설정 140파일이 Root와 동일하며 digest는 `18cba416e9da318d49a52b73f41e4d911c0116e94955120d38cfe0b057820636`다. Root에서는 직접 검증을 단계별 원문 로그와 함께 실행했다: build, 기본환경, Core·환경 Node60, projection·tree102, 작업문서 계약, 자료201파일, 실제 Electron GUI206, 실제 원격 ref/요청184경로 대조가 모두 exit0이다. 최초 실패·합성검사·추가 수정 전 기록은 보존하며 이번 최종 전체 명령의 통과와 구분한다. Source 전체 검사와 단계별 로그는 `.www/final-closeout-20261116/full-final-check.log`, `direct-v2/summary.jsonl`, `direct-v2/*.log`에 있다. 실제 모델·Windows·사람의 한국어 IME 검증으로 확대하지 않는다.
+
+### 검토 시점 기준 사본
+
+정본은 work.json.criteria이며 아래는 이 검토 시점의 criteriaSnapshot 사본이다. 기준 digest: `ec83a61df45f44cf7409b18592f6dcd7f9014ed47e618dd18736953cfdbe1410`. 실제 Terra 수용·보고서 연결에 남겨 둔 결과는 미검증을 유지하고, 독립 검토 후에 판정한다.
+
+| ID | 정본 설명 사본 | 필수 | 현재 결과 |
+|---|---|---|---|
+| ENV1 | 모델 실행 전에 상속 환경과 overrides를 병합하고 실행파일·PATH 문제를 구조화 진단하며 실패 시 호스트를 시작하지 않는다. | true | passed |
+| ENV2 | 요구한 Git 이력·기준 ref·index, 설치물 위치, 출력 보존 정책을 읽기 전용으로 검사하고 올바른 환경과 각 실패를 회귀 검증한다. | true | passed |
+| ENV3 | Codex 원문은 Git 제외 저장소에 완전히 보존하고 메모리 요약 절단과 완료·실제 usage 관측을 구분한다. | true | passed |
+| ENV4 | 공식 typed 실행의 실제 Sol 작성·집중 테스트·소스 정책·strict 타입 검증 및 후속 독립 검토 근거를 연결한다. | true | unverified |
+
+이번 독립 검토는 수정 코드와 직접 검증 근거의 정합을 판정한다. 실제 검토 receipt 수용과 저작 보고서·업무 완료는 검토 회수 후 이어지는 절차이며 아직 done으로 쓰지 않았다.
+
+## 실제 Terra 지적의 수정과 재검증
+
+실제 서버 선택 gpt-6.1-terra의 read-only 검토에서 legacy runWorkflow가 환경 진단 전 running 사건을 기록해 실패 후 같은 eventId 복구를 막는 결함을 지적했다. 해당 fail 원문과 receipt는 보존했다. 환경·runtime·실제 env 준비를 사건 기록 앞으로 이동했고 실제 Node fixture로 실패 host0/사건0 → 환경 복구 후 같은 ID host1 → 다시 호출해도 host1을 확인했다. 회귀 red→green, 환경·legacy Node30, strict 타입·소스 검사가 통과했으며 추가 저작 모델 호출은 하지 않았다. 같은 변경은 53308d1로 게시했다. Root의 새 실제 검증 시도는 ENV1~3에 현재 소스를 연결했으며 ENV4는 독립 재검토 전 미검증이다.
+
+<a id="attempt-4ff70d0d-afe4-48d5-875f-c503a01d86fe"></a>
+## 검증 시도 — 2026-11-15T16:39:47.085Z
+
+- 시도 ID: `attempt-4ff70d0d-afe4-48d5-875f-c503a01d86fe`
+- 실행 시각: 2026-11-15T16:39:39.473Z ~ 2026-11-15T16:39:47.085Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","--test","test/workflow-environment.test.ts","test/workflow-codex.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `ENV1`, `ENV2`, `ENV3`
+- 소스 HEAD: `3be2942af0f5be5a5e537c2f76d47dc06a95b066`
+- 검증 입력: `docs/architecture/structure.json`, `package.json`, `scripts/check-environment.ts`, `scripts/source-policy.ts`, `scripts/test.ts`, `scripts/workflow/adapters/codex.ts`, `scripts/workflow/adapters/gjc.ts`, `scripts/workflow/environment.ts`, `scripts/workflow/run.ts`, `source-policy.json`, `test/workflow-codex.test.ts`, `test/workflow-environment.test.ts`, `tsconfig.tools.json`
+- 소스 식별: `6427a7ab71a2db9104f5931b9bcb1274de35aa65f451e2f53aedb4a77577764c`
+- 기준 정의 식별: `ec83a61df45f44cf7409b18592f6dcd7f9014ed47e618dd18736953cfdbe1410`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 6516바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+## 최종 동결 스냅샷 V4 (2026-11-16)
+
+검증 대상은 게시 코드 `3be2942`와 관리 코드·설정 140경로가 같은 고정 사본이다. source digest `35e3de7994e3e776af279bcef1ced69405baab05ac29d8beef37f7d8e5783091`. 같은 시점의 live 작업 트리에는 다른 세션의 릴리스·빌드 표시와 Home 변경이 있어 이 검증에서 제외했다. 현재 live 소스 전체를 통과했다고 주장하지 않는다.
+
+이 고정 코드에서 전체 npmcheck exit0(Bun863+Node182=1045개), 실제 Electron GUI213개, 기준별 직접 집중 검사와 구조 지도 UI가 통과했다. 새 GUI는 실제 resume/read와 snapshot DOM 수용 뒤 turn/start 오류를 받았을 때 정확한 초안이 보존되고 요청은 1회임을 확인했다. 낮은 seq의 새 큐 사건은 semantic dedupe와 handler 전이 seq로 처리하며 UI512 cursor를 통해 전달한다. 전역 seq구간안은 활동0/sparse5000에서5000구간으로 커져 폐기했으며 20k ignored 사건에서추가global seq기억은0이다. 직접Codex호출의명시원문경로누락은host전거부하고 waiter는spawn에결합된spool을사용한다. 기존invalidJSON/도구금지 단언을 유지했다.
+
+원문: `.www/finalization/verify-core-result.json`, `verify-environment-result.json`, `core-focused.log`, `architecture-ui.log`, `publication.log`, `source-v4.json`; 전체 검사와 GUI는 같은 고정 사본의 형제 로그 `full-v4-check.log`, `snapshot-v4-gui.log`에 보존했다. 스타일off는원래Root정책의disabled이며스타일PASS가아니다. 실제Windows·사람의IME는별도범위로남긴다.
+
+### 현재 기준 정본의 검토용 사본
+
+정의의 정본은 work.json.criteria이다. 아래는 이번 검토 입력에 필요한 criteriaSnapshot이며 별도 정의를 만들지 않는다. digest `ec83a61df45f44cf7409b18592f6dcd7f9014ed47e618dd18736953cfdbe1410`. 실제 검토 수용·보고서 연결은 그 수행 후 판정한다.
+
+| ID | 설명 사본 | 필수 | 현재 결과 |
+|---|---|---|---|
+| ENV1 | 모델 실행 전에 상속 환경과 overrides를 병합하고 실행파일·PATH 문제를 구조화 진단하며 실패 시 호스트를 시작하지 않는다. | true | passed |
+| ENV2 | 요구한 Git 이력·기준 ref·index, 설치물 위치, 출력 보존 정책을 읽기 전용으로 검사하고 올바른 환경과 각 실패를 회귀 검증한다. | true | passed |
+| ENV3 | Codex 원문은 Git 제외 저장소에 완전히 보존하고 메모리 요약 절단과 완료·실제 usage 관측을 구분한다. | true | passed |
+| ENV4 | 공식 typed 실행의 실제 Sol 작성·집중 테스트·소스 정책·strict 타입 검증 및 후속 독립 검토 근거를 연결한다. | true | unverified |
+
+<a id="attempt-4c1a71ab-9cf0-4790-b6a7-1ad8b26d08bb"></a>
+## 검증 시도 — 2026-11-15T23:06:28.497Z
+
+- 시도 ID: `attempt-4c1a71ab-9cf0-4790-b6a7-1ad8b26d08bb`
+- 실행 시각: 2026-11-15T23:06:27.963Z ~ 2026-11-15T23:06:28.497Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","--input-type=module","-e","import {assessWork} from './scripts/workflow/work.ts';import {writeFile} from 'node:fs/promises';const a=await assessWork({repo:process.cwd(),workId:'work-9b00f22c-fa05-47bc-8de2-d7bf4d668fbc'});if(!a.review?.usable||!a.documentation?.usable||a.criteria.some(c=>c.id!=='ENV4'&&!c.usable))throw new Error(JSON.stringify({review:a.review,documentation:a.documentation,criteria:a.criteria}));const r={result:'passed',review:a.review,documentationUsable:a.documentation.usable,reviewId:a.record.workflow.reviews.at(-1).id,sourceDigest:a.source.digest,criteria:a.criteria.filter(c=>c.id!=='ENV4')};await writeFile('.www/finalization/environment-ENV4-receipt.json',JSON.stringify(r,null,2));console.log(JSON.stringify(r));"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `ENV4`
+- 소스 HEAD: `3be2942af0f5be5a5e537c2f76d47dc06a95b066`
+- 검증 입력: `docs/architecture/structure.json`, `package.json`, `scripts/check-environment.ts`, `scripts/source-policy.ts`, `scripts/test.ts`, `scripts/workflow/adapters/codex.ts`, `scripts/workflow/adapters/gjc.ts`, `scripts/workflow/environment.ts`, `scripts/workflow/run.ts`, `source-policy.json`, `test/workflow-codex.test.ts`, `test/workflow-environment.test.ts`, `tsconfig.tools.json`
+- 소스 식별: `6427a7ab71a2db9104f5931b9bcb1274de35aa65f451e2f53aedb4a77577764c`
+- 기준 정의 식별: `ec83a61df45f44cf7409b18592f6dcd7f9014ed47e618dd18736953cfdbe1410`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 360바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+## ENV4 실제 완료 조건 검사와 고정 범위 마감
+
+실제 Terra 읽기 전용 검토 review-a64ddfdc-7f84-4ca8-8d38-b5e4365fd124의 PASS가 공유 core에서 수용된 뒤, ENV4 전용 실제 Node verifier를 권한에 등록하고 실행했다. verifier는 현재 assessWork의 review.usable·documentation.usable 및 ENV1~3의 증거 적용 가능성을 검사했다. attempt-4c1a71ab-9cf0-4790-b6a7-1ad8b26d08bb는 exit0/result:passed/sourceStable:true/environmentStable:true/recorded:true로 회수됐다. 원문은 .www/finalization/environment-ENV4-request.json, environment-ENV4-result.json, environment-ENV4-receipt.json에 보존했다. 새 모델을 호출하거나 과거 실패 검토를 덮어쓰지 않았다.
+
+전체 1045개(Bun863+Node182)와 실제 Electron GUI213개는 게시 3be2942 코드의 고정 사본 근거다. GUI 범위는 실제 DOM·preload IPC·stdio·합성 Native 원장·앱 재시작이며 실제 Windows와 사람이 조작하는 한국어 IME, 실제 모델 흐름으로 확대하지 않는다. snapshot-v4의 현재 환경 입력 13개는 renderer·chat-state·verify-chat 및 architecture.generated를 포함하지 않으므로 별도 공백·생성물 갱신은 환경 증거 범위를 바꾸지 않는다. 현재 liveRelease·빌드 표시·Home 등 별도 작업과 Root 전체 배포/게시의 완료를 이 환경 작업의 완료로 간주하지 않는다. Root live 소스·index·HEAD 및 Work014는 이 마감 패스에서 수정하지 않았다.
