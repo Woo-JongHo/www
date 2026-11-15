@@ -47,9 +47,9 @@ function pulseRows(result: ReturnType<typeof projectActivitySidebar>): { seq: nu
 describe("Skills와 Hook 활동 사이드바 투영", () => {
   test("등록 목록 순서를 유지하고 정확한 Skill path와 Hook tuple에 반응한다", () => {
     const result = projectActivitySidebar([skills, hooks, skillRead(3), hookStart(4)], "thread");
-    expect(result.skills.map((row) => row.label)).toEqual(["first", "second"]);
-    expect(result.hooks.map((row) => row.label)).toEqual(["stop", "preToolUse"]);
-    expect(result.skills[0]?.lastActivityLabel).toBe("읽기");
+    expect(result.skills.map((row) => row.label)).toEqual(["first", "second"]   ) ;
+    expect(result.hooks.map((row) => row.label) ).toEqual(["stop", "preToolUse"]) ;
+    expect(result.skills[0]?.lastActivityLabel  ).toBe   ("읽기"                ) ;
     expect(result.skills[1]?.lastActivityLabel).toBeNull();
     expect(result.hooks[1]?.lastActivityLabel).toBe("시작");
     expect(pulseRows(result)).toEqual([
@@ -59,24 +59,24 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
   });
 
   test("Skill 이름 언급·임의 문자열·완료와 같은 읽기 재수신은 새 반응이 아니다", () => {
-    const mention = event(3, "item/started", { threadId: "thread", turnId: "turn", item: { id: "mention", type: "commandExecution", command: "echo first /skills/first/SKILL.md" } });
-    const request = event(4, "item/started", { threadId: "thread", turnId: "turn", item: { id: "request", type: "userMessage", content: [{ type: "skill", name: "first" }] } });
-    const read    = skillRead(5);
-    const replay  = { ...read, seq: 6 };
-    const finish  = event(7, "item/completed", { threadId: "thread", turnId: "turn", item: { id: "read", type: "commandExecution", exitCode: 0 } });
-    const result  = projectActivitySidebar([skills, mention, request, read, replay, finish], "thread");
+    const mention = event(3, "item/started", { threadId: "thread", turnId: "turn", item: { id: "mention", type: "commandExecution", command: "echo first /skills/first/SKILL.md" } }) ;
+    const request = event(4, "item/started", { threadId: "thread", turnId: "turn", item: { id: "request", type: "userMessage", content: [{ type: "skill", name: "first" }] } })       ;
+    const read    = skillRead(5)                                                                                                                                                      ;
+    const replay  = { ...read, seq: 6 }                                                                                                                                               ;
+    const finish  = event(7, "item/completed", { threadId: "thread", turnId: "turn", item: { id: "read", type: "commandExecution", exitCode: 0 } })                                   ;
+    const result  = projectActivitySidebar([skills, mention, request, read, replay, finish], "thread")                                                                                ;
     expect(pulseRows(result)).toEqual([{ seq: 5, rowId: "skill:/skills/first/SKILL.md" }]);
   });
 
   test("Hook 완료·중복·비동기·다른 thread·늦은 시작을 새 실행으로 처리하지 않는다", () => {
-    const completedFirst = event(3, "hook/completed", { threadId: "thread", run: { id: "late" } });
-    const lateStart      = hookStart(4, "late");
-    const first          = hookStart(5, "one");
-    const duplicate      = hookStart(6, "one");
-    const completed      = event(7, "hook/completed", { threadId: "thread", run: { id: "one" } });
-    const asyncRun       = hookStart(8, "async", { executionMode: "async" });
-    const otherThread    = { ...hookStart(9, "other"), params: { ...(hookStart(9, "other").params as Record<string, unknown>), threadId: "other" } };
-    const result         = projectActivitySidebar([hooks, completedFirst, lateStart, first, duplicate, completed, asyncRun, otherThread], "thread");
+    const completedFirst = event(3, "hook/completed", { threadId: "thread", run: { id: "late" } })                                                   ;
+    const lateStart      = hookStart(4, "late")                                                                                                      ;
+    const first          = hookStart(5, "one")                                                                                                       ;
+    const duplicate      = hookStart(6, "one")                                                                                                       ;
+    const completed      = event(7, "hook/completed", { threadId: "thread", run: { id: "one" } })                                                    ;
+    const asyncRun       = hookStart(8, "async", { executionMode: "async" })                                                                         ;
+    const otherThread    = { ...hookStart(9, "other"), params: { ...(hookStart(9, "other").params as Record<string, unknown>), threadId: "other" } } ;
+    const result         = projectActivitySidebar([hooks, completedFirst, lateStart, first, duplicate, completed, asyncRun, otherThread], "thread")  ;
     expect(pulseRows(result)).toEqual([{ seq: 5, rowId: "hook:pre-tool" }]);
   });
 
@@ -85,29 +85,29 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
       { key: "a", eventName: "stop", sourcePath: "/same.json", displayOrder: 1, handlerType: "command", enabled: true },
       { key: "b", eventName: "stop", sourcePath: "/same.json", displayOrder: 1, handlerType: "command", enabled: true },
     ] });
-    const started = hookStart(3, "ambiguous", { eventName: "stop", sourcePath: "/same.json", displayOrder: 1 });
-    const result  = projectActivitySidebar([ambiguous, started], "thread");
-    expect(result.hooks).toHaveLength(3);
-    expect(result.hooks.slice(0, 2).every((row) => row.lastActivitySeq === null)).toBe(true);
-    expect(result.hooks[2]?.catalogued).toBe(false);
-    expect(result.pulses[0]?.rowId.startsWith("hook-observed:")).toBe(true);
+    const started = hookStart             (3, "ambiguous", { eventName: "stop", sourcePath: "/same.json", displayOrder: 1 }) ;
+    const result  = projectActivitySidebar([ambiguous, started], "thread"                                                  ) ;
+    expect(result.hooks                                                         ).toHaveLength(3    ) ;
+    expect(result.hooks.slice(0, 2).every((row) => row.lastActivitySeq === null)).toBe        (true ) ;
+    expect(result.hooks[2]?.catalogued                                          ).toBe        (false) ;
+    expect(result.pulses[0]?.rowId.startsWith("hook-observed:")                 ).toBe        (true ) ;
   });
 
   test("목록 실패는 감지 범위를 유지하고 등록 밖 읽기를 뒤에 추가한다", () => {
-    const partial = event(1, "activity/skillsListed", { complete: false, skills: [{ name: "known", path: "/skills/known/SKILL.md", enabled: true, scope: "repo" }] });
-    const result  = projectActivitySidebar([partial, skillRead(2, "new", "C:\\skills\\new\\SKILL.md")], "thread");
-    expect(result.skillsComplete).toBe(false);
-    expect(result.skills.map((row) => row.label)).toEqual(["known", "new"]);
-    expect(result.skills[1]?.catalogued).toBe(false);
+    const partial = event                 (1, "activity/skillsListed", { complete: false, skills: [{ name: "known", path: "/skills/known/SKILL.md", enabled: true, scope: "repo" }] }) ;
+    const result  = projectActivitySidebar([partial, skillRead(2, "new", "C:\\skills\\new\\SKILL.md")], "thread"                                                                     ) ;
+    expect(result.skillsComplete                ).toBe   (false           ) ;
+    expect(result.skills.map((row) => row.label)).toEqual(["known", "new"]) ;
+    expect(result.skills[1]?.catalogued         ).toBe   (false           ) ;
   });
 
   test("seq 중복과 다른 thread를 억제하고 연결·이력 상태를 분리한다", () => {
-    const connected = event(5, "transport/connected", {});
-    const read      = skillRead(7);
-    const result    = projectActivitySidebar([connected, { ...skills, seq: 6 }, read, read, skillRead(8, "other", "/skills/second/SKILL.md", "other")], "thread");
-    expect(result.transport).toBe("connected");
-    expect(result.historyTruncated).toBe(true);
-    expect(pulseRows(result)).toEqual([{ seq: 7, rowId: "skill:/skills/first/SKILL.md" }]);
+    const connected = event                 (5, "transport/connected", {}                                                                                       ) ;
+    const read      = skillRead             (7                                                                                                                  ) ;
+    const result    = projectActivitySidebar([connected, { ...skills, seq: 6 }, read, read, skillRead(8, "other", "/skills/second/SKILL.md", "other")], "thread") ;
+    expect(result.transport       ).toBe   ("connected"                                        ) ;
+    expect(result.historyTruncated).toBe   (true                                               ) ;
+    expect(pulseRows(result)      ).toEqual([{ seq: 7, rowId: "skill:/skills/first/SKILL.md" }]) ;
   });
 
   test("중복 목록 식별자는 한 행만 남기고 전체 목록으로 주장하지 않는다", () => {
@@ -120,15 +120,15 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
       { key: "same", eventName: "preToolUse", sourcePath: "/hooks.json", displayOrder: 2, handlerType: "command", enabled: true },
     ] });
     const result = projectActivitySidebar([duplicateSkills, duplicateHooks], "thread");
-    expect(result.skills).toHaveLength(1);
-    expect(result.hooks).toHaveLength(1);
-    expect(result.skillsComplete).toBe(false);
-    expect(result.hooksComplete).toBe(false);
+    expect(result.skills        ).toHaveLength(1    ) ;
+    expect(result.hooks         ).toHaveLength(1    ) ;
+    expect(result.skillsComplete).toBe        (false) ;
+    expect(result.hooksComplete ).toBe        (false) ;
   });
 
   test("식별 메타데이터가 불완전한 Hook 시작은 행이나 반응을 만들지 않는다", () => {
-    const malformed = hookStart(3, "malformed", { sourcePath: "", displayOrder: null });
-    const result    = projectActivitySidebar([hooks, malformed], "thread");
+    const malformed = hookStart             (3, "malformed", { sourcePath: "", displayOrder: null }) ;
+    const result    = projectActivitySidebar([hooks, malformed], "thread"                          ) ;
     expect(result.hooks).toHaveLength(2);
     expect(pulseRows(result)).toEqual([]);
   });
@@ -168,8 +168,8 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
   });
 
   test("연결 수명주기 동안 이력 절단 뒤 같은 Hook run과 완료 뒤 늦은 시작을 다시 반응시키지 않는다", () => {
-    const completed = event(3, "hook/completed", { threadId: "thread", run: { id: "late" } });
-    const first     = hookStart(4, "same");
+    const completed = event    (3, "hook/completed", { threadId: "thread", run: { id: "late" } }) ;
+    const first     = hookStart(4, "same"                                                       ) ;
     let state = updateActivitySidebarState(createActivitySidebarState(), [
       event(1, "transport/connected", {}),
       hooks,
@@ -186,8 +186,8 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
   });
 
   test("Hook pulse 식별자는 늦은 catalog 매핑에도 안정적이고 새 연결에서는 같은 run ID를 다시 허용한다", () => {
-    let state = updateActivitySidebarState(createActivitySidebarState(), [event(1, "transport/connected", { connectionGeneration: 1 }), hookStart(2, "same")], { emitPulses: true });
-    const before = projectActivitySidebarState(state, "thread");
+    let state    = updateActivitySidebarState (createActivitySidebarState(), [event(1, "transport/connected", { connectionGeneration: 1 }), hookStart(2, "same")], { emitPulses: true }) ;
+    const before = projectActivitySidebarState(state, "thread"                                                                                                                         ) ;
     state = updateActivitySidebarState(state, [{ ...hooks, seq: 3 }], { emitPulses: true });
     const catalogued = projectActivitySidebarState(state, "thread");
     expect(catalogued.pulses[0]?.id).toBe(before.pulses[0]?.id);
@@ -230,12 +230,12 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
     expect(pulseRows(projectActivitySidebarState(state, "thread"))).toEqual([
       { seq: 2, rowId: "hook-observed:preToolUse%00%2Fhooks.json%002%00command" },
     ]);
-    expect(state.processedThrough).toBe(20_005);
-    expect(state.dedupe.buckets).toHaveLength(64);
-    expect(state.dedupe.size).toBe(2);
-    expect(state.observations.size).toBeLessThanOrEqual(512);
-    expect(state.threadHooks.size).toBeLessThanOrEqual(32);
-    expect(elapsedMs).toBeLessThan(5_000);
+    expect(state.processedThrough ).toBe               (20_005) ;
+    expect(state.dedupe.buckets   ).toHaveLength       (64    ) ;
+    expect(state.dedupe.size      ).toBe               (2     ) ;
+    expect(state.observations.size).toBeLessThanOrEqual(512   ) ;
+    expect(state.threadHooks.size ).toBeLessThanOrEqual(32    ) ;
+    expect(elapsedMs              ).toBeLessThan       (5_000 ) ;
   });
 
   test("2만개 고유 Hook run을 모두 새 활동으로 반응하고 이전 run과 완료 후 느린 시작은 정확히 억제한다", () => {
@@ -258,10 +258,10 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
       event(20_003, "hook/completed", { threadId: "t", run: { id: "late-before-start" } }),
       hookRun(20_004, "late-before-start"),
     ], { emitPulses: true });
-    expect(observed).toBe(20_000);
-    expect(state.pulses.filter((pulse) => pulse.seq >= 20_002)).toEqual([]);
-    expect(state.dedupe.size).toBe(20_001);
-    expect(performance.now() - started).toBeLessThan(5_000);
+    expect(observed                                           ).toBe        (20_000) ;
+    expect(state.pulses.filter((pulse) => pulse.seq >= 20_002)).toEqual     ([]    ) ;
+    expect(state.dedupe.size                                  ).toBe        (20_001) ;
+    expect(performance.now() - started                        ).toBeLessThan(5_000 ) ;
   });
 
   test("live 사건이 먼저 와도 느린 bootstrap snapshot의 연결과 catalog를 안전하게 수용한다", () => {
@@ -271,14 +271,14 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
       { ...skills, seq: 2 },
     ], { historySnapshot: true });
     const result = projectActivitySidebarState(state, "thread");
-    expect(result.transport).toBe("connected");
-    expect(result.skills.map((row) => row.label)).toEqual(["first", "second"]);
-    expect(result.pulses.map((pulse) => pulse.seq)).toEqual([3]);
+    expect(result.transport                       ).toBe   ("connected"        ) ;
+    expect(result.skills.map((row) => row.label)  ).toEqual(["first", "second"]) ;
+    expect(result.pulses.map((pulse) => pulse.seq)).toEqual([3]                ) ;
   });
 
   test("bootstrap·전환 boundary는 snapshot과 대기 live를 seq로 병합하고 실패·재진입에서 live를 잃지 않는다", () => {
-    const boundary = new ActivitySnapshotBoundary();
-    const bootstrap = boundary.begin();
+    const boundary  = new ActivitySnapshotBoundary() ;
+    const bootstrap = boundary.begin()               ;
     expect(boundary.queue(hookStart(3, "live-after-snapshot"))).toBe(true);
     const batch = boundary.complete(bootstrap, [
       event(1, "transport/connected", { connectionGeneration: 23 }),
@@ -319,8 +319,8 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
       event(3, "transport/status", { connectionGeneration: 31 }),
       event(4, "thread/configured", { threadId: "thread" }),
     ];
-    const boundary = new ActivitySnapshotBoundary();
-    const token = boundary.begin();
+    const boundary = new ActivitySnapshotBoundary() ;
+    const token    = boundary.begin()               ;
     expect(boundary.queue(live)).toBe(true);
     const batch = boundary.complete(token, snapshot);
     if (!batch) throw new Error("복원 batch가 필요합니다.");
@@ -335,37 +335,37 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
       event(1, "transport/connected", { connectionGeneration: 29 }),
     ]);
     const next = updateActivitySidebarState(previous, [hookStart(2, "first")], { emitPulses: true });
-    expect(previous.dedupe.size).toBe(0);
-    expect(next.dedupe.size).toBe(1);
-    expect(next.dedupe.buckets.filter((bucket, index) => bucket !== previous.dedupe.buckets[index])).toHaveLength(1);
-    expect(previous.dedupe.buckets.every((bucket) => bucket.size === 0)).toBe(true);
+    expect(previous.dedupe.size                                                                    ).toBe        (0   ) ;
+    expect(next.dedupe.size                                                                        ).toBe        (1   ) ;
+    expect(next.dedupe.buckets.filter((bucket, index) => bucket !== previous.dedupe.buckets[index])).toHaveLength(1   ) ;
+    expect(previous.dedupe.buckets.every((bucket) => bucket.size === 0)                            ).toBe        (true) ;
   });
 
   test("많은 고유 활동과 thread 목록에서도 관측·pulse·목록 보존 크기가 고정된다", () => {
     const activity = Array.from({ length: 700 }, (_, index) => skillRead(index + 2, `read-${index}`, `/skills/skill-${index}/SKILL.md`));
     const catalogs = Array.from({ length: 40 }, (_, index) => event(702 + index, "activity/hooksListed", {
-      complete: true,
-      requestGeneration: index + 1,
-      scope: "thread",
-      threadId: `thread-${index}`,
-      hooks: [],
+      complete          : true              ,
+      requestGeneration : index + 1         ,
+      scope             : "thread"          ,
+      threadId          : `thread-${index}` ,
+      hooks             : []                ,
     }));
     const state = updateActivitySidebarState(createActivitySidebarState(), [
       event(1, "transport/connected", { connectionGeneration: 13 }),
       ...activity,
       ...catalogs,
     ], { emitPulses: true });
-    expect(state.observations.size).toBe(512);
-    expect(state.pulses).toHaveLength(512);
-    expect(state.threadHooks.size).toBe(32);
-    expect(state.dedupe.size).toBe(700);
-    expect(state.dedupe.buckets).toHaveLength(64);
+    expect(state.observations.size).toBe        (512) ;
+    expect(state.pulses           ).toHaveLength(512) ;
+    expect(state.threadHooks.size ).toBe        (32 ) ;
+    expect(state.dedupe.size      ).toBe        (700) ;
+    expect(state.dedupe.buckets   ).toHaveLength(64 ) ;
   });
 });
 
 describe("Skills와 Hook 목록 응답 검증", () => {
-  const validSkill = { name: "first", path: "/skills/first/SKILL.md", description: "first", enabled: true, scope: "repo" };
-  const validHook  = { key: "pre-tool", eventName: "preToolUse", sourcePath: "/hooks.json", displayOrder: 1, handlerType: "command", enabled: true, source: "project", currentHash: "hash", isManaged: false, timeoutSec: 5, trustStatus: "trusted", command: "run", async: false };
+  const validSkill = { name: "first", path: "/skills/first/SKILL.md", description: "first", enabled: true, scope: "repo" }                                                                                                                                                          ;
+  const validHook  = { key: "pre-tool", eventName: "preToolUse", sourcePath: "/hooks.json", displayOrder: 1, handlerType: "command", enabled: true, source: "project", currentHash: "hash", isManaged: false, timeoutSec: 5, trustStatus: "trusted", command: "run", async: false } ;
 
   test("정확한 cwd와 필수 배열이 있는 응답만 완전한 목록으로 수용한다", () => {
     expect(parseSkillsListResponse({ data: [{ cwd: "/repo", errors: [], skills: [validSkill] }] }, "/repo")).toEqual({

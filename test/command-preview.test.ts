@@ -32,22 +32,22 @@ describe("명령 출력 미리보기", () => {
 });
 
 test("원본 보관 한도 초과는 보관된 범위의 미리보기와 원본 줄 수 미확인으로 안내한다", () => {
-  const output = Array.from({ length: 10000 }, (_, index) => `  출력 ${index}`).join("\n");
-  const event: AppEvent = { seq: 1, at: "2026-11-13T00:00:00Z", kind: "notification", method: "item/completed", params: { item: { id: "large", type: "commandExecution", status: "completed", exitCode: 0, aggregatedOutput: output } } };
-  const block = project([event]).blocks[0];
+  const output          = Array.from({ length: 10000 }, (_, index) => `  출력 ${index}`).join("\n")                                                                                                                                       ;
+  const event: AppEvent = { seq: 1, at: "2026-11-13T00:00:00Z", kind: "notification", method: "item/completed", params: { item: { id: "large", type: "commandExecution", status: "completed", exitCode: 0, aggregatedOutput: output } } } ;
+  const block           = project([event]).blocks[0]                                                                                                                                                                                      ;
   if (block?.kind !== "command") throw Error("명령 투영 없음");
   const html = renderToStaticMarkup(createElement(CommandView, { block }));
-  expect(block.outputTruncated).toBe(true);
-  expect(html).toContain("보관된 출력의 앞 10줄 미리보기");
-  expect(html).toContain("보관 범위 안에서");
-  expect(html).toContain("제거된 원본 줄 수는 미확인");
-  expect(html).toContain("중간 줄에서 시작할 수 있습니다");
+  expect(block.outputTruncated).toBe     (true                            ) ;
+  expect(html                 ).toContain("보관된 출력의 앞 10줄 미리보기") ;
+  expect(html                 ).toContain("보관 범위 안에서"              ) ;
+  expect(html                 ).toContain("제거된 원본 줄 수는 미확인"    ) ;
+  expect(html                 ).toContain("중간 줄에서 시작할 수 있습니다") ;
 });
 
 test("명령 거절과 턴 중단의 미확인 결과 문구를 구별한다", () => {
   for (const status of ["declined", "unknown"]) {
-    const event: AppEvent = { seq: 1, at: "2026-11-13T00:00:00Z", kind: "notification", method: "item/completed", params: { item: { id: "stop", type: "commandExecution", status } } };
-    const block = project([event]).blocks[0];
+    const event: AppEvent = { seq: 1, at: "2026-11-13T00:00:00Z", kind: "notification", method: "item/completed", params: { item: { id: "stop", type: "commandExecution", status } } } ;
+    const block           = project([event]).blocks[0]                                                                                                                                 ;
     if (block?.kind !== "command") throw Error("명령 투영 없음");
     if (status === "unknown") block.turnInterrupted = true;
     const html = renderToStaticMarkup(createElement(CommandView, { block }));

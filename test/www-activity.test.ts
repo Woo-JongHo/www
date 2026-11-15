@@ -17,9 +17,9 @@ describe("WWW 역할·스킬 정본 식별", () => {
   });
 
   test("발견용 상대 링크·하위 작업 경로·Windows 구분자를 처리한다", () => {
-    expect(identifyWwwArtifact(".agents/skills/www-build/SKILL.md", workspace)?.id).toBe("www-build");
-    expect(identifyWwwArtifact("../agents/www/AGENT.md", workspace, `${workspace}/src`)?.id).toBe("www-dev");
-    expect(identifyWwwArtifact("C:\\Project\\WWW\\AGENTS\\WWW\\AGENT.MD", "c:\\project\\www")?.id).toBe("www-dev");
+    expect(identifyWwwArtifact(".agents/skills/www-build/SKILL.md", workspace)?.id               ).toBe("www-build") ;
+    expect(identifyWwwArtifact("../agents/www/AGENT.md", workspace, `${workspace}/src`)?.id      ).toBe("www-dev"  ) ;
+    expect(identifyWwwArtifact("C:\\Project\\WWW\\AGENTS\\WWW\\AGENT.MD", "c:\\project\\www")?.id).toBe("www-dev"  ) ;
   });
 
   test("저장소 밖·이름만 같은 파일·유사 접두 경로를 WWW 역할로 만들지 않는다", () => {
@@ -40,9 +40,9 @@ describe("보수적인 문서 읽기 명령 참조", () => {
   });
 
   test("한 command 안 중복 정본 참조는 한 번이고 저장소 근거가 없으면 식별하지 않는다", () => {
-    expect(referencedWwwArtifacts("cat agents/www/AGENT.md agents/www/AGENT.md", workspace)).toHaveLength(1);
-    expect(referencedWwwArtifacts("cat agents/www/AGENT.md")).toEqual([]);
-    expect(referencedWwwArtifacts("cat /other/agents/www/AGENT.md", workspace)).toEqual([]);
+    expect(referencedWwwArtifacts("cat agents/www/AGENT.md agents/www/AGENT.md", workspace)).toHaveLength(1 ) ;
+    expect(referencedWwwArtifacts("cat agents/www/AGENT.md")                               ).toEqual     ([]) ;
+    expect(referencedWwwArtifacts("cat /other/agents/www/AGENT.md", workspace)             ).toEqual     ([]) ;
   });
 
   test("언급·검색·셸 확장·연쇄·리디렉션·손상된 인자를 읽기 명령으로 추정하지 않는다", () => {

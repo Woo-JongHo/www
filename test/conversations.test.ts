@@ -11,15 +11,15 @@ import { project } from "../src/projection";
 import { JsonRpcClient } from "../src/rpc";
 import type { AppEvent } from "../src/shared";
 
-const cwd = "/workspace/project";
-const thread = { id: "thread-1", cwd, originator: "www", source: "vscode", preview: "첫 요청", updatedAt: 50, status: { type: "notLoaded" }, ephemeral: false };
+const cwd    = "/workspace/project"                                                                                                                             ;
+const thread = { id: "thread-1", cwd, originator: "www", source: "vscode", preview: "첫 요청", updatedAt: 50, status: { type: "notLoaded" }, ephemeral: false } ;
 const oldTurn = { id: "turn-1", status: "completed", items: [
-  { id: "u1", type: "userMessage", content: [{ type: "text", text: "첫 요청" }] },
-  { id: "r1", type: "reasoning", summary: ["공개 요약"], content: ["PRIVATE_REASONING"] },
-  { id: "a1", type: "agentMessage", text: "답변" },
-  { id: "c1", type: "commandExecution", command: "echo ok", aggregatedOutput: "ok", exitCode: 0, status: "completed" },
-  { id: "f1", type: "fileChange", status: "inProgress", changes: [{ path: "a.ts", diff: "+a" }] },
-  { id: "x1", type: "requestApproval", command: "PRIVATE_REQUEST" }
+  { id : "u1" , type : "userMessage"      , content : [{ type: "text", text: "첫 요청" }]                                       },
+  { id : "r1" , type : "reasoning"        , summary : ["공개 요약"] , content          : ["PRIVATE_REASONING"]                  },
+  { id : "a1" , type : "agentMessage"     , text    : "답변"                                                                    },
+  { id : "c1" , type : "commandExecution" , command : "echo ok"     , aggregatedOutput : "ok", exitCode: 0, status: "completed" },
+  { id : "f1" , type : "fileChange"       , status  : "inProgress"  , changes          : [{ path: "a.ts", diff: "+a" }]         },
+  { id : "x1" , type : "requestApproval"  , command : "PRIVATE_REQUEST"                                                         }
 ] };
 
 function clientFor(handler: (method: string, params: unknown) => unknown) {
@@ -32,39 +32,39 @@ function events(values: ReturnType<typeof restoreConversationEvents>): AppEvent[
 }
 
 test("대화 목록은 현재 프로젝트와 WWW 원장만 조회하고 커서를 전달한다", async () => {
-  const client = clientFor(() => ({ data: [thread, { ...thread, id: "other", cwd: "/another" }, { ...thread, id: "temp", ephemeral: true }, { ...thread, id: "unowned", originator: "another_client" }], nextCursor: "next" }));
-  const result = await createConversationService(client, cwd).list("page");
-  expect(client.calls).toEqual([{ method: "thread/list", params: { cwd, sourceKinds: ["appServer", "vscode"], archived: false, limit: 50, sortKey: "updated_at", cursor: "page" } }]);
-  expect(result.threads.map((row) => row.id)).toEqual(["thread-1"]);
-  expect(result.threads[0]?.title).toBe("첫 요청");
-  expect(result.nextCursor).toBe("next");
+  const client = clientFor(() => ({ data: [thread, { ...thread, id: "other", cwd: "/another" }, { ...thread, id: "temp", ephemeral: true }, { ...thread, id: "unowned", originator: "another_client" }], nextCursor: "next" })) ;
+  const result = await createConversationService(client, cwd).list("page")                                                                                                                                                      ;
+  expect(client.calls                       ).toEqual([{ method: "thread/list", params: { cwd, sourceKinds: ["appServer", "vscode"], archived: false, limit: 50, sortKey: "updated_at", cursor: "page" } }]) ;
+  expect(result.threads.map((row) => row.id)).toEqual(["thread-1"]                                                                                                                                         ) ;
+  expect(result.threads[0]?.title           ).toBe   ("첫 요청"                                                                                                                                            ) ;
+  expect(result.nextCursor                  ).toBe   ("next"                                                                                                                                               ) ;
   await expect(createConversationService(client, cwd).list(42)).rejects.toThrow("커서");
 });
 
 test("같은 Native thread를 재개하고 과거 공개 항목만 비실행 상태로 복원한다", async () => {
   const client = clientFor((method) => {
-    if (method === "thread/read") return { thread };
-    if (method === "thread/resume") return { thread, model: "model", modelProvider: "provider", approvalPolicy: "never", sandbox: { type: "readOnly" } };
+    if (method === "thread/read"      ) return { thread };
+    if (method === "thread/resume"    ) return { thread, model: "model", modelProvider: "provider", approvalPolicy: "never", sandbox: { type: "readOnly" } };
     if (method === "thread/turns/list") return { data: [oldTurn], nextCursor: null };
     throw new Error(method);
   });
   const restored = await createConversationService(client, cwd).open("thread-1");
-  expect(client.calls.map((call) => call.method)).toEqual(["thread/read", "thread/resume", "thread/turns/list"]);
-  expect(client.calls[1]?.params).toEqual({ threadId: "thread-1", excludeTurns: true });
-  expect(restored.threadId).toBe("thread-1");
-  expect(restored.approvalPolicy).toBe("never");
-  expect(restored.sandbox).toBe("readOnly");
-  expect(restored.events.every((event) => event.historical)).toBe(true);
+  expect(client.calls.map((call) => call.method)           ).toEqual(["thread/read", "thread/resume", "thread/turns/list"]) ;
+  expect(client.calls[1]?.params                           ).toEqual({ threadId: "thread-1", excludeTurns: true }         ) ;
+  expect(restored.threadId                                 ).toBe   ("thread-1"                                           ) ;
+  expect(restored.approvalPolicy                           ).toBe   ("never"                                              ) ;
+  expect(restored.sandbox                                  ).toBe   ("readOnly"                                           ) ;
+  expect(restored.events.every((event) => event.historical)).toBe   (true                                                 ) ;
   const view = project(events(restored.events));
-  expect(view.blocks).toContainEqual(expect.objectContaining({ kind: "user", text: "첫 요청", state: "accepted" }));
-  expect(view.blocks).toContainEqual(expect.objectContaining({ kind: "answer", text: "답변", streaming: false }));
-  expect(view.blocks).toContainEqual(expect.objectContaining({ kind: "explanation", text: "공개 요약" }));
-  expect(view.blocks).toContainEqual(expect.objectContaining({ kind: "files", running: false, status: "unknown" }));
-  expect(view.blocks.some((block) => block.kind === "approval")).toBe(false);
-  expect(JSON.stringify(restored)).not.toContain("PRIVATE_REASONING");
-  expect(JSON.stringify(restored)).not.toContain("PRIVATE_REQUEST");
-  expect(view.working).toBe(false);
-  expect(view.historyTruncated).toBe(false);
+  expect(view.blocks                                           )    .toContainEqual(expect.objectContaining({ kind: "user", text: "첫 요청", state: "accepted" })) ;
+  expect(view.blocks                                           )    .toContainEqual(expect.objectContaining({ kind: "answer", text: "답변", streaming: false })  ) ;
+  expect(view.blocks                                           )    .toContainEqual(expect.objectContaining({ kind: "explanation", text: "공개 요약" })          ) ;
+  expect(view.blocks                                           )    .toContainEqual(expect.objectContaining({ kind: "files", running: false, status: "unknown" })) ;
+  expect(view.blocks.some((block) => block.kind === "approval"))    .toBe          (false                                                                        ) ;
+  expect(JSON.stringify(restored)                              ).not.toContain     ("PRIVATE_REASONING"                                                          ) ;
+  expect(JSON.stringify(restored)                              ).not.toContain     ("PRIVATE_REQUEST"                                                            ) ;
+  expect(view.working                                          )    .toBe          (false                                                                        ) ;
+  expect(view.historyTruncated                                 )    .toBe          (false                                                                        ) ;
 });
 
 test("다른 프로젝트·다른 ID·실행 중 thread와 잘못된 응답은 재개하지 않는다", async () => {
@@ -100,10 +100,10 @@ test("긴 출력과 불완전한 이력은 절단을 표시하고 저장된 inPr
     { id: "files", type: "fileChange", status: "completed", changes: [{ path: "large.ts", diff: "y".repeat(40_000) }] }
   ] };
   const view = project(events(restoreConversationEvents("thread-1", [longTurn], false)));
-  expect(view.historyTruncated).toBe(true);
-  expect(view.working).toBe(false);
-  expect(view.turn).toBe("unknown");
-  expect(view.blocks).toContainEqual(expect.objectContaining({ kind: "command", running: false, status: "unknown", outputTruncated: true }));
+  expect(view.historyTruncated).toBe          (true                                                                                                  ) ;
+  expect(view.working         ).toBe          (false                                                                                                 ) ;
+  expect(view.turn            ).toBe          ("unknown"                                                                                             ) ;
+  expect(view.blocks          ).toContainEqual(expect.objectContaining({ kind: "command", running: false, status: "unknown", outputTruncated: true })) ;
   const changed = view.blocks.find((block) => block.kind === "files");
   if (changed?.kind !== "files") throw new Error("복원된 파일 변경이 없습니다.");
   expect(changed.changes[0]?.truncated).toBe(true);
@@ -120,8 +120,8 @@ for (const status of ["completed", "failed", "interrupted", "declined", "inProgr
         { id: "files", type: "fileChange", status, changes: [{ path: "a.ts" }] }
       ]
     }], true);
-    const view = project(events(restored));
-    const commandStatus = status === "inProgress" || status === "interrupted" ? "unknown" : status;
+    const view          = project(events(restored))                                                ;
+    const commandStatus = status === "inProgress" || status === "interrupted" ? "unknown" : status ;
     expect(view.blocks).toContainEqual(expect.objectContaining({ kind: "command", running: false, status: commandStatus, startedAt: null, endedAt: null }));
     const fileStatus = status === "completed" || status === "failed" ? status : "unknown";
     expect(view.blocks).toContainEqual(expect.objectContaining({ kind: "files", running: false, status: fileStatus }));
@@ -129,8 +129,8 @@ for (const status of ["completed", "failed", "interrupted", "declined", "inProgr
 }
 
 test("실제 stdio subprocess를 재시작한 뒤 같은 Native thread ID와 누적 대화를 다시 연다", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "www-conversations-"));
-  const store = join(directory, "history.json");
+  const directory = await mkdtemp(join(tmpdir(), "www-conversations-")) ;
+  const store     = join(directory, "history.json")                     ;
   const start = () => {
     const child = spawn(process.execPath, [join(import.meta.dir, "fixtures/conversations-app-server.ts")], { stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, WWW_CONVERSATION_FIXTURE_STORE: store } });
     return { child, client: new JsonRpcClient(child) };
@@ -143,8 +143,8 @@ test("실제 stdio subprocess를 재시작한 뒤 같은 Native thread ID와 누
     running.child.kill();
     running = start();
     await running.client.request("initialize", {});
-    const service = createConversationService(running.client, cwd);
-    const listed = await service.list();
+    const service = createConversationService(running.client, cwd) ;
+    const listed  = await service.list()                           ;
     expect(listed.threads[0]?.id).toBe("thread-persisted");
     const opened = await service.open("thread-persisted");
     expect(project(events(opened.events)).blocks).toContainEqual(expect.objectContaining({ kind: "user", text: "재시작 전 요청" }));
