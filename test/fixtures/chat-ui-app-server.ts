@@ -87,13 +87,18 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
   } else if (message.method === "turn/start") {
     const input = Array.isArray(params.input) ? object(params.input[0]) : {};
     const prompt = typeof input.text === "string" ? input.text : "";
-    if (prompt.includes("전송 실패 확인")) {
-      send({ jsonrpc: "2.0", id: message.id, error: { code: -32603, message: "합성 전송 실패" } });
-      continue;
-    }
     const threadId = String(params.threadId);
     if (!loadedThreads.has(threadId)) {
       send({ jsonrpc: "2.0", id: message.id, error: { code: -32603, message: "이 Native 프로세스에서 thread/resume 없이 turn/start를 받았습니다." } });
+      continue;
+    }
+    if (prompt === "경계 재연결 후 전송 실패 확인") {
+      notify("fixture/reconnectFailureReady", { threadId });
+      releaseAfter("fixture-reconnect-failure-release", () => send({ jsonrpc: "2.0", id: message.id, error: { code: -32603, message: "합성 재연결 전송 실패" } }));
+      continue;
+    }
+    if (prompt.includes("전송 실패 확인")) {
+      send({ jsonrpc: "2.0", id: message.id, error: { code: -32603, message: "합성 전송 실패" } });
       continue;
     }
     const turnId = "live-" + Date.now() + "-" + ++turnCounter;
@@ -123,6 +128,10 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
       notify("hook/started", { threadId, turnId, run });
       notify("hook/completed", { threadId, turnId, run: { ...run, status: "completed" } });
       finish("completed", "경계 유휴 종료 이전 답변");
+      setTimeout(() => process.exit(0), 160);
+    }
+    else if (prompt === "경계 재연결 실패 준비") {
+      finish("completed", "경계 재연결 실패 이전 답변");
       setTimeout(() => process.exit(0), 160);
     }
     else if (prompt === "경계 유휴 종료 후 이어가기") {

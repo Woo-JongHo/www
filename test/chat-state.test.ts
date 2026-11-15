@@ -5,6 +5,8 @@
  * @verifies RESP-CHAT-WORKSPACE
  */
 import { describe, expect, test } from "bun:test";
+import { readFile } from "node:fs/promises";
+import { runInNewContext } from "node:vm";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { ChatMessage } from "../src/chat-message";
@@ -192,4 +194,100 @@ describe("재연결 snapshot과 실제 renderer 대화 경계", () => {
     const colliding = reduce(empty(), [event(1, "account/updated", {}, 2)], [event(1, "account/updated", {}, 1)]);
     expect(colliding.events).toHaveLength(2);
   });
+});
+
+
+describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
+  async function sending() {
+    const source = await readFile(new URL("../src/renderer.tsx", import.meta.url), "utf8");
+    const part = (from: string, to: string) => {
+      const start = source.indexOf(from);
+      const end = source.indexOf(to, start);
+      if (start < 0 || end < 0) throw new Error(`renderer 경계 없음: ${from}`);
+      return source.slice(start, end);
+    };
+    let reject!: (failure: Error) => void;
+    const request = new Promise<void>((_resolve, fail) => { reject = fail; });
+    const selected = { workspaceKey: "workspace", selectionEpoch: 1, processEpoch: "process" };
+    const state = { prompt: "재연결 뒤 실패해도 보존할 초안", pending: null as string | null, sending: false, error: "", calls: 0 };
+    const code = `
+      const selectionRef = { current: selected };
+      const requireSelection = () => selectionRef.current;
+      ${part("  const matchesSelection =", "\n  const acceptResources =")}
+      const threadRef = { current: "thread" };
+      const threadId = "thread";
+      const prompt = state.prompt;
+      const sendingRef = { current: false };
+      const switchingRef = { current: false };
+      const sendGeneration = { current: 0 };
+      const transcriptState = { current: { events: [], reconnect: null } };
+      const liveConnection = { current: 1 };
+      const setEvents = () => {};
+      const setActivityState = () => {};
+      const setPrompt = value => { state.prompt = typeof value === "function" ? value(state.prompt) : value; };
+      const setPendingPrompt = value => { state.pending = value; };
+      const setSending = value => { state.sending = value; };
+      const setError = value => { state.error = value; };
+      const window = { www: { startTurn() { state.calls++; return request; } } };
+      const refreshConversations = () => {};
+      ${part("  const consumeEvents =", "\n  const listGeneration =")}
+      ${part("  const run = async () =>", "\n  const choose =")}
+      globalThis.rendererSend = { run, consumeEvents, select(value) { selectionRef.current = value; }, transcriptState };
+    `;
+    const renderer: {
+      run(): Promise<void>;
+      consumeEvents(snapshot: ScopedAppEvent[], live: ScopedAppEvent[]): void;
+      select(selection: typeof selected): void;
+      transcriptState: { current: ConversationEventState };
+    } = runInNewContext(new Bun.Transpiler({ loader: "ts" }).transformSync(code), { state, selected, request, reduceConversationEvents, MAX_PROMPT_CHARS });
+    const snapshot: ScopedAppEvent[] = [
+      { ...selected, connectionGeneration: 2, seq: 10, at: "", kind: "transport", method: "transport/status", params: { state: "connected" }, historical: true },
+      { ...selected, connectionGeneration: 2, seq: 11, at: "", kind: "notification", method: "thread/configured", params: { threadId: "thread" }, historical: true }
+    ];
+    const marker: ScopedAppEvent = { ...selected, connectionGeneration: 2, seq: 12, at: "", kind: "notification", method: "conversation/reconnected", params: { threadId: "thread", events: snapshot } };
+    return { renderer, state, selected, marker, reject };
+  }
+
+  test("같은 전송의 resume snapshot 수용 뒤 turn/start 실패도 초안을 복구하고 재전송하지 않는다", async () => {
+    const s = await sending();
+    const pending = s.renderer.run();
+    expect(s.state.prompt).toBe("");
+    s.renderer.consumeEvents([], [s.marker]);
+    expect(s.renderer.transcriptState.current.reconnect?.seq).toBe(12);
+    expect(s.state.sending).toBe(true);
+    expect(s.state.pending).toBe("재연결 뒤 실패해도 보존할 초안");
+    s.reject(new Error("재연결 뒤 합성 전송 실패"));
+    await pending;
+    expect(s.state.prompt).toBe("재연결 뒤 실패해도 보존할 초안");
+    expect(s.state.error).toContain("재연결 뒤 합성 전송 실패");
+    expect(s.state.pending).toBeNull();
+    expect(s.state.sending).toBe(false);
+    expect(s.state.calls).toBe(1);
+  });
+
+  test("복구 대기 중 작성한 새 초안은 늦은 같은 전송 실패로 덮지 않는다", async () => {
+    const s = await sending();
+    const pending = s.renderer.run();
+    s.renderer.consumeEvents([], [s.marker]);
+    s.state.prompt = "사용자가 새로 작성한 초안";
+    s.reject(new Error("늦은 실패"));
+    await pending;
+    expect(s.state.prompt).toBe("사용자가 새로 작성한 초안");
+    expect(s.state.sending).toBe(false);
+  });
+
+  for (const changed of [{ selectionEpoch: 2 }, { workspaceKey: "other" }, { processEpoch: "other" }]) {
+    test(`선택이 바뀐 뒤 이전 전송 실패는 새 초안을 덮지 않는다: ${JSON.stringify(changed)}`, async () => {
+      const s = await sending();
+      const pending = s.renderer.run();
+      s.renderer.consumeEvents([], [s.marker]);
+      s.renderer.select({ ...s.selected, ...changed });
+      s.state.prompt = "다른 선택의 초안";
+      s.reject(new Error("이전 선택의 늦은 실패"));
+      await pending;
+      expect(s.state.prompt).toBe("다른 선택의 초안");
+      expect(s.state.error).toBe("");
+      expect(s.state.calls).toBe(1);
+    });
+  }
 });

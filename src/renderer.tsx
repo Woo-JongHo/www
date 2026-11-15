@@ -361,12 +361,7 @@ function App() {
     if (!selected) return;
     const batch = reduceConversationEvents(reset ? { events: [], reconnect: null } : transcriptState.current, snapshot, live, selected, threadRef.current);
     transcriptState.current = batch;
-    if (batch.replaced) {
-      sendGeneration.current += 1;
-      sendingRef.current = false;
-      setSending(false);
-      setPendingPrompt(null);
-    }
+    // 같은 선택의 재연결은 진행 중 전송의 성공·실패 처리를 취소하지 않는다.
     liveConnection.current = Math.max(0, batch.reconnect?.connectionGeneration ?? 0, ...batch.events.map((event) => event.connectionGeneration));
     setEvents(batch.events);
     setActivityState((current) => updateActivitySidebarSnapshot(resetActivity || batch.replaced ? createActivitySidebarState() : current, batch));
