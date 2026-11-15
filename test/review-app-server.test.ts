@@ -12,6 +12,7 @@ import { executeAppServer, inspectAppServer, readonlyCommand } from '../scripts/
 import { loadReviewPolicy, runReview, validateReview, REVIEW_INLINE_LIMIT } from '../scripts/workflow/review.ts';
 import type { ReviewAuthority } from '../scripts/workflow/review.ts';
 import { captureSource, criteriaDigest } from '../scripts/workflow/evidence.ts';
+import { WORK_RECORD_JSON_LIMIT } from '../scripts/workflow/reports.ts';
 import type { CurrentWorkRecord } from '../scripts/workflow/types.ts';
 
 // 실제 stdin/stdout JSON-RPC subprocess다. 유료 모델이나 외부 네트워크는 호출하지 않는다.
@@ -112,7 +113,7 @@ async function setup(t: import('node:test').TestContext) {
   return repo;
 }
 function work(): CurrentWorkRecord {
-  return { schemaVersion: 2, id: 'work-fixture', title: '검토 fixture', kind: 'bug', areas: ['dev'], owner: 'dev', status: 'verifying', blockedReason: null, relations: [], criteria: [{ id: 'AC-1', description: '읽기 전용', required: true, result: 'unverified', evidence: [] }], workflow: { role: 'www-dev', requestId: 'request-fixture', requestHash: hash('기존 구현 요청'), authorization: { source: 'direct_user_request', requestHash: hash('기존 구현 요청'), implementation: true, writePaths: [], mutationSurfaces: [], verifierCommands: [], commit: false, publish: false }, inputs: ['input.ts'], nextAction: 'review', verifications: [], reviews: [] } };
+  return { schemaVersion: 2, id: 'work-11111111-1111-4111-8111-111111111111', title: '검토 fixture', kind: 'bug', areas: ['dev'], owner: 'dev', status: 'verifying', blockedReason: null, relations: [], criteria: [{ id: 'AC-1', description: '읽기 전용', required: true, result: 'unverified', evidence: [] }], workflow: { role: 'www-dev', requestId: 'request-fixture', requestHash: hash('기존 구현 요청'), authorization: { source: 'direct_user_request', requestHash: hash('기존 구현 요청'), implementation: true, writePaths: [], mutationSurfaces: [], verifierCommands: [], commit: false, publish: false }, inputs: ['input.ts'], nextAction: 'review', verifications: [], reviews: [] } };
 }
 async function options(repo: string) {
   const record = work(), source = await captureSource({ repo, inputs: record.workflow.inputs });
@@ -401,4 +402,29 @@ test('현재 작업의 기준/검증만 추가 선택하고 다른 작업의 원
   await fs.writeFile(path.join(repo, other), JSON.stringify({ ...opts.work, id: 'work-other' }));
   const source = await captureSource({ repo, inputs: ['input.ts', other] });
   await assert.rejects(runReview({ ...opts, source, workPath, inputPaths: [other], authority: { ...opts.authority, sourceDigest: source.digest } }));
+});
+
+test('원장 metadata의 8MiB 한도와 선택 bundle의 512KiB 한도를 분리한다', async t => {
+  const repo = await setup(t), opts = await options(repo), workPath = 'work-record.json';
+  await fs.mkdir(path.join(repo, 'agents/www'), { recursive: true });
+  await fs.copyFile(opts.policyInfo.path, path.join(repo, 'agents/www/review-policy.json'));
+  const largeWork = JSON.stringify({ ...opts.work, title: '보존된 metadata '.repeat(40_000) });
+  assert.ok(Buffer.byteLength(largeWork) > REVIEW_INLINE_LIMIT);
+  for (const content of [largeWork, largeWork + ' '.repeat(WORK_RECORD_JSON_LIMIT - Buffer.byteLength(largeWork))]) {
+    await fs.writeFile(path.join(repo, workPath), content);
+    const review = await runReview({ ...opts, workPath });
+    assert.equal(review.verdict, 'pass', JSON.stringify(review.execution));
+    assert.equal(validateReview({ repo, work: opts.work, policy: opts.policyInfo.policy, policyHash: opts.policyInfo.hash, review, sourceDigest: opts.source.digest, criteriaDigest: opts.criteriaDigest }).usable, true);
+    assert.equal(await fs.readFile(path.join(repo, workPath), 'utf8'), content);
+  }
+  const starts = await fs.readFile(path.join(repo, '.www/process-starts'), 'utf8');
+  await fs.writeFile(path.join(repo, workPath), largeWork + ' '.repeat(WORK_RECORD_JSON_LIMIT + 1 - Buffer.byteLength(largeWork)));
+  await assert.rejects(runReview({ ...opts, workPath }), /8 MiB/);
+  await fs.writeFile(path.join(repo, workPath), JSON.stringify({ ...opts.work, criteria: null }));
+  await assert.rejects(runReview({ ...opts, workPath }), /작업 기록/);
+  await fs.writeFile(path.join(repo, workPath), largeWork);
+  await fs.writeFile(path.join(repo, 'input.ts'), 'x'.repeat(REVIEW_INLINE_LIMIT + 1));
+  const source = await captureSource({ repo, inputs: ['input.ts'] });
+  await assert.rejects(runReview({ ...opts, source, workPath, authority: { ...opts.authority, sourceDigest: source.digest } }), /512KiB/);
+  assert.equal(await fs.readFile(path.join(repo, '.www/process-starts'), 'utf8'), starts);
 });

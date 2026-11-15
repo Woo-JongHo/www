@@ -11,6 +11,8 @@ import { executeAppServer, inspectAppServer, appServerInvocation, actualAppServe
 import type { AppServerReceipt } from "./review-app-server.ts";
 import { captureSource, criteriaDigest as digestCriteria } from "./evidence.ts";
 import { hashRequest } from "./route.ts";
+import { parseWorkRecord } from "./schema.ts";
+import { WORK_RECORD_JSON_LIMIT } from "./reports.ts";
 import type { CurrentWorkRecord } from "./types.ts";
 import { providerExecution, providerExecutionMatches } from "./adapters/windows-command.ts";
 
@@ -465,7 +467,7 @@ export async function runReview({ repo, source, criteriaDigest, policyInfo, inpu
     if (!workPath) return;
     const relative = path.relative(root, path.resolve(root, workPath));
     if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) throw new Error("작업 경로 오류");
-    const current: unknown = JSON.parse(readSelectedFile(root, relative.split(path.sep).join("/")).toString("utf8"));
+    const current = readWorkMetadata(root, relative.split(path.sep).join("/"));
     if (!work || !object(current) || current.id !== work.id || !object(current.workflow) || current.workflow.requestHash !== work.workflow.requestHash || current.workflow.nextAction !== "review" || !object(current.workflow.authorization) || current.workflow.authorization.source !== "direct_user_request" || current.workflow.authorization.requestHash !== work.workflow.requestHash || digestCriteria(current) !== criteriaDigest || (await loadReviewPolicy({ root })).hash !== policyInfo.hash) throw new Error("검토 중 작업 맥락 변경");
   };
   const selected = authority ? { provider: "openai", model: "gpt-6.1-terra", fallbackReason: null } : selectReviewer({ policy: policyInfo.policy });
@@ -550,7 +552,7 @@ function appPromptMatches(body: ReviewExecutionResult, work?: CurrentWorkRecord,
       assertSelectedPaths(body.inputPaths, source, body.inputSelection.workPath, work);
       if (body.inputSelection.workPath) {
         if (!repo || !work) return false;
-        const current: unknown = JSON.parse(readSelectedFile(realpathSync(repo), body.inputSelection.workPath).toString("utf8"));
+        const current = readWorkMetadata(realpathSync(repo), body.inputSelection.workPath);
         if (!object(current) || current.id !== work.id || !object(current.workflow) || current.workflow.requestHash !== work.workflow.requestHash) return false;
       }
       for (const name of body.inputPaths) {
@@ -596,7 +598,7 @@ async function prepareInputs(root: string, source: ReviewSource, inputPaths: str
   const relativeWork = workPath ? path.relative(root, path.resolve(root, workPath)).split(path.sep).join("/") : null;
   if (relativeWork) {
     if (relativeWork.startsWith("../") || path.isAbsolute(relativeWork)) throw new Error("현재 작업 경로 오류");
-    const current: unknown = JSON.parse(readSelectedFile(root, relativeWork).toString("utf8"));
+    const current = readWorkMetadata(root, relativeWork);
     if (!work || !object(current) || current.id !== work.id || !object(current.workflow) || current.workflow.requestHash !== work.workflow.requestHash) throw new Error("현재 작업 선택 맥락 불일치");
   }
   assertSelectedPaths(inputPaths, source, relativeWork, work);
@@ -615,9 +617,16 @@ async function prepareInputs(root: string, source: ReviewSource, inputPaths: str
   return { inputSnapshot, inputBundle, inputSelection: selectionFor(source, inputSnapshot, inputBundle, relativeWork) };
 }
 function readSelectedFile(root: string, name: string) {
+  return readBoundedFile(root, name, REVIEW_INLINE_LIMIT);
+}
+function readWorkMetadata(root: string, name: string) {
+  const bytes = readBoundedFile(root, name, WORK_RECORD_JSON_LIMIT);
+  return parseWorkRecord(JSON.parse(bytes.toString("utf8")), { baseDir: path.dirname(path.join(root, name)) });
+}
+function readBoundedFile(root: string, name: string, limit: number) {
   let current = root;
   for (const part of name.split("/")) { current = path.join(current, part); if (lstatSync(current).isSymbolicLink()) throw new Error("선택 경로 symlink 금지"); }
   const stat = lstatSync(current);
-  if (!stat.isFile() || stat.size > REVIEW_INLINE_LIMIT) throw new Error("선택은 512KiB 이하 일반 파일이어야 합니다.");
+  if (!stat.isFile() || stat.size > limit) throw new Error(limit === WORK_RECORD_JSON_LIMIT ? "작업 원장 metadata는 8 MiB 이하 일반 JSON 파일이어야 합니다." : "선택은 512KiB 이하 일반 파일이어야 합니다.");
   return readFileSync(current);
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "17e3012f0f8176446293d553bcea0f3a22a672c10a36efd1998af7417b304b33",
+  "digest"       : "fb752cb251b62a324bb9ea787ae3d61a65f0f9b57db7f89b41cb9da1be99bdc0",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -268,8 +268,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · review",
       "line"       : 1,
-      "lines"      : 624,
-      "digest"     : "d0bbb444238790ca2e48c01a438215c23019db0942333adbbd7f381980e20f6f",
+      "lines"      : 633,
+      "digest"     : "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
       "structureId": "arch.development.review"
     },
     {
@@ -1124,45 +1124,67 @@
     {
       "id"       : "scripts/workflow/review.ts:607",
       "from"     : "scripts/workflow/review.ts",
+      "to"       : "scripts/workflow/schema.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./schema.ts",
+      "line"     : 14,
+      "endLine"  : 14,
+      "statement": "import { parseWorkRecord } from \"./schema.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/review.ts:654",
+      "from"     : "scripts/workflow/review.ts",
+      "to"       : "scripts/workflow/reports.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./reports.ts",
+      "line"     : 15,
+      "endLine"  : 15,
+      "statement": "import { WORK_RECORD_JSON_LIMIT } from \"./reports.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/review.ts:709",
+      "from"     : "scripts/workflow/review.ts",
       "to"       : "scripts/workflow/types.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./types.ts",
-      "line"     : 14,
-      "endLine"  : 14,
+      "line"     : 16,
+      "endLine"  : 16,
       "statement": "import type { CurrentWorkRecord } from \"./types.ts\";"
     },
     {
-      "id"       : "scripts/workflow/review.ts:660",
+      "id"       : "scripts/workflow/review.ts:762",
       "from"     : "scripts/workflow/review.ts",
       "to"       : "scripts/workflow/adapters/windows-command.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./adapters/windows-command.ts",
-      "line"     : 15,
-      "endLine"  : 15,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import { providerExecution, providerExecutionMatches } from \"./adapters/windows-command.ts\";"
     },
     {
-      "id"       : "scripts/workflow/review.ts:755",
+      "id"       : "scripts/workflow/review.ts:857",
       "from"     : "scripts/workflow/review.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line"     : 18,
-      "endLine"  : 18,
+      "line"     : 20,
+      "endLine"  : 20,
       "statement": "import type { CapturedSource } from './evidence.ts';"
     },
     {
-      "id"       : "scripts/workflow/review.ts:893",
+      "id"       : "scripts/workflow/review.ts:995",
       "from"     : "scripts/workflow/review.ts",
       "to"       : "scripts/workflow/adapters/windows-command.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./adapters/windows-command.ts",
-      "line"     : 20,
-      "endLine"  : 20,
+      "line"     : 22,
+      "endLine"  : 22,
       "statement": "import type { ActualProviderInvocation } from './adapters/windows-command.ts';"
     },
     {
@@ -3406,7 +3428,9 @@
           "arch.development.evidence.verification",
           "arch.development.providers.invocation",
           "arch.development.routing",
-          "arch.development.records.protocol"
+          "arch.development.records.protocol",
+          "arch.development.records.validation",
+          "arch.development.reporting.storage"
         ]
       },
       {
@@ -5039,6 +5063,6 @@
         "line": 2
       }
     ],
-    "digest": "1d8164946bfa748f3a41416cbe86fbe042cd4b7d1aac1a291a925b5bd521bb27"
+    "digest": "114ce89ef8434a9d22eda0b7652333c8b6b7a1a57ba1c9189a379b8bbc1d9945"
   }
 }
