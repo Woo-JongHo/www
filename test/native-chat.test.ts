@@ -10,8 +10,11 @@ test("Native params는 기존 권한·입력을 보존하며 진행 설명과 de
   const thread = nativeThreadStartParams("/workspace/한글");
   expect(thread                                           ).toEqual  ({ cwd: "/workspace/한글", approvalPolicy: "on-request", sandbox: "workspace-write", developerInstructions: expect.any(String) }) ;
   expect(thread.developerInstructions                     ).toContain("자연스러운 한국어"                                                                                                            ) ;
+  expect(thread.developerInstructions                     ).toContain("첫 도구 호출 전에"                                                                                                            ) ;
+  expect(thread.developerInstructions                     ).toContain("공개 설명 없이 작업을 이어가지 말고"                                                                                           ) ;
   expect(thread.developerInstructions                     ).toContain("실패하거나 방향을 바꾸면"                                                                                                     ) ;
   expect(thread.developerInstructions                     ).toContain("매 도구 호출마다 상투적인 문장을 반복하지"                                                                                    ) ;
+  expect(thread.developerInstructions                     ).toContain("결론, 실제로 한 일, 확인한 결과, 남은 문제"                                                                                    ) ;
   expect(nativeTurnStartParams("thread", " 사용자 원문\n")).toEqual  ({ threadId: "thread", input: [{ type: "text", text: " 사용자 원문\n", text_elements: [] }], summary: "detailed" }              ) ;
 });
 
