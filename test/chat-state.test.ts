@@ -209,7 +209,7 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
     let reject!: (failure: Error) => void;
     const request = new Promise<void>((_resolve, fail) => { reject = fail; });
     const selected = { workspaceKey: "workspace", selectionEpoch: 1, processEpoch: "process" };
-    const state = { prompt: draft, pending: null as string | null, sending: false, error: "", calls: 0, sent: [] as string[] };
+    const state = { prompt: draft, pending: null as string | null, sending: false, error: "", calls: 0, sent: [] as string[], failed: null as string | null };
     const code = `
       const selectionRef = { current: selected };
       const requireSelection = () => selectionRef.current;
@@ -217,6 +217,9 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
       const threadRef = { current: "thread" };
       const threadId = "thread";
       const prompt = state.prompt;
+      const promptRef = { get current() { return state.prompt; }, set current(value) { state.prompt = value; } };
+      const failedDraftRef = { get current() { return state.failed; }, set current(value) { state.failed = value; } };
+      const setFailedDraft = value => { state.failed = value; };
       const sendingRef = { current: false };
       const switchingRef = { current: false };
       const sendGeneration = { current: 0 };
@@ -230,12 +233,15 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
       const setError = value => { state.error = value; };
       const window = { www: { startTurn(_selection, _threadId, text) { state.calls++; state.sent.push(text); return request; } } };
       const refreshConversations = () => {};
+      const promptInput = { current: null };
       ${part("  const consumeEvents =", "\n  const listGeneration =")}
       ${part("  const run = async () =>", "\n  const choose =")}
-      globalThis.rendererSend = { run, consumeEvents, select(value) { selectionRef.current = value; }, transcriptState };
+      globalThis.rendererSend = { run, consumeEvents, restoreFailedDraft, discardFailedDraft, select(value) { selectionRef.current = value; }, transcriptState };
     `;
     const renderer: {
       run(): Promise<void>;
+      restoreFailedDraft(): void;
+      discardFailedDraft(): void;
       consumeEvents(snapshot: ScopedAppEvent[], live: ScopedAppEvent[]): void;
       select(selection: typeof selected): void;
       transcriptState: { current: ConversationEventState };
@@ -275,6 +281,7 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
     s.reject(new Error("공백 초안 전송 실패"));
     await pending;
     expect(s.state.prompt).toBe(draft);
+    expect(s.state.failed).toBeNull();
     expect(s.state.sending).toBe(false);
     expect(s.state.calls).toBe(1);
   });
@@ -290,6 +297,40 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
     expect(s.state.sending).toBe(false);
   });
 
+  test("새 초안과 충돌한 실패 원문은 공백·줄바꿈 그대로 별도로 보존한다", async () => {
+    const draft = "  실패한 원문\n";
+    const s = await sending(draft);
+    const pending = s.renderer.run();
+    s.renderer.consumeEvents([], [s.marker]);
+    s.state.prompt = "  새 초안\n";
+    s.reject(new Error("충돌 실패"));
+    await pending;
+    expect(s.state.prompt).toBe("  새 초안\n");
+    expect(s.state.failed).toBe(draft);
+    await s.renderer.run();
+    expect(s.state.calls).toBe(1);
+    s.renderer.restoreFailedDraft();
+    expect(s.state.prompt).toBe("  새 초안\n");
+    expect(s.state.failed).toBe(draft);
+    s.state.prompt = "";
+    s.renderer.restoreFailedDraft();
+    expect(s.state.prompt).toBe(draft);
+    expect(s.state.failed).toBeNull();
+    expect(s.state.calls).toBe(1);
+  });
+
+  test("실패한 원문을 명시적으로 버려도 새 초안은 유지하고 자동 전송하지 않는다", async () => {
+    const s = await sending("  실패 원문\n");
+    const pending = s.renderer.run();
+    s.state.prompt = "새 초안";
+    s.reject(new Error("충돌 실패"));
+    await pending;
+    s.renderer.discardFailedDraft();
+    expect(s.state.failed).toBeNull();
+    expect(s.state.prompt).toBe("새 초안");
+    expect(s.state.calls).toBe(1);
+  });
+
   for (const changed of [{ selectionEpoch: 2 }, { workspaceKey: "other" }, { processEpoch: "other" }]) {
     test(`선택이 바뀐 뒤 이전 전송 실패는 새 초안을 덮지 않는다: ${JSON.stringify(changed)}`, async () => {
       const s = await sending();
@@ -301,6 +342,7 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
       await pending;
       expect(s.state.prompt).toBe("다른 선택의 초안");
       expect(s.state.error).toBe("");
+      expect(s.state.failed).toBeNull();
       expect(s.state.calls).toBe(1);
     });
   }

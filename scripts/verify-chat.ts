@@ -352,6 +352,31 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
   checks.push("실제 idle 종료→read/resume→snapshot 수용 뒤 turn/start 오류에서도 초안 보존·자동 재전송 0회");
   await session.input("");
 
+  await fs.rm(path.join(workspace, "fixture-reconnect-failure-release"), { force: true });
+  const conflictBefore = await readCalls();
+  const conflictSeq = Math.max(0, ...(await readEvents()).map((event) => Number(event.seq)));
+  const newDraft = "  전송 중 작성한 새 초안\n";
+  await submit(failedDraft);
+  await session.wait("(async()=>{const selected=await window.www.workspace();return (await window.www.events(selected)).some(event=>event.method==='fixture/reconnectFailureReady' && event.seq>" + conflictSeq + ");})()", "충돌 검사 요청이 실제 Native 오류 gate에서 대기함");
+  await session.input(newDraft);
+  await fs.writeFile(path.join(workspace, "fixture-reconnect-failure-release"), "release\n");
+  await session.wait("document.querySelector('[data-testid=\"failed-request-text\"]')?.textContent===" + JSON.stringify(failedDraft) + " && document.querySelector('[data-testid=\"prompt-input\"]').value===" + JSON.stringify(newDraft), "실제 전송 실패 원문과 새 초안을 공백·줄바꿈까지 별도로 보존");
+  await session.wait("document.querySelector('[data-testid=\"restore-failed-request\"]').disabled && document.querySelector('[data-testid=\"send-button\"]').disabled && document.querySelector('[data-testid=\"new-conversation\"]').disabled && document.querySelector('button[aria-label=\"프로젝트 폴더 선택\"]').disabled && document.querySelector('[data-testid=\"failed-request\"]').innerText.includes('대화·프로젝트 전환이 일시 중지')", "충돌 원문을 해결하기 전 중복 전송·선택 전환을 막고 이유와 해결 버튼 표시");
+  await session.screenshot("reconnect-draft-conflict");
+  await session.click('[data-testid="reports-nav"]');
+  await session.wait("document.querySelector('main.work').hidden && document.querySelector('.workspace-nav button[aria-label=\"대화\"]').innerText.includes('실패한 요청 확인')", "리포트 화면에서도 실패 원문을 확인할 대화 복귀 안내 표시");
+  await session.click('.workspace-nav button[aria-label="대화"]');
+  await session.wait("document.querySelector('[data-testid=\"failed-request\"]').getClientRects().length>0", "화면 전환 뒤에도 대화 탭으로 돌아와 원문 해결 가능");
+  await session.input("");
+  await session.wait("!document.querySelector('[data-testid=\"restore-failed-request\"]').disabled", "새 초안을 비운 뒤 원문 복원 허용");
+  await session.click('[data-testid="restore-failed-request"]');
+  await session.wait("!document.querySelector('[data-testid=\"failed-request\"]') && document.querySelector('[data-testid=\"prompt-input\"]').value===" + JSON.stringify(failedDraft) + " && !document.querySelector('[data-testid=\"send-button\"]').disabled", "명시적 원문 복원은 입력창만 채우고 충돌 보관을 해제");
+  const conflictTurns = (await readCalls()).slice(conflictBefore.length).filter((call) => call.method === "turn/start");
+  if (conflictTurns.length !== 1) throw Error("실패 원문 보관·복원 또는 화면 전환 중 자동 전송이 발생했습니다.");
+  await fs.writeFile(path.join(directory, "reconnect-draft-conflict.json"), JSON.stringify({ failedDraft, newDraft, bothPreserved: true, explicitRestoreOnly: true, viewReturnAvailable: true, turnStartCount: conflictTurns.length }, null, 2));
+  checks.push("전송 중 새 초안과 실패 원문을 따로 보존하고 명시적 복원만 허용·자동 전송 0회");
+  await session.input("");
+
   const activeBefore = await readCalls();
   await submit("경계 실행 중 종료");
   await session.wait("(async()=>{const selected=await window.www.workspace();const events=await window.www.events(selected);const start=events.findLast(event=>event.method==='turn/userPrompt' && event.params?.text==='경계 실행 중 종료');return start && events.some(event=>event.method==='transport/closed' && event.seq>start.seq);})()", "실행 중 Native subprocess 종료 수신");
