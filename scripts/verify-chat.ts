@@ -338,6 +338,7 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
   await idle("실행 중 단절 결과를 확인한 뒤 수동 요청 가능");
   await session.click('[data-testid="conversation-item"][data-thread-id="history-b"]');
   await session.wait("document.querySelector('[data-thread-id=\"history-b\"]')?.getAttribute('aria-current')==='true' && document.querySelector('.transcript')?.textContent.includes('두 번째 저장 대화')", "미확정 턴 뒤 다른 대화를 실제 UI로 명시적으로 열기");
+  await session.wait("(() => { const button=document.querySelector('[data-testid=\"conversation-item\"][data-thread-id=\"history-a\"]'); return button instanceof HTMLButtonElement && !button.disabled && button.getClientRects().length>0; })()", "목록 갱신 뒤 원래 대화 A 버튼 표시·활성 대기");
   await session.click('[data-testid="conversation-item"][data-thread-id="history-a"]');
   await session.wait("document.querySelector('[data-thread-id=\"history-a\"]')?.getAttribute('aria-current')==='true' && document.querySelector('.transcript')?.textContent.includes('경계 유휴 종료 이전 답변') && !document.querySelector('[data-testid=\"new-conversation\"]').disabled", "원래 Native 대화를 명시적으로 다시 열어 수동 복구 허용");
   await submit("경계 실행 종료 후 수동 후속");
