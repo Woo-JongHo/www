@@ -4,6 +4,7 @@
 import { describe, expect, test } from "bun:test";
 import {
   ActivitySnapshotBoundary,
+  consumeActivitySidebarPulses,
   createActivitySidebarState,
   parseHooksListResponse,
   parseSkillsListResponse,
@@ -45,6 +46,108 @@ function pulseRows(result: ReturnType<typeof projectActivitySidebar>): { seq: nu
 }
 
 describe("Skills와 Hook 활동 사이드바 투영", () => {
+  test("이미 watermark 100이어도 snapshot에 없던 큐 전용 live 98·99는 한 번 반응한다", () => {
+    const current = updateActivitySidebarState(createActivitySidebarState(), [event(100, "account/updated", {})]);
+    const live = [skillRead(98, "queued-read"), hookStart(99, "queued-hook")];
+    const batch = { snapshot: [event(101, "thread/configured", { threadId: "thread" })], live };
+    const next = updateActivitySidebarSnapshot(current, batch);
+    expect(next.pulses.map((pulse) => pulse.seq)).toEqual([98, 99]);
+    expect(next.processedThrough).toBe(101);
+    expect(projectActivitySidebarState(next, "thread").skills[0]?.lastActivitySeq).toBe(98);
+    expect(projectActivitySidebarState(next, "thread").hooks[0]?.lastActivitySeq).toBe(99);
+    expect(updateActivitySidebarSnapshot(next, batch).pulses).toEqual(next.pulses);
+    expect(current.pulses).toEqual([]);
+    expect(current.processedThrough).toBe(100);
+  });
+
+  test("watermark 아래 snapshot은 관측만 복원하고 이미 알려진 동일 seq 사건은 재반응하지 않는다", () => {
+    const known = hookStart(100, "known-seq");
+    const current = updateActivitySidebarState(createActivitySidebarState(), [known]);
+    const restored = hookStart(99, "restored-hook", { eventName: "stop", displayOrder: 1 });
+    const next = updateActivitySidebarSnapshot(current, { snapshot: [restored], live: [restored, known] });
+    expect(next.pulses).toEqual([]);
+    expect(projectActivitySidebarState(next, "thread").hooks.find((row) => row.label === "stop")?.lastActivitySeq).toBe(99);
+    expect(next.processedThrough).toBe(100);
+    const replay = updateActivitySidebarSnapshot(next, { snapshot: [], live: [restored] });
+    expect(replay.pulses).toEqual([]);
+  });
+
+  test("늦은 큐 활동은 최근 관측과 완료된 handler를 되감지 않고 이미 수신한 시작은 재생하지 않는다", () => {
+    const current = updateActivitySidebarState(createActivitySidebarState(), [
+      hookStart(97, "completed"),
+      event(98, "hook/completed", { threadId: "thread", turnId: "turn", run: { id: "completed" } }),
+      hookStart(100, "latest"),
+    ], { emitPulses: true });
+    const next = updateActivitySidebarSnapshot(current, { snapshot: [], live: [
+      hookStart(97, "completed"), hookStart(99, "earlier"),
+    ] });
+    expect(next.pulses.map((pulse) => pulse.seq)).toEqual([97, 100, 99]);
+    expect(projectActivitySidebarState(next, "thread").hooks[0]?.lastActivitySeq).toBe(100);
+    expect(next.hookLifecycles.flatMap((bucket) => [...bucket.values()]).filter((run) => run.completed)).toHaveLength(1);
+    expect(current.pulses.map((pulse) => pulse.seq)).toEqual([97, 100]);
+  });
+
+  test("낮은 seq의 미수신 Hook 시작·완료는 이미 더 나중인 handler 상태를 다시 열거나 닫지 않는다", () => {
+    const running = updateActivitySidebarState(createActivitySidebarState(), [hookStart(100, "handler")], { emitPulses: true });
+    const lateCompletion = updateActivitySidebarSnapshot(running, { snapshot: [], live: [
+      event(99, "hook/completed", { threadId: "thread", turnId: "turn", run: { id: "handler" } }),
+      hookStart(101, "handler"),
+    ] });
+    expect(lateCompletion.pulses.map((pulse) => pulse.seq)).toEqual([100]);
+    expect(lateCompletion.hookLifecycles.flatMap((bucket) => [...bucket.values()])[0]?.completed).toBe(false);
+
+    const closed = updateActivitySidebarState(createActivitySidebarState(), [
+      hookStart(97, "handler"),
+      event(100, "hook/completed", { threadId: "thread", turnId: "turn", run: { id: "handler" } }),
+    ], { emitPulses: true });
+    const lateStart = updateActivitySidebarSnapshot(closed, { snapshot: [], live: [hookStart(99, "handler")] });
+    expect(lateStart.pulses.map((pulse) => pulse.seq)).toEqual([97]);
+    expect(lateStart.hookLifecycles.flatMap((bucket) => [...bucket.values()])[0]?.completed).toBe(true);
+    expect(closed.hookLifecycles).toBe(lateStart.hookLifecycles);
+    expect(running.pulses.map((pulse) => pulse.seq)).toEqual([100]);
+  });
+
+  test("UI pulse cursor는 seq 100 뒤 새 99를 수용하고 리렌더·대화 재진입은 재생하지 않는다", () => {
+    const seen = new Set<string>();
+    const current = updateActivitySidebarState(createActivitySidebarState(), [hookStart(100, "first")], { emitPulses: true });
+    expect(consumeActivitySidebarPulses(projectActivitySidebarState(current, "thread").pulses, seen).map((pulse) => pulse.seq)).toEqual([100]);
+    const next = updateActivitySidebarSnapshot(current, { snapshot: [], live: [hookStart(99, "late")] });
+    const pulses = projectActivitySidebarState(next, "thread").pulses;
+    expect(consumeActivitySidebarPulses(pulses, seen).map((pulse) => pulse.seq)).toEqual([99]);
+    expect(consumeActivitySidebarPulses(pulses, seen)).toEqual([]);
+    expect(consumeActivitySidebarPulses([], seen)).toEqual([]);
+    expect(consumeActivitySidebarPulses(pulses, seen)).toEqual([]);
+  });
+
+  test("UI cursor는 전역 pulse 보존 상한 512개로 제한하고 다른 대화에 다녀와도 과거 pulse를 재생하지 않는다", () => {
+    const seen = new Set<string>();
+    let state = createActivitySidebarState();
+    for (let seq = 1; seq <= 600; seq += 1) {
+      const threadId = seq % 2 ? "A" : "B";
+      const value = hookStart(seq, `handler-${seq}`);
+      state = updateActivitySidebarState(state, [{ ...value, params: { ...value.params as Record<string, unknown>, threadId } }], { emitPulses: true });
+      expect(consumeActivitySidebarPulses(projectActivitySidebarState(state, threadId).pulses, seen, state.pulses).map((pulse) => pulse.seq)).toEqual([seq]);
+      expect(seen.size).toBeLessThanOrEqual(512);
+    }
+    for (const thread of ["A", "B", "A"]) expect(consumeActivitySidebarPulses(projectActivitySidebarState(state, thread).pulses, seen, state.pulses)).toEqual([]);
+    expect(state.pulses).toHaveLength(512);
+    expect(seen.size).toBe(512);
+  });
+
+  test("UI는 선택하지 않았던 대화의 보존 pulse를 재생하지 않고 그 대화의 새 낮은 seq만 반응한다", () => {
+    const seen = new Set<string>();
+    const start = (seq: number, id: string, threadId: string): AppEvent => {
+      const value = hookStart(seq, id);
+      return { ...value, params: { ...value.params as Record<string, unknown>, threadId } };
+    };
+    const current = updateActivitySidebarState(createActivitySidebarState(), [start(99, "old-B", "B"), start(100, "A", "A")], { emitPulses: true });
+    expect(consumeActivitySidebarPulses(projectActivitySidebarState(current, "A").pulses, seen, current.pulses).map((pulse) => pulse.seq)).toEqual([100]);
+    expect(consumeActivitySidebarPulses(projectActivitySidebarState(current, "B").pulses, seen, current.pulses)).toEqual([]);
+    const next = updateActivitySidebarSnapshot(current, { snapshot: [], live: [start(98, "new-B", "B")] });
+    expect(consumeActivitySidebarPulses(projectActivitySidebarState(next, "B").pulses, seen, next.pulses).map((pulse) => pulse.seq)).toEqual([98]);
+    expect(consumeActivitySidebarPulses(projectActivitySidebarState(next, "A").pulses, seen, next.pulses)).toEqual([]);
+  });
+
   test("개별 Hook 완료 없이 turn이 끝나도 다른 turn의 첫 시작은 반응하고 이전 turn은 되돌아오지 않는다", () => {
     for (const [startedAt, laterTime] of [[undefined, undefined], [100, 101], ["2026-11-12T00:00:00Z", "2026-11-12T00:00:01Z"]]) {
       const start = (seq: number, turnId: string, time = startedAt): AppEvent => {

@@ -3,7 +3,7 @@
  * @implements RESP-CHAT-ACTIVITY-VIEW
  */
 import { useEffect, useMemo, useRef, useState } from "react";
-import { projectActivitySidebar, projectActivitySidebarState, type ActivitySidebarRow, type ActivitySidebarState } from "./activity-sidebar";
+import { consumeActivitySidebarPulses, projectActivitySidebar, projectActivitySidebarState, type ActivitySidebarRow, type ActivitySidebarState } from "./activity-sidebar";
 import type { AppEvent, ResourceSnapshot, ResourceObservation } from "./shared";
 import { projectNativeActivity, type ActivityEntry, type ActivityStatus, type ActivityTurn, type NativeActivityProjection, type UsageBreakdown } from "./native-activity";
 import { WWW_ARTIFACTS, type WwwArtifact } from "./www-activity";
@@ -59,19 +59,12 @@ function ActivityInventory({ activityState, events, threadId, hidden = false, on
   const projection        = useMemo(() => activityState ? projectActivitySidebarState(activityState, effectiveThreadId) : projectActivitySidebar(events, effectiveThreadId), [activityState, effectiveThreadId]);
   const [reactions, setReactions]       = useState<ReadonlyMap<string, ReactionPhase>>(() => new Map());
   const [announcement, setAnnouncement] = useState("");
-  const processed = useRef<{ seq: number; ids: Set<string> }>({ seq: 0, ids: new Set() });
+  const processed = useRef(new Set<string>());
   const timers    = useRef(new Map<string, number>());
 
   useEffect(() => {
     const next = new Set<string>();
-    for (const pulse of projection.pulses) {
-      if (pulse.seq < processed.current.seq) continue;
-      if (pulse.seq > processed.current.seq) {
-        processed.current.seq = pulse.seq;
-        processed.current.ids.clear();
-      }
-      if (processed.current.ids.has(pulse.id)) continue;
-      processed.current.ids.add(pulse.id);
+    for (const pulse of consumeActivitySidebarPulses(projection.pulses, processed.current, activityState?.pulses)) {
       if (!hidden) next.add(pulse.rowId);
     }
     if (next.size === 0) return;

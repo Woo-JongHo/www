@@ -93,6 +93,7 @@ interface ActivityObservation {
 }
 
 interface HookLifecycle {
+  seq: number;
   turnId: string;
   startedAt: number | null;
   started: boolean;
@@ -125,6 +126,8 @@ export interface ActivitySidebarUpdateOptions {
   emitPulses?      : boolean;
   /** true이면 입력을 복원 snapshot으로 보고 절단 여부를 계산한다. */
   historySnapshot? : boolean;
+  /** snapshot 경계의 낮은 seq도 정확한 활동 key와 handler 전이 순서로 판별한다. */
+  reconcileEarlierSequence? : boolean;
 }
 
 const MAX_EVENTS = 2_000;
@@ -132,6 +135,22 @@ const MAX_PULSES = 512;
 const MAX_OBSERVATIONS = 512;
 const MAX_THREAD_CATALOGS = 32;
 const DEDUPE_BUCKETS = 64;
+
+/** UI의 수신 cursor. 전송 seq와 독립적으로, 보존된 pulse 상한만큼의 식별자만 기억한다. */
+export function consumeActivitySidebarPulses(pulses: readonly ActivitySidebarPulse[], seen: Set<string>, retained?: ActivitySidebarState["pulses"]): ActivitySidebarPulse[] {
+  const fresh = pulses.filter((pulse) => !seen.has(pulse.id));
+  // 다른 thread의 보존 pulse도 통과한 것으로 표시해 선택 전환으로 과거 반응을 재생하지 않는다.
+  const ids = retained ? retained.map(activityPulseId) : pulses.map((pulse) => pulse.id);
+  for (const id of ids) {
+    if (seen.has(id)) continue;
+    seen.add(id);
+    if (seen.size > MAX_PULSES) {
+      const oldest = seen.values().next().value;
+      if (oldest !== undefined) seen.delete(oldest);
+    }
+  }
+  return fresh;
+}
 
 // 해시는 버킷을 고르는 데만 쓴다. 중복 판정은 버킷 안의 실제 문자열을 비교하므로 확률적 누락이 없다.
 // 각 업데이트는 바뀐 버킷만 복사해 React 이전 state를 변경하지 않는다.
@@ -406,6 +425,10 @@ function observationKey(threadId: string, kind: ActivitySidebarKind, identity: s
   return `${threadId}\u0000${kind}\u0000${identity}`;
 }
 
+function activityPulseId(pulse: ActivityObservation): string {
+  return `${pulse.threadId}\u0000${pulse.kind}\u0000${pulse.identity}\u0000${pulse.seq}`;
+}
+
 function hookTuple(eventName: unknown, sourcePath: unknown, displayOrder: unknown, handlerType: unknown): string {
   return [text(eventName), normalizedPath(sourcePath), String(displayOrder), text(handlerType)].join("\u0000");
 }
@@ -459,7 +482,8 @@ export function createActivitySidebarState(): ActivitySidebarState {
 }
 
 function observe(state: ActivitySidebarState, observation: ActivityObservation, emitPulse: boolean): void {
-  setRecent(state.observations, observationKey(observation.threadId, observation.kind, observation.identity), observation, MAX_OBSERVATIONS);
+  const key = observationKey(observation.threadId, observation.kind, observation.identity);
+  if ((state.observations.get(key)?.seq ?? -1) < observation.seq) setRecent(state.observations, key, observation, MAX_OBSERVATIONS);
   if (emitPulse) state.pulses.push(observation);
 }
 
@@ -508,9 +532,10 @@ export function updateActivitySidebarState(current: ActivitySidebarState, events
   // handler ID는 재사용된다. 다른 turn의 첫 시작은 개별 Hook 완료 없이도 새 실행의 근거다.
   // 같은 turn에서 metadata가 완전히 같은 완료→시작은 재전송과 새 호출을 구분할 수 없다.
   // 완료 선관측은 활성 Hook과 별도로 보존하고, 복원은 이미 관측한 live 실행을 되감지 않는다.
-  const hookLifecycle = (key: string, run: Record<string, unknown>, turnId: string, started: boolean, historical: boolean): boolean => {
+  const hookLifecycle = (key: string, run: Record<string, unknown>, turnId: string, started: boolean, historical: boolean, seq: number): boolean => {
     const index = dedupeBucket(key);
     const previous = state.hookLifecycles[index]!.get(key);
+    if (previous && seq <= previous.seq) return false;
     const retiredTurn = (id: string) => JSON.stringify(["retired-hook-turn", key, id]);
     if (previous && turnId) {
       const retiredKey = retiredTurn(turnId);
@@ -533,7 +558,7 @@ export function updateActivitySidebarState(current: ActivitySidebarState, events
           if (completion && ((historical && !completion.historical) || !(startedAt !== null && completion.startedAt !== null && startedAt > completion.startedAt))) return false;
         } else if (!newerStart) {
           if (!completion || !(historical && !completion.historical) && startedAt !== null && (completion.startedAt === null || startedAt > completion.startedAt)) {
-            writeHookLifecycle(index, completionKey, { turnId, startedAt, started: false, completed: true, historical });
+            writeHookLifecycle(index, completionKey, { seq, turnId, startedAt, started: false, completed: true, historical });
           }
           return false;
         }
@@ -541,6 +566,7 @@ export function updateActivitySidebarState(current: ActivitySidebarState, events
     }
     if (otherTurn) remember(retiredTurn(previous.turnId));
     writeHookLifecycle(index, key, {
+      seq,
       turnId: turnId || previous?.turnId || "",
       startedAt: startedAt ?? previous?.startedAt ?? null,
       started: started || (!newerStart && previous?.started === true),
@@ -580,13 +606,13 @@ export function updateActivitySidebarState(current: ActivitySidebarState, events
     if (hooks?.scope === "workspace" && newer(state.workspaceHooks, hooks.snapshot)) state.workspaceHooks = hooks.snapshot;
     if (hooks?.scope === "thread" && hooks.threadId && newer(state.threadHooks.get(hooks.threadId), hooks.snapshot)) setRecent(state.threadHooks, hooks.threadId, hooks.snapshot, MAX_THREAD_CATALOGS);
 
-    if (event.seq <= state.processedThrough) continue;
-    state.processedThrough = event.seq;
+    if (event.seq <= state.processedThrough && options.reconcileEarlierSequence !== true) continue;
+    state.processedThrough = Math.max(state.processedThrough, event.seq);
 
     const threadId = text(params.threadId);
     if (event.method === "hook/completed") {
       const runId = text(record(params.run).id);
-      if (threadId && runId) hookLifecycle(`hook\u0000${threadId}\u0000${runId}`, record(params.run), text(params.turnId), false, options.historySnapshot === true || event.historical === true);
+      if (threadId && runId) hookLifecycle(`hook\u0000${threadId}\u0000${runId}`, record(params.run), text(params.turnId), false, options.historySnapshot === true || event.historical === true, event.seq);
       continue;
     }
     if (event.method === "item/started" && threadId) {
@@ -617,7 +643,7 @@ export function updateActivitySidebarState(current: ActivitySidebarState, events
       || run.executionMode !== "sync"
       || run.status !== "running"
     ) continue;
-    if (!hookLifecycle(`hook\u0000${runKey}`, run, text(params.turnId), true, options.historySnapshot === true || event.historical === true)) continue;
+    if (!hookLifecycle(`hook\u0000${runKey}`, run, text(params.turnId), true, options.historySnapshot === true || event.historical === true, event.seq)) continue;
     const identity = hookTuple(run.eventName, run.sourcePath, run.displayOrder, run.handlerType);
     observe(state, { threadId, kind: "hook", identity, at: event.at, seq: event.seq, label: "시작" }, options.emitPulses === true);
   }
@@ -636,7 +662,7 @@ export function updateActivitySidebarSnapshot(current: ActivitySidebarState, bat
   }
   for (const event of ordered) {
     const emitPulses = !snapshotSequences.has(event.seq) && event.historical !== true;
-    state = updateActivitySidebarState(state, [event], { emitPulses, historySnapshot: snapshotSequences.has(event.seq) });
+    state = updateActivitySidebarState(state, [event], { emitPulses, historySnapshot: snapshotSequences.has(event.seq), reconcileEarlierSequence: true });
   }
   return state;
 }
@@ -705,7 +731,7 @@ export function projectActivitySidebarState(state: ActivitySidebarState, selecte
     applyObservation(row, observation);
   }
   const pulses = state.pulses.filter((pulse) => pulse.threadId === selectedThreadId).map((pulse) => {
-    const id = `${pulse.threadId}\u0000${pulse.kind}\u0000${pulse.identity}\u0000${pulse.seq}`;
+    const id = activityPulseId(pulse);
     if (pulse.kind === "skill") return { id, seq: pulse.seq, rowId: skillsByPath.get(pulse.identity)?.id ?? `skill:${pulse.identity}` };
     const matches = hookRowsByTuple.get(pulse.identity) ?? [];
     const match = matches.length === 1 ? matches.at(0) : null;

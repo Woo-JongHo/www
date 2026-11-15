@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "e261aef127688e0eed6652045ec4b78a72f987f54f55f1acf4309941b94fd4ae",
+  "digest"       : "0ff66d46cc68556636baf0efd98257892f66435cdfbd463904d39d356c714dde",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -356,8 +356,8 @@
       "layer"      : "model",
       "role"       : "앱 모듈 · activity-sidebar",
       "line"       : 1,
-      "lines"      : 729,
-      "digest"     : "69f8041e91c6544d9633b16b88898c9076b4ebfb21baab61ec824aa98495da8a",
+      "lines"      : 755,
+      "digest"     : "373e57bce951355c6f827cfd93fa13ff851130cf4f50ab1ae472d3ca1ebd8270",
       "structureId": "arch.chat.activity.catalog"
     },
     {
@@ -510,8 +510,8 @@
       "layer"      : "presentation",
       "role"       : "앱 모듈 · native-activity-view",
       "line"       : 1,
-      "lines"      : 369,
-      "digest"     : "ce9ecfe6e7ddf15691a5054ed620400a59f6d01f488313d84211187df70c8fc5",
+      "lines"      : 362,
+      "digest"     : "4a039da1b9335bb738daa7949c32c5736af43b7a4e61d253995b50196d3351e0",
       "structureId": "arch.chat.activity.view"
     },
     {
@@ -1911,10 +1911,10 @@
       "specifier": "./activity-sidebar",
       "line"     : 6,
       "endLine"  : 6,
-      "statement": "import { projectActivitySidebar, projectActivitySidebarState, type ActivitySidebarRow, type ActivitySidebarState } from \"./activity-sidebar\";"
+      "statement": "import { consumeActivitySidebarPulses, projectActivitySidebar, projectActivitySidebarState, type ActivitySidebarRow, type ActivitySidebarState } from \"./activity-sidebar\";"
     },
     {
-      "id"       : "src/native-activity-view.tsx:292",
+      "id"       : "src/native-activity-view.tsx:322",
       "from"     : "src/native-activity-view.tsx",
       "to"       : "src/shared.ts",
       "mode"     : "type",
@@ -1925,7 +1925,7 @@
       "statement": "import type { AppEvent, ResourceSnapshot, ResourceObservation } from \"./shared\";"
     },
     {
-      "id"       : "src/native-activity-view.tsx:373",
+      "id"       : "src/native-activity-view.tsx:403",
       "from"     : "src/native-activity-view.tsx",
       "to"       : "src/native-activity.ts",
       "mode"     : "mixed",
@@ -1936,7 +1936,7 @@
       "statement": "import { projectNativeActivity, type ActivityEntry, type ActivityStatus, type ActivityTurn, type NativeActivityProjection, type UsageBreakdown } from \"./native-activity\";"
     },
     {
-      "id"       : "src/native-activity-view.tsx:544",
+      "id"       : "src/native-activity-view.tsx:574",
       "from"     : "src/native-activity-view.tsx",
       "to"       : "src/www-activity.ts",
       "mode"     : "mixed",
@@ -5033,6 +5033,6 @@
         "line": 2
       }
     ],
-    "digest": "8341ebc16f483b3bd0370899d385145b9f4509bc2304f17ab0660c169b40d9c1"
+    "digest": "2a2c289714fb29a103232dc9870840c3494458fa015706de89d92805dd72c825"
   }
 }
