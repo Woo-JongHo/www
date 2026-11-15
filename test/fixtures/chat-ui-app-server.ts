@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 // 실제 Electron IPC·stdio 경계를 검사하는 합성 Native. 모델을 실행하지 않는다.
 import { createInterface } from "node:readline";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 type Data = Record<string, unknown>;
@@ -22,15 +22,28 @@ let histories: Record<string, unknown[]> = {
 try { histories = JSON.parse(readFileSync(storePath, "utf8")); } catch { writeFileSync(storePath, JSON.stringify(histories)); }
 let turnCounter = 0;
 let pending: { threadId: string; turnId: string; prompt: string } | null = null;
+let boundaryApproval = 0;
+const loadedThreads = new Set<string>();
 
 const object = (value: unknown): Data => value && typeof value === "object" && !Array.isArray(value) ? value as Data : {};
 const send = (value: unknown) => process.stdout.write(JSON.stringify(value) + "\n");
 const result = (id: unknown, value: unknown) => send({ jsonrpc: "2.0", id, result: value });
 const notify = (method: string, params: unknown) => send({ jsonrpc: "2.0", method, params });
-function finish(status = "completed") {
+function releaseAfter(file: string, action: () => void) {
+  const deadline = Date.now() + 30_000;
+  const timer = setInterval(() => {
+    if (existsSync(join(cwd, file))) { clearInterval(timer); action(); }
+    else if (Date.now() > deadline) { clearInterval(timer); process.stderr.write("경계 fixture release 제한 시간: " + file + "\n"); process.exit(1); }
+  }, 20);
+}
+function boundaryRequest() {
+  if (!pending) return;
+  send({ jsonrpc: "2.0", id: boundaryApproval < 2 ? 42 : "42", method: "item/commandExecution/requestApproval", params: { ...pending, command: "printf boundary-approval-" + (boundaryApproval + 1) } });
+}
+function finish(status = "completed", answerText?: string) {
   if (!pending) return;
   const { threadId, turnId, prompt } = pending;
-  const answer = status === "completed" ? "### 후속 요청 완료\n\n같은 대화에서 이어졌습니다." : "중단된 요청입니다.";
+  const answer = answerText ?? (status === "completed" ? "### 후속 요청 완료\n\n같은 대화에서 이어졌습니다." : "중단된 요청입니다.");
   const items = [
     { id: turnId + "-user", type: "userMessage", content: [{ type: "text", text: prompt }] },
     { id: turnId + "-answer", type: "agentMessage", text: answer }
@@ -45,17 +58,29 @@ function finish(status = "completed") {
 for await (const line of createInterface({ input: process.stdin, crlfDelay: Infinity })) {
   const message = object(JSON.parse(line));
   const params = object(message.params);
-  writeFileSync(callsPath, JSON.stringify({ method: message.method ?? "response", params, id: message.id }) + "\n", { flag: "a" });
-  if (!message.method) { if (message.id === 42) finish(); continue; }
+  writeFileSync(callsPath, JSON.stringify({ method: message.method ?? "response", params, id: message.id, result: message.result, pid: process.pid }) + "\n", { flag: "a" });
+  if (!message.method) {
+    if (pending?.prompt === "경계 승인 ID 재사용" && message.id === (boundaryApproval < 2 ? 42 : "42")) {
+      notify("serverRequest/resolved", { threadId: pending.threadId, requestId: message.id });
+      boundaryApproval++;
+      if (boundaryApproval < 4) boundaryRequest(); else finish();
+    } else if (pending?.prompt === "경계 해소 ID 후속 승인" && message.id === "boundary-resolved") finish();
+    else if (message.id === 42) finish();
+    continue;
+  }
   if (message.id === undefined) continue;
   if (message.method === "initialize") result(message.id, { userAgent: "fixture" });
   else if (message.method === "thread/list") result(message.id, { data: Object.keys(histories).map((id) => ({ id, name: id === "history-a" ? "저장 작업 A" : id === "history-b" ? "저장 작업 B" : "새 작업", preview: "복원 가능한 대화", cwd, updatedAt: 1794470000, source: "vscode", originator: "www", status: { type: "idle" } })), nextCursor: null });
-  else if (message.method === "thread/read" || message.method === "thread/resume") result(message.id, { thread: { id: params.threadId, cwd, originator: "www", source: "vscode", status: { type: "idle" }, turns: [] }, model: "fixture", modelProvider: "fixture" });
+  else if (message.method === "thread/read" || message.method === "thread/resume") {
+    if (message.method === "thread/resume") loadedThreads.add(String(params.threadId));
+    result(message.id, { thread: { id: params.threadId, cwd, originator: "www", source: "vscode", status: { type: "idle" }, turns: [] }, model: "fixture", modelProvider: "fixture" });
+  }
   else if (message.method === "thread/turns/list") {
     histories = JSON.parse(readFileSync(storePath, "utf8"));
     result(message.id, { data: [...(histories[String(params.threadId)] ?? [])].reverse(), nextCursor: null });
   }
   else if (message.method === "thread/start") {
+    loadedThreads.add("thread-new");
     histories["thread-new"] ??= [];
     writeFileSync(storePath, JSON.stringify(histories));
     setTimeout(() => result(message.id, { thread: { id: "thread-new", cwd, originator: "www", source: "vscode", status: { type: "idle" } }, model: "fixture", modelProvider: "fixture" }), 80);
@@ -67,12 +92,49 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
       continue;
     }
     const threadId = String(params.threadId);
+    if (!loadedThreads.has(threadId)) {
+      send({ jsonrpc: "2.0", id: message.id, error: { code: -32603, message: "이 Native 프로세스에서 thread/resume 없이 turn/start를 받았습니다." } });
+      continue;
+    }
     const turnId = "live-" + Date.now() + "-" + ++turnCounter;
     pending = { threadId, turnId, prompt };
     if (prompt === "사이드바 두 번째 요청 확인") await new Promise((resolve) => setTimeout(resolve, 450));
     result(message.id, { turn: { id: turnId } });
     notify("turn/started", { threadId, turn: { id: turnId } });
-    if (prompt === "사이드바 첫 요청 확인") {
+    if (prompt === "경계 승인 ID 재사용") {
+      boundaryApproval = 0;
+      boundaryRequest();
+    }
+    else if (prompt === "경계 승인 해소 대기" || prompt === "경계 해소 ID 후속 승인") {
+      send({ jsonrpc: "2.0", id: "boundary-resolved", method: "item/commandExecution/requestApproval", params: { threadId, turnId, command: prompt === "경계 승인 해소 대기" ? "printf boundary-resolved-first" : "printf boundary-resolved-next" } });
+    }
+    else if (prompt === "경계 공개 설명 교차 순서") {
+      const scope = { threadId, turnId };
+      notify("item/reasoning/summaryTextDelta", { ...scope, itemId: "boundary-summary", summaryIndex: 0, delta: "경계 요약 A" });
+      notify("item/agentMessage/delta", { ...scope, itemId: "boundary-commentary", phase: "commentary", delta: "경계 설명 B" });
+      notify("item/reasoning/summaryTextDelta", { ...scope, itemId: "boundary-summary", summaryIndex: 0, delta: "경계 요약 C" });
+      releaseAfter("fixture-summary-release", () => {
+        notify("item/completed", { ...scope, item: { id: "boundary-summary", type: "reasoning", summary: ["경계 최종 요약"] } });
+        finish();
+      });
+    }
+    else if (prompt === "경계 유휴 종료 준비") {
+      const run = { id: "boundary-handler", eventName: "preToolUse", executionMode: "sync", sourcePath: "/fixture/boundary-hooks.json", displayOrder: 0, handlerType: "command", status: "running", entries: [] };
+      notify("hook/started", { threadId, turnId, run });
+      notify("hook/completed", { threadId, turnId, run: { ...run, status: "completed" } });
+      finish("completed", "경계 유휴 종료 이전 답변");
+      setTimeout(() => process.exit(0), 160);
+    }
+    else if (prompt === "경계 유휴 종료 후 이어가기") {
+      notify("item/agentMessage/delta", { threadId, turnId, itemId: turnId + "-fresh-commentary", phase: "commentary", delta: "경계 재연결 새 공개 설명" });
+      setTimeout(() => finish("completed", "경계 재연결 후속 답변"), 80);
+    }
+    else if (prompt === "경계 실행 중 종료") {
+      notify("item/started", { threadId, turnId, item: { id: turnId + "-no-replay", type: "commandExecution", command: "printf boundary-no-replay", cwd, status: "inProgress" } });
+      setTimeout(() => process.exit(0), 160);
+    }
+    else if (prompt === "경계 실행 종료 후 수동 후속") setTimeout(() => finish("completed", "경계 수동 복구 후속 답변"), 80);
+    else if (prompt === "사이드바 첫 요청 확인") {
       notify("turn/plan/updated", { threadId, turnId, plan: [{ step: "첫 요청 전용 단계", status: "inProgress" }] });
       const run = { id: "sidebar-handler-a", eventName: "preToolUse", executionMode: "sync", sourcePath: "/fixture/handler-a.json", displayOrder: 0, handlerType: "command", status: "running", entries: [] };
       notify("hook/started", { threadId, turnId, run });
@@ -124,7 +186,15 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
     else if (prompt.includes("무활동 확인")) setTimeout(() => finish(), 16_000);
     else if (prompt.includes("결과 미확인 확인")) setTimeout(() => finish("mystery"), 80);
     else if (!prompt.includes("중단 확인")) setTimeout(() => finish(), 80);
-  } else if (message.method === "turn/interrupt") { result(message.id, {}); finish("interrupted"); }
-  else if (message.method === "skills/list" || message.method === "hooks/list") result(message.id, { data: [{ cwd, skills: [], hooks: [], errors: [] }] });
+  } else if (message.method === "turn/interrupt") {
+    result(message.id, {});
+    if (pending?.prompt === "경계 승인 해소 대기") {
+      notify("serverRequest/resolved", { threadId: pending.threadId, requestId: "boundary-resolved" });
+      releaseAfter("fixture-resolved-release", () => finish("interrupted"));
+    } else finish("interrupted");
+  }
+  else if (message.method === "skills/list" || message.method === "hooks/list") result(message.id, { data: [{ cwd, skills: [], hooks: message.method === "hooks/list" ? [
+    { key: "boundary-hook", eventName: "preToolUse", sourcePath: "/fixture/boundary-hooks.json", displayOrder: 0, handlerType: "command", enabled: true, source: "project", currentHash: "boundary", isManaged: false, timeoutSec: 5, trustStatus: "trusted", command: "fixture", async: false }
+  ] : [], errors: [] }] });
   else result(message.id, {});
 }

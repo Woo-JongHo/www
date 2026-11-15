@@ -231,6 +231,124 @@ async function start(round: number, selectedWorkspace = workspace) {
 }
 
 // AppEvent를 주입하지 않고 실제 버튼·preload IPC·fixture stdio로만 경계를 만든다.
+async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>) {
+  const readCalls = async () => (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map((line) => object(JSON.parse(line)));
+  const readEvents = async () => {
+    const events = await session.evaluate("(async()=>{const selected=await window.www.workspace();return window.www.events(selected);})()");
+    if (!Array.isArray(events)) throw Error("실제 IPC 사건 배열이 없습니다.");
+    return events.map(object);
+  };
+  const submit = async (prompt: string) => { await session.input(prompt); await session.click('[data-testid="send-button"]'); };
+  const idle = (label: string) => session.wait("!document.querySelector('[data-testid=\"new-conversation\"]').disabled && !document.querySelector('[data-testid=\"interrupt-button\"]')", label);
+  const visibleApproval = (command: string) => `(() => { const cards=Array.from(document.querySelectorAll('.approval.open')); const button=cards[0]?.querySelector('[data-decision="accept"]'); return cards.length===1 && cards[0].innerText.includes(${JSON.stringify(command)}) && button instanceof HTMLButtonElement && !button.disabled && button.getClientRects().length>0; })()`;
+  const approval = async (command: string) => {
+    await session.wait(visibleApproval(command), command + "은 실제 main이 허용한 승인 버튼 표시");
+    const event = (await readEvents()).reverse().find((event) => event.kind === "request" && event.supported === true && object(event.params).command === command);
+    if (!event || typeof event.approvalToken !== "string" || !event.approvalToken || (typeof event.requestId !== "number" && typeof event.requestId !== "string")) throw Error("main 발급 승인 token/ID가 없습니다: " + command);
+    return event;
+  };
+  const rejectOldToken = async (event: Data, oldToken: string, command: string) => {
+    const before = (await readCalls()).filter((call) => call.method === "response").length;
+    // 고정된 새 계약: respond(selection, id, decision, token). 옛 3인자 API로 낮추지 않는다.
+    const result = object(await session.evaluate("(async()=>{const selected=await window.www.workspace();try{await window.www.respond(selected," + JSON.stringify(event.requestId) + ",'decline'," + JSON.stringify(oldToken) + ");return {rejected:false};}catch(error){return {rejected:true,message:String(error)};}})()"));
+    if (result.rejected !== true || (await readCalls()).filter((call) => call.method === "response").length !== before) throw Error("이전 승인 token이 실제 Native 응답까지 전달됐습니다.");
+    await session.wait(visibleApproval(command), "오래된 token 거부 뒤 새 승인 버튼 보존");
+    checks.push("실제 IPC는 이전 token 응답을 거부하고 fixture response 수를 늘리지 않음");
+  };
+  const repeatedBefore = await readCalls();
+  await submit("경계 승인 ID 재사용");
+  const tokens: string[] = [];
+  for (let index = 0; index < 4; index++) {
+    const command = "printf boundary-approval-" + (index + 1);
+    const event = await approval(command);
+    const token = String(event.approvalToken);
+    if (event.requestId !== (index < 2 ? 42 : "42") || tokens.includes(token)) throw Error("ID 형식 또는 승인별 token 고유성이 유지되지 않았습니다.");
+    if (index === 1 || index === 3) await rejectOldToken(event, tokens[index - 1], command);
+    tokens.push(token);
+    await session.click('.approval.open [data-decision="accept"]');
+  }
+  await idle("동일 프로세스 numeric/string 승인 ID 네 번의 실제 응답 완료");
+  const repeatedCalls = (await readCalls()).slice(repeatedBefore.length);
+  const repeatedResponses = repeatedCalls.filter((call) => call.method === "response");
+  if (JSON.stringify(repeatedResponses.map((call) => call.id)) !== JSON.stringify([42, 42, "42", "42"]) || new Set(repeatedResponses.map((call) => call.pid)).size !== 1 || repeatedResponses.some((call) => object(call.result).decision !== "accept")) throw Error("같은 Native process의 ID 재사용 응답 원문이 다릅니다.");
+  checks.push("같은 Native PID에서 42/42/문자열42/문자열42를 각각 한 번 승인");
+
+  await submit("경계 승인 해소 대기");
+  const resolved = await approval("printf boundary-resolved-first");
+  await session.click('[data-testid="interrupt-button"]');
+  await session.wait("(async()=>{const selected=await window.www.workspace();const events=await window.www.events(selected);return events.some(event=>event.method==='serverRequest/resolved' && event.params?.requestId==='boundary-resolved') && !events.some(event=>event.method==='turn/completed' && event.params?.turn?.id===" + JSON.stringify(object(resolved.params).turnId) + ") && !document.querySelector('.approval.open') && !!document.querySelector('[data-testid=\"interrupt-button\"]');})()", "실제 resolved 알림만으로 턴 종료 전에 대기 승인 카드 닫힘");
+  await fs.writeFile(path.join(workspace, "fixture-resolved-release"), "release\n");
+  await idle("승인 해소 뒤 실제 interrupted 종료와 선택 복구");
+  await submit("경계 해소 ID 후속 승인");
+  const nextResolved = await approval("printf boundary-resolved-next");
+  if (nextResolved.requestId !== resolved.requestId || nextResolved.approvalToken === resolved.approvalToken) throw Error("해소한 ID 재사용에 새 token이 발급되지 않았습니다.");
+  await rejectOldToken(nextResolved, String(resolved.approvalToken), "printf boundary-resolved-next");
+  await session.click('.approval.open [data-decision="accept"]');
+  await idle("해소한 request ID를 새 token으로 정상 승인");
+
+  await submit("경계 공개 설명 교차 순서");
+  await session.wait("Array.from(document.querySelectorAll('.transcript [data-testid=\"public-explanation\"]')).map(node=>node.textContent.trim()).filter(text=>['경계 요약 A','경계 설명 B','경계 요약 C'].includes(text)).join('|')==='경계 요약 A|경계 설명 B|경계 요약 C'", "실제 stdio summary A·commentary B·summary C의 DOM 수신 순서");
+  await fs.writeFile(path.join(workspace, "fixture-summary-release"), "release\n");
+  await session.wait("Array.from(document.querySelectorAll('.transcript [data-testid=\"public-explanation\"]')).map(node=>node.textContent.trim()).filter(text=>['경계 요약 A','경계 설명 B','경계 요약 C','경계 최종 요약'].includes(text)).join('|')==='경계 설명 B|경계 최종 요약'", "완료 snapshot은 이전 요약만 교체하고 commentary 순서를 보존");
+  await idle("교차 공개 설명 턴 종료");
+
+  await session.click('[data-testid="detail-monitor-toggle"]');
+  await session.wait("!document.querySelector('[data-testid=\"activity-panel\"]').hidden", "복원 pulse를 검사할 실제 상세 모니터 열기");
+  await submit("경계 유휴 종료 준비");
+  await session.wait("document.querySelector('[data-row-id=\"hook:boundary-hook\"]')?.classList.contains('has-activity')", "Native Hook 사건은 실제 카탈로그 행에 관측됨");
+  await session.wait("(async()=>{const selected=await window.www.workspace();const events=await window.www.events(selected);return events.some(event=>event.method==='transport/closed') && !document.querySelector('[data-testid=\"new-conversation\"]').disabled;})()", "idle Native subprocess 종료를 실제 transport closed로 수신");
+  await session.wait("document.querySelector('[data-row-id=\"hook:boundary-hook\"]') && !document.querySelector('[data-row-id=\"hook:boundary-hook\"]').classList.contains('is-reacting')", "종료 전 실제 Hook pulse가 끝난 뒤 복원 관측 시작");
+  const beforeReconnect = await readCalls();
+  const idleCall = [...beforeReconnect].reverse().find((call) => call.method === "turn/start" && JSON.stringify(call.params).includes("경계 유휴 종료 준비"));
+  if (!idleCall || typeof idleCall.pid !== "number") throw Error("종료한 Native PID 근거가 없습니다.");
+  await session.evaluate(`(() => {
+    globalThis.__chatBoundaryReactions=[];
+    const inspect=(node)=>{if(node instanceof Element){const rows=[...(node.matches('[data-row-id="hook:boundary-hook"]')?[node]:[]),...node.querySelectorAll('[data-row-id="hook:boundary-hook"]')];for(const row of rows)if(row.classList.contains('is-reacting'))globalThis.__chatBoundaryReactions.push(row.className);}};
+    globalThis.__chatBoundaryObserver=new MutationObserver(records=>{for(const record of records){if(record.type==='attributes')inspect(record.target);else for(const node of record.addedNodes)inspect(node);}});
+    globalThis.__chatBoundaryObserver.observe(document.querySelector('[data-testid="activity-panel"]'),{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+  })()`);
+  await submit("경계 유휴 종료 후 이어가기");
+  await session.wait("Array.from(document.querySelectorAll('.transcript .chat-markdown')).filter(node=>node.textContent.trim()==='경계 유휴 종료 이전 답변').length===1 && Array.from(document.querySelectorAll('.transcript .chat-markdown')).filter(node=>node.textContent.trim()==='경계 재연결 새 공개 설명').length===1 && Array.from(document.querySelectorAll('.transcript .chat-markdown')).filter(node=>node.textContent.trim()==='경계 재연결 후속 답변').length===1", "재연결은 과거 본문을 한 번 교체하고 새 live 설명·답변을 보존");
+  await idle("idle 종료 뒤 동일 thread 후속 턴 완료");
+  const reconnectedEvents = await readEvents();
+  const marker = [...reconnectedEvents].reverse().find((event) => event.method === "conversation/reconnected");
+  const markerParams = object(marker?.params);
+  if (!marker || markerParams.threadId !== "history-a" || !Array.isArray(markerParams.events)) throw Error("main의 실제 conversation/reconnected snapshot이 없습니다.");
+  const snapshot = markerParams.events.map(object);
+  if (!snapshot.length || snapshot.some((event) => event.historical !== true || event.method === "conversation/reconnected" || typeof event.seq !== "number" || typeof marker.seq !== "number" || event.seq >= marker.seq || event.workspaceKey !== marker.workspaceKey || event.selectionEpoch !== marker.selectionEpoch || event.processEpoch !== marker.processEpoch)) throw Error("복원 snapshot의 역사·선택 scope·marker 이전 seq 경계가 다릅니다.");
+  const freshPrompt = reconnectedEvents.find((event) => event.method === "turn/userPrompt" && object(event.params).text === "경계 유휴 종료 후 이어가기");
+  if (!freshPrompt || typeof freshPrompt.seq !== "number" || typeof marker.seq !== "number" || freshPrompt.seq <= marker.seq || freshPrompt.historical === true) throw Error("새 요청이 복원 marker 뒤 live 사건으로 보전되지 않았습니다.");
+  const newCalls = (await readCalls()).slice(beforeReconnect.length);
+  const resumedTurn = newCalls.find((call) => call.method === "turn/start" && JSON.stringify(call.params).includes("경계 유휴 종료 후 이어가기"));
+  const startIndex = newCalls.indexOf(resumedTurn ?? {});
+  const priorMethods = newCalls.slice(0, startIndex).filter((call) => call.pid === resumedTurn?.pid && object(call.params).threadId === "history-a").map((call) => call.method);
+  if (!resumedTurn || resumedTurn.pid === idleCall.pid || object(resumedTurn.params).threadId !== "history-a" || !["thread/read", "thread/resume", "thread/turns/list"].every((method) => priorMethods.includes(method))) throw Error("새 Native process에서 같은 thread의 read/resume/원장 읽기가 후속 turn보다 먼저 실행되지 않았습니다.");
+  const reactions = await session.evaluate("(() => {globalThis.__chatBoundaryObserver.disconnect();return globalThis.__chatBoundaryReactions;})()");
+  if (!Array.isArray(reactions) || reactions.length !== 0) throw Error("복원된 과거 Hook을 새 pulse로 재생했습니다: " + JSON.stringify(reactions));
+  checks.push("재연결 marker는 scope가 같은 historical snapshot이며 fresh userPrompt보다 앞섬", "새 Native PID의 read/resume/turns-list 뒤 같은 thread 후속 요청", "복원 중 과거 Hook pulse 추가 0개");
+  await session.click('[data-testid="detail-monitor-toggle"]');
+
+  const activeBefore = await readCalls();
+  await submit("경계 실행 중 종료");
+  await session.wait("(async()=>{const selected=await window.www.workspace();const events=await window.www.events(selected);const start=events.findLast(event=>event.method==='turn/userPrompt' && event.params?.text==='경계 실행 중 종료');return start && events.some(event=>event.method==='transport/closed' && event.seq>start.seq);})()", "실행 중 Native subprocess 종료 수신");
+  await session.evaluate("new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))");
+  const afterCrash = (await readCalls()).slice(activeBefore.length);
+  const afterCrashTurns = afterCrash.filter((call) => call.method === "turn/start");
+  if (afterCrashTurns.length !== 1 || !JSON.stringify(afterCrashTurns[0]?.params).includes("경계 실행 중 종료")) throw Error("실행 중 단절 뒤 사용자의 새 요청 없이 Native mutation을 자동 전송했습니다.");
+  await idle("실행 중 단절 결과를 확인한 뒤 수동 요청 가능");
+  await session.click('[data-testid="conversation-item"][data-thread-id="history-b"]');
+  await session.wait("document.querySelector('[data-thread-id=\"history-b\"]')?.getAttribute('aria-current')==='true' && document.querySelector('.transcript')?.textContent.includes('두 번째 저장 대화')", "미확정 턴 뒤 다른 대화를 실제 UI로 명시적으로 열기");
+  await session.click('[data-testid="conversation-item"][data-thread-id="history-a"]');
+  await session.wait("document.querySelector('[data-thread-id=\"history-a\"]')?.getAttribute('aria-current')==='true' && document.querySelector('.transcript')?.textContent.includes('경계 유휴 종료 이전 답변') && !document.querySelector('[data-testid=\"new-conversation\"]').disabled", "원래 Native 대화를 명시적으로 다시 열어 수동 복구 허용");
+  await submit("경계 실행 종료 후 수동 후속");
+  await session.wait("Array.from(document.querySelectorAll('.transcript .chat-markdown')).some(node=>node.textContent.trim()==='경계 수동 복구 후속 답변')", "명시한 수동 후속 요청의 새 실제 답변 수신");
+  await idle("단절 뒤 사용자가 명시한 새 후속 요청만 완료");
+  const finalCalls = (await readCalls()).slice(activeBefore.length);
+  if (finalCalls.filter((call) => call.method === "turn/start" && JSON.stringify(call.params).includes("경계 실행 중 종료")).length !== 1 || finalCalls.filter((call) => call.method === "turn/start" && JSON.stringify(call.params).includes("경계 실행 종료 후 수동 후속")).length !== 1) throw Error("미확정 요청이 수동 복구 도중 재전송됐습니다.");
+  checks.push("실행 중 단절의 미확정 turn/start는 자동·수동 복구 뒤에도 총 1회");
+  await fs.writeFile(path.join(directory, "native-boundaries.json"), JSON.stringify({ repeatedApprovalIds: repeatedResponses.map((call) => call.id), repeatedApprovalPid: repeatedResponses[0]?.pid, staleTokensRejected: true, resolvedBeforeTurnCompleted: true, idleNativePid: idleCall.pid, resumedNativePid: resumedTurn.pid, threadId: "history-a", restoreMarkerSeq: marker.seq, freshPromptSeq: freshPrompt.seq, historicalSnapshotEvents: snapshot.length, replayedHookPulses: reactions.length, interruptedTurnSentOnce: true }, null, 2));
+}
+
 let session: Awaited<ReturnType<typeof start>> | null = null;
 async function verifyChat() {
 try {
@@ -479,6 +597,7 @@ try {
   await session.click('[data-decision="accept"]');
   await session.wait("!document.querySelector('[data-decision=\"accept\"]')", "승인 응답 왕복");
   await session.wait("!document.querySelector('[data-testid=\"new-conversation\"]')?.disabled && !document.querySelector('[data-testid=\"interrupt-button\"]')", "승인 턴 실제 종료 뒤 다음 요청 허용");
+  await verifyNativeBoundaries(session);
   await session.input("중단 확인");
   await session.click('[data-testid="send-button"]');
   await session.wait("Array.from(document.querySelectorAll('[data-testid=\"user-request\"]')).at(-1)?.textContent.startsWith('중단 확인') && document.querySelector('[data-testid=\"interrupt-button\"]')", "현재 중단 요청의 실행 중 중단 버튼");
