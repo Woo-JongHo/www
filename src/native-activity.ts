@@ -2,7 +2,7 @@
  * @architecture arch.chat.activity.projection
  * @implements RESP-CHAT-ACTIVITY-PROJECTION
  */
-import type { AppEvent, TransportState } from "./shared";
+import type { AppEvent, ResourceGap, ResourceObservationInput, TransportState } from "./shared";
 import { identifyWwwArtifact, referencedWwwArtifacts, type WwwArtifact } from "./www-activity";
 
 export type ActivityStatus = "pending" | "running" | "completed" | "failed" | "blocked" | "interrupted" | "unknown";
@@ -196,6 +196,138 @@ function finish(item: ActivityEntry, next: ActivityStatus, at: string, duration:
   }
 }
 
+/** Native 실행 결과를 투영과 원장 입력에서 같은 근거로 해석한다. */
+function nativeItemOutcome(item: Record<string, unknown>, complete: boolean): ActivityStatus {
+  if (!complete) return "running";
+  let outcome = status(item.status);
+  if (item.type === "commandExecution" && typeof item.exitCode === "number" && Number.isSafeInteger(item.exitCode)) {
+    outcome = item.exitCode === 0 ? "completed" : "failed";
+  }
+  if (item.success === false || item.error) outcome = "failed";
+  return outcome;
+}
+
+function nativeDocumentReads(item: Record<string, unknown>, workspacePath?: string): { path: string; artifact: WwwArtifact | null }[] {
+  return list(item.commandActions).flatMap((value) => {
+    const action = record(value);
+    const path = text(action.path);
+    if (action.type !== "read") return [];
+    const artifact = identifyWwwArtifact(path, workspacePath, text(item.cwd));
+    if (!artifact && !/(^|[\\/])SKILL\.md$/.test(path)) return [];
+    return [{ path, artifact: artifact ?? null }];
+  });
+}
+
+function nativeToolLabel(item: Record<string, unknown>): string | null {
+  const type = text(item.type);
+  return ["mcpToolCall", "dynamicToolCall", "collabAgentToolCall", "webSearch", "imageGeneration", "sleep"].includes(type)
+    ? text(item.tool) || type : null;
+}
+
+function nativeHookRun(data: Record<string, unknown>): Record<string, unknown> | null {
+  const run = record(data.run);
+  return text(run.id) && run.executionMode === "sync" ? run : null;
+}
+
+export interface NativeResourceNormalization {
+  threadId: string | null;
+  observations: ResourceObservationInput[];
+  gaps: ResourceGap[];
+}
+
+export interface NativeResourceOptions {
+  /** 실제 Native에는 지정하지 않는다. 호출별 유일성을 입증한 합성 adapter 전용 경계다. */
+  providerRunNamespace?: string;
+  /** 정본 목록 밖 구조화 read 경로를 원문 없는 SHA-256 metadata로 바꾸는 main 경계다. */
+  documentIdentity?: (path: string, cwd: string) => string;
+}
+
+function metadataName(value: unknown): string | null {
+  const name = text(value);
+  return /^[A-Za-z0-9_.:/-]{1,120}$/.test(name) ? name : null;
+}
+
+function documentIdentity(path: string, cwd: string, identify?: (path: string, cwd: string) => string): string | null {
+  try {
+    const identity = identify?.(path, cwd);
+    return typeof identity === "string" && identity.length === 80 && /^document-sha256:[a-f0-9]{64}$/.test(identity) ? identity : null;
+  } catch {
+    return null;
+  }
+}
+
+function resourceStatus(outcome: ActivityStatus, historical: boolean): ResourceObservationInput["status"] {
+  if (outcome === "completed" || outcome === "failed") return outcome;
+  if (outcome === "running" && !historical) return "running";
+  return "unknown";
+}
+
+/** 순수 입력 정규화. workspace 경계·선택·영속 ID·저장은 main과 원장이 소유한다. */
+export function normalizeNativeResources(event: AppEvent, workspacePath: string, options: NativeResourceOptions = {}): NativeResourceNormalization {
+  const data = record(event.params);
+  const threadId = text(data.threadId).trim() ? text(data.threadId) : null;
+  const result: NativeResourceNormalization = { threadId, observations: [], gaps: [] };
+  if (event.kind === "request") return result;
+  const hookEvent = event.method === "hook/started" || event.method === "hook/completed";
+  const itemEvent = event.method === "item/started" || event.method === "item/completed";
+  if (!hookEvent && !itemEvent) return result;
+  if (!threadId) { result.gaps.push("native-missing"); return result; }
+  const turnId = text(data.turnId).trim() ? text(data.turnId) : null;
+  if (hookEvent) {
+    const run = nativeHookRun(data);
+    if (!run) { result.gaps.push("native-missing"); return result; }
+    // codex-cli 0.167.2의 run.id는 eventName:displayOrder:sourcePath로 재사용된다.
+    const namespace = metadataName(options.providerRunNamespace);
+    if (!namespace) { result.gaps.push("unstable-id"); return result; }
+    if (["pending", "declined", "blocked"].includes(text(run.status))) return result;
+    const name = metadataName(run.eventName);
+    if (!name) { result.gaps.push("native-missing"); return result; }
+    result.observations.push({
+      source: { kind: "hook", hookRunId: text(run.id), providerRunNamespace: namespace, turnId },
+      resource: { kind: "hook", identity: name, label: name },
+      action: "invoke",
+      status: resourceStatus(status(run.status), event.historical === true),
+    });
+    return result;
+  }
+  const item = record(data.item);
+  const type = text(item.type);
+  const toolLabel = nativeToolLabel(item);
+  if (type !== "commandExecution" && type !== "fileChange" && !toolLabel) return result;
+  if (["pending", "declined", "blocked"].includes(text(item.status))) return result;
+  if (["skills/list", "hooks/list"].includes(text(item.tool))) return result;
+  const itemId = text(item.id).trim() ? text(item.id) : null;
+  if (!turnId || !itemId) { result.gaps.push("native-missing"); return result; }
+  const source: ResourceObservationInput["source"] = { kind: "item", itemId, turnId };
+  const invocationId = text(item.invocationId);
+  if (invocationId) source.nativeInvocationId = invocationId;
+  let identity = type;
+  let label = type === "commandExecution" ? "명령 실행" : type === "fileChange" ? "파일 변경" : type;
+  if (["mcpToolCall", "dynamicToolCall", "collabAgentToolCall"].includes(type)) {
+    const tool = metadataName(item.tool);
+    const server = type === "mcpToolCall" ? metadataName(item.server) : null;
+    if (!tool || (type === "mcpToolCall" && !server)) { result.gaps.push("native-missing"); return result; }
+    identity = JSON.stringify([type, server, tool]);
+    label = server ? `${server}/${tool}` : tool;
+  }
+  const explicitFailure = status(item.status) === "failed" || item.success === false || Boolean(item.error);
+  const outcome = explicitFailure ? "failed" : nativeItemOutcome(item, event.method === "item/completed");
+  const observedStatus = resourceStatus(outcome, event.historical === true);
+  result.observations.push({ source, resource: { kind: "tool", identity, label }, action: "invoke", status: observedStatus });
+  if (type === "commandExecution") {
+    for (const { path, artifact } of nativeDocumentReads(item, workspacePath)) {
+      const identity = artifact?.path ?? documentIdentity(path, text(item.cwd) || workspacePath, options.documentIdentity);
+      if (!identity) {
+        if (!result.gaps.includes("native-missing")) result.gaps.push("native-missing");
+        continue;
+      }
+      if (result.observations.some((row) => row.action === "read" && row.resource.identity === identity)) continue;
+      result.observations.push({ source, resource: { kind: "document", identity, label: artifact?.id ?? "SKILL.md" }, action: "read", status: observedStatus });
+    }
+  }
+  return result;
+}
+
 /** 서버 사건만 투영하며 reasoning 텍스트와 도구 출력 본문은 보관하지 않는다. */
 export function projectNativeActivity(events: readonly AppEvent[], selectedThreadId?: string | null, workspacePath?: string): NativeActivityProjection {
   const sorted = [...events].sort((left, right) => left.seq - right.seq).slice(-2_000);
@@ -369,9 +501,9 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
       continue;
     }
     if (event.method === "hook/started" || event.method === "hook/completed"     ) {
-      const run   = record(data.run) ;
-      const runId = text  (run.id  ) ;
-      if (!runId || run.executionMode !== "sync") continue;
+      const run = nativeHookRun(data);
+      if (!run) continue;
+      const runId = text(run.id);
       const target = threadId && turnId ? locate(threadId, turnId, event.at, event.historical === true)?.entries : sessionEntries;
       if (!target) continue;
       const hook = entry(target, `hook:${threadId}:${turnId}:${runId}`, "hook", text(run.eventName) || "Hook", event.at);
@@ -492,7 +624,8 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     let label                               = ""   ;
     if (type === "commandExecution"                                                                                      ) { kind = "command"; label = text(item.command) || "명령 실행"; }
     if (type === "fileChange"                                                                                            ) { kind = "files"; label = "파일 변경"; }
-    if (["mcpToolCall", "dynamicToolCall", "collabAgentToolCall", "webSearch", "imageGeneration", "sleep"].includes(type)) { kind = "tool"; label = text(item.tool) || type; }
+    const toolLabel = nativeToolLabel(item);
+    if (toolLabel !== null) { kind = "tool"; label = toolLabel; }
     if (type === "contextCompaction"                                                                                     ) { kind = "compaction"; label = "컨텍스트 압축"; }
     if (type === "agentMessage" && item.phase === "commentary") { kind = "progress"; label = "진행 설명"; }
     if (type === "agentMessage" && item.phase !== "analysis" && item.phase !== "reasoning" && item.phase !== "commentary") { kind = "answer"; label = "답변 작성"; }
@@ -505,19 +638,13 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
       turn.answer = turn.entries.filter((row) => row.kind === "answer").map((row) => row.description ?? "").join("\n");
     }
     if (complete                   ) {
-      let outcome = status(item.status);
+      let outcome = nativeItemOutcome(item, true);
       if (kind === "answer" || kind === "compaction" || kind === "progress") outcome = "completed";
-      if (type === "commandExecution" && typeof item.exitCode === "number" && Number.isSafeInteger(item.exitCode)) outcome = item.exitCode === 0 ? "completed" : "failed";
       if (item.success === false || item.error) outcome = "failed";
       finish(activity, outcome, event.at, item.durationMs);
     }
     if (type === "commandExecution") {
-      for (const value of list(item.commandActions)) {
-        const action = record(value      ) ;
-        const path   = text  (action.path) ;
-        if (action.type !== "read") continue;
-        const artifact = identifyWwwArtifact(path, workspacePath, text(item.cwd));
-        if (!artifact && !/(^|[\\/])SKILL\.md$/.test(path)) continue;
+      for (const { path, artifact } of nativeDocumentReads(item, workspacePath)) {
         const kind = artifact?.kind === "role" ? "role" : "skill";
         const document = entry(turn.entries, `${kind}-read:${itemId}:${path}`, kind, `${artifact?.id ?? "SKILL.md"} 읽는 중`, event.at);
         document.description = path;

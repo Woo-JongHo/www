@@ -15,6 +15,30 @@ export interface AppEvent {
   historical?: boolean                                  ;
 }
 
+/** 실제 IPC 배달과 요청의 필수 선택 경계. */
+export interface SelectionRef {
+  workspaceKey: string;
+  selectionEpoch: number;
+  processEpoch: string;
+}
+export interface ScopedAppEvent extends AppEvent, SelectionRef {
+  connectionGeneration: number;
+}
+export interface WorkspaceSelection extends WorkspaceInfo, SelectionRef {}
+export interface ProjectInfo {
+  workspaceKey: string;
+  name: string;
+  path: string;
+  favorite: boolean;
+}
+export interface ConversationSelection {
+  workspace: WorkspaceSelection;
+  threadId: string | null;
+  events: ScopedAppEvent[];
+  resources: ResourceSnapshot | null;
+  resourceStorageWarnings?: ResourceScope[];
+}
+
 export type TransportState = "disconnected" | "connected" | "closed" | "error"                                    ;
 export type TurnState      = "idle" | "starting" | "running" | "completed" | "interrupted" | "failed" | "unknown" ;
 export type InterruptState = "idle" | "requested" | "accepted" | "acknowledged" | "uncertain"                     ;
@@ -96,19 +120,24 @@ export interface ConversationCatalog {
 }
 
 export interface WwwApi {
-  listConversations      (cursor?: string                     ): Promise<ConversationCatalog>;
-  openConversation       (threadId: string                     ): Promise<{ threadId: string; events: AppEvent[] }>;
-  newConversation        ()                                   : Promise<void>;
-  openExternal           (url: string                          ): Promise<void>;
-  chooseWorkspace        ()                                   : Promise<WorkspaceInfo | null>;
-  workspace              ()                                   : Promise<WorkspaceInfo>;
-  startThread            ()                                   : Promise<{ threadId: string }>;
-  startTurn              (threadId: string, text: string     ): Promise<{ turnId: string }>;
-  interrupt              (threadId: string, turnId: string   ): Promise<void>;
-  respond                (requestId: RpcId, decision: string ): Promise<void>;
-  events                 ()                                   : Promise<AppEvent[]>;
-  refreshActivity        ()                                   : Promise<void>;
-  onEvent                (listener: (event: AppEvent) => void): () => void;
+  listConversations(selection: SelectionRef, cursor?: string): Promise<ConversationCatalog>;
+  openConversation(selection: SelectionRef, threadId: string): Promise<ConversationSelection>;
+  newConversation(selection: SelectionRef): Promise<ConversationSelection>;
+  openExternal(url: string): Promise<void>;
+  chooseWorkspace(selection: SelectionRef): Promise<ConversationSelection | null>;
+  workspace(): Promise<WorkspaceSelection>;
+  listProjects(selection: SelectionRef): Promise<readonly ProjectInfo[]>;
+  setProjectFavorite(selection: SelectionRef, workspaceKey: string, favorite: boolean): Promise<void>;
+  switchProject(selection: SelectionRef, workspaceKey: string): Promise<ConversationSelection>;
+  startThread(selection: SelectionRef): Promise<{ threadId: string }>;
+  startTurn(selection: SelectionRef, threadId: string, text: string): Promise<{ turnId: string }>;
+  interrupt(selection: SelectionRef, threadId: string, turnId: string): Promise<void>;
+  respond(selection: SelectionRef, requestId: RpcId, decision: string): Promise<void>;
+  events(selection: SelectionRef): Promise<ScopedAppEvent[]>;
+  refreshActivity(selection: SelectionRef): Promise<void>;
+  activityResources(selection: SelectionRef): Promise<ResourceSnapshot | null>;
+  onActivityResources(listener: (snapshot: ResourceSnapshot) => void): () => void;
+  onEvent(listener: (event: ScopedAppEvent) => void): () => void;
   probeReady             ()                                   : Promise<{ enabled: boolean; readinessMs?: number; developmentPolicyAvailable?: boolean; developmentWorkId?: string; expectDevelopmentComplete?: boolean; checkInterruptPending?: boolean; checkReports?: boolean; checkNativeReports?: boolean; checkActivity?: boolean }>;
   probeFinish            (result: Record<string, unknown>    ): Promise<void>;
   developmentPolicy      ()                                   : Promise<DevelopmentPolicyInfo>;
@@ -121,4 +150,45 @@ export interface WwwApi {
   nativeReportStatus     ()                                   : Promise<{ enabled: boolean; jobs: NativeReportJob[] }>;
   setNativeReportEnabled (enabled: boolean                   ): Promise<boolean>;
   retryNativeReport      (key: string                        ): Promise<NativeReportJob>;
+}
+
+/** main이 검증한 실제 workspace와 Native thread의 원장 경계. */
+export interface ResourceScope {
+  workspaceKey: string;
+  threadId: string;
+}
+
+export type ResourceSource =
+  | { kind: "hook"; hookRunId: string; turnId: string | null; providerRunNamespace: string }
+  | { kind: "item"; itemId: string; turnId: string; nativeInvocationId?: string };
+
+export interface ResourceObservation {
+  id: string;
+  source: ResourceSource;
+  resource: { kind: "skill" | "hook" | "document" | "tool"; identity: string; label: string };
+  action: "invoke" | "read";
+  status: "observed" | "running" | "completed" | "failed" | "unknown";
+  conflicts?: { turn?: true; terminal?: true };
+}
+
+/** 검증·정규화한 관측만 전달한다. namespace의 실제 유일성 근거는 caller가 소유한다. */
+export type ResourceObservationInput = Omit<ResourceObservation, "id" | "conflicts">;
+export type ResourceGap = "native-missing" | "unstable-id" | "disconnect" | "unclean-exit"
+  | "retention-limit" | "corrupt" | "unsupported-version" | "read-failed" | "write-failed";
+
+export interface ResourceCoverage {
+  startedAt: string | null;
+  completeness: "partial" | "complete-for-covered-range";
+  gaps: ResourceGap[];
+}
+
+export interface ResourceSnapshot {
+  scope: ResourceScope;
+  processEpoch: string;
+  selectionEpoch: number;
+  revision: number;
+  durableRevision: number;
+  observations: ResourceObservation[];
+  coverage: ResourceCoverage;
+  storage: "saved" | "saving" | "volatile" | "full" | "corrupt" | "unavailable";
 }

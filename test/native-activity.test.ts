@@ -2,10 +2,12 @@
  * @verifies RESP-CHAT-ACTIVITY-PROJECTION
  */
 import { describe, expect, test } from "bun:test";
+import { createHash } from "node:crypto";
+import { resolve } from "node:path";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { NativeActivityView } from "../src/native-activity-view";
-import { projectNativeActivity } from "../src/native-activity";
+import { normalizeNativeResources, projectNativeActivity } from "../src/native-activity";
 import type { AppEvent } from "../src/shared";
 
 function event(seq: number, method: string, params: unknown): AppEvent {
@@ -24,6 +26,276 @@ function item(seq: number, method: string, value: unknown, turnId = "a"): AppEve
   return event(seq, method, { threadId: "t", turnId, item: value });
 }
 const configured = event(1, "thread/configured", { threadId: "t", model: "gpt", modelProvider: "openai", isNew: true });
+
+describe("Native 원장 입력 정규화", () => {
+  const root = "/projects/www";
+
+  test("시작과 완료는 optional invocationId와 무관하게 같은 item/turn/resource/action을 전달한다", () => {
+    const start = normalizeNativeResources(item(1, "item/started", {
+      id: "cmd", type: "commandExecution", invocationId: "optional", command: "private command",
+    }), root);
+    const end = normalizeNativeResources(item(2, "item/completed", {
+      id: "cmd", type: "commandExecution", exitCode: 0,
+    }), root);
+    expect(start).toEqual({ threadId: "t", gaps: [], observations: [{
+      source: { kind: "item", itemId: "cmd", turnId: "a", nativeInvocationId: "optional" },
+      resource: { kind: "tool", identity: "commandExecution", label: "명령 실행" },
+      action: "invoke", status: "running",
+    }] });
+    expect(end).toEqual({ threadId: "t", gaps: [], observations: [{
+      source: { kind: "item", itemId: "cmd", turnId: "a" },
+      resource: { kind: "tool", identity: "commandExecution", label: "명령 실행" },
+      action: "invoke", status: "completed",
+    }] });
+    const lateOptional = normalizeNativeResources(item(3, "item/completed", {
+      id: "cmd", type: "commandExecution", invocationId: "late", exitCode: 0,
+    }), root);
+    expect(lateOptional.observations[0]?.source).toEqual({ kind: "item", itemId: "cmd", turnId: "a", nativeInvocationId: "late" });
+    expect(lateOptional.observations[0]?.resource).toEqual(end.observations[0]?.resource);
+    expect(JSON.stringify(start)).not.toContain("private command");
+  });
+
+  test("명시 thread/turn/item 누락을 다른 필드나 현재 대화로 추정하지 않는다", () => {
+    for (const params of [
+      { turnId: "a", thread: { id: "t" }, item: { id: "cmd", type: "commandExecution" } },
+      { threadId: "t", turn: { id: "a" }, item: { id: "cmd", type: "commandExecution" } },
+      { threadId: "t", turnId: "a", itemId: "cmd", item: { type: "commandExecution" } },
+    ]) {
+      const result = normalizeNativeResources(event(1, "item/started", params), root);
+      expect(result.observations).toEqual([]);
+      expect(result.gaps).toEqual(["native-missing"]);
+      expect(result.threadId).toBe("threadId" in params ? "t" : null);
+    }
+  });
+
+  test("승인 RPC·거절·요청·카탈로그는 invoke가 아니며 명령 참조는 문서 읽기가 아니다", () => {
+    const request: AppEvent = { ...item(1, "item/started", { id: "req", type: "commandExecution" }), kind: "request", requestId: 1 };
+    const ignored = [request,
+      item(2, "item/completed", { id: "declined", type: "commandExecution", status: "declined" }),
+      item(3, "item/started", { id: "pending", type: "fileChange", status: "pending" }),
+      item(4, "item/completed", { id: "user", type: "userMessage", content: [{ type: "skill", name: "www-build" }] }),
+      item(5, "item/completed", { id: "catalog", type: "mcpToolCall", server: "codex", tool: "skills/list", status: "completed" }),
+      item(6, "item/completed", { id: "hooks", type: "dynamicToolCall", tool: "hooks/list", success: true }),
+      event(7, "skills/list", { threadId: "t", skills: [{ name: "www-build" }] }),
+      event(8, "hooks/list", { threadId: "t", hooks: [{ name: "Stop" }] }),
+      event(9, "item/commandExecution/requestApproval", { threadId: "t", turnId: "a", item: { id: "req", type: "commandExecution" } }),
+    ];
+    for (const input of ignored) expect(normalizeNativeResources(input, root).observations).toEqual([]);
+    const reference = normalizeNativeResources(item(10, "item/completed", {
+      id: "ref", type: "commandExecution", command: "cat skills/www/www-build/SKILL.md", exitCode: 0,
+      commandActions: [{ type: "command_reference", path: "skills/www/www-build/SKILL.md" }],
+    }), root);
+    expect(reference.observations).toEqual([{
+      source: { kind: "item", itemId: "ref", turnId: "a" },
+      resource: { kind: "tool", identity: "commandExecution", label: "명령 실행" }, action: "invoke", status: "completed",
+    }]);
+  });
+
+  test("실제 read metadata만 document/read로 만들며 Skill 호출로 승격하지 않는다", () => {
+    const result = normalizeNativeResources(item(1, "item/completed", {
+      id: "read", type: "commandExecution", cwd: root, exitCode: 0,
+      commandActions: [
+        { type: "read", path: "skills/www/www-build/SKILL.md" },
+        { type: "read", path: "agents/www/AGENT.md" },
+        { type: "read", path: "/private/secret/SKILL.md" },
+        { type: "read", path: "src/main.ts" },
+      ],
+    }), root);
+    expect(result.observations.filter((row) => row.action === "read")).toEqual([
+      { source: { kind: "item", itemId: "read", turnId: "a" }, resource: { kind: "document", identity: "skills/www/www-build/SKILL.md", label: "www-build" }, action: "read", status: "completed" },
+      { source: { kind: "item", itemId: "read", turnId: "a" }, resource: { kind: "document", identity: "agents/www/AGENT.md", label: "www-dev" }, action: "read", status: "completed" },
+    ]);
+    expect(result.gaps).toEqual(["native-missing"]);
+    expect(result.observations.some((row) => row.resource.kind === "skill")).toBe(false);
+    expect(JSON.stringify(result)).not.toContain("/private/secret");
+    expect(JSON.stringify(result)).not.toContain("src/main.ts");
+  });
+
+  test("서로 다른 비공개 문서는 실제 hash로 구별하고 같은 경로의 중복·재전달·복원 identity는 유지한다", () => {
+    const paths = ["/synthetic/private-alpha/SKILL.md", "/synthetic/private-beta/SKILL.md"];
+    const options = { documentIdentity: (path: string, cwd: string) => `document-sha256:${createHash("sha256").update(resolve(root, cwd, path)).digest("hex")}` };
+    const fields = {
+      id: "private-read", type: "commandExecution", cwd: root,
+      command: "SYNTHETIC_PRIVATE_COMMAND", aggregatedOutput: "SYNTHETIC_PRIVATE_OUTPUT", reasoning: "SYNTHETIC_PRIVATE_REASONING",
+      commandActions: [...paths, paths[0]].map((path) => ({ type: "read", path })),
+    };
+    const start = normalizeNativeResources(item(1, "item/started", fields), root, options);
+    const completed = item(2, "item/completed", { ...fields, exitCode: 0 });
+    const end = normalizeNativeResources(completed, root, options);
+    const redelivery = normalizeNativeResources({ ...completed, seq: 3 }, root, options);
+    const restored = normalizeNativeResources({ ...completed, seq: 4, historical: true }, root, options);
+    const other = normalizeNativeResources(item(5, "item/completed", { ...fields, id: "another-read", exitCode: 0 }), root, options);
+    const reads = end.observations.filter((row) => row.action === "read");
+    expect(reads).toEqual(paths.map((path) => ({
+      source: { kind: "item", itemId: "private-read", turnId: "a" },
+      resource: { kind: "document", identity: `document-sha256:${createHash("sha256").update(path).digest("hex")}`, label: "SKILL.md" },
+      action: "read", status: "completed",
+    })));
+    expect(new Set(reads.map((row) => row.resource.identity)).size).toBe(2);
+    expect(start.observations).toEqual(end.observations.map((row) => ({ ...row, status: "running" })));
+    expect(redelivery).toEqual(end);
+    expect(restored).toEqual(end);
+    expect(other.observations).toEqual(end.observations.map((row) => ({ ...row, source: { kind: "item", itemId: "another-read", turnId: "a" } })));
+    const historicalStart = normalizeNativeResources({ ...item(6, "item/started", fields), historical: true }, root, options);
+    expect(historicalStart.observations).toEqual(start.observations.map((row) => ({ ...row, status: "unknown" })));
+    const failed = normalizeNativeResources(item(7, "item/completed", { ...fields, exitCode: 1 }), root, options);
+    expect(failed.observations).toEqual(end.observations.map((row) => ({ ...row, status: "failed" })));
+    const json = JSON.stringify([start, end, redelivery, restored, other, historicalStart, failed]);
+    for (const value of [...paths, "SYNTHETIC_PRIVATE_COMMAND", "SYNTHETIC_PRIVATE_OUTPUT", "SYNTHETIC_PRIVATE_REASONING"]) expect(json).not.toContain(value);
+    for (const result of [start, end, redelivery, restored, other, historicalStart, failed]) expect(result.gaps).toEqual([]);
+  });
+
+  test("상대 read는 실제 cwd로 구별하고 같은 문서의 상대·절대 표기와 빈 cwd는 정규화한다", () => {
+    const calls: { path: string; cwd: string }[] = [];
+    const options = { documentIdentity: (path: string, cwd: string) => {
+      calls.push({ path, cwd });
+      return `document-sha256:${createHash("sha256").update(resolve(root, cwd, path)).digest("hex")}`;
+    } };
+    const normalize = (cwd: string, paths: string[]) => normalizeNativeResources(item(1, "item/completed", {
+      id: "cwd-read", type: "commandExecution", cwd, exitCode: 0,
+      commandActions: paths.map((path) => ({ type: "read", path })),
+    }), root, options);
+    const alpha = normalize("/synthetic/private-alpha", ["SKILL.md", "/synthetic/private-alpha/SKILL.md"]);
+    const beta = normalize("/synthetic/private-beta", ["SKILL.md"]);
+    const fallback = normalize("", ["SKILL.md", `${root}/SKILL.md`]);
+    const relativeCwd = normalize("synthetic/private-alpha", ["SKILL.md"]);
+    const results = [alpha, beta, fallback, relativeCwd];
+    const identities = results.map((result) => {
+      const reads = result.observations.filter((row) => row.action === "read");
+      expect(reads).toHaveLength(1);
+      expect(result.gaps).toEqual([]);
+      return reads[0]?.resource.identity;
+    });
+    expect(identities).toEqual([
+      "/synthetic/private-alpha/SKILL.md", "/synthetic/private-beta/SKILL.md", `${root}/SKILL.md`, `${root}/synthetic/private-alpha/SKILL.md`,
+    ].map((path) => `document-sha256:${createHash("sha256").update(path).digest("hex")}`));
+    expect(identities[0]).not.toBe(identities[1]);
+    expect(calls).toEqual([
+      { path: "SKILL.md", cwd: "/synthetic/private-alpha" },
+      { path: "/synthetic/private-alpha/SKILL.md", cwd: "/synthetic/private-alpha" },
+      { path: "SKILL.md", cwd: "/synthetic/private-beta" },
+      { path: "SKILL.md", cwd: root },
+      { path: `${root}/SKILL.md`, cwd: root },
+      { path: "SKILL.md", cwd: "synthetic/private-alpha" },
+    ]);
+    const json = JSON.stringify(results);
+    for (const path of ["/synthetic/private-alpha", "/synthetic/private-beta", root, "synthetic/private-alpha"]) expect(json).not.toContain(path);
+  });
+
+  test("문서 identity 경계는 정본·명령 참조·일반 파일에 호출하지 않고 정본 path와 id를 유지한다", () => {
+    const calls: string[] = [];
+    const result = normalizeNativeResources(item(1, "item/completed", {
+      id: "known-read", type: "commandExecution", cwd: root, exitCode: 0,
+      command: "cat /synthetic/reference/SKILL.md",
+      commandActions: [
+        { type: "read", path: `${root}/skills/www/www-build/SKILL.md` },
+        { type: "read", path: ".agents/skills/www-build/SKILL.md" },
+        { type: "read", path: "agents/www/AGENT.md" },
+        { type: "command_reference", path: "/synthetic/reference/SKILL.md" },
+        { type: "read", path: "src/main.ts" },
+      ],
+    }), root, { documentIdentity: (path) => { calls.push(path); return "invalid"; } });
+    expect(calls).toEqual([]);
+    expect(result.gaps).toEqual([]);
+    expect(result.observations.filter((row) => row.action === "read").map((row) => row.resource)).toEqual([
+      { kind: "document", identity: "skills/www/www-build/SKILL.md", label: "www-build" },
+      { kind: "document", identity: "agents/www/AGENT.md", label: "www-dev" },
+    ]);
+  });
+
+  test("누락·잘못된 형식·길이·예외 identity는 원문 없이 native-missing으로 드러내고 생략한다", () => {
+    const paths = ["/synthetic/missing-alpha/SKILL.md", "/synthetic/missing-beta/SKILL.md"];
+    const input = item(1, "item/completed", {
+      id: "missing-read", type: "commandExecution", exitCode: 0,
+      commandActions: paths.map((path) => ({ type: "read", path })),
+    });
+    const invalid = ["", "SKILL.md", paths[0] ?? "", `document-sha256:${"a".repeat(63)}`, `document-sha256:${"a".repeat(65)}`,
+      `document-sha256:${"A".repeat(64)}`, `document-sha256:${"z".repeat(64)}`, `document-sha256:${"a".repeat(64)}\n`, "x".repeat(4096)];
+    const results = [normalizeNativeResources(input, root),
+      ...invalid.map((identity) => normalizeNativeResources(input, root, { documentIdentity: () => identity })),
+      normalizeNativeResources(input, root, { documentIdentity: () => { throw new Error(paths.join(" ")); } }),
+    ];
+    for (const result of results) {
+      expect(result.gaps).toEqual(["native-missing"]);
+      expect(result.observations).toHaveLength(1);
+      expect(result.observations[0]?.resource.kind).toBe("tool");
+      for (const path of paths) expect(JSON.stringify(result)).not.toContain(path);
+    }
+  });
+
+  test("실제 tool metadata만 남기며 command·출력·프롬프트·reasoning·payload를 유출하지 않는다", () => {
+    const privateBody = "PRIVATE_BODY_DO_NOT_COPY";
+    for (const type of ["commandExecution", "mcpToolCall", "dynamicToolCall", "collabAgentToolCall", "fileChange"]) {
+      const result = normalizeNativeResources(item(1, "item/completed", {
+        id: "exec", type, server: "docs", tool: "lookup", status: "completed",
+        command: privateBody, aggregatedOutput: privateBody, prompt: privateBody,
+        reasoning: privateBody, arguments: { secret: privateBody }, result: { content: privateBody },
+        changes: [{ path: privateBody }], payload: privateBody,
+      }), root);
+      expect(result.observations).toHaveLength(1);
+      expect(result.observations[0]?.source).toEqual({ kind: "item", itemId: "exec", turnId: "a" });
+      expect(result.observations[0]?.status).toBe("completed");
+      expect(JSON.stringify(result)).not.toContain(privateBody);
+      if (type === "mcpToolCall") expect(result.observations[0]?.resource).toEqual({ kind: "tool", identity: '["mcpToolCall","docs","lookup"]', label: "docs/lookup" });
+    }
+    for (const fields of [{ tool: "lookup" }, { server: "docs" }, { server: "docs", tool: "private body\ntext" }]) {
+      const result = normalizeNativeResources(item(2, "item/completed", { id: "bad", type: "mcpToolCall", ...fields }), root);
+      expect(result.observations).toEqual([]);
+      expect(result.gaps).toEqual(["native-missing"]);
+    }
+  });
+
+  test("실패·미확인·복원 상태를 보존하며 완료 알림만으로 성공을 만들지 않는다", () => {
+    const cases = [
+      { type: "commandExecution", exitCode: 2 },
+      { type: "commandExecution", status: "failed", exitCode: 0 },
+      { type: "fileChange", status: "failed" },
+      { type: "dynamicToolCall", tool: "lookup", success: false },
+      { type: "mcpToolCall", server: "docs", tool: "lookup", error: { message: "private error" } },
+    ];
+    for (const fields of cases) {
+      const result = normalizeNativeResources(item(1, "item/completed", { id: "fail", ...fields }), root);
+      expect(result.observations[0]?.status).toBe("failed");
+      expect(JSON.stringify(result)).not.toContain("private error");
+    }
+    for (const fields of [{ type: "commandExecution" }, { type: "fileChange" }, { type: "mcpToolCall", server: "docs", tool: "lookup" }]) {
+      expect(normalizeNativeResources(item(1, "item/completed", { id: "unknown", ...fields }), root).observations[0]?.status).toBe("unknown");
+    }
+    expect(normalizeNativeResources(item(1, "item/started", { id: "failed-start", type: "fileChange", status: "failed" }), root).observations[0]?.status).toBe("failed");
+    expect(normalizeNativeResources({ ...item(1, "item/started", { id: "old", type: "commandExecution" }), historical: true }, root).observations[0]?.status).toBe("unknown");
+  });
+
+  test("실제 Hook 핸들러 ID 재사용은 입력을 만들지 않으며 명시 thread에 unstable을 알린다", () => {
+    const run = { id: "Stop:0:/private/hooks/stop.sh", executionMode: "sync", eventName: "Stop", status: "completed", entries: [{ text: "private hook body" }] };
+    for (const turnId of [null, "a", "b"]) {
+      for (const method of ["hook/started", "hook/completed"]) {
+        const result = normalizeNativeResources(event(1, method, { threadId: "t", turnId, run }), root);
+        expect(result).toEqual({ threadId: "t", observations: [], gaps: ["unstable-id"] });
+        expect(JSON.stringify(result)).not.toContain("/private/hooks");
+        expect(JSON.stringify(result)).not.toContain("private hook body");
+      }
+    }
+    expect(normalizeNativeResources(event(2, "hook/completed", { turnId: "a", run }), root)).toEqual({ threadId: null, observations: [], gaps: ["native-missing"] });
+  });
+
+  test("유일성을 보증한 fixture namespace만 Hook을 받으며 null→명시 turn source를 보존한다", () => {
+    const options = { providerRunNamespace: "fixture-unique-runs" };
+    const run = { id: "fixture-call-1", executionMode: "sync", eventName: "Stop", status: "running" };
+    const start = normalizeNativeResources(event(1, "hook/started", { threadId: "t", turnId: null, run }), root, options);
+    const end = normalizeNativeResources(event(2, "hook/completed", { threadId: "t", turnId: "a", run: { ...run, status: "completed" } }), root, options);
+    expect(start).toEqual({ threadId: "t", gaps: [], observations: [{
+      source: { kind: "hook", hookRunId: "fixture-call-1", providerRunNamespace: "fixture-unique-runs", turnId: null },
+      resource: { kind: "hook", identity: "Stop", label: "Stop" }, action: "invoke", status: "running",
+    }] });
+    expect(end).toEqual({ threadId: "t", gaps: [], observations: [{
+      source: { kind: "hook", hookRunId: "fixture-call-1", providerRunNamespace: "fixture-unique-runs", turnId: "a" },
+      resource: { kind: "hook", identity: "Stop", label: "Stop" }, action: "invoke", status: "completed",
+    }] });
+    expect(normalizeNativeResources(event(3, "hook/started", { run }), root, options)).toEqual({ threadId: null, observations: [], gaps: ["native-missing"] });
+    const unknown = normalizeNativeResources(event(4, "hook/completed", { threadId: "t", run: { ...run, status: undefined } }), root, options);
+    expect(unknown.observations[0]?.status).toBe("unknown");
+  });
+});
 
 describe("실시간 Native 활동 투영", () => {
   test("누적 snapshot은 더하지 않고 이전 턴 기준과 차이만 계산한다", () => {
@@ -94,10 +366,10 @@ describe("실시간 Native 활동 투영", () => {
   });
 
   test("선택 저장소의 전용 역할·스킬 읽기를 이름과 근거로 보존한다", () => {
-    const root = "/projects/www";
-    const role = item(3, "item/started", { id: "role", type: "commandExecution", cwd: root, commandActions: [{ type: "read", path: `${root}/agents/www/AGENT.md` }] });
-    const skill = item(4, "item/started", { id: "skill", type: "commandExecution", cwd: root, commandActions: [{ type: "read", path: `${root}/skills/www/www-build/SKILL.md` }] });
-    const before = projectNativeActivity([configured, started(2), role, skill], "t", root);
+    const root   = "/projects/www"                                                                                                                                                  ;
+    const role   = item(3, "item/started", { id: "role", type: "commandExecution", cwd: root, commandActions: [{ type: "read", path: `${root}/agents/www/AGENT.md` }] })            ;
+    const skill  = item(4, "item/started", { id: "skill", type: "commandExecution", cwd: root, commandActions: [{ type: "read", path: `${root}/skills/www/www-build/SKILL.md` }] }) ;
+    const before = projectNativeActivity([configured, started(2), role, skill], "t", root)                                                                                          ;
     expect(before.turns[0]?.entries.find((row) => row.wwwArtifact?.id === "www-dev")).toMatchObject({ kind: "role", label: "www-dev 읽는 중", source: "file_read", status: "running" });
     const after = projectNativeActivity([configured, started(2), role, skill, item(5, "item/completed", { id: "role", type: "commandExecution", exitCode: 0 }), item(6, "item/completed", { id: "skill", type: "commandExecution", exitCode: 1 })], "t", root);
     expect(after.turns[0]?.entries.find((row) => row.wwwArtifact?.id === "www-dev")).toMatchObject({ label: "www-dev 읽기 확인", status: "completed" });
@@ -105,14 +377,14 @@ describe("실시간 Native 활동 투영", () => {
   });
 
   test("전용 문서 cat 참조는 구조화 읽기와 구별하고 완료 때 명령 상태만 갱신한다", () => {
-    const root = "/projects/www";
-    const read = item(3, "item/started", { id: "multi", type: "commandExecution", cwd: root, command: "/bin/zsh -lc 'cat AGENTS.md agents/www/AGENT.md skills/www/www-verify/SKILL.md'", commandActions: [{ type: "unknown" }] });
-    const result = projectNativeActivity([configured, started(2), read, item(4, "item/completed", { id: "multi", type: "commandExecution", exitCode: 0 })], "t", root);
-    const references = result.turns[0]?.entries.filter((row) => row.source === "command_reference");
-    expect(references?.map((row) => row.wwwArtifact?.id)).toEqual(["www-dev", "www-verify"]);
-    expect(references?.every((row) => row.label.endsWith("읽기 명령 관측") && row.status === "completed")).toBe(true);
-    expect(references?.every((row) => row.description?.includes("개별 문서 읽기·적용은 확인되지 않았습니다."))).toBe(true);
-    expect(result.turns[0]?.entries.some((row) => row.source === "file_read")).toBe(false);
+    const root       = "/projects/www"                                                                                                                                                                                                  ;
+    const read       = item(3, "item/started", { id: "multi", type: "commandExecution", cwd: root, command: "/bin/zsh -lc 'cat AGENTS.md agents/www/AGENT.md skills/www/www-verify/SKILL.md'", commandActions: [{ type: "unknown" }] }) ;
+    const result     = projectNativeActivity([configured, started(2), read, item(4, "item/completed", { id: "multi", type: "commandExecution", exitCode: 0 })], "t", root)                                                              ;
+    const references = result.turns[0]?.entries.filter((row) => row.source === "command_reference")                                                                                                                                     ;
+    expect(references?.map((row) => row.wwwArtifact?.id)                                                      ).toEqual(["www-dev", "www-verify"]) ;
+    expect(references?.every((row) => row.label.endsWith("읽기 명령 관측") && row.status === "completed")     ).toBe   (true                     ) ;
+    expect(references?.every((row) => row.description?.includes("개별 문서 읽기·적용은 확인되지 않았습니다."))).toBe   (true                     ) ;
+    expect(result.turns[0]?.entries.some((row) => row.source === "file_read")                                 ).toBe   (false                    ) ;
   });
 
   test("타 저장소 문서와 echo 언급은 WWW 사용으로 올리지 않고 구조화 읽기에는 중복 참조를 만들지 않는다", () => {
@@ -271,25 +543,25 @@ describe("실시간 Native 활동 투영", () => {
   });
 
   test("연결 상태는 명시적 transport 사건으로만 정하고 복원 상태도 반영한다", () => {
-    expect(projectNativeActivity([configured, started(2)]).transport).toBe("disconnected");
-    expect(projectNativeActivity([event(1, "transport/connected", {})]).transport).toBe("connected");
-    expect(projectNativeActivity([event(1, "transport/error", {})]).transport).toBe("disconnected");
-    expect(projectNativeActivity([event(1, "transport/connected", {}), event(2, "transport/error", {})]).transport).toBe("connected");
+    expect(projectNativeActivity([configured, started(2)]).transport                                              ).toBe("disconnected") ;
+    expect(projectNativeActivity([event(1, "transport/connected", {})]).transport                                 ).toBe("connected"   ) ;
+    expect(projectNativeActivity([event(1, "transport/error", {})]).transport                                     ).toBe("disconnected") ;
+    expect(projectNativeActivity([event(1, "transport/connected", {}), event(2, "transport/error", {})]).transport).toBe("connected"   ) ;
     for (const state of ["connected", "closed", "error", "disconnected"] as const) expect(projectNativeActivity([event(1, "transport/status", { state })]).transport).toBe(state);
     expect(projectNativeActivity([{ ...event(1, "transport/status", { state: "closed" }), historical: true }]).transport).toBe("closed");
   });
 
   test("복구 가능한 JSON 경고는 현재 턴과 명령을 종료하지 않는다", () => {
-    const before = [configured, started(2), item(3, "item/started", { id: "live", type: "commandExecution", command: "printf live" }), event(4, "transport/error", { message: "잘못된 JSON 한 줄" })];
-    const running = projectNativeActivity(before);
-    expect(running.transport).toBe("disconnected");
-    expect(running.protocolWarning?.message).toBe("잘못된 JSON 한 줄");
-    expect(running.turns[0]).toMatchObject({ status: "running", endedAt: null });
-    expect(running.turns[0]?.entries[0]?.status).toBe("running");
+    const before  = [configured, started(2), item(3, "item/started", { id: "live", type: "commandExecution", command: "printf live" }), event(4, "transport/error", { message: "잘못된 JSON 한 줄" })] ;
+    const running = projectNativeActivity(before)                                                                                                                                                      ;
+    expect(running.transport                   ).toBe         ("disconnected"                      ) ;
+    expect(running.protocolWarning?.message    ).toBe         ("잘못된 JSON 한 줄"                 ) ;
+    expect(running.turns[0]                    ).toMatchObject({ status: "running", endedAt: null }) ;
+    expect(running.turns[0]?.entries[0]?.status).toBe         ("running"                           ) ;
     const completed = projectNativeActivity([...before, item(5, "item/completed", { id: "live", type: "commandExecution", exitCode: 0 }), event(6, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } })]);
-    expect(completed.turns[0]?.status).toBe("completed");
-    expect(completed.turns[0]?.entries[0]?.status).toBe("completed");
-    expect(completed.protocolWarning).toEqual(running.protocolWarning);
+    expect(completed.turns[0]?.status            ).toBe   ("completed"            ) ;
+    expect(completed.turns[0]?.entries[0]?.status).toBe   ("completed"            ) ;
+    expect(completed.protocolWarning             ).toEqual(running.protocolWarning) ;
   });
 
   test("복원한 턴과 Hook은 실시간 활동으로 재생하지 않고 미종료 Hook을 미확인으로 둔다", () => {
@@ -298,35 +570,35 @@ describe("실시간 Native 활동 투영", () => {
       { ...started(2), historical: true },
       { ...event(3, "hook/started", { run: { id: "old", executionMode: "sync", status: "running", eventName: "Stop" } }), historical: true },
     ]);
-    expect(result.turns[0]?.historical).toBe(true);
-    expect(result.turns[0]?.status).toBe("unknown");
-    expect(result.sessionEntries[0]?.historical).toBe(true);
-    expect(result.sessionEntries[0]?.status).toBe("unknown");
+    expect(result.turns[0]?.historical         ).toBe(true     ) ;
+    expect(result.turns[0]?.status             ).toBe("unknown") ;
+    expect(result.sessionEntries[0]?.historical).toBe(true     ) ;
+    expect(result.sessionEntries[0]?.status    ).toBe("unknown") ;
   });
 
   test("공개 진행 설명은 완료 전 누적하고 snapshot으로 대체하며 analysis는 노출하지 않는다", () => {
     const before = [configured, started(2), item(3, "item/started", { id: "p", type: "agentMessage", phase: "commentary" }), event(4, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase: "commentary", delta: "파일 확인 중" })];
     expect(projectNativeActivity(before).turns[0]?.entries[0]?.description).toBe("파일 확인 중");
     const result = projectNativeActivity([...before, item(5, "item/completed", { id: "p", type: "agentMessage", phase: "commentary", text: "파일을 확인했습니다." }), item(6, "item/completed", { id: "secret", type: "agentMessage", phase: "analysis", text: "숨김 원문" })]);
-    expect(result.turns[0]?.entries).toHaveLength(1);
-    expect(result.turns[0]?.entries[0]?.kind).toBe("progress");
-    expect(result.turns[0]?.entries[0]?.description).toBe("파일을 확인했습니다.");
-    expect(result.turns[0]?.entries[0]?.status).toBe("completed");
+    expect(result.turns[0]?.entries                ).toHaveLength(1                     ) ;
+    expect(result.turns[0]?.entries[0]?.kind       ).toBe        ("progress"            ) ;
+    expect(result.turns[0]?.entries[0]?.description).toBe        ("파일을 확인했습니다.") ;
+    expect(result.turns[0]?.entries[0]?.status     ).toBe        ("completed"           ) ;
     expect(result.turns[0]?.answer).toBeNull();
     expect(JSON.stringify(result)).not.toContain("숨김 원문");
   });
 
   test("패널은 WWW 전용 흐름을 중심에 두고 일반 활동과 토큰은 보조 펼침으로 둔다", () => {
-    const events = [configured, event(2, "transport/connected", {}), started(3), item(4, "item/completed", { id: "u", type: "userMessage", content: [{ type: "skill", name: "demo" }] })];
-    const html = renderToStaticMarkup(createElement(NativeActivityView, { events, threadId: "t" }));
-    expect(html).toContain("현재 세션 모니터");
-    expect(html).toContain("Native 연결됨");
-    expect(html).toContain("WWW 개발 흐름");
-    expect(html).toContain("전용 에이전트");
-    expect(html).toContain("일반 Native 활동");
-    expect(html).toContain("요청됨");
-    expect(html).toContain("모델·토큰·계정 관측");
-    expect(html).toContain("공개 진행 설명 미제공");
+    const events = [configured, event(2, "transport/connected", {}), started(3), item(4, "item/completed", { id: "u", type: "userMessage", content: [{ type: "skill", name: "demo" }] })] ;
+    const html   = renderToStaticMarkup(createElement(NativeActivityView, { events, threadId: "t" }))                                                                                     ;
+    expect(html).toContain("현재 세션 모니터"     ) ;
+    expect(html).toContain("Native 연결됨"        ) ;
+    expect(html).toContain("WWW 개발 흐름"        ) ;
+    expect(html).toContain("전용 에이전트"        ) ;
+    expect(html).toContain("일반 Native 활동"     ) ;
+    expect(html).toContain("요청됨"               ) ;
+    expect(html).toContain("모델·토큰·계정 관측"  ) ;
+    expect(html).toContain("공개 진행 설명 미제공") ;
   });
 
   test("복원된 진행 턴은 패널에서 실시간 점멸하지 않는다", () => {
@@ -344,8 +616,8 @@ describe("실시간 Native 활동 투영", () => {
   });
 
   test("완전 복원 표식도 실제 2000건 보관 경계에서 제거되면 절단을 숨기지 않는다", () => {
-    const complete = { ...event(20, "conversation/restored", { threadId: "t", complete: true }), historical: true };
-    const after = Array.from({ length: 2_000 }, (_, index) => event(21 + index, "irrelevant", {}));
+    const complete = { ...event(20, "conversation/restored", { threadId: "t", complete: true }), historical: true } ;
+    const after    = Array.from({ length: 2_000 }, (_, index) => event(21 + index, "irrelevant", {}))               ;
     expect(projectNativeActivity([complete, ...after]).historyTruncated).toBe(true);
   });
 

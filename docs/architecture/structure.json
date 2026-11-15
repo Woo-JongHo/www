@@ -55,6 +55,22 @@
       "allowedDependencies": []
     },
     {
+      "id": "arch.native.resources",
+      "parent": "arch.native",
+      "title": "관측 원자 원장",
+      "description": "main 전용 단일 소유자가 대화별 실제 관측을 중복 없이 병합하고 제한된 메타데이터를 원자 저장·복원한다.",
+      "allowedDependencies": [
+        "arch.native.protocol"
+      ]
+    },
+    {
+      "id": "arch.native.projects",
+      "parent": "arch.native",
+      "title": "로컬 프로젝트 인덱스",
+      "description": "main 단일 소유자가 실제 경로별 최근 프로젝트와 즐겨찾기를 검증하고 제한된 로컬 인덱스를 원자 저장·복원하며 실패 시 기존 항목을 보전한다.",
+      "allowedDependencies": []
+    },
+    {
       "id": "arch.development",
       "parent": "arch.www",
       "title": "개발 실행",
@@ -454,7 +470,9 @@
         "arch.chat.sessions.restore",
         "arch.development.service",
         "arch.native.launch",
+        "arch.native.projects",
         "arch.native.protocol",
+        "arch.native.resources",
         "arch.native.transport",
         "arch.reports.collection",
         "arch.reports.judgement",

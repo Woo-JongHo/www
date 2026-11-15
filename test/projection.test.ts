@@ -2,9 +2,19 @@
  * @verifies RESP-CHAT-MESSAGES-PROJECTION
  */
 import { expect, test } from "bun:test";
-import { project } from "../src/projection";
+import { executionResultCounts, project } from "../src/projection";
 import type { AppEvent } from "../src/shared";
 const event = (seq: number, method: string, params: unknown, extra: Partial<AppEvent> = {}): AppEvent => ({ seq, at: "2026-01-01T00:00:00Z", kind: "notification", method, params, ...extra });
+
+test("결과 요약 집계는 명령과 파일의 실패·미확인을 함께 센다", () => {
+  const blocks = project([
+    event(1, "turn/started", { threadId: "t", turn: { id: "a" } }),
+    event(2, "item/completed", { threadId: "t", turnId: "a", item: { id: "command", type: "commandExecution", command: "false", status: "completed", exitCode: 0 } }),
+    event(3, "item/completed", { threadId: "t", turnId: "a", item: { id: "failed-file", type: "fileChange", status: "failed", changes: [] } }),
+    event(4, "item/started", { threadId: "t", turnId: "a", item: { id: "unknown-file", type: "fileChange", changes: [] } })
+  ]).blocks;
+  expect(executionResultCounts(blocks)).toEqual({ commands: 1, files: 2, failed: 1, unresolved: 1 });
+});
 
 test("명시적 명령 거절과 턴 중단의 명령 결과 미확인을 구별한다", () => {
   for (const status of ["declined"]) {
@@ -254,9 +264,9 @@ test("복구 가능한 프로토콜 오류 뒤 새 턴의 명령은 같은 연�
     event(5, "item/started", { threadId: "t", turnId: "new", item: { id: "live", type: "commandExecution", command: "printf live" } }),
     event(6, "item/commandExecution/outputDelta", { threadId: "t", turnId: "new", itemId: "live", delta: "즉시 읽는 출력" })
   ]);
-  expect(result.blocks[0]).toMatchObject({ kind: "command", turnId: "new", running: true, status: "running", output: "즉시 읽는 출력" });
-  expect(result.transport).toBe("connected");
-  expect(result.protocolWarning?.message).toBe("잘못된 JSON 한 줄");
+  expect(result.blocks[0]               ).toMatchObject({ kind: "command", turnId: "new", running: true, status: "running", output: "즉시 읽는 출력" }) ;
+  expect(result.transport               ).toBe         ("connected"                                                                                   ) ;
+  expect(result.protocolWarning?.message).toBe         ("잘못된 JSON 한 줄"                                                                           ) ;
 });
 
 test("시작에서 제공된 공개 설명 phase를 델타와 완료에도 보존한다", () => {

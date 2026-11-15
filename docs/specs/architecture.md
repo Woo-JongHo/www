@@ -5,6 +5,20 @@
 ```architecture-requirements
 [
   {
+    "id": "RESP-NATIVE-PROJECTS",
+    "nodeId": "arch.native.projects",
+    "description": "로컬 프로젝트 인덱스가 실제 경로 식별·최근순·즐겨찾기·직렬 갱신·원자 저장과 오류 시 원본 보전을 담당한다. main은 single-instance lock 뒤 userData당 factory 하나를 사용하며 실행·전송·승인 중 전환 보호를 소유한다. 제한된 IPC가 renderer의 조회·즐겨찾기·프로젝트 선택을 연결한다.",
+    "implementationRequired": true,
+    "verificationRequired": true
+  },
+  {
+    "id": "RESP-NATIVE-RESOURCES",
+    "nodeId": "arch.native.resources",
+    "description": "main 전용 관측 원자 원장이 scope 격리·안정 식별 병합·제한된 메타데이터 저장·복원·종료와 실패 보전을 담당한다. main이 Native 관측 정규화와 저장을 소유하고 제한된 IPC로 renderer에 scope별 읽기 전용 snapshot을 전달한다.",
+    "implementationRequired": true,
+    "verificationRequired": true
+  },
+  {
     "id": "RESP-TOOLING-BUNDLE",
     "nodeId": "arch.tooling.bundle",
     "description": "앱 번들 생성 책임을 구현하고 관련 동작을 검증한다.",

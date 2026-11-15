@@ -3,9 +3,9 @@
  * @implements RESP-NATIVE-LIFECYCLE
  */
 import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
-import { spawn, execFileSync } from "node:child_process";
-import { randomUUID } from "node:crypto";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { spawn, execFileSync, type ChildProcess } from "node:child_process";
+import { createHash, randomUUID } from "node:crypto";
+import { mkdirSync, realpathSync, writeFileSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { JsonRpcClient, type RpcMessage } from "./rpc";
 import { createConversationService, type ConversationEvent } from "./conversations";
@@ -17,11 +17,34 @@ import { NativeCompletionCollector } from "./native-report-input";
 import { resolveNativeCodex } from "./native-command";
 import { nativeThreadStartParams, nativeTurnStartParams } from "./native-chat";
 import { parseHooksListResponse, parseSkillsListResponse } from "./activity-sidebar";
-import type { AppEvent, RpcId, WorkspaceInfo } from "./shared";
+import { createActivityLedger, type ActivityLedger } from "./activity-ledger";
+import { createProjectRegistry } from "./projects";
+import { normalizeNativeResources } from "./native-activity";
+import type { AppEvent, ScopedAppEvent, SelectionRef, WorkspaceSelection, ResourceScope, ResourceSnapshot, RpcId } from "./shared";
 
 const DIST = join(app.getAppPath(), "dist");
 
 const PROBE_PATH  = process.env.WWW_PROBE_PATH                                                                                     ;
+// probe profile은 single-instance lock 이전에 확정한다.
+if (PROBE_PATH) {
+  const profile = process.argv.find((arg) => arg.startsWith("--user-data-dir="))?.slice("--user-data-dir=".length);
+  if (!profile) throw new Error("Probe 격리 user-data-dir이 필요합니다.");
+  app.setPath("userData", resolve(profile));
+}
+const ownsInstance = app.requestSingleInstanceLock();
+if (!ownsInstance) app.exit(0);
+const processEpoch = randomUUID();
+let selectionEpoch = 0;
+let stopping = false;
+let childProcess: ChildProcess | null = null;
+let clientToken = 0;
+let ledger: ActivityLedger;
+let projects: ReturnType<typeof createProjectRegistry>;
+let projectRegistrationError: string | null = null;
+const resourceScopes = new Map<string, Promise<ResourceScope>>();
+const resourceLoads = new Map<string, Promise<ResourceScope>>();
+const collections = new Set<Promise<unknown>>();
+const resourceCollections = new Map<string, Promise<void>>();
 const nativeEntry = process.hrtime.bigint()                                                                                        ;
 let workspace     = PROBE_PATH && process.env.WWW_PROBE_WORKSPACE ? resolve(process.env.WWW_PROBE_WORKSPACE) : app.getPath("home") ;
 
@@ -40,12 +63,12 @@ let nativeReports    : ReturnType<typeof createNativeReportHarness> | null = nul
 
 let autoReportsEnabled  = !PROBE_PATH || process.env.WWW_PROBE_NATIVE_REPORTS === "1" ;
 const reportAbort       = new AbortController()                                       ;
-const nativeCompletions = new NativeCompletionCollector()                             ;
+const nativeCompletions = new Map<string, NativeCompletionCollector>()                             ;
 
 let seq                       = 0                        ;
 let connectionGeneration      = 0                        ;
 let activityRequestGeneration = 0                        ;
-const eventLog : AppEvent[] = []                       ;
+const eventLog : ScopedAppEvent[] = []                       ;
 const pendingApprovals      = new Map<RpcId, string>() ;
 const approvalAttempts      = new Set<RpcId>()         ;
 const latestActivityRequests = new Map<string, number>();
@@ -53,28 +76,126 @@ const latestActivityRequests = new Map<string, number>();
 const SUPPORTED = new Set(["item/commandExecution/requestApproval", "item/fileChange/requestApproval"]) ;
 const DECISIONS = new Set(["accept", "acceptForSession", "decline", "cancel"])                          ;
 
+function selection(): SelectionRef {
+  return { workspaceKey: createHash("sha256").update(workspace).digest("hex"), selectionEpoch, processEpoch };
+}
+function isCurrent(expected: SelectionRef): boolean {
+  const current = selection();
+  return !stopping && expected.processEpoch === current.processEpoch && expected.workspaceKey === current.workspaceKey && expected.selectionEpoch === current.selectionEpoch;
+}
+function assertSelection(value: unknown): asserts value is SelectionRef {
+  const expected = optionalRecord(value);
+  if (!expected || typeof expected.workspaceKey !== "string" || typeof expected.processEpoch !== "string" || typeof expected.selectionEpoch !== "number"
+    || !isCurrent({ workspaceKey: expected.workspaceKey, processEpoch: expected.processEpoch, selectionEpoch: expected.selectionEpoch })) throw new Error("프로젝트 선택이 변경됐습니다. 다시 시도해 주세요.");
+}
+function wire(event: Omit<AppEvent, "seq" | "at">): ScopedAppEvent {
+  return { ...event, ...selection(), connectionGeneration, seq: ++seq, at: new Date().toISOString() };
+}
+function loadResourceScope(root: string, threadId: string, epoch: number): Promise<ResourceScope> {
+  const key = JSON.stringify([root, threadId, epoch]);
+  let pending = resourceLoads.get(key);
+  if (!pending) {
+    const scopeKey = JSON.stringify([root, threadId]);
+    let actualScope = resourceScopes.get(scopeKey);
+    if (!actualScope) {
+      actualScope = ledger.scope(root, threadId);
+      resourceScopes.set(scopeKey, actualScope);
+      void actualScope.catch(() => resourceScopes.delete(scopeKey));
+    }
+    pending = actualScope.then(async (scope) => { await ledger.select(scope, epoch); return scope; });
+    resourceLoads.set(key, pending);
+    void pending.catch(() => { if (resourceLoads.get(key) === pending) resourceLoads.delete(key); });
+  }
+  return pending;
+}
+function collectResources(entry: ScopedAppEvent): void {
+  if (stopping) return;
+  const root = workspace;
+  const normalized = normalizeNativeResources(entry, root, {
+    documentIdentity: (path, cwd) => "document-sha256:" + createHash("sha256").update(resolve(root, cwd, path)).digest("hex"),
+  });
+  if (!normalized.threadId) return;
+  if (!normalized.observations.length && !normalized.gaps.length && entry.method !== "turn/completed") return;
+  const id = normalized.threadId;
+  const key = JSON.stringify([root, id]);
+  const previous = resourceCollections.get(key) ?? Promise.resolve();
+  const scopeReady = loadResourceScope(root, id, entry.selectionEpoch);
+  void scopeReady.catch(() => undefined);
+  const pending = previous.then(async () => {
+    const scope = await scopeReady;
+    for (const gap of normalized.gaps) ledger.gap(scope, gap);
+    for (const observation of normalized.observations) await ledger.upsert(scope, observation);
+    if (entry.method === "turn/completed") await ledger.flush();
+  }).catch((error: unknown) => {
+    console.warn("리소스 수집 실패 · 채팅은 계속됩니다.", error);
+    if (isCurrent(entry)) publish({ kind: "notification", method: "activity/resourcesUnavailable", params: { message: String(error) } });
+  });
+  resourceCollections.set(key, pending);
+  collections.add(pending);
+  void pending.finally(() => {
+    collections.delete(pending);
+    if (resourceCollections.get(key) === pending) resourceCollections.delete(key);
+  });
+}
+async function currentResources(expected: SelectionRef): Promise<ResourceSnapshot | null> {
+  assertSelection(expected);
+  const id = activeThreadId;
+  if (!id) return null;
+  const root = workspace;
+  const scope = await loadResourceScope(root, id, expected.selectionEpoch);
+  await resourceCollections.get(JSON.stringify([root, id]));
+  assertSelection(expected);
+  if (activeThreadId !== id) throw new Error("대화 선택이 변경됐습니다.");
+  return ledger.snapshot(scope);
+}
 function publish(event: Omit<AppEvent, "seq" | "at">): void {
-  const entry = { ...event, seq: ++seq, at: new Date().toISOString() };
+  if (stopping) return;
+  const entry = wire(event);
+  collectResources(entry);
   eventLog.push(entry);
   if (eventLog.length > 2000) eventLog.shift();
   window?.webContents.send("app:event", entry);
   if (autoReportsEnabled && nativeReports) {
-    for (const input of nativeCompletions.observe(eventLog, entry)) {
-      const repository = workspace;
-      void nativeReports.enqueue({ repository, input }).catch((error: unknown) => publish({ kind: "notification", method: "reports/autoError", params: { threadId: input.threadId, turnId: input.turnId, message: error instanceof Error ? error.message : String(error) } }));
+    const expected = selection();
+    const repository = workspace;
+    const params = optionalRecord(entry.params);
+    const nativeTurn = optionalRecord(params?.turn);
+    const turnId = typeof params?.turnId === "string" ? params.turnId : typeof nativeTurn?.id === "string" ? nativeTurn.id : null;
+    if (typeof params?.threadId === "string" && turnId && ["turn/started", "turn/startAccepted", "turn/completed"].includes(entry.method)) {
+      const key = JSON.stringify([repository, params.threadId, turnId]);
+      if (!reportSelections.has(key)) reportSelections.set(key, expected);
+    }
+    let collector = nativeCompletions.get(repository);
+    if (!collector) { collector = new NativeCompletionCollector(); nativeCompletions.set(repository, collector); }
+    for (const input of collector.observe(eventLog, entry)) {
+      const reportKey = JSON.stringify([repository, input.threadId, input.turnId]);
+      if (!reportSelections.has(reportKey)) reportSelections.set(reportKey, expected);
+      const reportExpected = reportSelections.get(reportKey);
+      void nativeReports.enqueue({ repository, input }).catch((error: unknown) => {
+        if (reportExpected && isCurrent(reportExpected)) publish({ kind: "notification", method: "reports/autoError", params: { threadId: input.threadId, turnId: input.turnId, message: String(error) } });
+      });
     }
   }
 }
 
 function connect(): Promise<JsonRpcClient> {
+  if (stopping) return Promise.reject(new Error("앱 종료 중"));
   if (rpc) return Promise.resolve(rpc);
   if (connecting) return connecting;
-  connecting = new Promise<JsonRpcClient>((resolveClient, reject) => {
-    const child  = spawn(resolveNativeCodex(), ["app-server"], { stdio: ["pipe", "pipe", "pipe"] }) ;
+  const token = ++clientToken;
+  const root = workspace;
+  const valid = () => !stopping && token === clientToken && workspace === root;
+  connectionGeneration += 1;
+  const pending: Promise<JsonRpcClient> = new Promise<JsonRpcClient>((resolveClient, reject) => {
+    const child  = spawn(resolveNativeCodex(), ["app-server"], { cwd: workspace, stdio: ["pipe", "pipe", "pipe"] }) ;
+    childProcess = child;
     const client = new JsonRpcClient(child)                                                         ;
     let settled  = false                                                                            ;
     client.once("closed", (error: Error) => {
+      if (!valid()) { if (!settled) reject(error); return; }
+      clientToken++;
       rpc = null;
+      childProcess = null;
       activeTurnId = null;
       turnStarting = false;
       for (const requestId of pendingApprovals.keys()) {
@@ -82,12 +203,17 @@ function connect(): Promise<JsonRpcClient> {
       }
       pendingApprovals.clear();
       approvalAttempts.clear();
+      if (activeThreadId) {
+        const id = activeThreadId;
+        void loadResourceScope(workspace, id, selectionEpoch).then((scope) => { if (!stopping && workspace === root) ledger.gap(scope, "disconnect"); }).catch((error: unknown) => console.warn(error));
+      }
       publish({ kind: "transport", method: "transport/closed", params: { message: error.message } });
       if (!settled) reject(error);
     });
-    client.on("stderr", (text: string) => publish({ kind: "transport", method: "transport/stderr", params: { text } }));
-    client.on("protocolError", (message: string) => publish({ kind: "transport", method: "transport/error", params: { message } }));
+    client.on("stderr", (text: string) => { if (valid()) publish({ kind: "transport", method: "transport/stderr", params: { text } }); });
+    client.on("protocolError", (message: string) => { if (valid()) publish({ kind: "transport", method: "transport/error", params: { message } }); });
     client.on("message", (message: RpcMessage) => {
+      if (!valid()) return;
       const method = String(message.method) ;
       const id     = message.id             ;
       const params = optionalRecord(message.params);
@@ -113,17 +239,22 @@ function connect(): Promise<JsonRpcClient> {
     });
     void client.request("initialize", { clientInfo: { name: "www", title: "WWW", version: app.getVersion() }, capabilities: { experimentalApi: false } })
       .then(() => {
+        if (!valid()) { child.kill(); throw new Error("이전 프로젝트 연결 취소"); }
         client.notify("initialized", {});
         rpc = client;
         settled = true;
-        connectionGeneration += 1;
         publish({ kind: "transport", method: "transport/connected", params: { connectionGeneration } });
         resolveClient(client);
         void loadRateLimits(client);
       })
-      .catch((error) => { settled = true; reject(error); });
-  }).finally(() => { connecting = null; });
-  return connecting;
+      .catch((error: unknown) => {
+        settled = true;
+        if (valid()) { clientToken++; rpc = null; childProcess = null; child.kill(); }
+        reject(error);
+      });
+  }).finally(() => { if (connecting === pending) connecting = null; });
+  connecting = pending;
+  return pending;
 }
 
 function assertConversationIdle(): void {
@@ -131,16 +262,16 @@ function assertConversationIdle(): void {
   if (turnStarting || activeTurnId !== null || pendingApprovals.size > 0) throw new Error("실행 또는 승인 요청이 끝난 뒤 대화를 전환할 수 있습니다.");
 }
 
-function replaceConversationEvents(records: readonly ConversationEvent[]): AppEvent[] {
+function replaceConversationEvents(records: readonly ConversationEvent[]): ScopedAppEvent[] {
   eventLog.splice(0);
-  for (const value of records) eventLog.push({ ...value, seq: ++seq, at: new Date().toISOString() });
+  for (const value of records) { const entry = wire(value); collectResources(entry); eventLog.push(entry); }
   if (eventLog.length > 2000) eventLog.splice(0, eventLog.length - 2000);
   return [...eventLog];
 }
 
-function workspaceInfo(): WorkspaceInfo {
+function workspaceInfo(): WorkspaceSelection {
   const git = (args: string[]) => { try { return execFileSync("git", args, { cwd: workspace, encoding: "utf8" }).trim(); } catch { return ""; } };
-  return { name: basename(workspace), path: workspace, branch: git(["branch", "--show-current"]) || null, changes: git(["status", "--porcelain"]).split("\n").filter(Boolean).length };
+  return { ...selection(), name: basename(workspace), path: workspace, branch: git(["branch", "--show-current"]) || null, changes: git(["status", "--porcelain"]).split("\n").filter(Boolean).length };
 }
 function record(value: unknown): Record<string, unknown> { if (!value || typeof value !== "object") throw new Error("Invalid app-server response"); return value as Record<string, unknown>; }
 function requiredString(value: unknown, name: string): string { if (typeof value !== "string" || !value) throw new Error(`Invalid ${name}`); return value; }
@@ -163,12 +294,13 @@ function rateLimitPayload(value: unknown): Record<string, unknown> {
 }
 
 async function loadRateLimits(client: JsonRpcClient): Promise<void> {
+  const expected = selection();
   let timeout: ReturnType<typeof setTimeout> | undefined;
   try {
     const result = await Promise.race([client.request("account/rateLimits/read", {}), new Promise<never>((_resolve, reject) => { timeout = setTimeout(() => reject(new Error("한도 응답 대기 시간 초과")), 5000); })]);
-    if (rpc === client) publish({ kind: "notification", method: "account/rateLimits/updated", params: rateLimitPayload(result) });
+    if (isCurrent(expected) && rpc === client) publish({ kind: "notification", method: "account/rateLimits/updated", params: rateLimitPayload(result) });
   } catch {
-    if (rpc === client) publish({ kind: "notification", method: "account/rateLimits/unavailable", params: {} });
+    if (isCurrent(expected) && rpc === client) publish({ kind: "notification", method: "account/rateLimits/unavailable", params: {} });
   } finally { clearTimeout(timeout); }
 }
 
@@ -191,18 +323,20 @@ function optionalRecord(value: unknown): Record<string, unknown> | null {
 }
 
 async function loadSkills(client: JsonRpcClient, forceReload = false): Promise<void> {
+  const expected = selection();
   const cwd               = workspace                              ;
   const requestScope      = `skills\u0000${cwd}`                   ;
   const requestGeneration = beginActivityRequest(requestScope)     ;
   try {
     const result = parseSkillsListResponse(await client.request("skills/list", { cwds: [cwd], forceReload }), cwd);
-    if (rpc === client && workspace === cwd && currentActivityRequest(requestScope, requestGeneration)) publish({ kind: "notification", method: "activity/skillsListed", params: { cwd, scope: "workspace", requestGeneration, ...result } });
+    if (isCurrent(expected) && rpc === client && workspace === cwd && currentActivityRequest(requestScope, requestGeneration)) publish({ kind: "notification", method: "activity/skillsListed", params: { cwd, scope: "workspace", requestGeneration, ...result } });
   } catch {
-    if (rpc === client && workspace === cwd && currentActivityRequest(requestScope, requestGeneration)) publish({ kind: "notification", method: "activity/skillsListed", params: { cwd, scope: "workspace", requestGeneration, complete: false, skills: [] } });
-  } finally { finishActivityRequest(requestScope, requestGeneration); }
+    if (isCurrent(expected) && rpc === client && workspace === cwd && currentActivityRequest(requestScope, requestGeneration)) publish({ kind: "notification", method: "activity/skillsListed", params: { cwd, scope: "workspace", requestGeneration, complete: false, skills: [] } });
+  } finally { if (isCurrent(expected)) finishActivityRequest(requestScope, requestGeneration); }
 }
 
 async function loadHooks(client: JsonRpcClient, threadId: string | null = null): Promise<void> {
+  const expected = selection();
   const cwd               = workspace                                         ;
   const scope             = threadId === null ? "workspace" : "thread"       ;
   const requestScope      = `hooks\u0000${cwd}\u0000${threadId ?? "workspace"}` ;
@@ -210,17 +344,21 @@ async function loadHooks(client: JsonRpcClient, threadId: string | null = null):
   try {
     const params = threadId === null ? { cwds: [cwd] } : { threadId };
     const result = parseHooksListResponse(await client.request("hooks/list", params), cwd);
-    if (rpc === client && workspace === cwd && currentActivityRequest(requestScope, requestGeneration)) publish({ kind: "notification", method: "activity/hooksListed", params: { cwd, scope, threadId, requestGeneration, ...result } });
+    if (isCurrent(expected) && rpc === client && workspace === cwd && currentActivityRequest(requestScope, requestGeneration)) publish({ kind: "notification", method: "activity/hooksListed", params: { cwd, scope, threadId, requestGeneration, ...result } });
   } catch {
-    if (rpc === client && workspace === cwd && currentActivityRequest(requestScope, requestGeneration)) publish({ kind: "notification", method: "activity/hooksListed", params: { cwd, scope, threadId, requestGeneration, complete: false, hooks: [] } });
-  } finally { finishActivityRequest(requestScope, requestGeneration); }
+    if (isCurrent(expected) && rpc === client && workspace === cwd && currentActivityRequest(requestScope, requestGeneration)) publish({ kind: "notification", method: "activity/hooksListed", params: { cwd, scope, threadId, requestGeneration, complete: false, hooks: [] } });
+  } finally { if (isCurrent(expected)) finishActivityRequest(requestScope, requestGeneration); }
 }
 
 async function refreshActivityInventory(): Promise<void> {
+  const expected = selection();
   try {
     const client = await connect();
+    assertSelection(expected);
     await Promise.all([loadSkills(client), loadHooks(client)]);
-  } catch {
+  } catch (error: unknown) {
+    if (!isCurrent(expected)) return;
+    publish({ kind: "transport", method: "transport/error", params: { message: `Native 연결·활동 조회 실패: ${String(error)}` } });
     const cwd              = workspace                         ;
     const skillsScope      = `skills\u0000${cwd}`              ;
     const hooksScope       = `hooks\u0000${cwd}\u0000workspace` ;
@@ -233,17 +371,66 @@ async function refreshActivityInventory(): Promise<void> {
   }
 }
 
+const reportSelections = new Map<string, SelectionRef>();
+const reportHarnesses = new Map<string, ReturnType<typeof createNativeReportHarness>>();
+function reportHarness(root: string) {
+  let harness = reportHarnesses.get(root);
+  if (!harness) {
+    harness = createNativeReportHarness({
+      judge: (input) => judgeNativeReport(input, { signal: reportAbort.signal, ...(PROBE_PATH && process.env.WWW_PROBE_REPORT_JUDGE_BIN ? { binary: process.env.WWW_PROBE_REPORT_JUDGE_BIN } : {}) }),
+      onState: (job) => {
+        const expected = reportSelections.get(JSON.stringify([root, job.threadId, job.turnId]));
+        if (expected && workspace === root && isCurrent(expected) && activeThreadId === job.threadId) publish({ kind: "notification", method: "reports/autoState", params: job });
+      }
+    });
+    reportHarnesses.set(root, harness);
+  }
+  return harness;
+}
+async function switchWorkspace(expected: SelectionRef, path: string) {
+  assertSelection(expected);
+  assertConversationIdle();
+  switchingConversation = true;
+  try {
+    const actual = realpathSync(path);
+    // register는 실제 디렉터리와 등록 저장을 검증한다. 실패하면 기존 선택을 보전한다.
+    try { await projects.register(actual); } catch (cause) { throw new Error("프로젝트 등록·저장에 실패했습니다. 기존 선택을 유지합니다.", { cause }); }
+    assertSelection(expected);
+    await Promise.allSettled([...collections]);
+    assertSelection(expected);
+    const flushed = await ledger.flush();
+    assertSelection(expected);
+    if (!flushed.clean) console.warn("프로젝트 전환: 열린 리소스 일부의 저장 미확정 · 원장 상태를 보전합니다.");
+    if (realpathSync(actual) !== actual) throw new Error("프로젝트 실제 경로가 변경됐습니다.");
+    if (turnStarting || activeTurnId !== null || pendingApprovals.size > 0) throw new Error("새 실행 또는 승인 요청이 생겨 프로젝트 전환을 취소했습니다.");
+    // 위 검사부터 선택 확정까지 await 없는 커밋.
+    clientToken++;
+    rpc = null;
+    connecting = null;
+    const previousChild = childProcess;
+    childProcess = null;
+    workspace = actual;
+    selectionEpoch++;
+    activeThreadId = null;
+    activeTurnId = null;
+    threadStarted = false;
+    eventLog.splice(0);
+    endedTurns.clear();
+    latestActivityRequests.clear();
+    pendingApprovals.clear();
+    approvalAttempts.clear();
+    previousChild?.kill();
+    projectRegistrationError = null;
+    nativeReports = reportHarness(actual);
+    const result = { workspace: workspaceInfo(), threadId: null, events: [...eventLog], resources: null, resourceStorageWarnings: flushed.failedScopes };
+    void refreshActivityInventory();
+    return result;
+  } finally { if (isCurrent(expected) || selectionEpoch === expected.selectionEpoch + 1) switchingConversation = false; }
+}
 function registerIpc(): void {
   const reports = createReportService({ workspace: () => reportRepository ?? workspace });
-  const native = createNativeReportHarness({
-    judge: (input) => judgeNativeReport(input, {
-      signal: reportAbort.signal,
-      ...(PROBE_PATH && process.env.WWW_PROBE_REPORT_JUDGE_BIN ? { binary: process.env.WWW_PROBE_REPORT_JUDGE_BIN } : {})
-    }),
-    onState: (job) => publish({ kind: "notification", method: "reports/autoState", params: job })
-  });
-  nativeReports = native;
-  ipcMain.handle("reports:native-status", async () => ({ enabled: autoReportsEnabled, jobs: await native.list(reportRepository ?? workspace) }));
+  nativeReports = reportHarness(workspace);
+  ipcMain.handle("reports:native-status", async () => ({ enabled: autoReportsEnabled, jobs: await reportHarness(reportRepository ?? workspace).list(reportRepository ?? workspace) }));
   ipcMain.handle("reports:native-enabled", (_event, enabled: unknown) => {
     if (typeof enabled !== "boolean") throw new Error("자동 보고서 설정은 boolean이어야 합니다.");
     autoReportsEnabled = enabled;
@@ -251,7 +438,7 @@ function registerIpc(): void {
   });
   ipcMain.handle("reports:native-retry", (_event, key: unknown) => {
     if (typeof key !== "string" || !/^[a-f0-9]{64}$/.test(key)) throw new Error("자동 보고서 작업 ID가 올바르지 않습니다.");
-    return native.retry(reportRepository ?? workspace, key);
+    return reportHarness(reportRepository ?? workspace).retry(reportRepository ?? workspace, key);
   });
   ipcMain.handle("reports:list", () => reports.list());
   ipcMain.handle("reports:read", (_event, reportId: unknown) => reports.read(reportId));
@@ -282,13 +469,25 @@ function registerIpc(): void {
     if (url.protocol !== "https:" && url.protocol !== "http:") throw new Error("웹 링크만 열 수 있습니다.");
     await shell.openExternal(url.href);
   });
-  ipcMain.handle("conversations:list", async (_event, cursor: unknown) => createConversationService(await connect(), workspace).list(cursor));
-  ipcMain.handle("conversations:open", async (_event, value: unknown) => {
+  ipcMain.handle("conversations:list", async (_event, expected: unknown, cursor: unknown) => {
+    assertSelection(expected);
+    const root = workspace;
+    const client = await connect();
+    assertSelection(expected);
+    const result = await createConversationService(client, root).list(cursor);
+    assertSelection(expected);
+    return result;
+  });
+  ipcMain.handle("conversations:open", async (_event, expected: unknown, value: unknown) => {
+    assertSelection(expected);
     assertConversationIdle();
     switchingConversation = true;
     try {
       const client = await connect();
+      assertSelection(expected);
       const restored = await createConversationService(client, workspace).open(value);
+      assertSelection(expected);
+      selectionEpoch++;
       activeThreadId = restored.threadId;
       activeTurnId = null;
       threadStarted = true;
@@ -299,11 +498,17 @@ function registerIpc(): void {
       ]);
       void loadSkills(client);
       void loadHooks(client, restored.threadId);
-      return { threadId: restored.threadId, events };
+      const resources = await currentResources(selection()).catch((error: unknown) => {
+        publish({ kind: "notification", method: "activity/resourcesUnavailable", params: { threadId: restored.threadId, message: String(error) } });
+        return null;
+      });
+      return { workspace: workspaceInfo(), threadId: restored.threadId, events, resources };
     } finally { switchingConversation = false; }
   });
-  ipcMain.handle("conversations:new", () => {
+  ipcMain.handle("conversations:new", (_event, expected: unknown) => {
+    assertSelection(expected);
     assertConversationIdle();
+    selectionEpoch++;
     activeThreadId = null;
     activeTurnId = null;
     threadStarted = false;
@@ -311,33 +516,64 @@ function registerIpc(): void {
       { kind: "notification", method: "conversation/restored", params: { threadId: null, complete: true }, historical: true },
       { kind: "transport", method: "transport/status", params: { state: rpc ? "connected" : "closed", connectionGeneration }, historical: true }
     ]);
+    return { workspace: workspaceInfo(), threadId: null, events: [...eventLog], resources: null };
   });
   ipcMain.handle("workspace:get", () => workspaceInfo());
-  ipcMain.handle("activity:refresh", () => refreshActivityInventory());
-  ipcMain.handle("workspace:choose", async () => {
-    if (threadStarted) throw new Error("작업 폴더는 첫 스레드 전에만 변경할 수 있습니다.");
-    const result = await dialog.showOpenDialog(window!, { properties: ["openDirectory", "createDirectory"] });
-    if (result.canceled || !result.filePaths[0]) return null;
-    workspace = resolve(result.filePaths[0]);
-    return workspaceInfo();
+  ipcMain.handle("activity:refresh", (_event, expected: unknown) => { assertSelection(expected); return refreshActivityInventory(); });
+  ipcMain.handle("activity:resources", (_event, expected: unknown) => { assertSelection(expected); return currentResources(expected); });
+  ipcMain.handle("projects:list", async (_event, expected: unknown) => {
+    assertSelection(expected);
+    if (projectRegistrationError) {
+      const root = workspace;
+      try { await projects.register(root); } catch (cause) { throw new Error(`현재 프로젝트 등록·저장 실패: ${projectRegistrationError}`, { cause }); }
+      assertSelection(expected);
+      projectRegistrationError = null;
+    }
+    const result = await projects.list(); assertSelection(expected); return result;
   });
-  ipcMain.handle("thread:start", async () => {
+  ipcMain.handle("projects:favorite", async (_event, expected: unknown, key: string, favorite: boolean) => {
+    assertSelection(expected); await projects.setFavorite(key, favorite); assertSelection(expected);
+  });
+  ipcMain.handle("projects:switch", async (_event, expected: unknown, key: unknown) => {
+    assertSelection(expected); assertConversationIdle();
+    const list = await projects.list(); assertSelection(expected);
+    const project = list.find((item) => item.workspaceKey === key);
+    if (!project) throw new Error("등록된 프로젝트가 없습니다.");
+    return switchWorkspace(expected, project.path);
+  });
+  ipcMain.handle("workspace:choose", async (_event, expected: unknown) => {
+    assertSelection(expected); assertConversationIdle();
+    const result = await dialog.showOpenDialog(window!, { properties: ["openDirectory", "createDirectory"] });
+    assertSelection(expected);
+    if (result.canceled || !result.filePaths[0]) return null;
+    return switchWorkspace(expected, result.filePaths[0]);
+  });
+  ipcMain.handle("thread:start", async (_event, expected: unknown) => {
+    assertSelection(expected);
     assertConversationIdle();
     if (activeThreadId !== null) throw new Error("새 스레드를 시작하기 전에 새 대화를 선택해 주세요.");
     switchingConversation = true;
     try {
       const client   = await connect()                                                                  ;
+      assertSelection(expected);
       const result   = record(await client.request("thread/start", nativeThreadStartParams(workspace))) ;
       const threadId = requiredString(record(result.thread).id, "thread ID")                            ;
+      assertSelection(expected);
       threadStarted = true;
       activeThreadId = threadId;
+      void currentResources(expected).catch((error: unknown) => {
+        console.warn(error);
+        if (isCurrent(expected)) publish({ kind: "notification", method: "activity/resourcesUnavailable", params: { threadId, message: String(error) } });
+      });
       publish({ kind: "notification", method: "thread/configured", params: { threadId, model: typeof result.model === "string" ? result.model : null, modelProvider: typeof result.modelProvider === "string" ? result.modelProvider : null, isNew: true } });
       void loadHooks(client, threadId);
       return { threadId };
     } finally { switchingConversation = false; }
   });
-  ipcMain.handle("turn:start", async (_event, threadId: unknown, text: unknown) => {
+  ipcMain.handle("turn:start", async (_event, expected: unknown, threadId: unknown, text: unknown) => {
+    assertSelection(expected);
     const validThreadId = requiredString(threadId, "thread ID");
+    assertSelection(expected);
     assertConversationIdle();
     if (validThreadId !== activeThreadId) throw new Error("현재 선택한 대화에만 요청을 보낼 수 있습니다.");
     if (typeof text !== "string" || !text.trim() || text.length > 100_000) throw new Error("Invalid prompt");
@@ -347,28 +583,39 @@ function registerIpc(): void {
     endedTurns.clear();
     publish({ kind: "notification", method: "turn/userPrompt", params: { clientRequestId, threadId: validThreadId, text: prompt } });
     try {
-      const result = record        (await (await connect()).request("turn/start", nativeTurnStartParams(validThreadId, prompt))) ;
+      const client = await connect();
+      assertSelection(expected);
+      const result = record(await client.request("turn/start", nativeTurnStartParams(validThreadId, prompt)));
+      assertSelection(expected);
       const turnId = requiredString(record(result.turn).id, "turn ID"                                                          ) ;
       if (!endedTurns.has(`${validThreadId}:${turnId}`)) activeTurnId = turnId;
       publish({ kind: "notification", method: "turn/startAccepted", params: { clientRequestId, threadId: validThreadId, turnId } });
       return { turnId };
     } catch (error) {
+      assertSelection(expected);
       publish({ kind: "notification", method: "turn/startFailed", params: { clientRequestId, threadId: validThreadId, message: String(error) } });
       throw error;
-    } finally { turnStarting = false; }
+    } finally { if (isCurrent(expected)) turnStarting = false; }
   });
-  ipcMain.handle("turn:interrupt", async (_event, threadId: unknown, turnId: unknown) => {
+  ipcMain.handle("turn:interrupt", async (_event, expected: unknown, threadId: unknown, turnId: unknown) => {
+    assertSelection(expected);
     requiredString(threadId, "thread ID"); requiredString(turnId, "turn ID");
+    if (threadId !== activeThreadId || turnId !== activeTurnId) throw new Error("현재 실행 중인 턴만 중단할 수 있습니다.");
     publish({ kind: "notification", method: "turn/interruptRequested", params: { threadId, turnId } });
     try {
-      await (await connect()).request("turn/interrupt", { threadId, turnId });
+      const client = await connect();
+      assertSelection(expected);
+      await client.request("turn/interrupt", { threadId, turnId });
+      assertSelection(expected);
       publish({ kind: "notification", method: "turn/interruptAcknowledged", params: { threadId, turnId } });
     } catch (error) {
+      assertSelection(expected);
       publish({ kind: "notification", method: "turn/interruptUncertain", params: { threadId, turnId, message: String(error) } });
       throw error;
     }
   });
-  ipcMain.handle("approval:respond", async (_event, requestId: unknown, decision: unknown) => {
+  ipcMain.handle("approval:respond", async (_event, expected: unknown, requestId: unknown, decision: unknown) => {
+    assertSelection(expected);
     validId(requestId);
     if (typeof decision !== "string" || !DECISIONS.has(decision)) throw new Error("Unsupported approval decision");
     if (!pendingApprovals.has(requestId)) throw new Error("Unknown or unsupported approval request");
@@ -376,16 +623,20 @@ function registerIpc(): void {
     approvalAttempts.add(requestId);
     publish({ kind: "notification", method: "approval/responding", params: { decision }, requestId });
     try {
-      await (await connect()).respond(requestId, { decision });
+      const client = await connect();
+      assertSelection(expected);
+      await client.respond(requestId, { decision });
+      assertSelection(expected);
       pendingApprovals.delete(requestId);
       publish({ kind: "notification", method: "approval/responded", params: { decision }, requestId });
     } catch (error) {
+      assertSelection(expected);
       pendingApprovals.delete(requestId);
       publish({ kind: "notification", method: "approval/uncertain", params: { decision, message: String(error) }, requestId });
       throw error;
     }
   });
-  ipcMain.handle("events:get", () => [...eventLog]);
+  ipcMain.handle("events:get", (_event, expected: unknown) => { assertSelection(expected); return [...eventLog]; });
   ipcMain.handle("probe:ready", () => ({
     enabled: !!PROBE_PATH && process.env.WWW_NATIVE_PROBE !== "1",
     ...(PROBE_PATH && process.env.WWW_PROBE_ACTIVITY === "1" ? { checkActivity: true } : {}),
@@ -475,7 +726,7 @@ function registerIpc(): void {
       window.webContents.debugger.attach("1.3");
       try {
         await window.webContents.debugger.sendCommand("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
-        activityArtifacts = await window.webContents.executeJavaScript("(() => { const panel=document.querySelector('.native-activity-panel'); const row=panel?.querySelector('.na-row'); if(!panel||!row) throw Error('활동 패널 행 없음'); const wasReacting=row.classList.contains('is-reacting'); row.classList.add('has-activity','is-reacting'); const animation=getComputedStyle(row).animationName; if(!wasReacting) row.classList.remove('is-reacting'); return {width:panel.getBoundingClientRect().width,overflow:panel.scrollWidth>panel.clientWidth,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches,rowAnimation:animation}; })()");
+        activityArtifacts = await window.webContents.executeJavaScript("(() => { const panel=document.querySelector('[data-testid=activity-panel]:not([hidden])'); const row=panel?.querySelector('.na-row'); if(!panel||!row) throw Error('활동 패널 행 없음'); const wasReacting=row.classList.contains('is-reacting'); row.classList.add('has-activity','is-reacting'); const animation=getComputedStyle(row).animationName; if(!wasReacting) row.classList.remove('is-reacting'); return {width:panel.getBoundingClientRect().width,overflow:panel.scrollWidth>panel.clientWidth,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches,rowAnimation:animation}; })()");
       } finally { window.webContents.debugger.detach(); }
       const observed = record(activityArtifacts);
       if (observed.overflow !== false || observed.reducedMotion !== true || observed.rowAnimation !== "none") throw new Error("활동 패널 좁은 화면·모션 축소 검사 실패");
@@ -493,6 +744,40 @@ function createWindow(): void {
   void window.loadFile(join(DIST, "index.html"));
 }
 
-void app.whenReady().then(() => { registerIpc(); createWindow(); });
+if (ownsInstance) void app.whenReady().then(async () => {
+  mkdirSync(app.getPath("userData"), { recursive: true, mode: 0o700 });
+  const userData = realpathSync(app.getPath("userData"));
+  app.setPath("userData", userData);
+  workspace = realpathSync(workspace);
+  projects = createProjectRegistry({ userData });
+  ledger = createActivityLedger({ userData, processEpoch, onSnapshot: (snapshot) => {
+    if (!stopping && snapshot.processEpoch === processEpoch && snapshot.selectionEpoch === selectionEpoch && snapshot.scope.workspaceKey === selection().workspaceKey && snapshot.scope.threadId === activeThreadId) window?.webContents.send("activity:resources", snapshot);
+  } });
+  await projects.register(workspace).catch((error: unknown) => { projectRegistrationError = String(error); console.warn("현재 프로젝트 등록 실패", error); });
+  if (!stopping) { registerIpc(); createWindow(); }
+}).catch((error: unknown) => { console.error("WWW 초기화 실패", error); app.quit(); });
 app.on("window-all-closed", () => app.quit());
-app.on("before-quit", () => reportAbort.abort());
+let quitFinished = false;
+app.on("before-quit", (event) => {
+  if (!ownsInstance || quitFinished) return;
+  event.preventDefault();
+  if (stopping) return;
+  stopping = true;
+  clientToken++;
+  rpc = null;
+  connecting = null;
+  childProcess?.kill();
+  reportAbort.abort();
+  let deadline: ReturnType<typeof setTimeout> | undefined;
+  let expired = false;
+  const close = Promise.allSettled([...collections]).then(() => expired ? { clean: false } : ledger?.close() ?? { clean: false });
+  void Promise.race([close, new Promise<{ clean: boolean }>((resolveClose) => {
+    deadline = setTimeout(() => { expired = true; resolveClose({ clean: false }); }, 2000);
+  })]).then((result) => {
+    clearTimeout(deadline);
+    if (expired || !result.clean) console.warn("리소스 원장 종료 내구성 미확정");
+    quitFinished = true;
+    if (expired) app.exit(0);
+    else app.quit();
+  });
+});

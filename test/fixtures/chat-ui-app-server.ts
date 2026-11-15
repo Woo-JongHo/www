@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 type Data = Record<string, unknown>;
-const cwd = process.env.WWW_PROBE_WORKSPACE ?? process.cwd();
+const cwd = process.cwd();
 const storePath = join(cwd, "fixture-history.json");
 const callsPath = join(cwd, "fixture-calls.jsonl");
 const initialItems = [
@@ -58,7 +58,7 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
   else if (message.method === "thread/start") {
     histories["thread-new"] ??= [];
     writeFileSync(storePath, JSON.stringify(histories));
-    result(message.id, { thread: { id: "thread-new", cwd, originator: "www", source: "vscode", status: { type: "idle" } }, model: "fixture", modelProvider: "fixture" });
+    setTimeout(() => result(message.id, { thread: { id: "thread-new", cwd, originator: "www", source: "vscode", status: { type: "idle" } }, model: "fixture", modelProvider: "fixture" }), 80);
   } else if (message.method === "turn/start") {
     const input = Array.isArray(params.input) ? object(params.input[0]) : {};
     const prompt = typeof input.text === "string" ? input.text : "";
@@ -69,9 +69,34 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
     const threadId = String(params.threadId);
     const turnId = "live-" + Date.now() + "-" + ++turnCounter;
     pending = { threadId, turnId, prompt };
+    if (prompt === "사이드바 두 번째 요청 확인") await new Promise((resolve) => setTimeout(resolve, 450));
     result(message.id, { turn: { id: turnId } });
     notify("turn/started", { threadId, turn: { id: turnId } });
-    if (prompt.includes("실시간 카드 확인")) {
+    if (prompt === "사이드바 첫 요청 확인") {
+      notify("turn/plan/updated", { threadId, turnId, plan: [{ step: "첫 요청 전용 단계", status: "inProgress" }] });
+      const run = { id: "sidebar-handler-a", eventName: "preToolUse", executionMode: "sync", sourcePath: "/fixture/handler-a.json", displayOrder: 0, handlerType: "command", status: "running", entries: [] };
+      notify("hook/started", { threadId, turnId, run });
+      const item = { id: turnId + "-private-documents", type: "commandExecution", command: "fixture structured document reads", cwd, commandActions: [{ type: "read", path: join(cwd, ".private-one/SKILL.md") }, { type: "read", path: join(cwd, ".private-two/SKILL.md") }], status: "inProgress" };
+      notify("item/started", { threadId, turnId, item });
+      setTimeout(() => {
+        notify("hook/completed", { threadId, turnId, run: { ...run, status: "failed" } });
+        notify("hook/completed", { threadId, turnId, run: { ...run, id: "sidebar-handler-b", sourcePath: "/fixture/handler-b.json", displayOrder: 1, status: "completed" } });
+        notify("item/completed", { threadId, turnId, item: { ...item, status: "completed", exitCode: 0 } });
+        notify("turn/plan/updated", { threadId, turnId, plan: [{ step: "첫 요청 전용 단계", status: "completed" }] });
+        finish();
+      }, 500);
+    }
+    else if (prompt === "사이드바 두 번째 요청 확인") {
+      setTimeout(() => {
+        notify("turn/plan/updated", { threadId, turnId, plan: [{ step: "두 번째 요청 전용 단계", status: "inProgress" }] });
+        setTimeout(() => finish(), 500);
+      }, 500);
+    }
+    else if (prompt === "원장 저장 실패 확인") {
+      notify("item/completed", { threadId, turnId, item: { id: turnId + "-unsaved", type: "commandExecution", command: "fixture unsaved metadata", cwd, status: "completed", exitCode: 0 } });
+      setTimeout(() => finish(), 80);
+    }
+    else if (prompt.includes("실시간 카드 확인")) {
       process.stdout.write("{broken-json\n");
       const id = turnId + "-command";
 
@@ -96,6 +121,8 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
       }, 80);
     }
     else if (prompt.includes("승인 확인")) send({ jsonrpc: "2.0", id: 42, method: "item/commandExecution/requestApproval", params: { threadId, turnId, command: "printf approved" } });
+    else if (prompt.includes("무활동 확인")) setTimeout(() => finish(), 16_000);
+    else if (prompt.includes("결과 미확인 확인")) setTimeout(() => finish("mystery"), 80);
     else if (!prompt.includes("중단 확인")) setTimeout(() => finish(), 80);
   } else if (message.method === "turn/interrupt") { result(message.id, {}); finish("interrupted"); }
   else if (message.method === "skills/list" || message.method === "hooks/list") result(message.id, { data: [{ cwd, skills: [], hooks: [], errors: [] }] });

@@ -98,6 +98,24 @@ export interface Projection {
   protocolWarning: { at: string; message: string } | null;
 }
 
+export interface ExecutionResultCounts {
+  commands   : number ;
+  files      : number ;
+  failed     : number ;
+  unresolved : number ;
+}
+
+export function executionResultCounts(blocks: readonly Block[]): ExecutionResultCounts {
+  const commands = blocks.filter((block): block is Extract<Block, { kind: "command" }> => block.kind === "command");
+  const files = blocks.filter((block): block is Extract<Block, { kind: "files" }> => block.kind === "files");
+  return {
+    commands   : commands.length                                                                                         ,
+    files      : files.length                                                                                            ,
+    failed     : [...commands, ...files].filter((block) => block.status === "failed").length                             ,
+    unresolved : [...commands, ...files].filter((block) => block.status === "unknown" || block.running).length
+  };
+}
+
 const object = (value: unknown): Record<string, unknown> =>
   value && typeof value === "object" ? value as Record<string, unknown> : {};
 const string         = (value: unknown): string => typeof value === "string" ? value : "" ;

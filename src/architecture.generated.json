@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "ba61ca2422d568cd88169a90f2043a505af946ceeed94ba03938aa1af0a3ba13",
+  "digest"       : "eb0ccb694944c67256a58fbd55cbf7ec67f84d24622641e54e776211d8186829",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -306,6 +306,17 @@
       "structureId": "arch.development.records.state"
     },
     {
+      "id"         : "src/activity-ledger.ts",
+      "file"       : "src/activity-ledger.ts",
+      "title"      : "activity-ledger",
+      "layer"      : "host",
+      "role"       : "앱 모듈 · activity-ledger",
+      "line"       : 1,
+      "lines"      : 590,
+      "digest"     : "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+      "structureId": "arch.native.resources"
+    },
+    {
       "id"         : "src/activity-sidebar.ts",
       "file"       : "src/activity-sidebar.ts",
       "title"      : "activity-sidebar",
@@ -367,8 +378,8 @@
       "layer"      : "model",
       "role"       : "앱 모듈 · chat-state",
       "line"       : 1,
-      "lines"      : 64,
-      "digest"     : "1f88c97dbc2c6ad015cd87db9c79e485746a5512b957642e9a3f653cd01cca48",
+      "lines"      : 89,
+      "digest"     : "6d9858a53f4d867783d15cabc0e2e2ba235150b98998f52f4ba68b8b046182ce",
       "structureId": "arch.chat.sessions.reading"
     },
     {
@@ -455,8 +466,8 @@
       "layer"      : "host",
       "role"       : "앱·Native 수명주기와 IPC 처리",
       "line"       : 1,
-      "lines"      : 499,
-      "digest"     : "25181668e94f12179981505451af705a5b87509339f82e245a8157786e3e8899",
+      "lines"      : 784,
+      "digest"     : "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
       "structureId": "arch.native.lifecycle"
     },
     {
@@ -466,8 +477,8 @@
       "layer"      : "presentation",
       "role"       : "앱 모듈 · native-activity-view",
       "line"       : 1,
-      "lines"      : 298,
-      "digest"     : "16a6779ab7d344a99edfc5ab903409c752afabeb809f81d8611c770561893a29",
+      "lines"      : 369,
+      "digest"     : "ce9ecfe6e7ddf15691a5054ed620400a59f6d01f488313d84211187df70c8fc5",
       "structureId": "arch.chat.activity.view"
     },
     {
@@ -477,8 +488,8 @@
       "layer"      : "model",
       "role"       : "앱 모듈 · native-activity",
       "line"       : 1,
-      "lines"      : 560,
-      "digest"     : "890ccf24d3df971ecb2baa3f05eb823b7d2c148d62748bb7581c8575d327293a",
+      "lines"      : 687,
+      "digest"     : "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
       "structureId": "arch.chat.activity.projection"
     },
     {
@@ -532,8 +543,8 @@
       "layer"      : "contract",
       "role"       : "제한된 WwwApi 노출",
       "line"       : 1,
-      "lines"      : 40,
-      "digest"     : "104ad8d8520a3e9c5ac733dd5c7a05248778ec315d97e897174bc9043d3431ab",
+      "lines"      : 49,
+      "digest"     : "1581b5001e1f793fd58f6b930eaa9ed8c5570665a5231f6d1576648a800b4576",
       "structureId": "arch.native.bridge"
     },
     {
@@ -543,9 +554,20 @@
       "layer"      : "model",
       "role"       : "공개 사건을 읽을 수 있는 블록으로 투영",
       "line"       : 1,
-      "lines"      : 531,
-      "digest"     : "33f066db7d1fe7eb112e34cf7ee041e7138104be87a84dbb58c9d8addc5ec6e3",
+      "lines"      : 549,
+      "digest"     : "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
       "structureId": "arch.chat.messages.projection"
+    },
+    {
+      "id"         : "src/projects.ts",
+      "file"       : "src/projects.ts",
+      "title"      : "projects",
+      "layer"      : "host",
+      "role"       : "앱 모듈 · projects",
+      "line"       : 1,
+      "lines"      : 240,
+      "digest"     : "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+      "structureId": "arch.native.projects"
     },
     {
       "id"         : "src/renderer.tsx",
@@ -554,8 +576,8 @@
       "layer"      : "presentation",
       "role"       : "화면 전환과 대화 상태 통합",
       "line"       : 1,
-      "lines"      : 754,
-      "digest"     : "d365b5cde407ead3f230ba10b080c4aafe9ce81072d8962ebc247d0fe2fb1cb7",
+      "lines"      : 975,
+      "digest"     : "351e89686cb0ace94902ecb067424c77d33ce5782b1bba22f016dac6a8a848e4",
       "structureId": "arch.chat.workspace"
     },
     {
@@ -609,8 +631,8 @@
       "layer"      : "contract",
       "role"       : "프로세스 간 공용 타입 계약",
       "line"       : 1,
-      "lines"      : 125,
-      "digest"     : "b471fcb48743b97c4939d830830e6aca9e984586958b070516744748211256af",
+      "lines"      : 195,
+      "digest"     : "46ccfea22ebe92eb1af71eef85ff19a484bdb51d992bbe44caf7c9a1e9debcb6",
       "structureId": "arch.native.protocol"
     },
     {
@@ -1265,6 +1287,17 @@
       "statement": "export type { WorkRecord, WorkLocation, WorkAssessment, WorkOptions } from './types.ts';"
     },
     {
+      "id"       : "src/activity-ledger.ts:318",
+      "from"     : "src/activity-ledger.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./shared",
+      "line"     : 10,
+      "endLine"  : 10,
+      "statement": "import type { ResourceScope, ResourceObservation, ResourceObservationInput, ResourceSnapshot, ResourceCoverage, ResourceGap } from \"./shared\";"
+    },
+    {
       "id"       : "src/activity-sidebar.ts:94",
       "from"     : "src/activity-sidebar.ts",
       "to"       : "src/shared.ts",
@@ -1408,7 +1441,7 @@
       "statement": "import { createArchitectureTree, layoutResponsibilityGraph, responsibilityHierarchyPath, responsibilityEdgePath, responsibilityFit } from \"./architecture-tree\";"
     },
     {
-      "id"       : "src/main.ts:360",
+      "id"       : "src/main.ts:405",
       "from"     : "src/main.ts",
       "to"       : "src/rpc.ts",
       "mode"     : "mixed",
@@ -1419,7 +1452,7 @@
       "statement": "import { JsonRpcClient, type RpcMessage } from \"./rpc\";"
     },
     {
-      "id"       : "src/main.ts:416",
+      "id"       : "src/main.ts:461",
       "from"     : "src/main.ts",
       "to"       : "src/conversations.ts",
       "mode"     : "mixed",
@@ -1430,7 +1463,7 @@
       "statement": "import { createConversationService, type ConversationEvent } from \"./conversations\";"
     },
     {
-      "id"       : "src/main.ts:501",
+      "id"       : "src/main.ts:546",
       "from"     : "src/main.ts",
       "to"       : "src/development.ts",
       "mode"     : "runtime",
@@ -1441,7 +1474,7 @@
       "statement": "import { createDevelopmentService } from \"./development\";"
     },
     {
-      "id"       : "src/main.ts:559",
+      "id"       : "src/main.ts:604",
       "from"     : "src/main.ts",
       "to"       : "src/reports-service.ts",
       "mode"     : "runtime",
@@ -1452,7 +1485,7 @@
       "statement": "import { createReportService } from \"./reports-service\";"
     },
     {
-      "id"       : "src/main.ts:616",
+      "id"       : "src/main.ts:661",
       "from"     : "src/main.ts",
       "to"       : "src/native-reports.ts",
       "mode"     : "runtime",
@@ -1463,7 +1496,7 @@
       "statement": "import { createNativeReportHarness } from \"./native-reports\";"
     },
     {
-      "id"       : "src/main.ts:678",
+      "id"       : "src/main.ts:723",
       "from"     : "src/main.ts",
       "to"       : "src/report-judge.ts",
       "mode"     : "runtime",
@@ -1474,7 +1507,7 @@
       "statement": "import { judgeNativeReport } from \"./report-judge\";"
     },
     {
-      "id"       : "src/main.ts:730",
+      "id"       : "src/main.ts:775",
       "from"     : "src/main.ts",
       "to"       : "src/native-report-input.ts",
       "mode"     : "runtime",
@@ -1485,7 +1518,7 @@
       "statement": "import { NativeCompletionCollector } from \"./native-report-input\";"
     },
     {
-      "id"       : "src/main.ts:797",
+      "id"       : "src/main.ts:842",
       "from"     : "src/main.ts",
       "to"       : "src/native-command.ts",
       "mode"     : "runtime",
@@ -1496,7 +1529,7 @@
       "statement": "import { resolveNativeCodex } from \"./native-command\";"
     },
     {
-      "id"       : "src/main.ts:852",
+      "id"       : "src/main.ts:897",
       "from"     : "src/main.ts",
       "to"       : "src/native-chat.ts",
       "mode"     : "runtime",
@@ -1507,7 +1540,7 @@
       "statement": "import { nativeThreadStartParams, nativeTurnStartParams } from \"./native-chat\";"
     },
     {
-      "id"       : "src/main.ts:932",
+      "id"       : "src/main.ts:977",
       "from"     : "src/main.ts",
       "to"       : "src/activity-sidebar.ts",
       "mode"     : "runtime",
@@ -1518,15 +1551,48 @@
       "statement": "import { parseHooksListResponse, parseSkillsListResponse } from \"./activity-sidebar\";"
     },
     {
-      "id"       : "src/main.ts:1018",
+      "id"       : "src/main.ts:1063",
+      "from"     : "src/main.ts",
+      "to"       : "src/activity-ledger.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
+      "specifier": "./activity-ledger",
+      "line"     : 20,
+      "endLine"  : 20,
+      "statement": "import { createActivityLedger, type ActivityLedger } from \"./activity-ledger\";"
+    },
+    {
+      "id"       : "src/main.ts:1142",
+      "from"     : "src/main.ts",
+      "to"       : "src/projects.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./projects",
+      "line"     : 21,
+      "endLine"  : 21,
+      "statement": "import { createProjectRegistry } from \"./projects\";"
+    },
+    {
+      "id"       : "src/main.ts:1194",
+      "from"     : "src/main.ts",
+      "to"       : "src/native-activity.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./native-activity",
+      "line"     : 22,
+      "endLine"  : 22,
+      "statement": "import { normalizeNativeResources } from \"./native-activity\";"
+    },
+    {
+      "id"       : "src/main.ts:1256",
       "from"     : "src/main.ts",
       "to"       : "src/shared.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./shared",
-      "line"     : 20,
-      "endLine"  : 20,
-      "statement": "import type { AppEvent, RpcId, WorkspaceInfo } from \"./shared\";"
+      "line"     : 23,
+      "endLine"  : 23,
+      "statement": "import type { AppEvent, ScopedAppEvent, SelectionRef, WorkspaceSelection, ResourceScope, ResourceSnapshot, RpcId } from \"./shared\";"
     },
     {
       "id"       : "src/native-activity-view.tsx:150",
@@ -1548,10 +1614,10 @@
       "specifier": "./shared",
       "line"     : 7,
       "endLine"  : 7,
-      "statement": "import type { AppEvent } from \"./shared\";"
+      "statement": "import type { AppEvent, ResourceSnapshot, ResourceObservation } from \"./shared\";"
     },
     {
-      "id"       : "src/native-activity-view.tsx:334",
+      "id"       : "src/native-activity-view.tsx:373",
       "from"     : "src/native-activity-view.tsx",
       "to"       : "src/native-activity.ts",
       "mode"     : "mixed",
@@ -1562,7 +1628,7 @@
       "statement": "import { projectNativeActivity, type ActivityEntry, type ActivityStatus, type ActivityTurn, type NativeActivityProjection, type UsageBreakdown } from \"./native-activity\";"
     },
     {
-      "id"       : "src/native-activity-view.tsx:505",
+      "id"       : "src/native-activity-view.tsx:544",
       "from"     : "src/native-activity-view.tsx",
       "to"       : "src/www-activity.ts",
       "mode"     : "mixed",
@@ -1581,10 +1647,10 @@
       "specifier": "./shared",
       "line"     : 5,
       "endLine"  : 5,
-      "statement": "import type { AppEvent, TransportState } from \"./shared\";"
+      "statement": "import type { AppEvent, ResourceGap, ResourceObservationInput, TransportState } from \"./shared\";"
     },
     {
-      "id"       : "src/native-activity.ts:158",
+      "id"       : "src/native-activity.ts:197",
       "from"     : "src/native-activity.ts",
       "to"       : "src/www-activity.ts",
       "mode"     : "mixed",
@@ -1680,7 +1746,7 @@
       "specifier": "./shared",
       "line"     : 6,
       "endLine"  : 6,
-      "statement": "import type { AppEvent, WwwApi } from \"./shared\";"
+      "statement": "import type { ResourceSnapshot, ScopedAppEvent, WwwApi } from \"./shared\";"
     },
     {
       "id"       : "src/projection.ts:100",
@@ -1724,10 +1790,10 @@
       "specifier": "./native-activity-view",
       "line"     : 7,
       "endLine"  : 7,
-      "statement": "import { NativeActivityView } from \"./native-activity-view\";"
+      "statement": "import { NativeActivityView, ResourceActivitySidebar } from \"./native-activity-view\";"
     },
     {
-      "id"       : "src/renderer.tsx:246",
+      "id"       : "src/renderer.tsx:271",
       "from"     : "src/renderer.tsx",
       "to"       : "src/chat-message.tsx",
       "mode"     : "runtime",
@@ -1738,7 +1804,7 @@
       "statement": "import { ChatMessage } from \"./chat-message\";"
     },
     {
-      "id"       : "src/renderer.tsx:292",
+      "id"       : "src/renderer.tsx:317",
       "from"     : "src/renderer.tsx",
       "to"       : "src/chat-row-state.tsx",
       "mode"     : "mixed",
@@ -1749,7 +1815,7 @@
       "statement": "import { ChatDetails, ChatRowMemoryContext, type ChatRowMemory } from \"./chat-row-state\";"
     },
     {
-      "id"       : "src/renderer.tsx:382",
+      "id"       : "src/renderer.tsx:407",
       "from"     : "src/renderer.tsx",
       "to"       : "src/chat-state.ts",
       "mode"     : "mixed",
@@ -1757,10 +1823,10 @@
       "specifier": "./chat-state",
       "line"     : 10,
       "endLine"  : 10,
-      "statement": "import { blankReadingState, belongsToConversation, composerFull, conversationKey, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, pasteOverflow, type ConversationReadingState } from \"./chat-state\";"
+      "statement": "import { blankReadingState, belongsToConversation, composerFull, conversationKey, currentTurnEvents, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, pasteOverflow, type ConversationReadingState } from \"./chat-state\";"
     },
     {
-      "id"       : "src/renderer.tsx:581",
+      "id"       : "src/renderer.tsx:625",
       "from"     : "src/renderer.tsx",
       "to"       : "src/activity-sidebar.ts",
       "mode"     : "runtime",
@@ -1771,7 +1837,7 @@
       "statement": "import { ActivitySnapshotBoundary, createActivitySidebarState, projectActivitySidebar, updateActivitySidebarSnapshot, updateActivitySidebarState } from \"./activity-sidebar\";"
     },
     {
-      "id"       : "src/renderer.tsx:755",
+      "id"       : "src/renderer.tsx:799",
       "from"     : "src/renderer.tsx",
       "to"       : "src/reports-view.tsx",
       "mode"     : "runtime",
@@ -1782,7 +1848,7 @@
       "statement": "import { ReportsView } from \"./reports-view\";"
     },
     {
-      "id"       : "src/renderer.tsx:801",
+      "id"       : "src/renderer.tsx:845",
       "from"     : "src/renderer.tsx",
       "to"       : "src/ecosystem-view.tsx",
       "mode"     : "runtime",
@@ -1793,7 +1859,7 @@
       "statement": "import { EcosystemView } from \"./ecosystem-view\";"
     },
     {
-      "id"       : "src/renderer.tsx:851",
+      "id"       : "src/renderer.tsx:895",
       "from"     : "src/renderer.tsx",
       "to"       : "src/input.ts",
       "mode"     : "runtime",
@@ -1804,7 +1870,7 @@
       "statement": "import { handlePromptKeyDown, normalizeCompositionEnd } from \"./input\";"
     },
     {
-      "id"       : "src/renderer.tsx:1045",
+      "id"       : "src/renderer.tsx:1089",
       "from"     : "src/renderer.tsx",
       "to"       : "src/projection.ts",
       "mode"     : "mixed",
@@ -1812,10 +1878,10 @@
       "specifier": "./projection",
       "line"     : 17,
       "endLine"  : 17,
-      "statement": "import { MAX_OUTPUT_CODE_UNITS, project, type Block } from \"./projection\";"
+      "statement": "import { executionResultCounts, MAX_OUTPUT_CODE_UNITS, project, type Block, type Projection } from \"./projection\";"
     },
     {
-      "id"       : "src/renderer.tsx:1120",
+      "id"       : "src/renderer.tsx:1204",
       "from"     : "src/renderer.tsx",
       "to"       : "src/shared.ts",
       "mode"     : "type",
@@ -1823,7 +1889,7 @@
       "specifier": "./shared",
       "line"     : 18,
       "endLine"  : 18,
-      "statement": "import type { AppEvent, ConversationSummary, TurnState, WorkspaceInfo, WwwApi } from \"./shared\";"
+      "statement": "import type { AppEvent, ConversationSummary, TurnState, WorkspaceSelection, SelectionRef, ScopedAppEvent, ResourceSnapshot, ResourceScope, ProjectInfo, ConversationSelection, WwwApi } from \"./shared\";"
     },
     {
       "id"       : "src/report-judge.ts:228",
@@ -2397,6 +2463,30 @@
       "reason"   : "external"
     },
     {
+      "file"     : "src/activity-ledger.ts",
+      "line"     : 6,
+      "specifier": "node:crypto",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/activity-ledger.ts",
+      "line"     : 7,
+      "specifier": "node:fs/promises",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/activity-ledger.ts",
+      "line"     : 8,
+      "specifier": "node:fs",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/activity-ledger.ts",
+      "line"     : 9,
+      "specifier": "node:path",
+      "reason"   : "external"
+    },
+    {
       "file"     : "src/architecture.ts",
       "line"     : 5,
       "specifier": "./architecture.generated.json",
@@ -2511,6 +2601,30 @@
       "reason"   : "external"
     },
     {
+      "file"     : "src/projects.ts",
+      "line"     : 7,
+      "specifier": "node:crypto",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/projects.ts",
+      "line"     : 8,
+      "specifier": "node:fs",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/projects.ts",
+      "line"     : 9,
+      "specifier": "node:fs/promises",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/projects.ts",
+      "line"     : 10,
+      "specifier": "node:path",
+      "reason"   : "external"
+    },
+    {
       "file"     : "src/renderer.tsx",
       "line"     : 15,
       "specifier": "react",
@@ -2616,6 +2730,22 @@
         "parent"     : "arch.www",
         "title"      : "Native 연결",
         "description": "Native 연결 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.native.resources",
+        "parent"     : "arch.native",
+        "title"      : "관측 원자 원장",
+        "description": "main 전용 단일 소유자가 대화별 실제 관측을 중복 없이 병합하고 제한된 메타데이터를 원자 저장·복원한다.",
+        "allowedDependencies": [
+          "arch.native.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.native.projects",
+        "parent"     : "arch.native",
+        "title"      : "로컬 프로젝트 인덱스",
+        "description": "main 단일 소유자가 실제 경로별 최근 프로젝트와 즐겨찾기를 검증하고 제한된 로컬 인덱스를 원자 저장·복원하며 실패 시 기존 항목을 보전한다.",
         "allowedDependencies": []
       },
       {
@@ -3018,7 +3148,9 @@
           "arch.chat.sessions.restore",
           "arch.development.service",
           "arch.native.launch",
+          "arch.native.projects",
           "arch.native.protocol",
+          "arch.native.resources",
           "arch.native.transport",
           "arch.reports.collection",
           "arch.reports.judgement",
@@ -3182,13 +3314,31 @@
     ],
     "requirements": [
       {
+        "id"                    : "RESP-NATIVE-PROJECTS",
+        "nodeId"                : "arch.native.projects",
+        "description"           : "로컬 프로젝트 인덱스가 실제 경로 식별·최근순·즐겨찾기·직렬 갱신·원자 저장과 오류 시 원본 보전을 담당한다. main은 single-instance lock 뒤 userData당 factory 하나를 사용하며 실행·전송·승인 중 전환 보호를 소유한다. 제한된 IPC가 renderer의 조회·즐겨찾기·프로젝트 선택을 연결한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 8
+      },
+      {
+        "id"                    : "RESP-NATIVE-RESOURCES",
+        "nodeId"                : "arch.native.resources",
+        "description"           : "main 전용 관측 원자 원장이 scope 격리·안정 식별 병합·제한된 메타데이터 저장·복원·종료와 실패 보전을 담당한다. main이 Native 관측 정규화와 저장을 소유하고 제한된 IPC로 renderer에 scope별 읽기 전용 snapshot을 전달한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 15
+      },
+      {
         "id"                    : "RESP-TOOLING-BUNDLE",
         "nodeId"                : "arch.tooling.bundle",
         "description"           : "앱 번들 생성 책임을 구현하고 관련 동작을 검증한다.",
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 8
+        "line"                  : 22
       },
       {
         "id"                    : "RESP-TOOLING-STRUCTURE-CONTRACT",
@@ -3197,7 +3347,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 15
+        "line"                  : 29
       },
       {
         "id"                    : "RESP-TOOLING-MAP-VALIDATION",
@@ -3206,7 +3356,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 22
+        "line"                  : 36
       },
       {
         "id"                    : "RESP-TOOLING-MAP-GENERATION",
@@ -3215,7 +3365,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 29
+        "line"                  : 43
       },
       {
         "id"                    : "RESP-TOOLING-SOURCE-POLICY",
@@ -3224,7 +3374,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 36
+        "line"                  : 50
       },
       {
         "id"                    : "RESP-DEVELOPMENT-AUTHORING",
@@ -3233,7 +3383,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 43
+        "line"                  : 57
       },
       {
         "id"                    : "RESP-DEVELOPMENT-PROVIDERS-CODEX",
@@ -3242,7 +3392,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 50
+        "line"                  : 64
       },
       {
         "id"                    : "RESP-DEVELOPMENT-PROVIDERS-GJC",
@@ -3251,7 +3401,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 57
+        "line"                  : 71
       },
       {
         "id"                    : "RESP-DEVELOPMENT-PROVIDERS-INVOCATION",
@@ -3260,7 +3410,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 64
+        "line"                  : 78
       },
       {
         "id"                    : "RESP-DEVELOPMENT-EVIDENCE-REPOSITORY",
@@ -3269,7 +3419,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 71
+        "line"                  : 85
       },
       {
         "id"                    : "RESP-DEVELOPMENT-EVIDENCE-DOCUMENTATION",
@@ -3278,7 +3428,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 78
+        "line"                  : 92
       },
       {
         "id"                    : "RESP-DEVELOPMENT-EVIDENCE-VERIFICATION",
@@ -3287,7 +3437,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 85
+        "line"                  : 99
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-LOCK",
@@ -3296,7 +3446,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 92
+        "line"                  : 106
       },
       {
         "id"                    : "RESP-DEVELOPMENT-AUTHORIZATION",
@@ -3305,7 +3455,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 99
+        "line"                  : 113
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-EVENTS",
@@ -3314,7 +3464,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 106
+        "line"                  : 120
       },
       {
         "id"                    : "RESP-DEVELOPMENT-REPORTING-LIFECYCLE",
@@ -3323,7 +3473,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 113
+        "line"                  : 127
       },
       {
         "id"                    : "RESP-DEVELOPMENT-REPORTING-DOCUMENT",
@@ -3332,7 +3482,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 120
+        "line"                  : 134
       },
       {
         "id"                    : "RESP-DEVELOPMENT-REPORTING-STORAGE",
@@ -3341,7 +3491,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 127
+        "line"                  : 141
       },
       {
         "id"                    : "RESP-DEVELOPMENT-REVIEW",
@@ -3350,7 +3500,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 134
+        "line"                  : 148
       },
       {
         "id"                    : "RESP-DEVELOPMENT-ROUTING",
@@ -3359,7 +3509,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 141
+        "line"                  : 155
       },
       {
         "id"                    : "RESP-DEVELOPMENT-EXECUTION",
@@ -3368,7 +3518,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 148
+        "line"                  : 162
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-VALIDATION",
@@ -3377,7 +3527,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 155
+        "line"                  : 169
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-PROTOCOL",
@@ -3386,7 +3536,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 162
+        "line"                  : 176
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-STATE",
@@ -3395,7 +3545,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 169
+        "line"                  : 183
       },
       {
         "id"                    : "RESP-CHAT-ACTIVITY-CATALOG",
@@ -3404,7 +3554,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 176
+        "line"                  : 190
       },
       {
         "id"                    : "RESP-BLUEPRINT-LAYOUT",
@@ -3413,7 +3563,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 183
+        "line"                  : 197
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-MARKDOWN",
@@ -3422,7 +3572,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 190
+        "line"                  : 204
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-READING",
@@ -3431,7 +3581,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 197
+        "line"                  : 211
       },
       {
         "id"                    : "RESP-CHAT-SESSIONS-READING",
@@ -3440,7 +3590,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 204
+        "line"                  : 218
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-EXECUTION",
@@ -3449,7 +3599,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 211
+        "line"                  : 225
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-PREVIEW",
@@ -3458,7 +3608,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 218
+        "line"                  : 232
       },
       {
         "id"                    : "RESP-CHAT-SESSIONS-RESTORE",
@@ -3467,7 +3617,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 225
+        "line"                  : 239
       },
       {
         "id"                    : "RESP-DEVELOPMENT-SERVICE",
@@ -3476,7 +3626,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 232
+        "line"                  : 246
       },
       {
         "id"                    : "RESP-BLUEPRINT-VIEW",
@@ -3485,7 +3635,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 239
+        "line"                  : 253
       },
       {
         "id"                    : "RESP-BLUEPRINT-ECOSYSTEM",
@@ -3494,7 +3644,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 246
+        "line"                  : 260
       },
       {
         "id"                    : "RESP-CHAT-COMPOSER",
@@ -3503,7 +3653,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 253
+        "line"                  : 267
       },
       {
         "id"                    : "RESP-NATIVE-LIFECYCLE",
@@ -3512,7 +3662,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 260
+        "line"                  : 274
       },
       {
         "id"                    : "RESP-CHAT-ACTIVITY-VIEW",
@@ -3521,7 +3671,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 267
+        "line"                  : 281
       },
       {
         "id"                    : "RESP-CHAT-ACTIVITY-PROJECTION",
@@ -3530,7 +3680,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 274
+        "line"                  : 288
       },
       {
         "id"                    : "RESP-CHAT-SESSIONS-REQUESTS",
@@ -3539,7 +3689,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 281
+        "line"                  : 295
       },
       {
         "id"                    : "RESP-NATIVE-LAUNCH",
@@ -3548,7 +3698,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 288
+        "line"                  : 302
       },
       {
         "id"                    : "RESP-REPORTS-COLLECTION",
@@ -3557,7 +3707,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 295
+        "line"                  : 309
       },
       {
         "id"                    : "RESP-REPORTS-QUEUE",
@@ -3566,7 +3716,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 302
+        "line"                  : 316
       },
       {
         "id"                    : "RESP-NATIVE-BRIDGE",
@@ -3575,7 +3725,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 309
+        "line"                  : 323
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-PROJECTION",
@@ -3584,7 +3734,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 316
+        "line"                  : 330
       },
       {
         "id"                    : "RESP-CHAT-WORKSPACE",
@@ -3593,7 +3743,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 323
+        "line"                  : 337
       },
       {
         "id"                    : "RESP-REPORTS-JUDGEMENT",
@@ -3602,7 +3752,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 330
+        "line"                  : 344
       },
       {
         "id"                    : "RESP-REPORTS-SERVICE",
@@ -3611,7 +3761,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 337
+        "line"                  : 351
       },
       {
         "id"                    : "RESP-REPORTS-VIEW",
@@ -3620,7 +3770,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 344
+        "line"                  : 358
       },
       {
         "id"                    : "RESP-NATIVE-TRANSPORT",
@@ -3629,7 +3779,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 351
+        "line"                  : 365
       },
       {
         "id"                    : "RESP-NATIVE-PROTOCOL",
@@ -3638,7 +3788,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 358
+        "line"                  : 372
       },
       {
         "id"                    : "RESP-CHAT-ACTIVITY-ARTIFACTS",
@@ -3647,7 +3797,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 365
+        "line"                  : 379
       }
     ],
     "declarations": [
@@ -3844,6 +3994,14 @@
         "line": 2
       },
       {
+        "file": "src/activity-ledger.ts",
+        "nodeId": "arch.native.resources",
+        "requirementIds": [
+          "RESP-NATIVE-RESOURCES"
+        ],
+        "line": 3
+      },
+      {
         "file": "src/activity-sidebar.ts",
         "nodeId": "arch.chat.activity.catalog",
         "requirementIds": [
@@ -4020,6 +4178,14 @@
         "line": 2
       },
       {
+        "file": "src/projects.ts",
+        "nodeId": "arch.native.projects",
+        "requirementIds": [
+          "RESP-NATIVE-PROJECTS"
+        ],
+        "line": 4
+      },
+      {
         "file": "src/renderer.tsx",
         "nodeId": "arch.chat.workspace",
         "requirementIds": [
@@ -4077,6 +4243,13 @@
       }
     ],
     "tests": [
+      {
+        "file": "test/activity-ledger.test.ts",
+        "requirementIds": [
+          "RESP-NATIVE-RESOURCES"
+        ],
+        "line": 2
+      },
       {
         "file": "test/activity-sidebar.test.ts",
         "requirementIds": [
@@ -4196,6 +4369,13 @@
         "file": "test/projection.test.ts",
         "requirementIds": [
           "RESP-CHAT-MESSAGES-PROJECTION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/projects.test.ts",
+        "requirementIds": [
+          "RESP-NATIVE-PROJECTS"
         ],
         "line": 2
       },
@@ -4337,6 +4517,6 @@
         "line": 2
       }
     ],
-    "digest": "d325cbb50915b15571077b1741556339f81aff9f745777308dc54d30502e7fb1"
+    "digest": "f64425529530408fcbed6217b95e7b108a155f7c1ed98b05ed1977c03505c63c"
   }
 }

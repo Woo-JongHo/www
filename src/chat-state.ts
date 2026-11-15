@@ -42,6 +42,31 @@ export function belongsToConversation(event: AppEvent, threadId: string | null):
   return ownThread === null || ownThread === threadId;
 }
 
+export function eventTurnId(event: AppEvent): string | null {
+  if (!event.params || typeof event.params !== "object") return null;
+  const params = event.params as Record<string, unknown>;
+  if (typeof params.turnId === "string") return params.turnId;
+  const turn = params.turn;
+  if (turn && typeof turn === "object" && "id" in turn && typeof turn.id === "string") return turn.id;
+  const item = params.item;
+  if (item && typeof item === "object" && "turnId" in item && typeof item.turnId === "string") return item.turnId;
+  return null;
+}
+
+export function currentTurnEvents(events: readonly AppEvent[], turnId: string | null): AppEvent[] {
+  const firstCurrent = turnId === null ? -1 : events.findIndex((event) => eventTurnId(event) === turnId);
+  const searchEnd = firstCurrent < 0 ? events.length - 1 : firstCurrent;
+  let promptIndex = -1;
+  for (let index = searchEnd; index >= 0; index -= 1) {
+    if (events[index]?.method !== "turn/userPrompt") continue;
+    promptIndex = index;
+    break;
+  }
+  return events.slice(Math.max(0, promptIndex)).filter((event) =>
+    turnId === null || eventTurnId(event) === turnId || event.method === "turn/userPrompt"
+  );
+}
+
 export interface ConversationReadingState {
   draft     : string  ;
   scrollTop : number  ;
