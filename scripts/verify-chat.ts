@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 type Data = Record<string, unknown>;
 const object    = (value: unknown): Data => value && typeof value === "object" && !Array.isArray(value) ? value as Data : {} ;
 const root      = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")                                           ;
+await fs.mkdir(path.join(root, '.www/evidence'), { recursive: true });
 const directory = await fs.mkdtemp(path.join(root, ".www/evidence/chat-ui-"))                                                ;
 const workspace = path.join(directory, "workspace")                                                                          ;
 await fs.mkdir(workspace);
@@ -21,7 +22,7 @@ async function seedHistory() {
   const output    = Array.from({ length: 11 }, (_, index) => `    명령 출력 ${index + 1}`).join("\n")                                                                                                      ;
   const wideTable = "| " + Array.from({ length: 24 }, (_, index) => `열 ${index + 1}`).join(" | ") + " |\n| " + Array(24).fill("---").join(" | ") + " |\n| " + Array(24).fill("값").join(" | ") + " |\n\n" ;
 
-  const answer = "## 저장된 답변\n\n**이어갈 작업**을 확인했습니다.\n\n| 항목 | 상태 |\n| --- | --- |\n| 저장 | 완료 |\n\n" + wideTable + "```ts\n    const saved = true;\n" + "    // 긴 코드 " + "x".repeat(1200) + "\n```\n\n[긴 URL](https://example.com/" + "path".repeat(400) + ")\n\nhttps://example.com/" + "long".repeat(400) + "\n\n" + Array.from({ length: 35 }, (_, index) => `기록 문단 ${index}\n\n`).join("") + "마지막 문장 접근 확인.";
+  const answer = "## 저장된 답변\n\n1. **중앙 지도를 넓혔습니다.**\n\n   목록을 접고 노드의 역할과 하위 구성을 읽도록 정리했습니다. 아주 긴 한국어 설명도 문단 안에서 자연스럽게 줄바꿈되어야 합니다.\n\n2. **탐색 상태를 유지합니다.**\n\n   - 패널을 여닫아도 배율과 위치를 유지합니다.\n   - 키보드로 선택한 책임에 초점을 둡니다.\n\n3. **검증 범위를 확인했습니다.**\n\n   Mac 화면 검사는 통과했고 Windows 확인은 남아 있습니다.\n\n**이어갈 작업**을 확인했습니다.\n\n| 항목 | 상태 |\n| --- | --- |\n| 저장 | 완료 |\n\n" + wideTable + "```ts\n    const saved = true;\n" + "    // 긴 코드 " + "x".repeat(1200) + "\n```\n\n[긴 URL](https://example.com/" + "path".repeat(400) + ")\n\nhttps://example.com/" + "long".repeat(400) + "\n\n" + Array.from({ length: 35 }, (_, index) => `기록 문단 ${index}\n\n`).join("") + "마지막 문장 접근 확인.";
   await fs.writeFile(path.join(workspace, "fixture-history.json"), JSON.stringify({
     "history-a": [{ id: "saved-turn-a", status: "completed", items: [
       {
@@ -55,6 +56,7 @@ async function seedHistory() {
     ] }],
     "history-b": [{ id: "saved-turn-b", status: "completed", items: [{ id: "b-answer", type: "agentMessage", text: "두 번째 저장 대화" }] }]
   }));
+  return answer;
 }
 
 async function freePort(): Promise<number> {
@@ -130,7 +132,7 @@ async function start(round: number, selectedWorkspace = workspace) {
       if (result.exceptionDetails) throw Error(JSON.stringify(result.exceptionDetails));
       return object(result.result).value;
     };
-    const wait = async (expression: string, label: string, timeoutMs = 20_000) => {
+    const wait = async (expression: string, label: string, timeoutMs = 45_000) => {
       const until = Date.now() + timeoutMs;
       while (Date.now() < until) {
         if (await evaluate("(async()=>Boolean(await (" + expression + ")))()")) { checks.push(label); return; }
@@ -183,6 +185,17 @@ async function start(round: number, selectedWorkspace = workspace) {
         if (documentSize.scrollWidth > innerWidth || documentSize.scrollHeight > innerHeight) failures.push('documentElement 전체 넘침');
         if (bodySize.scrollWidth > innerWidth || bodySize.scrollHeight > innerHeight) failures.push('body 전체 넘침');
         const result = { viewport: { width: innerWidth, height: innerHeight }, documentElement: documentSize, body: bodySize, failures };
+        const answer = document.querySelector('.agent .chat-message');
+        const list = answer?.querySelector('.chat-markdown>ol');
+        if (!answer || !list || list.children.length !== 3) failures.push('번호별 최종 답변 의미 구조 누락');
+        if (answer && list) {
+          const size = dimensions(answer);
+          if (Number.parseFloat(getComputedStyle(answer).fontSize) < 14) failures.push('최종 답변 글자 축소');
+          if (Number.parseInt(getComputedStyle(list.children[0], '::marker').fontWeight) < 600) failures.push('최종 답변 번호 위계 누락');
+          if (size.width > document.querySelector('.transcript').clientWidth) failures.push('최종 답변 읽기 폭 넘침');
+          result.answer = { ...size, numberedItems: list.children.length, nestedItems: list.querySelectorAll('ul li').length };
+        }
+
         for (const [key, selector] of [['root', '#root'], ['footer', 'footer.status'], ['compose', '.compose'], ['transcript', '.transcript']]) {
           const node = document.querySelector(selector);
           if (!node) { failures.push(selector + ' 없음'); continue; }
@@ -226,7 +239,7 @@ async function start(round: number, selectedWorkspace = workspace) {
 
 let session: Awaited<ReturnType<typeof start>> | null = null;
 try {
-  await seedHistory();
+  const expectedAnswer = await seedHistory();
   session = await start(1);
   let falsePredicateRejected = false;
   try { await session.wait("Promise.resolve(false)", "의도적인 비동기 false 조건", 100); }
@@ -239,9 +252,18 @@ try {
   const a = '[data-thread-id="history-a"]' ;
   const b = '[data-thread-id="history-b"]' ;
   await session.click(a);
+  const resumeCalls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
+  const resumeParams = object(resumeCalls.find(call => call.method === "thread/resume")?.params);
+  if (typeof resumeParams.developerInstructions !== "string" || !resumeParams.developerInstructions.includes("실제 Markdown 번호 목록") || "sandbox" in resumeParams || "model" in resumeParams || "approvalPolicy" in resumeParams) throw Error("재개 지침 전달 또는 기존 Native 권한 보존 실패");
+  checks.push("실제 Electron 재개 IPC·stdio가 최종 답변 지침을 권한 변경 없이 전달");
+
   await session.wait("document.querySelector('.chat-markdown h2')?.textContent==='저장된 답변'", "저장 대화 Markdown 복원");
   await session.wait("document.querySelector('.chat-markdown table') && document.querySelector('.chat-code pre')", "표와 fenced code 실제 DOM");
   await session.wait("!document.body.innerText.includes('PRIVATE_REASONING_DO_NOT_RENDER')", "비공개 reasoning 미노출");
+  await session.wait("document.querySelectorAll('.agent .chat-markdown>ol>li').length===3 && document.querySelectorAll('.agent .chat-markdown ol ul li').length===2", "최종 답변의 실제 번호·제목·설명과 중첩 목록 복원");
+  await session.evaluate("document.querySelector('.agent .chat-message').scrollIntoView({block:'start'})");
+  await session.screenshot("final-answer-numbered");
+
   await session.wait("document.querySelector('[data-testid=\"command-preview\"]')?.textContent.split('\\n').length===10", "명령 카드 10줄 미리보기");
   await session.wait("document.querySelector('[data-testid=\"command-preview\"]')?.textContent.startsWith('    명령 출력 1')", "명령 출력 들여쓰기와 종료 후 앞 10줄");
   await session.wait("document.querySelector('.command-card.item-failed details')?.open===true", "실패 카드 보관 출력 자동 펼침");
@@ -324,6 +346,11 @@ try {
   await session.wait(chatPreserved, "키보드 상세 왕복 뒤 초안·읽기 위치 유지");
   await session.input("");
   await session.screenshot("restored-chat");
+  await session.click('.agent .chat-message-actions button:first-child');
+  await session.wait("document.querySelector('.agent .chat-message-actions button:first-child')?.textContent.includes('복사됨')", "번호별 최종 답변 복사");
+  const copiedAnswer = await session.evaluate("navigator.clipboard.readText()");
+  if (copiedAnswer !== expectedAnswer) throw Error("번호·중첩·문단의 원문 복사 불일치");
+  checks.push("번호·제목·설명·중첩 목록의 원문 복사 일치");
   await session.click('.chat-code button');
   await session.wait("document.querySelector('.chat-code button')?.textContent.includes('복사됨')", "코드 복사 클릭 성공");
   await session.click('.chat-message-actions button:last-child');
@@ -421,6 +448,9 @@ try {
   await session.click('[data-testid="send-button"]');
   await session.wait("document.body.innerText.includes('같은 대화에서 이어졌습니다.')", "재개 후 실제 turn 요청과 답변");
   await session.wait("!document.querySelector('[data-testid=\"new-conversation\"]')?.disabled", "후속 요청 최종 종료");
+  await session.wait("document.querySelector('[data-testid=result-summary]')?.open===false", "정상 최종 답변의 실행 집계 기본 접힘");
+  await session.click('[data-testid="result-summary"]>summary');
+  await session.wait("document.querySelector('[data-testid=result-summary]')?.open===true", "실행 기록 명시 펼침");
   await session.input("승인 확인");
   await session.click('[data-testid="send-button"]');
   await session.wait("document.querySelector('[data-decision=\"accept\"]')", "Native 승인 대기 표시");

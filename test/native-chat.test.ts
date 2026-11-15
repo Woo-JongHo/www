@@ -4,7 +4,7 @@
 import { expect, test } from "bun:test";
 import { spawn } from "node:child_process";
 import { join } from "node:path";
-import { nativeThreadStartParams, nativeTurnStartParams } from "../src/native-chat";
+import { nativeThreadStartParams, nativeTurnStartParams, nativeThreadResumeParams, NATIVE_FINAL_ANSWER_INSTRUCTIONS } from "../src/native-chat";
 import { project } from "../src/projection";
 import { JsonRpcClient } from "../src/rpc";
 import type { AppEvent } from "../src/shared";
@@ -17,7 +17,10 @@ test("Native params는 기존 권한·입력을 보존하며 진행 설명과 de
   expect(thread.developerInstructions                     ).toContain("공개 설명 없이 작업을 이어가지 말고"                                                                                           ) ;
   expect(thread.developerInstructions                     ).toContain("실패하거나 방향을 바꾸면"                                                                                                     ) ;
   expect(thread.developerInstructions                     ).toContain("매 도구 호출마다 상투적인 문장을 반복하지"                                                                                    ) ;
-  expect(thread.developerInstructions                     ).toContain("결론, 실제로 한 일, 확인한 결과, 남은 문제"                                                                                    ) ;
+  expect(thread.developerInstructions                     ).toContain(NATIVE_FINAL_ANSWER_INSTRUCTIONS) ;
+  expect(NATIVE_FINAL_ANSWER_INSTRUCTIONS).toContain("실제 Markdown 번호 목록");
+  expect(NATIVE_FINAL_ANSWER_INSTRUCTIONS).toContain("사용자가 지정한 답변 형식·길이를 우선");
+  expect(nativeThreadResumeParams("existing")).toEqual({ threadId: "existing", excludeTurns: true, developerInstructions: thread.developerInstructions });
   expect(nativeTurnStartParams("thread", " 사용자 원문\n")).toEqual  ({ threadId: "thread", input: [{ type: "text", text: " 사용자 원문\n", text_elements: [] }], summary: "detailed" }              ) ;
 });
 

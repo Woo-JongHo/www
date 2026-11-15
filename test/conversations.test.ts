@@ -2,6 +2,7 @@
  * @verifies RESP-CHAT-SESSIONS-RESTORE
  */
 import { expect, test } from "bun:test";
+import { NATIVE_PROGRESS_INSTRUCTIONS } from "../src/native-chat";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -50,7 +51,7 @@ test("같은 Native thread를 재개하고 과거 공개 항목만 비실행 상
   });
   const restored = await createConversationService(client, cwd).open("thread-1");
   expect(client.calls.map((call) => call.method)           ).toEqual(["thread/read", "thread/resume", "thread/turns/list"]) ;
-  expect(client.calls[1]?.params                           ).toEqual({ threadId: "thread-1", excludeTurns: true }         ) ;
+  expect(client.calls[1]?.params).toEqual({ threadId: "thread-1", excludeTurns: true, developerInstructions: NATIVE_PROGRESS_INSTRUCTIONS });
   expect(restored.threadId                                 ).toBe   ("thread-1"                                           ) ;
   expect(restored.approvalPolicy                           ).toBe   ("never"                                              ) ;
   expect(restored.sandbox                                  ).toBe   ("readOnly"                                           ) ;

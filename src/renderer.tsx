@@ -137,8 +137,9 @@ function ResultSummary({ blocks, turn }: { blocks: readonly Block[]; turn: TurnS
   const counts = executionResultCounts(blocks);
   const verification = commands.filter((block) => isVerificationCommand(block.command));
   const verificationPassed = verification.filter((block) => block.status === "completed").length;
-  return <section className="result-summary" aria-label="결과 요약" data-testid="result-summary">
-    <div className="result-summary-heading"><strong>결과 요약</strong><span>{turn === "completed" ? "응답 종료" : turn === "interrupted" ? "중단됨" : turn === "failed" ? "실패" : "결과 미확인"}</span></div>
+  const attention = turn !== "completed" || counts.failed > 0 || counts.unresolved > 0 || answers.length === 0;
+  return <details className="result-summary" open={attention} aria-label="실행 기록" data-testid="result-summary">
+    <summary className="result-summary-heading"><strong>실행 기록</strong><span>{turn === "completed" ? "응답 종료" : turn === "interrupted" ? "중단됨" : turn === "failed" ? "실패" : "결과 미확인"}{attention ? " · 확인 필요" : ""}</span></summary>
     <dl>
       <div><dt>최종 답변</dt><dd>{answers.length > 0 ? "수신됨" : "미제공"}</dd></div>
       <div><dt>실행</dt><dd>명령 {counts.commands}개 · 파일 변경 {counts.files}개</dd></div>
@@ -146,7 +147,7 @@ function ResultSummary({ blocks, turn }: { blocks: readonly Block[]; turn: TurnS
       <div><dt>확인 필요</dt><dd>{counts.failed > 0 || counts.unresolved > 0 ? `실패 ${counts.failed}개 · 결과 미확인 ${counts.unresolved}개` : "관측된 실행 차단 없음"}</dd></div>
     </dl>
     <p>응답 종료는 요청한 업무의 검증 완료와 다를 수 있습니다. 위 최종 답변과 실제 실행 근거를 함께 확인하세요.</p>
-  </section>;
+  </details>;
 }
 
 

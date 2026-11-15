@@ -3,6 +3,7 @@
  * @implements RESP-CHAT-SESSIONS-RESTORE
  */
 import { resolve } from "node:path";
+import { nativeThreadResumeParams } from "./native-chat";
 import type { AppEvent, ConversationCatalog, ConversationSummary } from "./shared";
 
 export type ConversationEvent = Omit<AppEvent, "seq" | "at">;
@@ -159,9 +160,7 @@ export function createConversationService(client: NativeRequester, cwd: string) 
       const threadId = identifier(threadIdValue);
       const initial = threadRecord(await client.request("thread/read", { threadId, includeTurns: false }), cwd, threadId);
       if (object(initial.status) && initial.status.type === "active") throw new Error("실행 중인 대화는 종료 후 다시 열 수 있습니다.");
-      const resumed = record(await client.request("thread/resume", {
-        threadId, excludeTurns: true
-      }));
+      const resumed = record(await client.request("thread/resume", nativeThreadResumeParams(threadId)));
       const thread = threadRecord(resumed, cwd, threadId);
       if (object(thread.status) && thread.status.type === "active") throw new Error("대화가 실행 중입니다. 종료 후 다시 열어 주세요.");
       const turns: SavedTurn[] = [];

@@ -13,7 +13,7 @@ const initialItems = [
   { id: "saved-summary", type: "reasoning", summary: ["공개 요약입니다."], content: ["PRIVATE_REASONING_DO_NOT_RENDER"] },
   { id: "saved-command", type: "commandExecution", command: "printf saved", cwd, status: "completed", exitCode: 0, aggregatedOutput: "saved output" },
   { id: "saved-files", type: "fileChange", status: "completed", changes: [{ path: "saved.ts", diff: "--- a/saved.ts\n+++ b/saved.ts\n+const saved = true;" }] },
-  { id: "saved-answer", type: "agentMessage", phase: "final_answer", text: "## 저장된 답변\n\n**이어갈 작업**을 확인했습니다.\n\n| 항목 | 상태 |\n| --- | --- |\n| 저장 | 완료 |\n\n\`\`\`ts\nconst saved = true;\n\`\`\`\n\n[공식 문서](https://example.com/docs)\n\n" + Array.from({ length: 35 }, (_, i) => "기록 문단 " + i + "\n\n").join("") }
+  { id: "saved-answer", type: "agentMessage", phase: "final_answer", text: "## 저장된 답변\n\n1. **중앙 지도를 넓혔습니다.**\n\n   목록을 접고 노드의 역할과 하위 구성을 읽도록 정리했습니다. 아주 긴 한국어 설명도 문단 안에서 자연스럽게 줄바꿈되어야 합니다.\n\n2. **탐색 상태를 유지합니다.**\n\n   - 패널을 여닫아도 배율과 위치를 유지합니다.\n   - 키보드로 선택한 책임에 초점을 둡니다.\n\n3. **검증 범위를 확인했습니다.**\n\n   Mac 화면 검사는 통과했고 Windows 확인은 남아 있습니다.\n\n**이어갈 작업**을 확인했습니다.\n\n| 항목 | 상태 |\n| --- | --- |\n| 저장 | 완료 |\n\n\`\`\`ts\nconst saved = true;\n\`\`\`\n\n[공식 문서](https://example.com/docs)\n\n" + Array.from({ length: 35 }, (_, i) => "기록 문단 " + i + "\n\n").join("") }
 ];
 let histories: Record<string, unknown[]> = {
   "history-a": [{ id: "saved-turn-a", status: "completed", items: initialItems }],

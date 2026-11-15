@@ -101,3 +101,24 @@
 .comm-warning{color:var(--warn);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .project-storage-warning{color:var(--warn);min-width:0;max-width:45vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sidebar,.sidebar>*{min-width:0}
+
+/* 최종 답변의 의미상 목록을 읽기 폭과 문단 위계로 구분한다. */
+:root{--chat-answer-measure:76ch;--chat-answer-font:14px;--chat-answer-leading:1.85;--chat-answer-item-gap:20px}
+.agent .chat-message{max-width:var(--chat-answer-measure);font-size:var(--chat-answer-font);line-height:var(--chat-answer-leading)}
+.agent .chat-markdown>p:first-child{font-size:15px;color:var(--text);margin-bottom:20px}
+.agent .chat-markdown>ol{padding-inline-start:28px;margin-block:20px}
+.agent .chat-markdown>ol>li{padding-inline-start:8px;margin-block:var(--chat-answer-item-gap)}
+.agent .chat-markdown>ol>li::marker{color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums}
+.agent .chat-markdown>ol>li>strong:first-child,.agent .chat-markdown>ol>li>p:first-child>strong:first-child{display:block;font-weight:650;margin-bottom:6px}
+.agent .chat-markdown li>p{margin-block:6px 10px}
+.agent .chat-markdown li :is(ul,ol){margin-block:8px;padding-inline-start:22px}
+.agent .chat-markdown li li{margin-block:6px}
+.result-summary{display:block;max-width:var(--chat-answer-measure);padding:12px 0;border:0;border-top:1px solid var(--border);border-radius:0;background:transparent;font-size:11px;color:var(--muted)}
+.result-summary>summary{justify-content:flex-start;cursor:pointer;list-style:none;gap:10px;min-height:28px}
+.result-summary>summary::-webkit-details-marker{display:none}
+.result-summary>summary::before{content:'›';font-size:17px;transform:rotate(0deg)}
+.result-summary[open]>summary::before{transform:rotate(90deg)}
+.result-summary>summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+.result-summary[open]>summary{margin-bottom:12px}
+.result-summary[open]>p{margin-top:12px;line-height:1.6}
+@media(max-width:760px){:root{--chat-answer-item-gap:16px}.agent .chat-markdown>ol{padding-inline-start:22px}.agent .chat-markdown>ol>li{padding-inline-start:4px}}

@@ -421,7 +421,8 @@
       "title"      : "Native 대화 목록과 복원",
       "description": "Native의 대화 목록·읽기·재개 응답을 검증하고 공개 이력을 화면 사건으로 복원한다. 저장 원본은 Native이며 과거 승인과 비공개 추론은 재생하지 않는다.",
       "allowedDependencies": [
-        "arch.native.protocol"
+        "arch.native.protocol",
+        "arch.chat.sessions.requests"
       ]
     },
     {

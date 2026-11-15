@@ -327,3 +327,7 @@ write/check는 동일 논리경로 `src/architecture.generated.json`의 격리�
 과거 JSONL 영수증은 첫 `thread.started` 제어 사건의 유효한 thread_id와 선택적 model 메타데이터만 읽는다. 뒤따르는 응답·도구 사건의 임의 model은 무시하며, 시작 사건이 중복되거나 뒤늦게 나타나면 거부한다. 현재 실측 CLI는 시작 사건에 모델을 제공하지 않아 해당 영수증은 모델 미관측으로 거부하고 새 plain 실행으로 재검토한다. 과거 메타데이터 호환은 fixture 검사이며 실제 성공 이력으로 세지 않는다.
 
 지도 GUI 회귀 검사는 자동 배율에서 스크롤한 뒤 탐색 열기·접기의 배율/위치 유지와 키보드 branch 진입 후 현재 책임 노드의 초점을 확인한다.
+
+## 번호별 최종 대화 답변 검증
+
+`bun test test/native-chat.test.ts test/conversations.test.ts test/chat-state.test.ts`는 새 대화·재개의 공통 지침과 권한/원문 보존을 검사한다. 설치 Native의 `codex app-server generate-ts --out .www/native-protocol`로 ThreadResumeParams.developerInstructions 지원을 확인했다. `node scripts/verify-chat.ts`는 실제 Electron에서 저장된 번호 답변·중첩·좁은 창·복사·재개·실행 기록 상태를 검사한다. `bun test/verify-final-answer-live.ts`는 실제 인증과 모델 사용량을 쓰는 명시 실행 검사이며 제공된 사실의 표현·재개·짧은 형식 준수를 확인한다. fixture 화면 검사와 실제 모델 응답 검사를 구분하고 원문은 .www/evidence에 보존한다.
