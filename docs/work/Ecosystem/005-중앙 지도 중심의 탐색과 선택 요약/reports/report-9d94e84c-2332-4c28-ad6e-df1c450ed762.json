@@ -1,0 +1,362 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-9d94e84c-2332-4c28-ad6e-df1c450ed762",
+  "workId"        : "work-2654a232-11a8-40a3-907d-edad8ec066b4",
+  "title"         : "중앙 지도 중심의 탐색과 선택 요약",
+  "summary"       : "중앙 지도 중심 UI를 별도 worktree에 구현하고 문서·종료 보고서·인수인계를 정리했다. 집중 테스트·타입·소스 정책·빌드·실제 Electron 및 대화 보존 통합 검사가 통과했고 기능 기준 세 개의 근거가 현재 소스에 유효하다. Opus 검토는 세션 한도로 중단됐고, 사용자 지시 후 Terra도 실제 CLI 사용 한도에 걸려 최종 검토를 완료하지 못했다. 업무 상태는 감사 대기로 보존하며 같은 UUID로 재개할 수 있다.",
+  "outcome"       : "blocked",
+  "kind"          : "authored",
+  "event"         : "finish",
+  "createdAt"     : "2026-11-15T10:04:16.540Z",
+  "workRecordHash": "a7a21adcd47178625590bb290dc3c9227abaa98b1e6d545af829f927d792f233",
+  "sourceDigest"  : "0a325dc6310a92f82ff2fa4350e288e5e8a59750fbbab753cce2017c2891bec8",
+  "criteriaDigest": "64c10ccb549acf2b2cd57581a48656d4726a10590153c92248e25f7745cd68b7",
+  "semanticHash"  : "84a4615f02bd3a3cb5bd8c47c1245a94fb411bd15d6c92af2e4f9ff3a1f30562",
+  "narrative": {
+    "summary": "중앙 지도 중심 UI를 별도 worktree에 구현하고 문서·종료 보고서·인수인계를 정리했다. 집중 테스트·타입·소스 정책·빌드·실제 Electron 및 대화 보존 통합 검사가 통과했고 기능 기준 세 개의 근거가 현재 소스에 유효하다. Opus 검토는 세션 한도로 중단됐고, 사용자 지시 후 Terra도 실제 CLI 사용 한도에 걸려 최종 검토를 완료하지 못했다. 업무 상태는 감사 대기로 보존하며 같은 UUID로 재개할 수 있다.",
+    "before" : "프로젝트·대화 목록과 노드 상세가 지도를 둘러싸고, 노드 선택 때 상세가 열려 중앙 영역이 줄었다.",
+    "after"  : "1440×900 기본 지도는 viewport 가로 90%·main 높이 60% 이상을 사용한다. 노드·검색·참조 선택은 역할/구성 수 요약만 갱신하고 탐색·상세는 명시적으로 연다.",
+    "changes": [
+      "지도에서는 탐색을 64px 아이콘 영역으로 접고 필요할 때 기존 목록을 연다.",
+      "상단 조작을 압축하고 지도 아래 선택 요약과 자세히 보기를 제공한다.",
+      "Chat·리포트의 기존 사이드바와 프로젝트·대화 DOM을 유지한다.",
+      "검증 도구가 native HTML 버튼의 실제 Enter/Space 입력을 보내도록 보완했다.",
+      "codex/canvas-focus worktree에 현재 기반과 작업을 복사하고 이후 원본을 수정하지 않았다."
+    ],
+    "decisions": [
+      "사용자가 선택한 요약＋명시적 상세 열기를 구현했다.",
+      "기존 상태를 유지하며 UI 표현과 로컬 상태만 바꾸고 IPC·Native 요청은 추가하지 않았다.",
+      "복사한 미커밋 기반은 .www/worktree-baseline.json으로 이번 저작과 구분한다."
+    ],
+    "limitations": [
+      "Opus 세션 한도로 필수 최종 검토가 미완료다. 대체 시도도 유효한 검토로 수용하지 않았다.",
+      "실제 Electron＋합성 Native를 검사했으며 실제 모델·Windows·OS 한글 IME를 새로 검증하지 않았다.",
+      "BoxBox project mode off를 새 worktree에만 복원했다. 형식 검사나 별도 typed 저작 subprocess 전체 실행을 주장하지 않는다.",
+      "worktree는 현재 미커밋 기반의 사본이다. 원본의 기존 UI 변경을 되돌리지 않았고 커밋·push·병합하지 않았다.",
+      "사용자 지시 후 실제 Terra CLI도 사용량 제한으로 종료 1이었다. 검토를 실행·통과한 것으로 세지 않으며 런타임 헤더 확인과 코드 검토 결과를 구분한다."
+    ],
+    "next": [
+      "모델 사용 한도 복구 후 tasks.md의 재개 순서로 Terra 읽기 전용 검토 경로와 실제 모델 관측을 확보하고 최종 검토·보고서·완료 판정을 이어간다."
+    ],
+    "reader": {
+      "story": "중앙 지도 중심 UI를 별도 worktree에 구현하고 문서·종료 보고서·인수인계를 정리했다. 집중 테스트·타입·소스 정책·빌드·실제 Electron 및 대화 보존 통합 검사가 통과했고 기능 기준 세 개의 근거가 현재 소스에 유효하다. Opus 검토는 세션 한도로 중단됐고, 사용자 지시 후 Terra도 실제 CLI 사용 한도에 걸려 최종 검토를 완료하지 못했다. 업무 상태는 감사 대기로 보존하며 같은 UUID로 재개할 수 있다.",
+      "requirements": [
+        {
+          "requirement": "CANVAS-SPACE: 지도 기본 화면에서 왼쪽 프로젝트/대화 목록과 오른쪽 상세를 접고 중앙 viewport가 가로 폭과 높이의 주 영역을 차지한다.",
+          "result"     : "현재 기능 검증 근거 적용 가능",
+          "evidence"   : "verification.md#attempt-e0acf838-0be7-450e-b685-0283183f6cbb",
+          "limitations": "업무 최종 완료는 필수 독립 검토 미수용으로 대기"
+        },
+        {
+          "requirement": "CANVAS-SELECT: 노드·검색·참조 강조 선택 시 지도에 역할과 구성 수 요약을 표시하며 상세 패널은 명시적으로 열 때만 나타난다.",
+          "result"     : "현재 기능 검증 근거 적용 가능",
+          "evidence"   : "verification.md#attempt-e0acf838-0be7-450e-b685-0283183f6cbb",
+          "limitations": "업무 최종 완료는 필수 독립 검토 미수용으로 대기"
+        },
+        {
+          "requirement": "CANVAS-CONTROL: 접힌 탐색과 상세를 키보드로 열고 닫을 수 있으며 포커스·계층·검색·보기·배율·대화 초안을 보존한다.",
+          "result"     : "현재 기능 검증 근거 적용 가능",
+          "evidence"   : "verification.md#attempt-b4e3050a-6d06-4d13-9875-dd529679b69c",
+          "limitations": "업무 최종 완료는 필수 독립 검토 미수용으로 대기"
+        }
+      ],
+      "checks": [
+        {
+          "target"     : "중앙 지도 UI와 기존 대화 보존",
+          "method"     : "work.json에 연결된 집중 검사·실제 Electron CDP·합성 Native 통합 검사",
+          "expected"   : "지도 면적·요약/상세·키보드·상태 보존",
+          "observed"   : "현재 기준 세 개에 유효한 통과 근거 있음",
+          "limitations": "전체 저장소·실제 모델·Windows·OS IME 검사로 확대하지 않음"
+        },
+        {
+          "target"     : "필수 독립 검토",
+          "method"     : "Opus 실행·기존 Terra 대체·사용자 지시 후 Terra CLI 재시도",
+          "expected"   : "현재 소스에 대한 읽기 전용 검토와 실제 모델 확인",
+          "observed"   : "Opus·추가 Terra 실행 모두 사용 한도로 미완료; 기존 대체도 소스 읽기/모델 관측 문제로 미수용",
+          "limitations": "어느 시도도 최종 검토 통과로 세지 않음"
+        },
+        {
+          "target"     : "종료 문서와 재개 가능성",
+          "method"     : "spec/design/tasks/verification 및 원장·보고서·목차 링크 확인",
+          "expected"   : "현재 결정·한계·원문·재개 순서 보존",
+          "observed"   : "worktree와 UUID, 기반 manifest, 검사 원문, 차단 사유, 재개 절차를 기록",
+          "limitations": "미커밋 상태로 보존하며 병합·게시·앱 종료는 수행하지 않음"
+        }
+      ],
+      "decisions": [],
+      "references": [
+        {
+          "path": "tasks.md",
+          "purpose": "다음 세션에서 같은 작업을 재개하는 순서와 보존 경계"
+        },
+        {
+          "path": "verification.md",
+          "purpose": "실제 검사 시도와 현재 근거·검토 차단 원문 위치"
+        },
+        {
+          "path": "work.json",
+          "purpose": "수용 기준·권한·현재 상태와 근거 연결의 정본"
+        }
+      ],
+      "nextActions": [
+        {
+          "action"  : "모델 한도 복구와 Terra 읽기 전용 검토 경로·실제 모델 관측을 확보한 후 동일 UUID에서 검토 재실행",
+          "owner"   : null,
+          "doneWhen": "현재 소스의 필수 검토가 공유 core에 수용되고 report-complete가 완료 조건을 충족함",
+          "impact"  : "최종 업무 완료 판정을 아직 내릴 수 없음"
+        }
+      ]
+    }
+  },
+  "work": {
+    "status": "verifying",
+    "blockedReason": "독립 검토 fail: quota_exhausted",
+    "criteria": [
+      {
+        "id"         : "CANVAS-SPACE",
+        "description": "지도 기본 화면에서 왼쪽 프로젝트/대화 목록과 오른쪽 상세를 접고 중앙 viewport가 가로 폭과 높이의 주 영역을 차지한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-10f6d1c1-7dfa-4291-b525-7a75adbe8856",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-12e04515-a952-4c3b-add5-948854a77a76",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-94a42629-9982-4385-aea1-bc72ca027c42",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-3c11cf3d-318b-42c5-bd40-8110a4018806",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e0acf838-0be7-450e-b685-0283183f6cbb",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "CANVAS-SELECT",
+        "description": "노드·검색·참조 강조 선택 시 지도에 역할과 구성 수 요약을 표시하며 상세 패널은 명시적으로 열 때만 나타난다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-10f6d1c1-7dfa-4291-b525-7a75adbe8856",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-12e04515-a952-4c3b-add5-948854a77a76",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-94a42629-9982-4385-aea1-bc72ca027c42",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-3c11cf3d-318b-42c5-bd40-8110a4018806",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e0acf838-0be7-450e-b685-0283183f6cbb",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "CANVAS-CONTROL",
+        "description": "접힌 탐색과 상세를 키보드로 열고 닫을 수 있으며 포커스·계층·검색·보기·배율·대화 초안을 보존한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-94a42629-9982-4385-aea1-bc72ca027c42",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e0acf838-0be7-450e-b685-0283183f6cbb",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-b4e3050a-6d06-4d13-9875-dd529679b69c",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-10f6d1c1-7dfa-4291-b525-7a75adbe8856",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/architecture-tree.test.ts",
+          "test/architecture.test.ts",
+          "test/architecture-contract.test.ts",
+          "test/ecosystem.test.ts",
+          "--timeout",
+          "60000"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:48:32.659Z"
+      },
+      {
+        "id": "attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "failed",
+        "executor"    : "process",
+        "exitCode"    : 1,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:48:42.620Z"
+      },
+      {
+        "id": "attempt-12e04515-a952-4c3b-add5-948854a77a76",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/architecture-tree.test.ts",
+          "test/architecture.test.ts",
+          "test/architecture-contract.test.ts",
+          "test/ecosystem.test.ts",
+          "--timeout",
+          "60000"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:53:11.432Z"
+      },
+      {
+        "id": "attempt-94a42629-9982-4385-aea1-bc72ca027c42",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:53:15.138Z"
+      },
+      {
+        "id": "attempt-3c11cf3d-318b-42c5-bd40-8110a4018806",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/architecture-tree.test.ts",
+          "test/architecture.test.ts",
+          "test/architecture-contract.test.ts",
+          "test/ecosystem.test.ts",
+          "--timeout",
+          "60000"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:54:55.346Z"
+      },
+      {
+        "id": "attempt-e0acf838-0be7-450e-b685-0283183f6cbb",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:54:58.654Z"
+      },
+      {
+        "id": "attempt-b4e3050a-6d06-4d13-9875-dd529679b69c",
+        "command": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:56:02.856Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id"         : "review-0e0ea302-2ac6-4931-b453-483b69df65a6",
+        "verdict"    : "fail",
+        "model"      : null,
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-0e0ea302-2ac6-4931-b453-483b69df65a6/terra.json",
+        "findings": [
+          "검토 대상 파일의 경로와 해시만 제공되어 소스·문서·검증 로그의 내용을 대조할 수 없었다. 명령 실행 금지 조건에서 로컬 파일을 읽을 수 있는 도구도 없어 수정의 타당성을 판정하지 못했다. 이는 확인된 코드 결함이 아니라 검토 미완료 사유다."
+        ]
+      }
+    ]
+  },
+  "source": {
+    "recordPath"    : "docs/work/Ecosystem/005-중앙 지도 중심의 탐색과 선택 요약/work.json",
+    "workRecordHash": "a7a21adcd47178625590bb290dc3c9227abaa98b1e6d545af829f927d792f233",
+    "sourceDigest"  : "0a325dc6310a92f82ff2fa4350e288e5e8a59750fbbab753cce2017c2891bec8",
+    "criteriaDigest": "64c10ccb549acf2b2cd57581a48656d4726a10590153c92248e25f7745cd68b7"
+  }
+}

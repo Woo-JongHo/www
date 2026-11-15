@@ -1,0 +1,4317 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-5bd187ad-cfd7-49bb-a971-69522685f01a",
+  "title"        : "사람이 읽는 구조 지도와 책임 설명",
+  "kind"         : "feature",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner"        : "ui",
+  "status"       : "done",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "MAP-READ",
+      "description": "구성·의존 관계를 구분하고 양방향 참조를 서로 다른 경로·포트로 표시하며 노드를 관통하지 않는다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-1b1c1c88-3826-41e8-8487-055bdb408ba1",
+          "path"     : "verification.md#attempt-1b1c1c88-3826-41e8-8487-055bdb408ba1",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-e8199d78-5482-4d05-a065-3393514dd24d",
+          "path"     : "verification.md#attempt-e8199d78-5482-4d05-a065-3393514dd24d",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c6979fc2-7556-49fa-b149-623b0ecafa6e",
+          "path"     : "verification.md#attempt-c6979fc2-7556-49fa-b149-623b0ecafa6e",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-dcce07a3-0e0e-4443-a381-5d3dbf7d2607",
+          "path"     : "verification.md#attempt-dcce07a3-0e0e-4443-a381-5d3dbf7d2607",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6",
+          "path"     : "verification.md#attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-f014edb7-a456-419c-9305-f5762d5d59d2",
+          "path"     : "verification.md#attempt-f014edb7-a456-419c-9305-f5762d5d59d2",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f",
+          "path"     : "verification.md#attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "MAP-NODE",
+      "description": "부모·하위 노드의 규격과 정보 위치를 통일하고 긴 제목·좁은 창에서도 내용에 접근할 수 있다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-1b1c1c88-3826-41e8-8487-055bdb408ba1",
+          "path"     : "verification.md#attempt-1b1c1c88-3826-41e8-8487-055bdb408ba1",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-e8199d78-5482-4d05-a065-3393514dd24d",
+          "path"     : "verification.md#attempt-e8199d78-5482-4d05-a065-3393514dd24d",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c6979fc2-7556-49fa-b149-623b0ecafa6e",
+          "path"     : "verification.md#attempt-c6979fc2-7556-49fa-b149-623b0ecafa6e",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-dcce07a3-0e0e-4443-a381-5d3dbf7d2607",
+          "path"     : "verification.md#attempt-dcce07a3-0e0e-4443-a381-5d3dbf7d2607",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6",
+          "path"     : "verification.md#attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-f014edb7-a456-419c-9305-f5762d5d59d2",
+          "path"     : "verification.md#attempt-f014edb7-a456-419c-9305-f5762d5d59d2",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f",
+          "path"     : "verification.md#attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "MAP-DETAIL",
+      "description": "대화 세션 선택 시 구체적인 역할, 초안·읽기/복원/요청 구성, 하위 책임과 코드 근거, 참조 방향을 읽고 이동할 수 있다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-1b1c1c88-3826-41e8-8487-055bdb408ba1",
+          "path"     : "verification.md#attempt-1b1c1c88-3826-41e8-8487-055bdb408ba1",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-e8199d78-5482-4d05-a065-3393514dd24d",
+          "path"     : "verification.md#attempt-e8199d78-5482-4d05-a065-3393514dd24d",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c6979fc2-7556-49fa-b149-623b0ecafa6e",
+          "path"     : "verification.md#attempt-c6979fc2-7556-49fa-b149-623b0ecafa6e",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-dcce07a3-0e0e-4443-a381-5d3dbf7d2607",
+          "path"     : "verification.md#attempt-dcce07a3-0e0e-4443-a381-5d3dbf7d2607",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6",
+          "path"     : "verification.md#attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-f014edb7-a456-419c-9305-f5762d5d59d2",
+          "path"     : "verification.md#attempt-f014edb7-a456-419c-9305-f5762d5d59d2",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f",
+          "path"     : "verification.md#attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "MAP-FLOW",
+      "description": "검색·계층 이동·키보드·상세 닫기·줌·팬·대화 상태 보존이 실제 Electron에서 동작한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-e8199d78-5482-4d05-a065-3393514dd24d",
+          "path"     : "verification.md#attempt-e8199d78-5482-4d05-a065-3393514dd24d",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-413bd27d-f5b0-44b9-8448-ed32a0891986",
+          "path"     : "verification.md#attempt-413bd27d-f5b0-44b9-8448-ed32a0891986",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6",
+          "path"     : "verification.md#attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-0901e93e-3f69-4eb1-867d-c68d2f87e564",
+          "path"     : "verification.md#attempt-0901e93e-3f69-4eb1-867d-c68d2f87e564",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f",
+          "path"     : "verification.md#attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-59b47add-42e8-4aae-87d1-6503003d0e37",
+          "path"     : "verification.md#attempt-59b47add-42e8-4aae-87d1-6503003d0e37",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "node-map-readable-blueprint-20261115",
+    "requestHash": "5e94689324609a56be17746c0cfc7d2c3abd3df48e3e7d44549139b86e31f7d1",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "src/architecture-tree.ts",
+        "src/ecosystem-view.tsx",
+        "src/ecosystem.css",
+        "src/architecture.generated.json",
+        "docs/architecture/structure.json",
+        "test/architecture-tree.test.ts",
+        "scripts/verify-architecture.ts",
+        "docs/specs/ecosystem.md",
+        "docs/CODE_BLUEPRINT.md",
+        "docs/ARCHITECTURE.md",
+        "docs/PRODUCT.md",
+        "docs/DEVELOPMENT.md"
+      ],
+      "mutationSurfaces": [
+        "ui",
+        "dev"
+      ],
+      "verifierCommands": [
+        "[\"bun\",\"test\",\"test/architecture-tree.test.ts\",\"test/architecture.test.ts\",\"test/architecture-contract.test.ts\",\"test/ecosystem.test.ts\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"npm\",\"run\",\"check:source\"]",
+        "[\"npm\",\"run\",\"build\"]",
+        "[\"node\",\"scripts/verify-architecture.ts\"]",
+        "[\"node\",\"scripts/verify-ecosystem.ts\"]",
+        "[\"bun\",\"test\",\"test/architecture-tree.test.ts\",\"test/architecture.test.ts\",\"test/architecture-contract.test.ts\",\"test/architecture-harness.test.ts\",\"test/ecosystem.test.ts\",\"--timeout\",\"60000\"]",
+        "[\"bun\",\"test\",\"test/architecture-tree.test.ts\",\"test/architecture.test.ts\",\"test/architecture-contract.test.ts\",\"test/ecosystem.test.ts\",\"--timeout\",\"60000\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "5e94689324609a56be17746c0cfc7d2c3abd3df48e3e7d44549139b86e31f7d1"
+    },
+    "inputs": [
+      "docs/architecture/structure.json",
+      "docs/specs/architecture.md",
+      "docs/specs/ecosystem.md",
+      "package.json",
+      "scripts/architecture-contract.ts",
+      "scripts/generate-architecture.ts",
+      "scripts/verify-architecture.ts",
+      "scripts/verify-ecosystem.ts",
+      "src",
+      "test/architecture-contract.test.ts",
+      "test/architecture-tree.test.ts",
+      "test/architecture.test.ts",
+      "test/ecosystem.test.ts"
+    ],
+    "nextAction": "complete",
+    "verifications": [
+      {
+        "id"         : "attempt-1b1c1c88-3826-41e8-8487-055bdb408ba1",
+        "startedAt"  : "2026-11-15T09:27:13.205Z",
+        "completedAt": "2026-11-15T09:29:00.241Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "0c732762a3e97f22d850a90e52e197d44c106aa37b0db720a8884b721004f5f2",
+          "inputs": [
+            "docs/architecture/structure.json",
+            "docs/specs/architecture.md",
+            "docs/specs/ecosystem.md",
+            "package.json",
+            "scripts/architecture-contract.ts",
+            "scripts/generate-architecture.ts",
+            "scripts/verify-architecture.ts",
+            "scripts/verify-ecosystem.ts",
+            "src",
+            "test/architecture-contract.test.ts",
+            "test/architecture-tree.test.ts",
+            "test/architecture.test.ts",
+            "test/ecosystem.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "0fbfb30424a9cca296a28423b99b306dbd0024163b3c67b0de7d6e2c45147335",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "5058e0b799c361e27d8a5c6638527187225f53683242130947a22c5be3e24473",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/ecosystem.md",
+              "type"  : "file",
+              "digest": "f12ee9388576636cba6986e9cda19145a523bebcf56892846094d11f78a1bc7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "d7256be447b4639f700f8d2c599790f1f162e89d7c7b78b8b5bcf1b902885019",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "774a715fe0bcef272411b766d9265a52d94b93c659803a6a52649f67a168c772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "c1b07921b1dc97a9236c4bf23d35c41d0adfdf88f500563b0425f4c3f74362a9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "0d5bc165710b14d7fca8791df34ff37ee00e31cb9b4cf75a4887b8e91316127f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "c537be6716e1b0047a944e61da324596046d32aebd3c3921c0744decbe71568b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "d41a14bc760058510f6fa8cecb523c3eb4613963f43e302b7f88617d49a85862",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "75708fae0323b692f43e6e31064ea7df013a65d8196e47208fc019d70e1fa06a",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "6d9858a53f4d867783d15cabc0e2e2ba235150b98998f52f4ba68b8b046182ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "3e18e23cc1f48ee97259dceb35592df8acf4ad1406f0712311767fb9de513f5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "3ee3942204a9fbd633d6fb6766e6d0d3576a1cfd0259f144a23cb1549f877fac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "3db5dccde5a183a17e9537204be93fc28ca5097314de16ad401bd2f02fa24856",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "75468e7335d6d09cf71e68c3acc4d5c79371617c94ad8b78c7086682a845bb5c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "2d4ba369b43ffc55562af5a9f842e5886882e6117def67bb86c248af60f6af2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "9a2f0c9f6fbb330e9e7571f8ac9a3550cd4ce3062dfda6d706423f3d759626ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "fbf8061c5a1cd677861548186f65e1095c779fe8d726e88b4179e12e77c19792",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ce9ecfe6e7ddf15691a5054ed620400a59f6d01f488313d84211187df70c8fc5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "b7a01c4c10226dbcd11e5931b27dcc7951226da80bdeeba054f89da7daaaaf9b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "1581b5001e1f793fd58f6b930eaa9ed8c5570665a5231f6d1576648a800b4576",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "351e89686cb0ace94902ecb067424c77d33ce5782b1bba22f016dac6a8a848e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "9befdc420d42b3d3b603e401c557d5b353dea6a3db28cfa85248af0b8fd8db17",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "e4a8fae10083d2c76f8927b58b3edcf22512959c89f4403ebcdb08332fe9c5ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "46ccfea22ebe92eb1af71eef85ff19a484bdb51d992bbe44caf7c9a1e9debcb6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-contract.test.ts",
+              "type"  : "file",
+              "digest": "3ac01231c0fecddae29de3ca36bfb6875a1c8c5418fafe89dd0cd33beafc848a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-tree.test.ts",
+              "type"  : "file",
+              "digest": "84dd896aa2a48ccd70fe2a10770847a17d173cb34973229cbdb636806202a72c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture.test.ts",
+              "type"  : "file",
+              "digest": "468708dd7edacf5d8991038a9fde48d07d1ca265a974446a8a62ac291d373592",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/ecosystem.test.ts",
+              "type"  : "file",
+              "digest": "c614897563c657539053f8c54327dec4f2440d1bb0822e83162131de5544c2c5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "MAP-DETAIL",
+            "description": "대화 세션 선택 시 구체적인 역할, 초안·읽기/복원/요청 구성, 하위 책임과 코드 근거, 참조 방향을 읽고 이동할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-FLOW",
+            "description": "검색·계층 이동·키보드·상세 닫기·줌·팬·대화 상태 보존이 실제 Electron에서 동작한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-NODE",
+            "description": "부모·하위 노드의 규격과 정보 위치를 통일하고 긴 제목·좁은 창에서도 내용에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-READ",
+            "description": "구성·의존 관계를 구분하고 양방향 참조를 서로 다른 경로·포트로 표시하며 노드를 관통하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/architecture-tree.test.ts",
+          "test/architecture.test.ts",
+          "test/architecture-contract.test.ts",
+          "test/architecture-harness.test.ts",
+          "test/ecosystem.test.ts",
+          "--timeout",
+          "60000"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "MAP-DETAIL",
+          "MAP-NODE",
+          "MAP-READ"
+        ],
+        "sourceStable": false,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 38929,
+            "digest"         : "e45d62a37a56a0c3c5d71eae56504d3a0a17b9441f1d9001cd1d277d53ea4600",
+            "truncated"      : false,
+            "retainedBytes"  : 38929,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-e8199d78-5482-4d05-a065-3393514dd24d",
+        "startedAt"  : "2026-11-15T09:28:42.302Z",
+        "completedAt": "2026-11-15T09:29:02.364Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "f1fd91f4d0b41fdf806e41dfae888a9265f6b9687ebc0be87055339b34c1a050",
+          "inputs": [
+            "docs/architecture/structure.json",
+            "docs/specs/architecture.md",
+            "docs/specs/ecosystem.md",
+            "package.json",
+            "scripts/architecture-contract.ts",
+            "scripts/generate-architecture.ts",
+            "scripts/verify-architecture.ts",
+            "scripts/verify-ecosystem.ts",
+            "src",
+            "test/architecture-contract.test.ts",
+            "test/architecture-tree.test.ts",
+            "test/architecture.test.ts",
+            "test/ecosystem.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "0fbfb30424a9cca296a28423b99b306dbd0024163b3c67b0de7d6e2c45147335",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "5058e0b799c361e27d8a5c6638527187225f53683242130947a22c5be3e24473",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/ecosystem.md",
+              "type"  : "file",
+              "digest": "f12ee9388576636cba6986e9cda19145a523bebcf56892846094d11f78a1bc7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "d7256be447b4639f700f8d2c599790f1f162e89d7c7b78b8b5bcf1b902885019",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "774a715fe0bcef272411b766d9265a52d94b93c659803a6a52649f67a168c772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "c1b07921b1dc97a9236c4bf23d35c41d0adfdf88f500563b0425f4c3f74362a9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "b179a6f8915aa3a0fd19e4cd2561783f5461d01553cf60a23b0c86c376ba733c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "c537be6716e1b0047a944e61da324596046d32aebd3c3921c0744decbe71568b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "d41a14bc760058510f6fa8cecb523c3eb4613963f43e302b7f88617d49a85862",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "75708fae0323b692f43e6e31064ea7df013a65d8196e47208fc019d70e1fa06a",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "6d9858a53f4d867783d15cabc0e2e2ba235150b98998f52f4ba68b8b046182ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "3e18e23cc1f48ee97259dceb35592df8acf4ad1406f0712311767fb9de513f5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "3ee3942204a9fbd633d6fb6766e6d0d3576a1cfd0259f144a23cb1549f877fac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "3db5dccde5a183a17e9537204be93fc28ca5097314de16ad401bd2f02fa24856",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "75468e7335d6d09cf71e68c3acc4d5c79371617c94ad8b78c7086682a845bb5c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "2d4ba369b43ffc55562af5a9f842e5886882e6117def67bb86c248af60f6af2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "9a2f0c9f6fbb330e9e7571f8ac9a3550cd4ce3062dfda6d706423f3d759626ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "fbf8061c5a1cd677861548186f65e1095c779fe8d726e88b4179e12e77c19792",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ce9ecfe6e7ddf15691a5054ed620400a59f6d01f488313d84211187df70c8fc5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "b7a01c4c10226dbcd11e5931b27dcc7951226da80bdeeba054f89da7daaaaf9b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "1581b5001e1f793fd58f6b930eaa9ed8c5570665a5231f6d1576648a800b4576",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "351e89686cb0ace94902ecb067424c77d33ce5782b1bba22f016dac6a8a848e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "9befdc420d42b3d3b603e401c557d5b353dea6a3db28cfa85248af0b8fd8db17",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "e4a8fae10083d2c76f8927b58b3edcf22512959c89f4403ebcdb08332fe9c5ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "46ccfea22ebe92eb1af71eef85ff19a484bdb51d992bbe44caf7c9a1e9debcb6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-contract.test.ts",
+              "type"  : "file",
+              "digest": "3ac01231c0fecddae29de3ca36bfb6875a1c8c5418fafe89dd0cd33beafc848a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-tree.test.ts",
+              "type"  : "file",
+              "digest": "84dd896aa2a48ccd70fe2a10770847a17d173cb34973229cbdb636806202a72c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture.test.ts",
+              "type"  : "file",
+              "digest": "468708dd7edacf5d8991038a9fde48d07d1ca265a974446a8a62ac291d373592",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/ecosystem.test.ts",
+              "type"  : "file",
+              "digest": "c614897563c657539053f8c54327dec4f2440d1bb0822e83162131de5544c2c5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "MAP-DETAIL",
+            "description": "대화 세션 선택 시 구체적인 역할, 초안·읽기/복원/요청 구성, 하위 책임과 코드 근거, 참조 방향을 읽고 이동할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-FLOW",
+            "description": "검색·계층 이동·키보드·상세 닫기·줌·팬·대화 상태 보존이 실제 Electron에서 동작한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-NODE",
+            "description": "부모·하위 노드의 규격과 정보 위치를 통일하고 긴 제목·좁은 창에서도 내용에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-READ",
+            "description": "구성·의존 관계를 구분하고 양방향 참조를 서로 다른 경로·포트로 표시하며 노드를 관통하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "MAP-DETAIL",
+          "MAP-FLOW",
+          "MAP-NODE",
+          "MAP-READ"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 3806,
+            "digest"         : "e708272b715f38adb57d6227f586c853d4672a6c90001937b58d1573bfd31154",
+            "truncated"      : false,
+            "retainedBytes"  : 3806,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-413bd27d-f5b0-44b9-8448-ed32a0891986",
+        "startedAt"  : "2026-11-15T09:28:49.748Z",
+        "completedAt": "2026-11-15T09:29:25.460Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "f1fd91f4d0b41fdf806e41dfae888a9265f6b9687ebc0be87055339b34c1a050",
+          "inputs": [
+            "docs/architecture/structure.json",
+            "docs/specs/architecture.md",
+            "docs/specs/ecosystem.md",
+            "package.json",
+            "scripts/architecture-contract.ts",
+            "scripts/generate-architecture.ts",
+            "scripts/verify-architecture.ts",
+            "scripts/verify-ecosystem.ts",
+            "src",
+            "test/architecture-contract.test.ts",
+            "test/architecture-tree.test.ts",
+            "test/architecture.test.ts",
+            "test/ecosystem.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "0fbfb30424a9cca296a28423b99b306dbd0024163b3c67b0de7d6e2c45147335",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "5058e0b799c361e27d8a5c6638527187225f53683242130947a22c5be3e24473",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/ecosystem.md",
+              "type"  : "file",
+              "digest": "f12ee9388576636cba6986e9cda19145a523bebcf56892846094d11f78a1bc7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "d7256be447b4639f700f8d2c599790f1f162e89d7c7b78b8b5bcf1b902885019",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "774a715fe0bcef272411b766d9265a52d94b93c659803a6a52649f67a168c772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "c1b07921b1dc97a9236c4bf23d35c41d0adfdf88f500563b0425f4c3f74362a9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "b179a6f8915aa3a0fd19e4cd2561783f5461d01553cf60a23b0c86c376ba733c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "c537be6716e1b0047a944e61da324596046d32aebd3c3921c0744decbe71568b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "d41a14bc760058510f6fa8cecb523c3eb4613963f43e302b7f88617d49a85862",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "75708fae0323b692f43e6e31064ea7df013a65d8196e47208fc019d70e1fa06a",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "6d9858a53f4d867783d15cabc0e2e2ba235150b98998f52f4ba68b8b046182ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "3e18e23cc1f48ee97259dceb35592df8acf4ad1406f0712311767fb9de513f5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "3ee3942204a9fbd633d6fb6766e6d0d3576a1cfd0259f144a23cb1549f877fac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "3db5dccde5a183a17e9537204be93fc28ca5097314de16ad401bd2f02fa24856",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "75468e7335d6d09cf71e68c3acc4d5c79371617c94ad8b78c7086682a845bb5c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "2d4ba369b43ffc55562af5a9f842e5886882e6117def67bb86c248af60f6af2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "9a2f0c9f6fbb330e9e7571f8ac9a3550cd4ce3062dfda6d706423f3d759626ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "fbf8061c5a1cd677861548186f65e1095c779fe8d726e88b4179e12e77c19792",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ce9ecfe6e7ddf15691a5054ed620400a59f6d01f488313d84211187df70c8fc5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "b7a01c4c10226dbcd11e5931b27dcc7951226da80bdeeba054f89da7daaaaf9b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "1581b5001e1f793fd58f6b930eaa9ed8c5570665a5231f6d1576648a800b4576",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "351e89686cb0ace94902ecb067424c77d33ce5782b1bba22f016dac6a8a848e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "9befdc420d42b3d3b603e401c557d5b353dea6a3db28cfa85248af0b8fd8db17",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "e4a8fae10083d2c76f8927b58b3edcf22512959c89f4403ebcdb08332fe9c5ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "46ccfea22ebe92eb1af71eef85ff19a484bdb51d992bbe44caf7c9a1e9debcb6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-contract.test.ts",
+              "type"  : "file",
+              "digest": "3ac01231c0fecddae29de3ca36bfb6875a1c8c5418fafe89dd0cd33beafc848a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-tree.test.ts",
+              "type"  : "file",
+              "digest": "84dd896aa2a48ccd70fe2a10770847a17d173cb34973229cbdb636806202a72c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture.test.ts",
+              "type"  : "file",
+              "digest": "468708dd7edacf5d8991038a9fde48d07d1ca265a974446a8a62ac291d373592",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/ecosystem.test.ts",
+              "type"  : "file",
+              "digest": "c614897563c657539053f8c54327dec4f2440d1bb0822e83162131de5544c2c5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "MAP-DETAIL",
+            "description": "대화 세션 선택 시 구체적인 역할, 초안·읽기/복원/요청 구성, 하위 책임과 코드 근거, 참조 방향을 읽고 이동할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-FLOW",
+            "description": "검색·계층 이동·키보드·상세 닫기·줌·팬·대화 상태 보존이 실제 Electron에서 동작한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-NODE",
+            "description": "부모·하위 노드의 규격과 정보 위치를 통일하고 긴 제목·좁은 창에서도 내용에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-READ",
+            "description": "구성·의존 관계를 구분하고 양방향 참조를 서로 다른 경로·포트로 표시하며 노드를 관통하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 1,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "MAP-FLOW"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 1253,
+            "digest"         : "cba7395600de63703a617426a4ffea0a5896289379446d9d5c9654bcd0fd0782",
+            "truncated"      : false,
+            "retainedBytes"  : 1253,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-c6979fc2-7556-49fa-b149-623b0ecafa6e",
+        "startedAt"  : "2026-11-15T09:29:34.743Z",
+        "completedAt": "2026-11-15T09:31:03.195Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "f1fd91f4d0b41fdf806e41dfae888a9265f6b9687ebc0be87055339b34c1a050",
+          "inputs": [
+            "docs/architecture/structure.json",
+            "docs/specs/architecture.md",
+            "docs/specs/ecosystem.md",
+            "package.json",
+            "scripts/architecture-contract.ts",
+            "scripts/generate-architecture.ts",
+            "scripts/verify-architecture.ts",
+            "scripts/verify-ecosystem.ts",
+            "src",
+            "test/architecture-contract.test.ts",
+            "test/architecture-tree.test.ts",
+            "test/architecture.test.ts",
+            "test/ecosystem.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "0fbfb30424a9cca296a28423b99b306dbd0024163b3c67b0de7d6e2c45147335",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "5058e0b799c361e27d8a5c6638527187225f53683242130947a22c5be3e24473",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/ecosystem.md",
+              "type"  : "file",
+              "digest": "f12ee9388576636cba6986e9cda19145a523bebcf56892846094d11f78a1bc7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "d7256be447b4639f700f8d2c599790f1f162e89d7c7b78b8b5bcf1b902885019",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "774a715fe0bcef272411b766d9265a52d94b93c659803a6a52649f67a168c772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "c1b07921b1dc97a9236c4bf23d35c41d0adfdf88f500563b0425f4c3f74362a9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "b179a6f8915aa3a0fd19e4cd2561783f5461d01553cf60a23b0c86c376ba733c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "c537be6716e1b0047a944e61da324596046d32aebd3c3921c0744decbe71568b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "d41a14bc760058510f6fa8cecb523c3eb4613963f43e302b7f88617d49a85862",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "75708fae0323b692f43e6e31064ea7df013a65d8196e47208fc019d70e1fa06a",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "6d9858a53f4d867783d15cabc0e2e2ba235150b98998f52f4ba68b8b046182ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "3e18e23cc1f48ee97259dceb35592df8acf4ad1406f0712311767fb9de513f5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "3ee3942204a9fbd633d6fb6766e6d0d3576a1cfd0259f144a23cb1549f877fac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "3db5dccde5a183a17e9537204be93fc28ca5097314de16ad401bd2f02fa24856",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "75468e7335d6d09cf71e68c3acc4d5c79371617c94ad8b78c7086682a845bb5c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "2d4ba369b43ffc55562af5a9f842e5886882e6117def67bb86c248af60f6af2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "9a2f0c9f6fbb330e9e7571f8ac9a3550cd4ce3062dfda6d706423f3d759626ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "fbf8061c5a1cd677861548186f65e1095c779fe8d726e88b4179e12e77c19792",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ce9ecfe6e7ddf15691a5054ed620400a59f6d01f488313d84211187df70c8fc5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "b7a01c4c10226dbcd11e5931b27dcc7951226da80bdeeba054f89da7daaaaf9b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "1581b5001e1f793fd58f6b930eaa9ed8c5570665a5231f6d1576648a800b4576",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "351e89686cb0ace94902ecb067424c77d33ce5782b1bba22f016dac6a8a848e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "9befdc420d42b3d3b603e401c557d5b353dea6a3db28cfa85248af0b8fd8db17",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "e4a8fae10083d2c76f8927b58b3edcf22512959c89f4403ebcdb08332fe9c5ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "46ccfea22ebe92eb1af71eef85ff19a484bdb51d992bbe44caf7c9a1e9debcb6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-contract.test.ts",
+              "type"  : "file",
+              "digest": "3ac01231c0fecddae29de3ca36bfb6875a1c8c5418fafe89dd0cd33beafc848a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-tree.test.ts",
+              "type"  : "file",
+              "digest": "84dd896aa2a48ccd70fe2a10770847a17d173cb34973229cbdb636806202a72c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture.test.ts",
+              "type"  : "file",
+              "digest": "468708dd7edacf5d8991038a9fde48d07d1ca265a974446a8a62ac291d373592",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/ecosystem.test.ts",
+              "type"  : "file",
+              "digest": "c614897563c657539053f8c54327dec4f2440d1bb0822e83162131de5544c2c5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "MAP-DETAIL",
+            "description": "대화 세션 선택 시 구체적인 역할, 초안·읽기/복원/요청 구성, 하위 책임과 코드 근거, 참조 방향을 읽고 이동할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-FLOW",
+            "description": "검색·계층 이동·키보드·상세 닫기·줌·팬·대화 상태 보존이 실제 Electron에서 동작한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-NODE",
+            "description": "부모·하위 노드의 규격과 정보 위치를 통일하고 긴 제목·좁은 창에서도 내용에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-READ",
+            "description": "구성·의존 관계를 구분하고 양방향 참조를 서로 다른 경로·포트로 표시하며 노드를 관통하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/architecture-tree.test.ts",
+          "test/architecture.test.ts",
+          "test/architecture-contract.test.ts",
+          "test/architecture-harness.test.ts",
+          "test/ecosystem.test.ts",
+          "--timeout",
+          "60000"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "MAP-DETAIL",
+          "MAP-NODE",
+          "MAP-READ"
+        ],
+        "sourceStable": false,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 38898,
+            "digest"         : "f467ed5b3228da1c86f5d39105b93051ba92a8a7b9c0b938fbf875bcc4692ce9",
+            "truncated"      : false,
+            "retainedBytes"  : 38898,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-dcce07a3-0e0e-4443-a381-5d3dbf7d2607",
+        "startedAt"  : "2026-11-15T09:30:57.187Z",
+        "completedAt": "2026-11-15T09:31:13.929Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "1ecfa2244f02604340461e8096fe9fef1a4790a4de47438aeef4e89fc5137922",
+          "inputs": [
+            "docs/architecture/structure.json",
+            "docs/specs/architecture.md",
+            "docs/specs/ecosystem.md",
+            "package.json",
+            "scripts/architecture-contract.ts",
+            "scripts/generate-architecture.ts",
+            "scripts/verify-architecture.ts",
+            "scripts/verify-ecosystem.ts",
+            "src",
+            "test/architecture-contract.test.ts",
+            "test/architecture-tree.test.ts",
+            "test/architecture.test.ts",
+            "test/ecosystem.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "0fbfb30424a9cca296a28423b99b306dbd0024163b3c67b0de7d6e2c45147335",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "5058e0b799c361e27d8a5c6638527187225f53683242130947a22c5be3e24473",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/ecosystem.md",
+              "type"  : "file",
+              "digest": "f12ee9388576636cba6986e9cda19145a523bebcf56892846094d11f78a1bc7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "d7256be447b4639f700f8d2c599790f1f162e89d7c7b78b8b5bcf1b902885019",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "774a715fe0bcef272411b766d9265a52d94b93c659803a6a52649f67a168c772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "c1b07921b1dc97a9236c4bf23d35c41d0adfdf88f500563b0425f4c3f74362a9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "f11daa77f3ff321b393075858dd4049bf9f640e833d70becbef80320926c0d7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "c537be6716e1b0047a944e61da324596046d32aebd3c3921c0744decbe71568b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "982484565ba767c43c77cdc91a86ad3cc7081f885584a9822fb4c86086f6d743",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "6d9858a53f4d867783d15cabc0e2e2ba235150b98998f52f4ba68b8b046182ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "3e18e23cc1f48ee97259dceb35592df8acf4ad1406f0712311767fb9de513f5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "3ee3942204a9fbd633d6fb6766e6d0d3576a1cfd0259f144a23cb1549f877fac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "3db5dccde5a183a17e9537204be93fc28ca5097314de16ad401bd2f02fa24856",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "75468e7335d6d09cf71e68c3acc4d5c79371617c94ad8b78c7086682a845bb5c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "2d4ba369b43ffc55562af5a9f842e5886882e6117def67bb86c248af60f6af2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "9a2f0c9f6fbb330e9e7571f8ac9a3550cd4ce3062dfda6d706423f3d759626ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "fbf8061c5a1cd677861548186f65e1095c779fe8d726e88b4179e12e77c19792",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ce9ecfe6e7ddf15691a5054ed620400a59f6d01f488313d84211187df70c8fc5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "b7a01c4c10226dbcd11e5931b27dcc7951226da80bdeeba054f89da7daaaaf9b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "1581b5001e1f793fd58f6b930eaa9ed8c5570665a5231f6d1576648a800b4576",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "351e89686cb0ace94902ecb067424c77d33ce5782b1bba22f016dac6a8a848e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "9befdc420d42b3d3b603e401c557d5b353dea6a3db28cfa85248af0b8fd8db17",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "e4a8fae10083d2c76f8927b58b3edcf22512959c89f4403ebcdb08332fe9c5ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "46ccfea22ebe92eb1af71eef85ff19a484bdb51d992bbe44caf7c9a1e9debcb6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-contract.test.ts",
+              "type"  : "file",
+              "digest": "3ac01231c0fecddae29de3ca36bfb6875a1c8c5418fafe89dd0cd33beafc848a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-tree.test.ts",
+              "type"  : "file",
+              "digest": "76bdd2cd02ae35a82a8a09999763815836db31e5ff6d47f815975a944701b1e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture.test.ts",
+              "type"  : "file",
+              "digest": "468708dd7edacf5d8991038a9fde48d07d1ca265a974446a8a62ac291d373592",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/ecosystem.test.ts",
+              "type"  : "file",
+              "digest": "c614897563c657539053f8c54327dec4f2440d1bb0822e83162131de5544c2c5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "MAP-DETAIL",
+            "description": "대화 세션 선택 시 구체적인 역할, 초안·읽기/복원/요청 구성, 하위 책임과 코드 근거, 참조 방향을 읽고 이동할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-FLOW",
+            "description": "검색·계층 이동·키보드·상세 닫기·줌·팬·대화 상태 보존이 실제 Electron에서 동작한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-NODE",
+            "description": "부모·하위 노드의 규격과 정보 위치를 통일하고 긴 제목·좁은 창에서도 내용에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-READ",
+            "description": "구성·의존 관계를 구분하고 양방향 참조를 서로 다른 경로·포트로 표시하며 노드를 관통하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/architecture-tree.test.ts",
+          "test/architecture.test.ts",
+          "test/architecture-contract.test.ts",
+          "test/ecosystem.test.ts",
+          "--timeout",
+          "60000"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "MAP-DETAIL",
+          "MAP-NODE",
+          "MAP-READ"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 37662,
+            "digest"         : "9cea36259f0f8ea010a06e271e658068a83469124360c70413cb7edac310ecb6",
+            "truncated"      : false,
+            "retainedBytes"  : 37662,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6",
+        "startedAt"  : "2026-11-15T09:30:57.635Z",
+        "completedAt": "2026-11-15T09:31:17.129Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "1ecfa2244f02604340461e8096fe9fef1a4790a4de47438aeef4e89fc5137922",
+          "inputs": [
+            "docs/architecture/structure.json",
+            "docs/specs/architecture.md",
+            "docs/specs/ecosystem.md",
+            "package.json",
+            "scripts/architecture-contract.ts",
+            "scripts/generate-architecture.ts",
+            "scripts/verify-architecture.ts",
+            "scripts/verify-ecosystem.ts",
+            "src",
+            "test/architecture-contract.test.ts",
+            "test/architecture-tree.test.ts",
+            "test/architecture.test.ts",
+            "test/ecosystem.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "0fbfb30424a9cca296a28423b99b306dbd0024163b3c67b0de7d6e2c45147335",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "5058e0b799c361e27d8a5c6638527187225f53683242130947a22c5be3e24473",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/ecosystem.md",
+              "type"  : "file",
+              "digest": "f12ee9388576636cba6986e9cda19145a523bebcf56892846094d11f78a1bc7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "d7256be447b4639f700f8d2c599790f1f162e89d7c7b78b8b5bcf1b902885019",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "774a715fe0bcef272411b766d9265a52d94b93c659803a6a52649f67a168c772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "c1b07921b1dc97a9236c4bf23d35c41d0adfdf88f500563b0425f4c3f74362a9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "f11daa77f3ff321b393075858dd4049bf9f640e833d70becbef80320926c0d7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "c537be6716e1b0047a944e61da324596046d32aebd3c3921c0744decbe71568b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "982484565ba767c43c77cdc91a86ad3cc7081f885584a9822fb4c86086f6d743",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "6d9858a53f4d867783d15cabc0e2e2ba235150b98998f52f4ba68b8b046182ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "3e18e23cc1f48ee97259dceb35592df8acf4ad1406f0712311767fb9de513f5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "3ee3942204a9fbd633d6fb6766e6d0d3576a1cfd0259f144a23cb1549f877fac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "3db5dccde5a183a17e9537204be93fc28ca5097314de16ad401bd2f02fa24856",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "75468e7335d6d09cf71e68c3acc4d5c79371617c94ad8b78c7086682a845bb5c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "2d4ba369b43ffc55562af5a9f842e5886882e6117def67bb86c248af60f6af2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "9a2f0c9f6fbb330e9e7571f8ac9a3550cd4ce3062dfda6d706423f3d759626ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "fbf8061c5a1cd677861548186f65e1095c779fe8d726e88b4179e12e77c19792",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ce9ecfe6e7ddf15691a5054ed620400a59f6d01f488313d84211187df70c8fc5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "b7a01c4c10226dbcd11e5931b27dcc7951226da80bdeeba054f89da7daaaaf9b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "1581b5001e1f793fd58f6b930eaa9ed8c5570665a5231f6d1576648a800b4576",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "351e89686cb0ace94902ecb067424c77d33ce5782b1bba22f016dac6a8a848e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "9befdc420d42b3d3b603e401c557d5b353dea6a3db28cfa85248af0b8fd8db17",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "e4a8fae10083d2c76f8927b58b3edcf22512959c89f4403ebcdb08332fe9c5ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "46ccfea22ebe92eb1af71eef85ff19a484bdb51d992bbe44caf7c9a1e9debcb6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-contract.test.ts",
+              "type"  : "file",
+              "digest": "3ac01231c0fecddae29de3ca36bfb6875a1c8c5418fafe89dd0cd33beafc848a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-tree.test.ts",
+              "type"  : "file",
+              "digest": "76bdd2cd02ae35a82a8a09999763815836db31e5ff6d47f815975a944701b1e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture.test.ts",
+              "type"  : "file",
+              "digest": "468708dd7edacf5d8991038a9fde48d07d1ca265a974446a8a62ac291d373592",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/ecosystem.test.ts",
+              "type"  : "file",
+              "digest": "c614897563c657539053f8c54327dec4f2440d1bb0822e83162131de5544c2c5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "MAP-DETAIL",
+            "description": "대화 세션 선택 시 구체적인 역할, 초안·읽기/복원/요청 구성, 하위 책임과 코드 근거, 참조 방향을 읽고 이동할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-FLOW",
+            "description": "검색·계층 이동·키보드·상세 닫기·줌·팬·대화 상태 보존이 실제 Electron에서 동작한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-NODE",
+            "description": "부모·하위 노드의 규격과 정보 위치를 통일하고 긴 제목·좁은 창에서도 내용에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-READ",
+            "description": "구성·의존 관계를 구분하고 양방향 참조를 서로 다른 경로·포트로 표시하며 노드를 관통하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "MAP-DETAIL",
+          "MAP-FLOW",
+          "MAP-NODE",
+          "MAP-READ"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 3860,
+            "digest"         : "99482278c09c0bc7a1e42c2858a30f066b4a5969060254fa09cbee1bdd3a02da",
+            "truncated"      : false,
+            "retainedBytes"  : 3860,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-0901e93e-3f69-4eb1-867d-c68d2f87e564",
+        "startedAt"  : "2026-11-15T09:31:51.279Z",
+        "completedAt": "2026-11-15T09:32:22.861Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "1ecfa2244f02604340461e8096fe9fef1a4790a4de47438aeef4e89fc5137922",
+          "inputs": [
+            "docs/architecture/structure.json",
+            "docs/specs/architecture.md",
+            "docs/specs/ecosystem.md",
+            "package.json",
+            "scripts/architecture-contract.ts",
+            "scripts/generate-architecture.ts",
+            "scripts/verify-architecture.ts",
+            "scripts/verify-ecosystem.ts",
+            "src",
+            "test/architecture-contract.test.ts",
+            "test/architecture-tree.test.ts",
+            "test/architecture.test.ts",
+            "test/ecosystem.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "0fbfb30424a9cca296a28423b99b306dbd0024163b3c67b0de7d6e2c45147335",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "5058e0b799c361e27d8a5c6638527187225f53683242130947a22c5be3e24473",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/ecosystem.md",
+              "type"  : "file",
+              "digest": "f12ee9388576636cba6986e9cda19145a523bebcf56892846094d11f78a1bc7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "d7256be447b4639f700f8d2c599790f1f162e89d7c7b78b8b5bcf1b902885019",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "774a715fe0bcef272411b766d9265a52d94b93c659803a6a52649f67a168c772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "c1b07921b1dc97a9236c4bf23d35c41d0adfdf88f500563b0425f4c3f74362a9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "f11daa77f3ff321b393075858dd4049bf9f640e833d70becbef80320926c0d7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "c537be6716e1b0047a944e61da324596046d32aebd3c3921c0744decbe71568b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "982484565ba767c43c77cdc91a86ad3cc7081f885584a9822fb4c86086f6d743",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "6d9858a53f4d867783d15cabc0e2e2ba235150b98998f52f4ba68b8b046182ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "3e18e23cc1f48ee97259dceb35592df8acf4ad1406f0712311767fb9de513f5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "3ee3942204a9fbd633d6fb6766e6d0d3576a1cfd0259f144a23cb1549f877fac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "3db5dccde5a183a17e9537204be93fc28ca5097314de16ad401bd2f02fa24856",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "75468e7335d6d09cf71e68c3acc4d5c79371617c94ad8b78c7086682a845bb5c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "2d4ba369b43ffc55562af5a9f842e5886882e6117def67bb86c248af60f6af2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "9a2f0c9f6fbb330e9e7571f8ac9a3550cd4ce3062dfda6d706423f3d759626ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "fbf8061c5a1cd677861548186f65e1095c779fe8d726e88b4179e12e77c19792",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ce9ecfe6e7ddf15691a5054ed620400a59f6d01f488313d84211187df70c8fc5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "b7a01c4c10226dbcd11e5931b27dcc7951226da80bdeeba054f89da7daaaaf9b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "1581b5001e1f793fd58f6b930eaa9ed8c5570665a5231f6d1576648a800b4576",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "351e89686cb0ace94902ecb067424c77d33ce5782b1bba22f016dac6a8a848e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "9befdc420d42b3d3b603e401c557d5b353dea6a3db28cfa85248af0b8fd8db17",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "e4a8fae10083d2c76f8927b58b3edcf22512959c89f4403ebcdb08332fe9c5ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "46ccfea22ebe92eb1af71eef85ff19a484bdb51d992bbe44caf7c9a1e9debcb6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-contract.test.ts",
+              "type"  : "file",
+              "digest": "3ac01231c0fecddae29de3ca36bfb6875a1c8c5418fafe89dd0cd33beafc848a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-tree.test.ts",
+              "type"  : "file",
+              "digest": "76bdd2cd02ae35a82a8a09999763815836db31e5ff6d47f815975a944701b1e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture.test.ts",
+              "type"  : "file",
+              "digest": "468708dd7edacf5d8991038a9fde48d07d1ca265a974446a8a62ac291d373592",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/ecosystem.test.ts",
+              "type"  : "file",
+              "digest": "c614897563c657539053f8c54327dec4f2440d1bb0822e83162131de5544c2c5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "MAP-DETAIL",
+            "description": "대화 세션 선택 시 구체적인 역할, 초안·읽기/복원/요청 구성, 하위 책임과 코드 근거, 참조 방향을 읽고 이동할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-FLOW",
+            "description": "검색·계층 이동·키보드·상세 닫기·줌·팬·대화 상태 보존이 실제 Electron에서 동작한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-NODE",
+            "description": "부모·하위 노드의 규격과 정보 위치를 통일하고 긴 제목·좁은 창에서도 내용에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-READ",
+            "description": "구성·의존 관계를 구분하고 양방향 참조를 서로 다른 경로·포트로 표시하며 노드를 관통하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "MAP-FLOW"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 236,
+            "digest"         : "9475e3ded1ffceb18ee8f5479f3caf7dbfba336a8e9e64ccaf210c5895a3f4e7",
+            "truncated"      : false,
+            "retainedBytes"  : 236,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-f014edb7-a456-419c-9305-f5762d5d59d2",
+        "startedAt"  : "2026-11-15T09:36:26.156Z",
+        "completedAt": "2026-11-15T09:36:39.159Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "283e2f45df1dae04ca83b37468c61317550d36c375e413f5ac9af02976bb3caf",
+          "inputs": [
+            "docs/architecture/structure.json",
+            "docs/specs/architecture.md",
+            "docs/specs/ecosystem.md",
+            "package.json",
+            "scripts/architecture-contract.ts",
+            "scripts/generate-architecture.ts",
+            "scripts/verify-architecture.ts",
+            "scripts/verify-ecosystem.ts",
+            "src",
+            "test/architecture-contract.test.ts",
+            "test/architecture-tree.test.ts",
+            "test/architecture.test.ts",
+            "test/ecosystem.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "0fbfb30424a9cca296a28423b99b306dbd0024163b3c67b0de7d6e2c45147335",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "5058e0b799c361e27d8a5c6638527187225f53683242130947a22c5be3e24473",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/ecosystem.md",
+              "type"  : "file",
+              "digest": "f12ee9388576636cba6986e9cda19145a523bebcf56892846094d11f78a1bc7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "d7256be447b4639f700f8d2c599790f1f162e89d7c7b78b8b5bcf1b902885019",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "774a715fe0bcef272411b766d9265a52d94b93c659803a6a52649f67a168c772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "c1b07921b1dc97a9236c4bf23d35c41d0adfdf88f500563b0425f4c3f74362a9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "f11daa77f3ff321b393075858dd4049bf9f640e833d70becbef80320926c0d7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "c537be6716e1b0047a944e61da324596046d32aebd3c3921c0744decbe71568b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "ec2a39c219f99ca19df5201db070057772d3b61d8fb4a242149537acd1910e16",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "6d9858a53f4d867783d15cabc0e2e2ba235150b98998f52f4ba68b8b046182ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "3e18e23cc1f48ee97259dceb35592df8acf4ad1406f0712311767fb9de513f5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "3ee3942204a9fbd633d6fb6766e6d0d3576a1cfd0259f144a23cb1549f877fac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "3db5dccde5a183a17e9537204be93fc28ca5097314de16ad401bd2f02fa24856",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "75468e7335d6d09cf71e68c3acc4d5c79371617c94ad8b78c7086682a845bb5c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "2d4ba369b43ffc55562af5a9f842e5886882e6117def67bb86c248af60f6af2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "9a2f0c9f6fbb330e9e7571f8ac9a3550cd4ce3062dfda6d706423f3d759626ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "fbf8061c5a1cd677861548186f65e1095c779fe8d726e88b4179e12e77c19792",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ce9ecfe6e7ddf15691a5054ed620400a59f6d01f488313d84211187df70c8fc5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "b7a01c4c10226dbcd11e5931b27dcc7951226da80bdeeba054f89da7daaaaf9b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "1581b5001e1f793fd58f6b930eaa9ed8c5570665a5231f6d1576648a800b4576",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "351e89686cb0ace94902ecb067424c77d33ce5782b1bba22f016dac6a8a848e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "9befdc420d42b3d3b603e401c557d5b353dea6a3db28cfa85248af0b8fd8db17",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "e4a8fae10083d2c76f8927b58b3edcf22512959c89f4403ebcdb08332fe9c5ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "46ccfea22ebe92eb1af71eef85ff19a484bdb51d992bbe44caf7c9a1e9debcb6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-contract.test.ts",
+              "type"  : "file",
+              "digest": "3ac01231c0fecddae29de3ca36bfb6875a1c8c5418fafe89dd0cd33beafc848a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-tree.test.ts",
+              "type"  : "file",
+              "digest": "76bdd2cd02ae35a82a8a09999763815836db31e5ff6d47f815975a944701b1e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture.test.ts",
+              "type"  : "file",
+              "digest": "468708dd7edacf5d8991038a9fde48d07d1ca265a974446a8a62ac291d373592",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/ecosystem.test.ts",
+              "type"  : "file",
+              "digest": "c614897563c657539053f8c54327dec4f2440d1bb0822e83162131de5544c2c5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "MAP-DETAIL",
+            "description": "대화 세션 선택 시 구체적인 역할, 초안·읽기/복원/요청 구성, 하위 책임과 코드 근거, 참조 방향을 읽고 이동할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-FLOW",
+            "description": "검색·계층 이동·키보드·상세 닫기·줌·팬·대화 상태 보존이 실제 Electron에서 동작한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-NODE",
+            "description": "부모·하위 노드의 규격과 정보 위치를 통일하고 긴 제목·좁은 창에서도 내용에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-READ",
+            "description": "구성·의존 관계를 구분하고 양방향 참조를 서로 다른 경로·포트로 표시하며 노드를 관통하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/architecture-tree.test.ts",
+          "test/architecture.test.ts",
+          "test/architecture-contract.test.ts",
+          "test/ecosystem.test.ts",
+          "--timeout",
+          "60000"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "MAP-DETAIL",
+          "MAP-NODE",
+          "MAP-READ"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 37629,
+            "digest"         : "91e9f9158d1904d33a7c5735bc06cb795b8c695e10bd975ae29d2d59521611fe",
+            "truncated"      : false,
+            "retainedBytes"  : 37629,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f",
+        "startedAt"  : "2026-11-15T09:36:26.912Z",
+        "completedAt": "2026-11-15T09:36:43.049Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "283e2f45df1dae04ca83b37468c61317550d36c375e413f5ac9af02976bb3caf",
+          "inputs": [
+            "docs/architecture/structure.json",
+            "docs/specs/architecture.md",
+            "docs/specs/ecosystem.md",
+            "package.json",
+            "scripts/architecture-contract.ts",
+            "scripts/generate-architecture.ts",
+            "scripts/verify-architecture.ts",
+            "scripts/verify-ecosystem.ts",
+            "src",
+            "test/architecture-contract.test.ts",
+            "test/architecture-tree.test.ts",
+            "test/architecture.test.ts",
+            "test/ecosystem.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "0fbfb30424a9cca296a28423b99b306dbd0024163b3c67b0de7d6e2c45147335",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "5058e0b799c361e27d8a5c6638527187225f53683242130947a22c5be3e24473",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/ecosystem.md",
+              "type"  : "file",
+              "digest": "f12ee9388576636cba6986e9cda19145a523bebcf56892846094d11f78a1bc7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "d7256be447b4639f700f8d2c599790f1f162e89d7c7b78b8b5bcf1b902885019",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "774a715fe0bcef272411b766d9265a52d94b93c659803a6a52649f67a168c772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "c1b07921b1dc97a9236c4bf23d35c41d0adfdf88f500563b0425f4c3f74362a9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "f11daa77f3ff321b393075858dd4049bf9f640e833d70becbef80320926c0d7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "c537be6716e1b0047a944e61da324596046d32aebd3c3921c0744decbe71568b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "ec2a39c219f99ca19df5201db070057772d3b61d8fb4a242149537acd1910e16",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "6d9858a53f4d867783d15cabc0e2e2ba235150b98998f52f4ba68b8b046182ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "3e18e23cc1f48ee97259dceb35592df8acf4ad1406f0712311767fb9de513f5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "3ee3942204a9fbd633d6fb6766e6d0d3576a1cfd0259f144a23cb1549f877fac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "3db5dccde5a183a17e9537204be93fc28ca5097314de16ad401bd2f02fa24856",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "75468e7335d6d09cf71e68c3acc4d5c79371617c94ad8b78c7086682a845bb5c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "2d4ba369b43ffc55562af5a9f842e5886882e6117def67bb86c248af60f6af2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "9a2f0c9f6fbb330e9e7571f8ac9a3550cd4ce3062dfda6d706423f3d759626ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "fbf8061c5a1cd677861548186f65e1095c779fe8d726e88b4179e12e77c19792",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ce9ecfe6e7ddf15691a5054ed620400a59f6d01f488313d84211187df70c8fc5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "b7a01c4c10226dbcd11e5931b27dcc7951226da80bdeeba054f89da7daaaaf9b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "1581b5001e1f793fd58f6b930eaa9ed8c5570665a5231f6d1576648a800b4576",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "351e89686cb0ace94902ecb067424c77d33ce5782b1bba22f016dac6a8a848e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "9befdc420d42b3d3b603e401c557d5b353dea6a3db28cfa85248af0b8fd8db17",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "e4a8fae10083d2c76f8927b58b3edcf22512959c89f4403ebcdb08332fe9c5ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "46ccfea22ebe92eb1af71eef85ff19a484bdb51d992bbe44caf7c9a1e9debcb6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-contract.test.ts",
+              "type"  : "file",
+              "digest": "3ac01231c0fecddae29de3ca36bfb6875a1c8c5418fafe89dd0cd33beafc848a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-tree.test.ts",
+              "type"  : "file",
+              "digest": "76bdd2cd02ae35a82a8a09999763815836db31e5ff6d47f815975a944701b1e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture.test.ts",
+              "type"  : "file",
+              "digest": "468708dd7edacf5d8991038a9fde48d07d1ca265a974446a8a62ac291d373592",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/ecosystem.test.ts",
+              "type"  : "file",
+              "digest": "c614897563c657539053f8c54327dec4f2440d1bb0822e83162131de5544c2c5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "MAP-DETAIL",
+            "description": "대화 세션 선택 시 구체적인 역할, 초안·읽기/복원/요청 구성, 하위 책임과 코드 근거, 참조 방향을 읽고 이동할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-FLOW",
+            "description": "검색·계층 이동·키보드·상세 닫기·줌·팬·대화 상태 보존이 실제 Electron에서 동작한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-NODE",
+            "description": "부모·하위 노드의 규격과 정보 위치를 통일하고 긴 제목·좁은 창에서도 내용에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-READ",
+            "description": "구성·의존 관계를 구분하고 양방향 참조를 서로 다른 경로·포트로 표시하며 노드를 관통하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "MAP-DETAIL",
+          "MAP-FLOW",
+          "MAP-NODE",
+          "MAP-READ"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 3860,
+            "digest"         : "f0015b24e95e9bdfa38776c4dbdd072c408c75abad542b09fa4d7c57b9dd418f",
+            "truncated"      : false,
+            "retainedBytes"  : 3860,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-59b47add-42e8-4aae-87d1-6503003d0e37",
+        "startedAt"  : "2026-11-15T09:37:11.769Z",
+        "completedAt": "2026-11-15T09:37:24.192Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "283e2f45df1dae04ca83b37468c61317550d36c375e413f5ac9af02976bb3caf",
+          "inputs": [
+            "docs/architecture/structure.json",
+            "docs/specs/architecture.md",
+            "docs/specs/ecosystem.md",
+            "package.json",
+            "scripts/architecture-contract.ts",
+            "scripts/generate-architecture.ts",
+            "scripts/verify-architecture.ts",
+            "scripts/verify-ecosystem.ts",
+            "src",
+            "test/architecture-contract.test.ts",
+            "test/architecture-tree.test.ts",
+            "test/architecture.test.ts",
+            "test/ecosystem.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "0fbfb30424a9cca296a28423b99b306dbd0024163b3c67b0de7d6e2c45147335",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "5058e0b799c361e27d8a5c6638527187225f53683242130947a22c5be3e24473",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/ecosystem.md",
+              "type"  : "file",
+              "digest": "f12ee9388576636cba6986e9cda19145a523bebcf56892846094d11f78a1bc7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "d7256be447b4639f700f8d2c599790f1f162e89d7c7b78b8b5bcf1b902885019",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "774a715fe0bcef272411b766d9265a52d94b93c659803a6a52649f67a168c772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "c1b07921b1dc97a9236c4bf23d35c41d0adfdf88f500563b0425f4c3f74362a9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "f11daa77f3ff321b393075858dd4049bf9f640e833d70becbef80320926c0d7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "c537be6716e1b0047a944e61da324596046d32aebd3c3921c0744decbe71568b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "ec2a39c219f99ca19df5201db070057772d3b61d8fb4a242149537acd1910e16",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "6d9858a53f4d867783d15cabc0e2e2ba235150b98998f52f4ba68b8b046182ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "3e18e23cc1f48ee97259dceb35592df8acf4ad1406f0712311767fb9de513f5a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "3ee3942204a9fbd633d6fb6766e6d0d3576a1cfd0259f144a23cb1549f877fac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "3db5dccde5a183a17e9537204be93fc28ca5097314de16ad401bd2f02fa24856",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "75468e7335d6d09cf71e68c3acc4d5c79371617c94ad8b78c7086682a845bb5c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "2d4ba369b43ffc55562af5a9f842e5886882e6117def67bb86c248af60f6af2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "9a2f0c9f6fbb330e9e7571f8ac9a3550cd4ce3062dfda6d706423f3d759626ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "fbf8061c5a1cd677861548186f65e1095c779fe8d726e88b4179e12e77c19792",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ce9ecfe6e7ddf15691a5054ed620400a59f6d01f488313d84211187df70c8fc5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "b7a01c4c10226dbcd11e5931b27dcc7951226da80bdeeba054f89da7daaaaf9b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "1581b5001e1f793fd58f6b930eaa9ed8c5570665a5231f6d1576648a800b4576",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "351e89686cb0ace94902ecb067424c77d33ce5782b1bba22f016dac6a8a848e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "9befdc420d42b3d3b603e401c557d5b353dea6a3db28cfa85248af0b8fd8db17",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "e4a8fae10083d2c76f8927b58b3edcf22512959c89f4403ebcdb08332fe9c5ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "46ccfea22ebe92eb1af71eef85ff19a484bdb51d992bbe44caf7c9a1e9debcb6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-contract.test.ts",
+              "type"  : "file",
+              "digest": "3ac01231c0fecddae29de3ca36bfb6875a1c8c5418fafe89dd0cd33beafc848a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-tree.test.ts",
+              "type"  : "file",
+              "digest": "76bdd2cd02ae35a82a8a09999763815836db31e5ff6d47f815975a944701b1e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture.test.ts",
+              "type"  : "file",
+              "digest": "468708dd7edacf5d8991038a9fde48d07d1ca265a974446a8a62ac291d373592",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/ecosystem.test.ts",
+              "type"  : "file",
+              "digest": "c614897563c657539053f8c54327dec4f2440d1bb0822e83162131de5544c2c5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "MAP-DETAIL",
+            "description": "대화 세션 선택 시 구체적인 역할, 초안·읽기/복원/요청 구성, 하위 책임과 코드 근거, 참조 방향을 읽고 이동할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-FLOW",
+            "description": "검색·계층 이동·키보드·상세 닫기·줌·팬·대화 상태 보존이 실제 Electron에서 동작한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-NODE",
+            "description": "부모·하위 노드의 규격과 정보 위치를 통일하고 긴 제목·좁은 창에서도 내용에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "MAP-READ",
+            "description": "구성·의존 관계를 구분하고 양방향 참조를 서로 다른 경로·포트로 표시하며 노드를 관통하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "MAP-FLOW"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 236,
+            "digest"         : "d2f651d92094a73e0f4e72bd8ea763ffdd2fd36f52364ff9523e4e687b0ce3d9",
+            "truncated"      : false,
+            "retainedBytes"  : 236,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id"            : "review-a8b4b090-3ef3-4911-9cf8-1cb86572e8fa",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "d86b9f7ce8d2b597514572612527413812ae4f4698b1ffc570121d7c359b3344",
+        "criteriaDigest": "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "03721f3c359de4631e70dc1349540258bdcc3e10827299781fd9d1a7d91d6ce9"
+        },
+        "failure": null,
+        "findings": [
+          "소스 현재성: 최종 검증 attempt-dcce07a3·attempt-da38cf90·attempt-0901e93e의 source digest는 1ecfa224…이다. 이 시도들에 기록된 파일 digest를 현재 파일과 대조했다. src/architecture-tree.ts 6f2e4a…, src/architecture.generated.json 982484…, scripts/verify-architecture.ts f11daa…, test/architecture-tree.test.ts 76bdd2…, src/ecosystem-view.tsx 2d4ba3…, src/ecosystem.css 9a2f0c…, docs/architecture/structure.json 0fbfb3…가 모두 현재와 같다. 이번 검토의 sourceDigest(d86b9f…)가 다른 것은 inputPaths에 docs/ARCHITECTURE.md 등 문서가 추가돼 범위가 넓어졌기 때문으로 판단한다. 선언된 검증 입력 안에서는 변경이 없다.",
+          "MAP-READ: src/architecture-tree.ts:148-161의 의존선은 오른쪽에서 나가 왼쪽으로 들어간다. 간선 index별로 통로 offset(16+6i)과 포트(20+(i+1)·72/(total+1))가 따로 정해진다. 통로 폭(36+12e), 행 간격(48+6e), 여백(24+12e)이 최대 offset(10+6e)보다 항상 크므로 세로·가로 구간이 노드 사각형 안으로 들어가지 않는다. 같은 열 사이 통로에서 출발선과 도착선이 겹치려면 32+6(i+j)=36+12e가 성립해야 하는데, 정수 해가 없다. test/architecture-tree.test.ts:132-163은 1열·3열에서 간선 30개, 모든 노드 쌍에 대해 비관통과 포트·통로 고유성, 양방향 경로 분리를 검사한다. scripts/verify-architecture.ts:144-145는 실제 SVG에서 비관통과 양방향 경로 분리를 검사한다.",
+          "MAP-NODE: 부모와 하위 노드는 모두 360×112이다(architecture-tree.ts:130-131, 177; GUI 검사 verify-architecture.ts:133, 137). 역할 설명은 responsibilityLines로 두 줄 이내 요약하고, 원문은 SVG title과 상세 패널에 둔다. 860·760px 창에서 수평 넘침이 없는지, 내부 스크롤이 되는지, leaf 검증 참조에 접근할 수 있는지도 GUI 검사가 있다(verify-architecture.ts:244-255). 다만 노드 제목은 줄바꿈·말줄임 없이 SVG text 한 줄로 출력된다. 현재 정본에서 가장 긴 제목 'Electron 수명주기와 IPC 처리'는 15px 기준으로 노드 폭 안에 들어가지만, 앞으로 더 긴 제목이 들어오면 넘칠 수 있다. 제목이 노드 안에 들어가는지 확인하는 bbox 검사(verify-architecture.ts:224)는 root 단계에서만 실행된다. 현재 데이터로는 결함이 아니다.",
+          "MAP-DETAIL: verify-architecture.ts:153-176은 arch.chat.sessions 진입 뒤 다음을 실제 DOM으로 확인한다. 역할 설명에 '대화별 초안'과 '요청'이 있는지, 구성 3개(초안·읽기 상태, 목록·복원, 요청 구성)가 있는지, 하위 담당 코드 3파일이 있는지, leaf의 요구·구현·검증 파일과 행이 맞는지를 본다. 참조 이동과 import 원문 열람은 211-218행에서 확인한다. 소스의 summary·connections 구현(architecture-tree.ts:62-92)과도 일치한다.",
+          "MAP-FLOW: 검색(대소문자 무관, 빈 결과 안내), breadcrumb·뒤로, 방향키·Enter·Space·Tab, 상세 닫기 후 초점 복귀와 Escape, 확대·축소·크기 맞춤, 배경 드래그 이동, 채팅 왕복 뒤 지도 상태와 초안 유지를 CDP 실입력으로 검사한다(verify-architecture.ts:185-291). 최종 attempt-da38cf90과 통합 attempt-0901e93e가 안정된 현재 소스에서 통과했다.",
+          "비차단 기록 정확성 문제: work.json 기준 evidence에서 attempt-e8199d78의 summary가 '현재 적용 가능'으로 남아 있다. 이 시도의 source digest는 f1fd91…이고 architecture-tree.ts(d41a14…), generated json(75708f…), verify-architecture.ts(b179a6…)가 현재와 다르므로 지금은 적용할 수 없다. 기록 당시의 판정이 그대로 남은 것으로 보인다. 같은 기준을 받치는 현재 적용 가능한 통과 시도(da38cf90·dcce07a3·0901e93e)가 따로 있어서 기준 판정은 유지된다. 다만 오래된 시도를 '현재 적용 가능'으로 보이게 하는 표현은 고치는 편이 맞다.",
+          "비차단 검사 공백: verify-architecture.ts:134의 비관통 검사는 구성 보기에서 실행된다. 그런데 바로 뒤 136행이 이 보기에 의존선이 0개임을 확인하므로, 134행은 빈 배열 위에서 항상 참이 된다. 실질적인 비관통 검사는 144행 하나다. 145행의 양방향 분리 검사도 root 단계에 실제 양방향 쌍이 없으면 같은 식으로 항상 참이 될 수 있다. 이 부분은 단위 테스트(architecture-tree.test.ts:157-160)가 보완한다.",
+          "기록 범위: verification.md는 typecheck·check:source·build를 실행해 통과했다고 적고 원문 로그 경로를 남겼다. 하지만 이 세 명령은 work.json의 검증 시도 기록(verifications)에 없어서 해당 기준의 증거로 연결되지 않는다. 문서는 실제 모델·Windows·IME 미검증, import가 실행 추적이 아님, sourceStable false로 거부된 시도를 통과로 승격하지 않았음을 명시하고 있어 증거 범위를 부풀리지 않았다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-a8b4b090-3ef3-4911-9cf8-1cb86572e8fa/opus.json",
+        "startedAt"  : "2026-11-15T09:32:19.223Z",
+        "completedAt": "2026-11-15T09:34:17.776Z"
+      },
+      {
+        "id"            : "review-32127cf0-3158-4dd1-9cee-b2bfe166a327",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "5a85552799a68d2924917a45aa725c9e63bb81f2a4c49b37071d7b5e6b442623",
+        "criteriaDigest": "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "46bc4bcdce5eabd0afdb2c1e17abf402750218daee5bd69867ed75aa8d565b0d"
+        },
+        "failure": null,
+        "findings": [
+          "판정 근거(MAP-READ): src/architecture-tree.ts:148-161의 responsibilityEdgePoints는 출발 노드 오른쪽에서 offset(16+6i)만큼 열 통로로 나간 뒤 대상 행 위 행 간격(to.y-offset)을 수평으로 지나고, 대상 왼쪽 통로로 들어온다. layoutResponsibilities(127-146)는 통로 36+12n, 행 간격 48+6n, 여백 24+12n이다. offset 최댓값 10+6n은 통로·행 간격·여백보다 항상 작고, 두 간선의 오프셋 합 32+6(i+j)도 통로 폭 36+12n에 닿지 않는다. 그래서 출발 측과 도착 측 수직 차선이 겹치지 않고 노드나 상위 부모 박스(y≤136)를 관통하지 않는다. 포트도 20+(i+1)·72/(n+1)로 인덱스마다 다르다. 양방향 A→B와 B→A는 서로 다른 index를 받으므로 경로와 포트가 분리된다.",
+          "판정 근거(MAP-READ 검사): test/architecture-tree.test.ts:132-163은 1열(540)과 넓은 폭(2400)에서 30개 간선의 모든 노드 쌍을 확인한다. 범위는 차선·포트의 고유성, 부모를 포함한 노드 비관통, 레이아웃 범위 안쪽 여부, 역방향 경로 분리다. scripts/verify-architecture.ts:144-145는 실제 SVG getPointAtLength 샘플링으로 의존선의 노드 비관통과 양방향 path d 차이를 확인한다. 다만 GUI 샘플링은 .blueprint-node만 대상으로 하고 .blueprint-parent는 포함하지 않는다. 부모 비관통은 단위 검사와 기하 계산으로만 뒷받침된다.",
+          "판정 근거(MAP-NODE): layoutResponsibilityGraph(172-181)는 부모와 자식을 모두 360×112로 배치한다. ecosystem-view.tsx:283-298은 부모와 자식이 같은 위치(제목 y27, 설명 y50 두 줄, 메타 y96)에 정보를 둔다. 열 전환 임계값(3열 1200px, 2열 804px)은 CODE_BLUEPRINT.md:66의 서술과 공식이 일치한다. responsibilityFit은 100% 아래로 줄이지 않아 좁은 창에서는 내부 스크롤로 접근한다. 26자 두 줄 요약을 13px 글꼴로 계산하면 약 356px로 360px 안에 들어가지만 여유가 거의 없다.",
+          "비차단 한계(MAP-NODE): 노드 제목은 줄바꿈이나 말줄임 없이 SVG text 한 줄로 그려진다(ecosystem-view.tsx:285,295). SVG <title> 툴팁에는 ID와 설명만 있고 제목은 없다. 긴 제목은 aria-label과 상세 패널 h2로만 온전히 접근할 수 있다. verification.md:144가 이 한계를 이미 밝혔으므로 현재 정본 기준 결함으로 보지 않는다.",
+          "판정 근거(MAP-DETAIL): 상세 패널(ecosystem-view.tsx:307-325)은 역할 설명, summary 기반 하위 구성 목록(진입 버튼 포함), 하위를 포함한 담당 코드, 참조하는/참조받는 책임 그룹과 import 원문을 표시한다. scripts/verify-architecture.ts:158-160은 대화 세션의 역할 문구, 세 하위 구성, 담당 파일 세 개(chat-state·conversations·native-chat)를 실제 DOM에서 확인한다.",
+          "판정 근거(MAP-FLOW): verify-architecture.ts는 CDP로 실제 클릭, Enter·Space·Tab, 검색, 확대·축소, 배경 drag 팬, 860/760px resize, Escape 닫기, 채팅 초안 유지를 확인한다. 통합 검사 attempt-0901e93e(verify-ecosystem)는 sourceStable true와 종료 코드 0으로 통과했다.",
+          "증거 현재성: 최종 시도 attempt-f014edb7(집중 검사)과 attempt-a3b4f6fe(GUI)의 기록 digest를 현재 파일과 대조했다. 대상은 src/architecture-tree.ts(6f2e4a…), scripts/verify-architecture.ts(f11daa…), src/architecture.generated.json(ec2a39…), test/architecture-tree.test.ts(76bdd2…)이며 모두 일치한다. 실패하거나 소스가 불안정했던 시도(1b1c1c88, c6979fc2, 413bd27d)는 verification.md에 실패로 남아 있고 승격되지 않았다. 다만 work.json의 MAP-FLOW 증거 연결에 포함된 e8199d78은 수정 전 소스다. verification.md:142가 이를 최종 근거에서 제외한다고 명시했으므로 증거 범위를 넓힌 것으로 보지 않는다.",
+          "비차단 문서 불일치: docs/CODE_BLUEPRINT.md:59의 집중 검사 명령에는 test/architecture-harness.test.ts가 들어 있다. 하지만 최종 통과 집중 검사(dcce07a3, f014edb7)는 harness를 빼고 실행했다. harness를 포함한 두 시도는 종료 코드 0이었지만 sourceStable false로 거부됐다. 현재 소스에서 harness 테스트가 통과했다는 증거는 이 작업 기록에 없다. 문서의 명령을 그대로 실행한 결과로 오해하지 않도록 유의해야 한다. 지도 기능 기준과 직접 관련은 없다.",
+          "경미한 UX 관찰(비차단): focusNext(ecosystem-view.tsx:237-240)는 다열 격자에서도 ArrowDown·ArrowRight를 같은 +1 이동으로 처리한다. 3열 배치에서 ArrowDown이 시각적으로 아래 행이 아니라 오른쪽 노드로 이동한다. 기준의 '키보드 동작'은 충족하지만 공간적 방향성은 없다.",
+          "이번 검토는 읽기 전용이다. 소스·테스트·검증 기록을 정적으로 대조했고 어떤 테스트나 명령도 직접 실행하지 않았다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-32127cf0-3158-4dd1-9cee-b2bfe166a327/opus.json",
+        "startedAt"  : "2026-11-15T09:37:11.252Z",
+        "completedAt": "2026-11-15T09:38:47.772Z"
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-fc94b999-575c-4bcb-9745-ee1ce498652f",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T09:31:17.905Z",
+        "sourceDigest"   : "1ecfa2244f02604340461e8096fe9fef1a4790a4de47438aeef4e89fc5137922",
+        "criteriaDigest" : "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "documentsDigest": "f63cccfed368b69d486393972083a78d082a52edc0d474bc28499dad39133fe6",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "순수 하위 근거 집계·방향별 통로와 구성/의존 보기 및 상세 책임을 반영했다."
+          },
+          {
+            "path"    : "docs/CODE_BLUEPRINT.md",
+            "decision": "updated",
+            "reason"  : "360×112 규격, 최대 세 열, 간선별 통로 및 하위 포함 근거와 직접 근거의 구분을 반영했다."
+          },
+          {
+            "path"    : "docs/design-system.md",
+            "decision": "unchanged",
+            "reason"  : "기존 어두운 의미 토큰·시스템 글꼴·포커스·내부 스크롤 규칙을 유지했다. 전용 지도 규격은 코드 설계도 문서가 소유한다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "실제 Electron probe의 균일 노드·관계 보기·대화 세션 설명 검증 범위를 반영했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "updated",
+            "reason"  : "구조 지도에서 역할·구성·담당 코드와 방향별 참조를 읽는 제품 흐름을 반영했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "기존 요청·권한·검증·독립 검토·보고서 계약을 사용하고 개발 절차의 계약 변경은 없다."
+          },
+          {
+            "path"    : "docs/specs/architecture.md",
+            "decision": "unchanged",
+            "reason"  : "안정 구조 ID·요구 ID·정적 import·선언 등록의 계약은 유지하고 화면 상세 동작은 기존 참조 대상인 생태계 명세에서 갱신했다."
+          },
+          {
+            "path"    : "docs/specs/ecosystem.md",
+            "decision": "updated",
+            "reason"  : "구성/의존 전환·책임별 참조 강조·역할/구성/담당 코드 상세와 반응형 동작을 정의했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-7a7a7278-db93-4428-ad75-b736f5f37ae9",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T09:36:09.720Z",
+        "sourceDigest"   : "283e2f45df1dae04ca83b37468c61317550d36c375e413f5ac9af02976bb3caf",
+        "criteriaDigest" : "c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d",
+        "documentsDigest": "f63cccfed368b69d486393972083a78d082a52edc0d474bc28499dad39133fe6",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "순수 하위 근거 집계·방향별 통로와 구성/의존 보기 및 상세 책임을 반영했다."
+          },
+          {
+            "path"    : "docs/CODE_BLUEPRINT.md",
+            "decision": "updated",
+            "reason"  : "360×112 규격, 최대 세 열, 간선별 통로 및 하위 포함 근거와 직접 근거의 구분을 반영했다."
+          },
+          {
+            "path"    : "docs/design-system.md",
+            "decision": "unchanged",
+            "reason"  : "기존 어두운 의미 토큰·시스템 글꼴·포커스·내부 스크롤 규칙을 유지했다. 전용 지도 규격은 코드 설계도 문서가 소유한다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "실제 Electron probe의 균일 노드·관계 보기·대화 세션 설명 검증 범위를 반영했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "updated",
+            "reason"  : "구조 지도에서 역할·구성·담당 코드와 방향별 참조를 읽는 제품 흐름을 반영했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "기존 요청·권한·검증·독립 검토·보고서 계약을 사용하고 개발 절차의 계약 변경은 없다."
+          },
+          {
+            "path"    : "docs/specs/architecture.md",
+            "decision": "unchanged",
+            "reason"  : "안정 구조 ID·요구 ID·정적 import·선언 등록의 계약은 유지하고 화면 상세 동작은 기존 참조 대상인 생태계 명세에서 갱신했다."
+          },
+          {
+            "path"    : "docs/specs/ecosystem.md",
+            "decision": "updated",
+            "reason"  : "구성/의존 전환·책임별 참조 강조·역할/구성/담당 코드 상세와 반응형 동작을 정의했다."
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
+  }
+}

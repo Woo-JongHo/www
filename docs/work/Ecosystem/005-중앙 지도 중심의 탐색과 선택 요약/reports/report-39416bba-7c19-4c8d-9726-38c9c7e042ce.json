@@ -1,0 +1,543 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-39416bba-7c19-4c8d-9726-38c9c7e042ce",
+  "workId"        : "work-2654a232-11a8-40a3-907d-edad8ec066b4",
+  "title"         : "중앙 지도 중심의 탐색과 선택 요약",
+  "summary"       : "중앙 지도를 넓히고 노드 선택은 요약만 표시하도록 개편했다. 실제 Terra 검토가 발견한 상세 상태·탐색 토글·키보드 초점 결함을 수정했으며, 최종 현재 소스의 실제 gpt-6.1-terra 검토와 공유 core 수용이 모두 통과했다.",
+  "outcome"       : "partial",
+  "kind"          : "authored",
+  "event"         : "finish",
+  "createdAt"     : "2026-11-15T12:54:52.332Z",
+  "workRecordHash": "f70f44c8b4a48265eacf724018caba8c346943411da1a4c84c3ee18d1860b1c5",
+  "sourceDigest"  : "bd5471d10664a9bd8e866bd671417d267497b32ec6d73629a0885cc7472eff98",
+  "criteriaDigest": "64c10ccb549acf2b2cd57581a48656d4726a10590153c92248e25f7745cd68b7",
+  "semanticHash"  : "4fa61dff3f4b5827d9c587e7d62530cf047540728433eed6f4aa74a2cd29d369",
+  "narrative": {
+    "summary": "중앙 지도를 넓히고 노드 선택은 요약만 표시하도록 개편했다. 실제 Terra 검토가 발견한 상세 상태·탐색 토글·키보드 초점 결함을 수정했으며, 최종 현재 소스의 실제 gpt-6.1-terra 검토와 공유 core 수용이 모두 통과했다.",
+    "before" : "사이드 정보가 지도를 압박하고 노드를 선택할 때 상세가 열려 구조 탐색이 끊겼다.",
+    "after"  : "기본 화면은 64px 탐색 rail·넓은 지도·선택 요약으로 구성된다. 자세히 보기와 탐색은 필요할 때 열고, 열린 상세·지도 배율·위치를 유지하며 선택한 책임에 키보드 초점을 연결한다.",
+    "changes": [
+      "기본 프로젝트·대화 목록과 상세를 접고 지도 아래 역할·하위 구성·담당 코드 요약을 배치했다.",
+      "전체·상위·뒤로 이동의 상세 상태, 탐색 토글의 배율·위치 보존과 현재 parent 노드 초점을 보완했다.",
+      "실제 Electron GUI에 회귀 시나리오를 추가하고 명세·설계·검증·개발 문서를 갱신했다."
+    ],
+    "decisions": [
+      "사용자가 선택한 요약 표시와 명시적 상세 열기를 적용했다.",
+      "다른 작업을 보존하기 위해 별도 codex/canvas-focus worktree에서 진행했다.",
+      "실제 CLI 관측과 process 영수증으로 필수 검토를 수용했으며 과거 실패를 보존했다."
+    ],
+    "limitations": [
+      "검증은 Mac Electron과 합성 Native 환경이다. 실제 Native 모델 왕복·Windows·OS 한글 IME는 이번 범위에서 검증하지 않았다.",
+      "변경은 별도 worktree에 미커밋 상태로 보존했다. 원본 반영·커밋·push·병합은 수행하지 않았다."
+    ],
+    "next": [],
+    "reader": {
+      "story": "중앙 지도를 넓히고 노드 선택은 요약만 표시하도록 개편했다. 실제 Terra 검토가 발견한 상세 상태·탐색 토글·키보드 초점 결함을 수정했으며, 최종 현재 소스의 실제 gpt-6.1-terra 검토와 공유 core 수용이 모두 통과했다.",
+      "requirements": [
+        {
+          "requirement": "지도 기본 화면에서 왼쪽 프로젝트/대화 목록과 오른쪽 상세를 접고 중앙 viewport가 가로 폭과 높이의 주 영역을 차지한다.",
+          "result"     : "통과",
+          "evidence"   : "현재 소스의 실제 검증과 Terra 검토를 공유 core에서 수용했다.",
+          "limitations": null
+        },
+        {
+          "requirement": "노드·검색·참조 강조 선택 시 지도에 역할과 구성 수 요약을 표시하며 상세 패널은 명시적으로 열 때만 나타난다.",
+          "result"     : "통과",
+          "evidence"   : "현재 소스의 실제 검증과 Terra 검토를 공유 core에서 수용했다.",
+          "limitations": null
+        },
+        {
+          "requirement": "접힌 탐색과 상세를 키보드로 열고 닫을 수 있으며 포커스·계층·검색·보기·배율·대화 초안을 보존한다.",
+          "result"     : "통과",
+          "evidence"   : "현재 소스의 실제 검증과 Terra 검토를 공유 core에서 수용했다.",
+          "limitations": null
+        }
+      ],
+      "checks": [
+        {
+          "target"     : "지도 중심 탐색·선택 요약·상태 및 키보드 보존",
+          "method"     : "실제 Electron GUI와 타입·소스 정책·공식 빌드",
+          "expected"   : "수용 기준을 만족하고 현재 소스의 검토가 수용됨",
+          "observed"   : "검사 통과, 실제 gpt-6.1-terra PASS, 공유 core 수용",
+          "limitations": "Mac·합성 Native 범위"
+        }
+      ],
+      "decisions": [],
+      "references": [
+        {
+          "path": "docs/work/Ecosystem/005-중앙 지도 중심의 탐색과 선택 요약/verification.md",
+          "purpose": "실패·수정·현재 검증 및 실제 검토 원문 연결"
+        }
+      ],
+      "nextActions": []
+    }
+  },
+  "work": {
+    "status": "verifying",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id"         : "CANVAS-SPACE",
+        "description": "지도 기본 화면에서 왼쪽 프로젝트/대화 목록과 오른쪽 상세를 접고 중앙 viewport가 가로 폭과 높이의 주 영역을 차지한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-12e04515-a952-4c3b-add5-948854a77a76",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-94a42629-9982-4385-aea1-bc72ca027c42",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-3c11cf3d-318b-42c5-bd40-8110a4018806",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e0acf838-0be7-450e-b685-0283183f6cbb",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-c5a0f2e1-6412-4d6a-845d-f4a40b553ccb",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-bb1a2765-a7a0-4f4b-8103-8a822800c2ba",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-4040015d-bd6a-4876-b0a8-5c9fbf092888",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-29ddfd7f-8010-40ca-a7fe-f442072c1761",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-21b1177e-de1a-49d0-a548-cdd29a54f71b",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-6bea6d55-7326-430d-9ba4-7d4a738ce974",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "CANVAS-SELECT",
+        "description": "노드·검색·참조 강조 선택 시 지도에 역할과 구성 수 요약을 표시하며 상세 패널은 명시적으로 열 때만 나타난다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-12e04515-a952-4c3b-add5-948854a77a76",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-94a42629-9982-4385-aea1-bc72ca027c42",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-3c11cf3d-318b-42c5-bd40-8110a4018806",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e0acf838-0be7-450e-b685-0283183f6cbb",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-c5a0f2e1-6412-4d6a-845d-f4a40b553ccb",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-bb1a2765-a7a0-4f4b-8103-8a822800c2ba",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-4040015d-bd6a-4876-b0a8-5c9fbf092888",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-29ddfd7f-8010-40ca-a7fe-f442072c1761",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-21b1177e-de1a-49d0-a548-cdd29a54f71b",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-6bea6d55-7326-430d-9ba4-7d4a738ce974",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "CANVAS-CONTROL",
+        "description": "접힌 탐색과 상세를 키보드로 열고 닫을 수 있으며 포커스·계층·검색·보기·배율·대화 초안을 보존한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          },
+          {
+            "path": "verification.md#attempt-94a42629-9982-4385-aea1-bc72ca027c42",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e0acf838-0be7-450e-b685-0283183f6cbb",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-b4e3050a-6d06-4d13-9875-dd529679b69c",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-bb1a2765-a7a0-4f4b-8103-8a822800c2ba",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-2c89027e-7b97-4390-ab81-5ba3e71d68a0",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-4040015d-bd6a-4876-b0a8-5c9fbf092888",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-29ddfd7f-8010-40ca-a7fe-f442072c1761",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-21b1177e-de1a-49d0-a548-cdd29a54f71b",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-6bea6d55-7326-430d-9ba4-7d4a738ce974",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-10f6d1c1-7dfa-4291-b525-7a75adbe8856",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/architecture-tree.test.ts",
+          "test/architecture.test.ts",
+          "test/architecture-contract.test.ts",
+          "test/ecosystem.test.ts",
+          "--timeout",
+          "60000"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:48:32.659Z"
+      },
+      {
+        "id": "attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "failed",
+        "executor"    : "process",
+        "exitCode"    : 1,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:48:42.620Z"
+      },
+      {
+        "id": "attempt-12e04515-a952-4c3b-add5-948854a77a76",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/architecture-tree.test.ts",
+          "test/architecture.test.ts",
+          "test/architecture-contract.test.ts",
+          "test/ecosystem.test.ts",
+          "--timeout",
+          "60000"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:53:11.432Z"
+      },
+      {
+        "id": "attempt-94a42629-9982-4385-aea1-bc72ca027c42",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:53:15.138Z"
+      },
+      {
+        "id": "attempt-3c11cf3d-318b-42c5-bd40-8110a4018806",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/architecture-tree.test.ts",
+          "test/architecture.test.ts",
+          "test/architecture-contract.test.ts",
+          "test/ecosystem.test.ts",
+          "--timeout",
+          "60000"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:54:55.346Z"
+      },
+      {
+        "id": "attempt-e0acf838-0be7-450e-b685-0283183f6cbb",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:54:58.654Z"
+      },
+      {
+        "id": "attempt-b4e3050a-6d06-4d13-9875-dd529679b69c",
+        "command": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:56:02.856Z"
+      },
+      {
+        "id": "attempt-c5a0f2e1-6412-4d6a-845d-f4a40b553ccb",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/architecture-tree.test.ts",
+          "test/architecture.test.ts",
+          "test/architecture-contract.test.ts",
+          "test/ecosystem.test.ts",
+          "--timeout",
+          "60000"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T10:12:06.416Z"
+      },
+      {
+        "id": "attempt-bb1a2765-a7a0-4f4b-8103-8a822800c2ba",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T10:12:09.934Z"
+      },
+      {
+        "id": "attempt-2c89027e-7b97-4390-ab81-5ba3e71d68a0",
+        "command": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T10:12:48.760Z"
+      },
+      {
+        "id": "attempt-4040015d-bd6a-4876-b0a8-5c9fbf092888",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T12:45:44.121Z"
+      },
+      {
+        "id": "attempt-29ddfd7f-8010-40ca-a7fe-f442072c1761",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T12:48:41.389Z"
+      },
+      {
+        "id": "attempt-21b1177e-de1a-49d0-a548-cdd29a54f71b",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T12:51:30.863Z"
+      },
+      {
+        "id": "attempt-6bea6d55-7326-430d-9ba4-7d4a738ce974",
+        "command": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T12:53:40.820Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id"         : "review-0e0ea302-2ac6-4931-b453-483b69df65a6",
+        "verdict"    : "fail",
+        "model"      : null,
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-0e0ea302-2ac6-4931-b453-483b69df65a6/terra.json",
+        "findings": [
+          "검토 대상 파일의 경로와 해시만 제공되어 소스·문서·검증 로그의 내용을 대조할 수 없었다. 명령 실행 금지 조건에서 로컬 파일을 읽을 수 있는 도구도 없어 수정의 타당성을 판정하지 못했다. 이는 확인된 코드 결함이 아니라 검토 미완료 사유다."
+        ]
+      },
+      {
+        "id"         : "review-24d020b9-f6ee-48aa-8d7d-685e954e47cf",
+        "verdict"    : "fail",
+        "model"      : "gpt-6.1-terra",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-24d020b9-f6ee-48aa-8d7d-685e954e47cf/terra.json",
+        "findings": [
+          "src/ecosystem-view.tsx:195-196에서 탐색 패널을 열거나 닫아 viewport 크기가 바뀌면 수동 배율을 설정하지 않은 경우 fit()이 호출되어 배율을 다시 계산하고 스크롤을 (0, 0)으로 이동한다. 지도에서 스크롤한 뒤 탐색을 열면 배율·이동 위치를 보존해야 하는 CANVAS-CONTROL과 어긋난다.",
+          "src/ecosystem-view.tsx:225-228의 탐색 후 포커스 선택자는 .blueprint-node만 찾지만, branch에 진입하거나 전체·ancestor·뒤로 이동한 직후 선택된 현재 노드는 .blueprint-parent다. 따라서 키보드로 해당 이동을 하면 선택된 노드 대신 첫 번째 자식에 포커스가 가며, 선택 요약과 키보드 포커스가 서로 다른 책임을 가리킨다."
+        ]
+      },
+      {
+        "id"         : "review-38b1d3c8-431f-490e-a483-195f913b203c",
+        "verdict"    : "pass",
+        "model"      : "gpt-6.1-terra",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-38b1d3c8-431f-490e-a483-195f913b203c/terra.json",
+        "findings": []
+      },
+      {
+        "id"         : "review-1ee6eeeb-d130-4087-a592-9e6d43384f5e",
+        "verdict"    : "pass",
+        "model"      : "gpt-6.1-terra",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-1ee6eeeb-d130-4087-a592-9e6d43384f5e/terra.json",
+        "findings": []
+      }
+    ],
+    "omitted": {
+      "criteria"     : 0,
+      "evidence"     : 4,
+      "verifications": 0,
+      "reviews"      : 0,
+      "arguments"    : 0,
+      "findings"     : 0,
+      "unresolved"   : 0
+    }
+  },
+  "source": {
+    "recordPath"    : "docs/work/Ecosystem/005-중앙 지도 중심의 탐색과 선택 요약/work.json",
+    "workRecordHash": "f70f44c8b4a48265eacf724018caba8c346943411da1a4c84c3ee18d1860b1c5",
+    "sourceDigest"  : "bd5471d10664a9bd8e866bd671417d267497b32ec6d73629a0885cc7472eff98",
+    "criteriaDigest": "64c10ccb549acf2b2cd57581a48656d4726a10590153c92248e25f7745cd68b7"
+  }
+}

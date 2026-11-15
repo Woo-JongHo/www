@@ -1,0 +1,103 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-bf3ea87f-585f-490c-8ed5-74cf6bf6fe3d",
+  "workId"        : "work-a427c2c5-c900-48d8-b3ca-31e9f1422410",
+  "title"         : "Terra 검토 실행 원문과 모델 관측 연결",
+  "summary"       : "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome"       : "blocked",
+  "kind"          : "snapshot",
+  "event"         : "review",
+  "createdAt"     : "2026-11-15T12:47:18.622Z",
+  "workRecordHash": "d310dfb489b251ec4ae5b5ccbfffecf81c01a762828d06f3c8a73fc1e031b07c",
+  "sourceDigest"  : "31433ec15c64efe74837e9d05d8841c2fd5dfd66208528420b5b365e814696cc",
+  "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+  "semanticHash"  : "e892990cb59b329e22966df9dd50412f0368ecbaac644b820d001dd415ac725b",
+  "narrative"     : null,
+  "work": {
+    "status": "verifying",
+    "blockedReason": "독립 검토 fail: quota_exhausted",
+    "criteria": [
+      {
+        "id"         : "TERRA-READ",
+        "description": "검토 프롬프트가 소스 확인용 읽기 전용 명령만 허용하고 변경·테스트·빌드·게시 금지를 유지한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "TERRA-MODEL",
+        "description": "새 Terra 실행의 실제 CLI 헤더와 최종 스키마 응답에서 모델·판정을 읽으며 요청값을 관측값으로 대체하지 않는다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "TERRA-RECEIPT",
+        "description": "기존 JSONL 영수증 호환성과 해시·맥락·권한·소진 검증을 유지하고 누락·변조·주입 결과를 수용하지 않는다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "TERRA-LIVE",
+        "description": "현재 소스의 실제 Terra 읽기 전용 검토가 공유 core의 필수 검토 수용 조건을 충족한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+        "command": "node",
+        "args": [
+          "--test",
+          "test/workflow-review.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T12:45:20.220Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id"         : "review-4105855e-7483-4210-8ec3-8c8e5589300e",
+        "verdict"    : "fail",
+        "model"      : "gpt-6.1-terra",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-4105855e-7483-4210-8ec3-8c8e5589300e/terra.json",
+        "findings": [
+          "scripts/workflow/review.ts:353-355의 기존 JSONL 영수증 처리에서는 이벤트 종류와 관계없이 최상위 `model` 필드를 관측 모델로 받아 마지막 값으로 덮어쓴다. 따라서 실제 모델 관측 이벤트가 없거나 다른 모델을 보고해도 뒤에 `{\"type\":\"item.completed\",\"model\":\"gpt-6.1-terra\",\"item\":{\"type\":\"agent_message\",\"text\":\"{\\\"verdict\\\":\\\"pass\\\",\\\"findings\\\":[]}\"}}`가 있으면 Terra 관측으로 판정할 수 있다. 이는 모델 값을 실제 관측에 연결하고 주입 결과를 거부해야 하는 TERRA-MODEL·TERRA-RECEIPT 기준에 어긋난다."
+        ]
+      }
+    ]
+  },
+  "source": {
+    "recordPath"    : "docs/work/Workflow/014-Terra 검토 실행 원문과 모델 관측 연결/work.json",
+    "workRecordHash": "d310dfb489b251ec4ae5b5ccbfffecf81c01a762828d06f3c8a73fc1e031b07c",
+    "sourceDigest"  : "31433ec15c64efe74837e9d05d8841c2fd5dfd66208528420b5b365e814696cc",
+    "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d"
+  }
+}

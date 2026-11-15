@@ -1,0 +1,350 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-144622e2-15d3-4785-a5f4-86df82d3c050",
+  "workId"        : "work-a427c2c5-c900-48d8-b3ca-31e9f1422410",
+  "title"         : "Terra 검토 실행 원문과 모델 관측 연결",
+  "summary"       : "Terra 검토 CLI의 소스 읽기·모델 관측·실행 영수증을 연결했다. 현재 소스의 실제 gpt-6.1-terra PASS를 공유 core가 수용했고 실제 영수증 대조 검사도 통과했다.",
+  "outcome"       : "completed",
+  "kind"          : "authored",
+  "event"         : "complete",
+  "createdAt"     : "2026-11-15T12:54:54.483Z",
+  "workRecordHash": "01de707cd6517572673fbe490205365503efd3520911514b63890a80acf4baf4",
+  "sourceDigest"  : "089a2a8c676266224ea448bfb9abe22413c62e4591c9b3b871b4e23b13b18283",
+  "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+  "semanticHash"  : "f03143076d3a769236e34ebff70213886213871364ebc149dc3358d1519ad292",
+  "narrative": {
+    "summary": "Terra 검토 CLI의 소스 읽기·모델 관측·실행 영수증을 연결했다. 현재 소스의 실제 gpt-6.1-terra PASS를 공유 core가 수용했고 실제 영수증 대조 검사도 통과했다.",
+    "before" : "검토 프롬프트가 파일 읽기 명령까지 금지했고, JSONL 출력에는 실제 CLI 모델 관측이 없어 호스트 PASS를 완료 근거로 연결할 수 없었다.",
+    "after"  : "새 실행은 읽기 전용 소스 확인을 허용하고 최종 판정 JSON과 초기 CLI 헤더를 분리해 읽는다. 요청 모델을 관측값으로 복사하지 않고 현재 소스·정책·권한·영수증과 대조해 수용한다.",
+    "changes": [
+      "새 plain CLI 경로와 초기 model/provider/read-only 헤더 검증을 추가했다.",
+      "기존 JSONL은 최초 thread.started의 thread_id·선택적 모델 메타데이터만 읽고, 응답 model 위조·중복/늦은 시작 사건·모델 누락을 거부한다.",
+      "정확 argv·실행 경로·원문 hash·소스/기준/정책 context·Opus 소진 증거·주입 거부를 유지했다."
+    ],
+    "decisions": [
+      "현재 CLI에 없는 JSONL 모델을 요청 argv로 채우지 않았다.",
+      "기존 판정과 유효한 시작 메타데이터 호환을 유지하면서 임의 응답 필드가 모델을 덮어쓰는 결함을 수정했다.",
+      "실제 Opus 소진 영수증에 근거해 기존 정책의 Terra 대체 경로를 사용했다."
+    ],
+    "limitations": [
+      "모델 관측은 실제 CLI 실행 헤더의 설정이다. 서버 내부 라우팅을 독립적으로 증명하지 않는다.",
+      "과거 모델 미관측 JSONL은 여전히 수용하지 않으며 새 CLI 실행으로 재검토해야 한다.",
+      "커밋·push·원본 병합은 수행하지 않았다."
+    ],
+    "next": [],
+    "reader": {
+      "story": "Terra 검토 CLI의 소스 읽기·모델 관측·실행 영수증을 연결했다. 현재 소스의 실제 gpt-6.1-terra PASS를 공유 core가 수용했고 실제 영수증 대조 검사도 통과했다.",
+      "requirements": [
+        {
+          "requirement": "검토 프롬프트가 소스 확인용 읽기 전용 명령만 허용하고 변경·테스트·빌드·게시 금지를 유지한다.",
+          "result"     : "통과",
+          "evidence"   : "현재 소스의 실제 검증과 Terra 검토를 공유 core에서 수용했다.",
+          "limitations": null
+        },
+        {
+          "requirement": "새 Terra 실행의 실제 CLI 헤더와 최종 스키마 응답에서 모델·판정을 읽으며 요청값을 관측값으로 대체하지 않는다.",
+          "result"     : "통과",
+          "evidence"   : "현재 소스의 실제 검증과 Terra 검토를 공유 core에서 수용했다.",
+          "limitations": null
+        },
+        {
+          "requirement": "기존 JSONL 영수증 호환성과 해시·맥락·권한·소진 검증을 유지하고 누락·변조·주입 결과를 수용하지 않는다.",
+          "result"     : "통과",
+          "evidence"   : "현재 소스의 실제 검증과 Terra 검토를 공유 core에서 수용했다.",
+          "limitations": null
+        },
+        {
+          "requirement": "현재 소스의 실제 Terra 읽기 전용 검토가 공유 core의 필수 검토 수용 조건을 충족한다.",
+          "result"     : "통과",
+          "evidence"   : "현재 소스의 실제 검증과 Terra 검토를 공유 core에서 수용했다.",
+          "limitations": null
+        }
+      ],
+      "checks": [
+        {
+          "target"     : "모델·권한·판정·영수증 수용 경계",
+          "method"     : "집중 22·통합 41·앱 23 검사 및 실제 CLI 검토·영수증 대조",
+          "expected"   : "수용 기준을 만족하고 현재 소스의 검토가 수용됨",
+          "observed"   : "검사 통과, 실제 gpt-6.1-terra PASS, 공유 core 수용",
+          "limitations": "fixture는 실제 모델 실행으로 세지 않음"
+        }
+      ],
+      "decisions": [],
+      "references": [
+        {
+          "path": "docs/work/Workflow/014-Terra 검토 실행 원문과 모델 관측 연결/verification.md",
+          "purpose": "실패·수정·현재 검증 및 실제 검토 원문 연결"
+        }
+      ],
+      "nextActions": []
+    }
+  },
+  "work": {
+    "status": "done",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id"         : "TERRA-READ",
+        "description": "검토 프롬프트가 소스 확인용 읽기 전용 명령만 허용하고 변경·테스트·빌드·게시 금지를 유지한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-b6da71a4-b559-4280-930c-25a4f1850711",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-96da4f88-8624-4e53-b206-ce9ccc3b10e7",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-0e2d8081-2120-42ab-97d3-b51d8305b94f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-154f212b-6b8d-49a8-b0f8-a79207d25aa6",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "TERRA-MODEL",
+        "description": "새 Terra 실행의 실제 CLI 헤더와 최종 스키마 응답에서 모델·판정을 읽으며 요청값을 관측값으로 대체하지 않는다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-b6da71a4-b559-4280-930c-25a4f1850711",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-96da4f88-8624-4e53-b206-ce9ccc3b10e7",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-0e2d8081-2120-42ab-97d3-b51d8305b94f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-154f212b-6b8d-49a8-b0f8-a79207d25aa6",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "TERRA-RECEIPT",
+        "description": "기존 JSONL 영수증 호환성과 해시·맥락·권한·소진 검증을 유지하고 누락·변조·주입 결과를 수용하지 않는다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-b6da71a4-b559-4280-930c-25a4f1850711",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-96da4f88-8624-4e53-b206-ce9ccc3b10e7",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-0e2d8081-2120-42ab-97d3-b51d8305b94f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-154f212b-6b8d-49a8-b0f8-a79207d25aa6",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "TERRA-LIVE",
+        "description": "현재 소스의 실제 Terra 읽기 전용 검토가 공유 core의 필수 검토 수용 조건을 충족한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-d168fb8a-9f55-44bb-9884-2560e00a04cd",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+        "command": "node",
+        "args": [
+          "--test",
+          "test/workflow-review.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T12:45:20.220Z"
+      },
+      {
+        "id": "attempt-b6da71a4-b559-4280-930c-25a4f1850711",
+        "command": "node",
+        "args": [
+          "--test",
+          "test/workflow-review.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T12:48:15.405Z"
+      },
+      {
+        "id": "attempt-96da4f88-8624-4e53-b206-ce9ccc3b10e7",
+        "command": "node",
+        "args": [
+          "--test",
+          "test/workflow-review.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T12:49:07.340Z"
+      },
+      {
+        "id": "attempt-0e2d8081-2120-42ab-97d3-b51d8305b94f",
+        "command": "node",
+        "args": [
+          "--test",
+          "test/workflow-review.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T12:51:34.482Z"
+      },
+      {
+        "id": "attempt-154f212b-6b8d-49a8-b0f8-a79207d25aa6",
+        "command": "node",
+        "args": [
+          "--test",
+          "test/workflow-review.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T12:53:17.065Z"
+      },
+      {
+        "id": "attempt-d168fb8a-9f55-44bb-9884-2560e00a04cd",
+        "command": "node",
+        "args": [
+          "--input-type=module",
+          "-e",
+          "import {assessWork} from \"./scripts/workflow/work.ts\"; const a=await assessWork({workId:\"work-a427c2c5-c900-48d8-b3ca-31e9f1422410\"}); const r=a.record.workflow.reviews.at(-1); const ok=a.review.usable && r?.provider===\"openai\" && r?.observedModel===\"gpt-6.1-terra\" && r?.executor===\"process\" && r?.verdict===\"pass\"; console.log(JSON.stringify({usable:a.review.usable,reasons:a.review.reasons,reviewId:r?.id,provider:r?.provider,observedModel:r?.observedModel,executor:r?.executor,sourceDigest:a.source.digest})); if(!ok)process.exit(1);"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T12:54:16.510Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id"         : "review-4105855e-7483-4210-8ec3-8c8e5589300e",
+        "verdict"    : "fail",
+        "model"      : "gpt-6.1-terra",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-4105855e-7483-4210-8ec3-8c8e5589300e/terra.json",
+        "findings": [
+          "scripts/workflow/review.ts:353-355의 기존 JSONL 영수증 처리에서는 이벤트 종류와 관계없이 최상위 `model` 필드를 관측 모델로 받아 마지막 값으로 덮어쓴다. 따라서 실제 모델 관측 이벤트가 없거나 다른 모델을 보고해도 뒤에 `{\"type\":\"item.completed\",\"model\":\"gpt-6.1-terra\",\"item\":{\"type\":\"agent_message\",\"text\":\"{\\\"verdict\\\":\\\"pass\\\",\\\"findings\\\":[]}\"}}`가 있으면 Terra 관측으로 판정할 수 있다. 이는 모델 값을 실제 관측에 연결하고 주입 결과를 거부해야 하는 TERRA-MODEL·TERRA-RECEIPT 기준에 어긋난다."
+        ]
+      },
+      {
+        "id"         : "review-7e81328e-8719-4b3d-9571-08ead2a2fb35",
+        "verdict"    : "fail",
+        "model"      : "gpt-6.1-terra",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-7e81328e-8719-4b3d-9571-08ead2a2fb35/terra.json",
+        "findings": [
+          "docs/work/Workflow/014-Terra 검토 실행 원문과 모델 관측 연결/work.json:89, 537 및 verification.md:55: 필수 기준 TERRA-LIVE는 현재 소스에 대한 실제 Terra 검토가 공유 core의 수용 조건을 충족해야 한다. 기록된 유일한 실제 검토는 수정 전 소스의 fail이며, review.ts:235는 pass와 현재 sourceDigest 일치를 요구한다. 따라서 수정 후 집중 테스트와 이전 실제 실행만으로 이 기준을 충족했다고 판단할 수 없으며, 현재 소스에 대한 수용 가능한 실제 검토 증거가 필요하다."
+        ]
+      },
+      {
+        "id"         : "review-e18e5b91-25e4-4c12-8b44-b7fbfa086e2e",
+        "verdict"    : "pass",
+        "model"      : "gpt-6.1-terra",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-e18e5b91-25e4-4c12-8b44-b7fbfa086e2e/terra.json",
+        "findings": []
+      },
+      {
+        "id"         : "review-354db954-33bb-4551-ad97-9b7ae26a5ad6",
+        "verdict"    : "fail",
+        "model"      : "gpt-6.1-terra",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-354db954-33bb-4551-ad97-9b7ae26a5ad6/terra.json",
+        "findings": [
+          "scripts/workflow/review.ts:350의 기존 JSONL 경로는 observedModel을 항상 null로 반환한다. 이전 구현이 JSONL의 model 필드로 기록한 유효한 Terra 통과 영수증도 validateReview의 observed_model_missing 또는 receipt_result_mismatch로 거부되므로, 제공된 TERRA-RECEIPT의 기존 영수증 호환성 기준을 충족하지 못한다. 새 테스트도 기존 통과 영수증의 유지가 아니라 거부를 확인한다.",
+          "제공된 검증 근거에서 TERRA-LIVE의 충족을 확인할 수 없다. .www/gate-current-tests.json은 TERRA-MODEL·TERRA-READ·TERRA-RECEIPT만 검증 대상으로 기록하고, .www/ui-terra-green.json은 별도의 지도 UI 검증 기록이다. 현재 소스에 대한 실제 Terra 검토가 공유 core에서 수용됐다는 근거가 없다."
+        ]
+      },
+      {
+        "id"         : "review-0725d0b8-ba59-4b2c-9c4f-602828f8c9f2",
+        "verdict"    : "pass",
+        "model"      : "gpt-6.1-terra",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-0725d0b8-ba59-4b2c-9c4f-602828f8c9f2/terra.json",
+        "findings": []
+      }
+    ]
+  },
+  "source": {
+    "recordPath"    : "docs/work/Workflow/014-Terra 검토 실행 원문과 모델 관측 연결/work.json",
+    "workRecordHash": "01de707cd6517572673fbe490205365503efd3520911514b63890a80acf4baf4",
+    "sourceDigest"  : "089a2a8c676266224ea448bfb9abe22413c62e4591c9b3b871b4e23b13b18283",
+    "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d"
+  }
+}

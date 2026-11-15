@@ -1,0 +1,420 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>중앙 지도 중심의 탐색과 선택 요약 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 15일 오후 7:14 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>중앙 지도 중심의 탐색과 선택 요약</h1><p class="lead">Terra로 지정한 읽기 전용 호스트 검토에서 상세 자동 닫힘 결함 1건을 발견했다. 실제 Electron에서 실패를 재현한 뒤 전체·상위 경로·뒤로 이동에서도 상세 열림을 유지하도록 수정했고, 회귀 검사·집중 테스트·타입·빌드·통합 검사가 통과했다. 수정 후 독립 재검토 판정은 PASS다. 실제 모델 메타데이터와 CLI process 영수증의 공유 core 수용은 별도로 미완료여서 자동 업무 완료 상태는 기록하지 않았다.</p><div id="report-story" class="story">Terra로 지정한 읽기 전용 호스트 검토에서 상세 자동 닫힘 결함 1건을 발견했다. 실제 Electron에서 실패를 재현한 뒤 전체·상위 경로·뒤로 이동에서도 상세 열림을 유지하도록 수정했고, 회귀 검사·집중 테스트·타입·빌드·통합 검사가 통과했다. 수정 후 독립 재검토 판정은 PASS다. 실제 모델 메타데이터와 CLI process 영수증의 공유 core 수용은 별도로 미완료여서 자동 업무 완료 상태는 기록하지 않았다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 9 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 실제 모델 관측과 공유 core가 수용할 검토 영수증 연결을 확보하고 최종 완료 판정</p><p class="blocker"><strong>남은 차단 사항</strong> Terra 요청 호스트 재검토 PASS; 공유 core의 process 영수증·실제 모델 관측은 미확보</p></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>CANVAS-SPACE: 지도 기본 화면에서 왼쪽 프로젝트/대화 목록과 오른쪽 상세를 접고 중앙 viewport가 가로 폭과 높이의 주 영역을 차지한다.</h3><p class="result">현재 수정 소스의 기능 근거 적용 가능</p><p class="support"><strong>근거</strong> verification.md#attempt-bb1a2765-a7a0-4f4b-8103-8a822800c2ba</p><p class="limit">호스트 검토 PASS와 자동 완료 게이트 수용은 구분</p></article><article class="requirement"><h3>CANVAS-SELECT: 노드·검색·참조 강조 선택 시 지도에 역할과 구성 수 요약을 표시하며 상세 패널은 명시적으로 열 때만 나타난다.</h3><p class="result">현재 수정 소스의 기능 근거 적용 가능</p><p class="support"><strong>근거</strong> verification.md#attempt-bb1a2765-a7a0-4f4b-8103-8a822800c2ba</p><p class="limit">호스트 검토 PASS와 자동 완료 게이트 수용은 구분</p></article><article class="requirement"><h3>CANVAS-CONTROL: 접힌 탐색과 상세를 키보드로 열고 닫을 수 있으며 포커스·계층·검색·보기·배율·대화 초안을 보존한다.</h3><p class="result">현재 수정 소스의 기능 근거 적용 가능</p><p class="support"><strong>근거</strong> verification.md#attempt-2c89027e-7b97-4390-ab81-5ba3e71d68a0</p><p class="limit">호스트 검토 PASS와 자동 완료 게이트 수용은 구분</p></article></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>Terra가 지적한 상세 자동 닫힘</h3><dl><div><dt>확인 방법</dt><dd>새 Electron assertion으로 먼저 red를 재현하고 코드/명세 수정 뒤 green 확인</dd></div><div><dt>기대 결과</dt><dd>전체·ancestor·뒤로 및 참조 후 전체 이동에서 명시적 상세 상태 보존</dd></div><div><dt>실제 관측</dt><dd>red에서 ancestor 유지 실패, 수정 후 실제 GUI·집중·통합 검사 passed/exit0/sourceStable true</dd></div><div><dt>확인 범위와 한계</dt><dd>실제 Electron＋합성 Native 환경</dd></div></dl></article><article class="check"><h3>수정 후 독립 검토</h3><dl><div><dt>확인 방법</dt><dd>Terra 지정 호스트 검토자가 소스·문서·현재 실행 증거를 읽기 전용으로 재검토</dd></div><div><dt>기대 결과</dt><dd>기존 결함 해결과 추가 차단 결함 여부 확인</dd></div><div><dt>실제 관측</dt><dd>PASS. 핵심 4개 SHA-256 대조, 부모의 검토 전후 공유 source digest 일치</dd></div><div><dt>확인 범위와 한계</dt><dd>검토자는 테스트를 재실행하지 않았고 실제 모델 메타데이터는 미관측. CLI 영수증 게이트 미수용</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 9건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록 · 관측 모델 미확인.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>호스트 검토의 요청 모델은 gpt-6.1-terra지만 실제 모델·호스트 메타데이터는 독립 미관측이다. 이 PASS를 CLI process 영수증으로 위조하거나 공유 core의 자동 승인으로 간주하지 않는다.</li><li>실제 Electron＋합성 Native를 검사했으며 실제 모델 연결·Windows·OS 한글 IME는 새로 검증하지 않았다.</li><li>BoxBox project mode off를 유지했다. 별도 typed 저작 subprocess 및 전체 저장소 통과를 주장하지 않는다.</li><li>미커밋 worktree에 보존했고 원본은 추가 수정하지 않았다. 커밋·push·병합은 수행하지 않았다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>실제 모델 관측과 공유 core가 수용할 검토 영수증 연결을 확보하고 최종 완료 판정</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>현재 소스·기준에서 공유 core가 필수 검토를 수용하고 report-complete 조건 충족</dd></div><div><dt>영향</dt><dd>자동 업무 완료 상태는 아직 기록할 수 없음</dd></div></dl></article></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><ol class="references"><li><p>다음 세션에서 같은 작업을 재개하는 순서와 보존 경계</p><code>tasks.md</code></li><li><p>실제 검사 시도와 현재 근거·검토 차단 원문 위치</p><code>verification.md</code></li><li><p>수용 기준·권한·현재 상태와 근거 연결의 정본</p><code>work.json</code></li><li><p>Terra 요청 호스트 재검토의 전체 판정과 범위·한계</p><code>.www/evidence/terra-host-review/review-2.md</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Ecosystem/005-중앙 지도 중심의 탐색과 선택 요약/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-2654a232-11a8-40a3-907d-edad8ec066b4<br>report-f46befc7-95ba-4841-8164-5418c7eb44ef</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>73a09c890eeca7871e8c9573f0c1a0d1adba1803b4b8ab85f51b1a9634f58542</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>f4dd7a44fc2e0974caaca88142f265c609bcd889fdc89f06e92b643e1da735e9</code></dd></div><div><dt>기준 지문</dt><dd><code>64c10ccb549acf2b2cd57581a48656d4726a10590153c92248e25f7745cd68b7</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;Terra 요청 호스트 재검토 PASS; 공유 core의 process 영수증·실제 모델 관측은 미확보&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;CANVAS-SPACE&quot;,
+      &quot;description&quot;: &quot;지도 기본 화면에서 왼쪽 프로젝트/대화 목록과 오른쪽 상세를 접고 중앙 viewport가 가로 폭과 높이의 주 영역을 차지한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-10f6d1c1-7dfa-4291-b525-7a75adbe8856&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-12e04515-a952-4c3b-add5-948854a77a76&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-94a42629-9982-4385-aea1-bc72ca027c42&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-3c11cf3d-318b-42c5-bd40-8110a4018806&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e0acf838-0be7-450e-b685-0283183f6cbb&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c5a0f2e1-6412-4d6a-845d-f4a40b553ccb&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-bb1a2765-a7a0-4f4b-8103-8a822800c2ba&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;CANVAS-SELECT&quot;,
+      &quot;description&quot;: &quot;노드·검색·참조 강조 선택 시 지도에 역할과 구성 수 요약을 표시하며 상세 패널은 명시적으로 열 때만 나타난다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-10f6d1c1-7dfa-4291-b525-7a75adbe8856&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-12e04515-a952-4c3b-add5-948854a77a76&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-94a42629-9982-4385-aea1-bc72ca027c42&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-3c11cf3d-318b-42c5-bd40-8110a4018806&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e0acf838-0be7-450e-b685-0283183f6cbb&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c5a0f2e1-6412-4d6a-845d-f4a40b553ccb&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-bb1a2765-a7a0-4f4b-8103-8a822800c2ba&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;CANVAS-CONTROL&quot;,
+      &quot;description&quot;: &quot;접힌 탐색과 상세를 키보드로 열고 닫을 수 있으며 포커스·계층·검색·보기·배율·대화 초안을 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-94a42629-9982-4385-aea1-bc72ca027c42&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e0acf838-0be7-450e-b685-0283183f6cbb&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-b4e3050a-6d06-4d13-9875-dd529679b69c&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-bb1a2765-a7a0-4f4b-8103-8a822800c2ba&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2c89027e-7b97-4390-ab81-5ba3e71d68a0&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-10f6d1c1-7dfa-4291-b525-7a75adbe8856&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/architecture-tree.test.ts&quot;,
+        &quot;test/architecture.test.ts&quot;,
+        &quot;test/architecture-contract.test.ts&quot;,
+        &quot;test/ecosystem.test.ts&quot;,
+        &quot;--timeout&quot;,
+        &quot;60000&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:48:32.659Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-architecture.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:48:42.620Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-12e04515-a952-4c3b-add5-948854a77a76&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/architecture-tree.test.ts&quot;,
+        &quot;test/architecture.test.ts&quot;,
+        &quot;test/architecture-contract.test.ts&quot;,
+        &quot;test/ecosystem.test.ts&quot;,
+        &quot;--timeout&quot;,
+        &quot;60000&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:53:11.432Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-94a42629-9982-4385-aea1-bc72ca027c42&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-architecture.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:53:15.138Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-3c11cf3d-318b-42c5-bd40-8110a4018806&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/architecture-tree.test.ts&quot;,
+        &quot;test/architecture.test.ts&quot;,
+        &quot;test/architecture-contract.test.ts&quot;,
+        &quot;test/ecosystem.test.ts&quot;,
+        &quot;--timeout&quot;,
+        &quot;60000&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:54:55.346Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e0acf838-0be7-450e-b685-0283183f6cbb&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-architecture.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:54:58.654Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-b4e3050a-6d06-4d13-9875-dd529679b69c&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-ecosystem.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:56:02.856Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-c5a0f2e1-6412-4d6a-845d-f4a40b553ccb&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/architecture-tree.test.ts&quot;,
+        &quot;test/architecture.test.ts&quot;,
+        &quot;test/architecture-contract.test.ts&quot;,
+        &quot;test/ecosystem.test.ts&quot;,
+        &quot;--timeout&quot;,
+        &quot;60000&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T10:12:06.416Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-bb1a2765-a7a0-4f4b-8103-8a822800c2ba&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-architecture.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T10:12:09.934Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-2c89027e-7b97-4390-ab81-5ba3e71d68a0&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-ecosystem.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T10:12:48.760Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-0e0ea302-2ac6-4931-b453-483b69df65a6&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: null,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-0e0ea302-2ac6-4931-b453-483b69df65a6/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 대상 파일의 경로와 해시만 제공되어 소스·문서·검증 로그의 내용을 대조할 수 없었다. 명령 실행 금지 조건에서 로컬 파일을 읽을 수 있는 도구도 없어 수정의 타당성을 판정하지 못했다. 이는 확인된 코드 결함이 아니라 검토 미완료 사유다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;Terra로 지정한 읽기 전용 호스트 검토에서 상세 자동 닫힘 결함 1건을 발견했다. 실제 Electron에서 실패를 재현한 뒤 전체·상위 경로·뒤로 이동에서도 상세 열림을 유지하도록 수정했고, 회귀 검사·집중 테스트·타입·빌드·통합 검사가 통과했다. 수정 후 독립 재검토 판정은 PASS다. 실제 모델 메타데이터와 CLI process 영수증의 공유 core 수용은 별도로 미완료여서 자동 업무 완료 상태는 기록하지 않았다.&quot;,
+  &quot;before&quot;: &quot;프로젝트·대화 목록과 노드 상세가 지도를 둘러싸고, 노드 선택 때 상세가 열려 중앙 영역이 줄었다.&quot;,
+  &quot;after&quot;: &quot;중앙 지도와 선택 요약의 기본 배치를 유지하면서, 사용자가 명시적으로 연 상세는 노드뿐 아니라 전체·상위 경로·뒤로 탐색에서도 유지한다. 명시적 닫기와 Escape는 계속 동작한다.&quot;,
+  &quot;changes&quot;: [
+    &quot;지도에서는 탐색을 64px 아이콘 영역으로 접고 필요할 때 기존 목록을 연다.&quot;,
+    &quot;상단 조작을 압축하고 지도 아래 선택 요약과 자세히 보기를 제공한다.&quot;,
+    &quot;Chat·리포트의 기존 사이드바와 프로젝트·대화 DOM을 유지한다.&quot;,
+    &quot;검증 도구가 native HTML 버튼의 실제 Enter/Space 입력을 보내도록 보완했다.&quot;,
+    &quot;codex/canvas-focus worktree에 현재 기반과 작업을 복사하고 이후 원본을 수정하지 않았다.&quot;,
+    &quot;Terra가 지적한 returnTo의 강제 상세 닫기를 제거하고 명세 모순을 정리했다. ancestor·뒤로·전체 유지 및 참조 탐색 후 전체 이동의 실제 GUI 회귀 검사를 추가했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;사용자가 선택한 요약＋명시적 상세 열기를 구현했다.&quot;,
+    &quot;기존 상태를 유지하며 UI 표현과 로컬 상태만 바꾸고 IPC·Native 요청은 추가하지 않았다.&quot;,
+    &quot;복사한 미커밋 기반은 .www/worktree-baseline.json으로 이번 저작과 구분한다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;호스트 검토의 요청 모델은 gpt-6.1-terra지만 실제 모델·호스트 메타데이터는 독립 미관측이다. 이 PASS를 CLI process 영수증으로 위조하거나 공유 core의 자동 승인으로 간주하지 않는다.&quot;,
+    &quot;실제 Electron＋합성 Native를 검사했으며 실제 모델 연결·Windows·OS 한글 IME는 새로 검증하지 않았다.&quot;,
+    &quot;BoxBox project mode off를 유지했다. 별도 typed 저작 subprocess 및 전체 저장소 통과를 주장하지 않는다.&quot;,
+    &quot;미커밋 worktree에 보존했고 원본은 추가 수정하지 않았다. 커밋·push·병합은 수행하지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;현재 Terra 요청 호스트 PASS를 보존하고 실제 모델 관측과 수용 가능한 검토 영수증 연결을 확보한 뒤 공유 core의 최종 완료 여부를 판정한다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;Terra로 지정한 읽기 전용 호스트 검토에서 상세 자동 닫힘 결함 1건을 발견했다. 실제 Electron에서 실패를 재현한 뒤 전체·상위 경로·뒤로 이동에서도 상세 열림을 유지하도록 수정했고, 회귀 검사·집중 테스트·타입·빌드·통합 검사가 통과했다. 수정 후 독립 재검토 판정은 PASS다. 실제 모델 메타데이터와 CLI process 영수증의 공유 core 수용은 별도로 미완료여서 자동 업무 완료 상태는 기록하지 않았다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;CANVAS-SPACE: 지도 기본 화면에서 왼쪽 프로젝트/대화 목록과 오른쪽 상세를 접고 중앙 viewport가 가로 폭과 높이의 주 영역을 차지한다.&quot;,
+        &quot;result&quot;: &quot;현재 수정 소스의 기능 근거 적용 가능&quot;,
+        &quot;evidence&quot;: &quot;verification.md#attempt-bb1a2765-a7a0-4f4b-8103-8a822800c2ba&quot;,
+        &quot;limitations&quot;: &quot;호스트 검토 PASS와 자동 완료 게이트 수용은 구분&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;CANVAS-SELECT: 노드·검색·참조 강조 선택 시 지도에 역할과 구성 수 요약을 표시하며 상세 패널은 명시적으로 열 때만 나타난다.&quot;,
+        &quot;result&quot;: &quot;현재 수정 소스의 기능 근거 적용 가능&quot;,
+        &quot;evidence&quot;: &quot;verification.md#attempt-bb1a2765-a7a0-4f4b-8103-8a822800c2ba&quot;,
+        &quot;limitations&quot;: &quot;호스트 검토 PASS와 자동 완료 게이트 수용은 구분&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;CANVAS-CONTROL: 접힌 탐색과 상세를 키보드로 열고 닫을 수 있으며 포커스·계층·검색·보기·배율·대화 초안을 보존한다.&quot;,
+        &quot;result&quot;: &quot;현재 수정 소스의 기능 근거 적용 가능&quot;,
+        &quot;evidence&quot;: &quot;verification.md#attempt-2c89027e-7b97-4390-ab81-5ba3e71d68a0&quot;,
+        &quot;limitations&quot;: &quot;호스트 검토 PASS와 자동 완료 게이트 수용은 구분&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;Terra가 지적한 상세 자동 닫힘&quot;,
+        &quot;method&quot;: &quot;새 Electron assertion으로 먼저 red를 재현하고 코드/명세 수정 뒤 green 확인&quot;,
+        &quot;expected&quot;: &quot;전체·ancestor·뒤로 및 참조 후 전체 이동에서 명시적 상세 상태 보존&quot;,
+        &quot;observed&quot;: &quot;red에서 ancestor 유지 실패, 수정 후 실제 GUI·집중·통합 검사 passed/exit0/sourceStable true&quot;,
+        &quot;limitations&quot;: &quot;실제 Electron＋합성 Native 환경&quot;
+      },
+      {
+        &quot;target&quot;: &quot;수정 후 독립 검토&quot;,
+        &quot;method&quot;: &quot;Terra 지정 호스트 검토자가 소스·문서·현재 실행 증거를 읽기 전용으로 재검토&quot;,
+        &quot;expected&quot;: &quot;기존 결함 해결과 추가 차단 결함 여부 확인&quot;,
+        &quot;observed&quot;: &quot;PASS. 핵심 4개 SHA-256 대조, 부모의 검토 전후 공유 source digest 일치&quot;,
+        &quot;limitations&quot;: &quot;검토자는 테스트를 재실행하지 않았고 실제 모델 메타데이터는 미관측. CLI 영수증 게이트 미수용&quot;
+      }
+    ],
+    &quot;decisions&quot;: [],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;tasks.md&quot;,
+        &quot;purpose&quot;: &quot;다음 세션에서 같은 작업을 재개하는 순서와 보존 경계&quot;
+      },
+      {
+        &quot;path&quot;: &quot;verification.md&quot;,
+        &quot;purpose&quot;: &quot;실제 검사 시도와 현재 근거·검토 차단 원문 위치&quot;
+      },
+      {
+        &quot;path&quot;: &quot;work.json&quot;,
+        &quot;purpose&quot;: &quot;수용 기준·권한·현재 상태와 근거 연결의 정본&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/evidence/terra-host-review/review-2.md&quot;,
+        &quot;purpose&quot;: &quot;Terra 요청 호스트 재검토의 전체 판정과 범위·한계&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;실제 모델 관측과 공유 core가 수용할 검토 영수증 연결을 확보하고 최종 완료 판정&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;현재 소스·기준에서 공유 core가 필수 검토를 수용하고 report-complete 조건 충족&quot;,
+        &quot;impact&quot;: &quot;자동 업무 완료 상태는 아직 기록할 수 없음&quot;
+      }
+    ]
+  }
+}</pre></div></details></section></main></body></html>

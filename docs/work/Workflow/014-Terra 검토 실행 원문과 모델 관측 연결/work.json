@@ -1,0 +1,1363 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-a427c2c5-c900-48d8-b3ca-31e9f1422410",
+  "title"        : "Terra 검토 실행 원문과 모델 관측 연결",
+  "kind"         : "bug",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "done",
+  "blockedReason": null,
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-2654a232-11a8-40a3-907d-edad8ec066b4"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "TERRA-READ",
+      "description": "검토 프롬프트가 소스 확인용 읽기 전용 명령만 허용하고 변경·테스트·빌드·게시 금지를 유지한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+          "path"     : "verification.md#attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-b6da71a4-b559-4280-930c-25a4f1850711",
+          "path"     : "verification.md#attempt-b6da71a4-b559-4280-930c-25a4f1850711",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-96da4f88-8624-4e53-b206-ce9ccc3b10e7",
+          "path"     : "verification.md#attempt-96da4f88-8624-4e53-b206-ce9ccc3b10e7",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-0e2d8081-2120-42ab-97d3-b51d8305b94f",
+          "path"     : "verification.md#attempt-0e2d8081-2120-42ab-97d3-b51d8305b94f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-154f212b-6b8d-49a8-b0f8-a79207d25aa6",
+          "path"     : "verification.md#attempt-154f212b-6b8d-49a8-b0f8-a79207d25aa6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "TERRA-MODEL",
+      "description": "새 Terra 실행의 실제 CLI 헤더와 최종 스키마 응답에서 모델·판정을 읽으며 요청값을 관측값으로 대체하지 않는다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+          "path"     : "verification.md#attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-b6da71a4-b559-4280-930c-25a4f1850711",
+          "path"     : "verification.md#attempt-b6da71a4-b559-4280-930c-25a4f1850711",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-96da4f88-8624-4e53-b206-ce9ccc3b10e7",
+          "path"     : "verification.md#attempt-96da4f88-8624-4e53-b206-ce9ccc3b10e7",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-0e2d8081-2120-42ab-97d3-b51d8305b94f",
+          "path"     : "verification.md#attempt-0e2d8081-2120-42ab-97d3-b51d8305b94f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-154f212b-6b8d-49a8-b0f8-a79207d25aa6",
+          "path"     : "verification.md#attempt-154f212b-6b8d-49a8-b0f8-a79207d25aa6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "TERRA-RECEIPT",
+      "description": "기존 JSONL 영수증 호환성과 해시·맥락·권한·소진 검증을 유지하고 누락·변조·주입 결과를 수용하지 않는다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+          "path"     : "verification.md#attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-b6da71a4-b559-4280-930c-25a4f1850711",
+          "path"     : "verification.md#attempt-b6da71a4-b559-4280-930c-25a4f1850711",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-96da4f88-8624-4e53-b206-ce9ccc3b10e7",
+          "path"     : "verification.md#attempt-96da4f88-8624-4e53-b206-ce9ccc3b10e7",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-0e2d8081-2120-42ab-97d3-b51d8305b94f",
+          "path"     : "verification.md#attempt-0e2d8081-2120-42ab-97d3-b51d8305b94f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-154f212b-6b8d-49a8-b0f8-a79207d25aa6",
+          "path"     : "verification.md#attempt-154f212b-6b8d-49a8-b0f8-a79207d25aa6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "TERRA-LIVE",
+      "description": "현재 소스의 실제 Terra 읽기 전용 검토가 공유 core의 필수 검토 수용 조건을 충족한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-d168fb8a-9f55-44bb-9884-2560e00a04cd",
+          "path"     : "verification.md#attempt-d168fb8a-9f55-44bb-9884-2560e00a04cd",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "terra-review-gate-20261115",
+    "requestHash": "26ddc13a7de7218ff2a427e72debed3132f6935a211ec36c220956af4d0fddca",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "scripts/workflow/review.ts",
+        "test/workflow-review.test.ts",
+        "src/architecture.generated.json",
+        "docs/ARCHITECTURE.md",
+        "docs/DEVELOPMENT.md"
+      ],
+      "mutationSurfaces": [
+        "dev"
+      ],
+      "verifierCommands": [
+        "[\"node\",\"--test\",\"test/workflow-review.test.ts\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"npm\",\"run\",\"check:source\"]",
+        "[\"npm\",\"run\",\"build\"]",
+        "[\"node\",\"scripts/verify-architecture.ts\"]",
+        "[\"node\",\"--input-type=module\",\"-e\",\"import {assessWork} from \\\"./scripts/workflow/work.ts\\\"; const a=await assessWork({workId:\\\"work-a427c2c5-c900-48d8-b3ca-31e9f1422410\\\"}); const r=a.record.workflow.reviews.at(-1); const ok=a.review.usable && r?.provider===\\\"openai\\\" && r?.observedModel===\\\"gpt-6.1-terra\\\" && r?.executor===\\\"process\\\" && r?.verdict===\\\"pass\\\"; console.log(JSON.stringify({usable:a.review.usable,reasons:a.review.reasons,reviewId:r?.id,provider:r?.provider,observedModel:r?.observedModel,executor:r?.executor,sourceDigest:a.source.digest})); if(!ok)process.exit(1);\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "26ddc13a7de7218ff2a427e72debed3132f6935a211ec36c220956af4d0fddca"
+    },
+    "inputs": [
+      "agents/www/review-policy.json",
+      "docs/ARCHITECTURE.md",
+      "docs/DEVELOPMENT.md",
+      "scripts/workflow/adapters/windows-command.ts",
+      "scripts/workflow/review.ts",
+      "src/architecture.generated.json",
+      "test/workflow-review.test.ts"
+    ],
+    "nextAction": "complete",
+    "verifications": [
+      {
+        "id"         : "attempt-fb01768d-e731-4fc9-8561-f894cd02b53c",
+        "startedAt"  : "2026-11-15T12:45:17.647Z",
+        "completedAt": "2026-11-15T12:45:20.220Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "31433ec15c64efe74837e9d05d8841c2fd5dfd66208528420b5b365e814696cc",
+          "inputs": [
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "scripts/workflow/adapters/windows-command.ts",
+            "scripts/workflow/review.ts",
+            "src/architecture.generated.json",
+            "test/workflow-review.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "0e1c9b403ef207150c8c709247d1d34f2e9cf47588eba16c1016f2ef4d4fc1a6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "84988d5a475d171a0f0d6de076c8b97dc0be6ef217c6ec5d0cebe944fc8cc0ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "ea5d367fd0ffe3c54fa4cd8ecf85abc10809b2401c6cc464211feceafb2b8475",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "7410f0824fc4a08fb9a1ea04a503e3152c722ded46d03ea28c659bfb57da90ea",
+              "mode"  : 384
+            },
+            {
+              "path"  : "test/workflow-review.test.ts",
+              "type"  : "file",
+              "digest": "d1206d376d74afd05cf36f24fd2bf9110a62a486409f5dd651f7a3987213e6ba",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "TERRA-LIVE",
+            "description": "현재 소스의 실제 Terra 읽기 전용 검토가 공유 core의 필수 검토 수용 조건을 충족한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-MODEL",
+            "description": "새 Terra 실행의 실제 CLI 헤더와 최종 스키마 응답에서 모델·판정을 읽으며 요청값을 관측값으로 대체하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-READ",
+            "description": "검토 프롬프트가 소스 확인용 읽기 전용 명령만 허용하고 변경·테스트·빌드·게시 금지를 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-RECEIPT",
+            "description": "기존 JSONL 영수증 호환성과 해시·맥락·권한·소진 검증을 유지하고 누락·변조·주입 결과를 수용하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--test",
+          "test/workflow-review.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "TERRA-MODEL",
+          "TERRA-READ",
+          "TERRA-RECEIPT"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 5705,
+            "digest"         : "7e4a7b2d95710db9e6cff617b7a9122be57cf1d49d2c84386fdfda456f027679",
+            "truncated"      : false,
+            "retainedBytes"  : 5705,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-b6da71a4-b559-4280-930c-25a4f1850711",
+        "startedAt"  : "2026-11-15T12:48:15.105Z",
+        "completedAt": "2026-11-15T12:48:15.405Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "dd918aeae623d58bf0fc614dba245d7ada24fc2c69e7ba939ddd0d448ac87a7e",
+          "inputs": [
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "scripts/workflow/adapters/windows-command.ts",
+            "scripts/workflow/review.ts",
+            "src/architecture.generated.json",
+            "test/workflow-review.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "c664bbd46275b2a215c0a8f7916d4f4f33e1376d13d779f63c133ed46453ab19",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "d6b6d577720b8dd82f7dcd7a352c9a2e65297bdb571710cf87c1ad720ca56c60",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "39da4d34d3d346ad3e998825c57266eab07464a095f801c5de8098e6798039ac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "2b80e3c0e3ab7591e8ceae733964b868ccdcfb4dc99a845c6ef9b38ef8426b03",
+              "mode"  : 384
+            },
+            {
+              "path"  : "test/workflow-review.test.ts",
+              "type"  : "file",
+              "digest": "bc22cae6fa9f828127a9ab0e19da4c9853866bf10c206ce2a11f7129d18e7857",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "TERRA-LIVE",
+            "description": "현재 소스의 실제 Terra 읽기 전용 검토가 공유 core의 필수 검토 수용 조건을 충족한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-MODEL",
+            "description": "새 Terra 실행의 실제 CLI 헤더와 최종 스키마 응답에서 모델·판정을 읽으며 요청값을 관측값으로 대체하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-READ",
+            "description": "검토 프롬프트가 소스 확인용 읽기 전용 명령만 허용하고 변경·테스트·빌드·게시 금지를 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-RECEIPT",
+            "description": "기존 JSONL 영수증 호환성과 해시·맥락·권한·소진 검증을 유지하고 누락·변조·주입 결과를 수용하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--test",
+          "test/workflow-review.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "TERRA-MODEL",
+          "TERRA-READ",
+          "TERRA-RECEIPT"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 5700,
+            "digest"         : "bae2169b311c47ce10983b8d497a5530b6111e95ffae816520c17ed71fa260ba",
+            "truncated"      : false,
+            "retainedBytes"  : 5700,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-96da4f88-8624-4e53-b206-ce9ccc3b10e7",
+        "startedAt"  : "2026-11-15T12:49:06.972Z",
+        "completedAt": "2026-11-15T12:49:07.340Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "1f6270d0ad5a9ff17aa2d95842c9e5288d776656da8a2421aa76f39305698c28",
+          "inputs": [
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "scripts/workflow/adapters/windows-command.ts",
+            "scripts/workflow/review.ts",
+            "src/architecture.generated.json",
+            "test/workflow-review.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "c664bbd46275b2a215c0a8f7916d4f4f33e1376d13d779f63c133ed46453ab19",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "d6b6d577720b8dd82f7dcd7a352c9a2e65297bdb571710cf87c1ad720ca56c60",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "39da4d34d3d346ad3e998825c57266eab07464a095f801c5de8098e6798039ac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "f41994a80fd4deee2b28650506726bacb8fb89befe8c981e3d1efcf053a9d528",
+              "mode"  : 384
+            },
+            {
+              "path"  : "test/workflow-review.test.ts",
+              "type"  : "file",
+              "digest": "bc22cae6fa9f828127a9ab0e19da4c9853866bf10c206ce2a11f7129d18e7857",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "TERRA-LIVE",
+            "description": "현재 소스의 실제 Terra 읽기 전용 검토가 공유 core의 필수 검토 수용 조건을 충족한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-MODEL",
+            "description": "새 Terra 실행의 실제 CLI 헤더와 최종 스키마 응답에서 모델·판정을 읽으며 요청값을 관측값으로 대체하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-READ",
+            "description": "검토 프롬프트가 소스 확인용 읽기 전용 명령만 허용하고 변경·테스트·빌드·게시 금지를 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-RECEIPT",
+            "description": "기존 JSONL 영수증 호환성과 해시·맥락·권한·소진 검증을 유지하고 누락·변조·주입 결과를 수용하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--test",
+          "test/workflow-review.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "TERRA-MODEL",
+          "TERRA-READ",
+          "TERRA-RECEIPT"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 5701,
+            "digest"         : "bc519fba855f91e65635dcfb4fc8b5dbf796ed9c959a4591e7d010bf45b1e88a",
+            "truncated"      : false,
+            "retainedBytes"  : 5701,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-0e2d8081-2120-42ab-97d3-b51d8305b94f",
+        "startedAt"  : "2026-11-15T12:51:34.155Z",
+        "completedAt": "2026-11-15T12:51:34.482Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "7c398c9a93f7a73b503d1eef003a6658f43cb7d73f28917a643812d798ed8dcc",
+          "inputs": [
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "scripts/workflow/adapters/windows-command.ts",
+            "scripts/workflow/review.ts",
+            "src/architecture.generated.json",
+            "test/workflow-review.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "c664bbd46275b2a215c0a8f7916d4f4f33e1376d13d779f63c133ed46453ab19",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "bab86070afb34ee10a3d7c742f6164461d36f585a24f0190edc70d7cb2dfbad6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "39da4d34d3d346ad3e998825c57266eab07464a095f801c5de8098e6798039ac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "67785e81330eaea2f0e6fba64d41f0443d6c52483965890cb0fa316fdf1dfefc",
+              "mode"  : 384
+            },
+            {
+              "path"  : "test/workflow-review.test.ts",
+              "type"  : "file",
+              "digest": "bc22cae6fa9f828127a9ab0e19da4c9853866bf10c206ce2a11f7129d18e7857",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "TERRA-LIVE",
+            "description": "현재 소스의 실제 Terra 읽기 전용 검토가 공유 core의 필수 검토 수용 조건을 충족한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-MODEL",
+            "description": "새 Terra 실행의 실제 CLI 헤더와 최종 스키마 응답에서 모델·판정을 읽으며 요청값을 관측값으로 대체하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-READ",
+            "description": "검토 프롬프트가 소스 확인용 읽기 전용 명령만 허용하고 변경·테스트·빌드·게시 금지를 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-RECEIPT",
+            "description": "기존 JSONL 영수증 호환성과 해시·맥락·권한·소진 검증을 유지하고 누락·변조·주입 결과를 수용하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--test",
+          "test/workflow-review.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "TERRA-MODEL",
+          "TERRA-READ",
+          "TERRA-RECEIPT"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 5702,
+            "digest"         : "96faf2f972415ffa51a3641fa3b5915ef737c9413222ce64f930c3aca904815e",
+            "truncated"      : false,
+            "retainedBytes"  : 5702,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-154f212b-6b8d-49a8-b0f8-a79207d25aa6",
+        "startedAt"  : "2026-11-15T12:53:16.630Z",
+        "completedAt": "2026-11-15T12:53:17.065Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "089a2a8c676266224ea448bfb9abe22413c62e4591c9b3b871b4e23b13b18283",
+          "inputs": [
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "scripts/workflow/adapters/windows-command.ts",
+            "scripts/workflow/review.ts",
+            "src/architecture.generated.json",
+            "test/workflow-review.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "9e50c527081e36577de79135d68c9ab83afd4cf0c8df0e41d296c5efb99b236c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "f5822c89cd1ae5803bc662a3a9ccc13a102a8fd1da912b2c9165632f0be7402a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "61b896075d0176779a68dd38848b385c5bc5e1e17f06087c4bf07e5f5c8f9242",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "7aaba1e2d6d07807117f6bfa47c6539088609568804aa0b7eae96bc7a2125612",
+              "mode"  : 384
+            },
+            {
+              "path"  : "test/workflow-review.test.ts",
+              "type"  : "file",
+              "digest": "fd3f2eb3d7cfed0e998203decac8b7bf62e34c599cbcfa0edc5768c7879d0a86",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "TERRA-LIVE",
+            "description": "현재 소스의 실제 Terra 읽기 전용 검토가 공유 core의 필수 검토 수용 조건을 충족한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-MODEL",
+            "description": "새 Terra 실행의 실제 CLI 헤더와 최종 스키마 응답에서 모델·판정을 읽으며 요청값을 관측값으로 대체하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-READ",
+            "description": "검토 프롬프트가 소스 확인용 읽기 전용 명령만 허용하고 변경·테스트·빌드·게시 금지를 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-RECEIPT",
+            "description": "기존 JSONL 영수증 호환성과 해시·맥락·권한·소진 검증을 유지하고 누락·변조·주입 결과를 수용하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--test",
+          "test/workflow-review.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "TERRA-MODEL",
+          "TERRA-READ",
+          "TERRA-RECEIPT"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 5713,
+            "digest"         : "0fcc5fc6a1475766c42b387a675ed443ab845e48ed2b6caa54fd7b8ffc7dd85f",
+            "truncated"      : false,
+            "retainedBytes"  : 5713,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-d168fb8a-9f55-44bb-9884-2560e00a04cd",
+        "startedAt"  : "2026-11-15T12:54:16.255Z",
+        "completedAt": "2026-11-15T12:54:16.510Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "089a2a8c676266224ea448bfb9abe22413c62e4591c9b3b871b4e23b13b18283",
+          "inputs": [
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "scripts/workflow/adapters/windows-command.ts",
+            "scripts/workflow/review.ts",
+            "src/architecture.generated.json",
+            "test/workflow-review.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "9e50c527081e36577de79135d68c9ab83afd4cf0c8df0e41d296c5efb99b236c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "f5822c89cd1ae5803bc662a3a9ccc13a102a8fd1da912b2c9165632f0be7402a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "61b896075d0176779a68dd38848b385c5bc5e1e17f06087c4bf07e5f5c8f9242",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "7aaba1e2d6d07807117f6bfa47c6539088609568804aa0b7eae96bc7a2125612",
+              "mode"  : 384
+            },
+            {
+              "path"  : "test/workflow-review.test.ts",
+              "type"  : "file",
+              "digest": "fd3f2eb3d7cfed0e998203decac8b7bf62e34c599cbcfa0edc5768c7879d0a86",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "TERRA-LIVE",
+            "description": "현재 소스의 실제 Terra 읽기 전용 검토가 공유 core의 필수 검토 수용 조건을 충족한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-MODEL",
+            "description": "새 Terra 실행의 실제 CLI 헤더와 최종 스키마 응답에서 모델·판정을 읽으며 요청값을 관측값으로 대체하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-READ",
+            "description": "검토 프롬프트가 소스 확인용 읽기 전용 명령만 허용하고 변경·테스트·빌드·게시 금지를 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "TERRA-RECEIPT",
+            "description": "기존 JSONL 영수증 호환성과 해시·맥락·권한·소진 검증을 유지하고 누락·변조·주입 결과를 수용하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--input-type=module",
+          "-e",
+          "import {assessWork} from \"./scripts/workflow/work.ts\"; const a=await assessWork({workId:\"work-a427c2c5-c900-48d8-b3ca-31e9f1422410\"}); const r=a.record.workflow.reviews.at(-1); const ok=a.review.usable && r?.provider===\"openai\" && r?.observedModel===\"gpt-6.1-terra\" && r?.executor===\"process\" && r?.verdict===\"pass\"; console.log(JSON.stringify({usable:a.review.usable,reasons:a.review.reasons,reviewId:r?.id,provider:r?.provider,observedModel:r?.observedModel,executor:r?.executor,sourceDigest:a.source.digest})); if(!ok)process.exit(1);"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "TERRA-LIVE"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 241,
+            "digest"         : "d7d70dd01addedd3cc0ad1b268a8198e4da42325d60b7d5103d56ccf910e0621",
+            "truncated"      : false,
+            "retainedBytes"  : 241,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id"            : "review-4105855e-7483-4210-8ec3-8c8e5589300e",
+        "provider"      : "openai",
+        "model"         : "gpt-6.1-terra",
+        "observedModel" : "gpt-6.1-terra",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "a151ca3e06a3c6cdfecc17e46de1c0e0d58bd83fc1e2de43b6213d9f2a9e75b1",
+        "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "claude_usage_window_exhausted",
+          "receiptHash": "76cd3ed41ba515296ed5eb2a751eab5b1ac649990723a59c8de17d621af52765",
+          "source"     : "claude-cli"
+        },
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "9bd61e98e1f709de582e5a36c57868ac29b5a0d22440949f4449595f79ac3b23"
+        },
+        "failure": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "claude_usage_window_exhausted",
+          "receiptHash": "76cd3ed41ba515296ed5eb2a751eab5b1ac649990723a59c8de17d621af52765",
+          "source"     : "claude-cli"
+        },
+        "findings": [
+          "scripts/workflow/review.ts:353-355의 기존 JSONL 영수증 처리에서는 이벤트 종류와 관계없이 최상위 `model` 필드를 관측 모델로 받아 마지막 값으로 덮어쓴다. 따라서 실제 모델 관측 이벤트가 없거나 다른 모델을 보고해도 뒤에 `{\"type\":\"item.completed\",\"model\":\"gpt-6.1-terra\",\"item\":{\"type\":\"agent_message\",\"text\":\"{\\\"verdict\\\":\\\"pass\\\",\\\"findings\\\":[]}\"}}`가 있으면 Terra 관측으로 판정할 수 있다. 이는 모델 값을 실제 관측에 연결하고 주입 결과를 거부해야 하는 TERRA-MODEL·TERRA-RECEIPT 기준에 어긋난다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-4105855e-7483-4210-8ec3-8c8e5589300e/terra.json",
+        "startedAt"  : "2026-11-15T12:46:52.930Z",
+        "completedAt": "2026-11-15T12:47:18.392Z"
+      },
+      {
+        "id"            : "review-7e81328e-8719-4b3d-9571-08ead2a2fb35",
+        "provider"      : "openai",
+        "model"         : "gpt-6.1-terra",
+        "observedModel" : "gpt-6.1-terra",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "2479e001be199f4c65a61d6d5b89e3ecc5b23762cd11436b3038d41cadf2a015",
+        "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "claude_usage_window_exhausted",
+          "receiptHash": "2842cb844c85ec2e6426a647ada228b5459449ed05f116f5104994957832aed0",
+          "source"     : "claude-cli"
+        },
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "46c6ee1e06ef06a4f2990d12b084062ea447a96a690f74ef4d0f27b40c82ac10"
+        },
+        "failure": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "claude_usage_window_exhausted",
+          "receiptHash": "2842cb844c85ec2e6426a647ada228b5459449ed05f116f5104994957832aed0",
+          "source"     : "claude-cli"
+        },
+        "findings": [
+          "docs/work/Workflow/014-Terra 검토 실행 원문과 모델 관측 연결/work.json:89, 537 및 verification.md:55: 필수 기준 TERRA-LIVE는 현재 소스에 대한 실제 Terra 검토가 공유 core의 수용 조건을 충족해야 한다. 기록된 유일한 실제 검토는 수정 전 소스의 fail이며, review.ts:235는 pass와 현재 sourceDigest 일치를 요구한다. 따라서 수정 후 집중 테스트와 이전 실제 실행만으로 이 기준을 충족했다고 판단할 수 없으며, 현재 소스에 대한 수용 가능한 실제 검토 증거가 필요하다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-7e81328e-8719-4b3d-9571-08ead2a2fb35/terra.json",
+        "startedAt"  : "2026-11-15T12:49:08.234Z",
+        "completedAt": "2026-11-15T12:49:31.686Z"
+      },
+      {
+        "id"            : "review-e18e5b91-25e4-4c12-8b44-b7fbfa086e2e",
+        "provider"      : "openai",
+        "model"         : "gpt-6.1-terra",
+        "observedModel" : "gpt-6.1-terra",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "2479e001be199f4c65a61d6d5b89e3ecc5b23762cd11436b3038d41cadf2a015",
+        "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "claude_usage_window_exhausted",
+          "receiptHash": "b728be48adc24a75b6faf9a2d2d6e3adcac5c5f256cf85c7bc7ccd2332893918",
+          "source"     : "claude-cli"
+        },
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "97788772f07f9dac5395fa4f381902b571b3b575b41f9f814e07942c53c94107"
+        },
+        "failure": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "claude_usage_window_exhausted",
+          "receiptHash": "b728be48adc24a75b6faf9a2d2d6e3adcac5c5f256cf85c7bc7ccd2332893918",
+          "source"     : "claude-cli"
+        },
+        "findings": [],
+        "receiptPath": ".www/evidence/reviews/review-e18e5b91-25e4-4c12-8b44-b7fbfa086e2e/terra.json",
+        "startedAt"  : "2026-11-15T12:49:51.134Z",
+        "completedAt": "2026-11-15T12:50:11.870Z"
+      },
+      {
+        "id"            : "review-354db954-33bb-4551-ad97-9b7ae26a5ad6",
+        "provider"      : "openai",
+        "model"         : "gpt-6.1-terra",
+        "observedModel" : "gpt-6.1-terra",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "4d31fe49db46ad6aff6b2113dc0768302128891704cbe424a43e328f55358c82",
+        "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "claude_usage_window_exhausted",
+          "receiptHash": "74bbd171497dbfed8e4853f2ad74b4d9e110376a7c22f04480f6d671d825fcc2",
+          "source"     : "claude-cli"
+        },
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "b2ff9085ccc789e987be09f937361140b6534a902446fee0d13a4dea0e561dbd"
+        },
+        "failure": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "claude_usage_window_exhausted",
+          "receiptHash": "74bbd171497dbfed8e4853f2ad74b4d9e110376a7c22f04480f6d671d825fcc2",
+          "source"     : "claude-cli"
+        },
+        "findings": [
+          "scripts/workflow/review.ts:350의 기존 JSONL 경로는 observedModel을 항상 null로 반환한다. 이전 구현이 JSONL의 model 필드로 기록한 유효한 Terra 통과 영수증도 validateReview의 observed_model_missing 또는 receipt_result_mismatch로 거부되므로, 제공된 TERRA-RECEIPT의 기존 영수증 호환성 기준을 충족하지 못한다. 새 테스트도 기존 통과 영수증의 유지가 아니라 거부를 확인한다.",
+          "제공된 검증 근거에서 TERRA-LIVE의 충족을 확인할 수 없다. .www/gate-current-tests.json은 TERRA-MODEL·TERRA-READ·TERRA-RECEIPT만 검증 대상으로 기록하고, .www/ui-terra-green.json은 별도의 지도 UI 검증 기록이다. 현재 소스에 대한 실제 Terra 검토가 공유 core에서 수용됐다는 근거가 없다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-354db954-33bb-4551-ad97-9b7ae26a5ad6/terra.json",
+        "startedAt"  : "2026-11-15T12:52:00.303Z",
+        "completedAt": "2026-11-15T12:52:23.447Z"
+      },
+      {
+        "id"            : "review-0725d0b8-ba59-4b2c-9c4f-602828f8c9f2",
+        "provider"      : "openai",
+        "model"         : "gpt-6.1-terra",
+        "observedModel" : "gpt-6.1-terra",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "0d8f38b158b99df20721a0a217f477d87f6d2efb6b67b5580ae3639f4f7d7866",
+        "criteriaDigest": "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "claude_usage_window_exhausted",
+          "receiptHash": "7b94845ab336511a17b2d342ac907f1858c31b1bed6d003f16c56d8298b24d73",
+          "source"     : "claude-cli"
+        },
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "fd591fb88d0748ed1cc0593348bd65b8e442aedfe21045b39d2db10e47504a51"
+        },
+        "failure": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "claude_usage_window_exhausted",
+          "receiptHash": "7b94845ab336511a17b2d342ac907f1858c31b1bed6d003f16c56d8298b24d73",
+          "source"     : "claude-cli"
+        },
+        "findings": [],
+        "receiptPath": ".www/evidence/reviews/review-0725d0b8-ba59-4b2c-9c4f-602828f8c9f2/terra.json",
+        "startedAt"  : "2026-11-15T12:53:42.843Z",
+        "completedAt": "2026-11-15T12:54:05.514Z"
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-345ac3ba-06b5-4acd-9399-b1bd14544c16",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T12:47:09.720Z",
+        "sourceDigest"   : "31433ec15c64efe74837e9d05d8841c2fd5dfd66208528420b5b365e814696cc",
+        "criteriaDigest" : "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "documentsDigest": "1077de65eb8ef2c023f2538041660a50645910f7291de1094c62a8cdcebbec43",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "Terra plain 최종 판정과 초기 CLI 실행 헤더 관측, legacy 형식 분리 책임을 현행 구현에 맞게 반영했다."
+          },
+          {
+            "path"    : "docs/CODE_BLUEPRINT.md",
+            "decision": "unchanged",
+            "reason"  : "정본 구조 ID와 생성 snapshot 경로는 유지되며 검토 내부 parsing은 새 구조 책임을 만들지 않는다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "읽기 전용 소스 확인 명령, 실제 CLI 헤더의 관측 범위와 fixture 및 실제 모델 검토 구분을 반영했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "지도 중심 제품 목적과 실행 근거 구분은 유지되고 이번 연관 수정은 검토 CLI 책임 내부에 한정된다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "정책·독립 검토·실행 증거 수용·한도 대체·문서 영향 계약을 변경하지 않았다."
+          },
+          {
+            "path"    : "docs/specs/architecture.md",
+            "decision": "unchanged",
+            "reason"  : "기존 구조·검토 요구 책임을 유지하며 새 기능 요구를 추가하지 않는다."
+          },
+          {
+            "path"    : "docs/specs/ecosystem.md",
+            "decision": "unchanged",
+            "reason"  : "지도 선택 요약과 명시적 상세 열기 요구는 유지되고 현재 GUI가 전체·ancestor·뒤로 이동의 열린 상세 보존까지 검증했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-b48064d2-d3da-4795-8bb0-38a1f6a23ed2",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T12:49:07.510Z",
+        "sourceDigest"   : "1f6270d0ad5a9ff17aa2d95842c9e5288d776656da8a2421aa76f39305698c28",
+        "criteriaDigest" : "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "documentsDigest": "4b9c6a2fb58021c0e3845efa634438596b66ae1de140021cf769d104308754a5",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "초기 CLI 헤더 관측과 legacy JSONL 모델 미관측 처리 책임 반영"
+          },
+          {
+            "path"    : "docs/CODE_BLUEPRINT.md",
+            "decision": "unchanged",
+            "reason"  : "정본 구조 ID와 생성 경로 유지"
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "읽기 명령 범위·새 plain 실행·과거 JSONL 재검토 절차 및 관측 한계 반영"
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "지도 중심의 목적과 검증 사실 구분 유지"
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "정책·한도 대체·독립 검토 및 실제 영수증 계약 유지"
+          },
+          {
+            "path"    : "docs/specs/architecture.md",
+            "decision": "unchanged",
+            "reason"  : "등록된 기존 검토 책임과 지도 요구 유지"
+          },
+          {
+            "path"    : "docs/specs/ecosystem.md",
+            "decision": "unchanged",
+            "reason"  : "명시 상세 열림 및 전체·ancestor·뒤로 보존 요구 유지"
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-1f15ff72-64ef-416e-b539-1dd16d3ec988",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T12:51:51.152Z",
+        "sourceDigest"   : "7c398c9a93f7a73b503d1eef003a6658f43cb7d73f28917a643812d798ed8dcc",
+        "criteriaDigest" : "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "documentsDigest": "e9d0bf80f1280f02bd2408d6baebeabe70b35168ae8af1e8630d39e3b9838c50",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "검토 CLI 초기 헤더와 JSONL 모델 미관측 처리 책임 반영"
+          },
+          {
+            "path"    : "docs/CODE_BLUEPRINT.md",
+            "decision": "unchanged",
+            "reason"  : "정본 구조 ID·배치·생성 책임 유지"
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "새 Terra 실행과 실제 관측 범위, 지도 토글·초점 GUI 회귀 확인 방법 반영"
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "지도 중심 제품 범위와 근거 구분 유지"
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "공유 정책과 실제 영수증·독립 검토·문서 영향 계약 유지"
+          },
+          {
+            "path"    : "docs/specs/architecture.md",
+            "decision": "unchanged",
+            "reason"  : "기존 구조와 검토 책임 요구 유지"
+          },
+          {
+            "path"    : "docs/specs/ecosystem.md",
+            "decision": "updated",
+            "reason"  : "탐색 열기·접기에서 자동 배율/위치 보존과 현재 책임 키보드 초점 명시"
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-7f64f4ed-188a-466b-bb23-024dafd1af9c",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T12:53:42.422Z",
+        "sourceDigest"   : "089a2a8c676266224ea448bfb9abe22413c62e4591c9b3b871b4e23b13b18283",
+        "criteriaDigest" : "4a8f904ef9bc70cb7dff2a968906c0cd9ae7430c51e104b4c084d2763e2bb75d",
+        "documentsDigest": "44c6e3245a2f8f0c4d084eb5cf4ebd8848de54993b81776bfd15cd40b1964aba",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "초기 CLI 헤더 및 JSONL 첫 시작 메타데이터의 제한적 호환 책임 반영"
+          },
+          {
+            "path"    : "docs/CODE_BLUEPRINT.md",
+            "decision": "unchanged",
+            "reason"  : "구조 ID와 생성 snapshot 책임 유지"
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "실제 관측 범위·legacy 누락 및 위조 거부·지도 회귀 검증 반영"
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "지도 중심 제품 목적과 근거 구분 유지"
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "독립 검토·실제 영수증 및 한도 대체 정책 유지"
+          },
+          {
+            "path"    : "docs/specs/architecture.md",
+            "decision": "unchanged",
+            "reason"  : "기존 구조 요구 유지"
+          },
+          {
+            "path"    : "docs/specs/ecosystem.md",
+            "decision": "updated",
+            "reason"  : "탐색 토글 배율·위치 유지와 현재 노드 초점 요구 반영"
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
+  }
+}
