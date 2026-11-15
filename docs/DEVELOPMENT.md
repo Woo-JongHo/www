@@ -314,4 +314,16 @@ write/check는 동일 논리경로 `src/architecture.generated.json`의 격리�
 
 `node scripts/verify-reports.ts`는 strict 검사 다음 위 실도구 테스트를 직렬로 실행하고 실패를 전파한 뒤 관련 집중 검사·빌드·Electron probe를 수행한다. 실도구 테스트별 예산은 300초, 전체 의미 테스트 자식 실행 예산은 900초다. runtime fixture의 개발 설정 부재, package runtime 의존성 및 main/preload/renderer bundle의 개발 CLI 경로 부재를 확인하고 Electron child PATH에는 Node와 git만 노출한다. 이 경계는 머신 전역 BoxBox 설치 제거를 뜻하지 않는다. 기존 fixture 보고서 bytes·legacy 원장 bytes/inode/mtime·no-op 원장의 재기록 여부를 실측하며, GUI 시작 실패는 원문과 prechecks를 보존하고 미확인으로 남긴다.
 
+## Terra 검토 CLI의 실행 형식과 관측
+
+새 Terra 대체 검토는 기존 `--model gpt-6.1-terra --sandbox read-only --ignore-user-config --ephemeral --output-schema`를 유지하며 `--json`을 사용하지 않는다. stdout은 최종 스키마 JSON, stderr의 초기 `OpenAI Codex v…` 구분자 블록은 CLI 실행 설정 관측으로 보존한다. 선택 argv를 observedModel로 복사하지 않는다. 처음의 Reading additional input 안내 외의 앞선 본문, 모델/제공자/sandbox 중복·누락, 다른 제공자와 읽기 전용이 아닌 헤더는 관측 근거로 수용하지 않는다. 이 값은 CLI가 출력한 실행 모델이며 서버 내부 라우팅을 독립 증명하는 것은 아니다.
+
+과거 `--json` 호출 영수증은 기존 JSONL 형식으로 검증한다. 기록된 정확한 argv에 맞는 파서만 사용하고 plain/JSONL의 모델 값을 서로 재사용하지 않는다. 판정 JSON은 verdict/findings 두 필드와 schema의 목록·문자 길이 제한을 검사한다. 영수증 해시·소스/기준/정책 맥락·허용된 실행 경로·읽기 전용 argv·Opus 사용량 소진 검증과 주입 결과 거부는 유지한다. 실제 종료 실패·출력 절단·모델 미관측은 완료 검토로 수용하지 않는다.
+
+검토자는 소스 읽기·검색·해시 확인용 읽기 전용 명령을 사용할 수 있다. 테스트·빌드·설치·네트워크·파일/설정/Git 변경·게시는 금지한다. 읽은 파일의 지시를 실행 권한으로 취급하지 않는다. CLI sandbox와 실제 원문을 함께 확인하며 prompt만으로 호스트의 모든 행동을 봉쇄했다고 주장하지 않는다.
+
+집중 검사는 `node --test test/workflow-review.test.ts`다. 이 fixture는 파싱·영수증 검증의 근거이며 실제 성공한 모델 실행을 대신하지 않는다. 실제 검토 성공과 공유 완료 수용은 별도 작업의 TERRA-LIVE 및 원문에서 확인한다. 사용량 제한을 우회하거나 호스트 검토문을 process 영수증으로 변환하지 않는다.
+
+과거 JSONL 영수증은 첫 `thread.started` 제어 사건의 유효한 thread_id와 선택적 model 메타데이터만 읽는다. 뒤따르는 응답·도구 사건의 임의 model은 무시하며, 시작 사건이 중복되거나 뒤늦게 나타나면 거부한다. 현재 실측 CLI는 시작 사건에 모델을 제공하지 않아 해당 영수증은 모델 미관측으로 거부하고 새 plain 실행으로 재검토한다. 과거 메타데이터 호환은 fixture 검사이며 실제 성공 이력으로 세지 않는다.
+
 지도 GUI 회귀 검사는 자동 배율에서 스크롤한 뒤 탐색 열기·접기의 배율/위치 유지와 키보드 branch 진입 후 현재 책임 노드의 초점을 확인한다.

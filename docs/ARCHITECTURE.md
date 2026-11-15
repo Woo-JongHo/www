@@ -179,3 +179,7 @@ renderer는 thread/cwd별 초안·읽기 위치·따라가기와 logical row 상
 `src/www-activity.ts`는 WWW 정본 역할·스킬 목록과 선택 저장소 범위의 경로 식별, 확장 없는 리터럴 cat 참조 식별을 소유한다. native-activity는 근거를 `wwwArtifact`와 source로 보존하고 renderer가 workspacePath를 전달한다. 뷰는 전용 흐름과 범용 Native 진단을 분리하며 실제 적용을 추론하지 않는다.
 
 새 작업 revision·신규 보고서의 최초 JSON 출력 책임은 `arch.development.records.serialization`의 `scripts/workflow/work-json.ts`에 둔다. type-only 도메인 참조로 runtime 순환을 피하고 파일·기존 JSON text를 받는 formatter API는 제공하지 않는다. Node 파일시스템 정책 로드는 `preflight.ts`가 고정 `docs/architecture/work-output.json`에서 수행하며 실제 저장·잠금·외부 변경 검사·atomic publication은 기존 work/report/Native writer가 소유한다. 사건 저장 모듈 `record.ts`와 `.www` 메타데이터의 책임은 유지한다.
+
+Terra 대체 검토의 새 실행은 stdout 최종 JSON과 stderr 초기 CLI 헤더를 분리해 판정과 실행 모델을 관측한다. 과거 JSONL 영수증은 기록된 호출 형식에 따라 계속 검증하며 형식 간 모델 값을 혼합하지 않는다. `review.ts`는 schema·모델 관측·argv/실행 경로·맥락·해시와 소진 원문을 함께 확인한다. 검토 prompt는 파일 확인용 읽기 전용 명령만 허용하고 변경·테스트 실행·게시를 금지한다. 이 전송 변경은 Opus 기본·소진 시 Terra 정책이나 process 증거의 수용 강도를 변경하지 않는다. 런타임 헤더의 의미와 실패 경계는 개발 안내에 둔다.
+
+과거 JSONL 영수증은 첫 `thread.started` 제어 사건의 유효한 thread_id와 선택적 model 메타데이터만 읽는다. 뒤따르는 응답·도구 사건의 임의 model은 무시하며, 시작 사건이 중복되거나 뒤늦게 나타나면 거부한다. 현재 실측 CLI는 시작 사건에 모델을 제공하지 않아 해당 영수증은 모델 미관측으로 거부하고 새 plain 실행으로 재검토한다. 과거 메타데이터 호환은 fixture 검사이며 실제 성공 이력으로 세지 않는다.

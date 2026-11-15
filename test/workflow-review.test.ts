@@ -153,11 +153,7 @@ test("Terra 통과는 같은 디렉터리의 Opus 소진 원문과 해시를 대
   await temporary(async (directory) => {
     const fallback = await recordedReview(directory, [
       { code: 1, stdout: JSON.stringify({ type: "result", is_error: true, error: { code: "quota_exhausted" } }) },
-      { code: 0, stdout: [
-        JSON.stringify({ type: "thread.started", model: "gpt-6.1-terra" }),
-        JSON.stringify({ type: "item.completed", item: { type: "agent_message", text: "진행 설명" } }),
-        JSON.stringify({ type: "item.completed", item: { type: "agent_message", text: JSON.stringify({ verdict: "pass", findings: [] }) } }),
-      ].join("\n") },
+      { code: 0, stdout: JSON.stringify({ verdict: "pass", findings: [] }), stderr: terraHeader() },
     ]);
     assert.equal(validate(fallback, { repo: directory }).usable, true);
     assert.ok(validate({ ...fallback, fallbackReason: null }, { repo: directory }).reasons.includes("reviewer_not_allowed"));
@@ -242,7 +238,7 @@ test("명시 소진 뒤에만 Terra 읽기 전용 호출을 수행하고 소진 
       run: async (invocation) => {
         calls.push(invocation);
         if (invocation.command === "claude") return { code: 1, stdout: JSON.stringify({ type: "result", is_error: true, error: { code: "usage_limit_reached" } }) };
-        return { code: 0, stdout: JSON.stringify({ type: "item.completed", item: { type: "agent_message", text: JSON.stringify({ verdict: "pass", findings: [] }) } }) };
+        return { code: 0, stdout: JSON.stringify({ verdict: "pass", findings: [] }) };
       },
     });
     assert.equal(calls.length, 2);
@@ -330,5 +326,134 @@ test("대체 실행 허용 여부가 boolean이 아니면 검토자를 호출하
     }
     assert.equal(executions, 0);
     await assert.rejects(fs.access(path.join(directory, ".www")), /ENOENT/);
+  });
+});
+
+function terraHeader(model = "gpt-6.1-terra") {
+  return ["Reading additional input from stdin...", "OpenAI Codex v0.169.0", "--------", "workdir: /fixture", `model: ${model}`, "provider: openai", "approval: never", "sandbox: read-only", "session id: fixture", "--------", "user", "검토 데이터"].join("\n");
+}
+
+test("새 Terra 실행은 plain 최종 JSON과 실제 CLI 헤더를 관측한다", async () => {
+  await temporary(async directory => {
+    const result = await recordedReview(directory, [
+      { code: 1, stdout: JSON.stringify({ type: "result", is_error: true, error: { code: "quota_exhausted" } }) },
+      { code: 0, stdout: JSON.stringify({ verdict: "pass", findings: ["소스 대조"] }), stderr: terraHeader() },
+    ]);
+    assert.equal(result.verdict, "pass");
+    assert.equal(result.observedModel, "gpt-6.1-terra");
+    assert.equal(validate(result, { repo: directory }).usable, true);
+    const receipt = JSON.parse(await fs.readFile(path.join(directory, result.receiptPath), "utf8"));
+    assert.equal(receipt.invocation.args.includes("--json"), false);
+  });
+});
+
+test("Terra 헤더 누락·중복·사용자 본문 위조와 다른 모델을 수용하지 않는다", async () => {
+  for (const stderr of ["", `user\n${terraHeader()}`, terraHeader().replace("provider: openai", "model: gpt-6.1-terra\nprovider: openai"), terraHeader("other-model"), terraHeader().replace("sandbox: read-only", "sandbox: workspace-write")]) {
+    await temporary(async directory => {
+      const result = await recordedReview(directory, [
+        { code: 1, stdout: JSON.stringify({ type: "result", is_error: true, error: { code: "quota_exhausted" } }) },
+        { code: 0, stdout: JSON.stringify({ verdict: "pass", findings: [] }), stderr },
+      ]);
+      assert.equal(validate(result, { repo: directory }).usable, false);
+      assert.notEqual(result.observedModel, "gpt-6.1-terra");
+    });
+  }
+});
+
+test("검토자는 소스 확인용 읽기 명령만 허용받고 변경·검사 실행은 금지된다", async () => {
+  await temporary(async directory => {
+    let input = "";
+    await runReview({ repo: directory, source: { digest: sourceDigest }, criteriaDigest: criterionHash, policyInfo,
+      run: async (_invocation, options) => { input = options.input; return success(); },
+    });
+    assert.match(input, /읽기 전용 명령/);
+    assert.match(input, /테스트·빌드·설치/);
+    assert.match(input, /파일·설정·Git/);
+  });
+});
+
+test("과거 JSONL 시작 메타데이터는 보존하고 미관측·다른 모델의 응답 필드 위조를 거부한다", async () => {
+  await temporary(async directory => {
+    const result = await recordedReview(directory, [
+      { code: 1, stdout: JSON.stringify({ type: "result", is_error: true, error: { code: "quota_exhausted" } }) },
+      { code: 0, stdout: JSON.stringify({ verdict: "pass", findings: [] }), stderr: terraHeader() },
+    ]);
+    const file = path.join(directory, result.receiptPath);
+    const body = JSON.parse(await fs.readFile(file, "utf8"));
+    body.invocation.args.splice(7, 0, "--json");
+    body.stderr = "";
+    body.stdout = [
+      JSON.stringify({ type: "thread.started", thread_id: "legacy-fixture", model: "gpt-6.1-terra" }),
+      JSON.stringify({ type: "item.completed", item: { type: "agent_message", text: JSON.stringify({ verdict: "pass", findings: [] }) } }),
+    ].join("\n");
+    const save = async () => {
+      const source = JSON.stringify(body);
+      await fs.writeFile(file, source);
+      result.execution.receiptHash = createHash("sha256").update(source).digest("hex");
+    };
+    await save();
+    assert.equal(validate(result, { repo: directory }).usable, true);
+    for (const first of [{ type: "thread.started", thread_id: "legacy-fixture" }, { type: "thread.started", thread_id: "legacy-fixture", model: "other-model" }]) {
+      body.stdout = [
+        JSON.stringify(first),
+        JSON.stringify({ type: "item.completed", model: "gpt-6.1-terra", item: { type: "agent_message", text: JSON.stringify({ verdict: "pass", findings: [] }) } }),
+      ].join("\n");
+      await save();
+      assert.equal(validate(result, { repo: directory }).usable, false);
+      assert.ok(validate(result, { repo: directory }).reasons.includes("receipt_result_mismatch"));
+    }
+    const started = { type: "thread.started", thread_id: "legacy-fixture", model: "gpt-6.1-terra" };
+    for (const events of [
+      [{ type: "thread.started", model: "gpt-6.1-terra" }],
+      [started, started],
+      [{ type: "turn.started" }, started],
+    ]) {
+      body.stdout = [...events, { type: "item.completed", item: { type: "agent_message", text: JSON.stringify({ verdict: "pass", findings: [] }) } }].map(event => JSON.stringify(event)).join("\n");
+      await save();
+      assert.equal(validate(result, { repo: directory }).usable, false);
+    }
+    body.invocation.args.splice(7, 1);
+    await save();
+    assert.equal(validate(result, { repo: directory }).usable, false);
+    body.invocation.args.splice(7, 0, "--json");
+    body.stdout += '\n' + JSON.stringify({ type: "item.completed", item: { type: "agent_message", text: "최종 판정 미확인" } });
+    await save();
+    assert.equal(validate(result, { repo: directory }).usable, false);
+  });
+});
+
+test("Terra 영수증의 쓰기 권한·추가 argv·stdout 모델 위조를 수용하지 않는다", async () => {
+  await temporary(async directory => {
+    const result = await recordedReview(directory, [
+      { code: 1, stdout: JSON.stringify({ type: "result", is_error: true, error: { code: "quota_exhausted" } }) },
+      { code: 0, stdout: JSON.stringify({ verdict: "pass", findings: [] }), stderr: terraHeader() },
+    ]);
+    const file = path.join(directory, result.receiptPath);
+    const original = JSON.parse(await fs.readFile(file, "utf8"));
+    for (const change of ['sandbox', 'extra', 'stdout-model']) {
+      const body = structuredClone(original);
+      if (change === 'sandbox') body.invocation.args[4] = 'workspace-write';
+      if (change === 'extra') body.invocation.args.push('--trust');
+      if (change === 'stdout-model') { body.stderr = ''; body.stdout = JSON.stringify({ verdict: 'pass', findings: [], model: 'gpt-6.1-terra' }); }
+      const source = JSON.stringify(body);
+      await fs.writeFile(file, source);
+      const changed = { ...result, execution: { ...result.execution, receiptHash: createHash('sha256').update(source).digest('hex') } };
+      assert.equal(validate(changed, { repo: directory }).usable, false);
+    }
+  });
+});
+
+test("Terra 최종 JSON은 추가 필드·과다 findings·과도한 문자열을 거부한다", async () => {
+  for (const response of [
+    { verdict: 'pass', findings: [], model: 'gpt-6.1-terra' },
+    { verdict: 'pass', findings: Array.from({ length: 31 }, () => '근거') },
+    { verdict: 'pass', findings: ['가'.repeat(1501)] },
+  ]) await temporary(async directory => {
+    const result = await recordedReview(directory, [
+      { code: 1, stdout: JSON.stringify({ type: 'result', is_error: true, error: { code: 'quota_exhausted' } }) },
+      { code: 0, stdout: JSON.stringify(response), stderr: terraHeader() },
+    ]);
+    assert.equal(result.verdict, 'not_run');
+    assert.equal(validate(result, { repo: directory }).usable, false);
   });
 });
