@@ -10,6 +10,7 @@ function isObject(value: unknown): value is Data { return value !== null && type
 function object(value: unknown): Data { return isObject(value) ? value : {}; }
 
 const root                         = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")        ;
+await fs.mkdir(path.join(root, ".www", "evidence"), { recursive: true });
 const directory                    = await fs.mkdtemp(path.join(root, ".www/evidence/architecture-"))        ;
 const checks : string[]            = []                                                                      ;
 const pause                        = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)) ;
@@ -105,8 +106,11 @@ try {
       await pause(80);
     };
     const key = async (value: string, code = value) => {
-      await command("Input.dispatchKeyEvent", { type: "keyDown", key: value, code });
-      await command("Input.dispatchKeyEvent", { type: "keyUp", key: value, code });
+      const virtualKeys: Record<string, number> = { Enter: 13, ' ': 32, Tab: 9, Escape: 27, ArrowDown: 40, ArrowUp: 38, ArrowLeft: 37, ArrowRight: 39, Home: 36, End: 35 };
+      const windowsVirtualKeyCode = virtualKeys[value] ?? 0;
+      const text = value === 'Enter' ? '\r' : value === ' ' ? ' ' : '';
+      await command("Input.dispatchKeyEvent", { type: "keyDown", key: value, code, windowsVirtualKeyCode, text });
+      await command("Input.dispatchKeyEvent", { type: "keyUp", key: value, code, windowsVirtualKeyCode });
       await pause(50);
     };
     const capture = async (name: string) => {
@@ -124,24 +128,69 @@ try {
     const nodeSelector = (id: string) => `[data-node-id="${id}"]`                                                                         ;
     const focus        = async (id: string) => { await evaluate(`document.querySelector(${JSON.stringify(nodeSelector(id))}).focus()`); } ;
     await assert(current(rootId), '최초 arch.www 경로');
+    await assert("document.querySelector('.blueprint-detail').hidden && document.querySelector('.sidebar').getBoundingClientRect().width===64", '기본 지도는 64px rail과 접힌 상세로 시작');
+    await assert("document.querySelector('.blueprint-viewport').clientWidth>=innerWidth*.9 && document.querySelector('.blueprint-viewport').clientHeight>=document.querySelector('.blueprint-work').clientHeight*.6", '중앙 지도가 가로 90%·main 높이 60% 이상 차지');
+    await assert("getComputedStyle(document.querySelector('.sidebar>.agents')).display==='none'", '지도에서 프로젝트·대화 목록 기본 접힘');
+    await evaluate("document.querySelector('[data-testid=architecture-navigation-toggle]').focus()");
+    await key('Enter');
+    await assert("document.querySelector('[data-testid=architecture-navigation-toggle]').getAttribute('aria-expanded')==='true' && document.querySelector('.sidebar').getBoundingClientRect().width>64 && getComputedStyle(document.querySelector('.sidebar>.agents')).display!=='none'", '명시적으로 탐색을 열어 기존 목록 접근');
+    await key(' ', 'Space');
+    await assert("document.querySelector('.sidebar').getBoundingClientRect().width===64", '탐색 접기 후 지도 폭 복구');
+
     await assert(`JSON.stringify([...document.querySelectorAll('.blueprint-node')].map(n=>n.dataset.nodeId).sort())===${JSON.stringify(JSON.stringify(rootChildren))}`, '처음은 정본 root의 직계 자식만 표시');
     await assert(`document.querySelector('.blueprint-parent').dataset.nodeId===${JSON.stringify(rootId)} && document.querySelectorAll('.blueprint-hierarchy').length===${rootChildren.length}`, '정본 부모와 각 직계 책임의 계층 연결 표시');
     await assert("[...document.querySelectorAll('.blueprint-hierarchy title')].every(node=>node.textContent.includes('계층') && node.textContent.includes('실행 순서 아님'))", '계층 관계를 실행 추적으로 위장하지 않음');
     await assert(`document.querySelector('.blueprint-summary>code').title===${JSON.stringify(snapshot.digest)}`, '실제 Electron 번들이 현재 snapshot digest 수용');
     const readable = "[...document.querySelectorAll('.blueprint-node text')].every(t=>{const r=t.getBoundingClientRect();const v=document.querySelector('.blueprint-viewport').getBoundingClientRect();return r.left>=v.left && r.right<=v.right && r.width>0 && r.height>=11})"                                                                     ;
-    const overview = "document.querySelectorAll('.blueprint-node').length===6 && [...document.querySelectorAll('.blueprint-node rect')].every(n=>{const r=n.getBoundingClientRect();const v=document.querySelector('.blueprint-viewport').getBoundingClientRect();return r.left>=v.left && r.right<=v.right && r.top>=v.top && r.bottom<=v.bottom})" ;
-    await assert(overview, '1440×900 root 6개 전체 rect가 viewport 안에 표시');
+    const overview = "document.querySelectorAll('.blueprint-node').length===6 && [...document.querySelectorAll('.blueprint-node rect')].every(n=>{const r=n.getBBox();return r.width===360 && r.height===112})";
+    await assert(overview, '1440×900 root 6개가 같은 360×112 규격으로 표시');
+    await click('[data-testid="architecture-reference-mode"]');
+    await evaluate("document.querySelector('.blueprint-viewport').scrollTop=48");
+    const navigationPosition = await evaluate("JSON.stringify({zoom:document.querySelector('[data-testid=architecture-zoom]').textContent,top:document.querySelector('.blueprint-viewport').scrollTop})");
+    await assert("document.querySelector('.blueprint-viewport').scrollTop>0", '탐색 토글 전 자동 배율에서 지도 이동 재현');
+    await click('[data-testid="architecture-navigation-toggle"]');
+    await assert(`JSON.stringify({zoom:document.querySelector('[data-testid=architecture-zoom]').textContent,top:document.querySelector('.blueprint-viewport').scrollTop})===${JSON.stringify(navigationPosition)}`, '탐색 열기에서 자동 배율과 이동 위치 유지');
+    await click('[data-testid="architecture-navigation-toggle"]');
+    await assert(`JSON.stringify({zoom:document.querySelector('[data-testid=architecture-zoom]').textContent,top:document.querySelector('.blueprint-viewport').scrollTop})===${JSON.stringify(navigationPosition)}`, '탐색 접기에서 배율과 이동 위치 유지');
+    await click('[data-testid="architecture-structure-mode"]');
+
     await assert("[...document.querySelectorAll('.blueprint-edge')].every(edge=>{const nodes=[...document.querySelectorAll('.blueprint-node')].map(n=>{const r=n.querySelector('rect').getBBox();const m=n.transform.baseVal.consolidate().matrix;return {x:m.e,y:m.f,w:r.width,h:r.height}});for(let d=0;d<=edge.getTotalLength();d+=2){const p=edge.getPointAtLength(d);if(nodes.some(n=>p.x>n.x && p.x<n.x+n.w && p.y>n.y && p.y<n.y+n.h))return false}return edge.getAttribute('marker-end')==='url(#blueprint-arrow)'})", '실제 모든 SVG 간선의 노드 비관통·방향 화살표 유지');
-    await assert(readable, 'root 모든 제목·ID 가독 크기와 수평 범위');
+    await assert(readable, 'root 모든 제목·역할 가독 크기와 수평 범위');
+    await assert("document.querySelectorAll('.blueprint-edge').length===0", '기본 구성 보기에는 계층만 표시');
+    await assert("[...document.querySelectorAll('.blueprint-node,.blueprint-parent')].every(n=>{const r=n.querySelector('rect').getBBox();return r.width===360 && r.height===112})", '부모와 하위 구성의 규격 통일');
+    await assert("[...document.querySelectorAll('.blueprint-node-description')].every(n=>n.textContent && n.querySelectorAll('tspan').length<=2)", '노드 역할을 두 줄 이내 요약으로 표시');
+    await assert("[...document.querySelectorAll('.blueprint-node rect')].every(n=>getComputedStyle(n).fill!=='rgb(0, 0, 0)' && getComputedStyle(n).stroke!=='none')", '노드의 표면·경계선 스타일이 SVG title 뒤에도 적용');
+    await assert("new Set([...document.querySelectorAll('.blueprint-node')].map(n=>n.transform.baseVal.consolidate().matrix.e)).size===3", '1440px 구성 지도에서 세 열로 공간 활용');
     await capture('root');
+    await click('[data-testid="architecture-reference-mode"]');
+    await assert("document.querySelectorAll('.blueprint-hierarchy').length===0 && document.querySelectorAll('.blueprint-reference').length>0", '코드 의존 보기와 포함 관계를 분리');
+    await assert("[...document.querySelectorAll('.blueprint-edge')].every(edge=>{const nodes=[...document.querySelectorAll('.blueprint-node')].map(n=>{const r=n.querySelector('rect').getBBox();const m=n.transform.baseVal.consolidate().matrix;return {x:m.e,y:m.f,w:r.width,h:r.height}});for(let d=0;d<=edge.getTotalLength();d+=2){const p=edge.getPointAtLength(d);if(nodes.some(n=>p.x>n.x && p.x<n.x+n.w && p.y>n.y && p.y<n.y+n.h))return false}return edge.getAttribute('marker-end')==='url(#blueprint-arrow)'})", '실제 의존선은 모든 노드 바깥을 통과');
+    await assert("[...document.querySelectorAll('.blueprint-reference')].every(n=>{const pair=[...document.querySelectorAll('.blueprint-reference')].find(m=>m.dataset.from===n.dataset.to && m.dataset.to===n.dataset.from);return !pair || pair.querySelector('path').getAttribute('d')!==n.querySelector('path').getAttribute('d')})", '실제 양방향 참조 경로 분리');
+    await evaluate("(() => {const select=document.querySelector('[aria-label=\"참조 강조 대상\"]');select.value='arch.chat';select.dispatchEvent(new Event('change',{bubbles:true}));})()");
+    await assert("[...document.querySelectorAll('.blueprint-reference')].every(n=>n.dataset.from==='arch.chat'||n.dataset.to==='arch.chat') && document.querySelectorAll('.blueprint-reference').length>0", '선택 책임의 들어오는/나가는 참조만 표시');
+    await assert("document.querySelector('.blueprint-stage-dependencies').textContent.includes('→') && document.querySelectorAll('.blueprint-edge-number').length===document.querySelectorAll('.blueprint-dependency-row').length", '간선 번호와 방향을 사람이 읽는 목록에 연결');
+    await assert("document.querySelector('.blueprint-detail').hidden && document.querySelector('.blueprint-selection-summary').dataset.selectedId==='arch.chat'", '참조 강조도 요약만 갱신하고 상세를 열지 않음');
+    await capture('references-focused');
+    await click('[data-testid="architecture-structure-mode"]');
+
     await click(nodeSelector('arch.chat'));
     await assert(current('arch.chat'), '실제 첫 클릭: arch.chat 진입');
     await click(nodeSelector('arch.chat.sessions'));
     await assert(current('arch.chat.sessions'), '실제 두 번째 클릭: arch.chat.sessions 진입');
+    await assert("document.querySelector('.blueprint-detail').hidden && document.querySelector('.blueprint-selection-summary').dataset.selectedId==='arch.chat.sessions' && document.querySelector('.blueprint-selection-summary').textContent.includes('대화별 초안') && document.querySelector('.blueprint-viewport').clientWidth>=innerWidth*.9", '대화 세션 선택은 중앙 요약과 지도 폭 유지');
+    await capture('selection-summary');
+    await evaluate("document.querySelector('[data-testid=architecture-detail-toggle]').focus()");
+    await key(' ', 'Space');
+    await assert("!document.querySelector('.blueprint-detail').hidden && document.querySelector('[data-testid=architecture-detail-toggle]').getAttribute('aria-expanded')==='true'", '사용자가 자세히 보기를 눌러 상세 열기');
+
     await assert(`JSON.stringify([...document.querySelectorAll('.blueprint-node')].map(n=>n.dataset.nodeId).sort())===${JSON.stringify(JSON.stringify(snapshot.structure.nodes.filter((entry) => entry.parent === 'arch.chat.sessions').map((entry) => entry.id).sort()))}`, '중간 단계는 해당 책임의 직계 자식만 표시');
+    await assert("document.querySelector('[aria-label=\"역할과 책임\"]').textContent.includes('대화별 초안') && document.querySelector('[aria-label=\"역할과 책임\"]').textContent.includes('요청')", '대화 세션의 구체적인 역할·책임 설명');
+    await assert("document.querySelectorAll('.blueprint-component-list button').length===3 && document.querySelector('.blueprint-component-list').textContent.includes('Native 대화 요청 구성') && document.querySelector('.blueprint-component-list').textContent.includes('Native 대화 목록과 복원') && document.querySelector('.blueprint-component-list').textContent.includes('대화별 초안과 읽기 상태')", '대화 세션의 세 구성과 각 설명 표시');
+    await assert("['src/chat-state.ts','src/conversations.ts','src/native-chat.ts'].every(file=>document.querySelector('.blueprint-owned-code').textContent.includes(file))", 'branch 상세에서 하위 담당 코드까지 확인');
     await capture('intermediate');
     await click(nodeSelector('arch.chat.sessions.restore'));
     await assert(selected('arch.chat.sessions.restore'), '실제 세 번째 클릭: 복원 leaf 선택');
+    await click('.blueprint-evidence>summary');
     const requirement  = snapshot.structure.requirements.find((entry) => entry.nodeId === 'arch.chat.sessions.restore'       ) ;
     const declaration  = snapshot.structure.declarations.find((entry) => entry.nodeId === 'arch.chat.sessions.restore'       ) ;
     const verification = snapshot.structure.tests       .find((entry) => entry.requirementIds.includes(requirement?.id ?? '')) ;
@@ -160,7 +209,12 @@ try {
     await assert(`!document.querySelector('.blueprint-detail').hidden && ${selected(requirement.nodeId)}`, '상세를 다시 열어도 안정 선택 ID 유지');
     await click('[data-ancestor-id="arch.chat"]');
     await assert(current('arch.chat'), 'ancestor breadcrumb 복귀');
+    await assert("!document.querySelector('.blueprint-detail').hidden", '열어둔 상세는 ancestor 이동에서도 유지');
+    await click('.blueprint-breadcrumb button:last-child');
+    await assert(`${current(rootId)} && !document.querySelector('.blueprint-detail').hidden`, '열어둔 상세는 뒤로 이동에서도 유지');
     await click('[data-testid="architecture-root"]');
+    await assert("!document.querySelector('.blueprint-detail').hidden", '전체 복귀도 명시적 상세 열림 유지');
+    await click('[data-testid="architecture-detail-close"]');
     await assert(overview, '부모 root 복귀 시 전체 배치 복구');
     await focus('arch.chat');
     await key('ArrowDown');
@@ -168,6 +222,7 @@ try {
     await focus('arch.chat');
     await key('Enter');
     await assert(current('arch.chat'), '실제 Enter로 branch 진입');
+    await assert("document.activeElement.dataset.nodeId==='arch.chat'", 'branch 진입 뒤 선택한 현재 책임에 초점 유지');
     await focus('arch.chat.sessions');
     await key(' ', 'Space');
     await assert(current('arch.chat.sessions'), '실제 Space로 추가 하위 책임 진입');
@@ -181,6 +236,9 @@ try {
     await assert("document.querySelectorAll('.ecosystem-results [data-result-id]').length===1", '요구 ID 전역 검색');
     await click(`[data-result-id="${requirement.nodeId}"]`);
     await assert(`${current('arch.chat.sessions')} && ${selected(requirement.nodeId)}`, '검색 선택은 대상 부모 경로와 leaf 선택을 함께 갱신');
+    await assert("document.querySelector('.blueprint-detail').hidden && document.querySelector('.blueprint-selection-summary').dataset.selectedId==='arch.chat.sessions.restore'", '검색 결과도 상세 자동 열기 없이 선택 요약 표시');
+    await click('[data-testid="architecture-detail-toggle"]');
+
     await search('CONVERSATIONS.TS');
     await assert(`document.querySelector('[data-result-id="${requirement.nodeId}"]')`, '대소문자 무관 구현 파일 검색');
     await click('.ecosystem-clear');
@@ -188,7 +246,7 @@ try {
     await assert("document.querySelector('.ecosystem-results').textContent.includes('일치하는 구조가 없습니다')", '검색 빈 결과 안내');
     await click('.ecosystem-clear');
     await assert("!document.querySelector('.ecosystem-results')", '빈 검색은 현재 계층을 유지');
-    const target = object(await evaluate("(() => { const button=document.querySelector('.blueprint-connection button'); return button ? {id:button.querySelector('code').textContent} : {}; })()"));
+    const target = object(await evaluate("(() => { const button=document.querySelector('.blueprint-connection button'); return button ? {id:button.dataset.targetId} : {}; })()"));
     if (typeof target.id !== 'string') throw Error('실제 외부 참조 이동 대상 누락');
     const targetNode = snapshot.structure.nodes.find((entry) => entry.id === target.id);
     if (!targetNode) throw Error('외부 참조 정본 ID 누락');
@@ -197,11 +255,13 @@ try {
     await evaluate("document.querySelector('.blueprint-connection details').open=true");
     await assert("document.querySelector('.blueprint-connection pre').textContent.includes('import')", '실제 import 원문 열람');
     await click('[data-testid="architecture-root"]');
+    await assert("!document.querySelector('.blueprint-detail').hidden", '참조 탐색 후 전체 이동도 상세 유지');
+    await click('[data-testid="architecture-detail-close"]');
+    await click('[data-testid="architecture-reference-mode"]');
     await assert("document.querySelectorAll('.blueprint-edge').length>0", '직계 하위 책임 사이 실제 의존 간선 표시');
-    await evaluate("document.querySelector('.blueprint-stage-dependencies').open=true");
-    await assert("document.querySelector('.blueprint-stage-dependencies').textContent.includes('runtime') && document.querySelector('.blueprint-stage-dependencies').textContent.includes('mixed') && document.querySelector('.blueprint-stage-dependencies').textContent.includes('type')", '방향과 mode별 의존 집계 설명');
-    await evaluate("document.querySelector('.blueprint-stage-dependencies').open=false");
-    await assert("[...document.querySelectorAll('.blueprint-node')].every(n=>{const r=n.querySelector('rect');return [...n.querySelectorAll('text')].every(t=>t.getBBox().x+t.getBBox().width<=Number(r.getAttribute('width'))-8)})", 'ID와 제목 레이블이 노드 안에 표시');
+    await assert("document.querySelector('.blueprint-stage-dependencies').textContent.includes('실행') && document.querySelector('.blueprint-stage-dependencies').textContent.includes('혼합') && document.querySelector('.blueprint-stage-dependencies').textContent.includes('타입')", '방향과 mode별 의존 집계 설명');
+    await click('[data-testid="architecture-structure-mode"]');
+    await assert("[...document.querySelectorAll('.blueprint-node')].every(n=>{const r=n.querySelector('rect');return [...n.querySelectorAll('text')].every(t=>t.getBBox().x+t.getBBox().width<=Number(r.getAttribute('width'))-8)})", '제목·역할 레이블이 노드 안에 표시');
     const zoomBefore = Number(await evaluate("document.querySelector('[data-testid=architecture-zoom]').textContent.replace('%','')"));
     await click('[aria-label="설계도 확대"]');
     await pause(200);
@@ -209,7 +269,7 @@ try {
     await click('[aria-label="설계도 축소"]');
     await assert(`Number(document.querySelector('[data-testid=architecture-zoom]').textContent.replace('%',''))===${zoomBefore}`, '축소');
     await click('[data-testid="architecture-fit"]');
-    await assert("document.querySelector('.blueprint-svg').getBoundingClientRect().width<=document.querySelector('.blueprint-viewport').clientWidth && document.querySelector('.blueprint-svg').getBoundingClientRect().height<=document.querySelector('.blueprint-viewport').clientHeight", '현재 계층 크기 맞춤');
+    await assert("Number(document.querySelector('[data-testid=architecture-zoom]').textContent.replace('%',''))>=100 && Number(document.querySelector('[data-testid=architecture-zoom]').textContent.replace('%',''))<=110", '현재 계층은 글자를 줄이지 않는 크기 맞춤');
     for (let step = 0; step < 10; step++) await click('[aria-label="설계도 확대"]');
     await evaluate("document.querySelector('.blueprint-viewport').scrollTo(0,0)");
     const point = object(await evaluate("(() => {const r=document.querySelector('.blueprint-viewport').getBoundingClientRect();return {x:r.left+8,y:r.top+r.height/2};})()"));
@@ -221,14 +281,15 @@ try {
     await search(requirement.id);
     await click(`[data-result-id="${requirement.nodeId}"]`);
     await assert("Number(document.querySelector('[data-testid=architecture-zoom]').textContent.replace('%',''))<=110", '수동 확대 후 계층 이동 시 배율 복구');
+    await click('[data-testid="architecture-detail-toggle"]');
     for (const width of [860, 760]) {
       await command('Emulation.setDeviceMetricsOverride', { width, height: 560, deviceScaleFactor: 1, mobile: false });
       await pause(150);
       await assert("document.documentElement.scrollWidth<=innerWidth && document.querySelector('.ecosystem-page').scrollHeight>document.querySelector('.ecosystem-page').clientHeight", `${width}px 수평 넘침 없음·내부 세로 스크롤`);
-      await assert(readable, `${width}px 모든 제목·ID 가독 크기와 수평 범위`);
+      await assert(readable, `${width}px 모든 제목·역할 가독 크기와 수평 범위`);
       await assert("Number(document.querySelector('[data-testid=architecture-zoom]').textContent.replace('%',''))<=110 && document.querySelector('.blueprint-viewport').scrollWidth<=document.querySelector('.blueprint-viewport').clientWidth", `${width}px resize 배율 복구·지도 수평 잘림 없음`);
       await capture(`narrow-${width}`);
-      await evaluate("document.querySelector('.blueprint-tests').scrollIntoView({block:'center'})");
+      await evaluate("document.querySelector('.blueprint-evidence').open=true; document.querySelector('.blueprint-tests').scrollIntoView({block:'center'})");
       await assert("document.querySelector('.blueprint-tests').getBoundingClientRect().bottom<=innerHeight && document.querySelector('.blueprint-tests').getBoundingClientRect().top>=0", `${width}px leaf 검증 참조 접근`);
       await capture(`detail-narrow-${width}`);
       await evaluate("document.querySelector('.ecosystem-page').scrollTop=0");
@@ -245,7 +306,7 @@ try {
     await click('.ecosystem-clear');
     await command('Emulation.setDeviceMetricsOverride', { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
     await assert(overview, '수동 확대·좁은 창 이후 desktop resize 전체 배치 복구');
-    await assert(readable, 'desktop resize 후 모든 제목·ID 가독성');
+    await assert(readable, 'desktop resize 후 모든 제목·역할 가독성');
     await capture('root-resized');
     await search(requirement.id);
     await click(`[data-result-id="${requirement.nodeId}"]`);
@@ -255,15 +316,17 @@ try {
     const savedMapState = await evaluate(mapState);
     await click('.workspace-nav button:first-child');
     await assert("document.querySelector('.ecosystem-shell').hidden && !document.querySelector('main.work').hidden", '지도 숨김이 채팅 레이아웃을 점유하지 않음');
+    await assert("document.querySelector('.sidebar').getBoundingClientRect().width>64 && getComputedStyle(document.querySelector('.sidebar>.agents')).display!=='none'", 'Chat 복귀 시 원래 탐색과 목록 복구');
+
     await evaluate("(() => { const input=document.querySelector('[data-testid=prompt-input]'); const setter=Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set; setter.call(input,'지도 왕복 초안'); input.dispatchEvent(new Event('input',{bubbles:true})); })()");
     await click('[data-testid="ecosystem-nav"]');
     await assert(`${mapState}===${JSON.stringify(savedMapState)}`, '채팅 왕복 후 지도 경로·선택·배율·이동 위치 유지');
     await click('[data-testid="ecosystem-guide-tab"]');
     await assert("document.querySelector('.eco-node').getBoundingClientRect().width>0 && document.querySelector('.blueprint-work').closest('.ecosystem-page').hidden", '개념 처리 관계와 책임 지도는 별도 화면으로 보존');
     await assert("document.querySelector('.ecosystem-badge').textContent.includes('실행 추적 아님')", '개념 처리 관계와 실제 실행 추적 구별');
-    const sourceTarget = await evaluate("document.querySelector('.blueprint-source-link code')?.textContent");
+    const sourceTarget = await evaluate("document.querySelector('.ecosystem-page:not([hidden]) .blueprint-source-link code')?.textContent");
     if (typeof sourceTarget !== 'string' || !snapshot.structure.nodes.some((node) => node.id === sourceTarget)) throw Error('개념 관계에서 이동할 실제 구조 ID 근거가 없습니다.');
-    await click('.blueprint-source-link');
+    await click('.ecosystem-page:not([hidden]) .blueprint-source-link');
     await assert(`${selected(sourceTarget)} && !document.querySelector('.blueprint-detail').hidden && document.querySelector('[data-testid=architecture-tab]').getAttribute('aria-pressed')==='true'`, '기능·개념 관계의 파일 근거에서 같은 안정 ID와 담당 코드로 이동');
     await key('Escape');
     await assert("document.querySelector('.blueprint-detail').hidden", 'Escape로 선택 상세 닫기');

@@ -278,7 +278,7 @@ HookRunSummary의 statusMessage와 entries 중 error/warning/stop만 제한된 �
 
 `node scripts/generate-architecture.ts`는 현재 WWW TypeScript의 실제 모듈 참조와 파일·행·원문·내용 해시를 `src/architecture.generated.json`에 생성한다. `--check`는 소스를 바꾸지 않고 생성 자료가 현재 소스와 일치하는지 확인한다. `npm run build`는 번들 전에 같은 생성을 수행한다. 생성 JSON을 손으로 수정하지 않는다. 구조 ID 계약·등록 검사·분석 범위와 한계는 [코드 설계도](CODE_BLUEPRINT.md)에 설명한다.
 
-코드 편집 후에는 생성 명령, `bun test test/architecture.test.ts test/architecture-tree.test.ts test/architecture-contract.test.ts test/architecture-harness.test.ts test/ecosystem.test.ts`, `npm run typecheck`, `npm run build`를 실행한다. `node scripts/verify-architecture.ts`는 빌드된 실제 Electron에 CDP로 연결해 정본 root 직계 자식·3단계 branch/leaf 선택·요구 ID 검색·ancestor 복귀·실제 키보드·참조 근거·배율·drag·860/760px 좁은 화면을 검사하고 `.www/evidence/architecture-*`에 JSON과 PNG를 남긴다. 먼저 현재 소스 snapshot을 대조하므로 편집 후 재생성을 생략하면 실패한다. `node scripts/verify-ecosystem.ts`는 별도 생태계 안내와 기존 대화 초안·읽기 위치 보존을 확인한다. Native는 합성 fixture이며 실제 모델·계정 검증과 구분한다.
+코드 편집 후에는 생성 명령, `bun test test/architecture.test.ts test/architecture-tree.test.ts test/architecture-contract.test.ts test/architecture-harness.test.ts test/ecosystem.test.ts`, `npm run typecheck`, `npm run build`를 실행한다. `node scripts/verify-architecture.ts`는 빌드된 실제 Electron에 CDP로 연결해 정본 root 직계 자식·균일 노드·기본 64px rail과 지도 면적·선택 요약·명시적 상세 열기·전체/ancestor/뒤로 이동의 상세 열림 유지·탐색 복구·구성/의존 보기·방향별 참조 강조·대화 세션 역할/구성/담당 코드·3단계 branch/leaf 선택·요구 ID 검색·ancestor 복귀·실제 키보드·참조 근거·배율·drag·860/760px 좁은 화면을 검사하고 `.www/evidence/architecture-*`에 JSON과 PNG를 남긴다. 먼저 현재 소스 snapshot을 대조하므로 편집 후 재생성을 생략하면 실패한다. `node scripts/verify-ecosystem.ts`는 별도 생태계 안내와 기존 대화 초안·읽기 위치 보존을 확인한다. Native는 합성 fixture이며 실제 모델·계정 검증과 구분한다.
 
 GUI 프로세스와 루프백 디버깅 포트를 허용하는 데스크톱 실행 환경이 필요하다. 포트·프로세스 권한이 제한된 자식 샌드박스에서 실패하면 해당 원문과 증거 경로를 보존하고 허용된 부모 실행 환경에서 검사를 이어간다. 정적 테스트·타입 검사만으로 Electron 시나리오를 통과했다고 기록하지 않는다.
 
@@ -313,3 +313,5 @@ write/check는 동일 논리경로 `src/architecture.generated.json`의 격리�
 개발 검증 `bun test test/work-json.test.ts --timeout 300000`은 현재 저장소 승인 문서에서 v1 28키·86쌍을 도출하여 공개 guide proof와 대조하고, 고정 Git 기준점의 JSON 승인 bytes를 확인한다. 격리 복사본에서 현재 승인 소스의 dry-run·Align·재Align·source check, 실제 양성 쓰기와 범위 밖·압축 구조 거부를 새로 실행한다. 도메인 writer는 fresh WorkRecord와 생성한 WorkReport를 `canonicalArchitectureJson`의 공개 pinned CLI 출력과 byte 단위로 비교한다. 로컬 개발 설치가 필요하며 과거 영수증이나 artifact hash만으로 의미 검사를 대신하지 않는다. v3 고정 제안·질문은 미승인 자료로 읽고 현재 source와 다른 key/file은 별도 addendum으로 출력한다.
 
 `node scripts/verify-reports.ts`는 strict 검사 다음 위 실도구 테스트를 직렬로 실행하고 실패를 전파한 뒤 관련 집중 검사·빌드·Electron probe를 수행한다. 실도구 테스트별 예산은 300초, 전체 의미 테스트 자식 실행 예산은 900초다. runtime fixture의 개발 설정 부재, package runtime 의존성 및 main/preload/renderer bundle의 개발 CLI 경로 부재를 확인하고 Electron child PATH에는 Node와 git만 노출한다. 이 경계는 머신 전역 BoxBox 설치 제거를 뜻하지 않는다. 기존 fixture 보고서 bytes·legacy 원장 bytes/inode/mtime·no-op 원장의 재기록 여부를 실측하며, GUI 시작 실패는 원문과 prechecks를 보존하고 미확인으로 남긴다.
+
+지도 GUI 회귀 검사는 자동 배율에서 스크롤한 뒤 탐색 열기·접기의 배율/위치 유지와 키보드 branch 진입 후 현재 책임 노드의 초점을 확인한다.

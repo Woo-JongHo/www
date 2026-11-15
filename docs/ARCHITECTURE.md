@@ -148,7 +148,7 @@ Codex 경로의 역할 로딩·일반 요청·같은 작업의 재개는 실제 
 
 scripts/generate-architecture.ts는 계약과 TypeScript compiler API의 실제 참조·행·원문·해시를 함께 생성한다. build.ts는 번들 전에 결정적인 src/architecture.generated.json을 생성하며 계약·추출 실패를 빌드 실패로 전달한다. scripts/check-architecture.ts와 전체 check는 재생성 없이 현재성을 검사한다. 실제 typed 저작 하네스의 사전 context와 사후 실패에도 연결된다.
 
-src/architecture-tree.ts는 structure의 rootId/nodes/requirements/declarations/tests에서 직계 자식·ancestor·breadcrumb·전역 검색·leaf 근거·현재 단계 의존 집계를 순수 계산한다. src/architecture.ts의 기존 파일 참조 API·배치는 유지하며 두 파일은 arch.blueprint.layout 책임을 공유한다. src/ecosystem-view.tsx와 src/ecosystem.css는 arch.www부터 branch마다 직계 자식으로 내려가고 leaf의 명세/구현/검증 선언을 표시한다. 검색과 외부 참조 선택은 대상 부모 경로와 선택을 함께 맞춘다. 실제 import는 직계 자식 책임 ID로 축약하며 내부 공유 책임을 별도 경계로 그리지 않는다. runtime/mixed/type를 구분하고 범위 밖 참조는 상세에서 읽는다.
+src/architecture-tree.ts는 structure의 rootId/nodes/requirements/declarations/tests에서 직계 자식·ancestor·breadcrumb·전역 검색·직접 근거·하위 포함 근거·현재 단계 의존 집계를 순수 계산한다. 균일 노드 배치와 간선별 출발/도착 통로도 같은 모델이 소유한다. src/architecture.ts의 기존 파일 참조 API·배치는 유지하며 두 파일은 arch.blueprint.layout 책임을 공유한다. src/ecosystem-view.tsx와 src/ecosystem.css는 arch.www부터 branch마다 직계 자식으로 내려가고 leaf의 명세/구현/검증 선언을 표시한다. 검색과 외부 참조 선택은 대상 부모 경로와 선택을 함께 맞춘다. 실제 import는 직계 자식 책임 ID로 축약하며 내부 공유 책임을 별도 경계로 그리지 않는다. 구성 보기와 코드 의존 보기를 분리하고 runtime/mixed/type를 구분한다. 범위 밖 참조는 상세에서 방향·대상별로 묶어 읽는다. 선택은 지도 아래 역할 요약을 갱신하고 명시적인 자세히 보기로 상세를 연다. 상세는 정본 역할 설명·하위 구성·담당 코드를 먼저 제공하고 직접 명세·구현·검증 선언을 접힘 근거에 보존한다. 생태계 화면이 탐색 열림을 소유하고 CSS는 보이는 지도에서만 화면 전환 rail로 접는다. renderer는 접근 가능한 화면 전환 이름과 기존 프로젝트·대화 DOM을 유지한다.
 
 src/ecosystem.ts의 정적 노드·방향 관계·후속 방향은 별도 생태계 안내에 보존한다. renderer는 대화 DOM을 유지한 채 화면을 전환하며 기존 IPC 권한과 Native 실행 경로를 확장하지 않는다. 이 지도는 실시간 실행 그래프나 서버 색인 결과가 아니다. 구조 변경 시 [코드 설계도](CODE_BLUEPRINT.md), 생성 자료와 [생태계 명세](specs/ecosystem.md)를 함께 검토한다.
 
