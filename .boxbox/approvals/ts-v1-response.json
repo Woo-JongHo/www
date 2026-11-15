@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-11-13 21:52:54 UTC",
+  "note": "사용자 실제 응답을 보존한 기록 시각이며 원래 답변 시각을 추정하지 않는다. JSON 기존 규칙은 이미 유효하므로 중복 승인 DB를 만들지 않는다.",
+  "json": {
+    "callId": "call_9234509d9de84b9a9493c3b1b1886a89",
+    "questionItemId": "[\"request_user_input_async\",\"call_9234509d9de84b9a9493c3b1b1886a89\",0]",
+    "question": "BoxBox 해결을 위해 WWW의 docs/work/**/*.json, src/architecture.generated.json, docs/architecture/structure.json에 같은 객체의 연속 3개 이상 단일행 scalar 속성을 최소 너비의 키·콜론·값 열로 정렬하는 재사용 규칙을 승인할까요? 키 순서·문자열·들여쓰기·줄 수는 보존하고, 기존 보고서는 덮어쓰지 않으며 새 출력부터 적용합니다.",
+    "answer": "지정 경로의 규칙 승인·새 출력부터 적용 (추천)"
+  },
+  "typescript": {
+    "callId": "call_f67526579a0b472bb989ac500b9c51f8",
+    "questionItemId": "[\"request_user_input_async\",\"call_f67526579a0b472bb989ac500b9c51f8\",0]",
+    "question": "고정 제안 v1의 TypeScript 정렬 규칙 28개를 문서에 열거한 파일에 한해 등록하고 공식 Align으로 적용할까요? 같은 파일·같은 규칙은 중첩 깊이가 달라도 적용됩니다. 새 규칙이나 파일은 자동 추가하지 않습니다.",
+    "answer": "제안 v1의 28개 규칙 등록·적용 승인",
+    "proposal": ".www/architecture-contract/boxbox-side/TS-rule-approval-proposal-v1.md",
+    "proposalSha256": "ae8df6d7b1293705be022f9247211bea5839eb941284fd13d8334a700aa2c61c",
+    "scope": "v1 28개 exact key와86개 key/file쌍만. v2와새key/file쌍은미승인."
+  }
+}
