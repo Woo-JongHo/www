@@ -10,7 +10,8 @@ import path from "node:path";
 import test from "node:test";
 import { checkEnvironment, mergeEnvironment } from "../scripts/workflow/environment.ts";
 import { createCodexInvocation, runCodex } from "../scripts/workflow/adapters/codex.ts";
-import { runDevelopmentWorkflow, runProcess } from "../scripts/workflow/run.ts";
+import { runDevelopmentWorkflow, runProcess, runWorkflow } from "../scripts/workflow/run.ts";
+import { readRuntime, runtimePaths } from "../scripts/workflow/record.ts";
 import type { EnvironmentOptions } from "../scripts/workflow/environment.ts";
 
 function repository(t: import("node:test").TestContext) {
@@ -44,6 +45,48 @@ function developmentFixture(t: import("node:test").TestContext) {
   fixture.git(["add", "."]);
   return fixture;
 }
+
+test("legacy 환경 실패는 eventId를 소비하지 않고 수정 후 같은 실행은 정확히 한 번만 시작한다", async (t) => {
+  const { repo } = repository(t);
+  const workId = "work-11111111-1111-4111-8111-111111111111";
+  const work = path.join(repo, "docs/work/Workflow/001-Fixture");
+  const skill = path.join(repo, "skills/www/www-build");
+  mkdirSync(work, { recursive: true });
+  mkdirSync(skill, { recursive: true });
+  writeFileSync(path.join(skill, "SKILL.md"), "# fixture build skill\n");
+  writeFileSync(path.join(work, "work.json"), JSON.stringify({
+    schemaVersion: 1, id: workId, title: "환경 복구", kind: "bug", areas: ["dev"], owner: "dev",
+    status: "ready", blockedReason: null, relations: [],
+    criteria: [{ id: "ENV", description: "실행 횟수 보존", required: true, result: "unverified", evidence: [] }],
+  }));
+  const verifier = { command: process.execPath, args: ["-e", "process.exit(0)"], criteria: { ENV: "passed" } };
+  const options = {
+    repo, workId, request: "환경을 복구하고 실행한다", direct: true, explicitSkill: "www-build", execute: true,
+    eventId: "same-environment-execution", verifier,
+    approval: { implementation: true, writePaths: [], mutationSurfaces: [], verifierCommands: [JSON.stringify([verifier.command, ...verifier.args])] },
+  };
+  const counter = path.join(repo, ".www/host-count");
+  const dependencies = { runProcess: (invocation: import("../scripts/workflow/adapters/gjc.ts").ProcessInvocation, context: import("../scripts/workflow/adapters/gjc.ts").ProcessOptions) =>
+    runProcess(invocation.command === "gjc"
+      ? { command: process.execPath, args: ["-e", `require('node:fs').appendFileSync(${JSON.stringify(counter)},'1')`] }
+      : invocation, context) };
+  const blocked = await runWorkflow({ ...options, env: { PATH: "" } }, dependencies);
+  assert.equal(blocked.executed, false);
+  assert.equal(blocked.host?.outcome, "environment_failed");
+  assert.throws(() => readFileSync(counter, "utf8"), { code: "ENOENT" });
+  const untouched = await readRuntime(runtimePaths(repo, workId));
+  assert.equal(untouched.events.length, 0);
+  const successful = await runWorkflow(options, dependencies);
+  assert.equal(successful.executed, true);
+  assert.equal(readFileSync(counter, "utf8"), "1");
+  assert.equal(successful.verificationSummary?.result, "passed");
+  const duplicate = await runWorkflow(options, dependencies);
+  assert.equal(duplicate.executed, false);
+  assert.equal(duplicate.duplicate, true);
+  assert.equal(readFileSync(counter, "utf8"), "1");
+  const completed = await readRuntime(runtimePaths(repo, workId));
+  assert.equal(completed.events.filter((event) => event.id === options.eventId).length, 1);
+});
 
 test("기본 개발환경 CLI와 함수는 정상 fixture를 허용하고 신규 installer JS 17개를 차단한다", async (t) => {
   const { repo } = developmentFixture(t);
