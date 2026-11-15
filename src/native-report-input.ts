@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.reports.collection
+ * @implements RESP-REPORTS-COLLECTION
+ */
 import { project } from "./projection";
 import type { AppEvent } from "./shared";
 import type { NativeReportInput } from "./report-judge";

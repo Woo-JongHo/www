@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.chat.sessions.restore
+ * @implements RESP-CHAT-SESSIONS-RESTORE
+ */
 import { resolve } from "node:path";
 import type { AppEvent, ConversationCatalog, ConversationSummary } from "./shared";
 

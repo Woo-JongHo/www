@@ -1,3 +1,9 @@
+/**
+ * @verifies RESP-CHAT-MESSAGES-MARKDOWN
+ * @verifies RESP-CHAT-MESSAGES-READING
+ * @verifies RESP-CHAT-SESSIONS-READING
+ * @verifies RESP-CHAT-WORKSPACE
+ */
 import { describe, expect, test } from "bun:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";

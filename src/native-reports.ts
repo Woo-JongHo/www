@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.reports.queue
+ * @implements RESP-REPORTS-QUEUE
+ */
 import { createHash, randomUUID } from "node:crypto";
 import { constants, promises as fs } from "node:fs";
 import path from "node:path";

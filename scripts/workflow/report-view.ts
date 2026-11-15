@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.reporting.document
+ * @implements RESP-DEVELOPMENT-REPORTING-DOCUMENT
+ */
 import type { ReportReader, WorkReport } from "./reports.ts";
 
 interface ViewState {

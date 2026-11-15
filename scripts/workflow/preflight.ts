@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.authorization
+ * @implements RESP-DEVELOPMENT-AUTHORIZATION
+ */
 import { createHash }     from "node:crypto";
 import { promises as fs } from "node:fs";
 import path               from "node:path";

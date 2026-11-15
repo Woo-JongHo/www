@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.execution
+ * @implements RESP-DEVELOPMENT-EXECUTION
+ */
 import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";

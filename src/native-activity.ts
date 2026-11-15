@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.chat.activity.projection
+ * @implements RESP-CHAT-ACTIVITY-PROJECTION
+ */
 import type { AppEvent, TransportState } from "./shared";
 import { identifyWwwArtifact, referencedWwwArtifacts, type WwwArtifact } from "./www-activity";
 

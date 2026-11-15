@@ -1,3 +1,8 @@
+/**
+ * @verifies RESP-TOOLING-BUNDLE
+ * @verifies RESP-DEVELOPMENT-SERVICE
+ * @verifies RESP-NATIVE-LIFECYCLE
+ */
 import { beforeAll, expect, test } from "bun:test";
 import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";

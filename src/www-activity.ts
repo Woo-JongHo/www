@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.chat.activity.artifacts
+ * @implements RESP-CHAT-ACTIVITY-ARTIFACTS
+ */
 export interface WwwArtifact {
   id: string;
   kind: "role" | "skill";

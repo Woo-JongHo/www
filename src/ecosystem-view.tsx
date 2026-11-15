@@ -1,7 +1,14 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+/**
+ * @architecture arch.blueprint.view
+ * @implements RESP-BLUEPRINT-VIEW
+ */
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { ecosystemEdges, ecosystemGroups, ecosystemNodes, matchingNodes, nodeConnections, type EcosystemGroup, type EcosystemNode } from "./ecosystem";
 
-import { architecture, architectureConnections, architectureEdgePath, architectureLayout, architectureMatches, layerConnections, type ArchitectureNode } from "./architecture";
+import { architecture } from "./architecture";
+import { createArchitectureTree, layoutResponsibilityGraph, responsibilityHierarchyPath, responsibilityEdgePath, responsibilityFit } from "./architecture-tree";
+
+const structureTree = createArchitectureTree(architecture);
 
 const WIDTH       = 1180 ;
 const HEIGHT      = 940  ;
@@ -24,11 +31,12 @@ function edgePath(from: EcosystemNode, to: EcosystemNode): string {
   return `M ${startX} ${startY} C ${startX} ${middleY}, ${endX} ${middleY}, ${endX} ${endY}`;
 }
 
-function EcosystemGuide() {
+function EcosystemGuide({ onLocate, active }: { onLocate: (id: string) => void; active: boolean }) {
   const [selectedId, setSelectedId] = useState("chat")                        ;
   const [query     , setQuery     ] = useState("")                            ;
   const [group     , setGroup     ] = useState<EcosystemGroup | "all">("all") ;
   const [zoom      , setZoom      ] = useState(1)                             ;
+  const fitted = useRef(false);
   const viewport     = useRef<HTMLDivElement>(null)                                             ;
   const drag         = useRef<{ x: number; y: number; left: number; top: number } | null>(null) ;
   const selected     = ecosystemNodes.find((node) => node.id === selectedId)!                   ;
@@ -40,14 +48,14 @@ function EcosystemGuide() {
 
   function fit() {
     const element = viewport.current;
-    if (!element) return;
+    if (!element || !element.clientWidth || !element.clientHeight) return;
     setZoom(Math.max(0.35, Math.min(1.25, (element.clientWidth - 24) / WIDTH, (element.clientHeight - 24) / HEIGHT)));
     element.scrollTo(0, 0);
   }
 
   useEffect(() => {
-    fit();
-  }, []);
+    if (active && !fitted.current) { fit(); fitted.current = true; }
+  }, [active]);
 
   function selectNode(node: EcosystemNode, reveal = false) {
     setSelectedId(node.id);
@@ -59,7 +67,7 @@ function EcosystemGuide() {
 
   return <>
     <main className="ecosystem-work" aria-label="WWW 생태계 지도">
-      <header className="ecosystem-header"><div><h1>WWW 생태계</h1><p>요청에서 실행으로, 작업에서 검증으로 이어지는 구조</p></div><span className="ecosystem-badge">로컬 구조 안내</span></header>
+      <header className="ecosystem-header"><div><h1>기능과 처리 관계</h1><p>제품의 개념 관계에서 근거가 있는 담당 코드로 이동합니다.</p></div><span className="ecosystem-badge">개념 지도 · 실행 추적 아님</span></header>
       <div className="ecosystem-toolbar">
         <label className="ecosystem-search"><span>검색</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="역할, 모듈, 파일 경로" aria-label="생태계 노드 검색"/></label>
         <div className="ecosystem-zoom" aria-label="지도 배율"><button onClick={() => setZoom((value) => Math.max(0.35, value - 0.15))} disabled={zoom <= 0.35} aria-label="지도 축소">−</button><output>{Math.round(zoom * 100)}%</output><button onClick={() => setZoom((value) => Math.min(1.75, value + 0.15))} disabled={zoom >= 1.75} aria-label="지도 확대">＋</button><button onClick={fit}>전체 보기</button></div>
@@ -97,160 +105,179 @@ function EcosystemGuide() {
           </g>)}
         </svg>
       </div>
-      <footer className="ecosystem-legend"><span><i className="eco-line"/>현재 구조</span><span><i className="eco-line planned"/>후속 방향</span><span>배경을 드래그해 이동 · 노드를 눌러 관계 확인</span></footer>
+      <footer className="ecosystem-legend"><span><i className="eco-line"/>개념적 처리 관계</span><span><i className="eco-line planned"/>후속 방향</span><span>실제 호출 순서 아님 · 배경 드래그로 이동</span></footer>
     </main>
     <aside className="ecosystem-detail" aria-label="선택한 노드 상세">
       <div className="ecosystem-detail-heading">노드 살펴보기</div>
       <div className={`ecosystem-detail-content eco-${selected.group}`}><span className="ecosystem-category">{ecosystemGroups.find((entry) => entry.id === selected.group)!.title}</span><h2>{selected.title}</h2><div className="ecosystem-subtitle">{selected.subtitle}</div><p>{selected.description}</p>
         <h3>연결 관계 <span>{connections.length}</span></h3>
         <div className="ecosystem-connections">{connections.map(({ edge, node, outgoing }) => <button key={`${edge.from}-${edge.to}`} onClick={() => selectNode(node, true)}><span className="ecosystem-direction">{outgoing ? "나가는 연결 ↗" : "들어오는 연결 ↙"}{edge.planned ? " · 후속" : ""}</span><strong>{node.title}</strong><span>{edge.label}</span></button>)}</div>
-        <h3>구조의 근거</h3><ul className="ecosystem-sources">{selected.sources.map((source) => <li key={source}><code>{source}</code></li>)}</ul>
+        <h3>구조의 근거와 담당 코드</h3><ul className="ecosystem-sources">{selected.sources.map((source) => {
+          const matches = structureTree.search(source);
+          return <li key={source}><code>{source}</code>{matches.length ? matches.map((entry) => <button key={entry.id} className="blueprint-source-link" onClick={() => onLocate(entry.id)}>{entry.title} · <code>{entry.id}</code> 보기</button>) : <span>이 근거에 연결된 구조 ID 미제공</span>}</li>;
+        })}</ul>
       </div>
       <p className="ecosystem-note">번들에 포함된 구조 안내입니다. 실시간 실행 상태나 자동 소스 분석 결과가 아닙니다. 근거 경로는 저장소 기준입니다.</p>
     </aside>
   </>;
 }
 
-export function EcosystemView() {
+export const EcosystemView = memo(function EcosystemView({ hidden }: { hidden: boolean }) {
   const [guide, setGuide] = useState(false);
-  return <section className="ecosystem-shell" aria-label="WWW 구조 탐색">
+  const [requested, setRequested] = useState<{ id: string; revision: number } | null>(null);
+  function locate(id: string) {
+    setGuide(false);
+    setRequested((previous) => ({ id, revision: (previous?.revision ?? 0) + 1 }));
+  }
+  return <section className="ecosystem-shell" hidden={hidden} aria-label="WWW 구조 탐색">
     <nav className="blueprint-tabs" aria-label="구조 보기">
-      <button aria-pressed={!guide} onClick={() => setGuide(false)} data-testid="architecture-tab">코드 설계도</button>
-      <button aria-pressed={guide} onClick={() => setGuide(true)} data-testid="ecosystem-guide-tab">생태계 안내</button>
-      <span>{guide ? "수동 구조 안내 · 후속 방향 포함" : "TypeScript 소스에서 추출한 모듈 참조"}</span>
+      <button aria-pressed={!guide} onClick={() => setGuide(false)} data-testid="architecture-tab">기능·책임 지도</button>
+      <button aria-pressed={guide} onClick={() => setGuide(true)} data-testid="ecosystem-guide-tab">개념 처리 관계</button>
+      <span>{guide ? "개념 관계와 실제 코드 근거를 구별합니다" : "기능 → 처리 책임 → 담당 코드 · 안정 구조 ID"}</span>
     </nav>
-    <div className="ecosystem-page">{guide ? <EcosystemGuide/> : <CodeBlueprintView/>}</div>
+    <div className="ecosystem-page" hidden={guide}><CodeBlueprintView requested={requested}/></div>
+    <div className="ecosystem-page" hidden={!guide}><EcosystemGuide onLocate={locate} active={guide && !hidden}/></div>
   </section>;
-}
+});
 
-function CodeBlueprintView() {
-  const [overview, setOverview] = useState(true);
+function CodeBlueprintView({ requested }: { requested: { id: string; revision: number } | null }) {
+  const tree = structureTree;
+  const [currentId, setCurrentId] = useState(architecture.structure.rootId);
+  const [selectedId, setSelectedId] = useState(architecture.structure.rootId);
   const [query, setQuery] = useState("");
-  const [layer, setLayer] = useState("all");
-  const [selectedId, setSelectedId] = useState("src/renderer.tsx");
   const [zoom, setZoom] = useState(1);
-  const viewport = useRef<HTMLDivElement>(null);
-  const drag = useRef<{ x: number; y: number; left: number; top: number } | null>(null);
-  const reveal = useRef(false);
-  const layout = useMemo(() => architectureLayout(overview, layer), [overview, layer]);
-  const selected = architecture.nodes.find((node) => node.id === selectedId)!;
-  const selectedLayer = architecture.layers.find((entry) => entry.id === selected.layer)!;
-  const matches = architectureMatches(query, layer);
-  const matchIds = new Set(matches.map((node) => node.id));
-  const connections = architectureConnections(selectedId);
-  const neighborhood = new Set([selectedId, ...connections.map(({ node }) => node.id)]);
-  const placed = new Map(layout.nodes.map((node) => [node.id, node]));
-  const aggregates = layerConnections();
-  const edges = overview
-    ? aggregates.filter((edge) => placed.has(edge.from) && placed.has(edge.to)).map((edge) => ({ ...edge, id: `${edge.from}:${edge.to}`, mode: edge.runtime ? "runtime" : "type", active: edge.from === selected.layer || edge.to === selected.layer }))
-    : connections.map(({ edge }) => ({ ...edge, active: true })).filter((edge) => placed.has(edge.from) && placed.has(edge.to));
+  const [detailOpen, setDetailOpen] = useState(false);
+  const manualZoom           = useRef(false)                                                            ;
+  const viewport             = useRef<HTMLDivElement>(null)                                             ;
+  const drag                 = useRef<{ x: number; y: number; left: number; top: number } | null>(null) ;
+  const focusAfterNavigation = useRef(false)                                                            ;
+  const previousCurrentId    = useRef(currentId)                                                        ;
+  const current              = tree.node(currentId)                                                     ;
+  const selected             = tree.node(selectedId)                                                    ;
+  const children             = tree.children(currentId)                                                 ;
+  const matches              = tree.search(query)                                                       ;
+  const refs                 = tree.evidence(selectedId)                                                ;
+  const connections          = tree.connections(selectedId)                                             ;
+  const dependencies         = tree.dependencies(currentId)                                             ;
+  const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
+  useEffect(() => {
+    const element = viewport.current;
+    if (!element) return;
+    const observer = new ResizeObserver(() => {
+      // 스크롤바 등장만으로 수동 확대를 다시 맞추지 않는다.
+      const bounds = element.getBoundingClientRect()                                  ;
+      const width  = Math   .max                  (0, Math.floor(bounds.width) - 16 ) ;
+      const height = Math   .max                  (0, Math.floor(bounds.height) - 16) ;
+      if (!width || !height) return;
+      setViewportSize((previous) => previous.width === width && previous.height === height ? previous : { width, height });
+    });
+    const resized = () => { manualZoom.current = false; };
+    window.addEventListener("resize", resized);
+    observer.observe(element, { box: "border-box" });
+    return () => { observer.disconnect(); window.removeEventListener("resize", resized); };
+  }, []);
+  const layout = useMemo(() => layoutResponsibilityGraph(tree.node(currentId), tree.children(currentId), viewportSize.width), [currentId, viewportSize.width]) ;
+  const placed = new Map(layout.nodes.map((entry) => [entry.id, entry]))                                                                       ;
 
   function fit() {
     const element = viewport.current;
-    if (!element) return;
-    setZoom(Math.max(0.05, Math.min(1.15, (element.clientWidth - 24) / layout.width, (element.clientHeight - 24) / layout.height)));
+    if (!element || !element.clientWidth || !element.clientHeight) return;
+    manualZoom.current = false;
+    setZoom(responsibilityFit(layout, { width: element.clientWidth, height: element.clientHeight }));
     element.scrollTo(0, 0);
   }
-
-  useEffect(() => {
-    const element = viewport.current;
-    if (!element) return;
-    // 처음에는 읽을 수 있는 크기를 지키며 스크롤을 허용한다. 전체 보기는 명시적으로 맞춘다.
-    setZoom(overview ? Math.max(0.72, Math.min(1, (element.clientWidth - 24) / layout.width, (element.clientHeight - 24) / layout.height)) : 0.9);
-  }, []);
-
-  useEffect(() => {
-    if (!reveal.current || overview) return;
-    const node = layout.nodes.find((entry) => entry.id === selectedId);
-    const element = viewport.current;
-    if (!node || !element) return;
-    element.scrollTo({ left: (node.x + node.width / 2) * zoom - element.clientWidth / 2, top: (node.y + node.height / 2) * zoom - element.clientHeight / 2 });
-    reveal.current = false;
-  }, [selectedId, overview, layout, zoom]);
-
-  function select(node: ArchitectureNode, move = false) {
-    if (move) {
-      reveal.current = true;
-      if (overview) setZoom(0.9);
-      setOverview(false);
-      if (layer !== "all" && layer !== node.layer) setLayer("all");
-      const position = layout.nodes.find((entry) => entry.id === node.id);
-      if (!overview && position && viewport.current) {
-        viewport.current.scrollTo({ left: (position.x + position.width / 2) * zoom - viewport.current.clientWidth / 2, top: (position.y + position.height / 2) * zoom - viewport.current.clientHeight / 2 });
-      }
-    }
-    setSelectedId(node.id);
+  useEffect(() => { manualZoom.current = false; }, [currentId]);
+  useEffect(() => { if (!manualZoom.current) fit(); }, [currentId, viewportSize.width, viewportSize.height]);
+  function changeZoom(delta: number) {
+    manualZoom.current = true;
+    setZoom((value) => Math.max(0.25, Math.min(2.5, value + delta)));
   }
-
-  function filterLayer(id: string) {
-    setLayer(id);
-    if (id !== "all" && selected.layer !== id) {
-      const first = architecture.nodes.find((node) => node.layer === id);
-      if (first) setSelectedId(first.id);
-    }
+  function navigate(id: string, keyboard = false) {
+    const location = tree.location(id);
+    setCurrentId(location.currentId);
+    setSelectedId(location.selectedId);
+    setDetailOpen(true);
+    setQuery("");
+    focusAfterNavigation.current = keyboard;
   }
-
+  function returnTo(id: string) {
+    setCurrentId(id);
+    setSelectedId(id);
+    setQuery("");
+    focusAfterNavigation.current = true;
+  }
+  function closeDetail() {
+    setDetailOpen(false);
+    requestAnimationFrame(() => document.querySelector<SVGElement>(`[data-node-id="${selectedId}"]`)?.focus({ preventScroll: true }));
+  }
+  useEffect(() => { if (requested) navigate(requested.id, true); }, [requested]);
+  useEffect(() => {
+    const navigationZoom = previousCurrentId.current === currentId ? zoom : responsibilityFit(layout, viewportSize);
+    previousCurrentId.current = currentId;
+    const position = layout.nodes.find((entry) => entry.id === selectedId) ;
+    const element  = viewport.current                                      ;
+    if (element) element.scrollTo({ left: position ? Math.max(0, (position.x + position.width / 2) * navigationZoom - element.clientWidth / 2) : 0, top: position ? Math.max(0, (position.y + position.height / 2) * navigationZoom - element.clientHeight / 2) : 0 });
+    if (focusAfterNavigation.current) {
+      const target = document.querySelector<SVGElement>(`.blueprint-node[data-node-id="${selectedId}"]`) ?? document.querySelector<SVGElement>('.blueprint-node');
+      target?.focus({ preventScroll: true });
+      focusAfterNavigation.current = false;
+    }
+  }, [currentId, selectedId]);
   function focusNext(index: number, key: string) {
-    const available = layout.nodes.filter((node) => overview ? matches.some((match) => match.layer === node.id) : matchIds.has(node.id));
-    const current = available.findIndex((node) => node.id === layout.nodes[index]?.id);
-    const next = key === "Home" ? 0 : key === "End" ? available.length - 1 : Math.max(0, Math.min(available.length - 1, current + (key === "ArrowDown" || key === "ArrowRight" ? 1 : -1)));
-    const target = available[next];
-    if (target) document.getElementById(`architecture-node-${layout.nodes.indexOf(target)}`)?.focus();
+    const next = key === 'Home' ? 0 : key === 'End' ? children.length - 1 : Math.max(0, Math.min(children.length - 1, index + (key === 'ArrowDown' || key === 'ArrowRight' ? 1 : -1)));
+    document.getElementById(`architecture-node-${next}`)?.focus();
   }
-
   return <>
-    <main className="ecosystem-work blueprint-work" aria-label="WWW 코드 아키텍처 설계도">
-      <header className="ecosystem-header blueprint-header"><div><div className="blueprint-eyebrow">WWW / CODE ARCHITECTURE</div><h1>코드에서 읽는 설계도</h1><p>계층의 책임에서 모듈의 실제 참조까지</p></div><span className="ecosystem-badge">소스 기반 · {architecture.nodes.length} modules</span></header>
-      <div className="blueprint-summary"><span><strong>{architecture.layers.length}</strong> 계층</span><span><strong>{architecture.edges.length}</strong> 모듈 참조</span><span><strong>{architecture.edges.filter((edge) => edge.mode === "type").length}</strong> 타입 전용</span><code title={architecture.digest}>snapshot {architecture.digest.slice(0, 10)}</code></div>
+    <main className="ecosystem-work blueprint-work" aria-label="WWW 기능과 코드 연결 지도" data-current-id={currentId} onKeyDown={(event) => { if (event.key === "Escape" && detailOpen) { event.preventDefault(); closeDetail(); } }}>
+      <header className="ecosystem-header blueprint-header"><div><h1>WWW Node Map</h1><p>기능에서 처리 책임을 따라 담당 코드와 근거를 읽습니다.</p></div></header>
+      <div className="blueprint-summary"><span>현재 구조 <code data-testid="architecture-current">{currentId}</code></span><code title={architecture.digest}>snapshot {architecture.digest.slice(0, 10)}</code></div>
+      <nav className="blueprint-breadcrumb" aria-label="구조 경로"><button data-testid="architecture-root" onClick={() => returnTo(architecture.structure.rootId)}>전체</button>{tree.breadcrumb(currentId).map((entry) => <button key={entry.id} data-ancestor-id={entry.id} aria-current={entry.id === currentId ? 'location' : undefined} onClick={() => returnTo(entry.id)}>{entry.title}</button>)}<button disabled={!current.parent} onClick={() => current.parent && returnTo(current.parent)}>뒤로</button></nav>
       <div className="ecosystem-toolbar">
-        <label className="ecosystem-search"><span>검색</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="모듈, 역할, 파일 경로" aria-label="코드 모듈 검색"/></label>
-        <div className="ecosystem-zoom" aria-label="설계도 배율"><button aria-label="설계도 축소" disabled={zoom <= 0.25} onClick={() => setZoom((value) => Math.max(0.25, value - 0.15))}>−</button><output data-testid="architecture-zoom">{Math.round(zoom * 100)}%</output><button aria-label="설계도 확대" disabled={zoom >= 1.75} onClick={() => setZoom((value) => Math.min(1.75, value + 0.15))}>＋</button><button onClick={fit} data-testid="architecture-fit">전체 보기</button></div>
+        <label className="ecosystem-search"><span>검색</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="구조 ID, 요구 ID, 제목, 파일" aria-label="구조와 요구 검색"/></label>
+        <div className="ecosystem-zoom" aria-label="설계도 배율"><button aria-label="설계도 축소" disabled={zoom <= 0.25} onClick={() => changeZoom(-0.15)}>−</button><output data-testid="architecture-zoom">{Math.round(zoom * 100)}%</output><button aria-label="설계도 확대" disabled={zoom >= 2.5} onClick={() => changeZoom(0.15)}>＋</button><button data-testid="architecture-fit" onClick={fit}>크기 맞춤</button><button data-testid="architecture-detail-toggle" aria-pressed={detailOpen} onClick={() => detailOpen ? closeDetail() : setDetailOpen(true)}>선택 상세</button></div>
       </div>
-      <div className="blueprint-view-switch"><button aria-pressed={overview} onClick={() => setOverview(true)}>계층 개요</button><button aria-pressed={!overview} onClick={() => setOverview(false)} data-testid="architecture-modules">모듈 상세</button><span>{overview ? "계층 간 참조를 묶어서 표시" : `선택한 모듈의 참조 ${edges.length}개 표시`}</span></div>
-      <nav className="ecosystem-filters" aria-label="코드 계층 필터"><button aria-pressed={layer === "all"} onClick={() => filterLayer("all")}>전체</button>{architecture.layers.map((entry) => <button key={entry.id} aria-pressed={layer === entry.id} onClick={() => filterLayer(entry.id)} data-layer={entry.id}><i style={{ background: entry.color }}/>{entry.title}</button>)}</nav>
-      {(query || layer !== "all") && <div className="ecosystem-results" aria-live="polite"><span>{matches.length ? `${matches.length}개 일치` : "일치하는 모듈이 없습니다."}</span>{matches.map((node) => <button key={node.id} onClick={() => select(node, true)}>{node.title}</button>)}<button className="ecosystem-clear" onClick={() => { setQuery(""); setLayer("all"); }}>필터 초기화</button></div>}
-      <div className="blueprint-canvas-caption"><span>{overview ? "LAYER OVERVIEW" : "MODULE DEPENDENCIES"}</span><span>화살표: 참조하는 쪽 → 참조되는 쪽</span></div>
-      <div className="ecosystem-viewport blueprint-viewport" ref={viewport} tabIndex={0} aria-label="코드 설계도. Tab과 방향키로 노드 이동, Enter와 Space로 선택."
-        onPointerDown={(event) => { if (event.button !== 0 || !(event.target instanceof Element) || event.target.closest('[role="button"]')) return; drag.current = { x: event.clientX, y: event.clientY, left: event.currentTarget.scrollLeft, top: event.currentTarget.scrollTop }; event.currentTarget.setPointerCapture(event.pointerId); }}
-        onPointerMove={(event) => { if (!drag.current) return; event.currentTarget.scrollLeft = drag.current.left - event.clientX + drag.current.x; event.currentTarget.scrollTop = drag.current.top - event.clientY + drag.current.y; }}
-        onPointerUp={() => { drag.current = null; }} onPointerCancel={() => { drag.current = null; }} onLostPointerCapture={() => { drag.current = null; }}>
-        <svg className="ecosystem-svg blueprint-svg" width={layout.width * zoom} height={layout.height * zoom} viewBox={`0 0 ${layout.width} ${layout.height}`} aria-label={overview ? "계층별 코드 참조 개요" : "실제 소스 모듈과 선택된 참조"}>
-          <defs><marker id="architecture-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
-          {layout.bands.map((band) => { const entry = architecture.layers.find((item) => item.id === band.id)!; return <g key={band.id} className="blueprint-band"><rect {...{ x: band.x, y: band.y, width: band.width, height: band.height }} rx="8"/><text x={band.x + 12} y={band.y + 29} fill={entry.color}>{entry.title}</text><text x={band.x + 12} y={band.y + 51} className="blueprint-band-count">{architecture.nodes.filter((node) => node.layer === band.id).length} MODULES</text></g>; })}
-          <g aria-hidden="true">{edges.map((edge, index) => <path key={edge.id} data-from={edge.from} data-to={edge.to} className={`blueprint-edge ${edge.active ? "is-connected" : ""} ${edge.mode === "type" ? "is-type" : ""}`} d={architectureEdgePath(placed.get(edge.from)!, placed.get(edge.to)!, index, overview)} markerEnd="url(#architecture-arrow)"><title>{edge.from} → {edge.to}</title></path>)}</g>
-          {layout.nodes.map((position, index) => {
-            const entry = overview ? architecture.layers.find((item) => item.id === position.id)! : architecture.nodes.find((item) => item.id === position.id)!;
-            const entryLayer = architecture.layers.find((item) => item.id === (overview ? entry.id : "layer" in entry ? entry.layer : ""))!;
-            const matched = overview ? matches.some((node) => node.layer === entry.id) : matchIds.has(entry.id);
-            const active = overview ? entry.id === selected.layer : entry.id === selectedId;
-            const layerNodes = architecture.nodes.filter((node) => node.layer === entry.id);
-            function choose() { if (overview) { const first = layerNodes[0]; if (first) select(first); } else { const node = architecture.nodes.find((item) => item.id === entry.id); if (node) select(node); } }
-            return <g key={entry.id} id={`architecture-node-${index}`} transform={`translate(${position.x} ${position.y})`} role="button" tabIndex={matched ? 0 : -1} aria-label={overview ? `${entry.title}, ${layerNodes.length}개 모듈` : `${entry.title}, ${"file" in entry ? entry.file : ""}`} aria-pressed={active} data-node-id={entry.id}
-              className={`blueprint-node ${active ? "is-selected" : ""} ${!overview && neighborhood.has(entry.id) ? "is-neighbor" : ""} ${matched ? "" : "is-dimmed"}`}
-              onClick={choose} onFocus={(event) => event.currentTarget.scrollIntoView({ block: "nearest", inline: "nearest" })}
-              onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); choose(); } else if (["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) { event.preventDefault(); focusNext(index, event.key); } }}>
-              <rect width={position.width} height={position.height} rx="7"/><rect className="blueprint-node-accent" width="3" height={position.height - 22} x="0" y="11" fill={entryLayer.color}/>
-              <text x="16" y={overview ? "31" : "26"} className="blueprint-node-title">{entry.title}</text>
-              <text x="16" y={overview ? "57" : "47"} className="blueprint-node-meta">{overview && "description" in entry ? entry.description : "file" in entry ? entry.file.replace("scripts/workflow/", "") : ""}</text>
-              {overview && <text x="516" y="34" textAnchor="end" className="blueprint-node-count">{layerNodes.length.toString().padStart(2, "0")}</text>}
-            </g>;
-          })}
+      {query.trim() && <div className="ecosystem-results" aria-live="polite">{matches.length ? matches.map((entry) => <button key={entry.id} data-result-id={entry.id} onClick={() => navigate(entry.id, true)}>{entry.title} <code>{entry.id}</code></button>) : <span>일치하는 구조가 없습니다. 검색어를 바꿔 보세요.</span>}<button className="ecosystem-clear" onClick={() => setQuery("")}>검색 초기화</button></div>}
+      <div className="blueprint-canvas-caption"><span>{current.title} → 직계 하위 책임 {children.length}개</span><span>회색: 계층 · 파랑: 실제 import · 점선: 타입 전용</span></div>
+      <div className="ecosystem-viewport blueprint-viewport" ref={viewport} tabIndex={0} aria-label="책임 계층 지도. Tab과 방향키로 이동, Enter 또는 Space로 진입"
+        onPointerDown={(event) => {
+          if (event.button !== 0 || (event.target as Element).closest('[role="button"]')) return;
+          const element = event.currentTarget;
+          drag.current = { x: event.clientX, y: event.clientY, left: element.scrollLeft, top: element.scrollTop };
+          element.setPointerCapture(event.pointerId);
+        }} onPointerMove={(event) => {
+          const start = drag.current;
+          if (!start) return;
+          event.currentTarget.scrollLeft = start.left - (event.clientX - start.x);
+          event.currentTarget.scrollTop = start.top - (event.clientY - start.y);
+        }} onPointerUp={() => { drag.current = null; }} onPointerCancel={() => { drag.current = null; }}>
+        <svg className="ecosystem-svg blueprint-svg" width={layout.width * zoom} height={layout.height * zoom} viewBox={`0 0 ${layout.width} ${layout.height}`} aria-label={`${current.title} 하위 책임`}>
+          <defs><marker id="blueprint-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+          {layout.nodes.map((entry) => <path key={`parent:${entry.id}`} className="blueprint-hierarchy" d={responsibilityHierarchyPath(layout.parent, entry)} markerEnd="url(#blueprint-arrow)"><title>{current.id} → {entry.id}: 정본 책임 계층 · 실행 순서 아님</title></path>)}
+          {dependencies.map((edge, index) => <path key={`${edge.from}:${edge.to}`} d={responsibilityEdgePath(placed.get(edge.from)!, placed.get(edge.to)!, index)} markerEnd="url(#blueprint-arrow)" className={`blueprint-edge is-connected ${edge.type && !edge.runtime && !edge.mixed ? 'is-type' : ''}`}><title>{edge.from} → {edge.to}: runtime {edge.runtime}, mixed {edge.mixed}, type {edge.type}</title></path>)}
+          <g className="blueprint-parent" data-node-id={current.id} transform={`translate(${layout.parent.x} ${layout.parent.y})`} role="button" tabIndex={0} aria-label={`${current.title}, 현재 기능과 책임`} onClick={() => { setSelectedId(current.id); setDetailOpen(true); }} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setSelectedId(current.id); setDetailOpen(true); } }}><rect width={layout.parent.width} height={layout.parent.height} rx="7"/><text x="18" y="24" className="blueprint-node-title">{current.title}</text><text x="18" y="43" className="blueprint-node-meta">{current.id}</text></g>
+          {layout.nodes.map((entry, index) => <g key={entry.id} id={`architecture-node-${index}`} data-node-id={entry.id} className={`blueprint-node ${entry.id === selectedId ? 'is-selected' : ''}`} transform={`translate(${entry.x} ${entry.y})`} role="button" tabIndex={0} aria-label={`${entry.title}, ${entry.id}, ${tree.children(entry.id).length ? '하위 책임 열기' : '명세와 구현 보기'}`} aria-pressed={entry.id === selectedId}
+            onClick={() => navigate(entry.id)} onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); navigate(entry.id, true); }
+              else if (['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) { event.preventDefault(); focusNext(index, event.key); }
+            }}>
+            <rect width={entry.width} height={entry.height} rx="7"/><text x="18" y="29" className="blueprint-node-title">{entry.title}</text><text x="18" y="52" className="blueprint-node-meta">{entry.id}</text><text x="18" y="70" className="blueprint-node-meta">{tree.children(entry.id).length ? `하위 책임 ${tree.children(entry.id).length}개 · 눌러서 진입` : '명세 · 구현 · 검증 참조 보기'}</text>
+          </g>)}
         </svg>
       </div>
-      <footer className="ecosystem-legend"><span><i className="eco-line"/>값 참조 · 혼합 참조</span><span><i className="eco-line planned"/>타입 전용</span><span>배경 드래그 · Tab / 방향키로 탐색</span></footer>
+      <details className="blueprint-stage-dependencies"><summary>현재 단계의 실제 의존 {dependencies.length}개</summary>{dependencies.map((edge) => <p key={`${edge.from}:${edge.to}`}><code>{edge.from} → {edge.to}</code><span>runtime {edge.runtime} · mixed {edge.mixed} · type {edge.type}</span></p>)}{!dependencies.length && <p>직계 하위 책임 사이의 import 참조가 없습니다. 범위 밖 참조는 선택한 책임의 상세에서 읽습니다.</p>}</details>
+      <footer className="ecosystem-legend"><span>배경 드래그로 이동 · 기능/책임 진입 · 선택 후 코드 근거</span><span>계층·import는 실행 추적이 아닙니다.</span></footer>
     </main>
-    <aside className="ecosystem-detail blueprint-detail" aria-label="코드 근거와 모듈 상세">
-      <div className="ecosystem-detail-heading">{overview ? "계층의 책임" : "선택한 모듈"}<span>CODE EVIDENCE</span></div>
-      <div className="ecosystem-detail-content">
-        <span className="ecosystem-category" style={{ color: selectedLayer.color }}>{selectedLayer.title}</span><h2>{overview ? selectedLayer.title : selected.title}</h2><p>{overview ? selectedLayer.description : selected.role}</p>
-        {overview ? <><h3>포함된 모듈</h3><div className="blueprint-module-list">{architecture.nodes.filter((node) => node.layer === selected.layer).map((node) => <button key={node.id} onClick={() => select(node, true)}><strong>{node.title}</strong><code>{node.file}</code></button>)}</div><h3>계층 간 참조</h3><div className="blueprint-layer-relations">{aggregates.filter((edge) => edge.from === selected.layer || edge.to === selected.layer).map((edge) => <p key={`${edge.from}:${edge.to}`}>{architecture.layers.find((entry) => entry.id === edge.from)!.title} → {architecture.layers.find((entry) => entry.id === edge.to)!.title}<small>값·혼합 {edge.runtime} · 타입 {edge.types}</small></p>)}</div></> : <>
-          <div className="blueprint-file"><code>{selected.file}:1–{selected.lines}</code><span>SHA-256 {selected.digest.slice(0, 12)}</span></div>
-          <h3>실제 참조 <span>{connections.length}</span></h3><div className="ecosystem-connections">{connections.map(({ edge, node, outgoing }) => <div className="blueprint-connection" key={edge.id}>
-            <button onClick={() => select(node, true)}><span className="ecosystem-direction">{outgoing ? "참조하는 모듈 →" : "← 이 모듈을 참조"} · {edge.mode === "type" ? "타입 전용" : edge.mode === "mixed" ? "값·타입 혼합" : "값 참조"}</span><strong>{node.title}</strong><code>{edge.from}:{edge.line}{edge.endLine !== edge.line ? `–${edge.endLine}` : ""}</code></button><details><summary>원문 근거 · {edge.syntax}</summary><pre>{edge.statement}</pre></details>
-          </div>)}</div>{!connections.length && <p>분석 범위 안의 모듈 참조가 없습니다.</p>}
-        </>}
-        <details className="blueprint-scope"><summary>분석 범위와 한계</summary><p>src의 TypeScript와 개발 workflow 핵심 모듈의 정적 import·export, 문자열 dynamic import·require를 추출합니다. 실행 추적이 아니며 IPC·JSON-RPC 호출은 간선에 포함하지 않습니다.</p><p>외부 패키지·생성 JSON·범위 밖 참조 {architecture.excluded.length}개는 노드에서 제외합니다. 계층·역할은 사람이 정의한 분류입니다. 빌드 시 갱신하며 선택한 작업 폴더를 실시간 분석하지 않습니다.</p><code>{architecture.scope}</code></details>
-      </div><p className="ecosystem-note">번들에 포함된 소스 snapshot입니다. 파일·행은 해당 snapshot 기준입니다. 현재 실행 상태와 생태계의 후속 방향은 별도입니다.</p>
+    <aside className="ecosystem-detail blueprint-detail" hidden={!detailOpen} aria-label="선택한 책임 상세" data-selected-id={selectedId} onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); closeDetail(); } }}>
+      <div className="ecosystem-detail-heading"><button data-testid="architecture-detail-close" aria-label="지도 선택 상세 닫기" onClick={closeDetail}>닫기</button>선택한 책임 <code>{selectedId}</code></div>
+      <div className="ecosystem-detail-content"><h2>{selected.title}</h2><p>{selected.description}</p>
+        {tree.children(selectedId).length > 0 && <p>하위 책임을 선택하면 해당 ID의 명세·구현·검증 참조를 읽을 수 있습니다.</p>}
+        <h3>명세 요구</h3><ul className="ecosystem-sources blueprint-requirements">{refs.requirements.map((ref) => <li key={ref.id}><strong>{ref.id}</strong><p>{ref.description}</p><code>{ref.file}:{ref.line}</code></li>)}</ul>{!refs.requirements.length && <p>이 단계에 직접 등록된 요구가 없습니다. 하위 책임에서 확인하세요.</p>}
+        <h3>구현 선언</h3><ul className="ecosystem-sources blueprint-declarations">{refs.declarations.map((ref) => <li key={ref.file}><code>{ref.file}:{ref.line}</code><span>{ref.requirementIds.join(', ')}</span></li>)}</ul>
+        {!refs.declarations.length && <p>이 책임의 직접 구현 근거 미제공입니다. 하위 책임 또는 등록된 명세를 확인하세요.</p>}
+        <h3>검증 참조 / 선언</h3><ul className="ecosystem-sources blueprint-tests">{refs.tests.map((ref) => <li key={ref.file}><code>{ref.file}:{ref.line}</code><span>{ref.requirementIds.filter((id) => refs.requirements.some((req) => req.id === id)).join(', ')}</span></li>)}</ul><p>테스트 등록은 현재 테스트 실행 결과나 통과 판정이 아닙니다.</p>
+        <h3>선택 범위 밖 실제 참조 <span>{connections.length}</span></h3><div className="ecosystem-connections">{connections.map(({ edge, target, outgoing }) => <div className="blueprint-connection" key={edge.id}><button onClick={() => navigate(target.id, true)}><span className="ecosystem-direction">{outgoing ? '참조하는 책임 →' : '← 이 책임을 참조'} · {edge.mode}</span><strong>{target.title}</strong><code>{target.id}</code><code>{edge.from}:{edge.line} → {edge.to}</code></button><details><summary>import 원문 근거</summary><pre>{edge.statement}</pre></details></div>)}</div>
+        <details className="blueprint-scope"><summary>분석 범위와 한계</summary><p>구조와 단일 부모는 정본 계약의 선언입니다. 파일 경로는 이동할 수 있고 책임 ID는 유지합니다. 선은 정적 import를 현재 하위 책임으로 축약한 실제 참조이며 IPC·함수 호출·실행 추적이 아닙니다. 같은 책임을 공유하는 파일 사이 참조는 경계선으로 표시하지 않습니다.</p><p>외부 패키지·생성물 등 제외 {architecture.excluded.length}개. 선택한 저장소의 실시간 분석이 아닌 번들 snapshot입니다.</p></details>
+      </div><p className="ecosystem-note">명세·파일·테스트의 행은 snapshot의 선언 위치입니다. 등록 검사는 요구 충족의 의미를 증명하지 않습니다.</p>
     </aside>
   </>;
 }

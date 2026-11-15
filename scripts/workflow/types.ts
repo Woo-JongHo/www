@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.records.protocol
+ * @implements RESP-DEVELOPMENT-RECORDS-PROTOCOL
+ */
 import type { CapturedSource, VerificationAttempt } from './evidence.ts';
 import type { DocumentationAssessment, DocumentationReview } from './documentation.ts';
 import type { RepositoryCheckStatus } from './consistency.ts';

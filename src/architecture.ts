@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.blueprint.layout
+ * @implements RESP-BLUEPRINT-LAYOUT
+ */
 import snapshot from "./architecture.generated.json";
 
 export const architecture = snapshot;

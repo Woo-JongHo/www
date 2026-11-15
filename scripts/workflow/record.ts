@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.records.events
+ * @implements RESP-DEVELOPMENT-RECORDS-EVENTS
+ */
 import { promises as fs, constants } from "node:fs";
 import path                          from "node:path";
 import { randomUUID }                from "node:crypto";

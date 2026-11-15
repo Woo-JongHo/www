@@ -1,3 +1,7 @@
+/**
+ * @verifies RESP-DEVELOPMENT-AUTHORIZATION
+ * @verifies RESP-DEVELOPMENT-ROUTING
+ */
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";

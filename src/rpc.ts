@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.native.transport
+ * @implements RESP-NATIVE-TRANSPORT
+ */
 import { EventEmitter } from "node:events";
 import type { ChildProcessWithoutNullStreams } from "node:child_process";
 import type { RpcId } from "./shared";

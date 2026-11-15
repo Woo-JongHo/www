@@ -1,3 +1,8 @@
+/**
+ * @verifies RESP-NATIVE-BRIDGE
+ * @verifies RESP-NATIVE-TRANSPORT
+ * @verifies RESP-NATIVE-PROTOCOL
+ */
 import { expect, test } from "bun:test";
 import { spawn } from "node:child_process";
 import { join } from "node:path";

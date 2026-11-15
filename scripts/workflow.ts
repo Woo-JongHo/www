@@ -1,5 +1,9 @@
+/**
+ * @architecture arch.development.authoring
+ * @implements RESP-DEVELOPMENT-AUTHORING
+ */
 import { runReportedStage } from "./workflow/report-lifecycle.ts";
-import { spawn } from "node:child_process";
+import { execFile, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import { access, lstat, readFile, realpath } from "node:fs/promises";
 import path from "node:path";
@@ -206,6 +210,42 @@ function withGuidance(invocation: ProcessInvocation, guidance: string): ProcessI
   return { ...invocation, args };
 }
 
+async function architectureGate(repo: string, required = false, regenerate = false) {
+  const signals: string[] = [];
+  for (const file of ["scripts/check-architecture.ts", "docs/architecture/structure.json"]) {
+    try { await lstat(path.join(repo, file)); signals.push(file); }
+    catch (error) { if (!(object(error) && error.code === "ENOENT")) throw error; }
+  }
+  try {
+    const value: unknown = JSON.parse(await readFile(path.join(repo, "package.json"), "utf8"));
+    if (object(value) && object(value.scripts) && Object.hasOwn(value.scripts, "check:architecture")) signals.push("package.json#check:architecture");
+  } catch (error) { if (!(object(error) && error.code === "ENOENT")) throw error; }
+  const enabled = required || signals.length > 0;
+  if (!enabled) return { enabled, applicable: false, ok: true, signals, generatorExecuted: false, accepted: false, errors: [] };
+  try {
+    // 검사 대상의 checker나 주입 runCommand를 실행하지 않는다. 매번 설치된 하네스 코드를 새로 읽는다.
+    const checker   = new URL("./check-architecture.ts", import.meta.url).href                                                                                                                                                                                                                   ;
+    const generator = new URL("./generate-architecture.ts", import.meta.url).href                                                                                                                                                                                                                ;
+    const script    = `${regenerate ? 'const { writeArchitecture } = await import(process.argv[3]); writeArchitecture(process.argv[2]);' : ''} const { checkArchitecture } = await import(process.argv[1]); console.log(JSON.stringify({ digest: checkArchitecture(process.argv[2]).digest }));` ;
+    const stdout = await new Promise<string>((resolve, reject) => {
+      execFile(process.execPath, ["--input-type=module", "--eval", script, checker, path.resolve(repo), generator], {
+        cwd: repo, timeout: 120_000, maxBuffer: 1_048_576, killSignal: "SIGKILL", encoding: "utf8", windowsHide: true,
+      }, (error, output, stderr) => {
+        if (error) { reject(new Error(`구조 검사 프로세스 실패: ${error.message}\n${stderr}`)); return; }
+        if (stderr.trim()) { reject(new Error(`구조 검사 프로세스 stderr: ${stderr}`)); return; }
+        resolve(output);
+      });
+    });
+    const response: unknown = JSON.parse(stdout);
+    if (!object(response) || Object.keys(response).length !== 1 || typeof response.digest !== "string" || !/^[a-f0-9]{64}$/.test(response.digest)) {
+      throw new Error("구조 검사 프로세스 JSON 응답이 올바르지 않습니다.");
+    }
+    return { enabled, applicable: true, ok: true, signals, generatorExecuted: true, accepted: true, digest: response.digest, errors: [] };
+  } catch (error) {
+    return { enabled, applicable: true, ok: false, signals, generatorExecuted: true, accepted: false, errors: [error instanceof Error ? error.message : String(error)] };
+  }
+}
+
 async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDependencies = {}): Promise<JsonObject> {
   const decision     = object(options.decision) ? options.decision : {}  ;
   const writes       = strings(options.writes ?? [], "writes")           ;
@@ -237,17 +277,19 @@ async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDe
   const run       = dependencies.runCommand ?? command                     ;
   const prePolicy = await checkSourcePolicy(repo)                          ;
   if (!prePolicy.projects.length) throw new Error(prePolicy.errors.join("; "));
-  const before       = await fingerprints(repo, checkedFiles(prePolicy)) ;
-  const frozenBefore = await frozenPolicy(repo)                          ;
-  const targets      = writes.filter(file => codeFile.test(file))        ;
-  const preTypes     = await typecheck(repo, prePolicy, run)             ;
-  const preBoxbox    = await boxbox(repo, local, targets, true, run)     ;
+  const before          = await fingerprints(repo, checkedFiles(prePolicy)) ;
+  const frozenBefore    = await frozenPolicy(repo)                          ;
+  const targets         = writes.filter(file => codeFile.test(file))        ;
+  const preTypes        = await typecheck(repo, prePolicy, run)             ;
+  const preBoxbox       = await boxbox(repo, local, targets, true, run)     ;
+  const preArchitecture = await architectureGate(repo)                      ;
   const guidance = JSON.stringify({
     policy:
       "새 앱·Node 실행 코드는 TypeScript로 작성하고 우회 주석이나 legacy 해시 갱신으로 검사를 통과시키지 않는다.",
-    source    : prePolicy ,
-    typecheck : preTypes  ,
-    boxbox    : preBoxbox
+    source       : prePolicy ,
+    typecheck    : preTypes  ,
+    boxbox       : preBoxbox ,
+    architecture : preArchitecture
   });
   if (Buffer.byteLength(guidance) > 1_048_576) throw new Error("작성 안내가 너무 큽니다. 변경 범위를 나누세요.");
   const runHost = dependencies.runHost ?? ((
@@ -272,11 +314,12 @@ async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDe
     try { await lstat(path.join(repo, file)); errors.push(`삭제 계획의 파일이 남아 있습니다: ${file}`); }
     catch (error) { if (!(object(error) && error.code === "ENOENT")) throw error; }
   }
-  const postTypes    = await typecheck(repo, postPolicy, run)                                                                                               ;
-  const postBoxbox   = await boxbox(repo, local, [...new Set([...targets, ...changed])].filter(file => codeFile.test(file) && after.has(file)), false, run) ;
-  const finalPolicy  = await checkSourcePolicy(repo)                                                                                                        ;
-  const sourceStable = sameFiles(after, await fingerprints(repo, checkedFiles(finalPolicy)))                                                                ;
-  errors.push(...finalPolicy.errors);
+  const postTypes        = await typecheck(repo, postPolicy, run)                                                                                               ;
+  const postBoxbox       = await boxbox(repo, local, [...new Set([...targets, ...changed])].filter(file => codeFile.test(file) && after.has(file)), false, run) ;
+  const postArchitecture = await architectureGate(repo, preArchitecture.enabled, writes.includes("src/architecture.generated.json"))                            ;
+  const finalPolicy      = await checkSourcePolicy(repo)                                                                                                        ;
+  const sourceStable     = sameFiles(after, await fingerprints(repo, checkedFiles(finalPolicy)))                                                                ;
+  errors.push(...finalPolicy.errors, ...postArchitecture.errors);
   if (!sourceStable) errors.push("사후 검사 중 소스 또는 프로젝트 설정이 바뀌었습니다. 다시 검사하세요.");
   if (postTypes.some(item => item.code !== 0 || item.outputTruncated)) errors.push("작성 후 타입 검사가 통과하지 않았습니다.");
   if (postBoxbox.observations.some(item => item.syntax !== "valid" || item.misaligned > 0 || item.refused > 0)) errors.push("작성 후 BoxBox 미해결 항목이 있습니다.");
@@ -289,18 +332,20 @@ async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDe
       toolExecutor : dependencies.runCommand ? "injected" : "process" ,
       sourceStable,
       pre  : {
-        source    : prePolicy ,
-        typecheck : preTypes  ,
-        boxbox    : preBoxbox.observations,
-        boxboxStatus : preBoxbox.status,
-        boxboxMode : preBoxbox.mode
+        source       : prePolicy              ,
+        typecheck    : preTypes               ,
+        architecture : preArchitecture        ,
+        boxbox       : preBoxbox.observations ,
+        boxboxStatus : preBoxbox.status       ,
+        boxboxMode   : preBoxbox.mode
       },
       post : {
-        source    : finalPolicy ,
-        typecheck : postTypes   ,
-        boxbox    : postBoxbox.observations,
-        boxboxStatus : postBoxbox.status,
-        boxboxMode : postBoxbox.mode
+        source       : finalPolicy             ,
+        typecheck    : postTypes               ,
+        architecture : postArchitecture        ,
+        boxbox       : postBoxbox.observations ,
+        boxboxStatus : postBoxbox.status       ,
+        boxboxMode   : postBoxbox.mode
       }
     }
   };

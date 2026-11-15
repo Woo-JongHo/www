@@ -1,3 +1,6 @@
+/**
+ * @verifies RESP-CHAT-COMPOSER
+ */
 import { expect, test } from "bun:test";
 import { handlePromptKeyDown, normalizeCompositionEnd, shouldSubmitPrompt } from "../src/input";
 

@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.evidence.verification
+ * @implements RESP-DEVELOPMENT-EVIDENCE-VERIFICATION
+ */
 import { createHash, randomUUID }    from "node:crypto";
 import { spawn, execFile }           from "node:child_process";
 import { constants, promises as fs } from "node:fs";

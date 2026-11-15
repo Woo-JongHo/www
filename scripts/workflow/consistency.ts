@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.evidence.repository
+ * @implements RESP-DEVELOPMENT-EVIDENCE-REPOSITORY
+ */
 import { createHash, randomUUID }                              from "node:crypto";
 import { execFile }                                            from "node:child_process";
 import { promises as fs }                                      from "node:fs";

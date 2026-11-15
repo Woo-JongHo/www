@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.native.protocol
+ * @implements RESP-NATIVE-PROTOCOL
+ */
 export type RpcId = string | number;
 
 export interface AppEvent {

@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.chat.sessions.requests
+ * @implements RESP-CHAT-SESSIONS-REQUESTS
+ */
 /** 새 Native 대화에서 요청하는 사용자용 진행 설명. 원문 사고는 요청하지 않는다. */
 export const NATIVE_PROGRESS_INSTRUCTIONS = [
   "진행 상황은 자연스러운 한국어 문장으로 자주, 충분히 자세히 설명하세요. 단순 인사나 즉시 답할 수 있는 짧은 질문이 아니라면 첫 도구 호출 전에 무엇을 확인할지 먼저 알려 주세요.",

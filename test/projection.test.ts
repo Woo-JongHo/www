@@ -1,3 +1,6 @@
+/**
+ * @verifies RESP-CHAT-MESSAGES-PROJECTION
+ */
 import { expect, test } from "bun:test";
 import { project } from "../src/projection";
 import type { AppEvent } from "../src/shared";

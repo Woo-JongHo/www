@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.routing
+ * @implements RESP-DEVELOPMENT-ROUTING
+ */
 import { createHash } from "node:crypto";
 import type { Approval } from "./types.ts";
 

@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.reports.service
+ * @implements RESP-REPORTS-SERVICE
+ */
 import { listWorkReports, readWorkReport } from "../scripts/workflow/reports.ts";
 import type { WorkReportCatalog, WorkReportDocument } from "./shared";
 

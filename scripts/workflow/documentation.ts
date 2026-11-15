@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.evidence.documentation
+ * @implements RESP-DEVELOPMENT-EVIDENCE-DOCUMENTATION
+ */
 import { randomUUID }                    from "node:crypto";
 import path                              from "node:path";
 import { captureSource, criteriaDigest } from "./evidence.ts";

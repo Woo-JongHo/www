@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.chat.messages.markdown
+ * @implements RESP-CHAT-MESSAGES-MARKDOWN
+ */
 import { Children, isValidElement, memo, useState, type ReactNode } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";

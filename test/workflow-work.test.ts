@@ -1,3 +1,11 @@
+/**
+ * @verifies RESP-DEVELOPMENT-EVIDENCE-REPOSITORY
+ * @verifies RESP-DEVELOPMENT-EVIDENCE-DOCUMENTATION
+ * @verifies RESP-DEVELOPMENT-RECORDS-LOCK
+ * @verifies RESP-DEVELOPMENT-RECORDS-VALIDATION
+ * @verifies RESP-DEVELOPMENT-RECORDS-PROTOCOL
+ * @verifies RESP-DEVELOPMENT-RECORDS-STATE
+ */
 import assert from "node:assert/strict";
 import      { execFile, spawn                                } from "node:child_process"              ;
 import      {

@@ -1,3 +1,6 @@
+/**
+ * @verifies RESP-REPORTS-COLLECTION
+ */
 import { expect, test } from "bun:test";
 import { completedNativeReportInput, NativeCompletionCollector } from "../src/native-report-input";
 import type { AppEvent } from "../src/shared";

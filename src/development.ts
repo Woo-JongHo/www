@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.service
+ * @implements RESP-DEVELOPMENT-SERVICE
+ */
 import { loadReviewPolicy } from "../scripts/workflow/review.ts";
 import { assessReportedWork as assessWork, completeReportedWork as completeWork } from "../scripts/workflow/report-lifecycle.ts";
 import type { DevelopmentPolicyInfo, DevelopmentWorkStatus } from "./shared";

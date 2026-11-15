@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.tooling.source-policy
+ * @implements RESP-TOOLING-SOURCE-POLICY
+ */
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { realpathSync } from 'node:fs';

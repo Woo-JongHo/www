@@ -1,3 +1,6 @@
+/**
+ * @verifies RESP-NATIVE-LAUNCH
+ */
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { copyFile, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";

@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.chat.messages.execution
+ * @implements RESP-CHAT-MESSAGES-EXECUTION
+ */
 import { useEffect, useState } from "react";
 import { useChatRowToggle } from "./chat-row-state";
 import { commandPreview } from "./command-preview";

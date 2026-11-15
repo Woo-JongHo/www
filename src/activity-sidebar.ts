@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.chat.activity.catalog
+ * @implements RESP-CHAT-ACTIVITY-CATALOG
+ */
 import type { AppEvent, TransportState } from "./shared";
 
 export type ActivitySidebarKind = "skill" | "hook";

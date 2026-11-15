@@ -1,3 +1,7 @@
+/**
+ * @verifies RESP-CHAT-MESSAGES-EXECUTION
+ * @verifies RESP-CHAT-MESSAGES-PREVIEW
+ */
 import { describe, expect, test } from "bun:test";
 import { commandPreview } from "../src/command-preview";
 import { createElement } from "react";

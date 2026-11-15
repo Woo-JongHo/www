@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.records.lock
+ * @implements RESP-DEVELOPMENT-RECORDS-LOCK
+ */
 import { randomUUID }     from "node:crypto";
 import { promises as fs } from "node:fs";
 import os                 from "node:os";

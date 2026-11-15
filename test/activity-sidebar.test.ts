@@ -1,3 +1,6 @@
+/**
+ * @verifies RESP-CHAT-ACTIVITY-CATALOG
+ */
 import { describe, expect, test } from "bun:test";
 import {
   ActivitySnapshotBoundary,

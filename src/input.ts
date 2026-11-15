@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.chat.composer
+ * @implements RESP-CHAT-COMPOSER
+ */
 interface PromptKeyEvent {
   key      : string  ;
   shiftKey : boolean ;

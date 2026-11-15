@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.reporting.storage
+ * @implements RESP-DEVELOPMENT-REPORTING-STORAGE
+ */
 import { createHash, randomUUID } from "node:crypto";
 import { constants, promises as fs, type Dirent } from "node:fs";
 import type { FileHandle } from "node:fs/promises";

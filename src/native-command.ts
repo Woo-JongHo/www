@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.native.launch
+ * @implements RESP-NATIVE-LAUNCH
+ */
 import { statSync } from "node:fs";
 import { resolveProviderInvocation } from "../scripts/workflow/adapters/windows-command.ts";
 

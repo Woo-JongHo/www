@@ -1,3 +1,6 @@
+/**
+ * @verifies RESP-CHAT-ACTIVITY-ARTIFACTS
+ */
 import { describe, expect, test } from "bun:test";
 import { identifyWwwArtifact, referencedWwwArtifacts, WWW_ARTIFACTS } from "../src/www-activity";
 

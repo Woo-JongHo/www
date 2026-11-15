@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.chat.messages.reading
+ * @implements RESP-CHAT-MESSAGES-READING
+ */
 // Ovis 채팅 행 상태에서 개작. Copyright (c) 2026 devswha, MIT.
 // 원본: devswha/ovis@d505c75e26c54f31573057d1e9aa431ecc56677f/src/lib/chatRowState.tsx
 // WWW에서는 명령·diff의 펼침 상태만 보존한다. 출처와 고지는 docs/third-party/ovis.md를 따른다.

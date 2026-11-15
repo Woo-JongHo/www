@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.tooling.bundle
+ * @implements RESP-TOOLING-BUNDLE
+ */
 import { copyFileSync, mkdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { writeArchitecture } from "./scripts/generate-architecture.ts";

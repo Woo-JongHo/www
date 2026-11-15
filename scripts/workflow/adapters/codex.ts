@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.providers.codex
+ * @implements RESP-DEVELOPMENT-PROVIDERS-CODEX
+ */
 import { spawn } from "node:child_process";
 import { StringDecoder } from "node:string_decoder";
 import path from "node:path";

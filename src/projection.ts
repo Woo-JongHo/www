@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.chat.messages.projection
+ * @implements RESP-CHAT-MESSAGES-PROJECTION
+ */
 import type {
   AppEvent,
   ApprovalState,

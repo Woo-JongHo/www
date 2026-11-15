@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.chat.sessions.reading
+ * @implements RESP-CHAT-SESSIONS-READING
+ */
 // 입력 한도와 인용 결합은 Ovis에서 개작. Copyright (c) 2026 devswha, MIT.
 // 원본 revision: d505c75e26c54f31573057d1e9aa431ecc56677f
 // src/lib/composerLength.ts, src/lib/chatQuote.ts. docs/third-party/ovis.md 참고.

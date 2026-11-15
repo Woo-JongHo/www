@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.records.state
+ * @implements RESP-DEVELOPMENT-RECORDS-STATE
+ */
 import { createHash, randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";

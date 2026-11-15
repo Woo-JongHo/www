@@ -1,2405 +1,4342 @@
 {
-  "schemaVersion": 1,
-  "digest": "faf0b77d563f7edb4fa07f43230c2c829a3d58ac194e9197859ac69e958f7391",
-  "scope": "src/**/*.ts(x), scripts/workflow/**/*.ts, workflow.ts, source-policy.ts, generate-architecture.ts, build.ts",
+  "schemaVersion": 2,
+  "digest"       : "ba61ca2422d568cd88169a90f2043a505af946ceeed94ba03938aa1af0a3ba13",
+  "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
-      "id": "presentation",
-      "title": "화면과 상호작용",
+      "id"         : "presentation",
+      "title"      : "화면과 상호작용",
       "description": "React 화면 · 입력 · 읽기 상태",
-      "color": "#91baff"
+      "color"      : "#91baff"
     },
     {
-      "id": "model",
-      "title": "상태와 투영",
+      "id"         : "model",
+      "title"      : "상태와 투영",
       "description": "사건 해석 · 순수 모델 · 탐색",
-      "color": "#83c9bc"
+      "color"      : "#83c9bc"
     },
     {
-      "id": "contract",
-      "title": "브리지와 계약",
+      "id"         : "contract",
+      "title"      : "브리지와 계약",
       "description": "preload · IPC 허용 목록 · 공용 타입",
-      "color": "#dac391"
+      "color"      : "#dac391"
     },
     {
-      "id": "host",
-      "title": "Electron과 Native",
+      "id"         : "host",
+      "title"      : "Electron과 Native",
       "description": "프로세스 · JSON-RPC · 저장 서비스",
-      "color": "#baa6e0"
+      "color"      : "#baa6e0"
     },
     {
-      "id": "workflow",
-      "title": "개발과 기록",
+      "id"         : "workflow",
+      "title"      : "개발과 기록",
       "description": "권한 · 실행 · 증거 · 검토 · 보고서",
-      "color": "#a6b4c4"
+      "color"      : "#a6b4c4"
     },
     {
-      "id": "tooling",
-      "title": "빌드와 소스 정책",
+      "id"         : "tooling",
+      "title"      : "빌드와 소스 정책",
       "description": "번들 · 분석 생성 · 작성 하네스",
-      "color": "#c8ab99"
+      "color"      : "#c8ab99"
     }
   ],
   "nodes": [
     {
-      "id": "build.ts",
-      "file": "build.ts",
-      "title": "build",
-      "layer": "tooling",
-      "role": "앱 모듈 · build",
-      "line": 1,
-      "lines": 32,
-      "digest": "e82206e2197cd2b2ea28c80a41fe52c934cc99543c96658531bdf7c73f1cd55f"
+      "id"         : "build.ts",
+      "file"       : "build.ts",
+      "title"      : "build",
+      "layer"      : "tooling",
+      "role"       : "앱 모듈 · build",
+      "line"       : 1,
+      "lines"      : 36,
+      "digest"     : "f7eadfddea8584f17223c2c39b9dd0f01a26116f737e1ff0ed9d42a2eca3c90d",
+      "structureId": "arch.tooling.bundle"
     },
     {
-      "id": "scripts/generate-architecture.ts",
-      "file": "scripts/generate-architecture.ts",
-      "title": "generate-architecture",
-      "layer": "tooling",
-      "role": "앱 모듈 · generate-architecture",
-      "line": 1,
-      "lines": 115,
-      "digest": "3fe25635b08bc8f9b877ba3da900cd71d604e0ab8a797ca96692b72a37b49368"
+      "id"         : "scripts/architecture-contract.ts",
+      "file"       : "scripts/architecture-contract.ts",
+      "title"      : "architecture-contract",
+      "layer"      : "tooling",
+      "role"       : "구조 ID·요구 선언과 허용 의존 계약 검사",
+      "line"       : 1,
+      "lines"      : 342,
+      "digest"     : "774a715fe0bcef272411b766d9265a52d94b93c659803a6a52649f67a168c772",
+      "structureId": "arch.tooling.structure-contract"
     },
     {
-      "id": "scripts/source-policy.ts",
-      "file": "scripts/source-policy.ts",
-      "title": "source-policy",
-      "layer": "tooling",
-      "role": "앱 모듈 · source-policy",
-      "line": 1,
-      "lines": 226,
-      "digest": "832113060a8e3e6de5d3196d15a976982ccbd6917976ee0ab735f53b3be05565"
+      "id"         : "scripts/check-architecture.ts",
+      "file"       : "scripts/check-architecture.ts",
+      "title"      : "check-architecture",
+      "layer"      : "tooling",
+      "role"       : "구조 계약과 생성 snapshot 현재성 검사",
+      "line"       : 1,
+      "lines"      : 15,
+      "digest"     : "bf40ca9962c3049ef7491c1cb8e1fcf128019ff49770311a2a2e20e35c59fca6",
+      "structureId": "arch.tooling.map-validation"
     },
     {
-      "id": "scripts/workflow.ts",
-      "file": "scripts/workflow.ts",
-      "title": "workflow",
-      "layer": "tooling",
-      "role": "앱 모듈 · workflow",
-      "line": 1,
-      "lines": 340,
-      "digest": "c27600a2797489871330dca362dea6d841cc7be999150ef09d452a87a1355e8a"
+      "id"         : "scripts/generate-architecture.ts",
+      "file"       : "scripts/generate-architecture.ts",
+      "title"      : "generate-architecture",
+      "layer"      : "tooling",
+      "role"       : "앱 모듈 · generate-architecture",
+      "line"       : 1,
+      "lines"      : 236,
+      "digest"     : "c1b07921b1dc97a9236c4bf23d35c41d0adfdf88f500563b0425f4c3f74362a9",
+      "structureId": "arch.tooling.map-generation"
     },
     {
-      "id": "scripts/workflow/adapters/codex.ts",
-      "file": "scripts/workflow/adapters/codex.ts",
-      "title": "codex",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · codex",
-      "line": 1,
-      "lines": 207,
-      "digest": "89e20efdee84096a43bf17fab6ebde03a83140790aa7f17313e67370c0d30042"
+      "id"         : "scripts/source-policy.ts",
+      "file"       : "scripts/source-policy.ts",
+      "title"      : "source-policy",
+      "layer"      : "tooling",
+      "role"       : "앱 모듈 · source-policy",
+      "line"       : 1,
+      "lines"      : 230,
+      "digest"     : "09d4b0eae97ca3b0b55015123969c815916672486cc004bfd8d83328506b0705",
+      "structureId": "arch.tooling.source-policy"
     },
     {
-      "id": "scripts/workflow/adapters/gjc.ts",
-      "file": "scripts/workflow/adapters/gjc.ts",
-      "title": "gjc",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · gjc",
-      "line": 1,
-      "lines": 101,
-      "digest": "88a27043d9355d262ca34f3002e0a1815d6098d59fc8607445dbc75fbb2bdc82"
+      "id"         : "scripts/workflow.ts",
+      "file"       : "scripts/workflow.ts",
+      "title"      : "workflow",
+      "layer"      : "tooling",
+      "role"       : "앱 모듈 · workflow",
+      "line"       : 1,
+      "lines"      : 385,
+      "digest"     : "ba3cefe3dd9be3af38bdbc5839b4e8d6ed3f99c3ece9f4e56ae44d30868dfc11",
+      "structureId": "arch.development.authoring"
     },
     {
-      "id": "scripts/workflow/adapters/windows-command.ts",
-      "file": "scripts/workflow/adapters/windows-command.ts",
-      "title": "windows-command",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · windows-command",
-      "line": 1,
-      "lines": 78,
-      "digest": "cb2f597e6db6e5328b5bf6f36fe9061ab60c6729e5c4b0c352862b1f47a78f89"
+      "id"         : "scripts/workflow/adapters/codex.ts",
+      "file"       : "scripts/workflow/adapters/codex.ts",
+      "title"      : "codex",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · codex",
+      "line"       : 1,
+      "lines"      : 211,
+      "digest"     : "19e72a81ae1685bf3a568d1b3f93f0bcabcefcf61e2cb41dbd700b9a617c3768",
+      "structureId": "arch.development.providers.codex"
     },
     {
-      "id": "scripts/workflow/consistency.ts",
-      "file": "scripts/workflow/consistency.ts",
-      "title": "consistency",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · consistency",
-      "line": 1,
-      "lines": 138,
-      "digest": "9eab0332a024714de131db08cf22aaf7d417b979fe3a5f0e0ae1cc21a83fc3e9"
+      "id"         : "scripts/workflow/adapters/gjc.ts",
+      "file"       : "scripts/workflow/adapters/gjc.ts",
+      "title"      : "gjc",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · gjc",
+      "line"       : 1,
+      "lines"      : 105,
+      "digest"     : "a8f72330efd13409095bd4ad8dc7d9747c75d152831ffce726f7207ea82c9cfd",
+      "structureId": "arch.development.providers.gjc"
     },
     {
-      "id": "scripts/workflow/documentation.ts",
-      "file": "scripts/workflow/documentation.ts",
-      "title": "documentation",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · documentation",
-      "line": 1,
-      "lines": 114,
-      "digest": "821a67f49979a036de6ac4bb2f4ca163498e62f45978172c7971c8280c3df2cb"
+      "id"         : "scripts/workflow/adapters/windows-command.ts",
+      "file"       : "scripts/workflow/adapters/windows-command.ts",
+      "title"      : "windows-command",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · windows-command",
+      "line"       : 1,
+      "lines"      : 82,
+      "digest"     : "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+      "structureId": "arch.development.providers.invocation"
     },
     {
-      "id": "scripts/workflow/evidence.ts",
-      "file": "scripts/workflow/evidence.ts",
-      "title": "evidence",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · evidence",
-      "line": 1,
-      "lines": 408,
-      "digest": "1cd3e9308123babafee0636be11a1bb20ab4b2ab0601f0234d8ae87a2e12603d"
+      "id"         : "scripts/workflow/consistency.ts",
+      "file"       : "scripts/workflow/consistency.ts",
+      "title"      : "consistency",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · consistency",
+      "line"       : 1,
+      "lines"      : 142,
+      "digest"     : "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+      "structureId": "arch.development.evidence.repository"
     },
     {
-      "id": "scripts/workflow/lock.ts",
-      "file": "scripts/workflow/lock.ts",
-      "title": "lock",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · lock",
-      "line": 1,
-      "lines": 102,
-      "digest": "468fbb51a6a1ffd0dfe977eb5f542c2aa4fc2000c99943f97bb8b904262c2f53"
+      "id"         : "scripts/workflow/documentation.ts",
+      "file"       : "scripts/workflow/documentation.ts",
+      "title"      : "documentation",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · documentation",
+      "line"       : 1,
+      "lines"      : 118,
+      "digest"     : "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+      "structureId": "arch.development.evidence.documentation"
     },
     {
-      "id": "scripts/workflow/preflight.ts",
-      "file": "scripts/workflow/preflight.ts",
-      "title": "preflight",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · preflight",
-      "line": 1,
-      "lines": 190,
-      "digest": "2550481a7a18c926b93496fa96da3e89afcabbd366e96f404e9a06ee790f6d63"
+      "id"         : "scripts/workflow/evidence.ts",
+      "file"       : "scripts/workflow/evidence.ts",
+      "title"      : "evidence",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · evidence",
+      "line"       : 1,
+      "lines"      : 412,
+      "digest"     : "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+      "structureId": "arch.development.evidence.verification"
     },
     {
-      "id": "scripts/workflow/record.ts",
-      "file": "scripts/workflow/record.ts",
-      "title": "record",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · record",
-      "line": 1,
-      "lines": 216,
-      "digest": "d7010c47bb49b81c8897555ef912d20cfa23399d36e5b4b68a12938edf239a77"
+      "id"         : "scripts/workflow/lock.ts",
+      "file"       : "scripts/workflow/lock.ts",
+      "title"      : "lock",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · lock",
+      "line"       : 1,
+      "lines"      : 106,
+      "digest"     : "247e50335e664c97646c25bf50504ccd107343de819863e36f40b8f079f1c09f",
+      "structureId": "arch.development.records.lock"
     },
     {
-      "id": "scripts/workflow/report-lifecycle.ts",
-      "file": "scripts/workflow/report-lifecycle.ts",
-      "title": "report-lifecycle",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · report-lifecycle",
-      "line": 1,
-      "lines": 170,
-      "digest": "8ddf887199341aa2a32c31be2d593771a97bcccb2956e9cbd367856702027147"
+      "id"         : "scripts/workflow/preflight.ts",
+      "file"       : "scripts/workflow/preflight.ts",
+      "title"      : "preflight",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · preflight",
+      "line"       : 1,
+      "lines"      : 194,
+      "digest"     : "1b8ca174c938e40da2a6f44e2592127901d99ec27c19a3fca6ed1557366471f9",
+      "structureId": "arch.development.authorization"
     },
     {
-      "id": "scripts/workflow/report-view.ts",
-      "file": "scripts/workflow/report-view.ts",
-      "title": "report-view",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · report-view",
-      "line": 1,
-      "lines": 165,
-      "digest": "e7e1ee7f64b085c0e6d1464182e5dadad66e4a0db4f4afe8dfad6db0281f6f7b"
+      "id"         : "scripts/workflow/record.ts",
+      "file"       : "scripts/workflow/record.ts",
+      "title"      : "record",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · record",
+      "line"       : 1,
+      "lines"      : 220,
+      "digest"     : "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+      "structureId": "arch.development.records.events"
     },
     {
-      "id": "scripts/workflow/reports.ts",
-      "file": "scripts/workflow/reports.ts",
-      "title": "reports",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · reports",
-      "line": 1,
-      "lines": 624,
-      "digest": "70dc54949690565d6d71bd58ad24e05f068ec26d362c3d8bc3746e7a02f13cec"
+      "id"         : "scripts/workflow/report-lifecycle.ts",
+      "file"       : "scripts/workflow/report-lifecycle.ts",
+      "title"      : "report-lifecycle",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · report-lifecycle",
+      "line"       : 1,
+      "lines"      : 174,
+      "digest"     : "b1f075c0e5fcbc7a85232cd99fbfd6818f7272df99da453bd9a8fa8f1daa4a23",
+      "structureId": "arch.development.reporting.lifecycle"
     },
     {
-      "id": "scripts/workflow/review.ts",
-      "file": "scripts/workflow/review.ts",
-      "title": "review",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · review",
-      "line": 1,
-      "lines": 422,
-      "digest": "b8da9ea1ed1a48a815dd62ec08aa326c4fd4ae90a62f329d93769850f72d685f"
+      "id"         : "scripts/workflow/report-view.ts",
+      "file"       : "scripts/workflow/report-view.ts",
+      "title"      : "report-view",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · report-view",
+      "line"       : 1,
+      "lines"      : 169,
+      "digest"     : "c0b392b8ef61a07432de9522054c3b13b9842c68df7ae2f05abd75495e251f2c",
+      "structureId": "arch.development.reporting.document"
     },
     {
-      "id": "scripts/workflow/route.ts",
-      "file": "scripts/workflow/route.ts",
-      "title": "route",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · route",
-      "line": 1,
-      "lines": 91,
-      "digest": "729305e536cc694d9456dfbe6de98f76ed471206a63ffc56b1805cde24f50407"
+      "id"         : "scripts/workflow/reports.ts",
+      "file"       : "scripts/workflow/reports.ts",
+      "title"      : "reports",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · reports",
+      "line"       : 1,
+      "lines"      : 628,
+      "digest"     : "b25a2ab2748970a4d4d2e6738535489e12e7328bf9d281f3475345318392457b",
+      "structureId": "arch.development.reporting.storage"
     },
     {
-      "id": "scripts/workflow/run.ts",
-      "file": "scripts/workflow/run.ts",
-      "title": "run",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · run",
-      "line": 1,
-      "lines": 642,
-      "digest": "89e60bf7efd939c640551efe589569eaecb9edcade176e6e61534da5668543a1"
+      "id"         : "scripts/workflow/review.ts",
+      "file"       : "scripts/workflow/review.ts",
+      "title"      : "review",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · review",
+      "line"       : 1,
+      "lines"      : 426,
+      "digest"     : "f4f84bf8c90f3d084324dbf145735352fc7f49656e92385e83b7749a3367a8fc",
+      "structureId": "arch.development.review"
     },
     {
-      "id": "scripts/workflow/schema.ts",
-      "file": "scripts/workflow/schema.ts",
-      "title": "schema",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · schema",
-      "line": 1,
-      "lines": 154,
-      "digest": "6b547e2e168ea1595ea6a17d60e8d2d54d483ee0b5c2ceea63b40f6aa11d922c"
+      "id"         : "scripts/workflow/route.ts",
+      "file"       : "scripts/workflow/route.ts",
+      "title"      : "route",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · route",
+      "line"       : 1,
+      "lines"      : 95,
+      "digest"     : "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+      "structureId": "arch.development.routing"
     },
     {
-      "id": "scripts/workflow/types.ts",
-      "file": "scripts/workflow/types.ts",
-      "title": "types",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · types",
-      "line": 1,
-      "lines": 149,
-      "digest": "9fdadd37f44c2b746a59cf0773270b7c93ea86eee45da2e799e815251114beee"
+      "id"         : "scripts/workflow/run.ts",
+      "file"       : "scripts/workflow/run.ts",
+      "title"      : "run",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · run",
+      "line"       : 1,
+      "lines"      : 646,
+      "digest"     : "af43522436d104b0cd9b30caff88ab6ca6da4bd4bb61a2ff9cadb160aa5b8a08",
+      "structureId": "arch.development.execution"
     },
     {
-      "id": "scripts/workflow/work.ts",
-      "file": "scripts/workflow/work.ts",
-      "title": "work",
-      "layer": "workflow",
-      "role": "개발 절차 모듈 · work",
-      "line": 1,
-      "lines": 411,
-      "digest": "8520e2f90cc048a84fbbbb56dbd631da948f8d5d642e8a30850a011a81eab3da"
+      "id"         : "scripts/workflow/schema.ts",
+      "file"       : "scripts/workflow/schema.ts",
+      "title"      : "schema",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · schema",
+      "line"       : 1,
+      "lines"      : 158,
+      "digest"     : "ceaf0a71cbdd589fdf8948a27b6f60bf6c72e9bca6ede78f6ebbbd131d5f01d2",
+      "structureId": "arch.development.records.validation"
     },
     {
-      "id": "src/activity-sidebar.ts",
-      "file": "src/activity-sidebar.ts",
-      "title": "activity-sidebar",
-      "layer": "model",
-      "role": "앱 모듈 · activity-sidebar",
-      "line": 1,
-      "lines": 659,
-      "digest": "4665c06bda2792b5bd6a40aacc03ffbb6020dd4a3dcfcaf16356cce2cf1f22d9"
+      "id"         : "scripts/workflow/types.ts",
+      "file"       : "scripts/workflow/types.ts",
+      "title"      : "types",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · types",
+      "line"       : 1,
+      "lines"      : 153,
+      "digest"     : "c835dc8a43dff458e0820072da6d98dc9932254b8f5a604dd4016d4638793bf0",
+      "structureId": "arch.development.records.protocol"
     },
     {
-      "id": "src/architecture.ts",
-      "file": "src/architecture.ts",
-      "title": "architecture",
-      "layer": "model",
-      "role": "계층·모듈 탐색과 결정적 배치",
-      "line": 1,
-      "lines": 61,
-      "digest": "f466156f3e0a05878db98bab2869343059b4d4f16af59e77081ecdab68d78c1d"
+      "id"         : "scripts/workflow/work.ts",
+      "file"       : "scripts/workflow/work.ts",
+      "title"      : "work",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · work",
+      "line"       : 1,
+      "lines"      : 415,
+      "digest"     : "659ef56fa8b73bef462b55adecf2b96fc5d6130bd46833e58712b25d0120fccb",
+      "structureId": "arch.development.records.state"
     },
     {
-      "id": "src/chat-message.tsx",
-      "file": "src/chat-message.tsx",
-      "title": "chat-message",
-      "layer": "presentation",
-      "role": "앱 모듈 · chat-message",
-      "line": 1,
-      "lines": 52,
-      "digest": "5a482b06b912db5629d6ebc10e3879811330280a57f86293f8439e31b793331a"
+      "id"         : "src/activity-sidebar.ts",
+      "file"       : "src/activity-sidebar.ts",
+      "title"      : "activity-sidebar",
+      "layer"      : "model",
+      "role"       : "앱 모듈 · activity-sidebar",
+      "line"       : 1,
+      "lines"      : 663,
+      "digest"     : "c537be6716e1b0047a944e61da324596046d32aebd3c3921c0744decbe71568b",
+      "structureId": "arch.chat.activity.catalog"
     },
     {
-      "id": "src/chat-row-state.tsx",
-      "file": "src/chat-row-state.tsx",
-      "title": "chat-row-state",
-      "layer": "presentation",
-      "role": "앱 모듈 · chat-row-state",
-      "line": 1,
-      "lines": 26,
-      "digest": "01cb8c0ccc96eda8a809cfd046b32a903966027375943a66c56d0b99d248ac2e"
+      "id"         : "src/architecture-tree.ts",
+      "file"       : "src/architecture-tree.ts",
+      "title"      : "architecture-tree",
+      "layer"      : "model",
+      "role"       : "책임 계층·검색·의존 집계",
+      "line"       : 1,
+      "lines"      : 175,
+      "digest"     : "f5e4f75216578cffd0f8a6c306da7b8dab8fe5e41bf68121938aed120948fbd2",
+      "structureId": "arch.blueprint.layout"
     },
     {
-      "id": "src/chat-state.ts",
-      "file": "src/chat-state.ts",
-      "title": "chat-state",
-      "layer": "model",
-      "role": "앱 모듈 · chat-state",
-      "line": 1,
-      "lines": 60,
-      "digest": "eed9e3608b6525638119859c096d6fb46bfba1ec0111acb3e6ca96aede6ac0d7"
+      "id"         : "src/architecture.ts",
+      "file"       : "src/architecture.ts",
+      "title"      : "architecture",
+      "layer"      : "model",
+      "role"       : "계층·모듈 탐색과 결정적 배치",
+      "line"       : 1,
+      "lines"      : 65,
+      "digest"     : "a6e31355db0b275fa87ff565cb3d2eeaa73ddf9e457e9043c0952eda7673682b",
+      "structureId": "arch.blueprint.layout"
     },
     {
-      "id": "src/command-card.tsx",
-      "file": "src/command-card.tsx",
-      "title": "command-card",
-      "layer": "presentation",
-      "role": "앱 모듈 · command-card",
-      "line": 1,
-      "lines": 42,
-      "digest": "28f08af51e65f82a4e84bbfc16d16862750816f1ee45146161d4ab04239d01fe"
+      "id"         : "src/chat-message.tsx",
+      "file"       : "src/chat-message.tsx",
+      "title"      : "chat-message",
+      "layer"      : "presentation",
+      "role"       : "앱 모듈 · chat-message",
+      "line"       : 1,
+      "lines"      : 56,
+      "digest"     : "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+      "structureId": "arch.chat.messages.markdown"
     },
     {
-      "id": "src/command-preview.ts",
-      "file": "src/command-preview.ts",
-      "title": "command-preview",
-      "layer": "host",
-      "role": "앱 모듈 · command-preview",
-      "line": 1,
-      "lines": 10,
-      "digest": "e4e2a38fdb1dd2014a262a7ec4940268cb16f4d583079c383bd79acd2ebfade1"
+      "id"         : "src/chat-row-state.tsx",
+      "file"       : "src/chat-row-state.tsx",
+      "title"      : "chat-row-state",
+      "layer"      : "presentation",
+      "role"       : "앱 모듈 · chat-row-state",
+      "line"       : 1,
+      "lines"      : 30,
+      "digest"     : "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+      "structureId": "arch.chat.messages.reading"
     },
     {
-      "id": "src/conversations.ts",
-      "file": "src/conversations.ts",
-      "title": "conversations",
-      "layer": "host",
-      "role": "Native 대화 목록·이력 복원",
-      "line": 1,
-      "lines": 197,
-      "digest": "4d4d1557270239b352a1904c5aac0cc95c8f172198e44bdc5caf4c489c2facc9"
+      "id"         : "src/chat-state.ts",
+      "file"       : "src/chat-state.ts",
+      "title"      : "chat-state",
+      "layer"      : "model",
+      "role"       : "앱 모듈 · chat-state",
+      "line"       : 1,
+      "lines"      : 64,
+      "digest"     : "1f88c97dbc2c6ad015cd87db9c79e485746a5512b957642e9a3f653cd01cca48",
+      "structureId": "arch.chat.sessions.reading"
     },
     {
-      "id": "src/development.ts",
-      "file": "src/development.ts",
-      "title": "development",
-      "layer": "host",
-      "role": "개발 상태와 완료 서비스",
-      "line": 1,
-      "lines": 52,
-      "digest": "f8301dbe318351b745a8ffb70ded6b3cde7cdc02ac4ff617040f14281ba96ca1"
+      "id"         : "src/command-card.tsx",
+      "file"       : "src/command-card.tsx",
+      "title"      : "command-card",
+      "layer"      : "presentation",
+      "role"       : "앱 모듈 · command-card",
+      "line"       : 1,
+      "lines"      : 46,
+      "digest"     : "3ee3942204a9fbd633d6fb6766e6d0d3576a1cfd0259f144a23cb1549f877fac",
+      "structureId": "arch.chat.messages.execution"
     },
     {
-      "id": "src/ecosystem-view.tsx",
-      "file": "src/ecosystem-view.tsx",
-      "title": "ecosystem-view",
-      "layer": "presentation",
-      "role": "코드 설계도와 생태계 안내 탐색",
-      "line": 1,
-      "lines": 257,
-      "digest": "3d464e20628b6166ddbbca6e0a178270d369254325d0ea4afdbff5dfdf0b65c1"
+      "id"         : "src/command-preview.ts",
+      "file"       : "src/command-preview.ts",
+      "title"      : "command-preview",
+      "layer"      : "host",
+      "role"       : "앱 모듈 · command-preview",
+      "line"       : 1,
+      "lines"      : 14,
+      "digest"     : "3db5dccde5a183a17e9537204be93fc28ca5097314de16ad401bd2f02fa24856",
+      "structureId": "arch.chat.messages.preview"
     },
     {
-      "id": "src/ecosystem.ts",
-      "file": "src/ecosystem.ts",
-      "title": "ecosystem",
-      "layer": "model",
-      "role": "수동 생태계 안내와 후속 방향",
-      "line": 1,
-      "lines": 149,
-      "digest": "9503bd32b21f7630b9ff2329e10c1f9bfda746d85ef90d5b3fcc6fd8e0d60e4b"
+      "id"         : "src/conversations.ts",
+      "file"       : "src/conversations.ts",
+      "title"      : "conversations",
+      "layer"      : "host",
+      "role"       : "Native 대화 목록·이력 복원",
+      "line"       : 1,
+      "lines"      : 201,
+      "digest"     : "75468e7335d6d09cf71e68c3acc4d5c79371617c94ad8b78c7086682a845bb5c",
+      "structureId": "arch.chat.sessions.restore"
     },
     {
-      "id": "src/input.ts",
-      "file": "src/input.ts",
-      "title": "input",
-      "layer": "presentation",
-      "role": "앱 모듈 · input",
-      "line": 1,
-      "lines": 41,
-      "digest": "d915ba1a024a6c930d1acebf93a7257cb35b16ad9f2f48ddf54013cd5929b0d0"
+      "id"         : "src/development.ts",
+      "file"       : "src/development.ts",
+      "title"      : "development",
+      "layer"      : "host",
+      "role"       : "개발 상태와 완료 서비스",
+      "line"       : 1,
+      "lines"      : 56,
+      "digest"     : "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+      "structureId": "arch.development.service"
     },
     {
-      "id": "src/main.ts",
-      "file": "src/main.ts",
-      "title": "main",
-      "layer": "host",
-      "role": "앱·Native 수명주기와 IPC 처리",
-      "line": 1,
-      "lines": 495,
-      "digest": "357b6525850445377c4c609034fa735ba1553f8f585203e1733eec15479e55de"
+      "id"         : "src/ecosystem-view.tsx",
+      "file"       : "src/ecosystem-view.tsx",
+      "title"      : "ecosystem-view",
+      "layer"      : "presentation",
+      "role"       : "코드 설계도와 생태계 안내 탐색",
+      "line"       : 1,
+      "lines"      : 284,
+      "digest"     : "28b5ca816ec60925e04248515c23fc9b4d3cb63dc4543815b60df2d7e77ce45b",
+      "structureId": "arch.blueprint.view"
     },
     {
-      "id": "src/native-activity-view.tsx",
-      "file": "src/native-activity-view.tsx",
-      "title": "native-activity-view",
-      "layer": "presentation",
-      "role": "앱 모듈 · native-activity-view",
-      "line": 1,
-      "lines": 294,
-      "digest": "706069639661194da7104faecdbd639efbf4416ce0af9aee93e404aba5037107"
+      "id"         : "src/ecosystem.ts",
+      "file"       : "src/ecosystem.ts",
+      "title"      : "ecosystem",
+      "layer"      : "model",
+      "role"       : "수동 생태계 안내와 후속 방향",
+      "line"       : 1,
+      "lines"      : 153,
+      "digest"     : "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+      "structureId": "arch.blueprint.ecosystem"
     },
     {
-      "id": "src/native-activity.ts",
-      "file": "src/native-activity.ts",
-      "title": "native-activity",
-      "layer": "model",
-      "role": "앱 모듈 · native-activity",
-      "line": 1,
-      "lines": 556,
-      "digest": "aec9fb5bd371925ffc820343ff51055bfe5eaa9d238095a5d02e71953190af72"
+      "id"         : "src/input.ts",
+      "file"       : "src/input.ts",
+      "title"      : "input",
+      "layer"      : "presentation",
+      "role"       : "앱 모듈 · input",
+      "line"       : 1,
+      "lines"      : 45,
+      "digest"     : "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+      "structureId": "arch.chat.composer"
     },
     {
-      "id": "src/native-chat.ts",
-      "file": "src/native-chat.ts",
-      "title": "native-chat",
-      "layer": "model",
-      "role": "앱 모듈 · native-chat",
-      "line": 1,
-      "lines": 29,
-      "digest": "35beb2a952a56d527dfb787561d6fd38632df76d7b97dee5275e66b16eed55a5"
+      "id"         : "src/main.ts",
+      "file"       : "src/main.ts",
+      "title"      : "main",
+      "layer"      : "host",
+      "role"       : "앱·Native 수명주기와 IPC 처리",
+      "line"       : 1,
+      "lines"      : 499,
+      "digest"     : "25181668e94f12179981505451af705a5b87509339f82e245a8157786e3e8899",
+      "structureId": "arch.native.lifecycle"
     },
     {
-      "id": "src/native-command.ts",
-      "file": "src/native-command.ts",
-      "title": "native-command",
-      "layer": "host",
-      "role": "앱 모듈 · native-command",
-      "line": 1,
-      "lines": 14,
-      "digest": "1649309ed54ab42b20a72b250cc6dd87b7dde096ff781abd5bf6802aee91e282"
+      "id"         : "src/native-activity-view.tsx",
+      "file"       : "src/native-activity-view.tsx",
+      "title"      : "native-activity-view",
+      "layer"      : "presentation",
+      "role"       : "앱 모듈 · native-activity-view",
+      "line"       : 1,
+      "lines"      : 298,
+      "digest"     : "16a6779ab7d344a99edfc5ab903409c752afabeb809f81d8611c770561893a29",
+      "structureId": "arch.chat.activity.view"
     },
     {
-      "id": "src/native-report-input.ts",
-      "file": "src/native-report-input.ts",
-      "title": "native-report-input",
-      "layer": "host",
-      "role": "앱 모듈 · native-report-input",
-      "line": 1,
-      "lines": 119,
-      "digest": "68f3fc6e15486b0daa7583cbb08ea4549f59afd0740e963e44b9c7921aa849c2"
+      "id"         : "src/native-activity.ts",
+      "file"       : "src/native-activity.ts",
+      "title"      : "native-activity",
+      "layer"      : "model",
+      "role"       : "앱 모듈 · native-activity",
+      "line"       : 1,
+      "lines"      : 560,
+      "digest"     : "890ccf24d3df971ecb2baa3f05eb823b7d2c148d62748bb7581c8575d327293a",
+      "structureId": "arch.chat.activity.projection"
     },
     {
-      "id": "src/native-reports.ts",
-      "file": "src/native-reports.ts",
-      "title": "native-reports",
-      "layer": "host",
-      "role": "자동 보고서 큐와 수명주기",
-      "line": 1,
-      "lines": 505,
-      "digest": "613d0802bac3e6ea97b0df1bd0eb8ba3659688037c1606ddf879ca1fb37bb35d"
+      "id"         : "src/native-chat.ts",
+      "file"       : "src/native-chat.ts",
+      "title"      : "native-chat",
+      "layer"      : "model",
+      "role"       : "앱 모듈 · native-chat",
+      "line"       : 1,
+      "lines"      : 33,
+      "digest"     : "b7a01c4c10226dbcd11e5931b27dcc7951226da80bdeeba054f89da7daaaaf9b",
+      "structureId": "arch.chat.sessions.requests"
     },
     {
-      "id": "src/preload.ts",
-      "file": "src/preload.ts",
-      "title": "preload",
-      "layer": "contract",
-      "role": "제한된 WwwApi 노출",
-      "line": 1,
-      "lines": 36,
-      "digest": "69a22504d09834b12d285d27062c2be95ba6f24e81aa4d79578c2bc077e914e5"
+      "id"         : "src/native-command.ts",
+      "file"       : "src/native-command.ts",
+      "title"      : "native-command",
+      "layer"      : "host",
+      "role"       : "앱 모듈 · native-command",
+      "line"       : 1,
+      "lines"      : 18,
+      "digest"     : "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+      "structureId": "arch.native.launch"
     },
     {
-      "id": "src/projection.ts",
-      "file": "src/projection.ts",
-      "title": "projection",
-      "layer": "model",
-      "role": "공개 사건을 읽을 수 있는 블록으로 투영",
-      "line": 1,
-      "lines": 527,
-      "digest": "bf733dabd96a2008fa6f8494e90238e982222d461e7b2a25c541c5a3cc9c817f"
+      "id"         : "src/native-report-input.ts",
+      "file"       : "src/native-report-input.ts",
+      "title"      : "native-report-input",
+      "layer"      : "host",
+      "role"       : "앱 모듈 · native-report-input",
+      "line"       : 1,
+      "lines"      : 123,
+      "digest"     : "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+      "structureId": "arch.reports.collection"
     },
     {
-      "id": "src/renderer.tsx",
-      "file": "src/renderer.tsx",
-      "title": "renderer",
-      "layer": "presentation",
-      "role": "화면 전환과 대화 상태 통합",
-      "line": 1,
-      "lines": 750,
-      "digest": "8aa91600a2f5a134a30a2e39edf39e9e3d05901231523ea686358561fcb408ce"
+      "id"         : "src/native-reports.ts",
+      "file"       : "src/native-reports.ts",
+      "title"      : "native-reports",
+      "layer"      : "host",
+      "role"       : "자동 보고서 큐와 수명주기",
+      "line"       : 1,
+      "lines"      : 509,
+      "digest"     : "32ae666fe6e40273a592af56ac4ed680f933dc6400d536876ad4b7ae50c21237",
+      "structureId": "arch.reports.queue"
     },
     {
-      "id": "src/report-judge.ts",
-      "file": "src/report-judge.ts",
-      "title": "report-judge",
-      "layer": "host",
-      "role": "별도 읽기 전용 Native 보고서 판단",
-      "line": 1,
-      "lines": 343,
-      "digest": "80170d3852300e57cd1516ca938d081bd27cb600d8ad71104b77ac89486680e3"
+      "id"         : "src/preload.ts",
+      "file"       : "src/preload.ts",
+      "title"      : "preload",
+      "layer"      : "contract",
+      "role"       : "제한된 WwwApi 노출",
+      "line"       : 1,
+      "lines"      : 40,
+      "digest"     : "104ad8d8520a3e9c5ac733dd5c7a05248778ec315d97e897174bc9043d3431ab",
+      "structureId": "arch.native.bridge"
     },
     {
-      "id": "src/reports-service.ts",
-      "file": "src/reports-service.ts",
-      "title": "reports-service",
-      "layer": "host",
-      "role": "작업 보고서의 안전한 목록·읽기",
-      "line": 1,
-      "lines": 19,
-      "digest": "896d4dedf42bf6f0b1c34b441d9b4c519459b830c476696a669d6e175acf8614"
+      "id"         : "src/projection.ts",
+      "file"       : "src/projection.ts",
+      "title"      : "projection",
+      "layer"      : "model",
+      "role"       : "공개 사건을 읽을 수 있는 블록으로 투영",
+      "line"       : 1,
+      "lines"      : 531,
+      "digest"     : "33f066db7d1fe7eb112e34cf7ee041e7138104be87a84dbb58c9d8addc5ec6e3",
+      "structureId": "arch.chat.messages.projection"
     },
     {
-      "id": "src/reports-view.tsx",
-      "file": "src/reports-view.tsx",
-      "title": "reports-view",
-      "layer": "presentation",
-      "role": "앱 모듈 · reports-view",
-      "line": 1,
-      "lines": 153,
-      "digest": "7eb88244000f916880a190f849579d39c7c25abaec6fa7091166e8849f4098d3"
+      "id"         : "src/renderer.tsx",
+      "file"       : "src/renderer.tsx",
+      "title"      : "renderer",
+      "layer"      : "presentation",
+      "role"       : "화면 전환과 대화 상태 통합",
+      "line"       : 1,
+      "lines"      : 754,
+      "digest"     : "d365b5cde407ead3f230ba10b080c4aafe9ce81072d8962ebc247d0fe2fb1cb7",
+      "structureId": "arch.chat.workspace"
     },
     {
-      "id": "src/rpc.ts",
-      "file": "src/rpc.ts",
-      "title": "rpc",
-      "layer": "host",
-      "role": "JSONL 요청·응답과 EOF 처리",
-      "line": 1,
-      "lines": 93,
-      "digest": "6ce78a35de91ce6d52aa8782627f96f18e77719c68e36d16fcd0f4347c6da24b"
+      "id"         : "src/report-judge.ts",
+      "file"       : "src/report-judge.ts",
+      "title"      : "report-judge",
+      "layer"      : "host",
+      "role"       : "별도 읽기 전용 Native 보고서 판단",
+      "line"       : 1,
+      "lines"      : 347,
+      "digest"     : "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+      "structureId": "arch.reports.judgement"
     },
     {
-      "id": "src/shared.ts",
-      "file": "src/shared.ts",
-      "title": "shared",
-      "layer": "contract",
-      "role": "프로세스 간 공용 타입 계약",
-      "line": 1,
-      "lines": 121,
-      "digest": "a483d866bc3fdead1986e20dc6aac26ee07d2f9e6b557daa058ee8f322a36731"
+      "id"         : "src/reports-service.ts",
+      "file"       : "src/reports-service.ts",
+      "title"      : "reports-service",
+      "layer"      : "host",
+      "role"       : "작업 보고서의 안전한 목록·읽기",
+      "line"       : 1,
+      "lines"      : 23,
+      "digest"     : "9befdc420d42b3d3b603e401c557d5b353dea6a3db28cfa85248af0b8fd8db17",
+      "structureId": "arch.reports.service"
     },
     {
-      "id": "src/www-activity.ts",
-      "file": "src/www-activity.ts",
-      "title": "www-activity",
-      "layer": "host",
-      "role": "앱 모듈 · www-activity",
-      "line": 1,
-      "lines": 113,
-      "digest": "8109fa33c7e76fc499b216991ca3934937133e6bb08b7a617c9349c9e85af335"
+      "id"         : "src/reports-view.tsx",
+      "file"       : "src/reports-view.tsx",
+      "title"      : "reports-view",
+      "layer"      : "presentation",
+      "role"       : "앱 모듈 · reports-view",
+      "line"       : 1,
+      "lines"      : 157,
+      "digest"     : "e4a8fae10083d2c76f8927b58b3edcf22512959c89f4403ebcdb08332fe9c5ea",
+      "structureId": "arch.reports.view"
+    },
+    {
+      "id"         : "src/rpc.ts",
+      "file"       : "src/rpc.ts",
+      "title"      : "rpc",
+      "layer"      : "host",
+      "role"       : "JSONL 요청·응답과 EOF 처리",
+      "line"       : 1,
+      "lines"      : 97,
+      "digest"     : "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+      "structureId": "arch.native.transport"
+    },
+    {
+      "id"         : "src/shared.ts",
+      "file"       : "src/shared.ts",
+      "title"      : "shared",
+      "layer"      : "contract",
+      "role"       : "프로세스 간 공용 타입 계약",
+      "line"       : 1,
+      "lines"      : 125,
+      "digest"     : "b471fcb48743b97c4939d830830e6aca9e984586958b070516744748211256af",
+      "structureId": "arch.native.protocol"
+    },
+    {
+      "id"         : "src/www-activity.ts",
+      "file"       : "src/www-activity.ts",
+      "title"      : "www-activity",
+      "layer"      : "host",
+      "role"       : "앱 모듈 · www-activity",
+      "line"       : 1,
+      "lines"      : 117,
+      "digest"     : "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+      "structureId": "arch.chat.activity.artifacts"
     }
   ],
   "edges": [
     {
-      "id": "build.ts:93",
-      "from": "build.ts",
-      "to": "scripts/generate-architecture.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "build.ts:173",
+      "from"     : "build.ts",
+      "to"       : "scripts/generate-architecture.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./scripts/generate-architecture.ts",
-      "line": 3,
-      "endLine": 3,
+      "line"     : 7,
+      "endLine"  : 7,
       "statement": "import { writeArchitecture } from \"./scripts/generate-architecture.ts\";"
     },
     {
-      "id": "scripts/workflow.ts:0",
-      "from": "scripts/workflow.ts",
-      "to": "scripts/workflow/report-lifecycle.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/check-architecture.ts:168",
+      "from"     : "scripts/check-architecture.ts",
+      "to"       : "scripts/generate-architecture.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./generate-architecture.ts",
+      "line"     : 7,
+      "endLine"  : 7,
+      "statement": "import { writeArchitecture } from \"./generate-architecture.ts\";"
+    },
+    {
+      "id"       : "scripts/generate-architecture.ts:469",
+      "from"     : "scripts/generate-architecture.ts",
+      "to"       : "scripts/architecture-contract.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./architecture-contract.ts",
+      "line"     : 12,
+      "endLine"  : 12,
+      "statement": "import { architecturePath, checkArchitectureContract, managedArchitectureSources } from \"./architecture-contract.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow.ts:94",
+      "from"     : "scripts/workflow.ts",
+      "to"       : "scripts/workflow/report-lifecycle.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./workflow/report-lifecycle.ts",
-      "line": 1,
-      "endLine": 1,
+      "line"     : 5,
+      "endLine"  : 5,
       "statement": "import { runReportedStage } from \"./workflow/report-lifecycle.ts\";"
     },
     {
-      "id": "scripts/workflow.ts:295",
-      "from": "scripts/workflow.ts",
-      "to": "scripts/source-policy.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow.ts:399",
+      "from"     : "scripts/workflow.ts",
+      "to"       : "scripts/source-policy.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./source-policy.ts",
-      "line": 7,
-      "endLine": 7,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { assertTypeScriptWrites, checkSourcePolicy } from \"./source-policy.ts\";"
     },
     {
-      "id": "scripts/workflow.ts:375",
-      "from": "scripts/workflow.ts",
-      "to": "scripts/workflow/run.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow.ts:479",
+      "from"     : "scripts/workflow.ts",
+      "to"       : "scripts/workflow/run.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./workflow/run.ts",
-      "line": 8,
-      "endLine": 8,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { runProcess, runWorkflow } from \"./workflow/run.ts\";"
     },
     {
-      "id": "scripts/workflow.ts:436",
-      "from": "scripts/workflow.ts",
-      "to": "scripts/workflow/preflight.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow.ts:540",
+      "from"     : "scripts/workflow.ts",
+      "to"       : "scripts/workflow/preflight.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./workflow/preflight.ts",
-      "line": 9,
-      "endLine": 9,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import { validateWritePaths } from \"./workflow/preflight.ts\";"
     },
     {
-      "id": "scripts/workflow.ts:498",
-      "from": "scripts/workflow.ts",
-      "to": "scripts/workflow/route.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow.ts:602",
+      "from"     : "scripts/workflow.ts",
+      "to"       : "scripts/workflow/route.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./workflow/route.ts",
-      "line": 10,
-      "endLine": 10,
+      "line"     : 14,
+      "endLine"  : 14,
       "statement": "import { namedSkill } from \"./workflow/route.ts\";"
     },
     {
-      "id": "scripts/workflow.ts:548",
-      "from": "scripts/workflow.ts",
-      "to": "scripts/workflow/adapters/gjc.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow.ts:652",
+      "from"     : "scripts/workflow.ts",
+      "to"       : "scripts/workflow/adapters/gjc.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./workflow/adapters/gjc.ts",
-      "line": 11,
-      "endLine": 11,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import type { ProcessInvocation, ProcessOptions } from \"./workflow/adapters/gjc.ts\";"
     },
     {
-      "id": "scripts/workflow/adapters/codex.ts:127",
-      "from": "scripts/workflow/adapters/codex.ts",
-      "to": "scripts/workflow/adapters/windows-command.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/adapters/codex.ts:233",
+      "from"     : "scripts/workflow/adapters/codex.ts",
+      "to"       : "scripts/workflow/adapters/windows-command.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./windows-command.ts",
-      "line": 4,
-      "endLine": 4,
+      "line"     : 8,
+      "endLine"  : 8,
       "statement": "import { providerExecution } from \"./windows-command.ts\";"
     },
     {
-      "id": "scripts/workflow/adapters/codex.ts:260",
-      "from": "scripts/workflow/adapters/codex.ts",
-      "to": "scripts/workflow/adapters/windows-command.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/adapters/codex.ts:366",
+      "from"     : "scripts/workflow/adapters/codex.ts",
+      "to"       : "scripts/workflow/adapters/windows-command.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./windows-command.ts",
-      "line": 7,
-      "endLine": 7,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import type { ActualProviderInvocation } from \"./windows-command.ts\";"
     },
     {
-      "id": "scripts/workflow/adapters/codex.ts:330",
-      "from": "scripts/workflow/adapters/codex.ts",
-      "to": "scripts/workflow/adapters/gjc.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/adapters/codex.ts:436",
+      "from"     : "scripts/workflow/adapters/codex.ts",
+      "to"       : "scripts/workflow/adapters/gjc.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./gjc.ts",
-      "line": 8,
-      "endLine": 8,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import type { ProcessInvocation, ProcessOptions, ProcessResult } from \"./gjc.ts\";"
     },
     {
-      "id": "scripts/workflow/consistency.ts:414",
-      "from": "scripts/workflow/consistency.ts",
-      "to": "scripts/workflow/evidence.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/consistency.ts:528",
+      "from"     : "scripts/workflow/consistency.ts",
+      "to"       : "scripts/workflow/evidence.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line": 6,
-      "endLine": 6,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import { resolveExecutionEnvironment, runVerificationCommand } from \"./evidence.ts\";"
     },
     {
-      "id": "scripts/workflow/documentation.ts:120",
-      "from": "scripts/workflow/documentation.ts",
-      "to": "scripts/workflow/evidence.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/documentation.ts:240",
+      "from"     : "scripts/workflow/documentation.ts",
+      "to"       : "scripts/workflow/evidence.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line": 3,
-      "endLine": 3,
+      "line"     : 7,
+      "endLine"  : 7,
       "statement": "import { captureSource, criteriaDigest } from \"./evidence.ts\";"
     },
     {
-      "id": "scripts/workflow/documentation.ts:184",
-      "from": "scripts/workflow/documentation.ts",
-      "to": "scripts/workflow/types.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/documentation.ts:304",
+      "from"     : "scripts/workflow/documentation.ts",
+      "to"       : "scripts/workflow/types.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./types.ts",
-      "line": 5,
-      "endLine": 5,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import type { WorkRecord } from './types.ts';"
     },
     {
-      "id": "scripts/workflow/preflight.ts:230",
-      "from": "scripts/workflow/preflight.ts",
-      "to": "scripts/workflow/types.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/preflight.ts:332",
+      "from"     : "scripts/workflow/preflight.ts",
+      "to"       : "scripts/workflow/types.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./types.ts",
-      "line": 7,
-      "endLine": 7,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import type { Approval } from \"./types.ts\";"
     },
     {
-      "id": "scripts/workflow/record.ts:165",
-      "from": "scripts/workflow/record.ts",
-      "to": "scripts/workflow/preflight.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/record.ts:269",
+      "from"     : "scripts/workflow/record.ts",
+      "to"       : "scripts/workflow/preflight.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./preflight.ts",
-      "line": 4,
-      "endLine": 4,
+      "line"     : 8,
+      "endLine"  : 8,
       "statement": "import { assertWorkId }              from \"./preflight.ts\";"
     },
     {
-      "id": "scripts/workflow/report-lifecycle.ts:114",
-      "from": "scripts/workflow/report-lifecycle.ts",
-      "to": "scripts/workflow/work.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "scripts/workflow/report-lifecycle.ts:228",
+      "from"     : "scripts/workflow/report-lifecycle.ts",
+      "to"       : "scripts/workflow/work.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./work.ts",
-      "line": 4,
-      "endLine": 4,
+      "line"     : 8,
+      "endLine"  : 8,
       "statement": "import { assessWork, completeWork, readWork, type WorkAssessment, type WorkOptions } from \"./work.ts\";"
     },
     {
-      "id": "scripts/workflow/report-lifecycle.ts:217",
-      "from": "scripts/workflow/report-lifecycle.ts",
-      "to": "scripts/workflow/lock.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/report-lifecycle.ts:331",
+      "from"     : "scripts/workflow/report-lifecycle.ts",
+      "to"       : "scripts/workflow/lock.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./lock.ts",
-      "line": 5,
-      "endLine": 5,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import { withWorkLock } from \"./lock.ts\";"
     },
     {
-      "id": "scripts/workflow/report-lifecycle.ts:259",
-      "from": "scripts/workflow/report-lifecycle.ts",
-      "to": "scripts/workflow/reports.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "scripts/workflow/report-lifecycle.ts:373",
+      "from"     : "scripts/workflow/report-lifecycle.ts",
+      "to"       : "scripts/workflow/reports.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./reports.ts",
-      "line": 6,
-      "endLine": 6,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import { captureWorkReport, listWorkReports, parseReportReader, publishWorkReport, readWorkReport, WORK_RECORD_JSON_LIMIT, type ReportNarrative } from \"./reports.ts\";"
     },
     {
-      "id": "scripts/workflow/report-view.ts:0",
-      "from": "scripts/workflow/report-view.ts",
-      "to": "scripts/workflow/reports.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/report-view.ts:112",
+      "from"     : "scripts/workflow/report-view.ts",
+      "to"       : "scripts/workflow/reports.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./reports.ts",
-      "line": 1,
-      "endLine": 1,
+      "line"     : 5,
+      "endLine"  : 5,
       "statement": "import type { ReportReader, WorkReport } from \"./reports.ts\";"
     },
     {
-      "id": "scripts/workflow/reports.ts:202",
-      "from": "scripts/workflow/reports.ts",
-      "to": "scripts/workflow/preflight.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/reports.ts:312",
+      "from"     : "scripts/workflow/reports.ts",
+      "to"       : "scripts/workflow/preflight.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./preflight.ts",
-      "line": 5,
-      "endLine": 5,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import { assertWorkId } from \"./preflight.ts\";"
     },
     {
-      "id": "scripts/workflow/reports.ts:249",
-      "from": "scripts/workflow/reports.ts",
-      "to": "scripts/workflow/evidence.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/reports.ts:359",
+      "from"     : "scripts/workflow/reports.ts",
+      "to"       : "scripts/workflow/evidence.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line": 6,
-      "endLine": 6,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import { captureSource, criteriaDigest } from \"./evidence.ts\";"
     },
     {
-      "id": "scripts/workflow/reports.ts:312",
-      "from": "scripts/workflow/reports.ts",
-      "to": "scripts/workflow/report-view.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/reports.ts:422",
+      "from"     : "scripts/workflow/reports.ts",
+      "to"       : "scripts/workflow/report-view.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./report-view.ts",
-      "line": 7,
-      "endLine": 7,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { renderReportDocument } from \"./report-view.ts\";"
     },
     {
-      "id": "scripts/workflow/review.ts:235",
-      "from": "scripts/workflow/review.ts",
-      "to": "scripts/workflow/adapters/windows-command.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/review.ts:323",
+      "from"     : "scripts/workflow/review.ts",
+      "to"       : "scripts/workflow/adapters/windows-command.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./adapters/windows-command.ts",
-      "line": 6,
-      "endLine": 6,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import { providerExecution, providerExecutionMatches } from \"./adapters/windows-command.ts\";"
     },
     {
-      "id": "scripts/workflow/review.ts:330",
-      "from": "scripts/workflow/review.ts",
-      "to": "scripts/workflow/evidence.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/review.ts:418",
+      "from"     : "scripts/workflow/review.ts",
+      "to"       : "scripts/workflow/evidence.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line": 9,
-      "endLine": 9,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import type { CapturedSource } from './evidence.ts';"
     },
     {
-      "id": "scripts/workflow/review.ts:468",
-      "from": "scripts/workflow/review.ts",
-      "to": "scripts/workflow/adapters/windows-command.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/review.ts:556",
+      "from"     : "scripts/workflow/review.ts",
+      "to"       : "scripts/workflow/adapters/windows-command.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./adapters/windows-command.ts",
-      "line": 11,
-      "endLine": 11,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import type { ActualProviderInvocation } from './adapters/windows-command.ts';"
     },
     {
-      "id": "scripts/workflow/route.ts:42",
-      "from": "scripts/workflow/route.ts",
-      "to": "scripts/workflow/types.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/route.ts:132",
+      "from"     : "scripts/workflow/route.ts",
+      "to"       : "scripts/workflow/types.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./types.ts",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import type { Approval } from \"./types.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:114",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/adapters/gjc.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:208",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/adapters/gjc.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./adapters/gjc.ts",
-      "line": 4,
-      "endLine": 4,
+      "line"     : 8,
+      "endLine"  : 8,
       "statement": "import { createGjcInvocation, gjcCapabilities, spawnGjc, waitForChild } from \"./adapters/gjc.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:212",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/preflight.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:306",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/preflight.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./preflight.ts",
-      "line": 5,
-      "endLine": 5,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import { createSessionBinding, findWorkRecord, loadCanonicalSkill, preflightMutation, validateSessionBinding, validateWritePaths } from \"./preflight.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:366",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/record.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:460",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/record.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./record.ts",
-      "line": 6,
-      "endLine": 6,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import { appendEvent } from \"./record.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:409",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/route.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:503",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/route.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./route.ts",
-      "line": 7,
-      "endLine": 7,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { routeRequest } from \"./route.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:452",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/adapters/codex.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:546",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/adapters/codex.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./adapters/codex.ts",
-      "line": 8,
-      "endLine": 8,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { createCodexInvocation, codexCapabilities, runCodex } from \"./adapters/codex.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:542",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/work.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:636",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/work.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./work.ts",
-      "line": 9,
-      "endLine": 9,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import { assessWork, advanceWork, completeWork, openWork, readWork, recordReview, resumeWork, verifyWork } from \"./work.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:667",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/evidence.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:761",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/evidence.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line": 10,
-      "endLine": 10,
+      "line"     : 14,
+      "endLine"  : 14,
       "statement": "import { captureSource, criteriaDigest } from \"./evidence.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:730",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/review.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:824",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/review.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./review.ts",
-      "line": 11,
-      "endLine": 11,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import { loadReviewPolicy, runReview } from \"./review.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:790",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/types.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:884",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/types.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./types.ts",
-      "line": 13,
-      "endLine": 13,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import type { Approval, WorkRecord, WorkLocation, WorkDecision } from \"./types.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:874",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/preflight.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:968",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/preflight.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./preflight.ts",
-      "line": 14,
-      "endLine": 14,
+      "line"     : 18,
+      "endLine"  : 18,
       "statement": "import type { SessionBinding, CanonicalSkill, MutationResult } from \"./preflight.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:960",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/route.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:1054",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/route.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./route.ts",
-      "line": 15,
-      "endLine": 15,
+      "line"     : 19,
+      "endLine"  : 19,
       "statement": "import type { RouteResult } from \"./route.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:1007",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/adapters/gjc.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:1101",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/adapters/gjc.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./adapters/gjc.ts",
-      "line": 16,
-      "endLine": 16,
+      "line"     : 20,
+      "endLine"  : 20,
       "statement": "import type { ProcessInvocation, ProcessOptions, ProcessResult } from \"./adapters/gjc.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:1098",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/evidence.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:1192",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/evidence.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line": 17,
-      "endLine": 17,
+      "line"     : 21,
+      "endLine"  : 21,
       "statement": "import type { VerificationAttempt } from \"./evidence.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:1156",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/review.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:1250",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/review.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./review.ts",
-      "line": 18,
-      "endLine": 18,
+      "line"     : 22,
+      "endLine"  : 22,
       "statement": "import type { ReviewResult } from \"./review.ts\";"
     },
     {
-      "id": "scripts/workflow/run.ts:1205",
-      "from": "scripts/workflow/run.ts",
-      "to": "scripts/workflow/record.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/run.ts:1299",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/record.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./record.ts",
-      "line": 19,
-      "endLine": 19,
+      "line"     : 23,
+      "endLine"  : 23,
       "statement": "import type { RuntimeState } from \"./record.ts\";"
     },
     {
-      "id": "scripts/workflow/schema.ts:0",
-      "from": "scripts/workflow/schema.ts",
-      "to": "scripts/workflow/types.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/schema.ts:112",
+      "from"     : "scripts/workflow/schema.ts",
+      "to"       : "scripts/workflow/types.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./types.ts",
-      "line": 1,
-      "endLine": 1,
+      "line"     : 5,
+      "endLine"  : 5,
       "statement": "import type { WorkRecord } from \"./types.ts\";"
     },
     {
-      "id": "scripts/workflow/types.ts:0",
-      "from": "scripts/workflow/types.ts",
-      "to": "scripts/workflow/evidence.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/types.ts:108",
+      "from"     : "scripts/workflow/types.ts",
+      "to"       : "scripts/workflow/evidence.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line": 1,
-      "endLine": 1,
+      "line"     : 5,
+      "endLine"  : 5,
       "statement": "import type { CapturedSource, VerificationAttempt } from './evidence.ts';"
     },
     {
-      "id": "scripts/workflow/types.ts:74",
-      "from": "scripts/workflow/types.ts",
-      "to": "scripts/workflow/documentation.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/types.ts:182",
+      "from"     : "scripts/workflow/types.ts",
+      "to"       : "scripts/workflow/documentation.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./documentation.ts",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import type { DocumentationAssessment, DocumentationReview } from './documentation.ts';"
     },
     {
-      "id": "scripts/workflow/types.ts:162",
-      "from": "scripts/workflow/types.ts",
-      "to": "scripts/workflow/consistency.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/types.ts:270",
+      "from"     : "scripts/workflow/types.ts",
+      "to"       : "scripts/workflow/consistency.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./consistency.ts",
-      "line": 3,
-      "endLine": 3,
+      "line"     : 7,
+      "endLine"  : 7,
       "statement": "import type { RepositoryCheckStatus } from './consistency.ts';"
     },
     {
-      "id": "scripts/workflow/work.ts:168",
-      "from": "scripts/workflow/work.ts",
-      "to": "scripts/workflow/schema.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/work.ts:270",
+      "from"     : "scripts/workflow/work.ts",
+      "to"       : "scripts/workflow/schema.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./schema.ts",
-      "line": 5,
-      "endLine": 5,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import { validateRequirementRefs, validateWorkRecord, parseWorkRecord } from \"./schema.ts\";"
     },
     {
-      "id": "scripts/workflow/work.ts:260",
-      "from": "scripts/workflow/work.ts",
-      "to": "scripts/workflow/preflight.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/work.ts:362",
+      "from"     : "scripts/workflow/work.ts",
+      "to"       : "scripts/workflow/preflight.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./preflight.ts",
-      "line": 6,
-      "endLine": 6,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import { findWorkRecord, resolveInside, validateWritePaths } from \"./preflight.ts\";"
     },
     {
-      "id": "scripts/workflow/work.ts:344",
-      "from": "scripts/workflow/work.ts",
-      "to": "scripts/workflow/route.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/work.ts:446",
+      "from"     : "scripts/workflow/work.ts",
+      "to"       : "scripts/workflow/route.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./route.ts",
-      "line": 7,
-      "endLine": 7,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { hashRequest, normalizeApproval } from \"./route.ts\";"
     },
     {
-      "id": "scripts/workflow/work.ts:405",
-      "from": "scripts/workflow/work.ts",
-      "to": "scripts/workflow/evidence.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/work.ts:507",
+      "from"     : "scripts/workflow/work.ts",
+      "to"       : "scripts/workflow/evidence.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line": 8,
-      "endLine": 8,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { captureSource, criteriaDigest, evaluateEvidence, renderAttempt, verify } from \"./evidence.ts\";"
     },
     {
-      "id": "scripts/workflow/work.ts:509",
-      "from": "scripts/workflow/work.ts",
-      "to": "scripts/workflow/review.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/work.ts:611",
+      "from"     : "scripts/workflow/work.ts",
+      "to"       : "scripts/workflow/review.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./review.ts",
-      "line": 9,
-      "endLine": 9,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import { loadReviewPolicy, validateReview } from \"./review.ts\";"
     },
     {
-      "id": "scripts/workflow/work.ts:573",
-      "from": "scripts/workflow/work.ts",
-      "to": "scripts/workflow/lock.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/work.ts:675",
+      "from"     : "scripts/workflow/work.ts",
+      "to"       : "scripts/workflow/lock.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./lock.ts",
-      "line": 10,
-      "endLine": 10,
+      "line"     : 14,
+      "endLine"  : 14,
       "statement": "import { withWorkLock, inspectWorkLock, recoverWorkLock } from \"./lock.ts\";"
     },
     {
-      "id": "scripts/workflow/work.ts:649",
-      "from": "scripts/workflow/work.ts",
-      "to": "scripts/workflow/consistency.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/work.ts:751",
+      "from"     : "scripts/workflow/work.ts",
+      "to"       : "scripts/workflow/consistency.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./consistency.ts",
-      "line": 11,
-      "endLine": 11,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import { checkRepository, assessRepositoryCheck } from \"./consistency.ts\";"
     },
     {
-      "id": "scripts/workflow/work.ts:724",
-      "from": "scripts/workflow/work.ts",
-      "to": "scripts/workflow/documentation.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "scripts/workflow/work.ts:826",
+      "from"     : "scripts/workflow/work.ts",
+      "to"       : "scripts/workflow/documentation.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./documentation.ts",
-      "line": 12,
-      "endLine": 12,
+      "line"     : 16,
+      "endLine"  : 16,
       "statement": "import { createDocumentationReview, assessDocumentation } from \"./documentation.ts\";"
     },
     {
-      "id": "scripts/workflow/work.ts:809",
-      "from": "scripts/workflow/work.ts",
-      "to": "scripts/workflow/types.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/work.ts:911",
+      "from"     : "scripts/workflow/work.ts",
+      "to"       : "scripts/workflow/types.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./types.ts",
-      "line": 13,
-      "endLine": 13,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import type { CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions } from './types.ts';"
     },
     {
-      "id": "scripts/workflow/work.ts:968",
-      "from": "scripts/workflow/work.ts",
-      "to": "scripts/workflow/documentation.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "scripts/workflow/work.ts:1070",
+      "from"     : "scripts/workflow/work.ts",
+      "to"       : "scripts/workflow/documentation.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./documentation.ts",
-      "line": 14,
-      "endLine": 14,
+      "line"     : 18,
+      "endLine"  : 18,
       "statement": "import type { DocumentationReview } from './documentation.ts';"
     },
     {
-      "id": "scripts/workflow/work.ts:1031",
-      "from": "scripts/workflow/work.ts",
-      "to": "scripts/workflow/types.ts",
-      "mode": "type",
-      "syntax": "export",
+      "id"       : "scripts/workflow/work.ts:1133",
+      "from"     : "scripts/workflow/work.ts",
+      "to"       : "scripts/workflow/types.ts",
+      "mode"     : "type",
+      "syntax"   : "export",
       "specifier": "./types.ts",
-      "line": 15,
-      "endLine": 15,
+      "line"     : 19,
+      "endLine"  : 19,
       "statement": "export type { WorkRecord, WorkLocation, WorkAssessment, WorkOptions } from './types.ts';"
     },
     {
-      "id": "src/activity-sidebar.ts:0",
-      "from": "src/activity-sidebar.ts",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/activity-sidebar.ts:94",
+      "from"     : "src/activity-sidebar.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 1,
-      "endLine": 1,
+      "line"     : 5,
+      "endLine"  : 5,
       "statement": "import type { AppEvent, TransportState } from \"./shared\";"
     },
     {
-      "id": "src/chat-message.tsx:157",
-      "from": "src/chat-message.tsx",
-      "to": "src/chat-state.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/chat-message.tsx:253",
+      "from"     : "src/chat-message.tsx",
+      "to"       : "src/chat-state.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./chat-state",
-      "line": 4,
-      "endLine": 4,
+      "line"     : 8,
+      "endLine"  : 8,
       "statement": "import { externalChatUrl } from \"./chat-state\";"
     },
     {
-      "id": "src/chat-state.ts:199",
-      "from": "src/chat-state.ts",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/chat-state.ts:293",
+      "from"     : "src/chat-state.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 4,
-      "endLine": 4,
+      "line"     : 8,
+      "endLine"  : 8,
       "statement": "import type { AppEvent } from \"./shared\";"
     },
     {
-      "id": "src/command-card.tsx:45",
-      "from": "src/command-card.tsx",
-      "to": "src/chat-row-state.tsx",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/command-card.tsx:143",
+      "from"     : "src/command-card.tsx",
+      "to"       : "src/chat-row-state.tsx",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./chat-row-state",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import { useChatRowToggle } from \"./chat-row-state\";"
     },
     {
-      "id": "src/command-card.tsx:98",
-      "from": "src/command-card.tsx",
-      "to": "src/command-preview.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/command-card.tsx:196",
+      "from"     : "src/command-card.tsx",
+      "to"       : "src/command-preview.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./command-preview",
-      "line": 3,
-      "endLine": 3,
+      "line"     : 7,
+      "endLine"  : 7,
       "statement": "import { commandPreview } from \"./command-preview\";"
     },
     {
-      "id": "src/command-card.tsx:150",
-      "from": "src/command-card.tsx",
-      "to": "src/projection.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/command-card.tsx:248",
+      "from"     : "src/command-card.tsx",
+      "to"       : "src/projection.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./projection",
-      "line": 4,
-      "endLine": 4,
+      "line"     : 8,
+      "endLine"  : 8,
       "statement": "import { MAX_OUTPUT_CODE_UNITS, type Block } from \"./projection\";"
     },
     {
-      "id": "src/conversations.ts:37",
-      "from": "src/conversations.ts",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/conversations.ts:131",
+      "from"     : "src/conversations.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import type { AppEvent, ConversationCatalog, ConversationSummary } from \"./shared\";"
     },
     {
-      "id": "src/development.ts:0",
-      "from": "src/development.ts",
-      "to": "scripts/workflow/review.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/development.ts:90",
+      "from"     : "src/development.ts",
+      "to"       : "scripts/workflow/review.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "../scripts/workflow/review.ts",
-      "line": 1,
-      "endLine": 1,
+      "line"     : 5,
+      "endLine"  : 5,
       "statement": "import { loadReviewPolicy } from \"../scripts/workflow/review.ts\";"
     },
     {
-      "id": "src/development.ts:66",
-      "from": "src/development.ts",
-      "to": "scripts/workflow/report-lifecycle.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/development.ts:156",
+      "from"     : "src/development.ts",
+      "to"       : "scripts/workflow/report-lifecycle.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "../scripts/workflow/report-lifecycle.ts",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import { assessReportedWork as assessWork, completeReportedWork as completeWork } from \"../scripts/workflow/report-lifecycle.ts\";"
     },
     {
-      "id": "src/development.ts:196",
-      "from": "src/development.ts",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/development.ts:286",
+      "from"     : "src/development.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 3,
-      "endLine": 3,
+      "line"     : 7,
+      "endLine"  : 7,
       "statement": "import type { DevelopmentPolicyInfo, DevelopmentWorkStatus } from \"./shared\";"
     },
     {
-      "id": "src/ecosystem-view.tsx:62",
-      "from": "src/ecosystem-view.tsx",
-      "to": "src/ecosystem.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/ecosystem-view.tsx:148",
+      "from"     : "src/ecosystem-view.tsx",
+      "to"       : "src/ecosystem.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./ecosystem",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import { ecosystemEdges, ecosystemGroups, ecosystemNodes, matchingNodes, nodeConnections, type EcosystemGroup, type EcosystemNode } from \"./ecosystem\";"
     },
     {
-      "id": "src/ecosystem-view.tsx:215",
-      "from": "src/ecosystem-view.tsx",
-      "to": "src/architecture.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/ecosystem-view.tsx:301",
+      "from"     : "src/ecosystem-view.tsx",
+      "to"       : "src/architecture.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./architecture",
-      "line": 4,
-      "endLine": 4,
-      "statement": "import { architecture, architectureConnections, architectureEdgePath, architectureLayout, architectureMatches, layerConnections, type ArchitectureNode } from \"./architecture\";"
+      "line"     : 8,
+      "endLine"  : 8,
+      "statement": "import { architecture } from \"./architecture\";"
     },
     {
-      "id": "src/main.ts:276",
-      "from": "src/main.ts",
-      "to": "src/rpc.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/ecosystem-view.tsx:348",
+      "from"     : "src/ecosystem-view.tsx",
+      "to"       : "src/architecture-tree.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./architecture-tree",
+      "line"     : 9,
+      "endLine"  : 9,
+      "statement": "import { createArchitectureTree, layoutResponsibilityGraph, responsibilityHierarchyPath, responsibilityEdgePath, responsibilityFit } from \"./architecture-tree\";"
+    },
+    {
+      "id"       : "src/main.ts:360",
+      "from"     : "src/main.ts",
+      "to"       : "src/rpc.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./rpc",
-      "line": 6,
-      "endLine": 6,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import { JsonRpcClient, type RpcMessage } from \"./rpc\";"
     },
     {
-      "id": "src/main.ts:332",
-      "from": "src/main.ts",
-      "to": "src/conversations.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/main.ts:416",
+      "from"     : "src/main.ts",
+      "to"       : "src/conversations.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./conversations",
-      "line": 7,
-      "endLine": 7,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { createConversationService, type ConversationEvent } from \"./conversations\";"
     },
     {
-      "id": "src/main.ts:417",
-      "from": "src/main.ts",
-      "to": "src/development.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/main.ts:501",
+      "from"     : "src/main.ts",
+      "to"       : "src/development.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./development",
-      "line": 8,
-      "endLine": 8,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { createDevelopmentService } from \"./development\";"
     },
     {
-      "id": "src/main.ts:475",
-      "from": "src/main.ts",
-      "to": "src/reports-service.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/main.ts:559",
+      "from"     : "src/main.ts",
+      "to"       : "src/reports-service.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./reports-service",
-      "line": 9,
-      "endLine": 9,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import { createReportService } from \"./reports-service\";"
     },
     {
-      "id": "src/main.ts:532",
-      "from": "src/main.ts",
-      "to": "src/native-reports.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/main.ts:616",
+      "from"     : "src/main.ts",
+      "to"       : "src/native-reports.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./native-reports",
-      "line": 10,
-      "endLine": 10,
+      "line"     : 14,
+      "endLine"  : 14,
       "statement": "import { createNativeReportHarness } from \"./native-reports\";"
     },
     {
-      "id": "src/main.ts:594",
-      "from": "src/main.ts",
-      "to": "src/report-judge.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/main.ts:678",
+      "from"     : "src/main.ts",
+      "to"       : "src/report-judge.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./report-judge",
-      "line": 11,
-      "endLine": 11,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import { judgeNativeReport } from \"./report-judge\";"
     },
     {
-      "id": "src/main.ts:646",
-      "from": "src/main.ts",
-      "to": "src/native-report-input.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/main.ts:730",
+      "from"     : "src/main.ts",
+      "to"       : "src/native-report-input.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./native-report-input",
-      "line": 12,
-      "endLine": 12,
+      "line"     : 16,
+      "endLine"  : 16,
       "statement": "import { NativeCompletionCollector } from \"./native-report-input\";"
     },
     {
-      "id": "src/main.ts:713",
-      "from": "src/main.ts",
-      "to": "src/native-command.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/main.ts:797",
+      "from"     : "src/main.ts",
+      "to"       : "src/native-command.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./native-command",
-      "line": 13,
-      "endLine": 13,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import { resolveNativeCodex } from \"./native-command\";"
     },
     {
-      "id": "src/main.ts:768",
-      "from": "src/main.ts",
-      "to": "src/native-chat.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/main.ts:852",
+      "from"     : "src/main.ts",
+      "to"       : "src/native-chat.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./native-chat",
-      "line": 14,
-      "endLine": 14,
+      "line"     : 18,
+      "endLine"  : 18,
       "statement": "import { nativeThreadStartParams, nativeTurnStartParams } from \"./native-chat\";"
     },
     {
-      "id": "src/main.ts:848",
-      "from": "src/main.ts",
-      "to": "src/activity-sidebar.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/main.ts:932",
+      "from"     : "src/main.ts",
+      "to"       : "src/activity-sidebar.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./activity-sidebar",
-      "line": 15,
-      "endLine": 15,
+      "line"     : 19,
+      "endLine"  : 19,
       "statement": "import { parseHooksListResponse, parseSkillsListResponse } from \"./activity-sidebar\";"
     },
     {
-      "id": "src/main.ts:934",
-      "from": "src/main.ts",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/main.ts:1018",
+      "from"     : "src/main.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 16,
-      "endLine": 16,
+      "line"     : 20,
+      "endLine"  : 20,
       "statement": "import type { AppEvent, RpcId, WorkspaceInfo } from \"./shared\";"
     },
     {
-      "id": "src/native-activity-view.tsx:62",
-      "from": "src/native-activity-view.tsx",
-      "to": "src/activity-sidebar.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/native-activity-view.tsx:150",
+      "from"     : "src/native-activity-view.tsx",
+      "to"       : "src/activity-sidebar.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./activity-sidebar",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import { projectActivitySidebar, projectActivitySidebarState, type ActivitySidebarRow, type ActivitySidebarState } from \"./activity-sidebar\";"
     },
     {
-      "id": "src/native-activity-view.tsx:204",
-      "from": "src/native-activity-view.tsx",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/native-activity-view.tsx:292",
+      "from"     : "src/native-activity-view.tsx",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 3,
-      "endLine": 3,
+      "line"     : 7,
+      "endLine"  : 7,
       "statement": "import type { AppEvent } from \"./shared\";"
     },
     {
-      "id": "src/native-activity-view.tsx:246",
-      "from": "src/native-activity-view.tsx",
-      "to": "src/native-activity.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/native-activity-view.tsx:334",
+      "from"     : "src/native-activity-view.tsx",
+      "to"       : "src/native-activity.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./native-activity",
-      "line": 4,
-      "endLine": 4,
+      "line"     : 8,
+      "endLine"  : 8,
       "statement": "import { projectNativeActivity, type ActivityEntry, type ActivityStatus, type ActivityTurn, type NativeActivityProjection, type UsageBreakdown } from \"./native-activity\";"
     },
     {
-      "id": "src/native-activity-view.tsx:417",
-      "from": "src/native-activity-view.tsx",
-      "to": "src/www-activity.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/native-activity-view.tsx:505",
+      "from"     : "src/native-activity-view.tsx",
+      "to"       : "src/www-activity.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./www-activity",
-      "line": 5,
-      "endLine": 5,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import { WWW_ARTIFACTS, type WwwArtifact } from \"./www-activity\";"
     },
     {
-      "id": "src/native-activity.ts:0",
-      "from": "src/native-activity.ts",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/native-activity.ts:100",
+      "from"     : "src/native-activity.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 1,
-      "endLine": 1,
+      "line"     : 5,
+      "endLine"  : 5,
       "statement": "import type { AppEvent, TransportState } from \"./shared\";"
     },
     {
-      "id": "src/native-activity.ts:58",
-      "from": "src/native-activity.ts",
-      "to": "src/www-activity.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/native-activity.ts:158",
+      "from"     : "src/native-activity.ts",
+      "to"       : "src/www-activity.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./www-activity",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import { identifyWwwArtifact, referencedWwwArtifacts, type WwwArtifact } from \"./www-activity\";"
     },
     {
-      "id": "src/native-command.ts:36",
-      "from": "src/native-command.ts",
-      "to": "scripts/workflow/adapters/windows-command.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/native-command.ts:114",
+      "from"     : "src/native-command.ts",
+      "to"       : "scripts/workflow/adapters/windows-command.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "../scripts/workflow/adapters/windows-command.ts",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import { resolveProviderInvocation } from \"../scripts/workflow/adapters/windows-command.ts\";"
     },
     {
-      "id": "src/native-report-input.ts:0",
-      "from": "src/native-report-input.ts",
-      "to": "src/projection.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/native-report-input.ts:88",
+      "from"     : "src/native-report-input.ts",
+      "to"       : "src/projection.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./projection",
-      "line": 1,
-      "endLine": 1,
+      "line"     : 5,
+      "endLine"  : 5,
       "statement": "import { project } from \"./projection\";"
     },
     {
-      "id": "src/native-report-input.ts:40",
-      "from": "src/native-report-input.ts",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/native-report-input.ts:128",
+      "from"     : "src/native-report-input.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import type { AppEvent } from \"./shared\";"
     },
     {
-      "id": "src/native-report-input.ts:82",
-      "from": "src/native-report-input.ts",
-      "to": "src/report-judge.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/native-report-input.ts:170",
+      "from"     : "src/native-report-input.ts",
+      "to"       : "src/report-judge.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./report-judge",
-      "line": 3,
-      "endLine": 3,
+      "line"     : 7,
+      "endLine"  : 7,
       "statement": "import type { NativeReportInput } from \"./report-judge\";"
     },
     {
-      "id": "src/native-reports.ts:137",
-      "from": "src/native-reports.ts",
-      "to": "scripts/workflow/lock.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/native-reports.ts:215",
+      "from"     : "src/native-reports.ts",
+      "to"       : "scripts/workflow/lock.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "../scripts/workflow/lock.ts",
-      "line": 4,
-      "endLine": 4,
+      "line"     : 8,
+      "endLine"  : 8,
       "statement": "import { withWorkLock } from \"../scripts/workflow/lock.ts\";"
     },
     {
-      "id": "src/native-reports.ts:197",
-      "from": "src/native-reports.ts",
-      "to": "scripts/workflow/reports.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/native-reports.ts:275",
+      "from"     : "src/native-reports.ts",
+      "to"       : "scripts/workflow/reports.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "../scripts/workflow/reports.ts",
-      "line": 5,
-      "endLine": 5,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import { parseReportReader, publishWorkReport, WORK_RECORD_JSON_LIMIT } from \"../scripts/workflow/reports.ts\";"
     },
     {
-      "id": "src/native-reports.ts:308",
-      "from": "src/native-reports.ts",
-      "to": "src/report-judge.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/native-reports.ts:386",
+      "from"     : "src/native-reports.ts",
+      "to"       : "src/report-judge.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./report-judge",
-      "line": 6,
-      "endLine": 6,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import type { NativeReportDecision, NativeReportInput } from \"./report-judge\";"
     },
     {
-      "id": "src/preload.ts:55",
-      "from": "src/preload.ts",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/preload.ts:133",
+      "from"     : "src/preload.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import type { AppEvent, WwwApi } from \"./shared\";"
     },
     {
-      "id": "src/projection.ts:0",
-      "from": "src/projection.ts",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/projection.ts:100",
+      "from"     : "src/projection.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 1,
-      "endLine": 9,
+      "line"     : 5,
+      "endLine"  : 13,
       "statement": "import type {\n  AppEvent,\n  ApprovalState,\n  InterruptState,\n  RequestState,\n  RpcId,\n  TransportState,\n  TurnState,\n} from \"./shared\";"
     },
     {
-      "id": "src/renderer.tsx:0",
-      "from": "src/renderer.tsx",
-      "to": "src/native-activity.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/renderer.tsx:80",
+      "from"     : "src/renderer.tsx",
+      "to"       : "src/native-activity.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./native-activity",
-      "line": 1,
-      "endLine": 1,
+      "line"     : 5,
+      "endLine"  : 5,
       "statement": "import { projectNativeActivity } from \"./native-activity\";"
     },
     {
-      "id": "src/renderer.tsx:59",
-      "from": "src/renderer.tsx",
-      "to": "src/command-card.tsx",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/renderer.tsx:139",
+      "from"     : "src/renderer.tsx",
+      "to"       : "src/command-card.tsx",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./command-card",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import { CommandView } from \"./command-card\";"
     },
     {
-      "id": "src/renderer.tsx:105",
-      "from": "src/renderer.tsx",
-      "to": "src/native-activity-view.tsx",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/renderer.tsx:185",
+      "from"     : "src/renderer.tsx",
+      "to"       : "src/native-activity-view.tsx",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./native-activity-view",
-      "line": 3,
-      "endLine": 3,
+      "line"     : 7,
+      "endLine"  : 7,
       "statement": "import { NativeActivityView } from \"./native-activity-view\";"
     },
     {
-      "id": "src/renderer.tsx:166",
-      "from": "src/renderer.tsx",
-      "to": "src/chat-message.tsx",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/renderer.tsx:246",
+      "from"     : "src/renderer.tsx",
+      "to"       : "src/chat-message.tsx",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./chat-message",
-      "line": 4,
-      "endLine": 4,
+      "line"     : 8,
+      "endLine"  : 8,
       "statement": "import { ChatMessage } from \"./chat-message\";"
     },
     {
-      "id": "src/renderer.tsx:212",
-      "from": "src/renderer.tsx",
-      "to": "src/chat-row-state.tsx",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/renderer.tsx:292",
+      "from"     : "src/renderer.tsx",
+      "to"       : "src/chat-row-state.tsx",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./chat-row-state",
-      "line": 5,
-      "endLine": 5,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import { ChatDetails, ChatRowMemoryContext, type ChatRowMemory } from \"./chat-row-state\";"
     },
     {
-      "id": "src/renderer.tsx:302",
-      "from": "src/renderer.tsx",
-      "to": "src/chat-state.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/renderer.tsx:382",
+      "from"     : "src/renderer.tsx",
+      "to"       : "src/chat-state.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./chat-state",
-      "line": 6,
-      "endLine": 6,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import { blankReadingState, belongsToConversation, composerFull, conversationKey, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, pasteOverflow, type ConversationReadingState } from \"./chat-state\";"
     },
     {
-      "id": "src/renderer.tsx:501",
-      "from": "src/renderer.tsx",
-      "to": "src/activity-sidebar.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/renderer.tsx:581",
+      "from"     : "src/renderer.tsx",
+      "to"       : "src/activity-sidebar.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./activity-sidebar",
-      "line": 7,
-      "endLine": 7,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { ActivitySnapshotBoundary, createActivitySidebarState, projectActivitySidebar, updateActivitySidebarSnapshot, updateActivitySidebarState } from \"./activity-sidebar\";"
     },
     {
-      "id": "src/renderer.tsx:675",
-      "from": "src/renderer.tsx",
-      "to": "src/reports-view.tsx",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/renderer.tsx:755",
+      "from"     : "src/renderer.tsx",
+      "to"       : "src/reports-view.tsx",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./reports-view",
-      "line": 8,
-      "endLine": 8,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { ReportsView } from \"./reports-view\";"
     },
     {
-      "id": "src/renderer.tsx:721",
-      "from": "src/renderer.tsx",
-      "to": "src/ecosystem-view.tsx",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/renderer.tsx:801",
+      "from"     : "src/renderer.tsx",
+      "to"       : "src/ecosystem-view.tsx",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./ecosystem-view",
-      "line": 9,
-      "endLine": 9,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import { EcosystemView } from \"./ecosystem-view\";"
     },
     {
-      "id": "src/renderer.tsx:771",
-      "from": "src/renderer.tsx",
-      "to": "src/input.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/renderer.tsx:851",
+      "from"     : "src/renderer.tsx",
+      "to"       : "src/input.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./input",
-      "line": 10,
-      "endLine": 10,
+      "line"     : 14,
+      "endLine"  : 14,
       "statement": "import { handlePromptKeyDown, normalizeCompositionEnd } from \"./input\";"
     },
     {
-      "id": "src/renderer.tsx:965",
-      "from": "src/renderer.tsx",
-      "to": "src/projection.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/renderer.tsx:1045",
+      "from"     : "src/renderer.tsx",
+      "to"       : "src/projection.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./projection",
-      "line": 13,
-      "endLine": 13,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import { MAX_OUTPUT_CODE_UNITS, project, type Block } from \"./projection\";"
     },
     {
-      "id": "src/renderer.tsx:1040",
-      "from": "src/renderer.tsx",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/renderer.tsx:1120",
+      "from"     : "src/renderer.tsx",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 14,
-      "endLine": 14,
+      "line"     : 18,
+      "endLine"  : 18,
       "statement": "import type { AppEvent, ConversationSummary, TurnState, WorkspaceInfo, WwwApi } from \"./shared\";"
     },
     {
-      "id": "src/report-judge.ts:142",
-      "from": "src/report-judge.ts",
-      "to": "scripts/workflow/reports.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/report-judge.ts:228",
+      "from"     : "src/report-judge.ts",
+      "to"       : "scripts/workflow/reports.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "../scripts/workflow/reports.ts",
-      "line": 5,
-      "endLine": 5,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import { parseReportReader, type ReportNarrative } from \"../scripts/workflow/reports.ts\";"
     },
     {
-      "id": "src/report-judge.ts:232",
-      "from": "src/report-judge.ts",
-      "to": "src/native-command.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/report-judge.ts:318",
+      "from"     : "src/report-judge.ts",
+      "to"       : "src/native-command.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "./native-command",
-      "line": 6,
-      "endLine": 6,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import { resolveNativeCodex } from \"./native-command\";"
     },
     {
-      "id": "src/report-judge.ts:287",
-      "from": "src/report-judge.ts",
-      "to": "src/rpc.ts",
-      "mode": "mixed",
-      "syntax": "import",
+      "id"       : "src/report-judge.ts:373",
+      "from"     : "src/report-judge.ts",
+      "to"       : "src/rpc.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
       "specifier": "./rpc",
-      "line": 7,
-      "endLine": 7,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { JsonRpcClient, type RpcMessage } from \"./rpc\";"
     },
     {
-      "id": "src/reports-service.ts:0",
-      "from": "src/reports-service.ts",
-      "to": "scripts/workflow/reports.ts",
-      "mode": "runtime",
-      "syntax": "import",
+      "id"       : "src/reports-service.ts:82",
+      "from"     : "src/reports-service.ts",
+      "to"       : "scripts/workflow/reports.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
       "specifier": "../scripts/workflow/reports.ts",
-      "line": 1,
-      "endLine": 1,
+      "line"     : 5,
+      "endLine"  : 5,
       "statement": "import { listWorkReports, readWorkReport } from \"../scripts/workflow/reports.ts\";"
     },
     {
-      "id": "src/reports-service.ts:82",
-      "from": "src/reports-service.ts",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/reports-service.ts:164",
+      "from"     : "src/reports-service.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import type { WorkReportCatalog, WorkReportDocument } from \"./shared\";"
     },
     {
-      "id": "src/reports-view.tsx:62",
-      "from": "src/reports-view.tsx",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/reports-view.tsx:138",
+      "from"     : "src/reports-view.tsx",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 2,
-      "endLine": 2,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import type { NativeReportJob, WorkReportCatalog, WorkReportDocument, WorkReportSummary } from \"./shared\";"
     },
     {
-      "id": "src/rpc.ts:118",
-      "from": "src/rpc.ts",
-      "to": "src/shared.ts",
-      "mode": "type",
-      "syntax": "import",
+      "id"       : "src/rpc.ts:202",
+      "from"     : "src/rpc.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
       "specifier": "./shared",
-      "line": 3,
-      "endLine": 3,
+      "line"     : 7,
+      "endLine"  : 7,
       "statement": "import type { RpcId } from \"./shared\";"
     }
   ],
   "excluded": [
     {
-      "file": "build.ts",
-      "line": 1,
+      "file"     : "build.ts",
+      "line"     : 5,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "build.ts",
-      "line": 2,
+      "file"     : "build.ts",
+      "line"     : 6,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/generate-architecture.ts",
-      "line": 1,
+      "file"     : "scripts/architecture-contract.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/generate-architecture.ts",
-      "line": 2,
+      "file"     : "scripts/architecture-contract.ts",
+      "line"     : 6,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/generate-architecture.ts",
-      "line": 3,
+      "file"     : "scripts/architecture-contract.ts",
+      "line"     : 7,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/generate-architecture.ts",
-      "line": 4,
-      "specifier": "node:url",
-      "reason": "external"
-    },
-    {
-      "file": "scripts/generate-architecture.ts",
-      "line": 5,
+      "file"     : "scripts/architecture-contract.ts",
+      "line"     : 8,
       "specifier": "typescript",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/source-policy.ts",
-      "line": 1,
-      "specifier": "node:child_process",
-      "reason": "external"
+      "file"     : "scripts/check-architecture.ts",
+      "line"     : 5,
+      "specifier": "node:path",
+      "reason"   : "external"
     },
     {
-      "file": "scripts/source-policy.ts",
-      "line": 2,
+      "file"     : "scripts/check-architecture.ts",
+      "line"     : 6,
+      "specifier": "node:url",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/generate-architecture.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/source-policy.ts",
-      "line": 3,
+      "file"     : "scripts/generate-architecture.ts",
+      "line"     : 6,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/source-policy.ts",
-      "line": 4,
-      "specifier": "node:fs/promises",
-      "reason": "external"
+      "file"     : "scripts/generate-architecture.ts",
+      "line"     : 7,
+      "specifier": "node:os",
+      "reason"   : "external"
     },
     {
-      "file": "scripts/source-policy.ts",
-      "line": 5,
+      "file"     : "scripts/generate-architecture.ts",
+      "line"     : 8,
+      "specifier": "node:child_process",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/generate-architecture.ts",
+      "line"     : 9,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/source-policy.ts",
-      "line": 6,
+      "file"     : "scripts/generate-architecture.ts",
+      "line"     : 10,
       "specifier": "node:url",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/source-policy.ts",
-      "line": 7,
+      "file"     : "scripts/generate-architecture.ts",
+      "line"     : 11,
       "specifier": "typescript",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow.ts",
-      "line": 2,
+      "file"     : "scripts/source-policy.ts",
+      "line"     : 5,
       "specifier": "node:child_process",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow.ts",
-      "line": 3,
+      "file"     : "scripts/source-policy.ts",
+      "line"     : 6,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow.ts",
-      "line": 4,
+      "file"     : "scripts/source-policy.ts",
+      "line"     : 7,
+      "specifier": "node:fs",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/source-policy.ts",
+      "line"     : 8,
       "specifier": "node:fs/promises",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow.ts",
-      "line": 5,
+      "file"     : "scripts/source-policy.ts",
+      "line"     : 9,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow.ts",
-      "line": 6,
+      "file"     : "scripts/source-policy.ts",
+      "line"     : 10,
       "specifier": "node:url",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/adapters/codex.ts",
-      "line": 1,
+      "file"     : "scripts/source-policy.ts",
+      "line"     : 11,
+      "specifier": "typescript",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow.ts",
+      "line"     : 6,
       "specifier": "node:child_process",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/adapters/codex.ts",
-      "line": 2,
+      "file"     : "scripts/workflow.ts",
+      "line"     : 7,
+      "specifier": "node:crypto",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow.ts",
+      "line"     : 8,
+      "specifier": "node:fs/promises",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow.ts",
+      "line"     : 9,
+      "specifier": "node:path",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow.ts",
+      "line"     : 10,
+      "specifier": "node:url",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/adapters/codex.ts",
+      "line"     : 5,
+      "specifier": "node:child_process",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/adapters/codex.ts",
+      "line"     : 6,
       "specifier": "node:string_decoder",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/adapters/codex.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/adapters/codex.ts",
+      "line"     : 7,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/adapters/codex.ts",
-      "line": 6,
+      "file"     : "scripts/workflow/adapters/codex.ts",
+      "line"     : 10,
       "specifier": "node:child_process",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/adapters/gjc.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/adapters/gjc.ts",
+      "line"     : 5,
       "specifier": "node:child_process",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/adapters/gjc.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/adapters/gjc.ts",
+      "line"     : 7,
       "specifier": "node:child_process",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/adapters/windows-command.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/adapters/windows-command.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/adapters/windows-command.ts",
-      "line": 2,
+      "file"     : "scripts/workflow/adapters/windows-command.ts",
+      "line"     : 6,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/adapters/windows-command.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/adapters/windows-command.ts",
+      "line"     : 7,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/consistency.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/consistency.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/consistency.ts",
-      "line": 2,
+      "file"     : "scripts/workflow/consistency.ts",
+      "line"     : 6,
       "specifier": "node:child_process",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/consistency.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/consistency.ts",
+      "line"     : 7,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/consistency.ts",
-      "line": 4,
+      "file"     : "scripts/workflow/consistency.ts",
+      "line"     : 8,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/consistency.ts",
-      "line": 5,
+      "file"     : "scripts/workflow/consistency.ts",
+      "line"     : 9,
       "specifier": "node:util",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/documentation.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/documentation.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/documentation.ts",
-      "line": 2,
+      "file"     : "scripts/workflow/documentation.ts",
+      "line"     : 6,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/evidence.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/evidence.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/evidence.ts",
-      "line": 2,
+      "file"     : "scripts/workflow/evidence.ts",
+      "line"     : 6,
       "specifier": "node:child_process",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/evidence.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/evidence.ts",
+      "line"     : 7,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/evidence.ts",
-      "line": 4,
+      "file"     : "scripts/workflow/evidence.ts",
+      "line"     : 8,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/evidence.ts",
-      "line": 5,
+      "file"     : "scripts/workflow/evidence.ts",
+      "line"     : 9,
       "specifier": "node:util",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/lock.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/lock.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/lock.ts",
-      "line": 2,
+      "file"     : "scripts/workflow/lock.ts",
+      "line"     : 6,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/lock.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/lock.ts",
+      "line"     : 7,
       "specifier": "node:os",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/lock.ts",
-      "line": 4,
+      "file"     : "scripts/workflow/lock.ts",
+      "line"     : 8,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/preflight.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/preflight.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/preflight.ts",
-      "line": 2,
+      "file"     : "scripts/workflow/preflight.ts",
+      "line"     : 6,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/preflight.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/preflight.ts",
+      "line"     : 7,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/preflight.ts",
-      "line": 4,
+      "file"     : "scripts/workflow/preflight.ts",
+      "line"     : 8,
       "specifier": "node:child_process",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/preflight.ts",
-      "line": 5,
+      "file"     : "scripts/workflow/preflight.ts",
+      "line"     : 9,
       "specifier": "node:util",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/record.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/record.ts",
+      "line"     : 5,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/record.ts",
-      "line": 2,
+      "file"     : "scripts/workflow/record.ts",
+      "line"     : 6,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/record.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/record.ts",
+      "line"     : 7,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/report-lifecycle.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/report-lifecycle.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/report-lifecycle.ts",
-      "line": 2,
+      "file"     : "scripts/workflow/report-lifecycle.ts",
+      "line"     : 6,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/report-lifecycle.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/report-lifecycle.ts",
+      "line"     : 7,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/reports.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/reports.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/reports.ts",
-      "line": 2,
+      "file"     : "scripts/workflow/reports.ts",
+      "line"     : 6,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/reports.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/reports.ts",
+      "line"     : 7,
       "specifier": "node:fs/promises",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/reports.ts",
-      "line": 4,
+      "file"     : "scripts/workflow/reports.ts",
+      "line"     : 8,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/review.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/review.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/review.ts",
-      "line": 2,
+      "file"     : "scripts/workflow/review.ts",
+      "line"     : 6,
       "specifier": "node:child_process",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/review.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/review.ts",
+      "line"     : 7,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/review.ts",
-      "line": 4,
+      "file"     : "scripts/workflow/review.ts",
+      "line"     : 8,
       "specifier": "node:os",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/review.ts",
-      "line": 5,
+      "file"     : "scripts/workflow/review.ts",
+      "line"     : 9,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/route.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/route.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/run.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/run.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/run.ts",
-      "line": 2,
+      "file"     : "scripts/workflow/run.ts",
+      "line"     : 6,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/run.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/run.ts",
+      "line"     : 7,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/schema.ts",
-      "line": 2,
+      "file"     : "scripts/workflow/schema.ts",
+      "line"     : 6,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/schema.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/schema.ts",
+      "line"     : 7,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/work.ts",
-      "line": 1,
+      "file"     : "scripts/workflow/work.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/work.ts",
-      "line": 2,
+      "file"     : "scripts/workflow/work.ts",
+      "line"     : 6,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/work.ts",
-      "line": 3,
+      "file"     : "scripts/workflow/work.ts",
+      "line"     : 7,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "scripts/workflow/work.ts",
-      "line": 4,
+      "file"     : "scripts/workflow/work.ts",
+      "line"     : 8,
       "specifier": "node:url",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/architecture.ts",
-      "line": 1,
+      "file"     : "src/architecture.ts",
+      "line"     : 5,
       "specifier": "./architecture.generated.json",
-      "reason": "generated-data"
+      "reason"   : "generated-data"
     },
     {
-      "file": "src/chat-message.tsx",
-      "line": 1,
+      "file"     : "src/chat-message.tsx",
+      "line"     : 5,
       "specifier": "react",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/chat-message.tsx",
-      "line": 2,
+      "file"     : "src/chat-message.tsx",
+      "line"     : 6,
       "specifier": "react-markdown",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/chat-message.tsx",
-      "line": 3,
+      "file"     : "src/chat-message.tsx",
+      "line"     : 7,
       "specifier": "remark-gfm",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/chat-row-state.tsx",
-      "line": 4,
+      "file"     : "src/chat-row-state.tsx",
+      "line"     : 8,
       "specifier": "react",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/command-card.tsx",
-      "line": 1,
+      "file"     : "src/command-card.tsx",
+      "line"     : 5,
       "specifier": "react",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/conversations.ts",
-      "line": 1,
+      "file"     : "src/conversations.ts",
+      "line"     : 5,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/ecosystem-view.tsx",
-      "line": 1,
+      "file"     : "src/ecosystem-view.tsx",
+      "line"     : 5,
       "specifier": "react",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/main.ts",
-      "line": 1,
+      "file"     : "src/main.ts",
+      "line"     : 5,
       "specifier": "electron",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/main.ts",
-      "line": 2,
+      "file"     : "src/main.ts",
+      "line"     : 6,
       "specifier": "node:child_process",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/main.ts",
-      "line": 3,
+      "file"     : "src/main.ts",
+      "line"     : 7,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/main.ts",
-      "line": 4,
+      "file"     : "src/main.ts",
+      "line"     : 8,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/main.ts",
-      "line": 5,
+      "file"     : "src/main.ts",
+      "line"     : 9,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/native-activity-view.tsx",
-      "line": 1,
+      "file"     : "src/native-activity-view.tsx",
+      "line"     : 5,
       "specifier": "react",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/native-command.ts",
-      "line": 1,
+      "file"     : "src/native-command.ts",
+      "line"     : 5,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/native-reports.ts",
-      "line": 1,
+      "file"     : "src/native-reports.ts",
+      "line"     : 5,
       "specifier": "node:crypto",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/native-reports.ts",
-      "line": 2,
+      "file"     : "src/native-reports.ts",
+      "line"     : 6,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/native-reports.ts",
-      "line": 3,
+      "file"     : "src/native-reports.ts",
+      "line"     : 7,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/preload.ts",
-      "line": 1,
+      "file"     : "src/preload.ts",
+      "line"     : 5,
       "specifier": "electron",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/renderer.tsx",
-      "line": 11,
+      "file"     : "src/renderer.tsx",
+      "line"     : 15,
       "specifier": "react",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/renderer.tsx",
-      "line": 12,
+      "file"     : "src/renderer.tsx",
+      "line"     : 16,
       "specifier": "react-dom/client",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/report-judge.ts",
-      "line": 1,
+      "file"     : "src/report-judge.ts",
+      "line"     : 5,
       "specifier": "node:child_process",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/report-judge.ts",
-      "line": 2,
+      "file"     : "src/report-judge.ts",
+      "line"     : 6,
       "specifier": "node:fs",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/report-judge.ts",
-      "line": 3,
+      "file"     : "src/report-judge.ts",
+      "line"     : 7,
       "specifier": "node:os",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/report-judge.ts",
-      "line": 4,
+      "file"     : "src/report-judge.ts",
+      "line"     : 8,
       "specifier": "node:path",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/reports-view.tsx",
-      "line": 1,
+      "file"     : "src/reports-view.tsx",
+      "line"     : 5,
       "specifier": "react",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/rpc.ts",
-      "line": 1,
+      "file"     : "src/rpc.ts",
+      "line"     : 5,
       "specifier": "node:events",
-      "reason": "external"
+      "reason"   : "external"
     },
     {
-      "file": "src/rpc.ts",
-      "line": 2,
+      "file"     : "src/rpc.ts",
+      "line"     : 6,
       "specifier": "node:child_process",
-      "reason": "external"
+      "reason"   : "external"
     }
   ],
-  "diagnostics": []
+  "diagnostics": [],
+  "structure": {
+    "rootId": "arch.www",
+    "nodes": [
+      {
+        "id"         : "arch.www",
+        "parent"     : null,
+        "title"      : "WWW",
+        "description": "이 저장소의 제품 책임과 개발 실행 구조",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.chat",
+        "parent"     : "arch.www",
+        "title"      : "대화",
+        "description": "대화 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.chat.sessions",
+        "parent"     : "arch.chat",
+        "title"      : "대화 세션",
+        "description": "대화 세션 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.chat.messages",
+        "parent"     : "arch.chat",
+        "title"      : "메시지",
+        "description": "메시지 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.chat.activity",
+        "parent"     : "arch.chat",
+        "title"      : "활동",
+        "description": "활동 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.reports",
+        "parent"     : "arch.www",
+        "title"      : "보고서",
+        "description": "보고서 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.native",
+        "parent"     : "arch.www",
+        "title"      : "Native 연결",
+        "description": "Native 연결 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.development",
+        "parent"     : "arch.www",
+        "title"      : "개발 실행",
+        "description": "개발 실행 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.development.providers",
+        "parent"     : "arch.development",
+        "title"      : "실행 어댑터",
+        "description": "실행 어댑터 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.development.evidence",
+        "parent"     : "arch.development",
+        "title"      : "검증 근거",
+        "description": "검증 근거 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.development.records",
+        "parent"     : "arch.development",
+        "title"      : "작업 기록",
+        "description": "작업 기록 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.development.reporting",
+        "parent"     : "arch.development",
+        "title"      : "저작 보고서",
+        "description": "저작 보고서 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.blueprint",
+        "parent"     : "arch.www",
+        "title"      : "구조 설계도",
+        "description": "구조 설계도 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.tooling",
+        "parent"     : "arch.www",
+        "title"      : "빌드와 구조 검사",
+        "description": "빌드와 구조 검사 책임을 하위 역할로 나눈다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.tooling.bundle",
+        "parent"     : "arch.tooling",
+        "title"      : "앱 번들 생성",
+        "description": "앱 번들 생성의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.tooling.map-generation"
+        ]
+      },
+      {
+        "id"         : "arch.tooling.structure-contract",
+        "parent"     : "arch.tooling",
+        "title"      : "구조와 요구 선언 계약 검증",
+        "description": "구조와 요구 선언 계약 검증의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.tooling.map-validation",
+        "parent"     : "arch.tooling",
+        "title"      : "계약과 지도 현재성 검사",
+        "description": "계약과 지도 현재성 검사의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.tooling.map-generation"
+        ]
+      },
+      {
+        "id"         : "arch.tooling.map-generation",
+        "parent"     : "arch.tooling",
+        "title"      : "결정적인 구조 지도 생성",
+        "description": "결정적인 구조 지도 생성의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.tooling.structure-contract"
+        ]
+      },
+      {
+        "id"         : "arch.tooling.source-policy",
+        "parent"     : "arch.tooling",
+        "title"      : "TypeScript 소스 정책 검사",
+        "description": "TypeScript 소스 정책 검사의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.development.authoring",
+        "parent"     : "arch.development",
+        "title"      : "typed 저작 하네스",
+        "description": "typed 저작 하네스의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.tooling.map-validation",
+          "arch.development.authorization",
+          "arch.development.execution",
+          "arch.development.providers.gjc",
+          "arch.development.reporting.lifecycle",
+          "arch.development.routing",
+          "arch.tooling.source-policy"
+        ]
+      },
+      {
+        "id"         : "arch.development.providers.codex",
+        "parent"     : "arch.development.providers",
+        "title"      : "Codex 실행 어댑터",
+        "description": "Codex 실행 어댑터의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.providers.gjc",
+          "arch.development.providers.invocation"
+        ]
+      },
+      {
+        "id"         : "arch.development.providers.gjc",
+        "parent"     : "arch.development.providers",
+        "title"      : "GJC 실행 어댑터",
+        "description": "GJC 실행 어댑터의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.development.providers.invocation",
+        "parent"     : "arch.development.providers",
+        "title"      : "플랫폼별 실행 명령 계약",
+        "description": "플랫폼별 실행 명령 계약의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.development.evidence.repository",
+        "parent"     : "arch.development.evidence",
+        "title"      : "전체 저장소 검사 적용성",
+        "description": "전체 저장소 검사 적용성의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.evidence.verification"
+        ]
+      },
+      {
+        "id"         : "arch.development.evidence.documentation",
+        "parent"     : "arch.development.evidence",
+        "title"      : "문서 영향 검토 적용성",
+        "description": "문서 영향 검토 적용성의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.evidence.verification",
+          "arch.development.records.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.development.evidence.verification",
+        "parent"     : "arch.development.evidence",
+        "title"      : "검증 시도와 소스 식별",
+        "description": "검증 시도와 소스 식별의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.development.records.lock",
+        "parent"     : "arch.development.records",
+        "title"      : "작업 기록 쓰기 잠금",
+        "description": "작업 기록 쓰기 잠금의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.development.authorization",
+        "parent"     : "arch.development",
+        "title"      : "작업 권한과 실행 전 검사",
+        "description": "작업 권한과 실행 전 검사의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.records.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.development.records.events",
+        "parent"     : "arch.development.records",
+        "title"      : "실행 사건 기록",
+        "description": "실행 사건 기록의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.authorization"
+        ]
+      },
+      {
+        "id"         : "arch.development.reporting.lifecycle",
+        "parent"     : "arch.development.reporting",
+        "title"      : "저작 보고서 종료 절차",
+        "description": "저작 보고서 종료 절차의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.records.lock",
+          "arch.development.records.state",
+          "arch.development.reporting.storage",
+          "arch.development.authorization"
+        ]
+      },
+      {
+        "id"         : "arch.development.reporting.document",
+        "parent"     : "arch.development.reporting",
+        "title"      : "저작 보고서 문서 렌더링",
+        "description": "저작 보고서 문서 렌더링의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.reporting.storage"
+        ]
+      },
+      {
+        "id"         : "arch.development.reporting.storage",
+        "parent"     : "arch.development.reporting",
+        "title"      : "저작 보고서 보관과 게시",
+        "description": "저작 보고서 보관과 게시의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.authorization",
+          "arch.development.evidence.verification",
+          "arch.development.reporting.document"
+        ]
+      },
+      {
+        "id"         : "arch.development.review",
+        "parent"     : "arch.development",
+        "title"      : "독립 검토 실행과 판정",
+        "description": "독립 검토 실행과 판정의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.evidence.verification",
+          "arch.development.providers.invocation"
+        ]
+      },
+      {
+        "id"         : "arch.development.routing",
+        "parent"     : "arch.development",
+        "title"      : "요청과 스킬 라우팅",
+        "description": "요청과 스킬 라우팅의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.records.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.development.execution",
+        "parent"     : "arch.development",
+        "title"      : "개발 단계 실행 통합",
+        "description": "개발 단계 실행 통합의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.authorization",
+          "arch.development.evidence.verification",
+          "arch.development.providers.codex",
+          "arch.development.providers.gjc",
+          "arch.development.records.events",
+          "arch.development.records.protocol",
+          "arch.development.records.state",
+          "arch.development.review",
+          "arch.development.routing"
+        ]
+      },
+      {
+        "id"         : "arch.development.records.validation",
+        "parent"     : "arch.development.records",
+        "title"      : "작업 레코드 스키마 검사",
+        "description": "작업 레코드 스키마 검사의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.records.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.development.records.protocol",
+        "parent"     : "arch.development.records",
+        "title"      : "작업 레코드 타입 계약",
+        "description": "작업 레코드 타입 계약의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.evidence.documentation",
+          "arch.development.evidence.repository",
+          "arch.development.evidence.verification"
+        ]
+      },
+      {
+        "id"         : "arch.development.records.state",
+        "parent"     : "arch.development.records",
+        "title"      : "작업 상태와 수용 판정",
+        "description": "작업 상태와 수용 판정의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.authorization",
+          "arch.development.evidence.documentation",
+          "arch.development.evidence.repository",
+          "arch.development.evidence.verification",
+          "arch.development.records.lock",
+          "arch.development.records.protocol",
+          "arch.development.records.validation",
+          "arch.development.review",
+          "arch.development.routing"
+        ]
+      },
+      {
+        "id"         : "arch.chat.activity.catalog",
+        "parent"     : "arch.chat.activity",
+        "title"      : "활동 목록과 읽기 상태",
+        "description": "활동 목록과 읽기 상태의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.native.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.blueprint.layout",
+        "parent"     : "arch.blueprint",
+        "title"      : "설계도 배치와 연결 탐색",
+        "description": "설계도 배치와 연결 탐색의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.chat.messages.markdown",
+        "parent"     : "arch.chat.messages",
+        "title"      : "대화 메시지 Markdown 표시",
+        "description": "대화 메시지 Markdown 표시의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.chat.sessions.reading"
+        ]
+      },
+      {
+        "id"         : "arch.chat.messages.reading",
+        "parent"     : "arch.chat.messages",
+        "title"      : "대화 행 펼침 상태",
+        "description": "대화 행 펼침 상태의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.chat.sessions.reading",
+        "parent"     : "arch.chat.sessions",
+        "title"      : "대화별 초안과 읽기 상태",
+        "description": "대화별 초안과 읽기 상태의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.native.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.chat.messages.execution",
+        "parent"     : "arch.chat.messages",
+        "title"      : "실행 카드와 출력 표시",
+        "description": "실행 카드와 출력 표시의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.chat.messages.preview",
+          "arch.chat.messages.projection",
+          "arch.chat.messages.reading"
+        ]
+      },
+      {
+        "id"         : "arch.chat.messages.preview",
+        "parent"     : "arch.chat.messages",
+        "title"      : "명령 출력 미리보기",
+        "description": "명령 출력 미리보기의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.chat.sessions.restore",
+        "parent"     : "arch.chat.sessions",
+        "title"      : "Native 대화 목록과 복원",
+        "description": "Native 대화 목록과 복원의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.native.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.development.service",
+        "parent"     : "arch.development",
+        "title"      : "개발 상태 서비스",
+        "description": "개발 상태 서비스의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.reporting.lifecycle",
+          "arch.development.review",
+          "arch.native.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.blueprint.view",
+        "parent"     : "arch.blueprint",
+        "title"      : "설계도와 생태계 화면",
+        "description": "설계도와 생태계 화면의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.blueprint.ecosystem",
+          "arch.blueprint.layout"
+        ]
+      },
+      {
+        "id"         : "arch.blueprint.ecosystem",
+        "parent"     : "arch.blueprint",
+        "title"      : "생태계 안내 모델",
+        "description": "생태계 안내 모델의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.chat.composer",
+        "parent"     : "arch.chat",
+        "title"      : "한글 조합과 메시지 입력",
+        "description": "한글 조합과 메시지 입력의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.native.lifecycle",
+        "parent"     : "arch.native",
+        "title"      : "Electron 수명주기와 IPC 처리",
+        "description": "Electron 수명주기와 IPC 처리의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.chat.activity.catalog",
+          "arch.chat.activity.projection",
+          "arch.chat.sessions.requests",
+          "arch.chat.sessions.restore",
+          "arch.development.service",
+          "arch.native.launch",
+          "arch.native.protocol",
+          "arch.native.transport",
+          "arch.reports.collection",
+          "arch.reports.judgement",
+          "arch.reports.queue",
+          "arch.reports.service"
+        ]
+      },
+      {
+        "id"         : "arch.chat.activity.view",
+        "parent"     : "arch.chat.activity",
+        "title"      : "Native 활동 상세 화면",
+        "description": "Native 활동 상세 화면의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.chat.activity.artifacts",
+          "arch.chat.activity.catalog",
+          "arch.chat.activity.projection",
+          "arch.native.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.chat.activity.projection",
+        "parent"     : "arch.chat.activity",
+        "title"      : "Native 활동 사건 투영",
+        "description": "Native 활동 사건 투영의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.chat.activity.artifacts",
+          "arch.native.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.chat.sessions.requests",
+        "parent"     : "arch.chat.sessions",
+        "title"      : "Native 대화 요청 구성",
+        "description": "Native 대화 요청 구성의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.native.launch",
+        "parent"     : "arch.native",
+        "title"      : "Native 실행 파일 선택",
+        "description": "Native 실행 파일 선택의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.providers.invocation"
+        ]
+      },
+      {
+        "id"         : "arch.reports.collection",
+        "parent"     : "arch.reports",
+        "title"      : "보고서용 완료 사건 수집",
+        "description": "보고서용 완료 사건 수집의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.chat.messages.projection",
+          "arch.native.protocol",
+          "arch.reports.judgement"
+        ]
+      },
+      {
+        "id"         : "arch.reports.queue",
+        "parent"     : "arch.reports",
+        "title"      : "자동 보고서 큐와 수명주기",
+        "description": "자동 보고서 큐와 수명주기의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.records.lock",
+          "arch.development.reporting.storage",
+          "arch.reports.judgement",
+          "arch.development.authorization",
+          "arch.development.records.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.native.bridge",
+        "parent"     : "arch.native",
+        "title"      : "제한된 브리지 노출",
+        "description": "제한된 브리지 노출의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.native.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.chat.messages.projection",
+        "parent"     : "arch.chat.messages",
+        "title"      : "대화 사건을 블록으로 투영",
+        "description": "대화 사건을 블록으로 투영의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.native.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.chat.workspace",
+        "parent"     : "arch.chat",
+        "title"      : "화면 전환과 대화 작업 공간",
+        "description": "화면 전환과 대화 작업 공간의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.blueprint.view",
+          "arch.chat.activity.catalog",
+          "arch.chat.activity.projection",
+          "arch.chat.activity.view",
+          "arch.chat.composer",
+          "arch.chat.messages.execution",
+          "arch.chat.messages.markdown",
+          "arch.chat.messages.projection",
+          "arch.chat.messages.reading",
+          "arch.chat.sessions.reading",
+          "arch.native.protocol",
+          "arch.reports.view"
+        ]
+      },
+      {
+        "id"         : "arch.reports.judgement",
+        "parent"     : "arch.reports",
+        "title"      : "읽기 전용 Native 보고서 판단",
+        "description": "읽기 전용 Native 보고서 판단의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.reporting.storage",
+          "arch.native.launch",
+          "arch.native.transport"
+        ]
+      },
+      {
+        "id"         : "arch.reports.service",
+        "parent"     : "arch.reports",
+        "title"      : "보고서 목록과 읽기 서비스",
+        "description": "보고서 목록과 읽기 서비스의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.development.reporting.storage",
+          "arch.native.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.reports.view",
+        "parent"     : "arch.reports",
+        "title"      : "보고서 탐색 화면",
+        "description": "보고서 탐색 화면의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.native.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.native.transport",
+        "parent"     : "arch.native",
+        "title"      : "JSONL 요청과 응답 전송",
+        "description": "JSONL 요청과 응답 전송의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": [
+          "arch.native.protocol"
+        ]
+      },
+      {
+        "id"         : "arch.native.protocol",
+        "parent"     : "arch.native",
+        "title"      : "프로세스 간 공용 계약",
+        "description": "프로세스 간 공용 계약의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.chat.activity.artifacts",
+        "parent"     : "arch.chat.activity",
+        "title"      : "WWW 작업 산출물 식별",
+        "description": "WWW 작업 산출물 식별의 입력·상태·결과를 소유한다.",
+        "allowedDependencies": []
+      }
+    ],
+    "requirements": [
+      {
+        "id"                    : "RESP-TOOLING-BUNDLE",
+        "nodeId"                : "arch.tooling.bundle",
+        "description"           : "앱 번들 생성 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 8
+      },
+      {
+        "id"                    : "RESP-TOOLING-STRUCTURE-CONTRACT",
+        "nodeId"                : "arch.tooling.structure-contract",
+        "description"           : "구조와 요구 선언 계약 검증 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 15
+      },
+      {
+        "id"                    : "RESP-TOOLING-MAP-VALIDATION",
+        "nodeId"                : "arch.tooling.map-validation",
+        "description"           : "계약과 지도 현재성 검사 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 22
+      },
+      {
+        "id"                    : "RESP-TOOLING-MAP-GENERATION",
+        "nodeId"                : "arch.tooling.map-generation",
+        "description"           : "결정적인 구조 지도 생성 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 29
+      },
+      {
+        "id"                    : "RESP-TOOLING-SOURCE-POLICY",
+        "nodeId"                : "arch.tooling.source-policy",
+        "description"           : "TypeScript 소스 정책 검사 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 36
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-AUTHORING",
+        "nodeId"                : "arch.development.authoring",
+        "description"           : "typed 저작 하네스 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 43
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-PROVIDERS-CODEX",
+        "nodeId"                : "arch.development.providers.codex",
+        "description"           : "Codex 실행 어댑터 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 50
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-PROVIDERS-GJC",
+        "nodeId"                : "arch.development.providers.gjc",
+        "description"           : "GJC 실행 어댑터 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 57
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-PROVIDERS-INVOCATION",
+        "nodeId"                : "arch.development.providers.invocation",
+        "description"           : "플랫폼별 실행 명령 계약 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 64
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-EVIDENCE-REPOSITORY",
+        "nodeId"                : "arch.development.evidence.repository",
+        "description"           : "전체 저장소 검사 적용성 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 71
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-EVIDENCE-DOCUMENTATION",
+        "nodeId"                : "arch.development.evidence.documentation",
+        "description"           : "문서 영향 검토 적용성 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 78
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-EVIDENCE-VERIFICATION",
+        "nodeId"                : "arch.development.evidence.verification",
+        "description"           : "검증 시도와 소스 식별 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 85
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-RECORDS-LOCK",
+        "nodeId"                : "arch.development.records.lock",
+        "description"           : "작업 기록 쓰기 잠금 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 92
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-AUTHORIZATION",
+        "nodeId"                : "arch.development.authorization",
+        "description"           : "작업 권한과 실행 전 검사 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 99
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-RECORDS-EVENTS",
+        "nodeId"                : "arch.development.records.events",
+        "description"           : "실행 사건 기록 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 106
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-REPORTING-LIFECYCLE",
+        "nodeId"                : "arch.development.reporting.lifecycle",
+        "description"           : "저작 보고서 종료 절차 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 113
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-REPORTING-DOCUMENT",
+        "nodeId"                : "arch.development.reporting.document",
+        "description"           : "저작 보고서 문서 렌더링 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 120
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-REPORTING-STORAGE",
+        "nodeId"                : "arch.development.reporting.storage",
+        "description"           : "저작 보고서 보관과 게시 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 127
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-REVIEW",
+        "nodeId"                : "arch.development.review",
+        "description"           : "독립 검토 실행과 판정 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 134
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-ROUTING",
+        "nodeId"                : "arch.development.routing",
+        "description"           : "요청과 스킬 라우팅 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 141
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-EXECUTION",
+        "nodeId"                : "arch.development.execution",
+        "description"           : "개발 단계 실행 통합 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 148
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-RECORDS-VALIDATION",
+        "nodeId"                : "arch.development.records.validation",
+        "description"           : "작업 레코드 스키마 검사 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 155
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-RECORDS-PROTOCOL",
+        "nodeId"                : "arch.development.records.protocol",
+        "description"           : "작업 레코드 타입 계약 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 162
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-RECORDS-STATE",
+        "nodeId"                : "arch.development.records.state",
+        "description"           : "작업 상태와 수용 판정 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 169
+      },
+      {
+        "id"                    : "RESP-CHAT-ACTIVITY-CATALOG",
+        "nodeId"                : "arch.chat.activity.catalog",
+        "description"           : "활동 목록과 읽기 상태 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 176
+      },
+      {
+        "id"                    : "RESP-BLUEPRINT-LAYOUT",
+        "nodeId"                : "arch.blueprint.layout",
+        "description"           : "설계도 배치와 연결 탐색 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 183
+      },
+      {
+        "id"                    : "RESP-CHAT-MESSAGES-MARKDOWN",
+        "nodeId"                : "arch.chat.messages.markdown",
+        "description"           : "대화 메시지 Markdown 표시 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 190
+      },
+      {
+        "id"                    : "RESP-CHAT-MESSAGES-READING",
+        "nodeId"                : "arch.chat.messages.reading",
+        "description"           : "대화 행 펼침 상태 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 197
+      },
+      {
+        "id"                    : "RESP-CHAT-SESSIONS-READING",
+        "nodeId"                : "arch.chat.sessions.reading",
+        "description"           : "대화별 초안과 읽기 상태 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 204
+      },
+      {
+        "id"                    : "RESP-CHAT-MESSAGES-EXECUTION",
+        "nodeId"                : "arch.chat.messages.execution",
+        "description"           : "실행 카드와 출력 표시 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 211
+      },
+      {
+        "id"                    : "RESP-CHAT-MESSAGES-PREVIEW",
+        "nodeId"                : "arch.chat.messages.preview",
+        "description"           : "명령 출력 미리보기 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 218
+      },
+      {
+        "id"                    : "RESP-CHAT-SESSIONS-RESTORE",
+        "nodeId"                : "arch.chat.sessions.restore",
+        "description"           : "Native 대화 목록과 복원 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 225
+      },
+      {
+        "id"                    : "RESP-DEVELOPMENT-SERVICE",
+        "nodeId"                : "arch.development.service",
+        "description"           : "개발 상태 서비스 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 232
+      },
+      {
+        "id"                    : "RESP-BLUEPRINT-VIEW",
+        "nodeId"                : "arch.blueprint.view",
+        "description"           : "설계도와 생태계 화면 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 239
+      },
+      {
+        "id"                    : "RESP-BLUEPRINT-ECOSYSTEM",
+        "nodeId"                : "arch.blueprint.ecosystem",
+        "description"           : "생태계 안내 모델 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 246
+      },
+      {
+        "id"                    : "RESP-CHAT-COMPOSER",
+        "nodeId"                : "arch.chat.composer",
+        "description"           : "한글 조합과 메시지 입력 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 253
+      },
+      {
+        "id"                    : "RESP-NATIVE-LIFECYCLE",
+        "nodeId"                : "arch.native.lifecycle",
+        "description"           : "Electron 수명주기와 IPC 처리 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 260
+      },
+      {
+        "id"                    : "RESP-CHAT-ACTIVITY-VIEW",
+        "nodeId"                : "arch.chat.activity.view",
+        "description"           : "Native 활동 상세 화면 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 267
+      },
+      {
+        "id"                    : "RESP-CHAT-ACTIVITY-PROJECTION",
+        "nodeId"                : "arch.chat.activity.projection",
+        "description"           : "Native 활동 사건 투영 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 274
+      },
+      {
+        "id"                    : "RESP-CHAT-SESSIONS-REQUESTS",
+        "nodeId"                : "arch.chat.sessions.requests",
+        "description"           : "Native 대화 요청 구성 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 281
+      },
+      {
+        "id"                    : "RESP-NATIVE-LAUNCH",
+        "nodeId"                : "arch.native.launch",
+        "description"           : "Native 실행 파일 선택 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 288
+      },
+      {
+        "id"                    : "RESP-REPORTS-COLLECTION",
+        "nodeId"                : "arch.reports.collection",
+        "description"           : "보고서용 완료 사건 수집 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 295
+      },
+      {
+        "id"                    : "RESP-REPORTS-QUEUE",
+        "nodeId"                : "arch.reports.queue",
+        "description"           : "자동 보고서 큐와 수명주기 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 302
+      },
+      {
+        "id"                    : "RESP-NATIVE-BRIDGE",
+        "nodeId"                : "arch.native.bridge",
+        "description"           : "제한된 브리지 노출 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 309
+      },
+      {
+        "id"                    : "RESP-CHAT-MESSAGES-PROJECTION",
+        "nodeId"                : "arch.chat.messages.projection",
+        "description"           : "대화 사건을 블록으로 투영 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 316
+      },
+      {
+        "id"                    : "RESP-CHAT-WORKSPACE",
+        "nodeId"                : "arch.chat.workspace",
+        "description"           : "화면 전환과 대화 작업 공간 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 323
+      },
+      {
+        "id"                    : "RESP-REPORTS-JUDGEMENT",
+        "nodeId"                : "arch.reports.judgement",
+        "description"           : "읽기 전용 Native 보고서 판단 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 330
+      },
+      {
+        "id"                    : "RESP-REPORTS-SERVICE",
+        "nodeId"                : "arch.reports.service",
+        "description"           : "보고서 목록과 읽기 서비스 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 337
+      },
+      {
+        "id"                    : "RESP-REPORTS-VIEW",
+        "nodeId"                : "arch.reports.view",
+        "description"           : "보고서 탐색 화면 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 344
+      },
+      {
+        "id"                    : "RESP-NATIVE-TRANSPORT",
+        "nodeId"                : "arch.native.transport",
+        "description"           : "JSONL 요청과 응답 전송 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 351
+      },
+      {
+        "id"                    : "RESP-NATIVE-PROTOCOL",
+        "nodeId"                : "arch.native.protocol",
+        "description"           : "프로세스 간 공용 계약 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 358
+      },
+      {
+        "id"                    : "RESP-CHAT-ACTIVITY-ARTIFACTS",
+        "nodeId"                : "arch.chat.activity.artifacts",
+        "description"           : "WWW 작업 산출물 식별 책임을 구현하고 관련 동작을 검증한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 365
+      }
+    ],
+    "declarations": [
+      {
+        "file": "build.ts",
+        "nodeId": "arch.tooling.bundle",
+        "requirementIds": [
+          "RESP-TOOLING-BUNDLE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/architecture-contract.ts",
+        "nodeId": "arch.tooling.structure-contract",
+        "requirementIds": [
+          "RESP-TOOLING-STRUCTURE-CONTRACT"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/check-architecture.ts",
+        "nodeId": "arch.tooling.map-validation",
+        "requirementIds": [
+          "RESP-TOOLING-MAP-VALIDATION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/generate-architecture.ts",
+        "nodeId": "arch.tooling.map-generation",
+        "requirementIds": [
+          "RESP-TOOLING-MAP-GENERATION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/source-policy.ts",
+        "nodeId": "arch.tooling.source-policy",
+        "requirementIds": [
+          "RESP-TOOLING-SOURCE-POLICY"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow.ts",
+        "nodeId": "arch.development.authoring",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-AUTHORING"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/adapters/codex.ts",
+        "nodeId": "arch.development.providers.codex",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-PROVIDERS-CODEX"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/adapters/gjc.ts",
+        "nodeId": "arch.development.providers.gjc",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-PROVIDERS-GJC"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/adapters/windows-command.ts",
+        "nodeId": "arch.development.providers.invocation",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-PROVIDERS-INVOCATION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/consistency.ts",
+        "nodeId": "arch.development.evidence.repository",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-EVIDENCE-REPOSITORY"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/documentation.ts",
+        "nodeId": "arch.development.evidence.documentation",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-EVIDENCE-DOCUMENTATION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/evidence.ts",
+        "nodeId": "arch.development.evidence.verification",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-EVIDENCE-VERIFICATION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/lock.ts",
+        "nodeId": "arch.development.records.lock",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-RECORDS-LOCK"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/preflight.ts",
+        "nodeId": "arch.development.authorization",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-AUTHORIZATION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/record.ts",
+        "nodeId": "arch.development.records.events",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-RECORDS-EVENTS"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/report-lifecycle.ts",
+        "nodeId": "arch.development.reporting.lifecycle",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-REPORTING-LIFECYCLE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/report-view.ts",
+        "nodeId": "arch.development.reporting.document",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-REPORTING-DOCUMENT"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/reports.ts",
+        "nodeId": "arch.development.reporting.storage",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-REPORTING-STORAGE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/review.ts",
+        "nodeId": "arch.development.review",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-REVIEW"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/route.ts",
+        "nodeId": "arch.development.routing",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-ROUTING"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/run.ts",
+        "nodeId": "arch.development.execution",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-EXECUTION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/schema.ts",
+        "nodeId": "arch.development.records.validation",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-RECORDS-VALIDATION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/types.ts",
+        "nodeId": "arch.development.records.protocol",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-RECORDS-PROTOCOL"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/work.ts",
+        "nodeId": "arch.development.records.state",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-RECORDS-STATE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/activity-sidebar.ts",
+        "nodeId": "arch.chat.activity.catalog",
+        "requirementIds": [
+          "RESP-CHAT-ACTIVITY-CATALOG"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/architecture-tree.ts",
+        "nodeId": "arch.blueprint.layout",
+        "requirementIds": [
+          "RESP-BLUEPRINT-LAYOUT"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/architecture.ts",
+        "nodeId": "arch.blueprint.layout",
+        "requirementIds": [
+          "RESP-BLUEPRINT-LAYOUT"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/chat-message.tsx",
+        "nodeId": "arch.chat.messages.markdown",
+        "requirementIds": [
+          "RESP-CHAT-MESSAGES-MARKDOWN"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/chat-row-state.tsx",
+        "nodeId": "arch.chat.messages.reading",
+        "requirementIds": [
+          "RESP-CHAT-MESSAGES-READING"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/chat-state.ts",
+        "nodeId": "arch.chat.sessions.reading",
+        "requirementIds": [
+          "RESP-CHAT-SESSIONS-READING"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/command-card.tsx",
+        "nodeId": "arch.chat.messages.execution",
+        "requirementIds": [
+          "RESP-CHAT-MESSAGES-EXECUTION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/command-preview.ts",
+        "nodeId": "arch.chat.messages.preview",
+        "requirementIds": [
+          "RESP-CHAT-MESSAGES-PREVIEW"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/conversations.ts",
+        "nodeId": "arch.chat.sessions.restore",
+        "requirementIds": [
+          "RESP-CHAT-SESSIONS-RESTORE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/development.ts",
+        "nodeId": "arch.development.service",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-SERVICE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/ecosystem-view.tsx",
+        "nodeId": "arch.blueprint.view",
+        "requirementIds": [
+          "RESP-BLUEPRINT-VIEW"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/ecosystem.ts",
+        "nodeId": "arch.blueprint.ecosystem",
+        "requirementIds": [
+          "RESP-BLUEPRINT-ECOSYSTEM"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/input.ts",
+        "nodeId": "arch.chat.composer",
+        "requirementIds": [
+          "RESP-CHAT-COMPOSER"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/main.ts",
+        "nodeId": "arch.native.lifecycle",
+        "requirementIds": [
+          "RESP-NATIVE-LIFECYCLE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/native-activity-view.tsx",
+        "nodeId": "arch.chat.activity.view",
+        "requirementIds": [
+          "RESP-CHAT-ACTIVITY-VIEW"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/native-activity.ts",
+        "nodeId": "arch.chat.activity.projection",
+        "requirementIds": [
+          "RESP-CHAT-ACTIVITY-PROJECTION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/native-chat.ts",
+        "nodeId": "arch.chat.sessions.requests",
+        "requirementIds": [
+          "RESP-CHAT-SESSIONS-REQUESTS"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/native-command.ts",
+        "nodeId": "arch.native.launch",
+        "requirementIds": [
+          "RESP-NATIVE-LAUNCH"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/native-report-input.ts",
+        "nodeId": "arch.reports.collection",
+        "requirementIds": [
+          "RESP-REPORTS-COLLECTION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/native-reports.ts",
+        "nodeId": "arch.reports.queue",
+        "requirementIds": [
+          "RESP-REPORTS-QUEUE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/preload.ts",
+        "nodeId": "arch.native.bridge",
+        "requirementIds": [
+          "RESP-NATIVE-BRIDGE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/projection.ts",
+        "nodeId": "arch.chat.messages.projection",
+        "requirementIds": [
+          "RESP-CHAT-MESSAGES-PROJECTION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/renderer.tsx",
+        "nodeId": "arch.chat.workspace",
+        "requirementIds": [
+          "RESP-CHAT-WORKSPACE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/report-judge.ts",
+        "nodeId": "arch.reports.judgement",
+        "requirementIds": [
+          "RESP-REPORTS-JUDGEMENT"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/reports-service.ts",
+        "nodeId": "arch.reports.service",
+        "requirementIds": [
+          "RESP-REPORTS-SERVICE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/reports-view.tsx",
+        "nodeId": "arch.reports.view",
+        "requirementIds": [
+          "RESP-REPORTS-VIEW"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/rpc.ts",
+        "nodeId": "arch.native.transport",
+        "requirementIds": [
+          "RESP-NATIVE-TRANSPORT"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/shared.ts",
+        "nodeId": "arch.native.protocol",
+        "requirementIds": [
+          "RESP-NATIVE-PROTOCOL"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/www-activity.ts",
+        "nodeId": "arch.chat.activity.artifacts",
+        "requirementIds": [
+          "RESP-CHAT-ACTIVITY-ARTIFACTS"
+        ],
+        "line": 2
+      }
+    ],
+    "tests": [
+      {
+        "file": "test/activity-sidebar.test.ts",
+        "requirementIds": [
+          "RESP-CHAT-ACTIVITY-CATALOG"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/architecture-contract.test.ts",
+        "requirementIds": [
+          "RESP-TOOLING-STRUCTURE-CONTRACT",
+          "RESP-TOOLING-MAP-VALIDATION",
+          "RESP-TOOLING-MAP-GENERATION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/architecture-harness.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-AUTHORING",
+          "RESP-TOOLING-MAP-VALIDATION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/architecture-tree.test.ts",
+        "requirementIds": [
+          "RESP-BLUEPRINT-LAYOUT"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/architecture.test.ts",
+        "requirementIds": [
+          "RESP-BLUEPRINT-LAYOUT"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/chat-state.test.ts",
+        "requirementIds": [
+          "RESP-CHAT-MESSAGES-MARKDOWN",
+          "RESP-CHAT-MESSAGES-READING",
+          "RESP-CHAT-SESSIONS-READING",
+          "RESP-CHAT-WORKSPACE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/command-preview.test.ts",
+        "requirementIds": [
+          "RESP-CHAT-MESSAGES-EXECUTION",
+          "RESP-CHAT-MESSAGES-PREVIEW"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/conversations.test.ts",
+        "requirementIds": [
+          "RESP-CHAT-SESSIONS-RESTORE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/development-policy.test.ts",
+        "requirementIds": [
+          "RESP-TOOLING-BUNDLE",
+          "RESP-DEVELOPMENT-SERVICE",
+          "RESP-NATIVE-LIFECYCLE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/ecosystem.test.ts",
+        "requirementIds": [
+          "RESP-BLUEPRINT-VIEW",
+          "RESP-BLUEPRINT-ECOSYSTEM"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/input.test.ts",
+        "requirementIds": [
+          "RESP-CHAT-COMPOSER"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/native-activity.test.ts",
+        "requirementIds": [
+          "RESP-CHAT-ACTIVITY-PROJECTION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/native-chat.test.ts",
+        "requirementIds": [
+          "RESP-CHAT-SESSIONS-REQUESTS"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/native-report-input.test.ts",
+        "requirementIds": [
+          "RESP-REPORTS-COLLECTION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/native-reports.test.ts",
+        "requirementIds": [
+          "RESP-REPORTS-QUEUE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/projection.test.ts",
+        "requirementIds": [
+          "RESP-CHAT-MESSAGES-PROJECTION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/report-judge.test.ts",
+        "requirementIds": [
+          "RESP-REPORTS-JUDGEMENT"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/report-lifecycle.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-REPORTING-LIFECYCLE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/report-service.test.ts",
+        "requirementIds": [
+          "RESP-REPORTS-SERVICE",
+          "RESP-REPORTS-VIEW"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/rpc.fixture.test.ts",
+        "requirementIds": [
+          "RESP-NATIVE-BRIDGE",
+          "RESP-NATIVE-TRANSPORT",
+          "RESP-NATIVE-PROTOCOL"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/source-policy.test.ts",
+        "requirementIds": [
+          "RESP-TOOLING-SOURCE-POLICY"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/typed-workflow.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-AUTHORING"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/windows-native.test.ts",
+        "requirementIds": [
+          "RESP-NATIVE-LAUNCH"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/workflow-codex.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-PROVIDERS-CODEX"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/workflow-contract.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-AUTHORIZATION",
+          "RESP-DEVELOPMENT-ROUTING"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/workflow-development.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-EXECUTION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/workflow-evidence.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-EVIDENCE-VERIFICATION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/workflow-harness.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-PROVIDERS-GJC",
+          "RESP-DEVELOPMENT-RECORDS-EVENTS"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/workflow-reports.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-REPORTING-DOCUMENT",
+          "RESP-DEVELOPMENT-REPORTING-STORAGE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/workflow-review.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-REVIEW"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/workflow-windows-command.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-PROVIDERS-INVOCATION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/workflow-work.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-EVIDENCE-REPOSITORY",
+          "RESP-DEVELOPMENT-EVIDENCE-DOCUMENTATION",
+          "RESP-DEVELOPMENT-RECORDS-LOCK",
+          "RESP-DEVELOPMENT-RECORDS-VALIDATION",
+          "RESP-DEVELOPMENT-RECORDS-PROTOCOL",
+          "RESP-DEVELOPMENT-RECORDS-STATE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/www-activity-view.test.ts",
+        "requirementIds": [
+          "RESP-CHAT-ACTIVITY-VIEW"
+        ],
+        "line": 2
+      },
+      {
+        "file": "test/www-activity.test.ts",
+        "requirementIds": [
+          "RESP-CHAT-ACTIVITY-ARTIFACTS"
+        ],
+        "line": 2
+      }
+    ],
+    "digest": "d325cbb50915b15571077b1741556339f81aff9f745777308dc54d30502e7fb1"
+  }
 }

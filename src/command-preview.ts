@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.chat.messages.preview
+ * @implements RESP-CHAT-MESSAGES-PREVIEW
+ */
 export function commandPreview(output: string, running: boolean): { text: string; hiddenLines: number } {
   if (!output) return { text: "", hiddenLines: 0 };
   const lines = output.replace(/\r\n/g, "\n").split("\n");

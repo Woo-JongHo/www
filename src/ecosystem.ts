@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.blueprint.ecosystem
+ * @implements RESP-BLUEPRINT-ECOSYSTEM
+ */
 export type EcosystemGroup = "app" | "development" | "records" | "future";
 
 export interface EcosystemNode {

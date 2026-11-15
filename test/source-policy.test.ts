@@ -1,3 +1,6 @@
+/**
+ * @verifies RESP-TOOLING-SOURCE-POLICY
+ */
 import { afterEach, expect, test } from 'bun:test';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';

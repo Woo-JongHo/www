@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.reporting.lifecycle
+ * @implements RESP-DEVELOPMENT-REPORTING-LIFECYCLE
+ */
 import { randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";

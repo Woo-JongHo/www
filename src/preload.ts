@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.native.bridge
+ * @implements RESP-NATIVE-BRIDGE
+ */
 import { contextBridge, ipcRenderer } from "electron";
 import type { AppEvent, WwwApi } from "./shared";
 

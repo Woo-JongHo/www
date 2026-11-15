@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.records.validation
+ * @implements RESP-DEVELOPMENT-RECORDS-VALIDATION
+ */
 import type { WorkRecord } from "./types.ts";
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { normalize, resolve, sep } from "node:path";

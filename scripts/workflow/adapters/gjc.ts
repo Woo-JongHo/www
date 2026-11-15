@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.providers.gjc
+ * @implements RESP-DEVELOPMENT-PROVIDERS-GJC
+ */
 import { spawn } from "node:child_process";
 
 import type { ChildProcess, StdioOptions } from "node:child_process";

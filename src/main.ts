@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.native.lifecycle
+ * @implements RESP-NATIVE-LIFECYCLE
+ */
 import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
 import { spawn, execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";

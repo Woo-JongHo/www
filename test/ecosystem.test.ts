@@ -1,3 +1,7 @@
+/**
+ * @verifies RESP-BLUEPRINT-VIEW
+ * @verifies RESP-BLUEPRINT-ECOSYSTEM
+ */
 import { describe, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";

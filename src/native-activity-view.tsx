@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.chat.activity.view
+ * @implements RESP-CHAT-ACTIVITY-VIEW
+ */
 import { useEffect, useMemo, useRef, useState } from "react";
 import { projectActivitySidebar, projectActivitySidebarState, type ActivitySidebarRow, type ActivitySidebarState } from "./activity-sidebar";
 import type { AppEvent } from "./shared";

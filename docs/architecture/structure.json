@@ -1,0 +1,619 @@
+{
+  "schemaVersion": 1,
+  "rootId": "arch.www",
+  "specFiles": [
+    "docs/specs/architecture.md"
+  ],
+  "nodes": [
+    {
+      "id": "arch.www",
+      "parent": null,
+      "title": "WWW",
+      "description": "이 저장소의 제품 책임과 개발 실행 구조",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.chat",
+      "parent": "arch.www",
+      "title": "대화",
+      "description": "대화 책임을 하위 역할로 나눈다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.chat.sessions",
+      "parent": "arch.chat",
+      "title": "대화 세션",
+      "description": "대화 세션 책임을 하위 역할로 나눈다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.chat.messages",
+      "parent": "arch.chat",
+      "title": "메시지",
+      "description": "메시지 책임을 하위 역할로 나눈다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.chat.activity",
+      "parent": "arch.chat",
+      "title": "활동",
+      "description": "활동 책임을 하위 역할로 나눈다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.reports",
+      "parent": "arch.www",
+      "title": "보고서",
+      "description": "보고서 책임을 하위 역할로 나눈다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.native",
+      "parent": "arch.www",
+      "title": "Native 연결",
+      "description": "Native 연결 책임을 하위 역할로 나눈다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.development",
+      "parent": "arch.www",
+      "title": "개발 실행",
+      "description": "개발 실행 책임을 하위 역할로 나눈다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.development.providers",
+      "parent": "arch.development",
+      "title": "실행 어댑터",
+      "description": "실행 어댑터 책임을 하위 역할로 나눈다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.development.evidence",
+      "parent": "arch.development",
+      "title": "검증 근거",
+      "description": "검증 근거 책임을 하위 역할로 나눈다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.development.records",
+      "parent": "arch.development",
+      "title": "작업 기록",
+      "description": "작업 기록 책임을 하위 역할로 나눈다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.development.reporting",
+      "parent": "arch.development",
+      "title": "저작 보고서",
+      "description": "저작 보고서 책임을 하위 역할로 나눈다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.blueprint",
+      "parent": "arch.www",
+      "title": "구조 설계도",
+      "description": "구조 설계도 책임을 하위 역할로 나눈다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.tooling",
+      "parent": "arch.www",
+      "title": "빌드와 구조 검사",
+      "description": "빌드와 구조 검사 책임을 하위 역할로 나눈다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.tooling.bundle",
+      "parent": "arch.tooling",
+      "title": "앱 번들 생성",
+      "description": "앱 번들 생성의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.tooling.map-generation"
+      ]
+    },
+    {
+      "id": "arch.tooling.structure-contract",
+      "parent": "arch.tooling",
+      "title": "구조와 요구 선언 계약 검증",
+      "description": "구조와 요구 선언 계약 검증의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.tooling.map-validation",
+      "parent": "arch.tooling",
+      "title": "계약과 지도 현재성 검사",
+      "description": "계약과 지도 현재성 검사의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.tooling.map-generation"
+      ]
+    },
+    {
+      "id": "arch.tooling.map-generation",
+      "parent": "arch.tooling",
+      "title": "결정적인 구조 지도 생성",
+      "description": "결정적인 구조 지도 생성의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.tooling.structure-contract"
+      ]
+    },
+    {
+      "id": "arch.tooling.source-policy",
+      "parent": "arch.tooling",
+      "title": "TypeScript 소스 정책 검사",
+      "description": "TypeScript 소스 정책 검사의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.development.authoring",
+      "parent": "arch.development",
+      "title": "typed 저작 하네스",
+      "description": "typed 저작 하네스의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.tooling.map-validation",
+        "arch.development.authorization",
+        "arch.development.execution",
+        "arch.development.providers.gjc",
+        "arch.development.reporting.lifecycle",
+        "arch.development.routing",
+        "arch.tooling.source-policy"
+      ]
+    },
+    {
+      "id": "arch.development.providers.codex",
+      "parent": "arch.development.providers",
+      "title": "Codex 실행 어댑터",
+      "description": "Codex 실행 어댑터의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.providers.gjc",
+        "arch.development.providers.invocation"
+      ]
+    },
+    {
+      "id": "arch.development.providers.gjc",
+      "parent": "arch.development.providers",
+      "title": "GJC 실행 어댑터",
+      "description": "GJC 실행 어댑터의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.development.providers.invocation",
+      "parent": "arch.development.providers",
+      "title": "플랫폼별 실행 명령 계약",
+      "description": "플랫폼별 실행 명령 계약의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.development.evidence.repository",
+      "parent": "arch.development.evidence",
+      "title": "전체 저장소 검사 적용성",
+      "description": "전체 저장소 검사 적용성의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.evidence.verification"
+      ]
+    },
+    {
+      "id": "arch.development.evidence.documentation",
+      "parent": "arch.development.evidence",
+      "title": "문서 영향 검토 적용성",
+      "description": "문서 영향 검토 적용성의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.evidence.verification",
+        "arch.development.records.protocol"
+      ]
+    },
+    {
+      "id": "arch.development.evidence.verification",
+      "parent": "arch.development.evidence",
+      "title": "검증 시도와 소스 식별",
+      "description": "검증 시도와 소스 식별의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.development.records.lock",
+      "parent": "arch.development.records",
+      "title": "작업 기록 쓰기 잠금",
+      "description": "작업 기록 쓰기 잠금의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.development.authorization",
+      "parent": "arch.development",
+      "title": "작업 권한과 실행 전 검사",
+      "description": "작업 권한과 실행 전 검사의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.records.protocol"
+      ]
+    },
+    {
+      "id": "arch.development.records.events",
+      "parent": "arch.development.records",
+      "title": "실행 사건 기록",
+      "description": "실행 사건 기록의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.authorization"
+      ]
+    },
+    {
+      "id": "arch.development.reporting.lifecycle",
+      "parent": "arch.development.reporting",
+      "title": "저작 보고서 종료 절차",
+      "description": "저작 보고서 종료 절차의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.records.lock",
+        "arch.development.records.state",
+        "arch.development.reporting.storage",
+        "arch.development.authorization"
+      ]
+    },
+    {
+      "id": "arch.development.reporting.document",
+      "parent": "arch.development.reporting",
+      "title": "저작 보고서 문서 렌더링",
+      "description": "저작 보고서 문서 렌더링의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.reporting.storage"
+      ]
+    },
+    {
+      "id": "arch.development.reporting.storage",
+      "parent": "arch.development.reporting",
+      "title": "저작 보고서 보관과 게시",
+      "description": "저작 보고서 보관과 게시의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.authorization",
+        "arch.development.evidence.verification",
+        "arch.development.reporting.document"
+      ]
+    },
+    {
+      "id": "arch.development.review",
+      "parent": "arch.development",
+      "title": "독립 검토 실행과 판정",
+      "description": "독립 검토 실행과 판정의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.evidence.verification",
+        "arch.development.providers.invocation"
+      ]
+    },
+    {
+      "id": "arch.development.routing",
+      "parent": "arch.development",
+      "title": "요청과 스킬 라우팅",
+      "description": "요청과 스킬 라우팅의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.records.protocol"
+      ]
+    },
+    {
+      "id": "arch.development.execution",
+      "parent": "arch.development",
+      "title": "개발 단계 실행 통합",
+      "description": "개발 단계 실행 통합의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.authorization",
+        "arch.development.evidence.verification",
+        "arch.development.providers.codex",
+        "arch.development.providers.gjc",
+        "arch.development.records.events",
+        "arch.development.records.protocol",
+        "arch.development.records.state",
+        "arch.development.review",
+        "arch.development.routing"
+      ]
+    },
+    {
+      "id": "arch.development.records.validation",
+      "parent": "arch.development.records",
+      "title": "작업 레코드 스키마 검사",
+      "description": "작업 레코드 스키마 검사의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.records.protocol"
+      ]
+    },
+    {
+      "id": "arch.development.records.protocol",
+      "parent": "arch.development.records",
+      "title": "작업 레코드 타입 계약",
+      "description": "작업 레코드 타입 계약의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.evidence.documentation",
+        "arch.development.evidence.repository",
+        "arch.development.evidence.verification"
+      ]
+    },
+    {
+      "id": "arch.development.records.state",
+      "parent": "arch.development.records",
+      "title": "작업 상태와 수용 판정",
+      "description": "작업 상태와 수용 판정의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.authorization",
+        "arch.development.evidence.documentation",
+        "arch.development.evidence.repository",
+        "arch.development.evidence.verification",
+        "arch.development.records.lock",
+        "arch.development.records.protocol",
+        "arch.development.records.validation",
+        "arch.development.review",
+        "arch.development.routing"
+      ]
+    },
+    {
+      "id": "arch.chat.activity.catalog",
+      "parent": "arch.chat.activity",
+      "title": "활동 목록과 읽기 상태",
+      "description": "활동 목록과 읽기 상태의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.native.protocol"
+      ]
+    },
+    {
+      "id": "arch.blueprint.layout",
+      "parent": "arch.blueprint",
+      "title": "설계도 배치와 연결 탐색",
+      "description": "설계도 배치와 연결 탐색의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.chat.messages.markdown",
+      "parent": "arch.chat.messages",
+      "title": "대화 메시지 Markdown 표시",
+      "description": "대화 메시지 Markdown 표시의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.chat.sessions.reading"
+      ]
+    },
+    {
+      "id": "arch.chat.messages.reading",
+      "parent": "arch.chat.messages",
+      "title": "대화 행 펼침 상태",
+      "description": "대화 행 펼침 상태의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.chat.sessions.reading",
+      "parent": "arch.chat.sessions",
+      "title": "대화별 초안과 읽기 상태",
+      "description": "대화별 초안과 읽기 상태의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.native.protocol"
+      ]
+    },
+    {
+      "id": "arch.chat.messages.execution",
+      "parent": "arch.chat.messages",
+      "title": "실행 카드와 출력 표시",
+      "description": "실행 카드와 출력 표시의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.chat.messages.preview",
+        "arch.chat.messages.projection",
+        "arch.chat.messages.reading"
+      ]
+    },
+    {
+      "id": "arch.chat.messages.preview",
+      "parent": "arch.chat.messages",
+      "title": "명령 출력 미리보기",
+      "description": "명령 출력 미리보기의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.chat.sessions.restore",
+      "parent": "arch.chat.sessions",
+      "title": "Native 대화 목록과 복원",
+      "description": "Native 대화 목록과 복원의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.native.protocol"
+      ]
+    },
+    {
+      "id": "arch.development.service",
+      "parent": "arch.development",
+      "title": "개발 상태 서비스",
+      "description": "개발 상태 서비스의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.reporting.lifecycle",
+        "arch.development.review",
+        "arch.native.protocol"
+      ]
+    },
+    {
+      "id": "arch.blueprint.view",
+      "parent": "arch.blueprint",
+      "title": "설계도와 생태계 화면",
+      "description": "설계도와 생태계 화면의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.blueprint.ecosystem",
+        "arch.blueprint.layout"
+      ]
+    },
+    {
+      "id": "arch.blueprint.ecosystem",
+      "parent": "arch.blueprint",
+      "title": "생태계 안내 모델",
+      "description": "생태계 안내 모델의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.chat.composer",
+      "parent": "arch.chat",
+      "title": "한글 조합과 메시지 입력",
+      "description": "한글 조합과 메시지 입력의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.native.lifecycle",
+      "parent": "arch.native",
+      "title": "Electron 수명주기와 IPC 처리",
+      "description": "Electron 수명주기와 IPC 처리의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.chat.activity.catalog",
+        "arch.chat.activity.projection",
+        "arch.chat.sessions.requests",
+        "arch.chat.sessions.restore",
+        "arch.development.service",
+        "arch.native.launch",
+        "arch.native.protocol",
+        "arch.native.transport",
+        "arch.reports.collection",
+        "arch.reports.judgement",
+        "arch.reports.queue",
+        "arch.reports.service"
+      ]
+    },
+    {
+      "id": "arch.chat.activity.view",
+      "parent": "arch.chat.activity",
+      "title": "Native 활동 상세 화면",
+      "description": "Native 활동 상세 화면의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.chat.activity.artifacts",
+        "arch.chat.activity.catalog",
+        "arch.chat.activity.projection",
+        "arch.native.protocol"
+      ]
+    },
+    {
+      "id": "arch.chat.activity.projection",
+      "parent": "arch.chat.activity",
+      "title": "Native 활동 사건 투영",
+      "description": "Native 활동 사건 투영의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.chat.activity.artifacts",
+        "arch.native.protocol"
+      ]
+    },
+    {
+      "id": "arch.chat.sessions.requests",
+      "parent": "arch.chat.sessions",
+      "title": "Native 대화 요청 구성",
+      "description": "Native 대화 요청 구성의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.native.launch",
+      "parent": "arch.native",
+      "title": "Native 실행 파일 선택",
+      "description": "Native 실행 파일 선택의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.providers.invocation"
+      ]
+    },
+    {
+      "id": "arch.reports.collection",
+      "parent": "arch.reports",
+      "title": "보고서용 완료 사건 수집",
+      "description": "보고서용 완료 사건 수집의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.chat.messages.projection",
+        "arch.native.protocol",
+        "arch.reports.judgement"
+      ]
+    },
+    {
+      "id": "arch.reports.queue",
+      "parent": "arch.reports",
+      "title": "자동 보고서 큐와 수명주기",
+      "description": "자동 보고서 큐와 수명주기의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.records.lock",
+        "arch.development.reporting.storage",
+        "arch.reports.judgement",
+        "arch.development.authorization",
+        "arch.development.records.protocol"
+      ]
+    },
+    {
+      "id": "arch.native.bridge",
+      "parent": "arch.native",
+      "title": "제한된 브리지 노출",
+      "description": "제한된 브리지 노출의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.native.protocol"
+      ]
+    },
+    {
+      "id": "arch.chat.messages.projection",
+      "parent": "arch.chat.messages",
+      "title": "대화 사건을 블록으로 투영",
+      "description": "대화 사건을 블록으로 투영의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.native.protocol"
+      ]
+    },
+    {
+      "id": "arch.chat.workspace",
+      "parent": "arch.chat",
+      "title": "화면 전환과 대화 작업 공간",
+      "description": "화면 전환과 대화 작업 공간의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.blueprint.view",
+        "arch.chat.activity.catalog",
+        "arch.chat.activity.projection",
+        "arch.chat.activity.view",
+        "arch.chat.composer",
+        "arch.chat.messages.execution",
+        "arch.chat.messages.markdown",
+        "arch.chat.messages.projection",
+        "arch.chat.messages.reading",
+        "arch.chat.sessions.reading",
+        "arch.native.protocol",
+        "arch.reports.view"
+      ]
+    },
+    {
+      "id": "arch.reports.judgement",
+      "parent": "arch.reports",
+      "title": "읽기 전용 Native 보고서 판단",
+      "description": "읽기 전용 Native 보고서 판단의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.reporting.storage",
+        "arch.native.launch",
+        "arch.native.transport"
+      ]
+    },
+    {
+      "id": "arch.reports.service",
+      "parent": "arch.reports",
+      "title": "보고서 목록과 읽기 서비스",
+      "description": "보고서 목록과 읽기 서비스의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.development.reporting.storage",
+        "arch.native.protocol"
+      ]
+    },
+    {
+      "id": "arch.reports.view",
+      "parent": "arch.reports",
+      "title": "보고서 탐색 화면",
+      "description": "보고서 탐색 화면의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.native.protocol"
+      ]
+    },
+    {
+      "id": "arch.native.transport",
+      "parent": "arch.native",
+      "title": "JSONL 요청과 응답 전송",
+      "description": "JSONL 요청과 응답 전송의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": [
+        "arch.native.protocol"
+      ]
+    },
+    {
+      "id": "arch.native.protocol",
+      "parent": "arch.native",
+      "title": "프로세스 간 공용 계약",
+      "description": "프로세스 간 공용 계약의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    },
+    {
+      "id": "arch.chat.activity.artifacts",
+      "parent": "arch.chat.activity",
+      "title": "WWW 작업 산출물 식별",
+      "description": "WWW 작업 산출물 식별의 입력·상태·결과를 소유한다.",
+      "allowedDependencies": []
+    }
+  ]
+}

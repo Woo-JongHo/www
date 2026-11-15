@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.providers.invocation
+ * @implements RESP-DEVELOPMENT-PROVIDERS-INVOCATION
+ */
 import { createHash } from "node:crypto";
 import { readFileSync, statSync } from "node:fs";
 import path from "node:path";

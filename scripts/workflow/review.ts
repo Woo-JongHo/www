@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.development.review
+ * @implements RESP-DEVELOPMENT-REVIEW
+ */
 import { createHash, randomUUID } from "node:crypto";
 import { spawn } from "node:child_process";
 import { promises as fs, lstatSync, readFileSync, realpathSync } from "node:fs";

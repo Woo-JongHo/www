@@ -1,3 +1,7 @@
+/**
+ * @architecture arch.reports.view
+ * @implements RESP-REPORTS-VIEW
+ */
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { NativeReportJob, WorkReportCatalog, WorkReportDocument, WorkReportSummary } from "./shared";
 

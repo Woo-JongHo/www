@@ -1,3 +1,6 @@
+/**
+ * @verifies RESP-REPORTS-QUEUE
+ */
 import { createHash } from "node:crypto";
 import assert from "node:assert/strict";
 import { promises as fs, readdirSync, symlinkSync } from "node:fs";
