@@ -3,13 +3,13 @@
  * @verifies RESP-DEVELOPMENT-PROVIDERS-CODEX
  */
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { chmodSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, statSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { checkEnvironment, mergeEnvironment } from "../scripts/workflow/environment.ts";
-import { createCodexInvocation, runCodex } from "../scripts/workflow/adapters/codex.ts";
+import { createCodexInvocation, runCodex, spawnCodex, waitForCodex } from "../scripts/workflow/adapters/codex.ts";
 import { runDevelopmentWorkflow, runProcess, runWorkflow } from "../scripts/workflow/run.ts";
 import { readRuntime, runtimePaths } from "../scripts/workflow/record.ts";
 import type { EnvironmentOptions } from "../scripts/workflow/environment.ts";
@@ -292,7 +292,55 @@ test("1MiB 초과 JSONL 원문은 완전 spool하고 bounded 요약 뒤 완료�
   assert.equal(readFileSync(result.outputFiles.stderr.path, "utf8"), "stderr 원문");
 });
 
-test("큰 오류 사건과 spool 실패는 완료·exit 0 뒤에도 성공으로 숨기지 않는다", async (t) => {
+test("직접 Codex 호출은 원문 출력 경로가 없으면 사용자 본문을 쓰거나 호스트를 시작하지 않는다", async (t) => {
+  const { repo } = repository(t);
+  const marker = path.join(repo, "host-started");
+  const invocation = createCodexInvocation({ repo, systemPrompt: "private fixture", request: "private fixture" });
+  const script = `require('node:fs').writeFileSync(${JSON.stringify(marker)},'started');process.stdout.write(JSON.stringify({type:'item.completed',item:{text:'x'.repeat(1100000)}})+'\\n')`;
+  await assert.rejects(runCodex({ ...invocation, command: process.execPath, args: ["-e", script] }, { cwd: repo, captureOutput: true }), /outputDirectory|원문.*출력/);
+  assert.throws(() => spawnCodex({ ...invocation, command: process.execPath, args: ["-e", script] }), /outputDirectory|원문.*출력/);
+  assert.throws(() => readFileSync(marker), { code: "ENOENT" });
+  assert.equal(readdirSync(repo).includes(".www"), false);
+});
+
+test("직접 Codex는 읽기 전용 비Git cwd를 변경하지 않고 명시한 출력에 원문과 usage를 보존한다", async (t) => {
+  const cwd = realpathSync(mkdtempSync(path.join(tmpdir(), "www-codex-readonly-")));
+  const outputDirectory = realpathSync(mkdtempSync(path.join(tmpdir(), "www-codex-output-")));
+  t.after(() => { chmodSync(cwd, 0o700); rmSync(cwd, { recursive: true, force: true }); rmSync(outputDirectory, { recursive: true, force: true }); });
+  if (process.platform !== "win32") chmodSync(cwd, 0o500);
+  const invocation = createCodexInvocation({ repo: cwd, systemPrompt: "fixture", request: "fixture" });
+  const script = `for(const event of [{type:'thread.started',thread_id:'direct-fixture'},{type:'item.completed',item:{text:'x'.repeat(1100000)}},{type:'turn.completed',usage:{input_tokens:7,output_tokens:3}}])process.stdout.write(JSON.stringify(event)+'\\n')`;
+  const child = spawnCodex({ ...invocation, command: process.execPath, args: ["-e", script] }, { cwd, outputDirectory });
+  const result = await waitForCodex(child, { captureOutput: false });
+  assert.equal(result.ok, true, result.error ?? "");
+  assert.equal(result.stdout, "");
+  assert.equal(result.rawOutputTruncated, false);
+  assert.equal(result.summaryTruncated, true);
+  assert.equal(result.turnCompleted, true);
+  assert.deepEqual(result.usage, { input_tokens: 7, output_tokens: 3 });
+  assert.ok(result.outputFiles);
+  assert.ok(readFileSync(result.outputFiles.stdout.path).length > 1_048_576);
+  assert.equal(statSync(result.outputFiles.stdout.path).mode & 0o777, 0o600);
+  assert.deepEqual(readdirSync(cwd), []);
+});
+
+test("직접 Codex는 Git에 노출되는 출력과 등록되지 않은 waiter를 거부한다", async (t) => {
+  const { repo } = repository(t);
+  const outputDirectory = path.join(repo, "public-output");
+  mkdirSync(outputDirectory);
+  const marker = path.join(repo, "started");
+  const invocation = createCodexInvocation({ repo, systemPrompt: "fixture", request: "fixture" });
+  await assert.rejects(runCodex({ ...invocation, command: process.execPath, args: ["-e", `require('node:fs').writeFileSync(${JSON.stringify(marker)},'1')`] }, { outputDirectory }), /Git 제외/);
+  assert.throws(() => readFileSync(marker), { code: "ENOENT" });
+  assert.deepEqual(readdirSync(outputDirectory), []);
+  const child = spawn(process.execPath, ["-e", "setTimeout(()=>process.exit(0),100)"]);
+  const exit = new Promise((resolve) => child.once("exit", resolve));
+  await assert.rejects(waitForCodex(child, { outputDirectory }), /spawnCodex/);
+  assert.equal(child.killed, false);
+  await exit;
+});
+
+test("큰 오류 사건은 숨기지 않고 원문 경로 생성 실패는 시작 전에 거부한다", async (t) => {
   const error = (await subprocess(t, "error")).result;
   assert.equal(error.ok, false);
   assert.equal(error.outcome, "host_error");
@@ -301,12 +349,7 @@ test("큰 오류 사건과 spool 실패는 완료·exit 0 뒤에도 성공으로
   assert.equal(malformed.ok, false);
   assert.equal(malformed.outcome, "protocol_error");
   assert.equal(malformed.turnCompleted, true);
-  const failedSpool = (await subprocess(t, "normal", true)).result;
-  assert.equal(failedSpool.code, 0);
-  assert.equal(failedSpool.turnCompleted, true);
-  assert.equal(failedSpool.ok, false);
-  assert.equal(failedSpool.outcome, "spool_error");
-  assert.equal(failedSpool.rawOutputTruncated, true);
+  await assert.rejects(subprocess(t, "normal", true), /ENOENT|원문/);
 });
 
 

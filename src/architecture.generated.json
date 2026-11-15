@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "38dc897fb25be6802fa1fddc99d9a2bf122f7575e91cfa1955182dfe04a95a41",
+  "digest"       : "f2b8ce7bc12f058fb07f0f533057ab70985bb88b7d7f4a7f750c348b8037fb65",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -114,8 +114,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · codex",
       "line"       : 1,
-      "lines"      : 290,
-      "digest"     : "3bee5c8cb5677eb9a7a3788d22f0b5d880e8b52c327b136baf6877d4765a8b06",
+      "lines"      : 294,
+      "digest"     : "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
       "structureId": "arch.development.providers.codex"
     },
     {
@@ -803,58 +803,58 @@
       "statement": "import type { ProcessInvocation, ProcessOptions } from \"./workflow/adapters/gjc.ts\";"
     },
     {
-      "id"       : "scripts/workflow/adapters/codex.ts:233",
+      "id"       : "scripts/workflow/adapters/codex.ts:296",
       "from"     : "scripts/workflow/adapters/codex.ts",
       "to"       : "scripts/workflow/adapters/gjc.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./gjc.ts",
-      "line"     : 8,
-      "endLine"  : 8,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import { createOutputSpool, mergeEnvironment } from \"./gjc.ts\";"
     },
     {
-      "id"       : "scripts/workflow/adapters/codex.ts:297",
+      "id"       : "scripts/workflow/adapters/codex.ts:360",
       "from"     : "scripts/workflow/adapters/codex.ts",
       "to"       : "scripts/workflow/adapters/windows-command.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./windows-command.ts",
-      "line"     : 9,
-      "endLine"  : 9,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import { providerExecution } from \"./windows-command.ts\";"
     },
     {
-      "id"       : "scripts/workflow/adapters/codex.ts:355",
+      "id"       : "scripts/workflow/adapters/codex.ts:418",
       "from"     : "scripts/workflow/adapters/codex.ts",
       "to"       : "scripts/workflow/adapters/windows-command.ts",
       "mode"     : "runtime",
       "syntax"   : "export",
       "specifier": "./windows-command.ts",
-      "line"     : 10,
-      "endLine"  : 10,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "export { resolveProviderInvocation } from \"./windows-command.ts\";"
     },
     {
-      "id"       : "scripts/workflow/adapters/codex.ts:496",
+      "id"       : "scripts/workflow/adapters/codex.ts:559",
       "from"     : "scripts/workflow/adapters/codex.ts",
       "to"       : "scripts/workflow/adapters/windows-command.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./windows-command.ts",
-      "line"     : 13,
-      "endLine"  : 13,
+      "line"     : 14,
+      "endLine"  : 14,
       "statement": "import type { ActualProviderInvocation } from \"./windows-command.ts\";"
     },
     {
-      "id"       : "scripts/workflow/adapters/codex.ts:566",
+      "id"       : "scripts/workflow/adapters/codex.ts:629",
       "from"     : "scripts/workflow/adapters/codex.ts",
       "to"       : "scripts/workflow/adapters/gjc.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./gjc.ts",
-      "line"     : 14,
-      "endLine"  : 14,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import type { ProcessInvocation, ProcessOptions, ProcessResult } from \"./gjc.ts\";"
     },
     {
@@ -2515,18 +2515,24 @@
     {
       "file"     : "scripts/workflow/adapters/codex.ts",
       "line"     : 6,
-      "specifier": "node:string_decoder",
+      "specifier": "node:fs",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow/adapters/codex.ts",
       "line"     : 7,
+      "specifier": "node:string_decoder",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/adapters/codex.ts",
+      "line"     : 8,
       "specifier": "node:path",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow/adapters/codex.ts",
-      "line"     : 12,
+      "line"     : 13,
       "specifier": "node:child_process",
       "reason"   : "external"
     },
@@ -5033,6 +5039,6 @@
         "line": 2
       }
     ],
-    "digest": "dbe0356a4d13f35206fc2ab29f6e9a9fd1b4d66c505a9bdac3901eefac6668a8"
+    "digest": "ca34ad3b51580188909430be5728a63494e8e42c2cad495fe21de5926e49684d"
   }
 }

@@ -2,7 +2,8 @@
  * @architecture arch.development.providers.codex
  * @implements RESP-DEVELOPMENT-PROVIDERS-CODEX
  */
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
+import { existsSync, realpathSync } from "node:fs";
 import { StringDecoder } from "node:string_decoder";
 import path from "node:path";
 import { createOutputSpool, mergeEnvironment } from "./gjc.ts";
@@ -39,6 +40,7 @@ export interface CodexResult extends ProcessResult {
   actualInvocation : ActualProviderInvocation | null ;
 }
 const actualInvocations = new WeakMap<ChildProcessWithoutNullStreams, ActualProviderInvocation | null>();
+const outputSpools = new WeakMap<ChildProcessWithoutNullStreams, { directory: string; spool: ReturnType<typeof createOutputSpool> }>();
 
 const LIMIT       = 1_048_576                                                       ;
 const SANDBOXES   = new Set(["read-only", "workspace-write", "danger-full-access"]) ;
@@ -83,19 +85,40 @@ ${request}
 
 export function codexCapabilities() { return capability; }
 
+function outputDirectory(value: unknown, env: NodeJS.ProcessEnv): string {
+  if (typeof value !== "string" || !path.isAbsolute(value) || value.includes("\0")) throw new Error("Codex 원문 출력 outputDirectory를 명시해야 합니다.");
+  const directory = realpathSync(value);
+  let ancestor = directory;
+  while (!existsSync(path.join(ancestor, ".git"))) {
+    const parent = path.dirname(ancestor);
+    if (parent === ancestor) return directory;
+    ancestor = parent;
+  }
+  const git = (args: string[]) => spawnSync("git", ["--no-optional-locks", "-C", directory, ...args], { env, encoding: "utf8", maxBuffer: 1_048_576 });
+  const tracked = git(["--literal-pathspecs", "ls-files", "--", directory]);
+  if (tracked.status !== 0 || tracked.stdout.trim() || git(["check-ignore", "--quiet", "--", directory]).status !== 0) throw new Error("Codex 원문 출력은 Git 제외 경로에 보존해야 합니다.");
+  return directory;
+}
+
 export function spawnCodex(invocation: ProcessInvocation, options: ProcessOptions = {}) {
   if (!invocation || invocation.mode !== "codex-exec" || typeof invocation.command !== "string" || !invocation.command.trim() || invocation.command.includes("\0") || !Array.isArray(invocation.args) || invocation.args.some((value) => typeof value !== "string" || value.includes("\0")) || typeof invocation.stdin !== "string") {
     throw new TypeError("검증된 Codex 호출이 필요합니다.");
   }
-  const execution = providerExecution(invocation, { env: mergeEnvironment(options.env), cwd: options.cwd });
-  const child = spawn(execution.command, execution.args, {
+  const env = mergeEnvironment(options.env);
+  const directory = outputDirectory(options.outputDirectory, env);
+  const execution = providerExecution(invocation, { env, cwd: options.cwd });
+  const spool = createOutputSpool(directory);
+  if (spool.error) { spool.close(); throw new Error(spool.error); }
+  let child: ChildProcessWithoutNullStreams;
+  try { child = spawn(execution.command, execution.args, {
     cwd         : options.cwd    ,
-    env         : mergeEnvironment(options.env)    ,
+    env                          ,
     signal      : options.signal ,
     shell       : false          ,
     windowsHide : true           ,
     stdio       : ["pipe", "pipe", "pipe"]
-  });
+  }); } catch (error) { spool.close(); throw error; }
+  outputSpools.set(child, { directory, spool });
   actualInvocations.set(child, execution.actualInvocation);
   child.stdin.on("error", (error) => { inputErrors.set(child, ("code" in error && typeof error.code === "string" ? error.code : "stdin_error")); });
   child.stdin.end(invocation.stdin, "utf8");
@@ -103,8 +126,11 @@ export function spawnCodex(invocation: ProcessInvocation, options: ProcessOption
 }
 
 export async function waitForCodex(child: ChildProcessWithoutNullStreams, { captureOutput = false, outputDirectory }: Pick<ProcessOptions, "captureOutput" | "outputDirectory"> = {}): Promise<CodexResult> {
+  const output = outputSpools.get(child);
+  if (!output) throw new Error("원문 출력 경로가 결합된 spawnCodex 프로세스가 필요합니다.");
+  if (outputDirectory !== undefined && realpathSync(outputDirectory) !== output.directory) throw new Error("spawnCodex에 결합된 원문 출력 경로와 다릅니다.");
   return new Promise<CodexResult>((resolve) => {
-    const spool = createOutputSpool(outputDirectory);
+    const spool = output.spool;
     let usage: Record<string, unknown> | null = null;
     const decoder                                             = new StringDecoder("utf8")  ;
     const chunks      : Record<"stdout" | "stderr", Buffer[]> = { stdout: [], stderr: [] } ;
@@ -143,27 +169,6 @@ export async function waitForCodex(child: ChildProcessWithoutNullStreams, { capt
       } else outputTruncated = true;
     }
 
-    function legacyParse(text: string, final = false): void {
-      const parts = text.split("\n");
-      for (let index = 0; index < parts.length; index += 1) {
-        if (!discarding) {
-          line += parts[index];
-          if (Buffer.byteLength(line) > LIMIT) {
-            protocolError ??= "Codex JSONL 사건 하나가 1 MiB 제한을 넘었습니다.";
-            outputTruncated = true ;
-            line            = ""   ;
-            discarding      = true ;
-          }
-        }
-        if (index < parts.length - 1) {
-          if (!discarding) observe(line);
-          line = "";
-          discarding = false;
-        }
-      }
-      if (final && !discarding) { observe(line); line = ""; }
-    }
-
     // JSON 문자열 본문만 축약한다. 나머지 구문과 escape는 검증하므로 큰 오류 사건도 숨기지 않는다.
     let inString = false;
     let escaped = false;
@@ -174,7 +179,6 @@ export async function waitForCodex(child: ChildProcessWithoutNullStreams, { capt
     let lineShortened = false;
     let shortenedKey = false;
     function parse(text: string, final = false): void {
-      if (outputDirectory === undefined) { legacyParse(text, final); return; }
       for (const character of text) {
         if (character === "\n" && !inString) {
           if (!discarding) observe(line, lineShortened);

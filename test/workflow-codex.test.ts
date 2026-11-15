@@ -3,7 +3,7 @@
  */
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -50,7 +50,7 @@ async function fixture(t: import("node:test").TestContext, mode: string, options
   await writeFile(file, script);
   const invocation      = createCodexInvocation({ repo, systemPrompt: "역할·스킬 컨텍스트", request: "요청 $(no-shell) `literal`" }) ;
   const childInvocation = { ...invocation, command: process.execPath, args: [file, mode] }                                           ;
-  return { repo, invocation, result: await runCodex(childInvocation, { cwd: repo, captureOutput: true, ...options }) };
+  return { repo, invocation, result: await runCodex(childInvocation, { cwd: repo, captureOutput: true, outputDirectory: repo, ...options }) };
 }
 
 test("Codex argv에는 실행 설정만 두고 컨텍스트와 요청은 stdin에 전달한다", () => {
@@ -128,13 +128,16 @@ test("큰 stderr를 양쪽 capture 설정에서 drain하고 출력·사건 보�
   assert.equal(events.outputTruncated, true);
 });
 
-test("1 MiB를 넘는 단일 JSONL 사건을 제한하고 이후 완료만으로 통과하지 않는다", async (t) => {
+test("1 MiB를 넘는 유효 사건은 본문 요약을 제한하고 원문과 완료를 보존한다", async (t) => {
   const { result } = await fixture(t, "oversized");
-  assert.equal(result.ok, false);
-  assert.equal(result.outcome, "protocol_error");
+  assert.equal(result.ok, true);
+  assert.equal(result.outcome, "passed");
   assert.equal(result.outputTruncated, true);
   assert.equal(result.turnCompleted, true);
   assert.ok(Buffer.byteLength(result.stdout) <= 1_048_576);
+  assert.equal(result.rawOutputTruncated, false);
+  assert.ok(result.outputFiles);
+  assert.ok((await readFile(result.outputFiles.stdout.path)).length > 1_048_576);
 });
 
 test("완료 사건 뒤 실제 비정상 종료와 신호를 구분한다", async (t) => {
@@ -156,7 +159,7 @@ test("없는 실행 파일은 stdin 오류를 유실하지 않고 spawn 실패�
   const repo = await mkdtemp(path.join(tmpdir(), "www-codex-missing-"));
   t.after(() => rm(repo, { recursive: true, force: true }));
   const invocation = createCodexInvocation({ repo, systemPrompt: "context", request: "request" }) ;
-  const child      = spawnCodex({ ...invocation, command: path.join(repo, "missing-command") })   ;
+  const child      = spawnCodex({ ...invocation, command: path.join(repo, "missing-command") }, { outputDirectory: repo }) ;
   const result     = await waitForCodex(child, { captureOutput: true })                           ;
   assert.equal(result.ok, false);
   assert.equal(result.outcome, "spawn_error");
