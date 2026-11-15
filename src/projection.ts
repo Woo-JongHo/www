@@ -77,6 +77,7 @@ export type Block =
       kind      : "approval"    ;
       id        : string        ;
       requestId : RpcId         ;
+      approvalToken: string | null;
       threadId  : string | null ;
       turnId    : string | null ;
       method    : string        ;
@@ -177,6 +178,33 @@ export function project(events: readonly AppEvent[]): Projection {
   const seen        = new Set<number>()                                                                            ;
   const closedTurns = new Set<string>()                                                                            ;
   const summaries   = new Map<string, { sections: Map<number, string>; completed: boolean; truncated: boolean }>() ;
+  // fragment 소유권은 공개 Block 타입 대신 투영 내부에서 항목·섹션에 연결한다.
+  const fragments = new Map<string, { owner: string; section: number }>();
+  const messages = new Map<string, { source: "answer" | "commentary" | "publicPlan"; completed: boolean }>();
+  const approvalScopes = new Map<string, { generation: unknown; process: unknown }>();
+  const removeFragments = (owner: string) => {
+    for (let index = blocks.length - 1; index >= 0; index--) {
+      const block = blocks[index]!;
+      if (fragments.get(block.id)?.owner !== owner) continue;
+      fragments.delete(block.id);
+      blocks.splice(index, 1);
+    }
+  };
+  const appendFragment = (owner: string, section: number, seq: number, source: Extract<Block, { kind: "explanation" }>["source"],
+    thread: string | null, turn: string | null, text: string, streaming: boolean, truncated = false) => {
+    if (!text) return;
+    const last = blocks.at(-1);
+    const identity = last && fragments.get(last.id);
+    if (last?.kind === "explanation" && identity?.owner === owner && identity.section === section && last.source === source) {
+      last.text += text;
+      last.streaming = streaming;
+    } else {
+      const id = `fragment:${JSON.stringify([owner, seq])}`;
+      blocks.push({ kind: "explanation", id, source, threadId: thread, turnId: turn, text, streaming,
+        ...(source === "reasoningSummary" ? { summaryTruncated: truncated } : {}) });
+      fragments.set(id, { owner, section });
+    }
+  };
   const turnKey     = (thread: string | null, turn: string | null) => JSON.stringify([thread, turn])               ;
   const closeMessages = (thread: string | null, turn: string | null) => {
     closedTurns.add(turnKey(thread, turn));
@@ -308,13 +336,16 @@ export function project(events: readonly AppEvent[]): Projection {
         const state = prior ?? { sections: new Map<number, string>(), completed: false, truncated: false };
         state.completed = true;
         summaries.set(summaryId, state);
-        const block = blocks.find((value) => value.kind === "explanation" && value.id === summaryId);
-        if (block?.kind === "explanation") block.streaming = false;
+        for (const block of blocks) {
+          if (block.kind === "explanation" && fragments.get(block.id)?.owner === summaryId) block.streaming = false;
+        }
       }
-      if (explicitScope && explicitItemId && ((summarySnapshot && snapshot !== null) ||
+      if (explicitScope && explicitItemId && ((summarySnapshot && snapshot !== null && (event.method === "item/completed" || (!closed && !prior?.completed))) ||
           (summaryDelta && validIndex && typeof params.delta === "string" && !closed && !prior?.completed))) {
         const state = prior ?? { sections: new Map<number, string>(), completed: false, truncated: false };
+        let acceptedDelta = "";
         if (summarySnapshot) {
+          removeFragments(summaryId);
           // 완료 snapshot은 빈 배열도 포함해 이전 공개 요약을 대체한다.
           if (event.method === "item/completed" || !state.completed) {
             state.sections.clear();
@@ -337,49 +368,60 @@ export function project(events: readonly AppEvent[]): Projection {
           const available = Math.max(0, MAX_OUTPUT_CODE_UNITS - Math.max(0, used) - (!state.sections.has(index) && state.sections.size ? 2 : 0)) ;
           const delta     = string(params.delta)                                                                                                 ;
           if (delta.length > available) state.truncated = true;
-          if (delta && available) state.sections.set(index, (state.sections.get(index) ?? "") + delta.slice(0, available));
+          acceptedDelta = delta.slice(0, available);
+          if (acceptedDelta) state.sections.set(index, (state.sections.get(index) ?? "") + acceptedDelta);
         }
         summaries.set(summaryId, state);
-        const text          = [...state.sections].sort(([a], [b]) => a - b).map(([, value]) => value).join("\n\n")                                       ;
-        const existingIndex = blocks.findIndex((block) => block.kind === "explanation" && block.source === "reasoningSummary" && block.id === summaryId) ;
-        if (text.trim()) {
-          const replacement: Block = { kind: "explanation", source: "reasoningSummary", id: summaryId, threadId: relatedThreadId, turnId: relatedTurnId, text, streaming: !closed && !state.completed, summaryTruncated: state.truncated };
-          if (existingIndex < 0) blocks.push(replacement);
-          else blocks[existingIndex] = replacement;
-        } else if (existingIndex >= 0) blocks.splice(existingIndex, 1);
+        if (summarySnapshot) {
+          const text = [...state.sections.values()].join("\n\n");
+          if (text.trim()) appendFragment(summaryId, -1, event.seq, "reasoningSummary", relatedThreadId, relatedTurnId, text, !closed && !state.completed, state.truncated);
+        } else {
+          appendFragment(summaryId, index, event.seq, "reasoningSummary", relatedThreadId, relatedTurnId, acceptedDelta, true, state.truncated);
+        }
+        for (const block of blocks) {
+          if (block.kind === "explanation" && fragments.get(block.id)?.owner === summaryId) block.summaryTruncated = state.truncated;
+        }
       }
     }
 
-    const messageKind      = publicMessageKind(event.method, item, params)                   ;
-    const isDelta          = event.method.endsWith("/delta")                                 ;
-    const isCompleted      = event.method === "item/completed"                               ;
-    const isMessageStarted = event.method === "item/started" && item.type === "agentMessage" ;
+    const messageKind = publicMessageKind(event.method, item, params);
+    const isDelta = event.method.endsWith("/delta");
+    const isCompleted = event.method === "item/completed";
+    const isMessageStarted = event.method === "item/started" && (item.type === "agentMessage" || item.type === "publicPlan" || item.type === "plan");
     if (messageKind && (isDelta || isCompleted || isMessageStarted)) {
-      const existingIndex = blocks.findIndex((block) =>
-        (block.kind === "answer" || block.kind === "explanation") && block.id === blockId
-      );
-      const prior    = blocks[existingIndex]                                                         ;
-      const existing = prior?.kind === "answer" || prior?.kind === "explanation" ? prior : undefined ;
+      const prior = messages.get(blockId);
       const closed = closedTurns.has(turnKey(relatedThreadId, relatedTurnId)) || transport === "closed" ||
         (turnId !== null && !activeTurn);
-      if (isCompleted || (!closed && existing?.streaming !== false)) {
-        const phase    = string(params.phase) || string(item.phase)                                    ;
-        const source   = !phase && existing?.kind === "explanation" ? existing.source : messageKind    ;
-        const kind     = source === "answer" ? "answer" : "explanation"                                ;
-        const text     = isDelta ? string(params.delta) : string(item.text) || string(item.content)    ;
-        const message = {
-          id        : blockId                                                                ,
-          threadId  : relatedThreadId                                                        ,
-          turnId    : relatedTurnId                                                          ,
-          text      : isDelta ? (existing?.text ?? "") + text : text || existing?.text || "" ,
-          streaming : isCompleted ? false : existing?.streaming ?? true                      ,
-        };
-        if (isMessageStarted && existing) message.text = existing.text;
-        const replacement: Block = kind === "answer"
-          ? { ...message, kind: "answer" }
-          : { ...message, kind: "explanation", source: source === "publicPlan" ? "publicPlan" : "commentary" };
-        if (existingIndex < 0) blocks.push(replacement);
-        else blocks[existingIndex] = replacement;
+      if (isCompleted || (!closed && !prior?.completed)) {
+        const phase = string(params.phase) || string(item.phase);
+        const explicitPlan = item.type === "publicPlan" || item.type === "plan" || event.method.includes("publicPlan");
+        const preservesSource = !phase && !explicitPlan && !(prior?.source === "publicPlan" && item.type === "agentMessage");
+        const source = preservesSource ? prior?.source ?? messageKind : messageKind;
+        let existingIndex = blocks.findIndex((block) => block.kind === "answer" && block.id === blockId);
+        if (prior && prior.source !== source) {
+          removeFragments(blockId);
+          if (existingIndex >= 0) blocks.splice(existingIndex, 1);
+          existingIndex = -1;
+        }
+        messages.set(blockId, { source, completed: isCompleted });
+        const text = isDelta ? string(params.delta) : string(item.text) || string(item.content);
+        if (source !== "answer") {
+          // snapshot은 과거 위치를 갱신하지 않고 모든 fragment를 수신 위치에서 대체한다.
+          if (!isDelta && (!isMessageStarted || !prior || prior.source !== source)) {
+            removeFragments(blockId);
+            if (text.trim()) appendFragment(blockId, 0, event.seq, source, relatedThreadId, relatedTurnId, text, !isCompleted);
+          } else if (isDelta) {
+            appendFragment(blockId, 0, event.seq, source, relatedThreadId, relatedTurnId, text, true);
+          }
+        } else {
+          const block = blocks[existingIndex];
+          const existing = block?.kind === "answer" ? block : undefined;
+          const replacement: Block = { kind: "answer", id: blockId, threadId: relatedThreadId, turnId: relatedTurnId,
+            text: isMessageStarted && existing ? existing.text : isDelta ? (existing?.text ?? "") + text : text || existing?.text || "",
+            streaming: !isCompleted };
+          if (existingIndex < 0) blocks.push(replacement);
+          else blocks[existingIndex] = replacement;
+        }
       }
     }
 
@@ -484,10 +526,16 @@ export function project(events: readonly AppEvent[]): Projection {
       files.status = string(item.status) === "failed" ? "failed" : string(item.status) && string(item.status) !== "completed" ? "unknown" : "completed";
     }
 
+    const approvalToken = "approvalToken" in event && typeof event.approvalToken === "string" && event.approvalToken ? event.approvalToken : null;
+    const approvalScope = {
+      generation: "connectionGeneration" in event ? event.connectionGeneration : undefined,
+      process: "processEpoch" in event ? event.processEpoch : undefined,
+    };
     if (event.kind === "request" && event.requestId !== undefined && !event.historical) {
       blocks.push({
         kind      : "approval"                                                                   ,
         id        : `approval-${typeof event.requestId}-${String(event.requestId)}-${event.seq}` ,
+        approvalToken,
         requestId : event.requestId                                                              ,
         threadId  : relatedThreadId                                                              ,
         turnId    : relatedTurnId                                                                ,
@@ -495,13 +543,26 @@ export function project(events: readonly AppEvent[]): Projection {
         summary   : approvalSummary(event.method, params)                                        ,
         supported : event.supported === true                                                     ,
         state     : "open"                                                                       ,
-        open      : event.supported === true                                                     ,
+        open      : event.supported === true && approvalToken !== null                                                     ,
       });
+      approvalScopes.set(blocks.at(-1)!.id, approvalScope);
     }
-    if (event.method.startsWith("approval/") && event.requestId !== undefined) {
-      const approval = blocks.find(
-        (block): block is Extract<Block, { kind: "approval" }> =>
-          block.kind === "approval" && block.supported && block.requestId === event.requestId
+    if (["approval/responding", "approval/responded", "approval/uncertain"].includes(event.method) && event.requestId !== undefined) {
+      const terminal = event.method === "approval/responded" || event.method === "approval/uncertain";
+      const approval = [...blocks].reverse().find(
+        (block): block is Extract<Block, { kind: "approval" }> => {
+          if (block.kind !== "approval" || !block.supported || block.state === "responded" || block.requestId !== event.requestId) return false;
+          if (block.approvalToken !== approvalToken || (!approvalToken && !terminal)) return false;
+          const notificationThread = eventThreadId(params, approvalToken ? null : threadId);
+          if (notificationThread !== null && block.threadId !== notificationThread) return false;
+          if (block.state === "uncertain" && event.method === "approval/responding") return false;
+          const scope = approvalScopes.get(block.id);
+          if (approvalScope.generation !== undefined && approvalScope.generation !== scope?.generation) return false;
+          if (approvalScope.process !== undefined && approvalScope.process !== scope?.process) return false;
+          // token 없는 과거 이벤트는 scoped 요청의 identity를 대신할 수 없다.
+          if (!approvalToken && (scope?.generation !== undefined || scope?.process !== undefined)) return false;
+          return true;
+        }
       );
       if (approval) {
         approval.state = event.method === "approval/responding" ? "responding" : event.method === "approval/responded" ? "responded" : "uncertain";

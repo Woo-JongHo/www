@@ -5,6 +5,7 @@ import { createInterface } from "node:readline";
 const store = process.env.WWW_CONVERSATION_FIXTURE_STORE;
 if (!store) throw new Error("대화 fixture 저장 경로가 필요합니다.");
 let thread: Record<string, unknown> | null = existsSync(store) ? JSON.parse(readFileSync(store, "utf8")) : null;
+let loaded = false;
 const send = (value: unknown) => process.stdout.write(`${JSON.stringify(value)}\n`);
 
 createInterface({ input: process.stdin }).on("line", (line) => {
@@ -16,9 +17,11 @@ createInterface({ input: process.stdin }).on("line", (line) => {
       id: "thread-persisted", originator: "www", source: "vscode", cwd: message.params.cwd, preview: "", name: null, ephemeral: false,
       updatedAt: 100, status: { type: "idle" }, turns: []
     };
+    loaded = true;
     writeFileSync(store, JSON.stringify(thread));
     result = { thread };
   } else if (message.method === "turn/start" && thread && message.params.threadId === thread.id) {
+    if (!loaded) { send({ id: message.id, error: { code: -32000, message: "thread/resume이 먼저 필요합니다." } }); return; }
     const turns = Array.isArray(thread.turns) ? thread.turns : [];
     const id = `turn-${turns.length + 1}`;
     const input = message.params.input[0].text;
@@ -34,6 +37,7 @@ createInterface({ input: process.stdin }).on("line", (line) => {
   } else if (message.method === "thread/list") {
     result = { data: thread && thread.cwd === message.params.cwd ? [thread] : [], nextCursor: null };
   } else if ((message.method === "thread/read" || message.method === "thread/resume") && thread && thread.id === message.params.threadId) {
+    if (message.method === "thread/resume") loaded = true;
     result = { thread, model: "fixture-model", modelProvider: "fixture", approvalPolicy: "on-request", sandbox: { type: "workspaceWrite" } };
   } else if (message.method === "thread/turns/list" && thread && thread.id === message.params.threadId) {
     result = { data: Array.isArray(thread.turns) ? [...thread.turns].reverse() : [], nextCursor: null };

@@ -92,6 +92,14 @@ interface ActivityObservation {
   label    : "읽기" | "시작"     ;
 }
 
+interface HookLifecycle {
+  turnId: string;
+  startedAt: number | null;
+  started: boolean;
+  completed: boolean;
+  historical: boolean;
+}
+
 interface ActivityDedupeIndex {
   buckets : Set<string>[] ;
   size    : number        ;
@@ -105,6 +113,7 @@ export interface ActivitySidebarState {
   pulses              : ActivityObservation[]                         ;
   processedThrough    : number                                        ;
   dedupe               : ActivityDedupeIndex                          ;
+  hookLifecycles       : Map<string, HookLifecycle>[]                  ;
   connectionGeneration : number | null                                 ;
   transportThrough     : number                                        ;
   transport           : TransportState                                ;
@@ -194,16 +203,16 @@ export class ActivitySnapshotBoundary {
     return true;
   }
 
-  complete(token: number, snapshot: readonly AppEvent[]): ActivitySnapshotBatch | null {
+  complete(token: number, snapshot: readonly AppEvent[], live: readonly AppEvent[] = []): ActivitySnapshotBatch | null {
     if (token !== this.pending) return null;
-    const batch = { snapshot: [...snapshot], live: orderedEvents(this.queued) };
+    const batch = { snapshot: [...snapshot], live: orderedEvents([...this.queued, ...live]) };
     this.pending = null;
     this.queued = [];
     return batch;
   }
 
-  fail(token: number): ActivitySnapshotBatch | null {
-    return this.complete(token, []);
+  fail(token: number, live: readonly AppEvent[] = []): ActivitySnapshotBatch | null {
+    return this.complete(token, [], live);
   }
 
   cancel(token: number): void {
@@ -441,6 +450,7 @@ export function createActivitySidebarState(): ActivitySidebarState {
     pulses               : [],
     processedThrough     : 0,
     dedupe               : newDedupeIndex(),
+    hookLifecycles       : Array.from({ length: DEDUPE_BUCKETS }, () => new Map()),
     connectionGeneration : null,
     transportThrough     : 0,
     transport            : "disconnected",
@@ -459,6 +469,7 @@ export function updateActivitySidebarState(current: ActivitySidebarState, events
   let dedupeWritable = false;
   let dedupeFresh = false;
   const copiedBuckets = new Set<number>();
+  const copiedLifecycleBuckets = new Set<number>();
   const firstSequence = ordered[0]?.seq;
   if (options.historySnapshot && (ordered.length >= MAX_EVENTS || firstSequence !== undefined && firstSequence > state.processedThrough + 1)) {
     state.historyTruncated = true;
@@ -468,6 +479,8 @@ export function updateActivitySidebarState(current: ActivitySidebarState, events
     dedupeWritable = true;
     dedupeFresh = true;
     copiedBuckets.clear();
+    state.hookLifecycles = Array.from({ length: DEDUPE_BUCKETS }, () => new Map());
+    copiedLifecycleBuckets.clear();
   };
   const remember = (key: string): boolean => {
     const index = dedupeBucket(key);
@@ -483,6 +496,59 @@ export function updateActivitySidebarState(current: ActivitySidebarState, events
     state.dedupe.buckets[index]!.add(key);
     state.dedupe.size += 1;
     return true;
+  };
+  const writeHookLifecycle = (index: number, key: string, lifecycle: HookLifecycle): void => {
+    if (state.hookLifecycles === current.hookLifecycles) state.hookLifecycles = [...state.hookLifecycles];
+    if (!copiedLifecycleBuckets.has(index)) {
+      state.hookLifecycles[index] = new Map(state.hookLifecycles[index]);
+      copiedLifecycleBuckets.add(index);
+    }
+    state.hookLifecycles[index]!.set(key, lifecycle);
+  };
+  // handler ID는 재사용된다. 다른 turn의 첫 시작은 개별 Hook 완료 없이도 새 실행의 근거다.
+  // 같은 turn에서 metadata가 완전히 같은 완료→시작은 재전송과 새 호출을 구분할 수 없다.
+  // 완료 선관측은 활성 Hook과 별도로 보존하고, 복원은 이미 관측한 live 실행을 되감지 않는다.
+  const hookLifecycle = (key: string, run: Record<string, unknown>, turnId: string, started: boolean, historical: boolean): boolean => {
+    const index = dedupeBucket(key);
+    const previous = state.hookLifecycles[index]!.get(key);
+    const retiredTurn = (id: string) => JSON.stringify(["retired-hook-turn", key, id]);
+    if (previous && turnId) {
+      const retiredKey = retiredTurn(turnId);
+      if (state.dedupe.buckets[dedupeBucket(retiredKey)]!.has(retiredKey)) return false;
+    }
+    const rawTime = run.startedAt;
+    const parsedTime = typeof rawTime === "number" ? rawTime : typeof rawTime === "string" ? Date.parse(rawTime) : NaN;
+    const startedAt = Number.isFinite(parsedTime) ? parsedTime : null;
+    const timeOrder = startedAt !== null && previous && previous.startedAt !== null
+      ? Math.sign(startedAt - previous.startedAt) : 0;
+    const newerStart = timeOrder > 0;
+    const otherTurn = previous !== undefined && !!turnId && !!previous.turnId && turnId !== previous.turnId;
+    if (previous) {
+      if ((historical && !previous.historical) || timeOrder < 0) return false;
+      if (otherTurn) {
+        // 같은 handler의 버킷에 정확한 turn key를 두되 활성 상태를 완료로 덮어쓰지 않는다.
+        const completionKey = JSON.stringify(["completed-hook-turn", key, turnId]);
+        const completion = state.hookLifecycles[index]!.get(completionKey);
+        if (started) {
+          if (completion && ((historical && !completion.historical) || !(startedAt !== null && completion.startedAt !== null && startedAt > completion.startedAt))) return false;
+        } else if (!newerStart) {
+          if (!completion || !(historical && !completion.historical) && startedAt !== null && (completion.startedAt === null || startedAt > completion.startedAt)) {
+            writeHookLifecycle(index, completionKey, { turnId, startedAt, started: false, completed: true, historical });
+          }
+          return false;
+        }
+      } else if (started && !newerStart && !(previous.completed && previous.started)) return false;
+    }
+    if (otherTurn) remember(retiredTurn(previous.turnId));
+    writeHookLifecycle(index, key, {
+      turnId: turnId || previous?.turnId || "",
+      startedAt: startedAt ?? previous?.startedAt ?? null,
+      started: started || (!newerStart && previous?.started === true),
+      completed: !started,
+      historical,
+    });
+    remember(key);
+    return started;
   };
   for (const event of ordered) {
     const params = record(event.params);
@@ -520,7 +586,7 @@ export function updateActivitySidebarState(current: ActivitySidebarState, events
     const threadId = text(params.threadId);
     if (event.method === "hook/completed") {
       const runId = text(record(params.run).id);
-      if (threadId && runId) remember(`hook\u0000${threadId}\u0000${runId}`);
+      if (threadId && runId) hookLifecycle(`hook\u0000${threadId}\u0000${runId}`, record(params.run), text(params.turnId), false, options.historySnapshot === true || event.historical === true);
       continue;
     }
     if (event.method === "item/started" && threadId) {
@@ -551,7 +617,7 @@ export function updateActivitySidebarState(current: ActivitySidebarState, events
       || run.executionMode !== "sync"
       || run.status !== "running"
     ) continue;
-    if (!remember(`hook\u0000${runKey}`)) continue;
+    if (!hookLifecycle(`hook\u0000${runKey}`, run, text(params.turnId), true, options.historySnapshot === true || event.historical === true)) continue;
     const identity = hookTuple(run.eventName, run.sourcePath, run.displayOrder, run.handlerType);
     observe(state, { threadId, kind: "hook", identity, at: event.at, seq: event.seq, label: "시작" }, options.emitPulses === true);
   }
@@ -570,7 +636,7 @@ export function updateActivitySidebarSnapshot(current: ActivitySidebarState, bat
   }
   for (const event of ordered) {
     const emitPulses = !snapshotSequences.has(event.seq) && event.historical !== true;
-    state = updateActivitySidebarState(state, [event], { emitPulses });
+    state = updateActivitySidebarState(state, [event], { emitPulses, historySnapshot: snapshotSequences.has(event.seq) });
   }
   return state;
 }

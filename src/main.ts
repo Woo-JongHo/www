@@ -15,7 +15,8 @@ import { createNativeReportHarness } from "./native-reports";
 import { judgeNativeReport } from "./report-judge";
 import { NativeCompletionCollector } from "./native-report-input";
 import { resolveNativeCodex } from "./native-command";
-import { nativeThreadStartParams, nativeTurnStartParams } from "./native-chat";
+import { nativeThreadStartParams } from "./native-chat";
+import { createNativeLifecycle } from "./native-lifecycle";
 import { parseHooksListResponse, parseSkillsListResponse } from "./activity-sidebar";
 import { createActivityLedger, type ActivityLedger } from "./activity-ledger";
 import { createProjectRegistry } from "./projects";
@@ -69,8 +70,7 @@ let seq                       = 0                        ;
 let connectionGeneration      = 0                        ;
 let activityRequestGeneration = 0                        ;
 const eventLog : ScopedAppEvent[] = []                       ;
-const pendingApprovals      = new Map<RpcId, string>() ;
-const approvalAttempts      = new Set<RpcId>()         ;
+const lifecycle = createNativeLifecycle(publish);
 const latestActivityRequests = new Map<string, number>();
 
 const SUPPORTED = new Set(["item/commandExecution/requestApproval", "item/fileChange/requestApproval"]) ;
@@ -196,13 +196,10 @@ function connect(): Promise<JsonRpcClient> {
       clientToken++;
       rpc = null;
       childProcess = null;
+      const interruptedThread = activeTurnId !== null ? activeThreadId : null;
       activeTurnId = null;
-      turnStarting = false;
-      for (const requestId of pendingApprovals.keys()) {
-        publish({ kind: "notification", method: "approval/uncertain", params: { message: error.message }, requestId });
-      }
-      pendingApprovals.clear();
-      approvalAttempts.clear();
+      // 준비 중인 IPC의 finally만 잠금을 해제한다. closed에서 내리면 복구가 겹친다.
+      lifecycle.closed(client, error.message, interruptedThread);
       if (activeThreadId) {
         const id = activeThreadId;
         void loadResourceScope(workspace, id, selectionEpoch).then((scope) => { if (!stopping && workspace === root) ledger.gap(scope, "disconnect"); }).catch((error: unknown) => console.warn(error));
@@ -225,16 +222,10 @@ function connect(): Promise<JsonRpcClient> {
       }
       if (typeof id === "string" || typeof id === "number") {
         const supported = SUPPORTED.has(method);
-        if (supported && (pendingApprovals.has(id) || approvalAttempts.has(id))) {
-          const params = message.params && typeof message.params === "object" && !Array.isArray(message.params)
-            ? message.params as Record<string, unknown>
-            : {};
-          publish({ kind: "request", method, params: { ...params, duplicateRequestId: true }, requestId: id, supported: false });
-        } else {
-          if (supported) pendingApprovals.set(id, method);
-          publish({ kind: "request", method, params: message.params, requestId: id, supported });
-        }
+        const token = supported ? lifecycle.approval(client, id, params?.threadId) : null;
+        publish({ kind: "request", method, params: message.params, requestId: id, ...(token === null ? {} : { approvalToken: token }), supported: token !== null });
       } else publish({ kind: "notification", method, params: method === "account/rateLimits/updated" ? rateLimitPayload(message.params) : message.params });
+      if (method === "serverRequest/resolved") lifecycle.resolved(client, message.params);
       if (method === "skills/changed") void loadSkills(client, true);
     });
     void client.request("initialize", { clientInfo: { name: "www", title: "WWW", version: app.getVersion() }, capabilities: { experimentalApi: false } })
@@ -259,7 +250,7 @@ function connect(): Promise<JsonRpcClient> {
 
 function assertConversationIdle(): void {
   if (switchingConversation) throw new Error("대화를 전환하고 있습니다. 잠시 기다려 주세요.");
-  if (turnStarting || activeTurnId !== null || pendingApprovals.size > 0) throw new Error("실행 또는 승인 요청이 끝난 뒤 대화를 전환할 수 있습니다.");
+  if (turnStarting || activeTurnId !== null || lifecycle.approvalCount > 0) throw new Error("실행 또는 승인 요청이 끝난 뒤 대화를 전환할 수 있습니다.");
 }
 
 function replaceConversationEvents(records: readonly ConversationEvent[]): ScopedAppEvent[] {
@@ -402,7 +393,7 @@ async function switchWorkspace(expected: SelectionRef, path: string) {
     assertSelection(expected);
     if (!flushed.clean) console.warn("프로젝트 전환: 열린 리소스 일부의 저장 미확정 · 원장 상태를 보전합니다.");
     if (realpathSync(actual) !== actual) throw new Error("프로젝트 실제 경로가 변경됐습니다.");
-    if (turnStarting || activeTurnId !== null || pendingApprovals.size > 0) throw new Error("새 실행 또는 승인 요청이 생겨 프로젝트 전환을 취소했습니다.");
+    if (turnStarting || activeTurnId !== null || lifecycle.approvalCount > 0) throw new Error("새 실행 또는 승인 요청이 생겨 프로젝트 전환을 취소했습니다.");
     // 위 검사부터 선택 확정까지 await 없는 커밋.
     clientToken++;
     rpc = null;
@@ -413,12 +404,11 @@ async function switchWorkspace(expected: SelectionRef, path: string) {
     selectionEpoch++;
     activeThreadId = null;
     activeTurnId = null;
+    lifecycle.reset();
     threadStarted = false;
     eventLog.splice(0);
     endedTurns.clear();
     latestActivityRequests.clear();
-    pendingApprovals.clear();
-    approvalAttempts.clear();
     previousChild?.kill();
     projectRegistrationError = null;
     nativeReports = reportHarness(actual);
@@ -485,8 +475,9 @@ function registerIpc(): void {
     try {
       const client = await connect();
       assertSelection(expected);
-      const restored = await createConversationService(client, workspace).open(value);
+      const restored = await lifecycle.open(client, workspace, value, () => isCurrent(expected) && rpc === client);
       assertSelection(expected);
+      if (rpc !== client) throw new Error("Native 연결이 종료됐습니다.");
       selectionEpoch++;
       activeThreadId = restored.threadId;
       activeTurnId = null;
@@ -511,6 +502,7 @@ function registerIpc(): void {
     selectionEpoch++;
     activeThreadId = null;
     activeTurnId = null;
+    lifecycle.reset();
     threadStarted = false;
     replaceConversationEvents([
       { kind: "notification", method: "conversation/restored", params: { threadId: null, complete: true }, historical: true },
@@ -559,6 +551,8 @@ function registerIpc(): void {
       const result   = record(await client.request("thread/start", nativeThreadStartParams(workspace))) ;
       const threadId = requiredString(record(result.thread).id, "thread ID")                            ;
       assertSelection(expected);
+      if (rpc !== client) throw new Error("Native 연결이 종료됐습니다.");
+      lifecycle.markReady(client, workspace, threadId);
       threadStarted = true;
       activeThreadId = threadId;
       void currentResources(expected).catch((error: unknown) => {
@@ -581,19 +575,38 @@ function registerIpc(): void {
     const clientRequestId = randomUUID() ;
     turnStarting = true;
     endedTurns.clear();
-    publish({ kind: "notification", method: "turn/userPrompt", params: { clientRequestId, threadId: validThreadId, text: prompt } });
+    let startedClient: JsonRpcClient | null = null;
+    let promptPublished = false;
     try {
-      const client = await connect();
+      const root = workspace;
+      const result = record(await lifecycle.start({
+        connect: async () => { const client = await connect(); startedClient = client; return client; },
+        valid: (client) => isCurrent(expected) && rpc === client && workspace === root && activeThreadId === validThreadId,
+        cwd: root, threadId: validThreadId, prompt,
+        restored: (restored) => {
+          const events = replaceConversationEvents([
+            { kind: "transport", method: "transport/status", params: { state: "connected", connectionGeneration }, historical: true },
+            { kind: "notification", method: "thread/configured", params: { threadId: restored.threadId, model: restored.model, modelProvider: restored.provider, approvalPolicy: restored.approvalPolicy, sandbox: restored.sandbox, isNew: false }, historical: true },
+            ...restored.events
+          ]);
+          // renderer는 이 snapshot을 교체 적용해야 한다. 과거 userPrompt를 append하면 중복된다.
+          publish({ kind: "notification", method: "conversation/reconnected", params: { threadId: restored.threadId, events } });
+          if (startedClient) { void loadSkills(startedClient); void loadHooks(startedClient, restored.threadId); }
+        },
+        beforeStart: () => {
+          promptPublished = true;
+          publish({ kind: "notification", method: "turn/userPrompt", params: { clientRequestId, threadId: validThreadId, text: prompt } });
+        }
+      }));
       assertSelection(expected);
-      const result = record(await client.request("turn/start", nativeTurnStartParams(validThreadId, prompt)));
-      assertSelection(expected);
+      if (rpc !== startedClient) throw new Error("Native 연결이 종료됐습니다.");
       const turnId = requiredString(record(result.turn).id, "turn ID"                                                          ) ;
       if (!endedTurns.has(`${validThreadId}:${turnId}`)) activeTurnId = turnId;
       publish({ kind: "notification", method: "turn/startAccepted", params: { clientRequestId, threadId: validThreadId, turnId } });
       return { turnId };
     } catch (error) {
       assertSelection(expected);
-      publish({ kind: "notification", method: "turn/startFailed", params: { clientRequestId, threadId: validThreadId, message: String(error) } });
+      if (promptPublished && rpc === startedClient) publish({ kind: "notification", method: "turn/startFailed", params: { clientRequestId, threadId: validThreadId, message: String(error) } });
       throw error;
     } finally { if (isCurrent(expected)) turnStarting = false; }
   });
@@ -614,27 +627,13 @@ function registerIpc(): void {
       throw error;
     }
   });
-  ipcMain.handle("approval:respond", async (_event, expected: unknown, requestId: unknown, decision: unknown) => {
+  ipcMain.handle("approval:respond", async (_event, expected: unknown, requestId: unknown, decision: unknown, approvalToken: unknown) => {
     assertSelection(expected);
     validId(requestId);
     if (typeof decision !== "string" || !DECISIONS.has(decision)) throw new Error("Unsupported approval decision");
-    if (!pendingApprovals.has(requestId)) throw new Error("Unknown or unsupported approval request");
-    if (approvalAttempts.has(requestId)) throw new Error("Approval response has already been attempted");
-    approvalAttempts.add(requestId);
-    publish({ kind: "notification", method: "approval/responding", params: { decision }, requestId });
-    try {
-      const client = await connect();
-      assertSelection(expected);
-      await client.respond(requestId, { decision });
-      assertSelection(expected);
-      pendingApprovals.delete(requestId);
-      publish({ kind: "notification", method: "approval/responded", params: { decision }, requestId });
-    } catch (error) {
-      assertSelection(expected);
-      pendingApprovals.delete(requestId);
-      publish({ kind: "notification", method: "approval/uncertain", params: { decision, message: String(error) }, requestId });
-      throw error;
-    }
+    const token = requiredString(approvalToken, "approval token");
+    const client = rpc;
+    await lifecycle.respond(client, requestId, decision, token, () => isCurrent(expected) && rpc === client);
   });
   ipcMain.handle("events:get", (_event, expected: unknown) => { assertSelection(expected); return [...eventLog]; });
   ipcMain.handle("probe:ready", () => ({

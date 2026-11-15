@@ -4,7 +4,7 @@
 import { expect, test } from "bun:test";
 import { executionResultCounts, project } from "../src/projection";
 import type { AppEvent } from "../src/shared";
-const event = (seq: number, method: string, params: unknown, extra: Partial<AppEvent> = {}): AppEvent => ({ seq, at: "2026-01-01T00:00:00Z", kind: "notification", method, params, ...extra });
+const event = (seq: number, method: string, params: unknown, extra: Partial<AppEvent> & { approvalToken?: string; connectionGeneration?: number; processEpoch?: string } = {}): AppEvent => ({ seq, at: "2026-01-01T00:00:00Z", kind: "notification", method, params, ...extra });
 
 test("결과 요약 집계는 명령과 파일의 실패·미확인을 함께 센다", () => {
   const blocks = project([
@@ -138,8 +138,8 @@ test("EOF와 알 수 없는 completion status를 성공으로 승격하지 않�
 test("승인 응답 상태와 중단 요청·확인을 독립적으로 투영한다", () => {
   const result = project([
     event(1, "turn/started", { turn: { id: "turn-1" } }),
-    event(2, "item/commandExecution/requestApproval", { command: "rm x" }, { kind: "request", requestId: 0, supported: true }),
-    event(3, "approval/responding", { decision: "decline" }, { requestId: 0 }),
+    event(2, "item/commandExecution/requestApproval", { command: "rm x" }, { kind: "request", requestId: 0, supported: true, approvalToken: "zero" }),
+    event(3, "approval/responding", { decision: "decline" }, { requestId: 0, approvalToken: "zero" }),
     event(4, "turn/interruptRequested", { turnId: "turn-1" }),
     event(5, "turn/interruptAcknowledged", { turnId: "turn-1" })
   ]);
@@ -373,12 +373,17 @@ test("공개 요약의 섹션·중복 seq·완료 snapshot과 commentary의 시�
   ];
   expect(project(events.slice(0, 3)).blocks).toEqual([]);
   expect(project(events).blocks).toMatchObject([
-    { kind: "explanation", source: "reasoningSummary", text: "먼저 확인\n\n다음", streaming: true },
-    { kind: "explanation", source: "commentary", text: "확인했습니다." }
+    { kind: "explanation", source: "reasoningSummary", text: "먼저", streaming: true },
+    { kind: "explanation", source: "commentary", text: "확인했습니다." },
+    { kind: "explanation", source: "reasoningSummary", text: "다음", streaming: true },
+    { kind: "explanation", source: "reasoningSummary", text: " 확인", streaming: true }
   ]);
   events.push(summaryEvent(8, "item/completed", { item: { id: "summary", type: "reasoning", summary: ["최종 첫 문단", "최종 다음 문단"], content: ["PRIVATE"] } }));
   events.push(summaryEvent(9, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "늦음" }));
-  expect(project(events).blocks[0]).toMatchObject({ text: "최종 첫 문단\n\n최종 다음 문단", streaming: false });
+  expect(project(events).blocks).toMatchObject([
+    { text: "확인했습니다." },
+    { text: "최종 첫 문단\n\n최종 다음 문단", streaming: false }
+  ]);
   expect(JSON.stringify(project(events).blocks)).not.toContain("PRIVATE");
 });
 
@@ -521,3 +526,184 @@ for (const ending of ["completed", "EOF"]) {
     expect(project(events).blocks[0]).toMatchObject({ running: false, status: "unknown", endedAt: Date.parse("2026-01-01T00:00:03Z") });
   });
 }
+
+
+test("동일 요약 섹션과 commentary가 교차해도 A/B/C/D 수신순을 지킨다", () => {
+  const events = [summaryStart,
+    summaryEvent(2, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "A" }),
+    summaryEvent(3, "item/agentMessage/delta", { itemId: "comment", phase: "commentary", delta: "B" }),
+    summaryEvent(4, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "C" }),
+    summaryEvent(5, "item/agentMessage/delta", { itemId: "comment", phase: "commentary", delta: "D" })];
+  expect(project(events).blocks.map((block) => "text" in block ? block.text : null)).toEqual(["A", "B", "C", "D"]);
+});
+
+test("재사용 승인 ID의 새 token만 최신 카드를 닫고 terminal은 보호한다", () => {
+  const request = (seq: number, approvalToken: string) => event(seq, "item/commandExecution/requestApproval", { threadId: "t" }, { kind: "request", requestId: 7, supported: true, approvalToken });
+  const response = (seq: number, approvalToken: string, method = "approval/responded") => event(seq, method, { threadId: "t" }, { requestId: 7, approvalToken });
+  const events = [request(1, "old"), response(2, "old"), request(3, "new"), response(4, "old"), response(5, "new", "approval/responding")];
+  expect(project(events).blocks).toMatchObject([{ state: "responded", open: false, approvalToken: "old" }, { state: "responding", open: false, approvalToken: "new" }]);
+  events.push(response(6, "new"), response(7, "new", "approval/responding"));
+  expect(project(events).blocks).toMatchObject([{ state: "responded" }, { state: "responded" }]);
+});
+
+
+const publicTexts = (events: readonly AppEvent[]) => project(events).blocks.flatMap((block) => "text" in block ? [block.text] : []);
+const summaryDelta = (seq: number, delta: string, summaryIndex = 0, itemId = "summary") =>
+  summaryEvent(seq, "item/reasoning/summaryTextDelta", { summaryIndex, itemId, delta });
+const summarySnapshot = (seq: number, summary: unknown, method = "item/completed", id = "summary") =>
+  summaryEvent(seq, method, { item: { id, type: "reasoning", summary, content: "PRIVATE" } });
+
+test("연속 동일 섹션만 합치고 0/1/0·별도 항목은 수신순과 고유 replay ID를 보존한다", () => {
+  const events = [summaryStart, summaryDelta(2, "A"), summaryDelta(3, "a"), summaryDelta(4, "B", 1),
+    summaryDelta(5, "C"), summaryDelta(6, "D", 0, "other"), summaryDelta(7, "E")];
+  expect(publicTexts(events)).toEqual(["Aa", "B", "C", "D", "E"]);
+  const result = project(events);
+  expect(new Set(result.blocks.map((block) => block.id)).size).toBe(result.blocks.length);
+  expect(project([...events, events[2]!])).toEqual(result);
+  expect(project(events)).toEqual(result);
+  expect(project(events.slice(0, 2)).blocks[0]?.id).toBe(result.blocks[0]?.id);
+});
+
+for (const snapshot of [[], [""], [" ", "\n\t"]]) {
+  test(`빈·공백 snapshot ${JSON.stringify(snapshot)}은 해당 항목의 모든 fragment만 정리한다`, () => {
+    const events = [summaryStart, summaryDelta(2, "A"), summaryDelta(3, "B", 0, "other"), summaryDelta(4, "C"), summarySnapshot(5, snapshot)];
+    expect(publicTexts(events)).toEqual(["B"]);
+  });
+}
+
+test("started·completed snapshot은 모든 fragment를 수신 위치에서 대체하며 늦은 started는 무시한다", () => {
+  const events = [summaryStart, summaryDelta(2, "A"), summaryDelta(3, "B", 0, "other"), summaryDelta(4, "C"),
+    summarySnapshot(5, ["시작"], "item/started")];
+  expect(publicTexts(events)).toEqual(["B", "시작"]);
+  events.push(summaryDelta(6, "D", 0, "other"), summaryDelta(7, "E"), summarySnapshot(8, ["최종", "문단"]));
+  expect(publicTexts(events)).toEqual(["B", "D", "최종\n\n문단"]);
+  const final = project(events);
+  events.push(summarySnapshot(9, ["늦은 시작"], "item/started"), summaryDelta(10, "늦음"));
+  expect(project(events)).toEqual(final);
+  events.push(summarySnapshot(11, ["최종", "문단"]));
+  expect(publicTexts(events)).toEqual(["B", "D", "최종\n\n문단"]);
+  expect(new Set(project(events).blocks.map((block) => block.id)).size).toBe(3);
+});
+
+test("malformed 완료는 항목의 모든 fragment를 닫고 raw fallback이나 늦은 시작을 허용하지 않는다", () => {
+  const events = [summaryStart, summaryDelta(2, "A"), summaryDelta(3, "B", 0, "other"), summaryDelta(4, "C"),
+    summarySnapshot(5, "PRIVATE"), summarySnapshot(6, ["늦은 시작"], "item/started"), summaryDelta(7, "늦음")];
+  expect(project(events).blocks).toMatchObject([{ text: "A", streaming: false }, { text: "B", streaming: true }, { text: "C", streaming: false }]);
+  expect(JSON.stringify(project(events))).not.toContain("PRIVATE");
+});
+
+for (const ending of ["turn/completed", "transport/closed"]) {
+  test(`${ending} 뒤 요약 started는 무시하고 완료 snapshot만 복원한다`, () => {
+    const events = [summaryStart, summaryDelta(2, "A"), event(3, ending, { threadId: "thread", turn: { id: "turn", status: "completed" } }),
+      summarySnapshot(4, ["늦은 시작"], "item/started"), summaryDelta(5, "늦음")];
+    expect(publicTexts(events)).toEqual(["A"]);
+    events.push(summarySnapshot(6, ["복원"]));
+    expect(project(events).blocks).toMatchObject([{ text: "복원", streaming: false }]);
+  });
+}
+
+test("여러 fragment·섹션의 UTF16 총예산과 구분자 비용은 항목별로 유지한다", () => {
+  const events = [summaryStart, summaryDelta(2, "😀".repeat(8_000)), summaryDelta(3, "별도", 0, "other"),
+    summaryDelta(4, "나".repeat(16_765), 1), summaryDelta(5, "마지막", 0)];
+  const result = project(events);
+  expect(publicTexts(events)).toEqual(["😀".repeat(8_000), "별도", "나".repeat(16_765), "마"]);
+  expect(result.blocks.filter((block) => block.kind === "explanation" && block.summaryTruncated)).toHaveLength(3);
+  // 서로 다른 두 섹션의 문단 구분자 2도 같은 32768 예산에 포함한다.
+  expect(publicTexts(events).filter((text) => text !== "별도").join("").length + 2).toBe(32_768);
+  events.push(summaryDelta(6, "독립", 1, "other"));
+  expect(publicTexts(events).at(-1)).toBe("독립");
+});
+
+for (const source of ["commentary", "publicPlan"]) {
+  const delta = (seq: number, text: string) => summaryEvent(seq, source === "publicPlan" ? "item/publicPlan/delta" : "item/agentMessage/delta", { itemId: "message", phase: source === "commentary" ? source : undefined, delta: text });
+  const snapshot = (seq: number, text: string, method = "item/completed") => summaryEvent(seq, method, { item: { id: "message", type: source === "publicPlan" ? source : "agentMessage", phase: source === "commentary" ? source : undefined, text } });
+  test(`${source}도 연속 delta만 합치고 snapshot은 모든 fragment를 수신 위치에서 대체한다`, () => {
+    const events = [summaryStart, delta(2, "A"), delta(3, "a"), summaryDelta(4, "B"), delta(5, "C")];
+    expect(publicTexts(events)).toEqual(["Aa", "B", "C"]);
+    const before = project(events);
+    expect(new Set(before.blocks.map((block) => block.id)).size).toBe(3);
+    expect(project(events)).toEqual(before);
+    events.push(snapshot(6, "완료"), delta(7, "늦음"), snapshot(8, "늦은 시작", "item/started"));
+    expect(project(events).blocks).toMatchObject([{ text: "B" }, { text: "완료", streaming: false, source }]);
+    events.push(snapshot(9, "완료"));
+    expect(publicTexts(events)).toEqual(["B", "완료"]);
+    events.push(snapshot(10, "   "));
+    expect(publicTexts(events)).toEqual(["B"]);
+  });
+  for (const ending of ["turn/completed", "transport/closed"]) {
+    test(`${source}는 ${ending} 뒤 delta를 재개하지 않고 snapshot만 복원한다`, () => {
+      const events = [summaryStart, delta(2, "A"), event(3, ending, { threadId: "thread", turn: { id: "turn", status: "completed" } }), delta(4, "늦음"), snapshot(5, "늦은 시작", "item/started")];
+      expect(project(events).blocks).toMatchObject([{ text: "A", streaming: false }]);
+      events.push(snapshot(6, "복원"));
+      expect(project(events).blocks).toMatchObject([{ text: "복원", streaming: false }]);
+    });
+  }
+}
+
+test("공개 메시지의 명시적 phase·type 전환은 이전 fragment를 혼합하지 않는다", () => {
+  const events = [summaryStart,
+    summaryEvent(2, "item/agentMessage/delta", { itemId: "m", phase: "commentary", delta: "설명" }), summaryDelta(3, "요약"),
+    summaryEvent(4, "item/agentMessage/delta", { itemId: "m", phase: "commentary", delta: "설명2" }),
+    summaryEvent(5, "item/started", { item: { id: "m", type: "publicPlan", text: "계획" } })];
+  expect(publicTexts(events)).toEqual(["요약", "계획"]);
+  events.push(summaryEvent(6, "item/agentMessage/delta", { itemId: "m", phase: "final_answer", delta: "답변" }));
+  expect(project(events).blocks).toMatchObject([{ source: "reasoningSummary", text: "요약" }, { kind: "answer", text: "답변" }]);
+});
+
+const approvalRequest = (seq: number, approvalToken: string | undefined, requestId: string | number = 7, threadId = "t", connectionGeneration = 1, processEpoch = "process") =>
+  event(seq, "item/commandExecution/requestApproval", { threadId }, { kind: "request", requestId, supported: true, approvalToken, connectionGeneration, processEpoch });
+const approvalNotification = (seq: number, approvalToken: string | undefined, requestId: string | number = 7, threadId = "t", connectionGeneration = 1, processEpoch = "process", method = "approval/responded") =>
+  event(seq, method, { threadId }, { requestId, approvalToken, connectionGeneration, processEpoch });
+
+for (const scope of [{ generation: 2, process: "process" }, { generation: 1, process: "new-process" }]) {
+  test(`승인 ID 재사용은 연결 ${scope.generation}/${scope.process}와 token을 교차검증한다`, () => {
+    const events = [approvalRequest(1, "old"), approvalNotification(2, "old"), approvalRequest(3, "new", 7, "t", scope.generation, scope.process),
+      approvalNotification(4, "old"), approvalNotification(5, "new", 7, "t", 99), approvalNotification(6, "new", 7, "t", scope.generation, "stale")];
+    expect(project(events).blocks).toMatchObject([{ state: "responded" }, { state: "open", open: true }]);
+    events.push(approvalNotification(7, "new", 7, "t", scope.generation, scope.process));
+    expect(project(events).blocks).toMatchObject([{ state: "responded" }, { state: "responded", open: false }]);
+  });
+}
+
+test("같은 승인 ID의 다른 thread·숫자문자·unsupported 카드와 위조 params token을 격리한다", () => {
+  const events = [approvalRequest(1, "a"), approvalRequest(2, "b", 7, "other"), approvalRequest(3, "c", "7"),
+    event(4, "item/commandExecution/requestApproval", { threadId: "t", duplicateRequestId: true }, { kind: "request", requestId: 7, supported: false, approvalToken: "a" }),
+    approvalNotification(5, "a", 7, "other"), approvalNotification(6, "a", "7"),
+    event(7, "approval/responded", { threadId: "t", approvalToken: "a" }, { requestId: 7 })];
+  expect(project(events).blocks).toMatchObject([{ state: "open", open: true }, { state: "open", open: true }, { state: "open", open: true }, { state: "open", open: false }]);
+  events.push(approvalNotification(8, "a"), approvalNotification(9, "c", "7"), approvalNotification(10, "b", 7, "other"));
+  expect(project(events).blocks).toMatchObject([{ state: "responded" }, { state: "responded" }, { state: "responded" }, { state: "open", open: false }]);
+});
+
+test("identity 없는 legacy는 클릭 불가이며 scoped/token 카드에는 대응하지 않는다", () => {
+  const legacy = event(1, "item/commandExecution/requestApproval", { threadId: "t", approvalToken: "위조" }, { kind: "request", requestId: 7, supported: true });
+  expect(project([legacy]).blocks).toMatchObject([{ approvalToken: null, state: "open", open: false }]);
+  expect(project([legacy, event(2, "approval/responding", { threadId: "t" }, { requestId: 7 })]).blocks).toMatchObject([{ state: "open", open: false }]);
+  expect(project([legacy, event(2, "approval/responded", { threadId: "t" }, { requestId: 7 })]).blocks).toMatchObject([{ state: "responded", open: false }]);
+  const events = [approvalRequest(1, "token"), event(2, "approval/responded", { threadId: "t" }, { requestId: 7 })];
+  expect(project(events).blocks).toMatchObject([{ state: "open", open: true }]);
+  const noToken = [approvalRequest(1, undefined), event(2, "approval/responded", { threadId: "t" }, { requestId: 7 })];
+  expect(project(noToken).blocks).toMatchObject([{ approvalToken: null, state: "open", open: false }]);
+});
+
+test("정확한 token은 선택적 scope가 없어도 대응하고 uncertain 뒤 중복 responding은 퇴행하지 않는다", () => {
+  const events = [approvalRequest(1, "token"), event(2, "approval/uncertain", { threadId: "t" }, { requestId: 7, approvalToken: "token" }),
+    event(3, "approval/responding", { threadId: "t" }, { requestId: 7, approvalToken: "token" })];
+  expect(project(events).blocks).toMatchObject([{ state: "uncertain", open: false }]);
+  events.push(event(4, "approval/responded", { threadId: "t" }, { requestId: 7, approvalToken: "token" }), event(5, "approval/uncertain", { threadId: "t" }, { requestId: 7, approvalToken: "token" }));
+  expect(project(events).blocks).toMatchObject([{ state: "responded", open: false }]);
+});
+
+
+test("명시적 agentMessage 타입은 publicPlan에서 최종 답변으로 전환한다", () => {
+  const events = [summaryStart,
+    summaryEvent(2, "item/publicPlan/delta", { itemId: "m", delta: "계획" }),
+    summaryEvent(3, "item/completed", { item: { id: "m", type: "agentMessage", text: "답변" } })];
+  expect(project(events).blocks).toMatchObject([{ kind: "answer", text: "답변", streaming: false }]);
+});
+
+test("token이 있는 알림은 명시 thread만 교차검증하고 현재 대화 fallback에 오연결하지 않는다", () => {
+  const events = [approvalRequest(1, "token"), event(2, "turn/started", { threadId: "other", turn: { id: "turn" } }),
+    event(3, "approval/responded", {}, { requestId: 7, approvalToken: "token" })];
+  expect(project(events).blocks).toMatchObject([{ threadId: "t", state: "responded", open: false }]);
+});

@@ -254,6 +254,10 @@ Chat은 Ovis revision d505c75e26c54f31573057d1e9aa431ecc56677f의 행 상태·�
 
 집중 검사는 bun test test/chat-state.test.ts test/conversations.test.ts test/projection.test.ts test/input.test.ts다. Native thread/list/read/resume/turns/list 필드는 설치된 codex app-server generate-json-schema 결과와 대조한다. 새 프로토콜이 없으면 응답을 꾸며 완전 복원으로 표시하지 않는다.
 
+`src/native-lifecycle.ts`는 main이 사용하는 연결별 thread 준비와 대기 승인의 수명주기를 소유한다. idle 프로세스 종료 뒤에는 새 연결에서 read/resume를 마치고 다음 요청을 보내며, 실행 중이거나 전송 결과가 불확실한 변경은 자동 재전송하지 않는다. `test/native-lifecycle.test.ts`는 복원 실패·stale 응답·실제 stdio 재시작과 승인 ID 재사용·서버 해소 경계를 검사한다. 승인 token은 main이 최상위 사건 필드로 발급하고 preload·renderer의 네 인자 응답 API가 해당 카드의 token을 그대로 돌려준다.
+
+재연결의 `conversation/reconnected`는 이력을 교체하는 scoped snapshot이다. renderer가 실제 사용하는 `src/chat-state.ts`의 `reduceConversationEvents`로 bootstrap·대화 전환 큐·일반 수신을 함께 처리한다. transcript 교체와 활동 상태 초기화는 다른 수명주기이며 같은 연결의 대화 전환에서는 활동 중복 억제 상태를 보존한다. `test/chat-state.test.ts`와 `test/activity-sidebar.test.ts`는 오래된 marker·연결/선택 경계·낮은 seq의 새 live·과거 Hook turn 재수신을 검사한다. metadata가 모두 같은 동일 turn의 완료→시작은 새 실행과 재전송을 프로토콜만으로 구분할 수 없어 수신 lifecycle 전이를 수용한다.
+
 `node scripts/verify-chat.ts --command-cards`는 같은 Electron 하네스에서 명령 카드·원문 전환·클립보드·폭별 레이아웃까지 실행하고 scope를 명시한 summary.json을 남긴다. 기본 실행의 후속 재연결·승인·프로젝트 시나리오는 생략하지 않고 그대로 유지하며, 제한 실행의 통과로 그 후반부를 검증했다고 쓰지 않는다.
 
 node scripts/verify-chat.ts는 빌드된 실제 Electron을 고립 profile과 cwd에서 실행하고 외부 CDP로 저장 대화·Markdown·코드복사·인용·대화별 상태·동일 thread 후속 요청·승인·중단·앱 재시작을 조작한다. 서버는 test/fixtures/chat-ui-app-server.ts의 합성 stdio subprocess다. 성공·실패 원문과 화면은 .www/evidence/chat-ui-*에 저장하며 실제 모델·Windows·IME 실기로 확대하지 않는다. 실행 전에 npm run build를 수행하고 검사 중 다른 빌드로 dist를 바꾸지 않는다.

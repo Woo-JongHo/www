@@ -8,8 +8,10 @@ import { describe, expect, test } from "bun:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { ChatMessage } from "../src/chat-message";
-import { blankReadingState, belongsToConversation, composerFull, conversationKey, currentTurnEvents, draftWithQuote, eventTurnId, externalChatUrl, MAX_PROMPT_CHARS, pasteOverflow } from "../src/chat-state";
-import type { AppEvent } from "../src/shared";
+import { reduceConversationEvents, type ConversationEventState, blankReadingState, belongsToConversation, composerFull, conversationKey, currentTurnEvents, draftWithQuote, eventTurnId, externalChatUrl, MAX_PROMPT_CHARS, pasteOverflow } from "../src/chat-state";
+import { createActivitySidebarState, updateActivitySidebarSnapshot } from "../src/activity-sidebar";
+import { project } from "../src/projection";
+import type { AppEvent, ScopedAppEvent } from "../src/shared";
 
 describe("Ovis에서 개작한 Chat 입력과 대화 경계", () => {
   test("인용은 기존 초안을 보존하고 모든 줄을 인용한 뒤 전송 없이 결합한다", () => {
@@ -81,5 +83,113 @@ describe("실제 Markdown/GFM 메시지 렌더러", () => {
     expect(html).not.toContain("<img"       ) ;
     expect(html).not.toContain("href="      ) ;
     expect(html)    .toContain("민감 이미지") ;
+  });
+});
+
+
+describe("재연결 snapshot과 실제 renderer 대화 경계", () => {
+  const selection = { workspaceKey: "repo", selectionEpoch: 2, processEpoch: "process" };
+  const event = (seq: number, method: string, params: unknown = { threadId: "thread" }, generation = 2): ScopedAppEvent => ({ ...selection, seq, method, params, at: "2026-11-15", kind: "notification", connectionGeneration: generation });
+  const history = () => [
+    { ...event(10, "transport/status", { state: "connected", connectionGeneration: 2 }), historical: true },
+    { ...event(11, "thread/configured"), historical: true },
+    { ...event(12, "item/completed", { threadId: "thread", turnId: "old", item: { id: "answer", type: "agentMessage", text: "복원 답변" } }), historical: true },
+  ];
+  const marker = (seq = 20, events: unknown = history()) => event(seq, "conversation/reconnected", { threadId: "thread", events });
+  const empty = (): ConversationEventState => ({ events: [], reconnect: null });
+  const reduce = (current: ConversationEventState, incoming: ScopedAppEvent[], snapshot: ScopedAppEvent[] = []) => reduceConversationEvents(current, snapshot, incoming, selection, "thread");
+  const fresh = () => event(21, "turn/userPrompt", { threadId: "thread", text: "새 요청" });
+
+  test("이전 연결의 미결 승인·진행 명령·턴을 원자 교체하고 새 live만 유지한다", () => {
+    const old: ConversationEventState = { reconnect: null, events: [
+      event(1, "turn/started", { threadId: "thread", turn: { id: "old" } }, 1),
+      event(4, "turn/userPrompt", { threadId: "thread", text: "이전 미결 입력" }, 1),
+      event(2, "item/started", { threadId: "thread", turnId: "old", item: { id: "cmd", type: "commandExecution", command: "old command" } }, 1),
+      { ...event(3, "item/commandExecution/requestApproval", { threadId: "thread", turnId: "old", itemId: "cmd", command: "old command" }, 1), kind: "request", requestId: 42, approvalToken: "old", supported: true },
+    ] };
+    expect(project(old.events).blocks.some((block) => block.kind === "approval" && block.open)).toBe(true);
+    const next = reduce(old, [marker(), fresh()]);
+    expect(next.events.map((value) => value.seq)).toEqual([10, 11, 12, 21]);
+    expect(next.replaced).toBe(true);
+    expect(next.snapshot.every((value) => value.historical)).toBe(true);
+    expect(next.live.map((value) => value.seq)).toEqual([21]);
+    expect(project(next.events).blocks.some((block) => block.kind === "approval" || block.kind === "command")).toBe(false);
+    expect(project(next.events).working).toBe(false);
+    expect(project(next.events).blocks.some((block) => block.kind === "user" && block.text === "이전 미결 입력")).toBe(false);
+    expect(old.events).toHaveLength(4);
+  });
+
+  test("marker보다 먼저 받은 freshlive와 순서가 뒤섞인 외부 큐도 같은 reducer로 보존한다", () => {
+    for (const queued of [[marker(), fresh()], [fresh(), marker()]]) {
+      const success = reduce(empty(), queued, [event(1, "turn/started", {}, 1)]);
+      const failed = reduce({ events: [event(1, "turn/started", {}, 1)], reconnect: null }, queued);
+      const waiting = reduce(reduce(empty(), [fresh()]), [marker()], [event(1, "turn/started", {}, 1)]);
+      expect(success.events).toEqual(failed.events);
+      expect(waiting.events).toEqual(success.events);
+      expect(success.events.map((value) => value.seq)).toEqual([10, 11, 12, 21]);
+    }
+  });
+
+  test("중복·stale marker와 늦은 bootstrap snapshot은 현재 transcript를 되감지 않는다", () => {
+    const current = reduce(empty(), [marker(), fresh()]);
+    for (const stale of [marker(), marker(19), { ...marker(30), connectionGeneration: 1 }]) {
+      const next = reduce(current, [stale], [event(1, "turn/started", {}, 1)]);
+      expect(next.events).toEqual(current.events);
+      expect(next.replaced).toBe(false);
+      expect(next.reconnect).toBe(current.reconnect);
+    }
+    const many = Array.from({ length: 2_100 }, (_, index) => event(index + 22, "account/updated", {}));
+    const capped = reduce(current, many);
+    expect(capped.events).toHaveLength(2_000);
+    expect(reduce(capped, [marker()]).events).toEqual(capped.events);
+    const nextGeneration = { ...fresh(), seq: 41, connectionGeneration: 3 };
+    const newer = reduce(current, [nextGeneration]);
+    expect(newer.events.at(-1)).toEqual(nextGeneration);
+    expect(reduce(newer, [fresh(), marker()]).events).toEqual(newer.events);
+  });
+
+  test("재연결 활동 snapshot은 pulse 없이 복원하고 marker 이후 live Hook만 반응한다", () => {
+    const run = { id: "handler", eventName: "preToolUse", sourcePath: "/hooks.json", displayOrder: 2, handlerType: "command", executionMode: "sync", status: "running", startedAt: 100 };
+    const snapshot = [...history(),
+      { ...event(13, "hook/started", { threadId: "thread", turnId: "old", run }), historical: true },
+      { ...event(14, "hook/completed", { threadId: "thread", turnId: "old", run }), historical: true },
+    ];
+    const live = event(22, "hook/started", { threadId: "thread", turnId: "new", run });
+    const batch = reduce(empty(), [live, marker(20, snapshot)]);
+    const activity = updateActivitySidebarSnapshot(createActivitySidebarState(), batch);
+    expect(activity.pulses.map((pulse) => pulse.seq)).toEqual([22]);
+    expect(batch.events.map((value) => value.seq)).toEqual([10, 11, 12, 13, 14, 22]);
+  });
+
+  test("다른 scope·thread·generation과 손상 snapshot은 교체를 일으키지 않는다", () => {
+    const current = reduce(empty(), [fresh()]);
+    const invalid = [
+      { ...marker(), workspaceKey: "other" }, { ...marker(), selectionEpoch: 1 }, { ...marker(), processEpoch: "old" },
+      event(20, "conversation/reconnected", { threadId: "other", events: history() }),
+      marker(20, []), marker(20, null), marker(20, [{ seq: 1 }]),
+      marker(20, [{ ...history()[0]!, historical: false }]),
+      marker(20, [{ ...history()[0]!, connectionGeneration: 1 }]),
+      marker(20, [{ ...history()[0]!, workspaceKey: "other" }]),
+      marker(20, [{ ...history()[0]!, selectionEpoch: 1 }]),
+      marker(20, [{ ...history()[0]!, processEpoch: "old" }]),
+      marker(20, [{ ...history()[0]!, seq: 20 }]),
+      marker(20, [{ ...history()[0]!, params: { threadId: "other" } }]),
+      marker(20, [{ ...history()[0]!, method: "conversation/reconnected" }]),
+    ];
+    for (const value of invalid) {
+      const next = reduce(current, [value]);
+      expect(next.events).toEqual(current.events);
+      expect(next.replaced).toBe(false);
+    }
+  });
+
+  test("scope 전환은 이전 marker를 버리고 scoped seq 키는 충돌하지 않는다", () => {
+    const current = reduce(empty(), [marker(), fresh()]);
+    const nextSelection = { ...selection, selectionEpoch: 3 };
+    const next = reduceConversationEvents(current, [], [{ ...fresh(), ...nextSelection, seq: 1 }], nextSelection, "thread");
+    expect(next.reconnect).toBeNull();
+    expect(next.events.map((value) => value.seq)).toEqual([1]);
+    const colliding = reduce(empty(), [event(1, "account/updated", {}, 2)], [event(1, "account/updated", {}, 1)]);
+    expect(colliding.events).toHaveLength(2);
   });
 });

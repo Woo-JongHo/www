@@ -7,8 +7,8 @@ import { CommandView } from "./command-card";
 import { NativeActivityView, ResourceActivitySidebar } from "./native-activity-view";
 import { ChatMessage } from "./chat-message";
 import { ChatDetails, ChatRowMemoryContext, type ChatRowMemory } from "./chat-row-state";
-import { blankReadingState, belongsToConversation, composerFull, conversationKey, currentTurnEvents, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, pasteOverflow, type ConversationReadingState } from "./chat-state";
-import { ActivitySnapshotBoundary, createActivitySidebarState, projectActivitySidebar, updateActivitySidebarSnapshot, updateActivitySidebarState } from "./activity-sidebar";
+import { reduceConversationEvents, type ConversationEventState, blankReadingState, belongsToConversation, composerFull, conversationKey, currentTurnEvents, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, pasteOverflow, type ConversationReadingState } from "./chat-state";
+import { createActivitySidebarState, projectActivitySidebar, updateActivitySidebarSnapshot } from "./activity-sidebar";
 import { ReportsView } from "./reports-view";
 import { EcosystemView } from "./ecosystem-view";
 import { handlePromptKeyDown, normalizeCompositionEnd } from "./input";
@@ -20,6 +20,7 @@ import type { AppEvent, ConversationSummary, TurnState, WorkspaceSelection, Sele
 declare global { interface Window { www: WwwApi } }
 
 const MAX_RAW_EVENTS = 2_000;
+
 const afterTwoFrames = () => new Promise<void>((resolve) =>
   requestAnimationFrame(() =>
     requestAnimationFrame(() => resolve())
@@ -35,13 +36,6 @@ const waitForEvent = async (method: string, timeoutMs = 15000): Promise<AppEvent
   throw new Error(`Probe timed out waiting for ${method}`);
 };
 
-function mergeEvents(current: readonly ScopedAppEvent[], incoming: readonly ScopedAppEvent[]): ScopedAppEvent[] {
-  const key = (event: ScopedAppEvent) => `${event.processEpoch}:${event.connectionGeneration}:${event.seq}`;
-  const bySequence = new Map(current.map((event) => [key(event), event]));
-  for (const event of incoming) bySequence.set(key(event), event);
-  return [...bySequence.values()].sort((left, right) => left.connectionGeneration - right.connectionGeneration || left.seq - right.seq).slice(-MAX_RAW_EVENTS);
-}
-
 function blockKey(block: Block): string {
   if (block.kind === "approval") return block.id;
   return `${block.kind}-${block.id}`;
@@ -55,7 +49,7 @@ function fileStatus(block: Extract<Block, { kind: "files" }>): string {
   return "결과 미확인";
 }
 
-function BlockView({ block, decide, quote }: { block: Block; decide(id: string | number, decision: string): void; quote(text: string): void }) {
+function BlockView({ block, decide, quote }: { block: Block; decide(id: string | number, decision: string, approvalToken: string | null): void; quote(text: string): void }) {
   if (block.kind === "user") {
     return <div className={`user request-${block.state}`} data-testid="user-request"><div>{block.text}</div><span className="muted">{block.state === "sending" ? "요청을 보내는 중" : block.state === "accepted" ? "요청을 받았습니다" : `요청을 보내지 못했습니다 · ${block.error ?? "원인 미확인"}`}</span></div>;
   }
@@ -66,7 +60,8 @@ function BlockView({ block, decide, quote }: { block: Block; decide(id: string |
   if (block.kind === "answer" ) return <div className={`agent ${block.streaming ? "streaming" : ""}`}><ChatMessage text={block.text} streaming={block.streaming} onQuote={quote}/></div>;
   if (block.kind === "command") return <CommandView block={block}/>;
   if (block.kind === "files"  ) return <div className={`files item-${block.status}`} data-testid="file-change"><div>파일 변경 · {fileStatus(block)}</div>{block.changes.length ? block.changes.map((change) => <ChatDetails key={change.path} memoryKey={`${block.id}:${change.path}`}><summary>{change.path}</summary>{change.diff === null ? <div className="muted">변경 내용 미제공</div> : <pre data-testid="file-diff">{change.diff || "제공된 변경 내용이 비어 있습니다."}</pre>}{change.truncated && <div className="muted">변경 내용의 최근 {MAX_OUTPUT_CODE_UNITS.toLocaleString("ko-KR")} UTF-16 코드 단위만 보관합니다. 앞부분은 복원할 수 없습니다.</div>}</ChatDetails>) : "파일 정보 미제공"}</div>;
-  return <div className={`approval ${block.open ? "open" : ""}`} data-testid="approval-card"><div className="ahead">{!block.supported ? "지원하지 않는 요청" : block.state === "open" ? "승인 필요" : block.state === "responding" ? "응답 전송 중" : block.state === "responded" ? "응답 전송됨" : "응답 결과 미확인"}</div><div className="abody">{block.summary}</div>{block.supported && block.open && <div className="aact"><button data-decision="accept" onClick={() => decide(block.requestId, "accept")}>허용</button><button data-decision="acceptForSession" onClick={() => decide(block.requestId, "acceptForSession")}>세션 허용</button><button data-decision="decline" onClick={() => decide(block.requestId, "decline")}>거절</button><button data-decision="cancel" onClick={() => decide(block.requestId, "cancel")}>중단</button></div>}</div>;
+  const approvalToken = "approvalToken" in block && typeof block.approvalToken === "string" ? block.approvalToken : null;
+  return <div className={`approval ${block.open ? "open" : ""}`} data-testid="approval-card"><div className="ahead">{!block.supported ? "지원하지 않는 요청" : block.state === "open" && block.open && approvalToken !== null ? "승인 필요" : block.state === "responding" ? "응답 전송 중" : block.state === "responded" ? "응답 전송됨" : "응답 결과 미확인"}</div><div className="abody">{block.summary}</div>{block.supported && block.open && approvalToken !== null && <div className="aact"><button data-decision="accept" onClick={() => decide(block.requestId, "accept", approvalToken)}>허용</button><button data-decision="acceptForSession" onClick={() => decide(block.requestId, "acceptForSession", approvalToken)}>세션 허용</button><button data-decision="decline" onClick={() => decide(block.requestId, "decline", approvalToken)}>거절</button><button data-decision="cancel" onClick={() => decide(block.requestId, "cancel", approvalToken)}>중단</button></div>}</div>;
 }
 
 function elapsedLabel(milliseconds: number): string {
@@ -359,13 +354,22 @@ function App() {
   const switchingRef = useRef(false);
   const switchGeneration = useRef(0);
   const queuedEvents = useRef<ScopedAppEvent[]>([]);
-  const activityBoundary = useRef(new ActivitySnapshotBoundary());
-  const pendingActivityBoundary = useRef<number | null>(null);
-  const beginActivityBoundary = () => {
-    if (pendingActivityBoundary.current !== null) activityBoundary.current.cancel(pendingActivityBoundary.current);
-    const token = activityBoundary.current.begin();
-    pendingActivityBoundary.current = token;
-    return token;
+  const transcriptState = useRef<ConversationEventState>({ events: [], reconnect: null });
+  const bootstrapPending = useRef(true);
+  const consumeEvents = (snapshot: readonly ScopedAppEvent[], live: readonly ScopedAppEvent[], reset = false, resetActivity = false) => {
+    const selected = selectionRef.current;
+    if (!selected) return;
+    const batch = reduceConversationEvents(reset ? { events: [], reconnect: null } : transcriptState.current, snapshot, live, selected, threadRef.current);
+    transcriptState.current = batch;
+    if (batch.replaced) {
+      sendGeneration.current += 1;
+      sendingRef.current = false;
+      setSending(false);
+      setPendingPrompt(null);
+    }
+    liveConnection.current = Math.max(0, batch.reconnect?.connectionGeneration ?? 0, ...batch.events.map((event) => event.connectionGeneration));
+    setEvents(batch.events);
+    setActivityState((current) => updateActivitySidebarSnapshot(resetActivity || batch.replaced ? createActivitySidebarState() : current, batch));
   };
   const listGeneration = useRef(0);
   const readingStates = useRef(new Map<string, ConversationReadingState>());
@@ -390,6 +394,7 @@ function App() {
   const transcriptRef       = useRef<HTMLDivElement>(null)             ;
   const transcriptScrollTop = useRef(0)                                ;
   const followTail          = useRef(true)                             ;
+  const sendGeneration = useRef(0);
   const sendingRef          = useRef(false)                            ;
   const projection          = useMemo(() => project(events), [events]) ;
 
@@ -460,7 +465,6 @@ function App() {
     setSwitching(true);
     queuedEvents.current = [];
     const generation = ++switchGeneration.current;
-    const activityToken = beginActivityBoundary();
     setError("");
     try {
       const selected = requireSelection();
@@ -479,22 +483,17 @@ function App() {
       restoreReading(restored.threadId, restored.workspace.path);
       setThreadId(restored.threadId);
       const arrived = queuedEvents.current.filter((event) => matchesSelection(event, restored.workspace) && belongsToConversation(event, restored.threadId));
-      setEvents(mergeEvents(restored.events, arrived));
-      const activityBatch = activityBoundary.current.complete(activityToken, restored.events);
-      if (activityBatch) setActivityState((current) => updateActivitySidebarState(updateActivitySidebarSnapshot(current, activityBatch), arrived, { emitPulses: false }));
+      consumeEvents(restored.events, arrived, true);
       setView("chat");
       void refreshConversations();
       void refreshProjects();
     } catch (failure) {
       const arrived = queuedEvents.current.filter((event) => matchesSelection(event) && belongsToConversation(event, threadRef.current));
-      setEvents((current) => mergeEvents(current, arrived));
-      const activityBatch = activityBoundary.current.fail(activityToken);
-      if (activityBatch) setActivityState((current) => updateActivitySidebarState(updateActivitySidebarSnapshot(current, activityBatch), arrived, { emitPulses: true }));
+      consumeEvents([], arrived);
       for (const snapshot of resourceQueue.current) acceptResources(snapshot);
       resourceQueue.current = [];
       setError(String(failure));
     } finally {
-      activityBoundary.current.cancel(activityToken);
       if (generation === switchGeneration.current) {
         queuedEvents.current = [];
         switchingRef.current = false;
@@ -518,16 +517,13 @@ function App() {
 
   useEffect(() => {
     let disposed = false;
-    const activityToken = beginActivityBoundary();
     const acceptEvent = (event: ScopedAppEvent) => {
       if (disposed) return;
-      if (switchingRef.current || !selectionRef.current) { queuedEvents.current.push(event); return; }
+      if (switchingRef.current || bootstrapPending.current || !selectionRef.current) { queuedEvents.current.push(event); return; }
       if (!matchesSelection(event) || event.connectionGeneration < liveConnection.current) return;
-      liveConnection.current = event.connectionGeneration;
       if (event.method === "thread/configured" && sendingRef.current && threadRef.current === null) threadRef.current = eventThreadId(event);
       if (!belongsToConversation(event, threadRef.current)) return;
-      if (!activityBoundary.current.queue(event)) setActivityState((current) => updateActivitySidebarState(current, [event], { emitPulses: !event.historical }));
-      setEvents((current) => mergeEvents(current, [event]));
+      consumeEvents([], [event]);
       if (event.method === "turn/completed") void refreshConversations();
       if (event.method === "activity/resourcesUnavailable") setError("리소스 복원 실패 · 채팅은 계속 사용할 수 있습니다.");
       if (event.method === "reports/autoState" && event.params && typeof event.params === "object" && "status" in event.params) setAutoReportHint(event.params.status === "saved" ? "새 보고서" : event.params.status === "judging" ? "판단 중" : event.params.status === "failed" ? "확인 필요" : "");
@@ -546,17 +542,15 @@ function App() {
       selectionRef.current = selected;
       setWorkspace(selected);
       const snapshot = await window.www.events(selected);
+      bootstrapPending.current = false;
       if (disposed || switchingRef.current || !matchesSelection(selected)) return;
       const configured = [...snapshot].reverse().find((event) => event.method === "thread/configured");
       const id = configured ? eventThreadId(configured) : null;
       if (threadRef.current === null && !sendingRef.current) { threadRef.current = id; setThreadId(id); }
       const current = snapshot.filter((event) => matchesSelection(event) && belongsToConversation(event, threadRef.current));
-      const activityBatch = activityBoundary.current.complete(activityToken, current);
-      if (activityBatch) setActivityState((state) => updateActivitySidebarSnapshot(state, activityBatch));
-      setEvents((state) => mergeEvents(state, current));
       const queued = queuedEvents.current;
       queuedEvents.current = [];
-      for (const event of queued) acceptEvent(event);
+      consumeEvents(current, queued);
       for (const resource of resourceQueue.current) acceptResources(resource);
       resourceQueue.current = [];
       const version = resourceVersion.current;
@@ -565,11 +559,14 @@ function App() {
       if (initialResources && (version === resourceVersion.current || !resourceRef.current || initialResources.revision > resourceRef.current.revision || initialResources.durableRevision > resourceRef.current.durableRevision)) acceptResources(initialResources);
       await window.www.refreshActivity(selected);
     })().catch((failure: unknown) => {
-      const batch = activityBoundary.current.fail(activityToken);
-      if (batch && !disposed) setActivityState((state) => updateActivitySidebarSnapshot(state, batch));
+      bootstrapPending.current = false;
+      if (!disposed) {
+        consumeEvents([], queuedEvents.current);
+        queuedEvents.current = [];
+      }
       if (!disposed) setError(String(failure));
     });
-    return () => { disposed = true; activityBoundary.current.cancel(activityToken); unsubscribe(); unsubscribeResources(); };
+    return () => { disposed = true; unsubscribe(); unsubscribeResources(); };
   }, []);
 
   const refreshProjects = async () => {
@@ -590,7 +587,6 @@ function App() {
     switchingRef.current = true;
     setSwitching(true);
     queuedEvents.current = [];
-    const token = beginActivityBoundary();
     try {
       const result: ConversationSelection | null = key
         ? await window.www.switchProject(selected, key)
@@ -610,20 +606,16 @@ function App() {
       setResources(null);
       restoreReading(null, result.workspace.path);
       const arrived = queuedEvents.current.filter((event) => matchesSelection(event) && belongsToConversation(event, null));
-      setEvents(mergeEvents(result.events, arrived));
-      const batch = activityBoundary.current.complete(token, result.events);
-      setActivityState(batch ? updateActivitySidebarState(updateActivitySidebarSnapshot(createActivitySidebarState(), batch), arrived, { emitPulses: true }) : createActivitySidebarState());
+      consumeEvents(result.events, arrived, true, true);
       setError("");
       setView("chat");
     } catch (failure) { setError(String(failure)); }
     finally {
-      activityBoundary.current.cancel(token);
       switchingRef.current = false;
       setSwitching(false);
       const arrived = queuedEvents.current.filter((event) => matchesSelection(event) && belongsToConversation(event, threadRef.current));
       queuedEvents.current = [];
-      setEvents((current) => mergeEvents(current, arrived));
-      setActivityState((current) => updateActivitySidebarState(current, arrived, { emitPulses: true }));
+      consumeEvents([], arrived);
       for (const snapshot of resourceQueue.current) acceptResources(snapshot);
       resourceQueue.current = [];
     }
@@ -667,6 +659,8 @@ function App() {
     const text = prompt.trim();
     if (!selectionRef.current || !text || sendingRef.current || switchingRef.current || text.length > MAX_PROMPT_CHARS) return;
     const selected = requireSelection();
+    const generation = ++sendGeneration.current;
+    const currentRequest = () => generation === sendGeneration.current && matchesSelection(selected);
     sendingRef.current = true;
     setSending(true);
     setPendingPrompt(text);
@@ -676,7 +670,7 @@ function App() {
       let id = threadId;
       if (!id) {
         id = (await window.www.startThread(selected)).threadId;
-        if (!matchesSelection(selected)) return;
+        if (!currentRequest()) return;
         threadRef.current = id;
         readingStates.current.set(conversationKey(workspace?.path ?? "", id), { draft: "", scrollTop: 0, followTail: true });
         readingStates.current.delete(conversationKey(workspace?.path ?? "", null));
@@ -687,22 +681,25 @@ function App() {
         }).catch((failure: unknown) => { if (matchesSelection(selected)) setError(`리소스 복원 실패: ${String(failure)}`); });
       }
       await window.www.startTurn(selected, id, text);
-      if (!matchesSelection(selected)) return;
+      if (!currentRequest()) return;
       void refreshConversations();
     } catch (failure) {
-      if (!matchesSelection(selected)) return;
+      if (!currentRequest()) return;
       setPrompt((current) => current || text);
       setError(String(failure));
     } finally {
-      setPendingPrompt(null);
-      sendingRef.current = false;
-      setSending(false);
+      if (currentRequest()) {
+        setPendingPrompt(null);
+        sendingRef.current = false;
+        setSending(false);
+      }
     }
   };
   const choose = () => changeProject();
-  const decide = async (id: string | number, decision: string) => {
+  const decide = async (id: string | number, decision: string, approvalToken: string | null) => {
+    if (approvalToken === null) return;
     const selected = requireSelection();
-    try { await window.www.respond(selected, id, decision); }
+    try { await window.www.respond(selected, id, decision, approvalToken); }
     catch (failure) { if (matchesSelection(selected)) setError(String(failure)); }
   };
   const interrupt = async () => {

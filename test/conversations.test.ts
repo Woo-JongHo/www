@@ -143,6 +143,7 @@ test("실제 stdio subprocess를 재시작한 뒤 같은 Native thread ID와 누
     running.child.kill();
     running = start();
     await running.client.request("initialize", {});
+    await expect(running.client.request("turn/start", { threadId: "thread-persisted", input: [{ type: "text", text: "복원 전 거부" }] })).rejects.toThrow("thread/resume");
     const service = createConversationService(running.client, cwd) ;
     const listed  = await service.list()                           ;
     expect(listed.threads[0]?.id).toBe("thread-persisted");

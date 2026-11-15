@@ -11,6 +11,7 @@ export interface AppEvent {
   method     : string                                   ;
   params     : unknown                                  ;
   requestId? : RpcId                                    ;
+  approvalToken?: string;
   supported? : boolean                                  ;
   historical?: boolean                                  ;
 }
@@ -132,7 +133,7 @@ export interface WwwApi {
   startThread(selection: SelectionRef): Promise<{ threadId: string }>;
   startTurn(selection: SelectionRef, threadId: string, text: string): Promise<{ turnId: string }>;
   interrupt(selection: SelectionRef, threadId: string, turnId: string): Promise<void>;
-  respond(selection: SelectionRef, requestId: RpcId, decision: string): Promise<void>;
+  respond(selection: SelectionRef, requestId: RpcId, decision: string, approvalToken: string): Promise<void>;
   events(selection: SelectionRef): Promise<ScopedAppEvent[]>;
   refreshActivity(selection: SelectionRef): Promise<void>;
   activityResources(selection: SelectionRef): Promise<ResourceSnapshot | null>;
