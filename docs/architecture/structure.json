@@ -170,7 +170,8 @@
         "arch.development.providers.gjc",
         "arch.development.reporting.lifecycle",
         "arch.development.routing",
-        "arch.tooling.source-policy"
+        "arch.tooling.source-policy",
+        "arch.development.records.state"
       ]
     },
     {
@@ -289,7 +290,9 @@
       "description": "공유 검토 정책에 따라 읽기 전용 검토를 실행하고 실제 모델·원문 영수증·판정·현재 적용성을 검증한다.",
       "allowedDependencies": [
         "arch.development.evidence.verification",
-        "arch.development.providers.invocation"
+        "arch.development.providers.invocation",
+        "arch.development.routing",
+        "arch.development.records.protocol"
       ]
     },
     {

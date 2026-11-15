@@ -24,10 +24,11 @@ import      { fileURLToPath                                  } from "node:url"  
 import      { promisify                                      } from "node:util"                       ;
 import test from "node:test";
 import      { once                                           } from "node:events"                     ;
-import      { inspectWorkLock, recoverWorkLock, withWorkLock } from "../scripts/workflow/lock.ts"     ;
+import      { inspectWorkLock, recoverWorkLock, withWorkLock, retryWorkWriter } from "../scripts/workflow/lock.ts"     ;
 import      { evaluateEvidence                               } from "../scripts/workflow/evidence.ts" ;
 import      { loadReviewPolicy, runReview                    } from "../scripts/workflow/review.ts"   ;
 import      {
+              appendPending              ,
               adoptWork                  ,
               advanceWork                ,
               assessWork as assessAnyWork ,
@@ -732,4 +733,112 @@ test("과거 작업 근거와 잘못된 요구 참조가 문서 검토의 상태
     assert.match(invalid.reasons.join(" "), /요구사항 참조/);
     assert.equal((await resumeWork({ repo, workId })).record.id, workId);
   }
+});
+
+
+test("살아있는 원장 잠금 경합은 verifier 한 번과 durable 회수·중복 억제로 처리한다", async t => {
+  const repo = await repository(t);
+  await writeFile(join(repo, "checks/pass.ts"), "import fs from 'node:fs'; fs.mkdirSync('.www',{recursive:true}); fs.appendFileSync('.www/calls','called\\n');\n");
+  const work = await openWork(request(repo)), workId = work.record.id;
+  let artifactPath = "", attemptId = "";
+  await withWorkLock(repo, async () => {
+    const lockBefore = await readFile(join(repo, ".www/work-records.lock"), "utf8");
+    const attempt = await verifyPass(repo, workId);
+    assert.equal(attempt.recorded, false);
+    assert.equal(attempt.result, "passed");
+    artifactPath = attempt.artifactPath; attemptId = attempt.id;
+    assert.ok((await readFile(join(repo, artifactPath), "utf8")).includes(attempt.id));
+    assert.equal((await readWork({ repo, workId })).record.workflow.verifications.length, 0);
+    assert.equal(await readFile(join(repo, ".www/calls"), "utf8"), "called\n");
+    assert.equal((await inspectWorkLock({ repo })).status, "owner_alive");
+    assert.equal(await readFile(join(repo, ".www/work-records.lock"), "utf8"), lockBefore);
+  });
+  const recovered = await appendPending({ repo, workId, artifactPath });
+  assert.equal(recovered.recorded, true);
+  const report = join(dirname(work.path), "verification.md");
+  const before = await readFile(report, "utf8");
+  await appendPending({ repo, workId, artifactPath });
+  assert.equal(await readFile(report, "utf8"), before);
+  assert.equal(before.split(`<a id="${attemptId}">`).length - 1, 1);
+  assert.equal((await readWork({ repo, workId })).record.workflow.verifications.length, 1);
+  assert.equal(await readFile(join(repo, ".www/calls"), "utf8"), "called\n");
+  await assert.rejects(appendPending({ repo, workId: "work-22222222-2222-4222-8222-222222222222", artifactPath }), /작업 불일치/);
+  await assert.rejects(appendPending({ repo, workId, artifactPath: "../outside.json" }), /경로 오류/);
+});
+
+test("pending 회수의 소스·기준 drift는 과거 결과만 보존하고 통과로 승격하지 않는다", async t => {
+  for (const drift of ["source", "criteria"]) {
+    const repo = await repository(t), work = await openWork(request(repo)), workId = work.record.id;
+    const attempt = await withWorkLock(repo, () => verifyPass(repo, workId));
+    assert.equal(attempt.recorded, false);
+    if (drift === "source") await writeFile(join(repo, "src/item.ts"), "export const value = 2;\n");
+    else {
+      const current = await readWork({ repo, workId });
+      current.record.criteria[0].description += " 변경";
+      await writeFile(current.path, JSON.stringify(current.record));
+    }
+    await appendPending({ repo, workId, artifactPath: attempt.artifactPath });
+    const current = await readWork({ repo, workId });
+    assert.equal(current.record.workflow.verifications[0].result, "passed");
+    assert.equal(current.record.criteria[0].result, "unverified");
+    assert.match(current.record.blockedReason ?? "", new RegExp(`${drift}_changed`));
+  }
+});
+
+test("동일 review ID는 멱등이며 다른 내용과 action 실패는 재시도하지 않는다", async t => {
+  const repo = await repository(t), work = await openWork(request(repo)), workId = work.record.id;
+  const review = { id: "review-duplicate", verdict: "not_run" };
+  let artifactPath = "";
+  await withWorkLock(repo, async () => {
+    const result = await recordReview({ repo, workId, review });
+    assert.equal(result.recorded, false); artifactPath = result.artifactPath;
+  });
+  await appendPending({ repo, workId, artifactPath });
+  const savedReview = await recordReview({ repo, workId, review });
+  assert.equal(savedReview.recorded, true);
+  if (!savedReview.recorded) throw new Error("저장 실패");
+  assert.equal(savedReview.record.id, workId);
+  assert.equal((await readWork({ repo, workId })).record.workflow.reviews.length, 1);
+  await assert.rejects(recordReview({ repo, workId, review: { ...review, verdict: "pass" } }));
+  let calls = 0;
+  await assert.rejects(retryWorkWriter(() => withWorkLock(repo, async () => { calls++; throw Object.assign(new Error("action failed"), { code: "EEXIST" }); })), /action failed/);
+  assert.equal(calls, 1);
+});
+
+test("malformed pending은 문서·원장을 쓰기 전에 명시 오류로 거부한다", async t => {
+  const repo = await repository(t), work = await openWork(request(repo)), workId = work.record.id;
+  const attempt = await withWorkLock(repo, () => verifyPass(repo, workId));
+  const target = join(repo, attempt.artifactPath), original = await readFile(target, "utf8");
+  const before = await readFile(work.path, "utf8");
+  for (const field of ["source", "criteriaSnapshot", "criterionIds", "environment", "args", "output", "artifacts"]) {
+    const pending = JSON.parse(original);
+    pending.payload[field] = field === "source" ? { files: null } : null;
+    await writeFile(target, JSON.stringify(pending));
+    await assert.rejects(appendPending({ repo, workId, artifactPath: attempt.artifactPath }), error => error instanceof Error && !(error instanceof TypeError) && /회수 검증/.test(error.message));
+    assert.equal(await readFile(work.path, "utf8"), before);
+    await assert.rejects(readFile(join(dirname(work.path), "verification.md")), /ENOENT/);
+  }
+  await writeFile(target, original);
+  assert.equal((await appendPending({ repo, workId, artifactPath: attempt.artifactPath })).recorded, true);
+});
+
+test("pending 명령 권한 철회는 append 전에 거부하고 문서 검토 후에도 PASS로 승격하지 않는다", async t => {
+  const repo = await repository(t), work = await openWork(request(repo)), workId = work.record.id;
+  const attempt = await withWorkLock(repo, () => verifyPass(repo, workId));
+  const current = await readWork({ repo, workId });
+  assert.equal(current.record.schemaVersion, 2);
+  current.record.workflow.authorization.verifierCommands = [];
+  await writeFile(work.path, JSON.stringify(current.record));
+  const before = await readFile(join(repo, attempt.artifactPath), "utf8");
+  for (let index = 0; index < 2; index++) await assert.rejects(appendPending({ repo, workId, artifactPath: attempt.artifactPath }), /command_authorization_changed/);
+  const latest = await readWork({ repo, workId });
+  assert.equal(latest.record.workflow.verifications.length, 0);
+  await assert.rejects(readFile(join(dirname(work.path), "verification.md")), /ENOENT/);
+  await documentReview(repo, workId);
+  const assessment = await assessWork({ repo, workId });
+  assert.equal(assessment.complete, false);
+  if (assessment.legacy) throw new Error("schema2 필요");
+  assert.equal(assessment.criteria[0].usable, false);
+  await assert.rejects(completeWork({ repo, workId }), /현재 증거로 완료/);
+  assert.equal(await readFile(join(repo, attempt.artifactPath), "utf8"), before);
 });

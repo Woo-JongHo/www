@@ -19,6 +19,7 @@ import type { SessionBinding, CanonicalSkill, MutationResult } from "./preflight
 import type { RouteResult } from "./route.ts";
 import type { ProcessInvocation, ProcessOptions, ProcessResult } from "./adapters/gjc.ts";
 import type { VerificationAttempt } from "./evidence.ts";
+import type { ReviewAuthority } from "./review.ts";
 import type { ReviewResult } from "./review.ts";
 import type { RuntimeState } from "./record.ts";
 
@@ -32,6 +33,8 @@ export interface WorkflowVerifier {
   artifactPaths? : string[]                ;
 }
 export interface WorkflowOptions extends JsonObject {
+  reviewAuthority?: ReviewAuthority;
+  reviewInputPaths?: string[];
   repo?              : string                  ;
   workId?            : string                  ;
   request?           : string                  ;
@@ -227,13 +230,18 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
       source                                          ,
       criteriaDigest : criteriaDigest(current.record) ,
       policyInfo                                      ,
-      inputPaths     : [
-        ...source.inputs,
+      work: current.record.schemaVersion === 2 ? current.record : undefined,
+      authority: options.reviewAuthority,
+      workPath: current.path,
+      directRequest: options.direct === true && typeof options.request === "string" ? { direct: true, request: options.request } : undefined,
+      inputPaths     : options.reviewInputPaths !== undefined ? options.reviewInputPaths : [
+        ...source.files.filter(file => file.type === "file").map(file => file.path),
         path.relative(repo, current.path),
         path.relative(repo, path.join(path.dirname(current.path), "verification.md")),
       ],
     });
-    return { executed: true, review, work: await recordReview({ repo, workId: work.record.id, review }) };
+    const recording = await recordReview({ repo, workId: work.record.id, review });
+    return { executed: true, review, ...(recording.recorded ? { work: recording } : {}), recording };
   }
   if (intent === "verify") {
     const verifier = requireVerifier(options.verifier)                                                                          ;
@@ -631,7 +639,8 @@ async function main() {
   if (!object(options)) throw new Error("JSON 옵션 객체가 필요합니다.");
   const result = await runWorkflow(options);
   process.stdout.write(`${JSON.stringify(result)}\n`);
-  if (result.mutation?.ok === false || result.confirmation === true) process.exitCode = 2;
+  if (property(result.recording, "recorded") === false || property(result.verification, "recorded") === false) process.exitCode = 1;
+  else if (result.mutation?.ok === false || result.confirmation === true) process.exitCode = 2;
   else if (options.role === "www-dev") {
     if (result.host?.ok === false || property(result.verification, "result") === "failed" || (result.review && result.review.verdict !== "pass")) process.exitCode = 1;
   } else if (result.executed && (!result.host?.ok || result.postError || result.verificationSummary?.result !== "passed")) process.exitCode = 1;

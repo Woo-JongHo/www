@@ -2,6 +2,7 @@
  * @architecture arch.development.authoring
  * @implements RESP-DEVELOPMENT-AUTHORING
  */
+import { appendPending } from "./workflow/work.ts";
 import { runReportedStage } from "./workflow/report-lifecycle.ts";
 import { execFile, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -352,10 +353,26 @@ async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDe
 }
 
 export async function runTypedWorkflow(options: JsonObject, dependencies: HarnessDependencies = {}): Promise<JsonObject> {
+  if (options.action === "recover-result") {
+    if (options.direct !== true || typeof options.workId !== "string" || typeof options.artifactPath !== "string") throw new Error("직접 요청과 회수 대상이 필요합니다.");
+    return appendPending({ repo: typeof options.repo === "string" ? options.repo : process.cwd(), workId: options.workId, artifactPath: options.artifactPath });
+  }
+  const decision = object(options.decision) ? options.decision : {};
+  if (options.role === "www-dev" && ["review", "verify"].includes(String(decision.intent)) && options.execute === true && options.preview !== true) {
+    const result    = await runTypedWorkflowCore(options, dependencies)                                                    ;
+    const recording = object(result.recording) ? result.recording : object(result.verification) ? result.verification : {} ;
+    if (recording.recorded === false) return { ...result, reportHook: { status: "deferred", reason: "원장 잠금 해소 후 recover-result로 기록하세요." } };
+    // 보고서 기록 실패가 이미 끝난 모델·검증을 다시 실행시키지 않도록 결과를 보존한다.
+    try { return await runReportedStage(options, async () => result); }
+    catch (error) { return { ...result, reportHook: { status: "failed", error: error instanceof Error ? error.message : String(error) } }; }
+  }
   return runReportedStage(options, () => runTypedWorkflowCore(options, dependencies));
 }
 
 function exitCode(result: JsonObject): number {
+  if (result.recorded === false || (object(result.recording) && result.recording.recorded === false) || (object(result.verification) && result.verification.recorded === false)) {
+    return 1;
+  }
   if (object(result.reportHook) && result.reportHook.status === "failed") return 1;
   if (object(result.harness) && result.harness.ok !== true) return 1;
   if ((object(result.mutation) && result.mutation.ok === false)

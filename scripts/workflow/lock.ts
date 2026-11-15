@@ -93,7 +93,7 @@ export async function withWorkLock<T>(repo: string, action: (root: string) => Pr
     // 완성한 metadata를 같은 파일 시스템의 hard link로 원자적으로 공개한다. 쓰기 도중 죽어도 빈 잠금을 남기지 않는다.
     await fs.link(temporary, file);
   } catch (error) {
-    if (hasCode(error, "EEXIST")) throw new Error("다른 실행자가 작업 기록을 갱신 중입니다. 종료된 실행이면 lock-status와 recover-lock으로 확인·복구하세요.");
+    if (hasCode(error, "EEXIST")) throw new WorkLockBusyError();
     throw error;
   } finally { await fs.unlink(temporary); }
   try { return await action(root); }
@@ -101,5 +101,21 @@ export async function withWorkLock<T>(repo: string, action: (root: string) => Pr
     const current = await owner(file);
     if (!current || unknownOwner(current) || current.token !== value.token) throw new Error("작업 잠금 소유자가 바뀌어 임의 해제하지 않습니다.");
     await fs.unlink(file);
+  }
+}
+
+export class WorkLockBusyError extends Error {
+  readonly code = "WORK_LOCK_BUSY";
+  constructor() { super("다른 실행자가 작업 기록을 갱신 중입니다. lock-status와 recover-lock으로 확인하세요."); }
+}
+// action 실패는 재시도하지 않는다. 잠금 생성 충돌만 제한 시간 안에서 재시도한다.
+export async function retryWorkWriter<T>(write: () => Promise<T>, budgetMs = 500) {
+  const deadline = Date.now() + budgetMs;
+  for (;;) {
+    try { return await write(); }
+    catch (error) {
+      if (!(error instanceof WorkLockBusyError) || Date.now() >= deadline) throw error;
+      await new Promise(resolve => setTimeout(resolve, Math.min(25, Math.max(1, deadline - Date.now()))));
+    }
   }
 }

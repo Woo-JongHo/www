@@ -7,6 +7,7 @@ import { promises as fs } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { captureSource } from "../scripts/workflow/evidence.ts";
 import { assertReviewPolicy, classifyOpusFailure, loadReviewPolicy, runReview, selectReviewer, validateReview } from "../scripts/workflow/review.ts";
 
 const root          = path.resolve(import.meta.dirname, "..") ;
@@ -53,7 +54,23 @@ function success() {
 }
 
 async function recordedReview(directory: string, responses: { code: number; stdout: string; signal?: NodeJS.Signals | null; error?: string | null; stderr?: string }[] = [success()]) {
-  const result = await runReview({ repo: directory, source: { digest: sourceDigest }, criteriaDigest: criterionHash, policyInfo, run: async () => { const response = responses.shift(); assert.ok(response); return response; } });
+  const legacy = responses.length > 1 ? responses.slice() : null;
+  const result = await runReview({ repo: directory, source: { digest: sourceDigest }, criteriaDigest: criterionHash, policyInfo, allowFallback: !legacy, run: async () => { const response = responses.shift(); assert.ok(response); return response; } });
+  if (legacy) {
+    // 과거 exec JSONL 영수증의 읽기 호환성만 검사하는 신규 fixture다.
+    const selected = selectReviewer({ policy, opusFailure: result.failure });
+    const opusFile = path.join(directory, path.dirname(result.receiptPath), "opus.json");
+    const opus = JSON.parse(await fs.readFile(opusFile, "utf8"));
+    const body = { ...legacy[1], invocation: { command: "codex", args: ["exec", "--model", "gpt-6.1-terra", "--sandbox", "read-only", "--ignore-user-config", "--ephemeral", "--json", "--output-schema", path.join(directory, "response.json"), "-"] }, context: { ...opus.context, provider: "openai", model: "gpt-6.1-terra" } };
+    const text = `${JSON.stringify(body)}\n`;
+    const receiptPath = path.join(path.dirname(result.receiptPath), "terra-legacy.json");
+    await fs.writeFile(path.join(directory, receiptPath), text, { flag: "wx" });
+    const messages = legacy[1].stdout.split("\n").map(line => JSON.parse(line));
+    const last = messages.filter(m => m.type === "item.completed").at(-1)?.item.text;
+    let final: { verdict: "pass" | "fail"; findings: string[] } | null = null;
+    try { final = JSON.parse(last); } catch { /* 최종 JSON 부재 fixture */ }
+    return { ...result, ...selected, executor: "process", verdict: final?.verdict ?? "not_run", findings: final?.findings ?? [], observedModel: messages.find(m => m.model)?.model ?? null, receiptPath, execution: { exitCode: legacy[1].code, signal: null, error: null, receiptHash: createHash("sha256").update(text).digest("hex") }, observedModelMeaning: undefined, inputPathsHash: undefined };
+  }
   // 수용 predicate의 단위 fixture다. 실제 모델 실행 근거로 사용하지 않는다.
   return { ...result, executor: "process" };
 }
@@ -236,9 +253,11 @@ test("Terra 마지막 응답이 스키마에 맞지 않으면 앞선 JSON 통과
 
 test("명시 소진 뒤에만 Terra 읽기 전용 호출을 수행하고 소진 영수증을 보존한다", async () => {
   await temporary(async (directory) => {
+    await fs.writeFile(path.join(directory, "input.ts"), "export {};\n");
+    const source = await captureSource({ repo: directory, inputs: ["input.ts"] });
     const calls: { command: string; args: string[] }[] = [];
     const result = await runReview({
-      repo: directory, source: { digest: sourceDigest }, criteriaDigest: criterionHash, policyInfo,
+      repo: directory, source, criteriaDigest: criterionHash, policyInfo, inputPaths: ["input.ts"],
       run: async (invocation) => {
         calls.push(invocation);
         if (invocation.command === "claude") return { code: 1, stdout: JSON.stringify({ type: "result", is_error: true, error: { code: "usage_limit_reached" } }) };
@@ -247,16 +266,50 @@ test("명시 소진 뒤에만 Terra 읽기 전용 호출을 수행하고 소진 
     });
     assert.equal(calls.length, 2);
     assert.equal(calls[1].command, "codex");
-    assert.equal(calls[1].args[calls[1].args.indexOf("--sandbox") + 1], "read-only");
-    assert.equal(calls[1].args[calls[1].args.indexOf("--model") + 1], "gpt-6.1-terra");
-    assert.ok(calls[1].args.includes("--ignore-user-config"));
+    assert.deepEqual(calls[1].args, ["app-server", "--listen", "stdio://"]);
     assert.ok(result.fallbackReason);
     assert.equal(result.fallbackReason.code, "usage_limit_reached");
-    assert.equal(result.verdict, "pass");
+    assert.equal(result.verdict, "not_run");
     assert.equal(result.observedModel, null);
     assert.ok((await fs.readdir(path.join(directory, path.dirname(result.receiptPath)))).includes("opus.json"));
     const originalReceipt = await fs.readFile(path.join(directory, path.dirname(result.receiptPath), "opus.json"));
     assert.equal(result.fallbackReason.receiptHash, createHash("sha256").update(originalReceipt).digest("hex"));
+  });
+});
+
+test("full source의 기본 Opus는 inputPaths 생략·디렉터리·Terra cap 초과에도 한 번 통과한다", async () => {
+  await temporary(async (directory) => {
+    await fs.mkdir(path.join(directory, "src"));
+    await fs.writeFile(path.join(directory, "src/large.ts"), "a".repeat(512 * 1024 + 1));
+    const source = await captureSource({ repo: directory, inputs: ["src"] });
+    for (const selection of [{}, { inputPaths: ["src"] }, { inputPaths: ["src/large.ts"] }]) {
+      let calls = 0;
+      const result = await runReview({ repo: directory, source, criteriaDigest: criterionHash, policyInfo, ...selection,
+        run: async invocation => { calls++; assert.equal(invocation.command, "claude"); return success(); } });
+      assert.equal(calls, 1);
+      assert.equal(result.model, "opus");
+      assert.equal(result.verdict, "pass");
+      assert.equal(result.sourceDigest, source.digest);
+    }
+  });
+});
+
+test("quota fallback은 Opus 원문 저장 뒤 선택을 검증하고 잘못된 선택으로 Terra를 시작하지 않는다", async () => {
+  await temporary(async (directory) => {
+    await fs.writeFile(path.join(directory, "input.ts"), "export {};\n");
+    const source = await captureSource({ repo: directory, inputs: ["input.ts"] });
+    const response = { code: 1, stdout: JSON.stringify({ type: "result", is_error: true, error: { code: "quota_exhausted" } }) };
+    let calls = 0;
+    await assert.rejects(runReview({ repo: directory, source, criteriaDigest: criterionHash, policyInfo,
+      run: async invocation => { calls++; assert.equal(invocation.command, "claude"); return response; } }), /비어/);
+    assert.equal(calls, 1);
+    const reviews = path.join(directory, ".www/evidence/reviews");
+    const [id] = await fs.readdir(reviews);
+    const receiptDirectory = path.join(reviews, id);
+    assert.deepEqual(await fs.readdir(receiptDirectory), ["opus.json"]);
+    const receipt = JSON.parse(await fs.readFile(path.join(receiptDirectory, "opus.json"), "utf8"));
+    assert.equal(receipt.stdout, response.stdout);
+    assert.equal(classifyOpusFailure(receipt)?.verified, true);
   });
 });
 
@@ -312,7 +365,7 @@ test("대체 실행을 끄면 검증된 Opus 소진도 Terra 호출 없이 원�
     assert.equal(JSON.parse(originalReceipt.toString("utf8")).stdout, response.stdout);
     assert.deepEqual(result.failure, classifyOpusFailure(JSON.parse(originalReceipt.toString("utf8"))));
     assert.equal(result.execution.receiptHash, createHash("sha256").update(originalReceipt).digest("hex"));
-    assert.deepEqual(await fs.readdir(path.dirname(path.join(directory, result.receiptPath))), ["opus.json"]);
+    assert.deepEqual(await fs.readdir(path.dirname(path.join(directory, result.receiptPath))), ["opus.json", "result.json"]);
   });
 });
 

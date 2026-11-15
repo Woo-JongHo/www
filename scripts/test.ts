@@ -12,7 +12,7 @@ const groups: Record<"bun:test" | "node:test", string[]> = {
 // .mjs 시절 Node로 실행하던 테스트는 같은 실행기를 유지한다.
 const nodeTests = new Set([
   "skill-library", "windows-native", "workflow-codex", "workflow-contract", "workflow-development",
-  "workflow-evidence", "workflow-harness", "workflow-review", "workflow-windows-command", "workflow-work",
+  "review-app-server", "workflow-evidence", "workflow-harness", "workflow-review", "workflow-windows-command", "workflow-work",
 ].map(name => path.join("test", `${name}.test.ts`)));
 const entries = (await readdir(path.join(root, "test"), { recursive: true })).sort();
 for (const entry of entries) {

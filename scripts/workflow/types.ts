@@ -31,6 +31,7 @@ export interface Criterion {
 }
 
 export interface RecordedReview {
+  recordingRejection?: string[];
   id       : string  ;
   verdict? : unknown ;
   failure? : unknown ;
