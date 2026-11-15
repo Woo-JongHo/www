@@ -41,6 +41,7 @@ readline.createInterface({input:process.stdin}).on('line', line=>{
  if(mode.startsWith('work-')) { const fs=require('node:fs'); const w=JSON.parse(fs.readFileSync('work-record.json','utf8')); if(mode==='work-stage') w.workflow.nextAction='build'; if(mode==='work-criteria') w.criteria[0].description+=' drift'; if(mode==='work-request') w.workflow.requestHash='0'.repeat(64); fs.writeFileSync('work-record.json',JSON.stringify(w)); }
  if(mode==='source') require('node:fs').appendFileSync('input.ts','\n// drift');
  const item = (type, extra) => send({method:'item/completed',params:{threadId:'thread-fixture',turnId:'turn-fixture',item:{id:'item-fixture',type,...extra}}});
+ item('userMessage',{clientId:null,content:[{...m.params.input[0],text_elements:[]}],startedAtMs:1,completedAtMs:2});
  if(mode==='read-failure') item('commandExecution',{command:'cat missing.ts',exitCode:1,status:'completed'});
  if(mode==='write-command') item('commandExecution',{command:'sed -i s/a/b/ input.ts',exitCode:0,status:'completed'});
  if(mode==='wrapper') item('commandExecution',{command:"/bin/zsh -lc 'cat input.ts'",exitCode:0,status:'completed'});
@@ -57,6 +58,48 @@ readline.createInterface({input:process.stdin}).on('line', line=>{
 `;
 const root = path.resolve(import.meta.dirname, '..');
 const hash = (v: string) => createHash('sha256').update(v).digest('hex');
+
+test('실제 Terra userMessage echo 축약 재생은 입력과 턴을 결합하고 최종 fail을 보존한다', () => {
+  // 실원문 SHA-256 b745d3830451256fe30b74821578d263860e2eccc8becc3983c2ff27ec864b99.
+  // userMessage 시작/완료의 실제 필드만 재현한다. 큰 prompt·개인 경로·최종 findings는 포함하지 않는다.
+  const cwd = '/fixture/workspace', threadId = 'thread-echo', turnId = 'turn-echo';
+  const input = JSON.stringify({ inputBundle: [{ path: 'input.ts', content: '검토할 축약 소스' }] });
+  const finalResponse = { verdict: 'fail', findings: ['축약 fixture의 검토 결함'] };
+  const frame = (direction: 'request' | 'response', message: unknown) => ({ direction, raw: JSON.stringify(message) });
+  const receiptFor = (itemChanges: Record<string, unknown> = {}, paramsChanges: Record<string, unknown> = {}) => ({
+    cwd, threadId, turnId, selectedModelMeaning: 'server-selected', finalResponse,
+    readScope: { bundleOnly: true, commandsObserved: [] },
+    frames: [
+      frame('request', { id: 1, method: 'initialize', params: {} }),
+      frame('response', { id: 1, result: {} }),
+      frame('request', { method: 'initialized' }),
+      frame('request', { id: 2, method: 'thread/start', params: { model: 'gpt-6.1-terra', modelProvider: 'openai', cwd, sandbox: 'read-only', approvalPolicy: 'never', ephemeral: true } }),
+      frame('response', { id: 2, result: { model: 'gpt-6.1-terra', modelProvider: 'openai', cwd, sandbox: { type: 'readOnly', networkAccess: false }, approvalPolicy: 'never', thread: { id: threadId } } }),
+      frame('request', { id: 3, method: 'turn/start', params: { threadId, input: [{ type: 'text', text: input }] } }),
+      frame('response', { id: 3, result: { turn: { id: turnId } } }),
+      ...['item/started', 'item/completed'].map(method => frame('response', { method, params: {
+        threadId, turnId, item: { type: 'userMessage', id: 'input-echo', clientId: null,
+          content: [{ type: 'text', text: input, text_elements: [] }], startedAtMs: 1,
+          completedAtMs: method === 'item/completed' ? 2 : null, ...itemChanges }, ...paramsChanges,
+      } })),
+      frame('response', { method: 'item/completed', params: { threadId, turnId, item: { type: 'reasoning', id: 'reasoning-echo', summary: [], content: [], startedAtMs: 2, completedAtMs: 3 } } }),
+      frame('response', { method: 'item/completed', params: { threadId, turnId, item: { type: 'agentMessage', id: 'answer-echo', phase: 'final_answer', text: JSON.stringify(finalResponse) } } }),
+      frame('response', { method: 'turn/completed', params: { threadId, turn: { id: turnId, status: 'completed', error: null } } }),
+    ],
+  });
+  assert.deepEqual(inspectAppServer(receiptFor(), cwd), { ...finalResponse, observedModel: 'gpt-6.1-terra' });
+  for (const item of [
+    { content: [{ type: 'text', text: '변조된 입력', text_elements: [] }] },
+    { content: [{ type: 'text', text: input }, { type: 'text', text: input }] },
+    { content: [{ type: 'image', text: input }] },
+    { content: [{ type: 'text', text: input, text_elements: [{ type: '추가 참조' }] }] },
+    { content: [{ type: 'text', text: input, tool: '임의 도구' }] },
+    { turnId: '다른 턴' }, { type: 'mcpToolCall' }, { type: 'unknownItem' },
+  ]) assert.throws(() => inspectAppServer(receiptFor(item), cwd));
+  for (const params of [{ threadId: '다른 스레드' }, { turnId: '다른 턴' }]) {
+    assert.throws(() => inspectAppServer(receiptFor({}, params), cwd));
+  }
+});
 
 async function setup(t: import('node:test').TestContext) {
   const repo = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), 'review-rpc-')));

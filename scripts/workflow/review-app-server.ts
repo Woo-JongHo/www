@@ -133,7 +133,13 @@ export function inspectAppServer(value: unknown, cwd: string) {
       itemTurns.add(params.turnId);
       if (item.turnId !== undefined && item.turnId !== params.turnId) throw new Error('도구 자체 turn 불일치');
       if (item.threadId !== undefined && item.threadId !== params.threadId) throw new Error('도구 자체 thread 불일치');
-      if (!['commandExecution', 'agentMessage', 'reasoning', 'plan', 'contextCompaction'].includes(String(item.type))) throw new Error('허용되지 않은 도구');
+      if (item.type === 'userMessage') {
+        const content = item.content;
+        if (!['item/started', 'item/completed'].includes(message.method) || !Array.isArray(content) || content.length !== 1 || !object(content[0])
+          || content[0].type !== 'text' || content[0].text !== inlineInput
+          || Object.keys(content[0]).some(key => !['type', 'text', 'text_elements'].includes(key))
+          || (content[0].text_elements !== undefined && (!Array.isArray(content[0].text_elements) || content[0].text_elements.length !== 0))) throw new Error('사용자 입력 echo 불일치');
+      } else if (!['commandExecution', 'agentMessage', 'reasoning', 'plan', 'contextCompaction'].includes(String(item.type))) throw new Error('허용되지 않은 도구');
       if (item.type === 'commandExecution' && (!readonlyCommand(item.command) || (message.method === 'item/completed' && (item.exitCode !== 0 || item.status !== 'completed')))) throw new Error('읽기 명령 실패 또는 금지 명령');
       if (message.method === 'item/completed' && item.type === 'commandExecution' && typeof item.command === 'string') commandsObserved.push(item.command);
       if (message.method === 'item/completed' && item.type === 'agentMessage' && item.phase === 'final_answer' && typeof item.text === 'string') finalMessages.push({ thread: params.threadId, turn: params.turnId, text: item.text });
