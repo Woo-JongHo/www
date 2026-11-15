@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "def3449a5384b1601bc9cd035b311f277e967809c2d9027fe931a8fb1bb7f6a4",
+  "digest"       : "f16a91ed637083c78f8ae960af1d695b03488c3f759e242a82b68a45359bd303",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -114,8 +114,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · codex",
       "line"       : 1,
-      "lines"      : 211,
-      "digest"     : "19e72a81ae1685bf3a568d1b3f93f0bcabcefcf61e2cb41dbd700b9a617c3768",
+      "lines"      : 290,
+      "digest"     : "3bee5c8cb5677eb9a7a3788d22f0b5d880e8b52c327b136baf6877d4765a8b06",
       "structureId": "arch.development.providers.codex"
     },
     {
@@ -125,8 +125,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · gjc",
       "line"       : 1,
-      "lines"      : 105,
-      "digest"     : "a8f72330efd13409095bd4ad8dc7d9747c75d152831ffce726f7207ea82c9cfd",
+      "lines"      : 178,
+      "digest"     : "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
       "structureId": "arch.development.providers.gjc"
     },
     {
@@ -161,6 +161,17 @@
       "lines"      : 118,
       "digest"     : "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
       "structureId": "arch.development.evidence.documentation"
+    },
+    {
+      "id"         : "scripts/workflow/environment.ts",
+      "file"       : "scripts/workflow/environment.ts",
+      "title"      : "environment",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · environment",
+      "line"       : 1,
+      "lines"      : 146,
+      "digest"     : "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+      "structureId": "arch.development.execution"
     },
     {
       "id"         : "scripts/workflow/evidence.ts",
@@ -279,8 +290,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · run",
       "line"       : 1,
-      "lines"      : 655,
-      "digest"     : "21b28b655c2f95e9f82cd9f4535fc7cacb6a15ca3946ba902b38661ddb47a8a5",
+      "lines"      : 686,
+      "digest"     : "57adc0d68b813f198ab771b4c809ce9e3c854a9c2d0de3976dd4363c6d42a57f",
       "structureId": "arch.development.execution"
     },
     {
@@ -794,34 +805,56 @@
     {
       "id"       : "scripts/workflow/adapters/codex.ts:233",
       "from"     : "scripts/workflow/adapters/codex.ts",
+      "to"       : "scripts/workflow/adapters/gjc.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./gjc.ts",
+      "line"     : 8,
+      "endLine"  : 8,
+      "statement": "import { createOutputSpool, mergeEnvironment } from \"./gjc.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/adapters/codex.ts:297",
+      "from"     : "scripts/workflow/adapters/codex.ts",
       "to"       : "scripts/workflow/adapters/windows-command.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./windows-command.ts",
-      "line"     : 8,
-      "endLine"  : 8,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import { providerExecution } from \"./windows-command.ts\";"
     },
     {
-      "id"       : "scripts/workflow/adapters/codex.ts:366",
+      "id"       : "scripts/workflow/adapters/codex.ts:355",
+      "from"     : "scripts/workflow/adapters/codex.ts",
+      "to"       : "scripts/workflow/adapters/windows-command.ts",
+      "mode"     : "runtime",
+      "syntax"   : "export",
+      "specifier": "./windows-command.ts",
+      "line"     : 10,
+      "endLine"  : 10,
+      "statement": "export { resolveProviderInvocation } from \"./windows-command.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/adapters/codex.ts:496",
       "from"     : "scripts/workflow/adapters/codex.ts",
       "to"       : "scripts/workflow/adapters/windows-command.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./windows-command.ts",
-      "line"     : 11,
-      "endLine"  : 11,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import type { ActualProviderInvocation } from \"./windows-command.ts\";"
     },
     {
-      "id"       : "scripts/workflow/adapters/codex.ts:436",
+      "id"       : "scripts/workflow/adapters/codex.ts:566",
       "from"     : "scripts/workflow/adapters/codex.ts",
       "to"       : "scripts/workflow/adapters/gjc.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./gjc.ts",
-      "line"     : 12,
-      "endLine"  : 12,
+      "line"     : 14,
+      "endLine"  : 14,
       "statement": "import type { ProcessInvocation, ProcessOptions, ProcessResult } from \"./gjc.ts\";"
     },
     {
@@ -856,6 +889,50 @@
       "line"     : 9,
       "endLine"  : 9,
       "statement": "import type { WorkRecord } from './types.ts';"
+    },
+    {
+      "id"       : "scripts/workflow/environment.ts:256",
+      "from"     : "scripts/workflow/environment.ts",
+      "to"       : "scripts/workflow/adapters/gjc.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./adapters/gjc.ts",
+      "line"     : 8,
+      "endLine"  : 8,
+      "statement": "import { mergeEnvironment } from \"./adapters/gjc.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/environment.ts:310",
+      "from"     : "scripts/workflow/environment.ts",
+      "to"       : "scripts/workflow/adapters/gjc.ts",
+      "mode"     : "runtime",
+      "syntax"   : "export",
+      "specifier": "./adapters/gjc.ts",
+      "line"     : 9,
+      "endLine"  : 9,
+      "statement": "export { mergeEnvironment } from \"./adapters/gjc.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/environment.ts:364",
+      "from"     : "scripts/workflow/environment.ts",
+      "to"       : "scripts/workflow/adapters/codex.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./adapters/codex.ts",
+      "line"     : 10,
+      "endLine"  : 10,
+      "statement": "import { resolveProviderInvocation } from \"./adapters/codex.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/environment.ts:429",
+      "from"     : "scripts/workflow/environment.ts",
+      "to"       : "scripts/source-policy.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "../source-policy.ts",
+      "line"     : 11,
+      "endLine"  : 11,
+      "statement": "import { checkSourcePolicy } from \"../source-policy.ts\";"
     },
     {
       "id"       : "scripts/workflow/preflight.ts:332",
@@ -1100,179 +1177,201 @@
       "statement": "import type { Approval } from \"./types.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:208",
+      "id"       : "scripts/workflow/run.ts:94",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/environment.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./environment.ts",
+      "line"     : 5,
+      "endLine"  : 5,
+      "statement": "import { checkEnvironment, mergeEnvironment } from \"./environment.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/run.ts:165",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/environment.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./environment.ts",
+      "line"     : 6,
+      "endLine"  : 6,
+      "statement": "import type { EnvironmentOptions, EnvironmentReport } from \"./environment.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/run.ts:358",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/adapters/gjc.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./adapters/gjc.ts",
-      "line"     : 8,
-      "endLine"  : 8,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import { createGjcInvocation, gjcCapabilities, spawnGjc, waitForChild } from \"./adapters/gjc.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:306",
+      "id"       : "scripts/workflow/run.ts:456",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/preflight.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./preflight.ts",
-      "line"     : 9,
-      "endLine"  : 9,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { createSessionBinding, findWorkRecord, loadCanonicalSkill, preflightMutation, validateSessionBinding, validateWritePaths } from \"./preflight.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:460",
+      "id"       : "scripts/workflow/run.ts:610",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/record.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./record.ts",
-      "line"     : 10,
-      "endLine"  : 10,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { appendEvent } from \"./record.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:503",
+      "id"       : "scripts/workflow/run.ts:653",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/route.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./route.ts",
-      "line"     : 11,
-      "endLine"  : 11,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import { routeRequest } from \"./route.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:546",
+      "id"       : "scripts/workflow/run.ts:696",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/adapters/codex.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./adapters/codex.ts",
-      "line"     : 12,
-      "endLine"  : 12,
+      "line"     : 14,
+      "endLine"  : 14,
       "statement": "import { createCodexInvocation, codexCapabilities, runCodex } from \"./adapters/codex.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:636",
+      "id"       : "scripts/workflow/run.ts:786",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/work.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./work.ts",
-      "line"     : 13,
-      "endLine"  : 13,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import { assessWork, advanceWork, completeWork, openWork, readWork, recordReview, resumeWork, verifyWork } from \"./work.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:761",
+      "id"       : "scripts/workflow/run.ts:911",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line"     : 14,
-      "endLine"  : 14,
+      "line"     : 16,
+      "endLine"  : 16,
       "statement": "import { captureSource, criteriaDigest } from \"./evidence.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:824",
+      "id"       : "scripts/workflow/run.ts:974",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/review.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./review.ts",
-      "line"     : 15,
-      "endLine"  : 15,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import { loadReviewPolicy, runReview } from \"./review.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:884",
+      "id"       : "scripts/workflow/run.ts:1034",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/types.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./types.ts",
-      "line"     : 17,
-      "endLine"  : 17,
+      "line"     : 19,
+      "endLine"  : 19,
       "statement": "import type { Approval, WorkRecord, WorkLocation, WorkDecision } from \"./types.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:968",
+      "id"       : "scripts/workflow/run.ts:1118",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/preflight.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./preflight.ts",
-      "line"     : 18,
-      "endLine"  : 18,
+      "line"     : 20,
+      "endLine"  : 20,
       "statement": "import type { SessionBinding, CanonicalSkill, MutationResult } from \"./preflight.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1054",
+      "id"       : "scripts/workflow/run.ts:1204",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/route.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./route.ts",
-      "line"     : 19,
-      "endLine"  : 19,
+      "line"     : 21,
+      "endLine"  : 21,
       "statement": "import type { RouteResult } from \"./route.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1101",
+      "id"       : "scripts/workflow/run.ts:1251",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/adapters/gjc.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./adapters/gjc.ts",
-      "line"     : 20,
-      "endLine"  : 20,
+      "line"     : 22,
+      "endLine"  : 22,
       "statement": "import type { ProcessInvocation, ProcessOptions, ProcessResult } from \"./adapters/gjc.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1192",
+      "id"       : "scripts/workflow/run.ts:1342",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line"     : 21,
-      "endLine"  : 21,
+      "line"     : 23,
+      "endLine"  : 23,
       "statement": "import type { VerificationAttempt } from \"./evidence.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1250",
+      "id"       : "scripts/workflow/run.ts:1400",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/review.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./review.ts",
-      "line"     : 22,
-      "endLine"  : 22,
+      "line"     : 24,
+      "endLine"  : 24,
       "statement": "import type { ReviewAuthority } from \"./review.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1302",
+      "id"       : "scripts/workflow/run.ts:1452",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/review.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./review.ts",
-      "line"     : 23,
-      "endLine"  : 23,
+      "line"     : 25,
+      "endLine"  : 25,
       "statement": "import type { ReviewResult } from \"./review.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1351",
+      "id"       : "scripts/workflow/run.ts:1501",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/record.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./record.ts",
-      "line"     : 24,
-      "endLine"  : 24,
+      "line"     : 26,
+      "endLine"  : 26,
       "statement": "import type { RuntimeState } from \"./record.ts\";"
     },
     {
@@ -2427,7 +2526,7 @@
     },
     {
       "file"     : "scripts/workflow/adapters/codex.ts",
-      "line"     : 10,
+      "line"     : 12,
       "specifier": "node:child_process",
       "reason"   : "external"
     },
@@ -2439,7 +2538,25 @@
     },
     {
       "file"     : "scripts/workflow/adapters/gjc.ts",
+      "line"     : 6,
+      "specifier": "node:crypto",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/adapters/gjc.ts",
       "line"     : 7,
+      "specifier": "node:fs",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/adapters/gjc.ts",
+      "line"     : 8,
+      "specifier": "node:path",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/adapters/gjc.ts",
+      "line"     : 10,
       "specifier": "node:child_process",
       "reason"   : "external"
     },
@@ -2500,6 +2617,24 @@
     {
       "file"     : "scripts/workflow/documentation.ts",
       "line"     : 6,
+      "specifier": "node:path",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/environment.ts",
+      "line"     : 5,
+      "specifier": "node:child_process",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/environment.ts",
+      "line"     : 6,
+      "specifier": "node:fs",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/environment.ts",
+      "line"     : 7,
       "specifier": "node:path",
       "reason"   : "external"
     },
@@ -2703,19 +2838,19 @@
     },
     {
       "file"     : "scripts/workflow/run.ts",
-      "line"     : 5,
+      "line"     : 7,
       "specifier": "node:crypto",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow/run.ts",
-      "line"     : 6,
+      "line"     : 8,
       "specifier": "node:fs",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow/run.ts",
-      "line"     : 7,
+      "line"     : 9,
       "specifier": "node:path",
       "reason"   : "external"
     },
@@ -3291,7 +3426,8 @@
           "arch.development.records.protocol",
           "arch.development.records.state",
           "arch.development.review",
-          "arch.development.routing"
+          "arch.development.routing",
+          "arch.tooling.source-policy"
         ]
       },
       {
@@ -4209,6 +4345,14 @@
         "line": 2
       },
       {
+        "file": "scripts/workflow/environment.ts",
+        "nodeId": "arch.development.execution",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-EXECUTION"
+        ],
+        "line": 2
+      },
+      {
         "file": "scripts/workflow/evidence.ts",
         "nodeId": "arch.development.evidence.verification",
         "requirementIds": [
@@ -4818,6 +4962,14 @@
         "line": 2
       },
       {
+        "file": "test/workflow-environment.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-EXECUTION",
+          "RESP-DEVELOPMENT-PROVIDERS-CODEX"
+        ],
+        "line": 2
+      },
+      {
         "file": "test/workflow-evidence.test.ts",
         "requirementIds": [
           "RESP-DEVELOPMENT-EVIDENCE-VERIFICATION"
@@ -4881,6 +5033,6 @@
         "line": 2
       }
     ],
-    "digest": "417f9077842bb987e70cb00bc61043ea29a8a2cbe3e6926a9b68cbd80d0d4684"
+    "digest": "ce653fc95f5a78ddbcc84795dc5b8306ce78e2944d8689869a8b211b4b12fe5d"
   }
 }

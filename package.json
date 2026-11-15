@@ -19,7 +19,8 @@
     "typecheck": "tsc --noEmit && tsc --project tsconfig.tools.json",
     "test": "node scripts/test.ts",
     "check:architecture": "node scripts/check-architecture.ts",
-    "check": "npm run check:architecture && npm run check:source && npm run check:workflow && npm run typecheck && npm test && npm run build",
+    "check": "npm run check:environment && npm run check:architecture && npm run check:source && npm run check:workflow && npm run typecheck && npm test && npm run build",
+    "check:environment": "node scripts/check-environment.ts",
     "start": "npm run build && electron .",
     "check:source": "node scripts/source-policy.ts"
   },

@@ -2,6 +2,8 @@
  * @architecture arch.development.execution
  * @implements RESP-DEVELOPMENT-EXECUTION
  */
+import { checkEnvironment, mergeEnvironment } from "./environment.ts";
+import type { EnvironmentOptions, EnvironmentReport } from "./environment.ts";
 import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
@@ -53,6 +55,7 @@ export interface WorkflowOptions extends JsonObject {
   surfaces?          : string[]                ;
   requireHardGate?   : boolean                 ;
   env?               : NodeJS.ProcessEnv       ;
+  environment?: Pick<EnvironmentOptions, "git" | "toolPaths">;
   model?             : string                  ;
   sandbox?           : string                  ;
   binding?           : SessionBinding          ;
@@ -122,6 +125,8 @@ export interface WorkflowResult extends JsonObject {
   binding?             : SessionBinding                      ;
   skill?               : Omit<CanonicalSkill, "source">      ;
   capabilities?        : ReturnType<typeof gjcCapabilities>  ;
+  environment?: EnvironmentReport;
+  executor?: "process" | "injected";
   host?                : ProcessResult                       ;
   sources?             : { path: string; hash: string }[]    ;
   verification?        : VerificationAttempt | ProcessResult ;
@@ -178,8 +183,13 @@ function publicPrepared(prepared: PreparedRun) {
 }
 
 export async function runProcess(invocation: ProcessInvocation, options: ProcessOptions = {}): Promise<ProcessResult> {
-  if (invocation.mode === "codex-exec") return runCodex(invocation, options);
-  return waitForChild(spawnGjc(invocation, options), { captureOutput: options.captureOutput === true });
+  if (invocation.mode === "codex-exec" || invocation.mode === "prompt" || /^(?:codex|gjc)(?:\.(?:exe|cmd))?$/i.test(path.basename(invocation.command))) {
+    const report = checkEnvironment({ repo: options.cwd ?? process.cwd(), commands: [invocation.command], env: options.env, outputDirectory: options.outputDirectory });
+    if (!report.ok) return { ok: false, code: null, outcome: "environment_failed", environment: report };
+  }
+  const effective = { ...options, env: mergeEnvironment(options.env) };
+  if (invocation.mode === "codex-exec") return runCodex(invocation, effective);
+  return waitForChild(spawnGjc(invocation, effective), effective);
 }
 
 async function developmentContext(repo: string, work: WorkLocation, skill: string) {
@@ -245,8 +255,11 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
   }
   if (intent === "verify") {
     const verifier = requireVerifier(options.verifier)                                                                          ;
+    // env override는 모델용이며 verifyWork는 실제 부모 환경으로 실행한다.
+    const environment = options.environment === undefined ? undefined : checkEnvironment({ ...options.environment, repo, commands: [verifier.command], outputDirectory: path.join(repo, ".www", "runtime", work.record.id) });
+    if (environment && !environment.ok) return { executed: false, workId: work.record.id, environment, executor: "process", host: { ok: false, code: null, outcome: "environment_failed", error: "환경 사전점검 실패로 검증 프로세스를 실행하지 않았습니다." } };
     const attempt  = await verifyWork({ repo, workId: work.record.id, ...verifier, criterionIds: verifier.criterionIds ?? [] }) ;
-    return { executed: true, workId: work.record.id, verification: attempt };
+    return { executed: true, workId: work.record.id, environment, verification: attempt };
   }
   const route = routeRequest({ ...options, workId: work.record.id, status: work.record.status, approval: work.record.workflow.authorization });
   if (!route.skill) return { executed: false, workId: work.record.id, route };
@@ -272,6 +285,10 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
   });
   const runtimeDirectory = path.join(repo, ".www", "runtime", work.record.id);
   await validateWritePaths(repo, [path.relative(repo, runtimeDirectory).split(path.sep).join("/")]);
+  const environment = checkEnvironment({ ...options.environment, repo, commands: dependencies.runProcess ? [] : [invocation.command], env: options.env, outputDirectory: runtimeDirectory });
+  const executor = dependencies.runProcess ? "injected" : "process";
+  if (!environment.ok) return { executed: false, workId: work.record.id, environment, executor, host: { ok: false, code: null, outcome: "environment_failed" } };
+  const env = mergeEnvironment(options.env);
   await fs.mkdir(runtimeDirectory, { recursive: true });
   const leaseFile = path.join(runtimeDirectory, "execution.lock");
   let lease;
@@ -285,7 +302,7 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
     const started = await appendEvent({ repo, workId: work.record.id, event: { id: options.eventId, type: "status", status: "running", role: "www-dev", skill: route.skill, sources: context.sources, requestedModel: invocation.requestedModel } });
     if (started.duplicate) return { executed: false, duplicate: true, workId: work.record.id };
     await advanceWork({ repo, workId: work.record.id, intent: route.intent ?? "answer", writes, surfaces });
-    const host = processResult(await (dependencies.runProcess ?? runProcess)(invocation, { cwd: repo, env: options.env, captureOutput: true }));
+    const host = processResult(await (dependencies.runProcess ?? runProcess)(invocation, { cwd: repo, env, captureOutput: true, outputDirectory: runtimeDirectory }));
     await appendEvent({ repo, workId: work.record.id, event: { id: `${options.eventId}-host`, type: host.ok ? "host_result" : "post_failure", outcome: host.outcome, exitCode: host.code, threadId: host.threadId ?? null, injected: Boolean(dependencies.runProcess) } });
     await appendEvent({ repo, workId: work.record.id, event: { id: `${options.eventId}-stage`, type: "status", status: host.ok ? "completed" : "failed" } });
     const receiptDirectory = path.join(repo, ".www", "evidence", work.record.id);
@@ -293,9 +310,9 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
     await fs.mkdir(receiptDirectory, { recursive: true });
     const receiptId = createHash("sha256").update(options.eventId).digest("hex");
     await fs.writeFile(path.join(receiptDirectory, `${receiptId}.json`), `${JSON.stringify({ eventId: options.eventId, workId: work.record.id, sources: context.sources, host }, null, 2)}\n`, { flag: "wx", mode: 0o600 });
-    if (!host.ok || !options.verifier) return { executed: true, workId: work.record.id, route, mutation, host, sources: context.sources };
+    if (!host.ok || !options.verifier) return { executed: true, workId: work.record.id, route, mutation, host, environment, executor, sources: context.sources };
     const verification = await verifyWork({ repo, workId: work.record.id, ...options.verifier, criterionIds: options.verifier.criterionIds ?? [] });
-    return { executed: true, workId: work.record.id, route, mutation, host, sources: context.sources, verification };
+    return { executed: true, workId: work.record.id, route, mutation, host, environment, executor, sources: context.sources, verification };
   } finally {
     await lease.close();
     await fs.unlink(leaseFile);
@@ -530,10 +547,13 @@ export async function runWorkflow(options: WorkflowOptions = {}, dependencies: W
     return { ...publicPrepared(prepared), route, mutation, executed: false, duplicate: true, session: started.session };
   }
 
-  const processOptions = {
-    cwd   : prepared.binding.repo      ,
-    env   : options.env                ,
-    stdio : options.stdio ?? "inherit" ,
+  const runtimeDirectory = path.join(prepared.binding.repo, ".www", "runtime", prepared.binding.workId);
+  const processOptions: ProcessOptions = {
+    cwd: prepared.binding.repo,
+    env: options.env,
+    stdio: "pipe",
+    captureOutput: true,
+    outputDirectory: runtimeDirectory,
   };
   const invocation = boxboxGuides.length ? createGjcInvocation({
     systemPrompt:
@@ -542,6 +562,12 @@ export async function runWorkflow(options: WorkflowOptions = {}, dependencies: W
     model    : options.model    ,
     thinking : options.thinking ,
   }) : prepared.invocation;
+  const environment = checkEnvironment({ ...options.environment, repo: prepared.binding.repo, commands: dependencies.runProcess ? [] : [invocation.command], env: processOptions.env, outputDirectory: runtimeDirectory });
+  const executor = dependencies.runProcess ? "injected" : "process";
+  if (!environment.ok) return { ...publicPrepared(prepared), route, mutation, executed: false, environment, executor, host: { ok: false, code: null, outcome: "environment_failed" }, boxboxPre };
+  await validateWritePaths(prepared.binding.repo, [path.relative(prepared.binding.repo, runtimeDirectory).split(path.sep).join("/")]);
+  await fs.mkdir(runtimeDirectory, { recursive: true });
+  processOptions.env = mergeEnvironment(options.env);
   const hostResult = await run(invocation, processOptions);
   if (!hostResult.ok) {
     await appendEvent({
@@ -550,7 +576,7 @@ export async function runWorkflow(options: WorkflowOptions = {}, dependencies: W
       expectedRevision : started.session.revision                                                             ,
       event            : { id: `${options.eventId}-host`, type: "post_failure", outcome: hostResult.outcome } ,
     });
-    return { ...publicPrepared(prepared), route, mutation, executed: true, host: hostResult, boxboxPre };
+    return { ...publicPrepared(prepared), route, mutation, executed: true, host: hostResult, environment, executor, boxboxPre };
   }
   await appendEvent({
     repo   : prepared.binding.repo                                                                                                                    ,
@@ -564,7 +590,7 @@ export async function runWorkflow(options: WorkflowOptions = {}, dependencies: W
       workId : prepared.binding.workId                                                                      ,
       event  : { id: `${options.eventId}-criteria-drift`, type: "post_failure", outcome: "criteria_drift" } ,
     });
-    return { ...publicPrepared(prepared), route, mutation, executed: true, host: hostResult, postError: "실행 중 수용 기준이 바뀌어 완료 판정을 중단했습니다.", boxboxPre };
+    return { ...publicPrepared(prepared), route, mutation, executed: true, host: hostResult, environment, executor, postError: "실행 중 수용 기준이 바뀌어 완료 판정을 중단했습니다.", boxboxPre };
   }
 
   let boxboxPost;
@@ -588,6 +614,8 @@ export async function runWorkflow(options: WorkflowOptions = {}, dependencies: W
       mutation                                                           ,
       executed  : true                                                   ,
       host      : hostResult                                             ,
+      environment,
+      executor,
       boxboxPre                                                          ,
       postError : error instanceof Error ? error.message : String(error) ,
     };
@@ -625,6 +653,8 @@ export async function runWorkflow(options: WorkflowOptions = {}, dependencies: W
     mutation   ,
     executed            : true           ,
     host                : hostResult     ,
+    environment,
+    executor,
     verification        : verifierResult ,
     verificationSummary : summary        ,
     boxboxPre  ,
@@ -640,6 +670,7 @@ async function main() {
   const result = await runWorkflow(options);
   process.stdout.write(`${JSON.stringify(result)}\n`);
   if (property(result.recording, "recorded") === false || property(result.verification, "recorded") === false) process.exitCode = 1;
+  else if (result.environment?.ok === false) process.exitCode = 1;
   else if (result.mutation?.ok === false || result.confirmation === true) process.exitCode = 2;
   else if (options.role === "www-dev") {
     if (result.host?.ok === false || property(result.verification, "result") === "failed" || (result.review && result.review.verdict !== "pass")) process.exitCode = 1;

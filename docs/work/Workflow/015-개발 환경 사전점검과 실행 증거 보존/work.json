@@ -1,0 +1,578 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-9b00f22c-fa05-47bc-8de2-d7bf4d668fbc",
+  "title"        : "개발 환경 사전점검과 실행 증거 보존",
+  "kind"         : "bug",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "ENV1",
+      "description": "모델 실행 전에 상속 환경과 overrides를 병합하고 실행파일·PATH 문제를 구조화 진단하며 실패 시 호스트를 시작하지 않는다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-94d16a72-59e6-4478-b1fc-1452611230cf",
+          "path"     : "verification.md#attempt-94d16a72-59e6-4478-b1fc-1452611230cf",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-1de40eb7-5c2c-4762-a998-e8e23d8006f4",
+          "path"     : "verification.md#attempt-1de40eb7-5c2c-4762-a998-e8e23d8006f4",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "ENV2",
+      "description": "요구한 Git 이력·기준 ref·index, 설치물 위치, 출력 보존 정책을 읽기 전용으로 검사하고 올바른 환경과 각 실패를 회귀 검증한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-94d16a72-59e6-4478-b1fc-1452611230cf",
+          "path"     : "verification.md#attempt-94d16a72-59e6-4478-b1fc-1452611230cf",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-1de40eb7-5c2c-4762-a998-e8e23d8006f4",
+          "path"     : "verification.md#attempt-1de40eb7-5c2c-4762-a998-e8e23d8006f4",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "ENV3",
+      "description": "Codex 원문은 Git 제외 저장소에 완전히 보존하고 메모리 요약 절단과 완료·실제 usage 관측을 구분한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-94d16a72-59e6-4478-b1fc-1452611230cf",
+          "path"     : "verification.md#attempt-94d16a72-59e6-4478-b1fc-1452611230cf",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-1de40eb7-5c2c-4762-a998-e8e23d8006f4",
+          "path"     : "verification.md#attempt-1de40eb7-5c2c-4762-a998-e8e23d8006f4",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "ENV4",
+      "description": "공식 typed 실행의 실제 Sol 작성·집중 테스트·소스 정책·strict 타입 검증 및 후속 독립 검토 근거를 연결한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "environment-preflight-20261115",
+    "requestHash": "8a4d3324b6113a138610b93590a501b0d2db82cfea40cdd65679a0aa06519cc8",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "scripts/workflow/environment.ts",
+        "scripts/check-environment.ts",
+        "test/workflow-environment.test.ts",
+        "scripts/workflow/run.ts",
+        "scripts/workflow/adapters/codex.ts",
+        "scripts/workflow/adapters/gjc.ts",
+        "src/architecture.generated.json",
+        "docs/work/Workflow",
+        "docs/work/INDEX.md",
+        "package.json",
+        "scripts/test.ts",
+        "docs/architecture/structure.json"
+      ],
+      "mutationSurfaces": [
+        "repo_write"
+      ],
+      "verifierCommands": [
+        "[\"bun\",[\"test\",\"test/workflow-environment.test.ts\"]]",
+        "[\"npm\",\"run\",\"check\"]",
+        "[\"/opt/homebrew/Cellar/node@22/22.22.3/bin/node\",\"--test\",\"test/workflow-environment.test.ts\"]",
+        "[\"/bin/sh\",\"-c\",\"npm run check > .www/final-npmcheck.log 2>&1\"]",
+        "[\"node\",\"--test\",\"test/workflow-environment.test.ts\",\"test/workflow-development.test.ts\"]"
+      ],
+      "commit"     : true,
+      "publish"    : true,
+      "source"     : "direct_user_request",
+      "requestHash": "8a4d3324b6113a138610b93590a501b0d2db82cfea40cdd65679a0aa06519cc8"
+    },
+    "inputs": [
+      "docs/architecture/structure.json",
+      "package.json",
+      "scripts/check-environment.ts",
+      "scripts/source-policy.ts",
+      "scripts/test.ts",
+      "scripts/workflow/adapters/codex.ts",
+      "scripts/workflow/adapters/gjc.ts",
+      "scripts/workflow/environment.ts",
+      "scripts/workflow/run.ts",
+      "source-policy.json",
+      "test/workflow-environment.test.ts",
+      "tsconfig.tools.json"
+    ],
+    "nextAction": "review",
+    "verifications": [
+      {
+        "id"         : "attempt-94d16a72-59e6-4478-b1fc-1452611230cf",
+        "startedAt"  : "2026-11-15T15:14:59.043Z",
+        "completedAt": "2026-11-15T15:17:10.986Z",
+        "source": {
+          "head": "92b1b31fc77c9555f83a48a0cf998ad8abd3f5de",
+          "digest": "f828b4fff7795ac1d21ea077658fe85aa4e6c76520cad6d7f5625a9a9dd73f9a",
+          "inputs": [
+            "docs/architecture/structure.json",
+            "package.json",
+            "scripts/check-environment.ts",
+            "scripts/source-policy.ts",
+            "scripts/test.ts",
+            "scripts/workflow/adapters/codex.ts",
+            "scripts/workflow/adapters/gjc.ts",
+            "scripts/workflow/environment.ts",
+            "scripts/workflow/run.ts",
+            "source-policy.json",
+            "test/workflow-environment.test.ts",
+            "tsconfig.tools.json"
+          ],
+          "files": [
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "8f6c275a3d1093cc3f53641b88837c9416bba6ae9fa735c00c4a653df4011bb2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "37f512ddd0df3501ad9a8db5cf9f81be152fc76d42496d619f40f649d0d4ba7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-environment.ts",
+              "type"  : "file",
+              "digest": "05ad73550de9774ded1b7b9dacc047a53bee24376a532d0e8dc1e8601ffd90c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/source-policy.ts",
+              "type"  : "file",
+              "digest": "09d4b0eae97ca3b0b55015123969c815916672486cc004bfd8d83328506b0705",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "ce7c99a7ef05b14be6e229c48da575402cdeaa05d7a17b35ea8cae01009e8d40",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "3bee5c8cb5677eb9a7a3788d22f0b5d880e8b52c327b136baf6877d4765a8b06",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "38352b387e7a61cd919d8776b8ffcb7b5d78d0b6f4e2a5babd908e98814768e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "source-policy.json",
+              "type"  : "file",
+              "digest": "06ad234ca147201bad0127fa34cedbeda9c21a5524fb061d4d9bdbde039ae7b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-environment.test.ts",
+              "type"  : "file",
+              "digest": "13f2b1e02c2716f9313107c2162d4d780cc5e3ebc4392558da27f7e2933be6e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.tools.json",
+              "type"  : "file",
+              "digest": "43a861f044c589999e471a3c936f161c916ea634013990e8136547d41612ccd5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ec83a61df45f44cf7409b18592f6dcd7f9014ed47e618dd18736953cfdbe1410",
+        "criteriaSnapshot": [
+          {
+            "id"         : "ENV1",
+            "description": "모델 실행 전에 상속 환경과 overrides를 병합하고 실행파일·PATH 문제를 구조화 진단하며 실패 시 호스트를 시작하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "ENV2",
+            "description": "요구한 Git 이력·기준 ref·index, 설치물 위치, 출력 보존 정책을 읽기 전용으로 검사하고 올바른 환경과 각 실패를 회귀 검증한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "ENV3",
+            "description": "Codex 원문은 Git 제외 저장소에 완전히 보존하고 메모리 요약 절단과 완료·실제 usage 관측을 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "ENV4",
+            "description": "공식 typed 실행의 실제 Sol 작성·집중 테스트·소스 정책·strict 타입 검증 및 후속 독립 검토 근거를 연결한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/bin/sh",
+        "requestedCommand": "/bin/sh",
+        "args": [
+          "-c",
+          "npm run check > .www/final-npmcheck.log 2>&1"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 1,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "ENV1",
+          "ENV2",
+          "ENV3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/bin/sh",
+            "digest": "e4d71aa95be0725c351e9d1d273d35ccdb0a8bdb31a57927c8738431b89788f5"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-1de40eb7-5c2c-4762-a998-e8e23d8006f4",
+        "startedAt"  : "2026-11-15T15:23:30.059Z",
+        "completedAt": "2026-11-15T15:23:36.090Z",
+        "source": {
+          "head": "92b1b31fc77c9555f83a48a0cf998ad8abd3f5de",
+          "digest": "d39b41c92684b6b159c21f7f38b3434cec98f74d2ec39b8eb78d4f88b878283d",
+          "inputs": [
+            "docs/architecture/structure.json",
+            "package.json",
+            "scripts/check-environment.ts",
+            "scripts/source-policy.ts",
+            "scripts/test.ts",
+            "scripts/workflow/adapters/codex.ts",
+            "scripts/workflow/adapters/gjc.ts",
+            "scripts/workflow/environment.ts",
+            "scripts/workflow/run.ts",
+            "source-policy.json",
+            "test/workflow-environment.test.ts",
+            "tsconfig.tools.json"
+          ],
+          "files": [
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "8f6c275a3d1093cc3f53641b88837c9416bba6ae9fa735c00c4a653df4011bb2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "37f512ddd0df3501ad9a8db5cf9f81be152fc76d42496d619f40f649d0d4ba7a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-environment.ts",
+              "type"  : "file",
+              "digest": "05ad73550de9774ded1b7b9dacc047a53bee24376a532d0e8dc1e8601ffd90c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/source-policy.ts",
+              "type"  : "file",
+              "digest": "09d4b0eae97ca3b0b55015123969c815916672486cc004bfd8d83328506b0705",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "ce7c99a7ef05b14be6e229c48da575402cdeaa05d7a17b35ea8cae01009e8d40",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "3bee5c8cb5677eb9a7a3788d22f0b5d880e8b52c327b136baf6877d4765a8b06",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "57adc0d68b813f198ab771b4c809ce9e3c854a9c2d0de3976dd4363c6d42a57f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "source-policy.json",
+              "type"  : "file",
+              "digest": "06ad234ca147201bad0127fa34cedbeda9c21a5524fb061d4d9bdbde039ae7b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-environment.test.ts",
+              "type"  : "file",
+              "digest": "13f2b1e02c2716f9313107c2162d4d780cc5e3ebc4392558da27f7e2933be6e4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.tools.json",
+              "type"  : "file",
+              "digest": "43a861f044c589999e471a3c936f161c916ea634013990e8136547d41612ccd5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ec83a61df45f44cf7409b18592f6dcd7f9014ed47e618dd18736953cfdbe1410",
+        "criteriaSnapshot": [
+          {
+            "id"         : "ENV1",
+            "description": "모델 실행 전에 상속 환경과 overrides를 병합하고 실행파일·PATH 문제를 구조화 진단하며 실패 시 호스트를 시작하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "ENV2",
+            "description": "요구한 Git 이력·기준 ref·index, 설치물 위치, 출력 보존 정책을 읽기 전용으로 검사하고 올바른 환경과 각 실패를 회귀 검증한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "ENV3",
+            "description": "Codex 원문은 Git 제외 저장소에 완전히 보존하고 메모리 요약 절단과 완료·실제 usage 관측을 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "ENV4",
+            "description": "공식 typed 실행의 실제 Sol 작성·집중 테스트·소스 정책·strict 타입 검증 및 후속 독립 검토 근거를 연결한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--test",
+          "test/workflow-environment.test.ts",
+          "test/workflow-development.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "ENV1",
+          "ENV2",
+          "ENV3"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/environment-preflight-20261115/.www/followup/.www/handoff/final-source-snapshot.json",
+            "size"  : 24918,
+            "digest": "863961c17f637b897b1a297d59781521c6d46c51b58a2c0292570fceebd24403"
+          },
+          {
+            "path"  : ".www/environment-preflight-20261115/.www/followup/.www/handoff/manifest.json",
+            "size"  : 4655,
+            "digest": "2b576950c8ede34daa4f5b6eb75d7c292f43ffae9d2197b840b6e0613f30d376"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 5022,
+            "digest"         : "a8ac77d5cb8efc49a285dbeddbc11f450e0c160210019faf47338848cc86238c",
+            "truncated"      : false,
+            "retainedBytes"  : 5022,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [],
+    "reportingRequired": true,
+    "documentationReviews": [
+      {
+        "id"             : "documentation-5e0cab1e-e5cf-4a27-9a41-fb924d149cea",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T15:05:14.723Z",
+        "sourceDigest"   : "7de564ff089c86a6e461419bccc3bdd51c64f675e239c02861b2eb9f4c57f9e4",
+        "criteriaDigest" : "ec83a61df45f44cf7409b18592f6dcd7f9014ed47e618dd18736953cfdbe1410",
+        "documentsDigest": "d941af2f6e5b9086e48229c1d1e7aca6000deef184242226ee7d63550205b5d4",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "기존 개발 실행 경계에 환경 진단을 추가하며 새 독립 서비스나 상태 소유는 만들지 않는다. 신규 환경 모듈 항목은 통합 담당의 문서 addendum 검토 대상이다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "공유 문서 직접 편집을 금지받아 환경 CLI와 출력 보존 addendum을 로컬 handoff로 작성했다. 통합 담당이 적용한 뒤 문서 검토를 갱신해야 한다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "개인 개발 작업 공간이라는 제품 목적과 제품 Chat 범위는 유지된다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "권한·증거·독립 검토·완료 정책은 변경하지 않는다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-392837ed-595f-45c6-9265-e0272739f2ac",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T15:20:06.183Z",
+        "sourceDigest"   : "d39b41c92684b6b159c21f7f38b3434cec98f74d2ec39b8eb78d4f88b878283d",
+        "criteriaDigest" : "ec83a61df45f44cf7409b18592f6dcd7f9014ed47e618dd18736953cfdbe1410",
+        "documentsDigest": "050e2132935bfa9e13a8cf5e94b67155167f1785c0b26e18fb6bb9e555f77337",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "기존 개발 실행 경계와 도구 소스 정책을 재사용한다. 실제 의존성 단일 edge는 structure.json에 반영했고 공식 canonical을 생성했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "직접 공유 문서를 변경하지 않았으며 무인자 doctor·npm check·선언 verify와 model-only env 구분 addendum을 handoff로 제공했다. 통합 담당이 적용 후 이 판단을 갱신한다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "환경 검증은 기존 개인 개발 공간의 개발 절차를 보강하며 제품 목적과 Chat 범위는 유지한다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "권한·기준·실제 증거·독립 검토·완료 계약은 유지한다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-76a256b2-ad68-4060-ac41-1cafe68ad7d4",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T15:25:46.002Z",
+        "sourceDigest"   : "d39b41c92684b6b159c21f7f38b3434cec98f74d2ec39b8eb78d4f88b878283d",
+        "criteriaDigest" : "ec83a61df45f44cf7409b18592f6dcd7f9014ed47e618dd18736953cfdbe1410",
+        "documentsDigest": "b156569e30e1d0934a57b3da311dd94eb29c025ecea26a922eeea61dbdc9f4f4",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "기존 실행·기록 책임 경계 안의 보강이며 실제 source-policy 의존성은 구조 정본에 연결했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "Native·검토 core와 기본 환경 검사·선언한 verify 요구·원문 보존을 현행 API로 갱신했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "기존 개인용 데스크톱 제품 목적을 유지한다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "권한·고정 소스·독립 검토·완료 계약은 유지한다."
+          },
+          {
+            "path"    : "docs/specs/chat.md",
+            "decision": "unchanged",
+            "reason"  : "Native 승인 token·재연결·Hook·summary 동작을 반영했으며 새 환경 변경은 개발 도구 경로다."
+          }
+        ]
+      }
+    ]
+  }
+}

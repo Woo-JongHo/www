@@ -5,7 +5,9 @@
 import { spawn } from "node:child_process";
 import { StringDecoder } from "node:string_decoder";
 import path from "node:path";
+import { createOutputSpool, mergeEnvironment } from "./gjc.ts";
 import { providerExecution } from "./windows-command.ts";
+export { resolveProviderInvocation } from "./windows-command.ts";
 
 import type { ChildProcessWithoutNullStreams } from "node:child_process";
 import type { ActualProviderInvocation } from "./windows-command.ts";
@@ -85,10 +87,10 @@ export function spawnCodex(invocation: ProcessInvocation, options: ProcessOption
   if (!invocation || invocation.mode !== "codex-exec" || typeof invocation.command !== "string" || !invocation.command.trim() || invocation.command.includes("\0") || !Array.isArray(invocation.args) || invocation.args.some((value) => typeof value !== "string" || value.includes("\0")) || typeof invocation.stdin !== "string") {
     throw new TypeError("검증된 Codex 호출이 필요합니다.");
   }
-  const execution = providerExecution(invocation, { env: options.env, cwd: options.cwd });
+  const execution = providerExecution(invocation, { env: mergeEnvironment(options.env), cwd: options.cwd });
   const child = spawn(execution.command, execution.args, {
     cwd         : options.cwd    ,
-    env         : options.env    ,
+    env         : mergeEnvironment(options.env)    ,
     signal      : options.signal ,
     shell       : false          ,
     windowsHide : true           ,
@@ -100,8 +102,10 @@ export function spawnCodex(invocation: ProcessInvocation, options: ProcessOption
   return child;
 }
 
-export async function waitForCodex(child: ChildProcessWithoutNullStreams, { captureOutput = false }: Pick<ProcessOptions, "captureOutput"> = {}): Promise<CodexResult> {
+export async function waitForCodex(child: ChildProcessWithoutNullStreams, { captureOutput = false, outputDirectory }: Pick<ProcessOptions, "captureOutput" | "outputDirectory"> = {}): Promise<CodexResult> {
   return new Promise<CodexResult>((resolve) => {
+    const spool = createOutputSpool(outputDirectory);
+    let usage: Record<string, unknown> | null = null;
     const decoder                                             = new StringDecoder("utf8")  ;
     const chunks      : Record<"stdout" | "stderr", Buffer[]> = { stdout: [], stderr: [] } ;
     const captured                                            = { stdout: 0, stderr: 0 }   ;
@@ -116,7 +120,7 @@ export async function waitForCodex(child: ChildProcessWithoutNullStreams, { capt
     let line                                                  = ""                         ;
     let discarding                                            = false                      ;
 
-    function observe(text: string): void {
+    function observe(text: string, summaryTruncated = false): void {
       if (!text.trim()) return;
       let event: unknown;
       try { event = JSON.parse(text); }
@@ -126,17 +130,20 @@ export async function waitForCodex(child: ChildProcessWithoutNullStreams, { capt
         return;
       }
       if (event.type === "thread.started" && "thread_id" in event && typeof event.thread_id === "string") threadId = event.thread_id;
-      if (event.type === "turn.started") turnCompleted = false;
-      if (event.type === "turn.completed") turnCompleted = true;
+      if (event.type === "turn.started") { turnCompleted = false; usage = null; }
+      if (event.type === "turn.completed") {
+        turnCompleted = true;
+        if ("usage" in event && event.usage !== null && typeof event.usage === "object" && !Array.isArray(event.usage)) usage = { ...event.usage };
+      }
       if (event.type === "turn.failed" || event.type === "error") hostError = true;
       const bytes = Buffer.byteLength(text);
       if (eventBytes + bytes <= LIMIT && events.length < 1_000) {
-        events.push({ ...event });
+        events.push({ ...event, ...(summaryTruncated ? { summaryTruncated: true } : {}) });
         eventBytes += bytes;
       } else outputTruncated = true;
     }
 
-    function parse(text: string, final = false): void {
+    function legacyParse(text: string, final = false): void {
       const parts = text.split("\n");
       for (let index = 0; index < parts.length; index += 1) {
         if (!discarding) {
@@ -157,8 +164,76 @@ export async function waitForCodex(child: ChildProcessWithoutNullStreams, { capt
       if (final && !discarding) { observe(line); line = ""; }
     }
 
+    // JSON 문자열 본문만 축약한다. 나머지 구문과 escape는 검증하므로 큰 오류 사건도 숨기지 않는다.
+    let inString = false;
+    let escaped = false;
+    let unicodeRemaining = 0;
+    let token = "";
+    let tokenLength = 0;
+    let shortened = false;
+    let lineShortened = false;
+    let shortenedKey = false;
+    function parse(text: string, final = false): void {
+      if (outputDirectory === undefined) { legacyParse(text, final); return; }
+      for (const character of text) {
+        if (character === "\n" && !inString) {
+          if (!discarding) observe(line, lineShortened);
+          line = "";
+          discarding = false;
+          lineShortened = false;
+          shortenedKey = false;
+          continue;
+        }
+        if (inString) {
+          if (!escaped && unicodeRemaining === 0 && character === '"') {
+            inString = false;
+            if (!discarding) line += shortened ? `${token} [본문 요약 제한]"` : `${token}"`;
+            lineShortened ||= shortened;
+            shortenedKey = shortened;
+            continue;
+          }
+          const unitStart = !escaped && unicodeRemaining === 0;
+          if (unitStart) shortened ||= tokenLength >= 4096;
+          if (unicodeRemaining > 0) {
+            if (!/[0-9a-fA-F]/.test(character)) protocolError ??= "Codex JSON 문자열 unicode escape가 올바르지 않습니다.";
+            unicodeRemaining -= 1;
+          } else if (escaped) {
+            if (!/^["\\/bfnrtu]$/.test(character)) protocolError ??= "Codex JSON 문자열 escape가 올바르지 않습니다.";
+            if (character === "u") unicodeRemaining = 4;
+            escaped = false;
+          } else if (character === "\\") escaped = true;
+          else if (character.charCodeAt(0) < 32) protocolError ??= "Codex JSON 문자열에 제어 문자가 있습니다.";
+          if (!shortened) token += character;
+          tokenLength += 1;
+        } else {
+          if (shortenedKey && character.trim()) {
+            if (character === ":") protocolError ??= "Codex JSON key가 요약 한도를 넘었습니다.";
+            shortenedKey = false;
+          }
+          if (character === '"') {
+            inString = true;
+            token = '"';
+            tokenLength = 0;
+            shortened = false;
+          } else if (!discarding) line += character;
+        }
+        if (line.length > LIMIT) {
+          protocolError ??= "Codex JSON 구조가 메모리 요약 한도를 넘었습니다.";
+          discarding = true;
+          line = "";
+        }
+        if (shortened || lineShortened) outputTruncated = true;
+      }
+      if (final) {
+        if (inString) protocolError ??= "Codex JSON 문자열이 완성되지 않았습니다.";
+        else if (!discarding) observe(line, lineShortened);
+        line = "";
+      }
+    }
+
     function capture(name: "stdout" | "stderr", value: Buffer): void {
       const buffer = Buffer.from(value);
+      spool.write(name, buffer);
       if (captured[name] + buffer.length > LIMIT) outputTruncated = true;
       const sample = buffer.subarray(0, Math.max(0, LIMIT - captured[name]));
       if (captureOutput && sample.length) chunks[name].push(sample);
@@ -170,8 +245,9 @@ export async function waitForCodex(child: ChildProcessWithoutNullStreams, { capt
     child.once("error", (error) => { spawnError = error; });
     child.once("close", (code, signal) => {
       parse(decoder.end(), true);
+      spool.close();
       const inputError = inputErrors.get(child);
-      const outcome = spawnError ? "spawn_error"
+      const outcome = spool.error ? "spool_error" : spawnError ? "spawn_error"
         : signal ? "signal"
         : code !== 0 ? "nonzero"
         : inputError ? "stdin_error"
@@ -179,13 +255,16 @@ export async function waitForCodex(child: ChildProcessWithoutNullStreams, { capt
         : hostError ? "host_error"
         : !threadId || !turnCompleted ? "incomplete"
         : "passed";
-      const error = spawnError?.message
+      const error = spool.error ?? spawnError?.message
         ?? (inputError ? `Codex 입력 전달 실패: ${inputError}`
           : protocolError
             ?? (hostError ? "Codex 실행이 오류 사건을 반환했습니다."
               : outcome === "incomplete" ? "Codex 스레드 시작과 턴 완료 사건을 확인하지 못했습니다."
               : null));
       resolve({
+        ...spool.result(),
+        summaryTruncated: outputTruncated,
+        usage,
         ok               : outcome === "passed"                                                               ,
         code                                                                                                  ,
         signal                                                                                                ,
@@ -206,5 +285,5 @@ export async function waitForCodex(child: ChildProcessWithoutNullStreams, { capt
 }
 
 export async function runCodex(invocation: ProcessInvocation, options: ProcessOptions = {}): Promise<CodexResult> {
-  return waitForCodex(spawnCodex(invocation, options), { captureOutput: options.captureOutput === true });
+  return waitForCodex(spawnCodex(invocation, options), { captureOutput: options.captureOutput === true, outputDirectory: options.outputDirectory });
 }

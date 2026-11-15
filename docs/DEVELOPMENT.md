@@ -137,6 +137,10 @@ node scripts/workflow/work.ts '{"action":"read","workId":"work-d5528c42-2849-48b
 
 장기 제품 방향은 별도 브라우저 UI가 아닌 하나의 WWW 데스크톱 앱에서 shared React view와 로컬 Codex 실행·승인을 제공하고, 이후 GitHub의 코드·구조화 기록을 Mac mini가 지정 브랜치별로 검증·색인해 Roadmap/Node/Canvas API 보기를 제공하는 것이다. 서버 통합은 없으며 현재 로컬 저장은 Native 대화 원장과 WWW의 프로젝트·리소스 메타데이터로 구분한다. 정식 데스크톱 기반은 위 결정에 따라 Electron과 TypeScript다. push 성공과 서버의 commit 색인은 별개이며 원격 실행·소스 동기화는 범위 밖이다.
 
+무인자 `node scripts/check-environment.ts` 또는 `npm run check:environment`는 현재 저장소의 실행파일/PATH·HEAD·Git 전체 이력/index·로컬 설정·안전한 출력과 기존 소스 정책을 읽기 전용 검사한다. `npm run check` 맨 앞에서 항상 실행하므로 루트의 새 JavaScript 설치 오염을 고비용 검사 전에 차단한다. JSON을 명시하면 기존 개별 환경 진단 계약을 사용한다.
+
+공식 verify intent는 `environment`를 명시한 요청의 Git/toolPaths·실행파일을 실제 verifier 시작 전에 검사한다. 실패 시 verifier를 시작하지 않으며 선언이 없는 일반 비Git 검증은 기존 계약을 유지한다. top-level `env` override는 모델용이며 기존 verifier는 부모 `process.env`를 사용하므로 verify 진단도 같은 실제 환경을 검사한다. source-policy 기존 오류를 작성 context에 전달하는 build 정책은 변경하지 않는다.
+
 ## 샌드박스 한계
 
 스레드는 `sandbox: workspace-write`, `approvalPolicy: on-request`로 시작한다. 이는 선택한 작업 폴더 쓰기를 허용하는 Codex 정책 설정이지 “폴더 밖의 모든 작업은 반드시 질문한다”는 보장이 아니다. 실제 제한과 승인 발생 여부는 Codex 버전, 플랫폼 샌드박스, 구성, 명령 종류와 서버 정책에 좌우된다. UI는 관찰한 요청만 표시하며 보안 경계가 아니다.
