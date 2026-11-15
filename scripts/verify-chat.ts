@@ -17,6 +17,8 @@ const checks  : string[] = []                                                   
 const metrics : Data[]   = []                                                                      ;
 const pause              = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)) ;
 
+const reviewOutput = '{"id":"review-readable","provider":"anthropic","model":"opus","verdict":"not_run","readOnly":true,"execution":{"exitCode":1,"error":null},"large":9007199254740993,"path":"' + 'long-path/'.repeat(70) + '","findings":[]}\n';
+
 async function seedHistory() {
   const output    = Array.from({ length: 11 }, (_, index) => `    명령 출력 ${index + 1}`).join("\n")                                                                                                      ;
   const wideTable = "| " + Array.from({ length: 24 }, (_, index) => `열 ${index + 1}`).join(" | ") + " |\n| " + Array(24).fill("---").join(" | ") + " |\n| " + Array(24).fill("값").join(" | ") + " |\n\n" ;
@@ -47,6 +49,10 @@ async function seedHistory() {
       {
         id: "auto-transition-command", type: "commandExecution", command: "printf auto-transition", cwd: workspace,
         status: "completed", exitCode: 0, aggregatedOutput: "자동 상태 전환 확인"
+      },
+      {
+        id: "review-readable", type: "commandExecution", command: "node --input-type=module -e '" + "console.log(review);".repeat(30) + "'", cwd: workspace,
+        status: "completed", exitCode: 0, aggregatedOutput: reviewOutput
       },
       {
         id: "saved-answer", type: "agentMessage",
@@ -224,7 +230,9 @@ async function start(round: number, selectedWorkspace = workspace) {
   } catch (error) { await terminate(); throw error; }
 }
 
+// AppEvent를 주입하지 않고 실제 버튼·preload IPC·fixture stdio로만 경계를 만든다.
 let session: Awaited<ReturnType<typeof start>> | null = null;
+async function verifyChat() {
 try {
   await seedHistory();
   session = await start(1);
@@ -250,6 +258,36 @@ try {
   await session.wait("document.querySelector('.command-card.item-completed details')?.open===true", "보관된 전체 출력 펼치기");
   await session.click('.command-card.item-completed summary');
   await session.wait("document.querySelector('.command-card.item-completed details')?.open===false && document.querySelector('[data-testid=\"command-preview\"]')?.getBoundingClientRect().height>0", "출력을 접어도 미리보기 유지");
+  const reviewCard = '.command-card:has(.command-review)';
+  const cardSession = session;
+  const activateByKey = async (selector: string, label: string, space = false) => {
+    await cardSession.evaluate(`document.querySelector(${JSON.stringify(selector)}).focus()`);
+    await cardSession.wait(`document.activeElement===document.querySelector(${JSON.stringify(selector)})`, label + ' 포커스');
+    const key = space ? ' ' : 'Enter';
+    const code = space ? 'Space' : 'Enter';
+    const text = space ? ' ' : '\r';
+    const keyCode = space ? 32 : 13;
+    await cardSession.command('Input.dispatchKeyEvent', { type: 'keyDown', key, code, text, unmodifiedText: text, windowsVirtualKeyCode: keyCode, nativeVirtualKeyCode: keyCode });
+    await cardSession.command('Input.dispatchKeyEvent', { type: 'keyUp', key, code, windowsVirtualKeyCode: keyCode, nativeVirtualKeyCode: keyCode });
+  };
+
+  await session.wait(`(() => { const c=document.querySelector('${reviewCard}'); return c?.innerText.includes('실행 종료') && c.innerText.includes('종료 코드 0') && c.innerText.includes('미실행') && c.innerText.includes('보고값') && c.querySelector('[data-testid="command-preview"]').textContent.includes('\\n  "id": "review-readable"'); })()`, "종료 코드 0과 검토 미실행 분리·JSON 2칸 정렬");
+  await session.wait(`(() => { const c=document.querySelector('${reviewCard}'); const key=c.querySelector('.syntax-key'); const string=c.querySelector('pre .syntax-string'); const number=c.querySelector('pre .syntax-number'); const literal=c.querySelector('pre .syntax-literal'); return [key,string,number,literal].every(Boolean) && new Set([key,string,number,literal].map(n=>getComputedStyle(n).color)).size===4 && c.querySelector('.cmdline .syntax-option') && c.querySelector('.cmdline').scrollWidth>c.querySelector('.cmdline').clientWidth; })()`, "실제 JSON 4종 색상·셸 옵션 강조·명령 내부 가로 스크롤");
+  await activateByKey(reviewCard + ' summary', '출력 펼침 Enter');
+  await session.wait(`document.querySelector('${reviewCard} details pre').textContent.includes('9007199254740993') && document.querySelector('${reviewCard} details pre').scrollWidth>document.querySelector('${reviewCard} details pre').clientWidth`, "정렬된 전체 출력의 큰 정수 보존·긴 줄 내부 스크롤");
+  await session.evaluate(`document.querySelector('${reviewCard}').scrollIntoView({block:'start'})`);
+  await session.screenshot('command-json-formatted');
+  await session.evaluate(`document.querySelector('${reviewCard} button[aria-pressed]').focus()`);
+  await session.wait(`document.activeElement===document.querySelector('${reviewCard} button[aria-pressed]')`, "원문 전환 버튼 키보드 포커스");
+  await session.command("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", text: "\r", unmodifiedText: "\r", windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
+  await session.command("Input.dispatchKeyEvent", { type: "keyUp", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
+  await session.wait(`document.querySelector('${reviewCard} button[aria-pressed]').getAttribute('aria-pressed')==='true' && document.querySelector('${reviewCard} details pre').textContent===` + JSON.stringify(reviewOutput), "키보드 원문 전환과 종료 개행까지 원본 일치");
+  await activateByKey(reviewCard + ' .command-output-tools button:last-of-type', '원문 복사 Enter');
+  await session.wait(`document.querySelector('${reviewCard} [role="status"]').textContent==='원문 복사됨'`, "원문 클립보드 쓰기 성공 안내");
+  await session.wait("navigator.clipboard.readText().then(text=>text===" + JSON.stringify(reviewOutput) + ")", "실제 클립보드 원문 완전 일치");
+  await session.click(reviewCard + ' button[aria-pressed]');
+  await activateByKey(reviewCard + ' summary', '출력 접기 Space', true);
+  await session.wait(`document.querySelector('${reviewCard} details').open===false && document.querySelector('${reviewCard} [data-testid="command-preview"]').getBoundingClientRect().height>0`, 'Space로 출력 한 번 접기·미리보기 유지');
   await session.evaluate("(() => { const transcript=document.querySelector('.transcript'); transcript.scrollTop=transcript.scrollHeight; transcript.dispatchEvent(new Event('scroll')); })()");
   await session.wait("(() => { const t=document.querySelector('.transcript'); const last=document.querySelector('.agent .chat-markdown>:last-child'); const input=document.querySelector('.compose'); return last.textContent.includes('마지막 문장 접근 확인') && last.getBoundingClientRect().bottom<=t.getBoundingClientRect().bottom+1 && t.getBoundingClientRect().bottom<=input.getBoundingClientRect().top+1; })()", "긴 답변 마지막 문장과 입력창 분리");
   await session.measureLayout("기준선 DOM 치수");
@@ -261,7 +299,16 @@ try {
     if (object(measurement.viewport).width !== width || object(measurement.viewport).height !== height || !Array.isArray(measurement.failures) || measurement.failures.length) throw Error("창 치수 검증 실패: " + JSON.stringify(measurement));
     checks.push(`창 ${width}x${height} 전체 넘침·프레임 가시 범위·본문 세로 이동·코드/긴 표 가로 이동`);
     await session.wait("(() => { const t=document.querySelector('.transcript'); const input=document.querySelector('.compose'); return t.clientHeight>0 && t.getBoundingClientRect().bottom<=input.getBoundingClientRect().top+1 && input.getBoundingClientRect().bottom<window.innerHeight && document.documentElement.scrollWidth<=window.innerWidth; })()", `창 폭 ${width}에서 본문·입력 접근`);
+    await session.wait(`(() => { const c=document.querySelector('${reviewCard}'); const t=document.querySelector('.transcript'); return c.getBoundingClientRect().width<=t.clientWidth && c.querySelector('.cmdline').scrollWidth>c.querySelector('.cmdline').clientWidth && document.documentElement.scrollWidth<=innerWidth; })()`, `창 ${width} 명령 카드 가로 넘침 격리`);
     await session.screenshot(height === 900 ? `chat-width-${width}` : `chat-viewport-${width}x${height}`);
+  }
+  if (process.argv.includes('--command-cards')) {
+    await session.terminate();
+    session = null;
+    const summary = { ok: true, scope: 'command-cards', evidence: directory, fixture: '합성 Native 이력의 명령 카드·원문·클립보드·폭별 레이아웃만 검사. 실제 모델·후속 재연결·Windows·OS IME는 미검증.', checks, metrics };
+    await fs.writeFile(path.join(directory, 'summary.json'), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify(summary));
+    return;
   }
   const sidebarToggle = '[data-testid="resource-sidebar-toggle"]';
   const detailToggle = '[data-testid="detail-monitor-toggle"]';
@@ -562,3 +609,7 @@ try {
   console.error(String(error) + "\n증거: " + directory);
   process.exitCode = 1;
 }
+
+}
+
+await verifyChat();

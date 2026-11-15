@@ -254,6 +254,8 @@ Chat은 Ovis revision d505c75e26c54f31573057d1e9aa431ecc56677f의 행 상태·�
 
 집중 검사는 bun test test/chat-state.test.ts test/conversations.test.ts test/projection.test.ts test/input.test.ts다. Native thread/list/read/resume/turns/list 필드는 설치된 codex app-server generate-json-schema 결과와 대조한다. 새 프로토콜이 없으면 응답을 꾸며 완전 복원으로 표시하지 않는다.
 
+`node scripts/verify-chat.ts --command-cards`는 같은 Electron 하네스에서 명령 카드·원문 전환·클립보드·폭별 레이아웃까지 실행하고 scope를 명시한 summary.json을 남긴다. 기본 실행의 후속 재연결·승인·프로젝트 시나리오는 생략하지 않고 그대로 유지하며, 제한 실행의 통과로 그 후반부를 검증했다고 쓰지 않는다.
+
 node scripts/verify-chat.ts는 빌드된 실제 Electron을 고립 profile과 cwd에서 실행하고 외부 CDP로 저장 대화·Markdown·코드복사·인용·대화별 상태·동일 thread 후속 요청·승인·중단·앱 재시작을 조작한다. 서버는 test/fixtures/chat-ui-app-server.ts의 합성 stdio subprocess다. 성공·실패 원문과 화면은 .www/evidence/chat-ui-*에 저장하며 실제 모델·Windows·IME 실기로 확대하지 않는다. 실행 전에 npm run build를 수행하고 검사 중 다른 빌드로 dist를 바꾸지 않는다.
 
 ## Chat 표시 변경의 확인

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "525092e6a9aa7bed91260cf12d90ebbac82a4904327ebecd28fe5475d57dc94d",
+  "digest"       : "cff90f4f4f1604ed178aedbcff39d39f9ec847d2d2efdb7ce345570ddee49a90",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -400,8 +400,8 @@
       "layer"      : "presentation",
       "role"       : "앱 모듈 · command-card",
       "line"       : 1,
-      "lines"      : 46,
-      "digest"     : "3ee3942204a9fbd633d6fb6766e6d0d3576a1cfd0259f144a23cb1549f877fac",
+      "lines"      : 70,
+      "digest"     : "8f9418d921d481ed5313061f30c905da5b3226db77b9b42349dc8a91e6b507c5",
       "structureId": "arch.chat.messages.execution"
     },
     {
@@ -411,8 +411,8 @@
       "layer"      : "host",
       "role"       : "앱 모듈 · command-preview",
       "line"       : 1,
-      "lines"      : 14,
-      "digest"     : "3db5dccde5a183a17e9537204be93fc28ca5097314de16ad401bd2f02fa24856",
+      "lines"      : 69,
+      "digest"     : "4821e105a0d9d41b260c551eb0423e6b2174b72911fafe017229979fcf0f7ba2",
       "structureId": "arch.chat.messages.preview"
     },
     {
@@ -1408,7 +1408,7 @@
       "statement": "import type { AppEvent } from \"./shared\";"
     },
     {
-      "id"       : "src/command-card.tsx:143",
+      "id"       : "src/command-card.tsx:152",
       "from"     : "src/command-card.tsx",
       "to"       : "src/chat-row-state.tsx",
       "mode"     : "runtime",
@@ -1419,18 +1419,18 @@
       "statement": "import { useChatRowToggle } from \"./chat-row-state\";"
     },
     {
-      "id"       : "src/command-card.tsx:196",
+      "id"       : "src/command-card.tsx:205",
       "from"     : "src/command-card.tsx",
       "to"       : "src/command-preview.ts",
-      "mode"     : "runtime",
+      "mode"     : "mixed",
       "syntax"   : "import",
       "specifier": "./command-preview",
       "line"     : 7,
       "endLine"  : 7,
-      "statement": "import { commandPreview } from \"./command-preview\";"
+      "statement": "import { commandOutput, commandPreview, jsonTokens, shellTokens, type SyntaxToken } from \"./command-preview\";"
     },
     {
-      "id"       : "src/command-card.tsx:248",
+      "id"       : "src/command-card.tsx:315",
       "from"     : "src/command-card.tsx",
       "to"       : "src/projection.ts",
       "mode"     : "mixed",
@@ -4665,6 +4665,6 @@
         "line": 2
       }
     ],
-    "digest": "a47e3e0c6ba7cc67f466ac5874d2c3c2780e5c43fab874256c2a161e4d2e06e3"
+    "digest": "048a803ff8a1a38ac5ce5fc5a047513a92d2340002ad56f934f811ef4a18f7b2"
   }
 }

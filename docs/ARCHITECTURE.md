@@ -172,7 +172,7 @@ renderer는 thread/cwd별 초안·읽기 위치·따라가기와 logical row 상
 
 ## Chat 표시 컴포넌트와 디자인 역할
 
-`src/command-card.tsx`는 투영의 명령 상태와 관측 시각을 읽고 펼침을 기존 대화별 행 메모리에 보존한다. `src/command-preview.ts`가 논리 줄 미리보기 경계를 소유하며 원본 보관 한도는 `projection.ts`가 계속 소유한다. `renderer.tsx`는 모니터 접힘과 본문 크기 변경 시 따라가기를 연결한다. `native-activity.ts`는 최신 작업과 과거 선택을 위한 사건 투영·연결·마지막 활동을 제공하고 뷰는 공개 과정과 실시간 상태를 구분한다.
+`src/command-card.tsx`는 투영의 명령 상태와 관측 시각을 읽고 펼침을 기존 대화별 행 메모리에 보존한다. `src/command-preview.ts`가 논리 줄 미리보기 경계, 원문 토큰을 보존하는 제한된 JSON 표시 정렬·구문 토큰·검토 출력 보고값 식별을 소유하며 원본 보관 한도는 `projection.ts`가 계속 소유한다. 카드의 원문 전환·복사는 수신 문자열을 사용하고 JSON 표시는 저장·투영 상태를 변경하지 않는다. `renderer.tsx`는 모니터 접힘과 본문 크기 변경 시 따라가기를 연결한다. `native-activity.ts`는 최신 작업과 과거 선택을 위한 사건 투영·연결·마지막 활동을 제공하고 뷰는 공개 과정과 실시간 상태를 구분한다.
 
 [WWW 디자인 역할](../agents/www-design/AGENT.md)은 디자인 산출물·상태 규칙·개발 인계를 맡는 계약이다. 기존 `www-design` 단계 스킬과 다른 역할이며 파일 존재만으로 호스트 자동 등록을 뜻하지 않는다. 제품 Native의 모델·권한을 변경하지 않는다. 토큰과 컴포넌트 규칙은 [디자인 시스템](design-system.md)에 기록한다.
 
