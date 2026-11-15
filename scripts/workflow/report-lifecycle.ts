@@ -3,7 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { assessWork, completeWork, readWork, type WorkAssessment, type WorkOptions } from "./work.ts";
 import { withWorkLock } from "./lock.ts";
-import { captureWorkReport, listWorkReports, parseReportReader, publishWorkReport, readWorkReport, type ReportNarrative } from "./reports.ts";
+import { captureWorkReport, listWorkReports, parseReportReader, publishWorkReport, readWorkReport, WORK_RECORD_JSON_LIMIT, type ReportNarrative } from "./reports.ts";
 
 type JsonObject = Record<string, unknown>;
 export type ReportHookResult = {
@@ -127,7 +127,7 @@ async function requestWorkId(repo: string, requestId: unknown): Promise<string |
       const file = path.join(areaPath, entry.name, "work.json");
       try {
         const stat = await fs.lstat(file);
-        if (!stat.isFile() || stat.isSymbolicLink() || stat.size > 1_048_576) continue;
+        if (!stat.isFile() || stat.isSymbolicLink() || stat.size > WORK_RECORD_JSON_LIMIT) continue;
         const value: unknown = JSON.parse(await fs.readFile(file, "utf8"));
         if (object(value) && typeof value.id === "string" && object(value.workflow) && value.workflow.requestId === requestId) matches.push(value.id);
       } catch { /* 실패한 레코드를 다른 작업의 근거로 사용하지 않는다. */ }

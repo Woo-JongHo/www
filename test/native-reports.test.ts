@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import assert from "node:assert/strict";
 import { promises as fs, readdirSync, symlinkSync } from "node:fs";
 import os from "node:os";
@@ -131,6 +132,12 @@ test("작업 등록 후 저장 실패를 retry하면 같은 작업 UUID를 재�
   assert.match(failed.reason, /보고서 또는 작업 상태 저장에 실패/);
   assert.ok(injection);
   await fs.unlink(injection ?? "");
+  const folder   = (await fs.readdir(path.join(repo, "docs/work/Native")))[0] ;
+  const workFile = path.join(repo, "docs/work/Native", folder, "work.json")   ;
+  // 합성 fixture의 기존 유효 원장만 공백으로 키워 재등록 경계와 원문 보존을 검사한다.
+  await fs.appendFile(workFile, " ".repeat(1_048_576));
+  const original = await fs.readFile(workFile);
+  assert.ok(original.byteLength > 1_048_576 && original.byteLength <= 8_388_608);
   await harness.retry(repo, queued.key);
   const saved = await waitFor(harness, repo, queued.key, "saved");
   assert.equal(saved.workId, failed.workId);
@@ -138,6 +145,24 @@ test("작업 등록 후 저장 실패를 retry하면 같은 작업 UUID를 재�
   assert.equal((await fs.readdir(path.join(repo, "docs/work/Native"))).length, 1);
   assert.equal((await listWorkReports({ repo })).reports.length, 1);
   assert.deepEqual(await fs.readdir(outside), []);
+  const report = await readWorkReport({ repo, reportId: saved.reportId ?? "" });
+  assert.equal(report.report.workRecordHash, createHash("sha256").update(original).digest("hex"));
+  assert.deepEqual(await fs.readFile(workFile), original);
+  const reportDirectory = path.join(path.dirname(workFile), "reports")                                                ;
+  const reportFiles     = await fs.readdir(reportDirectory)                                                           ;
+  const reportBytes     = await Promise.all(reportFiles.map((file) => fs.readFile(path.join(reportDirectory, file)))) ;
+  await fs.appendFile(workFile, " ".repeat(8_388_609 - original.byteLength));
+  const oversized = await fs.readFile(workFile);
+  assert.equal(oversized.byteLength, 8_388_609);
+  const rejected = await harness.enqueue({ repository: repo, input: input("oversized-turn") }) ;
+  const boundary = await waitFor(harness, repo, rejected.key, "failed")                        ;
+  assert.match(boundary.reason, /보고서 또는 작업 상태 저장에 실패/);
+  assert.equal(boundary.workId, undefined);
+  assert.equal(boundary.reportId, null);
+  assert.equal((await fs.readdir(path.join(repo, "docs/work/Native"))).length, 1);
+  assert.deepEqual(await fs.readFile(workFile), oversized);
+  assert.deepEqual(await fs.readdir(reportDirectory), reportFiles);
+  assert.deepEqual(await Promise.all(reportFiles.map((file) => fs.readFile(path.join(reportDirectory, file)))), reportBytes);
 });
 
 test("재시작에서 남은 judging은 interrupted이며 원문 없이 자동 복구하지 않는다", async (t) => {

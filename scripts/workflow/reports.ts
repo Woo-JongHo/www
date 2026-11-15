@@ -200,6 +200,7 @@ const REPORT_ID  = /^report-[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a
 const HASH       = /^[a-f0-9]{64}$/                                                                   ;
 const JSON_LIMIT = 1_048_576                                                                          ;
 const HTML_LIMIT = 2_097_152                                                                          ;
+export const WORK_RECORD_JSON_LIMIT = 8_388_608;
 
 const LABELS: Record<ReportOutcome, string> = {
   completed   : "작업 완료"                  ,
@@ -291,12 +292,12 @@ async function inside(root: string, file: string, missing = false): Promise<stri
   return target;
 }
 
-async function readJson(root: string, file: string): Promise<{ source: string; value: unknown }> {
+async function readJson(root: string, file: string, limit = JSON_LIMIT): Promise<{ source: string; value: unknown }> {
   const target = await inside(root, file)                                                ;
   const handle = await fs.open(target, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0)) ;
   try {
     const stat = await handle.stat();
-    if (!stat.isFile() || stat.size > JSON_LIMIT) throw new Error("보고서 입력은 1 MiB 이하의 일반 JSON 파일이어야 합니다.");
+    if (!stat.isFile() || stat.size > limit) throw new Error(limit === WORK_RECORD_JSON_LIMIT ? "작업 원장 입력은 8 MiB 이하의 일반 JSON 파일이어야 합니다." : "보고서 입력은 1 MiB 이하의 일반 JSON 파일이어야 합니다.");
     const source = await handle.readFile("utf8");
     return { source, value: JSON.parse(source) };
   } finally { await handle.close(); }
@@ -320,7 +321,7 @@ async function workLocations(repo?: string): Promise<{ root: string; works: Work
       if (entry.isDirectory() && entry.name !== "reports") await visit(candidate, depth + 1);
       if (entry.isFile() && entry.name === "work.json") {
         try {
-          const { source, value } = await readJson(root, candidate);
+          const { source, value } = await readJson(root, candidate, WORK_RECORD_JSON_LIMIT);
           const record = workValue(value);
           assertWorkId(record.id);
           works.push({ path: candidate, record, source });

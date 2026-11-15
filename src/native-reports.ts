@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { constants, promises as fs } from "node:fs";
 import path from "node:path";
 import { withWorkLock } from "../scripts/workflow/lock.ts";
-import { parseReportReader, publishWorkReport } from "../scripts/workflow/reports.ts";
+import { parseReportReader, publishWorkReport, WORK_RECORD_JSON_LIMIT } from "../scripts/workflow/reports.ts";
 import type { NativeReportDecision, NativeReportInput } from "./report-judge";
 
 export interface NativeReportJob {
@@ -278,7 +278,7 @@ async function registerWork(entry: Entry, decision: NativeReportDecision): Promi
       try {
         await safePath(root, workFile);
         const stat = await fs.stat(workFile);
-        if (!stat.isFile() || stat.size > 1_048_576) throw new Error("Native 작업 기록 파일 크기가 제한을 초과했습니다.");
+        if (!stat.isFile() || stat.size > WORK_RECORD_JSON_LIMIT) throw new Error("Native 작업 기록 파일 크기가 제한을 초과했습니다.");
         const value: unknown = JSON.parse(await fs.readFile(workFile, "utf8"));
         if (object(value) && object(value.native) && value.native.key === entry.job.key) {
           if (value.native.threadId !== entry.input.threadId || value.native.turnId !== entry.input.turnId) throw new Error("Native 작업의 원래 턴이 일치하지 않습니다.");

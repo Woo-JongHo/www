@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "digest": "75b4b4dfda90ad1d33e6d6c410aee2a6cf9902d451746685e99022cbdb1b179f",
+  "digest": "faf0b77d563f7edb4fa07f43230c2c829a3d58ac194e9197859ac69e958f7391",
   "scope": "src/**/*.ts(x), scripts/workflow/**/*.ts, workflow.ts, source-policy.ts, generate-architecture.ts, build.ts",
   "layers": [
     {
@@ -179,7 +179,7 @@
       "role": "개발 절차 모듈 · report-lifecycle",
       "line": 1,
       "lines": 170,
-      "digest": "b129a206c50ba959c24ae02ac42023731372962d6badb90e0ccfd840274be57d"
+      "digest": "8ddf887199341aa2a32c31be2d593771a97bcccb2956e9cbd367856702027147"
     },
     {
       "id": "scripts/workflow/report-view.ts",
@@ -198,8 +198,8 @@
       "layer": "workflow",
       "role": "개발 절차 모듈 · reports",
       "line": 1,
-      "lines": 623,
-      "digest": "bf157ec33d19072430d05fc3cf8e2ce898ded55508221477b3c22435935dea24"
+      "lines": 624,
+      "digest": "70dc54949690565d6d71bd58ad24e05f068ec26d362c3d8bc3746e7a02f13cec"
     },
     {
       "id": "scripts/workflow/review.ts",
@@ -449,7 +449,7 @@
       "role": "자동 보고서 큐와 수명주기",
       "line": 1,
       "lines": 505,
-      "digest": "6df0f91f85bd5e1a28175df0d63780f5cf85ab41a9c3c2df1da680d3040e40ba"
+      "digest": "613d0802bac3e6ea97b0df1bd0eb8ba3659688037c1606ddf879ca1fb37bb35d"
     },
     {
       "id": "src/preload.ts",
@@ -739,7 +739,7 @@
       "specifier": "./reports.ts",
       "line": 6,
       "endLine": 6,
-      "statement": "import { captureWorkReport, listWorkReports, parseReportReader, publishWorkReport, readWorkReport, type ReportNarrative } from \"./reports.ts\";"
+      "statement": "import { captureWorkReport, listWorkReports, parseReportReader, publishWorkReport, readWorkReport, WORK_RECORD_JSON_LIMIT, type ReportNarrative } from \"./reports.ts\";"
     },
     {
       "id": "scripts/workflow/report-view.ts:0",
@@ -1542,10 +1542,10 @@
       "specifier": "../scripts/workflow/reports.ts",
       "line": 5,
       "endLine": 5,
-      "statement": "import { parseReportReader, publishWorkReport } from \"../scripts/workflow/reports.ts\";"
+      "statement": "import { parseReportReader, publishWorkReport, WORK_RECORD_JSON_LIMIT } from \"../scripts/workflow/reports.ts\";"
     },
     {
-      "id": "src/native-reports.ts:284",
+      "id": "src/native-reports.ts:308",
       "from": "src/native-reports.ts",
       "to": "src/report-judge.ts",
       "mode": "type",
