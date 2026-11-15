@@ -61,6 +61,8 @@ BoxBox는 제품 의존성이 아니라 작성 시 가독성 검사 도구다. �
 
 TypeScript·Python·strict JSON·YAML 작성은 파일별 `guide --file <파일> --authoring --json`과 `check --source --file <파일> --json`을 먼저 실행해 `columnSets`·`axisNotes`의 역할 행·열과 구문 경계를 읽고, 수정 후 같은 source check를 실행한다. 하네스는 코드 대상 `writes`의 `.ts`·`.tsx`·`.mts`·`.cts` 파일에 guide와 사전 검사 결과를 호스트 context로 전달한다. 사후 검사에서 `misaligned`, `REFUSE`, invalid 또는 errors가 나오면 하네스 결과는 실패이고 CLI는 exit 1로 끝난다. `FIXABLE`을 통과로 바꾸지 않는다.
 
+공식 설치 런처의 `mode off --json`은 현재 프로젝트의 BoxBox 작성을 임시 중지한다. typed 하네스는 사전·사후마다 같은 런처의 `mode --json`을 검증하고, project mode가 `off`이면 guide와 source check를 호출하지 않는다. 작성 context에는 `status: "disabled"`, `mode: "off"`와 빈 관측을, `harness.pre/post`에는 `boxboxStatus: "disabled"`, `boxboxMode: "off"`와 빈 `boxbox` 배열을 기록하며 BoxBox PASS로 해석하지 않는다. 소스 정책·strict 타입·지문·미선언 변경·구조 검사와 도구 출처 검증은 유지하고 로컬 설정·mode 조회 실패도 성공으로 바꾸지 않는다. 같은 런처에서 `mode check --json`으로 복원하면 다음 실행부터 guide와 강제 source check가 다시 적용된다. `align`·`refactor` mode에서도 하네스는 검사만 하며 자동 정렬하지 않는다. 전역 mode는 변경하지 않는다.
+
 `NO_GROUPS`는 검사기가 읽은 범위만 표시하며 전체 가독성 PASS 근거가 아니다. 미지원 언어는 미지원으로 보고하고 승인되지 않은 형태를 수동 공백 정렬·format·align으로 우회하지 않는다. align이나 formatter는 별도 명시 승인 없이 실행하지 않는다. 현재 승인되지 않은 BoxBox 형태는 별도 미해결 사항이며 TypeScript 전환만으로 모든 스타일 개선이 완료됐다고 쓰지 않는다. 실제 호스트가 guide·사전 검사 context를 수용했는지도 실행 근거로 확인하며 전역 자동 훅의 활성화를 주장하지 않는다.
 
 ### 제품 파일과 전송 경계

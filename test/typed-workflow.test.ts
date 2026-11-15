@@ -70,14 +70,17 @@ function fakeTools(change: () => Promise<void> = async () => {}) {
   let hosted   = false                                                                                        ;
   let calls    = 0                                                                                            ;
   let prompt   = ''                                                                                           ;
-  const faults = { invalidJSON: false, preType: false, preBoxbox: false, postType: false, postRefuse: false } ;
+  const faults = { invalidJSON: false, preType: false, preBoxbox: false, postType: false, postRefuse: false, mode: 'check' } ;
+  const commands: string[][] = [];
   async function runCommand(_command: string, args: string[], _cwd: string): Promise<CommandResult> {
+    commands.push([...args]);
     const base = { code: 0, stdout: '', stderr: '', outputTruncated: false };
     if (args.includes('--project')) {
       const failed = hosted ? faults.postType : faults.preType;
       return { ...base, code: failed ? 2 : 0, stdout: failed ? 'error TS2322: fixture의 의도한 타입 오류' : '' };
     }
     if (faults.invalidJSON) return { ...base, stdout: '{broken' };
+    if (args.includes('mode')) return { ...base, stdout: JSON.stringify({ tool: 'boxbox', command: 'mode', scope: 'project', mode: faults.mode }) };
     const file = args[args.indexOf('--file') + 1];
     if (args.includes('guide')) return { ...base, stdout: JSON.stringify({ tool: 'boxbox', command: 'guide', file, columnSets: [], ok: false }) };
     const summary = { groups: 1, misaligned: !hosted && faults.preBoxbox ? 1 : 0, refused: hosted && faults.postRefuse ? 1 : 0 };
@@ -91,8 +94,115 @@ function fakeTools(change: () => Promise<void> = async () => {}) {
     await change();
     return { ok: true, code: 0, outcome: 'passed', stdout: 'fixture', stderr: '', outputTruncated: false, threadId: 'fixture', events: [] };
   }
-  return { faults, runCommand, runHost, calls: () => calls, prompt: () => prompt };
+  return { faults, runCommand, runHost, commands, calls: () => calls, prompt: () => prompt };
 }
+
+test('project mode off는 guide와 source check를 호출하지 않고 disabled로 기록한다', async () => {
+  const repo = await fixture();
+  const tools = fakeTools();
+  tools.faults.mode = 'off';
+  tools.faults.postRefuse = true;
+  const result = await runTypedWorkflow(options(repo), tools);
+  const harness = record(result.harness);
+  assert.equal(harness.ok, true);
+  assert.equal(tools.calls(), 1);
+  assert.equal(tools.commands.filter(args => args.includes('mode')).length, 2);
+  assert.equal(tools.commands.some(args => args.includes('guide') || args.includes('check') || args.includes('--source')), false);
+  for (const phase of ['pre', 'post']) {
+    const observation = record(harness[phase]);
+    assert.equal(observation.boxboxStatus, 'disabled');
+    assert.equal(observation.boxboxMode, 'off');
+    assert.deepEqual(observation.boxbox, []);
+  }
+  const guidance = JSON.parse(tools.prompt().split('작성 하네스 관찰 데이터\n')[1]);
+  assert.deepEqual(record(guidance).boxbox, { status: 'disabled', mode: 'off', observations: [], guides: [] });
+});
+
+test('mode off여도 사후 타입·소스 정책·미선언 변경은 실패한다', async () => {
+  for (const fault of ['postType', 'source', 'undeclared'] as const) {
+    const repo = await fixture();
+    const tools = fakeTools(async () => {
+      if (fault === 'source') await put(repo, 'src/item.ts', '// @ts-ignore\nexport const value = 2;\n');
+      if (fault === 'undeclared') await put(repo, 'src/other.ts', 'export const other = 2;\n');
+    });
+    tools.faults.mode = 'off';
+    tools.faults.postType = fault === 'postType';
+    const result = await runTypedWorkflow(options(repo), tools);
+    const harness = record(result.harness);
+    assert.equal(record(result.host).ok, true);
+    assert.equal(harness.ok, false);
+    assert.equal(record(harness.post).boxboxStatus, 'disabled');
+    const expected = fault === 'postType' ? /타입 검사/ : fault === 'source' ? /타입 검사 우회 주석 금지/ : /사전 선언하지 않은 TypeScript 변경/;
+    assert.match(JSON.stringify(harness.errors), expected);
+  }
+});
+
+test('같은 도구의 project mode를 check로 복원하면 다음 실행의 REFUSE가 다시 실패한다', async () => {
+  const repo = await fixture();
+  const tools = fakeTools();
+  tools.faults.mode = 'off';
+  tools.faults.postRefuse = true;
+  const disabled = await runTypedWorkflow(options(repo), tools);
+  assert.equal(record(disabled.harness).ok, true);
+  tools.faults.mode = 'check';
+  const restored = await runTypedWorkflow(options(repo), tools);
+  const harness = record(restored.harness);
+  assert.equal(harness.ok, false);
+  assert.equal(record(harness.post).boxboxStatus, 'checked');
+  assert.equal(record(harness.post).boxboxMode, 'check');
+  assert.match(JSON.stringify(harness.errors), /BoxBox/);
+  assert.ok(tools.commands.some(args => args.includes('guide')));
+  assert.ok(tools.commands.some(args => args.includes('check') && args.includes('--source')));
+});
+
+test('잘못된 mode 응답과 조회 실패는 호스트 전에 거부한다', async () => {
+  const valid = { tool: 'boxbox', command: 'mode', scope: 'project', mode: 'off' };
+  const base = { code: 0, stdout: JSON.stringify(valid), stderr: '', outputTruncated: false };
+  const responses: CommandResult[] = [
+    { ...base, code: 1 },
+    { ...base, outputTruncated: true },
+    { ...base, stdout: '{broken' },
+    ...[null, {}, { ...valid, tool: 'other' }, { ...valid, command: 'check' }, { ...valid, scope: 'global' },
+      { ...valid, mode: 'unknown' }, { ...valid, mode: null }, { ...valid, error: 'failed' }, { ...valid, ok: false }]
+      .map(value => ({ ...base, stdout: JSON.stringify(value) })),
+  ];
+  const repo = await fixture();
+  for (const response of responses) {
+    const tools = fakeTools();
+    await assert.rejects(runTypedWorkflow(options(repo), {
+      runHost: tools.runHost,
+      runCommand: (command, args, cwd) => args.includes('mode') ? Promise.resolve(response) : tools.runCommand(command, args, cwd),
+    }));
+    assert.equal(tools.calls(), 0);
+    assert.equal(tools.commands.some(args => args.includes('guide') || args.includes('check')), false);
+  }
+});
+
+test('check·align·refactor mode는 자동 정렬 없이 기존 guide와 source check를 수행한다', async () => {
+  const repo = await fixture();
+  for (const mode of ['check', 'align', 'refactor']) {
+    const tools = fakeTools();
+    tools.faults.mode = mode;
+    const result = await runTypedWorkflow(options(repo), tools);
+    const harness = record(result.harness);
+    assert.equal(harness.ok, true);
+    assert.equal(record(harness.pre).boxboxMode, mode);
+    assert.equal(record(harness.post).boxboxStatus, 'checked');
+    assert.equal(tools.commands.filter(args => args.includes('guide')).length, 1);
+    assert.equal(tools.commands.filter(args => args.includes('check') && args.includes('--source')).length, 2);
+    assert.equal(tools.commands.some(args => args.includes('align') || args.includes('refactor')), false);
+  }
+});
+
+test('mode off도 로컬 도구 설정 오류를 성공으로 바꾸지 않는다', async () => {
+  const repo = await fixture();
+  const tools = fakeTools();
+  tools.faults.mode = 'off';
+  await rm(path.join(repo, '.www/fixture/boxbox.mjs'));
+  await assert.rejects(runTypedWorkflow(options(repo), tools), /ENOENT/);
+  assert.equal(tools.calls(), 0);
+  assert.equal(tools.commands.length, 0);
+});
 
 test('JavaScript 쓰기 계획은 확장자별로 호스트 실행 전에 거부한다', async () => {
   const repo  = await fixture() ;

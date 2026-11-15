@@ -105,8 +105,17 @@ function parseReport(result: CommandResult, file: string, guide: boolean): JsonO
 }
 
 async function boxbox(repo: string, local: LocalSettings, files: string[], before: boolean, run: NonNullable<HarnessDependencies["runCommand"]>) {
-  const observations : BoxboxObservation[] = [] ;
-  const guides       : JsonObject[]        = [] ;
+  const observations : BoxboxObservation[] = []                                                                          ;
+  const guides       : JsonObject[]        = []                                                                          ;
+  const result                             = await run(local.boxboxNode, [local.boxboxLauncher, "mode", "--json"], repo) ;
+  if (result.code !== 0 || result.outputTruncated) throw new Error("BoxBox mode 조회 실행 실패");
+  const report: unknown = JSON.parse(result.stdout);
+  if (!object(report) || report.tool !== "boxbox" || report.command !== "mode" || report.scope !== "project"
+    || report.error || report.ok === false || typeof report.mode !== "string" || !["off", "check", "align", "refactor"].includes(report.mode)) {
+    throw new Error("BoxBox mode 결과 출처·프로젝트·mode 오류");
+  }
+  const mode = report.mode;
+  if (mode === "off") return { status: "disabled", mode, observations, guides };
   for (const file of files) {
     if (before) {
       const result = await run(local.boxboxNode, [local.boxboxLauncher, "guide", "--file", file, "--authoring", "--json"], repo);
@@ -124,7 +133,7 @@ async function boxbox(repo: string, local: LocalSettings, files: string[], befor
     }
     observations.push({ file, syntax: String(report.syntax.status), groups: Number(summary.groups), misaligned: Number(summary.misaligned), refused: Number(summary.refused), digest: hash(result.stdout) });
   }
-  return { observations, guides };
+  return { status: "checked", mode, observations, guides };
 }
 
 async function typecheck(repo: string, policy: PolicyResult, run: NonNullable<HarnessDependencies["runCommand"]>): Promise<CommandResult[]> {
@@ -282,12 +291,16 @@ async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDe
       pre  : {
         source    : prePolicy ,
         typecheck : preTypes  ,
-        boxbox    : preBoxbox.observations
+        boxbox    : preBoxbox.observations,
+        boxboxStatus : preBoxbox.status,
+        boxboxMode : preBoxbox.mode
       },
       post : {
         source    : finalPolicy ,
         typecheck : postTypes   ,
-        boxbox    : postBoxbox.observations
+        boxbox    : postBoxbox.observations,
+        boxboxStatus : postBoxbox.status,
+        boxboxMode : postBoxbox.mode
       }
     }
   };
