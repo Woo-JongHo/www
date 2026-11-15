@@ -394,7 +394,7 @@ test("BoxBox 작성 안내와 승인 경로를 실제 fixture host 컨텍스트�
   try {
     const directory = join(repo, ".www", "mock-boxbox");
     await mkdir(directory, { recursive: true });
-    const launcher = join(directory, "boxbox.ts");
+    const launcher = join(directory, "boxbox.mjs");
     await writeFile(launcher, `const args = process.argv.slice(2); const file = args[args.indexOf("--file") + 1]; console.log(JSON.stringify(args[0] === "guide" ? {tool:"boxbox",command:"guide",ok:false,file,columnSets:[{kind:"object-properties",columns:["property-colon","property-value"]}]} : {tool:"boxbox",syntax:{status:"valid"},results:[{summary:{refused:1}}]}));process.exit(args[0] === "guide" ? 1 : 2);\n`);
     const result = await runWorkflow({
       repo, workId, request: "BoxBox 안내로 구현", direct: true, explicitSkill: "www-build",
@@ -415,6 +415,33 @@ test("BoxBox 작성 안내와 승인 경로를 실제 fixture host 컨텍스트�
     assert.equal(result.boxboxPre[0].approvedGuidance, false);
     assert.ok(result.boxboxPost);
     assert.equal(record(result.boxboxPost[0].findings).refused, 1);
+  } finally {
+    await rm(repo, { recursive: true, force: true });
+  }
+});
+
+test("BoxBox 런처 basename이 boxbox.ts이면 실제 host 호출 전에 거부한다", async () => {
+  const repo = await createRepository();
+  const check = verifier();
+  const marker = join(repo, "marker.json");
+  try {
+    const directory = join(repo, ".www", "mock-boxbox");
+    await mkdir(directory, { recursive: true });
+    const launcher = join(directory, "boxbox.ts");
+    await writeFile(launcher, `const args = process.argv.slice(2); const file = args[args.indexOf("--file") + 1]; console.log(JSON.stringify(args[0] === "guide" ? {tool:"boxbox",command:"guide",ok:true,file,columnSets:[]} : {tool:"boxbox",syntax:{status:"valid"},results:[]}));\n`);
+    let processCalls = 0;
+    const runner = fixtureRunner();
+    await assert.rejects(runWorkflow({
+      repo, workId, request: "BoxBox 런처 출처 검사", direct: true, explicitSkill: "www-build",
+      approval: approvalFor(check), writes: ["src/a.ts"], surfaces: ["edit"],
+      verifier: check, execute: true, eventId: "boxbox-invalid-basename", boxboxLauncher: launcher,
+      boxboxFiles: ["src/a.ts"], env: { ...process.env, WORKFLOW_MARKER: marker },
+    }, { runProcess: async (invocation, options) => {
+      processCalls += 1;
+      return runner(invocation, options);
+    } }), /BoxBox launcher는 boxbox\.mjs 정본 경로여야 합니다/);
+    assert.equal(processCalls, 0);
+    await assert.rejects(access(marker), { code: "ENOENT" });
   } finally {
     await rm(repo, { recursive: true, force: true });
   }

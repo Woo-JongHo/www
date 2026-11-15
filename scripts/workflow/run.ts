@@ -338,7 +338,7 @@ export async function prepareRun({ binding, skill: skillName, expectedSkillHash,
 async function runBoxbox({ launcher, files, phase, cwd, run, guides = [] }: { launcher?: string; files?: string[]; phase: "pre" | "post"; cwd: string; run: typeof runProcess; guides?: BoxboxGuide[] }): Promise<BoxboxObservation[]> {
   if (!launcher) return [];
   const realLauncher = await fs.realpath(launcher);
-  if (path.basename(realLauncher) !== "boxbox.ts") throw new Error("BoxBox launcher는 boxbox.mjs 정본 경로여야 합니다.");
+  if (path.basename(realLauncher) !== "boxbox.mjs") throw new Error("BoxBox launcher는 boxbox.mjs 정본 경로여야 합니다.");
   const supported                    = (files ?? []).filter((file) => BOXBOX_EXTENSIONS.has(path.extname(file))) ;
   const results: BoxboxObservation[] = []                                                                        ;
   for (const file of supported) {
