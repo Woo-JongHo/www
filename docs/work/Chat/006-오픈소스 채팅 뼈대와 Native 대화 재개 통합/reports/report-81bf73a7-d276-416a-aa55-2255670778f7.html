@@ -1,0 +1,342 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>오픈소스 채팅 뼈대와 Native 대화 재개 통합 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 15일 오후 6:49 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>오픈소스 채팅 뼈대와 Native 대화 재개 통합</h1><p class="lead">실제 Native 저장 대화 재개·후속 응답과 검사 당시 GUI는 통과했지만 연결 종료와 승인 해소 경계가 남아 검증 마감을 보류한다.</p><div id="report-story" class="story">저장 대화 재개 구현의 과거 실패와 오래된 감사가 있어 실제 현재 동작을 다시 확인해야 했다.
+
+실제 첫 응답·프로세스 종료·원장 목록 및 공개 이력 복원·동일 thread 재개·후속 응답이 공식 sourceStable 시도로 통과했다. 검사 당시 합성 Electron GUI 145항목과 strict 타입도 통과했고, 복합 오류 경계는 독립 감사 결과로 blocked를 유지한다. 이후 다른 세션의 renderer·생태계·구조 snapshot·정본 문서 변경을 관측해, 확보한 검사의 현재 전체 입력 적용성을 재검증 대기로 남겼다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 5 · 실패 4 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> Native 연결 재생성 뒤 선택 thread를 resume하는 경계를 수정하고 복구 시나리오를 검증한다.</p><p class="blocker"><strong>남은 차단 사항</strong> 최신 Opus fail로 확인한 활동/재개 경계 미해결; 다른 세션의 renderer·생태계·구조 snapshot/정본 변경으로 현재 전체 입력 적용성 재확인 필요</p><p class="state-note">저장 당시 기준 중 4개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>현재 실제 Native 재개 PASS와 현재 145항목 합성 GUI PASS를 원장에 연결했다.</li><li>sourceStable strict 타입 영수증·라이선스/명세 문서 영향 검토를 기록했다.</li><li>Codex 0.169 schema의 serverRequest/resolved 존재와 수신 처리 부재, 연결 종료 후 resume 누락을 최종 Opus 지적과 연결했다.</li></ul></div></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>실제 upstream 출처·revision·라이선스를 보존한 채팅 코드가 Native 답변·공개 설명·도구·변경·승인을 표현하고 Markdown·코드복사·인용 입력을 제공한다.</dt><dd>미검증으로 기록</dd></div><div><dt>프로젝트 대화 목록·새 대화·저장 이력 재열기·동일 Native thread 후속 요청을 지원하며 과거 이력을 현재 실행·승인으로 재생하지 않는다.</dt><dd>당시 차단으로 기록</dd></div><div><dt>대화별 초안·읽기 위치·펼침 상태를 보존하고 전송 실패·중복·중단·한국어 입력의 기존 의미를 유지한다.</dt><dd>당시 차단으로 기록</dd></div><div><dt>집중 테스트·타입·빌드와 실제 Electron 합성 경계 검증을 수행하고 기존 사이드바 변경 및 Native 실기·독립 검토 한계를 구분한다.</dt><dd>미검증으로 기록</dd></div></dl></section><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>실제 단문 재개 PASS를 보존하고, 연결 종료 후 복구·승인 해소의 별도 경계로 AC-2·3의 전체 수용을 보류한다.</li><li>이번 검증에서는 추가 제품 소스 변경을 하지 않는다.</li></ul></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 5건, 실패 4건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>실제 Native crash 후 같은 선택 thread 후속 요청은 실행하지 않았으며, resume 누락은 소스 경로 대조로 확인했다.</li><li>serverRequest/resolved의 schema 존재와 수신 분기 부재는 확인했으나 승인 대기 중 중단에서 실제 알림 발행·승인 잔류는 미실측이다.</li><li>합성 GUI의 입력 회귀는 실제 Windows나 OS 한국어 IME 실기를 대신하지 않는다.</li><li>최신 실제 Opus는 fail이며 수정·재검증 전에 done으로 바꾸지 않는다.</li><li>검사 이후 다른 세션에서 소스·정본 문서가 추가 변경됐다. 실행 당시 sourceStable PASS/FAIL은 보존하며 현재 전체 입력에 대한 증거 적용성은 status와 후속 재검증으로 확인한다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><ul><li>Native 연결 재생성 뒤 선택 thread를 resume하는 경계를 수정하고 복구 시나리오를 검증한다.</li><li>서버가 해소한 승인 요청의 수명주기를 설계·수정하고 승인 대기 중 중단을 실제/합성 경계에서 확인한다.</li><li>현재 소스에서 독립 Opus·문서·보고서를 다시 확인한 뒤 마감한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-baa0963b-ea71-48e7-a34f-0d229ba704b1<br>report-81bf73a7-d276-416a-aa55-2255670778f7</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>43776d6159c4c9f18264277dd77f0acd40b9853568b044d34d4fbcf3a5227634</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>ec58bc3ea520a603531a06970a6179d756f8e061b93a2278f52d1089ccc61f19</code></dd></div><div><dt>기준 지문</dt><dd><code>e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;최신 Opus fail로 확인한 활동/재개 경계 미해결; 다른 세션의 renderer·생태계·구조 snapshot/정본 변경으로 현재 전체 입력 적용성 재확인 필요&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;실제 upstream 출처·revision·라이선스를 보존한 채팅 코드가 Native 답변·공개 설명·도구·변경·승인을 표현하고 Markdown·코드복사·인용 입력을 제공한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;프로젝트 대화 목록·새 대화·저장 이력 재열기·동일 Native thread 후속 요청을 지원하며 과거 이력을 현재 실행·승인으로 재생하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;blocked&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-14994d5d-6e05-43fe-a15b-bd8df5824e8b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-756411e7-de22-46fc-a831-cabafd00a940&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2e86d68a-f7fd-4abc-8883-4295efed1652&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5c3dcfd2-2202-49d6-8637-082aba374f07&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5f97bdc1-6e29-4ec7-99d8-b8e6c2f7c311&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;대화별 초안·읽기 위치·펼침 상태를 보존하고 전송 실패·중복·중단·한국어 입력의 기존 의미를 유지한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;blocked&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2e86d68a-f7fd-4abc-8883-4295efed1652&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;집중 테스트·타입·빌드와 실제 Electron 합성 경계 검증을 수행하고 기존 사이드바 변경 및 Native 실기·독립 검토 한계를 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d6a44bcb-190c-4954-9e8e-550ffa6f0b59&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e35dc33c-616e-40db-90bd-9aba9b30614c&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-d6a44bcb-190c-4954-9e8e-550ffa6f0b59&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T22:53:24.543Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e35dc33c-616e-40db-90bd-9aba9b30614c&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T22:55:06.171Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-chat.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T22:55:11.829Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-14994d5d-6e05-43fe-a15b-bd8df5824e8b&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test/verify-chat-live.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T22:58:08.168Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-756411e7-de22-46fc-a831-cabafd00a940&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test/verify-chat-live.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: false,
+      &quot;completedAt&quot;: &quot;2026-11-12T22:58:37.183Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-2e86d68a-f7fd-4abc-8883-4295efed1652&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/conversations.test.ts&quot;,
+        &quot;test/chat-state.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:26:05.282Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-5c3dcfd2-2202-49d6-8637-082aba374f07&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test/verify-chat-live.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: false,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:27:11.893Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-5f97bdc1-6e29-4ec7-99d8-b8e6c2f7c311&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test/verify-chat-live.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:36:46.568Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-chat.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:41:59.494Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-32355cdb-ad40-446b-ba2b-69999fd7ee61&quot;,
+      &quot;verdict&quot;: &quot;not_run&quot;,
+      &quot;model&quot;: null,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-32355cdb-ad40-446b-ba2b-69999fd7ee61/opus.json&quot;,
+      &quot;findings&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;review-bf7a0192-d57f-4422-b3cb-0a243bd91dd1&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-bf7a0192-d57f-4422-b3cb-0a243bd91dd1/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;판정 근거(소스 대조): 현재 입력의 개별 파일 digest(src/conversations.ts 6fede61c…, src/native-chat.ts 5593df69…, src/main.ts 357b6525…, test/fixtures/conversations-app-server.ts cf35fafe…, scripts/verify-chat.ts b17491a5… 등)는 work.json의 세 검증 시도(d126edd7… 소스)에 기록된 값과 같다. 전체 sourceDigest(aea9e85e…)가 다른 것은 이번 검토 입력에 docs/skills/WORKFLOW.md·work.json·verification.md·evidence JSON이 추가됐기 때문으로 보이며, 검증 이후 제품 소스가 바뀐 흔적은 없다. criteriaDigest e58ba493…도 일치한다.&quot;,
+        &quot;AC-1: src/chat-row-state.tsx:1-3과 src/chat-state.ts:1-3에 devswha/ovis@d505c75e… 출처와 MIT 고지가 있다. docs/third-party/ovis.md에는 반입 파일, 제외 범위, 라이선스 전문이 있다. Markdown·코드복사·인용은 합성 Electron 검증(attempt-9ca37ad6, exit 0)의 범위로 기록돼 있다.&quot;,
+        &quot;AC-2 경계: src/conversations.ts:150은 목록을 cwd·originator===&#39;www&#39;·ephemeral 기준으로 거르고, :55-63 threadRecord는 read·resume 응답에서 같은 조건과 같은 ID를 다시 검사한다. :79-107 publicItem은 analysis/reasoning 원문과 승인 요청을 복원하지 않는다. main.ts:130-135는 복원 이벤트를 publish를 거치지 않고 eventLog에 넣으므로 자동보고·승인 상태(pendingApprovals)가 재생되지 않는다. projection.ts:431도 historical 요청을 승인 대상에서 뺀다. 실행·승인·전환 중 선택 차단(main.ts:125-128)과 다른 thread로의 turn:start 거부(main.ts:338)를 확인했다.&quot;,
+        &quot;sourceKinds 수정: verification.md의 native-source-diagnosis 기록(실제 source=vscode, originator=clientInfo.name)과 conversations.ts:147의 sourceKinds:[&#39;appServer&#39;,&#39;vscode&#39;], :150의 originator===&#39;www&#39; 필터가 일치한다. main.ts:110에서 clientInfo.name이 &#39;www&#39;로 설정돼 있다.&quot;,
+        &quot;증거 범위(결함 아님, 한계): AC-1~3의 공식 receipt(attempt-9ca37ad6)는 합성 app-server 기반이다. 실제 Native 재시작→목록→동일 thread resume→후속 응답의 근거인 chat-native-live.json(22:52:28~22:52:37)에는 소스 digest가 연결돼 있지 않고 공식 attempt로도 등록되지 않았다. 이 실행이 d126edd7 소스에서 이뤄졌는지는 기록만으로 확정할 수 없다. 또 verify-chat-live.ts:121은 approvalPolicy:&#39;never&#39;, sandbox:&#39;read-only&#39;로 시작해 제품 경로(nativeThreadStartParams)의 on-request/workspace-write를 재현하지 않는다. 따라서 실제 Native 재개 성공은 &#39;읽기 전용 단문 표본&#39;으로 한정해 보고해야 한다. verification.md는 이미 합성/실기를 구분하므로 현재 기술은 확대 주장이 아니다.&quot;,
+        &quot;잔여 위험(미확인, 수정 필수 아님): conversations.ts:158-160의 thread/resume은 approvalPolicy·sandbox·developerInstructions를 넘기지 않는다. docs/specs/chat.md:109는 &#39;저장 설정을 덮어쓰지 않는다&#39;고 정했지만, Codex app-server가 resume 때 원래 thread의 승인·sandbox를 복원하는지, 아니면 현재 config.toml 기본값을 적용하는지는 이번 증거로 확인되지 않는다. 기본값이 적용된다면 재개 대화가 새 대화의 on-request/workspace-write 정책과 다르게 실행될 수 있다. main.ts:293이 resume 응답의 approvalPolicy·sandbox를 표시하지만 검증하거나 강제하지는 않으며, 실기 표본도 resume 후 정책 값을 기록하지 않았다. 후속 검증에서 resume 응답의 정책 값을 관측해 기록하기를 권한다.&quot;,
+        &quot;AC-4: npm run check의 첫 시도(attempt-d6a44bcb, exit 1)는 실패로 보존됐다. 원인은 입력 범위 밖인 Chat 005 문서의 링크 계약 위반이며, 수정 후 재시도(attempt-e35dc33c, exit 0)가 같은 소스 digest에서 통과했다. 원격 Opus 검토 not_run(authentication)과 BoxBox misaligned/REFUSE 잔존도 통과로 바꾸지 않고 기록돼 있어 한계 구분 요건에 맞는다. 이 검토는 읽기 전용이며 어떤 테스트도 직접 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-8dc45833-b9b7-4b5a-ba92-b758c774723c&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/scratchpad/chat-006-critical-review-20261113/receipt-keychain/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;[결함·증거 범위 확대] 현재 검토 대상(HEAD 1509280, sourceDigest cea65e2f…)을 검증한 공식 시도는 하나도 없다. work.json의 다섯 시도는 모두 HEAD 4ef13d29의 소스 d126edd7… 또는 977e0094…에서 실행됐다. 현재 핵심 파일의 digest는 그때와 다르다: src/conversations.ts fd85d613 (검증 시 6fede61c), src/main.ts 34952bd1 (357b6525), src/renderer.tsx c186f81c (fc4e011d), src/preload.ts 7330b041 (69a22504), src/shared.ts a204c69a (a483d866), src/native-activity-view.tsx·native-activity.css, test/conversations.test.ts c4508904 (8919770e), test/fixtures/conversations-app-server.ts b086bcb5 (cf35fafe), test/verify-chat-live.ts 0f9de563 (99b6aad9), docs/specs/chat.md, ARCHITECTURE, DEVELOPMENT, PRODUCT, third-party/ovis.md도 바뀌었다. 검증 당시 있던 src/activity-sidebar.ts와 test/activity-sidebar.test.ts는 현재 없다. 그런데도 work.json의 AC-1·AC-2·AC-3 evidence(attempt-9ca37ad6)와 AC-4 evidence(attempt-e35dc33c)는 여전히 &#39;실제 검증 passed; 현재 적용 가능&#39;으로 적혀 있다. 이 표시는 현재 소스에는 맞지 않으므로 고치거나 현재 소스로 다시 검증해야 한다.&quot;,
+        &quot;[결함·기록 불일치] work.json의 workflow.authorization은 commit:false, publish:false다. verification.md handoff-20261113도 &#39;커밋·push하지 않았다&#39;고 적었다. 그러나 현재 main HEAD 1509280의 커밋 &#39;오픈소스 채팅과 Native 대화 재개를 통합한다&#39;에 이 작업이 들어가 있다. 별도 권한으로 커밋했다면 그 근거와 커밋된 소스의 검증 상태가 기록돼야 하는데 work.json·verification.md·보고서(report-ccd22113, sourceDigest a31449d9…)에 반영돼 있지 않다.&quot;,
+        &quot;[결함·독립 검토 적용성] 기존 Opus 검토 review-bf7a0192는 판정 근거로 src/conversations.ts 6fede61c… 와 src/main.ts 357b6525… 의 digest·행 번호를 인용했다(예: main.ts:338 turn:start 거부, main.ts:130-135 replaceConversationEvents). 현재 main.ts에서 같은 로직은 :273과 :126-131에 있다. 약 65행이 줄어 내용이 바뀐 것이 확인되므로 이 pass 판정을 현재 커밋에 옮겨 적용할 수 없다. 보고서는 Skill/Hook pulse를 다시 실행하지 않는다고 주장하는데, 이 주장도 activity-sidebar.ts가 있던 소스에서만 확인됐다. 사이드바가 빠진 현재 구성에서는 다시 확인해야 한다.&quot;,
+        &quot;[코드 대조·문제 없음] src/conversations.ts:147,150,55-63의 sourceKinds [appServer,vscode], cwd 검사, originator===&#39;www&#39; 검사, ephemeral 검사는 design.md의 &#39;실제 Native 목록 출처 보정&#39;과 일치한다. publicItem(:79-107)은 reasoning 본문과 승인 요청을 버린다. src/native-chat.ts:20-26의 turn/start에는 approvalPolicy·sandbox override가 없다. src/main.ts:126-131은 복원 사건을 publish를 거치지 않고 eventLog에 넣으므로 자동 보고서가 다시 실행되지 않는다. projection.ts:431은 historical 요청을 승인 블록에서 뺀다. 렌더러 src/renderer.tsx:254-285는 switchingRef와 generation으로 전환을 직렬화한다. 이 경계들은 소스상 명세와 맞는다. 단, 위의 이유로 현재 소스에서 실행 근거는 없다.&quot;,
+        &quot;[미확인 위험] src/main.ts:43,73-77,302-318에서 pendingApprovals는 사용자 응답이나 연결 종료 때만 지워진다. Native가 승인 대기 중 중단 등으로 서버 요청을 스스로 해소해도 이를 처리하는 코드가 없다(저장소 안에 serverRequest/resolved 처리 없음). 이번 작업에서 assertConversationIdle(:121-124)은 turn:start(:272)·thread:start·대화 전환까지 막는다. 따라서 &#39;승인 대기 → 중단&#39; 뒤 이전 승인 블록에 응답하기 전까지 새 요청과 대화 전환이 막힐 수 있다. scripts/verify-chat.ts:142-152는 승인과 중단을 따로 검사하고 승인 대기 중 중단은 검사하지 않는다. Codex 0.166.0의 실제 해소 알림 여부를 schema로 확인해야 한다.&quot;,
+        &quot;[미확인 위험] app-server가 실행 중 종료되면 src/main.ts:69-80에서 rpc만 null이 되고 activeThreadId는 남는다. 다음 turn:start는 새 프로세스에 resume 없이 turn/start를 보낸다. 렌더러 selectConversation(src/renderer.tsx:255)은 같은 id를 다시 선택하면 바로 반환하므로 같은 대화를 다시 열어 복구할 수도 없다. 기존 동작에서 이어진 문제일 수 있지만, 이번 재개 기능이 있는데도 연결 재생성 경로에 resume을 하지 않는다.&quot;,
+        &quot;[경미] src/conversations.ts:158-162는 thread/resume을 보낸 뒤 응답이 active이거나 검증에 실패하면 예외를 던진다. 이때 Native 쪽 thread는 이미 load된 상태로 남고 main의 activeThreadId는 바뀌지 않는다. :95는 aggregatedOutput을, :102는 diff를 길이 제한 없이 IPC로 넘긴다(command만 100k로 자른다). 화면 표시는 projection.ts:102-105에서 32,768로 잘리지만, 복원 payload와 메모리는 최대 1,990개 사건 × 원문 크기까지 커질 수 있다. 또 :137의 slice(-1990)는 턴 중간을 자를 수 있어서, 복원된 첫 턴에 turn/started나 turn/userPrompt 없이 이후 사건만 남을 수 있다.&quot;,
+        &quot;[검토 한계] 이 검토는 읽기 전용 소스·문서 대조다. npm run check, scripts/verify-chat.ts, test/verify-chat-live.ts를 포함해 어떤 테스트도 실행하지 않았다. 실제 Native·Electron 동작과 BoxBox 상태도 직접 확인하지 않았다. 통과로 판정하려면 현재 HEAD 소스(cea65e2f…)에서 npm run check, node scripts/verify-chat.ts, 실제 Native 재개 검증을 다시 실행해야 한다. 그다음 work.json evidence의 적용 표시와 커밋 기록을 고쳐야 한다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-0bfaab3e-4c7b-484d-8013-dd6909bfd7ec&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-0bfaab3e-4c7b-484d-8013-dd6909bfd7ec/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;[결함·AC-2] 연결 종료 뒤 같은 thread 후속 요청에서 thread/resume을 하지 않는다. src/main.ts:194-211의 closed 처리기는 rpc·activeTurnId·pendingApprovals는 초기화하지만 activeThreadId·threadStarted는 그대로 둔다. 이후 turn:start(src/main.ts:573-599)는 connect()로 새 app-server 프로세스를 띄우고 바로 turn/start를 보낸다(588행). 새 프로세스에 그 thread를 다시 불러오는 thread/resume은 conversations.ts:162의 open 경로에만 있다. 그런데 renderer.tsx:457은 `id === threadRef.current`이면 바로 반환하므로, 사용자가 같은 대화를 다시 눌러도 resume이 일어나지 않는다. 재현 경로: 대화를 열거나 시작한다 → Native 프로세스가 종료된다(transport/closed) → 같은 대화에서 후속 메시지를 보낸다 → 새 프로세스에서 thread를 불러오지 않은 채 turn/start가 나간다. AC-2의 &#39;동일 Native thread 후속 요청&#39;이 연결 경계에서 지켜지지 않는다. verification.md 197-199행과 254행도 이 위험을 미해결로 적어 두었다.&quot;,
+        &quot;[결함·AC-3] 승인 대기 중 중단하거나 서버가 요청을 해소해도 pendingApprovals가 남는다. pendingApprovals는 사용자 응답(src/main.ts:630,634), 연결 종료(204행), 프로젝트 전환(420행)에서만 비워진다. serverRequest/resolved 알림이나 turn/completed를 받아도 해당 승인 요청을 지우는 분기가 없다(src 전체에서 &#39;serverRequest/resolved&#39; 검색 결과 0건). 그런데 assertConversationIdle(262행)은 `pendingApprovals.size &gt; 0`이면 turn:start·대화 전환·새 대화·프로젝트 전환을 모두 거부한다. 그래서 중단 뒤 서버가 이미 해소한 승인이 남아 있으면 사용자는 낡은 승인 카드에 응답하기 전까지 다음 요청이나 대화 전환을 할 수 없다. verification.md 231행은 Codex 0.169.0 schema에 serverRequest/resolved(requestId, threadId)가 있다는 것을 확인했다. AC-3의 &#39;중단의 기존 의미 유지&#39;에 해당하는 경계가 빠져 있다.&quot;,
+        &quot;[증거 범위 확대] work.json은 AC-2와 AC-3을 result=passed로 기록했다. 하지만 그 근거로 연결된 attempt-084a9dd3(합성 fixture GUI), attempt-5f97bdc1(실제 Native 단문 재개, tools=0), attempt-2e86d68a(단위 테스트)는 모두 위 두 경계(연결 종료 후 재개, 승인 대기 중 중단 뒤 잔류)를 검증하지 않는다. verification.md 199·231·254행이 직접 &#39;해결됐다고 쓰지 않는다&#39;고 밝힌 위험이 남아 있는데 기준 결과는 passed로 승격돼 있다. AC-2 evidence에는 failed 시도(14994d5d, 756411e7, 5c3dcfd2)와 passed 시도가 함께 있고, passed 판정은 일부 경계만 본 표본에 기대고 있다.&quot;,
+        &quot;[확인된 정상 부분] conversations:open은 thread/read 다음에 thread/resume을 호출하고 originator를 확인한 뒤 공개 이력을 historical 이벤트로 바꾼다(main.ts:481-507, conversations.ts:150-174). 그래서 과거 이력을 현재 실행·승인으로 다시 실행하지 않는 구조로 보인다. turn:start는 activeThreadId가 일치하는지와 프롬프트 길이(100,000자)를 검사하고, approval:respond는 approvalAttempts로 중복 응답을 막는다. 이 검토는 소스 대조로만 했으며 테스트·Electron·Native는 실행하지 않았다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;실제 Native 저장 대화 재개·후속 응답과 검사 당시 GUI는 통과했지만 연결 종료와 승인 해소 경계가 남아 검증 마감을 보류한다.&quot;,
+  &quot;before&quot;: &quot;저장 대화 재개 구현의 과거 실패와 오래된 감사가 있어 실제 현재 동작을 다시 확인해야 했다.&quot;,
+  &quot;after&quot;: &quot;실제 첫 응답·프로세스 종료·원장 목록 및 공개 이력 복원·동일 thread 재개·후속 응답이 공식 sourceStable 시도로 통과했다. 검사 당시 합성 Electron GUI 145항목과 strict 타입도 통과했고, 복합 오류 경계는 독립 감사 결과로 blocked를 유지한다. 이후 다른 세션의 renderer·생태계·구조 snapshot·정본 문서 변경을 관측해, 확보한 검사의 현재 전체 입력 적용성을 재검증 대기로 남겼다.&quot;,
+  &quot;changes&quot;: [
+    &quot;현재 실제 Native 재개 PASS와 현재 145항목 합성 GUI PASS를 원장에 연결했다.&quot;,
+    &quot;sourceStable strict 타입 영수증·라이선스/명세 문서 영향 검토를 기록했다.&quot;,
+    &quot;Codex 0.169 schema의 serverRequest/resolved 존재와 수신 처리 부재, 연결 종료 후 resume 누락을 최종 Opus 지적과 연결했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;실제 단문 재개 PASS를 보존하고, 연결 종료 후 복구·승인 해소의 별도 경계로 AC-2·3의 전체 수용을 보류한다.&quot;,
+    &quot;이번 검증에서는 추가 제품 소스 변경을 하지 않는다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;실제 Native crash 후 같은 선택 thread 후속 요청은 실행하지 않았으며, resume 누락은 소스 경로 대조로 확인했다.&quot;,
+    &quot;serverRequest/resolved의 schema 존재와 수신 분기 부재는 확인했으나 승인 대기 중 중단에서 실제 알림 발행·승인 잔류는 미실측이다.&quot;,
+    &quot;합성 GUI의 입력 회귀는 실제 Windows나 OS 한국어 IME 실기를 대신하지 않는다.&quot;,
+    &quot;최신 실제 Opus는 fail이며 수정·재검증 전에 done으로 바꾸지 않는다.&quot;,
+    &quot;검사 이후 다른 세션에서 소스·정본 문서가 추가 변경됐다. 실행 당시 sourceStable PASS/FAIL은 보존하며 현재 전체 입력에 대한 증거 적용성은 status와 후속 재검증으로 확인한다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;Native 연결 재생성 뒤 선택 thread를 resume하는 경계를 수정하고 복구 시나리오를 검증한다.&quot;,
+    &quot;서버가 해소한 승인 요청의 수명주기를 설계·수정하고 승인 대기 중 중단을 실제/합성 경계에서 확인한다.&quot;,
+    &quot;현재 소스에서 독립 Opus·문서·보고서를 다시 확인한 뒤 마감한다.&quot;
+  ]
+}</pre></div></details></section></main></body></html>

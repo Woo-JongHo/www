@@ -1,0 +1,518 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-59dbdec5-823d-49c5-be43-357d9f6ea7ec",
+  "workId"        : "work-e9007dfb-f546-426b-88c6-58174641acc8",
+  "title"         : "Mac과 Windows 실사용 및 검증 신뢰성 완성",
+  "summary"       : "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome"       : "blocked",
+  "kind"          : "snapshot",
+  "event"         : "review",
+  "createdAt"     : "2026-11-15T09:34:33.865Z",
+  "workRecordHash": "4497707eea62848163c7340d9b166d55cb075d13daf0eb99ca8a6f5166e963b3",
+  "sourceDigest"  : "6fd0c5a806d55d6c58f78f3bcd0bd3ee38bec552e12ad296d3a3a024aae6e945",
+  "criteriaDigest": "656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba",
+  "semanticHash"  : "4c13345404912ff74b7fe82731fe9aba048746c38af773e163fdbf8b3e9fdc7b",
+  "narrative"     : null,
+  "work": {
+    "status": "verifying",
+    "blockedReason": "독립 검토 fail: 수정 또는 검토 재실행 필요",
+    "criteria": [
+      {
+        "id"         : "AC-1",
+        "description": "실제 앱과 Native로 파일 읽기·변경·출력·승인 허용/거절·중단·실패를 실제 관찰한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-437dcc1d-0d5e-47c1-b548-5d732ecccd8c",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-e6238218-50cd-408b-ae32-b706e7f839d0",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-1fccf71a-4db2-4657-868f-afd736733abf",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-0e5744a4-57f2-4c7b-a997-ce145da27a06",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-4a205ecc-9d18-465a-ad8f-cc6e27f6cb47",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          }
+        ]
+      },
+      {
+        "id"         : "AC-2",
+        "description": "Windows x64 네이티브 패키지를 생성하고 실제 앱 실행과 배포 정책을 확인한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-437dcc1d-0d5e-47c1-b548-5d732ecccd8c",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-e6238218-50cd-408b-ae32-b706e7f839d0",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-1fccf71a-4db2-4657-868f-afd736733abf",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-0e5744a4-57f2-4c7b-a997-ce145da27a06",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-4a205ecc-9d18-465a-ad8f-cc6e27f6cb47",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          }
+        ]
+      },
+      {
+        "id"         : "AC-3",
+        "description": "Windows Codex·도구 실행과 한글·공백 경로 및 종료 처리를 실제 검사한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-437dcc1d-0d5e-47c1-b548-5d732ecccd8c",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-e6238218-50cd-408b-ae32-b706e7f839d0",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-1fccf71a-4db2-4657-868f-afd736733abf",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-0e5744a4-57f2-4c7b-a997-ce145da27a06",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-4a205ecc-9d18-465a-ad8f-cc6e27f6cb47",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          }
+        ]
+      },
+      {
+        "id"         : "AC-4",
+        "description": "Mac과 Windows에서 한국어 조합 중 Enter·줄바꿈·포커스를 실기하고 자동 입력 회귀도 검사한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-1fccf71a-4db2-4657-868f-afd736733abf",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-0e5744a4-57f2-4c7b-a997-ce145da27a06",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          }
+        ]
+      },
+      {
+        "id"         : "AC-5",
+        "description": "중단 요청·접수·불확실·최종 결과가 구분되며 중복 요청과 늦은 사건을 회귀 검사한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-1b323074-4ff3-4397-a8c5-129e01f087d0",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-7fd656db-0fbd-4db8-ab93-d4253ab3e96c",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-1fccf71a-4db2-4657-868f-afd736733abf",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-0e5744a4-57f2-4c7b-a997-ce145da27a06",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-dbc618a4-4d6f-4498-a1d9-7190e421807d",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-6",
+        "description": "강제 종료 후 죽은 소유자의 잠금만 안전하게 회수하고 실제 동시 실행을 보호한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-1b323074-4ff3-4397-a8c5-129e01f087d0",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-7fd656db-0fbd-4db8-ab93-d4253ab3e96c",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-1fccf71a-4db2-4657-868f-afd736733abf",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-0e5744a4-57f2-4c7b-a997-ce145da27a06",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-6eec6ef2-32fe-4ab4-af74-bccfd7dde1d3",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-7",
+        "description": "검토 모델 누락·불일치의 완료를 거부하고 실제 Opus 관측을 검사한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-4a1d3f8e-1c1b-47bc-a961-8f8dbbe71216",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          }
+        ]
+      },
+      {
+        "id"         : "AC-8",
+        "description": "기능 검증과 전체 저장소 일관성 검사의 적용 범위·오래된 결과를 구분한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-1b323074-4ff3-4397-a8c5-129e01f087d0",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-7fd656db-0fbd-4db8-ab93-d4253ab3e96c",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-1fccf71a-4db2-4657-868f-afd736733abf",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-0e5744a4-57f2-4c7b-a997-ce145da27a06",
+            "summary": "당시 검증 기록 보존; 현재 적용성은 최신 status 판정 및 2026-11-15 재검증 절에서 확인한다."
+          },
+          {
+            "path": "verification.md#attempt-6eec6ef2-32fe-4ab4-af74-bccfd7dde1d3",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-437dcc1d-0d5e-47c1-b548-5d732ecccd8c",
+        "command": "node",
+        "args": [
+          "scripts/verify-eight-items.mjs"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T01:47:31.305Z"
+      },
+      {
+        "id": "attempt-de5bef50-9d82-46b2-83d4-fcc641aa8e06",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T01:47:50.837Z"
+      },
+      {
+        "id": "attempt-1b323074-4ff3-4397-a8c5-129e01f087d0",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T02:19:02.725Z"
+      },
+      {
+        "id": "attempt-7fd656db-0fbd-4db8-ab93-d4253ab3e96c",
+        "command": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T02:25:51.362Z"
+      },
+      {
+        "id": "attempt-e6238218-50cd-408b-ae32-b706e7f839d0",
+        "command": "node",
+        "args": [
+          "scripts/verify-eight-items.mjs"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T02:34:01.222Z"
+      },
+      {
+        "id": "attempt-4a1d3f8e-1c1b-47bc-a961-8f8dbbe71216",
+        "command": "node",
+        "args": [
+          "scripts/verify-eight-items.mjs",
+          "--review"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T02:37:31.066Z"
+      },
+      {
+        "id": "attempt-1fccf71a-4db2-4657-868f-afd736733abf",
+        "command": "node",
+        "args": [
+          "scripts/verify-eight-items.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "failed",
+        "executor"    : "process",
+        "exitCode"    : 1,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:26:36.874Z"
+      },
+      {
+        "id": "attempt-0e5744a4-57f2-4c7b-a997-ce145da27a06",
+        "command": "node",
+        "args": [
+          "scripts/verify-eight-items.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "failed",
+        "executor"    : "process",
+        "exitCode"    : 1,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:27:53.438Z"
+      },
+      {
+        "id": "attempt-4a205ecc-9d18-465a-ad8f-cc6e27f6cb47",
+        "command": "node",
+        "args": [
+          "scripts/verify-eight-items.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "failed",
+        "executor"    : "process",
+        "exitCode"    : 1,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:31:00.836Z"
+      },
+      {
+        "id": "attempt-dbc618a4-4d6f-4498-a1d9-7190e421807d",
+        "command": "bun",
+        "args": [
+          "test",
+          "test/projection.test.ts",
+          "test/input.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:31:35.763Z"
+      },
+      {
+        "id": "attempt-6eec6ef2-32fe-4ab4-af74-bccfd7dde1d3",
+        "command": "node",
+        "args": [
+          "--test",
+          "test/workflow-work.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:31:47.670Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id"         : "review-349cd6aa-b13b-4085-a693-b45d7b578fed",
+        "verdict"    : "fail",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-349cd6aa-b13b-4085-a693-b45d7b578fed/opus.json",
+        "findings": [
+          "[증거 범위 확대·AC-2/AC-3] work.json은 AC-2·AC-3를 attempt-437dcc1d(소스 digest 8893…)로 묶고 'passed; 현재 적용 가능'이라고 기록했다. 그런데 .www/scratchpad/eight-items/windows/report.md:56에는 177 tests 통과, packaged exe 실행, WINDOWS_NATIVE_READY 결과가 모두 '마지막 전달 이전 snapshot'의 기록이라고 적혀 있다. 이후 src/input.ts, src/renderer.tsx, scripts/verify-eight-items.mjs가 바뀌었고, 바뀐 소스로 Windows에서 다시 검증한 결과는 아직 회수되지 않았다. scripts/verify-eight-items.mjs:34-56은 windows/source-snapshot.json의 fingerprint를 현재 소스와 비교하지 않는다. 그래서 이 검사는 예전 소스의 실행 기록만으로 현재 소스에서 AC-2·AC-3이 통과했다는 판정을 만든다.",
+          "[증거 신선도 경계 누락] verify-eight-items.mjs는 .www/scratchpad/eight-items/{native,windows}/*.json을 읽는다. 하지만 work.json의 workflow.inputs와 verifications[].source.inputs에는 .www/scratchpad가 없다. 근거 원문 파일이 바뀌거나 다시 생성돼도 sourceDigest가 그대로라서 AC-1~AC-3 증거가 오래된 것으로 표시되지 않는다. 근거 파일을 검증 입력에 넣고 digest로 고정하거나, 원문에 기록된 소스 지문을 현재 소스와 대조해야 한다.",
+          "[AC-3 기준 미검사] AC-3 정의는 'Windows Codex·도구 실행과 한글·공백 경로 및 종료 처리를 실제 검사한다'이다. 그런데 연결된 scripts/verify-eight-items.mjs:40-56은 provider --version 종료 0, exe 경로와 지문, 단문 WINDOWS_NATIVE_READY 응답만 확인한다. 한글·공백·& 경로, 도구 실행, 종료와 signal 처리는 확인하지 않는다. 이 항목들은 Windows에서 돈 test/windows-native.test.mjs에 있지만, 그 실행은 이번 소스 이전 snapshot의 원격 로그다. 현재 연결된 Mac npm run check(attempt-de5bef50, darwin)는 AC-3에 연결되지 않았고 Windows 실행도 아니다. AC-3 passed는 실제 검사 범위보다 넓게 주장된 것이다.",
+          "[증거 범위 확대·AC-7] AC-7은 '실제 Opus 관측을 검사한다'를 요구한다. 그러나 근거는 Mac의 npm run check 단위 테스트 실행(attempt-de5bef50) 하나뿐이고, work.json의 workflow.reviews는 []다. 실제 Opus 검토 영수증으로 observedModel을 확인한 기록이 없는데 passed로 표시됐다. verification.md:14도 '독립 실제 Opus 감사는 통합 후 수행한다'고 적고 있어 work.json의 판정과 맞지 않는다.",
+          "[입력 경계·낮음] src/input.ts:10-13: compositionend의 timeStamp가 0, 음수, NaN이면 lastCompositionEnd에 그 값이 저장된다. 이 경우 shouldSubmitPrompt는 항상 false를 반환한다. renderer.tsx:306은 이 ref를 다시 초기화하지 않으므로 그 뒤로 Enter 전송이 계속 막힌다. 안전 쪽으로 막는 것은 맞지만 복구할 경로가 없다. 비정상 timestamp는 null로 저장해 무시하거나, 그 직후 Enter 한 번만 차단하도록 범위를 줄이는 편이 맞다. 실제 user-keyboard.json 이벤트열(Enter 136599.8 ≤ compositionend 136608)에서 늦게 도착한 Enter를 막는 판정 자체는 타당하다.",
+          "[Windows 영수증 경계·낮음] scripts/workflow/adapters/windows-command.mjs:40: providerExecution이 options.platform이 아니라 process.platform으로 actualInvocation을 만든다. 그래서 resolver에는 win32를 주입하고 영수증은 null이 되는 불일치가 생길 수 있다. 같은 파일 :47의 providerExecutionMatches는 actual이 null이면 플랫폼과 관계없이 true를 반환한다. 따라서 Windows에서 만든 검토 영수증에 actualInvocation이 빠져도 review.mjs:133·140이 receipt_execution_mismatch로 거부하지 않는다. 영수증에 플랫폼을 기록하고, win32 영수증에서는 actualInvocation을 필수로 해야 한다.",
+          "[잠금·참고] scripts/workflow/lock.mjs:43-58: 복구하던 프로세스가 강제 종료되면 work-records.lock.recovery가 남는다. 이 파일을 확인하거나 회수하는 API가 없어서, 이후 모든 recover-lock 호출이 EEXIST로 실패한다. verification.md:13에 한계로 적혀 있어 결함으로 세지는 않았지만, lock-status가 이 gate 파일의 존재도 보고하도록 하는 편이 낫다. 일반 잠금은 hard link로 원자적으로 공개되고, 소유자가 종료된 경우(ESRCH)에만 token이 일치할 때 회수한다. 이 동작은 타당하다.",
+          "[확인한 범위] 이 검토는 소스와 기록 원문만 읽었다. 테스트, 패키징, GUI는 실행하지 않았다. AC-4가 unverified이고 원격 background 작업의 수용을 완료로 쓰지 않은 점은 brief와 맞는다. 판정을 fail로 한 근거는 위 1~4번의 증거 적용 범위 문제다."
+        ]
+      },
+      {
+        "id"         : "review-9f73062c-55cb-4333-8e03-447ad4089c52",
+        "verdict"    : "fail",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-9f73062c-55cb-4333-8e03-447ad4089c52/opus.json",
+        "findings": [
+          "[결함] Windows 증거의 검사 원문(하네스)이 고정되지 않아 Mac 증거와 같은 수준으로 확인되지 않는다. 브리프는 'artifactPaths로 검사 원문을 source와 별도로 실행 전후 hash/size 고정'했다고 하지만, `.www/scratchpad/eight-items/background/host-verify.mjs:58`의 `verify({ repo, record, inputs, command: process.execPath, args, criterionIds })` 호출에는 artifactPaths가 없다. 그래서 실제로 실행되는 `.www/native-cdp-probe.mjs`, `.www/final-metadata.mjs`, `.www/parent-work-criteria.json`의 digest가 attempt에 남지 않는다. `.www`는 evidence.mjs의 EXCLUDED에 들어 있어 source.inputs에도 포함되지 않는다. 또 `scripts/verify-eight-items.mjs:44-48`은 `platform === \"darwin\"`일 때만 artifacts·artifactsStable을 요구하므로, win32 attempt는 원문 고정이 없어도 통과한다.",
+          "[결함, 이어짐] `scripts/verify-eight-items.mjs:89-119`는 windowsProof의 `approvedManifestDigest`, `before`, `after`도 검사하지 않는다. 이 값들은 host-verify.mjs:36,46,72가 기록한다. 따라서 Native 시도가 승인된 probe 스크립트(host-deployment.json의 133d0fed…)로 실행됐다는 사실을 공개 검증기가 확인하지 못한다. 재현 근거: 내용이 다른 `.www/native-cdp-probe.mjs`로 실행해 'WINDOWS_NATIVE_READY'를 담은 proof와 metadata를 만들어도, attempt에는 그 스크립트 경로만 args로 남고 digest가 없다. 그러면 verify-eight-items의 win32 분기는 모두 통과한다. 수정 제안: host-verify의 각 verify 호출에 위 세 private 입력을 artifactPaths로 넘긴다. verify-eight-items는 win32에서도 artifactsStable과 기대 digest를 확인하고, proof.before === proof.after와 manifest digest(baa07cb5…)도 대조해야 한다. 원격 proof는 아직 만들어지지 않았으므로 지금 고치는 비용이 가장 작다.",
+          "[확인, 결함 아님] Native proof와 현재 소스가 일치한다. `.www/scratchpad/eight-items/native/current-source-proof.json`의 attempt.source 파일 digest(예: src/input.ts 0e0b1632…, scripts/workflow/evidence.mjs 81c4a1ed…, review.mjs 64f20864…)가 이번 검토 입력 JSON의 현재 digest와 같다. before/after/attempt.source.digest(4dde4f29…)도 서로 같고, artifacts 9개의 digest는 harnessDigests와 같다. 다만 결과 JSON의 digest(artifactDigests)는 실행 결과물이므로 사전에 고정할 수 없고, proof 생성기가 직접 써 넣은 값이다. 보고할 때 이 한계를 함께 밝히면 된다.",
+          "[확인, 결함 아님] `src/input.ts`의 IME 처리는 브리프 설명과 같다. normalizeCompositionEnd는 0, 음수, NaN, null을 null로 바꿔 Enter가 영구히 막히는 문제를 해소한다. handlePromptKeyDown은 compositionend 이전이나 같은 시각에 다시 전달된 Enter에 대해 preventDefault만 하고 전송하지 않는다. Shift+Enter와 isComposing·keyCode 229 경로는 preventDefault 없이 기본 동작이 유지된다. renderer.tsx:306도 nativeEvent.timeStamp를 정규화해 저장한다. 실제 양쪽 OS의 IME 실기(AC-4)는 미검증으로 정직하게 표시돼 있고, 이를 통과로 주장하지 않는다.",
+          "[확인, 결함 아님] `scripts/workflow/adapters/windows-command.mjs`의 providerExecution은 platform·isFile 주입을 거부하고, executionPlatform에 실제 process.platform을 기록한다. providerExecutionMatches는 executionPlatform이 'win32'인데 actualInvocation이 없는 receipt를 거부한다. actual이 있으면 win32 절대 경로, `<logical>.exe` 파일명, sha256, logical argv와의 완전 일치를 요구한다. 필드가 없는 과거 POSIX 형식만 호환한다. review.mjs:133,140에서 primary와 quota receipt 모두에 이 검사를 적용한다. `verify-eight-items.mjs --review` 분기는 AC-7을 validateReview 결과로만 판정하며, 브리프대로 이번 감사 뒤 실행할 예정이라 아직 미검증이다.",
+          "[참고] 검토자는 읽기 전용으로 소스와 기록만 대조했고, 테스트나 스크립트는 실행하지 않았다. host-local-source-comparison.json의 mismatches(scripts/verify-eight-items.mjs, scripts/windows-start.mjs, AGENTS.md)는 Windows attempt 입력 범위 밖이어서 위 판정에 영향이 없다. 다만 approved manifest의 verify-eight-items.mjs digest(e45b4942…)는 현재 파일(03717008…)과 다르다. host-verify를 다시 배포할 때 manifest도 함께 갱신해야 한다."
+        ]
+      },
+      {
+        "id"         : "review-888234b4-8571-4806-aa75-82c85ace799c",
+        "verdict"    : "pass",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-888234b4-8571-4806-aa75-82c85ace799c/opus.json",
+        "findings": [
+          "읽기 전용 정적 대조만 했다. 공개 검증기, 테스트, 원격 실행 중 어느 것도 직접 실행하지 않았다.",
+          "scripts/verify-eight-items.mjs:36-59의 currentAttempt는 각 attempt에 대해 다음을 요구한다: executor=process, result=passed, exitCode=0, sourceStable=true, 실행 플랫폼, 현재 criteriaDigest, 필수 입력 포함, 현재 파일 digest와의 일치(test/skill-library.test.mjs만 명시적으로 제외). Windows attempt는 여기에 더해 artifactsStable=true와 비공개 원문 3개(.www/native-cdp-probe.mjs, .www/final-metadata.mjs, .www/parent-work-criteria.json)의 digest가 승인 manifest와 같은지 대조한다. 2차 지적이었던 Windows 원문 고정 누락은 해소됐다.",
+          "windows/current-source-proof.json의 attempts 3개(check, package, native)는 모두 win32, passed, exitCode 0, sourceStable/artifactsStable=true다. 비공개 원문 digest는 ecbb607d, 133d0fed, a97139ed로, approved-source.json entries와 같다. source 파일 digest도 이번 입력 JSON의 현재 파일 digest와 같다(예: src/main.ts 601b54bb, scripts/workflow/evidence.mjs 81c4a1ed, scripts/verify-eight-items.mjs 779e68a4). proof의 before와 after가 같은 값(7132767f)인 점도 host-verify.mjs:30-35, 46, 73의 정렬 entries 지문 계산 방식과 맞는다.",
+          "host-verify.mjs는 manifest의 directories/files를 실제로 다시 순회해 승인 entries와 정확히 같은지 확인한다. 그래서 미검토 파일 추가나 링크를 거부하고, 매 단계 전후에 assertApproved를 호출한다. 실행 명령도 check/package/native 고정 argv이고 외부 인자를 받지 않는다(host-runner.ps1은 marker 존재만 확인). 브리프의 '일반 args를 받지 않는다'는 설명과 일치한다.",
+          "native 시각 재사용 방지도 맞는다. final-metadata.json의 turn.startedAt=1794450674(2026-11-12T02:31:14Z)는 native attempt의 startedAt 02:31:11.525Z 이후라서 verify-eight-items.mjs:137의 하한 검사를 통과하는 구조다. final-metadata.mjs는 policy의 source/dist/asar 일치, codex/claude 실제 invocation, WINDOWS_NATIVE_READY를 다시 확인한다.",
+          "evidence.mjs:186-233의 verify는 artifactPaths를 source와 별도로 실행 전후 path/size/digest로 고정한다. artifactsStable=false이면 result를 passed로 만들지 않는다. evaluateEvidence(253-262)도 현재 원문과 다시 대조한다. captureArtifacts는 절대경로, 드라이브 문자, 백슬래시, '..'를 거부하고 O_NOFOLLOW로 읽어 경로 우회를 막는다.",
+          "참고(결함 아님): native/current-source-proof.json의 attempt ID는 attempt-96cd77e6이고 원문 artifacts는 9개다. 브리프가 말하는 attempt-e6238218(원문 30개)은 work.json 쪽 별도 attempt로 보이는데, 이번 검토에서는 그 기록을 열어 보지 않았다. 공개 검증기도 work.json 최신 attempt가 아니라 native proof의 attempt를 대조하므로, 이 수치 차이는 문서 표현 차이로만 판단했다.",
+          "참고(결함 아님): currentAttempt는 environmentStable을 직접 검사하지 않는다. 다만 evidence.verify에서 result=passed가 되려면 environmentStable이 참이어야 하므로 우회 경로는 아니다.",
+          "브리프는 범위를 넓혀 주장하지 않는다. AC-4(실제 양 OS IME와 수정 후 수동 재실기)와 AC-7(--review 실제 실행)은 미검증으로 유지되고 전체 done도 주장하지 않는다. 공개 검증기의 마지막 출력문(line 141)도 OS IME와 수동 재실기를 범위 밖으로 명시한다. 코드 수정이 필요한 구체적 결함, 완료 판정 위조, 검사 우회는 찾지 못했다."
+        ]
+      },
+      {
+        "id"         : "review-f3c5ca8f-82e1-4edf-81ea-a0c92d65a0b2",
+        "verdict"    : "fail",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-f3c5ca8f-82e1-4edf-81ea-a0c92d65a0b2/opus.json",
+        "findings": [
+          "[결함·기준 연결 오류] work.json:4313-4320과 5211-5218에서 실패한 두 시도 attempt-1fccf71a·attempt-0e5744a4(`node scripts/verify-eight-items.ts`)를 AC-1·2·3·4·5·6·8에 연결했다. 그런데 scripts/verify-eight-items.ts:297-378은 Native proof(AC-1)와 Windows proof·metadata(AC-2·AC-3)만 대조하고 마지막 출력(:378)도 'AC-1~AC-3' 범위라고 밝힌다. 중단 상태 구분(AC-5), 잠금 회수(AC-6), 저장소 일관성 범위(AC-8), IME(AC-4)는 이 명령이 검사하지 않는다. 실패는 :282의 `실행 대상과 현재 소스가 다릅니다`에서 나왔고, :10 주석대로 TS 이관 뒤에는 이 불일치가 예상된 결과다. 그런데도 AC-5·AC-6·AC-8의 result가 'failed'로 바뀌었다(work.json:125, 161, 212). 결과를 낮추는 방향이라도 검사하지 않은 기준에 결과를 붙인 것은 증거 범위를 잘못 연결한 것이다. 이 시도들은 AC-1~3에만 연결해야 한다. AC-5·6·8은 현재 소스에서 `npm run check`를 실제로 실행해 판정하거나 'unverified'로 두어야 한다. 현재 소스에서 `npm run check`를 실행한 기록은 시도 목록에 없다.",
+          "[결함·오래된 판정 문구] verification.md:13-15는 아직 'Windows는 승인한 최신 source에서 실제 check·package·Native 세 실행이 모두 … 통과', '현재 자동 검사는 AC-1·2·3·5·6·7·8에 적용 가능하다'라고 적고 있다. 같은 문서 :200-202는 과거 스냅샷과 현재 소스가 달라 재사용할 수 없다고 적어 앞의 문장과 서로 모순된다. work.json의 evidence summary도 소스 digest가 8893…/bc73…/f2da…인 과거 시도들(437dcc1d, de5bef50, 1b323074, 7fd656db, e6238218, 4a1d3f8e)을 계속 '실제 검증 passed; 현재 적용 가능'으로 표시한다(work.json:25, 30, 53, 58, 130, 135, 140, 199, 204 등). 현재 소스 digest(49579c73…, 이번 검토 입력 fbc0d4e2…)와 맞지 않으므로 이 문구는 증거 범위를 넓게 주장한다. 과거 시도의 summary와 :13-15 서술을 '당시 소스 기준·현재 적용 불가'로 정정해야 한다.",
+          "[주의·권한 출처] work.json:264-270의 authorization.verifierCommands에 `.ts` 명령 두 개가 추가됐다. 그러나 authorization.requestHash와 source(`direct_user_request`, 4488349b…)는 2026-11-12의 원래 요청 그대로다. verification.md:160은 2026-11-15 사용자의 '검증마감항목을 지금 진행' 요청을 근거로 든다. 하지만 권한 블록에는 새 요청과의 연결(별도 requestHash 또는 변경 이력)이 없다. 그래서 원래 요청이 이 명령들을 승인한 것처럼 읽힌다. 확장 범위는 검증 명령에 한정되어 위험은 낮지만, 권한 변경의 출처를 기록에 남겨야 한다.",
+          "[확인·결함 아님] 현재 상태는 status 'verifying', AC-7 'unverified', 나머지는 'failed'이며 done을 주장하지 않는다. verification.md:200-202는 Windows 네이티브·패키지·현재 앱 실측과 양 OS IME 실기를 이번에 다시 하지 않았다고 밝히고, 과거 Windows 원문을 새 실측으로 승격하지 않는다. 실패 시도의 종료 코드 1, stderr 24149바이트, sourceStable 기록도 verification.md와 work.json이 일치한다.",
+          "[확인·결함 아님] 마지막 Opus 검토 review-888234b4의 sourceDigest(f2da9c19…)는 현재 소스와 다르다. 따라서 `--review` 검사를 지금 실행하면 validateReview가 불일치로 거부할 것이다(verify-eight-items.ts:251-256, 정적 판단). AC-7을 passed로 올리지 않고 'unverified'로 둔 판단은 타당하다.",
+          "[검토 범위] 이 검토는 work.json, verification.md, scripts/verify-eight-items.ts, docs/skills/WORKFLOW.md를 읽고 대조한 것이다. 테스트, 검증기, 패키징, GUI는 실행하지 않았다. fail 판정의 근거는 위 두 결함, 즉 검사하지 않은 기준에 시도를 연결한 것과 과거 시도를 '현재 적용 가능'으로 표시한 문구다."
+        ]
+      },
+      {
+        "id"         : "review-e792bcb3-e864-41bb-9c05-85fc70a7e5d6",
+        "verdict"    : "fail",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-e792bcb3-e864-41bb-9c05-85fc70a7e5d6/opus.json",
+        "findings": [
+          "[결함·현재 소스 실패 은폐] work.json:43-46, 76-79, 108-111에서 attempt-4a205ecc의 evidence summary가 '당시 검증 기록 보존; 현재 적용성은 … 재검증 절에서 확인한다'로 적혀 있다. 이 시도는 2026-11-15에 현재 소스(ca130ff0…)에서 AC-1~3 범위로만 실행됐고 실패(종료 코드 1)했다(verification.md:211-226). 따라서 이 시도 자체가 '2026-11-15 재검증'이다. verifyWork는 scripts/workflow/work.ts:287-288에서 이런 경우 criterion.result='failed'와 summary '실제 검증 failed; 현재 적용 불가'를 남긴다. 현재 기록은 AC-1·2·3을 'unverified'로 두고 summary를 일반 문구로 바꿔 현재 소스 실패 사실을 지웠다. 공식 resumeWork(work.ts:359-377)를 거쳤다면 결과가 unverified가 되더라도 blockedReason에 verification_failed 등의 사유가 들어가고 nextAction도 build/verify가 됐어야 한다. 그런데 work.json:13은 blockedReason=null, :333은 nextAction='review'다. 이 조합은 공개 API로 만들어질 수 없으므로 손으로 고친 것으로 판단한다. 4a205ecc의 summary를 실제 결과(failed, 현재 적용 불가)로 되돌리고, AC-1~3 결과·blockedReason·nextAction을 공식 resume 결과와 일치시켜야 한다.",
+          "[결함·증거 범위 확대] AC-5(work.json:137-176)의 설명은 '중단 요청·접수·불확실·최종 결과 구분 + 중복 요청과 늦은 사건 회귀 검사'다. 그런데 'passed'의 유일한 현재 근거는 attempt-dbc618a4(`bun test test/projection.test.ts test/input.test.ts`)다. projection.test.ts는 상태 구분과 늦은·다른 턴 사건만 검사한다(:143-201, :328-356). input.test.ts에는 중단 관련 검사가 없다. 중단 요청의 실제 중복 차단은 다음 두 가지에 기대고 있다. (1) renderer.tsx:964 버튼 비활성화, (2) renderer.tsx:778-791 probe의 duplicateClickAttempted·requestCount=1 확인. main.ts:600-616의 turn:interrupt 핸들러에는 자체 중복 방지가 없다. 이 probe와 fake-app-server의 fixture/interruptRequest 집계는 이번 bun 명령에 포함되지 않는다. 과거에는 `npm run check`가 이를 포함했지만 그 시도는 이전 소스에서 실행된 것이다. 따라서 '중복 요청 차단'이 현재 소스에서 검사됐다는 주장은 증거 범위를 넘는다. 중복 차단 검사(UI probe 또는 fixture 통합 검사)를 현재 소스에서 실행해 연결하거나, AC-5를 unverified로 유지해야 한다.",
+          "[주의·권한 출처] work.json:294-306의 authorization.verifierCommands에 `.ts` 검증기 2개, `node --test test/workflow-work.test.ts`, `bun test …`가 추가됐다. 그런데 authorization.requestHash/source는 2026-11-12 원요청(4488349b…)과 같다. work.ts에는 승인 범위를 확장하는 공개 API가 없다(normalizeApproval는 createWork/adoptWork에서만 쓰인다). 따라서 직접 고친 것이다. verification.md:209에 후속 요청 원문과 SHA(0ddd7340…), 정확한 argv를 남긴 점은 이전 Opus 지적을 일부 해소한다. 다만 기계 판독 권한 블록에는 여전히 원요청이 이 명령들을 승인한 것처럼 남아 있다. 위험은 검증 명령에 한정되어 낮다.",
+          "[주의·문서 검토 현재성] documentationReviews의 마지막 항목(work.json:8096-8102)은 sourceDigest 49579c73…에 묶여 있다. 그 뒤 attempt-4a205ecc/dbc618a4/6eec6ef2의 소스 식별은 ca130ff0…로 바뀌었다. 현재 완료를 주장하지 않으므로 결함은 아니다. 다만 마감 전에는 문서 검토를 다시 수행해야 한다.",
+          "[확인·타당] AC-6 근거 attempt-6eec6ef2(workflow-work.test.ts)는 다음을 실제로 검사하므로 현재 소스 기준 passed와 맞는다. (1) 실제 자식 프로세스 SIGKILL 후 토큰 확인 복구, (2) 동시 recover 중 1건만 성공, (3) 살아 있는 소유자가 있을 때 openWork 거부, (4) 다른 호스트·빈 잠금 회수 거부(test/workflow-work.test.ts:593-632). AC-8도 같은 파일 :635-651에서 check-repository 후 다른 기록이 바뀌면 repositoryConsistency.current=false와 repository_changed를 기능 증거와 분리해 검사하므로 적절하다.",
+          "[확인·타당] AC-4(양 OS IME 실기)와 AC-7(현재 소스 Opus 영수증 대조 미실행)을 unverified로 둔 것, verification.md:198-209에서 Windows 네이티브·패키지·IME 재실측을 하지 않았다고 명시한 것, 실패 시도 1fccf71a/0e5744a4의 AC-4·5·6·8 연결을 판정 근거로 쓰지 않겠다고 적은 것은 이전 지적을 반영한다. 이 검토는 work.json, verification.md, scripts/workflow/work.ts, src/main.ts·renderer.tsx·projection 관련 부분, test/projection.test.ts·input.test.ts·workflow-work.test.ts를 읽고 대조한 정적 검토다. 테스트나 검증기는 실행하지 않았다."
+        ]
+      }
+    ]
+  },
+  "source": {
+    "recordPath"    : "docs/work/Development/001-Mac과 Windows 실사용 및 검증 신뢰성 완성/work.json",
+    "workRecordHash": "4497707eea62848163c7340d9b166d55cb075d13daf0eb99ca8a6f5166e963b3",
+    "sourceDigest"  : "6fd0c5a806d55d6c58f78f3bcd0bd3ee38bec552e12ad296d3a3a024aae6e945",
+    "criteriaDigest": "656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba"
+  }
+}

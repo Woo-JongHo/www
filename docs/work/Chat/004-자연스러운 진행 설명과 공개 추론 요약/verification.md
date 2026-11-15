@@ -157,3 +157,100 @@ CUA 화면과 접근성 출력은 이 세션 도구 결과에 남는다. 별도 
 - 검증 중 소스 유지: 확인
 - 출력: stdout 76바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-df1c798b-e9bf-44ea-966e-3bd7085384b1"></a>
+## 검증 시도 — 2026-11-15T09:25:22.023Z
+
+- 시도 ID: `attempt-df1c798b-e9bf-44ea-966e-3bd7085384b1`
+- 실행 시각: 2026-11-15T09:25:21.782Z ~ 2026-11-15T09:25:22.023Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","test","test/projection.test.ts","test/native-chat.test.ts","test/native-activity.test.ts","test/input.test.ts","test/native-report-input.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/specs/chat.md`, `package.json`, `src/input.ts`, `src/main.ts`, `src/native-activity.ts`, `src/native-chat.ts`, `src/native-report-input.ts`, `src/projection.ts`, `src/renderer.tsx`, `src/rpc.ts`, `src/shared.ts`, `test/fixtures/activity-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/input.test.ts`, `test/native-activity.test.ts`, `test/native-chat.test.ts`, `test/native-report-input.test.ts`, `test/projection.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `b97a511551755baa2144a07c8e338868191b583e1a89a9979a93de5c228af9f0`
+- 기준 정의 식별: `e75249ba0eefaf305d5c4a12a3345d82c9560bd26f43400a0a34911254183023`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 28바이트, stderr 14592바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-4e8f04ea-0815-4e16-a561-cab2324ebc17"></a>
+## 검증 시도 — 2026-11-15T09:28:24.420Z
+
+- 시도 ID: `attempt-4e8f04ea-0815-4e16-a561-cab2324ebc17`
+- 실행 시각: 2026-11-15T09:28:18.377Z ~ 2026-11-15T09:28:24.420Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js","run","check:source"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/specs/chat.md`, `package.json`, `src/input.ts`, `src/main.ts`, `src/native-activity.ts`, `src/native-chat.ts`, `src/native-report-input.ts`, `src/projection.ts`, `src/renderer.tsx`, `src/rpc.ts`, `src/shared.ts`, `test/fixtures/activity-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/input.test.ts`, `test/native-activity.test.ts`, `test/native-chat.test.ts`, `test/native-report-input.test.ts`, `test/projection.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `b97a511551755baa2144a07c8e338868191b583e1a89a9979a93de5c228af9f0`
+- 기준 정의 식별: `e75249ba0eefaf305d5c4a12a3345d82c9560bd26f43400a0a34911254183023`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 119바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+## 2026-11-15 독립 감사 지적과 현재성 정정
+
+Opus review-9566d6e4는 구현 결함을 찾지 못했으나, 옛 source digest 05c8f923의 빌드·타입·소스 검사와 Electron 관측을 현재 소스의 완료 근거로 읽을 수 있는 문구를 지적했다. 위 “최종 소스”, “현재 반환 상태”와 BoxBox blocker 문구는 2026-11-12 당시 반환 상태를 의미하며 이번 재개의 현재 완료 선언이 아니다. 원래 검증 시도·리뷰·당시 관찰은 수정하지 않았다. work.json의 증거 요약은 현재 evaluateEvidence 결과로 다시 대조하여 과거 성공의 적용 불가를 구분했다.
+
+2026-11-15 집중 Bun 검사는 실제 passed/sourceStable=true였다. 현재 source/type/build와 새 독립 검토를 별도로 실행하며, 실제 Native·GUI 표본을 이번 재개에서 관측하기 전까지 과거 표본을 새 소스에서 다시 통과한 것으로 쓰지 않는다. BoxBox는 현재 사용자가 선택한 project mode off이므로 disabled이며 과거 misaligned blocker 해소를 스타일 검사 PASS로 표현하지 않는다. AC-3의 표본 확인 범위는 합성 투영·집중 회귀와 실제 Native/GUI의 미확인을 분명히 나누는 것이다.
+
+<a id="attempt-068a3b99-b3c9-4eb2-a2bf-20aed617141c"></a>
+## 검증 시도 — 2026-11-15T09:28:38.736Z
+
+- 시도 ID: `attempt-068a3b99-b3c9-4eb2-a2bf-20aed617141c`
+- 실행 시각: 2026-11-15T09:28:19.543Z ~ 2026-11-15T09:28:38.736Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js","run","typecheck"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/specs/chat.md`, `package.json`, `src/input.ts`, `src/main.ts`, `src/native-activity.ts`, `src/native-chat.ts`, `src/native-report-input.ts`, `src/projection.ts`, `src/renderer.tsx`, `src/rpc.ts`, `src/shared.ts`, `test/fixtures/activity-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/input.test.ts`, `test/native-activity.test.ts`, `test/native-chat.test.ts`, `test/native-report-input.test.ts`, `test/projection.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `b97a511551755baa2144a07c8e338868191b583e1a89a9979a93de5c228af9f0`
+- 기준 정의 식별: `e75249ba0eefaf305d5c4a12a3345d82c9560bd26f43400a0a34911254183023`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 76바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-76328610-41ef-44a5-8656-d089fa73cea8"></a>
+## 검증 시도 — 2026-11-15T09:36:02.308Z
+
+- 시도 ID: `attempt-76328610-41ef-44a5-8656-d089fa73cea8`
+- 실행 시각: 2026-11-15T09:36:01.579Z ~ 2026-11-15T09:36:02.308Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","test","test/projection.test.ts","test/native-chat.test.ts","test/native-activity.test.ts","test/input.test.ts","test/native-report-input.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/specs/chat.md`, `package.json`, `src/input.ts`, `src/main.ts`, `src/native-activity.ts`, `src/native-chat.ts`, `src/native-report-input.ts`, `src/projection.ts`, `src/renderer.tsx`, `src/rpc.ts`, `src/shared.ts`, `test/fixtures/activity-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/input.test.ts`, `test/native-activity.test.ts`, `test/native-chat.test.ts`, `test/native-report-input.test.ts`, `test/projection.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `b97a511551755baa2144a07c8e338868191b583e1a89a9979a93de5c228af9f0`
+- 기준 정의 식별: `e75249ba0eefaf305d5c4a12a3345d82c9560bd26f43400a0a34911254183023`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 28바이트, stderr 14657바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-fccfbac4-8c63-4f1e-83c9-3b77e554aab5"></a>
+## 검증 시도 — 2026-11-15T09:39:59.818Z
+
+- 시도 ID: `attempt-fccfbac4-8c63-4f1e-83c9-3b77e554aab5`
+- 실행 시각: 2026-11-15T09:39:57.334Z ~ 2026-11-15T09:39:59.818Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js","run","build"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/specs/chat.md`, `package.json`, `src/input.ts`, `src/main.ts`, `src/native-activity.ts`, `src/native-chat.ts`, `src/native-report-input.ts`, `src/projection.ts`, `src/renderer.tsx`, `src/rpc.ts`, `src/shared.ts`, `test/fixtures/activity-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/input.test.ts`, `test/native-activity.test.ts`, `test/native-chat.test.ts`, `test/native-report-input.test.ts`, `test/projection.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `b97a511551755baa2144a07c8e338868191b583e1a89a9979a93de5c228af9f0`
+- 기준 정의 식별: `e75249ba0eefaf305d5c4a12a3345d82c9560bd26f43400a0a34911254183023`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 86바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+### 2026-11-15 현재 소스의 마감 검사
+
+제품 소스 동결 뒤 최종 집중 Bun 검사 attempt-76328610, 현재 source 정책 attempt-4e8f04ea, strict 타입 attempt-068a3b99, 최종 빌드 attempt-fccfbac4가 모두 실제 exit 0/sourceStable=true로 통과했다. 네 시도의 이 작업 입력 source digest는 b97a511551755baa2144a07c8e338868191b583e1a89a9979a93de5c228af9f0로 동일하다. 과거 05c8f923 소스의 성공은 현재 적용 불가로 증거 요약에 명시했다. 현재 문서 영향 검토를 갱신했으며 새 Opus 최종 검토를 실행한다. 이번 재개에서 실제 Native/GUI 표본을 이 작업 전용으로 새로 관측하지 않았고 합성 투영·집중회귀·타입·빌드와 그 미확인을 구분한다. 실제 모델의 진행 설명 빈도·품질 또는 Windows/IME 실기 통과를 주장하지 않는다.

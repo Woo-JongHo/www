@@ -9,7 +9,7 @@
   ],
   "owner"        : "dev",
   "status"       : "verifying",
-  "blockedReason": null,
+  "blockedReason": "독립 검토 fail: 수정 또는 검토 재실행 필요",
   "relations": [],
   "criteria": [
     {
@@ -65,7 +65,7 @@
       "package.json",
       "src"
     ],
-    "nextAction": "complete",
+    "nextAction": "review",
     "verifications": [],
     "reviews": [
       {
@@ -99,6 +99,39 @@
         "receiptPath": ".www/evidence/reviews/review-e3af38b2-a1a7-454c-8e59-4966e9410195/opus.json",
         "startedAt"  : "2026-11-12T09:35:31.324Z",
         "completedAt": "2026-11-12T09:36:22.471Z"
+      },
+      {
+        "id"            : "review-aaee6ab7-609e-445c-b860-67bc58c76904",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "447710337411797680a61d313322199950cf0da039d973daf54e7eed6b95743d",
+        "criteriaDigest": "ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "88695281654acb1c4511f35fa17969ee47fb6f7bc3380a0caebca4bd1ded9aed"
+        },
+        "failure": null,
+        "findings": [
+          "판정 fail: 산출물 comparison.md는 현재 구현과 맞지 않고 결론도 서로 어긋난다. work.json의 AC-1~3은 모두 result=unverified, evidence=[]이며 workflow.verifications=[]이다. 수정하지 않은 상태로는 이 작업을 완료할 수 없다. verification.md:20-24의 2026-11-15 재검토도 같은 결론을 스스로 기록하고 있다.",
+          "AC-1 현황표가 현재 소스와 다르다. comparison.md:39는 'Markdown·코드 복사 UI 없음'이라고 쓰지만, 현재 src/chat-message.tsx:6이 react-markdown을 import한다. 같은 파일 :22는 navigator.clipboard.writeText로 복사를 처리하고, :48은 remarkGfm으로 렌더링한다. comparison.md:43은 '목록·영속 저장·읽기·동일 Native thread 복구 없음'이라고 쓰지만, src/conversations.ts:150·160·162가 thread/list·thread/read·thread/resume을 호출한다. 표 머리(:34)는 HEAD 4ef13d29 시점만 밝힐 뿐, 이 내용이 현재 상태가 아니라는 표시가 본문 표에 없다. 그래서 문서만 읽는 사람은 이 표를 현행 공백으로 오해한다. 표를 다시 쓰거나 표 자체에 시점 한정과 현행 대비를 넣어야 한다.",
+          "AC-3 결론이 서로 모순된다. comparison.md:5는 'assistant-ui 우선 권장은 사용자 선택이 아니며 확정하지 않는다'고 하고, :24는 Herdr·Ovis·T3 Code 중심으로 비교 기준을 바꿨다. 그런데 '결론과 결정 상태'(:28-30), 후보표(:87), 경계표(:94-101), 권장 순서(:105-110)는 여전히 assistant-ui 도입을 단일 권장안으로 제시한다. 또 :87과 :96은 Markdown·코드 표시를 assistant-ui에서 가져올 이점으로 꼽지만, 이 기능은 이미 react-markdown으로 구현돼 있어 근거가 사라졌다. 사용자 정정을 반영한 하나의 권장안으로 다시 써야 한다.",
+          "AC-2 범위가 빠져 있다. 사용자 정정 이후 비교 대상은 Herdr runtime/desktop과 Ovis다(:9-22). 이들에는 고정 SHA 링크만 있고, assistant-ui·T3 Code처럼 실제 adapter·의존 경계·전체 교체 대 부분 재사용을 비교한 절이 없다. :24에서도 '새 독립 검토는 아직 수행하지 않았다'고 인정한다. 이 검토에서는 외부 링크를 네트워크로 조회하지 않았으므로, 링크된 내용과 라이선스의 진위는 확인하지 않았다.",
+          "작업 레코드의 증거가 연결되지 않았고 오래됐다. work.json documentationReviews[0].sourceDigest(27e6…)와 reviews[0].sourceDigest(585a…)는 모두 현재 입력 digest(4477…)와 다르다. blockedReason에도 source_changed·receipt_context_mismatch가 남아 있다. 이전 리뷰 pass(:76)는 오래된 소스 기준이고, 그때도 '목록·복구 없음은 타당'(:92)이라고 판단했다. 현재 소스에서는 이 판단이 틀렸으므로 근거로 재사용할 수 없다. 문서 영향 검토는 현재 입력 기준으로 다시 기록해야 한다(WORKFLOW 재검토 규칙). verification.md의 baseline-20261112·source-inspection-20261112 앵커도 workflow.verifications와 criteria evidence에 아직 연결되지 않았다.",
+          "verification.md:5-8의 npm run check exit 0과 Node 테스트 147개는 HEAD 4ef13d29 시점의 기준선이다. 현재 HEAD 92de238에서 다시 실행한 기록은 없다. 이 검토도 명령을 실행하지 않았으므로 현재 통과 여부는 확인하지 않았다. AC-1의 '실행 결과' 근거를 현재 코드에 맞춰 새로 만들어야 한다.",
+          "결함은 아니지만 보완을 권한다. AionUi·Cline 조사 전문(comparison.md:79, verification.md:14)은 비추적 경로 .www/scratchpad/chat-skeleton-upstream.md에만 있다. 'npm view 0.2.0' 같은 관찰(:83)은 다른 환경에서 재현할 수 없으므로, 필요한 요약은 추적되는 문서로 옮기는 편이 낫다.",
+          "범위 준수는 확인했다. 이 작업 문서들은 제품 코드나 의존성 변경을 주장하지 않는다. spec.md:21-23과 comparison.md:116은 채팅 완성 보고가 아니며 사용자 선택이 남았다고 유지한다. verification.md:22-24는 과거 조사와 현재 구현을 구분하고 링크가 있다는 것만으로 AC-2를 통과시키지 않는다. 따라서 증거 범위를 부풀린 서술은 없다. 다만 이것만으로 위 결함을 덮고 pass로 판정할 수는 없다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-aaee6ab7-609e-445c-b860-67bc58c76904/opus.json",
+        "startedAt"  : "2026-11-15T09:28:48.890Z",
+        "completedAt": "2026-11-15T09:29:28.608Z"
       }
     ],
     "documentationReviews": [

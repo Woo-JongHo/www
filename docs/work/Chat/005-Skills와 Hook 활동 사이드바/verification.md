@@ -331,3 +331,114 @@
 - 실제 Native 읽기는 .www/scratchpad/sidebar-final2-20261113/native-live.log의 통과를 동일 실행 코드 범위에서 재사용했다. 새 실행이 아니며 실제 Hook 알림 0건·Windows 미실행은 한계다.
 - BoxBox는 사용자 지정 https://github.com/Woo-JongHo/boxbox/issues/62 별도 조사다. 공유 자동 core가 명시적 Terra 예외를 수용하지 못하므로 done·quota·관측 모델을 위조하지 않는다. 기능 검증 수용과 자동 완료 마커는 별도다.
 - HEAD 1509280d746979ad0b44e3634f104f894191cbbc의 Chat006을 보존했고 index 초기화·commit·push·배포를 하지 않았다.
+
+<a id="attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88"></a>
+## 검증 시도 — 2026-11-15T09:25:52.907Z
+
+- 시도 ID: `attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88`
+- 실행 시각: 2026-11-15T09:25:52.414Z ~ 2026-11-15T09:25:52.907Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","test","test/activity-sidebar.test.ts","test/native-activity.test.ts","test/projection.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/specs/chat.md`, `package.json`, `scripts/verify-native-activity.ts`, `src`, `test/activity-sidebar.test.ts`, `test/fixtures/activity-app-server.ts`, `test/native-activity.test.ts`, `test/projection.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `555fc81919eb8755f5a2410bfb805c710690a025f59c4fcc2e0cb5133859aff2`
+- 기준 정의 식별: `7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 28바이트, stderr 16328바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+
+## 2026-11-15 목록·반응 경계 재검증
+
+현재 집중 검사 세 파일의 공식 시도 attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88은 종료 0·sourceStable=true다. 목록 순서와 등록/감지 구분, snapshot/live 경계, 정확 경로·run 매핑, 중복·복원·다른 thread 억제를 재검사했다. GUI와 실제 Native 목록의 관측 범위는 별도 증거이며 집중 검사 통과로 전체 호스트·모든 Hook 호출을 입증하지 않는다. 기존 spec의 특정 CLI 버전·실행 제약은 당시 관측이고 현재 환경의 결과를 대체하지 않는다.
+
+<a id="attempt-6821f151-0987-4bca-92df-ffe1949f9c96"></a>
+## 검증 시도 — 2026-11-15T09:29:34.168Z
+
+- 시도 ID: `attempt-6821f151-0987-4bca-92df-ffe1949f9c96`
+- 실행 시각: 2026-11-15T09:29:31.152Z ~ 2026-11-15T09:29:34.168Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","test","test/activity-sidebar.test.ts","test/native-activity.test.ts","test/projection.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/specs/chat.md`, `package.json`, `scripts/verify-native-activity.ts`, `src`, `test/activity-sidebar.test.ts`, `test/fixtures/activity-app-server.ts`, `test/native-activity.test.ts`, `test/projection.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `926002f5a6635deda9a3b4d03b1b3149aae50bbae62ce1a7b7ad5d1ce02c30de`
+- 기준 정의 식별: `7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 28바이트, stderr 16431바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+
+## 2026-11-15 실제 Native 등록 목록 표본
+
+실제 설치 Codex app-server를 새 프로세스로 시작해 제품과 같은 `experimentalApi: false` 초기화 후 선택 저장소의 `skills/list`와 `hooks/list`를 조회했다. `.www/closeout-native-20261115/catalog-actual.json`에 정제 전 등록 메타데이터, `catalog-summary.json`에 요약을 보존했다. cwd가 요청과 일치했고 Skill은 119개·오류 0건, WWW 정본 여섯 Skill이 모두 포함됐다. Hook은 8개·오류/경고 0건이었다. 이는 호스트가 실제 목록 요청을 받아 응답했다는 표본이며, 119개 Skill 모두 실행되거나 모든 Hook 조건이 발동됐다는 뜻이 아니다. 실제 응답을 사용한 GUI 연결 전체는 별도 합성 경계 검증과 구분한다.
+
+
+## 2026-11-15 최종 strict 타입 검사
+
+실제 subprocess `npm run typecheck`가 종료 0으로 끝났다. 실행 전후 이 작업의 전체 inputs를 `captureSource`로 읽어 소스 내용 지문이 같음을 확인했다. 이 작업의 before/after digest는 `8faa25992de94ccabbb8a7d6f8b45c5cf38a8c2b92ac5149e1c58720d3bbd713`로 동일하다. 정확한 inputs와 파일별 지문·실행 시각·실제 argv는 `.www/closeout-native-20261115/typecheck-receipt.json`, 원문은 같은 폴더 `typecheck.stdout.log`와 `typecheck.stderr.log`에 보존했다. 이는 root strict 앱·도구 타입 검사이며 전체 테스트·GUI·실제 Native·독립 검토를 대신하지 않는다.
+
+<a id="attempt-b2733b60-59b8-4108-b406-63560790021f"></a>
+## 검증 시도 — 2026-11-15T09:39:28.647Z
+
+- 시도 ID: `attempt-b2733b60-59b8-4108-b406-63560790021f`
+- 실행 시각: 2026-11-15T09:39:17.227Z ~ 2026-11-15T09:39:28.647Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","scripts/verify-native-activity.ts","--ui-only"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`, `AC-5`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/specs/chat.md`, `package.json`, `scripts/verify-native-activity.ts`, `src`, `test/activity-sidebar.test.ts`, `test/fixtures/activity-app-server.ts`, `test/native-activity.test.ts`, `test/projection.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `8faa25992de94ccabbb8a7d6f8b45c5cf38a8c2b92ac5149e1c58720d3bbd713`
+- 기준 정의 식별: `7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 940바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+
+## 2026-11-15 현재 Electron GUI와 중복 중단 경계
+
+공식 시도 `attempt-b2733b60-59b8-4108-b406-63560790021f`는 `node scripts/verify-native-activity.ts --ui-only`를 실제 실행해 종료 0·sourceStable=true로 통과했다. 정확한 추가 환경은 `WWW_PROBE_INTERRUPT_PENDING=1`, `WWW_FIXTURE_INTERRUPT_DELAY_MS=1500`이다. 기존 검증 코드가 이를 받아 중단 접수 후 버튼 비활성·중복 클릭 시도·실제 합성 Native 요청 1건과 interrupted 완료를 검사했다. `.www/evidence/native-activity-KDfCa4/probe.json`의 interruptPending은 rpcAccepted/buttonDisabled/duplicateClickAttempted=true 및 requestCount=1이다. 새 검사 코드나 제품 코드를 추가하지 않았다.
+
+같은 실행의 summary/probe와 `activity-narrow.png`, `electron-chat.png`를 보존했다. 목록 고정·새 Skill/Hook 반응·과거 복원 무재생·다른 thread/연결 경계·공개 추론과 비공개 추론 분리·좁은 패널·모션 축소 검사를 수행했고, 작성자가 좁은 패널 이미지를 직접 열어 목록과 안내·입력 영역의 표시를 확인했다. 실제 모델 대신 합성 Native subprocess를 사용한 GUI이며 `typecheck:not_run`은 위 별도 sourceStable strict 타입 영수증으로 구분해 보완한다. 실제 등록 목록 표본은 별도 catalog-actual.json이고 GUI에서 실제 119개 전체 목록을 검증한 것으로 확대하지 않는다.
+
+<a id="attempt-044ba35e-245e-4197-82b7-d30e766f1c95"></a>
+## 검증 시도 — 2026-11-15T09:44:16.859Z
+
+- 시도 ID: `attempt-044ba35e-245e-4197-82b7-d30e766f1c95`
+- 실행 시각: 2026-11-15T09:44:16.744Z ~ 2026-11-15T09:44:16.859Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","--eval","import {createActivitySidebarState,updateActivitySidebarState} from \"./src/activity-sidebar.ts\"; const run={id:\"postToolUse:0:/x/hooks.json\",eventName:\"postToolUse\",sourcePath:\"/x/hooks.json\",displayOrder:0,handlerType:\"command\",executionMode:\"sync\",status:\"running\"};const ev=(seq,method,turnId,run)=>({seq,at:new Date().toISOString(),kind:\"notification\",method,params:{threadId:\"t\",turnId,run}});const state=updateActivitySidebarState(createActivitySidebarState(),[ev(1,\"hook/started\",\"turn-a\",run),ev(2,\"hook/completed\",\"turn-a\",{...run,status:\"completed\"}),ev(3,\"hook/started\",\"turn-b\",run)],{emitPulses:true});const result={scenario:\"same-handler-id-new-turn\",starts:2,pulseSeqs:state.pulses.map(p=>p.seq),observedSeqs:[...state.observations.values()].map(o=>o.seq),expectedNewStartSeq:3};console.log(JSON.stringify(result));if(!state.pulses.some(p=>p.seq===3)||![...state.observations.values()].some(o=>o.seq===3))process.exitCode=1;"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`, `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/specs/chat.md`, `package.json`, `scripts/verify-native-activity.ts`, `src`, `test/activity-sidebar.test.ts`, `test/fixtures/activity-app-server.ts`, `test/native-activity.test.ts`, `test/projection.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `8faa25992de94ccabbb8a7d6f8b45c5cf38a8c2b92ac5149e1c58720d3bbd713`
+- 기준 정의 식별: `7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 110바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+
+## 2026-11-15 독립 감사와 재현으로 마감 보류
+
+실제 읽기 전용 `claude-opus-5-5` 검토 review-6d88aeb6-9887-4555-9f5c-1c18e45e7528은 fail이다. 확인된 첫 결함은 연결·thread 내 run.id의 영구 중복 억제로 같은 handler ID의 새 턴 Hook 시작도 반응과 최근 관측에서 누락되는 것이다. 현재 순수 투영 함수를 직접 실행한 chat005-repeated-hook-reproduction.json에서 시작2건의 pulse/최근관측은 seq1만 남았고 새 턴 seq3이 누락됐다.
+
+공식 재현 시도 attempt-044ba35e-245e-4197-82b7-d30e766f1c95는 AC-2·AC-3의 이 경계만 검사했다. 새 턴의 실제 시작 반응과 최근 관측 갱신을 요구하는 검사이므로 현재 결과는 종료1·failed·sourceStable=true다. 고유 run ID 합성 회귀와 일반 GUI의 이전 PASS를 삭제하지 않고 이 누락 사례와 구분한다. 실제 Codex 0.169의 모든 호출이 같은 ID를 쓴다는 새 실측은 아니며, 반복 ID 입력에 대한 현재 동작의 재현이다.
+
+두 번째 지적은 renderer.tsx의 대화 전환 성공 경로에서 arrived live 사건을 emitPulses=false로 적용하는 분기다. 감사자는 큐의 새 Skill/Hook 반응 누락을 정적으로 지적했다. 이 특정 지연 시나리오의 실제 GUI 재현은 이번에 실행하지 않았으므로 첫 결함의 실행 재현과 구분한다.
+
+사용자 후속 “검증마감항목을 지금 진행하고,” 요청으로 위 순수 경계 검사만 verifierCommands에 추가했다. 원래 요청 해시·기존 권한·시도는 유지하고 commit/publish=false를 보존했다. 정확한 실행 argv는 work.json의 bun --eval 문자열과 .www/closeout-native-20261115/chat005-regression-command.json에 보존했다. 후속 요청 fragment의 UTF-8 SHA256은 0ddd73409b499656f1be6e9bc08881f9f0c4c5324a1d41c7e703ba7a2de86836이다. 제품 코드·정본 요구는 바꾸지 않았으며 현재 마감하지 않는다.
+
+## 2026-11-15 병행 소스 변경 뒤 최종 적용성 정리
+
+검사 종료 뒤 다른 세션에서 renderer.tsx·ecosystem-view.tsx/CSS·architecture.generated.json 및 제품/구조/개발 정본 문서의 추가 변경을 관측했다. 이번 담당자는 해당 소스를 덮어쓰지 않았고 새 유료 검사나 제품 수정을 추가하지 않았다. 확보한 실제 프로세스 PASS/FAIL과 그 당시 sourceStable 결과는 원장에 그대로 보존한다. 현재 전체 입력 지문이 달라진 시도는 최신 status에서 source_changed로 구분하며 검사 당시 통과를 현재 전체 소스의 통과로 승격하지 않는다.
+
+최종 보고서는 이 부분 완료와 미실측/결함/병행 변경 한계를 반영한 현재 스냅샷이다. 보고서가 앱에서 current로 읽힌다는 사실은 업무 complete나 모든 기능 증거 usable을 뜻하지 않는다. 다른 세션의 후속 편집 뒤에는 보고서와 문서 검토도 다시 stale로 바뀔 수 있다. 구현/기준 동결 시점을 다시 정한 뒤 필요한 범위의 검증과 독립 검토를 회수해야 한다.

@@ -143,6 +143,16 @@ Native와의 대화에서 실행 흐름을 통제하고 진행·근거·승인·
 - [실행 계획](Workflow/012-BoxBox%20%EC%8A%B9%EC%9D%B8%20%EA%B7%9C%EC%B9%99%EA%B3%BC%20%EC%83%88%20JSON%20%EC%B6%9C%EB%A0%A5/tasks.md)
 - [작업 레코드](Workflow/012-BoxBox%20%EC%8A%B9%EC%9D%B8%20%EA%B7%9C%EC%B9%99%EA%B3%BC%20%EC%83%88%20JSON%20%EC%B6%9C%EB%A0%A5/work.json)
 
+### 013 — 변경된 플러그인 Hook 신뢰 복구
+
+- [명세](Workflow/013-%EB%B3%80%EA%B2%BD%EB%90%9C%20%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8%20Hook%20%EC%8B%A0%EB%A2%B0%20%EB%B3%B5%EA%B5%AC/spec.md)
+- [작업 레코드](Workflow/013-%EB%B3%80%EA%B2%BD%EB%90%9C%20%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8%20Hook%20%EC%8B%A0%EB%A2%B0%20%EB%B3%B5%EA%B5%AC/work.json)
+
+### 014 — 검토 지적 수정과 통합 검증 및 게시
+
+- [명세](Workflow/014-%EA%B2%80%ED%86%A0%20%EC%A7%80%EC%A0%81%20%EC%88%98%EC%A0%95%EA%B3%BC%20%ED%86%B5%ED%95%A9%20%EA%B2%80%EC%A6%9D%20%EB%B0%8F%20%EA%B2%8C%EC%8B%9C/spec.md)
+- [작업 레코드](Workflow/014-%EA%B2%80%ED%86%A0%20%EC%A7%80%EC%A0%81%20%EC%88%98%EC%A0%95%EA%B3%BC%20%ED%86%B5%ED%95%A9%20%EA%B2%80%EC%A6%9D%20%EB%B0%8F%20%EA%B2%8C%EC%8B%9C/work.json)
+
 ## Development
 
 ### 001 — Mac과 Windows 실사용 및 검증 신뢰성 완성
@@ -168,6 +178,18 @@ Native와의 대화에서 실행 흐름을 통제하고 진행·근거·승인·
 
 - [명세](Ecosystem/003-%EA%B5%AC%EC%A1%B0%20ID%20%EA%B3%84%EC%95%BD%EA%B3%BC%20%EB%8B%A8%EA%B3%84%EB%B3%84%20%EC%84%A4%EA%B3%84%EB%8F%84%20%ED%83%90%EC%83%89/spec.md)
 - [작업 레코드](Ecosystem/003-%EA%B5%AC%EC%A1%B0%20ID%20%EA%B3%84%EC%95%BD%EA%B3%BC%20%EB%8B%A8%EA%B3%84%EB%B3%84%20%EC%84%A4%EA%B3%84%EB%8F%84%20%ED%83%90%EC%83%89/work.json)
+
+### 004 — 사람이 읽는 구조 지도와 책임 설명
+
+- [명세](Ecosystem/004-%EC%82%AC%EB%9E%8C%EC%9D%B4%20%EC%9D%BD%EB%8A%94%20%EA%B5%AC%EC%A1%B0%20%EC%A7%80%EB%8F%84%EC%99%80%20%EC%B1%85%EC%9E%84%20%EC%84%A4%EB%AA%85/spec.md)
+- [설계](Ecosystem/004-%EC%82%AC%EB%9E%8C%EC%9D%B4%20%EC%9D%BD%EB%8A%94%20%EA%B5%AC%EC%A1%B0%20%EC%A7%80%EB%8F%84%EC%99%80%20%EC%B1%85%EC%9E%84%20%EC%84%A4%EB%AA%85/design.md)
+- [실행 계획](Ecosystem/004-%EC%82%AC%EB%9E%8C%EC%9D%B4%20%EC%9D%BD%EB%8A%94%20%EA%B5%AC%EC%A1%B0%20%EC%A7%80%EB%8F%84%EC%99%80%20%EC%B1%85%EC%9E%84%20%EC%84%A4%EB%AA%85/tasks.md)
+- [작업 레코드](Ecosystem/004-%EC%82%AC%EB%9E%8C%EC%9D%B4%20%EC%9D%BD%EB%8A%94%20%EA%B5%AC%EC%A1%B0%20%EC%A7%80%EB%8F%84%EC%99%80%20%EC%B1%85%EC%9E%84%20%EC%84%A4%EB%AA%85/work.json)
+
+### 005 — 중앙 지도 중심의 탐색과 선택 요약
+
+- [명세](Ecosystem/005-%EC%A4%91%EC%95%99%20%EC%A7%80%EB%8F%84%20%EC%A4%91%EC%8B%AC%EC%9D%98%20%ED%83%90%EC%83%89%EA%B3%BC%20%EC%84%A0%ED%83%9D%20%EC%9A%94%EC%95%BD/spec.md)
+- [작업 레코드](Ecosystem/005-%EC%A4%91%EC%95%99%20%EC%A7%80%EB%8F%84%20%EC%A4%91%EC%8B%AC%EC%9D%98%20%ED%83%90%EC%83%89%EA%B3%BC%20%EC%84%A0%ED%83%9D%20%EC%9A%94%EC%95%BD/work.json)
 
 ## Reports
 

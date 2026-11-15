@@ -7,7 +7,7 @@
     "dev"
   ],
   "owner"        : "dev",
-  "status"       : "verifying",
+  "status"       : "done",
   "blockedReason": null,
   "relations": [],
   "criteria": [
@@ -15,22 +15,40 @@
       "id"         : "AC-1",
       "description": "생성 런타임 파일 경합과 source readability·지원 언어·승인 규칙의 공백을 실제 검사로 구분한다",
       "required"   : true,
-      "result"     : "unverified",
-      "evidence": []
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-b62c27f6-021b-46e1-a074-e81ee137b974",
+          "path"     : "verification.md#attempt-b62c27f6-021b-46e1-a074-e81ee137b974",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
     },
     {
       "id"         : "AC-2",
       "description": "ignored 런타임 변경은 제외하고 실제 소스 변경 감지는 유지하는 훅 수정본을 검증·설치한다",
       "required"   : true,
-      "result"     : "unverified",
-      "evidence": []
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-b62c27f6-021b-46e1-a074-e81ee137b974",
+          "path"     : "verification.md#attempt-b62c27f6-021b-46e1-a074-e81ee137b974",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
     },
     {
       "id"         : "AC-3",
       "description": "새 호스트 세션에서 실제 등록된 수정 훅이 수용되는지 확인하며 미승인 정렬·언어 변경은 완료로 주장하지 않는다",
       "required"   : true,
-      "result"     : "unverified",
-      "evidence": []
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-6a34d71f-9006-4db4-a542-48c7cd86296b",
+          "path"     : "verification.md#attempt-6a34d71f-9006-4db4-a542-48c7cd86296b",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
     }
   ],
   "workflow": {
@@ -43,19 +61,476 @@
         "docs/DEVELOPMENT.md"
       ],
       "mutationSurfaces": [
-        "edit"
+        "edit",
+        "execute"
       ],
-      "verifierCommands": [],
+      "verifierCommands": [
+        "[\"python3\",\"-c\",\"import json,pathlib,tempfile,subprocess,os,threading,time,hashlib,shutil\\nroot=pathlib.Path.cwd()\\nout=root/'.www/closeout-hook-legacy-20261115'\\nout.mkdir(parents=True,exist_ok=True)\\nnode='/opt/homebrew/Cellar/node@22/22.22.3/bin/node'\\nlauncher='/Users/jonghoPro/.local/share/boxbox/codex/0.2.8/plugin/scripts/boxbox.mjs'\\nruntime=json.loads(pathlib.Path(launcher).parent.parent.joinpath('runtime.json').read_text())\\ncli=pathlib.Path(runtime['cli'])\\ncli_hash=hashlib.sha256(cli.read_bytes()).hexdigest()\\nassert cli_hash=='3ea6e779c0f1b2442d8d5286a6bdf254db820d4c7a2ff417d0eb31d5639716db'\\ncmd=[node,launcher]\\nbefore_mode=subprocess.run(cmd+['mode','--json'],capture_output=True,text=True,check=True)\\nassert json.loads(before_mode.stdout)['mode']=='off'\\nbase=pathlib.Path(tempfile.mkdtemp(prefix='www-boxbox-closeout-'))\\nrecords=[]\\ntry:\\n for case in ['ignored_runtime','visible_source','unsupported_language']:\\n  work=base/case;work.mkdir()\\n  data=base/(case+'-data');data.mkdir()\\n  subprocess.run(['git','init','-q',str(work)],check=True)\\n  (work/'.gitignore').write_text('.www/\\\\n.gjc/\\\\n')\\n  (work/'.www').mkdir()\\n  (work/'sample.py').write_text('value = 1\\\\n')\\n  env={**os.environ,'BOXBOX_MODE':'check','PLUGIN_DATA':str(data)}\\n  payload={'session_id':'workflow007-'+case,'cwd':str(work),'tool_name':'Bash'}\\n  def hook(mode):\\n   return subprocess.run(cmd+['hook',mode,'--root',str(work)],cwd=work,input=json.dumps(payload),capture_output=True,text=True,env=env,timeout=60)\\n  start=hook('session')\\n  assert start.returncode==0 and 'hook error' not in start.stdout+start.stderr\\n  (work/'sample.py').write_text('value = 2\\\\n')\\n  if case=='unsupported_language':(work/'legacy.mjs').write_text('export const value = 1;\\\\n')\\n  stop=threading.Event();count=[0]\\n  def mutate():\\n   while not stop.is_set():\\n    count[0]+=1\\n    if case=='visible_source':\\n     temporary=work/'.sample.tmp'\\n     temporary.write_text('value = 2\\\\n# revision '+str(count[0])+'\\\\n'+('# source comment\\\\n'*10000))\\n     temporary.replace(work/'sample.py')\\n    else:\\n     (work/'.www'/'runtime.json').write_text(str(count[0]))\\n     transition=work/'.www'/'lock.transition'\\n     transition.mkdir(exist_ok=True)\\n     transition.rmdir()\\n    time.sleep(.002)\\n  thread=threading.Thread(target=mutate)\\n  if case!='unsupported_language':thread.start()\\n  try:post=hook('post')\\n  finally:\\n   stop.set()\\n   if thread.is_alive():thread.join()\\n  receipts=[json.loads(p.read_text()) for p in data.rglob('*.json') if p.name!='baseline.json']\\n  observed={'case':case,'writes':count[0],'sessionExit':start.returncode,'postExit':post.returncode,'stdout':post.stdout,'stderr':post.stderr,'receipts':receipts}\\n  if case=='ignored_runtime':\\n   assert count[0]>0 and 'hook error' not in post.stdout+post.stderr\\n   assert len(receipts)==1 and receipts[0]['files']==['sample.py']\\n   assert receipts[0]['automaticFixPerformed']==False\\n  elif case=='visible_source':\\n   assert count[0]>0 and 'Source changed during check' in post.stdout+post.stderr\\n   assert not receipts\\n  else:\\n   assert len(receipts)==1 and 'legacy.mjs' in receipts[0]['unsupported']\\n   assert receipts[0]['state']=='UNSUPPORTED'\\n  records.append(observed)\\n check=subprocess.run(cmd+['check','--source','--file','src/main.ts','--json'],cwd=root,capture_output=True,text=True,timeout=90)\\n parsed=json.loads(check.stdout)\\n assert parsed['results'][0]['file']=='src/main.ts'\\n assert parsed['results'][0]['language']=='typescript'\\n assert parsed['results'][0]['summary']['misaligned']>0\\n assert check.returncode==1\\n policy=json.loads((root/'source-policy.json').read_text())\\n after_mode=subprocess.run(cmd+['mode','--json'],capture_output=True,text=True,check=True)\\n assert before_mode.stdout==after_mode.stdout\\n result={'result':'passed','executor':'actual-installed-cli-isolated-fixtures','cliSha256':cli_hash,'launcher':launcher,'runtimeNode':runtime['node'],'projectMode':json.loads(after_mode.stdout),'cases':records,'sourceCheck':{'exitCode':check.returncode,'summary':parsed['results'][0]['summary'],'syntax':parsed.get('syntax'),'formatReadiness':parsed.get('formatReadiness'),'basis':parsed.get('basis')},'legacyJavaScript':policy.get('legacyJavaScript'),'limitations':['NO_GROUPS is fixture-only coverage, not repository style PASS.','The user project remains off. Only isolated subprocesses force check mode.','Source changed during check is expected and required in visible source negative control.','This CLI fixture does not prove host event acceptance.']}\\n (out/'installed-current.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))\\n print(json.dumps({k:v for k,v in result.items() if k not in ['cases']},ensure_ascii=False))\\nfinally:shutil.rmtree(base)\\n\"]",
+        "[\"python3\",\"-c\",\"import json,pathlib\\nbase=pathlib.Path('.www/hook-trust-20261115')\\np=json.loads((base/'post-tool-lifecycle.json').read_text())\\nassert p['completed'] and p['failed'] is None and p['bypass'] is False\\nbox=[r for r in p['runs'] if 'boxbox-plugins/boxbox/0.2.8/' in r['sourcePath']]\\nassert {r['eventName'] for r in box}=={'sessionStart','postToolUse','stop'}\\nassert all(r['source']=='plugin' and r['status']=='completed' for r in box)\\nassert any('Mode off' in e['text'] for r in box for e in r['entries'])\\nh=json.loads((base/'hooks-after.json').read_text())['data'][0]['hooks']\\nassert len(h)==8 and all(x['enabled'] and x['trustStatus']=='trusted' for x in h)\\ni=json.loads((base/'plugin-integrity.json').read_text())\\nassert i['boxboxCacheVsInstallerDifferences']==[]\\nprint('실제 설치 BoxBox SessionStart·PostToolUse·Stop 호스트 수용 및 mode off 관측. 엔진 스타일 PASS나 모든 조건부 훅 실행으로 확대하지 않음.')\\n\"]"
+      ],
       "commit"     : false,
       "publish"    : false,
       "source"     : "direct_user_request",
       "requestHash": "7542fb887ff172704d0f708448355b1313a0c80962d9ea7e16efc5a9d07e64fe"
     },
     "inputs": [
-      "docs/DEVELOPMENT.md"
+      ".boxbox",
+      "docs/DEVELOPMENT.md",
+      "source-policy.json",
+      "src/main.ts"
     ],
-    "nextAction": "verify",
-    "verifications": [],
-    "reviews": []
+    "nextAction": "complete",
+    "verifications": [
+      {
+        "id"         : "attempt-b62c27f6-021b-46e1-a074-e81ee137b974",
+        "startedAt"  : "2026-11-15T09:28:58.787Z",
+        "completedAt": "2026-11-15T09:29:20.130Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "07d1bcefe0e269eeca9cd5d04c33c69ccea0e38b075fce7132106b44a1025196",
+          "inputs": [
+            ".boxbox",
+            "docs/DEVELOPMENT.md",
+            "source-policy.json",
+            "src/main.ts"
+          ],
+          "files": [
+            {
+              "path": ".boxbox",
+              "type": "directory"
+            },
+            {
+              "path": ".boxbox/approvals",
+              "type": "directory"
+            },
+            {
+              "path"  : ".boxbox/approvals/chat-final-two-response.json",
+              "type"  : "file",
+              "digest": "9b39f950ee1fb4a81c88215f1697c5d76608079c7574b500dbeede205d4fcb53",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/approvals/ts-v1-response.json",
+              "type"  : "file",
+              "digest": "ce18cd60b29d0d13f9bbc8d714c5db749909c5e11fc94aa88879fcce3f707b29",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/approvals/ts-v3-extra4-response.json",
+              "type"  : "file",
+              "digest": "ca0d5c602e618b96f4e33b4ba42425af5f995177c6f4d3fce497e6212afa2f73",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/conventions.jsonl",
+              "type"  : "file",
+              "digest": "b94a6376e0bc520ad83c63846aa42fc748a700e3f032465e89ebd0e6fda31ac8",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/decisions.jsonl",
+              "type"  : "file",
+              "digest": "c32f7473ea387a2c60d1bc22ac693089b0b116d28f397ff495f58b86fe19a3ad",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/examples.jsonl",
+              "type"  : "file",
+              "digest": "2878dfc825978f0cf20f317a21fd705bbc9838614d659540e38bdadf10de4039",
+              "mode"  : 420
+            },
+            {
+              "path": ".boxbox/rules",
+              "type": "directory"
+            },
+            {
+              "path"  : ".boxbox/rules/json-scalar-fields.md",
+              "type"  : "file",
+              "digest": "cc0ad4a462441d8f82a829ef94bdc6a9826d44664e23e9e8182d59c25b08b8eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/rules/www-chat-final-two-approved.md",
+              "type"  : "file",
+              "digest": "49ed13f4fa0db53a5d5cff03386068ce43782c08dad0ff206adc9efec90d66c9",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/rules/www-chat-scroll-ts-approved.md",
+              "type"  : "file",
+              "digest": "7b4677528e921e4992dcec9444072fa93cc200d7f925e602aa3118ae5eddd120",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/rules/www-ts-extra4-v1-approved.md",
+              "type"  : "file",
+              "digest": "9936c15573044027ad305a5d056b4bb03347a1bcdac4b96ce66d4004bf9f7dce",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/rules/www-ts-v1-approved.md",
+              "type"  : "file",
+              "digest": "ae8df6d7b1293705be022f9247211bea5839eb941284fd13d8334a700aa2c61c",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/rules/www-ts-v3-approved.md",
+              "type"  : "file",
+              "digest": "9ba598dac06cadab0e77c50f04b07350ebba8cc7e3fdbe84c77af458d9a0bac3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "e524b3b75b0f1e25fb1a20b6ebe05012ec00a535fa9cfc700e8217bde3b23750",
+              "mode"  : 420
+            },
+            {
+              "path"  : "source-policy.json",
+              "type"  : "file",
+              "digest": "06ad234ca147201bad0127fa34cedbeda9c21a5524fb061d4d9bdbde039ae7b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "4c45b69ae8c65e97c44fc57b402565aa9f7804dd241b1ede45aea25044f9993d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "생성 런타임 파일 경합과 source readability·지원 언어·승인 규칙의 공백을 실제 검사로 구분한다",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "ignored 런타임 변경은 제외하고 실제 소스 변경 감지는 유지하는 훅 수정본을 검증·설치한다",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "새 호스트 세션에서 실제 등록된 수정 훅이 수용되는지 확인하며 미승인 정렬·언어 변경은 완료로 주장하지 않는다",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "requestedCommand": "python3",
+        "args": [
+          "-c",
+          "import json,pathlib,tempfile,subprocess,os,threading,time,hashlib,shutil\nroot=pathlib.Path.cwd()\nout=root/'.www/closeout-hook-legacy-20261115'\nout.mkdir(parents=True,exist_ok=True)\nnode='/opt/homebrew/Cellar/node@22/22.22.3/bin/node'\nlauncher='/Users/jonghoPro/.local/share/boxbox/codex/0.2.8/plugin/scripts/boxbox.mjs'\nruntime=json.loads(pathlib.Path(launcher).parent.parent.joinpath('runtime.json').read_text())\ncli=pathlib.Path(runtime['cli'])\ncli_hash=hashlib.sha256(cli.read_bytes()).hexdigest()\nassert cli_hash=='3ea6e779c0f1b2442d8d5286a6bdf254db820d4c7a2ff417d0eb31d5639716db'\ncmd=[node,launcher]\nbefore_mode=subprocess.run(cmd+['mode','--json'],capture_output=True,text=True,check=True)\nassert json.loads(before_mode.stdout)['mode']=='off'\nbase=pathlib.Path(tempfile.mkdtemp(prefix='www-boxbox-closeout-'))\nrecords=[]\ntry:\n for case in ['ignored_runtime','visible_source','unsupported_language']:\n  work=base/case;work.mkdir()\n  data=base/(case+'-data');data.mkdir()\n  subprocess.run(['git','init','-q',str(work)],check=True)\n  (work/'.gitignore').write_text('.www/\\n.gjc/\\n')\n  (work/'.www').mkdir()\n  (work/'sample.py').write_text('value = 1\\n')\n  env={**os.environ,'BOXBOX_MODE':'check','PLUGIN_DATA':str(data)}\n  payload={'session_id':'workflow007-'+case,'cwd':str(work),'tool_name':'Bash'}\n  def hook(mode):\n   return subprocess.run(cmd+['hook',mode,'--root',str(work)],cwd=work,input=json.dumps(payload),capture_output=True,text=True,env=env,timeout=60)\n  start=hook('session')\n  assert start.returncode==0 and 'hook error' not in start.stdout+start.stderr\n  (work/'sample.py').write_text('value = 2\\n')\n  if case=='unsupported_language':(work/'legacy.mjs').write_text('export const value = 1;\\n')\n  stop=threading.Event();count=[0]\n  def mutate():\n   while not stop.is_set():\n    count[0]+=1\n    if case=='visible_source':\n     temporary=work/'.sample.tmp'\n     temporary.write_text('value = 2\\n# revision '+str(count[0])+'\\n'+('# source comment\\n'*10000))\n     temporary.replace(work/'sample.py')\n    else:\n     (work/'.www'/'runtime.json').write_text(str(count[0]))\n     transition=work/'.www'/'lock.transition'\n     transition.mkdir(exist_ok=True)\n     transition.rmdir()\n    time.sleep(.002)\n  thread=threading.Thread(target=mutate)\n  if case!='unsupported_language':thread.start()\n  try:post=hook('post')\n  finally:\n   stop.set()\n   if thread.is_alive():thread.join()\n  receipts=[json.loads(p.read_text()) for p in data.rglob('*.json') if p.name!='baseline.json']\n  observed={'case':case,'writes':count[0],'sessionExit':start.returncode,'postExit':post.returncode,'stdout':post.stdout,'stderr':post.stderr,'receipts':receipts}\n  if case=='ignored_runtime':\n   assert count[0]>0 and 'hook error' not in post.stdout+post.stderr\n   assert len(receipts)==1 and receipts[0]['files']==['sample.py']\n   assert receipts[0]['automaticFixPerformed']==False\n  elif case=='visible_source':\n   assert count[0]>0 and 'Source changed during check' in post.stdout+post.stderr\n   assert not receipts\n  else:\n   assert len(receipts)==1 and 'legacy.mjs' in receipts[0]['unsupported']\n   assert receipts[0]['state']=='UNSUPPORTED'\n  records.append(observed)\n check=subprocess.run(cmd+['check','--source','--file','src/main.ts','--json'],cwd=root,capture_output=True,text=True,timeout=90)\n parsed=json.loads(check.stdout)\n assert parsed['results'][0]['file']=='src/main.ts'\n assert parsed['results'][0]['language']=='typescript'\n assert parsed['results'][0]['summary']['misaligned']>0\n assert check.returncode==1\n policy=json.loads((root/'source-policy.json').read_text())\n after_mode=subprocess.run(cmd+['mode','--json'],capture_output=True,text=True,check=True)\n assert before_mode.stdout==after_mode.stdout\n result={'result':'passed','executor':'actual-installed-cli-isolated-fixtures','cliSha256':cli_hash,'launcher':launcher,'runtimeNode':runtime['node'],'projectMode':json.loads(after_mode.stdout),'cases':records,'sourceCheck':{'exitCode':check.returncode,'summary':parsed['results'][0]['summary'],'syntax':parsed.get('syntax'),'formatReadiness':parsed.get('formatReadiness'),'basis':parsed.get('basis')},'legacyJavaScript':policy.get('legacyJavaScript'),'limitations':['NO_GROUPS is fixture-only coverage, not repository style PASS.','The user project remains off. Only isolated subprocesses force check mode.','Source changed during check is expected and required in visible source negative control.','This CLI fixture does not prove host event acceptance.']}\n (out/'installed-current.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))\n print(json.dumps({k:v for k,v in result.items() if k not in ['cases']},ensure_ascii=False))\nfinally:shutil.rmtree(base)\n"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+            "digest": "332c0783571fe1260d5f1832321d7691109ccaf3e9b6ee1fa41ce08194b57ce6"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 4622,
+            "digest"         : "28f36fda4a8a85d2022145d1dab916b59321292570d6ded4d00ec66bbc169349",
+            "truncated"      : false,
+            "retainedBytes"  : 4622,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-6a34d71f-9006-4db4-a542-48c7cd86296b",
+        "startedAt"  : "2026-11-15T09:29:23.292Z",
+        "completedAt": "2026-11-15T09:29:23.792Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "07d1bcefe0e269eeca9cd5d04c33c69ccea0e38b075fce7132106b44a1025196",
+          "inputs": [
+            ".boxbox",
+            "docs/DEVELOPMENT.md",
+            "source-policy.json",
+            "src/main.ts"
+          ],
+          "files": [
+            {
+              "path": ".boxbox",
+              "type": "directory"
+            },
+            {
+              "path": ".boxbox/approvals",
+              "type": "directory"
+            },
+            {
+              "path"  : ".boxbox/approvals/chat-final-two-response.json",
+              "type"  : "file",
+              "digest": "9b39f950ee1fb4a81c88215f1697c5d76608079c7574b500dbeede205d4fcb53",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/approvals/ts-v1-response.json",
+              "type"  : "file",
+              "digest": "ce18cd60b29d0d13f9bbc8d714c5db749909c5e11fc94aa88879fcce3f707b29",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/approvals/ts-v3-extra4-response.json",
+              "type"  : "file",
+              "digest": "ca0d5c602e618b96f4e33b4ba42425af5f995177c6f4d3fce497e6212afa2f73",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/conventions.jsonl",
+              "type"  : "file",
+              "digest": "b94a6376e0bc520ad83c63846aa42fc748a700e3f032465e89ebd0e6fda31ac8",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/decisions.jsonl",
+              "type"  : "file",
+              "digest": "c32f7473ea387a2c60d1bc22ac693089b0b116d28f397ff495f58b86fe19a3ad",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/examples.jsonl",
+              "type"  : "file",
+              "digest": "2878dfc825978f0cf20f317a21fd705bbc9838614d659540e38bdadf10de4039",
+              "mode"  : 420
+            },
+            {
+              "path": ".boxbox/rules",
+              "type": "directory"
+            },
+            {
+              "path"  : ".boxbox/rules/json-scalar-fields.md",
+              "type"  : "file",
+              "digest": "cc0ad4a462441d8f82a829ef94bdc6a9826d44664e23e9e8182d59c25b08b8eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/rules/www-chat-final-two-approved.md",
+              "type"  : "file",
+              "digest": "49ed13f4fa0db53a5d5cff03386068ce43782c08dad0ff206adc9efec90d66c9",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/rules/www-chat-scroll-ts-approved.md",
+              "type"  : "file",
+              "digest": "7b4677528e921e4992dcec9444072fa93cc200d7f925e602aa3118ae5eddd120",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/rules/www-ts-extra4-v1-approved.md",
+              "type"  : "file",
+              "digest": "9936c15573044027ad305a5d056b4bb03347a1bcdac4b96ce66d4004bf9f7dce",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/rules/www-ts-v1-approved.md",
+              "type"  : "file",
+              "digest": "ae8df6d7b1293705be022f9247211bea5839eb941284fd13d8334a700aa2c61c",
+              "mode"  : 420
+            },
+            {
+              "path"  : ".boxbox/rules/www-ts-v3-approved.md",
+              "type"  : "file",
+              "digest": "9ba598dac06cadab0e77c50f04b07350ebba8cc7e3fdbe84c77af458d9a0bac3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "e524b3b75b0f1e25fb1a20b6ebe05012ec00a535fa9cfc700e8217bde3b23750",
+              "mode"  : 420
+            },
+            {
+              "path"  : "source-policy.json",
+              "type"  : "file",
+              "digest": "06ad234ca147201bad0127fa34cedbeda9c21a5524fb061d4d9bdbde039ae7b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "4c45b69ae8c65e97c44fc57b402565aa9f7804dd241b1ede45aea25044f9993d",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "생성 런타임 파일 경합과 source readability·지원 언어·승인 규칙의 공백을 실제 검사로 구분한다",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "ignored 런타임 변경은 제외하고 실제 소스 변경 감지는 유지하는 훅 수정본을 검증·설치한다",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "새 호스트 세션에서 실제 등록된 수정 훅이 수용되는지 확인하며 미승인 정렬·언어 변경은 완료로 주장하지 않는다",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+        "requestedCommand": "python3",
+        "args": [
+          "-c",
+          "import json,pathlib\nbase=pathlib.Path('.www/hook-trust-20261115')\np=json.loads((base/'post-tool-lifecycle.json').read_text())\nassert p['completed'] and p['failed'] is None and p['bypass'] is False\nbox=[r for r in p['runs'] if 'boxbox-plugins/boxbox/0.2.8/' in r['sourcePath']]\nassert {r['eventName'] for r in box}=={'sessionStart','postToolUse','stop'}\nassert all(r['source']=='plugin' and r['status']=='completed' for r in box)\nassert any('Mode off' in e['text'] for r in box for e in r['entries'])\nh=json.loads((base/'hooks-after.json').read_text())['data'][0]['hooks']\nassert len(h)==8 and all(x['enabled'] and x['trustStatus']=='trusted' for x in h)\ni=json.loads((base/'plugin-integrity.json').read_text())\nassert i['boxboxCacheVsInstallerDifferences']==[]\nprint('실제 설치 BoxBox SessionStart·PostToolUse·Stop 호스트 수용 및 mode off 관측. 엔진 스타일 PASS나 모든 조건부 훅 실행으로 확대하지 않음.')\n"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/hook-trust-20261115/hooks-after.json",
+            "size"  : 8357,
+            "digest": "f06398b7ffe83ea52bb74e063a14fa0fb6ec71ab30defb2119df249675e1a6b2"
+          },
+          {
+            "path"  : ".www/hook-trust-20261115/plugin-integrity.json",
+            "size"  : 135,
+            "digest": "3ec683f7a9134fa271ae9163afbfa66bf0e8fa6ea39d44f1950575160a8e0602"
+          },
+          {
+            "path"  : ".www/hook-trust-20261115/post-tool-lifecycle.json",
+            "size"  : 1917,
+            "digest": "7b6e81772ed8e1c734735e19d72b485dd468a6cbd86ca8b75c5d8a510646ee20"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+            "digest": "332c0783571fe1260d5f1832321d7691109ccaf3e9b6ee1fa41ce08194b57ce6"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 171,
+            "digest"         : "fb78c19efcd70b5243e5b3438c0bc403b47529dae3c1f220b94bf39e69c318bf",
+            "truncated"      : false,
+            "retainedBytes"  : 171,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id"            : "review-a09d6c5b-1d50-4459-b045-b791d11eec82",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "e2e4cc3bb21015215cc048e4c957a4d585e1522eb801e8cf502a949be0ee6804",
+        "criteriaDigest": "4c45b69ae8c65e97c44fc57b402565aa9f7804dd241b1ede45aea25044f9993d",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "2a8c4aff8014e96da77090c9b5fe8f6d5280ea87d456be59e8df9591a5856b0b"
+        },
+        "failure": null,
+        "findings": [
+          "판정 근거(대조 결과): work.json의 두 attempt(b62c27f6, 6a34d71f)에 기록된 입력 파일 digest가 이번 검토 대상과 같습니다. 대상은 .boxbox 하위 파일, docs/DEVELOPMENT.md e524…, source-policy.json 06ad…, src/main.ts 3bc3…입니다. criteriaDigest 4c45…도 같습니다. 검토 요청의 sourceDigest e2e4…가 attempt의 07d1…와 다른 이유는 검토 입력에 문서와 작업 원장이 더 들어갔기 때문입니다. 따라서 소스가 바뀌었다는 뜻은 아닙니다.",
+          "AC-1·AC-2: .www/closeout-hook-legacy-20261115/installed-current.json의 실제 기록이 verification.md 본문과 맞습니다. cliSha256은 3ea6…이고, project mode는 실행 전후 모두 off입니다. ignored_runtime 사례는 NO_GROUPS이고 files는 sample.py 하나뿐입니다. unsupported_language 사례는 UNSUPPORTED이며 legacy.mjs가 포함됩니다. src/main.ts 검사는 groups 35, misaligned 26, refused 0, exit 1입니다. source-policy.json:7의 legacyJavaScript는 []입니다. 대조군에서는 visible source를 바꾸면 'Source changed during check'로 거부됐고 receipt도 남지 않았습니다. 그러니 ignored 런타임을 제외하면서 실제 소스 변경 감지는 유지된다는 점이 확인됩니다. NO_GROUPS를 fixture에만 한정한 점과, main.ts의 misaligned를 미해결로 남긴 점은 DEVELOPMENT.md:68의 계약과 맞습니다.",
+          "AC-3: .www/hook-trust-20261115/post-tool-lifecycle.json에 boxbox 0.2.8 캐시 경로의 sessionStart·postToolUse·stop이 모두 source=plugin, status=completed로 남아 있습니다. failed는 null, bypass는 false이고 'Mode off' context도 있습니다. plugin-integrity.json의 boxboxCacheVsInstallerDifferences는 []입니다. 이 결과로 '수용'이라는 기준은 충족됩니다. 다만 host 세션이 mode off였으므로 수정된 post 검사 경로가 host 안에서 실제로 실행되지는 않았습니다. verification.md:46과 attempt 출력 문구는 이 한계를 직접 밝히고, 엔진 PASS로 넓혀 주장하지 않습니다. 따라서 증거 범위를 부풀린 것은 아닙니다.",
+          "확인 한계(결함 아님): 읽기 도구가 저장소 바깥에 접근할 수 없었습니다. 그래서 ~/.codex/plugins/cache/boxbox-plugins/boxbox/0.2.8의 launcher와 runtime.json이 SHA 3ea6…인 CLI를 가리키는지는 직접 열어 보지 못했습니다. 이 연결은 plugin-integrity.json의 차이 없음 기록에 기대고 있습니다. 명령은 실행하지 않았고 테스트도 다시 돌리지 않았습니다.",
+          "경미(문서 정합성): verification.md:12-14의 '현재 판정' 문단은 예전 상태 그대로입니다. '호스트 재시작 후 수용'이 아직 미해결이라고 쓰고, 기록된 실행을 'docs-only 입력'의 AC 통과로 옮기지 않았다고 적었습니다. 하지만 지금은 AC-3이 passed이고 입력에도 src/main.ts, source-policy.json, .boxbox가 추가됐습니다. status가 verifying으로 남아 있고 '실제 소스 가독성 미해결'이라는 내용은 여전히 맞아서 판정을 뒤집을 정도는 아닙니다. 그래도 나중 문단(33-50행)과 어긋나 보이므로 이력으로 표시하거나 현재 판정을 고쳐 쓰는 편이 좋습니다.",
+          "경미(검증 명령 강도): attempt b62c27f6 명령은 source-policy의 legacyJavaScript를 읽기만 하고 assert는 하지 않습니다. ignored_runtime 사례의 post.returncode도 확인하지 않습니다. main.ts 결과도 groups·misaligned 같은 구체 수치가 아니라 misaligned>0만 assert합니다. 산출 파일로 수치를 확인했기 때문에 현재 판정에는 영향이 없습니다. 다만 같은 명령을 다시 돌렸을 때 회귀를 잡아내는 힘은 약합니다.",
+          "권한 범위: commit과 publish는 false입니다. 검증 명령이 쓰는 위치는 Git이 무시하는 .www/closeout-hook-legacy-20261115/와 임시 디렉터리뿐이고, 임시 디렉터리는 shutil.rmtree로 지웁니다. 전역이나 프로젝트 mode도 바꾸지 않습니다(before_mode==after_mode). 따라서 writePaths(docs/DEVELOPMENT.md)를 벗어나 제품 소스를 바꾼 흔적은 없습니다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-a09d6c5b-1d50-4459-b045-b791d11eec82/opus.json",
+        "startedAt"  : "2026-11-15T09:29:47.150Z",
+        "completedAt": "2026-11-15T09:30:46.256Z"
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-d5a8917a-c260-4f47-b8fb-dc14ba757624",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T09:29:42.960Z",
+        "sourceDigest"   : "07d1bcefe0e269eeca9cd5d04c33c69ccea0e38b075fce7132106b44a1025196",
+        "criteriaDigest" : "4c45b69ae8c65e97c44fc57b402565aa9f7804dd241b1ede45aea25044f9993d",
+        "documentsDigest": "6ac56772d90463dede6d54ac0a0abee5c223b0acd896705dff82bb643fb1d2e7",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "플러그인 CLI 격리 검증과 Native 관측은 기존 프로세스·권한 경계를 이용하며 제품 모듈이나 상태 소유를 변경하지 않는다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "현행 문서가 설치 경로·mode off의 disabled 처리·NO_GROUPS 한계·미지원 언어·신뢰와 설치 분리를 이미 설명한다. 이번 실제 관측은 해당 계약과 일치하며 전체 가독성 PASS를 추가 주장하지 않는다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "이번 작업은 외부 설치 BoxBox 훅의 기존 경합 수정과 호스트 수용을 검증하며 WWW 제품 목적·사용 흐름·제공 범위를 바꾸지 않는다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "현재 소스에 연결한 실제 검증, 문서 영향 검토, 읽기 전용 Opus 및 저작 보고서 절차를 그대로 적용하며 완료 계약을 변경하지 않는다."
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
   }
 }

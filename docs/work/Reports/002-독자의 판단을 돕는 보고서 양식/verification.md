@@ -126,3 +126,84 @@ PDF는 3페이지의 본문 텍스트와 페이지 렌더를 확인했다. 요�
 ## 공개 준비 경로 치환
 
 2026-11-12 사용자가 승인한 공개 준비에서 기록 속 사용자 홈 경로를 `<USER_HOME>`으로 치환했다. 원문은 무시되는 로컬 증거에 보존했다. 과거 실행 결과를 이번 변경 후보의 새 검증으로 승격하지 않으며, 이 치환 뒤 증거의 현재 적용성은 별도로 판단한다.
+
+<a id="attempt-2dcb9bc3-8994-4da1-9516-550953a2a073"></a>
+## 검증 시도 — 2026-11-15T09:27:53.975Z
+
+- 시도 ID: `attempt-2dcb9bc3-8994-4da1-9516-550953a2a073`
+- 실행 시각: 2026-11-15T09:27:12.824Z ~ 2026-11-15T09:27:53.975Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","test/verify-native-report-live.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-5`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `docs/skills/REPORTS.md`, `docs/specs/reports.md`, `package.json`, `scripts/verify-reports.ts`, `scripts/workflow`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `b65f05fb9cf642a6c8453551474a1999e6f65e11df5280265387994e10a82086`
+- 기준 정의 식별: `a95cc49709ff393fba70c298409011afd740e431bfcb43acdbe37069f5a7d7cb`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 1128바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+## 2026-11-15 검증 마감 재개
+
+이번 요청은 기존 검증 대기 항목을 현재 입력에서 다시 확인하는 작업이다. 과거 검증·실패·저작 보고서는 보존하며, 현재 소스에 적용되는 실제 검사·문서 영향 검토·정책상 독립 검토와 새 저작 보고서를 확보하기 전에는 완료로 바꾸지 않는다. 별도 Ecosystem/004 변경이 병행 중이므로 검사 전후 입력 지문 변화와 UI 영향을 구분한다. 제품 수정·새 커밋·push는 이 재검증에서 수행하지 않는다.
+
+### 보고서 전용 실제 UI 검사 추가
+
+현재 사용자 검증 마감 요청의 범위에서 현재 타입·보고서 집중 테스트·build·새 Electron 프로세스의 보고서 전용 시나리오를 실행하는 정확한 `node --input-type=module --eval` 명령을 추가했다. 원본 명령은 `.www/closeout-reports-20261115/gui-command.json`에 보존한다. 보존된 합성 fixture의 docs/src와 합성 판단 프로세스를 새 작업 공간·profile로 복사해 사용한다. 이 검사는 원래 통합 스크립트나 전체 저장소 검사 결과를 대체하지 않으며 실제 LLM 품질·BoxBox 전체 golden proof·실제 사용자 업무 수용을 입증하지 않는다. 기존 요청 해시와 권한은 보존하고 커밋·게시 권한은 추가하지 않는다.
+
+### 2026-11-15 실제 모델의 새 서술 보존
+
+`attempt-2dcb9bc3-8994-4da1-9516-550953a2a073`는 실제 설치 Native의 인사 생략·설계 저작 저장 및 reader 이야기·요구별 결과 존재를 확인했다. exit 0·sourceStable=true·environmentStable=true다. 두 합성 공개 입력의 표본이며 일반 판단 품질이나 실제 구현 수행의 증명이 아니다. 정확한 관측 모델명은 이 검사의 출력에 없어 추정하지 않는다.
+
+같은 현재 제품의 보고서 전용 실제 Electron 검사는 Reports/001의 `attempt-b503d743-f126-41bc-aaf1-5d11eaa7923d`와 `.www/evidence/reports-closeout-gui-B56QSM/`에서 통과했다. 이 작업의 새 검증 시도로 복사하거나 당시 source 범위가 같은 것으로 단정하지 않는다. 전체 저장소와 원래 보고서 통합 스크립트의 현재 승인 proof 실패는 별도 남아 있다. BoxBox project mode off는 스타일 PASS가 아니며 이 기록이 과거 형식 실패를 소급 삭제하지 않는다.
+
+<a id="attempt-fa07fed9-decb-4461-9d62-f9f33e281015"></a>
+## 검증 시도 — 2026-11-15T09:36:24.691Z
+
+- 시도 ID: `attempt-fa07fed9-decb-4461-9d62-f9f33e281015`
+- 실행 시각: 2026-11-15T09:35:46.932Z ~ 2026-11-15T09:36:24.691Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","test/verify-native-report-live.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-5`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `docs/skills/REPORTS.md`, `docs/specs/reports.md`, `package.json`, `scripts/verify-reports.ts`, `scripts/workflow`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `d99f9a2cb18aa4279a8e41b64b31092f2e7d86fd85c53ad37cc01ae80b6bd0e2`
+- 기준 정의 식별: `a95cc49709ff393fba70c298409011afd740e431bfcb43acdbe37069f5a7d7cb`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 1136바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+### 실제 도구 의존 범위 보완
+
+현재 검사에서 타입 도구 프로젝트와 build의 구조 생성기가 실제로 읽는 scripts, docs/architecture, docs/specs, build·패키지·소스 정책·타입 설정을 기존 입력에 추가했다. 범위를 줄이거나 과거 시도를 다시 연결하지 않는다. scope_changed인 과거 통과는 이력으로 보존하며 최종 판단은 추가된 입력 범위의 새 실행으로 확인한다.
+
+### 현재 공통 검사와 작업 고유 검사의 경계
+
+공통 `npm run check`는 `.www/hook-trust-20261115/current-full-check.log`에 Bun 771 통과·3 실패로 남았다. 5초 시간 제한 관련 두 건은 같은 파일의 별도 30초 재검사에서 400 통과·0 실패(`.www/hook-trust-20261115/timeout-recheck.log`)였으며, 남은 공통 실패는 별도 test/architecture-tree.test.ts 새 declaration 구문 3 key의 BoxBox 승인 proof 미충족(`.www/hook-trust-20261115/current-proof-pending.json`)이다. Node 전체는 `.www/hook-trust-20261115/current-node-suite.log`에서 148 통과·0 실패였다. 이는 이 작업의 모든 기준을 자동 통과시키거나 기존 전체 검사를 성공으로 바꾸는 근거가 아니다. BoxBox mode off는 스타일 PASS와 구분한다.
+
+<a id="attempt-9f48575c-8291-490d-bfac-253a501fea00"></a>
+## 검증 시도 — 2026-11-15T09:46:40.478Z
+
+- 시도 ID: `attempt-9f48575c-8291-490d-bfac-253a501fea00`
+- 실행 시각: 2026-11-15T09:46:11.985Z ~ 2026-11-15T09:46:40.478Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","--input-type=module","--eval","import {promises as fs} from 'node:fs';\nimport path from 'node:path';\nimport {spawn} from 'node:child_process';\nimport assert from 'node:assert/strict';\nimport {readWorkReport} from './scripts/workflow/reports.ts';\nconst root=process.cwd();\nconst directory=await fs.mkdtemp(path.join(root,'.www/evidence/reports-closeout-gui-'));\nasync function run(command,args,env=process.env){\n const log=path.join(directory,'process-'+(await fs.readdir(directory)).length+'.log');\n let output='';\n await new Promise((resolve,reject)=>{const c=spawn(command,args,{cwd:root,env,stdio:['ignore','pipe','pipe']});const timer=setTimeout(()=>{c.kill('SIGTERM');reject(Error('검사 시간 초과'));},120000);for(const s of [c.stdout,c.stderr])s.on('data',x=>{output=(output+x).slice(-2000000);});c.on('error',reject);c.on('close',code=>{clearTimeout(timer);fs.writeFile(log,output).then(()=>code===0?resolve():reject(Error(command+' 종료 '+code)));});});\n}\ntry{\n await run('npm',['run','typecheck']);\n await run('bun',['test','test/workflow-reports.test.ts','test/report-service.test.ts','test/report-lifecycle.test.ts','test/native-report-input.test.ts','test/native-reports.test.ts','test/report-judge.test.ts','--timeout','30000']);\n await run('npm',['run','build']);\n const template=path.join(root,'.www/evidence/reports-vzEGpd');\n const fixture=path.join(directory,'fixture');\n await fs.mkdir(fixture);\n for(const name of ['docs','src'])await fs.cp(path.join(template,'fixture',name),path.join(fixture,name),{recursive:true});\n const judge=path.join(directory,'judge-fixture');await fs.copyFile(path.join(template,'judge-fixture'),judge);await fs.chmod(judge,0o700);\n const reportPath=path.join(directory,'electron-probe.json');\n const env={...process.env,WWW_CODEX_BIN:path.join(root,'test/fixtures/fake-app-server.ts'),WWW_PROBE_PATH:reportPath,WWW_PROBE_WORKSPACE:fixture,WWW_PROBE_REPORTS:'1',WWW_PROBE_NATIVE_REPORTS:'1',WWW_PROBE_REPORT_JUDGE_BIN:judge};\n for(const k of ['ELECTRON_RUN_AS_NODE','WWW_NATIVE_PROBE','WWW_PROBE_DEVELOPMENT_WORK_ID','WWW_PROBE_EXPECT_DEVELOPMENT_COMPLETE','WWW_PROBE_ACTIVITY'])delete env[k];\n const binary=path.join(root,'node_modules/electron/dist/Electron.app/Contents/MacOS/Electron');\n await run(binary,[root,'--user-data-dir='+path.join(directory,'profile')],env);\n const result=JSON.parse(await fs.readFile(reportPath,'utf8'));\n assert(!result.error,result.error);assert.equal(typeof result.reportId,'string');\n const selected=await readWorkReport({repo:fixture,reportId:result.reportId});\n const artifacts=result.reportArtifacts,embedded=artifacts.embedded;\n assert.equal(embedded.title,selected.report.title);assert.equal(embedded.url,'about:srcdoc');\n assert.equal(embedded.story,selected.report.narrative.reader.story);assert(embedded.storyHeight>0);assert(embedded.storyTop<=400);\n for(const k of ['reportsNavigation','reportsSandboxed','reportsEmptySearch','reportsDraftPreserved','approvalRoundtrip','nativeAutomaticReport'])assert.equal(result[k],true,k);\n assert.equal(artifacts.mobile.width,360);assert(artifacts.mobile.scrollWidth<=360);assert.equal(artifacts.reducedMotion.enabled,true);assert.equal(artifacts.reducedMotion.animations,0);assert.equal(artifacts.printed,true);\n const summary={result:'passed',evidence:path.relative(root,directory),coverage:'현재 타입·보고서 집중 행동/보안·현재 build·실제 Electron·sandbox 본문·360px·모션축소·PDF·합성 Native 자동보고서',limitations:['기존 성공 검사에서 보존한 합성 docs/src/판단 fixture를 새 공간으로 복사했다. 실제 사용자 작업/LLM 품질이나 현재 전체 저장소 BoxBox golden proof 검사 통과가 아니다.','원래 scripts/verify-reports.ts의 실패·전체 npm check 실패는 이 별도 검사로 변경하지 않는다.']};\n await fs.writeFile(path.join(directory,'summary.json'),JSON.stringify(summary,null,2));console.log(JSON.stringify(summary));\n}catch(e){await fs.writeFile(path.join(directory,'failure.txt'),String(e));console.error(JSON.stringify({result:'failed',evidence:path.relative(root,directory),error:String(e)}));process.exitCode=1;}"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`, `AC-5`, `AC-6`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/architecture`, `docs/skills/REPORTS.md`, `docs/specs`, `docs/specs/reports.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/verify-reports.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `ba9b6330a14bce4afd92b7fc74c0063fea5a961a5531317eecc4a6090a927581`
+- 기준 정의 식별: `a95cc49709ff393fba70c298409011afd740e431bfcb43acdbe37069f5a7d7cb`
+- 검증 중 소스 유지: 변경 감지
+- 검증 의존 원문: `.www/evidence/reports-vzEGpd/fixture/docs/architecture/work-output.json` (169바이트, sha256 d4dfa158c0562a8700d6e82520d8c26c69df3da65e4719cdf975368019cf8eaf), `.www/evidence/reports-vzEGpd/fixture/docs/work/INDEX.md` (567바이트, sha256 bd6c17c9b996f31c8a9919c5efc91b8abee4de636ecd099f23037121774e8970), `.www/evidence/reports-vzEGpd/fixture/docs/work/Native/001-Native 답변 뒤 자동 보고서 연결/reports/report-09d41723-4299-4d77-a2ac-ad2cb2ab90d3.html` (12939바이트, sha256 f7f7a4d8ec34f65d74f4eea3124d9aadc90b74f1e39328bb55add654228b0fb8), `.www/evidence/reports-vzEGpd/fixture/docs/work/Native/001-Native 답변 뒤 자동 보고서 연결/reports/report-09d41723-4299-4d77-a2ac-ad2cb2ab90d3.json` (3499바이트, sha256 204e1ebf1a9e2046fd314dc535afbccc6d80fa05cf25b0bc4237acb9897c9199), `.www/evidence/reports-vzEGpd/fixture/docs/work/Native/001-Native 답변 뒤 자동 보고서 연결/spec.md` (591바이트, sha256 0ef662c431eb75d6df19436d5991cb2176e5e423d796d3c5cc377e2491d64089), `.www/evidence/reports-vzEGpd/fixture/docs/work/Native/001-Native 답변 뒤 자동 보고서 연결/work.json` (1096바이트, sha256 b6115bf0c71d2e56b6407c0ad7bca83a385d2bfa1460c761634c94b1229c8608), `.www/evidence/reports-vzEGpd/fixture/docs/work/Reports/001-실행 검증/reports/report-296947d1-65e2-42a5-9d5f-74a6e4982ff6.html` (9173바이트, sha256 0d7dcf7a1cdcafd1b8e1cdfcb0b59e5610d1161d37e704ce2e0272016f186288), `.www/evidence/reports-vzEGpd/fixture/docs/work/Reports/001-실행 검증/reports/report-296947d1-65e2-42a5-9d5f-74a6e4982ff6.json` (1312바이트, sha256 1dbdfda36464024715fd2f19a36cd76983025d778137e6451e1c2df845027648), `.www/evidence/reports-vzEGpd/fixture/docs/work/Reports/001-실행 검증/work.json` (440바이트, sha256 231623485ad2ca3ba2e217281faef6e5e8a032e6b5083d86e4c8280b928f216b), `.www/evidence/reports-vzEGpd/fixture/docs/work/Reports/002-새 JSON 출력/reports/report-4b1f7633-a5ed-4155-9dc6-4ff2f8283c8c.html` (12950바이트, sha256 ea74950f189a5aaa3aca6519213df11e94403aa4d2c12058edf6185aa131aa80), `.www/evidence/reports-vzEGpd/fixture/docs/work/Reports/002-새 JSON 출력/reports/report-4b1f7633-a5ed-4155-9dc6-4ff2f8283c8c.json` (3816바이트, sha256 78abcdab853617f4c33fbb03916ed2f3838f0fd1e0134113b867df686ac77062), `.www/evidence/reports-vzEGpd/fixture/docs/work/Reports/002-새 JSON 출력/reports/report-4da551b9-2e99-4130-9693-0e1fdd5ebc5b.html` (8790바이트, sha256 c2859b6194f6910080b6975b47727db3d78f89d32767ee85d3b79fb5ed619039), `.www/evidence/reports-vzEGpd/fixture/docs/work/Reports/002-새 JSON 출력/reports/report-4da551b9-2e99-4130-9693-0e1fdd5ebc5b.json` (1563바이트, sha256 9dc82daa7f15c515899ce7068b4ad64545055125d492a6da074ecf76c3cd5883), `.www/evidence/reports-vzEGpd/fixture/docs/work/Reports/002-새 JSON 출력/spec.md` (590바이트, sha256 3d25887108d8e4c1b8469dee46778c7cc73425e982e79068a63a3d6a06d91c18), `.www/evidence/reports-vzEGpd/fixture/docs/work/Reports/002-새 JSON 출력/work.json` (1113바이트, sha256 f6243c8853579600420e36e353aafb7216e393848170168320a0274b344feaf6), `.www/evidence/reports-vzEGpd/judge-fixture` (2631바이트, sha256 c73891ca74919d306ecce8d8d4af02056739f316f9481b7336ea789f43bab36c)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 0바이트, stderr 155바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+## 2026-11-15 최종 현재성 재평가와 부분 반환
+
+별도 세션에서 `docs/specs/ecosystem.md`, `scripts/verify-architecture.ts`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/renderer.tsx`가 검사 도중 다시 바뀌었다. 우리 병렬 작업자의 제품 소스 동결과 실제 전체 워크스페이스의 동결은 달랐다. 통과 영수증은 당시 소스에 묶인 결과로 보존하고 현재 소스 통과로 승격하지 않는다. 공식 resume로 현재 기준·검토·문서 적용성을 재평가했으며 완료를 요청하지 않는다. 추가 유료 검사는 중단했고, 다른 세션 종료 후 현재 소스 재검증 또는 고정 스냅샷 기준의 마감 선택이 남았다. 부분 저작 보고서에 실제 확인 범위·실패·소스 변화·남은 조건을 연결한다.

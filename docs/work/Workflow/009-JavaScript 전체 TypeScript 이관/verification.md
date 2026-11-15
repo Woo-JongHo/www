@@ -459,3 +459,160 @@ BoxBox 파일 수정 종료 후 source 정책·작업 계약·전체 strict·tes
 ## 공개 준비 경로 치환
 
 2026-11-12 사용자가 승인한 공개 준비에서 기록 속 사용자 홈 경로를 `<USER_HOME>`으로 치환했다. 원문은 무시되는 로컬 증거에 보존했다. 과거 실행 결과를 이번 변경 후보의 새 검증으로 승격하지 않으며, 이 치환 뒤 증거의 현재 적용성은 별도로 판단한다.
+
+<a id="attempt-c93cd5fd-6e76-4f1d-a06e-78d1e2100afb"></a>
+## 검증 시도 — 2026-11-15T09:26:41.585Z
+
+- 시도 ID: `attempt-c93cd5fd-6e76-4f1d-a06e-78d1e2100afb`
+- 실행 시각: 2026-11-15T09:26:35.226Z ~ 2026-11-15T09:26:41.585Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js","run","check:source"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `agents/www/review-policy.json`, `build.ts`, `package.json`, `scripts`, `scripts/test.ts`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src/development.ts`, `src/ecosystem.ts`, `src/native-command.ts`, `src/native-reports.ts`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `de1c013a50845ca417ac58a38bc26ae847c5a2c0bbf53f653aeb939616bbc02d`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 119바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-bb9d4204-0ff8-4837-a7a9-2879fb665386"></a>
+## 검증 시도 — 2026-11-15T09:26:46.930Z
+
+- 시도 ID: `attempt-bb9d4204-0ff8-4837-a7a9-2879fb665386`
+- 실행 시각: 2026-11-15T09:26:36.655Z ~ 2026-11-15T09:26:46.930Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","--test","test/workflow-contract.test.ts","test/workflow-harness.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `agents/www/review-policy.json`, `build.ts`, `package.json`, `scripts`, `scripts/test.ts`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src/development.ts`, `src/ecosystem.ts`, `src/native-command.ts`, `src/native-reports.ts`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `de1c013a50845ca417ac58a38bc26ae847c5a2c0bbf53f653aeb939616bbc02d`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 8366바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-140e064c-cd35-4fee-9f9f-a2ca54dc51d6"></a>
+## 검증 시도 — 2026-11-15T09:28:39.572Z
+
+- 시도 ID: `attempt-140e064c-cd35-4fee-9f9f-a2ca54dc51d6`
+- 실행 시각: 2026-11-15T09:28:21.109Z ~ 2026-11-15T09:28:39.572Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js","run","typecheck"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `agents/www/review-policy.json`, `build.ts`, `package.json`, `scripts`, `scripts/test.ts`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src/development.ts`, `src/ecosystem.ts`, `src/native-command.ts`, `src/native-reports.ts`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `f04c8c55b973030aa5effb4ffb62f682cea3b24ad0f2604662ac2b516da6014f`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 76바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+## 2026-11-15 현재 전환 경로 재검증
+
+현재 HEAD 92de2389에서 소스 정책 attempt-c93cd5fd, Node 전용 workflow-contract·workflow-harness attempt-bb9d4204, strict 타입 검사 attempt-140e064c가 각각 exit 0/sourceStable=true로 통과했다. 이전 Opus가 지적한 test:comparison의 Bun/Node 일괄 실행 문제는 현재 package.json에서 npm test의 분리 실행기로 연결되어 있고, test/fixtures/fake-app-server.ts는 Node shebang과 Git 실행 mode 100755를 유지한다. 이 패스는 해당 파일을 수정하지 않았다.
+
+공용 전체 npm run check에서 새 구조지도 병렬 변경에 대한 BoxBox proof 검사 실패와 구조 fixture timeout이 관찰되었다(.www/hook-trust-20261115/current-full-check.log). 원인은 별도 조사 중이며 그 실패를 TypeScript 이관 자체의 결함으로 단정하지 않는다. 그러나 전체 테스트·비교 스파이크 재실행 통과 증거도 아니므로 AC-2/AC-3의 전체 완료를 주장하지 않는다. 현재 빌드 산출물을 쓰는 다른 검증과 충돌하지 않도록 빌드는 공유 슬롯을 기다린다. 과거 실패 시도와 원문 감사는 보존하며 현재 실행 근거와 구분한다.
+
+### 2026-11-15 보존한 비교 스파이크 검사 명령
+
+현재 사용자의 검증 마감 요청에 따라 기존 허용 cargo test와 같은 manifest·인자를 실행하는 Node 래퍼를 verifierCommands에 추가했다. 홈 경로를 os.homedir()로 해석해 기기 절대경로를 추적 문서에 넣지 않는다. 실제 자식 cargo의 stdout/stderr·exit를 그대로 전달하며 검사·수용 기준을 완화하지 않는다. Electron 제품 전환 완료와 보존한 Tauri 비교 스파이크 회귀는 별도로 구분한다.
+
+<a id="attempt-bb2f7dc2-31cd-44a9-80de-b454bd4895f6"></a>
+## 검증 시도 — 2026-11-15T09:30:44.476Z
+
+- 시도 ID: `attempt-bb2f7dc2-31cd-44a9-80de-b454bd4895f6`
+- 실행 시각: 2026-11-15T09:30:41.266Z ~ 2026-11-15T09:30:44.476Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","-e","const cp=require(\"node:child_process\"),os=require(\"node:os\"),path=require(\"node:path\");const r=cp.spawnSync(path.join(os.homedir(),\".cargo/bin/cargo\"),[\"test\",\"--manifest-path\",\"spikes/tauri/src-tauri/Cargo.toml\"],{cwd:process.cwd(),encoding:\"utf8\",timeout:240000});process.stdout.write(r.stdout||\"\");process.stderr.write(r.stderr||\"\");if(r.error)throw r.error;process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `agents/www/review-policy.json`, `build.ts`, `package.json`, `scripts`, `scripts/test.ts`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src/development.ts`, `src/ecosystem.ts`, `src/native-command.ts`, `src/native-reports.ts`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `579cbdb0fe0f4ebc2c8875f744b2f7f7cd5f89b84f6bf6e214679cb8bdd83405`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 496바이트, stderr 323바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+### 2026-11-15 독립 감사의 실제 회귀 발견
+
+Opus review-0bdcc7c7(실제 claude-opus-5-5)는 scripts/workflow/run.ts의 runBoxbox가 외부 설치 런처 basename을 boxbox.ts로 요구하는 반면 공식 scripts/workflow.ts는 boxbox.mjs를 요구하는 모순을 발견했다. 해당 소스를 직접 대조해 일괄 확장자 이관이 WWW 소유가 아닌 외부 설치 런처 식별까지 바꾼 회귀임을 확인했다. test/workflow-harness.test.ts의 mock도 boxbox.ts여서 기존 Node 하네스 검사는 이 회귀를 관찰하지 못했다. 검증 단계의 소유 범위에서는 제품 코드를 수정하지 않고 구현 담당자에게 전달했다. 정상 외부 설치 런처 식별과 이를 잡는 집중 회귀 보완이 AC-3의 구체적인 미완료다.
+
+감사 뒤 실제 Cargo 보존 스파이크 검사는 attempt-bb2f7dc2에서 exit 0/sourceStable=true로 끝났다. 이는 해당 manifest의 Rust 테스트 표본이며 Electron 빌드·전체 npm test·test:comparison 전체 통과를 뜻하지 않는다. 공용 npm run check는 Bun 3건 실패에서 중단되어 뒤 Node 147건과 최종 빌드는 실행되지 않았다는 한계를 유지한다.
+
+### 2026-11-15 동일 이관 범위의 회귀 수정
+
+기존 implementation=true, scripts·test 쓰기 권한을 승계해 외부 런처 계약 회귀를 www-build 단계로 돌렸다. TypeScript managed 소스 2파일 변경에 따라 공식 생성기로만 갱신하는 src/architecture.generated.json을 추가 출력으로 선언한다. 제품 범위나 수용 기준을 바꾸지 않으며 외부 설치물은 수정하지 않는다. 타 작업 변경을 보존하고 수동 snapshot 편집·commit·push는 하지 않는다.
+
+1차 공식 하네스는 기존 scripts·test 디렉터리 항목이 정확 파일 권한으로 해석되지 않아 outside_approval로 호스트 실행 전에 거부됐다. 제품 파일은 변경되지 않았다. 기존 이관 회귀 범위에서 이번에 담당을 명시한 scripts/workflow/run.ts와 test/workflow-harness.test.ts를 정확 writePaths로 추가했다. 권한 실패를 성공이나 모델 실행으로 기록하지 않는다.
+
+<a id="attempt-898177ec-06f4-43f1-8296-85437006b40d"></a>
+## 검증 시도 — 2026-11-15T09:35:28.424Z
+
+- 시도 ID: `attempt-898177ec-06f4-43f1-8296-85437006b40d`
+- 실행 시각: 2026-11-15T09:35:25.679Z ~ 2026-11-15T09:35:28.424Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js","run","check:source"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `agents/www/review-policy.json`, `build.ts`, `package.json`, `scripts`, `scripts/test.ts`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src/development.ts`, `src/ecosystem.ts`, `src/native-command.ts`, `src/native-reports.ts`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `1faafa4bc5abc6217e6879924f815b46cf4f027c1e9b501a58902a777f2af10d`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 119바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-b7519965-c1ca-41f1-a410-fec94a5966ae"></a>
+## 검증 시도 — 2026-11-15T09:35:29.548Z
+
+- 시도 ID: `attempt-b7519965-c1ca-41f1-a410-fec94a5966ae`
+- 실행 시각: 2026-11-15T09:35:24.400Z ~ 2026-11-15T09:35:29.548Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","--test","test/workflow-contract.test.ts","test/workflow-harness.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `agents/www/review-policy.json`, `build.ts`, `package.json`, `scripts`, `scripts/test.ts`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src/development.ts`, `src/ecosystem.ts`, `src/native-command.ts`, `src/native-reports.ts`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `1faafa4bc5abc6217e6879924f815b46cf4f027c1e9b501a58902a777f2af10d`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 8588바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+### 2026-11-15 회귀 수정과 제품 소스 동결
+
+공식 typed 하네스 재시도는 실제 Codex host가 두 소스를 수정하고 정상 종료했다. scripts/workflow/run.ts의 외부 런처 식별은 boxbox.mjs로 복원했고, 기존 수용 fixture도 같은 외부 artifact 이름을 사용한다. 잘못된 boxbox.ts 경로는 host 호출 전 거부되어 processCalls=0 및 marker 미생성을 확인하는 회귀를 추가했다. 실행 소스·테스트 파일 자체는 TypeScript이며 임시 외부 도구 fixture의 확장자를 소유 JavaScript 소스로 등록하거나 허용한 것이 아니다.
+
+실제 하네스는 executed=true, host passed/turnCompleted=true, harness.ok=true, sourceStable=true였다. 사전·사후 소스 정책과 두 strict 타입 검사가 통과했고 BoxBox는 두 단계 모두 status=disabled/mode=off로 관찰했다. 요청 모델과 관측 모델은 이 어댑터 영수증에 제공되지 않아 미확인으로 남긴다. 공식 생성기는 generatorExecuted=true/accepted=true로 src/architecture.generated.json을 갱신했다. 제품 코드·snapshot은 여기서 동결하고 이후 기록·검증만 수행한다.
+
+전체 원문은 .www/closeout-static-20261115/workflow009-build-retry.json, 소스 직전/후 SHA 대조와 수집 시점 한계는 regression-source-before-after.json 및 before-regression-files.json/after-regression-files.json에 있다. 다른 구조지도 소스 3파일의 SHA는 보존됐고 snapshot은 현재 전체 소스를 읽어 공식 생성했다. 집중 Node 재검증·현재 source/type 검사·독립 Opus 재검토를 이어간다. 전체 테스트·Electron 빌드의 미완료 한계는 별도 유지한다.
+
+<a id="attempt-f292df7c-4c5a-412c-ae27-a6c5e90ce57d"></a>
+## 검증 시도 — 2026-11-15T09:36:22.533Z
+
+- 시도 ID: `attempt-f292df7c-4c5a-412c-ae27-a6c5e90ce57d`
+- 실행 시각: 2026-11-15T09:36:04.205Z ~ 2026-11-15T09:36:22.533Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js","run","typecheck"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `agents/www/review-policy.json`, `build.ts`, `package.json`, `scripts`, `scripts/test.ts`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src/development.ts`, `src/ecosystem.ts`, `src/native-command.ts`, `src/native-reports.ts`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `1faafa4bc5abc6217e6879924f815b46cf4f027c1e9b501a58902a777f2af10d`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 76바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+### 2026-11-15 부분 성공과 수용 기준의 잔여 구분
+
+회귀 수정 뒤 집중 Node 하네스(attempt-b7519965), source 정책(attempt-898177ec), strict 타입(attempt-f292df7c)은 실제 exit 0/sourceStable=true다. 공용 Node 전체도 148개가 통과했다(.www/hook-trust-20261115/current-node-suite.log). 그러나 Bun 전체의 이전 실패 3건과 Electron 최종 빌드·test:comparison 전체 완료 근거가 아직 없어 AC-2·AC-3의 result는 unverified로 유지하고 구체 blocker를 기록한다. 검증 시도와 연결은 보존하면서 현재 증거 요약은 부분 검사라는 범위를 명시했다. 전체 증거가 없는 상태에서는 완료 요청을 실행하지 않는다.

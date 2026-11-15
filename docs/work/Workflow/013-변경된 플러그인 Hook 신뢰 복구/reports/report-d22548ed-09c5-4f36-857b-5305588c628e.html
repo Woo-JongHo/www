@@ -1,0 +1,194 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>변경된 플러그인 Hook 신뢰 복구 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 15일 오후 6:32 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>변경된 플러그인 Hook 신뢰 복구</h1><p class="lead">변경된 BoxBox·Vercel 8개 Hook의 신뢰 승인을 정식 호스트 경로로 복구했다.</p><div id="report-story" class="story">현재 플러그인 내용 지문과 저장된 승인 지문이 달라 8개 활성 Hook이 modified로 차단됐다. Hook 정의 지문은 같았다.
+
+정식 CLI 승인 후 별도 Native 목록 8개가 trusted이고 새 세션의 SessionStart 4개·Stop 1개가 완료됐다. 실제 import 의존성과 실행 산출물을 고정해 재검증·독립 Opus 재검토도 통과했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 4 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 기존 오류 세션은 재시작해 복구된 신뢰 상태를 읽게 한다. 새 세션 재발 시 hooks/list의 내용 지문과 설치 파일을 대조한다.</p><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>플러그인 설치 무결성 및 승인 전후 내용 지문을 대조했다.</li><li>스크립트 검토 후 Trust all and continue로 승인했다. 관계없는 설정은 보전했다.</li><li>공식 현재 입력 검증·문서 영향 검토·실제 Opus 검토와 저작 보고서를 연결했다.</li></ul></div></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 Native 목록·저장 승인·설치 무결성을 대조해 오류가 발생한 정확한 플러그인과 정의/내용 지문 불일치를 식별한다.</dt><dd>당시 통과로 기록</dd></div><div><dt>검토한 BoxBox·Vercel의 8개 Hook을 정식 호스트 승인 경로로 복구하고 bypass·승인 해시 직접 작성 없이 활성·신뢰 상태와 관계없는 설정 보전을 확인한다.</dt><dd>당시 통과로 기록</dd></div><div><dt>우회 옵션 없는 새 Native 세션에서 대표 SessionStart·Stop Hook의 실제 실행과 완료를 관찰하고 신뢰 오류의 재발 여부 및 미실행 Hook 범위를 구분한다.</dt><dd>당시 통과로 기록</dd></div></dl></section><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>우회 옵션이나 승인 지문 수동 작성을 사용하지 않았다.</li><li>BoxBox 프로젝트 off를 유지하며 Hook 수용과 가독성 검사를 구분했다.</li></ul></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 4건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>과거 승인 파일 사본이 없어 최초 변경 파일·시각은 특정하지 못했다.</li><li>대표 공식 실행은 SessionStart·Stop이며 PostToolUse·SessionEnd 전체 범위를 의미하지 않는다. 별도 PostToolUse 표본은 Workflow007에서 다룬다.</li><li>CLI MCP 경고 내용은 미확인이다. Hook 신뢰 오류가 재발했다는 증거는 없다.</li><li>플러그인 내용이 이후 다시 바뀌면 새 검토가 필요하다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><ul><li>기존 오류 세션은 재시작해 복구된 신뢰 상태를 읽게 한다. 새 세션 재발 시 hooks/list의 내용 지문과 설치 파일을 대조한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Workflow/013-변경된 플러그인 Hook 신뢰 복구/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-1196c539-f66f-4ad1-9e8a-6eedb0471134<br>report-d22548ed-09c5-4f36-857b-5305588c628e</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>6db124f4199a363950fe637c1cb81c2223c339255ec62334747fc7f3a7f6213c</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>92bbb3916d9f4c6075a86e90ed9409fa53057d7da3e4904ad566dffba618eda6</code></dd></div><div><dt>기준 지문</dt><dd><code>ddba05de31b6a59b9348c926c1918be25f558d17eaf3f302a4f1abdafe78be24</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;HOOK-1&quot;,
+      &quot;description&quot;: &quot;현재 Native 목록·저장 승인·설치 무결성을 대조해 오류가 발생한 정확한 플러그인과 정의/내용 지문 불일치를 식별한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-609d31eb-01b6-4159-8d68-e399f2ba0c3f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-70df4081-ca5d-4589-a2d4-ff2dd7bf5e68&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;HOOK-2&quot;,
+      &quot;description&quot;: &quot;검토한 BoxBox·Vercel의 8개 Hook을 정식 호스트 승인 경로로 복구하고 bypass·승인 해시 직접 작성 없이 활성·신뢰 상태와 관계없는 설정 보전을 확인한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-609d31eb-01b6-4159-8d68-e399f2ba0c3f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-70df4081-ca5d-4589-a2d4-ff2dd7bf5e68&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;HOOK-3&quot;,
+      &quot;description&quot;: &quot;우회 옵션 없는 새 Native 세션에서 대표 SessionStart·Stop Hook의 실제 실행과 완료를 관찰하고 신뢰 오류의 재발 여부 및 미실행 Hook 범위를 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-622e11f2-9c3b-4ab7-be00-02457e9d0a92&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-9d0b6f7f-5bd7-4dde-8cec-20acc3450b50&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-609d31eb-01b6-4159-8d68-e399f2ba0c3f&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import {readFileSync} from &#39;node:fs&#39;;import assert from &#39;node:assert/strict&#39;;const p=&#39;.www/hook-trust-20261115/&#39;;const read=n=&gt;JSON.parse(readFileSync(p+n,&#39;utf8&#39;));const b=read(&#39;hooks-before.json&#39;).data.flatMap(x=&gt;x.hooks);const a=read(&#39;hooks-after.json&#39;).data.flatMap(x=&gt;x.hooks);const d=read(&#39;trust-review-config-delta.json&#39;);const i=read(&#39;plugin-integrity.json&#39;);assert.equal(b.length,8);assert(b.every(h=&gt;h.enabled&amp;&amp;h.trustStatus===&#39;modified&#39;));assert.equal(a.length,8);assert(a.every(h=&gt;h.enabled&amp;&amp;h.trustStatus===&#39;trusted&#39;));assert.equal(Object.keys(d.changedStates).length,8);assert(d.unrelatedConfigurationUnchanged);for(const v of Object.values(d.changedStates)){assert.equal(v.before.trusted_hash,v.after.trusted_hash);assert.notEqual(v.before.trusted_content_hash,v.after.trusted_content_hash);}assert.equal(i.boxboxCacheVsInstallerDifferences.length,0);assert.equal(i.vercelGitChanges.length,0);assert(readFileSync(p+&#39;official-tui-review.txt&#39;,&#39;utf8&#39;).includes(&#39;Trusting hooks&#39;));console.log(&#39;HOOK-1/2: 설치 무결성, 정의 동일·내용 승인 변경, 8개 정식 호스트 신뢰 및 관계없는 설정 보전 확인. 실제 의미 판정은 diagnosis와 독립 검토 참조.&#39;);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:26:20.771Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-622e11f2-9c3b-4ab7-be00-02457e9d0a92&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--experimental-transform-types&quot;,
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import {spawn} from &#39;node:child_process&#39;;\nimport {writeFileSync} from &#39;node:fs&#39;;\nimport {JsonRpcClient} from &#39;./src/rpc.ts&#39;;\nconst child=spawn(&#39;codex&#39;,[&#39;app-server&#39;],{stdio:[&#39;pipe&#39;,&#39;pipe&#39;,&#39;pipe&#39;]});\nconst rpc=new JsonRpcClient(child);const runs=[];let completed=false;let failed=null;\nrpc.on(&#39;message&#39;,m=&gt;{if(m.id!==undefined&amp;&amp;m.method){void rpc.respond(m.id,{decision:&#39;decline&#39;});return;}if(m.method===&#39;hook/completed&#39;){const r=m.params.run;runs.push({eventName:r.eventName,source:r.source,sourcePath:r.sourcePath,status:r.status,statusMessage:r.statusMessage,entries:r.entries.map(e=&gt;({kind:e.kind,text:e.text.slice(0,500)}))});}if(m.method===&#39;turn/completed&#39;){completed=true;failed=m.params.turn?.error??null;}});\nconst timer=setTimeout(()=&gt;child.kill(&#39;SIGTERM&#39;),150000);\ntry{await rpc.request(&#39;initialize&#39;,{clientInfo:{name:&#39;www_hook_lifecycle_check&#39;,version:&#39;0.1.0&#39;},capabilities:{experimentalApi:true}});rpc.notify(&#39;initialized&#39;,{});const t=await rpc.request(&#39;thread/start&#39;,{cwd:process.cwd(),approvalPolicy:&#39;never&#39;,sandbox:&#39;read-only&#39;,ephemeral:true});await rpc.request(&#39;turn/start&#39;,{threadId:t.thread.id,effort:&#39;low&#39;,input:[{type:&#39;text&#39;,text:&#39;도구를 사용하지 말고 HOOK_LIFECYCLE_OK 한 줄만 답하세요.&#39;}]});while(!completed&amp;&amp;child.exitCode===null)await new Promise(r=&gt;setTimeout(r,100));await new Promise(r=&gt;setTimeout(r,1000));const result={completed,failed,bypass:false,runs,checks:{sessionStart:runs.some(r=&gt;r.eventName===&#39;sessionStart&#39;&amp;&amp;r.status===&#39;completed&#39;),stop:runs.some(r=&gt;r.eventName===&#39;stop&#39;&amp;&amp;r.status===&#39;completed&#39;),noFailedHooks:runs.every(r=&gt;r.status===&#39;completed&#39;)}};writeFileSync(&#39;.www/hook-trust-20261115/lifecycle.json&#39;,JSON.stringify(result,null,2));console.log(JSON.stringify(result));if(!completed||failed||!Object.values(result.checks).every(Boolean))process.exitCode=1;}finally{clearTimeout(timer);child.kill(&#39;SIGTERM&#39;);}&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:26:45.694Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-70df4081-ca5d-4589-a2d4-ff2dd7bf5e68&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import {readFileSync} from &#39;node:fs&#39;;import assert from &#39;node:assert/strict&#39;;const p=&#39;.www/hook-trust-20261115/&#39;;const read=n=&gt;JSON.parse(readFileSync(p+n,&#39;utf8&#39;));const b=read(&#39;hooks-before.json&#39;).data.flatMap(x=&gt;x.hooks);const a=read(&#39;hooks-after.json&#39;).data.flatMap(x=&gt;x.hooks);const d=read(&#39;trust-review-config-delta.json&#39;);const i=read(&#39;plugin-integrity.json&#39;);assert.equal(b.length,8);assert(b.every(h=&gt;h.enabled&amp;&amp;h.trustStatus===&#39;modified&#39;));assert.equal(a.length,8);assert(a.every(h=&gt;h.enabled&amp;&amp;h.trustStatus===&#39;trusted&#39;));assert.equal(Object.keys(d.changedStates).length,8);assert(d.unrelatedConfigurationUnchanged);for(const v of Object.values(d.changedStates)){assert.equal(v.before.trusted_hash,v.after.trusted_hash);assert.notEqual(v.before.trusted_content_hash,v.after.trusted_content_hash);}assert.equal(i.boxboxCacheVsInstallerDifferences.length,0);assert.equal(i.vercelGitChanges.length,0);assert(readFileSync(p+&#39;official-tui-review.txt&#39;,&#39;utf8&#39;).includes(&#39;Trusting hooks&#39;));console.log(&#39;HOOK-1/2: 설치 무결성, 정의 동일·내용 승인 변경, 8개 정식 호스트 신뢰 및 관계없는 설정 보전 확인. 실제 의미 판정은 diagnosis와 독립 검토 참조.&#39;);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:30:52.773Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-9d0b6f7f-5bd7-4dde-8cec-20acc3450b50&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--experimental-transform-types&quot;,
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import {spawn} from &#39;node:child_process&#39;;\nimport {writeFileSync} from &#39;node:fs&#39;;\nimport {JsonRpcClient} from &#39;./src/rpc.ts&#39;;\nconst child=spawn(&#39;codex&#39;,[&#39;app-server&#39;],{stdio:[&#39;pipe&#39;,&#39;pipe&#39;,&#39;pipe&#39;]});\nconst rpc=new JsonRpcClient(child);const runs=[];let completed=false;let failed=null;\nrpc.on(&#39;message&#39;,m=&gt;{if(m.id!==undefined&amp;&amp;m.method){void rpc.respond(m.id,{decision:&#39;decline&#39;});return;}if(m.method===&#39;hook/completed&#39;){const r=m.params.run;runs.push({eventName:r.eventName,source:r.source,sourcePath:r.sourcePath,status:r.status,statusMessage:r.statusMessage,entries:r.entries.map(e=&gt;({kind:e.kind,text:e.text.slice(0,500)}))});}if(m.method===&#39;turn/completed&#39;){completed=true;failed=m.params.turn?.error??null;}});\nconst timer=setTimeout(()=&gt;child.kill(&#39;SIGTERM&#39;),150000);\ntry{await rpc.request(&#39;initialize&#39;,{clientInfo:{name:&#39;www_hook_lifecycle_check&#39;,version:&#39;0.1.0&#39;},capabilities:{experimentalApi:true}});rpc.notify(&#39;initialized&#39;,{});const t=await rpc.request(&#39;thread/start&#39;,{cwd:process.cwd(),approvalPolicy:&#39;never&#39;,sandbox:&#39;read-only&#39;,ephemeral:true});await rpc.request(&#39;turn/start&#39;,{threadId:t.thread.id,effort:&#39;low&#39;,input:[{type:&#39;text&#39;,text:&#39;도구를 사용하지 말고 HOOK_LIFECYCLE_OK 한 줄만 답하세요.&#39;}]});while(!completed&amp;&amp;child.exitCode===null)await new Promise(r=&gt;setTimeout(r,100));await new Promise(r=&gt;setTimeout(r,1000));const result={completed,failed,bypass:false,runs,checks:{sessionStart:runs.some(r=&gt;r.eventName===&#39;sessionStart&#39;&amp;&amp;r.status===&#39;completed&#39;),stop:runs.some(r=&gt;r.eventName===&#39;stop&#39;&amp;&amp;r.status===&#39;completed&#39;),noFailedHooks:runs.every(r=&gt;r.status===&#39;completed&#39;)}};writeFileSync(&#39;.www/hook-trust-20261115/lifecycle.json&#39;,JSON.stringify(result,null,2));console.log(JSON.stringify(result));if(!completed||failed||!Object.values(result.checks).every(Boolean))process.exitCode=1;}finally{clearTimeout(timer);child.kill(&#39;SIGTERM&#39;);}&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:31:04.939Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-f202d0f7-2cfb-4803-b69b-3b528ec5f262&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-f202d0f7-2cfb-4803-b69b-3b528ec5f262/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;저장소 소스는 바뀌지 않았다. 대상은 외부 플러그인 Hook의 신뢰 상태를 복구하는 운영 작업이다. 두 검증 시도의 소스 digest(41c247bb…)와 criteriaDigest(ddba05de…)가 요청 JSON과 같고, sourceStable·artifactsStable·environmentStable이 모두 true다. 검증 명령은 work.json의 verifierCommands와 문자 그대로 같다.&quot;,
+        &quot;HOOK-1: trust-review-config-delta.json의 8개 항목 모두에서 trusted_hash는 전후가 같고 trusted_content_hash만 다르다(BoxBox 82ad…→3a8b…, Vercel d33d…→5475…). diagnosis.md의 &#39;정의 지문 동일·내용 지문 불일치&#39; 판단과 맞는다. plugin-integrity.json에서도 BoxBox 캐시와 설치 원본의 차이가 없고, Vercel은 HEAD가 882e66c…이며 Git 변경이 없다. 최초 변경 파일을 특정하지 않은 한계도 diagnosis.md:11과 verification.md:49에 숨김없이 적혀 있다.&quot;,
+        &quot;HOOK-2: official-tui-review.txt에 Codex CLI 0.169.0의 &#39;Hooks need review / 8 hooks are new or changed&#39; 화면, &#39;2. Trust all and continue&#39; 선택, &#39;Trusting hooks...&#39;가 기록돼 있다. 정식 호스트 승인 경로를 거쳤다는 근거로 충분하다. delta에서 trusted_hash는 그대로이고 content hash만 호스트가 계산한 값으로 바뀌었으므로, 승인 해시를 직접 써 넣었다는 흔적은 없다. after에 추가된 `enabled: true`(boxbox session_start)는 활성 상태 항목이므로 기준의 &#39;활성·신뢰 상태와 관계없는 설정&#39;에 해당하지 않는다. 이 사실도 verification.md:46에 공개돼 있어 증거 범위를 넓힌 것은 아니다.&quot;,
+        &quot;HOOK-3: lifecycle.json에는 bypass=false인 새 ephemeral·read-only 세션의 실행 기록이 있다. BoxBox sessionStart 1건, Vercel sessionStart 3건, BoxBox stop 1건이 모두 source=plugin, status=completed다. 신뢰되지 않은 Hook은 실행되지 않으므로 이 다섯 Hook에는 신뢰 오류가 재발하지 않았다고 볼 수 있다. 실행하지 않은 범위(PostToolUse 2종, SessionEnd)도 verification.md:49에 따로 적혀 있어 기준의 &#39;미실행 Hook 범위 구분&#39;을 충족한다.&quot;,
+        &quot;참고(결함 아님): HOOK-3 검증 명령의 checks는 eventName과 status만 확인한다. sourcePath가 BoxBox·Vercel인지는 거르지 않아서, 다른 출처의 Hook이 완료돼도 통과할 수 있다. 이번 lifecycle.json에는 두 플러그인 경로만 있어 결론은 그대로이지만, 같은 명령을 다시 쓸 때는 출처까지 확인하면 더 견고해진다. 또 이 시도가 만든 lifecycle.json은 attempt 622e11f2의 artifacts 목록에 digest로 고정돼 있지 않다.&quot;,
+        &quot;참고(결함 아님): official-tui-review.txt에는 승인 뒤에도 TUI에 &#39;⚠ 1 warning&#39;, &#39;⚠ 3 warnings&#39;가 표시된다. 경고 내용은 기록되지 않았다. lifecycle 실행에서 Hook 실패가 없었으므로 신뢰 오류로 단정할 근거는 없지만, 경고 내용은 확인되지 않은 상태로 남아 있다.&quot;,
+        &quot;이번 검토에서는 명령이나 테스트를 실행하지 않았다. 검증 명령 실행 결과(종료 코드 0)는 기록된 attempt를 근거로 했고, 보존된 .www/hook-trust-20261115/ 산출물만 직접 읽어 대조했다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-a47c4f83-c0fc-4aae-b755-aacf097b57b4&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-a47c4f83-c0fc-4aae-b755-aacf097b57b4/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;이번 판정의 대상은 소스 digest 92bbb391…이다. 직전 검토(41c247bb…)와 비교하면 검증 입력에 src/rpc.ts(digest 396bf547…)가 추가되고, HOOK-3 재실행에서 lifecycle.json이 산출물로 고정된 것만 다르다. 두 재실행 attempt(70df4081, 9d0b6f7f)의 source digest와 criteriaDigest(ddba05de…)는 요청 JSON과 같다. 실행된 명령도 verifierCommands와 문자 그대로 같다. sourceStable·artifactsStable·environmentStable은 모두 true다.&quot;,
+        &quot;src/rpc.ts:16-84를 대조했다. JsonRpcClient는 EventEmitter를 상속하고 request/notify/respond를 제공한다. id와 method가 함께 있는 서버 요청은 82-83행에서 &#39;message&#39; 이벤트로 전달된다. 따라서 검증 스크립트가 서버 요청에 decline으로 응답하고 hook/completed·turn/completed를 수집하는 동작은 실제 구현과 맞는다. 이 import를 입력에 넣은 보완은 증거 범위를 정확하게 만든 것이며, 범위를 넓힌 것이 아니다.&quot;,
+        &quot;HOOK-1: trust-review-config-delta.json의 8개 항목에서 trusted_hash는 승인 전후가 같고 trusted_content_hash만 다르다(BoxBox 82ad…→3a8b…, Vercel d33d…→5475…). plugin-integrity.json에는 BoxBox 캐시와 설치 원본의 차이가 없고, Vercel은 HEAD 882e66c…에 Git 변경이 없다. diagnosis.md:9-11의 &#39;정의 지문 동일·내용 지문 불일치&#39; 판단, 그리고 최초 변경 파일을 특정하지 않는다는 한계와 일치한다.&quot;,
+        &quot;HOOK-2: official-tui-review.txt에 Codex CLI v0.169.0의 &#39;Hooks need review / 8 hooks are new or changed&#39; 화면, &#39;2. Trust all and continue&#39; 선택, &#39;Trusting hooks...&#39;가 기록돼 있다. 정식 호스트 승인 경로를 거쳤다는 근거가 된다. 승인 해시를 직접 써 넣었다는 흔적은 없다. BoxBox session_start에 명시적 enabled=true가 추가된 것은 활성 상태 항목이므로 &#39;관계없는 설정&#39;에 해당하지 않고, verification.md:46에도 기록돼 있다.&quot;,
+        &quot;HOOK-3: lifecycle.json(1660바이트, digest 03b61d69…, attempt 9d0b6f7f에 고정)에 bypass=false인 새 ephemeral·read-only 세션의 기록이 있다. BoxBox sessionStart 1건, Vercel sessionStart 3건, BoxBox stop 1건이 모두 source=plugin, status=completed이고, turn은 오류 없이 끝났다. 실행되지 않은 PostToolUse 2종과 SessionEnd는 verification.md:49에 따로 적혀 있어 &#39;미실행 Hook 범위 구분&#39; 기준을 충족한다.&quot;,
+        &quot;참고(결함 아님): HOOK-3의 checks는 eventName과 status만 확인하고 sourcePath는 거르지 않는다. 다른 출처의 Hook이 완료돼도 통과할 수 있다는 뜻이다. 이번 산출물에는 두 플러그인 경로만 있으므로 결론은 달라지지 않는다. 또 TUI의 &#39;⚠ 1/3/5 warnings&#39;는 내용이 기록되지 않아 확인하지 못한 상태로 남아 있다.&quot;,
+        &quot;이번 검토에서는 명령이나 테스트를 실행하지 않았다. 종료 코드 0은 기록된 attempt를 근거로 삼았다. 직접 읽어 대조한 것은 .www/hook-trust-20261115/의 lifecycle.json·trust-review-config-delta.json·plugin-integrity.json·official-tui-review.txt와 src/rpc.ts다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;변경된 BoxBox·Vercel 8개 Hook의 신뢰 승인을 정식 호스트 경로로 복구했다.&quot;,
+  &quot;before&quot;: &quot;현재 플러그인 내용 지문과 저장된 승인 지문이 달라 8개 활성 Hook이 modified로 차단됐다. Hook 정의 지문은 같았다.&quot;,
+  &quot;after&quot;: &quot;정식 CLI 승인 후 별도 Native 목록 8개가 trusted이고 새 세션의 SessionStart 4개·Stop 1개가 완료됐다. 실제 import 의존성과 실행 산출물을 고정해 재검증·독립 Opus 재검토도 통과했다.&quot;,
+  &quot;changes&quot;: [
+    &quot;플러그인 설치 무결성 및 승인 전후 내용 지문을 대조했다.&quot;,
+    &quot;스크립트 검토 후 Trust all and continue로 승인했다. 관계없는 설정은 보전했다.&quot;,
+    &quot;공식 현재 입력 검증·문서 영향 검토·실제 Opus 검토와 저작 보고서를 연결했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;우회 옵션이나 승인 지문 수동 작성을 사용하지 않았다.&quot;,
+    &quot;BoxBox 프로젝트 off를 유지하며 Hook 수용과 가독성 검사를 구분했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;과거 승인 파일 사본이 없어 최초 변경 파일·시각은 특정하지 못했다.&quot;,
+    &quot;대표 공식 실행은 SessionStart·Stop이며 PostToolUse·SessionEnd 전체 범위를 의미하지 않는다. 별도 PostToolUse 표본은 Workflow007에서 다룬다.&quot;,
+    &quot;CLI MCP 경고 내용은 미확인이다. Hook 신뢰 오류가 재발했다는 증거는 없다.&quot;,
+    &quot;플러그인 내용이 이후 다시 바뀌면 새 검토가 필요하다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;기존 오류 세션은 재시작해 복구된 신뢰 상태를 읽게 한다. 새 세션 재발 시 hooks/list의 내용 지문과 설치 파일을 대조한다.&quot;
+  ]
+}</pre></div></details></section></main></body></html>

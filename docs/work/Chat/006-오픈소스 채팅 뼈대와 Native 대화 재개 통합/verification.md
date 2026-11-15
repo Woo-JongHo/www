@@ -151,3 +151,115 @@
 - 코드상 확인한 미확인 위험: 연결 종료 뒤 activeThreadId가 남고 turn/start가 새 연결에서 resume 없이 호출된다(main.ts:69,281). 같은 대화 클릭은 반환한다(renderer.tsx:255). 승인 대기 중 중단 뒤 pendingApprovals가 남을 위험도 제기됐으나 Native 해소 알림과 실제 재현은 확인하지 않았다. 긴 이력의 원문 payload와 턴 중간 절단도 검토 지적이다.
 - 검토자의 커밋 기록 지적 해석: 현재 HEAD에 통합 커밋은 있지만 과거 보고서의 미커밋 서술만으로 무단 커밋을 단정할 수 없다. 후속 승인·게시·검증 기록의 연결을 확인해야 한다.
 - 이 검토에서는 테스트·Electron·실제 Native·BoxBox를 실행하지 않았다. 기존 원격 실기 원문은 이 로컬 사본에 없었다. 이전 BoxBox 미해결과 미검증 한계는 해소하지 않았다. 제품 수정 없이 verifying을 유지한다.
+
+<a id="attempt-2e86d68a-f7fd-4abc-8883-4295efed1652"></a>
+## 검증 시도 — 2026-11-15T09:26:05.282Z
+
+- 시도 ID: `attempt-2e86d68a-f7fd-4abc-8883-4295efed1652`
+- 실행 시각: 2026-11-15T09:26:05.016Z ~ 2026-11-15T09:26:05.282Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","test","test/conversations.test.ts","test/chat-state.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`, `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md`, `docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `src`, `test`
+- 소스 식별: `c6addb03a5f08c77fef60dc0c20ea52cb93f6561c9c0d2453a298afa63499fde`
+- 기준 정의 식별: `e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 28바이트, stderr 2693바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+
+## 2026-11-15 저장 대화 실제 재개 재검증
+
+실제 설치 Native의 새 읽기 전용 스레드에서 CHAT_RESUME_OK 응답을 받은 뒤 첫 프로세스를 종료하고, 원장 목록과 공개 이력을 복원해 같은 thread ID를 resume한 뒤 후속 응답까지 확인했다. .www/closeout-native-20261115/chat-live.log와 .www/evidence/work-baa0963b-ea71-48e7-a34f-0d229ba704b1/chat-native-live.json의 outcome은 passed이고 tools=0, Hook 알림은 20건이다. 이는 승인 허용/거절·파일 변경·중단의 실제 모델 실측을 뜻하지 않는다. 기존 1509280 이후 이번 사용자 전체 380파일 커밋·push 명시요청으로 현재 HEAD 92de2389까지 게시됐다. 원래 구현 권한의 commit/publish=false는 보존하며 이번 검증 변경에 게시 권한을 부여하지 않는다.
+
+<a id="attempt-5c3dcfd2-2202-49d6-8637-082aba374f07"></a>
+## 검증 시도 — 2026-11-15T09:27:11.893Z
+
+- 시도 ID: `attempt-5c3dcfd2-2202-49d6-8637-082aba374f07`
+- 실행 시각: 2026-11-15T09:26:19.654Z ~ 2026-11-15T09:27:11.893Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","test/verify-chat-live.ts"]`
+- 실행 결과: 실패; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md`, `docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `src`, `test`
+- 소스 식별: `c6addb03a5f08c77fef60dc0c20ea52cb93f6561c9c0d2453a298afa63499fde`
+- 기준 정의 식별: `e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101`
+- 검증 중 소스 유지: 변경 감지
+- 출력: stdout 421바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+
+## 2026-11-15 재개 검증의 잔여 위험
+
+독립 검토가 이전에 지적한 승인 대기 중 중단과 Native 연결 종료 뒤 복구는 이번 실제 단문 재개 검사 범위 밖이다. 현행 `src/main.ts`에서도 `pendingApprovals`는 사용자 응답·연결 종료에서 회수하며 `serverRequest/resolved` 처리는 찾지 못했다. 따라서 서버가 승인 요청을 해소한 뒤 남은 pending 상태가 새 요청·대화 전환을 막는지 실제 프로토콜/합성 경계 검사가 필요하다. 연결 종료 뒤 선택된 thread에 새 Native process가 resume하지 않고 turn/start하는 위험도 독립 검토에서 재확인해야 한다. 이 위험을 수정됐다고 주장하지 않는다.
+
+공식 실제 재개 시도 `attempt-5c3dcfd2-2202-49d6-8637-082aba374f07`의 자식 프로세스는 종료 0이나 병행 소스 변경을 감지해 sourceStable=false 및 result=failed로 남겼다. 사용자 코드 편집을 덮어쓰거나 검증 범위를 줄이지 않고, 소스가 안정화되면 같은 검사를 다시 실행한다.
+
+
+## 2026-11-15 최종 strict 타입 검사
+
+실제 subprocess `npm run typecheck`가 종료 0으로 끝났다. 실행 전후 이 작업의 전체 inputs를 `captureSource`로 읽어 소스 내용 지문이 같음을 확인했다. 이 작업의 before/after digest는 `00b9ef6078babfb389a392482f4ba51a13355ee1ea953a13dcaaa9db865dc00e`로 동일하다. 정확한 inputs와 파일별 지문·실행 시각·실제 argv는 `.www/closeout-native-20261115/typecheck-receipt.json`, 원문은 같은 폴더 `typecheck.stdout.log`와 `typecheck.stderr.log`에 보존했다. 이는 root strict 앱·도구 타입 검사이며 전체 테스트·GUI·실제 Native·독립 검토를 대신하지 않는다.
+
+<a id="attempt-5f97bdc1-6e29-4ec7-99d8-b8e6c2f7c311"></a>
+## 검증 시도 — 2026-11-15T09:36:46.568Z
+
+- 시도 ID: `attempt-5f97bdc1-6e29-4ec7-99d8-b8e6c2f7c311`
+- 실행 시각: 2026-11-15T09:36:18.429Z ~ 2026-11-15T09:36:46.568Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","test/verify-chat-live.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md`, `docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `src`, `test`
+- 소스 식별: `00b9ef6078babfb389a392482f4ba51a13355ee1ea953a13dcaaa9db865dc00e`
+- 기준 정의 식별: `e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 421바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+
+## 2026-11-15 소스 안정화 뒤 실제 재개 영수증 회수
+
+공식 시도 `attempt-5f97bdc1-6e29-4ec7-99d8-b8e6c2f7c311`는 실제 설치 Native 프로세스에서 종료 0, result=passed, sourceStable=true다. 첫 응답·첫 프로세스 종료·Native 원장 목록과 공개 이력 복원·같은 thread 재개·후속 응답과 두 번째 턴 종료를 실제로 관측했다. 이전 경합으로 회수하지 못한 실행과 구분해 이 시도를 현행 AC-2의 실제 재개 표본으로 연결했다.
+
+현재 Codex 0.169.0이 생성한 공식 schema의 `ServerRequestResolvedNotification`과 `ServerNotification`에는 `serverRequest/resolved`가 존재하고 `requestId`(string 또는 integer)와 `threadId`를 요구한다. `src/main.ts`에 그 수신 처리 분기가 없다는 것은 소스 대조로 확인했다. 그러나 승인 대기 중 중단에서 그 알림이 실제 발행되는지, 실제로 승인 상태가 잔류하는지는 이번에 재현하지 않았다. 스키마 존재·수신 핸들러 부재와 실제 사용자 시나리오 재현을 구분한다.
+
+<a id="attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac"></a>
+## 검증 시도 — 2026-11-15T09:41:59.494Z
+
+- 시도 ID: `attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac`
+- 실행 시각: 2026-11-15T09:41:16.799Z ~ 2026-11-15T09:41:59.494Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","scripts/verify-chat.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/design.md`, `docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `src`, `test`
+- 소스 식별: `00b9ef6078babfb389a392482f4ba51a13355ee1ea953a13dcaaa9db865dc00e`
+- 기준 정의 식별: `e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 25228바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+
+## 2026-11-15 현재 Electron 대화 통합 GUI
+
+공식 시도 attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac은 `node scripts/verify-chat.ts`를 실제 실행해 종료 0·sourceStable=true로 통과했다. .www/evidence/chat-ui-z1nERG/summary.json의 145개 확인 항목에 Markdown·복사·인용·긴 출력·대화/프로젝트 재개·초안과 읽기 상태·중복 Enter·승인/중단/실패와 연결 경계를 보존했다. 이 GUI의 Native는 합성 fixture이며 별도의 실제 Native 재개 영수증과 구분한다. 실제 Windows와 OS 한국어 IME는 범위 밖이다. 승인 대기 중 중단 뒤 serverRequest/resolved 수신·잔류 상태와 Native 연결 종료 후 재개 경계는 이 GUI의 통과로 해결됐다고 쓰지 않는다.
+
+
+## 2026-11-15 최종 독립 감사와 부분 마감
+
+실제 읽기 전용 claude-opus-5-5 review-0bfaab3e-4c7b-484d-8013-dd6909bfd7ec은 fail이다. 연결 종료 뒤 같은 선택 thread에서 새 Native 프로세스에 resume 없이 turn/start를 전송하는 코드 경계, serverRequest/resolved를 수신해 pendingApprovals를 정리하는 분기의 부재를 지적했다. 전자는 현재 main/renderer/conversations 소스에서 경로를 대조했고 후자는 현재 0.169 생성 schema 존재와 수신 처리 부재를 확인했다. 그러나 실제 Native crash→후속 전송과 승인 대기→중단→해소 알림 발행·잔류의 복합 시나리오는 이번에 실행하지 않았다. 실제 단문 원장 재개·후속 응답과 145항목 합성 GUI PASS는 그대로 보존하고, 이 미검증/미해결 경계로 AC-2·3을 blocked로 유지한다. 과거 시도나 그 criterionIds를 다시 매핑하지 않는다.
+
+## 2026-11-15 병행 소스 변경 뒤 최종 적용성 정리
+
+검사 종료 뒤 다른 세션에서 renderer.tsx·ecosystem-view.tsx/CSS·architecture.generated.json 및 제품/구조/개발 정본 문서의 추가 변경을 관측했다. 이번 담당자는 해당 소스를 덮어쓰지 않았고 새 유료 검사나 제품 수정을 추가하지 않았다. 확보한 실제 프로세스 PASS/FAIL과 그 당시 sourceStable 결과는 원장에 그대로 보존한다. 현재 전체 입력 지문이 달라진 시도는 최신 status에서 source_changed로 구분하며 검사 당시 통과를 현재 전체 소스의 통과로 승격하지 않는다.
+
+최종 보고서는 이 부분 완료와 미실측/결함/병행 변경 한계를 반영한 현재 스냅샷이다. 보고서가 앱에서 current로 읽힌다는 사실은 업무 complete나 모든 기능 증거 usable을 뜻하지 않는다. 다른 세션의 후속 편집 뒤에는 보고서와 문서 검토도 다시 stale로 바뀔 수 있다. 구현/기준 동결 시점을 다시 정한 뒤 필요한 범위의 검증과 독립 검토를 회수해야 한다.

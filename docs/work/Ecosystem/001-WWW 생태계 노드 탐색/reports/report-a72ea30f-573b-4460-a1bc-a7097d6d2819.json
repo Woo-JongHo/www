@@ -1,0 +1,225 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-a72ea30f-573b-4460-a1bc-a7097d6d2819",
+  "workId"        : "work-566dd8f2-1121-4ae7-8c98-182283693c92",
+  "title"         : "WWW 생태계 노드 탐색",
+  "summary"       : "일부 확인 · 후속 작업 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome"       : "partial",
+  "kind"          : "snapshot",
+  "event"         : "review",
+  "createdAt"     : "2026-11-15T09:44:37.485Z",
+  "workRecordHash": "e2a138e0911c53f3c00a92e01bc76d1bc4ea62bcc592c795ada8a71cccc54362",
+  "sourceDigest"  : "c16c22adfa2433612ac1bc48f98a4046da91f5db81737f0f9f5459dd7134a743",
+  "criteriaDigest": "c6bf19975fc9cd9096600c89e9f5e4b01e0c4c19ab1dbed9d6dc7b64560c61ff",
+  "semanticHash"  : "9f597f0d896b0e7650ce7cda04c31d8908fa2772b3c0676bf189f4959f5777b3",
+  "narrative"     : null,
+  "work": {
+    "status": "verifying",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id"         : "AC-1",
+        "description": "사이드바에서 생태계 지도를 열고 돌아와도 대화와 초안이 유지된다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e425d4dc-ad2d-463c-b958-aa0a92194166",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-a8aaec1c-eacc-4f61-a779-da9decbf361f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-2",
+        "description": "실행·개발·기록과 검토·후속 방향을 출처가 있는 노드와 방향 관계로 구분한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e425d4dc-ad2d-463c-b958-aa0a92194166",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-a8aaec1c-eacc-4f61-a779-da9decbf361f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-3",
+        "description": "노드 선택·연결 탐색·검색·영역 필터·확대·축소·초기화가 동작한다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e425d4dc-ad2d-463c-b958-aa0a92194166",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-a8aaec1c-eacc-4f61-a779-da9decbf361f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-fcd8fbba-835b-441b-890a-cf386aaa3196",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-4",
+        "description": "타입 검사·집중 테스트·빌드 및 Electron 화면에서 회귀가 없다.",
+        "required"   : true,
+        "result"     : "passed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-e425d4dc-ad2d-463c-b958-aa0a92194166",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-a8aaec1c-eacc-4f61-a779-da9decbf361f",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-fa488026-fc74-4f82-84d7-a35d0989e49b",
+        "command": "node",
+        "args": [
+          "scripts/verify-ecosystem.mjs"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-12T03:44:54.400Z"
+      },
+      {
+        "id": "attempt-e425d4dc-ad2d-463c-b958-aa0a92194166",
+        "command": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:35:29.982Z"
+      },
+      {
+        "id": "attempt-a8aaec1c-eacc-4f61-a779-da9decbf361f",
+        "command": "node",
+        "args": [
+          "scripts/verify-ecosystem.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:37:38.064Z"
+      },
+      {
+        "id": "attempt-fcd8fbba-835b-441b-890a-cf386aaa3196",
+        "command": "node",
+        "args": [
+          "--input-type=module",
+          "--eval",
+          "import {spawn} from 'node:child_process';\nimport {promises as fs} from 'node:fs';\nimport {createServer} from 'node:net';\nimport path from 'node:path';\nimport assert from 'node:assert/strict';\nimport {ecosystemNodes} from './src/ecosystem.ts';\nconst root=process.cwd(),directory=await fs.mkdtemp(path.join(root,'.www/evidence/ecosystem-guide-controls-'));\nlet child,socket;const checks=[];const pause=ms=>new Promise(r=>setTimeout(r,ms));\ntry{\n const server=createServer();await new Promise(r=>server.listen(0,'127.0.0.1',r));const port=server.address().port;await new Promise(r=>server.close(r));\n const env={...process.env,WWW_NATIVE_PROBE:'1',WWW_PROBE_PATH:path.join(directory,'disabled-probe.json'),WWW_PROBE_WORKSPACE:root,WWW_CODEX_BIN:path.join(root,'test/fixtures/fake-app-server.ts')};for(const k of ['ELECTRON_RUN_AS_NODE','WWW_PROBE_REPORTS','WWW_PROBE_NATIVE_REPORTS','WWW_PROBE_ACTIVITY','WWW_PROBE_DEVELOPMENT_WORK_ID'])delete env[k];\n const log=await fs.open(path.join(directory,'electron.log'),'w');\n child=spawn(path.join(root,'node_modules/electron/dist/Electron.app/Contents/MacOS/Electron'),[root,'--remote-debugging-port='+port,'--user-data-dir='+path.join(directory,'profile')],{cwd:root,env,stdio:['ignore',log.fd,log.fd]});await log.close();\n let endpoint;for(let i=0;i<200&&!endpoint;i++){if(child.exitCode!==null)throw Error('Electron 조기 종료');try{const targets=await(await fetch('http://127.0.0.1:'+port+'/json/list')).json();endpoint=targets.find(x=>x.type==='page')?.webSocketDebuggerUrl;}catch{}if(!endpoint)await pause(100);}assert(endpoint,'debugger 연결');\n socket=new WebSocket(endpoint);await new Promise((resolve,reject)=>{socket.addEventListener('open',resolve,{once:true});socket.addEventListener('error',reject,{once:true});});\n let id=0;const pending=new Map();socket.addEventListener('message',event=>{const x=JSON.parse(String(event.data)),p=pending.get(x.id);if(!p)return;pending.delete(x.id);clearTimeout(p.timer);x.error?p.reject(Error(JSON.stringify(x.error))):p.resolve(x.result);});\n const command=(method,params={})=>new Promise((resolve,reject)=>{const n=++id;const timer=setTimeout(()=>{pending.delete(n);reject(Error('CDP 시간 초과 '+method));},10000);pending.set(n,{resolve,reject,timer});socket.send(JSON.stringify({id:n,method,params}));});\n const evaluate=async expression=>{const x=await command('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true,userGesture:true});if(x.exceptionDetails)throw Error(JSON.stringify(x.exceptionDetails));return x.result.value;};\n const wait=async(expression,label)=>{for(let i=0;i<150;i++){if(await evaluate('Boolean('+expression+')')){checks.push(label);return;}await pause(50);}throw Error('화면 조건 실패 '+label);};\n const click=async selector=>{const p=await evaluate('(()=>{const e=document.querySelector('+JSON.stringify(selector)+');if(!e)throw Error(\"대상 없음\");e.scrollIntoView({block:\"center\",inline:\"center\"});const r=e.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2};})()');for(const type of ['mousePressed','mouseReleased'])await command('Input.dispatchMouseEvent',{type,x:p.x,y:p.y,button:'left',buttons:type==='mousePressed'?1:0,clickCount:1});await pause(100);};\n const base='.ecosystem-page:not([hidden]) ';\n await wait('document.querySelector(\"[data-testid=ecosystem-nav]\")','앱 준비');await command('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});await click('[data-testid=ecosystem-nav]');await click('[data-testid=ecosystem-guide-tab]');\n await wait('document.querySelector('+JSON.stringify(base+'.ecosystem-work')+')','개념 관계 지도 활성');\n const zoom=()=>evaluate('Number(document.querySelector('+JSON.stringify(base+'.ecosystem-zoom output')+').textContent.replace(\"%\",\"\"))');\n const initialZoom=await zoom();const initialWidth=await evaluate('document.querySelector('+JSON.stringify(base+'.ecosystem-svg')+').getAttribute(\"width\")');\n await click(base+'[aria-label=\"지도 확대\"]');assert((await zoom())>initialZoom,'실제 확대');checks.push('확대 버튼이 실제 배율 증가');\n await click(base+'[aria-label=\"지도 축소\"]');assert.equal(await zoom(),initialZoom);checks.push('축소 버튼이 실제 배율 감소');\n await click(base+'[aria-label=\"지도 확대\"]');await click(base+'.ecosystem-zoom button:last-child');assert.equal(await zoom(),initialZoom);assert.equal(await evaluate('document.querySelector('+JSON.stringify(base+'.ecosystem-svg')+').getAttribute(\"width\")'),initialWidth);checks.push('전체 보기로 초기 크기맞춤 복귀');\n await click(base+'.ecosystem-filters .eco-future');const count=ecosystemNodes.filter(n=>n.group==='future').length;\n await wait('document.querySelector('+JSON.stringify(base+'.ecosystem-filters .eco-future[aria-pressed=true]')+')','후속 방향 필터 실제 선택');\n assert.equal(await evaluate('document.querySelectorAll('+JSON.stringify(base+'.ecosystem-results button:not(.ecosystem-clear)')+').length'),count);assert.equal(await evaluate('document.querySelectorAll('+JSON.stringify(base+'.eco-node:not(.is-dimmed)')+').length'),count);checks.push('필터 일치 수와 밝은 노드 수가 모델의 '+count+'개와 일치');\n await click(base+'.ecosystem-clear');await wait('!document.querySelector('+JSON.stringify(base+'.ecosystem-results')+') && !document.querySelector('+JSON.stringify(base+'.eco-node.is-dimmed')+')','필터 초기화 실제 복귀');\n const nextTitle=await evaluate('document.querySelector('+JSON.stringify(base+'.ecosystem-connections button strong')+').textContent');await click(base+'.ecosystem-connections button');\n await wait('document.querySelector('+JSON.stringify(base+'.ecosystem-detail h2')+').textContent === '+JSON.stringify(nextTitle),'연결 관계 버튼이 대상 상세로 이동');\n assert.equal(await evaluate('document.querySelector('+JSON.stringify(base+'.eco-node[aria-pressed=true] .eco-node-title')+').textContent'),nextTitle);checks.push('연결 대상의 SVG 선택 상태 동기화');\n const image=await command('Page.captureScreenshot',{format:'png'});await fs.writeFile(path.join(directory,'guide-controls.png'),Buffer.from(image.data,'base64'));\n const result={result:'passed',evidence:path.relative(root,directory),checks,initialZoom,futureNodes:count,selectedTitle:nextTitle,limitation:'실제 현재 Electron의 개념 지도 조작이며 합성 Native/격리 profile을 사용했다. 일반 OS 입력·스크린리더·모든 크기 검사나 런타임 호출 trace 증명은 아니다.'};await fs.writeFile(path.join(directory,'summary.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));\n}catch(error){await fs.writeFile(path.join(directory,'failure.txt'),String(error));console.error(JSON.stringify({result:'failed',evidence:path.relative(root,directory),error:String(error)}));process.exitCode=1;}finally{socket?.close();if(child){child.kill('SIGTERM');const timer=setTimeout(()=>child.kill('SIGKILL'),3000);await new Promise(r=>child.exitCode!==null||child.signalCode!==null?r():child.once('close',r));clearTimeout(timer);}}"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T09:42:58.373Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id"         : "review-683a52c6-7026-4e93-b1fd-90bda5d09ef2",
+        "verdict"    : "not_run",
+        "model"      : null,
+        "executor"   : "process",
+        "receiptPath": ".www/scratchpad/ecosystem/opus-1794455137781/opus.json",
+        "findings": []
+      },
+      {
+        "id"         : "review-da4e09f7-b2bd-478c-b2ac-c183f3c80791",
+        "verdict"    : "fail",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-da4e09f7-b2bd-478c-b2ac-c183f3c80791/opus.json",
+        "findings": [
+          "[증거 범위 확대 · AC-3] work.json:51-67은 AC-3(노드 선택·연결 탐색·검색·영역 필터·확대·축소·초기화)를 attempt-e425d4dc의 `node scripts/verify-ecosystem.ts` 결과로 '현재 적용 가능' passed 처리했다. 그런데 이 스크립트가 확인하는 것은 scripts/verify-ecosystem.ts:61의 8개 필드뿐이고, 이 값을 만드는 renderer probe(src/renderer.tsx:810-841)도 가이드 탭 진입, 독립 검토 노드 Enter 선택, 'EVIDENCE.TS' 검색, 결과 버튼 선택, 대화 복귀만 실행한다. 연결 관계 버튼 탐색(src/ecosystem-view.tsx:114), 영역 필터 버튼(:75), 지도 축소/확대/전체 보기(:73), '필터 초기화'(:76)는 probe에서 누르지 않는다. 영역 필터는 test/ecosystem.test.ts:32-38에서 순수 함수 matchingNodes로만 확인되고, 확대·축소·초기화는 자동 검사가 전혀 없다. 따라서 현재 소스에서 AC-3을 통과로 기록할 근거가 부족하다.",
+          "[과거 수동 관찰의 현재 소스 적용] verification.md:4-8의 CUA 수동 관찰(후속 방향 필터 4개, 62%에서 확대, 전체 보기 복귀, 초기화)은 2026-11-12의 이전 소스(digest dc9d17ac…, ecosystem-view.tsx 795a4d39…)에서 한 것이다. 현재 ecosystem-view.tsx(2d4ba369…)는 기본 화면이 코드 blueprint이고 가이드가 별도 탭으로 바뀌는 등 화면 구조가 달라졌다(src/renderer.tsx:816-820). 이 관찰을 현재 attempt의 AC-3 근거로 이어서 쓸 수 없다. 그런데도 현재 적용 증거에는 수동 재관찰 기록이 없다.",
+          "[기록 불일치] work.json:820의 2026-11-15 문서 영향 검토(DEVELOPMENT.md 항목)는 '전체 검사 실패는 검증 기록에 남기고'라고 적었다. 하지만 verification.md의 2026-11-15 섹션(:44-67)에는 전체 `npm run check` 실행이나 실패 기록이 없다. 전체 검사 기록은 11-12 당시 것(:10-12)뿐이다. 문서 검토 사유가 실재하지 않는 기록을 가리키므로 정정하거나 해당 실행 기록을 추가해야 한다.",
+          "[확인된 부분] 이번 검토 입력 파일들의 digest는 attempt-e425d4dc에 기록된 source.files 값과 모두 일치한다. 기준 digest(c6bf1997…)도 같다. probe는 AC-1(초안·선택 범위·읽기 위치 보존, src/renderer.tsx:841)과 AC-2의 모델 측면(출처 파일 존재와 planned 관계, test/ecosystem.test.ts:11-30)을 실제로 검사한다. 저는 명령을 실행하지 않았고, 기록된 종료 코드 0과 소스를 대조만 했다.",
+          "[수정 제안] AC-3의 증거 연결에서 이번 attempt를 빼거나 AC-3을 미확인으로 되돌린다. 아니면 probe에 영역 필터 선택 후 일치 수 확인, 필터 초기화, 연결 관계 버튼으로 노드 이동, 축소/확대 후 배율 출력 변화, 전체 보기 복귀를 추가하고 verify-ecosystem.ts의 필수 필드에도 넣은 뒤 다시 실행해야 한다. 독립 검토는 기존 기록상 not_run이므로 완료 판정도 아직 할 수 없다."
+        ]
+      },
+      {
+        "id"         : "review-3b7cee4e-9de7-4c98-a509-d324927c11d3",
+        "verdict"    : "pass",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-3b7cee4e-9de7-4c98-a509-d324927c11d3/opus.json",
+        "findings": [
+          "[이전 지적 해소 · AC-3] 직전 Opus 검토(review-da4e09f7)는 영역 필터·확대·축소·전체 보기·필터 초기화·연결 관계 버튼이 자동 검증되지 않는다고 지적했습니다. 새 시도 attempt-fcd8fbba(work.json:1429-2111)가 이 조작을 모두 다룹니다. 현재 Electron에서 CDP 마우스로 실제로 누르고 배율, SVG width, 결과 수, dimmed 노드 수, 선택 상세 h2, SVG aria-pressed를 단언합니다. 사용한 selector는 현재 src/ecosystem-view.tsx와 일치합니다. 대상은 '.ecosystem-zoom'의 '지도 확대/축소' aria-label과 마지막 버튼 '전체 보기'(:73), '.ecosystem-filters .eco-future'의 aria-pressed(:75), '.ecosystem-results'와 '.ecosystem-clear'(:76), '.ecosystem-connections button strong'(:114), '.eco-node[aria-pressed]'와 '.eco-node-title'(:101-104)입니다. 'base=.ecosystem-page:not([hidden])'로 가이드 탭 범위를 한정했습니다. 그래서 같은 클래스를 쓰는 CodeBlueprintView(:248, :250)와 섞이지 않습니다.",
+          "[AC-3 증거 합산 범위] 노드 선택(Enter 키)과 파일 경로 검색, 결과 버튼 이동은 attempt-a8aaec1c의 renderer probe(src/renderer.tsx:821-836)가 확인합니다. 필터, 확대·축소, 초기화, 연결 탐색은 attempt-fcd8fbba가 확인합니다. 두 시도는 같은 source digest c16c22ad…와 같은 criteria digest c6bf1997…에 묶여 있습니다. 따라서 AC-3 전체를 현재 소스의 실제 실행으로 덮습니다. verification.md:94, :124도 2026-11-12 CUA 관찰을 현재 근거로 재사용하지 않는다고 명시합니다.",
+          "[AC-1] renderer probe(src/renderer.tsx:810-841)는 사이드바 생태계 진입, 가이드 탭 조작, 대화 복귀를 실행합니다. 복귀 후 초안 값, 선택 범위(3-7), 명령 접힘 상태, transcript.scrollTop이 그대로인지 단언합니다. scripts/verify-ecosystem.ts:61은 ecosystemDraftAndReadingPositionPreserved=true를 필수로 확인합니다. 기준과 증거가 일치합니다.",
+          "[AC-2] test/ecosystem.test.ts:11-30은 다음을 검사합니다. 모든 노드 출처 파일이 실제로 존재하는지, future 그룹과 닿는 edge가 planned인지, 실행 경로(chat→bridge/projection)와 검토 경로(review→core)가 분리되는지, native→review 관계가 없는지입니다. 화면 쪽에서는 is-planned 점선과 방향 marker(src/ecosystem-view.tsx:99)로 표현됩니다. 모델 수준의 자동 검증으로 기준을 뒷받침합니다.",
+          "[AC-4] scripts/verify-ecosystem.ts:35-63은 npm run typecheck, 집중 bun 테스트(architecture·ecosystem), npm run build, 실제 Electron probe를 순서대로 실행합니다. 하나라도 실패하면 exitCode를 1로 둡니다. AC-4는 '집중 테스트'로 정의되어 있으므로 이 범위로 충족됩니다. 공통 npm run check의 남은 3건 실패(병행 test/architecture-tree.test.ts의 BoxBox proof)는 verification.md:96-100에 별도 기록돼 있습니다. 이 실패를 생태계 통과로 덮지 않은 점도 확인했습니다. 직전 검토가 지적한 기록 불일치(문서 영향 검토와 실제 기록 부재)도 이 절로 정정되었습니다.",
+          "[경미한 한계 · 결함 아님] attempt-fcd8fbba의 eval 명령은 직접 빌드하지 않고 기존 dist/*.js를 실행합니다. 번들 SHA는 artifacts에 묶였습니다(work.json:2066-2083). 하지만 그 번들이 c16c22ad… 소스에서 빌드됐다는 직접 연결은 없습니다. 약 5분 전 a8aaec1c가 같은 source digest에서 npm run build를 실행했으므로 사실상 일치할 가능성이 높습니다. 다만 병행 Ecosystem/004 작업이 있는 만큼 후속 보강에서는 빌드 단계를 포함하는 편이 엄밀합니다. stderr 447바이트도 남아 있습니다. Node 22의 .ts import 경고로 보이지만 원문을 보관하지 않아 이 검토에서는 확인하지 않았습니다.",
+          "[기록 정합성] 이번 검토 입력 파일의 digest는 a8aaec1c와 fcd8fbba의 source.files 값과 같습니다. 추가 권한(verifierCommands의 eval 명령과 verify-ecosystem.ts)은 verification.md:46, :94에 사유와 함께 기록됐습니다. 제품 코드 수정, 커밋, 게시 권한은 확장되지 않았습니다. status는 verifying이고 reportingRequired=true입니다. 따라서 완료 처리 전에 이 독립 검토 결과와 저작 보고서를 연결해야 합니다.",
+          "저는 명령을 실행하지 않았습니다. 기록된 종료 코드 0과 소스, 테스트, probe 코드를 대조하기만 했습니다."
+        ]
+      }
+    ]
+  },
+  "source": {
+    "recordPath"    : "docs/work/Ecosystem/001-WWW 생태계 노드 탐색/work.json",
+    "workRecordHash": "e2a138e0911c53f3c00a92e01bc76d1bc4ea62bcc592c795ada8a71cccc54362",
+    "sourceDigest"  : "c16c22adfa2433612ac1bc48f98a4046da91f5db81737f0f9f5459dd7134a743",
+    "criteriaDigest": "c6bf19975fc9cd9096600c89e9f5e4b01e0c4c19ab1dbed9d6dc7b64560c61ff"
+  }
+}

@@ -1,3 +1,17 @@
+# 2026-11-15 현재 마감 판단과 증거 위치
+
+이 절은 과거 이력과 현재 판정을 구분한다. 아래 기존 시도·근거의 “현재 적용 가능” 문자열은 **각 시도가 기록될 당시**의 관찰 요약이며, 현재 적용성은 최신 입력/기준의 공유 status 결과와 아래 새 시도로 판단한다. 과거 시도·원문·요약을 소급해 다시 쓰지 않았다.
+
+- 현행 기능 AC-1·2·3: `attempt-4aa48cb3-2276-44e5-a7db-bd3f3ce72cfe` 실제 현재 Electron architecture 검사 75개 통과.
+- 현행 AC-4: `attempt-c9dbc39a-87f6-4a94-afab-f7c708c87701`의 `node scripts/verify-ecosystem.ts`는 **스크립트 36~40행에서 npm typecheck·집중 Bun·npm build를 실제 실행한 다음** Electron을 실행한다. `.www/evidence/ecosystem-tkcOwy/typecheck.log`는 두 strict 프로젝트 성공, `model-test.log`는 8개 테스트·35,254 assertion 통과, `build.log`는 현재 dist 빌드 성공, `electron-probe.json`은 전환·초안/읽기 상태 보존 관찰이다. 종료코드 0이며 sourceStable/environmentStable=true다. 이를 단순 GUI-only 실행으로 읽지 않는다.
+- 최신 문서 영향 검토는 `workflow.documentationReviews`의 **마지막** `documentation-27845fb4-d003-45b0-9160-c71710a5ab9b`다. digest는 현재 기능 검사와 같은 `d11ec3ede028d74464d595922111433066c78985c781d054492d02e7a3e9b9a6`이다. 초기 2026-11-13 문서 검토만 현재 기록으로 사용하지 않는다.
+- AC-5는 **unverified**다. 과거 Mac mini 분리 저작 원문들이 현재 checkout에 없어 당시 SHA/산문만으로 새 적용성이나 현재 실제 저작을 입증하지 않는다. 원문 회수·진위/적용성 확인 또는 실제 허용 환경의 새로운 분리 저작 검사가 남았다.
+- 공통 전체 저장소의 BoxBox 승인 proof 실패는 아직 남아 있고 이를 이 작업의 현재 타입·집중·build·Electron 통과로 지우지 않는다. 전체 check와 작업 고유 수용 검사를 구분한다.
+
+독립 검토 `review-eccb27e7-f9d1-45d3-a0e9-1d363d10f0a7`의 fail은 보존한다. 다만 그중 “현재 타입/집중/build 통과 없음”과 “현재 문서 검토 없음”이라는 지적은 위 실제 스크립트/로그/마지막 레코드와 다르므로 수용하지 않고 위 위치를 명시해 재검토한다. 검토자가 명령을 실행했다고 쓰지 않으며 공유 status의 기계적 적용성만으로 독립 내용 검토를 대신하지 않는다.
+
+---
+
 # 검증 기록
 
 <a id="integration-3"></a>
@@ -351,3 +365,98 @@ action=report로 저작 보고서 `report-7a4858ae-edfb-4c96-9e68-55173f861045`�
 - 출력: stdout 0바이트, stderr 24바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
 
+<a id="attempt-4eb9466b-0c2f-473e-b74f-a721d5013c8a"></a>
+## 검증 시도 — 2026-11-15T09:28:32.466Z
+
+- 시도 ID: `attempt-4eb9466b-0c2f-473e-b74f-a721d5013c8a`
+- 실행 시각: 2026-11-15T09:28:16.575Z ~ 2026-11-15T09:28:32.466Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","test","test/architecture.test.ts","test/ecosystem.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/CODE_BLUEPRINT.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/specs/ecosystem.md`, `package-lock.json`, `package.json`, `scripts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `dd1091fc10a268092dfcb3ef72d8b2b1d72f6ef48543da8a4448d1d8ae0bcf01`
+- 기준 정의 식별: `43484fe65ac2cba0bbad71a5617e5580fcc141a05be4361ea8acded360b47bcf`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 28바이트, stderr 1149바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+## 2026-11-15 검증 마감 재개
+
+이번 요청은 기존 검증 대기 항목을 현재 입력에서 다시 확인하는 작업이다. 과거 검증·실패·저작 보고서는 보존하며, 현재 소스에 적용되는 실제 검사·문서 영향 검토·정책상 독립 검토와 새 저작 보고서를 확보하기 전에는 완료로 바꾸지 않는다. 별도 Ecosystem/004 변경이 병행 중이므로 검사 전후 입력 지문 변화와 UI 영향을 구분한다. 제품 수정·새 커밋·push는 이 재검증에서 수행하지 않는다.
+
+### 2026-11-15 현재 집중 모델 검사와 별도 실행 조건
+
+현재 `bun test test/architecture.test.ts test/ecosystem.test.ts`는 실제 공식 verifyWork 실행에서 통과했고 전후 소스·환경은 안정적이었다. 별도 진행 중인 Ecosystem/004의 UI 수정·검사와 이 작업의 현재 필수 기준은 구분한다. 실제 Electron·넓은/좁은 화면·초안 및 읽기 상태와 전체 회귀 조건은 아직 별도 재검증 대상이다.
+
+AC-5의 Mac mini detached tmux·실제 저작·검사 영수증은 당시 이력으로 보존한다. 현재 장비의 새 분리 저작이나 노트북 덮개 실험을 수행했다고 쓰지 않는다. 현재 소스와 과거 영수증의 적용성을 검토하기 전에는 해당 조건을 통과로 승격하지 않는다.
+
+<a id="attempt-8f8d8034-3cdf-438a-a3c4-090e324d7a70"></a>
+## 검증 시도 — 2026-11-15T09:36:28.385Z
+
+- 시도 ID: `attempt-8f8d8034-3cdf-438a-a3c4-090e324d7a70`
+- 실행 시각: 2026-11-15T09:36:04.820Z ~ 2026-11-15T09:36:28.385Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","scripts/verify-architecture.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/CODE_BLUEPRINT.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/specs/ecosystem.md`, `package-lock.json`, `package.json`, `scripts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `80e7014b90a3e4619742b4f68a6609514c23c167d94285a4dc5b832aa6620996`
+- 기준 정의 식별: `43484fe65ac2cba0bbad71a5617e5580fcc141a05be4361ea8acded360b47bcf`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 3860바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+### 실제 도구 의존 범위 보완
+
+현재 검사에서 타입 도구 프로젝트와 build의 구조 생성기가 실제로 읽는 scripts, docs/architecture, docs/specs, build·패키지·소스 정책·타입 설정을 기존 입력에 추가했다. 범위를 줄이거나 과거 시도를 다시 연결하지 않는다. scope_changed인 과거 통과는 이력으로 보존하며 최종 판단은 추가된 입력 범위의 새 실행으로 확인한다.
+
+<a id="attempt-4aa48cb3-2276-44e5-a7db-bd3f3ce72cfe"></a>
+## 검증 시도 — 2026-11-15T09:38:38.780Z
+
+- 시도 ID: `attempt-4aa48cb3-2276-44e5-a7db-bd3f3ce72cfe`
+- 실행 시각: 2026-11-15T09:38:25.035Z ~ 2026-11-15T09:38:38.780Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","scripts/verify-architecture.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/CODE_BLUEPRINT.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/chat.md`, `docs/specs/ecosystem.md`, `package-lock.json`, `package.json`, `scripts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `d11ec3ede028d74464d595922111433066c78985c781d054492d02e7a3e9b9a6`
+- 기준 정의 식별: `43484fe65ac2cba0bbad71a5617e5580fcc141a05be4361ea8acded360b47bcf`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 3860바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-c9dbc39a-87f6-4a94-afab-f7c708c87701"></a>
+## 검증 시도 — 2026-11-15T09:38:49.657Z
+
+- 시도 ID: `attempt-c9dbc39a-87f6-4a94-afab-f7c708c87701`
+- 실행 시각: 2026-11-15T09:38:38.899Z ~ 2026-11-15T09:38:49.657Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","scripts/verify-ecosystem.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-4`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/CODE_BLUEPRINT.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/chat.md`, `docs/specs/ecosystem.md`, `package-lock.json`, `package.json`, `scripts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `d11ec3ede028d74464d595922111433066c78985c781d054492d02e7a3e9b9a6`
+- 기준 정의 식별: `43484fe65ac2cba0bbad71a5617e5580fcc141a05be4361ea8acded360b47bcf`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 236바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+### 현재 공통 검사와 작업 고유 검사의 경계
+
+공통 `npm run check`는 `.www/hook-trust-20261115/current-full-check.log`에 Bun 771 통과·3 실패로 남았다. 5초 시간 제한 관련 두 건은 같은 파일의 별도 30초 재검사에서 400 통과·0 실패(`.www/hook-trust-20261115/timeout-recheck.log`)였으며, 남은 공통 실패는 별도 test/architecture-tree.test.ts 새 declaration 구문 3 key의 BoxBox 승인 proof 미충족(`.www/hook-trust-20261115/current-proof-pending.json`)이다. Node 전체는 `.www/hook-trust-20261115/current-node-suite.log`에서 148 통과·0 실패였다. 이는 이 작업의 모든 기준을 자동 통과시키거나 기존 전체 검사를 성공으로 바꾸는 근거가 아니다. BoxBox mode off는 스타일 PASS와 구분한다.
+
+### AC-5 원문 회수 불가
+
+당시 attempt-f1161db7의 artifacts에 등록된 `.www/background/architecture/detached-receipt.json`, `build.result.json`, `build.log`, `started-at`, `ended-at`, `exit-code` 원문은 현재 checkout에 없다. 현재 레코드의 SHA·크기와 당시 산문만으로 새 원문을 만들거나 현재 분리 저작을 실측한 것으로 쓰지 않는다. AC-5는 원문 회수와 실제 적용성 판단 또는 허용된 실제 환경의 새 분리 저작 검사가 남아 있다.
+
+## 2026-11-15 최종 현재성 재평가와 부분 반환
+
+별도 세션에서 `docs/specs/ecosystem.md`, `scripts/verify-architecture.ts`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/renderer.tsx`가 검사 도중 다시 바뀌었다. 우리 병렬 작업자의 제품 소스 동결과 실제 전체 워크스페이스의 동결은 달랐다. 통과 영수증은 당시 소스에 묶인 결과로 보존하고 현재 소스 통과로 승격하지 않는다. 공식 resume로 현재 기준·검토·문서 적용성을 재평가했으며 완료를 요청하지 않는다. 추가 유료 검사는 중단했고, 다른 세션 종료 후 현재 소스 재검증 또는 고정 스냅샷 기준의 마감 선택이 남았다. 부분 저작 보고서에 실제 확인 범위·실패·소스 변화·남은 조건을 연결한다.

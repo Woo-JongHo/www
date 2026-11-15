@@ -48,3 +48,24 @@
 - 검증 중 소스 유지: 확인
 - 출력: stdout 96바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+## 2026-11-15 검증 마감 재개
+
+현재 사용자의 “검증마감항목을 지금 진행” 직접 요청에 따라 읽기 전용 포인터·정본 연결·후보 분리 기준 대조 명령을 기존 verifierCommands에 추가했다. 원래 요청 식별과 권한·과거 시도는 보존했다. ~/.codex/woo.yaml의 workspace_root를 realpath로 현재 저장소와 비교하고 전역 지침·정본 스킬·양식에서 목적, 검증, 의존 순서, 공유 변경 예외, 승인 승계와 이력 재작성 경계를 확인한다. 외부 두 파일은 실행 당시 SHA-256으로 관찰하며 저장소 digest에 포함되지 않는 외부 전제라는 한계가 있다. 이번 재개는 commit·push·이력 재작성을 실행하지 않는다.
+
+<a id="attempt-4423e906-648f-4f15-ba21-37b85a6dd1ea"></a>
+## 검증 시도 — 2026-11-15T09:26:03.032Z
+
+- 시도 ID: `attempt-4423e906-648f-4f15-ba21-37b85a6dd1ea`
+- 실행 시각: 2026-11-15T09:26:02.948Z ~ 2026-11-15T09:26:03.032Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","-e","const fs=require(\"node:fs\"),path=require(\"node:path\"),os=require(\"node:os\"),assert=require(\"node:assert/strict\"),crypto=require(\"node:crypto\"); const pointer=path.join(os.homedir(),\".codex/woo.yaml\"),global=path.join(os.homedir(),\".codex/AGENTS.md\"); const yaml=fs.readFileSync(pointer,\"utf8\"),g=fs.readFileSync(global,\"utf8\");const v=yaml.match(/^workspace_root:\\s*(.+)$/m)[1].trim().replace(/^~/,os.homedir());assert.equal(fs.realpathSync(v),fs.realpathSync(process.cwd()));assert(g.includes(\"skills/www/www-commit/SKILL.md\")&&g.includes(\"용도와 역할별\"));const skill=fs.readFileSync(\"skills/www/www-commit/SKILL.md\",\"utf8\"),form=fs.readFileSync(\"docs/skills/templates/commit.md\",\"utf8\"),agents=fs.readFileSync(\"AGENTS.md\",\"utf8\");for(const text of [\"독립적으로 검토·되돌릴\", \"후보마다\", \"선행\", \"한 후보의 stage·검증·commit\", \"단일 커밋 지시가 아니다\", \"안전하게 분리할 수 없는\", \"이미 승인된 범위의 실행 권한\", \"이력 재작성\"] ) assert(skill.includes(text),text); assert(form.includes(\"목적별 후보와 실행 순서\")&&form.includes(\"검증\")&&form.includes(\"선행\"));assert(agents.includes(\"용도·역할별 후보 분리\"));console.log(JSON.stringify({pointerMatches:true,canonicalLinks:true,candidateBoundaries:true,exceptionsAndApproval:true,readOnly:true,externalSha256:[pointer,global].map(p=>crypto.createHash(\"sha256\").update(fs.readFileSync(p)).digest(\"hex\"))}));"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `92de2389b943610f7e12c23a4cd211555d4cae1b`
+- 검증 입력: `AGENTS.md`, `docs/skills/templates/commit.md`, `skills/www/www-commit/SKILL.md`
+- 소스 식별: `4681d3f62e0cf53c32c3d5240864d5c7b6f8ec128ca991c6c7197f161decfa0b`
+- 기준 정의 식별: `7e8d8023b5bcfd9ada3a5d1b266ee1130c2d3c9e25e3d4ac08a599930ce0e51b`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 271바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.

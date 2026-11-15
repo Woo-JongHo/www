@@ -9,7 +9,9 @@ PASS
 - **정확한 ID 판정:** 직전 독립 집중 검사에서 고유 Hook run 20,000개가 모두 반응했고, 중복·늦은 시작 억제와 같은 연결 복원·새 연결 회수를 확인했습니다. 현재 검증 입력에서 직전과 달라진 파일은 Chat 명세뿐이므로 제품 코드에 해당 결과가 적용됩니다.
 - **snapshot/live 경합:** 실제 renderer가 사용하는 경계에서 늦은 snapshot의 연결·목록 보존, snapshot에 없는 낮은 seq live의 반응, 포함된 중복의 무재생을 확인한 상태입니다.
 
-최신 [공식 GUI 결과](../../../../.www/scratchpad/sidebar-final5-20261113/gui-result.json)와 [probe 원문](../../../../.www/evidence/native-activity-BEFPGS/probe.json)을 대조했습니다. 공식 실행의 전체 검사에는 Bun 215건, Node 147건, 타입 검사와 빌드가 포함돼 통과했습니다. 이번 패스에서 직접 실행한 `check:workflow`와 `git diff --check`도 통과했습니다. 요청대로 GUI와 전체 검사는 독립 재실행하지 않았습니다.
+당시 최신 공식 GUI 결과 `.www/scratchpad/sidebar-final5-20261113/gui-result.json`와 probe 원문 `.www/evidence/native-activity-BEFPGS/probe.json`을 대조했습니다. 공식 실행의 전체 검사에는 Bun 215건, Node 147건, 타입 검사와 빌드가 포함돼 통과했습니다. 이번 패스에서 직접 실행한 `check:workflow`와 `git diff --check`도 통과했습니다. 요청대로 GUI와 전체 검사는 독립 재실행하지 않았습니다.
+
+2026-11-15 기록 이식성 보정: 위 두 파일은 Git이 무시하는 로컬 원문이며 새 checkout에 포함되는 링크가 아닙니다. 보존된 파일의 SHA-256은 각각 `d4cfe612835fef32b9f341feea4ba6a39f8093b9add36df4d972ef2612f2d519`, `ccc68a2d18e127f973765c7a6115337c419c454e352d338b85b6aad54e176086`입니다. 이 식별은 당시 원문의 회수를 돕는 것이며 현행 수정본의 검증이나 다른 머신의 원문 보유를 뜻하지 않습니다.
 
 AC-1~5는 해당 집중 검사와 최신 공식 실행의 **관측 범위에서 확인**했습니다. Native 읽기 표본은 제품 실행 코드가 같은 이전 실제 통과를 재사용한 것이며 새 실행은 아닙니다. 실제 Hook 알림은 0건이고 Windows는 실행하지 않았습니다.
 

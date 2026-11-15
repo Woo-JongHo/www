@@ -1,0 +1,929 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-1196c539-f66f-4ad1-9e8a-6eedb0471134",
+  "title"        : "변경된 플러그인 Hook 신뢰 복구",
+  "kind"         : "bug",
+  "areas": [
+    "dev",
+    "ops"
+  ],
+  "owner"        : "dev",
+  "status"       : "done",
+  "blockedReason": null,
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-c70c4563-123f-4156-b836-0a71fcfe8b40"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "HOOK-1",
+      "description": "현재 Native 목록·저장 승인·설치 무결성을 대조해 오류가 발생한 정확한 플러그인과 정의/내용 지문 불일치를 식별한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-609d31eb-01b6-4159-8d68-e399f2ba0c3f",
+          "path"     : "verification.md#attempt-609d31eb-01b6-4159-8d68-e399f2ba0c3f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-70df4081-ca5d-4589-a2d4-ff2dd7bf5e68",
+          "path"     : "verification.md#attempt-70df4081-ca5d-4589-a2d4-ff2dd7bf5e68",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "HOOK-2",
+      "description": "검토한 BoxBox·Vercel의 8개 Hook을 정식 호스트 승인 경로로 복구하고 bypass·승인 해시 직접 작성 없이 활성·신뢰 상태와 관계없는 설정 보전을 확인한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-609d31eb-01b6-4159-8d68-e399f2ba0c3f",
+          "path"     : "verification.md#attempt-609d31eb-01b6-4159-8d68-e399f2ba0c3f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-70df4081-ca5d-4589-a2d4-ff2dd7bf5e68",
+          "path"     : "verification.md#attempt-70df4081-ca5d-4589-a2d4-ff2dd7bf5e68",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "HOOK-3",
+      "description": "우회 옵션 없는 새 Native 세션에서 대표 SessionStart·Stop Hook의 실제 실행과 완료를 관찰하고 신뢰 오류의 재발 여부 및 미실행 Hook 범위를 구분한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-622e11f2-9c3b-4ab7-be00-02457e9d0a92",
+          "path"     : "verification.md#attempt-622e11f2-9c3b-4ab7-be00-02457e9d0a92",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-9d0b6f7f-5bd7-4dde-8cec-20acc3450b50",
+          "path"     : "verification.md#attempt-9d0b6f7f-5bd7-4dde-8cec-20acc3450b50",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "hook-content-trust-repair-20261115",
+    "requestHash": "40df026ab04e33e46fcddce5586972259444428754aa7aa2e0226d164875104d",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "docs/work/INDEX.md",
+        "docs/work/Workflow/013-변경된 플러그인 Hook 신뢰 복구/spec.md",
+        "docs/work/Workflow/013-변경된 플러그인 Hook 신뢰 복구/diagnosis.md",
+        "docs/work/Workflow/013-변경된 플러그인 Hook 신뢰 복구/verification.md",
+        "docs/work/Workflow/013-변경된 플러그인 Hook 신뢰 복구/work.json"
+      ],
+      "mutationSurfaces": [
+        "edit",
+        "create",
+        "execute"
+      ],
+      "verifierCommands": [
+        "[\"node\",\"scripts/check-workflow.ts\"]",
+        "[\"node\",\"--input-type=module\",\"--eval\",\"import {readFileSync} from 'node:fs';import assert from 'node:assert/strict';const p='.www/hook-trust-20261115/';const read=n=>JSON.parse(readFileSync(p+n,'utf8'));const b=read('hooks-before.json').data.flatMap(x=>x.hooks);const a=read('hooks-after.json').data.flatMap(x=>x.hooks);const d=read('trust-review-config-delta.json');const i=read('plugin-integrity.json');assert.equal(b.length,8);assert(b.every(h=>h.enabled&&h.trustStatus==='modified'));assert.equal(a.length,8);assert(a.every(h=>h.enabled&&h.trustStatus==='trusted'));assert.equal(Object.keys(d.changedStates).length,8);assert(d.unrelatedConfigurationUnchanged);for(const v of Object.values(d.changedStates)){assert.equal(v.before.trusted_hash,v.after.trusted_hash);assert.notEqual(v.before.trusted_content_hash,v.after.trusted_content_hash);}assert.equal(i.boxboxCacheVsInstallerDifferences.length,0);assert.equal(i.vercelGitChanges.length,0);assert(readFileSync(p+'official-tui-review.txt','utf8').includes('Trusting hooks'));console.log('HOOK-1/2: 설치 무결성, 정의 동일·내용 승인 변경, 8개 정식 호스트 신뢰 및 관계없는 설정 보전 확인. 실제 의미 판정은 diagnosis와 독립 검토 참조.');\"]",
+        "[\"node\",\"--experimental-transform-types\",\"--input-type=module\",\"--eval\",\"import {spawn} from 'node:child_process';\\nimport {writeFileSync} from 'node:fs';\\nimport {JsonRpcClient} from './src/rpc.ts';\\nconst child=spawn('codex',['app-server'],{stdio:['pipe','pipe','pipe']});\\nconst rpc=new JsonRpcClient(child);const runs=[];let completed=false;let failed=null;\\nrpc.on('message',m=>{if(m.id!==undefined&&m.method){void rpc.respond(m.id,{decision:'decline'});return;}if(m.method==='hook/completed'){const r=m.params.run;runs.push({eventName:r.eventName,source:r.source,sourcePath:r.sourcePath,status:r.status,statusMessage:r.statusMessage,entries:r.entries.map(e=>({kind:e.kind,text:e.text.slice(0,500)}))});}if(m.method==='turn/completed'){completed=true;failed=m.params.turn?.error??null;}});\\nconst timer=setTimeout(()=>child.kill('SIGTERM'),150000);\\ntry{await rpc.request('initialize',{clientInfo:{name:'www_hook_lifecycle_check',version:'0.1.0'},capabilities:{experimentalApi:true}});rpc.notify('initialized',{});const t=await rpc.request('thread/start',{cwd:process.cwd(),approvalPolicy:'never',sandbox:'read-only',ephemeral:true});await rpc.request('turn/start',{threadId:t.thread.id,effort:'low',input:[{type:'text',text:'도구를 사용하지 말고 HOOK_LIFECYCLE_OK 한 줄만 답하세요.'}]});while(!completed&&child.exitCode===null)await new Promise(r=>setTimeout(r,100));await new Promise(r=>setTimeout(r,1000));const result={completed,failed,bypass:false,runs,checks:{sessionStart:runs.some(r=>r.eventName==='sessionStart'&&r.status==='completed'),stop:runs.some(r=>r.eventName==='stop'&&r.status==='completed'),noFailedHooks:runs.every(r=>r.status==='completed')}};writeFileSync('.www/hook-trust-20261115/lifecycle.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));if(!completed||failed||!Object.values(result.checks).every(Boolean))process.exitCode=1;}finally{clearTimeout(timer);child.kill('SIGTERM');}\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "40df026ab04e33e46fcddce5586972259444428754aa7aa2e0226d164875104d"
+    },
+    "inputs": [
+      "agents/www/review-policy.json",
+      "docs/ARCHITECTURE.md",
+      "docs/DEVELOPMENT.md",
+      "docs/PRODUCT.md",
+      "docs/skills/REPORTS.md",
+      "docs/skills/WORKFLOW.md",
+      "scripts/verify-native-activity.ts",
+      "src/main.ts",
+      "src/native-activity.ts",
+      "src/rpc.ts",
+      "test/verify-native-activity-live.ts"
+    ],
+    "nextAction": "complete",
+    "verifications": [
+      {
+        "id"         : "attempt-609d31eb-01b6-4159-8d68-e399f2ba0c3f",
+        "startedAt"  : "2026-11-15T09:26:20.575Z",
+        "completedAt": "2026-11-15T09:26:20.771Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "41c247bb39cb055238f278f1d1e66f98890eefe0af100fcfe91d3521be56c1a5",
+          "inputs": [
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/skills/REPORTS.md",
+            "docs/skills/WORKFLOW.md",
+            "scripts/verify-native-activity.ts",
+            "src/main.ts",
+            "src/native-activity.ts",
+            "test/verify-native-activity-live.ts"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "c9e0d42d7b6bb04be0b3aa75916f90747a43fa1e9bc282a4647db6fa7021ffee",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "e524b3b75b0f1e25fb1a20b6ebe05012ec00a535fa9cfc700e8217bde3b23750",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "eaa44d04f7f2092cd6160948b94efd8c1f0144907072ac7d3b2954d6b6952426",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "555df5b1457d56d69e6f2e59765e960b64feb2616db97f621c5b51c81a02e090",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "91e581e796022bf7f094c7c65316cfc0e619f7139119855157a504093456b8ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-native-activity.ts",
+              "type"  : "file",
+              "digest": "ee5a3f1f476f0326e1de893af3897e1f35fc47343203f39d4395f572a46b5f95",
+              "mode"  : 493
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/verify-native-activity-live.ts",
+              "type"  : "file",
+              "digest": "ff733010722f0da4a23f0a03b1c28ece29b78bd1a16a9df1bae69c3bb1845970",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ddba05de31b6a59b9348c926c1918be25f558d17eaf3f302a4f1abdafe78be24",
+        "criteriaSnapshot": [
+          {
+            "id"         : "HOOK-1",
+            "description": "현재 Native 목록·저장 승인·설치 무결성을 대조해 오류가 발생한 정확한 플러그인과 정의/내용 지문 불일치를 식별한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "HOOK-2",
+            "description": "검토한 BoxBox·Vercel의 8개 Hook을 정식 호스트 승인 경로로 복구하고 bypass·승인 해시 직접 작성 없이 활성·신뢰 상태와 관계없는 설정 보전을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "HOOK-3",
+            "description": "우회 옵션 없는 새 Native 세션에서 대표 SessionStart·Stop Hook의 실제 실행과 완료를 관찰하고 신뢰 오류의 재발 여부 및 미실행 Hook 범위를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--input-type=module",
+          "--eval",
+          "import {readFileSync} from 'node:fs';import assert from 'node:assert/strict';const p='.www/hook-trust-20261115/';const read=n=>JSON.parse(readFileSync(p+n,'utf8'));const b=read('hooks-before.json').data.flatMap(x=>x.hooks);const a=read('hooks-after.json').data.flatMap(x=>x.hooks);const d=read('trust-review-config-delta.json');const i=read('plugin-integrity.json');assert.equal(b.length,8);assert(b.every(h=>h.enabled&&h.trustStatus==='modified'));assert.equal(a.length,8);assert(a.every(h=>h.enabled&&h.trustStatus==='trusted'));assert.equal(Object.keys(d.changedStates).length,8);assert(d.unrelatedConfigurationUnchanged);for(const v of Object.values(d.changedStates)){assert.equal(v.before.trusted_hash,v.after.trusted_hash);assert.notEqual(v.before.trusted_content_hash,v.after.trusted_content_hash);}assert.equal(i.boxboxCacheVsInstallerDifferences.length,0);assert.equal(i.vercelGitChanges.length,0);assert(readFileSync(p+'official-tui-review.txt','utf8').includes('Trusting hooks'));console.log('HOOK-1/2: 설치 무결성, 정의 동일·내용 승인 변경, 8개 정식 호스트 신뢰 및 관계없는 설정 보전 확인. 실제 의미 판정은 diagnosis와 독립 검토 참조.');"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "HOOK-1",
+          "HOOK-2"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/hook-trust-20261115/hooks-after.json",
+            "size"  : 8357,
+            "digest": "f06398b7ffe83ea52bb74e063a14fa0fb6ec71ab30defb2119df249675e1a6b2"
+          },
+          {
+            "path"  : ".www/hook-trust-20261115/hooks-before.json",
+            "size"  : 8365,
+            "digest": "78c00a5a871b8256fd1f47e3abc3275c6cb50de5629cdc872a5f0dfce9f57948"
+          },
+          {
+            "path"  : ".www/hook-trust-20261115/official-tui-review.txt",
+            "size"  : 5202,
+            "digest": "9ec9a092fac3d8bf7d48ff4ff0d2223f5a4cb25297a78e290d460f4a611487a2"
+          },
+          {
+            "path"  : ".www/hook-trust-20261115/plugin-integrity.json",
+            "size"  : 135,
+            "digest": "3ec683f7a9134fa271ae9163afbfa66bf0e8fa6ea39d44f1950575160a8e0602"
+          },
+          {
+            "path"  : ".www/hook-trust-20261115/trust-review-config-delta.json",
+            "size"  : 4410,
+            "digest": "109ef22df54e31c57834d88ce971f46a98ab23f2d41e4c59e560754d60289759"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 192,
+            "digest"         : "65379bd10e47940df0b6201e13d235d245cf73f90c070b47096d8ceaa3653dc0",
+            "truncated"      : false,
+            "retainedBytes"  : 192,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-622e11f2-9c3b-4ab7-be00-02457e9d0a92",
+        "startedAt"  : "2026-11-15T09:26:30.120Z",
+        "completedAt": "2026-11-15T09:26:45.694Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "41c247bb39cb055238f278f1d1e66f98890eefe0af100fcfe91d3521be56c1a5",
+          "inputs": [
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/skills/REPORTS.md",
+            "docs/skills/WORKFLOW.md",
+            "scripts/verify-native-activity.ts",
+            "src/main.ts",
+            "src/native-activity.ts",
+            "test/verify-native-activity-live.ts"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "c9e0d42d7b6bb04be0b3aa75916f90747a43fa1e9bc282a4647db6fa7021ffee",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "e524b3b75b0f1e25fb1a20b6ebe05012ec00a535fa9cfc700e8217bde3b23750",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "eaa44d04f7f2092cd6160948b94efd8c1f0144907072ac7d3b2954d6b6952426",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "555df5b1457d56d69e6f2e59765e960b64feb2616db97f621c5b51c81a02e090",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "91e581e796022bf7f094c7c65316cfc0e619f7139119855157a504093456b8ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-native-activity.ts",
+              "type"  : "file",
+              "digest": "ee5a3f1f476f0326e1de893af3897e1f35fc47343203f39d4395f572a46b5f95",
+              "mode"  : 493
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/verify-native-activity-live.ts",
+              "type"  : "file",
+              "digest": "ff733010722f0da4a23f0a03b1c28ece29b78bd1a16a9df1bae69c3bb1845970",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ddba05de31b6a59b9348c926c1918be25f558d17eaf3f302a4f1abdafe78be24",
+        "criteriaSnapshot": [
+          {
+            "id"         : "HOOK-1",
+            "description": "현재 Native 목록·저장 승인·설치 무결성을 대조해 오류가 발생한 정확한 플러그인과 정의/내용 지문 불일치를 식별한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "HOOK-2",
+            "description": "검토한 BoxBox·Vercel의 8개 Hook을 정식 호스트 승인 경로로 복구하고 bypass·승인 해시 직접 작성 없이 활성·신뢰 상태와 관계없는 설정 보전을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "HOOK-3",
+            "description": "우회 옵션 없는 새 Native 세션에서 대표 SessionStart·Stop Hook의 실제 실행과 완료를 관찰하고 신뢰 오류의 재발 여부 및 미실행 Hook 범위를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--experimental-transform-types",
+          "--input-type=module",
+          "--eval",
+          "import {spawn} from 'node:child_process';\nimport {writeFileSync} from 'node:fs';\nimport {JsonRpcClient} from './src/rpc.ts';\nconst child=spawn('codex',['app-server'],{stdio:['pipe','pipe','pipe']});\nconst rpc=new JsonRpcClient(child);const runs=[];let completed=false;let failed=null;\nrpc.on('message',m=>{if(m.id!==undefined&&m.method){void rpc.respond(m.id,{decision:'decline'});return;}if(m.method==='hook/completed'){const r=m.params.run;runs.push({eventName:r.eventName,source:r.source,sourcePath:r.sourcePath,status:r.status,statusMessage:r.statusMessage,entries:r.entries.map(e=>({kind:e.kind,text:e.text.slice(0,500)}))});}if(m.method==='turn/completed'){completed=true;failed=m.params.turn?.error??null;}});\nconst timer=setTimeout(()=>child.kill('SIGTERM'),150000);\ntry{await rpc.request('initialize',{clientInfo:{name:'www_hook_lifecycle_check',version:'0.1.0'},capabilities:{experimentalApi:true}});rpc.notify('initialized',{});const t=await rpc.request('thread/start',{cwd:process.cwd(),approvalPolicy:'never',sandbox:'read-only',ephemeral:true});await rpc.request('turn/start',{threadId:t.thread.id,effort:'low',input:[{type:'text',text:'도구를 사용하지 말고 HOOK_LIFECYCLE_OK 한 줄만 답하세요.'}]});while(!completed&&child.exitCode===null)await new Promise(r=>setTimeout(r,100));await new Promise(r=>setTimeout(r,1000));const result={completed,failed,bypass:false,runs,checks:{sessionStart:runs.some(r=>r.eventName==='sessionStart'&&r.status==='completed'),stop:runs.some(r=>r.eventName==='stop'&&r.status==='completed'),noFailedHooks:runs.every(r=>r.status==='completed')}};writeFileSync('.www/hook-trust-20261115/lifecycle.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));if(!completed||failed||!Object.values(result.checks).every(Boolean))process.exitCode=1;}finally{clearTimeout(timer);child.kill('SIGTERM');}"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "HOOK-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 1277,
+            "digest"         : "e001d82d024417ad7d41bd4729174d13875583b027a70392c641bd7ecf79bdca",
+            "truncated"      : false,
+            "retainedBytes"  : 1277,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 547,
+            "digest"         : "3381a1c44548a0854b53fbdbbdfcbeb091dc26d4a77d2b2bf791353f53a3211a",
+            "truncated"      : false,
+            "retainedBytes"  : 547,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-70df4081-ca5d-4589-a2d4-ff2dd7bf5e68",
+        "startedAt"  : "2026-11-15T09:30:52.628Z",
+        "completedAt": "2026-11-15T09:30:52.773Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "92bbb3916d9f4c6075a86e90ed9409fa53057d7da3e4904ad566dffba618eda6",
+          "inputs": [
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/skills/REPORTS.md",
+            "docs/skills/WORKFLOW.md",
+            "scripts/verify-native-activity.ts",
+            "src/main.ts",
+            "src/native-activity.ts",
+            "src/rpc.ts",
+            "test/verify-native-activity-live.ts"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "c9e0d42d7b6bb04be0b3aa75916f90747a43fa1e9bc282a4647db6fa7021ffee",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "e524b3b75b0f1e25fb1a20b6ebe05012ec00a535fa9cfc700e8217bde3b23750",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "eaa44d04f7f2092cd6160948b94efd8c1f0144907072ac7d3b2954d6b6952426",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "555df5b1457d56d69e6f2e59765e960b64feb2616db97f621c5b51c81a02e090",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "91e581e796022bf7f094c7c65316cfc0e619f7139119855157a504093456b8ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-native-activity.ts",
+              "type"  : "file",
+              "digest": "ee5a3f1f476f0326e1de893af3897e1f35fc47343203f39d4395f572a46b5f95",
+              "mode"  : 493
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/verify-native-activity-live.ts",
+              "type"  : "file",
+              "digest": "ff733010722f0da4a23f0a03b1c28ece29b78bd1a16a9df1bae69c3bb1845970",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ddba05de31b6a59b9348c926c1918be25f558d17eaf3f302a4f1abdafe78be24",
+        "criteriaSnapshot": [
+          {
+            "id"         : "HOOK-1",
+            "description": "현재 Native 목록·저장 승인·설치 무결성을 대조해 오류가 발생한 정확한 플러그인과 정의/내용 지문 불일치를 식별한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "HOOK-2",
+            "description": "검토한 BoxBox·Vercel의 8개 Hook을 정식 호스트 승인 경로로 복구하고 bypass·승인 해시 직접 작성 없이 활성·신뢰 상태와 관계없는 설정 보전을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "HOOK-3",
+            "description": "우회 옵션 없는 새 Native 세션에서 대표 SessionStart·Stop Hook의 실제 실행과 완료를 관찰하고 신뢰 오류의 재발 여부 및 미실행 Hook 범위를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--input-type=module",
+          "--eval",
+          "import {readFileSync} from 'node:fs';import assert from 'node:assert/strict';const p='.www/hook-trust-20261115/';const read=n=>JSON.parse(readFileSync(p+n,'utf8'));const b=read('hooks-before.json').data.flatMap(x=>x.hooks);const a=read('hooks-after.json').data.flatMap(x=>x.hooks);const d=read('trust-review-config-delta.json');const i=read('plugin-integrity.json');assert.equal(b.length,8);assert(b.every(h=>h.enabled&&h.trustStatus==='modified'));assert.equal(a.length,8);assert(a.every(h=>h.enabled&&h.trustStatus==='trusted'));assert.equal(Object.keys(d.changedStates).length,8);assert(d.unrelatedConfigurationUnchanged);for(const v of Object.values(d.changedStates)){assert.equal(v.before.trusted_hash,v.after.trusted_hash);assert.notEqual(v.before.trusted_content_hash,v.after.trusted_content_hash);}assert.equal(i.boxboxCacheVsInstallerDifferences.length,0);assert.equal(i.vercelGitChanges.length,0);assert(readFileSync(p+'official-tui-review.txt','utf8').includes('Trusting hooks'));console.log('HOOK-1/2: 설치 무결성, 정의 동일·내용 승인 변경, 8개 정식 호스트 신뢰 및 관계없는 설정 보전 확인. 실제 의미 판정은 diagnosis와 독립 검토 참조.');"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "HOOK-1",
+          "HOOK-2"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/hook-trust-20261115/hooks-after.json",
+            "size"  : 8357,
+            "digest": "f06398b7ffe83ea52bb74e063a14fa0fb6ec71ab30defb2119df249675e1a6b2"
+          },
+          {
+            "path"  : ".www/hook-trust-20261115/hooks-before.json",
+            "size"  : 8365,
+            "digest": "78c00a5a871b8256fd1f47e3abc3275c6cb50de5629cdc872a5f0dfce9f57948"
+          },
+          {
+            "path"  : ".www/hook-trust-20261115/official-tui-review.txt",
+            "size"  : 5202,
+            "digest": "9ec9a092fac3d8bf7d48ff4ff0d2223f5a4cb25297a78e290d460f4a611487a2"
+          },
+          {
+            "path"  : ".www/hook-trust-20261115/plugin-integrity.json",
+            "size"  : 135,
+            "digest": "3ec683f7a9134fa271ae9163afbfa66bf0e8fa6ea39d44f1950575160a8e0602"
+          },
+          {
+            "path"  : ".www/hook-trust-20261115/trust-review-config-delta.json",
+            "size"  : 4410,
+            "digest": "109ef22df54e31c57834d88ce971f46a98ab23f2d41e4c59e560754d60289759"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 192,
+            "digest"         : "65379bd10e47940df0b6201e13d235d245cf73f90c070b47096d8ceaa3653dc0",
+            "truncated"      : false,
+            "retainedBytes"  : 192,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-9d0b6f7f-5bd7-4dde-8cec-20acc3450b50",
+        "startedAt"  : "2026-11-15T09:30:53.306Z",
+        "completedAt": "2026-11-15T09:31:04.939Z",
+        "source": {
+          "head": "92de2389b943610f7e12c23a4cd211555d4cae1b",
+          "digest": "92bbb3916d9f4c6075a86e90ed9409fa53057d7da3e4904ad566dffba618eda6",
+          "inputs": [
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/skills/REPORTS.md",
+            "docs/skills/WORKFLOW.md",
+            "scripts/verify-native-activity.ts",
+            "src/main.ts",
+            "src/native-activity.ts",
+            "src/rpc.ts",
+            "test/verify-native-activity-live.ts"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "c9e0d42d7b6bb04be0b3aa75916f90747a43fa1e9bc282a4647db6fa7021ffee",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "e524b3b75b0f1e25fb1a20b6ebe05012ec00a535fa9cfc700e8217bde3b23750",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "eaa44d04f7f2092cd6160948b94efd8c1f0144907072ac7d3b2954d6b6952426",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "555df5b1457d56d69e6f2e59765e960b64feb2616db97f621c5b51c81a02e090",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "91e581e796022bf7f094c7c65316cfc0e619f7139119855157a504093456b8ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-native-activity.ts",
+              "type"  : "file",
+              "digest": "ee5a3f1f476f0326e1de893af3897e1f35fc47343203f39d4395f572a46b5f95",
+              "mode"  : 493
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/verify-native-activity-live.ts",
+              "type"  : "file",
+              "digest": "ff733010722f0da4a23f0a03b1c28ece29b78bd1a16a9df1bae69c3bb1845970",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ddba05de31b6a59b9348c926c1918be25f558d17eaf3f302a4f1abdafe78be24",
+        "criteriaSnapshot": [
+          {
+            "id"         : "HOOK-1",
+            "description": "현재 Native 목록·저장 승인·설치 무결성을 대조해 오류가 발생한 정확한 플러그인과 정의/내용 지문 불일치를 식별한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "HOOK-2",
+            "description": "검토한 BoxBox·Vercel의 8개 Hook을 정식 호스트 승인 경로로 복구하고 bypass·승인 해시 직접 작성 없이 활성·신뢰 상태와 관계없는 설정 보전을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "HOOK-3",
+            "description": "우회 옵션 없는 새 Native 세션에서 대표 SessionStart·Stop Hook의 실제 실행과 완료를 관찰하고 신뢰 오류의 재발 여부 및 미실행 Hook 범위를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--experimental-transform-types",
+          "--input-type=module",
+          "--eval",
+          "import {spawn} from 'node:child_process';\nimport {writeFileSync} from 'node:fs';\nimport {JsonRpcClient} from './src/rpc.ts';\nconst child=spawn('codex',['app-server'],{stdio:['pipe','pipe','pipe']});\nconst rpc=new JsonRpcClient(child);const runs=[];let completed=false;let failed=null;\nrpc.on('message',m=>{if(m.id!==undefined&&m.method){void rpc.respond(m.id,{decision:'decline'});return;}if(m.method==='hook/completed'){const r=m.params.run;runs.push({eventName:r.eventName,source:r.source,sourcePath:r.sourcePath,status:r.status,statusMessage:r.statusMessage,entries:r.entries.map(e=>({kind:e.kind,text:e.text.slice(0,500)}))});}if(m.method==='turn/completed'){completed=true;failed=m.params.turn?.error??null;}});\nconst timer=setTimeout(()=>child.kill('SIGTERM'),150000);\ntry{await rpc.request('initialize',{clientInfo:{name:'www_hook_lifecycle_check',version:'0.1.0'},capabilities:{experimentalApi:true}});rpc.notify('initialized',{});const t=await rpc.request('thread/start',{cwd:process.cwd(),approvalPolicy:'never',sandbox:'read-only',ephemeral:true});await rpc.request('turn/start',{threadId:t.thread.id,effort:'low',input:[{type:'text',text:'도구를 사용하지 말고 HOOK_LIFECYCLE_OK 한 줄만 답하세요.'}]});while(!completed&&child.exitCode===null)await new Promise(r=>setTimeout(r,100));await new Promise(r=>setTimeout(r,1000));const result={completed,failed,bypass:false,runs,checks:{sessionStart:runs.some(r=>r.eventName==='sessionStart'&&r.status==='completed'),stop:runs.some(r=>r.eventName==='stop'&&r.status==='completed'),noFailedHooks:runs.every(r=>r.status==='completed')}};writeFileSync('.www/hook-trust-20261115/lifecycle.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));if(!completed||failed||!Object.values(result.checks).every(Boolean))process.exitCode=1;}finally{clearTimeout(timer);child.kill('SIGTERM');}"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "HOOK-3"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/hook-trust-20261115/lifecycle.json",
+            "size"  : 1660,
+            "digest": "03b61d6974348bbf37c5555d8b11a929a6ed851a3d2d1890de54ed49c6e7509b"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 1277,
+            "digest"         : "e001d82d024417ad7d41bd4729174d13875583b027a70392c641bd7ecf79bdca",
+            "truncated"      : false,
+            "retainedBytes"  : 1277,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 547,
+            "digest"         : "efbf7006d9eb585f6c3775dd89843911a543c6b2c6f241f9bd40feb1c3de9f09",
+            "truncated"      : false,
+            "retainedBytes"  : 547,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id"            : "review-f202d0f7-2cfb-4803-b69b-3b528ec5f262",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "41c247bb39cb055238f278f1d1e66f98890eefe0af100fcfe91d3521be56c1a5",
+        "criteriaDigest": "ddba05de31b6a59b9348c926c1918be25f558d17eaf3f302a4f1abdafe78be24",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "cdeb86aaab3c97997d6e359f2f936091444643bdc6e59480bc22bef3f4fc8aec"
+        },
+        "failure": null,
+        "findings": [
+          "저장소 소스는 바뀌지 않았다. 대상은 외부 플러그인 Hook의 신뢰 상태를 복구하는 운영 작업이다. 두 검증 시도의 소스 digest(41c247bb…)와 criteriaDigest(ddba05de…)가 요청 JSON과 같고, sourceStable·artifactsStable·environmentStable이 모두 true다. 검증 명령은 work.json의 verifierCommands와 문자 그대로 같다.",
+          "HOOK-1: trust-review-config-delta.json의 8개 항목 모두에서 trusted_hash는 전후가 같고 trusted_content_hash만 다르다(BoxBox 82ad…→3a8b…, Vercel d33d…→5475…). diagnosis.md의 '정의 지문 동일·내용 지문 불일치' 판단과 맞는다. plugin-integrity.json에서도 BoxBox 캐시와 설치 원본의 차이가 없고, Vercel은 HEAD가 882e66c…이며 Git 변경이 없다. 최초 변경 파일을 특정하지 않은 한계도 diagnosis.md:11과 verification.md:49에 숨김없이 적혀 있다.",
+          "HOOK-2: official-tui-review.txt에 Codex CLI 0.169.0의 'Hooks need review / 8 hooks are new or changed' 화면, '2. Trust all and continue' 선택, 'Trusting hooks...'가 기록돼 있다. 정식 호스트 승인 경로를 거쳤다는 근거로 충분하다. delta에서 trusted_hash는 그대로이고 content hash만 호스트가 계산한 값으로 바뀌었으므로, 승인 해시를 직접 써 넣었다는 흔적은 없다. after에 추가된 `enabled: true`(boxbox session_start)는 활성 상태 항목이므로 기준의 '활성·신뢰 상태와 관계없는 설정'에 해당하지 않는다. 이 사실도 verification.md:46에 공개돼 있어 증거 범위를 넓힌 것은 아니다.",
+          "HOOK-3: lifecycle.json에는 bypass=false인 새 ephemeral·read-only 세션의 실행 기록이 있다. BoxBox sessionStart 1건, Vercel sessionStart 3건, BoxBox stop 1건이 모두 source=plugin, status=completed다. 신뢰되지 않은 Hook은 실행되지 않으므로 이 다섯 Hook에는 신뢰 오류가 재발하지 않았다고 볼 수 있다. 실행하지 않은 범위(PostToolUse 2종, SessionEnd)도 verification.md:49에 따로 적혀 있어 기준의 '미실행 Hook 범위 구분'을 충족한다.",
+          "참고(결함 아님): HOOK-3 검증 명령의 checks는 eventName과 status만 확인한다. sourcePath가 BoxBox·Vercel인지는 거르지 않아서, 다른 출처의 Hook이 완료돼도 통과할 수 있다. 이번 lifecycle.json에는 두 플러그인 경로만 있어 결론은 그대로이지만, 같은 명령을 다시 쓸 때는 출처까지 확인하면 더 견고해진다. 또 이 시도가 만든 lifecycle.json은 attempt 622e11f2의 artifacts 목록에 digest로 고정돼 있지 않다.",
+          "참고(결함 아님): official-tui-review.txt에는 승인 뒤에도 TUI에 '⚠ 1 warning', '⚠ 3 warnings'가 표시된다. 경고 내용은 기록되지 않았다. lifecycle 실행에서 Hook 실패가 없었으므로 신뢰 오류로 단정할 근거는 없지만, 경고 내용은 확인되지 않은 상태로 남아 있다.",
+          "이번 검토에서는 명령이나 테스트를 실행하지 않았다. 검증 명령 실행 결과(종료 코드 0)는 기록된 attempt를 근거로 했고, 보존된 .www/hook-trust-20261115/ 산출물만 직접 읽어 대조했다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-f202d0f7-2cfb-4803-b69b-3b528ec5f262/opus.json",
+        "startedAt"  : "2026-11-15T09:27:09.665Z",
+        "completedAt": "2026-11-15T09:27:55.992Z"
+      },
+      {
+        "id"            : "review-a47c4f83-c0fc-4aae-b755-aacf097b57b4",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "92bbb3916d9f4c6075a86e90ed9409fa53057d7da3e4904ad566dffba618eda6",
+        "criteriaDigest": "ddba05de31b6a59b9348c926c1918be25f558d17eaf3f302a4f1abdafe78be24",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "198499ee7ee305dd610790a8c2254ae06a3c6190b9a2b3d37381afde40db3248"
+        },
+        "failure": null,
+        "findings": [
+          "이번 판정의 대상은 소스 digest 92bbb391…이다. 직전 검토(41c247bb…)와 비교하면 검증 입력에 src/rpc.ts(digest 396bf547…)가 추가되고, HOOK-3 재실행에서 lifecycle.json이 산출물로 고정된 것만 다르다. 두 재실행 attempt(70df4081, 9d0b6f7f)의 source digest와 criteriaDigest(ddba05de…)는 요청 JSON과 같다. 실행된 명령도 verifierCommands와 문자 그대로 같다. sourceStable·artifactsStable·environmentStable은 모두 true다.",
+          "src/rpc.ts:16-84를 대조했다. JsonRpcClient는 EventEmitter를 상속하고 request/notify/respond를 제공한다. id와 method가 함께 있는 서버 요청은 82-83행에서 'message' 이벤트로 전달된다. 따라서 검증 스크립트가 서버 요청에 decline으로 응답하고 hook/completed·turn/completed를 수집하는 동작은 실제 구현과 맞는다. 이 import를 입력에 넣은 보완은 증거 범위를 정확하게 만든 것이며, 범위를 넓힌 것이 아니다.",
+          "HOOK-1: trust-review-config-delta.json의 8개 항목에서 trusted_hash는 승인 전후가 같고 trusted_content_hash만 다르다(BoxBox 82ad…→3a8b…, Vercel d33d…→5475…). plugin-integrity.json에는 BoxBox 캐시와 설치 원본의 차이가 없고, Vercel은 HEAD 882e66c…에 Git 변경이 없다. diagnosis.md:9-11의 '정의 지문 동일·내용 지문 불일치' 판단, 그리고 최초 변경 파일을 특정하지 않는다는 한계와 일치한다.",
+          "HOOK-2: official-tui-review.txt에 Codex CLI v0.169.0의 'Hooks need review / 8 hooks are new or changed' 화면, '2. Trust all and continue' 선택, 'Trusting hooks...'가 기록돼 있다. 정식 호스트 승인 경로를 거쳤다는 근거가 된다. 승인 해시를 직접 써 넣었다는 흔적은 없다. BoxBox session_start에 명시적 enabled=true가 추가된 것은 활성 상태 항목이므로 '관계없는 설정'에 해당하지 않고, verification.md:46에도 기록돼 있다.",
+          "HOOK-3: lifecycle.json(1660바이트, digest 03b61d69…, attempt 9d0b6f7f에 고정)에 bypass=false인 새 ephemeral·read-only 세션의 기록이 있다. BoxBox sessionStart 1건, Vercel sessionStart 3건, BoxBox stop 1건이 모두 source=plugin, status=completed이고, turn은 오류 없이 끝났다. 실행되지 않은 PostToolUse 2종과 SessionEnd는 verification.md:49에 따로 적혀 있어 '미실행 Hook 범위 구분' 기준을 충족한다.",
+          "참고(결함 아님): HOOK-3의 checks는 eventName과 status만 확인하고 sourcePath는 거르지 않는다. 다른 출처의 Hook이 완료돼도 통과할 수 있다는 뜻이다. 이번 산출물에는 두 플러그인 경로만 있으므로 결론은 달라지지 않는다. 또 TUI의 '⚠ 1/3/5 warnings'는 내용이 기록되지 않아 확인하지 못한 상태로 남아 있다.",
+          "이번 검토에서는 명령이나 테스트를 실행하지 않았다. 종료 코드 0은 기록된 attempt를 근거로 삼았다. 직접 읽어 대조한 것은 .www/hook-trust-20261115/의 lifecycle.json·trust-review-config-delta.json·plugin-integrity.json·official-tui-review.txt와 src/rpc.ts다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-a47c4f83-c0fc-4aae-b755-aacf097b57b4/opus.json",
+        "startedAt"  : "2026-11-15T09:31:45.846Z",
+        "completedAt": "2026-11-15T09:32:21.663Z"
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-1830886a-cacc-4842-93d4-c3c15040df19",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T09:27:07.527Z",
+        "sourceDigest"   : "41c247bb39cb055238f278f1d1e66f98890eefe0af100fcfe91d3521be56c1a5",
+        "criteriaDigest" : "ddba05de31b6a59b9348c926c1918be25f558d17eaf3f302a4f1abdafe78be24",
+        "documentsDigest": "b4ac7e9cf9765d85992dcefb1198cf8586443fcb53b89dbf31435ed1e2171340",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "설치된 외부 플러그인 Hook의 내용 신뢰 승인을 복구했다. 제품 계약·구조·보고서 형식은 바뀌지 않았고 DEVELOPMENT의 설치와 신뢰 승인을 구분하는 안내는 현재 관측과 일치한다. 병행 구조 지도 작업의 변경은 이 작업이 소유하지 않는다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "설치된 외부 플러그인 Hook의 내용 신뢰 승인을 복구했다. 제품 계약·구조·보고서 형식은 바뀌지 않았고 DEVELOPMENT의 설치와 신뢰 승인을 구분하는 안내는 현재 관측과 일치한다. 병행 구조 지도 작업의 변경은 이 작업이 소유하지 않는다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "설치된 외부 플러그인 Hook의 내용 신뢰 승인을 복구했다. 제품 계약·구조·보고서 형식은 바뀌지 않았고 DEVELOPMENT의 설치와 신뢰 승인을 구분하는 안내는 현재 관측과 일치한다. 병행 구조 지도 작업의 변경은 이 작업이 소유하지 않는다."
+          },
+          {
+            "path"    : "docs/skills/REPORTS.md",
+            "decision": "unchanged",
+            "reason"  : "설치된 외부 플러그인 Hook의 내용 신뢰 승인을 복구했다. 제품 계약·구조·보고서 형식은 바뀌지 않았고 DEVELOPMENT의 설치와 신뢰 승인을 구분하는 안내는 현재 관측과 일치한다. 병행 구조 지도 작업의 변경은 이 작업이 소유하지 않는다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "설치된 외부 플러그인 Hook의 내용 신뢰 승인을 복구했다. 제품 계약·구조·보고서 형식은 바뀌지 않았고 DEVELOPMENT의 설치와 신뢰 승인을 구분하는 안내는 현재 관측과 일치한다. 병행 구조 지도 작업의 변경은 이 작업이 소유하지 않는다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-68dac777-95bd-4c68-a224-6f026a72bbfc",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T09:31:44.081Z",
+        "sourceDigest"   : "92bbb3916d9f4c6075a86e90ed9409fa53057d7da3e4904ad566dffba618eda6",
+        "criteriaDigest" : "ddba05de31b6a59b9348c926c1918be25f558d17eaf3f302a4f1abdafe78be24",
+        "documentsDigest": "b4ac7e9cf9765d85992dcefb1198cf8586443fcb53b89dbf31435ed1e2171340",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "외부 플러그인 Hook 내용 신뢰 승인 복구이며 제품·구조·보고서 형식은 변경하지 않았다. DEVELOPMENT의 설치/신뢰 구분은 관측과 일치한다. 직접 사용한 src/rpc.ts를 검증 입력에 보완한 현재 증거로 다시 대조했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "외부 플러그인 Hook 내용 신뢰 승인 복구이며 제품·구조·보고서 형식은 변경하지 않았다. DEVELOPMENT의 설치/신뢰 구분은 관측과 일치한다. 직접 사용한 src/rpc.ts를 검증 입력에 보완한 현재 증거로 다시 대조했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "외부 플러그인 Hook 내용 신뢰 승인 복구이며 제품·구조·보고서 형식은 변경하지 않았다. DEVELOPMENT의 설치/신뢰 구분은 관측과 일치한다. 직접 사용한 src/rpc.ts를 검증 입력에 보완한 현재 증거로 다시 대조했다."
+          },
+          {
+            "path"    : "docs/skills/REPORTS.md",
+            "decision": "unchanged",
+            "reason"  : "외부 플러그인 Hook 내용 신뢰 승인 복구이며 제품·구조·보고서 형식은 변경하지 않았다. DEVELOPMENT의 설치/신뢰 구분은 관측과 일치한다. 직접 사용한 src/rpc.ts를 검증 입력에 보완한 현재 증거로 다시 대조했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "외부 플러그인 Hook 내용 신뢰 승인 복구이며 제품·구조·보고서 형식은 변경하지 않았다. DEVELOPMENT의 설치/신뢰 구분은 관측과 일치한다. 직접 사용한 src/rpc.ts를 검증 입력에 보완한 현재 증거로 다시 대조했다."
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
+  }
+}

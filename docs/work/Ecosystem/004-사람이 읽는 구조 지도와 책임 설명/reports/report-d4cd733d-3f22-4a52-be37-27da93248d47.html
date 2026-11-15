@@ -1,0 +1,410 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>사람이 읽는 구조 지도와 책임 설명 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 15일 오후 6:39 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>사람이 읽는 구조 지도와 책임 설명</h1><p class="lead">생태계를 사람이 구조를 파악하고 관리하는 지도이자 설계도면으로 개선했다. 포함 관계와 코드 의존 관계를 나누고 부모·하위 노드를 같은 규격으로 맞췄다. 대화 세션을 선택하면 역할과 세 하위 구성, 담당 파일 및 참조 방향을 확인할 수 있다. 안정된 최종 소스의 집중 검사·실제 Electron 검사·통합 검사와 Opus 읽기 전용 독립 검토가 통과했다.</p><div id="report-story" class="story">계층선과 import 선을 동시에 그렸고 방향별 포트를 공유했다. 부모·하위 노드의 높이와 정보가 달랐으며 대화 세션의 설명은 제목을 반복하고 하위 구성과 담당 코드를 함께 읽기 어려웠다.
+
+내부 구성과 코드 의존 보기를 전환하고 책임별 참조를 좁힐 수 있다. 360×112px 노드를 최대 세 열로 배치하며, 역할·하위 구성·담당 코드·들어오는/나가는 실제 참조와 원문 근거를 읽고 이동한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 7 · 실패 3 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>출발은 오른쪽·도착은 왼쪽으로 분리하고 간선마다 다른 통로·포트·관계 번호를 배정했다.</li><li>부모와 하위 노드의 규격·정보 위치를 통일하고 역할 두 줄 요약과 원문 상세를 제공했다.</li><li>정본 역할 설명을 갱신하고 하위 포함 코드·명세 집계 및 구성별 탐색을 추가했다.</li><li>대화 세션의 초안·읽기 상태, Native 목록·복원, Native 요청 구성과 각 담당 파일을 연결했다.</li><li>검색·키보드·배율·팬·좁은 창·초안 보존 검사를 갱신하고 제품·구조·개발·생태계 문서를 맞췄다.</li></ul></div></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>구성·의존 관계를 구분하고 양방향 참조를 서로 다른 경로·포트로 표시하며 노드를 관통하지 않는다.</dt><dd>당시 통과로 기록</dd></div><div><dt>부모·하위 노드의 규격과 정보 위치를 통일하고 긴 제목·좁은 창에서도 내용에 접근할 수 있다.</dt><dd>당시 통과로 기록</dd></div><div><dt>대화 세션 선택 시 구체적인 역할, 초안·읽기/복원/요청 구성, 하위 책임과 코드 근거, 참조 방향을 읽고 이동할 수 있다.</dt><dd>당시 통과로 기록</dd></div><div><dt>검색·계층 이동·키보드·상세 닫기·줌·팬·대화 상태 보존이 실제 Electron에서 동작한다.</dt><dd>당시 통과로 기록</dd></div></dl></section><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>포함 관계와 정적 import를 분리해 실행 순서나 데이터 전달로 오인하지 않게 했다.</li><li>원문 설명·구조 ID·실제 선언 근거를 보존하면서 기본 노드는 역할 요약과 구성 수를 중심으로 읽게 했다.</li><li>자동 축소로 글자를 줄이지 않고 충분한 폭에서는 최대 세 열, 좁거나 큰 지도에서는 내부 스크롤을 사용했다.</li></ul></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 7건, 실패 3건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>GUI는 실제 Electron과 합성 Native fixture로 검사했다. 실제 모델·Windows·OS 한글 IME를 새로 검증하지 않았다.</li><li>BoxBox project mode off를 유지했다. source/strict/구조 및 공식 snapshot 생성은 검사했으며 저작 guide/source 형식 검사를 통과한 것으로 쓰지 않는다.</li><li>지도는 번들 snapshot과 사람이 작성한 책임 설명이다. 정적 참조는 현재 실행 추적이 아니며 현재 정본보다 긴 미래 제목의 모든 단계 표시를 보장하지 않는다.</li><li>과거 sourceStable false 및 기본 5초 실도구 시간 초과 시도는 보존하고 최종 안정 소스의 통과 근거와 구분했다.</li><li>최종 집중 검사는 지도·계층·구조 계약·snapshot·개념 모델 대상이다. harness 포함 시도는 소스 변경으로 무효화되어 현재 전체 하네스 통과를 주장하지 않는다. 기존 방향키는 격자의 시각적 상하가 아닌 선형 순서로 이동한다.</li></ul></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Ecosystem/004-사람이 읽는 구조 지도와 책임 설명/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-5bd187ad-cfd7-49bb-a971-69522685f01a<br>report-d4cd733d-3f22-4a52-be37-27da93248d47</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>ed6a94c46b9c972664514124bd1cea3421ff9be17abf02e81b947d90ce384cd5</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>283e2f45df1dae04ca83b37468c61317550d36c375e413f5ac9af02976bb3caf</code></dd></div><div><dt>기준 지문</dt><dd><code>c7bacd3aae26921d22012016802806c67f8d70d959a55e41f3c799c70cc8f43d</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;MAP-READ&quot;,
+      &quot;description&quot;: &quot;구성·의존 관계를 구분하고 양방향 참조를 서로 다른 경로·포트로 표시하며 노드를 관통하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-1b1c1c88-3826-41e8-8487-055bdb408ba1&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e8199d78-5482-4d05-a065-3393514dd24d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c6979fc2-7556-49fa-b149-623b0ecafa6e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-dcce07a3-0e0e-4443-a381-5d3dbf7d2607&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f014edb7-a456-419c-9305-f5762d5d59d2&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;MAP-NODE&quot;,
+      &quot;description&quot;: &quot;부모·하위 노드의 규격과 정보 위치를 통일하고 긴 제목·좁은 창에서도 내용에 접근할 수 있다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-1b1c1c88-3826-41e8-8487-055bdb408ba1&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e8199d78-5482-4d05-a065-3393514dd24d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c6979fc2-7556-49fa-b149-623b0ecafa6e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-dcce07a3-0e0e-4443-a381-5d3dbf7d2607&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f014edb7-a456-419c-9305-f5762d5d59d2&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;MAP-DETAIL&quot;,
+      &quot;description&quot;: &quot;대화 세션 선택 시 구체적인 역할, 초안·읽기/복원/요청 구성, 하위 책임과 코드 근거, 참조 방향을 읽고 이동할 수 있다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-1b1c1c88-3826-41e8-8487-055bdb408ba1&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e8199d78-5482-4d05-a065-3393514dd24d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c6979fc2-7556-49fa-b149-623b0ecafa6e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-dcce07a3-0e0e-4443-a381-5d3dbf7d2607&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f014edb7-a456-419c-9305-f5762d5d59d2&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;MAP-FLOW&quot;,
+      &quot;description&quot;: &quot;검색·계층 이동·키보드·상세 닫기·줌·팬·대화 상태 보존이 실제 Electron에서 동작한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e8199d78-5482-4d05-a065-3393514dd24d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-413bd27d-f5b0-44b9-8448-ed32a0891986&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0901e93e-3f69-4eb1-867d-c68d2f87e564&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-59b47add-42e8-4aae-87d1-6503003d0e37&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-1b1c1c88-3826-41e8-8487-055bdb408ba1&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/architecture-tree.test.ts&quot;,
+        &quot;test/architecture.test.ts&quot;,
+        &quot;test/architecture-contract.test.ts&quot;,
+        &quot;test/architecture-harness.test.ts&quot;,
+        &quot;test/ecosystem.test.ts&quot;,
+        &quot;--timeout&quot;,
+        &quot;60000&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: false,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:29:00.241Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e8199d78-5482-4d05-a065-3393514dd24d&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-architecture.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:29:02.364Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-413bd27d-f5b0-44b9-8448-ed32a0891986&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-ecosystem.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:29:25.460Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-c6979fc2-7556-49fa-b149-623b0ecafa6e&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/architecture-tree.test.ts&quot;,
+        &quot;test/architecture.test.ts&quot;,
+        &quot;test/architecture-contract.test.ts&quot;,
+        &quot;test/architecture-harness.test.ts&quot;,
+        &quot;test/ecosystem.test.ts&quot;,
+        &quot;--timeout&quot;,
+        &quot;60000&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: false,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:31:03.195Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-dcce07a3-0e0e-4443-a381-5d3dbf7d2607&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/architecture-tree.test.ts&quot;,
+        &quot;test/architecture.test.ts&quot;,
+        &quot;test/architecture-contract.test.ts&quot;,
+        &quot;test/ecosystem.test.ts&quot;,
+        &quot;--timeout&quot;,
+        &quot;60000&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:31:13.929Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-da38cf90-f5d2-4c99-a4ed-63a85964b2c6&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-architecture.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:31:17.129Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0901e93e-3f69-4eb1-867d-c68d2f87e564&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-ecosystem.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:32:22.861Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f014edb7-a456-419c-9305-f5762d5d59d2&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/architecture-tree.test.ts&quot;,
+        &quot;test/architecture.test.ts&quot;,
+        &quot;test/architecture-contract.test.ts&quot;,
+        &quot;test/ecosystem.test.ts&quot;,
+        &quot;--timeout&quot;,
+        &quot;60000&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:36:39.159Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-a3b4f6fe-dc19-4f5d-9bd5-97196dab957f&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-architecture.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:36:43.049Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-59b47add-42e8-4aae-87d1-6503003d0e37&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-ecosystem.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:37:24.192Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-a8b4b090-3ef3-4911-9cf8-1cb86572e8fa&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-a8b4b090-3ef3-4911-9cf8-1cb86572e8fa/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;소스 현재성: 최종 검증 attempt-dcce07a3·attempt-da38cf90·attempt-0901e93e의 source digest는 1ecfa224…이다. 이 시도들에 기록된 파일 digest를 현재 파일과 대조했다. src/architecture-tree.ts 6f2e4a…, src/architecture.generated.json 982484…, scripts/verify-architecture.ts f11daa…, test/architecture-tree.test.ts 76bdd2…, src/ecosystem-view.tsx 2d4ba3…, src/ecosystem.css 9a2f0c…, docs/architecture/structure.json 0fbfb3…가 모두 현재와 같다. 이번 검토의 sourceDigest(d86b9f…)가 다른 것은 inputPaths에 docs/ARCHITECTURE.md 등 문서가 추가돼 범위가 넓어졌기 때문으로 판단한다. 선언된 검증 입력 안에서는 변경이 없다.&quot;,
+        &quot;MAP-READ: src/architecture-tree.ts:148-161의 의존선은 오른쪽에서 나가 왼쪽으로 들어간다. 간선 index별로 통로 offset(16+6i)과 포트(20+(i+1)·72/(total+1))가 따로 정해진다. 통로 폭(36+12e), 행 간격(48+6e), 여백(24+12e)이 최대 offset(10+6e)보다 항상 크므로 세로·가로 구간이 노드 사각형 안으로 들어가지 않는다. 같은 열 사이 통로에서 출발선과 도착선이 겹치려면 32+6(i+j)=36+12e가 성립해야 하는데, 정수 해가 없다. test/architecture-tree.test.ts:132-163은 1열·3열에서 간선 30개, 모든 노드 쌍에 대해 비관통과 포트·통로 고유성, 양방향 경로 분리를 검사한다. scripts/verify-architecture.ts:144-145는 실제 SVG에서 비관통과 양방향 경로 분리를 검사한다.&quot;,
+        &quot;MAP-NODE: 부모와 하위 노드는 모두 360×112이다(architecture-tree.ts:130-131, 177; GUI 검사 verify-architecture.ts:133, 137). 역할 설명은 responsibilityLines로 두 줄 이내 요약하고, 원문은 SVG title과 상세 패널에 둔다. 860·760px 창에서 수평 넘침이 없는지, 내부 스크롤이 되는지, leaf 검증 참조에 접근할 수 있는지도 GUI 검사가 있다(verify-architecture.ts:244-255). 다만 노드 제목은 줄바꿈·말줄임 없이 SVG text 한 줄로 출력된다. 현재 정본에서 가장 긴 제목 &#39;Electron 수명주기와 IPC 처리&#39;는 15px 기준으로 노드 폭 안에 들어가지만, 앞으로 더 긴 제목이 들어오면 넘칠 수 있다. 제목이 노드 안에 들어가는지 확인하는 bbox 검사(verify-architecture.ts:224)는 root 단계에서만 실행된다. 현재 데이터로는 결함이 아니다.&quot;,
+        &quot;MAP-DETAIL: verify-architecture.ts:153-176은 arch.chat.sessions 진입 뒤 다음을 실제 DOM으로 확인한다. 역할 설명에 &#39;대화별 초안&#39;과 &#39;요청&#39;이 있는지, 구성 3개(초안·읽기 상태, 목록·복원, 요청 구성)가 있는지, 하위 담당 코드 3파일이 있는지, leaf의 요구·구현·검증 파일과 행이 맞는지를 본다. 참조 이동과 import 원문 열람은 211-218행에서 확인한다. 소스의 summary·connections 구현(architecture-tree.ts:62-92)과도 일치한다.&quot;,
+        &quot;MAP-FLOW: 검색(대소문자 무관, 빈 결과 안내), breadcrumb·뒤로, 방향키·Enter·Space·Tab, 상세 닫기 후 초점 복귀와 Escape, 확대·축소·크기 맞춤, 배경 드래그 이동, 채팅 왕복 뒤 지도 상태와 초안 유지를 CDP 실입력으로 검사한다(verify-architecture.ts:185-291). 최종 attempt-da38cf90과 통합 attempt-0901e93e가 안정된 현재 소스에서 통과했다.&quot;,
+        &quot;비차단 기록 정확성 문제: work.json 기준 evidence에서 attempt-e8199d78의 summary가 &#39;현재 적용 가능&#39;으로 남아 있다. 이 시도의 source digest는 f1fd91…이고 architecture-tree.ts(d41a14…), generated json(75708f…), verify-architecture.ts(b179a6…)가 현재와 다르므로 지금은 적용할 수 없다. 기록 당시의 판정이 그대로 남은 것으로 보인다. 같은 기준을 받치는 현재 적용 가능한 통과 시도(da38cf90·dcce07a3·0901e93e)가 따로 있어서 기준 판정은 유지된다. 다만 오래된 시도를 &#39;현재 적용 가능&#39;으로 보이게 하는 표현은 고치는 편이 맞다.&quot;,
+        &quot;비차단 검사 공백: verify-architecture.ts:134의 비관통 검사는 구성 보기에서 실행된다. 그런데 바로 뒤 136행이 이 보기에 의존선이 0개임을 확인하므로, 134행은 빈 배열 위에서 항상 참이 된다. 실질적인 비관통 검사는 144행 하나다. 145행의 양방향 분리 검사도 root 단계에 실제 양방향 쌍이 없으면 같은 식으로 항상 참이 될 수 있다. 이 부분은 단위 테스트(architecture-tree.test.ts:157-160)가 보완한다.&quot;,
+        &quot;기록 범위: verification.md는 typecheck·check:source·build를 실행해 통과했다고 적고 원문 로그 경로를 남겼다. 하지만 이 세 명령은 work.json의 검증 시도 기록(verifications)에 없어서 해당 기준의 증거로 연결되지 않는다. 문서는 실제 모델·Windows·IME 미검증, import가 실행 추적이 아님, sourceStable false로 거부된 시도를 통과로 승격하지 않았음을 명시하고 있어 증거 범위를 부풀리지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-32127cf0-3158-4dd1-9cee-b2bfe166a327&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-32127cf0-3158-4dd1-9cee-b2bfe166a327/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;판정 근거(MAP-READ): src/architecture-tree.ts:148-161의 responsibilityEdgePoints는 출발 노드 오른쪽에서 offset(16+6i)만큼 열 통로로 나간 뒤 대상 행 위 행 간격(to.y-offset)을 수평으로 지나고, 대상 왼쪽 통로로 들어온다. layoutResponsibilities(127-146)는 통로 36+12n, 행 간격 48+6n, 여백 24+12n이다. offset 최댓값 10+6n은 통로·행 간격·여백보다 항상 작고, 두 간선의 오프셋 합 32+6(i+j)도 통로 폭 36+12n에 닿지 않는다. 그래서 출발 측과 도착 측 수직 차선이 겹치지 않고 노드나 상위 부모 박스(y≤136)를 관통하지 않는다. 포트도 20+(i+1)·72/(n+1)로 인덱스마다 다르다. 양방향 A→B와 B→A는 서로 다른 index를 받으므로 경로와 포트가 분리된다.&quot;,
+        &quot;판정 근거(MAP-READ 검사): test/architecture-tree.test.ts:132-163은 1열(540)과 넓은 폭(2400)에서 30개 간선의 모든 노드 쌍을 확인한다. 범위는 차선·포트의 고유성, 부모를 포함한 노드 비관통, 레이아웃 범위 안쪽 여부, 역방향 경로 분리다. scripts/verify-architecture.ts:144-145는 실제 SVG getPointAtLength 샘플링으로 의존선의 노드 비관통과 양방향 path d 차이를 확인한다. 다만 GUI 샘플링은 .blueprint-node만 대상으로 하고 .blueprint-parent는 포함하지 않는다. 부모 비관통은 단위 검사와 기하 계산으로만 뒷받침된다.&quot;,
+        &quot;판정 근거(MAP-NODE): layoutResponsibilityGraph(172-181)는 부모와 자식을 모두 360×112로 배치한다. ecosystem-view.tsx:283-298은 부모와 자식이 같은 위치(제목 y27, 설명 y50 두 줄, 메타 y96)에 정보를 둔다. 열 전환 임계값(3열 1200px, 2열 804px)은 CODE_BLUEPRINT.md:66의 서술과 공식이 일치한다. responsibilityFit은 100% 아래로 줄이지 않아 좁은 창에서는 내부 스크롤로 접근한다. 26자 두 줄 요약을 13px 글꼴로 계산하면 약 356px로 360px 안에 들어가지만 여유가 거의 없다.&quot;,
+        &quot;비차단 한계(MAP-NODE): 노드 제목은 줄바꿈이나 말줄임 없이 SVG text 한 줄로 그려진다(ecosystem-view.tsx:285,295). SVG &lt;title&gt; 툴팁에는 ID와 설명만 있고 제목은 없다. 긴 제목은 aria-label과 상세 패널 h2로만 온전히 접근할 수 있다. verification.md:144가 이 한계를 이미 밝혔으므로 현재 정본 기준 결함으로 보지 않는다.&quot;,
+        &quot;판정 근거(MAP-DETAIL): 상세 패널(ecosystem-view.tsx:307-325)은 역할 설명, summary 기반 하위 구성 목록(진입 버튼 포함), 하위를 포함한 담당 코드, 참조하는/참조받는 책임 그룹과 import 원문을 표시한다. scripts/verify-architecture.ts:158-160은 대화 세션의 역할 문구, 세 하위 구성, 담당 파일 세 개(chat-state·conversations·native-chat)를 실제 DOM에서 확인한다.&quot;,
+        &quot;판정 근거(MAP-FLOW): verify-architecture.ts는 CDP로 실제 클릭, Enter·Space·Tab, 검색, 확대·축소, 배경 drag 팬, 860/760px resize, Escape 닫기, 채팅 초안 유지를 확인한다. 통합 검사 attempt-0901e93e(verify-ecosystem)는 sourceStable true와 종료 코드 0으로 통과했다.&quot;,
+        &quot;증거 현재성: 최종 시도 attempt-f014edb7(집중 검사)과 attempt-a3b4f6fe(GUI)의 기록 digest를 현재 파일과 대조했다. 대상은 src/architecture-tree.ts(6f2e4a…), scripts/verify-architecture.ts(f11daa…), src/architecture.generated.json(ec2a39…), test/architecture-tree.test.ts(76bdd2…)이며 모두 일치한다. 실패하거나 소스가 불안정했던 시도(1b1c1c88, c6979fc2, 413bd27d)는 verification.md에 실패로 남아 있고 승격되지 않았다. 다만 work.json의 MAP-FLOW 증거 연결에 포함된 e8199d78은 수정 전 소스다. verification.md:142가 이를 최종 근거에서 제외한다고 명시했으므로 증거 범위를 넓힌 것으로 보지 않는다.&quot;,
+        &quot;비차단 문서 불일치: docs/CODE_BLUEPRINT.md:59의 집중 검사 명령에는 test/architecture-harness.test.ts가 들어 있다. 하지만 최종 통과 집중 검사(dcce07a3, f014edb7)는 harness를 빼고 실행했다. harness를 포함한 두 시도는 종료 코드 0이었지만 sourceStable false로 거부됐다. 현재 소스에서 harness 테스트가 통과했다는 증거는 이 작업 기록에 없다. 문서의 명령을 그대로 실행한 결과로 오해하지 않도록 유의해야 한다. 지도 기능 기준과 직접 관련은 없다.&quot;,
+        &quot;경미한 UX 관찰(비차단): focusNext(ecosystem-view.tsx:237-240)는 다열 격자에서도 ArrowDown·ArrowRight를 같은 +1 이동으로 처리한다. 3열 배치에서 ArrowDown이 시각적으로 아래 행이 아니라 오른쪽 노드로 이동한다. 기준의 &#39;키보드 동작&#39;은 충족하지만 공간적 방향성은 없다.&quot;,
+        &quot;이번 검토는 읽기 전용이다. 소스·테스트·검증 기록을 정적으로 대조했고 어떤 테스트나 명령도 직접 실행하지 않았다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;생태계를 사람이 구조를 파악하고 관리하는 지도이자 설계도면으로 개선했다. 포함 관계와 코드 의존 관계를 나누고 부모·하위 노드를 같은 규격으로 맞췄다. 대화 세션을 선택하면 역할과 세 하위 구성, 담당 파일 및 참조 방향을 확인할 수 있다. 안정된 최종 소스의 집중 검사·실제 Electron 검사·통합 검사와 Opus 읽기 전용 독립 검토가 통과했다.&quot;,
+  &quot;before&quot;: &quot;계층선과 import 선을 동시에 그렸고 방향별 포트를 공유했다. 부모·하위 노드의 높이와 정보가 달랐으며 대화 세션의 설명은 제목을 반복하고 하위 구성과 담당 코드를 함께 읽기 어려웠다.&quot;,
+  &quot;after&quot;: &quot;내부 구성과 코드 의존 보기를 전환하고 책임별 참조를 좁힐 수 있다. 360×112px 노드를 최대 세 열로 배치하며, 역할·하위 구성·담당 코드·들어오는/나가는 실제 참조와 원문 근거를 읽고 이동한다.&quot;,
+  &quot;changes&quot;: [
+    &quot;출발은 오른쪽·도착은 왼쪽으로 분리하고 간선마다 다른 통로·포트·관계 번호를 배정했다.&quot;,
+    &quot;부모와 하위 노드의 규격·정보 위치를 통일하고 역할 두 줄 요약과 원문 상세를 제공했다.&quot;,
+    &quot;정본 역할 설명을 갱신하고 하위 포함 코드·명세 집계 및 구성별 탐색을 추가했다.&quot;,
+    &quot;대화 세션의 초안·읽기 상태, Native 목록·복원, Native 요청 구성과 각 담당 파일을 연결했다.&quot;,
+    &quot;검색·키보드·배율·팬·좁은 창·초안 보존 검사를 갱신하고 제품·구조·개발·생태계 문서를 맞췄다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;포함 관계와 정적 import를 분리해 실행 순서나 데이터 전달로 오인하지 않게 했다.&quot;,
+    &quot;원문 설명·구조 ID·실제 선언 근거를 보존하면서 기본 노드는 역할 요약과 구성 수를 중심으로 읽게 했다.&quot;,
+    &quot;자동 축소로 글자를 줄이지 않고 충분한 폭에서는 최대 세 열, 좁거나 큰 지도에서는 내부 스크롤을 사용했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;GUI는 실제 Electron과 합성 Native fixture로 검사했다. 실제 모델·Windows·OS 한글 IME를 새로 검증하지 않았다.&quot;,
+    &quot;BoxBox project mode off를 유지했다. source/strict/구조 및 공식 snapshot 생성은 검사했으며 저작 guide/source 형식 검사를 통과한 것으로 쓰지 않는다.&quot;,
+    &quot;지도는 번들 snapshot과 사람이 작성한 책임 설명이다. 정적 참조는 현재 실행 추적이 아니며 현재 정본보다 긴 미래 제목의 모든 단계 표시를 보장하지 않는다.&quot;,
+    &quot;과거 sourceStable false 및 기본 5초 실도구 시간 초과 시도는 보존하고 최종 안정 소스의 통과 근거와 구분했다.&quot;,
+    &quot;최종 집중 검사는 지도·계층·구조 계약·snapshot·개념 모델 대상이다. harness 포함 시도는 소스 변경으로 무효화되어 현재 전체 하네스 통과를 주장하지 않는다. 기존 방향키는 격자의 시각적 상하가 아닌 선형 순서로 이동한다.&quot;
+  ],
+  &quot;next&quot;: []
+}</pre></div></details></section></main></body></html>

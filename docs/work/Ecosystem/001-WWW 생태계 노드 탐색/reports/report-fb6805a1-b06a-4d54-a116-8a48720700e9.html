@@ -1,0 +1,132 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>WWW 생태계 노드 탐색 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 15일 오후 6:36 · 한국 시간 · 자동 기록</span></header><section class="hero" id="report-conclusion"><h1>WWW 생태계 노드 탐색</h1><p class="lead">차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</p><div id="report-story" class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 2 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="blocker"><strong>남은 차단 사항</strong> 독립 검토 fail: 수정 또는 검토 재실행 필요</p></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>사이드바에서 생태계 지도를 열고 돌아와도 대화와 초안이 유지된다.</dt><dd>당시 통과로 기록</dd></div><div><dt>실행·개발·기록과 검토·후속 방향을 출처가 있는 노드와 방향 관계로 구분한다.</dt><dd>당시 통과로 기록</dd></div><div><dt>노드 선택·연결 탐색·검색·영역 필터·확대·축소·초기화가 동작한다.</dt><dd>당시 통과로 기록</dd></div><div><dt>타입 검사·집중 테스트·빌드 및 Electron 화면에서 회귀가 없다.</dt><dd>당시 통과로 기록</dd></div></dl></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 2건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><p>차단 사항은 남아 있지만 구체적인 해소 행동이 기록되지 않았습니다.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Ecosystem/001-WWW 생태계 노드 탐색/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-566dd8f2-1121-4ae7-8c98-182283693c92<br>report-fb6805a1-b06a-4d54-a116-8a48720700e9</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>c13586be35d671e49fd37a9c593ff2194fdcc9d028cbaadc17d9cad552ea98f3</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>0b5a76d76912409e94f750db0db833fe57f433cbfc8feeb27425ffa75555e025</code></dd></div><div><dt>기준 지문</dt><dd><code>c6bf19975fc9cd9096600c89e9f5e4b01e0c4c19ab1dbed9d6dc7b64560c61ff</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;독립 검토 fail: 수정 또는 검토 재실행 필요&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;사이드바에서 생태계 지도를 열고 돌아와도 대화와 초안이 유지된다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e425d4dc-ad2d-463c-b958-aa0a92194166&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;실행·개발·기록과 검토·후속 방향을 출처가 있는 노드와 방향 관계로 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e425d4dc-ad2d-463c-b958-aa0a92194166&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;노드 선택·연결 탐색·검색·영역 필터·확대·축소·초기화가 동작한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e425d4dc-ad2d-463c-b958-aa0a92194166&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;타입 검사·집중 테스트·빌드 및 Electron 화면에서 회귀가 없다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fa488026-fc74-4f82-84d7-a35d0989e49b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e425d4dc-ad2d-463c-b958-aa0a92194166&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-fa488026-fc74-4f82-84d7-a35d0989e49b&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-ecosystem.mjs&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-12T03:44:54.400Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e425d4dc-ad2d-463c-b958-aa0a92194166&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-ecosystem.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T09:35:29.982Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-683a52c6-7026-4e93-b1fd-90bda5d09ef2&quot;,
+      &quot;verdict&quot;: &quot;not_run&quot;,
+      &quot;model&quot;: null,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/scratchpad/ecosystem/opus-1794455137781/opus.json&quot;,
+      &quot;findings&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;review-da4e09f7-b2bd-478c-b2ac-c183f3c80791&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-da4e09f7-b2bd-478c-b2ac-c183f3c80791/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;[증거 범위 확대 · AC-3] work.json:51-67은 AC-3(노드 선택·연결 탐색·검색·영역 필터·확대·축소·초기화)를 attempt-e425d4dc의 `node scripts/verify-ecosystem.ts` 결과로 &#39;현재 적용 가능&#39; passed 처리했다. 그런데 이 스크립트가 확인하는 것은 scripts/verify-ecosystem.ts:61의 8개 필드뿐이고, 이 값을 만드는 renderer probe(src/renderer.tsx:810-841)도 가이드 탭 진입, 독립 검토 노드 Enter 선택, &#39;EVIDENCE.TS&#39; 검색, 결과 버튼 선택, 대화 복귀만 실행한다. 연결 관계 버튼 탐색(src/ecosystem-view.tsx:114), 영역 필터 버튼(:75), 지도 축소/확대/전체 보기(:73), &#39;필터 초기화&#39;(:76)는 probe에서 누르지 않는다. 영역 필터는 test/ecosystem.test.ts:32-38에서 순수 함수 matchingNodes로만 확인되고, 확대·축소·초기화는 자동 검사가 전혀 없다. 따라서 현재 소스에서 AC-3을 통과로 기록할 근거가 부족하다.&quot;,
+        &quot;[과거 수동 관찰의 현재 소스 적용] verification.md:4-8의 CUA 수동 관찰(후속 방향 필터 4개, 62%에서 확대, 전체 보기 복귀, 초기화)은 2026-11-12의 이전 소스(digest dc9d17ac…, ecosystem-view.tsx 795a4d39…)에서 한 것이다. 현재 ecosystem-view.tsx(2d4ba369…)는 기본 화면이 코드 blueprint이고 가이드가 별도 탭으로 바뀌는 등 화면 구조가 달라졌다(src/renderer.tsx:816-820). 이 관찰을 현재 attempt의 AC-3 근거로 이어서 쓸 수 없다. 그런데도 현재 적용 증거에는 수동 재관찰 기록이 없다.&quot;,
+        &quot;[기록 불일치] work.json:820의 2026-11-15 문서 영향 검토(DEVELOPMENT.md 항목)는 &#39;전체 검사 실패는 검증 기록에 남기고&#39;라고 적었다. 하지만 verification.md의 2026-11-15 섹션(:44-67)에는 전체 `npm run check` 실행이나 실패 기록이 없다. 전체 검사 기록은 11-12 당시 것(:10-12)뿐이다. 문서 검토 사유가 실재하지 않는 기록을 가리키므로 정정하거나 해당 실행 기록을 추가해야 한다.&quot;,
+        &quot;[확인된 부분] 이번 검토 입력 파일들의 digest는 attempt-e425d4dc에 기록된 source.files 값과 모두 일치한다. 기준 digest(c6bf1997…)도 같다. probe는 AC-1(초안·선택 범위·읽기 위치 보존, src/renderer.tsx:841)과 AC-2의 모델 측면(출처 파일 존재와 planned 관계, test/ecosystem.test.ts:11-30)을 실제로 검사한다. 저는 명령을 실행하지 않았고, 기록된 종료 코드 0과 소스를 대조만 했다.&quot;,
+        &quot;[수정 제안] AC-3의 증거 연결에서 이번 attempt를 빼거나 AC-3을 미확인으로 되돌린다. 아니면 probe에 영역 필터 선택 후 일치 수 확인, 필터 초기화, 연결 관계 버튼으로 노드 이동, 축소/확대 후 배율 출력 변화, 전체 보기 복귀를 추가하고 verify-ecosystem.ts의 필수 필드에도 넣은 뒤 다시 실행해야 한다. 독립 검토는 기존 기록상 not_run이므로 완료 판정도 아직 할 수 없다.&quot;
+      ]
+    }
+  ]
+}</pre></div></details></section></main></body></html>
