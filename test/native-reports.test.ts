@@ -257,6 +257,30 @@ test("판단기의 안정 코드로 응답·입력·시간 초과·실행 오류
   }
 });
 
+test("persisted interrupted와 live pending 경계에서도 retry는 거부한다", async (t) => {
+  const repo                                         = await repository(t)                                                       ;
+  let release: (value: NativeReportDecision) => void = () => { throw new Error("judge 준비 전입니다."); }                        ;
+  const deferred                                     = new Promise<NativeReportDecision>((resolve) => { release = resolve; })    ;
+  let calls                                          = 0                                                                         ;
+  const harness                                      = createNativeReportHarness({ judge: () => { calls++; return deferred; } }) ;
+  const queued                                       = await harness.enqueue({ repository: repo, input: input() })               ;
+  try {
+    const judging = await waitFor(harness, repo, queued.key, "judging");
+    assert.equal((await harness.retry(repo, queued.key)).status, "judging");
+    // state의 영속화 이후 schedule.finally 이전에 존재하는 디스크 상태를 고정한다.
+    // judge가 해제되지 않아 pending은 반드시 살아 있으며 전역 FS/test hook은 쓰지 않는다.
+    await fs.writeFile(path.join(repo, ".www/native-report-jobs", `${queued.key}.json`), JSON.stringify({
+      ...judging, status: "interrupted", reason: "앱 종료로 중단됐습니다. 재시도할 수 없습니다.",
+    }));
+    assert.match(await fs.readFile(path.join(repo, ".www/native-report-jobs", `${queued.key}.json`), "utf8"), /"status":"interrupted"/);
+    await assert.rejects(harness.retry(repo, queued.key), /원문이 메모리에/);
+    assert.equal(calls, 1);
+  } finally {
+    release(decision(false));
+    await waitFor(harness, repo, queued.key, "skipped");
+  }
+});
+
 test("앱 종료 취소는 interrupted로 저장하고 현재·재시작 모두 retry 불가로 안내한다", async (t) => {
   for (const error of [new DOMException("PRIVATE_ANSWER_MARKER", "AbortError"), new ReportJudgeError("REPORT_JUDGE_CANCELLED", "PRIVATE_ANSWER_MARKER cancelled")]) {
     const repo  = await repository(t)   ;

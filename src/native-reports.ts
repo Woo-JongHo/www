@@ -488,6 +488,7 @@ export function createNativeReportHarness({ judge, onState }: { judge(input: Nat
     const stored = await readJob(root, key)      ;
     if (!stored) throw new Error("Native 작업 상태를 찾을 수 없습니다.");
     const id = composite(root, key);
+    if (stored.status === "interrupted") throw new Error("원문이 메모리에 남아 있지 않아 재시도할 수 없습니다. 자동 복구하지 않습니다.");
     if (stored.status === "saved" || stored.status === "skipped" || pending.has(id)) return stored;
     const entry = memory.get(id);
     if (!entry) throw new Error("원문이 메모리에 남아 있지 않아 재시도할 수 없습니다. 자동 복구하지 않습니다.");
