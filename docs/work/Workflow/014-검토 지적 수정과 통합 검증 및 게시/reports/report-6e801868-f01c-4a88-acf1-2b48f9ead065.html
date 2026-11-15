@@ -1,0 +1,344 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>검토 지적 수정과 통합 검증 및 게시 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 16일 오전 8:35 · 한국 시간 · 자동 기록</span></header><section class="hero" id="report-conclusion"><h1>검토 지적 수정과 통합 검증 및 게시</h1><p class="lead">일부 확인 · 후속 작업 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</p><div id="report-story" class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 7 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>반복 Hook·대화 전환 live 반응과 Native 연결 재생성·승인 해소의 실제 결함을 수정하고 경계 회귀를 검증한다.</dt><dd>당시 통과로 기록</dd></div><div><dt>공개 요약 교차 수신과 지도 탐색 및 BoxBox proof의 요구 불일치를 수정하거나 반증을 근거로 판정하고 테스트를 통과한다.</dt><dd>당시 통과로 기록</dd></div><div><dt>사용자 지정 Terra의 실제 모델·read-only·대상 소스·최종 응답을 공유 검토 core가 수용하고 기록 잠금 경합이 유료 검증을 재실행시키지 않도록 검증한다.</dt><dd>당시 통과로 기록</dd></div><div><dt>비교 문서와 검사·문서·독립 검토·저작 보고서를 현행 소스에 연결하고 외부 OS/기계 실측의 확인·미확인을 구분한다.</dt><dd>당시 통과로 기록</dd></div><div><dt>세션 소유 변경을 용도별 검토 가능한 커밋으로 나누어 push하고 원격 일치·잔여 변경·게시 이력을 기록한다.</dt><dd>당시 통과로 기록</dd></div></dl></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 7건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Workflow/014-검토 지적 수정과 통합 검증 및 게시/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-7aaa8974-f791-4f76-8613-06e18f17b835<br>report-6e801868-f01c-4a88-acf1-2b48f9ead065</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>537254a17117389fd14a6be3112a1481a8ab9189359bbf2e3056577fd2e9d7e4</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>a7ee21ed3a4db5e99ef712869451f1cd5afcb38142b239dae76c3416057da922</code></dd></div><div><dt>기준 지문</dt><dd><code>2786b38112f3d835da49f1acfa014441ec737fa238a83e06b292445f5904acc8</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;FIX-1&quot;,
+      &quot;description&quot;: &quot;반복 Hook·대화 전환 live 반응과 Native 연결 재생성·승인 해소의 실제 결함을 수정하고 경계 회귀를 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a461d0e4-5694-4995-9e2c-c5dafdd99d25&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d9aee885-a5f4-4aea-a3e4-be4db4874a6b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-511029be-d6b6-43ce-9f20-684f22712cf3&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0de6cf67-49d0-4dfd-a585-ee8cd63f5810&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f4cffb8e-0329-4111-84a2-388db1c4ad3e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-583d9544-c88b-4923-99cf-d50842bfb5ed&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-16fcef2a-b86c-48d7-acae-b75f86e73737&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;FIX-2&quot;,
+      &quot;description&quot;: &quot;공개 요약 교차 수신과 지도 탐색 및 BoxBox proof의 요구 불일치를 수정하거나 반증을 근거로 판정하고 테스트를 통과한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a461d0e4-5694-4995-9e2c-c5dafdd99d25&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d9aee885-a5f4-4aea-a3e4-be4db4874a6b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-511029be-d6b6-43ce-9f20-684f22712cf3&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0de6cf67-49d0-4dfd-a585-ee8cd63f5810&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f4cffb8e-0329-4111-84a2-388db1c4ad3e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-583d9544-c88b-4923-99cf-d50842bfb5ed&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-16fcef2a-b86c-48d7-acae-b75f86e73737&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;FIX-3&quot;,
+      &quot;description&quot;: &quot;사용자 지정 Terra의 실제 모델·read-only·대상 소스·최종 응답을 공유 검토 core가 수용하고 기록 잠금 경합이 유료 검증을 재실행시키지 않도록 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a6908a28-f5a8-498e-b2a7-e265d5d8dcc3&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;FIX-4&quot;,
+      &quot;description&quot;: &quot;비교 문서와 검사·문서·독립 검토·저작 보고서를 현행 소스에 연결하고 외부 OS/기계 실측의 확인·미확인을 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a461d0e4-5694-4995-9e2c-c5dafdd99d25&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a6908a28-f5a8-498e-b2a7-e265d5d8dcc3&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;FIX-5&quot;,
+      &quot;description&quot;: &quot;세션 소유 변경을 용도별 검토 가능한 커밋으로 나누어 push하고 원격 일치·잔여 변경·게시 이력을 기록한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a461d0e4-5694-4995-9e2c-c5dafdd99d25&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d9aee885-a5f4-4aea-a3e4-be4db4874a6b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-511029be-d6b6-43ce-9f20-684f22712cf3&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0de6cf67-49d0-4dfd-a585-ee8cd63f5810&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f4cffb8e-0329-4111-84a2-388db1c4ad3e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-583d9544-c88b-4923-99cf-d50842bfb5ed&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-16fcef2a-b86c-48d7-acae-b75f86e73737&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-a461d0e4-5694-4995-9e2c-c5dafdd99d25&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/review-app-server.test.ts&quot;,
+        &quot;test/workflow-review.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T15:25:02.668Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d9aee885-a5f4-4aea-a3e4-be4db4874a6b&quot;,
+      &quot;command&quot;: &quot;/bin/sh&quot;,
+      &quot;args&quot;: [
+        &quot;-c&quot;,
+        &quot;set -e\nnpm run build\nbun test --timeout 30000 test/projection.test.ts test/architecture-tree.test.ts\nnode scripts/check-workflow.ts\nnode scripts/check-skill-library.ts\nnode scripts/verify-chat.ts\nnode --input-type=module -e &#39;import{execFileSync}from\&quot;node:child_process\&quot;;import fs from\&quot;node:fs\&quot;;const head=execFileSync(\&quot;git\&quot;,[\&quot;rev-parse\&quot;,\&quot;HEAD\&quot;],{encoding:\&quot;utf8\&quot;}).trim();const remote=execFileSync(\&quot;git\&quot;,[\&quot;ls-remote\&quot;,\&quot;origin\&quot;,\&quot;refs/heads/main\&quot;],{encoding:\&quot;utf8\&quot;}).trim().split(String.fromCharCode(9))[0];if(head!==remote)throw Error(\&quot;remote ref mismatch\&quot;);const dirty=execFileSync(\&quot;git\&quot;,[\&quot;diff\&quot;,\&quot;--name-only\&quot;,\&quot;-z\&quot;,\&quot;HEAD\&quot;,\&quot;--\&quot;,\&quot;src\&quot;,\&quot;scripts\&quot;,\&quot;package.json\&quot;,\&quot;docs/architecture\&quot;],{encoding:\&quot;utf8\&quot;});if(dirty)throw Error(\&quot;unpublished managed source\&quot;);const touched=new Set(execFileSync(\&quot;git\&quot;,[\&quot;diff\&quot;,\&quot;--name-only\&quot;,\&quot;-z\&quot;,\&quot;92de238..HEAD\&quot;],{encoding:\&quot;utf8\&quot;}).split(String.fromCharCode(0)));const requested=JSON.parse(fs.readFileSync(\&quot;.www/review-fixes-20261115/commit-now-expanded.json\&quot;,\&quot;utf8\&quot;));if(requested.some(x=&gt;!touched.has(x.path)))throw Error(\&quot;requested path missing from publication\&quot;);console.log(JSON.stringify({publication:\&quot;passed\&quot;,head,remote,requestedDistinct:requested.length}));&#39;\n&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T15:40:44.189Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-511029be-d6b6-43ce-9f20-684f22712cf3&quot;,
+      &quot;command&quot;: &quot;/bin/sh&quot;,
+      &quot;args&quot;: [
+        &quot;-c&quot;,
+        &quot;set -e\numask 077\nmkdir -p .www/final-closeout-20261116/direct-v2\nrun_step() {\n  phase=\&quot;$1\&quot;\n  shift\n  if \&quot;$@\&quot; &gt; \&quot;.www/final-closeout-20261116/direct-v2/$phase.log\&quot; 2&gt;&amp;1; then code=0; else code=$?; fi\n  printf &#39;{\&quot;step\&quot;:\&quot;%s\&quot;,\&quot;exitCode\&quot;:%s}\\n&#39; \&quot;$phase\&quot; \&quot;$code\&quot; | tee -a .www/final-closeout-20261116/direct-v2/summary.jsonl\n  return \&quot;$code\&quot;\n}\nrun_step build npm run build\nrun_step environment node scripts/check-environment.ts\nrun_step core-environment node --test test/review-app-server.test.ts test/workflow-review.test.ts test/workflow-environment.test.ts test/workflow-harness.test.ts\nrun_step projection-tree bun test --timeout 30000 test/projection.test.ts test/architecture-tree.test.ts\nrun_step workflow node scripts/check-workflow.ts\nrun_step library node scripts/check-skill-library.ts\nrun_step gui node scripts/verify-chat.ts\nrun_step publication node --input-type=module -e &#39;import{execFileSync}from\&quot;node:child_process\&quot;;import fs from\&quot;node:fs\&quot;;const head=execFileSync(\&quot;git\&quot;,[\&quot;rev-parse\&quot;,\&quot;HEAD\&quot;],{encoding:\&quot;utf8\&quot;}).trim();const remote=execFileSync(\&quot;git\&quot;,[\&quot;ls-remote\&quot;,\&quot;origin\&quot;,\&quot;refs/heads/main\&quot;],{encoding:\&quot;utf8\&quot;}).trim().split(String.fromCharCode(9))[0];if(head!==remote)throw Error(\&quot;remote ref mismatch\&quot;);const dirty=execFileSync(\&quot;git\&quot;,[\&quot;diff\&quot;,\&quot;--name-only\&quot;,\&quot;-z\&quot;,\&quot;HEAD\&quot;,\&quot;--\&quot;,\&quot;src\&quot;,\&quot;scripts\&quot;,\&quot;package.json\&quot;,\&quot;docs/architecture\&quot;],{encoding:\&quot;utf8\&quot;});if(dirty)throw Error(\&quot;unpublished managed source\&quot;);const touched=new Set(execFileSync(\&quot;git\&quot;,[\&quot;diff\&quot;,\&quot;--name-only\&quot;,\&quot;-z\&quot;,\&quot;92de238..HEAD\&quot;],{encoding:\&quot;utf8\&quot;}).split(String.fromCharCode(0)));const requested=JSON.parse(fs.readFileSync(\&quot;.www/review-fixes-20261115/commit-now-expanded.json\&quot;,\&quot;utf8\&quot;));if(requested.some(x=&gt;!touched.has(x.path)))throw Error(\&quot;requested path missing from publication\&quot;);console.log(JSON.stringify({publication:\&quot;passed\&quot;,head,remote,requestedDistinct:requested.length}));&#39;\n&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T15:54:22.770Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0de6cf67-49d0-4dfd-a585-ee8cd63f5810&quot;,
+      &quot;command&quot;: &quot;/bin/sh&quot;,
+      &quot;args&quot;: [
+        &quot;-c&quot;,
+        &quot;set -e\numask 077\nbun test --timeout 30000 test/activity-sidebar.test.ts test/chat-state.test.ts test/native-lifecycle.test.ts test/projection.test.ts test/architecture-tree.test.ts &gt; .www/finalization/core-focused.log 2&gt;&amp;1\nnode scripts/verify-architecture.ts &gt; .www/finalization/architecture-ui.log 2&gt;&amp;1\nnode scripts/check-workflow.ts &gt; .www/finalization/workflow.log 2&gt;&amp;1\nnode scripts/check-skill-library.ts &gt; .www/finalization/library.log 2&gt;&amp;1\nnode --input-type=module -e &#39;import{execFileSync as e}from\&quot;node:child_process\&quot;;import fs from\&quot;node:fs\&quot;;const h=e(\&quot;git\&quot;,[\&quot;rev-parse\&quot;,\&quot;HEAD\&quot;],{encoding:\&quot;utf8\&quot;}).trim(),r=e(\&quot;git\&quot;,[\&quot;ls-remote\&quot;,\&quot;origin\&quot;,\&quot;refs/heads/main\&quot;],{encoding:\&quot;utf8\&quot;}).trim().split(String.fromCharCode(9))[0];if(h!==r)e(\&quot;git\&quot;,[\&quot;fetch\&quot;,\&quot;--quiet\&quot;,\&quot;--no-tags\&quot;,\&quot;origin\&quot;,\&quot;refs/heads/main\&quot;]);e(\&quot;git\&quot;,[\&quot;merge-base\&quot;,\&quot;--is-ancestor\&quot;,h,r]);const a=new Set(e(\&quot;git\&quot;,[\&quot;diff\&quot;,\&quot;--name-only\&quot;,\&quot;-z\&quot;,\&quot;92de238..HEAD\&quot;],{encoding:\&quot;utf8\&quot;}).split(String.fromCharCode(0)));const p=JSON.parse(fs.readFileSync(\&quot;.www/review-fixes-20261115/commit-now-expanded.json\&quot;,\&quot;utf8\&quot;));if(p.some(x=&gt;!a.has(x.path)))throw Error(\&quot;publication missing\&quot;);console.log(JSON.stringify({target:h,remote:r,targetIncluded:true,requested:p.length}));&#39; &gt; .www/finalization/publication.log 2&gt;&amp;1\n&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T16:39:57.119Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f4cffb8e-0329-4111-84a2-388db1c4ad3e&quot;,
+      &quot;command&quot;: &quot;/bin/sh&quot;,
+      &quot;args&quot;: [
+        &quot;-c&quot;,
+        &quot;set -e\numask 077\nbun test --timeout 30000 test/activity-sidebar.test.ts test/chat-state.test.ts test/native-lifecycle.test.ts test/projection.test.ts test/architecture-tree.test.ts &gt; .www/finalization/core-focused.log 2&gt;&amp;1\nnode scripts/verify-architecture.ts &gt; .www/finalization/architecture-ui.log 2&gt;&amp;1\nnode scripts/check-workflow.ts &gt; .www/finalization/workflow.log 2&gt;&amp;1\nnode scripts/check-skill-library.ts &gt; .www/finalization/library.log 2&gt;&amp;1\nnode --input-type=module -e &#39;import{execFileSync as e}from\&quot;node:child_process\&quot;;import fs from\&quot;node:fs\&quot;;const h=e(\&quot;git\&quot;,[\&quot;rev-parse\&quot;,\&quot;HEAD\&quot;],{encoding:\&quot;utf8\&quot;}).trim(),r=e(\&quot;git\&quot;,[\&quot;ls-remote\&quot;,\&quot;origin\&quot;,\&quot;refs/heads/main\&quot;],{encoding:\&quot;utf8\&quot;}).trim().split(String.fromCharCode(9))[0];if(h!==r)e(\&quot;git\&quot;,[\&quot;fetch\&quot;,\&quot;--quiet\&quot;,\&quot;--no-tags\&quot;,\&quot;origin\&quot;,\&quot;refs/heads/main\&quot;]);e(\&quot;git\&quot;,[\&quot;merge-base\&quot;,\&quot;--is-ancestor\&quot;,h,r]);const a=new Set(e(\&quot;git\&quot;,[\&quot;diff\&quot;,\&quot;--name-only\&quot;,\&quot;-z\&quot;,\&quot;92de238..HEAD\&quot;],{encoding:\&quot;utf8\&quot;}).split(String.fromCharCode(0)));const p=JSON.parse(fs.readFileSync(\&quot;.www/review-fixes-20261115/commit-now-expanded.json\&quot;,\&quot;utf8\&quot;));if(p.some(x=&gt;!a.has(x.path)))throw Error(\&quot;publication missing\&quot;);console.log(JSON.stringify({target:h,remote:r,targetIncluded:true,requested:p.length}));&#39; &gt; .www/finalization/publication.log 2&gt;&amp;1\n&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:09:15.113Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-583d9544-c88b-4923-99cf-d50842bfb5ed&quot;,
+      &quot;command&quot;: &quot;/bin/sh&quot;,
+      &quot;args&quot;: [
+        &quot;-c&quot;,
+        &quot;set -e\numask 077\nbun test --timeout 30000 test/activity-sidebar.test.ts test/chat-state.test.ts test/native-lifecycle.test.ts test/projection.test.ts test/architecture-tree.test.ts &gt; .www/finalization/core-focused.log 2&gt;&amp;1\nnode scripts/verify-architecture.ts &gt; .www/finalization/architecture-ui.log 2&gt;&amp;1\nnode scripts/check-workflow.ts &gt; .www/finalization/workflow.log 2&gt;&amp;1\nnode scripts/check-skill-library.ts &gt; .www/finalization/library.log 2&gt;&amp;1\nnode --input-type=module -e &#39;import{execFileSync as e}from\&quot;node:child_process\&quot;;import fs from\&quot;node:fs\&quot;;const h=e(\&quot;git\&quot;,[\&quot;rev-parse\&quot;,\&quot;HEAD\&quot;],{encoding:\&quot;utf8\&quot;}).trim(),r=e(\&quot;git\&quot;,[\&quot;ls-remote\&quot;,\&quot;origin\&quot;,\&quot;refs/heads/main\&quot;],{encoding:\&quot;utf8\&quot;}).trim().split(String.fromCharCode(9))[0];if(h!==r)e(\&quot;git\&quot;,[\&quot;fetch\&quot;,\&quot;--quiet\&quot;,\&quot;--no-tags\&quot;,\&quot;origin\&quot;,\&quot;refs/heads/main\&quot;]);e(\&quot;git\&quot;,[\&quot;merge-base\&quot;,\&quot;--is-ancestor\&quot;,h,r]);const a=new Set(e(\&quot;git\&quot;,[\&quot;diff\&quot;,\&quot;--name-only\&quot;,\&quot;-z\&quot;,\&quot;92de238..HEAD\&quot;],{encoding:\&quot;utf8\&quot;}).split(String.fromCharCode(0)));const p=JSON.parse(fs.readFileSync(\&quot;.www/review-fixes-20261115/commit-now-expanded.json\&quot;,\&quot;utf8\&quot;));if(p.some(x=&gt;!a.has(x.path)))throw Error(\&quot;publication missing\&quot;);console.log(JSON.stringify({target:h,remote:r,targetIncluded:true,requested:p.length}));&#39; &gt; .www/finalization/publication.log 2&gt;&amp;1\n&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:22:28.918Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-16fcef2a-b86c-48d7-acae-b75f86e73737&quot;,
+      &quot;command&quot;: &quot;/bin/sh&quot;,
+      &quot;args&quot;: [
+        &quot;-c&quot;,
+        &quot;set -e\numask 077\nbun test --timeout 30000 test/activity-sidebar.test.ts test/chat-state.test.ts test/native-lifecycle.test.ts test/projection.test.ts test/architecture-tree.test.ts &gt; .www/finalization/core-focused.log 2&gt;&amp;1\nnode scripts/verify-architecture.ts &gt; .www/finalization/architecture-ui.log 2&gt;&amp;1\nnode scripts/check-workflow.ts &gt; .www/finalization/workflow.log 2&gt;&amp;1\nnode scripts/check-skill-library.ts &gt; .www/finalization/library.log 2&gt;&amp;1\nnode --input-type=module -e &#39;import{execFileSync as e}from\&quot;node:child_process\&quot;;import fs from\&quot;node:fs\&quot;;const h=e(\&quot;git\&quot;,[\&quot;rev-parse\&quot;,\&quot;HEAD\&quot;],{encoding:\&quot;utf8\&quot;}).trim(),r=e(\&quot;git\&quot;,[\&quot;ls-remote\&quot;,\&quot;origin\&quot;,\&quot;refs/heads/main\&quot;],{encoding:\&quot;utf8\&quot;}).trim().split(String.fromCharCode(9))[0];if(h!==r)e(\&quot;git\&quot;,[\&quot;fetch\&quot;,\&quot;--quiet\&quot;,\&quot;--no-tags\&quot;,\&quot;origin\&quot;,\&quot;refs/heads/main\&quot;]);e(\&quot;git\&quot;,[\&quot;merge-base\&quot;,\&quot;--is-ancestor\&quot;,h,r]);const a=new Set(e(\&quot;git\&quot;,[\&quot;diff\&quot;,\&quot;--name-only\&quot;,\&quot;-z\&quot;,\&quot;92de238..HEAD\&quot;],{encoding:\&quot;utf8\&quot;}).split(String.fromCharCode(0)));const p=JSON.parse(fs.readFileSync(\&quot;.www/review-fixes-20261115/commit-now-expanded.json\&quot;,\&quot;utf8\&quot;));if(p.some(x=&gt;!a.has(x.path)))throw Error(\&quot;publication missing\&quot;);console.log(JSON.stringify({target:h,remote:r,targetIncluded:true,requested:p.length}));&#39; &gt; .www/finalization/publication.log 2&gt;&amp;1\n&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:33:43.211Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-a6908a28-f5a8-498e-b2a7-e265d5d8dcc3&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/finalization/work014-closeout/verify-current-core.mjs&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:35:48.527Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-6b3fbba7-7c44-43d8-b726-09285d4a13d1&quot;,
+      &quot;verdict&quot;: &quot;not_run&quot;,
+      &quot;model&quot;: null,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-6b3fbba7-7c44-43d8-b726-09285d4a13d1/terra.json&quot;,
+      &quot;findings&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;review-fbab3ea6-057b-43a9-9b67-dba59176a5a9&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-fbab3ea6-057b-43a9-9b67-dba59176a5a9/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;src/activity-sidebar.ts의 updateActivitySidebarSnapshot은 snapshot과 live를 순서대로 전달하지만, updateActivitySidebarState는 event.seq가 기존 processedThrough 이하이면 활동 처리를 건너뛴다. 이미 watermark가 100인 상태에서 snapshot에 없던 지연 live 사건 seq 99가 큐에 도착하면 새 반응이 누락되어, snapshot 최대 seq보다 낮은 큐 전용 live 사건도 반응시켜야 한다는 CHAT-ACTIVITY-01과 충돌한다.&quot;,
+        &quot;src/renderer.tsx의 consumeEvents는 재연결 snapshot이 교체되면 sendGeneration을 증가시키고 pendingPrompt를 지운다. 그 뒤 같은 startTurn 요청이 실패하면 run의 catch가 currentRequest()에서 false가 되어 전송 전에 비운 입력을 복원하지 않는다. 재연결 후 전송 실패 시 초안을 보존해야 하는 CHAT-INPUT-01에 어긋난다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle의 선택 파일과 그 안의 검증 기록이다. omitted 파일과 별도 로그 원문은 읽지 않았으며 테스트를 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-ab0d6c00-e809-4bb2-a70c-4e9be8ccda8a&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-ab0d6c00-e809-4bb2-a70c-4e9be8ccda8a/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;src/renderer.tsx의 run()은 전송 전에 prompt.trim()을 text로 저장하고, 전송 실패 시 setPrompt((current) =&gt; current || text)로 복원한다. 따라서 앞뒤 공백이나 줄바꿈이 있는 초안을 전송한 뒤 turn/start가 실패하면 원래 초안이 아닌 잘린 문자열이 복원되어 CHAT-INPUT-01의 초안 보존 요구와 일치하지 않는다. verification.md의 정확한 초안 보존 GUI 검증 기록만으로 이 경계가 검증됐다고 볼 수 없다.&quot;,
+        &quot;검토 범위는 inline inputBundle의 선택된 소스·문서와 그 안에 인용된 검증 기록이다. omitted 파일과 원문 로그는 읽지 않았으며 테스트를 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-cfc6e243-833a-4cff-a406-aaadb32e00ed&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-cfc6e243-833a-4cff-a406-aaadb32e00ed/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;src/renderer.tsx의 run() 실패 처리에서 `setPrompt(current =&gt; current || draft)`는 전송 중 사용자가 새 초안을 입력한 경우 실패한 원래 초안을 복원하지 않는다. 입력란은 전송 중에도 활성화되어 있으므로, 요청을 보낸 뒤 새 텍스트를 입력하고 startTurn이 실패하면 원래 요청의 앞뒤 공백을 포함한 초안이 입력란에서 사라진다. 이는 전송 실패 시 입력을 조용히 잃지 않아야 한다는 CHAT-INPUT-01 경계에 어긋난다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle의 선택 파일과 그 안의 검증 기록에 한정했다. 생략된 manifest 항목과 참조된 별도 로그는 읽지 않았고 테스트를 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-79375c8a-5426-4fc9-921f-d22d18a9a732&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-79375c8a-5426-4fc9-921f-d22d18a9a732/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위는 제공된 inputBundle의 선택 파일과 그 안의 검증 기록이다. 생략된 manifest 항목과 별도 로그는 읽지 않았으며 테스트를 실행하지 않았다.&quot;
+      ]
+    }
+  ]
+}</pre></div></details></section></main></body></html>

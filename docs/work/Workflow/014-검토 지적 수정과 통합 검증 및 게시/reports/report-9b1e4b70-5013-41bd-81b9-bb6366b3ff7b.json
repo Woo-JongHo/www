@@ -1,0 +1,144 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-9b1e4b70-5013-41bd-81b9-bb6366b3ff7b",
+  "workId"        : "work-7aaa8974-f791-4f76-8613-06e18f17b835",
+  "title"         : "검토 지적 수정과 통합 검증 및 게시",
+  "summary"       : "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome"       : "blocked",
+  "kind"          : "snapshot",
+  "event"         : "verify",
+  "createdAt"     : "2026-11-15T15:40:44.487Z",
+  "workRecordHash": "afd7634112d898529633cb870bf2a6b4fefb6810f774bc452ca84e3975e7003d",
+  "sourceDigest"  : "bad23882e05c2f3fc89c1e7786a361636b90fdf1e941a9931de287b95f757e5d",
+  "criteriaDigest": "2786b38112f3d835da49f1acfa014441ec737fa238a83e06b292445f5904acc8",
+  "semanticHash"  : "ab5f69207e10a02b8e44ff35afb99ea56b8ca53442bec2292fd9b3b2d798008b",
+  "narrative"     : null,
+  "work": {
+    "status": "verifying",
+    "blockedReason": "verification_failed",
+    "criteria": [
+      {
+        "id"         : "FIX-1",
+        "description": "반복 Hook·대화 전환 live 반응과 Native 연결 재생성·승인 해소의 실제 결함을 수정하고 경계 회귀를 검증한다.",
+        "required"   : true,
+        "result"     : "failed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-a461d0e4-5694-4995-9e2c-c5dafdd99d25",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-d9aee885-a5f4-4aea-a3e4-be4db4874a6b",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          }
+        ]
+      },
+      {
+        "id"         : "FIX-2",
+        "description": "공개 요약 교차 수신과 지도 탐색 및 BoxBox proof의 요구 불일치를 수정하거나 반증을 근거로 판정하고 테스트를 통과한다.",
+        "required"   : true,
+        "result"     : "failed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-a461d0e4-5694-4995-9e2c-c5dafdd99d25",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-d9aee885-a5f4-4aea-a3e4-be4db4874a6b",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          }
+        ]
+      },
+      {
+        "id"         : "FIX-3",
+        "description": "사용자 지정 Terra의 실제 모델·read-only·대상 소스·최종 응답을 공유 검토 core가 수용하고 기록 잠금 경합이 유료 검증을 재실행시키지 않도록 검증한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "FIX-4",
+        "description": "비교 문서와 검사·문서·독립 검토·저작 보고서를 현행 소스에 연결하고 외부 OS/기계 실측의 확인·미확인을 구분한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-a461d0e4-5694-4995-9e2c-c5dafdd99d25",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "FIX-5",
+        "description": "세션 소유 변경을 용도별 검토 가능한 커밋으로 나누어 push하고 원격 일치·잔여 변경·게시 이력을 기록한다.",
+        "required"   : true,
+        "result"     : "failed",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-a461d0e4-5694-4995-9e2c-c5dafdd99d25",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-d9aee885-a5f4-4aea-a3e4-be4db4874a6b",
+            "summary": "실제 검증 failed; 현재 적용 불가"
+          }
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-a461d0e4-5694-4995-9e2c-c5dafdd99d25",
+        "command": "node",
+        "args": [
+          "--test",
+          "test/review-app-server.test.ts",
+          "test/workflow-review.test.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T15:25:02.668Z"
+      },
+      {
+        "id": "attempt-d9aee885-a5f4-4aea-a3e4-be4db4874a6b",
+        "command": "/bin/sh",
+        "args": [
+          "-c",
+          "set -e\nnpm run build\nbun test --timeout 30000 test/projection.test.ts test/architecture-tree.test.ts\nnode scripts/check-workflow.ts\nnode scripts/check-skill-library.ts\nnode scripts/verify-chat.ts\nnode --input-type=module -e 'import{execFileSync}from\"node:child_process\";import fs from\"node:fs\";const head=execFileSync(\"git\",[\"rev-parse\",\"HEAD\"],{encoding:\"utf8\"}).trim();const remote=execFileSync(\"git\",[\"ls-remote\",\"origin\",\"refs/heads/main\"],{encoding:\"utf8\"}).trim().split(String.fromCharCode(9))[0];if(head!==remote)throw Error(\"remote ref mismatch\");const dirty=execFileSync(\"git\",[\"diff\",\"--name-only\",\"-z\",\"HEAD\",\"--\",\"src\",\"scripts\",\"package.json\",\"docs/architecture\"],{encoding:\"utf8\"});if(dirty)throw Error(\"unpublished managed source\");const touched=new Set(execFileSync(\"git\",[\"diff\",\"--name-only\",\"-z\",\"92de238..HEAD\"],{encoding:\"utf8\"}).split(String.fromCharCode(0)));const requested=JSON.parse(fs.readFileSync(\".www/review-fixes-20261115/commit-now-expanded.json\",\"utf8\"));if(requested.some(x=>!touched.has(x.path)))throw Error(\"requested path missing from publication\");console.log(JSON.stringify({publication:\"passed\",head,remote,requestedDistinct:requested.length}));'\n"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "failed",
+        "executor"    : "process",
+        "exitCode"    : 1,
+        "sourceStable": true,
+        "completedAt" : "2026-11-15T15:40:44.189Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id"         : "review-6b3fbba7-7c44-43d8-b726-09285d4a13d1",
+        "verdict"    : "not_run",
+        "model"      : null,
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-6b3fbba7-7c44-43d8-b726-09285d4a13d1/terra.json",
+        "findings": []
+      }
+    ]
+  },
+  "source": {
+    "recordPath"    : "docs/work/Workflow/014-검토 지적 수정과 통합 검증 및 게시/work.json",
+    "workRecordHash": "afd7634112d898529633cb870bf2a6b4fefb6810f774bc452ca84e3975e7003d",
+    "sourceDigest"  : "bad23882e05c2f3fc89c1e7786a361636b90fdf1e941a9931de287b95f757e5d",
+    "criteriaDigest": "2786b38112f3d835da49f1acfa014441ec737fa238a83e06b292445f5904acc8"
+  }
+}
