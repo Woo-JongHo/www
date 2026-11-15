@@ -1,0 +1,54 @@
+{
+  "id": "ev_c526a641954a1856bef9b0710d6170d88bfe439937d60ef7a3c3fb0cb30190b2",
+  "subject": {
+    "kind": "script",
+    "sha256": "34952bd1567d99ede3edd2ee08cf0ece0554dd7690dc42143029fc71bbe8f836",
+    "name": "main.ts"
+  },
+  "operation": "core_text_read",
+  "params": {
+    "limit": 90,
+    "offset": 0,
+    "path": "/Users/jonghoPro/woo/00_project/www/src/main.ts"
+  },
+  "result": {
+    "cut_lines": [],
+    "encoding": "utf8",
+    "file_size": 30303,
+    "lines": 90,
+    "more": true,
+    "offset": 0,
+    "path": "/Users/jonghoPro/woo/00_project/www/src/main.ts",
+    "replaced_sequences": 0,
+    "text": "import { app, BrowserWindow, dialog, ipcMain, shell } from \"electron\";\nimport { spawn, execFileSync } from \"node:child_process\";\nimport { randomUUID } from \"node:crypto\";\nimport { mkdirSync, writeFileSync } from \"node:fs\";\nimport { basename, join, resolve } from \"node:path\";\nimport { JsonRpcClient, type RpcMessage } from \"./rpc\";\nimport { createConversationService, type ConversationEvent } from \"./conversations\";\nimport { createDevelopmentService } from \"./development\";\nimport { createReportService } from \"./reports-service\";\nimport { createNativeReportHarness } from \"./native-reports\";\nimport { judgeNativeReport } from \"./report-judge\";\nimport { NativeCompletionCollector } from \"./native-report-input\";\nimport { resolveNativeCodex } from \"./native-command\";\nimport { nativeThreadStartParams, nativeTurnStartParams } from \"./native-chat\";\nimport type { AppEvent, RpcId, WorkspaceInfo } from \"./shared\";\n\nconst DIST = join(app.getAppPath(), \"dist\");\n\nconst PROBE_PATH  = process.env.WWW_PROBE_PATH                                                                                     ;\nconst nativeEntry = process.hrtime.bigint()                                                                                        ;\nlet workspace     = PROBE_PATH && process.env.WWW_PROBE_WORKSPACE ? resolve(process.env.WWW_PROBE_WORKSPACE) : app.getPath(\"home\") ;\n\nlet rpc    : JsonRpcClient | null = null  ;\nlet window : BrowserWindow | null = null  ;\nlet threadStarted                 = false ;\nlet connecting : Promise<JsonRpcClient> | null = null;\nlet activeThreadId : string | null = null;\nlet activeTurnId   : string | null = null;\nlet turnStarting                  = false;\nlet switchingConversation         = false;\nconst endedTurns = new Set<string>();\n\nlet reportRepository : string | null                                       = null ;\nlet nativeReports    : ReturnType<typeof createNativeReportHarness> | null = null ;\n\nlet autoReportsEnabled  = !PROBE_PATH || process.env.WWW_PROBE_NATIVE_REPORTS === \"1\" ;\nconst reportAbort       = new AbortController()                                       ;\nconst nativeCompletions = new NativeCompletionCollector()                             ;\n\nlet seq                       = 0                        ;\nlet connectionGeneration      = 0                        ;\nconst eventLog : AppEvent[] = []                       ;\nconst pendingApprovals      = new Map<RpcId, string>() ;\nconst approvalAttempts      = new Set<RpcId>()         ;\n\nconst SUPPORTED = new Set([\"item/commandExecution/requestApproval\", \"item/fileChange/requestApproval\"]) ;\nconst DECISIONS = new Set([\"accept\", \"acceptForSession\", \"decline\", \"cancel\"])                          ;\n\nfunction publish(event: Omit<AppEvent, \"seq\" | \"at\">): void {\n  const entry = { ...event, seq: ++seq, at: new Date().toISOString() };\n  eventLog.push(entry);\n  if (eventLog.length > 2000) eventLog.shift();\n  window?.webContents.send(\"app:event\", entry);\n  if (autoReportsEnabled && nativeReports) {\n    for (const input of nativeCompletions.observe(eventLog, entry)) {\n      const repository = workspace;\n      void nativeReports.enqueue({ repository, input }).catch((error: unknown) => publish({ kind: \"notification\", method: \"reports/autoError\", params: { threadId: input.threadId, turnId: input.turnId, message: error instanceof Error ? error.message : String(error) } }));\n    }\n  }\n}\n\nfunction connect(): Promise<JsonRpcClient> {\n  if (rpc) return Promise.resolve(rpc);\n  if (connecting) return connecting;\n  connecting = new Promise<JsonRpcClient>((resolveClient, reject) => {\n    const child  = spawn(resolveNativeCodex(), [\"app-server\"], { stdio: [\"pipe\", \"pipe\", \"pipe\"] }) ;\n    const client = new JsonRpcClient(child)                                                         ;\n    let settled  = false                                                                            ;\n    client.once(\"closed\", (error: Error) => {\n      rpc = null;\n      activeTurnId = null;\n      turnStarting = false;\n      for (const requestId of pendingApprovals.keys()) {\n        publish({ kind: \"notification\", method: \"approval/uncertain\", params: { message: error.message }, requestId });\n      }\n      pendingApprovals.clear();\n      approvalAttempts.clear();\n      publish({ kind: \"transport\", method: \"transport/closed\", params: { message: error.message } });\n      if (!settled) reject(error);\n    });\n    client.on(\"stderr\", (text: string) => publish({ kind: \"transport\", method: \"transport/stderr\", params: { text } }));\n    client.on(\"protocolError\", (message: string) => publish({ kind: \"transport\", method: \"transport/error\", params: { message } }));\n    client.on(\"message\", (message: RpcMessage) => {\n      const method = String(message.method) ;\n      const id     = message.id             ;\n      const params = optionalRecord(message.params);\n      const turn   = params && optionalRecord(params.turn);\n      if (method === \"turn/started\" && params?.threadId === activeThreadId && turn && typeof turn.id === \"string\") activeTurnId = turn.id;\n      if (method === \"turn/completed\" && params && turn && typeof turn.id === \"string\") {\n        endedTurns.add(`${String(params.threadId)}:${turn.id}`);\n",
+    "total_lines": 429
+  },
+  "summary": "main.ts: lines 1–90 of 429 (UTF-8).",
+  "confidence": "observed",
+  "authority": "original-files",
+  "environment": {
+    "clean_room": false,
+    "engine": "builtin",
+    "engine_version": "0.6.1",
+    "host": "macos-aarch64"
+  },
+  "limitations": [
+    {
+      "code": "text_as_stored",
+      "message": "The file is read as text as it is stored: nothing is run, rendered or formatted, and text a program builds or downloads while it runs isn't here."
+    }
+  ],
+  "coverage": {
+    "status": "partial",
+    "examined": 90,
+    "total": 429,
+    "next_offset": 90
+  },
+  "locations": [
+    {
+      "kind": "path",
+      "value": "/Users/jonghoPro/woo/00_project/www/src/main.ts"
+    }
+  ],
+  "links": []
+}

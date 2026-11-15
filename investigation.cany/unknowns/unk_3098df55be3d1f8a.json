@@ -1,0 +1,18 @@
+{
+  "id": "unk_3098df55be3d1f8a",
+  "revision": 2,
+  "question": "현재 소스가 제품 설명대로 Codex 연결·대화·활동·보고서 화면을 구현하는가? 실제 실행 정상 여부는 이번 읽기 분석에서 확인하지 않고 한계로 표시한다.",
+  "severity": "medium",
+  "domain": "general",
+  "status": "resolved",
+  "probes": [
+    "main과 renderer의 연결 및 화면 분기 읽기",
+    "실제 실행 정상 여부는 후속 별도 검증"
+  ],
+  "evidence_for": [
+    "ev_c526a641954a1856bef9b0710d6170d88bfe439937d60ef7a3c3fb0cb30190b2",
+    "ev_8f13c8cc54a1a02d7da3e87477780202eddb5f59115a9f281c964f7cfde1df45"
+  ],
+  "evidence_against": [],
+  "resolution": "main의 app-server 프로세스 실행·사건 전달·자동 보고서 연결과 renderer의 저장 대화·활동·생태계·리포트 화면 연결을 확인했다. 코드 존재와 실제 실행 성공은 구분한다."
+}

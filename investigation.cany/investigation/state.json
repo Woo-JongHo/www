@@ -1,0 +1,42 @@
+{
+  "revision": 6,
+  "brief": {
+    "question": "이 코드가 어떤 프로젝트인지 비개발자가 이해하도록 분석한다.",
+    "purpose": "제품의 목적·주요 기능·구조·현재 한계를 파악",
+    "targets": [
+      "/Users/jonghoPro/woo/00_project/www"
+    ],
+    "constraints": [
+      "분석만 수행하고 제품 소스 변경·빌드·앱 실행은 하지 않는다."
+    ],
+    "done_when": "문서와 핵심 코드의 일치 여부를 확인하고 한국어로 요약"
+  },
+  "plan": [
+    {
+      "title": "프로젝트의 목적 파악하기",
+      "status": "done"
+    },
+    {
+      "title": "주요 기능과 작동 방식 살펴보기",
+      "status": "done"
+    },
+    {
+      "title": "확인한 내용과 한계 정리하기",
+      "status": "done"
+    }
+  ],
+  "hypotheses": [],
+  "findings": [
+    {
+      "id": "fnd_1",
+      "statement": "WWW는 로컬 Codex app-server를 실행하고 AI 개발 작업을 대화·실행/파일 변경·승인·활동 패널로 보여주는 Electron 데스크톱 앱이다. 저장된 대화 탐색과 생태계·리포트 화면이 연결되어 있고 자동 보고서 큐 연결이 소스에 존재한다.",
+      "evidence_ids": [
+        "ev_c526a641954a1856bef9b0710d6170d88bfe439937d60ef7a3c3fb0cb30190b2",
+        "ev_8f13c8cc54a1a02d7da3e87477780202eddb5f59115a9f281c964f7cfde1df45"
+      ],
+      "confidence": "observed"
+    }
+  ],
+  "handoff": "사용자는 먼저 어떤 프로젝트인지 분석만 요청했다. 제품 소스 수정·빌드·테스트·서버 실행 없음. PRODUCT/ARCHITECTURE/HANDOFF/package와 핵심 main/renderer를 읽어 WWW가 Codex 기반 개인 AI 개발 데스크톱 작업 공간임을 확인했다. Electron/React/TypeScript가 기본이고 Tauri 비교 실험과 개발 절차·검증 도구가 함께 있다. 실제 실행 정상 여부는 미검증 unknown으로 남겼다. 기존 dirty 변경을 보존했으며 제품 완성·보안 감사 통과로 확대 해석하지 않는다.",
+  "updated": "2026-11-13T00:33:27Z"
+}
