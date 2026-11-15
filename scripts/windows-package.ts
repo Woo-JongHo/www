@@ -16,6 +16,6 @@ const outputs = await packager({
   out       : resolve(root, ".www", "packages")         ,
   overwrite : true                                      ,
   prune     : true                                      ,
-  ignore    : /^\/(spikes|test|docs|\.git|\.www)(\/|$)/ ,
+  ignore    : /^\/(spikes|test|docs|\.git|\.www|\.agents|skill-library)(\/|$)/ ,
 });
 for (const output of outputs) console.log(`Windows 패키지: ${output}`);
