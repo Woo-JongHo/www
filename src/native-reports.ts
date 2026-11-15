@@ -5,6 +5,9 @@
 import { createHash, randomUUID } from "node:crypto";
 import { constants, promises as fs } from "node:fs";
 import path from "node:path";
+import { serializeWorkRecord } from "../scripts/workflow/work-json.ts";
+import { workOutputColumns } from "../scripts/workflow/preflight.ts";
+import type { WorkRecord } from "../scripts/workflow/types.ts";
 import { withWorkLock } from "../scripts/workflow/lock.ts";
 import { parseReportReader, publishWorkReport, WORK_RECORD_JSON_LIMIT } from "../scripts/workflow/reports.ts";
 import type { NativeReportDecision, NativeReportInput } from "./report-judge";
@@ -293,12 +296,13 @@ async function registerWork(entry: Entry, decision: NativeReportDecision): Promi
     }
     const title = safeTitle(decision.title);
     if (!found) {
-      const next   = Math.max(0, ...folders.map((folder) => Number(folder.name.match(/^(\d{3,})-/)?.[1] ?? 0))) + 1 ;
-      const target = path.join(directory, `${String(next).padStart(3, "0")}-${title}`)                              ;
+      const columns = await workOutputColumns(root)                                                                  ;
+      const next    = Math.max(0, ...folders.map((folder) => Number(folder.name.match(/^(\d{3,})-/)?.[1] ?? 0))) + 1 ;
+      const target  = path.join(directory, `${String(next).padStart(3, "0")}-${title}`)                              ;
       await safePath(root, target, true);
       await fs.mkdir(target);
       const id = `work-${randomUUID()}`;
-      const record = {
+      const record: WorkRecord & { native: unknown } = {
         schemaVersion : 1 ,
         id                ,
         title             ,
@@ -324,7 +328,7 @@ async function registerWork(entry: Entry, decision: NativeReportDecision): Promi
           truncated : entry.input.truncated
         },
       };
-      try { await atomic(root, path.join(target, "work.json"), `${JSON.stringify(record, null, 2)}\n`); }
+      try { await atomic(root, path.join(target, "work.json"), serializeWorkRecord(record, columns)); }
       catch (error: unknown) { await fs.rmdir(target).catch(() => {}); throw error; }
       found = { id, directory: target };
     }

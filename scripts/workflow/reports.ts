@@ -6,7 +6,8 @@ import { createHash, randomUUID } from "node:crypto";
 import { constants, promises as fs, type Dirent } from "node:fs";
 import type { FileHandle } from "node:fs/promises";
 import path from "node:path";
-import { assertWorkId } from "./preflight.ts";
+import { serializeWorkReport } from "./work-json.ts";
+import { assertWorkId, workOutputColumns } from "./preflight.ts";
 import { captureSource, criteriaDigest } from "./evidence.ts";
 import { renderReportDocument } from "./report-view.ts";
 
@@ -200,11 +201,11 @@ function workValue(input: unknown): WorkRecord {
   return { ...value, id: text(value.id), title: text(value.title, 4000), status: text(value.status), schemaVersion: value.schemaVersion, blockedReason: optionalString(value.blockedReason), criteria: arrayValue(value.criteria), workflow: value.workflow === undefined ? undefined : objectValue(value.workflow) };
 }
 
-const REPORT_ID  = /^report-[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/ ;
-const HASH       = /^[a-f0-9]{64}$/                                                                   ;
-const JSON_LIMIT = 1_048_576                                                                          ;
-const HTML_LIMIT = 2_097_152                                                                          ;
-export const WORK_RECORD_JSON_LIMIT = 8_388_608;
+const REPORT_ID                     = /^report-[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/ ;
+const HASH                          = /^[a-f0-9]{64}$/                                                                   ;
+const JSON_LIMIT                    = 1_048_576                                                                          ;
+const HTML_LIMIT                    = 2_097_152                                                                          ;
+export const WORK_RECORD_JSON_LIMIT = 8_388_608                                                                          ;
 
 const LABELS: Record<ReportOutcome, string> = {
   completed   : "작업 완료"                  ,
@@ -542,6 +543,7 @@ async function publish({ repo = process.cwd(), workId, narrative = null, event, 
   const identity       = await sourceIdentity(work.root, work.record)                                             ;
   const workRecordHash = digest(work.source)                                                                      ;
   const semanticHash   = digest(JSON.stringify({ kind, event, workRecordHash, ...identity, narrative: details })) ;
+  const columns        = await workOutputColumns(work.root)                                                       ;
   const directory      = path.join(path.dirname(work.path), "reports")                                            ;
   await inside(work.root, directory, true);
   await fs.mkdir(directory, { recursive: true });
@@ -564,7 +566,7 @@ async function publish({ repo = process.cwd(), workId, narrative = null, event, 
       outcome: outcomeFor(work.record), kind, event, createdAt: new Date().toISOString(), workRecordHash,
       ...identity, semanticHash, narrative: details, work: facts(work.record), source,
     };
-    const json = `${JSON.stringify(report, null, 2)}\n`;
+    const json = serializeWorkReport(report, columns);
     if (Buffer.byteLength(json) > JSON_LIMIT) throw new Error("보고서 JSON이 1 MiB를 초과합니다.");
     const html     = renderWorkReport(report                 ) ;
     const htmlFile = path.join       (directory, `${id}.html`) ;

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "id": "report-ee58730d-2bb6-45ec-b89a-e61f510b051b",
+  "workId": "work-a4f924c3-501b-4fd5-ba40-d8997e18a792",
+  "title": "BoxBox 승인 규칙과 새 JSON 출력",
+  "summary": "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome": "in_progress",
+  "kind": "snapshot",
+  "event": "build",
+  "createdAt": "2026-11-13T23:17:06.616Z",
+  "workRecordHash": "0c7f7a2c5c77b33123d9e4456c3136f22c9d80034c0040c45d44c49b8f5e837d",
+  "sourceDigest": "4f9436eed9ef455862a37ded882781eeb35982d7cbed5825d9b41d5aaf47c09c",
+  "criteriaDigest": "d998f4f489816111ad3008a4e9993704a5e993a8285590c68a5770485a2e1b52",
+  "semanticHash": "7f7f34b32ee5cc8d515ab8101da1c7b1a02888c603d3e1527d8979bc1674f1e7",
+  "narrative": null,
+  "work": {
+    "status": "in_progress",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id": "AC-1",
+        "description": "실제 인간 답변과 고정 v1에 결합한 TS28키·86파일쌍만 등록하고 기존 JSON 승인·기존 증거를 보존하며 추가 범위를 자동 승인하지 않는다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-2",
+        "description": "압축 멤버 사전조건과 승인 누락을 구분하고 동작 보존 구조 정리 후 승인된 파일에 공식 dry-run·보존·고정점·source check를 적용하며 남은 차이를 정확한 질문으로 연결한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-3",
+        "description": "명시 활성화한 WWW의 새 작업 revision·새 보고서만 승인된 JSON scalar 열로 생성하고 기존 보고서·무변경 원장을 다시 쓰지 않으며 일반 앱은 BoxBox runtime 설치 없이 동작한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-4",
+        "description": "JSON 의미·순서·escaping·Unicode 폭·행/indent·최종 크기와 hash를 공식 CLI golden 및 writer 통합 검사로 대조하고 현재 타입·빌드·관련 Electron 보고서 동작을 검증한다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      },
+      {
+        "id": "AC-5",
+        "description": "BoxBox 이슈·보고서와 재발 질문 절차에 실제 원인·승인/미승인·적용/미실행을 구분하고 정본 문서 검토·필수 독립 검토·저작 보고서를 남긴다.",
+        "required": true,
+        "result": "unverified",
+        "evidence": []
+      }
+    ],
+    "verifications": [],
+    "reviews": []
+  },
+  "source": {
+    "recordPath": "docs/work/Workflow/012-BoxBox 승인 규칙과 새 JSON 출력/work.json",
+    "workRecordHash": "0c7f7a2c5c77b33123d9e4456c3136f22c9d80034c0040c45d44c49b8f5e837d",
+    "sourceDigest": "4f9436eed9ef455862a37ded882781eeb35982d7cbed5825d9b41d5aaf47c09c",
+    "criteriaDigest": "d998f4f489816111ad3008a4e9993704a5e993a8285590c68a5770485a2e1b52"
+  }
+}

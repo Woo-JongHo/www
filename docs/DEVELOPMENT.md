@@ -8,7 +8,7 @@
 
 이 저장소는 기존 WWW 기능을 계승하지 않고 빈 저장소에서 시작한 Electron 데스크톱 앱이다. 현재 범위는 3열 React 화면에서 로컬 `codex app-server`의 대화·공개 설명·실행 박스·승인·중단·결과를 관찰하고 통제하는 것이다. 레이아웃은 [runkids/skillshare의 herdr/skillshare](https://github.com/runkids/skillshare/tree/main/herdr/skillshare)를 디자인 참고 자료로만 사용했고 코드는 가져오지 않았다.
 
-사용자는 첫 스레드 전 작업 폴더를 고른 뒤 메시지를 보낸다. 앱은 `initialize`/`initialized`, `thread/start`, `turn/start`, `turn/interrupt`를 수행하고 알림을 화면에 투영한다. 명령 실행과 파일 변경을 표시하며, 지원하는 명령/파일 승인 요청에는 원래 JSON-RPC ID(문자열 또는 숫자)를 보존해 응답한다. 그 외 구조화 요청은 임의 결정을 만들지 않고 지원하지 않는 요청으로 표시한다. 계정 로그인이나 자격 증명 저장·전달은 다루지 않는다.
+사용자는 작업 폴더를 고른 뒤 메시지를 보내며 idle 상태에서 최근·즐겨찾기 프로젝트로 전환할 수 있다. 앱은 `initialize`/`initialized`, `thread/start`, `turn/start`, `turn/interrupt`를 수행하고 알림을 화면에 투영한다. 명령 실행과 파일 변경을 표시하며, 지원하는 명령/파일 승인 요청에는 원래 JSON-RPC ID(문자열 또는 숫자)를 보존해 응답한다. 그 외 구조화 요청은 임의 결정을 만들지 않고 지원하지 않는 요청으로 표시한다. 계정 로그인이나 자격 증명 저장·전달은 다루지 않는다.
 
 ## 기술 결정: Electron과 TypeScript
 
@@ -49,6 +49,8 @@ WWW가 소유하는 새 실행 코드·테스트·개발 도구는 TypeScript(`.
 
 typed 진입점은 `build` 또는 `writes`·`deletePaths` 계획이 있는 authoring 실행에서 사전·사후 검사를 수행한다. 코드 수정이 필요한 build는 변경 계획이 필수이며 새 TypeScript는 `writes`, 삭제할 기존 JavaScript·TypeScript는 `deletePaths: string[]`에 선언한다. 내부 legacy 권한 검증에는 두 목록의 합집합을 전달한다. `writes`의 JavaScript 대상과 안전하지 않은 경로는 실행 전에 거부한다. 사후에는 삭제 대상이 실제 없어졌는지와 선언하지 않은 TS·기존 JS·소스 정책·명시 프로젝트 설정 변경도 확인한다. 기존 JavaScript를 수정한 채 남기면 소스 정책 실패다.
 
+managed TypeScript 변경으로 구조 생성물이 달라지는 단위는 `src/architecture.generated.json`도 승인 경로와 `writes`에 포함한다. 이 경우 하네스는 호스트 종료 후 신뢰한 공식 생성기로 갱신하고 구조 사후 검사를 실행한다. 검사 대상 저장소의 임의 생성기를 실행하거나 스냅샷을 손으로 수정하지 않는다. 생성물 쓰기를 선언하지 않은 실행은 기존 현재성 검사를 유지하며 오래된 스냅샷을 통과시키지 않는다.
+
 사전 소스 정책·타입·BoxBox 검사에서 발견한 기존 오류는 호스트의 작성 context로 전달해 수정할 수 있게 하며, 기존 오류 자체로 호스트 실행을 막지 않는다. 로컬 설정 누락, 도구 실행·JSON 파싱 실패와 안전하지 않은 쓰기 계획은 실행 전 실패한다. 사후 소스 정책·타입·BoxBox의 미해결 오류는 전체 하네스의 `harness.ok: false`와 CLI exit 1로 판정한다. 사후 검사 전후의 TS·기존 JS·소스 정책·명시 프로젝트 설정 지문이 달라져도 실패한다. 실행 결과의 `executor`와 `toolExecutor`는 실제 프로세스와 주입 시험을 구분하며, 주입 시험의 성공을 실제 모델 실행으로 보고하지 않는다.
 
 정보 답변·preview·실행 없는 호출은 모델을 실행하지 않으며 검사를 위한 호출이 구현·쓰기·명령 실행 권한을 확대하지 않는다. `verify`·`review`·`read`·`complete`는 기존 core로 위임하며 authoring의 전후 검사를 모든 단계의 gate로 확대하지 않는다. 프로젝트 전체 소스 정책·타입 검사는 `npm run check`에서 별도로 강제한다. 공식 typed 진입점은 `npm run workflow`이며 low-level legacy API는 내부 구현으로 유지한다. 이 경로들은 호스트의 모든 쓰기를 차단하는 OS sandbox를 제공하지 않는다. 작업 완료의 문서 영향 검토와 독립 검토 책임은 [공통 계약](skills/WORKFLOW.md)을 유지한다.
@@ -74,7 +76,7 @@ TypeScript·Python·strict JSON·YAML 작성은 파일별 `guide --file <파일>
 - `src/renderer.tsx`: React 화면
 - `test/`: 가짜 JSONL child transport와 이벤트 투영의 행동 테스트
 
-전송 프레임은 4 MiB로 제한한다. EOF나 오류가 나면 대기 요청을 실패시키며, 결과가 불확실한 변경 요청을 자동 재시도하지 않는다. 이벤트는 메모리에서 최근 2,000개만 보관하고 개인 원장을 파일로 쓰지 않는다.
+전송 프레임은 4 MiB로 제한한다. EOF나 오류가 나면 대기 요청을 실패시키며, 결과가 불확실한 변경 요청을 자동 재시도하지 않는다. 원본 이벤트는 메모리에서 최근 2,000개만 보관한다. main 단일 소유자가 앱 userData에 프로젝트 인덱스와 최소 리소스 관측 메타데이터를 원자 저장하며 본문·명령·출력·reasoning을 저장하지 않는다. 저장 한도·오류·coverage와 revision은 성공 여부를 분리해 표시한다. 계약은 [Chat 명세](specs/chat.md)를 따른다.
 
 ## 제외한 기능과 Skills 정책
 
@@ -129,7 +131,7 @@ node scripts/workflow/work.ts '{"action":"read","workId":"work-d5528c42-2849-48b
 
 런타임 세션 `done`은 작업의 `work.json` 완료가 아니다. verifier의 기준 매핑은 호출자가 지정한 검사 범위이며 최종 수용은 검증 기록과 대조한다. 원본 요청·컨텍스트·verifier argv는 사건에 남기지 않으며, Skill hash와 승인 범위·명령 hash·실제 exit를 기록한다. 상세 한계와 테스트는 해당 작업의 [재검증 기록](work/Workflow/001-Skills%20실행과%20개발%20기록%20자동화/verification.md)에 있다.
 
-장기 제품 방향은 별도 브라우저 UI가 아닌 하나의 WWW 데스크톱 앱에서 shared React view와 로컬 Codex 실행·승인을 제공하고, 이후 GitHub의 코드·구조화 기록을 Mac mini가 지정 브랜치별로 검증·색인해 Roadmap/Node/Canvas API 보기를 제공하는 것이다. 이는 목표 설계이며 현재 제품은 메모리 전용이고 서버 통합이 없다. 정식 데스크톱 기반은 위 결정에 따라 Electron과 TypeScript다. push 성공과 서버의 commit 색인은 별개이며 원격 실행·소스 동기화는 범위 밖이다.
+장기 제품 방향은 별도 브라우저 UI가 아닌 하나의 WWW 데스크톱 앱에서 shared React view와 로컬 Codex 실행·승인을 제공하고, 이후 GitHub의 코드·구조화 기록을 Mac mini가 지정 브랜치별로 검증·색인해 Roadmap/Node/Canvas API 보기를 제공하는 것이다. 서버 통합은 없으며 현재 로컬 저장은 Native 대화 원장과 WWW의 프로젝트·리소스 메타데이터로 구분한다. 정식 데스크톱 기반은 위 결정에 따라 Electron과 TypeScript다. push 성공과 서버의 commit 색인은 별개이며 원격 실행·소스 동기화는 범위 밖이다.
 
 ## 샌드박스 한계
 
@@ -230,6 +232,8 @@ renderer는 초기 bootstrap과 대화 전환 전에 활동 snapshot 경계를 �
 
 저자는 [작업 종료 보고서 계약](skills/REPORTS.md)에 따라 work CLI의 report action으로 서술을 저장한다. reports 서비스·sandbox iframe·독립 HTML은 같은 구조화 데이터를 사용한다. 개발 역할의 core·하네스 사건이 자동 기록을 만들며 전역 호스트 Stop 등록은 전제하지 않는다. 보고서 생성에 실패한 reportHook 결과를 검사 성공으로 숨기지 않는다.
 
+보고서 서비스의 작업 탐색, 호스트 예외의 `requestId` 회수, Native 기존 작업 재사용은 `reports.ts`의 공통 `WORK_RECORD_JSON_LIMIT`으로 `work.json`에 8 MiB 읽기 상한을 적용한다. 보고서 JSON 읽기·생성은 1 MiB, HTML 생성은 2 MiB 상한을 유지하며, 원장과 보고서의 정규 파일·심볼릭 링크 거부·JSON 검증 경계도 유지한다. 상한을 넘은 원장은 보고서 목록에서 경고와 함께 제외하고, 접수 ID 회수에서는 건너뛰며, Native 등록에서는 저장 실패로 거부한다. 기존 이력을 줄여 우회하지 않는다.
+
 집중 검사 위치는 test/workflow-reports.test.ts, test/report-service.test.ts, test/workflow-work.test.ts, test/workflow-development.test.ts다. scripts/verify-reports.ts는 실제 Electron과 합성 Native로 리포트 IPC·화면 전환을 확인한다. 보고서 HTML은 좁은 화면·키보드·모션 축소·인쇄를 별도로 확인한다.
 
 Native 자동 보고서의 집중 검사는 test/native-report-input.test.ts, test/native-reports.test.ts, test/report-judge.test.ts다. 실제 별도 subprocess 프로토콜·판단 거부·타임아웃·취소·큐·중복·재시작을 검사한다. scripts/verify-reports.ts는 실제 Electron에서 합성 Native 종료→합성 판단 subprocess→저장→sandbox iframe 표시를 확인한다. 실제 모델의 필요/생략 판단은 별도 실행 증거로 구분하며 합성 실행으로 판단 품질을 입증하지 않는다. probe에서는 자동 판단이 기본으로 꺼지고 WWW_PROBE_NATIVE_REPORTS=1일 때만 켠다. 판단 바이너리 주입은 probe 모드에서만 허용한다.
@@ -272,8 +276,40 @@ HookRunSummary의 statusMessage와 entries 중 error/warning/stop만 제한된 �
 
 ## 코드 설계도 생성과 검사
 
-`node scripts/generate-architecture.ts`는 현재 WWW TypeScript의 실제 모듈 참조와 파일·행·원문·내용 해시를 `src/architecture.generated.json`에 생성한다. `--check`는 소스를 바꾸지 않고 생성 자료가 현재 소스와 일치하는지 확인한다. `npm run build`는 번들 전에 같은 생성을 수행한다. 생성 JSON을 손으로 수정하지 않는다. 분석 범위·제외와 수동 계층 분류는 [코드 설계도](CODE_BLUEPRINT.md)에 설명한다.
+`node scripts/generate-architecture.ts`는 현재 WWW TypeScript의 실제 모듈 참조와 파일·행·원문·내용 해시를 `src/architecture.generated.json`에 생성한다. `--check`는 소스를 바꾸지 않고 생성 자료가 현재 소스와 일치하는지 확인한다. `npm run build`는 번들 전에 같은 생성을 수행한다. 생성 JSON을 손으로 수정하지 않는다. 구조 ID 계약·등록 검사·분석 범위와 한계는 [코드 설계도](CODE_BLUEPRINT.md)에 설명한다.
 
-코드 편집 후에는 생성 명령, `bun test test/architecture.test.ts test/ecosystem.test.ts`, `npm run typecheck`, `npm run build`를 실행한다. `node scripts/verify-architecture.ts`는 빌드된 실제 Electron에 CDP로 연결해 기본 계층 개요·검색·필터·키보드·참조 근거·배율·좁은 화면을 검사하고 `.www/evidence/architecture-*`에 JSON과 PNG를 남긴다. 먼저 현재 소스 snapshot을 대조하므로 편집 후 재생성을 생략하면 실패한다. `node scripts/verify-ecosystem.ts`는 별도 생태계 안내와 기존 대화 초안·읽기 위치 보존을 확인한다. Native는 합성 fixture이며 실제 모델·계정 검증과 구분한다.
+코드 편집 후에는 생성 명령, `bun test test/architecture.test.ts test/architecture-tree.test.ts test/architecture-contract.test.ts test/architecture-harness.test.ts test/ecosystem.test.ts`, `npm run typecheck`, `npm run build`를 실행한다. `node scripts/verify-architecture.ts`는 빌드된 실제 Electron에 CDP로 연결해 정본 root 직계 자식·3단계 branch/leaf 선택·요구 ID 검색·ancestor 복귀·실제 키보드·참조 근거·배율·drag·860/760px 좁은 화면을 검사하고 `.www/evidence/architecture-*`에 JSON과 PNG를 남긴다. 먼저 현재 소스 snapshot을 대조하므로 편집 후 재생성을 생략하면 실패한다. `node scripts/verify-ecosystem.ts`는 별도 생태계 안내와 기존 대화 초안·읽기 위치 보존을 확인한다. Native는 합성 fixture이며 실제 모델·계정 검증과 구분한다.
 
 GUI 프로세스와 루프백 디버깅 포트를 허용하는 데스크톱 실행 환경이 필요하다. 포트·프로세스 권한이 제한된 자식 샌드박스에서 실패하면 해당 원문과 증거 경로를 보존하고 허용된 부모 실행 환경에서 검사를 이어간다. 정적 테스트·타입 검사만으로 Electron 시나리오를 통과했다고 기록하지 않는다.
+
+
+구조 변경 시 `docs/architecture/structure.json`의 안정 ID·단일 부모와 정확한 허용 의존을 갱신한다. 파일 이동 시 책임이 같으면 ID를 유지하고 새 구현 파일은 실제 선행 JSDoc에 구조 ID와 요구 ID를 선언한다. 같은 책임의 여러 파일 등록도 허용한다. 새 요구는 `docs/specs/architecture.md` catalog에 추가하고 실제 테스트에 검증 선언을 연결한 뒤 공식 generator로 snapshot을 갱신한다. JSON을 손으로 꾸미거나 미등록 fallback을 두지 않는다.
+
+`npm run check:architecture`와 전체 check는 계약 오류·stale 지도를 읽기 전용으로 차단한다. typed 저작 하네스도 사전 계약 관찰과 사후 실패를 연결하며 같은 invocation에서 등록 표식을 삭제해도 검사를 생략하지 않는다. 검사는 매번 신뢰된 하네스 설치 위치의 checker/generator를 별도 프로세스에서 읽고 대상 root를 명시적으로 전달한다. 저작 전 import cache나 검사 대상 저장소의 checker를 실행하지 않으며 주입 runCommand도 이 검사를 대신하지 않는다. 기존 source 정책·strict 타입·파일별 BoxBox 검사는 유지한다. 선언 연결의 존재는 테스트 실행 결과가 아니며 GUI 검증은 실제 Electron 실행 증거가 필요하다.
+
+### 생성 snapshot의 개발용 BoxBox 설치 계약
+
+코드 설계도 snapshot은 개발·빌드 시 설치된 BoxBox 공개 CLI로 canonical 직렬화한다. 앱 runtime이나 work/report writer의 의존성이 아니다. 새 머신에서는 BoxBox 설치, 기존 프로젝트 JSON 승인 근거 복구, `.www/development.local.json` 설정이 먼저 필요하다. 설치가 없거나 설정·승인 근거가 어긋나면 생성·check·build가 실패하며 다른 직렬화로 대체하지 않는다.
+
+기존 `boxboxNode`·`boxboxLauncher`를 유지하고 같은 로컬 설정에 `architectureCanonical` 객체를 추가한다. `runtime`은 설치 launcher의 상위 `runtime.json`, `cli`는 그 runtime의 실제 `cli` 경로다. `cliSha256`은 그 공개 CLI 파일의 SHA-256, `version`은 설치 package.json의 버전, `nodeVersion`은 고정 Node의 `--version` 출력이다. 이 값은 머신 설치를 직접 확인해 명시적으로 설정한다. 경로·Node 패치·승인 SHA를 제품 소스에 고정하지 않는다. generator는 launcher/runtime 연결, runtime의 node/cli, 실제 Node 버전, package 버전과 CLI SHA를 대조한다.
+
+`architectureCanonical.registry`에는 기존 `.boxbox/examples.jsonl`, `.boxbox/conventions.jsonl`, `.boxbox/decisions.jsonl`, `.boxbox/rules/json-scalar-fields.md` 네 파일의 전체 SHA-256만 넣는다. 새 승인 기록을 만들어 채우는 절차가 아니다. 실제 승인 변경 후에는 변경 이유와 원래 승인 증거를 확인하고 네 파일을 다시 읽어 로컬 pin을 갱신한다. TS 승인 추가도 공유 JSONL 전체 SHA를 바꾸므로 `승인 근거가 바뀌었습니다` 오류가 날 수 있다. 이 경우 JSON 승인이 새로 필요하다고 추측하거나 검증을 생략하지 않고 승인 이력과 설치·설정을 대조한다.
+
+write/check는 동일 논리경로 `src/architecture.generated.json`의 격리된 staging에서 공식 `align --dry-run`, `align`, 재차 `align`의 바이트 fixed point, `check --source`를 사용한다. JSON 프로젝트 승인 proof와 syntax valid, misaligned/refused 0, 값·속성 순서 보존을 모두 확인한다. check는 최종 파일을 쓰지 않고 write는 모든 검사 후 atomic rename한다. 실패·stale·도구 누락·승인 drift에서는 원본이 유지된다. 외부 프로세스의 마지막 순간 쓰기를 OS compare-and-swap으로 직렬화하지는 않으므로 검사 중 다른 저작·빌드로 snapshot을 바꾸지 않는다.
+
+### 새 작업·보고서 JSON 최초 출력
+
+`docs/architecture/work-output.json`의 version 1 정책은 `boxbox-scalar-columns-v1`, `docs/work/**/*.json`, 실제 답변 참조 `approvalRef`만 받는다. 정책 부재는 다른 저장소의 기존 plain JSON 출력을 유지한다. 잘못된 값·추가 필드·정책 경로의 심볼릭 링크는 저장 전에 실패한다. `approvalRef`는 결정의 참고 위치이며 런타임 승인 생성이나 승인 원본 검사 기능이 아니다.
+
+`scripts/workflow/work-json.ts`는 새 WorkRecord revision·신규 WorkReport 의미 객체만 처음 직렬화한다. JSON.stringify를 한 번 실행한 fresh 데이터에서 native escaping·속성 순서·생략·배열 null·오류 의미를 유지하며 같은 객체의 연속 scalar 세 행 이상만 인코딩된 key의 공식 폭으로 출력한다. 런타임에 BoxBox CLI·registry·설치 설정은 필요하지 않다. 공식 CLI와의 바이트 golden은 개발 검증이다. 기존 report, read/list/dedupe, 실제 변화 없는 원장은 다시 쓰지 않는다. work 반환의 `rawSource`는 저장 원문이며 검증 대상 snapshot인 `source`와 구분한다. 신규 보고서는 최종 padding을 포함한 JSON 1 MiB·HTML 2 MiB 검사 후 게시한다. `.www` 사건·session·Native job metadata와 구조 snapshot의 개발용 공식 CLI 생성 경로는 각자의 기존 계약을 유지한다.
+
+### BoxBox 재발 시 질문과 실행 순서
+
+먼저 기존 proof와 실제 답변·고정 제안의 SHA를 확인한다. 전체 파일의 `check --source`에서 SUGGEST 구조 사전조건, unsupported/REFUSE, 정확 key/file 승인 누락, 도구 오류를 나눠 기록한다. 승인된 Write 범위의 압축 멤버 등 구조 정리를 먼저 수행한 뒤 다시 검사한다. 새 승인이 필요한 경우 고정 positive/counterexample과 정확 key·파일의 기존 승인 대비 delta만 질문한다. 실제 answer 참조를 보존하고 백업·등록 후 whole-file proof가 완전한 파일에만 공식 dry-run → Align → 보존 확인 → fixed point → source check를 적용한다. NO_GROUPS는 source/native 대조로 기록하며 Align 거부를 통과로 쓰지 않는다.
+
+이미 승인한 v1을 재질문하거나 JSON을 중복 승인하지 않는다. 같은 key의 다른 파일도 자동 확대하지 않는다. 미승인 TS shape는 원문을 유지하고 delta로 남긴다. 이 저장소 변경은 설치본·전역 Skill 배포를 뜻하지 않는다. 실제 통합 테스트는 성능 기준과 실행 budget을 구분한다. `architecture-harness.test.ts`의 canonical generator·공식 CLI 왕복은 일반 통합 사례에 60초, 기존 장기 subprocess 사례에 120초를 주며 실제 시간과 실패 원문을 함께 기록한다.
+
+
+개발 검증 `bun test test/work-json.test.ts --timeout 300000`은 현재 저장소 승인 문서에서 v1 28키·86쌍을 도출하여 공개 guide proof와 대조하고, 고정 Git 기준점의 JSON 승인 bytes를 확인한다. 격리 복사본에서 현재 승인 소스의 dry-run·Align·재Align·source check, 실제 양성 쓰기와 범위 밖·압축 구조 거부를 새로 실행한다. 도메인 writer는 fresh WorkRecord와 생성한 WorkReport를 `canonicalArchitectureJson`의 공개 pinned CLI 출력과 byte 단위로 비교한다. 로컬 개발 설치가 필요하며 과거 영수증이나 artifact hash만으로 의미 검사를 대신하지 않는다. v3 고정 제안·질문은 미승인 자료로 읽고 현재 source와 다른 key/file은 별도 addendum으로 출력한다.
+
+`node scripts/verify-reports.ts`는 strict 검사 다음 위 실도구 테스트를 직렬로 실행하고 실패를 전파한 뒤 관련 집중 검사·빌드·Electron probe를 수행한다. 실도구 테스트별 예산은 300초, 전체 의미 테스트 자식 실행 예산은 900초다. runtime fixture의 개발 설정 부재, package runtime 의존성 및 main/preload/renderer bundle의 개발 CLI 경로 부재를 확인하고 Electron child PATH에는 Node와 git만 노출한다. 이 경계는 머신 전역 BoxBox 설치 제거를 뜻하지 않는다. 기존 fixture 보고서 bytes·legacy 원장 bytes/inode/mtime·no-op 원장의 재기록 여부를 실측하며, GUI 시작 실패는 원문과 prechecks를 보존하고 미확인으로 남긴다.

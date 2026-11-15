@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "4152d41fd928f2f253794a5779cf511cde9b2a1afe2b093583b4c13a73e6abd2",
+  "digest"       : "b16d375a1903543212bcb3fcf5ccfc7396b506a00db3b9373b5559f04490f83c",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -191,8 +191,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · preflight",
       "line"       : 1,
-      "lines"      : 194,
-      "digest"     : "1b8ca174c938e40da2a6f44e2592127901d99ec27c19a3fca6ed1557366471f9",
+      "lines"      : 218,
+      "digest"     : "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
       "structureId": "arch.development.authorization"
     },
     {
@@ -213,8 +213,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · report-lifecycle",
       "line"       : 1,
-      "lines"      : 174,
-      "digest"     : "b1f075c0e5fcbc7a85232cd99fbfd6818f7272df99da453bd9a8fa8f1daa4a23",
+      "lines"      : 181,
+      "digest"     : "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
       "structureId": "arch.development.reporting.lifecycle"
     },
     {
@@ -235,8 +235,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · reports",
       "line"       : 1,
-      "lines"      : 628,
-      "digest"     : "b25a2ab2748970a4d4d2e6738535489e12e7328bf9d281f3475345318392457b",
+      "lines"      : 630,
+      "digest"     : "4578f648bc31e0eee001a7d9190e5c28534b88c1145d99bc2a1ad22468bb68c6",
       "structureId": "arch.development.reporting.storage"
     },
     {
@@ -290,9 +290,20 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · types",
       "line"       : 1,
-      "lines"      : 153,
-      "digest"     : "c835dc8a43dff458e0820072da6d98dc9932254b8f5a604dd4016d4638793bf0",
+      "lines"      : 154,
+      "digest"     : "c5fc097e1eb40b0d22babdc3469cdd9850b7554ddeb4e37ff3904a30b1e2b276",
       "structureId": "arch.development.records.protocol"
+    },
+    {
+      "id"         : "scripts/workflow/work-json.ts",
+      "file"       : "scripts/workflow/work-json.ts",
+      "title"      : "work-json",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · work-json",
+      "line"       : 1,
+      "lines"      : 66,
+      "digest"     : "bbee7cd5ea38ccce553d1bd6dc7dd9579769f352ee82f47637ab12cd61559260",
+      "structureId": "arch.development.records.serialization"
     },
     {
       "id"         : "scripts/workflow/work.ts",
@@ -301,8 +312,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · work",
       "line"       : 1,
-      "lines"      : 415,
-      "digest"     : "659ef56fa8b73bef462b55adecf2b96fc5d6130bd46833e58712b25d0120fccb",
+      "lines"      : 424,
+      "digest"     : "08ef28924b28a1159a05f52871093a485e816f05ba08c863e3582bad42091a3c",
       "structureId": "arch.development.records.state"
     },
     {
@@ -532,8 +543,8 @@
       "layer"      : "host",
       "role"       : "자동 보고서 큐와 수명주기",
       "line"       : 1,
-      "lines"      : 509,
-      "digest"     : "32ae666fe6e40273a592af56ac4ed680f933dc6400d536876ad4b7ae50c21237",
+      "lines"      : 513,
+      "digest"     : "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
       "structureId": "arch.reports.queue"
     },
     {
@@ -836,7 +847,7 @@
       "statement": "import { assertWorkId }              from \"./preflight.ts\";"
     },
     {
-      "id"       : "scripts/workflow/report-lifecycle.ts:228",
+      "id"       : "scripts/workflow/report-lifecycle.ts:240",
       "from"     : "scripts/workflow/report-lifecycle.ts",
       "to"       : "scripts/workflow/work.ts",
       "mode"     : "mixed",
@@ -844,28 +855,50 @@
       "specifier": "./work.ts",
       "line"     : 8,
       "endLine"  : 8,
-      "statement": "import { assessWork, completeWork, readWork, type WorkAssessment, type WorkOptions } from \"./work.ts\";"
+      "statement": "import { assessWork, completeWork, readWork, type WorkAssessment, type WorkOptions, type WorkLocation } from \"./work.ts\";"
     },
     {
-      "id"       : "scripts/workflow/report-lifecycle.ts:331",
+      "id"       : "scripts/workflow/report-lifecycle.ts:362",
+      "from"     : "scripts/workflow/report-lifecycle.ts",
+      "to"       : "scripts/workflow/work-json.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./work-json.ts",
+      "line"     : 9,
+      "endLine"  : 9,
+      "statement": "import { serializeWorkRecord } from \"./work-json.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/report-lifecycle.ts:416",
+      "from"     : "scripts/workflow/report-lifecycle.ts",
+      "to"       : "scripts/workflow/preflight.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./preflight.ts",
+      "line"     : 10,
+      "endLine"  : 10,
+      "statement": "import { workOutputColumns } from \"./preflight.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/report-lifecycle.ts:468",
       "from"     : "scripts/workflow/report-lifecycle.ts",
       "to"       : "scripts/workflow/lock.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./lock.ts",
-      "line"     : 9,
-      "endLine"  : 9,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { withWorkLock } from \"./lock.ts\";"
     },
     {
-      "id"       : "scripts/workflow/report-lifecycle.ts:373",
+      "id"       : "scripts/workflow/report-lifecycle.ts:510",
       "from"     : "scripts/workflow/report-lifecycle.ts",
       "to"       : "scripts/workflow/reports.ts",
       "mode"     : "mixed",
       "syntax"   : "import",
       "specifier": "./reports.ts",
-      "line"     : 10,
-      "endLine"  : 10,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { captureWorkReport, listWorkReports, parseReportReader, publishWorkReport, readWorkReport, WORK_RECORD_JSON_LIMIT, type ReportNarrative } from \"./reports.ts\";"
     },
     {
@@ -882,34 +915,45 @@
     {
       "id"       : "scripts/workflow/reports.ts:312",
       "from"     : "scripts/workflow/reports.ts",
+      "to"       : "scripts/workflow/work-json.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./work-json.ts",
+      "line"     : 9,
+      "endLine"  : 9,
+      "statement": "import { serializeWorkReport } from \"./work-json.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/reports.ts:366",
+      "from"     : "scripts/workflow/reports.ts",
       "to"       : "scripts/workflow/preflight.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./preflight.ts",
-      "line"     : 9,
-      "endLine"  : 9,
-      "statement": "import { assertWorkId } from \"./preflight.ts\";"
+      "line"     : 10,
+      "endLine"  : 10,
+      "statement": "import { assertWorkId, workOutputColumns } from \"./preflight.ts\";"
     },
     {
-      "id"       : "scripts/workflow/reports.ts:359",
+      "id"       : "scripts/workflow/reports.ts:432",
       "from"     : "scripts/workflow/reports.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line"     : 10,
-      "endLine"  : 10,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { captureSource, criteriaDigest } from \"./evidence.ts\";"
     },
     {
-      "id"       : "scripts/workflow/reports.ts:422",
+      "id"       : "scripts/workflow/reports.ts:495",
       "from"     : "scripts/workflow/reports.ts",
       "to"       : "scripts/workflow/report-view.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./report-view.ts",
-      "line"     : 11,
-      "endLine"  : 11,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { renderReportDocument } from \"./report-view.ts\";"
     },
     {
@@ -1166,6 +1210,28 @@
       "statement": "import type { RepositoryCheckStatus } from './consistency.ts';"
     },
     {
+      "id"       : "scripts/workflow/work-json.ts:118",
+      "from"     : "scripts/workflow/work-json.ts",
+      "to"       : "scripts/workflow/types.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./types.ts",
+      "line"     : 5,
+      "endLine"  : 5,
+      "statement": "import type { WorkRecord } from \"./types.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/work-json.ts:164",
+      "from"     : "scripts/workflow/work-json.ts",
+      "to"       : "scripts/workflow/reports.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./reports.ts",
+      "line"     : 6,
+      "endLine"  : 6,
+      "statement": "import type { WorkReport } from \"./reports.ts\";"
+    },
+    {
       "id"       : "scripts/workflow/work.ts:270",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/schema.ts",
@@ -1185,105 +1251,116 @@
       "specifier": "./preflight.ts",
       "line"     : 10,
       "endLine"  : 10,
-      "statement": "import { findWorkRecord, resolveInside, validateWritePaths } from \"./preflight.ts\";"
+      "statement": "import { findWorkRecord, resolveInside, validateWritePaths, workOutputColumns } from \"./preflight.ts\";"
     },
     {
-      "id"       : "scripts/workflow/work.ts:446",
+      "id"       : "scripts/workflow/work.ts:465",
+      "from"     : "scripts/workflow/work.ts",
+      "to"       : "scripts/workflow/work-json.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./work-json.ts",
+      "line"     : 11,
+      "endLine"  : 11,
+      "statement": "import { serializeWorkRecord } from \"./work-json.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/work.ts:519",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/route.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./route.ts",
-      "line"     : 11,
-      "endLine"  : 11,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { hashRequest, normalizeApproval } from \"./route.ts\";"
     },
     {
-      "id"       : "scripts/workflow/work.ts:507",
+      "id"       : "scripts/workflow/work.ts:580",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line"     : 12,
-      "endLine"  : 12,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import { captureSource, criteriaDigest, evaluateEvidence, renderAttempt, verify } from \"./evidence.ts\";"
     },
     {
-      "id"       : "scripts/workflow/work.ts:611",
+      "id"       : "scripts/workflow/work.ts:684",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/review.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./review.ts",
-      "line"     : 13,
-      "endLine"  : 13,
+      "line"     : 14,
+      "endLine"  : 14,
       "statement": "import { loadReviewPolicy, validateReview } from \"./review.ts\";"
     },
     {
-      "id"       : "scripts/workflow/work.ts:675",
+      "id"       : "scripts/workflow/work.ts:748",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/lock.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./lock.ts",
-      "line"     : 14,
-      "endLine"  : 14,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import { withWorkLock, inspectWorkLock, recoverWorkLock } from \"./lock.ts\";"
     },
     {
-      "id"       : "scripts/workflow/work.ts:751",
+      "id"       : "scripts/workflow/work.ts:824",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/consistency.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./consistency.ts",
-      "line"     : 15,
-      "endLine"  : 15,
+      "line"     : 16,
+      "endLine"  : 16,
       "statement": "import { checkRepository, assessRepositoryCheck } from \"./consistency.ts\";"
     },
     {
-      "id"       : "scripts/workflow/work.ts:826",
+      "id"       : "scripts/workflow/work.ts:899",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/documentation.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./documentation.ts",
-      "line"     : 16,
-      "endLine"  : 16,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import { createDocumentationReview, assessDocumentation } from \"./documentation.ts\";"
     },
     {
-      "id"       : "scripts/workflow/work.ts:911",
+      "id"       : "scripts/workflow/work.ts:984",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/types.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./types.ts",
-      "line"     : 17,
-      "endLine"  : 17,
+      "line"     : 18,
+      "endLine"  : 18,
       "statement": "import type { CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions } from './types.ts';"
     },
     {
-      "id"       : "scripts/workflow/work.ts:1070",
+      "id"       : "scripts/workflow/work.ts:1143",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/documentation.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./documentation.ts",
-      "line"     : 18,
-      "endLine"  : 18,
+      "line"     : 19,
+      "endLine"  : 19,
       "statement": "import type { DocumentationReview } from './documentation.ts';"
     },
     {
-      "id"       : "scripts/workflow/work.ts:1133",
+      "id"       : "scripts/workflow/work.ts:1206",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/types.ts",
       "mode"     : "type",
       "syntax"   : "export",
       "specifier": "./types.ts",
-      "line"     : 19,
-      "endLine"  : 19,
+      "line"     : 20,
+      "endLine"  : 20,
       "statement": "export type { WorkRecord, WorkLocation, WorkAssessment, WorkOptions } from './types.ts';"
     },
     {
@@ -1707,34 +1784,67 @@
     {
       "id"       : "src/native-reports.ts:215",
       "from"     : "src/native-reports.ts",
+      "to"       : "scripts/workflow/work-json.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "../scripts/workflow/work-json.ts",
+      "line"     : 8,
+      "endLine"  : 8,
+      "statement": "import { serializeWorkRecord } from \"../scripts/workflow/work-json.ts\";"
+    },
+    {
+      "id"       : "src/native-reports.ts:287",
+      "from"     : "src/native-reports.ts",
+      "to"       : "scripts/workflow/preflight.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "../scripts/workflow/preflight.ts",
+      "line"     : 9,
+      "endLine"  : 9,
+      "statement": "import { workOutputColumns } from \"../scripts/workflow/preflight.ts\";"
+    },
+    {
+      "id"       : "src/native-reports.ts:357",
+      "from"     : "src/native-reports.ts",
+      "to"       : "scripts/workflow/types.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "../scripts/workflow/types.ts",
+      "line"     : 10,
+      "endLine"  : 10,
+      "statement": "import type { WorkRecord } from \"../scripts/workflow/types.ts\";"
+    },
+    {
+      "id"       : "src/native-reports.ts:421",
+      "from"     : "src/native-reports.ts",
       "to"       : "scripts/workflow/lock.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "../scripts/workflow/lock.ts",
-      "line"     : 8,
-      "endLine"  : 8,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { withWorkLock } from \"../scripts/workflow/lock.ts\";"
     },
     {
-      "id"       : "src/native-reports.ts:275",
+      "id"       : "src/native-reports.ts:481",
       "from"     : "src/native-reports.ts",
       "to"       : "scripts/workflow/reports.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "../scripts/workflow/reports.ts",
-      "line"     : 9,
-      "endLine"  : 9,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { parseReportReader, publishWorkReport, WORK_RECORD_JSON_LIMIT } from \"../scripts/workflow/reports.ts\";"
     },
     {
-      "id"       : "src/native-reports.ts:386",
+      "id"       : "src/native-reports.ts:592",
       "from"     : "src/native-reports.ts",
       "to"       : "src/report-judge.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./report-judge",
-      "line"     : 10,
-      "endLine"  : 10,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import type { NativeReportDecision, NativeReportInput } from \"./report-judge\";"
     },
     {
@@ -2937,6 +3047,7 @@
           "arch.development.records.lock",
           "arch.development.records.state",
           "arch.development.reporting.storage",
+          "arch.development.records.serialization",
           "arch.development.authorization"
         ]
       },
@@ -2957,7 +3068,8 @@
         "allowedDependencies": [
           "arch.development.authorization",
           "arch.development.evidence.verification",
-          "arch.development.reporting.document"
+          "arch.development.reporting.document",
+          "arch.development.records.serialization"
         ]
       },
       {
@@ -3030,7 +3142,8 @@
           "arch.development.records.protocol",
           "arch.development.records.validation",
           "arch.development.review",
-          "arch.development.routing"
+          "arch.development.routing",
+          "arch.development.records.serialization"
         ]
       },
       {
@@ -3216,6 +3329,7 @@
           "arch.development.records.lock",
           "arch.development.reporting.storage",
           "arch.reports.judgement",
+          "arch.development.records.serialization",
           "arch.development.authorization",
           "arch.development.records.protocol"
         ]
@@ -3310,6 +3424,16 @@
         "title"      : "WWW 작업 산출물 식별",
         "description": "WWW 작업 산출물 식별의 입력·상태·결과를 소유한다.",
         "allowedDependencies": []
+      },
+      {
+        "id"         : "arch.development.records.serialization",
+        "parent"     : "arch.development.records",
+        "title"      : "새 작업과 보고서 JSON 출력",
+        "description": "새 의미 객체를 최초 직렬화하고 승인된 scalar 열을 생성한다.",
+        "allowedDependencies": [
+          "arch.development.records.protocol",
+          "arch.development.reporting.storage"
+        ]
       }
     ],
     "requirements": [
@@ -3332,13 +3456,22 @@
         "line"                  : 15
       },
       {
+        "id"                    : "RESP-DEVELOPMENT-RECORDS-SERIALIZATION",
+        "nodeId"                : "arch.development.records.serialization",
+        "description"           : "새 작업 revision과 신규 보고서의 최초 JSON 출력에서 native 의미와 승인된 scalar 열을 보존한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 22
+      },
+      {
         "id"                    : "RESP-TOOLING-BUNDLE",
         "nodeId"                : "arch.tooling.bundle",
         "description"           : "앱 번들 생성 책임을 구현하고 관련 동작을 검증한다.",
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 22
+        "line"                  : 29
       },
       {
         "id"                    : "RESP-TOOLING-STRUCTURE-CONTRACT",
@@ -3347,7 +3480,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 29
+        "line"                  : 36
       },
       {
         "id"                    : "RESP-TOOLING-MAP-VALIDATION",
@@ -3356,7 +3489,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 36
+        "line"                  : 43
       },
       {
         "id"                    : "RESP-TOOLING-MAP-GENERATION",
@@ -3365,7 +3498,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 43
+        "line"                  : 50
       },
       {
         "id"                    : "RESP-TOOLING-SOURCE-POLICY",
@@ -3374,7 +3507,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 50
+        "line"                  : 57
       },
       {
         "id"                    : "RESP-DEVELOPMENT-AUTHORING",
@@ -3383,7 +3516,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 57
+        "line"                  : 64
       },
       {
         "id"                    : "RESP-DEVELOPMENT-PROVIDERS-CODEX",
@@ -3392,7 +3525,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 64
+        "line"                  : 71
       },
       {
         "id"                    : "RESP-DEVELOPMENT-PROVIDERS-GJC",
@@ -3401,7 +3534,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 71
+        "line"                  : 78
       },
       {
         "id"                    : "RESP-DEVELOPMENT-PROVIDERS-INVOCATION",
@@ -3410,7 +3543,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 78
+        "line"                  : 85
       },
       {
         "id"                    : "RESP-DEVELOPMENT-EVIDENCE-REPOSITORY",
@@ -3419,7 +3552,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 85
+        "line"                  : 92
       },
       {
         "id"                    : "RESP-DEVELOPMENT-EVIDENCE-DOCUMENTATION",
@@ -3428,7 +3561,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 92
+        "line"                  : 99
       },
       {
         "id"                    : "RESP-DEVELOPMENT-EVIDENCE-VERIFICATION",
@@ -3437,7 +3570,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 99
+        "line"                  : 106
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-LOCK",
@@ -3446,7 +3579,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 106
+        "line"                  : 113
       },
       {
         "id"                    : "RESP-DEVELOPMENT-AUTHORIZATION",
@@ -3455,7 +3588,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 113
+        "line"                  : 120
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-EVENTS",
@@ -3464,7 +3597,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 120
+        "line"                  : 127
       },
       {
         "id"                    : "RESP-DEVELOPMENT-REPORTING-LIFECYCLE",
@@ -3473,7 +3606,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 127
+        "line"                  : 134
       },
       {
         "id"                    : "RESP-DEVELOPMENT-REPORTING-DOCUMENT",
@@ -3482,7 +3615,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 134
+        "line"                  : 141
       },
       {
         "id"                    : "RESP-DEVELOPMENT-REPORTING-STORAGE",
@@ -3491,7 +3624,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 141
+        "line"                  : 148
       },
       {
         "id"                    : "RESP-DEVELOPMENT-REVIEW",
@@ -3500,7 +3633,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 148
+        "line"                  : 155
       },
       {
         "id"                    : "RESP-DEVELOPMENT-ROUTING",
@@ -3509,7 +3642,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 155
+        "line"                  : 162
       },
       {
         "id"                    : "RESP-DEVELOPMENT-EXECUTION",
@@ -3518,7 +3651,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 162
+        "line"                  : 169
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-VALIDATION",
@@ -3527,7 +3660,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 169
+        "line"                  : 176
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-PROTOCOL",
@@ -3536,7 +3669,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 176
+        "line"                  : 183
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-STATE",
@@ -3545,7 +3678,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 183
+        "line"                  : 190
       },
       {
         "id"                    : "RESP-CHAT-ACTIVITY-CATALOG",
@@ -3554,7 +3687,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 190
+        "line"                  : 197
       },
       {
         "id"                    : "RESP-BLUEPRINT-LAYOUT",
@@ -3563,7 +3696,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 197
+        "line"                  : 204
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-MARKDOWN",
@@ -3572,7 +3705,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 204
+        "line"                  : 211
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-READING",
@@ -3581,7 +3714,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 211
+        "line"                  : 218
       },
       {
         "id"                    : "RESP-CHAT-SESSIONS-READING",
@@ -3590,7 +3723,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 218
+        "line"                  : 225
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-EXECUTION",
@@ -3599,7 +3732,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 225
+        "line"                  : 232
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-PREVIEW",
@@ -3608,7 +3741,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 232
+        "line"                  : 239
       },
       {
         "id"                    : "RESP-CHAT-SESSIONS-RESTORE",
@@ -3617,7 +3750,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 239
+        "line"                  : 246
       },
       {
         "id"                    : "RESP-DEVELOPMENT-SERVICE",
@@ -3626,7 +3759,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 246
+        "line"                  : 253
       },
       {
         "id"                    : "RESP-BLUEPRINT-VIEW",
@@ -3635,7 +3768,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 253
+        "line"                  : 260
       },
       {
         "id"                    : "RESP-BLUEPRINT-ECOSYSTEM",
@@ -3644,7 +3777,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 260
+        "line"                  : 267
       },
       {
         "id"                    : "RESP-CHAT-COMPOSER",
@@ -3653,7 +3786,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 267
+        "line"                  : 274
       },
       {
         "id"                    : "RESP-NATIVE-LIFECYCLE",
@@ -3662,7 +3795,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 274
+        "line"                  : 281
       },
       {
         "id"                    : "RESP-CHAT-ACTIVITY-VIEW",
@@ -3671,7 +3804,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 281
+        "line"                  : 288
       },
       {
         "id"                    : "RESP-CHAT-ACTIVITY-PROJECTION",
@@ -3680,7 +3813,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 288
+        "line"                  : 295
       },
       {
         "id"                    : "RESP-CHAT-SESSIONS-REQUESTS",
@@ -3689,7 +3822,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 295
+        "line"                  : 302
       },
       {
         "id"                    : "RESP-NATIVE-LAUNCH",
@@ -3698,7 +3831,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 302
+        "line"                  : 309
       },
       {
         "id"                    : "RESP-REPORTS-COLLECTION",
@@ -3707,7 +3840,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 309
+        "line"                  : 316
       },
       {
         "id"                    : "RESP-REPORTS-QUEUE",
@@ -3716,7 +3849,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 316
+        "line"                  : 323
       },
       {
         "id"                    : "RESP-NATIVE-BRIDGE",
@@ -3725,7 +3858,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 323
+        "line"                  : 330
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-PROJECTION",
@@ -3734,7 +3867,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 330
+        "line"                  : 337
       },
       {
         "id"                    : "RESP-CHAT-WORKSPACE",
@@ -3743,7 +3876,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 337
+        "line"                  : 344
       },
       {
         "id"                    : "RESP-REPORTS-JUDGEMENT",
@@ -3752,7 +3885,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 344
+        "line"                  : 351
       },
       {
         "id"                    : "RESP-REPORTS-SERVICE",
@@ -3761,7 +3894,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 351
+        "line"                  : 358
       },
       {
         "id"                    : "RESP-REPORTS-VIEW",
@@ -3770,7 +3903,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 358
+        "line"                  : 365
       },
       {
         "id"                    : "RESP-NATIVE-TRANSPORT",
@@ -3779,7 +3912,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 365
+        "line"                  : 372
       },
       {
         "id"                    : "RESP-NATIVE-PROTOCOL",
@@ -3788,7 +3921,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 372
+        "line"                  : 379
       },
       {
         "id"                    : "RESP-CHAT-ACTIVITY-ARTIFACTS",
@@ -3797,7 +3930,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 379
+        "line"                  : 386
       }
     ],
     "declarations": [
@@ -3982,6 +4115,14 @@
         "nodeId": "arch.development.records.protocol",
         "requirementIds": [
           "RESP-DEVELOPMENT-RECORDS-PROTOCOL"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/work-json.ts",
+        "nodeId": "arch.development.records.serialization",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-RECORDS-SERIALIZATION"
         ],
         "line": 2
       },
@@ -4432,6 +4573,13 @@
         "line": 2
       },
       {
+        "file": "test/work-json.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-RECORDS-SERIALIZATION"
+        ],
+        "line": 2
+      },
+      {
         "file": "test/workflow-codex.test.ts",
         "requirementIds": [
           "RESP-DEVELOPMENT-PROVIDERS-CODEX"
@@ -4517,6 +4665,6 @@
         "line": 2
       }
     ],
-    "digest": "120b194e9717682c359d16d02d338308f2fb0d26c4f5f17826324084feb273f2"
+    "digest": "4b934373018e7ecea365de20b8cee65096f6b5336d54818151ae2d47468b90bc"
   }
 }

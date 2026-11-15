@@ -7,7 +7,8 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { validateRequirementRefs, validateWorkRecord, parseWorkRecord } from "./schema.ts";
-import { findWorkRecord, resolveInside, validateWritePaths } from "./preflight.ts";
+import { findWorkRecord, resolveInside, validateWritePaths, workOutputColumns } from "./preflight.ts";
+import { serializeWorkRecord } from "./work-json.ts";
 import { hashRequest, normalizeApproval } from "./route.ts";
 import { captureSource, criteriaDigest, evaluateEvidence, renderAttempt, verify } from "./evidence.ts";
 import { loadReviewPolicy, validateReview } from "./review.ts";
@@ -129,6 +130,7 @@ export async function openWork(options: NewWorkOptions = {}): Promise<WorkLocati
       if (existing[0].record.workflow?.requestHash !== hashRequest(request)) throw new Error("같은 접수 ID의 요청 내용이 달라졌습니다.");
       return { ...await readWork({ repo: root, workId: existing[0].record.id }), created: false };
     }
+    const columns = await workOutputColumns(root);
     await captureSource({ repo: root, inputs });
     await validateWritePaths(root, normalizeApproval(approval).writePaths);
     const areas    = await fs.readdir(path.join(root, "docs", "work"), { withFileTypes: true })  ;
@@ -168,9 +170,10 @@ export async function openWork(options: NewWorkOptions = {}): Promise<WorkLocati
     };
     const errors = validateWorkRecord(record, { baseDir: directory });
     if (errors.length) throw new Error(errors.join("; "));
+    const source = serializeWorkRecord(record, columns);
     await fs.mkdir(directory);
     const file = path.join(directory, "work.json");
-    await atomicWrite(file, `${JSON.stringify(record, null, 2)}\n`);
+    await atomicWrite(file, source);
     const spec = `# ${record.title}\n\n## 요청과 목적\n\n${decision.summary ?? decision.title}\n\n사용자의 직접 요청으로 접수했다. 요청 식별값은 work.json의 workflow.requestHash에 보존한다.\n\n## 범위\n\n변경 경로·표면·검증 명령과 커밋·게시 권한은 work.json의 workflow.authorization을 따른다. 범위 확대는 기존 권한으로 간주하지 않는다.\n\n## 수용 기준\n\n정의와 필수 여부의 정본은 work.json이다. 관련 기준: ${record.criteria.map((criterion) => `\`${criterion.id}\``).join(", ")}.\n\n## 결정과 열린 질문\n\n작업 접수는 구현 완료가 아니다. 재개 시 같은 UUID와 현재 증거를 확인한다.\n`;
     await atomicWrite(path.join(directory, "spec.md"), spec);
     const index    = path.join(root, "docs", "work", "INDEX.md")                                                                                       ;
@@ -178,7 +181,7 @@ export async function openWork(options: NewWorkOptions = {}): Promise<WorkLocati
     const relative = encodePath(path.relative(path.dirname(index), directory))                                                                         ;
     const block    = `### ${String(next).padStart(3, "0")} — ${record.title}\n\n- [명세](${relative}/spec.md)\n- [작업 레코드](${relative}/work.json)` ;
     await atomicWrite(index, indexEntry(oldIndex, area, block));
-    return { path: file, record, created: true };
+    return { path: file, record, rawSource: source, created: true };
   });
 }
 
@@ -190,6 +193,7 @@ export async function adoptWork({ repo = process.cwd(), role, direct, requestId,
     const work = await readWork({ repo: root, workId });
     if (work.record.schemaVersion === 2) return { ...work, created: false };
     inputs = verificationInputs(inputPaths, work.record.criteria);
+    const columns = await workOutputColumns(root);
     await captureSource({ repo: root, inputs });
     await validateWritePaths(root, normalizeApproval(approval).writePaths);
     const legacyRecord = structuredClone(work.record);
@@ -213,8 +217,9 @@ export async function adoptWork({ repo = process.cwd(), role, direct, requestId,
     for (const criterion of record.criteria) { criterion.result = "unverified"; criterion.evidence = []; }
     const errors = validateWorkRecord(record, { baseDir: path.dirname(work.path) });
     if (errors.length) throw new Error(errors.join("; "));
-    await atomicWrite(work.path, `${JSON.stringify(record, null, 2)}\n`);
-    return { ...work, record, created: false, adopted: true };
+    const source = serializeWorkRecord(record, columns);
+    await atomicWrite(work.path, source);
+    return { ...work, record, rawSource: source, created: false, adopted: true };
   });
 }
 
@@ -222,14 +227,18 @@ async function mutateWork(repo: string, workId: string, change: (record: Current
   return withWorkLock(repo, async () => {
     const work = await readWork({ repo, workId });
     if (work.record.schemaVersion !== 2) throw new Error("현재 증거 판정은 schemaVersion 2 작업에 적용합니다. legacy 기록은 그대로 보존합니다.");
-    const before = hash           (await fs.readFile(work.path)) ;
-    const record = structuredClone(work.record                 ) ;
+    const before  = hash           (await fs.readFile(work.path)) ;
+    const record  = structuredClone(work.record                 ) ;
+    const columns = await workOutputColumns(repo)                 ;
     await change(record, { ...work, record });
     if (hash(await fs.readFile(work.path)) !== before) throw new Error("작업 갱신 중 다른 작성자가 내용을 바꿨습니다.");
     const errors = validateWorkRecord(record, { baseDir: path.dirname(work.path) });
     if (errors.length) throw new Error(errors.join("; "));
-    await atomicWrite(work.path, `${JSON.stringify(record, null, 2)}\n`);
-    return { ...work, record };
+    if (JSON.stringify(record) === JSON.stringify(work.record)) return { ...work, record };
+    const source = serializeWorkRecord(record, columns);
+    if (hash(await fs.readFile(work.path)) !== before) throw new Error("작업 갱신 중 다른 작성자가 내용을 바꿨습니다.");
+    await atomicWrite(work.path, source);
+    return { ...work, record, rawSource: source };
   });
 }
 

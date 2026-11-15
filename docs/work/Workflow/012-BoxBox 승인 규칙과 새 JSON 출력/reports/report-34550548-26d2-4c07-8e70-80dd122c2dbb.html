@@ -1,0 +1,352 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>BoxBox 승인 규칙과 새 JSON 출력 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 14일 오후 5:13 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>BoxBox 승인 규칙과 새 JSON 출력</h1><p class="lead">승인된 80개 조합의 등록과 15개 파일 정렬을 완료했습니다. 보고서 발행 중 발견한 대형 작업 원장 읽기 버그도 최소 수정했고 최종 정식 재검증과 독립 검토를 진행 중입니다.</p><div id="report-story" class="story">승인된 80개 조합의 등록과 15개 파일 정렬을 완료했습니다. 보고서 발행 중 발견한 대형 작업 원장 읽기 버그도 최소 수정했고 최종 정식 재검증과 독립 검토를 진행 중입니다. 실제 사용자 답변 1을 두 고정 제안서의 내용 지문과 연결했습니다. 정확 80개 조합만 추가했고, 15개 파일은 공식 dry-run·Align·고정점·사후 검사와 토큰·AST·주석·행·들여쓰기 보존을 확인했습니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 5 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 독립 검토와 최종 보고 기록 대조</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>고정 두 제안서만 실제 사용자 선택에 따라 적용</h3><p class="result">정확 80개 조합 등록과 15개 파일 공식 정렬 완료</p><p class="support"><strong>근거</strong> .boxbox/approvals/ts-v3-extra4-response.json 및 phase14-apply.json</p><p class="limit">다른 세션의 승인·원장 수정은 별도 권한으로 구분합니다.</p></article><article class="requirement"><h3>기존 동작과 이력 보존</h3><p class="result">AST·토큰·주석·행·indent 보존 및 기존 승인과 보고서 보존 확인</p><p class="support"><strong>근거</strong> 공식 pipeline과 phase14 파일별 전후 증거</p><p class="limit">전체 세션의 기존 미정렬 파일을 재작성하지 않았습니다.</p></article></section><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>기존 JSON과 v1을 다시 승인받아야 하는가</h3><p><strong>선택</strong> 고정 추가안 v3만 질문했습니다.</p><p><strong>판단 근거</strong> 기존 JSON proof와 실제 v1 답변은 이미 유효합니다.</p><h4>함께 검토한 대안</h4><ul><li>기존 승인을 모두 다시 질문</li><li>유효한 승인을 빼고 추가 차이만 질문</li></ul><p class="limit"><strong>감수한 점</strong> 새 파일이나 shape가 생기면 그 차이를 다시 검토해야 합니다.</p></article><article class="decision"><h3>과거 보고서를 다시 정렬할 것인가</h3><p><strong>선택</strong> 새 writer를 연결하고 기존 이력을 보존했습니다.</p><p><strong>판단 근거</strong> 사용자가 기존 보고서 보존과 새 출력부터 적용을 선택했습니다.</p><h4>함께 검토한 대안</h4><ul><li>기존 보고서 재작성</li><li>새 의미 객체의 최초 출력 개선</li></ul><p class="limit"><strong>감수한 점</strong> 보존된 과거 보고서는 전체 Stop에서 계속 검출될 수 있습니다.</p></article></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>대상 15개 파일</h3><dl><div><dt>확인 방법</dt><dd>공식 guide/source/dry-run/Align/고정점/source 및 parser leaf·AST·행·indent 비교</dd></div><div><dt>기대 결과</dt><dd>승인 proof 완전, 미정렬 0과 보존</dd></div><div><dt>실제 관측</dt><dd>15개 모두 통과, 미승인·거부·미적용 0</dd></div></dl></article><article class="check"><h3>현재 작성·집중 검사</h3><dl><div><dt>확인 방법</dt><dd>실제 runTypedWorkflow와 소스 정책·strict·빌드·집중 테스트</dd></div><div><dt>기대 결과</dt><dd>실제 프로세스와 작성 하네스 성공</dd></div><div><dt>실제 관측</dt><dd>executed true, host/harness true, sourceStable true. 집중 498개 통과, 실패 0.</dd></div><div><dt>확인 범위와 한계</dt><dd>집중 검사와 하네스는 당시 지문을 보존했습니다. 이후 외부 원장 변경 뒤 최신 의미·실제 앱 검사와 전체 검사를 다시 실행했습니다.</dd></div></dl></article><article class="check"><h3>정렬 직후 소스의 전체 회귀 검사</h3><dl><div><dt>확인 방법</dt><dd>verifyWork의 실제 npm run check</dd></div><div><dt>기대 결과</dt><dd>종료 0과 source/environment/artifact 불변</dd></div><div><dt>실제 관측</dt><dd>attempt-8e188e5c-b873-4307-8b34-e18b640de653 passed, 세 불변 값 true</dd></div><div><dt>확인 범위와 한계</dt><dd>한도 분리 수정 전 코드의 증거입니다. 최종 정식 검증은 진행 중입니다.</dd></div></dl></article><article class="check"><h3>정렬 직후 의미·실제 앱 검사</h3><dl><div><dt>확인 방법</dt><dd>정식 보고서·지도·생태계·Chat 검증</dd></div><div><dt>기대 결과</dt><dd>실제 실행 성공과 소스·환경·설정 불변</dd></div><div><dt>실제 관측</dt><dd>reports attempt-3b289786-8af2-4197-95c3-426a8d09dc7d, architecture attempt-ad046b51-d105-47ac-aa6b-1442b80917c5, ecosystem attempt-da9e1075-7171-4292-9480-00a5312e3e2a, chat attempt-9eda11d6-c922-42c4-9f8c-63f672fdfae5 모두 passed와 세 불변 값 true</dd></div><div><dt>확인 범위와 한계</dt><dd>한도 분리 수정 전 코드의 증거입니다. 최종 정식 검증은 진행 중입니다.</dd></div></dl></article><article class="check"><h3>작업 원장과 보고서 입력 한도</h3><dl><div><dt>확인 방법</dt><dd>수정 전 두 회귀 실패 → 수정 후 실제 유효 원장 발행·조회·초과 거부</dd></div><div><dt>기대 결과</dt><dd>1MiB 초과 원장 지원, 8MiB 초과 거부, 보고서 읽기1MiB 유지와 원문 보존</dd></div><div><dt>실제 관측</dt><dd>수정 전 2 fail, 수정 후 2 pass. 소스 정책·strict·빌드와 올바른 실행기의 관련 검사가 통과했고 작성 하네스 true입니다.</dd></div><div><dt>확인 범위와 한계</dt><dd>Bun으로 Node 대상 테스트를 묶은 타임아웃과 잘못된 실행기 재시도는 원문에 보존했습니다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 5건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>정렬 직후 전체·실제 앱 검사는 통과했습니다. 그 뒤 원장 입력 한도 두 TS 파일과 문서를 수정했으므로 최종 코드의 정식 재검증 결과는 별도로 갱신합니다.</li><li>전체 세션 훅의 기존 보고서·다른 작업 잔여를 이번 승인 15개 파일의 미정렬 0건과 구분합니다.</li><li>업무 done·전체 Stop 통과·Git 게시를 주장하지 않습니다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>독립 검토와 최종 보고 기록 대조</h3><dl><div><dt>담당</dt><dd>Codex</dd></div><div><dt>해소 조건</dt><dd>현재 소스·기준과 실제 검토가 일치함</dd></div><div><dt>영향</dt><dd>전체 Stop과 업무 수용·Git 게시를 구분합니다.</dd></div></dl></article></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><ol class="references"><li><p>원인 분류·질문·공식 적용 절차 정본</p><code>docs/DEVELOPMENT.md</code></li><li><p>새 의미 객체의 최초 출력 책임</p><code>scripts/workflow/work-json.ts</code></li><li><p>WWW의 명시적 출력 정책</p><code>docs/architecture/work-output.json</code></li><li><p>실제 구현·통과·실패·한계 전문</p><code>.www/boxbox-output/phase12-new-output.md</code></li><li><p>추가 범위와 양성·반례 고정안</p><code>.www/boxbox-output/final-approval-candidates/20261113T231457Z-9fe53e46/stable-delta-v3.md</code></li><li><p>기존 승인을 반복해서 묻지 않는 재발 절차</p><code>.www/architecture-contract/boxbox-side/issue-report-draft/recurrence-question-procedure.md</code></li><li><p>검증 보강으로 생긴 4개 조합의 별도 고정안</p><code>docs/work/Workflow/012-BoxBox 승인 규칙과 새 JSON 출력/decisions/extra-4-v1.md</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Workflow/012-BoxBox 승인 규칙과 새 JSON 출력/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-a4f924c3-501b-4fd5-ba40-d8997e18a792<br>report-34550548-26d2-4c07-8e70-80dd122c2dbb</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>f84a5bf4e74be697507595a82ec04ebe9823cc2669d9506364764572ce981a09</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>84cfe7606288c417f0b01b960693a3f261ca2a47f7bb7c439822dce23551355b</code></dd></div><div><dt>기준 지문</dt><dd><code>d998f4f489816111ad3008a4e9993704a5e993a8285590c68a5770485a2e1b52</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;실제 인간 답변과 고정 v1에 결합한 TS28키·86파일쌍만 등록하고 기존 JSON 승인·기존 증거를 보존하며 추가 범위를 자동 승인하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8681e48-3bea-48c3-8e4e-c27b1b99c805&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7298955a-d66c-4e5a-8b29-4a89fa1357aa&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-3b289786-8af2-4197-95c3-426a8d09dc7d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;압축 멤버 사전조건과 승인 누락을 구분하고 동작 보존 구조 정리 후 승인된 파일에 공식 dry-run·보존·고정점·source check를 적용하며 남은 차이를 정확한 질문으로 연결한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c2e6265c-7236-4f76-b621-4b0576d8861d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-3b289786-8af2-4197-95c3-426a8d09dc7d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;명시 활성화한 WWW의 새 작업 revision·새 보고서만 승인된 JSON scalar 열로 생성하고 기존 보고서·무변경 원장을 다시 쓰지 않으며 일반 앱은 BoxBox runtime 설치 없이 동작한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7e90de51-10c7-419f-be78-fc5ae940937c&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7298955a-d66c-4e5a-8b29-4a89fa1357aa&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-3b289786-8af2-4197-95c3-426a8d09dc7d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;JSON 의미·순서·escaping·Unicode 폭·행/indent·최종 크기와 hash를 공식 CLI golden 및 writer 통합 검사로 대조하고 현재 타입·빌드·관련 Electron 보고서 동작을 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7e90de51-10c7-419f-be78-fc5ae940937c&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7298955a-d66c-4e5a-8b29-4a89fa1357aa&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-3b289786-8af2-4197-95c3-426a8d09dc7d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;BoxBox 이슈·보고서와 재발 질문 절차에 실제 원인·승인/미승인·적용/미실행을 구분하고 정본 문서 검토·필수 독립 검토·저작 보고서를 남긴다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-7e90de51-10c7-419f-be78-fc5ae940937c&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-reports.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-13T23:29:00.629Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-a8681e48-3bea-48c3-8e4e-c27b1b99c805&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-workflow.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-13T23:32:35.929Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-c2e6265c-7236-4f76-b621-4b0576d8861d&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-workflow.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-13T23:36:33.322Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-7298955a-d66c-4e5a-8b29-4a89fa1357aa&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-reports.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-14T00:04:39.534Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-3b289786-8af2-4197-95c3-426a8d09dc7d&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-reports.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-14T07:55:40.223Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-fa764a6a-62c6-4a35-b2f8-a61f6d2744a9&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-fa764a6a-62c6-4a35-b2f8-a61f6d2744a9/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;[증거 범위 확대·AC-1] work.json의 AC-1은 attempt-a8681e48 하나로 passed다. 이 시도의 명령은 `node scripts/check-workflow.ts`다. 그런데 scripts/check-workflow.ts:89-135의 validateRepository는 스킬 SKILL.md 절, 발견 링크, 필수 파일, Markdown 링크, work.json 스키마, UUID 중복, 관계 대상만 검사한다. 고정 v1 승인 제안(.www/architecture-contract/boxbox-side/TS-rule-approval-proposal-v1.md), 인간 답변(human-approvals-20261114.json), registry-currentness.json, verification-summary.json은 읽지 않는다. 따라서 &#39;TS 28키·86파일쌍만 등록&#39;, &#39;기존 JSON 승인 보존&#39;, &#39;추가 범위 자동 승인 없음&#39;을 판정하는 코드가 이 명령에는 없다. 위 파일들은 artifacts로만 붙어 있다. scripts/workflow/evidence.ts:153-178,310-312의 artifact 처리는 실행 전후 size/sha256이 같은지만 비교하고 내용을 판정하지 않는다. 결국 &#39;exit 0 + 해시 불변&#39;이 AC-1의 의미 검증으로 승격된 상태다. 같은 정식 시도에 걸 수 있는, 실제 대조를 수행하는 verifier가 필요하다. 그 전에는 AC-1을 unverified로 되돌려야 한다.&quot;,
+        &quot;[증거 범위 확대·AC-2] AC-2도 같은 `node scripts/check-workflow.ts` 시도(attempt-c2e6265c, stdout 96바이트로 AC-1 시도와 같은 고정 통과 문구 길이)로 passed다. 첨부 artifact는 stable-delta-v3.json/md, phase11-approved-apply.json, phase12-new-output.md, stable-delta-v3-question.json이다. 하지만 check-workflow.ts는 압축 멤버 사전조건과 승인 누락의 구분, 공식 dry-run·보존·고정점·source check 적용, 남은 차이와 질문의 연결 중 어느 것도 검사하지 않는다. 이 artifact들을 읽는 코드도 없다. verification.md:11의 서술(77개 중 신규 17개 delta 분리 등)은 정식 시도 밖의 자기 보고다. 그런데도 이 서술이 &#39;실제 검증 passed; 현재 적용 가능&#39;이라는 기준 판정으로 기록됐다.&quot;,
+        &quot;[증거 범위 확대·AC-4] AC-4는 &#39;공식 CLI golden 및 writer 통합 검사로 대조&#39;를 요구하고, attempt-7e90de51(`node scripts/verify-reports.ts`)로 passed다. scripts/verify-reports.ts 전체에서 golden-final.log나 golden-results.json을 읽거나 공식 BoxBox CLI를 호출하는 코드는 없다. 이 스크립트는 합성 fixture에서 serializeWorkRecord/serializeWorkReport와 실제 저장 bytes가 같은지 자기 일관성만 확인한다(55, 93행). golden 두 파일은 artifact 해시 안정성만 기록됐다. 따라서 &#39;escaping·Unicode 폭·행/indent·최종 크기와 hash의 공식 CLI golden 대조&#39; 부분은 이 정식 시도로 입증되지 않는다. verification.md:6의 golden 9개 결과는 정식 시도 밖의 기록이다.&quot;,
+        &quot;[AC-3 부분 증거 과장] scripts/verify-reports.ts:158은 new-output.json에 `runtimeBoxboxConfiguration: \&quot;absent\&quot;`와 `oldReportsUnchanged: true`를 상수로 기록한다. 두 번째 값은 150행의 legacy 보고서 bytes 비교를 통과한 뒤라 근거가 있다. 그러나 &#39;BoxBox runtime 설치 없이 동작&#39;은 어디서도 검사하지 않는다(환경이나 의존성 부재 확인 코드가 없다). 그런데도 verification.md:61은 이 값을 실측 결과처럼 인용한다. 또 legacy 작업(legacyId)의 work.json bytes가 바뀌지 않았는지는 비교하지 않으므로 &#39;무변경 원장 재기록 없음&#39;의 직접 증거도 없다. 원장 쪽 구현 자체는 타당해 보인다: scripts/workflow/work.ts:237에서 내용 변화가 없으면 쓰지 않는다.&quot;,
+        &quot;[절차 불일치 보존 확인] verification.md:59에 따르면 Phase12 저작 harness.ok=false다. 원인은 계획에 선언하지 않은 preflight.ts/types.ts 변경과 BoxBox 미해결이다. 이 실패는 소급해 통과로 바꾸지 않고 보존했으며 AC-5도 unverified로 유지했다. 여기까지는 타당하다. 다만 이 상태에서 AC-1·AC-2·AC-4를 위 근거로 passed 처리한 것은 같은 문서의 &#39;증거 범위를 넓히지 않는다&#39;는 원칙과 충돌한다.&quot;,
+        &quot;[구현 확인·결함 아님] scripts/workflow/work.ts의 openWork(173), adoptWork(220), mutateWork(238)는 workOutputColumns 정책에 따라 새 revision에서만 scalar 열 출력을 쓴다. mutateWork는 JSON 의미가 같으면 쓰지 않는다(237). 그래서 정책 활성화만으로 기존 원장이 재기록되지는 않는 구조로 확인됐다. 이 검토에서는 명령이나 테스트를 직접 실행하지 않았고, 판단은 소스와 기록 대조에만 근거한다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-f28de614-60f2-4e6e-96fe-0488bed09fd6&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-f28de614-60f2-4e6e-96fe-0488bed09fd6/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;판정 근거 범위: 읽기 전용으로 소스와 기록만 대조했다. 테스트나 명령은 하나도 실행하지 않았다. 아래의 &#39;통과&#39;는 work.json/verification.md에 기록된 attempt-7298955a 결과(sourceDigest 58e2dfb7…, 이번 검토 입력과 일치)를 인용한 것이며 이번 검토에서 재현하지 않았다.&quot;,
+        &quot;이전 독립 검토(review-fa764a6a)가 지적한 &#39;check-workflow 성공·artifact 해시 불변을 의미 검증으로 승격&#39;한 문제는 현재 소스에서 보완됐다. scripts/verify-reports.ts:34가 `bun test test/work-json.test.ts`를 실제로 실행한다. 이 테스트 파일에는 AC1(test/work-json.test.ts:368), AC2(:453, :490), AC4 golden(:523) 의미 검사가 들어 있다. 따라서 attempt-7298955a를 AC-1·AC-3·AC-4 근거로 연결한 것은 증거 범위 확대가 아니다.&quot;,
+        &quot;AC-1 의미 검사가 실제 승인 경계를 확인한다(test/work-json.test.ts:368-451). 확인 항목: ts-v1-response.json의 callId·answer·proposalSha256과 고정 v1 문서 SHA, 28개 key·86개 key/file 조합의 정확 일치, conventions·decisions·examples 상호 링크와 docHash. 또 8e38c9b 기준 JSONL이 원문 prefix로 그대로 남아 있는지 확인해 기존 JSON 승인 보존을 검증하고, 격리 stage에서 공식 CLI guide가 v1 외 추가 rule을 노출하지 않는지도 대조한다.&quot;,
+        &quot;AC-3 경계가 구현과 맞다. preflight.ts:62-83은 정책 파일의 정확한 4개 key·고정 값만 허용하고 symlink와 4 KiB 초과를 거부하며, 파일이 없으면 기존 출력으로 돌아간다. work.ts:237은 의미상 바뀌지 않은 원장의 재기록을 생략하고, reports.ts:558-559는 기존 semanticHash 보고서를 재사용한다. 기존 보고서와 원장의 bytes·inode·mtime 불변은 verify-reports.ts:131-134, 186-189에서 실측한다. runtime BoxBox 부재는 같은 파일 136-165에서 fixture 설정·의존성·bundle·child PATH 범위로만 주장하며, 그 한계도 runtime-prechecks.json의 boundary에 명시돼 있다.&quot;,
+        &quot;AC-4 golden 대조는 공식 고정 CLI 경로를 쓴다. canonicalArchitectureJson(generate-architecture.ts:150-202)은 CLI sha·runtime.json·Node 버전·registry SHA를 확인한 뒤 align → align → 고정점 → check --source를 거친다. 이 결과와 serializeWorkRecord/serializeWorkReport 출력을 bytes·크기·hash·indent·literal 단위로 비교한다(test/work-json.test.ts:534-563).&quot;,
+        &quot;AC-2·AC-5를 unverified로 유지한 것은 기록과 맞다. AC2 테스트가 같은 실행에 포함됐지만 attempt-7298955a의 criterionIds에는 AC-2가 없으므로, 보수적으로 미검증으로 둔 상태가 타당하다. 근거 없이 승격하지 않았다.&quot;,
+        &quot;비차단 관찰 1: work.json의 AC-1·AC-3·AC-4 evidence 배열에는 이전 attempt(a8681e48, 7e90de51)가 &#39;현재 적용 가능&#39; 요약과 함께 남아 있다. 이는 work.ts:288이 시점별 요약을 누적하는 동작이다. verification.md:89는 이 시도들을 완료 근거로 쓰지 않는다고 밝히고 있어, 판정 자체는 현재 소스 기준 attempt-7298955a에 근거한다. 다만 이전 소스 digest(4f9436…)로 실행된 시도의 &#39;현재 적용 가능&#39; 문구는 읽는 사람이 오해할 수 있다.&quot;,
+        &quot;비차단 관찰 2: work-json.ts:12-18의 keyWidth는 Hangul·Han·Hiragana·Katakana만 폭 2로 계산한다. 반각 가타카나, 전각 라틴, 기타 동아시아 전각 기호에서 공식 BoxBox 폭 계산과 어긋날 수 있다. golden 사례(test/work-json.test.ts:525-533)는 이 문자들을 다루지 않는다. 현재 WorkRecord/WorkReport의 key는 고정 스키마 영문이어서 실제 영향은 낮지만, 이후 사용자 정의 key가 들어오면 golden 사례를 보강해야 한다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;승인된 80개 조합의 등록과 15개 파일 정렬을 완료했습니다. 보고서 발행 중 발견한 대형 작업 원장 읽기 버그도 최소 수정했고 최종 정식 재검증과 독립 검토를 진행 중입니다.&quot;,
+  &quot;before&quot;: &quot;원문 미정렬, 쓰기 승인 부족, 압축 멤버의 구조 전제조건과 반복 검사 비용이 같은 실패로 보였습니다.&quot;,
+  &quot;after&quot;: &quot;실제 사용자 답변 1을 두 고정 제안서의 내용 지문과 연결했습니다. 정확 80개 조합만 추가했고, 15개 파일은 공식 dry-run·Align·고정점·사후 검사와 토큰·AST·주석·행·들여쓰기 보존을 확인했습니다.&quot;,
+  &quot;changes&quot;: [
+    &quot;v3 76개와 추가 4개 조합만 등록했고 기존 86개 조합과 JSON 승인·과거 보고서를 보존했습니다.&quot;,
+    &quot;대상 15개 파일의 미정렬 130개 그룹을 0개로 정렬했습니다.&quot;,
+    &quot;과거 미승인 질문은 그대로 두고 현재 실제 승인 80개 조합의 공개 proof를 확인하도록 테스트를 보강했습니다.&quot;,
+    &quot;현재 소스에서 지도를 공식 재생성하고 작성 하네스·소스 정책·타입·빌드·집중 테스트 498개를 통과했습니다.&quot;,
+    &quot;전체 검사 중 다른 세션이 승인 원장과 규칙 문서를 두 번 수정한 사실과 실패를 보존했습니다.&quot;,
+    &quot;보고서 JSON 1MiB·HTML 2MiB 제한을 유지하고 작업 원장 입력에 별도 8MiB 상한을 적용했습니다. 실제 큰 유효 원장의 발행·조회와 초과 거부를 회귀 검사했습니다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;승인 범위를 새 파일·key·glob으로 자동 확장하지 않았습니다.&quot;,
+    &quot;실제 정렬과 의미 검증 코드 변경을 별도 diff로 기록했습니다.&quot;,
+    &quot;외부 원장 변경은 보존하고 이번 사용자 승인과 별도 작업의 권한을 섞지 않았습니다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;정렬 직후 전체·실제 앱 검사는 통과했습니다. 그 뒤 원장 입력 한도 두 TS 파일과 문서를 수정했으므로 최종 코드의 정식 재검증 결과는 별도로 갱신합니다.&quot;,
+    &quot;전체 세션 훅의 기존 보고서·다른 작업 잔여를 이번 승인 15개 파일의 미정렬 0건과 구분합니다.&quot;,
+    &quot;업무 done·전체 Stop 통과·Git 게시를 주장하지 않습니다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;현재 실제 검사와 승인·정렬 범위를 읽기 전용 Opus 검토로 대조합니다.&quot;,
+    &quot;기존 미정렬 이력과 다른 작업 범위는 자동 재작성하거나 새 승인으로 확대하지 않습니다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;승인된 80개 조합의 등록과 15개 파일 정렬을 완료했습니다. 보고서 발행 중 발견한 대형 작업 원장 읽기 버그도 최소 수정했고 최종 정식 재검증과 독립 검토를 진행 중입니다. 실제 사용자 답변 1을 두 고정 제안서의 내용 지문과 연결했습니다. 정확 80개 조합만 추가했고, 15개 파일은 공식 dry-run·Align·고정점·사후 검사와 토큰·AST·주석·행·들여쓰기 보존을 확인했습니다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;고정 두 제안서만 실제 사용자 선택에 따라 적용&quot;,
+        &quot;result&quot;: &quot;정확 80개 조합 등록과 15개 파일 공식 정렬 완료&quot;,
+        &quot;evidence&quot;: &quot;.boxbox/approvals/ts-v3-extra4-response.json 및 phase14-apply.json&quot;,
+        &quot;limitations&quot;: &quot;다른 세션의 승인·원장 수정은 별도 권한으로 구분합니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;기존 동작과 이력 보존&quot;,
+        &quot;result&quot;: &quot;AST·토큰·주석·행·indent 보존 및 기존 승인과 보고서 보존 확인&quot;,
+        &quot;evidence&quot;: &quot;공식 pipeline과 phase14 파일별 전후 증거&quot;,
+        &quot;limitations&quot;: &quot;전체 세션의 기존 미정렬 파일을 재작성하지 않았습니다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;대상 15개 파일&quot;,
+        &quot;method&quot;: &quot;공식 guide/source/dry-run/Align/고정점/source 및 parser leaf·AST·행·indent 비교&quot;,
+        &quot;expected&quot;: &quot;승인 proof 완전, 미정렬 0과 보존&quot;,
+        &quot;observed&quot;: &quot;15개 모두 통과, 미승인·거부·미적용 0&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;target&quot;: &quot;현재 작성·집중 검사&quot;,
+        &quot;method&quot;: &quot;실제 runTypedWorkflow와 소스 정책·strict·빌드·집중 테스트&quot;,
+        &quot;expected&quot;: &quot;실제 프로세스와 작성 하네스 성공&quot;,
+        &quot;observed&quot;: &quot;executed true, host/harness true, sourceStable true. 집중 498개 통과, 실패 0.&quot;,
+        &quot;limitations&quot;: &quot;집중 검사와 하네스는 당시 지문을 보존했습니다. 이후 외부 원장 변경 뒤 최신 의미·실제 앱 검사와 전체 검사를 다시 실행했습니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;정렬 직후 소스의 전체 회귀 검사&quot;,
+        &quot;method&quot;: &quot;verifyWork의 실제 npm run check&quot;,
+        &quot;expected&quot;: &quot;종료 0과 source/environment/artifact 불변&quot;,
+        &quot;observed&quot;: &quot;attempt-8e188e5c-b873-4307-8b34-e18b640de653 passed, 세 불변 값 true&quot;,
+        &quot;limitations&quot;: &quot;한도 분리 수정 전 코드의 증거입니다. 최종 정식 검증은 진행 중입니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;정렬 직후 의미·실제 앱 검사&quot;,
+        &quot;method&quot;: &quot;정식 보고서·지도·생태계·Chat 검증&quot;,
+        &quot;expected&quot;: &quot;실제 실행 성공과 소스·환경·설정 불변&quot;,
+        &quot;observed&quot;: &quot;reports attempt-3b289786-8af2-4197-95c3-426a8d09dc7d, architecture attempt-ad046b51-d105-47ac-aa6b-1442b80917c5, ecosystem attempt-da9e1075-7171-4292-9480-00a5312e3e2a, chat attempt-9eda11d6-c922-42c4-9f8c-63f672fdfae5 모두 passed와 세 불변 값 true&quot;,
+        &quot;limitations&quot;: &quot;한도 분리 수정 전 코드의 증거입니다. 최종 정식 검증은 진행 중입니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;작업 원장과 보고서 입력 한도&quot;,
+        &quot;method&quot;: &quot;수정 전 두 회귀 실패 → 수정 후 실제 유효 원장 발행·조회·초과 거부&quot;,
+        &quot;expected&quot;: &quot;1MiB 초과 원장 지원, 8MiB 초과 거부, 보고서 읽기1MiB 유지와 원문 보존&quot;,
+        &quot;observed&quot;: &quot;수정 전 2 fail, 수정 후 2 pass. 소스 정책·strict·빌드와 올바른 실행기의 관련 검사가 통과했고 작성 하네스 true입니다.&quot;,
+        &quot;limitations&quot;: &quot;Bun으로 Node 대상 테스트를 묶은 타임아웃과 잘못된 실행기 재시도는 원문에 보존했습니다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;기존 JSON과 v1을 다시 승인받아야 하는가&quot;,
+        &quot;basis&quot;: &quot;기존 JSON proof와 실제 v1 답변은 이미 유효합니다.&quot;,
+        &quot;alternatives&quot;: [
+          &quot;기존 승인을 모두 다시 질문&quot;,
+          &quot;유효한 승인을 빼고 추가 차이만 질문&quot;
+        ],
+        &quot;choice&quot;: &quot;고정 추가안 v3만 질문했습니다.&quot;,
+        &quot;tradeoff&quot;: &quot;새 파일이나 shape가 생기면 그 차이를 다시 검토해야 합니다.&quot;
+      },
+      {
+        &quot;problem&quot;: &quot;과거 보고서를 다시 정렬할 것인가&quot;,
+        &quot;basis&quot;: &quot;사용자가 기존 보고서 보존과 새 출력부터 적용을 선택했습니다.&quot;,
+        &quot;alternatives&quot;: [
+          &quot;기존 보고서 재작성&quot;,
+          &quot;새 의미 객체의 최초 출력 개선&quot;
+        ],
+        &quot;choice&quot;: &quot;새 writer를 연결하고 기존 이력을 보존했습니다.&quot;,
+        &quot;tradeoff&quot;: &quot;보존된 과거 보고서는 전체 Stop에서 계속 검출될 수 있습니다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;docs/DEVELOPMENT.md&quot;,
+        &quot;purpose&quot;: &quot;원인 분류·질문·공식 적용 절차 정본&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/workflow/work-json.ts&quot;,
+        &quot;purpose&quot;: &quot;새 의미 객체의 최초 출력 책임&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/architecture/work-output.json&quot;,
+        &quot;purpose&quot;: &quot;WWW의 명시적 출력 정책&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/boxbox-output/phase12-new-output.md&quot;,
+        &quot;purpose&quot;: &quot;실제 구현·통과·실패·한계 전문&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/boxbox-output/final-approval-candidates/20261113T231457Z-9fe53e46/stable-delta-v3.md&quot;,
+        &quot;purpose&quot;: &quot;추가 범위와 양성·반례 고정안&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/architecture-contract/boxbox-side/issue-report-draft/recurrence-question-procedure.md&quot;,
+        &quot;purpose&quot;: &quot;기존 승인을 반복해서 묻지 않는 재발 절차&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Workflow/012-BoxBox 승인 규칙과 새 JSON 출력/decisions/extra-4-v1.md&quot;,
+        &quot;purpose&quot;: &quot;검증 보강으로 생긴 4개 조합의 별도 고정안&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;독립 검토와 최종 보고 기록 대조&quot;,
+        &quot;owner&quot;: &quot;Codex&quot;,
+        &quot;doneWhen&quot;: &quot;현재 소스·기준과 실제 검토가 일치함&quot;,
+        &quot;impact&quot;: &quot;전체 Stop과 업무 수용·Git 게시를 구분합니다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></section></main></body></html>

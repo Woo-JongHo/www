@@ -1,0 +1,94 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-32e673c5-ed20-4f3a-9b67-e28e6407c2d5",
+  "workId"        : "work-a4f924c3-501b-4fd5-ba40-d8997e18a792",
+  "title"         : "BoxBox 승인 규칙과 새 JSON 출력",
+  "summary"       : "Phase12의 새 의미 객체 JSON 최초 출력 연결과 자동 검사를 구현했습니다. Electron은 SIGABRT로 종료돼 GUI와 독립 감사·업무 수용은 부모 실행에서 이어갑니다.",
+  "outcome"       : "in_progress",
+  "kind"          : "authored",
+  "event"         : "finish",
+  "createdAt"     : "2026-11-13T23:11:22.994Z",
+  "workRecordHash": "0c7f7a2c5c77b33123d9e4456c3136f22c9d80034c0040c45d44c49b8f5e837d",
+  "sourceDigest"  : "4f9436eed9ef455862a37ded882781eeb35982d7cbed5825d9b41d5aaf47c09c",
+  "criteriaDigest": "d998f4f489816111ad3008a4e9993704a5e993a8285590c68a5770485a2e1b52",
+  "semanticHash"  : "fa0bd2e98f63d4ab37883b995fb3b87d822efe4222fe9a28c803f677500db0c7",
+  "narrative": {
+    "summary": "Phase12의 새 의미 객체 JSON 최초 출력 연결과 자동 검사를 구현했습니다. Electron은 SIGABRT로 종료돼 GUI와 독립 감사·업무 수용은 부모 실행에서 이어갑니다.",
+    "before" : "작업과 보고서를 native JSON으로 저장했고, 무변경 원장도 다시 저장할 수 있었습니다. 새 출력의 scalar 열과 실제 저장 원문 반환이 연결되지 않았습니다.",
+    "after"  : "WWW가 명시 활성화한 새 revision·신규 보고서만 승인된 scalar 열로 처음 출력합니다. 무변경 원장과 기존 보고서 bytes를 보존하고 저장 원문 rawSource와 보고서 hash를 연결합니다.",
+    "changes": [
+      "순수 work-json leaf와 실제 요구·검증 선언을 추가했습니다.",
+      "open/adopt/mutate·보고서 활성화·신규 report·Native 신규 work를 연결했습니다.",
+      "최종 padding 뒤 JSON 1 MiB 거부·Unicode/native 의미·no-op·dedupe·raw hash 회귀를 추가했습니다.",
+      "실제 Electron fixture에 활성 정책 신규 work/report와 기존 보고서 불변 검사를 추가했습니다.",
+      "재발 질문 절차와 통합 테스트별 60초 실행 budget을 기록했습니다."
+    ],
+    "decisions": [
+      "BoxBox CLI는 개발 golden과 snapshot 생성에만 사용하고 앱 writer에는 설치 의존성을 추가하지 않았습니다.",
+      "기존 JSON source/file을 받는 formatter API를 만들지 않고 새 도메인 의미 객체만 직렬화합니다.",
+      "기존 source가 검증 snapshot을 뜻하므로 실제 저장 원문은 rawSource로 분리했습니다.",
+      "미승인 TS shape는 수동 정렬하거나 registry를 확대하지 않았습니다."
+    ],
+    "limitations": [
+      "전체 npm check는 Bun 689개·Node 147개와 빌드를 통과했지만 BoxStyle의 미승인 TS 차이를 해결한 것은 아닙니다.",
+      "실제 Electron 실행이 SIGABRT로 종료됐습니다. 원인은 이 실행에서 확정하지 않았고 GUI 검증은 미완료입니다.",
+      "독립 agent·중첩 저작 하네스는 요청에 따라 실행하지 않았습니다. 실제 호스트 모델 실행과 Opus 감사는 미실행입니다.",
+      "문서 영향 판단은 인계 자료에 준비했습니다. 공유 원장의 검증·문서 검토·독립 검토 연결과 수용 기준 판정은 부모가 이어갑니다.",
+      "이 보고서는 부분 구현 인계이며 work를 done으로 변경하지 않습니다."
+    ],
+    "next": [
+      "부모 데스크톱 환경에서 node scripts/verify-reports.ts를 실행하고 .www/evidence의 실제 GUI 증거를 회수합니다.",
+      "phase12-new-output.md와 구조화 JSON의 정확 key/file delta만 고정 제안·질문으로 연결합니다.",
+      "부모가 현재 소스의 문서 영향·검증 기록·필수 Opus 검토와 최종 보고서를 연결합니다."
+    ]
+  },
+  "work": {
+    "status": "in_progress",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id"         : "AC-1",
+        "description": "실제 인간 답변과 고정 v1에 결합한 TS28키·86파일쌍만 등록하고 기존 JSON 승인·기존 증거를 보존하며 추가 범위를 자동 승인하지 않는다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-2",
+        "description": "압축 멤버 사전조건과 승인 누락을 구분하고 동작 보존 구조 정리 후 승인된 파일에 공식 dry-run·보존·고정점·source check를 적용하며 남은 차이를 정확한 질문으로 연결한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-3",
+        "description": "명시 활성화한 WWW의 새 작업 revision·새 보고서만 승인된 JSON scalar 열로 생성하고 기존 보고서·무변경 원장을 다시 쓰지 않으며 일반 앱은 BoxBox runtime 설치 없이 동작한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-4",
+        "description": "JSON 의미·순서·escaping·Unicode 폭·행/indent·최종 크기와 hash를 공식 CLI golden 및 writer 통합 검사로 대조하고 현재 타입·빌드·관련 Electron 보고서 동작을 검증한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-5",
+        "description": "BoxBox 이슈·보고서와 재발 질문 절차에 실제 원인·승인/미승인·적용/미실행을 구분하고 정본 문서 검토·필수 독립 검토·저작 보고서를 남긴다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      }
+    ],
+    "verifications": [],
+    "reviews": []
+  },
+  "source": {
+    "recordPath"    : "docs/work/Workflow/012-BoxBox 승인 규칙과 새 JSON 출력/work.json",
+    "workRecordHash": "0c7f7a2c5c77b33123d9e4456c3136f22c9d80034c0040c45d44c49b8f5e837d",
+    "sourceDigest"  : "4f9436eed9ef455862a37ded882781eeb35982d7cbed5825d9b41d5aaf47c09c",
+    "criteriaDigest": "d998f4f489816111ad3008a4e9993704a5e993a8285590c68a5770485a2e1b52"
+  }
+}

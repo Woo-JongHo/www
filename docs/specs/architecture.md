@@ -19,6 +19,13 @@
     "verificationRequired": true
   },
   {
+    "id": "RESP-DEVELOPMENT-RECORDS-SERIALIZATION",
+    "nodeId": "arch.development.records.serialization",
+    "description": "새 작업 revision과 신규 보고서의 최초 JSON 출력에서 native 의미와 승인된 scalar 열을 보존한다.",
+    "implementationRequired": true,
+    "verificationRequired": true
+  },
+  {
     "id": "RESP-TOOLING-BUNDLE",
     "nodeId": "arch.tooling.bundle",
     "description": "앱 번들 생성 책임을 구현하고 관련 동작을 검증한다.",

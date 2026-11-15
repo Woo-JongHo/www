@@ -1,0 +1,200 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-c66d59de-ee7c-4ebc-a1ca-d40364963a47",
+  "workId"        : "work-673ddd6a-b9e6-4dd2-99c5-c37f4b02c96b",
+  "title"         : "채팅과 실시간 사이드바 및 프로젝트 Node Map 개편",
+  "summary"       : "인터뷰에서 확정한 UI 개편 명세를 WWW 작업 체계에 등록했다. GJC 세션 파일 없이도 작업 목차·명세·작업 레코드로 요구와 21개 수용 기준을 확인할 수 있다. 제품 구현은 수행하지 않았으며 작업은 ready, 다음 단계는 design으로 남겼다.",
+  "outcome"       : "in_progress",
+  "kind"          : "authored",
+  "event"         : "finish",
+  "createdAt"     : "2026-11-14T01:02:57.550Z",
+  "workRecordHash": "631cac3cb59618ce038b4a4dec2e7105377f48ea5f943ab7a9d9c82701b9afd8",
+  "sourceDigest"  : "4bccc836cb23343ed8ff712d9af9287c82c1a06d0ff8c4fa2e81300c9b2f7f87",
+  "criteriaDigest": "d77df2b140716f5a2eda6c4483af8fcd6d9b8ebe727c96ba3d8c39975fd15dce",
+  "semanticHash"  : "1ff4a3a64036058b372133d971bb54b5629843637dfe4b9311b126edae3f7986",
+  "narrative": {
+    "summary": "인터뷰에서 확정한 UI 개편 명세를 WWW 작업 체계에 등록했다. GJC 세션 파일 없이도 작업 목차·명세·작업 레코드로 요구와 21개 수용 기준을 확인할 수 있다. 제품 구현은 수행하지 않았으며 작업은 ready, 다음 단계는 design으로 남겼다.",
+    "before" : "확정 명세가 GJC 숨김 세션에만 있어 WWW 작업 목차와 작업 UUID로 찾을 수 없었다.",
+    "after"  : "Chat 009 작업에 명세와 수용 기준을 등록하고 작업 목차에서 연결했다. 채팅 스크롤, 상태 사이드바와 대화별 리소스 영속화, 로컬 프로젝트 탐색, Node Map의 합의 내용과 제외 범위를 읽을 수 있다.",
+    "changes": [
+      "새 work.json에 21개 수용 기준과 명세 등록 권한을 연결했다.",
+      "spec.md에 네 영역의 사용자 시나리오·확정 결정·설계 과제·검증 계획·참고 자료를 작성했다.",
+      "기존 작업 목차에 명세와 작업 레코드 링크를 추가했다."
+    ],
+    "decisions": [
+      "수용 기준 정의와 결과는 work.json만 정본으로 사용하고 명세에는 시나리오와 기준 ID를 연결했다.",
+      "모든 제품 기준은 unverified로 유지하고 명세 등록을 구현 완료나 실행 승인으로 바꾸지 않았다.",
+      "사용자의 최신 요청에 맞춰 합의 설계 진행은 보류하고 문서 등록만 처리했다."
+    ],
+    "limitations": [
+      "node scripts/check-workflow.ts와 등록 비교 검증은 통과했으나 제품 테스트·타입 검사·빌드·실제 앱 GUI 검증은 수행하지 않았다. 실행 코드 변경이 없는 문서 등록이다.",
+      "공유 검토 core를 통한 독립 Opus 검토와 현행 정본 전체의 완료용 문서 영향 검토는 수행하지 않았고 제품 작업을 done 처리하지 않았다.",
+      "앱 리포트 화면을 직접 열지는 않았다. 생성된 보고서 HTML과 JSON은 파일로 확인한다."
+    ],
+    "next": [
+      "같은 작업 UUID의 명세와 수용 기준을 사용해 후속 합의 설계를 진행한다.",
+      "구현은 별도 승인 이후 수행하며 현재 제품 기준의 미검증 상태를 보존한다."
+    ]
+  },
+  "work": {
+    "status": "ready",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id"         : "AC-CHAT-01",
+        "description": "긴 답변과 연속 메시지에서도 문서 전체가 세로로 밀리지 않고 대화 영역 내부에서 스크롤된다. 입력창과 탐색·상태 영역은 화면 안에 유지된다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-CHAT-02",
+        "description": "긴 코드·URL·표의 넘침을 해당 영역에 가두며 앱 전체의 가로 넘침을 만들지 않는다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-CHAT-03",
+        "description": "과거를 읽는 중 새 출력이 와도 읽기 위치를 빼앗지 않는다. 최신을 따라가는 중이면 새 내용과 레이아웃 변경 후 끝 위치를 유지한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-CHAT-04",
+        "description": "모니터 열기/닫기와 지원하는 창 크기 변경에서도 입력창 접근과 대화 스크롤이 유지된다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-STATUS-01",
+        "description": "상단에 현재 요청의 단계·작업 체크리스트를 표시한다. 과거 요청의 완료 상태가 현재 요청으로 섞이지 않는다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-STATUS-02",
+        "description": "실제 Skill/Hook 호출이 관측되면 즉시 이름·활동 상태를 알아볼 수 있도록 반영한다. 전체 설치 카탈로그를 기본 화면에 나열하지 않는다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-STATUS-03",
+        "description": "단계·호출 자료가 없으면 미제공/누락을 표시한다. 대화 내용으로 호출·진행·성공을 추정해 만들지 않는다. 문서 읽기와 실제 실행도 구분한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-STATUS-04",
+        "description": "하단에 실제 사용 리소스를 시각적으로 정리해 대화(thread) 단위로 축적한다. 같은 대화의 후속 요청은 이어 쌓고 다른 대화·프로젝트와 섞지 않는다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-STATUS-05",
+        "description": "앱을 재시작한 뒤 같은 대화를 다시 열면 보존된 누적 리소스를 확인할 수 있다. 이력 복원을 새 호출 반응으로 재생하지 않는다. 누락 구간·불완전 이력을 완전한 기록으로 주장하지 않는다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-STATUS-06",
+        "description": "동일 관측의 중복 전달·복원으로 누적을 이중 계산하지 않는다. 저장 형식·용량·복구 오류 처리는 후속 설계에서 정하되 누락·손상을 숨기지 않는다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-STATUS-07",
+        "description": "상세 실행 흐름·이벤트 및 필요시 전체 리소스 카탈로그는 사이드바와 분리된 상세 모니터 화면에서 확인한다. 상세 조회가 채팅 초안이나 읽기 위치를 잃게 하지 않는다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-PROJECT-01",
+        "description": "로컬 최근 프로젝트·즐겨찾기·프로젝트별 대화를 구별해 탐색할 수 있다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-PROJECT-02",
+        "description": "Figma의 명료한 탐색 계층을 참고하되 일관된 선형 아이콘·선택 강조·간격·타이포그래피를 적용한다. Figma 전체 서비스나 외형의 완전 복제는 아니다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-PROJECT-03",
+        "description": "프로젝트 전환 뒤 해당 프로젝트의 대화만 연결하며, 기존 실행·승인 중 전환 보호 및 저장 대화 재개 동작을 회귀시키지 않는다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-PROJECT-04",
+        "description": "아이콘만으로 의미를 전달하지 않고 접근 가능한 이름과 키보드 포커스를 제공한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-MAP-01",
+        "description": "기존 구조 화면의 산만한 카드 배너 중심 구성을 기능→처리 흐름→담당 코드를 읽을 수 있는 연결 지도 중심으로 개편한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-MAP-02",
+        "description": "연결선, 검색, 확대·축소, 지도 이동, 선택 항목 상세를 제공한다. 검색 결과를 지도와 상세에서 찾을 수 있고 선택/초점이 식별된다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-MAP-03",
+        "description": "선택 상세에서 기능·처리 단계의 역할과 담당 파일/코드 근거를 확인한다. 없는 연결·코드 근거를 생성하지 않으며 미제공을 표시한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-MAP-04",
+        "description": "개념적 처리 관계와 실제 실행 순서·호출 추적을 혼동시키지 않는다. 설치된 코드 의존 관계를 표시하면 그 관계 유형을 구분한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-MAP-05",
+        "description": "참고 HTML의 계층 탐색·연결·선택 상세 방식은 모티브로 사용하되 RPA의 Process/Task/Unit 용어를 WWW에 억지로 적용하지 않는다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      },
+      {
+        "id"         : "AC-MAP-06",
+        "description": "큰 지도에서도 창 전체를 밀어내지 않고 내부 탐색이 가능하며 선택 상세를 닫거나 화면 전환 후에도 탐색과 채팅이 정상 동작한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      }
+    ],
+    "verifications": [],
+    "reviews": []
+  },
+  "source": {
+    "recordPath"    : "docs/work/Chat/009-채팅과 실시간 사이드바 및 프로젝트 Node Map 개편/work.json",
+    "workRecordHash": "631cac3cb59618ce038b4a4dec2e7105377f48ea5f943ab7a9d9c82701b9afd8",
+    "sourceDigest"  : "4bccc836cb23343ed8ff712d9af9287c82c1a06d0ff8c4fa2e81300c9b2f7f87",
+    "criteriaDigest": "d77df2b140716f5a2eda6c4483af8fcd6d9b8ebe727c96ba3d8c39975fd15dce"
+  }
+}

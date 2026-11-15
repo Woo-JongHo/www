@@ -1,0 +1,899 @@
+{
+  "preparedAt"            : "2026-11-14T00:04:28.085345+00:00",
+  "status"                : "fixed-review-proposal-unapproved-unapplied",
+  "scope"                 : "test/work-json.test.ts exact 4 pairs only; original v3 76 pairs not modified",
+  "sourceSha256"          : "e52e3855987994a9eeacc5d3427a9afeca6d0d6c5ee5a47e3f27730c0d8a312d",
+  "sourceHashMatchesNow"  : true,
+  "existingV1KeysNewScope": 3,
+  "newKeys"               : 1,
+  "entries": [
+    {
+      "id"            : "E01",
+      "key"           : "v1|typescript|ArrayLiteralExpression|object-rows|open-brace>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>close-brace>tail",
+      "exactFileScope": "test/work-json.test.ts",
+      "sourceSha256"  : "e52e3855987994a9eeacc5d3427a9afeca6d0d6c5ee5a47e3f27730c0d8a312d",
+      "classification": "existing-v1-approved-key-new-file-scope",
+      "example": {
+        "before"      : "const rows = [\n  { id: \"a\", title: \"first\", role: \"x\", color: \"red\" },\n  { id: \"longer\", title: \"x\", role: \"mid\", color: \"blue\" },\n  { id: \"b\", title: \"mid\", role: \"longer\", color: \"red\" },\n];\n",
+        "after"       : "const rows = [\n  { id : \"a\"      , title : \"first\" , role : \"x\"      , color : \"red\"  },\n  { id : \"longer\" , title : \"x\"     , role : \"mid\"    , color : \"blue\" },\n  { id : \"b\"      , title : \"mid\"   , role : \"longer\" , color : \"red\"  },\n];\n",
+        "beforeSha256": "c9934d32fdddd85dfe6c5cfcb16b815bd9f7d3a66ad77c110adec0363c6f5739",
+        "afterSha256" : "b6c34888e21d88dfc983ebb71ebabe3b6a496943d36dc4315045bd5b04c55440"
+      },
+      "counterexample": {
+        "before": "const other = {\n  a: 1,\n  longer: 22,\n  mid: 333\n};\n",
+        "after" : "const other = {\n  a: 1,\n  longer: 22,\n  mid: 333\n};\n",
+        "status": "official-other-key-confirmed",
+        "sha256": "d16c643f17cd632a00fdbf935035fff62b2f4ae66cf7a6757c7bc4229f60f18a"
+      },
+      "exampleOrigin"            : "/Users/jonghoPro/woo/00_project/www/.www/architecture-contract/boxbox-side/TS-rule-approval-proposal-v2.json",
+      "exampleOriginSha256"      : "180732fc06e8db858475ec8f44d46d904248b0a999b9cd608c2230464466d62b",
+      "officialSourceCheckStatus": "verified-before-fixable-after-zero-same-key-counter-other-key",
+      "approvalStatus"           : "unapproved",
+      "v3OriginalModified"       : false,
+      "officialSourceEvidence": {
+        "id": "E01",
+        "key": "v1|typescript|ArrayLiteralExpression|object-rows|open-brace>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>close-brace>tail",
+        "checks": {
+          "before": {
+            "exit": 1,
+            "syntax": {
+              "status": "valid",
+              "tool": "typescript",
+              "diagnostics": []
+            },
+            "summary": {
+              "groups"    : 1,
+              "misaligned": 1,
+              "edits"     : 23,
+              "refused"   : 0,
+              "suggested" : 0
+            },
+            "facts": [
+              {
+                "key"          : "v1|typescript|ArrayLiteralExpression|object-rows|open-brace>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>close-brace>tail",
+                "status"       : "unknown",
+                "proofComplete": false,
+                "reasons": [
+                  "no matching convention"
+                ]
+              }
+            ],
+            "groups": [
+              {
+                "kind"     : "object-rows",
+                "startLine": 2,
+                "endLine"  : 4,
+                "rows"     : 3,
+                "axes": [
+                  "open-brace=2",
+                  "property1=4",
+                  "colon1=7",
+                  "value1=9",
+                  "comma1=18",
+                  "property2=20",
+                  "colon2=26",
+                  "value2=28",
+                  "comma2=36",
+                  "property3=38",
+                  "colon3=43",
+                  "value3=45",
+                  "comma3=54",
+                  "property4=56",
+                  "colon4=62",
+                  "value4=64",
+                  "close-brace=71",
+                  "tail=72"
+                ],
+                "state"  : "FIXABLE",
+                "edits"  : 23,
+                "context": "ArrayLiteralExpression",
+                "depth"  : 1
+              }
+            ]
+          },
+          "after": {
+            "exit": 0,
+            "syntax": {
+              "status": "valid",
+              "tool": "typescript",
+              "diagnostics": []
+            },
+            "summary": {
+              "groups"    : 1,
+              "misaligned": 0,
+              "edits"     : 0,
+              "refused"   : 0,
+              "suggested" : 0
+            },
+            "facts": [
+              {
+                "key"          : "v1|typescript|ArrayLiteralExpression|object-rows|open-brace>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>close-brace>tail",
+                "status"       : "unknown",
+                "proofComplete": false,
+                "reasons": [
+                  "no matching convention"
+                ]
+              }
+            ],
+            "groups": [
+              {
+                "kind"     : "object-rows",
+                "startLine": 2,
+                "endLine"  : 4,
+                "rows"     : 3,
+                "axes": [
+                  "open-brace=2",
+                  "property1=4",
+                  "colon1=7",
+                  "value1=9",
+                  "comma1=18",
+                  "property2=20",
+                  "colon2=26",
+                  "value2=28",
+                  "comma2=36",
+                  "property3=38",
+                  "colon3=43",
+                  "value3=45",
+                  "comma3=54",
+                  "property4=56",
+                  "colon4=62",
+                  "value4=64",
+                  "close-brace=71",
+                  "tail=72"
+                ],
+                "state"  : "PASS",
+                "edits"  : 0,
+                "context": "ArrayLiteralExpression",
+                "depth"  : 1
+              }
+            ]
+          },
+          "counter": {
+            "exit": 1,
+            "syntax": {
+              "status": "valid",
+              "tool": "typescript",
+              "diagnostics": []
+            },
+            "summary": {
+              "groups"    : 1,
+              "misaligned": 1,
+              "edits"     : 5,
+              "refused"   : 0,
+              "suggested" : 0
+            },
+            "facts": [
+              {
+                "key"          : "v1|typescript|ObjectLiteralExpression|registration|colon>value>comma",
+                "status"       : "unknown",
+                "proofComplete": false,
+                "reasons": [
+                  "no matching convention"
+                ]
+              }
+            ],
+            "groups": [
+              {
+                "kind"     : "registration",
+                "startLine": 2,
+                "endLine"  : 4,
+                "rows"     : 3,
+                "axes": [
+                  "colon=9",
+                  "value=11",
+                  "comma=14"
+                ],
+                "state"  : "FIXABLE",
+                "edits"  : 5,
+                "context": "ObjectLiteralExpression",
+                "depth"  : 1
+              }
+            ]
+          }
+        }
+      },
+      "actualTargetApprovalFact": {
+        "key"          : "v1|typescript|ArrayLiteralExpression|object-rows|open-brace>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>close-brace>tail",
+        "status"       : "unknown",
+        "proofComplete": false,
+        "reasons": [
+          "no matching convention"
+        ]
+      },
+      "semanticEvidence": {
+        "key": "v1|typescript|ArrayLiteralExpression|object-rows|open-brace>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>close-brace>tail",
+        "positive": {
+          "available"                   : true,
+          "beforeSha256"                : "c9934d32fdddd85dfe6c5cfcb16b815bd9f7d3a66ad77c110adec0363c6f5739",
+          "afterSha256"                 : "b6c34888e21d88dfc983ebb71ebabe3b6a496943d36dc4315045bd5b04c55440",
+          "syntaxValid"                 : true,
+          "astLeafTokensPreserved"      : true,
+          "astKindsPreserved"           : true,
+          "printerWithCommentsPreserved": true,
+          "lineCountPreserved"          : true,
+          "indentationPreserved"        : true
+        },
+        "counterexample": {
+          "available"                   : true,
+          "beforeSha256"                : "d16c643f17cd632a00fdbf935035fff62b2f4ae66cf7a6757c7bc4229f60f18a",
+          "afterSha256"                 : "d16c643f17cd632a00fdbf935035fff62b2f4ae66cf7a6757c7bc4229f60f18a",
+          "syntaxValid"                 : true,
+          "astLeafTokensPreserved"      : true,
+          "astKindsPreserved"           : true,
+          "printerWithCommentsPreserved": true,
+          "lineCountPreserved"          : true,
+          "indentationPreserved"        : true
+        },
+        "automaticTargetPipelineVerified": false
+      },
+      "automaticAlignFixedPointVerified": false
+    },
+    {
+      "id"            : "E02",
+      "key"           : "v1|typescript|ArrayLiteralExpression|object-rows|open-brace>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>close-brace>tail",
+      "exactFileScope": "test/work-json.test.ts",
+      "sourceSha256"  : "e52e3855987994a9eeacc5d3427a9afeca6d0d6c5ee5a47e3f27730c0d8a312d",
+      "classification": "new-key",
+      "example": {
+        "before"      : "const rows = [\n  { a: 1, b: 1, c: 1, d: 1, e: 1, f: 1, g: 1, h: 1, i: 1 },\n  { a: 22, b: 22, c: 22, d: 22, e: 22, f: 22, g: 22, h: 22, i: 22 },\n  { a: 333, b: 333, c: 333, d: 333, e: 333, f: 333, g: 333, h: 333, i: 333 },\n];\n",
+        "after"       : "const rows = [\n  { a : 1   , b : 1   , c : 1   , d : 1   , e : 1   , f : 1   , g : 1   , h : 1   , i : 1   },\n  { a : 22  , b : 22  , c : 22  , d : 22  , e : 22  , f : 22  , g : 22  , h : 22  , i : 22  },\n  { a : 333 , b : 333 , c : 333 , d : 333 , e : 333 , f : 333 , g : 333 , h : 333 , i : 333 },\n];\n",
+        "beforeSha256": "5fe412314ba9c30b5b530c74f93efd1fbaf0355860ada80818a1a8c68e85b718",
+        "afterSha256" : "fdfeeca4504b53c604d6cd669a3a2f392ae31f8cb41f997be3628e40c39db5a5"
+      },
+      "counterexample": {
+        "before": "const other = {\n  a: 1,\n  longer: 22,\n  mid: 333\n};\n",
+        "after" : "const other = {\n  a: 1,\n  longer: 22,\n  mid: 333\n};\n",
+        "status": "official-other-key-confirmed",
+        "sha256": "d16c643f17cd632a00fdbf935035fff62b2f4ae66cf7a6757c7bc4229f60f18a"
+      },
+      "exampleOrigin"            : "new-hand-authored-nine-field-example",
+      "exampleOriginSha256"      : null,
+      "officialSourceCheckStatus": "verified-before-fixable-after-zero-same-key-counter-other-key",
+      "approvalStatus"           : "unapproved",
+      "v3OriginalModified"       : false,
+      "officialSourceEvidence": {
+        "id": "E02",
+        "key": "v1|typescript|ArrayLiteralExpression|object-rows|open-brace>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>close-brace>tail",
+        "checks": {
+          "before": {
+            "exit": 1,
+            "syntax": {
+              "status": "valid",
+              "tool": "typescript",
+              "diagnostics": []
+            },
+            "summary": {
+              "groups"    : 1,
+              "misaligned": 1,
+              "edits"     : 53,
+              "refused"   : 0,
+              "suggested" : 0
+            },
+            "facts": [
+              {
+                "key"          : "v1|typescript|ArrayLiteralExpression|object-rows|open-brace>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>close-brace>tail",
+                "status"       : "unknown",
+                "proofComplete": false,
+                "reasons": [
+                  "no matching convention"
+                ]
+              }
+            ],
+            "groups": [
+              {
+                "kind"     : "object-rows",
+                "startLine": 2,
+                "endLine"  : 4,
+                "rows"     : 3,
+                "axes": [
+                  "open-brace=2",
+                  "property1=4",
+                  "colon1=6",
+                  "value1=8",
+                  "comma1=12",
+                  "property2=14",
+                  "colon2=16",
+                  "value2=18",
+                  "comma2=22",
+                  "property3=24",
+                  "colon3=26",
+                  "value3=28",
+                  "comma3=32",
+                  "property4=34",
+                  "colon4=36",
+                  "value4=38",
+                  "comma4=42",
+                  "property5=44",
+                  "colon5=46",
+                  "value5=48",
+                  "comma5=52",
+                  "property6=54",
+                  "colon6=56",
+                  "value6=58",
+                  "comma6=62",
+                  "property7=64",
+                  "colon7=66",
+                  "value7=68",
+                  "comma7=72",
+                  "property8=74",
+                  "colon8=76",
+                  "value8=78",
+                  "comma8=82",
+                  "property9=84",
+                  "colon9=86",
+                  "value9=88",
+                  "close-brace=92",
+                  "tail=93"
+                ],
+                "state"  : "FIXABLE",
+                "edits"  : 53,
+                "context": "ArrayLiteralExpression",
+                "depth"  : 1
+              }
+            ]
+          },
+          "after": {
+            "exit": 0,
+            "syntax": {
+              "status": "valid",
+              "tool": "typescript",
+              "diagnostics": []
+            },
+            "summary": {
+              "groups"    : 1,
+              "misaligned": 0,
+              "edits"     : 0,
+              "refused"   : 0,
+              "suggested" : 0
+            },
+            "facts": [
+              {
+                "key"          : "v1|typescript|ArrayLiteralExpression|object-rows|open-brace>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>close-brace>tail",
+                "status"       : "unknown",
+                "proofComplete": false,
+                "reasons": [
+                  "no matching convention"
+                ]
+              }
+            ],
+            "groups": [
+              {
+                "kind"     : "object-rows",
+                "startLine": 2,
+                "endLine"  : 4,
+                "rows"     : 3,
+                "axes": [
+                  "open-brace=2",
+                  "property1=4",
+                  "colon1=6",
+                  "value1=8",
+                  "comma1=12",
+                  "property2=14",
+                  "colon2=16",
+                  "value2=18",
+                  "comma2=22",
+                  "property3=24",
+                  "colon3=26",
+                  "value3=28",
+                  "comma3=32",
+                  "property4=34",
+                  "colon4=36",
+                  "value4=38",
+                  "comma4=42",
+                  "property5=44",
+                  "colon5=46",
+                  "value5=48",
+                  "comma5=52",
+                  "property6=54",
+                  "colon6=56",
+                  "value6=58",
+                  "comma6=62",
+                  "property7=64",
+                  "colon7=66",
+                  "value7=68",
+                  "comma7=72",
+                  "property8=74",
+                  "colon8=76",
+                  "value8=78",
+                  "comma8=82",
+                  "property9=84",
+                  "colon9=86",
+                  "value9=88",
+                  "close-brace=92",
+                  "tail=93"
+                ],
+                "state"  : "PASS",
+                "edits"  : 0,
+                "context": "ArrayLiteralExpression",
+                "depth"  : 1
+              }
+            ]
+          },
+          "counter": {
+            "exit": 1,
+            "syntax": {
+              "status": "valid",
+              "tool": "typescript",
+              "diagnostics": []
+            },
+            "summary": {
+              "groups"    : 1,
+              "misaligned": 1,
+              "edits"     : 5,
+              "refused"   : 0,
+              "suggested" : 0
+            },
+            "facts": [
+              {
+                "key"          : "v1|typescript|ObjectLiteralExpression|registration|colon>value>comma",
+                "status"       : "unknown",
+                "proofComplete": false,
+                "reasons": [
+                  "no matching convention"
+                ]
+              }
+            ],
+            "groups": [
+              {
+                "kind"     : "registration",
+                "startLine": 2,
+                "endLine"  : 4,
+                "rows"     : 3,
+                "axes": [
+                  "colon=9",
+                  "value=11",
+                  "comma=14"
+                ],
+                "state"  : "FIXABLE",
+                "edits"  : 5,
+                "context": "ObjectLiteralExpression",
+                "depth"  : 1
+              }
+            ]
+          }
+        }
+      },
+      "actualTargetApprovalFact": {
+        "key"          : "v1|typescript|ArrayLiteralExpression|object-rows|open-brace>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>close-brace>tail",
+        "status"       : "unknown",
+        "proofComplete": false,
+        "reasons": [
+          "no matching convention"
+        ]
+      },
+      "semanticEvidence": {
+        "key": "v1|typescript|ArrayLiteralExpression|object-rows|open-brace>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>comma{i}>property{i}>colon{i}>value{i}>close-brace>tail",
+        "positive": {
+          "available"                   : true,
+          "beforeSha256"                : "5fe412314ba9c30b5b530c74f93efd1fbaf0355860ada80818a1a8c68e85b718",
+          "afterSha256"                 : "fdfeeca4504b53c604d6cd669a3a2f392ae31f8cb41f997be3628e40c39db5a5",
+          "syntaxValid"                 : true,
+          "astLeafTokensPreserved"      : true,
+          "astKindsPreserved"           : true,
+          "printerWithCommentsPreserved": true,
+          "lineCountPreserved"          : true,
+          "indentationPreserved"        : true
+        },
+        "counterexample": {
+          "available"                   : true,
+          "beforeSha256"                : "d16c643f17cd632a00fdbf935035fff62b2f4ae66cf7a6757c7bc4229f60f18a",
+          "afterSha256"                 : "d16c643f17cd632a00fdbf935035fff62b2f4ae66cf7a6757c7bc4229f60f18a",
+          "syntaxValid"                 : true,
+          "astLeafTokensPreserved"      : true,
+          "astKindsPreserved"           : true,
+          "printerWithCommentsPreserved": true,
+          "lineCountPreserved"          : true,
+          "indentationPreserved"        : true
+        },
+        "automaticTargetPipelineVerified": false
+      },
+      "automaticAlignFixedPointVerified": false
+    },
+    {
+      "id"            : "E03",
+      "key"           : "v1|typescript|Block|declaration-equals|colon>equals>semicolon",
+      "exactFileScope": "test/work-json.test.ts",
+      "sourceSha256"  : "e52e3855987994a9eeacc5d3427a9afeca6d0d6c5ee5a47e3f27730c0d8a312d",
+      "classification": "existing-v1-approved-key-new-file-scope",
+      "example": {
+        "before"      : "function sample() {\n  const request: Event = { kind: \"request\" };\n  const waiting = project(request);\n}\n",
+        "after"       : "function sample() {\n  const request : Event = { kind: \"request\" } ;\n  const waiting         = project(request)    ;\n}\n",
+        "beforeSha256": "d2171945b46a4b549d02e224ce1c6917fe2add75049c4a1ef0a7b5bea962da32",
+        "afterSha256" : "6b3e45cdccd9e47d20622f4f1de04270319cce2bebb63dc7ac60f2363f8e5ec2"
+      },
+      "counterexample": {
+        "before": "const other = {\n  a: 1,\n  longer: 22,\n  mid: 333\n};\n",
+        "after" : "const other = {\n  a: 1,\n  longer: 22,\n  mid: 333\n};\n",
+        "status": "official-other-key-confirmed",
+        "sha256": "d16c643f17cd632a00fdbf935035fff62b2f4ae66cf7a6757c7bc4229f60f18a"
+      },
+      "exampleOrigin"            : "/Users/jonghoPro/woo/00_project/www/.www/architecture-contract/boxbox-side/TS-rule-approval-proposal-v2.json",
+      "exampleOriginSha256"      : "180732fc06e8db858475ec8f44d46d904248b0a999b9cd608c2230464466d62b",
+      "officialSourceCheckStatus": "verified-before-fixable-after-zero-same-key-counter-other-key",
+      "approvalStatus"           : "unapproved",
+      "v3OriginalModified"       : false,
+      "officialSourceEvidence": {
+        "id": "E03",
+        "key": "v1|typescript|Block|declaration-equals|colon>equals>semicolon",
+        "checks": {
+          "before": {
+            "exit": 1,
+            "syntax": {
+              "status": "valid",
+              "tool": "typescript",
+              "diagnostics": []
+            },
+            "summary": {
+              "groups"    : 1,
+              "misaligned": 1,
+              "edits"     : 3,
+              "refused"   : 0,
+              "suggested" : 0
+            },
+            "facts": [
+              {
+                "key"          : "v1|typescript|Block|declaration-equals|colon>equals>semicolon",
+                "status"       : "unknown",
+                "proofComplete": false,
+                "reasons": [
+                  "no matching convention"
+                ]
+              }
+            ],
+            "groups": [
+              {
+                "kind"     : "declaration-equals",
+                "startLine": 2,
+                "endLine"  : 3,
+                "rows"     : 2,
+                "axes": [
+                  "colon=15",
+                  "equals=23",
+                  "semicolon=45"
+                ],
+                "state"  : "FIXABLE",
+                "edits"  : 3,
+                "context": "Block",
+                "depth"  : 1
+              }
+            ]
+          },
+          "after": {
+            "exit": 0,
+            "syntax": {
+              "status": "valid",
+              "tool": "typescript",
+              "diagnostics": []
+            },
+            "summary": {
+              "groups"    : 1,
+              "misaligned": 0,
+              "edits"     : 0,
+              "refused"   : 0,
+              "suggested" : 0
+            },
+            "facts": [
+              {
+                "key"          : "v1|typescript|Block|declaration-equals|colon>equals>semicolon",
+                "status"       : "unknown",
+                "proofComplete": false,
+                "reasons": [
+                  "no matching convention"
+                ]
+              }
+            ],
+            "groups": [
+              {
+                "kind"     : "declaration-equals",
+                "startLine": 2,
+                "endLine"  : 3,
+                "rows"     : 2,
+                "axes": [
+                  "colon=16",
+                  "equals=24",
+                  "semicolon=46"
+                ],
+                "state"  : "PASS",
+                "edits"  : 0,
+                "context": "Block",
+                "depth"  : 1
+              }
+            ]
+          },
+          "counter": {
+            "exit": 1,
+            "syntax": {
+              "status": "valid",
+              "tool": "typescript",
+              "diagnostics": []
+            },
+            "summary": {
+              "groups"    : 1,
+              "misaligned": 1,
+              "edits"     : 5,
+              "refused"   : 0,
+              "suggested" : 0
+            },
+            "facts": [
+              {
+                "key"          : "v1|typescript|ObjectLiteralExpression|registration|colon>value>comma",
+                "status"       : "unknown",
+                "proofComplete": false,
+                "reasons": [
+                  "no matching convention"
+                ]
+              }
+            ],
+            "groups": [
+              {
+                "kind"     : "registration",
+                "startLine": 2,
+                "endLine"  : 4,
+                "rows"     : 3,
+                "axes": [
+                  "colon=9",
+                  "value=11",
+                  "comma=14"
+                ],
+                "state"  : "FIXABLE",
+                "edits"  : 5,
+                "context": "ObjectLiteralExpression",
+                "depth"  : 1
+              }
+            ]
+          }
+        }
+      },
+      "actualTargetApprovalFact": {
+        "key"          : "v1|typescript|Block|declaration-equals|colon>equals>semicolon",
+        "status"       : "unknown",
+        "proofComplete": false,
+        "reasons": [
+          "no matching convention"
+        ]
+      },
+      "semanticEvidence": {
+        "key": "v1|typescript|Block|declaration-equals|colon>equals>semicolon",
+        "positive": {
+          "available"                   : true,
+          "beforeSha256"                : "d2171945b46a4b549d02e224ce1c6917fe2add75049c4a1ef0a7b5bea962da32",
+          "afterSha256"                 : "6b3e45cdccd9e47d20622f4f1de04270319cce2bebb63dc7ac60f2363f8e5ec2",
+          "syntaxValid"                 : true,
+          "astLeafTokensPreserved"      : true,
+          "astKindsPreserved"           : true,
+          "printerWithCommentsPreserved": true,
+          "lineCountPreserved"          : true,
+          "indentationPreserved"        : true
+        },
+        "counterexample": {
+          "available"                   : true,
+          "beforeSha256"                : "d16c643f17cd632a00fdbf935035fff62b2f4ae66cf7a6757c7bc4229f60f18a",
+          "afterSha256"                 : "d16c643f17cd632a00fdbf935035fff62b2f4ae66cf7a6757c7bc4229f60f18a",
+          "syntaxValid"                 : true,
+          "astLeafTokensPreserved"      : true,
+          "astKindsPreserved"           : true,
+          "printerWithCommentsPreserved": true,
+          "lineCountPreserved"          : true,
+          "indentationPreserved"        : true
+        },
+        "automaticTargetPipelineVerified": false
+      },
+      "automaticAlignFixedPointVerified": false
+    },
+    {
+      "id"            : "E04",
+      "key"           : "v1|typescript|SourceFile|declaration-equals|equals>semicolon",
+      "exactFileScope": "test/work-json.test.ts",
+      "sourceSha256"  : "e52e3855987994a9eeacc5d3427a9afeca6d0d6c5ee5a47e3f27730c0d8a312d",
+      "classification": "existing-v1-approved-key-new-file-scope",
+      "example": {
+        "before"      : "const begin = event(1);\nconst hookRun = { status: \"failed\" };\n",
+        "after"       : "const begin   = event(1)             ;\nconst hookRun = { status: \"failed\" } ;\n",
+        "beforeSha256": "7a94f77a10d59511d11545567d6ea825554f2e750ffe071ef0a1694045d153b5",
+        "afterSha256" : "0573455bd746b86e1eb321c3d52da1ce893b60d75058f9f232005508d00cd262"
+      },
+      "counterexample": {
+        "before": "const other = {\n  a: 1,\n  longer: 22,\n  mid: 333\n};\n",
+        "after" : "const other = {\n  a: 1,\n  longer: 22,\n  mid: 333\n};\n",
+        "status": "official-other-key-confirmed",
+        "sha256": "d16c643f17cd632a00fdbf935035fff62b2f4ae66cf7a6757c7bc4229f60f18a"
+      },
+      "exampleOrigin"            : "/Users/jonghoPro/woo/00_project/www/.www/architecture-contract/boxbox-side/TS-rule-approval-proposal-v2.json",
+      "exampleOriginSha256"      : "180732fc06e8db858475ec8f44d46d904248b0a999b9cd608c2230464466d62b",
+      "officialSourceCheckStatus": "verified-before-fixable-after-zero-same-key-counter-other-key",
+      "approvalStatus"           : "unapproved",
+      "v3OriginalModified"       : false,
+      "officialSourceEvidence": {
+        "id": "E04",
+        "key": "v1|typescript|SourceFile|declaration-equals|equals>semicolon",
+        "checks": {
+          "before": {
+            "exit": 1,
+            "syntax": {
+              "status": "valid",
+              "tool": "typescript",
+              "diagnostics": []
+            },
+            "summary": {
+              "groups"    : 1,
+              "misaligned": 1,
+              "edits"     : 3,
+              "refused"   : 0,
+              "suggested" : 0
+            },
+            "facts": [
+              {
+                "key"          : "v1|typescript|SourceFile|declaration-equals|equals>semicolon",
+                "status"       : "unknown",
+                "proofComplete": false,
+                "reasons": [
+                  "no matching convention"
+                ]
+              }
+            ],
+            "groups": [
+              {
+                "kind"     : "declaration-equals",
+                "startLine": 1,
+                "endLine"  : 2,
+                "rows"     : 2,
+                "axes": [
+                  "equals=14",
+                  "semicolon=37"
+                ],
+                "state"  : "FIXABLE",
+                "edits"  : 3,
+                "context": "SourceFile",
+                "depth"  : 0
+              }
+            ]
+          },
+          "after": {
+            "exit": 0,
+            "syntax": {
+              "status": "valid",
+              "tool": "typescript",
+              "diagnostics": []
+            },
+            "summary": {
+              "groups"    : 1,
+              "misaligned": 0,
+              "edits"     : 0,
+              "refused"   : 0,
+              "suggested" : 0
+            },
+            "facts": [
+              {
+                "key"          : "v1|typescript|SourceFile|declaration-equals|equals>semicolon",
+                "status"       : "unknown",
+                "proofComplete": false,
+                "reasons": [
+                  "no matching convention"
+                ]
+              }
+            ],
+            "groups": [
+              {
+                "kind"     : "declaration-equals",
+                "startLine": 1,
+                "endLine"  : 2,
+                "rows"     : 2,
+                "axes": [
+                  "equals=14",
+                  "semicolon=37"
+                ],
+                "state"  : "PASS",
+                "edits"  : 0,
+                "context": "SourceFile",
+                "depth"  : 0
+              }
+            ]
+          },
+          "counter": {
+            "exit": 1,
+            "syntax": {
+              "status": "valid",
+              "tool": "typescript",
+              "diagnostics": []
+            },
+            "summary": {
+              "groups"    : 1,
+              "misaligned": 1,
+              "edits"     : 5,
+              "refused"   : 0,
+              "suggested" : 0
+            },
+            "facts": [
+              {
+                "key"          : "v1|typescript|ObjectLiteralExpression|registration|colon>value>comma",
+                "status"       : "unknown",
+                "proofComplete": false,
+                "reasons": [
+                  "no matching convention"
+                ]
+              }
+            ],
+            "groups": [
+              {
+                "kind"     : "registration",
+                "startLine": 2,
+                "endLine"  : 4,
+                "rows"     : 3,
+                "axes": [
+                  "colon=9",
+                  "value=11",
+                  "comma=14"
+                ],
+                "state"  : "FIXABLE",
+                "edits"  : 5,
+                "context": "ObjectLiteralExpression",
+                "depth"  : 1
+              }
+            ]
+          }
+        }
+      },
+      "actualTargetApprovalFact": {
+        "key"          : "v1|typescript|SourceFile|declaration-equals|equals>semicolon",
+        "status"       : "unknown",
+        "proofComplete": false,
+        "reasons": [
+          "no matching convention"
+        ]
+      },
+      "semanticEvidence": {
+        "key": "v1|typescript|SourceFile|declaration-equals|equals>semicolon",
+        "positive": {
+          "available"                   : true,
+          "beforeSha256"                : "7a94f77a10d59511d11545567d6ea825554f2e750ffe071ef0a1694045d153b5",
+          "afterSha256"                 : "0573455bd746b86e1eb321c3d52da1ce893b60d75058f9f232005508d00cd262",
+          "syntaxValid"                 : true,
+          "astLeafTokensPreserved"      : true,
+          "astKindsPreserved"           : true,
+          "printerWithCommentsPreserved": true,
+          "lineCountPreserved"          : true,
+          "indentationPreserved"        : true
+        },
+        "counterexample": {
+          "available"                   : true,
+          "beforeSha256"                : "d16c643f17cd632a00fdbf935035fff62b2f4ae66cf7a6757c7bc4229f60f18a",
+          "afterSha256"                 : "d16c643f17cd632a00fdbf935035fff62b2f4ae66cf7a6757c7bc4229f60f18a",
+          "syntaxValid"                 : true,
+          "astLeafTokensPreserved"      : true,
+          "astKindsPreserved"           : true,
+          "printerWithCommentsPreserved": true,
+          "lineCountPreserved"          : true,
+          "indentationPreserved"        : true
+        },
+        "automaticTargetPipelineVerified": false
+      },
+      "automaticAlignFixedPointVerified": false
+    }
+  ],
+  "sourceWritten"  : false,
+  "registryWritten": false,
+  "questionAsked"  : false,
+  "proposalId"     : "phase13-extra-4-v1",
+  "fixedAt"        : "2026-11-14T00:05:42.580488+00:00",
+  "originalV3": {
+    "md"          : ".www/boxbox-output/final-approval-candidates/20261113T231457Z-9fe53e46/stable-delta-v3.md",
+    "sha256"      : "9ba598dac06cadab0e77c50f04b07350ebba8cc7e3fdbe84c77af458d9a0bac3",
+    "pendingPairs": 76,
+    "unchanged"   : true
+  },
+  "sourceProof": {
+    "file"                    : "test/work-json.test.ts",
+    "sha256"                  : "e52e3855987994a9eeacc5d3427a9afeca6d0d6c5ee5a47e3f27730c0d8a312d",
+    "rawSourceCheckFile"      : ".www/boxbox-output/phase13/test_work-json.test.ts.post-source.json",
+    "rawSourceCheckSha256"    : "298aaca14df703735cbe9bd7890dfb65dd006e13361b361d7161a9aec1ea6804",
+    "currentSourceHashMatches": true
+  },
+  "limits": [
+    "대상은 test/work-json.test.ts의 정확한 네 key/파일 쌍뿐이다.",
+    "원래 v3 76쌍은 별도 질문의 고정범위이며 이 추가안에 대한 답변으로 승인되지 않는다.",
+    "기존 v1의 3개 key는 새 파일 scope만 제안하며 이미 승인된 기존 파일쌍을 재승인하지 않는다.",
+    "key에는 depth가 없으므로 같은 파일·같은 key의 다른 깊이도 적용될 수 있다. 다른 context/kind/axis/key/파일/glob은 자동 확장하지 않는다.",
+    "양성4종은 구문·AST leaf token·AST kind tree·주석 printer·줄·indent 보존을 확인했다. 공식 source-check 전후동일key/after0/반례다른key를 확인했으나 실제 자동 Align/고정점은 아직 미실행이다.",
+    "등록·적용은 실제 사용자 답변과 소스/proof/config 현재성 재검사 후 공식 pipeline으로만 수행한다."
+  ]
+}

@@ -1,0 +1,225 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>채팅과 실시간 사이드바 및 프로젝트 Node Map 개편 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 14일 오후 6:53 · 한국 시간 · 자동 기록</span></header><section class="hero" id="report-conclusion"><h1>채팅과 실시간 사이드바 및 프로젝트 Node Map 개편</h1><p class="lead">진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</p><div id="report-story" class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 1 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="state-note">저장 당시 기준 중 21개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>긴 답변과 연속 메시지에서도 문서 전체가 세로로 밀리지 않고 대화 영역 내부에서 스크롤된다. 입력창과 탐색·상태 영역은 화면 안에 유지된다.</dt><dd>미검증으로 기록</dd></div><div><dt>긴 코드·URL·표의 넘침을 해당 영역에 가두며 앱 전체의 가로 넘침을 만들지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>과거를 읽는 중 새 출력이 와도 읽기 위치를 빼앗지 않는다. 최신을 따라가는 중이면 새 내용과 레이아웃 변경 후 끝 위치를 유지한다.</dt><dd>미검증으로 기록</dd></div><div><dt>모니터 열기/닫기와 지원하는 창 크기 변경에서도 입력창 접근과 대화 스크롤이 유지된다.</dt><dd>미검증으로 기록</dd></div><div><dt>상단에 현재 요청의 단계·작업 체크리스트를 표시한다. 과거 요청의 완료 상태가 현재 요청으로 섞이지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>실제 Skill/Hook 호출이 관측되면 즉시 이름·활동 상태를 알아볼 수 있도록 반영한다. 전체 설치 카탈로그를 기본 화면에 나열하지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>단계·호출 자료가 없으면 미제공/누락을 표시한다. 대화 내용으로 호출·진행·성공을 추정해 만들지 않는다. 문서 읽기와 실제 실행도 구분한다.</dt><dd>미검증으로 기록</dd></div><div><dt>하단에 실제 사용 리소스를 시각적으로 정리해 대화(thread) 단위로 축적한다. 같은 대화의 후속 요청은 이어 쌓고 다른 대화·프로젝트와 섞지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>앱을 재시작한 뒤 같은 대화를 다시 열면 보존된 누적 리소스를 확인할 수 있다. 이력 복원을 새 호출 반응으로 재생하지 않는다. 누락 구간·불완전 이력을 완전한 기록으로 주장하지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>동일 관측의 중복 전달·복원으로 누적을 이중 계산하지 않는다. 저장 형식·용량·복구 오류 처리는 후속 설계에서 정하되 누락·손상을 숨기지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>상세 실행 흐름·이벤트 및 필요시 전체 리소스 카탈로그는 사이드바와 분리된 상세 모니터 화면에서 확인한다. 상세 조회가 채팅 초안이나 읽기 위치를 잃게 하지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>로컬 최근 프로젝트·즐겨찾기·프로젝트별 대화를 구별해 탐색할 수 있다.</dt><dd>미검증으로 기록</dd></div><div><dt>Figma의 명료한 탐색 계층을 참고하되 일관된 선형 아이콘·선택 강조·간격·타이포그래피를 적용한다. Figma 전체 서비스나 외형의 완전 복제는 아니다.</dt><dd>미검증으로 기록</dd></div><div><dt>프로젝트 전환 뒤 해당 프로젝트의 대화만 연결하며, 기존 실행·승인 중 전환 보호 및 저장 대화 재개 동작을 회귀시키지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>아이콘만으로 의미를 전달하지 않고 접근 가능한 이름과 키보드 포커스를 제공한다.</dt><dd>미검증으로 기록</dd></div><div><dt>기존 구조 화면의 산만한 카드 배너 중심 구성을 기능→처리 흐름→담당 코드를 읽을 수 있는 연결 지도 중심으로 개편한다.</dt><dd>미검증으로 기록</dd></div><div><dt>연결선, 검색, 확대·축소, 지도 이동, 선택 항목 상세를 제공한다. 검색 결과를 지도와 상세에서 찾을 수 있고 선택/초점이 식별된다.</dt><dd>미검증으로 기록</dd></div><div><dt>선택 상세에서 기능·처리 단계의 역할과 담당 파일/코드 근거를 확인한다. 없는 연결·코드 근거를 생성하지 않으며 미제공을 표시한다.</dt><dd>미검증으로 기록</dd></div><div><dt>개념적 처리 관계와 실제 실행 순서·호출 추적을 혼동시키지 않는다. 설치된 코드 의존 관계를 표시하면 그 관계 유형을 구분한다.</dt><dd>미검증으로 기록</dd></div><div><dt>참고 HTML의 계층 탐색·연결·선택 상세 방식은 모티브로 사용하되 RPA의 Process/Task/Unit 용어를 WWW에 억지로 적용하지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>큰 지도에서도 창 전체를 밀어내지 않고 내부 탐색이 가능하며 선택 상세를 닫거나 화면 전환 후에도 탐색과 채팅이 정상 동작한다.</dt><dd>미검증으로 기록</dd></div></dl></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/009-채팅과 실시간 사이드바 및 프로젝트 Node Map 개편/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-673ddd6a-b9e6-4dd2-99c5-c37f4b02c96b<br>report-d1a773e7-c158-480a-8f80-6e248d33e51c</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>5a2a775aa895e8268cb61807ff12727194d827ec93fa21075cbac7b72c95ff82</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>a565f41843039f377e0474b2a8f3ec13b6f162d7a831081fc5b64434f917ffab</code></dd></div><div><dt>기준 지문</dt><dd><code>d77df2b140716f5a2eda6c4483af8fcd6d9b8ebe727c96ba3d8c39975fd15dce</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>in_progress</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;in_progress&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-CHAT-01&quot;,
+      &quot;description&quot;: &quot;긴 답변과 연속 메시지에서도 문서 전체가 세로로 밀리지 않고 대화 영역 내부에서 스크롤된다. 입력창과 탐색·상태 영역은 화면 안에 유지된다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4cee46de-7d07-4946-8b6b-7aa04b5714f6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-CHAT-02&quot;,
+      &quot;description&quot;: &quot;긴 코드·URL·표의 넘침을 해당 영역에 가두며 앱 전체의 가로 넘침을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4cee46de-7d07-4946-8b6b-7aa04b5714f6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-CHAT-03&quot;,
+      &quot;description&quot;: &quot;과거를 읽는 중 새 출력이 와도 읽기 위치를 빼앗지 않는다. 최신을 따라가는 중이면 새 내용과 레이아웃 변경 후 끝 위치를 유지한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4cee46de-7d07-4946-8b6b-7aa04b5714f6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-CHAT-04&quot;,
+      &quot;description&quot;: &quot;모니터 열기/닫기와 지원하는 창 크기 변경에서도 입력창 접근과 대화 스크롤이 유지된다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4cee46de-7d07-4946-8b6b-7aa04b5714f6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-STATUS-01&quot;,
+      &quot;description&quot;: &quot;상단에 현재 요청의 단계·작업 체크리스트를 표시한다. 과거 요청의 완료 상태가 현재 요청으로 섞이지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-STATUS-02&quot;,
+      &quot;description&quot;: &quot;실제 Skill/Hook 호출이 관측되면 즉시 이름·활동 상태를 알아볼 수 있도록 반영한다. 전체 설치 카탈로그를 기본 화면에 나열하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-STATUS-03&quot;,
+      &quot;description&quot;: &quot;단계·호출 자료가 없으면 미제공/누락을 표시한다. 대화 내용으로 호출·진행·성공을 추정해 만들지 않는다. 문서 읽기와 실제 실행도 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-STATUS-04&quot;,
+      &quot;description&quot;: &quot;하단에 실제 사용 리소스를 시각적으로 정리해 대화(thread) 단위로 축적한다. 같은 대화의 후속 요청은 이어 쌓고 다른 대화·프로젝트와 섞지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-STATUS-05&quot;,
+      &quot;description&quot;: &quot;앱을 재시작한 뒤 같은 대화를 다시 열면 보존된 누적 리소스를 확인할 수 있다. 이력 복원을 새 호출 반응으로 재생하지 않는다. 누락 구간·불완전 이력을 완전한 기록으로 주장하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-STATUS-06&quot;,
+      &quot;description&quot;: &quot;동일 관측의 중복 전달·복원으로 누적을 이중 계산하지 않는다. 저장 형식·용량·복구 오류 처리는 후속 설계에서 정하되 누락·손상을 숨기지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-STATUS-07&quot;,
+      &quot;description&quot;: &quot;상세 실행 흐름·이벤트 및 필요시 전체 리소스 카탈로그는 사이드바와 분리된 상세 모니터 화면에서 확인한다. 상세 조회가 채팅 초안이나 읽기 위치를 잃게 하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-PROJECT-01&quot;,
+      &quot;description&quot;: &quot;로컬 최근 프로젝트·즐겨찾기·프로젝트별 대화를 구별해 탐색할 수 있다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-PROJECT-02&quot;,
+      &quot;description&quot;: &quot;Figma의 명료한 탐색 계층을 참고하되 일관된 선형 아이콘·선택 강조·간격·타이포그래피를 적용한다. Figma 전체 서비스나 외형의 완전 복제는 아니다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-PROJECT-03&quot;,
+      &quot;description&quot;: &quot;프로젝트 전환 뒤 해당 프로젝트의 대화만 연결하며, 기존 실행·승인 중 전환 보호 및 저장 대화 재개 동작을 회귀시키지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-PROJECT-04&quot;,
+      &quot;description&quot;: &quot;아이콘만으로 의미를 전달하지 않고 접근 가능한 이름과 키보드 포커스를 제공한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-MAP-01&quot;,
+      &quot;description&quot;: &quot;기존 구조 화면의 산만한 카드 배너 중심 구성을 기능→처리 흐름→담당 코드를 읽을 수 있는 연결 지도 중심으로 개편한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-MAP-02&quot;,
+      &quot;description&quot;: &quot;연결선, 검색, 확대·축소, 지도 이동, 선택 항목 상세를 제공한다. 검색 결과를 지도와 상세에서 찾을 수 있고 선택/초점이 식별된다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-MAP-03&quot;,
+      &quot;description&quot;: &quot;선택 상세에서 기능·처리 단계의 역할과 담당 파일/코드 근거를 확인한다. 없는 연결·코드 근거를 생성하지 않으며 미제공을 표시한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-MAP-04&quot;,
+      &quot;description&quot;: &quot;개념적 처리 관계와 실제 실행 순서·호출 추적을 혼동시키지 않는다. 설치된 코드 의존 관계를 표시하면 그 관계 유형을 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-MAP-05&quot;,
+      &quot;description&quot;: &quot;참고 HTML의 계층 탐색·연결·선택 상세 방식은 모티브로 사용하되 RPA의 Process/Task/Unit 용어를 WWW에 억지로 적용하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-MAP-06&quot;,
+      &quot;description&quot;: &quot;큰 지도에서도 창 전체를 밀어내지 않고 내부 탐색이 가능하며 선택 상세를 닫거나 화면 전환 후에도 탐색과 채팅이 정상 동작한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-4cee46de-7d07-4946-8b6b-7aa04b5714f6&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-chat.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-14T08:05:30.715Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-90ff8cc3-c9e9-47d2-8792-c8ce82ce4dad&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-90ff8cc3-c9e9-47d2-8792-c8ce82ce4dad/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;[결함] work.json:11, 193 — 작업 상태가 실제 단계와 맞지 않는다. 기계 레코드는 `status: \&quot;verifying\&quot;`, `nextAction: \&quot;verify\&quot;`인데 같은 레코드의 권한은 `implementation: false`, `verifierCommands: []`, `verifications: []`이고 21개 기준은 모두 `unverified`/`evidence: []`다. design.md:8은 &#39;설계 합의 완료, 구현 승인 대기&#39;, tasks.md:62는 &#39;현재 단계는 구현 승인 대기이므로 승인 전 제품 파일을 수정하거나 구현 담당을 실행하지 않는다&#39;고 적는다. 따라서 status/resume가 이 작업을 구현 후 검증 단계로 다루게 된다. 허용된 검증 명령이 없어서 어떤 기준도 진행할 수 없고, 사람이 읽는 문서의 다음 행동(승인 대기 후 P1 재현)과도 충돌한다. 정본인 work.json을 승인 대기 상태로 맞춰야 한다. 예: `ready`/`build`와 `blockedReason`에 구현 승인 대기를 적는 방식이다.&quot;,
+        &quot;[경미] spec.md:7, 80 — 명세에는 &#39;후속 합의 설계는 별도 단계로 남긴다&#39;, &#39;…는 다음 설계에서 구체화한다&#39;가 남아 있다. 그러나 같은 디렉터리의 design.md는 revision 3 합의 완료와 계약·저장 형식·전환 경계를 이미 확정한 것으로 기록한다. 등록 당시의 서술이 갱신되지 않아 명세만 읽은 재개자는 설계가 없다고 오해할 수 있다. design.md를 가리키는 연결이나 현재 상태 문장을 보완하는 것이 좋다.&quot;,
+        &quot;[확인] design.md가 인용한 현재 소스 사실을 대조했고 모두 일치한다. `workspace:choose`는 첫 thread 뒤 변경을 거부한다(src/main.ts:318). eventLog는 2000개 한도다(src/main.ts:59, 137). `assertConversationIdle`의 `turnStarting || activeTurnId !== null || pendingApprovals.size &gt; 0` 검사와 switchingConversation 잠금이 있다(src/main.ts:130-131). BrowserWindow는 minWidth 1040, minHeight 680이다(src/main.ts:489). 999px 미디어 쿼리가 있다(src/chat.css:96). `ActivitySnapshotBoundary`가 있다(src/activity-sidebar.ts:180, src/renderer.tsx:328). 참조한 검증 경로 scripts/verify-native-activity.ts, test/verify-native-activity-live.ts, test/chat-state.test.ts, docs/architecture/structure.json도 실제로 존재한다.&quot;,
+        &quot;[확인] 증거 범위는 확대되지 않았다. 모든 기준이 `unverified`이고, spec·design·tasks 모두 명세·설계 작성을 제품 테스트 통과로 주장하지 않는다. 브라우저 시각 검증, 원격 참고 HTML, GJC 숨김 파일, Architect·Critic 합의가 WWW 필수 독립 검토를 대신하지 않는다는 한계도 적혀 있다. verification.md는 inputPaths에 있지만 실제로는 없다. verifications가 비어 있으므로 증거 연결 누락으로 보지 않는다.&quot;,
+        &quot;[확인] 쓰기 권한(writePaths: docs/work/Chat, docs/work/INDEX.md)과 산출물이 일치한다. INDEX.md:56-61에 009 항목과 명세·설계·구현 단위·레코드 링크가 등록되어 있다. 이번 검토에서는 테스트나 명령을 실행하지 않았고 정적 읽기로만 판단했다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-36f64f68-1c2d-449a-8828-e1ca4b9ede15&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-36f64f68-1c2d-449a-8828-e1ca4b9ede15/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;[해소] 이전 검토(review-90ff8cc3)의 주요 결함인 상태 불일치는 고쳐졌다. work.json:11-12, 193이 이제 `status: \&quot;ready\&quot;`, `blockedReason: \&quot;구현 승인 대기. 제품 구현은 별도 승인 전 시작하지 않는다.\&quot;`, `nextAction: \&quot;build\&quot;`다. 이는 design.md:8의 &#39;구현 승인 대기&#39;와 tasks.md:62의 &#39;승인 전 제품 파일을 수정하지 않는다&#39;와 같은 내용이다. `ready`, `build`, 비어 있지 않은 blockedReason 문자열은 scripts/workflow/schema.ts:9, 66, 111의 허용값 안에 있다.&quot;,
+        &quot;[해소] 이전 경미 지적도 반영됐다. spec.md:7은 [합의 설계](design.md)와 [구현 단위](tasks.md)를 작성했다고 적고, spec.md:80은 화면 배치, 저장 형식, 지도 정본을 design.md에서 구체화했다고 적는다. 명세만 읽고 재개하는 사람도 설계가 이미 있다는 것을 알 수 있다.&quot;,
+        &quot;[확인] 권한 경계가 일관된다. work.json의 authorization은 `implementation: false`, `commit: false`, `publish: false`, `verifierCommands: []`이고 writePaths는 docs/work/Chat과 docs/work/INDEX.md로 제한된다. spec.md:100의 &#39;제품 구현·커밋·게시 권한은 부여하지 않는다&#39;와 일치한다. INDEX.md:56-61에 009 항목의 명세, 합의 설계, 구현 단위, 작업 레코드 링크가 등록되어 있다.&quot;,
+        &quot;[확인] design.md가 인용한 현재 소스 사실을 다시 대조했고 일치한다. 첫 thread 뒤 `workspace:choose`를 거부한다(src/main.ts:317-318). idle 검사 조건은 `turnStarting || activeTurnId !== null || pendingApprovals.size &gt; 0`이다(src/main.ts:131). BrowserWindow는 minWidth 1040, minHeight 680이다(src/main.ts:489). 단일 인스턴스 lock은 현재 코드에 없고 design.md도 이를 P2에서 구현할 계약으로 서술하므로 현재 사실처럼 과장하지 않았다.&quot;,
+        &quot;[확인] 증거 범위는 확대되지 않았다. 21개 기준이 모두 `result: \&quot;unverified\&quot;`, `evidence: []`이고 `verifications: []`다. spec, design, tasks 모두 설계 합의, native 계획 합의, Architect·Critic 승인을 제품 테스트 통과나 WWW 필수 Opus 검토로 대체하지 않는다고 명시한다. verification.md는 inputPaths에 있지만 실제 파일은 없다. 검증 기록이 비어 있는 단계라서 결함으로 보지 않는다.&quot;,
+        &quot;[한계] 이번 검토는 정적 읽기로만 판단했다. 테스트, 스키마 검증 명령, 빌드는 실행하지 않았다.&quot;
+      ]
+    }
+  ]
+}</pre></div></details></section></main></body></html>

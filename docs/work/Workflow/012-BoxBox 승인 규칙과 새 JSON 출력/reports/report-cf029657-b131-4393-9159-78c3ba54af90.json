@@ -1,0 +1,199 @@
+{
+  "schemaVersion" : 1,
+  "id"            : "report-cf029657-b131-4393-9159-78c3ba54af90",
+  "workId"        : "work-a4f924c3-501b-4fd5-ba40-d8997e18a792",
+  "title"         : "BoxBox 승인 규칙과 새 JSON 출력",
+  "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+  "outcome"       : "in_progress",
+  "kind"          : "snapshot",
+  "event"         : "build",
+  "createdAt"     : "2026-11-14T07:43:40.445Z",
+  "workRecordHash": "6a041a47eadf094a445b850779242af661fede47cc0da0661caea348b147f560",
+  "sourceDigest"  : "6fc2e1de59cd910d38eea2364735f7c3234f5aad91df27119f5dbbf3092a3676",
+  "criteriaDigest": "d998f4f489816111ad3008a4e9993704a5e993a8285590c68a5770485a2e1b52",
+  "semanticHash"  : "1dc75e394d720a6eda51805152851ae64ea47ce8c29fd2d5ac2bf23df5ed3158",
+  "narrative"     : null,
+  "work": {
+    "status": "in_progress",
+    "blockedReason": null,
+    "criteria": [
+      {
+        "id"         : "AC-1",
+        "description": "실제 인간 답변과 고정 v1에 결합한 TS28키·86파일쌍만 등록하고 기존 JSON 승인·기존 증거를 보존하며 추가 범위를 자동 승인하지 않는다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-a8681e48-3bea-48c3-8e4e-c27b1b99c805",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-7298955a-d66c-4e5a-8b29-4a89fa1357aa",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-2",
+        "description": "압축 멤버 사전조건과 승인 누락을 구분하고 동작 보존 구조 정리 후 승인된 파일에 공식 dry-run·보존·고정점·source check를 적용하며 남은 차이를 정확한 질문으로 연결한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-c2e6265c-7236-4f76-b621-4b0576d8861d",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-3",
+        "description": "명시 활성화한 WWW의 새 작업 revision·새 보고서만 승인된 JSON scalar 열로 생성하고 기존 보고서·무변경 원장을 다시 쓰지 않으며 일반 앱은 BoxBox runtime 설치 없이 동작한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-7e90de51-10c7-419f-be78-fc5ae940937c",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-7298955a-d66c-4e5a-8b29-4a89fa1357aa",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-4",
+        "description": "JSON 의미·순서·escaping·Unicode 폭·행/indent·최종 크기와 hash를 공식 CLI golden 및 writer 통합 검사로 대조하고 현재 타입·빌드·관련 Electron 보고서 동작을 검증한다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": [
+          {
+            "path": "verification.md#attempt-7e90de51-10c7-419f-be78-fc5ae940937c",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          },
+          {
+            "path": "verification.md#attempt-7298955a-d66c-4e5a-8b29-4a89fa1357aa",
+            "summary": "실제 검증 passed; 현재 적용 가능"
+          }
+        ]
+      },
+      {
+        "id"         : "AC-5",
+        "description": "BoxBox 이슈·보고서와 재발 질문 절차에 실제 원인·승인/미승인·적용/미실행을 구분하고 정본 문서 검토·필수 독립 검토·저작 보고서를 남긴다.",
+        "required"   : true,
+        "result"     : "unverified",
+        "evidence": []
+      }
+    ],
+    "verifications": [
+      {
+        "id": "attempt-7e90de51-10c7-419f-be78-fc5ae940937c",
+        "command": "node",
+        "args": [
+          "scripts/verify-reports.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-13T23:29:00.629Z"
+      },
+      {
+        "id": "attempt-a8681e48-3bea-48c3-8e4e-c27b1b99c805",
+        "command": "node",
+        "args": [
+          "scripts/check-workflow.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-13T23:32:35.929Z"
+      },
+      {
+        "id": "attempt-c2e6265c-7236-4f76-b621-4b0576d8861d",
+        "command": "node",
+        "args": [
+          "scripts/check-workflow.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-13T23:36:33.322Z"
+      },
+      {
+        "id": "attempt-7298955a-d66c-4e5a-8b29-4a89fa1357aa",
+        "command": "node",
+        "args": [
+          "scripts/verify-reports.ts"
+        ],
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3"
+        },
+        "result"      : "passed",
+        "executor"    : "process",
+        "exitCode"    : 0,
+        "sourceStable": true,
+        "completedAt" : "2026-11-14T00:04:39.534Z"
+      }
+    ],
+    "reviews": [
+      {
+        "id"         : "review-fa764a6a-62c6-4a35-b2f8-a61f6d2744a9",
+        "verdict"    : "fail",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-fa764a6a-62c6-4a35-b2f8-a61f6d2744a9/opus.json",
+        "findings": [
+          "[증거 범위 확대·AC-1] work.json의 AC-1은 attempt-a8681e48 하나로 passed다. 이 시도의 명령은 `node scripts/check-workflow.ts`다. 그런데 scripts/check-workflow.ts:89-135의 validateRepository는 스킬 SKILL.md 절, 발견 링크, 필수 파일, Markdown 링크, work.json 스키마, UUID 중복, 관계 대상만 검사한다. 고정 v1 승인 제안(.www/architecture-contract/boxbox-side/TS-rule-approval-proposal-v1.md), 인간 답변(human-approvals-20261114.json), registry-currentness.json, verification-summary.json은 읽지 않는다. 따라서 'TS 28키·86파일쌍만 등록', '기존 JSON 승인 보존', '추가 범위 자동 승인 없음'을 판정하는 코드가 이 명령에는 없다. 위 파일들은 artifacts로만 붙어 있다. scripts/workflow/evidence.ts:153-178,310-312의 artifact 처리는 실행 전후 size/sha256이 같은지만 비교하고 내용을 판정하지 않는다. 결국 'exit 0 + 해시 불변'이 AC-1의 의미 검증으로 승격된 상태다. 같은 정식 시도에 걸 수 있는, 실제 대조를 수행하는 verifier가 필요하다. 그 전에는 AC-1을 unverified로 되돌려야 한다.",
+          "[증거 범위 확대·AC-2] AC-2도 같은 `node scripts/check-workflow.ts` 시도(attempt-c2e6265c, stdout 96바이트로 AC-1 시도와 같은 고정 통과 문구 길이)로 passed다. 첨부 artifact는 stable-delta-v3.json/md, phase11-approved-apply.json, phase12-new-output.md, stable-delta-v3-question.json이다. 하지만 check-workflow.ts는 압축 멤버 사전조건과 승인 누락의 구분, 공식 dry-run·보존·고정점·source check 적용, 남은 차이와 질문의 연결 중 어느 것도 검사하지 않는다. 이 artifact들을 읽는 코드도 없다. verification.md:11의 서술(77개 중 신규 17개 delta 분리 등)은 정식 시도 밖의 자기 보고다. 그런데도 이 서술이 '실제 검증 passed; 현재 적용 가능'이라는 기준 판정으로 기록됐다.",
+          "[증거 범위 확대·AC-4] AC-4는 '공식 CLI golden 및 writer 통합 검사로 대조'를 요구하고, attempt-7e90de51(`node scripts/verify-reports.ts`)로 passed다. scripts/verify-reports.ts 전체에서 golden-final.log나 golden-results.json을 읽거나 공식 BoxBox CLI를 호출하는 코드는 없다. 이 스크립트는 합성 fixture에서 serializeWorkRecord/serializeWorkReport와 실제 저장 bytes가 같은지 자기 일관성만 확인한다(55, 93행). golden 두 파일은 artifact 해시 안정성만 기록됐다. 따라서 'escaping·Unicode 폭·행/indent·최종 크기와 hash의 공식 CLI golden 대조' 부분은 이 정식 시도로 입증되지 않는다. verification.md:6의 golden 9개 결과는 정식 시도 밖의 기록이다.",
+          "[AC-3 부분 증거 과장] scripts/verify-reports.ts:158은 new-output.json에 `runtimeBoxboxConfiguration: \"absent\"`와 `oldReportsUnchanged: true`를 상수로 기록한다. 두 번째 값은 150행의 legacy 보고서 bytes 비교를 통과한 뒤라 근거가 있다. 그러나 'BoxBox runtime 설치 없이 동작'은 어디서도 검사하지 않는다(환경이나 의존성 부재 확인 코드가 없다). 그런데도 verification.md:61은 이 값을 실측 결과처럼 인용한다. 또 legacy 작업(legacyId)의 work.json bytes가 바뀌지 않았는지는 비교하지 않으므로 '무변경 원장 재기록 없음'의 직접 증거도 없다. 원장 쪽 구현 자체는 타당해 보인다: scripts/workflow/work.ts:237에서 내용 변화가 없으면 쓰지 않는다.",
+          "[절차 불일치 보존 확인] verification.md:59에 따르면 Phase12 저작 harness.ok=false다. 원인은 계획에 선언하지 않은 preflight.ts/types.ts 변경과 BoxBox 미해결이다. 이 실패는 소급해 통과로 바꾸지 않고 보존했으며 AC-5도 unverified로 유지했다. 여기까지는 타당하다. 다만 이 상태에서 AC-1·AC-2·AC-4를 위 근거로 passed 처리한 것은 같은 문서의 '증거 범위를 넓히지 않는다'는 원칙과 충돌한다.",
+          "[구현 확인·결함 아님] scripts/workflow/work.ts의 openWork(173), adoptWork(220), mutateWork(238)는 workOutputColumns 정책에 따라 새 revision에서만 scalar 열 출력을 쓴다. mutateWork는 JSON 의미가 같으면 쓰지 않는다(237). 그래서 정책 활성화만으로 기존 원장이 재기록되지는 않는 구조로 확인됐다. 이 검토에서는 명령이나 테스트를 직접 실행하지 않았고, 판단은 소스와 기록 대조에만 근거한다."
+        ]
+      },
+      {
+        "id"         : "review-f28de614-60f2-4e6e-96fe-0488bed09fd6",
+        "verdict"    : "pass",
+        "model"      : "claude-opus-5-5",
+        "executor"   : "process",
+        "receiptPath": ".www/evidence/reviews/review-f28de614-60f2-4e6e-96fe-0488bed09fd6/opus.json",
+        "findings": [
+          "판정 근거 범위: 읽기 전용으로 소스와 기록만 대조했다. 테스트나 명령은 하나도 실행하지 않았다. 아래의 '통과'는 work.json/verification.md에 기록된 attempt-7298955a 결과(sourceDigest 58e2dfb7…, 이번 검토 입력과 일치)를 인용한 것이며 이번 검토에서 재현하지 않았다.",
+          "이전 독립 검토(review-fa764a6a)가 지적한 'check-workflow 성공·artifact 해시 불변을 의미 검증으로 승격'한 문제는 현재 소스에서 보완됐다. scripts/verify-reports.ts:34가 `bun test test/work-json.test.ts`를 실제로 실행한다. 이 테스트 파일에는 AC1(test/work-json.test.ts:368), AC2(:453, :490), AC4 golden(:523) 의미 검사가 들어 있다. 따라서 attempt-7298955a를 AC-1·AC-3·AC-4 근거로 연결한 것은 증거 범위 확대가 아니다.",
+          "AC-1 의미 검사가 실제 승인 경계를 확인한다(test/work-json.test.ts:368-451). 확인 항목: ts-v1-response.json의 callId·answer·proposalSha256과 고정 v1 문서 SHA, 28개 key·86개 key/file 조합의 정확 일치, conventions·decisions·examples 상호 링크와 docHash. 또 8e38c9b 기준 JSONL이 원문 prefix로 그대로 남아 있는지 확인해 기존 JSON 승인 보존을 검증하고, 격리 stage에서 공식 CLI guide가 v1 외 추가 rule을 노출하지 않는지도 대조한다.",
+          "AC-3 경계가 구현과 맞다. preflight.ts:62-83은 정책 파일의 정확한 4개 key·고정 값만 허용하고 symlink와 4 KiB 초과를 거부하며, 파일이 없으면 기존 출력으로 돌아간다. work.ts:237은 의미상 바뀌지 않은 원장의 재기록을 생략하고, reports.ts:558-559는 기존 semanticHash 보고서를 재사용한다. 기존 보고서와 원장의 bytes·inode·mtime 불변은 verify-reports.ts:131-134, 186-189에서 실측한다. runtime BoxBox 부재는 같은 파일 136-165에서 fixture 설정·의존성·bundle·child PATH 범위로만 주장하며, 그 한계도 runtime-prechecks.json의 boundary에 명시돼 있다.",
+          "AC-4 golden 대조는 공식 고정 CLI 경로를 쓴다. canonicalArchitectureJson(generate-architecture.ts:150-202)은 CLI sha·runtime.json·Node 버전·registry SHA를 확인한 뒤 align → align → 고정점 → check --source를 거친다. 이 결과와 serializeWorkRecord/serializeWorkReport 출력을 bytes·크기·hash·indent·literal 단위로 비교한다(test/work-json.test.ts:534-563).",
+          "AC-2·AC-5를 unverified로 유지한 것은 기록과 맞다. AC2 테스트가 같은 실행에 포함됐지만 attempt-7298955a의 criterionIds에는 AC-2가 없으므로, 보수적으로 미검증으로 둔 상태가 타당하다. 근거 없이 승격하지 않았다.",
+          "비차단 관찰 1: work.json의 AC-1·AC-3·AC-4 evidence 배열에는 이전 attempt(a8681e48, 7e90de51)가 '현재 적용 가능' 요약과 함께 남아 있다. 이는 work.ts:288이 시점별 요약을 누적하는 동작이다. verification.md:89는 이 시도들을 완료 근거로 쓰지 않는다고 밝히고 있어, 판정 자체는 현재 소스 기준 attempt-7298955a에 근거한다. 다만 이전 소스 digest(4f9436…)로 실행된 시도의 '현재 적용 가능' 문구는 읽는 사람이 오해할 수 있다.",
+          "비차단 관찰 2: work-json.ts:12-18의 keyWidth는 Hangul·Han·Hiragana·Katakana만 폭 2로 계산한다. 반각 가타카나, 전각 라틴, 기타 동아시아 전각 기호에서 공식 BoxBox 폭 계산과 어긋날 수 있다. golden 사례(test/work-json.test.ts:525-533)는 이 문자들을 다루지 않는다. 현재 WorkRecord/WorkReport의 key는 고정 스키마 영문이어서 실제 영향은 낮지만, 이후 사용자 정의 key가 들어오면 golden 사례를 보강해야 한다."
+        ]
+      }
+    ]
+  },
+  "source": {
+    "recordPath"    : "docs/work/Workflow/012-BoxBox 승인 규칙과 새 JSON 출력/work.json",
+    "workRecordHash": "6a041a47eadf094a445b850779242af661fede47cc0da0661caea348b147f560",
+    "sourceDigest"  : "6fc2e1de59cd910d38eea2364735f7c3234f5aad91df27119f5dbbf3092a3676",
+    "criteriaDigest": "d998f4f489816111ad3008a4e9993704a5e993a8285590c68a5770485a2e1b52"
+  }
+}

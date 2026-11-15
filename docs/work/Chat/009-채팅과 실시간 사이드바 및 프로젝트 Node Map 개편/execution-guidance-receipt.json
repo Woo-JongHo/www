@@ -1,0 +1,32 @@
+{
+  "sessionId": "01a1d728-f356-755f-995a-cb761f2a24ad",
+  "channel": "GJC SDK MCP turn.steer",
+  "instruction": "사용자 명시 지시 전달: 지연 원인을 확인·기록했으니 현재 작업을 빠르게 마무리하라. 기록: docs/work/Chat/009-채팅과 실시간 사이드바 및 프로젝트 Node Map 개편/execution-bottlenecks.md. 기존 G002 및 www-ui-p2-p4-live-integration-01a1d728을 계속하고 새 계획/작업 UUID/중복 작성 호스트를 만들거나 진행 중인 호스트를 중단하지 마라. 핵심 지연: managed TS 변경 후 architecture.generated.json 생성 금지와 필수 postArchitecture 검사가 충돌해 같은 snapshot 오류로 반복 실패했다. 생성 파일을 승인 변경 단위에 포함하고 공식 생성기를 post 검사 전에 실행하는 순서를 바로잡아라. 스냅샷 수동 수정/게이트 우회는 금지. 쓰기 범위만 제한하고 의존 파일 읽기는 허용하라. 기존 normalizer/원장 계약을 main→IPC/preload→sidebar·monitor→프로젝트 전환으로 실제 연결하는 현재 수직 흐름을 끝내라. 동일 오류면 원인·순서를 먼저 고치고 모델 재실행을 반복하지 마라. BoxBox는 사용자 승인된 프로젝트 off 유지(disabled/skipped), 전역 변경 금지. strict/소스/구조/기능/GUI/필수 최종 리뷰는 유지하라. 이 진단 세션은 제품 코드 쓰기를 중지했다. 장황한 재계획·중간 보고 반복을 줄이고 적용한 실행순서, 현재 연결 완료, 남은 연결, 실제 blocker만 짧게 알려라. 기존 승인·수용 기준은 보존하라.",
+  "control": {
+    "type": "control_response",
+    "id": "7a5b9278-96b6-40ed-9f70-b37b770d9100",
+    "ok": true,
+    "result": {
+      "accepted": true,
+      "commandId": "1fc87f41-31af-41b0-ba01-ba893b92020d",
+      "turnId": "90c4e34b-5267-44d2-b53e-8051fb755e29",
+      "clientRef": "www-work009-bottleneck-guidance-20261114-v1",
+      "status": "accepted",
+      "acceptedAt": 1794649953555
+    }
+  },
+  "reconciliation": {
+    "type": "query_response",
+    "id": "07d32656-0cd7-4e69-a44d-b815d72c299a",
+    "ok": true,
+    "result": {
+      "commandId": "1fc87f41-31af-41b0-ba01-ba893b92020d",
+      "turnId": "90c4e34b-5267-44d2-b53e-8051fb755e29",
+      "clientRef": "www-work009-bottleneck-guidance-20261114-v1",
+      "status": "accepted",
+      "acceptedAt": 1794649953555
+    }
+  },
+  "verifiedAt": "2026-11-14T09:52:48.880Z",
+  "limitation": "accepted는 SDK의 steer 접수 증거이며 에이전트의 지침 적용·기능 완료 확인은 아니다."
+}

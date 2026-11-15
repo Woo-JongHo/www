@@ -49,9 +49,11 @@ async function allText(directory: string): Promise<string> {
 
 test("필요 판단은 실제 보고서를 저장하며 원문·검증 통과를 발명하지 않는다", async (t) => {
   const repo                      = await repository(t) ;
-  const states: NativeReportJob[] = []                  ;
-  let calls                       = 0                   ;
-  const authored                  = decision()          ;
+  await fs.mkdir(path.join(repo, "docs/architecture"), { recursive: true });
+  await fs.writeFile(path.join(repo, "docs/architecture/work-output.json"), JSON.stringify({ version: 1, format: "boxbox-scalar-columns-v1", scope: "docs/work/**/*.json", approvalRef: ".www/architecture-contract/boxbox-side/human-approvals-20261114.json#json" }));
+  const states: NativeReportJob[] = []         ;
+  let calls                       = 0          ;
+  const authored                  = decision() ;
   if (authored.narrative) authored.narrative.reader = { story: "구현 결과를 보고서로 연결했습니다.", requirements: [], checks: [], decisions: [], references: [], nextActions: [] };
   const harness = createNativeReportHarness({ judge: async () => { calls++; return authored; }, onState: (job) => { states.push(job); } }) ;
   const queued  = await harness.enqueue({ repository: repo, input: input() })                                                              ;
@@ -61,6 +63,12 @@ test("필요 판단은 실제 보고서를 저장하며 원문·검증 통과를
   assert.ok(saved.reportId);
   const report = await readWorkReport({ repo, reportId: saved.reportId ?? "" });
   assert.equal(report.report.kind, "authored");
+  const raw = await fs.readFile(path.join(repo, report.report.source.recordPath), "utf8");
+  assert.match(raw, /"id" +:/);
+  assert.equal(report.report.workRecordHash, createHash("sha256").update(raw).digest("hex"));
+  assert.match(await fs.readFile(path.join(repo, path.dirname(report.report.source.recordPath), "reports", `${report.report.id}.json`), "utf8"), /"id" +:/);
+  await assert.rejects(fs.access(path.join(repo, ".www/development.local.json")));
+
   assert.deepEqual(report.report.narrative?.reader, authored.narrative?.reader);
   assert.equal(report.report.outcome, "blocked");
   assert.equal(report.report.sourceDigest, null);

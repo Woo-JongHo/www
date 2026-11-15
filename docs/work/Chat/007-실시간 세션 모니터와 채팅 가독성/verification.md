@@ -744,3 +744,30 @@ review-24215cee-bcac-42a9-94bf-e10c7bcb168c(Opus)는 기능 결함 대신 AC-01�
 이번 세션에서 `npm run check`가 소스 정책·작업 문서 계약·타입 검사·전체 테스트·빌드를 통과했다. `node scripts/verify-native-activity.ts --ui-only`의 실제 Electron+합성 Native 검사 19항목이 통과했고, `node scripts/verify-chat.ts`는 명령 미리보기·보관 범위·자동/수동 펼침, 세션 모니터, 좁은 창, 대화 복원, 합성 키보드/IME, 승인·중단·실시간 전송 경계를 통과했다. 원문은 `.www/publish-macbook/check.log`, `activity-ui.log`, `chat-ui.log`에 보존한다.
 
 과거 백그라운드 실행의 시간 초과와 잘못된 실행기 직접 호출 실패는 지우지 않는다. 위 결과는 맥북에서 새로 실행한 현재 통합본의 결과이며 실제 모델·계정·Windows·실제 OS 한국어 IME 검증은 아니다. BoxBox 미정렬·REFUSE와 현재 통합본의 필수 독립 검토 미충족은 남아 있으므로 업무 완료로 승격하지 않고 게시 체크포인트로 보존한다.
+
+## 2026-11-14 요청 접수·작업 흐름 1차 구현 검증
+
+채팅의 현재 질문 바로 아래에 `작업 흐름`을 두고 요청 접수 문구, 공개 설명·명령·파일 변경·답변 수신 여부를 한곳에서 읽도록 변경했다. 공개 설명이 아직 없을 때는 내용을 만들지 않고 `첫 작업 소식을 기다리는 중`과 실제 관측 수만 표시한다. 새 Native 스레드에는 첫 도구 호출 전 설명, 긴 연속 작업의 중간 설명, 최종 결과 정리를 더 명확히 요청한다. 이 지침은 공개 설명 빈도를 높이기 위한 요청이며 모델이 항상 설명을 생성한다는 보장은 아니다.
+
+- `bun test test/native-chat.test.ts test/projection.test.ts`: 68개 통과, 실패 0.
+- `npm run typecheck`: 통과.
+- `npm run check:source`: TypeScript 111개, 기존 JavaScript 0개로 통과.
+- `npm run build`: 통과.
+- `node scripts/verify-chat.ts`: 실제 Electron DOM·preload IPC·stdio·합성 Native 원장·앱 재시작 검사 통과. 증거는 `.www/evidence/chat-ui-zQbHdY`에 있다.
+- Electron probe에서 `요청을 받았습니다`와 `작업 흐름`이 같은 현재 질문에 연결되는지 추가 확인했다.
+- BoxBox는 `src/native-chat.ts`가 통과했다. `src/renderer.tsx`는 파일 전체의 기존 FIXABLE을 포함해 통과하지 않았으며 자동 정렬로 사용자 작업을 덮어쓰지 않았다.
+- 실제 모델의 설명 빈도, Windows, 실제 OS 한국어 IME는 이번 시도에서 확인하지 않았다. 필수 독립 검토도 아직 수행하지 않았으므로 작업 상태는 `in_progress`다.
+
+## 2026-11-14 작업 흐름 9점 기준 확장 검증
+
+현재 질문에 결속된 경과 시간·마지막 활동, 15초 무활동, 승인·중단·연결 상태 우선 표시, 종료 후 결과 요약을 추가했다. 결과 요약은 명령뿐 아니라 파일 변경의 실패·미확인과 식별된 검사 결과를 함께 세며, 알 수 없는 종료를 성공이나 정상 종료로 쓰지 않는다. 초 단위 시간은 라이브 리전 밖에 두고 의미 있는 상태 문구만 보조기술에 알린다.
+
+- 집중 단위 검사: `bun test test/native-chat.test.ts test/projection.test.ts test/chat-state.test.ts` 77개 통과, 실패 0. 후속 턴 사건 격리와 명령·파일 실패 집계를 포함한다.
+- `npm run typecheck`, `npm run build`, `npm run check:source`, `npm run check:architecture`: 통과.
+- 확장 Electron 검사: `node scripts/verify-chat.ts` 통과. 최종 증거는 `.www/evidence/chat-ui-BOA1Q3`에 있다.
+- 실제 DOM에서 새 스레드 생성 전 낙관적 접수, 후속 턴 0~4초 경과 초기화, 15초 무활동 대기, 승인 상태 우선 표시, 알 수 없는 종료의 흐름·결과 요약, 중단 결과 요약을 단언했다.
+- 전체 `npm run check`에서는 이 변경과 무관한 `architecture-contract.test.ts`의 BoxBox fixture가 5초 제한을 넘겨 678개 통과·1개 실패했다. 해당 단독 재실행도 같은 외부 BoxBox 제한 시간 실패였으며 Chat 집중 검사와 구조 현재성 검사는 통과했다.
+- 변경 파일 BoxBox source 검사는 구문 오류와 REFUSE는 없었지만 기존 파일의 FIXABLE 정렬을 포함해 일부 파일이 비통과다. 자동 정렬로 사용자 작업을 덮어쓰지 않았다.
+- 실제 모델·Windows·실제 OS 한국어 IME는 미검증이다. 공개 설명이 없는 경우에도 가짜 내용을 만들지 않고 관측 상태를 유지한다.
+
+읽기 전용 Architect 독립 검토는 첫 시도에서 현재 턴 경과·unknown·파일 실패 집계·라이브 리전과 Electron assertion 부족을 지적했다. 구현과 검증을 보완한 최종 재검토는 입력 후 접수 10점, 나머지 여섯 항목 9점으로 모두 최소 기준을 충족했고 `Architectural Status: CLEAR`, `Code Review Recommendation: APPROVE`를 반환했다. 이 검토는 프로젝트 정책의 Opus 공유 core 검토를 대신하지 않으므로 작업 레코드의 공식 완료 상태는 별도로 유지한다.

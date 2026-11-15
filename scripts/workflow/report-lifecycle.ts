@@ -2,10 +2,12 @@
  * @architecture arch.development.reporting.lifecycle
  * @implements RESP-DEVELOPMENT-REPORTING-LIFECYCLE
  */
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { assessWork, completeWork, readWork, type WorkAssessment, type WorkOptions } from "./work.ts";
+import { assessWork, completeWork, readWork, type WorkAssessment, type WorkOptions, type WorkLocation } from "./work.ts";
+import { serializeWorkRecord } from "./work-json.ts";
+import { workOutputColumns } from "./preflight.ts";
 import { withWorkLock } from "./lock.ts";
 import { captureWorkReport, listWorkReports, parseReportReader, publishWorkReport, readWorkReport, WORK_RECORD_JSON_LIMIT, type ReportNarrative } from "./reports.ts";
 
@@ -47,15 +49,20 @@ function narrative(value: unknown): ReportNarrative {
   };
 }
 
-async function enableReports(options: WorkOptions, failure?: string): Promise<void> {
-  await withWorkLock(options.repo ?? process.cwd(), async () => {
+async function enableReports(options: WorkOptions, failure?: string): Promise<WorkLocation | undefined> {
+  return withWorkLock(options.repo ?? process.cwd(), async () => {
     const work = await readWork(options);
     if (work.record.schemaVersion !== 2 || !work.record.workflow) return;
+    if (work.record.workflow.reportingRequired === true && (!failure || work.record.blockedReason === failure)) return work;
+    const before = createHash("sha256").update(await fs.readFile(work.path)).digest("hex");
     work.record.workflow.reportingRequired = true;
     if (failure) work.record.blockedReason = failure;
+    const source = serializeWorkRecord(work.record, await workOutputColumns(options.repo ?? process.cwd()));
+    if (createHash("sha256").update(await fs.readFile(work.path)).digest("hex") !== before) throw new Error("보고서 활성화 중 작업 기록이 바뀌었습니다.");
     const temporary = `${work.path}.${randomUUID()}.tmp`;
-    await fs.writeFile(temporary, `${JSON.stringify(work.record, null, 2)}\n`, { flag: "wx", mode: 0o600 });
+    await fs.writeFile(temporary, source, { flag: "wx", mode: 0o600 });
     await fs.rename(temporary, work.path);
+    return { ...work, rawSource: source };
   });
 }
 

@@ -32,8 +32,9 @@ export interface SessionBinding {
   createdAt     : string            ;
 }
 export interface FoundWorkRecord {
-  path   : string                                   ;
-  record : Record<string, unknown> & { id: string } ;
+  rawSource : string                                   ;
+  path      : string                                   ;
+  record    : Record<string, unknown> & { id: string } ;
 }
 export interface CanonicalSkill {
   skill    : string    ;
@@ -57,6 +58,29 @@ export interface MutationResult {
   deniedSurfaces? : string[] ;
 }
 function object(value: unknown): value is Record<string, unknown> { return value !== null && typeof value === "object" && !Array.isArray(value); }
+
+export async function workOutputColumns(repo: string): Promise<boolean> {
+  let current = await fs.realpath(repo);
+  for (const segment of ["docs", "architecture", "work-output.json"]) {
+    current = path.join(current, segment);
+    let stat;
+    try { stat = await fs.lstat(current); }
+    catch (error) {
+      if (object(error) && error.code === "ENOENT") return false;
+      throw error;
+    }
+    if (stat.isSymbolicLink()) throw new Error("작업 출력 정책의 심볼릭 링크는 허용하지 않습니다.");
+    if (segment !== "work-output.json" && !stat.isDirectory()) throw new Error("작업 출력 정책 경로가 디렉터리가 아닙니다.");
+    if (segment === "work-output.json" && (!stat.isFile() || stat.size > 4096)) throw new Error("작업 출력 정책 파일이 유효하지 않습니다.");
+  }
+  const policy: unknown = JSON.parse(await fs.readFile(current, "utf8"));
+  if (!object(policy) || Object.keys(policy).sort().join(",") !== "approvalRef,format,scope,version"
+    || policy.version !== 1 || policy.format !== "boxbox-scalar-columns-v1" || policy.scope !== "docs/work/**/*.json"
+    || policy.approvalRef !== ".www/architecture-contract/boxbox-side/human-approvals-20261114.json#json") {
+    throw new Error("알 수 없거나 잘못된 작업 출력 정책입니다.");
+  }
+  return true;
+}
 
 const exec    = promisify(execFile)                                                               ;
 const WORK_ID = /^work-[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i ;
@@ -92,7 +116,7 @@ export async function findWorkRecord({ repo = process.cwd(), workId }: { repo?: 
         const source = await fs.readFile(candidate, "utf8");
         let record: unknown;
         try { record = JSON.parse(source); } catch { throw new Error("work.json JSON이 올바르지 않습니다."); }
-        if (object(record) && typeof record.id === "string" && record.id.toLowerCase() === id) return Object.freeze({ path: candidate, record: { ...record, id: record.id } });
+        if (object(record) && typeof record.id === "string" && record.id.toLowerCase() === id) return Object.freeze({ path: candidate, rawSource: source, record: { ...record, id: record.id } });
       }
     }
     return null;

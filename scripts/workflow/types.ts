@@ -75,11 +75,12 @@ export interface CurrentWorkRecord extends WorkRecordBase {
 export type WorkRecord = LegacyWorkRecord | CurrentWorkRecord;
 
 export interface WorkLocation {
-  path     : string     ;
-  record   : WorkRecord ;
-  created? : boolean    ;
-  legacy?  : boolean    ;
-  adopted? : boolean    ;
+  rawSource? : string     ;
+  path       : string     ;
+  record     : WorkRecord ;
+  created?   : boolean    ;
+  legacy?    : boolean    ;
+  adopted?   : boolean    ;
 }
 
 export interface CurrentWorkLocation extends WorkLocation {

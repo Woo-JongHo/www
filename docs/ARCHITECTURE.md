@@ -27,20 +27,32 @@
 | `src/projection.ts` | 관찰 사건을 thread/turn/item/request에 연결하고 화면 블록·상태로 바꾸는 순수 투영 |
 | `src/native-activity.ts` | 같은 사건을 답변 턴·활동·모델 관측·누적 토큰과 안전한 턴 차분·계정 한도로 바꾸는 순수 투영 |
 | `src/activity-sidebar.ts` | 등록 Skills·Hooks snapshot과 구조화된 읽기·동기 Hook 시작을 고정 행·pulse로 바꾸고 thread/run/중복 경계를 지키는 순수 투영 |
-| `src/native-activity-view.tsx`, `src/native-activity.css` | 오른쪽 최소 활동 패널, 행 반응·연결 상태·부분 목록·모션 축소 표시 |
+| `src/native-activity-view.tsx`, `src/native-activity.css` | 현재 요청·누적 리소스 사이드바, 별도 상세 모니터·카탈로그·모션 축소 표시 |
+| `src/activity-ledger.ts` | main 전용 최소 관측 원장, 안정 ID upsert·원자 저장·한도·오류·coverage |
+| `src/projects.ts` | realpath 기반 프로젝트 식별, 앱 데이터의 최근·즐겨찾기 인덱스 |
 | `src/renderer.tsx` | 입력 초안·전송 중 상태·펼침·읽기 위치와 화면 표현 |
 
 renderer는 Node 기능을 직접 사용하지 않는다. 권한 있는 동작은 main의 허용된 IPC를 통한다. Native의 응답과 도구 출력은 관찰 데이터이며 권한을 확대하는 지시로 해석하지 않는다.
 
+### 프로젝트와 리소스 원장의 소유권
+
+격리 userData를 설정한 뒤 `app.requestSingleInstanceLock()`을 획득한 main만 Native·창·원장을 시작하고 종료 flush를 수행한다. main이 Native 관측을 정규화하고 workspace/thread/선택 세대를 검사한다. renderer는 제한된 DTO만 조회하며 저장 경로·관측 목록·revision을 쓰는 IPC는 없다. workspaceKey는 실제 경로의 SHA256이고 대소문자를 임의 통합하지 않는다. 프로젝트마다 Native subprocess cwd·대화·초안·리소스를 격리한다.
+
+원장은 userData의 `activity-v1/<workspaceKey>/<hash(threadId)>.json`에 최소 메타데이터만 원자 저장한다. 본문·명령·출력·reasoning은 제외한다. 안정 관측 ID로 live/복원을 병합하며 seq/연결 세대는 영속 ID가 아니다. revision과 durableRevision, 저장 상태와 누락 범위를 분리한다. 손상·저장 실패·용량 한도·dirty 종료를 완전한 성공으로 승격하지 않는다. 실제 Native Hook의 반복 핸들러 ID는 호출별 ID가 아니므로 횟수 미제공과 `unstable-id`로 처리한다.
+
+프로젝트 전환은 비동기 realpath·flush 준비 후 동기 커밋 직전에 선택 세대·실행·전송·미결 승인을 다시 검사한다. 거절하면 기존 선택과 승인을 보존한다. 성공하면 과거 client/목록/복원 응답이 새 프로젝트를 갱신하지 못하도록 무효화한다.
+
+미등록 구조화 문서 읽기는 main이 command cwd와 경로를 정규화한 뒤 SHA256 identity를 공급한다. renderer 공유 정규화기는 Node crypto나 원문 경로 저장을 소유하지 않는다. 서로 다른 문서는 표시 이름이 같아도 합치지 않으며 안전한 식별값 부재는 명시 gap이다. flush는 전체 열린 scope의 clean과 실제 failedScopes 복사본을 반환한다. 전환 응답은 실패한 workspace/thread만 읽기 전용 진단으로 전달하고 별도 상태 경고에 보존한다. 현재 선택을 실패 대상으로 추정하거나 새 scope의 원장 DTO와 섞거나 새 목록 갱신으로 지우지 않는다.
+
 ## 요청·사건·실패 흐름
 
-Native 활동 패널은 기존 대화 투영과 같은 AppEvent를 읽는다. renderer가 제한된 IPC로 목록 새로고침을 요청하면 main은 같은 app-server 연결에서 `skills/list`와 `hooks/list`를 독립 호출하고 cwd·필수 배열·항목 shape를 검증한 최소 메타데이터를 `activity/skillsListed`·`activity/hooksListed` 사건으로 게시한다. `skills/changed`는 Skills 재조회 신호이며 스레드 시작 뒤에는 선택 환경을 포함한 Hook 목록을 다시 읽는다. workspace·thread별 최신 요청 세대는 요청을 시작할 때 main이 교체하고 응답 게시 전에 다시 대조하므로, 새 요청이 대기하거나 실패한 동안에도 이전 응답을 수용하지 않는다. 선택 thread 목록은 workspace 목록보다 우선한다. 한 목록의 실패가 다른 목록을 숨기지 않고 부분 응답은 전체 목록으로 표현하지 않는다.
+기본 사이드바는 같은 AppEvent의 현재 요청 투영과 main의 원장 DTO를 읽는다. 다음 목록·pulse 계약은 별도 상세 모니터의 카탈로그에 적용하며 누적 관측 원장과 구별한다. renderer가 제한된 IPC로 목록 새로고침을 요청하면 main은 같은 app-server 연결에서 `skills/list`와 `hooks/list`를 독립 호출하고 cwd·필수 배열·항목 shape를 검증한 최소 메타데이터를 `activity/skillsListed`·`activity/hooksListed` 사건으로 게시한다. `skills/changed`는 Skills 재조회 신호이며 스레드 시작 뒤에는 선택 환경을 포함한 Hook 목록을 다시 읽는다. workspace·thread별 최신 요청 세대는 요청을 시작할 때 main이 교체하고 응답 게시 전에 다시 대조하므로, 새 요청이 대기하거나 실패한 동안에도 이전 응답을 수용하지 않는다. 선택 thread 목록은 workspace 목록보다 우선한다. 한 목록의 실패가 다른 목록을 숨기지 않고 부분 응답은 전체 목록으로 표현하지 않는다.
 
 실제 app-server 초기화 성공만 transport 연결 세대를 증가시킨다. 대화 복원·새 대화는 `transport/status`로 현재 표시 상태와 같은 연결 세대를 전달하므로 채팅 투영의 연결 표시는 유지하면서 사이드바의 연결 수명주기 중복 방지를 지우지 않는다. 사이드바는 단조 증가 AppEvent seq를 scalar high-water mark로 압축한다. Skill 읽기와 Hook run key는 연결 세대별 실제 문자열 집합으로 정확히 보존하며, 해시는 고정 64개 bucket을 고르는 용도로만 쓴다. reducer update마다 wrapper와 bucket 배열을 한 번 복사하고 변경된 bucket의 `Set`만 copy-on-write하므로 이전 React state를 변경하지 않으면서 전체 집합 복사를 피한다. 이 필수 상태는 연결 세대의 고유 key 수에 비례해 증가하고 실제 새 연결에서만 회수한다. 관측·pulse·thread 목록 cache는 각각 512·512·32개로 제한한다.
 
 등록 목록과 새 활동은 다른 입력이다. 최신 목록 snapshot은 최근 2,000개 AppEvent ring과 독립한 renderer 상태로 유지한다. Skill은 등록 path와 구조화된 `commandActions.read`의 `SKILL.md` path가 일치할 때 읽기 시작에서 반응하며 한 commandActions의 여러 읽기를 각각 보존한다. Hook은 event name·source path·display order·handler type의 단일 일치와 run ID를 사용하며 시작에서만 반응한다. 읽기와 run 중복 억제는 연결 수명주기 상태라 이력 절단으로 풀리지 않고 완료 뒤 늦은 시작도 막으며, 새 `transport/connected`에서만 초기화한다. renderer는 bootstrap·대화 전환마다 snapshot 경계를 시작하고 그동안의 live 사건을 큐에 둔다. snapshot과 큐를 seq로 병합하고 snapshot에 실제 포함된 사건은 복원으로, 큐에만 있는 live 사건은 snapshot 최대 seq보다 낮아도 새 pulse로 적용한다. 실패 때도 큐를 현재 thread에 배출한다. 경계 token은 취소된 StrictMode effect나 이전 전환 응답이 새 경계를 drain하지 못하게 한다. reducer는 일반 사건 watermark보다 오래된 catalog·transport 사건도 요청/연결 세대와 별도 lifecycle watermark가 최신일 때 안전하게 수용하되 최신 catalog나 연결 상태를 역행시키지 않는다. 매핑이 없거나 불명확하면 감지 행으로 분리하고 기존 행을 추정해 켜지 않는다.
 
-`native-activity.ts`의 답변 턴·모델·사용량 투영은 기존 의미 경계와 검사에서 유지되지만 기본 사이드바의 표시 입력은 아니다. tokenUsage.total은 스레드 누적 snapshot이고 last는 최근 모델 요청의 사용량이다. 새 스레드 영점 또는 안전한 이전 턴 누적값을 확보했을 때만 턴 차분을 제공하며 기준 누락·감소·절단·늦은 이전 턴 갱신으로 정합성이 깨지면 미제공으로 둔다. 모델 설정과 model/rerouted 관측, 턴 토큰과 계정 quota bucket은 서로 다른 상태다. 비공개 reasoning 본문과 Hook 내부 출력은 활동 상태로 복제하지 않는다. 실제 화면 검증·감사 상태는 해당 작업 증거를 따른다.
+`native-activity.ts`의 답변 턴·계획 투영은 현재 요청에 사용하고 모델·사용량은 상세 모니터에서만 표시한다. tokenUsage.total은 스레드 누적 snapshot이고 last는 최근 모델 요청의 사용량이다. 새 스레드 영점 또는 안전한 이전 턴 누적값을 확보했을 때만 턴 차분을 제공하며 기준 누락·감소·절단·늦은 이전 턴 갱신으로 정합성이 깨지면 미제공으로 둔다. 모델 설정과 model/rerouted 관측, 턴 토큰과 계정 quota bucket은 서로 다른 상태다. 비공개 reasoning 본문과 Hook 내부 출력은 활동 상태로 복제하지 않는다. 실제 화면 검증·감사 상태는 해당 작업 증거를 따른다.
 
 대화 투영은 공개 commentary·계획과 reasoning의 공개 summary를 시간순 explanation으로 표시한다. 요약 상태는 thread/turn/item별 Map과 섹션 index로 분리하며 빈 섹션 알림으로 희소 배열을 만들지 않는다. seq 중복을 억제하고 완료 summary snapshot으로 대체하며 턴 종료·EOF 뒤 델타는 다시 열지 않는다. 원문 reasoning content·textDelta·analysis는 제외한다. 요약은 앞 32,768 UTF-16 코드 단위로 제한하고 renderer가 절단 안내와 출처별 접근성 이름을 제공한다. 본문 앞의 고정 출처 라벨은 붙이지 않는다. 자동 보고서의 최종 answer 선택 경로는 유지한다.
 
@@ -132,7 +144,11 @@ Codex 경로의 역할 로딩·일반 요청·같은 작업의 재개는 실제 
 
 ## 코드 설계도와 생태계 안내
 
-scripts/generate-architecture.ts는 TypeScript compiler API로 현재 src와 개발 workflow 핵심 모듈의 참조·파일·행·원문·내용 해시를 추출한다. build.ts는 번들 전에 결정적인 src/architecture.generated.json을 생성하며 추출 실패를 빌드 실패로 전달한다. src/architecture.ts가 계층·모듈 검색과 참조 탐색·결정적 배치를, src/ecosystem-view.tsx와 src/ecosystem.css가 계층 개요·모듈 상세와 직각 방향 연결을 표현한다. 모듈 보기에서는 선택한 모듈의 직접 참조만 연결선으로 보여 준다. 계층·역할 이름은 수동 분류이고 타입 전용 참조는 값·혼합 참조와 구분한다.
+구조 정본은 docs/architecture/structure.json의 안정 ID·단일 부모·정확한 allowedDependencies, 요구 정본은 docs/specs/architecture.md catalog다. scripts/architecture-contract.ts는 관리 TypeScript 전체의 실제 선행 JSDoc 구조/구현 선언과 실제 테스트의 검증 선언을 검사한다. 같은 구조 ID를 여러 구현 파일이 공유할 수 있으며 경로는 위치 근거다. 부모·자식도 명시 허용이 없으면 의존을 거부한다. 등록 검사는 의미상 요구 충족이나 테스트 통과를 증명하지 않는다.
+
+scripts/generate-architecture.ts는 계약과 TypeScript compiler API의 실제 참조·행·원문·해시를 함께 생성한다. build.ts는 번들 전에 결정적인 src/architecture.generated.json을 생성하며 계약·추출 실패를 빌드 실패로 전달한다. scripts/check-architecture.ts와 전체 check는 재생성 없이 현재성을 검사한다. 실제 typed 저작 하네스의 사전 context와 사후 실패에도 연결된다.
+
+src/architecture-tree.ts는 structure의 rootId/nodes/requirements/declarations/tests에서 직계 자식·ancestor·breadcrumb·전역 검색·leaf 근거·현재 단계 의존 집계를 순수 계산한다. src/architecture.ts의 기존 파일 참조 API·배치는 유지하며 두 파일은 arch.blueprint.layout 책임을 공유한다. src/ecosystem-view.tsx와 src/ecosystem.css는 arch.www부터 branch마다 직계 자식으로 내려가고 leaf의 명세/구현/검증 선언을 표시한다. 검색과 외부 참조 선택은 대상 부모 경로와 선택을 함께 맞춘다. 실제 import는 직계 자식 책임 ID로 축약하며 내부 공유 책임을 별도 경계로 그리지 않는다. runtime/mixed/type를 구분하고 범위 밖 참조는 상세에서 읽는다.
 
 src/ecosystem.ts의 정적 노드·방향 관계·후속 방향은 별도 생태계 안내에 보존한다. renderer는 대화 DOM을 유지한 채 화면을 전환하며 기존 IPC 권한과 Native 실행 경로를 확장하지 않는다. 이 지도는 실시간 실행 그래프나 서버 색인 결과가 아니다. 구조 변경 시 [코드 설계도](CODE_BLUEPRINT.md), 생성 자료와 [생태계 명세](specs/ecosystem.md)를 함께 검토한다.
 
@@ -161,3 +177,5 @@ renderer는 thread/cwd별 초안·읽기 위치·따라가기와 logical row 상
 [WWW 디자인 역할](../agents/www-design/AGENT.md)은 디자인 산출물·상태 규칙·개발 인계를 맡는 계약이다. 기존 `www-design` 단계 스킬과 다른 역할이며 파일 존재만으로 호스트 자동 등록을 뜻하지 않는다. 제품 Native의 모델·권한을 변경하지 않는다. 토큰과 컴포넌트 규칙은 [디자인 시스템](design-system.md)에 기록한다.
 
 `src/www-activity.ts`는 WWW 정본 역할·스킬 목록과 선택 저장소 범위의 경로 식별, 확장 없는 리터럴 cat 참조 식별을 소유한다. native-activity는 근거를 `wwwArtifact`와 source로 보존하고 renderer가 workspacePath를 전달한다. 뷰는 전용 흐름과 범용 Native 진단을 분리하며 실제 적용을 추론하지 않는다.
+
+새 작업 revision·신규 보고서의 최초 JSON 출력 책임은 `arch.development.records.serialization`의 `scripts/workflow/work-json.ts`에 둔다. type-only 도메인 참조로 runtime 순환을 피하고 파일·기존 JSON text를 받는 formatter API는 제공하지 않는다. Node 파일시스템 정책 로드는 `preflight.ts`가 고정 `docs/architecture/work-output.json`에서 수행하며 실제 저장·잠금·외부 변경 검사·atomic publication은 기존 work/report/Native writer가 소유한다. 사건 저장 모듈 `record.ts`와 `.www` 메타데이터의 책임은 유지한다.
