@@ -59,6 +59,17 @@ export function createArchitectureTree(data: TreeData) {
       tests        : structure.tests.filter((entry) => entry.requirementIds.some((ref) => ids.has(ref))) ,
     };
   }
+  function summary(id: string) {
+    const scope = new Set(structure.nodes.filter((entry) => contains(id, entry.id)).map((entry) => entry.id));
+    const requirements = structure.requirements.filter((entry) => scope.has(entry.nodeId));
+    const requirementIds = new Set(requirements.map((entry) => entry.id));
+    return {
+      components: children(id),
+      requirements,
+      declarations: structure.declarations.filter((entry) => scope.has(entry.nodeId)),
+      tests: structure.tests.filter((entry) => entry.requirementIds.some((ref) => requirementIds.has(ref))),
+    };
+  }
   function search(query: string) {
     const needle = query.trim().toLocaleLowerCase('ko-KR');
     if (!needle) return [];
@@ -102,7 +113,7 @@ export function createArchitectureTree(data: TreeData) {
     const target = node(id);
     return { currentId: children(id).length ? id : target.parent ?? id, selectedId: id };
   }
-  return { node, children, ancestors, breadcrumb, search, evidence, connections, dependencies, location };
+  return { node, children, ancestors, breadcrumb, search, evidence, summary, connections, dependencies, location };
 }
 
 export interface ResponsibilityRect extends StructureNode {
@@ -112,37 +123,45 @@ export interface ResponsibilityRect extends StructureNode {
   height: number
 }
 
-// 열 옆 48px와 행 사이 48px는 노드와 분리된 간선 통로다.
-export function layoutResponsibilities(entries: StructureNode[], viewportWidth: number) {
-  const padding      = 24                                                                                               ;
-  const edgeCorridor = 48                                                                                               ;
-  const nodeHeight   = 82                                                                                               ;
-  const rowGap       = 48                                                                                               ;
-  const columns      = entries.length >= 4 && viewportWidth >= 784 ? 2 : 1                                              ;
-  const nodeWidth    = Math.max(320, Math.min(420, Math.floor((viewportWidth - padding * 2) / columns) - edgeCorridor)) ;
-  const rows         = Math.max(1, Math.ceil(entries.length / columns))                                                 ;
+// 출발은 오른쪽, 도착은 왼쪽이다. 간선마다 별도 통로를 확보한다.
+export function layoutResponsibilities(entries: StructureNode[], viewportWidth: number, edgeCount = 0) {
+  const edgeCorridor = 36 + edgeCount * 12;
+  const padding = 24 + edgeCount * 12;
+  const nodeWidth = 360;
+  const nodeHeight = 112;
+  const rowGap = 48 + edgeCount * 6;
+  const columns = entries.length >= 6 && viewportWidth >= nodeWidth * 3 + padding * 2 + edgeCorridor * 2 ? 3
+    : entries.length >= 2 && viewportWidth >= nodeWidth * 2 + padding * 2 + edgeCorridor ? 2 : 1;
+  const rows = Math.max(1, Math.ceil(entries.length / columns));
   const nodes = [...entries].sort((a, b) => a.id.localeCompare(b.id, 'en')).map((entry, index) => ({
-    ...entry, x: padding + index % columns * (nodeWidth + edgeCorridor), y: padding + Math.floor(index / columns) * (nodeHeight + rowGap), width: nodeWidth, height: nodeHeight,
+    ...entry,
+    x: padding + index % columns * (nodeWidth + edgeCorridor),
+    y: padding + Math.floor(index / columns) * (nodeHeight + rowGap),
+    width: nodeWidth,
+    height: nodeHeight,
   }));
-  return { nodes, columns, nodeWidth, nodeHeight, rowGap, edgeCorridor, width: padding * 2 + columns * (nodeWidth + edgeCorridor), height: padding * 2 + rows * nodeHeight + (rows - 1) * rowGap };
+  return { nodes, columns, nodeWidth, nodeHeight, rowGap, edgeCorridor,
+    width: padding * 2 + columns * nodeWidth + (columns - 1) * edgeCorridor,
+    height: padding * 2 + rows * nodeHeight + (rows - 1) * rowGap };
 }
 
-export function responsibilityEdgePoints(from: ResponsibilityRect, to: ResponsibilityRect, index: number) {
-  const offset    = 14 + index % 8 * 3       ;
-  const sourceX   = from.x + from.width      ;
-  const targetX   = to.x + to.width          ;
-  const startY    = from.y + from.height / 2 ;
-  const endY      = to.y + to.height / 2     ;
-  const corridorY = to.y - 12                ;
+export function responsibilityEdgePoints(from: ResponsibilityRect, to: ResponsibilityRect, index: number, total = index + 1) {
+  const offset = 16 + index * 6;
+  const port = 20 + (index + 1) * 72 / (Math.max(total, index + 1) + 1);
+  const sourceX = from.x + from.width;
+  const targetX = to.x;
+  const startY = from.y + port;
+  const endY = to.y + port;
+  const corridorY = to.y - offset;
   return [
     { x: sourceX + 4, y: startY }, { x: sourceX + offset, y: startY },
-    { x: sourceX + offset, y: corridorY }, { x: targetX + offset, y: corridorY },
-    { x: targetX + offset, y: endY }, { x: targetX + 6, y: endY },
+    { x: sourceX + offset, y: corridorY }, { x: targetX - offset, y: corridorY },
+    { x: targetX - offset, y: endY }, { x: targetX - 6, y: endY },
   ];
 }
 
-export function responsibilityEdgePath(from: ResponsibilityRect, to: ResponsibilityRect, index: number) {
-  return responsibilityEdgePoints(from, to, index).map((point, i) => `${i ? 'L' : 'M'} ${point.x} ${point.y}`).join(' ');
+export function responsibilityEdgePath(from: ResponsibilityRect, to: ResponsibilityRect, index: number, total = index + 1) {
+  return responsibilityEdgePoints(from, to, index, total).map((point, i) => `${i ? 'L' : 'M'} ${point.x} ${point.y}`).join(' ');
 }
 
 // 글자 크기를 줄여 전체를 욱여넣지 않고, 낮거나 좁은 창은 내부 스크롤한다.
@@ -150,14 +169,14 @@ export function responsibilityFit(layout: { width: number; height: number }, vie
   return Math.max(1, Math.min(1.1, viewport.width / layout.width, viewport.height / layout.height));
 }
 
-export function layoutResponsibilityGraph(parent: StructureNode, entries: StructureNode[], viewportWidth: number) {
+export function layoutResponsibilityGraph(parent: StructureNode, entries: StructureNode[], viewportWidth: number, edgeCount = 0) {
   if (entries.some((entry) => entry.parent !== parent.id)) throw new Error("직계 하위 책임만 계층 지도에 연결할 수 있습니다.");
-  const layout = layoutResponsibilities(entries, viewportWidth);
+  const layout = layoutResponsibilities(entries, viewportWidth, edgeCount);
   return {
     ...layout,
-    parent : { ...parent, x: (layout.width - layout.nodeWidth) / 2, y: 24, width: layout.nodeWidth, height: 52 } ,
-    nodes  : layout.nodes.map((entry) => ({ ...entry, y: entry.y + 96 }))                                        ,
-    height : layout.height + 96                                                                                  ,
+    parent : { ...parent, x: (layout.width - layout.nodeWidth) / 2, y: 24, width: layout.nodeWidth, height: layout.nodeHeight } ,
+    nodes  : layout.nodes.map((entry) => ({ ...entry, y: entry.y + layout.nodeHeight + 48 }))                                        ,
+    height : layout.height + layout.nodeHeight + 48                                                                                  ,
   };
 }
 
@@ -171,4 +190,12 @@ export function responsibilityHierarchyPoints(parent: ResponsibilityRect, child:
 
 export function responsibilityHierarchyPath(parent: ResponsibilityRect, child: ResponsibilityRect) {
   return responsibilityHierarchyPoints(parent, child).map((point, index) => `${index ? "L" : "M"} ${point.x} ${point.y}`).join(" ");
+}
+
+// SVG는 자동 줄바꿈하지 않으므로 요약만 두 줄로 표시하고 상세에는 원문을 둔다.
+export function responsibilityLines(text: string, limit = 26) {
+  const characters = Array.from(text);
+  return [characters.slice(0, limit).join(''), characters.length > limit * 2
+    ? `${characters.slice(limit, limit * 2 - 1).join('')}…`
+    : characters.slice(limit, limit * 2).join('')].filter(Boolean);
 }
