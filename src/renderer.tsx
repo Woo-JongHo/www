@@ -651,7 +651,8 @@ function App() {
   }, [events, view, monitorVisible, detailsVisible]);
 
   const run = async () => {
-    const text = prompt.trim();
+    const draft = prompt;
+    const text = draft.trim();
     if (!selectionRef.current || !text || sendingRef.current || switchingRef.current || text.length > MAX_PROMPT_CHARS) return;
     const selected = requireSelection();
     const generation = ++sendGeneration.current;
@@ -680,7 +681,7 @@ function App() {
       void refreshConversations();
     } catch (failure) {
       if (!currentRequest()) return;
-      setPrompt((current) => current || text);
+      setPrompt((current) => current || draft);
       setError(String(failure));
     } finally {
       if (currentRequest()) {

@@ -198,7 +198,7 @@ describe("재연결 snapshot과 실제 renderer 대화 경계", () => {
 
 
 describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
-  async function sending() {
+  async function sending(draft = "재연결 뒤 실패해도 보존할 초안") {
     const source = await readFile(new URL("../src/renderer.tsx", import.meta.url), "utf8");
     const part = (from: string, to: string) => {
       const start = source.indexOf(from);
@@ -209,7 +209,7 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
     let reject!: (failure: Error) => void;
     const request = new Promise<void>((_resolve, fail) => { reject = fail; });
     const selected = { workspaceKey: "workspace", selectionEpoch: 1, processEpoch: "process" };
-    const state = { prompt: "재연결 뒤 실패해도 보존할 초안", pending: null as string | null, sending: false, error: "", calls: 0 };
+    const state = { prompt: draft, pending: null as string | null, sending: false, error: "", calls: 0, sent: [] as string[] };
     const code = `
       const selectionRef = { current: selected };
       const requireSelection = () => selectionRef.current;
@@ -228,7 +228,7 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
       const setPendingPrompt = value => { state.pending = value; };
       const setSending = value => { state.sending = value; };
       const setError = value => { state.error = value; };
-      const window = { www: { startTurn() { state.calls++; return request; } } };
+      const window = { www: { startTurn(_selection, _threadId, text) { state.calls++; state.sent.push(text); return request; } } };
       const refreshConversations = () => {};
       ${part("  const consumeEvents =", "\n  const listGeneration =")}
       ${part("  const run = async () =>", "\n  const choose =")}
@@ -265,14 +265,28 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
     expect(s.state.calls).toBe(1);
   });
 
+  test("전송은 trim하되 같은 재연결 실패는 앞뒤 공백과 줄바꿈을 원문 그대로 복원한다", async () => {
+    const draft = "  공백과 줄바꿈도 보존할 초안\n";
+    const s = await sending(draft);
+    const pending = s.renderer.run();
+    s.renderer.consumeEvents([], [s.marker]);
+    expect(s.state.sent).toEqual([draft.trim()]);
+    expect(s.state.pending).toBe(draft.trim());
+    s.reject(new Error("공백 초안 전송 실패"));
+    await pending;
+    expect(s.state.prompt).toBe(draft);
+    expect(s.state.sending).toBe(false);
+    expect(s.state.calls).toBe(1);
+  });
+
   test("복구 대기 중 작성한 새 초안은 늦은 같은 전송 실패로 덮지 않는다", async () => {
     const s = await sending();
     const pending = s.renderer.run();
     s.renderer.consumeEvents([], [s.marker]);
-    s.state.prompt = "사용자가 새로 작성한 초안";
+    s.state.prompt = "  사용자가 새로 작성한 초안\n";
     s.reject(new Error("늦은 실패"));
     await pending;
-    expect(s.state.prompt).toBe("사용자가 새로 작성한 초안");
+    expect(s.state.prompt).toBe("  사용자가 새로 작성한 초안\n");
     expect(s.state.sending).toBe(false);
   });
 

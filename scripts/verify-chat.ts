@@ -331,21 +331,22 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
   await submit("경계 재연결 실패 준비");
   await session.wait("(async()=>{const selected=await window.www.workspace();const events=await window.www.events(selected);const start=events.findLast(event=>event.method==='turn/userPrompt' && event.params?.text==='경계 재연결 실패 준비');return start && events.some(event=>event.method==='transport/closed' && event.seq>start.seq) && !document.querySelector('[data-testid=\"new-conversation\"]').disabled;})()", "실패 복구 검사 전 idle Native 종료");
   const beforeFailure = await readCalls();
-  const failedDraft = "경계 재연결 후 전송 실패 확인";
+  const failedDraft = "  경계 재연결 후 전송 실패 확인\n";
+  const failedText = failedDraft.trim();
   await submit(failedDraft);
   await session.wait("(async()=>{const selected=await window.www.workspace();const events=await window.www.events(selected);return events.some(event=>event.method==='conversation/reconnected' && event.seq>" + marker.seq + ") && events.some(event=>event.method==='fixture/reconnectFailureReady') && document.querySelector('.transcript')?.textContent.includes('경계 재연결 실패 이전 답변');})()", "전송 오류 전에 실제 재연결 snapshot이 화면에 수용됨");
   const failureMarker = [...await readEvents()].reverse().find((event) => event.method === "conversation/reconnected");
   const failureCalls = (await readCalls()).slice(beforeFailure.length);
   const failedTurn = failureCalls.find((call) => {
     const input = object(call.params).input;
-    return call.method === "turn/start" && Array.isArray(input) && object(input[0]).text === failedDraft;
+    return call.method === "turn/start" && Array.isArray(input) && object(input[0]).text === failedText;
   });
   const failedIndex = failureCalls.indexOf(failedTurn ?? {});
   const restoredMethods = failureCalls.slice(0, failedIndex).filter((call) => call.pid === failedTurn?.pid && object(call.params).threadId === "history-a").map((call) => call.method);
   if (!failureMarker || !failedTurn || !["thread/read", "thread/resume", "thread/turns/list"].every((method) => restoredMethods.includes(method))) throw Error("실패 요청 전에 실제 Native read/resume/snapshot 경계를 통과하지 않았습니다.");
   await fs.writeFile(path.join(workspace, "fixture-reconnect-failure-release"), "release\n");
   await session.wait("document.body.innerText.includes('합성 재연결 전송 실패') && document.querySelector('[data-testid=\"prompt-input\"]').value===" + JSON.stringify(failedDraft) + " && !document.querySelector('[data-testid=\"send-button\"]').disabled", "재연결 뒤 같은 turn/start 실패는 비운 초안을 정확 복원");
-  const failedTurns = (await readCalls()).slice(beforeFailure.length).filter((call) => call.method === "turn/start" && JSON.stringify(call.params).includes(failedDraft));
+  const failedTurns = (await readCalls()).slice(beforeFailure.length).filter((call) => call.method === "turn/start" && JSON.stringify(call.params).includes(failedText));
   if (failedTurns.length !== 1) throw Error("재연결 실패 요청을 자동 재전송했습니다.");
   await fs.writeFile(path.join(directory, "reconnect-draft.json"), JSON.stringify({ draft: failedDraft, preserved: true, markerSeq: failureMarker.seq, nativePid: failedTurn.pid, restoredMethods, turnStartCount: failedTurns.length }, null, 2));
   checks.push("실제 idle 종료→read/resume→snapshot 수용 뒤 turn/start 오류에서도 초안 보존·자동 재전송 0회");
