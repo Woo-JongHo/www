@@ -1,0 +1,922 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-297fe383-3552-4419-8ff5-404d750f57b4",
+  "title"        : "번호별 최종 답변과 대화 가독성",
+  "kind"         : "feature",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner"        : "ui",
+  "status"       : "done",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "FINAL-POLICY",
+      "description": "작업 결과 중심 번호·제목·설명과 실제 검증/미완료 범위를 요청하며 짧은 질문·명시 형식을 존중한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-e51f80b3-6464-45e2-8229-31c8aa79099c",
+          "path"     : "verification.md#attempt-e51f80b3-6464-45e2-8229-31c8aa79099c",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "FINAL-SESSION",
+      "description": "새 대화와 기존 대화 재개에 같은 최종 답변 지침을 전달하고 Native 모델·권한·사용자 원문을 보존한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-e51f80b3-6464-45e2-8229-31c8aa79099c",
+          "path"     : "verification.md#attempt-e51f80b3-6464-45e2-8229-31c8aa79099c",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "FINAL-READ",
+      "description": "실제 Electron에서 번호·설명·중첩·긴 한국어·좁은 화면과 복사/재열기 가독성을 유지하고 실패 실행 상태를 숨기지 않는다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-78b0588c-dde3-40b8-989d-a06e2cc48f5b",
+          "path"     : "verification.md#attempt-78b0588c-dde3-40b8-989d-a06e2cc48f5b",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "FINAL-LIVE",
+      "description": "실제 Native의 기능 결과·부분 실패·단순 질문 응답을 받아 번호별 의미 구성과 과장 없는 최종 설명을 확인한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-759edb86-229c-4d66-a4af-3018295b7348",
+          "path"     : "verification.md#attempt-759edb86-229c-4d66-a4af-3018295b7348",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "dialogue-final-readability-20261115",
+    "requestHash": "0de8d931c6e905957ad0154d268a6e822d2473650bed14731eb5a5dedeebba22",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "src/native-chat.ts",
+        "src/conversations.ts",
+        "src/renderer.tsx",
+        "src/chat.css",
+        "test/native-chat.test.ts",
+        "test/conversations.test.ts",
+        "test/fixtures/chat-ui-app-server.ts",
+        "scripts/verify-chat.ts",
+        "src/architecture.generated.json",
+        "docs/architecture/structure.json",
+        "docs/specs/chat.md",
+        "docs/design-system.md",
+        "docs/PRODUCT.md",
+        "docs/ARCHITECTURE.md",
+        "docs/DEVELOPMENT.md",
+        "test/verify-final-answer-live.ts"
+      ],
+      "mutationSurfaces": [
+        "ui",
+        "dev"
+      ],
+      "verifierCommands": [
+        "[\"bun\",\"test\",\"test/native-chat.test.ts\",\"test/conversations.test.ts\",\"test/chat-state.test.ts\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"npm\",\"run\",\"check:source\"]",
+        "[\"npm\",\"run\",\"build\"]",
+        "[\"node\",\"scripts/verify-chat.ts\"]",
+        "[\"bun\",\"test/verify-final-answer-live.ts\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "0de8d931c6e905957ad0154d268a6e822d2473650bed14731eb5a5dedeebba22"
+    },
+    "inputs": [
+      "docs/ARCHITECTURE.md",
+      "docs/DEVELOPMENT.md",
+      "docs/PRODUCT.md",
+      "docs/architecture/structure.json",
+      "docs/design-system.md",
+      "docs/specs/chat.md",
+      "scripts/verify-chat.ts",
+      "src/architecture.generated.json",
+      "src/chat-message.tsx",
+      "src/chat.css",
+      "src/conversations.ts",
+      "src/main.ts",
+      "src/native-chat.ts",
+      "src/projection.ts",
+      "src/renderer.tsx",
+      "test/conversations.test.ts",
+      "test/fixtures/chat-ui-app-server.ts",
+      "test/fixtures/conversations-app-server.ts",
+      "test/native-chat.test.ts",
+      "test/verify-final-answer-live.ts"
+    ],
+    "nextAction": "complete",
+    "verifications": [
+      {
+        "id"         : "attempt-e51f80b3-6464-45e2-8229-31c8aa79099c",
+        "startedAt"  : "2026-11-15T13:42:31.042Z",
+        "completedAt": "2026-11-15T13:42:36.451Z",
+        "source": {
+          "head": "eb1d4f64caab686ac9e55355b5e22b970d152a9f",
+          "digest": "05ca4ee5acd816264720fe8225cd62eb5a3dba63f792d9ed3a43347be2f6beef",
+          "inputs": [
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/architecture/structure.json",
+            "docs/design-system.md",
+            "docs/specs/chat.md",
+            "scripts/verify-chat.ts",
+            "src/architecture.generated.json",
+            "src/chat-message.tsx",
+            "src/chat.css",
+            "src/conversations.ts",
+            "src/main.ts",
+            "src/native-chat.ts",
+            "src/projection.ts",
+            "src/renderer.tsx",
+            "test/conversations.test.ts",
+            "test/fixtures/chat-ui-app-server.ts",
+            "test/fixtures/conversations-app-server.ts",
+            "test/native-chat.test.ts",
+            "test/verify-final-answer-live.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "be0580aa1b6acb35e61553ab50bf86d704b9d92677f5b9993243086c4ab34a12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "6982553e9abf60b54b4aa9883d312856038139f85c455e4915760f523f1fcdea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "4e6059214ac0137a3589293c71906236e3214fa7240d20df50388bfd6660ccdf",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "3f9e2b9916b5c8b05e0703f774251ccd9845b4b297a075786597ca5349f006a8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/design-system.md",
+              "type"  : "file",
+              "digest": "a8bb5a913e5ff8e5fd961bf1d05405ecd8fc939e46fdeda7a44781868297c415",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "8278b3bdd9a0fd28311af81dfa7f20d534fd77dde596d6c8b706320cffaf0256",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "0289389bd77afa4258e3311711ac53d7c3e037fa6e49efd1977f15ba25e69407",
+              "mode"  : 493
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "f4b4e96e2c23502a1240e00a58e7567dc72eb80800b2c7fb6e6779cefbbd75a7",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "2268f97fe2b27eeeb640bded87811b651dc967202b14ecdb54f6596760326aa0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "4f7f3859768138b72a84714235bcdae32d37551699c31a76e4593a7bdbf1bb11",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "775d622cc909356194bae7921e5bde0cd9ead446e75837028beaded72f30f759",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "dc57a18a85b82d22fe205b778a6f2d37bc985d39f4e56561835fc885b611f4eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/conversations.test.ts",
+              "type"  : "file",
+              "digest": "ad9e25a4e48b591ca0ba001db28dd6e7b95c7c6fbbac6166b75648d8bf801650",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/fixtures/chat-ui-app-server.ts",
+              "type"  : "file",
+              "digest": "b8626e425933054f3b5d2d8d19b8130ebc8242fb4896c8ed9a7f8850f28fa872",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/conversations-app-server.ts",
+              "type"  : "file",
+              "digest": "b086bcb5951fe8680d2e6dbc848de33e74ae2b194b2e24f0e7246b4750984209",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-chat.test.ts",
+              "type"  : "file",
+              "digest": "641c2fc194f311b510134b47a462f8e8f3cbac5da8194196c6657eb6290dda25",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/verify-final-answer-live.ts",
+              "type"  : "file",
+              "digest": "eadc631887becb84a74b3423ce1f5c0413879053f695671562b4ef59da50e235",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "e2d0d9fe7ddaa97884e0fba3c14da51aedb66aad5c8b13f6ce922cd99d16ea77",
+        "criteriaSnapshot": [
+          {
+            "id"         : "FINAL-LIVE",
+            "description": "실제 Native의 기능 결과·부분 실패·단순 질문 응답을 받아 번호별 의미 구성과 과장 없는 최종 설명을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "FINAL-POLICY",
+            "description": "작업 결과 중심 번호·제목·설명과 실제 검증/미완료 범위를 요청하며 짧은 질문·명시 형식을 존중한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "FINAL-READ",
+            "description": "실제 Electron에서 번호·설명·중첩·긴 한국어·좁은 화면과 복사/재열기 가독성을 유지하고 실패 실행 상태를 숨기지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "FINAL-SESSION",
+            "description": "새 대화와 기존 대화 재개에 같은 최종 답변 지침을 전달하고 Native 모델·권한·사용자 원문을 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/native-chat.test.ts",
+          "test/conversations.test.ts",
+          "test/chat-state.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "FINAL-POLICY",
+          "FINAL-SESSION"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 2969,
+            "digest"         : "8930c509c27c80ff07a377eef6def48d47bd968c4b287c9088de38c683b20d18",
+            "truncated"      : false,
+            "retainedBytes"  : 2969,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-759edb86-229c-4d66-a4af-3018295b7348",
+        "startedAt"  : "2026-11-15T13:42:29.795Z",
+        "completedAt": "2026-11-15T13:45:33.172Z",
+        "source": {
+          "head": "eb1d4f64caab686ac9e55355b5e22b970d152a9f",
+          "digest": "05ca4ee5acd816264720fe8225cd62eb5a3dba63f792d9ed3a43347be2f6beef",
+          "inputs": [
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/architecture/structure.json",
+            "docs/design-system.md",
+            "docs/specs/chat.md",
+            "scripts/verify-chat.ts",
+            "src/architecture.generated.json",
+            "src/chat-message.tsx",
+            "src/chat.css",
+            "src/conversations.ts",
+            "src/main.ts",
+            "src/native-chat.ts",
+            "src/projection.ts",
+            "src/renderer.tsx",
+            "test/conversations.test.ts",
+            "test/fixtures/chat-ui-app-server.ts",
+            "test/fixtures/conversations-app-server.ts",
+            "test/native-chat.test.ts",
+            "test/verify-final-answer-live.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "be0580aa1b6acb35e61553ab50bf86d704b9d92677f5b9993243086c4ab34a12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "6982553e9abf60b54b4aa9883d312856038139f85c455e4915760f523f1fcdea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "4e6059214ac0137a3589293c71906236e3214fa7240d20df50388bfd6660ccdf",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "3f9e2b9916b5c8b05e0703f774251ccd9845b4b297a075786597ca5349f006a8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/design-system.md",
+              "type"  : "file",
+              "digest": "a8bb5a913e5ff8e5fd961bf1d05405ecd8fc939e46fdeda7a44781868297c415",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "8278b3bdd9a0fd28311af81dfa7f20d534fd77dde596d6c8b706320cffaf0256",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "0289389bd77afa4258e3311711ac53d7c3e037fa6e49efd1977f15ba25e69407",
+              "mode"  : 493
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "f4b4e96e2c23502a1240e00a58e7567dc72eb80800b2c7fb6e6779cefbbd75a7",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "2268f97fe2b27eeeb640bded87811b651dc967202b14ecdb54f6596760326aa0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "4f7f3859768138b72a84714235bcdae32d37551699c31a76e4593a7bdbf1bb11",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "775d622cc909356194bae7921e5bde0cd9ead446e75837028beaded72f30f759",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "dc57a18a85b82d22fe205b778a6f2d37bc985d39f4e56561835fc885b611f4eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/conversations.test.ts",
+              "type"  : "file",
+              "digest": "ad9e25a4e48b591ca0ba001db28dd6e7b95c7c6fbbac6166b75648d8bf801650",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/fixtures/chat-ui-app-server.ts",
+              "type"  : "file",
+              "digest": "b8626e425933054f3b5d2d8d19b8130ebc8242fb4896c8ed9a7f8850f28fa872",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/conversations-app-server.ts",
+              "type"  : "file",
+              "digest": "b086bcb5951fe8680d2e6dbc848de33e74ae2b194b2e24f0e7246b4750984209",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-chat.test.ts",
+              "type"  : "file",
+              "digest": "641c2fc194f311b510134b47a462f8e8f3cbac5da8194196c6657eb6290dda25",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/verify-final-answer-live.ts",
+              "type"  : "file",
+              "digest": "eadc631887becb84a74b3423ce1f5c0413879053f695671562b4ef59da50e235",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "e2d0d9fe7ddaa97884e0fba3c14da51aedb66aad5c8b13f6ce922cd99d16ea77",
+        "criteriaSnapshot": [
+          {
+            "id"         : "FINAL-LIVE",
+            "description": "실제 Native의 기능 결과·부분 실패·단순 질문 응답을 받아 번호별 의미 구성과 과장 없는 최종 설명을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "FINAL-POLICY",
+            "description": "작업 결과 중심 번호·제목·설명과 실제 검증/미완료 범위를 요청하며 짧은 질문·명시 형식을 존중한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "FINAL-READ",
+            "description": "실제 Electron에서 번호·설명·중첩·긴 한국어·좁은 화면과 복사/재열기 가독성을 유지하고 실패 실행 상태를 숨기지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "FINAL-SESSION",
+            "description": "새 대화와 기존 대화 재개에 같은 최종 답변 지침을 전달하고 Native 모델·권한·사용자 원문을 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test/verify-final-answer-live.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "FINAL-LIVE"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 211,
+            "digest"         : "962c6df2bd5bc8bc9d8801384d9fafc980b3ace93d0e8b97fca73425ddf510e0",
+            "truncated"      : false,
+            "retainedBytes"  : 211,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-78b0588c-dde3-40b8-989d-a06e2cc48f5b",
+        "startedAt"  : "2026-11-15T13:46:54.863Z",
+        "completedAt": "2026-11-15T13:47:30.253Z",
+        "source": {
+          "head": "eb1d4f64caab686ac9e55355b5e22b970d152a9f",
+          "digest": "05ca4ee5acd816264720fe8225cd62eb5a3dba63f792d9ed3a43347be2f6beef",
+          "inputs": [
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/architecture/structure.json",
+            "docs/design-system.md",
+            "docs/specs/chat.md",
+            "scripts/verify-chat.ts",
+            "src/architecture.generated.json",
+            "src/chat-message.tsx",
+            "src/chat.css",
+            "src/conversations.ts",
+            "src/main.ts",
+            "src/native-chat.ts",
+            "src/projection.ts",
+            "src/renderer.tsx",
+            "test/conversations.test.ts",
+            "test/fixtures/chat-ui-app-server.ts",
+            "test/fixtures/conversations-app-server.ts",
+            "test/native-chat.test.ts",
+            "test/verify-final-answer-live.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "be0580aa1b6acb35e61553ab50bf86d704b9d92677f5b9993243086c4ab34a12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "6982553e9abf60b54b4aa9883d312856038139f85c455e4915760f523f1fcdea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "4e6059214ac0137a3589293c71906236e3214fa7240d20df50388bfd6660ccdf",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "3f9e2b9916b5c8b05e0703f774251ccd9845b4b297a075786597ca5349f006a8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/design-system.md",
+              "type"  : "file",
+              "digest": "a8bb5a913e5ff8e5fd961bf1d05405ecd8fc939e46fdeda7a44781868297c415",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "8278b3bdd9a0fd28311af81dfa7f20d534fd77dde596d6c8b706320cffaf0256",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "0289389bd77afa4258e3311711ac53d7c3e037fa6e49efd1977f15ba25e69407",
+              "mode"  : 493
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "f4b4e96e2c23502a1240e00a58e7567dc72eb80800b2c7fb6e6779cefbbd75a7",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "2268f97fe2b27eeeb640bded87811b651dc967202b14ecdb54f6596760326aa0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "4f7f3859768138b72a84714235bcdae32d37551699c31a76e4593a7bdbf1bb11",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "3bc3c8873f0f374b8e27517e12509a4b4d27a81fb7defcb30f35f8d1b518d920",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "775d622cc909356194bae7921e5bde0cd9ead446e75837028beaded72f30f759",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7f5058770dc0a02e1a0e8759b22dc4036546ebf601ff1995f662196662360915",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "dc57a18a85b82d22fe205b778a6f2d37bc985d39f4e56561835fc885b611f4eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/conversations.test.ts",
+              "type"  : "file",
+              "digest": "ad9e25a4e48b591ca0ba001db28dd6e7b95c7c6fbbac6166b75648d8bf801650",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/fixtures/chat-ui-app-server.ts",
+              "type"  : "file",
+              "digest": "b8626e425933054f3b5d2d8d19b8130ebc8242fb4896c8ed9a7f8850f28fa872",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/conversations-app-server.ts",
+              "type"  : "file",
+              "digest": "b086bcb5951fe8680d2e6dbc848de33e74ae2b194b2e24f0e7246b4750984209",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-chat.test.ts",
+              "type"  : "file",
+              "digest": "641c2fc194f311b510134b47a462f8e8f3cbac5da8194196c6657eb6290dda25",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/verify-final-answer-live.ts",
+              "type"  : "file",
+              "digest": "eadc631887becb84a74b3423ce1f5c0413879053f695671562b4ef59da50e235",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "e2d0d9fe7ddaa97884e0fba3c14da51aedb66aad5c8b13f6ce922cd99d16ea77",
+        "criteriaSnapshot": [
+          {
+            "id"         : "FINAL-LIVE",
+            "description": "실제 Native의 기능 결과·부분 실패·단순 질문 응답을 받아 번호별 의미 구성과 과장 없는 최종 설명을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "FINAL-POLICY",
+            "description": "작업 결과 중심 번호·제목·설명과 실제 검증/미완료 범위를 요청하며 짧은 질문·명시 형식을 존중한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "FINAL-READ",
+            "description": "실제 Electron에서 번호·설명·중첩·긴 한국어·좁은 화면과 복사/재열기 가독성을 유지하고 실패 실행 상태를 숨기지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "FINAL-SESSION",
+            "description": "새 대화와 기존 대화 재개에 같은 최종 답변 지침을 전달하고 Native 모델·권한·사용자 원문을 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "FINAL-READ"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 27530,
+            "digest"         : "91f043dd9c9aa59a8bde8bd6e176ede4eb632043393cb53c87a03512943adb85",
+            "truncated"      : false,
+            "retainedBytes"  : 27530,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id"            : "review-0bd233ea-d87c-4dd6-bc9d-98da24f0f310",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "861a6a8362ab4c3843d346bea578a87e7a7e18447f84967998dd1c66330b2566",
+        "criteriaDigest": "e2d0d9fe7ddaa97884e0fba3c14da51aedb66aad5c8b13f6ce922cd99d16ea77",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "10ab43db841284d99553e8140043889dee43c57794a66df4bc9e314130adbddf"
+        },
+        "failure": null,
+        "findings": [
+          "판정 근거: src/native-chat.ts:6-23에서 최종 답변 지침(NATIVE_FINAL_ANSWER_INSTRUCTIONS)을 진행 지침과 분리해 조합하고, nativeThreadStartParams(:25-32)와 nativeThreadResumeParams(:42-44)가 같은 NATIVE_PROGRESS_INSTRUCTIONS를 전달한다. 재개 파라미터에는 model·approvalPolicy·sandbox override가 없어 FINAL-SESSION의 '모델·권한 보존' 경계와 일치한다. src/conversations.ts:163이 실제로 이 함수를 써서 thread/resume을 호출한다.",
+          "테스트 대조: test/native-chat.test.ts:14-23은 새 스레드의 cwd/승인/sandbox 고정값, 최종 답변 지침 포함 여부, 재개 파라미터의 지침 동일성을 검사한다. test/conversations.test.ts:54는 conversations 복원 경로가 정확히 {threadId, excludeTurns, developerInstructions}만 보내는지 확인한다. FINAL-POLICY·FINAL-SESSION을 verification.md의 bun test 실행(attempt-e51f80b3, 종료 코드 0)에 연결한 것은 범위가 적절하다. 이 테스트는 이번 검토에서 다시 실행하지 않았다.",
+          "화면 범위: chat.css:105-124의 읽기 폭 76ch, 14px/1.85 본문, ol/li 여백, ::marker 강조는 .agent에만 적용된다. renderer.tsx:64/66에서 공개 설명은 .explanation, 최종 답변은 .agent로 렌더링되므로 '진행 설명에 같은 위계를 강제하지 않는다'(docs/specs/chat.md:150)와 맞다. 내용 추출이나 가짜 번호 생성 코드는 보이지 않는다.",
+          "실행 기록 접힘: renderer.tsx:140-141은 attention(정상 completed가 아님 · 실패 · 미확인 · 답변 미제공)일 때만 details를 open으로 둔다. 정상 응답은 기본 접힘, 이상 상태는 기본 펼침이라는 명세와 일치한다. React는 이전 prop과 비교해 diff하므로 attention 값이 바뀌지 않으면 사용자가 수동으로 펼친 상태를 다시 렌더링 때 초기화하지 않는다.",
+          "증거 범위: FINAL-READ와 FINAL-LIVE는 work.json에서 unverified이고 evidence가 비어 있다. .www/evidence/final-answer-live-PNaVWM/result.json이 passed로 존재하지만 기준 통과로 승격되지 않았으므로 증거 범위 확대는 없다. result.json의 limitations에도 '제품 기능 수행 증거가 아님'과 'configuredModel은 라우팅의 독립 증명이 아님'이 명시돼 있다.",
+          "경미(수정 권장, 차단 아님): src/native-chat.ts:5의 JSDoc '새 Native 대화에서 요청하는 사용자용 진행 설명'이 이제 NATIVE_FINAL_ANSWER_INSTRUCTIONS 위에 붙어 있다. 원래 설명 대상인 NATIVE_PROGRESS_INSTRUCTIONS와 어긋난다.",
+          "경미(차단 아님): test/verify-final-answer-live.ts:96의 '재개 후 부분 실패' 판정은 '503' 포함 여부와 '전체/모든 테스트 통과' 문구만 막는다. '테스트를 통과했습니다'처럼 다른 표현의 과장이나 번호 구성 여부는 걸러내지 못한다. 나중에 이 스크립트를 FINAL-LIVE 근거로 연결할 때는 판정 강도의 한계를 함께 기록해야 한다.",
+          "경미(차단 아님): docs/DEVELOPMENT.md:333에 'generate-ts로 ThreadResumeParams.developerInstructions 지원을 확인했다'는 사실 진술이 있다. work.json verifications에는 이에 대응하는 실행 기록이 없다. 문서상 확인 주장과 기록된 검증 근거 사이의 연결이 비어 있다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-0bd233ea-d87c-4dd6-bc9d-98da24f0f310/opus.json",
+        "startedAt"  : "2026-11-15T13:43:50.927Z",
+        "completedAt": "2026-11-15T13:46:04.706Z"
+      },
+      {
+        "id"            : "review-c073ed10-7428-4f2b-8f7e-65cadc6293ca",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "3d0c9d26efa63e57c5970c165e5460d80d5619c1c4b478961d94e494987a98b3",
+        "criteriaDigest": "e2d0d9fe7ddaa97884e0fba3c14da51aedb66aad5c8b13f6ce922cd99d16ea77",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "1d1997f2af7c6bb966f3ef91f4cd66e2c348caebc3cd6a2a7181fb60f4b6faaf"
+        },
+        "failure": null,
+        "findings": [
+          "판정 근거(FINAL-POLICY·FINAL-SESSION): src/native-chat.ts:6-23은 최종 답변 지침을 진행 지침과 분리해 NATIVE_PROGRESS_INSTRUCTIONS에 넣는다. 이 지침은 결과 우선, 의미 단위 번호·굵은 제목·설명, 실제 검증과 미완료 범위 명시, 단순 질문·사용자 지정 형식 우선을 모두 포함한다. nativeThreadStartParams(:25-32)와 nativeThreadResumeParams(:42-44)는 같은 지침을 전달한다. 재개 파라미터에는 model·approvalPolicy·sandbox가 없다. src/conversations.ts:163은 실제 thread/resume 경로에서 이 함수를 사용한다. test/native-chat.test.ts:20-24와 test/conversations.test.ts:54는 지침 포함, 재개 파라미터의 정확한 형태, 사용자 원문 보존을 검사한다. 이 테스트들은 이번 검토에서 다시 실행하지 않았다.",
+          "판정 근거(FINAL-READ): src/chat.css:107-124의 76ch·14px/1.85·ol/li 여백·::marker 강조는 `.agent`(최종 답변)에만 적용된다. src/renderer.tsx:64·66에서 진행 설명은 `.explanation`으로 분리되므로 명세 docs/specs/chat.md:150과 맞는다. 번호를 만들어 넣거나 내용을 추출하는 코드는 없다. renderer.tsx:140-141은 정상 completed이면서 실패·미확인 0개이고 답변이 있을 때만 접는다. 그 밖의 경우는 open이다. ResultSummary는 실행 중 null을 반환해 unmount되므로, 다음 턴은 새 기본값에서 다시 시작한다. scripts/verify-chat.ts:257은 실제 Electron IPC·stdio로 보낸 재개 지침이 권한 필드 없이 전달됐는지 검사한다. :263은 번호 3개와 중첩 목록, :285는 좁은 창, :350-352는 원문 복사 일치, :451-453은 정상 응답의 기본 접힘과 사용자가 직접 펼치는 동작을 검사한다.",
+          "판정 근거(FINAL-LIVE): .www/evidence/final-answer-live-PNaVWM/result.json의 기능 결과 응답은 결과 우선 문장과 굵은 제목이 있는 번호 3개로 구성되고 Windows 미검사와 커밋 미수행을 밝힌다. 재개 후 부분 실패 응답은 503 실패, 원인 미확인, 수정·테스트 미수행을 과장 없이 밝힌다. 단순 질문 응답은 '12'만 반환했다. 다만 test/verify-final-answer-live.ts:85·94는 approvalPolicy/sandbox를 never/read-only로 바꾸고 guard 문구를 덧붙여 실행한다. 이 결과는 제품의 실제 권한 구성 그대로가 아니라, 같은 지침을 받은 모델의 표현 검사다. result.json의 limitations와 verification.md:40도 이 범위로 기록하고 있어 증거 범위가 확대되지는 않았다.",
+          "경미(차단 아님): scripts/verify-chat.ts:434(결과 미확인)와 :470(중단)은 result-summary의 innerText에 상태 문자열이 있는지만 확인한다. 접힌 details에서도 summary 줄의 '결과 미확인 · 확인 필요'/'중단됨'은 innerText에 포함되므로, 명세 chat.md:150의 '실패·중단·결과 미확인은 기본 펼침'(open===true)은 실제 Electron 검사로 단정되지 않는다. 코드(renderer.tsx:140-141)는 올바르게 open을 설정한다. summary 줄에 상태가 항상 보이므로 '실패 상태를 숨기지 않는다'는 기준 자체는 충족한다. 그래도 회귀 방지를 위해 `.open===true` 단정을 추가하는 것을 권장한다.",
+          "경미(차단 아님, 이전 검토 지적 미반영): src/native-chat.ts:5의 JSDoc '새 Native 대화에서 요청하는 사용자용 진행 설명'이 여전히 NATIVE_FINAL_ANSWER_INSTRUCTIONS 위에 있다. 이 설명은 진행 지침에 해당하므로 위치가 맞지 않는다. 또 지침은 이제 재개에도 전달되므로 '새 Native 대화에서'라는 표현도 현재 동작과 맞지 않는다.",
+          "경미(차단 아님): test/verify-final-answer-live.ts:96의 부분 실패 판정은 '503' 포함 여부와 '전체/모든 테스트 통과' 문구만 거른다. '테스트를 통과했습니다'처럼 다른 표현으로 과장해도 통과할 수 있다. 이번 실제 응답(result.json)은 과장이 없음을 직접 확인했지만, 스크립트의 자동 판정 강도는 FINAL-LIVE 설명('과장 없는 최종 설명 확인')보다 약하다.",
+          "경미(차단 아님): docs/DEVELOPMENT.md:333과 verification.md:40은 generate-ts로 ThreadResumeParams.developerInstructions 지원을 확인했다고 적는다. 그러나 work.json verifications에는 이에 대응하는 실행 기록이 없다. 다만 verify-final-answer-live의 실제 thread/resume 요청이 오류 없이 수용됐으므로 기능상 근거는 따로 있다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-c073ed10-7428-4f2b-8f7e-65cadc6293ca/opus.json",
+        "startedAt"  : "2026-11-15T13:47:25.025Z",
+        "completedAt": "2026-11-15T13:48:32.316Z"
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-09c88835-4364-47e0-8f36-e0420a1be925",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T13:45:43.204Z",
+        "sourceDigest"   : "05ca4ee5acd816264720fe8225cd62eb5a3dba63f792d9ed3a43347be2f6beef",
+        "criteriaDigest" : "e2d0d9fe7ddaa97884e0fba3c14da51aedb66aad5c8b13f6ce922cd99d16ea77",
+        "documentsDigest": "a149e06828a960d944f8a5cd3c6d9f595684497f82eeb3e09c40d7e8b51db968",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "요청 구성의 새 대화/재개 공통 지침과 CSS 및 실행 기록 책임을 반영했다."
+          },
+          {
+            "path"    : "docs/CODE_BLUEPRINT.md",
+            "decision": "unchanged",
+            "reason"  : "기존 지도·추출 책임은 유지되고 요청 구성의 의존 선언만 기존 구조 ID 안에서 갱신했다."
+          },
+          {
+            "path"    : "docs/design-system.md",
+            "decision": "updated",
+            "reason"  : "기존 색과 의미상 목록을 활용한 읽기 폭·본문·번호·문단 위계를 정의했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "설치 프로토콜 확인·연결 검사·Electron 및 실제 Native 응답 검증 경로를 반영했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "updated",
+            "reason"  : "대화 최종 결과의 번호별 의미 구성과 실행 집계의 보조 역할을 반영했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "권한·검증·독립 검토·보고서 계약을 유지한다."
+          },
+          {
+            "path"    : "docs/specs/chat.md",
+            "decision": "updated",
+            "reason"  : "CHAT-FINAL-01에 작성 규칙·세션 전달·가독성과 실패 상태를 명시했다."
+          },
+          {
+            "path"    : "docs/specs/reports.md",
+            "decision": "unchanged",
+            "reason"  : "보고서 작성·판단·저장·읽기 경로는 변경하지 않았다."
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
+  }
+}
