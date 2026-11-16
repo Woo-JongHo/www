@@ -1,0 +1,429 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-632e43ce-dcb8-4726-ad34-8fe85034b6fd",
+  "title"        : "스크롤과 첫 응답 및 진행 설명 개선 논의",
+  "kind"         : "bug",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner"        : "ui",
+  "status"       : "in_progress",
+  "blockedReason": null,
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-673ddd6a-b9e6-4dd2-99c5-c37f4b02c96b"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-17ba7e7d-64e2-4450-b637-2c5f1c7ce0b2"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-9e0dfecb-5a69-4d13-bd34-768a9fb8890e"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-2",
+      "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-3",
+      "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-4",
+      "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "chat-discussion-scroll-feedback-20261116",
+    "requestHash": "dc50b0ee98baf927c58facc81cecbbf7a4f5baee900b1febf02373bde597929e",
+    "authorization": {
+      "implementation": false,
+      "writePaths": [
+        "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의",
+        "docs/work/INDEX.md"
+      ],
+      "mutationSurfaces": [
+        "files"
+      ],
+      "verifierCommands": [],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "dc50b0ee98baf927c58facc81cecbbf7a4f5baee900b1febf02373bde597929e"
+    },
+    "inputs": [
+      "docs/specs/chat.md",
+      "src/chat.css",
+      "src/command-card.tsx",
+      "src/index.html",
+      "src/main.ts",
+      "src/native-activity.css",
+      "src/native-chat.ts",
+      "src/projection.ts",
+      "src/renderer.tsx"
+    ],
+    "nextAction": "diagnose",
+    "verifications": [],
+    "reviews": [],
+    "artifactReviews": [
+      {
+        "id"        : "artifact-2fcd6a45-9da9-493f-8136-4c88f2e007b2",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:25:55.259Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "관측·목표·권한과 제안을 분리한 논의 초안이다. 03의 출력 위치와 02·04의 세부 목표가 열려 있어 draft로 유지한다.",
+        "digest"    : "520e358093f10d45e56a8188186b5d7c920bf6475e1d5714d2e87b7ac1ee0752",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "다음 개발을 위한 논의이며 구현 권한이 없음을 명시했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "여백 스크롤·첫 의미 있는 사건·출력 확장·진행 설명 시나리오를 구분했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 14
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "finding",
+            "reason": "출력 위치와 응답 공백·설명 표현 목표는 사용자 논의가 더 필요하다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 27
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "finding",
+            "reason": "네 기준은 등록했으나 초기 공백의 표시 목표와 출력 위치는 아직 제안·미결정이다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 16
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-db488516-9b63-46bd-9c09-3fbf5d633664",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:28:24.073Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "03의 동일 위치 전환을 사용자 결정으로 반영했다. 단축키 범위와 초기 공백·설명 표현의 미결정은 draft로 유지한다.",
+        "digest"    : "99f0857ed681d1afdd551a05522e2cb27b0c1edecececede08c7ad193dc65cff",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "구현 없이 다음 개발을 위한 논의를 진행한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "03의 동일 영역 전환과 키보드 접근을 구체화했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 20
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "finding",
+            "reason": "단축키 적용 범위와 02·04의 표현 목표가 미결정이다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 29
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "finding",
+            "reason": "단축키 범위와 첫 유의미한 내용의 표시 목표가 아직 확정되지 않았다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 16
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-c363fac8-a78c-43fb-a316-5cf36a670fdb",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:32:04.862Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "03의 동일 위치·선택한 출력 하나 적용을 확정했다. 04의 설명 생성 범위와 02의 초기 공백 목표는 논의 중이다.",
+        "digest"    : "43318e326477122922bd8d76f0e16cb950866de4947cf8a960efb4f78a76ff8b",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "다음 개발 준비를 위한 명세 논의이며 구현 권한은 없다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "선택한 출력의 독립 펼침과 다른 출력 상태 보존을 연결했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 20
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "finding",
+            "reason": "앱이 작성하는 진행 설명의 추가 여부와 초기 공백 목표를 확인해야 한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 29
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "finding",
+            "reason": "03은 구체화됐으나 02·04의 세부 기준이 남았다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 16
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-91347463-57d1-40a9-870b-b7a796f27650",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:33:42.419Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "04의 앱 진행 설명 추가를 확인했다. 관측 범위·출처 구분을 반영하고 02의 지연 양상을 확인하는 단계로 이동한다.",
+        "digest"    : "9c80ba5fbdf68d2e0abe052d4952a43babe67591e41b2efc3615c9edfeac16a9",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "다음 개발을 위한 논의와 구현 미승인 범위를 유지한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "Native 공개 설명과 실제 사건 기반 앱 설명의 채팅 읽기 시나리오를 구분했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 21
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "finding",
+            "reason": "02의 지연이 시작 구간만인지 이후 사건도 일괄 표시되는지 아직 확인되지 않았다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 29
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "finding",
+            "reason": "02의 첫 의미 있는 내용에 대한 구체 목표는 관측 보완 후 정리한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 19
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-3f9c02ea-125b-4471-bff2-ead343f351aa",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:34:57.924Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "02의 첫 내용 이후 개별 표시 관측을 반영했다. 원인을 단정하지 않고 초기 공백의 표시 방식을 다음 결정으로 남긴다.",
+        "digest"    : "83c5673fa534c9b7bbae7a091b893ed14428a9eb8ff356a1b406e976694e3cf0",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "구현 없이 다음 개발의 요구와 관측을 정리한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "초기 공백과 이후 개별 사건 표시를 구분했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 10
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "finding",
+            "reason": "실제 내용이 없을 때의 채팅 표시 방식이 미결정이다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 29
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "finding",
+            "reason": "초기 지연 개선과 대기 안내의 구체 기준을 더 정리해야 한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 19
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-b7b02026-e1be-451d-abb7-dd6544593d25",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:39:18.604Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "확인된 관측과 사용자 결정을 개발 인계 기준으로 정리했다. 초기 원인은 후속 진단 대상으로 남기고 구현·검증 완료로 판정하지 않는다.",
+        "digest"    : "715af793a6cf73adb99a020b5b6600b3bf22a319fa62a05e4a961649d7b30738",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "논의·읽기 전용 원인 조사 범위와 구현 미승인을 구분했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "여백 스크롤·첫 작업 흐름·선택한 출력 전환 시나리오를 정리했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 27
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "satisfied",
+            "reason": "원인 미확정과 사용자 선택 미결정을 구분하고 다음 개발의 계측 경계를 제시했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 35
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "satisfied",
+            "reason": "관측 가능한 네 기준을 원장에 두고 구현·검증 결과는 미검증으로 유지한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 16
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      }
+    ]
+  }
+}
