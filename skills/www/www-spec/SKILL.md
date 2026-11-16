@@ -28,6 +28,8 @@ description: WWW 요청의 범위와 검증 가능한 수용 기준을 기록한
 
 ## 출력 경로
 
+명세 작성 끝에는 [구현 전 산출물 검토](../../../docs/skills/ARTIFACT_REVIEW.md)에 따라 `spec` 검토를 준비·수행·기록한다. 작은 수정은 brief로 판단 이유를 짧게 남기고, 발견한 중요한 미결정만 사용자에게 확인한다. 검토 기록을 구현 완료로 읽지 않는다.
+
 `docs/work/<영역>/<번호>-<작업명>/work.json`, 같은 폴더의 `spec.md`, `docs/work/INDEX.md`.
 
 ## 허용 변경

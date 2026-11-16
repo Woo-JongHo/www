@@ -103,7 +103,7 @@ test("주입 호스트 fixture로 일반 요청을 신규 UUID·자동 선택 �
   assert.ok(received.stdin.includes('"writePaths":["src/item.ts"]'));
   assert.ok(!received.args.includes(options.request));
   assert.ok(result.sources);
-  assert.deepEqual(result.sources.map((source) => source.path), contextFiles);
+  assert.deepEqual(result.sources.map((source) => source.path), [...contextFiles, "agents/www/review-policy.json"]);
   assert.ok(result.sources);
   for (const source of result.sources) {
     const content = await readFile(join(repo, source.path));

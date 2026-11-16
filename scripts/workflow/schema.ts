@@ -3,6 +3,7 @@
  * @implements RESP-DEVELOPMENT-RECORDS-VALIDATION
  */
 import type { WorkRecord } from "./types.ts";
+import { artifactReviewErrors } from "./artifacts.ts";
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { normalize, resolve, sep } from "node:path";
 
@@ -121,6 +122,17 @@ export function validateWorkRecord(value: unknown, options: ValidationOptions = 
         add(errors, review?.version === 1 && typeof review.reviewedAt === "string" && Number.isFinite(Date.parse(review.reviewedAt)), "문서 검토 버전·시각이 올바르지 않습니다.");
         for (const field of ["sourceDigest", "criteriaDigest", "documentsDigest"]) add(errors, /^[a-f0-9]{64}$/.test(String(review?.[field] ?? "")), `문서 검토 ${field}가 필요합니다.`);
         add(errors, Array.isArray(review?.documents) && review.documents.length > 0 && review.documents.every((item) => typeof item?.path === "string" && ["updated", "unchanged", "not_applicable"].includes(item.decision) && typeof item.reason === "string" && item.reason.trim()), "문서 검토 경로·판단·이유가 필요합니다.");
+      }
+    }
+    if (workflow.artifactReviews !== undefined) {
+      add(errors, Array.isArray(workflow.artifactReviews), "artifactReviews는 배열이어야 합니다.");
+      const reviewIds = new Set<unknown>();
+      for (const review of list(workflow.artifactReviews)) {
+        errors.push(...artifactReviewErrors(review));
+        if (review && typeof review === "object" && "id" in review) {
+          add(errors, !reviewIds.has(review.id), "산출물 검토 ID가 중복됩니다.");
+          reviewIds.add(review.id);
+        }
       }
     }
     const attempts = new Map<string, Record<string, unknown>>();

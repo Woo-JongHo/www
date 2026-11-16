@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "0e1d73d4b964fa11c25df9f3de8f45732444960fa0e593b0dd4f88c4a46f0b28",
+  "digest"       : "8a83f5a5da2d8ce5e15bbd266b44c005219d2c9aac241aa243333e5a7600f36a",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -103,8 +103,8 @@
       "layer"      : "tooling",
       "role"       : "앱 모듈 · workflow",
       "line"       : 1,
-      "lines"      : 422,
-      "digest"     : "0e9ae3022c391b7d3b6601ac7494a9365c9473ea457d9e1ca91a80873d47fd09",
+      "lines"      : 437,
+      "digest"     : "aa484f55141ecb5705bbd582cab83b5b8b9604a085e71b403ad14e40ca4f3bb0",
       "structureId": "arch.development.authoring"
     },
     {
@@ -139,6 +139,17 @@
       "lines"      : 82,
       "digest"     : "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
       "structureId": "arch.development.providers.invocation"
+    },
+    {
+      "id"         : "scripts/workflow/artifacts.ts",
+      "file"       : "scripts/workflow/artifacts.ts",
+      "title"      : "artifacts",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · artifacts",
+      "line"       : 1,
+      "lines"      : 165,
+      "digest"     : "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+      "structureId": "arch.development.artifacts"
     },
     {
       "id"         : "scripts/workflow/consistency.ts",
@@ -301,8 +312,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · run",
       "line"       : 1,
-      "lines"      : 686,
-      "digest"     : "b9f4f5791cce8b71fc81dbaa79f049f2393781818aa9153659df3166ecc2c6e3",
+      "lines"      : 691,
+      "digest"     : "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
       "structureId": "arch.development.execution"
     },
     {
@@ -312,8 +323,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · schema",
       "line"       : 1,
-      "lines"      : 159,
-      "digest"     : "2b184e96e6d199bbece6deeb7d4b7efb0f0e62b82e98cbaec58a93c5ae14750f",
+      "lines"      : 171,
+      "digest"     : "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
       "structureId": "arch.development.records.validation"
     },
     {
@@ -323,8 +334,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · types",
       "line"       : 1,
-      "lines"      : 155,
-      "digest"     : "66397c28b33c6910bc493090ea65008f112ee8cd13fb00f689556801aa5c0798",
+      "lines"      : 157,
+      "digest"     : "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
       "structureId": "arch.development.records.protocol"
     },
     {
@@ -345,8 +356,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · work",
       "line"       : 1,
-      "lines"      : 513,
-      "digest"     : "a5e2ee1c7c54d9b3b21e9eb4b5675d7ac3196619c12b0db2b3afcd3962980d13",
+      "lines"      : 521,
+      "digest"     : "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
       "structureId": "arch.development.records.state"
     },
     {
@@ -745,83 +756,94 @@
       "specifier": "./workflow/work.ts",
       "line"     : 5,
       "endLine"  : 5,
-      "statement": "import { appendPending } from \"./workflow/work.ts\";"
+      "statement": "import { appendPending, readWork, recordArtifactReview } from \"./workflow/work.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:146",
+      "id"       : "scripts/workflow.ts:178",
+      "from"     : "scripts/workflow.ts",
+      "to"       : "scripts/workflow/artifacts.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./workflow/artifacts.ts",
+      "line"     : 6,
+      "endLine"  : 6,
+      "statement": "import { artifactContext, artifactStatus, developmentTools } from \"./workflow/artifacts.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow.ts:271",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/report-lifecycle.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./workflow/report-lifecycle.ts",
-      "line"     : 6,
-      "endLine"  : 6,
+      "line"     : 7,
+      "endLine"  : 7,
       "statement": "import { runReportedStage } from \"./workflow/report-lifecycle.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:213",
+      "id"       : "scripts/workflow.ts:338",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/reports.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./workflow/reports.ts",
-      "line"     : 7,
-      "endLine"  : 7,
+      "line"     : 8,
+      "endLine"  : 8,
       "statement": "import { inspectReportLocks, maintainWorkReports, recoverReportLock } from \"./workflow/reports.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:551",
+      "id"       : "scripts/workflow.ts:676",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/source-policy.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./source-policy.ts",
-      "line"     : 13,
-      "endLine"  : 13,
+      "line"     : 14,
+      "endLine"  : 14,
       "statement": "import { assertTypeScriptWrites, checkSourcePolicy } from \"./source-policy.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:631",
+      "id"       : "scripts/workflow.ts:756",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/run.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./workflow/run.ts",
-      "line"     : 14,
-      "endLine"  : 14,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import { runProcess, runWorkflow } from \"./workflow/run.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:692",
+      "id"       : "scripts/workflow.ts:817",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/preflight.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./workflow/preflight.ts",
-      "line"     : 15,
-      "endLine"  : 15,
+      "line"     : 16,
+      "endLine"  : 16,
       "statement": "import { validateWritePaths } from \"./workflow/preflight.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:754",
+      "id"       : "scripts/workflow.ts:879",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/route.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./workflow/route.ts",
-      "line"     : 16,
-      "endLine"  : 16,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import { namedSkill } from \"./workflow/route.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:804",
+      "id"       : "scripts/workflow.ts:929",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/adapters/gjc.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./workflow/adapters/gjc.ts",
-      "line"     : 17,
-      "endLine"  : 17,
+      "line"     : 18,
+      "endLine"  : 18,
       "statement": "import type { ProcessInvocation, ProcessOptions } from \"./workflow/adapters/gjc.ts\";"
     },
     {
@@ -878,6 +900,28 @@
       "line"     : 15,
       "endLine"  : 15,
       "statement": "import type { ProcessInvocation, ProcessOptions, ProcessResult } from \"./gjc.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/artifacts.ts:220",
+      "from"     : "scripts/workflow/artifacts.ts",
+      "to"       : "scripts/workflow/evidence.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./evidence.ts",
+      "line"     : 8,
+      "endLine"  : 8,
+      "statement": "import { criteriaDigest } from \"./evidence.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/artifacts.ts:268",
+      "from"     : "scripts/workflow/artifacts.ts",
+      "to"       : "scripts/workflow/types.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./types.ts",
+      "line"     : 9,
+      "endLine"  : 9,
+      "statement": "import type { WorkLocation } from \"./types.ts\";"
     },
     {
       "id"       : "scripts/workflow/consistency.ts:528",
@@ -1342,73 +1386,73 @@
       "statement": "import { loadReviewPolicy, runReview } from \"./review.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1034",
+      "id"       : "scripts/workflow/run.ts:1033",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/artifacts.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./artifacts.ts",
+      "line"     : 18,
+      "endLine"  : 18,
+      "statement": "import { artifactStatus, developmentTools } from \"./artifacts.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/run.ts:1101",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/types.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./types.ts",
-      "line"     : 19,
-      "endLine"  : 19,
+      "line"     : 20,
+      "endLine"  : 20,
       "statement": "import type { Approval, WorkRecord, WorkLocation, WorkDecision } from \"./types.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1118",
+      "id"       : "scripts/workflow/run.ts:1185",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/preflight.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./preflight.ts",
-      "line"     : 20,
-      "endLine"  : 20,
+      "line"     : 21,
+      "endLine"  : 21,
       "statement": "import type { SessionBinding, CanonicalSkill, MutationResult } from \"./preflight.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1204",
+      "id"       : "scripts/workflow/run.ts:1271",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/route.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./route.ts",
-      "line"     : 21,
-      "endLine"  : 21,
+      "line"     : 22,
+      "endLine"  : 22,
       "statement": "import type { RouteResult } from \"./route.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1251",
+      "id"       : "scripts/workflow/run.ts:1318",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/adapters/gjc.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./adapters/gjc.ts",
-      "line"     : 22,
-      "endLine"  : 22,
+      "line"     : 23,
+      "endLine"  : 23,
       "statement": "import type { ProcessInvocation, ProcessOptions, ProcessResult } from \"./adapters/gjc.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1342",
+      "id"       : "scripts/workflow/run.ts:1409",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line"     : 23,
-      "endLine"  : 23,
+      "line"     : 24,
+      "endLine"  : 24,
       "statement": "import type { VerificationAttempt } from \"./evidence.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1400",
-      "from"     : "scripts/workflow/run.ts",
-      "to"       : "scripts/workflow/review.ts",
-      "mode"     : "type",
-      "syntax"   : "import",
-      "specifier": "./review.ts",
-      "line"     : 24,
-      "endLine"  : 24,
-      "statement": "import type { ReviewAuthority } from \"./review.ts\";"
-    },
-    {
-      "id"       : "scripts/workflow/run.ts:1452",
+      "id"       : "scripts/workflow/run.ts:1467",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/review.ts",
       "mode"     : "type",
@@ -1416,17 +1460,28 @@
       "specifier": "./review.ts",
       "line"     : 25,
       "endLine"  : 25,
+      "statement": "import type { ReviewAuthority } from \"./review.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/run.ts:1519",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/review.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./review.ts",
+      "line"     : 26,
+      "endLine"  : 26,
       "statement": "import type { ReviewResult } from \"./review.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1501",
+      "id"       : "scripts/workflow/run.ts:1568",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/record.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./record.ts",
-      "line"     : 26,
-      "endLine"  : 26,
+      "line"     : 27,
+      "endLine"  : 27,
       "statement": "import type { RuntimeState } from \"./record.ts\";"
     },
     {
@@ -1439,6 +1494,17 @@
       "line"     : 5,
       "endLine"  : 5,
       "statement": "import type { WorkRecord } from \"./types.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/schema.ts:158",
+      "from"     : "scripts/workflow/schema.ts",
+      "to"       : "scripts/workflow/artifacts.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./artifacts.ts",
+      "line"     : 6,
+      "endLine"  : 6,
+      "statement": "import { artifactReviewErrors } from \"./artifacts.ts\";"
     },
     {
       "id"       : "scripts/workflow/types.ts:108",
@@ -1472,6 +1538,17 @@
       "line"     : 7,
       "endLine"  : 7,
       "statement": "import type { RepositoryCheckStatus } from './consistency.ts';"
+    },
+    {
+      "id"       : "scripts/workflow/types.ts:333",
+      "from"     : "scripts/workflow/types.ts",
+      "to"       : "scripts/workflow/artifacts.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./artifacts.ts",
+      "line"     : 8,
+      "endLine"  : 8,
+      "statement": "import type { ArtifactReview } from './artifacts.ts';"
     },
     {
       "id"       : "scripts/workflow/work-json.ts:118",
@@ -1597,45 +1674,56 @@
     {
       "id"       : "scripts/workflow/work.ts:1033",
       "from"     : "scripts/workflow/work.ts",
+      "to"       : "scripts/workflow/artifacts.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./artifacts.ts",
+      "line"     : 18,
+      "endLine"  : 18,
+      "statement": "import { createArtifactReview } from \"./artifacts.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/work.ts:1088",
+      "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/types.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./types.ts",
-      "line"     : 18,
-      "endLine"  : 18,
+      "line"     : 19,
+      "endLine"  : 19,
       "statement": "import type { CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions } from './types.ts';"
     },
     {
-      "id"       : "scripts/workflow/work.ts:1192",
+      "id"       : "scripts/workflow/work.ts:1247",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line"     : 19,
-      "endLine"  : 19,
+      "line"     : 20,
+      "endLine"  : 20,
       "statement": "import type { VerificationAttempt } from './evidence.ts';"
     },
     {
-      "id"       : "scripts/workflow/work.ts:1250",
+      "id"       : "scripts/workflow/work.ts:1305",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/documentation.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./documentation.ts",
-      "line"     : 20,
-      "endLine"  : 20,
+      "line"     : 21,
+      "endLine"  : 21,
       "statement": "import type { DocumentationReview } from './documentation.ts';"
     },
     {
-      "id"       : "scripts/workflow/work.ts:1313",
+      "id"       : "scripts/workflow/work.ts:1368",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/types.ts",
       "mode"     : "type",
       "syntax"   : "export",
       "specifier": "./types.ts",
-      "line"     : 21,
-      "endLine"  : 21,
+      "line"     : 22,
+      "endLine"  : 22,
       "statement": "export type { WorkRecord, WorkLocation, WorkAssessment, WorkOptions } from './types.ts';"
     },
     {
@@ -2544,31 +2632,31 @@
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 8,
+      "line"     : 9,
       "specifier": "node:child_process",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 9,
+      "line"     : 10,
       "specifier": "node:crypto",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 10,
+      "line"     : 11,
       "specifier": "node:fs/promises",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 11,
+      "line"     : 12,
       "specifier": "node:path",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 12,
+      "line"     : 13,
       "specifier": "node:url",
       "reason"   : "external"
     },
@@ -2646,6 +2734,24 @@
     },
     {
       "file"     : "scripts/workflow/adapters/windows-command.ts",
+      "line"     : 7,
+      "specifier": "node:path",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/artifacts.ts",
+      "line"     : 5,
+      "specifier": "node:crypto",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/artifacts.ts",
+      "line"     : 6,
+      "specifier": "node:fs",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/artifacts.ts",
       "line"     : 7,
       "specifier": "node:path",
       "reason"   : "external"
@@ -2940,13 +3046,13 @@
     },
     {
       "file"     : "scripts/workflow/schema.ts",
-      "line"     : 6,
+      "line"     : 7,
       "specifier": "node:fs",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow/schema.ts",
-      "line"     : 7,
+      "line"     : 8,
       "specifier": "node:path",
       "reason"   : "external"
     },
@@ -3196,6 +3302,16 @@
     "rootId": "arch.www",
     "nodes": [
       {
+        "id"         : "arch.development.artifacts",
+        "parent"     : "arch.development",
+        "title"      : "산출물 검토와 개발 도구 출처",
+        "description": "명세 품질·산출물 정합성 검토의 근거·현재성과 개발 도구 정본·발견 경로를 조회한다.",
+        "allowedDependencies": [
+          "arch.development.evidence.verification",
+          "arch.development.records.protocol"
+        ]
+      },
+      {
         "id"         : "arch.www",
         "parent"     : null,
         "title"      : "WWW",
@@ -3364,7 +3480,8 @@
           "arch.development.routing",
           "arch.tooling.source-policy",
           "arch.development.records.state",
-          "arch.development.reporting.storage"
+          "arch.development.reporting.storage",
+          "arch.development.artifacts"
         ]
       },
       {
@@ -3514,7 +3631,8 @@
           "arch.development.records.state",
           "arch.development.review",
           "arch.development.routing",
-          "arch.tooling.source-policy"
+          "arch.tooling.source-policy",
+          "arch.development.artifacts"
         ]
       },
       {
@@ -3523,7 +3641,8 @@
         "title"      : "작업 레코드 스키마 검사",
         "description": "작업 레코드의 버전·필드·수용 기준·요구 참조·증거 연결 형식을 검사한다.",
         "allowedDependencies": [
-          "arch.development.records.protocol"
+          "arch.development.records.protocol",
+          "arch.development.artifacts"
         ]
       },
       {
@@ -3534,7 +3653,8 @@
         "allowedDependencies": [
           "arch.development.evidence.documentation",
           "arch.development.evidence.repository",
-          "arch.development.evidence.verification"
+          "arch.development.evidence.verification",
+          "arch.development.artifacts"
         ]
       },
       {
@@ -3552,7 +3672,8 @@
           "arch.development.records.validation",
           "arch.development.review",
           "arch.development.routing",
-          "arch.development.records.serialization"
+          "arch.development.records.serialization",
+          "arch.development.artifacts"
         ]
       },
       {
@@ -3848,13 +3969,22 @@
     ],
     "requirements": [
       {
+        "id"                    : "RESP-DEVELOPMENT-ARTIFACTS",
+        "nodeId"                : "arch.development.artifacts",
+        "description"           : "산출물 검토의 완전성·근거 위치·문서/기준 현재성과 개발 도구의 출처·제공·수용 미확인을 구분한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 8
+      },
+      {
         "id"                    : "RESP-NATIVE-PROJECTS",
         "nodeId"                : "arch.native.projects",
         "description"           : "로컬 프로젝트 인덱스가 실제 경로 식별·최근순·즐겨찾기·직렬 갱신·원자 저장과 오류 시 원본 보전을 담당한다. main은 single-instance lock 뒤 userData당 factory 하나를 사용하며 실행·전송·승인 중 전환 보호를 소유한다. 제한된 IPC가 renderer의 조회·즐겨찾기·프로젝트 선택을 연결한다.",
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 8
+        "line"                  : 15
       },
       {
         "id"                    : "RESP-NATIVE-RESOURCES",
@@ -3863,7 +3993,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 15
+        "line"                  : 22
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-SERIALIZATION",
@@ -3872,7 +4002,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 22
+        "line"                  : 29
       },
       {
         "id"                    : "RESP-TOOLING-BUNDLE",
@@ -3881,7 +4011,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 29
+        "line"                  : 36
       },
       {
         "id"                    : "RESP-TOOLING-STRUCTURE-CONTRACT",
@@ -3890,7 +4020,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 36
+        "line"                  : 43
       },
       {
         "id"                    : "RESP-TOOLING-MAP-VALIDATION",
@@ -3899,7 +4029,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 43
+        "line"                  : 50
       },
       {
         "id"                    : "RESP-TOOLING-MAP-GENERATION",
@@ -3908,7 +4038,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 50
+        "line"                  : 57
       },
       {
         "id"                    : "RESP-TOOLING-SOURCE-POLICY",
@@ -3917,7 +4047,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 57
+        "line"                  : 64
       },
       {
         "id"                    : "RESP-DEVELOPMENT-AUTHORING",
@@ -3926,7 +4056,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 64
+        "line"                  : 71
       },
       {
         "id"                    : "RESP-DEVELOPMENT-PROVIDERS-CODEX",
@@ -3935,7 +4065,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 71
+        "line"                  : 78
       },
       {
         "id"                    : "RESP-DEVELOPMENT-PROVIDERS-GJC",
@@ -3944,7 +4074,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 78
+        "line"                  : 85
       },
       {
         "id"                    : "RESP-DEVELOPMENT-PROVIDERS-INVOCATION",
@@ -3953,7 +4083,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 85
+        "line"                  : 92
       },
       {
         "id"                    : "RESP-DEVELOPMENT-EVIDENCE-REPOSITORY",
@@ -3962,7 +4092,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 92
+        "line"                  : 99
       },
       {
         "id"                    : "RESP-DEVELOPMENT-EVIDENCE-DOCUMENTATION",
@@ -3971,7 +4101,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 99
+        "line"                  : 106
       },
       {
         "id"                    : "RESP-DEVELOPMENT-EVIDENCE-VERIFICATION",
@@ -3980,7 +4110,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 106
+        "line"                  : 113
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-LOCK",
@@ -3989,7 +4119,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 113
+        "line"                  : 120
       },
       {
         "id"                    : "RESP-DEVELOPMENT-AUTHORIZATION",
@@ -3998,7 +4128,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 120
+        "line"                  : 127
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-EVENTS",
@@ -4007,7 +4137,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 127
+        "line"                  : 134
       },
       {
         "id"                    : "RESP-DEVELOPMENT-REPORTING-LIFECYCLE",
@@ -4016,7 +4146,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 134
+        "line"                  : 141
       },
       {
         "id"                    : "RESP-DEVELOPMENT-REPORTING-DOCUMENT",
@@ -4025,7 +4155,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 141
+        "line"                  : 148
       },
       {
         "id"                    : "RESP-DEVELOPMENT-REPORTING-STORAGE",
@@ -4034,7 +4164,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 148
+        "line"                  : 155
       },
       {
         "id"                    : "RESP-DEVELOPMENT-REVIEW",
@@ -4043,7 +4173,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 155
+        "line"                  : 162
       },
       {
         "id"                    : "RESP-DEVELOPMENT-ROUTING",
@@ -4052,7 +4182,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 162
+        "line"                  : 169
       },
       {
         "id"                    : "RESP-DEVELOPMENT-EXECUTION",
@@ -4061,7 +4191,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 169
+        "line"                  : 176
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-VALIDATION",
@@ -4070,7 +4200,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 176
+        "line"                  : 183
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-PROTOCOL",
@@ -4079,7 +4209,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 183
+        "line"                  : 190
       },
       {
         "id"                    : "RESP-DEVELOPMENT-RECORDS-STATE",
@@ -4088,7 +4218,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 190
+        "line"                  : 197
       },
       {
         "id"                    : "RESP-CHAT-ACTIVITY-CATALOG",
@@ -4097,7 +4227,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 197
+        "line"                  : 204
       },
       {
         "id"                    : "RESP-BLUEPRINT-LAYOUT",
@@ -4106,7 +4236,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 204
+        "line"                  : 211
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-MARKDOWN",
@@ -4115,7 +4245,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 211
+        "line"                  : 218
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-READING",
@@ -4124,7 +4254,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 218
+        "line"                  : 225
       },
       {
         "id"                    : "RESP-CHAT-SESSIONS-READING",
@@ -4133,7 +4263,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 225
+        "line"                  : 232
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-EXECUTION",
@@ -4142,7 +4272,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 232
+        "line"                  : 239
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-PREVIEW",
@@ -4151,7 +4281,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 239
+        "line"                  : 246
       },
       {
         "id"                    : "RESP-CHAT-SESSIONS-RESTORE",
@@ -4160,7 +4290,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 246
+        "line"                  : 253
       },
       {
         "id"                    : "RESP-DEVELOPMENT-SERVICE",
@@ -4169,7 +4299,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 253
+        "line"                  : 260
       },
       {
         "id"                    : "RESP-BLUEPRINT-VIEW",
@@ -4178,7 +4308,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 260
+        "line"                  : 267
       },
       {
         "id"                    : "RESP-BLUEPRINT-ECOSYSTEM",
@@ -4187,7 +4317,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 267
+        "line"                  : 274
       },
       {
         "id"                    : "RESP-CHAT-COMPOSER",
@@ -4196,7 +4326,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 274
+        "line"                  : 281
       },
       {
         "id"                    : "RESP-NATIVE-LIFECYCLE",
@@ -4205,7 +4335,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 281
+        "line"                  : 288
       },
       {
         "id"                    : "RESP-CHAT-ACTIVITY-VIEW",
@@ -4214,7 +4344,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 288
+        "line"                  : 295
       },
       {
         "id"                    : "RESP-CHAT-ACTIVITY-PROJECTION",
@@ -4223,7 +4353,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 295
+        "line"                  : 302
       },
       {
         "id"                    : "RESP-CHAT-SESSIONS-REQUESTS",
@@ -4232,7 +4362,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 302
+        "line"                  : 309
       },
       {
         "id"                    : "RESP-NATIVE-LAUNCH",
@@ -4241,7 +4371,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 309
+        "line"                  : 316
       },
       {
         "id"                    : "RESP-REPORTS-COLLECTION",
@@ -4250,7 +4380,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 316
+        "line"                  : 323
       },
       {
         "id"                    : "RESP-REPORTS-QUEUE",
@@ -4259,7 +4389,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 323
+        "line"                  : 330
       },
       {
         "id"                    : "RESP-NATIVE-BRIDGE",
@@ -4268,7 +4398,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 330
+        "line"                  : 337
       },
       {
         "id"                    : "RESP-CHAT-MESSAGES-PROJECTION",
@@ -4277,7 +4407,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 337
+        "line"                  : 344
       },
       {
         "id"                    : "RESP-CHAT-WORKSPACE",
@@ -4286,7 +4416,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 344
+        "line"                  : 351
       },
       {
         "id"                    : "RESP-REPORTS-JUDGEMENT",
@@ -4295,7 +4425,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 351
+        "line"                  : 358
       },
       {
         "id"                    : "RESP-REPORTS-SERVICE",
@@ -4304,7 +4434,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 358
+        "line"                  : 365
       },
       {
         "id"                    : "RESP-REPORTS-VIEW",
@@ -4313,7 +4443,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 365
+        "line"                  : 372
       },
       {
         "id"                    : "RESP-NATIVE-TRANSPORT",
@@ -4322,7 +4452,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 372
+        "line"                  : 379
       },
       {
         "id"                    : "RESP-NATIVE-PROTOCOL",
@@ -4331,7 +4461,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 379
+        "line"                  : 386
       },
       {
         "id"                    : "RESP-CHAT-ACTIVITY-ARTIFACTS",
@@ -4340,7 +4470,7 @@
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
-        "line"                  : 386
+        "line"                  : 393
       }
     ],
     "declarations": [
@@ -4413,6 +4543,14 @@
         "nodeId": "arch.development.providers.invocation",
         "requirementIds": [
           "RESP-DEVELOPMENT-PROVIDERS-INVOCATION"
+        ],
+        "line": 2
+      },
+      {
+        "file": "scripts/workflow/artifacts.ts",
+        "nodeId": "arch.development.artifacts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-ARTIFACTS"
         ],
         "line": 2
       },
@@ -5043,6 +5181,13 @@
         "line": 2
       },
       {
+        "file": "test/workflow-artifacts.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-ARTIFACTS"
+        ],
+        "line": 2
+      },
+      {
         "file": "test/workflow-codex.test.ts",
         "requirementIds": [
           "RESP-DEVELOPMENT-PROVIDERS-CODEX"
@@ -5136,6 +5281,6 @@
         "line": 2
       }
     ],
-    "digest": "9b7c433b9adb14bb669a2bff41af4915151c7422a7f61173e03e5b3ae777d1e2"
+    "digest": "78035b6e0f445e323a1e5dff1e08186304293e883d3ecb99522ba66c393e427f"
   }
 }

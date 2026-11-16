@@ -92,6 +92,8 @@ WWW 프로젝트 유형(Desktop 포함)의 여섯 Skills 정본은 `skills/www/`
 
 ## 개발 역할의 작업 인터페이스
 
+구현 전 검토와 도구 출처는 공식 진입점의 `artifact-context`, `artifact-review`, `artifact-status`, `tool-inventory` action으로 제공한다. 입력·판단 책임·brief/full·상태의 의미는 [산출물 검토 계약](skills/ARTIFACT_REVIEW.md)을 따른다. 예를 들어 `node scripts/workflow.ts '{"action":"tool-inventory","skill":"www-spec"}'`는 실행 없이 출처를 조회한다. 개발 단계 실행은 해당 출처와 검토 상태를 컨텍스트·결과·로컬 영수증에 보존하며 호스트 의미 수용은 미확인으로 남긴다.
+
 현재 작업 접수·재개의 CLI는 `node scripts/workflow.ts '<JSON>'`이며 `action`으로 동작을 선택한다. 이 인터페이스가 구현돼 있다는 사실과 실제 Codex·GUI·검토 흐름의 통합 검증은 구분한다. 입력의 권한 정보는 사용자의 유효한 요청에서 정하며, 예제나 역할 선택이 실행 승인을 만들지 않는다.
 
 | `action` | 입력과 동작 |

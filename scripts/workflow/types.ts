@@ -5,6 +5,7 @@
 import type { CapturedSource, VerificationAttempt } from './evidence.ts';
 import type { DocumentationAssessment, DocumentationReview } from './documentation.ts';
 import type { RepositoryCheckStatus } from './consistency.ts';
+import type { ArtifactReview } from './artifacts.ts';
 
 export interface Approval {
   implementation   : boolean  ;
@@ -48,6 +49,7 @@ export interface WorkWorkflow {
   verifications         : VerificationAttempt[]                              ;
   reviews               : RecordedReview[]                                   ;
   documentationReviews? : DocumentationReview[]                              ;
+  artifactReviews?      : ArtifactReview[]                                   ;
   legacyRecord?         : WorkRecord                                         ;
 }
 

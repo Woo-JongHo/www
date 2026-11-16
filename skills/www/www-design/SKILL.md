@@ -27,6 +27,8 @@ description: WWW 작업의 기존 구조를 조사해 최소 설계와 위험·�
 
 ## 출력 경로
 
+구현 인계 전에는 [구현 전 산출물 검토](../../../docs/skills/ARTIFACT_REVIEW.md)의 `consistency`로 명세·설계·작업과 기준별 연결을 검토·기록한다. 작은 수정은 brief로 필요한 근거를 남긴다. 발견한 모순은 소유 문서에서 해소하고 새 digest로 다시 검토한다.
+
 UUID로 찾은 실제 작업 폴더의 `design.md`, 필요한 경우 같은 폴더의 `tasks.md`.
 
 ## 허용 변경

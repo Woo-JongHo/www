@@ -15,6 +15,7 @@ import { loadReviewPolicy, validateReview, durableJson } from "./review.ts";
 import { withWorkLock, inspectWorkLock, recoverWorkLock, retryWorkWriter, WorkLockBusyError } from "./lock.ts";
 import { checkRepository, assessRepositoryCheck } from "./consistency.ts";
 import { createDocumentationReview, assessDocumentation } from "./documentation.ts";
+import { createArtifactReview } from "./artifacts.ts";
 import type { CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions } from './types.ts';
 import type { VerificationAttempt } from './evidence.ts';
 import type { DocumentationReview } from './documentation.ts';
@@ -240,6 +241,13 @@ async function mutateWork(repo: string, workId: string, change: (record: Current
     if (hash(await fs.readFile(work.path)) !== before) throw new Error("작업 갱신 중 다른 작성자가 내용을 바꿨습니다.");
     await atomicWrite(work.path, source);
     return { ...work, record, rawSource: source };
+  });
+}
+
+export async function recordArtifactReview({ repo = process.cwd(), workId, review }: WorkOptions & { review: unknown }) {
+  return mutateWork(repo, workId, async (record, work) => {
+    const result = await createArtifactReview(repo, work, review);
+    (record.workflow.artifactReviews ??= []).push(result);
   });
 }
 

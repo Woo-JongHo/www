@@ -5,6 +5,13 @@
 ```architecture-requirements
 [
   {
+    "id": "RESP-DEVELOPMENT-ARTIFACTS",
+    "nodeId": "arch.development.artifacts",
+    "description": "산출물 검토의 완전성·근거 위치·문서/기준 현재성과 개발 도구의 출처·제공·수용 미확인을 구분한다.",
+    "implementationRequired": true,
+    "verificationRequired": true
+  },
+  {
     "id": "RESP-NATIVE-PROJECTS",
     "nodeId": "arch.native.projects",
     "description": "로컬 프로젝트 인덱스가 실제 경로 식별·최근순·즐겨찾기·직렬 갱신·원자 저장과 오류 시 원본 보전을 담당한다. main은 single-instance lock 뒤 userData당 factory 하나를 사용하며 실행·전송·승인 중 전환 보호를 소유한다. 제한된 IPC가 renderer의 조회·즐겨찾기·프로젝트 선택을 연결한다.",

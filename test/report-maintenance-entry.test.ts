@@ -45,3 +45,12 @@ test("보고서 관리 진입점은 잘못된 경로·적용 옵션을 실행 �
   await assert.rejects(runTypedWorkflow({ action: "report-lock-status", repo: 42 }), /문자열/);
   await assert.rejects(runTypedWorkflow({ action: "report-lock-recover", directory: "docs/work/Reports/001/reports", token: randomUUID() }), /직접 요청/);
 });
+
+test("보고서 스킬의 정본과 발견 경로를 공식 출처 조회에서 확인한다", async () => {
+  const inventory = await runTypedWorkflow({ action: "tool-inventory", skill: "www-report" });
+  assert.ok(Array.isArray(inventory.items));
+  const skill = inventory.items.find((item) => item.path === "skills/www/www-report/SKILL.md");
+  assert.equal(skill?.status, "available");
+  assert.equal(skill?.discovery, "matches");
+  assert.equal(skill?.hostAcceptance, "unconfirmed");
+});

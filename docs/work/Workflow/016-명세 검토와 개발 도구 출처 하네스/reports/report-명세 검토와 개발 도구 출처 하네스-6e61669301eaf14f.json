@@ -1,0 +1,351 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-370f0fe9-8596-4475-b62b-7b7c70992a34",
+  "title"        : "명세 검토와 개발 도구 출처 하네스",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-f00e9978-d9b4-40d7-92c5-663f94384f5c",
+      "workId"        : "work-370f0fe9-8596-4475-b62b-7b7c70992a34",
+      "title"         : "명세 검토와 개발 도구 출처 하네스",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-15T23:47:58.024Z",
+      "event"         : "design",
+      "workRecordHash": "afd64bebe6eb800418f9ecb1fdf168f3a6c42c21540a53dd2e804038a682fcc0",
+      "sourceDigest"  : "e417a7ec0be6284b975ea7c11cb1f6c7474dcce311c9dfd7b2299549cd63eb8b",
+      "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+      "semanticHash"  : "5a25015d610ae1f671f42cde4411fc39562626fa2de429cb8c9e8f4562682c93",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/work.json",
+        "workRecordHash": "afd64bebe6eb800418f9ecb1fdf168f3a6c42c21540a53dd2e804038a682fcc0",
+        "sourceDigest"  : "e417a7ec0be6284b975ea7c11cb1f6c7474dcce311c9dfd7b2299549cd63eb8b",
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-646501f9-0666-4aae-a589-046ff92bca05",
+      "workId"        : "work-370f0fe9-8596-4475-b62b-7b7c70992a34",
+      "title"         : "명세 검토와 개발 도구 출처 하네스",
+      "summary"       : "명세 품질 검토, 구현 전 산출물 정합성 검토, 개발 도구 출처 조회를 기존 WWW 하네스에 구현했다. 새 CLI·기록·실제 Codex 컨텍스트 배선을 확인했고 각 검사 시점의 집중 테스트와 타입·회귀 검사가 통과했다. 공유 작업 트리의 병행 수정으로 전체 검사 실패와 소스 변경이 반복되어 통합 수용 및 최종 감사는 완료하지 않았다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T00:02:15.452Z",
+      "event"         : "finish",
+      "workRecordHash": "72815dce21e2fece9b6bf1cb6b715a6b8cc1d7efe5411c926cbec0faf2fa7bb5",
+      "sourceDigest"  : "3a32277f6a5e8630c69c19b5e7bfbd0d8ae7191fdb9aafd860d07750efe51589",
+      "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+      "semanticHash"  : "41b2bebd1c78224067bdd6e3526020dc4eb47b039132264d26a22411389f1828",
+      "narrative": {
+        "summary": "명세 품질 검토, 구현 전 산출물 정합성 검토, 개발 도구 출처 조회를 기존 WWW 하네스에 구현했다. 새 CLI·기록·실제 Codex 컨텍스트 배선을 확인했고 각 검사 시점의 집중 테스트와 타입·회귀 검사가 통과했다. 공유 작업 트리의 병행 수정으로 전체 검사 실패와 소스 변경이 반복되어 통합 수용 및 최종 감사는 완료하지 않았다.",
+        "before" : "명세·설계·작업의 의미 검토 결과와 그 문서 지문을 기록하는 전용 인터페이스가 없었고 개발 컨텍스트 출처는 일부 문서 해시에 한정됐다.",
+        "after"  : "명세·정합성 검토를 근거 행과 기준·문서 digest에 연결해 저장하고 not_run/current/stale을 조회한다. 정본과 발견 경로의 missing/mismatch/outside/invalid 및 실제 제공·호스트 수용 미확인을 구분한다. 명세·설계 스킬이 새 검토를 인계한다.",
+        "changes": [
+          "공식 workflow.ts에 artifact-context/artifact-review/artifact-status/tool-inventory action을 추가했다.",
+          "artifacts.ts와 선택적인 artifactReviews 필드·스키마·작업 잠금 저장을 연결했다.",
+          "run.ts가 도구 출처·검토 상태를 호스트 컨텍스트·결과·영수증에 보존한다.",
+          "명세·설계 스킬과 공통 계약·개발 안내·구조 요구 및 작업 기록을 갱신했다."
+        ],
+        "decisions": [
+          "의미 판단은 에이전트가 맡고 코드는 항목 완전성·근거 위치·현재성만 확인한다.",
+          "작은 작업의 brief와 상세 full을 구분하되 기존 권한·실제 검증·독립 감사·완료 조건은 유지한다.",
+          "기존 사용자 요청에 직접 영향받는 회귀 테스트 경로를 접수 시 누락한 사실을 정정하고 새로운 승인을 받은 것으로 해석하지 않았다."
+        ],
+        "limitations": [
+          "새 집중 테스트 6개/40 assertions와 개발 흐름 회귀 7개는 각 실행 당시 통과했다. 현재 다른 변경 이후의 증거 적용성은 별도 판정이다.",
+          "실제 Codex 읽기 전용 실행에서 정본 6개와 두 검토 상태의 전달·응답을 확인했다. 호스트가 모든 지침을 의미상 적용했다는 보장은 없다.",
+          "Opus 읽기 전용 독립 검토는 두 번 fail이었다. 권한 기록 누락·공식 증거 연결·발견용 invalid 처리 지적은 반영했으나 현재 소스의 통합 검증·최종 감사는 미충족이다.",
+          "전체 npm run check와 build에서 병행 변경의 구조 오류·snapshot 변경 및 sourceStable=false가 관측됐다. 업무를 done으로 기록하지 않았다.",
+          "BoxBox off 상태를 적용했으며 자동 정렬의 기존 별도 변경은 보존했다."
+        ],
+        "next": [
+          "다른 작업이 끝난 안정된 현재 소스에서 공식 전체 검사와 빌드를 재검증한다.",
+          "현재 소스의 문서 영향 검토·Opus 최종 감사·저작 보고서를 갱신한 뒤에만 완료 판단한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "동일 작업 트리의 병행 수정으로 전체 검사 exit 1 및 sourceStable=false가 반복됐다. 안정된 통합 소스의 검증과 최종 독립 감사가 필요하다.",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a25016da-a543-48b0-b56d-3b1d63856021",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-1263334d-5822-4ccf-922a-60c5031a2b55",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a25016da-a543-48b0-b56d-3b1d63856021",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-1263334d-5822-4ccf-922a-60c5031a2b55",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a25016da-a543-48b0-b56d-3b1d63856021",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-8bb9f5b9-90a5-4293-8056-1baeb949e48e",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-74622172-3bdc-484f-a1f9-cfedf1fb91c6",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9f1696f9-fa02-4042-a6cf-64d79ab65227",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/workflow-artifacts.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T23:48:24.265Z"
+          },
+          {
+            "id": "attempt-a25016da-a543-48b0-b56d-3b1d63856021",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/workflow-artifacts.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T23:50:31.946Z"
+          },
+          {
+            "id": "attempt-1263334d-5822-4ccf-922a-60c5031a2b55",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/workflow-artifacts.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T23:53:11.887Z"
+          },
+          {
+            "id": "attempt-8bb9f5b9-90a5-4293-8056-1baeb949e48e",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T23:53:14.461Z"
+          },
+          {
+            "id": "attempt-74622172-3bdc-484f-a1f9-cfedf1fb91c6",
+            "command": "node",
+            "args": [
+              "--test",
+              "test/workflow-development.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T23:56:32.812Z"
+          },
+          {
+            "id": "attempt-9f1696f9-fa02-4042-a6cf-64d79ab65227",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": false,
+            "completedAt" : "2026-11-15T23:56:58.374Z"
+          },
+          {
+            "id": "attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": false,
+            "completedAt" : "2026-11-16T00:00:52.046Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-86197f86-9986-4e61-b8aa-6c7d48d756c6",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-86197f86-9986-4e61-b8aa-6c7d48d756c6/opus.json",
+            "findings": [
+              "검토 범위: Read/Grep/Glob 도구로 이 파일들을 직접 읽었다. scripts/workflow/artifacts.ts 전체, scripts/workflow.ts:356-384, scripts/workflow/work.ts:86-91·200-279, scripts/workflow/run.ts:180-324, scripts/workflow/schema.ts:120-139, scripts/workflow/preflight.ts의 findWorkRecord·resolveInside, test/workflow-artifacts.test.ts 전체, test/workflow-development.test.ts의 Grep 결과, docs/skills/ARTIFACT_REVIEW.md, 016 작업의 spec·design·tasks·verification.md·work.json. git diff는 사용 가능한 도구가 아니어서 실행하지 못했다. 그래서 변경 전후 비교는 verification.md의 진술과 현재 파일 내용으로만 했다. 테스트는 실행하지 않았다. skills/www/*/SKILL.md, types.ts 전체, docs/ARCHITECTURE.md·DEVELOPMENT.md는 읽지 않았다.",
+              "[결함, 권한 범위 밖 수정] verification.md:23은 test/workflow-development.test.ts를 고쳤다고 적고 있다. 정책 문서를 추가로 제공하는 의도된 변경에 맞춰 출처 기대값을 갱신했다는 내용이다. 실제로 이 파일의 27행과 106행은 agents/www/review-policy.json을 sources에 포함하도록 기대하고 있다. 그런데 work.json:60-71의 workflow.authorization.writePaths에는 test/workflow-artifacts.test.ts만 있고 test/workflow-development.test.ts는 없다. spec.md:11은 '범위 확대는 기존 권한으로 간주하지 않는다'고 정한다. 따라서 이 수정은 승인된 쓰기 범위 밖의 변경이다. AC-3('기존 권한·완료 계약을 유지')이 passed로 기록돼 있는 것과도 충돌한다. 사용자에게 범위 확대 승인을 받아 writePaths에 반영하거나, 승인 없이 수정한 사실을 기록하고 처리해야 한다.",
+              "[증거 범위] work.json:13-53의 AC-1·AC-2·AC-3은 모두 bun test test/workflow-artifacts.test.ts 한 번의 실행(attempt-81adfe8d)으로 passed가 됐다. AC-3의 '기존 권한·완료 계약 유지'에 관한 회귀 근거는 verification.md:23-24에 있다. node --test test/workflow-development.test.ts의 7개 통과와 npm run typecheck 통과라는 서술이다. 하지만 이 두 실행은 공식 검증 시도로 기록되지 않았다. 특히 node --test는 authorization.verifierCommands(work.json:75-79)에 없는 명령이다. 서술만으로 AC-3의 회귀 증거가 확보됐다고 볼 수 없다. 허용된 npm run check 같은 명령을 공식 verify로 기록해야 한다.",
+              "[경미, 견고성] artifacts.ts:151-159의 developmentTools를 보면 발견 경로가 저장소 안의 디렉터리나 1 MiB를 넘는 파일로 해석될 수 있다. 그러면 document()가 예외를 던지고(artifacts.ts:61), tool-inventory와 개발 실행 컨텍스트 전체가 실패한다. mismatch로 보고되지 않는다. 설계는 일치·불일치·외부·누락을 구분해 표시한다고 정했으니, 이 경우도 mismatch로 낮추는 편이 맞다.",
+              "[확인, 정상] 주요 계약은 소스와 맞았다. 대상 문서·기준·requestHash를 묶은 digest와 stale 판정(artifacts.ts:76, 138), 제출 전후 digest 재확인(104, 124), 항목 완전성·중복, 실제 비어 있지 않은 행 근거, tasks.md 한정 coverage, 기준 중복·누락 거부(92-122), 잠금 안의 저장과 schema 재검증(work.ts:228-252, schema.ts:127-137)을 확인했다. 저장소 밖 경로·심볼릭 링크 거부(artifacts.ts:48-54), 제공한 문서에만 provided 표시와 hostAcceptance: unconfirmed 유지(run.ts:199-217, 317)도 확인했다. 검토 기록이 AC 결과를 바꾸지 않는다는 점은 test/workflow-artifacts.test.ts:44, 89에서 직접 검사한다."
+            ]
+          },
+          {
+            "id"         : "review-fac82f50-9c2c-4e0e-b2b7-b7c06b6cba00",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-fac82f50-9c2c-4e0e-b2b7-b7c06b6cba00/opus.json",
+            "findings": [
+              "검토 범위: Read와 Grep 도구로 다음 파일만 직접 읽었다. scripts/workflow/artifacts.ts 전체, scripts/workflow/run.ts:185-224와 317-320, scripts/workflow/work.ts:240-259, scripts/workflow.ts의 import부와 370-383, scripts/workflow/reports.ts 머리말, docs/architecture/structure.json의 일부(authoring 노드 172-188), test/workflow-artifacts.test.ts 전체, 016 작업의 spec·design·tasks·verification.md, work.json의 1-1290행과 1680-1989행. git diff, schema.ts·types.ts 본문, test/workflow-development.test.ts, ARTIFACT_REVIEW.md, SKILL.md 문서는 읽지 않았다. 테스트·typecheck·check는 실행하지 않았다.",
+              "[결함, 필수 기준의 증거 부재] work.json:61-81의 AC-3(required)은 result가 failed다. 연결된 공식 시도 중 마지막인 attempt-8bb9f5b9(npm run check, verification.md:70-85)는 현재와 같은 소스 식별 edb3f96a…에서 종료 코드 1로 실패했다. verification.md:51은 '마지막 안정 상태의 전체 검사 결과를 별도로 기록한다'고 적었지만 통과한 npm run check 시도는 없다. 같은 소스에 대한 attempt-1263334d는 AC-1·AC-2에만 연결돼 있다. 따라서 '기존 권한·완료 계약 유지'를 뒷받침할 현재 근거가 없고, 작업을 수용 가능한 상태로 볼 수 없다. 실패 원인으로 적은 workflow.ts→reports.ts 의존은 현재 structure.json:183의 arch.development.reporting.storage 허용으로 이미 해소된 것으로 보인다. 그렇다면 npm run check를 공식 verify로 다시 실행해 통과를 기록해야 한다.",
+              "[결함, 증거 범위 확대] verification.md:23-24는 'node --test test/workflow-development.test.ts 7개 통과'와 'npm run typecheck 통과'를 서술한다. 하지만 work.json의 verifications에는 이 두 명령의 공식 시도가 없다. node --test는 authorization.verifierCommands(work.json:106-110)에 없는 명령이기도 하다. 첫 독립 검토(review-86197f86)가 같은 점을 지적했고, verification.md:49는 이 지적을 '수용했다'고 적었다. 그런데도 공식 시도 기록은 여전히 없다. 서술만으로 회귀나 타입 검사 통과의 근거로 삼을 수 없다.",
+              "[결함, 오래된 저작 검토를 current로 진술] verification.md:25는 이번 작업의 spec/consistency 검토가 두 종류 모두 current라고 적는다. 그러나 artifactReviews(work.json:1718-1847)는 2026-11-15T23:47:36에 digest 8a7eefe2…/056f183d…로 저장됐다. 그 뒤 spec.md:13에 23:50:29에 끝난 첫 독립 검토의 지적과 경로 정정 문단이 추가됐다. artifacts.ts:76의 digest는 spec.md 원문을 포함하므로 artifactStatus(artifacts.ts:138)는 현재 두 검토를 stale로 판정해야 한다. 기록된 근거 행도 어긋났다. purpose 근거인 spec.md:13은 지금 범위 정정 문단이고, outcomes 근거인 spec.md:21은 '## 수용 기준' 제목 행이다. 현재 문서로 검토를 다시 기록하거나, verification.md의 진술을 당시 시점으로 한정해야 한다.",
+              "[경미, 견고성] artifacts.ts:46-59의 document()는 ENOENT만 누락으로 처리한다. 중간 경로가 파일이면 ENOTDIR 같은 다른 오류가 그대로 전파된다. 정본 경로(artifacts.ts:147)에서 이런 일이 생기면 tool-inventory와 개발 실행 컨텍스트(run.ts:198) 전체가 실패한다. 발견 경로는 159행에서 invalid로 낮추지만 정본 쪽은 같은 처리를 하지 않는다. 설계상 상태 구분을 유지하려면 정본 조회에도 같은 방식을 적용하는 편이 맞다.",
+              "[확인, 정상] 소스에서 다음 계약이 구현돼 있음을 읽었다. digest는 작업 ID·requestHash·대상 문서(누락 포함)·기준 지문을 포함한다(artifacts.ts:76). 제출 전후 digest를 다시 대조한다(104, 124). 항목 누락·중복, 배열을 enum 문자열로 쓴 입력, 실제 비어 있지 않은 행 근거, tasks.md에 한정한 coverage, 기준 중복·누락을 거부한다(84-123). 잠금 안에서 저장한다(work.ts:247-252). 직접 요청 없이 기록하면 거부한다(workflow.ts:380). 발견 경로의 missing/mismatch/outside/invalid를 구분한다(151-160). 제공 표시와 hostAcceptance: unconfirmed도 보존한다(run.ts:204, 317). 이 판단은 코드를 읽은 결과이며, 이번 검토에서 테스트를 다시 실행하지는 않았다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/work.json",
+        "workRecordHash": "72815dce21e2fece9b6bf1cb6b715a6b8cc1d7efe5411c926cbec0faf2fa7bb5",
+        "sourceDigest"  : "3a32277f6a5e8630c69c19b5e7bfbd0d8ae7191fdb9aafd860d07750efe51589",
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38"
+      }
+    }
+  ]
+}

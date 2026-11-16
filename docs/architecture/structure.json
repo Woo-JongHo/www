@@ -6,6 +6,16 @@
   ],
   "nodes": [
     {
+      "id": "arch.development.artifacts",
+      "parent": "arch.development",
+      "title": "산출물 검토와 개발 도구 출처",
+      "description": "명세 품질·산출물 정합성 검토의 근거·현재성과 개발 도구 정본·발견 경로를 조회한다.",
+      "allowedDependencies": [
+        "arch.development.evidence.verification",
+        "arch.development.records.protocol"
+      ]
+    },
+    {
       "id"         : "arch.www",
       "parent"     : null,
       "title"      : "WWW",
@@ -172,7 +182,8 @@
         "arch.development.routing",
         "arch.tooling.source-policy",
         "arch.development.records.state",
-        "arch.development.reporting.storage"
+        "arch.development.reporting.storage",
+        "arch.development.artifacts"
       ]
     },
     {
@@ -322,7 +333,8 @@
         "arch.development.records.state",
         "arch.development.review",
         "arch.development.routing",
-        "arch.tooling.source-policy"
+        "arch.tooling.source-policy",
+        "arch.development.artifacts"
       ]
     },
     {
@@ -331,7 +343,8 @@
       "title"      : "작업 레코드 스키마 검사",
       "description": "작업 레코드의 버전·필드·수용 기준·요구 참조·증거 연결 형식을 검사한다.",
       "allowedDependencies": [
-        "arch.development.records.protocol"
+        "arch.development.records.protocol",
+        "arch.development.artifacts"
       ]
     },
     {
@@ -342,7 +355,8 @@
       "allowedDependencies": [
         "arch.development.evidence.documentation",
         "arch.development.evidence.repository",
-        "arch.development.evidence.verification"
+        "arch.development.evidence.verification",
+        "arch.development.artifacts"
       ]
     },
     {
@@ -360,7 +374,8 @@
         "arch.development.records.validation",
         "arch.development.review",
         "arch.development.routing",
-        "arch.development.records.serialization"
+        "arch.development.records.serialization",
+        "arch.development.artifacts"
       ]
     },
     {

@@ -2,7 +2,8 @@
  * @architecture arch.development.authoring
  * @implements RESP-DEVELOPMENT-AUTHORING
  */
-import { appendPending } from "./workflow/work.ts";
+import { appendPending, readWork, recordArtifactReview } from "./workflow/work.ts";
+import { artifactContext, artifactStatus, developmentTools } from "./workflow/artifacts.ts";
 import { runReportedStage } from "./workflow/report-lifecycle.ts";
 import { inspectReportLocks, maintainWorkReports, recoverReportLock } from "./workflow/reports.ts";
 import { execFile, spawn } from "node:child_process";
@@ -372,6 +373,20 @@ export async function runTypedWorkflow(options: JsonObject, dependencies: Harnes
         }
       }
     }
+  }
+  if (["artifact-context", "artifact-review", "artifact-status", "tool-inventory"].includes(String(options.action))) {
+    const repo = typeof options.repo === "string" ? options.repo : process.cwd();
+    if (options.action === "tool-inventory") {
+      const { documents: _documents, ...inventory } = await developmentTools(repo, options.skill);
+      return inventory;
+    }
+    if (typeof options.workId !== "string") throw new Error("작업 UUID가 필요합니다.");
+    const work = await readWork({ repo, workId: options.workId });
+    if (options.action === "artifact-context") return artifactContext(repo, work, options.kind);
+    if (options.action === "artifact-status") return { reviews: await artifactStatus(repo, work) };
+    if (options.direct !== true) throw new Error("검토 기록에는 직접 요청에서 이어진 실행 맥락이 필요합니다.");
+    const saved = await recordArtifactReview({ repo, workId: options.workId, review: options.review });
+    return { workId: options.workId, reviews: await artifactStatus(repo, saved) };
   }
   if (options.action === "recover-result") {
     if (options.direct !== true || typeof options.workId !== "string" || typeof options.artifactPath !== "string") throw new Error("직접 요청과 회수 대상이 필요합니다.");

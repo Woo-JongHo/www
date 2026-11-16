@@ -15,6 +15,7 @@ import { createCodexInvocation, codexCapabilities, runCodex } from "./adapters/c
 import { assessWork, advanceWork, completeWork, openWork, readWork, recordReview, resumeWork, verifyWork } from "./work.ts";
 import { captureSource, criteriaDigest } from "./evidence.ts";
 import { loadReviewPolicy, runReview } from "./review.ts";
+import { artifactStatus, developmentTools } from "./artifacts.ts";
 
 import type { Approval, WorkRecord, WorkLocation, WorkDecision } from "./types.ts";
 import type { SessionBinding, CanonicalSkill, MutationResult } from "./preflight.ts";
@@ -194,15 +195,17 @@ export async function runProcess(invocation: ProcessInvocation, options: Process
 
 async function developmentContext(repo: string, work: WorkLocation, skill: string) {
   if (work.record.schemaVersion !== 2) throw new Error("현재 개발 작업 계약이 필요합니다.");
-  const sources = ["AGENTS.md", "agents/www/AGENT.md", "docs/skills/WORKFLOW.md", `skills/www/${skill}/SKILL.md`];
-  const documents = await Promise.all(sources.map(async (relative) => {
-    const absolute = await fs.realpath(path.join(repo, relative));
-    if (!absolute.startsWith(`${repo}${path.sep}`)) throw new Error("역할 컨텍스트가 저장소를 벗어납니다.");
-    const source = await fs.readFile(absolute, "utf8");
-    return { path: relative, hash: createHash("sha256").update(source).digest("hex"), source };
-  }));
+  const inventory = await developmentTools(repo, skill);
+  const documents = inventory.documents.filter((doc): doc is { path: string; source: string } => doc.source !== null);
+  for (const file of ["AGENTS.md", "agents/www/AGENT.md", "docs/skills/WORKFLOW.md", `skills/www/${skill}/SKILL.md`]) {
+    if (!documents.some(doc => doc.path === file)) throw new Error(`역할 컨텍스트 정본이 없습니다: ${file}`);
+  }
+  const reviews = await artifactStatus(repo, work);
+  const tools = inventory.items.map(item => ({ ...item, provided: item.status === "available" }));
   return {
-    sources: documents.map(({ path: file, hash }) => ({ path: file, hash })),
+    sources: tools.flatMap(item => item.provided && item.digest !== null ? [{ path: item.path, hash: item.digest }] : []),
+    tools,
+    reviews,
     text: [
       "www-dev 역할이 직접 요청을 받아 선택한 실행 단계다. 기존 요청의 권한을 유지하며 아래 작업 UUID를 재사용한다.",
       "진행 중인 작업을 중복 접수하지 않는다. 현재 범위의 구현·검사·실패 수정은 이어가되 commit·push는 명시 요청이 없으면 수행하지 않는다.",
@@ -210,8 +213,10 @@ async function developmentContext(repo: string, work: WorkLocation, skill: strin
       `작업 UUID: ${work.record.id}`,
       `허용 범위: ${JSON.stringify(work.record.workflow.authorization)}`,
       `현재 기준: ${JSON.stringify(work.record.criteria.map(({ id, description, required, requirementRefs }) => ({ id, description, required, requirementRefs })))}`,
+      `개발 도구 출처와 제공 대상: ${JSON.stringify(tools)}`,
+      `명세 품질·구현 전 정합성 검토 상태: ${JSON.stringify(reviews)}`,
       "단계의 결과는 실행 사실과 한계를 보고한다. 부모 실행부가 검증과 검토를 연결하므로 스스로 작업을 done으로 바꾸거나 기준을 약화하지 않는다.",
-      ...documents.map((document) => `\n--- ${document.path} (${document.hash}) ---\n${document.source}`),
+      ...documents.map((document) => `\n--- ${document.path} ---\n${document.source}`),
     ].join("\n"),
   };
 }
@@ -309,10 +314,10 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
     await validateWritePaths(repo, [path.relative(repo, receiptDirectory).split(path.sep).join("/")]);
     await fs.mkdir(receiptDirectory, { recursive: true });
     const receiptId = createHash("sha256").update(options.eventId).digest("hex");
-    await fs.writeFile(path.join(receiptDirectory, `${receiptId}.json`), `${JSON.stringify({ eventId: options.eventId, workId: work.record.id, sources: context.sources, host }, null, 2)}\n`, { flag: "wx", mode: 0o600 });
-    if (!host.ok || !options.verifier) return { executed: true, workId: work.record.id, route, mutation, host, environment, executor, sources: context.sources };
+    await fs.writeFile(path.join(receiptDirectory, `${receiptId}.json`), `${JSON.stringify({ eventId: options.eventId, workId: work.record.id, sources: context.sources, tools: context.tools, artifactReviews: context.reviews, host }, null, 2)}\n`, { flag: "wx", mode: 0o600 });
+    if (!host.ok || !options.verifier) return { executed: true, workId: work.record.id, route, mutation, host, environment, executor, sources: context.sources, tools: context.tools, artifactReviews: context.reviews };
     const verification = await verifyWork({ repo, workId: work.record.id, ...options.verifier, criterionIds: options.verifier.criterionIds ?? [] });
-    return { executed: true, workId: work.record.id, route, mutation, host, environment, executor, sources: context.sources, verification };
+    return { executed: true, workId: work.record.id, route, mutation, host, environment, executor, sources: context.sources, tools: context.tools, artifactReviews: context.reviews, verification };
   } finally {
     await lease.close();
     await fs.unlink(leaseFile);
