@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 2,
+  "id": "work-f5711e8a-33a0-41da-9f07-e2e956a43219",
+  "title": "공통 절차와 표준 하네스 및 프로젝트 공간",
+  "kind": "feature",
+  "areas": [
+    "dev",
+    "ui",
+    "ops"
+  ],
+  "owner": "dev",
+  "status": "ready",
+  "blockedReason": null,
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-4573f7d4-62eb-4e72-9985-62994c1b30a8"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "RPA-ENTRY",
+      "description": "RPA 프로젝트 선택 시 해당 경로·세션·작업·표준 버전과 rpa-dev 역할/선택 스킬을 연결하고 실제 호스트 제공과 수용의 관측 범위를 기록한다. 대시보드 진입만으로 모델이나 업무 자동화를 실행하지 않으며 프로젝트/탭 전환의 권한·출력 혼입을 차단한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "RPA-FLOW",
+      "description": "모든 대상 프로젝트에 공통 개발·유지보수 단계와 필수 산출물·통과 조건을 적용한다. 누락·실패·미확인·오래된 근거가 있으면 해당 승격을 거부하며 작은 변경은 영향 범위 근거로 유효한 기존 증거를 재사용한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "RPA-STRUCTURE",
+      "description": "진입점·Process·Task·Unit·설정·검사·기술 Core의 책임과 배치 규칙을 단일/다중 Process에 동일하게 적용하고 기존 업무 주소·실행 순서·외부 동작의 변경은 명시적으로 추적한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "RPA-CORE",
+      "description": "공통 Core의 인터페이스·실패/수명 계약·버전·관리 파일과 프로젝트별 기술 어댑터를 구별하고 배포/갱신 시 로컬 변경·불일치를 탐지한다. 업무 해석은 Task에 유지하며 공통 변경의 프로젝트별 회귀 근거를 연결한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "RPA-CASE",
+      "description": "Case 정의와 실제 발생 건의 ID를 구별하고 조건·영향 Unit·처리·계속/중단·재개/재실행·테스트·실제 증거를 연결한다. 재실행 안전성이 미확인이거나 불가한 외부 변경을 자동 재실행하지 않는다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "RPA-LOG",
+      "description": "모든 프로젝트가 실행·Task/Unit·Case 발생 건·시각·결과·부분 실패·산출물·재개 위치를 공통 로그 계약으로 기록한다. 실제 관측과 선언·추정을 구별하며 비밀을 제거하고 기존 업무 기록을 보존한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "RPA-MAIL",
+      "description": "결과 메일의 실행 식별·버전·처리량·업무/전달 결과·Case·산출물·조치를 공통 계약으로 생성하고 preview·실제 발송·중복/불확실 상태를 구별한다. 실제 발송은 해당 권한과 재실행 정책에 따라 별도 확인한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "RPA-PACKAGE",
+      "description": "배포물의 실행 진입·runtime·config·logs·output·버전·manifest·운영 안내의 역할/배치 규칙을 통일하고 빌드 후 실제 산출물·포함 파일·설정·체크섬을 검사한다. 비밀 동봉·다른 소스 혼입·누락을 거부하고 빌드와 배포/운영 수락을 구별한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "RPA-MAP",
+      "description": "기존 GMB HTML 지도의 데이터/추출/탐색을 평가해 Process·Task·Unit 지도와 코드·Case·검증·실행 근거를 선택 프로젝트에 연결한다. KMpark 다중 Process를 표현하며 snapshot의 시점과 오래됨을 구별하고 코드나 생성 HTML을 임의 실행하지 않는다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "RPA-DASHBOARD",
+      "description": "선택 프로젝트의 단계·다음 행동·차단·표준 적용·검증·Case·최근 실행·빌드/배포를 실제 원본으로 표시하고 상세 근거로 이동한다. 업무 성공·출력·전달, 미실행·미확인·실패·오래됨을 구별하며 없는 자료를 0이나 성공으로 만들지 않는다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "RPA-EVIDENCE",
+      "description": "공통 검증 질문을 정상·경계·실패·부분 실패·재실행에 적용하고 실제/모의·소스/기준/환경·대상 범위와 결과를 연결한다. 결함 주입·속성 검사·실제 UI 스크린샷·빌드 검사를 필요 범위에서 실행하고 보고서 문구만으로 수용하지 않는다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "RPA-ADOPTION",
+      "description": "서로 다른 단일 Process 두 프로젝트에서 표준 절차와 산출물을 입증한 뒤 KMpark 다중 Process 및 조사한 7개 프로젝트로 확대한다. 프로젝트별 적용/예외/미확인 표와 회귀·운영 수락 근거를 보존하고 테스트 통과를 실환경 수락으로 승격하지 않는다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role": "www-dev",
+    "requestId": "rpa-documentation-7bd34734-d32e-4e33-8010-912118f8c6cb",
+    "requestHash": "e82f245215dfd1f45b583c9889a8401846486217e8939f8b967fc2482118f8ab",
+    "authorization": {
+      "implementation": false,
+      "writePaths": [
+        "docs/work/RPA/001-공통 절차와 표준 하네스 및 프로젝트 공간",
+        "docs/work/INDEX.md"
+      ],
+      "mutationSurfaces": [
+        "files"
+      ],
+      "verifierCommands": [],
+      "commit": false,
+      "publish": false,
+      "source": "direct_user_request",
+      "requestHash": "e82f245215dfd1f45b583c9889a8401846486217e8939f8b967fc2482118f8ab"
+    },
+    "inputs": [
+      "agents/www",
+      "docs/skills",
+      "docs/specs/dashboard.md",
+      "docs/ARCHITECTURE.md",
+      "src/projects.ts",
+      "src/dashboard.ts",
+      "src/native-session.ts",
+      "src/shared.ts",
+      "src/renderer.tsx",
+      "scripts/workflow"
+    ],
+    "nextAction": "design",
+    "verifications": [],
+    "reviews": []
+  }
+}
