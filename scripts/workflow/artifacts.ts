@@ -142,7 +142,7 @@ export async function artifactStatus(repo: string, work: WorkLocation) {
 const SKILLS = ["spec", "design", "build", "diagnose", "verify", "commit", "report"];
 export async function developmentTools(repo: string, selectedSkill: unknown = "www-build") {
   if (typeof selectedSkill !== "string" || !SKILLS.some(item => selectedSkill === `www-${item}`)) throw new Error("조회할 WWW 스킬이 올바르지 않습니다.");
-  const canonical = ["AGENTS.md", "agents/www/AGENT.md", "docs/skills/WORKFLOW.md", `skills/www/${selectedSkill}/SKILL.md`, "docs/skills/profiles/desktop.md", "agents/www/review-policy.json"];
+  const canonical = ["AGENTS.md", "agents/www/AGENT.md", "docs/skills/WORKFLOW.md", `skills/www/${selectedSkill}/SKILL.md`, "docs/skills/profiles/desktop.md", "agents/www/review-policy.json", "docs/skills/MODEL_POLICY.md"];
   const root = await fs.realpath(repo);
   const documents = await Promise.all(canonical.map(file => document(root, file)));
   const items = await Promise.all(documents.map(async doc => {

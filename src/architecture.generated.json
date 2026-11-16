@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "caa379b7e1fc026476c58f064a36c7841c9cac99eba17a28cd8f1862bb3b7be1",
+  "digest"       : "e50c5e08454e8d4e720619b0c92be0b222443b9c97e035f9a94d539f4189c072",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -103,8 +103,8 @@
       "layer"      : "tooling",
       "role"       : "앱 모듈 · workflow",
       "line"       : 1,
-      "lines"      : 437,
-      "digest"     : "aa484f55141ecb5705bbd582cab83b5b8b9604a085e71b403ad14e40ca4f3bb0",
+      "lines"      : 434,
+      "digest"     : "002b9f21dca4b4cb87284182b0406286f6c541e1a987853dda91f5dd565bddc3",
       "structureId": "arch.development.authoring"
     },
     {
@@ -148,7 +148,7 @@
       "role"       : "개발 절차 모듈 · artifacts",
       "line"       : 1,
       "lines"      : 165,
-      "digest"     : "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+      "digest"     : "80f486cac3409ae54d67bda2985242e7ed1da529ed9f7ba9cf7b5a5c79964725",
       "structureId": "arch.development.artifacts"
     },
     {
@@ -205,6 +205,17 @@
       "lines"      : 122,
       "digest"     : "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
       "structureId": "arch.development.records.lock"
+    },
+    {
+      "id"         : "scripts/workflow/model-allocation.ts",
+      "file"       : "scripts/workflow/model-allocation.ts",
+      "title"      : "model-allocation",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · model-allocation",
+      "line"       : 1,
+      "lines"      : 84,
+      "digest"     : "efb5879017eb309f8d2914dfc61e53c4947deac7ed9848153fef702e6d028513",
+      "structureId": "arch.development.execution"
     },
     {
       "id"         : "scripts/workflow/preflight.ts",
@@ -312,8 +323,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · run",
       "line"       : 1,
-      "lines"      : 691,
-      "digest"     : "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+      "lines"      : 804,
+      "digest"     : "7fe3a312c099c679a39d90881cb5fd4d3b9b15ca6679ad8d8a00706741852acc",
       "structureId": "arch.development.execution"
     },
     {
@@ -822,10 +833,10 @@
       "specifier": "./workflow/run.ts",
       "line"     : 15,
       "endLine"  : 15,
-      "statement": "import { runProcess, runWorkflow } from \"./workflow/run.ts\";"
+      "statement": "import { runWorkflow } from \"./workflow/run.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:817",
+      "id"       : "scripts/workflow.ts:805",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/preflight.ts",
       "mode"     : "runtime",
@@ -836,7 +847,7 @@
       "statement": "import { validateWritePaths } from \"./workflow/preflight.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:879",
+      "id"       : "scripts/workflow.ts:867",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/route.ts",
       "mode"     : "runtime",
@@ -847,7 +858,7 @@
       "statement": "import { namedSkill } from \"./workflow/route.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:929",
+      "id"       : "scripts/workflow.ts:917",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/adapters/gjc.ts",
       "mode"     : "type",
@@ -1339,161 +1350,183 @@
       "specifier": "./record.ts",
       "line"     : 12,
       "endLine"  : 12,
-      "statement": "import { appendEvent } from \"./record.ts\";"
+      "statement": "import { appendEvent, readRuntime, runtimePaths } from \"./record.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:653",
+      "id"       : "scripts/workflow/run.ts:680",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/model-allocation.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./model-allocation.ts",
+      "line"     : 13,
+      "endLine"  : 13,
+      "statement": "import { validateModelAllocation } from \"./model-allocation.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/run.ts:745",
+      "from"     : "scripts/workflow/run.ts",
+      "to"       : "scripts/workflow/model-allocation.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./model-allocation.ts",
+      "line"     : 14,
+      "endLine"  : 14,
+      "statement": "import type { ModelAllocation } from \"./model-allocation.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/run.ts:807",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/route.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./route.ts",
-      "line"     : 13,
-      "endLine"  : 13,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import { routeRequest } from \"./route.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:696",
+      "id"       : "scripts/workflow/run.ts:850",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/adapters/codex.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./adapters/codex.ts",
-      "line"     : 14,
-      "endLine"  : 14,
+      "line"     : 16,
+      "endLine"  : 16,
       "statement": "import { createCodexInvocation, codexCapabilities, runCodex } from \"./adapters/codex.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:786",
+      "id"       : "scripts/workflow/run.ts:940",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/work.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./work.ts",
-      "line"     : 15,
-      "endLine"  : 15,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import { assessWork, advanceWork, completeWork, openWork, readWork, recordReview, resumeWork, verifyWork } from \"./work.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:911",
+      "id"       : "scripts/workflow/run.ts:1065",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line"     : 16,
-      "endLine"  : 16,
+      "line"     : 18,
+      "endLine"  : 18,
       "statement": "import { captureSource, criteriaDigest } from \"./evidence.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:974",
+      "id"       : "scripts/workflow/run.ts:1128",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/review.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./review.ts",
-      "line"     : 17,
-      "endLine"  : 17,
+      "line"     : 19,
+      "endLine"  : 19,
       "statement": "import { loadReviewPolicy, runReview } from \"./review.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1033",
+      "id"       : "scripts/workflow/run.ts:1187",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/artifacts.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./artifacts.ts",
-      "line"     : 18,
-      "endLine"  : 18,
+      "line"     : 20,
+      "endLine"  : 20,
       "statement": "import { artifactStatus, developmentTools } from \"./artifacts.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1101",
+      "id"       : "scripts/workflow/run.ts:1255",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/types.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./types.ts",
-      "line"     : 20,
-      "endLine"  : 20,
+      "line"     : 22,
+      "endLine"  : 22,
       "statement": "import type { Approval, WorkRecord, WorkLocation, WorkDecision } from \"./types.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1185",
+      "id"       : "scripts/workflow/run.ts:1339",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/preflight.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./preflight.ts",
-      "line"     : 21,
-      "endLine"  : 21,
+      "line"     : 23,
+      "endLine"  : 23,
       "statement": "import type { SessionBinding, CanonicalSkill, MutationResult } from \"./preflight.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1271",
+      "id"       : "scripts/workflow/run.ts:1425",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/route.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./route.ts",
-      "line"     : 22,
-      "endLine"  : 22,
+      "line"     : 24,
+      "endLine"  : 24,
       "statement": "import type { RouteResult } from \"./route.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1318",
+      "id"       : "scripts/workflow/run.ts:1472",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/adapters/gjc.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./adapters/gjc.ts",
-      "line"     : 23,
-      "endLine"  : 23,
+      "line"     : 25,
+      "endLine"  : 25,
       "statement": "import type { ProcessInvocation, ProcessOptions, ProcessResult } from \"./adapters/gjc.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1409",
+      "id"       : "scripts/workflow/run.ts:1563",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line"     : 24,
-      "endLine"  : 24,
+      "line"     : 26,
+      "endLine"  : 26,
       "statement": "import type { VerificationAttempt } from \"./evidence.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1467",
+      "id"       : "scripts/workflow/run.ts:1621",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/review.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./review.ts",
-      "line"     : 25,
-      "endLine"  : 25,
+      "line"     : 27,
+      "endLine"  : 27,
       "statement": "import type { ReviewAuthority } from \"./review.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1519",
+      "id"       : "scripts/workflow/run.ts:1673",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/review.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./review.ts",
-      "line"     : 26,
-      "endLine"  : 26,
+      "line"     : 28,
+      "endLine"  : 28,
       "statement": "import type { ReviewResult } from \"./review.ts\";"
     },
     {
-      "id"       : "scripts/workflow/run.ts:1568",
+      "id"       : "scripts/workflow/run.ts:1722",
       "from"     : "scripts/workflow/run.ts",
       "to"       : "scripts/workflow/record.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./record.ts",
-      "line"     : 27,
-      "endLine"  : 27,
-      "statement": "import type { RuntimeState } from \"./record.ts\";"
+      "line"     : 29,
+      "endLine"  : 29,
+      "statement": "import type { RuntimeState, RuntimeEvent } from \"./record.ts\";"
     },
     {
       "id"       : "scripts/workflow/schema.ts:112",
@@ -4664,6 +4697,14 @@
         "line": 2
       },
       {
+        "file": "scripts/workflow/model-allocation.ts",
+        "nodeId": "arch.development.execution",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-EXECUTION"
+        ],
+        "line": 2
+      },
+      {
         "file": "scripts/workflow/preflight.ts",
         "nodeId": "arch.development.authorization",
         "requirementIds": [
@@ -5318,6 +5359,13 @@
         "line": 2
       },
       {
+        "file": "test/workflow-model-allocation.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-EXECUTION"
+        ],
+        "line": 1
+      },
+      {
         "file": "test/workflow-reports.test.ts",
         "requirementIds": [
           "RESP-DEVELOPMENT-REPORTING-DOCUMENT",
@@ -5366,6 +5414,6 @@
         "line": 2
       }
     ],
-    "digest": "ee19c3d2aef7b4947c81ccbdcb998c4914702b1e6cd7c54f1fc07a8e6f5c5f1d"
+    "digest": "939b2fcbfffef7cddc428d84c9acdf4a9037cabeca2a2ec84784252dde54a847"
   }
 }

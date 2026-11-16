@@ -12,7 +12,7 @@ import { access, lstat, readFile, realpath } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { assertTypeScriptWrites, checkSourcePolicy } from "./source-policy.ts";
-import { runProcess, runWorkflow } from "./workflow/run.ts";
+import { runWorkflow } from "./workflow/run.ts";
 import { validateWritePaths } from "./workflow/preflight.ts";
 import { namedSkill } from "./workflow/route.ts";
 import type { ProcessInvocation, ProcessOptions } from "./workflow/adapters/gjc.ts";
@@ -295,15 +295,12 @@ async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDe
     architecture : preArchitecture
   });
   if (Buffer.byteLength(guidance) > 1_048_576) throw new Error("작성 안내가 너무 큽니다. 변경 범위를 나누세요.");
-  const runHost = dependencies.runHost ?? ((
-    invocation : ProcessInvocation,
-    context    : ProcessOptions
-  ) => runProcess(invocation, context));
   const executionOptions: JsonObject = { ...options, repo, writes: [...new Set([...writes, ...deletions])] };
   delete executionOptions.boxboxLauncher;
   delete executionOptions.boxboxFiles;
   const result: unknown = await runWorkflow(executionOptions, {
-    runProcess: (invocation: ProcessInvocation, context: ProcessOptions) => runHost(withGuidance(invocation, guidance), context),
+    prepareInvocation: (invocation: ProcessInvocation) => withGuidance(invocation, guidance),
+    ...(dependencies.runHost ? { runProcess: dependencies.runHost } : {}),
   });
   if (!object(result)) throw new Error("개발 실행 결과가 객체가 아닙니다.");
   const postPolicy = await checkSourcePolicy(repo)                                                                          ;

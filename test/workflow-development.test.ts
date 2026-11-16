@@ -10,7 +10,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import test from "node:test";
-import { readRuntime, runtimePaths } from "../scripts/workflow/record.ts";
+import { readRuntime, replayEvents, runtimePaths } from "../scripts/workflow/record.ts";
 import { runDevelopmentWorkflow } from "../scripts/workflow/run.ts";
 import { completeWork, readWork } from "../scripts/workflow/work.ts";
 
@@ -254,4 +254,281 @@ test("개발 역할은 읽기 전용·작업 폴더 sandbox만 선택하고 전�
   let calls  = 0                   ;
   await assert.rejects(runDevelopmentWorkflow(request(repo, { sandbox: "danger-full-access" }), { runProcess: async () => { calls += 1; return hostResult(); } }), /read-only|workspace-write/);
   assert.equal(calls, 0);
+});
+
+function allocation(overrides: object = {}) {
+  return {
+    taskId: "fixture-task", ownerModel: "gpt-6.1-sol", kind: "small_implementation", risk: "low", model: "gpt-6-luna",
+    reason: "반복되는 작은 구현", inputs: ["src"], writePaths: ["src/item.ts"], dependencies: [], attempt: 1, ...overrides,
+  };
+}
+
+test("단일 Luna 배분은 실제 호출 인자·축소 컨텍스트와 관측 없는 영수증에 연결된다", async (t) => {
+  const repo = await repository(t);
+  let received: ProcessInvocation | undefined;
+  const result = await runDevelopmentWorkflow(request(repo, { allocation: allocation(), verifier: undefined, executor: "process" }), { runProcess: async invocation => {
+    received = invocation;
+    return hostResult({ usage: { input_tokens: 100, cached_input_tokens: 20, output_tokens: 30 }, observedModel: "fixture-is-not-observation" });
+  } });
+  assert.ok(received);
+  assert.equal(received.args[received.args.indexOf("--model") + 1], "gpt-6-luna");
+  assert.ok(received.stdin?.includes('실행 입력 범위: ["src"]'));
+  assert.ok(received.stdin?.includes('"taskId":"fixture-task"'));
+  assert.equal(result.executor, "injected");
+  assert.equal(result.modelExecution?.requested.model, "gpt-6-luna");
+  assert.deepEqual(result.modelExecution?.observed, { model: null, reason: "injected_execution" });
+  assert.deepEqual(result.modelExecution?.accounting, { scope: "task", attempts: 1, missingUsageAttempts: 0, usageByField: { input_tokens: 100, cached_input_tokens: 20, output_tokens: 30 }, excludedFields: [], partialAggregation: false });
+  assert.equal(typeof result.receiptPath, "string");
+  assert.ok(typeof result.receiptPath === "string");
+  const receipt: unknown = JSON.parse(await readFile(join(repo, result.receiptPath), "utf8"));
+  assert.ok(receipt && typeof receipt === "object" && "modelExecution" in receipt);
+  assert.deepEqual(receipt.modelExecution, result.modelExecution);
+  assert.ok(result.workId);
+  assert.equal((await readWork({ repo, workId: result.workId })).record.status, "in_progress");
+});
+
+test("실패·상향·정상 인계 사용량은 같은 task의 시도 전체를 합산하며 누락을 보존한다", async (t) => {
+  const repo = await repository(t);
+  const first = await runDevelopmentWorkflow(request(repo, { allocation: allocation(), verifier: undefined }), { runProcess: async () => hostResult({ ok: false, code: 1, outcome: "host_error", error: "모델 품질 실패 fixture", usage: { input_tokens: 100, output_tokens: 10 } }) });
+  assert.equal(first.modelExecution?.failure?.outcome, "host_error");
+  const second = await runDevelopmentWorkflow(request(repo, {
+    eventId: "fixture-retry", verifier: undefined,
+    allocation: allocation({ attempt: 2, model: "gpt-6.1-terra", previousAttempt: { eventId: "fixture-execution-1", reason: "작은 단위에서도 품질 오류가 재현됨", kind: "retry", failureCause: "quality" } }),
+  }), { runProcess: async () => hostResult({ usage: { input_tokens: 40, output_tokens: 20 } }) });
+  assert.deepEqual(second.modelExecution?.accounting.usageByField, { input_tokens: 140, output_tokens: 30 });
+  const third = await runDevelopmentWorkflow(request(repo, {
+    eventId: "fixture-handoff", verifier: undefined,
+    allocation: allocation({ attempt: 3, model: "gpt-6.1-sol", kind: "integration", previousAttempt: { eventId: "fixture-retry", reason: "성공한 부분 구현을 통합 책임자에게 인계", kind: "handoff" } }),
+  }), { runProcess: async () => hostResult() });
+  assert.equal(third.workId, first.workId);
+  assert.deepEqual(third.modelExecution?.accounting, { scope: "task", attempts: 3, missingUsageAttempts: 1, usageByField: { input_tokens: 140, output_tokens: 30 }, excludedFields: [], partialAggregation: true });
+  assert.equal(third.modelExecution?.usage, null);
+  assert.equal(third.modelExecution?.failure, null);
+});
+
+test("모델 배분은 권한 확대·미완료 의존·근거 없는 재시도·환경 실패 상향을 실행 전에 거부한다", async (t) => {
+  const repo = await repository(t);
+  let calls = 0;
+  const runner = { runProcess: async () => { calls += 1; return hostResult({ ok: false, code: 1, outcome: "nonzero" }); } };
+  await assert.rejects(runDevelopmentWorkflow(request(repo, { allocation: allocation({ writePaths: ["src/item.ts", "src/outside.ts"] }) }), runner), /배분 범위/);
+  await assert.rejects(runDevelopmentWorkflow(request(repo, { allocation: allocation({ dependencies: ["missing-task"] }) }), runner), /의존 작업/);
+  await assert.rejects(runDevelopmentWorkflow(request(repo, { allocation: allocation({ attempt: 2, previousAttempt: { eventId: "missing", reason: "이전 시도가 없음", kind: "retry", failureCause: "quality" } }) }), runner), /이전 작업 시도/);
+  assert.equal(calls, 0);
+  await runDevelopmentWorkflow(request(repo, { allocation: allocation(), verifier: undefined }), runner);
+  await assert.rejects(runDevelopmentWorkflow(request(repo, {
+    eventId: "fixture-invalid-escalation", allocation: allocation({ attempt: 2, model: "gpt-6.1-terra", previousAttempt: { eventId: "fixture-execution-1", reason: "도구 경로가 잘못됨", kind: "retry", failureCause: "environment" } }),
+  }), runner), /모델 상향/);
+  assert.equal(calls, 1);
+});
+
+test("배분된 선행 task 성공과 호스트 예외는 의존 실행·실패 영수증으로 이어진다", async (t) => {
+  const repo = await repository(t);
+  await runDevelopmentWorkflow(request(repo, { allocation: allocation(), verifier: undefined }), { runProcess: async () => hostResult() });
+  const result = await runDevelopmentWorkflow(request(repo, { eventId: "dependent-task", allocation: allocation({ taskId: "task-2", dependencies: ["fixture-task"] }), verifier: undefined }), { runProcess: async () => { throw new Error("실행 연결이 중단됨"); } });
+  assert.equal(result.host?.ok, false);
+  assert.deepEqual(result.modelExecution?.failure, { outcome: "execution_error", error: "실행 연결이 중단됨" });
+  assert.equal(typeof result.receiptPath, "string");
+  assert.ok(typeof result.receiptPath === "string");
+  assert.ok((await readFile(join(repo, result.receiptPath), "utf8")).includes("실행 연결이 중단됨"));
+});
+
+test("모델 배분은 독립 리뷰를 대체하지 않고 명시된 미지원 추론 노력을 무시하지 않는다", async (t) => {
+  const repo = await repository(t);
+  let calls = 0;
+  const runner = { runProcess: async () => { calls += 1; return hostResult(); } };
+  await assert.rejects(runDevelopmentWorkflow(request(repo, { allocation: allocation(), decision: { intent: "review" } }), runner), /독립 검토/);
+  await assert.rejects(runDevelopmentWorkflow(request(repo, { allocation: allocation(), thinking: "high" }), runner), /추론 노력/);
+  assert.equal(calls, 0);
+});
+
+test("환경 사전점검 실패도 모델을 실행하지 않은 영수증을 남긴다", async (t) => {
+  const repo = await repository(t);
+  let calls = 0;
+  const result = await runDevelopmentWorkflow(request(repo, {
+    allocation: allocation(), verifier: undefined, environment: { git: join(repo, "missing-git") },
+  }), { runProcess: async () => { calls += 1; return hostResult(); } });
+  assert.equal(calls, 0);
+  assert.equal(result.executed, false);
+  assert.equal(result.modelExecution?.failure?.outcome, "environment_failed");
+  assert.equal(result.modelExecution?.accounting.missingUsageAttempts, 1);
+  assert.ok(typeof result.receiptPath === "string");
+  assert.ok((await readFile(join(repo, result.receiptPath), "utf8")).includes("environment_failed"));
+});
+
+test("배분 사건 중복은 재실행하지 않고 완료 영수증이 없는 시도는 재시도하지 않는다", async (t) => {
+  const repo = await repository(t);
+  let calls = 0;
+  const runner = { runProcess: async () => { calls += 1; return hostResult({ ok: false, code: 1, outcome: "host_error" }); } };
+  const options = request(repo, { allocation: allocation(), verifier: undefined });
+  const first = await runDevelopmentWorkflow(options, runner);
+  const duplicate = await runDevelopmentWorkflow(options, runner);
+  assert.equal(duplicate.duplicate, true);
+  assert.equal(calls, 1);
+  assert.ok(typeof first.receiptPath === "string");
+  await rm(join(repo, first.receiptPath));
+  await assert.rejects(runDevelopmentWorkflow(request(repo, {
+    eventId: "missing-receipt-retry", verifier: undefined,
+    allocation: allocation({ attempt: 2, previousAttempt: { eventId: "fixture-execution-1", reason: "실패를 이어서 조사", kind: "retry", failureCause: "context" } }),
+  }), runner), /완료 영수증/);
+  assert.equal(calls, 1);
+});
+
+test("주입 실행 라벨 위조를 무시하고 준비 콜백의 컨텍스트를 호스트에 전달한다", async (t) => {
+  const repo = await repository(t);
+  let received: ProcessInvocation | undefined;
+  const runner = {
+    executor: "process",
+    prepareInvocation: (invocation: ProcessInvocation) => ({ ...invocation, stdin: `${invocation.stdin}\n준비 콜백 관찰` }),
+    runProcess: async (invocation: ProcessInvocation) => { received = invocation; return hostResult(); },
+  };
+  const result = await runDevelopmentWorkflow(request(repo, { verifier: undefined }), runner);
+  assert.equal(result.executor, "injected");
+  assert.equal(result.modelExecution?.observed.reason, "injected_execution");
+  assert.ok(received?.stdin?.includes("준비 콜백 관찰"));
+});
+
+test("내부 프로세스 환경 실패는 실행하지 않은 것으로 기록하고 중첩 사용량은 부분 집계로 표시한다", async (t) => {
+  const repo = await repository(t);
+  const failed = await runDevelopmentWorkflow(request(repo, { verifier: undefined }), { runProcess: async () => hostResult({ ok: false, code: null, outcome: "environment_failed" }) });
+  assert.equal(failed.executed, false);
+  const result = await runDevelopmentWorkflow(request(repo, { eventId: "nested-usage", verifier: undefined }), { runProcess: async () => hostResult({ usage: { input_tokens: 10, output_tokens_details: { reasoning_tokens: 3 }, provider: "fixture" } }) });
+  assert.deepEqual(result.modelExecution?.usage, { input_tokens: 10, output_tokens_details: { reasoning_tokens: 3 }, provider: "fixture" });
+  assert.deepEqual(result.modelExecution?.accounting.usageByField, { input_tokens: 10 });
+  assert.deepEqual(result.modelExecution?.accounting.excludedFields, ["output_tokens_details", "provider"]);
+  assert.equal(result.modelExecution?.accounting.partialAggregation, true);
+});
+
+test("후속 시도 뒤 과거 사건을 재호출해도 중복으로 반환하고 영수증 변조는 거부한다", async (t) => {
+  const repo = await repository(t);
+  let calls = 0;
+  const runner = { runProcess: async () => { calls += 1; return hostResult({ ok: false, code: 1, outcome: "host_error", usage: { input_tokens: 10 } }); } };
+  const original = request(repo, { allocation: allocation(), verifier: undefined });
+  const first = await runDevelopmentWorkflow(original, runner);
+  await runDevelopmentWorkflow(request(repo, {
+    eventId: "second-attempt", verifier: undefined,
+    allocation: allocation({ attempt: 2, previousAttempt: { eventId: "fixture-execution-1", reason: "입력 재구성", kind: "retry", failureCause: "context" } }),
+  }), runner);
+  const duplicate = await runDevelopmentWorkflow(original, runner);
+  assert.equal(duplicate.duplicate, true);
+  assert.equal(calls, 2);
+  assert.ok(typeof first.receiptPath === "string");
+  const file = join(repo, first.receiptPath);
+  await writeFile(file, (await readFile(file, "utf8")).replace('"input_tokens": 10', '"input_tokens": 999'));
+  await assert.rejects(runDevelopmentWorkflow(request(repo, {
+    eventId: "third-attempt", verifier: undefined,
+    allocation: allocation({ attempt: 3, previousAttempt: { eventId: "second-attempt", reason: "입력 재구성", kind: "retry", failureCause: "context" } }),
+  }), runner), /영수증 무결성/);
+  assert.equal(calls, 2);
+});
+
+test("의존 작업은 마지막 시도 영수증과 host_result 사건을 모두 확인한다", async (t) => {
+  const repo = await repository(t);
+  const first = await runDevelopmentWorkflow(request(repo, { allocation: allocation(), verifier: undefined }), { runProcess: async () => hostResult() });
+  assert.ok(typeof first.receiptPath === "string");
+  const file = join(repo, first.receiptPath);
+  const original = await readFile(file, "utf8");
+  await writeFile(file, original.replace('"ok": true', '"ok": false'));
+  let calls = 0;
+  const runner = { runProcess: async () => { calls += 1; return hostResult(); } };
+  await assert.rejects(runDevelopmentWorkflow(request(repo, { eventId: "dependency-tampered", allocation: allocation({ taskId: "dependent", dependencies: ["fixture-task"] }), verifier: undefined }), runner), /영수증 무결성/);
+  assert.equal(calls, 0);
+  await writeFile(file, original);
+  await runDevelopmentWorkflow(request(repo, {
+    eventId: "upstream-next", verifier: undefined,
+    allocation: allocation({ attempt: 2, previousAttempt: { eventId: "fixture-execution-1", reason: "추가 수집 인계", kind: "handoff" } }),
+  }), { runProcess: async () => hostResult({ ok: false, code: 1, outcome: "host_error" }) });
+  await assert.rejects(runDevelopmentWorkflow(request(repo, { eventId: "dependency-latest-failed", allocation: allocation({ taskId: "dependent", dependencies: ["fixture-task"] }), verifier: undefined }), runner), /마지막 호스트 정상 종료/);
+  assert.equal(calls, 0);
+});
+
+test("같은 영수증이어도 의존 완료 사건의 종류·task·attempt가 다르면 거부한다", async (t) => {
+  for (const change of [{ type: "status" }, { taskId: "different-task" }, { attempt: 2 }]) {
+    const repo = await repository(t);
+    const first = await runDevelopmentWorkflow(request(repo, { allocation: allocation(), verifier: undefined }), { runProcess: async () => hostResult() });
+    assert.ok(first.workId);
+    const paths = runtimePaths(repo, first.workId);
+    const { events } = await readRuntime(paths);
+    const completion = events.find(event => event.id === "fixture-execution-1-host");
+    assert.ok(completion);
+    Object.assign(completion, change);
+    await writeFile(paths.events, events.map(event => JSON.stringify(event)).join("\n") + "\n");
+    await writeFile(paths.session, JSON.stringify(replayEvents(events)) + "\n");
+    let calls = 0;
+    await assert.rejects(runDevelopmentWorkflow(request(repo, {
+      eventId: "invalid-dependency-event", verifier: undefined,
+      allocation: allocation({ taskId: "dependent", dependencies: ["fixture-task"] }),
+    }), { runProcess: async () => { calls += 1; return hostResult(); } }), /완료 사건|영수증 연결/);
+    assert.equal(calls, 0);
+  }
+});
+
+test("승인된 추가 경로도 실제 쓰기 계획에 없으면 배분 호스트를 실행하지 않는다", async (t) => {
+  const repo = await repository(t);
+  const options = request(repo);
+  let calls = 0;
+  await assert.rejects(runDevelopmentWorkflow(request(repo, {
+    approval: { ...options.approval, writePaths: ["src/item.ts", "src/extra.ts"] },
+    allocation: allocation({ writePaths: ["src/item.ts", "src/extra.ts"] }),
+    verifier: undefined,
+  }), { runProcess: async () => { calls += 1; return hostResult(); } }), /배분 범위/);
+  assert.equal(calls, 0);
+});
+
+test("실패 인계는 원인을 요구하고 성공 인계·실패 재시도와 시도 순서를 유지한다", async (t) => {
+  const repo = await repository(t);
+  let calls = 0;
+  const runner = { runProcess: async () => {
+    calls += 1;
+    return hostResult({ ok: calls !== 1, code: calls === 1 ? 1 : 0, outcome: calls === 1 ? "host_error" : "passed", usage: { input_tokens: calls } });
+  } };
+  const first = await runDevelopmentWorkflow(request(repo, { allocation: allocation(), verifier: undefined }), runner);
+  await assert.rejects(runDevelopmentWorkflow(request(repo, {
+    eventId: "failed-handoff-without-cause", verifier: undefined,
+    allocation: allocation({ attempt: 2, previousAttempt: { eventId: "fixture-execution-1", kind: "handoff", reason: "실패를 다른 문맥에 인계" } }),
+  }), runner), /실패 원인/);
+  assert.equal(calls, 1);
+  assert.ok(first.workId);
+  assert.ok(!(await readRuntime(runtimePaths(repo, first.workId))).events.some(event => event.id === "failed-handoff-without-cause"));
+  await assert.rejects(runDevelopmentWorkflow(request(repo, {
+    eventId: "out-of-order-failed-handoff", verifier: undefined,
+    allocation: allocation({ attempt: 3, previousAttempt: { eventId: "fixture-execution-1", kind: "handoff", reason: "시도를 건너뛴 인계", failureCause: "context" } }),
+  }), runner), /마지막 시도/);
+  const handoff = await runDevelopmentWorkflow(request(repo, {
+    eventId: "failed-handoff-with-cause", verifier: undefined,
+    allocation: allocation({ attempt: 2, previousAttempt: { eventId: "fixture-execution-1", kind: "handoff", reason: "원인을 밝힌 실패 인계", failureCause: "context" } }),
+  }), runner);
+  assert.equal(handoff.host?.ok, true);
+  await assert.rejects(runDevelopmentWorkflow(request(repo, {
+    eventId: "retry-after-success", verifier: undefined,
+    allocation: allocation({ attempt: 3, previousAttempt: { eventId: "failed-handoff-with-cause", kind: "retry", reason: "성공을 실패 재시도로 표시", failureCause: "quality" } }),
+  }), runner), /성공한 시도/);
+  const completed = await runDevelopmentWorkflow(request(repo, {
+    eventId: "successful-handoff-without-cause", verifier: undefined,
+    allocation: allocation({ attempt: 3, previousAttempt: { eventId: "failed-handoff-with-cause", kind: "handoff", reason: "성공한 부분의 통합 인계" } }),
+  }), runner);
+  assert.equal(calls, 3);
+  assert.equal(completed.modelExecution?.allocation?.previousAttempt?.failureCause, undefined);
+  assert.equal(completed.modelExecution?.accounting.attempts, 3);
+  assert.deepEqual(completed.modelExecution?.accounting.usageByField, { input_tokens: 6 });
+});
+
+test("정규화된 주입 결과의 ok와 outcome이 다르면 이전 성공으로 분류하지 않는다", async (t) => {
+  const repo = await repository(t);
+  const first = await runDevelopmentWorkflow(request(repo, { allocation: allocation(), verifier: undefined }), {
+    runProcess: async () => hostResult({ ok: true, code: 1, outcome: "host_error" }),
+  });
+  assert.equal(first.host?.ok, true);
+  assert.equal(first.host?.outcome, "host_error");
+  let calls = 0;
+  const runner = { runProcess: async () => { calls += 1; return hostResult(); } };
+  await assert.rejects(runDevelopmentWorkflow(request(repo, {
+    eventId: "contradictory-host-handoff", verifier: undefined,
+    allocation: allocation({ attempt: 2, previousAttempt: { eventId: "fixture-execution-1", kind: "handoff", reason: "모순된 종료 필드를 인계" } }),
+  }), runner), /실패 원인/);
+  const retry = await runDevelopmentWorkflow(request(repo, {
+    eventId: "contradictory-host-retry", verifier: undefined,
+    allocation: allocation({ attempt: 2, previousAttempt: { eventId: "fixture-execution-1", kind: "retry", reason: "실패 종료 원인을 보완", failureCause: "context" } }),
+  }), runner);
+  assert.equal(calls, 1);
+  assert.equal(retry.host?.ok, true);
 });

@@ -2,6 +2,7 @@
  * @verifies RESP-DEVELOPMENT-ARTIFACTS
  */
 import { afterEach, expect, test } from "bun:test";
+import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { promises as fs } from "node:fs";
 import os from "node:os";
@@ -137,7 +138,7 @@ test("공식 CLI는 모델 실행 없이 검토 준비·저장·상태와 출처
 
 test("개발 호스트에 정본·출처·검토 상태를 실제 전달하고 영수증에 보존한다", async () => {
   const { repo, work } = await fixture();
-  const files = ["AGENTS.md", "agents/www/AGENT.md", "docs/skills/WORKFLOW.md", "skills/www/www-design/SKILL.md", "docs/skills/profiles/desktop.md", "agents/www/review-policy.json"];
+  const files = ["AGENTS.md", "agents/www/AGENT.md", "docs/skills/WORKFLOW.md", "skills/www/www-design/SKILL.md", "docs/skills/profiles/desktop.md", "agents/www/review-policy.json", "docs/skills/MODEL_POLICY.md"];
   for (const file of files) await put(repo, file, `정본 내용: ${file}\n`);
   await put(repo, ".gitignore", ".www/\n");
   execFileSync("git", ["init", "-q", repo]);
@@ -148,13 +149,24 @@ test("개발 호스트에 정본·출처·검토 상태를 실제 전달하고 �
     return { ok: true, code: 0, outcome: "passed", stdout: "", stderr: "", outputTruncated: false, events: [] };
   } });
   expect(result).toMatchObject({ executed: true });
-  expect(prompt).toContain("hostAcceptance");
+  const policySource = "정본 내용: docs/skills/MODEL_POLICY.md\n";
+  const policyDigest = createHash("sha256").update(policySource).digest("hex");
+  const inventoryPrefix = "개발 도구 출처와 제공 대상: ";
+  const inventory = JSON.parse(prompt.split("\n").find(line => line.startsWith(inventoryPrefix))!.slice(inventoryPrefix.length));
+  expect(inventory).toHaveLength(7);
+  expect(inventory.find((item: { path: string }) => item.path === "docs/skills/MODEL_POLICY.md")).toMatchObject({
+    path: "docs/skills/MODEL_POLICY.md", digest: policyDigest, status: "available", provided: true, hostAcceptance: "unconfirmed",
+  });
+  expect(prompt).toContain(`--- docs/skills/MODEL_POLICY.md ---\n${policySource}`);
   expect(prompt).toContain("not_run");
   expect(prompt).toContain("정본 내용: docs/skills/profiles/desktop.md");
   expect(Array.isArray(result.tools) && result.tools.every(item => item.provided === true)).toBe(true);
+  expect(result.sources).toContainEqual({ path: "docs/skills/MODEL_POLICY.md", hash: policyDigest });
   const receipts = await fs.readdir(path.join(repo, ".www/evidence", work.record.id));
   expect(receipts).toHaveLength(1);
   const receipt = JSON.parse(await fs.readFile(path.join(repo, ".www/evidence", work.record.id, receipts[0]), "utf8"));
   expect(receipt.tools[0].hostAcceptance).toBe("unconfirmed");
+  expect(receipt.tools.find((item: { path: string }) => item.path === "docs/skills/MODEL_POLICY.md")).toMatchObject({ digest: policyDigest, provided: true, hostAcceptance: "unconfirmed" });
+  expect(receipt.sources).toContainEqual({ path: "docs/skills/MODEL_POLICY.md", hash: policyDigest });
   expect(receipt.artifactReviews[0].status).toBe("not_run");
 });

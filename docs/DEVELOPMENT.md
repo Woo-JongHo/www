@@ -57,6 +57,16 @@ managed TypeScript 변경으로 구조 생성물이 달라지는 단위는 `src/
 
 `skipLibCheck: true`는 외부 라이브러리 선언 검사를 생략하는 기존 설정으로 유지한다. 직접 관리하던 `.d.mts`는 구현 `.ts`에 통합했다. 외부 선언 파일 본문까지 검증했다는 뜻은 아니다.
 
+### 작업 내부 모델 배분과 실행 영수증
+
+Sol이 통합 책임을 유지하며 내부 단위를 Luna·Terra·Sol로 나누는 판단은 [모델 배분 정본](skills/MODEL_POLICY.md)을 따른다. www-dev의 실제 개발 호스트 실행에는 선택적인 `allocation`을 전달한다. `taskId`, `ownerModel`, `kind`, `risk`, `model`, `reason`, `inputs`, `writePaths`, `dependencies`, `attempt`를 지정한다. 종류·위험에 비해 낮은 모델, 부모 입력·승인 밖 범위, 실행 쓰기 계획과 다른 배분, 지원하지 않는 추론 노력은 거부한다. 모델의 계정 가용성은 별도 실제 호출 결과로 판단한다.
+
+두 번째 이후 시도는 `previousAttempt`의 실제 `eventId`·`kind`(`retry` 또는 `handoff`)·사유와 연결한다. retry에는 실패 원인을 남긴다. 검증된 선행 호스트가 실패했다면 handoff도 실패 원인을 생략할 수 없으며, 성공 인계에는 가짜 실패 원인을 요구하지 않는다. 배분의 쓰기 경로와 실제 실행 계획은 순서와 무관하게 같은 집합이어야 한다. dependency는 같은 작업의 검증한 선행 호스트 종료이며 업무 수용이 아니다. 같은 UUID의 CLI 실행은 직렬이고, 외부 협업 병렬 저작은 파일 소유를 나눠 하나의 전후 검사 범위로 묶는다.
+
+결과의 `modelExecution`은 요청·관측 미확인 사유·executor·원본 usage·부분 집계·실패를 보존한다. 디스크 receipt와 runtime 사건의 원문 해시를 대조한다. 주입 결과를 실제 프로세스로 표시하지 않으며 기본 CLI가 저작 안내를 붙이는 동작도 실제 호스트 실행 출처를 유지한다. `docs/skills/MODEL_POLICY.md`는 도구 출처와 실제 전달 문서에 포함되고 해시를 기록하지만 `hostAcceptance: unconfirmed`를 유지한다. 토큰 절감은 같은 완료 조건의 실측 비교 전에는 주장하지 않는다.
+
+이 계약은 개발용 역할·스킬·하네스의 내부 배분이다. 제품 Chat의 입력을 자동 분류해 모델을 선택하는 라우터는 구현되지 않았다. 여러 Codex 탭을 만드는 동작도 모델을 자동 배치하거나 관측되지 않은 토큰 절감률을 만드는 기능이 아니다.
+
 ### BoxBox 작성·검증 경계
 
 BoxBox는 제품 의존성이 아니라 작성 시 가독성 검사 도구다. 머신별 설치 경로는 Git에서 무시하는 `.www/development.local.json`의 `boxboxLauncher`, `boxboxNode`에 각각 절대경로로 둔다. 런처와 Node의 파일 실재를 확인하고 저장소 내부에 복사한 런처 대신 외부 설치본을 사용한다. BoxBox가 고정한 Node는 설치본의 `runtime.json`과 대조한다. 이 작업에서 확인한 설치본 런타임은 Node 22.22.3이다. 로컬 설정 누락이나 도구 고장은 성공으로 건너뛰지 않는다.

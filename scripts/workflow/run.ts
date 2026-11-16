@@ -9,7 +9,9 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { createGjcInvocation, gjcCapabilities, spawnGjc, waitForChild } from "./adapters/gjc.ts";
 import { createSessionBinding, findWorkRecord, loadCanonicalSkill, preflightMutation, validateSessionBinding, validateWritePaths } from "./preflight.ts";
-import { appendEvent } from "./record.ts";
+import { appendEvent, readRuntime, runtimePaths } from "./record.ts";
+import { validateModelAllocation } from "./model-allocation.ts";
+import type { ModelAllocation } from "./model-allocation.ts";
 import { routeRequest } from "./route.ts";
 import { createCodexInvocation, codexCapabilities, runCodex } from "./adapters/codex.ts";
 import { assessWork, advanceWork, completeWork, openWork, readWork, recordReview, resumeWork, verifyWork } from "./work.ts";
@@ -24,7 +26,7 @@ import type { ProcessInvocation, ProcessOptions, ProcessResult } from "./adapter
 import type { VerificationAttempt } from "./evidence.ts";
 import type { ReviewAuthority } from "./review.ts";
 import type { ReviewResult } from "./review.ts";
-import type { RuntimeState } from "./record.ts";
+import type { RuntimeState, RuntimeEvent } from "./record.ts";
 
 export type JsonObject = Record<string, unknown>;
 export interface WorkflowVerifier {
@@ -57,6 +59,7 @@ export interface WorkflowOptions extends JsonObject {
   requireHardGate?   : boolean                 ;
   env?               : NodeJS.ProcessEnv       ;
   environment?: Pick<EnvironmentOptions, "git" | "toolPaths">;
+  allocation?        : ModelAllocation         ;
   model?             : string                  ;
   sandbox?           : string                  ;
   binding?           : SessionBinding          ;
@@ -71,6 +74,7 @@ export interface WorkflowOptions extends JsonObject {
   stdio?             : ProcessOptions["stdio"] ;
 }
 export interface WorkflowDependencies {
+  prepareInvocation?: (invocation: ProcessInvocation) => ProcessInvocation;
   runProcess?: (invocation: ProcessInvocation, context: ProcessOptions) => Promise<unknown>;
 }
 export interface BoxboxObservation {
@@ -128,6 +132,7 @@ export interface WorkflowResult extends JsonObject {
   capabilities?        : ReturnType<typeof gjcCapabilities>  ;
   environment?: EnvironmentReport;
   executor?: "process" | "injected";
+  modelExecution?: ModelExecution;
   host?                : ProcessResult                       ;
   sources?             : { path: string; hash: string }[]    ;
   verification?        : VerificationAttempt | ProcessResult ;
@@ -193,7 +198,88 @@ export async function runProcess(invocation: ProcessInvocation, options: Process
   return waitForChild(spawnGjc(invocation, effective), effective);
 }
 
-async function developmentContext(repo: string, work: WorkLocation, skill: string) {
+export interface ModelExecution {
+  allocation?: ModelAllocation;
+  requested: { model: string | null; thinking: string | null };
+  observed: { model: null; reason: "host_metadata_unavailable" | "injected_execution" };
+  executor: "process" | "injected";
+  usage: Record<string, unknown> | null;
+  accounting: { scope: "task" | "invocation"; attempts: number; missingUsageAttempts: number; usageByField: Record<string, number>; excludedFields: string[]; partialAggregation: boolean };
+  failure: { outcome: string; error: string | null } | null;
+}
+
+function allocationReceiptPath(repo: string, workId: string, eventId: string): string {
+  return path.join(repo, ".www", "evidence", workId, `${createHash("sha256").update(eventId).digest("hex")}.json`);
+}
+
+async function readAllocationReceipt(repo: string, workId: string, start: RuntimeEvent, events: RuntimeEvent[]): Promise<JsonObject> {
+  const file = allocationReceiptPath(repo, workId, start.id);
+  const completion = events.find(event => event.id === `${start.id}-host`);
+  await validateWritePaths(repo, [path.relative(repo, file).split(path.sep).join("/")]);
+  let bytes: Buffer;
+  try { bytes = await fs.readFile(file); }
+  catch { throw new Error("이전 시도의 완료 영수증이 없습니다. 불명확한 실행을 자동 재시도하지 않습니다."); }
+  if (!completion || !["host_result", "post_failure"].includes(String(completion.type)) || completion.receiptPath !== path.relative(repo, file).split(path.sep).join("/") || typeof completion.receiptHash !== "string" || createHash("sha256").update(bytes).digest("hex") !== completion.receiptHash) throw new Error("이전 시도의 영수증 무결성 또는 완료 사건을 확인할 수 없습니다.");
+  let receipt: unknown;
+  try { receipt = JSON.parse(bytes.toString("utf8")); }
+  catch { throw new Error("이전 시도의 영수증 JSON이 올바르지 않습니다."); }
+  if (!object(receipt) || receipt.eventId !== start.id || receipt.workId !== workId || JSON.stringify(property(receipt.modelExecution, "allocation")) !== JSON.stringify(start.allocation) || completion.taskId !== property(start.allocation, "taskId") || completion.attempt !== property(start.allocation, "attempt") || !object(receipt.host) || typeof receipt.host.ok !== "boolean" || receipt.host.outcome !== completion.outcome || (receipt.host.ok ? "host_result" : "post_failure") !== completion.type) throw new Error("이전 시도의 영수증 연결이 올바르지 않습니다.");
+  return receipt;
+}
+
+async function allocationHistory(repo: string, workId: string, eventId: string, allocation: ModelAllocation): Promise<JsonObject[]> {
+  const { events } = await readRuntime(runtimePaths(repo, workId));
+  const starts = events.filter(event => event.id !== eventId && event.type === "status" && event.status === "running" && object(event.allocation));
+  const taskStarts = starts.filter(event => property(event.allocation, "taskId") === allocation.taskId);
+  const previous = taskStarts.at(-1);
+  if (!previous && allocation.attempt !== 1) throw new Error("이전 작업 시도 사건이 없습니다.");
+  if (previous && (!allocation.previousAttempt || allocation.previousAttempt.eventId !== previous.id || property(previous.allocation, "attempt") !== allocation.attempt - 1)) throw new Error("재시도·인계는 같은 작업의 마지막 시도를 순서대로 연결해야 합니다.");
+  // dependencies는 검증·업무 수용이 아닌 선행 호스트의 정상 종료 연결이다.
+  for (const taskId of allocation.dependencies) {
+    const dependency = starts.filter(event => property(event.allocation, "taskId") === taskId).at(-1);
+    if (taskId === allocation.taskId || !dependency) throw new Error(`의존 작업의 마지막 호스트 정상 종료를 확인할 수 없습니다: ${taskId}`);
+    const receipt = await readAllocationReceipt(repo, workId, dependency, events);
+    if (property(receipt.host, "ok") !== true || property(receipt.host, "outcome") !== "passed") throw new Error(`의존 작업의 마지막 호스트 정상 종료를 확인할 수 없습니다: ${taskId}`);
+  }
+  const receipts: JsonObject[] = [];
+  for (const start of taskStarts) receipts.push(await readAllocationReceipt(repo, workId, start, events));
+  if (previous && allocation.previousAttempt) {
+    const last = receipts.at(-1);
+    const passed = property(last?.host, "ok") === true && property(last?.host, "outcome") === "passed";
+    if (allocation.previousAttempt.kind === "retry" && passed) throw new Error("성공한 시도는 실패 재시도로 기록할 수 없습니다. 인계 이유를 연결하세요.");
+    if (!passed && !allocation.previousAttempt.failureCause) throw new Error("실패한 이전 시도를 재시도하거나 인계하려면 실패 원인이 필요합니다.");
+    const ranks: Record<string, number> = { "gpt-6-luna": 0, "gpt-6.1-terra": 1, "gpt-6.1-sol": 2 };
+    const oldModel = property(previous.allocation, "model");
+    if (!passed && typeof oldModel === "string" && (ranks[allocation.model] ?? 0) > (ranks[oldModel] ?? 0) && !["capability", "quality"].includes(allocation.previousAttempt.failureCause ?? "")) throw new Error("실패 후 모델 상향에는 역량·품질 실패 근거가 필요합니다. 범위·입력·환경 문제는 먼저 바로잡으세요.");
+  }
+  return receipts;
+}
+
+function modelExecution(allocation: ModelAllocation | undefined, model: string | null, thinking: string | undefined, executor: "process" | "injected", host: ProcessResult, previous: JsonObject[]): ModelExecution {
+  const usage = object(host.usage) ? host.usage : null;
+  const usages = [...previous.map(receipt => property(receipt.modelExecution, "usage")), usage];
+  const usageByField: Record<string, number> = {};
+  const excludedFields = new Set<string>();
+  for (const value of usages) {
+    if (!object(value)) continue;
+    for (const [field, count] of Object.entries(value)) {
+      if (typeof count === "number" && Number.isFinite(count) && count >= 0) usageByField[field] = (usageByField[field] ?? 0) + count;
+      else excludedFields.add(field);
+    }
+  }
+  const missingUsageAttempts = usages.filter(value => !object(value)).length;
+  return {
+    ...(allocation ? { allocation } : {}),
+    requested: { model, thinking: thinking ?? null },
+    observed: { model: null, reason: executor === "injected" ? "injected_execution" : "host_metadata_unavailable" },
+    executor,
+    usage,
+    accounting: { scope: allocation ? "task" : "invocation", attempts: usages.length, missingUsageAttempts, usageByField, excludedFields: [...excludedFields].sort(), partialAggregation: missingUsageAttempts > 0 || excludedFields.size > 0 },
+    failure: host.ok ? null : { outcome: host.outcome, error: host.error ?? null },
+  };
+}
+
+async function developmentContext(repo: string, work: WorkLocation, skill: string, allocation?: ModelAllocation) {
   if (work.record.schemaVersion !== 2) throw new Error("현재 개발 작업 계약이 필요합니다.");
   const inventory = await developmentTools(repo, skill);
   const documents = inventory.documents.filter((doc): doc is { path: string; source: string } => doc.source !== null);
@@ -211,7 +297,9 @@ async function developmentContext(repo: string, work: WorkLocation, skill: strin
       "진행 중인 작업을 중복 접수하지 않는다. 현재 범위의 구현·검사·실패 수정은 이어가되 commit·push는 명시 요청이 없으면 수행하지 않는다.",
       `작업 정본: ${work.path}`,
       `작업 UUID: ${work.record.id}`,
-      `허용 범위: ${JSON.stringify(work.record.workflow.authorization)}`,
+      `허용 범위: ${JSON.stringify({ ...work.record.workflow.authorization, ...(allocation ? { writePaths: allocation.writePaths } : {}) })}`,
+      `실행 입력 범위: ${JSON.stringify(allocation?.inputs ?? work.record.workflow.inputs)}`,
+      ...(allocation ? [`작업 내부 모델 배분: ${JSON.stringify(allocation)}`, "이 배분은 작업 권한을 축소하며 독립 검토를 대체하지 않는다. 경로 제한은 advisory이며 OS 강제 차단으로 주장하지 않는다."] : []),
       `현재 기준: ${JSON.stringify(work.record.criteria.map(({ id, description, required, requirementRefs }) => ({ id, description, required, requirementRefs })))}`,
       `개발 도구 출처와 제공 대상: ${JSON.stringify(tools)}`,
       `명세 품질·구현 전 정합성 검토 상태: ${JSON.stringify(reviews)}`,
@@ -223,6 +311,7 @@ async function developmentContext(repo: string, work: WorkLocation, skill: strin
 
 export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, dependencies: WorkflowDependencies = {}): Promise<WorkflowResult> {
   const repo = await fs.realpath(options.repo ?? process.cwd());
+  if (options.allocation !== undefined && (options.resume === true || ["answer", "verify", "review", "complete"].includes(options.decision?.intent ?? ""))) throw new Error("모델 배분은 실제 개발 호스트 실행에만 적용합니다. 검증 명령·독립 검토·완료를 대신하지 않습니다.");
   if (options.direct !== true || options.role !== "www-dev") throw new Error("직접 요청을 받은 www-dev 역할이 필요합니다.");
   if (typeof options.request !== "string" || !options.request.trim()) throw new Error("직접 받은 요청이 필요합니다.");
   if (options.decision?.intent === "answer") return { executed: false, route: { intent: "answer", reason: "role_information_request" } };
@@ -279,20 +368,26 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
   });
   if (!mutation.ok) return { executed: false, workId: work.record.id, route, mutation };
   await validateWritePaths(repo, writes);
-  const context = await developmentContext(repo, work, route.skill);
+  const allocation = options.allocation === undefined ? undefined : validateModelAllocation(options.allocation, {
+    model: options.model, inputs: work.record.workflow.inputs, writes, authorizationWritePaths: work.record.workflow.authorization.writePaths,
+  });
+  if (allocation) await validateWritePaths(repo, [...allocation.inputs, ...allocation.writePaths]);
+  const context = await developmentContext(repo, work, route.skill, allocation);
   if (options.sandbox !== undefined && !["read-only", "workspace-write"].includes(options.sandbox)) throw new Error("WWW 개발 역할은 read-only 또는 workspace-write 호스트 정책을 사용합니다.");
   const invocation = createCodexInvocation({
     repo,
     systemPrompt : context.text                         ,
     request      : options.request                      ,
-    model        : options.model                        ,
+    model        : allocation?.model ?? options.model   ,
+    thinking     : options.thinking                     ,
     sandbox      : options.sandbox ?? "workspace-write" ,
   });
+  const executionInvocation = dependencies.prepareInvocation ? dependencies.prepareInvocation(invocation) : invocation;
   const runtimeDirectory = path.join(repo, ".www", "runtime", work.record.id);
   await validateWritePaths(repo, [path.relative(repo, runtimeDirectory).split(path.sep).join("/")]);
-  const environment = checkEnvironment({ ...options.environment, repo, commands: dependencies.runProcess ? [] : [invocation.command], env: options.env, outputDirectory: runtimeDirectory });
+  const environment = checkEnvironment({ ...options.environment, repo, commands: dependencies.runProcess ? [] : [executionInvocation.command], env: options.env, outputDirectory: runtimeDirectory });
   const executor = dependencies.runProcess ? "injected" : "process";
-  if (!environment.ok) return { executed: false, workId: work.record.id, environment, executor, host: { ok: false, code: null, outcome: "environment_failed" } };
+
   const env = mergeEnvironment(options.env);
   await fs.mkdir(runtimeDirectory, { recursive: true });
   const leaseFile = path.join(runtimeDirectory, "execution.lock");
@@ -304,20 +399,36 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
   }
   try {
     await lease.writeFile(JSON.stringify({ eventId: options.eventId, pid: process.pid, startedAt: new Date().toISOString() }));
-    const started = await appendEvent({ repo, workId: work.record.id, event: { id: options.eventId, type: "status", status: "running", role: "www-dev", skill: route.skill, sources: context.sources, requestedModel: invocation.requestedModel } });
+    const prior = (await readRuntime(runtimePaths(repo, work.record.id))).events.find(event => event.id === options.eventId);
+    if (prior) {
+      if (prior.type !== "status" || prior.skill !== route.skill || prior.requestedModel !== invocation.requestedModel || JSON.stringify(prior.allocation ?? null) !== JSON.stringify(allocation ?? null)) throw new Error("같은 event id의 실행 요청이 다릅니다.");
+      return { executed: false, duplicate: true, workId: work.record.id };
+    }
+    const previous = allocation ? await allocationHistory(repo, work.record.id, options.eventId, allocation) : [];
+    const started = await appendEvent({ repo, workId: work.record.id, event: { id: options.eventId, type: "status", status: "running", role: "www-dev", skill: route.skill, sources: context.sources, requestedModel: invocation.requestedModel, ...(allocation ? { allocation } : {}) } });
     if (started.duplicate) return { executed: false, duplicate: true, workId: work.record.id };
     await advanceWork({ repo, workId: work.record.id, intent: route.intent ?? "answer", writes, surfaces });
-    const host = processResult(await (dependencies.runProcess ?? runProcess)(invocation, { cwd: repo, env, captureOutput: true, outputDirectory: runtimeDirectory }));
-    await appendEvent({ repo, workId: work.record.id, event: { id: `${options.eventId}-host`, type: host.ok ? "host_result" : "post_failure", outcome: host.outcome, exitCode: host.code, threadId: host.threadId ?? null, injected: Boolean(dependencies.runProcess) } });
+    let host: ProcessResult;
+    try {
+      host = environment.ok
+        ? processResult(await (dependencies.runProcess ?? runProcess)(executionInvocation, { cwd: repo, env, captureOutput: true, outputDirectory: runtimeDirectory }))
+        : { ok: false, code: null, outcome: "environment_failed", error: "환경 사전점검 실패로 호스트를 실행하지 않았습니다." };
+    } catch (error) {
+      host = { ok: false, code: null, outcome: "execution_error", error: error instanceof Error ? error.message : String(error) };
+    }
+    const execution = modelExecution(allocation, invocation.requestedModel, options.thinking, executor, host, previous);
+    const receiptFile = allocationReceiptPath(repo, work.record.id, options.eventId);
+    await validateWritePaths(repo, [path.relative(repo, receiptFile).split(path.sep).join("/")]);
+    await fs.mkdir(path.dirname(receiptFile), { recursive: true });
+    const receiptBytes = `${JSON.stringify({ eventId: options.eventId, workId: work.record.id, sources: context.sources, tools: context.tools, artifactReviews: context.reviews, modelExecution: execution, host }, null, 2)}\n`;
+    await fs.writeFile(receiptFile, receiptBytes, { flag: "wx", mode: 0o600 });
+    const receiptHash = createHash("sha256").update(receiptBytes).digest("hex");
+    await appendEvent({ repo, workId: work.record.id, event: { id: `${options.eventId}-host`, type: host.ok ? "host_result" : "post_failure", outcome: host.outcome, exitCode: host.code, threadId: host.threadId ?? null, injected: executor === "injected", observedModel: execution.observed.model, observedReason: execution.observed.reason, receiptPath: path.relative(repo, receiptFile).split(path.sep).join("/"), receiptHash, ...(allocation ? { taskId: allocation.taskId, attempt: allocation.attempt } : {}) } });
     await appendEvent({ repo, workId: work.record.id, event: { id: `${options.eventId}-stage`, type: "status", status: host.ok ? "completed" : "failed" } });
-    const receiptDirectory = path.join(repo, ".www", "evidence", work.record.id);
-    await validateWritePaths(repo, [path.relative(repo, receiptDirectory).split(path.sep).join("/")]);
-    await fs.mkdir(receiptDirectory, { recursive: true });
-    const receiptId = createHash("sha256").update(options.eventId).digest("hex");
-    await fs.writeFile(path.join(receiptDirectory, `${receiptId}.json`), `${JSON.stringify({ eventId: options.eventId, workId: work.record.id, sources: context.sources, tools: context.tools, artifactReviews: context.reviews, host }, null, 2)}\n`, { flag: "wx", mode: 0o600 });
-    if (!host.ok || !options.verifier) return { executed: true, workId: work.record.id, route, mutation, host, environment, executor, sources: context.sources, tools: context.tools, artifactReviews: context.reviews };
+    const result: WorkflowResult = { executed: environment.ok && host.outcome !== "environment_failed", workId: work.record.id, route, mutation, host, environment, executor, sources: context.sources, tools: context.tools, artifactReviews: context.reviews, modelExecution: execution, receiptPath: path.relative(repo, receiptFile).split(path.sep).join("/") };
+    if (!host.ok || !options.verifier) return result;
     const verification = await verifyWork({ repo, workId: work.record.id, ...options.verifier, criterionIds: options.verifier.criterionIds ?? [] });
-    return { executed: true, workId: work.record.id, route, mutation, host, environment, executor, sources: context.sources, tools: context.tools, artifactReviews: context.reviews, verification };
+    return { ...result, verification };
   } finally {
     await lease.close();
     await fs.unlink(leaseFile);
@@ -457,6 +568,7 @@ function verificationSummary(record: unknown, verifier: WorkflowVerifier, result
 }
 
 export async function runWorkflow(options: WorkflowOptions = {}, dependencies: WorkflowDependencies = {}): Promise<WorkflowResult> {
+  if (options.allocation !== undefined && options.role !== "www-dev") throw new Error("작업 내부 모델 배분은 www-dev 실행에만 적용합니다.");
   if (options.role === "www-dev") return runDevelopmentWorkflow(options, dependencies);
   if (typeof options.request !== "string" || !options.request.trim()) throw new TypeError("원문 사용자 request가 필요합니다.");
   const work = await findWorkRecord({
@@ -573,7 +685,8 @@ export async function runWorkflow(options: WorkflowOptions = {}, dependencies: W
     return { ...publicPrepared(prepared), route, mutation, executed: false, duplicate: true, session: started.session };
   }
 
-  const hostResult = await run(invocation, processOptions);
+  const executionInvocation = dependencies.prepareInvocation ? dependencies.prepareInvocation(invocation) : invocation;
+  const hostResult = await run(executionInvocation, processOptions);
   if (!hostResult.ok) {
     await appendEvent({
       repo             : prepared.binding.repo                                                                ,
@@ -581,7 +694,7 @@ export async function runWorkflow(options: WorkflowOptions = {}, dependencies: W
       expectedRevision : started.session.revision                                                             ,
       event            : { id: `${options.eventId}-host`, type: "post_failure", outcome: hostResult.outcome } ,
     });
-    return { ...publicPrepared(prepared), route, mutation, executed: true, host: hostResult, environment, executor, boxboxPre };
+    return { ...publicPrepared(prepared), route, mutation, executed: hostResult.outcome !== "environment_failed", host: hostResult, environment, executor, boxboxPre };
   }
   await appendEvent({
     repo   : prepared.binding.repo                                                                                                                    ,
