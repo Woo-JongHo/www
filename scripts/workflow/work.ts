@@ -274,8 +274,8 @@ export async function verifyWork({ repo = process.cwd(), workId, command, args =
   if (work.record.schemaVersion !== 2) throw new Error("현재 검증 연결에는 schemaVersion 2 작업이 필요합니다.");
   const signature = JSON.stringify([command, ...args]);
   if (!work.record.workflow.authorization.verifierCommands.includes(signature)) throw new Error("이 작업에서 허용하지 않은 검증 명령입니다.");
-  const attempt = await verify({ repo, record: work.record, inputs: work.record.workflow.inputs, command, args, criterionIds, artifactPaths });
-  const artifactPath = await savePending(repo, workId, "verification", attempt, hash(signature), work.record.workflow.requestHash);
+  const attempt      = await verify({ repo, record: work.record, inputs: work.record.workflow.inputs, command, args, criterionIds, artifactPaths }) ;
+  const artifactPath = await savePending(repo, workId, "verification", attempt, hash(signature), work.record.workflow.requestHash)                  ;
   const { work: _work, ...recording } = await appendPending({ repo, workId, artifactPath });
   return { ...attempt, ...recording };
 }
@@ -325,10 +325,10 @@ async function assessRecord(repo: string, work: WorkLocation, policyRoot?: strin
   }
   const review = record.workflow.reviews.at(-1);
   const reviewState = review ? validateReview({
-    repo                      ,
-    policy: policyInfo.policy ,
-    work: record,
-    review                    ,
+    repo                       ,
+    policy : policyInfo.policy ,
+    work   : record            ,
+    review                     ,
     sourceDigest   : source.digest          ,
     criteriaDigest : criteriaDigest(record) ,
     policyHash     : policyInfo.hash        ,
@@ -353,9 +353,9 @@ export async function recordDocumentReview({ repo = process.cwd(), workId, docum
 }
 
 export async function recordReview({ repo = process.cwd(), workId, review }: WorkOptions & { review: unknown }) {
-  const requestHash = review && typeof review === "object" && "workRequestHash" in review && typeof review.workRequestHash === "string" ? review.workRequestHash : undefined;
-  const artifactPath = await savePending(repo, workId, "review", review, undefined, requestHash);
-  const result = await appendPending({ repo, workId, artifactPath });
+  const requestHash  = review && typeof review === "object" && "workRequestHash" in review && typeof review.workRequestHash === "string" ? review.workRequestHash : undefined ;
+  const artifactPath = await savePending(repo, workId, "review", review, undefined, requestHash)                                                                              ;
+  const result       = await appendPending({ repo, workId, artifactPath })                                                                                                    ;
   return result.recorded ? { ...result.work, recorded: true as const, artifactPath } : result;
 }
 
@@ -364,11 +364,11 @@ async function appendReview(repo: string, workId: string, review: unknown) {
     if (!review || typeof review !== "object" || !("id" in review) || typeof review.id !== "string" || !review.id) throw new Error("식별 가능한 실제 검토 기록이 필요합니다.");
     const existing = record.workflow.reviews.find(item => item.id === review.id);
     if (existing) { const { recordingRejection: _rejection, ...original } = existing; if (JSON.stringify(original) !== JSON.stringify(review)) throw new Error("동일 review ID 내용 충돌"); return; }
-    const saved = review as { id: string; verdict?: unknown; failure?: unknown };
-    const policy = await loadReviewPolicy({ root: repo });
-    const documentation = await assessDocumentation({ repo, record });
-    const source = await captureSource({ repo, inputs: [...new Set([...record.workflow.inputs, ...documentation.paths])].sort() });
-    const applicable = validateReview({ repo, work: record, policy: policy.policy, policyHash: policy.hash, review, sourceDigest: source.digest, criteriaDigest: criteriaDigest(record) });
+    const saved         = review as { id: string; verdict?: unknown; failure?: unknown }                                                                                                      ;
+    const policy        = await loadReviewPolicy({ root: repo })                                                                                                                              ;
+    const documentation = await assessDocumentation({ repo, record })                                                                                                                         ;
+    const source        = await captureSource({ repo, inputs: [...new Set([...record.workflow.inputs, ...documentation.paths])].sort() })                                                     ;
+    const applicable    = validateReview({ repo, work: record, policy: policy.policy, policyHash: policy.hash, review, sourceDigest: source.digest, criteriaDigest: criteriaDigest(record) }) ;
     record.workflow.reviews.push(applicable.usable ? saved : { ...saved, recordingRejection: applicable.reasons });
     record.status              = "verifying";
     record.workflow.nextAction = applicable.usable ? "complete"
@@ -429,7 +429,7 @@ async function main() {
     advance             : advanceWork           ,
     inputs              : setVerificationInputs ,
     "document-review"   : recordDocumentReview  ,
-    "recover-result"    : appendPending          ,
+    "recover-result"    : appendPending         ,
     verify              : verifyWork            ,
     status              : assessWork            ,
     resume              : resumeWork            ,
@@ -458,8 +458,8 @@ async function savePending(repo: string, workId: string, kind: "verification" | 
     if (current.record.schemaVersion !== 2) throw new Error("현재 작업이 필요합니다.");
     requestHash = current.record.workflow.requestHash;
   }
-  const text = `${JSON.stringify({ version: 1, kind, workId, workRequestHash: requestHash, ...(commandHash ? { commandHash } : {}), payload })}\n`;
-  const target = path.join(directory, `${kind === "review" ? "review" : "attempt"}-${hash(payload.id)}.json`);
+  const text   = `${JSON.stringify({ version: 1, kind, workId, workRequestHash: requestHash, ...(commandHash ? { commandHash } : {}), payload })}\n` ;
+  const target = path.join(directory, `${kind === "review" ? "review" : "attempt"}-${hash(payload.id)}.json`)                                        ;
   try { await durableJson(target, text); }
   catch (error) {
     if (!(error instanceof Error && "code" in error && error.code === "EEXIST") || await fs.readFile(target, "utf8") !== text) throw error;
@@ -468,8 +468,8 @@ async function savePending(repo: string, workId: string, kind: "verification" | 
 }
 export async function appendPending({ repo = process.cwd(), workId, artifactPath }: WorkOptions & { artifactPath: string }) {
   if (typeof artifactPath !== "string" || !/^\.www[\/]pending-results[\/](?:attempt|review)-[a-zA-Z0-9-]+\.json$/.test(artifactPath)) throw new Error("회수할 결과 artifact 경로 오류");
-  const target = await resolveInside(repo, artifactPath);
-  const value: unknown = JSON.parse(await fs.readFile(target, "utf8"));
+  const target         = await resolveInside(repo, artifactPath)       ;
+  const value: unknown = JSON.parse(await fs.readFile(target, "utf8")) ;
   if (!value || typeof value !== "object" || !("version" in value) || value.version !== 1 || !("workId" in value) || value.workId !== workId || !("payload" in value) || !("kind" in value)) throw new Error("회수 결과의 작업 불일치");
   const current = await readWork({ repo, workId });
   if (current.record.schemaVersion !== 2 || !("workRequestHash" in value) || current.record.workflow.requestHash !== value.workRequestHash) throw new Error("회수 결과의 요청 hash 불일치");
@@ -491,10 +491,10 @@ export async function appendPending({ repo = process.cwd(), workId, artifactPath
 
 // durable 파일도 unknown 입력이다. 렌더링·원장 쓰기 전에 중첩 형식을 확인한다.
 function assertPendingAttempt(value: unknown): asserts value is VerificationAttempt {
-  const object = (item: unknown): item is Record<string, unknown> => !!item && typeof item === "object" && !Array.isArray(item);
-  const strings = (item: unknown): item is string[] => Array.isArray(item) && item.every(entry => typeof entry === "string");
-  const hashValue = (item: unknown) => typeof item === "string" && /^[a-f0-9]{64}$/.test(item);
-  const nullableText = (item: unknown) => item === null || typeof item === "string";
+  const object       = (item: unknown): item is Record<string, unknown> => !!item && typeof item === "object" && !Array.isArray(item) ;
+  const strings      = (item: unknown): item is string[] => Array.isArray(item) && item.every(entry => typeof entry === "string")     ;
+  const hashValue    = (item: unknown) => typeof item === "string" && /^[a-f0-9]{64}$/.test(item)                                     ;
+  const nullableText = (item: unknown) => item === null || typeof item === "string"                                                   ;
   if (!object(value) || typeof value.id !== "string" || !/^attempt-[a-f0-9-]+$/i.test(value.id)) throw new Error("회수 검증 시도 형식 오류");
   for (const field of ["startedAt", "completedAt", "command", "requestedCommand"]) if (typeof value[field] !== "string") throw new Error("회수 검증 문자열 필드 오류");
   for (const field of ["argumentsRedacted", "sourceStable", "environmentStable"]) if (typeof value[field] !== "boolean") throw new Error("회수 검증 boolean 필드 오류");

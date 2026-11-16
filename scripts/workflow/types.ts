@@ -31,10 +31,10 @@ export interface Criterion {
 }
 
 export interface RecordedReview {
-  recordingRejection?: string[];
-  id       : string  ;
-  verdict? : unknown ;
-  failure? : unknown ;
+  recordingRejection? : string[] ;
+  id                  : string   ;
+  verdict?            : unknown  ;
+  failure?            : unknown  ;
 }
 
 export interface WorkWorkflow {
