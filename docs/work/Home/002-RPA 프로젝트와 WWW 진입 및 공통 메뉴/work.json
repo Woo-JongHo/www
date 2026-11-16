@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 2,
+  "id": "work-4573f7d4-62eb-4e72-9985-62994c1b30a8",
+  "title": "RPA 프로젝트와 WWW 진입 및 공통 메뉴",
+  "kind": "feature",
+  "areas": [
+    "ui"
+  ],
+  "owner": "ui",
+  "status": "draft",
+  "blockedReason": null,
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-6825661e-9d06-4364-82fe-b612365a0072"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "S1",
+      "description": "첫 실행의 왼쪽 탐색을 RPA(+)와 그 하위 프로젝트 목록, 별도 단일 WWW 항목으로 명세한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "S2",
+      "description": "RPA 프로젝트 또는 WWW 선택 후 대시보드·대화·생태계·리포트 순서의 공통 메뉴와 선택 대상의 관계를 명세한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "S3",
+      "description": "사용자 확정 사항·제안·미결정을 구분하고 추가·취소·실패·전환 경계의 후속 검증 시나리오를 기록한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "S4",
+      "description": "제품 코드를 수정하지 않고 문서만 작성하며 현행 구현과 미래 변경 목표를 구분한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "S5",
+      "description": "프로젝트 선택 전 첫 진입 화면을 전체 대시보드인 View Page로 명세하고, 왼쪽 RPA·WWW 진입점 및 선택 후 대상별 대시보드와의 범위를 구분한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "S6",
+      "description": "Chat에서 여러 터미널을 여는 요청을 기록하고 터미널 종류·표시·실행 방식의 미결정을 구분한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "S7",
+      "description": "Herdr Board의 확인한 참고 요소와 WWW 칸반 대시보드 적용 제안을 구분하고, 전체·대상별 범위 및 Chat·터미널 연결과 데이터·상태의 미결정을 기록한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    },
+    {
+      "id": "S8",
+      "description": "모든 작업에서 품질·실패 위험에 맞게 모델을 자동 선택해 작업 완료까지의 총 토큰을 효율화하는 목적과, 요청/관측/미실행 구분·독립 검토·정책 정합화 및 절감 검증 요구를 기록한다.",
+      "required": true,
+      "result": "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role": "www-dev",
+    "requestId": "sidebar-entry-spec-2026-11-16",
+    "requestHash": "b3ee8b36ba5e763d216883bc601b6909bc8ff19e002df62e121728193f2dc9d6",
+    "authorization": {
+      "implementation": false,
+      "writePaths": [
+        "docs/work/Home",
+        "docs/work/INDEX.md"
+      ],
+      "mutationSurfaces": [
+        "spec-documents"
+      ],
+      "verifierCommands": [
+        "node scripts/check-workflow.ts"
+      ],
+      "commit": false,
+      "publish": false,
+      "source": "direct_user_request",
+      "requestHash": "b3ee8b36ba5e763d216883bc601b6909bc8ff19e002df62e121728193f2dc9d6"
+    },
+    "inputs": [
+      "docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/spec.md",
+      "docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/design.md",
+      "docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/tasks.md"
+    ],
+    "nextAction": "spec",
+    "verifications": [],
+    "reviews": []
+  }
+}
