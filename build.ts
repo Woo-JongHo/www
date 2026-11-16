@@ -2,12 +2,14 @@
  * @architecture arch.tooling.bundle
  * @implements RESP-TOOLING-BUNDLE
  */
-import { copyFileSync, mkdirSync, rmSync } from "node:fs";
+import { copyFileSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { writeArchitecture } from "./scripts/generate-architecture.ts";
+import { buildInfo } from "./scripts/release.ts";
 const root = import.meta.dir    ;
 const out  = join(root, "dist") ;
 writeArchitecture(root);
+const info = buildInfo(root);
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 async function bundle(entry: string, target: "node" | "browser", format: "cjs" | "iife") {
@@ -16,6 +18,7 @@ async function bundle(entry: string, target: "node" | "browser", format: "cjs" |
     outdir      : out                        ,
     target                                   ,
     format                                   ,
+    define: { __WWW_BUILD_INFO__: JSON.stringify(info) },
     minify   : false                           ,
     naming   : entry.replace(/\.tsx?$/, ".js") ,
     external : target === "node" ? ["electron"] : []
@@ -33,3 +36,5 @@ const policyDirectory = join(out, "agents", "www");
 mkdirSync(policyDirectory, { recursive: true });
 copyFileSync(join(root, "agents", "www", "review-policy.json"), join(policyDirectory, "review-policy.json"));
 console.log(`built ${out}`);
+
+writeFileSync(join(out, "build-info.json"), JSON.stringify(info));

@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-403b8e0b-7859-4166-9ded-11b991069ff8",
+  "title"        : "커밋 버전과 릴리즈 및 CI CD 구축",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-c0abff5a-d50e-410b-b29c-9a791bed2058",
+      "workId"        : "work-403b8e0b-7859-4166-9ded-11b991069ff8",
+      "title"         : "커밋 버전과 릴리즈 및 CI CD 구축",
+      "summary"       : "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-15T16:06:55.061Z",
+      "event"         : "host_failed",
+      "workRecordHash": "91041580389355be0e56be4b120c2dd5f080f75c56062591c807782100934fff",
+      "sourceDigest"  : "02533b2e9b4ec38625dde874c67b875da2aa64171b27c45800a2e80e862febd5",
+      "criteriaDigest": "93e1707bb20abb48dc102f5c64ad3713c6591296d09cb07ba2fbf455320059fa",
+      "semanticHash"  : "f37b79023efbf33bbc3567a5c52b6a2bbe40356091108175701aced66bd38dd3",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": "개발 호스트 실행 실패: nonzero",
+        "criteria": [
+          {
+            "id"         : "AC-VERSION",
+            "description": "기준 커밋 이후 first-parent 커밋별 0.1.n 자동 증가, 동일 커밋 재빌드 동일 버전, dirty 및 소스 digest 구분과 앱 표시가 실제 빌드에 연결된다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-RELEASE",
+            "description": "깨끗하고 검증된 소스의 버전·커밋·체크섬 manifest와 macOS arm64 Electron 배포 패키지를 만들며 잘못된 태그·shallow·dirty 릴리즈를 거부한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-PIPELINE",
+            "description": "GitHub Actions PR/main 검증과 main artifact 전달, 버전 태그의 정식 GitHub Release 파이프라인 및 BoxBox CI 준비가 구성되고 로컬에서 가능한 경로를 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Release/001-커밋 버전과 릴리즈 및 CI CD 구축/work.json",
+        "workRecordHash": "91041580389355be0e56be4b120c2dd5f080f75c56062591c807782100934fff",
+        "sourceDigest"  : "02533b2e9b4ec38625dde874c67b875da2aa64171b27c45800a2e80e862febd5",
+        "criteriaDigest": "93e1707bb20abb48dc102f5c64ad3713c6591296d09cb07ba2fbf455320059fa"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-11a81a13-4854-4a4e-a213-2b471152fc3e",
+      "workId"        : "work-403b8e0b-7859-4166-9ded-11b991069ff8",
+      "title"         : "커밋 버전과 릴리즈 및 CI CD 구축",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-15T16:15:42.817Z",
+      "event"         : "build",
+      "workRecordHash": "d2489cfabd13d22258ea1834aa7c44f311b59f7949ae42d0f1b52e20db9649f1",
+      "sourceDigest"  : "1ab85f27fe531457f97267da295ff045b3b6b7b7c827c3e9c5107333500773ad",
+      "criteriaDigest": "93e1707bb20abb48dc102f5c64ad3713c6591296d09cb07ba2fbf455320059fa",
+      "semanticHash"  : "c580de39534f40488db88af42b5badee04cc190d46498ed4f54e70ece66bdda0",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "AC-VERSION",
+            "description": "기준 커밋 이후 first-parent 커밋별 0.1.n 자동 증가, 동일 커밋 재빌드 동일 버전, dirty 및 소스 digest 구분과 앱 표시가 실제 빌드에 연결된다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-RELEASE",
+            "description": "깨끗하고 검증된 소스의 버전·커밋·체크섬 manifest와 macOS arm64 Electron 배포 패키지를 만들며 잘못된 태그·shallow·dirty 릴리즈를 거부한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-PIPELINE",
+            "description": "GitHub Actions PR/main 검증과 main artifact 전달, 버전 태그의 정식 GitHub Release 파이프라인 및 BoxBox CI 준비가 구성되고 로컬에서 가능한 경로를 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Release/001-커밋 버전과 릴리즈 및 CI CD 구축/work.json",
+        "workRecordHash": "d2489cfabd13d22258ea1834aa7c44f311b59f7949ae42d0f1b52e20db9649f1",
+        "sourceDigest"  : "1ab85f27fe531457f97267da295ff045b3b6b7b7c827c3e9c5107333500773ad",
+        "criteriaDigest": "93e1707bb20abb48dc102f5c64ad3713c6591296d09cb07ba2fbf455320059fa"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-f7064c8a-71fa-490a-aa94-64760ffa3612",
+      "workId"        : "work-403b8e0b-7859-4166-9ded-11b991069ff8",
+      "title"         : "커밋 버전과 릴리즈 및 CI CD 구축",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-15T23:29:45.882Z",
+      "event"         : "build",
+      "workRecordHash": "d2489cfabd13d22258ea1834aa7c44f311b59f7949ae42d0f1b52e20db9649f1",
+      "sourceDigest"  : "f7303b2a02df10f6ea27d7d487d4de6468eab2cc45fc7a362cccd7dad5accdf0",
+      "criteriaDigest": "93e1707bb20abb48dc102f5c64ad3713c6591296d09cb07ba2fbf455320059fa",
+      "semanticHash"  : "bf2f029ad12dad01647a910f5aa04653954b95dea0cbaa542fc937b6c93fb560",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "AC-VERSION",
+            "description": "기준 커밋 이후 first-parent 커밋별 0.1.n 자동 증가, 동일 커밋 재빌드 동일 버전, dirty 및 소스 digest 구분과 앱 표시가 실제 빌드에 연결된다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-RELEASE",
+            "description": "깨끗하고 검증된 소스의 버전·커밋·체크섬 manifest와 macOS arm64 Electron 배포 패키지를 만들며 잘못된 태그·shallow·dirty 릴리즈를 거부한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-PIPELINE",
+            "description": "GitHub Actions PR/main 검증과 main artifact 전달, 버전 태그의 정식 GitHub Release 파이프라인 및 BoxBox CI 준비가 구성되고 로컬에서 가능한 경로를 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Release/001-커밋 버전과 릴리즈 및 CI CD 구축/work.json",
+        "workRecordHash": "d2489cfabd13d22258ea1834aa7c44f311b59f7949ae42d0f1b52e20db9649f1",
+        "sourceDigest"  : "f7303b2a02df10f6ea27d7d487d4de6468eab2cc45fc7a362cccd7dad5accdf0",
+        "criteriaDigest": "93e1707bb20abb48dc102f5c64ad3713c6591296d09cb07ba2fbf455320059fa"
+      }
+    }
+  ]
+}

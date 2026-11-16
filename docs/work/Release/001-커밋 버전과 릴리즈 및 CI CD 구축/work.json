@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-403b8e0b-7859-4166-9ded-11b991069ff8",
+  "title"        : "커밋 버전과 릴리즈 및 CI CD 구축",
+  "kind"         : "feature",
+  "areas": [
+    "ui",
+    "dev",
+    "ops"
+  ],
+  "owner"        : "dev",
+  "status"       : "in_progress",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-VERSION",
+      "description": "기준 커밋 이후 first-parent 커밋별 0.1.n 자동 증가, 동일 커밋 재빌드 동일 버전, dirty 및 소스 digest 구분과 앱 표시가 실제 빌드에 연결된다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-RELEASE",
+      "description": "깨끗하고 검증된 소스의 버전·커밋·체크섬 manifest와 macOS arm64 Electron 배포 패키지를 만들며 잘못된 태그·shallow·dirty 릴리즈를 거부한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-PIPELINE",
+      "description": "GitHub Actions PR/main 검증과 main artifact 전달, 버전 태그의 정식 GitHub Release 파이프라인 및 BoxBox CI 준비가 구성되고 로컬에서 가능한 경로를 검증한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "release-version-cicd-20261116",
+    "requestHash": "dc7478eaf056b3a1df9a1e004f0051d268c443efd3d3389a0f8575660e4dc85a",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "build.ts",
+        "package.json",
+        "scripts/release.ts",
+        "scripts/setup-ci.ts",
+        "src/build-info.ts",
+        "src/main.ts",
+        "src/renderer.tsx",
+        "src/index.html",
+        "src/architecture.generated.json",
+        "test/release.test.ts",
+        "docs/architecture/structure.json",
+        "docs/specs/architecture.md",
+        "docs/DEVELOPMENT.md",
+        "docs/ARCHITECTURE.md",
+        "docs/RELEASING.md",
+        ".github/workflows/ci.yml",
+        ".github/workflows/release.yml"
+      ],
+      "mutationSurfaces": [
+        "edit"
+      ],
+      "verifierCommands": [
+        "[\"bun\",\"test\",\"test/release.test.ts\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"npm\",\"run\",\"build\"]",
+        "[\"npm\",\"run\",\"check:source\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "dc7478eaf056b3a1df9a1e004f0051d268c443efd3d3389a0f8575660e4dc85a"
+    },
+    "inputs": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/release.yml",
+      "build.ts",
+      "docs/ARCHITECTURE.md",
+      "docs/DEVELOPMENT.md",
+      "docs/RELEASING.md",
+      "docs/architecture/structure.json",
+      "docs/specs/architecture.md",
+      "package.json",
+      "scripts/release.ts",
+      "scripts/setup-ci.ts",
+      "src/architecture.generated.json",
+      "src/build-info.ts",
+      "src/index.html",
+      "src/main.ts",
+      "src/renderer.tsx",
+      "test/release.test.ts"
+    ],
+    "nextAction": "build",
+    "verifications": [],
+    "reviews": [],
+    "reportingRequired": true
+  }
+}

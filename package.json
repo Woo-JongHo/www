@@ -22,7 +22,12 @@
     "check": "npm run check:environment && npm run check:architecture && npm run check:source && npm run check:workflow && npm run typecheck && npm test && npm run build",
     "check:environment": "node scripts/check-environment.ts",
     "start": "npm run build && electron .",
-    "check:source": "node scripts/source-policy.ts"
+    "check:source": "node scripts/source-policy.ts",
+    "version:info": "node scripts/release.ts build-info",
+    "release:verify": "node scripts/release.ts verify",
+    "release:package": "node scripts/release.ts package",
+    "setup:ci": "node scripts/setup-ci.ts",
+    "release:check": "node scripts/release.ts check"
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -38,5 +43,6 @@
     "@types/react-dom": "^19.2.0",
     "electron": "^39.2.1",
     "typescript": "^5.9.3"
-  }
+  },
+  "releaseBase": "0f7661ded359b69a95cbdde67392287d63fffb69"
 }

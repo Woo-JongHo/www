@@ -319,7 +319,7 @@ write/check는 동일 논리경로 `src/architecture.generated.json`의 격리�
 
 `docs/architecture/work-output.json`의 version 1 정책은 `boxbox-scalar-columns-v1`, `docs/work/**/*.json`, 실제 답변 참조 `approvalRef`만 받는다. 정책 부재는 다른 저장소의 기존 plain JSON 출력을 유지한다. 잘못된 값·추가 필드·정책 경로의 심볼릭 링크는 저장 전에 실패한다. `approvalRef`는 결정의 참고 위치이며 런타임 승인 생성이나 승인 원본 검사 기능이 아니다.
 
-`scripts/workflow/work-json.ts`는 새 WorkRecord revision·신규 WorkReport 의미 객체만 처음 직렬화한다. JSON.stringify를 한 번 실행한 fresh 데이터에서 native escaping·속성 순서·생략·배열 null·오류 의미를 유지하며 같은 객체의 연속 scalar 세 행 이상만 인코딩된 key의 공식 폭으로 출력한다. 런타임에 BoxBox CLI·registry·설치 설정은 필요하지 않다. 공식 CLI와의 바이트 golden은 개발 검증이다. 기존 report, read/list/dedupe, 실제 변화 없는 원장은 다시 쓰지 않는다. work 반환의 `rawSource`는 저장 원문이며 검증 대상 snapshot인 `source`와 구분한다. 신규 보고서는 최종 padding을 포함한 JSON 1 MiB·HTML 2 MiB 검사 후 게시한다. `.www` 사건·session·Native job metadata와 구조 snapshot의 개발용 공식 CLI 생성 경로는 각자의 기존 계약을 유지한다.
+`scripts/workflow/work-json.ts`는 새 WorkRecord revision·신규 WorkReport 의미 객체만 처음 직렬화한다. JSON.stringify를 한 번 실행한 fresh 데이터에서 native escaping·속성 순서·생략·배열 null·오류 의미를 유지하며 같은 객체의 연속 scalar 세 행 이상만 인코딩된 key의 공식 폭으로 출력한다. 런타임에 BoxBox CLI·registry·설치 설정은 필요하지 않다. 공식 CLI와의 바이트 golden은 개발 검증이다. 기존 entry의 의미와 실제 변화 없는 원장은 보존하며 read/list/dedupe는 정본 JSON을 다시 쓰지 않는다. 명시 report-maintain 병합은 원본 백업과 의미 대조 뒤 schema2 묶음으로 이전하고 누락·낡은 파생 HTML을 복구한다. work 반환의 `rawSource`는 저장 원문이며 검증 대상 snapshot인 `source`와 구분한다. 신규 보고서는 최종 padding을 포함한 JSON 1 MiB·HTML 2 MiB 검사 후 게시한다. `.www` 사건·session·Native job metadata와 구조 snapshot의 개발용 공식 CLI 생성 경로는 각자의 기존 계약을 유지한다.
 
 ### BoxBox 재발 시 질문과 실행 순서
 
@@ -331,3 +331,7 @@ write/check는 동일 논리경로 `src/architecture.generated.json`의 격리�
 개발 검증 `bun test test/work-json.test.ts --timeout 300000`은 현재 저장소 승인 문서에서 v1 28키·86쌍을 도출하여 공개 guide proof와 대조하고, 고정 Git 기준점의 JSON 승인 bytes를 확인한다. 격리 복사본에서 현재 승인 소스의 dry-run·Align·재Align·source check, 실제 양성 쓰기와 범위 밖·압축 구조 거부를 새로 실행한다. 도메인 writer는 fresh WorkRecord와 생성한 WorkReport를 `canonicalArchitectureJson`의 공개 pinned CLI 출력과 byte 단위로 비교한다. 로컬 개발 설치가 필요하며 과거 영수증이나 artifact hash만으로 의미 검사를 대신하지 않는다. v3 고정 제안·질문은 미승인 자료로 읽고 현재 source와 다른 key/file은 별도 addendum으로 출력한다.
 
 `node scripts/verify-reports.ts`는 strict 검사 다음 위 실도구 테스트를 직렬로 실행하고 실패를 전파한 뒤 관련 집중 검사·빌드·Electron probe를 수행한다. 실도구 테스트별 예산은 300초, 전체 의미 테스트 자식 실행 예산은 900초다. runtime fixture의 개발 설정 부재, package runtime 의존성 및 main/preload/renderer bundle의 개발 CLI 경로 부재를 확인하고 Electron child PATH에는 Node와 git만 노출한다. 이 경계는 머신 전역 BoxBox 설치 제거를 뜻하지 않는다. 기존 fixture 보고서 bytes·legacy 원장 bytes/inode/mtime·no-op 원장의 재기록 여부를 실측하며, GUI 시작 실패는 원문과 prechecks를 보존하고 미확인으로 남긴다.
+
+## 빌드 버전과 배포
+
+`npm start`의 main·renderer에는 같은 Git 기반 `0.1.n` 빌드 식별이 주입된다. `npm run version:info`, `npm run release:verify`, macOS arm64의 `npm run release:package`와 CI 전용 `npm run setup:ci`의 사용·설치 전제·제한은 [릴리즈 안내](RELEASING.md)를 따른다. 빌드는 구조 snapshot 생성 후 소스 digest를 잡고 `dist/build-info.json`을 남긴다. 개발 중 dirty 빌드는 허용하며 정식 패키징은 거부한다.

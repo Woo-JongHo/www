@@ -1,0 +1,87 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>커밋 버전과 릴리즈 및 CI CD 구축 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 16일 오전 8:29 · 한국 시간 · 자동 기록</span></header><section class="hero" id="report-conclusion"><h1>커밋 버전과 릴리즈 및 CI CD 구축</h1><p class="lead">진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</p><div id="report-story" class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>기준 커밋 이후 first-parent 커밋별 0.1.n 자동 증가, 동일 커밋 재빌드 동일 버전, dirty 및 소스 digest 구분과 앱 표시가 실제 빌드에 연결된다.</dt><dd>미검증으로 기록</dd></div><div><dt>깨끗하고 검증된 소스의 버전·커밋·체크섬 manifest와 macOS arm64 Electron 배포 패키지를 만들며 잘못된 태그·shallow·dirty 릴리즈를 거부한다.</dt><dd>미검증으로 기록</dd></div><div><dt>GitHub Actions PR/main 검증과 main artifact 전달, 버전 태그의 정식 GitHub Release 파이프라인 및 BoxBox CI 준비가 구성되고 로컬에서 가능한 경로를 검증한다.</dt><dd>미검증으로 기록</dd></div></dl></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Release/001-커밋 버전과 릴리즈 및 CI CD 구축/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-403b8e0b-7859-4166-9ded-11b991069ff8<br>report-f7064c8a-71fa-490a-aa94-64760ffa3612</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>d2489cfabd13d22258ea1834aa7c44f311b59f7949ae42d0f1b52e20db9649f1</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>f7303b2a02df10f6ea27d7d487d4de6468eab2cc45fc7a362cccd7dad5accdf0</code></dd></div><div><dt>기준 지문</dt><dd><code>93e1707bb20abb48dc102f5c64ad3713c6591296d09cb07ba2fbf455320059fa</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>in_progress</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;in_progress&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-VERSION&quot;,
+      &quot;description&quot;: &quot;기준 커밋 이후 first-parent 커밋별 0.1.n 자동 증가, 동일 커밋 재빌드 동일 버전, dirty 및 소스 digest 구분과 앱 표시가 실제 빌드에 연결된다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-RELEASE&quot;,
+      &quot;description&quot;: &quot;깨끗하고 검증된 소스의 버전·커밋·체크섬 manifest와 macOS arm64 Electron 배포 패키지를 만들며 잘못된 태그·shallow·dirty 릴리즈를 거부한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-PIPELINE&quot;,
+      &quot;description&quot;: &quot;GitHub Actions PR/main 검증과 main artifact 전달, 버전 태그의 정식 GitHub Release 파이프라인 및 BoxBox CI 준비가 구성되고 로컬에서 가능한 경로를 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre></div></details></section><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 2개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 16일 오전 1:15 · 자동 기록 · 진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</summary><article><h3>커밋 버전과 릴리즈 및 CI CD 구축</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>기준 커밋 이후 first-parent 커밋별 0.1.n 자동 증가, 동일 커밋 재빌드 동일 버전, dirty 및 소스 digest 구분과 앱 표시가 실제 빌드에 연결된다.</dt><dd>미검증으로 기록</dd></div><div><dt>깨끗하고 검증된 소스의 버전·커밋·체크섬 manifest와 macOS arm64 Electron 배포 패키지를 만들며 잘못된 태그·shallow·dirty 릴리즈를 거부한다.</dt><dd>미검증으로 기록</dd></div><div><dt>GitHub Actions PR/main 검증과 main artifact 전달, 버전 태그의 정식 GitHub Release 파이프라인 및 BoxBox CI 준비가 구성되고 로컬에서 가능한 경로를 검증한다.</dt><dd>미검증으로 기록</dd></div></dl><section class="paper" id="history-report-11a81a13-4854-4a4e-a213-2b471152fc3e-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-11a81a13-4854-4a4e-a213-2b471152fc3e-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-403b8e0b-7859-4166-9ded-11b991069ff8<br>report-11a81a13-4854-4a4e-a213-2b471152fc3e</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>d2489cfabd13d22258ea1834aa7c44f311b59f7949ae42d0f1b52e20db9649f1</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>1ab85f27fe531457f97267da295ff045b3b6b7b7c827c3e9c5107333500773ad</code></dd></div><div><dt>기준 지문</dt><dd><code>93e1707bb20abb48dc102f5c64ad3713c6591296d09cb07ba2fbf455320059fa</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>in_progress</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;in_progress&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-VERSION&quot;,
+      &quot;description&quot;: &quot;기준 커밋 이후 first-parent 커밋별 0.1.n 자동 증가, 동일 커밋 재빌드 동일 버전, dirty 및 소스 digest 구분과 앱 표시가 실제 빌드에 연결된다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-RELEASE&quot;,
+      &quot;description&quot;: &quot;깨끗하고 검증된 소스의 버전·커밋·체크섬 manifest와 macOS arm64 Electron 배포 패키지를 만들며 잘못된 태그·shallow·dirty 릴리즈를 거부한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-PIPELINE&quot;,
+      &quot;description&quot;: &quot;GitHub Actions PR/main 검증과 main artifact 전달, 버전 태그의 정식 GitHub Release 파이프라인 및 BoxBox CI 준비가 구성되고 로컬에서 가능한 경로를 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 오전 1:06 · 자동 기록 · 차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</summary><article><h3>커밋 버전과 릴리즈 및 CI CD 구축</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="blocker"><strong>남은 차단 사항</strong> 개발 호스트 실행 실패: nonzero</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>기준 커밋 이후 first-parent 커밋별 0.1.n 자동 증가, 동일 커밋 재빌드 동일 버전, dirty 및 소스 digest 구분과 앱 표시가 실제 빌드에 연결된다.</dt><dd>미검증으로 기록</dd></div><div><dt>깨끗하고 검증된 소스의 버전·커밋·체크섬 manifest와 macOS arm64 Electron 배포 패키지를 만들며 잘못된 태그·shallow·dirty 릴리즈를 거부한다.</dt><dd>미검증으로 기록</dd></div><div><dt>GitHub Actions PR/main 검증과 main artifact 전달, 버전 태그의 정식 GitHub Release 파이프라인 및 BoxBox CI 준비가 구성되고 로컬에서 가능한 경로를 검증한다.</dt><dd>미검증으로 기록</dd></div></dl><section class="paper" id="history-report-c0abff5a-d50e-410b-b29c-9a791bed2058-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p></section><section class="paper" id="history-report-c0abff5a-d50e-410b-b29c-9a791bed2058-next"><h2>남은 일과 해소 행동</h2><p>차단 사항은 남아 있지만 구체적인 해소 행동이 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-c0abff5a-d50e-410b-b29c-9a791bed2058-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-403b8e0b-7859-4166-9ded-11b991069ff8<br>report-c0abff5a-d50e-410b-b29c-9a791bed2058</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>91041580389355be0e56be4b120c2dd5f080f75c56062591c807782100934fff</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>02533b2e9b4ec38625dde874c67b875da2aa64171b27c45800a2e80e862febd5</code></dd></div><div><dt>기준 지문</dt><dd><code>93e1707bb20abb48dc102f5c64ad3713c6591296d09cb07ba2fbf455320059fa</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>in_progress</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;in_progress&quot;,
+  &quot;blockedReason&quot;: &quot;개발 호스트 실행 실패: nonzero&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-VERSION&quot;,
+      &quot;description&quot;: &quot;기준 커밋 이후 first-parent 커밋별 0.1.n 자동 증가, 동일 커밋 재빌드 동일 버전, dirty 및 소스 digest 구분과 앱 표시가 실제 빌드에 연결된다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-RELEASE&quot;,
+      &quot;description&quot;: &quot;깨끗하고 검증된 소스의 버전·커밋·체크섬 manifest와 macOS arm64 Electron 배포 패키지를 만들며 잘못된 태그·shallow·dirty 릴리즈를 거부한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-PIPELINE&quot;,
+      &quot;description&quot;: &quot;GitHub Actions PR/main 검증과 main artifact 전달, 버전 태그의 정식 GitHub Release 파이프라인 및 BoxBox CI 준비가 구성되고 로컬에서 가능한 경로를 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre></div></details></article></details></section></main></body></html>

@@ -35,7 +35,7 @@
   {
     "id": "RESP-TOOLING-BUNDLE",
     "nodeId": "arch.tooling.bundle",
-    "description": "앱 번들 생성 책임을 구현하고 관련 동작을 검증한다.",
+    "description": "앱 번들 생성과 Git 버전·릴리즈 preflight·산출물 체크섬, 공개 엔진 CI 연결 책임을 구현하고 실제 동작을 검증한다.",
     "implementationRequired": true,
     "verificationRequired": true
   },
@@ -393,6 +393,13 @@
     "id": "RESP-CHAT-ACTIVITY-ARTIFACTS",
     "nodeId": "arch.chat.activity.artifacts",
     "description": "WWW 작업 산출물 식별 책임을 구현하고 관련 동작을 검증한다.",
+    "implementationRequired": true,
+    "verificationRequired": true
+  },
+  {
+    "id": "RESP-NATIVE-BUILD-INFO",
+    "nodeId": "arch.native.build-info",
+    "description": "실행 중인 앱에 동일 빌드의 버전·커밋·dirty·소스 digest를 표시한다.",
     "implementationRequired": true,
     "verificationRequired": true
   }

@@ -1,0 +1,50 @@
+name: WWW CI
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.3
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+      - run: npm ci
+      - run: npm install --global @openai/codex@0.167.2
+      - name: 공개 BoxBox headless 설치
+        run: |
+          export XDG_DATA_HOME="$RUNNER_TEMP/boxbox-engine"
+          npm exec --yes --package=boxbox-plugin@0.2.8 -- boxbox --engine-only
+          echo "BOXBOX_CI_ROOT=$XDG_DATA_HOME/boxbox/codex/0.2.8" >> "$GITHUB_ENV"
+      - run: npm run setup:ci
+      - run: npm run release:verify
+      - if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        name: 검증과 패키징
+        id: package
+        run: |
+          npm run release:check
+          npm run release:package
+      - if: steps.package.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: www-${{ github.sha }}-darwin-arm64
+          path: ${{ steps.package.outputs.path }}/*
+          retention-days: 14
+          include-hidden-files: true
+          if-no-files-found: error

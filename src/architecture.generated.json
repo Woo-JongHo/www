@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "6979fd711a780a3eff5bb77d4910584c3bfaefc1dd34b3b55a51051c62d8ba86",
+  "digest"       : "caa379b7e1fc026476c58f064a36c7841c9cac99eba17a28cd8f1862bb3b7be1",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -48,8 +48,8 @@
       "layer"      : "tooling",
       "role"       : "앱 모듈 · build",
       "line"       : 1,
-      "lines"      : 36,
-      "digest"     : "f7eadfddea8584f17223c2c39b9dd0f01a26116f737e1ff0ed9d42a2eca3c90d",
+      "lines"      : 41,
+      "digest"     : "2bc232219f02e3dc7eebed9044fa0ddbd89ba13d7170e8613e4ee289331f34d5",
       "structureId": "arch.tooling.bundle"
     },
     {
@@ -405,6 +405,17 @@
       "structureId": "arch.blueprint.layout"
     },
     {
+      "id"         : "src/build-info.ts",
+      "file"       : "src/build-info.ts",
+      "title"      : "build-info",
+      "layer"      : "host",
+      "role"       : "앱 모듈 · build-info",
+      "line"       : 1,
+      "lines"      : 15,
+      "digest"     : "fcee1f41180acb0990e73e73fd6b3078500d807f3ad207891c8a8c0985f200eb",
+      "structureId": "arch.native.build-info"
+    },
+    {
       "id"         : "src/chat-message.tsx",
       "file"       : "src/chat-message.tsx",
       "title"      : "chat-message",
@@ -521,8 +532,8 @@
       "layer"      : "host",
       "role"       : "앱·Native 수명주기와 IPC 처리",
       "line"       : 1,
-      "lines"      : 784,
-      "digest"     : "70138f72d431bcb6a1d8bf4cc06f4f026cee35b59d2944e772f126d9471cf855",
+      "lines"      : 787,
+      "digest"     : "57b037341ece638351bbc7f04ace0152a0d29ac53749bf0cb64352a3b09d2d0a",
       "structureId": "arch.native.lifecycle"
     },
     {
@@ -642,8 +653,8 @@
       "layer"      : "presentation",
       "role"       : "화면 전환과 대화 상태 통합",
       "line"       : 1,
-      "lines"      : 995,
-      "digest"     : "1913d463c0547902eb694bcf4df61088684f9b61c8c9bed7f1e3f9ee59e2af1a",
+      "lines"      : 998,
+      "digest"     : "8abea960fa421f9a6c328f9b3756b7e33a8288b2b128e215c83e65cbc1baad0f",
       "structureId": "arch.chat.workspace"
     },
     {
@@ -715,7 +726,7 @@
   ],
   "edges": [
     {
-      "id"       : "build.ts:173",
+      "id"       : "build.ts:188",
       "from"     : "build.ts",
       "to"       : "scripts/generate-architecture.ts",
       "mode"     : "runtime",
@@ -1892,179 +1903,190 @@
       "statement": "import { createArchitectureTree, layoutResponsibilityGraph, responsibilityHierarchyPath, responsibilityEdgePath, responsibilityEdgePoints, responsibilityLines, responsibilityFit } from \"./architecture-tree\";"
     },
     {
-      "id"       : "src/main.ts:405",
+      "id"       : "src/main.ts:84",
+      "from"     : "src/main.ts",
+      "to"       : "src/build-info.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./build-info",
+      "line"     : 5,
+      "endLine"  : 5,
+      "statement": "import { appBuildInfo } from \"./build-info\";"
+    },
+    {
+      "id"       : "src/main.ts:450",
       "from"     : "src/main.ts",
       "to"       : "src/rpc.ts",
       "mode"     : "mixed",
       "syntax"   : "import",
       "specifier": "./rpc",
-      "line"     : 10,
-      "endLine"  : 10,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { JsonRpcClient, type RpcMessage } from \"./rpc\";"
     },
     {
-      "id"       : "src/main.ts:461",
+      "id"       : "src/main.ts:506",
       "from"     : "src/main.ts",
       "to"       : "src/conversations.ts",
       "mode"     : "mixed",
       "syntax"   : "import",
       "specifier": "./conversations",
-      "line"     : 11,
-      "endLine"  : 11,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { createConversationService, type ConversationEvent } from \"./conversations\";"
     },
     {
-      "id"       : "src/main.ts:546",
+      "id"       : "src/main.ts:591",
       "from"     : "src/main.ts",
       "to"       : "src/development.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./development",
-      "line"     : 12,
-      "endLine"  : 12,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import { createDevelopmentService } from \"./development\";"
     },
     {
-      "id"       : "src/main.ts:604",
+      "id"       : "src/main.ts:649",
       "from"     : "src/main.ts",
       "to"       : "src/reports-service.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./reports-service",
-      "line"     : 13,
-      "endLine"  : 13,
+      "line"     : 14,
+      "endLine"  : 14,
       "statement": "import { createReportService } from \"./reports-service\";"
     },
     {
-      "id"       : "src/main.ts:661",
+      "id"       : "src/main.ts:706",
       "from"     : "src/main.ts",
       "to"       : "scripts/workflow/report-names.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "../scripts/workflow/report-names.ts",
-      "line"     : 14,
-      "endLine"  : 14,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import { reportFileStem } from \"../scripts/workflow/report-names.ts\";"
     },
     {
-      "id"       : "src/main.ts:731",
+      "id"       : "src/main.ts:776",
       "from"     : "src/main.ts",
       "to"       : "src/native-reports.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-reports",
-      "line"     : 15,
-      "endLine"  : 15,
+      "line"     : 16,
+      "endLine"  : 16,
       "statement": "import { createNativeReportHarness } from \"./native-reports\";"
     },
     {
-      "id"       : "src/main.ts:793",
+      "id"       : "src/main.ts:838",
       "from"     : "src/main.ts",
       "to"       : "src/report-judge.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./report-judge",
-      "line"     : 16,
-      "endLine"  : 16,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import { judgeNativeReport } from \"./report-judge\";"
     },
     {
-      "id"       : "src/main.ts:845",
+      "id"       : "src/main.ts:890",
       "from"     : "src/main.ts",
       "to"       : "src/native-report-input.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-report-input",
-      "line"     : 17,
-      "endLine"  : 17,
+      "line"     : 18,
+      "endLine"  : 18,
       "statement": "import { NativeCompletionCollector } from \"./native-report-input\";"
     },
     {
-      "id"       : "src/main.ts:912",
+      "id"       : "src/main.ts:957",
       "from"     : "src/main.ts",
       "to"       : "src/native-command.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-command",
-      "line"     : 18,
-      "endLine"  : 18,
+      "line"     : 19,
+      "endLine"  : 19,
       "statement": "import { resolveNativeCodex } from \"./native-command\";"
     },
     {
-      "id"       : "src/main.ts:967",
+      "id"       : "src/main.ts:1012",
       "from"     : "src/main.ts",
       "to"       : "src/native-chat.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-chat",
-      "line"     : 19,
-      "endLine"  : 19,
+      "line"     : 20,
+      "endLine"  : 20,
       "statement": "import { nativeThreadStartParams } from \"./native-chat\";"
     },
     {
-      "id"       : "src/main.ts:1024",
+      "id"       : "src/main.ts:1069",
       "from"     : "src/main.ts",
       "to"       : "src/native-lifecycle.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-lifecycle",
-      "line"     : 20,
-      "endLine"  : 20,
+      "line"     : 21,
+      "endLine"  : 21,
       "statement": "import { createNativeLifecycle } from \"./native-lifecycle\";"
     },
     {
-      "id"       : "src/main.ts:1084",
+      "id"       : "src/main.ts:1129",
       "from"     : "src/main.ts",
       "to"       : "src/activity-sidebar.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./activity-sidebar",
-      "line"     : 21,
-      "endLine"  : 21,
+      "line"     : 22,
+      "endLine"  : 22,
       "statement": "import { parseHooksListResponse, parseSkillsListResponse } from \"./activity-sidebar\";"
     },
     {
-      "id"       : "src/main.ts:1170",
+      "id"       : "src/main.ts:1215",
       "from"     : "src/main.ts",
       "to"       : "src/activity-ledger.ts",
       "mode"     : "mixed",
       "syntax"   : "import",
       "specifier": "./activity-ledger",
-      "line"     : 22,
-      "endLine"  : 22,
+      "line"     : 23,
+      "endLine"  : 23,
       "statement": "import { createActivityLedger, type ActivityLedger } from \"./activity-ledger\";"
     },
     {
-      "id"       : "src/main.ts:1249",
+      "id"       : "src/main.ts:1294",
       "from"     : "src/main.ts",
       "to"       : "src/projects.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./projects",
-      "line"     : 23,
-      "endLine"  : 23,
+      "line"     : 24,
+      "endLine"  : 24,
       "statement": "import { createProjectRegistry } from \"./projects\";"
     },
     {
-      "id"       : "src/main.ts:1301",
+      "id"       : "src/main.ts:1346",
       "from"     : "src/main.ts",
       "to"       : "src/native-activity.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-activity",
-      "line"     : 24,
-      "endLine"  : 24,
+      "line"     : 25,
+      "endLine"  : 25,
       "statement": "import { normalizeNativeResources } from \"./native-activity\";"
     },
     {
-      "id"       : "src/main.ts:1363",
+      "id"       : "src/main.ts:1408",
       "from"     : "src/main.ts",
       "to"       : "src/shared.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./shared",
-      "line"     : 25,
-      "endLine"  : 25,
+      "line"     : 26,
+      "endLine"  : 26,
       "statement": "import type { AppEvent, ScopedAppEvent, SelectionRef, WorkspaceSelection, ResourceScope, ResourceSnapshot, RpcId } from \"./shared\";"
     },
     {
@@ -2301,133 +2323,144 @@
     {
       "id"       : "src/renderer.tsx:80",
       "from"     : "src/renderer.tsx",
+      "to"       : "src/build-info.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./build-info",
+      "line"     : 5,
+      "endLine"  : 5,
+      "statement": "import { appBuildInfo } from \"./build-info\";"
+    },
+    {
+      "id"       : "src/renderer.tsx:125",
+      "from"     : "src/renderer.tsx",
       "to"       : "src/native-activity.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-activity",
-      "line"     : 5,
-      "endLine"  : 5,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import { projectNativeActivity } from \"./native-activity\";"
     },
     {
-      "id"       : "src/renderer.tsx:139",
+      "id"       : "src/renderer.tsx:184",
       "from"     : "src/renderer.tsx",
       "to"       : "src/command-card.tsx",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./command-card",
-      "line"     : 6,
-      "endLine"  : 6,
+      "line"     : 7,
+      "endLine"  : 7,
       "statement": "import { CommandView } from \"./command-card\";"
     },
     {
-      "id"       : "src/renderer.tsx:185",
+      "id"       : "src/renderer.tsx:230",
       "from"     : "src/renderer.tsx",
       "to"       : "src/native-activity-view.tsx",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-activity-view",
-      "line"     : 7,
-      "endLine"  : 7,
+      "line"     : 8,
+      "endLine"  : 8,
       "statement": "import { NativeActivityView, ResourceActivitySidebar } from \"./native-activity-view\";"
     },
     {
-      "id"       : "src/renderer.tsx:271",
+      "id"       : "src/renderer.tsx:316",
       "from"     : "src/renderer.tsx",
       "to"       : "src/chat-message.tsx",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./chat-message",
-      "line"     : 8,
-      "endLine"  : 8,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import { ChatMessage } from \"./chat-message\";"
     },
     {
-      "id"       : "src/renderer.tsx:317",
+      "id"       : "src/renderer.tsx:362",
       "from"     : "src/renderer.tsx",
       "to"       : "src/chat-row-state.tsx",
       "mode"     : "mixed",
       "syntax"   : "import",
       "specifier": "./chat-row-state",
-      "line"     : 9,
-      "endLine"  : 9,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import { ChatDetails, ChatRowMemoryContext, type ChatRowMemory } from \"./chat-row-state\";"
     },
     {
-      "id"       : "src/renderer.tsx:407",
+      "id"       : "src/renderer.tsx:452",
       "from"     : "src/renderer.tsx",
       "to"       : "src/chat-state.ts",
       "mode"     : "mixed",
       "syntax"   : "import",
       "specifier": "./chat-state",
-      "line"     : 10,
-      "endLine"  : 10,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { reduceConversationEvents, type ConversationEventState, blankReadingState, belongsToConversation, composerFull, conversationKey, currentTurnEvents, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, pasteOverflow, type ConversationReadingState } from \"./chat-state\";"
     },
     {
-      "id"       : "src/renderer.tsx:680",
+      "id"       : "src/renderer.tsx:725",
       "from"     : "src/renderer.tsx",
       "to"       : "src/activity-sidebar.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./activity-sidebar",
-      "line"     : 11,
-      "endLine"  : 11,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { createActivitySidebarState, projectActivitySidebar, updateActivitySidebarSnapshot } from \"./activity-sidebar\";"
     },
     {
-      "id"       : "src/renderer.tsx:800",
+      "id"       : "src/renderer.tsx:845",
       "from"     : "src/renderer.tsx",
       "to"       : "src/reports-view.tsx",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./reports-view",
-      "line"     : 12,
-      "endLine"  : 12,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import { ReportsView } from \"./reports-view\";"
     },
     {
-      "id"       : "src/renderer.tsx:846",
+      "id"       : "src/renderer.tsx:891",
       "from"     : "src/renderer.tsx",
       "to"       : "src/ecosystem-view.tsx",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./ecosystem-view",
-      "line"     : 13,
-      "endLine"  : 13,
+      "line"     : 14,
+      "endLine"  : 14,
       "statement": "import { EcosystemView } from \"./ecosystem-view\";"
     },
     {
-      "id"       : "src/renderer.tsx:896",
+      "id"       : "src/renderer.tsx:941",
       "from"     : "src/renderer.tsx",
       "to"       : "src/input.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./input",
-      "line"     : 14,
-      "endLine"  : 14,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import { handlePromptKeyDown, normalizeCompositionEnd } from \"./input\";"
     },
     {
-      "id"       : "src/renderer.tsx:1090",
+      "id"       : "src/renderer.tsx:1135",
       "from"     : "src/renderer.tsx",
       "to"       : "src/projection.ts",
       "mode"     : "mixed",
       "syntax"   : "import",
       "specifier": "./projection",
-      "line"     : 17,
-      "endLine"  : 17,
+      "line"     : 18,
+      "endLine"  : 18,
       "statement": "import { executionResultCounts, MAX_OUTPUT_CODE_UNITS, project, type Block, type Projection } from \"./projection\";"
     },
     {
-      "id"       : "src/renderer.tsx:1205",
+      "id"       : "src/renderer.tsx:1250",
       "from"     : "src/renderer.tsx",
       "to"       : "src/shared.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./shared",
-      "line"     : 18,
-      "endLine"  : 18,
+      "line"     : 19,
+      "endLine"  : 19,
       "statement": "import type { AppEvent, ConversationSummary, TurnState, WorkspaceSelection, SelectionRef, ScopedAppEvent, ResourceSnapshot, ResourceScope, ProjectInfo, ConversationSelection, WwwApi } from \"./shared\";"
     },
     {
@@ -2520,6 +2553,12 @@
       "line"     : 6,
       "specifier": "node:path",
       "reason"   : "external"
+    },
+    {
+      "file"     : "build.ts",
+      "line"     : 8,
+      "specifier": "./scripts/release.ts",
+      "reason"   : "outside-scope"
     },
     {
       "file"     : "scripts/architecture-contract.ts",
@@ -3165,31 +3204,31 @@
     },
     {
       "file"     : "src/main.ts",
-      "line"     : 5,
+      "line"     : 6,
       "specifier": "electron",
       "reason"   : "external"
     },
     {
       "file"     : "src/main.ts",
-      "line"     : 6,
+      "line"     : 7,
       "specifier": "node:child_process",
       "reason"   : "external"
     },
     {
       "file"     : "src/main.ts",
-      "line"     : 7,
+      "line"     : 8,
       "specifier": "node:crypto",
       "reason"   : "external"
     },
     {
       "file"     : "src/main.ts",
-      "line"     : 8,
+      "line"     : 9,
       "specifier": "node:fs",
       "reason"   : "external"
     },
     {
       "file"     : "src/main.ts",
-      "line"     : 9,
+      "line"     : 10,
       "specifier": "node:path",
       "reason"   : "external"
     },
@@ -3255,13 +3294,13 @@
     },
     {
       "file"     : "src/renderer.tsx",
-      "line"     : 15,
+      "line"     : 16,
       "specifier": "react",
       "reason"   : "external"
     },
     {
       "file"     : "src/renderer.tsx",
-      "line"     : 16,
+      "line"     : 17,
       "specifier": "react-dom/client",
       "reason"   : "external"
     },
@@ -3440,7 +3479,7 @@
         "id"         : "arch.tooling.bundle",
         "parent"     : "arch.tooling",
         "title"      : "앱 번들 생성",
-        "description": "main·preload·renderer를 번들하고 HTML·CSS·검토 정책을 실행 디렉터리에 복사한다. 번들 전에 구조 snapshot을 생성한다.",
+        "description": "main·preload·renderer 번들과 구조 snapshot 생성, Git 버전·릴리즈 검증·격리 패키징, 공개 headless 엔진의 CI 설정 연결을 소유한다.",
         "allowedDependencies": [
           "arch.tooling.map-generation"
         ]
@@ -3483,16 +3522,16 @@
         "title"      : "typed 저작 하네스",
         "description": "공식 저작 진입점에서 쓰기 계획을 확인하고 실행 전후 소스·타입·BoxBox·구조 검사와 변경 지문을 연결한다.",
         "allowedDependencies": [
+          "arch.development.artifacts",
           "arch.tooling.map-validation",
           "arch.development.authorization",
           "arch.development.execution",
           "arch.development.providers.gjc",
           "arch.development.reporting.lifecycle",
+          "arch.development.reporting.storage",
           "arch.development.routing",
           "arch.tooling.source-policy",
-          "arch.development.records.state",
-          "arch.development.reporting.storage",
-          "arch.development.artifacts"
+          "arch.development.records.state"
         ]
       },
       {
@@ -3633,6 +3672,7 @@
         "title"      : "개발 단계 실행 통합",
         "description": "선택한 개발 단계와 호스트·검사·검토 실행을 연결하고 결과와 작업 기록을 회수한다.",
         "allowedDependencies": [
+          "arch.development.artifacts",
           "arch.development.authorization",
           "arch.development.evidence.verification",
           "arch.development.providers.codex",
@@ -3642,8 +3682,7 @@
           "arch.development.records.state",
           "arch.development.review",
           "arch.development.routing",
-          "arch.tooling.source-policy",
-          "arch.development.artifacts"
+          "arch.tooling.source-policy"
         ]
       },
       {
@@ -3652,8 +3691,8 @@
         "title"      : "작업 레코드 스키마 검사",
         "description": "작업 레코드의 버전·필드·수용 기준·요구 참조·증거 연결 형식을 검사한다.",
         "allowedDependencies": [
-          "arch.development.records.protocol",
-          "arch.development.artifacts"
+          "arch.development.artifacts",
+          "arch.development.records.protocol"
         ]
       },
       {
@@ -3662,10 +3701,10 @@
         "title"      : "작업 레코드 타입 계약",
         "description": "작업·권한·수용 기준·검증·검토·현재 및 과거 작업 레코드의 공용 TypeScript 타입을 정의한다.",
         "allowedDependencies": [
+          "arch.development.artifacts",
           "arch.development.evidence.documentation",
           "arch.development.evidence.repository",
-          "arch.development.evidence.verification",
-          "arch.development.artifacts"
+          "arch.development.evidence.verification"
         ]
       },
       {
@@ -3674,6 +3713,7 @@
         "title"      : "작업 상태와 수용 판정",
         "description": "작업을 접수·조회하고 다음 단계·검증·문서 검토·독립 검토를 연결해 재개와 완료 가능 여부를 판정한다.",
         "allowedDependencies": [
+          "arch.development.artifacts",
           "arch.development.authorization",
           "arch.development.evidence.documentation",
           "arch.development.evidence.repository",
@@ -3683,8 +3723,7 @@
           "arch.development.records.validation",
           "arch.development.review",
           "arch.development.routing",
-          "arch.development.records.serialization",
-          "arch.development.artifacts"
+          "arch.development.records.serialization"
         ]
       },
       {
@@ -3802,6 +3841,7 @@
           "arch.chat.sessions.requests",
           "arch.chat.sessions.restore",
           "arch.development.service",
+          "arch.development.reporting.storage",
           "arch.native.launch",
           "arch.native.projects",
           "arch.native.protocol",
@@ -3811,7 +3851,7 @@
           "arch.reports.judgement",
           "arch.reports.queue",
           "arch.reports.service",
-          "arch.development.reporting.storage"
+          "arch.native.build-info"
         ]
       },
       {
@@ -3912,7 +3952,8 @@
           "arch.chat.messages.reading",
           "arch.chat.sessions.reading",
           "arch.native.protocol",
-          "arch.reports.view"
+          "arch.reports.view",
+          "arch.native.build-info"
         ]
       },
       {
@@ -3977,6 +4018,13 @@
           "arch.development.records.protocol",
           "arch.development.reporting.storage"
         ]
+      },
+      {
+        "id"         : "arch.native.build-info",
+        "parent"     : "arch.native",
+        "title"      : "실행 빌드 식별",
+        "description": "빌드 시 주입한 커밋 버전·dirty·소스 digest를 main과 renderer가 공유한다.",
+        "allowedDependencies": []
       }
     ],
     "requirements": [
@@ -4019,7 +4067,7 @@
       {
         "id"                    : "RESP-TOOLING-BUNDLE",
         "nodeId"                : "arch.tooling.bundle",
-        "description"           : "앱 번들 생성 책임을 구현하고 관련 동작을 검증한다.",
+        "description"           : "앱 번들 생성과 Git 버전·릴리즈 preflight·산출물 체크섬, 공개 엔진 CI 연결 책임을 구현하고 실제 동작을 검증한다.",
         "implementationRequired": true,
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
@@ -4483,6 +4531,15 @@
         "verificationRequired"  : true,
         "file"                  : "docs/specs/architecture.md",
         "line"                  : 393
+      },
+      {
+        "id"                    : "RESP-NATIVE-BUILD-INFO",
+        "nodeId"                : "arch.native.build-info",
+        "description"           : "실행 중인 앱에 동일 빌드의 버전·커밋·dirty·소스 digest를 표시한다.",
+        "implementationRequired": true,
+        "verificationRequired"  : true,
+        "file"                  : "docs/specs/architecture.md",
+        "line"                  : 400
       }
     ],
     "declarations": [
@@ -4747,6 +4804,14 @@
         "nodeId": "arch.blueprint.layout",
         "requirementIds": [
           "RESP-BLUEPRINT-LAYOUT"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/build-info.ts",
+        "nodeId": "arch.native.build-info",
+        "requirementIds": [
+          "RESP-NATIVE-BUILD-INFO"
         ],
         "line": 2
       },
@@ -5120,6 +5185,14 @@
         "line": 2
       },
       {
+        "file": "test/release.test.ts",
+        "requirementIds": [
+          "RESP-NATIVE-BUILD-INFO",
+          "RESP-TOOLING-BUNDLE"
+        ],
+        "line": 2
+      },
+      {
         "file": "test/report-judge.test.ts",
         "requirementIds": [
           "RESP-REPORTS-JUDGEMENT"
@@ -5293,6 +5366,6 @@
         "line": 2
       }
     ],
-    "digest": "e6227c22b6d7c74acc8ac11f24548ef2d3ac5b34c7816f38e111f5f697fd14fc"
+    "digest": "ee19c3d2aef7b4947c81ccbdcb998c4914702b1e6cd7c54f1fc07a8e6f5c5f1d"
   }
 }

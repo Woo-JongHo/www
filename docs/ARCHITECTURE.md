@@ -181,3 +181,9 @@ renderer는 thread/cwd별 초안·읽기 위치·따라가기와 logical row 상
 `src/www-activity.ts`는 WWW 정본 역할·스킬 목록과 선택 저장소 범위의 경로 식별, 확장 없는 리터럴 cat 참조 식별을 소유한다. native-activity는 근거를 `wwwArtifact`와 source로 보존하고 renderer가 workspacePath를 전달한다. 뷰는 전용 흐름과 범용 Native 진단을 분리하며 실제 적용을 추론하지 않는다.
 
 새 작업 revision·신규 보고서의 최초 JSON 출력 책임은 `arch.development.records.serialization`의 `scripts/workflow/work-json.ts`에 둔다. type-only 도메인 참조로 runtime 순환을 피하고 파일·기존 JSON text를 받는 formatter API는 제공하지 않는다. Node 파일시스템 정책 로드는 `preflight.ts`가 고정 `docs/architecture/work-output.json`에서 수행하며 실제 저장·잠금·외부 변경 검사·atomic publication은 기존 work/report/Native writer가 소유한다. 사건 저장 모듈 `record.ts`와 `.www` 메타데이터의 책임은 유지한다.
+
+## 실행 버전과 릴리즈 경계
+
+`scripts/release.ts`가 기준 커밋부터 first-parent 버전·저장소 소스 digest를 계산한다. `build.ts`는 공식 구조 생성 후 동일한 식별 객체를 main·renderer와 dist metadata에 주입한다. `src/build-info.ts`는 주입 상수를 공유하고 Electron 제목과 renderer의 버전 표시가 이를 사용한다. 실행 중 작업 폴더의 Git 상태를 실행 바이너리의 버전으로 오인하지 않는다.
+
+릴리즈 CLI는 깨끗한 소스의 검증 전후 식별과 번들 metadata를 대조하고, 번들만 격리해 Electron arm64 앱·zip·manifest·SHA256SUMS를 만든다. GitHub Actions는 main artifact 전달과 태그 Release 게시를 나눈다. BoxBox는 CI/개발 생성 경계에만 있으며 배포 runtime에는 넣지 않는다. 설치 전제·서명과 공증의 한계는 [릴리즈 안내](RELEASING.md)에 있다.

@@ -2,6 +2,7 @@
  * @architecture arch.native.lifecycle
  * @implements RESP-NATIVE-LIFECYCLE
  */
+import { appBuildInfo } from "./build-info";
 import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
 import { spawn, execFileSync, type ChildProcess } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
@@ -229,7 +230,7 @@ function connect(): Promise<JsonRpcClient> {
       if (method === "serverRequest/resolved") lifecycle.resolved(client, message.params);
       if (method === "skills/changed") void loadSkills(client, true);
     });
-    void client.request("initialize", { clientInfo: { name: "www", title: "WWW", version: app.getVersion() }, capabilities: { experimentalApi: false } })
+    void client.request("initialize", { clientInfo: { name: "www", title: "WWW", version: appBuildInfo.version }, capabilities: { experimentalApi: false } })
       .then(() => {
         if (!valid()) { child.kill(); throw new Error("이전 프로젝트 연결 취소"); }
         client.notify("initialized", {});
@@ -742,6 +743,8 @@ function createWindow(): void {
   window.webContents.on("will-navigate", (event) => event.preventDefault());
   window.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
   void window.loadFile(join(DIST, "index.html"));
+  window.setTitle(`WWW ${appBuildInfo.label}`);
+  window.on("page-title-updated", (event) => event.preventDefault());
 }
 
 if (ownsInstance) void app.whenReady().then(async () => {

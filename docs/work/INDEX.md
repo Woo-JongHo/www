@@ -229,3 +229,10 @@ Native와의 대화에서 실행 흐름을 통제하고 진행·근거·승인·
 
 - [명세](Reports/002-%EB%8F%85%EC%9E%90%EC%9D%98%20%ED%8C%90%EB%8B%A8%EC%9D%84%20%EB%8F%95%EB%8A%94%20%EB%B3%B4%EA%B3%A0%EC%84%9C%20%EC%96%91%EC%8B%9D/spec.md)
 - [작업 레코드](Reports/002-%EB%8F%85%EC%9E%90%EC%9D%98%20%ED%8C%90%EB%8B%A8%EC%9D%84%20%EB%8F%95%EB%8A%94%20%EB%B3%B4%EA%B3%A0%EC%84%9C%20%EC%96%91%EC%8B%9D/work.json)
+
+## Release
+
+### 001 — 커밋 버전과 릴리즈 및 CI CD 구축
+
+- [명세](Release/001-%EC%BB%A4%EB%B0%8B%20%EB%B2%84%EC%A0%84%EA%B3%BC%20%EB%A6%B4%EB%A6%AC%EC%A6%88%20%EB%B0%8F%20CI%20CD%20%EA%B5%AC%EC%B6%95/spec.md)
+- [작업 레코드](Release/001-%EC%BB%A4%EB%B0%8B%20%EB%B2%84%EC%A0%84%EA%B3%BC%20%EB%A6%B4%EB%A6%AC%EC%A6%88%20%EB%B0%8F%20CI%20CD%20%EA%B5%AC%EC%B6%95/work.json)

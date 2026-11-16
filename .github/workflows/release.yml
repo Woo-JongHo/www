@@ -1,0 +1,64 @@
+name: WWW Release
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v0.1.*']
+permissions:
+  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  package:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.3
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+      - run: npm ci
+      - run: npm install --global @openai/codex@0.167.2
+      - name: 공개 BoxBox headless 설치
+        run: |
+          export XDG_DATA_HOME="$RUNNER_TEMP/boxbox-engine"
+          npm exec --yes --package=boxbox-plugin@0.2.8 -- boxbox --engine-only
+          echo "BOXBOX_CI_ROOT=$XDG_DATA_HOME/boxbox/codex/0.2.8" >> "$GITHUB_ENV"
+      - run: npm run setup:ci
+      - run: npm run release:check
+      - name: 검증과 패키징
+        id: package
+        run: |
+          npm run release:package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-package
+          path: ${{ steps.package.outputs.path }}/*
+          retention-days: 14
+          include-hidden-files: true
+          if-no-files-found: error
+  publish:
+    if: startsWith(github.ref, 'refs/tags/v0.1.')
+    needs: package
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-package
+          path: release-assets
+      - name: GitHub Release 게시
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: gh release create "$RELEASE_TAG" release-assets/* --verify-tag --generate-notes --title "WWW $RELEASE_TAG"

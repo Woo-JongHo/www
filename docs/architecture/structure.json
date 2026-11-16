@@ -131,7 +131,7 @@
       "id"         : "arch.tooling.bundle",
       "parent"     : "arch.tooling",
       "title"      : "앱 번들 생성",
-      "description": "main·preload·renderer를 번들하고 HTML·CSS·검토 정책을 실행 디렉터리에 복사한다. 번들 전에 구조 snapshot을 생성한다.",
+      "description": "main·preload·renderer 번들과 구조 snapshot 생성, Git 버전·릴리즈 검증·격리 패키징, 공개 headless 엔진의 CI 설정 연결을 소유한다.",
       "allowedDependencies": [
         "arch.tooling.map-generation"
       ]
@@ -174,16 +174,16 @@
       "title"      : "typed 저작 하네스",
       "description": "공식 저작 진입점에서 쓰기 계획을 확인하고 실행 전후 소스·타입·BoxBox·구조 검사와 변경 지문을 연결한다.",
       "allowedDependencies": [
+        "arch.development.artifacts",
         "arch.tooling.map-validation",
         "arch.development.authorization",
         "arch.development.execution",
         "arch.development.providers.gjc",
         "arch.development.reporting.lifecycle",
+        "arch.development.reporting.storage",
         "arch.development.routing",
         "arch.tooling.source-policy",
-        "arch.development.records.state",
-        "arch.development.reporting.storage",
-        "arch.development.artifacts"
+        "arch.development.records.state"
       ]
     },
     {
@@ -324,6 +324,7 @@
       "title"      : "개발 단계 실행 통합",
       "description": "선택한 개발 단계와 호스트·검사·검토 실행을 연결하고 결과와 작업 기록을 회수한다.",
       "allowedDependencies": [
+        "arch.development.artifacts",
         "arch.development.authorization",
         "arch.development.evidence.verification",
         "arch.development.providers.codex",
@@ -333,8 +334,7 @@
         "arch.development.records.state",
         "arch.development.review",
         "arch.development.routing",
-        "arch.tooling.source-policy",
-        "arch.development.artifacts"
+        "arch.tooling.source-policy"
       ]
     },
     {
@@ -343,8 +343,8 @@
       "title"      : "작업 레코드 스키마 검사",
       "description": "작업 레코드의 버전·필드·수용 기준·요구 참조·증거 연결 형식을 검사한다.",
       "allowedDependencies": [
-        "arch.development.records.protocol",
-        "arch.development.artifacts"
+        "arch.development.artifacts",
+        "arch.development.records.protocol"
       ]
     },
     {
@@ -353,10 +353,10 @@
       "title"      : "작업 레코드 타입 계약",
       "description": "작업·권한·수용 기준·검증·검토·현재 및 과거 작업 레코드의 공용 TypeScript 타입을 정의한다.",
       "allowedDependencies": [
+        "arch.development.artifacts",
         "arch.development.evidence.documentation",
         "arch.development.evidence.repository",
-        "arch.development.evidence.verification",
-        "arch.development.artifacts"
+        "arch.development.evidence.verification"
       ]
     },
     {
@@ -365,6 +365,7 @@
       "title"      : "작업 상태와 수용 판정",
       "description": "작업을 접수·조회하고 다음 단계·검증·문서 검토·독립 검토를 연결해 재개와 완료 가능 여부를 판정한다.",
       "allowedDependencies": [
+        "arch.development.artifacts",
         "arch.development.authorization",
         "arch.development.evidence.documentation",
         "arch.development.evidence.repository",
@@ -374,8 +375,7 @@
         "arch.development.records.validation",
         "arch.development.review",
         "arch.development.routing",
-        "arch.development.records.serialization",
-        "arch.development.artifacts"
+        "arch.development.records.serialization"
       ]
     },
     {
@@ -493,6 +493,7 @@
         "arch.chat.sessions.requests",
         "arch.chat.sessions.restore",
         "arch.development.service",
+        "arch.development.reporting.storage",
         "arch.native.launch",
         "arch.native.projects",
         "arch.native.protocol",
@@ -502,7 +503,7 @@
         "arch.reports.judgement",
         "arch.reports.queue",
         "arch.reports.service",
-        "arch.development.reporting.storage"
+        "arch.native.build-info"
       ]
     },
     {
@@ -603,7 +604,8 @@
         "arch.chat.messages.reading",
         "arch.chat.sessions.reading",
         "arch.native.protocol",
-        "arch.reports.view"
+        "arch.reports.view",
+        "arch.native.build-info"
       ]
     },
     {
@@ -668,6 +670,13 @@
         "arch.development.records.protocol",
         "arch.development.reporting.storage"
       ]
+    },
+    {
+      "id"         : "arch.native.build-info",
+      "parent"     : "arch.native",
+      "title"      : "실행 빌드 식별",
+      "description": "빌드 시 주입한 커밋 버전·dirty·소스 digest를 main과 renderer가 공유한다.",
+      "allowedDependencies": []
     }
   ]
 }
