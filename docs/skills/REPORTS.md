@@ -9,7 +9,15 @@ WWW 개발 역할은 작업을 마치고 사용자에게 반환하기 전에 저
 3. 문서 영향 검토와 독립 검토의 실행 결과가 기록된 뒤 `node scripts/workflow.ts '<JSON>'`의 `action: "report"`, `workId`, `narrative`로 저장한다. 서술 배열에 항목이 없으면 빈 배열로 전달하고 자료를 발명하지 않는다. 보고서 출력 디렉터리는 검증 inputs에 포함하지 않는다.
 4. 반환한 report ID를 앱 목록·읽기 또는 같은 작업 폴더 reports의 HTML에서 확인한다. 완료 조건을 충족하면 기존 report-complete action을 호출한다. 감사 대기나 실패라면 업무 상태를 그대로 보존하고 보고서에서 다음 행동을 설명한다.
 
-보고서는 `docs/work/<영역>/<번호-작업명>/reports/report-UUID.json`과 같은 이름의 `.html`이다. JSON이 저작과 근거 사본의 정본이며 HTML은 안전한 파생 보기다. 예전 보고서는 덮어쓰지 않는다. 같은 사건·같은 내용의 재실행은 중복을 억제한다. 앱에서 내보낸 HTML은 독립적인 오프라인 사본이다.
+같은 작업 UUID와 NFC 제목의 보고서는 `docs/work/<영역>/<번호-작업명>/reports/` 아래 JSON 1개·HTML 1개로 관리한다. 공통 `reportFileStem`이 `report-<안전한 제목>-<제목 SHA256 앞 16hex>`를 정하고 저장과 앱 내보내기가 같은 이름을 사용한다. 제목은 NFC로 정규화하고 제한 문자를 치환하며 NFD UTF8 파일명 길이도 제한한다. 다른 작업 UUID의 보고서는 제목이 같아도 합치지 않는다.
+
+schema2 묶음 JSON의 entries에 schema1 WorkReport 전체를 누적한다. 각 entry의 UUID·서술·검증·semanticHash는 보존하고 같은 사건·내용의 재실행은 중복을 억제한다. 모든 과거 UUID로 해당 기록을 읽는다. 앱 목록은 같은 작업·제목을 한 항목으로 모으고 최신 저작 기록을 우선, 저작이 없으면 최신 자동 기록을 고른다. 독립 HTML은 선택한 기록과 같은 제목의 나머지 기록을 함께 보여 주며 당시 판단을 현재 검증으로 승격하지 않는다.
+
+생성·점검·병합 요청에는 [www-report 스킬](../../skills/www/www-report/SKILL.md)을 사용한다. 공식 typed 진입점의 `action: "report-maintain"`은 기본 읽기 전용 계획을 반환하고 `apply: true`, `direct: true`에서만 적용한다. UUID 파일명과 시각 포함 제목 파일명도 읽는다. 적용 전 원본 JSON·HTML bytes를 별도 검증된 사본으로 보관하고 전체 사전검사·writer 공유 잠금 뒤 entries의 의미를 보존해 묶는다. 결과의 원본 경로·SHA256과 entry 의미 지문을 보존하고 전체 UUID 집합·객체·조회·재실행을 대조한다. 묶음 직렬화는 과거 파일 bytes 불변과 구분하며 다른 작업 원장은 변경하지 않는다.
+
+신규 누적은 완성한 JSON의 원자 교체를 정본 commit으로 삼고 HTML은 같은 entries에서 파생해 별도 교체한다. JSON commit 뒤 중단돼 HTML이 누락·낡은 경우 정본에서 재생성한다. 같은 ID의 다른 내용·경로 충돌·손상·링크·상한 위반은 기존 정본을 보존하며 거부한다. 전체 저장소와 JSON·HTML 쌍을 단일 원자 commit으로 보장하지 않는다. 개별 entry JSON 1 MiB, 묶음 JSON 16 MiB·최대 2000 entries, 단일 HTML 2 MiB·묶음 HTML 32 MiB 한도를 적용하고 임의 절단으로 우회하지 않는다.
+
+강제 종료 후 남은 보고서 잠금은 `report-lock-status`로 PID·호스트·token과 회수 가능 여부를 확인한다. 등록된 reports 디렉터리 중 같은 호스트의 종료된 소유 PID만 `report-lock-recover`에 관찰한 `directory`, `token`, `direct: true`를 전달해 명시 회수한다. 소유 미확인·다른 호스트·살아 있는 PID는 거부한다. 회수와 이후 이전 재실행은 별도 결과로 기록한다.
 
 ## 자동 기록과 완료
 

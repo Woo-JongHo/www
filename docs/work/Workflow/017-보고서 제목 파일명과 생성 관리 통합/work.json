@@ -1,0 +1,4448 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-2f2c2837-080b-45ac-a702-09bf6cda2d45",
+  "title"        : "보고서 제목 파일명과 생성 관리 통합",
+  "kind"         : "feature",
+  "areas": [
+    "dev",
+    "ui"
+  ],
+  "owner"        : "dev",
+  "status"       : "done",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "같은 작업 UUID와 NFC 제목의 보고서는 안정된 제목 파일명의 JSON 1개·HTML 1개로 생성·누적하며 내보내기도 같은 이름을 사용한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6",
+          "path"     : "verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e",
+          "path"     : "verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75",
+          "path"     : "verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a",
+          "path"     : "verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7",
+          "path"     : "verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739",
+          "path"     : "verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec",
+          "path"     : "verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f",
+          "path"     : "verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-2",
+      "description": "기존 UUID형·시각포함 제목형 보고서를 묶음으로 이전하고 모든 entry의 ID·서술·검증 의미·semanticHash를 보존하며 기존 UUID로 읽는다. 병합 전 원본 bytes는 별도 백업한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6",
+          "path"     : "verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e",
+          "path"     : "verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75",
+          "path"     : "verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a",
+          "path"     : "verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7",
+          "path"     : "verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739",
+          "path"     : "verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec",
+          "path"     : "verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f",
+          "path"     : "verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-3",
+      "description": "관리 하네스는 미리보기·전체 사전검사·명시 적용·재실행·중단 복원·잠금 회수와 동시 누적을 제공하며 충돌·손상·링크·상한 위반에서 기존 정본을 보존한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6",
+          "path"     : "verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e",
+          "path"     : "verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75",
+          "path"     : "verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a",
+          "path"     : "verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7",
+          "path"     : "verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739",
+          "path"     : "verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec",
+          "path"     : "verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f",
+          "path"     : "verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-4",
+      "description": "발견 가능한 보고서 스킬과 정본 계약이 생성·누적·목록·이전·백업·복원·실패 처리를 같은 공식 경로로 안내한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6",
+          "path"     : "verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e",
+          "path"     : "verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75",
+          "path"     : "verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a",
+          "path"     : "verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7",
+          "path"     : "verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739",
+          "path"     : "verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec",
+          "path"     : "verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f",
+          "path"     : "verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-5",
+      "description": "앱 목록은 같은 작업·제목을 한 항목으로 모으고 최신 저작 기록을 우선 표시하며 독립 HTML에서 누적된 모든 기록을 안전하게 읽고 과거 판단과 현재성을 구분한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6",
+          "path"     : "verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e",
+          "path"     : "verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75",
+          "path"     : "verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a",
+          "path"     : "verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7",
+          "path"     : "verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739",
+          "path"     : "verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec",
+          "path"     : "verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f",
+          "path"     : "verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "report-title-maintenance-20261116",
+    "requestHash": "e0260be228719f5137dc48692781a417e38d6ab56961f9fe0f29fae5e48f3dbe",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "scripts",
+        "src/main.ts",
+        "test",
+        "skills/www",
+        "docs",
+        "src/architecture.generated.json",
+        ".agents/skills",
+        "src/reports-service.ts"
+      ],
+      "mutationSurfaces": [
+        "edit",
+        "command"
+      ],
+      "verifierCommands": [
+        "[\"bun\",\"test\",\"test/workflow-reports.test.ts\",\"test/report-maintenance-entry.test.ts\",\"test/native-reports.test.ts\",\"test/report-service.test.ts\",\"test/report-lifecycle.test.ts\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"npm\",\"run\",\"check:source\"]",
+        "[\"npm\",\"run\",\"check:architecture\"]",
+        "[\"npm\",\"run\",\"build\"]",
+        "[\"npm\",\"run\",\"check:workflow\"]",
+        "[\"npm\",\"test\"]",
+        "[\"bun\",\"test\",\"test/work-json.test.ts\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "e0260be228719f5137dc48692781a417e38d6ab56961f9fe0f29fae5e48f3dbe"
+    },
+    "inputs": [
+      "scripts/workflow",
+      "scripts/workflow.ts",
+      "src/main.ts",
+      "src/reports-service.ts",
+      "test/workflow-reports.test.ts",
+      "test/report-maintenance-entry.test.ts",
+      "test/work-json.test.ts",
+      "test/native-reports.test.ts",
+      "test/report-service.test.ts",
+      "test/report-lifecycle.test.ts",
+      "scripts/verify-reports.ts",
+      "skills/www/www-report/SKILL.md",
+      "docs/skills/REPORTS.md",
+      "docs/specs/reports.md",
+      "docs/DEVELOPMENT.md"
+    ],
+    "nextAction": "complete",
+    "verifications": [
+      {
+        "id"         : "attempt-a9bd8b6a-351c-4c26-81d2-7be86a42d9bb",
+        "startedAt"  : "2026-11-15T23:58:20.799Z",
+        "completedAt": "2026-11-15T23:58:31.883Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "595a1aa3a89e2f6f9524281cde494e29c5335a361d08202b493be4d214eb7944",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "docs/skills/REPORTS.md",
+            "docs/specs/reports.md",
+            "scripts/verify-reports.ts",
+            "scripts/workflow.ts",
+            "scripts/workflow/artifacts.ts",
+            "scripts/workflow/report-names.ts",
+            "scripts/workflow/reports.ts",
+            "skills/www/www-report/SKILL.md",
+            "src/main.ts",
+            "test/native-reports.test.ts",
+            "test/report-maintenance-entry.test.ts",
+            "test/work-json.test.ts",
+            "test/workflow-reports.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "f6ad667d4d778614a73ec33202af9b98c7f1f1904576010424660607be685905",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "bfddb2835512a15e37a5fba43eb1cd578fb84850ec70fc202fa5049987e52c26",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "e6c31b3d349498cf74b0cd254952f9d33533aba8927e0e7634af9a3bbc280512",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "329ca60830c5df4ad9a9a633592dc255076d56a8f2517483728b299a374a3772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "74c26346f27987cf1a09b0b1f7eee7366f5ed6646fd343867c99576bc5ddaac6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "79027591a1b070d1f290062439944de8b4755f79a278e886b18b65607f521f97",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "e74f0bcd916bf5568041dc44c5d0baf76279af26b0712750425e41f9c43434ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "8dc482cedcc5fa7af037c8c6dd6a1cfda45df8a2aba23a2ef7e482135de7be4a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "95927e48f800c506eb7096b673ca5b7b3ad95445fbc02f1065504a0f80c02a01",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "ba0294ef63988fdc5cc5e2f365fabef080de201acde0ea34e564589869b7197e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "9e4dd448c664952cc50203d73dad5cdc031788bcf4b4676d0f5f61291567e2e0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "3574079e8188b687e42debb1a49b99cc312b635159a8634050d4141a476c8f67",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "70df2e168b107bf6c5d1fd233c05acd0c38898b1cbde8da98b9a11ddcc420571",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "신규 생성과 HTML 내보내기가 동일한 안전한 제목 파일명 규칙을 사용하며 내부 UUID는 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "기존 JSON과 HTML을 내용 변경 없이 제목 파일명으로 이전하고 기존 UUID 조회·중복 억제·경로 참조를 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "관리 하네스가 미리보기·적용·재실행·충돌·손상·중단·경로 안전성을 검사하고 실제 이전 증거를 남긴다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "정본 계약과 발견 가능한 보고서 관리 스킬이 생성·확인·이전·실패 처리의 공식 경로를 안내한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/workflow-reports.test.ts",
+          "test/report-maintenance-entry.test.ts",
+          "test/native-reports.test.ts",
+          "test/report-service.test.ts",
+          "test/report-lifecycle.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/evidence/report-title-maintenance/applied.json",
+            "size"  : 272160,
+            "digest": "63540a0afd06851f158c305e4eb05f227e317e93a90babf1bcd2b2143fbbdbc0"
+          },
+          {
+            "path"  : ".www/evidence/report-title-maintenance/plan.json",
+            "size"  : 249786,
+            "digest": "3df0b1d9502f2e9eaadc499da33051c0aaf71de999bcea75b693dbf15e5f2c5b"
+          },
+          {
+            "path"  : ".www/evidence/report-title-maintenance/skill-inventory.json",
+            "size"  : 1581,
+            "digest": "c1e956d26f62392f444246f0c59bcfc7184db952acbebc536c37a69f0390c2c3"
+          },
+          {
+            "path"  : ".www/evidence/report-title-maintenance/verified.json",
+            "size"  : 2315,
+            "digest": "12b6a517e8f5cddb96b66284aa5c4f34a0ede65da27de3b0d3ba0297856100c2"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 6163,
+            "digest"         : "f16df5536abab27711a1eb376681569ed7b28f436eb429619a853bcf95c9d68e",
+            "truncated"      : false,
+            "retainedBytes"  : 6163,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-76dd20ae-4451-43ed-aa27-49c5d5b96b76",
+        "startedAt"  : "2026-11-15T23:58:21.953Z",
+        "completedAt": "2026-11-15T23:58:51.435Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "595a1aa3a89e2f6f9524281cde494e29c5335a361d08202b493be4d214eb7944",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "docs/skills/REPORTS.md",
+            "docs/specs/reports.md",
+            "scripts/verify-reports.ts",
+            "scripts/workflow.ts",
+            "scripts/workflow/artifacts.ts",
+            "scripts/workflow/report-names.ts",
+            "scripts/workflow/reports.ts",
+            "skills/www/www-report/SKILL.md",
+            "src/main.ts",
+            "test/native-reports.test.ts",
+            "test/report-maintenance-entry.test.ts",
+            "test/work-json.test.ts",
+            "test/workflow-reports.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "f6ad667d4d778614a73ec33202af9b98c7f1f1904576010424660607be685905",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "bfddb2835512a15e37a5fba43eb1cd578fb84850ec70fc202fa5049987e52c26",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "e6c31b3d349498cf74b0cd254952f9d33533aba8927e0e7634af9a3bbc280512",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "329ca60830c5df4ad9a9a633592dc255076d56a8f2517483728b299a374a3772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "74c26346f27987cf1a09b0b1f7eee7366f5ed6646fd343867c99576bc5ddaac6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "79027591a1b070d1f290062439944de8b4755f79a278e886b18b65607f521f97",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "e74f0bcd916bf5568041dc44c5d0baf76279af26b0712750425e41f9c43434ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "8dc482cedcc5fa7af037c8c6dd6a1cfda45df8a2aba23a2ef7e482135de7be4a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "95927e48f800c506eb7096b673ca5b7b3ad95445fbc02f1065504a0f80c02a01",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "ba0294ef63988fdc5cc5e2f365fabef080de201acde0ea34e564589869b7197e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "9e4dd448c664952cc50203d73dad5cdc031788bcf4b4676d0f5f61291567e2e0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "3574079e8188b687e42debb1a49b99cc312b635159a8634050d4141a476c8f67",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "70df2e168b107bf6c5d1fd233c05acd0c38898b1cbde8da98b9a11ddcc420571",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "신규 생성과 HTML 내보내기가 동일한 안전한 제목 파일명 규칙을 사용하며 내부 UUID는 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "기존 JSON과 HTML을 내용 변경 없이 제목 파일명으로 이전하고 기존 UUID 조회·중복 억제·경로 참조를 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "관리 하네스가 미리보기·적용·재실행·충돌·손상·중단·경로 안전성을 검사하고 실제 이전 증거를 남긴다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "정본 계약과 발견 가능한 보고서 관리 스킬이 생성·확인·이전·실패 처리의 공식 경로를 안내한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 76,
+            "digest"         : "9777a80647c68b8bc13dcd097bfb23098450f6b43963611bdbea5a198280d180",
+            "truncated"      : false,
+            "retainedBytes"  : 76,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-ef973dee-2bc7-4deb-a072-cc71e39820cc",
+        "startedAt"  : "2026-11-15T23:59:52.701Z",
+        "completedAt": "2026-11-16T00:00:06.580Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "7279114bd6a3fb5e2f0a46658571b6ec5ea65f2d5e32ed42bd6b0d3753ed3c28",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "docs/skills/REPORTS.md",
+            "docs/specs/reports.md",
+            "scripts/verify-reports.ts",
+            "scripts/workflow.ts",
+            "scripts/workflow/artifacts.ts",
+            "scripts/workflow/report-names.ts",
+            "scripts/workflow/reports.ts",
+            "skills/www/www-report/SKILL.md",
+            "src/main.ts",
+            "test/native-reports.test.ts",
+            "test/report-maintenance-entry.test.ts",
+            "test/work-json.test.ts",
+            "test/workflow-reports.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "f6ad667d4d778614a73ec33202af9b98c7f1f1904576010424660607be685905",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "bfddb2835512a15e37a5fba43eb1cd578fb84850ec70fc202fa5049987e52c26",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "e6c31b3d349498cf74b0cd254952f9d33533aba8927e0e7634af9a3bbc280512",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "329ca60830c5df4ad9a9a633592dc255076d56a8f2517483728b299a374a3772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "aa484f55141ecb5705bbd582cab83b5b8b9604a085e71b403ad14e40ca4f3bb0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "79027591a1b070d1f290062439944de8b4755f79a278e886b18b65607f521f97",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "e74f0bcd916bf5568041dc44c5d0baf76279af26b0712750425e41f9c43434ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "8dc482cedcc5fa7af037c8c6dd6a1cfda45df8a2aba23a2ef7e482135de7be4a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "95927e48f800c506eb7096b673ca5b7b3ad95445fbc02f1065504a0f80c02a01",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "ba0294ef63988fdc5cc5e2f365fabef080de201acde0ea34e564589869b7197e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "9e4dd448c664952cc50203d73dad5cdc031788bcf4b4676d0f5f61291567e2e0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "3574079e8188b687e42debb1a49b99cc312b635159a8634050d4141a476c8f67",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "70df2e168b107bf6c5d1fd233c05acd0c38898b1cbde8da98b9a11ddcc420571",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "신규 생성과 HTML 내보내기가 동일한 안전한 제목 파일명 규칙을 사용하며 내부 UUID는 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "기존 JSON과 HTML을 내용 변경 없이 제목 파일명으로 이전하고 기존 UUID 조회·중복 억제·경로 참조를 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "관리 하네스가 미리보기·적용·재실행·충돌·손상·중단·경로 안전성을 검사하고 실제 이전 증거를 남긴다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "정본 계약과 발견 가능한 보고서 관리 스킬이 생성·확인·이전·실패 처리의 공식 경로를 안내한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/workflow-reports.test.ts",
+          "test/report-maintenance-entry.test.ts",
+          "test/native-reports.test.ts",
+          "test/report-service.test.ts",
+          "test/report-lifecycle.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/evidence/report-title-maintenance/applied.json",
+            "size"  : 272160,
+            "digest": "63540a0afd06851f158c305e4eb05f227e317e93a90babf1bcd2b2143fbbdbc0"
+          },
+          {
+            "path"  : ".www/evidence/report-title-maintenance/plan.json",
+            "size"  : 249786,
+            "digest": "3df0b1d9502f2e9eaadc499da33051c0aaf71de999bcea75b693dbf15e5f2c5b"
+          },
+          {
+            "path"  : ".www/evidence/report-title-maintenance/skill-inventory.json",
+            "size"  : 1581,
+            "digest": "c1e956d26f62392f444246f0c59bcfc7184db952acbebc536c37a69f0390c2c3"
+          },
+          {
+            "path"  : ".www/evidence/report-title-maintenance/verified.json",
+            "size"  : 2315,
+            "digest": "12b6a517e8f5cddb96b66284aa5c4f34a0ede65da27de3b0d3ba0297856100c2"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 6172,
+            "digest"         : "a5733c317da47dde4f803aadb354c8f71a742e1d16102de44e7eadf5ebc004bf",
+            "truncated"      : false,
+            "retainedBytes"  : 6172,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-e6c2e7af-9710-4ddc-8373-874f80c15a47",
+        "startedAt"  : "2026-11-15T23:59:52.535Z",
+        "completedAt": "2026-11-16T00:00:20.870Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "7279114bd6a3fb5e2f0a46658571b6ec5ea65f2d5e32ed42bd6b0d3753ed3c28",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "docs/skills/REPORTS.md",
+            "docs/specs/reports.md",
+            "scripts/verify-reports.ts",
+            "scripts/workflow.ts",
+            "scripts/workflow/artifacts.ts",
+            "scripts/workflow/report-names.ts",
+            "scripts/workflow/reports.ts",
+            "skills/www/www-report/SKILL.md",
+            "src/main.ts",
+            "test/native-reports.test.ts",
+            "test/report-maintenance-entry.test.ts",
+            "test/work-json.test.ts",
+            "test/workflow-reports.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "f6ad667d4d778614a73ec33202af9b98c7f1f1904576010424660607be685905",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "bfddb2835512a15e37a5fba43eb1cd578fb84850ec70fc202fa5049987e52c26",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "e6c31b3d349498cf74b0cd254952f9d33533aba8927e0e7634af9a3bbc280512",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "329ca60830c5df4ad9a9a633592dc255076d56a8f2517483728b299a374a3772",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "aa484f55141ecb5705bbd582cab83b5b8b9604a085e71b403ad14e40ca4f3bb0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "79027591a1b070d1f290062439944de8b4755f79a278e886b18b65607f521f97",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "e74f0bcd916bf5568041dc44c5d0baf76279af26b0712750425e41f9c43434ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "8dc482cedcc5fa7af037c8c6dd6a1cfda45df8a2aba23a2ef7e482135de7be4a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "95927e48f800c506eb7096b673ca5b7b3ad95445fbc02f1065504a0f80c02a01",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "ba0294ef63988fdc5cc5e2f365fabef080de201acde0ea34e564589869b7197e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "9e4dd448c664952cc50203d73dad5cdc031788bcf4b4676d0f5f61291567e2e0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "3574079e8188b687e42debb1a49b99cc312b635159a8634050d4141a476c8f67",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "70df2e168b107bf6c5d1fd233c05acd0c38898b1cbde8da98b9a11ddcc420571",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "신규 생성과 HTML 내보내기가 동일한 안전한 제목 파일명 규칙을 사용하며 내부 UUID는 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "기존 JSON과 HTML을 내용 변경 없이 제목 파일명으로 이전하고 기존 UUID 조회·중복 억제·경로 참조를 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "관리 하네스가 미리보기·적용·재실행·충돌·손상·중단·경로 안전성을 검사하고 실제 이전 증거를 남긴다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "정본 계약과 발견 가능한 보고서 관리 스킬이 생성·확인·이전·실패 처리의 공식 경로를 안내한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 76,
+            "digest"         : "9777a80647c68b8bc13dcd097bfb23098450f6b43963611bdbea5a198280d180",
+            "truncated"      : false,
+            "retainedBytes"  : 76,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6",
+        "startedAt"  : "2026-11-16T00:14:47.038Z",
+        "completedAt": "2026-11-16T00:14:56.340Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "5221a893076bf14807180834a39891b2a618628ccf7c1cf73dc41e1aca738e83",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "docs/skills/REPORTS.md",
+            "docs/specs/reports.md",
+            "scripts/verify-reports.ts",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-report/SKILL.md",
+            "src/main.ts",
+            "src/reports-service.ts",
+            "test/native-reports.test.ts",
+            "test/report-lifecycle.test.ts",
+            "test/report-maintenance-entry.test.ts",
+            "test/report-service.test.ts",
+            "test/work-json.test.ts",
+            "test/workflow-reports.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "68048ee058158435f9e5b40d9f7e3af3a3bf210d83b9c0803943358663fd2733",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "d7dae509e0585c3e506eb77d8d79ad1404500cf20d439ec3132c43bcca4b24f1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "ca1c718a6f637a6e8fcf6b2beb333667ccefbfacbcdf7a9248e85a7915f35065",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "dd7250ec35c0144217cd4dcc19d759a3b89c369e18501d20dbfca958d8b56e5e",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "aa484f55141ecb5705bbd582cab83b5b8b9604a085e71b403ad14e40ca4f3bb0",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e0d9fafba2ec6227e888b3349c5aa358bc67c2c4dda4c04ff391dd71b0ea15a7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "52dd4fe6c47bfc9754c383edd255bdd817f7cec5129f0b9e8cdbc663a950d157",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "4857b858c01f6c15c4411ab12233fb5a17587b4b00ac4470576ff076ecf1ee15",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "d04b457919a3079d7c2b98c5a5e124b4f2191f4127f9155889533c041280248b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "60176c426c49f97c386e91ef66d0f961a61580be2f54af370c40e5ecc8006f2e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-service.test.ts",
+              "type"  : "file",
+              "digest": "c1eacb456c7d6b4e83c41839dba36cb2c36daa1842b21d819a07d95a15dff9ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "d8084054fbc8510604b58df0d9bde6ce7b2e8955840f988c4f9204a0f08dda0d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "ccc8f92b80641ac814a57b8d40982c64609548895d951e6405a77fbec5028a1d",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "같은 작업 UUID와 NFC 제목의 보고서는 안정된 제목 파일명의 JSON 1개·HTML 1개로 생성·누적하며 내보내기도 같은 이름을 사용한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "기존 UUID형·시각포함 제목형 보고서를 묶음으로 이전하고 모든 entry의 ID·서술·검증 의미·semanticHash를 보존하며 기존 UUID로 읽는다. 병합 전 원본 bytes는 별도 백업한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "관리 하네스는 미리보기·전체 사전검사·명시 적용·재실행·중단 복원·잠금 회수와 동시 누적을 제공하며 충돌·손상·링크·상한 위반에서 기존 정본을 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "발견 가능한 보고서 스킬과 정본 계약이 생성·누적·목록·이전·백업·복원·실패 처리를 같은 공식 경로로 안내한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "앱 목록은 같은 작업·제목을 한 항목으로 모으고 최신 저작 기록을 우선 표시하며 독립 HTML에서 누적된 모든 기록을 안전하게 읽고 과거 판단과 현재성을 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/workflow-reports.test.ts",
+          "test/report-maintenance-entry.test.ts",
+          "test/native-reports.test.ts",
+          "test/report-service.test.ts",
+          "test/report-lifecycle.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4",
+          "AC-5"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/evidence/report-title-maintenance/merge-applied.json",
+            "size"  : 334920,
+            "digest": "386ded43c2f170508b4634c7a13aac3886c272d7d84955ce58f9566f7b069f4e"
+          },
+          {
+            "path"  : ".www/evidence/report-title-maintenance/merge-plan.json",
+            "size"  : 305211,
+            "digest": "a15d95fc6f480d8638d4532148e08937dba937307bcd62c5b627ec617edafc59"
+          },
+          {
+            "path"  : ".www/evidence/report-title-maintenance/merge-verified.json",
+            "size"  : 705,
+            "digest": "251df8a26b9ce48af071a7cf7d7e4133c1767204524c366a087d436c110e2ba0"
+          },
+          {
+            "path"  : ".www/report-merge-backups/f8ab1f95-e237-4970-bb07-c437578581f1/manifest.json",
+            "size"  : 162393,
+            "digest": "d783d0d55740daccc46fe480d7eaf9042f2367a03afed7680777827771f08a19"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 7207,
+            "digest"         : "61bf684a20fcdd3af29bcb6355c3ed23e7ff8d7e2a4f08a190b794a3bcb78081",
+            "truncated"      : false,
+            "retainedBytes"  : 7207,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e",
+        "startedAt"  : "2026-11-16T00:14:46.964Z",
+        "completedAt": "2026-11-16T00:14:57.188Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "5221a893076bf14807180834a39891b2a618628ccf7c1cf73dc41e1aca738e83",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "docs/skills/REPORTS.md",
+            "docs/specs/reports.md",
+            "scripts/verify-reports.ts",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-report/SKILL.md",
+            "src/main.ts",
+            "src/reports-service.ts",
+            "test/native-reports.test.ts",
+            "test/report-lifecycle.test.ts",
+            "test/report-maintenance-entry.test.ts",
+            "test/report-service.test.ts",
+            "test/work-json.test.ts",
+            "test/workflow-reports.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "68048ee058158435f9e5b40d9f7e3af3a3bf210d83b9c0803943358663fd2733",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "d7dae509e0585c3e506eb77d8d79ad1404500cf20d439ec3132c43bcca4b24f1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "ca1c718a6f637a6e8fcf6b2beb333667ccefbfacbcdf7a9248e85a7915f35065",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "dd7250ec35c0144217cd4dcc19d759a3b89c369e18501d20dbfca958d8b56e5e",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "aa484f55141ecb5705bbd582cab83b5b8b9604a085e71b403ad14e40ca4f3bb0",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e0d9fafba2ec6227e888b3349c5aa358bc67c2c4dda4c04ff391dd71b0ea15a7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "52dd4fe6c47bfc9754c383edd255bdd817f7cec5129f0b9e8cdbc663a950d157",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "4857b858c01f6c15c4411ab12233fb5a17587b4b00ac4470576ff076ecf1ee15",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "d04b457919a3079d7c2b98c5a5e124b4f2191f4127f9155889533c041280248b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "60176c426c49f97c386e91ef66d0f961a61580be2f54af370c40e5ecc8006f2e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-service.test.ts",
+              "type"  : "file",
+              "digest": "c1eacb456c7d6b4e83c41839dba36cb2c36daa1842b21d819a07d95a15dff9ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "d8084054fbc8510604b58df0d9bde6ce7b2e8955840f988c4f9204a0f08dda0d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "ccc8f92b80641ac814a57b8d40982c64609548895d951e6405a77fbec5028a1d",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "같은 작업 UUID와 NFC 제목의 보고서는 안정된 제목 파일명의 JSON 1개·HTML 1개로 생성·누적하며 내보내기도 같은 이름을 사용한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "기존 UUID형·시각포함 제목형 보고서를 묶음으로 이전하고 모든 entry의 ID·서술·검증 의미·semanticHash를 보존하며 기존 UUID로 읽는다. 병합 전 원본 bytes는 별도 백업한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "관리 하네스는 미리보기·전체 사전검사·명시 적용·재실행·중단 복원·잠금 회수와 동시 누적을 제공하며 충돌·손상·링크·상한 위반에서 기존 정본을 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "발견 가능한 보고서 스킬과 정본 계약이 생성·누적·목록·이전·백업·복원·실패 처리를 같은 공식 경로로 안내한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "앱 목록은 같은 작업·제목을 한 항목으로 모으고 최신 저작 기록을 우선 표시하며 독립 HTML에서 누적된 모든 기록을 안전하게 읽고 과거 판단과 현재성을 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4",
+          "AC-5"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 76,
+            "digest"         : "9777a80647c68b8bc13dcd097bfb23098450f6b43963611bdbea5a198280d180",
+            "truncated"      : false,
+            "retainedBytes"  : 76,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75",
+        "startedAt"  : "2026-11-16T00:18:14.487Z",
+        "completedAt": "2026-11-16T00:18:23.636Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "5a4326430db4afde9ea9a29d3d1e790e159fbdf679be115df341ba3ac4e6ae29",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "docs/skills/REPORTS.md",
+            "docs/specs/reports.md",
+            "scripts/verify-reports.ts",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-report/SKILL.md",
+            "src/main.ts",
+            "src/reports-service.ts",
+            "test/native-reports.test.ts",
+            "test/report-lifecycle.test.ts",
+            "test/report-maintenance-entry.test.ts",
+            "test/report-service.test.ts",
+            "test/work-json.test.ts",
+            "test/workflow-reports.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "68048ee058158435f9e5b40d9f7e3af3a3bf210d83b9c0803943358663fd2733",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "d7dae509e0585c3e506eb77d8d79ad1404500cf20d439ec3132c43bcca4b24f1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "ca1c718a6f637a6e8fcf6b2beb333667ccefbfacbcdf7a9248e85a7915f35065",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "dd7250ec35c0144217cd4dcc19d759a3b89c369e18501d20dbfca958d8b56e5e",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "aa484f55141ecb5705bbd582cab83b5b8b9604a085e71b403ad14e40ca4f3bb0",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e0d9fafba2ec6227e888b3349c5aa358bc67c2c4dda4c04ff391dd71b0ea15a7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "c5b01ccb798ff1975d0dbafdb8d3136d1a9977e65456f1268bf783d2c42ade5b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "7283c98b4b4cce3886b171bdf278856165d7d607e3d0f00d0aec2c5241a0c4f4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "d04b457919a3079d7c2b98c5a5e124b4f2191f4127f9155889533c041280248b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "60176c426c49f97c386e91ef66d0f961a61580be2f54af370c40e5ecc8006f2e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-service.test.ts",
+              "type"  : "file",
+              "digest": "c1eacb456c7d6b4e83c41839dba36cb2c36daa1842b21d819a07d95a15dff9ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "d8084054fbc8510604b58df0d9bde6ce7b2e8955840f988c4f9204a0f08dda0d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "ccc8f92b80641ac814a57b8d40982c64609548895d951e6405a77fbec5028a1d",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "같은 작업 UUID와 NFC 제목의 보고서는 안정된 제목 파일명의 JSON 1개·HTML 1개로 생성·누적하며 내보내기도 같은 이름을 사용한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "기존 UUID형·시각포함 제목형 보고서를 묶음으로 이전하고 모든 entry의 ID·서술·검증 의미·semanticHash를 보존하며 기존 UUID로 읽는다. 병합 전 원본 bytes는 별도 백업한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "관리 하네스는 미리보기·전체 사전검사·명시 적용·재실행·중단 복원·잠금 회수와 동시 누적을 제공하며 충돌·손상·링크·상한 위반에서 기존 정본을 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "발견 가능한 보고서 스킬과 정본 계약이 생성·누적·목록·이전·백업·복원·실패 처리를 같은 공식 경로로 안내한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "앱 목록은 같은 작업·제목을 한 항목으로 모으고 최신 저작 기록을 우선 표시하며 독립 HTML에서 누적된 모든 기록을 안전하게 읽고 과거 판단과 현재성을 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4",
+          "AC-5"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 76,
+            "digest"         : "9777a80647c68b8bc13dcd097bfb23098450f6b43963611bdbea5a198280d180",
+            "truncated"      : false,
+            "retainedBytes"  : 76,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a",
+        "startedAt"  : "2026-11-16T00:18:14.552Z",
+        "completedAt": "2026-11-16T00:18:24.645Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "5a4326430db4afde9ea9a29d3d1e790e159fbdf679be115df341ba3ac4e6ae29",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "docs/skills/REPORTS.md",
+            "docs/specs/reports.md",
+            "scripts/verify-reports.ts",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-report/SKILL.md",
+            "src/main.ts",
+            "src/reports-service.ts",
+            "test/native-reports.test.ts",
+            "test/report-lifecycle.test.ts",
+            "test/report-maintenance-entry.test.ts",
+            "test/report-service.test.ts",
+            "test/work-json.test.ts",
+            "test/workflow-reports.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "68048ee058158435f9e5b40d9f7e3af3a3bf210d83b9c0803943358663fd2733",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "d7dae509e0585c3e506eb77d8d79ad1404500cf20d439ec3132c43bcca4b24f1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "ca1c718a6f637a6e8fcf6b2beb333667ccefbfacbcdf7a9248e85a7915f35065",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "dd7250ec35c0144217cd4dcc19d759a3b89c369e18501d20dbfca958d8b56e5e",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "aa484f55141ecb5705bbd582cab83b5b8b9604a085e71b403ad14e40ca4f3bb0",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e0d9fafba2ec6227e888b3349c5aa358bc67c2c4dda4c04ff391dd71b0ea15a7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "c5b01ccb798ff1975d0dbafdb8d3136d1a9977e65456f1268bf783d2c42ade5b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "7283c98b4b4cce3886b171bdf278856165d7d607e3d0f00d0aec2c5241a0c4f4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "d04b457919a3079d7c2b98c5a5e124b4f2191f4127f9155889533c041280248b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "60176c426c49f97c386e91ef66d0f961a61580be2f54af370c40e5ecc8006f2e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-service.test.ts",
+              "type"  : "file",
+              "digest": "c1eacb456c7d6b4e83c41839dba36cb2c36daa1842b21d819a07d95a15dff9ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "d8084054fbc8510604b58df0d9bde6ce7b2e8955840f988c4f9204a0f08dda0d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "ccc8f92b80641ac814a57b8d40982c64609548895d951e6405a77fbec5028a1d",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "같은 작업 UUID와 NFC 제목의 보고서는 안정된 제목 파일명의 JSON 1개·HTML 1개로 생성·누적하며 내보내기도 같은 이름을 사용한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "기존 UUID형·시각포함 제목형 보고서를 묶음으로 이전하고 모든 entry의 ID·서술·검증 의미·semanticHash를 보존하며 기존 UUID로 읽는다. 병합 전 원본 bytes는 별도 백업한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "관리 하네스는 미리보기·전체 사전검사·명시 적용·재실행·중단 복원·잠금 회수와 동시 누적을 제공하며 충돌·손상·링크·상한 위반에서 기존 정본을 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "발견 가능한 보고서 스킬과 정본 계약이 생성·누적·목록·이전·백업·복원·실패 처리를 같은 공식 경로로 안내한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "앱 목록은 같은 작업·제목을 한 항목으로 모으고 최신 저작 기록을 우선 표시하며 독립 HTML에서 누적된 모든 기록을 안전하게 읽고 과거 판단과 현재성을 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/workflow-reports.test.ts",
+          "test/report-maintenance-entry.test.ts",
+          "test/native-reports.test.ts",
+          "test/report-service.test.ts",
+          "test/report-lifecycle.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4",
+          "AC-5"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/evidence/report-title-maintenance/merge-applied.json",
+            "size"  : 334920,
+            "digest": "386ded43c2f170508b4634c7a13aac3886c272d7d84955ce58f9566f7b069f4e"
+          },
+          {
+            "path"  : ".www/evidence/report-title-maintenance/merge-plan.json",
+            "size"  : 305211,
+            "digest": "a15d95fc6f480d8638d4532148e08937dba937307bcd62c5b627ec617edafc59"
+          },
+          {
+            "path"  : ".www/evidence/report-title-maintenance/merge-verified.json",
+            "size"  : 705,
+            "digest": "251df8a26b9ce48af071a7cf7d7e4133c1767204524c366a087d436c110e2ba0"
+          },
+          {
+            "path"  : ".www/report-merge-backups/f8ab1f95-e237-4970-bb07-c437578581f1/manifest.json",
+            "size"  : 162393,
+            "digest": "d783d0d55740daccc46fe480d7eaf9042f2367a03afed7680777827771f08a19"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 7208,
+            "digest"         : "b3248cef986b5f0e948c62c5a3c78cde9fdea819bbb9a5bc97fa4ace36999923",
+            "truncated"      : false,
+            "retainedBytes"  : 7208,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7",
+        "startedAt"  : "2026-11-16T00:21:37.990Z",
+        "completedAt": "2026-11-16T00:21:47.754Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "a501bb822e31004d750752850080a54a90ef7625e44db87dcc4784de08775486",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "docs/skills/REPORTS.md",
+            "docs/specs/reports.md",
+            "scripts/verify-reports.ts",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-report/SKILL.md",
+            "src/main.ts",
+            "src/reports-service.ts",
+            "test/native-reports.test.ts",
+            "test/report-lifecycle.test.ts",
+            "test/report-maintenance-entry.test.ts",
+            "test/report-service.test.ts",
+            "test/work-json.test.ts",
+            "test/workflow-reports.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "68048ee058158435f9e5b40d9f7e3af3a3bf210d83b9c0803943358663fd2733",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "d7dae509e0585c3e506eb77d8d79ad1404500cf20d439ec3132c43bcca4b24f1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "ca1c718a6f637a6e8fcf6b2beb333667ccefbfacbcdf7a9248e85a7915f35065",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "c99a9c7ba9472de3ac6b32567545b13a47c6b832cd09ccb6460eb0dca399d456",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "aa484f55141ecb5705bbd582cab83b5b8b9604a085e71b403ad14e40ca4f3bb0",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e0d9fafba2ec6227e888b3349c5aa358bc67c2c4dda4c04ff391dd71b0ea15a7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "c5b01ccb798ff1975d0dbafdb8d3136d1a9977e65456f1268bf783d2c42ade5b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "57b037341ece638351bbc7f04ace0152a0d29ac53749bf0cb64352a3b09d2d0a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "d04b457919a3079d7c2b98c5a5e124b4f2191f4127f9155889533c041280248b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "60176c426c49f97c386e91ef66d0f961a61580be2f54af370c40e5ecc8006f2e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-service.test.ts",
+              "type"  : "file",
+              "digest": "c1eacb456c7d6b4e83c41839dba36cb2c36daa1842b21d819a07d95a15dff9ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "4a7bdb19b876771a4b763554b2e04bd811028acfc180cc9abbb2505e8c5a5bad",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "ccc8f92b80641ac814a57b8d40982c64609548895d951e6405a77fbec5028a1d",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "같은 작업 UUID와 NFC 제목의 보고서는 안정된 제목 파일명의 JSON 1개·HTML 1개로 생성·누적하며 내보내기도 같은 이름을 사용한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "기존 UUID형·시각포함 제목형 보고서를 묶음으로 이전하고 모든 entry의 ID·서술·검증 의미·semanticHash를 보존하며 기존 UUID로 읽는다. 병합 전 원본 bytes는 별도 백업한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "관리 하네스는 미리보기·전체 사전검사·명시 적용·재실행·중단 복원·잠금 회수와 동시 누적을 제공하며 충돌·손상·링크·상한 위반에서 기존 정본을 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "발견 가능한 보고서 스킬과 정본 계약이 생성·누적·목록·이전·백업·복원·실패 처리를 같은 공식 경로로 안내한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "앱 목록은 같은 작업·제목을 한 항목으로 모으고 최신 저작 기록을 우선 표시하며 독립 HTML에서 누적된 모든 기록을 안전하게 읽고 과거 판단과 현재성을 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/workflow-reports.test.ts",
+          "test/report-maintenance-entry.test.ts",
+          "test/native-reports.test.ts",
+          "test/report-service.test.ts",
+          "test/report-lifecycle.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4",
+          "AC-5"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/evidence/report-title-maintenance/merge-applied.json",
+            "size"  : 334920,
+            "digest": "386ded43c2f170508b4634c7a13aac3886c272d7d84955ce58f9566f7b069f4e"
+          },
+          {
+            "path"  : ".www/evidence/report-title-maintenance/merge-verified.json",
+            "size"  : 705,
+            "digest": "251df8a26b9ce48af071a7cf7d7e4133c1767204524c366a087d436c110e2ba0"
+          },
+          {
+            "path"  : ".www/report-merge-backups/f8ab1f95-e237-4970-bb07-c437578581f1/manifest.json",
+            "size"  : 162393,
+            "digest": "d783d0d55740daccc46fe480d7eaf9042f2367a03afed7680777827771f08a19"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 7206,
+            "digest"         : "a6fc26f2afd689d945e357ef0a0d4ebe00afa8c01f0ea128d2d063827dc91096",
+            "truncated"      : false,
+            "retainedBytes"  : 7206,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739",
+        "startedAt"  : "2026-11-16T00:21:37.899Z",
+        "completedAt": "2026-11-16T00:21:48.488Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "a501bb822e31004d750752850080a54a90ef7625e44db87dcc4784de08775486",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "docs/skills/REPORTS.md",
+            "docs/specs/reports.md",
+            "scripts/verify-reports.ts",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-report/SKILL.md",
+            "src/main.ts",
+            "src/reports-service.ts",
+            "test/native-reports.test.ts",
+            "test/report-lifecycle.test.ts",
+            "test/report-maintenance-entry.test.ts",
+            "test/report-service.test.ts",
+            "test/work-json.test.ts",
+            "test/workflow-reports.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "68048ee058158435f9e5b40d9f7e3af3a3bf210d83b9c0803943358663fd2733",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "d7dae509e0585c3e506eb77d8d79ad1404500cf20d439ec3132c43bcca4b24f1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "ca1c718a6f637a6e8fcf6b2beb333667ccefbfacbcdf7a9248e85a7915f35065",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "c99a9c7ba9472de3ac6b32567545b13a47c6b832cd09ccb6460eb0dca399d456",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "aa484f55141ecb5705bbd582cab83b5b8b9604a085e71b403ad14e40ca4f3bb0",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e0d9fafba2ec6227e888b3349c5aa358bc67c2c4dda4c04ff391dd71b0ea15a7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "c5b01ccb798ff1975d0dbafdb8d3136d1a9977e65456f1268bf783d2c42ade5b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "57b037341ece638351bbc7f04ace0152a0d29ac53749bf0cb64352a3b09d2d0a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "d04b457919a3079d7c2b98c5a5e124b4f2191f4127f9155889533c041280248b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "60176c426c49f97c386e91ef66d0f961a61580be2f54af370c40e5ecc8006f2e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-service.test.ts",
+              "type"  : "file",
+              "digest": "c1eacb456c7d6b4e83c41839dba36cb2c36daa1842b21d819a07d95a15dff9ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "4a7bdb19b876771a4b763554b2e04bd811028acfc180cc9abbb2505e8c5a5bad",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "ccc8f92b80641ac814a57b8d40982c64609548895d951e6405a77fbec5028a1d",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "같은 작업 UUID와 NFC 제목의 보고서는 안정된 제목 파일명의 JSON 1개·HTML 1개로 생성·누적하며 내보내기도 같은 이름을 사용한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "기존 UUID형·시각포함 제목형 보고서를 묶음으로 이전하고 모든 entry의 ID·서술·검증 의미·semanticHash를 보존하며 기존 UUID로 읽는다. 병합 전 원본 bytes는 별도 백업한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "관리 하네스는 미리보기·전체 사전검사·명시 적용·재실행·중단 복원·잠금 회수와 동시 누적을 제공하며 충돌·손상·링크·상한 위반에서 기존 정본을 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "발견 가능한 보고서 스킬과 정본 계약이 생성·누적·목록·이전·백업·복원·실패 처리를 같은 공식 경로로 안내한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "앱 목록은 같은 작업·제목을 한 항목으로 모으고 최신 저작 기록을 우선 표시하며 독립 HTML에서 누적된 모든 기록을 안전하게 읽고 과거 판단과 현재성을 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4",
+          "AC-5"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 76,
+            "digest"         : "9777a80647c68b8bc13dcd097bfb23098450f6b43963611bdbea5a198280d180",
+            "truncated"      : false,
+            "retainedBytes"  : 76,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec",
+        "startedAt"  : "2026-11-16T00:26:29.681Z",
+        "completedAt": "2026-11-16T00:26:37.703Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "4bb9ac3d2a42df192d728f2a4dce96ec9b09d950699e5d1419b15a793933143e",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "docs/skills/REPORTS.md",
+            "docs/specs/reports.md",
+            "scripts/verify-reports.ts",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-report/SKILL.md",
+            "src/main.ts",
+            "src/reports-service.ts",
+            "test/native-reports.test.ts",
+            "test/report-lifecycle.test.ts",
+            "test/report-maintenance-entry.test.ts",
+            "test/report-service.test.ts",
+            "test/work-json.test.ts",
+            "test/workflow-reports.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "68048ee058158435f9e5b40d9f7e3af3a3bf210d83b9c0803943358663fd2733",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "d7dae509e0585c3e506eb77d8d79ad1404500cf20d439ec3132c43bcca4b24f1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "ca1c718a6f637a6e8fcf6b2beb333667ccefbfacbcdf7a9248e85a7915f35065",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "c99a9c7ba9472de3ac6b32567545b13a47c6b832cd09ccb6460eb0dca399d456",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "aa484f55141ecb5705bbd582cab83b5b8b9604a085e71b403ad14e40ca4f3bb0",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e0d9fafba2ec6227e888b3349c5aa358bc67c2c4dda4c04ff391dd71b0ea15a7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "30c0c253617b7631c44e424f8fd821e08e5a3c73bf88387c2c5492e24d318848",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "57b037341ece638351bbc7f04ace0152a0d29ac53749bf0cb64352a3b09d2d0a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "d04b457919a3079d7c2b98c5a5e124b4f2191f4127f9155889533c041280248b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "60176c426c49f97c386e91ef66d0f961a61580be2f54af370c40e5ecc8006f2e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-service.test.ts",
+              "type"  : "file",
+              "digest": "c1eacb456c7d6b4e83c41839dba36cb2c36daa1842b21d819a07d95a15dff9ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "4a7bdb19b876771a4b763554b2e04bd811028acfc180cc9abbb2505e8c5a5bad",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "5725877b796bba4d9ad8447e114732fe15e28b33669b57bffec35a36bf951171",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "같은 작업 UUID와 NFC 제목의 보고서는 안정된 제목 파일명의 JSON 1개·HTML 1개로 생성·누적하며 내보내기도 같은 이름을 사용한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "기존 UUID형·시각포함 제목형 보고서를 묶음으로 이전하고 모든 entry의 ID·서술·검증 의미·semanticHash를 보존하며 기존 UUID로 읽는다. 병합 전 원본 bytes는 별도 백업한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "관리 하네스는 미리보기·전체 사전검사·명시 적용·재실행·중단 복원·잠금 회수와 동시 누적을 제공하며 충돌·손상·링크·상한 위반에서 기존 정본을 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "발견 가능한 보고서 스킬과 정본 계약이 생성·누적·목록·이전·백업·복원·실패 처리를 같은 공식 경로로 안내한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "앱 목록은 같은 작업·제목을 한 항목으로 모으고 최신 저작 기록을 우선 표시하며 독립 HTML에서 누적된 모든 기록을 안전하게 읽고 과거 판단과 현재성을 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4",
+          "AC-5"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 76,
+            "digest"         : "9777a80647c68b8bc13dcd097bfb23098450f6b43963611bdbea5a198280d180",
+            "truncated"      : false,
+            "retainedBytes"  : 76,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f",
+        "startedAt"  : "2026-11-16T00:26:29.763Z",
+        "completedAt": "2026-11-16T00:26:37.901Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "4bb9ac3d2a42df192d728f2a4dce96ec9b09d950699e5d1419b15a793933143e",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "docs/skills/REPORTS.md",
+            "docs/specs/reports.md",
+            "scripts/verify-reports.ts",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-report/SKILL.md",
+            "src/main.ts",
+            "src/reports-service.ts",
+            "test/native-reports.test.ts",
+            "test/report-lifecycle.test.ts",
+            "test/report-maintenance-entry.test.ts",
+            "test/report-service.test.ts",
+            "test/work-json.test.ts",
+            "test/workflow-reports.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "68048ee058158435f9e5b40d9f7e3af3a3bf210d83b9c0803943358663fd2733",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "d7dae509e0585c3e506eb77d8d79ad1404500cf20d439ec3132c43bcca4b24f1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "ca1c718a6f637a6e8fcf6b2beb333667ccefbfacbcdf7a9248e85a7915f35065",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "c99a9c7ba9472de3ac6b32567545b13a47c6b832cd09ccb6460eb0dca399d456",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "aa484f55141ecb5705bbd582cab83b5b8b9604a085e71b403ad14e40ca4f3bb0",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e0d9fafba2ec6227e888b3349c5aa358bc67c2c4dda4c04ff391dd71b0ea15a7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "30c0c253617b7631c44e424f8fd821e08e5a3c73bf88387c2c5492e24d318848",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "57b037341ece638351bbc7f04ace0152a0d29ac53749bf0cb64352a3b09d2d0a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "d04b457919a3079d7c2b98c5a5e124b4f2191f4127f9155889533c041280248b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "60176c426c49f97c386e91ef66d0f961a61580be2f54af370c40e5ecc8006f2e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-service.test.ts",
+              "type"  : "file",
+              "digest": "c1eacb456c7d6b4e83c41839dba36cb2c36daa1842b21d819a07d95a15dff9ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "4a7bdb19b876771a4b763554b2e04bd811028acfc180cc9abbb2505e8c5a5bad",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "5725877b796bba4d9ad8447e114732fe15e28b33669b57bffec35a36bf951171",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "같은 작업 UUID와 NFC 제목의 보고서는 안정된 제목 파일명의 JSON 1개·HTML 1개로 생성·누적하며 내보내기도 같은 이름을 사용한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "기존 UUID형·시각포함 제목형 보고서를 묶음으로 이전하고 모든 entry의 ID·서술·검증 의미·semanticHash를 보존하며 기존 UUID로 읽는다. 병합 전 원본 bytes는 별도 백업한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "관리 하네스는 미리보기·전체 사전검사·명시 적용·재실행·중단 복원·잠금 회수와 동시 누적을 제공하며 충돌·손상·링크·상한 위반에서 기존 정본을 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "발견 가능한 보고서 스킬과 정본 계약이 생성·누적·목록·이전·백업·복원·실패 처리를 같은 공식 경로로 안내한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "앱 목록은 같은 작업·제목을 한 항목으로 모으고 최신 저작 기록을 우선 표시하며 독립 HTML에서 누적된 모든 기록을 안전하게 읽고 과거 판단과 현재성을 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/workflow-reports.test.ts",
+          "test/report-maintenance-entry.test.ts",
+          "test/native-reports.test.ts",
+          "test/report-service.test.ts",
+          "test/report-lifecycle.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4",
+          "AC-5"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/evidence/report-title-maintenance/duplicate-id-fixed.json",
+            "size"  : 98,
+            "digest": "dba35d81dcd8f31d577efb10934ea741383f5af6aae886aec3ff0606a237f98e"
+          },
+          {
+            "path"  : ".www/evidence/report-title-maintenance/merge-applied.json",
+            "size"  : 334920,
+            "digest": "386ded43c2f170508b4634c7a13aac3886c272d7d84955ce58f9566f7b069f4e"
+          },
+          {
+            "path"  : ".www/evidence/report-title-maintenance/merge-verified.json",
+            "size"  : 705,
+            "digest": "251df8a26b9ce48af071a7cf7d7e4133c1767204524c366a087d436c110e2ba0"
+          },
+          {
+            "path"  : ".www/report-merge-backups/f8ab1f95-e237-4970-bb07-c437578581f1/manifest.json",
+            "size"  : 162393,
+            "digest": "d783d0d55740daccc46fe480d7eaf9042f2367a03afed7680777827771f08a19"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 7304,
+            "digest"         : "433b98fe267d94710d047b2bc8eebd85f90c2fcfbe02bad7384c2d756ccfd087",
+            "truncated"      : false,
+            "retainedBytes"  : 7304,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id"            : "review-aa3efe2b-17a7-48d2-baec-39cd62b2b082",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "65b0f4131eda7fba97c1178a09157a7205214df45f7b099395b711bdf60c438f",
+        "criteriaDigest": "ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "8526109eee4fda663addff1fabbd3fb04174f0843ab9086391f6ec3f79114d64"
+        },
+        "failure": null,
+        "findings": [
+          "검토 범위: Read/Grep으로 spec.md·verification.md, scripts/workflow/reports.ts(494-1023행)·report-names.ts·workflow.ts의 report-maintain dispatch, src/reports-service.ts·src/main.ts의 내보내기 이름, skills/www/www-report/SKILL.md를 읽었습니다. test/workflow-reports.test.ts는 테스트 이름 목록과 416-439행만 읽었습니다. 증거 파일은 merge-verified.json, release-maintenance.json(1행), release-functional-verification.json을 읽었습니다. design.md·tasks.md·work.json·report-view.ts·work-json.ts·artifacts.ts·docs 계약 본문은 직접 읽지 않았습니다. 테스트는 실행하지 않았고 읽기 실패도 없었습니다.",
+          "AC-1: 파일 이름(reportFileStem, report-names.ts:32-43)은 NFC 제목과 제목 SHA256 앞 16자로 정해서 시각·종류·entry UUID에 따라 달라지지 않습니다. 작성 경로(reports.ts:741-752)는 같은 제목의 기존 entry에 새 entry를 더해 JSON 1개와 HTML 1개로 다시 씁니다. 내보내기 기본 이름(src/main.ts:447)도 같은 함수를 씁니다. 작업마다 reports 디렉터리가 따로 있어서 다른 작업 UUID의 같은 제목은 다른 묶음으로 남고, 테스트 548행이 이 경우를 다룹니다.",
+          "AC-2: 묶음 이전은 entry 의미가 충돌하면 거부합니다(migrationGroups 847·855행). 원본 bytes는 덮어쓰기 전에 백업하고 다시 읽어 대조한 뒤 manifest를 남깁니다(backupReportSources 907-929행). 원본은 bytes가 바뀌지 않았는지 다시 확인한 다음에만 지웁니다(943행). 묶음과 이전 형식 파일이 함께 남은 중간 상태는 entryMeaning이 같을 때만 중복 없이 받아들입니다. 실제 저장소 증거에는 269 entries, 27 groups, 백업 538개, UUID 재읽기 269건, 재실행 결과 no_changes가 기록돼 있고 release-maintenance.json도 no_changes입니다.",
+          "AC-3: 쓰기는 reportLease로 잠그고, 쓰기 직전 대상 bytes가 예상과 같은지 다시 확인합니다(atomicReportFile 681-696행). JSON을 먼저 commit하고 HTML은 나중에 파생합니다. 같은 사건을 재실행하면 existing 분기(726-729행)가 오래되거나 빠진 HTML을 복구합니다. 잠금 회수는 같은 호스트에서 소유 PID 종료가 확인된 경우(owner_exited)이면서 관찰한 토큰이 일치할 때만 허용합니다. 묶음이 16 MiB를 넘거나 2000건을 넘으면 쓰기 전에 거부합니다. 관련 테스트 이름(563·618·646·665행)을 확인했고, 테스트 실제 실행 결과는 verification.md의 기록에만 근거합니다.",
+          "AC-5: reports-service.ts:14-20은 workId와 NFC 제목으로 항목을 묶고, 최신순 목록에서 처음 나오는 authored를 대표로 고릅니다. 이는 reports.ts의 representative(808-813행)와 같은 기준입니다. readWorkReport는 요청한 UUID의 entry를 기준으로 같은 제목의 history를 함께 렌더링합니다. 작업 기록·소스·기준이 바뀌었으면 stale 사유를 따로 표시해서 과거 판단과 현재성을 구분합니다.",
+          "AC-4: SKILL.md는 report·report-snapshot·report-maintain(apply·direct)·report-lock-status·report-lock-recover를 공식 경로로 안내하고, 병합을 bytes 불변으로 보고하지 않는다는 경계도 적고 있습니다. workflow.ts:369-372는 apply=true에 direct=true를 요구해 이 안내와 일치합니다.",
+          "증거 대조: 이번 검토 번들의 sourceDigest(65b0f413…)는 최종 검증 시도의 digest(a501bb82…)와 다릅니다. 하지만 검증 입력에 포함된 개별 파일 digest는 번들과 모두 같습니다(reports.ts c5b01ccb, report-names.ts 40322265, main.ts 57b03734, reports-service.ts e412a437, 각 테스트 파일 등). 차이는 번들에만 있는 docs/ARCHITECTURE.md·PRODUCT.md·skills/WORKFLOW.md 때문으로 보이며, 검증 이후 대상 소스가 바뀐 흔적은 없습니다.",
+          "verification.md는 전체 npm test, 실제 Electron GUI, BoxBox 가독성 전체 PASS를 하지 않았다고 명시해 증거 범위를 넓히지 않습니다. 계획 검토를 구현 완료 검토로 읽지 않는다는 구분도 있어 범위 확대는 보이지 않습니다.",
+          "경미한 관찰(수정 필수 아님): migrationGroups는 대상 stem.html을 항상 허용 목록에 넣습니다(895행). 그래서 같은 제목의 이전 형식 JSON은 있고 대상 stem.json 없이 stem.html만 있으면, 이전 적용이 그 HTML을 덮어씁니다. 이 HTML은 sources에 들어가지 않아 백업되지 않습니다. 반면 작성 경로(750행)는 같은 상황을 거부합니다. writer는 JSON을 먼저 commit하므로 정상 흐름에서는 생기지 않고, 외부 조작에서만 생기는 파생 HTML이라 정본(JSON) 손실은 아닙니다. 두 경로의 정책을 맞추려면 이전에서도 거부하거나 백업하도록 하면 됩니다.",
+          "경미한 관찰: 앱 목록의 묶음 정렬 기준은 대표 entry(최신 authored)의 createdAt입니다. 그래서 오래된 authored 뒤에 최신 snapshot이 있는 묶음은 목록 아래쪽에 놓입니다. '최신 저작 기록 우선 표시'라는 명세와 맞는 설계 선택으로 보고 결함으로 판단하지 않았습니다. maintainWorkReports 결과의 counts.reports와 counts.entries가 같은 값을 반복하는 것도 표시상의 중복일 뿐입니다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-aa3efe2b-17a7-48d2-baec-39cd62b2b082/opus.json",
+        "startedAt"      : "2026-11-16T00:23:05.872Z",
+        "completedAt"    : "2026-11-16T00:24:32.931Z",
+        "workId"         : "work-2f2c2837-080b-45ac-a702-09bf6cda2d45",
+        "workRequestHash": "e0260be228719f5137dc48692781a417e38d6ab56961f9fe0f29fae5e48f3dbe",
+        "recordingRejection": [
+          "source_changed",
+          "receipt_context_mismatch"
+        ]
+      },
+      {
+        "id"            : "review-36bfb81e-67fa-4cdf-b52f-01350ac5df4a",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "8393864118bb0bda08039fbffa2b104c70ee9d98a67a42ff145349ddb9a50836",
+        "criteriaDigest": "ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "1b90bc2be44f83e61ed5e80fefd0094871b52899cf4bb58357738ccc417c1269"
+        },
+        "failure": null,
+        "findings": [
+          "검토 범위: Read/Grep 도구로 scripts/workflow/reports.ts 전체, report-names.ts, src/reports-service.ts, src/main.ts(보고서 관련 줄), scripts/workflow.ts(보고서 action 분기), skills/www/www-report/SKILL.md(관련 줄), test/workflow-reports.test.ts 395~554줄, 작업 017의 spec·tasks·verification, 증거 파일 duplicate-id-probe.json·duplicate-id-fixed.json·audit-maintenance.json·audit-functional-verification.json을 읽었다. design.md, work.json, report-view.ts, work-json.ts, artifacts.ts, 나머지 테스트 파일, docs/specs/reports.md·docs/skills/REPORTS.md 본문, merge-verified.json, audit-quality/boxbox 증거, work-json-audit.log는 읽지 않았다. 테스트·타입 검사는 실행하지 않았고 기록된 결과만 대조했다. 도구 읽기 실패는 없었다.",
+          "증거 일치: audit-functional-verification.json(attempt-285b66ee)에 기록된 파일별 digest(reports.ts 30c0c2…, report-names.ts 403222…, src/main.ts 57b037…, reports-service.ts e412a4…, workflow-reports.test.ts 572587… 등)가 이번 검토 대상 목록의 digest와 같다. 따라서 기록된 집중 테스트 통과(exitCode 0, sourceStable true)는 현재 후보 소스에 대한 것이다. criteriaDigest ee88e367…도 검토 입력과 같다.",
+          "UUID 충돌 단건 읽기 수정 확인: reports.ts:990-1006에서 파일 사이의 의미 충돌을 conflictingIds에 기록하고, 요청 UUID가 충돌하면 즉시 거부한다. 목록 경로 storedReports(reports.ts:581-592)도 충돌 UUID를 제외한다. 회귀 테스트 test/workflow-reports.test.ts:534-546이 다른 제목 묶음에 같은 UUID를 넣은 경우를 검사한다. probe 결과가 unexpected_success에서 refused로 바뀐 증거와도 맞다. readdir 순서와 상관없이 충돌 ID가 추적되는 구조다.",
+          "정본 JSON 없이 대상 HTML만 있는 경우의 사전 거부 확인: writer(reports.ts:750)와 이전(reports.ts:869)이 같은 조건으로 거부한다. 테스트 workflow-reports.test.ts:426-431이 미리보기와 apply 모두 거부되고 원본 bytes가 보존되는지 검사한다.",
+          "AC-1/AC-5 동작 대조: 묶음 이름 reportFileStem은 NFC 제목과 제목 sha256 앞 16자로 정해지고 시각·종류·UUID와 무관하다(report-names.ts:32-43). 내보내기도 같은 stem을 쓴다(src/main.ts:447). 서비스 목록은 createdAt 내림차순 목록에서 workId+NFC 제목별로 처음 나온 항목을 고르고, snapshot이면 최신 authored로 교체한다. 그래서 '최신 저작 우선'을 만족한다(src/reports-service.ts:14-20).",
+          "비차단 관찰 1 — 목록의 부분 노출, reports.ts:582-591: 한 파일을 처리하다 충돌로 throw하기 전에 found에 넣은 같은 파일의 앞쪽 entry는 목록에 그대로 남는다. 예를 들어 묶음 B의 정렬 순서가 [idD, idC(충돌)]이면 idD는 목록에 나온다. 그런데 readWorkReport는 실패 파일명이 reportFileStem(idD)와 같아 idD 읽기를 거부한다(reports.ts:1009-1011). 정렬 순서에 따라 '목록에는 보이지만 열리지 않는' 항목이 생길 수 있다. 손상·충돌 자료에서만 생기고 정본을 덮어쓰거나 숨기지는 않으므로 차단 결함으로 보지 않는다. 실패한 파일의 entry 전체를 목록에서 빼면 일관성이 나아진다.",
+          "비차단 관찰 2 — 이름 분류의 경계, reports.ts:566: 제목이 '-YYYYMMDDTHHMMSSmmmZ-authored'처럼 legacy 시각 접미사 형태로 끝나면 묶음 파일명도 legacy 정규식에 걸린다. 그러면 1 MiB 한도(JSON_LIMIT)로 읽혀 1 MiB를 넘는 묶음이 거부될 수 있다. 실제로 나올 가능성은 낮고, 이 경우에도 실패로 거부하며 정본을 보존한다.",
+          "증거 범위: verification.md는 실제 Electron GUI QA, 전체 npm test, BoxBox 가독성 전체 PASS를 주장하지 않는다고 명시한다. 충돌 수정 전 Opus 검토를 현재 후보의 통과로 쓰지 않는다는 점도 구분해 적었다. 읽은 범위 안에서 증거를 실제보다 넓혀 쓴 서술은 찾지 못했다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-36bfb81e-67fa-4cdf-b52f-01350ac5df4a/opus.json",
+        "startedAt"      : "2026-11-16T00:28:07.096Z",
+        "completedAt"    : "2026-11-16T00:29:34.943Z",
+        "workId"         : "work-2f2c2837-080b-45ac-a702-09bf6cda2d45",
+        "workRequestHash": "e0260be228719f5137dc48692781a417e38d6ab56961f9fe0f29fae5e48f3dbe"
+      }
+    ],
+    "artifactReviews": [
+      {
+        "id"        : "artifact-8cdfa775-6524-4b55-9278-784873933fa9",
+        "version"   : 1,
+        "reviewedAt": "2026-11-15T23:51:40.366Z",
+        "kind"      : "spec",
+        "depth"     : "full",
+        "summary"   : "독립 Opus 계획 검토 pass. 원문 .www/evidence/reviews/review-f6e1d475-a634-4c5c-af64-ce998b453db0/opus.json; 구현·테스트 통과와 구분한다.",
+        "digest"    : "eea721d7b8ddf2f542990cef7a9af551d0165211a3eb909e551719ff91e5e598",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "Opus가 명세·설계·작업·기준을 직접 읽고 제목 충돌, UUID 호환, 내용 보존, 실패·재실행 경계를 대조해 계획 단계 pass로 판단했다. 구현 후 단건 UUID 조회·내보내기와 원장 불변을 실측한다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "Opus가 명세·설계·작업·기준을 직접 읽고 제목 충돌, UUID 호환, 내용 보존, 실패·재실행 경계를 대조해 계획 단계 pass로 판단했다. 구현 후 단건 UUID 조회·내보내기와 원장 불변을 실측한다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "satisfied",
+            "reason": "Opus가 명세·설계·작업·기준을 직접 읽고 제목 충돌, UUID 호환, 내용 보존, 실패·재실행 경계를 대조해 계획 단계 pass로 판단했다. 구현 후 단건 UUID 조회·내보내기와 원장 불변을 실측한다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "satisfied",
+            "reason": "Opus가 명세·설계·작업·기준을 직접 읽고 제목 충돌, UUID 호환, 내용 보존, 실패·재실행 경계를 대조해 계획 단계 pass로 판단했다. 구현 후 단건 UUID 조회·내보내기와 원장 불변을 실측한다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-c8716351-c067-4051-a1c3-263f72449456",
+        "version"   : 1,
+        "reviewedAt": "2026-11-15T23:51:40.625Z",
+        "kind"      : "consistency",
+        "depth"     : "full",
+        "summary"   : "독립 Opus 계획 검토 pass. 원문 .www/evidence/reviews/review-f6e1d475-a634-4c5c-af64-ce998b453db0/opus.json; 구현·테스트 통과와 구분한다.",
+        "digest"    : "5ad57c1f0a7f7221c9c21fab4349f43b6a928cae50d3023033904c2c2be037c4",
+        "checks": [
+          {
+            "id"    : "coverage",
+            "result": "satisfied",
+            "reason": "Opus가 명세·설계·작업·기준을 직접 읽고 제목 충돌, UUID 호환, 내용 보존, 실패·재실행 경계를 대조해 계획 단계 pass로 판단했다. 구현 후 단건 UUID 조회·내보내기와 원장 불변을 실측한다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              },
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/design.md",
+                "line": 1
+              },
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "alignment",
+            "result": "satisfied",
+            "reason": "Opus가 명세·설계·작업·기준을 직접 읽고 제목 충돌, UUID 호환, 내용 보존, 실패·재실행 경계를 대조해 계획 단계 pass로 판단했다. 구현 후 단건 UUID 조회·내보내기와 원장 불변을 실측한다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              },
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/design.md",
+                "line": 1
+              },
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "terminology",
+            "result": "satisfied",
+            "reason": "Opus가 명세·설계·작업·기준을 직접 읽고 제목 충돌, UUID 호환, 내용 보존, 실패·재실행 경계를 대조해 계획 단계 pass로 판단했다. 구현 후 단건 UUID 조회·내보내기와 원장 불변을 실측한다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              },
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/design.md",
+                "line": 1
+              },
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 1
+              }
+            ]
+          }
+        ],
+        "coverage": [
+          {
+            "criterionId": "AC-1",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "criterionId": "AC-2",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 4
+              }
+            ]
+          },
+          {
+            "criterionId": "AC-3",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 5
+              }
+            ]
+          },
+          {
+            "criterionId": "AC-4",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id"        : "artifact-fa6d0b62-58ef-4154-9c94-904fbef1eda1",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:09:00.652Z",
+        "kind"      : "spec",
+        "depth"     : "full",
+        "summary"   : "추가 요구와 사용자 선택 반영 후 독립 Opus 계획 재검토 pass. 원문 .www/evidence/reviews/review-94752746-ec64-42ea-ab36-6e08c09d5b56/opus.json. 최초 fail의 과거 근거 연결을 수정했으며 구현 검증과 구분한다.",
+        "digest"    : "c4f3f3a9e1b1ee14bc2a8ad0d2d922421652a1d8842e5371f20131cc2ff25cc7",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "독립 검토가 workId·NFC 제목 병합, UUID·entry 보존, JSON 정본/HTML 복구·상한·백업·권한·현재 기준 근거 분리를 문서에서 대조했다. 사용자 병합 경계가 확정됐고 이전 시도는 새 기준의 현재 근거에서 제외했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "독립 검토가 workId·NFC 제목 병합, UUID·entry 보존, JSON 정본/HTML 복구·상한·백업·권한·현재 기준 근거 분리를 문서에서 대조했다. 사용자 병합 경계가 확정됐고 이전 시도는 새 기준의 현재 근거에서 제외했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "satisfied",
+            "reason": "독립 검토가 workId·NFC 제목 병합, UUID·entry 보존, JSON 정본/HTML 복구·상한·백업·권한·현재 기준 근거 분리를 문서에서 대조했다. 사용자 병합 경계가 확정됐고 이전 시도는 새 기준의 현재 근거에서 제외했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "satisfied",
+            "reason": "독립 검토가 workId·NFC 제목 병합, UUID·entry 보존, JSON 정본/HTML 복구·상한·백업·권한·현재 기준 근거 분리를 문서에서 대조했다. 사용자 병합 경계가 확정됐고 이전 시도는 새 기준의 현재 근거에서 제외했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-af022683-551e-45b7-9898-284cd8cdfe09",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:09:01.306Z",
+        "kind"      : "consistency",
+        "depth"     : "full",
+        "summary"   : "추가 요구와 사용자 선택 반영 후 독립 Opus 계획 재검토 pass. 원문 .www/evidence/reviews/review-94752746-ec64-42ea-ab36-6e08c09d5b56/opus.json. 최초 fail의 과거 근거 연결을 수정했으며 구현 검증과 구분한다.",
+        "digest"    : "78b7240c39d380b43273a3084f9e1b2aaf77f98f453183c0f23efc1e2db5baff",
+        "checks": [
+          {
+            "id"    : "coverage",
+            "result": "satisfied",
+            "reason": "독립 검토가 workId·NFC 제목 병합, UUID·entry 보존, JSON 정본/HTML 복구·상한·백업·권한·현재 기준 근거 분리를 문서에서 대조했다. 사용자 병합 경계가 확정됐고 이전 시도는 새 기준의 현재 근거에서 제외했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              },
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/design.md",
+                "line": 1
+              },
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "alignment",
+            "result": "satisfied",
+            "reason": "독립 검토가 workId·NFC 제목 병합, UUID·entry 보존, JSON 정본/HTML 복구·상한·백업·권한·현재 기준 근거 분리를 문서에서 대조했다. 사용자 병합 경계가 확정됐고 이전 시도는 새 기준의 현재 근거에서 제외했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              },
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/design.md",
+                "line": 1
+              },
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "terminology",
+            "result": "satisfied",
+            "reason": "독립 검토가 workId·NFC 제목 병합, UUID·entry 보존, JSON 정본/HTML 복구·상한·백업·권한·현재 기준 근거 분리를 문서에서 대조했다. 사용자 병합 경계가 확정됐고 이전 시도는 새 기준의 현재 근거에서 제외했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/spec.md",
+                "line": 1
+              },
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/design.md",
+                "line": 1
+              },
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 1
+              }
+            ]
+          }
+        ],
+        "coverage": [
+          {
+            "criterionId": "AC-1",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "criterionId": "AC-2",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 4
+              }
+            ]
+          },
+          {
+            "criterionId": "AC-3",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 5
+              }
+            ]
+          },
+          {
+            "criterionId": "AC-4",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 6
+              }
+            ]
+          },
+          {
+            "criterionId": "AC-5",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/tasks.md",
+                "line": 7
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-4035ccb9-f8bf-4be5-bf9b-631597826da0",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T00:19:27.891Z",
+        "sourceDigest"   : "5a4326430db4afde9ea9a29d3d1e790e159fbdf679be115df341ba3ac4e6ae29",
+        "criteriaDigest" : "ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00",
+        "documentsDigest": "31832645e5666c25b5552032222dd223c458014fa83ff850d4d9dd0d064f50fc",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "schema2 entries·원자 정본·HTML 복구·서비스 묶음 목록 책임과 파일명 공통 함수를 반영했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "제목별 누적·실제 병합·백업·한도·재실행·스킬 발견 경로를 갱신했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "제품 목적과 보고서 읽기·자동 저작 범위는 유지하고 저장·목록 표현을 정본 보고서 계약에서 구체화했다."
+          },
+          {
+            "path"    : "docs/skills/REPORTS.md",
+            "decision": "updated",
+            "reason"  : "같은 작업·NFC 제목의 한 파일 쌍 누적과 과거 UUID·entry 의미 보존, 정본·파생 복구·상한을 정했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "기존 권한·증거·검토·보고서 계약 참조가 유지되며 별도 단계·상태를 추가하지 않았다."
+          },
+          {
+            "path"    : "docs/specs/reports.md",
+            "decision": "updated",
+            "reason"  : "한 항목 목록·누적 HTML·내보내기·병합과 묶음 크기 경계를 반영했다."
+          },
+          {
+            "path"    : "skills/www/www-report/SKILL.md",
+            "decision": "updated",
+            "reason"  : "실제 제공한 생성·누적·관리·검증·잠금 복구 경로와 백업·의미 비교를 연결했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-fb2ed4f6-6866-4fff-b13b-928a9caa2d09",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T00:22:49.188Z",
+        "sourceDigest"   : "a501bb822e31004d750752850080a54a90ef7625e44db87dcc4784de08775486",
+        "criteriaDigest" : "ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00",
+        "documentsDigest": "31832645e5666c25b5552032222dd223c458014fa83ff850d4d9dd0d064f50fc",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "schema2 entries·원자 정본·HTML 복구·서비스 묶음 목록 책임과 파일명 공통 함수를 반영했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "제목별 누적·실제 병합·백업·한도·재실행·스킬 발견 경로를 갱신했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "제품 목적과 보고서 읽기·자동 저작 범위는 유지하고 저장·목록 표현을 정본 보고서 계약에서 구체화했다."
+          },
+          {
+            "path"    : "docs/skills/REPORTS.md",
+            "decision": "updated",
+            "reason"  : "같은 작업·NFC 제목의 한 파일 쌍 누적과 과거 UUID·entry 의미 보존, 정본·파생 복구·상한을 정했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "기존 권한·증거·검토·보고서 계약 참조가 유지되며 별도 단계·상태를 추가하지 않았다."
+          },
+          {
+            "path"    : "docs/specs/reports.md",
+            "decision": "updated",
+            "reason"  : "한 항목 목록·누적 HTML·내보내기·병합과 묶음 크기 경계를 반영했다."
+          },
+          {
+            "path"    : "skills/www/www-report/SKILL.md",
+            "decision": "updated",
+            "reason"  : "실제 제공한 생성·누적·관리·검증·잠금 복구 경로와 백업·의미 비교를 연결했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-57bd9e9c-d44a-4ad2-aa40-126a971428f3",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T00:28:05.859Z",
+        "sourceDigest"   : "4bb9ac3d2a42df192d728f2a4dce96ec9b09d950699e5d1419b15a793933143e",
+        "criteriaDigest" : "ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00",
+        "documentsDigest": "31832645e5666c25b5552032222dd223c458014fa83ff850d4d9dd0d064f50fc",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "schema2 entries·원자 정본·HTML 복구·서비스 묶음 목록 책임과 파일명 공통 함수를 반영했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "제목별 누적·실제 병합·백업·한도·재실행·스킬 발견 경로를 갱신했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "제품 목적과 보고서 읽기·자동 저작 범위는 유지하고 저장·목록 표현을 정본 보고서 계약에서 구체화했다."
+          },
+          {
+            "path"    : "docs/skills/REPORTS.md",
+            "decision": "updated",
+            "reason"  : "같은 작업·NFC 제목의 한 파일 쌍 누적과 과거 UUID·entry 의미 보존, 정본·파생 복구·상한을 정했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "기존 권한·증거·검토·보고서 계약 참조가 유지되며 별도 단계·상태를 추가하지 않았다."
+          },
+          {
+            "path"    : "docs/specs/reports.md",
+            "decision": "updated",
+            "reason"  : "한 항목 목록·누적 HTML·내보내기·병합과 묶음 크기 경계를 반영했다."
+          },
+          {
+            "path"    : "skills/www/www-report/SKILL.md",
+            "decision": "updated",
+            "reason"  : "실제 제공한 생성·누적·관리·검증·잠금 복구 경로와 백업·의미 비교를 연결했다."
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
+  }
+}

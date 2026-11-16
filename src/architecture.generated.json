@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "f8357105575d510193a7b2e6b6f3c40bd7b47120685dd2d844ae0e38b42306ac",
+  "digest"       : "0e1d73d4b964fa11c25df9f3de8f45732444960fa0e593b0dd4f88c4a46f0b28",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -103,8 +103,8 @@
       "layer"      : "tooling",
       "role"       : "앱 모듈 · workflow",
       "line"       : 1,
-      "lines"      : 402,
-      "digest"     : "656220cd2bab398762c57d2ae6dc6e8d0c1ee9e4b5b0f1b6958c71068aeaf656",
+      "lines"      : 422,
+      "digest"     : "0e9ae3022c391b7d3b6601ac7494a9365c9473ea457d9e1ca91a80873d47fd09",
       "structureId": "arch.development.authoring"
     },
     {
@@ -229,14 +229,25 @@
       "structureId": "arch.development.reporting.lifecycle"
     },
     {
+      "id"         : "scripts/workflow/report-names.ts",
+      "file"       : "scripts/workflow/report-names.ts",
+      "title"      : "report-names",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · report-names",
+      "line"       : 1,
+      "lines"      : 44,
+      "digest"     : "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+      "structureId": "arch.development.reporting.storage"
+    },
+    {
       "id"         : "scripts/workflow/report-view.ts",
       "file"       : "scripts/workflow/report-view.ts",
       "title"      : "report-view",
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · report-view",
       "line"       : 1,
-      "lines"      : 169,
-      "digest"     : "c0b392b8ef61a07432de9522054c3b13b9842c68df7ae2f05abd75495e251f2c",
+      "lines"      : 182,
+      "digest"     : "e0d9fafba2ec6227e888b3349c5aa358bc67c2c4dda4c04ff391dd71b0ea15a7",
       "structureId": "arch.development.reporting.document"
     },
     {
@@ -246,8 +257,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · reports",
       "line"       : 1,
-      "lines"      : 630,
-      "digest"     : "4578f648bc31e0eee001a7d9190e5c28534b88c1145d99bc2a1ad22468bb68c6",
+      "lines"      : 1029,
+      "digest"     : "30c0c253617b7631c44e424f8fd821e08e5a3c73bf88387c2c5492e24d318848",
       "structureId": "arch.development.reporting.storage"
     },
     {
@@ -324,7 +335,7 @@
       "role"       : "개발 절차 모듈 · work-json",
       "line"       : 1,
       "lines"      : 66,
-      "digest"     : "bbee7cd5ea38ccce553d1bd6dc7dd9579769f352ee82f47637ab12cd61559260",
+      "digest"     : "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
       "structureId": "arch.development.records.serialization"
     },
     {
@@ -499,8 +510,8 @@
       "layer"      : "host",
       "role"       : "앱·Native 수명주기와 IPC 처리",
       "line"       : 1,
-      "lines"      : 783,
-      "digest"     : "7303faa6d674785b88ba21c70d216387ca7e7cf5cc029add7154da10e2f549f7",
+      "lines"      : 784,
+      "digest"     : "6a3f03bcdb703d939141e18b3bed987b0beee5548c8faf30c94aa7b2777f3a05",
       "structureId": "arch.native.lifecycle"
     },
     {
@@ -642,8 +653,8 @@
       "layer"      : "host",
       "role"       : "작업 보고서의 안전한 목록·읽기",
       "line"       : 1,
-      "lines"      : 23,
-      "digest"     : "9befdc420d42b3d3b603e401c557d5b353dea6a3db28cfa85248af0b8fd8db17",
+      "lines"      : 31,
+      "digest"     : "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
       "structureId": "arch.reports.service"
     },
     {
@@ -748,58 +759,69 @@
       "statement": "import { runReportedStage } from \"./workflow/report-lifecycle.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:451",
+      "id"       : "scripts/workflow.ts:213",
+      "from"     : "scripts/workflow.ts",
+      "to"       : "scripts/workflow/reports.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./workflow/reports.ts",
+      "line"     : 7,
+      "endLine"  : 7,
+      "statement": "import { inspectReportLocks, maintainWorkReports, recoverReportLock } from \"./workflow/reports.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow.ts:551",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/source-policy.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./source-policy.ts",
-      "line"     : 12,
-      "endLine"  : 12,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import { assertTypeScriptWrites, checkSourcePolicy } from \"./source-policy.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:531",
+      "id"       : "scripts/workflow.ts:631",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/run.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./workflow/run.ts",
-      "line"     : 13,
-      "endLine"  : 13,
+      "line"     : 14,
+      "endLine"  : 14,
       "statement": "import { runProcess, runWorkflow } from \"./workflow/run.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:592",
+      "id"       : "scripts/workflow.ts:692",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/preflight.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./workflow/preflight.ts",
-      "line"     : 14,
-      "endLine"  : 14,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import { validateWritePaths } from \"./workflow/preflight.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:654",
+      "id"       : "scripts/workflow.ts:754",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/route.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./workflow/route.ts",
-      "line"     : 15,
-      "endLine"  : 15,
+      "line"     : 16,
+      "endLine"  : 16,
       "statement": "import { namedSkill } from \"./workflow/route.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:704",
+      "id"       : "scripts/workflow.ts:804",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/adapters/gjc.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./workflow/adapters/gjc.ts",
-      "line"     : 16,
-      "endLine"  : 16,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import type { ProcessInvocation, ProcessOptions } from \"./workflow/adapters/gjc.ts\";"
     },
     {
@@ -1023,48 +1045,59 @@
       "statement": "import type { ReportReader, WorkReport } from \"./reports.ts\";"
     },
     {
-      "id"       : "scripts/workflow/reports.ts:312",
+      "id"       : "scripts/workflow/reports.ts:338",
       "from"     : "scripts/workflow/reports.ts",
       "to"       : "scripts/workflow/work-json.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./work-json.ts",
-      "line"     : 9,
-      "endLine"  : 9,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import { serializeWorkReport } from \"./work-json.ts\";"
     },
     {
-      "id"       : "scripts/workflow/reports.ts:366",
+      "id"       : "scripts/workflow/reports.ts:392",
       "from"     : "scripts/workflow/reports.ts",
       "to"       : "scripts/workflow/preflight.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./preflight.ts",
-      "line"     : 10,
-      "endLine"  : 10,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { assertWorkId, workOutputColumns } from \"./preflight.ts\";"
     },
     {
-      "id"       : "scripts/workflow/reports.ts:432",
+      "id"       : "scripts/workflow/reports.ts:458",
       "from"     : "scripts/workflow/reports.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./evidence.ts",
-      "line"     : 11,
-      "endLine"  : 11,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { captureSource, criteriaDigest } from \"./evidence.ts\";"
     },
     {
-      "id"       : "scripts/workflow/reports.ts:495",
+      "id"       : "scripts/workflow/reports.ts:521",
       "from"     : "scripts/workflow/reports.ts",
       "to"       : "scripts/workflow/report-view.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./report-view.ts",
-      "line"     : 12,
-      "endLine"  : 12,
+      "line"     : 13,
+      "endLine"  : 13,
       "statement": "import { renderReportDocument } from \"./report-view.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/reports.ts:578",
+      "from"     : "scripts/workflow/reports.ts",
+      "to"       : "scripts/workflow/report-names.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./report-names.ts",
+      "line"     : 14,
+      "endLine"  : 14,
+      "statement": "import { reportFileStem, reportRevisionFileStem } from \"./report-names.ts\";"
     },
     {
       "id"       : "scripts/workflow/review-app-server.ts:258",
@@ -1460,7 +1493,7 @@
       "specifier": "./reports.ts",
       "line"     : 6,
       "endLine"  : 6,
-      "statement": "import type { WorkReport } from \"./reports.ts\";"
+      "statement": "import type { WorkReport, ReportBundle } from \"./reports.ts\";"
     },
     {
       "id"       : "scripts/workflow/work.ts:270",
@@ -1806,122 +1839,133 @@
     {
       "id"       : "src/main.ts:661",
       "from"     : "src/main.ts",
+      "to"       : "scripts/workflow/report-names.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "../scripts/workflow/report-names.ts",
+      "line"     : 14,
+      "endLine"  : 14,
+      "statement": "import { reportFileStem } from \"../scripts/workflow/report-names.ts\";"
+    },
+    {
+      "id"       : "src/main.ts:731",
+      "from"     : "src/main.ts",
       "to"       : "src/native-reports.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-reports",
-      "line"     : 14,
-      "endLine"  : 14,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import { createNativeReportHarness } from \"./native-reports\";"
     },
     {
-      "id"       : "src/main.ts:723",
+      "id"       : "src/main.ts:793",
       "from"     : "src/main.ts",
       "to"       : "src/report-judge.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./report-judge",
-      "line"     : 15,
-      "endLine"  : 15,
+      "line"     : 16,
+      "endLine"  : 16,
       "statement": "import { judgeNativeReport } from \"./report-judge\";"
     },
     {
-      "id"       : "src/main.ts:775",
+      "id"       : "src/main.ts:845",
       "from"     : "src/main.ts",
       "to"       : "src/native-report-input.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-report-input",
-      "line"     : 16,
-      "endLine"  : 16,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import { NativeCompletionCollector } from \"./native-report-input\";"
     },
     {
-      "id"       : "src/main.ts:842",
+      "id"       : "src/main.ts:912",
       "from"     : "src/main.ts",
       "to"       : "src/native-command.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-command",
-      "line"     : 17,
-      "endLine"  : 17,
+      "line"     : 18,
+      "endLine"  : 18,
       "statement": "import { resolveNativeCodex } from \"./native-command\";"
     },
     {
-      "id"       : "src/main.ts:897",
+      "id"       : "src/main.ts:967",
       "from"     : "src/main.ts",
       "to"       : "src/native-chat.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-chat",
-      "line"     : 18,
-      "endLine"  : 18,
+      "line"     : 19,
+      "endLine"  : 19,
       "statement": "import { nativeThreadStartParams } from \"./native-chat\";"
     },
     {
-      "id"       : "src/main.ts:954",
+      "id"       : "src/main.ts:1024",
       "from"     : "src/main.ts",
       "to"       : "src/native-lifecycle.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-lifecycle",
-      "line"     : 19,
-      "endLine"  : 19,
+      "line"     : 20,
+      "endLine"  : 20,
       "statement": "import { createNativeLifecycle } from \"./native-lifecycle\";"
     },
     {
-      "id"       : "src/main.ts:1014",
+      "id"       : "src/main.ts:1084",
       "from"     : "src/main.ts",
       "to"       : "src/activity-sidebar.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./activity-sidebar",
-      "line"     : 20,
-      "endLine"  : 20,
+      "line"     : 21,
+      "endLine"  : 21,
       "statement": "import { parseHooksListResponse, parseSkillsListResponse } from \"./activity-sidebar\";"
     },
     {
-      "id"       : "src/main.ts:1100",
+      "id"       : "src/main.ts:1170",
       "from"     : "src/main.ts",
       "to"       : "src/activity-ledger.ts",
       "mode"     : "mixed",
       "syntax"   : "import",
       "specifier": "./activity-ledger",
-      "line"     : 21,
-      "endLine"  : 21,
+      "line"     : 22,
+      "endLine"  : 22,
       "statement": "import { createActivityLedger, type ActivityLedger } from \"./activity-ledger\";"
     },
     {
-      "id"       : "src/main.ts:1179",
+      "id"       : "src/main.ts:1249",
       "from"     : "src/main.ts",
       "to"       : "src/projects.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./projects",
-      "line"     : 22,
-      "endLine"  : 22,
+      "line"     : 23,
+      "endLine"  : 23,
       "statement": "import { createProjectRegistry } from \"./projects\";"
     },
     {
-      "id"       : "src/main.ts:1231",
+      "id"       : "src/main.ts:1301",
       "from"     : "src/main.ts",
       "to"       : "src/native-activity.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-activity",
-      "line"     : 23,
-      "endLine"  : 23,
+      "line"     : 24,
+      "endLine"  : 24,
       "statement": "import { normalizeNativeResources } from \"./native-activity\";"
     },
     {
-      "id"       : "src/main.ts:1293",
+      "id"       : "src/main.ts:1363",
       "from"     : "src/main.ts",
       "to"       : "src/shared.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./shared",
-      "line"     : 24,
-      "endLine"  : 24,
+      "line"     : 25,
+      "endLine"  : 25,
       "statement": "import type { AppEvent, ScopedAppEvent, SelectionRef, WorkspaceSelection, ResourceScope, ResourceSnapshot, RpcId } from \"./shared\";"
     },
     {
@@ -2340,7 +2384,7 @@
       "specifier": "./shared",
       "line"     : 6,
       "endLine"  : 6,
-      "statement": "import type { WorkReportCatalog, WorkReportDocument } from \"./shared\";"
+      "statement": "import type { WorkReportCatalog, WorkReportDocument, WorkReportSummary } from \"./shared\";"
     },
     {
       "id"       : "src/reports-view.tsx:138",
@@ -2500,31 +2544,31 @@
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 7,
+      "line"     : 8,
       "specifier": "node:child_process",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 8,
+      "line"     : 9,
       "specifier": "node:crypto",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 9,
+      "line"     : 10,
       "specifier": "node:fs/promises",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 10,
+      "line"     : 11,
       "specifier": "node:path",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 11,
+      "line"     : 12,
       "specifier": "node:url",
       "reason"   : "external"
     },
@@ -2787,6 +2831,12 @@
       "reason"   : "external"
     },
     {
+      "file"     : "scripts/workflow/report-names.ts",
+      "line"     : 5,
+      "specifier": "node:crypto",
+      "reason"   : "external"
+    },
+    {
       "file"     : "scripts/workflow/reports.ts",
       "line"     : 5,
       "specifier": "node:crypto",
@@ -2808,6 +2858,12 @@
       "file"     : "scripts/workflow/reports.ts",
       "line"     : 8,
       "specifier": "node:path",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/reports.ts",
+      "line"     : 9,
+      "specifier": "node:os",
       "reason"   : "external"
     },
     {
@@ -3307,7 +3363,8 @@
           "arch.development.reporting.lifecycle",
           "arch.development.routing",
           "arch.tooling.source-policy",
-          "arch.development.records.state"
+          "arch.development.records.state",
+          "arch.development.reporting.storage"
         ]
       },
       {
@@ -3620,7 +3677,8 @@
           "arch.reports.collection",
           "arch.reports.judgement",
           "arch.reports.queue",
-          "arch.reports.service"
+          "arch.reports.service",
+          "arch.development.reporting.storage"
         ]
       },
       {
@@ -4423,6 +4481,14 @@
         "line": 2
       },
       {
+        "file": "scripts/workflow/report-names.ts",
+        "nodeId": "arch.development.reporting.storage",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-REPORTING-STORAGE"
+        ],
+        "line": 2
+      },
+      {
         "file": "scripts/workflow/report-view.ts",
         "nodeId": "arch.development.reporting.document",
         "requirementIds": [
@@ -4918,6 +4984,13 @@
         "line": 2
       },
       {
+        "file": "test/report-maintenance-entry.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-REPORTING-STORAGE"
+        ],
+        "line": 2
+      },
+      {
         "file": "test/report-service.test.ts",
         "requirementIds": [
           "RESP-REPORTS-SERVICE",
@@ -5063,6 +5136,6 @@
         "line": 2
       }
     ],
-    "digest": "cbeec9bbb67748559cbef8756350b719fc27a024b1476e173fc22a4aef4dfcca"
+    "digest": "9b7c433b9adb14bb669a2bff41af4915151c7422a7f61173e03e5b3ae777d1e2"
   }
 }

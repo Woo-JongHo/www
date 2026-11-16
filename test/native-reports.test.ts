@@ -1,6 +1,7 @@
 /**
  * @verifies RESP-REPORTS-QUEUE
  */
+import { reportFileStem } from "../scripts/workflow/report-names.ts";
 import { createHash } from "node:crypto";
 import assert from "node:assert/strict";
 import { promises as fs, readdirSync, symlinkSync } from "node:fs";
@@ -66,7 +67,7 @@ test("필요 판단은 실제 보고서를 저장하며 원문·검증 통과를
   const raw = await fs.readFile(path.join(repo, report.report.source.recordPath), "utf8");
   assert.match(raw, /"id" +:/);
   assert.equal(report.report.workRecordHash, createHash("sha256").update(raw).digest("hex"));
-  assert.match(await fs.readFile(path.join(repo, path.dirname(report.report.source.recordPath), "reports", `${report.report.id}.json`), "utf8"), /"id" +:/);
+  assert.match(await fs.readFile(path.join(repo, path.dirname(report.report.source.recordPath), "reports", `${reportFileStem(report.report)}.json`), "utf8"), /"id" +:/);
   await assert.rejects(fs.access(path.join(repo, ".www/development.local.json")));
 
   assert.deepEqual(report.report.narrative?.reader, authored.narrative?.reader);

@@ -238,9 +238,11 @@ renderer는 초기 bootstrap과 대화 전환 전에 활동 snapshot 경계를 �
 
 ## 작업 보고서 실행과 유지보수
 
+제목별 묶음 점검은 `node scripts/workflow.ts '{"action":"report-maintain"}'`, 실제 이전은 같은 옵션에 `"apply":true,"direct":true`를 추가한다. 병합 전 원본 JSON·HTML을 검증된 별도 사본으로 보관하고 반환한 `changes`의 원본 경로·SHA256과 entries 의미 지문·수량을 보존한다. 적용 후 전체 entry 객체·UUID 집합, 읽기 전용 재실행의 `no_changes`와 과거 UUID 읽기를 확인한다. 같은 작업·NFC 제목은 안정 파일명 한 쌍에 누적하고 앱 목록은 최신 저작 우선의 한 항목으로 표시한다. 기존 entry 의미와 원장을 보존하는 병합·중단 복원 절차는 [보고서 계약](skills/REPORTS.md), 반복 실행 지침은 [www-report](../skills/www/www-report/SKILL.md)를 따른다. 새 스킬은 `.agents/skills/www-report`의 정본 상대 링크로 발견하며 현재 세션의 자동 재로딩을 전제하지 않는다.
+
 저자는 [작업 종료 보고서 계약](skills/REPORTS.md)에 따라 work CLI의 report action으로 서술을 저장한다. reports 서비스·sandbox iframe·독립 HTML은 같은 구조화 데이터를 사용한다. 개발 역할의 core·하네스 사건이 자동 기록을 만들며 전역 호스트 Stop 등록은 전제하지 않는다. 보고서 생성에 실패한 reportHook 결과를 검사 성공으로 숨기지 않는다.
 
-보고서 서비스의 작업 탐색, 호스트 예외의 `requestId` 회수, Native 기존 작업 재사용은 `reports.ts`의 공통 `WORK_RECORD_JSON_LIMIT`으로 `work.json`에 8 MiB 읽기 상한을 적용한다. 보고서 JSON 읽기·생성은 1 MiB, HTML 생성은 2 MiB 상한을 유지하며, 원장과 보고서의 정규 파일·심볼릭 링크 거부·JSON 검증 경계도 유지한다. 상한을 넘은 원장은 보고서 목록에서 경고와 함께 제외하고, 접수 ID 회수에서는 건너뛰며, Native 등록에서는 저장 실패로 거부한다. 기존 이력을 줄여 우회하지 않는다.
+보고서 서비스의 작업 탐색, 호스트 예외의 `requestId` 회수, Native 기존 작업 재사용은 `reports.ts`의 공통 `WORK_RECORD_JSON_LIMIT`으로 `work.json`에 8 MiB 읽기 상한을 적용한다. 개별 entry JSON 읽기·생성은 1 MiB, 단일 HTML은 2 MiB 상한을 유지한다. 누적 묶음은 JSON 16 MiB·최대 2000 entries, HTML 32 MiB로 제한하며 원장과 보고서의 정규 파일·심볼릭 링크 거부·JSON 검증 경계도 유지한다. 상한을 넘은 원장은 보고서 목록에서 경고와 함께 제외하고, 접수 ID 회수에서는 건너뛰며, Native 등록에서는 저장 실패로 거부한다. 기존 이력을 줄여 우회하지 않는다.
 
 집중 검사 위치는 test/workflow-reports.test.ts, test/report-service.test.ts, test/workflow-work.test.ts, test/workflow-development.test.ts다. scripts/verify-reports.ts는 실제 Electron과 합성 Native로 리포트 IPC·화면 전환을 확인한다. 보고서 HTML은 좁은 화면·키보드·모션 축소·인쇄를 별도로 확인한다.
 

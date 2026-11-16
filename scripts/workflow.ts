@@ -4,6 +4,7 @@
  */
 import { appendPending } from "./workflow/work.ts";
 import { runReportedStage } from "./workflow/report-lifecycle.ts";
+import { inspectReportLocks, maintainWorkReports, recoverReportLock } from "./workflow/reports.ts";
 import { execFile, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import { access, lstat, readFile, realpath } from "node:fs/promises";
@@ -353,6 +354,25 @@ async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDe
 }
 
 export async function runTypedWorkflow(options: JsonObject, dependencies: HarnessDependencies = {}): Promise<JsonObject> {
+  switch (options.action) {
+    case "report-lock-status":
+    case "report-lock-recover":
+    case "report-maintain": {
+      if (options.repo !== undefined && typeof options.repo !== "string") throw new Error("저장소 경로는 문자열이어야 합니다.");
+      switch (options.action) {
+        case "report-lock-status": return { ...await inspectReportLocks({ repo: options.repo }) };
+        case "report-lock-recover": {
+          if (options.direct !== true || typeof options.directory !== "string" || typeof options.token !== "string") throw new Error("잠금 회수에는 직접 요청·관찰한 디렉터리·token이 필요합니다.");
+          return { ...await recoverReportLock({ repo: options.repo, directory: options.directory, token: options.token }) };
+        }
+        default: {
+          if (options.apply !== undefined && typeof options.apply !== "boolean") throw new Error("apply는 boolean이어야 합니다.");
+          if (options.apply === true && options.direct !== true) throw new Error("보고서 이전 적용에는 직접 받은 요청이 필요합니다.");
+          return { ...await maintainWorkReports({ repo: options.repo, apply: options.apply === true }) };
+        }
+      }
+    }
+  }
   if (options.action === "recover-result") {
     if (options.direct !== true || typeof options.workId !== "string" || typeof options.artifactPath !== "string") throw new Error("직접 요청과 회수 대상이 필요합니다.");
     return appendPending({ repo: typeof options.repo === "string" ? options.repo : process.cwd(), workId: options.workId, artifactPath: options.artifactPath });

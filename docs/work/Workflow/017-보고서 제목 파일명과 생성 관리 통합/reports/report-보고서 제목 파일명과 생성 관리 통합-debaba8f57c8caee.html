@@ -1,0 +1,1175 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>보고서 제목 파일명과 생성 관리 통합 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 16일 오전 9:31 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>보고서 제목 파일명과 생성 관리 통합</h1><p class="lead">기존 269개 기록을 27개 누적 보고서로 정리하고, 같은 작업·제목의 새 내용이 같은 파일에 쌓이도록 연결했습니다.</p><div id="report-story" class="story">작업을 다시 검증하거나 설명을 덧붙일 때마다 파일이 늘어나면, 사람이 찾고 싶은 하나의 보고서가 여러 곳으로 흩어집니다. 이번에는 같은 작업의 같은 제목을 한 보고서로 묶고 새 기록을 그 안에 쌓도록 바꿨습니다.
+
+최신 저작 설명을 먼저 읽고, 같은 파일의 이력에서 당시의 설명과 검증 결과를 다시 확인할 수 있습니다. 서로 다른 작업은 제목이 같아도 합치지 않습니다. 이전 기록을 최신 결과로 바꾸거나 검증을 새로 통과한 것으로 꾸미지도 않습니다.
+
+기존 269개 기록은 내용을 대조해 27개 묶음으로 옮겼고, 모든 UUID를 실제로 다시 읽었습니다. 원본 538개 파일은 별도 백업으로 남겼습니다. 이제 새로운 내용도 같은 제목 파일에 누적되며, 중단된 저장과 충돌은 하네스에서 확인하고 복구하거나 거부합니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 12 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>완료로 기록</strong></p></div></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>같은 작업·같은 제목의 파일을 하나로 관리</h3><p class="result">안정 제목의 JSON·HTML 한 쌍에 entries를 누적하고 앱 목록은 한 항목으로 모읍니다.</p><p class="support"><strong>근거</strong> 동시 append·dedupe·작업 분리 회귀와 실제 27묶음 결과</p></article><article class="requirement"><h3>기존 내용과 ID를 잃지 않고 병합</h3><p class="result">269개 entry 객체와 UUID 조회를 대조하고 538개 원본 백업을 검증했습니다.</p><p class="support"><strong>근거</strong> .www/evidence/report-title-maintenance/merge-verified.json</p></article><article class="requirement"><h3>이후 생성·관리의 일관성</h3><p class="result">writer·내보내기·관리 action·스킬이 같은 규칙을 사용합니다.</p><p class="support"><strong>근거</strong> 공식 CLI·서비스·수명주기·Native 및 직렬화 집중 검사</p><p class="limit">실제 GUI와 전체 가독성 판정은 별도 한계입니다.</p></article></section><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>파일 수를 줄이면서 과거 검증 근거를 보존해야 함</h3><p><strong>선택</strong> 같은 작업·제목의 불변 entry를 한 묶음에 누적</p><p><strong>판단 근거</strong> 사용자가 같은 작업 안 병합과 UUID별 이력 보존을 선택했습니다.</p><p class="limit"><strong>감수한 점</strong> 묶음 크기 상한을 두며 초과 시 임의 절단 없이 거부합니다.</p></article></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>누적 저장·목록·조회·복구</h3><dl><div><dt>확인 방법</dt><dd>공식 verifyWork와 실제 별도 프로세스 충돌·강제 종료 fixture</dd></div><div><dt>기대 결과</dt><dd>기록 유실·중복 없이 저장하고 충돌은 거부</dd></div><div><dt>실제 관측</dt><dd>집중 65개 passed, sourceStable·recorded true</dd></div><div><dt>확인 범위와 한계</dt><dd>합성 subprocess와 서비스 검사이며 실제 GUI는 아닙니다.</dd></div></dl></article><article class="check"><h3>직렬화·기존 승인 proof·공개 CLI golden</h3><dl><div><dt>확인 방법</dt><dd>bun test test/work-json.test.ts</dd></div><div><dt>기대 결과</dt><dd>새 묶음 직렬화와 기존 정본·원본 보존 경계 유지</dd></div><div><dt>실제 관측</dt><dd>16 pass/0 fail, 3938 assertions</dd></div></dl></article><article class="check"><h3>실제 기존 자료</h3><dl><div><dt>확인 방법</dt><dd>원본 backup SHA256·entry deepEqual·전체 UUID 읽기·재실행</dd></div><div><dt>기대 결과</dt><dd>모든 의미와 ID 보존, 같은 제목별 한 쌍으로 수렴</dd></div><div><dt>실제 관측</dt><dd>269 entries→27 groups·54 active files, 538 backups, 269 UUID reads, 38원장 변경 없음, no_changes</dd></div><div><dt>확인 범위와 한계</dt><dd>병합 적용 시점의 관측입니다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 12건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>BoxBox 구문은 확인했지만 정렬 FIXABLE·승인 또는 보존 거부가 남아 가독성 전체 PASS를 주장하지 않습니다.</li><li>전체 npm test와 실제 Electron 저장 대화상자·인쇄·키보드의 새 GUI QA는 실행하지 않았습니다.</li><li>현재 세션의 새 스킬 자동 재로딩과 별도 저작 호스트의 의미 수용은 미확인입니다.</li><li>최종 Opus가 손상 묶음의 부분 목록 노출과 legacy 시각 접미사 형태 제목의 큰 파일 분류를 비차단 관찰로 남겼으며 이를 해결했다고 주장하지 않습니다.</li></ul></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><ol class="references"><li><p>누적·병합·백업·복구 정책의 정본</p><code>docs/skills/REPORTS.md</code></li><li><p>반복 생성·관리 절차</p><code>skills/www/www-report/SKILL.md</code></li><li><p>실제 병합과 의미·UUID·원장 보존 관측</p><code>.www/evidence/report-title-maintenance/merge-verified.json</code></li><li><p>원본 백업 경로와 SHA256</p><code>.www/report-merge-backups/f8ab1f95-e237-4970-bb07-c437578581f1/manifest.json</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Workflow/017-보고서 제목 파일명과 생성 관리 통합/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-2f2c2837-080b-45ac-a702-09bf6cda2d45<br>report-14b063c4-242a-497f-a413-0c1c33fa194d</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>93f026cd9cded40d5453a43d92124938b2386ce8a27874c0d49e5b87beb375fa</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>4bb9ac3d2a42df192d728f2a4dce96ec9b09d950699e5d1419b15a793933143e</code></dd></div><div><dt>기준 지문</dt><dd><code>ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>done</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;done&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;같은 작업 UUID와 NFC 제목의 보고서는 안정된 제목 파일명의 JSON 1개·HTML 1개로 생성·누적하며 내보내기도 같은 이름을 사용한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;기존 UUID형·시각포함 제목형 보고서를 묶음으로 이전하고 모든 entry의 ID·서술·검증 의미·semanticHash를 보존하며 기존 UUID로 읽는다. 병합 전 원본 bytes는 별도 백업한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;관리 하네스는 미리보기·전체 사전검사·명시 적용·재실행·중단 복원·잠금 회수와 동시 누적을 제공하며 충돌·손상·링크·상한 위반에서 기존 정본을 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;발견 가능한 보고서 스킬과 정본 계약이 생성·누적·목록·이전·백업·복원·실패 처리를 같은 공식 경로로 안내한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;앱 목록은 같은 작업·제목을 한 항목으로 모으고 최신 저작 기록을 우선 표시하며 독립 HTML에서 누적된 모든 기록을 안전하게 읽고 과거 판단과 현재성을 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-a9bd8b6a-351c-4c26-81d2-7be86a42d9bb&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/workflow-reports.test.ts&quot;,
+        &quot;test/report-maintenance-entry.test.ts&quot;,
+        &quot;test/native-reports.test.ts&quot;,
+        &quot;test/report-service.test.ts&quot;,
+        &quot;test/report-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:58:31.883Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-76dd20ae-4451-43ed-aa27-49c5d5b96b76&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:58:51.435Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-ef973dee-2bc7-4deb-a072-cc71e39820cc&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/workflow-reports.test.ts&quot;,
+        &quot;test/report-maintenance-entry.test.ts&quot;,
+        &quot;test/native-reports.test.ts&quot;,
+        &quot;test/report-service.test.ts&quot;,
+        &quot;test/report-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:00:06.580Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e6c2e7af-9710-4ddc-8373-874f80c15a47&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:00:20.870Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/workflow-reports.test.ts&quot;,
+        &quot;test/report-maintenance-entry.test.ts&quot;,
+        &quot;test/native-reports.test.ts&quot;,
+        &quot;test/report-service.test.ts&quot;,
+        &quot;test/report-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:14:56.340Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:14:57.188Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:18:23.636Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/workflow-reports.test.ts&quot;,
+        &quot;test/report-maintenance-entry.test.ts&quot;,
+        &quot;test/native-reports.test.ts&quot;,
+        &quot;test/report-service.test.ts&quot;,
+        &quot;test/report-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:18:24.645Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/workflow-reports.test.ts&quot;,
+        &quot;test/report-maintenance-entry.test.ts&quot;,
+        &quot;test/native-reports.test.ts&quot;,
+        &quot;test/report-service.test.ts&quot;,
+        &quot;test/report-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:21:47.754Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:21:48.488Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:26:37.703Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/workflow-reports.test.ts&quot;,
+        &quot;test/report-maintenance-entry.test.ts&quot;,
+        &quot;test/native-reports.test.ts&quot;,
+        &quot;test/report-service.test.ts&quot;,
+        &quot;test/report-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:26:37.901Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-aa3efe2b-17a7-48d2-baec-39cd62b2b082&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-aa3efe2b-17a7-48d2-baec-39cd62b2b082/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep으로 spec.md·verification.md, scripts/workflow/reports.ts(494-1023행)·report-names.ts·workflow.ts의 report-maintain dispatch, src/reports-service.ts·src/main.ts의 내보내기 이름, skills/www/www-report/SKILL.md를 읽었습니다. test/workflow-reports.test.ts는 테스트 이름 목록과 416-439행만 읽었습니다. 증거 파일은 merge-verified.json, release-maintenance.json(1행), release-functional-verification.json을 읽었습니다. design.md·tasks.md·work.json·report-view.ts·work-json.ts·artifacts.ts·docs 계약 본문은 직접 읽지 않았습니다. 테스트는 실행하지 않았고 읽기 실패도 없었습니다.&quot;,
+        &quot;AC-1: 파일 이름(reportFileStem, report-names.ts:32-43)은 NFC 제목과 제목 SHA256 앞 16자로 정해서 시각·종류·entry UUID에 따라 달라지지 않습니다. 작성 경로(reports.ts:741-752)는 같은 제목의 기존 entry에 새 entry를 더해 JSON 1개와 HTML 1개로 다시 씁니다. 내보내기 기본 이름(src/main.ts:447)도 같은 함수를 씁니다. 작업마다 reports 디렉터리가 따로 있어서 다른 작업 UUID의 같은 제목은 다른 묶음으로 남고, 테스트 548행이 이 경우를 다룹니다.&quot;,
+        &quot;AC-2: 묶음 이전은 entry 의미가 충돌하면 거부합니다(migrationGroups 847·855행). 원본 bytes는 덮어쓰기 전에 백업하고 다시 읽어 대조한 뒤 manifest를 남깁니다(backupReportSources 907-929행). 원본은 bytes가 바뀌지 않았는지 다시 확인한 다음에만 지웁니다(943행). 묶음과 이전 형식 파일이 함께 남은 중간 상태는 entryMeaning이 같을 때만 중복 없이 받아들입니다. 실제 저장소 증거에는 269 entries, 27 groups, 백업 538개, UUID 재읽기 269건, 재실행 결과 no_changes가 기록돼 있고 release-maintenance.json도 no_changes입니다.&quot;,
+        &quot;AC-3: 쓰기는 reportLease로 잠그고, 쓰기 직전 대상 bytes가 예상과 같은지 다시 확인합니다(atomicReportFile 681-696행). JSON을 먼저 commit하고 HTML은 나중에 파생합니다. 같은 사건을 재실행하면 existing 분기(726-729행)가 오래되거나 빠진 HTML을 복구합니다. 잠금 회수는 같은 호스트에서 소유 PID 종료가 확인된 경우(owner_exited)이면서 관찰한 토큰이 일치할 때만 허용합니다. 묶음이 16 MiB를 넘거나 2000건을 넘으면 쓰기 전에 거부합니다. 관련 테스트 이름(563·618·646·665행)을 확인했고, 테스트 실제 실행 결과는 verification.md의 기록에만 근거합니다.&quot;,
+        &quot;AC-5: reports-service.ts:14-20은 workId와 NFC 제목으로 항목을 묶고, 최신순 목록에서 처음 나오는 authored를 대표로 고릅니다. 이는 reports.ts의 representative(808-813행)와 같은 기준입니다. readWorkReport는 요청한 UUID의 entry를 기준으로 같은 제목의 history를 함께 렌더링합니다. 작업 기록·소스·기준이 바뀌었으면 stale 사유를 따로 표시해서 과거 판단과 현재성을 구분합니다.&quot;,
+        &quot;AC-4: SKILL.md는 report·report-snapshot·report-maintain(apply·direct)·report-lock-status·report-lock-recover를 공식 경로로 안내하고, 병합을 bytes 불변으로 보고하지 않는다는 경계도 적고 있습니다. workflow.ts:369-372는 apply=true에 direct=true를 요구해 이 안내와 일치합니다.&quot;,
+        &quot;증거 대조: 이번 검토 번들의 sourceDigest(65b0f413…)는 최종 검증 시도의 digest(a501bb82…)와 다릅니다. 하지만 검증 입력에 포함된 개별 파일 digest는 번들과 모두 같습니다(reports.ts c5b01ccb, report-names.ts 40322265, main.ts 57b03734, reports-service.ts e412a437, 각 테스트 파일 등). 차이는 번들에만 있는 docs/ARCHITECTURE.md·PRODUCT.md·skills/WORKFLOW.md 때문으로 보이며, 검증 이후 대상 소스가 바뀐 흔적은 없습니다.&quot;,
+        &quot;verification.md는 전체 npm test, 실제 Electron GUI, BoxBox 가독성 전체 PASS를 하지 않았다고 명시해 증거 범위를 넓히지 않습니다. 계획 검토를 구현 완료 검토로 읽지 않는다는 구분도 있어 범위 확대는 보이지 않습니다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님): migrationGroups는 대상 stem.html을 항상 허용 목록에 넣습니다(895행). 그래서 같은 제목의 이전 형식 JSON은 있고 대상 stem.json 없이 stem.html만 있으면, 이전 적용이 그 HTML을 덮어씁니다. 이 HTML은 sources에 들어가지 않아 백업되지 않습니다. 반면 작성 경로(750행)는 같은 상황을 거부합니다. writer는 JSON을 먼저 commit하므로 정상 흐름에서는 생기지 않고, 외부 조작에서만 생기는 파생 HTML이라 정본(JSON) 손실은 아닙니다. 두 경로의 정책을 맞추려면 이전에서도 거부하거나 백업하도록 하면 됩니다.&quot;,
+        &quot;경미한 관찰: 앱 목록의 묶음 정렬 기준은 대표 entry(최신 authored)의 createdAt입니다. 그래서 오래된 authored 뒤에 최신 snapshot이 있는 묶음은 목록 아래쪽에 놓입니다. &#39;최신 저작 기록 우선 표시&#39;라는 명세와 맞는 설계 선택으로 보고 결함으로 판단하지 않았습니다. maintainWorkReports 결과의 counts.reports와 counts.entries가 같은 값을 반복하는 것도 표시상의 중복일 뿐입니다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-36bfb81e-67fa-4cdf-b52f-01350ac5df4a&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-36bfb81e-67fa-4cdf-b52f-01350ac5df4a/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep 도구로 scripts/workflow/reports.ts 전체, report-names.ts, src/reports-service.ts, src/main.ts(보고서 관련 줄), scripts/workflow.ts(보고서 action 분기), skills/www/www-report/SKILL.md(관련 줄), test/workflow-reports.test.ts 395~554줄, 작업 017의 spec·tasks·verification, 증거 파일 duplicate-id-probe.json·duplicate-id-fixed.json·audit-maintenance.json·audit-functional-verification.json을 읽었다. design.md, work.json, report-view.ts, work-json.ts, artifacts.ts, 나머지 테스트 파일, docs/specs/reports.md·docs/skills/REPORTS.md 본문, merge-verified.json, audit-quality/boxbox 증거, work-json-audit.log는 읽지 않았다. 테스트·타입 검사는 실행하지 않았고 기록된 결과만 대조했다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;증거 일치: audit-functional-verification.json(attempt-285b66ee)에 기록된 파일별 digest(reports.ts 30c0c2…, report-names.ts 403222…, src/main.ts 57b037…, reports-service.ts e412a4…, workflow-reports.test.ts 572587… 등)가 이번 검토 대상 목록의 digest와 같다. 따라서 기록된 집중 테스트 통과(exitCode 0, sourceStable true)는 현재 후보 소스에 대한 것이다. criteriaDigest ee88e367…도 검토 입력과 같다.&quot;,
+        &quot;UUID 충돌 단건 읽기 수정 확인: reports.ts:990-1006에서 파일 사이의 의미 충돌을 conflictingIds에 기록하고, 요청 UUID가 충돌하면 즉시 거부한다. 목록 경로 storedReports(reports.ts:581-592)도 충돌 UUID를 제외한다. 회귀 테스트 test/workflow-reports.test.ts:534-546이 다른 제목 묶음에 같은 UUID를 넣은 경우를 검사한다. probe 결과가 unexpected_success에서 refused로 바뀐 증거와도 맞다. readdir 순서와 상관없이 충돌 ID가 추적되는 구조다.&quot;,
+        &quot;정본 JSON 없이 대상 HTML만 있는 경우의 사전 거부 확인: writer(reports.ts:750)와 이전(reports.ts:869)이 같은 조건으로 거부한다. 테스트 workflow-reports.test.ts:426-431이 미리보기와 apply 모두 거부되고 원본 bytes가 보존되는지 검사한다.&quot;,
+        &quot;AC-1/AC-5 동작 대조: 묶음 이름 reportFileStem은 NFC 제목과 제목 sha256 앞 16자로 정해지고 시각·종류·UUID와 무관하다(report-names.ts:32-43). 내보내기도 같은 stem을 쓴다(src/main.ts:447). 서비스 목록은 createdAt 내림차순 목록에서 workId+NFC 제목별로 처음 나온 항목을 고르고, snapshot이면 최신 authored로 교체한다. 그래서 &#39;최신 저작 우선&#39;을 만족한다(src/reports-service.ts:14-20).&quot;,
+        &quot;비차단 관찰 1 — 목록의 부분 노출, reports.ts:582-591: 한 파일을 처리하다 충돌로 throw하기 전에 found에 넣은 같은 파일의 앞쪽 entry는 목록에 그대로 남는다. 예를 들어 묶음 B의 정렬 순서가 [idD, idC(충돌)]이면 idD는 목록에 나온다. 그런데 readWorkReport는 실패 파일명이 reportFileStem(idD)와 같아 idD 읽기를 거부한다(reports.ts:1009-1011). 정렬 순서에 따라 &#39;목록에는 보이지만 열리지 않는&#39; 항목이 생길 수 있다. 손상·충돌 자료에서만 생기고 정본을 덮어쓰거나 숨기지는 않으므로 차단 결함으로 보지 않는다. 실패한 파일의 entry 전체를 목록에서 빼면 일관성이 나아진다.&quot;,
+        &quot;비차단 관찰 2 — 이름 분류의 경계, reports.ts:566: 제목이 &#39;-YYYYMMDDTHHMMSSmmmZ-authored&#39;처럼 legacy 시각 접미사 형태로 끝나면 묶음 파일명도 legacy 정규식에 걸린다. 그러면 1 MiB 한도(JSON_LIMIT)로 읽혀 1 MiB를 넘는 묶음이 거부될 수 있다. 실제로 나올 가능성은 낮고, 이 경우에도 실패로 거부하며 정본을 보존한다.&quot;,
+        &quot;증거 범위: verification.md는 실제 Electron GUI QA, 전체 npm test, BoxBox 가독성 전체 PASS를 주장하지 않는다고 명시한다. 충돌 수정 전 Opus 검토를 현재 후보의 통과로 쓰지 않는다는 점도 구분해 적었다. 읽은 범위 안에서 증거를 실제보다 넓혀 쓴 서술은 찾지 못했다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;기존 269개 기록을 27개 누적 보고서로 정리하고, 같은 작업·제목의 새 내용이 같은 파일에 쌓이도록 연결했습니다.&quot;,
+  &quot;before&quot;: &quot;보고서를 생성할 때마다 UUID나 시각이 다른 파일이 늘어나 같은 작업의 설명과 검증 이력을 따로 찾아야 했습니다.&quot;,
+  &quot;after&quot;: &quot;같은 작업 UUID와 NFC 제목은 JSON·HTML 한 쌍으로 유지합니다. 앱 목록은 한 항목으로 모으고 과거 기록은 같은 HTML 안에서 읽으며 모든 기존 UUID로 당시 내용을 조회합니다.&quot;,
+  &quot;changes&quot;: [
+    &quot;안정된 제목 파일명과 schema2 entries 누적 저장·중복 억제를 연결했습니다.&quot;,
+    &quot;기존 269개 entry의 객체와 UUID를 보존해 27개 묶음으로 병합하고 원본 538개 파일을 검증된 백업으로 남겼습니다.&quot;,
+    &quot;공식 관리 하네스에 계획·적용·재실행·잠금 상태·종료 잠금 명시 회수와 HTML 복구를 연결했습니다.&quot;,
+    &quot;앱의 묶음 목록·제목 내보내기와 독립 HTML의 전체 이력을 연결했습니다.&quot;,
+    &quot;www-report 스킬·발견 링크·정본 계약과 회귀 검사를 추가했습니다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;다른 작업의 기록을 섞지 않도록 같은 작업 UUID 안에서 NFC 제목으로 묶습니다.&quot;,
+    &quot;이전 UUID·서술·검증 지문은 entry로 보존하고 JSON 정본 commit 뒤 HTML을 파생합니다.&quot;,
+    &quot;충돌 UUID와 정본 없는 대상 HTML을 읽기·작성·이전 경로에서 거부해 잘못된 내용을 선택하거나 덮어쓰지 않도록 했습니다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;BoxBox 구문은 확인했지만 정렬 FIXABLE·승인 또는 보존 거부가 남아 가독성 전체 PASS를 주장하지 않습니다.&quot;,
+    &quot;전체 npm test와 실제 Electron 저장 대화상자·인쇄·키보드의 새 GUI QA는 실행하지 않았습니다.&quot;,
+    &quot;현재 세션의 새 스킬 자동 재로딩과 별도 저작 호스트의 의미 수용은 미확인입니다.&quot;,
+    &quot;최종 Opus가 손상 묶음의 부분 목록 노출과 legacy 시각 접미사 형태 제목의 큰 파일 분류를 비차단 관찰로 남겼으며 이를 해결했다고 주장하지 않습니다.&quot;
+  ],
+  &quot;next&quot;: [],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;작업을 다시 검증하거나 설명을 덧붙일 때마다 파일이 늘어나면, 사람이 찾고 싶은 하나의 보고서가 여러 곳으로 흩어집니다. 이번에는 같은 작업의 같은 제목을 한 보고서로 묶고 새 기록을 그 안에 쌓도록 바꿨습니다.\n\n최신 저작 설명을 먼저 읽고, 같은 파일의 이력에서 당시의 설명과 검증 결과를 다시 확인할 수 있습니다. 서로 다른 작업은 제목이 같아도 합치지 않습니다. 이전 기록을 최신 결과로 바꾸거나 검증을 새로 통과한 것으로 꾸미지도 않습니다.\n\n기존 269개 기록은 내용을 대조해 27개 묶음으로 옮겼고, 모든 UUID를 실제로 다시 읽었습니다. 원본 538개 파일은 별도 백업으로 남겼습니다. 이제 새로운 내용도 같은 제목 파일에 누적되며, 중단된 저장과 충돌은 하네스에서 확인하고 복구하거나 거부합니다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;같은 작업·같은 제목의 파일을 하나로 관리&quot;,
+        &quot;result&quot;: &quot;안정 제목의 JSON·HTML 한 쌍에 entries를 누적하고 앱 목록은 한 항목으로 모읍니다.&quot;,
+        &quot;evidence&quot;: &quot;동시 append·dedupe·작업 분리 회귀와 실제 27묶음 결과&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;기존 내용과 ID를 잃지 않고 병합&quot;,
+        &quot;result&quot;: &quot;269개 entry 객체와 UUID 조회를 대조하고 538개 원본 백업을 검증했습니다.&quot;,
+        &quot;evidence&quot;: &quot;.www/evidence/report-title-maintenance/merge-verified.json&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;이후 생성·관리의 일관성&quot;,
+        &quot;result&quot;: &quot;writer·내보내기·관리 action·스킬이 같은 규칙을 사용합니다.&quot;,
+        &quot;evidence&quot;: &quot;공식 CLI·서비스·수명주기·Native 및 직렬화 집중 검사&quot;,
+        &quot;limitations&quot;: &quot;실제 GUI와 전체 가독성 판정은 별도 한계입니다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;누적 저장·목록·조회·복구&quot;,
+        &quot;method&quot;: &quot;공식 verifyWork와 실제 별도 프로세스 충돌·강제 종료 fixture&quot;,
+        &quot;expected&quot;: &quot;기록 유실·중복 없이 저장하고 충돌은 거부&quot;,
+        &quot;observed&quot;: &quot;집중 65개 passed, sourceStable·recorded true&quot;,
+        &quot;limitations&quot;: &quot;합성 subprocess와 서비스 검사이며 실제 GUI는 아닙니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;직렬화·기존 승인 proof·공개 CLI golden&quot;,
+        &quot;method&quot;: &quot;bun test test/work-json.test.ts&quot;,
+        &quot;expected&quot;: &quot;새 묶음 직렬화와 기존 정본·원본 보존 경계 유지&quot;,
+        &quot;observed&quot;: &quot;16 pass/0 fail, 3938 assertions&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;target&quot;: &quot;실제 기존 자료&quot;,
+        &quot;method&quot;: &quot;원본 backup SHA256·entry deepEqual·전체 UUID 읽기·재실행&quot;,
+        &quot;expected&quot;: &quot;모든 의미와 ID 보존, 같은 제목별 한 쌍으로 수렴&quot;,
+        &quot;observed&quot;: &quot;269 entries→27 groups·54 active files, 538 backups, 269 UUID reads, 38원장 변경 없음, no_changes&quot;,
+        &quot;limitations&quot;: &quot;병합 적용 시점의 관측입니다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;파일 수를 줄이면서 과거 검증 근거를 보존해야 함&quot;,
+        &quot;basis&quot;: &quot;사용자가 같은 작업 안 병합과 UUID별 이력 보존을 선택했습니다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;같은 작업·제목의 불변 entry를 한 묶음에 누적&quot;,
+        &quot;tradeoff&quot;: &quot;묶음 크기 상한을 두며 초과 시 임의 절단 없이 거부합니다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;docs/skills/REPORTS.md&quot;,
+        &quot;purpose&quot;: &quot;누적·병합·백업·복구 정책의 정본&quot;
+      },
+      {
+        &quot;path&quot;: &quot;skills/www/www-report/SKILL.md&quot;,
+        &quot;purpose&quot;: &quot;반복 생성·관리 절차&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/evidence/report-title-maintenance/merge-verified.json&quot;,
+        &quot;purpose&quot;: &quot;실제 병합과 의미·UUID·원장 보존 관측&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/report-merge-backups/f8ab1f95-e237-4970-bb07-c437578581f1/manifest.json&quot;,
+        &quot;purpose&quot;: &quot;원본 백업 경로와 SHA256&quot;
+      }
+    ],
+    &quot;nextActions&quot;: []
+  }
+}</pre></div></details></section><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 1개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 16일 오전 9:31 · 작성자 보고서 · 기존 269개 기록을 27개 누적 보고서로 정리하고, 같은 작업·제목의 새 내용이 같은 파일에 쌓이도록 연결했습니다.</summary><article><h3>보고서 제목 파일명과 생성 관리 통합</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">작업을 다시 검증하거나 설명을 덧붙일 때마다 파일이 늘어나면, 사람이 찾고 싶은 하나의 보고서가 여러 곳으로 흩어집니다. 이번에는 같은 작업의 같은 제목을 한 보고서로 묶고 새 기록을 그 안에 쌓도록 바꿨습니다.
+
+최신 저작 설명을 먼저 읽고, 같은 파일의 이력에서 당시의 설명과 검증 결과를 다시 확인할 수 있습니다. 서로 다른 작업은 제목이 같아도 합치지 않습니다. 이전 기록을 최신 결과로 바꾸거나 검증을 새로 통과한 것으로 꾸미지도 않습니다.
+
+기존 269개 기록은 내용을 대조해 27개 묶음으로 옮겼고, 모든 UUID를 실제로 다시 읽었습니다. 원본 538개 파일은 별도 백업으로 남겼습니다. 이제 새로운 내용도 같은 제목 파일에 누적되며, 중단된 저장과 충돌은 하네스에서 확인하고 복구하거나 거부합니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 12 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><h3>기록된 변경</h3><ul><li>안정된 제목 파일명과 schema2 entries 누적 저장·중복 억제를 연결했습니다.</li><li>기존 269개 entry의 객체와 UUID를 보존해 27개 묶음으로 병합하고 원본 538개 파일을 검증된 백업으로 남겼습니다.</li><li>공식 관리 하네스에 계획·적용·재실행·잠금 상태·종료 잠금 명시 회수와 HTML 복구를 연결했습니다.</li><li>앱의 묶음 목록·제목 내보내기와 독립 HTML의 전체 이력을 연결했습니다.</li><li>www-report 스킬·발견 링크·정본 계약과 회귀 검사를 추가했습니다.</li></ul><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>같은 작업·같은 제목의 파일을 하나로 관리</h3><p class="result">안정 제목의 JSON·HTML 한 쌍에 entries를 누적하고 앱 목록은 한 항목으로 모읍니다.</p><p class="support"><strong>근거</strong> 동시 append·dedupe·작업 분리 회귀와 실제 27묶음 결과</p></article><article class="requirement"><h3>기존 내용과 ID를 잃지 않고 병합</h3><p class="result">269개 entry 객체와 UUID 조회를 대조하고 538개 원본 백업을 검증했습니다.</p><p class="support"><strong>근거</strong> .www/evidence/report-title-maintenance/merge-verified.json</p></article><article class="requirement"><h3>이후 생성·관리의 일관성</h3><p class="result">writer·내보내기·관리 action·스킬이 같은 규칙을 사용합니다.</p><p class="support"><strong>근거</strong> 공식 CLI·서비스·수명주기·Native 및 직렬화 집중 검사</p><p class="limit">실제 GUI와 전체 가독성 판정은 별도 한계입니다.</p></article><section class="paper" id="history-report-13197a67-0a01-4062-9480-5d341e6f971e-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>파일 수를 줄이면서 과거 검증 근거를 보존해야 함</h3><p><strong>선택</strong> 같은 작업·제목의 불변 entry를 한 묶음에 누적</p><p><strong>판단 근거</strong> 사용자가 같은 작업 안 병합과 UUID별 이력 보존을 선택했습니다.</p><p class="limit"><strong>감수한 점</strong> 묶음 크기 상한을 두며 초과 시 임의 절단 없이 거부합니다.</p></article></section><section class="paper" id="history-report-13197a67-0a01-4062-9480-5d341e6f971e-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>누적 저장·목록·조회·복구</h3><dl><div><dt>확인 방법</dt><dd>공식 verifyWork와 실제 별도 프로세스 충돌·강제 종료 fixture</dd></div><div><dt>기대 결과</dt><dd>기록 유실·중복 없이 저장하고 충돌은 거부</dd></div><div><dt>실제 관측</dt><dd>집중 65개 passed, sourceStable·recorded true</dd></div><div><dt>확인 범위와 한계</dt><dd>합성 subprocess와 서비스 검사이며 실제 GUI는 아닙니다.</dd></div></dl></article><article class="check"><h3>직렬화·기존 승인 proof·공개 CLI golden</h3><dl><div><dt>확인 방법</dt><dd>bun test test/work-json.test.ts</dd></div><div><dt>기대 결과</dt><dd>새 묶음 직렬화와 기존 정본·원본 보존 경계 유지</dd></div><div><dt>실제 관측</dt><dd>16 pass/0 fail, 3938 assertions</dd></div></dl></article><article class="check"><h3>실제 기존 자료</h3><dl><div><dt>확인 방법</dt><dd>원본 backup SHA256·entry deepEqual·전체 UUID 읽기·재실행</dd></div><div><dt>기대 결과</dt><dd>모든 의미와 ID 보존, 같은 제목별 한 쌍으로 수렴</dd></div><div><dt>실제 관측</dt><dd>269 entries→27 groups·54 active files, 538 backups, 269 UUID reads, 38원장 변경 없음, no_changes</dd></div><div><dt>확인 범위와 한계</dt><dd>병합 적용 시점의 관측입니다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 12건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>BoxBox 구문은 확인했지만 정렬 FIXABLE·승인 또는 보존 거부가 남아 가독성 전체 PASS를 주장하지 않습니다.</li><li>전체 npm test와 실제 Electron 저장 대화상자·인쇄·키보드의 새 GUI QA는 실행하지 않았습니다.</li><li>현재 세션의 새 스킬 자동 재로딩과 별도 저작 호스트의 의미 수용은 미확인입니다.</li><li>최종 Opus가 손상 묶음의 부분 목록 노출과 legacy 시각 접미사 형태 제목의 큰 파일 분류를 비차단 관찰로 남겼으며 이를 해결했다고 주장하지 않습니다.</li></ul></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>누적·병합·백업·복구 정책의 정본</p><code>docs/skills/REPORTS.md</code></li><li><p>반복 생성·관리 절차</p><code>skills/www/www-report/SKILL.md</code></li><li><p>실제 병합과 의미·UUID·원장 보존 관측</p><code>.www/evidence/report-title-maintenance/merge-verified.json</code></li><li><p>원본 백업 경로와 SHA256</p><code>.www/report-merge-backups/f8ab1f95-e237-4970-bb07-c437578581f1/manifest.json</code></li></ol><details id="history-report-13197a67-0a01-4062-9480-5d341e6f971e-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-2f2c2837-080b-45ac-a702-09bf6cda2d45<br>report-13197a67-0a01-4062-9480-5d341e6f971e</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>281e6a29e06704239d1fce34a8a2e9720f6fcb58fb801d0dcaaa32effa360e00</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>4bb9ac3d2a42df192d728f2a4dce96ec9b09d950699e5d1419b15a793933143e</code></dd></div><div><dt>기준 지문</dt><dd><code>ee88e3671dad6c20184ffdf9f50095a9fee135db8a5101389f8b2d43e710bc00</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;같은 작업 UUID와 NFC 제목의 보고서는 안정된 제목 파일명의 JSON 1개·HTML 1개로 생성·누적하며 내보내기도 같은 이름을 사용한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;기존 UUID형·시각포함 제목형 보고서를 묶음으로 이전하고 모든 entry의 ID·서술·검증 의미·semanticHash를 보존하며 기존 UUID로 읽는다. 병합 전 원본 bytes는 별도 백업한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;관리 하네스는 미리보기·전체 사전검사·명시 적용·재실행·중단 복원·잠금 회수와 동시 누적을 제공하며 충돌·손상·링크·상한 위반에서 기존 정본을 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;발견 가능한 보고서 스킬과 정본 계약이 생성·누적·목록·이전·백업·복원·실패 처리를 같은 공식 경로로 안내한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;앱 목록은 같은 작업·제목을 한 항목으로 모으고 최신 저작 기록을 우선 표시하며 독립 HTML에서 누적된 모든 기록을 안전하게 읽고 과거 판단과 현재성을 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-a9bd8b6a-351c-4c26-81d2-7be86a42d9bb&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/workflow-reports.test.ts&quot;,
+        &quot;test/report-maintenance-entry.test.ts&quot;,
+        &quot;test/native-reports.test.ts&quot;,
+        &quot;test/report-service.test.ts&quot;,
+        &quot;test/report-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:58:31.883Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-76dd20ae-4451-43ed-aa27-49c5d5b96b76&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:58:51.435Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-ef973dee-2bc7-4deb-a072-cc71e39820cc&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/workflow-reports.test.ts&quot;,
+        &quot;test/report-maintenance-entry.test.ts&quot;,
+        &quot;test/native-reports.test.ts&quot;,
+        &quot;test/report-service.test.ts&quot;,
+        &quot;test/report-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:00:06.580Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e6c2e7af-9710-4ddc-8373-874f80c15a47&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:00:20.870Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d24f8951-716b-4b60-a9dc-833d5be21fb6&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/workflow-reports.test.ts&quot;,
+        &quot;test/report-maintenance-entry.test.ts&quot;,
+        &quot;test/native-reports.test.ts&quot;,
+        &quot;test/report-service.test.ts&quot;,
+        &quot;test/report-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:14:56.340Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-c732a8c5-5c3a-424e-8287-b19c6fed102e&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:14:57.188Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-a8ab779c-52f2-49eb-a1fa-dbb5eb276a75&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:18:23.636Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-c89c72b4-0ca0-44c1-8c6d-06e714dc369a&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/workflow-reports.test.ts&quot;,
+        &quot;test/report-maintenance-entry.test.ts&quot;,
+        &quot;test/native-reports.test.ts&quot;,
+        &quot;test/report-service.test.ts&quot;,
+        &quot;test/report-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:18:24.645Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-07bbc66e-177d-4f69-a74b-df9f02258ba7&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/workflow-reports.test.ts&quot;,
+        &quot;test/report-maintenance-entry.test.ts&quot;,
+        &quot;test/native-reports.test.ts&quot;,
+        &quot;test/report-service.test.ts&quot;,
+        &quot;test/report-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:21:47.754Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d075339b-40b3-40a1-a34b-c8b80b3a3739&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:21:48.488Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-53cdadff-15a5-45de-ac16-0cfb5996c2ec&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:26:37.703Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-285b66ee-ad89-403b-a9ce-895e8e16dc8f&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/workflow-reports.test.ts&quot;,
+        &quot;test/report-maintenance-entry.test.ts&quot;,
+        &quot;test/native-reports.test.ts&quot;,
+        &quot;test/report-service.test.ts&quot;,
+        &quot;test/report-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T00:26:37.901Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-aa3efe2b-17a7-48d2-baec-39cd62b2b082&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-aa3efe2b-17a7-48d2-baec-39cd62b2b082/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep으로 spec.md·verification.md, scripts/workflow/reports.ts(494-1023행)·report-names.ts·workflow.ts의 report-maintain dispatch, src/reports-service.ts·src/main.ts의 내보내기 이름, skills/www/www-report/SKILL.md를 읽었습니다. test/workflow-reports.test.ts는 테스트 이름 목록과 416-439행만 읽었습니다. 증거 파일은 merge-verified.json, release-maintenance.json(1행), release-functional-verification.json을 읽었습니다. design.md·tasks.md·work.json·report-view.ts·work-json.ts·artifacts.ts·docs 계약 본문은 직접 읽지 않았습니다. 테스트는 실행하지 않았고 읽기 실패도 없었습니다.&quot;,
+        &quot;AC-1: 파일 이름(reportFileStem, report-names.ts:32-43)은 NFC 제목과 제목 SHA256 앞 16자로 정해서 시각·종류·entry UUID에 따라 달라지지 않습니다. 작성 경로(reports.ts:741-752)는 같은 제목의 기존 entry에 새 entry를 더해 JSON 1개와 HTML 1개로 다시 씁니다. 내보내기 기본 이름(src/main.ts:447)도 같은 함수를 씁니다. 작업마다 reports 디렉터리가 따로 있어서 다른 작업 UUID의 같은 제목은 다른 묶음으로 남고, 테스트 548행이 이 경우를 다룹니다.&quot;,
+        &quot;AC-2: 묶음 이전은 entry 의미가 충돌하면 거부합니다(migrationGroups 847·855행). 원본 bytes는 덮어쓰기 전에 백업하고 다시 읽어 대조한 뒤 manifest를 남깁니다(backupReportSources 907-929행). 원본은 bytes가 바뀌지 않았는지 다시 확인한 다음에만 지웁니다(943행). 묶음과 이전 형식 파일이 함께 남은 중간 상태는 entryMeaning이 같을 때만 중복 없이 받아들입니다. 실제 저장소 증거에는 269 entries, 27 groups, 백업 538개, UUID 재읽기 269건, 재실행 결과 no_changes가 기록돼 있고 release-maintenance.json도 no_changes입니다.&quot;,
+        &quot;AC-3: 쓰기는 reportLease로 잠그고, 쓰기 직전 대상 bytes가 예상과 같은지 다시 확인합니다(atomicReportFile 681-696행). JSON을 먼저 commit하고 HTML은 나중에 파생합니다. 같은 사건을 재실행하면 existing 분기(726-729행)가 오래되거나 빠진 HTML을 복구합니다. 잠금 회수는 같은 호스트에서 소유 PID 종료가 확인된 경우(owner_exited)이면서 관찰한 토큰이 일치할 때만 허용합니다. 묶음이 16 MiB를 넘거나 2000건을 넘으면 쓰기 전에 거부합니다. 관련 테스트 이름(563·618·646·665행)을 확인했고, 테스트 실제 실행 결과는 verification.md의 기록에만 근거합니다.&quot;,
+        &quot;AC-5: reports-service.ts:14-20은 workId와 NFC 제목으로 항목을 묶고, 최신순 목록에서 처음 나오는 authored를 대표로 고릅니다. 이는 reports.ts의 representative(808-813행)와 같은 기준입니다. readWorkReport는 요청한 UUID의 entry를 기준으로 같은 제목의 history를 함께 렌더링합니다. 작업 기록·소스·기준이 바뀌었으면 stale 사유를 따로 표시해서 과거 판단과 현재성을 구분합니다.&quot;,
+        &quot;AC-4: SKILL.md는 report·report-snapshot·report-maintain(apply·direct)·report-lock-status·report-lock-recover를 공식 경로로 안내하고, 병합을 bytes 불변으로 보고하지 않는다는 경계도 적고 있습니다. workflow.ts:369-372는 apply=true에 direct=true를 요구해 이 안내와 일치합니다.&quot;,
+        &quot;증거 대조: 이번 검토 번들의 sourceDigest(65b0f413…)는 최종 검증 시도의 digest(a501bb82…)와 다릅니다. 하지만 검증 입력에 포함된 개별 파일 digest는 번들과 모두 같습니다(reports.ts c5b01ccb, report-names.ts 40322265, main.ts 57b03734, reports-service.ts e412a437, 각 테스트 파일 등). 차이는 번들에만 있는 docs/ARCHITECTURE.md·PRODUCT.md·skills/WORKFLOW.md 때문으로 보이며, 검증 이후 대상 소스가 바뀐 흔적은 없습니다.&quot;,
+        &quot;verification.md는 전체 npm test, 실제 Electron GUI, BoxBox 가독성 전체 PASS를 하지 않았다고 명시해 증거 범위를 넓히지 않습니다. 계획 검토를 구현 완료 검토로 읽지 않는다는 구분도 있어 범위 확대는 보이지 않습니다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님): migrationGroups는 대상 stem.html을 항상 허용 목록에 넣습니다(895행). 그래서 같은 제목의 이전 형식 JSON은 있고 대상 stem.json 없이 stem.html만 있으면, 이전 적용이 그 HTML을 덮어씁니다. 이 HTML은 sources에 들어가지 않아 백업되지 않습니다. 반면 작성 경로(750행)는 같은 상황을 거부합니다. writer는 JSON을 먼저 commit하므로 정상 흐름에서는 생기지 않고, 외부 조작에서만 생기는 파생 HTML이라 정본(JSON) 손실은 아닙니다. 두 경로의 정책을 맞추려면 이전에서도 거부하거나 백업하도록 하면 됩니다.&quot;,
+        &quot;경미한 관찰: 앱 목록의 묶음 정렬 기준은 대표 entry(최신 authored)의 createdAt입니다. 그래서 오래된 authored 뒤에 최신 snapshot이 있는 묶음은 목록 아래쪽에 놓입니다. &#39;최신 저작 기록 우선 표시&#39;라는 명세와 맞는 설계 선택으로 보고 결함으로 판단하지 않았습니다. maintainWorkReports 결과의 counts.reports와 counts.entries가 같은 값을 반복하는 것도 표시상의 중복일 뿐입니다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-36bfb81e-67fa-4cdf-b52f-01350ac5df4a&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-36bfb81e-67fa-4cdf-b52f-01350ac5df4a/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep 도구로 scripts/workflow/reports.ts 전체, report-names.ts, src/reports-service.ts, src/main.ts(보고서 관련 줄), scripts/workflow.ts(보고서 action 분기), skills/www/www-report/SKILL.md(관련 줄), test/workflow-reports.test.ts 395~554줄, 작업 017의 spec·tasks·verification, 증거 파일 duplicate-id-probe.json·duplicate-id-fixed.json·audit-maintenance.json·audit-functional-verification.json을 읽었다. design.md, work.json, report-view.ts, work-json.ts, artifacts.ts, 나머지 테스트 파일, docs/specs/reports.md·docs/skills/REPORTS.md 본문, merge-verified.json, audit-quality/boxbox 증거, work-json-audit.log는 읽지 않았다. 테스트·타입 검사는 실행하지 않았고 기록된 결과만 대조했다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;증거 일치: audit-functional-verification.json(attempt-285b66ee)에 기록된 파일별 digest(reports.ts 30c0c2…, report-names.ts 403222…, src/main.ts 57b037…, reports-service.ts e412a4…, workflow-reports.test.ts 572587… 등)가 이번 검토 대상 목록의 digest와 같다. 따라서 기록된 집중 테스트 통과(exitCode 0, sourceStable true)는 현재 후보 소스에 대한 것이다. criteriaDigest ee88e367…도 검토 입력과 같다.&quot;,
+        &quot;UUID 충돌 단건 읽기 수정 확인: reports.ts:990-1006에서 파일 사이의 의미 충돌을 conflictingIds에 기록하고, 요청 UUID가 충돌하면 즉시 거부한다. 목록 경로 storedReports(reports.ts:581-592)도 충돌 UUID를 제외한다. 회귀 테스트 test/workflow-reports.test.ts:534-546이 다른 제목 묶음에 같은 UUID를 넣은 경우를 검사한다. probe 결과가 unexpected_success에서 refused로 바뀐 증거와도 맞다. readdir 순서와 상관없이 충돌 ID가 추적되는 구조다.&quot;,
+        &quot;정본 JSON 없이 대상 HTML만 있는 경우의 사전 거부 확인: writer(reports.ts:750)와 이전(reports.ts:869)이 같은 조건으로 거부한다. 테스트 workflow-reports.test.ts:426-431이 미리보기와 apply 모두 거부되고 원본 bytes가 보존되는지 검사한다.&quot;,
+        &quot;AC-1/AC-5 동작 대조: 묶음 이름 reportFileStem은 NFC 제목과 제목 sha256 앞 16자로 정해지고 시각·종류·UUID와 무관하다(report-names.ts:32-43). 내보내기도 같은 stem을 쓴다(src/main.ts:447). 서비스 목록은 createdAt 내림차순 목록에서 workId+NFC 제목별로 처음 나온 항목을 고르고, snapshot이면 최신 authored로 교체한다. 그래서 &#39;최신 저작 우선&#39;을 만족한다(src/reports-service.ts:14-20).&quot;,
+        &quot;비차단 관찰 1 — 목록의 부분 노출, reports.ts:582-591: 한 파일을 처리하다 충돌로 throw하기 전에 found에 넣은 같은 파일의 앞쪽 entry는 목록에 그대로 남는다. 예를 들어 묶음 B의 정렬 순서가 [idD, idC(충돌)]이면 idD는 목록에 나온다. 그런데 readWorkReport는 실패 파일명이 reportFileStem(idD)와 같아 idD 읽기를 거부한다(reports.ts:1009-1011). 정렬 순서에 따라 &#39;목록에는 보이지만 열리지 않는&#39; 항목이 생길 수 있다. 손상·충돌 자료에서만 생기고 정본을 덮어쓰거나 숨기지는 않으므로 차단 결함으로 보지 않는다. 실패한 파일의 entry 전체를 목록에서 빼면 일관성이 나아진다.&quot;,
+        &quot;비차단 관찰 2 — 이름 분류의 경계, reports.ts:566: 제목이 &#39;-YYYYMMDDTHHMMSSmmmZ-authored&#39;처럼 legacy 시각 접미사 형태로 끝나면 묶음 파일명도 legacy 정규식에 걸린다. 그러면 1 MiB 한도(JSON_LIMIT)로 읽혀 1 MiB를 넘는 묶음이 거부될 수 있다. 실제로 나올 가능성은 낮고, 이 경우에도 실패로 거부하며 정본을 보존한다.&quot;,
+        &quot;증거 범위: verification.md는 실제 Electron GUI QA, 전체 npm test, BoxBox 가독성 전체 PASS를 주장하지 않는다고 명시한다. 충돌 수정 전 Opus 검토를 현재 후보의 통과로 쓰지 않는다는 점도 구분해 적었다. 읽은 범위 안에서 증거를 실제보다 넓혀 쓴 서술은 찾지 못했다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;기존 269개 기록을 27개 누적 보고서로 정리하고, 같은 작업·제목의 새 내용이 같은 파일에 쌓이도록 연결했습니다.&quot;,
+  &quot;before&quot;: &quot;보고서를 생성할 때마다 UUID나 시각이 다른 파일이 늘어나 같은 작업의 설명과 검증 이력을 따로 찾아야 했습니다.&quot;,
+  &quot;after&quot;: &quot;같은 작업 UUID와 NFC 제목은 JSON·HTML 한 쌍으로 유지합니다. 앱 목록은 한 항목으로 모으고 과거 기록은 같은 HTML 안에서 읽으며 모든 기존 UUID로 당시 내용을 조회합니다.&quot;,
+  &quot;changes&quot;: [
+    &quot;안정된 제목 파일명과 schema2 entries 누적 저장·중복 억제를 연결했습니다.&quot;,
+    &quot;기존 269개 entry의 객체와 UUID를 보존해 27개 묶음으로 병합하고 원본 538개 파일을 검증된 백업으로 남겼습니다.&quot;,
+    &quot;공식 관리 하네스에 계획·적용·재실행·잠금 상태·종료 잠금 명시 회수와 HTML 복구를 연결했습니다.&quot;,
+    &quot;앱의 묶음 목록·제목 내보내기와 독립 HTML의 전체 이력을 연결했습니다.&quot;,
+    &quot;www-report 스킬·발견 링크·정본 계약과 회귀 검사를 추가했습니다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;다른 작업의 기록을 섞지 않도록 같은 작업 UUID 안에서 NFC 제목으로 묶습니다.&quot;,
+    &quot;이전 UUID·서술·검증 지문은 entry로 보존하고 JSON 정본 commit 뒤 HTML을 파생합니다.&quot;,
+    &quot;충돌 UUID와 정본 없는 대상 HTML을 읽기·작성·이전 경로에서 거부해 잘못된 내용을 선택하거나 덮어쓰지 않도록 했습니다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;BoxBox 구문은 확인했지만 정렬 FIXABLE·승인 또는 보존 거부가 남아 가독성 전체 PASS를 주장하지 않습니다.&quot;,
+    &quot;전체 npm test와 실제 Electron 저장 대화상자·인쇄·키보드의 새 GUI QA는 실행하지 않았습니다.&quot;,
+    &quot;현재 세션의 새 스킬 자동 재로딩과 별도 저작 호스트의 의미 수용은 미확인입니다.&quot;,
+    &quot;최종 Opus가 손상 묶음의 부분 목록 노출과 legacy 시각 접미사 형태 제목의 큰 파일 분류를 비차단 관찰로 남겼으며 이를 해결했다고 주장하지 않습니다.&quot;
+  ],
+  &quot;next&quot;: [],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;작업을 다시 검증하거나 설명을 덧붙일 때마다 파일이 늘어나면, 사람이 찾고 싶은 하나의 보고서가 여러 곳으로 흩어집니다. 이번에는 같은 작업의 같은 제목을 한 보고서로 묶고 새 기록을 그 안에 쌓도록 바꿨습니다.\n\n최신 저작 설명을 먼저 읽고, 같은 파일의 이력에서 당시의 설명과 검증 결과를 다시 확인할 수 있습니다. 서로 다른 작업은 제목이 같아도 합치지 않습니다. 이전 기록을 최신 결과로 바꾸거나 검증을 새로 통과한 것으로 꾸미지도 않습니다.\n\n기존 269개 기록은 내용을 대조해 27개 묶음으로 옮겼고, 모든 UUID를 실제로 다시 읽었습니다. 원본 538개 파일은 별도 백업으로 남겼습니다. 이제 새로운 내용도 같은 제목 파일에 누적되며, 중단된 저장과 충돌은 하네스에서 확인하고 복구하거나 거부합니다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;같은 작업·같은 제목의 파일을 하나로 관리&quot;,
+        &quot;result&quot;: &quot;안정 제목의 JSON·HTML 한 쌍에 entries를 누적하고 앱 목록은 한 항목으로 모읍니다.&quot;,
+        &quot;evidence&quot;: &quot;동시 append·dedupe·작업 분리 회귀와 실제 27묶음 결과&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;기존 내용과 ID를 잃지 않고 병합&quot;,
+        &quot;result&quot;: &quot;269개 entry 객체와 UUID 조회를 대조하고 538개 원본 백업을 검증했습니다.&quot;,
+        &quot;evidence&quot;: &quot;.www/evidence/report-title-maintenance/merge-verified.json&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;이후 생성·관리의 일관성&quot;,
+        &quot;result&quot;: &quot;writer·내보내기·관리 action·스킬이 같은 규칙을 사용합니다.&quot;,
+        &quot;evidence&quot;: &quot;공식 CLI·서비스·수명주기·Native 및 직렬화 집중 검사&quot;,
+        &quot;limitations&quot;: &quot;실제 GUI와 전체 가독성 판정은 별도 한계입니다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;누적 저장·목록·조회·복구&quot;,
+        &quot;method&quot;: &quot;공식 verifyWork와 실제 별도 프로세스 충돌·강제 종료 fixture&quot;,
+        &quot;expected&quot;: &quot;기록 유실·중복 없이 저장하고 충돌은 거부&quot;,
+        &quot;observed&quot;: &quot;집중 65개 passed, sourceStable·recorded true&quot;,
+        &quot;limitations&quot;: &quot;합성 subprocess와 서비스 검사이며 실제 GUI는 아닙니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;직렬화·기존 승인 proof·공개 CLI golden&quot;,
+        &quot;method&quot;: &quot;bun test test/work-json.test.ts&quot;,
+        &quot;expected&quot;: &quot;새 묶음 직렬화와 기존 정본·원본 보존 경계 유지&quot;,
+        &quot;observed&quot;: &quot;16 pass/0 fail, 3938 assertions&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;target&quot;: &quot;실제 기존 자료&quot;,
+        &quot;method&quot;: &quot;원본 backup SHA256·entry deepEqual·전체 UUID 읽기·재실행&quot;,
+        &quot;expected&quot;: &quot;모든 의미와 ID 보존, 같은 제목별 한 쌍으로 수렴&quot;,
+        &quot;observed&quot;: &quot;269 entries→27 groups·54 active files, 538 backups, 269 UUID reads, 38원장 변경 없음, no_changes&quot;,
+        &quot;limitations&quot;: &quot;병합 적용 시점의 관측입니다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;파일 수를 줄이면서 과거 검증 근거를 보존해야 함&quot;,
+        &quot;basis&quot;: &quot;사용자가 같은 작업 안 병합과 UUID별 이력 보존을 선택했습니다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;같은 작업·제목의 불변 entry를 한 묶음에 누적&quot;,
+        &quot;tradeoff&quot;: &quot;묶음 크기 상한을 두며 초과 시 임의 절단 없이 거부합니다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;docs/skills/REPORTS.md&quot;,
+        &quot;purpose&quot;: &quot;누적·병합·백업·복구 정책의 정본&quot;
+      },
+      {
+        &quot;path&quot;: &quot;skills/www/www-report/SKILL.md&quot;,
+        &quot;purpose&quot;: &quot;반복 생성·관리 절차&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/evidence/report-title-maintenance/merge-verified.json&quot;,
+        &quot;purpose&quot;: &quot;실제 병합과 의미·UUID·원장 보존 관측&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/report-merge-backups/f8ab1f95-e237-4970-bb07-c437578581f1/manifest.json&quot;,
+        &quot;purpose&quot;: &quot;원본 백업 경로와 SHA256&quot;
+      }
+    ],
+    &quot;nextActions&quot;: []
+  }
+}</pre></div></details></article></details></section></main></body></html>

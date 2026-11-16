@@ -1,3 +1,4 @@
+import { reportFileStem } from "./workflow/report-names.ts";
 import { spawn } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
@@ -92,8 +93,10 @@ try {
   } });
   const finalWork = await fs.readFile(created.path, "utf8");
   if (written.report.workRecordHash !== createHash("sha256").update(finalWork).digest("hex")) throw new Error("보고서 raw work hash 불일치");
-  const savedReport = path.join(path.dirname(created.path), "reports", `${written.report.id}.json`);
-  if (await fs.readFile(savedReport, "utf8") !== serializeWorkReport(written.report, true)) throw new Error("신규 report 최초 출력 불일치");
+  const savedReport  = path.join(path.dirname(created.path), "reports", `${reportFileStem(written.report)}.json`) ;
+  const savedBundle  = await fs.readFile(savedReport, "utf8")                                                     ;
+  const reportBundle = JSON.parse(savedBundle)                                                                    ;
+  if (reportBundle.schemaVersion !== 2 || !reportBundle.entries.some((entry: { id: string }) => entry.id === written.report.id) || savedBundle !== serializeWorkReport(reportBundle, true)) throw new Error("신규 report 묶음 최초 출력 불일치");
   await captureWorkReport({ repo: fixture, workId, event: "fixture_verification" });
   await fs.writeFile(path.join(directory, "standalone.html"), written.html);
   const judgeFixture = path.join(directory, "judge-fixture");

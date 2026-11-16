@@ -1,0 +1,4698 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+  "title"        : "Skills와 Hook 활동 사이드바",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-006992d1-1477-4d3e-b906-1122f45e18eb",
+      "workId"        : "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+      "title"         : "Skills와 Hook 활동 사이드바",
+      "summary"       : "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-12T08:16:08.030Z",
+      "event"         : "host_failed",
+      "workRecordHash": "98f97b324cdda7a927a189ce4e0029a97f55693e2d38f84672e42ab7696faed7",
+      "sourceDigest"  : "5a83b8f7587ab6a5fb7757142c69a2f9e1ad1352fe8e0d8cfbb8aceb4af168bc",
+      "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+      "semanticHash"  : "6f8c2380ffb889c4c43e0ac8fc85efb6ecdcfe00d048e697260660a087bef69a",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": "개발 호스트 실행 실패: nonzero",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+        "workRecordHash": "98f97b324cdda7a927a189ce4e0029a97f55693e2d38f84672e42ab7696faed7",
+        "sourceDigest"  : "5a83b8f7587ab6a5fb7757142c69a2f9e1ad1352fe8e0d8cfbb8aceb4af168bc",
+        "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-c128ec32-b555-46f6-8877-f168fbbce993",
+      "workId"        : "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+      "title"         : "Skills와 Hook 활동 사이드바",
+      "summary"       : "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-12T08:38:50.046Z",
+      "event"         : "host_exception",
+      "workRecordHash": "c6e5da87478d6af266555c3d4a28061df885eccb9bb76059266a1df551009a6c",
+      "sourceDigest"  : "d26206576c16bfa55d5a0139b201c460ea680c552090a9433c1b52b7d319406f",
+      "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+      "semanticHash"  : "e78c018d15a885edd2d7dc7d49200f3b30db639a3279f125bddaacc5b8e13c69",
+      "narrative"     : null,
+      "work": {
+        "status": "verifying",
+        "blockedReason": "개발 하네스가 오류로 종료됐습니다.",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:40.510Z"
+          },
+          {
+            "id": "attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:50.755Z"
+          },
+          {
+            "id": "attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 2,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:55.112Z"
+          },
+          {
+            "id": "attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:38:05.512Z"
+          }
+        ],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+        "workRecordHash": "c6e5da87478d6af266555c3d4a28061df885eccb9bb76059266a1df551009a6c",
+        "sourceDigest"  : "d26206576c16bfa55d5a0139b201c460ea680c552090a9433c1b52b7d319406f",
+        "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-06ac3f3f-d2c7-4e98-b624-b0a5fb2a58bb",
+      "workId"        : "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+      "title"         : "Skills와 Hook 활동 사이드바",
+      "summary"       : "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-12T08:39:06.937Z",
+      "event"         : "review",
+      "workRecordHash": "6c57abdc7e01cbc26390ac3ac1238f103396e73f5dd496d02c4d2ed7607d1421",
+      "sourceDigest"  : "d26206576c16bfa55d5a0139b201c460ea680c552090a9433c1b52b7d319406f",
+      "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+      "semanticHash"  : "7abdfe192f9faf18cd15ece69c56ad5a2e30cb8aea56255997d0d7ffac8a50eb",
+      "narrative"     : null,
+      "work": {
+        "status": "verifying",
+        "blockedReason": "독립 검토 not_run: authentication",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:40.510Z"
+          },
+          {
+            "id": "attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:50.755Z"
+          },
+          {
+            "id": "attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 2,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:55.112Z"
+          },
+          {
+            "id": "attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:38:05.512Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-a5a7ac26-28b4-42fe-9540-d2ddf2178189",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+        "workRecordHash": "6c57abdc7e01cbc26390ac3ac1238f103396e73f5dd496d02c4d2ed7607d1421",
+        "sourceDigest"  : "d26206576c16bfa55d5a0139b201c460ea680c552090a9433c1b52b7d319406f",
+        "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-3c9dd98c-a727-4adb-868d-5c02d3983e41",
+      "workId"        : "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+      "title"         : "Skills와 Hook 활동 사이드바",
+      "summary"       : "Skills와 Hooks를 고정 목록으로 보여 주고 새 구조화 활동이 생긴 해당 행만 반응하는 최소 사이드바를 구현했습니다. 순수 투영과 기존 대화 회귀 76건 및 번들은 통과했지만, 의존성 설치 실패로 전체 타입 검사와 Electron GUI가 완료되지 않았습니다. 실제 Native 목록 표본과 BoxBox 후검사도 현재 환경에서 실행하지 못했고, 필수 Opus 검토는 인증 오류로 미실행 상태입니다. 따라서 변경은 구현되어 있으나 작업은 완료가 아닌 검증·감사 대기로 남깁니다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-12T08:40:23.243Z",
+      "event"         : "finish",
+      "workRecordHash": "6c57abdc7e01cbc26390ac3ac1238f103396e73f5dd496d02c4d2ed7607d1421",
+      "sourceDigest"  : "d26206576c16bfa55d5a0139b201c460ea680c552090a9433c1b52b7d319406f",
+      "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+      "semanticHash"  : "41049f3e149f38f0bf401c414ee76b0cd7c78e1274d29eb68fcf01def6bc387f",
+      "narrative": {
+        "summary": "Skills와 Hooks를 고정 목록으로 보여 주고 새 구조화 활동이 생긴 해당 행만 반응하는 최소 사이드바를 구현했습니다. 순수 투영과 기존 대화 회귀 76건 및 번들은 통과했지만, 의존성 설치 실패로 전체 타입 검사와 Electron GUI가 완료되지 않았습니다. 실제 Native 목록 표본과 BoxBox 후검사도 현재 환경에서 실행하지 못했고, 필수 Opus 검토는 인증 오류로 미실행 상태입니다. 따라서 변경은 구현되어 있으나 작업은 완료가 아닌 검증·감사 대기로 남깁니다.",
+        "before" : "오른쪽 패널은 계획·모델·토큰·긴 활동 흐름을 한 화면에 표시했고, 현재 작업공간의 등록 Skills·Hooks 전체 목록과 행별 짧은 반응을 기본 표면으로 제공하지 않았습니다.",
+        "after"  : "main이 app-server의 skills/list와 hooks/list를 독립 조회해 최소 snapshot 사건으로 게시하고, 사이드바는 등록 순서 목록과 정확히 매핑된 구조화 Skill 읽기·동기 Hook 시작만 해당 행에서 약 0.7초 반응하도록 구성됩니다. 목록이 불완전하면 감지된 목록으로 밝히며 과거 snapshot·재진입·중복·다른 스레드 사건은 새 반응으로 재생하지 않습니다.",
+        "changes": [
+          "Skills·Hooks 목록 수집 IPC와 skills/changed·스레드 생성 재조회 경계를 추가했습니다.",
+          "경로·Hook tuple·run ID·thread를 사용하는 순수 활동 투영과 중복·늦은 시작·불명확 매핑 방지를 구현했습니다.",
+          "기본 오른쪽 패널을 고정 목록·연결 상태·행 반응·모션 축소 안내로 단순화했습니다.",
+          "합성 app-server와 Electron probe, 투영 회귀 테스트 및 제품·구조·개발·Chat 정본을 갱신했습니다."
+        ],
+        "decisions": [
+          "등록 목록 응답 순서를 유지하고 활동 때문에 정렬하지 않으며, 등록 밖 관측만 뒤에 붙였습니다.",
+          "Skill 이름 언급이나 명령 문자열 검색은 사용 근거에서 제외하고 구조화된 SKILL.md read 시작만 반응 근거로 삼았습니다.",
+          "Hook 알림에 목록 key가 없으므로 event name·source path·display order·handler type이 정확히 하나와 일치할 때만 기존 행에 연결했습니다.",
+          "복원 snapshot은 정적 상태만 구성하고 renderer의 live 구독 사건만 pulse를 만들도록 분리했습니다."
+        ],
+        "limitations": [
+          "npm install이 제한된 네트워크의 ENOTFOUND와 npm 종료 처리 오류로 완료되지 않아 @types/bun·@types/node가 비었고 npm run typecheck가 실패했습니다.",
+          "Electron 실행 파일이 node_modules에 없어 실제 Electron+합성 Native GUI, 좁은 패널, 모션 축소 computed style, 초안·패널 재진입 시나리오는 실행되지 않았습니다.",
+          "샌드박스에서 실제 codex app-server 프로세스 시작이 Operation not permitted로 막혀 설치 Native의 skills/list·hooks/list 표본을 확인하지 못했습니다.",
+          ".www/development.local.json과 검증된 BoxBox 설치 runtime이 없어 요구된 BoxBox 작성 후 검사를 실행하지 못했습니다.",
+          "정책상 Opus 읽기 전용 검토는 인증 오류로 not_run이며, 사용량 소진이 아니므로 Terra 대체는 수행하지 않았습니다.",
+          "커밋·push·배포는 요청 범위가 아니어서 수행하지 않았습니다."
+        ],
+        "next": [
+          "네트워크가 가능한 환경에서 npm 의존성을 정상 설치하고 전체 타입 검사를 다시 실행합니다.",
+          "Electron 실행물을 복구한 뒤 UI 전용 probe와 가능한 실제 Native 목록 표본을 실행합니다.",
+          "검증된 BoxBox 로컬 설정을 제공해 변경한 TypeScript 파일의 후검사를 수행합니다.",
+          "Anthropic 인증을 복구한 뒤 Opus 읽기 전용 독립 검토를 다시 실행하고 남은 기준을 재판정합니다."
+        ],
+        "reader": {
+          "story": "요청의 확정 범위인 Skills·Hooks 목록과 해당 행의 짧은 새 활동 반응을 기존 넓은 활동 패널에서 분리해 구현했습니다. 목록 출처와 구조화 활동의 의미를 구분하고, 중복·이력 복원·다른 스레드·늦은 Hook 시작이 현재 행을 잘못 켜지 않도록 순수 투영에서 차단했습니다. 집중 회귀와 번들은 통과했으나 이 머신의 부분 설치와 실행 권한 제약 때문에 실제 GUI·Native 표본·전체 타입·BoxBox를 끝내지 못했습니다. 정책상 필수 Opus 검토도 인증 오류라 완료 판정을 내리지 않았습니다.",
+          "requirements": [
+            {
+              "requirement": "등록 Skills·Hooks 목록과 부분 목록 표시",
+              "result"     : "수집·검증·표시 코드와 fixture를 구현했으나 실제 Electron 및 설치 Native 표본은 미실행입니다.",
+              "evidence"   : "src/main.ts, src/activity-sidebar.ts, test/fixtures/activity-app-server.ts, verification.md의 attempt-4e37e5fe-da15-4405-943e-61b078634470",
+              "limitations": "Electron ENOENT와 app-server Operation not permitted 때문에 AC-1은 실패 상태입니다."
+            },
+            {
+              "requirement": "구조화 Skill 읽기와 동기 Hook 시작만 해당 행 반응",
+              "result"     : "이름 언급·문자열·완료·비동기 실행을 제외하는 순수 투영 검사가 통과했습니다.",
+              "evidence"   : "verification.md의 attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+              "limitations": "GUI 반응 자체는 Electron 부재로 보지 못했습니다."
+            },
+            {
+              "requirement": "중복·늦은 시작·복원·다른 스레드 오귀속 방지",
+              "result"     : "경로, Hook 단일 tuple, run ID, thread, live 사건 경계를 구현하고 집중 검사를 통과했습니다.",
+              "evidence"   : "test/activity-sidebar.test.ts와 verification.md의 attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+              "limitations": "리렌더·패널 재진입은 probe 코드만 갱신됐고 실제 GUI 실행은 남았습니다."
+            },
+            {
+              "requirement": "고정 순서, 짧은 반응, 모션 축소와 기존 화면 보존",
+              "result"     : "UI와 probe를 구현했으나 실제 Electron 검사가 실행물 부재로 실패했습니다.",
+              "evidence"   : "src/native-activity-view.tsx, src/native-activity.css, src/renderer.tsx, .www/evidence/native-activity-I7l83M/failure.txt",
+              "limitations": "AC-4와 AC-5는 완료 기준을 충족하지 못했습니다."
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "순수 활동·기존 대화 투영",
+              "method"     : "bun test test/activity-sidebar.test.ts test/native-activity.test.ts test/projection.test.ts",
+              "expected"   : "목록·매핑·중복·thread 경계와 기존 회귀 통과",
+              "observed"   : "76건 통과, 실패 0건",
+              "limitations": "DOM·실제 app-server 동작은 포함하지 않습니다."
+            },
+            {
+              "target"     : "번들 생성",
+              "method"     : "npm run build",
+              "expected"   : "Electron renderer/main 번들 생성",
+              "observed"   : "종료 코드 0",
+              "limitations": "타입 검사나 GUI 실행을 대신하지 않습니다."
+            },
+            {
+              "target"     : "소스 정책과 격리 타입",
+              "method"     : "npm run check:source 및 activity-sidebar.ts·shared.ts의 별도 strict tsc",
+              "expected"   : "TypeScript 정책과 새 순수 모듈 타입 확인",
+              "observed"   : "소스 정책 통과, 격리 strict tsc 통과",
+              "limitations": "공식 전체 typecheck는 타입 패키지 부재로 실패했습니다."
+            },
+            {
+              "target"     : "전체 타입 검사",
+              "method"     : "npm run typecheck",
+              "expected"   : "프로젝트·도구 TypeScript 검사 통과",
+              "observed"   : "TS2688: bun과 node 타입 정의를 찾지 못해 종료 코드 2",
+              "limitations": "npm install이 네트워크 ENOTFOUND로 끝나 부분 node_modules만 남은 환경입니다."
+            },
+            {
+              "target"     : "실제 Electron+합성 Native GUI",
+              "method"     : "node scripts/verify-native-activity.ts --ui-only",
+              "expected"   : "목록·대상 행 반응·고정 순서·재진입 무재생·모션 축소 확인",
+              "observed"   : "집중 검사와 빌드는 먼저 통과했으나 Electron 실행 파일 ENOENT로 GUI 시작 전 실패",
+              "limitations": "화면 동작을 통과로 주장하지 않습니다."
+            },
+            {
+              "target"     : "독립 읽기 전용 검토",
+              "method"     : "공유 review core의 Anthropic Opus 실행",
+              "expected"   : "관측 Opus 모델의 pass/fail 판정",
+              "observed"   : "인증 오류, observedModel 없음, verdict not_run",
+              "limitations": "정책상 인증 실패는 Terra 대체 조건이 아닙니다."
+            }
+          ],
+          "decisions": [
+            {
+              "problem": "목록 key가 Hook 시작 알림에 없는 상태에서 등록 행을 어떻게 연결할지",
+              "basis": "codex-cli 0.166.0 생성 스키마에서 목록과 시작 알림의 공통 필드를 대조했습니다.",
+              "alternatives": [
+                "eventName만으로 연결",
+                "모든 시작을 새 감지 행으로 표시"
+              ],
+              "choice": "eventName·sourcePath·displayOrder·handlerType이 정확히 하나와 일치할 때만 등록 행에 연결하고 나머지는 감지 행으로 분리했습니다.",
+              "tradeoff": "동일 tuple의 등록 Hook이 여러 개면 기존 행 반응 대신 별도 감지 행이 생깁니다."
+            },
+            {
+              "problem": "복원 이력과 실시간 반응을 어떻게 구분할지",
+              "basis": "events/get snapshot을 pulse로 쓰면 재시작·리렌더·패널 재진입 때 과거 활동이 새 활동처럼 보입니다.",
+              "alternatives": [
+                "모든 최신 관측을 다시 애니메이션",
+                "마지막 시각 기준 휴리스틱"
+              ],
+              "choice": "snapshot은 상태 복원에만 사용하고 onEvent로 받은 live 사건만 pulse 입력에 넣었습니다.",
+              "tradeoff": "패널이 숨겨진 동안의 활동은 최근 관측 상태로 남지만 다시 열 때 애니메이션하지 않습니다."
+            }
+          ],
+          "references": [
+            {
+              "path": "docs/work/Chat/005-Skills와 Hook 활동 사이드바/spec.md",
+              "purpose": "요청 범위와 수용 기준 해석"
+            },
+            {
+              "path": "docs/work/Chat/005-Skills와 Hook 활동 사이드바/verification.md",
+              "purpose": "실제 검사 시도와 적용성 기록"
+            },
+            {
+              "path": ".www/evidence/native-activity-I7l83M/failure.txt",
+              "purpose": "Electron 실행 파일 부재 원문"
+            },
+            {
+              "path": ".www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json",
+              "purpose": "Opus 인증 실패와 읽기 전용 호출 영수증"
+            },
+            {
+              "path": ".www/scratchpad/sidebar-handoff-20261112/source.md",
+              "purpose": "인계 원문 축자 보존본"
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "의존성과 Electron 실행물을 정상 복구한 뒤 typecheck와 UI probe를 재실행합니다.",
+              "owner"   : "다음 WWW 작업 세션",
+              "doneWhen": "npm run typecheck와 node scripts/verify-native-activity.ts --ui-only가 종료 코드 0이며 GUI 증거가 생성됩니다.",
+              "impact"  : "AC-1·AC-4·AC-5의 현재 실패 상태를 실제 동작 근거로 재판정할 수 있습니다."
+            },
+            {
+              "action"  : "실제 codex app-server가 시작 가능한 호스트에서 목록 응답과 행 매핑 표본을 확인합니다.",
+              "owner"   : "다음 WWW 작업 세션",
+              "doneWhen": "설치 Native의 skills/list·hooks/list 응답 범위와 화면 목록이 같은 증거에 기록됩니다.",
+              "impact"  : "합성 fixture를 실제 Native 전체 동작으로 확대하는 위험을 해소합니다."
+            },
+            {
+              "action"  : "BoxBox 설정과 Anthropic 인증을 복구하고 후검사·Opus 감사를 다시 수행합니다.",
+              "owner"   : "환경 관리자와 다음 WWW 작업 세션",
+              "doneWhen": "변경 TypeScript 후검사와 관측 Opus 검토가 실제 통과 또는 구체적 결함으로 기록됩니다.",
+              "impact"  : "저작과 독립 검토를 분리한 완료 게이트를 충족할 수 있습니다."
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "독립 검토 not_run: authentication",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:40.510Z"
+          },
+          {
+            "id": "attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:50.755Z"
+          },
+          {
+            "id": "attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 2,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:55.112Z"
+          },
+          {
+            "id": "attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:38:05.512Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-a5a7ac26-28b4-42fe-9540-d2ddf2178189",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+        "workRecordHash": "6c57abdc7e01cbc26390ac3ac1238f103396e73f5dd496d02c4d2ed7607d1421",
+        "sourceDigest"  : "d26206576c16bfa55d5a0139b201c460ea680c552090a9433c1b52b7d319406f",
+        "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-202518e3-38f9-4c0a-b49f-d4a6fd6f4be7",
+      "workId"        : "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+      "title"         : "Skills와 Hook 활동 사이드바",
+      "summary"       : "Terra가 찾은 사이드바 결함 6건을 수정하고 현재 소스에서 전체 검사와 실제 Electron·Native 표본을 통과했습니다. 작업은 독립 Terra 재검토 전이라 verifying으로 남겨 둡니다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-12T10:18:12.240Z",
+      "event"         : "finish",
+      "workRecordHash": "9cd903a1dee203f0338a823214400e129f2381b4b53fea6dc73a45a779a34f58",
+      "sourceDigest"  : "434baba61d5ad5b9f6dc6573ec32d9f2ad39594297a3d25bacc592b375441eb7",
+      "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+      "semanticHash"  : "fe79bae991b73cc01f644dd0f052381801ee39d3d9e81210836477b371309533",
+      "narrative": {
+        "summary": "Terra가 찾은 사이드바 결함 6건을 수정하고 현재 소스에서 전체 검사와 실제 Electron·Native 표본을 통과했습니다. 작업은 독립 Terra 재검토 전이라 verifying으로 남겨 둡니다.",
+        "before" : "최근 사건 절단과 늦은 목록 응답이 등록 목록을 잃거나 덮었고, 여러 Skill 읽기와 Hook 중복 경계, 연속 강조, 잘못된 목록 응답의 완전성 판정이 실제 경계에서 깨졌습니다.",
+        "after"  : "등록 목록·관측·pulse·연결 수명주기 중복 상태를 분리하고 요청 세대와 scope, 엄격한 Native 응답 검증을 연결했습니다. 여섯 회귀와 전체 저장소 검사, 실제 Electron 합성 GUI, 실제 설치 Native 목록과 읽기 전용 Skill 활동 표본이 통과했습니다.",
+        "changes": [
+          "최근 2,000개 사건 ring과 독립해 최신 Skills·Hooks catalog를 유지합니다.",
+          "선택 thread Hook 목록이 workspace보다 우선하고 요청 세대로 늦은 응답을 거릅니다.",
+          "한 commandActions의 여러 SKILL.md 읽기에 안정적인 pulse를 각각 보존합니다.",
+          "Hook run과 Skill read 중복 억제를 연결 수명주기에 두고 완료 뒤 늦은 시작을 막습니다.",
+          "연속 활동마다 CSS animation phase와 760ms 타이머를 다시 시작해 720~760ms 경계의 강조를 유지합니다.",
+          "cwd·필수 배열·필수 항목 shape·errors·warnings를 엄격히 검증해 잘못된 목록을 incomplete로 표시합니다."
+        ],
+        "decisions": [
+          "화면 이력, 등록 catalog, 관측, pulse, 연결 수명주기 중복 상태를 서로 다른 소유 상태로 분리했습니다.",
+          "사용자 지정 Terra 재검토는 부모의 읽기 전용 별도 context가 소유하므로 이 저자 context에서 자체 승인하지 않았습니다.",
+          "전역 BoxBox 관습이나 설정을 변경하지 않고 승인 없는 자동 정렬을 실행하지 않았습니다."
+        ],
+        "limitations": [
+          "실제 설치 Native의 최소 활동 표본에서는 Hook 알림이 0건이었고 Hook 동작은 실제 Electron+합성 Native로 확인했습니다.",
+          "BoxBox는 핵심 새 상태 파일의 import와 표 정렬을 통과했지만 프로젝트 관습 승인이 없는 2행·논리식 표 25개를 안전 거부했습니다.",
+          "최신 수정 source digest에 대한 사용자 지정 Terra 독립 검토는 아직 실행하지 않았습니다.",
+          "Windows 실기와 모든 실제 Hook 구성은 확인하지 않았습니다."
+        ],
+        "next": [
+          "부모가 최신 소스와 기준 digest로 Terra 읽기 전용 독립 검토를 실행하고, 발견이 있으면 같은 범위에서 수정·재검증합니다."
+        ],
+        "reader": {
+          "story": "등록 목록이 오래된 사건과 함께 사라지거나 늦은 응답에 덮이고, 같은 사건의 여러 Skill 읽기와 Hook 중복이 화면 반응에서 손실되던 여섯 경계를 고쳤습니다. 최신 목록은 ring과 독립해 유지하고 thread scope·요청 세대·연결 수명주기 dedupe를 별도 상태로 관리합니다. 실제 Electron 화면에서는 두 Skill 행, Hook 행, 연속 강조와 모션 축소를 관찰했고 실제 설치 Native에서는 36개 Skill·3개 Hook 목록과 읽기 전용 Skill 읽기를 확인했습니다. 다만 저자와 독립된 Terra 재검토가 남아 있어 작업 완료로 전환하지 않았습니다.",
+          "requirements": [
+            {
+              "requirement": "Terra가 지적한 여섯 결함 수정",
+              "result"     : "각 결함의 실제 경계를 회귀로 추가하고 catalog·scope·pulse·dedupe·animation·parser를 수정했습니다.",
+              "evidence"   : "verification.md의 결함 수정 뒤 보조 실행 증거와 attempt-297fa9e1-d696-446b-a325-11b73539a194",
+              "limitations": null
+            },
+            {
+              "requirement": "전체 저장소와 실제 화면·Native 검증",
+              "result"     : "npm run check, 실제 Electron+합성 Native, 실제 설치 Native 목록과 읽기 전용 Skill 활동 표본이 통과했습니다.",
+              "evidence"   : ".www/evidence/native-activity-4kQt4y 및 .www/evidence/native-activity-live-xYnxHr",
+              "limitations": "실제 Hook 알림은 최소 Native 표본에서 관측되지 않았습니다."
+            },
+            {
+              "requirement": "독립 Terra 검토 전 완료 금지",
+              "result"     : "상태를 verifying과 nextAction review로 유지했습니다.",
+              "evidence"   : "work.json과 tasks.md의 재개할 다음 행동",
+              "limitations": "최신 독립 검토 결과는 아직 없습니다."
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "여섯 결함과 기존 투영 회귀",
+              "method"     : "bun 회귀와 npm run check를 포함한 공식 전체 probe",
+              "expected"   : "전체 테스트·타입·빌드 통과와 실제 경계 보존",
+              "observed"   : "공식 시도 attempt-297fa9e1-d696-446b-a325-11b73539a194 통과",
+              "limitations": "검사 입력에 연결된 현재 소스에 한정됩니다."
+            },
+            {
+              "target"     : "실제 Electron 사이드바",
+              "method"     : "합성 Native subprocess를 연결한 Electron GUI probe",
+              "expected"   : "두 Skill·Hook 반응, 고정 순서, 강조 연장, 무재생, reduced motion",
+              "observed"   : "모든 boolean 관측 true, 340px overflow false, rowAnimation none",
+              "limitations": "합성 Native 사건이며 Windows 실기가 아닙니다."
+            },
+            {
+              "target"     : "실제 설치 Native",
+              "method"     : "skills/list·hooks/list 엄격 파싱과 읽기 전용 단일 turn",
+              "expected"   : "현재 cwd 목록과 정확한 SKILL.md 읽기 관측",
+              "observed"   : "Skill 36개, Hook 3개, command read와 공개 답변·사용량·모델 관측",
+              "limitations": "실제 Hook 알림 0건, 단일 표본입니다."
+            },
+            {
+              "target"     : "TypeScript 가독성",
+              "method"     : "import 정규화 검사, align-tables, BoxBox source check",
+              "expected"   : "핵심 상태 파일의 import·표 정렬과 구문 통과",
+              "observed"   : "changed 0, misaligned 0, syntax valid",
+              "limitations": "프로젝트 관습 미승인 안전 거부 25개가 남았습니다."
+            }
+          ],
+          "decisions": [
+            {
+              "problem": "절단 가능한 이력과 장기 상태가 같은 수명주기를 공유했습니다.",
+              "basis": "2,000건 뒤 catalog와 Hook run 중복 억제가 사라지는 재현이 있었습니다.",
+              "alternatives": [
+                "ring 크기만 늘리기",
+                "catalog와 dedupe를 별도 상태로 유지하기"
+              ],
+              "choice": "catalog·관측·pulse·연결 수명주기 dedupe를 분리했습니다.",
+              "tradeoff": "renderer 상태 구조가 늘지만 각 상태의 만료 조건이 명확해졌습니다."
+            },
+            {
+              "problem": "빠른 연속 활동이 같은 CSS animation 이름을 재시작하지 못했습니다.",
+              "basis": "730ms 재활동 뒤 기존 760ms 경계에서 강조가 사라지는 GUI 재현이 있었습니다.",
+              "alternatives": [
+                "단일 class 재부여",
+                "두 animation phase와 타이머 재설정"
+              ],
+              "choice": "pulse마다 phase를 교대하고 760ms 타이머를 다시 시작했습니다.",
+              "tradeoff": "행별 반응 상태를 추가로 유지합니다."
+            }
+          ],
+          "references": [
+            {
+              "path": "docs/work/Chat/005-Skills와 Hook 활동 사이드바/terra-review.md",
+              "purpose": "수정 전 독립 Terra 발견 6건의 원문"
+            },
+            {
+              "path": "docs/work/Chat/005-Skills와 Hook 활동 사이드바/verification.md",
+              "purpose": "공식 시도와 실제 Electron·Native·BoxBox 범위"
+            },
+            {
+              "path": "docs/specs/chat.md#chat-activity-01",
+              "purpose": "현재 지속 요구와 활동 의미 경계"
+            },
+            {
+              "path": "src/activity-sidebar.ts",
+              "purpose": "catalog·scope·pulse·dedupe·응답 검증의 핵심 상태"
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "최신 source digest와 criteria digest로 Terra 읽기 전용 독립 검토를 실행합니다.",
+              "owner"   : "부모/root의 별도 Terra 검토 context",
+              "doneWhen": "새 검토가 현재 소스와 기준에 연결되고 발견이 없거나 발견 수정 뒤 재검증됩니다.",
+              "impact"  : "그 전에는 작업을 done으로 전환하지 않습니다."
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:40.510Z"
+          },
+          {
+            "id": "attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:50.755Z"
+          },
+          {
+            "id": "attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 2,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:55.112Z"
+          },
+          {
+            "id": "attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:38:05.512Z"
+          },
+          {
+            "id": "attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:14:40.567Z"
+          },
+          {
+            "id": "attempt-297fa9e1-d696-446b-a325-11b73539a194",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:16:21.177Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-a5a7ac26-28b4-42fe-9540-d2ddf2178189",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+        "workRecordHash": "9cd903a1dee203f0338a823214400e129f2381b4b53fea6dc73a45a779a34f58",
+        "sourceDigest"  : "434baba61d5ad5b9f6dc6573ec32d9f2ad39594297a3d25bacc592b375441eb7",
+        "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-e8cc58cf-fd49-4c6e-af79-0cc0c3b88653",
+      "workId"        : "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+      "title"         : "Skills와 Hook 활동 사이드바",
+      "summary"       : "Terra 재검토 1차가 지적한 연결 복원 dedupe 초기화, 무한 상태 증가, 요청 시작 경합 세 결함을 현재 제품 경계와 fixture에서 보완했다. 집중 회귀 87건, 타입 검사, 빌드와 전체 npm run check는 현재 소스에서 통과했다. 실제 설치 Native와 Electron GUI는 각각 현재 세션의 SQLite state 초기화 실패와 앱 코드 진입 전 SIGABRT로 재시도에 실패해 AC-4와 AC-5를 완료로 판정하지 않았다. 부모가 유효한 권한·GUI 세션에서 두 probe와 사용자 지정 Terra 읽기 전용 재검토를 이어간다.",
+      "kind"          : "authored",
+      "outcome"       : "failed",
+      "createdAt"     : "2026-11-12T18:22:45.974Z",
+      "event"         : "finish",
+      "workRecordHash": "412f707e3ef5a89b570591522b791f7cb498a3a0cf5015a61e7ebd300c6cff14",
+      "sourceDigest"  : "6fd60adb7e9e00f2f734411374d2b603f66cbbe080e5ccce59e8cbbb3e2f3ad1",
+      "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+      "semanticHash"  : "5d0688e82fb633b90403bc4eb3a6f55be8327462ad0e150eade7841bdec908bb",
+      "narrative": {
+        "summary": "Terra 재검토 1차가 지적한 연결 복원 dedupe 초기화, 무한 상태 증가, 요청 시작 경합 세 결함을 현재 제품 경계와 fixture에서 보완했다. 집중 회귀 87건, 타입 검사, 빌드와 전체 npm run check는 현재 소스에서 통과했다. 실제 설치 Native와 Electron GUI는 각각 현재 세션의 SQLite state 초기화 실패와 앱 코드 진입 전 SIGABRT로 재시도에 실패해 AC-4와 AC-5를 완료로 판정하지 않았다. 부모가 유효한 권한·GUI 세션에서 두 probe와 사용자 지정 Terra 읽기 전용 재검토를 이어간다.",
+        "before" : "대화 복원·생성이 실제 transport 재연결처럼 게시되어 동일 연결의 Hook run dedupe가 초기화됐고, 사건·읽기·Hook 상태가 사건 수에 비례해 계속 증가했다. 목록 요청의 최신 세대도 새 요청 시작이 아니라 새 응답을 받은 뒤에만 앞선 응답을 배제해 지연된 이전 목록이 수용될 수 있었다.",
+        "after"  : "실제 app-server 초기화만 연결 세대를 올리고 대화 복원은 transport 상태만 동기화한다. 전송 seq는 scalar high-water로, 활동 dedupe는 연결 세대 수명의 고정 128 KiB 필터로, UI 관찰·pulse·thread catalog는 명시한 cap으로 제한했다. scope별 요청 generation을 시작 시점에 획득해 오래된 성공·실패를 게시 전에 버리며, 실제 대화 전환과 요청 경합 순서를 fixture와 probe에 고정했다.",
+        "changes": [
+          "src/main.ts의 실제 연결 generation과 대화 표시 상태를 분리하고 scope별 최신 목록 요청 토큰을 요청 시작 시 소유하도록 변경했다.",
+          "src/activity-sidebar.ts와 src/native-activity-view.tsx의 무한 집합을 scalar high-water, 고정 크기 dedupe 필터, 제한된 관찰·pulse·catalog 상태로 교체했다.",
+          "실제 대화 read·resume·switch 및 지연 목록 경합 fixture, 20,005 사건과 700개 활동의 상태 크기 회귀, 합성 UI 판정을 추가하고 관련 명세·아키텍처·개발·작업 문서를 갱신했다."
+        ],
+        "decisions": [
+          "오래된 Hook 시작의 재점멸을 막기 위해 고정 개수 후 삭제하는 정확 집합 대신 연결 세대 수명의 고정 Bloom-style 필터를 사용했다. false negative는 만들지 않지만 해시 충돌 시 정당한 새 pulse가 보수적으로 억제될 수 있음을 명시했다.",
+          "대화 복원은 transport 연결 수명주기와 별개이므로 connected 사건을 합성하지 않고 transport/status로 UI 표시만 갱신한다.",
+          "목록 freshness는 응답 도착 순서가 아니라 사용자·시스템이 새 요청을 시작한 순간을 기준으로 판정한다."
+        ],
+        "limitations": [
+          "현재 source digest의 실제 Electron 합성 GUI는 현재 세션에서 앱 코드 진입 전 SIGABRT로 종료해 AC-4를 재관찰하지 못했다.",
+          "실제 설치 Native 최소 표본은 현재 세션에서 ~/.codex SQLite state runtime 초기화 실패로 종료해 AC-5 전체 충족을 주장하지 않는다.",
+          "BoxBox가 프로젝트 관습 승인 없이 안전 거부한 축은 통과로 위조하지 않았고, 지원 축의 syntax와 정렬 결과만 기록했다.",
+          "사용자 지정 Terra 독립 재검토는 부모가 별도 읽기 전용 세션에서 수행하므로 이 저자 보고는 독립 승인이나 완료 판정이 아니다."
+        ],
+        "next": [
+          "부모가 권한과 GUI가 유효한 세션에서 실제 설치 Native 최소 표본과 node scripts/verify-native-activity.ts --ui-only를 재실행해 현재 source digest의 AC-4·AC-5 적용성을 갱신한다.",
+          "부모가 동일 source·criteria digest를 대상으로 Terra 읽기 전용 재검토를 수행하고 발견이 없을 때만 작업 완료를 판정한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-47169e41-b5d2-4823-9e2a-56f50781c954",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b16ce131-7825-4bb0-a313-8e3c360d08a7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:40.510Z"
+          },
+          {
+            "id": "attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:50.755Z"
+          },
+          {
+            "id": "attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 2,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:55.112Z"
+          },
+          {
+            "id": "attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:38:05.512Z"
+          },
+          {
+            "id": "attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:14:40.567Z"
+          },
+          {
+            "id": "attempt-297fa9e1-d696-446b-a325-11b73539a194",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:16:21.177Z"
+          },
+          {
+            "id": "attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:42.568Z"
+          },
+          {
+            "id": "attempt-47169e41-b5d2-4823-9e2a-56f50781c954",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:48.408Z"
+          },
+          {
+            "id": "attempt-b16ce131-7825-4bb0-a313-8e3c360d08a7",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:51.929Z"
+          },
+          {
+            "id": "attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:56.077Z"
+          },
+          {
+            "id": "attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:19:30.356Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-a5a7ac26-28b4-42fe-9540-d2ddf2178189",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+        "workRecordHash": "412f707e3ef5a89b570591522b791f7cb498a3a0cf5015a61e7ebd300c6cff14",
+        "sourceDigest"  : "6fd60adb7e9e00f2f734411374d2b603f66cbbe080e5ccce59e8cbbb3e2f3ad1",
+        "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-f42cfada-1090-4a8a-aaf0-926a536f2ed5",
+      "workId"        : "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+      "title"         : "Skills와 Hook 활동 사이드바",
+      "summary"       : "Terra 재검토 2차가 확인한 확률 dedupe 오탐과 snapshot/live 순서 경합을 현재 제품 경계에서 수정했다. 서로 다른 Hook run 20,000개가 모두 반응하고 오래된 동일 ID는 다시 반응하지 않으며, bootstrap·대화 전환 중 live 사건은 snapshot과 seq 순서로 원자 병합된다. 집중·타입·빌드·전체 npm 검사는 frozen source digest에서 통과했다. 실제 Electron·Native는 부모가 별도 조사 중인 환경 실패 때문에 AC-4와 AC-5를 완료로 올리지 않았고, 부모의 GUI 재실행과 Terra 읽기 전용 재검토가 다음 단계다.",
+      "kind"          : "authored",
+      "outcome"       : "failed",
+      "createdAt"     : "2026-11-12T23:14:29.264Z",
+      "event"         : "finish",
+      "workRecordHash": "bb9b4a4f0b22b6ab4651609ec7ea743ba4f686d34c3e591b325eb1199e52c9e9",
+      "sourceDigest"  : "f41c51af43c5fab034563e22a8235f8c088a8a1aaa287e80cab21e3fa43fa911",
+      "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+      "semanticHash"  : "78a41e16b523bf523e07f8d02cb8cec45e088b9129a848d7c8bb67ec11ea734e",
+      "narrative": {
+        "summary": "Terra 재검토 2차가 확인한 확률 dedupe 오탐과 snapshot/live 순서 경합을 현재 제품 경계에서 수정했다. 서로 다른 Hook run 20,000개가 모두 반응하고 오래된 동일 ID는 다시 반응하지 않으며, bootstrap·대화 전환 중 live 사건은 snapshot과 seq 순서로 원자 병합된다. 집중·타입·빌드·전체 npm 검사는 frozen source digest에서 통과했다. 실제 Electron·Native는 부모가 별도 조사 중인 환경 실패 때문에 AC-4와 AC-5를 완료로 올리지 않았고, 부모의 GUI 재실행과 Terra 읽기 전용 재검토가 다음 단계다.",
+        "before" : "연결 세대의 Bloom-style 필터가 서로 다른 새 Hook run을 중복으로 오인해 실제 활동을 누락할 수 있었다. renderer는 live 구독 사건을 snapshot과 별도로 즉시 reducer에 보내므로 seq 3을 먼저 처리한 뒤 seq 1·2 snapshot이 도착하면 일반 watermark가 연결·catalog 복원을 버릴 수 있었다.",
+        "after"  : "일반 사건의 처리 이력은 scalar watermark로 압축하고, 연결 세대의 Skill read·Hook run ID는 실제 문자열 Set으로 정확히 보존한다. 64개 bucket은 복사 범위를 나누는 데만 쓰며 해시는 중복 판정에 관여하지 않는다. renderer는 snapshot 요청 전에 tokenized live 큐를 열어 snapshot cutoff까지를 복원으로, 이후 live만 새 반응으로 적용하고 실패·취소·StrictMode 재진입도 안전하게 배출·격리한다.",
+        "changes": [
+          "src/activity-sidebar.ts에서 확률 필터를 exact 64-bucket copy-on-write 인덱스로 교체하고 일반 seq·catalog·transport lifecycle watermark를 분리했다.",
+          "src/activity-sidebar.ts와 src/renderer.tsx에 snapshot 요청 중 live 사건을 큐잉하고 성공·실패·취소에서 seq 병합하는 실제 bootstrap·대화 전환 배선을 추가했다.",
+          "test/activity-sidebar.test.ts에 20,000개 고유 run 전수 반응·오래된 ID 억제·copy-on-write 불변성·늦은 snapshot·실패·재진입 회귀를 추가하고 명세·설계·개발·검증 기록을 현재 계약으로 갱신했다."
+        ],
+        "decisions": [
+          "임의 유한 메모리로 무한한 임의 ID의 exact dedupe를 약속하지 않았다. 새 활동 정확성을 희생하지 않고 연결 세대의 고유 ID 수에 비례하는 필수 상태를 보존하며 실제 새 transport 연결에서 회수한다.",
+          "해시는 bucket partition에만 사용하고 실제 문자열 비교로 중복을 결정한다. updater마다 전체 ID 집합 대신 wrapper와 변경 bucket만 복사해 React 이전 state 불변성을 지킨다.",
+          "snapshot 최대 seq를 cutoff로 사용해 그 시점까지 큐에 있던 사건은 복원으로 처리하고 이후 live만 pulse로 처리한다. catalog와 transport는 별도 generation/lifecycle watermark로 늦은 snapshot을 수용하되 최신 상태를 역행시키지 않는다."
+        ],
+        "limitations": [
+          "현재 source digest의 실제 Electron+합성 Native GUI는 부모가 별도로 조사 중인 SIGABRT 환경 실패 때문에 이 저자 단계에서 재실행하지 않았으며 AC-4를 통과로 바꾸지 않았다.",
+          "실제 설치 Native 최소 표본도 부모의 SQLite 환경 조사 대상이므로 AC-5 전체 충족을 주장하지 않는다.",
+          "BoxBox는 세 TypeScript 파일의 syntax를 valid로 확인했지만 프로젝트 관습 승인이 없어 제품 파일의 안전 거부와 테스트의 정렬 후보를 자동 수정하지 않았다.",
+          "사용자 지정 Terra 독립 검토는 부모가 frozen digest에서 다시 수행하므로 이 보고서는 독립 승인이나 완료 판정이 아니다."
+        ],
+        "next": [
+          "부모가 .www/scratchpad/sidebar-final-20261113/final.md의 frozen source digest에서 실제 Electron+합성 Native와 필요한 최소 Native 표본을 재실행해 AC-4·AC-5 적용성을 갱신한다.",
+          "부모가 같은 source·criteria digest를 대상으로 Terra 읽기 전용 재검토를 수행하고 발견이 해소됐을 때만 작업 완료를 판정한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-47169e41-b5d2-4823-9e2a-56f50781c954",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b16ce131-7825-4bb0-a313-8e3c360d08a7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:40.510Z"
+          },
+          {
+            "id": "attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:50.755Z"
+          },
+          {
+            "id": "attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 2,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:55.112Z"
+          },
+          {
+            "id": "attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:38:05.512Z"
+          },
+          {
+            "id": "attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:14:40.567Z"
+          },
+          {
+            "id": "attempt-297fa9e1-d696-446b-a325-11b73539a194",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:16:21.177Z"
+          },
+          {
+            "id": "attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:42.568Z"
+          },
+          {
+            "id": "attempt-47169e41-b5d2-4823-9e2a-56f50781c954",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:48.408Z"
+          },
+          {
+            "id": "attempt-b16ce131-7825-4bb0-a313-8e3c360d08a7",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:51.929Z"
+          },
+          {
+            "id": "attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:56.077Z"
+          },
+          {
+            "id": "attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:19:30.356Z"
+          },
+          {
+            "id": "attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T23:12:00.522Z"
+          },
+          {
+            "id": "attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T23:12:46.984Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-a5a7ac26-28b4-42fe-9540-d2ddf2178189",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+        "workRecordHash": "bb9b4a4f0b22b6ab4651609ec7ea743ba4f686d34c3e591b325eb1199e52c9e9",
+        "sourceDigest"  : "f41c51af43c5fab034563e22a8235f8c088a8a1aaa287e80cab21e3fa43fa911",
+        "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-aa1f411a-23a1-472d-be5e-a83833ca2fc0",
+      "workId"        : "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+      "title"         : "Skills와 Hook 활동 사이드바",
+      "summary"       : "사이드바005의 코드·fixture 결함을 수정했다. 최신 소스의 전체 검사와 실제 Electron 합성 GUI 11개 항목이 통과했고 독립 Terra가 PASS로 확인했다. Native 읽기 표본은 같은 실행 코드의 이전 통과를 재사용한다. Chat006과 빈 index를 보존했고 커밋·push하지 않았다. 자동 done은 사용자 지정 Terra를 수용하지 못하는 기존 core 정책 때문에 별도 미반영 상태다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-13T00:23:04.825Z",
+      "event"         : "finish",
+      "workRecordHash": "2f3e2f02872542963f14510f5374c6fe3717d74e77e4757c9b7b6bbcf31196a3",
+      "sourceDigest"  : "4b78dfb6eff3ccc42e83aab9c8ef7ee454f00a7ede42fb2bc3d1cfbbaf025478",
+      "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+      "semanticHash"  : "5e26b53a7230627c6889a7aba2176a4d246fbf8060fb4dd6ff19c9fd6d3829a1",
+      "narrative": {
+        "summary": "사이드바005의 코드·fixture 결함을 수정했다. 최신 소스의 전체 검사와 실제 Electron 합성 GUI 11개 항목이 통과했고 독립 Terra가 PASS로 확인했다. Native 읽기 표본은 같은 실행 코드의 이전 통과를 재사용한다. Chat006과 빈 index를 보존했고 커밋·push하지 않았다. 자동 done은 사용자 지정 Terra를 수용하지 못하는 기존 core 정책 때문에 별도 미반영 상태다.",
+        "before" : "긴 이력에서 목록·중복 상태가 유실되고 목록 경합·여러 Skill 반응 누락·확률 dedupe 오탐·snapshot/live 오분류가 있었다. fixture의 originator·경로와 실행 명령 형식도 현행 계약과 달랐다.",
+        "after"  : "등록 목록을 독립 유지하고 연결 수명의 정확한 ID로 중복을 억제한다. 모든 구조화 읽기를 보존하고 snapshot에 없는 live는 낮은 seq여도 반응한다. fixture와 GUI 전환 절차를 Chat006 계약에 맞춰 실제 활동 11개 확인을 통과했다.",
+        "changes": [
+          "목록의 요청 세대·scope·cwd/shape 검증과 고정 순서를 유지했다.",
+          "고유 Hook20,000개 전수 반응과 중복·늦은 시작 억제를 확인했다.",
+          "bootstrap·전환·복원·실패·재진입에서 snapshot과 live를 구별한다.",
+          "fixture originator·등록/읽기 경로를 맞추고 두 번째 턴 종료 뒤 복원을 검사한다."
+        ],
+        "decisions": [
+          "확률 필터 대신 실제 문자열 ID를 정확히 보존한다.",
+          "snapshot 최대 seq가 아니라 실제 포함 여부로 새 live를 구분한다.",
+          "실행기 종료와 내부 attempt 결과를 구별한다."
+        ],
+        "limitations": [
+          "공유 자동 core는 명시적 Terra 예외를 지원하지 않아 done을 강제로 기록하지 않았다.",
+          "요청 모델과 관측 모델을 구분하며 관측하지 못한 메타데이터를 만들지 않았다.",
+          "실제 Hook 알림0건·Windows 미실행. Native 표본 재사용은 새 실행이 아니다.",
+          "BoxBox는 사용자 지정 issue #62에서 별도 조사한다."
+        ],
+        "next": [],
+        "reader": {
+          "story": "최소 사이드바를 실제 목록과 읽기·시작 관측에 연결하고 장기 이력·중복·복원 경계의 활동 누락을 고쳤다. 전체 실행·실제 화면·독립 Terra의 근거가 같은 소스에 연결됐다.",
+          "requirements": [
+            {
+              "requirement": "AC-1",
+              "result"     : "현재 공식 실행의 관측 범위에서 통과",
+              "evidence"   : "verification.md#parent-final-20261113",
+              "limitations": null
+            },
+            {
+              "requirement": "AC-2",
+              "result"     : "현재 공식 실행의 관측 범위에서 통과",
+              "evidence"   : "verification.md#parent-final-20261113",
+              "limitations": null
+            },
+            {
+              "requirement": "AC-3",
+              "result"     : "현재 공식 실행의 관측 범위에서 통과",
+              "evidence"   : "verification.md#parent-final-20261113",
+              "limitations": null
+            },
+            {
+              "requirement": "AC-4",
+              "result"     : "현재 공식 실행의 관측 범위에서 통과",
+              "evidence"   : "verification.md#parent-final-20261113",
+              "limitations": null
+            },
+            {
+              "requirement": "AC-5",
+              "result"     : "현재 공식 실행의 관측 범위에서 통과",
+              "evidence"   : "verification.md#parent-final-20261113",
+              "limitations": "실제 Hook·Windows 전체 검증으로 확대하지 않음"
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "전체 저장소·실제 Electron 합성 GUI",
+              "method"     : "공식 verify-native-activity 실행과 Terra 근거 대조",
+              "expected"   : "내부 검증 및 활동11개 항목 통과",
+              "observed"   : "Bun215·Node147·타입·빌드·GUI11개 항목 통과, sourceStable true",
+              "limitations": "자동 완료 정책과 BoxBox 별도 조사 구분"
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": "verification.md#parent-final-20261113",
+              "purpose": "실제 시도와 source·criteria 식별"
+            },
+            {
+              "path": "terra-final.md",
+              "purpose": "독립 Terra 최종 PASS와 한계"
+            }
+          ],
+          "nextActions": []
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-47169e41-b5d2-4823-9e2a-56f50781c954",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b16ce131-7825-4bb0-a313-8e3c360d08a7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:40.510Z"
+          },
+          {
+            "id": "attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:50.755Z"
+          },
+          {
+            "id": "attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 2,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:55.112Z"
+          },
+          {
+            "id": "attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:38:05.512Z"
+          },
+          {
+            "id": "attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:14:40.567Z"
+          },
+          {
+            "id": "attempt-297fa9e1-d696-446b-a325-11b73539a194",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:16:21.177Z"
+          },
+          {
+            "id": "attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:42.568Z"
+          },
+          {
+            "id": "attempt-47169e41-b5d2-4823-9e2a-56f50781c954",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:48.408Z"
+          },
+          {
+            "id": "attempt-b16ce131-7825-4bb0-a313-8e3c360d08a7",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:51.929Z"
+          },
+          {
+            "id": "attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:56.077Z"
+          },
+          {
+            "id": "attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:19:30.356Z"
+          },
+          {
+            "id": "attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T23:12:00.522Z"
+          },
+          {
+            "id": "attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T23:12:46.984Z"
+          },
+          {
+            "id": "attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-13T00:07:03.072Z"
+          },
+          {
+            "id": "attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-13T00:12:05.498Z"
+          },
+          {
+            "id": "attempt-37e8e644-d251-4484-bce4-795e0168f411",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-13T00:16:00.932Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-a5a7ac26-28b4-42fe-9540-d2ddf2178189",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json",
+            "findings": []
+          }
+        ],
+        "omitted": {
+          "criteria"     : 0,
+          "evidence"     : 1,
+          "verifications": 0,
+          "reviews"      : 0,
+          "arguments"    : 0,
+          "findings"     : 0,
+          "unresolved"   : 0
+        }
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+        "workRecordHash": "2f3e2f02872542963f14510f5374c6fe3717d74e77e4757c9b7b6bbcf31196a3",
+        "sourceDigest"  : "4b78dfb6eff3ccc42e83aab9c8ef7ee454f00a7ede42fb2bc3d1cfbbaf025478",
+        "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-e8e483b7-a373-4277-bc8c-4b0b8259aa9a",
+      "workId"        : "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+      "title"         : "Skills와 Hook 활동 사이드바",
+      "summary"       : "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-15T09:41:45.611Z",
+      "event"         : "review",
+      "workRecordHash": "c46cd8ec2a7d3a317739980eee1d0ce34aed6ee9b0753a3b32c7fffb8cc31bda",
+      "sourceDigest"  : "8faa25992de94ccabbb8a7d6f8b45c5cf38a8c2b92ac5149e1c58720d3bbd713",
+      "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+      "semanticHash"  : "497cc4298eb7cccc14e06d1f2f874cd8a877cad7d94a1ab06978b6739a1fcda1",
+      "narrative"     : null,
+      "work": {
+        "status": "verifying",
+        "blockedReason": "독립 검토 fail: 수정 또는 검토 재실행 필요",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6821f151-0987-4bca-92df-ffe1949f9c96",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6821f151-0987-4bca-92df-ffe1949f9c96",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6821f151-0987-4bca-92df-ffe1949f9c96",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-47169e41-b5d2-4823-9e2a-56f50781c954",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b16ce131-7825-4bb0-a313-8e3c360d08a7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:40.510Z"
+          },
+          {
+            "id": "attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:50.755Z"
+          },
+          {
+            "id": "attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 2,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:55.112Z"
+          },
+          {
+            "id": "attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:38:05.512Z"
+          },
+          {
+            "id": "attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:14:40.567Z"
+          },
+          {
+            "id": "attempt-297fa9e1-d696-446b-a325-11b73539a194",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:16:21.177Z"
+          },
+          {
+            "id": "attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:42.568Z"
+          },
+          {
+            "id": "attempt-47169e41-b5d2-4823-9e2a-56f50781c954",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:48.408Z"
+          },
+          {
+            "id": "attempt-b16ce131-7825-4bb0-a313-8e3c360d08a7",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:51.929Z"
+          },
+          {
+            "id": "attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:56.077Z"
+          },
+          {
+            "id": "attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:19:30.356Z"
+          },
+          {
+            "id": "attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T23:12:00.522Z"
+          },
+          {
+            "id": "attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T23:12:46.984Z"
+          },
+          {
+            "id": "attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-13T00:07:03.072Z"
+          },
+          {
+            "id": "attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-13T00:12:05.498Z"
+          },
+          {
+            "id": "attempt-37e8e644-d251-4484-bce4-795e0168f411",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-13T00:16:00.932Z"
+          },
+          {
+            "id": "attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:25:52.907Z"
+          },
+          {
+            "id": "attempt-6821f151-0987-4bca-92df-ffe1949f9c96",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:29:34.168Z"
+          },
+          {
+            "id": "attempt-b2733b60-59b8-4108-b406-63560790021f",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:39:28.647Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-a5a7ac26-28b4-42fe-9540-d2ddf2178189",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json",
+            "findings": []
+          },
+          {
+            "id"         : "review-6d88aeb6-9887-4555-9f5c-1c18e45e7528",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-6d88aeb6-9887-4555-9f5c-1c18e45e7528/opus.json",
+            "findings": [
+              "[높음·AC-2/AC-3] src/activity-sidebar.ts:521-554 — Hook 중복 억제 key는 `hook\\0threadId\\0run.id`이고, 연결 세대가 살아 있는 동안 유지된다. 그런데 같은 저장소의 src/native-activity.ts:279는 \"codex-cli 0.167.2의 run.id는 eventName:displayOrder:sourcePath로 재사용된다\"고 적고 있다. docs/specs/chat.md:135와 docs/ARCHITECTURE.md:41도 실제 Native Hook `run.id`를 호출별 ID가 아닌 반복 핸들러 ID(`unstable-id`)로 정의한다. 실제 Native에서 같은 thread·같은 연결 안의 두 번째 이후 sync `hook/started`(예: 도구마다 반복되는 postToolUse)는 `remember()`가 false를 돌려 반응도 최근 관측 갱신도 만들지 않는다. 첫 run의 `hook/completed`(523행)도 같은 key를 기록하므로 뒤 호출은 '늦은 시작'으로 영구 억제된다. 그래서 '동기 Hook 시작이 해당 행에 새 활동 반응을 만든다'는 AC-2가 실제 Native에서는 thread·연결마다 Hook당 한 번만 충족된다. 재현: 같은 threadId로 `{run:{id:'postToolUse:0:/x/hooks.json', executionMode:'sync', status:'running', ...}}` 시작→완료→같은 id로 다시 시작을 넣으면, 두 번째 시작의 pulse가 0건이다.",
+              "[근거 범위] 위 결함을 검증 근거가 가리지 못한다. test/activity-sidebar.test.ts:253의 회귀와 fixture는 `run-${index}`처럼 호출마다 고유한 run ID만 쓴다. verification.md:125와 331은 실제 Native Hook 알림을 0건으로 기록했다. 따라서 '고유 Hook ID 20,000개 전수 반응'(verification.md:330)은 합성 고유 ID에서만 성립한다. 반복 run.id를 쓰는 실제 Native에 대해 AC-2·AC-3을 통과로 판단할 근거가 없다. 수정 방향: dedupe key에 turnId와 item/호출 경계를 포함하거나 started/completed 쌍의 수명으로 판정하고, 반복 run.id 회귀 테스트를 추가해야 한다.",
+              "[중간·AC-2, spec 69행 위반] src/renderer.tsx:484 — 대화 전환(selectConversation) 중에는 acceptEvent(524행)가 live 사건을 `queuedEvents`에만 쌓는다. 그래서 ActivitySnapshotBoundary의 live 큐는 비어 있고, 실제 live 사건은 `arrived`로만 전달된다. 그런데 성공 경로가 `arrived`를 `{ emitPulses: false }`로 적용한다. 이때 Skill 읽기·Hook 시작 key가 dedupe에 기록되므로, 전환 중 도착한 새 활동은 반응 없이 영구 소비된다. 이는 docs/specs/chat.md:69의 '큐에만 있는 live 사건은 … 새 반응을 만든다'와 어긋난다. 같은 파일 615·626행의 프로젝트 전환과 492행의 실패 경로는 `emitPulses: true`로 처리해 동작도 일관되지 않는다. 재현: openConversation 응답 지연 중 대상 thread의 `item/started`(SKILL.md read)를 보내면, 전환 완료 뒤 해당 행 pulse가 0건이다.",
+              "[참고·증거 적용성] 이번 검토 대상 source digest는 11890fea…다. 기록된 최신 공식 시도(attempt-b2733b60…, GUI --ui-only)는 8faa2599…, 집중 검사(attempt-6821f151…)는 926002f5…에 대한 것이다. 입력 경로에 docs 파일이 추가된 영향일 수 있으나, 현재 digest에 대한 GUI·집중 검사 재실행 기록은 없다. 이 검토에서는 테스트나 명령을 실행하지 않았고 소스와 문서를 읽어 대조만 했다.",
+              "[확인된 정상 범위] skills/list·hooks/list 엄격 파서(cwd 단일 일치, shape·오류·경고 시 incomplete), 고정 등록 순서 투영, Skill read dedupe key(thread+turn+item+path), snapshot 실제 포함 여부 기반의 pulse 분류(updateActivitySidebarSnapshot), 64 bucket 정확 dedupe의 copy-on-write는 소스상 spec과 일치한다."
+            ]
+          }
+        ],
+        "omitted": {
+          "criteria"     : 0,
+          "evidence"     : 11,
+          "verifications": 0,
+          "reviews"      : 0,
+          "arguments"    : 0,
+          "findings"     : 0,
+          "unresolved"   : 0
+        }
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+        "workRecordHash": "c46cd8ec2a7d3a317739980eee1d0ce34aed6ee9b0753a3b32c7fffb8cc31bda",
+        "sourceDigest"  : "8faa25992de94ccabbb8a7d6f8b45c5cf38a8c2b92ac5149e1c58720d3bbd713",
+        "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-a6267ead-157f-438a-a41a-6923c680247c",
+      "workId"        : "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+      "title"         : "Skills와 Hook 활동 사이드바",
+      "summary"       : "목록·일반 반응·타입·GUI는 재검증했지만 반복 Hook ID 반응 누락과 전환 중 live 반응 지적이 남아 검증 마감을 보류한다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-15T09:44:46.453Z",
+      "event"         : "finish",
+      "workRecordHash": "a3006f2e2abc9a1a91313225ed6d0d21a57c74dc76f7d08d6a7cf59a39dfb9a1",
+      "sourceDigest"  : "8faa25992de94ccabbb8a7d6f8b45c5cf38a8c2b92ac5149e1c58720d3bbd713",
+      "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+      "semanticHash"  : "ef55d0e3e01ac6a4fc69f74f228072e46bdcff8afe4b18ab2d7f854fdc04040f",
+      "narrative": {
+        "summary": "목록·일반 반응·타입·GUI는 재검증했지만 반복 Hook ID 반응 누락과 전환 중 live 반응 지적이 남아 검증 마감을 보류한다.",
+        "before" : "이전 합성 검사와 오래된 감사 기록으로 현재 사이드바를 다시 판정해야 했다.",
+        "after"  : "현재 소스의 일반 GUI와 실제 Native 목록을 확인했고, 독립 Opus가 잡은 반복 ID 경계는 현재 함수에서 실패로 재현했다.",
+        "changes": [
+          "현재 집중 검사·strict 타입 영수증·실제 Electron GUI와 Native 등록 목록 표본을 연결했다.",
+          "동일 handler ID를 새 턴에서 다시 시작하면 pulse와 최근 관측이 빠지는 공식 실패 재현을 AC-2·AC-3에 연결했다.",
+          "최신 실제 Opus fail 원문과 두 결함의 실행/정적 근거를 구분해 보존했다."
+        ],
+        "decisions": [
+          "일반 GUI와 고유 run ID 합성 검사 PASS만으로 반복 ID 경계를 통과시키지 않는다.",
+          "제품 수정은 다음 구현 단계에서 수행하고 이번에는 재현과 미완료 조건을 기록한다."
+        ],
+        "limitations": [
+          "반복 run ID 입력 실패는 실행 재현했으나 실제 0.169 모든 Hook의 ID 반복 양상을 새로 전수 관측하지 않았다.",
+          "대화 전환 중 arrived live를 emitPulses=false로 처리하는 경로는 독립 정적 감사 지적이며 그 지연 GUI 시나리오는 아직 재현하지 않았다.",
+          "Windows·OS 실제 한국어 IME·모든 설치 Hook 조건의 실제 발동은 이번 GUI 범위 밖이다."
+        ],
+        "next": [
+          "Hook handler ID와 실제 호출 경계를 구분하는 중복 억제를 설계·수정하고 반복 ID 회귀를 통과시킨다.",
+          "전환 중 queued live 사건 반응을 실제 GUI 지연 시나리오로 재현·수정한다.",
+          "현재 소스에서 독립 Opus와 문서·보고서 현재성을 재검사한 뒤 마감한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "verification_failed",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6821f151-0987-4bca-92df-ffe1949f9c96",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6821f151-0987-4bca-92df-ffe1949f9c96",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-044ba35e-245e-4197-82b7-d30e766f1c95",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6821f151-0987-4bca-92df-ffe1949f9c96",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-044ba35e-245e-4197-82b7-d30e766f1c95",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-47169e41-b5d2-4823-9e2a-56f50781c954",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b16ce131-7825-4bb0-a313-8e3c360d08a7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:40.510Z"
+          },
+          {
+            "id": "attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:50.755Z"
+          },
+          {
+            "id": "attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 2,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:55.112Z"
+          },
+          {
+            "id": "attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:38:05.512Z"
+          },
+          {
+            "id": "attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:14:40.567Z"
+          },
+          {
+            "id": "attempt-297fa9e1-d696-446b-a325-11b73539a194",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:16:21.177Z"
+          },
+          {
+            "id": "attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:42.568Z"
+          },
+          {
+            "id": "attempt-47169e41-b5d2-4823-9e2a-56f50781c954",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:48.408Z"
+          },
+          {
+            "id": "attempt-b16ce131-7825-4bb0-a313-8e3c360d08a7",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:51.929Z"
+          },
+          {
+            "id": "attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:56.077Z"
+          },
+          {
+            "id": "attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:19:30.356Z"
+          },
+          {
+            "id": "attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T23:12:00.522Z"
+          },
+          {
+            "id": "attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T23:12:46.984Z"
+          },
+          {
+            "id": "attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-13T00:07:03.072Z"
+          },
+          {
+            "id": "attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-13T00:12:05.498Z"
+          },
+          {
+            "id": "attempt-37e8e644-d251-4484-bce4-795e0168f411",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-13T00:16:00.932Z"
+          },
+          {
+            "id": "attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:25:52.907Z"
+          },
+          {
+            "id": "attempt-6821f151-0987-4bca-92df-ffe1949f9c96",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:29:34.168Z"
+          },
+          {
+            "id": "attempt-b2733b60-59b8-4108-b406-63560790021f",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:39:28.647Z"
+          },
+          {
+            "id": "attempt-044ba35e-245e-4197-82b7-d30e766f1c95",
+            "command": "bun",
+            "args": [
+              "--eval",
+              "import {createActivitySidebarState,updateActivitySidebarState} from \"./src/activity-sidebar.ts\"; const run={id:\"postToolUse:0:/x/hooks.json\",eventName:\"postToolUse\",sourcePath:\"/x/hooks.json\",displayOrder:0,handlerType:\"command\",executionMode:\"sync\",status:\"running\"};const ev=(seq,method,turnId,run)=>({seq,at:new Date().toISOString(),kind:\"notification\",method,params:{threadId:\"t\",turnId,run}});const state=updateActivitySidebarState(createActivitySidebarState(),[ev(1,\"hook/started\",\"turn-a\",run),ev(2,\"hook/completed\",\"turn-a\",{...run,status:\"completed\"}),ev(3,\"hook/started\",\"turn-b\",run)],{emitPulses:true});const result={scenario:\"same-handler-id-new-turn\",starts:2,pulseSeqs:state.pulses.map(p=>p.seq),observedSeqs:[...state.observations.values()].map(o=>o.seq),expectedNewStartSeq:3};console.log(JSON.stringify(result));if(!state.pulses.some(p=>p.seq===3)||![...state.observations.values()].some(o=>o.seq===3))process.exitCode=1;"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:44:16.859Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-a5a7ac26-28b4-42fe-9540-d2ddf2178189",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json",
+            "findings": []
+          },
+          {
+            "id"         : "review-6d88aeb6-9887-4555-9f5c-1c18e45e7528",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-6d88aeb6-9887-4555-9f5c-1c18e45e7528/opus.json",
+            "findings": [
+              "[높음·AC-2/AC-3] src/activity-sidebar.ts:521-554 — Hook 중복 억제 key는 `hook\\0threadId\\0run.id`이고, 연결 세대가 살아 있는 동안 유지된다. 그런데 같은 저장소의 src/native-activity.ts:279는 \"codex-cli 0.167.2의 run.id는 eventName:displayOrder:sourcePath로 재사용된다\"고 적고 있다. docs/specs/chat.md:135와 docs/ARCHITECTURE.md:41도 실제 Native Hook `run.id`를 호출별 ID가 아닌 반복 핸들러 ID(`unstable-id`)로 정의한다. 실제 Native에서 같은 thread·같은 연결 안의 두 번째 이후 sync `hook/started`(예: 도구마다 반복되는 postToolUse)는 `remember()`가 false를 돌려 반응도 최근 관측 갱신도 만들지 않는다. 첫 run의 `hook/completed`(523행)도 같은 key를 기록하므로 뒤 호출은 '늦은 시작'으로 영구 억제된다. 그래서 '동기 Hook 시작이 해당 행에 새 활동 반응을 만든다'는 AC-2가 실제 Native에서는 thread·연결마다 Hook당 한 번만 충족된다. 재현: 같은 threadId로 `{run:{id:'postToolUse:0:/x/hooks.json', executionMode:'sync', status:'running', ...}}` 시작→완료→같은 id로 다시 시작을 넣으면, 두 번째 시작의 pulse가 0건이다.",
+              "[근거 범위] 위 결함을 검증 근거가 가리지 못한다. test/activity-sidebar.test.ts:253의 회귀와 fixture는 `run-${index}`처럼 호출마다 고유한 run ID만 쓴다. verification.md:125와 331은 실제 Native Hook 알림을 0건으로 기록했다. 따라서 '고유 Hook ID 20,000개 전수 반응'(verification.md:330)은 합성 고유 ID에서만 성립한다. 반복 run.id를 쓰는 실제 Native에 대해 AC-2·AC-3을 통과로 판단할 근거가 없다. 수정 방향: dedupe key에 turnId와 item/호출 경계를 포함하거나 started/completed 쌍의 수명으로 판정하고, 반복 run.id 회귀 테스트를 추가해야 한다.",
+              "[중간·AC-2, spec 69행 위반] src/renderer.tsx:484 — 대화 전환(selectConversation) 중에는 acceptEvent(524행)가 live 사건을 `queuedEvents`에만 쌓는다. 그래서 ActivitySnapshotBoundary의 live 큐는 비어 있고, 실제 live 사건은 `arrived`로만 전달된다. 그런데 성공 경로가 `arrived`를 `{ emitPulses: false }`로 적용한다. 이때 Skill 읽기·Hook 시작 key가 dedupe에 기록되므로, 전환 중 도착한 새 활동은 반응 없이 영구 소비된다. 이는 docs/specs/chat.md:69의 '큐에만 있는 live 사건은 … 새 반응을 만든다'와 어긋난다. 같은 파일 615·626행의 프로젝트 전환과 492행의 실패 경로는 `emitPulses: true`로 처리해 동작도 일관되지 않는다. 재현: openConversation 응답 지연 중 대상 thread의 `item/started`(SKILL.md read)를 보내면, 전환 완료 뒤 해당 행 pulse가 0건이다.",
+              "[참고·증거 적용성] 이번 검토 대상 source digest는 11890fea…다. 기록된 최신 공식 시도(attempt-b2733b60…, GUI --ui-only)는 8faa2599…, 집중 검사(attempt-6821f151…)는 926002f5…에 대한 것이다. 입력 경로에 docs 파일이 추가된 영향일 수 있으나, 현재 digest에 대한 GUI·집중 검사 재실행 기록은 없다. 이 검토에서는 테스트나 명령을 실행하지 않았고 소스와 문서를 읽어 대조만 했다.",
+              "[확인된 정상 범위] skills/list·hooks/list 엄격 파서(cwd 단일 일치, shape·오류·경고 시 incomplete), 고정 등록 순서 투영, Skill read dedupe key(thread+turn+item+path), snapshot 실제 포함 여부 기반의 pulse 분류(updateActivitySidebarSnapshot), 64 bucket 정확 dedupe의 copy-on-write는 소스상 spec과 일치한다."
+            ]
+          }
+        ],
+        "omitted": {
+          "criteria"     : 0,
+          "evidence"     : 13,
+          "verifications": 0,
+          "reviews"      : 0,
+          "arguments"    : 0,
+          "findings"     : 0,
+          "unresolved"   : 0
+        }
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+        "workRecordHash": "a3006f2e2abc9a1a91313225ed6d0d21a57c74dc76f7d08d6a7cf59a39dfb9a1",
+        "sourceDigest"  : "8faa25992de94ccabbb8a7d6f8b45c5cf38a8c2b92ac5149e1c58720d3bbd713",
+        "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-8f7962ec-5145-41bd-bd26-67b59349fe66",
+      "workId"        : "work-16362e60-e269-4d5d-bf38-2869496efd2c",
+      "title"         : "Skills와 Hook 활동 사이드바",
+      "summary"       : "목록·일반 반응·타입·GUI는 재검증했지만 반복 Hook ID 반응 누락과 전환 중 live 반응 지적이 남아 검증 마감을 보류한다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-15T09:49:00.132Z",
+      "event"         : "finish",
+      "workRecordHash": "e560eedb53603794e5427bae56ec163f64e2445b3c2532454246a74b06167cc7",
+      "sourceDigest"  : "ac245e4f6a7c1e409c115720cbe7e3d9f96045f07a42e1939de4d57347b5c508",
+      "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d",
+      "semanticHash"  : "2b53faf61b9c5a5f1fc2405bf0f163b65be72a388bcf00888ea67c3b3c206b30",
+      "narrative": {
+        "summary": "목록·일반 반응·타입·GUI는 재검증했지만 반복 Hook ID 반응 누락과 전환 중 live 반응 지적이 남아 검증 마감을 보류한다.",
+        "before" : "이전 합성 검사와 오래된 감사 기록으로 현재 사이드바를 다시 판정해야 했다.",
+        "after"  : "검사 당시 소스의 일반 GUI와 실제 Native 목록을 확인했고, 독립 Opus가 잡은 반복 ID 경계는 현재 함수에서 실패로 재현했다. 이후 다른 세션의 renderer·생태계·구조 snapshot·정본 문서 변경을 관측해, 확보한 검사의 현재 전체 입력 적용성을 재검증 대기로 남겼다.",
+        "changes": [
+          "현재 집중 검사·strict 타입 영수증·실제 Electron GUI와 Native 등록 목록 표본을 연결했다.",
+          "동일 handler ID를 새 턴에서 다시 시작하면 pulse와 최근 관측이 빠지는 공식 실패 재현을 AC-2·AC-3에 연결했다.",
+          "최신 실제 Opus fail 원문과 두 결함의 실행/정적 근거를 구분해 보존했다."
+        ],
+        "decisions": [
+          "일반 GUI와 고유 run ID 합성 검사 PASS만으로 반복 ID 경계를 통과시키지 않는다.",
+          "제품 수정은 다음 구현 단계에서 수행하고 이번에는 재현과 미완료 조건을 기록한다."
+        ],
+        "limitations": [
+          "반복 run ID 입력 실패는 실행 재현했으나 실제 0.169 모든 Hook의 ID 반복 양상을 새로 전수 관측하지 않았다.",
+          "대화 전환 중 arrived live를 emitPulses=false로 처리하는 경로는 독립 정적 감사 지적이며 그 지연 GUI 시나리오는 아직 재현하지 않았다.",
+          "Windows·OS 실제 한국어 IME·모든 설치 Hook 조건의 실제 발동은 이번 GUI 범위 밖이다.",
+          "검사 이후 다른 세션에서 소스·정본 문서가 추가 변경됐다. 실행 당시 sourceStable PASS/FAIL은 보존하며 현재 전체 입력에 대한 증거 적용성은 status와 후속 재검증으로 확인한다."
+        ],
+        "next": [
+          "Hook handler ID와 실제 호출 경계를 구분하는 중복 억제를 설계·수정하고 반복 ID 회귀를 통과시킨다.",
+          "전환 중 queued live 사건 반응을 실제 GUI 지연 시나리오로 재현·수정한다.",
+          "현재 소스에서 독립 Opus와 문서·보고서 현재성을 재검사한 뒤 마감한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "최신 Opus fail로 확인한 활동/재개 경계 미해결; 다른 세션의 renderer·생태계·구조 snapshot/정본 변경으로 현재 전체 입력 적용성 재확인 필요",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "현재 작업공간의 실제 skills/list와 hooks/list 응답을 고정 순서 목록으로 표시하고 목록을 얻지 못하면 관측 목록임을 명시한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6821f151-0987-4bca-92df-ffe1949f9c96",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "구조화된 SKILL.md 읽기 시작과 동기 Hook 시작만 해당 행에 새 활동 반응을 만들고 Skill 이름 언급·임의 문자열·Hook 완료는 새 호출로 반응시키지 않는다.",
+            "required"   : true,
+            "result"     : "blocked",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6821f151-0987-4bca-92df-ffe1949f9c96",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-044ba35e-245e-4197-82b7-d30e766f1c95",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "Skill 경로와 Hook 메타데이터·run ID를 정확히 매핑해 중복·늦은 시작·리렌더·패널 재진입·이력 복원·다른 스레드 사건을 새 활동으로 오귀속하지 않는다.",
+            "required"   : true,
+            "result"     : "blocked",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6821f151-0987-4bca-92df-ffe1949f9c96",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-044ba35e-245e-4197-82b7-d30e766f1c95",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "목록 위치를 활동 때문에 바꾸지 않고 약 0.7초의 절제된 행 반응과 모션 축소 시 정적 최근 관측 표시를 제공하며 연결 상태와 관측 의미를 짧게 밝힌다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "기존 대화·승인·중단·초안·다른 패널을 보존하고 집중 투영 검사, 타입·빌드, 실제 Electron+합성 Native GUI 및 가능한 실제 Native 목록 응답을 범위별로 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-4e37e5fe-da15-4405-943e-61b078634470",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-297fa9e1-d696-446b-a325-11b73539a194",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-47169e41-b5d2-4823-9e2a-56f50781c954",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b16ce131-7825-4bb0-a313-8e3c360d08a7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37e8e644-d251-4484-bce4-795e0168f411",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b2733b60-59b8-4108-b406-63560790021f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-2b5e019f-bca4-4ebc-a857-cd4e523473ad",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:40.510Z"
+          },
+          {
+            "id": "attempt-85b72260-4bed-481f-8fb5-b79c6ccfd0d5",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:50.755Z"
+          },
+          {
+            "id": "attempt-faee1650-a05f-4851-8ede-b1d10e41bcab",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 2,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:37:55.112Z"
+          },
+          {
+            "id": "attempt-4e37e5fe-da15-4405-943e-61b078634470",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T08:38:05.512Z"
+          },
+          {
+            "id": "attempt-27cce55a-5aed-442e-8ccc-5a38c4fd8ad4",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:14:40.567Z"
+          },
+          {
+            "id": "attempt-297fa9e1-d696-446b-a325-11b73539a194",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T10:16:21.177Z"
+          },
+          {
+            "id": "attempt-96a0b582-3f8b-4227-bb01-f3bdac90539d",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:42.568Z"
+          },
+          {
+            "id": "attempt-47169e41-b5d2-4823-9e2a-56f50781c954",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:48.408Z"
+          },
+          {
+            "id": "attempt-b16ce131-7825-4bb0-a313-8e3c360d08a7",
+            "command": "npm",
+            "args": [
+              "run",
+              "build"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:51.929Z"
+          },
+          {
+            "id": "attempt-49de3d55-cb04-4a03-9a28-38d43e62bb2b",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:18:56.077Z"
+          },
+          {
+            "id": "attempt-e286d158-8fb2-42bc-b347-8f650f2a27b4",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T18:19:30.356Z"
+          },
+          {
+            "id": "attempt-c2d71a8c-6cef-414f-8bab-be8790cca222",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T23:12:00.522Z"
+          },
+          {
+            "id": "attempt-d2d92577-533a-494d-91c4-9e62dd1690a1",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T23:12:46.984Z"
+          },
+          {
+            "id": "attempt-bc1ae94d-5ca1-406d-a959-90d85c5dad5a",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-13T00:07:03.072Z"
+          },
+          {
+            "id": "attempt-9b179b7e-fb0c-41a4-91ec-4d8cdf701b8b",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-13T00:12:05.498Z"
+          },
+          {
+            "id": "attempt-37e8e644-d251-4484-bce4-795e0168f411",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-13T00:16:00.932Z"
+          },
+          {
+            "id": "attempt-8764afec-93c2-4c20-9da9-f07a3ac82f88",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:25:52.907Z"
+          },
+          {
+            "id": "attempt-6821f151-0987-4bca-92df-ffe1949f9c96",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/activity-sidebar.test.ts",
+              "test/native-activity.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:29:34.168Z"
+          },
+          {
+            "id": "attempt-b2733b60-59b8-4108-b406-63560790021f",
+            "command": "node",
+            "args": [
+              "scripts/verify-native-activity.ts",
+              "--ui-only"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:39:28.647Z"
+          },
+          {
+            "id": "attempt-044ba35e-245e-4197-82b7-d30e766f1c95",
+            "command": "bun",
+            "args": [
+              "--eval",
+              "import {createActivitySidebarState,updateActivitySidebarState} from \"./src/activity-sidebar.ts\"; const run={id:\"postToolUse:0:/x/hooks.json\",eventName:\"postToolUse\",sourcePath:\"/x/hooks.json\",displayOrder:0,handlerType:\"command\",executionMode:\"sync\",status:\"running\"};const ev=(seq,method,turnId,run)=>({seq,at:new Date().toISOString(),kind:\"notification\",method,params:{threadId:\"t\",turnId,run}});const state=updateActivitySidebarState(createActivitySidebarState(),[ev(1,\"hook/started\",\"turn-a\",run),ev(2,\"hook/completed\",\"turn-a\",{...run,status:\"completed\"}),ev(3,\"hook/started\",\"turn-b\",run)],{emitPulses:true});const result={scenario:\"same-handler-id-new-turn\",starts:2,pulseSeqs:state.pulses.map(p=>p.seq),observedSeqs:[...state.observations.values()].map(o=>o.seq),expectedNewStartSeq:3};console.log(JSON.stringify(result));if(!state.pulses.some(p=>p.seq===3)||![...state.observations.values()].some(o=>o.seq===3))process.exitCode=1;"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:44:16.859Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-a5a7ac26-28b4-42fe-9540-d2ddf2178189",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-a5a7ac26-28b4-42fe-9540-d2ddf2178189/opus.json",
+            "findings": []
+          },
+          {
+            "id"         : "review-6d88aeb6-9887-4555-9f5c-1c18e45e7528",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-6d88aeb6-9887-4555-9f5c-1c18e45e7528/opus.json",
+            "findings": [
+              "[높음·AC-2/AC-3] src/activity-sidebar.ts:521-554 — Hook 중복 억제 key는 `hook\\0threadId\\0run.id`이고, 연결 세대가 살아 있는 동안 유지된다. 그런데 같은 저장소의 src/native-activity.ts:279는 \"codex-cli 0.167.2의 run.id는 eventName:displayOrder:sourcePath로 재사용된다\"고 적고 있다. docs/specs/chat.md:135와 docs/ARCHITECTURE.md:41도 실제 Native Hook `run.id`를 호출별 ID가 아닌 반복 핸들러 ID(`unstable-id`)로 정의한다. 실제 Native에서 같은 thread·같은 연결 안의 두 번째 이후 sync `hook/started`(예: 도구마다 반복되는 postToolUse)는 `remember()`가 false를 돌려 반응도 최근 관측 갱신도 만들지 않는다. 첫 run의 `hook/completed`(523행)도 같은 key를 기록하므로 뒤 호출은 '늦은 시작'으로 영구 억제된다. 그래서 '동기 Hook 시작이 해당 행에 새 활동 반응을 만든다'는 AC-2가 실제 Native에서는 thread·연결마다 Hook당 한 번만 충족된다. 재현: 같은 threadId로 `{run:{id:'postToolUse:0:/x/hooks.json', executionMode:'sync', status:'running', ...}}` 시작→완료→같은 id로 다시 시작을 넣으면, 두 번째 시작의 pulse가 0건이다.",
+              "[근거 범위] 위 결함을 검증 근거가 가리지 못한다. test/activity-sidebar.test.ts:253의 회귀와 fixture는 `run-${index}`처럼 호출마다 고유한 run ID만 쓴다. verification.md:125와 331은 실제 Native Hook 알림을 0건으로 기록했다. 따라서 '고유 Hook ID 20,000개 전수 반응'(verification.md:330)은 합성 고유 ID에서만 성립한다. 반복 run.id를 쓰는 실제 Native에 대해 AC-2·AC-3을 통과로 판단할 근거가 없다. 수정 방향: dedupe key에 turnId와 item/호출 경계를 포함하거나 started/completed 쌍의 수명으로 판정하고, 반복 run.id 회귀 테스트를 추가해야 한다.",
+              "[중간·AC-2, spec 69행 위반] src/renderer.tsx:484 — 대화 전환(selectConversation) 중에는 acceptEvent(524행)가 live 사건을 `queuedEvents`에만 쌓는다. 그래서 ActivitySnapshotBoundary의 live 큐는 비어 있고, 실제 live 사건은 `arrived`로만 전달된다. 그런데 성공 경로가 `arrived`를 `{ emitPulses: false }`로 적용한다. 이때 Skill 읽기·Hook 시작 key가 dedupe에 기록되므로, 전환 중 도착한 새 활동은 반응 없이 영구 소비된다. 이는 docs/specs/chat.md:69의 '큐에만 있는 live 사건은 … 새 반응을 만든다'와 어긋난다. 같은 파일 615·626행의 프로젝트 전환과 492행의 실패 경로는 `emitPulses: true`로 처리해 동작도 일관되지 않는다. 재현: openConversation 응답 지연 중 대상 thread의 `item/started`(SKILL.md read)를 보내면, 전환 완료 뒤 해당 행 pulse가 0건이다.",
+              "[참고·증거 적용성] 이번 검토 대상 source digest는 11890fea…다. 기록된 최신 공식 시도(attempt-b2733b60…, GUI --ui-only)는 8faa2599…, 집중 검사(attempt-6821f151…)는 926002f5…에 대한 것이다. 입력 경로에 docs 파일이 추가된 영향일 수 있으나, 현재 digest에 대한 GUI·집중 검사 재실행 기록은 없다. 이 검토에서는 테스트나 명령을 실행하지 않았고 소스와 문서를 읽어 대조만 했다.",
+              "[확인된 정상 범위] skills/list·hooks/list 엄격 파서(cwd 단일 일치, shape·오류·경고 시 incomplete), 고정 등록 순서 투영, Skill read dedupe key(thread+turn+item+path), snapshot 실제 포함 여부 기반의 pulse 분류(updateActivitySidebarSnapshot), 64 bucket 정확 dedupe의 copy-on-write는 소스상 spec과 일치한다."
+            ]
+          }
+        ],
+        "omitted": {
+          "criteria"     : 0,
+          "evidence"     : 13,
+          "verifications": 0,
+          "reviews"      : 0,
+          "arguments"    : 0,
+          "findings"     : 0,
+          "unresolved"   : 0
+        }
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+        "workRecordHash": "e560eedb53603794e5427bae56ec163f64e2445b3c2532454246a74b06167cc7",
+        "sourceDigest"  : "ac245e4f6a7c1e409c115720cbe7e3d9f96045f07a42e1939de4d57347b5c508",
+        "criteriaDigest": "7103ab06faf91896f58778fdca459186c17070f990ed3da4bf41bef1db52a42d"
+      }
+    }
+  ]
+}

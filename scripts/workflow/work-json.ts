@@ -3,7 +3,7 @@
  * @implements RESP-DEVELOPMENT-RECORDS-SERIALIZATION
  */
 import type { WorkRecord } from "./types.ts";
-import type { WorkReport } from "./reports.ts";
+import type { WorkReport, ReportBundle } from "./reports.ts";
 
 function scalar(value: unknown): boolean {
   return value === null || typeof value === "string" || typeof value === "number" || typeof value === "boolean";
@@ -48,7 +48,7 @@ function emit(value: unknown, depth: number): string {
   return rows.length === 0 ? "{}" : `{\n${rows.join(",\n")}\n${indent}}`;
 }
 
-function serialize(value: WorkRecord | WorkReport, columns: boolean): string {
+function serialize(value: WorkRecord | WorkReport | ReportBundle, columns: boolean): string {
   // 새 의미 객체를 한 번만 관찰해 getter/toJSON과 native 오류 의미를 보존한다.
   const fresh = JSON.stringify(value, null, 2);
   if (!columns || fresh === undefined) return `${fresh}\n`;
@@ -60,6 +60,6 @@ export function serializeWorkRecord(record: WorkRecord, columns: boolean): strin
   return serialize(record, columns);
 }
 
-export function serializeWorkReport(report: WorkReport, columns: boolean): string {
+export function serializeWorkReport(report: WorkReport | ReportBundle, columns: boolean): string {
   return serialize(report, columns);
 }

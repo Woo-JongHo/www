@@ -1,6 +1,7 @@
 /**
  * @verifies RESP-DEVELOPMENT-RECORDS-SERIALIZATION
  */
+import { reportFileStem } from "../scripts/workflow/report-names.ts";
 import { test, expect } from "bun:test";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
@@ -189,14 +190,14 @@ test("1 MiB 초과 유효 원장의 보고서를 발행·조회하고 보고서 
     expect(listed.warnings                          ).toEqual([]                   ) ;
     expect(listed.reports.map((report) => report.id)).toEqual([published.report.id]) ;
     expect(await fs.readFile(work.path)             ).toEqual(original             ) ;
-    const reportFile = path.join(path.dirname(work.path), "reports", `${published.report.id}.json`);
+    const reportFile = path.join(path.dirname(work.path), "reports", `${reportFileStem(published.report)}.json`);
     // 유효 JSON의 뒤쪽 공백만으로 저장 보고서의 읽기 상한도 실제로 넘긴다.
-    await fs.appendFile(reportFile, " ".repeat(1_048_576));
-    await expect(readWorkReport({ repo, reportId: published.report.id })).rejects.toThrow(/보고서 입력은 1 MiB/);
+    await fs.appendFile(reportFile, " ".repeat(16_777_216));
+    await expect(readWorkReport({ repo, reportId: published.report.id })).rejects.toThrow(/묶음 보고서 입력은 16 MiB/);
     const oversized = await listWorkReports({ repo });
-    expect(oversized.reports                                                            ).toEqual([]      ) ;
-    expect(oversized.warnings.some((warning) => warning.includes("보고서 입력은 1 MiB"))).toBe   (true    ) ;
-    expect(await fs.readFile(work.path)                                                 ).toEqual(original) ;
+    expect(oversized.reports                                                                  ).toEqual([]      ) ;
+    expect(oversized.warnings.some((warning) => warning.includes("묶음 보고서 입력은 16 MiB"))).toBe   (true    ) ;
+    expect(await fs.readFile(work.path)                                                       ).toEqual(original) ;
   });
 });
 
@@ -241,9 +242,9 @@ test("open·mutate·보고서 활성화의 no-op bytes와 raw hash·불변 보�
     const first   = await finishWorkReport({ repo, workId: work.record.id, narrative }) ;
     const enabled = await fs.readFile(work.path, "utf8")                                ;
     expect(first.report.workRecordHash).toBe(createHash("sha256").update(enabled).digest("hex"));
-    const reportFile     = path.join(path.dirname(work.path), "reports", `${first.report.id}.json`) ;
-    const originalReport = await fs.readFile(reportFile, "utf8")                                    ;
-    const again          = await finishWorkReport({ repo, workId: work.record.id, narrative })      ;
+    const reportFile     = path.join(path.dirname(work.path), "reports", `${reportFileStem(first.report)}.json`) ;
+    const originalReport = await fs.readFile(reportFile, "utf8")                                                 ;
+    const again          = await finishWorkReport({ repo, workId: work.record.id, narrative })                   ;
     expect(again.created                                                      ).toBe(false         ) ;
     expect(await fs.readFile(work.path, "utf8")                               ).toBe(enabled       ) ;
     expect(await fs.readFile(reportFile, "utf8")                              ).toBe(originalReport) ;
@@ -718,8 +719,11 @@ test("AC4 fresh WorkRecord·실제 WorkReport를 공개 pinned CLI golden bytes�
     const actual   = serializeWorkReport(written.report, true)                     ;
     compare(written.report, actual);
     expect(actual                                                                                 ).toBe(expected                   ) ;
-    expect(await fs.readFile(path.join(directory, "reports", `${written.report.id}.json`), "utf8")).toBe(expected                   ) ;
-    expect(Buffer.byteLength(actual)                                                              ).toBe(Buffer.byteLength(expected)) ;
-    expect(sha(actual)                                                                            ).toBe(sha(expected)              ) ;
+    const storedBundle = await fs.readFile(path.join(directory, "reports", `${reportFileStem(written.report)}.json`), "utf8") ;
+    const bundle       = JSON.parse(storedBundle)                                                                             ;
+    expect(bundle.entries           ).toEqual([written.report]                                   ) ;
+    expect(storedBundle             ).toBe   (canonicalArchitectureJson(sourceRoot, bundle, tool)) ;
+    expect(Buffer.byteLength(actual)).toBe   (Buffer.byteLength(expected)                        ) ;
+    expect(sha(actual)              ).toBe   (sha(expected)                                      ) ;
   });
 }, 300_000);

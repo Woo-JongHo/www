@@ -3,14 +3,22 @@
  * @implements RESP-REPORTS-SERVICE
  */
 import { listWorkReports, readWorkReport } from "../scripts/workflow/reports.ts";
-import type { WorkReportCatalog, WorkReportDocument } from "./shared";
+import type { WorkReportCatalog, WorkReportDocument, WorkReportSummary } from "./shared";
 
 const REPORT_ID = /^report-[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export function createReportService({ workspace }: { workspace(): string }) {
   async function list(): Promise<WorkReportCatalog> {
     const repository = workspace();
-    return { repository, ...await listWorkReports({ repo: repository }) };
+    const catalog = await listWorkReports({ repo: repository });
+    const groups = new Map<string, WorkReportSummary>();
+    for (const report of catalog.reports) {
+      const key = JSON.stringify([report.workId, report.title.normalize("NFC")]);
+      const current = groups.get(key);
+      if (!current || (current.kind === "snapshot" && report.kind === "authored")) groups.set(key, report);
+    }
+    const reports = [...groups.values()].sort((left, right) => right.createdAt.localeCompare(left.createdAt) || left.id.localeCompare(right.id));
+    return { repository, reports, warnings: catalog.warnings };
   }
 
   async function read(value: unknown): Promise<WorkReportDocument> {

@@ -11,6 +11,7 @@ import { JsonRpcClient, type RpcMessage } from "./rpc";
 import { createConversationService, type ConversationEvent } from "./conversations";
 import { createDevelopmentService } from "./development";
 import { createReportService } from "./reports-service";
+import { reportFileStem } from "../scripts/workflow/report-names.ts";
 import { createNativeReportHarness } from "./native-reports";
 import { judgeNativeReport } from "./report-judge";
 import { NativeCompletionCollector } from "./native-report-input";
@@ -441,8 +442,8 @@ function registerIpc(): void {
   ipcMain.handle("reports:export", async (_event, reportId: unknown) => {
     const document = await reports.read(reportId);
     const result = await dialog.showSaveDialog(window!, {
-      title       : "작업 보고서 저장"           ,
-      defaultPath : `${document.report.id}.html` ,
+      title       : "작업 보고서 저장"                        ,
+      defaultPath : `${reportFileStem(document.report)}.html` ,
       filters     : [{ name: "HTML 보고서", extensions: ["html"] }]
     });
     if (result.canceled || !result.filePath) return null;

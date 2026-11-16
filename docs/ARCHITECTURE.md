@@ -154,9 +154,9 @@ src/ecosystem.ts의 정적 노드·방향 관계·후속 방향은 별도 생태
 
 ## 작업 보고서 저장과 보기
 
-scripts/workflow/reports.ts는 작업별 reports의 불변 JSON·독립 HTML, 안전한 읽기·목록·현재성 비교를 맡는다. report-lifecycle.ts의 검증·검토·완료 훅과 공식 typed 하네스의 종료 훅이 실제 기록을 생성한다. 저작 서술은 report action에서 입력하고 자동 투영과 구분한다.
+scripts/workflow/reports.ts는 같은 작업·NFC 제목별 묶음 JSON·독립 HTML, 안전한 읽기·목록·현재성 비교를 맡는다. schema2 entries의 각 schema1 기록은 UUID·내용·근거를 보존하고 신규 사건을 같은 파일에 누적한다. report-names.ts의 안정 제목 파일명은 저장과 내보내기가 공유한다. JSON 원자 교체를 정본 commit으로 삼고 HTML은 복구 가능한 파생 보기다. report-lifecycle.ts의 검증·검토·완료 훅과 공식 typed 하네스의 종료 훅이 실제 기록을 생성한다. 저작 서술은 report action에서 입력하고 자동 투영과 구분한다.
 
-src/reports-service.ts가 선택 저장소와 report ID만 사용해 읽는다. main의 제한된 reports IPC가 서비스와 저장 대화상자를 소유하며 renderer는 sandbox iframe으로 파생 HTML을 표시한다. 읽기 폴더 선택은 진행 중 Native 작업 폴더를 바꾸지 않는다. 보고서 생성 실패와 핵심 기록 저장은 별도 결과다. 업무 완료 조건과 연결 범위는 [보고서 계약](skills/REPORTS.md)이 소유한다.
+src/reports-service.ts가 선택 저장소와 report ID만 사용해 읽으며 앱 목록은 같은 작업·제목의 최신 저작 기록을 우선한 한 항목으로 투영한다. core의 flat entry 목록은 완료 평가와 과거 UUID 조회에 유지한다. main의 제한된 reports IPC가 서비스와 저장 대화상자를 소유하며 renderer는 sandbox iframe으로 같은 제목의 누적 기록을 포함한 파생 HTML을 표시한다. 읽기 폴더 선택은 진행 중 Native 작업 폴더를 바꾸지 않는다. 보고서 생성 실패와 핵심 작업 기록 저장은 별도 결과다. 업무 완료 조건과 연결 범위는 [보고서 계약](skills/REPORTS.md)이 소유한다.
 
 Native 자동 보고서는 src/native-report-input.ts의 공개 사건 수집 → src/native-reports.ts의 프로젝트별 중복 억제·직렬 큐 → src/report-judge.ts의 별도 읽기 전용 Codex subprocess → 구조화 보고서 저장으로 연결된다. main이 수명주기와 취소를 소유하며 renderer는 상태·이유·토글·재시도를 제공한다. 원문 재시도 입력은 메모리에만 보관하고 디스크에는 상태 메타데이터만 남긴다. Native 종료는 신규 작업의 수용·검증 결과를 만들지 않는다.
 
