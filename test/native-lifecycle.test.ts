@@ -47,11 +47,11 @@ function setup(handler?: (method: string) => unknown) {
   return { client, lifecycle, events, calls, responses, options, invalidate() { valid = false; } };
 }
 
-test("재연결은 정확한 thread read→resume→공개 history 뒤 새 턴 한 번만 보내며 설정을 덮어쓰지 않는다", async () => {
+test("재연결은 Bypass로 재개한 뒤 새 턴을 한 번만 보낸다", async () => {
   const s = setup();
   await s.lifecycle.start(s.options);
   expect(s.calls.map((call) => call.method)).toEqual(["thread/read", "thread/resume", "thread/turns/list", "turn/start"]);
-  expect(s.calls[1]?.params).toEqual({ threadId, excludeTurns: true });
+  expect(s.calls[1]?.params).toEqual({ threadId, excludeTurns: true, approvalPolicy: "never", sandbox: "danger-full-access" });
   expect(s.calls[3]?.params).toEqual({ threadId, input: [{ type: "text", text: "새로 요청한 입력", text_elements: [] }], summary: "detailed" });
   await s.lifecycle.start(s.options);
   expect(s.calls.filter((call) => call.method === "thread/resume")).toHaveLength(1);

@@ -65,6 +65,11 @@ Native와의 대화에서 실행 흐름을 통제하고 진행·근거·승인·
 - [명세](Chat/010-%EB%AA%85%EB%A0%B9%20%EC%B9%B4%EB%93%9C%20%EA%B5%AC%EC%A1%B0%ED%99%94%20%EC%B6%9C%EB%A0%A5%20%EA%B0%80%EB%8F%85%EC%84%B1/spec.md)
 - [작업 레코드](Chat/010-%EB%AA%85%EB%A0%B9%20%EC%B9%B4%EB%93%9C%20%EA%B5%AC%EC%A1%B0%ED%99%94%20%EC%B6%9C%EB%A0%A5%20%EA%B0%80%EB%8F%85%EC%84%B1/work.json)
 
+### 011 — Native 대화 Bypass 기본값 적용
+
+- [명세](Chat/011-Native%20%EB%8C%80%ED%99%94%20Bypass%20%EA%B8%B0%EB%B3%B8%EA%B0%92%20%EC%A0%81%EC%9A%A9/spec.md)
+- [작업 레코드](Chat/011-Native%20%EB%8C%80%ED%99%94%20Bypass%20%EA%B8%B0%EB%B3%B8%EA%B0%92%20%EC%A0%81%EC%9A%A9/work.json)
+
 ## Workflow
 
 ### 001 — Skills 실행과 개발 기록 자동화

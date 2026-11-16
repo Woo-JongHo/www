@@ -14,11 +14,13 @@ export const NATIVE_PROGRESS_INSTRUCTIONS = [
   "사용자에게 유용한 진행 설명과 공개 추론 요약만 제공하고 비공개 원문 사고나 analysis는 공개하지 마세요."
 ].join(" ");
 
+/** 새 대화와 저장 대화 재개에 같은 Bypass 정책을 적용한다. */
+export const NATIVE_PERMISSIONS = { approvalPolicy: "never", sandbox: "danger-full-access" };
+
 export function nativeThreadStartParams(cwd: string) {
   return {
     cwd,
-    approvalPolicy        : "on-request"      ,
-    sandbox               : "workspace-write" ,
+    ...NATIVE_PERMISSIONS,
     developerInstructions : NATIVE_PROGRESS_INSTRUCTIONS
   };
 }

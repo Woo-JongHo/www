@@ -145,7 +145,7 @@ node scripts/workflow/work.ts '{"action":"read","workId":"work-d5528c42-2849-48b
 
 ## 샌드박스 한계
 
-스레드는 `sandbox: workspace-write`, `approvalPolicy: on-request`로 시작한다. 이는 선택한 작업 폴더 쓰기를 허용하는 Codex 정책 설정이지 “폴더 밖의 모든 작업은 반드시 질문한다”는 보장이 아니다. 실제 제한과 승인 발생 여부는 Codex 버전, 플랫폼 샌드박스, 구성, 명령 종류와 서버 정책에 좌우된다. UI는 관찰한 요청만 표시하며 보안 경계가 아니다.
+새 스레드와 저장 스레드 재개에는 Bypass 기본값인 `sandbox: danger-full-access`, `approvalPolicy: never`를 명시한다. 재개 시 모델 설정은 유지하지만 과거 승인·sandbox 설정은 이 기본값으로 전환한다. 이 설정은 Codex 명령의 승인 요청과 샌드박스 제한을 해제하며, 외부 서비스의 인증·별도 도구 입력까지 자동 응답하지 않는다. UI는 관찰한 요청만 표시하며 보안 경계가 아니다.
 
 ## 검증과 알려진 한계
 
@@ -256,7 +256,7 @@ Native 자동 보고서의 집중 검사는 test/native-report-input.test.ts, te
 
 ## 자연스러운 진행 설명과 공개 추론 요약
 
-`src/native-chat.ts`의 params 함수를 main이 실제 `thread/start`·`turn/start`에 사용한다. 스레드의 `developerInstructions`에 한국어 진행 설명 지침을 더하고 턴에서 `summary: "detailed"`를 요청한다. 기존 cwd·`workspace-write`·`on-request`와 text 입력 구조를 보존하며 baseInstructions·모델·effort·전역 설정은 바꾸지 않는다. 로컬 codex-cli 0.167.2 생성 스키마에서 해당 필드를 확인했다.
+`src/native-chat.ts`의 params 함수를 main이 실제 `thread/start`·`turn/start`에 사용한다. 스레드의 `developerInstructions`에 한국어 진행 설명 지침을 더하고 턴에서 `summary: "detailed"`를 요청한다. cwd와 text 입력 구조를 보존하고 새 대화·재개에 Bypass(`danger-full-access`·`never`)를 적용하며 baseInstructions·모델·effort·전역 설정은 바꾸지 않는다. 로컬 codex-cli 0.167.2 생성 스키마에서 해당 필드를 확인했다.
 
 `bun test test/projection.test.ts test/native-chat.test.ts test/native-activity.test.ts test/input.test.ts test/native-report-input.test.ts`로 실제 main params 배선, 공개 요약 lifecycle·섹션·중복·snapshot·잘못된 입력·턴 격리·종료·절단과 기존 경로를 검사한다. `test/fixtures/fake-app-server.ts`는 기존 MODE에 공개 summary와 private sentinel 사건을 추가해 Electron probe에서 공개 요약 표시와 원문 미노출을 점검할 수 있게 한다. 합성 fixture·투영 검사와 실제 Native의 설명 빈도·요약 제공, 실제 DOM 확인은 구분해 기록한다. 이번 변경 자체가 새 실제 GUI·Native 검증 완료를 뜻하지 않는다.
 

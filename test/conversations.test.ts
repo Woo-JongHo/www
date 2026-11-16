@@ -41,7 +41,7 @@ test("대화 목록은 현재 프로젝트와 WWW 원장만 조회하고 커서�
   await expect(createConversationService(client, cwd).list(42)).rejects.toThrow("커서");
 });
 
-test("같은 Native thread를 재개하고 과거 공개 항목만 비실행 상태로 복원한다", async () => {
+test("기존 Native thread를 Bypass로 재개하고 모델과 과거 공개 항목을 보존한다", async () => {
   const client = clientFor((method) => {
     if (method === "thread/read"      ) return { thread };
     if (method === "thread/resume"    ) return { thread, model: "model", modelProvider: "provider", approvalPolicy: "never", sandbox: { type: "readOnly" } };
@@ -49,12 +49,14 @@ test("같은 Native thread를 재개하고 과거 공개 항목만 비실행 상
     throw new Error(method);
   });
   const restored = await createConversationService(client, cwd).open("thread-1");
-  expect(client.calls.map((call) => call.method)           ).toEqual(["thread/read", "thread/resume", "thread/turns/list"]) ;
-  expect(client.calls[1]?.params                           ).toEqual({ threadId: "thread-1", excludeTurns: true }         ) ;
-  expect(restored.threadId                                 ).toBe   ("thread-1"                                           ) ;
-  expect(restored.approvalPolicy                           ).toBe   ("never"                                              ) ;
-  expect(restored.sandbox                                  ).toBe   ("readOnly"                                           ) ;
-  expect(restored.events.every((event) => event.historical)).toBe   (true                                                 ) ;
+  expect(client.calls.map((call) => call.method)           ).toEqual(["thread/read", "thread/resume", "thread/turns/list"]                                                        ) ;
+  expect(client.calls[1]?.params                           ).toEqual({ threadId: "thread-1", excludeTurns: true, approvalPolicy: "never", sandbox: "danger-full-access" }         ) ;
+  expect(restored.model                                    ).toBe   ("model"                                                                                                      ) ;
+  expect(restored.provider                                 ).toBe   ("provider"                                                                                                   ) ;
+  expect(restored.threadId                                 ).toBe   ("thread-1"                                                                                                   ) ;
+  expect(restored.approvalPolicy                           ).toBe   ("never"                                                                                                      ) ;
+  expect(restored.sandbox                                  ).toBe   ("readOnly"                                                                                                   ) ;
+  expect(restored.events.every((event) => event.historical)).toBe   (true                                                                                                         ) ;
   const view = project(events(restored.events));
   expect(view.blocks                                           )    .toContainEqual(expect.objectContaining({ kind: "user", text: "첫 요청", state: "accepted" })) ;
   expect(view.blocks                                           )    .toContainEqual(expect.objectContaining({ kind: "answer", text: "답변", streaming: false })  ) ;

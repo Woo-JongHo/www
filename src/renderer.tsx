@@ -968,7 +968,10 @@ function App() {
   const failedCommands       = commands.filter((block) => block.status === "failed"                  ) ;
   const unresolvedCommands   = commands.filter((block) => block.status === "unknown" || block.running) ;
 
-  const policyLabel = events.some((event) => event.method === "thread/configured" && event.params && typeof event.params === "object" && "isNew" in event.params && event.params.isNew === false) ? "Native 저장 정책" : "workspace-write · on-request";
+  const configuredPolicy = [...events].reverse().find((event) => event.method === "thread/configured")?.params;
+  const policyLabel = configuredPolicy && typeof configuredPolicy === "object" && "approvalPolicy" in configuredPolicy && typeof configuredPolicy.approvalPolicy === "string" && "sandbox" in configuredPolicy && typeof configuredPolicy.sandbox === "string"
+    ? `${configuredPolicy.sandbox} · ${configuredPolicy.approvalPolicy}`
+    : "기본 정책: Bypass · danger-full-access · never";
 
   const statusTone = approvals.length ? "blocked" : projection.turn === "failed" || projection.transport === "error" ? "failed" : projection.working ? "working" : "idle" ;
   const statusText = approvals.length ? "사용자 결정 대기" : turnLabel(projection.turn)                                                                                   ;

@@ -560,7 +560,7 @@ function registerIpc(): void {
         console.warn(error);
         if (isCurrent(expected)) publish({ kind: "notification", method: "activity/resourcesUnavailable", params: { threadId, message: String(error) } });
       });
-      publish({ kind: "notification", method: "thread/configured", params: { threadId, model: typeof result.model === "string" ? result.model : null, modelProvider: typeof result.modelProvider === "string" ? result.modelProvider : null, isNew: true } });
+      publish({ kind: "notification", method: "thread/configured", params: { threadId, model: typeof result.model === "string" ? result.model : null, modelProvider: typeof result.modelProvider === "string" ? result.modelProvider : null, approvalPolicy: typeof result.approvalPolicy === "string" ? result.approvalPolicy : null, sandbox: result.sandbox && typeof result.sandbox === "object" && "type" in result.sandbox && typeof result.sandbox.type === "string" ? result.sandbox.type : null, isNew: true } });
       void loadHooks(client, threadId);
       return { threadId };
     } finally { switchingConversation = false; }

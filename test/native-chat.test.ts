@@ -9,9 +9,9 @@ import { project } from "../src/projection";
 import { JsonRpcClient } from "../src/rpc";
 import type { AppEvent } from "../src/shared";
 
-test("Native params는 기존 권한·입력을 보존하며 진행 설명과 detailed 공개 요약만 요청한다", () => {
+test("Native params는 Bypass와 진행 설명을 적용하고 턴 입력과 detailed 공개 요약을 보존한다", () => {
   const thread = nativeThreadStartParams("/workspace/한글");
-  expect(thread                                           ).toEqual  ({ cwd: "/workspace/한글", approvalPolicy: "on-request", sandbox: "workspace-write", developerInstructions: expect.any(String) }) ;
+  expect(thread                                           ).toEqual  ({ cwd: "/workspace/한글", approvalPolicy: "never", sandbox: "danger-full-access", developerInstructions: expect.any(String) }) ;
   expect(thread.developerInstructions                     ).toContain("자연스러운 한국어"                                                                                                            ) ;
   expect(thread.developerInstructions                     ).toContain("첫 도구 호출 전에"                                                                                                            ) ;
   expect(thread.developerInstructions                     ).toContain("공개 설명 없이 작업을 이어가지 말고"                                                                                           ) ;

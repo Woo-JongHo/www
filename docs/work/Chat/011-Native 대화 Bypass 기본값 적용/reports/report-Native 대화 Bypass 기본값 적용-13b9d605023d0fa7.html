@@ -1,0 +1,1550 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>Native 대화 Bypass 기본값 적용 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 16일 오전 8:59 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>Native 대화 Bypass 기본값 적용</h1><p class="lead">새 대화와 기존 대화 재개에 Bypass 기본값을 적용했고 실행 중인 WWW 앱도 새 빌드로 재시작했다. 실제 두 경로의 명령 실행에서 승인 요청이 없었고, 관련 테스트 42건·소스 정책·타입 검사·빌드와 독립 Opus 검토가 통과했다.</p><div id="report-story" class="story">새 대화는 on-request/workspace-write로 시작했고 기존 대화도 과거 권한 설정을 유지해 세션 허용 요청이 나타날 수 있었다.
+
+새 대화와 재개는 never/danger-full-access를 명시한다. 실제 정책 응답을 상태 표시로 전달하며, 다시 실행한 앱에서도 Bypass 기본값을 확인했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 11 · 실패 9 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>완료로 기록</strong></p></div><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>새 대화와 저장 대화 재개가 Bypass 정책을 공유한다.</li><li>화면은 서버가 응답한 실제 정책을 표시한다.</li><li>빌드를 막던 보고서 테스트 3개의 구조 주석·import 순서와 실제 의존성 등록을 보완했다.</li></ul></div></section><aside class="omission"><strong>일부 원본 항목이 이 보고서에 보관되지 않았습니다.</strong><p>기준 근거 전체 28개 중 17개 표시 (11개 제외), 검사 이력 전체 28개 중 20개 표시 (8개 제외), 명령 인자 전체 70개 중 48개 표시 (22개 제외). 제외된 당시 기록 중 실패·차단·미확인 항목이 2건 있습니다. 더 넓은 기록은 근거의 작업 파일과 대조해야 합니다.</p></aside><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>새 대화와 기존 대화 재개에서 never와 danger-full-access를 명시하고 모델 설정은 덮어쓰지 않는다.</dt><dd>당시 통과로 기록</dd></div><div><dt>소스 정책, 타입 검사, 빌드가 통과한다.</dt><dd>당시 통과로 기록</dd></div></dl></section><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>저장된 모델·provider는 유지하고 승인·sandbox 정책만 전환한다.</li><li>빌드가 재생성하는 architecture.generated.json은 검증 입력에서 분리하고 실제 공식 빌드에서 생성 계약을 검사했다.</li><li>오래된 검사 실패와 최신 통과를 구분해 보존한다.</li></ul></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 11건, 실패 9건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>전체 저장소 테스트 통과를 주장하지 않는다. 추가 검사에서 work-json의 BoxBox 공개 proof 검사 2건은 실패했으며 Bypass 수용 기준과 구분해 기록했다.</li><li>실제 실행 검사는 무해한 printf 명령을 새 대화와 재개 대화에서 한 번씩 실행한 범위다.</li></ul></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/011-Native 대화 Bypass 기본값 적용/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-128f5f17-a260-4c79-9612-35d558590c14<br>report-ea353fec-2b4a-4b6f-8aa7-93814ace0736</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>54ff1fc19ab1810bf6198e4e62bbb6d4325f0a0443db1d6df71d6033b3a04cd1</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>167da0709b747aa61c0fdd7e5a9bb37f3e79c64ed53be75087df4e6a2093dd9a</code></dd></div><div><dt>기준 지문</dt><dd><code>2f63c2583e1c8820f04d29de9b6954c38bd0c7ee9ad63c8f03b81a3f7bab804f</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>done</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;done&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;새 대화와 기존 대화 재개에서 never와 danger-full-access를 명시하고 모델 설정은 덮어쓰지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d045c301-460f-4c18-82e9-274a72894d11&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-67813521-9f16-44a0-8257-5de16bd7748c&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-efce69d0-adab-401a-bf9d-1a55f876b0ee&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0fbca73e-c277-4160-aa1c-48ef43b853b9&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e4eaf9de-d308-4d27-9fb8-137334e6d4f2&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f29d8600-be9a-4f19-aedd-684f0f5eb8cb&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0c4220ad-5c3d-408d-b3b8-f585b20549fb&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 소스와 검사 범위에 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;소스 정책, 타입 검사, 빌드가 통과한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-de3f3cdb-3a96-4d3f-8dd0-a8e721c518db&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e68b4708-3847-4f5c-bb41-8c6a2db2563f&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-91561dbd-7b5f-4a77-a1f0-88ec7df8268b&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-466007e2-115b-4aad-99ca-334776f135a1&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f8299ff0-0850-4db9-a8d1-ab8bae8ec8b9&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-b1c9fddc-bc9e-41db-ad7e-cff9e2b478a7&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-885187b1-ebd2-4e5d-a96a-bfaeca986dff&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-b1f3fbba-71a9-46ae-a2d0-e91b280e67de&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 소스와 검사 범위에 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d51d9c08-b30d-4f7f-9ab3-2959e31a446e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 소스와 검사 범위에 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-83a86dad-f532-441a-9735-e6905a60d8d1&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 소스와 검사 범위에 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-34afc6c2-f930-4326-993e-1de9088e8088&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:43:16.959Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-1f63e41f-b5c4-4ee7-8704-5c50476cc264&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 2,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:43:21.048Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-4c25b12b-0e64-410b-8bed-09022823d19f&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:43:21.639Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0fbca73e-c277-4160-aa1c-48ef43b853b9&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/conversations.test.ts&quot;,
+        &quot;test/native-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:45:37.549Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-686e1ec3-7ef5-4aeb-8624-c10aadb6a9fc&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:45:39.150Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-84f02dc5-9793-4b57-bca2-7e2fd815be68&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 2,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:45:43.471Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f572bd1d-f6f7-4f0f-bb46-bd0df329c379&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:45:44.330Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e4eaf9de-d308-4d27-9fb8-137334e6d4f2&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/conversations.test.ts&quot;,
+        &quot;test/native-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:50:18.973Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-de3f3cdb-3a96-4d3f-8dd0-a8e721c518db&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:50:28.720Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e68b4708-3847-4f5c-bb41-8c6a2db2563f&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 2,
+      &quot;sourceStable&quot;: false,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:51:17.460Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-91561dbd-7b5f-4a77-a1f0-88ec7df8268b&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: false,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:52:36.197Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-466007e2-115b-4aad-99ca-334776f135a1&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:52:38.963Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f29d8600-be9a-4f19-aedd-684f0f5eb8cb&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/conversations.test.ts&quot;,
+        &quot;test/native-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:55:19.757Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f8299ff0-0850-4db9-a8d1-ab8bae8ec8b9&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:55:33.317Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-b1c9fddc-bc9e-41db-ad7e-cff9e2b478a7&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: false,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:56:04.261Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-885187b1-ebd2-4e5d-a96a-bfaeca986dff&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: false,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:56:08.971Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0c4220ad-5c3d-408d-b3b8-f585b20549fb&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/conversations.test.ts&quot;,
+        &quot;test/native-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:56:44.938Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-b1f3fbba-71a9-46ae-a2d0-e91b280e67de&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:56:52.773Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d51d9c08-b30d-4f7f-9ab3-2959e31a446e&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:57:13.305Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-83a86dad-f532-441a-9735-e6905a60d8d1&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:57:21.458Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-37b9a743-bed7-4c1d-8163-2c361c8180e5&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-37b9a743-bed7-4c1d-8163-2c361c8180e5/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Bash가 이 세션에서 비활성화되어 있어 git diff/status/show는 실행하지 못했다(도구 호출 오류: \&quot;No such tool available: Bash\&quot;). 그래서 Read/Grep으로 작업 디렉터리의 현재 파일만 직접 읽었다. 읽은 파일은 spec.md, work.json, verification.md, src/native-chat.ts, src/conversations.ts(1-40, 150-201행), src/main.ts(470-499행), test 3개 파일의 관련 행과 docs 3개 파일의 관련 행이다. 테스트와 빌드는 직접 실행하지 않았다.&quot;,
+        &quot;[결함·필수 기준 미충족] AC-2(required)가 충족되지 않았다. work.json의 attempt-ab68b574(`npm run build`)는 종료 코드 1, result failed이고 criteria AC-2.result도 \&quot;failed\&quot;다(work.json 30-47행, verification.md 54-69행). 기록상 소스 HEAD aea78d1과 digest가 대상 sourceDigest·파일 digest와 같아 현재 소스에 그대로 적용된다. stderr 원문은 보관되지 않아 원인은 확인할 수 없다. 다만 &#39;소스 정책, 타입 검사, 빌드가 통과한다&#39;는 기준은 현재 근거로 통과가 아니다. check:source와 typecheck 통과만으로 AC-2 통과를 주장하면 증거 범위를 넓히는 것이다.&quot;,
+        &quot;[결함·문서 모순] docs/DEVELOPMENT.md:255에 아직 &#39;기존 cwd·`workspace-write`·`on-request`와 text 입력 구조를 보존하며&#39;라고 적혀 있다. 같은 문서 146행과 src/native-chat.ts:18-25는 thread/start에 never/danger-full-access를 넣는다. 이번 변경으로 255행 서술이 사실과 달라졌는데, 이 파일은 writePaths에 포함되어 있으니 같이 고쳐야 한다.&quot;,
+        &quot;[결함·UI 표시 불일치] src/renderer.tsx:974의 policyLabel은 새 대화(isNew가 false인 thread/configured가 없는 경우)에 여전히 \&quot;workspace-write · on-request\&quot;를 표시한다. 실제 thread/start 요청은 NATIVE_PERMISSIONS(approvalPolicy \&quot;never\&quot;, sandbox \&quot;danger-full-access\&quot;)를 보내므로 사용자에게 실제보다 제한된 보안 정책이 표시된다. renderer.tsx는 writePaths 밖이어서 이번 범위에서 고칠 수 없다. 그래도 Bypass 기본값 적용의 결과로 표시가 틀리게 되었으므로 범위 확장 승인이나 후속 작업이 필요하다.&quot;,
+        &quot;[범위 확인 필요] src/main.ts:488과 590은 RestoredConversation에 새로 추가된 approvalPolicy·sandbox 필드를 thread/configured에 싣는다. main.ts는 git status상 수정 상태지만 이 작업의 writePaths와 inputs에 없다. diff를 실행할 수 없어 이번 작업에서 바뀐 부분인지는 확인하지 못했다. 이번 작업의 변경이라면 승인 범위를 벗어난 것이고 검증 입력에서도 빠져 있다.&quot;,
+        &quot;[적합] src/native-chat.ts:18-25는 nativeThreadStartParams에 approvalPolicy \&quot;never\&quot;, sandbox \&quot;danger-full-access\&quot;를 명시하고 model·provider 필드는 보내지 않는다. src/conversations.ts:163-165의 thread/resume도 같은 상수를 펼쳐 넣고 model 계열 필드는 덮어쓰지 않는다. test/native-chat.test.ts:14, test/conversations.test.ts:53, test/native-lifecycle.test.ts:54가 요청 payload를 정확히 단언하고, attempt-d045c301(bun test)은 통과로 기록되어 있다. 따라서 AC-1 근거는 소스와 맞는다. src/report-judge.ts:320의 read-only 정책은 바뀌지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-02c24fe0-1361-4fcb-a2fe-f2f402c4ab96&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-02c24fe0-1361-4fcb-a2fe-f2f402c4ab96/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep 도구로 작업 문서(spec.md, verification.md, work.json 1~1304행), src/native-chat.ts, src/conversations.ts 150~202행, src/renderer.tsx 966~980행, test/conversations.test.ts 35~64행, test/native-chat.test.ts 1~30행, docs/architecture/structure.json·src/architecture.generated.json의 restore 노드, 관련 문서 문구를 읽었다. work.json 1305행 이후와 git diff는 읽지 않았다. 테스트·타입 검사·빌드는 실행하지 않았다.&quot;,
+        &quot;구현 자체는 의도와 맞다. src/native-chat.ts:18의 NATIVE_PERMISSIONS = { approvalPolicy: \&quot;never\&quot;, sandbox: \&quot;danger-full-access\&quot; }를 nativeThreadStartParams(src/native-chat.ts:20-26, main.ts:552에서 thread/start에 사용)와 thread/resume(src/conversations.ts:163-165)이 함께 쓴다. resume 요청에는 model·modelProvider를 보내지 않으므로 저장된 모델 설정은 덮어쓰지 않는다. test/conversations.test.ts:53, test/native-lifecycle.test.ts:54, test/native-chat.test.ts:14가 요청 payload를 정확히 단언한다. 보고서 판단기(src/report-judge.ts:320)는 계속 read-only이므로 범위 밖 정책은 바뀌지 않았다.&quot;,
+        &quot;결함(필수 기준 미충족): work.json의 AC-2 &#39;소스 정책, 타입 검사, 빌드가 통과한다&#39;는 required=true이고 result=failed다. 가장 최근 시도에서 typecheck(attempt-1f63e41f, 종료 코드 2)와 build(attempt-4c25b12b, 종료 코드 1)가 모두 실패했다. 실패 원인이 다른 작업(scripts/workflow/run.ts:318,320의 nullable hash, scripts/workflow/artifacts.ts:2의 arch.development.artifacts 미정의)이라는 설명은 Grep 결과와 어긋나지 않는다. arch.development.artifacts는 structure.json에 없다. 다만 원인과 관계없이 필수 기준이 통과하지 않았으므로 이 작업을 완료로 판정할 수 없다.&quot;,
+        &quot;결함(증거와 현재 소스 불일치): 이번 검토 대상의 현재 digest와 마지막 검증 시도(source digest 0a0a5216…)의 입력 digest가 다르다. docs/ARCHITECTURE.md는 현재 0e984ad…이고 검증 당시 4ae3e1f…였다. docs/DEVELOPMENT.md는 현재 c311f60…이고 검증 당시 985c21f…였다. docs/architecture/structure.json은 현재 298dfa5…이고 검증 당시 c9659a6…였다. 그런데 work.json의 AC-1 evidence summary는 세 시도 모두 &#39;현재 적용 가능&#39;으로 표시한다. 특히 structure.json은 check:source와 구조 생성기 입력이므로, 현재 소스에서 소스 정책 검사가 통과한다는 근거가 없다. verification.md:205도 &#39;source snapshot은 아직 재생성하지 못했다&#39;고 인정한다. 현재 소스 digest(f5e274cb…)로 다시 검증해야 한다.&quot;,
+        &quot;주의(경미): src/renderer.tsx:974의 policyLabel은 &#39;Bypass · danger-full-access · never&#39; 상수로 고정되어 있다. resume 응답에서 실제 정책을 받는 RestoredConversation.approvalPolicy/sandbox(src/conversations.ts:195-196)를 쓰지 않는다. 서버가 요구 설정 등으로 sandbox를 낮춰 응답하면(test/conversations.test.ts:47처럼 readOnly를 반환하는 경우) 화면에는 여전히 Bypass로 표시된다. 보안 경계는 아니라고 문서화되어 있지만, 표시가 실제 상태를 반영하지 않는다.&quot;,
+        &quot;증거 범위: verification.md:74에 적힌 실제 codex app-server의 cold resume 확인(.www/bypass-live.json)은 이번 검토에서 읽지 않았다. 기록 자체도 모델 턴, 실제 명령 실행, GUI에 승인 창이 뜨지 않는지를 관찰하지 않았다고 명시한다. 따라서 &#39;세션 허용 요청이 더 이상 발생하지 않는다&#39;는 사용자 증상의 해소는 아직 검증되지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-5a1a0d67-4d33-4e74-ba9b-628ecab5937f&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-5a1a0d67-4d33-4e74-ba9b-628ecab5937f/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep으로 작업 문서 세 개를 읽었다. spec.md와 verification.md는 전체를 읽었고, work.json은 1-1268행과 2440-2601행을 읽었으며 digest는 Grep으로 대조했다. 소스는 src/native-chat.ts 1-35행, src/conversations.ts 150-202행, src/renderer.tsx 960-984행, src/main.ts 548-567행과 thread/configured 위치(488, 563, 590행)를 읽었다. git diff/status는 실행하지 않았다. 테스트·타입 검사·빌드도 직접 실행하지 않았다.&quot;,
+        &quot;[결함·필수 기준 미충족] AC-2(&#39;소스 정책, 타입 검사, 빌드가 통과한다&#39;, required=true)가 현재 소스에서 충족되지 않았다. 마지막 검증 묶음(source digest fe71088f…)의 입력 digest를 Grep으로 대조했다. main.ts 6f8296d2…, renderer.tsx 8abea960…, conversations.test.ts a0654992…, ARCHITECTURE.md 0e984ad0…, DEVELOPMENT.md c311f600…, structure.json 7e0d3033…가 모두 이번 검토 대상 digest와 같다. 이 묶음에서 typecheck(attempt-84f02dc5, 종료 코드 2)와 build(attempt-f572bd1d, 종료 코드 1)는 실패했다(verification.md 241-273행). work.json도 AC-2.result를 \&quot;failed\&quot;로 기록한다. 실패 원인이 병행 작업(scripts/workflow/run.ts의 nullable hash, scripts/workflow/artifacts.ts의 arch.development.artifacts)이라는 설명이 맞더라도 필수 기준을 통과로 볼 근거는 없다.&quot;,
+        &quot;[증거 범위 과대 표시] work.json의 AC-2 evidence 중 attempt-a9f1d257(typecheck passed)의 summary는 &#39;현재 적용 가능&#39;이다. 이 시도의 source digest는 73f9ef7a…이고, 당시 test/conversations.test.ts digest는 41aaf929…였다. 현재 digest a0654992…와 다르고 renderer.tsx·main.ts는 당시 입력에 없었다. 같은 명령이 최신 소스에서는 실패했으므로(attempt-84f02dc5), 옛 통과 기록을 현재 근거로 표시하면 증거 범위가 넓어진다. AC-1의 첫 세 evidence(d045c301, 67813521, efce69d0)도 옛 digest 기준이다. 다만 AC-1은 최신 digest의 attempt-0fbca73e(bun test 통과)가 있어 결론은 유지된다.&quot;,
+        &quot;[적합·AC-1] src/native-chat.ts:18의 NATIVE_PERMISSIONS({approvalPolicy:\&quot;never\&quot;, sandbox:\&quot;danger-full-access\&quot;})를 두 경로가 함께 쓴다. 하나는 thread/start용 nativeThreadStartParams(native-chat.ts:20-26, main.ts:552)이고, 다른 하나는 thread/resume(conversations.ts:163-165)이다. resume 요청에는 model·modelProvider를 보내지 않으므로 저장된 모델 설정을 덮어쓰지 않는다. 최신 digest의 bun test 시도(attempt-0fbca73e)는 통과로 기록되어 있다.&quot;,
+        &quot;[적합·이전 지적 해소] renderer.tsx:974-977은 이제 마지막 thread/configured 사건의 approvalPolicy·sandbox를 표시한다. 정책 값이 없을 때만 &#39;기본 정책: Bypass …&#39;로 표시한다. main.ts:563은 새 대화 응답의 실제 정책을, 488/590행은 재개 응답의 실제 정책을 싣는다. 따라서 서버가 더 낮은 정책을 응답해도 화면에 Bypass로 단정하지 않는다. main.ts와 renderer.tsx는 갱신된 writePaths와 inputs에 포함되어 있다.&quot;,
+        &quot;[미검증 범위] verification.md:74, 205에 적힌 실제 app-server 확인(.www/bypass-live.json)은 이번 검토에서 읽지 않았다. 기록 자체도 모델 턴, 실제 명령 실행, GUI 승인 창 부재는 관찰하지 않았다고 밝힌다. 따라서 &#39;세션 허용 요청이 더 이상 뜨지 않는다&#39;는 사용자 증상의 해소는 미검증이다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-a950a72b-de3a-4e03-be6c-0b801a1c7f9c&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-a950a72b-de3a-4e03-be6c-0b801a1c7f9c/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep/Glob 도구만 사용했다. Bash가 없어 git diff/status/show는 실행하지 못했다. 테스트, 타입 검사, 빌드는 직접 실행하지 않았다. 읽은 범위는 다음과 같다. spec.md와 verification.md는 전체를 읽었다. work.json은 1-1276행과 4700-5074행을 읽었다. 그 밖에 src/native-chat.ts 전체, src/conversations.ts 155-202행, src/main.ts 545-574행, src/renderer.tsx 965-979행, test 디렉터리의 정책 단언(Grep), 보고서 테스트 3개의 머리 import(Grep), docs의 정책 문구(Grep), .www/evidence/.../native-command-bypass.json을 읽었다.&quot;,
+        &quot;[적합·AC-1] src/native-chat.ts:18에 NATIVE_PERMISSIONS={approvalPolicy:\&quot;never\&quot;, sandbox:\&quot;danger-full-access\&quot;}가 정의되어 있다. 이 값은 thread/start(native-chat.ts:20-26, main.ts:553)와 thread/resume(conversations.ts:163-165)이 함께 쓴다. resume 요청에는 model·modelProvider를 보내지 않으므로 저장된 모델 설정을 덮어쓰지 않는다. test/native-chat.test.ts:14, test/conversations.test.ts:53, test/native-lifecycle.test.ts:54가 payload를 정확히 단언한다. 보고서 판단기의 read-only 정책(src/report-judge.ts:320)은 바뀌지 않았다.&quot;,
+        &quot;[적합·이전 지적 해소] main.ts:564는 새 대화 응답의 실제 approvalPolicy·sandbox.type을 thread/configured에 싣는다. 재개 경로는 main.ts:489와 591에서 같은 필드를 싣는다. renderer.tsx:974-977은 마지막 thread/configured의 정책을 표시하고, 값이 없을 때만 &#39;기본 정책: Bypass&#39;를 표시한다. 따라서 서버가 더 낮은 정책을 응답할 때 화면에 Bypass로 단정하지 않는다. docs/DEVELOPMENT.md:148과 259, docs/ARCHITECTURE.md:24, docs/specs/chat.md:119에는 옛 on-request/workspace-write 문구가 남아 있지 않고 모두 소스와 일치한다.&quot;,
+        &quot;[적합·AC-2 증거와 현재 소스 대조] work.json 4700-4790행에 기록된 마지막 build 시도(attempt-83a86dad, sourceDigest 167da070…)의 입력 파일 digest를 이번 검토 대상 files digest와 대조했다. ARCHITECTURE.md 0e984ad, DEVELOPMENT.md f6ad667, structure.json fd1551e, chat.md c981075, package.json 63ada4b, conversations.ts b47eae2, main.ts 95927e4, native-chat.ts edda356, renderer.tsx 8abea96, test 6개 파일이 모두 같다. build.ts 2bc2322도 이전 묶음들과 같다. 같은 묶음에서 bun test(0c4220ad), check:source(b1f3fbba), typecheck(d51d9c08), build(83a86dad)가 모두 종료 코드 0, sourceStable=true로 기록되어 있다. 전체 sourceDigest가 다른 이유는 검토 입력에 docs/PRODUCT.md와 docs/skills/WORKFLOW.md가 추가되었기 때문으로 보인다. 두 파일은 documentationReviews에서 unchanged로 판정되었다.&quot;,
+        &quot;[적합·생성 출력 제외] verification.md:443은 src/architecture.generated.json을 검사 입력에서 뺐다. 이 파일은 build.ts가 다시 생성하는 출력이어서 입력에 두면 sourceStable 판정이 무효가 되기 때문이며, 근거가 타당하다. 원본 구조 계약 structure.json은 입력으로 유지했다. 생성 계약의 정합성은 build 통과로 확인된다.&quot;,
+        &quot;[적합·범위] 보고서 테스트 3개(test/native-reports.test.ts:4, test/workflow-reports.test.ts:5, test/work-json.test.ts:4)는 reportFileStem import가 구조 주석 블록 뒤에 있다. 기록상 테스트 로직 변경은 없다. verification.md:370은 work-json 확장 검사 2건의 실패를 숨기지 않았고, 전체 테스트 통과도 주장하지 않는다. 이 실패는 AC-1·AC-2 정의 밖이다.&quot;,
+        &quot;[참고·실제 동작 증거] native-command-bypass.json에는 fresh와 resumed 각각 status=completed, commands=1, approvalRequests=0, modelPreserved와 providerPreserved=true, policy never/dangerFullAccess가 기록되어 있다. 이는 승인 요청이 사라졌다는 사용자 증상 해소의 근거가 된다. GUI 화면 확인(verification.md:368)과 .www/evidence/chat-ui-foV26o는 이번 검토에서 읽지 않았다.&quot;,
+        &quot;[경미·비차단] renderer.tsx:975는 approvalPolicy가 문자열일 때만 실제 정책으로 인정한다. 서버가 approvalPolicy를 객체 형태(예: 세분화 정책)로 응답하면 main.ts:564가 null을 전달하고, 화면은 &#39;기본 정책: Bypass&#39;로 되돌아간다. 현재 요청은 문자열 \&quot;never\&quot;를 보내므로 이번 기준에는 영향이 없다.&quot;,
+        &quot;[경미·기록 정합성] work.json의 AC-1·AC-2 evidence summary는 마지막 통과 시도(0c4220ad, b1f3fbba, d51d9c08, 83a86dad)까지 모두 &#39;현재 완료 근거에 사용하지 않음&#39;으로 표시한다. 그런데 criteria result는 passed다. 증거 범위를 넓힌 것이 아니라 보수적으로 적은 표시라서 결함으로 보지 않는다. 다만 기록기가 입력 집합 차이를 기준으로 summary를 갱신하는 방식은 확인이 필요하다.&quot;
+      ]
+    }
+  ],
+  &quot;omitted&quot;: {
+    &quot;criteria&quot;: 0,
+    &quot;evidence&quot;: 11,
+    &quot;verifications&quot;: 8,
+    &quot;reviews&quot;: 0,
+    &quot;arguments&quot;: 22,
+    &quot;findings&quot;: 0,
+    &quot;unresolved&quot;: 2
+  }
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;새 대화와 기존 대화 재개에 Bypass 기본값을 적용했고 실행 중인 WWW 앱도 새 빌드로 재시작했다. 실제 두 경로의 명령 실행에서 승인 요청이 없었고, 관련 테스트 42건·소스 정책·타입 검사·빌드와 독립 Opus 검토가 통과했다.&quot;,
+  &quot;before&quot;: &quot;새 대화는 on-request/workspace-write로 시작했고 기존 대화도 과거 권한 설정을 유지해 세션 허용 요청이 나타날 수 있었다.&quot;,
+  &quot;after&quot;: &quot;새 대화와 재개는 never/danger-full-access를 명시한다. 실제 정책 응답을 상태 표시로 전달하며, 다시 실행한 앱에서도 Bypass 기본값을 확인했다.&quot;,
+  &quot;changes&quot;: [
+    &quot;새 대화와 저장 대화 재개가 Bypass 정책을 공유한다.&quot;,
+    &quot;화면은 서버가 응답한 실제 정책을 표시한다.&quot;,
+    &quot;빌드를 막던 보고서 테스트 3개의 구조 주석·import 순서와 실제 의존성 등록을 보완했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;저장된 모델·provider는 유지하고 승인·sandbox 정책만 전환한다.&quot;,
+    &quot;빌드가 재생성하는 architecture.generated.json은 검증 입력에서 분리하고 실제 공식 빌드에서 생성 계약을 검사했다.&quot;,
+    &quot;오래된 검사 실패와 최신 통과를 구분해 보존한다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;전체 저장소 테스트 통과를 주장하지 않는다. 추가 검사에서 work-json의 BoxBox 공개 proof 검사 2건은 실패했으며 Bypass 수용 기준과 구분해 기록했다.&quot;,
+    &quot;실제 실행 검사는 무해한 printf 명령을 새 대화와 재개 대화에서 한 번씩 실행한 범위다.&quot;
+  ],
+  &quot;next&quot;: []
+}</pre></div></details></section><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 2개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 16일 오전 8:59 · 작성자 보고서 · 새 대화와 기존 대화 재개에 Bypass 기본값을 적용했고 실행 중인 WWW 앱도 새 빌드로 재시작했다. 실제 두 경로의 명령 실행에서 승인 요청이 없었고, 관련 테스트 42건·소스 정책·타입 검사·빌드와 독립 Opus 검토가 통과했다.</summary><article><h3>Native 대화 Bypass 기본값 적용</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><aside class="omission"><strong>일부 원본 항목이 이 보고서에 보관되지 않았습니다.</strong><p>기준 근거 전체 28개 중 17개 표시 (11개 제외), 검사 이력 전체 28개 중 20개 표시 (8개 제외), 명령 인자 전체 70개 중 48개 표시 (22개 제외). 제외된 당시 기록 중 실패·차단·미확인 항목이 2건 있습니다. 더 넓은 기록은 근거의 작업 파일과 대조해야 합니다.</p></aside><div class="story">새 대화는 on-request/workspace-write로 시작했고 기존 대화도 과거 권한 설정을 유지해 세션 허용 요청이 나타날 수 있었다.
+
+새 대화와 재개는 never/danger-full-access를 명시한다. 실제 정책 응답을 상태 표시로 전달하며, 다시 실행한 앱에서도 Bypass 기본값을 확인했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 11 · 실패 9 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><h3>기록된 변경</h3><ul><li>새 대화와 저장 대화 재개가 Bypass 정책을 공유한다.</li><li>화면은 서버가 응답한 실제 정책을 표시한다.</li><li>빌드를 막던 보고서 테스트 3개의 구조 주석·import 순서와 실제 의존성 등록을 보완했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>새 대화와 기존 대화 재개에서 never와 danger-full-access를 명시하고 모델 설정은 덮어쓰지 않는다.</dt><dd>당시 통과로 기록</dd></div><div><dt>소스 정책, 타입 검사, 빌드가 통과한다.</dt><dd>당시 통과로 기록</dd></div></dl><section class="paper" id="history-report-914612dc-7c72-4682-ba7b-212936e84fcb-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>저장된 모델·provider는 유지하고 승인·sandbox 정책만 전환한다.</li><li>빌드가 재생성하는 architecture.generated.json은 검증 입력에서 분리하고 실제 공식 빌드에서 생성 계약을 검사했다.</li><li>오래된 검사 실패와 최신 통과를 구분해 보존한다.</li></ul></section><section class="paper" id="history-report-914612dc-7c72-4682-ba7b-212936e84fcb-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 11건, 실패 9건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>전체 저장소 테스트 통과를 주장하지 않는다. 추가 검사에서 work-json의 BoxBox 공개 proof 검사 2건은 실패했으며 Bypass 수용 기준과 구분해 기록했다.</li><li>실제 실행 검사는 무해한 printf 명령을 새 대화와 재개 대화에서 한 번씩 실행한 범위다.</li></ul></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-914612dc-7c72-4682-ba7b-212936e84fcb-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-128f5f17-a260-4c79-9612-35d558590c14<br>report-914612dc-7c72-4682-ba7b-212936e84fcb</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>3cf17c1eb1756f44fc58c269284a18b0b43baf1c003d1652bab3f4a9d147aa93</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>167da0709b747aa61c0fdd7e5a9bb37f3e79c64ed53be75087df4e6a2093dd9a</code></dd></div><div><dt>기준 지문</dt><dd><code>2f63c2583e1c8820f04d29de9b6954c38bd0c7ee9ad63c8f03b81a3f7bab804f</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;새 대화와 기존 대화 재개에서 never와 danger-full-access를 명시하고 모델 설정은 덮어쓰지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d045c301-460f-4c18-82e9-274a72894d11&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-67813521-9f16-44a0-8257-5de16bd7748c&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-efce69d0-adab-401a-bf9d-1a55f876b0ee&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0fbca73e-c277-4160-aa1c-48ef43b853b9&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e4eaf9de-d308-4d27-9fb8-137334e6d4f2&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f29d8600-be9a-4f19-aedd-684f0f5eb8cb&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0c4220ad-5c3d-408d-b3b8-f585b20549fb&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 소스와 검사 범위에 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;소스 정책, 타입 검사, 빌드가 통과한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-de3f3cdb-3a96-4d3f-8dd0-a8e721c518db&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e68b4708-3847-4f5c-bb41-8c6a2db2563f&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-91561dbd-7b5f-4a77-a1f0-88ec7df8268b&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-466007e2-115b-4aad-99ca-334776f135a1&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f8299ff0-0850-4db9-a8d1-ab8bae8ec8b9&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-b1c9fddc-bc9e-41db-ad7e-cff9e2b478a7&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-885187b1-ebd2-4e5d-a96a-bfaeca986dff&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-b1f3fbba-71a9-46ae-a2d0-e91b280e67de&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 소스와 검사 범위에 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d51d9c08-b30d-4f7f-9ab3-2959e31a446e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 소스와 검사 범위에 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-83a86dad-f532-441a-9735-e6905a60d8d1&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 소스와 검사 범위에 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-34afc6c2-f930-4326-993e-1de9088e8088&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:43:16.959Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-1f63e41f-b5c4-4ee7-8704-5c50476cc264&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 2,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:43:21.048Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-4c25b12b-0e64-410b-8bed-09022823d19f&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:43:21.639Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0fbca73e-c277-4160-aa1c-48ef43b853b9&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/conversations.test.ts&quot;,
+        &quot;test/native-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:45:37.549Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-686e1ec3-7ef5-4aeb-8624-c10aadb6a9fc&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:45:39.150Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-84f02dc5-9793-4b57-bca2-7e2fd815be68&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 2,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:45:43.471Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f572bd1d-f6f7-4f0f-bb46-bd0df329c379&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:45:44.330Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e4eaf9de-d308-4d27-9fb8-137334e6d4f2&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/conversations.test.ts&quot;,
+        &quot;test/native-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:50:18.973Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-de3f3cdb-3a96-4d3f-8dd0-a8e721c518db&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:50:28.720Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e68b4708-3847-4f5c-bb41-8c6a2db2563f&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 2,
+      &quot;sourceStable&quot;: false,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:51:17.460Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-91561dbd-7b5f-4a77-a1f0-88ec7df8268b&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: false,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:52:36.197Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-466007e2-115b-4aad-99ca-334776f135a1&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:52:38.963Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f29d8600-be9a-4f19-aedd-684f0f5eb8cb&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/conversations.test.ts&quot;,
+        &quot;test/native-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:55:19.757Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f8299ff0-0850-4db9-a8d1-ab8bae8ec8b9&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:55:33.317Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-b1c9fddc-bc9e-41db-ad7e-cff9e2b478a7&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: false,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:56:04.261Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-885187b1-ebd2-4e5d-a96a-bfaeca986dff&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: false,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:56:08.971Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0c4220ad-5c3d-408d-b3b8-f585b20549fb&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/conversations.test.ts&quot;,
+        &quot;test/native-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:56:44.938Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-b1f3fbba-71a9-46ae-a2d0-e91b280e67de&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:56:52.773Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d51d9c08-b30d-4f7f-9ab3-2959e31a446e&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:57:13.305Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-83a86dad-f532-441a-9735-e6905a60d8d1&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:57:21.458Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-37b9a743-bed7-4c1d-8163-2c361c8180e5&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-37b9a743-bed7-4c1d-8163-2c361c8180e5/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Bash가 이 세션에서 비활성화되어 있어 git diff/status/show는 실행하지 못했다(도구 호출 오류: \&quot;No such tool available: Bash\&quot;). 그래서 Read/Grep으로 작업 디렉터리의 현재 파일만 직접 읽었다. 읽은 파일은 spec.md, work.json, verification.md, src/native-chat.ts, src/conversations.ts(1-40, 150-201행), src/main.ts(470-499행), test 3개 파일의 관련 행과 docs 3개 파일의 관련 행이다. 테스트와 빌드는 직접 실행하지 않았다.&quot;,
+        &quot;[결함·필수 기준 미충족] AC-2(required)가 충족되지 않았다. work.json의 attempt-ab68b574(`npm run build`)는 종료 코드 1, result failed이고 criteria AC-2.result도 \&quot;failed\&quot;다(work.json 30-47행, verification.md 54-69행). 기록상 소스 HEAD aea78d1과 digest가 대상 sourceDigest·파일 digest와 같아 현재 소스에 그대로 적용된다. stderr 원문은 보관되지 않아 원인은 확인할 수 없다. 다만 &#39;소스 정책, 타입 검사, 빌드가 통과한다&#39;는 기준은 현재 근거로 통과가 아니다. check:source와 typecheck 통과만으로 AC-2 통과를 주장하면 증거 범위를 넓히는 것이다.&quot;,
+        &quot;[결함·문서 모순] docs/DEVELOPMENT.md:255에 아직 &#39;기존 cwd·`workspace-write`·`on-request`와 text 입력 구조를 보존하며&#39;라고 적혀 있다. 같은 문서 146행과 src/native-chat.ts:18-25는 thread/start에 never/danger-full-access를 넣는다. 이번 변경으로 255행 서술이 사실과 달라졌는데, 이 파일은 writePaths에 포함되어 있으니 같이 고쳐야 한다.&quot;,
+        &quot;[결함·UI 표시 불일치] src/renderer.tsx:974의 policyLabel은 새 대화(isNew가 false인 thread/configured가 없는 경우)에 여전히 \&quot;workspace-write · on-request\&quot;를 표시한다. 실제 thread/start 요청은 NATIVE_PERMISSIONS(approvalPolicy \&quot;never\&quot;, sandbox \&quot;danger-full-access\&quot;)를 보내므로 사용자에게 실제보다 제한된 보안 정책이 표시된다. renderer.tsx는 writePaths 밖이어서 이번 범위에서 고칠 수 없다. 그래도 Bypass 기본값 적용의 결과로 표시가 틀리게 되었으므로 범위 확장 승인이나 후속 작업이 필요하다.&quot;,
+        &quot;[범위 확인 필요] src/main.ts:488과 590은 RestoredConversation에 새로 추가된 approvalPolicy·sandbox 필드를 thread/configured에 싣는다. main.ts는 git status상 수정 상태지만 이 작업의 writePaths와 inputs에 없다. diff를 실행할 수 없어 이번 작업에서 바뀐 부분인지는 확인하지 못했다. 이번 작업의 변경이라면 승인 범위를 벗어난 것이고 검증 입력에서도 빠져 있다.&quot;,
+        &quot;[적합] src/native-chat.ts:18-25는 nativeThreadStartParams에 approvalPolicy \&quot;never\&quot;, sandbox \&quot;danger-full-access\&quot;를 명시하고 model·provider 필드는 보내지 않는다. src/conversations.ts:163-165의 thread/resume도 같은 상수를 펼쳐 넣고 model 계열 필드는 덮어쓰지 않는다. test/native-chat.test.ts:14, test/conversations.test.ts:53, test/native-lifecycle.test.ts:54가 요청 payload를 정확히 단언하고, attempt-d045c301(bun test)은 통과로 기록되어 있다. 따라서 AC-1 근거는 소스와 맞는다. src/report-judge.ts:320의 read-only 정책은 바뀌지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-02c24fe0-1361-4fcb-a2fe-f2f402c4ab96&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-02c24fe0-1361-4fcb-a2fe-f2f402c4ab96/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep 도구로 작업 문서(spec.md, verification.md, work.json 1~1304행), src/native-chat.ts, src/conversations.ts 150~202행, src/renderer.tsx 966~980행, test/conversations.test.ts 35~64행, test/native-chat.test.ts 1~30행, docs/architecture/structure.json·src/architecture.generated.json의 restore 노드, 관련 문서 문구를 읽었다. work.json 1305행 이후와 git diff는 읽지 않았다. 테스트·타입 검사·빌드는 실행하지 않았다.&quot;,
+        &quot;구현 자체는 의도와 맞다. src/native-chat.ts:18의 NATIVE_PERMISSIONS = { approvalPolicy: \&quot;never\&quot;, sandbox: \&quot;danger-full-access\&quot; }를 nativeThreadStartParams(src/native-chat.ts:20-26, main.ts:552에서 thread/start에 사용)와 thread/resume(src/conversations.ts:163-165)이 함께 쓴다. resume 요청에는 model·modelProvider를 보내지 않으므로 저장된 모델 설정은 덮어쓰지 않는다. test/conversations.test.ts:53, test/native-lifecycle.test.ts:54, test/native-chat.test.ts:14가 요청 payload를 정확히 단언한다. 보고서 판단기(src/report-judge.ts:320)는 계속 read-only이므로 범위 밖 정책은 바뀌지 않았다.&quot;,
+        &quot;결함(필수 기준 미충족): work.json의 AC-2 &#39;소스 정책, 타입 검사, 빌드가 통과한다&#39;는 required=true이고 result=failed다. 가장 최근 시도에서 typecheck(attempt-1f63e41f, 종료 코드 2)와 build(attempt-4c25b12b, 종료 코드 1)가 모두 실패했다. 실패 원인이 다른 작업(scripts/workflow/run.ts:318,320의 nullable hash, scripts/workflow/artifacts.ts:2의 arch.development.artifacts 미정의)이라는 설명은 Grep 결과와 어긋나지 않는다. arch.development.artifacts는 structure.json에 없다. 다만 원인과 관계없이 필수 기준이 통과하지 않았으므로 이 작업을 완료로 판정할 수 없다.&quot;,
+        &quot;결함(증거와 현재 소스 불일치): 이번 검토 대상의 현재 digest와 마지막 검증 시도(source digest 0a0a5216…)의 입력 digest가 다르다. docs/ARCHITECTURE.md는 현재 0e984ad…이고 검증 당시 4ae3e1f…였다. docs/DEVELOPMENT.md는 현재 c311f60…이고 검증 당시 985c21f…였다. docs/architecture/structure.json은 현재 298dfa5…이고 검증 당시 c9659a6…였다. 그런데 work.json의 AC-1 evidence summary는 세 시도 모두 &#39;현재 적용 가능&#39;으로 표시한다. 특히 structure.json은 check:source와 구조 생성기 입력이므로, 현재 소스에서 소스 정책 검사가 통과한다는 근거가 없다. verification.md:205도 &#39;source snapshot은 아직 재생성하지 못했다&#39;고 인정한다. 현재 소스 digest(f5e274cb…)로 다시 검증해야 한다.&quot;,
+        &quot;주의(경미): src/renderer.tsx:974의 policyLabel은 &#39;Bypass · danger-full-access · never&#39; 상수로 고정되어 있다. resume 응답에서 실제 정책을 받는 RestoredConversation.approvalPolicy/sandbox(src/conversations.ts:195-196)를 쓰지 않는다. 서버가 요구 설정 등으로 sandbox를 낮춰 응답하면(test/conversations.test.ts:47처럼 readOnly를 반환하는 경우) 화면에는 여전히 Bypass로 표시된다. 보안 경계는 아니라고 문서화되어 있지만, 표시가 실제 상태를 반영하지 않는다.&quot;,
+        &quot;증거 범위: verification.md:74에 적힌 실제 codex app-server의 cold resume 확인(.www/bypass-live.json)은 이번 검토에서 읽지 않았다. 기록 자체도 모델 턴, 실제 명령 실행, GUI에 승인 창이 뜨지 않는지를 관찰하지 않았다고 명시한다. 따라서 &#39;세션 허용 요청이 더 이상 발생하지 않는다&#39;는 사용자 증상의 해소는 아직 검증되지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-5a1a0d67-4d33-4e74-ba9b-628ecab5937f&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-5a1a0d67-4d33-4e74-ba9b-628ecab5937f/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep으로 작업 문서 세 개를 읽었다. spec.md와 verification.md는 전체를 읽었고, work.json은 1-1268행과 2440-2601행을 읽었으며 digest는 Grep으로 대조했다. 소스는 src/native-chat.ts 1-35행, src/conversations.ts 150-202행, src/renderer.tsx 960-984행, src/main.ts 548-567행과 thread/configured 위치(488, 563, 590행)를 읽었다. git diff/status는 실행하지 않았다. 테스트·타입 검사·빌드도 직접 실행하지 않았다.&quot;,
+        &quot;[결함·필수 기준 미충족] AC-2(&#39;소스 정책, 타입 검사, 빌드가 통과한다&#39;, required=true)가 현재 소스에서 충족되지 않았다. 마지막 검증 묶음(source digest fe71088f…)의 입력 digest를 Grep으로 대조했다. main.ts 6f8296d2…, renderer.tsx 8abea960…, conversations.test.ts a0654992…, ARCHITECTURE.md 0e984ad0…, DEVELOPMENT.md c311f600…, structure.json 7e0d3033…가 모두 이번 검토 대상 digest와 같다. 이 묶음에서 typecheck(attempt-84f02dc5, 종료 코드 2)와 build(attempt-f572bd1d, 종료 코드 1)는 실패했다(verification.md 241-273행). work.json도 AC-2.result를 \&quot;failed\&quot;로 기록한다. 실패 원인이 병행 작업(scripts/workflow/run.ts의 nullable hash, scripts/workflow/artifacts.ts의 arch.development.artifacts)이라는 설명이 맞더라도 필수 기준을 통과로 볼 근거는 없다.&quot;,
+        &quot;[증거 범위 과대 표시] work.json의 AC-2 evidence 중 attempt-a9f1d257(typecheck passed)의 summary는 &#39;현재 적용 가능&#39;이다. 이 시도의 source digest는 73f9ef7a…이고, 당시 test/conversations.test.ts digest는 41aaf929…였다. 현재 digest a0654992…와 다르고 renderer.tsx·main.ts는 당시 입력에 없었다. 같은 명령이 최신 소스에서는 실패했으므로(attempt-84f02dc5), 옛 통과 기록을 현재 근거로 표시하면 증거 범위가 넓어진다. AC-1의 첫 세 evidence(d045c301, 67813521, efce69d0)도 옛 digest 기준이다. 다만 AC-1은 최신 digest의 attempt-0fbca73e(bun test 통과)가 있어 결론은 유지된다.&quot;,
+        &quot;[적합·AC-1] src/native-chat.ts:18의 NATIVE_PERMISSIONS({approvalPolicy:\&quot;never\&quot;, sandbox:\&quot;danger-full-access\&quot;})를 두 경로가 함께 쓴다. 하나는 thread/start용 nativeThreadStartParams(native-chat.ts:20-26, main.ts:552)이고, 다른 하나는 thread/resume(conversations.ts:163-165)이다. resume 요청에는 model·modelProvider를 보내지 않으므로 저장된 모델 설정을 덮어쓰지 않는다. 최신 digest의 bun test 시도(attempt-0fbca73e)는 통과로 기록되어 있다.&quot;,
+        &quot;[적합·이전 지적 해소] renderer.tsx:974-977은 이제 마지막 thread/configured 사건의 approvalPolicy·sandbox를 표시한다. 정책 값이 없을 때만 &#39;기본 정책: Bypass …&#39;로 표시한다. main.ts:563은 새 대화 응답의 실제 정책을, 488/590행은 재개 응답의 실제 정책을 싣는다. 따라서 서버가 더 낮은 정책을 응답해도 화면에 Bypass로 단정하지 않는다. main.ts와 renderer.tsx는 갱신된 writePaths와 inputs에 포함되어 있다.&quot;,
+        &quot;[미검증 범위] verification.md:74, 205에 적힌 실제 app-server 확인(.www/bypass-live.json)은 이번 검토에서 읽지 않았다. 기록 자체도 모델 턴, 실제 명령 실행, GUI 승인 창 부재는 관찰하지 않았다고 밝힌다. 따라서 &#39;세션 허용 요청이 더 이상 뜨지 않는다&#39;는 사용자 증상의 해소는 미검증이다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-a950a72b-de3a-4e03-be6c-0b801a1c7f9c&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-a950a72b-de3a-4e03-be6c-0b801a1c7f9c/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep/Glob 도구만 사용했다. Bash가 없어 git diff/status/show는 실행하지 못했다. 테스트, 타입 검사, 빌드는 직접 실행하지 않았다. 읽은 범위는 다음과 같다. spec.md와 verification.md는 전체를 읽었다. work.json은 1-1276행과 4700-5074행을 읽었다. 그 밖에 src/native-chat.ts 전체, src/conversations.ts 155-202행, src/main.ts 545-574행, src/renderer.tsx 965-979행, test 디렉터리의 정책 단언(Grep), 보고서 테스트 3개의 머리 import(Grep), docs의 정책 문구(Grep), .www/evidence/.../native-command-bypass.json을 읽었다.&quot;,
+        &quot;[적합·AC-1] src/native-chat.ts:18에 NATIVE_PERMISSIONS={approvalPolicy:\&quot;never\&quot;, sandbox:\&quot;danger-full-access\&quot;}가 정의되어 있다. 이 값은 thread/start(native-chat.ts:20-26, main.ts:553)와 thread/resume(conversations.ts:163-165)이 함께 쓴다. resume 요청에는 model·modelProvider를 보내지 않으므로 저장된 모델 설정을 덮어쓰지 않는다. test/native-chat.test.ts:14, test/conversations.test.ts:53, test/native-lifecycle.test.ts:54가 payload를 정확히 단언한다. 보고서 판단기의 read-only 정책(src/report-judge.ts:320)은 바뀌지 않았다.&quot;,
+        &quot;[적합·이전 지적 해소] main.ts:564는 새 대화 응답의 실제 approvalPolicy·sandbox.type을 thread/configured에 싣는다. 재개 경로는 main.ts:489와 591에서 같은 필드를 싣는다. renderer.tsx:974-977은 마지막 thread/configured의 정책을 표시하고, 값이 없을 때만 &#39;기본 정책: Bypass&#39;를 표시한다. 따라서 서버가 더 낮은 정책을 응답할 때 화면에 Bypass로 단정하지 않는다. docs/DEVELOPMENT.md:148과 259, docs/ARCHITECTURE.md:24, docs/specs/chat.md:119에는 옛 on-request/workspace-write 문구가 남아 있지 않고 모두 소스와 일치한다.&quot;,
+        &quot;[적합·AC-2 증거와 현재 소스 대조] work.json 4700-4790행에 기록된 마지막 build 시도(attempt-83a86dad, sourceDigest 167da070…)의 입력 파일 digest를 이번 검토 대상 files digest와 대조했다. ARCHITECTURE.md 0e984ad, DEVELOPMENT.md f6ad667, structure.json fd1551e, chat.md c981075, package.json 63ada4b, conversations.ts b47eae2, main.ts 95927e4, native-chat.ts edda356, renderer.tsx 8abea96, test 6개 파일이 모두 같다. build.ts 2bc2322도 이전 묶음들과 같다. 같은 묶음에서 bun test(0c4220ad), check:source(b1f3fbba), typecheck(d51d9c08), build(83a86dad)가 모두 종료 코드 0, sourceStable=true로 기록되어 있다. 전체 sourceDigest가 다른 이유는 검토 입력에 docs/PRODUCT.md와 docs/skills/WORKFLOW.md가 추가되었기 때문으로 보인다. 두 파일은 documentationReviews에서 unchanged로 판정되었다.&quot;,
+        &quot;[적합·생성 출력 제외] verification.md:443은 src/architecture.generated.json을 검사 입력에서 뺐다. 이 파일은 build.ts가 다시 생성하는 출력이어서 입력에 두면 sourceStable 판정이 무효가 되기 때문이며, 근거가 타당하다. 원본 구조 계약 structure.json은 입력으로 유지했다. 생성 계약의 정합성은 build 통과로 확인된다.&quot;,
+        &quot;[적합·범위] 보고서 테스트 3개(test/native-reports.test.ts:4, test/workflow-reports.test.ts:5, test/work-json.test.ts:4)는 reportFileStem import가 구조 주석 블록 뒤에 있다. 기록상 테스트 로직 변경은 없다. verification.md:370은 work-json 확장 검사 2건의 실패를 숨기지 않았고, 전체 테스트 통과도 주장하지 않는다. 이 실패는 AC-1·AC-2 정의 밖이다.&quot;,
+        &quot;[참고·실제 동작 증거] native-command-bypass.json에는 fresh와 resumed 각각 status=completed, commands=1, approvalRequests=0, modelPreserved와 providerPreserved=true, policy never/dangerFullAccess가 기록되어 있다. 이는 승인 요청이 사라졌다는 사용자 증상 해소의 근거가 된다. GUI 화면 확인(verification.md:368)과 .www/evidence/chat-ui-foV26o는 이번 검토에서 읽지 않았다.&quot;,
+        &quot;[경미·비차단] renderer.tsx:975는 approvalPolicy가 문자열일 때만 실제 정책으로 인정한다. 서버가 approvalPolicy를 객체 형태(예: 세분화 정책)로 응답하면 main.ts:564가 null을 전달하고, 화면은 &#39;기본 정책: Bypass&#39;로 되돌아간다. 현재 요청은 문자열 \&quot;never\&quot;를 보내므로 이번 기준에는 영향이 없다.&quot;,
+        &quot;[경미·기록 정합성] work.json의 AC-1·AC-2 evidence summary는 마지막 통과 시도(0c4220ad, b1f3fbba, d51d9c08, 83a86dad)까지 모두 &#39;현재 완료 근거에 사용하지 않음&#39;으로 표시한다. 그런데 criteria result는 passed다. 증거 범위를 넓힌 것이 아니라 보수적으로 적은 표시라서 결함으로 보지 않는다. 다만 기록기가 입력 집합 차이를 기준으로 summary를 갱신하는 방식은 확인이 필요하다.&quot;
+      ]
+    }
+  ],
+  &quot;omitted&quot;: {
+    &quot;criteria&quot;: 0,
+    &quot;evidence&quot;: 11,
+    &quot;verifications&quot;: 8,
+    &quot;reviews&quot;: 0,
+    &quot;arguments&quot;: 22,
+    &quot;findings&quot;: 0,
+    &quot;unresolved&quot;: 2
+  }
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;새 대화와 기존 대화 재개에 Bypass 기본값을 적용했고 실행 중인 WWW 앱도 새 빌드로 재시작했다. 실제 두 경로의 명령 실행에서 승인 요청이 없었고, 관련 테스트 42건·소스 정책·타입 검사·빌드와 독립 Opus 검토가 통과했다.&quot;,
+  &quot;before&quot;: &quot;새 대화는 on-request/workspace-write로 시작했고 기존 대화도 과거 권한 설정을 유지해 세션 허용 요청이 나타날 수 있었다.&quot;,
+  &quot;after&quot;: &quot;새 대화와 재개는 never/danger-full-access를 명시한다. 실제 정책 응답을 상태 표시로 전달하며, 다시 실행한 앱에서도 Bypass 기본값을 확인했다.&quot;,
+  &quot;changes&quot;: [
+    &quot;새 대화와 저장 대화 재개가 Bypass 정책을 공유한다.&quot;,
+    &quot;화면은 서버가 응답한 실제 정책을 표시한다.&quot;,
+    &quot;빌드를 막던 보고서 테스트 3개의 구조 주석·import 순서와 실제 의존성 등록을 보완했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;저장된 모델·provider는 유지하고 승인·sandbox 정책만 전환한다.&quot;,
+    &quot;빌드가 재생성하는 architecture.generated.json은 검증 입력에서 분리하고 실제 공식 빌드에서 생성 계약을 검사했다.&quot;,
+    &quot;오래된 검사 실패와 최신 통과를 구분해 보존한다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;전체 저장소 테스트 통과를 주장하지 않는다. 추가 검사에서 work-json의 BoxBox 공개 proof 검사 2건은 실패했으며 Bypass 수용 기준과 구분해 기록했다.&quot;,
+    &quot;실제 실행 검사는 무해한 printf 명령을 새 대화와 재개 대화에서 한 번씩 실행한 범위다.&quot;
+  ],
+  &quot;next&quot;: []
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 오전 8:47 · 작성자 보고서 · 새 대화와 기존 대화 재개에 Bypass 기본값을 적용하고 실제 서버 정책을 화면에 표시하도록 수정했다. 관련 42건과 소스 정책 검사는 통과했으나 병행 작업의 타입·구조 오류 때문에 전체 검증과 빌드는 완료하지 못했다.</summary><article><h3>Native 대화 Bypass 기본값 적용</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><aside class="omission"><strong>일부 원본 항목이 이 보고서에 보관되지 않았습니다.</strong><p>기준 근거 전체 15개 중 14개 표시 (1개 제외). 더 넓은 기록은 근거의 작업 파일과 대조해야 합니다.</p></aside><div class="story">새 대화가 on-request/workspace-write로 시작하고 저장 대화도 예전 권한 설정으로 재개되어 세션 허용 요청이 나타날 수 있었다.
+
+새 대화와 재개가 never/danger-full-access 정책을 공유한다. 실제 app-server의 새 대화와 제한 모드 대화 cold resume 응답에서 이 정책의 수용과 모델·provider 보존을 확인했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 9 · 실패 6 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 병행 개발 하네스 변경의 타입·구조 오류가 해소되면 공식 구조 생성·타입 검사·빌드를 다시 수행한다.</p><p class="blocker"><strong>남은 차단 사항</strong> 독립 검토 fail: 수정 또는 검토 재실행 필요</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>Native 새 대화·재개에 동일한 Bypass 정책을 명시했다.</li><li>새 대화의 실제 정책 응답을 thread/configured에 전달하고 화면에서 수신한 정책을 표시한다.</li><li>회귀 테스트와 기능·개발·구조 문서를 갱신했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>새 대화와 기존 대화 재개에서 never와 danger-full-access를 명시하고 모델 설정은 덮어쓰지 않는다.</dt><dd>당시 통과로 기록</dd></div><div><dt>소스 정책, 타입 검사, 빌드가 통과한다.</dt><dd>당시 실패로 기록</dd></div></dl><section class="paper" id="history-report-d4f1acf9-9ed6-48ba-a811-f9990ca95d76-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>저장된 모델 설정은 유지하고 승인·sandbox만 사용자 요청의 Bypass로 전환한다.</li><li>다른 작업에서 수정 중인 개발 하네스 파일은 보존했다.</li><li>독립 Opus 검토에서 확인한 전체 검증 미충족을 차단 상태로 유지한다.</li></ul></section><section class="paper" id="history-report-d4f1acf9-9ed6-48ba-a811-f9990ca95d76-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 9건, 실패 6건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>관련 테스트 42건과 소스 정책은 통과했지만 최신 전체 타입 검사와 빌드는 실패했다.</li><li>빌드 생성 snapshot의 최종 현재성 확인이 남아 있다.</li><li>실제 모델 명령 실행과 GUI에서 승인 창이 나타나지 않는지는 미검증이다.</li><li>현재 실행 중인 앱은 교체하거나 재시작하지 않았다.</li></ul></section><section class="paper" id="history-report-d4f1acf9-9ed6-48ba-a811-f9990ca95d76-next"><h2>남은 일과 해소 행동</h2><ul><li>병행 개발 하네스 변경의 타입·구조 오류가 해소되면 공식 구조 생성·타입 검사·빌드를 다시 수행한다.</li><li>현재 소스에서 독립 검토를 통과한 뒤 새 빌드로 앱을 재시작하고 승인 없이 동작하는지 확인한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-d4f1acf9-9ed6-48ba-a811-f9990ca95d76-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-128f5f17-a260-4c79-9612-35d558590c14<br>report-d4f1acf9-9ed6-48ba-a811-f9990ca95d76</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>aa959541458c3c03b2eeb1e89d9ef05d2266c527e3d02fb3b2cee9fdd8b5309e</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>75803de89c09de7467062c7ccef1b209453a2fc3c215ef8598caed39934456f6</code></dd></div><div><dt>기준 지문</dt><dd><code>2f63c2583e1c8820f04d29de9b6954c38bd0c7ee9ad63c8f03b81a3f7bab804f</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;독립 검토 fail: 수정 또는 검토 재실행 필요&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;새 대화와 기존 대화 재개에서 never와 danger-full-access를 명시하고 모델 설정은 덮어쓰지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d045c301-460f-4c18-82e9-274a72894d11&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-67813521-9f16-44a0-8257-5de16bd7748c&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-efce69d0-adab-401a-bf9d-1a55f876b0ee&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0fbca73e-c277-4160-aa1c-48ef43b853b9&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;소스 정책, 타입 검사, 빌드가 통과한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a9f1d257-cd53-4ee2-a2ff-b2fe46072ff3&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ab68b574-3cca-4cbc-8252-f4bcd0280dfb&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-cd3e3e97-9269-458b-9cb9-cd561d19fb82&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-da1b9978-beb2-4145-ae92-81dee53f8a03&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-34afc6c2-f930-4326-993e-1de9088e8088&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-1f63e41f-b5c4-4ee7-8704-5c50476cc264&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4c25b12b-0e64-410b-8bed-09022823d19f&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-686e1ec3-7ef5-4aeb-8624-c10aadb6a9fc&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 passed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-84f02dc5-9793-4b57-bca2-7e2fd815be68&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f572bd1d-f6f7-4f0f-bb46-bd0df329c379&quot;,
+          &quot;summary&quot;: &quot;당시 실제 검증 failed; 소스 또는 검사 범위 변경으로 현재 완료 근거에 사용하지 않음&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-d045c301-460f-4c18-82e9-274a72894d11&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/conversations.test.ts&quot;,
+        &quot;test/native-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:41:23.264Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-681f62d3-4bab-43e2-9d15-50f07ed483de&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:41:25.100Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-a9f1d257-cd53-4ee2-a2ff-b2fe46072ff3&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:41:36.641Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-ab68b574-3cca-4cbc-8252-f4bcd0280dfb&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:41:37.564Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-67813521-9f16-44a0-8257-5de16bd7748c&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/conversations.test.ts&quot;,
+        &quot;test/native-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:42:30.436Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-cd3e3e97-9269-458b-9cb9-cd561d19fb82&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:42:31.976Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-da1b9978-beb2-4145-ae92-81dee53f8a03&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 2,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:42:38.172Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-efce69d0-adab-401a-bf9d-1a55f876b0ee&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/conversations.test.ts&quot;,
+        &quot;test/native-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:43:15.535Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-34afc6c2-f930-4326-993e-1de9088e8088&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:43:16.959Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-1f63e41f-b5c4-4ee7-8704-5c50476cc264&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 2,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:43:21.048Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-4c25b12b-0e64-410b-8bed-09022823d19f&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:43:21.639Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0fbca73e-c277-4160-aa1c-48ef43b853b9&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/native-chat.test.ts&quot;,
+        &quot;test/conversations.test.ts&quot;,
+        &quot;test/native-lifecycle.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:45:37.549Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-686e1ec3-7ef5-4aeb-8624-c10aadb6a9fc&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check:source&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:45:39.150Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-84f02dc5-9793-4b57-bca2-7e2fd815be68&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;typecheck&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 2,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:45:43.471Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f572bd1d-f6f7-4f0f-bb46-bd0df329c379&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;build&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-15T23:45:44.330Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-37b9a743-bed7-4c1d-8163-2c361c8180e5&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-37b9a743-bed7-4c1d-8163-2c361c8180e5/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Bash가 이 세션에서 비활성화되어 있어 git diff/status/show는 실행하지 못했다(도구 호출 오류: \&quot;No such tool available: Bash\&quot;). 그래서 Read/Grep으로 작업 디렉터리의 현재 파일만 직접 읽었다. 읽은 파일은 spec.md, work.json, verification.md, src/native-chat.ts, src/conversations.ts(1-40, 150-201행), src/main.ts(470-499행), test 3개 파일의 관련 행과 docs 3개 파일의 관련 행이다. 테스트와 빌드는 직접 실행하지 않았다.&quot;,
+        &quot;[결함·필수 기준 미충족] AC-2(required)가 충족되지 않았다. work.json의 attempt-ab68b574(`npm run build`)는 종료 코드 1, result failed이고 criteria AC-2.result도 \&quot;failed\&quot;다(work.json 30-47행, verification.md 54-69행). 기록상 소스 HEAD aea78d1과 digest가 대상 sourceDigest·파일 digest와 같아 현재 소스에 그대로 적용된다. stderr 원문은 보관되지 않아 원인은 확인할 수 없다. 다만 &#39;소스 정책, 타입 검사, 빌드가 통과한다&#39;는 기준은 현재 근거로 통과가 아니다. check:source와 typecheck 통과만으로 AC-2 통과를 주장하면 증거 범위를 넓히는 것이다.&quot;,
+        &quot;[결함·문서 모순] docs/DEVELOPMENT.md:255에 아직 &#39;기존 cwd·`workspace-write`·`on-request`와 text 입력 구조를 보존하며&#39;라고 적혀 있다. 같은 문서 146행과 src/native-chat.ts:18-25는 thread/start에 never/danger-full-access를 넣는다. 이번 변경으로 255행 서술이 사실과 달라졌는데, 이 파일은 writePaths에 포함되어 있으니 같이 고쳐야 한다.&quot;,
+        &quot;[결함·UI 표시 불일치] src/renderer.tsx:974의 policyLabel은 새 대화(isNew가 false인 thread/configured가 없는 경우)에 여전히 \&quot;workspace-write · on-request\&quot;를 표시한다. 실제 thread/start 요청은 NATIVE_PERMISSIONS(approvalPolicy \&quot;never\&quot;, sandbox \&quot;danger-full-access\&quot;)를 보내므로 사용자에게 실제보다 제한된 보안 정책이 표시된다. renderer.tsx는 writePaths 밖이어서 이번 범위에서 고칠 수 없다. 그래도 Bypass 기본값 적용의 결과로 표시가 틀리게 되었으므로 범위 확장 승인이나 후속 작업이 필요하다.&quot;,
+        &quot;[범위 확인 필요] src/main.ts:488과 590은 RestoredConversation에 새로 추가된 approvalPolicy·sandbox 필드를 thread/configured에 싣는다. main.ts는 git status상 수정 상태지만 이 작업의 writePaths와 inputs에 없다. diff를 실행할 수 없어 이번 작업에서 바뀐 부분인지는 확인하지 못했다. 이번 작업의 변경이라면 승인 범위를 벗어난 것이고 검증 입력에서도 빠져 있다.&quot;,
+        &quot;[적합] src/native-chat.ts:18-25는 nativeThreadStartParams에 approvalPolicy \&quot;never\&quot;, sandbox \&quot;danger-full-access\&quot;를 명시하고 model·provider 필드는 보내지 않는다. src/conversations.ts:163-165의 thread/resume도 같은 상수를 펼쳐 넣고 model 계열 필드는 덮어쓰지 않는다. test/native-chat.test.ts:14, test/conversations.test.ts:53, test/native-lifecycle.test.ts:54가 요청 payload를 정확히 단언하고, attempt-d045c301(bun test)은 통과로 기록되어 있다. 따라서 AC-1 근거는 소스와 맞는다. src/report-judge.ts:320의 read-only 정책은 바뀌지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-02c24fe0-1361-4fcb-a2fe-f2f402c4ab96&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-02c24fe0-1361-4fcb-a2fe-f2f402c4ab96/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep 도구로 작업 문서(spec.md, verification.md, work.json 1~1304행), src/native-chat.ts, src/conversations.ts 150~202행, src/renderer.tsx 966~980행, test/conversations.test.ts 35~64행, test/native-chat.test.ts 1~30행, docs/architecture/structure.json·src/architecture.generated.json의 restore 노드, 관련 문서 문구를 읽었다. work.json 1305행 이후와 git diff는 읽지 않았다. 테스트·타입 검사·빌드는 실행하지 않았다.&quot;,
+        &quot;구현 자체는 의도와 맞다. src/native-chat.ts:18의 NATIVE_PERMISSIONS = { approvalPolicy: \&quot;never\&quot;, sandbox: \&quot;danger-full-access\&quot; }를 nativeThreadStartParams(src/native-chat.ts:20-26, main.ts:552에서 thread/start에 사용)와 thread/resume(src/conversations.ts:163-165)이 함께 쓴다. resume 요청에는 model·modelProvider를 보내지 않으므로 저장된 모델 설정은 덮어쓰지 않는다. test/conversations.test.ts:53, test/native-lifecycle.test.ts:54, test/native-chat.test.ts:14가 요청 payload를 정확히 단언한다. 보고서 판단기(src/report-judge.ts:320)는 계속 read-only이므로 범위 밖 정책은 바뀌지 않았다.&quot;,
+        &quot;결함(필수 기준 미충족): work.json의 AC-2 &#39;소스 정책, 타입 검사, 빌드가 통과한다&#39;는 required=true이고 result=failed다. 가장 최근 시도에서 typecheck(attempt-1f63e41f, 종료 코드 2)와 build(attempt-4c25b12b, 종료 코드 1)가 모두 실패했다. 실패 원인이 다른 작업(scripts/workflow/run.ts:318,320의 nullable hash, scripts/workflow/artifacts.ts:2의 arch.development.artifacts 미정의)이라는 설명은 Grep 결과와 어긋나지 않는다. arch.development.artifacts는 structure.json에 없다. 다만 원인과 관계없이 필수 기준이 통과하지 않았으므로 이 작업을 완료로 판정할 수 없다.&quot;,
+        &quot;결함(증거와 현재 소스 불일치): 이번 검토 대상의 현재 digest와 마지막 검증 시도(source digest 0a0a5216…)의 입력 digest가 다르다. docs/ARCHITECTURE.md는 현재 0e984ad…이고 검증 당시 4ae3e1f…였다. docs/DEVELOPMENT.md는 현재 c311f60…이고 검증 당시 985c21f…였다. docs/architecture/structure.json은 현재 298dfa5…이고 검증 당시 c9659a6…였다. 그런데 work.json의 AC-1 evidence summary는 세 시도 모두 &#39;현재 적용 가능&#39;으로 표시한다. 특히 structure.json은 check:source와 구조 생성기 입력이므로, 현재 소스에서 소스 정책 검사가 통과한다는 근거가 없다. verification.md:205도 &#39;source snapshot은 아직 재생성하지 못했다&#39;고 인정한다. 현재 소스 digest(f5e274cb…)로 다시 검증해야 한다.&quot;,
+        &quot;주의(경미): src/renderer.tsx:974의 policyLabel은 &#39;Bypass · danger-full-access · never&#39; 상수로 고정되어 있다. resume 응답에서 실제 정책을 받는 RestoredConversation.approvalPolicy/sandbox(src/conversations.ts:195-196)를 쓰지 않는다. 서버가 요구 설정 등으로 sandbox를 낮춰 응답하면(test/conversations.test.ts:47처럼 readOnly를 반환하는 경우) 화면에는 여전히 Bypass로 표시된다. 보안 경계는 아니라고 문서화되어 있지만, 표시가 실제 상태를 반영하지 않는다.&quot;,
+        &quot;증거 범위: verification.md:74에 적힌 실제 codex app-server의 cold resume 확인(.www/bypass-live.json)은 이번 검토에서 읽지 않았다. 기록 자체도 모델 턴, 실제 명령 실행, GUI에 승인 창이 뜨지 않는지를 관찰하지 않았다고 명시한다. 따라서 &#39;세션 허용 요청이 더 이상 발생하지 않는다&#39;는 사용자 증상의 해소는 아직 검증되지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-5a1a0d67-4d33-4e74-ba9b-628ecab5937f&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-5a1a0d67-4d33-4e74-ba9b-628ecab5937f/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep으로 작업 문서 세 개를 읽었다. spec.md와 verification.md는 전체를 읽었고, work.json은 1-1268행과 2440-2601행을 읽었으며 digest는 Grep으로 대조했다. 소스는 src/native-chat.ts 1-35행, src/conversations.ts 150-202행, src/renderer.tsx 960-984행, src/main.ts 548-567행과 thread/configured 위치(488, 563, 590행)를 읽었다. git diff/status는 실행하지 않았다. 테스트·타입 검사·빌드도 직접 실행하지 않았다.&quot;,
+        &quot;[결함·필수 기준 미충족] AC-2(&#39;소스 정책, 타입 검사, 빌드가 통과한다&#39;, required=true)가 현재 소스에서 충족되지 않았다. 마지막 검증 묶음(source digest fe71088f…)의 입력 digest를 Grep으로 대조했다. main.ts 6f8296d2…, renderer.tsx 8abea960…, conversations.test.ts a0654992…, ARCHITECTURE.md 0e984ad0…, DEVELOPMENT.md c311f600…, structure.json 7e0d3033…가 모두 이번 검토 대상 digest와 같다. 이 묶음에서 typecheck(attempt-84f02dc5, 종료 코드 2)와 build(attempt-f572bd1d, 종료 코드 1)는 실패했다(verification.md 241-273행). work.json도 AC-2.result를 \&quot;failed\&quot;로 기록한다. 실패 원인이 병행 작업(scripts/workflow/run.ts의 nullable hash, scripts/workflow/artifacts.ts의 arch.development.artifacts)이라는 설명이 맞더라도 필수 기준을 통과로 볼 근거는 없다.&quot;,
+        &quot;[증거 범위 과대 표시] work.json의 AC-2 evidence 중 attempt-a9f1d257(typecheck passed)의 summary는 &#39;현재 적용 가능&#39;이다. 이 시도의 source digest는 73f9ef7a…이고, 당시 test/conversations.test.ts digest는 41aaf929…였다. 현재 digest a0654992…와 다르고 renderer.tsx·main.ts는 당시 입력에 없었다. 같은 명령이 최신 소스에서는 실패했으므로(attempt-84f02dc5), 옛 통과 기록을 현재 근거로 표시하면 증거 범위가 넓어진다. AC-1의 첫 세 evidence(d045c301, 67813521, efce69d0)도 옛 digest 기준이다. 다만 AC-1은 최신 digest의 attempt-0fbca73e(bun test 통과)가 있어 결론은 유지된다.&quot;,
+        &quot;[적합·AC-1] src/native-chat.ts:18의 NATIVE_PERMISSIONS({approvalPolicy:\&quot;never\&quot;, sandbox:\&quot;danger-full-access\&quot;})를 두 경로가 함께 쓴다. 하나는 thread/start용 nativeThreadStartParams(native-chat.ts:20-26, main.ts:552)이고, 다른 하나는 thread/resume(conversations.ts:163-165)이다. resume 요청에는 model·modelProvider를 보내지 않으므로 저장된 모델 설정을 덮어쓰지 않는다. 최신 digest의 bun test 시도(attempt-0fbca73e)는 통과로 기록되어 있다.&quot;,
+        &quot;[적합·이전 지적 해소] renderer.tsx:974-977은 이제 마지막 thread/configured 사건의 approvalPolicy·sandbox를 표시한다. 정책 값이 없을 때만 &#39;기본 정책: Bypass …&#39;로 표시한다. main.ts:563은 새 대화 응답의 실제 정책을, 488/590행은 재개 응답의 실제 정책을 싣는다. 따라서 서버가 더 낮은 정책을 응답해도 화면에 Bypass로 단정하지 않는다. main.ts와 renderer.tsx는 갱신된 writePaths와 inputs에 포함되어 있다.&quot;,
+        &quot;[미검증 범위] verification.md:74, 205에 적힌 실제 app-server 확인(.www/bypass-live.json)은 이번 검토에서 읽지 않았다. 기록 자체도 모델 턴, 실제 명령 실행, GUI 승인 창 부재는 관찰하지 않았다고 밝힌다. 따라서 &#39;세션 허용 요청이 더 이상 뜨지 않는다&#39;는 사용자 증상의 해소는 미검증이다.&quot;
+      ]
+    }
+  ],
+  &quot;omitted&quot;: {
+    &quot;criteria&quot;: 0,
+    &quot;evidence&quot;: 1,
+    &quot;verifications&quot;: 0,
+    &quot;reviews&quot;: 0,
+    &quot;arguments&quot;: 0,
+    &quot;findings&quot;: 0,
+    &quot;unresolved&quot;: 0
+  }
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;새 대화와 기존 대화 재개에 Bypass 기본값을 적용하고 실제 서버 정책을 화면에 표시하도록 수정했다. 관련 42건과 소스 정책 검사는 통과했으나 병행 작업의 타입·구조 오류 때문에 전체 검증과 빌드는 완료하지 못했다.&quot;,
+  &quot;before&quot;: &quot;새 대화가 on-request/workspace-write로 시작하고 저장 대화도 예전 권한 설정으로 재개되어 세션 허용 요청이 나타날 수 있었다.&quot;,
+  &quot;after&quot;: &quot;새 대화와 재개가 never/danger-full-access 정책을 공유한다. 실제 app-server의 새 대화와 제한 모드 대화 cold resume 응답에서 이 정책의 수용과 모델·provider 보존을 확인했다.&quot;,
+  &quot;changes&quot;: [
+    &quot;Native 새 대화·재개에 동일한 Bypass 정책을 명시했다.&quot;,
+    &quot;새 대화의 실제 정책 응답을 thread/configured에 전달하고 화면에서 수신한 정책을 표시한다.&quot;,
+    &quot;회귀 테스트와 기능·개발·구조 문서를 갱신했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;저장된 모델 설정은 유지하고 승인·sandbox만 사용자 요청의 Bypass로 전환한다.&quot;,
+    &quot;다른 작업에서 수정 중인 개발 하네스 파일은 보존했다.&quot;,
+    &quot;독립 Opus 검토에서 확인한 전체 검증 미충족을 차단 상태로 유지한다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;관련 테스트 42건과 소스 정책은 통과했지만 최신 전체 타입 검사와 빌드는 실패했다.&quot;,
+    &quot;빌드 생성 snapshot의 최종 현재성 확인이 남아 있다.&quot;,
+    &quot;실제 모델 명령 실행과 GUI에서 승인 창이 나타나지 않는지는 미검증이다.&quot;,
+    &quot;현재 실행 중인 앱은 교체하거나 재시작하지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;병행 개발 하네스 변경의 타입·구조 오류가 해소되면 공식 구조 생성·타입 검사·빌드를 다시 수행한다.&quot;,
+    &quot;현재 소스에서 독립 검토를 통과한 뒤 새 빌드로 앱을 재시작하고 승인 없이 동작하는지 확인한다.&quot;
+  ]
+}</pre></div></details></article></details></section></main></body></html>

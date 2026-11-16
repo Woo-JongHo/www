@@ -21,7 +21,7 @@
 | 모듈 | 책임과 소유 상태 |
 |---|---|
 | `src/main.ts` | 앱·Native 프로세스 생명주기, 작업 폴더, 사건 순번, 미결 승인과 응답 시도, 검증된 IPC |
-| `src/native-chat.ts` | 새 스레드의 한국어 진행 설명 지침과 기존 cwd·승인·sandbox를 보존하는 params, 턴의 text 입력·detailed 공개 요약 요청 |
+| `src/native-chat.ts` | 새 스레드의 한국어 진행 설명 지침·cwd params와 새 대화·재개가 공유하는 Bypass 승인·sandbox 정책, 턴의 text 입력·detailed 공개 요약 요청 |
 | `src/rpc.ts` | JSONL 프레임과 JSON-RPC 요청 ID, 대기 응답, EOF·오류 처리 |
 | `src/preload.ts`, `src/shared.ts` | renderer에 노출하는 제한된 인터페이스와 공유 계약 |
 | `src/projection.ts` | 관찰 사건을 thread/turn/item/request에 연결하고 화면 블록·상태로 바꾸는 순수 투영 |

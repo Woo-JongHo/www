@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "8a83f5a5da2d8ce5e15bbd266b44c005219d2c9aac241aa243333e5a7600f36a",
+  "digest"       : "6979fd711a780a3eff5bb77d4910584c3bfaefc1dd34b3b55a51051c62d8ba86",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -466,8 +466,8 @@
       "layer"      : "host",
       "role"       : "Native 대화 목록·이력 복원",
       "line"       : 1,
-      "lines"      : 201,
-      "digest"     : "75468e7335d6d09cf71e68c3acc4d5c79371617c94ad8b78c7086682a845bb5c",
+      "lines"      : 202,
+      "digest"     : "b47eae2dc28075eaa7458ed80c26b0bc84d23293400a8f01f5d2c1fdd094f36e",
       "structureId": "arch.chat.sessions.restore"
     },
     {
@@ -522,7 +522,7 @@
       "role"       : "앱·Native 수명주기와 IPC 처리",
       "line"       : 1,
       "lines"      : 784,
-      "digest"     : "6a3f03bcdb703d939141e18b3bed987b0beee5548c8faf30c94aa7b2777f3a05",
+      "digest"     : "70138f72d431bcb6a1d8bf4cc06f4f026cee35b59d2944e772f126d9471cf855",
       "structureId": "arch.native.lifecycle"
     },
     {
@@ -554,8 +554,8 @@
       "layer"      : "model",
       "role"       : "앱 모듈 · native-chat",
       "line"       : 1,
-      "lines"      : 33,
-      "digest"     : "b7a01c4c10226dbcd11e5931b27dcc7951226da80bdeeba054f89da7daaaaf9b",
+      "lines"      : 35,
+      "digest"     : "edda3567ab519caf5a50473662ad281bd99345f0cd270099ba073b335bbec729",
       "structureId": "arch.chat.sessions.requests"
     },
     {
@@ -642,8 +642,8 @@
       "layer"      : "presentation",
       "role"       : "화면 전환과 대화 상태 통합",
       "line"       : 1,
-      "lines"      : 992,
-      "digest"     : "ffade0a60c6a92dac7253f3e0f30d21a1fb5c0daeba805474c66be9d7f36accf",
+      "lines"      : 995,
+      "digest"     : "1913d463c0547902eb694bcf4df61088684f9b61c8c9bed7f1e3f9ee59e2af1a",
       "structureId": "arch.chat.workspace"
     },
     {
@@ -1806,12 +1806,23 @@
     {
       "id"       : "src/conversations.ts:131",
       "from"     : "src/conversations.ts",
+      "to"       : "src/native-chat.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./native-chat",
+      "line"     : 6,
+      "endLine"  : 6,
+      "statement": "import { NATIVE_PERMISSIONS } from \"./native-chat\";"
+    },
+    {
+      "id"       : "src/conversations.ts:183",
+      "from"     : "src/conversations.ts",
       "to"       : "src/shared.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./shared",
-      "line"     : 6,
-      "endLine"  : 6,
+      "line"     : 7,
+      "endLine"  : 7,
       "statement": "import type { AppEvent, ConversationCatalog, ConversationSummary } from \"./shared\";"
     },
     {
@@ -3741,7 +3752,8 @@
         "title"      : "Native 대화 목록과 복원",
         "description": "Native의 대화 목록·읽기·재개 응답을 검증하고 공개 이력을 화면 사건으로 복원한다. 저장 원본은 Native이며 과거 승인과 비공개 추론은 재생하지 않는다.",
         "allowedDependencies": [
-          "arch.native.protocol"
+          "arch.native.protocol",
+          "arch.chat.sessions.requests"
         ]
       },
       {
@@ -5281,6 +5293,6 @@
         "line": 2
       }
     ],
-    "digest": "78035b6e0f445e323a1e5dff1e08186304293e883d3ecb99522ba66c393e427f"
+    "digest": "e6227c22b6d7c74acc8ac11f24548ef2d3ac5b34c7816f38e111f5f697fd14fc"
   }
 }
