@@ -238,9 +238,9 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
     if (!Array.isArray(events)) throw Error("실제 IPC 사건 배열이 없습니다.");
     return events.map(object);
   };
-  const submit = async (prompt: string) => { await session.input(prompt); await session.click('[data-testid="send-button"]'); };
-  const idle = (label: string) => session.wait("!document.querySelector('[data-testid=\"new-conversation\"]').disabled && !document.querySelector('[data-testid=\"interrupt-button\"]')", label);
-  const visibleApproval = (command: string) => `(() => { const cards=Array.from(document.querySelectorAll('.approval.open')); const button=cards[0]?.querySelector('[data-decision="accept"]'); return cards.length===1 && cards[0].innerText.includes(${JSON.stringify(command)}) && button instanceof HTMLButtonElement && !button.disabled && button.getClientRects().length>0; })()`;
+  const submit          = async (prompt: string) => { await session.input(prompt); await session.click('[data-testid="send-button"]'); }                                                                                                                                                                                                                                                 ;
+  const idle            = (label: string) => session.wait("!document.querySelector('[data-testid=\"new-conversation\"]').disabled && !document.querySelector('[data-testid=\"interrupt-button\"]')", label)                                                                                                                                                                              ;
+  const visibleApproval = (command: string) => `(() => { const cards=Array.from(document.querySelectorAll('.approval.open')); const button=cards[0]?.querySelector('[data-decision="accept"]'); return cards.length===1 && cards[0].innerText.includes(${JSON.stringify(command)}) && button instanceof HTMLButtonElement && !button.disabled && button.getClientRects().length>0; })()` ;
   const approval = async (command: string) => {
     await session.wait(visibleApproval(command), command + "은 실제 main이 허용한 승인 버튼 표시");
     const event = (await readEvents()).reverse().find((event) => event.kind === "request" && event.supported === true && object(event.params).command === command);
@@ -259,17 +259,17 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
   await submit("경계 승인 ID 재사용");
   const tokens: string[] = [];
   for (let index = 0; index < 4; index++) {
-    const command = "printf boundary-approval-" + (index + 1);
-    const event = await approval(command);
-    const token = String(event.approvalToken);
+    const command = "printf boundary-approval-" + (index + 1) ;
+    const event   = await approval(command)                   ;
+    const token   = String(event.approvalToken)               ;
     if (event.requestId !== (index < 2 ? 42 : "42") || tokens.includes(token)) throw Error("ID 형식 또는 승인별 token 고유성이 유지되지 않았습니다.");
     if (index === 1 || index === 3) await rejectOldToken(event, tokens[index - 1], command);
     tokens.push(token);
     await session.click('.approval.open [data-decision="accept"]');
   }
   await idle("동일 프로세스 numeric/string 승인 ID 네 번의 실제 응답 완료");
-  const repeatedCalls = (await readCalls()).slice(repeatedBefore.length);
-  const repeatedResponses = repeatedCalls.filter((call) => call.method === "response");
+  const repeatedCalls     = (await readCalls()).slice(repeatedBefore.length)           ;
+  const repeatedResponses = repeatedCalls.filter((call) => call.method === "response") ;
   if (JSON.stringify(repeatedResponses.map((call) => call.id)) !== JSON.stringify([42, 42, "42", "42"]) || new Set(repeatedResponses.map((call) => call.pid)).size !== 1 || repeatedResponses.some((call) => object(call.result).decision !== "accept")) throw Error("같은 Native process의 ID 재사용 응답 원문이 다릅니다.");
   checks.push("같은 Native PID에서 42/42/문자열42/문자열42를 각각 한 번 승인");
 
@@ -298,8 +298,8 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
   await session.wait("document.querySelector('[data-row-id=\"hook:boundary-hook\"]')?.classList.contains('has-activity')", "Native Hook 사건은 실제 카탈로그 행에 관측됨");
   await session.wait("(async()=>{const selected=await window.www.workspace();const events=await window.www.events(selected);return events.some(event=>event.method==='transport/closed') && !document.querySelector('[data-testid=\"new-conversation\"]').disabled;})()", "idle Native subprocess 종료를 실제 transport closed로 수신");
   await session.wait("document.querySelector('[data-row-id=\"hook:boundary-hook\"]') && !document.querySelector('[data-row-id=\"hook:boundary-hook\"]').classList.contains('is-reacting')", "종료 전 실제 Hook pulse가 끝난 뒤 복원 관측 시작");
-  const beforeReconnect = await readCalls();
-  const idleCall = [...beforeReconnect].reverse().find((call) => call.method === "turn/start" && JSON.stringify(call.params).includes("경계 유휴 종료 준비"));
+  const beforeReconnect = await readCalls()                                                                                                                          ;
+  const idleCall        = [...beforeReconnect].reverse().find((call) => call.method === "turn/start" && JSON.stringify(call.params).includes("경계 유휴 종료 준비")) ;
   if (!idleCall || typeof idleCall.pid !== "number") throw Error("종료한 Native PID 근거가 없습니다.");
   await session.evaluate(`(() => {
     globalThis.__chatBoundaryReactions=[];
@@ -310,18 +310,18 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
   await submit("경계 유휴 종료 후 이어가기");
   await session.wait("Array.from(document.querySelectorAll('.transcript .chat-markdown')).filter(node=>node.textContent.trim()==='경계 유휴 종료 이전 답변').length===1 && Array.from(document.querySelectorAll('.transcript .chat-markdown')).filter(node=>node.textContent.trim()==='경계 재연결 새 공개 설명').length===1 && Array.from(document.querySelectorAll('.transcript .chat-markdown')).filter(node=>node.textContent.trim()==='경계 재연결 후속 답변').length===1", "재연결은 과거 본문을 한 번 교체하고 새 live 설명·답변을 보존");
   await idle("idle 종료 뒤 동일 thread 후속 턴 완료");
-  const reconnectedEvents = await readEvents();
-  const marker = [...reconnectedEvents].reverse().find((event) => event.method === "conversation/reconnected");
-  const markerParams = object(marker?.params);
+  const reconnectedEvents = await readEvents()                                                                            ;
+  const marker            = [...reconnectedEvents].reverse().find((event) => event.method === "conversation/reconnected") ;
+  const markerParams      = object(marker?.params)                                                                        ;
   if (!marker || markerParams.threadId !== "history-a" || !Array.isArray(markerParams.events)) throw Error("main의 실제 conversation/reconnected snapshot이 없습니다.");
   const snapshot = markerParams.events.map(object);
   if (!snapshot.length || snapshot.some((event) => event.historical !== true || event.method === "conversation/reconnected" || typeof event.seq !== "number" || typeof marker.seq !== "number" || event.seq >= marker.seq || event.workspaceKey !== marker.workspaceKey || event.selectionEpoch !== marker.selectionEpoch || event.processEpoch !== marker.processEpoch)) throw Error("복원 snapshot의 역사·선택 scope·marker 이전 seq 경계가 다릅니다.");
   const freshPrompt = reconnectedEvents.find((event) => event.method === "turn/userPrompt" && object(event.params).text === "경계 유휴 종료 후 이어가기");
   if (!freshPrompt || typeof freshPrompt.seq !== "number" || typeof marker.seq !== "number" || freshPrompt.seq <= marker.seq || freshPrompt.historical === true) throw Error("새 요청이 복원 marker 뒤 live 사건으로 보전되지 않았습니다.");
-  const newCalls = (await readCalls()).slice(beforeReconnect.length);
-  const resumedTurn = newCalls.find((call) => call.method === "turn/start" && JSON.stringify(call.params).includes("경계 유휴 종료 후 이어가기"));
-  const startIndex = newCalls.indexOf(resumedTurn ?? {});
-  const priorMethods = newCalls.slice(0, startIndex).filter((call) => call.pid === resumedTurn?.pid && object(call.params).threadId === "history-a").map((call) => call.method);
+  const newCalls     = (await readCalls()).slice(beforeReconnect.length)                                                                                                        ;
+  const resumedTurn  = newCalls.find((call) => call.method === "turn/start" && JSON.stringify(call.params).includes("경계 유휴 종료 후 이어가기"))                              ;
+  const startIndex   = newCalls.indexOf(resumedTurn ?? {})                                                                                                                      ;
+  const priorMethods = newCalls.slice(0, startIndex).filter((call) => call.pid === resumedTurn?.pid && object(call.params).threadId === "history-a").map((call) => call.method) ;
   if (!resumedTurn || resumedTurn.pid === idleCall.pid || object(resumedTurn.params).threadId !== "history-a" || !["thread/read", "thread/resume", "thread/turns/list"].every((method) => priorMethods.includes(method))) throw Error("새 Native process에서 같은 thread의 read/resume/원장 읽기가 후속 turn보다 먼저 실행되지 않았습니다.");
   const reactions = await session.evaluate("(() => {globalThis.__chatBoundaryObserver.disconnect();return globalThis.__chatBoundaryReactions;})()");
   if (!Array.isArray(reactions) || reactions.length !== 0) throw Error("복원된 과거 Hook을 새 pulse로 재생했습니다: " + JSON.stringify(reactions));
@@ -330,19 +330,19 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
 
   await submit("경계 재연결 실패 준비");
   await session.wait("(async()=>{const selected=await window.www.workspace();const events=await window.www.events(selected);const start=events.findLast(event=>event.method==='turn/userPrompt' && event.params?.text==='경계 재연결 실패 준비');return start && events.some(event=>event.method==='transport/closed' && event.seq>start.seq) && !document.querySelector('[data-testid=\"new-conversation\"]').disabled;})()", "실패 복구 검사 전 idle Native 종료");
-  const beforeFailure = await readCalls();
-  const failedDraft = "  경계 재연결 후 전송 실패 확인\n";
-  const failedText = failedDraft.trim();
+  const beforeFailure = await readCalls()                   ;
+  const failedDraft   = "  경계 재연결 후 전송 실패 확인\n" ;
+  const failedText    = failedDraft.trim()                  ;
   await submit(failedDraft);
   await session.wait("(async()=>{const selected=await window.www.workspace();const events=await window.www.events(selected);return events.some(event=>event.method==='conversation/reconnected' && event.seq>" + marker.seq + ") && events.some(event=>event.method==='fixture/reconnectFailureReady') && document.querySelector('.transcript')?.textContent.includes('경계 재연결 실패 이전 답변');})()", "전송 오류 전에 실제 재연결 snapshot이 화면에 수용됨");
-  const failureMarker = [...await readEvents()].reverse().find((event) => event.method === "conversation/reconnected");
-  const failureCalls = (await readCalls()).slice(beforeFailure.length);
+  const failureMarker = [...await readEvents()].reverse().find((event) => event.method === "conversation/reconnected") ;
+  const failureCalls  = (await readCalls()).slice(beforeFailure.length)                                                ;
   const failedTurn = failureCalls.find((call) => {
     const input = object(call.params).input;
     return call.method === "turn/start" && Array.isArray(input) && object(input[0]).text === failedText;
   });
-  const failedIndex = failureCalls.indexOf(failedTurn ?? {});
-  const restoredMethods = failureCalls.slice(0, failedIndex).filter((call) => call.pid === failedTurn?.pid && object(call.params).threadId === "history-a").map((call) => call.method);
+  const failedIndex     = failureCalls.indexOf(failedTurn ?? {})                                                                                                                       ;
+  const restoredMethods = failureCalls.slice(0, failedIndex).filter((call) => call.pid === failedTurn?.pid && object(call.params).threadId === "history-a").map((call) => call.method) ;
   if (!failureMarker || !failedTurn || !["thread/read", "thread/resume", "thread/turns/list"].every((method) => restoredMethods.includes(method))) throw Error("실패 요청 전에 실제 Native read/resume/snapshot 경계를 통과하지 않았습니다.");
   await fs.writeFile(path.join(workspace, "fixture-reconnect-failure-release"), "release\n");
   await session.wait("document.body.innerText.includes('합성 재연결 전송 실패') && document.querySelector('[data-testid=\"prompt-input\"]').value===" + JSON.stringify(failedDraft) + " && !document.querySelector('[data-testid=\"send-button\"]').disabled", "재연결 뒤 같은 turn/start 실패는 비운 초안을 정확 복원");
@@ -353,9 +353,9 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
   await session.input("");
 
   await fs.rm(path.join(workspace, "fixture-reconnect-failure-release"), { force: true });
-  const conflictBefore = await readCalls();
-  const conflictSeq = Math.max(0, ...(await readEvents()).map((event) => Number(event.seq)));
-  const newDraft = "  전송 중 작성한 새 초안\n";
+  const conflictBefore = await readCalls()                                                      ;
+  const conflictSeq    = Math.max(0, ...(await readEvents()).map((event) => Number(event.seq))) ;
+  const newDraft       = "  전송 중 작성한 새 초안\n"                                           ;
   await submit(failedDraft);
   await session.wait("(async()=>{const selected=await window.www.workspace();return (await window.www.events(selected)).some(event=>event.method==='fixture/reconnectFailureReady' && event.seq>" + conflictSeq + ");})()", "충돌 검사 요청이 실제 Native 오류 gate에서 대기함");
   await session.input(newDraft);
@@ -381,8 +381,8 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
   await submit("경계 실행 중 종료");
   await session.wait("(async()=>{const selected=await window.www.workspace();const events=await window.www.events(selected);const start=events.findLast(event=>event.method==='turn/userPrompt' && event.params?.text==='경계 실행 중 종료');return start && events.some(event=>event.method==='transport/closed' && event.seq>start.seq);})()", "실행 중 Native subprocess 종료 수신");
   await session.evaluate("new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))");
-  const afterCrash = (await readCalls()).slice(activeBefore.length);
-  const afterCrashTurns = afterCrash.filter((call) => call.method === "turn/start");
+  const afterCrash      = (await readCalls()).slice(activeBefore.length)            ;
+  const afterCrashTurns = afterCrash.filter((call) => call.method === "turn/start") ;
   if (afterCrashTurns.length !== 1 || !JSON.stringify(afterCrashTurns[0]?.params).includes("경계 실행 중 종료")) throw Error("실행 중 단절 뒤 사용자의 새 요청 없이 Native mutation을 자동 전송했습니다.");
   await idle("실행 중 단절 결과를 확인한 뒤 수동 요청 가능");
   await session.click('[data-testid="conversation-item"][data-thread-id="history-b"]');
@@ -426,15 +426,15 @@ try {
   await session.wait("document.querySelector('.command-card.item-completed details')?.open===true", "보관된 전체 출력 펼치기");
   await session.click('.command-card.item-completed summary');
   await session.wait("document.querySelector('.command-card.item-completed details')?.open===false && document.querySelector('[data-testid=\"command-preview\"]')?.getBoundingClientRect().height>0", "출력을 접어도 미리보기 유지");
-  const reviewCard = '.command-card:has(.command-review)';
-  const cardSession = session;
+  const reviewCard  = '.command-card:has(.command-review)' ;
+  const cardSession = session                              ;
   const activateByKey = async (selector: string, label: string, space = false) => {
     await cardSession.evaluate(`document.querySelector(${JSON.stringify(selector)}).focus()`);
     await cardSession.wait(`document.activeElement===document.querySelector(${JSON.stringify(selector)})`, label + ' 포커스');
-    const key = space ? ' ' : 'Enter';
-    const code = space ? 'Space' : 'Enter';
-    const text = space ? ' ' : '\r';
-    const keyCode = space ? 32 : 13;
+    const key     = space ? ' ' : 'Enter'     ;
+    const code    = space ? 'Space' : 'Enter' ;
+    const text    = space ? ' ' : '\r'        ;
+    const keyCode = space ? 32 : 13           ;
     await cardSession.command('Input.dispatchKeyEvent', { type: 'keyDown', key, code, text, unmodifiedText: text, windowsVirtualKeyCode: keyCode, nativeVirtualKeyCode: keyCode });
     await cardSession.command('Input.dispatchKeyEvent', { type: 'keyUp', key, code, windowsVirtualKeyCode: keyCode, nativeVirtualKeyCode: keyCode });
   };
@@ -478,8 +478,8 @@ try {
     console.log(JSON.stringify(summary));
     return;
   }
-  const sidebarToggle = '[data-testid="resource-sidebar-toggle"]';
-  const detailToggle = '[data-testid="detail-monitor-toggle"]';
+  const sidebarToggle = '[data-testid="resource-sidebar-toggle"]' ;
+  const detailToggle  = '[data-testid="detail-monitor-toggle"]'   ;
   const panelState = (sidebar: boolean, detail: boolean, sidebarEnabled = sidebar) => `(() => {
     const visible = (node) => node instanceof HTMLElement && !node.hidden && getComputedStyle(node).visibility !== 'hidden' && node.getClientRects().length > 0 && node.getBoundingClientRect().width > 0 && node.getBoundingClientRect().height > 0;
     const sidebar = document.querySelector('[data-testid="resource-sidebar"]');
@@ -667,12 +667,12 @@ try {
   await session.wait("document.body.innerText.includes('같은 대화 후속 요청')", "앱 재시작 뒤 Native 저장 이력 재열기");
   await session.screenshot("restart-chat");
   await session.wait("(async () => { const selected = await window.www.workspace(); const state = await window.www.activityResources(selected); return state?.observations.length > 0 && state.storage === 'saved' && state.revision === state.durableRevision; })()", "재시작 뒤 실제 대화 원장과 마지막 저장 revision 복원");
-  const beforeA = object(await session.evaluate("(async () => { const selected = await window.www.workspace(); return { selected, resources: await window.www.activityResources(selected) }; })()"));
-  const selectedA = object(beforeA.selected);
-  const rowsA = object(beforeA.resources).observations;
+  const beforeA   = object(await session.evaluate("(async () => { const selected = await window.www.workspace(); return { selected, resources: await window.www.activityResources(selected) }; })()")) ;
+  const selectedA = object(beforeA.selected)                                                                                                                                                           ;
+  const rowsA     = object(beforeA.resources).observations                                                                                                                                             ;
   if (!Array.isArray(rowsA)) throw Error("프로젝트 A의 관측 배열이 없습니다.");
-  const idsA = rowsA.map((row) => String(object(row).id)).sort();
-  const favoriteA = `button[aria-label=${JSON.stringify(path.basename(workspace) + " 즐겨찾기 추가")}]`;
+  const idsA      = rowsA.map((row) => String(object(row).id)).sort()                                   ;
+  const favoriteA = `button[aria-label=${JSON.stringify(path.basename(workspace) + " 즐겨찾기 추가")}]` ;
   await session.evaluate("document.querySelector(" + JSON.stringify(favoriteA) + ").focus()");
   await session.wait("document.activeElement===document.querySelector(" + JSON.stringify(favoriteA) + ")", "접근 가능한 이름으로 프로젝트 즐겨찾기 키보드 초점 접근");
   await session.command("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", text: "\r", unmodifiedText: "\r", windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
@@ -689,18 +689,18 @@ try {
   await session.wait("(async () => { const selected = await window.www.workspace(); const projects = await window.www.listProjects(selected); return projects.length === 2 && projects.some(project => project.path === " + JSON.stringify(workspace) + " && project.favorite); })()", "다른 프로젝트 앱 재시작에서 최근·즐겨찾기 복원");
   await session.click(a);
   await session.wait("(async () => { const selected = await window.www.workspace(); const state = await window.www.activityResources(selected); return state?.scope.threadId === 'history-a' && state.observations.length > 0; })()", "같은 thread 문자열의 프로젝트 B 관측 복원");
-  const beforeB = object(await session.evaluate("(async () => { const selected = await window.www.workspace(); return { selected, resources: await window.www.activityResources(selected) }; })()"));
-  const selectedB = object(beforeB.selected);
-  const rowsB = object(beforeB.resources).observations;
+  const beforeB   = object(await session.evaluate("(async () => { const selected = await window.www.workspace(); return { selected, resources: await window.www.activityResources(selected) }; })()")) ;
+  const selectedB = object(beforeB.selected)                                                                                                                                                           ;
+  const rowsB     = object(beforeB.resources).observations                                                                                                                                             ;
   if (!Array.isArray(rowsB) || selectedB.workspaceKey === selectedA.workspaceKey) throw Error("다른 실제 프로젝트 경계가 합쳐졌습니다.");
   const idsB = rowsB.map((row) => String(object(row).id)).sort();
   if (idsB.some((id) => idsA.includes(id))) throw Error("서로 다른 프로젝트의 관측 ID가 섞였습니다.");
   const staleProject = await session.evaluate("(async () => { try { await window.www.startTurn(" + JSON.stringify(selectedA) + ", 'history-a', 'stale-project-must-not-run'); return 'allowed'; } catch(error) { return String(error); } })()");
   if (typeof staleProject !== "string" || !staleProject.includes("프로젝트 선택이 변경")) throw Error("이전 프로세스·프로젝트 요청이 차단되지 않았습니다.");
-  const nativeCallsB = path.join(workspaceB, "fixture-calls.jsonl");
-  const initializations = async () => (await fs.readFile(nativeCallsB, "utf8")).trim().split("\n").map((line) => object(JSON.parse(line))).filter((call) => call.method === "initialize").length;
-  const ownerInitializations = await initializations();
-  const secondaryEnv = { ...process.env };
+  const nativeCallsB         = path.join(workspaceB, "fixture-calls.jsonl")                                                                                                                           ;
+  const initializations      = async () => (await fs.readFile(nativeCallsB, "utf8")).trim().split("\n").map((line) => object(JSON.parse(line))).filter((call) => call.method === "initialize").length ;
+  const ownerInitializations = await initializations()                                                                                                                                                ;
+  const secondaryEnv         = { ...process.env }                                                                                                                                                     ;
   delete secondaryEnv.ELECTRON_RUN_AS_NODE;
   const secondary = spawn(path.join(root, "node_modules/electron/dist/Electron.app/Contents/MacOS/Electron"), [root, "--user-data-dir=" + path.join(directory, "profile")], {
     cwd: root, stdio: "ignore", env: { ...secondaryEnv, WWW_PROBE_PATH: path.join(directory, "secondary-disabled-probe.json"), WWW_NATIVE_PROBE: "1", WWW_PROBE_WORKSPACE: workspaceB, WWW_CODEX_BIN: path.join(root, "test/fixtures/chat-ui-app-server.ts"), WWW_PROBE_NATIVE_REPORTS: "0" }
@@ -708,8 +708,8 @@ try {
   const secondaryExit = await Promise.race([new Promise<number | null>((resolve, reject) => { secondary.once("error", reject); secondary.once("close", resolve); }), pause(5000).then(() => null)]);
   if (secondaryExit !== 0) { secondary.kill("SIGTERM"); throw Error("비소유 Electron main이 정상 종료하지 않았습니다: " + secondaryExit); }
   if (await initializations() !== ownerInitializations) throw Error("비소유 main이 두 번째 Native를 시작했습니다.");
-  const switchA = `button[title=${JSON.stringify(workspace)}]`;
-  const switchB = `button[title=${JSON.stringify(workspaceB)}]`;
+  const switchA = `button[title=${JSON.stringify(workspace)}]`  ;
+  const switchB = `button[title=${JSON.stringify(workspaceB)}]` ;
   await session.input("프로젝트 B만의 초안");
   await session.click(switchA);
   await session.wait("document.querySelector(" + JSON.stringify(switchA) + ")?.getAttribute('aria-current') === 'true' && document.querySelector('[data-testid=\"conversation-item\"][data-thread-id=\"history-a\"]')", "실제 프로젝트 전환과 대화 목록 재연결");
@@ -727,8 +727,8 @@ try {
   const projectEvidence = { workspaceA: selectedA.workspaceKey, workspaceB: selectedB.workspaceKey, threadId: "history-a", observationIdsA: idsA, observationIdsB: idsB, staleRequestRejected: true, secondaryExit, duplicateNativeStarted: false, favoritesRestored: true, draftsIsolated: true };
   await fs.writeFile(path.join(directory, "project-isolation.json"), JSON.stringify(projectEvidence, null, 2));
   checks.push("서로 다른 프로젝트의 동일 thread 관측·초안 격리", "재시작 후 즐겨찾기·누적 원장 복원", "동일 userData의 두 번째 main은 Native 시작 없이 종료", "이전 선택 요청과 승인 중 프로젝트 전환 차단");
-  const ledgerFile = path.join(directory, "profile", "activity-v1", String(selectedB.workspaceKey), createHash("sha256").update("history-a").digest("hex") + ".json");
-  const preservedLedger = ledgerFile + ".probe-preserved";
+  const ledgerFile      = path.join(directory, "profile", "activity-v1", String(selectedB.workspaceKey), createHash("sha256").update("history-a").digest("hex") + ".json") ;
+  const preservedLedger = ledgerFile + ".probe-preserved"                                                                                                                  ;
   await fs.rename(ledgerFile, preservedLedger);
   await fs.mkdir(ledgerFile);
   try {
