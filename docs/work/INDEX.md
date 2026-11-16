@@ -75,6 +75,11 @@ Native와의 대화에서 실행 흐름을 통제하고 진행·근거·승인·
 - [명세](Chat/012-%EC%8A%A4%ED%81%AC%EB%A1%A4%EA%B3%BC%20%EC%B2%AB%20%EC%9D%91%EB%8B%B5%20%EB%B0%8F%20%EC%A7%84%ED%96%89%20%EC%84%A4%EB%AA%85%20%EA%B0%9C%EC%84%A0%20%EB%85%BC%EC%9D%98/spec.md)
 - [작업 레코드](Chat/012-%EC%8A%A4%ED%81%AC%EB%A1%A4%EA%B3%BC%20%EC%B2%AB%20%EC%9D%91%EB%8B%B5%20%EB%B0%8F%20%EC%A7%84%ED%96%89%20%EC%84%A4%EB%AA%85%20%EA%B0%9C%EC%84%A0%20%EB%85%BC%EC%9D%98/work.json)
 
+### 013 — 오른쪽 Agent와 WWW Skills 및 Hook 표시 논의
+
+- [명세](Chat/013-%EC%98%A4%EB%A5%B8%EC%AA%BD%20Agent%EC%99%80%20WWW%20Skills%20%EB%B0%8F%20Hook%20%ED%91%9C%EC%8B%9C%20%EB%85%BC%EC%9D%98/spec.md)
+- [작업 레코드](Chat/013-%EC%98%A4%EB%A5%B8%EC%AA%BD%20Agent%EC%99%80%20WWW%20Skills%20%EB%B0%8F%20Hook%20%ED%91%9C%EC%8B%9C%20%EB%85%BC%EC%9D%98/work.json)
+
 ## Workflow
 
 ### 001 — Skills 실행과 개발 기록 자동화
