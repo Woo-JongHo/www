@@ -5,6 +5,8 @@ const modeArgument   = process.argv[2]                                          
 const mode           = modeArgument && modeArgument !== "app-server" ? modeArgument : process.env.WWW_FAKE_MODE ?? "normal" ;
 const interruptDelay = Number(process.env.WWW_FIXTURE_INTERRUPT_DELAY_MS ?? 0)                                              ;
 if (!Number.isFinite(interruptDelay) || interruptDelay < 0 || interruptDelay > 10_000) throw new Error("중단 완료 지연은 0~10000ms여야 합니다.");
+const fixtureOutput = Array.from({ length: 12 }, (_, index) => `fixture 출력 ${index + 1}`).join("\n");
+
 let interruptRequests = 0                                                                          ;
 const lines           = createInterface({ input: process.stdin })                                  ;
 const send            = (message: unknown) => process.stdout.write(`${JSON.stringify(message)}\n`) ;
@@ -29,7 +31,7 @@ lines.on("line", (line) => {
     send({ jsonrpc: "2.0", method: "item/agentMessage/delta",           params: { threadId: "thread-fixture", turnId: "turn-fixture", itemId: "answer-1", delta: "안녕" }                                                                                                                     });
     send({ jsonrpc: "2.0", method: "item/agentMessage/delta",           params: { threadId: "thread-fixture", turnId: "turn-fixture", itemId: "answer-1", delta: "하세요" }                                                                                                                    });
     send({ jsonrpc: "2.0", method: "item/started",                      params: { threadId: "thread-fixture", turnId: "turn-fixture", item: { id: "command-1", type: "commandExecution", command: "printf fixture" } }                                                                      });
-    send({ jsonrpc: "2.0", method: "item/commandExecution/outputDelta", params: { threadId: "thread-fixture", turnId: "turn-fixture", itemId: "command-1", delta: "fixture" }                                                                                                               });
+    send({ jsonrpc: "2.0", method: "item/commandExecution/outputDelta", params: { threadId: "thread-fixture", turnId: "turn-fixture", itemId: "command-1", delta: fixtureOutput }                                                                                                               });
     send({ jsonrpc: "2.0", method: "item/completed",                    params: { threadId: "thread-fixture", turnId: "turn-fixture", item: { id: "command-failed", type: "commandExecution", command: "node failing-check.ts", aggregatedOutput: "긴 실패 출력\n".repeat(6000), exitCode: 3 } } });
     send({ jsonrpc: "2.0", method: "item/started",                      params: { threadId: "thread-fixture", turnId: "turn-fixture", item: { id: "file-1", type: "fileChange", changes: [{ path: "fixture.txt", diff: "--- a/fixture.txt\n+++ b/fixture.txt\n+fixture\n" }] } }            });
     send({ jsonrpc: "2.0", method: "item/completed",                    params: { threadId: "thread-fixture", turnId: "turn-fixture", item: { id: "file-1", type: "fileChange", changes: [{ path: "fixture.txt", diff: "--- a/fixture.txt\n+++ b/fixture.txt\n+fixture\n" }] } }            });
@@ -45,7 +47,7 @@ lines.on("line", (line) => {
     if (interruptDelay > 0) setTimeout(completeInterrupt, interruptDelay);
     else completeInterrupt();
   } else if (message.id === 42) {
-    send({ jsonrpc: "2.0", method: "item/completed",           params: { threadId: "thread-fixture", turnId: "turn-fixture", item: { id: "command-1", type: "commandExecution", command: "printf fixture", aggregatedOutput: "fixture", exitCode: 0 } } });
+    send({ jsonrpc: "2.0", method: "item/completed",           params: { threadId: "thread-fixture", turnId: "turn-fixture", item: { id: "command-1", type: "commandExecution", command: "printf fixture", aggregatedOutput: fixtureOutput, exitCode: 0 } } });
     send({ jsonrpc: "2.0", method: "fixture/approvalResponse", params: { idType: typeof message.id, decision: message.result?.decision }                                                                                                                });
     if (mode === "duplicate-approval") send({ jsonrpc: "2.0", id: 42, method: "item/commandExecution/requestApproval", params: { threadId: "thread-fixture", turnId: "turn-fixture", command: "printf fixture" } });
   }

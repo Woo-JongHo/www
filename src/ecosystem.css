@@ -4,7 +4,7 @@
 .ecosystem-detail{min-height:0;display:flex;flex-direction:column;border-left:1px solid var(--border);background:var(--surface)}.ecosystem-detail-heading{padding:15px 20px;border-bottom:1px solid var(--border);font-weight:600}.ecosystem-detail-content{overflow:auto;flex:1;padding:22px 20px}.ecosystem-category{color:var(--eco-color);font-size:11px}.ecosystem-detail h2{font-size:23px;letter-spacing:-.6px;margin:10px 0 5px}.ecosystem-subtitle{font-size:12px;color:var(--muted)}.ecosystem-detail-content p{font-size:13px;line-height:1.85;color:#c0c0c7;margin:20px 0 28px;word-break:keep-all}.ecosystem-detail h3{font-size:12px;margin:24px 0 10px}.ecosystem-detail h3 span{color:var(--muted);font-weight:400;margin-left:4px}.ecosystem-connections{display:grid;gap:7px}.ecosystem-connections button{display:grid;gap:4px;text-align:left;background:transparent;border:1px solid var(--border);border-radius:7px;padding:10px 12px}.ecosystem-connections button:hover{border-color:var(--eco-color);background:var(--raised)}.ecosystem-connections strong{font-size:13px;font-weight:500}.ecosystem-connections span{font-size:11px;color:var(--muted)}.ecosystem-connections .ecosystem-direction{font-size:10px;color:var(--eco-color)}.ecosystem-sources{list-style:none;padding:0;margin:0;display:grid;gap:8px}.ecosystem-sources code{font:11px/1.5 ui-monospace,monospace;color:var(--muted);overflow-wrap:anywhere}.ecosystem-note{font-size:11px;line-height:1.7;color:var(--muted);padding:14px 20px;margin:0;border-top:1px solid var(--border)}.workspace-nav button:focus-visible,.ecosystem-work button:focus-visible,.ecosystem-detail button:focus-visible,.ecosystem-viewport:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 @media(max-width:1100px){.ecosystem-toolbar{padding-left:14px;padding-right:14px}.ecosystem-header{padding-left:14px;padding-right:14px}.ecosystem-badge{display:none}}
 
-#root:has(.ecosystem-shell:not([hidden])){grid-template-columns:220px minmax(0,1fr)}
+.session-surface:has(.ecosystem-shell:not([hidden])){grid-template-columns:220px minmax(0,1fr)}
 .ecosystem-shell{grid-column:2/-1;grid-row:1;min-width:0;min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr)}
 .ecosystem-page{display:grid;grid-template-columns:minmax(0,1fr) 308px;min-height:0;min-width:0}
 .blueprint-tabs{display:flex;align-items:center;gap:8px;padding:10px 20px;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap}
@@ -61,9 +61,9 @@
 .blueprint-scope{margin-top:24px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)}
 .blueprint-scope code{font:10px ui-monospace,monospace;overflow-wrap:anywhere}
 .ecosystem-shell button:focus-visible,.ecosystem-shell summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
-@media(max-width:1200px){#root:has(.ecosystem-shell:not([hidden])){grid-template-columns:190px minmax(0,1fr)}.ecosystem-page{grid-template-columns:minmax(0,1fr) 270px}.blueprint-summary{padding-left:14px;padding-right:14px;gap:10px}.blueprint-summary code{display:none}.blueprint-view-switch{padding-left:14px;padding-right:14px}.blueprint-view-switch>span{display:none}}
+@media(max-width:1200px){.session-surface:has(.ecosystem-shell:not([hidden])){grid-template-columns:190px minmax(0,1fr)}.ecosystem-page{grid-template-columns:minmax(0,1fr) 270px}.blueprint-summary{padding-left:14px;padding-right:14px;gap:10px}.blueprint-summary code{display:none}.blueprint-view-switch{padding-left:14px;padding-right:14px}.blueprint-view-switch>span{display:none}}
 @media(max-width:1050px),(max-height:700px){.ecosystem-page{display:block;overflow:auto}.ecosystem-page>.ecosystem-work{min-height:620px;height:calc(100vh - 90px)}.ecosystem-page>.ecosystem-detail{border-left:0;border-top:1px solid var(--border);min-height:200px}.ecosystem-detail-content{overflow:visible}.ecosystem-detail-heading{padding-top:12px;padding-bottom:12px}.blueprint-tabs>span{display:none}}
-@media(max-width:700px){#root:has(.ecosystem-shell:not([hidden])){grid-template-columns:130px minmax(0,1fr)}.blueprint-tabs{padding:8px}.ecosystem-header{padding:16px 12px 12px}.ecosystem-toolbar{flex-wrap:wrap}.ecosystem-search{max-width:none;flex-basis:100%}.blueprint-header h1{font-size:21px}.ecosystem-filters{padding-left:12px;padding-right:12px}.blueprint-canvas-caption{padding-left:12px;padding-right:12px;flex-wrap:wrap}.ecosystem-legend{padding:10px 12px}.ecosystem-legend span:last-child{margin-left:0}.blueprint-summary{flex-wrap:wrap}.blueprint-work .ecosystem-zoom{margin-left:auto}}
+@media(max-width:700px){.session-surface:has(.ecosystem-shell:not([hidden])){grid-template-columns:130px minmax(0,1fr)}.blueprint-tabs{padding:8px}.ecosystem-header{padding:16px 12px 12px}.ecosystem-toolbar{flex-wrap:wrap}.ecosystem-search{max-width:none;flex-basis:100%}.blueprint-header h1{font-size:21px}.ecosystem-filters{padding-left:12px;padding-right:12px}.blueprint-canvas-caption{padding-left:12px;padding-right:12px;flex-wrap:wrap}.ecosystem-legend{padding:10px 12px}.ecosystem-legend span:last-child{margin-left:0}.blueprint-summary{flex-wrap:wrap}.blueprint-work .ecosystem-zoom{margin-left:auto}}
 
 .blueprint-breadcrumb{display:flex;gap:4px;flex-wrap:wrap;padding:0 24px 14px;align-items:center}
 .blueprint-breadcrumb button{background:transparent;border:1px solid var(--border);border-radius:5px;padding:5px 8px;color:var(--muted);font:inherit;font-size:12px}
@@ -143,16 +143,16 @@
 @media(max-width:700px){.blueprint-relation-toolbar{padding-inline:12px}.blueprint-relation-toolbar select{max-width:200px}}
 
 /* 지도에서는 화면 전환만 남기고 프로젝트·대화 탐색은 사용자가 펼친다. */
-#root:has(.ecosystem-shell:not([hidden])[data-navigation-open=false]){grid-template-columns:64px minmax(0,1fr)}
-#root:has(.ecosystem-shell:not([hidden])[data-navigation-open=false])>.sidebar{grid-template-rows:44px 1fr}
-#root:has(.ecosystem-shell:not([hidden])[data-navigation-open=false])>.sidebar>.sec,
-#root:has(.ecosystem-shell:not([hidden])[data-navigation-open=false])>.sidebar>.agents,
-#root:has(.ecosystem-shell:not([hidden])[data-navigation-open=false])>.sidebar>.footer,
-#root:has(.ecosystem-shell:not([hidden])[data-navigation-open=false])>.sidebar>div:has(.workspace-nav)>.srow{display:none}
-#root:has(.ecosystem-shell:not([hidden])[data-navigation-open=false]) .workspace-nav{margin:8px}
-#root:has(.ecosystem-shell:not([hidden])[data-navigation-open=false]) .workspace-nav button{justify-content:center;padding:12px 8px}
-#root:has(.ecosystem-shell:not([hidden])[data-navigation-open=false]) .workspace-nav :is(.nav-label,.nav-hint){display:none}
-#root:has(.ecosystem-shell:not([hidden])[data-navigation-open=false]) .brand{justify-content:center;padding:0;font-size:12px}
+.session-surface:has(.ecosystem-shell:not([hidden])[data-navigation-open=false]){grid-template-columns:64px minmax(0,1fr)}
+.session-surface:has(.ecosystem-shell:not([hidden])[data-navigation-open=false])>.sidebar{grid-template-rows:44px 1fr}
+.session-surface:has(.ecosystem-shell:not([hidden])[data-navigation-open=false])>.sidebar>.sec,
+.session-surface:has(.ecosystem-shell:not([hidden])[data-navigation-open=false])>.sidebar>.agents,
+.session-surface:has(.ecosystem-shell:not([hidden])[data-navigation-open=false])>.sidebar>.footer,
+.session-surface:has(.ecosystem-shell:not([hidden])[data-navigation-open=false])>.sidebar>div:has(.workspace-nav)>.srow{display:none}
+.session-surface:has(.ecosystem-shell:not([hidden])[data-navigation-open=false]) .workspace-nav{margin:8px}
+.session-surface:has(.ecosystem-shell:not([hidden])[data-navigation-open=false]) .workspace-nav button{justify-content:center;padding:12px 8px}
+.session-surface:has(.ecosystem-shell:not([hidden])[data-navigation-open=false]) .workspace-nav :is(.nav-label,.nav-hint){display:none}
+.session-surface:has(.ecosystem-shell:not([hidden])[data-navigation-open=false]) .brand{justify-content:center;padding:0;font-size:12px}
 .blueprint-tabs{padding:6px 16px;gap:6px}
 .blueprint-tabs>span{display:none}
 .blueprint-tabs [data-testid=architecture-navigation-toggle]{border-color:var(--border);margin-right:8px;font-size:12px}

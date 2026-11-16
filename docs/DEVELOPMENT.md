@@ -8,7 +8,7 @@
 
 이 저장소는 기존 WWW 기능을 계승하지 않고 빈 저장소에서 시작한 Electron 데스크톱 앱이다. 현재 범위는 3열 React 화면에서 로컬 `codex app-server`의 대화·공개 설명·실행 박스·승인·중단·결과를 관찰하고 통제하는 것이다. 레이아웃은 [runkids/skillshare의 herdr/skillshare](https://github.com/runkids/skillshare/tree/main/herdr/skillshare)를 디자인 참고 자료로만 사용했고 코드는 가져오지 않았다.
 
-사용자는 작업 폴더를 고른 뒤 메시지를 보내며 idle 상태에서 최근·즐겨찾기 프로젝트로 전환할 수 있다. 앱은 `initialize`/`initialized`, `thread/start`, `turn/start`, `turn/interrupt`를 수행하고 알림을 화면에 투영한다. 명령 실행과 파일 변경을 표시하며, 지원하는 명령/파일 승인 요청에는 원래 JSON-RPC ID(문자열 또는 숫자)를 보존해 응답한다. 그 외 구조화 요청은 임의 결정을 만들지 않고 지원하지 않는 요청으로 표시한다. 계정 로그인이나 자격 증명 저장·전달은 다루지 않는다.
+첫 탭은 View Page에서 프로젝트를 선택하고, 추가 Codex 대화 탭은 현재 탭의 프로젝트에서 시작한다. 각 탭은 자체 Native 연결로 동시에 실행할 수 있으며 해당 탭이 idle일 때 최근·즐겨찾기 프로젝트로 전환할 수 있다. 다른 탭으로의 이동은 실행 중에도 가능하다. 세션별로 `initialize`/`initialized`, `thread/start`, `turn/start`, `turn/interrupt`를 수행하고 알림을 해당 화면에 투영한다. 명령 실행과 파일 변경을 표시하며, 지원하는 명령/파일 승인 요청에는 원래 JSON-RPC ID(문자열 또는 숫자)와 세션별 승인 token을 보존해 응답한다. 그 외 구조화 요청은 임의 결정을 만들지 않고 지원하지 않는 요청으로 표시한다. 계정 로그인이나 자격 증명 저장·전달은 다루지 않는다.
 
 ## 기술 결정: Electron과 TypeScript
 
@@ -79,14 +79,25 @@ TypeScript·Python·strict JSON·YAML 작성은 파일별 `guide --file <파일>
 
 ### 제품 파일과 전송 경계
 
-- `src/main.ts`: Electron 생명주기, 폴더 선택, 검증된 IPC, Codex 프로세스 연결
+- `src/main.ts`: Electron 생명주기, 공유 원장·프로젝트 registry, 세션 생성·종료·IPC 라우팅
+- `src/native-session.ts`: 탭별 cwd·Native child/RPC·thread/turn·승인·사건·계측·리포트 조회
+- `src/session-registry.ts`: 세션 목록과 같은 프로젝트/thread의 단일 소유권 예약·해제
 - `src/rpc.ts`: 크기 제한 JSONL/JSON-RPC 전송, 요청 라우팅, EOF/오류 처리
 - `src/projection.ts`: 이벤트를 화면 블록으로 바꾸는 순수 투영
 - `src/preload.ts`, `src/shared.ts`: context-isolated 브리지와 공유 계약
-- `src/renderer.tsx`: React 화면
+- `src/session-api.tsx`: 탭 ID에 묶인 API와 사건·리소스 구독 필터
+- `src/session-tabs.tsx`, `src/renderer.tsx`: 탭 조작과 비활성 App 유지, 탭별 React 화면 상태
 - `test/`: 가짜 JSONL child transport와 이벤트 투영의 행동 테스트
 
-전송 프레임은 4 MiB로 제한한다. EOF나 오류가 나면 대기 요청을 실패시키며, 결과가 불확실한 변경 요청을 자동 재시도하지 않는다. 원본 이벤트는 메모리에서 최근 2,000개만 보관한다. main 단일 소유자가 앱 userData에 프로젝트 인덱스와 최소 리소스 관측 메타데이터를 원자 저장하며 본문·명령·출력·reasoning을 저장하지 않는다. 저장 한도·오류·coverage와 revision은 성공 여부를 분리해 표시한다. 계약은 [Chat 명세](specs/chat.md)를 따른다.
+전송 프레임은 연결마다 4 MiB로 제한한다. EOF나 오류가 나면 해당 세션의 대기 요청을 실패시키며, 결과가 불확실한 변경 요청을 자동 재시도하지 않는다. 원본 이벤트는 탭마다 메모리에서 최근 2,000개만 보관한다. main 단일 소유자가 앱 userData에 프로젝트 인덱스와 최소 리소스 관측 메타데이터를 원자 저장하며 본문·명령·출력·reasoning을 저장하지 않는다. 이 공유 저장 소유권과 탭별 Native 실행 상태는 구분한다. 저장 한도·오류·coverage와 revision은 성공 여부를 분리해 표시한다. 계약은 [Chat 명세](specs/chat.md)를 따른다.
+
+### Codex 대화 탭의 수명과 확인
+
+`sessions:list/create/close`와 `sessions:changed`는 main의 registry를 통해 제공한다. 새 탭은 원본 탭의 검증된 선택에서 프로젝트만 이어받고 thread·초안·출력을 복사하지 않는다. 탭의 Native child는 대화 조회나 요청이 필요할 때 시작한다. `SelectionRef.sessionId`를 세션에 라우팅한 뒤 프로젝트·선택 세대를 다시 검사하고, provider는 선택 인자가 없는 조회와 리포트 API도 탭에 묶는다. 같은 프로젝트/thread를 다른 탭이 소유하거나 재개 중이면 거부한다.
+
+탭 전환은 실행을 중단하지 않는다. 닫을 때 backend는 실행·요청/대화 준비·미결 승인과 마지막 탭을 보호하며 frontend는 초안·실패 원문도 보호한다. 해당 child 정리 후 탭을 제거하며 다른 탭을 종료하지 않는다. 앱 종료는 모든 세션을 정리하고 공유 원장을 flush한다. 재시작 시 탭 목록·초안·활성 실행을 자동 복구하지 않는다. 최근 프로젝트와 최소 관측은 앱 데이터에서, 저장 대화는 Native 원장에서 명시적으로 다시 연다. 일반 셸/PTY는 이번 구현 범위가 아니다.
+
+집중 검사 대상은 `bun test test/native-session.test.ts test/session-registry.test.ts test/session-tabs.test.ts`다. 빌드된 앱의 `node scripts/verify-sessions.ts`는 격리 profile·프로젝트와 `test/fixtures/sessions-app-server.ts`를 사용해 실제 Electron·IPC·독립 stdio 연결에서 탭과 동시 실행을 확인한다. 실행 기록은 `.www/evidence/sessions-ui-*`에 남긴다. 실제 Codex 모델·계정·Windows 실기와 합성 Native 검사는 구분한다. 검사 중에는 다른 빌드로 dist를 바꾸지 않는다. 이 안내를 추가한 문서 정합 패스 자체가 해당 명령의 새 통과 증거는 아니다.
 
 ## 제외한 기능과 Skills 정책
 
@@ -266,7 +277,7 @@ Native 자동 보고서의 집중 검사는 test/native-report-input.test.ts, te
 
 ## 자연스러운 진행 설명과 공개 추론 요약
 
-`src/native-chat.ts`의 params 함수를 main이 실제 `thread/start`·`turn/start`에 사용한다. 스레드의 `developerInstructions`에 한국어 진행 설명 지침을 더하고 턴에서 `summary: "detailed"`를 요청한다. cwd와 text 입력 구조를 보존하고 새 대화·재개에 Bypass(`danger-full-access`·`never`)를 적용하며 baseInstructions·모델·effort·전역 설정은 바꾸지 않는다. 로컬 codex-cli 0.167.2 생성 스키마에서 해당 필드를 확인했다.
+`src/native-chat.ts`의 params 함수를 main 프로세스의 `src/native-session.ts`가 실제 `thread/start`·`turn/start`에 사용한다. 스레드의 `developerInstructions`에 한국어 진행 설명 지침을 더하고 턴에서 `summary: "detailed"`를 요청한다. cwd와 text 입력 구조를 보존하고 새 대화·재개에 Bypass(`danger-full-access`·`never`)를 적용하며 baseInstructions·모델·effort·전역 설정은 바꾸지 않는다. 로컬 codex-cli 0.167.2 생성 스키마에서 해당 필드를 확인했다.
 
 `bun test test/projection.test.ts test/native-chat.test.ts test/native-activity.test.ts test/input.test.ts test/native-report-input.test.ts`로 실제 main params 배선, 공개 요약 lifecycle·섹션·중복·snapshot·잘못된 입력·턴 격리·종료·절단과 기존 경로를 검사한다. `test/fixtures/fake-app-server.ts`는 기존 MODE에 공개 summary와 private sentinel 사건을 추가해 Electron probe에서 공개 요약 표시와 원문 미노출을 점검할 수 있게 한다. 합성 fixture·투영 검사와 실제 Native의 설명 빈도·요약 제공, 실제 DOM 확인은 구분해 기록한다. 이번 변경 자체가 새 실제 GUI·Native 검증 완료를 뜻하지 않는다.
 
@@ -276,7 +287,7 @@ Chat은 Ovis revision d505c75e26c54f31573057d1e9aa431ecc56677f의 행 상태·�
 
 집중 검사는 bun test test/chat-state.test.ts test/conversations.test.ts test/projection.test.ts test/input.test.ts다. Native thread/list/read/resume/turns/list 필드는 설치된 codex app-server generate-json-schema 결과와 대조한다. 새 프로토콜이 없으면 응답을 꾸며 완전 복원으로 표시하지 않는다.
 
-`src/native-lifecycle.ts`는 main이 사용하는 연결별 thread 준비와 대기 승인의 수명주기를 소유한다. idle 프로세스 종료 뒤에는 새 연결에서 read/resume를 마치고 다음 요청을 보내며, 실행 중이거나 전송 결과가 불확실한 변경은 자동 재전송하지 않는다. `test/native-lifecycle.test.ts`는 복원 실패·stale 응답·실제 stdio 재시작과 승인 ID 재사용·서버 해소 경계를 검사한다. 승인 token은 main이 최상위 사건 필드로 발급하고 preload·renderer의 네 인자 응답 API가 해당 카드의 token을 그대로 돌려준다.
+`src/native-lifecycle.ts`는 각 `src/native-session.ts`가 사용하는 연결별 thread 준비와 대기 승인의 수명주기를 소유한다. idle 프로세스 종료 뒤에는 새 연결에서 read/resume를 마치고 다음 요청을 보내며, 실행 중이거나 전송 결과가 불확실한 변경은 자동 재전송하지 않는다. `test/native-lifecycle.test.ts`는 복원 실패·stale 응답·실제 stdio 재시작과 승인 ID 재사용·서버 해소 경계를 검사한다. 승인 token은 해당 세션에서 발급하고 세션 접두부와 함께 최상위 사건 필드로 게시하며 preload·renderer의 응답 API가 해당 카드의 token을 그대로 돌려준다.
 
 재연결의 `conversation/reconnected`는 이력을 교체하는 scoped snapshot이다. renderer가 실제 사용하는 `src/chat-state.ts`의 `reduceConversationEvents`로 bootstrap·대화 전환 큐·일반 수신을 함께 처리한다. transcript 교체와 활동 상태 초기화는 다른 수명주기이며 같은 연결의 대화 전환에서는 활동 중복 억제 상태를 보존한다. `test/chat-state.test.ts`와 `test/activity-sidebar.test.ts`는 오래된 marker·연결/선택 경계·낮은 seq의 새 live·과거 Hook turn 재수신을 검사한다. metadata가 모두 같은 동일 turn의 완료→시작은 새 실행과 재전송을 프로토콜만으로 구분할 수 없어 수신 lifecycle 전이를 수용한다.
 

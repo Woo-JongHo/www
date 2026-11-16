@@ -74,6 +74,8 @@ async function freePort(): Promise<number> {
 }
 
 async function start(round: number, selectedWorkspace = workspace) {
+  const callsBefore = await fs.readFile(path.join(selectedWorkspace, "fixture-calls.jsonl"), "utf8").catch(() => "");
+
   const port   = await freePort()                                                          ;
   const stdout = await fs.open(path.join(directory, "electron-" + round + ".stdout"), "w") ;
   const stderr = await fs.open(path.join(directory, "electron-" + round + ".stderr"), "w") ;
@@ -225,6 +227,15 @@ async function start(round: number, selectedWorkspace = workspace) {
       return measurement;
     };
     await command("Emulation.setFocusEmulationEnabled", { enabled: true });
+    await wait("document.querySelector('[data-testid=\"view-page\"]') && document.querySelector('[data-testid=\"open-current-workspace\"]')", "프로젝트 선택 전 전체 보기");
+    await pause(250);
+    const callsAtHome = await fs.readFile(path.join(selectedWorkspace, "fixture-calls.jsonl"), "utf8").catch(() => "");
+    if (callsAtHome !== callsBefore) throw Error("프로젝트 선택 전 Native 호출이 발생했습니다.");
+    checks.push("전체 보기에서 Native 자동 실행 없음");
+    await screenshot("home-" + round);
+    await click('[data-testid="open-current-workspace"]');
+    await wait("document.querySelector('[data-testid=\"target-dashboard\"]')", "현재 프로젝트 대시보드 진입");
+    await click('[data-testid="chat-nav"]');
     await wait("document.querySelector('[data-thread-id=\"history-a\"]')", "프로젝트 저장 대화 목록");
     return { command, evaluate, wait, click, input, screenshot, measureLayout, measureNavigation, terminate };
   } catch (error) { await terminate(); throw error; }
@@ -416,16 +427,18 @@ try {
   const b = '[data-thread-id="history-b"]' ;
   await session.click(a);
   await session.wait("document.querySelector('.chat-markdown h2')?.textContent==='저장된 답변'", "저장 대화 Markdown 복원");
+  metrics.push({ label: "renderer timing", entries: await session.evaluate("performance.getEntriesByName('www:renderer-commit-frame').map(e=>({name:e.name,startTime:e.startTime,detail:e.detail}))") });
   await session.wait("document.querySelector('.chat-markdown table') && document.querySelector('.chat-code pre')", "표와 fenced code 실제 DOM");
   await session.wait("!document.body.innerText.includes('PRIVATE_REASONING_DO_NOT_RENDER')", "비공개 reasoning 미노출");
   await session.wait("document.querySelector('[data-testid=\"command-preview\"]')?.textContent.split('\\n').length===10", "명령 카드 10줄 미리보기");
   await session.wait("document.querySelector('[data-testid=\"command-preview\"]')?.textContent.startsWith('    명령 출력 1')", "명령 출력 들여쓰기와 종료 후 앞 10줄");
-  await session.wait("document.querySelector('.command-card.item-failed details')?.open===true", "실패 카드 보관 출력 자동 펼침");
-  await session.wait("Array.from(document.querySelectorAll('.command-card')).some((card)=>card.innerText.includes('printf truncated') && card.innerText.includes('보관된 출력의 앞 10줄') && card.innerText.includes('보관 범위 안에서') && card.innerText.includes('제거된 원본 줄 수는 미확인') && card.querySelector('details')?.open===true)", "한도 초과 실패 출력의 보관 범위 안내와 자동 펼침");
-  await session.click('.command-card.item-completed summary');
-  await session.wait("document.querySelector('.command-card.item-completed details')?.open===true", "보관된 전체 출력 펼치기");
-  await session.click('.command-card.item-completed summary');
-  await session.wait("document.querySelector('.command-card.item-completed details')?.open===false && document.querySelector('[data-testid=\"command-preview\"]')?.getBoundingClientRect().height>0", "출력을 접어도 미리보기 유지");
+  const savedCard = '.command-card:has(.cmdline[aria-label="실행 명령"])';
+  await session.wait("Array.from(document.querySelectorAll('.command-card')).some(c=>c.querySelector('.cmdline')?.textContent==='printf failed' && c.querySelectorAll('pre').length===1 && !c.querySelector('[aria-expanded]') && c.querySelector('pre').textContent.includes('오류 확인'))", "짧은 실패 출력은 단일 pre에 전체 표시하고 확장 버튼 없음");
+  await session.wait("Array.from(document.querySelectorAll('.command-card')).some(c=>c.innerText.includes('printf truncated') && c.innerText.includes('제거된 원본 줄 수는 미확인') && c.querySelector('[aria-expanded]')?.getAttribute('aria-expanded')==='true' && c.querySelectorAll('pre').length===1)", "한도 초과 실패 출력 자동 펼침과 보관 범위 안내");
+  await session.click(savedCard + ' [aria-expanded]');
+  await session.wait("document.querySelector('.command-card.item-completed [aria-expanded]')?.getAttribute('aria-expanded')==='true'", "보관된 전체 출력 펼치기");
+  await session.click(savedCard + ' [aria-expanded]');
+  await session.wait("document.querySelector('.command-card.item-completed [aria-expanded]')?.getAttribute('aria-expanded')==='false' && document.querySelector('.command-card.item-completed').querySelectorAll('pre').length===1 && !document.querySelector('.command-card.item-completed pre').textContent.includes('명령 출력 11')", "접힌 출력은 단일 pre에 앞 10줄만 표시");
   const reviewCard  = '.command-card:has(.command-review)' ;
   const cardSession = session                              ;
   const activateByKey = async (selector: string, label: string, space = false) => {
@@ -439,23 +452,47 @@ try {
     await cardSession.command('Input.dispatchKeyEvent', { type: 'keyUp', key, code, windowsVirtualKeyCode: keyCode, nativeVirtualKeyCode: keyCode });
   };
 
+  const toggleShortcut = async (selector: string) => {
+    await cardSession.evaluate(`document.querySelector(${JSON.stringify(selector)}).focus()`);
+    await cardSession.command('Input.dispatchKeyEvent', { type: 'keyDown', key: 't', code: 'KeyT', modifiers: 2, windowsVirtualKeyCode: 84, nativeVirtualKeyCode: 84 });
+    await cardSession.command('Input.dispatchKeyEvent', { type: 'keyUp', key: 't', code: 'KeyT', modifiers: 2, windowsVirtualKeyCode: 84, nativeVirtualKeyCode: 84 });
+  };
+  await toggleShortcut(savedCard + ' pre');
+  await session.wait(`document.querySelector(${JSON.stringify(savedCard)}).querySelector('[aria-expanded]').getAttribute('aria-expanded')==='true' && document.querySelector('${reviewCard} [aria-expanded]').getAttribute('aria-expanded')==='false'`, 'Ctrl+T는 포커스된 첫 카드만 펼침');
+  await toggleShortcut(reviewCard + ' pre');
+  await session.wait(`document.querySelector(${JSON.stringify(savedCard)}).querySelector('[aria-expanded]').getAttribute('aria-expanded')==='true' && document.querySelector('${reviewCard} [aria-expanded]').getAttribute('aria-expanded')==='true'`, 'Ctrl+T는 두 번째 카드만 독립 전환');
+  await toggleShortcut(savedCard + ' pre');
+  await toggleShortcut(reviewCard + ' pre');
+  await session.wait(`document.querySelector(${JSON.stringify(savedCard)}).querySelector('[aria-expanded]').getAttribute('aria-expanded')==='false' && document.querySelector('${reviewCard} [aria-expanded]').getAttribute('aria-expanded')==='false'`, '각 카드 Ctrl+T 접힘 독립 유지');
   await session.wait(`(() => { const c=document.querySelector('${reviewCard}'); return c?.innerText.includes('실행 종료') && c.innerText.includes('종료 코드 0') && c.innerText.includes('미실행') && c.innerText.includes('보고값') && c.querySelector('[data-testid="command-preview"]').textContent.includes('\\n  "id": "review-readable"'); })()`, "종료 코드 0과 검토 미실행 분리·JSON 2칸 정렬");
   await session.wait(`(() => { const c=document.querySelector('${reviewCard}'); const key=c.querySelector('.syntax-key'); const string=c.querySelector('pre .syntax-string'); const number=c.querySelector('pre .syntax-number'); const literal=c.querySelector('pre .syntax-literal'); return [key,string,number,literal].every(Boolean) && new Set([key,string,number,literal].map(n=>getComputedStyle(n).color)).size===4 && c.querySelector('.cmdline .syntax-option') && c.querySelector('.cmdline').scrollWidth>c.querySelector('.cmdline').clientWidth; })()`, "실제 JSON 4종 색상·셸 옵션 강조·명령 내부 가로 스크롤");
-  await activateByKey(reviewCard + ' summary', '출력 펼침 Enter');
-  await session.wait(`document.querySelector('${reviewCard} details pre').textContent.includes('9007199254740993') && document.querySelector('${reviewCard} details pre').scrollWidth>document.querySelector('${reviewCard} details pre').clientWidth`, "정렬된 전체 출력의 큰 정수 보존·긴 줄 내부 스크롤");
+  await activateByKey(reviewCard + ' [aria-expanded]', '출력 펼침 Enter');
+  await session.wait(`document.querySelector('${reviewCard} pre').textContent.includes('9007199254740993') && document.querySelector('${reviewCard} pre').scrollWidth>document.querySelector('${reviewCard} pre').clientWidth`, "정렬된 전체 출력의 큰 정수 보존·긴 줄 내부 스크롤");
   await session.evaluate(`document.querySelector('${reviewCard}').scrollIntoView({block:'start'})`);
   await session.screenshot('command-json-formatted');
   await session.evaluate(`document.querySelector('${reviewCard} button[aria-pressed]').focus()`);
   await session.wait(`document.activeElement===document.querySelector('${reviewCard} button[aria-pressed]')`, "원문 전환 버튼 키보드 포커스");
   await session.command("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", text: "\r", unmodifiedText: "\r", windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
   await session.command("Input.dispatchKeyEvent", { type: "keyUp", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
-  await session.wait(`document.querySelector('${reviewCard} button[aria-pressed]').getAttribute('aria-pressed')==='true' && document.querySelector('${reviewCard} details pre').textContent===` + JSON.stringify(reviewOutput), "키보드 원문 전환과 종료 개행까지 원본 일치");
+  await session.wait(`document.querySelector('${reviewCard} button[aria-pressed]').getAttribute('aria-pressed')==='true' && document.querySelector('${reviewCard} pre').textContent===` + JSON.stringify(reviewOutput), "키보드 원문 전환과 종료 개행까지 원본 일치");
   await activateByKey(reviewCard + ' .command-output-tools button:last-of-type', '원문 복사 Enter');
   await session.wait(`document.querySelector('${reviewCard} [role="status"]').textContent==='원문 복사됨'`, "원문 클립보드 쓰기 성공 안내");
   await session.wait("navigator.clipboard.readText().then(text=>text===" + JSON.stringify(reviewOutput) + ")", "실제 클립보드 원문 완전 일치");
   await session.click(reviewCard + ' button[aria-pressed]');
-  await activateByKey(reviewCard + ' summary', '출력 접기 Space', true);
-  await session.wait(`document.querySelector('${reviewCard} details').open===false && document.querySelector('${reviewCard} [data-testid="command-preview"]').getBoundingClientRect().height>0`, 'Space로 출력 한 번 접기·미리보기 유지');
+  await activateByKey(reviewCard + ' [aria-expanded]', '출력 접기 Space', true);
+  await session.wait(`document.querySelector('${reviewCard} [aria-expanded]').getAttribute('aria-expanded')==='false' && document.querySelector('${reviewCard} [data-testid="command-preview"]').getBoundingClientRect().height>0`, 'Space로 출력 한 번 접기·미리보기 유지');
+  await session.evaluate("(() => { const c=Array.from(document.querySelectorAll('.command-card')).find(n=>n.innerText.includes('printf truncated')); c.scrollIntoView({block:'start'}); c.querySelector('pre').scrollTop=c.querySelector('pre').scrollHeight; })()");
+  const wheelBefore = object(await session.evaluate(`(() => { const t=document.querySelector('.transcript'); const p=Array.from(document.querySelectorAll('.command-card')).find(n=>n.innerText.includes('printf truncated')).querySelector('pre'); const r=p.getBoundingClientRect(); const input=document.querySelector('[data-testid="prompt-input"]').getBoundingClientRect(); return { x:r.left+Math.min(20,r.width/2), y:Math.max(0,Math.min(innerHeight-1,r.top+Math.min(20,r.height/2))), transcript:t.scrollTop, document:document.documentElement.scrollTop, body:document.body.scrollTop, input:{x:input.x,y:input.y,width:input.width,height:input.height} }; })()`));
+  await session.command('Input.dispatchMouseEvent', { type: 'mouseWheel', x: wheelBefore.x, y: wheelBefore.y, deltaX: 0, deltaY: 400 });
+  await pause(150);
+  checks.push('출력 내부 끝에서 실제 휠 입력');
+  const blankPoint = object(await session.evaluate(`(() => { const t=document.querySelector('.transcript'); const r=t.getBoundingClientRect(); return {x:r.right-3,y:r.top+3,top:t.scrollTop}; })()`));
+  await session.command('Input.dispatchMouseEvent', { type: 'mouseWheel', x: blankPoint.x, y: blankPoint.y, deltaX: 0, deltaY: -300 });
+  await session.wait(`document.querySelector('.transcript').scrollTop<${blankPoint.top}`, '대화 빈 영역 휠은 대화 스크롤');
+  const wheelAfter = object(await session.evaluate(`(() => { const input=document.querySelector('[data-testid="prompt-input"]').getBoundingClientRect(); return {document:document.documentElement.scrollTop,body:document.body.scrollTop,input:{x:input.x,y:input.y,width:input.width,height:input.height}}; })()`));
+  metrics.push({ label: '실제 CDP 휠 전후', before: wheelBefore, after: wheelAfter });
+  if (wheelAfter.document !== wheelBefore.document || wheelAfter.body !== wheelBefore.body || JSON.stringify(wheelAfter.input) !== JSON.stringify(wheelBefore.input)) throw Error('휠이 문서 또는 입력 위치를 변경했습니다: ' + JSON.stringify({ wheelBefore, wheelAfter }));
+  checks.push('실제 휠 전후 문서 scrollTop과 입력 사각형 불변');
   await session.evaluate("(() => { const transcript=document.querySelector('.transcript'); transcript.scrollTop=transcript.scrollHeight; transcript.dispatchEvent(new Event('scroll')); })()");
   await session.wait("(() => { const t=document.querySelector('.transcript'); const last=document.querySelector('.agent .chat-markdown>:last-child'); const input=document.querySelector('.compose'); return last.textContent.includes('마지막 문장 접근 확인') && last.getBoundingClientRect().bottom<=t.getBoundingClientRect().bottom+1 && t.getBoundingClientRect().bottom<=input.getBoundingClientRect().top+1; })()", "긴 답변 마지막 문장과 입력창 분리");
   await session.measureLayout("기준선 DOM 치수");
@@ -496,8 +533,20 @@ try {
       && !sidebar.querySelector('[data-testid="www-artifact"], [data-testid="activity-skill-row"], [data-testid="activity-hook-row"]')
       && Array.from(catalog).every((row) => !Array.from(sidebar.querySelectorAll('.na-row-copy strong')).some((label) => label.textContent === row.querySelector('strong')?.textContent));
   })()`;
+  const wheelFrame = async (selector: string, atEnd: boolean, label: string) => {
+    const before = object(await cardSession.evaluate(`(() => { const node=document.querySelector(${JSON.stringify(selector)}); if(${atEnd})node.scrollTop=node.scrollHeight; const r=node.getBoundingClientRect(); const input=document.querySelector('[data-testid="prompt-input"]').getBoundingClientRect(); return { x:r.right-4,y:r.top+4,document:document.documentElement.scrollTop,body:document.body.scrollTop,input:{x:input.x,y:input.y,width:input.width,height:input.height} }; })()`));
+    await cardSession.command('Input.dispatchMouseEvent', { type: 'mouseWheel', x: before.x, y: before.y, deltaX: 0, deltaY: 400 });
+    await pause(150);
+    const after = object(await cardSession.evaluate(`(() => { const input=document.querySelector('[data-testid="prompt-input"]').getBoundingClientRect(); return {document:document.documentElement.scrollTop,body:document.body.scrollTop,input:{x:input.x,y:input.y,width:input.width,height:input.height}}; })()`));
+    metrics.push({ label, before, after });
+    if (after.document !== before.document || after.body !== before.body || JSON.stringify(after.input) !== JSON.stringify(before.input)) throw Error(label + ' 프레임 이동: ' + JSON.stringify({ before, after }));
+    checks.push(label + ' 실제 휠 뒤 문서 scrollTop·입력 사각형 유지');
+  };
   await session.wait(panelState(true, false), "기본 사이드바 가시성과 상세 모니터 닫힘");
+  await session.wait("document.querySelectorAll('[data-testid=\"agent-tree\"] [data-skill-id]').length===5 && Array.from(document.querySelectorAll('[data-testid=\"agent-tree\"] [data-skill-id]')).every(n=>n.innerText.includes('대기')) && document.querySelector('[data-testid=\"agent-plan\"]') && document.querySelector('[data-testid=\"agent-progress\"]') && !document.querySelector('[data-testid=\"resource-sidebar\"] [data-testid=\"activity-hook-row\"]')", "관측 전 고정 Skills 다섯 개 대기와 plan·progress·Hook 제외");
   await session.wait(noSidebarCatalog, "기본 사이드바에 미관측 카탈로그 행 없음");
+  await wheelFrame('[data-testid="resource-sidebar"] .na-scroll', false, '사이드바 여백');
+  await wheelFrame('[data-testid="resource-sidebar"] .na-scroll', true, '사이드바 내부 끝 경계');
   await session.input("모니터 전환 뒤 보존할 초안");
   await session.evaluate("(() => { const t=document.querySelector('.transcript'); t.scrollTop=80; t.dispatchEvent(new Event('scroll')); })()");
   const monitorScrollTop = Number(await session.evaluate("document.querySelector('.transcript').scrollTop"));
@@ -547,6 +596,7 @@ try {
   await session.evaluate("document.querySelector('.transcript').scrollTop=0; document.querySelector('.transcript').dispatchEvent(new Event('scroll'))");
   await session.click(b);
   await session.wait("document.body.innerText.includes('두 번째 저장 대화')", "다른 저장 대화 선택");
+  await wheelFrame('.transcript', true, '짧은 대화 여백');
   await session.input("B의 보존할 초안");
   const history = object(JSON.parse(await fs.readFile(path.join(workspace, "fixture-history.json"), "utf8")));
   for (const turn of Array.isArray(history["history-a"]) ? history["history-a"] : []) {
@@ -559,20 +609,27 @@ try {
   await session.click(a);
   await session.wait("document.querySelector('[data-testid=\"prompt-input\"]').value===" + JSON.stringify(draft), "대화별 인용 초안 보존");
   await session.wait("document.querySelector('.transcript').scrollTop<2", "대화별 읽기 위치 보존");
-  await session.wait("Array.from(document.querySelectorAll('.command-card')).some((card)=>card.innerText.includes('printf auto-transition') && card.classList.contains('item-failed') && card.querySelector('details')?.open===true)", "재마운트 뒤 자동 상태는 새 실패를 펼침");
-  await session.wait("Array.from(document.querySelectorAll('.command-card')).some((card)=>card.querySelector('.cmdline')?.textContent==='printf saved' && card.classList.contains('item-failed') && card.querySelector('details')?.open===false)", "재마운트 뒤 수동 접힘은 새 실패에도 유지");
+  await session.wait("Array.from(document.querySelectorAll('.command-card')).some((card)=>card.innerText.includes('printf auto-transition') && card.classList.contains('item-failed') && !card.querySelector('[aria-expanded]'))", "재마운트 뒤 짧은 실패는 확장 버튼 없음");
+  await session.wait("Array.from(document.querySelectorAll('.command-card')).some((card)=>card.querySelector('.cmdline')?.textContent==='printf saved' && card.classList.contains('item-failed') && card.querySelector('[aria-expanded]')?.getAttribute('aria-expanded')==='false')", "재마운트 뒤 수동 접힘은 새 실패에도 유지");
   const currentSidebar = "document.querySelector('[data-testid=\"resource-sidebar\"] .na-monitor')";
   await session.wait("!document.querySelector('[data-testid=\"resource-sidebar\"]').hidden && document.querySelector('[data-testid=\"activity-panel\"]').hidden", "신규 계약은 실제 보이는 기본 사이드바에서 검사");
   await session.input("사이드바 첫 요청 확인");
   await session.click('[data-testid="send-button"]');
-  await session.wait(currentSidebar + ".innerText.includes('첫 요청 전용 단계') && " + currentSidebar + ".innerText.includes('preToolUse') && " + currentSidebar + ".innerText.includes('진행 관측')", "기본 사이드바에 실제 첫 요청 plan과 Hook 시작 반영");
-  await session.wait("Array.from(" + currentSidebar + ".querySelectorAll('.na-row')).filter(row=>row.innerText.includes('preToolUse')).length===2 && " + currentSidebar + ".innerText.includes('실패 관측') && " + currentSidebar + ".innerText.includes('완료 관측') && !document.querySelector('[data-testid=\"new-conversation\"]').disabled", "동명 두 Hook 핸들러의 실패·완료를 기본 사이드바에서 각각 보전");
+  await session.wait("document.querySelector('[data-testid=\"subagent-list\"] [data-agent-id=\"sidebar-child\"][data-agent-status=\"running\"]')", "실제 Native 하위 작업 시작");
+  await session.wait("(async()=>{await new Promise(r=>setTimeout(r,300));return document.querySelector('[data-testid=\"subagent-list\"] [data-agent-id=\"sidebar-child\"][data-agent-status=\"running\"]')})()", "도구 호출 완료만으로 하위 작업 완료 처리하지 않음");
+  await session.wait("document.querySelector('[data-testid=\"subagent-list\"] [data-agent-id=\"sidebar-child\"][data-agent-status=\"completed\"]')", "Native 상태 완료 후 하위 작업 완료 표시");
+  await session.wait(currentSidebar + ".innerText.includes('첫 요청 전용 단계') && !document.querySelector('[data-testid=\"resource-sidebar\"]').innerText.includes('preToolUse')", "기본 사이드바의 실제 첫 요청 plan과 Hook 제외");
+  await session.wait("!document.querySelector('[data-testid=\"new-conversation\"]').disabled", "첫 요청 종료");
+  await session.click(detailToggle);
+  await session.click('[data-testid="native-activity-details"] > summary');
+  await session.wait("(() => { const rows=Array.from(document.querySelectorAll('[data-testid=\"native-activity-details\"] [data-testid=\"activity-entry\"]')).filter(row=>row.innerText.includes('preToolUse')); return rows.length===2 && rows.some(row=>row.innerText.includes('실패')) && rows.some(row=>row.innerText.includes('완료')); })()", "상세 모니터에 두 Hook 실패·완료 보존");
+  await session.click(detailToggle);
   await session.wait("(async()=>{const selected=await window.www.workspace();const state=await window.www.activityResources(selected);const docs=state.observations.filter(row=>row.resource.kind==='document');return docs.length===2 && new Set(docs.map(row=>row.resource.identity)).size===2 && docs.every(row=>/^document-sha256:[a-f0-9]{64}$/.test(row.resource.identity)) && !JSON.stringify(state.observations).includes('.private-');})()", "실제 main 해시 경계에서 미등록 문서 두 개·중복 병합·비공개 경로 비저장 확인");
   await session.screenshot("sidebar-first-request");
   await session.input("사이드바 두 번째 요청 확인");
   await session.click('[data-testid="send-button"]');
   await session.wait(currentSidebar + ".innerText.includes('전송 중') && !" + currentSidebar + ".innerText.includes('첫 요청 전용 단계') && !" + currentSidebar + ".innerText.includes('preToolUse')", "B 전송 중 기본 사이드바에서 A plan·Hook 결과를 제거");
-  await session.wait(currentSidebar + ".innerText.includes('단계·체크리스트 미제공') && " + currentSidebar + ".innerText.includes('실제 Skill/Hook 호출 미제공') && !" + currentSidebar + ".innerText.includes('전송 중')", "B 수락 후 plan·호출 미제공을 이전 A 완료로 채우지 않음");
+  await session.wait(currentSidebar + ".innerText.includes('단계·체크리스트 미제공') && !" + currentSidebar + ".innerText.includes('전송 중')", "B 수락 후 plan·호출 미제공을 이전 A 완료로 채우지 않음");
   await session.wait(currentSidebar + ".innerText.includes('두 번째 요청 전용 단계') && !" + currentSidebar + ".innerText.includes('첫 요청 전용 단계') && !" + currentSidebar + ".innerText.includes('preToolUse')", "B의 새 plan만 기본 사이드바에 갱신");
   await session.screenshot("sidebar-second-request");
   await session.wait("!document.querySelector('[data-testid=\"new-conversation\"]').disabled", "기본 사이드바 두 번째 요청 종료");
@@ -609,7 +666,7 @@ try {
   await session.wait("document.querySelector('[data-testid=\"activity-live-monitor\"]')?.innerText.includes('최근 통신 경고') && document.querySelector('[data-testid=\"activity-live-monitor\"]')?.innerText.includes('Native 연결됨') && !document.querySelector('.status')?.innerText.includes('연결 error')", "잘못된 JSON 경고와 살아 있는 연결·명령 스트리밍 구분");
   checks.push("요청 클릭→실시간 카드 관측 " + (Date.now() - started) + "ms (수신→반영 지연과 별개)");
   await session.wait("document.querySelector('.new-content') && document.querySelector('.transcript').scrollTop<2", "실시간 사건 중 과거 읽기 위치 유지");
-  await session.wait("Array.from(document.querySelectorAll('.command-card')).some((card)=>card.innerText.includes('printf live') && card.classList.contains('item-failed') && card.querySelector('details')?.open===true && card.querySelector('[data-testid=\"command-preview\"]')?.textContent.startsWith('    실시간 출력 1'))", "실패 종료 후 앞 10줄과 보관 출력 펼침");
+  await session.wait("Array.from(document.querySelectorAll('.command-card')).some((card)=>card.innerText.includes('printf live') && card.classList.contains('item-failed') && card.querySelector('[aria-expanded]')?.getAttribute('aria-expanded')==='true' && card.querySelector('[data-testid=\"command-preview\"]')?.textContent.startsWith('    실시간 출력 1'))", "실패 종료 후 앞 10줄과 보관 출력 펼침");
   await session.wait("!document.querySelector('[data-testid=\"new-conversation\"]')?.disabled", "실시간 카드 턴 종료");
   await session.click(detailToggle);
   await session.wait(panelState(true, false), "실시간 관측 뒤 상세 닫기와 기본 사이드바 복원");
@@ -673,6 +730,8 @@ try {
   if (!Array.isArray(rowsA)) throw Error("프로젝트 A의 관측 배열이 없습니다.");
   const idsA      = rowsA.map((row) => String(object(row).id)).sort()                                   ;
   const favoriteA = `button[aria-label=${JSON.stringify(path.basename(workspace) + " 즐겨찾기 추가")}]` ;
+  await session.click('[data-testid="view-page-nav"]');
+  await session.wait("document.querySelector('[data-testid=\"view-page\"]')", "즐겨찾기 조작을 위한 전체 보기");
   await session.evaluate("document.querySelector(" + JSON.stringify(favoriteA) + ").focus()");
   await session.wait("document.activeElement===document.querySelector(" + JSON.stringify(favoriteA) + ")", "접근 가능한 이름으로 프로젝트 즐겨찾기 키보드 초점 접근");
   await session.command("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", text: "\r", unmodifiedText: "\r", windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
@@ -695,8 +754,10 @@ try {
   if (!Array.isArray(rowsB) || selectedB.workspaceKey === selectedA.workspaceKey) throw Error("다른 실제 프로젝트 경계가 합쳐졌습니다.");
   const idsB = rowsB.map((row) => String(object(row).id)).sort();
   if (idsB.some((id) => idsA.includes(id))) throw Error("서로 다른 프로젝트의 관측 ID가 섞였습니다.");
+  const staleBefore = await fs.readFile(path.join(workspaceB, "fixture-calls.jsonl"), "utf8");
   const staleProject = await session.evaluate("(async () => { try { await window.www.startTurn(" + JSON.stringify(selectedA) + ", 'history-a', 'stale-project-must-not-run'); return 'allowed'; } catch(error) { return String(error); } })()");
-  if (typeof staleProject !== "string" || !staleProject.includes("프로젝트 선택이 변경")) throw Error("이전 프로세스·프로젝트 요청이 차단되지 않았습니다.");
+  const staleAfter = await fs.readFile(path.join(workspaceB, "fixture-calls.jsonl"), "utf8");
+  if (typeof staleProject !== "string" || !["프로젝트 선택이 변경", "세션을 찾을 수 없습니다"].some(message => staleProject.includes(message)) || staleAfter.slice(staleBefore.length).includes("stale-project-must-not-run")) throw Error("이전 프로세스·프로젝트 요청이 Native에 차단되지 않았습니다: " + String(staleProject));
   const nativeCallsB         = path.join(workspaceB, "fixture-calls.jsonl")                                                                                                                           ;
   const initializations      = async () => (await fs.readFile(nativeCallsB, "utf8")).trim().split("\n").map((line) => object(JSON.parse(line))).filter((call) => call.method === "initialize").length ;
   const ownerInitializations = await initializations()                                                                                                                                                ;
@@ -710,17 +771,23 @@ try {
   if (await initializations() !== ownerInitializations) throw Error("비소유 main이 두 번째 Native를 시작했습니다.");
   const switchA = `button[title=${JSON.stringify(workspace)}]`  ;
   const switchB = `button[title=${JSON.stringify(workspaceB)}]` ;
+  const switchProject = async (selector: string, key: unknown, label: string) => {
+    await session!.click('[data-testid="view-page-nav"]');
+    await session!.wait("document.querySelector('[data-testid=\"view-page\"]')", label + " 전체 보기");
+    await session!.click(selector);
+    await session!.wait("document.querySelector('[data-testid=\"target-dashboard\"]') && window.www.workspace().then(s=>s.workspaceKey===" + JSON.stringify(key) + ")", label + " 대시보드");
+    await session!.click('[data-testid="chat-nav"]');
+    await session!.wait("document.querySelector('[data-testid=\"conversation-item\"][data-thread-id=\"history-a\"]')", label + " 대화 목록");
+  };
   await session.input("프로젝트 B만의 초안");
-  await session.click(switchA);
-  await session.wait("document.querySelector(" + JSON.stringify(switchA) + ")?.getAttribute('aria-current') === 'true' && document.querySelector('[data-testid=\"conversation-item\"][data-thread-id=\"history-a\"]')", "실제 프로젝트 전환과 대화 목록 재연결");
+  await switchProject(switchA, selectedA.workspaceKey, "실제 프로젝트 전환과 대화 목록 재연결");
   await session.click(a);
   await session.wait("document.body.innerText.includes('같은 대화 후속 요청')", "프로젝트 A의 원래 Native 대화 재연결");
   const afterA = object(await session.evaluate("(async () => { const selected = await window.www.workspace(); return await window.www.activityResources(selected); })()"));
   if (!Array.isArray(afterA.observations) || JSON.stringify(afterA.observations.map((row) => String(object(row).id)).sort()) !== JSON.stringify(idsA)) throw Error("전환 뒤 프로젝트 A의 누적 ID가 유실되거나 중복됐습니다.");
   if (await session.evaluate("document.querySelector('[data-testid=\"prompt-input\"]').value") === "프로젝트 B만의 초안") throw Error("다른 프로젝트의 동일 thread에 초안이 섞였습니다.");
   await session.input("프로젝트 A만의 초안");
-  await session.click(switchB);
-  await session.wait("document.querySelector(" + JSON.stringify(switchB) + ")?.getAttribute('aria-current') === 'true' && document.querySelector('[data-testid=\"conversation-item\"][data-thread-id=\"history-a\"]')", "프로젝트 B 복귀");
+  await switchProject(switchB, selectedB.workspaceKey, "프로젝트 B 복귀");
   await session.click(a);
   await session.wait("document.querySelector('[data-testid=\"prompt-input\"]').value === '프로젝트 B만의 초안'", "동일 thread 문자열의 프로젝트별 초안 격리·복원");
   await session.screenshot("project-isolation");
@@ -735,17 +802,17 @@ try {
     await session.input("원장 저장 실패 확인");
     await session.click('[data-testid="send-button"]');
     await session.wait("(async()=>{const selected=await window.www.workspace();const state=await window.www.activityResources(selected);return state?.storage==='volatile' && state.revision>state.durableRevision && !document.querySelector('[data-testid=\"new-conversation\"]').disabled;})()", "격리 profile 실제 파일 경로 방해로 원장 저장 실패와 미확정 revision 재현");
-    await session.click(switchA);
-    await session.wait("document.querySelector(" + JSON.stringify(switchA) + ")?.getAttribute('aria-current')==='true' && document.querySelector('.project-storage-warning')?.textContent.includes('workspace-b')", "다른 프로젝트로 전환해도 이전 B의 저장 미확정 경고 보전");
+    await switchProject(switchA, selectedA.workspaceKey, "저장 실패 뒤 A 전환");
+    await session.wait("document.querySelector('.project-storage-warning')?.textContent.includes('workspace-b')", "다른 프로젝트로 전환해도 이전 B의 저장 미확정 경고 보전");
     const failureStillBelongsToB = "(()=>{const node=document.querySelector('.project-storage-warning');if(!node?.hasAttribute('data-failed-scopes'))return false;const scopes=JSON.parse(node.getAttribute('data-failed-scopes'));return Array.isArray(scopes)&&scopes.length===1&&scopes[0].workspaceKey===" + JSON.stringify(selectedB.workspaceKey) + "&&scopes[0].threadId==='history-a';})()";
     await session.wait(failureStillBelongsToB, "전체 flush의 실제 실패 scope B만 진단하고 정상 A로 귀속하지 않음");
     await session.wait("(async()=>{const selected=await window.www.workspace();return selected.workspaceKey===" + JSON.stringify(selectedA.workspaceKey) + " && await window.www.activityResources(selected)===null;})()", "이전 저장 경고를 새 프로젝트의 원장 데이터로 수용하지 않음");
-    await session.click('button[aria-label="프로젝트 목록 새로고침"]');
-    await session.evaluate("new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))");
-    await session.wait("!document.querySelector('button[aria-label=\"프로젝트 목록 새로고침\"]').disabled && " + failureStillBelongsToB, "목록 갱신 완료·새 선택의 일반 오류 초기화 뒤에도 실제 실패 scope 진단 유지");
+    await session.click('[data-testid="view-page-nav"]');
+    await session.wait("document.querySelector('[data-testid=\"view-page\"]') && " + failureStillBelongsToB, "전체 보기에서도 실제 실패 scope 진단 유지");
     await session.screenshot("project-storage-warning");
     await session.click(switchB);
-    await session.wait("document.querySelector(" + JSON.stringify(switchB) + ")?.getAttribute('aria-current')==='true' && " + failureStillBelongsToB, "B 실패 후 정상 A에서 다시 전환해도 A를 실패 대상으로 덮지 않음");
+    await session.wait("document.querySelector('[data-testid=\"target-dashboard\"]') && " + failureStillBelongsToB, "B 실패 후 정상 A에서 다시 전환해도 A를 실패 대상으로 덮지 않음");
+    await session.click('[data-testid="chat-nav"]');
     await session.wait("(async()=>{const selected=await window.www.workspace();return selected.workspaceKey===" + JSON.stringify(selectedB.workspaceKey) + " && await window.www.activityResources(selected)===null;})()", "미선택 실패 thread의 경고와 새 빈 대화 리소스는 왕복 뒤에도 분리");
     await session.screenshot("project-storage-warning-roundtrip");
   } finally {

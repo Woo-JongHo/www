@@ -3,16 +3,26 @@
  * @implements RESP-NATIVE-BRIDGE
  */
 import { contextBridge, ipcRenderer } from "electron";
-import type { ResourceSnapshot, ScopedAppEvent, WwwApi } from "./shared";
+import type { NativeSessionSummary, ResourceSnapshot, ScopedAppEvent, WwwApi } from "./shared";
 
 const api: WwwApi = {
+  listSessions: () => ipcRenderer.invoke("sessions:list"),
+  createSession: selection => ipcRenderer.invoke("sessions:create", selection),
+  closeSession: sessionId => ipcRenderer.invoke("sessions:close", sessionId),
+  onSessions: listener => {
+    const handler = (_event: Electron.IpcRendererEvent, sessions: NativeSessionSummary[]) => listener(sessions);
+    ipcRenderer.on("sessions:changed", handler);
+    return () => ipcRenderer.removeListener("sessions:changed", handler);
+  },
   listConversations: (selection, cursor) => ipcRenderer.invoke("conversations:list", selection, cursor),
   openConversation: (selection, threadId) => ipcRenderer.invoke("conversations:open", selection, threadId),
   newConversation: (selection) => ipcRenderer.invoke("conversations:new", selection),
-  openExternal: (url) => ipcRenderer.invoke("link:open", url),
+  openExternal: (url, sessionId) => ipcRenderer.invoke("link:open", url, sessionId),
   chooseWorkspace: (selection) => ipcRenderer.invoke("workspace:choose", selection),
-  workspace: () => ipcRenderer.invoke("workspace:get"),
+  workspace: (sessionId) => ipcRenderer.invoke("workspace:get", sessionId),
   listProjects: (selection) => ipcRenderer.invoke("projects:list", selection),
+  dashboard: (selection) => ipcRenderer.invoke("dashboard:get", selection),
+  selectWww: (selection) => ipcRenderer.invoke("projects:www", selection),
   setProjectFavorite: (selection, key, favorite) => ipcRenderer.invoke("projects:favorite", selection, key, favorite),
   switchProject: (selection, key) => ipcRenderer.invoke("projects:switch", selection, key),
   startThread: (selection) => ipcRenderer.invoke("thread:start", selection),
@@ -29,16 +39,16 @@ const api: WwwApi = {
   },
   probeReady              : () => ipcRenderer.invoke("probe:ready")                                              ,
   probeFinish             : (result) => ipcRenderer.invoke("probe:finish", result)                               ,
-  developmentPolicy       : () => ipcRenderer.invoke("development:policy")                                       ,
-  developmentStatus       : (workId) => ipcRenderer.invoke("development:status", workId)                         ,
-  completeDevelopmentWork : (workId) => ipcRenderer.invoke("development:complete", workId)                       ,
-  listReports             : () => ipcRenderer.invoke("reports:list")                                             ,
-  readReport              : (reportId) => ipcRenderer.invoke("reports:read", reportId)                           ,
-  chooseReportRepository  : () => ipcRenderer.invoke("reports:choose")                                           ,
-  exportReport            : (reportId) => ipcRenderer.invoke("reports:export", reportId)                         ,
-  nativeReportStatus      : () => ipcRenderer.invoke("reports:native-status")                                    ,
-  setNativeReportEnabled  : (enabled) => ipcRenderer.invoke("reports:native-enabled", enabled)                   ,
-  retryNativeReport       : (key) => ipcRenderer.invoke("reports:native-retry", key)                             ,
+  developmentPolicy       : (sessionId) => ipcRenderer.invoke("development:policy", sessionId)                                       ,
+  developmentStatus       : (workId, sessionId) => ipcRenderer.invoke("development:status", workId, sessionId)                         ,
+  completeDevelopmentWork : (workId, sessionId) => ipcRenderer.invoke("development:complete", workId, sessionId)                       ,
+  listReports             : (sessionId) => ipcRenderer.invoke("reports:list", sessionId)                                             ,
+  readReport              : (reportId, sessionId) => ipcRenderer.invoke("reports:read", reportId, sessionId)                           ,
+  chooseReportRepository  : (sessionId) => ipcRenderer.invoke("reports:choose", sessionId)                                           ,
+  exportReport            : (reportId, sessionId) => ipcRenderer.invoke("reports:export", reportId, sessionId)                         ,
+  nativeReportStatus      : (sessionId) => ipcRenderer.invoke("reports:native-status", sessionId)                                    ,
+  setNativeReportEnabled  : (enabled, sessionId) => ipcRenderer.invoke("reports:native-enabled", enabled, sessionId)                   ,
+  retryNativeReport       : (key, sessionId) => ipcRenderer.invoke("reports:native-retry", key, sessionId)                             ,
   onEvent                 : (listener) => {
     const handler = (_event: Electron.IpcRendererEvent, entry: ScopedAppEvent) => listener(entry);
     ipcRenderer.on("app:event", handler);

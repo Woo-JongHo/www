@@ -31,7 +31,8 @@ function edgePath(from: EcosystemNode, to: EcosystemNode): string {
   return `M ${startX} ${startY} C ${startX} ${middleY}, ${endX} ${middleY}, ${endX} ${endY}`;
 }
 
-function EcosystemGuide({ onLocate, active }: { onLocate: (id: string) => void; active: boolean }) {
+function EcosystemGuide({ onLocate, active, namespace }: { onLocate: (id: string) => void; active: boolean; namespace: string }) {
+  const arrowId = `${namespace}-eco-arrow`;
   const [selectedId, setSelectedId] = useState("chat")                        ;
   const [query     , setQuery     ] = useState("")                            ;
   const [group     , setGroup     ] = useState<EcosystemGroup | "all">("all") ;
@@ -89,14 +90,14 @@ function EcosystemGuide({ onLocate, active }: { onLocate: (id: string) => void; 
         }}
         onPointerUp={() => { drag.current = null; }} onPointerCancel={() => { drag.current = null; }}>
         <svg className="ecosystem-svg" width={WIDTH * zoom} height={HEIGHT * zoom} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} aria-label="WWW 모듈과 관계">
-          <defs><marker id="eco-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+          <defs><marker id={arrowId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
           {ecosystemGroups.map((entry) => <g key={entry.id} className={`eco-band eco-${entry.id}`}><rect x="20" y={entry.y - 10} width="1140" height={entry.id === "app" ? 300 : 180} rx="12"/><text x="40" y={entry.y + 20} className="eco-band-title">{entry.title}</text><text x="180" y={entry.y + 20} className="eco-band-description">{entry.description}</text></g>)}
           <g aria-hidden="true">{ecosystemEdges.map((edge) => {
             const from   = ecosystemNodes.find((node) => node.id === edge.from)!             ;
             const to     = ecosystemNodes.find((node) => node.id === edge.to)!               ;
             const active = edge.from === selectedId || edge.to === selectedId                ;
             const dimmed = filtering && (!matchIds.has(edge.from) || !matchIds.has(edge.to)) ;
-            return <path key={`${edge.from}-${edge.to}`} d={edgePath(from, to)} className={`eco-edge ${active ? "is-connected" : ""} ${edge.planned ? "is-planned" : ""} ${dimmed ? "is-dimmed" : ""}`} markerEnd="url(#eco-arrow)"><title>{from.title} → {to.title}: {edge.label}</title></path>;
+            return <path key={`${edge.from}-${edge.to}`} d={edgePath(from, to)} className={`eco-edge ${active ? "is-connected" : ""} ${edge.planned ? "is-planned" : ""} ${dimmed ? "is-dimmed" : ""}`} markerEnd={`url(#${arrowId})`}><title>{from.title} → {to.title}: {edge.label}</title></path>;
           })}</g>
           {ecosystemNodes.map((node) => <g key={node.id} transform={`translate(${node.x} ${node.y})`} role="button" tabIndex={0} aria-label={`${node.title}, ${node.subtitle}`} aria-pressed={selectedId === node.id}
             className={`eco-node eco-${node.group} ${selectedId === node.id ? "is-selected" : ""} ${neighborhood.has(node.id) ? "is-neighbor" : ""} ${filtering && !matchIds.has(node.id) ? "is-dimmed" : ""}`}
@@ -122,7 +123,7 @@ function EcosystemGuide({ onLocate, active }: { onLocate: (id: string) => void; 
   </>;
 }
 
-export const EcosystemView = memo(function EcosystemView({ hidden }: { hidden: boolean }) {
+export const EcosystemView = memo(function EcosystemView({ hidden, namespace = "default" }: { hidden: boolean; namespace?: string }) {
   const [guide, setGuide] = useState(false);
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [requested, setRequested] = useState<{ id: string; revision: number } | null>(null);
@@ -132,17 +133,18 @@ export const EcosystemView = memo(function EcosystemView({ hidden }: { hidden: b
   }
   return <section className="ecosystem-shell" hidden={hidden} data-navigation-open={navigationOpen} aria-label="WWW 구조 탐색">
     <nav className="blueprint-tabs" aria-label="구조 보기">
-      <button data-testid="architecture-navigation-toggle" aria-expanded={navigationOpen} aria-controls="workspace-sidebar" onClick={() => setNavigationOpen((open) => !open)}>{navigationOpen ? '탐색 접기' : '탐색 열기'}</button>
+      <button data-testid="architecture-navigation-toggle" aria-expanded={navigationOpen} aria-controls={`workspace-sidebar-${namespace}`} onClick={() => setNavigationOpen((open) => !open)}>{navigationOpen ? '탐색 접기' : '탐색 열기'}</button>
       <button aria-pressed={!guide} onClick={() => setGuide(false)} data-testid="architecture-tab">기능·책임 지도</button>
       <button aria-pressed={guide} onClick={() => setGuide(true)} data-testid="ecosystem-guide-tab">개념 처리 관계</button>
       <span>{guide ? "개념 관계와 실제 코드 근거를 구별합니다" : "기능 → 처리 책임 → 담당 코드 · 안정 구조 ID"}</span>
     </nav>
-    <div className="ecosystem-page" hidden={guide}><CodeBlueprintView requested={requested}/></div>
-    <div className="ecosystem-page" hidden={!guide}><EcosystemGuide onLocate={locate} active={guide && !hidden}/></div>
+    <div className="ecosystem-page" hidden={guide}><CodeBlueprintView requested={requested} namespace={namespace}/></div>
+    <div className="ecosystem-page" hidden={!guide}><EcosystemGuide onLocate={locate} active={guide && !hidden} namespace={namespace}/></div>
   </section>;
 });
 
-function CodeBlueprintView({ requested }: { requested: { id: string; revision: number } | null }) {
+function CodeBlueprintView({ requested, namespace }: { requested: { id: string; revision: number } | null; namespace: string }) {
+  const arrowId = `${namespace}-blueprint-arrow`;
   const tree = structureTree;
   const [currentId, setCurrentId] = useState(architecture.structure.rootId);
   const [selectedId, setSelectedId] = useState(architecture.structure.rootId);
@@ -220,7 +222,7 @@ function CodeBlueprintView({ requested }: { requested: { id: string; revision: n
   }
   function closeDetail() {
     setDetailOpen(false);
-    requestAnimationFrame(() => document.querySelector<SVGElement>(`[data-node-id="${selectedId}"]`)?.focus({ preventScroll: true }));
+    requestAnimationFrame(() => viewport.current?.querySelector<SVGElement>(`[data-node-id="${selectedId}"]`)?.focus({ preventScroll: true }));
   }
   useEffect(() => { if (requested) { navigate(requested.id, true); setDetailOpen(true); } }, [requested]);
   useEffect(() => {
@@ -230,14 +232,14 @@ function CodeBlueprintView({ requested }: { requested: { id: string; revision: n
     const element  = viewport.current                                      ;
     if (element) element.scrollTo({ left: position ? Math.max(0, (position.x + position.width / 2) * navigationZoom - element.clientWidth / 2) : 0, top: position ? Math.max(0, (position.y + position.height / 2) * navigationZoom - element.clientHeight / 2) : 0 });
     if (focusAfterNavigation.current) {
-      const target = document.querySelector<SVGElement>(`.blueprint-node[data-node-id="${selectedId}"]`) ?? document.querySelector<SVGElement>('.blueprint-node');
+      const target = viewport.current?.querySelector<SVGElement>(`.blueprint-node[data-node-id="${selectedId}"]`) ?? viewport.current?.querySelector<SVGElement>('.blueprint-node');
       target?.focus({ preventScroll: true });
       focusAfterNavigation.current = false;
     }
   }, [currentId, selectedId]);
   function focusNext(index: number, key: string) {
     const next = key === 'Home' ? 0 : key === 'End' ? children.length - 1 : Math.max(0, Math.min(children.length - 1, index + (key === 'ArrowDown' || key === 'ArrowRight' ? 1 : -1)));
-    document.getElementById(`architecture-node-${next}`)?.focus();
+    document.getElementById(`${namespace}-architecture-node-${next}`)?.focus();
   }
   return <>
     <main className="ecosystem-work blueprint-work" aria-label="WWW 기능과 코드 연결 지도" data-current-id={currentId} onKeyDown={(event) => { if (event.key === "Escape" && detailOpen) { event.preventDefault(); closeDetail(); } }}>
@@ -270,14 +272,14 @@ function CodeBlueprintView({ requested }: { requested: { id: string; revision: n
           event.currentTarget.scrollTop = start.top - (event.clientY - start.y);
         }} onPointerUp={() => { drag.current = null; }} onPointerCancel={() => { drag.current = null; }}>
         <svg className="ecosystem-svg blueprint-svg" width={layout.width * zoom} height={layout.height * zoom} viewBox={`0 0 ${layout.width} ${layout.height}`} aria-label={`${current.title} 하위 책임`}>
-          <defs><marker id="blueprint-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
-          {relationMode === 'structure' && layout.nodes.map((entry) => <path key={`parent:${entry.id}`} className="blueprint-hierarchy" d={responsibilityHierarchyPath(layout.parent, entry)} markerEnd="url(#blueprint-arrow)"><title>{current.id} → {entry.id}: 정본 책임 계층 · 실행 순서 아님</title></path>)}
+          <defs><marker id={arrowId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/></marker></defs>
+          {relationMode === 'structure' && layout.nodes.map((entry) => <path key={`parent:${entry.id}`} className="blueprint-hierarchy" d={responsibilityHierarchyPath(layout.parent, entry)} markerEnd={`url(#${arrowId})`}><title>{current.id} → {entry.id}: 정본 책임 계층 · 실행 순서 아님</title></path>)}
           {drawnDependencies.map((edge, index) => {
             const from = placed.get(edge.from)!;
             const to = placed.get(edge.to)!;
             const start = responsibilityEdgePoints(from, to, index, drawnDependencies.length)[0]!;
             return <g key={`${edge.from}:${edge.to}`} className="blueprint-reference" data-from={edge.from} data-to={edge.to}>
-              <path d={responsibilityEdgePath(from, to, index, drawnDependencies.length)} markerEnd="url(#blueprint-arrow)" className={`blueprint-edge is-connected ${edge.type && !edge.runtime && !edge.mixed ? 'is-type' : ''} ${referenceFocus === edge.to ? 'is-incoming' : ''}`}><title>{from.title} → {to.title}: runtime {edge.runtime}, mixed {edge.mixed}, type {edge.type}</title></path>
+              <path d={responsibilityEdgePath(from, to, index, drawnDependencies.length)} markerEnd={`url(#${arrowId})`} className={`blueprint-edge is-connected ${edge.type && !edge.runtime && !edge.mixed ? 'is-type' : ''} ${referenceFocus === edge.to ? 'is-incoming' : ''}`}><title>{from.title} → {to.title}: runtime {edge.runtime}, mixed {edge.mixed}, type {edge.type}</title></path>
               <text x={start.x + 8} y={start.y - 5} className="blueprint-edge-number">{index + 1}</text>
             </g>;
           })}
@@ -287,7 +289,7 @@ function CodeBlueprintView({ requested }: { requested: { id: string; revision: n
             <text x="18" y="50" className="blueprint-node-description">{responsibilityLines(current.description).map((line, index) => <tspan key={index} x="18" dy={index ? 18 : 0}>{line}</tspan>)}</text>
             <text x="18" y="96" className="blueprint-node-meta">현재 구성 · 하위 책임 {children.length}개</text>
           </g>
-          {layout.nodes.map((entry, index) => <g key={entry.id} id={`architecture-node-${index}`} data-node-id={entry.id} className={`blueprint-node ${entry.id === selectedId ? 'is-selected' : ''}`} transform={`translate(${entry.x} ${entry.y})`} role="button" tabIndex={0} aria-label={`${entry.title}, ${entry.id}, ${tree.children(entry.id).length ? '하위 책임 열기' : '명세와 구현 보기'}`} aria-pressed={entry.id === selectedId}
+          {layout.nodes.map((entry, index) => <g key={entry.id} id={`${namespace}-architecture-node-${index}`} data-node-id={entry.id} className={`blueprint-node ${entry.id === selectedId ? 'is-selected' : ''}`} transform={`translate(${entry.x} ${entry.y})`} role="button" tabIndex={0} aria-label={`${entry.title}, ${entry.id}, ${tree.children(entry.id).length ? '하위 책임 열기' : '명세와 구현 보기'}`} aria-pressed={entry.id === selectedId}
             onClick={() => navigate(entry.id)} onKeyDown={(event) => {
               if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); navigate(entry.id, true); }
               else if (['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) { event.preventDefault(); focusNext(index, event.key); }
@@ -305,11 +307,11 @@ function CodeBlueprintView({ requested }: { requested: { id: string; revision: n
       </div>}
       <section className="blueprint-selection-summary" aria-label="선택한 노드 요약" data-selected-id={selectedId}>
         <div><strong>{selected.title}</strong><p>{selected.description}</p><span>하위 구성 {overview.components.length}개 · 담당 코드 {overview.declarations.length}개</span></div>
-        <button data-testid="architecture-detail-toggle" aria-expanded={detailOpen} aria-controls="architecture-detail" onClick={() => detailOpen ? closeDetail() : setDetailOpen(true)}>{detailOpen ? '상세 접기' : '자세히 보기'}</button>
+        <button data-testid="architecture-detail-toggle" aria-expanded={detailOpen} aria-controls={`${namespace}-architecture-detail`} onClick={() => detailOpen ? closeDetail() : setDetailOpen(true)}>{detailOpen ? '상세 접기' : '자세히 보기'}</button>
       </section>
       <footer className="ecosystem-legend"><span>배경 드래그로 이동 · 노드를 눌러 내부 구성 탐색</span><span>포함 관계와 코드 참조 · 실행 추적 아님</span></footer>
     </main>
-    <aside id="architecture-detail" className="ecosystem-detail blueprint-detail" hidden={!detailOpen} aria-label="선택한 책임 상세" data-selected-id={selectedId} onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); closeDetail(); } }}>
+    <aside id={`${namespace}-architecture-detail`} className="ecosystem-detail blueprint-detail" hidden={!detailOpen} aria-label="선택한 책임 상세" data-selected-id={selectedId} onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); closeDetail(); } }}>
       <div className="ecosystem-detail-heading"><button data-testid="architecture-detail-close" aria-label="지도 선택 상세 닫기" onClick={closeDetail}>닫기</button>선택한 책임 <code>{selectedId}</code></div>
       <div className="ecosystem-detail-content"><h2>{selected.title}</h2>
         <section className="blueprint-role" aria-label="역할과 책임"><h3>역할과 책임</h3><p>{selected.description}</p></section>

@@ -1,0 +1,45 @@
+.agent-sidebar .na-nav{margin-top:0}
+.ao-agents,.ao-overview{padding:20px}
+.ao-agent-root{display:flex;align-items:center;gap:10px}
+.ao-role-mark{display:grid;place-items:center;width:28px;height:28px;flex-shrink:0;border:1px solid var(--na-control-border);border-radius:7px;color:var(--na-accent);font-size:12px;font-weight:650}
+.ao-agent-root h3{font-size:13px}
+.ao-agent-root p{margin-top:2px;font-size:10px;color:var(--na-muted);overflow-wrap:anywhere}
+.ao-skills{list-style:none;padding:10px 0 0 14px;margin-left:13px!important;border-left:1px solid var(--na-border)}
+.ao-skill{display:grid;grid-template-columns:7px minmax(0,1fr) auto;column-gap:9px;align-items:center;padding:9px 8px;margin:2px -8px;border:1px solid transparent;border-radius:6px}
+.ao-skill-light{width:6px;height:6px;border:1px solid var(--na-muted);border-radius:50%}
+.ao-skill-name{display:flex;align-items:baseline;gap:8px;min-width:0}
+.ao-skill-name strong{font-size:11px;font-weight:550}
+.ao-skill-name small,.ao-skill-state{font-size:10px;color:var(--na-muted)}
+.ao-skill-basis{grid-column:2 / -1;color:var(--na-muted);font-size:9px;overflow-wrap:anywhere;margin-top:4px}
+.ao-skill.is-selected{background:var(--na-surface-active);border-color:var(--na-control-border)}
+.ao-skill.is-selected .ao-skill-light{background:var(--na-accent);border-color:var(--na-accent)}
+.ao-skill.is-selected .ao-skill-state{color:var(--na-accent)}
+.ao-subagents{margin-top:22px}
+.ao-subagents>ul{list-style:none;padding:0}
+.ao-subagent{padding:10px 0;border-top:1px solid var(--na-border)}
+.ao-subagent-heading{display:flex;align-items:center;gap:8px;min-width:0}
+.ao-subagent-heading strong{font-weight:500;font-size:11px;flex:1;min-width:0;overflow-wrap:anywhere}
+.ao-agent-light{display:grid;place-items:center;width:12px;height:12px;flex-shrink:0;border:1px solid var(--na-muted);border-radius:50%;font-size:9px;line-height:1}
+.ao-subagent-state{font-size:10px;color:var(--na-muted);white-space:nowrap}
+.ao-agent-completed .ao-agent-light{background:var(--na-accent);border-color:var(--na-accent);color:var(--na-ink)}
+.ao-agent-completed .ao-subagent-state,.ao-agent-running .ao-subagent-state{color:var(--na-accent)}
+.ao-agent-running .ao-agent-light{border-color:var(--na-accent)}
+.ao-agent-failed .ao-agent-light,.ao-agent-interrupted .ao-agent-light{border-color:var(--na-warm)}
+.ao-agent-failed .ao-subagent-state,.ao-agent-interrupted .ao-subagent-state{color:var(--na-warm)}
+.ao-agent-parent,.ao-agent-model{margin:4px 0 0 20px!important;color:var(--na-muted);font-size:9px;overflow-wrap:anywhere}
+.ao-agent-message{margin:8px 0 0 20px!important;color:var(--na-text);font-size:10px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:180px;overflow:auto}
+.ao-overview{border-top:1px solid var(--na-border);background:transparent}
+.ao-request-title{font-size:12px;line-height:1.65;overflow-wrap:anywhere}
+.ao-section-title{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:20px 0 8px}
+.ao-section-title h4{margin:0;font-size:11px;font-weight:600}
+.ao-section-title>span{font-size:9px;color:var(--na-muted)}
+.ao-plan ol{list-style:none;padding:0}
+.ao-plan li{display:flex;gap:9px;align-items:flex-start;padding:7px 0;color:var(--na-muted);font-size:11px;overflow-wrap:anywhere}
+.ao-plan-mark{width:12px;flex-shrink:0;font-size:10px;padding-top:1px}
+.ao-plan li small{display:block;font-size:9px;color:var(--na-muted);margin-top:2px}
+.ao-plan-inProgress{color:var(--na-text)!important}
+.ao-plan-inProgress .ao-plan-mark,.ao-plan-completed .ao-plan-mark{color:var(--na-accent)}
+.ao-progress-context{font-size:10px;color:var(--na-accent);margin-bottom:7px!important;overflow-wrap:anywhere}
+.ao-progress-prose{font-size:11px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
+.ao-empty{font-size:10px;line-height:1.7;color:var(--na-muted);padding:4px 0}
+@media(max-width:1100px){.ao-agents,.ao-overview{padding-left:16px;padding-right:16px}}

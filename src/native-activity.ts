@@ -46,6 +46,8 @@ export interface ActivityTurn {
   status           : ActivityStatus                ;
   startedAt        : string                        ;
   endedAt          : string | null                 ;
+  /** Native가 식별한 최초 턴 종료·연결 종료의 수신 순서. */
+  endedSeq         : number | null                 ;
   model            : ModelObservation | null       ;
   plan             : PlanStep[]                    ;
   entries          : ActivityEntry[]               ;
@@ -345,6 +347,7 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
   const baselines          = new Map<ActivityTurn, UsageBreakdown | null>() ;
   const turnTotals         = new Map<ActivityTurn, UsageBreakdown>()        ;
   const unsafeUsageThreads = new Set<string>()                              ;
+  const settledTurns = new Set<ActivityTurn>();
 
   const requests       = new Map<string, ActivityTurn>()         ;
   const approvals      = new Map<string, ActivityTurn>()         ;
@@ -370,6 +373,7 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
       status           : "running"                    ,
       startedAt        : at                           ,
       endedAt          : null                         ,
+      endedSeq         : null                         ,
       model            : models.get(threadId) ?? null ,
       plan             : []                           ,
       entries          : []                           ,
@@ -480,7 +484,11 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     }
     if (event.method === "turn/startFailed"                                      ) {
       const pending = requests.get(`${threadId}:${requestId}`);
-      if (pending && pending.turnId === null) { pending.status = "failed"; pending.endedAt = event.at; }
+      if (pending && pending.turnId === null) {
+        pending.status = "failed";
+        pending.endedAt = event.at;
+        pending.endedSeq ??= event.seq;
+      }
       continue;
     }
     if (event.method === "transport/error") {
@@ -490,7 +498,8 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     if (event.method === "transport/closed") {
       transport = "closed";
       for (const turn of turns) {
-        if (turn.status === "running" || turn.status === "pending" || turn.status === "blocked") {
+        if (!turn.endedAt) {
+          turn.endedSeq ??= event.seq;
           turn.lastActivityAt = event.at;
           turn.status = "unknown";
           turn.endedAt = event.at;
@@ -520,9 +529,17 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     if (!threadId || !turnId) continue;
     const turn = locate(threadId, turnId, event.at, event.historical === true);
     if (!turn) continue;
+    const progressEvent = event.method === "turn/plan/updated"
+      || (event.method === "item/agentMessage/delta" && data.phase === "commentary")
+      || ((event.method === "item/started" || event.method === "item/completed") && item.type === "agentMessage" && item.phase === "commentary");
+    if ((turn.endedAt || turn.endedSeq !== null) && progressEvent) continue;
     if (event.method === "turn/started" && !turn.endedAt) turn.status = "running";
     if (event.method === "turn/completed"                                   ) {
-      turn.status = status(turnData.status);
+      if (settledTurns.has(turn)) continue;
+      const outcome = turnData.status === "completed" || turnData.status === "failed" || turnData.status === "interrupted" ? turnData.status : "unknown";
+      if (outcome !== "unknown") settledTurns.add(turn);
+      turn.endedSeq ??= event.seq;
+      turn.status = outcome;
       turn.endedAt = event.at;
       for (const item of turn.entries) {
         if (item.status === "running" || item.status === "pending" || item.status === "blocked") {

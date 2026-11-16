@@ -7,6 +7,7 @@ import { commandOutput, commandPreview, jsonTokens, shellTokens } from "../src/c
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { CommandView } from "../src/command-card";
+import { ChatRowMemoryContext } from "../src/chat-row-state";
 import { project } from "../src/projection";
 import type { AppEvent } from "../src/shared";
 
@@ -29,6 +30,65 @@ describe("명령 출력 미리보기", () => {
       expect(commandPreview(lines.join("\n"), false)).toEqual({ text: lines.slice(0, 10).join("\n"), hiddenLines: count - 10 });
     }
   });
+});
+
+test("긴 출력은 한 영역에서 펼치며 짧은 출력에는 전환이 없다", () => {
+  for (const count of [0, 10, 11]) {
+    const output = Array.from({ length: count }, (_, index) => `줄-${index}`).join("\n");
+    const block = project([{ seq: 1, at: "2026-11-13T00:00:00Z", kind: "notification", method: "item/completed", params: { item: { id: `cmd-${count}`, type: "commandExecution", status: "completed", exitCode: 0, aggregatedOutput: output } } }]).blocks[0];
+    if (block?.kind !== "command") throw Error("명령 없음");
+    const render = (open: boolean) => renderToStaticMarkup(createElement(ChatRowMemoryContext.Provider, { value: new Map([[block.id, open]]) }, createElement(CommandView, { block })));
+    const collapsed = render(false);
+    const expanded = render(true);
+    expect((collapsed.match(/data-testid="command-preview"/g) ?? []).length).toBe(1);
+    expect((expanded.match(/data-testid="command-preview"/g) ?? []).length).toBe(1);
+    expect(collapsed.includes("aria-expanded=")).toBe(count > 10);
+    expect(expanded.includes("aria-expanded=")).toBe(count > 10);
+    if (count > 10) {
+      expect(collapsed).not.toContain("줄-10");
+      expect(expanded).toContain("줄-10");
+      expect((expanded.match(/줄-0/g) ?? []).length).toBe(1);
+    }
+  }
+});
+
+test("실패 명령은 기본 펼침이며 개별 기억은 기본값보다 우선한다", () => {
+  const output = Array.from({ length: 11 }, (_, index) => `실패-${index}`).join("\n");
+  const block = project([{ seq: 1, at: "2026-11-13T00:00:00Z", kind: "notification", method: "item/completed", params: { item: { id: "failed", type: "commandExecution", status: "failed", exitCode: 1, aggregatedOutput: output } } }]).blocks[0];
+  if (block?.kind !== "command") throw Error("명령 없음");
+  const render = (memory: Map<string, boolean>) => renderToStaticMarkup(createElement(ChatRowMemoryContext.Provider, { value: memory }, createElement(CommandView, { block })));
+  expect(render(new Map())).toContain("실패-10");
+  expect(render(new Map([[block.id, false]]))).not.toContain("실패-10");
+});
+
+test("짧은 원문 출력은 끝 개행과 들여쓰기를 그대로 표시한다", () => {
+  const outputs = ["", "  한 줄\n", Array.from({ length: 10 }, (_, index) => `  줄 ${index}`).join("\n") + "\n", '{"value": 1}\n'];
+  for (const [index, output] of outputs.entries()) {
+    const block = project([{ seq: 1, at: "2026-11-13T00:00:00Z", kind: "notification", method: "item/completed", params: { item: { id: `short-${index}`, type: "commandExecution", status: "completed", exitCode: 0, aggregatedOutput: output } } }]).blocks[0];
+    if (block?.kind !== "command") throw Error("명령 없음");
+    const memory = new Map([[`${block.id}:raw-output`, true]]);
+    const html = renderToStaticMarkup(createElement(ChatRowMemoryContext.Provider, { value: memory }, createElement(CommandView, { block })));
+    const content = html.match(/<pre[^>]*data-testid="command-preview"[^>]*>([\s\S]*?)<\/pre>/)?.[1];
+    expect(content?.replaceAll("&quot;", '"')).toBe(output || "출력 없음");
+    expect(html).not.toContain("aria-expanded=");
+  }
+});
+
+test("명령별 펼침과 JSON 원문 선택은 서로 독립적이다", () => {
+  const output = JSON.stringify(Object.fromEntries(Array.from({ length: 12 }, (_, index) => [`key${index}`, index])));
+  const blocks = project(["first", "second"].map((id, index) => ({ seq: index + 1, at: "2026-11-13T00:00:00Z", kind: "notification" as const, method: "item/completed", params: { item: { id, type: "commandExecution", status: "completed", exitCode: 0, aggregatedOutput: output } } }))).blocks;
+  const first = blocks[0];
+  const second = blocks[1];
+  if (first?.kind !== "command" || second?.kind !== "command") throw Error("명령 없음");
+  const memory = new Map([[first.id, true], [`${second.id}:raw-output`, true]]);
+  const render = (block: typeof first) => renderToStaticMarkup(createElement(ChatRowMemoryContext.Provider, { value: memory }, createElement(CommandView, { block })));
+  const firstHtml = render(first);
+  const secondHtml = render(second);
+  expect(firstHtml).toContain("key11");
+  expect(firstHtml).toContain('aria-expanded="true"');
+  expect(secondHtml).toContain('aria-pressed="true"');
+  expect(secondHtml).not.toContain("aria-expanded=");
+  expect(secondHtml).toContain("key11");
 });
 
 test("원본 보관 한도 초과는 보관된 범위의 미리보기와 원본 줄 수 미확인으로 안내한다", () => {

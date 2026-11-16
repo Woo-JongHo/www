@@ -27,6 +27,153 @@ function item(seq: number, method: string, value: unknown, turnId = "a"): AppEve
 }
 const configured = event(1, "thread/configured", { threadId: "t", model: "gpt", modelProvider: "openai", isNew: true });
 
+describe("계획·공개 진행 설명의 종료 경계", () => {
+  test("종료·복원된 턴의 늦은 계획과 산문만 차단하고 후행 실행 결과는 보존한다", () => {
+    for (const historical of [false, true]) {
+      for (const status of ["completed", "failed", "interrupted"] as const) {
+        const events = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "종료 전 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "종료 전 설명" }), item(4, "item/started", { id: "cmd", type: "commandExecution", command: "printf result" }), event(5, "turn/completed", { threadId: "t", turn: { id: "a", status } }), started(6), event(7, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "늦은 계획", status: "inProgress" }] }), event(8, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "msg", phase: "commentary", delta: "늦은 조각" }), item(9, "item/completed", { id: "late", type: "agentMessage", phase: "commentary", text: "늦은 산문" }), item(10, "item/completed", { id: "cmd", type: "commandExecution", command: "printf result", exitCode: 0 }), item(11, "item/completed", { id: "answer", type: "agentMessage", phase: "final_answer", text: "최종 결과" })].map((row) => ({ ...row, historical }));
+        const turn = projectNativeActivity(events, "t").turns[0];
+        expect(turn?.plan).toEqual([{ step: "종료 전 계획", status: "inProgress" }]);
+        expect(turn?.entries.filter((entry) => entry.kind === "progress").map((entry) => entry.description)).toEqual(["종료 전 설명"]);
+        expect(turn?.entries.find((entry) => entry.kind === "command")?.status).toBe("completed");
+        expect(turn?.answer).toBe("최종 결과");
+        expect(turn?.status).toBe(status);
+        expect(turn?.historical).toBe(historical);
+        expect(turn?.endedSeq).toBe(5);
+      }
+    }
+  });
+  test("다른 새 턴의 계획과 재사용된 메시지 ID는 이전 턴의 늦은 사건과 섞이지 않는다", () => {
+    const events = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "A 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "shared", type: "agentMessage", phase: "commentary", text: "A 설명" }), event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), started(5, "b"), event(6, "turn/plan/updated", { threadId: "t", turnId: "b", plan: [{ step: "B 계획", status: "inProgress" }] }), item(7, "item/completed", { id: "shared", type: "agentMessage", phase: "commentary", text: "B 설명" }, "b"), event(8, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "늦은 A 계획", status: "inProgress" }] }), item(9, "item/completed", { id: "shared", type: "agentMessage", phase: "commentary", text: "늦은 A 설명" })];
+    const turns = projectNativeActivity(events, "t").turns;
+    expect(turns.map((turn) => turn.plan[0]?.step)).toEqual(["A 계획", "B 계획"]);
+    expect(turns.map((turn) => turn.entries.find((entry) => entry.kind === "progress")?.description)).toEqual(["A 설명", "B 설명"]);
+  });
+  test("연결 종료도 계획·공개 산문의 경계이며 새 턴에는 전파하지 않는다", () => {
+    const closed = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "A 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "A 설명" }), event(4, "transport/closed", {}), event(5, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "늦은 계획", status: "inProgress" }] }), item(6, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "늦은 설명" })];
+    const turns = projectNativeActivity([...closed, started(7, "b"), event(8, "turn/plan/updated", { threadId: "t", turnId: "b", plan: [{ step: "B 계획", status: "inProgress" }] }), item(9, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "B 설명" }, "b")], "t").turns;
+    expect(turns.map((turn) => turn.plan[0]?.step)).toEqual(["A 계획", "B 계획"]);
+    expect(turns.map((turn) => turn.entries.find((entry) => entry.kind === "progress")?.description)).toEqual(["A 설명", "B 설명"]);
+  });
+  test("최초 종료 seq는 prefix의 Native 식별과 중복 종료 뒤에도 일치한다", () => {
+    const completions = [
+      { turn: { id: "a", status: "completed" } },
+      { thread: { id: "t" }, turn: { id: "a", status: "completed" } },
+      { turn: { threadId: "t", id: "a", status: "completed" } },
+      { turnId: "a", turn: { status: "completed" } },
+    ];
+    for (const completion of completions) {
+      const events = [started(1), event(2, "turn/completed", completion), event(3, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } })];
+      expect(projectNativeActivity(events, "t").turns[0]?.endedSeq).toBe(2);
+      expect(projectNativeActivity(events.map((row) => ({ ...row, historical: true })), "t").turns[0]?.endedSeq).toBe(2);
+    }
+    const ambiguous = [started(1), event(2, "turn/started", { threadId: "foreign", turn: { id: "a" } }), event(3, "turn/completed", { turn: { id: "a", status: "completed" } })];
+    expect(projectNativeActivity(ambiguous, "t").turns[0]?.endedSeq).toBeNull();
+    const futureCollision = [started(1), event(2, "turn/completed", { turn: { id: "a", status: "completed" } }), event(3, "turn/started", { threadId: "foreign", turn: { id: "a" } })];
+    expect(projectNativeActivity(futureCollision, "t").turns[0]?.endedSeq).toBe(2);
+  });
+  test("승인 결과가 불확실한 턴도 연결 종료 seq 뒤 공개 진행을 갱신하지 않는다", () => {
+    const request: AppEvent = { ...event(4, "item/commandExecution/requestApproval", { threadId: "t", turnId: "a" }), kind: "request", requestId: 42 };
+    const uncertain: AppEvent = { ...event(5, "approval/uncertain", {}), requestId: 42 };
+    const events = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "A 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "처음" }), request, uncertain, event(6, "transport/closed", {}), item(7, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "늦은 설명" })];
+    const turn = projectNativeActivity(events, "t").turns[0];
+    expect(turn?.status).toBe("unknown");
+    expect(turn?.endedSeq).toBe(6);
+    expect(turn?.entries.find((entry) => entry.kind === "progress")?.description).toBe("처음");
+  });
+  test("확정된 Native 종료 상태와 시각은 교차 상태·동일 상태 재전달로 바뀌지 않는다", () => {
+    for (const first of ["completed", "failed", "interrupted"] as const) {
+      for (const duplicate of ["completed", "failed", "interrupted"] as const) {
+        const events = [started(1), event(2, "turn/completed", { threadId: "t", turn: { id: "a", status: first } }), event(3, "turn/completed", { threadId: "t", turn: { id: "a", status: duplicate } })];
+        for (const historical of [false, true]) {
+          const turn = projectNativeActivity(events.map((row) => ({ ...row, historical })), "t").turns[0];
+          expect(turn?.status).toBe(first);
+          expect(turn?.endedAt).toBe(events[1]?.at);
+          expect(turn?.endedSeq).toBe(2);
+        }
+      }
+    }
+  });
+  test("연결 종료·미확인 Native 완료는 뒤늦은 확정 결과로 정제할 수 있다", () => {
+    for (const status of ["completed", "failed", "interrupted"] as const) {
+      for (const unknown of [event(2, "transport/closed", {}), event(2, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } })]) {
+        const terminal = event(3, "turn/completed", { threadId: "t", turn: { id: "a", status } });
+        const duplicate = event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: status === "failed" ? "completed" : "failed" } });
+        const turn = projectNativeActivity([started(1), unknown, terminal, duplicate], "t").turns[0];
+        expect(turn?.status).toBe(status);
+        expect(turn?.endedAt).toBe(terminal.at);
+        expect(turn?.endedSeq).toBe(2);
+      }
+    }
+  });
+  test("클라이언트 startFailed를 Native의 확정 종료로 오인하지 않는다", () => {
+    const terminal = event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } });
+    const events = [event(1, "turn/userPrompt", { threadId: "t", clientRequestId: "r", text: "요청" }), event(2, "turn/startFailed", { threadId: "t", clientRequestId: "r" }), event(3, "turn/startAccepted", { threadId: "t", turnId: "a", clientRequestId: "r" }), terminal, event(5, "turn/completed", { threadId: "t", turn: { id: "a", status: "failed" } })];
+    const turn = projectNativeActivity(events, "t").turns[0];
+    expect(turn?.status).toBe("completed");
+    expect(turn?.endedAt).toBe(terminal.at);
+    expect(turn?.endedSeq).toBe(2);
+  });
+  test("불확실 승인 턴의 연결 종료 뒤 시작·승인·산문은 재활성화하지 않는다", () => {
+    const request: AppEvent = { ...event(4, "item/commandExecution/requestApproval", { threadId: "t", turnId: "a" }), kind: "request", requestId: 42 };
+    const uncertain: AppEvent = { ...event(5, "approval/uncertain", {}), requestId: 42 };
+    const closed = event(6, "transport/closed", {});
+    const responded: AppEvent = { ...event(8, "approval/responded", { decision: "accept" }), requestId: 42 };
+    const lateRequest: AppEvent = { ...event(9, "item/commandExecution/requestApproval", { threadId: "t", turnId: "a" }), kind: "request", requestId: 43 };
+    const events = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "A 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "처음" }), request, uncertain, closed, started(7), responded, lateRequest, item(10, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "늦은 설명" }), event(11, "transport/closed", {})];
+    const turn = projectNativeActivity(events, "t").turns[0];
+    expect(turn?.status).toBe("unknown");
+    expect(turn?.endedAt).toBe(closed.at);
+    expect(turn?.endedSeq).toBe(closed.seq);
+    expect(turn?.lastActivityAt).toBe(closed.at);
+    expect(turn?.entries.find((entry) => entry.kind === "progress")?.description).toBe("처음");
+    expect(turn?.entries.find((entry) => entry.id === "request:number:43")?.status).toBe("unknown");
+  });
+  test("완료 사건의 canonical 확정3종 외 값은 unknown이며 뒤늦은 확정으로 정제한다", () => {
+    const unknownValues: unknown[] = ["inProgress", "running", "pending", "blocked", "declined", "stopped", "unknown", "other", null, undefined, 42];
+    for (const rawStatus of unknownValues) {
+      const uncertain = event(2, "turn/completed", { threadId: "t", turn: { id: "a", status: rawStatus } });
+      const before = projectNativeActivity([started(1), uncertain], "t").turns[0];
+      expect(before?.status).toBe("unknown");
+      expect(before?.endedAt).toBe(uncertain.at);
+      expect(before?.endedSeq).toBe(2);
+      for (const status of ["completed", "failed", "interrupted"] as const) {
+        const terminal = event(3, "turn/completed", { threadId: "t", turn: { id: "a", status } });
+        const duplicate = event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: status === "failed" ? "completed" : "failed" } });
+        const turn = projectNativeActivity([started(1), uncertain, terminal, duplicate], "t").turns[0];
+        expect(turn?.status).toBe(status);
+        expect(turn?.endedAt).toBe(terminal.at);
+        expect(turn?.endedSeq).toBe(2);
+      }
+    }
+  });
+  test("모든 종료 생성 경로의 각 prefix에서 종료 시각과 비활성 상태가 정합하다", () => {
+    const request: AppEvent = { ...event(2, "item/commandExecution/requestApproval", { threadId: "t", turnId: "a" }), kind: "request", requestId: 42 };
+    const uncertain: AppEvent = { ...event(3, "approval/uncertain", {}), requestId: 42 };
+    const lateApproval: AppEvent = { ...event(8, "approval/responded", { decision: "accept" }), requestId: 42 };
+    const closers: AppEvent[][] = [
+      [started(1), event(5, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } })],
+      [started(1), event(5, "turn/completed", { threadId: "t", turn: { id: "a", status: "inProgress" } })],
+      [started(1), event(5, "transport/closed", {})],
+      [started(1), request, event(5, "transport/closed", {})],
+      [started(1), request, uncertain, event(5, "transport/closed", {})],
+      [event(1, "turn/userPrompt", { threadId: "t", clientRequestId: "r", text: "요청" }), event(5, "transport/closed", {}), event(6, "turn/startAccepted", { threadId: "t", turnId: "a", clientRequestId: "r" })],
+      [event(1, "turn/userPrompt", { threadId: "t", clientRequestId: "r", text: "요청" }), event(5, "turn/startFailed", { threadId: "t", clientRequestId: "r" }), event(6, "turn/startAccepted", { threadId: "t", turnId: "a", clientRequestId: "r" })],
+    ];
+    for (const historical of [false, true]) {
+      for (const before of closers) {
+        const events = [...before, started(7), lateApproval, item(9, "item/completed", { id: "late", type: "agentMessage", phase: "commentary", text: "늦은 산문" }), started(10, "b")].map((row) => ({ ...row, historical }));
+        for (let count = 1; count <= events.length; count++) {
+          for (const turn of projectNativeActivity(events.slice(0, count), "t").turns) {
+            if (turn.endedSeq !== null) expect(turn.endedAt).not.toBeNull();
+            if (turn.endedAt !== null) expect(["running", "pending", "blocked"]).not.toContain(turn.status);
+          }
+        }
+      }
+    }
+  });
+});
+
 describe("Native 원장 입력 정규화", () => {
   const root = "/projects/www";
 

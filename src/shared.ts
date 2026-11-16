@@ -4,6 +4,30 @@
  */
 export type RpcId = string | number;
 
+export type NativeTimingPhase = "request" | "connect" | "initialize" | "thread/start" | "thread/read" | "thread/resume" | "thread/turns/list" | "turn/start" | "first-native";
+export type NativeTimingStatus = "started" | "completed" | "failed" | "cancelled";
+export interface NativeTimingEvent {
+  traceId: string;
+  threadId: string | null;
+  phase: NativeTimingPhase;
+  status: NativeTimingStatus;
+  elapsedMs: number;
+  source: "www" | "native";
+}
+
+export type WorkStatus = "draft" | "ready" | "in_progress" | "verifying" | "done" | "cancelled";
+export interface DashboardProject { key: string; name: string; path: string; kind: "rpa" | "www" }
+export interface DashboardWork {
+  id: string; projectKey: string; title: string; status: WorkStatus; blockedReason: string | null;
+  sourcePath: string; areas: string[]; owner: string; requiredCriteria: number; passedCriteria: number;
+}
+export interface DashboardIssue { code: string; path: string; message: string }
+export interface DashboardProjectSnapshot {
+  project: DashboardProject; coverage: "complete" | "empty" | "partial" | "failed";
+  cards: DashboardWork[]; issues: DashboardIssue[];
+}
+export interface DashboardSnapshot { capturedAt: string; projects: DashboardProjectSnapshot[] }
+
 export interface AppEvent {
   seq        : number                                   ;
   at         : string                                   ;
@@ -18,6 +42,7 @@ export interface AppEvent {
 
 /** 실제 IPC 배달과 요청의 필수 선택 경계. */
 export interface SelectionRef {
+  sessionId?: string;
   workspaceKey: string;
   selectionEpoch: number;
   processEpoch: string;
@@ -120,14 +145,30 @@ export interface ConversationCatalog {
   nextCursor : string | null         ;
 }
 
+export interface NativeSessionSummary {
+  id: string;
+  title: string;
+  workspace: WorkspaceSelection;
+  threadId: string | null;
+  busy: boolean;
+  approvalCount: number;
+  failed: boolean;
+}
+
 export interface WwwApi {
+  listSessions(): Promise<NativeSessionSummary[]>;
+  createSession(selection?: SelectionRef): Promise<NativeSessionSummary>;
+  closeSession(sessionId: string): Promise<void>;
+  onSessions(listener: (sessions: NativeSessionSummary[]) => void): () => void;
   listConversations(selection: SelectionRef, cursor?: string): Promise<ConversationCatalog>;
   openConversation(selection: SelectionRef, threadId: string): Promise<ConversationSelection>;
   newConversation(selection: SelectionRef): Promise<ConversationSelection>;
-  openExternal(url: string): Promise<void>;
+  openExternal(url: string, sessionId?: string): Promise<void>;
   chooseWorkspace(selection: SelectionRef): Promise<ConversationSelection | null>;
-  workspace(): Promise<WorkspaceSelection>;
+  workspace(sessionId?: string): Promise<WorkspaceSelection>;
   listProjects(selection: SelectionRef): Promise<readonly ProjectInfo[]>;
+  dashboard(selection: SelectionRef): Promise<DashboardSnapshot>;
+  selectWww(selection: SelectionRef): Promise<ConversationSelection>;
   setProjectFavorite(selection: SelectionRef, workspaceKey: string, favorite: boolean): Promise<void>;
   switchProject(selection: SelectionRef, workspaceKey: string): Promise<ConversationSelection>;
   startThread(selection: SelectionRef): Promise<{ threadId: string }>;
@@ -141,16 +182,16 @@ export interface WwwApi {
   onEvent(listener: (event: ScopedAppEvent) => void): () => void;
   probeReady             ()                                   : Promise<{ enabled: boolean; readinessMs?: number; developmentPolicyAvailable?: boolean; developmentWorkId?: string; expectDevelopmentComplete?: boolean; checkInterruptPending?: boolean; checkReports?: boolean; checkNativeReports?: boolean; checkActivity?: boolean }>;
   probeFinish            (result: Record<string, unknown>    ): Promise<void>;
-  developmentPolicy      ()                                   : Promise<DevelopmentPolicyInfo>;
-  developmentStatus      (workId: string                     ): Promise<DevelopmentWorkStatus>;
-  completeDevelopmentWork(workId: string                     ): Promise<{ workId: string; status: string }>;
-  listReports            ()                                   : Promise<WorkReportCatalog>;
-  readReport             (reportId: string                   ): Promise<WorkReportDocument>;
-  chooseReportRepository ()                                   : Promise<boolean>;
-  exportReport           (reportId: string                   ): Promise<string | null>;
-  nativeReportStatus     ()                                   : Promise<{ enabled: boolean; jobs: NativeReportJob[] }>;
-  setNativeReportEnabled (enabled: boolean                   ): Promise<boolean>;
-  retryNativeReport      (key: string                        ): Promise<NativeReportJob>;
+  developmentPolicy      (sessionId?: string)                                   : Promise<DevelopmentPolicyInfo>;
+  developmentStatus      (workId: string, sessionId?: string): Promise<DevelopmentWorkStatus>;
+  completeDevelopmentWork(workId: string, sessionId?: string): Promise<{ workId: string; status: string }>;
+  listReports            (sessionId?: string)                                   : Promise<WorkReportCatalog>;
+  readReport             (reportId: string, sessionId?: string): Promise<WorkReportDocument>;
+  chooseReportRepository (sessionId?: string)                                   : Promise<boolean>;
+  exportReport           (reportId: string, sessionId?: string): Promise<string | null>;
+  nativeReportStatus     (sessionId?: string)                                   : Promise<{ enabled: boolean; jobs: NativeReportJob[] }>;
+  setNativeReportEnabled (enabled: boolean, sessionId?: string): Promise<boolean>;
+  retryNativeReport      (key: string, sessionId?: string): Promise<NativeReportJob>;
 }
 
 /** main이 검증한 실제 workspace와 Native thread의 원장 경계. */
@@ -184,6 +225,7 @@ export interface ResourceCoverage {
 }
 
 export interface ResourceSnapshot {
+  sessionId?: string;
   scope: ResourceScope;
   processEpoch: string;
   selectionEpoch: number;

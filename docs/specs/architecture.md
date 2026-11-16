@@ -14,7 +14,7 @@
   {
     "id": "RESP-NATIVE-PROJECTS",
     "nodeId": "arch.native.projects",
-    "description": "로컬 프로젝트 인덱스가 실제 경로 식별·최근순·즐겨찾기·직렬 갱신·원자 저장과 오류 시 원본 보전을 담당한다. main은 single-instance lock 뒤 userData당 factory 하나를 사용하며 실행·전송·승인 중 전환 보호를 소유한다. 제한된 IPC가 renderer의 조회·즐겨찾기·프로젝트 선택을 연결한다.",
+    "description": "로컬 프로젝트 인덱스가 실제 경로 식별·최근순·즐겨찾기·직렬 갱신·원자 저장과 오류 시 원본 보전을 담당한다. main은 single-instance lock 뒤 userData당 factory 하나를 사용하며 실행·전송·승인 중 전환 보호를 소유한다. 제한된 IPC가 renderer의 조회·즐겨찾기·프로젝트 선택과 작업 기록 보드를 연결한다. 보드는 승인 프로젝트의 work.json만 한도 내에서 읽고 원본 상태·부분 실패·빈 자료를 구분하며 코드 실행이나 업무 상태 쓰기를 하지 않는다.",
     "implementationRequired": true,
     "verificationRequired": true
   },

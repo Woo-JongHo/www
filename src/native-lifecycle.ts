@@ -27,12 +27,19 @@ export function createNativeLifecycle(emit: Emit) {
   let interruptedThread: string | null = null;
   const pending = new Map<RpcId, Approval>();
   let nextApproval = 0;
-  const checked = (client: Client, valid: () => boolean) => ({
+  const checked = (client: Client, valid: () => boolean, boundary?: (method: string, status: "started" | "completed" | "failed") => void) => ({
     async request(method: string, params: unknown) {
       if (!valid()) throw new Error("Native 연결 또는 대화 선택이 변경됐습니다.");
-      const result = await client.request(method, params);
-      if (!valid()) throw new Error("Native 연결 또는 대화 선택이 변경됐습니다.");
-      return result;
+      boundary?.(method, "started");
+      try {
+        const result = await client.request(method, params);
+        if (!valid()) throw new Error("Native 연결 또는 대화 선택이 변경됐습니다.");
+        boundary?.(method, "completed");
+        return result;
+      } catch (error) {
+        boundary?.(method, "failed");
+        throw error;
+      }
     }
   });
   const currentApproval = (id: RpcId, approval: Approval, valid: () => boolean) => valid() && pending.get(id) === approval;
@@ -64,6 +71,7 @@ export function createNativeLifecycle(emit: Emit) {
       prompt: string;
       restored(value: RestoredConversation): void;
       beforeStart(): void;
+      requestBoundary?(method: string, status: "started" | "completed" | "failed"): void;
     }) {
       if (interruptedThread === options.threadId) throw new Error("이전 턴의 종료를 확인할 수 없습니다. 대화를 명시적으로 다시 열어 주세요.");
       if (starting) throw new Error("Native 요청을 준비하고 있습니다.");
@@ -71,7 +79,7 @@ export function createNativeLifecycle(emit: Emit) {
       try {
         const client = await options.connect();
         const valid = () => options.valid(client);
-        const transport = checked(client, valid);
+        const transport = checked(client, valid, options.requestBoundary);
         if (!valid()) throw new Error("Native 연결 또는 대화 선택이 변경됐습니다.");
         if (ready?.client !== client || ready.cwd !== options.cwd || ready.threadId !== options.threadId) {
           const restored = await createConversationService(transport, options.cwd).open(options.threadId);

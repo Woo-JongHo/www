@@ -129,7 +129,11 @@ try {
       if (typeof result.data !== "string") throw Error("화면 캡처 데이터가 없습니다.");
       await fs.writeFile(path.join(directory, `${name}.png`), Buffer.from(result.data, "base64"));
     };
-    await assert("document.querySelector('[data-testid=ecosystem-nav]')", "앱 준비");
+    await assert("(()=>{const b=document.querySelector('[data-testid=open-current-workspace]');return document.querySelector('[data-testid=view-page]') && b && !b.disabled && b.getBoundingClientRect().width>0})()", "전체 보기와 현재 프로젝트 활성 버튼 준비");
+    const homeEntry = await evaluate("(async()=>{const b=document.querySelector('[data-testid=open-current-workspace]');return {label:b.textContent,disabled:b.disabled,rect:b.getBoundingClientRect().toJSON(),workspace:await window.www.workspace()}})()");
+    await fs.writeFile(path.join(directory, "home-entry.json"), JSON.stringify(homeEntry, null, 2));
+    await click('[data-testid="open-current-workspace"]');
+    await assert("document.querySelector('[data-testid=target-dashboard]')", "현재 프로젝트 대시보드 진입");
     await click('[data-testid="ecosystem-nav"]');
     await command('Emulation.setDeviceMetricsOverride', { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
     const rootId       = snapshot.structure.rootId                                                                                        ;
@@ -155,7 +159,7 @@ try {
     const readable = "[...document.querySelectorAll('.blueprint-node text')].every(t=>{const r=t.getBoundingClientRect();const v=document.querySelector('.blueprint-viewport').getBoundingClientRect();return r.left>=v.left && r.right<=v.right && r.width>0 && r.height>=11})"                                                                     ;
     const overview = "document.querySelectorAll('.blueprint-node').length===6 && [...document.querySelectorAll('.blueprint-node rect')].every(n=>{const r=n.getBBox();return r.width===360 && r.height===112})";
     await assert(overview, '1440×900 root 6개가 같은 360×112 규격으로 표시');
-    await assert("[...document.querySelectorAll('.blueprint-edge')].every(edge=>{const nodes=[...document.querySelectorAll('.blueprint-node')].map(n=>{const r=n.querySelector('rect').getBBox();const m=n.transform.baseVal.consolidate().matrix;return {x:m.e,y:m.f,w:r.width,h:r.height}});for(let d=0;d<=edge.getTotalLength();d+=2){const p=edge.getPointAtLength(d);if(nodes.some(n=>p.x>n.x && p.x<n.x+n.w && p.y>n.y && p.y<n.y+n.h))return false}return edge.getAttribute('marker-end')==='url(#blueprint-arrow)'})", '실제 모든 SVG 간선의 노드 비관통·방향 화살표 유지');
+    await assert("[...document.querySelectorAll('.blueprint-edge')].every(edge=>{const nodes=[...document.querySelectorAll('.blueprint-node')].map(n=>{const r=n.querySelector('rect').getBBox();const m=n.transform.baseVal.consolidate().matrix;return {x:m.e,y:m.f,w:r.width,h:r.height}});for(let d=0;d<=edge.getTotalLength();d+=2){const p=edge.getPointAtLength(d);if(nodes.some(n=>p.x>n.x && p.x<n.x+n.w && p.y>n.y && p.y<n.y+n.h))return false}const marker=edge.closest('svg').querySelector('marker');return marker && edge.getAttribute('marker-end')==='url(#'+marker.id+')'})", '실제 모든 SVG 간선의 노드 비관통·방향 화살표 유지');
     await assert(readable, 'root 모든 제목·역할 가독 크기와 수평 범위');
     await assert("document.querySelectorAll('.blueprint-edge').length===0", '기본 구성 보기에는 계층만 표시');
     await assert("[...document.querySelectorAll('.blueprint-node,.blueprint-parent')].every(n=>{const r=n.querySelector('rect').getBBox();return r.width===360 && r.height===112})", '부모와 하위 구성의 규격 통일');
@@ -165,7 +169,7 @@ try {
     await capture('root');
     await click('[data-testid="architecture-reference-mode"]');
     await assert("document.querySelectorAll('.blueprint-hierarchy').length===0 && document.querySelectorAll('.blueprint-reference').length>0", '코드 의존 보기와 포함 관계를 분리');
-    await assert("[...document.querySelectorAll('.blueprint-edge')].every(edge=>{const nodes=[...document.querySelectorAll('.blueprint-node')].map(n=>{const r=n.querySelector('rect').getBBox();const m=n.transform.baseVal.consolidate().matrix;return {x:m.e,y:m.f,w:r.width,h:r.height}});for(let d=0;d<=edge.getTotalLength();d+=2){const p=edge.getPointAtLength(d);if(nodes.some(n=>p.x>n.x && p.x<n.x+n.w && p.y>n.y && p.y<n.y+n.h))return false}return edge.getAttribute('marker-end')==='url(#blueprint-arrow)'})", '실제 의존선은 모든 노드 바깥을 통과');
+    await assert("[...document.querySelectorAll('.blueprint-edge')].every(edge=>{const nodes=[...document.querySelectorAll('.blueprint-node')].map(n=>{const r=n.querySelector('rect').getBBox();const m=n.transform.baseVal.consolidate().matrix;return {x:m.e,y:m.f,w:r.width,h:r.height}});for(let d=0;d<=edge.getTotalLength();d+=2){const p=edge.getPointAtLength(d);if(nodes.some(n=>p.x>n.x && p.x<n.x+n.w && p.y>n.y && p.y<n.y+n.h))return false}const marker=edge.closest('svg').querySelector('marker');return marker && edge.getAttribute('marker-end')==='url(#'+marker.id+')'})", '실제 의존선은 모든 노드 바깥을 통과');
     await assert("[...document.querySelectorAll('.blueprint-reference')].every(n=>{const pair=[...document.querySelectorAll('.blueprint-reference')].find(m=>m.dataset.from===n.dataset.to && m.dataset.to===n.dataset.from);return !pair || pair.querySelector('path').getAttribute('d')!==n.querySelector('path').getAttribute('d')})", '실제 양방향 참조 경로 분리');
     await evaluate("(() => {const select=document.querySelector('[aria-label=\"참조 강조 대상\"]');select.value='arch.chat';select.dispatchEvent(new Event('change',{bubbles:true}));})()");
     await assert("[...document.querySelectorAll('.blueprint-reference')].every(n=>n.dataset.from==='arch.chat'||n.dataset.to==='arch.chat') && document.querySelectorAll('.blueprint-reference').length>0", '선택 책임의 들어오는/나가는 참조만 표시');
@@ -307,7 +311,7 @@ try {
     await evaluate("document.querySelector('.blueprint-viewport').scrollTop=64");
     const mapState = "JSON.stringify({current:document.querySelector('.blueprint-work').dataset.currentId,selected:document.querySelector('.blueprint-detail').dataset.selectedId,zoom:document.querySelector('[data-testid=architecture-zoom]').textContent,top:document.querySelector('.blueprint-viewport').scrollTop})";
     const savedMapState = await evaluate(mapState);
-    await click('.workspace-nav button:first-child');
+    await click('[data-testid="chat-nav"]');
     await assert("document.querySelector('.ecosystem-shell').hidden && !document.querySelector('main.work').hidden", '지도 숨김이 채팅 레이아웃을 점유하지 않음');
     await assert("document.querySelector('.sidebar').getBoundingClientRect().width>64 && getComputedStyle(document.querySelector('.sidebar>.agents')).display!=='none'", 'Chat 복귀 시 원래 탐색과 목록 복구');
 
@@ -323,7 +327,7 @@ try {
     await assert(`${selected(sourceTarget)} && !document.querySelector('.blueprint-detail').hidden && document.querySelector('[data-testid=architecture-tab]').getAttribute('aria-pressed')==='true'`, '기능·개념 관계의 파일 근거에서 같은 안정 ID와 담당 코드로 이동');
     await key('Escape');
     await assert("document.querySelector('.blueprint-detail').hidden", 'Escape로 선택 상세 닫기');
-    await click('.workspace-nav button:first-child');
+    await click('[data-testid="chat-nav"]');
     await assert("document.querySelector('[data-testid=prompt-input]').value==='지도 왕복 초안'", '지도 탐색·상세 닫기 후 채팅 초안 유지');
     await click('[data-testid="ecosystem-nav"]');
     await capture('node-map-final');

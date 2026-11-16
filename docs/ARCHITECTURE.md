@@ -4,15 +4,21 @@
 
 이 문서는 제품의 실행 구조와 WWW를 개발하는 프로세스의 연결을 설명한다. [제품 기준](PRODUCT.md)은 목적과 범위, [Chat 명세](specs/chat.md)는 의도된 동작, [공통 계약](skills/WORKFLOW.md)은 작업·권한·증거·완료 규칙을 소유한다. 코드에 존재하는 구조와 새 개발 경로의 검증 상태를 구분해서 읽는다.
 
+## 진입 화면과 작업 보드
+
+renderer는 프로젝트 선택 전 View Page와 선택 대상의 대시보드·대화·생태계·리포트를 구분한다. main의 `dashboard:get`만 등록 프로젝트와 WWW 실제 경로를 정해 `dashboard.ts`의 제한된 work.json reader로 넘긴다. renderer는 `DashboardSnapshot`을 필터·표시하며 업무 원장이나 임의 파일 경로를 쓰지 않는다. View Page 조회는 Native 연결을 요구하지 않고 대화 진입에서 목록·활동을 조회한다. 같은 대상 보기 전환은 실행 컨텍스트 전환과 분리한다.
+
+`native-timing.ts`는 각 Native 세션의 요청 trace·단조 상대 시간·실패/취소 경계를 소유한다. 공유 DTO로 정제한 diagnostics/timing만 화면에 게시하고 실제 Native 사건과 앱 준비 관측을 구분한다. renderer의 수신→두 번째 animation frame은 별도 시간축이다. Agent 개요의 `agent-overview.ts`는 실제 subagent 상태·Native plan·활성 항목에 귀속되는 공개 진행 설명을 순수 투영한다.
+
 ## 제품 실행 구조
 
 ```text
 사용자
-  → React 화면
+  → React SessionShell / 탭별 App
   → context-isolated preload / 허용된 IPC
-  → Electron main
-  → JSONL / JSON-RPC 전송
-  → 로컬 codex app-server
+  → Electron main의 sessionId 라우팅
+  → 탭별 native-session / JSONL·JSON-RPC 전송
+  → 탭별 로컬 codex app-server
   → 응답·알림·서버 요청
   → 사건 투영
   → 대화·실행·파일·승인 화면
@@ -20,39 +26,54 @@
 
 | 모듈 | 책임과 소유 상태 |
 |---|---|
-| `src/main.ts` | 앱·Native 프로세스 생명주기, 작업 폴더, 사건 순번, 미결 승인과 응답 시도, 검증된 IPC |
+| `src/main.ts` | Electron 창·단일 인스턴스, 공유 프로젝트/리소스 원장, 세션 생성·조회·종료, 검증된 IPC 라우팅과 앱 전체 종료 |
+| `src/native-session.ts` | 탭별 작업 폴더·Native child/RPC·thread/turn·사건 순번·승인·연결 세대·목록·계측·리포트 조회 범위 |
+| `src/session-registry.ts` | 세션 ID와 기본 세션, 프로젝트/thread의 단일 소유권 예약·커밋·회수 |
 | `src/native-chat.ts` | 새 스레드의 한국어 진행 설명 지침·cwd params와 새 대화·재개가 공유하는 Bypass 승인·sandbox 정책, 턴의 text 입력·detailed 공개 요약 요청 |
 | `src/rpc.ts` | JSONL 프레임과 JSON-RPC 요청 ID, 대기 응답, EOF·오류 처리 |
 | `src/preload.ts`, `src/shared.ts` | renderer에 노출하는 제한된 인터페이스와 공유 계약 |
 | `src/projection.ts` | 관찰 사건을 thread/turn/item/request에 연결하고 화면 블록·상태로 바꾸는 순수 투영 |
 | `src/native-activity.ts` | 같은 사건을 답변 턴·활동·모델 관측·누적 토큰과 안전한 턴 차분·계정 한도로 바꾸는 순수 투영 |
 | `src/activity-sidebar.ts` | 등록 Skills·Hooks snapshot과 구조화된 읽기·동기 Hook 시작을 고정 행·pulse로 바꾸고 thread/run/중복 경계를 지키는 순수 투영 |
-| `src/native-activity-view.tsx`, `src/native-activity.css` | 현재 요청·누적 리소스 사이드바, 별도 상세 모니터·카탈로그·모션 축소 표시 |
+| `src/agent-overview.ts`, `src/agent-overview-view.tsx`, `src/agent-overview.css` | 고정 WWW Agent·다섯 스킬·실제 Subagent와 Plan/Progress 개요의 투영·표현 |
+| `src/native-activity-view.tsx`, `src/native-activity.css` | 기본 Agent 개요 배치·원장 경고와 별도 상세 모니터·카탈로그·누적 관측·모션 축소 표시 |
 | `src/activity-ledger.ts` | main 전용 최소 관측 원장, 안정 ID upsert·원자 저장·한도·오류·coverage |
 | `src/projects.ts` | realpath 기반 프로젝트 식별, 앱 데이터의 최근·즐겨찾기 인덱스 |
-| `src/renderer.tsx` | 입력 초안·전송 중 상태·펼침·읽기 위치와 화면 표현 |
+| `src/session-api.tsx` | 조회·리포트 API를 탭 ID에 연결하고 다른 탭의 사건·리소스를 걸러내는 React provider |
+| `src/session-tabs.tsx` | 탭 선택·추가·닫기와 프로젝트·실행·승인·실패 표시, 키보드 이동 |
+| `src/renderer.tsx` | SessionShell의 열린 탭과 활성 탭, 탭별 App의 입력·전송·펼침·읽기 위치와 화면 표현 |
 
 renderer는 Node 기능을 직접 사용하지 않는다. 권한 있는 동작은 main의 허용된 IPC를 통한다. Native의 응답과 도구 출력은 관찰 데이터이며 권한을 확대하는 지시로 해석하지 않는다.
 
+### 독립 세션과 동시 실행
+
+`createNativeSession`의 closure가 탭별 상태를 소유한다. 각 탭은 자체 Native child·RPC client·workspace·thread·turn·승인 대기와 최근 2,000개 사건을 가진다. 전역 선택 값을 잠깐 교체해 비동기 호출을 흉내내지 않는다. main은 선택 범위 IPC의 `SelectionRef.sessionId`로 세션을 찾고 processEpoch·workspaceKey·selectionEpoch를 해당 세션에서 검사한다. 다중 탭에서 이 선택의 세션 ID 누락은 거부하며 구형 단일 탭 선택만 main 경계에서 보완한다. 선택 인자가 없는 조회도 `SessionApiProvider`가 탭 ID를 지정한다. 사건·리소스 DTO의 sessionId를 검사한 뒤 각 App의 현재 프로젝트/thread/세대 검사도 적용한다.
+
+새 탭은 현재 프로젝트에서 시작하며 Native는 실제 대화 목록 조회·요청이 필요할 때 지연 연결한다. 종료 중인 원본 세션의 복제는 거부하고 원본의 프로젝트 등록 오류도 새 탭에 승계하여 등록 성공처럼 숨기지 않는다. 여러 탭은 서로 다른 thread를 동시에 실행할 수 있다. `session-registry.ts`가 같은 workspaceKey/threadId의 재개를 예약하고 성공 시 소유권을 확정하므로 같은 대화를 두 탭에서 중복 실행하지 않는다. 새 대화·프로젝트 전환·탭 제거 때 이전 소유권을 회수한다.
+
+SessionShell은 비활성 App을 마운트한 채 숨긴다. 탭 선택만으로 child·실행·초안·읽기 상태를 제거하지 않는다. backend는 실행·요청/대화 준비·승인 대기가 있는 탭과 마지막 탭의 닫기를 거부한다. frontend는 미전송 초안·실패 원문의 닫기도 막는다. 승인 token에는 세션 접두부를 붙이고 원래 JSON-RPC ID와 함께 해당 세션의 lifecycle에 응답하여 다른 탭의 승인·중단을 처리하지 않는다. 닫기는 해당 세션의 child와 수집 중 작업을 정리한 뒤 registry에서 제거한다. 앱 종료는 모든 세션을 정리하고 공유 원장을 flush하며 저장 미확정 종료를 성공으로 감추지 않는다.
+
+열린 탭 목록·활성 탭·초안·읽기 상태는 현재 앱 메모리다. 재시작 시 새 기본 세션의 View Page에서 시작하며 자동 실행 복구·자동 재전송은 없다. 프로젝트 인덱스·최소 리소스 원장은 복원하고, 저장된 대화 본문은 Native 원장을 명시적으로 다시 열어 읽는다. 일반 셸/PTY는 추가하지 않았다.
+
 ### 프로젝트와 리소스 원장의 소유권
 
-격리 userData를 설정한 뒤 `app.requestSingleInstanceLock()`을 획득한 main만 Native·창·원장을 시작하고 종료 flush를 수행한다. main이 Native 관측을 정규화하고 workspace/thread/선택 세대를 검사한다. renderer는 제한된 DTO만 조회하며 저장 경로·관측 목록·revision을 쓰는 IPC는 없다. workspaceKey는 실제 경로의 SHA256이고 대소문자를 임의 통합하지 않는다. 프로젝트마다 Native subprocess cwd·대화·초안·리소스를 격리한다.
+격리 userData를 설정한 뒤 `app.requestSingleInstanceLock()`을 획득한 main만 창·세션·원장을 시작하고 종료 flush를 수행한다. 프로젝트 registry와 activity ledger는 main의 공유 단일 소유자이며 Native 실행 상태의 단일 전역 선택을 뜻하지 않는다. 각 native-session이 관측을 정규화하고 session/workspace/thread/선택 세대를 검사한다. renderer는 제한된 DTO만 조회하며 저장 경로·관측 목록·revision을 쓰는 IPC는 없다. workspaceKey는 실제 경로의 SHA256이고 대소문자를 임의 통합하지 않는다. Native subprocess cwd·대화·초안은 탭에, 영속 리소스는 프로젝트/thread에 귀속한다.
 
 원장은 userData의 `activity-v1/<workspaceKey>/<hash(threadId)>.json`에 최소 메타데이터만 원자 저장한다. 본문·명령·출력·reasoning은 제외한다. 안정 관측 ID로 live/복원을 병합하며 seq/연결 세대는 영속 ID가 아니다. revision과 durableRevision, 저장 상태와 누락 범위를 분리한다. 손상·저장 실패·용량 한도·dirty 종료를 완전한 성공으로 승격하지 않는다. 실제 Native Hook의 반복 핸들러 ID는 호출별 ID가 아니므로 횟수 미제공과 `unstable-id`로 처리한다.
 
-프로젝트 전환은 비동기 realpath·flush 준비 후 동기 커밋 직전에 선택 세대·실행·전송·미결 승인을 다시 검사한다. 거절하면 기존 선택과 승인을 보존한다. 성공하면 과거 client/목록/복원 응답이 새 프로젝트를 갱신하지 못하도록 무효화한다.
+프로젝트 전환은 해당 탭 안에서 실제 경로·등록·flush 준비 후 동기 커밋 직전에 선택 세대·실행·전송·미결 승인을 다시 검사한다. 거절하면 기존 선택과 승인을 보존한다. 성공하면 그 탭의 과거 client/목록/복원 응답이 새 프로젝트를 갱신하지 못하도록 무효화한다. 다른 탭의 선택과 실행은 유지한다.
 
 미등록 구조화 문서 읽기는 main이 command cwd와 경로를 정규화한 뒤 SHA256 identity를 공급한다. renderer 공유 정규화기는 Node crypto나 원문 경로 저장을 소유하지 않는다. 서로 다른 문서는 표시 이름이 같아도 합치지 않으며 안전한 식별값 부재는 명시 gap이다. flush는 전체 열린 scope의 clean과 실제 failedScopes 복사본을 반환한다. 전환 응답은 실패한 workspace/thread만 읽기 전용 진단으로 전달하고 별도 상태 경고에 보존한다. 현재 선택을 실패 대상으로 추정하거나 새 scope의 원장 DTO와 섞거나 새 목록 갱신으로 지우지 않는다.
 
 ## 요청·사건·실패 흐름
 
-기본 사이드바는 같은 AppEvent의 현재 요청 투영과 main의 원장 DTO를 읽는다. 다음 목록·pulse 계약은 별도 상세 모니터의 카탈로그에 적용하며 누적 관측 원장과 구별한다. renderer가 제한된 IPC로 목록 새로고침을 요청하면 main은 같은 app-server 연결에서 `skills/list`와 `hooks/list`를 독립 호출하고 cwd·필수 배열·항목 shape를 검증한 최소 메타데이터를 `activity/skillsListed`·`activity/hooksListed` 사건으로 게시한다. `skills/changed`는 Skills 재조회 신호이며 스레드 시작 뒤에는 선택 환경을 포함한 Hook 목록을 다시 읽는다. workspace·thread별 최신 요청 세대는 요청을 시작할 때 main이 교체하고 응답 게시 전에 다시 대조하므로, 새 요청이 대기하거나 실패한 동안에도 이전 응답을 수용하지 않는다. 선택 thread 목록은 workspace 목록보다 우선한다. 한 목록의 실패가 다른 목록을 숨기지 않고 부분 응답은 전체 목록으로 표현하지 않는다.
+기본 사이드바는 `agent-overview.ts`가 투영한 고정 WWW Agent·다섯 스킬·실제 Subagent와 Plan/Progress 개요를 읽는다. 원장 DTO는 기본바의 누락·저장 실패 경고에만 쓰고 누적 리소스·Hook·전체 카탈로그는 상세 모니터에서 표시한다. 다음 목록·pulse 계약은 그 상세 모니터 카탈로그에 적용하며 누적 관측 원장과 구별한다. renderer가 제한된 IPC로 목록 새로고침을 요청하면 main은 같은 app-server 연결에서 `skills/list`와 `hooks/list`를 독립 호출하고 cwd·필수 배열·항목 shape를 검증한 최소 메타데이터를 `activity/skillsListed`·`activity/hooksListed` 사건으로 게시한다. `skills/changed`는 Skills 재조회 신호이며 스레드 시작 뒤에는 선택 환경을 포함한 Hook 목록을 다시 읽는다. workspace·thread별 최신 요청 세대는 요청을 시작할 때 main이 교체하고 응답 게시 전에 다시 대조하므로, 새 요청이 대기하거나 실패한 동안에도 이전 응답을 수용하지 않는다. 선택 thread 목록은 workspace 목록보다 우선한다. 한 목록의 실패가 다른 목록을 숨기지 않고 부분 응답은 전체 목록으로 표현하지 않는다.
 
 실제 app-server 초기화 성공만 transport 연결 세대를 증가시킨다. 대화 복원·새 대화는 `transport/status`로 현재 표시 상태와 같은 연결 세대를 전달하므로 채팅 투영의 연결 표시는 유지하면서 사이드바의 연결 수명주기 중복 방지를 지우지 않는다. 사이드바는 단조 증가 AppEvent seq를 scalar high-water mark로 압축한다. Skill 읽기와 Hook run key는 연결 세대별 실제 문자열 집합으로 정확히 보존하며, 해시는 고정 64개 bucket을 고르는 용도로만 쓴다. reducer update마다 wrapper와 bucket 배열을 한 번 복사하고 변경된 bucket의 `Set`만 copy-on-write하므로 이전 React state를 변경하지 않으면서 전체 집합 복사를 피한다. 이 필수 상태는 연결 세대의 고유 key 수에 비례해 증가하고 실제 새 연결에서만 회수한다. 관측·pulse·thread 목록 cache는 각각 512·512·32개로 제한한다.
 
 등록 목록과 새 활동은 다른 입력이다. 최신 목록 snapshot은 최근 2,000개 AppEvent ring과 독립한 renderer 상태로 유지한다. Skill은 등록 path와 구조화된 `commandActions.read`의 `SKILL.md` path가 일치할 때 읽기 시작에서 반응하며 한 commandActions의 여러 읽기를 각각 보존한다. Hook은 event name·source path·display order·handler type의 단일 일치와 run ID를 사용하며 시작에서만 반응한다. 읽기와 run 중복 억제는 연결 수명주기 상태라 이력 절단으로 풀리지 않고 완료 뒤 늦은 시작도 막으며, 새 `transport/connected`에서만 초기화한다. renderer는 bootstrap·대화 전환마다 snapshot 경계를 시작하고 그동안의 live 사건을 큐에 둔다. snapshot과 큐를 seq로 병합하고 snapshot에 실제 포함된 사건은 복원으로, 큐에만 있는 live 사건은 snapshot 최대 seq보다 낮아도 새 pulse로 적용한다. 실패 때도 큐를 현재 thread에 배출한다. 경계 token은 취소된 StrictMode effect나 이전 전환 응답이 새 경계를 drain하지 못하게 한다. reducer는 일반 사건 watermark보다 오래된 catalog·transport 사건도 요청/연결 세대와 별도 lifecycle watermark가 최신일 때 안전하게 수용하되 최신 catalog나 연결 상태를 역행시키지 않는다. 매핑이 없거나 불명확하면 감지 행으로 분리하고 기존 행을 추정해 켜지 않는다.
 
-`native-activity.ts`의 답변 턴·계획 투영은 현재 요청에 사용하고 모델·사용량은 상세 모니터에서만 표시한다. tokenUsage.total은 스레드 누적 snapshot이고 last는 최근 모델 요청의 사용량이다. 새 스레드 영점 또는 안전한 이전 턴 누적값을 확보했을 때만 턴 차분을 제공하며 기준 누락·감소·절단·늦은 이전 턴 갱신으로 정합성이 깨지면 미제공으로 둔다. 모델 설정과 model/rerouted 관측, 턴 토큰과 계정 quota bucket은 서로 다른 상태다. 비공개 reasoning 본문과 Hook 내부 출력은 활동 상태로 복제하지 않는다. 실제 화면 검증·감사 상태는 해당 작업 증거를 따른다.
+`agent-overview.ts`의 현재 계획·활성 항목별 공개 진행 설명은 기본 개요에 표시한다. `native-activity.ts`의 답변 턴·계획·스레드 모델·사용량은 상세 모니터에서 표시한다. tokenUsage.total은 스레드 누적 snapshot이고 last는 최근 모델 요청의 사용량이다. 새 스레드 영점 또는 안전한 이전 턴 누적값을 확보했을 때만 턴 차분을 제공하며 기준 누락·감소·절단·늦은 이전 턴 갱신으로 정합성이 깨지면 미제공으로 둔다. 모델 설정과 model/rerouted 관측, 턴 토큰과 계정 quota bucket은 서로 다른 상태다. 비공개 reasoning 본문과 Hook 내부 출력은 활동 상태로 복제하지 않는다. 실제 화면 검증·감사 상태는 해당 작업 증거를 따른다.
 
 대화 투영은 공개 commentary·계획과 reasoning의 공개 summary를 시간순 explanation으로 표시한다. 요약 상태는 thread/turn/item별 Map과 섹션 index로 분리하며 빈 섹션 알림으로 희소 배열을 만들지 않는다. seq 중복을 억제하고 완료 summary snapshot으로 대체하며 턴 종료·EOF 뒤 델타는 다시 열지 않는다. 원문 reasoning content·textDelta·analysis는 제외한다. 요약은 앞 32,768 UTF-16 코드 단위로 제한하고 renderer가 절단 안내와 출처별 접근성 이름을 제공한다. 본문 앞의 고정 출처 라벨은 붙이지 않는다. 자동 보고서의 최종 answer 선택 경로는 유지한다.
 
@@ -60,7 +81,7 @@ main은 Native와 초기화한 뒤 스레드·턴 시작, 턴 중단, 지원되�
 
 전송 연결, 요청 전송·접수, 턴 실행·종료, 중단 요청·접수·최종 결과, 승인 응답은 별도 상태로 다룬다. Native loop 종료나 명령 종료 코드 0을 업무 수용으로 승격하지 않는다. EOF 이후 대기 요청은 불확실한 실패로 끝내고 실행 중 사건은 관측 가능한 범위에서 결과 미확인으로 표시한다.
 
-제품 사건은 메모리에서 최근 2,000개, 명령·변경 출력은 현재 코드의 제한 범위만 보관한다. 절단과 미제공을 표시하며 확보하지 않은 원본을 복원 가능하다고 약속하지 않는다. 장기 보관·공유 원본과 서버 색인은 [후속 제품 방향](PRODUCT.md#후속-방향)이다.
+제품 사건은 탭마다 메모리에서 최근 2,000개, 명령·변경 출력은 현재 코드의 제한 범위만 보관한다. seq·연결 세대는 탭 내부 순서이며 서로 다른 탭의 전역 시계로 쓰지 않는다. 절단과 미제공을 표시하며 확보하지 않은 원본을 복원 가능하다고 약속하지 않는다. 장기 보관·공유 원본과 서버 색인은 [후속 제품 방향](PRODUCT.md#후속-방향)이다.
 
 ## 개발 프로세스 구조
 
@@ -105,11 +126,14 @@ main은 Native와 초기화한 뒤 스레드·턴 시작, 턴 중단, 지원되�
 | `documentation.ts` | 필수 현행 문서 범위·검토 판단의 형식과 소스·기준·문서 지문 적용성 확인 |
 | `review.ts` | 프로젝트 정책 읽기, 검토 모델 선택·오류 분류·결과의 현재 적용성 확인 |
 | `run.ts`, `adapters/` | 선택한 단계와 호스트·검사 실행을 연결 |
+| `model-allocation.ts` | 개발 내부 단위의 종류·위험·모델·범위·의존·이전 시도 연결 검증 |
 | `record.ts` | 로컬 runtime 사건의 순서·멱등성·재생과 실행 상태 |
 | `types.ts` | 작업·기준·권한과 현행·과거 작업의 공용 TypeScript 계약 |
 | `scripts/test.ts` | 이관한 Node 테스트와 기존 Bun 테스트를 각 실행기로 연결 |
 
 새 schema2 작업은 작업 상태와 AC 정의·결과 외에 `workflow`에서 역할·접수 식별·요청 해시·권한·검사 입력·다음 행동·검증 및 검토 시도를 연결한다. 구체 필드 의미는 [공통 계약](skills/WORKFLOW.md#workjson-규칙), CLI는 [개발 안내](DEVELOPMENT.md#개발-역할의-작업-인터페이스)가 소유한다.
+
+내부 모델 배분은 개발 역할·스킬·하네스의 기능이다. 배분된 요청 모델·실제 실행 결과·관측 불가 사유·사용량 근거를 구분하고 제품 Chat의 요청을 자동 분류하거나 Native 모델을 자동 전환하지 않는다. 탭의 동시 실행도 모델 자동 라우터가 아니다.
 
 ## 작업과 검증의 저장 경계
 

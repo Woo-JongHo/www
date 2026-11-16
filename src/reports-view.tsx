@@ -3,6 +3,7 @@
  * @implements RESP-REPORTS-VIEW
  */
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSessionApi } from "./session-api";
 import type { NativeReportJob, WorkReportCatalog, WorkReportDocument, WorkReportSummary } from "./shared";
 
 const outcomes: Record<WorkReportSummary["outcome"], string> = {
@@ -14,6 +15,7 @@ const outcomes: Record<WorkReportSummary["outcome"], string> = {
 };
 
 export function ReportsView() {
+  const api = useSessionApi();
   const [catalog   , setCatalog   ] = useState<WorkReportCatalog | null>                            (   null   ) ;
   const [selectedId, setSelectedId] = useState<string | null>                                       (   null   ) ;
   const [mode      , setMode      ] = useState<"authored" | "snapshot">                             ("authored") ;
@@ -44,8 +46,8 @@ export function ReportsView() {
       pending = true;
       try {
         const [result, native] = await Promise.all([
-          window.www.listReports(),
-          window.www.nativeReportStatus().catch((failure) => { if (!disposed) setAutoError(String(failure)); return null; }),
+          api.listReports(),
+          api.nativeReportStatus().catch((failure) => { if (!disposed) setAutoError(String(failure)); return null; }),
         ]);
         if (!disposed) {
           setCatalog(result);
@@ -73,7 +75,7 @@ export function ReportsView() {
     setReadError("");
     if (!activeId) { setReading(false); return; }
     if (changed) setReading(true);
-    void window.www.readReport(activeId).then((result) => {
+    void api.readReport(activeId).then((result) => {
       if (!disposed) setDocument(result);
     }).catch((failure) => {
       if (!disposed) setReadError(String(failure));
@@ -85,7 +87,7 @@ export function ReportsView() {
 
   async function choose() {
     try {
-      if (await window.www.chooseReportRepository()) {
+      if (await api.chooseReportRepository()) {
         setCatalog(null);
         setDocument(null);
         setSelectedId(null);
@@ -102,7 +104,7 @@ export function ReportsView() {
     setExporting(true);
     setNotice("");
     try {
-      const file = await window.www.exportReport(activeId);
+      const file = await api.exportReport(activeId);
       if (file) setNotice(`HTML 보고서를 저장했습니다: ${file}`);
     } catch (failure) { setNotice(`저장 실패: ${String(failure)}`); }
     finally { exportInFlight.current = false; setExporting(false); }
@@ -110,7 +112,7 @@ export function ReportsView() {
 
   async function toggleAutomatic(enabled: boolean) {
     try {
-      const value = await window.www.setNativeReportEnabled(enabled);
+      const value = await api.setNativeReportEnabled(enabled);
       setAuto((current) => ({ enabled: value, jobs: current?.jobs ?? [] }));
       setAutoError("");
     } catch (failure) { setAutoError(String(failure)); }
@@ -118,7 +120,7 @@ export function ReportsView() {
 
   async function retry(job: NativeReportJob) {
     try {
-      await window.www.retryNativeReport(job.key);
+      await api.retryNativeReport(job.key);
       setNotice("이 답변의 보고서 필요 여부를 다시 판단합니다.");
       setRevision((value) => value + 1);
     } catch (failure) { setAutoError(String(failure)); }

@@ -126,6 +126,10 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
     else if (prompt === "경계 유휴 종료 준비") {
       const run = { id: "boundary-handler", eventName: "preToolUse", executionMode: "sync", sourcePath: "/fixture/boundary-hooks.json", displayOrder: 0, handlerType: "command", status: "running", entries: [] };
       notify("hook/started", { threadId, turnId, run });
+      const child = { id: turnId + "-spawn", type: "collabAgentToolCall", tool: "spawnAgent", senderThreadId: threadId, receiverThreadIds: ["sidebar-child"], agentsStates: { "sidebar-child": { status: "running", message: "하위 작업 진행" } } };
+      notify("item/started", { threadId, turnId, item: child });
+      setTimeout(() => notify("item/completed", { threadId, turnId, item: child }), 150);
+      setTimeout(() => notify("item/completed", { threadId, turnId, item: { ...child, agentsStates: { "sidebar-child": { status: "completed", message: "하위 작업 완료" } } } }), 900);
       notify("hook/completed", { threadId, turnId, run: { ...run, status: "completed" } });
       finish("completed", "경계 유휴 종료 이전 답변");
       setTimeout(() => process.exit(0), 160);
@@ -147,6 +151,10 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
       notify("turn/plan/updated", { threadId, turnId, plan: [{ step: "첫 요청 전용 단계", status: "inProgress" }] });
       const run = { id: "sidebar-handler-a", eventName: "preToolUse", executionMode: "sync", sourcePath: "/fixture/handler-a.json", displayOrder: 0, handlerType: "command", status: "running", entries: [] };
       notify("hook/started", { threadId, turnId, run });
+      const child = { id: turnId + "-spawn", type: "collabAgentToolCall", tool: "spawnAgent", senderThreadId: threadId, receiverThreadIds: ["sidebar-child"], agentsStates: { "sidebar-child": { status: "running", message: "하위 작업 진행" } } };
+      notify("item/started", { threadId, turnId, item: child });
+      setTimeout(() => notify("item/completed", { threadId, turnId, item: child }), 150);
+      setTimeout(() => notify("item/completed", { threadId, turnId, item: { ...child, agentsStates: { "sidebar-child": { status: "completed", message: "하위 작업 완료" } } } }), 900);
       const item = { id: turnId + "-private-documents", type: "commandExecution", command: "fixture structured document reads", cwd, commandActions: [{ type: "read", path: join(cwd, ".private-one/SKILL.md") }, { type: "read", path: join(cwd, ".private-two/SKILL.md") }], status: "inProgress" };
       notify("item/started", { threadId, turnId, item });
       setTimeout(() => {
@@ -154,7 +162,7 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
         notify("hook/completed", { threadId, turnId, run: { ...run, id: "sidebar-handler-b", sourcePath: "/fixture/handler-b.json", displayOrder: 1, status: "completed" } });
         notify("item/completed", { threadId, turnId, item: { ...item, status: "completed", exitCode: 0 } });
         notify("turn/plan/updated", { threadId, turnId, plan: [{ step: "첫 요청 전용 단계", status: "completed" }] });
-        finish();
+        setTimeout(() => finish(), 600);
       }, 500);
     }
     else if (prompt === "사이드바 두 번째 요청 확인") {

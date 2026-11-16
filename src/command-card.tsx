@@ -37,12 +37,20 @@ export function CommandView({ block }: { block: Extract<Block, { kind: "command"
           : block.turnInterrupted && block.status === "unknown" ? "턴 중단 · 명령 결과 미확인"
       : block.status === "completed" ? "실행 종료" : "결과 미확인";
   const preview = commandPreview(text, block.running);
+  const expandable = preview.hiddenLines > 0;
+  const expanded = expandable && open;
+  const outputText = expandable && !expanded ? preview.text : text;
 
   const endpoint = block.endedAt ?? (block.running ? now : null);
   const elapsed = block.startedAt !== null && endpoint !== null
     ? `${Math.max(0, Math.floor((endpoint - block.startedAt) / 1000))}초`
     : "시간 미제공";
-  return <section className={`cmd command-card item-${block.status}`} data-testid="command-card">
+  return <section className={`cmd command-card item-${block.status}`} data-testid="command-card" onKeyDown={(event) => {
+    if (expandable && event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey && event.key.toLowerCase() === "t") {
+      event.preventDefault();
+      setOpen(!open);
+    }
+  }}>
     <header className="command-heading"><span className="command-state"><span aria-hidden="true">{block.running ? "●" : failed ? "×" : block.status === "completed" ? "✓" : "?"}</span> {state}</span><span className="muted">{elapsed}{block.exitCode !== null ? ` · 종료 코드 ${block.exitCode}` : !block.running ? " · 종료 코드 미제공" : ""}</span></header>
     <div className="cmdline" tabIndex={0} aria-label="실행 명령"><Highlight tokens={shellTokens(block.command || "명령 정보 미제공")}/></div>
     {block.cwd && <div className="command-path">작업 경로: {block.cwd}</div>}
@@ -54,16 +62,13 @@ export function CommandView({ block }: { block: Extract<Block, { kind: "command"
       {display.json && <button type="button" aria-pressed={raw} onClick={() => setRaw(!raw)}>{raw ? 'JSON 정렬 보기' : '원문 보기'}</button>}
       <span>{display.json && !raw ? 'JSON · 2칸 들여쓰기' : '원문 출력'}</span>
       <button type="button" disabled={!block.output} onClick={() => { void copy(); }}>원문 복사</button>
+      {expandable && <button type="button" aria-expanded={expanded} aria-keyshortcuts="Control+T" onClick={() => setOpen(!open)}>{expanded ? "출력 접기" : "출력 펼치기"} · Ctrl+T</button>}
       <span role="status">{copyStatus}</span>
     </div>
-    <pre tabIndex={0} aria-label="명령 출력 미리보기" data-testid="command-preview">{display.json && !raw ? <Highlight tokens={jsonTokens(preview.text)}/> : preview.text || "출력 없음"}</pre>
-    {preview.hiddenLines > 0 && <div className="command-note">{block.outputTruncated ? "보관된 출력의 " : ""}{block.running ? "최근" : "앞"} 10줄 미리보기 · {block.outputTruncated ? "보관 범위 안에서 " : ""}{preview.hiddenLines.toLocaleString("ko-KR")}줄 생략{display.json && !raw ? " · 정렬된 표시 줄 기준" : ""}</div>}
+    <pre tabIndex={0} aria-label={expanded ? "보관된 명령 출력" : "명령 출력 미리보기"} data-testid="command-preview" style={expanded ? { maxHeight: 360 } : undefined}>{display.json && !raw ? <Highlight tokens={jsonTokens(outputText)}/> : outputText || "출력 없음"}</pre>
+    {expandable && !expanded && <div className="command-note">{block.outputTruncated ? "보관된 출력의 " : ""}{block.running ? "최근" : "앞"} 10줄 미리보기 · {block.outputTruncated ? "보관 범위 안에서 " : ""}{preview.hiddenLines.toLocaleString("ko-KR")}줄 생략{display.json && !raw ? " · 정렬된 표시 줄 기준" : ""}</div>}
     {block.outputTruncated && <div className="command-note">보관 범위가 중간 줄에서 시작할 수 있습니다. 제거된 원본 줄 수는 미확인입니다.</div>}
-    <details open={open} className="command-output">
-      <summary onClick={(event) => { event.preventDefault(); setOpen(!open); }}>보관된 출력 {open ? "접기" : "펼치기"}</summary>
-      <pre tabIndex={0} aria-label="보관된 명령 출력">{display.json && !raw ? <Highlight tokens={jsonTokens(text)}/> : text || "출력 없음"}</pre>
-      <div className="command-note">{block.outputTruncated ? "앞부분 보관 한도 초과" : "수신한 출력"} · 출력 스트림 구분은 미제공</div>
-    </details>
+    {expanded && <div className="command-note">{block.outputTruncated ? "앞부분 보관 한도 초과" : "수신한 출력"} · 출력 스트림 구분은 미제공</div>}
     {block.outputTruncated && <div className="command-note">최근 {MAX_OUTPUT_CODE_UNITS.toLocaleString("ko-KR")} UTF-16 코드 단위만 보관합니다. 앞부분은 제거되어 복원할 수 없습니다.</div>}
   </section>;
 }

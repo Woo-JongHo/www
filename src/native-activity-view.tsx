@@ -4,7 +4,9 @@
  */
 import { useEffect, useMemo, useRef, useState } from "react";
 import { consumeActivitySidebarPulses, projectActivitySidebar, projectActivitySidebarState, type ActivitySidebarRow, type ActivitySidebarState } from "./activity-sidebar";
-import type { AppEvent, ResourceSnapshot, ResourceObservation } from "./shared";
+import type { AppEvent, ResourceSnapshot } from "./shared";
+import { projectAgentOverview } from "./agent-overview";
+import { AgentOverviewView } from "./agent-overview-view";
 import { projectNativeActivity, type ActivityEntry, type ActivityStatus, type ActivityTurn, type NativeActivityProjection, type UsageBreakdown } from "./native-activity";
 import { WWW_ARTIFACTS, type WwwArtifact } from "./www-activity";
 
@@ -293,31 +295,7 @@ export function NativeActivityView({ activityState, events, threadId, hidden = f
 
 
 /** 반복 핸들러 ID를 호출 ID로 세지 않고, 명시 범위의 마지막 상태만 표시한다. */
-function latestHookStates(events: readonly AppEvent[], threadId: string | null, turnId: string | null | undefined) {
-  const hooks = new Map<string, { key: string; label: string; detail: string; state: string; historical: boolean }>();
-  for (const event of events) {
-    if (event.method !== "hook/started" && event.method !== "hook/completed") continue;
-    const params = event.params;
-    if (!params || typeof params !== "object" || Array.isArray(params)) continue;
-    const ownThread = "threadId" in params && typeof params.threadId === "string" && params.threadId ? params.threadId : null;
-    const ownTurn = "turnId" in params && typeof params.turnId === "string" && params.turnId ? params.turnId : null;
-    if (ownThread !== threadId || (turnId !== undefined && ownTurn !== turnId)) continue;
-    const run = "run" in params ? params.run : null;
-    if (!run || typeof run !== "object" || !("eventName" in run) || typeof run.eventName !== "string") continue;
-    const handlerId = "id" in run && typeof run.id === "string" && run.id ? run.id : null;
-    const key = JSON.stringify([run.eventName, handlerId]);
-    const sourcePath = "sourcePath" in run && typeof run.sourcePath === "string" ? run.sourcePath.slice(0, 500) : "";
-    const displayOrder = "displayOrder" in run && typeof run.displayOrder === "number" && Number.isFinite(run.displayOrder) ? `표시 순서 ${run.displayOrder}` : "";
-    const detail = [handlerId ? "반복 핸들러 식별자 · 마지막 관측" : "핸들러 식별 미제공 · 마지막 관측 · 동명 핸들러 합침 가능", sourcePath, displayOrder].filter(Boolean).join(" · ");
-    const rawStatus = "status" in run ? run.status : null;
-    const state = rawStatus === "running" || rawStatus === "inProgress" ? event.historical ? "과거 진행 · 현재 결과 미확인" : "진행 관측"
-      : rawStatus === "completed" ? "완료 관측" : rawStatus === "failed" ? "실패 관측" : rawStatus === "blocked" || rawStatus === "declined" ? "실행 전 차단" : "상태 미제공";
-    hooks.set(key, { key, label: run.eventName, detail, state, historical: event.historical === true });
-  }
-  return [...hooks.values()];
-}
-
-/** main의 실제 관측 원장만 누적한다. 카탈로그는 상세 모니터에서 조회한다. */
+/** 기본 오른쪽 바는 관측한 Agent와 계획·진행 설명을 연결한다. */
 export function ResourceActivitySidebar({ events, resources, threadId, workspacePath, sending, hidden, onOpenMonitor }: {
   events: readonly AppEvent[];
   resources: ResourceSnapshot | null;
@@ -327,35 +305,19 @@ export function ResourceActivitySidebar({ events, resources, threadId, workspace
   hidden: boolean;
   onOpenMonitor: () => void;
 }) {
-  const projection = useMemo(() => projectNativeActivity(events, threadId, workspacePath), [events, threadId, workspacePath]);
-  const current = sending ? null : projection.turns.at(-1) ?? null;
-  const calls = (current?.entries ?? []).filter((entry) => entry.kind === "skill" && entry.source === "native");
-  const hooks = current?.turnId && threadId ? latestHookStates(events, threadId, current.turnId) : [];
-  const sessionHooks = threadId ? latestHookStates(events, threadId, null) : [];
-  const unscopedHooks = latestHookStates(events, null, undefined);
+  const projection = useMemo(() => projectAgentOverview(events, threadId, workspacePath), [events, threadId, workspacePath]);
   const unavailable = events.some((event) => event.method === "activity/resourcesUnavailable");
-  const groups = new Map<string, { row: ResourceObservation; ids: Set<string> }>();
-  for (const row of resources?.observations ?? []) {
-    const key = JSON.stringify([row.resource.kind, row.resource.identity, row.action]);
-    const group = groups.get(key) ?? { row, ids: new Set<string>() };
-    group.ids.add(row.id);
-    groups.set(key, group);
-  }
-  const storageLabels: Record<ResourceSnapshot["storage"], string> = { saved: "저장됨", saving: "저장 중", volatile: "임시 보관 · 저장 실패", full: "저장 한도 도달", corrupt: "저장 손상 · 원본 보전", unavailable: "저장소 사용 불가" };
-  return <aside className="native-activity-panel" hidden={hidden} aria-label="현재 요청과 대화 누적 리소스" data-testid="resource-sidebar">
-    <header className="na-header"><div className="na-heading"><h2>실시간 활동</h2><div className="na-nav"><button onClick={onOpenMonitor} aria-label="상세 실행 모니터 열기">상세 모니터</button></div></div></header>
-    <div className="na-scroll" tabIndex={0} aria-label="실시간 활동 스크롤">
-      <section className="na-monitor" aria-label="현재 요청"><div className="na-section-heading"><h3>현재 요청</h3><span>{sending ? "전송 중" : current ? current.historical ? "복원된 이력" : statusLabel(current.status) : "요청 대기"}</span></div><p className="na-current-title">{sending ? "새 요청을 보내고 있습니다." : current?.title ?? "현재 요청 미제공"}</p>
-        {current?.plan.length ? <section className="na-plan" aria-label="실제 작업 체크리스트"><ul>{current.plan.map((step, index) => <li key={index} className={`na-plan-${step.status}`}><span aria-hidden="true">{step.status === "completed" ? "✓" : step.status === "inProgress" ? "◉" : "○"}</span><span>{step.step}<small>{step.status === "completed" ? "완료" : step.status === "inProgress" ? "진행 중" : "대기"}</small></span></li>)}</ul></section> : <p className="na-subtle">단계·체크리스트 미제공</p>}
-        <h3>관측한 호출</h3>{calls.length ? <ul className="na-track">{calls.map((entry) => <li key={entry.id} className="na-row has-activity"><span className="na-row-dot" aria-hidden="true"/><span className="na-row-copy"><strong>{entry.label}</strong><small>Native 실제 호출{entry.historical ? " · 복원된 이력" : ""}</small></span><span className="na-row-state">{statusLabel(entry.status)}</span></li>)}</ul> : hooks.length === 0 && <p className="na-subtle">실제 Skill/Hook 호출 미제공</p>}
-        {hooks.length > 0 && <><p className="na-subtle">Hook 호출 횟수 미제공 · 완료 뒤 시작 관측은 늦은 시작인지 새 호출인지 구별할 수 없습니다.</p><ul className="na-track">{hooks.map((hook) => <li key={hook.key} className="na-row has-activity"><span className="na-row-dot" aria-hidden="true"/><span className="na-row-copy"><strong>{hook.label}</strong><small>Hook · {hook.detail}{hook.historical ? " · 복원 이력" : ""}</small></span><span className="na-row-state">{hook.state}</span></li>)}</ul></>}
-      </section>
-      {sessionHooks.length > 0 && <section className="na-session" aria-label="턴 미연결 Hook"><h3>턴 미연결 Hook</h3><p className="na-subtle">현재 요청의 성공 여부에 귀속하지 않습니다. 호출 횟수 미제공 · 완료 뒤 시작 관측은 늦은 시작인지 새 호출인지 구별할 수 없습니다.</p><ul>{sessionHooks.map((hook) => <li key={hook.key}>{hook.label} · {hook.detail} · {hook.state}{hook.historical ? " · 복원 이력" : ""}</li>)}</ul></section>}
-      {unscopedHooks.length > 0 && <section className="na-session" aria-label="대화 경계 미제공 Hook"><h3>대화 경계 미제공 Hook</h3><p className="na-subtle">현재 대화·턴이나 누적 원장에 귀속하지 않습니다. 호출 횟수 미제공 · 완료 뒤 시작 관측은 늦은 시작인지 새 호출인지 구별할 수 없습니다.</p><ul>{unscopedHooks.map((hook) => <li key={hook.key}>{hook.label} · {hook.detail} · {hook.state}{hook.historical ? " · 복원 이력" : ""}</li>)}</ul></section>}
-      <section className="na-timeline" aria-label="대화 누적 리소스"><div className="na-section-heading"><h3>대화 누적 리소스</h3><span>{resources ? storageLabels[resources.storage] : threadId ? unavailable ? "복원·수집 실패 · 경고 확인 필요" : "복원 대기 · 아직 자료 없음" : "대화 선택 필요"}</span></div>
-        {resources && <><p className="na-subtle">{resources.coverage.completeness === "partial" ? "부분 이력" : "관측 범위 내 기록"} · 보존 이력 포함 · 저장 revision {resources.durableRevision}/{resources.revision}</p>{resources.coverage.gaps.length > 0 && <p className="na-warning" role="status">누락·불완전: {resources.coverage.gaps.join(" · ")}{resources.coverage.gaps.includes("unstable-id") ? " · Hook 등 불안정 식별의 정확 횟수 미제공" : ""}</p>}</>}
-        {groups.size ? <ul className="na-track">{[...groups].map(([key, { row, ids }]) => <li key={key} className="na-row"><span className="na-row-dot" aria-hidden="true"/><span className="na-row-copy"><strong>{row.resource.label}</strong><small title={row.resource.identity}>{row.resource.kind} · {row.action === "read" ? "문서 읽기" : "실제 호출"} · {row.resource.identity}</small></span><span className="na-row-state">{ids.size}개 관측</span></li>)}</ul> : <p className="na-empty">누적된 실제 관측이 없습니다. 설치 목록이나 요청·명령 참조를 실행으로 세지 않습니다.</p>}
-      </section><footer className="na-source-note">같은 대화의 관측 ID로 누적합니다. 저장된 과거 관측을 현재 호출로 재생하지 않습니다.</footer>
+  return <aside className="native-activity-panel agent-sidebar" hidden={hidden} aria-label="Agent와 작업 개요" data-testid="resource-sidebar">
+    <header className="na-header"><div className="na-heading"><h2>Agent</h2><div className="na-nav"><button onClick={onOpenMonitor} aria-label="상세 실행 모니터 열기">상세 모니터</button></div></div></header>
+    <div className="na-scroll" tabIndex={0} aria-label="Agent와 작업 개요 스크롤">
+      <AgentOverviewView projection={projection} sending={sending}/>
+      <footer className="na-source-note">
+        <p>문서 읽기와 실제 선택은 구분합니다. Subagent 완료는 제공된 작업 상태로만 표시합니다.</p>
+        {resources?.coverage.completeness === "partial" && <p>관측 원장에 부분 이력이 있습니다. 상세 모니터에서 근거를 확인할 수 있습니다.</p>}
+        {resources && resources.coverage.gaps.length > 0 && <p className="na-warning" role="status">누락·불완전: {resources.coverage.gaps.join(" · ")}</p>}
+        {resources && resources.storage !== "saved" && resources.storage !== "saving" && <p className="na-warning" role="status">관측 원장 {resources.storage === "volatile" ? "임시 보관 · 저장 실패" : resources.storage === "full" ? "저장 한도 도달" : resources.storage === "corrupt" ? "저장 손상 · 원본 보전" : "저장소 사용 불가"}</p>}
+        {!resources && unavailable && <p className="na-warning" role="status">관측 원장 복원·수집 실패</p>}
+      </footer>
     </div>
   </aside>;
 }

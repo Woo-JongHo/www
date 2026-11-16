@@ -12,11 +12,15 @@ import { reduceConversationEvents, type ConversationEventState, blankReadingStat
 import { createActivitySidebarState, projectActivitySidebar, updateActivitySidebarSnapshot } from "./activity-sidebar";
 import { ReportsView } from "./reports-view";
 import { EcosystemView } from "./ecosystem-view";
+import { DashboardView } from "./dashboard-view";
+import { SessionApiProvider, useSessionApi } from "./session-api";
+import { SessionTabs } from "./session-tabs";
 import { handlePromptKeyDown, normalizeCompositionEnd } from "./input";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { executionResultCounts, MAX_OUTPUT_CODE_UNITS, project, type Block, type Projection } from "./projection";
 import type { AppEvent, ConversationSummary, TurnState, WorkspaceSelection, SelectionRef, ScopedAppEvent, ResourceSnapshot, ResourceScope, ProjectInfo, ConversationSelection, WwwApi } from "./shared";
+import type { NativeTimingEvent, DashboardSnapshot, NativeSessionSummary } from "./shared";
 
 document.title = `WWW ${appBuildInfo.label}`;
 
@@ -74,6 +78,40 @@ function elapsedLabel(milliseconds: number): string {
   return `${minutes}분 ${seconds % 60}초`;
 }
 
+function timingParams(event: AppEvent): NativeTimingEvent | null {
+  if (event.method !== "diagnostics/timing" || !event.params || typeof event.params !== "object") return null;
+  const value = event.params;
+  if (!("traceId" in value) || typeof value.traceId !== "string"
+    || !("phase" in value) || typeof value.phase !== "string"
+    || !("status" in value) || !["started", "completed", "failed", "cancelled"].includes(String(value.status))
+    || !("elapsedMs" in value) || typeof value.elapsedMs !== "number" || !Number.isFinite(value.elapsedMs)
+    || !("source" in value) || !["www", "native"].includes(String(value.source))
+    || !("threadId" in value) || (value.threadId !== null && typeof value.threadId !== "string")) return null;
+  // main의 고정 메타데이터만 읽는다. 이 값으로 다른 프로세스 시계를 빼지 않는다.
+  return value as NativeTimingEvent;
+}
+
+function NativePreparation({ events, sinceSeq }: { events: readonly AppEvent[]; sinceSeq: number }) {
+  const timings = events.filter(event => !event.historical && event.seq >= sinceSeq)
+    .map(timingParams).filter((event): event is NativeTimingEvent => event !== null);
+  const latest = timings.at(-1);
+  if (!latest) return null;
+  const trace = timings.filter(event => event.traceId === latest.traceId);
+  const labels: Record<string, string> = {
+    request: "요청 준비", connect: "Native 연결", initialize: "Native 초기화",
+    "thread/start": "새 대화 준비", "thread/read": "대화 읽기", "thread/resume": "대화 재개",
+    "thread/turns/list": "대화 이력 확인", "turn/start": "요청 전달", "first-native": "첫 작업 소식 수신",
+  };
+  const stage = labels[latest.phase] ?? "요청 준비";
+  const state = latest.status === "started" ? "진행 중" : latest.status === "failed" ? "실패" : latest.status === "cancelled" ? "취소" : "확인됨";
+  return <section className="work-flow" data-testid="native-preparation" aria-label="Native 요청 준비">
+    <p role="status">앱 관측 · {stage} {state}</p>
+    <details><summary>준비 시간 확인</summary><p className="muted">main 프로세스의 요청 시작부터 경과한 시간입니다. 첫 작업 소식 수신과 업무 완료는 다릅니다.</p>
+      <ol>{trace.map((item, index) => <li key={index}>{labels[item.phase] ?? item.phase} · {item.status === "started" ? "시작" : item.status === "completed" ? "확인" : item.status === "failed" ? "실패" : "취소"} · {(item.elapsedMs / 1000).toFixed(2)}초</li>)}</ol>
+    </details>
+  </section>;
+}
+
 function WorkFlow({ turn, blocks, events, transport, interrupt, now }: {
   turn      : TurnState               ;
   blocks    : readonly Block[]         ;
@@ -102,6 +140,14 @@ function WorkFlow({ turn, blocks, events, transport, interrupt, now }: {
   const lastActivity = observed.at(-1);
   const elapsed = startedAt ? elapsedLabel(now - Date.parse(startedAt.at)) : null;
   const quiet = active && lastActivity ? Math.max(0, now - Date.parse(lastActivity.at)) : null;
+  const latestCommand = commands.at(-1);
+  const observedProgress = latestCommand
+    ? latestCommand.running ? "명령을 실행하고 출력을 받고 있습니다."
+      : latestCommand.status === "failed" ? "명령 실패를 관측했습니다. 후속 설명과 실행 결과를 확인할 수 있습니다."
+        : latestCommand.status === "completed" ? "명령 실행이 종료됐습니다. 제공된 결과를 아래에서 확인할 수 있습니다."
+          : "명령은 관측됐지만 최종 결과는 아직 확인되지 않았습니다."
+    : files.length ? "파일 변경 사건을 받았습니다. 제공된 변경 내역을 아래에서 확인할 수 있습니다."
+      : null;
   if (turn === "idle" && blocks.length === 0) return null;
   let label = "작업 상태를 확인하는 중";
   if (turn === "starting"   ) label = "작업 시작을 기다리는 중";
@@ -116,6 +162,7 @@ function WorkFlow({ turn, blocks, events, transport, interrupt, now }: {
   return <section className={`work-flow ${active ? "is-active" : ""}`} aria-label="작업 흐름" data-testid="work-flow">
     <div className="work-flow-heading"><strong>작업 흐름</strong><span>{active ? `진행 중${elapsed ? ` · ${elapsed}` : ""}` : finished ? "종료" : "결과 확인 필요"}</span></div>
     <p role="status" aria-live="polite">{label}</p>
+    {observedProgress && <p data-testid="observed-progress">앱 관측 · {observedProgress}</p>}
     {active && lastActivity && <p className="work-flow-time">마지막 활동 {elapsedLabel(now - Date.parse(lastActivity.at))} 전</p>}
     <div className="work-flow-facts">
       <span>공개 설명 {explanations.length}개</span>
@@ -310,8 +357,19 @@ function LineIcon({ kind }: { kind: "folder" | "star" | "refresh" | "chat" | "ma
   return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">{kind === "folder" ? <path d="M3 7V5h6l2 2h10v13H3V7Z"/> : kind === "star" ? <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2-5.5-2.9-5.5 2.9 1-6.2L3 9.6l6.2-.9L12 3Z"/> : kind === "chat" ? <path d="M4 4h16v12H9l-5 4V4Z"/> : kind === "map" ? <path d="M3 3h6v6H3V3Zm12 12h6v6h-6v-6ZM9 6h9v9M6 9v9h9"/> : kind === "report" ? <path d="M5 3h14v18H5V3Zm3 5h8M8 12h8M8 16h5"/> : <path d="M20 8a8 8 0 1 0 0 8M20 3v5h-5"/>}</svg>;
 }
 
-function App() {
-  const [view, setView] = useState<"chat" | "ecosystem" | "reports">("chat");
+interface SessionCloseState { allowed: boolean; reason?: string }
+
+function App({ sessionId, active, initial, onCloseState }: {
+  sessionId: string; active: boolean; initial: boolean;
+  onCloseState: (id: string, state: SessionCloseState) => void;
+}) {
+  const api = useSessionApi();
+  const [view, setView] = useState<"home" | "dashboard" | "chat" | "ecosystem" | "reports">(initial ? "home" : "chat");
+  const [targetKey, setTargetKey] = useState<string | null>(null);
+  const [dashboard, setDashboard] = useState<DashboardSnapshot | null>(null);
+  const [dashboardLoading, setDashboardLoading] = useState(false);
+  const [dashboardError, setDashboardError] = useState("");
+  const dashboardGeneration = useRef(0);
   const [autoReportHint, setAutoReportHint] = useState("");
   const [workspace, setWorkspace] = useState<WorkspaceSelection | null>(null);
   const selectionRef = useRef<WorkspaceSelection | null>(null);
@@ -332,7 +390,7 @@ function App() {
     if (!selectionRef.current) throw new Error("프로젝트 선택을 기다려 주세요.");
     return selectionRef.current;
   };
-  const matchesSelection = (value: SelectionRef, selected = selectionRef.current) => selected !== null && value.processEpoch === selected.processEpoch && value.workspaceKey === selected.workspaceKey && value.selectionEpoch === selected.selectionEpoch;
+  const matchesSelection = (value: SelectionRef, selected = selectionRef.current) => selected !== null && value.sessionId === selected.sessionId && value.processEpoch === selected.processEpoch && value.workspaceKey === selected.workspaceKey && value.selectionEpoch === selected.selectionEpoch;
   const acceptResources = (snapshot: ResourceSnapshot) => {
     if (!matchesSelection({ ...snapshot, workspaceKey: snapshot.scope.workspaceKey }) || snapshot.scope.threadId !== threadRef.current) return;
     const previous = resourceRef.current;
@@ -388,6 +446,8 @@ function App() {
   const [newContent, setNewContent] = useState(false);
   const [sending, setSending] = useState(false);
   const [pendingPrompt, setPendingPrompt] = useState<string | null>(null);
+  const [sendEventStart, setSendEventStart] = useState<number>(Infinity);
+  const timingReceipts = useRef(new Map<number, number>());
   const [failedDraft, setFailedDraft] = useState<string | null>(null);
   const failedDraftRef = useRef<string | null>(null);
   const [now, setNow] = useState(Date.now);
@@ -407,13 +467,23 @@ function App() {
 
   const selectionBlocked = failedDraft !== null || projection.working || sending || switching || projection.blocks.some((block) => block.kind === "approval" && block.open);
 
+  useEffect(() => {
+    const reason = sending || switching ? "요청·대화 준비가 끝난 뒤 닫을 수 있습니다."
+      : projection.working ? "실행을 중단하고 결과를 확인한 뒤 닫아 주세요."
+        : projection.blocks.some(block => block.kind === "approval" && block.open) ? "승인 요청을 처리한 뒤 닫아 주세요."
+          : failedDraft !== null ? "실패한 요청을 복원하거나 버린 뒤 닫아 주세요."
+            : prompt.length > 0 || [...readingStates.current].some(([key, state]) => key !== currentKey && state.draft.length > 0)
+              ? "이 탭의 대화에 남은 초안을 보내거나 비운 뒤 닫아 주세요." : undefined;
+    onCloseState(sessionId, { allowed: reason === undefined, ...(reason ? { reason } : {}) });
+  }, [sessionId, currentKey, sending, switching, projection.working, projection.blocks, failedDraft, prompt, onCloseState]);
+
   const refreshConversations = async (cursor?: string) => {
     const selected = requireSelection();
     const generation = ++listGeneration.current;
     setListLoading(true);
     setListError("");
     try {
-      const result = await window.www.listConversations(requireSelection(), cursor);
+      const result = await api.listConversations(requireSelection(), cursor);
       if (generation !== listGeneration.current || !matchesSelection(selected)) return;
       setConversations((current) => cursor
         ? [...new Map([...current, ...result.threads].map((item) => [item.id, item])).values()]
@@ -429,9 +499,14 @@ function App() {
   useEffect(() => {
     setConversations([]);
     setListCursor(null);
-    if (workspace) void refreshConversations();
+    if (workspace && view === "chat") void refreshConversations();
     return () => { listGeneration.current += 1; };
-  }, [workspace?.path, workspace?.selectionEpoch]);
+  }, [workspace?.path, workspace?.selectionEpoch, view === "chat"]);
+
+  useEffect(() => {
+    if (!workspace || view !== "chat") return;
+    void api.refreshActivity(requireSelection()).catch((failure: unknown) => setError(String(failure)));
+  }, [workspace?.workspaceKey, workspace?.selectionEpoch, view === "chat"]);
 
   useEffect(() => {
     readingStates.current.set(currentKey, {
@@ -470,8 +545,8 @@ function App() {
     try {
       const selected = requireSelection();
       const restored = id === null
-        ? await window.www.newConversation(selected)
-        : await window.www.openConversation(selected, id);
+        ? await api.newConversation(selected)
+        : await api.openConversation(selected, id);
       if (generation !== switchGeneration.current) return;
       selectionRef.current = restored.workspace;
       setWorkspace(restored.workspace);
@@ -525,6 +600,14 @@ function App() {
       if (!matchesSelection(event) || event.connectionGeneration < liveConnection.current) return;
       if (event.method === "thread/configured" && sendingRef.current && threadRef.current === null) threadRef.current = eventThreadId(event);
       if (!belongsToConversation(event, threadRef.current)) return;
+      if (timingParams(event) && !event.historical) {
+        timingReceipts.current.set(event.seq, performance.now());
+        while (timingReceipts.current.size > 128) {
+          const oldest = timingReceipts.current.keys().next().value;
+          if (oldest === undefined) break;
+          timingReceipts.current.delete(oldest);
+        }
+      }
       consumeEvents([], [event]);
       if (event.method === "turn/completed") void refreshConversations();
       if (event.method === "activity/resourcesUnavailable") setError("리소스 복원 실패 · 채팅은 계속 사용할 수 있습니다.");
@@ -532,18 +615,18 @@ function App() {
       if (event.method === "reports/autoError" && event.params && typeof event.params === "object" && "message" in event.params) setError(`자동 보고서: ${String(event.params.message)}`);
     };
     // 두 구독을 먼저 설치한 뒤 초기 상태를 요청한다.
-    const unsubscribe = window.www.onEvent(acceptEvent);
-    const unsubscribeResources = window.www.onActivityResources((snapshot) => {
+    const unsubscribe = api.onEvent(acceptEvent);
+    const unsubscribeResources = api.onActivityResources((snapshot) => {
       if (disposed) return;
       if (switchingRef.current || !selectionRef.current) { resourceQueue.current.push(snapshot); return; }
       acceptResources(snapshot);
     });
     void (async () => {
-      const selected = await window.www.workspace();
+      const selected = await api.workspace();
       if (disposed) return;
       selectionRef.current = selected;
       setWorkspace(selected);
-      const snapshot = await window.www.events(selected);
+      const snapshot = await api.events(selected);
       bootstrapPending.current = false;
       if (disposed || switchingRef.current || !matchesSelection(selected)) return;
       const configured = [...snapshot].reverse().find((event) => event.method === "thread/configured");
@@ -556,10 +639,9 @@ function App() {
       for (const resource of resourceQueue.current) acceptResources(resource);
       resourceQueue.current = [];
       const version = resourceVersion.current;
-      const initialResources = await window.www.activityResources(selected);
+      const initialResources = await api.activityResources(selected);
       if (disposed || !matchesSelection(selected)) return;
       if (initialResources && (version === resourceVersion.current || !resourceRef.current || initialResources.revision > resourceRef.current.revision || initialResources.durableRevision > resourceRef.current.durableRevision)) acceptResources(initialResources);
-      await window.www.refreshActivity(selected);
     })().catch((failure: unknown) => {
       bootstrapPending.current = false;
       if (!disposed) {
@@ -571,16 +653,56 @@ function App() {
     return () => { disposed = true; unsubscribe(); unsubscribeResources(); };
   }, []);
 
+  useEffect(() => {
+    const event = [...events].reverse().find(item => !item.historical && item.seq >= sendEventStart && timingParams(item));
+    if (!event) return;
+    const timing = timingParams(event);
+    const receivedAt = timingReceipts.current.get(event.seq);
+    if (!timing || receivedAt === undefined) return;
+    let cancelled = false;
+    void afterTwoFrames().then(() => {
+      if (cancelled) return;
+      if (performance.getEntriesByName("www:renderer-commit-frame").length >= 128) performance.clearMarks("www:renderer-commit-frame");
+      performance.mark("www:renderer-commit-frame", { detail: {
+        traceId: timing.traceId, phase: timing.phase, status: timing.status, seq: event.seq,
+        mainElapsedMs: timing.elapsedMs, rendererReceiveToFrameMs: performance.now() - receivedAt,
+        chatVisible: view === "chat", definition: "renderer receive to second animation frame after React commit; main clock is separate",
+      } });
+    });
+    return () => { cancelled = true; };
+  }, [events, sendEventStart, view]);
+
   const refreshProjects = async () => {
     const selected = requireSelection();
     setProjectLoading(true);
     setProjectError("");
     try {
-      const result = await window.www.listProjects(selected);
+      const result = await api.listProjects(selected);
       if (matchesSelection(selected)) setProjects(result);
     } catch (failure) { if (matchesSelection(selected)) setProjectError(String(failure)); }
     finally { if (matchesSelection(selected)) setProjectLoading(false); }
   };
+  const refreshDashboard = async () => {
+    if (!selectionRef.current) return;
+    const selected = requireSelection();
+    const generation = ++dashboardGeneration.current;
+    setDashboardLoading(true);
+    setDashboardError("");
+    try {
+      const result = await api.dashboard(selected);
+      if (generation === dashboardGeneration.current && matchesSelection(selected)) setDashboard(result);
+    } catch (failure) {
+      if (generation === dashboardGeneration.current && matchesSelection(selected)) setDashboardError(String(failure));
+    } finally {
+      if (generation === dashboardGeneration.current) setDashboardLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (!workspace || (view !== "home" && view !== "dashboard")) return;
+    void refreshDashboard();
+    const timer = window.setInterval(() => { void refreshDashboard(); }, 15_000);
+    return () => { window.clearInterval(timer); dashboardGeneration.current++; };
+  }, [workspace?.workspaceKey, workspace?.selectionEpoch, view === "home", view === "dashboard"]);
   useEffect(() => { if (workspace) void refreshProjects(); }, [workspace?.workspaceKey, workspace?.selectionEpoch]);
   const changeProject = async (key?: string) => {
     if (!selectionRef.current || selectionBlocked || switchingRef.current || key === selectionRef.current.workspaceKey) return;
@@ -591,8 +713,8 @@ function App() {
     queuedEvents.current = [];
     try {
       const result: ConversationSelection | null = key
-        ? await window.www.switchProject(selected, key)
-        : await window.www.chooseWorkspace(selected);
+        ? key === "www" ? await api.selectWww(selected) : await api.switchProject(selected, key)
+        : await api.chooseWorkspace(selected);
       if (!result) return;
       if (result.resourceStorageWarnings?.length) setProjectStorageWarnings(result.resourceStorageWarnings);
       liveConnection.current = 0;
@@ -610,7 +732,8 @@ function App() {
       const arrived = queuedEvents.current.filter((event) => matchesSelection(event) && belongsToConversation(event, null));
       consumeEvents(result.events, arrived, true, true);
       setError("");
-      setView("chat");
+      setTargetKey(key === "www" || result.workspace.path === dashboard?.projects.find(item => item.project.kind === "www")?.project.path ? "www" : result.workspace.workspaceKey);
+      setView("dashboard");
     } catch (failure) { setError(String(failure)); }
     finally {
       switchingRef.current = false;
@@ -622,13 +745,21 @@ function App() {
       resourceQueue.current = [];
     }
   };
+  const openDashboardProject = (key: string) => {
+    if (!workspace || !selectionRef.current) return;
+    const project = dashboard?.projects.find(item => item.project.key === key)?.project;
+    if (key === workspace.workspaceKey || (project !== undefined && project.path === workspace.path)) {
+      setTargetKey(key);
+      setView("dashboard");
+    } else { void changeProject(key); }
+  };
   const toggleFavorite = async (item: ProjectInfo) => {
     if (favoritePending) return;
     const selected = requireSelection();
     setFavoritePending(true);
     setProjectError("");
     try {
-      await window.www.setProjectFavorite(selected, item.workspaceKey, !item.favorite);
+      await api.setProjectFavorite(selected, item.workspaceKey, !item.favorite);
       if (matchesSelection(selected)) await refreshProjects();
     } catch (failure) { if (matchesSelection(selected)) setProjectError(`즐겨찾기 저장 실패: ${String(failure)}`); }
     finally { setFavoritePending(false); }
@@ -636,7 +767,7 @@ function App() {
 
   useEffect(() => {
     const element = transcriptRef.current;
-    if (!element || view !== "chat") return;
+    if (!element || !active || view !== "chat") return;
     if (followTail.current) {
       element.scrollTop = element.scrollHeight;
       setNewContent(false);
@@ -644,18 +775,18 @@ function App() {
       element.scrollTop = transcriptScrollTop.current;
       setNewContent(true);
     }
-  }, [events, view]);
+  }, [events, view, active]);
 
   useEffect(() => {
     const element = transcriptRef.current;
-    if (!element || view !== "chat") return;
+    if (!element || !active || view !== "chat") return;
     const resize = new ResizeObserver(() => {
       if (followTail.current) element.scrollTop = element.scrollHeight;
     });
     resize.observe(element);
     for (const child of element.children) resize.observe(child);
     return () => resize.disconnect();
-  }, [events, view, monitorVisible, detailsVisible]);
+  }, [events, view, monitorVisible, detailsVisible, active]);
 
   const run = async () => {
     const draft = prompt;
@@ -665,6 +796,9 @@ function App() {
     const generation = ++sendGeneration.current;
     const currentRequest = () => generation === sendGeneration.current && matchesSelection(selected);
     sendingRef.current = true;
+    setSendEventStart((transcriptState.current.events.at(-1)?.seq ?? 0) + 1);
+    performance.clearMarks("www:renderer-send");
+    performance.mark("www:renderer-send");
     setSending(true);
     setPendingPrompt(text);
     setError("");
@@ -673,18 +807,18 @@ function App() {
     try {
       let id = threadId;
       if (!id) {
-        id = (await window.www.startThread(selected)).threadId;
+        id = (await api.startThread(selected)).threadId;
         if (!currentRequest()) return;
         threadRef.current = id;
         readingStates.current.set(conversationKey(workspace?.path ?? "", id), { draft: "", scrollTop: 0, followTail: true });
         readingStates.current.delete(conversationKey(workspace?.path ?? "", null));
         setThreadId(id);
         const version = resourceVersion.current;
-        void window.www.activityResources(selected).then((snapshot) => {
+        void api.activityResources(selected).then((snapshot) => {
           if (snapshot && matchesSelection(selected) && (version === resourceVersion.current || !resourceRef.current || snapshot.revision > resourceRef.current.revision || snapshot.durableRevision > resourceRef.current.durableRevision)) acceptResources(snapshot);
         }).catch((failure: unknown) => { if (matchesSelection(selected)) setError(`리소스 복원 실패: ${String(failure)}`); });
       }
-      await window.www.startTurn(selected, id, text);
+      await api.startTurn(selected, id, text);
       if (!currentRequest()) return;
       void refreshConversations();
     } catch (failure) {
@@ -722,25 +856,35 @@ function App() {
   const decide = async (id: string | number, decision: string, approvalToken: string | null) => {
     if (approvalToken === null) return;
     const selected = requireSelection();
-    try { await window.www.respond(selected, id, decision, approvalToken); }
+    try { await api.respond(selected, id, decision, approvalToken); }
     catch (failure) { if (matchesSelection(selected)) setError(String(failure)); }
   };
   const interrupt = async () => {
     if (!threadId || !projection.turnId) return;
     const selected = requireSelection();
-    try { await window.www.interrupt(selected, threadId, projection.turnId); }
+    try { await api.interrupt(selected, threadId, projection.turnId); }
     catch (failure) { if (matchesSelection(selected)) setError(String(failure)); }
   };
 
   useEffect(() => {
     void (async () => {
       await afterTwoFrames();
-      const ready = await window.www.probeReady();
-      if (!ready.enabled) return;
-      const developmentPolicy = ready.developmentPolicyAvailable ? await window.www.developmentPolicy() : null;
+      const ready = await api.probeReady();
+      if (!ready.enabled || !initial) return;
+      const entryDeadline = performance.now() + 15000;
+      while (!document.querySelector('[data-testid="open-current-workspace"]') && performance.now() < entryDeadline) await new Promise(resolve => setTimeout(resolve, 20));
+      const currentWorkspace = document.querySelector('[data-testid="open-current-workspace"]');
+      if (!(currentWorkspace instanceof HTMLButtonElement)) throw new Error("Probe expected View Page project entry");
+      currentWorkspace.click();
+      await afterTwoFrames();
+      const chatEntry = document.querySelector('[data-testid="chat-nav"]');
+      if (!(chatEntry instanceof HTMLButtonElement)) throw new Error("Probe expected project Chat navigation");
+      chatEntry.click();
+      await afterTwoFrames();
+      const developmentPolicy = ready.developmentPolicyAvailable ? await api.developmentPolicy() : null;
       if (ready.developmentPolicyAvailable && (!developmentPolicy || developmentPolicy.id !== "www-dev-review" || developmentPolicy.primaryModel !== "opus" || !/^[a-f0-9]{64}$/.test(developmentPolicy.hash))) throw new Error("Probe did not receive the bundled development policy");
       if (ready.expectDevelopmentComplete && !ready.developmentWorkId) throw new Error("Probe completion verification requires a development work UUID");
-      const developmentStatus = ready.developmentWorkId ? await window.www.developmentStatus(ready.developmentWorkId) : null;
+      const developmentStatus = ready.developmentWorkId ? await api.developmentStatus(ready.developmentWorkId) : null;
       let developmentCompletion: {
         rejected : true   ;
         reason   : string
@@ -753,15 +897,15 @@ function App() {
       } | null = null;
       if (ready.developmentWorkId) {
         if (!developmentStatus || developmentStatus.workId !== ready.developmentWorkId.toLowerCase() || developmentStatus.canComplete !== (ready.expectDevelopmentComplete === true)) throw new Error("Probe development status did not match the requested completion scenario");
-        if (typeof window.www.completeDevelopmentWork !== "function") throw new Error("Probe development completion bridge is unavailable");
+        if (typeof api.completeDevelopmentWork !== "function") throw new Error("Probe development completion bridge is unavailable");
         if (ready.expectDevelopmentComplete) {
-          const result = await window.www.completeDevelopmentWork(ready.developmentWorkId) ;
-          const after  = await window.www.developmentStatus(ready.developmentWorkId)       ;
+          const result = await api.completeDevelopmentWork(ready.developmentWorkId) ;
+          const after  = await api.developmentStatus(ready.developmentWorkId)       ;
           if (result.workId !== developmentStatus.workId || result.status !== "done" || after.status !== "done" || after.canComplete !== true) throw new Error("Probe did not observe canonical development completion through IPC");
           developmentCompletion = { rejected: false, workId: result.workId, status: result.status, statusAfter: after.status, canCompleteAfter: after.canComplete };
         } else {
           let rejection: string | null = null;
-          try { await window.www.completeDevelopmentWork(ready.developmentWorkId); }
+          try { await api.completeDevelopmentWork(ready.developmentWorkId); }
           catch (failure) { rejection = String(failure); }
           if (!rejection?.includes("현재 증거로 완료할 수 없습니다")) throw new Error("Probe did not receive the development completion gate rejection");
           developmentCompletion = { rejected: true, reason: rejection };
@@ -780,13 +924,13 @@ function App() {
       textarea.focus();
       textarea.setSelectionRange(3, 7);
       await afterTwoFrames();
-      const runningCommand = document.querySelector('[data-testid="command-card"] details');
-      if (!(runningCommand instanceof HTMLDetailsElement)) throw new Error("Probe expected running command");
-      const summary = runningCommand.querySelector("summary");
-      if (!(summary instanceof HTMLElement)) throw new Error("Probe expected command summary");
-      if (!runningCommand.open) summary.click();
+      const runningCommand = document.querySelector('[data-testid="command-card"]');
+      if (!(runningCommand instanceof HTMLElement)) throw new Error("Probe expected running command");
+      const outputToggle = runningCommand.querySelector('button[aria-expanded]');
+      if (!(outputToggle instanceof HTMLButtonElement)) throw new Error("Probe expected command output toggle");
+      if (outputToggle.getAttribute("aria-expanded") !== "true") outputToggle.click();
       await afterTwoFrames();
-      summary.click();
+      outputToggle.click();
       const transcript = document.querySelector(".transcript");
       if (!(transcript instanceof HTMLDivElement)) throw new Error("Probe expected transcript");
       transcript.scrollTop = 0;
@@ -802,29 +946,29 @@ function App() {
       if (ready.checkInterruptPending) {
         await waitForEvent("turn/interruptAcknowledged");
         await afterTwoFrames();
-        if ((await window.www.workspace().then((selected) => window.www.events(selected))).some((event) => event.method === "turn/completed")) throw new Error("Probe fixture completed before the pending interval could be inspected");
+        if ((await api.workspace().then((selected) => api.events(selected))).some((event) => event.method === "turn/completed")) throw new Error("Probe fixture completed before the pending interval could be inspected");
         if (!interruptButton.isConnected || !interruptButton.disabled) throw new Error("Probe enabled interrupt again before the turn completed");
         interruptButton.click();
         await afterTwoFrames();
-        const counts = (await window.www.workspace().then((selected) => window.www.events(selected))).filter((event) => event.method === "fixture/interruptRequest").map((event) => (event.params as { count?: number }).count);
+        const counts = (await api.workspace().then((selected) => api.events(selected))).filter((event) => event.method === "fixture/interruptRequest").map((event) => (event.params as { count?: number }).count);
         if (counts.length !== 1 || counts[0] !== 1) throw new Error("Probe expected one Native fixture interrupt request");
         interruptPending = { rpcAccepted: true, buttonDisabled: interruptButton.disabled, duplicateClickAttempted: true, requestCount: 1 };
       }
       const completed = await waitForEvent("turn/completed");
       if (ready.checkInterruptPending) {
-        const counts = (await window.www.workspace().then((selected) => window.www.events(selected))).filter((event) => event.method === "fixture/interruptRequest").map((event) => (event.params as { count?: number }).count);
+        const counts = (await api.workspace().then((selected) => api.events(selected))).filter((event) => event.method === "fixture/interruptRequest").map((event) => (event.params as { count?: number }).count);
         if (counts.length !== 1 || counts[0] !== 1 || (completed.params as { turn?: { status?: string } }).turn?.status !== "interrupted") throw new Error("Probe did not confirm a single interrupt and interrupted completion");
       }
       await afterTwoFrames();
-      const command     = document.querySelector('[data-testid="command-card"] details') ;
+      const command     = document.querySelector('[data-testid="command-card"] button[aria-expanded]') ;
       const userRequest = document.querySelector('[data-testid="user-request"]') ;
-      if (!(command instanceof HTMLDetailsElement) || !userRequest) throw new Error("Probe did not render request and command");
+      if (!(command instanceof HTMLButtonElement) || !userRequest) throw new Error("Probe did not render request and command");
       const workFlow = document.querySelector('[data-testid="work-flow"]');
       if (!(workFlow instanceof HTMLElement) || !workFlow.textContent?.includes("작업 흐름") || !userRequest.textContent?.includes("요청을 받았습니다")) throw new Error("Probe did not connect request acceptance to the work flow");
       const resultSummary = document.querySelector('[data-testid="result-summary"]');
       if (!(resultSummary instanceof HTMLElement) || !resultSummary.textContent?.includes("결과 요약") || !resultSummary.textContent?.includes("실패 1개")) throw new Error("Probe did not render the observed result summary");
       if (textarea.value !== "보존할 입력 초안" || textarea.selectionStart !== 3 || textarea.selectionEnd !== 7) throw new Error("Probe lost draft or selection");
-      if (command.open) throw new Error("Probe lost manual command collapse state");
+      if (command.getAttribute("aria-expanded") === "true") throw new Error("Probe lost manual command collapse state");
       if (!document.querySelector(".new-content")) throw new Error("Probe did not preserve historical scroll position");
       if (!document.querySelector(".cmd.item-failed") || !document.body.textContent?.includes("UTF-16 코드 단위")) throw new Error("Probe did not render failure and long-output boundary");
       const ecosystemNavigation = document.querySelector('[data-testid="ecosystem-nav"]');
@@ -858,13 +1002,13 @@ function App() {
       if (!(chatNavigation instanceof HTMLButtonElement)) throw new Error("Probe expected chat navigation");
       chatNavigation.click();
       await afterTwoFrames();
-      if (textarea.value !== "보존할 입력 초안" || textarea.selectionStart !== 3 || textarea.selectionEnd !== 7 || command.open || transcript.scrollTop !== readingPosition) throw new Error("Probe lost conversation state after ecosystem navigation");
+      if (textarea.value !== "보존할 입력 초안" || textarea.selectionStart !== 3 || textarea.selectionEnd !== 7 || command.getAttribute("aria-expanded") === "true" || transcript.scrollTop !== readingPosition) throw new Error("Probe lost conversation state after ecosystem navigation");
       let reportId : string | null = null  ;
       let nativeAutomaticReport    = false ;
       if (ready.checkNativeReports) {
         const deadline = performance.now() + 20_000;
         while (performance.now() < deadline) {
-          const automatic = await window.www.nativeReportStatus();
+          const automatic = await api.nativeReportStatus();
           if (automatic.jobs.some((job) => job.status === "failed")) throw new Error("Probe automatic Native report failed");
           if (automatic.jobs.some((job) => job.status === "saved" && job.reportId)) { nativeAutomaticReport = true; break; }
           await new Promise((resolve) => setTimeout(resolve, 50));
@@ -872,7 +1016,7 @@ function App() {
         if (!nativeAutomaticReport) throw new Error("Probe did not observe an automatic report after Native turn completion");
       }
       if (ready.checkReports) {
-        const catalog = await window.www.listReports()                               ;
+        const catalog = await api.listReports()                               ;
         const saved   = catalog.reports.find((report) => report.kind === "authored") ;
         if (!saved || catalog.warnings.length) throw new Error("Probe expected an authored report from the selected repository");
         reportId = saved.id;
@@ -891,7 +1035,7 @@ function App() {
         if (!document.querySelector('.reports-empty-list')?.textContent?.includes("일치하는 보고서가 없습니다")) throw new Error("Probe expected empty report search results");
         chatNavigation.click();
         await afterTwoFrames();
-        if (textarea.value !== "보존할 입력 초안" || command.open || transcript.scrollTop !== readingPosition) throw new Error("Probe lost conversation state after report navigation");
+        if (textarea.value !== "보존할 입력 초안" || command.getAttribute("aria-expanded") === "true" || transcript.scrollTop !== readingPosition) throw new Error("Probe lost conversation state after report navigation");
         reportNavigation.click();
         const opened = performance.now() + 15_000;
         while (!document.querySelector('.report-frame') && performance.now() < opened) await new Promise((resolve) => setTimeout(resolve, 30));
@@ -907,7 +1051,7 @@ function App() {
         await afterTwoFrames();
         nativeActivity = await verifyNativeActivity(textarea, send);
       }
-      await window.www.probeFinish({
+      await api.probeFinish({
         ...(ready.checkActivity ? { nativeActivity } : {}),
         readinessMs         : ready.readinessMs                                                             ,
         readinessDefinition : "native entry to the second requestAnimationFrame callback after React mount" ,
@@ -946,11 +1090,11 @@ function App() {
         draftPreserved                 : true ,
         selectionPreserved             : true ,
 
-        notificationMethods: (await window.www.workspace().then((selected) => window.www.events(selected))).map((event) => event.method)
+        notificationMethods: (await api.workspace().then((selected) => api.events(selected))).map((event) => event.method)
       });
     })().catch(async (failure) => {
       try {
-        await window.www.probeFinish({ error: String(failure) });
+        await api.probeFinish({ error: String(failure) });
       } catch {
         setError(String(failure));
       }
@@ -983,15 +1127,91 @@ function App() {
     : "검사로 식별할 실행 근거 없음 · 미검증";
 
   return <>
-    <aside id="workspace-sidebar" className="sidebar"><div className="brand" title={`커밋 ${appBuildInfo.commit} · 소스 ${appBuildInfo.sourceDigest}`} >WWW <small data-testid="build-version">{appBuildInfo.label}</small></div><div className="sec">작업 공간 <button className="icon" aria-label="프로젝트 폴더 선택" onClick={choose} disabled={selectionBlocked || !workspace}><LineIcon kind="folder"/></button></div><div><div className="srow active"><span className="avatar">W</span><span className="name">{workspace?.name ?? "선택 중"}</span><span className="right">{workspace?.branch ?? "git 아님"}</span></div><nav className="workspace-nav" aria-label="화면 선택"><button aria-label="대화" title="대화" aria-current={view === "chat" ? "page" : undefined} onClick={() => setView("chat")}><LineIcon kind="chat"/><span className="nav-label">대화</span>{failedDraft !== null && <span className="nav-hint">실패한 요청 확인</span>}</button><button aria-label="생태계 구조 지도" title="생태계 구조 지도" aria-current={view === "ecosystem" ? "page" : undefined} onClick={() => setView("ecosystem")} data-testid="ecosystem-nav"><LineIcon kind="map"/><span className="nav-label">생태계</span><span className="nav-hint">구조 지도</span></button><button aria-label="리포트" title="리포트" aria-current={view === "reports" ? "page" : undefined} onClick={() => { setView("reports"); setAutoReportHint(""); }} data-testid="reports-nav"><LineIcon kind="report"/><span className="nav-label">리포트</span><span className="nav-hint">{autoReportHint || "작업 이야기"}</span></button></nav></div><div className="agents"><section className="chat-conversations" aria-label="로컬 프로젝트"><div className="chat-conversation-heading"><strong>프로젝트</strong><button disabled={projectLoading || switching || !workspace} onClick={() => { void refreshProjects(); }} aria-label="프로젝트 목록 새로고침"><LineIcon kind="refresh"/></button></div>{projectLoading && <p role="status">프로젝트 불러오는 중…</p>}{projectError && <p role="alert" className="chat-list-error">{projectError}</p>}<div className="chat-conversation-list" aria-label="프로젝트 목록">{[true, false].map((favorite) => <section key={String(favorite)} aria-label={favorite ? "즐겨찾기 프로젝트" : "최근 프로젝트"}><div className="group">{favorite ? "즐겨찾기" : "최근 프로젝트"}</div><div className="chat-conversation-list">{projects.filter((item) => item.favorite === favorite).map((item) => <div className={`srow ${workspace?.workspaceKey === item.workspaceKey ? "active" : ""}`} key={item.workspaceKey}><button className="name grow" aria-current={workspace?.workspaceKey === item.workspaceKey ? "true" : undefined} disabled={selectionBlocked} onClick={() => { void changeProject(item.workspaceKey); }} title={item.path}><LineIcon kind="folder"/> {item.name}</button><button className="icon" aria-label={`${item.name} 즐겨찾기 ${item.favorite ? "해제" : "추가"}`} aria-pressed={item.favorite} disabled={switching || favoritePending} onClick={() => { void toggleFavorite(item); }}><LineIcon kind="star"/></button></div>)}</div></section>)}</div>{favoritePending && <p role="status">즐겨찾기 저장 중…</p>}</section><div className="group">CODEX</div><div className="srow"><span className="agentmark"/><span>{statusText}</span></div><section className="chat-conversations" aria-label="저장된 대화"><div className="chat-conversation-heading"><strong>대화</strong><button type="button" data-testid="new-conversation" disabled={selectionBlocked} onClick={() => { void selectConversation(null); }}>새 대화</button></div><label className="chat-search"><span className="sr-only">불러온 대화 검색</span><input data-testid="conversation-search" value={conversationSearch} onChange={(event) => setConversationSearch(event.target.value)} placeholder="불러온 대화 검색"/></label><div className="chat-list-tools"><span>{listLoading ? "불러오는 중…" : `불러온 대화 ${conversations.length}개`}</span><button type="button" disabled={listLoading || switching} onClick={() => { void refreshConversations(); }} aria-label="대화 목록 새로고침">새로고침</button></div>{listError && <div role="status" className="chat-list-error">{listError}</div>}<div className="chat-conversation-list" data-testid="conversation-list">{conversations.filter((item) => `${item.title} ${item.preview}`.toLocaleLowerCase("ko-KR").includes(conversationSearch.toLocaleLowerCase("ko-KR"))).map((item) => <button type="button" key={item.id} data-testid="conversation-item" data-thread-id={item.id} className={item.id === threadId ? "is-current" : ""} aria-current={item.id === threadId ? "true" : undefined} disabled={selectionBlocked} onClick={() => { void selectConversation(item.id); }}><strong>{item.title || item.preview || "제목 없는 대화"}</strong><span>{item.preview || "내용 미제공"}</span>{item.updatedAt !== null && Number.isFinite(new Date(item.updatedAt * 1000).getTime()) && <time dateTime={new Date(item.updatedAt * 1000).toISOString()}>{new Date(item.updatedAt * 1000).toLocaleDateString("ko-KR")}</time>}</button>)}</div>{!listLoading && conversations.length === 0 && !listError && <p className="muted">이 작업 폴더에 저장된 대화가 없습니다.</p>}{conversations.length > 0 && conversationSearch && !conversations.some((item) => `${item.title} ${item.preview}`.toLocaleLowerCase("ko-KR").includes(conversationSearch.toLocaleLowerCase("ko-KR"))) && <p className="muted">불러온 대화 중 일치하는 항목이 없습니다.</p>}{listCursor && <button type="button" className="chat-load-more" data-testid="load-more-conversations" disabled={listLoading || switching} onClick={() => { void refreshConversations(listCursor); }}>이전 대화 더 불러오기</button>}</section></div><div className="footer"><span className="muted">{workspace?.path}</span><span>{workspace?.changes ?? 0} changes</span></div></aside>
-    <main className="work" hidden={view !== "chat"}><div className="tabrow"><button className="tab active">대화</button><span className="spacer"/><button ref={monitorButton} className="tool" data-testid="detail-monitor-toggle" aria-label="상세 실행 모니터" aria-pressed={detailsVisible} onClick={() => setDetailsVisible((visible) => !visible)}>상세 모니터 {detailsVisible ? "닫기" : "열기"}</button><button className="tool" data-testid="resource-sidebar-toggle" aria-label="실시간 리소스 사이드바" aria-pressed={monitorVisible} onClick={() => setMonitorVisible((visible) => !visible)}>세션 모니터 {monitorVisible ? "접기" : "열기"}</button><span className="tool selected">Codex app-server</span></div><section className="stage"><div className="pane focused"><div className="title"><span className="name">Codex</span><span className="path">{workspace?.name}</span></div><div className="body conversation"><div className="transcript" tabIndex={0} aria-label="대화 내용" ref={transcriptRef} onScroll={(event) => { if (view !== "chat") return; const element = event.currentTarget; transcriptScrollTop.current = element.scrollTop; followTail.current = element.scrollHeight - element.scrollTop - element.clientHeight < 48; readingStates.current.set(currentKey, { draft: promptRef.current, scrollTop: element.scrollTop, followTail: followTail.current }); if (followTail.current) setNewContent(false); }}>{projection.historyTruncated && <div className="history-warning">최근 {MAX_RAW_EVENTS.toLocaleString("ko-KR")}개 사건만 있어 이전 흐름은 완전히 복원할 수 없습니다.</div>}<ChatRowMemoryContext.Provider value={rowMemory}>{pendingPrompt && !projection.blocks.some((block) => block.kind === "user" && block.text === pendingPrompt && block.state === "sending") && <div className="chat-flow-item"><div className="user request-sending" data-testid="pending-user-request"><div>{pendingPrompt}</div><span className="muted">요청을 보내는 중</span></div><WorkFlow turn="starting" blocks={[]} events={[]} transport={projection.transport} interrupt={projection.interrupt} now={now}/></div>}{projection.blocks.length === 0 && !pendingPrompt ? <div className="empty">{switching ? "대화를 불러오는 중입니다." : "작업 폴더를 확인하고 메시지를 입력하거나 저장된 대화를 여세요."}</div> : projection.blocks.map((block) => <div className="chat-flow-item" key={`${currentKey}:${blockKey(block)}`}><BlockView block={block} decide={decide} quote={quote}/>{block.kind === "user" && (block.turnId === projection.turnId || block.state !== "accepted") && <WorkFlow turn={projection.turn} blocks={activeBlocks} events={events} transport={projection.transport} interrupt={projection.interrupt} now={now}/>}</div>)}<ResultSummary blocks={activeBlocks} turn={projection.turn}/></ChatRowMemoryContext.Provider></div>{newContent && <button className="secondary new-content" onClick={() => { followTail.current = true; transcriptRef.current?.scrollTo({ top: transcriptRef.current.scrollHeight, behavior: "smooth" }); setNewContent(false); }}>새 내용으로 이동</button>}{failedDraft !== null && <section className="history-warning" data-testid="failed-request" aria-label="실패한 요청" style={{ margin: "0 14px", maxHeight: 180, overflow: "auto" }}><strong>실패한 요청</strong><pre data-testid="failed-request-text" style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{failedDraft}</pre><p role="status">{prompt !== "" ? "새 초안이 있습니다. 입력창을 비운 뒤 원문을 복원할 수 있습니다." : "실패한 원문을 복원하거나 버려 주세요."} 해결 전에는 다음 전송과 대화·프로젝트 전환이 일시 중지됩니다.</p><button type="button" className="secondary" data-testid="restore-failed-request" onClick={restoreFailedDraft} disabled={prompt !== ""}>입력창으로 복원</button><button type="button" className="secondary" data-testid="discard-failed-request" onClick={discardFailedDraft}>실패한 요청 버리기</button></section>}<div className="compose"><span className="prompt">›</span><textarea ref={promptInput} data-testid="prompt-input" value={prompt} maxLength={MAX_PROMPT_CHARS} disabled={switching} aria-label="Codex에게 작업 요청" onChange={(event) => { promptRef.current = event.target.value; setPrompt(event.target.value); setInputNotice(composerFull(event.target.value.length, MAX_PROMPT_CHARS) ? "입력 한도에 도달했습니다." : ""); }} onPaste={(event) => { const count = pasteOverflow(prompt, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, event.clipboardData.getData("text/plain"), MAX_PROMPT_CHARS); if (count > 0) { event.preventDefault(); setInputNotice(`붙여넣을 내용이 입력 한도를 ${count.toLocaleString("ko-KR")}자 넘어서 추가하지 않았습니다.`); } }} onCompositionStart={() => { composing.current = true; }} onCompositionEnd={(event) => { composing.current = false; lastCompositionEnd.current = normalizeCompositionEnd(event.nativeEvent.timeStamp); }} onBlur={() => { composing.current = false; }} onKeyDown={(event) => { handlePromptKeyDown(event, () => { void run(); }, composing.current, lastCompositionEnd.current); }} placeholder="Codex에게 작업 요청"/><div className="actions">{projection.working && <button data-testid="interrupt-button" className="secondary" onClick={interrupt} disabled={projection.interrupt === "requested" || projection.interrupt === "accepted"}>{projection.interrupt === "accepted" ? "중단 접수됨" : projection.interrupt === "requested" ? "중단 요청 중" : "중단"}</button>}<button data-testid="send-button" className="primary" onClick={run} disabled={!workspace || !prompt.trim() || failedDraft !== null || sending || switching || prompt.length > MAX_PROMPT_CHARS}>{sending ? "전송 중" : "보내기"}</button></div></div><div className="chat-compose-note" role="status">{inputNotice || (switching ? "저장된 대화를 여는 중입니다." : `Enter 전송 · Shift+Enter 줄바꿈 · ${prompt.length.toLocaleString("ko-KR")}/${MAX_PROMPT_CHARS.toLocaleString("ko-KR")}`)}</div></div></div></section></main>
-    <ResourceActivitySidebar events={events} resources={resources} threadId={threadId} workspacePath={workspace?.path} sending={sending || pendingPrompt !== null} hidden={view !== "chat" || !monitorVisible || detailsVisible} onOpenMonitor={() => setDetailsVisible(true)}/>
-    <NativeActivityView key={workspace?.workspaceKey ?? "initial"} activityState={activityState} events={events} threadId={threadId} workspacePath={workspace?.path} hidden={view !== "chat" || !detailsVisible || panel !== "activity"} onClose={() => { setDetailsVisible(false); monitorButton.current?.focus(); }} onShowOverview={() => setPanel("overview")} onShowEvents={() => setPanel("events")}/>
-    <aside className="panel" onKeyDown={(event) => { if (event.key === "Escape") { setDetailsVisible(false); monitorButton.current?.focus(); } }} hidden={view !== "chat" || !detailsVisible || panel === "activity"}><div className="phead"><span className="logo"/><span className="title">Codex</span><span className="pill">{threadId ?? "새 스레드"}</span></div><div className="ptabs"><button aria-label="상세 모니터 닫기" onClick={() => { setDetailsVisible(false); monitorButton.current?.focus(); }}>닫기</button><button className="ptab" onClick={() => setPanel("activity")}>흐름</button><button className={`ptab ${panel === "overview" ? "active" : ""}`} onClick={() => setPanel("overview")}>개요</button><button className={`ptab ${panel === "events" ? "active" : ""}`} onClick={() => setPanel("events")}>이벤트</button><span className="aside">{events.length}{projection.historyTruncated ? "+" : ""}</span></div><div className="pbody">{panel === "overview" ? <><div className={`headline t-${statusTone}`}><span className="glyph">{approvals.length ? "!" : projection.working ? "·" : projection.turn === "failed" ? "×" : "○"}</span><div><div className="h">{statusText}</div><div className="sub">연결 {projection.transport} · 중단 {projection.interrupt === "accepted" ? "접수됨 · 최종 결과 대기" : projection.interrupt} · 턴 {projection.turn}</div></div></div><div className="counts"><div className="count"><div className="n">{commands.length}</div><div className="l">현재 명령</div></div><div className="count blocked"><div className="n">{approvals.length}</div><div className="l">현재 요청</div></div><div className="count"><div className="n">{files.length}</div><div className="l">현재 변경</div></div></div><div className="ledger"><div className="entry"><span className="prov">공개 설명</span><span>{explanations.length ? explanations.map((block) => block.text).filter(Boolean).join(" · ") : "Native 공개 설명 미제공"}</span></div><div className="entry"><span className="prov">관측 결과</span><span>현재 턴 명령 {commands.length} · 파일 변경 {files.length} · 실패 {failedCommands.length} · 미확인 {unresolvedCommands.length}</span></div><div className="entry"><span className="prov">실제 검증</span><span>{verificationText}</span></div><div className="entry"><span className="prov">미해결</span><span>{approvals.length ? `승인 ${approvals.length}건 대기` : failedCommands.length ? `실패 명령 ${failedCommands.length}건` : unresolvedCommands.length ? `결과 미확인 명령 ${unresolvedCommands.length}건` : projection.transport !== "connected" ? `연결 ${projection.transport}` : "현재 턴에서 관측된 차단 없음"}</span></div></div></> : <div className="ledger">{projection.historyTruncated && <div className="history-warning">이벤트 앞부분이 없어 완전한 기록이 아닙니다.</div>}{events.map((event) => <div className="entry" key={`${event.processEpoch}:${event.connectionGeneration}:${event.seq}`}><span className="seq">{event.seq}</span><span className="prov">{event.kind}</span><span>{event.method}</span></div>)}</div>}</div><div className="pfooter"><span className="src">로컬 Codex CLI · Native 출력은 신뢰하지 않는 데이터 · 승인 UI는 OS sandbox 보장이 아님</span></div></aside>
-    <EcosystemView hidden={view !== "ecosystem"}/>
+    {view === "home" && <aside className="sidebar home-sidebar" aria-label="프로젝트 선택"><div className="brand">WWW <small>{appBuildInfo.label}</small></div><div className="home-project-heading"><strong>RPA</strong><button className="secondary" aria-label="RPA 프로젝트 추가" onClick={choose} disabled={selectionBlocked || !workspace}>+</button></div><div className="home-project-list">{projects.filter(item => item.path !== dashboard?.projects.find(entry => entry.project.kind === "www")?.project.path).map(item => <div className="home-project-row" key={item.workspaceKey}><button className="secondary grow" data-testid={item.workspaceKey === workspace?.workspaceKey ? "open-current-workspace" : undefined} disabled={selectionBlocked && item.workspaceKey !== workspace?.workspaceKey} onClick={() => openDashboardProject(item.workspaceKey)} title={item.path}>{item.name}</button><button className="icon" aria-label={`${item.name} 즐겨찾기 ${item.favorite ? "해제" : "추가"}`} aria-pressed={item.favorite} onClick={() => { void toggleFavorite(item); }} disabled={favoritePending}>☆</button></div>)}{!projectLoading && projects.filter(item => item.path !== dashboard?.projects.find(entry => entry.project.kind === "www")?.project.path).length === 0 && <p className="muted">등록된 RPA 프로젝트가 없습니다.</p>}</div><button className="secondary home-www" data-testid={dashboard?.projects.find(item => item.project.kind === "www")?.project.path === workspace?.path ? "open-current-workspace" : "open-www"} disabled={!workspace || (selectionBlocked && dashboard?.projects.find(item => item.project.kind === "www")?.project.path !== workspace.path)} onClick={() => openDashboardProject("www")}>WWW</button>{projectError && <p role="alert">{projectError}</p>}<p className="muted home-scope-note">프로젝트를 선택하기 전 전체 작업 기록을 볼 수 있습니다.</p></aside>}
+    <aside id={`workspace-sidebar-${sessionId}`} className="sidebar target-sidebar" hidden={view === "home"}><div className="brand" title={`커밋 ${appBuildInfo.commit} · 소스 ${appBuildInfo.sourceDigest}`} >WWW <small data-testid="build-version">{appBuildInfo.label}</small></div><div className="sec"><button className="secondary" data-testid="view-page-nav" onClick={() => setView("home")}>← 전체 보기</button><button className="icon" aria-label="프로젝트 폴더 선택" onClick={choose} disabled={selectionBlocked || !workspace}><LineIcon kind="folder"/></button></div><div><div className="srow active"><span className="avatar">W</span><span className="name">{workspace?.name ?? "선택 중"}</span><span className="right">{workspace?.branch ?? "git 아님"}</span></div><nav className="workspace-nav" aria-label="화면 선택"><button aria-current={view === "dashboard" ? "page" : undefined} onClick={() => setView("dashboard")} data-testid="dashboard-nav"><LineIcon kind="map"/><span className="nav-label">대시보드</span></button><button data-testid="chat-nav" aria-label="대화" title="대화" aria-current={view === "chat" ? "page" : undefined} onClick={() => setView("chat")}><LineIcon kind="chat"/><span className="nav-label">대화</span>{failedDraft !== null && <span className="nav-hint">실패한 요청 확인</span>}</button><button aria-label="생태계 구조 지도" title="생태계 구조 지도" aria-current={view === "ecosystem" ? "page" : undefined} onClick={() => setView("ecosystem")} data-testid="ecosystem-nav"><LineIcon kind="map"/><span className="nav-label">생태계</span><span className="nav-hint">구조 지도</span></button><button aria-label="리포트" title="리포트" aria-current={view === "reports" ? "page" : undefined} onClick={() => { setView("reports"); setAutoReportHint(""); }} data-testid="reports-nav"><LineIcon kind="report"/><span className="nav-label">리포트</span><span className="nav-hint">{autoReportHint || "작업 이야기"}</span></button></nav></div><div className="agents"><div className="group">CODEX</div><div className="srow"><span className="agentmark"/><span>{statusText}</span></div><section className="chat-conversations" aria-label="저장된 대화" hidden={view !== "chat"}><div className="chat-conversation-heading"><strong>대화</strong><button type="button" data-testid="new-conversation" disabled={selectionBlocked} onClick={() => { void selectConversation(null); }}>새 대화</button></div><label className="chat-search"><span className="sr-only">불러온 대화 검색</span><input data-testid="conversation-search" value={conversationSearch} onChange={(event) => setConversationSearch(event.target.value)} placeholder="불러온 대화 검색"/></label><div className="chat-list-tools"><span>{listLoading ? "불러오는 중…" : `불러온 대화 ${conversations.length}개`}</span><button type="button" disabled={listLoading || switching} onClick={() => { void refreshConversations(); }} aria-label="대화 목록 새로고침">새로고침</button></div>{listError && <div role="status" className="chat-list-error">{listError}</div>}<div className="chat-conversation-list" data-testid="conversation-list">{conversations.filter((item) => `${item.title} ${item.preview}`.toLocaleLowerCase("ko-KR").includes(conversationSearch.toLocaleLowerCase("ko-KR"))).map((item) => <button type="button" key={item.id} data-testid="conversation-item" data-thread-id={item.id} className={item.id === threadId ? "is-current" : ""} aria-current={item.id === threadId ? "true" : undefined} disabled={selectionBlocked} onClick={() => { void selectConversation(item.id); }}><strong>{item.title || item.preview || "제목 없는 대화"}</strong><span>{item.preview || "내용 미제공"}</span>{item.updatedAt !== null && Number.isFinite(new Date(item.updatedAt * 1000).getTime()) && <time dateTime={new Date(item.updatedAt * 1000).toISOString()}>{new Date(item.updatedAt * 1000).toLocaleDateString("ko-KR")}</time>}</button>)}</div>{!listLoading && conversations.length === 0 && !listError && <p className="muted">이 작업 폴더에 저장된 대화가 없습니다.</p>}{conversations.length > 0 && conversationSearch && !conversations.some((item) => `${item.title} ${item.preview}`.toLocaleLowerCase("ko-KR").includes(conversationSearch.toLocaleLowerCase("ko-KR"))) && <p className="muted">불러온 대화 중 일치하는 항목이 없습니다.</p>}{listCursor && <button type="button" className="chat-load-more" data-testid="load-more-conversations" disabled={listLoading || switching} onClick={() => { void refreshConversations(listCursor); }}>이전 대화 더 불러오기</button>}</section></div><div className="footer"><span className="muted">{workspace?.path}</span><span>{workspace?.changes ?? 0} changes</span></div></aside>
+    <section className="dashboard-shell" hidden={view !== "home" && view !== "dashboard"} data-testid={view === "home" ? "view-page" : "target-dashboard"}><DashboardView snapshot={dashboard} loading={dashboardLoading} error={dashboardError || null} projectKey={view === "dashboard" ? targetKey ?? dashboard?.projects.find(item => item.project.path === workspace?.path)?.project.key ?? workspace?.workspaceKey : undefined} onRefresh={() => { void refreshDashboard(); }} onOpenProject={openDashboardProject}/>{view === "dashboard" && targetKey !== "www" && <p className="dashboard-scope-note">생태계는 현재 WWW 빌드의 구조를 표시합니다. 선택 프로젝트의 자동 분석은 제공하지 않습니다.</p>}</section>
+    <main className="work" hidden={view !== "chat"}><div className="tabrow"><button className="tab active">대화</button><span className="spacer"/><button ref={monitorButton} className="tool" data-testid="detail-monitor-toggle" aria-label="상세 실행 모니터" aria-pressed={detailsVisible} onClick={() => setDetailsVisible((visible) => !visible)}>상세 모니터 {detailsVisible ? "닫기" : "열기"}</button><button className="tool" data-testid="resource-sidebar-toggle" aria-label="실시간 리소스 사이드바" aria-pressed={monitorVisible} onClick={() => setMonitorVisible((visible) => !visible)}>세션 모니터 {monitorVisible ? "접기" : "열기"}</button><span className="tool selected">Codex app-server</span></div><section className="stage"><div className="pane focused"><div className="title"><span className="name">Codex</span><span className="path">{workspace?.name}</span></div><div className="body conversation"><div className="transcript" tabIndex={0} aria-label="대화 내용" ref={transcriptRef} onScroll={(event) => { if (view !== "chat") return; const element = event.currentTarget; transcriptScrollTop.current = element.scrollTop; followTail.current = element.scrollHeight - element.scrollTop - element.clientHeight < 48; readingStates.current.set(currentKey, { draft: promptRef.current, scrollTop: element.scrollTop, followTail: followTail.current }); if (followTail.current) setNewContent(false); }}>{projection.historyTruncated && <div className="history-warning">최근 {MAX_RAW_EVENTS.toLocaleString("ko-KR")}개 사건만 있어 이전 흐름은 완전히 복원할 수 없습니다.</div>}<ChatRowMemoryContext.Provider value={rowMemory}>{pendingPrompt && !projection.blocks.some((block) => block.kind === "user" && block.text === pendingPrompt && block.state === "sending") && <div className="chat-flow-item"><div className="user request-sending" data-testid="pending-user-request"><div>{pendingPrompt}</div><span className="muted">요청을 보내는 중</span></div><WorkFlow turn="starting" blocks={[]} events={[]} transport={projection.transport} interrupt={projection.interrupt} now={now}/></div>}{projection.blocks.length === 0 && !pendingPrompt ? <div className="empty">{switching ? "대화를 불러오는 중입니다." : "작업 폴더를 확인하고 메시지를 입력하거나 저장된 대화를 여세요."}</div> : projection.blocks.map((block) => <div className="chat-flow-item" key={`${currentKey}:${blockKey(block)}`}><BlockView block={block} decide={decide} quote={quote}/>{block.kind === "user" && (block.turnId === projection.turnId || block.state !== "accepted") && <WorkFlow turn={projection.turn} blocks={activeBlocks} events={events} transport={projection.transport} interrupt={projection.interrupt} now={now}/>}</div>)}<NativePreparation events={events} sinceSeq={sendEventStart}/><ResultSummary blocks={activeBlocks} turn={projection.turn}/></ChatRowMemoryContext.Provider></div>{newContent && <button className="secondary new-content" onClick={() => { followTail.current = true; transcriptRef.current?.scrollTo({ top: transcriptRef.current.scrollHeight, behavior: "smooth" }); setNewContent(false); }}>새 내용으로 이동</button>}{failedDraft !== null && <section className="history-warning" data-testid="failed-request" aria-label="실패한 요청" style={{ margin: "0 14px", maxHeight: 180, overflow: "auto" }}><strong>실패한 요청</strong><pre data-testid="failed-request-text" style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{failedDraft}</pre><p role="status">{prompt !== "" ? "새 초안이 있습니다. 입력창을 비운 뒤 원문을 복원할 수 있습니다." : "실패한 원문을 복원하거나 버려 주세요."} 해결 전에는 다음 전송과 대화·프로젝트 전환이 일시 중지됩니다.</p><button type="button" className="secondary" data-testid="restore-failed-request" onClick={restoreFailedDraft} disabled={prompt !== ""}>입력창으로 복원</button><button type="button" className="secondary" data-testid="discard-failed-request" onClick={discardFailedDraft}>실패한 요청 버리기</button></section>}<div className="compose"><span className="prompt">›</span><textarea ref={promptInput} data-testid="prompt-input" value={prompt} maxLength={MAX_PROMPT_CHARS} disabled={switching} aria-label="Codex에게 작업 요청" onChange={(event) => { promptRef.current = event.target.value; setPrompt(event.target.value); setInputNotice(composerFull(event.target.value.length, MAX_PROMPT_CHARS) ? "입력 한도에 도달했습니다." : ""); }} onPaste={(event) => { const count = pasteOverflow(prompt, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, event.clipboardData.getData("text/plain"), MAX_PROMPT_CHARS); if (count > 0) { event.preventDefault(); setInputNotice(`붙여넣을 내용이 입력 한도를 ${count.toLocaleString("ko-KR")}자 넘어서 추가하지 않았습니다.`); } }} onCompositionStart={() => { composing.current = true; }} onCompositionEnd={(event) => { composing.current = false; lastCompositionEnd.current = normalizeCompositionEnd(event.nativeEvent.timeStamp); }} onBlur={() => { composing.current = false; }} onKeyDown={(event) => { handlePromptKeyDown(event, () => { void run(); }, composing.current, lastCompositionEnd.current); }} placeholder="Codex에게 작업 요청"/><div className="actions">{projection.working && <button data-testid="interrupt-button" className="secondary" onClick={interrupt} disabled={projection.interrupt === "requested" || projection.interrupt === "accepted"}>{projection.interrupt === "accepted" ? "중단 접수됨" : projection.interrupt === "requested" ? "중단 요청 중" : "중단"}</button>}<button data-testid="send-button" className="primary" onClick={run} disabled={!workspace || !prompt.trim() || failedDraft !== null || sending || switching || prompt.length > MAX_PROMPT_CHARS}>{sending ? "전송 중" : "보내기"}</button></div></div><div className="chat-compose-note" role="status">{inputNotice || (switching ? "저장된 대화를 여는 중입니다." : `Enter 전송 · Shift+Enter 줄바꿈 · ${prompt.length.toLocaleString("ko-KR")}/${MAX_PROMPT_CHARS.toLocaleString("ko-KR")}`)}</div></div></div></section></main>
+    <ResourceActivitySidebar events={events} resources={resources} threadId={threadId} workspacePath={workspace?.path} sending={sending || pendingPrompt !== null} hidden={!active || view !== "chat" || !monitorVisible || detailsVisible} onOpenMonitor={() => setDetailsVisible(true)}/>
+    <NativeActivityView key={workspace?.workspaceKey ?? "initial"} activityState={activityState} events={events} threadId={threadId} workspacePath={workspace?.path} hidden={!active || view !== "chat" || !detailsVisible || panel !== "activity"} onClose={() => { setDetailsVisible(false); monitorButton.current?.focus(); }} onShowOverview={() => setPanel("overview")} onShowEvents={() => setPanel("events")}/>
+    <aside className="panel" onKeyDown={(event) => { if (event.key === "Escape") { setDetailsVisible(false); monitorButton.current?.focus(); } }} hidden={!active || view !== "chat" || !detailsVisible || panel === "activity"}><div className="phead"><span className="logo"/><span className="title">Codex</span><span className="pill">{threadId ?? "새 스레드"}</span></div><div className="ptabs"><button aria-label="상세 모니터 닫기" onClick={() => { setDetailsVisible(false); monitorButton.current?.focus(); }}>닫기</button><button className="ptab" onClick={() => setPanel("activity")}>흐름</button><button className={`ptab ${panel === "overview" ? "active" : ""}`} onClick={() => setPanel("overview")}>개요</button><button className={`ptab ${panel === "events" ? "active" : ""}`} onClick={() => setPanel("events")}>이벤트</button><span className="aside">{events.length}{projection.historyTruncated ? "+" : ""}</span></div><div className="pbody">{panel === "overview" ? <><div className={`headline t-${statusTone}`}><span className="glyph">{approvals.length ? "!" : projection.working ? "·" : projection.turn === "failed" ? "×" : "○"}</span><div><div className="h">{statusText}</div><div className="sub">연결 {projection.transport} · 중단 {projection.interrupt === "accepted" ? "접수됨 · 최종 결과 대기" : projection.interrupt} · 턴 {projection.turn}</div></div></div><div className="counts"><div className="count"><div className="n">{commands.length}</div><div className="l">현재 명령</div></div><div className="count blocked"><div className="n">{approvals.length}</div><div className="l">현재 요청</div></div><div className="count"><div className="n">{files.length}</div><div className="l">현재 변경</div></div></div><div className="ledger"><div className="entry"><span className="prov">공개 설명</span><span>{explanations.length ? explanations.map((block) => block.text).filter(Boolean).join(" · ") : "Native 공개 설명 미제공"}</span></div><div className="entry"><span className="prov">관측 결과</span><span>현재 턴 명령 {commands.length} · 파일 변경 {files.length} · 실패 {failedCommands.length} · 미확인 {unresolvedCommands.length}</span></div><div className="entry"><span className="prov">실제 검증</span><span>{verificationText}</span></div><div className="entry"><span className="prov">미해결</span><span>{approvals.length ? `승인 ${approvals.length}건 대기` : failedCommands.length ? `실패 명령 ${failedCommands.length}건` : unresolvedCommands.length ? `결과 미확인 명령 ${unresolvedCommands.length}건` : projection.transport !== "connected" ? `연결 ${projection.transport}` : "현재 턴에서 관측된 차단 없음"}</span></div></div></> : <div className="ledger">{projection.historyTruncated && <div className="history-warning">이벤트 앞부분이 없어 완전한 기록이 아닙니다.</div>}{events.map((event) => <div className="entry" key={`${event.processEpoch}:${event.connectionGeneration}:${event.seq}`}><span className="seq">{event.seq}</span><span className="prov">{event.kind}</span><span>{event.method}</span></div>)}</div>}</div><div className="pfooter"><span className="src">로컬 Codex CLI · Native 출력은 신뢰하지 않는 데이터 · 승인 UI는 OS sandbox 보장이 아님</span></div></aside>
+    <EcosystemView hidden={!active || view !== "ecosystem"} namespace={sessionId}/>
     {view === "reports" && <ReportsView/>}
     <footer className="status"><span title={`커밋 ${appBuildInfo.commit} · 소스 ${appBuildInfo.sourceDigest}`} data-testid="build-identity">{appBuildInfo.label}</span><span>{statusText}</span><span>연결 {projection.transport} · {policyLabel}</span>{projection.protocolWarning && <span className="comm-warning" title={projection.protocolWarning.message}>최근 통신 경고 · <time dateTime={projection.protocolWarning.at}>{new Date(projection.protocolWarning.at).toLocaleTimeString("ko-KR")}</time></span>}{projectStorageWarning && <span className="project-storage-warning" role="status" title={projectStorageWarning} data-failed-scopes={JSON.stringify(projectStorageWarnings)}>{projectStorageWarning}</span>}<span className="grow"/><span className="err">{error}</span></footer>
   </>;
 }
 
-createRoot(document.getElementById("root")!).render(<App/>);
+function SessionShell() {
+  const [sessions, setSessions] = useState<NativeSessionSummary[]>([]);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [creating, setCreating] = useState(false);
+  const [error, setError] = useState("");
+  const [closeStates, setCloseStates] = useState(new Map<string, SessionCloseState>());
+  const defaultId = useRef<string | null>(null);
+  const updateSerial = useRef(0);
+  useEffect(() => {
+    let disposed = false;
+    const accept = (next: NativeSessionSummary[]) => {
+      if (disposed) return;
+      if (!defaultId.current) defaultId.current = next[0]?.id ?? null;
+      setSessions(next);
+      setActiveId(previous => next.some(session => session.id === previous) ? previous : next[0]?.id ?? null);
+    };
+    const unsubscribe = window.www.onSessions((next) => { updateSerial.current++; accept(next); });
+    const serial = updateSerial.current;
+    void window.www.listSessions().then((next) => { if (serial === updateSerial.current) accept(next); })
+      .catch((failure: unknown) => { if (!disposed) setError(String(failure)); });
+    return () => { disposed = true; unsubscribe(); };
+  }, []);
+  const onCloseState = useCallback((id: string, next: SessionCloseState) => {
+    setCloseStates(previous => {
+      const old = previous.get(id);
+      if (old?.allowed === next.allowed && old.reason === next.reason) return previous;
+      const updated = new Map(previous);
+      updated.set(id, next);
+      return updated;
+    });
+  }, []);
+  const canClose = (id: string): SessionCloseState => {
+    if (sessions.length <= 1) return { allowed: false, reason: "마지막 대화 탭은 유지합니다." };
+    const session = sessions.find(item => item.id === id);
+    if (!session) return { allowed: false, reason: "이미 닫힌 탭입니다." };
+    if (session.busy || session.approvalCount > 0) return { allowed: false, reason: "실행·승인 처리가 끝난 뒤 닫아 주세요." };
+    return closeStates.get(id) ?? { allowed: false, reason: "대화 상태를 확인하고 있습니다." };
+  };
+  const create = async () => {
+    if (creating || !activeId) return;
+    setCreating(true);
+    setError("");
+    try {
+      const selection = await window.www.workspace(activeId);
+      const session = await window.www.createSession(selection);
+      setSessions(previous => previous.some(item => item.id === session.id) ? previous : [...previous, session]);
+      setActiveId(session.id);
+      requestAnimationFrame(() => document.getElementById(`session-tab-${session.id}`)?.focus());
+    } catch (failure) { setError(String(failure)); }
+    finally { setCreating(false); }
+  };
+  const close = async (id: string) => {
+    const permission = canClose(id);
+    if (!permission.allowed) { setError(permission.reason ?? "이 탭을 닫을 수 없습니다."); return; }
+    setError("");
+    try {
+      await window.www.closeSession(id);
+      setSessions(previous => previous.filter(item => item.id !== id));
+      setCloseStates(previous => { const next = new Map(previous); next.delete(id); return next; });
+      requestAnimationFrame(() => document.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')?.focus());
+    } catch (failure) { setError(String(failure)); }
+  };
+  return <div className="session-shell">
+    <SessionTabs tabs={sessions} activeId={activeId ?? ""} creating={creating} canCreate={activeId !== null} error={error || undefined}
+      onSelect={setActiveId} onCreate={() => { void create(); }} onClose={(id) => { void close(id); }} canClose={canClose}/>
+    <div className="session-surfaces">{sessions.length === 0 && <p role="status">{error || "대화 탭을 준비하고 있습니다."}</p>}
+      {sessions.map(session => <section key={session.id} id={`session-panel-${session.id}`} role="tabpanel" aria-labelledby={`session-tab-${session.id}`}
+        data-session-id={session.id} className="session-surface" hidden={session.id !== activeId}>
+        <SessionApiProvider id={session.id}><App sessionId={session.id} active={session.id === activeId} initial={session.id === defaultId.current} onCloseState={onCloseState}/></SessionApiProvider>
+      </section>)}
+    </div>
+  </div>;
+}
+
+createRoot(document.getElementById("root")!).render(<SessionShell/>);

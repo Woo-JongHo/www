@@ -1,0 +1,608 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-632e43ce-dcb8-4726-ad34-8fe85034b6fd",
+  "title"        : "스크롤과 첫 응답 및 진행 설명 개선 논의",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-8170009e-ced0-4c20-8a95-e60c0b609640",
+      "workId"        : "work-632e43ce-dcb8-4726-ad34-8fe85034b6fd",
+      "title"         : "스크롤과 첫 응답 및 진행 설명 개선 논의",
+      "summary"       : "스크롤 프레임 고정, 명령 출력 한 영역 전환과 앱 관측 진행 설명을 구현했다. 공식 실제 Electron·합성 Native 256조건 검사에서 AC-1·AC-3·AC-4가 통과했고 소스·환경·실행 번들 해시가 검사 중 유지됐다. AC-2의 과거 122초 지연 원인은 확정하지 못해 전체 완료가 아니다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T02:32:52.704Z",
+      "event"         : "finish",
+      "workRecordHash": "35dff2a5cc0965fe028e9fe298cd48a7f2ce09aade488aa20b62d322bee7cf7c",
+      "sourceDigest"  : "1bf6a800b9cb2505c31cc9d8bcf11f901af7678f92c8d39d2a95b66169c086a7",
+      "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+      "semanticHash"  : "afb5ea63cf1fb3cf1cc23b90b643bfe4041185d62d4b4976355bda12e7e63253",
+      "narrative": {
+        "summary": "스크롤 프레임 고정, 명령 출력 한 영역 전환과 앱 관측 진행 설명을 구현했다. 공식 실제 Electron·합성 Native 256조건 검사에서 AC-1·AC-3·AC-4가 통과했고 소스·환경·실행 번들 해시가 검사 중 유지됐다. AC-2의 과거 122초 지연 원인은 확정하지 못해 전체 완료가 아니다.",
+        "before" : "여백·경계 스크롤로 프레임이 밀린다는 사용자 관측이 있었고 명령 미리보기와 전체 출력이 중복 표시됐다. 초기 요청 전 공백의 앱/Native 경계 시각은 없었다.",
+        "after"  : "프레임·입력은 화면에 고정하고 내부 영역만 스크롤한다. 카드별 Ctrl+T와 같은 자리의 단일 출력으로 전환하며 짧은 원문의 끝 개행도 보존한다. 준비 trace와 앱 관측 설명의 출처를 구분한다.",
+        "changes": [
+          "프레임 overflow와 내부 overscroll 경계를 정리했다.",
+          "명령 출력 전환·짧은 원문 개행·카드별 수동 선택을 유지했다.",
+          "main 요청 준비·첫 Native와 renderer 수신→두 번째 animation frame을 별도 시간축으로 계측했다."
+        ],
+        "decisions": [
+          "실제 사건에서 확인한 사실만 앱 설명으로 표시한다.",
+          "단일 실제 Native 표본을 과거 긴 지연의 원인 해소로 승격하지 않는다."
+        ],
+        "limitations": [
+          "실제 Native 한 번에서 첫 사건 3571.97ms, 연결949.36ms·대화준비224.54ms, 해당 renderer 프레임 근사91.7ms를 관측했지만 이는 수정 전 빌드의 표본이다.",
+          "과거 약122초 동일 증상은 재현되지 않아 AC-2는 미검증이다.",
+          "이 UUID의 제품 전체 독립 감사와 업무 수용은 미완료다.",
+          "Windows와 실제 OS 한국어 IME는 이번 검사 범위가 아니다.",
+          "커밋·push는 실행하지 않았다."
+        ],
+        "next": [
+          "새 계측으로 동일 장기 지연 표본을 확보해 초기 준비·Native·화면 경계를 판별한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "과거 122초 초기 지연의 동일 증상은 재현되지 않아 AC-2 원인 확정이 남았다. 현재 실제 Native 단일 표본은 첫 사건 3.57초이며 이를 과거 원인 해소로 승격하지 않는다.",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T02:28:08.347Z"
+          }
+        ],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/work.json",
+        "workRecordHash": "35dff2a5cc0965fe028e9fe298cd48a7f2ce09aade488aa20b62d322bee7cf7c",
+        "sourceDigest"  : "1bf6a800b9cb2505c31cc9d8bcf11f901af7678f92c8d39d2a95b66169c086a7",
+        "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-b1fa73e7-ebba-41f9-8d02-fcbb50a106ae",
+      "workId"        : "work-632e43ce-dcb8-4726-ad34-8fe85034b6fd",
+      "title"         : "스크롤과 첫 응답 및 진행 설명 개선 논의",
+      "summary"       : "Chat 스크롤·명령 출력과 공개 진행 표시를 개선하고 최신 Electron 회귀를 통과했다. 과거 122초 지연은 원인을 확정하지 못해 부분 완료로 유지한다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T03:23:39.814Z",
+      "event"         : "finish",
+      "workRecordHash": "c65165d4ee6bdb1c7f86c03a9d898d295488930c1ce4fa0dc5382cbdb1895977",
+      "sourceDigest"  : "85503940ed9493375727cf27a4597689d551044ae82869f5e91239841002c385",
+      "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+      "semanticHash"  : "0076972cf9c9316e4b259955d76cd0306f324cddad646430f2141fffb344435b",
+      "narrative": {
+        "summary": "Chat 스크롤·명령 출력과 공개 진행 표시를 개선하고 최신 Electron 회귀를 통과했다. 과거 122초 지연은 원인을 확정하지 못해 부분 완료로 유지한다.",
+        "before" : "앱 전체 스크롤이 이동하고 명령 출력 미리보기와 전체 출력이 중복되며 첫 응답 지연의 경계별 기록이 부족했다.",
+        "after"  : "본문·사이드바·출력은 내부에서 스크롤하고 카드별 Ctrl+T로 한 영역을 펼친다. 관측 사건에 근거한 진행 설명과 연결·대화 준비·턴 전달·첫 Native 사건 계측을 제공한다.",
+        "changes": [
+          "최신 source-bound Electron 검사 256개를 실제 IPC·stdio 합성 Native에서 확인했다.",
+          "공개 설명과 앱 관측 출처를 구분하고 짧은 원문 출력의 끝 개행·들여쓰기를 보존했다.",
+          "탭별 읽기·초안·펼침 상태를 유지하고 세션별 사건 격리를 연결했다."
+        ],
+        "decisions": [
+          "수신하지 않은 이유나 내부 추론을 만들어 표시하지 않는다.",
+          "과거 지연 원장을 새 3.57초/10초대 실행 표본으로 대체하거나 개선율로 해석하지 않는다."
+        ],
+        "limitations": [
+          "AC-2: 과거122.414초 원장에는 IPC/renderer 경계가 없어 원인 미확정이다.",
+          "두 번째 animation frame 근사는 첫 콘텐츠 paint나 main과 동기화된 IPC 지연이 아니다.",
+          "이 작업의 필수 독립 완료 감사는 미충족이며 완료로 전환하지 않았다. 실제 Native 변경·승인 전체와 Windows/OS 한국어 IME 실기는 이번 GUI 근거에 포함하지 않는다."
+        ],
+        "next": [
+          "동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.",
+          "원인 수정 후 AC-2 재검증과 해당 소스의 독립 완료 감사를 수행한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "AC-2: 과거 122.414초 지연의 구간별 기록이 없어 원인 미확정. 새 계측·실제 표본은 확보했으나 같은 지연 재현과 원인 확인은 미완료.",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
+            "required"   : true,
+            "result"     : "blocked",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T02:28:08.347Z"
+          },
+          {
+            "id": "attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:22:28.833Z"
+          }
+        ],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/work.json",
+        "workRecordHash": "c65165d4ee6bdb1c7f86c03a9d898d295488930c1ce4fa0dc5382cbdb1895977",
+        "sourceDigest"  : "85503940ed9493375727cf27a4597689d551044ae82869f5e91239841002c385",
+        "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-0f750f49-1ac2-4ac6-b7af-3a8107f5c8e9",
+      "workId"        : "work-632e43ce-dcb8-4726-ad34-8fe85034b6fd",
+      "title"         : "스크롤과 첫 응답 및 진행 설명 개선 논의",
+      "summary"       : "Chat 스크롤·명령 출력과 공개 진행 표시를 개선하고 최신 Electron 회귀를 통과했다. 과거 122초 지연은 원인을 확정하지 못해 부분 완료로 유지한다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T03:37:16.454Z",
+      "event"         : "finish",
+      "workRecordHash": "843a8a7bebb3afb34a7ae7c49706c52e959a918ae8c7774edb83bc6e10f34b51",
+      "sourceDigest"  : "3920c3115d66f9fa8887fa049bf563c2f0248784f04e09d9a51b8af153e2080b",
+      "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+      "semanticHash"  : "9b80a7114ba16fe03cb9ea3f0d83db4db3af719eec4ae4d55ba1a4f78af95e03",
+      "narrative": {
+        "summary": "Chat 스크롤·명령 출력과 공개 진행 표시를 개선하고 최신 Electron 회귀를 통과했다. 과거 122초 지연은 원인을 확정하지 못해 부분 완료로 유지한다.",
+        "before" : "앱 전체 스크롤이 이동하고 명령 출력 미리보기와 전체 출력이 중복되며 첫 응답 지연의 경계별 기록이 부족했다.",
+        "after"  : "본문·사이드바·출력은 내부에서 스크롤하고 카드별 Ctrl+T로 한 영역을 펼친다. 관측 사건에 근거한 진행 설명과 연결·대화 준비·턴 전달·첫 Native 사건 계측을 제공한다.",
+        "changes": [
+          "최신 source-bound Electron 검사 256개를 실제 IPC·stdio 합성 Native에서 확인했다.",
+          "공개 설명과 앱 관측 출처를 구분하고 짧은 원문 출력의 끝 개행·들여쓰기를 보존했다.",
+          "탭별 읽기·초안·펼침 상태를 유지하고 세션별 사건 격리를 연결했다.",
+          "구조 스냅샷 갱신 후 최신 실제 Electron 256개 검사를 다시 실행해 sourceStable:true로 AC-1·3·4 근거를 연결했다."
+        ],
+        "decisions": [
+          "수신하지 않은 이유나 내부 추론을 만들어 표시하지 않는다.",
+          "과거 지연 원장을 새 3.57초/10초대 실행 표본으로 대체하거나 개선율로 해석하지 않는다."
+        ],
+        "limitations": [
+          "AC-2: 과거122.414초 원장에는 IPC/renderer 경계가 없어 원인 미확정이다.",
+          "두 번째 animation frame 근사는 첫 콘텐츠 paint나 main과 동기화된 IPC 지연이 아니다.",
+          "이 작업의 필수 독립 완료 감사는 미충족이며 완료로 전환하지 않았다. 실제 Native 변경·승인 전체와 Windows/OS 한국어 IME 실기는 이번 GUI 근거에 포함하지 않는다."
+        ],
+        "next": [
+          "동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.",
+          "원인 수정 후 AC-2 재검증과 해당 소스의 독립 완료 감사를 수행한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "AC-2: 과거 122.414초 지연의 구간별 기록이 없어 원인 미확정. 새 계측·실제 표본은 확보했으나 같은 지연 재현과 원인 확인은 미완료.",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
+            "required"   : true,
+            "result"     : "blocked",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T02:28:08.347Z"
+          },
+          {
+            "id": "attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:22:28.833Z"
+          },
+          {
+            "id": "attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:36:54.809Z"
+          }
+        ],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/work.json",
+        "workRecordHash": "843a8a7bebb3afb34a7ae7c49706c52e959a918ae8c7774edb83bc6e10f34b51",
+        "sourceDigest"  : "3920c3115d66f9fa8887fa049bf563c2f0248784f04e09d9a51b8af153e2080b",
+        "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-e830868a-b72f-4127-9195-0d686c8d8e17",
+      "workId"        : "work-632e43ce-dcb8-4726-ad34-8fe85034b6fd",
+      "title"         : "스크롤과 첫 응답 및 진행 설명 개선 논의",
+      "summary"       : "Chat 스크롤·명령 출력과 공개 진행 표시를 개선하고 최신 Electron 회귀를 통과했다. 과거 122초 지연은 원인을 확정하지 못해 부분 완료로 유지한다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T03:42:17.740Z",
+      "event"         : "finish",
+      "workRecordHash": "1d180db33a9a6b0d4ec7a6119179e8d69d3d5da08c0d691dda4f4253f2ad96ed",
+      "sourceDigest"  : "3920c3115d66f9fa8887fa049bf563c2f0248784f04e09d9a51b8af153e2080b",
+      "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+      "semanticHash"  : "d18b8cf6c04ff1dbff30b6e588c41eb6e98fea83c07747e4a1aa1b9b07d82e60",
+      "narrative": {
+        "summary": "Chat 스크롤·명령 출력과 공개 진행 표시를 개선하고 최신 Electron 회귀를 통과했다. 과거 122초 지연은 원인을 확정하지 못해 부분 완료로 유지한다.",
+        "before" : "앱 전체 스크롤이 이동하고 명령 출력 미리보기와 전체 출력이 중복되며 첫 응답 지연의 경계별 기록이 부족했다.",
+        "after"  : "본문·사이드바·출력은 내부에서 스크롤하고 카드별 Ctrl+T로 한 영역을 펼친다. 관측 사건에 근거한 진행 설명과 연결·대화 준비·턴 전달·첫 Native 사건 계측을 제공한다.",
+        "changes": [
+          "최신 source-bound Electron 검사 256개를 실제 IPC·stdio 합성 Native에서 확인했다.",
+          "공개 설명과 앱 관측 출처를 구분하고 짧은 원문 출력의 끝 개행·들여쓰기를 보존했다.",
+          "탭별 읽기·초안·펼침 상태를 유지하고 세션별 사건 격리를 연결했다.",
+          "구조 스냅샷 갱신 후 최신 실제 Electron 256개 검사를 다시 실행해 sourceStable:true로 AC-1·3·4 근거를 연결했다."
+        ],
+        "decisions": [
+          "수신하지 않은 이유나 내부 추론을 만들어 표시하지 않는다.",
+          "과거 지연 원장을 새 3.57초/10초대 실행 표본으로 대체하거나 개선율로 해석하지 않는다.",
+          "검토 일반 정책과 직접 사용자 지침의 최종 대체 금지를 문서에서 분리했다. 이번 완료 감사는 Opus 고정이며 이 Chat 작업은 AC-2 미완료로 완료 판정하지 않는다."
+        ],
+        "limitations": [
+          "AC-2: 과거122.414초 원장에는 IPC/renderer 경계가 없어 원인 미확정이다.",
+          "두 번째 animation frame 근사는 첫 콘텐츠 paint나 main과 동기화된 IPC 지연이 아니다.",
+          "이 작업의 필수 독립 완료 감사는 미충족이며 완료로 전환하지 않았다. 실제 Native 변경·승인 전체와 Windows/OS 한국어 IME 실기는 이번 GUI 근거에 포함하지 않는다."
+        ],
+        "next": [
+          "동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.",
+          "원인 수정 후 AC-2 재검증과 해당 소스의 독립 완료 감사를 수행한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "AC-2: 과거 122.414초 지연의 구간별 기록이 없어 원인 미확정. 새 계측·실제 표본은 확보했으나 같은 지연 재현과 원인 확인은 미완료.",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
+            "required"   : true,
+            "result"     : "blocked",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T02:28:08.347Z"
+          },
+          {
+            "id": "attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:22:28.833Z"
+          },
+          {
+            "id": "attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:36:54.809Z"
+          }
+        ],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/work.json",
+        "workRecordHash": "1d180db33a9a6b0d4ec7a6119179e8d69d3d5da08c0d691dda4f4253f2ad96ed",
+        "sourceDigest"  : "3920c3115d66f9fa8887fa049bf563c2f0248784f04e09d9a51b8af153e2080b",
+        "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f"
+      }
+    }
+  ]
+}

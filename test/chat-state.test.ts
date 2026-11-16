@@ -230,8 +230,10 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
       const setPrompt = value => { state.prompt = typeof value === "function" ? value(state.prompt) : value; };
       const setPendingPrompt = value => { state.pending = value; };
       const setSending = value => { state.sending = value; };
+      const setSendEventStart = () => {};
       const setError = value => { state.error = value; };
       const window = { www: { startTurn(_selection, _threadId, text) { state.calls++; state.sent.push(text); return request; } } };
+      const api = window.www;
       const refreshConversations = () => {};
       const promptInput = { current: null };
       ${part("  const consumeEvents =", "\n  const listGeneration =")}
@@ -245,7 +247,7 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
       consumeEvents(snapshot: ScopedAppEvent[], live: ScopedAppEvent[]): void;
       select(selection: typeof selected): void;
       transcriptState: { current: ConversationEventState };
-    } = runInNewContext(new Bun.Transpiler({ loader: "ts" }).transformSync(code), { state, selected, request, reduceConversationEvents, MAX_PROMPT_CHARS });
+    } = runInNewContext(new Bun.Transpiler({ loader: "ts" }).transformSync(code), { state, selected, request, reduceConversationEvents, MAX_PROMPT_CHARS, performance });
     const snapshot: ScopedAppEvent[] = [
       { ...selected, connectionGeneration: 2, seq: 10, at: "", kind: "transport", method: "transport/status", params: { state: "connected" }, historical: true },
       { ...selected, connectionGeneration: 2, seq: 11, at: "", kind: "notification", method: "thread/configured", params: { threadId: "thread" }, historical: true }

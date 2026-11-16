@@ -195,12 +195,12 @@ test("respond 직전 선택과 request 객체 재검사 및 실패 후 재시도
 });
 
 test("실제 main은 같은 lifecycle seam을 사용하고 closed에서 준비 잠금을 내리지 않는다", async () => {
-  const main = await readFile(join(import.meta.dir, "../src/main.ts"), "utf8");
+  const main = await readFile(join(import.meta.dir, "../src/native-session.ts"), "utf8");
   for (const call of ["createNativeLifecycle(publish)", "lifecycle.open(", "lifecycle.markReady(", "lifecycle.start({", "lifecycle.respond(", "lifecycle.resolved(client, message.params)", "lifecycle.reset()"])
     expect(main).toContain(call);
   const closed = main.slice(main.indexOf('client.once("closed"'), main.indexOf('client.on("stderr"'));
   expect(closed).not.toContain("turnStarting = false");
-  const respond = main.slice(main.indexOf('ipcMain.handle("approval:respond"'), main.indexOf('ipcMain.handle("events:get"'));
+  const respond = main.slice(main.indexOf('handle("approval:respond"'), main.indexOf('handle("events:get"'));
   expect(respond).not.toContain("connect()");
   expect(main).toContain('if (rpc !== startedClient) throw');
 });
@@ -361,7 +361,7 @@ test("개발 service.status/complete에 위조 reviewAuthority 객체를 주면 
 
 /** 실제 main의 함수·콜백 원문을 실행한다. Electron·리소스 I/O만 격리한다. */
 test("main 재복구 snapshot은 기존 log를 교체하고 marker 중첩 없이 같은 scope의 순서를 보존한다", async () => {
-  const main = await readFile(join(import.meta.dir, "../src/main.ts"), "utf8");
+  const main = await readFile(join(import.meta.dir, "../src/native-session.ts"), "utf8");
   const part = (from: string, to: string) => {
     const start = main.indexOf(from);
     const end = main.indexOf(to, start);
@@ -377,7 +377,11 @@ test("main 재복구 snapshot은 기존 log를 교체하고 marker 중첩 없이
     const eventLog = [];
     const delivered = [];
     const stopping = false;
-    const autoReportsEnabled = false;
+    const options = { id: "session", reports: { enabled: false }, onEvent(entry) { delivered.push(entry); } };
+    const observeSummary = () => {};
+    const threadTransition = null;
+    const activeThreadId = "${threadId}";
+    const eventThread = params => params?.threadId ?? null;
     const startedClient = null;
     const window = { webContents: { send(channel, entry) { delivered.push(entry); } } };
     const selection = () => ({ workspaceKey: "workspace", selectionEpoch, processEpoch: "process" });
@@ -385,9 +389,10 @@ test("main 재복구 snapshot은 기존 log를 교체하고 marker 중첩 없이
     const clientRequestId = "new-prompt";
     const validThreadId = "${threadId}";
     const prompt = "새 입력";
+    const trace = { arm() {} };
     let promptPublished = false;
     ${part('function wire(', 'function loadResourceScope(')}
-    ${part('function publish(', 'function connect(')}
+    ${part('function publish(', 'async function connect(')}
     ${part('function replaceConversationEvents(', 'function workspaceInfo(')}
     ${restored}
     ${beforeStart}
@@ -425,8 +430,8 @@ test("main 재복구 snapshot은 기존 log를 교체하고 marker 중첩 없이
 
 /** main의 실제 Native message 콜백에서 신뢰할 수 없는 params와 로컬 토큰을 분리한다. */
 test("main 요청 발행은 raw params·typed ID를 보존하고 active duplicate를 unsupported로 내보낸다", async () => {
-  const main = await readFile(join(import.meta.dir, "../src/main.ts"), "utf8");
-  const from = main.indexOf('client.on("message", (message: RpcMessage) => {');
+  const main = await readFile(join(import.meta.dir, "../src/native-session.ts"), "utf8");
+  const from = main.indexOf('const receiveMessage = (message: RpcMessage) => {');
   const to = main.indexOf('    void client.request("initialize"', from);
   expect(from).toBeGreaterThan(0);
   expect(to).toBeGreaterThan(from);
@@ -435,11 +440,16 @@ test("main 요청 발행은 raw params·typed ID를 보존하고 active duplicat
   let handle!: (message: { id: RpcId; method: string; params: unknown }) => void;
   runInNewContext(new Bun.Transpiler({ loader: "ts" }).transformSync(`
     const valid = () => true;
+    const threadTransition = null;
+    let nativeMessageHandler = null;
+    const eventThread = params => params?.threadId ?? null;
     const SUPPORTED = new Set(["item/commandExecution/requestApproval"]);
     const optionalRecord = (value) => value && typeof value === "object" ? value : null;
     let activeThreadId = "${threadId}";
     let activeTurnId = null;
     const endedTurns = new Set();
+    const nativeTiming = { observe() {} };
+    const trace = { mark() {} };
     ${main.slice(from, to)}
   `), {
     client: { on(_name: string, listener: typeof handle) { handle = listener; } },
@@ -463,9 +473,9 @@ test("main 요청 발행은 raw params·typed ID를 보존하고 active duplicat
 });
 
 test("main 승인 IPC는 필수 문자열 token을 검증하고 원본 ID와 함께 lifecycle에 전달한다", async () => {
-  const main = await readFile(join(import.meta.dir, "../src/main.ts"), "utf8");
-  const from = main.indexOf('  ipcMain.handle("approval:respond"');
-  const to = main.indexOf('  ipcMain.handle("events:get"', from);
+  const main = await readFile(join(import.meta.dir, "../src/native-session.ts"), "utf8");
+  const from = main.indexOf('  handle("approval:respond"');
+  const to = main.indexOf('  handle("events:get"', from);
   expect(from).toBeGreaterThan(0);
   expect(to).toBeGreaterThan(from);
   const s = setup();
@@ -474,18 +484,19 @@ test("main 승인 IPC는 필수 문자열 token을 검증하고 원본 ID와 함
   runInNewContext(new Bun.Transpiler({ loader: "ts" }).transformSync(`
     const assertSelection = () => {};
     const isCurrent = () => true;
+    const options = { id: "session" };
     const DECISIONS = new Set(["accept", "decline"]);
     ${main.slice(main.indexOf('function requiredString('), main.indexOf('\n', main.indexOf('function validId(')))}
     ${main.slice(from, to)}
   `), {
     rpc: s.client, lifecycle: s.lifecycle,
-    ipcMain: { handle(_channel: string, value: typeof handler) { handler = value; } }
+    handle(_channel: string, value: typeof handler) { handler = value; }
   });
   for (const invalid of [undefined, null, 7, {}, ""]) {
     await expect(handler(null, {}, "7", "accept", invalid)).rejects.toThrow("approval token");
   }
   expect(s.responses).toHaveLength(0);
-  await expect(handler(null, {}, 7, "accept", token)).rejects.toThrow("Unknown");
-  await handler(null, {}, "7", "accept", token);
+  await expect(handler(null, {}, 7, "accept", `session:${token}`)).rejects.toThrow("Unknown");
+  await handler(null, {}, "7", "accept", `session:${token}`);
   expect(s.responses).toEqual([{ id: "7", value: { decision: "accept" } }]);
 });

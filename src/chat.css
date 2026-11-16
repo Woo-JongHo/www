@@ -1,4 +1,7 @@
 /* Ovis의 대화·입력 상태 구조를 WWW 3열 작업 공간에 맞춰 표현한다. */
+html,body,#root{width:100%;height:100%;min-height:0;overflow:hidden;overscroll-behavior:none}
+.sidebar,.stage,.pane,.panel,.native-activity-panel{overscroll-behavior:contain}
+.transcript,.chat-conversation-list,.pbody,.na-scroll,.command-card pre,.chat-code pre{overscroll-behavior:contain}
 .chat-conversations{display:flex;flex-direction:column;gap:10px;min-height:0;flex:1;margin-top:20px;padding:0 12px}
 .sidebar .agents{display:flex;flex-direction:column;min-height:0;flex:1;overflow:hidden}
 .chat-conversation-heading,.chat-list-tools{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -52,8 +55,8 @@
 
 /* Chat 007: 읽기 영역만 늘어나고 입력과 안내는 화면 안에 남는다. */
 :root{--chat-card-surface:var(--surface);--chat-card-border:var(--border);--chat-card-radius:8px;--chat-state-running:var(--accent);--chat-state-failed:var(--error);--chat-state-unknown:var(--warn);--chat-space:16px;--chat-font-mono:ui-monospace,SFMono-Regular,Menlo,monospace}
-#root:has(.work:not([hidden])){grid-template-columns:220px minmax(0,1fr) 360px;grid-template-rows:minmax(0,1fr) 28px}
-#root:has(.work:not([hidden])):not(:has(:is(.panel,.native-activity-panel):not([hidden]))){grid-template-columns:220px minmax(0,1fr) 0}
+.session-surface:has(.work:not([hidden])){grid-template-columns:220px minmax(0,1fr) 360px;grid-template-rows:minmax(0,1fr) 28px}
+.session-surface:has(.work:not([hidden])):not(:has(:is(.panel,.native-activity-panel):not([hidden]))){grid-template-columns:220px minmax(0,1fr) 0}
 .work{grid-template-rows:44px minmax(0,1fr)}
 .pane{grid-template-rows:35px minmax(0,1fr);min-width:0}
 .conversation{display:flex;flex-direction:column;min-width:0;overflow:hidden}
@@ -92,8 +95,8 @@
 .command-output{margin-top:10px;min-width:0}
 .command-output summary{display:list-item;cursor:pointer;color:var(--accent);font:11px/1.6 system-ui,sans-serif}
 .command-output pre{max-height:360px}
-@media(max-width:1100px){#root:has(.work:not([hidden])){grid-template-columns:180px minmax(0,1fr) 300px}}
-@media(max-width:999px){#root:has(.work:not([hidden])),#root:has(.work:not([hidden])):not(:has(:is(.panel,.native-activity-panel):not([hidden]))){grid-template-columns:160px minmax(0,1fr) 0}.work:not([hidden])~:is(.panel,.native-activity-panel):not([hidden]){position:fixed;z-index:5;right:0;top:44px;bottom:28px;width:min(360px,90vw);background:var(--surface);box-shadow:-8px 0 32px #0008}.tabrow .tool{font-size:11px}}
+@media(max-width:1100px){.session-surface:has(.work:not([hidden])){grid-template-columns:180px minmax(0,1fr) 300px}}
+@media(max-width:999px){.session-surface:has(.work:not([hidden])),.session-surface:has(.work:not([hidden])):not(:has(:is(.panel,.native-activity-panel):not([hidden]))){grid-template-columns:160px minmax(0,1fr) 0}.work:not([hidden])~:is(.panel,.native-activity-panel):not([hidden]){position:fixed;z-index:5;right:0;top:44px;bottom:28px;width:min(360px,90vw);background:var(--surface);box-shadow:-8px 0 32px #0008}.tabrow .tool{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.transcript{scroll-behavior:auto!important}}
 
 .command-card.item-declined .command-state{color:var(--chat-state-unknown)}
@@ -115,3 +118,19 @@
 .command-review.review-pass{color:var(--ok);border-color:var(--ok)}
 .command-review.review-fail{color:var(--chat-state-failed);border-color:var(--chat-state-failed)}
 .command-review span{display:block;color:var(--muted);font-size:11px}
+
+[hidden]{display:none!important}
+.sidebar.target-sidebar,.sidebar.home-sidebar{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.sidebar .brand{min-height:44px;flex-shrink:0}.sidebar .footer{flex-shrink:0}
+.home-project-heading,.home-project-row{display:flex;align-items:center;gap:8px;padding:8px 14px}
+.home-project-heading{justify-content:space-between}.home-project-list{overflow:auto;min-height:0;padding:4px 0;overscroll-behavior:contain}
+.home-project-row button.grow{text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.home-www{margin:12px 14px;text-align:left}.home-scope-note{margin-top:auto;padding:14px;font-size:11px;line-height:1.7}
+.dashboard-shell{grid-column:2/-1;min-width:0;min-height:0;overflow:auto;overscroll-behavior:contain}
+.session-surface:has(.dashboard-shell:not([hidden])){grid-template-columns:220px minmax(0,1fr);grid-template-rows:minmax(0,1fr) 28px}
+.dashboard-scope-note{padding:10px 24px;margin:0;font-size:11px;color:var(--muted)}
+
+#root{display:block;height:100%;width:100%;min-height:0;overflow:hidden}
+.session-shell{height:100%;display:grid;grid-template-rows:38px minmax(0,1fr);min-width:0;min-height:0;overflow:hidden}
+.session-surfaces{min-width:0;min-height:0;overflow:hidden}.session-surface{position:relative;width:100%;height:100%;min-width:0;min-height:0}
+@media(max-width:999px){.session-surface .work:not([hidden])~:is(.panel,.native-activity-panel):not([hidden]){position:absolute;top:44px;bottom:28px}}

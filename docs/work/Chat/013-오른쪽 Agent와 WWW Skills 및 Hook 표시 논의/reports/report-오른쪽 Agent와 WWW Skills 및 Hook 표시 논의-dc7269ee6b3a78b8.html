@@ -1,0 +1,1718 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>오른쪽 Agent와 WWW Skills 및 Hook 표시 논의 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 16일 오후 12:43 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>오른쪽 Agent와 WWW Skills 및 Hook 표시 논의</h1><p class="lead">오른쪽 기본바의 고정 WWW Agent·다섯 스킬·실제 Subagent·Plan/Progress 기능 증거는 현재 소스에 계속 적용된다. 이번에는 검토 정책 설명의 문서 정합화로 감사의 소스 식별값만 달라져, 변경 문서를 다시 읽고 문서 영향 검토와 실제 Opus 독립 감사를 새로 연결했다. 기능검사나 GUI를 반복 실행했다고 표시하지 않았고, 원래의 GUI 미관찰과 비필수 표시 한계도 유지했다. 새 문서 기준에서 공식 보고서와 완료 상태를 갱신한다.</p><div id="report-story" class="story">오른쪽 기본바의 고정 WWW Agent·다섯 스킬·실제 Subagent·Plan/Progress 기능 증거는 현재 소스에 계속 적용된다. 이번에는 검토 정책 설명의 문서 정합화로 감사의 소스 식별값만 달라져, 변경 문서를 다시 읽고 문서 영향 검토와 실제 Opus 독립 감사를 새로 연결했다. 기능검사나 GUI를 반복 실행했다고 표시하지 않았고, 원래의 GUI 미관찰과 비필수 표시 한계도 유지했다. 새 문서 기준에서 공식 보고서와 완료 상태를 갱신한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 2 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>완료로 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.</p></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>AC-1 · 고정 Agent와 다섯 Skills</h3><p class="result">WWW Agent 아래 spec/design/build/diagnose/verify를 항상 보이고 범용 목록을 제외한다.</p><p class="support"><strong>근거</strong> 집중검사 고정 목록·범용 제외 SSR; 이전 Electron 기본바 표시</p><p class="limit">실제 다섯 스킬을 모두 호출한 시험은 아니다.</p></article><article class="requirement"><h3>AC-2 · 근거 있는 현재 항목</h3><p class="result">정본 경로의 구조화 Skill 요청 하나만 선택한다. 문서 읽기·이름·복원·종료를 현재 실행으로 올리지 않는다.</p><p class="support"><strong>근거</strong> 집중검사 선택·해제·다중 요청·다른 thread·historical 행동 사례</p><p class="limit">GUI의 양성 선택 강조는 새로 관찰하지 않았다.</p></article><article class="requirement"><h3>AC-3 · Hook 기본 제외와 상세 보존</h3><p class="result">기본바에서 Hook·범용 리소스를 제외하고 상세의 Hook 상태·진단을 보존한다.</p><p class="support"><strong>근거</strong> 집중 SSR 기본 제외·상세 보존; 이전 Electron Hook 실패/완료</p><p class="limit">표시 변경은 Hook 실행 비활성화가 아니다.</p></article><article class="requirement"><h3>AC-4 · 실제 Subagent와 완료 불</h3><p class="result">실제 Agent 식별자와 상태를 유지하며 일반 도구 종료로 완료를 추정하지 않는다.</p><p class="support"><strong>근거</strong> 집중 행동·SSR 완료 체크·동일 항목 유지; 이전 Electron 합성 Native 전이</p><p class="limit">실제 모델의 하위 Agent spawn은 이 검증에서 실행하지 않았다.</p></article><article class="requirement"><h3>AC-5 · 연결된 Plan과 Progress</h3><p class="result">현재 Native Plan의 유일한 활성 항목에 공개 설명을 연결하고 늦은 설명의 재귀속을 막는다.</p><p class="support"><strong>근거</strong> 집중 행동·SSR 활성 항목·delta·A→B→A·비공개 추론 제외</p><p class="limit">활성 항목 산문의 GUI 동시 표시를 새로 관찰하지 않았고 Plan.md 파일·복원 미제공 자료는 임의 보충하지 않는다.</p></article></section><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>문서 읽기와 도구 종료가 실제 실행·완료처럼 보일 수 있다.</h3><p><strong>선택</strong> 각 근거를 분리하고 명시 근거에만 선택·완료 표시를 연결한다.</p><p><strong>판단 근거</strong> 구조화 입력과 Agent 전용 상태 필드가 서로 다른 사실을 제공한다.</p><p class="limit"><strong>감수한 점</strong> Native가 단계·Agent 자료를 제공하지 않으면 현재 상태가 미확인으로 남는다.</p></article></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>최종 소스의 Agent 투영과 기본·상세 표시</h3><dl><div><dt>확인 방법</dt><dd>공식 verifyWork로 bun test test/agent-overview.test.ts test/www-activity-view.test.ts 실제 실행</dd></div><div><dt>기대 결과</dt><dd>근거 기반 선택·완료·Plan/Progress 연결과 Hook 분리를 유지한다.</dd></div><div><dt>실제 관측</dt><dd>exit0, 소스·artifact·환경 안정성 true, AC1~5 증거 usable.</dd></div><div><dt>확인 범위와 한계</dt><dd>행동·SSR 검사이며 실제 GUI나 모델 호출이 아니다.</dd></div></dl></article><article class="check"><h3>독립 검토</h3><dl><div><dt>확인 방법</dt><dd>allowFallback=false의 실제 Opus 읽기 전용 CLI와 canonical digest 대조</dd></div><div><dt>기대 결과</dt><dd>작성자와 분리된 검토가 현재 소스·기준과 실제 근거를 대조한다.</dd></div><div><dt>실제 관측</dt><dd>claude-opus-5-5, executor process, verdict pass, recordReview 수용.</dd></div><div><dt>확인 범위와 한계</dt><dd>검토자는 읽지 않은 파일·GUI·실프로토콜 범위를 명시했고 검사 실행은 하지 않았다.</dd></div></dl></article><article class="check"><h3>snapshot 재생성 뒤 현재성</h3><dl><div><dt>확인 방법</dt><dd>canonical source manifest 대조→공식 resume→같은 실제 집중검사→문서 digest 대조→새 Opus 감사</dd></div><div><dt>기대 결과</dt><dd>과거 통과를 새 소스로 승격하지 않고 새 실제 결과를 연결한다.</dd></div><div><dt>실제 관측</dt><dd>변경 입력은 src/architecture.generated.json 하나, 새 attempt-e467166f exit0/stable true, review-92513dd3 실제 Opus pass와 수용, assessWork complete=true.</dd></div><div><dt>확인 범위와 한계</dt><dd>GUI를 불필요하게 반복하지 않았으며 기존 GUI는 실행 당시 소스의 관찰로 유지한다.</dd></div></dl></article><article class="check"><h3>검토 정책 문서 정합화 뒤 현재성</h3><dl><div><dt>확인 방법</dt><dd>canonical currentness→문서5개 영향검토→새 실제 Opus nofallback 감사</dd></div><div><dt>기대 결과</dt><dd>기능 증거는 유효 범위에서 재사용하고 바뀐 문서·감사는 새로 연결한다.</dd></div><div><dt>실제 관측</dt><dd>WORKFLOW만 변경, AC1~5 기존 증거 usable, review-7c6ea45a 실제 Opus pass 및 기록 수용, assessWork complete=true.</dd></div><div><dt>확인 범위와 한계</dt><dd>새 기능검사나 GUI 실행은 하지 않았다. 일반 정책의 fallback 기능을 이번 최종감사에 적용하지 않았다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 2건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>GUI의 양성 스킬 강조와 활성 Plan+Progress 산문 동시 표시는 이번 공식 집중검사 담당이 새로 관찰하지 않았다. 이전 Electron 결과는 합성 Native의 역사적 보조 근거다.</li><li>실제 모델 Subagent spawn·Windows·OS 한국어 IME는 이번 범위에서 실행하지 않았다. Native 사건이 제공되지 않으면 미제공/미확인으로 표시한다.</li><li>Plan.md 파일이나 복원되지 않은 계획을 읽었다고 표시하지 않으며 Native 계획 사건과 공개 commentary만 연결한다.</li><li>독립 감사의 비필수 관찰: 같은 활성 항목에서 commentary 중 explanation plan 갱신이 끼면 다음 delta가 잠시 앞부분 없이 보이고 완료 snapshot에서 회복될 수 있다.</li><li>BoxBox project mode off의 공식 사후 형식 단계는 disabled다. 기능 검사·소스 정책·strict 타입·빌드와 형식 PASS를 구분한다.</li><li>새 감사는 최근 2,000 사건 보관창에서 Progress 자료가 미제공일 수 있다는 비필수 관찰도 남겼다. 관측하지 않은 산문을 보충하지 않는 보수적 표시이며 이 재생성으로 제품 구현을 바꾸지 않았다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>추가 관찰이 필요한 품질 확인을 별도 범위로 수행할 때 실제 화면과 스트림 순서를 보존한다.</dd></div><div><dt>영향</dt><dd>현재 필수 수용을 막는 결함으로 판정되지 않은 잔여 표시 한계다.</dd></div></dl></article></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><ol class="references"><li><p>공식 검사·기준별 관찰·독립 감사와 한계</p><code>verification.md</code></li><li><p>실제 Opus 관측 모델·판정·발견 사항</p><code>.www/session-implementation/chat013-opus-review-result.json</code></li><li><p>기존 Electron와 행동·SSR 근거 및 미관찰 범위 대응</p><code>.www/session-implementation/ui-acceptance-map.md</code></li><li><p>재생성된 현재 소스의 새 실제 Opus 판정과 비필수 관찰</p><code>.www/session-implementation/chat013-regenerated-opus-result.json</code></li><li><p>과거 증거 만료와 snapshot 단일 변경의 현재성 대조</p><code>.www/session-implementation/chat013-recheck-scope.json</code></li><li><p>기능 증거 유지와 공통 문서 단일 변경의 현재성 분리</p><code>.www/session-implementation/chat013-policy-currentness.json</code></li><li><p>정합화 문서와 실제 core를 대조한 새 Opus 독립 감사</p><code>.www/session-implementation/chat013-policy-opus-result.json</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/013-오른쪽 Agent와 WWW Skills 및 Hook 표시 논의/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-64677750-337f-4488-a503-4e0265356bf5<br>report-27a4f7f4-b0c1-48b6-bbe1-340543fe24d9</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>2c58801461761bf59bc0d541ffff6f169a73dd4c597fc0b898b26bc553fc64ac</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>6b25721c3253157bd75281af1218e42600d1de3f34bd313d0bf44d0dc44a7cb0</code></dd></div><div><dt>기준 지문</dt><dd><code>5950d05d534dbcec78ab4ba9dcf4dc08ab4d84520b6255f49888b451227a7dd8</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>done</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;done&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;오른쪽 바에 WWW 개발 Agent를 상위 항목으로 두고 spec/design/build/diagnose/verify 다섯 스킬 전체를 고정 표시하며 범용 스킬 전체 목록을 섞지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;현재 선택·진행 중인 WWW 스킬을 식별 가능한 근거에 따라 강조하며 문서 읽기·이름 언급·설치 여부만으로 실행 중이라고 판정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;이번 오른쪽 바의 표시 범위에서 Hook 목록·실행 현황 보기를 제외한다. Agent·WWW Skills·실제 Subagent와 Plan·Progress를 표시하며, Hook 표시 제외를 Hook 실행 비활성화로 취급하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;WWW Agent를 기본 표시하고 실제 Subagent 호출이 관측되면 해당 Subagent를 식별하여 표시한다. Subagent 작업 완료가 확인되면 항목을 유지한 채 완료 표시등으로 상태를 전환한다. 호출하지 않은 Subagent를 실행 중이라고 표시하지 않으며 역할 정의·일반 도구 호출과 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;Plan은 Plan.md 등 작업 계획 문서나 Native가 요구사항을 처리하며 제공한 계획을 바탕으로 요구사항 단위의 작업 항목·상태를 보여준다. Progress는 현재 진행 중인 Plan 항목에 연결하여 Native가 제공하는 공개 판단 요약·진행 설명과 확인된 실행 사건을 바탕으로 작업 상황을 산문으로 요약한다. 계획 목록과 원시 로그를 반복 표시하지 않고 출처 없는 판단 이유·관측하지 않은 진행을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/agent-overview.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T03:15:56.149Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/agent-overview.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T03:35:12.449Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-78add0a6-e3f5-4015-9869-af4c31d441c2&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-78add0a6-e3f5-4015-9869-af4c31d441c2/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep 도구로 spec.md, work.json, verification.md, src/agent-overview.ts, src/agent-overview-view.tsx, src/native-activity.ts(투영 본문 325~686행), src/native-activity-view.tsx(ResourceActivitySidebar 부분), test/agent-overview.test.ts, docs/specs/chat.md(Subagent·Progress 관련 행), test/fixtures/chat-ui-app-server.ts(collabAgentToolCall 부분)를 읽었다. agent-overview.css, renderer.tsx, www-activity.ts, test/www-activity-view.test.ts, PRODUCT/ARCHITECTURE/DEVELOPMENT/WORKFLOW 문서, .www 증거 JSON·스크린샷은 읽지 않았다. 테스트·빌드는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;소스 동일성: 입력 bundle에 있는 src·test·scripts·docs/specs/chat.md 파일별 digest가 work.json verifications[0].source.files의 digest와 일치한다(예: agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, native-activity-view.tsx ebdfb611…). 따라서 attempt-fce5db7e 실행 뒤 대상 소스는 바뀌지 않았다. 전체 sourceDigest 값이 다른 것(0a34… / 5abc…)은 입력 집합에 docs 파일이 추가됐기 때문으로 판단하며, 이 점이 결함은 아니다.&quot;,
+        &quot;AC-1/AC-3: WWW_AGENT_SKILLS가 다섯 항목으로 고정돼 있다(src/agent-overview.ts:8-14). 뷰는 projection.skills만 렌더링하고 Hook과 범용 리소스는 기본바에 그리지 않는다(src/agent-overview-view.tsx:36-69, src/native-activity-view.tsx:299-316). 테스트는 data-skill-id 5개, preToolUse·www-commit·누적 리소스 미노출을 확인한다(test/agent-overview.test.ts:102-112). 상세 모니터 진입 버튼은 유지되므로 Hook 표시 제외가 실행 비활성화로 이어지지 않는다.&quot;,
+        &quot;AC-2: 강조는 live 턴(historical 아님, endedAt 없음, running/pending/blocked)에서 정본 경로로 식별된 구조화 Skill 요청이 정확히 하나일 때만 선택된다(src/agent-overview.ts:67-71). 이름만 있는 요청, 문서 읽기, 복수 요청, 턴 종료, 복원, 다른 thread에서는 선택되지 않는 경로를 테스트가 다룬다(test/agent-overview.test.ts:26-37, 76-83). 전송 중에는 이전 선택을 지운다(agent-overview-view.tsx:30-31).&quot;,
+        &quot;AC-4: collabAgentToolCall은 senderThreadId가 현재 thread일 때만 receiver를 Subagent로 등록한다. 도구 item/completed만으로는 완료로 바꾸지 않고, agentsStates.status 또는 subAgentActivity kind=completed가 있을 때만 completed로 전환해 같은 항목에 ✓ 표시등을 켠다(src/agent-overview.ts:96-127, agent-overview-view.tsx:47-48). transport/closed와 historical 이벤트는 running/pending을 unknown으로 낮춘다. 이는 spec.md의 &#39;도구 호출 종료만으로 완료 추정 금지&#39; 결정과 맞는다.&quot;,
+        &quot;AC-5: Plan은 현재 턴 turn/plan/updated의 Native 계획만 사용한다. Progress는 inProgress 항목이 정확히 하나일 때 그 항목에 귀속된 commentary 또는 plan explanation만 사용한다. epoch·contextKey로 항목 전환, A→B→A, 계획 이전 메시지의 늦은 재귀속을 막는다(src/agent-overview.ts:128-162). analysis/reasoning phase와 다른 turn은 제외된다(테스트 57-95행). docs/specs/chat.md:149도 Plan.md를 연결하지 않는 한계를 명시한다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님): 같은 활성 항목에서 commentary delta가 스트리밍되는 도중 explanation이 있는 turn/plan/updated가 끼어들면 messageId가 &#39;&#39;로 초기화된다(src/agent-overview.ts:138). 그 뒤 같은 itemId의 delta는 앞부분 없이 조각만 progress로 표시되고(150행), item/completed가 와야 전체 텍스트로 회복된다. update_plan은 보통 메시지 완료 뒤에 호출되므로 실제로 생길 가능성은 낮고 일시적인 표시 문제다.&quot;,
+        &quot;증거 범위 확인: verification.md는 실제 프로세스로 실행한 bun test(exit 0)가 행동·SSR 검사이며 GUI·실제 모델 Subagent spawn이 아니라고 명시한다. 이전 Electron 합성 Native 관찰도 최종 소스 GUI 재검사로 승격하지 않았다(verification.md:25-37). AC-2의 양성 강조 GUI 화면과 AC-5의 Plan+Progress 동시 GUI 표시는 미관찰이라고 공개하므로 증거 범위가 과장되지 않았다.&quot;,
+        &quot;잔여 위험: subAgentActivity 항목 형태와 실제 codex spawnAgent의 item/started 시점 receiverThreadIds·agentsStates 제공 여부는 fixture와 테스트의 가정이다. 이번 검토에서는 실제 프로토콜과 대조하지 않았다. started 시점에 receiver가 비어 있으면 첫 상태는 completed 시점의 agentsStates에 의존한다. 그 값이 없으면 &#39;결과 미확인&#39;으로 보수적으로 표시되므로 잘못된 완료 표시로 이어지지는 않는다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-92513dd3-0bc0-4c4e-b513-89f19f2926ce&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-92513dd3-0bc0-4c4e-b513-89f19f2926ce/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read와 Grep 도구로 실제 작업트리 파일을 읽었다(inline bundle에만 의존하지 않음). 읽은 파일은 spec.md, verification.md, work.json(전체 1410행), src/agent-overview.ts, src/agent-overview-view.tsx, src/native-activity-view.tsx의 ResourceActivitySidebar(299~323행), src/native-activity.ts의 plan 처리 Grep, src/architecture.generated.json의 agent-overview Grep, test/agent-overview.test.ts, .www/session-implementation의 chat013-recheck-scope.json, chat013-regenerated-verification-result.json, chat013-opus-review-result.json이다. docs/PRODUCT·ARCHITECTURE·DEVELOPMENT·skills/WORKFLOW·specs/chat.md 본문, test/www-activity-view.test.ts, ui-acceptance-map.md, chat-ui-Mpd1UU/summary.json, home-supplement-structure-harness.json, CSS·renderer는 읽지 않았다. 테스트·빌드·GUI는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;재검사 범위의 정합성: chat013-recheck-scope.json은 이전 digest 0a34f3bd…에서 현재 c782bbe4…로 바뀐 입력이 src/architecture.generated.json 하나뿐이라고 기록한다. 이 값은 요청에 주어진 sourceDigest c782bbe4…와 같다. 현재 bundle의 파일별 digest를 work.json verifications[1](attempt-e467166f) source.files와 대조하니 agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, native-activity-view.tsx ebdfb611…, native-activity.ts 4fa746b3…, architecture.generated.json f437938b…, 두 테스트 파일, fixture, scripts/verify-chat.ts, docs/specs/chat.md가 모두 일치했다. 그래서 재실행 attempt는 현재 소스를 대상으로 한 실행이다. 이전 attempt-fce5db7e의 architecture.generated.json은 d6590d65…로 현재 값과 다르다. 재생성으로 무효가 된 사실을 숨기지 않고 resumeWork 이후 새 attempt를 연결한 기록(verification.md 69~75행)은 실제 데이터와 맞는다.&quot;,
+        &quot;architecture.generated.json 변경의 영향: Grep 결과 이 파일에서 agent-overview 관련 내용은 모듈·import 그래프 메타데이터(397~412, 1895~1933, 2216~2233, 5261~5597행 부근)뿐이다. agent-overview.ts와 agent-overview-view.tsx는 이 JSON을 import하지 않는다. 따라서 이 snapshot 변경이 AC1~5의 동작을 바꾼다는 근거는 없다.&quot;,
+        &quot;AC-1/AC-3: WWW_AGENT_SKILLS 다섯 항목을 고정했다(src/agent-overview.ts:8-14). ResourceActivitySidebar는 AgentOverviewView만 렌더링하고 Hook과 누적 리소스 목록은 그리지 않는다. 상세 모니터 버튼은 남아 있다(src/native-activity-view.tsx:308-313). 테스트는 data-skill-id가 5개인지, preToolUse·www-commit·누적 리소스가 노출되지 않는지 확인한다(test/agent-overview.test.ts:102-112).&quot;,
+        &quot;AC-2: 선택 강조는 다음 조건을 모두 만족할 때만 켜진다. 턴이 live 상태(historical 아님, 종료 시각 없음, running/pending/blocked)이고, 구조화된 skill 요청이 정확히 하나이며, wwwArtifact로 식별된다(src/agent-overview.ts:67-71). 문서 읽기와 명령 참조는 basis 문구로만 &#39;적용 미확인&#39;이라고 표시된다(73-75행). 이름만 있는 요청, 턴 종료, 복원 이력, 다른 thread, 복수 요청에서 선택이 없는 경로는 테스트 26-37, 76-83행이 다룬다. 전송 중에는 선택을 비운다(view 30-31행).&quot;,
+        &quot;AC-4: Subagent는 senderThreadId가 현재 thread인 collabAgentToolCall의 receiver와 subAgentActivity에서만 등록된다. 도구 item/completed만으로는 completed가 되지 않는다. agentsStates.status나 subAgentActivity kind=completed가 있어야 같은 id 항목에 ✓가 표시된다(src/agent-overview.ts:96-127, view 47-48행). transport/closed와 historical 이벤트에서는 running/pending이 unknown으로 낮아진다(88-90, 108행).&quot;,
+        &quot;AC-5: Plan과 Progress는 현재 turnId의 turn/plan/updated와 commentary만 사용한다. 활성 inProgress 항목이 정확히 하나일 때만 연결되며, epoch·contextKey로 늦은 재귀속을 막는다(src/agent-overview.ts:128-162). 테스트 57-95행이 항목 전환, A→B→A, 계획 이전 메시지, analysis phase, 다른 turn이 제외되는지 확인한다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님) 1: 루프는 마지막 2,000개 이벤트만 처리한다(src/agent-overview.ts:85). 최종 plan은 native 투영의 current.plan을 사용한다(160행). 따라서 아주 긴 턴에서 계획 갱신이 창 밖으로 밀리면 Plan은 보이고 Progress는 null로 나올 수 있다. 이 경우 근거 없는 산문을 만들지 않고 &#39;공개 진행 설명이 아직 없습니다&#39;로 보수적으로 표시하므로 AC 위반은 아니다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님) 2: 이전 Opus 감사가 지적한 사항이 그대로 남아 있다. 같은 활성 항목의 commentary 스트리밍 중에 explanation이 있는 plan 갱신이 끼면 messageId가 초기화되어 delta 조각이 일시적으로 표시될 수 있다(138, 150행). 이번 재생성과는 무관하다.&quot;,
+        &quot;증거 범위: verification.md는 재실행 attempt-e467166f를 행동·SSR bun test로만 기술한다. GUI 실행, 실제 모델의 Subagent spawn, AC-2 양성 강조 GUI, AC-5 Plan+Progress 동시 GUI는 관찰하지 않았다고 유지한다(73행). 이전 Opus 감사(sourceDigest 0a34…)를 현재 소스의 감사로 바꿔 쓰지 않고 새 감사가 필요하다고 명시한다(75행). 증거 범위를 과장한 부분은 확인되지 않았다. 다만 work.json의 AC evidence summary &#39;현재 적용 가능&#39;은 기록 시점의 도구 판정이다. 본 검토에서 assessWork를 다시 실행해 확인하지는 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-7c6ea45a-1085-40ba-8cc1-bb04815c308e&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-7c6ea45a-1085-40ba-8cc1-bb04815c308e/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read와 Grep으로 실제 작업트리 파일을 읽었고, inline bundle에만 의존하지 않았다. 읽은 파일은 다음과 같다. work.json 전체(1482행), verification.md 전체, docs/skills/WORKFLOW.md와 docs/skills/MODEL_POLICY.md의 독립 검토 관련 행(Grep), agents/www/review-policy.json 전체, scripts/workflow/review.ts 260~316행과 425~511행, chat013-policy-currentness.json, chat013-regenerated-post-review-assessment.json, docs/DEVELOPMENT.md의 Terra 관련 Grep. chat013-policy-document-review.json은 133,203자 중 앞 43,237자만 읽었으며, 그 부분은 work.json rawSource 사본이었다. spec.md, src/agent-overview.ts, src/agent-overview-view.tsx, 두 테스트 파일, chat013-regenerated-verification-result.json, chat013-regenerated-opus-result.json의 본문은 이번에 다시 읽지 않았다. 테스트·빌드·GUI·assessWork는 실행하지 않았고 digest도 다시 계산하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;현재성 변경 범위: chat013-policy-currentness.json은 c782bbe4…에서 074277db…로 바뀌면서 변경된 파일이 docs/skills/WORKFLOW.md 하나뿐이라고 기록한다. 이 값은 요청의 sourceDigest와 같다. 요청 bundle의 파일별 digest는 attempt-e467166f source.files와 같다(예: agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, architecture.generated.json f437938b…, 두 테스트, fixture, chat.md 6fce6998…). WORKFLOW.md는 이전 평가 기록의 b1dd0353…에서 bundle의 b6d93028…로 바뀌었다. 이 기록상 기능 소스는 바뀌지 않았으므로 AC1~5가 attempt-e467166f를 근거로 계속 usable이라는 판정은 합당하다. 변경된 문서 때문에 문서 검토와 독립 감사만 적용 불가가 된 기록(documentation.usable=false, review source_changed/receipt_context_mismatch)도 core의 판정 규칙과 맞는다.&quot;,
+        &quot;WORKFLOW.md와 core의 일치: WORKFLOW.md:134는 일반 정책이 Opus 기본이며, 사용량 소진이 확인된 경우에만 Terra로 대체하고 인증·네트워크 오류나 불합격은 대체 사유가 아니라고 쓴다. 이는 review-policy.json(primary opus, fallback gpt-6.1-terra, when primary_quota_exhausted)과 맞는다. review.ts:157, 199, 222~223의 quota 코드 검증과도 맞는다. WORKFLOW.md:136의 &#39;직접 지침 시 allowFallback:false, Opus 미실행은 blocker&#39;는 review.ts:508과 맞는다. 이 행은 verifiedQuota(failure)가 참이어도 allowFallback이 false이면 Terra를 호출하지 않고 Opus 실패 결과를 그대로 보존한다. 그 결과는 validateReview의 review_not_passed 경로로 사용 불가가 된다(review.ts:268). runReview의 allowFallback 기본값이 true라는 점(433행)도 MODEL_POLICY.md:41의 &#39;일반 정책·기본값이 이 문서만으로 바뀌었다고 주장하지 않는다&#39;와 맞는다.&quot;,
+        &quot;Sonnet 보조검토 경계: MODEL_POLICY.md:39와 WORKFLOW.md:136은 Sonnet 교차검증을 역할이 외부에서 수행하는 보조 검토로 한정한다. 자동 core 단계나 필수 완료 감사로 승격하지도 않는다. 실제로 review.ts의 선택 경로는 primary(opus), quota fallback(Terra), 직접 Terra override 세 가지뿐이다. 따라서 문서가 core에 없는 Sonnet 단계를 있다고 주장하지 않는다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님): WORKFLOW.md:134는 &#39;사용량 소진이 확인된 경우에만 Terra 대체를 허용한다&#39;고 쓴다. 그런데 core에는 cli_direct_user_request authority로 묶인 직접 Terra override 경로도 있다(review.ts:276~281, 436, 473, 499). 이 경로는 대체(fallback)가 아니라 별도 직접 요청이고 DEVELOPMENT.md:141에 설명되어 있으므로 모순으로 보지 않는다. 다만 WORKFLOW만 읽으면 Terra 선택 경로가 quota 대체 하나뿐이라고 오해할 수 있다.&quot;,
+        &quot;증거 범위: verification.md 83~87행은 이번 재개를 문서 영향검토와 새 독립 감사의 현재성 복구로만 기술한다. 기능 집중검사나 GUI를 새로 했다고 쓰지 않는다. 이전 GUI 미관찰 고지(AC-2 양성 강조, AC-5 Plan+Progress 동시 표시, 실제 모델 Subagent spawn 미실행)도 축소하지 않았다. 새 문서 검토 documentation-6c6bf704는 WORKFLOW.md만 updated로, 나머지 네 문서는 digest 동일로 unchanged 처리했다. 이는 currentness 기록의 변경 파일 범위와 맞는다. 단, 이 검토의 sourceDigest 필드는 canonical 074277db…가 아니라 verification source 6b25721c…이다. 직전 검토 c8f9a897도 같은 방식으로 기록됐고 이 방식으로 usable 판정을 받았으므로 일관된 관행으로 판단한다. 수용 여부는 이번 검토에서 assessWork로 재확인하지 않았다.&quot;,
+        &quot;기존 감사에서 남긴 수정 필수가 아닌 관찰 두 가지는 이번 문서 변경과 무관하게 그대로 남아 있다. 하나는 같은 활성 항목에서 commentary 스트리밍 중 explanation을 포함한 plan 갱신이 끼면 Progress 일부가 일시적으로 앞부분 없이 표시되는 문제이고, 다른 하나는 2,000개 이벤트 창 밖으로 밀린 Progress의 자료 미제공 가능성이다. 이번 범위에서 새 결함은 확인되지 않았다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;오른쪽 기본바의 고정 WWW Agent·다섯 스킬·실제 Subagent·Plan/Progress 기능 증거는 현재 소스에 계속 적용된다. 이번에는 검토 정책 설명의 문서 정합화로 감사의 소스 식별값만 달라져, 변경 문서를 다시 읽고 문서 영향 검토와 실제 Opus 독립 감사를 새로 연결했다. 기능검사나 GUI를 반복 실행했다고 표시하지 않았고, 원래의 GUI 미관찰과 비필수 표시 한계도 유지했다. 새 문서 기준에서 공식 보고서와 완료 상태를 갱신한다.&quot;,
+  &quot;before&quot;: &quot;기본 오른쪽 바는 현재 요청의 plan·Hook·범용 호출과 누적 리소스를 함께 읽는 방식이었다. 고정 다섯 Skills와 실제 Subagent 완료, 활성 계획 항목의 산문을 한 개요에서 추적할 수 없었다.&quot;,
+  &quot;after&quot;: &quot;기본바는 WWW Agent·다섯 Skills·실제 Subagent와 Plan/Progress로 구성한다. Hook·전체 카탈로그·누적 관측은 상세 모니터에서 읽고 기본바에는 원장 누락·저장 경고만 보조로 남긴다.&quot;,
+  &quot;changes&quot;: [
+    &quot;agent-overview 순수 투영과 전용 뷰·CSS를 추가하고 기존 ResourceActivitySidebar props를 유지해 연결했다.&quot;,
+    &quot;정본 경로의 명시 Skill 요청·문서 읽기·이름 언급을 구별하고 종료·복원된 요청의 현재 선택을 해제한다.&quot;,
+    &quot;Agent 상태 completed와 일반 도구 종료를 구별하며 후속 요청·실패·중단·연결 종료·historical 상태를 보존한다.&quot;,
+    &quot;Native Plan의 활성 항목과 공개 산문을 묶고 계획 변경·항목 복귀·계획 이전 메시지의 늦은 delta를 재귀속하지 않는다.&quot;,
+    &quot;Product·Architecture·Development·Chat 명세의 기본바와 상세 모니터 범위를 최신 구현에 맞춰 정합화했다.&quot;,
+    &quot;공식 구조 snapshot 재생성으로 만료된 현재성을 숨기지 않고 과거 이력을 보존해 재개·실제 집중 재검사·새 Opus 감사·문서 재연결을 수행했다.&quot;,
+    &quot;일반 core의 조건부 Terra fallback과 이번 최종 Opus고정, 외부 Sonnet 보조검토를 구분한 공통 문서 정합화 뒤 기능 증거를 유지하고 문서·감사 현재성만 복구했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;실제 사건이 없는 단계 선택·Agent 완료·진행 설명을 추측하지 않고 미확인으로 남겼다.&quot;,
+    &quot;사용자가 선택한 다섯 Skills만 고정 표시하고 Hook 실행 설정은 변경하지 않았다.&quot;,
+    &quot;Plan.md를 임의 탐색하지 않고 Native 계획 자료부터 연결했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;GUI의 양성 스킬 강조와 활성 Plan+Progress 산문 동시 표시는 이번 공식 집중검사 담당이 새로 관찰하지 않았다. 이전 Electron 결과는 합성 Native의 역사적 보조 근거다.&quot;,
+    &quot;실제 모델 Subagent spawn·Windows·OS 한국어 IME는 이번 범위에서 실행하지 않았다. Native 사건이 제공되지 않으면 미제공/미확인으로 표시한다.&quot;,
+    &quot;Plan.md 파일이나 복원되지 않은 계획을 읽었다고 표시하지 않으며 Native 계획 사건과 공개 commentary만 연결한다.&quot;,
+    &quot;독립 감사의 비필수 관찰: 같은 활성 항목에서 commentary 중 explanation plan 갱신이 끼면 다음 delta가 잠시 앞부분 없이 보이고 완료 snapshot에서 회복될 수 있다.&quot;,
+    &quot;BoxBox project mode off의 공식 사후 형식 단계는 disabled다. 기능 검사·소스 정책·strict 타입·빌드와 형식 PASS를 구분한다.&quot;,
+    &quot;새 감사는 최근 2,000 사건 보관창에서 Progress 자료가 미제공일 수 있다는 비필수 관찰도 남겼다. 관측하지 않은 산문을 보충하지 않는 보수적 표시이며 이 재생성으로 제품 구현을 바꾸지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;수정 필수 아닌 스트리밍 interleaving 관찰과 GUI 선택 강조·활성 산문 화면은 후속 품질 점검 대상으로 남긴다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;오른쪽 기본바의 고정 WWW Agent·다섯 스킬·실제 Subagent·Plan/Progress 기능 증거는 현재 소스에 계속 적용된다. 이번에는 검토 정책 설명의 문서 정합화로 감사의 소스 식별값만 달라져, 변경 문서를 다시 읽고 문서 영향 검토와 실제 Opus 독립 감사를 새로 연결했다. 기능검사나 GUI를 반복 실행했다고 표시하지 않았고, 원래의 GUI 미관찰과 비필수 표시 한계도 유지했다. 새 문서 기준에서 공식 보고서와 완료 상태를 갱신한다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;AC-1 · 고정 Agent와 다섯 Skills&quot;,
+        &quot;result&quot;: &quot;WWW Agent 아래 spec/design/build/diagnose/verify를 항상 보이고 범용 목록을 제외한다.&quot;,
+        &quot;evidence&quot;: &quot;집중검사 고정 목록·범용 제외 SSR; 이전 Electron 기본바 표시&quot;,
+        &quot;limitations&quot;: &quot;실제 다섯 스킬을 모두 호출한 시험은 아니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-2 · 근거 있는 현재 항목&quot;,
+        &quot;result&quot;: &quot;정본 경로의 구조화 Skill 요청 하나만 선택한다. 문서 읽기·이름·복원·종료를 현재 실행으로 올리지 않는다.&quot;,
+        &quot;evidence&quot;: &quot;집중검사 선택·해제·다중 요청·다른 thread·historical 행동 사례&quot;,
+        &quot;limitations&quot;: &quot;GUI의 양성 선택 강조는 새로 관찰하지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-3 · Hook 기본 제외와 상세 보존&quot;,
+        &quot;result&quot;: &quot;기본바에서 Hook·범용 리소스를 제외하고 상세의 Hook 상태·진단을 보존한다.&quot;,
+        &quot;evidence&quot;: &quot;집중 SSR 기본 제외·상세 보존; 이전 Electron Hook 실패/완료&quot;,
+        &quot;limitations&quot;: &quot;표시 변경은 Hook 실행 비활성화가 아니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-4 · 실제 Subagent와 완료 불&quot;,
+        &quot;result&quot;: &quot;실제 Agent 식별자와 상태를 유지하며 일반 도구 종료로 완료를 추정하지 않는다.&quot;,
+        &quot;evidence&quot;: &quot;집중 행동·SSR 완료 체크·동일 항목 유지; 이전 Electron 합성 Native 전이&quot;,
+        &quot;limitations&quot;: &quot;실제 모델의 하위 Agent spawn은 이 검증에서 실행하지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-5 · 연결된 Plan과 Progress&quot;,
+        &quot;result&quot;: &quot;현재 Native Plan의 유일한 활성 항목에 공개 설명을 연결하고 늦은 설명의 재귀속을 막는다.&quot;,
+        &quot;evidence&quot;: &quot;집중 행동·SSR 활성 항목·delta·A→B→A·비공개 추론 제외&quot;,
+        &quot;limitations&quot;: &quot;활성 항목 산문의 GUI 동시 표시를 새로 관찰하지 않았고 Plan.md 파일·복원 미제공 자료는 임의 보충하지 않는다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;최종 소스의 Agent 투영과 기본·상세 표시&quot;,
+        &quot;method&quot;: &quot;공식 verifyWork로 bun test test/agent-overview.test.ts test/www-activity-view.test.ts 실제 실행&quot;,
+        &quot;expected&quot;: &quot;근거 기반 선택·완료·Plan/Progress 연결과 Hook 분리를 유지한다.&quot;,
+        &quot;observed&quot;: &quot;exit0, 소스·artifact·환경 안정성 true, AC1~5 증거 usable.&quot;,
+        &quot;limitations&quot;: &quot;행동·SSR 검사이며 실제 GUI나 모델 호출이 아니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;독립 검토&quot;,
+        &quot;method&quot;: &quot;allowFallback=false의 실제 Opus 읽기 전용 CLI와 canonical digest 대조&quot;,
+        &quot;expected&quot;: &quot;작성자와 분리된 검토가 현재 소스·기준과 실제 근거를 대조한다.&quot;,
+        &quot;observed&quot;: &quot;claude-opus-5-5, executor process, verdict pass, recordReview 수용.&quot;,
+        &quot;limitations&quot;: &quot;검토자는 읽지 않은 파일·GUI·실프로토콜 범위를 명시했고 검사 실행은 하지 않았다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;snapshot 재생성 뒤 현재성&quot;,
+        &quot;method&quot;: &quot;canonical source manifest 대조→공식 resume→같은 실제 집중검사→문서 digest 대조→새 Opus 감사&quot;,
+        &quot;expected&quot;: &quot;과거 통과를 새 소스로 승격하지 않고 새 실제 결과를 연결한다.&quot;,
+        &quot;observed&quot;: &quot;변경 입력은 src/architecture.generated.json 하나, 새 attempt-e467166f exit0/stable true, review-92513dd3 실제 Opus pass와 수용, assessWork complete=true.&quot;,
+        &quot;limitations&quot;: &quot;GUI를 불필요하게 반복하지 않았으며 기존 GUI는 실행 당시 소스의 관찰로 유지한다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;검토 정책 문서 정합화 뒤 현재성&quot;,
+        &quot;method&quot;: &quot;canonical currentness→문서5개 영향검토→새 실제 Opus nofallback 감사&quot;,
+        &quot;expected&quot;: &quot;기능 증거는 유효 범위에서 재사용하고 바뀐 문서·감사는 새로 연결한다.&quot;,
+        &quot;observed&quot;: &quot;WORKFLOW만 변경, AC1~5 기존 증거 usable, review-7c6ea45a 실제 Opus pass 및 기록 수용, assessWork complete=true.&quot;,
+        &quot;limitations&quot;: &quot;새 기능검사나 GUI 실행은 하지 않았다. 일반 정책의 fallback 기능을 이번 최종감사에 적용하지 않았다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;문서 읽기와 도구 종료가 실제 실행·완료처럼 보일 수 있다.&quot;,
+        &quot;basis&quot;: &quot;구조화 입력과 Agent 전용 상태 필드가 서로 다른 사실을 제공한다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;각 근거를 분리하고 명시 근거에만 선택·완료 표시를 연결한다.&quot;,
+        &quot;tradeoff&quot;: &quot;Native가 단계·Agent 자료를 제공하지 않으면 현재 상태가 미확인으로 남는다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;verification.md&quot;,
+        &quot;purpose&quot;: &quot;공식 검사·기준별 관찰·독립 감사와 한계&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-opus-review-result.json&quot;,
+        &quot;purpose&quot;: &quot;실제 Opus 관측 모델·판정·발견 사항&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/ui-acceptance-map.md&quot;,
+        &quot;purpose&quot;: &quot;기존 Electron와 행동·SSR 근거 및 미관찰 범위 대응&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-regenerated-opus-result.json&quot;,
+        &quot;purpose&quot;: &quot;재생성된 현재 소스의 새 실제 Opus 판정과 비필수 관찰&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-recheck-scope.json&quot;,
+        &quot;purpose&quot;: &quot;과거 증거 만료와 snapshot 단일 변경의 현재성 대조&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-policy-currentness.json&quot;,
+        &quot;purpose&quot;: &quot;기능 증거 유지와 공통 문서 단일 변경의 현재성 분리&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-policy-opus-result.json&quot;,
+        &quot;purpose&quot;: &quot;정합화 문서와 실제 core를 대조한 새 Opus 독립 감사&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;추가 관찰이 필요한 품질 확인을 별도 범위로 수행할 때 실제 화면과 스트림 순서를 보존한다.&quot;,
+        &quot;impact&quot;: &quot;현재 필수 수용을 막는 결함으로 판정되지 않은 잔여 표시 한계다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></section><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 6개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 16일 오후 12:43 · 작성자 보고서 · 오른쪽 기본바의 고정 WWW Agent·다섯 스킬·실제 Subagent·Plan/Progress 기능 증거는 현재 소스에 계속 적용된다. 이번에는 검토 정책 설명의 문서 정합화로 감사의 소스 식별값만 달라져, 변경 문서를 다시 읽고 문서 영향 검토와 실제 Opus 독립 감사를 새로 연결했다. 기능검사나 GUI를 반복 실행했다고 표시하지 않았고, 원래의 GUI 미관찰과 비필수 표시 한계도 유지했다. 새 문서 기준에서 공식 보고서와 완료 상태를 갱신한다.</summary><article><h3>오른쪽 Agent와 WWW Skills 및 Hook 표시 논의</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">오른쪽 기본바의 고정 WWW Agent·다섯 스킬·실제 Subagent·Plan/Progress 기능 증거는 현재 소스에 계속 적용된다. 이번에는 검토 정책 설명의 문서 정합화로 감사의 소스 식별값만 달라져, 변경 문서를 다시 읽고 문서 영향 검토와 실제 Opus 독립 감사를 새로 연결했다. 기능검사나 GUI를 반복 실행했다고 표시하지 않았고, 원래의 GUI 미관찰과 비필수 표시 한계도 유지했다. 새 문서 기준에서 공식 보고서와 완료 상태를 갱신한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 2 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.</p><h3>기록된 변경</h3><ul><li>agent-overview 순수 투영과 전용 뷰·CSS를 추가하고 기존 ResourceActivitySidebar props를 유지해 연결했다.</li><li>정본 경로의 명시 Skill 요청·문서 읽기·이름 언급을 구별하고 종료·복원된 요청의 현재 선택을 해제한다.</li><li>Agent 상태 completed와 일반 도구 종료를 구별하며 후속 요청·실패·중단·연결 종료·historical 상태를 보존한다.</li><li>Native Plan의 활성 항목과 공개 산문을 묶고 계획 변경·항목 복귀·계획 이전 메시지의 늦은 delta를 재귀속하지 않는다.</li><li>Product·Architecture·Development·Chat 명세의 기본바와 상세 모니터 범위를 최신 구현에 맞춰 정합화했다.</li><li>공식 구조 snapshot 재생성으로 만료된 현재성을 숨기지 않고 과거 이력을 보존해 재개·실제 집중 재검사·새 Opus 감사·문서 재연결을 수행했다.</li><li>일반 core의 조건부 Terra fallback과 이번 최종 Opus고정, 외부 Sonnet 보조검토를 구분한 공통 문서 정합화 뒤 기능 증거를 유지하고 문서·감사 현재성만 복구했다.</li></ul><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>AC-1 · 고정 Agent와 다섯 Skills</h3><p class="result">WWW Agent 아래 spec/design/build/diagnose/verify를 항상 보이고 범용 목록을 제외한다.</p><p class="support"><strong>근거</strong> 집중검사 고정 목록·범용 제외 SSR; 이전 Electron 기본바 표시</p><p class="limit">실제 다섯 스킬을 모두 호출한 시험은 아니다.</p></article><article class="requirement"><h3>AC-2 · 근거 있는 현재 항목</h3><p class="result">정본 경로의 구조화 Skill 요청 하나만 선택한다. 문서 읽기·이름·복원·종료를 현재 실행으로 올리지 않는다.</p><p class="support"><strong>근거</strong> 집중검사 선택·해제·다중 요청·다른 thread·historical 행동 사례</p><p class="limit">GUI의 양성 선택 강조는 새로 관찰하지 않았다.</p></article><article class="requirement"><h3>AC-3 · Hook 기본 제외와 상세 보존</h3><p class="result">기본바에서 Hook·범용 리소스를 제외하고 상세의 Hook 상태·진단을 보존한다.</p><p class="support"><strong>근거</strong> 집중 SSR 기본 제외·상세 보존; 이전 Electron Hook 실패/완료</p><p class="limit">표시 변경은 Hook 실행 비활성화가 아니다.</p></article><article class="requirement"><h3>AC-4 · 실제 Subagent와 완료 불</h3><p class="result">실제 Agent 식별자와 상태를 유지하며 일반 도구 종료로 완료를 추정하지 않는다.</p><p class="support"><strong>근거</strong> 집중 행동·SSR 완료 체크·동일 항목 유지; 이전 Electron 합성 Native 전이</p><p class="limit">실제 모델의 하위 Agent spawn은 이 검증에서 실행하지 않았다.</p></article><article class="requirement"><h3>AC-5 · 연결된 Plan과 Progress</h3><p class="result">현재 Native Plan의 유일한 활성 항목에 공개 설명을 연결하고 늦은 설명의 재귀속을 막는다.</p><p class="support"><strong>근거</strong> 집중 행동·SSR 활성 항목·delta·A→B→A·비공개 추론 제외</p><p class="limit">활성 항목 산문의 GUI 동시 표시를 새로 관찰하지 않았고 Plan.md 파일·복원 미제공 자료는 임의 보충하지 않는다.</p></article><section class="paper" id="history-report-94e4e64b-9de8-4593-97f7-6bf3e1f3a8da-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>문서 읽기와 도구 종료가 실제 실행·완료처럼 보일 수 있다.</h3><p><strong>선택</strong> 각 근거를 분리하고 명시 근거에만 선택·완료 표시를 연결한다.</p><p><strong>판단 근거</strong> 구조화 입력과 Agent 전용 상태 필드가 서로 다른 사실을 제공한다.</p><p class="limit"><strong>감수한 점</strong> Native가 단계·Agent 자료를 제공하지 않으면 현재 상태가 미확인으로 남는다.</p></article></section><section class="paper" id="history-report-94e4e64b-9de8-4593-97f7-6bf3e1f3a8da-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>최종 소스의 Agent 투영과 기본·상세 표시</h3><dl><div><dt>확인 방법</dt><dd>공식 verifyWork로 bun test test/agent-overview.test.ts test/www-activity-view.test.ts 실제 실행</dd></div><div><dt>기대 결과</dt><dd>근거 기반 선택·완료·Plan/Progress 연결과 Hook 분리를 유지한다.</dd></div><div><dt>실제 관측</dt><dd>exit0, 소스·artifact·환경 안정성 true, AC1~5 증거 usable.</dd></div><div><dt>확인 범위와 한계</dt><dd>행동·SSR 검사이며 실제 GUI나 모델 호출이 아니다.</dd></div></dl></article><article class="check"><h3>독립 검토</h3><dl><div><dt>확인 방법</dt><dd>allowFallback=false의 실제 Opus 읽기 전용 CLI와 canonical digest 대조</dd></div><div><dt>기대 결과</dt><dd>작성자와 분리된 검토가 현재 소스·기준과 실제 근거를 대조한다.</dd></div><div><dt>실제 관측</dt><dd>claude-opus-5-5, executor process, verdict pass, recordReview 수용.</dd></div><div><dt>확인 범위와 한계</dt><dd>검토자는 읽지 않은 파일·GUI·실프로토콜 범위를 명시했고 검사 실행은 하지 않았다.</dd></div></dl></article><article class="check"><h3>snapshot 재생성 뒤 현재성</h3><dl><div><dt>확인 방법</dt><dd>canonical source manifest 대조→공식 resume→같은 실제 집중검사→문서 digest 대조→새 Opus 감사</dd></div><div><dt>기대 결과</dt><dd>과거 통과를 새 소스로 승격하지 않고 새 실제 결과를 연결한다.</dd></div><div><dt>실제 관측</dt><dd>변경 입력은 src/architecture.generated.json 하나, 새 attempt-e467166f exit0/stable true, review-92513dd3 실제 Opus pass와 수용, assessWork complete=true.</dd></div><div><dt>확인 범위와 한계</dt><dd>GUI를 불필요하게 반복하지 않았으며 기존 GUI는 실행 당시 소스의 관찰로 유지한다.</dd></div></dl></article><article class="check"><h3>검토 정책 문서 정합화 뒤 현재성</h3><dl><div><dt>확인 방법</dt><dd>canonical currentness→문서5개 영향검토→새 실제 Opus nofallback 감사</dd></div><div><dt>기대 결과</dt><dd>기능 증거는 유효 범위에서 재사용하고 바뀐 문서·감사는 새로 연결한다.</dd></div><div><dt>실제 관측</dt><dd>WORKFLOW만 변경, AC1~5 기존 증거 usable, review-7c6ea45a 실제 Opus pass 및 기록 수용, assessWork complete=true.</dd></div><div><dt>확인 범위와 한계</dt><dd>새 기능검사나 GUI 실행은 하지 않았다. 일반 정책의 fallback 기능을 이번 최종감사에 적용하지 않았다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 2건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>GUI의 양성 스킬 강조와 활성 Plan+Progress 산문 동시 표시는 이번 공식 집중검사 담당이 새로 관찰하지 않았다. 이전 Electron 결과는 합성 Native의 역사적 보조 근거다.</li><li>실제 모델 Subagent spawn·Windows·OS 한국어 IME는 이번 범위에서 실행하지 않았다. Native 사건이 제공되지 않으면 미제공/미확인으로 표시한다.</li><li>Plan.md 파일이나 복원되지 않은 계획을 읽었다고 표시하지 않으며 Native 계획 사건과 공개 commentary만 연결한다.</li><li>독립 감사의 비필수 관찰: 같은 활성 항목에서 commentary 중 explanation plan 갱신이 끼면 다음 delta가 잠시 앞부분 없이 보이고 완료 snapshot에서 회복될 수 있다.</li><li>BoxBox project mode off의 공식 사후 형식 단계는 disabled다. 기능 검사·소스 정책·strict 타입·빌드와 형식 PASS를 구분한다.</li><li>새 감사는 최근 2,000 사건 보관창에서 Progress 자료가 미제공일 수 있다는 비필수 관찰도 남겼다. 관측하지 않은 산문을 보충하지 않는 보수적 표시이며 이 재생성으로 제품 구현을 바꾸지 않았다.</li></ul></section><section class="paper" id="history-report-94e4e64b-9de8-4593-97f7-6bf3e1f3a8da-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>추가 관찰이 필요한 품질 확인을 별도 범위로 수행할 때 실제 화면과 스트림 순서를 보존한다.</dd></div><div><dt>영향</dt><dd>현재 필수 수용을 막는 결함으로 판정되지 않은 잔여 표시 한계다.</dd></div></dl></article></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>공식 검사·기준별 관찰·독립 감사와 한계</p><code>verification.md</code></li><li><p>실제 Opus 관측 모델·판정·발견 사항</p><code>.www/session-implementation/chat013-opus-review-result.json</code></li><li><p>기존 Electron와 행동·SSR 근거 및 미관찰 범위 대응</p><code>.www/session-implementation/ui-acceptance-map.md</code></li><li><p>재생성된 현재 소스의 새 실제 Opus 판정과 비필수 관찰</p><code>.www/session-implementation/chat013-regenerated-opus-result.json</code></li><li><p>과거 증거 만료와 snapshot 단일 변경의 현재성 대조</p><code>.www/session-implementation/chat013-recheck-scope.json</code></li><li><p>기능 증거 유지와 공통 문서 단일 변경의 현재성 분리</p><code>.www/session-implementation/chat013-policy-currentness.json</code></li><li><p>정합화 문서와 실제 core를 대조한 새 Opus 독립 감사</p><code>.www/session-implementation/chat013-policy-opus-result.json</code></li></ol><details id="history-report-94e4e64b-9de8-4593-97f7-6bf3e1f3a8da-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-64677750-337f-4488-a503-4e0265356bf5<br>report-94e4e64b-9de8-4593-97f7-6bf3e1f3a8da</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>056f4db5df1efacdbf9b65495aa6b721e45f7167d8cff19afbfeb2fe6f8956ad</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>6b25721c3253157bd75281af1218e42600d1de3f34bd313d0bf44d0dc44a7cb0</code></dd></div><div><dt>기준 지문</dt><dd><code>5950d05d534dbcec78ab4ba9dcf4dc08ab4d84520b6255f49888b451227a7dd8</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;오른쪽 바에 WWW 개발 Agent를 상위 항목으로 두고 spec/design/build/diagnose/verify 다섯 스킬 전체를 고정 표시하며 범용 스킬 전체 목록을 섞지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;현재 선택·진행 중인 WWW 스킬을 식별 가능한 근거에 따라 강조하며 문서 읽기·이름 언급·설치 여부만으로 실행 중이라고 판정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;이번 오른쪽 바의 표시 범위에서 Hook 목록·실행 현황 보기를 제외한다. Agent·WWW Skills·실제 Subagent와 Plan·Progress를 표시하며, Hook 표시 제외를 Hook 실행 비활성화로 취급하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;WWW Agent를 기본 표시하고 실제 Subagent 호출이 관측되면 해당 Subagent를 식별하여 표시한다. Subagent 작업 완료가 확인되면 항목을 유지한 채 완료 표시등으로 상태를 전환한다. 호출하지 않은 Subagent를 실행 중이라고 표시하지 않으며 역할 정의·일반 도구 호출과 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;Plan은 Plan.md 등 작업 계획 문서나 Native가 요구사항을 처리하며 제공한 계획을 바탕으로 요구사항 단위의 작업 항목·상태를 보여준다. Progress는 현재 진행 중인 Plan 항목에 연결하여 Native가 제공하는 공개 판단 요약·진행 설명과 확인된 실행 사건을 바탕으로 작업 상황을 산문으로 요약한다. 계획 목록과 원시 로그를 반복 표시하지 않고 출처 없는 판단 이유·관측하지 않은 진행을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/agent-overview.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T03:15:56.149Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/agent-overview.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T03:35:12.449Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-78add0a6-e3f5-4015-9869-af4c31d441c2&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-78add0a6-e3f5-4015-9869-af4c31d441c2/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep 도구로 spec.md, work.json, verification.md, src/agent-overview.ts, src/agent-overview-view.tsx, src/native-activity.ts(투영 본문 325~686행), src/native-activity-view.tsx(ResourceActivitySidebar 부분), test/agent-overview.test.ts, docs/specs/chat.md(Subagent·Progress 관련 행), test/fixtures/chat-ui-app-server.ts(collabAgentToolCall 부분)를 읽었다. agent-overview.css, renderer.tsx, www-activity.ts, test/www-activity-view.test.ts, PRODUCT/ARCHITECTURE/DEVELOPMENT/WORKFLOW 문서, .www 증거 JSON·스크린샷은 읽지 않았다. 테스트·빌드는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;소스 동일성: 입력 bundle에 있는 src·test·scripts·docs/specs/chat.md 파일별 digest가 work.json verifications[0].source.files의 digest와 일치한다(예: agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, native-activity-view.tsx ebdfb611…). 따라서 attempt-fce5db7e 실행 뒤 대상 소스는 바뀌지 않았다. 전체 sourceDigest 값이 다른 것(0a34… / 5abc…)은 입력 집합에 docs 파일이 추가됐기 때문으로 판단하며, 이 점이 결함은 아니다.&quot;,
+        &quot;AC-1/AC-3: WWW_AGENT_SKILLS가 다섯 항목으로 고정돼 있다(src/agent-overview.ts:8-14). 뷰는 projection.skills만 렌더링하고 Hook과 범용 리소스는 기본바에 그리지 않는다(src/agent-overview-view.tsx:36-69, src/native-activity-view.tsx:299-316). 테스트는 data-skill-id 5개, preToolUse·www-commit·누적 리소스 미노출을 확인한다(test/agent-overview.test.ts:102-112). 상세 모니터 진입 버튼은 유지되므로 Hook 표시 제외가 실행 비활성화로 이어지지 않는다.&quot;,
+        &quot;AC-2: 강조는 live 턴(historical 아님, endedAt 없음, running/pending/blocked)에서 정본 경로로 식별된 구조화 Skill 요청이 정확히 하나일 때만 선택된다(src/agent-overview.ts:67-71). 이름만 있는 요청, 문서 읽기, 복수 요청, 턴 종료, 복원, 다른 thread에서는 선택되지 않는 경로를 테스트가 다룬다(test/agent-overview.test.ts:26-37, 76-83). 전송 중에는 이전 선택을 지운다(agent-overview-view.tsx:30-31).&quot;,
+        &quot;AC-4: collabAgentToolCall은 senderThreadId가 현재 thread일 때만 receiver를 Subagent로 등록한다. 도구 item/completed만으로는 완료로 바꾸지 않고, agentsStates.status 또는 subAgentActivity kind=completed가 있을 때만 completed로 전환해 같은 항목에 ✓ 표시등을 켠다(src/agent-overview.ts:96-127, agent-overview-view.tsx:47-48). transport/closed와 historical 이벤트는 running/pending을 unknown으로 낮춘다. 이는 spec.md의 &#39;도구 호출 종료만으로 완료 추정 금지&#39; 결정과 맞는다.&quot;,
+        &quot;AC-5: Plan은 현재 턴 turn/plan/updated의 Native 계획만 사용한다. Progress는 inProgress 항목이 정확히 하나일 때 그 항목에 귀속된 commentary 또는 plan explanation만 사용한다. epoch·contextKey로 항목 전환, A→B→A, 계획 이전 메시지의 늦은 재귀속을 막는다(src/agent-overview.ts:128-162). analysis/reasoning phase와 다른 turn은 제외된다(테스트 57-95행). docs/specs/chat.md:149도 Plan.md를 연결하지 않는 한계를 명시한다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님): 같은 활성 항목에서 commentary delta가 스트리밍되는 도중 explanation이 있는 turn/plan/updated가 끼어들면 messageId가 &#39;&#39;로 초기화된다(src/agent-overview.ts:138). 그 뒤 같은 itemId의 delta는 앞부분 없이 조각만 progress로 표시되고(150행), item/completed가 와야 전체 텍스트로 회복된다. update_plan은 보통 메시지 완료 뒤에 호출되므로 실제로 생길 가능성은 낮고 일시적인 표시 문제다.&quot;,
+        &quot;증거 범위 확인: verification.md는 실제 프로세스로 실행한 bun test(exit 0)가 행동·SSR 검사이며 GUI·실제 모델 Subagent spawn이 아니라고 명시한다. 이전 Electron 합성 Native 관찰도 최종 소스 GUI 재검사로 승격하지 않았다(verification.md:25-37). AC-2의 양성 강조 GUI 화면과 AC-5의 Plan+Progress 동시 GUI 표시는 미관찰이라고 공개하므로 증거 범위가 과장되지 않았다.&quot;,
+        &quot;잔여 위험: subAgentActivity 항목 형태와 실제 codex spawnAgent의 item/started 시점 receiverThreadIds·agentsStates 제공 여부는 fixture와 테스트의 가정이다. 이번 검토에서는 실제 프로토콜과 대조하지 않았다. started 시점에 receiver가 비어 있으면 첫 상태는 completed 시점의 agentsStates에 의존한다. 그 값이 없으면 &#39;결과 미확인&#39;으로 보수적으로 표시되므로 잘못된 완료 표시로 이어지지는 않는다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-92513dd3-0bc0-4c4e-b513-89f19f2926ce&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-92513dd3-0bc0-4c4e-b513-89f19f2926ce/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read와 Grep 도구로 실제 작업트리 파일을 읽었다(inline bundle에만 의존하지 않음). 읽은 파일은 spec.md, verification.md, work.json(전체 1410행), src/agent-overview.ts, src/agent-overview-view.tsx, src/native-activity-view.tsx의 ResourceActivitySidebar(299~323행), src/native-activity.ts의 plan 처리 Grep, src/architecture.generated.json의 agent-overview Grep, test/agent-overview.test.ts, .www/session-implementation의 chat013-recheck-scope.json, chat013-regenerated-verification-result.json, chat013-opus-review-result.json이다. docs/PRODUCT·ARCHITECTURE·DEVELOPMENT·skills/WORKFLOW·specs/chat.md 본문, test/www-activity-view.test.ts, ui-acceptance-map.md, chat-ui-Mpd1UU/summary.json, home-supplement-structure-harness.json, CSS·renderer는 읽지 않았다. 테스트·빌드·GUI는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;재검사 범위의 정합성: chat013-recheck-scope.json은 이전 digest 0a34f3bd…에서 현재 c782bbe4…로 바뀐 입력이 src/architecture.generated.json 하나뿐이라고 기록한다. 이 값은 요청에 주어진 sourceDigest c782bbe4…와 같다. 현재 bundle의 파일별 digest를 work.json verifications[1](attempt-e467166f) source.files와 대조하니 agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, native-activity-view.tsx ebdfb611…, native-activity.ts 4fa746b3…, architecture.generated.json f437938b…, 두 테스트 파일, fixture, scripts/verify-chat.ts, docs/specs/chat.md가 모두 일치했다. 그래서 재실행 attempt는 현재 소스를 대상으로 한 실행이다. 이전 attempt-fce5db7e의 architecture.generated.json은 d6590d65…로 현재 값과 다르다. 재생성으로 무효가 된 사실을 숨기지 않고 resumeWork 이후 새 attempt를 연결한 기록(verification.md 69~75행)은 실제 데이터와 맞는다.&quot;,
+        &quot;architecture.generated.json 변경의 영향: Grep 결과 이 파일에서 agent-overview 관련 내용은 모듈·import 그래프 메타데이터(397~412, 1895~1933, 2216~2233, 5261~5597행 부근)뿐이다. agent-overview.ts와 agent-overview-view.tsx는 이 JSON을 import하지 않는다. 따라서 이 snapshot 변경이 AC1~5의 동작을 바꾼다는 근거는 없다.&quot;,
+        &quot;AC-1/AC-3: WWW_AGENT_SKILLS 다섯 항목을 고정했다(src/agent-overview.ts:8-14). ResourceActivitySidebar는 AgentOverviewView만 렌더링하고 Hook과 누적 리소스 목록은 그리지 않는다. 상세 모니터 버튼은 남아 있다(src/native-activity-view.tsx:308-313). 테스트는 data-skill-id가 5개인지, preToolUse·www-commit·누적 리소스가 노출되지 않는지 확인한다(test/agent-overview.test.ts:102-112).&quot;,
+        &quot;AC-2: 선택 강조는 다음 조건을 모두 만족할 때만 켜진다. 턴이 live 상태(historical 아님, 종료 시각 없음, running/pending/blocked)이고, 구조화된 skill 요청이 정확히 하나이며, wwwArtifact로 식별된다(src/agent-overview.ts:67-71). 문서 읽기와 명령 참조는 basis 문구로만 &#39;적용 미확인&#39;이라고 표시된다(73-75행). 이름만 있는 요청, 턴 종료, 복원 이력, 다른 thread, 복수 요청에서 선택이 없는 경로는 테스트 26-37, 76-83행이 다룬다. 전송 중에는 선택을 비운다(view 30-31행).&quot;,
+        &quot;AC-4: Subagent는 senderThreadId가 현재 thread인 collabAgentToolCall의 receiver와 subAgentActivity에서만 등록된다. 도구 item/completed만으로는 completed가 되지 않는다. agentsStates.status나 subAgentActivity kind=completed가 있어야 같은 id 항목에 ✓가 표시된다(src/agent-overview.ts:96-127, view 47-48행). transport/closed와 historical 이벤트에서는 running/pending이 unknown으로 낮아진다(88-90, 108행).&quot;,
+        &quot;AC-5: Plan과 Progress는 현재 turnId의 turn/plan/updated와 commentary만 사용한다. 활성 inProgress 항목이 정확히 하나일 때만 연결되며, epoch·contextKey로 늦은 재귀속을 막는다(src/agent-overview.ts:128-162). 테스트 57-95행이 항목 전환, A→B→A, 계획 이전 메시지, analysis phase, 다른 turn이 제외되는지 확인한다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님) 1: 루프는 마지막 2,000개 이벤트만 처리한다(src/agent-overview.ts:85). 최종 plan은 native 투영의 current.plan을 사용한다(160행). 따라서 아주 긴 턴에서 계획 갱신이 창 밖으로 밀리면 Plan은 보이고 Progress는 null로 나올 수 있다. 이 경우 근거 없는 산문을 만들지 않고 &#39;공개 진행 설명이 아직 없습니다&#39;로 보수적으로 표시하므로 AC 위반은 아니다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님) 2: 이전 Opus 감사가 지적한 사항이 그대로 남아 있다. 같은 활성 항목의 commentary 스트리밍 중에 explanation이 있는 plan 갱신이 끼면 messageId가 초기화되어 delta 조각이 일시적으로 표시될 수 있다(138, 150행). 이번 재생성과는 무관하다.&quot;,
+        &quot;증거 범위: verification.md는 재실행 attempt-e467166f를 행동·SSR bun test로만 기술한다. GUI 실행, 실제 모델의 Subagent spawn, AC-2 양성 강조 GUI, AC-5 Plan+Progress 동시 GUI는 관찰하지 않았다고 유지한다(73행). 이전 Opus 감사(sourceDigest 0a34…)를 현재 소스의 감사로 바꿔 쓰지 않고 새 감사가 필요하다고 명시한다(75행). 증거 범위를 과장한 부분은 확인되지 않았다. 다만 work.json의 AC evidence summary &#39;현재 적용 가능&#39;은 기록 시점의 도구 판정이다. 본 검토에서 assessWork를 다시 실행해 확인하지는 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-7c6ea45a-1085-40ba-8cc1-bb04815c308e&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-7c6ea45a-1085-40ba-8cc1-bb04815c308e/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read와 Grep으로 실제 작업트리 파일을 읽었고, inline bundle에만 의존하지 않았다. 읽은 파일은 다음과 같다. work.json 전체(1482행), verification.md 전체, docs/skills/WORKFLOW.md와 docs/skills/MODEL_POLICY.md의 독립 검토 관련 행(Grep), agents/www/review-policy.json 전체, scripts/workflow/review.ts 260~316행과 425~511행, chat013-policy-currentness.json, chat013-regenerated-post-review-assessment.json, docs/DEVELOPMENT.md의 Terra 관련 Grep. chat013-policy-document-review.json은 133,203자 중 앞 43,237자만 읽었으며, 그 부분은 work.json rawSource 사본이었다. spec.md, src/agent-overview.ts, src/agent-overview-view.tsx, 두 테스트 파일, chat013-regenerated-verification-result.json, chat013-regenerated-opus-result.json의 본문은 이번에 다시 읽지 않았다. 테스트·빌드·GUI·assessWork는 실행하지 않았고 digest도 다시 계산하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;현재성 변경 범위: chat013-policy-currentness.json은 c782bbe4…에서 074277db…로 바뀌면서 변경된 파일이 docs/skills/WORKFLOW.md 하나뿐이라고 기록한다. 이 값은 요청의 sourceDigest와 같다. 요청 bundle의 파일별 digest는 attempt-e467166f source.files와 같다(예: agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, architecture.generated.json f437938b…, 두 테스트, fixture, chat.md 6fce6998…). WORKFLOW.md는 이전 평가 기록의 b1dd0353…에서 bundle의 b6d93028…로 바뀌었다. 이 기록상 기능 소스는 바뀌지 않았으므로 AC1~5가 attempt-e467166f를 근거로 계속 usable이라는 판정은 합당하다. 변경된 문서 때문에 문서 검토와 독립 감사만 적용 불가가 된 기록(documentation.usable=false, review source_changed/receipt_context_mismatch)도 core의 판정 규칙과 맞는다.&quot;,
+        &quot;WORKFLOW.md와 core의 일치: WORKFLOW.md:134는 일반 정책이 Opus 기본이며, 사용량 소진이 확인된 경우에만 Terra로 대체하고 인증·네트워크 오류나 불합격은 대체 사유가 아니라고 쓴다. 이는 review-policy.json(primary opus, fallback gpt-6.1-terra, when primary_quota_exhausted)과 맞는다. review.ts:157, 199, 222~223의 quota 코드 검증과도 맞는다. WORKFLOW.md:136의 &#39;직접 지침 시 allowFallback:false, Opus 미실행은 blocker&#39;는 review.ts:508과 맞는다. 이 행은 verifiedQuota(failure)가 참이어도 allowFallback이 false이면 Terra를 호출하지 않고 Opus 실패 결과를 그대로 보존한다. 그 결과는 validateReview의 review_not_passed 경로로 사용 불가가 된다(review.ts:268). runReview의 allowFallback 기본값이 true라는 점(433행)도 MODEL_POLICY.md:41의 &#39;일반 정책·기본값이 이 문서만으로 바뀌었다고 주장하지 않는다&#39;와 맞는다.&quot;,
+        &quot;Sonnet 보조검토 경계: MODEL_POLICY.md:39와 WORKFLOW.md:136은 Sonnet 교차검증을 역할이 외부에서 수행하는 보조 검토로 한정한다. 자동 core 단계나 필수 완료 감사로 승격하지도 않는다. 실제로 review.ts의 선택 경로는 primary(opus), quota fallback(Terra), 직접 Terra override 세 가지뿐이다. 따라서 문서가 core에 없는 Sonnet 단계를 있다고 주장하지 않는다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님): WORKFLOW.md:134는 &#39;사용량 소진이 확인된 경우에만 Terra 대체를 허용한다&#39;고 쓴다. 그런데 core에는 cli_direct_user_request authority로 묶인 직접 Terra override 경로도 있다(review.ts:276~281, 436, 473, 499). 이 경로는 대체(fallback)가 아니라 별도 직접 요청이고 DEVELOPMENT.md:141에 설명되어 있으므로 모순으로 보지 않는다. 다만 WORKFLOW만 읽으면 Terra 선택 경로가 quota 대체 하나뿐이라고 오해할 수 있다.&quot;,
+        &quot;증거 범위: verification.md 83~87행은 이번 재개를 문서 영향검토와 새 독립 감사의 현재성 복구로만 기술한다. 기능 집중검사나 GUI를 새로 했다고 쓰지 않는다. 이전 GUI 미관찰 고지(AC-2 양성 강조, AC-5 Plan+Progress 동시 표시, 실제 모델 Subagent spawn 미실행)도 축소하지 않았다. 새 문서 검토 documentation-6c6bf704는 WORKFLOW.md만 updated로, 나머지 네 문서는 digest 동일로 unchanged 처리했다. 이는 currentness 기록의 변경 파일 범위와 맞는다. 단, 이 검토의 sourceDigest 필드는 canonical 074277db…가 아니라 verification source 6b25721c…이다. 직전 검토 c8f9a897도 같은 방식으로 기록됐고 이 방식으로 usable 판정을 받았으므로 일관된 관행으로 판단한다. 수용 여부는 이번 검토에서 assessWork로 재확인하지 않았다.&quot;,
+        &quot;기존 감사에서 남긴 수정 필수가 아닌 관찰 두 가지는 이번 문서 변경과 무관하게 그대로 남아 있다. 하나는 같은 활성 항목에서 commentary 스트리밍 중 explanation을 포함한 plan 갱신이 끼면 Progress 일부가 일시적으로 앞부분 없이 표시되는 문제이고, 다른 하나는 2,000개 이벤트 창 밖으로 밀린 Progress의 자료 미제공 가능성이다. 이번 범위에서 새 결함은 확인되지 않았다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;오른쪽 기본바의 고정 WWW Agent·다섯 스킬·실제 Subagent·Plan/Progress 기능 증거는 현재 소스에 계속 적용된다. 이번에는 검토 정책 설명의 문서 정합화로 감사의 소스 식별값만 달라져, 변경 문서를 다시 읽고 문서 영향 검토와 실제 Opus 독립 감사를 새로 연결했다. 기능검사나 GUI를 반복 실행했다고 표시하지 않았고, 원래의 GUI 미관찰과 비필수 표시 한계도 유지했다. 새 문서 기준에서 공식 보고서와 완료 상태를 갱신한다.&quot;,
+  &quot;before&quot;: &quot;기본 오른쪽 바는 현재 요청의 plan·Hook·범용 호출과 누적 리소스를 함께 읽는 방식이었다. 고정 다섯 Skills와 실제 Subagent 완료, 활성 계획 항목의 산문을 한 개요에서 추적할 수 없었다.&quot;,
+  &quot;after&quot;: &quot;기본바는 WWW Agent·다섯 Skills·실제 Subagent와 Plan/Progress로 구성한다. Hook·전체 카탈로그·누적 관측은 상세 모니터에서 읽고 기본바에는 원장 누락·저장 경고만 보조로 남긴다.&quot;,
+  &quot;changes&quot;: [
+    &quot;agent-overview 순수 투영과 전용 뷰·CSS를 추가하고 기존 ResourceActivitySidebar props를 유지해 연결했다.&quot;,
+    &quot;정본 경로의 명시 Skill 요청·문서 읽기·이름 언급을 구별하고 종료·복원된 요청의 현재 선택을 해제한다.&quot;,
+    &quot;Agent 상태 completed와 일반 도구 종료를 구별하며 후속 요청·실패·중단·연결 종료·historical 상태를 보존한다.&quot;,
+    &quot;Native Plan의 활성 항목과 공개 산문을 묶고 계획 변경·항목 복귀·계획 이전 메시지의 늦은 delta를 재귀속하지 않는다.&quot;,
+    &quot;Product·Architecture·Development·Chat 명세의 기본바와 상세 모니터 범위를 최신 구현에 맞춰 정합화했다.&quot;,
+    &quot;공식 구조 snapshot 재생성으로 만료된 현재성을 숨기지 않고 과거 이력을 보존해 재개·실제 집중 재검사·새 Opus 감사·문서 재연결을 수행했다.&quot;,
+    &quot;일반 core의 조건부 Terra fallback과 이번 최종 Opus고정, 외부 Sonnet 보조검토를 구분한 공통 문서 정합화 뒤 기능 증거를 유지하고 문서·감사 현재성만 복구했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;실제 사건이 없는 단계 선택·Agent 완료·진행 설명을 추측하지 않고 미확인으로 남겼다.&quot;,
+    &quot;사용자가 선택한 다섯 Skills만 고정 표시하고 Hook 실행 설정은 변경하지 않았다.&quot;,
+    &quot;Plan.md를 임의 탐색하지 않고 Native 계획 자료부터 연결했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;GUI의 양성 스킬 강조와 활성 Plan+Progress 산문 동시 표시는 이번 공식 집중검사 담당이 새로 관찰하지 않았다. 이전 Electron 결과는 합성 Native의 역사적 보조 근거다.&quot;,
+    &quot;실제 모델 Subagent spawn·Windows·OS 한국어 IME는 이번 범위에서 실행하지 않았다. Native 사건이 제공되지 않으면 미제공/미확인으로 표시한다.&quot;,
+    &quot;Plan.md 파일이나 복원되지 않은 계획을 읽었다고 표시하지 않으며 Native 계획 사건과 공개 commentary만 연결한다.&quot;,
+    &quot;독립 감사의 비필수 관찰: 같은 활성 항목에서 commentary 중 explanation plan 갱신이 끼면 다음 delta가 잠시 앞부분 없이 보이고 완료 snapshot에서 회복될 수 있다.&quot;,
+    &quot;BoxBox project mode off의 공식 사후 형식 단계는 disabled다. 기능 검사·소스 정책·strict 타입·빌드와 형식 PASS를 구분한다.&quot;,
+    &quot;새 감사는 최근 2,000 사건 보관창에서 Progress 자료가 미제공일 수 있다는 비필수 관찰도 남겼다. 관측하지 않은 산문을 보충하지 않는 보수적 표시이며 이 재생성으로 제품 구현을 바꾸지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;수정 필수 아닌 스트리밍 interleaving 관찰과 GUI 선택 강조·활성 산문 화면은 후속 품질 점검 대상으로 남긴다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;오른쪽 기본바의 고정 WWW Agent·다섯 스킬·실제 Subagent·Plan/Progress 기능 증거는 현재 소스에 계속 적용된다. 이번에는 검토 정책 설명의 문서 정합화로 감사의 소스 식별값만 달라져, 변경 문서를 다시 읽고 문서 영향 검토와 실제 Opus 독립 감사를 새로 연결했다. 기능검사나 GUI를 반복 실행했다고 표시하지 않았고, 원래의 GUI 미관찰과 비필수 표시 한계도 유지했다. 새 문서 기준에서 공식 보고서와 완료 상태를 갱신한다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;AC-1 · 고정 Agent와 다섯 Skills&quot;,
+        &quot;result&quot;: &quot;WWW Agent 아래 spec/design/build/diagnose/verify를 항상 보이고 범용 목록을 제외한다.&quot;,
+        &quot;evidence&quot;: &quot;집중검사 고정 목록·범용 제외 SSR; 이전 Electron 기본바 표시&quot;,
+        &quot;limitations&quot;: &quot;실제 다섯 스킬을 모두 호출한 시험은 아니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-2 · 근거 있는 현재 항목&quot;,
+        &quot;result&quot;: &quot;정본 경로의 구조화 Skill 요청 하나만 선택한다. 문서 읽기·이름·복원·종료를 현재 실행으로 올리지 않는다.&quot;,
+        &quot;evidence&quot;: &quot;집중검사 선택·해제·다중 요청·다른 thread·historical 행동 사례&quot;,
+        &quot;limitations&quot;: &quot;GUI의 양성 선택 강조는 새로 관찰하지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-3 · Hook 기본 제외와 상세 보존&quot;,
+        &quot;result&quot;: &quot;기본바에서 Hook·범용 리소스를 제외하고 상세의 Hook 상태·진단을 보존한다.&quot;,
+        &quot;evidence&quot;: &quot;집중 SSR 기본 제외·상세 보존; 이전 Electron Hook 실패/완료&quot;,
+        &quot;limitations&quot;: &quot;표시 변경은 Hook 실행 비활성화가 아니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-4 · 실제 Subagent와 완료 불&quot;,
+        &quot;result&quot;: &quot;실제 Agent 식별자와 상태를 유지하며 일반 도구 종료로 완료를 추정하지 않는다.&quot;,
+        &quot;evidence&quot;: &quot;집중 행동·SSR 완료 체크·동일 항목 유지; 이전 Electron 합성 Native 전이&quot;,
+        &quot;limitations&quot;: &quot;실제 모델의 하위 Agent spawn은 이 검증에서 실행하지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-5 · 연결된 Plan과 Progress&quot;,
+        &quot;result&quot;: &quot;현재 Native Plan의 유일한 활성 항목에 공개 설명을 연결하고 늦은 설명의 재귀속을 막는다.&quot;,
+        &quot;evidence&quot;: &quot;집중 행동·SSR 활성 항목·delta·A→B→A·비공개 추론 제외&quot;,
+        &quot;limitations&quot;: &quot;활성 항목 산문의 GUI 동시 표시를 새로 관찰하지 않았고 Plan.md 파일·복원 미제공 자료는 임의 보충하지 않는다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;최종 소스의 Agent 투영과 기본·상세 표시&quot;,
+        &quot;method&quot;: &quot;공식 verifyWork로 bun test test/agent-overview.test.ts test/www-activity-view.test.ts 실제 실행&quot;,
+        &quot;expected&quot;: &quot;근거 기반 선택·완료·Plan/Progress 연결과 Hook 분리를 유지한다.&quot;,
+        &quot;observed&quot;: &quot;exit0, 소스·artifact·환경 안정성 true, AC1~5 증거 usable.&quot;,
+        &quot;limitations&quot;: &quot;행동·SSR 검사이며 실제 GUI나 모델 호출이 아니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;독립 검토&quot;,
+        &quot;method&quot;: &quot;allowFallback=false의 실제 Opus 읽기 전용 CLI와 canonical digest 대조&quot;,
+        &quot;expected&quot;: &quot;작성자와 분리된 검토가 현재 소스·기준과 실제 근거를 대조한다.&quot;,
+        &quot;observed&quot;: &quot;claude-opus-5-5, executor process, verdict pass, recordReview 수용.&quot;,
+        &quot;limitations&quot;: &quot;검토자는 읽지 않은 파일·GUI·실프로토콜 범위를 명시했고 검사 실행은 하지 않았다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;snapshot 재생성 뒤 현재성&quot;,
+        &quot;method&quot;: &quot;canonical source manifest 대조→공식 resume→같은 실제 집중검사→문서 digest 대조→새 Opus 감사&quot;,
+        &quot;expected&quot;: &quot;과거 통과를 새 소스로 승격하지 않고 새 실제 결과를 연결한다.&quot;,
+        &quot;observed&quot;: &quot;변경 입력은 src/architecture.generated.json 하나, 새 attempt-e467166f exit0/stable true, review-92513dd3 실제 Opus pass와 수용, assessWork complete=true.&quot;,
+        &quot;limitations&quot;: &quot;GUI를 불필요하게 반복하지 않았으며 기존 GUI는 실행 당시 소스의 관찰로 유지한다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;검토 정책 문서 정합화 뒤 현재성&quot;,
+        &quot;method&quot;: &quot;canonical currentness→문서5개 영향검토→새 실제 Opus nofallback 감사&quot;,
+        &quot;expected&quot;: &quot;기능 증거는 유효 범위에서 재사용하고 바뀐 문서·감사는 새로 연결한다.&quot;,
+        &quot;observed&quot;: &quot;WORKFLOW만 변경, AC1~5 기존 증거 usable, review-7c6ea45a 실제 Opus pass 및 기록 수용, assessWork complete=true.&quot;,
+        &quot;limitations&quot;: &quot;새 기능검사나 GUI 실행은 하지 않았다. 일반 정책의 fallback 기능을 이번 최종감사에 적용하지 않았다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;문서 읽기와 도구 종료가 실제 실행·완료처럼 보일 수 있다.&quot;,
+        &quot;basis&quot;: &quot;구조화 입력과 Agent 전용 상태 필드가 서로 다른 사실을 제공한다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;각 근거를 분리하고 명시 근거에만 선택·완료 표시를 연결한다.&quot;,
+        &quot;tradeoff&quot;: &quot;Native가 단계·Agent 자료를 제공하지 않으면 현재 상태가 미확인으로 남는다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;verification.md&quot;,
+        &quot;purpose&quot;: &quot;공식 검사·기준별 관찰·독립 감사와 한계&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-opus-review-result.json&quot;,
+        &quot;purpose&quot;: &quot;실제 Opus 관측 모델·판정·발견 사항&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/ui-acceptance-map.md&quot;,
+        &quot;purpose&quot;: &quot;기존 Electron와 행동·SSR 근거 및 미관찰 범위 대응&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-regenerated-opus-result.json&quot;,
+        &quot;purpose&quot;: &quot;재생성된 현재 소스의 새 실제 Opus 판정과 비필수 관찰&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-recheck-scope.json&quot;,
+        &quot;purpose&quot;: &quot;과거 증거 만료와 snapshot 단일 변경의 현재성 대조&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-policy-currentness.json&quot;,
+        &quot;purpose&quot;: &quot;기능 증거 유지와 공통 문서 단일 변경의 현재성 분리&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-policy-opus-result.json&quot;,
+        &quot;purpose&quot;: &quot;정합화 문서와 실제 core를 대조한 새 Opus 독립 감사&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;추가 관찰이 필요한 품질 확인을 별도 범위로 수행할 때 실제 화면과 스트림 순서를 보존한다.&quot;,
+        &quot;impact&quot;: &quot;현재 필수 수용을 막는 결함으로 판정되지 않은 잔여 표시 한계다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 오후 12:37 · 작성자 보고서 · 오른쪽 기본바는 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 연결된 계획·진행 개요를 제공한다. 다른 작업의 검사 메타데이터로 공식 구조 snapshot이 재생성되어 이전 증거의 현재성이 만료됐으므로 이력을 보존해 재개했다. 변경된 입력이 snapshot 하나임을 확인한 뒤 행동·SSR 검사를 실제 다시 실행하고 새 소스의 Opus 독립 감사와 문서 영향 검토를 수용했다. GUI의 선택 강조·활성 산문 미관찰과 실제 모델 하위 호출의 한계는 이전과 동일하게 남긴다.</summary><article><h3>오른쪽 Agent와 WWW Skills 및 Hook 표시 논의</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">오른쪽 기본바는 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 연결된 계획·진행 개요를 제공한다. 다른 작업의 검사 메타데이터로 공식 구조 snapshot이 재생성되어 이전 증거의 현재성이 만료됐으므로 이력을 보존해 재개했다. 변경된 입력이 snapshot 하나임을 확인한 뒤 행동·SSR 검사를 실제 다시 실행하고 새 소스의 Opus 독립 감사와 문서 영향 검토를 수용했다. GUI의 선택 강조·활성 산문 미관찰과 실제 모델 하위 호출의 한계는 이전과 동일하게 남긴다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 2 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>완료로 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.</p><h3>기록된 변경</h3><ul><li>agent-overview 순수 투영과 전용 뷰·CSS를 추가하고 기존 ResourceActivitySidebar props를 유지해 연결했다.</li><li>정본 경로의 명시 Skill 요청·문서 읽기·이름 언급을 구별하고 종료·복원된 요청의 현재 선택을 해제한다.</li><li>Agent 상태 completed와 일반 도구 종료를 구별하며 후속 요청·실패·중단·연결 종료·historical 상태를 보존한다.</li><li>Native Plan의 활성 항목과 공개 산문을 묶고 계획 변경·항목 복귀·계획 이전 메시지의 늦은 delta를 재귀속하지 않는다.</li><li>Product·Architecture·Development·Chat 명세의 기본바와 상세 모니터 범위를 최신 구현에 맞춰 정합화했다.</li><li>공식 구조 snapshot 재생성으로 만료된 현재성을 숨기지 않고 과거 이력을 보존해 재개·실제 집중 재검사·새 Opus 감사·문서 재연결을 수행했다.</li></ul><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>AC-1 · 고정 Agent와 다섯 Skills</h3><p class="result">WWW Agent 아래 spec/design/build/diagnose/verify를 항상 보이고 범용 목록을 제외한다.</p><p class="support"><strong>근거</strong> 집중검사 고정 목록·범용 제외 SSR; 이전 Electron 기본바 표시</p><p class="limit">실제 다섯 스킬을 모두 호출한 시험은 아니다.</p></article><article class="requirement"><h3>AC-2 · 근거 있는 현재 항목</h3><p class="result">정본 경로의 구조화 Skill 요청 하나만 선택한다. 문서 읽기·이름·복원·종료를 현재 실행으로 올리지 않는다.</p><p class="support"><strong>근거</strong> 집중검사 선택·해제·다중 요청·다른 thread·historical 행동 사례</p><p class="limit">GUI의 양성 선택 강조는 새로 관찰하지 않았다.</p></article><article class="requirement"><h3>AC-3 · Hook 기본 제외와 상세 보존</h3><p class="result">기본바에서 Hook·범용 리소스를 제외하고 상세의 Hook 상태·진단을 보존한다.</p><p class="support"><strong>근거</strong> 집중 SSR 기본 제외·상세 보존; 이전 Electron Hook 실패/완료</p><p class="limit">표시 변경은 Hook 실행 비활성화가 아니다.</p></article><article class="requirement"><h3>AC-4 · 실제 Subagent와 완료 불</h3><p class="result">실제 Agent 식별자와 상태를 유지하며 일반 도구 종료로 완료를 추정하지 않는다.</p><p class="support"><strong>근거</strong> 집중 행동·SSR 완료 체크·동일 항목 유지; 이전 Electron 합성 Native 전이</p><p class="limit">실제 모델의 하위 Agent spawn은 이 검증에서 실행하지 않았다.</p></article><article class="requirement"><h3>AC-5 · 연결된 Plan과 Progress</h3><p class="result">현재 Native Plan의 유일한 활성 항목에 공개 설명을 연결하고 늦은 설명의 재귀속을 막는다.</p><p class="support"><strong>근거</strong> 집중 행동·SSR 활성 항목·delta·A→B→A·비공개 추론 제외</p><p class="limit">활성 항목 산문의 GUI 동시 표시를 새로 관찰하지 않았고 Plan.md 파일·복원 미제공 자료는 임의 보충하지 않는다.</p></article><section class="paper" id="history-report-0fc74015-7271-4631-bf0f-e44d210dcb9f-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>문서 읽기와 도구 종료가 실제 실행·완료처럼 보일 수 있다.</h3><p><strong>선택</strong> 각 근거를 분리하고 명시 근거에만 선택·완료 표시를 연결한다.</p><p><strong>판단 근거</strong> 구조화 입력과 Agent 전용 상태 필드가 서로 다른 사실을 제공한다.</p><p class="limit"><strong>감수한 점</strong> Native가 단계·Agent 자료를 제공하지 않으면 현재 상태가 미확인으로 남는다.</p></article></section><section class="paper" id="history-report-0fc74015-7271-4631-bf0f-e44d210dcb9f-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>최종 소스의 Agent 투영과 기본·상세 표시</h3><dl><div><dt>확인 방법</dt><dd>공식 verifyWork로 bun test test/agent-overview.test.ts test/www-activity-view.test.ts 실제 실행</dd></div><div><dt>기대 결과</dt><dd>근거 기반 선택·완료·Plan/Progress 연결과 Hook 분리를 유지한다.</dd></div><div><dt>실제 관측</dt><dd>exit0, 소스·artifact·환경 안정성 true, AC1~5 증거 usable.</dd></div><div><dt>확인 범위와 한계</dt><dd>행동·SSR 검사이며 실제 GUI나 모델 호출이 아니다.</dd></div></dl></article><article class="check"><h3>독립 검토</h3><dl><div><dt>확인 방법</dt><dd>allowFallback=false의 실제 Opus 읽기 전용 CLI와 canonical digest 대조</dd></div><div><dt>기대 결과</dt><dd>작성자와 분리된 검토가 현재 소스·기준과 실제 근거를 대조한다.</dd></div><div><dt>실제 관측</dt><dd>claude-opus-5-5, executor process, verdict pass, recordReview 수용.</dd></div><div><dt>확인 범위와 한계</dt><dd>검토자는 읽지 않은 파일·GUI·실프로토콜 범위를 명시했고 검사 실행은 하지 않았다.</dd></div></dl></article><article class="check"><h3>snapshot 재생성 뒤 현재성</h3><dl><div><dt>확인 방법</dt><dd>canonical source manifest 대조→공식 resume→같은 실제 집중검사→문서 digest 대조→새 Opus 감사</dd></div><div><dt>기대 결과</dt><dd>과거 통과를 새 소스로 승격하지 않고 새 실제 결과를 연결한다.</dd></div><div><dt>실제 관측</dt><dd>변경 입력은 src/architecture.generated.json 하나, 새 attempt-e467166f exit0/stable true, review-92513dd3 실제 Opus pass와 수용, assessWork complete=true.</dd></div><div><dt>확인 범위와 한계</dt><dd>GUI를 불필요하게 반복하지 않았으며 기존 GUI는 실행 당시 소스의 관찰로 유지한다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 2건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>GUI의 양성 스킬 강조와 활성 Plan+Progress 산문 동시 표시는 이번 공식 집중검사 담당이 새로 관찰하지 않았다. 이전 Electron 결과는 합성 Native의 역사적 보조 근거다.</li><li>실제 모델 Subagent spawn·Windows·OS 한국어 IME는 이번 범위에서 실행하지 않았다. Native 사건이 제공되지 않으면 미제공/미확인으로 표시한다.</li><li>Plan.md 파일이나 복원되지 않은 계획을 읽었다고 표시하지 않으며 Native 계획 사건과 공개 commentary만 연결한다.</li><li>독립 감사의 비필수 관찰: 같은 활성 항목에서 commentary 중 explanation plan 갱신이 끼면 다음 delta가 잠시 앞부분 없이 보이고 완료 snapshot에서 회복될 수 있다.</li><li>BoxBox project mode off의 공식 사후 형식 단계는 disabled다. 기능 검사·소스 정책·strict 타입·빌드와 형식 PASS를 구분한다.</li><li>새 감사는 최근 2,000 사건 보관창에서 Progress 자료가 미제공일 수 있다는 비필수 관찰도 남겼다. 관측하지 않은 산문을 보충하지 않는 보수적 표시이며 이 재생성으로 제품 구현을 바꾸지 않았다.</li></ul></section><section class="paper" id="history-report-0fc74015-7271-4631-bf0f-e44d210dcb9f-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>추가 관찰이 필요한 품질 확인을 별도 범위로 수행할 때 실제 화면과 스트림 순서를 보존한다.</dd></div><div><dt>영향</dt><dd>현재 필수 수용을 막는 결함으로 판정되지 않은 잔여 표시 한계다.</dd></div></dl></article></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>공식 검사·기준별 관찰·독립 감사와 한계</p><code>verification.md</code></li><li><p>실제 Opus 관측 모델·판정·발견 사항</p><code>.www/session-implementation/chat013-opus-review-result.json</code></li><li><p>기존 Electron와 행동·SSR 근거 및 미관찰 범위 대응</p><code>.www/session-implementation/ui-acceptance-map.md</code></li><li><p>재생성된 현재 소스의 새 실제 Opus 판정과 비필수 관찰</p><code>.www/session-implementation/chat013-regenerated-opus-result.json</code></li><li><p>과거 증거 만료와 snapshot 단일 변경의 현재성 대조</p><code>.www/session-implementation/chat013-recheck-scope.json</code></li></ol><details id="history-report-0fc74015-7271-4631-bf0f-e44d210dcb9f-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-64677750-337f-4488-a503-4e0265356bf5<br>report-0fc74015-7271-4631-bf0f-e44d210dcb9f</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>3e9d2b8225cfd210e6d94dbf352b978ca44a21c96dcde2c79f2dc2ed7513703f</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>6b25721c3253157bd75281af1218e42600d1de3f34bd313d0bf44d0dc44a7cb0</code></dd></div><div><dt>기준 지문</dt><dd><code>5950d05d534dbcec78ab4ba9dcf4dc08ab4d84520b6255f49888b451227a7dd8</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>done</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;done&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;오른쪽 바에 WWW 개발 Agent를 상위 항목으로 두고 spec/design/build/diagnose/verify 다섯 스킬 전체를 고정 표시하며 범용 스킬 전체 목록을 섞지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;현재 선택·진행 중인 WWW 스킬을 식별 가능한 근거에 따라 강조하며 문서 읽기·이름 언급·설치 여부만으로 실행 중이라고 판정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;이번 오른쪽 바의 표시 범위에서 Hook 목록·실행 현황 보기를 제외한다. Agent·WWW Skills·실제 Subagent와 Plan·Progress를 표시하며, Hook 표시 제외를 Hook 실행 비활성화로 취급하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;WWW Agent를 기본 표시하고 실제 Subagent 호출이 관측되면 해당 Subagent를 식별하여 표시한다. Subagent 작업 완료가 확인되면 항목을 유지한 채 완료 표시등으로 상태를 전환한다. 호출하지 않은 Subagent를 실행 중이라고 표시하지 않으며 역할 정의·일반 도구 호출과 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;Plan은 Plan.md 등 작업 계획 문서나 Native가 요구사항을 처리하며 제공한 계획을 바탕으로 요구사항 단위의 작업 항목·상태를 보여준다. Progress는 현재 진행 중인 Plan 항목에 연결하여 Native가 제공하는 공개 판단 요약·진행 설명과 확인된 실행 사건을 바탕으로 작업 상황을 산문으로 요약한다. 계획 목록과 원시 로그를 반복 표시하지 않고 출처 없는 판단 이유·관측하지 않은 진행을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/agent-overview.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T03:15:56.149Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/agent-overview.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T03:35:12.449Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-78add0a6-e3f5-4015-9869-af4c31d441c2&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-78add0a6-e3f5-4015-9869-af4c31d441c2/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep 도구로 spec.md, work.json, verification.md, src/agent-overview.ts, src/agent-overview-view.tsx, src/native-activity.ts(투영 본문 325~686행), src/native-activity-view.tsx(ResourceActivitySidebar 부분), test/agent-overview.test.ts, docs/specs/chat.md(Subagent·Progress 관련 행), test/fixtures/chat-ui-app-server.ts(collabAgentToolCall 부분)를 읽었다. agent-overview.css, renderer.tsx, www-activity.ts, test/www-activity-view.test.ts, PRODUCT/ARCHITECTURE/DEVELOPMENT/WORKFLOW 문서, .www 증거 JSON·스크린샷은 읽지 않았다. 테스트·빌드는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;소스 동일성: 입력 bundle에 있는 src·test·scripts·docs/specs/chat.md 파일별 digest가 work.json verifications[0].source.files의 digest와 일치한다(예: agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, native-activity-view.tsx ebdfb611…). 따라서 attempt-fce5db7e 실행 뒤 대상 소스는 바뀌지 않았다. 전체 sourceDigest 값이 다른 것(0a34… / 5abc…)은 입력 집합에 docs 파일이 추가됐기 때문으로 판단하며, 이 점이 결함은 아니다.&quot;,
+        &quot;AC-1/AC-3: WWW_AGENT_SKILLS가 다섯 항목으로 고정돼 있다(src/agent-overview.ts:8-14). 뷰는 projection.skills만 렌더링하고 Hook과 범용 리소스는 기본바에 그리지 않는다(src/agent-overview-view.tsx:36-69, src/native-activity-view.tsx:299-316). 테스트는 data-skill-id 5개, preToolUse·www-commit·누적 리소스 미노출을 확인한다(test/agent-overview.test.ts:102-112). 상세 모니터 진입 버튼은 유지되므로 Hook 표시 제외가 실행 비활성화로 이어지지 않는다.&quot;,
+        &quot;AC-2: 강조는 live 턴(historical 아님, endedAt 없음, running/pending/blocked)에서 정본 경로로 식별된 구조화 Skill 요청이 정확히 하나일 때만 선택된다(src/agent-overview.ts:67-71). 이름만 있는 요청, 문서 읽기, 복수 요청, 턴 종료, 복원, 다른 thread에서는 선택되지 않는 경로를 테스트가 다룬다(test/agent-overview.test.ts:26-37, 76-83). 전송 중에는 이전 선택을 지운다(agent-overview-view.tsx:30-31).&quot;,
+        &quot;AC-4: collabAgentToolCall은 senderThreadId가 현재 thread일 때만 receiver를 Subagent로 등록한다. 도구 item/completed만으로는 완료로 바꾸지 않고, agentsStates.status 또는 subAgentActivity kind=completed가 있을 때만 completed로 전환해 같은 항목에 ✓ 표시등을 켠다(src/agent-overview.ts:96-127, agent-overview-view.tsx:47-48). transport/closed와 historical 이벤트는 running/pending을 unknown으로 낮춘다. 이는 spec.md의 &#39;도구 호출 종료만으로 완료 추정 금지&#39; 결정과 맞는다.&quot;,
+        &quot;AC-5: Plan은 현재 턴 turn/plan/updated의 Native 계획만 사용한다. Progress는 inProgress 항목이 정확히 하나일 때 그 항목에 귀속된 commentary 또는 plan explanation만 사용한다. epoch·contextKey로 항목 전환, A→B→A, 계획 이전 메시지의 늦은 재귀속을 막는다(src/agent-overview.ts:128-162). analysis/reasoning phase와 다른 turn은 제외된다(테스트 57-95행). docs/specs/chat.md:149도 Plan.md를 연결하지 않는 한계를 명시한다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님): 같은 활성 항목에서 commentary delta가 스트리밍되는 도중 explanation이 있는 turn/plan/updated가 끼어들면 messageId가 &#39;&#39;로 초기화된다(src/agent-overview.ts:138). 그 뒤 같은 itemId의 delta는 앞부분 없이 조각만 progress로 표시되고(150행), item/completed가 와야 전체 텍스트로 회복된다. update_plan은 보통 메시지 완료 뒤에 호출되므로 실제로 생길 가능성은 낮고 일시적인 표시 문제다.&quot;,
+        &quot;증거 범위 확인: verification.md는 실제 프로세스로 실행한 bun test(exit 0)가 행동·SSR 검사이며 GUI·실제 모델 Subagent spawn이 아니라고 명시한다. 이전 Electron 합성 Native 관찰도 최종 소스 GUI 재검사로 승격하지 않았다(verification.md:25-37). AC-2의 양성 강조 GUI 화면과 AC-5의 Plan+Progress 동시 GUI 표시는 미관찰이라고 공개하므로 증거 범위가 과장되지 않았다.&quot;,
+        &quot;잔여 위험: subAgentActivity 항목 형태와 실제 codex spawnAgent의 item/started 시점 receiverThreadIds·agentsStates 제공 여부는 fixture와 테스트의 가정이다. 이번 검토에서는 실제 프로토콜과 대조하지 않았다. started 시점에 receiver가 비어 있으면 첫 상태는 completed 시점의 agentsStates에 의존한다. 그 값이 없으면 &#39;결과 미확인&#39;으로 보수적으로 표시되므로 잘못된 완료 표시로 이어지지는 않는다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-92513dd3-0bc0-4c4e-b513-89f19f2926ce&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-92513dd3-0bc0-4c4e-b513-89f19f2926ce/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read와 Grep 도구로 실제 작업트리 파일을 읽었다(inline bundle에만 의존하지 않음). 읽은 파일은 spec.md, verification.md, work.json(전체 1410행), src/agent-overview.ts, src/agent-overview-view.tsx, src/native-activity-view.tsx의 ResourceActivitySidebar(299~323행), src/native-activity.ts의 plan 처리 Grep, src/architecture.generated.json의 agent-overview Grep, test/agent-overview.test.ts, .www/session-implementation의 chat013-recheck-scope.json, chat013-regenerated-verification-result.json, chat013-opus-review-result.json이다. docs/PRODUCT·ARCHITECTURE·DEVELOPMENT·skills/WORKFLOW·specs/chat.md 본문, test/www-activity-view.test.ts, ui-acceptance-map.md, chat-ui-Mpd1UU/summary.json, home-supplement-structure-harness.json, CSS·renderer는 읽지 않았다. 테스트·빌드·GUI는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;재검사 범위의 정합성: chat013-recheck-scope.json은 이전 digest 0a34f3bd…에서 현재 c782bbe4…로 바뀐 입력이 src/architecture.generated.json 하나뿐이라고 기록한다. 이 값은 요청에 주어진 sourceDigest c782bbe4…와 같다. 현재 bundle의 파일별 digest를 work.json verifications[1](attempt-e467166f) source.files와 대조하니 agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, native-activity-view.tsx ebdfb611…, native-activity.ts 4fa746b3…, architecture.generated.json f437938b…, 두 테스트 파일, fixture, scripts/verify-chat.ts, docs/specs/chat.md가 모두 일치했다. 그래서 재실행 attempt는 현재 소스를 대상으로 한 실행이다. 이전 attempt-fce5db7e의 architecture.generated.json은 d6590d65…로 현재 값과 다르다. 재생성으로 무효가 된 사실을 숨기지 않고 resumeWork 이후 새 attempt를 연결한 기록(verification.md 69~75행)은 실제 데이터와 맞는다.&quot;,
+        &quot;architecture.generated.json 변경의 영향: Grep 결과 이 파일에서 agent-overview 관련 내용은 모듈·import 그래프 메타데이터(397~412, 1895~1933, 2216~2233, 5261~5597행 부근)뿐이다. agent-overview.ts와 agent-overview-view.tsx는 이 JSON을 import하지 않는다. 따라서 이 snapshot 변경이 AC1~5의 동작을 바꾼다는 근거는 없다.&quot;,
+        &quot;AC-1/AC-3: WWW_AGENT_SKILLS 다섯 항목을 고정했다(src/agent-overview.ts:8-14). ResourceActivitySidebar는 AgentOverviewView만 렌더링하고 Hook과 누적 리소스 목록은 그리지 않는다. 상세 모니터 버튼은 남아 있다(src/native-activity-view.tsx:308-313). 테스트는 data-skill-id가 5개인지, preToolUse·www-commit·누적 리소스가 노출되지 않는지 확인한다(test/agent-overview.test.ts:102-112).&quot;,
+        &quot;AC-2: 선택 강조는 다음 조건을 모두 만족할 때만 켜진다. 턴이 live 상태(historical 아님, 종료 시각 없음, running/pending/blocked)이고, 구조화된 skill 요청이 정확히 하나이며, wwwArtifact로 식별된다(src/agent-overview.ts:67-71). 문서 읽기와 명령 참조는 basis 문구로만 &#39;적용 미확인&#39;이라고 표시된다(73-75행). 이름만 있는 요청, 턴 종료, 복원 이력, 다른 thread, 복수 요청에서 선택이 없는 경로는 테스트 26-37, 76-83행이 다룬다. 전송 중에는 선택을 비운다(view 30-31행).&quot;,
+        &quot;AC-4: Subagent는 senderThreadId가 현재 thread인 collabAgentToolCall의 receiver와 subAgentActivity에서만 등록된다. 도구 item/completed만으로는 completed가 되지 않는다. agentsStates.status나 subAgentActivity kind=completed가 있어야 같은 id 항목에 ✓가 표시된다(src/agent-overview.ts:96-127, view 47-48행). transport/closed와 historical 이벤트에서는 running/pending이 unknown으로 낮아진다(88-90, 108행).&quot;,
+        &quot;AC-5: Plan과 Progress는 현재 turnId의 turn/plan/updated와 commentary만 사용한다. 활성 inProgress 항목이 정확히 하나일 때만 연결되며, epoch·contextKey로 늦은 재귀속을 막는다(src/agent-overview.ts:128-162). 테스트 57-95행이 항목 전환, A→B→A, 계획 이전 메시지, analysis phase, 다른 turn이 제외되는지 확인한다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님) 1: 루프는 마지막 2,000개 이벤트만 처리한다(src/agent-overview.ts:85). 최종 plan은 native 투영의 current.plan을 사용한다(160행). 따라서 아주 긴 턴에서 계획 갱신이 창 밖으로 밀리면 Plan은 보이고 Progress는 null로 나올 수 있다. 이 경우 근거 없는 산문을 만들지 않고 &#39;공개 진행 설명이 아직 없습니다&#39;로 보수적으로 표시하므로 AC 위반은 아니다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님) 2: 이전 Opus 감사가 지적한 사항이 그대로 남아 있다. 같은 활성 항목의 commentary 스트리밍 중에 explanation이 있는 plan 갱신이 끼면 messageId가 초기화되어 delta 조각이 일시적으로 표시될 수 있다(138, 150행). 이번 재생성과는 무관하다.&quot;,
+        &quot;증거 범위: verification.md는 재실행 attempt-e467166f를 행동·SSR bun test로만 기술한다. GUI 실행, 실제 모델의 Subagent spawn, AC-2 양성 강조 GUI, AC-5 Plan+Progress 동시 GUI는 관찰하지 않았다고 유지한다(73행). 이전 Opus 감사(sourceDigest 0a34…)를 현재 소스의 감사로 바꿔 쓰지 않고 새 감사가 필요하다고 명시한다(75행). 증거 범위를 과장한 부분은 확인되지 않았다. 다만 work.json의 AC evidence summary &#39;현재 적용 가능&#39;은 기록 시점의 도구 판정이다. 본 검토에서 assessWork를 다시 실행해 확인하지는 않았다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;오른쪽 기본바는 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 연결된 계획·진행 개요를 제공한다. 다른 작업의 검사 메타데이터로 공식 구조 snapshot이 재생성되어 이전 증거의 현재성이 만료됐으므로 이력을 보존해 재개했다. 변경된 입력이 snapshot 하나임을 확인한 뒤 행동·SSR 검사를 실제 다시 실행하고 새 소스의 Opus 독립 감사와 문서 영향 검토를 수용했다. GUI의 선택 강조·활성 산문 미관찰과 실제 모델 하위 호출의 한계는 이전과 동일하게 남긴다.&quot;,
+  &quot;before&quot;: &quot;기본 오른쪽 바는 현재 요청의 plan·Hook·범용 호출과 누적 리소스를 함께 읽는 방식이었다. 고정 다섯 Skills와 실제 Subagent 완료, 활성 계획 항목의 산문을 한 개요에서 추적할 수 없었다.&quot;,
+  &quot;after&quot;: &quot;기본바는 WWW Agent·다섯 Skills·실제 Subagent와 Plan/Progress로 구성한다. Hook·전체 카탈로그·누적 관측은 상세 모니터에서 읽고 기본바에는 원장 누락·저장 경고만 보조로 남긴다.&quot;,
+  &quot;changes&quot;: [
+    &quot;agent-overview 순수 투영과 전용 뷰·CSS를 추가하고 기존 ResourceActivitySidebar props를 유지해 연결했다.&quot;,
+    &quot;정본 경로의 명시 Skill 요청·문서 읽기·이름 언급을 구별하고 종료·복원된 요청의 현재 선택을 해제한다.&quot;,
+    &quot;Agent 상태 completed와 일반 도구 종료를 구별하며 후속 요청·실패·중단·연결 종료·historical 상태를 보존한다.&quot;,
+    &quot;Native Plan의 활성 항목과 공개 산문을 묶고 계획 변경·항목 복귀·계획 이전 메시지의 늦은 delta를 재귀속하지 않는다.&quot;,
+    &quot;Product·Architecture·Development·Chat 명세의 기본바와 상세 모니터 범위를 최신 구현에 맞춰 정합화했다.&quot;,
+    &quot;공식 구조 snapshot 재생성으로 만료된 현재성을 숨기지 않고 과거 이력을 보존해 재개·실제 집중 재검사·새 Opus 감사·문서 재연결을 수행했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;실제 사건이 없는 단계 선택·Agent 완료·진행 설명을 추측하지 않고 미확인으로 남겼다.&quot;,
+    &quot;사용자가 선택한 다섯 Skills만 고정 표시하고 Hook 실행 설정은 변경하지 않았다.&quot;,
+    &quot;Plan.md를 임의 탐색하지 않고 Native 계획 자료부터 연결했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;GUI의 양성 스킬 강조와 활성 Plan+Progress 산문 동시 표시는 이번 공식 집중검사 담당이 새로 관찰하지 않았다. 이전 Electron 결과는 합성 Native의 역사적 보조 근거다.&quot;,
+    &quot;실제 모델 Subagent spawn·Windows·OS 한국어 IME는 이번 범위에서 실행하지 않았다. Native 사건이 제공되지 않으면 미제공/미확인으로 표시한다.&quot;,
+    &quot;Plan.md 파일이나 복원되지 않은 계획을 읽었다고 표시하지 않으며 Native 계획 사건과 공개 commentary만 연결한다.&quot;,
+    &quot;독립 감사의 비필수 관찰: 같은 활성 항목에서 commentary 중 explanation plan 갱신이 끼면 다음 delta가 잠시 앞부분 없이 보이고 완료 snapshot에서 회복될 수 있다.&quot;,
+    &quot;BoxBox project mode off의 공식 사후 형식 단계는 disabled다. 기능 검사·소스 정책·strict 타입·빌드와 형식 PASS를 구분한다.&quot;,
+    &quot;새 감사는 최근 2,000 사건 보관창에서 Progress 자료가 미제공일 수 있다는 비필수 관찰도 남겼다. 관측하지 않은 산문을 보충하지 않는 보수적 표시이며 이 재생성으로 제품 구현을 바꾸지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;수정 필수 아닌 스트리밍 interleaving 관찰과 GUI 선택 강조·활성 산문 화면은 후속 품질 점검 대상으로 남긴다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;오른쪽 기본바는 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 연결된 계획·진행 개요를 제공한다. 다른 작업의 검사 메타데이터로 공식 구조 snapshot이 재생성되어 이전 증거의 현재성이 만료됐으므로 이력을 보존해 재개했다. 변경된 입력이 snapshot 하나임을 확인한 뒤 행동·SSR 검사를 실제 다시 실행하고 새 소스의 Opus 독립 감사와 문서 영향 검토를 수용했다. GUI의 선택 강조·활성 산문 미관찰과 실제 모델 하위 호출의 한계는 이전과 동일하게 남긴다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;AC-1 · 고정 Agent와 다섯 Skills&quot;,
+        &quot;result&quot;: &quot;WWW Agent 아래 spec/design/build/diagnose/verify를 항상 보이고 범용 목록을 제외한다.&quot;,
+        &quot;evidence&quot;: &quot;집중검사 고정 목록·범용 제외 SSR; 이전 Electron 기본바 표시&quot;,
+        &quot;limitations&quot;: &quot;실제 다섯 스킬을 모두 호출한 시험은 아니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-2 · 근거 있는 현재 항목&quot;,
+        &quot;result&quot;: &quot;정본 경로의 구조화 Skill 요청 하나만 선택한다. 문서 읽기·이름·복원·종료를 현재 실행으로 올리지 않는다.&quot;,
+        &quot;evidence&quot;: &quot;집중검사 선택·해제·다중 요청·다른 thread·historical 행동 사례&quot;,
+        &quot;limitations&quot;: &quot;GUI의 양성 선택 강조는 새로 관찰하지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-3 · Hook 기본 제외와 상세 보존&quot;,
+        &quot;result&quot;: &quot;기본바에서 Hook·범용 리소스를 제외하고 상세의 Hook 상태·진단을 보존한다.&quot;,
+        &quot;evidence&quot;: &quot;집중 SSR 기본 제외·상세 보존; 이전 Electron Hook 실패/완료&quot;,
+        &quot;limitations&quot;: &quot;표시 변경은 Hook 실행 비활성화가 아니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-4 · 실제 Subagent와 완료 불&quot;,
+        &quot;result&quot;: &quot;실제 Agent 식별자와 상태를 유지하며 일반 도구 종료로 완료를 추정하지 않는다.&quot;,
+        &quot;evidence&quot;: &quot;집중 행동·SSR 완료 체크·동일 항목 유지; 이전 Electron 합성 Native 전이&quot;,
+        &quot;limitations&quot;: &quot;실제 모델의 하위 Agent spawn은 이 검증에서 실행하지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-5 · 연결된 Plan과 Progress&quot;,
+        &quot;result&quot;: &quot;현재 Native Plan의 유일한 활성 항목에 공개 설명을 연결하고 늦은 설명의 재귀속을 막는다.&quot;,
+        &quot;evidence&quot;: &quot;집중 행동·SSR 활성 항목·delta·A→B→A·비공개 추론 제외&quot;,
+        &quot;limitations&quot;: &quot;활성 항목 산문의 GUI 동시 표시를 새로 관찰하지 않았고 Plan.md 파일·복원 미제공 자료는 임의 보충하지 않는다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;최종 소스의 Agent 투영과 기본·상세 표시&quot;,
+        &quot;method&quot;: &quot;공식 verifyWork로 bun test test/agent-overview.test.ts test/www-activity-view.test.ts 실제 실행&quot;,
+        &quot;expected&quot;: &quot;근거 기반 선택·완료·Plan/Progress 연결과 Hook 분리를 유지한다.&quot;,
+        &quot;observed&quot;: &quot;exit0, 소스·artifact·환경 안정성 true, AC1~5 증거 usable.&quot;,
+        &quot;limitations&quot;: &quot;행동·SSR 검사이며 실제 GUI나 모델 호출이 아니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;독립 검토&quot;,
+        &quot;method&quot;: &quot;allowFallback=false의 실제 Opus 읽기 전용 CLI와 canonical digest 대조&quot;,
+        &quot;expected&quot;: &quot;작성자와 분리된 검토가 현재 소스·기준과 실제 근거를 대조한다.&quot;,
+        &quot;observed&quot;: &quot;claude-opus-5-5, executor process, verdict pass, recordReview 수용.&quot;,
+        &quot;limitations&quot;: &quot;검토자는 읽지 않은 파일·GUI·실프로토콜 범위를 명시했고 검사 실행은 하지 않았다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;snapshot 재생성 뒤 현재성&quot;,
+        &quot;method&quot;: &quot;canonical source manifest 대조→공식 resume→같은 실제 집중검사→문서 digest 대조→새 Opus 감사&quot;,
+        &quot;expected&quot;: &quot;과거 통과를 새 소스로 승격하지 않고 새 실제 결과를 연결한다.&quot;,
+        &quot;observed&quot;: &quot;변경 입력은 src/architecture.generated.json 하나, 새 attempt-e467166f exit0/stable true, review-92513dd3 실제 Opus pass와 수용, assessWork complete=true.&quot;,
+        &quot;limitations&quot;: &quot;GUI를 불필요하게 반복하지 않았으며 기존 GUI는 실행 당시 소스의 관찰로 유지한다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;문서 읽기와 도구 종료가 실제 실행·완료처럼 보일 수 있다.&quot;,
+        &quot;basis&quot;: &quot;구조화 입력과 Agent 전용 상태 필드가 서로 다른 사실을 제공한다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;각 근거를 분리하고 명시 근거에만 선택·완료 표시를 연결한다.&quot;,
+        &quot;tradeoff&quot;: &quot;Native가 단계·Agent 자료를 제공하지 않으면 현재 상태가 미확인으로 남는다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;verification.md&quot;,
+        &quot;purpose&quot;: &quot;공식 검사·기준별 관찰·독립 감사와 한계&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-opus-review-result.json&quot;,
+        &quot;purpose&quot;: &quot;실제 Opus 관측 모델·판정·발견 사항&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/ui-acceptance-map.md&quot;,
+        &quot;purpose&quot;: &quot;기존 Electron와 행동·SSR 근거 및 미관찰 범위 대응&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-regenerated-opus-result.json&quot;,
+        &quot;purpose&quot;: &quot;재생성된 현재 소스의 새 실제 Opus 판정과 비필수 관찰&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-recheck-scope.json&quot;,
+        &quot;purpose&quot;: &quot;과거 증거 만료와 snapshot 단일 변경의 현재성 대조&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;추가 관찰이 필요한 품질 확인을 별도 범위로 수행할 때 실제 화면과 스트림 순서를 보존한다.&quot;,
+        &quot;impact&quot;: &quot;현재 필수 수용을 막는 결함으로 판정되지 않은 잔여 표시 한계다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 오후 12:37 · 작성자 보고서 · 오른쪽 기본바는 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 연결된 계획·진행 개요를 제공한다. 다른 작업의 검사 메타데이터로 공식 구조 snapshot이 재생성되어 이전 증거의 현재성이 만료됐으므로 이력을 보존해 재개했다. 변경된 입력이 snapshot 하나임을 확인한 뒤 행동·SSR 검사를 실제 다시 실행하고 새 소스의 Opus 독립 감사와 문서 영향 검토를 수용했다. GUI의 선택 강조·활성 산문 미관찰과 실제 모델 하위 호출의 한계는 이전과 동일하게 남긴다.</summary><article><h3>오른쪽 Agent와 WWW Skills 및 Hook 표시 논의</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">오른쪽 기본바는 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 연결된 계획·진행 개요를 제공한다. 다른 작업의 검사 메타데이터로 공식 구조 snapshot이 재생성되어 이전 증거의 현재성이 만료됐으므로 이력을 보존해 재개했다. 변경된 입력이 snapshot 하나임을 확인한 뒤 행동·SSR 검사를 실제 다시 실행하고 새 소스의 Opus 독립 감사와 문서 영향 검토를 수용했다. GUI의 선택 강조·활성 산문 미관찰과 실제 모델 하위 호출의 한계는 이전과 동일하게 남긴다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 2 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.</p><h3>기록된 변경</h3><ul><li>agent-overview 순수 투영과 전용 뷰·CSS를 추가하고 기존 ResourceActivitySidebar props를 유지해 연결했다.</li><li>정본 경로의 명시 Skill 요청·문서 읽기·이름 언급을 구별하고 종료·복원된 요청의 현재 선택을 해제한다.</li><li>Agent 상태 completed와 일반 도구 종료를 구별하며 후속 요청·실패·중단·연결 종료·historical 상태를 보존한다.</li><li>Native Plan의 활성 항목과 공개 산문을 묶고 계획 변경·항목 복귀·계획 이전 메시지의 늦은 delta를 재귀속하지 않는다.</li><li>Product·Architecture·Development·Chat 명세의 기본바와 상세 모니터 범위를 최신 구현에 맞춰 정합화했다.</li><li>공식 구조 snapshot 재생성으로 만료된 현재성을 숨기지 않고 과거 이력을 보존해 재개·실제 집중 재검사·새 Opus 감사·문서 재연결을 수행했다.</li></ul><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>AC-1 · 고정 Agent와 다섯 Skills</h3><p class="result">WWW Agent 아래 spec/design/build/diagnose/verify를 항상 보이고 범용 목록을 제외한다.</p><p class="support"><strong>근거</strong> 집중검사 고정 목록·범용 제외 SSR; 이전 Electron 기본바 표시</p><p class="limit">실제 다섯 스킬을 모두 호출한 시험은 아니다.</p></article><article class="requirement"><h3>AC-2 · 근거 있는 현재 항목</h3><p class="result">정본 경로의 구조화 Skill 요청 하나만 선택한다. 문서 읽기·이름·복원·종료를 현재 실행으로 올리지 않는다.</p><p class="support"><strong>근거</strong> 집중검사 선택·해제·다중 요청·다른 thread·historical 행동 사례</p><p class="limit">GUI의 양성 선택 강조는 새로 관찰하지 않았다.</p></article><article class="requirement"><h3>AC-3 · Hook 기본 제외와 상세 보존</h3><p class="result">기본바에서 Hook·범용 리소스를 제외하고 상세의 Hook 상태·진단을 보존한다.</p><p class="support"><strong>근거</strong> 집중 SSR 기본 제외·상세 보존; 이전 Electron Hook 실패/완료</p><p class="limit">표시 변경은 Hook 실행 비활성화가 아니다.</p></article><article class="requirement"><h3>AC-4 · 실제 Subagent와 완료 불</h3><p class="result">실제 Agent 식별자와 상태를 유지하며 일반 도구 종료로 완료를 추정하지 않는다.</p><p class="support"><strong>근거</strong> 집중 행동·SSR 완료 체크·동일 항목 유지; 이전 Electron 합성 Native 전이</p><p class="limit">실제 모델의 하위 Agent spawn은 이 검증에서 실행하지 않았다.</p></article><article class="requirement"><h3>AC-5 · 연결된 Plan과 Progress</h3><p class="result">현재 Native Plan의 유일한 활성 항목에 공개 설명을 연결하고 늦은 설명의 재귀속을 막는다.</p><p class="support"><strong>근거</strong> 집중 행동·SSR 활성 항목·delta·A→B→A·비공개 추론 제외</p><p class="limit">활성 항목 산문의 GUI 동시 표시를 새로 관찰하지 않았고 Plan.md 파일·복원 미제공 자료는 임의 보충하지 않는다.</p></article><section class="paper" id="history-report-edfacfbb-6060-46a7-a835-e1c9bc3af882-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>문서 읽기와 도구 종료가 실제 실행·완료처럼 보일 수 있다.</h3><p><strong>선택</strong> 각 근거를 분리하고 명시 근거에만 선택·완료 표시를 연결한다.</p><p><strong>판단 근거</strong> 구조화 입력과 Agent 전용 상태 필드가 서로 다른 사실을 제공한다.</p><p class="limit"><strong>감수한 점</strong> Native가 단계·Agent 자료를 제공하지 않으면 현재 상태가 미확인으로 남는다.</p></article></section><section class="paper" id="history-report-edfacfbb-6060-46a7-a835-e1c9bc3af882-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>최종 소스의 Agent 투영과 기본·상세 표시</h3><dl><div><dt>확인 방법</dt><dd>공식 verifyWork로 bun test test/agent-overview.test.ts test/www-activity-view.test.ts 실제 실행</dd></div><div><dt>기대 결과</dt><dd>근거 기반 선택·완료·Plan/Progress 연결과 Hook 분리를 유지한다.</dd></div><div><dt>실제 관측</dt><dd>exit0, 소스·artifact·환경 안정성 true, AC1~5 증거 usable.</dd></div><div><dt>확인 범위와 한계</dt><dd>행동·SSR 검사이며 실제 GUI나 모델 호출이 아니다.</dd></div></dl></article><article class="check"><h3>독립 검토</h3><dl><div><dt>확인 방법</dt><dd>allowFallback=false의 실제 Opus 읽기 전용 CLI와 canonical digest 대조</dd></div><div><dt>기대 결과</dt><dd>작성자와 분리된 검토가 현재 소스·기준과 실제 근거를 대조한다.</dd></div><div><dt>실제 관측</dt><dd>claude-opus-5-5, executor process, verdict pass, recordReview 수용.</dd></div><div><dt>확인 범위와 한계</dt><dd>검토자는 읽지 않은 파일·GUI·실프로토콜 범위를 명시했고 검사 실행은 하지 않았다.</dd></div></dl></article><article class="check"><h3>snapshot 재생성 뒤 현재성</h3><dl><div><dt>확인 방법</dt><dd>canonical source manifest 대조→공식 resume→같은 실제 집중검사→문서 digest 대조→새 Opus 감사</dd></div><div><dt>기대 결과</dt><dd>과거 통과를 새 소스로 승격하지 않고 새 실제 결과를 연결한다.</dd></div><div><dt>실제 관측</dt><dd>변경 입력은 src/architecture.generated.json 하나, 새 attempt-e467166f exit0/stable true, review-92513dd3 실제 Opus pass와 수용, assessWork complete=true.</dd></div><div><dt>확인 범위와 한계</dt><dd>GUI를 불필요하게 반복하지 않았으며 기존 GUI는 실행 당시 소스의 관찰로 유지한다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 2건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>GUI의 양성 스킬 강조와 활성 Plan+Progress 산문 동시 표시는 이번 공식 집중검사 담당이 새로 관찰하지 않았다. 이전 Electron 결과는 합성 Native의 역사적 보조 근거다.</li><li>실제 모델 Subagent spawn·Windows·OS 한국어 IME는 이번 범위에서 실행하지 않았다. Native 사건이 제공되지 않으면 미제공/미확인으로 표시한다.</li><li>Plan.md 파일이나 복원되지 않은 계획을 읽었다고 표시하지 않으며 Native 계획 사건과 공개 commentary만 연결한다.</li><li>독립 감사의 비필수 관찰: 같은 활성 항목에서 commentary 중 explanation plan 갱신이 끼면 다음 delta가 잠시 앞부분 없이 보이고 완료 snapshot에서 회복될 수 있다.</li><li>BoxBox project mode off의 공식 사후 형식 단계는 disabled다. 기능 검사·소스 정책·strict 타입·빌드와 형식 PASS를 구분한다.</li><li>새 감사는 최근 2,000 사건 보관창에서 Progress 자료가 미제공일 수 있다는 비필수 관찰도 남겼다. 관측하지 않은 산문을 보충하지 않는 보수적 표시이며 이 재생성으로 제품 구현을 바꾸지 않았다.</li></ul></section><section class="paper" id="history-report-edfacfbb-6060-46a7-a835-e1c9bc3af882-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>추가 관찰이 필요한 품질 확인을 별도 범위로 수행할 때 실제 화면과 스트림 순서를 보존한다.</dd></div><div><dt>영향</dt><dd>현재 필수 수용을 막는 결함으로 판정되지 않은 잔여 표시 한계다.</dd></div></dl></article></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>공식 검사·기준별 관찰·독립 감사와 한계</p><code>verification.md</code></li><li><p>실제 Opus 관측 모델·판정·발견 사항</p><code>.www/session-implementation/chat013-opus-review-result.json</code></li><li><p>기존 Electron와 행동·SSR 근거 및 미관찰 범위 대응</p><code>.www/session-implementation/ui-acceptance-map.md</code></li><li><p>재생성된 현재 소스의 새 실제 Opus 판정과 비필수 관찰</p><code>.www/session-implementation/chat013-regenerated-opus-result.json</code></li><li><p>과거 증거 만료와 snapshot 단일 변경의 현재성 대조</p><code>.www/session-implementation/chat013-recheck-scope.json</code></li></ol><details id="history-report-edfacfbb-6060-46a7-a835-e1c9bc3af882-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-64677750-337f-4488-a503-4e0265356bf5<br>report-edfacfbb-6060-46a7-a835-e1c9bc3af882</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>51239df811d78defbb264e5110b3bc8fb5b7e0886142c556018d1ff52b45bd6c</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>6b25721c3253157bd75281af1218e42600d1de3f34bd313d0bf44d0dc44a7cb0</code></dd></div><div><dt>기준 지문</dt><dd><code>5950d05d534dbcec78ab4ba9dcf4dc08ab4d84520b6255f49888b451227a7dd8</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;오른쪽 바에 WWW 개발 Agent를 상위 항목으로 두고 spec/design/build/diagnose/verify 다섯 스킬 전체를 고정 표시하며 범용 스킬 전체 목록을 섞지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;현재 선택·진행 중인 WWW 스킬을 식별 가능한 근거에 따라 강조하며 문서 읽기·이름 언급·설치 여부만으로 실행 중이라고 판정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;이번 오른쪽 바의 표시 범위에서 Hook 목록·실행 현황 보기를 제외한다. Agent·WWW Skills·실제 Subagent와 Plan·Progress를 표시하며, Hook 표시 제외를 Hook 실행 비활성화로 취급하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;WWW Agent를 기본 표시하고 실제 Subagent 호출이 관측되면 해당 Subagent를 식별하여 표시한다. Subagent 작업 완료가 확인되면 항목을 유지한 채 완료 표시등으로 상태를 전환한다. 호출하지 않은 Subagent를 실행 중이라고 표시하지 않으며 역할 정의·일반 도구 호출과 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;Plan은 Plan.md 등 작업 계획 문서나 Native가 요구사항을 처리하며 제공한 계획을 바탕으로 요구사항 단위의 작업 항목·상태를 보여준다. Progress는 현재 진행 중인 Plan 항목에 연결하여 Native가 제공하는 공개 판단 요약·진행 설명과 확인된 실행 사건을 바탕으로 작업 상황을 산문으로 요약한다. 계획 목록과 원시 로그를 반복 표시하지 않고 출처 없는 판단 이유·관측하지 않은 진행을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/agent-overview.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T03:15:56.149Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e467166f-9ff0-449b-9bda-8113acdd1647&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/agent-overview.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T03:35:12.449Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-78add0a6-e3f5-4015-9869-af4c31d441c2&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-78add0a6-e3f5-4015-9869-af4c31d441c2/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep 도구로 spec.md, work.json, verification.md, src/agent-overview.ts, src/agent-overview-view.tsx, src/native-activity.ts(투영 본문 325~686행), src/native-activity-view.tsx(ResourceActivitySidebar 부분), test/agent-overview.test.ts, docs/specs/chat.md(Subagent·Progress 관련 행), test/fixtures/chat-ui-app-server.ts(collabAgentToolCall 부분)를 읽었다. agent-overview.css, renderer.tsx, www-activity.ts, test/www-activity-view.test.ts, PRODUCT/ARCHITECTURE/DEVELOPMENT/WORKFLOW 문서, .www 증거 JSON·스크린샷은 읽지 않았다. 테스트·빌드는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;소스 동일성: 입력 bundle에 있는 src·test·scripts·docs/specs/chat.md 파일별 digest가 work.json verifications[0].source.files의 digest와 일치한다(예: agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, native-activity-view.tsx ebdfb611…). 따라서 attempt-fce5db7e 실행 뒤 대상 소스는 바뀌지 않았다. 전체 sourceDigest 값이 다른 것(0a34… / 5abc…)은 입력 집합에 docs 파일이 추가됐기 때문으로 판단하며, 이 점이 결함은 아니다.&quot;,
+        &quot;AC-1/AC-3: WWW_AGENT_SKILLS가 다섯 항목으로 고정돼 있다(src/agent-overview.ts:8-14). 뷰는 projection.skills만 렌더링하고 Hook과 범용 리소스는 기본바에 그리지 않는다(src/agent-overview-view.tsx:36-69, src/native-activity-view.tsx:299-316). 테스트는 data-skill-id 5개, preToolUse·www-commit·누적 리소스 미노출을 확인한다(test/agent-overview.test.ts:102-112). 상세 모니터 진입 버튼은 유지되므로 Hook 표시 제외가 실행 비활성화로 이어지지 않는다.&quot;,
+        &quot;AC-2: 강조는 live 턴(historical 아님, endedAt 없음, running/pending/blocked)에서 정본 경로로 식별된 구조화 Skill 요청이 정확히 하나일 때만 선택된다(src/agent-overview.ts:67-71). 이름만 있는 요청, 문서 읽기, 복수 요청, 턴 종료, 복원, 다른 thread에서는 선택되지 않는 경로를 테스트가 다룬다(test/agent-overview.test.ts:26-37, 76-83). 전송 중에는 이전 선택을 지운다(agent-overview-view.tsx:30-31).&quot;,
+        &quot;AC-4: collabAgentToolCall은 senderThreadId가 현재 thread일 때만 receiver를 Subagent로 등록한다. 도구 item/completed만으로는 완료로 바꾸지 않고, agentsStates.status 또는 subAgentActivity kind=completed가 있을 때만 completed로 전환해 같은 항목에 ✓ 표시등을 켠다(src/agent-overview.ts:96-127, agent-overview-view.tsx:47-48). transport/closed와 historical 이벤트는 running/pending을 unknown으로 낮춘다. 이는 spec.md의 &#39;도구 호출 종료만으로 완료 추정 금지&#39; 결정과 맞는다.&quot;,
+        &quot;AC-5: Plan은 현재 턴 turn/plan/updated의 Native 계획만 사용한다. Progress는 inProgress 항목이 정확히 하나일 때 그 항목에 귀속된 commentary 또는 plan explanation만 사용한다. epoch·contextKey로 항목 전환, A→B→A, 계획 이전 메시지의 늦은 재귀속을 막는다(src/agent-overview.ts:128-162). analysis/reasoning phase와 다른 turn은 제외된다(테스트 57-95행). docs/specs/chat.md:149도 Plan.md를 연결하지 않는 한계를 명시한다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님): 같은 활성 항목에서 commentary delta가 스트리밍되는 도중 explanation이 있는 turn/plan/updated가 끼어들면 messageId가 &#39;&#39;로 초기화된다(src/agent-overview.ts:138). 그 뒤 같은 itemId의 delta는 앞부분 없이 조각만 progress로 표시되고(150행), item/completed가 와야 전체 텍스트로 회복된다. update_plan은 보통 메시지 완료 뒤에 호출되므로 실제로 생길 가능성은 낮고 일시적인 표시 문제다.&quot;,
+        &quot;증거 범위 확인: verification.md는 실제 프로세스로 실행한 bun test(exit 0)가 행동·SSR 검사이며 GUI·실제 모델 Subagent spawn이 아니라고 명시한다. 이전 Electron 합성 Native 관찰도 최종 소스 GUI 재검사로 승격하지 않았다(verification.md:25-37). AC-2의 양성 강조 GUI 화면과 AC-5의 Plan+Progress 동시 GUI 표시는 미관찰이라고 공개하므로 증거 범위가 과장되지 않았다.&quot;,
+        &quot;잔여 위험: subAgentActivity 항목 형태와 실제 codex spawnAgent의 item/started 시점 receiverThreadIds·agentsStates 제공 여부는 fixture와 테스트의 가정이다. 이번 검토에서는 실제 프로토콜과 대조하지 않았다. started 시점에 receiver가 비어 있으면 첫 상태는 completed 시점의 agentsStates에 의존한다. 그 값이 없으면 &#39;결과 미확인&#39;으로 보수적으로 표시되므로 잘못된 완료 표시로 이어지지는 않는다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-92513dd3-0bc0-4c4e-b513-89f19f2926ce&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-92513dd3-0bc0-4c4e-b513-89f19f2926ce/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read와 Grep 도구로 실제 작업트리 파일을 읽었다(inline bundle에만 의존하지 않음). 읽은 파일은 spec.md, verification.md, work.json(전체 1410행), src/agent-overview.ts, src/agent-overview-view.tsx, src/native-activity-view.tsx의 ResourceActivitySidebar(299~323행), src/native-activity.ts의 plan 처리 Grep, src/architecture.generated.json의 agent-overview Grep, test/agent-overview.test.ts, .www/session-implementation의 chat013-recheck-scope.json, chat013-regenerated-verification-result.json, chat013-opus-review-result.json이다. docs/PRODUCT·ARCHITECTURE·DEVELOPMENT·skills/WORKFLOW·specs/chat.md 본문, test/www-activity-view.test.ts, ui-acceptance-map.md, chat-ui-Mpd1UU/summary.json, home-supplement-structure-harness.json, CSS·renderer는 읽지 않았다. 테스트·빌드·GUI는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;재검사 범위의 정합성: chat013-recheck-scope.json은 이전 digest 0a34f3bd…에서 현재 c782bbe4…로 바뀐 입력이 src/architecture.generated.json 하나뿐이라고 기록한다. 이 값은 요청에 주어진 sourceDigest c782bbe4…와 같다. 현재 bundle의 파일별 digest를 work.json verifications[1](attempt-e467166f) source.files와 대조하니 agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, native-activity-view.tsx ebdfb611…, native-activity.ts 4fa746b3…, architecture.generated.json f437938b…, 두 테스트 파일, fixture, scripts/verify-chat.ts, docs/specs/chat.md가 모두 일치했다. 그래서 재실행 attempt는 현재 소스를 대상으로 한 실행이다. 이전 attempt-fce5db7e의 architecture.generated.json은 d6590d65…로 현재 값과 다르다. 재생성으로 무효가 된 사실을 숨기지 않고 resumeWork 이후 새 attempt를 연결한 기록(verification.md 69~75행)은 실제 데이터와 맞는다.&quot;,
+        &quot;architecture.generated.json 변경의 영향: Grep 결과 이 파일에서 agent-overview 관련 내용은 모듈·import 그래프 메타데이터(397~412, 1895~1933, 2216~2233, 5261~5597행 부근)뿐이다. agent-overview.ts와 agent-overview-view.tsx는 이 JSON을 import하지 않는다. 따라서 이 snapshot 변경이 AC1~5의 동작을 바꾼다는 근거는 없다.&quot;,
+        &quot;AC-1/AC-3: WWW_AGENT_SKILLS 다섯 항목을 고정했다(src/agent-overview.ts:8-14). ResourceActivitySidebar는 AgentOverviewView만 렌더링하고 Hook과 누적 리소스 목록은 그리지 않는다. 상세 모니터 버튼은 남아 있다(src/native-activity-view.tsx:308-313). 테스트는 data-skill-id가 5개인지, preToolUse·www-commit·누적 리소스가 노출되지 않는지 확인한다(test/agent-overview.test.ts:102-112).&quot;,
+        &quot;AC-2: 선택 강조는 다음 조건을 모두 만족할 때만 켜진다. 턴이 live 상태(historical 아님, 종료 시각 없음, running/pending/blocked)이고, 구조화된 skill 요청이 정확히 하나이며, wwwArtifact로 식별된다(src/agent-overview.ts:67-71). 문서 읽기와 명령 참조는 basis 문구로만 &#39;적용 미확인&#39;이라고 표시된다(73-75행). 이름만 있는 요청, 턴 종료, 복원 이력, 다른 thread, 복수 요청에서 선택이 없는 경로는 테스트 26-37, 76-83행이 다룬다. 전송 중에는 선택을 비운다(view 30-31행).&quot;,
+        &quot;AC-4: Subagent는 senderThreadId가 현재 thread인 collabAgentToolCall의 receiver와 subAgentActivity에서만 등록된다. 도구 item/completed만으로는 completed가 되지 않는다. agentsStates.status나 subAgentActivity kind=completed가 있어야 같은 id 항목에 ✓가 표시된다(src/agent-overview.ts:96-127, view 47-48행). transport/closed와 historical 이벤트에서는 running/pending이 unknown으로 낮아진다(88-90, 108행).&quot;,
+        &quot;AC-5: Plan과 Progress는 현재 turnId의 turn/plan/updated와 commentary만 사용한다. 활성 inProgress 항목이 정확히 하나일 때만 연결되며, epoch·contextKey로 늦은 재귀속을 막는다(src/agent-overview.ts:128-162). 테스트 57-95행이 항목 전환, A→B→A, 계획 이전 메시지, analysis phase, 다른 turn이 제외되는지 확인한다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님) 1: 루프는 마지막 2,000개 이벤트만 처리한다(src/agent-overview.ts:85). 최종 plan은 native 투영의 current.plan을 사용한다(160행). 따라서 아주 긴 턴에서 계획 갱신이 창 밖으로 밀리면 Plan은 보이고 Progress는 null로 나올 수 있다. 이 경우 근거 없는 산문을 만들지 않고 &#39;공개 진행 설명이 아직 없습니다&#39;로 보수적으로 표시하므로 AC 위반은 아니다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님) 2: 이전 Opus 감사가 지적한 사항이 그대로 남아 있다. 같은 활성 항목의 commentary 스트리밍 중에 explanation이 있는 plan 갱신이 끼면 messageId가 초기화되어 delta 조각이 일시적으로 표시될 수 있다(138, 150행). 이번 재생성과는 무관하다.&quot;,
+        &quot;증거 범위: verification.md는 재실행 attempt-e467166f를 행동·SSR bun test로만 기술한다. GUI 실행, 실제 모델의 Subagent spawn, AC-2 양성 강조 GUI, AC-5 Plan+Progress 동시 GUI는 관찰하지 않았다고 유지한다(73행). 이전 Opus 감사(sourceDigest 0a34…)를 현재 소스의 감사로 바꿔 쓰지 않고 새 감사가 필요하다고 명시한다(75행). 증거 범위를 과장한 부분은 확인되지 않았다. 다만 work.json의 AC evidence summary &#39;현재 적용 가능&#39;은 기록 시점의 도구 판정이다. 본 검토에서 assessWork를 다시 실행해 확인하지는 않았다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;오른쪽 기본바는 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 연결된 계획·진행 개요를 제공한다. 다른 작업의 검사 메타데이터로 공식 구조 snapshot이 재생성되어 이전 증거의 현재성이 만료됐으므로 이력을 보존해 재개했다. 변경된 입력이 snapshot 하나임을 확인한 뒤 행동·SSR 검사를 실제 다시 실행하고 새 소스의 Opus 독립 감사와 문서 영향 검토를 수용했다. GUI의 선택 강조·활성 산문 미관찰과 실제 모델 하위 호출의 한계는 이전과 동일하게 남긴다.&quot;,
+  &quot;before&quot;: &quot;기본 오른쪽 바는 현재 요청의 plan·Hook·범용 호출과 누적 리소스를 함께 읽는 방식이었다. 고정 다섯 Skills와 실제 Subagent 완료, 활성 계획 항목의 산문을 한 개요에서 추적할 수 없었다.&quot;,
+  &quot;after&quot;: &quot;기본바는 WWW Agent·다섯 Skills·실제 Subagent와 Plan/Progress로 구성한다. Hook·전체 카탈로그·누적 관측은 상세 모니터에서 읽고 기본바에는 원장 누락·저장 경고만 보조로 남긴다.&quot;,
+  &quot;changes&quot;: [
+    &quot;agent-overview 순수 투영과 전용 뷰·CSS를 추가하고 기존 ResourceActivitySidebar props를 유지해 연결했다.&quot;,
+    &quot;정본 경로의 명시 Skill 요청·문서 읽기·이름 언급을 구별하고 종료·복원된 요청의 현재 선택을 해제한다.&quot;,
+    &quot;Agent 상태 completed와 일반 도구 종료를 구별하며 후속 요청·실패·중단·연결 종료·historical 상태를 보존한다.&quot;,
+    &quot;Native Plan의 활성 항목과 공개 산문을 묶고 계획 변경·항목 복귀·계획 이전 메시지의 늦은 delta를 재귀속하지 않는다.&quot;,
+    &quot;Product·Architecture·Development·Chat 명세의 기본바와 상세 모니터 범위를 최신 구현에 맞춰 정합화했다.&quot;,
+    &quot;공식 구조 snapshot 재생성으로 만료된 현재성을 숨기지 않고 과거 이력을 보존해 재개·실제 집중 재검사·새 Opus 감사·문서 재연결을 수행했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;실제 사건이 없는 단계 선택·Agent 완료·진행 설명을 추측하지 않고 미확인으로 남겼다.&quot;,
+    &quot;사용자가 선택한 다섯 Skills만 고정 표시하고 Hook 실행 설정은 변경하지 않았다.&quot;,
+    &quot;Plan.md를 임의 탐색하지 않고 Native 계획 자료부터 연결했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;GUI의 양성 스킬 강조와 활성 Plan+Progress 산문 동시 표시는 이번 공식 집중검사 담당이 새로 관찰하지 않았다. 이전 Electron 결과는 합성 Native의 역사적 보조 근거다.&quot;,
+    &quot;실제 모델 Subagent spawn·Windows·OS 한국어 IME는 이번 범위에서 실행하지 않았다. Native 사건이 제공되지 않으면 미제공/미확인으로 표시한다.&quot;,
+    &quot;Plan.md 파일이나 복원되지 않은 계획을 읽었다고 표시하지 않으며 Native 계획 사건과 공개 commentary만 연결한다.&quot;,
+    &quot;독립 감사의 비필수 관찰: 같은 활성 항목에서 commentary 중 explanation plan 갱신이 끼면 다음 delta가 잠시 앞부분 없이 보이고 완료 snapshot에서 회복될 수 있다.&quot;,
+    &quot;BoxBox project mode off의 공식 사후 형식 단계는 disabled다. 기능 검사·소스 정책·strict 타입·빌드와 형식 PASS를 구분한다.&quot;,
+    &quot;새 감사는 최근 2,000 사건 보관창에서 Progress 자료가 미제공일 수 있다는 비필수 관찰도 남겼다. 관측하지 않은 산문을 보충하지 않는 보수적 표시이며 이 재생성으로 제품 구현을 바꾸지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;수정 필수 아닌 스트리밍 interleaving 관찰과 GUI 선택 강조·활성 산문 화면은 후속 품질 점검 대상으로 남긴다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;오른쪽 기본바는 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 연결된 계획·진행 개요를 제공한다. 다른 작업의 검사 메타데이터로 공식 구조 snapshot이 재생성되어 이전 증거의 현재성이 만료됐으므로 이력을 보존해 재개했다. 변경된 입력이 snapshot 하나임을 확인한 뒤 행동·SSR 검사를 실제 다시 실행하고 새 소스의 Opus 독립 감사와 문서 영향 검토를 수용했다. GUI의 선택 강조·활성 산문 미관찰과 실제 모델 하위 호출의 한계는 이전과 동일하게 남긴다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;AC-1 · 고정 Agent와 다섯 Skills&quot;,
+        &quot;result&quot;: &quot;WWW Agent 아래 spec/design/build/diagnose/verify를 항상 보이고 범용 목록을 제외한다.&quot;,
+        &quot;evidence&quot;: &quot;집중검사 고정 목록·범용 제외 SSR; 이전 Electron 기본바 표시&quot;,
+        &quot;limitations&quot;: &quot;실제 다섯 스킬을 모두 호출한 시험은 아니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-2 · 근거 있는 현재 항목&quot;,
+        &quot;result&quot;: &quot;정본 경로의 구조화 Skill 요청 하나만 선택한다. 문서 읽기·이름·복원·종료를 현재 실행으로 올리지 않는다.&quot;,
+        &quot;evidence&quot;: &quot;집중검사 선택·해제·다중 요청·다른 thread·historical 행동 사례&quot;,
+        &quot;limitations&quot;: &quot;GUI의 양성 선택 강조는 새로 관찰하지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-3 · Hook 기본 제외와 상세 보존&quot;,
+        &quot;result&quot;: &quot;기본바에서 Hook·범용 리소스를 제외하고 상세의 Hook 상태·진단을 보존한다.&quot;,
+        &quot;evidence&quot;: &quot;집중 SSR 기본 제외·상세 보존; 이전 Electron Hook 실패/완료&quot;,
+        &quot;limitations&quot;: &quot;표시 변경은 Hook 실행 비활성화가 아니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-4 · 실제 Subagent와 완료 불&quot;,
+        &quot;result&quot;: &quot;실제 Agent 식별자와 상태를 유지하며 일반 도구 종료로 완료를 추정하지 않는다.&quot;,
+        &quot;evidence&quot;: &quot;집중 행동·SSR 완료 체크·동일 항목 유지; 이전 Electron 합성 Native 전이&quot;,
+        &quot;limitations&quot;: &quot;실제 모델의 하위 Agent spawn은 이 검증에서 실행하지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-5 · 연결된 Plan과 Progress&quot;,
+        &quot;result&quot;: &quot;현재 Native Plan의 유일한 활성 항목에 공개 설명을 연결하고 늦은 설명의 재귀속을 막는다.&quot;,
+        &quot;evidence&quot;: &quot;집중 행동·SSR 활성 항목·delta·A→B→A·비공개 추론 제외&quot;,
+        &quot;limitations&quot;: &quot;활성 항목 산문의 GUI 동시 표시를 새로 관찰하지 않았고 Plan.md 파일·복원 미제공 자료는 임의 보충하지 않는다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;최종 소스의 Agent 투영과 기본·상세 표시&quot;,
+        &quot;method&quot;: &quot;공식 verifyWork로 bun test test/agent-overview.test.ts test/www-activity-view.test.ts 실제 실행&quot;,
+        &quot;expected&quot;: &quot;근거 기반 선택·완료·Plan/Progress 연결과 Hook 분리를 유지한다.&quot;,
+        &quot;observed&quot;: &quot;exit0, 소스·artifact·환경 안정성 true, AC1~5 증거 usable.&quot;,
+        &quot;limitations&quot;: &quot;행동·SSR 검사이며 실제 GUI나 모델 호출이 아니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;독립 검토&quot;,
+        &quot;method&quot;: &quot;allowFallback=false의 실제 Opus 읽기 전용 CLI와 canonical digest 대조&quot;,
+        &quot;expected&quot;: &quot;작성자와 분리된 검토가 현재 소스·기준과 실제 근거를 대조한다.&quot;,
+        &quot;observed&quot;: &quot;claude-opus-5-5, executor process, verdict pass, recordReview 수용.&quot;,
+        &quot;limitations&quot;: &quot;검토자는 읽지 않은 파일·GUI·실프로토콜 범위를 명시했고 검사 실행은 하지 않았다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;snapshot 재생성 뒤 현재성&quot;,
+        &quot;method&quot;: &quot;canonical source manifest 대조→공식 resume→같은 실제 집중검사→문서 digest 대조→새 Opus 감사&quot;,
+        &quot;expected&quot;: &quot;과거 통과를 새 소스로 승격하지 않고 새 실제 결과를 연결한다.&quot;,
+        &quot;observed&quot;: &quot;변경 입력은 src/architecture.generated.json 하나, 새 attempt-e467166f exit0/stable true, review-92513dd3 실제 Opus pass와 수용, assessWork complete=true.&quot;,
+        &quot;limitations&quot;: &quot;GUI를 불필요하게 반복하지 않았으며 기존 GUI는 실행 당시 소스의 관찰로 유지한다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;문서 읽기와 도구 종료가 실제 실행·완료처럼 보일 수 있다.&quot;,
+        &quot;basis&quot;: &quot;구조화 입력과 Agent 전용 상태 필드가 서로 다른 사실을 제공한다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;각 근거를 분리하고 명시 근거에만 선택·완료 표시를 연결한다.&quot;,
+        &quot;tradeoff&quot;: &quot;Native가 단계·Agent 자료를 제공하지 않으면 현재 상태가 미확인으로 남는다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;verification.md&quot;,
+        &quot;purpose&quot;: &quot;공식 검사·기준별 관찰·독립 감사와 한계&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-opus-review-result.json&quot;,
+        &quot;purpose&quot;: &quot;실제 Opus 관측 모델·판정·발견 사항&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/ui-acceptance-map.md&quot;,
+        &quot;purpose&quot;: &quot;기존 Electron와 행동·SSR 근거 및 미관찰 범위 대응&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-regenerated-opus-result.json&quot;,
+        &quot;purpose&quot;: &quot;재생성된 현재 소스의 새 실제 Opus 판정과 비필수 관찰&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-recheck-scope.json&quot;,
+        &quot;purpose&quot;: &quot;과거 증거 만료와 snapshot 단일 변경의 현재성 대조&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;추가 관찰이 필요한 품질 확인을 별도 범위로 수행할 때 실제 화면과 스트림 순서를 보존한다.&quot;,
+        &quot;impact&quot;: &quot;현재 필수 수용을 막는 결함으로 판정되지 않은 잔여 표시 한계다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 오후 12:23 · 작성자 보고서 · 오른쪽 기본바를 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 계획·진행 개요로 정리했다. 현재 스킬은 구조화된 선택 근거가 있을 때만 강조하고 Subagent는 실제 완료 상태에서 같은 항목의 불을 켠다. 최종 동결 소스의 행동·SSR 집중검사와 실제 Opus 독립 감사가 통과했으며, GUI에서 새로 관찰하지 않은 선택 강조·활성 산문과 실제 모델 하위 호출의 한계는 구분해 남겼다.</summary><article><h3>오른쪽 Agent와 WWW Skills 및 Hook 표시 논의</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">오른쪽 기본바를 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 계획·진행 개요로 정리했다. 현재 스킬은 구조화된 선택 근거가 있을 때만 강조하고 Subagent는 실제 완료 상태에서 같은 항목의 불을 켠다. 최종 동결 소스의 행동·SSR 집중검사와 실제 Opus 독립 감사가 통과했으며, GUI에서 새로 관찰하지 않은 선택 강조·활성 산문과 실제 모델 하위 호출의 한계는 구분해 남겼다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 1 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>완료로 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.</p><h3>기록된 변경</h3><ul><li>agent-overview 순수 투영과 전용 뷰·CSS를 추가하고 기존 ResourceActivitySidebar props를 유지해 연결했다.</li><li>정본 경로의 명시 Skill 요청·문서 읽기·이름 언급을 구별하고 종료·복원된 요청의 현재 선택을 해제한다.</li><li>Agent 상태 completed와 일반 도구 종료를 구별하며 후속 요청·실패·중단·연결 종료·historical 상태를 보존한다.</li><li>Native Plan의 활성 항목과 공개 산문을 묶고 계획 변경·항목 복귀·계획 이전 메시지의 늦은 delta를 재귀속하지 않는다.</li><li>Product·Architecture·Development·Chat 명세의 기본바와 상세 모니터 범위를 최신 구현에 맞춰 정합화했다.</li></ul><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>AC-1 · 고정 Agent와 다섯 Skills</h3><p class="result">WWW Agent 아래 spec/design/build/diagnose/verify를 항상 보이고 범용 목록을 제외한다.</p><p class="support"><strong>근거</strong> 집중검사 고정 목록·범용 제외 SSR; 이전 Electron 기본바 표시</p><p class="limit">실제 다섯 스킬을 모두 호출한 시험은 아니다.</p></article><article class="requirement"><h3>AC-2 · 근거 있는 현재 항목</h3><p class="result">정본 경로의 구조화 Skill 요청 하나만 선택한다. 문서 읽기·이름·복원·종료를 현재 실행으로 올리지 않는다.</p><p class="support"><strong>근거</strong> 집중검사 선택·해제·다중 요청·다른 thread·historical 행동 사례</p><p class="limit">GUI의 양성 선택 강조는 새로 관찰하지 않았다.</p></article><article class="requirement"><h3>AC-3 · Hook 기본 제외와 상세 보존</h3><p class="result">기본바에서 Hook·범용 리소스를 제외하고 상세의 Hook 상태·진단을 보존한다.</p><p class="support"><strong>근거</strong> 집중 SSR 기본 제외·상세 보존; 이전 Electron Hook 실패/완료</p><p class="limit">표시 변경은 Hook 실행 비활성화가 아니다.</p></article><article class="requirement"><h3>AC-4 · 실제 Subagent와 완료 불</h3><p class="result">실제 Agent 식별자와 상태를 유지하며 일반 도구 종료로 완료를 추정하지 않는다.</p><p class="support"><strong>근거</strong> 집중 행동·SSR 완료 체크·동일 항목 유지; 이전 Electron 합성 Native 전이</p><p class="limit">실제 모델의 하위 Agent spawn은 이 검증에서 실행하지 않았다.</p></article><article class="requirement"><h3>AC-5 · 연결된 Plan과 Progress</h3><p class="result">현재 Native Plan의 유일한 활성 항목에 공개 설명을 연결하고 늦은 설명의 재귀속을 막는다.</p><p class="support"><strong>근거</strong> 집중 행동·SSR 활성 항목·delta·A→B→A·비공개 추론 제외</p><p class="limit">활성 항목 산문의 GUI 동시 표시를 새로 관찰하지 않았고 Plan.md 파일·복원 미제공 자료는 임의 보충하지 않는다.</p></article><section class="paper" id="history-report-fb2d34df-b227-4820-a805-8ea06a96b63e-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>문서 읽기와 도구 종료가 실제 실행·완료처럼 보일 수 있다.</h3><p><strong>선택</strong> 각 근거를 분리하고 명시 근거에만 선택·완료 표시를 연결한다.</p><p><strong>판단 근거</strong> 구조화 입력과 Agent 전용 상태 필드가 서로 다른 사실을 제공한다.</p><p class="limit"><strong>감수한 점</strong> Native가 단계·Agent 자료를 제공하지 않으면 현재 상태가 미확인으로 남는다.</p></article></section><section class="paper" id="history-report-fb2d34df-b227-4820-a805-8ea06a96b63e-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>최종 소스의 Agent 투영과 기본·상세 표시</h3><dl><div><dt>확인 방법</dt><dd>공식 verifyWork로 bun test test/agent-overview.test.ts test/www-activity-view.test.ts 실제 실행</dd></div><div><dt>기대 결과</dt><dd>근거 기반 선택·완료·Plan/Progress 연결과 Hook 분리를 유지한다.</dd></div><div><dt>실제 관측</dt><dd>exit0, 소스·artifact·환경 안정성 true, AC1~5 증거 usable.</dd></div><div><dt>확인 범위와 한계</dt><dd>행동·SSR 검사이며 실제 GUI나 모델 호출이 아니다.</dd></div></dl></article><article class="check"><h3>독립 검토</h3><dl><div><dt>확인 방법</dt><dd>allowFallback=false의 실제 Opus 읽기 전용 CLI와 canonical digest 대조</dd></div><div><dt>기대 결과</dt><dd>작성자와 분리된 검토가 현재 소스·기준과 실제 근거를 대조한다.</dd></div><div><dt>실제 관측</dt><dd>claude-opus-5-5, executor process, verdict pass, recordReview 수용.</dd></div><div><dt>확인 범위와 한계</dt><dd>검토자는 읽지 않은 파일·GUI·실프로토콜 범위를 명시했고 검사 실행은 하지 않았다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>GUI의 양성 스킬 강조와 활성 Plan+Progress 산문 동시 표시는 이번 공식 집중검사 담당이 새로 관찰하지 않았다. 이전 Electron 결과는 합성 Native의 역사적 보조 근거다.</li><li>실제 모델 Subagent spawn·Windows·OS 한국어 IME는 이번 범위에서 실행하지 않았다. Native 사건이 제공되지 않으면 미제공/미확인으로 표시한다.</li><li>Plan.md 파일이나 복원되지 않은 계획을 읽었다고 표시하지 않으며 Native 계획 사건과 공개 commentary만 연결한다.</li><li>독립 감사의 비필수 관찰: 같은 활성 항목에서 commentary 중 explanation plan 갱신이 끼면 다음 delta가 잠시 앞부분 없이 보이고 완료 snapshot에서 회복될 수 있다.</li><li>BoxBox project mode off의 공식 사후 형식 단계는 disabled다. 기능 검사·소스 정책·strict 타입·빌드와 형식 PASS를 구분한다.</li></ul></section><section class="paper" id="history-report-fb2d34df-b227-4820-a805-8ea06a96b63e-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>추가 관찰이 필요한 품질 확인을 별도 범위로 수행할 때 실제 화면과 스트림 순서를 보존한다.</dd></div><div><dt>영향</dt><dd>현재 필수 수용을 막는 결함으로 판정되지 않은 잔여 표시 한계다.</dd></div></dl></article></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>공식 검사·기준별 관찰·독립 감사와 한계</p><code>verification.md</code></li><li><p>실제 Opus 관측 모델·판정·발견 사항</p><code>.www/session-implementation/chat013-opus-review-result.json</code></li><li><p>기존 Electron와 행동·SSR 근거 및 미관찰 범위 대응</p><code>.www/session-implementation/ui-acceptance-map.md</code></li></ol><details id="history-report-fb2d34df-b227-4820-a805-8ea06a96b63e-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-64677750-337f-4488-a503-4e0265356bf5<br>report-fb2d34df-b227-4820-a805-8ea06a96b63e</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>f06976546d58b4d2da95784a94bc299188d8e9e8541dddd89034d48ee87d53c1</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>5abc558dc0b736eaf96e49a1b003f5d0328c1f3c396ef5a07663fa2923bbf5cb</code></dd></div><div><dt>기준 지문</dt><dd><code>5950d05d534dbcec78ab4ba9dcf4dc08ab4d84520b6255f49888b451227a7dd8</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>done</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;done&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;오른쪽 바에 WWW 개발 Agent를 상위 항목으로 두고 spec/design/build/diagnose/verify 다섯 스킬 전체를 고정 표시하며 범용 스킬 전체 목록을 섞지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;현재 선택·진행 중인 WWW 스킬을 식별 가능한 근거에 따라 강조하며 문서 읽기·이름 언급·설치 여부만으로 실행 중이라고 판정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;이번 오른쪽 바의 표시 범위에서 Hook 목록·실행 현황 보기를 제외한다. Agent·WWW Skills·실제 Subagent와 Plan·Progress를 표시하며, Hook 표시 제외를 Hook 실행 비활성화로 취급하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;WWW Agent를 기본 표시하고 실제 Subagent 호출이 관측되면 해당 Subagent를 식별하여 표시한다. Subagent 작업 완료가 확인되면 항목을 유지한 채 완료 표시등으로 상태를 전환한다. 호출하지 않은 Subagent를 실행 중이라고 표시하지 않으며 역할 정의·일반 도구 호출과 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;Plan은 Plan.md 등 작업 계획 문서나 Native가 요구사항을 처리하며 제공한 계획을 바탕으로 요구사항 단위의 작업 항목·상태를 보여준다. Progress는 현재 진행 중인 Plan 항목에 연결하여 Native가 제공하는 공개 판단 요약·진행 설명과 확인된 실행 사건을 바탕으로 작업 상황을 산문으로 요약한다. 계획 목록과 원시 로그를 반복 표시하지 않고 출처 없는 판단 이유·관측하지 않은 진행을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/agent-overview.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T03:15:56.149Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-78add0a6-e3f5-4015-9869-af4c31d441c2&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-78add0a6-e3f5-4015-9869-af4c31d441c2/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep 도구로 spec.md, work.json, verification.md, src/agent-overview.ts, src/agent-overview-view.tsx, src/native-activity.ts(투영 본문 325~686행), src/native-activity-view.tsx(ResourceActivitySidebar 부분), test/agent-overview.test.ts, docs/specs/chat.md(Subagent·Progress 관련 행), test/fixtures/chat-ui-app-server.ts(collabAgentToolCall 부분)를 읽었다. agent-overview.css, renderer.tsx, www-activity.ts, test/www-activity-view.test.ts, PRODUCT/ARCHITECTURE/DEVELOPMENT/WORKFLOW 문서, .www 증거 JSON·스크린샷은 읽지 않았다. 테스트·빌드는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;소스 동일성: 입력 bundle에 있는 src·test·scripts·docs/specs/chat.md 파일별 digest가 work.json verifications[0].source.files의 digest와 일치한다(예: agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, native-activity-view.tsx ebdfb611…). 따라서 attempt-fce5db7e 실행 뒤 대상 소스는 바뀌지 않았다. 전체 sourceDigest 값이 다른 것(0a34… / 5abc…)은 입력 집합에 docs 파일이 추가됐기 때문으로 판단하며, 이 점이 결함은 아니다.&quot;,
+        &quot;AC-1/AC-3: WWW_AGENT_SKILLS가 다섯 항목으로 고정돼 있다(src/agent-overview.ts:8-14). 뷰는 projection.skills만 렌더링하고 Hook과 범용 리소스는 기본바에 그리지 않는다(src/agent-overview-view.tsx:36-69, src/native-activity-view.tsx:299-316). 테스트는 data-skill-id 5개, preToolUse·www-commit·누적 리소스 미노출을 확인한다(test/agent-overview.test.ts:102-112). 상세 모니터 진입 버튼은 유지되므로 Hook 표시 제외가 실행 비활성화로 이어지지 않는다.&quot;,
+        &quot;AC-2: 강조는 live 턴(historical 아님, endedAt 없음, running/pending/blocked)에서 정본 경로로 식별된 구조화 Skill 요청이 정확히 하나일 때만 선택된다(src/agent-overview.ts:67-71). 이름만 있는 요청, 문서 읽기, 복수 요청, 턴 종료, 복원, 다른 thread에서는 선택되지 않는 경로를 테스트가 다룬다(test/agent-overview.test.ts:26-37, 76-83). 전송 중에는 이전 선택을 지운다(agent-overview-view.tsx:30-31).&quot;,
+        &quot;AC-4: collabAgentToolCall은 senderThreadId가 현재 thread일 때만 receiver를 Subagent로 등록한다. 도구 item/completed만으로는 완료로 바꾸지 않고, agentsStates.status 또는 subAgentActivity kind=completed가 있을 때만 completed로 전환해 같은 항목에 ✓ 표시등을 켠다(src/agent-overview.ts:96-127, agent-overview-view.tsx:47-48). transport/closed와 historical 이벤트는 running/pending을 unknown으로 낮춘다. 이는 spec.md의 &#39;도구 호출 종료만으로 완료 추정 금지&#39; 결정과 맞는다.&quot;,
+        &quot;AC-5: Plan은 현재 턴 turn/plan/updated의 Native 계획만 사용한다. Progress는 inProgress 항목이 정확히 하나일 때 그 항목에 귀속된 commentary 또는 plan explanation만 사용한다. epoch·contextKey로 항목 전환, A→B→A, 계획 이전 메시지의 늦은 재귀속을 막는다(src/agent-overview.ts:128-162). analysis/reasoning phase와 다른 turn은 제외된다(테스트 57-95행). docs/specs/chat.md:149도 Plan.md를 연결하지 않는 한계를 명시한다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님): 같은 활성 항목에서 commentary delta가 스트리밍되는 도중 explanation이 있는 turn/plan/updated가 끼어들면 messageId가 &#39;&#39;로 초기화된다(src/agent-overview.ts:138). 그 뒤 같은 itemId의 delta는 앞부분 없이 조각만 progress로 표시되고(150행), item/completed가 와야 전체 텍스트로 회복된다. update_plan은 보통 메시지 완료 뒤에 호출되므로 실제로 생길 가능성은 낮고 일시적인 표시 문제다.&quot;,
+        &quot;증거 범위 확인: verification.md는 실제 프로세스로 실행한 bun test(exit 0)가 행동·SSR 검사이며 GUI·실제 모델 Subagent spawn이 아니라고 명시한다. 이전 Electron 합성 Native 관찰도 최종 소스 GUI 재검사로 승격하지 않았다(verification.md:25-37). AC-2의 양성 강조 GUI 화면과 AC-5의 Plan+Progress 동시 GUI 표시는 미관찰이라고 공개하므로 증거 범위가 과장되지 않았다.&quot;,
+        &quot;잔여 위험: subAgentActivity 항목 형태와 실제 codex spawnAgent의 item/started 시점 receiverThreadIds·agentsStates 제공 여부는 fixture와 테스트의 가정이다. 이번 검토에서는 실제 프로토콜과 대조하지 않았다. started 시점에 receiver가 비어 있으면 첫 상태는 completed 시점의 agentsStates에 의존한다. 그 값이 없으면 &#39;결과 미확인&#39;으로 보수적으로 표시되므로 잘못된 완료 표시로 이어지지는 않는다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;오른쪽 기본바를 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 계획·진행 개요로 정리했다. 현재 스킬은 구조화된 선택 근거가 있을 때만 강조하고 Subagent는 실제 완료 상태에서 같은 항목의 불을 켠다. 최종 동결 소스의 행동·SSR 집중검사와 실제 Opus 독립 감사가 통과했으며, GUI에서 새로 관찰하지 않은 선택 강조·활성 산문과 실제 모델 하위 호출의 한계는 구분해 남겼다.&quot;,
+  &quot;before&quot;: &quot;기본 오른쪽 바는 현재 요청의 plan·Hook·범용 호출과 누적 리소스를 함께 읽는 방식이었다. 고정 다섯 Skills와 실제 Subagent 완료, 활성 계획 항목의 산문을 한 개요에서 추적할 수 없었다.&quot;,
+  &quot;after&quot;: &quot;기본바는 WWW Agent·다섯 Skills·실제 Subagent와 Plan/Progress로 구성한다. Hook·전체 카탈로그·누적 관측은 상세 모니터에서 읽고 기본바에는 원장 누락·저장 경고만 보조로 남긴다.&quot;,
+  &quot;changes&quot;: [
+    &quot;agent-overview 순수 투영과 전용 뷰·CSS를 추가하고 기존 ResourceActivitySidebar props를 유지해 연결했다.&quot;,
+    &quot;정본 경로의 명시 Skill 요청·문서 읽기·이름 언급을 구별하고 종료·복원된 요청의 현재 선택을 해제한다.&quot;,
+    &quot;Agent 상태 completed와 일반 도구 종료를 구별하며 후속 요청·실패·중단·연결 종료·historical 상태를 보존한다.&quot;,
+    &quot;Native Plan의 활성 항목과 공개 산문을 묶고 계획 변경·항목 복귀·계획 이전 메시지의 늦은 delta를 재귀속하지 않는다.&quot;,
+    &quot;Product·Architecture·Development·Chat 명세의 기본바와 상세 모니터 범위를 최신 구현에 맞춰 정합화했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;실제 사건이 없는 단계 선택·Agent 완료·진행 설명을 추측하지 않고 미확인으로 남겼다.&quot;,
+    &quot;사용자가 선택한 다섯 Skills만 고정 표시하고 Hook 실행 설정은 변경하지 않았다.&quot;,
+    &quot;Plan.md를 임의 탐색하지 않고 Native 계획 자료부터 연결했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;GUI의 양성 스킬 강조와 활성 Plan+Progress 산문 동시 표시는 이번 공식 집중검사 담당이 새로 관찰하지 않았다. 이전 Electron 결과는 합성 Native의 역사적 보조 근거다.&quot;,
+    &quot;실제 모델 Subagent spawn·Windows·OS 한국어 IME는 이번 범위에서 실행하지 않았다. Native 사건이 제공되지 않으면 미제공/미확인으로 표시한다.&quot;,
+    &quot;Plan.md 파일이나 복원되지 않은 계획을 읽었다고 표시하지 않으며 Native 계획 사건과 공개 commentary만 연결한다.&quot;,
+    &quot;독립 감사의 비필수 관찰: 같은 활성 항목에서 commentary 중 explanation plan 갱신이 끼면 다음 delta가 잠시 앞부분 없이 보이고 완료 snapshot에서 회복될 수 있다.&quot;,
+    &quot;BoxBox project mode off의 공식 사후 형식 단계는 disabled다. 기능 검사·소스 정책·strict 타입·빌드와 형식 PASS를 구분한다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;수정 필수 아닌 스트리밍 interleaving 관찰과 GUI 선택 강조·활성 산문 화면은 후속 품질 점검 대상으로 남긴다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;오른쪽 기본바를 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 계획·진행 개요로 정리했다. 현재 스킬은 구조화된 선택 근거가 있을 때만 강조하고 Subagent는 실제 완료 상태에서 같은 항목의 불을 켠다. 최종 동결 소스의 행동·SSR 집중검사와 실제 Opus 독립 감사가 통과했으며, GUI에서 새로 관찰하지 않은 선택 강조·활성 산문과 실제 모델 하위 호출의 한계는 구분해 남겼다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;AC-1 · 고정 Agent와 다섯 Skills&quot;,
+        &quot;result&quot;: &quot;WWW Agent 아래 spec/design/build/diagnose/verify를 항상 보이고 범용 목록을 제외한다.&quot;,
+        &quot;evidence&quot;: &quot;집중검사 고정 목록·범용 제외 SSR; 이전 Electron 기본바 표시&quot;,
+        &quot;limitations&quot;: &quot;실제 다섯 스킬을 모두 호출한 시험은 아니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-2 · 근거 있는 현재 항목&quot;,
+        &quot;result&quot;: &quot;정본 경로의 구조화 Skill 요청 하나만 선택한다. 문서 읽기·이름·복원·종료를 현재 실행으로 올리지 않는다.&quot;,
+        &quot;evidence&quot;: &quot;집중검사 선택·해제·다중 요청·다른 thread·historical 행동 사례&quot;,
+        &quot;limitations&quot;: &quot;GUI의 양성 선택 강조는 새로 관찰하지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-3 · Hook 기본 제외와 상세 보존&quot;,
+        &quot;result&quot;: &quot;기본바에서 Hook·범용 리소스를 제외하고 상세의 Hook 상태·진단을 보존한다.&quot;,
+        &quot;evidence&quot;: &quot;집중 SSR 기본 제외·상세 보존; 이전 Electron Hook 실패/완료&quot;,
+        &quot;limitations&quot;: &quot;표시 변경은 Hook 실행 비활성화가 아니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-4 · 실제 Subagent와 완료 불&quot;,
+        &quot;result&quot;: &quot;실제 Agent 식별자와 상태를 유지하며 일반 도구 종료로 완료를 추정하지 않는다.&quot;,
+        &quot;evidence&quot;: &quot;집중 행동·SSR 완료 체크·동일 항목 유지; 이전 Electron 합성 Native 전이&quot;,
+        &quot;limitations&quot;: &quot;실제 모델의 하위 Agent spawn은 이 검증에서 실행하지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-5 · 연결된 Plan과 Progress&quot;,
+        &quot;result&quot;: &quot;현재 Native Plan의 유일한 활성 항목에 공개 설명을 연결하고 늦은 설명의 재귀속을 막는다.&quot;,
+        &quot;evidence&quot;: &quot;집중 행동·SSR 활성 항목·delta·A→B→A·비공개 추론 제외&quot;,
+        &quot;limitations&quot;: &quot;활성 항목 산문의 GUI 동시 표시를 새로 관찰하지 않았고 Plan.md 파일·복원 미제공 자료는 임의 보충하지 않는다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;최종 소스의 Agent 투영과 기본·상세 표시&quot;,
+        &quot;method&quot;: &quot;공식 verifyWork로 bun test test/agent-overview.test.ts test/www-activity-view.test.ts 실제 실행&quot;,
+        &quot;expected&quot;: &quot;근거 기반 선택·완료·Plan/Progress 연결과 Hook 분리를 유지한다.&quot;,
+        &quot;observed&quot;: &quot;exit0, 소스·artifact·환경 안정성 true, AC1~5 증거 usable.&quot;,
+        &quot;limitations&quot;: &quot;행동·SSR 검사이며 실제 GUI나 모델 호출이 아니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;독립 검토&quot;,
+        &quot;method&quot;: &quot;allowFallback=false의 실제 Opus 읽기 전용 CLI와 canonical digest 대조&quot;,
+        &quot;expected&quot;: &quot;작성자와 분리된 검토가 현재 소스·기준과 실제 근거를 대조한다.&quot;,
+        &quot;observed&quot;: &quot;claude-opus-5-5, executor process, verdict pass, recordReview 수용.&quot;,
+        &quot;limitations&quot;: &quot;검토자는 읽지 않은 파일·GUI·실프로토콜 범위를 명시했고 검사 실행은 하지 않았다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;문서 읽기와 도구 종료가 실제 실행·완료처럼 보일 수 있다.&quot;,
+        &quot;basis&quot;: &quot;구조화 입력과 Agent 전용 상태 필드가 서로 다른 사실을 제공한다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;각 근거를 분리하고 명시 근거에만 선택·완료 표시를 연결한다.&quot;,
+        &quot;tradeoff&quot;: &quot;Native가 단계·Agent 자료를 제공하지 않으면 현재 상태가 미확인으로 남는다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;verification.md&quot;,
+        &quot;purpose&quot;: &quot;공식 검사·기준별 관찰·독립 감사와 한계&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-opus-review-result.json&quot;,
+        &quot;purpose&quot;: &quot;실제 Opus 관측 모델·판정·발견 사항&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/ui-acceptance-map.md&quot;,
+        &quot;purpose&quot;: &quot;기존 Electron와 행동·SSR 근거 및 미관찰 범위 대응&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;추가 관찰이 필요한 품질 확인을 별도 범위로 수행할 때 실제 화면과 스트림 순서를 보존한다.&quot;,
+        &quot;impact&quot;: &quot;현재 필수 수용을 막는 결함으로 판정되지 않은 잔여 표시 한계다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 오후 12:23 · 작성자 보고서 · 오른쪽 기본바를 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 계획·진행 개요로 정리했다. 현재 스킬은 구조화된 선택 근거가 있을 때만 강조하고 Subagent는 실제 완료 상태에서 같은 항목의 불을 켠다. 최종 동결 소스의 행동·SSR 집중검사와 실제 Opus 독립 감사가 통과했으며, GUI에서 새로 관찰하지 않은 선택 강조·활성 산문과 실제 모델 하위 호출의 한계는 구분해 남겼다.</summary><article><h3>오른쪽 Agent와 WWW Skills 및 Hook 표시 논의</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">오른쪽 기본바를 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 계획·진행 개요로 정리했다. 현재 스킬은 구조화된 선택 근거가 있을 때만 강조하고 Subagent는 실제 완료 상태에서 같은 항목의 불을 켠다. 최종 동결 소스의 행동·SSR 집중검사와 실제 Opus 독립 감사가 통과했으며, GUI에서 새로 관찰하지 않은 선택 강조·활성 산문과 실제 모델 하위 호출의 한계는 구분해 남겼다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 1 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.</p><h3>기록된 변경</h3><ul><li>agent-overview 순수 투영과 전용 뷰·CSS를 추가하고 기존 ResourceActivitySidebar props를 유지해 연결했다.</li><li>정본 경로의 명시 Skill 요청·문서 읽기·이름 언급을 구별하고 종료·복원된 요청의 현재 선택을 해제한다.</li><li>Agent 상태 completed와 일반 도구 종료를 구별하며 후속 요청·실패·중단·연결 종료·historical 상태를 보존한다.</li><li>Native Plan의 활성 항목과 공개 산문을 묶고 계획 변경·항목 복귀·계획 이전 메시지의 늦은 delta를 재귀속하지 않는다.</li><li>Product·Architecture·Development·Chat 명세의 기본바와 상세 모니터 범위를 최신 구현에 맞춰 정합화했다.</li></ul><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>AC-1 · 고정 Agent와 다섯 Skills</h3><p class="result">WWW Agent 아래 spec/design/build/diagnose/verify를 항상 보이고 범용 목록을 제외한다.</p><p class="support"><strong>근거</strong> 집중검사 고정 목록·범용 제외 SSR; 이전 Electron 기본바 표시</p><p class="limit">실제 다섯 스킬을 모두 호출한 시험은 아니다.</p></article><article class="requirement"><h3>AC-2 · 근거 있는 현재 항목</h3><p class="result">정본 경로의 구조화 Skill 요청 하나만 선택한다. 문서 읽기·이름·복원·종료를 현재 실행으로 올리지 않는다.</p><p class="support"><strong>근거</strong> 집중검사 선택·해제·다중 요청·다른 thread·historical 행동 사례</p><p class="limit">GUI의 양성 선택 강조는 새로 관찰하지 않았다.</p></article><article class="requirement"><h3>AC-3 · Hook 기본 제외와 상세 보존</h3><p class="result">기본바에서 Hook·범용 리소스를 제외하고 상세의 Hook 상태·진단을 보존한다.</p><p class="support"><strong>근거</strong> 집중 SSR 기본 제외·상세 보존; 이전 Electron Hook 실패/완료</p><p class="limit">표시 변경은 Hook 실행 비활성화가 아니다.</p></article><article class="requirement"><h3>AC-4 · 실제 Subagent와 완료 불</h3><p class="result">실제 Agent 식별자와 상태를 유지하며 일반 도구 종료로 완료를 추정하지 않는다.</p><p class="support"><strong>근거</strong> 집중 행동·SSR 완료 체크·동일 항목 유지; 이전 Electron 합성 Native 전이</p><p class="limit">실제 모델의 하위 Agent spawn은 이 검증에서 실행하지 않았다.</p></article><article class="requirement"><h3>AC-5 · 연결된 Plan과 Progress</h3><p class="result">현재 Native Plan의 유일한 활성 항목에 공개 설명을 연결하고 늦은 설명의 재귀속을 막는다.</p><p class="support"><strong>근거</strong> 집중 행동·SSR 활성 항목·delta·A→B→A·비공개 추론 제외</p><p class="limit">활성 항목 산문의 GUI 동시 표시를 새로 관찰하지 않았고 Plan.md 파일·복원 미제공 자료는 임의 보충하지 않는다.</p></article><section class="paper" id="history-report-77b66377-5af5-460e-9ee6-75eb46159cad-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>문서 읽기와 도구 종료가 실제 실행·완료처럼 보일 수 있다.</h3><p><strong>선택</strong> 각 근거를 분리하고 명시 근거에만 선택·완료 표시를 연결한다.</p><p><strong>판단 근거</strong> 구조화 입력과 Agent 전용 상태 필드가 서로 다른 사실을 제공한다.</p><p class="limit"><strong>감수한 점</strong> Native가 단계·Agent 자료를 제공하지 않으면 현재 상태가 미확인으로 남는다.</p></article></section><section class="paper" id="history-report-77b66377-5af5-460e-9ee6-75eb46159cad-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>최종 소스의 Agent 투영과 기본·상세 표시</h3><dl><div><dt>확인 방법</dt><dd>공식 verifyWork로 bun test test/agent-overview.test.ts test/www-activity-view.test.ts 실제 실행</dd></div><div><dt>기대 결과</dt><dd>근거 기반 선택·완료·Plan/Progress 연결과 Hook 분리를 유지한다.</dd></div><div><dt>실제 관측</dt><dd>exit0, 소스·artifact·환경 안정성 true, AC1~5 증거 usable.</dd></div><div><dt>확인 범위와 한계</dt><dd>행동·SSR 검사이며 실제 GUI나 모델 호출이 아니다.</dd></div></dl></article><article class="check"><h3>독립 검토</h3><dl><div><dt>확인 방법</dt><dd>allowFallback=false의 실제 Opus 읽기 전용 CLI와 canonical digest 대조</dd></div><div><dt>기대 결과</dt><dd>작성자와 분리된 검토가 현재 소스·기준과 실제 근거를 대조한다.</dd></div><div><dt>실제 관측</dt><dd>claude-opus-5-5, executor process, verdict pass, recordReview 수용.</dd></div><div><dt>확인 범위와 한계</dt><dd>검토자는 읽지 않은 파일·GUI·실프로토콜 범위를 명시했고 검사 실행은 하지 않았다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>GUI의 양성 스킬 강조와 활성 Plan+Progress 산문 동시 표시는 이번 공식 집중검사 담당이 새로 관찰하지 않았다. 이전 Electron 결과는 합성 Native의 역사적 보조 근거다.</li><li>실제 모델 Subagent spawn·Windows·OS 한국어 IME는 이번 범위에서 실행하지 않았다. Native 사건이 제공되지 않으면 미제공/미확인으로 표시한다.</li><li>Plan.md 파일이나 복원되지 않은 계획을 읽었다고 표시하지 않으며 Native 계획 사건과 공개 commentary만 연결한다.</li><li>독립 감사의 비필수 관찰: 같은 활성 항목에서 commentary 중 explanation plan 갱신이 끼면 다음 delta가 잠시 앞부분 없이 보이고 완료 snapshot에서 회복될 수 있다.</li><li>BoxBox project mode off의 공식 사후 형식 단계는 disabled다. 기능 검사·소스 정책·strict 타입·빌드와 형식 PASS를 구분한다.</li></ul></section><section class="paper" id="history-report-77b66377-5af5-460e-9ee6-75eb46159cad-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>추가 관찰이 필요한 품질 확인을 별도 범위로 수행할 때 실제 화면과 스트림 순서를 보존한다.</dd></div><div><dt>영향</dt><dd>현재 필수 수용을 막는 결함으로 판정되지 않은 잔여 표시 한계다.</dd></div></dl></article></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>공식 검사·기준별 관찰·독립 감사와 한계</p><code>verification.md</code></li><li><p>실제 Opus 관측 모델·판정·발견 사항</p><code>.www/session-implementation/chat013-opus-review-result.json</code></li><li><p>기존 Electron와 행동·SSR 근거 및 미관찰 범위 대응</p><code>.www/session-implementation/ui-acceptance-map.md</code></li></ol><details id="history-report-77b66377-5af5-460e-9ee6-75eb46159cad-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-64677750-337f-4488-a503-4e0265356bf5<br>report-77b66377-5af5-460e-9ee6-75eb46159cad</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>de0285f56cc4a284ba0d0f60741a216fef8071db11a85362c9a6ad7876eedbda</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>5abc558dc0b736eaf96e49a1b003f5d0328c1f3c396ef5a07663fa2923bbf5cb</code></dd></div><div><dt>기준 지문</dt><dd><code>5950d05d534dbcec78ab4ba9dcf4dc08ab4d84520b6255f49888b451227a7dd8</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;오른쪽 바에 WWW 개발 Agent를 상위 항목으로 두고 spec/design/build/diagnose/verify 다섯 스킬 전체를 고정 표시하며 범용 스킬 전체 목록을 섞지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;현재 선택·진행 중인 WWW 스킬을 식별 가능한 근거에 따라 강조하며 문서 읽기·이름 언급·설치 여부만으로 실행 중이라고 판정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;이번 오른쪽 바의 표시 범위에서 Hook 목록·실행 현황 보기를 제외한다. Agent·WWW Skills·실제 Subagent와 Plan·Progress를 표시하며, Hook 표시 제외를 Hook 실행 비활성화로 취급하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;WWW Agent를 기본 표시하고 실제 Subagent 호출이 관측되면 해당 Subagent를 식별하여 표시한다. Subagent 작업 완료가 확인되면 항목을 유지한 채 완료 표시등으로 상태를 전환한다. 호출하지 않은 Subagent를 실행 중이라고 표시하지 않으며 역할 정의·일반 도구 호출과 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;Plan은 Plan.md 등 작업 계획 문서나 Native가 요구사항을 처리하며 제공한 계획을 바탕으로 요구사항 단위의 작업 항목·상태를 보여준다. Progress는 현재 진행 중인 Plan 항목에 연결하여 Native가 제공하는 공개 판단 요약·진행 설명과 확인된 실행 사건을 바탕으로 작업 상황을 산문으로 요약한다. 계획 목록과 원시 로그를 반복 표시하지 않고 출처 없는 판단 이유·관측하지 않은 진행을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/agent-overview.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T03:15:56.149Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-78add0a6-e3f5-4015-9869-af4c31d441c2&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-78add0a6-e3f5-4015-9869-af4c31d441c2/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep 도구로 spec.md, work.json, verification.md, src/agent-overview.ts, src/agent-overview-view.tsx, src/native-activity.ts(투영 본문 325~686행), src/native-activity-view.tsx(ResourceActivitySidebar 부분), test/agent-overview.test.ts, docs/specs/chat.md(Subagent·Progress 관련 행), test/fixtures/chat-ui-app-server.ts(collabAgentToolCall 부분)를 읽었다. agent-overview.css, renderer.tsx, www-activity.ts, test/www-activity-view.test.ts, PRODUCT/ARCHITECTURE/DEVELOPMENT/WORKFLOW 문서, .www 증거 JSON·스크린샷은 읽지 않았다. 테스트·빌드는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;소스 동일성: 입력 bundle에 있는 src·test·scripts·docs/specs/chat.md 파일별 digest가 work.json verifications[0].source.files의 digest와 일치한다(예: agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, native-activity-view.tsx ebdfb611…). 따라서 attempt-fce5db7e 실행 뒤 대상 소스는 바뀌지 않았다. 전체 sourceDigest 값이 다른 것(0a34… / 5abc…)은 입력 집합에 docs 파일이 추가됐기 때문으로 판단하며, 이 점이 결함은 아니다.&quot;,
+        &quot;AC-1/AC-3: WWW_AGENT_SKILLS가 다섯 항목으로 고정돼 있다(src/agent-overview.ts:8-14). 뷰는 projection.skills만 렌더링하고 Hook과 범용 리소스는 기본바에 그리지 않는다(src/agent-overview-view.tsx:36-69, src/native-activity-view.tsx:299-316). 테스트는 data-skill-id 5개, preToolUse·www-commit·누적 리소스 미노출을 확인한다(test/agent-overview.test.ts:102-112). 상세 모니터 진입 버튼은 유지되므로 Hook 표시 제외가 실행 비활성화로 이어지지 않는다.&quot;,
+        &quot;AC-2: 강조는 live 턴(historical 아님, endedAt 없음, running/pending/blocked)에서 정본 경로로 식별된 구조화 Skill 요청이 정확히 하나일 때만 선택된다(src/agent-overview.ts:67-71). 이름만 있는 요청, 문서 읽기, 복수 요청, 턴 종료, 복원, 다른 thread에서는 선택되지 않는 경로를 테스트가 다룬다(test/agent-overview.test.ts:26-37, 76-83). 전송 중에는 이전 선택을 지운다(agent-overview-view.tsx:30-31).&quot;,
+        &quot;AC-4: collabAgentToolCall은 senderThreadId가 현재 thread일 때만 receiver를 Subagent로 등록한다. 도구 item/completed만으로는 완료로 바꾸지 않고, agentsStates.status 또는 subAgentActivity kind=completed가 있을 때만 completed로 전환해 같은 항목에 ✓ 표시등을 켠다(src/agent-overview.ts:96-127, agent-overview-view.tsx:47-48). transport/closed와 historical 이벤트는 running/pending을 unknown으로 낮춘다. 이는 spec.md의 &#39;도구 호출 종료만으로 완료 추정 금지&#39; 결정과 맞는다.&quot;,
+        &quot;AC-5: Plan은 현재 턴 turn/plan/updated의 Native 계획만 사용한다. Progress는 inProgress 항목이 정확히 하나일 때 그 항목에 귀속된 commentary 또는 plan explanation만 사용한다. epoch·contextKey로 항목 전환, A→B→A, 계획 이전 메시지의 늦은 재귀속을 막는다(src/agent-overview.ts:128-162). analysis/reasoning phase와 다른 turn은 제외된다(테스트 57-95행). docs/specs/chat.md:149도 Plan.md를 연결하지 않는 한계를 명시한다.&quot;,
+        &quot;경미한 관찰(수정 필수 아님): 같은 활성 항목에서 commentary delta가 스트리밍되는 도중 explanation이 있는 turn/plan/updated가 끼어들면 messageId가 &#39;&#39;로 초기화된다(src/agent-overview.ts:138). 그 뒤 같은 itemId의 delta는 앞부분 없이 조각만 progress로 표시되고(150행), item/completed가 와야 전체 텍스트로 회복된다. update_plan은 보통 메시지 완료 뒤에 호출되므로 실제로 생길 가능성은 낮고 일시적인 표시 문제다.&quot;,
+        &quot;증거 범위 확인: verification.md는 실제 프로세스로 실행한 bun test(exit 0)가 행동·SSR 검사이며 GUI·실제 모델 Subagent spawn이 아니라고 명시한다. 이전 Electron 합성 Native 관찰도 최종 소스 GUI 재검사로 승격하지 않았다(verification.md:25-37). AC-2의 양성 강조 GUI 화면과 AC-5의 Plan+Progress 동시 GUI 표시는 미관찰이라고 공개하므로 증거 범위가 과장되지 않았다.&quot;,
+        &quot;잔여 위험: subAgentActivity 항목 형태와 실제 codex spawnAgent의 item/started 시점 receiverThreadIds·agentsStates 제공 여부는 fixture와 테스트의 가정이다. 이번 검토에서는 실제 프로토콜과 대조하지 않았다. started 시점에 receiver가 비어 있으면 첫 상태는 completed 시점의 agentsStates에 의존한다. 그 값이 없으면 &#39;결과 미확인&#39;으로 보수적으로 표시되므로 잘못된 완료 표시로 이어지지는 않는다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;오른쪽 기본바를 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 계획·진행 개요로 정리했다. 현재 스킬은 구조화된 선택 근거가 있을 때만 강조하고 Subagent는 실제 완료 상태에서 같은 항목의 불을 켠다. 최종 동결 소스의 행동·SSR 집중검사와 실제 Opus 독립 감사가 통과했으며, GUI에서 새로 관찰하지 않은 선택 강조·활성 산문과 실제 모델 하위 호출의 한계는 구분해 남겼다.&quot;,
+  &quot;before&quot;: &quot;기본 오른쪽 바는 현재 요청의 plan·Hook·범용 호출과 누적 리소스를 함께 읽는 방식이었다. 고정 다섯 Skills와 실제 Subagent 완료, 활성 계획 항목의 산문을 한 개요에서 추적할 수 없었다.&quot;,
+  &quot;after&quot;: &quot;기본바는 WWW Agent·다섯 Skills·실제 Subagent와 Plan/Progress로 구성한다. Hook·전체 카탈로그·누적 관측은 상세 모니터에서 읽고 기본바에는 원장 누락·저장 경고만 보조로 남긴다.&quot;,
+  &quot;changes&quot;: [
+    &quot;agent-overview 순수 투영과 전용 뷰·CSS를 추가하고 기존 ResourceActivitySidebar props를 유지해 연결했다.&quot;,
+    &quot;정본 경로의 명시 Skill 요청·문서 읽기·이름 언급을 구별하고 종료·복원된 요청의 현재 선택을 해제한다.&quot;,
+    &quot;Agent 상태 completed와 일반 도구 종료를 구별하며 후속 요청·실패·중단·연결 종료·historical 상태를 보존한다.&quot;,
+    &quot;Native Plan의 활성 항목과 공개 산문을 묶고 계획 변경·항목 복귀·계획 이전 메시지의 늦은 delta를 재귀속하지 않는다.&quot;,
+    &quot;Product·Architecture·Development·Chat 명세의 기본바와 상세 모니터 범위를 최신 구현에 맞춰 정합화했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;실제 사건이 없는 단계 선택·Agent 완료·진행 설명을 추측하지 않고 미확인으로 남겼다.&quot;,
+    &quot;사용자가 선택한 다섯 Skills만 고정 표시하고 Hook 실행 설정은 변경하지 않았다.&quot;,
+    &quot;Plan.md를 임의 탐색하지 않고 Native 계획 자료부터 연결했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;GUI의 양성 스킬 강조와 활성 Plan+Progress 산문 동시 표시는 이번 공식 집중검사 담당이 새로 관찰하지 않았다. 이전 Electron 결과는 합성 Native의 역사적 보조 근거다.&quot;,
+    &quot;실제 모델 Subagent spawn·Windows·OS 한국어 IME는 이번 범위에서 실행하지 않았다. Native 사건이 제공되지 않으면 미제공/미확인으로 표시한다.&quot;,
+    &quot;Plan.md 파일이나 복원되지 않은 계획을 읽었다고 표시하지 않으며 Native 계획 사건과 공개 commentary만 연결한다.&quot;,
+    &quot;독립 감사의 비필수 관찰: 같은 활성 항목에서 commentary 중 explanation plan 갱신이 끼면 다음 delta가 잠시 앞부분 없이 보이고 완료 snapshot에서 회복될 수 있다.&quot;,
+    &quot;BoxBox project mode off의 공식 사후 형식 단계는 disabled다. 기능 검사·소스 정책·strict 타입·빌드와 형식 PASS를 구분한다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;수정 필수 아닌 스트리밍 interleaving 관찰과 GUI 선택 강조·활성 산문 화면은 후속 품질 점검 대상으로 남긴다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;오른쪽 기본바를 WWW Agent와 다섯 고정 스킬, 실제 Subagent, 계획·진행 개요로 정리했다. 현재 스킬은 구조화된 선택 근거가 있을 때만 강조하고 Subagent는 실제 완료 상태에서 같은 항목의 불을 켠다. 최종 동결 소스의 행동·SSR 집중검사와 실제 Opus 독립 감사가 통과했으며, GUI에서 새로 관찰하지 않은 선택 강조·활성 산문과 실제 모델 하위 호출의 한계는 구분해 남겼다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;AC-1 · 고정 Agent와 다섯 Skills&quot;,
+        &quot;result&quot;: &quot;WWW Agent 아래 spec/design/build/diagnose/verify를 항상 보이고 범용 목록을 제외한다.&quot;,
+        &quot;evidence&quot;: &quot;집중검사 고정 목록·범용 제외 SSR; 이전 Electron 기본바 표시&quot;,
+        &quot;limitations&quot;: &quot;실제 다섯 스킬을 모두 호출한 시험은 아니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-2 · 근거 있는 현재 항목&quot;,
+        &quot;result&quot;: &quot;정본 경로의 구조화 Skill 요청 하나만 선택한다. 문서 읽기·이름·복원·종료를 현재 실행으로 올리지 않는다.&quot;,
+        &quot;evidence&quot;: &quot;집중검사 선택·해제·다중 요청·다른 thread·historical 행동 사례&quot;,
+        &quot;limitations&quot;: &quot;GUI의 양성 선택 강조는 새로 관찰하지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-3 · Hook 기본 제외와 상세 보존&quot;,
+        &quot;result&quot;: &quot;기본바에서 Hook·범용 리소스를 제외하고 상세의 Hook 상태·진단을 보존한다.&quot;,
+        &quot;evidence&quot;: &quot;집중 SSR 기본 제외·상세 보존; 이전 Electron Hook 실패/완료&quot;,
+        &quot;limitations&quot;: &quot;표시 변경은 Hook 실행 비활성화가 아니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-4 · 실제 Subagent와 완료 불&quot;,
+        &quot;result&quot;: &quot;실제 Agent 식별자와 상태를 유지하며 일반 도구 종료로 완료를 추정하지 않는다.&quot;,
+        &quot;evidence&quot;: &quot;집중 행동·SSR 완료 체크·동일 항목 유지; 이전 Electron 합성 Native 전이&quot;,
+        &quot;limitations&quot;: &quot;실제 모델의 하위 Agent spawn은 이 검증에서 실행하지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;AC-5 · 연결된 Plan과 Progress&quot;,
+        &quot;result&quot;: &quot;현재 Native Plan의 유일한 활성 항목에 공개 설명을 연결하고 늦은 설명의 재귀속을 막는다.&quot;,
+        &quot;evidence&quot;: &quot;집중 행동·SSR 활성 항목·delta·A→B→A·비공개 추론 제외&quot;,
+        &quot;limitations&quot;: &quot;활성 항목 산문의 GUI 동시 표시를 새로 관찰하지 않았고 Plan.md 파일·복원 미제공 자료는 임의 보충하지 않는다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;최종 소스의 Agent 투영과 기본·상세 표시&quot;,
+        &quot;method&quot;: &quot;공식 verifyWork로 bun test test/agent-overview.test.ts test/www-activity-view.test.ts 실제 실행&quot;,
+        &quot;expected&quot;: &quot;근거 기반 선택·완료·Plan/Progress 연결과 Hook 분리를 유지한다.&quot;,
+        &quot;observed&quot;: &quot;exit0, 소스·artifact·환경 안정성 true, AC1~5 증거 usable.&quot;,
+        &quot;limitations&quot;: &quot;행동·SSR 검사이며 실제 GUI나 모델 호출이 아니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;독립 검토&quot;,
+        &quot;method&quot;: &quot;allowFallback=false의 실제 Opus 읽기 전용 CLI와 canonical digest 대조&quot;,
+        &quot;expected&quot;: &quot;작성자와 분리된 검토가 현재 소스·기준과 실제 근거를 대조한다.&quot;,
+        &quot;observed&quot;: &quot;claude-opus-5-5, executor process, verdict pass, recordReview 수용.&quot;,
+        &quot;limitations&quot;: &quot;검토자는 읽지 않은 파일·GUI·실프로토콜 범위를 명시했고 검사 실행은 하지 않았다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;문서 읽기와 도구 종료가 실제 실행·완료처럼 보일 수 있다.&quot;,
+        &quot;basis&quot;: &quot;구조화 입력과 Agent 전용 상태 필드가 서로 다른 사실을 제공한다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;각 근거를 분리하고 명시 근거에만 선택·완료 표시를 연결한다.&quot;,
+        &quot;tradeoff&quot;: &quot;Native가 단계·Agent 자료를 제공하지 않으면 현재 상태가 미확인으로 남는다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;verification.md&quot;,
+        &quot;purpose&quot;: &quot;공식 검사·기준별 관찰·독립 감사와 한계&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/chat013-opus-review-result.json&quot;,
+        &quot;purpose&quot;: &quot;실제 Opus 관측 모델·판정·발견 사항&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.www/session-implementation/ui-acceptance-map.md&quot;,
+        &quot;purpose&quot;: &quot;기존 Electron와 행동·SSR 근거 및 미관찰 범위 대응&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;선택 강조·활성 산문 GUI와 비필수 interleaving 표시를 후속 점검한다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;추가 관찰이 필요한 품질 확인을 별도 범위로 수행할 때 실제 화면과 스트림 순서를 보존한다.&quot;,
+        &quot;impact&quot;: &quot;현재 필수 수용을 막는 결함으로 판정되지 않은 잔여 표시 한계다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 오전 11:32 · 작성자 보고서 · 기본 오른쪽 바를 WWW Agent·다섯 Skills·실제 Subagent와 Plan·Progress로 구현했다. 실제 Electron 검사와 집중 투영 검사는 통과했으나 이 UUID의 기준별 공식 수용과 제품 독립 감사는 완료하지 않았다.</summary><article><h3>오른쪽 Agent와 WWW Skills 및 Hook 표시 논의</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">기본 바에 현재 요청·Hook·누적 리소스가 혼재했다.
+
+고정 다섯 Skills와 실제 Subagent 상태를 표시하고 Native 계획의 활성 항목에 공개 진행 설명을 연결한다. Hook은 상세 모니터에 남긴다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 현재 소스의 기준별 검증과 읽기 전용 제품 독립 검토를 이 UUID에 연결한다.</p><p class="blocker"><strong>남은 차단 사항</strong> 기능 구현과 실제 Electron 256조건 검사는 통과했지만 이 UUID의 최종 독립 검토와 기준별 공식 수용 연결은 미완료다.</p><p class="state-note">저장 당시 기준 중 5개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>Agent 고정 트리와 실제 agentsStates 기반 Subagent 완료 표시를 추가했다.</li><li>단계 변경 뒤 늦은 설명을 새 항목에 붙이지 않는 Plan·Progress 투영을 구현했다.</li><li>CSS를 실제 빌드 복사와 index 링크에 연결해 호스트에서 표시했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>오른쪽 바에 WWW 개발 Agent를 상위 항목으로 두고 spec/design/build/diagnose/verify 다섯 스킬 전체를 고정 표시하며 범용 스킬 전체 목록을 섞지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>현재 선택·진행 중인 WWW 스킬을 식별 가능한 근거에 따라 강조하며 문서 읽기·이름 언급·설치 여부만으로 실행 중이라고 판정하지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>이번 오른쪽 바의 표시 범위에서 Hook 목록·실행 현황 보기를 제외한다. Agent·WWW Skills·실제 Subagent와 Plan·Progress를 표시하며, Hook 표시 제외를 Hook 실행 비활성화로 취급하지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>WWW Agent를 기본 표시하고 실제 Subagent 호출이 관측되면 해당 Subagent를 식별하여 표시한다. Subagent 작업 완료가 확인되면 항목을 유지한 채 완료 표시등으로 상태를 전환한다. 호출하지 않은 Subagent를 실행 중이라고 표시하지 않으며 역할 정의·일반 도구 호출과 구분한다.</dt><dd>미검증으로 기록</dd></div><div><dt>Plan은 Plan.md 등 작업 계획 문서나 Native가 요구사항을 처리하며 제공한 계획을 바탕으로 요구사항 단위의 작업 항목·상태를 보여준다. Progress는 현재 진행 중인 Plan 항목에 연결하여 Native가 제공하는 공개 판단 요약·진행 설명과 확인된 실행 사건을 바탕으로 작업 상황을 산문으로 요약한다. 계획 목록과 원시 로그를 반복 표시하지 않고 출처 없는 판단 이유·관측하지 않은 진행을 만들지 않는다.</dt><dd>미검증으로 기록</dd></div></dl><section class="paper" id="history-report-f6d3ea9f-c457-4635-b6f5-ee664de1c722-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>스킬 문서 읽기나 도구 종료만으로 실제 적용·작업 완료를 만들지 않는다.</li><li>Native가 주지 않은 단계나 공개 판단은 미제공으로 둔다.</li></ul></section><section class="paper" id="history-report-f6d3ea9f-c457-4635-b6f5-ee664de1c722-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>역할의 실제 단계 적용 사건이 없으면 명시 선택 관측 또는 미확인만 표시한다.</li><li>과거 대화 복원에 Subagent·계획 자료가 없으면 복원 사실을 합성하지 않는다.</li><li>제품 UI 전체 독립 감사와 이 작업의 공식 기준 수용 연결은 미완료다.</li><li>Windows와 실제 OS 한국어 IME는 이번 검사 범위가 아니다.</li><li>커밋·push는 실행하지 않았다.</li></ul></section><section class="paper" id="history-report-f6d3ea9f-c457-4635-b6f5-ee664de1c722-next"><h2>남은 일과 해소 행동</h2><ul><li>현재 소스의 기준별 검증과 읽기 전용 제품 독립 검토를 이 UUID에 연결한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-f6d3ea9f-c457-4635-b6f5-ee664de1c722-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-64677750-337f-4488-a503-4e0265356bf5<br>report-f6d3ea9f-c457-4635-b6f5-ee664de1c722</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>5a82fe922eb1ce26d4390b6fd8d0423fefece46279709a6e7c18a77d0ef3590f</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>98868f61002956646775b638b5538cbbf1bc5d2128954bf5f48130440c5e1672</code></dd></div><div><dt>기준 지문</dt><dd><code>5950d05d534dbcec78ab4ba9dcf4dc08ab4d84520b6255f49888b451227a7dd8</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;기능 구현과 실제 Electron 256조건 검사는 통과했지만 이 UUID의 최종 독립 검토와 기준별 공식 수용 연결은 미완료다.&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;오른쪽 바에 WWW 개발 Agent를 상위 항목으로 두고 spec/design/build/diagnose/verify 다섯 스킬 전체를 고정 표시하며 범용 스킬 전체 목록을 섞지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;현재 선택·진행 중인 WWW 스킬을 식별 가능한 근거에 따라 강조하며 문서 읽기·이름 언급·설치 여부만으로 실행 중이라고 판정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;이번 오른쪽 바의 표시 범위에서 Hook 목록·실행 현황 보기를 제외한다. Agent·WWW Skills·실제 Subagent와 Plan·Progress를 표시하며, Hook 표시 제외를 Hook 실행 비활성화로 취급하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;WWW Agent를 기본 표시하고 실제 Subagent 호출이 관측되면 해당 Subagent를 식별하여 표시한다. Subagent 작업 완료가 확인되면 항목을 유지한 채 완료 표시등으로 상태를 전환한다. 호출하지 않은 Subagent를 실행 중이라고 표시하지 않으며 역할 정의·일반 도구 호출과 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;Plan은 Plan.md 등 작업 계획 문서나 Native가 요구사항을 처리하며 제공한 계획을 바탕으로 요구사항 단위의 작업 항목·상태를 보여준다. Progress는 현재 진행 중인 Plan 항목에 연결하여 Native가 제공하는 공개 판단 요약·진행 설명과 확인된 실행 사건을 바탕으로 작업 상황을 산문으로 요약한다. 계획 목록과 원시 로그를 반복 표시하지 않고 출처 없는 판단 이유·관측하지 않은 진행을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;기본 오른쪽 바를 WWW Agent·다섯 Skills·실제 Subagent와 Plan·Progress로 구현했다. 실제 Electron 검사와 집중 투영 검사는 통과했으나 이 UUID의 기준별 공식 수용과 제품 독립 감사는 완료하지 않았다.&quot;,
+  &quot;before&quot;: &quot;기본 바에 현재 요청·Hook·누적 리소스가 혼재했다.&quot;,
+  &quot;after&quot;: &quot;고정 다섯 Skills와 실제 Subagent 상태를 표시하고 Native 계획의 활성 항목에 공개 진행 설명을 연결한다. Hook은 상세 모니터에 남긴다.&quot;,
+  &quot;changes&quot;: [
+    &quot;Agent 고정 트리와 실제 agentsStates 기반 Subagent 완료 표시를 추가했다.&quot;,
+    &quot;단계 변경 뒤 늦은 설명을 새 항목에 붙이지 않는 Plan·Progress 투영을 구현했다.&quot;,
+    &quot;CSS를 실제 빌드 복사와 index 링크에 연결해 호스트에서 표시했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;스킬 문서 읽기나 도구 종료만으로 실제 적용·작업 완료를 만들지 않는다.&quot;,
+    &quot;Native가 주지 않은 단계나 공개 판단은 미제공으로 둔다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;역할의 실제 단계 적용 사건이 없으면 명시 선택 관측 또는 미확인만 표시한다.&quot;,
+    &quot;과거 대화 복원에 Subagent·계획 자료가 없으면 복원 사실을 합성하지 않는다.&quot;,
+    &quot;제품 UI 전체 독립 감사와 이 작업의 공식 기준 수용 연결은 미완료다.&quot;,
+    &quot;Windows와 실제 OS 한국어 IME는 이번 검사 범위가 아니다.&quot;,
+    &quot;커밋·push는 실행하지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;현재 소스의 기준별 검증과 읽기 전용 제품 독립 검토를 이 UUID에 연결한다.&quot;
+  ]
+}</pre></div></details></article></details></section></main></body></html>
