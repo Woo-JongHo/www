@@ -1,0 +1,479 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-dc931897-564a-4b95-a8c5-a23d7b03a8a3",
+  "title"        : "참조 HTML 기반 한 페이지 보고서 양식 변경 명세",
+  "kind"         : "feature",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner"        : "ui",
+  "status"       : "verifying",
+  "blockedReason": "AC-1: verification_failed, environment_changed, source_changed; AC-2: verification_failed, environment_changed, source_changed; AC-3: verification_failed, environment_changed, source_changed; AC-4: verification_failed, environment_changed, source_changed; AC-5: verification_failed, environment_changed, source_changed; AC-6: verification_failed, environment_changed, source_changed; AC-7: verification_failed, environment_changed, source_changed; 필수 독립 검토 없음; 현재 소스·기준·기록의 저작 작업 보고서 없음",
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-fc3f6aea-c842-45f3-821b-5fc448809d35"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": [
+        {
+          "attemptId": "attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "path"     : "verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-2",
+      "description": "상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": [
+        {
+          "attemptId": "attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "path"     : "verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-3",
+      "description": "문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": [
+        {
+          "attemptId": "attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "path"     : "verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-4",
+      "description": "변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": [
+        {
+          "attemptId": "attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "path"     : "verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-5",
+      "description": "참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": [
+        {
+          "attemptId": "attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "path"     : "verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-6",
+      "description": "앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": [
+        {
+          "attemptId": "attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "path"     : "verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-7",
+      "description": "구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": [
+        {
+          "attemptId": "attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "path"     : "verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "session-implementation-20261116-work-dc931897-564a-4b95-a8c5-a23d7b03a8a3",
+    "requestHash": "9eff0da0ea243298d559c8d61a2c4ff298e05c651e5d58046aac9f5ad5ddd8d1",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "src/renderer.tsx",
+        "src/chat.css",
+        "src/command-card.tsx",
+        "src/command-preview.ts",
+        "src/native-activity-view.tsx",
+        "src/native-activity.css",
+        "src/chat-composer.tsx",
+        "src/chat-status.ts",
+        "src/projection.ts",
+        "test/chat-status.test.ts",
+        "test/projection.test.ts",
+        "test/command-preview.test.ts",
+        "test/input.test.ts",
+        "test/www-activity-view.test.ts",
+        "scripts/verify-chat.ts",
+        "scripts/verify-home.ts",
+        "scripts/verify-native-activity.ts",
+        "src/native-session.ts",
+        "src/native-chat.ts",
+        "src/native-lifecycle.ts",
+        "src/main.ts",
+        "src/preload.ts",
+        "src/shared.ts",
+        "src/session-api.tsx",
+        "test/native-session.test.ts",
+        "test/native-chat.test.ts",
+        "test/native-lifecycle.test.ts",
+        "test/fixtures/chat-ui-app-server.ts",
+        "scripts/workflow/report-view.ts",
+        "test/workflow-reports.test.ts",
+        "test/report-service.test.ts",
+        "scripts/workflow/model-allocation.ts",
+        "scripts/workflow/run.ts",
+        "scripts/workflow/types.ts",
+        "scripts/workflow/schema.ts",
+        "scripts/workflow/work.ts",
+        "scripts/workflow/report-lifecycle.ts",
+        "scripts/workflow.ts",
+        "scripts/workflow/decomposition.ts",
+        "scripts/workflow/completion-report.ts",
+        "scripts/workflow/statechart.ts",
+        "test/workflow-completion-faults.test.ts",
+        "test/workflow-properties.test.ts",
+        "test/workflow-statechart.test.ts",
+        "test/workflow-statechart-view.test.ts",
+        "test/workflow-model-allocation.test.ts",
+        "test/workflow-work.test.ts",
+        "test/workflow-development.test.ts",
+        "src/ecosystem-view.tsx",
+        "src/ecosystem.css",
+        "src/architecture-tree.ts",
+        "src/architecture.ts",
+        "src/workflow-statechart-view.tsx",
+        "src/workflow-statechart.ts",
+        "scripts/architecture-contract.ts",
+        "scripts/generate-architecture.ts",
+        "src/architecture.generated.json",
+        "scripts/verify-architecture.ts",
+        "docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세"
+      ],
+      "mutationSurfaces": [
+        "files"
+      ],
+      "verifierCommands": [
+        "[\"npm\",\"run\",\"check\"]",
+        "[\"npm\",\"run\",\"build\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"node\",\"scripts/check-workflow.ts\"]",
+        "[\"node\",\"scripts/verify-home.ts\"]",
+        "[\"node\",\"scripts/verify-chat.ts\"]",
+        "[\"node\",\"scripts/verify-chat.ts\",\"--command-cards\"]",
+        "[\"node\",\"scripts/verify-reports.ts\"]",
+        "[\"node\",\"scripts/verify-architecture.ts\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "9eff0da0ea243298d559c8d61a2c4ff298e05c651e5d58046aac9f5ad5ddd8d1"
+    },
+    "inputs": [
+      "docs/design-system.md",
+      "docs/skills/REPORTS.md",
+      "scripts/verify-reports.ts",
+      "scripts/workflow/report-view.ts",
+      "scripts/workflow/reports.ts",
+      "src/renderer.tsx",
+      "src/reports-view.tsx",
+      "src/reports.css",
+      "test/report-service.test.ts",
+      "test/workflow-reports.test.ts"
+    ],
+    "nextAction": "verify",
+    "verifications": [
+      {
+        "id"         : "attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676",
+        "startedAt"  : "2026-11-16T07:29:34.720Z",
+        "completedAt": "2026-11-16T07:31:12.266Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "70f112b9034d60c64252544c395c189a5bc0764bdea5585dd1e8fbe840def5b8",
+          "inputs": [
+            "docs/design-system.md",
+            "docs/skills/REPORTS.md",
+            "scripts/verify-reports.ts",
+            "scripts/workflow/report-view.ts",
+            "scripts/workflow/reports.ts",
+            "src/renderer.tsx",
+            "src/reports-view.tsx",
+            "src/reports.css",
+            "test/report-service.test.ts",
+            "test/workflow-reports.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/design-system.md",
+              "type"  : "file",
+              "digest": "2c3bae0b335fe0d13a22bd66721e77bf97b530084bb2cdf8ca399b188c72b013",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "c94676ad5da39ea49d3861f625d246a6bf613ed1d96da25102f9fa2257345648",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "bb86a31b710a761b8e88f9fcf1b40810a3c6ee10722fb936234f8e776772ea95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e8dc8b0c7ce6db751bb6720dc9513eb7417eae50ed41557e75b87a5229a45f10",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "30c0c253617b7631c44e424f8fd821e08e5a3c73bf88387c2c5492e24d318848",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "04ec9f403fd760e457e071adfdfb54a8f542b9931eba0f8f1d35c43e994c2b4a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "7556cec14e44b25d3fbeaaf7a59939852e9a2880c6214a4bb2ec2428138310b8",
+              "mode"  : 420
+            },
+            {
+              "path": "src/reports.css",
+              "type": "missing"
+            },
+            {
+              "path"  : "test/report-service.test.ts",
+              "type"  : "file",
+              "digest": "33cf8e460ee4762aa4d762098d54fa47af2efc4c85baa86e39873b28cff9f084",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "fecb3e95527f075157233f9965c4b31c3aa6deffcfa3bf19978a494ce8081c01",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "6b70bf39012ec889b2c5cf2b28d8ad6dcde5779f644ad30bbf72e8385beac44b",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-6",
+            "description": "앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-7",
+            "description": "구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-reports.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 1,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3",
+          "AC-4",
+          "AC-5",
+          "AC-6",
+          "AC-7"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 64,
+            "digest"         : "f5fed5b5002f64f015537b1daa9a80e46d43fb16127075a97a26d592c5280a1d",
+            "truncated"      : false,
+            "retainedBytes"  : 64,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [],
+    "artifactReviews": [
+      {
+        "id"        : "artifact-7c113b15-2f9e-4d2d-a1ec-981a485b08b7",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T05:43:43.882Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "저작 후 별도 문서 대조 패스에서 참고 HTML의 여섯 절·CSS 기준과 명세 전용 범위·예시 데이터 경계·보존 조건을 확인했다. 실제 화면과 독립 제품 감사는 미실행이다.",
+        "digest"    : "0bc8b5050f11597463a2195b15cad261f5dbc1daa1a75ad3eb4b4b66a5fc7e59",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "사용자 지정 HTML을 참조로 명세만 작성하며 기존 작업과 권한을 구분한다.",
+            "references": [
+              {
+                "path": "docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "여섯 절·목차·본문·상세의 읽기 순서와 앱/HTML을 정의한다.",
+            "references": [
+              {
+                "path": "docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/spec.md",
+                "line": 17
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "satisfied",
+            "reason": "예시 사실·과거 판정·legacy·entry 보존과 실제 미관측을 구분한다.",
+            "references": [
+              {
+                "path": "docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/spec.md",
+                "line": 47
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "satisfied",
+            "reason": "AC-1~AC-7의 매핑·내용 보존·실기·오프라인·인쇄 검증을 정의한다.",
+            "references": [
+              {
+                "path": "docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/spec.md",
+                "line": 87
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      }
+    ],
+    "reportingRequired": true,
+    "documentationReviews": [
+      {
+        "id"             : "documentation-b2c16032-071c-44a3-94b9-3176342c1ca4",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T08:32:03.949Z",
+        "sourceDigest"   : "58f4463e7dcbf6fdfe658da8f03e2da7edb8edda650d2f77f9d1c7f0632b80dd",
+        "criteriaDigest" : "6b70bf39012ec889b2c5cf2b28d8ad6dcde5779f644ad30bbf72e8385beac44b",
+        "documentsDigest": "caa19f99e7edd08d0327ea95b56b2427ced8c22452090e92683b7a38ed88245d",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "Hook 정산은 기존 native-activity 순수 투영 책임에 속하고 프로세스·IPC·상태 소유 경계를 바꾸지 않았다. 현재 구조 ID 계약과 생성기는 통과했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "현재 Hook 집중 회귀 명령과 합성 사건·실제 Native/GUI/신뢰 수용의 분리 및 시각 모호성 검증 범위를 기록했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "현재 변경은 기존 개인용 로컬 Electron 관측·통제 목적 안의 투영/기록 정합성 수정이며 제품 목적·사용자·범위를 추가하지 않았다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "마지막 action 뒤 read/status 대조, record.blockedReason과 status.reasons, complete=false와 실제 complete 호출 거부를 명시적으로 분리했다."
+          }
+        ]
+      }
+    ]
+  }
+}

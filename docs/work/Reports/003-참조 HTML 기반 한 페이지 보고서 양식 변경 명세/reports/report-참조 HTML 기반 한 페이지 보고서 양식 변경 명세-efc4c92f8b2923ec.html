@@ -1,0 +1,1447 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>참조 HTML 기반 한 페이지 보고서 양식 변경 명세 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+dd.result-status{font-weight:600}dd.result-passed{color:var(--green)}dd.result-failed{color:var(--red)}dd.result-blocked,dd.result-unverified{color:var(--amber)}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 17일 PM 12:07 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>참조 HTML 기반 한 페이지 보고서 양식 변경 명세</h1><p class="lead">참조 HTML 기반 한 페이지 보고서 양식 변경 명세의 기능 기준 7개와 지정 Opus 감사·문서 검토를 현재 소스에서 수용했다. 실제 실행과 코드 판단의 범위 및 과거 실패를 보존해 최종 보고서를 갱신했다.</p><div id="report-story" class="story">참조 양식의 읽기 순서와 실제 기록의 판정을 일관되게 연결할 명세와 검증이 필요했다. 여섯 절·왼쪽 목차·접는 근거와 반응형·인쇄·오프라인 읽기를 제공하며 실제 선택과 미실행 사유를 보존한다. 현재 기능 기준 7개와 Opus review-2a45fad1-4e76-4283-a051-7f6701aad342를 공식 core가 수용했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 3 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>완료로 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 실제 업무 자료·Windows·앱 iframe 목차 클릭의 확대 관측은 별도 후속 범위로 유지한다.</p></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>참조 양식의 읽기 순서와 실제 기록의 판정을 일관되게 연결할 명세와 검증이 필요했다.</p></div><div><h3>접근과 결과</h3><p>여섯 절·왼쪽 목차·접는 근거와 반응형·인쇄·오프라인 읽기를 제공하며 실제 선택과 미실행 사유를 보존한다.</p></div></div><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>기존 UUID·entries·원문 서술을 보존하고 구조화 설명을 보강했다.</li><li>원격 OAuth 만료는 모델 대체나 자격증명 복사 없이 동일 source/criteria/policy/request의 읽기 전용 로컬 사본에서 공식 Opus 프로세스를 실행하고 원격 core로 영수증을 회수해 해결했다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>여섯 절·왼쪽 목차·접는 근거와 반응형·인쇄·오프라인 읽기를 제공하며 실제 선택과 미실행 사유를 보존한다.</li><li>이전 감사의 iframe 목차·기존 선택 누락·실제 not_run 사유 왜곡 지적을 현재 소스와 회귀 근거로 재검토했다.</li><li>공식 기능 검증·현재성·독립 감사·문서 영향과 저작 보고서를 같은 UUID에 연결했다.</li></ul></div><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-1의 최신 실제 검증과 현재성 판정</td></tr><tr><td data-label="항목">상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-2의 최신 실제 검증과 현재성 판정</td></tr><tr><td data-label="항목">문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-3의 최신 실제 검증과 현재성 판정</td></tr><tr><td data-label="항목">변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-4의 최신 실제 검증과 현재성 판정</td></tr><tr><td data-label="항목">참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-5의 최신 실제 검증과 현재성 판정</td></tr><tr><td data-label="항목">앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-6의 최신 실제 검증과 현재성 판정</td></tr><tr><td data-label="항목">구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-7의 최신 실제 검증과 현재성 판정</td></tr></tbody></table><h3>저장 당시 수용 기준 판정</h3><dl class="requirements"><div><dt>참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>현재 Task의 필수 기준·문서·독립 감사</h3><dl><div><dt>확인 방법</dt><dd>원격 실제 verifyWork와 현재성 재조회, 공식 Opus 감사 영수증 회수</dd></div><div><dt>기대 결과</dt><dd>모든 필수 근거가 현재 유효함</dd></div><div><dt>실제 관측</dt><dd>기준7개·문서·Opus review-2a45fad1-4e76-4283-a051-7f6701aad342 수용</dd></div><div><dt>확인 범위와 한계</dt><dd>실행 관측과 코드 감사의 판단을 구분한다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 3건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>BoxBox 외부4개 실도구 검사는 off로 미실행이며 제품 검사 PASS로 확대하지 않는다.</li><li>앱 iframe 목차의 실제 클릭·스크롤은 별도 실측하지 않았으며 코드·문자열 회귀 근거로 판단했다. 독립 HTML 목차·반응형·키보드·인쇄·오프라인과 앱 본문은 원격 실제 GUI 검증 범위다.</li><li>Reports001 실제 모델은 두 합성 공개 표본으로 일반 판단 품질·Windows·실제 코드 구현 수행을 입증하지 않는다.</li><li>검토자는 소스 읽기 전용으로 감사했고 테스트를 직접 재실행하지 않았다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>실제 업무 자료·Windows·앱 iframe 목차 클릭의 확대 관측은 별도 후속 범위로 유지한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 17일 PM 12:07 · 선택한 발행 기록 · 참조 HTML 기반 한 페이지 보고서 양식 변경 명세의 기능 기준 7개와 지정 Opus 감사·문서 검토를 현재 소스에서 수용했다. 실제 실행과 코드 판단의 범위 및 과거 실패를 보존해 최종 보고서를 갱신했다.</p><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 5개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 17일 PM 12:07 · 작성자 보고서 · 참조 HTML 기반 한 페이지 보고서 양식 변경 명세의 기능 기준 7개와 지정 Opus 감사·문서 검토를 현재 소스에서 수용했다. 실제 실행과 코드 판단의 범위 및 과거 실패를 보존해 최종 보고서를 갱신했다.</summary><article><h3>참조 HTML 기반 한 페이지 보고서 양식 변경 명세</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">참조 양식의 읽기 순서와 실제 기록의 판정을 일관되게 연결할 명세와 검증이 필요했다. 여섯 절·왼쪽 목차·접는 근거와 반응형·인쇄·오프라인 읽기를 제공하며 실제 선택과 미실행 사유를 보존한다. 현재 기능 기준 7개와 Opus review-2a45fad1-4e76-4283-a051-7f6701aad342를 공식 core가 수용했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 3 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 실제 업무 자료·Windows·앱 iframe 목차 클릭의 확대 관측은 별도 후속 범위로 유지한다.</p><h3>기록된 변경</h3><ul><li>여섯 절·왼쪽 목차·접는 근거와 반응형·인쇄·오프라인 읽기를 제공하며 실제 선택과 미실행 사유를 보존한다.</li><li>이전 감사의 iframe 목차·기존 선택 누락·실제 not_run 사유 왜곡 지적을 현재 소스와 회귀 근거로 재검토했다.</li><li>공식 기능 검증·현재성·독립 감사·문서 영향과 저작 보고서를 같은 UUID에 연결했다.</li></ul><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-1의 최신 실제 검증과 현재성 판정</td></tr><tr><td data-label="항목">상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-2의 최신 실제 검증과 현재성 판정</td></tr><tr><td data-label="항목">문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-3의 최신 실제 검증과 현재성 판정</td></tr><tr><td data-label="항목">변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-4의 최신 실제 검증과 현재성 판정</td></tr><tr><td data-label="항목">참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-5의 최신 실제 검증과 현재성 판정</td></tr><tr><td data-label="항목">앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-6의 최신 실제 검증과 현재성 판정</td></tr><tr><td data-label="항목">구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.</td><td data-label="바뀐 동작">현재 공식 검증 근거 수용</td><td data-label="근거와 한계">AC-7의 최신 실제 검증과 현재성 판정</td></tr></tbody></table><section class="paper" id="history-report-bfeca8e5-f4f6-4397-9a84-70c7192e173a-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>기존 UUID·entries·원문 서술을 보존하고 구조화 설명을 보강했다.</li><li>원격 OAuth 만료는 모델 대체나 자격증명 복사 없이 동일 source/criteria/policy/request의 읽기 전용 로컬 사본에서 공식 Opus 프로세스를 실행하고 원격 core로 영수증을 회수해 해결했다.</li></ul></section><section class="paper" id="history-report-bfeca8e5-f4f6-4397-9a84-70c7192e173a-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>현재 Task의 필수 기준·문서·독립 감사</h3><dl><div><dt>확인 방법</dt><dd>원격 실제 verifyWork와 현재성 재조회, 공식 Opus 감사 영수증 회수</dd></div><div><dt>기대 결과</dt><dd>모든 필수 근거가 현재 유효함</dd></div><div><dt>실제 관측</dt><dd>기준7개·문서·Opus review-2a45fad1-4e76-4283-a051-7f6701aad342 수용</dd></div><div><dt>확인 범위와 한계</dt><dd>실행 관측과 코드 감사의 판단을 구분한다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 3건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>BoxBox 외부4개 실도구 검사는 off로 미실행이며 제품 검사 PASS로 확대하지 않는다.</li><li>앱 iframe 목차의 실제 클릭·스크롤은 별도 실측하지 않았으며 코드·문자열 회귀 근거로 판단했다. 독립 HTML 목차·반응형·키보드·인쇄·오프라인과 앱 본문은 원격 실제 GUI 검증 범위다.</li><li>Reports001 실제 모델은 두 합성 공개 표본으로 일반 판단 품질·Windows·실제 코드 구현 수행을 입증하지 않는다.</li><li>검토자는 소스 읽기 전용으로 감사했고 테스트를 직접 재실행하지 않았다.</li></ul></section><section class="paper" id="history-report-bfeca8e5-f4f6-4397-9a84-70c7192e173a-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>실제 업무 자료·Windows·앱 iframe 목차 클릭의 확대 관측은 별도 후속 범위로 유지한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>같은 UUID의 실제 시도·소스·정책·과거 실패를 확인한다.</p><code>docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/work.json</code></li></ol><details id="history-report-bfeca8e5-f4f6-4397-9a84-70c7192e173a-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-dc931897-564a-4b95-a8c5-a23d7b03a8a3<br>report-bfeca8e5-f4f6-4397-9a84-70c7192e173a</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>410c6347fbd842261ecb0d2e51aae6ba9d12f68d59fa350c174f89090a5a5411</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>1f6e4ba15ce95a59845c930c32975c804c39758732843e5e080c1b50724883a5</code></dd></div><div><dt>기준 지문</dt><dd><code>6b70bf39012ec889b2c5cf2b28d8ad6dcde5779f644ad30bbf72e8385beac44b</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-6&quot;,
+      &quot;description&quot;: &quot;앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-7&quot;,
+      &quot;description&quot;: &quot;구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-reports.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T07:31:12.266Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/resume-20261116/reports-closeout/verify-current.mts&quot;,
+        &quot;reports003&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:57:24.496Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/resume-20261116/reports-closeout/verify-current.mts&quot;,
+        &quot;reports003&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-17T01:46:10.523Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/resume-20261116/reports-closeout/verify-current.mts&quot;,
+        &quot;reports003&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-17T02:00:32.502Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-580dfbd1-87a5-4c8a-893e-809b20da67e4&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-580dfbd1-87a5-4c8a-893e-809b20da67e4/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;scripts/workflow/report-view.ts의 decisions()는 narrative.reader가 존재하면 reader.decisions만 표시한다. reader.decisions가 빈 배열이고 기존 narrative.decisions에 실제 선택 이유가 있는 보고서는 선택 내용이 원시 상세로 밀려 기본 본문에서 사라진다. test/workflow-reports.test.ts의 reader fixture도 이 누락을 기대한다. 중요한 선택을 보존해야 하는 보고서 계약과 충돌한다.&quot;,
+        &quot;scripts/workflow/report-view.ts의 blockerMessage()는 blockedReason이 &#39;독립 검토 not_run:&#39;으로 시작하면 뒤에 실제 사유가 기록돼 있어도 무조건 &#39;원인은 기록에서 확인되지 않았습니다&#39;로 바꾼다. 예를 들어 로그인 실패가 기록된 경우에도 독자는 원인을 알 수 없다는 잘못된 설명을 보게 된다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle의 소스·문서·테스트 코드이며, 생략된 파일과 별도 검증 로그는 읽지 않았다. 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-2a45fad1-4e76-4283-a051-7f6701aad342&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-2a45fad1-4e76-4283-a051-7f6701aad342/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: 감사 사본(snapshot) 안에서 Read·Grep·Glob 도구로만 읽었다. 읽은 파일은 scripts/workflow/report-view.ts 전체, src/reports-view.tsx 전체, test/workflow-reports.test.ts 770-843행, test/report-service.test.ts 125-153행, src/main.ts 175-224행, Reports003 verification.md 전체, 003-scope.json, audit-context.md이고, scripts/verify-reports.ts·browser-current.mts·docs/specs/reports.md에서는 패턴 검색만 했다. 작업 디렉터리 밖에 있는 원본 위치의 audit-context.md는 --restricted 제한으로 읽지 못했고, snapshot 안의 같은 상대경로 사본으로 대신 읽었다. reports.ts, report-lifecycle.ts, docs/skills/REPORTS.md, Reports003 spec.md는 전체를 읽지 않았다. 테스트·빌드·브라우저는 실행하지 않았다.&quot;,
+        &quot;이전 지적 1(decisions 누락)은 해소됐다. report-view.ts:63-76은 reader.decisions와 narrative.decisions를 함께 표시한다. 정규화(NFC·trim)한 choice가 이미 표시된 원문만 중복에서 빼고, 나머지는 &#39;함께 기록된 선택&#39; 또는 &#39;기록에 남은 주요 선택&#39;으로 기본 본문에 남긴다. reader.decisions가 비어 있고 원문에만 선택이 있어도 본문에서 사라지지 않는다. test/workflow-reports.test.ts:796-814가 &#39;둘 다 없으면 선택을 만들지 않음&#39;과 &#39;원문 선택 보존&#39;을 반례로 고정한다.&quot;,
+        &quot;이전 지적 2(blockerMessage 원인 덮어쓰기)는 해소됐다. report-view.ts:150-157은 &#39;not_run:&#39; 뒤의 사유가 비었거나 &#39;unknown&#39;일 때만 &#39;원인은 기록에서 확인되지 않았습니다&#39;를 쓴다. 그 밖의 경우에는 &#39;기록된 사유: …&#39;를 escape해 그대로 보여 준다. test/workflow-reports.test.ts:779-794와 816-825가 로그인 실패, script 주입 문자열, 빈 값, unknown의 네 경우를 다룬다. :342-352의 unknown 비노출 검사와도 충돌하지 않는다. 바뀐 문구가 기존 문구를 부분 문자열로 포함하므로 787행의 기대와도 맞다.&quot;,
+        &quot;AC-1·AC-5 구조 확인: 여섯 절의 순서와 section-1~6 앵커, 왼쪽 목차, 접히는 원시 상세(details#report-raw), 790px/540px 미디어 쿼리, 인쇄 시 접힌 이력·원시 상세 제외와 그 안내, focus-visible outline, prefers-reduced-motion, 다크 모드가 report-view.ts:196-201에 들어 있다. 과거 이력 본문의 id는 :186에서 history-&lt;id&gt;- 접두어로 바꿔 중복을 피한다.&quot;,
+        &quot;AC-2·AC-3·AC-6: conclusion()(report-view.ts:159-167)은 저장 당시 검사, 보고서 자료의 현재성, 저장 당시 독립 검토, 업무 상태를 따로 보여 준다. 실패·미확인 건수, 차단 사항, 기록 변경 경고도 숨기지 않는다. nextActions는 담당이 없으면 &#39;미지정&#39;, 조건이 없으면 &#39;기록되지 않았습니다&#39;로 표시해 없는 사실을 지어내지 않는다. 앱은 같은 HTML을 sandbox=\&quot;\&quot; iframe의 srcDoc으로 보여 주고(reports-view.tsx:158), 바꾸는 것은 목차 href 하나뿐이다(:17-19). test/report-service.test.ts:134-152가 저장 원문이 보존되는지와 정확한 6개 앵커만 바뀌는지를 확인한다.&quot;,
+        &quot;남은 한계(결함 아님, 증거 범위): 앱 iframe 안에서 about:srcdoc#section-N 목차를 실제로 클릭하는 동작은 문자열 단위 테스트로만 확인됐다. src/main.ts:175-224의 Electron 관측은 iframe의 제목과 story box만 보고, 검색 결과로는 browser-current.mts에 srcdoc·iframe 검사가 없다. verification.md:84는 &#39;추가 실제 브라우저 재현이 필요하다&#39;고 이 미실행을 명시하고 있다. 따라서 실제 Electron에서 목차가 이동한다는 관측을 PASS 증거로 넓혀 해석하면 안 된다.&quot;,
+        &quot;증거 대조: 003-scope.json의 최신 검사 attempt-ea8adeee는 sourceDigest 1f6e4ba1…에서 통과(passed, sourceStable)했다. 이 검토 요청의 sourceDigest는 f3a1f866…이고, 두 지문은 입력 파일 집합이 다르다(검토 요청에는 docs/ARCHITECTURE.md 등이 포함됨). 이 사본만으로는 두 지문이 같은 소스 상태를 가리키는지 판정할 수 없다. 이 확인은 원격 recordReview의 지문 재검사에 맡긴다. 원격 테스트 PASS는 기록된 관측일 뿐이고, 이 검토자가 재실행하지 않았다.&quot;,
+        &quot;기록 정합성 참고: verification.md:76-84의 &#39;현재 독립 감사 — 수정 필요&#39; 절은 과거 fail로 보존돼 있다. 그 뒤 두 지적이 수정됐다는 서술은 검증 기록에 아직 없지만, 소스와 테스트에는 수정이 반영돼 있다. 판정을 바꿀 결함은 아니다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;참조 HTML 기반 한 페이지 보고서 양식 변경 명세의 기능 기준 7개와 지정 Opus 감사·문서 검토를 현재 소스에서 수용했다. 실제 실행과 코드 판단의 범위 및 과거 실패를 보존해 최종 보고서를 갱신했다.&quot;,
+  &quot;before&quot;: &quot;참조 양식의 읽기 순서와 실제 기록의 판정을 일관되게 연결할 명세와 검증이 필요했다.&quot;,
+  &quot;after&quot;: &quot;여섯 절·왼쪽 목차·접는 근거와 반응형·인쇄·오프라인 읽기를 제공하며 실제 선택과 미실행 사유를 보존한다.&quot;,
+  &quot;changes&quot;: [
+    &quot;여섯 절·왼쪽 목차·접는 근거와 반응형·인쇄·오프라인 읽기를 제공하며 실제 선택과 미실행 사유를 보존한다.&quot;,
+    &quot;이전 감사의 iframe 목차·기존 선택 누락·실제 not_run 사유 왜곡 지적을 현재 소스와 회귀 근거로 재검토했다.&quot;,
+    &quot;공식 기능 검증·현재성·독립 감사·문서 영향과 저작 보고서를 같은 UUID에 연결했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;기존 UUID·entries·원문 서술을 보존하고 구조화 설명을 보강했다.&quot;,
+    &quot;원격 OAuth 만료는 모델 대체나 자격증명 복사 없이 동일 source/criteria/policy/request의 읽기 전용 로컬 사본에서 공식 Opus 프로세스를 실행하고 원격 core로 영수증을 회수해 해결했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;BoxBox 외부4개 실도구 검사는 off로 미실행이며 제품 검사 PASS로 확대하지 않는다.&quot;,
+    &quot;앱 iframe 목차의 실제 클릭·스크롤은 별도 실측하지 않았으며 코드·문자열 회귀 근거로 판단했다. 독립 HTML 목차·반응형·키보드·인쇄·오프라인과 앱 본문은 원격 실제 GUI 검증 범위다.&quot;,
+    &quot;Reports001 실제 모델은 두 합성 공개 표본으로 일반 판단 품질·Windows·실제 코드 구현 수행을 입증하지 않는다.&quot;,
+    &quot;검토자는 소스 읽기 전용으로 감사했고 테스트를 직접 재실행하지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;실제 업무 자료·Windows·앱 iframe 목차 클릭의 확대 관측은 별도 후속 범위로 유지한다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;참조 양식의 읽기 순서와 실제 기록의 판정을 일관되게 연결할 명세와 검증이 필요했다. 여섯 절·왼쪽 목차·접는 근거와 반응형·인쇄·오프라인 읽기를 제공하며 실제 선택과 미실행 사유를 보존한다. 현재 기능 기준 7개와 Opus review-2a45fad1-4e76-4283-a051-7f6701aad342를 공식 core가 수용했다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-1의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-2의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-3의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-4의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-5의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-6의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-7의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;현재 Task의 필수 기준·문서·독립 감사&quot;,
+        &quot;method&quot;: &quot;원격 실제 verifyWork와 현재성 재조회, 공식 Opus 감사 영수증 회수&quot;,
+        &quot;expected&quot;: &quot;모든 필수 근거가 현재 유효함&quot;,
+        &quot;observed&quot;: &quot;기준7개·문서·Opus review-2a45fad1-4e76-4283-a051-7f6701aad342 수용&quot;,
+        &quot;limitations&quot;: &quot;실행 관측과 코드 감사의 판단을 구분한다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/work.json&quot;,
+        &quot;purpose&quot;: &quot;같은 UUID의 실제 시도·소스·정책·과거 실패를 확인한다.&quot;
+      }
+    ],
+    &quot;nextActions&quot;: []
+  }
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 17일 AM 11:12 · 작성자 보고서 · BoxBox 외부도구 검사와 제품 검사를 분리한 현재 소스에서 이 Task의 기능 검증을 기존 허용명령으로 재실행해 정식 등록했다. 현재 필수 기능기준은 모두 usable이며 다음 단계는 review다. 고유 필수완료감사는 아직 미실행이므로 완료가 아니다.</summary><article><h3>참조 HTML 기반 한 페이지 보고서 양식 변경 명세</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">과거 기능·GUI 관측이 정식 검증에 연결되지 않거나 source_changed로 현재성을 잃었고, 복합 검사의 외부 BoxBox 형식 승인 실패가 진행을 막았다.
+
+제품 직렬화12시나리오와 외부BoxBox4시나리오를 분리한 뒤 현재 공식 기능·Electron·Chrome 결과를 같은 UUID에 등록했다. 기존 허용 argv·기준·완료core는 유지했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 3 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 현재 기능증거를 유지하고 지정 Opus고유감사→문서영향→완료보고서→공식완료/readback으로 진행한다.</p><h3>기록된 변경</h3><ul><li>기본 제품 검사에서 외부BoxBox를 분리하고 실제 테스트본문은 보존했다.</li><li>현재 기능기준 7개는 공식 core재조회에서 모두 usable=true/reasons=[]다.</li><li>실제 BoxBox off명령은 disabled/exit2/외부실행0으로 거부한다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div></dl><section class="paper" id="history-report-f4dbfb98-c502-40f4-ae9a-e86397b8ef0c-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>권한 갱신 API를 추가하지 않고 이미 허용된 복합 검증 경로를 복구했다.</li><li>정식 기능 검증과 이 Task 고유의 완료감사·문서영향·완료처리를 구분한다.</li></ul></section><section class="paper" id="history-report-f4dbfb98-c502-40f4-ae9a-e86397b8ef0c-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 3건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>BoxBox 외부4개는 off요청으로 미실행이며 PASS가 아니다.</li><li>이 Task의 최신 고유Opus감사·문서영향·완료보고서 수용은 남아 있고 complete=false다. 로컬 변경코드 Opus검토를 이 UUID의 감사로 복사하지 않는다.</li><li>실제모델2표본이 있는 Reports001도 일반판단품질·Windows·실제 구현수행의 검증으로 확대하지 않는다.</li></ul></section><section class="paper" id="history-report-f4dbfb98-c502-40f4-ae9a-e86397b8ef0c-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>현재 기능증거를 유지하고 지정 Opus고유감사→문서영향→완료보고서→공식완료/readback으로 진행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-f4dbfb98-c502-40f4-ae9a-e86397b8ef0c-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-dc931897-564a-4b95-a8c5-a23d7b03a8a3<br>report-f4dbfb98-c502-40f4-ae9a-e86397b8ef0c</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>f633c05fb871528b58df5feb7be4e4587896deca201807c7967fd3810e2043c9</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>1f6e4ba15ce95a59845c930c32975c804c39758732843e5e080c1b50724883a5</code></dd></div><div><dt>기준 지문</dt><dd><code>6b70bf39012ec889b2c5cf2b28d8ad6dcde5779f644ad30bbf72e8385beac44b</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-6&quot;,
+      &quot;description&quot;: &quot;앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-7&quot;,
+      &quot;description&quot;: &quot;구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-reports.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T07:31:12.266Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/resume-20261116/reports-closeout/verify-current.mts&quot;,
+        &quot;reports003&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:57:24.496Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/resume-20261116/reports-closeout/verify-current.mts&quot;,
+        &quot;reports003&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-17T01:46:10.523Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/resume-20261116/reports-closeout/verify-current.mts&quot;,
+        &quot;reports003&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-17T02:00:32.502Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-580dfbd1-87a5-4c8a-893e-809b20da67e4&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-580dfbd1-87a5-4c8a-893e-809b20da67e4/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;scripts/workflow/report-view.ts의 decisions()는 narrative.reader가 존재하면 reader.decisions만 표시한다. reader.decisions가 빈 배열이고 기존 narrative.decisions에 실제 선택 이유가 있는 보고서는 선택 내용이 원시 상세로 밀려 기본 본문에서 사라진다. test/workflow-reports.test.ts의 reader fixture도 이 누락을 기대한다. 중요한 선택을 보존해야 하는 보고서 계약과 충돌한다.&quot;,
+        &quot;scripts/workflow/report-view.ts의 blockerMessage()는 blockedReason이 &#39;독립 검토 not_run:&#39;으로 시작하면 뒤에 실제 사유가 기록돼 있어도 무조건 &#39;원인은 기록에서 확인되지 않았습니다&#39;로 바꾼다. 예를 들어 로그인 실패가 기록된 경우에도 독자는 원인을 알 수 없다는 잘못된 설명을 보게 된다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle의 소스·문서·테스트 코드이며, 생략된 파일과 별도 검증 로그는 읽지 않았다. 테스트는 실행하지 않았다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;BoxBox 외부도구 검사와 제품 검사를 분리한 현재 소스에서 이 Task의 기능 검증을 기존 허용명령으로 재실행해 정식 등록했다. 현재 필수 기능기준은 모두 usable이며 다음 단계는 review다. 고유 필수완료감사는 아직 미실행이므로 완료가 아니다.&quot;,
+  &quot;before&quot;: &quot;과거 기능·GUI 관측이 정식 검증에 연결되지 않거나 source_changed로 현재성을 잃었고, 복합 검사의 외부 BoxBox 형식 승인 실패가 진행을 막았다.&quot;,
+  &quot;after&quot;: &quot;제품 직렬화12시나리오와 외부BoxBox4시나리오를 분리한 뒤 현재 공식 기능·Electron·Chrome 결과를 같은 UUID에 등록했다. 기존 허용 argv·기준·완료core는 유지했다.&quot;,
+  &quot;changes&quot;: [
+    &quot;기본 제품 검사에서 외부BoxBox를 분리하고 실제 테스트본문은 보존했다.&quot;,
+    &quot;현재 기능기준 7개는 공식 core재조회에서 모두 usable=true/reasons=[]다.&quot;,
+    &quot;실제 BoxBox off명령은 disabled/exit2/외부실행0으로 거부한다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;권한 갱신 API를 추가하지 않고 이미 허용된 복합 검증 경로를 복구했다.&quot;,
+    &quot;정식 기능 검증과 이 Task 고유의 완료감사·문서영향·완료처리를 구분한다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;BoxBox 외부4개는 off요청으로 미실행이며 PASS가 아니다.&quot;,
+    &quot;이 Task의 최신 고유Opus감사·문서영향·완료보고서 수용은 남아 있고 complete=false다. 로컬 변경코드 Opus검토를 이 UUID의 감사로 복사하지 않는다.&quot;,
+    &quot;실제모델2표본이 있는 Reports001도 일반판단품질·Windows·실제 구현수행의 검증으로 확대하지 않는다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;현재 기능증거를 유지하고 지정 Opus고유감사→문서영향→완료보고서→공식완료/readback으로 진행한다.&quot;
+  ]
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 17일 AM 10:03 · 작성자 보고서 · Reports003 운영 효율 실험: 현재 공식 core의 증거 수용 불가를 확인해 차단 상태로 반환합니다. 제품 완료나 현재 검증 통과가 아닙니다.</summary><article><h3>참조 HTML 기반 한 페이지 보고서 양식 변경 명세</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">과거 기준 결과는 passed로 저장돼 있으나 v5 제품 phase·Chrome 관측은 정식 verifyWork 시도가 아니며 과거 Terra fail과 원장 차단이 남아 있었습니다.
+
+종료 checkpoint의 기술 171파일·원장 57개 SHA를 대조했고 모두 일치했습니다. 공식 work.ts status는 모든 필수 기준에 source_changed와 complete=false를 반환했습니다. 실제 소스나 기준을 고치지 않고 감사 이전에 멈춥니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 1 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> CHECKPOINT.md와 next-commands.json의 파일별 후속 계획을 기준으로 현재 요청의 공식 연결 경로와 형식 승인 실패를 먼저 해결합니다.</p><p class="blocker"><strong>남은 차단 사항</strong> 독립 검토 fail: 수정 또는 검토 재실행 필요</p><h3>기록된 변경</h3><ul><li>운영 ACK·baseline·정확 argv/입력 발췌·core 판정 원문을 ../efficiency-20261117에 저장했습니다.</li><li>추가 에이전트·개발 세션·모델 감사를 호출하지 않았고 기존 실패·dirty·권한·판정 규칙을 보존했습니다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div></dl><section class="paper" id="history-report-d380f3b8-b487-4e9d-b81c-3014a4e7bce8-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>최신 검증만 평가하는 core에 실행하지 않은 의미 검사를 artifact로 대체하지 않습니다.</li><li>schema2 adopt가 기존 레코드를 그대로 반환해 현재 요청/새 argv의 공식 갱신을 제공하지 않습니다. 로컬 소유 범위는 운영 정책·관측/감사이므로 core 구현을 수정하지 않습니다.</li><li>허용된 verify-current.mts는 현재 verify-reports.ts의 전체 형식 검사·집중 검사·빌드·Electron·양면 의미 검사와 Chrome을 잇습니다. 별도 형식 검사 실패를 제품 관측 PASS로 덮지 않습니다.</li></ul></section><section class="paper" id="history-report-d380f3b8-b487-4e9d-b81c-3014a4e7bce8-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 1건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>현재 공식 검증 재실행·문서 영향 재검토·Sonnet 보조 검토·Opus 필수 감사·공식 완료는 수행하지 않았습니다. 모델 가용성 및 실제 observedModel은 확인하지 않았습니다.</li><li>보존된 npm-check-v7.log와 022-check-diagnostic-npmtest.log의 test/work-json.test.ts:413 approvalEligible=false는 과거 실행 사실입니다. 이번 세션의 현재 재현이나 Reports 기능 실패라고 단정하지 않습니다.</li><li>docs/DEVELOPMENT.md의 action-only status 예시는 typed CLI에서 request 누락으로 거부됐습니다. 같은 입력 재시도 대신 문서화된 직접 core status로 판정했습니다.</li><li>coding-guidelines.md 및 포인터 워크스페이스 LAYERS.md가 현재 경로에 없습니다. 토큰 사용량은 호스트 JSONL에 아직 usage가 없어 null이며 절감률을 추정하지 않습니다.</li></ul></section><section class="paper" id="history-report-d380f3b8-b487-4e9d-b81c-3014a4e7bce8-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>CHECKPOINT.md와 next-commands.json의 파일별 후속 계획을 기준으로 현재 요청의 공식 연결 경로와 형식 승인 실패를 먼저 해결합니다.</li><li>수용 가능한 정확 복합 검사로 UUID별 증거를 기록하고 기술 소스를 동결한 뒤 실제 GUI·Sonnet 읽기 전용 검토·각 UUID Opus 감사를 수행합니다. Opus 불가는 blocker입니다.</li><li>문서 영향 검토·저작 보고서·목록/읽기·공식 완료·readback을 같은 Reports 작업군에서 닫습니다. 다른 작업군으로 확장하지 않습니다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-d380f3b8-b487-4e9d-b81c-3014a4e7bce8-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-dc931897-564a-4b95-a8c5-a23d7b03a8a3<br>report-d380f3b8-b487-4e9d-b81c-3014a4e7bce8</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>3aa667787643b22577c63b075f20b1e990d968a2f66123f50b9cda64cf77325a</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>ff9ade4ebea96696bf0fdc7b8724ddd1a2f5fcd6006f8161df25ec9ce852828e</code></dd></div><div><dt>기준 지문</dt><dd><code>6b70bf39012ec889b2c5cf2b28d8ad6dcde5779f644ad30bbf72e8385beac44b</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;독립 검토 fail: 수정 또는 검토 재실행 필요&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-6&quot;,
+      &quot;description&quot;: &quot;앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-7&quot;,
+      &quot;description&quot;: &quot;구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-reports.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T07:31:12.266Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/resume-20261116/reports-closeout/verify-current.mts&quot;,
+        &quot;reports003&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:57:24.496Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-580dfbd1-87a5-4c8a-893e-809b20da67e4&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-580dfbd1-87a5-4c8a-893e-809b20da67e4/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;scripts/workflow/report-view.ts의 decisions()는 narrative.reader가 존재하면 reader.decisions만 표시한다. reader.decisions가 빈 배열이고 기존 narrative.decisions에 실제 선택 이유가 있는 보고서는 선택 내용이 원시 상세로 밀려 기본 본문에서 사라진다. test/workflow-reports.test.ts의 reader fixture도 이 누락을 기대한다. 중요한 선택을 보존해야 하는 보고서 계약과 충돌한다.&quot;,
+        &quot;scripts/workflow/report-view.ts의 blockerMessage()는 blockedReason이 &#39;독립 검토 not_run:&#39;으로 시작하면 뒤에 실제 사유가 기록돼 있어도 무조건 &#39;원인은 기록에서 확인되지 않았습니다&#39;로 바꾼다. 예를 들어 로그인 실패가 기록된 경우에도 독자는 원인을 알 수 없다는 잘못된 설명을 보게 된다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle의 소스·문서·테스트 코드이며, 생략된 파일과 별도 검증 로그는 읽지 않았다. 테스트는 실행하지 않았다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;Reports003 운영 효율 실험: 현재 공식 core의 증거 수용 불가를 확인해 차단 상태로 반환합니다. 제품 완료나 현재 검증 통과가 아닙니다.&quot;,
+  &quot;before&quot;: &quot;과거 기준 결과는 passed로 저장돼 있으나 v5 제품 phase·Chrome 관측은 정식 verifyWork 시도가 아니며 과거 Terra fail과 원장 차단이 남아 있었습니다.&quot;,
+  &quot;after&quot;: &quot;종료 checkpoint의 기술 171파일·원장 57개 SHA를 대조했고 모두 일치했습니다. 공식 work.ts status는 모든 필수 기준에 source_changed와 complete=false를 반환했습니다. 실제 소스나 기준을 고치지 않고 감사 이전에 멈춥니다.&quot;,
+  &quot;changes&quot;: [
+    &quot;운영 ACK·baseline·정확 argv/입력 발췌·core 판정 원문을 ../efficiency-20261117에 저장했습니다.&quot;,
+    &quot;추가 에이전트·개발 세션·모델 감사를 호출하지 않았고 기존 실패·dirty·권한·판정 규칙을 보존했습니다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;최신 검증만 평가하는 core에 실행하지 않은 의미 검사를 artifact로 대체하지 않습니다.&quot;,
+    &quot;schema2 adopt가 기존 레코드를 그대로 반환해 현재 요청/새 argv의 공식 갱신을 제공하지 않습니다. 로컬 소유 범위는 운영 정책·관측/감사이므로 core 구현을 수정하지 않습니다.&quot;,
+    &quot;허용된 verify-current.mts는 현재 verify-reports.ts의 전체 형식 검사·집중 검사·빌드·Electron·양면 의미 검사와 Chrome을 잇습니다. 별도 형식 검사 실패를 제품 관측 PASS로 덮지 않습니다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;현재 공식 검증 재실행·문서 영향 재검토·Sonnet 보조 검토·Opus 필수 감사·공식 완료는 수행하지 않았습니다. 모델 가용성 및 실제 observedModel은 확인하지 않았습니다.&quot;,
+    &quot;보존된 npm-check-v7.log와 022-check-diagnostic-npmtest.log의 test/work-json.test.ts:413 approvalEligible=false는 과거 실행 사실입니다. 이번 세션의 현재 재현이나 Reports 기능 실패라고 단정하지 않습니다.&quot;,
+    &quot;docs/DEVELOPMENT.md의 action-only status 예시는 typed CLI에서 request 누락으로 거부됐습니다. 같은 입력 재시도 대신 문서화된 직접 core status로 판정했습니다.&quot;,
+    &quot;coding-guidelines.md 및 포인터 워크스페이스 LAYERS.md가 현재 경로에 없습니다. 토큰 사용량은 호스트 JSONL에 아직 usage가 없어 null이며 절감률을 추정하지 않습니다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;CHECKPOINT.md와 next-commands.json의 파일별 후속 계획을 기준으로 현재 요청의 공식 연결 경로와 형식 승인 실패를 먼저 해결합니다.&quot;,
+    &quot;수용 가능한 정확 복합 검사로 UUID별 증거를 기록하고 기술 소스를 동결한 뒤 실제 GUI·Sonnet 읽기 전용 검토·각 UUID Opus 감사를 수행합니다. Opus 불가는 blocker입니다.&quot;,
+    &quot;문서 영향 검토·저작 보고서·목록/읽기·공식 완료·readback을 같은 Reports 작업군에서 닫습니다. 다른 작업군으로 확장하지 않습니다.&quot;
+  ]
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 PM 5:34 · 작성자 보고서 · 보고서 공식 전체 명령을 재실행하고 실제 GUI 시작 차단을 분리했다.</summary><article><h3>참조 HTML 기반 한 페이지 보고서 양식 변경 명세</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">보고서 공식 전체 명령을 재실행하고 실제 GUI 시작 차단을 분리했다. 현 머신에서 타입·실도구·집중·빌드와 runtime boundary precheck는 통과했지만 실제 Electron이 시작 중 SIGABRT로 종료했다. 접기·스크롤·인쇄/PDF·GUI 현재 통과를 입증하지 못했다. 앱 등록 초기화의 crash 원문을 보존하고 원인/해제 조건을 추측하지 않았다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 0 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 현재 인계 문서의 남은 실제 검증·필수 감사를 재개한다.</p><p class="blocker"><strong>남은 차단 사항</strong> AC-1: verification_failed, environment_changed, source_changed; AC-2: verification_failed, environment_changed, source_changed; AC-3: verification_failed, environment_changed, source_changed; AC-4: verification_failed, environment_changed, source_changed; AC-5: verification_failed, environment_changed, source_changed; AC-6: verification_failed, environment_changed, source_changed; AC-7: verification_failed, environment_changed, source_changed; 필수 독립 검토 없음; 현재 소스·기준·기록의 저작 작업 보고서 없음</p><p class="state-note">저장 당시 기준 중 7개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>현 머신에서 타입·실도구·집중·빌드와 runtime boundary precheck는 통과했지만 실제 Electron이 시작 중 SIGABRT로 종료했다.</li><li>현재 계획은 같은 UUID의 tasks.md에 두고 이전 계획은 이력으로 구분했다.</li></ul><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">같은 UUID의 실제 결과와 미실행 구분</td><td data-label="바뀐 동작">현 머신에서 타입·실도구·집중·빌드와 runtime boundary precheck는 통과했지만 실제 Electron이 시작 중 SIGABRT로 종료했다.</td><td data-label="근거와 한계">.www/evidence/reports-Jk4kyD/failure.txt<p class="limit">접기·스크롤·인쇄/PDF·GUI 현재 통과를 입증하지 못했다. 앱 등록 초기화의 crash 원문을 보존하고 원인/해제 조건을 추측하지 않았다.</p></td></tr></tbody></table><section class="paper" id="history-report-38161f64-01d5-4f7a-a9d7-bff2abb8743b-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>source-machine 기록과 현 머신의 실제 실행을 분리하고 기준·권한을 약화하지 않았다.</li></ul></section><section class="paper" id="history-report-38161f64-01d5-4f7a-a9d7-bff2abb8743b-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>현재 원장과 증거 적용성</h3><dl><div><dt>확인 방법</dt><dd>공식 read/status 및 실제 명령·독립 읽기 전용 대조</dd></div><div><dt>기대 결과</dt><dd>과거 성공이나 부분 검사로 전체 완료를 만들지 않음</dd></div><div><dt>실제 관측</dt><dd>업무 완료 false를 유지하고 기준별 현재 적용성과 미검증을 나누었다.</dd></div><div><dt>확인 범위와 한계</dt><dd>접기·스크롤·인쇄/PDF·GUI 현재 통과를 입증하지 못했다. 앱 등록 초기화의 crash 원문을 보존하고 원인/해제 조건을 추측하지 않았다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 0건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>접기·스크롤·인쇄/PDF·GUI 현재 통과를 입증하지 못했다. 앱 등록 초기화의 crash 원문을 보존하고 원인/해제 조건을 추측하지 않았다.</li><li>Claude OAuth 만료 및 자동 갱신 실패로 필수 감사가 not_run이며 대체 모델은 실행하지 않았다. 커밋·push·배포·외부 쓰기를 하지 않았다.</li></ul></section><section class="paper" id="history-report-38161f64-01d5-4f7a-a9d7-bff2abb8743b-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>현재 인계 문서의 남은 실제 검증·필수 감사를 재개한다.</h3><dl><div><dt>담당</dt><dd>후속 Codex 통합자</dd></div><div><dt>해소 조건</dt><dd>현재 기능·환경·필수 감사와 저작 보고서가 모두 적용 가능함</dd></div><div><dt>영향</dt><dd>미충족 동안 업무 완료로 승격하지 않음</dd></div></dl></article><h3>기존 서술에 기록된 남은 일</h3><ul><li>현재 원장의 다음 행동 verify에서 계획에 기록한 실제 미실행 구간을 확인한다.</li><li>GUI/Native/Opus 또는 BoxBox 전제가 필요한 경우 현재 금지된 인증·전역 설정·승인 변경을 이 실행에서 우회하지 않는다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>이 보고서의 실제 실행 범위와 실패/제한 원문 확인</p><code>.www/evidence/reports-Jk4kyD/failure.txt</code></li></ol><details id="history-report-38161f64-01d5-4f7a-a9d7-bff2abb8743b-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-dc931897-564a-4b95-a8c5-a23d7b03a8a3<br>report-38161f64-01d5-4f7a-a9d7-bff2abb8743b</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>26136c427c66063fe0c7453ce2f989422ac4e5920791461a1396d1c3b59054e9</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>58f4463e7dcbf6fdfe658da8f03e2da7edb8edda650d2f77f9d1c7f0632b80dd</code></dd></div><div><dt>기준 지문</dt><dd><code>6b70bf39012ec889b2c5cf2b28d8ad6dcde5779f644ad30bbf72e8385beac44b</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;AC-1: verification_failed, environment_changed, source_changed; AC-2: verification_failed, environment_changed, source_changed; AC-3: verification_failed, environment_changed, source_changed; AC-4: verification_failed, environment_changed, source_changed; AC-5: verification_failed, environment_changed, source_changed; AC-6: verification_failed, environment_changed, source_changed; AC-7: verification_failed, environment_changed, source_changed; 필수 독립 검토 없음; 현재 소스·기준·기록의 저작 작업 보고서 없음&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-6&quot;,
+      &quot;description&quot;: &quot;앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-7&quot;,
+      &quot;description&quot;: &quot;구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-reports.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T07:31:12.266Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;보고서 공식 전체 명령을 재실행하고 실제 GUI 시작 차단을 분리했다.&quot;,
+  &quot;before&quot;: &quot;원래 머신에서 스크롤 probe 교정 후 공식 전체 재실행이 남아 있었다.&quot;,
+  &quot;after&quot;: &quot;현 머신에서 타입·실도구·집중·빌드와 runtime boundary precheck는 통과했지만 실제 Electron이 시작 중 SIGABRT로 종료했다.&quot;,
+  &quot;changes&quot;: [
+    &quot;현 머신에서 타입·실도구·집중·빌드와 runtime boundary precheck는 통과했지만 실제 Electron이 시작 중 SIGABRT로 종료했다.&quot;,
+    &quot;현재 계획은 같은 UUID의 tasks.md에 두고 이전 계획은 이력으로 구분했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;source-machine 기록과 현 머신의 실제 실행을 분리하고 기준·권한을 약화하지 않았다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;접기·스크롤·인쇄/PDF·GUI 현재 통과를 입증하지 못했다. 앱 등록 초기화의 crash 원문을 보존하고 원인/해제 조건을 추측하지 않았다.&quot;,
+    &quot;Claude OAuth 만료 및 자동 갱신 실패로 필수 감사가 not_run이며 대체 모델은 실행하지 않았다. 커밋·push·배포·외부 쓰기를 하지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;현재 원장의 다음 행동 verify에서 계획에 기록한 실제 미실행 구간을 확인한다.&quot;,
+    &quot;GUI/Native/Opus 또는 BoxBox 전제가 필요한 경우 현재 금지된 인증·전역 설정·승인 변경을 이 실행에서 우회하지 않는다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;보고서 공식 전체 명령을 재실행하고 실제 GUI 시작 차단을 분리했다. 현 머신에서 타입·실도구·집중·빌드와 runtime boundary precheck는 통과했지만 실제 Electron이 시작 중 SIGABRT로 종료했다. 접기·스크롤·인쇄/PDF·GUI 현재 통과를 입증하지 못했다. 앱 등록 초기화의 crash 원문을 보존하고 원인/해제 조건을 추측하지 않았다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;같은 UUID의 실제 결과와 미실행 구분&quot;,
+        &quot;result&quot;: &quot;현 머신에서 타입·실도구·집중·빌드와 runtime boundary precheck는 통과했지만 실제 Electron이 시작 중 SIGABRT로 종료했다.&quot;,
+        &quot;evidence&quot;: &quot;.www/evidence/reports-Jk4kyD/failure.txt&quot;,
+        &quot;limitations&quot;: &quot;접기·스크롤·인쇄/PDF·GUI 현재 통과를 입증하지 못했다. 앱 등록 초기화의 crash 원문을 보존하고 원인/해제 조건을 추측하지 않았다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;현재 원장과 증거 적용성&quot;,
+        &quot;method&quot;: &quot;공식 read/status 및 실제 명령·독립 읽기 전용 대조&quot;,
+        &quot;expected&quot;: &quot;과거 성공이나 부분 검사로 전체 완료를 만들지 않음&quot;,
+        &quot;observed&quot;: &quot;업무 완료 false를 유지하고 기준별 현재 적용성과 미검증을 나누었다.&quot;,
+        &quot;limitations&quot;: &quot;접기·스크롤·인쇄/PDF·GUI 현재 통과를 입증하지 못했다. 앱 등록 초기화의 crash 원문을 보존하고 원인/해제 조건을 추측하지 않았다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;.www/evidence/reports-Jk4kyD/failure.txt&quot;,
+        &quot;purpose&quot;: &quot;이 보고서의 실제 실행 범위와 실패/제한 원문 확인&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;현재 인계 문서의 남은 실제 검증·필수 감사를 재개한다.&quot;,
+        &quot;owner&quot;: &quot;후속 Codex 통합자&quot;,
+        &quot;doneWhen&quot;: &quot;현재 기능·환경·필수 감사와 저작 보고서가 모두 적용 가능함&quot;,
+        &quot;impact&quot;: &quot;미충족 동안 업무 완료로 승격하지 않음&quot;
+      }
+    ]
+  }
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 PM 2:43 · 작성자 보고서 · Downloads/www-report.html을 정적으로 분석해 한 페이지 보고서 양식 변경의 개발명세를 작성했다. 제품 양식은 바꾸지 않았다.</summary><article><h3>참조 HTML 기반 한 페이지 보고서 양식 변경 명세</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">현행 보고서는 독자 중심 정보를 제공하지만 사용자가 지정한 새 HTML의 번호 목차·여섯 절·간결한 문서 스타일과 차이가 있다.
+
+참조 원본의 내용 식별값·읽기 순서·시각 기준·반응형·기존 기록 보존·앱/독립 HTML 매핑과 검증 계획을 Reports 003에 기록했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 구현 요청 후 실제 참조 화면 확인과 기존 기록의 여섯 절 매핑부터 진행한다.</p><p class="state-note">저장 당시 기준 중 7개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>개발명세·수용 기준 7개·작업 목차를 등록하고 Reports 002와 연결했다.</li><li>참고 원본은 Git 제외 로컬 증거에 보존하고 SHA-256을 명세에 기록했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl><section class="paper" id="history-report-94765ceb-8033-4957-920e-562c932b2d7a-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>시안의 수치·날짜·Opus 문구는 예시로 구분하고 일반 보고서의 고정 사실로 사용하지 않는다.</li><li>원본 visualization wrapper와 스크립트를 복사하지 않고 기존 오프라인·의미 보존 계약을 유지하는 목표를 정했다.</li></ul></section><section class="paper" id="history-report-94765ceb-8033-4957-920e-562c932b2d7a-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>브라우저 접근 호스트 불가로 실제 렌더링·목차 클릭·인쇄는 확인하지 못했다.</li><li>제품 구현·실기·타입·빌드·독립 제품 감사는 수행하지 않았다.</li></ul></section><section class="paper" id="history-report-94765ceb-8033-4957-920e-562c932b2d7a-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>구현 요청 후 실제 참조 화면 확인과 기존 기록의 여섯 절 매핑부터 진행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-94765ceb-8033-4957-920e-562c932b2d7a-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-dc931897-564a-4b95-a8c5-a23d7b03a8a3<br>report-94765ceb-8033-4957-920e-562c932b2d7a</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>58524c48b965e006d942c82c521cf5b2d92bef292b98f85a7aa012b07b27560e</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>3485dabab0f478216efdd6435561b488fdd52425558e1436313f1b2bd3dbe79c</code></dd></div><div><dt>기준 지문</dt><dd><code>6b70bf39012ec889b2c5cf2b28d8ad6dcde5779f644ad30bbf72e8385beac44b</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>ready</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;ready&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-6&quot;,
+      &quot;description&quot;: &quot;앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-7&quot;,
+      &quot;description&quot;: &quot;구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;Downloads/www-report.html을 정적으로 분석해 한 페이지 보고서 양식 변경의 개발명세를 작성했다. 제품 양식은 바꾸지 않았다.&quot;,
+  &quot;before&quot;: &quot;현행 보고서는 독자 중심 정보를 제공하지만 사용자가 지정한 새 HTML의 번호 목차·여섯 절·간결한 문서 스타일과 차이가 있다.&quot;,
+  &quot;after&quot;: &quot;참조 원본의 내용 식별값·읽기 순서·시각 기준·반응형·기존 기록 보존·앱/독립 HTML 매핑과 검증 계획을 Reports 003에 기록했다.&quot;,
+  &quot;changes&quot;: [
+    &quot;개발명세·수용 기준 7개·작업 목차를 등록하고 Reports 002와 연결했다.&quot;,
+    &quot;참고 원본은 Git 제외 로컬 증거에 보존하고 SHA-256을 명세에 기록했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;시안의 수치·날짜·Opus 문구는 예시로 구분하고 일반 보고서의 고정 사실로 사용하지 않는다.&quot;,
+    &quot;원본 visualization wrapper와 스크립트를 복사하지 않고 기존 오프라인·의미 보존 계약을 유지하는 목표를 정했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;브라우저 접근 호스트 불가로 실제 렌더링·목차 클릭·인쇄는 확인하지 못했다.&quot;,
+    &quot;제품 구현·실기·타입·빌드·독립 제품 감사는 수행하지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;구현 요청 후 실제 참조 화면 확인과 기존 기록의 여섯 절 매핑부터 진행한다.&quot;
+  ]
+}</pre></div></details></article></details></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>같은 UUID의 실제 시도·소스·정책·과거 실패를 확인한다.</p><code>docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/work.json</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-dc931897-564a-4b95-a8c5-a23d7b03a8a3<br>report-1f518b45-cf74-4fa8-a67a-51fb529b1b88</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>5d988543eed46598a43fdf70ed58efc3f6f58cba7eb34f91c37e4fe65817d16a</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>1f6e4ba15ce95a59845c930c32975c804c39758732843e5e080c1b50724883a5</code></dd></div><div><dt>기준 지문</dt><dd><code>6b70bf39012ec889b2c5cf2b28d8ad6dcde5779f644ad30bbf72e8385beac44b</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>done</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;done&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-6&quot;,
+      &quot;description&quot;: &quot;앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-7&quot;,
+      &quot;description&quot;: &quot;구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-7ca1c4d6-29e3-42cf-a96e-e536e56db676&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-reports.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T07:31:12.266Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0991073d-f542-4b27-8c01-b33fc8663023&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/resume-20261116/reports-closeout/verify-current.mts&quot;,
+        &quot;reports003&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:57:24.496Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e6da79a8-2988-4f48-a549-7b451e188032&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/resume-20261116/reports-closeout/verify-current.mts&quot;,
+        &quot;reports003&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-17T01:46:10.523Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-ea8adeee-5946-45f4-9a2e-f8d7d8649587&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/resume-20261116/reports-closeout/verify-current.mts&quot;,
+        &quot;reports003&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-17T02:00:32.502Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-580dfbd1-87a5-4c8a-893e-809b20da67e4&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-580dfbd1-87a5-4c8a-893e-809b20da67e4/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;scripts/workflow/report-view.ts의 decisions()는 narrative.reader가 존재하면 reader.decisions만 표시한다. reader.decisions가 빈 배열이고 기존 narrative.decisions에 실제 선택 이유가 있는 보고서는 선택 내용이 원시 상세로 밀려 기본 본문에서 사라진다. test/workflow-reports.test.ts의 reader fixture도 이 누락을 기대한다. 중요한 선택을 보존해야 하는 보고서 계약과 충돌한다.&quot;,
+        &quot;scripts/workflow/report-view.ts의 blockerMessage()는 blockedReason이 &#39;독립 검토 not_run:&#39;으로 시작하면 뒤에 실제 사유가 기록돼 있어도 무조건 &#39;원인은 기록에서 확인되지 않았습니다&#39;로 바꾼다. 예를 들어 로그인 실패가 기록된 경우에도 독자는 원인을 알 수 없다는 잘못된 설명을 보게 된다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle의 소스·문서·테스트 코드이며, 생략된 파일과 별도 검증 로그는 읽지 않았다. 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-2a45fad1-4e76-4283-a051-7f6701aad342&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-2a45fad1-4e76-4283-a051-7f6701aad342/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: 감사 사본(snapshot) 안에서 Read·Grep·Glob 도구로만 읽었다. 읽은 파일은 scripts/workflow/report-view.ts 전체, src/reports-view.tsx 전체, test/workflow-reports.test.ts 770-843행, test/report-service.test.ts 125-153행, src/main.ts 175-224행, Reports003 verification.md 전체, 003-scope.json, audit-context.md이고, scripts/verify-reports.ts·browser-current.mts·docs/specs/reports.md에서는 패턴 검색만 했다. 작업 디렉터리 밖에 있는 원본 위치의 audit-context.md는 --restricted 제한으로 읽지 못했고, snapshot 안의 같은 상대경로 사본으로 대신 읽었다. reports.ts, report-lifecycle.ts, docs/skills/REPORTS.md, Reports003 spec.md는 전체를 읽지 않았다. 테스트·빌드·브라우저는 실행하지 않았다.&quot;,
+        &quot;이전 지적 1(decisions 누락)은 해소됐다. report-view.ts:63-76은 reader.decisions와 narrative.decisions를 함께 표시한다. 정규화(NFC·trim)한 choice가 이미 표시된 원문만 중복에서 빼고, 나머지는 &#39;함께 기록된 선택&#39; 또는 &#39;기록에 남은 주요 선택&#39;으로 기본 본문에 남긴다. reader.decisions가 비어 있고 원문에만 선택이 있어도 본문에서 사라지지 않는다. test/workflow-reports.test.ts:796-814가 &#39;둘 다 없으면 선택을 만들지 않음&#39;과 &#39;원문 선택 보존&#39;을 반례로 고정한다.&quot;,
+        &quot;이전 지적 2(blockerMessage 원인 덮어쓰기)는 해소됐다. report-view.ts:150-157은 &#39;not_run:&#39; 뒤의 사유가 비었거나 &#39;unknown&#39;일 때만 &#39;원인은 기록에서 확인되지 않았습니다&#39;를 쓴다. 그 밖의 경우에는 &#39;기록된 사유: …&#39;를 escape해 그대로 보여 준다. test/workflow-reports.test.ts:779-794와 816-825가 로그인 실패, script 주입 문자열, 빈 값, unknown의 네 경우를 다룬다. :342-352의 unknown 비노출 검사와도 충돌하지 않는다. 바뀐 문구가 기존 문구를 부분 문자열로 포함하므로 787행의 기대와도 맞다.&quot;,
+        &quot;AC-1·AC-5 구조 확인: 여섯 절의 순서와 section-1~6 앵커, 왼쪽 목차, 접히는 원시 상세(details#report-raw), 790px/540px 미디어 쿼리, 인쇄 시 접힌 이력·원시 상세 제외와 그 안내, focus-visible outline, prefers-reduced-motion, 다크 모드가 report-view.ts:196-201에 들어 있다. 과거 이력 본문의 id는 :186에서 history-&lt;id&gt;- 접두어로 바꿔 중복을 피한다.&quot;,
+        &quot;AC-2·AC-3·AC-6: conclusion()(report-view.ts:159-167)은 저장 당시 검사, 보고서 자료의 현재성, 저장 당시 독립 검토, 업무 상태를 따로 보여 준다. 실패·미확인 건수, 차단 사항, 기록 변경 경고도 숨기지 않는다. nextActions는 담당이 없으면 &#39;미지정&#39;, 조건이 없으면 &#39;기록되지 않았습니다&#39;로 표시해 없는 사실을 지어내지 않는다. 앱은 같은 HTML을 sandbox=\&quot;\&quot; iframe의 srcDoc으로 보여 주고(reports-view.tsx:158), 바꾸는 것은 목차 href 하나뿐이다(:17-19). test/report-service.test.ts:134-152가 저장 원문이 보존되는지와 정확한 6개 앵커만 바뀌는지를 확인한다.&quot;,
+        &quot;남은 한계(결함 아님, 증거 범위): 앱 iframe 안에서 about:srcdoc#section-N 목차를 실제로 클릭하는 동작은 문자열 단위 테스트로만 확인됐다. src/main.ts:175-224의 Electron 관측은 iframe의 제목과 story box만 보고, 검색 결과로는 browser-current.mts에 srcdoc·iframe 검사가 없다. verification.md:84는 &#39;추가 실제 브라우저 재현이 필요하다&#39;고 이 미실행을 명시하고 있다. 따라서 실제 Electron에서 목차가 이동한다는 관측을 PASS 증거로 넓혀 해석하면 안 된다.&quot;,
+        &quot;증거 대조: 003-scope.json의 최신 검사 attempt-ea8adeee는 sourceDigest 1f6e4ba1…에서 통과(passed, sourceStable)했다. 이 검토 요청의 sourceDigest는 f3a1f866…이고, 두 지문은 입력 파일 집합이 다르다(검토 요청에는 docs/ARCHITECTURE.md 등이 포함됨). 이 사본만으로는 두 지문이 같은 소스 상태를 가리키는지 판정할 수 없다. 이 확인은 원격 recordReview의 지문 재검사에 맡긴다. 원격 테스트 PASS는 기록된 관측일 뿐이고, 이 검토자가 재실행하지 않았다.&quot;,
+        &quot;기록 정합성 참고: verification.md:76-84의 &#39;현재 독립 감사 — 수정 필요&#39; 절은 과거 fail로 보존돼 있다. 그 뒤 두 지적이 수정됐다는 서술은 검증 기록에 아직 없지만, 소스와 테스트에는 수정이 반영돼 있다. 판정을 바꿀 결함은 아니다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;참조 HTML 기반 한 페이지 보고서 양식 변경 명세의 기능 기준 7개와 지정 Opus 감사·문서 검토를 현재 소스에서 수용했다. 실제 실행과 코드 판단의 범위 및 과거 실패를 보존해 최종 보고서를 갱신했다.&quot;,
+  &quot;before&quot;: &quot;참조 양식의 읽기 순서와 실제 기록의 판정을 일관되게 연결할 명세와 검증이 필요했다.&quot;,
+  &quot;after&quot;: &quot;여섯 절·왼쪽 목차·접는 근거와 반응형·인쇄·오프라인 읽기를 제공하며 실제 선택과 미실행 사유를 보존한다.&quot;,
+  &quot;changes&quot;: [
+    &quot;여섯 절·왼쪽 목차·접는 근거와 반응형·인쇄·오프라인 읽기를 제공하며 실제 선택과 미실행 사유를 보존한다.&quot;,
+    &quot;이전 감사의 iframe 목차·기존 선택 누락·실제 not_run 사유 왜곡 지적을 현재 소스와 회귀 근거로 재검토했다.&quot;,
+    &quot;공식 기능 검증·현재성·독립 감사·문서 영향과 저작 보고서를 같은 UUID에 연결했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;기존 UUID·entries·원문 서술을 보존하고 구조화 설명을 보강했다.&quot;,
+    &quot;원격 OAuth 만료는 모델 대체나 자격증명 복사 없이 동일 source/criteria/policy/request의 읽기 전용 로컬 사본에서 공식 Opus 프로세스를 실행하고 원격 core로 영수증을 회수해 해결했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;BoxBox 외부4개 실도구 검사는 off로 미실행이며 제품 검사 PASS로 확대하지 않는다.&quot;,
+    &quot;앱 iframe 목차의 실제 클릭·스크롤은 별도 실측하지 않았으며 코드·문자열 회귀 근거로 판단했다. 독립 HTML 목차·반응형·키보드·인쇄·오프라인과 앱 본문은 원격 실제 GUI 검증 범위다.&quot;,
+    &quot;Reports001 실제 모델은 두 합성 공개 표본으로 일반 판단 품질·Windows·실제 코드 구현 수행을 입증하지 않는다.&quot;,
+    &quot;검토자는 소스 읽기 전용으로 감사했고 테스트를 직접 재실행하지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;실제 업무 자료·Windows·앱 iframe 목차 클릭의 확대 관측은 별도 후속 범위로 유지한다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;참조 양식의 읽기 순서와 실제 기록의 판정을 일관되게 연결할 명세와 검증이 필요했다. 여섯 절·왼쪽 목차·접는 근거와 반응형·인쇄·오프라인 읽기를 제공하며 실제 선택과 미실행 사유를 보존한다. 현재 기능 기준 7개와 Opus review-2a45fad1-4e76-4283-a051-7f6701aad342를 공식 core가 수용했다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-1의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-2의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-3의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-4의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-5의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-6의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      },
+      {
+        &quot;requirement&quot;: &quot;구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.&quot;,
+        &quot;result&quot;: &quot;현재 공식 검증 근거 수용&quot;,
+        &quot;evidence&quot;: &quot;AC-7의 최신 실제 검증과 현재성 판정&quot;,
+        &quot;limitations&quot;: null
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;현재 Task의 필수 기준·문서·독립 감사&quot;,
+        &quot;method&quot;: &quot;원격 실제 verifyWork와 현재성 재조회, 공식 Opus 감사 영수증 회수&quot;,
+        &quot;expected&quot;: &quot;모든 필수 근거가 현재 유효함&quot;,
+        &quot;observed&quot;: &quot;기준7개·문서·Opus review-2a45fad1-4e76-4283-a051-7f6701aad342 수용&quot;,
+        &quot;limitations&quot;: &quot;실행 관측과 코드 감사의 판단을 구분한다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/work.json&quot;,
+        &quot;purpose&quot;: &quot;같은 UUID의 실제 시도·소스·정책·과거 실패를 확인한다.&quot;
+      }
+    ],
+    &quot;nextActions&quot;: []
+  }
+}</pre></div></details></section></article></div></main></body></html>

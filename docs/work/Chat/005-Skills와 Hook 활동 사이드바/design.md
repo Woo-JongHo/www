@@ -1,3 +1,18 @@
+# 현재 구조 책임과 과거 설계
+
+현재 구현·검사·검토의 결과와 적용성은 같은 UUID의 [작업 원장](work.json)과 [검증 기록](verification.md)의 최신 공식 read/status로 판단한다. 새 반례 이후의 소스 교정·집중 검증·문서 영향 검토·고유 독립 감사·저작 보고서·완료 판정은 별도 절차이며, 이 문서 작성으로 통과를 선언하지 않는다. 과거 숫자·모델 판정·미실행 설명은 당시 소스의 이력이다.
+
+현재 공개 사건은 native-session→AppEvent/리소스 snapshot→native-activity/activity-sidebar 순수 투영→상세 모니터 DOM으로 흐른다. 기본 Agent 개요는 후속013 요구가 소유하며 Hook 목록을 숨기는 것과 실제 Hook 실행·상세 관측을 구분한다.
+
+Hook handler ID는 호출별 고유 ID가 아니다. sidebar는 turn/startedAt/완료 lifecycle으로 중복과 새 시작을 대조하며, 상세 activity는 같은 thread/turn/handler 항목을 새 시각에서 최신 상태로 갱신한다. 식별정보 없는 반복에서 무제한 호출횟수/타임라인을 보존한다고 쓰지 않는다. renderer는 snapshot과 arrived live를 consumeEvents로 합친다. 이 현행 코드를 새 단위·독립 profile GUI에서 확인할 계획이고 코드 존재만으로 PASS하지 않는다.
+
+설정 모델·관측 전환·계정 quota·total/last 사용량은 서로 다른 근거다. 실제 Native 읽기 표본과 합성/SSR/actual Electron을 분리하고 Windows·OS IME·모델별 비용을 추측하지 않는다. 자세한 여정과 같은 기준 연결은 현재 spec.md다.
+
+## 과거 설계 원문 — 당시 책임/BoxBox/미실행 설명
+
+<details>
+<summary>변경 전 설계 이력</summary>
+
 # Skills와 Hook 활동 사이드바 설계
 
 ## 기준선과 재사용
@@ -58,3 +73,5 @@ bootstrap과 대화 전환은 `ActivitySnapshotBoundary` token을 먼저 연 뒤
 ### 목록 요청 최신성
 
 main은 `skills + cwd`, `hooks + cwd + workspace/threadId`를 요청 scope로 사용한다. 요청 시작에서 전역 증가 generation을 해당 scope의 최신값으로 교체하고, 성공·실패 응답 모두 publish 직전에 같은 generation인지 확인한다. 최신 요청이 끝나면 scope entry를 제거하되 이전 요청은 `undefined`와도 불일치하므로 뒤늦게 게시될 수 없다. fixture는 요청 1 보류, 요청 2 시작, 요청 1 stale 응답, 요청 2 지연 실패, 요청 3 복구 순서를 실제 JSON-RPC로 주입한다.
+
+</details>

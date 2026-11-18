@@ -284,3 +284,164 @@ BoxBox 사전 guide/source 검사와 최종 source 검사는 .www/scratchpad/rep
 ## 2026-11-15 최종 현재성 재평가와 부분 반환
 
 별도 세션에서 `docs/specs/ecosystem.md`, `scripts/verify-architecture.ts`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/renderer.tsx`가 검사 도중 다시 바뀌었다. 우리 병렬 작업자의 제품 소스 동결과 실제 전체 워크스페이스의 동결은 달랐다. 통과 영수증은 당시 소스에 묶인 결과로 보존하고 현재 소스 통과로 승격하지 않는다. 공식 resume로 현재 기준·검토·문서 적용성을 재평가했으며 완료를 요청하지 않는다. 추가 유료 검사는 중단했고, 다른 세션 종료 후 현재 소스 재검증 또는 고정 스냅샷 기준의 마감 선택이 남았다. 부분 저작 보고서에 실제 확인 범위·실패·소스 변화·남은 조건을 연결한다.
+
+<a id="attempt-9ef232cb-b253-456c-9f67-174e346bd770"></a>
+## 검증 시도 — 2026-11-16T14:36:04.908Z
+
+- 시도 ID: `attempt-9ef232cb-b253-456c-9f67-174e346bd770`
+- 실행 시각: 2026-11-16T14:35:22.666Z ~ 2026-11-16T14:36:04.908Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-reports.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`, `AC-5`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `build.ts`, `docs/architecture`, `docs/skills/REPORTS.md`, `docs/specs`, `docs/specs/reports.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/package.json`, `scripts/source-policy.ts`, `scripts/verify-reports.ts`, `scripts/workflow`, `scripts/workflow.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `e770e1d663cc122b60e1109116e00274c44723e9348a66260e0d4fa878d50838`
+- 기준 정의 식별: `9e5ffa587390fd87fdeffac0c3353d0691050c91f52b7128600fbc6bd558203e`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 233바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-7b7c2a27-dbd9-432e-ad68-3e4f0f0f8607"></a>
+## 검증 시도 — 2026-11-16T14:39:10.816Z
+
+- 시도 ID: `attempt-7b7c2a27-dbd9-432e-ad68-3e4f0f0f8607`
+- 실행 시각: 2026-11-16T14:38:18.438Z ~ 2026-11-16T14:39:10.816Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test/verify-native-report-live.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-6`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `build.ts`, `docs/architecture`, `docs/skills/REPORTS.md`, `docs/specs`, `docs/specs/reports.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/package.json`, `scripts/source-policy.ts`, `scripts/verify-reports.ts`, `scripts/workflow`, `scripts/workflow.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `e770e1d663cc122b60e1109116e00274c44723e9348a66260e0d4fa878d50838`
+- 기준 정의 식별: `9e5ffa587390fd87fdeffac0c3353d0691050c91f52b7128600fbc6bd558203e`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 1136바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+## 현재 검증 범위 준비 — Reports001
+
+현재 소스 동결 승인 뒤 실제 검사 의존 입력과 정확한 복합 verifier 서명만 합집합으로 확장했다. 원문 전체 백업과 SHA, withWorkLock, CAS, validateWorkRecord(baseDir=작업 폴더), 공식 serializer와 atomic rename을 확인했다. 기준·과거 결과·이력·직접 요청과 auth 해시는 보존했다. 확장 직후 공식 status의 완료 판정은 false이며 다음 단계는 verify다. 이는 검사를 실행한 결과가 아니다. 실제 build/GUI 슬롯 인계를 기다린다.
+
+준비 근거: `.www/evidence/resume-20261116/reports-closeout/authority-expansion.json`, `authority-expansion.log`, `scratch-types.log`, `preflight.md`. 브라우저 복합 verifier는 현재 formal 실행이 만든 합성 HTML을 사용하며 모든 checks가 true인 경우만 성공한다. 기존 raw 로그와 읽기 전용 감사는 수정하지 않았다.
+
+<a id="attempt-c2366128-9585-46dd-86fe-2c90a4f53520"></a>
+## 검증 시도 — 2026-11-16T14:55:16.445Z
+
+- 시도 ID: `attempt-c2366128-9585-46dd-86fe-2c90a4f53520`
+- 실행 시각: 2026-11-16T14:54:27.621Z ~ 2026-11-16T14:55:16.445Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/resume-20261116/reports-closeout/verify-current.mts","reports001"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`, `AC-5`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `.boxbox`, `build.ts`, `docs/architecture`, `docs/skills/REPORTS.md`, `docs/specs`, `docs/specs/reports.md`, `docs/work/Workflow/012-BoxBox 승인 규칙과 새 JSON 출력/approvals`, `package-lock.json`, `package.json`, `scripts`, `scripts/package.json`, `scripts/source-policy.ts`, `scripts/verify-reports.ts`, `scripts/workflow`, `scripts/workflow.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `38c7b7a582921a5a9abd0e9f8dd88208cddb5c5ad96400060103eb10aa1080e9`
+- 기준 정의 식별: `9e5ffa587390fd87fdeffac0c3353d0691050c91f52b7128600fbc6bd558203e`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/reports-closeout/browser-current.mts` (12264바이트, sha256 5eb673ec0c5ab9c61cab48ec35f3dc73782229eb65ff67aca9cdb8795560f310), `.www/evidence/resume-20261116/reports-closeout/verify-current.mts` (1113바이트, sha256 9a687908ddf8fd81ea2ceb8671f8ced23fc09fcf8c9421430af122d9c229d352)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 454바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+## 현재 복합 검사 관찰 — Reports001
+
+실제 attempt `attempt-c2366128-9585-46dd-86fe-2c90a4f53520`는 `2026-11-16T14:54:27.621Z`부터 `2026-11-16T14:55:16.445Z`까지 종료 코드 0, passed, sourceStable=true로 기록됐다. 대상 기준은 AC-1, AC-2, AC-3, AC-4, AC-5다. 소스 지문은 `38c7b7a582921a5a9abd0e9f8dd88208cddb5c5ad96400060103eb10aa1080e9`, 기준 지문은 `9e5ffa587390fd87fdeffac0c3353d0691050c91f52b7128600fbc6bd558203e`이며 이 둘은 다른 namespace다. 원장에 정식 연결한 현재 시도이고 다른 UUID 영수증을 복사하지 않았다.
+
+formal verify-reports가 현재 타입·실제 공개 CLI를 사용하는 JSON 의미 golden·보고서 집중 행동/보안·빌드·실제 Electron을 실행하고 새 합성 보고서를 만들었다. 이어 그 실행이 반환한 fixture의 HTML을 실제 headless Chrome에서 열어 23개 checks가 모두 통과했다. 현재 HTML은 `/Users/woojongho/woo/00_project/www-handoff-20261116/source/.www/evidence/reports-OTdfHN/standalone.html`이며 SHA-256은 `9a0f04d1d8a65407b010624ae8cead525ca89e3bcca733bd4dfcb241a9666c07`다. Chrome 관측 버전은 `Chrome/157.0.8103.51`다.
+
+- 요구 매핑: reader story/요구/검사/조건부 결정 보존, 실패 판정 병기, 과거 PASS·현재성·감사·업무 완료 분리, legacy 의미와 UUID/entry 보존, 실제 생략 표시·이스케이프는 formal 집중 테스트에서 확인했다.
+- 사용자 흐름: 실제 Electron에서 목록·독립 HTML 읽기·sandbox·빈 검색·대화 초안 보존·Native 합성 자동 저장을 확인했다. 실제 모델 판단 품질은 이 합성 프로세스 검사 범위가 아니다.
+- 현재 Chrome: 1440/791/790/789/541/540/539/360px, 키보드 목차 6절·원시 상세 열기/닫기와 위치·포커스 outline, light/dark 주요 본문 대비 4.5:1 이상, PDF 한글 여섯 절, 과거 이력 열림/닫힘 인쇄 및 외부 요청 없는 오프라인을 직접 관찰했다.
+- 한계: 이 실행의 합성 자료·macOS Electron/Chrome 표본이다. OS 인쇄 대화상자·Windows·모든 실제 업무 자료 조합·실제 Native 구현 수행/일반 모델 품질은 확인하지 않았다. 과거 Chrome 결과를 새 실행으로 승격하지 않았다. BoxBox off는 disabled이며 스타일 PASS가 아니다.
+
+원문은 `.www/evidence/resume-20261116/reports-closeout/reports001-functional.json`, `reports001-functional.log`, `reports001-browser/results.json`, `reports001-browser/cdp.json`과 각 PDF/PNG에 보존했다. 독립 감사와 업무 완료는 이 검사 성공과 별도다.
+
+<a id="attempt-a792c6ff-acd2-469f-bbfb-893e049eb515"></a>
+## 검증 시도 — 2026-11-16T14:58:34.180Z
+
+- 시도 ID: `attempt-a792c6ff-acd2-469f-bbfb-893e049eb515`
+- 실행 시각: 2026-11-16T14:57:41.968Z ~ 2026-11-16T14:58:34.180Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test/verify-native-report-live.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-6`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `.boxbox`, `build.ts`, `docs/architecture`, `docs/skills/REPORTS.md`, `docs/specs`, `docs/specs/reports.md`, `docs/work/Workflow/012-BoxBox 승인 규칙과 새 JSON 출력/approvals`, `package-lock.json`, `package.json`, `scripts`, `scripts/package.json`, `scripts/source-policy.ts`, `scripts/verify-reports.ts`, `scripts/workflow`, `scripts/workflow.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `38c7b7a582921a5a9abd0e9f8dd88208cddb5c5ad96400060103eb10aa1080e9`
+- 기준 정의 식별: `9e5ffa587390fd87fdeffac0c3353d0691050c91f52b7128600fbc6bd558203e`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 1112바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+## 현재 실제 LLM 판단 — AC-6
+
+`attempt-a792c6ff-acd2-469f-bbfb-893e049eb515`는 2026-11-16T14:57:41.968Z~14:58:34.180Z에 실제 `bun test/verify-native-report-live.ts`를 실행해 passed/exit 0/sourceStable=true를 기록했다. 두 합성 공개 입력에서 인사(greeting)는 skipped, 백업 설계(design)는 saved였으며 새 authored 보고서를 다시 읽어 reader 이야기와 요구 결과 보존을 확인했다. 실제 판단 실행 시간은 52,136ms다. 중복·실패·재시도·재시작 경계는 현재 formal 집중 테스트의 합성 사건 검사와 함께 해석한다.
+
+명시 model 필드는 보내지 않고 별도 Codex app-server의 설정 기본 모델을 사용하는 구현이다. 이 테스트 결과는 실제 응답의 유효 모델명을 기록하지 않으므로 관측 모델명은 미확인이다. 개발 저자/감사에 요청한 모델명으로 이 판단 모델명을 채우지 않는다. 실제 LLM 호출이지만 두 합성 공개 답변 표본이며 일반 판단 품질, 주 대화와 같은 유효 모델, 실제 코드 구현 수행은 검증하지 않았다.
+
+원문: `.www/evidence/resume-20261116/reports-closeout/reports001-native.json`, `reports001-native.log`, `.www/evidence/native-report-live-kR2Kl2/result.json`. 과거 52초 시도와 현재 시도는 별도 보존하며 이전 성공을 복사하지 않았다.
+
+## 현재 독립 감사 — 수정 필요
+
+실제 공유 review core의 `review-487837c7-91c0-4d6a-9595-0a646c7f6b55`는 `executor=process`, `observedModel=gpt-6.1-terra`, `verdict=fail`, `recorded=true`다. 직접 사용자 Terra 요청·현재 work/request/auth·source/criteria/policy 지문·review 단계로 연결하고 fallback이나 주입 실행을 사용하지 않았다. 이 결과는 실제 감사 실패이며 과거 실패/미실행과 별도 보존한다.
+
+- scripts/workflow/report-view.ts:187의 목차는 `href="#section-…"`를 사용하지만, src/reports-view.tsx:153은 보고서를 `srcDoc` iframe에 표시한다. srcdoc 문서에서 상대 URL은 상위 문서 URL을 기준으로 해석되므로 앱에서 목차를 누르면 보고서 내부 절로 이동하지 않고 상위 문서 주소로 iframe 이동을 시도한다. 이는 앱에서도 번호 목차로 문서 내 절에 이동해야 하는 REPORTS-7을 충족하지 못한다. 제공된 테스트는 링크 문자열의 존재를 검사하지만 이 iframe 클릭 동작을 확인하지 않는다.
+- 검토 범위는 제공된 inputBundle과 지정 파일의 git diff 및 관련 행 검색이다. 테스트나 Electron 시나리오는 실행하지 않았다.
+
+현재 기준 검사의 passed와 감사 fail은 별개다. 공식 action 뒤 다음 단계는 build, 완료 판정은 false다. 공유 제품 코드 소유자인 Root에 원문과 재현을 전달했으며 이 담당은 제품 파일을 임의 수정하지 않았다. 결정 누락은 현재 새 fixture의 읽기, 차단 사유는 메모리상의 보고서 clone 렌더로 재현했다. iframe 내부 목차 실제 클릭은 이전 formal/Chrome 표본에서 확인하지 않았고 추가 실제 브라우저 재현이 필요하다. 원문은 `.www/evidence/resume-20261116/reports-closeout/reports001-audit.json`과 `.review.json`에 보존한다.
+
+<a id="attempt-974223c0-d701-45d4-9094-8e5ca67881d4"></a>
+## 검증 시도 — 2026-11-17T01:45:06.291Z
+
+- 시도 ID: `attempt-974223c0-d701-45d4-9094-8e5ca67881d4`
+- 실행 시각: 2026-11-17T01:44:33.410Z ~ 2026-11-17T01:45:06.291Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/resume-20261116/reports-closeout/verify-current.mts","reports001"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`, `AC-5`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `.boxbox`, `build.ts`, `docs/architecture`, `docs/skills/REPORTS.md`, `docs/specs`, `docs/specs/reports.md`, `docs/work/Workflow/012-BoxBox 승인 규칙과 새 JSON 출력/approvals`, `package-lock.json`, `package.json`, `scripts`, `scripts/package.json`, `scripts/source-policy.ts`, `scripts/verify-reports.ts`, `scripts/workflow`, `scripts/workflow.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `6a26245b5733184f911a5bb383a7d0624dc3a5a244ce98813701fbd04fc3e4ba`
+- 기준 정의 식별: `9e5ffa587390fd87fdeffac0c3353d0691050c91f52b7128600fbc6bd558203e`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/reports-closeout/browser-current.mts` (12264바이트, sha256 5eb673ec0c5ab9c61cab48ec35f3dc73782229eb65ff67aca9cdb8795560f310), `.www/evidence/resume-20261116/reports-closeout/verify-current.mts` (1113바이트, sha256 9a687908ddf8fd81ea2ceb8671f8ced23fc09fcf8c9421430af122d9c229d352)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 549바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-332ffbd0-2e0d-43ea-b163-25e265b68b83"></a>
+## 검증 시도 — 2026-11-17T01:59:28.239Z
+
+- 시도 ID: `attempt-332ffbd0-2e0d-43ea-b163-25e265b68b83`
+- 실행 시각: 2026-11-17T01:58:56.358Z ~ 2026-11-17T01:59:28.239Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/resume-20261116/reports-closeout/verify-current.mts","reports001"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`, `AC-5`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `.boxbox`, `build.ts`, `docs/architecture`, `docs/skills/REPORTS.md`, `docs/specs`, `docs/specs/reports.md`, `docs/work/Workflow/012-BoxBox 승인 규칙과 새 JSON 출력/approvals`, `package-lock.json`, `package.json`, `scripts`, `scripts/package.json`, `scripts/source-policy.ts`, `scripts/verify-reports.ts`, `scripts/workflow`, `scripts/workflow.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `9f2908a2ef9f07f75708a9b9d035b2e9050fb499e8c90f19a39ffe157e60655e`
+- 기준 정의 식별: `9e5ffa587390fd87fdeffac0c3353d0691050c91f52b7128600fbc6bd558203e`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/reports-closeout/browser-current.mts` (12264바이트, sha256 5eb673ec0c5ab9c61cab48ec35f3dc73782229eb65ff67aca9cdb8795560f310), `.www/evidence/resume-20261116/reports-closeout/verify-current.mts` (1113바이트, sha256 9a687908ddf8fd81ea2ceb8671f8ced23fc09fcf8c9421430af122d9c229d352)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 549바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-d4c97176-2183-4df1-a8a8-34bd3d14398c"></a>
+## 검증 시도 — 2026-11-17T02:00:50.430Z
+
+- 시도 ID: `attempt-d4c97176-2183-4df1-a8a8-34bd3d14398c`
+- 실행 시각: 2026-11-17T01:59:28.983Z ~ 2026-11-17T02:00:50.430Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test/verify-native-report-live.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-6`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `.boxbox`, `build.ts`, `docs/architecture`, `docs/skills/REPORTS.md`, `docs/specs`, `docs/specs/reports.md`, `docs/work/Workflow/012-BoxBox 승인 규칙과 새 JSON 출력/approvals`, `package-lock.json`, `package.json`, `scripts`, `scripts/package.json`, `scripts/source-policy.ts`, `scripts/verify-reports.ts`, `scripts/workflow`, `scripts/workflow.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `9f2908a2ef9f07f75708a9b9d035b2e9050fb499e8c90f19a39ffe157e60655e`
+- 기준 정의 식별: `9e5ffa587390fd87fdeffac0c3353d0691050c91f52b7128600fbc6bd558203e`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 1127바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
