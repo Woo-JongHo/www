@@ -1,0 +1,304 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>대화 단일 스크롤과 카드 펼침 및 성능 개선 명세 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 16일 오후 2:39 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>대화 단일 스크롤과 카드 펼침 및 성능 개선 명세</h1><p class="lead">Chat 014 개발명세에 작업 중 같은 턴에 추가 지시를 전달하는 Steer 요구를 추가했다. 제품 코드는 변경하지 않았다.</p><div id="report-story" class="story">기존 전송은 turn:start의 idle 검사로 실행 중 추가 입력을 거부하며 별도 Steer 경로가 없다.
+
+일반 보내기와 Steer를 구분하고 같은 턴 전달·접수 상태·오류·원문 복원·세션 격리 및 실제 검증 시나리오를 명세했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 구현 요청 후 Input P0 계측과 함께 Steer 전송·종료 경합·원문 복원·동일 턴 유지부터 검증한다.</p><p class="state-note">저장 당시 기준 중 14개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>AC-11~AC-14를 추가하고 Native·API·IPC 관련 검사 입력을 연결했다.</li><li>설치된 Codex 0.169.0의 공식 JSON 스키마 생성기로 turn/steer의 필수 필드와 응답 형식을 확인했다.</li></ul></div></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>Chat 본문은 대화 전체만 세로 스크롤하며 명령·코드·diff 카드에 독립 세로 스크롤이 없고 입력창은 고정된다.</dt><dd>미검증으로 기록</dd></div><div><dt>선택한 명령 출력은 ^T 표시 버튼과 Control+T로 같은 자리에서 펼침·접힘을 전환하며 다른 카드와 입력창의 상태를 바꾸지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>펼침은 보관된 원문 최대 32768 UTF-16 코드 단위 범위로 제한하고 생략·보관 초과를 명시하며 원문 복사와 JSON 보기의 의미를 보존한다.</dt><dd>미검증으로 기록</dd></div><div><dt>출력 증가·펼침·접힘·대화 전환에서 최신 추적과 과거 읽기 위치 및 카드별 수동 선택을 보존한다.</dt><dd>미검증으로 기록</dd></div><div><dt>동일 환경·fixture의 변경 전후 입력·스크롤·스트리밍을 계측하고 불필요한 완료 카드 재렌더와 반복 계산을 줄이며 입력 지연과 긴 프레임의 개선 및 미해결을 보고한다.</dt><dd>미검증으로 기록</dd></div><div><dt>실제 Electron에서 휠·키보드·긴 출력·실시간 출력·실패·대화 전환 시나리오와 관련 집중 테스트·소스 정책·타입 검사·빌드를 검증한다.</dt><dd>미검증으로 기록</dd></div><div><dt>P0: 입력 중 한글 조합·Enter·커서 편집·붙여넣기·인용·초안 복원을 보존하고, 스트리밍 유무별 입력 표시 지연을 계측해 입력으로 인한 불필요한 대화 전체 처리를 제거한다.</dt><dd>미검증으로 기록</dd></div><div><dt>현재 대화의 Working 상태를 입력창 위 고정 줄에서 확인하고 전송·시작 대기·실행·승인·중단 확인·종료·실패·연결 미확인을 실제 상태에 맞게 구분한다. 과거 스크롤·모니터 접힘·대화 전환에서도 해당 상태가 정확히 보인다.</dt><dd>미검증으로 기록</dd></div><div><dt>99_www의 기본 WWW Mint 팔레트를 매트릭스 계열 기본안으로 앱 공통 의미 토큰에 연결하고 본문·보조·진행·정보·대기·오류·구문 역할을 구분한다. 실제 배경별 대비와 색 외 상태 문구·아이콘을 검증한다.</dt><dd>미검증으로 기록</dd></div><div><dt>Working 상태 갱신과 테마 적용 후에도 Input P0 성능 기준 및 한글 조합·스크롤·포커스를 보존하며 과거 읽기·좁은 창·모션 축소·상태 전이 시나리오를 실제 Electron에서 검증한다.</dt><dd>미검증으로 기록</dd></div><div><dt>활성 턴이 확인된 작업 중 입력창의 Steer 동작으로 같은 턴에 추가 지시를 보내며 원래 실행 중단·새 턴 시작 없이 Working을 유지하고 대기 중 일반 전송과 구분한다.</dt><dd>미검증으로 기록</dd></div><div><dt>Steer를 세션 API·preload IPC·main·Native turn/steer에 연결하고 session/selection/thread/expectedTurnId를 검사하며 응답 turnId를 확인한다. 추가 메시지 ID로 pending·접수·이력을 연결해 중복과 다른 세션 전달을 방지한다.</dt><dd>미검증으로 기록</dd></div><div><dt>Steer의 시작 대기·승인·중단·턴 종료 경합·불일치·미지원·전송 실패·접수 미확인을 구분하고 입력 원문과 새 초안을 보존한다. 자동 재전송·새 턴 전환을 하지 않고 중복 전송을 막는다.</dt><dd>미검증으로 기록</dd></div><div><dt>Steer의 같은 턴 전달·연속 입력·IME·원문 복원·다른 세션 격리를 집중 테스트와 실제 Electron에서 검증하며 실제 Native 후속 행동 반영과 API 접수 성공을 구분하고 Input P0 성능을 보존한다.</dt><dd>미검증으로 기록</dd></div></dl></section><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>실행 중에는 새 턴 시작 대신 expectedTurnId를 검증하는 같은 턴 추가 지시를 기본으로 한다.</li><li>종료 경합·접수 미확인에서 자동 재시도하지 않고 원문과 새 초안을 보존한다.</li></ul></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>제품 구현·실제 Native Steer 요청·Electron 동작·성능 검증·독립 제품 감사는 미실행이다.</li><li>스키마 존재는 모델이 추가 지시를 반영하는 시점이나 성공을 증명하지 않는다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><ul><li>구현 요청 후 Input P0 계측과 함께 Steer 전송·종료 경합·원문 복원·동일 턴 유지부터 검증한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118<br>report-8732977e-babd-4b79-8888-a85797918e65</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>d896d5c67a54d0298ad075784b973b76d9e3ddb168ae4b268d07334949749b0f</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>c5f0265490a18c9b7a3aef04d32ed4f02e0eacb1bd792fb5c9ab0bd20ebe7677</code></dd></div><div><dt>기준 지문</dt><dd><code>de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>ready</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;ready&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;Chat 본문은 대화 전체만 세로 스크롤하며 명령·코드·diff 카드에 독립 세로 스크롤이 없고 입력창은 고정된다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;선택한 명령 출력은 ^T 표시 버튼과 Control+T로 같은 자리에서 펼침·접힘을 전환하며 다른 카드와 입력창의 상태를 바꾸지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;펼침은 보관된 원문 최대 32768 UTF-16 코드 단위 범위로 제한하고 생략·보관 초과를 명시하며 원문 복사와 JSON 보기의 의미를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;출력 증가·펼침·접힘·대화 전환에서 최신 추적과 과거 읽기 위치 및 카드별 수동 선택을 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;동일 환경·fixture의 변경 전후 입력·스크롤·스트리밍을 계측하고 불필요한 완료 카드 재렌더와 반복 계산을 줄이며 입력 지연과 긴 프레임의 개선 및 미해결을 보고한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-6&quot;,
+      &quot;description&quot;: &quot;실제 Electron에서 휠·키보드·긴 출력·실시간 출력·실패·대화 전환 시나리오와 관련 집중 테스트·소스 정책·타입 검사·빌드를 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-7&quot;,
+      &quot;description&quot;: &quot;P0: 입력 중 한글 조합·Enter·커서 편집·붙여넣기·인용·초안 복원을 보존하고, 스트리밍 유무별 입력 표시 지연을 계측해 입력으로 인한 불필요한 대화 전체 처리를 제거한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-8&quot;,
+      &quot;description&quot;: &quot;현재 대화의 Working 상태를 입력창 위 고정 줄에서 확인하고 전송·시작 대기·실행·승인·중단 확인·종료·실패·연결 미확인을 실제 상태에 맞게 구분한다. 과거 스크롤·모니터 접힘·대화 전환에서도 해당 상태가 정확히 보인다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-9&quot;,
+      &quot;description&quot;: &quot;99_www의 기본 WWW Mint 팔레트를 매트릭스 계열 기본안으로 앱 공통 의미 토큰에 연결하고 본문·보조·진행·정보·대기·오류·구문 역할을 구분한다. 실제 배경별 대비와 색 외 상태 문구·아이콘을 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-10&quot;,
+      &quot;description&quot;: &quot;Working 상태 갱신과 테마 적용 후에도 Input P0 성능 기준 및 한글 조합·스크롤·포커스를 보존하며 과거 읽기·좁은 창·모션 축소·상태 전이 시나리오를 실제 Electron에서 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-11&quot;,
+      &quot;description&quot;: &quot;활성 턴이 확인된 작업 중 입력창의 Steer 동작으로 같은 턴에 추가 지시를 보내며 원래 실행 중단·새 턴 시작 없이 Working을 유지하고 대기 중 일반 전송과 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-12&quot;,
+      &quot;description&quot;: &quot;Steer를 세션 API·preload IPC·main·Native turn/steer에 연결하고 session/selection/thread/expectedTurnId를 검사하며 응답 turnId를 확인한다. 추가 메시지 ID로 pending·접수·이력을 연결해 중복과 다른 세션 전달을 방지한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-13&quot;,
+      &quot;description&quot;: &quot;Steer의 시작 대기·승인·중단·턴 종료 경합·불일치·미지원·전송 실패·접수 미확인을 구분하고 입력 원문과 새 초안을 보존한다. 자동 재전송·새 턴 전환을 하지 않고 중복 전송을 막는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-14&quot;,
+      &quot;description&quot;: &quot;Steer의 같은 턴 전달·연속 입력·IME·원문 복원·다른 세션 격리를 집중 테스트와 실제 Electron에서 검증하며 실제 Native 후속 행동 반영과 API 접수 성공을 구분하고 Input P0 성능을 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;Chat 014 개발명세에 작업 중 같은 턴에 추가 지시를 전달하는 Steer 요구를 추가했다. 제품 코드는 변경하지 않았다.&quot;,
+  &quot;before&quot;: &quot;기존 전송은 turn:start의 idle 검사로 실행 중 추가 입력을 거부하며 별도 Steer 경로가 없다.&quot;,
+  &quot;after&quot;: &quot;일반 보내기와 Steer를 구분하고 같은 턴 전달·접수 상태·오류·원문 복원·세션 격리 및 실제 검증 시나리오를 명세했다.&quot;,
+  &quot;changes&quot;: [
+    &quot;AC-11~AC-14를 추가하고 Native·API·IPC 관련 검사 입력을 연결했다.&quot;,
+    &quot;설치된 Codex 0.169.0의 공식 JSON 스키마 생성기로 turn/steer의 필수 필드와 응답 형식을 확인했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;실행 중에는 새 턴 시작 대신 expectedTurnId를 검증하는 같은 턴 추가 지시를 기본으로 한다.&quot;,
+    &quot;종료 경합·접수 미확인에서 자동 재시도하지 않고 원문과 새 초안을 보존한다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;제품 구현·실제 Native Steer 요청·Electron 동작·성능 검증·독립 제품 감사는 미실행이다.&quot;,
+    &quot;스키마 존재는 모델이 추가 지시를 반영하는 시점이나 성공을 증명하지 않는다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;구현 요청 후 Input P0 계측과 함께 Steer 전송·종료 경합·원문 복원·동일 턴 유지부터 검증한다.&quot;
+  ]
+}</pre></div></details></section><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 2개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 16일 오후 2:36 · 작성자 보고서 · 기존 Chat 014 개발명세에 Working 고정 상태 표시와 99_www의 매트릭스 계열 색상 요구를 추가했다. Input 지연 P0와 명세 전용 권한을 유지했다.</summary><article><h3>대화 단일 스크롤과 카드 펼침 및 성능 개선 명세</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">사용자는 Working 표시를 찾기 어렵고 UI 글자가 흰색 위주라고 관찰했으며 99_www 매트릭스 테마를 기본으로 요청했다.
+
+입력창 위 Working 요약, 실제 상태별 문구, WWW Mint 원본 토큰과 의미별 색상·대비·성능 회귀 검증을 개발명세에 연결했다. 제품 동작은 바꾸지 않았다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 구현 요청 후 Input 기준선 측정부터 시작하고 Working·테마 변경의 성능 회귀를 함께 확인한다.</p><p class="state-note">저장 당시 기준 중 10개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>AC-8~AC-10을 추가하고 99_www의 원본 테마 경로와 HEAD, 기준 색을 기록했다.</li><li>Working 가시성과 상태 전이, 텍스트 위계, 대비 및 Input 성능 보존 시나리오를 추가했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>Chat 본문은 대화 전체만 세로 스크롤하며 명령·코드·diff 카드에 독립 세로 스크롤이 없고 입력창은 고정된다.</dt><dd>미검증으로 기록</dd></div><div><dt>선택한 명령 출력은 ^T 표시 버튼과 Control+T로 같은 자리에서 펼침·접힘을 전환하며 다른 카드와 입력창의 상태를 바꾸지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>펼침은 보관된 원문 최대 32768 UTF-16 코드 단위 범위로 제한하고 생략·보관 초과를 명시하며 원문 복사와 JSON 보기의 의미를 보존한다.</dt><dd>미검증으로 기록</dd></div><div><dt>출력 증가·펼침·접힘·대화 전환에서 최신 추적과 과거 읽기 위치 및 카드별 수동 선택을 보존한다.</dt><dd>미검증으로 기록</dd></div><div><dt>동일 환경·fixture의 변경 전후 입력·스크롤·스트리밍을 계측하고 불필요한 완료 카드 재렌더와 반복 계산을 줄이며 입력 지연과 긴 프레임의 개선 및 미해결을 보고한다.</dt><dd>미검증으로 기록</dd></div><div><dt>실제 Electron에서 휠·키보드·긴 출력·실시간 출력·실패·대화 전환 시나리오와 관련 집중 테스트·소스 정책·타입 검사·빌드를 검증한다.</dt><dd>미검증으로 기록</dd></div><div><dt>P0: 입력 중 한글 조합·Enter·커서 편집·붙여넣기·인용·초안 복원을 보존하고, 스트리밍 유무별 입력 표시 지연을 계측해 입력으로 인한 불필요한 대화 전체 처리를 제거한다.</dt><dd>미검증으로 기록</dd></div><div><dt>현재 대화의 Working 상태를 입력창 위 고정 줄에서 확인하고 전송·시작 대기·실행·승인·중단 확인·종료·실패·연결 미확인을 실제 상태에 맞게 구분한다. 과거 스크롤·모니터 접힘·대화 전환에서도 해당 상태가 정확히 보인다.</dt><dd>미검증으로 기록</dd></div><div><dt>99_www의 기본 WWW Mint 팔레트를 매트릭스 계열 기본안으로 앱 공통 의미 토큰에 연결하고 본문·보조·진행·정보·대기·오류·구문 역할을 구분한다. 실제 배경별 대비와 색 외 상태 문구·아이콘을 검증한다.</dt><dd>미검증으로 기록</dd></div><div><dt>Working 상태 갱신과 테마 적용 후에도 Input P0 성능 기준 및 한글 조합·스크롤·포커스를 보존하며 과거 읽기·좁은 창·모션 축소·상태 전이 시나리오를 실제 Electron에서 검증한다.</dt><dd>미검증으로 기록</dd></div></dl><section class="paper" id="history-report-1fdfdc92-db7d-43fd-9176-45f07a8232fa-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>99_www에는 matrix 테마 ID가 없어 기본 mint/WWW Mint를 매트릭스 계열 기본안으로 해석한 사실을 명시했다.</li><li>상태는 문구·아이콘·색을 함께 사용하고 과거 대화 위치에서도 확인하도록 했다.</li></ul></section><section class="paper" id="history-report-1fdfdc92-db7d-43fd-9176-45f07a8232fa-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>제품 코드·앱 재시작·실기·성능·색상 대비 검증·커밋·push는 실행하지 않았다.</li><li>문서 검토와 워크플로 구조 검증은 독립 제품 완료 감사나 구현 통과가 아니다.</li></ul></section><section class="paper" id="history-report-1fdfdc92-db7d-43fd-9176-45f07a8232fa-next"><h2>남은 일과 해소 행동</h2><ul><li>구현 요청 후 Input 기준선 측정부터 시작하고 Working·테마 변경의 성능 회귀를 함께 확인한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-1fdfdc92-db7d-43fd-9176-45f07a8232fa-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118<br>report-1fdfdc92-db7d-43fd-9176-45f07a8232fa</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>a1c560a53e0aca98093950a3f244973e4efa86f36993c4d8bcaf5f8dc5586861</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>3209e1ef82ac7f2f3cc9fe6fe1527e161386dc2a64119af4f17f5937348014b0</code></dd></div><div><dt>기준 지문</dt><dd><code>1fcbc12ff52acc40199bb71529ba0fe1a737308b50be3a598a71e7562e6e2b4c</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>ready</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;ready&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;Chat 본문은 대화 전체만 세로 스크롤하며 명령·코드·diff 카드에 독립 세로 스크롤이 없고 입력창은 고정된다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;선택한 명령 출력은 ^T 표시 버튼과 Control+T로 같은 자리에서 펼침·접힘을 전환하며 다른 카드와 입력창의 상태를 바꾸지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;펼침은 보관된 원문 최대 32768 UTF-16 코드 단위 범위로 제한하고 생략·보관 초과를 명시하며 원문 복사와 JSON 보기의 의미를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;출력 증가·펼침·접힘·대화 전환에서 최신 추적과 과거 읽기 위치 및 카드별 수동 선택을 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;동일 환경·fixture의 변경 전후 입력·스크롤·스트리밍을 계측하고 불필요한 완료 카드 재렌더와 반복 계산을 줄이며 입력 지연과 긴 프레임의 개선 및 미해결을 보고한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-6&quot;,
+      &quot;description&quot;: &quot;실제 Electron에서 휠·키보드·긴 출력·실시간 출력·실패·대화 전환 시나리오와 관련 집중 테스트·소스 정책·타입 검사·빌드를 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-7&quot;,
+      &quot;description&quot;: &quot;P0: 입력 중 한글 조합·Enter·커서 편집·붙여넣기·인용·초안 복원을 보존하고, 스트리밍 유무별 입력 표시 지연을 계측해 입력으로 인한 불필요한 대화 전체 처리를 제거한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-8&quot;,
+      &quot;description&quot;: &quot;현재 대화의 Working 상태를 입력창 위 고정 줄에서 확인하고 전송·시작 대기·실행·승인·중단 확인·종료·실패·연결 미확인을 실제 상태에 맞게 구분한다. 과거 스크롤·모니터 접힘·대화 전환에서도 해당 상태가 정확히 보인다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-9&quot;,
+      &quot;description&quot;: &quot;99_www의 기본 WWW Mint 팔레트를 매트릭스 계열 기본안으로 앱 공통 의미 토큰에 연결하고 본문·보조·진행·정보·대기·오류·구문 역할을 구분한다. 실제 배경별 대비와 색 외 상태 문구·아이콘을 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-10&quot;,
+      &quot;description&quot;: &quot;Working 상태 갱신과 테마 적용 후에도 Input P0 성능 기준 및 한글 조합·스크롤·포커스를 보존하며 과거 읽기·좁은 창·모션 축소·상태 전이 시나리오를 실제 Electron에서 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;기존 Chat 014 개발명세에 Working 고정 상태 표시와 99_www의 매트릭스 계열 색상 요구를 추가했다. Input 지연 P0와 명세 전용 권한을 유지했다.&quot;,
+  &quot;before&quot;: &quot;사용자는 Working 표시를 찾기 어렵고 UI 글자가 흰색 위주라고 관찰했으며 99_www 매트릭스 테마를 기본으로 요청했다.&quot;,
+  &quot;after&quot;: &quot;입력창 위 Working 요약, 실제 상태별 문구, WWW Mint 원본 토큰과 의미별 색상·대비·성능 회귀 검증을 개발명세에 연결했다. 제품 동작은 바꾸지 않았다.&quot;,
+  &quot;changes&quot;: [
+    &quot;AC-8~AC-10을 추가하고 99_www의 원본 테마 경로와 HEAD, 기준 색을 기록했다.&quot;,
+    &quot;Working 가시성과 상태 전이, 텍스트 위계, 대비 및 Input 성능 보존 시나리오를 추가했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;99_www에는 matrix 테마 ID가 없어 기본 mint/WWW Mint를 매트릭스 계열 기본안으로 해석한 사실을 명시했다.&quot;,
+    &quot;상태는 문구·아이콘·색을 함께 사용하고 과거 대화 위치에서도 확인하도록 했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;제품 코드·앱 재시작·실기·성능·색상 대비 검증·커밋·push는 실행하지 않았다.&quot;,
+    &quot;문서 검토와 워크플로 구조 검증은 독립 제품 완료 감사나 구현 통과가 아니다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;구현 요청 후 Input 기준선 측정부터 시작하고 Working·테마 변경의 성능 회귀를 함께 확인한다.&quot;
+  ]
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 오후 2:33 · 작성자 보고서 · Chat 단일 스크롤·^T 펼침·성능 개선의 개발명세만 작성했다. 최신 사용자 관측에 따라 Input 지연을 P0로 지정했다.</summary><article><h3>대화 단일 스크롤과 카드 펼침 및 성능 개선 명세</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">카드별 스크롤과 전체 버벅임, 특히 입력창의 심한 지연이 사용자에게 관찰됐다. 원인은 실측 전이다.
+
+후속 구현을 위한 범위·우선순위·수용 기준 7개·입력 계측 및 Electron 검증 시나리오를 기록했다. 제품 동작은 변경하지 않았다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 구현 요청을 받으면 Input 지연 기준선 계측부터 시작한다.</p><p class="state-note">저장 당시 기준 중 7개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>Chat 014 개발명세와 work.json을 등록하고 작업 목차에 연결했다.</li><li>입력 지연 계측, 한글 조합과 붙여넣기 보존, 카드 단일 스크롤 및 ^T 동작을 정리했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>Chat 본문은 대화 전체만 세로 스크롤하며 명령·코드·diff 카드에 독립 세로 스크롤이 없고 입력창은 고정된다.</dt><dd>미검증으로 기록</dd></div><div><dt>선택한 명령 출력은 ^T 표시 버튼과 Control+T로 같은 자리에서 펼침·접힘을 전환하며 다른 카드와 입력창의 상태를 바꾸지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>펼침은 보관된 원문 최대 32768 UTF-16 코드 단위 범위로 제한하고 생략·보관 초과를 명시하며 원문 복사와 JSON 보기의 의미를 보존한다.</dt><dd>미검증으로 기록</dd></div><div><dt>출력 증가·펼침·접힘·대화 전환에서 최신 추적과 과거 읽기 위치 및 카드별 수동 선택을 보존한다.</dt><dd>미검증으로 기록</dd></div><div><dt>동일 환경·fixture의 변경 전후 입력·스크롤·스트리밍을 계측하고 불필요한 완료 카드 재렌더와 반복 계산을 줄이며 입력 지연과 긴 프레임의 개선 및 미해결을 보고한다.</dt><dd>미검증으로 기록</dd></div><div><dt>실제 Electron에서 휠·키보드·긴 출력·실시간 출력·실패·대화 전환 시나리오와 관련 집중 테스트·소스 정책·타입 검사·빌드를 검증한다.</dt><dd>미검증으로 기록</dd></div><div><dt>P0: 입력 중 한글 조합·Enter·커서 편집·붙여넣기·인용·초안 복원을 보존하고, 스트리밍 유무별 입력 표시 지연을 계측해 입력으로 인한 불필요한 대화 전체 처리를 제거한다.</dt><dd>미검증으로 기록</dd></div></dl><section class="paper" id="history-report-17d8e4e3-e60f-4d0e-b375-adb0f540d407-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>최신 지시 개발명세서만 세워놔에 따라 구현을 중단했다.</li><li>Input 지연을 P0로 두고 성능 원인은 실측할 가설로 남겼다.</li></ul></section><section class="paper" id="history-report-17d8e4e3-e60f-4d0e-b375-adb0f540d407-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>제품 코드 변경·성능 측정·실제 Electron 동작 검증·필수 제품 완료 감사는 수행하지 않았다.</li><li>명세 산출물 검토는 기능 검증이나 독립 완료 감사 통과가 아니다.</li></ul></section><section class="paper" id="history-report-17d8e4e3-e60f-4d0e-b375-adb0f540d407-next"><h2>남은 일과 해소 행동</h2><ul><li>구현 요청을 받으면 Input 지연 기준선 계측부터 시작한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-17d8e4e3-e60f-4d0e-b375-adb0f540d407-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118<br>report-17d8e4e3-e60f-4d0e-b375-adb0f540d407</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>913ac57cf2912fd90f1c3544c19df250a7e1f92ce2948f8f659c8e41d1729b07</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>3209e1ef82ac7f2f3cc9fe6fe1527e161386dc2a64119af4f17f5937348014b0</code></dd></div><div><dt>기준 지문</dt><dd><code>53966d570d23db81383990d443a49bf6e6b5cfe20ab024d49477cedd4051a714</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>ready</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;ready&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;Chat 본문은 대화 전체만 세로 스크롤하며 명령·코드·diff 카드에 독립 세로 스크롤이 없고 입력창은 고정된다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;선택한 명령 출력은 ^T 표시 버튼과 Control+T로 같은 자리에서 펼침·접힘을 전환하며 다른 카드와 입력창의 상태를 바꾸지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;펼침은 보관된 원문 최대 32768 UTF-16 코드 단위 범위로 제한하고 생략·보관 초과를 명시하며 원문 복사와 JSON 보기의 의미를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;출력 증가·펼침·접힘·대화 전환에서 최신 추적과 과거 읽기 위치 및 카드별 수동 선택을 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-5&quot;,
+      &quot;description&quot;: &quot;동일 환경·fixture의 변경 전후 입력·스크롤·스트리밍을 계측하고 불필요한 완료 카드 재렌더와 반복 계산을 줄이며 입력 지연과 긴 프레임의 개선 및 미해결을 보고한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-6&quot;,
+      &quot;description&quot;: &quot;실제 Electron에서 휠·키보드·긴 출력·실시간 출력·실패·대화 전환 시나리오와 관련 집중 테스트·소스 정책·타입 검사·빌드를 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-7&quot;,
+      &quot;description&quot;: &quot;P0: 입력 중 한글 조합·Enter·커서 편집·붙여넣기·인용·초안 복원을 보존하고, 스트리밍 유무별 입력 표시 지연을 계측해 입력으로 인한 불필요한 대화 전체 처리를 제거한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;Chat 단일 스크롤·^T 펼침·성능 개선의 개발명세만 작성했다. 최신 사용자 관측에 따라 Input 지연을 P0로 지정했다.&quot;,
+  &quot;before&quot;: &quot;카드별 스크롤과 전체 버벅임, 특히 입력창의 심한 지연이 사용자에게 관찰됐다. 원인은 실측 전이다.&quot;,
+  &quot;after&quot;: &quot;후속 구현을 위한 범위·우선순위·수용 기준 7개·입력 계측 및 Electron 검증 시나리오를 기록했다. 제품 동작은 변경하지 않았다.&quot;,
+  &quot;changes&quot;: [
+    &quot;Chat 014 개발명세와 work.json을 등록하고 작업 목차에 연결했다.&quot;,
+    &quot;입력 지연 계측, 한글 조합과 붙여넣기 보존, 카드 단일 스크롤 및 ^T 동작을 정리했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;최신 지시 개발명세서만 세워놔에 따라 구현을 중단했다.&quot;,
+    &quot;Input 지연을 P0로 두고 성능 원인은 실측할 가설로 남겼다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;제품 코드 변경·성능 측정·실제 Electron 동작 검증·필수 제품 완료 감사는 수행하지 않았다.&quot;,
+    &quot;명세 산출물 검토는 기능 검증이나 독립 완료 감사 통과가 아니다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;구현 요청을 받으면 Input 지연 기준선 계측부터 시작한다.&quot;
+  ]
+}</pre></div></details></article></details></section></main></body></html>

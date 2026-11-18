@@ -1,0 +1,376 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-0e282d77-1c00-4663-8860-483d28148f74",
+  "title"        : "프로젝트 탐색과 세션 모니터링 메뉴 개편",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-422bf9e8-1d3a-4d88-a779-9934c39032b5",
+      "workId"        : "work-0e282d77-1c00-4663-8860-483d28148f74",
+      "title"         : "프로젝트 탐색과 세션 모니터링 메뉴 개편",
+      "summary"       : "프로젝트 목록 탐색 중 중앙 화면 유지와 다섯 공통 메뉴·현재 대화 탭의 세션 모니터링을 Home003의 명세·설계·실행 계획으로 정리했다. 제품 코드는 변경하지 않았다. 문서 계약과 기준별 연결은 확인했으며 별도 Claude Sonnet 5 의미 검토는 180초 응답 시간 초과로 미실행 상태다.",
+      "kind"          : "authored",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T05:45:17.905Z",
+      "event"         : "finish",
+      "workRecordHash": "b71a28598ecd00c9b75c6988b2b7a662eff8feca0ebe74090beb73b1f7abbf88",
+      "sourceDigest"  : "504dc9fa11d6bf8147b0ca345e3dda7f800f0831eaa20ea074a43a8aac3a8ebc",
+      "criteriaDigest": "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393",
+      "semanticHash"  : "a71fea2505c9136d3ad314b4da15347f4b53415daeb2ca0e532cf1e907ac3b0c",
+      "narrative": {
+        "summary": "프로젝트 목록 탐색 중 중앙 화면 유지와 다섯 공통 메뉴·현재 대화 탭의 세션 모니터링을 Home003의 명세·설계·실행 계획으로 정리했다. 제품 코드는 변경하지 않았다. 문서 계약과 기준별 연결은 확인했으며 별도 Claude Sonnet 5 의미 검토는 180초 응답 시간 초과로 미실행 상태다.",
+        "before" : "기존 전체 보기 버튼은 사이드바와 중앙을 동시에 홈으로 바꾸고, 같은 프로젝트를 다시 선택해도 대시보드로 이동한다. 대화에는 상세 모니터와 세션 모니터 접기/열기 버튼이 있다.",
+        "after"  : "다음 구현의 기준으로 목록 탐색과 중앙 이동을 분리하고 현재 프로젝트 재선택 시 화면 유지, 다른 대상 선택 성공 시 전환, 대시보드·대화·생태계·리포트·모니터링 순서와 기존 두 버튼의 JSX 주석 처리를 문서화했다. 실제 앱 동작은 아직 동일하다.",
+        "changes": [
+          "명세에 사용자 확정 사항과 설계 기본안, 정상·취소·실패·보호·빈 상태·세션 격리 시나리오를 기록했다.",
+          "설계에 상태 소유와 기존 세션 API·투영 재사용, 화면 생명주기·초점·예상 영향 파일을 기록했다.",
+          "실행 계획에 기준 10개와 단계별 구현·검증·소유·의존성·문서 갱신을 연결했다.",
+          "작업 원장과 목차, 실제 문서 검사·검토 한계를 남겼다."
+        ],
+        "decisions": [
+          "Home002와 자동 Native001의 이력을 보존하고 후속 문서의 정본을 새 Home003 UUID로 연결했다.",
+          "현행 제품·기능 명세는 기존 구현을 설명하도록 유지하고 새 목표를 현재 제공 기능으로 승격하지 않았다.",
+          "모니터링은 선택한 대화 탭의 세션 범위로 한정하고 기존 승인·실행 보호와 Chat014의 읽기·성능 요구를 재사용한다."
+        ],
+        "limitations": [
+          "제품 구현·행동 테스트·GUI·IME·Windows 실기 검증과 필수 제품 감사는 미실행이다.",
+          "Claude Sonnet 5 문서 검토는 180초 응답 시간 초과로 spec·consistency 모두 not_run이며 실제 모델 metadata와 검토 승인을 얻지 못했다.",
+          "작업 ready와 모든 수용 기준 unverified를 유지한다. 커밋·푸시는 실행하지 않았다."
+        ],
+        "next": [
+          "유효한 별도 문서 의미 검토를 받아 spec·consistency 결과를 기록한다.",
+          "제품 코드 쓰기 권한을 받은 뒤 같은 UUID로 탐색 분리·모니터링 연결을 구현하고 계획의 실제 시나리오를 검증한다."
+        ],
+        "reader": {
+          "story": "목록을 살펴보는 동안 하던 작업이 사라지는 불편을 줄이기 위해 탐색과 중앙 화면을 분리하는 다음 구현 기준을 작성했다. 사용자가 정한 다섯 메뉴와 세션 모니터링 범위를 명세·설계·실행 계획에 연결했다. 문서 구조와 기준 연결은 확인했지만 앱은 변경하지 않았으며 별도 의미 검토의 응답은 받지 못했다.",
+          "requirements": [
+            {
+              "requirement": "프로젝트 목록 탐색 중 현재 화면 유지",
+              "result"     : "정상·현재 대상 재선택·다른 대상 선택·추가 취소와 실패의 전환 규칙을 문서화했다.",
+              "evidence"   : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md",
+              "limitations": "제품 행동 미검증"
+            },
+            {
+              "requirement": "다섯 메뉴와 세션 모니터링",
+              "result"     : "메뉴 순서·두 기존 버튼의 주석 처리·현재 탭의 세션 격리와 화면 왕복 보존을 정의했다.",
+              "evidence"   : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md",
+              "limitations": "제품 구현 미실행"
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "작업 문서 계약",
+              "method"     : "node scripts/check-workflow.ts 및 기준별 참조 대조",
+              "expected"   : "목차·스키마·링크와 기준 10개 연결이 유효함",
+              "observed"   : "종료 코드 0과 10개 기준의 spec/tasks 참조를 확인했다.",
+              "limitations": "의미 승인과 기능 검증을 대체하지 않음"
+            },
+            {
+              "target"     : "별도 문서 의미 검토",
+              "method"     : "도구 없는 Claude CLI에 claude-sonnet-5를 요청",
+              "expected"   : "spec/consistency의 근거 있는 검토 응답",
+              "observed"   : "180초 응답 시간 초과, stdout/stderr 0바이트, 공식 상태 not_run",
+              "limitations": "실제 모델과 실패 원인 미확인"
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md",
+              "purpose": "사용자 여정·전환 규칙·범위를 확인한다."
+            },
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md",
+              "purpose": "상태·세션·화면 생명주기와 영향 파일을 확인한다."
+            },
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/tasks.md",
+              "purpose": "기준별 구현·검증·소유와 다음 실행 순서를 확인한다."
+            },
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/verification.md",
+              "purpose": "실제 문서 검사와 검토 미실행의 한계를 확인한다."
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "별도 문서 의미 검토와 제품 구현 권한을 확인한 뒤 계획을 실행한다.",
+              "owner"   : "Codex 통합 책임자",
+              "doneWhen": "현재 기준과 source에 연결된 실제 구현·검증·필수 검토가 확보됨",
+              "impact"  : "현재 앱의 탐색 동작은 그대로 유지됨"
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "NAV-KEEP",
+            "description": "프로젝트 목록을 열고 탐색하거나 닫는 동안 중앙의 현재 프로젝트·화면·선택 상태를 유지하며 홈 보드로 강제 이동하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-SELECT",
+            "description": "현재 프로젝트 재선택은 기존 화면을 유지하고 다른 프로젝트의 명시 선택 성공 때만 해당 대상의 대시보드로 전환한다. 프로젝트 추가 취소·실패 시 기존 화면과 선택을 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-GUARD",
+            "description": "프로젝트 목록 열기는 실행 중에도 가능하며 실제 다른 프로젝트 전환에는 전송·실행·대화 준비·미결 승인·실패 원문 보호를 유지한다. 사이드바 탐색으로 Native 실행을 중단하거나 새 요청을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-MENU",
+            "description": "프로젝트 공통 메뉴를 대시보드·대화·생태계·리포트·모니터링 순서로 제공하고 프로젝트 목록과 명시적 전체 대시보드 열기를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-ENTRY",
+            "description": "대화 상단의 상세 모니터·세션 모니터 접기/열기 두 기존 버튼을 JSX 주석 처리해 비활성화하고 모니터링 메뉴로 세션 개요와 상세 관측에 접근한다. 숨은 버튼이 키보드 초점이나 클릭 대상에 남지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-SCOPE",
+            "description": "모니터링은 현재 선택한 Codex 대화 탭의 sessionId·프로젝트·thread 범위에 연결되고 활성 턴과 과거 턴의 출처를 구분한다. 다른 탭의 사건·승인·리소스를 혼합하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-STATES",
+            "description": "모니터링에서 기존 공개 실행·Plan/Progress·Skills/Hooks·리소스·사용량·사건 관측을 재사용하며 새 대화·자료 없음·로딩·연결 종료·수집 오류·부분 이력·오래된 관측을 사실에 따라 표시한다. 관측 열기만으로 새 thread/turn·자동 재전송을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "STATE-RETURN",
+            "description": "대화·모니터링·프로젝트 목록·다른 탭을 왕복해도 같은 대화의 입력 초안·읽기 위치·출력 카드 펼침을 유지하며 리포트 선택과 생태계 경로 등 현재 화면 상태를 보존한다. 비활성 화면에서도 실행 관측을 놓치지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "ACCESS-VERIFY",
+            "description": "프로젝트 목록·명시적 화면 이동·모니터링을 키보드와 좁은 창에서 사용할 수 있고 현재 프로젝트·세션·선택 메뉴와 초점이 식별된다. 실제 Electron과 합성 Native 시나리오·스크린샷·소스 식별을 연결해 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "DOC-HANDOFF",
+            "description": "명세·설계·실행 계획에 기준별 구현·검증·관련 기존 작업과 권한을 연결하고 현행 구현·새 목표·미실행 검토를 구분한다. 문서 작성만으로 제품 구현이나 완료를 표시하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/work.json",
+        "workRecordHash": "b71a28598ecd00c9b75c6988b2b7a662eff8feca0ebe74090beb73b1f7abbf88",
+        "sourceDigest"  : "504dc9fa11d6bf8147b0ca345e3dda7f800f0831eaa20ea074a43a8aac3a8ebc",
+        "criteriaDigest": "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-8b40eff3-86e2-4fa3-b777-72dd94c0152b",
+      "workId"        : "work-0e282d77-1c00-4663-8860-483d28148f74",
+      "title"         : "프로젝트 탐색과 세션 모니터링 메뉴 개편",
+      "summary"       : "프로젝트 목록 탐색 중 중앙 화면 유지와 다섯 공통 메뉴·현재 대화 탭의 세션 모니터링을 Home003의 명세·설계·실행 계획으로 정리했다. 제품 코드는 변경하지 않았다. 문서 계약과 기준별 연결은 확인했으며 별도 Claude Sonnet 5 의미 검토는 180초 응답 시간 초과로 미실행 상태다.",
+      "kind"          : "authored",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T05:46:30.169Z",
+      "event"         : "finish",
+      "workRecordHash": "b71a28598ecd00c9b75c6988b2b7a662eff8feca0ebe74090beb73b1f7abbf88",
+      "sourceDigest"  : "504dc9fa11d6bf8147b0ca345e3dda7f800f0831eaa20ea074a43a8aac3a8ebc",
+      "criteriaDigest": "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393",
+      "semanticHash"  : "b5d27942aebbb51dc7c108d43b94f2fba9ef976527de35ec8502f8e082561477",
+      "narrative": {
+        "summary": "프로젝트 목록 탐색 중 중앙 화면 유지와 다섯 공통 메뉴·현재 대화 탭의 세션 모니터링을 Home003의 명세·설계·실행 계획으로 정리했다. 제품 코드는 변경하지 않았다. 문서 계약과 기준별 연결은 확인했으며 별도 Claude Sonnet 5 의미 검토는 180초 응답 시간 초과로 미실행 상태다.",
+        "before" : "기존 전체 보기 버튼은 사이드바와 중앙을 동시에 홈으로 바꾸고, 같은 프로젝트를 다시 선택해도 대시보드로 이동한다. 대화에는 상세 모니터와 세션 모니터 접기/열기 버튼이 있다.",
+        "after"  : "다음 구현의 기준으로 목록 탐색과 중앙 이동을 분리하고 현재 프로젝트 재선택 시 화면 유지, 다른 대상 선택 성공 시 전환, 대시보드·대화·생태계·리포트·모니터링 순서와 기존 두 버튼의 JSX 주석 처리를 문서화했다. 실제 앱 동작은 아직 동일하다.",
+        "changes": [
+          "명세에 사용자 확정 사항과 설계 기본안, 정상·취소·실패·보호·빈 상태·세션 격리 시나리오를 기록했다.",
+          "설계에 상태 소유와 기존 세션 API·투영 재사용, 화면 생명주기·초점·예상 영향 파일을 기록했다.",
+          "실행 계획에 기준 10개와 단계별 구현·검증·소유·의존성·문서 갱신을 연결했다.",
+          "작업 원장과 목차, 실제 문서 검사·검토 한계를 남겼다.",
+          "초기 문서 대조의 ready와 문서 영향 검토 기록 뒤의 verifying를 구분해 현재 보고서의 상태 표현을 정정했다."
+        ],
+        "decisions": [
+          "Home002와 자동 Native001의 이력을 보존하고 후속 문서의 정본을 새 Home003 UUID로 연결했다.",
+          "현행 제품·기능 명세는 기존 구현을 설명하도록 유지하고 새 목표를 현재 제공 기능으로 승격하지 않았다.",
+          "모니터링은 선택한 대화 탭의 세션 범위로 한정하고 기존 승인·실행 보호와 Chat014의 읽기·성능 요구를 재사용한다."
+        ],
+        "limitations": [
+          "제품 구현·행동 테스트·GUI·IME·Windows 실기 검증과 필수 제품 감사는 미실행이다.",
+          "Claude Sonnet 5 문서 검토는 180초 응답 시간 초과로 spec·consistency 모두 not_run이며 실제 모델 metadata와 검토 승인을 얻지 못했다.",
+          "작업 verifying·다음 단계 review와 모든 수용 기준 unverified를 유지한다. 커밋·푸시는 실행하지 않았다."
+        ],
+        "next": [
+          "유효한 별도 문서 의미 검토를 받아 spec·consistency 결과를 기록한다.",
+          "제품 코드 쓰기 권한을 받은 뒤 같은 UUID로 탐색 분리·모니터링 연결을 구현하고 계획의 실제 시나리오를 검증한다."
+        ],
+        "reader": {
+          "story": "목록을 살펴보는 동안 하던 작업이 사라지는 불편을 줄이기 위해 탐색과 중앙 화면을 분리하는 다음 구현 기준을 작성했다. 사용자가 정한 다섯 메뉴와 세션 모니터링 범위를 명세·설계·실행 계획에 연결했다. 문서 구조와 기준 연결은 확인했지만 앱은 변경하지 않았으며 별도 의미 검토의 응답은 받지 못했다.",
+          "requirements": [
+            {
+              "requirement": "프로젝트 목록 탐색 중 현재 화면 유지",
+              "result"     : "정상·현재 대상 재선택·다른 대상 선택·추가 취소와 실패의 전환 규칙을 문서화했다.",
+              "evidence"   : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md",
+              "limitations": "제품 행동 미검증"
+            },
+            {
+              "requirement": "다섯 메뉴와 세션 모니터링",
+              "result"     : "메뉴 순서·두 기존 버튼의 주석 처리·현재 탭의 세션 격리와 화면 왕복 보존을 정의했다.",
+              "evidence"   : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md",
+              "limitations": "제품 구현 미실행"
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "작업 문서 계약",
+              "method"     : "node scripts/check-workflow.ts 및 기준별 참조 대조",
+              "expected"   : "목차·스키마·링크와 기준 10개 연결이 유효함",
+              "observed"   : "종료 코드 0과 10개 기준의 spec/tasks 참조를 확인했다.",
+              "limitations": "의미 승인과 기능 검증을 대체하지 않음"
+            },
+            {
+              "target"     : "별도 문서 의미 검토",
+              "method"     : "도구 없는 Claude CLI에 claude-sonnet-5를 요청",
+              "expected"   : "spec/consistency의 근거 있는 검토 응답",
+              "observed"   : "180초 응답 시간 초과, stdout/stderr 0바이트, 공식 상태 not_run",
+              "limitations": "실제 모델과 실패 원인 미확인"
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md",
+              "purpose": "사용자 여정·전환 규칙·범위를 확인한다."
+            },
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md",
+              "purpose": "상태·세션·화면 생명주기와 영향 파일을 확인한다."
+            },
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/tasks.md",
+              "purpose": "기준별 구현·검증·소유와 다음 실행 순서를 확인한다."
+            },
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/verification.md",
+              "purpose": "실제 문서 검사와 검토 미실행의 한계를 확인한다."
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "별도 문서 의미 검토와 제품 구현 권한을 확인한 뒤 계획을 실행한다.",
+              "owner"   : "Codex 통합 책임자",
+              "doneWhen": "현재 기준과 source에 연결된 실제 구현·검증·필수 검토가 확보됨",
+              "impact"  : "현재 앱의 탐색 동작은 그대로 유지됨"
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "NAV-KEEP",
+            "description": "프로젝트 목록을 열고 탐색하거나 닫는 동안 중앙의 현재 프로젝트·화면·선택 상태를 유지하며 홈 보드로 강제 이동하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-SELECT",
+            "description": "현재 프로젝트 재선택은 기존 화면을 유지하고 다른 프로젝트의 명시 선택 성공 때만 해당 대상의 대시보드로 전환한다. 프로젝트 추가 취소·실패 시 기존 화면과 선택을 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-GUARD",
+            "description": "프로젝트 목록 열기는 실행 중에도 가능하며 실제 다른 프로젝트 전환에는 전송·실행·대화 준비·미결 승인·실패 원문 보호를 유지한다. 사이드바 탐색으로 Native 실행을 중단하거나 새 요청을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-MENU",
+            "description": "프로젝트 공통 메뉴를 대시보드·대화·생태계·리포트·모니터링 순서로 제공하고 프로젝트 목록과 명시적 전체 대시보드 열기를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-ENTRY",
+            "description": "대화 상단의 상세 모니터·세션 모니터 접기/열기 두 기존 버튼을 JSX 주석 처리해 비활성화하고 모니터링 메뉴로 세션 개요와 상세 관측에 접근한다. 숨은 버튼이 키보드 초점이나 클릭 대상에 남지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-SCOPE",
+            "description": "모니터링은 현재 선택한 Codex 대화 탭의 sessionId·프로젝트·thread 범위에 연결되고 활성 턴과 과거 턴의 출처를 구분한다. 다른 탭의 사건·승인·리소스를 혼합하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-STATES",
+            "description": "모니터링에서 기존 공개 실행·Plan/Progress·Skills/Hooks·리소스·사용량·사건 관측을 재사용하며 새 대화·자료 없음·로딩·연결 종료·수집 오류·부분 이력·오래된 관측을 사실에 따라 표시한다. 관측 열기만으로 새 thread/turn·자동 재전송을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "STATE-RETURN",
+            "description": "대화·모니터링·프로젝트 목록·다른 탭을 왕복해도 같은 대화의 입력 초안·읽기 위치·출력 카드 펼침을 유지하며 리포트 선택과 생태계 경로 등 현재 화면 상태를 보존한다. 비활성 화면에서도 실행 관측을 놓치지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "ACCESS-VERIFY",
+            "description": "프로젝트 목록·명시적 화면 이동·모니터링을 키보드와 좁은 창에서 사용할 수 있고 현재 프로젝트·세션·선택 메뉴와 초점이 식별된다. 실제 Electron과 합성 Native 시나리오·스크린샷·소스 식별을 연결해 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "DOC-HANDOFF",
+            "description": "명세·설계·실행 계획에 기준별 구현·검증·관련 기존 작업과 권한을 연결하고 현행 구현·새 목표·미실행 검토를 구분한다. 문서 작성만으로 제품 구현이나 완료를 표시하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/work.json",
+        "workRecordHash": "b71a28598ecd00c9b75c6988b2b7a662eff8feca0ebe74090beb73b1f7abbf88",
+        "sourceDigest"  : "504dc9fa11d6bf8147b0ca345e3dda7f800f0831eaa20ea074a43a8aac3a8ebc",
+        "criteriaDigest": "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393"
+      }
+    }
+  ]
+}

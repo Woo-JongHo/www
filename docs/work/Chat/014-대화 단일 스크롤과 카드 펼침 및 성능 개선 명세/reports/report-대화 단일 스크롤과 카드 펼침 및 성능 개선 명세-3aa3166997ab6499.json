@@ -1,0 +1,371 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118",
+  "title"        : "대화 단일 스크롤과 카드 펼침 및 성능 개선 명세",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-17d8e4e3-e60f-4d0e-b375-adb0f540d407",
+      "workId"        : "work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118",
+      "title"         : "대화 단일 스크롤과 카드 펼침 및 성능 개선 명세",
+      "summary"       : "Chat 단일 스크롤·^T 펼침·성능 개선의 개발명세만 작성했다. 최신 사용자 관측에 따라 Input 지연을 P0로 지정했다.",
+      "kind"          : "authored",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T05:33:17.692Z",
+      "event"         : "finish",
+      "workRecordHash": "913ac57cf2912fd90f1c3544c19df250a7e1f92ce2948f8f659c8e41d1729b07",
+      "sourceDigest"  : "3209e1ef82ac7f2f3cc9fe6fe1527e161386dc2a64119af4f17f5937348014b0",
+      "criteriaDigest": "53966d570d23db81383990d443a49bf6e6b5cfe20ab024d49477cedd4051a714",
+      "semanticHash"  : "6535d1f6af4fb11022031d9ae5c8925091e303fd3e992a9b5d734c772f48ec70",
+      "narrative": {
+        "summary": "Chat 단일 스크롤·^T 펼침·성능 개선의 개발명세만 작성했다. 최신 사용자 관측에 따라 Input 지연을 P0로 지정했다.",
+        "before" : "카드별 스크롤과 전체 버벅임, 특히 입력창의 심한 지연이 사용자에게 관찰됐다. 원인은 실측 전이다.",
+        "after"  : "후속 구현을 위한 범위·우선순위·수용 기준 7개·입력 계측 및 Electron 검증 시나리오를 기록했다. 제품 동작은 변경하지 않았다.",
+        "changes": [
+          "Chat 014 개발명세와 work.json을 등록하고 작업 목차에 연결했다.",
+          "입력 지연 계측, 한글 조합과 붙여넣기 보존, 카드 단일 스크롤 및 ^T 동작을 정리했다."
+        ],
+        "decisions": [
+          "최신 지시 개발명세서만 세워놔에 따라 구현을 중단했다.",
+          "Input 지연을 P0로 두고 성능 원인은 실측할 가설로 남겼다."
+        ],
+        "limitations": [
+          "제품 코드 변경·성능 측정·실제 Electron 동작 검증·필수 제품 완료 감사는 수행하지 않았다.",
+          "명세 산출물 검토는 기능 검증이나 독립 완료 감사 통과가 아니다."
+        ],
+        "next": [
+          "구현 요청을 받으면 Input 지연 기준선 계측부터 시작한다."
+        ]
+      },
+      "work": {
+        "status": "ready",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "Chat 본문은 대화 전체만 세로 스크롤하며 명령·코드·diff 카드에 독립 세로 스크롤이 없고 입력창은 고정된다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "선택한 명령 출력은 ^T 표시 버튼과 Control+T로 같은 자리에서 펼침·접힘을 전환하며 다른 카드와 입력창의 상태를 바꾸지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "펼침은 보관된 원문 최대 32768 UTF-16 코드 단위 범위로 제한하고 생략·보관 초과를 명시하며 원문 복사와 JSON 보기의 의미를 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "출력 증가·펼침·접힘·대화 전환에서 최신 추적과 과거 읽기 위치 및 카드별 수동 선택을 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "동일 환경·fixture의 변경 전후 입력·스크롤·스트리밍을 계측하고 불필요한 완료 카드 재렌더와 반복 계산을 줄이며 입력 지연과 긴 프레임의 개선 및 미해결을 보고한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-6",
+            "description": "실제 Electron에서 휠·키보드·긴 출력·실시간 출력·실패·대화 전환 시나리오와 관련 집중 테스트·소스 정책·타입 검사·빌드를 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-7",
+            "description": "P0: 입력 중 한글 조합·Enter·커서 편집·붙여넣기·인용·초안 복원을 보존하고, 스트리밍 유무별 입력 표시 지연을 계측해 입력으로 인한 불필요한 대화 전체 처리를 제거한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/work.json",
+        "workRecordHash": "913ac57cf2912fd90f1c3544c19df250a7e1f92ce2948f8f659c8e41d1729b07",
+        "sourceDigest"  : "3209e1ef82ac7f2f3cc9fe6fe1527e161386dc2a64119af4f17f5937348014b0",
+        "criteriaDigest": "53966d570d23db81383990d443a49bf6e6b5cfe20ab024d49477cedd4051a714"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-1fdfdc92-db7d-43fd-9176-45f07a8232fa",
+      "workId"        : "work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118",
+      "title"         : "대화 단일 스크롤과 카드 펼침 및 성능 개선 명세",
+      "summary"       : "기존 Chat 014 개발명세에 Working 고정 상태 표시와 99_www의 매트릭스 계열 색상 요구를 추가했다. Input 지연 P0와 명세 전용 권한을 유지했다.",
+      "kind"          : "authored",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T05:36:20.212Z",
+      "event"         : "finish",
+      "workRecordHash": "a1c560a53e0aca98093950a3f244973e4efa86f36993c4d8bcaf5f8dc5586861",
+      "sourceDigest"  : "3209e1ef82ac7f2f3cc9fe6fe1527e161386dc2a64119af4f17f5937348014b0",
+      "criteriaDigest": "1fcbc12ff52acc40199bb71529ba0fe1a737308b50be3a598a71e7562e6e2b4c",
+      "semanticHash"  : "be40ae8e4eb0652c1ac37b0e171b9090c0ecec32b0aa595d4c248ab5f31162e2",
+      "narrative": {
+        "summary": "기존 Chat 014 개발명세에 Working 고정 상태 표시와 99_www의 매트릭스 계열 색상 요구를 추가했다. Input 지연 P0와 명세 전용 권한을 유지했다.",
+        "before" : "사용자는 Working 표시를 찾기 어렵고 UI 글자가 흰색 위주라고 관찰했으며 99_www 매트릭스 테마를 기본으로 요청했다.",
+        "after"  : "입력창 위 Working 요약, 실제 상태별 문구, WWW Mint 원본 토큰과 의미별 색상·대비·성능 회귀 검증을 개발명세에 연결했다. 제품 동작은 바꾸지 않았다.",
+        "changes": [
+          "AC-8~AC-10을 추가하고 99_www의 원본 테마 경로와 HEAD, 기준 색을 기록했다.",
+          "Working 가시성과 상태 전이, 텍스트 위계, 대비 및 Input 성능 보존 시나리오를 추가했다."
+        ],
+        "decisions": [
+          "99_www에는 matrix 테마 ID가 없어 기본 mint/WWW Mint를 매트릭스 계열 기본안으로 해석한 사실을 명시했다.",
+          "상태는 문구·아이콘·색을 함께 사용하고 과거 대화 위치에서도 확인하도록 했다."
+        ],
+        "limitations": [
+          "제품 코드·앱 재시작·실기·성능·색상 대비 검증·커밋·push는 실행하지 않았다.",
+          "문서 검토와 워크플로 구조 검증은 독립 제품 완료 감사나 구현 통과가 아니다."
+        ],
+        "next": [
+          "구현 요청 후 Input 기준선 측정부터 시작하고 Working·테마 변경의 성능 회귀를 함께 확인한다."
+        ]
+      },
+      "work": {
+        "status": "ready",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "Chat 본문은 대화 전체만 세로 스크롤하며 명령·코드·diff 카드에 독립 세로 스크롤이 없고 입력창은 고정된다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "선택한 명령 출력은 ^T 표시 버튼과 Control+T로 같은 자리에서 펼침·접힘을 전환하며 다른 카드와 입력창의 상태를 바꾸지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "펼침은 보관된 원문 최대 32768 UTF-16 코드 단위 범위로 제한하고 생략·보관 초과를 명시하며 원문 복사와 JSON 보기의 의미를 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "출력 증가·펼침·접힘·대화 전환에서 최신 추적과 과거 읽기 위치 및 카드별 수동 선택을 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "동일 환경·fixture의 변경 전후 입력·스크롤·스트리밍을 계측하고 불필요한 완료 카드 재렌더와 반복 계산을 줄이며 입력 지연과 긴 프레임의 개선 및 미해결을 보고한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-6",
+            "description": "실제 Electron에서 휠·키보드·긴 출력·실시간 출력·실패·대화 전환 시나리오와 관련 집중 테스트·소스 정책·타입 검사·빌드를 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-7",
+            "description": "P0: 입력 중 한글 조합·Enter·커서 편집·붙여넣기·인용·초안 복원을 보존하고, 스트리밍 유무별 입력 표시 지연을 계측해 입력으로 인한 불필요한 대화 전체 처리를 제거한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-8",
+            "description": "현재 대화의 Working 상태를 입력창 위 고정 줄에서 확인하고 전송·시작 대기·실행·승인·중단 확인·종료·실패·연결 미확인을 실제 상태에 맞게 구분한다. 과거 스크롤·모니터 접힘·대화 전환에서도 해당 상태가 정확히 보인다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-9",
+            "description": "99_www의 기본 WWW Mint 팔레트를 매트릭스 계열 기본안으로 앱 공통 의미 토큰에 연결하고 본문·보조·진행·정보·대기·오류·구문 역할을 구분한다. 실제 배경별 대비와 색 외 상태 문구·아이콘을 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-10",
+            "description": "Working 상태 갱신과 테마 적용 후에도 Input P0 성능 기준 및 한글 조합·스크롤·포커스를 보존하며 과거 읽기·좁은 창·모션 축소·상태 전이 시나리오를 실제 Electron에서 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/work.json",
+        "workRecordHash": "a1c560a53e0aca98093950a3f244973e4efa86f36993c4d8bcaf5f8dc5586861",
+        "sourceDigest"  : "3209e1ef82ac7f2f3cc9fe6fe1527e161386dc2a64119af4f17f5937348014b0",
+        "criteriaDigest": "1fcbc12ff52acc40199bb71529ba0fe1a737308b50be3a598a71e7562e6e2b4c"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-8732977e-babd-4b79-8888-a85797918e65",
+      "workId"        : "work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118",
+      "title"         : "대화 단일 스크롤과 카드 펼침 및 성능 개선 명세",
+      "summary"       : "Chat 014 개발명세에 작업 중 같은 턴에 추가 지시를 전달하는 Steer 요구를 추가했다. 제품 코드는 변경하지 않았다.",
+      "kind"          : "authored",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T05:39:54.286Z",
+      "event"         : "finish",
+      "workRecordHash": "d896d5c67a54d0298ad075784b973b76d9e3ddb168ae4b268d07334949749b0f",
+      "sourceDigest"  : "c5f0265490a18c9b7a3aef04d32ed4f02e0eacb1bd792fb5c9ab0bd20ebe7677",
+      "criteriaDigest": "de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff",
+      "semanticHash"  : "fa424c6416b7dfb613be17f29bdf2cde02660b1e395113fbb9295ec8555a489e",
+      "narrative": {
+        "summary": "Chat 014 개발명세에 작업 중 같은 턴에 추가 지시를 전달하는 Steer 요구를 추가했다. 제품 코드는 변경하지 않았다.",
+        "before" : "기존 전송은 turn:start의 idle 검사로 실행 중 추가 입력을 거부하며 별도 Steer 경로가 없다.",
+        "after"  : "일반 보내기와 Steer를 구분하고 같은 턴 전달·접수 상태·오류·원문 복원·세션 격리 및 실제 검증 시나리오를 명세했다.",
+        "changes": [
+          "AC-11~AC-14를 추가하고 Native·API·IPC 관련 검사 입력을 연결했다.",
+          "설치된 Codex 0.169.0의 공식 JSON 스키마 생성기로 turn/steer의 필수 필드와 응답 형식을 확인했다."
+        ],
+        "decisions": [
+          "실행 중에는 새 턴 시작 대신 expectedTurnId를 검증하는 같은 턴 추가 지시를 기본으로 한다.",
+          "종료 경합·접수 미확인에서 자동 재시도하지 않고 원문과 새 초안을 보존한다."
+        ],
+        "limitations": [
+          "제품 구현·실제 Native Steer 요청·Electron 동작·성능 검증·독립 제품 감사는 미실행이다.",
+          "스키마 존재는 모델이 추가 지시를 반영하는 시점이나 성공을 증명하지 않는다."
+        ],
+        "next": [
+          "구현 요청 후 Input P0 계측과 함께 Steer 전송·종료 경합·원문 복원·동일 턴 유지부터 검증한다."
+        ]
+      },
+      "work": {
+        "status": "ready",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "Chat 본문은 대화 전체만 세로 스크롤하며 명령·코드·diff 카드에 독립 세로 스크롤이 없고 입력창은 고정된다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "선택한 명령 출력은 ^T 표시 버튼과 Control+T로 같은 자리에서 펼침·접힘을 전환하며 다른 카드와 입력창의 상태를 바꾸지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "펼침은 보관된 원문 최대 32768 UTF-16 코드 단위 범위로 제한하고 생략·보관 초과를 명시하며 원문 복사와 JSON 보기의 의미를 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "출력 증가·펼침·접힘·대화 전환에서 최신 추적과 과거 읽기 위치 및 카드별 수동 선택을 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "동일 환경·fixture의 변경 전후 입력·스크롤·스트리밍을 계측하고 불필요한 완료 카드 재렌더와 반복 계산을 줄이며 입력 지연과 긴 프레임의 개선 및 미해결을 보고한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-6",
+            "description": "실제 Electron에서 휠·키보드·긴 출력·실시간 출력·실패·대화 전환 시나리오와 관련 집중 테스트·소스 정책·타입 검사·빌드를 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-7",
+            "description": "P0: 입력 중 한글 조합·Enter·커서 편집·붙여넣기·인용·초안 복원을 보존하고, 스트리밍 유무별 입력 표시 지연을 계측해 입력으로 인한 불필요한 대화 전체 처리를 제거한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-8",
+            "description": "현재 대화의 Working 상태를 입력창 위 고정 줄에서 확인하고 전송·시작 대기·실행·승인·중단 확인·종료·실패·연결 미확인을 실제 상태에 맞게 구분한다. 과거 스크롤·모니터 접힘·대화 전환에서도 해당 상태가 정확히 보인다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-9",
+            "description": "99_www의 기본 WWW Mint 팔레트를 매트릭스 계열 기본안으로 앱 공통 의미 토큰에 연결하고 본문·보조·진행·정보·대기·오류·구문 역할을 구분한다. 실제 배경별 대비와 색 외 상태 문구·아이콘을 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-10",
+            "description": "Working 상태 갱신과 테마 적용 후에도 Input P0 성능 기준 및 한글 조합·스크롤·포커스를 보존하며 과거 읽기·좁은 창·모션 축소·상태 전이 시나리오를 실제 Electron에서 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-11",
+            "description": "활성 턴이 확인된 작업 중 입력창의 Steer 동작으로 같은 턴에 추가 지시를 보내며 원래 실행 중단·새 턴 시작 없이 Working을 유지하고 대기 중 일반 전송과 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-12",
+            "description": "Steer를 세션 API·preload IPC·main·Native turn/steer에 연결하고 session/selection/thread/expectedTurnId를 검사하며 응답 turnId를 확인한다. 추가 메시지 ID로 pending·접수·이력을 연결해 중복과 다른 세션 전달을 방지한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-13",
+            "description": "Steer의 시작 대기·승인·중단·턴 종료 경합·불일치·미지원·전송 실패·접수 미확인을 구분하고 입력 원문과 새 초안을 보존한다. 자동 재전송·새 턴 전환을 하지 않고 중복 전송을 막는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-14",
+            "description": "Steer의 같은 턴 전달·연속 입력·IME·원문 복원·다른 세션 격리를 집중 테스트와 실제 Electron에서 검증하며 실제 Native 후속 행동 반영과 API 접수 성공을 구분하고 Input P0 성능을 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/work.json",
+        "workRecordHash": "d896d5c67a54d0298ad075784b973b76d9e3ddb168ae4b268d07334949749b0f",
+        "sourceDigest"  : "c5f0265490a18c9b7a3aef04d32ed4f02e0eacb1bd792fb5c9ab0bd20ebe7677",
+        "criteriaDigest": "de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff"
+      }
+    }
+  ]
+}

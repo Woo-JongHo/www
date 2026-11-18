@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-58c85aec-718b-46b1-9e50-331e437f6180",
+  "title"        : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-b180ea1b-42f9-4189-86f3-c46f61b179fe",
+      "workId"        : "work-58c85aec-718b-46b1-9e50-331e437f6180",
+      "title"         : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-17T01:43:23.349Z",
+      "event"         : "build",
+      "workRecordHash": "2c1ecf130f0cbd8faabee4700ce9c1387954ec389cfbddbb82d25aac67d52f45",
+      "sourceDigest"  : "37d010ca8d2bec393e03642562b66bf06d3bb72d017298c9f2824a9159144ca7",
+      "criteriaDigest": "3d075483605e99fa1212e72d97fa5d19645381a93077b4228910401ae568a7b6",
+      "semanticHash"  : "e4b19638c2fd41dffdafa3b95ba74053381fed19f79503d6e973bf8aca7253cb",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서도 제품 직렬화·보고서 테스트와 기본 테스트 실행이 외부 BoxBox 호출 없이 수행되고 모든 기존 제품 시나리오를 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "BOXBOX",
+            "description": "BoxBox 실제 도구 시나리오는 별도 묶음에 보존되며 기본 제품 검사에 섞이지 않고 명시 실행도 off일 때 disabled로 거부한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 허용 Reports 복합 argv로 현재 소스의 기능·GUI 검증 결과를 같은 Task UUID 기준에 공식 등록하고 현재성을 확인한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/023-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json",
+        "workRecordHash": "2c1ecf130f0cbd8faabee4700ce9c1387954ec389cfbddbb82d25aac67d52f45",
+        "sourceDigest"  : "37d010ca8d2bec393e03642562b66bf06d3bb72d017298c9f2824a9159144ca7",
+        "criteriaDigest": "3d075483605e99fa1212e72d97fa5d19645381a93077b4228910401ae568a7b6"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-660de054-e829-48a4-a5db-e4e9318825f4",
+      "workId"        : "work-58c85aec-718b-46b1-9e50-331e437f6180",
+      "title"         : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-17T01:48:37.545Z",
+      "event"         : "build",
+      "workRecordHash": "2c1ecf130f0cbd8faabee4700ce9c1387954ec389cfbddbb82d25aac67d52f45",
+      "sourceDigest"  : "66dae320efadd2c2906b0092bb5f4cf0ac0265a4edf80f6373daa35244ad6e4e",
+      "criteriaDigest": "3d075483605e99fa1212e72d97fa5d19645381a93077b4228910401ae568a7b6",
+      "semanticHash"  : "0bbf10f2ecbe375fc27682d17617a07fa3b1c8edcd860b07cb78ea059ee067e9",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서도 제품 직렬화·보고서 테스트와 기본 테스트 실행이 외부 BoxBox 호출 없이 수행되고 모든 기존 제품 시나리오를 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "BOXBOX",
+            "description": "BoxBox 실제 도구 시나리오는 별도 묶음에 보존되며 기본 제품 검사에 섞이지 않고 명시 실행도 off일 때 disabled로 거부한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 허용 Reports 복합 argv로 현재 소스의 기능·GUI 검증 결과를 같은 Task UUID 기준에 공식 등록하고 현재성을 확인한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/023-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json",
+        "workRecordHash": "2c1ecf130f0cbd8faabee4700ce9c1387954ec389cfbddbb82d25aac67d52f45",
+        "sourceDigest"  : "66dae320efadd2c2906b0092bb5f4cf0ac0265a4edf80f6373daa35244ad6e4e",
+        "criteriaDigest": "3d075483605e99fa1212e72d97fa5d19645381a93077b4228910401ae568a7b6"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-37e7d76f-642b-440d-b0d2-9eed15e70645",
+      "workId"        : "work-58c85aec-718b-46b1-9e50-331e437f6180",
+      "title"         : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+      "summary"       : "BoxBox 외부 도구 검사를 기본 제품 검사에서 분리하고 기존 Reports 공식 검증 경로를 복구했다. 양쪽 기본 제품 검사를 통과했고 원격 Reports3건의19개 기준을 최종 소스에 정식 등록해 현재성까지 확인했다. 이번 변경의 Sonnet 검토와 Opus 수정 재검토는 통과했으며 원래3Task의 최종완료감사와 구분한다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-17T02:11:45.510Z",
+      "event"         : "finish",
+      "workRecordHash": "53a9cbcb69f204e171bdb6f2298d34a2651e6b5f002dbcda297510f84ef824cf",
+      "sourceDigest"  : "f6a5181c23e7473605bd3f863900551336b767e87c8a7541a936d50d8375a93c",
+      "criteriaDigest": "3d075483605e99fa1212e72d97fa5d19645381a93077b4228910401ae568a7b6",
+      "semanticHash"  : "8545edee1c52c87a26176c5a7f067b673d3c840de6a7e2070bc85cc80aee06ab",
+      "narrative": {
+        "summary": "BoxBox 외부 도구 검사를 기본 제품 검사에서 분리하고 기존 Reports 공식 검증 경로를 복구했다. 양쪽 기본 제품 검사를 통과했고 원격 Reports3건의19개 기준을 최종 소스에 정식 등록해 현재성까지 확인했다. 이번 변경의 Sonnet 검토와 Opus 수정 재검토는 통과했으며 원래3Task의 최종완료감사와 구분한다.",
+        "before" : "BoxBox가 off여도 work-json 테스트에 섞인 외부 CLI 승인 검사가 실행돼 Reports 복합 검사를 막았다. 별도 GUI관측은 공식 verifyWork와 연결되지 않아 source_changed 상태였다.",
+        "after"  : "제품12개와 외부BoxBox4개 시나리오를 본문 동일하게 분리했다. 기본 npm test는 제품 suite를 실행하며 명시 test:boxbox도 off이면 disabled/exit2/실행0건으로 거부한다. 기존 허용 argv를 유지해 Reports19기준 모두 usable=true, nextAction=review가 됐다.",
+        "changes": [
+          "scripts/test.ts에 기본 product/명시 boxbox suite와 fail-closed mode경계를 추가했다.",
+          "외부4개 테스트를 test/boxbox로 옮기고 원래16개 본문 SHA를 보존했다. runner회귀9개와 실제 Node witness를 검증했다.",
+          "원격은 파일별 SHA 대조와 package·문서 부분패치로 적용했고 다른 코드·registry·완료core·권한은 바꾸지 않았다.",
+          "DEVELOPMENT의 기존 실도구 검사 포함 설명을 실제 제품12/외부4 및 semantic.log 범위와 맞게 정정했다."
+        ],
+        "decisions": [
+          "기존 Reports명령이 이미 허용돼 있으므로 schema2 권한갱신API를 추가하지 않고 내부 테스트분리를 선택했다.",
+          "기존 Node등록 선언에 의존한 실제 witness회귀는 테스트를 약화하지 않고 기존 Set선언을 보존해 해결했다.",
+          "원격의 rg실행 실패는 기존 Codex번들rg를 검증환경PATH에 연결해 해결했고 전역설정·추가설치는 하지 않았다."
+        ],
+        "limitations": [
+          "BoxBox 외부4개 실도구 시나리오는 사용자 off요청에 따라 미실행이며 PASS로 세지 않는다. 인자 없는 bun test는 자동탐색이 다르므로 기본 제품검사는 npm test를 사용한다.",
+          "원래 Reports3건은 기능19기준이 모두 유효하지만 고유 필수완료감사·문서영향·완료보고서 수용이 남아 complete=false다. 이번 변경검토PASS를 그3UUID감사로 복사하지 않는다.",
+          "로컬 구현원장의 REGISTER는 별도 허용명령에 자동연결하지 않아 unverified다. 마지막 문서정정으로 이 구현원장의 과거제품검증sourceDigest는 현재와 다르며 이 작업 자체도 done으로 주장하지 않는다. 실행코드는 제품검사 때와 같다.",
+          "실제모델검사는 두 합성공개답변의 생략·저장 표본이며 일반판단품질·Windows·실제구현수행 검증이 아니다. typed호스트adapter는 injected, source/type/architecture 도구검사는 process이며 실제CLI모델호스트로 주장하지 않는다."
+        ],
+        "next": [
+          "원래 Reports3건은 현재 유효한 기능증거를 유지하고 각 UUID의 지정 Opus감사·문서영향·저작보고서·완료 readback으로 진행한다.",
+          "BoxBox를 다시 켜는 별도 지시 전에는 외부실도구 검사를 실행하지 않는다.",
+          "현재 보고서와 .www/evidence/harness-unblock-20261117/의 공식 검증·현재성·provider원문을 인계한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서도 제품 직렬화·보고서 테스트와 기본 테스트 실행이 외부 BoxBox 호출 없이 수행되고 모든 기존 제품 시나리오를 보존한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-6ac0a766-7f06-4c7e-9845-19a25bb1afdf",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "BOXBOX",
+            "description": "BoxBox 실제 도구 시나리오는 별도 묶음에 보존되며 기본 제품 검사에 섞이지 않고 명시 실행도 off일 때 disabled로 거부한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-6ac0a766-7f06-4c7e-9845-19a25bb1afdf",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 허용 Reports 복합 argv로 현재 소스의 기능·GUI 검증 결과를 같은 Task UUID 기준에 공식 등록하고 현재성을 확인한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-6ac0a766-7f06-4c7e-9845-19a25bb1afdf",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:51:39.289Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-1b920e4b-e5ef-4171-80bb-2ba3c75017ea",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-1b920e4b-e5ef-4171-80bb-2ba3c75017ea/opus.json",
+            "findings": [
+              "[결함] docs/DEVELOPMENT.md:370 문서와 실제 테스트가 맞지 않습니다. 문서는 `bun test test/work-json.test.ts --timeout 300000`이 v1 28키·86쌍 공개 guide proof, 격리 복사본의 dry-run·Align·재Align·source check, pinned CLI golden bytes 비교를 실행한다고 적고 있습니다. 하지만 이 검사들(AC1·AC2 두 건·AC4)은 모두 test/boxbox/work-json.test.ts:204-462로 옮겨졌습니다. test/work-json.test.ts에는 직렬화·정책·크기 제한·보존을 다루는 제품 테스트 12개(46~278행)만 남아 있습니다. 같은 문서 82행의 'test/boxbox/ 분리' 설명과도 서로 모순됩니다.",
+              "[결함] docs/DEVELOPMENT.md:372는 `node scripts/verify-reports.ts`가 '위 실도구 테스트를 직렬로 실행'하고 '실도구 테스트별 예산은 300초'라고 적고 있습니다. 그러나 scripts/verify-reports.ts:35는 이번 변경 뒤에도 `bun test test/work-json.test.ts`만 실행합니다. 따라서 semantic.log에는 실제 BoxBox CLI 왕복 검사가 더 이상 들어 있지 않습니다. 원격 Reports001~003 정식 등록(attempt-332ffbd0, bec084b9, ea8adeee 등)이 이 축소된 의미 검사로 통과했는데, 문서는 여전히 실도구 검사가 포함된 것처럼 읽힙니다. 증거 범위가 실제보다 넓게 표시되는 문제입니다. 고치는 방법은 둘 중 하나입니다. 370·372행을 '제품 직렬화 검사만 실행하며 BoxBox 실도구 검사는 npm run test:boxbox로 별도 실행(off이면 disabled)'으로 정정하거나, verify-reports가 실도구 검사를 별도로 실행하지 않는다는 한계를 verification.md에 적어야 합니다. design.md의 '앞부분 제품 파일경로 유지 시 충돌하지 않는다'는 판단은 argv 호환성만 다루고, 검사 내용이 줄었다는 점은 다루지 않습니다.",
+              "[정상] scripts/test.ts의 suite 선택은 맞게 동작합니다. 인수는 없거나 `--boxbox` 하나만 허용하고, 나머지는 예외로 거부합니다. 제품 suite는 경로가 `boxbox/`로 시작하는 테스트만 빼고 나머지 .test.ts/.tsx를 모두 고르며, Node 테스트 12개가 하나라도 빠지면 거부합니다. boxbox suite는 bun 대상 파일이 하나도 없으면 거부합니다. test/** 실제 파일 목록과 대조했을 때 하위 디렉터리의 테스트는 test/boxbox/work-json.test.ts 하나뿐이어서, 제품 선택에 새 파일이 잘못 섞이지 않습니다.",
+              "[정상] off와 오류 경계도 맞습니다. 명시 boxbox 실행에서 mode가 off이면 readdir과 run 전에 disabled JSON을 출력하고 exit 2로 끝나므로 성공으로 세지 않습니다. 응답 객체의 tool/command/ok/scope/error/mode 검증, 설정 파일 누락, 절대경로가 아닌 설정, launcher 실패는 모두 예외로 처리되고 최종 exit은 1입니다. 실행기 결과에 signal이 있거나 status가 0이 아니면 다음 그룹을 실행하지 않고 비0으로 끝나며, spawn error는 그대로 던집니다. test/test-runner.test.ts의 9개 테스트가 이 경계들을 주입 방식으로 다룹니다. 제품 suite가 readMode를 호출하지 않는다는 점도 검사합니다.",
+              "[정상] package.json의 test는 `node scripts/test.ts`, test:boxbox는 `node scripts/test.ts --boxbox`이고, check는 계속 npm test(제품 suite)만 실행합니다. 이것은 spec의 '기본은 제품, 명시 실행만 외부 도구 검사' 요구와 일치합니다.",
+              "[참고] test/work-json.test.ts의 test 정의 수(12개)와 test/boxbox/work-json.test.ts의 test 정의 수(4개)는 직접 확인했습니다. 다만 원래 16개 테스트 본문의 byte/SHA 대조(preservation.json)는 직접 재현하지 않았습니다. 이 검토에는 Read/Grep/Glob만 사용할 수 있었고 git diff/show를 실행할 도구가 없어서, HEAD와의 원문 diff는 읽지 못했습니다. 테스트, verifyWork, 원격 readback도 실행하지 않았으며, verification.md에 적힌 실행 결과는 기록된 내용으로만 대조했습니다."
+            ]
+          },
+          {
+            "id"         : "review-190def3d-3c81-4e86-9110-f293fcceef06",
+            "verdict"    : "pass",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-190def3d-3c81-4e86-9110-f293fcceef06/opus.json",
+            "findings": [
+              "[검토 범위] 이 환경에는 Read/Grep/Glob 도구만 있고 셸 도구가 없어 git diff/show/status를 실행하지 못했다. 따라서 HEAD 원문과의 diff, 그리고 preservation.json에 적힌 16개 테스트 본문의 byte/SHA 대조는 직접 재현하지 않았다. 직접 읽은 파일은 scripts/test.ts, test/test-runner.test.ts, test/boxbox/work-json.test.ts, test/work-json.test.ts(Grep), package.json, docs/DEVELOPMENT.md(Grep), scripts/verify-reports.ts(Grep), test/workflow-environment.test.ts(Grep), 023 spec/design/tasks/verification/work.json이다. 테스트, verifyWork, 원격 readback은 실행하지 않았다. 실행 결과는 기록과 대조만 했다.",
+              "[정상] scripts/test.ts:24-28은 인수를 생략하거나 --boxbox 하나만 받는다. 오타·중복·추가 인수는 예외로 거부하며, 제품 suite로 조용히 바뀌지 않는다. testGroups(30-45)는 제품 suite에서 'boxbox/' 경로만 빼고, Node 목록 12개 중 하나라도 없으면 거부한다. boxbox suite에서 bun 대상이 없을 때도 거부한다. Glob으로 본 test/** 실제 목록에서 하위 디렉터리 테스트는 test/boxbox/work-json.test.ts 하나뿐이다. readdir을 recursive로 바꿔도 새 파일이 제품 suite에 잘못 섞이지 않는다.",
+              "[정상] 명시 boxbox 실행에서 mode가 off이면 scripts/test.ts:70-73이 readdir·run 전에 disabled JSON(executedFiles 0)을 출력하고 2를 반환한다. 비성공이므로 PASS로 세지 않는다. boxboxMode(47-54)는 tool/command/ok/scope/error/mode를 모두 확인하고 fail closed한다. readBoxboxMode(56-64)는 설정 누락, 절대경로가 아닌 설정, spawn 오류·signal·비0 종료·JSON 파싱 실패를 모두 예외로 처리하며 main 경계(89-94)에서 exit 1이 된다. 제품 suite는 readMode를 호출하지 않으므로 BoxBox 설치에 의존하지 않는다. test-runner.test.ts:48-60이 이를 주입 방식으로 검사한다.",
+              "[정상] 실행기 결과에 signal이 있거나 status가 0이 아니면 scripts/test.ts:84가 다음 그룹을 실행하지 않고 비0을 반환한다. spawn error는 83행에서 그대로 던진다. test-runner.test.ts:93-102가 이 경계를 다룬다. 기존 nodeTests Set 선언 형태(19-22)도 유지된다. 그래서 test/workflow-environment.test.ts:150-158의 Node witness가 문자열을 추출하는 계약과 맞는다.",
+              "[정상] 테스트 수를 셌다. test/work-json.test.ts에는 test 정의가 12개(46-278행) 있고 외부 CLI 호출이 없다. test/boxbox/work-json.test.ts에는 AC1, AC2 두 건, AC4로 4개(204-462행)가 있다. sourceRoot는 '../..'로 저장소 루트를 가리키도록 조정됐다(45행). skip/only는 없다.",
+              "[정상] package.json의 test는 'node scripts/test.ts', test:boxbox는 'node scripts/test.ts --boxbox'다. check는 계속 npm test(제품 suite)만 포함한다. spec의 '기본은 제품, 외부 도구 검사는 명시 실행' 요구와 일치한다.",
+              "[보완 확인] 이전 Opus 리뷰(review-1b920e4b)가 지적한 문서 과장은 현재 docs/DEVELOPMENT.md:370·372에서 정정됐다. 370행은 test/work-json.test.ts가 제품 12개만 실행하고 외부 4개는 test:boxbox로 실행한다고 적고, 372행은 verify-reports·semantic.log에 BoxBox 실도구 검사가 포함되지 않는다고 적는다. 이는 scripts/verify-reports.ts:35(bun test test/work-json.test.ts)와 일치한다. 82·84행의 bun test 자동 탐색 차이 안내도 정확하다.",
+              "[참고·비차단] work.json의 PRODUCT/BOXBOX 근거(attempt-6ac0a766)에 기록된 docs/DEVELOPMENT.md digest(4c22b7f8…)는 현재 입력 digest(bf788828…)와 다르다. 따라서 evidence summary의 '현재 적용 가능'은 문서 수정 전 시점의 판정이다. verification.md:55가 이 점을 재평가 대상으로 명시하고 done을 주장하지 않으므로 증거 범위를 넓힌 것은 아니다. 다만 완료 판정 전에 core 현재성 재조회나 새 시도가 필요하다. 또 BOXBOX 기준은 제품 suite 안의 주입형 test-runner 검사와 별도로 기록된 실제 off 명령(disabled-v2.json)으로만 뒷받침된다. BoxBox 실도구 4개 시나리오는 실행되지 않았고, 문서도 그렇게 적고 있다.",
+              "[참고] REGISTER는 work.json에서 unverified 상태이고 evidence가 비어 있다. verification.md:32도 원격 19개 기준 등록 관측을 이 작업의 기준 수용과 구분한다. 과장은 없다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/023-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json",
+        "workRecordHash": "53a9cbcb69f204e171bdb6f2298d34a2651e6b5f002dbcda297510f84ef824cf",
+        "sourceDigest"  : "f6a5181c23e7473605bd3f863900551336b767e87c8a7541a936d50d8375a93c",
+        "criteriaDigest": "3d075483605e99fa1212e72d97fa5d19645381a93077b4228910401ae568a7b6"
+      }
+    }
+  ]
+}

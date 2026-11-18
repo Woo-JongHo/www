@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-36d312bc-a767-4e3e-a581-01898b35f75f",
+  "title"        : "WWW 스킬 단계와 Plan 및 Progress 관측 누락",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-f332a10e-570d-4a58-a638-f5bc51a70805",
+      "workId"        : "work-36d312bc-a767-4e3e-a581-01898b35f75f",
+      "title"         : "WWW 스킬 단계와 Plan 및 Progress 관측 누락",
+      "summary"       : "WWW 스킬 단계와 Plan·Progress의 관측 누락을 Chat015 버그로 명세화하고 GitHub #2에 bug 이슈로 등록했다. 실제 투영 함수의 합성 입력에서 Plan 없는 공개 설명의 누락과 미관측 다섯 항목의 대기 표시를 확인했다. 제품 코드는 수정하지 않았다.",
+      "kind"          : "authored",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T05:56:20.253Z",
+      "event"         : "finish",
+      "workRecordHash": "c07981754f29f4773fd6cfcc88864e0eff25b0e37e0960e5dd00dd70ccb4871b",
+      "sourceDigest"  : "e769b7d0fa7826f8f277667eb291f7c76a5613db088ac660afb852f7db9626ab",
+      "criteriaDigest": "7a9dba16078d79c2d52909b6cc87d4a3be266c2f6cc65b0d42758511aa31bf43",
+      "semanticHash"  : "f88111ad6ae8095861de73edfd961c801e0d8df7a7fd30753768e6cb5c6bb8ee",
+      "narrative": {
+        "summary": "WWW 스킬 단계와 Plan·Progress의 관측 누락을 Chat015 버그로 명세화하고 GitHub #2에 bug 이슈로 등록했다. 실제 투영 함수의 합성 입력에서 Plan 없는 공개 설명의 누락과 미관측 다섯 항목의 대기 표시를 확인했다. 제품 코드는 수정하지 않았다.",
+        "before" : "문서 작업 중 오른쪽 개요가 현재 스킬 선택 미확인·다섯 항목 대기·Plan/Progress 미제공을 표시해 수행 여부를 판단하기 어렵다는 사용자 관찰이 있었다.",
+        "after"  : "문서 읽기·명시 요청·단계 선언·호스트 실행·완료의 근거 수준과 미관측/대기 구분, 계획 미연결 공개 설명, 실제 Subagent 집계의 수정 기준을 정의하고 버그 추적을 연결했다. 앱의 현재 동작은 아직 동일하다.",
+        "changes": [
+          "Chat015의 kind=bug 원장과 개발 명세·원인 가설/입증 범위·수정 및 검증 계획을 작성했다.",
+          "실제 함수에 합성 공개 사건을 입력해 Plan 유무와 읽기 참조 파서를 대조하고 결과를 기록했다.",
+          "GitHub 연결 도구의 403 실패를 보존하고 기존 CLI 인증으로 OPEN 상태의 bug 이슈 #2를 등록·재조회했다.",
+          "기준 여덟 개를 문서와 계획에 연결하고 작업 목차·검증 기록·현행 문서 영향 판단을 남겼다."
+        ],
+        "decisions": [
+          "사용자가 제시한 화면과 현행 소스·합성 재현을 구분하며 실제 세션의 원본 사건이나 앱 빌드까지 확인했다고 주장하지 않는다.",
+          "Native Subagent 0개는 해당 표본과 일치하는 정상 경계로 보존하고 외부 CLI 검토 프로세스를 가짜 Subagent로 만들지 않는다.",
+          "GitHub 이슈만 게시하고 미게시 로컬 명세의 Git 커밋·푸시와 제품 수정은 수행하지 않는다."
+        ],
+        "limitations": [
+          "실제 사용자 세션·Electron·Native·IME·Windows 검증과 제품 수정·회귀 검사·타입·빌드는 미실행이다.",
+          "독립 문서 의미 검토·필수 최종 감사는 미실행이며 현재 작업은 verifying·다음 단계 review, 제품 기준은 모두 unverified다.",
+          "GitHub #2는 열린 상태이며 로컬 명세는 아직 Git에 게시되지 않았다."
+        ],
+        "next": [
+          "구현 전 실제 세션·빌드·공개 사건 표본과 구조화 단계 연결 계약을 확인하고 별도 문서 검토를 수행한다.",
+          "구현 권한을 받은 뒤 같은 UUID로 수정·회귀 검증하고 GitHub #2에 실제 결과를 연결한다."
+        ],
+        "reader": {
+          "story": "사용자가 작업 중인 스킬과 진행 상태가 보이지 않는다고 보고해 표시 조건을 조사했다. 현행 함수에 합성 사건을 넣자 공개 설명이 있어도 Plan이 없으면 Progress가 비고 미관측 항목 다섯 개가 대기로 표시됐다. 이 근거와 실제 세션에서 아직 모르는 부분을 분리해 다음 수정의 명세·진단·검증 계획을 작성하고 GitHub 버그로 등록했다.",
+          "requirements": [
+            {
+              "requirement": "버그 개발 명세와 이슈 등록",
+              "result"     : "Chat015와 GitHub #2를 연결했다.",
+              "evidence"   : "https://github.com/Woo-JongHo/www/issues/2",
+              "limitations": "로컬 문서는 미커밋·미푸시이며 제품 미수정"
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "현행 투영과 참조 파서",
+              "method"     : "실제 함수를 합성 공개 사건과 Plan 유무·리터럴/복합 cat으로 대조",
+              "expected"   : "문제의 입력 조건과 정상 대조를 분리",
+              "observed"   : "Plan 없음: commentary 관측·Progress null·대기 5행. Plan 있음: 같은 설명 표시. 리터럴 참조 1개·복합 0개.",
+              "limitations": "실제 Native·Electron·사용자 원본 사건 아님"
+            },
+            {
+              "target"     : "GitHub 등록",
+              "method"     : "연결 도구 실패 후 기존 CLI로 생성·별도 조회",
+              "expected"   : "버그 이슈의 URL·OPEN·bug 라벨과 작업 UUID 연결",
+              "observed"   : "#2 OPEN과 bug 라벨·본문 UUID 확인",
+              "limitations": "앱 수정이나 Git 코드 게시를 뜻하지 않음"
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/spec.md",
+              "purpose": "버그 범위와 수정 기준을 확인한다."
+            },
+            {
+              "path": "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/diagnosis.md",
+              "purpose": "관찰·가설·입증된 함수 동작과 미확인을 구분한다."
+            },
+            {
+              "path": "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/tasks.md",
+              "purpose": "실행 연결 계약과 회귀 검증 순서를 확인한다."
+            },
+            {
+              "path": "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/verification.md",
+              "purpose": "실제 실행과 문서/이슈 등록의 한계를 확인한다."
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "별도 문서 검토와 실제 세션 표본을 확보한 뒤 승인 범위에서 수정한다.",
+              "owner"   : "Codex 통합 책임자",
+              "doneWhen": "단계 근거·공개 설명·화면 표시가 실제 소스와 세션에서 일치함을 검증",
+              "impact"  : "현재 버그는 아직 수정되지 않음"
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "OBS-EVIDENCE",
+            "description": "문서 참조·구조화 읽기·명시적 Skill 요청·역할이 선언한 절차 적용·실제 하네스 실행·성공 완료를 구별하고 상태마다 출처·관측 한계를 표시한다. 문서 읽기나 자연어 언급만으로 실행·완료를 추정하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "OBS-LIFECYCLE",
+            "description": "WWW 개발 역할이 선택·전환한 단계를 현재 session/thread/turn과 작업 UUID에 구조적으로 연결해 UI에 전달한다. 선택·시작·종료·실패·중단의 실제 근거와 중복·지연·재접속 처리를 정의하고, 외부 개발 세션 등 연결이 없는 표면은 미연결로 표시한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "OBS-UNKNOWN",
+            "description": "명시된 대기 사건이 없는 스킬은 대기로 단정하지 않고 미관측 또는 선택 미확인으로 표시한다. 복수 요청으로 현재 항목을 특정할 수 없으면 모호성을 표시하고 임의의 하나를 선택하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "PLAN-SOURCE",
+            "description": "계획 없음·자료 미제공·수집 실패를 구별하고 Native 계획과 명시적으로 연결한 계획 문서의 출처·현재성을 표시한다. tasks.md를 작성했다는 이유만으로 실행 계획을 받은 것으로 보거나 모든 항목을 실행 중으로 승격하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "PROGRESS-FALLBACK",
+            "description": "공개 진행 설명이 존재하면 활성 Plan이 없어도 현재 요청의 계획 미연결 설명으로 표시한다. 활성 항목이 제공된 경우에는 기존 항목 연결을 유지하며 과거·다른 턴·다른 탭의 설명을 섞지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AGENT-TRUTH",
+            "description": "실제 Native Subagent 사건만 Subagent 집계에 반영하고 부모·자식·상태·출처를 보존한다. 외부 CLI 검토 프로세스와 문서상의 역할은 별도 사실로 설명하며 표시를 채우기 위한 가짜 호출·완료를 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "OBS-REGRESSION",
+            "description": "선택/읽기만 관측·계획 없는 commentary·계획과 commentary 혼합·새 턴·중복·종료 후 지연·복원·2,000건 절단·탭 격리·상태 미제공을 행동 테스트와 실제 Electron에서 검증하고 근거를 해당 소스와 연결한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "ISSUE-TRACE",
+            "description": "사용자 증상·소스상 확인한 원인·미확인 실세션 근거·수정 범위·재현/회귀 시나리오를 개발 명세와 버그 기록에 남기고 GitHub 이슈에 연결한다. 문서/이슈 등록을 제품 수정 완료로 표시하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/work.json",
+        "workRecordHash": "c07981754f29f4773fd6cfcc88864e0eff25b0e37e0960e5dd00dd70ccb4871b",
+        "sourceDigest"  : "e769b7d0fa7826f8f277667eb291f7c76a5613db088ac660afb852f7db9626ab",
+        "criteriaDigest": "7a9dba16078d79c2d52909b6cc87d4a3be266c2f6cc65b0d42758511aa31bf43"
+      }
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-6825661e-9d06-4364-82fe-b612365a0072",
+  "title"        : "업무 진입점과 탐색 구조 연구",
+  "kind"         : "feature",
+  "areas": [
+    "ui"
+  ],
+  "owner"        : "ui",
+  "status"       : "verifying",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "R1",
+      "description": "공식 원문을 열어 확인한 제품별 패턴과 출처, 관측 사실과 WWW 적용 추론을 분리한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "R2",
+      "description": "대안과 비용을 비교하고 탐색·상세·전환·데이터 경계·반응형·접근성·실패 동작을 포함한 설계 제안을 작성한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "R3",
+      "description": "사용자 여정과 검증 시나리오、미검증 가정을 명시하고 읽기 전용 독립 검토를 수행한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "entry-ui-research-2026-11-15",
+    "requestHash": "92f9e9b941e8ee1b0921e6a788b46599cb905a87a7598f08c102804196c1240d",
+    "authorization": {
+      "implementation": false,
+      "writePaths": [
+        "docs/work/Home",
+        "docs/work/INDEX.md"
+      ],
+      "mutationSurfaces": [
+        "research-documents"
+      ],
+      "verifierCommands": [
+        "node scripts/check-workflow.ts"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "92f9e9b941e8ee1b0921e6a788b46599cb905a87a7598f08c102804196c1240d"
+    },
+    "inputs": [
+      "docs/work/Home/001-업무 진입점과 탐색 구조 연구/research.md"
+    ],
+    "nextAction": "verify",
+    "verifications": [],
+    "reviews": [
+      {
+        "id"            : "review-8c2d1472-1ec0-4cbc-8c78-861a4cf99eae",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : null,
+        "verdict"       : "not_run",
+        "readOnly"      : true,
+        "sourceDigest"  : "6d6a6d1b795c995b107e8872267e96ad84a501bb6eb5bb7476ae3788c75ee812",
+        "criteriaDigest": "380ea7f93cab33195eac378c52d74b1323bfaede315ed1f04dd842c323c79867",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 1,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "f80bcf159e2eb071c8a521dc857009974c3e0078d5f795159e746876b7fea952"
+        },
+        "failure": {
+          "kind"       : "unknown",
+          "verified"   : false,
+          "receiptHash": "f80bcf159e2eb071c8a521dc857009974c3e0078d5f795159e746876b7fea952"
+        },
+        "findings": [],
+        "receiptPath"    : ".www/evidence/reviews/review-8c2d1472-1ec0-4cbc-8c78-861a4cf99eae/opus.json",
+        "startedAt"      : "2026-11-15T14:10:42.231Z",
+        "completedAt"    : "2026-11-15T14:10:46.369Z",
+        "workId"         : "work-6825661e-9d06-4364-82fe-b612365a0072",
+        "workRequestHash": "92f9e9b941e8ee1b0921e6a788b46599cb905a87a7598f08c102804196c1240d",
+        "recordingRejection": [
+          "review_not_passed",
+          "source_changed",
+          "observed_model_missing",
+          "receipt_context_mismatch",
+          "receipt_result_mismatch"
+        ]
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-af408703-affa-4857-88a3-9435da54354e",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T14:12:07.352Z",
+        "sourceDigest"   : "6d6a6d1b795c995b107e8872267e96ad84a501bb6eb5bb7476ae3788c75ee812",
+        "criteriaDigest" : "380ea7f93cab33195eac378c52d74b1323bfaede315ed1f04dd842c323c79867",
+        "documentsDigest": "4094306377bcae30e93cadef5c14bda49951445ec781c5d7dc09cabf214de231",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "읽고 대조했다. 현재 Native와 프로젝트 격리를 근거로 제안했으며 실행 구조나 상태 소유 구현은 변경하지 않았다."
+          },
+          {
+            "path"    : "docs/design-system.md",
+            "decision": "unchanged",
+            "reason"  : "읽고 대조했다. 현재 의미 토큰을 재사용하는 제안만 있고 실제 토큰·컴포넌트 구현은 바꾸지 않았다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "읽고 대조했다. 이번 범위는 문서 연구다. 접수 인터페이스와 실제 경로 차이는 검증 기록에 남겼으며 개발 도구 변경으로 확대하지 않는다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "읽고 대조했다. 연구 제안만 작성했으며 홈·업무·일정은 아직 제품 제공 범위로 추가하지 않는다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "읽고 대조했다. 관측과 제안·형식 검증·필수 독립 감사 미실행을 분리하며 계약 변경은 없다."
+          },
+          {
+            "path"    : "docs/specs/ecosystem.md",
+            "decision": "unchanged",
+            "reason"  : "읽고 대조했다. 기존 지도 선택과 자세히 보기의 분리를 존중하는 연구안이며 현행 지도 동작을 바꾸지 않았다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-786621af-85c2-4586-9156-bf74d9ebacd7",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T07:44:49.876Z",
+        "sourceDigest"   : "6d6a6d1b795c995b107e8872267e96ad84a501bb6eb5bb7476ae3788c75ee812",
+        "criteriaDigest" : "380ea7f93cab33195eac378c52d74b1323bfaede315ed1f04dd842c323c79867",
+        "documentsDigest": "7075e6f157331c316f342cfb67363e3b67f560a6867bb6feb5f2667244ac302d",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "연구 당시 맥락과 현재 구현을 구분하며 실행 구조 변경은 없다."
+          },
+          {
+            "path"    : "docs/design-system.md",
+            "decision": "unchanged",
+            "reason"  : "양식과 접근성은 연구 가설이며 현재 디자인 토큰 변경을 요구하지 않는다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "연구 검증은 개발 및 빌드 절차를 변경하지 않는다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "연구의 2026-11-15 제안이며 현재 제품 목적과 제공 범위를 변경하지 않는다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "연구 기록의 증거와 독립 검토 구분을 유지하며 공통 계약을 변경하지 않는다."
+          },
+          {
+            "path"    : "docs/specs/ecosystem.md",
+            "decision": "unchanged",
+            "reason"  : "기존 지도 동작과 연구 제안을 분리하며 기능 명세 변경은 없다."
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
+  }
+}

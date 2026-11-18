@@ -8,14 +8,14 @@
   ],
   "owner"        : "dev",
   "status"       : "verifying",
-  "blockedReason": "동일 작업 트리의 병행 수정으로 전체 검사 exit 1 및 sourceStable=false가 반복됐다. 안정된 통합 소스의 검증과 최종 독립 감사가 필요하다.",
+  "blockedReason": null,
   "relations": [],
   "criteria": [
     {
       "id"         : "AC-1",
       "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
       "required"   : true,
-      "result"     : "failed",
+      "result"     : "passed",
       "evidence": [
         {
           "attemptId": "attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
@@ -36,6 +36,11 @@
           "attemptId": "attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
           "path"     : "verification.md#attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
           "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-fd8db2c2-df92-496f-8e9b-72c58a9fde2c",
+          "path"     : "verification.md#attempt-fd8db2c2-df92-496f-8e9b-72c58a9fde2c",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
         }
       ]
     },
@@ -43,7 +48,7 @@
       "id"         : "AC-2",
       "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
       "required"   : true,
-      "result"     : "failed",
+      "result"     : "passed",
       "evidence": [
         {
           "attemptId": "attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
@@ -64,6 +69,11 @@
           "attemptId": "attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
           "path"     : "verification.md#attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
           "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-fd8db2c2-df92-496f-8e9b-72c58a9fde2c",
+          "path"     : "verification.md#attempt-fd8db2c2-df92-496f-8e9b-72c58a9fde2c",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
         }
       ]
     },
@@ -71,7 +81,7 @@
       "id"         : "AC-3",
       "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
       "required"   : true,
-      "result"     : "failed",
+      "result"     : "passed",
       "evidence": [
         {
           "attemptId": "attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
@@ -102,57 +112,84 @@
           "attemptId": "attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
           "path"     : "verification.md#attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
           "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-ada93783-0c9d-4c73-ae9a-a542f4099c58",
+          "path"     : "verification.md#attempt-ada93783-0c9d-4c73-ae9a-a542f4099c58",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-2a2d1d28-0c6b-4922-ab87-c3aa22f8d453",
+          "path"     : "verification.md#attempt-2a2d1d28-0c6b-4922-ab87-c3aa22f8d453",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-65422ec9-af4d-447a-853c-c604d041820b",
+          "path"     : "verification.md#attempt-65422ec9-af4d-447a-853c-c604d041820b",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-c3c32406-d895-426c-97df-89370d07876e",
+          "path"     : "verification.md#attempt-c3c32406-d895-426c-97df-89370d07876e",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-12443fb9-ab2e-4b62-a223-430f2b3290d8",
+          "path"     : "verification.md#attempt-12443fb9-ab2e-4b62-a223-430f2b3290d8",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
         }
       ]
     }
   ],
   "workflow": {
     "role"       : "www-dev",
-    "requestId"  : "skills-quality-harness-20261116",
-    "requestHash": "87bdf128ca87957bfcb3c09225a3316b15dcc793d4dab3cfab8751311a1b2401",
+    "requestId"  : "legacy-workflow-016-local-closeout-20261116",
+    "requestHash": "de1e9c9b8f943d7b5c86c5b5b3096220b12748851ede994d83b00d7e8fd25916",
     "authorization": {
-      "implementation": true,
+      "implementation": false,
       "writePaths": [
-        "scripts/workflow",
-        "scripts/workflow.ts",
-        "test/workflow-artifacts.test.ts",
-        "skills/www",
-        "docs/skills",
-        "docs/DEVELOPMENT.md",
-        "docs/ARCHITECTURE.md",
-        "docs/architecture/structure.json",
-        "docs/specs/architecture.md",
-        "src/architecture.generated.json",
-        "test/workflow-development.test.ts"
+        "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스"
       ],
       "mutationSurfaces": [
-        "edit"
+        "files"
       ],
       "verifierCommands": [
         "[\"bun\",\"test\",\"test/workflow-artifacts.test.ts\"]",
         "[\"npm\",\"run\",\"typecheck\"]",
         "[\"npm\",\"run\",\"check\"]",
-        "[\"node\",\"--test\",\"test/workflow-development.test.ts\"]"
+        "[\"node\",\"--test\",\"test/workflow-development.test.ts\"]",
+        "[\"node\",\"--test\",\"test/workflow-development.test.ts\",\"test/workflow-work.test.ts\"]",
+        "[\"bun\",\"test\",\"test/workflow-completion-faults.test.ts\"]",
+        "[\"npm\",\"run\",\"check:source\"]",
+        "[\"bun\",\"test\",\"test/workflow-completion-faults.test.ts\",\"--timeout\",\"30000\"]"
       ],
       "commit"     : false,
       "publish"    : false,
       "source"     : "direct_user_request",
-      "requestHash": "87bdf128ca87957bfcb3c09225a3316b15dcc793d4dab3cfab8751311a1b2401"
+      "requestHash": "de1e9c9b8f943d7b5c86c5b5b3096220b12748851ede994d83b00d7e8fd25916"
     },
     "inputs": [
+      "AGENTS.md",
+      "agents/www/AGENT.md",
+      "agents/www/review-policy.json",
       "docs/ARCHITECTURE.md",
       "docs/DEVELOPMENT.md",
-      "docs/architecture/structure.json",
+      "docs/PRODUCT.md",
+      "docs/architecture",
       "docs/skills",
       "docs/specs/architecture.md",
-      "scripts/workflow",
-      "scripts/workflow.ts",
-      "skills/www/www-design/SKILL.md",
-      "skills/www/www-spec/SKILL.md",
+      "package.json",
+      "scripts",
+      "skills/www",
+      "source-policy.json",
       "test/workflow-artifacts.test.ts",
-      "test/workflow-development.test.ts"
+      "test/workflow-completion-faults.test.ts",
+      "test/workflow-development.test.ts",
+      "test/workflow-work.test.ts",
+      "tsconfig.json",
+      "tsconfig.tools.json"
     ],
-    "nextAction": "verify",
+    "nextAction": "review",
     "verifications": [
       {
         "id"         : "attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
@@ -2863,6 +2900,4192 @@
             "contentRetained": false
           }
         }
+      },
+      {
+        "id"         : "attempt-ada93783-0c9d-4c73-ae9a-a542f4099c58",
+        "startedAt"  : "2026-11-16T07:48:47.850Z",
+        "completedAt": "2026-11-16T07:49:18.353Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "7053fee7a647ff259ff34e5d6276fda3f7da12e2a949c9a664023ccc07bb891e",
+          "inputs": [
+            "AGENTS.md",
+            "agents/www/AGENT.md",
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/architecture",
+            "docs/skills",
+            "docs/specs/architecture.md",
+            "package.json",
+            "scripts",
+            "skills/www",
+            "source-policy.json",
+            "test/workflow-artifacts.test.ts",
+            "test/workflow-completion-faults.test.ts",
+            "test/workflow-development.test.ts",
+            "test/workflow-work.test.ts",
+            "tsconfig.json",
+            "tsconfig.tools.json"
+          ],
+          "files": [
+            {
+              "path"  : "AGENTS.md",
+              "type"  : "file",
+              "digest": "27f8bfff8c68fa78bb8b20e53d4f341753f943ecd28819f17d86e095bf86f1f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "c9c2f118a26a7484c4c9c629ac25ec06b2e280cd4daef2b4154ac9ccf2cf956d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "ef44b8d2a5ea9e05ec741f94e94cdcb7df59dbf13fda0283aaedf8f80a7b6671",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "5264e6b5ed550ac41005b46b1fc2878f0f401ec58470ac4a4c1c5fb245c65e6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "dcd5f64355b76f91d2cb524ad06485b0de4078211021f3aa730725a084ef5510",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/architecture",
+              "type": "directory"
+            },
+            {
+              "path": "docs/architecture/statecharts",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/architecture/statecharts/development-work.json",
+              "type"  : "file",
+              "digest": "06667bf9628304ce40c264ba372ba0a083d80f62f8629f0848a31743acdb1835",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "4247a762d0ef5ed91db2cd511dba5215bec30e7ec0136dc02f0d2e1b361c14b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/work-output.json",
+              "type"  : "file",
+              "digest": "60cd4a77e169fa70ea12551449c20d8bd6975b45d28eb7fdb526c94c84b04ba2",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "707b9f18418b02125192454b73e1216bcfac66aafa52d024cad03fd2d3a29e47",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/CATALOG.md",
+              "type"  : "file",
+              "digest": "826ca52a8d5af9fe2f601fc361c1c74712580a283d3d125aa692d5bcc0354511",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "0c6808f1d0b6ccb3ced9cbdbf4a470baab618c1bc93a1f6bf90121a8ebe91046",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "c94676ad5da39ea49d3861f625d246a6bf613ed1d96da25102f9fa2257345648",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "5ebf4ef369fe447a512f9d8b9b9bc166ba4112b9fcdb334ad39500ee3e8888ab",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/examples",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/examples/approval-waiting.md",
+              "type"  : "file",
+              "digest": "feb35c4c7b507ef011bda86460c09e7f0c7e831c17acf1379dbda99b6ff12c3c",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/profiles",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/profiles/desktop.md",
+              "type"  : "file",
+              "digest": "c2857bd2823ea7533096da05bee137ec3cf67aaa85079089c93cca39241c1c26",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "45a96438ac2fdc0e7741a1ebdc878dad61e3fa80d6f96fea518a8967c93ae542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "14451a10bdd1278385ec2b906fb483182096ab91837904c9d46328781ceb571f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "e626ede8fe43e24669ff88dbd4a18e6bba7838060e9a7a72e408a0ea358532f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "c9247a7acc174b7884977f5273a6534b94e06693dbcc9953ea68c29b71442e7f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "083e07860b39d900cf318396352b8e429b0db409d4894de35dc1ad9344a8655b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "63ada4b17e605413de2dc77a54bbd94fd0e6d95554b91fe841ab52255e272ef4",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "fd16561a9c5451a564a24253e920eaa5c7126f3f26a9b4809ccb760dcd905bd4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-architecture.ts",
+              "type"  : "file",
+              "digest": "bf40ca9962c3049ef7491c1cb8e1fcf128019ff49770311a2a2e20e35c59fca6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-environment.ts",
+              "type"  : "file",
+              "digest": "05ad73550de9774ded1b7b9dacc047a53bee24376a532d0e8dc1e8601ffd90c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-skill-library.ts",
+              "type"  : "file",
+              "digest": "0e51d546738ac2f9e2a58b389950b3aa21d29d0089208fcfbe731342eef49507",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.ts",
+              "type"  : "file",
+              "digest": "4b8116e52b337e2467dfd013785768c0156c65719f2caa5a16ee20cb7b90338f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "53231d638f7969dba7c51881bcf7af1f4a4d3df6951877feb777c4b0845fae4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/package.json",
+              "type"  : "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/release.ts",
+              "type"  : "file",
+              "digest": "f33d35141e723abb5ce6bec50986862a9bee2c9af339216da40555c620ea1af5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/setup-ci.ts",
+              "type"  : "file",
+              "digest": "29de80de6edd9ea9d47f4321dda978fd9d4d1c62cfef6f88c595df6940b7815b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/source-policy.ts",
+              "type"  : "file",
+              "digest": "09d4b0eae97ca3b0b55015123969c815916672486cc004bfd8d83328506b0705",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "ce7c99a7ef05b14be6e229c48da575402cdeaa05d7a17b35ea8cae01009e8d40",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "8a404a03708d91c580e60c41c1e4628bd8753c6c89c74cc6dfb46dd6c55f1462",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "2f00dd92ad50ff9b483f6ec57659889832cd49419857ec9e789e7f439b03eeb1",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-dashboard-race.ts",
+              "type"  : "file",
+              "digest": "d42e792fe3b247ab29dd9be54b58c790d2366d6d15ad8550c8320c9667224c6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.ts",
+              "type"  : "file",
+              "digest": "d0af92b3c963f969756aefdb7fa95f8a70916be988200cd5d61648d55fab8aa7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-home.ts",
+              "type"  : "file",
+              "digest": "f69924045540def6085205f563a6c4979fe3738fac9970778aa49cc6ded8cb99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-native-activity.ts",
+              "type"  : "file",
+              "digest": "632a044ce6b94716e090e42d546f15f56fd5f52db14f6df972c5b92e5e5c2e25",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "bb86a31b710a761b8e88f9fcf1b40810a3c6ee10722fb936234f8e776772ea95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-sessions.ts",
+              "type"  : "file",
+              "digest": "90e91b4af5c534410910f8cc7e4e701c190a410f6943f4cc68bab75d7edb686b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.ts",
+              "type"  : "file",
+              "digest": "4f95b6c8443f3acdbdfad274619c67942398fcc4d8aac9ace183d6f946c99e9d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.ts",
+              "type"  : "file",
+              "digest": "3ef00cebaf54f7ceda48cc242eb5ecf1fc180905b2dd3ff1b8a508ce78cd631d",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "002b9f21dca4b4cb87284182b0406286f6c541e1a987853dda91f5dd565bddc3",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "80f486cac3409ae54d67bda2985242e7ed1da529ed9f7ba9cf7b5a5c79964725",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/completion-report.ts",
+              "type"  : "file",
+              "digest": "fcdc2f56a235d26b8b3d457ded94f874eec7c1682d17ac5e9c063e1901ea3c9f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/decomposition.ts",
+              "type"  : "file",
+              "digest": "994a6f45c5145ea957992f814789967b8ba81ad8a8127068dce3abe45bbaa217",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/model-allocation.ts",
+              "type"  : "file",
+              "digest": "efb5879017eb309f8d2914dfc61e53c4947deac7ed9848153fef702e6d028513",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "1896ceb74a17dfd957357fbd8e3e3d17abef07a8e5b13bd986a57011d542b843",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e8dc8b0c7ce6db751bb6720dc9513eb7417eae50ed41557e75b87a5229a45f10",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "30c0c253617b7631c44e424f8fd821e08e5a3c73bf88387c2c5492e24d318848",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "2617815426fa18134ed0dc8334254944c537df2211f32e13dc4b017b07e7b1cf",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6aec5571181e076f0bc0f32b274caf893074c06d9ee645229575685ca32f6643",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/statechart.ts",
+              "type"  : "file",
+              "digest": "465d558bee8857ca3b8ec6eefd6bd8168399170da947e998382dcd93ae2f9a67",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "9516375ab8c2e77bf616b170d242f0bfee48da6416301bd3e704d6703db0a72e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "fb6f423a039cf068dad536f0e5b30f99fb43280146bac80f2469d869ac08134b",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www",
+              "type": "directory"
+            },
+            {
+              "path": "skills/www/www-build",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-build/SKILL.md",
+              "type"  : "file",
+              "digest": "0fdda41c4c60aa18542b29c3f515f49642ff25a7bf54e62eca25f44fdb1e5fa8",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-commit",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-commit/SKILL.md",
+              "type"  : "file",
+              "digest": "1bc4a0ce3157cd533738857b56809d8ea4ea0351228cff51225aaeb93d76ee04",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-design",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4b0b18d19eeef148dc77fab45adfc036333eb146bf786e83b552fef0bcc83a0c",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-diagnose",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-diagnose/SKILL.md",
+              "type"  : "file",
+              "digest": "3678511c0e8bdcee9d69a48919662cb822a3be84ccfba39c9cafd44e4cc8f8ed",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-report",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-spec",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "87ccb5189d28edaf675e5f6af2e340d6eba059043ac42712cdf8e76338ee260a",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-verify",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-verify/SKILL.md",
+              "type"  : "file",
+              "digest": "1e2e3afa16df1ff55b5899df557cc2aff6213884defa57f488969381198a09aa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "source-policy.json",
+              "type"  : "file",
+              "digest": "06ad234ca147201bad0127fa34cedbeda9c21a5524fb061d4d9bdbde039ae7b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "5c0de97ea8f81457aac8f4d13d0a246ea2c8d30793820c9831f09cfa4ae82bb8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-completion-faults.test.ts",
+              "type"  : "file",
+              "digest": "0c2892eaffe54bf82e8c33b9c0138fe38f7d10a9321cbdda78f6725d5f4ada6d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "d8eb8c1459f2b0e1d6b48d092683c516f7b370af72d61f7a1f955630017d7652",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.ts",
+              "type"  : "file",
+              "digest": "d87f9470b9cf99ce19de4decbd1a69b1d0766caaaa1e33af2da282c1a20ba7c1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "1c500b27690f1ac82090054fd90bf75237ba5e42b69ea97f44860a61ec8479d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.tools.json",
+              "type"  : "file",
+              "digest": "43a861f044c589999e471a3c936f161c916ea634013990e8136547d41612ccd5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 76,
+            "digest"         : "9777a80647c68b8bc13dcd097bfb23098450f6b43963611bdbea5a198280d180",
+            "truncated"      : false,
+            "retainedBytes"  : 76,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-2a2d1d28-0c6b-4922-ab87-c3aa22f8d453",
+        "startedAt"  : "2026-11-16T07:49:21.412Z",
+        "completedAt": "2026-11-16T07:49:30.155Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "7053fee7a647ff259ff34e5d6276fda3f7da12e2a949c9a664023ccc07bb891e",
+          "inputs": [
+            "AGENTS.md",
+            "agents/www/AGENT.md",
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/architecture",
+            "docs/skills",
+            "docs/specs/architecture.md",
+            "package.json",
+            "scripts",
+            "skills/www",
+            "source-policy.json",
+            "test/workflow-artifacts.test.ts",
+            "test/workflow-completion-faults.test.ts",
+            "test/workflow-development.test.ts",
+            "test/workflow-work.test.ts",
+            "tsconfig.json",
+            "tsconfig.tools.json"
+          ],
+          "files": [
+            {
+              "path"  : "AGENTS.md",
+              "type"  : "file",
+              "digest": "27f8bfff8c68fa78bb8b20e53d4f341753f943ecd28819f17d86e095bf86f1f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "c9c2f118a26a7484c4c9c629ac25ec06b2e280cd4daef2b4154ac9ccf2cf956d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "ef44b8d2a5ea9e05ec741f94e94cdcb7df59dbf13fda0283aaedf8f80a7b6671",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "5264e6b5ed550ac41005b46b1fc2878f0f401ec58470ac4a4c1c5fb245c65e6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "dcd5f64355b76f91d2cb524ad06485b0de4078211021f3aa730725a084ef5510",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/architecture",
+              "type": "directory"
+            },
+            {
+              "path": "docs/architecture/statecharts",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/architecture/statecharts/development-work.json",
+              "type"  : "file",
+              "digest": "06667bf9628304ce40c264ba372ba0a083d80f62f8629f0848a31743acdb1835",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "4247a762d0ef5ed91db2cd511dba5215bec30e7ec0136dc02f0d2e1b361c14b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/work-output.json",
+              "type"  : "file",
+              "digest": "60cd4a77e169fa70ea12551449c20d8bd6975b45d28eb7fdb526c94c84b04ba2",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "707b9f18418b02125192454b73e1216bcfac66aafa52d024cad03fd2d3a29e47",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/CATALOG.md",
+              "type"  : "file",
+              "digest": "826ca52a8d5af9fe2f601fc361c1c74712580a283d3d125aa692d5bcc0354511",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "0c6808f1d0b6ccb3ced9cbdbf4a470baab618c1bc93a1f6bf90121a8ebe91046",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "c94676ad5da39ea49d3861f625d246a6bf613ed1d96da25102f9fa2257345648",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "5ebf4ef369fe447a512f9d8b9b9bc166ba4112b9fcdb334ad39500ee3e8888ab",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/examples",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/examples/approval-waiting.md",
+              "type"  : "file",
+              "digest": "feb35c4c7b507ef011bda86460c09e7f0c7e831c17acf1379dbda99b6ff12c3c",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/profiles",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/profiles/desktop.md",
+              "type"  : "file",
+              "digest": "c2857bd2823ea7533096da05bee137ec3cf67aaa85079089c93cca39241c1c26",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "45a96438ac2fdc0e7741a1ebdc878dad61e3fa80d6f96fea518a8967c93ae542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "14451a10bdd1278385ec2b906fb483182096ab91837904c9d46328781ceb571f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "e626ede8fe43e24669ff88dbd4a18e6bba7838060e9a7a72e408a0ea358532f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "c9247a7acc174b7884977f5273a6534b94e06693dbcc9953ea68c29b71442e7f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "083e07860b39d900cf318396352b8e429b0db409d4894de35dc1ad9344a8655b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "63ada4b17e605413de2dc77a54bbd94fd0e6d95554b91fe841ab52255e272ef4",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "fd16561a9c5451a564a24253e920eaa5c7126f3f26a9b4809ccb760dcd905bd4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-architecture.ts",
+              "type"  : "file",
+              "digest": "bf40ca9962c3049ef7491c1cb8e1fcf128019ff49770311a2a2e20e35c59fca6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-environment.ts",
+              "type"  : "file",
+              "digest": "05ad73550de9774ded1b7b9dacc047a53bee24376a532d0e8dc1e8601ffd90c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-skill-library.ts",
+              "type"  : "file",
+              "digest": "0e51d546738ac2f9e2a58b389950b3aa21d29d0089208fcfbe731342eef49507",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.ts",
+              "type"  : "file",
+              "digest": "4b8116e52b337e2467dfd013785768c0156c65719f2caa5a16ee20cb7b90338f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "53231d638f7969dba7c51881bcf7af1f4a4d3df6951877feb777c4b0845fae4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/package.json",
+              "type"  : "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/release.ts",
+              "type"  : "file",
+              "digest": "f33d35141e723abb5ce6bec50986862a9bee2c9af339216da40555c620ea1af5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/setup-ci.ts",
+              "type"  : "file",
+              "digest": "29de80de6edd9ea9d47f4321dda978fd9d4d1c62cfef6f88c595df6940b7815b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/source-policy.ts",
+              "type"  : "file",
+              "digest": "09d4b0eae97ca3b0b55015123969c815916672486cc004bfd8d83328506b0705",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "ce7c99a7ef05b14be6e229c48da575402cdeaa05d7a17b35ea8cae01009e8d40",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "8a404a03708d91c580e60c41c1e4628bd8753c6c89c74cc6dfb46dd6c55f1462",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "2f00dd92ad50ff9b483f6ec57659889832cd49419857ec9e789e7f439b03eeb1",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-dashboard-race.ts",
+              "type"  : "file",
+              "digest": "d42e792fe3b247ab29dd9be54b58c790d2366d6d15ad8550c8320c9667224c6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.ts",
+              "type"  : "file",
+              "digest": "d0af92b3c963f969756aefdb7fa95f8a70916be988200cd5d61648d55fab8aa7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-home.ts",
+              "type"  : "file",
+              "digest": "f69924045540def6085205f563a6c4979fe3738fac9970778aa49cc6ded8cb99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-native-activity.ts",
+              "type"  : "file",
+              "digest": "632a044ce6b94716e090e42d546f15f56fd5f52db14f6df972c5b92e5e5c2e25",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "bb86a31b710a761b8e88f9fcf1b40810a3c6ee10722fb936234f8e776772ea95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-sessions.ts",
+              "type"  : "file",
+              "digest": "90e91b4af5c534410910f8cc7e4e701c190a410f6943f4cc68bab75d7edb686b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.ts",
+              "type"  : "file",
+              "digest": "4f95b6c8443f3acdbdfad274619c67942398fcc4d8aac9ace183d6f946c99e9d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.ts",
+              "type"  : "file",
+              "digest": "3ef00cebaf54f7ceda48cc242eb5ecf1fc180905b2dd3ff1b8a508ce78cd631d",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "002b9f21dca4b4cb87284182b0406286f6c541e1a987853dda91f5dd565bddc3",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "80f486cac3409ae54d67bda2985242e7ed1da529ed9f7ba9cf7b5a5c79964725",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/completion-report.ts",
+              "type"  : "file",
+              "digest": "fcdc2f56a235d26b8b3d457ded94f874eec7c1682d17ac5e9c063e1901ea3c9f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/decomposition.ts",
+              "type"  : "file",
+              "digest": "994a6f45c5145ea957992f814789967b8ba81ad8a8127068dce3abe45bbaa217",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/model-allocation.ts",
+              "type"  : "file",
+              "digest": "efb5879017eb309f8d2914dfc61e53c4947deac7ed9848153fef702e6d028513",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "1896ceb74a17dfd957357fbd8e3e3d17abef07a8e5b13bd986a57011d542b843",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e8dc8b0c7ce6db751bb6720dc9513eb7417eae50ed41557e75b87a5229a45f10",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "30c0c253617b7631c44e424f8fd821e08e5a3c73bf88387c2c5492e24d318848",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "2617815426fa18134ed0dc8334254944c537df2211f32e13dc4b017b07e7b1cf",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6aec5571181e076f0bc0f32b274caf893074c06d9ee645229575685ca32f6643",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/statechart.ts",
+              "type"  : "file",
+              "digest": "465d558bee8857ca3b8ec6eefd6bd8168399170da947e998382dcd93ae2f9a67",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "9516375ab8c2e77bf616b170d242f0bfee48da6416301bd3e704d6703db0a72e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "fb6f423a039cf068dad536f0e5b30f99fb43280146bac80f2469d869ac08134b",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www",
+              "type": "directory"
+            },
+            {
+              "path": "skills/www/www-build",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-build/SKILL.md",
+              "type"  : "file",
+              "digest": "0fdda41c4c60aa18542b29c3f515f49642ff25a7bf54e62eca25f44fdb1e5fa8",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-commit",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-commit/SKILL.md",
+              "type"  : "file",
+              "digest": "1bc4a0ce3157cd533738857b56809d8ea4ea0351228cff51225aaeb93d76ee04",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-design",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4b0b18d19eeef148dc77fab45adfc036333eb146bf786e83b552fef0bcc83a0c",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-diagnose",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-diagnose/SKILL.md",
+              "type"  : "file",
+              "digest": "3678511c0e8bdcee9d69a48919662cb822a3be84ccfba39c9cafd44e4cc8f8ed",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-report",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-spec",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "87ccb5189d28edaf675e5f6af2e340d6eba059043ac42712cdf8e76338ee260a",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-verify",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-verify/SKILL.md",
+              "type"  : "file",
+              "digest": "1e2e3afa16df1ff55b5899df557cc2aff6213884defa57f488969381198a09aa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "source-policy.json",
+              "type"  : "file",
+              "digest": "06ad234ca147201bad0127fa34cedbeda9c21a5524fb061d4d9bdbde039ae7b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "5c0de97ea8f81457aac8f4d13d0a246ea2c8d30793820c9831f09cfa4ae82bb8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-completion-faults.test.ts",
+              "type"  : "file",
+              "digest": "0c2892eaffe54bf82e8c33b9c0138fe38f7d10a9321cbdda78f6725d5f4ada6d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "d8eb8c1459f2b0e1d6b48d092683c516f7b370af72d61f7a1f955630017d7652",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.ts",
+              "type"  : "file",
+              "digest": "d87f9470b9cf99ce19de4decbd1a69b1d0766caaaa1e33af2da282c1a20ba7c1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "1c500b27690f1ac82090054fd90bf75237ba5e42b69ea97f44860a61ec8479d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.tools.json",
+              "type"  : "file",
+              "digest": "43a861f044c589999e471a3c936f161c916ea634013990e8136547d41612ccd5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "check:source"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 119,
+            "digest"         : "af57e92f61178f7faadbdac7c98d7b6b92e66703d4817198ffe9463f36faacc0",
+            "truncated"      : false,
+            "retainedBytes"  : 119,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-fd8db2c2-df92-496f-8e9b-72c58a9fde2c",
+        "startedAt"  : "2026-11-16T07:49:32.104Z",
+        "completedAt": "2026-11-16T07:49:39.173Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "7053fee7a647ff259ff34e5d6276fda3f7da12e2a949c9a664023ccc07bb891e",
+          "inputs": [
+            "AGENTS.md",
+            "agents/www/AGENT.md",
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/architecture",
+            "docs/skills",
+            "docs/specs/architecture.md",
+            "package.json",
+            "scripts",
+            "skills/www",
+            "source-policy.json",
+            "test/workflow-artifacts.test.ts",
+            "test/workflow-completion-faults.test.ts",
+            "test/workflow-development.test.ts",
+            "test/workflow-work.test.ts",
+            "tsconfig.json",
+            "tsconfig.tools.json"
+          ],
+          "files": [
+            {
+              "path"  : "AGENTS.md",
+              "type"  : "file",
+              "digest": "27f8bfff8c68fa78bb8b20e53d4f341753f943ecd28819f17d86e095bf86f1f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "c9c2f118a26a7484c4c9c629ac25ec06b2e280cd4daef2b4154ac9ccf2cf956d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "ef44b8d2a5ea9e05ec741f94e94cdcb7df59dbf13fda0283aaedf8f80a7b6671",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "5264e6b5ed550ac41005b46b1fc2878f0f401ec58470ac4a4c1c5fb245c65e6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "dcd5f64355b76f91d2cb524ad06485b0de4078211021f3aa730725a084ef5510",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/architecture",
+              "type": "directory"
+            },
+            {
+              "path": "docs/architecture/statecharts",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/architecture/statecharts/development-work.json",
+              "type"  : "file",
+              "digest": "06667bf9628304ce40c264ba372ba0a083d80f62f8629f0848a31743acdb1835",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "4247a762d0ef5ed91db2cd511dba5215bec30e7ec0136dc02f0d2e1b361c14b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/work-output.json",
+              "type"  : "file",
+              "digest": "60cd4a77e169fa70ea12551449c20d8bd6975b45d28eb7fdb526c94c84b04ba2",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "707b9f18418b02125192454b73e1216bcfac66aafa52d024cad03fd2d3a29e47",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/CATALOG.md",
+              "type"  : "file",
+              "digest": "826ca52a8d5af9fe2f601fc361c1c74712580a283d3d125aa692d5bcc0354511",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "0c6808f1d0b6ccb3ced9cbdbf4a470baab618c1bc93a1f6bf90121a8ebe91046",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "c94676ad5da39ea49d3861f625d246a6bf613ed1d96da25102f9fa2257345648",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "5ebf4ef369fe447a512f9d8b9b9bc166ba4112b9fcdb334ad39500ee3e8888ab",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/examples",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/examples/approval-waiting.md",
+              "type"  : "file",
+              "digest": "feb35c4c7b507ef011bda86460c09e7f0c7e831c17acf1379dbda99b6ff12c3c",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/profiles",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/profiles/desktop.md",
+              "type"  : "file",
+              "digest": "c2857bd2823ea7533096da05bee137ec3cf67aaa85079089c93cca39241c1c26",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "45a96438ac2fdc0e7741a1ebdc878dad61e3fa80d6f96fea518a8967c93ae542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "14451a10bdd1278385ec2b906fb483182096ab91837904c9d46328781ceb571f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "e626ede8fe43e24669ff88dbd4a18e6bba7838060e9a7a72e408a0ea358532f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "c9247a7acc174b7884977f5273a6534b94e06693dbcc9953ea68c29b71442e7f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "083e07860b39d900cf318396352b8e429b0db409d4894de35dc1ad9344a8655b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "63ada4b17e605413de2dc77a54bbd94fd0e6d95554b91fe841ab52255e272ef4",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "fd16561a9c5451a564a24253e920eaa5c7126f3f26a9b4809ccb760dcd905bd4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-architecture.ts",
+              "type"  : "file",
+              "digest": "bf40ca9962c3049ef7491c1cb8e1fcf128019ff49770311a2a2e20e35c59fca6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-environment.ts",
+              "type"  : "file",
+              "digest": "05ad73550de9774ded1b7b9dacc047a53bee24376a532d0e8dc1e8601ffd90c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-skill-library.ts",
+              "type"  : "file",
+              "digest": "0e51d546738ac2f9e2a58b389950b3aa21d29d0089208fcfbe731342eef49507",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.ts",
+              "type"  : "file",
+              "digest": "4b8116e52b337e2467dfd013785768c0156c65719f2caa5a16ee20cb7b90338f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "53231d638f7969dba7c51881bcf7af1f4a4d3df6951877feb777c4b0845fae4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/package.json",
+              "type"  : "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/release.ts",
+              "type"  : "file",
+              "digest": "f33d35141e723abb5ce6bec50986862a9bee2c9af339216da40555c620ea1af5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/setup-ci.ts",
+              "type"  : "file",
+              "digest": "29de80de6edd9ea9d47f4321dda978fd9d4d1c62cfef6f88c595df6940b7815b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/source-policy.ts",
+              "type"  : "file",
+              "digest": "09d4b0eae97ca3b0b55015123969c815916672486cc004bfd8d83328506b0705",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "ce7c99a7ef05b14be6e229c48da575402cdeaa05d7a17b35ea8cae01009e8d40",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "8a404a03708d91c580e60c41c1e4628bd8753c6c89c74cc6dfb46dd6c55f1462",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "2f00dd92ad50ff9b483f6ec57659889832cd49419857ec9e789e7f439b03eeb1",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-dashboard-race.ts",
+              "type"  : "file",
+              "digest": "d42e792fe3b247ab29dd9be54b58c790d2366d6d15ad8550c8320c9667224c6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.ts",
+              "type"  : "file",
+              "digest": "d0af92b3c963f969756aefdb7fa95f8a70916be988200cd5d61648d55fab8aa7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-home.ts",
+              "type"  : "file",
+              "digest": "f69924045540def6085205f563a6c4979fe3738fac9970778aa49cc6ded8cb99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-native-activity.ts",
+              "type"  : "file",
+              "digest": "632a044ce6b94716e090e42d546f15f56fd5f52db14f6df972c5b92e5e5c2e25",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "bb86a31b710a761b8e88f9fcf1b40810a3c6ee10722fb936234f8e776772ea95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-sessions.ts",
+              "type"  : "file",
+              "digest": "90e91b4af5c534410910f8cc7e4e701c190a410f6943f4cc68bab75d7edb686b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.ts",
+              "type"  : "file",
+              "digest": "4f95b6c8443f3acdbdfad274619c67942398fcc4d8aac9ace183d6f946c99e9d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.ts",
+              "type"  : "file",
+              "digest": "3ef00cebaf54f7ceda48cc242eb5ecf1fc180905b2dd3ff1b8a508ce78cd631d",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "002b9f21dca4b4cb87284182b0406286f6c541e1a987853dda91f5dd565bddc3",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "80f486cac3409ae54d67bda2985242e7ed1da529ed9f7ba9cf7b5a5c79964725",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/completion-report.ts",
+              "type"  : "file",
+              "digest": "fcdc2f56a235d26b8b3d457ded94f874eec7c1682d17ac5e9c063e1901ea3c9f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/decomposition.ts",
+              "type"  : "file",
+              "digest": "994a6f45c5145ea957992f814789967b8ba81ad8a8127068dce3abe45bbaa217",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/model-allocation.ts",
+              "type"  : "file",
+              "digest": "efb5879017eb309f8d2914dfc61e53c4947deac7ed9848153fef702e6d028513",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "1896ceb74a17dfd957357fbd8e3e3d17abef07a8e5b13bd986a57011d542b843",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e8dc8b0c7ce6db751bb6720dc9513eb7417eae50ed41557e75b87a5229a45f10",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "30c0c253617b7631c44e424f8fd821e08e5a3c73bf88387c2c5492e24d318848",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "2617815426fa18134ed0dc8334254944c537df2211f32e13dc4b017b07e7b1cf",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6aec5571181e076f0bc0f32b274caf893074c06d9ee645229575685ca32f6643",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/statechart.ts",
+              "type"  : "file",
+              "digest": "465d558bee8857ca3b8ec6eefd6bd8168399170da947e998382dcd93ae2f9a67",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "9516375ab8c2e77bf616b170d242f0bfee48da6416301bd3e704d6703db0a72e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "fb6f423a039cf068dad536f0e5b30f99fb43280146bac80f2469d869ac08134b",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www",
+              "type": "directory"
+            },
+            {
+              "path": "skills/www/www-build",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-build/SKILL.md",
+              "type"  : "file",
+              "digest": "0fdda41c4c60aa18542b29c3f515f49642ff25a7bf54e62eca25f44fdb1e5fa8",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-commit",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-commit/SKILL.md",
+              "type"  : "file",
+              "digest": "1bc4a0ce3157cd533738857b56809d8ea4ea0351228cff51225aaeb93d76ee04",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-design",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4b0b18d19eeef148dc77fab45adfc036333eb146bf786e83b552fef0bcc83a0c",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-diagnose",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-diagnose/SKILL.md",
+              "type"  : "file",
+              "digest": "3678511c0e8bdcee9d69a48919662cb822a3be84ccfba39c9cafd44e4cc8f8ed",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-report",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-spec",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "87ccb5189d28edaf675e5f6af2e340d6eba059043ac42712cdf8e76338ee260a",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-verify",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-verify/SKILL.md",
+              "type"  : "file",
+              "digest": "1e2e3afa16df1ff55b5899df557cc2aff6213884defa57f488969381198a09aa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "source-policy.json",
+              "type"  : "file",
+              "digest": "06ad234ca147201bad0127fa34cedbeda9c21a5524fb061d4d9bdbde039ae7b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "5c0de97ea8f81457aac8f4d13d0a246ea2c8d30793820c9831f09cfa4ae82bb8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-completion-faults.test.ts",
+              "type"  : "file",
+              "digest": "0c2892eaffe54bf82e8c33b9c0138fe38f7d10a9321cbdda78f6725d5f4ada6d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "d8eb8c1459f2b0e1d6b48d092683c516f7b370af72d61f7a1f955630017d7652",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.ts",
+              "type"  : "file",
+              "digest": "d87f9470b9cf99ce19de4decbd1a69b1d0766caaaa1e33af2da282c1a20ba7c1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "1c500b27690f1ac82090054fd90bf75237ba5e42b69ea97f44860a61ec8479d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.tools.json",
+              "type"  : "file",
+              "digest": "43a861f044c589999e471a3c936f161c916ea634013990e8136547d41612ccd5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/workflow-artifacts.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 821,
+            "digest"         : "7c40c99c05bbc17ed9b4fa89f9e285c2f50f6c3051ffffeccb6dbf43a28359e8",
+            "truncated"      : false,
+            "retainedBytes"  : 821,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-65422ec9-af4d-447a-853c-c604d041820b",
+        "startedAt"  : "2026-11-16T07:49:41.514Z",
+        "completedAt": "2026-11-16T07:50:04.260Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "7053fee7a647ff259ff34e5d6276fda3f7da12e2a949c9a664023ccc07bb891e",
+          "inputs": [
+            "AGENTS.md",
+            "agents/www/AGENT.md",
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/architecture",
+            "docs/skills",
+            "docs/specs/architecture.md",
+            "package.json",
+            "scripts",
+            "skills/www",
+            "source-policy.json",
+            "test/workflow-artifacts.test.ts",
+            "test/workflow-completion-faults.test.ts",
+            "test/workflow-development.test.ts",
+            "test/workflow-work.test.ts",
+            "tsconfig.json",
+            "tsconfig.tools.json"
+          ],
+          "files": [
+            {
+              "path"  : "AGENTS.md",
+              "type"  : "file",
+              "digest": "27f8bfff8c68fa78bb8b20e53d4f341753f943ecd28819f17d86e095bf86f1f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "c9c2f118a26a7484c4c9c629ac25ec06b2e280cd4daef2b4154ac9ccf2cf956d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "ef44b8d2a5ea9e05ec741f94e94cdcb7df59dbf13fda0283aaedf8f80a7b6671",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "5264e6b5ed550ac41005b46b1fc2878f0f401ec58470ac4a4c1c5fb245c65e6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "dcd5f64355b76f91d2cb524ad06485b0de4078211021f3aa730725a084ef5510",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/architecture",
+              "type": "directory"
+            },
+            {
+              "path": "docs/architecture/statecharts",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/architecture/statecharts/development-work.json",
+              "type"  : "file",
+              "digest": "06667bf9628304ce40c264ba372ba0a083d80f62f8629f0848a31743acdb1835",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "4247a762d0ef5ed91db2cd511dba5215bec30e7ec0136dc02f0d2e1b361c14b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/work-output.json",
+              "type"  : "file",
+              "digest": "60cd4a77e169fa70ea12551449c20d8bd6975b45d28eb7fdb526c94c84b04ba2",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "707b9f18418b02125192454b73e1216bcfac66aafa52d024cad03fd2d3a29e47",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/CATALOG.md",
+              "type"  : "file",
+              "digest": "826ca52a8d5af9fe2f601fc361c1c74712580a283d3d125aa692d5bcc0354511",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "0c6808f1d0b6ccb3ced9cbdbf4a470baab618c1bc93a1f6bf90121a8ebe91046",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "c94676ad5da39ea49d3861f625d246a6bf613ed1d96da25102f9fa2257345648",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "5ebf4ef369fe447a512f9d8b9b9bc166ba4112b9fcdb334ad39500ee3e8888ab",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/examples",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/examples/approval-waiting.md",
+              "type"  : "file",
+              "digest": "feb35c4c7b507ef011bda86460c09e7f0c7e831c17acf1379dbda99b6ff12c3c",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/profiles",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/profiles/desktop.md",
+              "type"  : "file",
+              "digest": "c2857bd2823ea7533096da05bee137ec3cf67aaa85079089c93cca39241c1c26",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "45a96438ac2fdc0e7741a1ebdc878dad61e3fa80d6f96fea518a8967c93ae542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "14451a10bdd1278385ec2b906fb483182096ab91837904c9d46328781ceb571f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "e626ede8fe43e24669ff88dbd4a18e6bba7838060e9a7a72e408a0ea358532f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "c9247a7acc174b7884977f5273a6534b94e06693dbcc9953ea68c29b71442e7f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "083e07860b39d900cf318396352b8e429b0db409d4894de35dc1ad9344a8655b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "63ada4b17e605413de2dc77a54bbd94fd0e6d95554b91fe841ab52255e272ef4",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "fd16561a9c5451a564a24253e920eaa5c7126f3f26a9b4809ccb760dcd905bd4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-architecture.ts",
+              "type"  : "file",
+              "digest": "bf40ca9962c3049ef7491c1cb8e1fcf128019ff49770311a2a2e20e35c59fca6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-environment.ts",
+              "type"  : "file",
+              "digest": "05ad73550de9774ded1b7b9dacc047a53bee24376a532d0e8dc1e8601ffd90c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-skill-library.ts",
+              "type"  : "file",
+              "digest": "0e51d546738ac2f9e2a58b389950b3aa21d29d0089208fcfbe731342eef49507",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.ts",
+              "type"  : "file",
+              "digest": "4b8116e52b337e2467dfd013785768c0156c65719f2caa5a16ee20cb7b90338f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "53231d638f7969dba7c51881bcf7af1f4a4d3df6951877feb777c4b0845fae4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/package.json",
+              "type"  : "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/release.ts",
+              "type"  : "file",
+              "digest": "f33d35141e723abb5ce6bec50986862a9bee2c9af339216da40555c620ea1af5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/setup-ci.ts",
+              "type"  : "file",
+              "digest": "29de80de6edd9ea9d47f4321dda978fd9d4d1c62cfef6f88c595df6940b7815b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/source-policy.ts",
+              "type"  : "file",
+              "digest": "09d4b0eae97ca3b0b55015123969c815916672486cc004bfd8d83328506b0705",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "ce7c99a7ef05b14be6e229c48da575402cdeaa05d7a17b35ea8cae01009e8d40",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "8a404a03708d91c580e60c41c1e4628bd8753c6c89c74cc6dfb46dd6c55f1462",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "2f00dd92ad50ff9b483f6ec57659889832cd49419857ec9e789e7f439b03eeb1",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-dashboard-race.ts",
+              "type"  : "file",
+              "digest": "d42e792fe3b247ab29dd9be54b58c790d2366d6d15ad8550c8320c9667224c6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.ts",
+              "type"  : "file",
+              "digest": "d0af92b3c963f969756aefdb7fa95f8a70916be988200cd5d61648d55fab8aa7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-home.ts",
+              "type"  : "file",
+              "digest": "f69924045540def6085205f563a6c4979fe3738fac9970778aa49cc6ded8cb99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-native-activity.ts",
+              "type"  : "file",
+              "digest": "632a044ce6b94716e090e42d546f15f56fd5f52db14f6df972c5b92e5e5c2e25",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "bb86a31b710a761b8e88f9fcf1b40810a3c6ee10722fb936234f8e776772ea95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-sessions.ts",
+              "type"  : "file",
+              "digest": "90e91b4af5c534410910f8cc7e4e701c190a410f6943f4cc68bab75d7edb686b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.ts",
+              "type"  : "file",
+              "digest": "4f95b6c8443f3acdbdfad274619c67942398fcc4d8aac9ace183d6f946c99e9d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.ts",
+              "type"  : "file",
+              "digest": "3ef00cebaf54f7ceda48cc242eb5ecf1fc180905b2dd3ff1b8a508ce78cd631d",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "002b9f21dca4b4cb87284182b0406286f6c541e1a987853dda91f5dd565bddc3",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "80f486cac3409ae54d67bda2985242e7ed1da529ed9f7ba9cf7b5a5c79964725",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/completion-report.ts",
+              "type"  : "file",
+              "digest": "fcdc2f56a235d26b8b3d457ded94f874eec7c1682d17ac5e9c063e1901ea3c9f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/decomposition.ts",
+              "type"  : "file",
+              "digest": "994a6f45c5145ea957992f814789967b8ba81ad8a8127068dce3abe45bbaa217",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/model-allocation.ts",
+              "type"  : "file",
+              "digest": "efb5879017eb309f8d2914dfc61e53c4947deac7ed9848153fef702e6d028513",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "1896ceb74a17dfd957357fbd8e3e3d17abef07a8e5b13bd986a57011d542b843",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e8dc8b0c7ce6db751bb6720dc9513eb7417eae50ed41557e75b87a5229a45f10",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "30c0c253617b7631c44e424f8fd821e08e5a3c73bf88387c2c5492e24d318848",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "2617815426fa18134ed0dc8334254944c537df2211f32e13dc4b017b07e7b1cf",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6aec5571181e076f0bc0f32b274caf893074c06d9ee645229575685ca32f6643",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/statechart.ts",
+              "type"  : "file",
+              "digest": "465d558bee8857ca3b8ec6eefd6bd8168399170da947e998382dcd93ae2f9a67",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "9516375ab8c2e77bf616b170d242f0bfee48da6416301bd3e704d6703db0a72e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "fb6f423a039cf068dad536f0e5b30f99fb43280146bac80f2469d869ac08134b",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www",
+              "type": "directory"
+            },
+            {
+              "path": "skills/www/www-build",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-build/SKILL.md",
+              "type"  : "file",
+              "digest": "0fdda41c4c60aa18542b29c3f515f49642ff25a7bf54e62eca25f44fdb1e5fa8",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-commit",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-commit/SKILL.md",
+              "type"  : "file",
+              "digest": "1bc4a0ce3157cd533738857b56809d8ea4ea0351228cff51225aaeb93d76ee04",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-design",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4b0b18d19eeef148dc77fab45adfc036333eb146bf786e83b552fef0bcc83a0c",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-diagnose",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-diagnose/SKILL.md",
+              "type"  : "file",
+              "digest": "3678511c0e8bdcee9d69a48919662cb822a3be84ccfba39c9cafd44e4cc8f8ed",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-report",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-spec",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "87ccb5189d28edaf675e5f6af2e340d6eba059043ac42712cdf8e76338ee260a",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-verify",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-verify/SKILL.md",
+              "type"  : "file",
+              "digest": "1e2e3afa16df1ff55b5899df557cc2aff6213884defa57f488969381198a09aa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "source-policy.json",
+              "type"  : "file",
+              "digest": "06ad234ca147201bad0127fa34cedbeda9c21a5524fb061d4d9bdbde039ae7b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "5c0de97ea8f81457aac8f4d13d0a246ea2c8d30793820c9831f09cfa4ae82bb8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-completion-faults.test.ts",
+              "type"  : "file",
+              "digest": "0c2892eaffe54bf82e8c33b9c0138fe38f7d10a9321cbdda78f6725d5f4ada6d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "d8eb8c1459f2b0e1d6b48d092683c516f7b370af72d61f7a1f955630017d7652",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.ts",
+              "type"  : "file",
+              "digest": "d87f9470b9cf99ce19de4decbd1a69b1d0766caaaa1e33af2da282c1a20ba7c1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "1c500b27690f1ac82090054fd90bf75237ba5e42b69ea97f44860a61ec8479d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.tools.json",
+              "type"  : "file",
+              "digest": "43a861f044c589999e471a3c936f161c916ea634013990e8136547d41612ccd5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/workflow-completion-faults.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 1,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 2486,
+            "digest"         : "3e5dff8b70f71de17bcc645210b985848db81c525ce319021ceb8f116e072416",
+            "truncated"      : false,
+            "retainedBytes"  : 2486,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-c3c32406-d895-426c-97df-89370d07876e",
+        "startedAt"  : "2026-11-16T07:52:43.107Z",
+        "completedAt": "2026-11-16T07:53:04.476Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "7053fee7a647ff259ff34e5d6276fda3f7da12e2a949c9a664023ccc07bb891e",
+          "inputs": [
+            "AGENTS.md",
+            "agents/www/AGENT.md",
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/architecture",
+            "docs/skills",
+            "docs/specs/architecture.md",
+            "package.json",
+            "scripts",
+            "skills/www",
+            "source-policy.json",
+            "test/workflow-artifacts.test.ts",
+            "test/workflow-completion-faults.test.ts",
+            "test/workflow-development.test.ts",
+            "test/workflow-work.test.ts",
+            "tsconfig.json",
+            "tsconfig.tools.json"
+          ],
+          "files": [
+            {
+              "path"  : "AGENTS.md",
+              "type"  : "file",
+              "digest": "27f8bfff8c68fa78bb8b20e53d4f341753f943ecd28819f17d86e095bf86f1f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "c9c2f118a26a7484c4c9c629ac25ec06b2e280cd4daef2b4154ac9ccf2cf956d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "ef44b8d2a5ea9e05ec741f94e94cdcb7df59dbf13fda0283aaedf8f80a7b6671",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "5264e6b5ed550ac41005b46b1fc2878f0f401ec58470ac4a4c1c5fb245c65e6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "dcd5f64355b76f91d2cb524ad06485b0de4078211021f3aa730725a084ef5510",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/architecture",
+              "type": "directory"
+            },
+            {
+              "path": "docs/architecture/statecharts",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/architecture/statecharts/development-work.json",
+              "type"  : "file",
+              "digest": "06667bf9628304ce40c264ba372ba0a083d80f62f8629f0848a31743acdb1835",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "4247a762d0ef5ed91db2cd511dba5215bec30e7ec0136dc02f0d2e1b361c14b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/work-output.json",
+              "type"  : "file",
+              "digest": "60cd4a77e169fa70ea12551449c20d8bd6975b45d28eb7fdb526c94c84b04ba2",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "707b9f18418b02125192454b73e1216bcfac66aafa52d024cad03fd2d3a29e47",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/CATALOG.md",
+              "type"  : "file",
+              "digest": "826ca52a8d5af9fe2f601fc361c1c74712580a283d3d125aa692d5bcc0354511",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "0c6808f1d0b6ccb3ced9cbdbf4a470baab618c1bc93a1f6bf90121a8ebe91046",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "c94676ad5da39ea49d3861f625d246a6bf613ed1d96da25102f9fa2257345648",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "5ebf4ef369fe447a512f9d8b9b9bc166ba4112b9fcdb334ad39500ee3e8888ab",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/examples",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/examples/approval-waiting.md",
+              "type"  : "file",
+              "digest": "feb35c4c7b507ef011bda86460c09e7f0c7e831c17acf1379dbda99b6ff12c3c",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/profiles",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/profiles/desktop.md",
+              "type"  : "file",
+              "digest": "c2857bd2823ea7533096da05bee137ec3cf67aaa85079089c93cca39241c1c26",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "45a96438ac2fdc0e7741a1ebdc878dad61e3fa80d6f96fea518a8967c93ae542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "14451a10bdd1278385ec2b906fb483182096ab91837904c9d46328781ceb571f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "e626ede8fe43e24669ff88dbd4a18e6bba7838060e9a7a72e408a0ea358532f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "c9247a7acc174b7884977f5273a6534b94e06693dbcc9953ea68c29b71442e7f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "083e07860b39d900cf318396352b8e429b0db409d4894de35dc1ad9344a8655b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "63ada4b17e605413de2dc77a54bbd94fd0e6d95554b91fe841ab52255e272ef4",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "fd16561a9c5451a564a24253e920eaa5c7126f3f26a9b4809ccb760dcd905bd4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-architecture.ts",
+              "type"  : "file",
+              "digest": "bf40ca9962c3049ef7491c1cb8e1fcf128019ff49770311a2a2e20e35c59fca6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-environment.ts",
+              "type"  : "file",
+              "digest": "05ad73550de9774ded1b7b9dacc047a53bee24376a532d0e8dc1e8601ffd90c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-skill-library.ts",
+              "type"  : "file",
+              "digest": "0e51d546738ac2f9e2a58b389950b3aa21d29d0089208fcfbe731342eef49507",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.ts",
+              "type"  : "file",
+              "digest": "4b8116e52b337e2467dfd013785768c0156c65719f2caa5a16ee20cb7b90338f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "53231d638f7969dba7c51881bcf7af1f4a4d3df6951877feb777c4b0845fae4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/package.json",
+              "type"  : "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/release.ts",
+              "type"  : "file",
+              "digest": "f33d35141e723abb5ce6bec50986862a9bee2c9af339216da40555c620ea1af5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/setup-ci.ts",
+              "type"  : "file",
+              "digest": "29de80de6edd9ea9d47f4321dda978fd9d4d1c62cfef6f88c595df6940b7815b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/source-policy.ts",
+              "type"  : "file",
+              "digest": "09d4b0eae97ca3b0b55015123969c815916672486cc004bfd8d83328506b0705",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "ce7c99a7ef05b14be6e229c48da575402cdeaa05d7a17b35ea8cae01009e8d40",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "8a404a03708d91c580e60c41c1e4628bd8753c6c89c74cc6dfb46dd6c55f1462",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "2f00dd92ad50ff9b483f6ec57659889832cd49419857ec9e789e7f439b03eeb1",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-dashboard-race.ts",
+              "type"  : "file",
+              "digest": "d42e792fe3b247ab29dd9be54b58c790d2366d6d15ad8550c8320c9667224c6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.ts",
+              "type"  : "file",
+              "digest": "d0af92b3c963f969756aefdb7fa95f8a70916be988200cd5d61648d55fab8aa7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-home.ts",
+              "type"  : "file",
+              "digest": "f69924045540def6085205f563a6c4979fe3738fac9970778aa49cc6ded8cb99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-native-activity.ts",
+              "type"  : "file",
+              "digest": "632a044ce6b94716e090e42d546f15f56fd5f52db14f6df972c5b92e5e5c2e25",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "bb86a31b710a761b8e88f9fcf1b40810a3c6ee10722fb936234f8e776772ea95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-sessions.ts",
+              "type"  : "file",
+              "digest": "90e91b4af5c534410910f8cc7e4e701c190a410f6943f4cc68bab75d7edb686b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.ts",
+              "type"  : "file",
+              "digest": "4f95b6c8443f3acdbdfad274619c67942398fcc4d8aac9ace183d6f946c99e9d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.ts",
+              "type"  : "file",
+              "digest": "3ef00cebaf54f7ceda48cc242eb5ecf1fc180905b2dd3ff1b8a508ce78cd631d",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "002b9f21dca4b4cb87284182b0406286f6c541e1a987853dda91f5dd565bddc3",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "80f486cac3409ae54d67bda2985242e7ed1da529ed9f7ba9cf7b5a5c79964725",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/completion-report.ts",
+              "type"  : "file",
+              "digest": "fcdc2f56a235d26b8b3d457ded94f874eec7c1682d17ac5e9c063e1901ea3c9f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/decomposition.ts",
+              "type"  : "file",
+              "digest": "994a6f45c5145ea957992f814789967b8ba81ad8a8127068dce3abe45bbaa217",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/model-allocation.ts",
+              "type"  : "file",
+              "digest": "efb5879017eb309f8d2914dfc61e53c4947deac7ed9848153fef702e6d028513",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "1896ceb74a17dfd957357fbd8e3e3d17abef07a8e5b13bd986a57011d542b843",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e8dc8b0c7ce6db751bb6720dc9513eb7417eae50ed41557e75b87a5229a45f10",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "30c0c253617b7631c44e424f8fd821e08e5a3c73bf88387c2c5492e24d318848",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "2617815426fa18134ed0dc8334254944c537df2211f32e13dc4b017b07e7b1cf",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6aec5571181e076f0bc0f32b274caf893074c06d9ee645229575685ca32f6643",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/statechart.ts",
+              "type"  : "file",
+              "digest": "465d558bee8857ca3b8ec6eefd6bd8168399170da947e998382dcd93ae2f9a67",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "9516375ab8c2e77bf616b170d242f0bfee48da6416301bd3e704d6703db0a72e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "fb6f423a039cf068dad536f0e5b30f99fb43280146bac80f2469d869ac08134b",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www",
+              "type": "directory"
+            },
+            {
+              "path": "skills/www/www-build",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-build/SKILL.md",
+              "type"  : "file",
+              "digest": "0fdda41c4c60aa18542b29c3f515f49642ff25a7bf54e62eca25f44fdb1e5fa8",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-commit",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-commit/SKILL.md",
+              "type"  : "file",
+              "digest": "1bc4a0ce3157cd533738857b56809d8ea4ea0351228cff51225aaeb93d76ee04",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-design",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4b0b18d19eeef148dc77fab45adfc036333eb146bf786e83b552fef0bcc83a0c",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-diagnose",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-diagnose/SKILL.md",
+              "type"  : "file",
+              "digest": "3678511c0e8bdcee9d69a48919662cb822a3be84ccfba39c9cafd44e4cc8f8ed",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-report",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-spec",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "87ccb5189d28edaf675e5f6af2e340d6eba059043ac42712cdf8e76338ee260a",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-verify",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-verify/SKILL.md",
+              "type"  : "file",
+              "digest": "1e2e3afa16df1ff55b5899df557cc2aff6213884defa57f488969381198a09aa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "source-policy.json",
+              "type"  : "file",
+              "digest": "06ad234ca147201bad0127fa34cedbeda9c21a5524fb061d4d9bdbde039ae7b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "5c0de97ea8f81457aac8f4d13d0a246ea2c8d30793820c9831f09cfa4ae82bb8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-completion-faults.test.ts",
+              "type"  : "file",
+              "digest": "0c2892eaffe54bf82e8c33b9c0138fe38f7d10a9321cbdda78f6725d5f4ada6d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "d8eb8c1459f2b0e1d6b48d092683c516f7b370af72d61f7a1f955630017d7652",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.ts",
+              "type"  : "file",
+              "digest": "d87f9470b9cf99ce19de4decbd1a69b1d0766caaaa1e33af2da282c1a20ba7c1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "1c500b27690f1ac82090054fd90bf75237ba5e42b69ea97f44860a61ec8479d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.tools.json",
+              "type"  : "file",
+              "digest": "43a861f044c589999e471a3c936f161c916ea634013990e8136547d41612ccd5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/workflow-completion-faults.test.ts",
+          "--timeout",
+          "30000"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 1012,
+            "digest"         : "1b8899aea167dc64202abdd5ee0a25a2bb1ab4ec03dc48e545668b87a081ebc7",
+            "truncated"      : false,
+            "retainedBytes"  : 1012,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-12443fb9-ab2e-4b62-a223-430f2b3290d8",
+        "startedAt"  : "2026-11-16T07:53:05.624Z",
+        "completedAt": "2026-11-16T07:54:20.782Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "7053fee7a647ff259ff34e5d6276fda3f7da12e2a949c9a664023ccc07bb891e",
+          "inputs": [
+            "AGENTS.md",
+            "agents/www/AGENT.md",
+            "agents/www/review-policy.json",
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/architecture",
+            "docs/skills",
+            "docs/specs/architecture.md",
+            "package.json",
+            "scripts",
+            "skills/www",
+            "source-policy.json",
+            "test/workflow-artifacts.test.ts",
+            "test/workflow-completion-faults.test.ts",
+            "test/workflow-development.test.ts",
+            "test/workflow-work.test.ts",
+            "tsconfig.json",
+            "tsconfig.tools.json"
+          ],
+          "files": [
+            {
+              "path"  : "AGENTS.md",
+              "type"  : "file",
+              "digest": "27f8bfff8c68fa78bb8b20e53d4f341753f943ecd28819f17d86e095bf86f1f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "c9c2f118a26a7484c4c9c629ac25ec06b2e280cd4daef2b4154ac9ccf2cf956d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "agents/www/review-policy.json",
+              "type"  : "file",
+              "digest": "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "ef44b8d2a5ea9e05ec741f94e94cdcb7df59dbf13fda0283aaedf8f80a7b6671",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "5264e6b5ed550ac41005b46b1fc2878f0f401ec58470ac4a4c1c5fb245c65e6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "dcd5f64355b76f91d2cb524ad06485b0de4078211021f3aa730725a084ef5510",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/architecture",
+              "type": "directory"
+            },
+            {
+              "path": "docs/architecture/statecharts",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/architecture/statecharts/development-work.json",
+              "type"  : "file",
+              "digest": "06667bf9628304ce40c264ba372ba0a083d80f62f8629f0848a31743acdb1835",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "4247a762d0ef5ed91db2cd511dba5215bec30e7ec0136dc02f0d2e1b361c14b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/work-output.json",
+              "type"  : "file",
+              "digest": "60cd4a77e169fa70ea12551449c20d8bd6975b45d28eb7fdb526c94c84b04ba2",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "707b9f18418b02125192454b73e1216bcfac66aafa52d024cad03fd2d3a29e47",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/CATALOG.md",
+              "type"  : "file",
+              "digest": "826ca52a8d5af9fe2f601fc361c1c74712580a283d3d125aa692d5bcc0354511",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "0c6808f1d0b6ccb3ced9cbdbf4a470baab618c1bc93a1f6bf90121a8ebe91046",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "c94676ad5da39ea49d3861f625d246a6bf613ed1d96da25102f9fa2257345648",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "5ebf4ef369fe447a512f9d8b9b9bc166ba4112b9fcdb334ad39500ee3e8888ab",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/examples",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/examples/approval-waiting.md",
+              "type"  : "file",
+              "digest": "feb35c4c7b507ef011bda86460c09e7f0c7e831c17acf1379dbda99b6ff12c3c",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/profiles",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/profiles/desktop.md",
+              "type"  : "file",
+              "digest": "c2857bd2823ea7533096da05bee137ec3cf67aaa85079089c93cca39241c1c26",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "45a96438ac2fdc0e7741a1ebdc878dad61e3fa80d6f96fea518a8967c93ae542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "14451a10bdd1278385ec2b906fb483182096ab91837904c9d46328781ceb571f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "e626ede8fe43e24669ff88dbd4a18e6bba7838060e9a7a72e408a0ea358532f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "c9247a7acc174b7884977f5273a6534b94e06693dbcc9953ea68c29b71442e7f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "083e07860b39d900cf318396352b8e429b0db409d4894de35dc1ad9344a8655b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "63ada4b17e605413de2dc77a54bbd94fd0e6d95554b91fe841ab52255e272ef4",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "fd16561a9c5451a564a24253e920eaa5c7126f3f26a9b4809ccb760dcd905bd4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-architecture.ts",
+              "type"  : "file",
+              "digest": "bf40ca9962c3049ef7491c1cb8e1fcf128019ff49770311a2a2e20e35c59fca6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-environment.ts",
+              "type"  : "file",
+              "digest": "05ad73550de9774ded1b7b9dacc047a53bee24376a532d0e8dc1e8601ffd90c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-skill-library.ts",
+              "type"  : "file",
+              "digest": "0e51d546738ac2f9e2a58b389950b3aa21d29d0089208fcfbe731342eef49507",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.ts",
+              "type"  : "file",
+              "digest": "4b8116e52b337e2467dfd013785768c0156c65719f2caa5a16ee20cb7b90338f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "53231d638f7969dba7c51881bcf7af1f4a4d3df6951877feb777c4b0845fae4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/package.json",
+              "type"  : "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/release.ts",
+              "type"  : "file",
+              "digest": "f33d35141e723abb5ce6bec50986862a9bee2c9af339216da40555c620ea1af5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/setup-ci.ts",
+              "type"  : "file",
+              "digest": "29de80de6edd9ea9d47f4321dda978fd9d4d1c62cfef6f88c595df6940b7815b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/source-policy.ts",
+              "type"  : "file",
+              "digest": "09d4b0eae97ca3b0b55015123969c815916672486cc004bfd8d83328506b0705",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "ce7c99a7ef05b14be6e229c48da575402cdeaa05d7a17b35ea8cae01009e8d40",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "8a404a03708d91c580e60c41c1e4628bd8753c6c89c74cc6dfb46dd6c55f1462",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "2f00dd92ad50ff9b483f6ec57659889832cd49419857ec9e789e7f439b03eeb1",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-dashboard-race.ts",
+              "type"  : "file",
+              "digest": "d42e792fe3b247ab29dd9be54b58c790d2366d6d15ad8550c8320c9667224c6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.ts",
+              "type"  : "file",
+              "digest": "d0af92b3c963f969756aefdb7fa95f8a70916be988200cd5d61648d55fab8aa7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-home.ts",
+              "type"  : "file",
+              "digest": "f69924045540def6085205f563a6c4979fe3738fac9970778aa49cc6ded8cb99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-native-activity.ts",
+              "type"  : "file",
+              "digest": "632a044ce6b94716e090e42d546f15f56fd5f52db14f6df972c5b92e5e5c2e25",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "bb86a31b710a761b8e88f9fcf1b40810a3c6ee10722fb936234f8e776772ea95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-sessions.ts",
+              "type"  : "file",
+              "digest": "90e91b4af5c534410910f8cc7e4e701c190a410f6943f4cc68bab75d7edb686b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.ts",
+              "type"  : "file",
+              "digest": "4f95b6c8443f3acdbdfad274619c67942398fcc4d8aac9ace183d6f946c99e9d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.ts",
+              "type"  : "file",
+              "digest": "3ef00cebaf54f7ceda48cc242eb5ecf1fc180905b2dd3ff1b8a508ce78cd631d",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "002b9f21dca4b4cb87284182b0406286f6c541e1a987853dda91f5dd565bddc3",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "80f486cac3409ae54d67bda2985242e7ed1da529ed9f7ba9cf7b5a5c79964725",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/completion-report.ts",
+              "type"  : "file",
+              "digest": "fcdc2f56a235d26b8b3d457ded94f874eec7c1682d17ac5e9c063e1901ea3c9f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/decomposition.ts",
+              "type"  : "file",
+              "digest": "994a6f45c5145ea957992f814789967b8ba81ad8a8127068dce3abe45bbaa217",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/model-allocation.ts",
+              "type"  : "file",
+              "digest": "efb5879017eb309f8d2914dfc61e53c4947deac7ed9848153fef702e6d028513",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "1896ceb74a17dfd957357fbd8e3e3d17abef07a8e5b13bd986a57011d542b843",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e8dc8b0c7ce6db751bb6720dc9513eb7417eae50ed41557e75b87a5229a45f10",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "30c0c253617b7631c44e424f8fd821e08e5a3c73bf88387c2c5492e24d318848",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "2617815426fa18134ed0dc8334254944c537df2211f32e13dc4b017b07e7b1cf",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6aec5571181e076f0bc0f32b274caf893074c06d9ee645229575685ca32f6643",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/statechart.ts",
+              "type"  : "file",
+              "digest": "465d558bee8857ca3b8ec6eefd6bd8168399170da947e998382dcd93ae2f9a67",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "9516375ab8c2e77bf616b170d242f0bfee48da6416301bd3e704d6703db0a72e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "fb6f423a039cf068dad536f0e5b30f99fb43280146bac80f2469d869ac08134b",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www",
+              "type": "directory"
+            },
+            {
+              "path": "skills/www/www-build",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-build/SKILL.md",
+              "type"  : "file",
+              "digest": "0fdda41c4c60aa18542b29c3f515f49642ff25a7bf54e62eca25f44fdb1e5fa8",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-commit",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-commit/SKILL.md",
+              "type"  : "file",
+              "digest": "1bc4a0ce3157cd533738857b56809d8ea4ea0351228cff51225aaeb93d76ee04",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-design",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4b0b18d19eeef148dc77fab45adfc036333eb146bf786e83b552fef0bcc83a0c",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-diagnose",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-diagnose/SKILL.md",
+              "type"  : "file",
+              "digest": "3678511c0e8bdcee9d69a48919662cb822a3be84ccfba39c9cafd44e4cc8f8ed",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-report",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-spec",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "87ccb5189d28edaf675e5f6af2e340d6eba059043ac42712cdf8e76338ee260a",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-verify",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-verify/SKILL.md",
+              "type"  : "file",
+              "digest": "1e2e3afa16df1ff55b5899df557cc2aff6213884defa57f488969381198a09aa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "source-policy.json",
+              "type"  : "file",
+              "digest": "06ad234ca147201bad0127fa34cedbeda9c21a5524fb061d4d9bdbde039ae7b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "5c0de97ea8f81457aac8f4d13d0a246ea2c8d30793820c9831f09cfa4ae82bb8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-completion-faults.test.ts",
+              "type"  : "file",
+              "digest": "0c2892eaffe54bf82e8c33b9c0138fe38f7d10a9321cbdda78f6725d5f4ada6d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "d8eb8c1459f2b0e1d6b48d092683c516f7b370af72d61f7a1f955630017d7652",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.ts",
+              "type"  : "file",
+              "digest": "d87f9470b9cf99ce19de4decbd1a69b1d0766caaaa1e33af2da282c1a20ba7c1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "1c500b27690f1ac82090054fd90bf75237ba5e42b69ea97f44860a61ec8479d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.tools.json",
+              "type"  : "file",
+              "digest": "43a861f044c589999e471a3c936f161c916ea634013990e8136547d41612ccd5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--test",
+          "test/workflow-development.test.ts",
+          "test/workflow-work.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 20112,
+            "digest"         : "b8a17fe8877219e867653396a4efea4e23a04f55cde28a37c4ffd1dac30f41ea",
+            "truncated"      : false,
+            "retainedBytes"  : 20112,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
       }
     ],
     "reviews": [
@@ -3200,6 +7423,167 @@
             ]
           }
         ]
+      },
+      {
+        "id"        : "artifact-a4287365-02b6-4b38-9832-dbcba1e2a9e4",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T07:50:24.467Z",
+        "kind"      : "spec",
+        "depth"     : "full",
+        "summary"   : "현재 재개 문서를 저자가 직접 대조한 산출물 검토다. 실제 검사·독립 승인과 구분한다.",
+        "digest"    : "aa27e8368dd772ade430aa8ecc55f63432cb8a8ae2eba11843d9fff460babe6c",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "원래 포함/제외 범위와 현재 검증·기록만 허용하는 재개 목적을 보존했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 15
+              },
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 34
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "준비→저장→조회→stale와 정본/발견/제공/수용 미확인의 실제 여정을 명시했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 17
+              },
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 36
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "satisfied",
+            "reason": "과거 결과와 현재 결과, test double과 실제 모델 의미 수용, 쓰기와 게시 권한을 구분했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 18
+              },
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 19
+              },
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 34
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "satisfied",
+            "reason": "세 기준의 정의를 보존하고 현재 여정의 기대 결과와 실제 모델 수용 미확인을 구분했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 23
+              },
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 36
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-5bb6497c-5b3d-4211-81fc-70d64db5f94f",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T07:50:25.355Z",
+        "kind"      : "consistency",
+        "depth"     : "full",
+        "summary"   : "현재 재개 문서를 저자가 직접 대조한 산출물 검토다. 실제 검사·독립 승인과 구분한다.",
+        "digest"    : "2387d20beef0f4a47046b682b454336002e9f8ff150eeb9c005057a808af5912",
+        "checks": [
+          {
+            "id"    : "coverage",
+            "result": "satisfied",
+            "reason": "AC-1/2는 artifacts 행동, AC-3은 실제 context/영수증·권한·완료 core 회귀로 연결했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 26
+              },
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 27
+              }
+            ]
+          },
+          {
+            "id"    : "alignment",
+            "result": "satisfied",
+            "reason": "의미 판단은 저자, 형식·지문·증거 현재성은 core라는 기존 설계를 유지하며 이 마감은 제품을 변경하지 않는다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/design.md",
+                "line": 5
+              },
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 28
+              }
+            ]
+          },
+          {
+            "id"    : "terminology",
+            "result": "satisfied",
+            "reason": "작성 검토·실제 테스트·독립 Opus·보고서·업무 수용을 혼용하지 않는다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/design.md",
+                "line": 11
+              },
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 29
+              }
+            ]
+          }
+        ],
+        "coverage": [
+          {
+            "criterionId": "AC-1",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 26
+              }
+            ]
+          },
+          {
+            "criterionId": "AC-2",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 26
+              }
+            ]
+          },
+          {
+            "criterionId": "AC-3",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 27
+              }
+            ]
+          }
+        ]
       }
     ],
     "reportingRequired": true,
@@ -3336,6 +7720,41 @@
             "path"    : "skills/www/www-spec/SKILL.md",
             "decision": "updated",
             "reason"  : "명세 품질 검토 인계를 연결했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-6c06790f-14a6-4673-9ee4-576542055072",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T07:50:27.178Z",
+        "sourceDigest"   : "7053fee7a647ff259ff34e5d6276fda3f7da12e2a949c9a664023ccc07bb891e",
+        "criteriaDigest" : "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "documentsDigest": "f674170cc7152a296d553f38c935feb2c0580e4c05afe3797a897ffccbd739d3",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "현재 개발 artifacts/출처/실행/완료 core 책임을 유지하고 모듈 또는 의존을 변경하지 않는다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "현행 공식 typed CLI와 검증/산출물/출처 action이 현재 소스에 맞게 이미 설명되어 있으며 이번에는 실행 근거만 갱신한다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "이번 마감은 개발 하네스의 기존 기능을 검증·기록하며 제품 기능·사용자 흐름을 변경하지 않는다."
+          },
+          {
+            "path"    : "docs/skills/ARTIFACT_REVIEW.md",
+            "decision": "unchanged",
+            "reason"  : "행 근거·기준별 작업 연결·문서/기준 변경에 따른 stale·hostAcceptance 미확인의 현행 계약을 유지한다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "16:44 현재 인계 교정 이후의 정본을 입력으로 고정하고 권한·검증·독립검토·완료 구분을 그대로 적용한다."
           }
         ]
       }

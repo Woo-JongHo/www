@@ -1,0 +1,486 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-58c85aec-718b-46b1-9e50-331e437f6180",
+  "title"        : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+  "kind"         : "bug",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "PRODUCT",
+      "description": "BoxBox off에서도 제품 직렬화·보고서 테스트와 기본 테스트 실행이 외부 BoxBox 호출 없이 수행되고 모든 기존 제품 시나리오를 보존한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-6ac0a766-7f06-4c7e-9845-19a25bb1afdf",
+          "path"     : "verification.md#attempt-6ac0a766-7f06-4c7e-9845-19a25bb1afdf",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "BOXBOX",
+      "description": "BoxBox 실제 도구 시나리오는 별도 묶음에 보존되며 기본 제품 검사에 섞이지 않고 명시 실행도 off일 때 disabled로 거부한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-6ac0a766-7f06-4c7e-9845-19a25bb1afdf",
+          "path"     : "verification.md#attempt-6ac0a766-7f06-4c7e-9845-19a25bb1afdf",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "REGISTER",
+      "description": "기존 허용 Reports 복합 argv로 현재 소스의 기능·GUI 검증 결과를 같은 Task UUID 기준에 공식 등록하고 현재성을 확인한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "harness-boxbox-separation-20261117",
+    "requestHash": "321eb5db0bfcbc69bfd2a4e34dbd373441c91d9c9d2b4cd4ce0449b87db8c09e",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "test/work-json.test.ts",
+        "test/boxbox/work-json.test.ts",
+        "scripts/test.ts",
+        "test/test-runner.test.ts",
+        "package.json",
+        "docs/DEVELOPMENT.md",
+        "src/architecture.generated.json"
+      ],
+      "mutationSurfaces": [
+        "local_test_tools",
+        "remote_test_tools",
+        "work_verification"
+      ],
+      "verifierCommands": [
+        "[\"bun\",\"test\",\"test/work-json.test.ts\",\"test/test-runner.test.ts\"]",
+        "[\"node\",\"scripts/test.ts\"]",
+        "[\"node\",\"scripts/source-policy.ts\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"npm\",\"run\",\"build\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "321eb5db0bfcbc69bfd2a4e34dbd373441c91d9c9d2b4cd4ce0449b87db8c09e"
+    },
+    "inputs": [
+      "docs/DEVELOPMENT.md",
+      "package.json",
+      "scripts/test.ts",
+      "scripts/verify-reports.ts",
+      "test/boxbox/work-json.test.ts",
+      "test/test-runner.test.ts",
+      "test/work-json.test.ts"
+    ],
+    "nextAction": "verify",
+    "verifications": [
+      {
+        "id"         : "attempt-6ac0a766-7f06-4c7e-9845-19a25bb1afdf",
+        "startedAt"  : "2026-11-17T01:49:13.300Z",
+        "completedAt": "2026-11-17T01:51:39.289Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "66dae320efadd2c2906b0092bb5f4cf0ac0265a4edf80f6373daa35244ad6e4e",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "package.json",
+            "scripts/test.ts",
+            "scripts/verify-reports.ts",
+            "test/boxbox/work-json.test.ts",
+            "test/test-runner.test.ts",
+            "test/work-json.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "4c22b7f8178c1aeca5523459d775c3ad0c15701813ef0cbb056257bf7d25c0d4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "daf6478f0277b8b789bcdb7dc8842f2b84e2e81cfcde72aaadf465ece5d35dc5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "8c717be482f700d75c8416130eaf70135ec4ebd8ecf60fee3477048f5fa9bd30",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "bb86a31b710a761b8e88f9fcf1b40810a3c6ee10722fb936234f8e776772ea95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/boxbox/work-json.test.ts",
+              "type"  : "file",
+              "digest": "0ccb53efbcd13ab89fef7a0f185bc2af3d70c1959adbd3a03266ec4cc35f719a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/test-runner.test.ts",
+              "type"  : "file",
+              "digest": "98494937a38e92b290f155dbc05a806e8ebc2f828292d35fa8c9c3ad09cb09dd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "f66f4f5d1d0b1e8a77989b35bcb30efd5db66c832fbcf657f069d811cdcc0e4c",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "3d075483605e99fa1212e72d97fa5d19645381a93077b4228910401ae568a7b6",
+        "criteriaSnapshot": [
+          {
+            "id"         : "BOXBOX",
+            "description": "BoxBox 실제 도구 시나리오는 별도 묶음에 보존되며 기본 제품 검사에 섞이지 않고 명시 실행도 off일 때 disabled로 거부한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서도 제품 직렬화·보고서 테스트와 기본 테스트 실행이 외부 BoxBox 호출 없이 수행되고 모든 기존 제품 시나리오를 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 허용 Reports 복합 argv로 현재 소스의 기능·GUI 검증 결과를 같은 Task UUID 기준에 공식 등록하고 현재성을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "BOXBOX",
+          "PRODUCT"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 55436,
+            "digest"         : "8fce34982c7431d1ffadbf4b3daf1e59e7ca2444c34a6cdea151823905ac181e",
+            "truncated"      : false,
+            "retainedBytes"  : 55436,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 113896,
+            "digest"         : "6e11a3d0de56c5e0889fd952e817da8144ba2693b80280426f9d14e5f175e281",
+            "truncated"      : true,
+            "retainedBytes"  : 65536,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id"            : "review-1b920e4b-e5ef-4171-80bb-2ba3c75017ea",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "58775e5274a36ac9dee42d99d4814c48f4aaa47eeb1646e8ca3d9a4b5daf6541",
+        "criteriaDigest": "3d075483605e99fa1212e72d97fa5d19645381a93077b4228910401ae568a7b6",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "1b0e12eec8142081ec77b3e2ea5842b678e78f5369d5aceb5ac5d1ca76090a24"
+        },
+        "failure": null,
+        "findings": [
+          "[결함] docs/DEVELOPMENT.md:370 문서와 실제 테스트가 맞지 않습니다. 문서는 `bun test test/work-json.test.ts --timeout 300000`이 v1 28키·86쌍 공개 guide proof, 격리 복사본의 dry-run·Align·재Align·source check, pinned CLI golden bytes 비교를 실행한다고 적고 있습니다. 하지만 이 검사들(AC1·AC2 두 건·AC4)은 모두 test/boxbox/work-json.test.ts:204-462로 옮겨졌습니다. test/work-json.test.ts에는 직렬화·정책·크기 제한·보존을 다루는 제품 테스트 12개(46~278행)만 남아 있습니다. 같은 문서 82행의 'test/boxbox/ 분리' 설명과도 서로 모순됩니다.",
+          "[결함] docs/DEVELOPMENT.md:372는 `node scripts/verify-reports.ts`가 '위 실도구 테스트를 직렬로 실행'하고 '실도구 테스트별 예산은 300초'라고 적고 있습니다. 그러나 scripts/verify-reports.ts:35는 이번 변경 뒤에도 `bun test test/work-json.test.ts`만 실행합니다. 따라서 semantic.log에는 실제 BoxBox CLI 왕복 검사가 더 이상 들어 있지 않습니다. 원격 Reports001~003 정식 등록(attempt-332ffbd0, bec084b9, ea8adeee 등)이 이 축소된 의미 검사로 통과했는데, 문서는 여전히 실도구 검사가 포함된 것처럼 읽힙니다. 증거 범위가 실제보다 넓게 표시되는 문제입니다. 고치는 방법은 둘 중 하나입니다. 370·372행을 '제품 직렬화 검사만 실행하며 BoxBox 실도구 검사는 npm run test:boxbox로 별도 실행(off이면 disabled)'으로 정정하거나, verify-reports가 실도구 검사를 별도로 실행하지 않는다는 한계를 verification.md에 적어야 합니다. design.md의 '앞부분 제품 파일경로 유지 시 충돌하지 않는다'는 판단은 argv 호환성만 다루고, 검사 내용이 줄었다는 점은 다루지 않습니다.",
+          "[정상] scripts/test.ts의 suite 선택은 맞게 동작합니다. 인수는 없거나 `--boxbox` 하나만 허용하고, 나머지는 예외로 거부합니다. 제품 suite는 경로가 `boxbox/`로 시작하는 테스트만 빼고 나머지 .test.ts/.tsx를 모두 고르며, Node 테스트 12개가 하나라도 빠지면 거부합니다. boxbox suite는 bun 대상 파일이 하나도 없으면 거부합니다. test/** 실제 파일 목록과 대조했을 때 하위 디렉터리의 테스트는 test/boxbox/work-json.test.ts 하나뿐이어서, 제품 선택에 새 파일이 잘못 섞이지 않습니다.",
+          "[정상] off와 오류 경계도 맞습니다. 명시 boxbox 실행에서 mode가 off이면 readdir과 run 전에 disabled JSON을 출력하고 exit 2로 끝나므로 성공으로 세지 않습니다. 응답 객체의 tool/command/ok/scope/error/mode 검증, 설정 파일 누락, 절대경로가 아닌 설정, launcher 실패는 모두 예외로 처리되고 최종 exit은 1입니다. 실행기 결과에 signal이 있거나 status가 0이 아니면 다음 그룹을 실행하지 않고 비0으로 끝나며, spawn error는 그대로 던집니다. test/test-runner.test.ts의 9개 테스트가 이 경계들을 주입 방식으로 다룹니다. 제품 suite가 readMode를 호출하지 않는다는 점도 검사합니다.",
+          "[정상] package.json의 test는 `node scripts/test.ts`, test:boxbox는 `node scripts/test.ts --boxbox`이고, check는 계속 npm test(제품 suite)만 실행합니다. 이것은 spec의 '기본은 제품, 명시 실행만 외부 도구 검사' 요구와 일치합니다.",
+          "[참고] test/work-json.test.ts의 test 정의 수(12개)와 test/boxbox/work-json.test.ts의 test 정의 수(4개)는 직접 확인했습니다. 다만 원래 16개 테스트 본문의 byte/SHA 대조(preservation.json)는 직접 재현하지 않았습니다. 이 검토에는 Read/Grep/Glob만 사용할 수 있었고 git diff/show를 실행할 도구가 없어서, HEAD와의 원문 diff는 읽지 못했습니다. 테스트, verifyWork, 원격 readback도 실행하지 않았으며, verification.md에 적힌 실행 결과는 기록된 내용으로만 대조했습니다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-1b920e4b-e5ef-4171-80bb-2ba3c75017ea/opus.json",
+        "startedAt"      : "2026-11-17T02:03:43.052Z",
+        "completedAt"    : "2026-11-17T02:04:51.290Z",
+        "workId"         : "work-58c85aec-718b-46b1-9e50-331e437f6180",
+        "workRequestHash": "321eb5db0bfcbc69bfd2a4e34dbd373441c91d9c9d2b4cd4ce0449b87db8c09e",
+        "recordingRejection": [
+          "review_not_passed"
+        ]
+      },
+      {
+        "id"            : "review-190def3d-3c81-4e86-9110-f293fcceef06",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "965534f6315008dab4a9330a1499ffc610bd15881db8de7e20e16032c024d43b",
+        "criteriaDigest": "3d075483605e99fa1212e72d97fa5d19645381a93077b4228910401ae568a7b6",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "240277afc33eefc8d622e5d8608cceec6db92060857d76c87d4824c934502c1f"
+        },
+        "failure": null,
+        "findings": [
+          "[검토 범위] 이 환경에는 Read/Grep/Glob 도구만 있고 셸 도구가 없어 git diff/show/status를 실행하지 못했다. 따라서 HEAD 원문과의 diff, 그리고 preservation.json에 적힌 16개 테스트 본문의 byte/SHA 대조는 직접 재현하지 않았다. 직접 읽은 파일은 scripts/test.ts, test/test-runner.test.ts, test/boxbox/work-json.test.ts, test/work-json.test.ts(Grep), package.json, docs/DEVELOPMENT.md(Grep), scripts/verify-reports.ts(Grep), test/workflow-environment.test.ts(Grep), 023 spec/design/tasks/verification/work.json이다. 테스트, verifyWork, 원격 readback은 실행하지 않았다. 실행 결과는 기록과 대조만 했다.",
+          "[정상] scripts/test.ts:24-28은 인수를 생략하거나 --boxbox 하나만 받는다. 오타·중복·추가 인수는 예외로 거부하며, 제품 suite로 조용히 바뀌지 않는다. testGroups(30-45)는 제품 suite에서 'boxbox/' 경로만 빼고, Node 목록 12개 중 하나라도 없으면 거부한다. boxbox suite에서 bun 대상이 없을 때도 거부한다. Glob으로 본 test/** 실제 목록에서 하위 디렉터리 테스트는 test/boxbox/work-json.test.ts 하나뿐이다. readdir을 recursive로 바꿔도 새 파일이 제품 suite에 잘못 섞이지 않는다.",
+          "[정상] 명시 boxbox 실행에서 mode가 off이면 scripts/test.ts:70-73이 readdir·run 전에 disabled JSON(executedFiles 0)을 출력하고 2를 반환한다. 비성공이므로 PASS로 세지 않는다. boxboxMode(47-54)는 tool/command/ok/scope/error/mode를 모두 확인하고 fail closed한다. readBoxboxMode(56-64)는 설정 누락, 절대경로가 아닌 설정, spawn 오류·signal·비0 종료·JSON 파싱 실패를 모두 예외로 처리하며 main 경계(89-94)에서 exit 1이 된다. 제품 suite는 readMode를 호출하지 않으므로 BoxBox 설치에 의존하지 않는다. test-runner.test.ts:48-60이 이를 주입 방식으로 검사한다.",
+          "[정상] 실행기 결과에 signal이 있거나 status가 0이 아니면 scripts/test.ts:84가 다음 그룹을 실행하지 않고 비0을 반환한다. spawn error는 83행에서 그대로 던진다. test-runner.test.ts:93-102가 이 경계를 다룬다. 기존 nodeTests Set 선언 형태(19-22)도 유지된다. 그래서 test/workflow-environment.test.ts:150-158의 Node witness가 문자열을 추출하는 계약과 맞는다.",
+          "[정상] 테스트 수를 셌다. test/work-json.test.ts에는 test 정의가 12개(46-278행) 있고 외부 CLI 호출이 없다. test/boxbox/work-json.test.ts에는 AC1, AC2 두 건, AC4로 4개(204-462행)가 있다. sourceRoot는 '../..'로 저장소 루트를 가리키도록 조정됐다(45행). skip/only는 없다.",
+          "[정상] package.json의 test는 'node scripts/test.ts', test:boxbox는 'node scripts/test.ts --boxbox'다. check는 계속 npm test(제품 suite)만 포함한다. spec의 '기본은 제품, 외부 도구 검사는 명시 실행' 요구와 일치한다.",
+          "[보완 확인] 이전 Opus 리뷰(review-1b920e4b)가 지적한 문서 과장은 현재 docs/DEVELOPMENT.md:370·372에서 정정됐다. 370행은 test/work-json.test.ts가 제품 12개만 실행하고 외부 4개는 test:boxbox로 실행한다고 적고, 372행은 verify-reports·semantic.log에 BoxBox 실도구 검사가 포함되지 않는다고 적는다. 이는 scripts/verify-reports.ts:35(bun test test/work-json.test.ts)와 일치한다. 82·84행의 bun test 자동 탐색 차이 안내도 정확하다.",
+          "[참고·비차단] work.json의 PRODUCT/BOXBOX 근거(attempt-6ac0a766)에 기록된 docs/DEVELOPMENT.md digest(4c22b7f8…)는 현재 입력 digest(bf788828…)와 다르다. 따라서 evidence summary의 '현재 적용 가능'은 문서 수정 전 시점의 판정이다. verification.md:55가 이 점을 재평가 대상으로 명시하고 done을 주장하지 않으므로 증거 범위를 넓힌 것은 아니다. 다만 완료 판정 전에 core 현재성 재조회나 새 시도가 필요하다. 또 BOXBOX 기준은 제품 suite 안의 주입형 test-runner 검사와 별도로 기록된 실제 off 명령(disabled-v2.json)으로만 뒷받침된다. BoxBox 실도구 4개 시나리오는 실행되지 않았고, 문서도 그렇게 적고 있다.",
+          "[참고] REGISTER는 work.json에서 unverified 상태이고 evidence가 비어 있다. verification.md:32도 원격 19개 기준 등록 관측을 이 작업의 기준 수용과 구분한다. 과장은 없다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-190def3d-3c81-4e86-9110-f293fcceef06/opus.json",
+        "startedAt"      : "2026-11-17T02:08:01.188Z",
+        "completedAt"    : "2026-11-17T02:08:57.626Z",
+        "workId"         : "work-58c85aec-718b-46b1-9e50-331e437f6180",
+        "workRequestHash": "321eb5db0bfcbc69bfd2a4e34dbd373441c91d9c9d2b4cd4ce0449b87db8c09e"
+      }
+    ],
+    "artifactReviews": [
+      {
+        "id"        : "artifact-94b44395-8d4c-49a9-91f1-def7c8f5c9c7",
+        "version"   : 1,
+        "reviewedAt": "2026-11-17T01:39:19.201Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "Sonnet 사전 지적을 별도 대조 패스에서 확인하고 정확 argv/16시나리오 보존/단일소유/SHA CAS/disabled 비성공 조건을 설계에 보완했다. GUI와 최종감사는 이후 실제 검증한다.",
+        "digest"    : "8bb053168337bef6f54f063202b94092dda0d39b4c3b3e219e8de9604f0ec4c7",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "실제 요청 범위와 제품/외부 분리·기준별 실행·실패/동결/원격 적용 한계를 별도 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/023-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/spec.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "실제 요청 범위와 제품/외부 분리·기준별 실행·실패/동결/원격 적용 한계를 별도 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/023-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/spec.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "satisfied",
+            "reason": "실제 요청 범위와 제품/외부 분리·기준별 실행·실패/동결/원격 적용 한계를 별도 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/023-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/spec.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "satisfied",
+            "reason": "실제 요청 범위와 제품/외부 분리·기준별 실행·실패/동결/원격 적용 한계를 별도 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/023-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/spec.md",
+                "line": 1
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-fb1d969c-88de-403a-86c6-6e0e49504183",
+        "version"   : 1,
+        "reviewedAt": "2026-11-17T01:39:19.309Z",
+        "kind"      : "consistency",
+        "depth"     : "brief",
+        "summary"   : "Sonnet 사전 지적을 별도 대조 패스에서 확인하고 정확 argv/16시나리오 보존/단일소유/SHA CAS/disabled 비성공 조건을 설계에 보완했다. GUI와 최종감사는 이후 실제 검증한다.",
+        "digest"    : "de499ed0c39385e864d2561f5493068d52d2c5bb0a5193bb79e8424d98119eb8",
+        "checks": [
+          {
+            "id"    : "coverage",
+            "result": "satisfied",
+            "reason": "실제 요청 범위와 제품/외부 분리·기준별 실행·실패/동결/원격 적용 한계를 별도 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/023-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/design.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "alignment",
+            "result": "satisfied",
+            "reason": "실제 요청 범위와 제품/외부 분리·기준별 실행·실패/동결/원격 적용 한계를 별도 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/023-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/design.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "terminology",
+            "result": "satisfied",
+            "reason": "실제 요청 범위와 제품/외부 분리·기준별 실행·실패/동결/원격 적용 한계를 별도 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/023-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/design.md",
+                "line": 1
+              }
+            ]
+          }
+        ],
+        "coverage": [
+          {
+            "criterionId": "PRODUCT",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/023-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/tasks.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "criterionId": "BOXBOX",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/023-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/tasks.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "criterionId": "REGISTER",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/023-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/tasks.md",
+                "line": 3
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true,
+    "documentationReviews": [
+      {
+        "id"             : "documentation-07b4467b-abd7-447c-98e6-9ee49dfbfddb",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-17T02:03:24.324Z",
+        "sourceDigest"   : "66dae320efadd2c2906b0092bb5f4cf0ac0265a4edf80f6373daa35244ad6e4e",
+        "criteriaDigest" : "3d075483605e99fa1212e72d97fa5d19645381a93077b4228910401ae568a7b6",
+        "documentsDigest": "6f7f09f3d54c8fea4bb7f92c5f9a64c17485fc88f61a3813d285a86b88eef60f",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "테스트 실행기와 외부 도구 검사 분리이며 제품 목적·런타임 책임·공유 완료 판정과 권한 정책은 유지한다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "기본 제품 검사와 명시 BoxBox suite, off disabled 비성공 및 bun 자동탐색 차이를 기록했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "테스트 실행기와 외부 도구 검사 분리이며 제품 목적·런타임 책임·공유 완료 판정과 권한 정책은 유지한다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "테스트 실행기와 외부 도구 검사 분리이며 제품 목적·런타임 책임·공유 완료 판정과 권한 정책은 유지한다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-4cd02b39-1f08-487d-94fa-6617b7a93daa",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-17T02:07:30.024Z",
+        "sourceDigest"   : "f6a5181c23e7473605bd3f863900551336b767e87c8a7541a936d50d8375a93c",
+        "criteriaDigest" : "3d075483605e99fa1212e72d97fa5d19645381a93077b4228910401ae568a7b6",
+        "documentsDigest": "81b92578997662daf4c921d6183e8a91022ee53d8184f81083a09ba812704b67",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "테스트 실행기와 외부 도구 검사 분리이며 제품 목적·런타임 책임·공유 완료 판정과 권한 정책은 유지한다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "기본 제품 검사와 명시 BoxBox suite, off disabled 비성공 및 bun 자동탐색 차이를 기록했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "테스트 실행기와 외부 도구 검사 분리이며 제품 목적·런타임 책임·공유 완료 판정과 권한 정책은 유지한다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "테스트 실행기와 외부 도구 검사 분리이며 제품 목적·런타임 책임·공유 완료 판정과 권한 정책은 유지한다."
+          }
+        ]
+      }
+    ]
+  }
+}

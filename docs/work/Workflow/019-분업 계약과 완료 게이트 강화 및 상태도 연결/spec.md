@@ -178,3 +178,8 @@ Feature map은 이 작업에서 프로젝트 전체의 기능·책임과 관련 
 - [WWW 공통 계약](../../../skills/WORKFLOW.md), [모델 배분](../../../skills/MODEL_POLICY.md), [구조 계약](../../../specs/architecture.md).
 - [pstack feature](https://github.com/cursor/plugins/blob/main/pstack/skills/poteto-mode/playbooks/feature.md): 분업 전 선행 조건·독립 작업·공유 상태 점검의 참고.
 - [pstack statechart](https://github.com/cursor/plugins/blob/main/pstack/skills/statechart/SKILL.md): 상태 모델·반례와 실제 구현 대응의 참고. 실행 의존성으로 추가하지 않는다.
+
+
+## 2026-11-16 누적 요구 구현 재개
+
+사용자는 누적 작업의 구현·검증과 사용성 개선을 병렬로 진행하도록 직접 요청했다. 이번 요청으로 같은 UUID의 구현 권한과 쓰기·검증 범위를 연결했다. 이전 문서 전용 권한과 전체 레코드 bytes는 `history/before-session-implementation-20261116.json`에 보존한다. 위 과거 권한 설명은 당시 접수 이력이며 현재 권한은 work.json의 workflow.authorization이 소유한다. 기존 수용 기준·증거·검토는 보존하며 새 구현의 현재 통과로 승격하지 않는다.

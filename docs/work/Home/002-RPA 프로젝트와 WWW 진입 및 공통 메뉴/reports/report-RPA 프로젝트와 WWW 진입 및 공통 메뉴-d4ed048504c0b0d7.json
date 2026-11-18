@@ -7933,6 +7933,2190 @@
         "sourceDigest"  : "6fe71a6ea3d5ceda61c4b2ad95f2ba7fbae91e88b9f4c0a699a27e53adc07c2b",
         "criteriaDigest": "79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0"
       }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-5765a493-484a-4936-8a1a-b8bccdf20fe1",
+      "workId"        : "work-4573f7d4-62eb-4e72-9985-62994c1b30a8",
+      "title"         : "RPA 프로젝트와 WWW 진입 및 공통 메뉴",
+      "summary"       : "실패 관찰. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "failed",
+      "createdAt"     : "2026-11-16T06:17:06.297Z",
+      "event"         : "build",
+      "workRecordHash": "ab453706ddb62cd7e770dab7a9c680625af428e15c55d6c69abcbd299f7aecad",
+      "sourceDigest"  : "bbe0509132a0e9865208b67ddb27b5e24f4b35a41514d9850502bc94965c780b",
+      "criteriaDigest": "79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0",
+      "semanticHash"  : "74cb3fdee1e1a9b086e0f9384bc2dfd2dd0219c8580bfacffdb7a2fa3a22e0c0",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "S1",
+            "description": "View Page의 왼쪽 탐색에 RPA(+)와 등록 프로젝트 목록, 별도 단일 WWW 진입점을 실제로 표시한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-532eba15-76a0-465d-9cb6-c7247c2081ce",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-7d5d8f6c-2e93-4bb6-9982-aaccd945974f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1cf117d3-9d87-4150-9dee-f8c9fed159d7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e0ace19e-4a2f-44ae-8690-33f00ed327e7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37abdd46-2212-4b1a-b87c-49e666d81320",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-60763213-d2fc-4200-97c8-7832bcbde25c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a9be6dac-5ec7-4886-8810-66df4669b77b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8a037391-d517-41c7-a583-23079ccdd8a0",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "S2",
+            "description": "RPA 프로젝트 또는 WWW 선택 후 대시보드·대화·생태계·리포트 순서의 공통 메뉴가 선택 대상 범위에서 동작한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-532eba15-76a0-465d-9cb6-c7247c2081ce",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-7d5d8f6c-2e93-4bb6-9982-aaccd945974f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1cf117d3-9d87-4150-9dee-f8c9fed159d7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e0ace19e-4a2f-44ae-8690-33f00ed327e7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37abdd46-2212-4b1a-b87c-49e666d81320",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-60763213-d2fc-4200-97c8-7832bcbde25c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a9be6dac-5ec7-4886-8810-66df4669b77b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8a037391-d517-41c7-a583-23079ccdd8a0",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "S3",
+            "description": "프로젝트 추가·취소·실패와 실행·승인 중 전환 경계의 관찰 및 검증 시나리오를 기록하고 기존 등록 자료를 보존한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-532eba15-76a0-465d-9cb6-c7247c2081ce",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-7d5d8f6c-2e93-4bb6-9982-aaccd945974f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-51a35c29-8442-4e96-be3a-28f290dea6dd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ce75d537-b502-4a91-b2d6-58ec5b35e3f0",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8db57a69-a342-4bb8-8030-f3c54df60bb7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-299e5d23-4d39-4345-bf5a-203d2a94048a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4e20586d-4ca2-4899-ac6a-d54b36e1ebfa",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-2a8b7610-e139-45fc-8dfc-1633b86fb44a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "S4",
+            "description": "이번 직접 구현 요청으로 확대된 권한 안에서 제품 코드·현행 문서·검증을 함께 적용하고, 최초 문서 한정 결정과 미구현 미래 목표는 역사로 구분해 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-1f355f1b-c246-4546-bdcc-92b019464c8a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ec54e66a-9551-4d3f-baa8-e7df7378c88f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1206ba0f-d798-4640-8da9-826504e95f45",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-16429343-ba63-4729-85ba-9ca43389cab3",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5890bc3c-781f-4f1f-9e70-8ec21489801e",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "S5",
+            "description": "프로젝트 선택 전 전체 대시보드 View Page와 선택 후 대상별 대시보드를 구분하고 RPA·WWW 진입 및 돌아가기를 제공한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-532eba15-76a0-465d-9cb6-c7247c2081ce",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-7d5d8f6c-2e93-4bb6-9982-aaccd945974f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1cf117d3-9d87-4150-9dee-f8c9fed159d7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e0ace19e-4a2f-44ae-8690-33f00ed327e7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37abdd46-2212-4b1a-b87c-49e666d81320",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-60763213-d2fc-4200-97c8-7832bcbde25c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a9be6dac-5ec7-4886-8810-66df4669b77b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8a037391-d517-41c7-a583-23079ccdd8a0",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "S6",
+            "description": "사용자가 선택한 독립 Codex 대화 탭 여러 개를 동시에 실행하고 출력·승인·중단·프로젝트 상태를 격리한다. 실행·승인 중 및 초안이 남은 탭 닫기와 마지막 탭 닫기를 차단한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-14433c15-e6d5-47b0-8d8f-b47c984b5f96",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-b0f65c03-afee-4fe7-a145-5ab43ae905ac",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bde236d6-2a0e-4b26-ab9e-d6cd3df0154d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-82d441a7-7db1-4bb1-ae0d-190f3cd6ceaa",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c267f4a8-4104-44d9-aa38-5ab17b56534f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-051ecaf1-b9ca-4b16-b847-82c897c81f75",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-22a84134-dfe4-4110-a5f1-e26d82bebe19",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "S7",
+            "description": "전체·대상별 칸반 대시보드는 실제 work.json의 UUID·상태·차단 이유를 읽기 전용으로 투영하고 빈 결과·부분 수집·오류를 구분한다. 참고 보드의 제안과 실제 제공 범위를 구별한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-a732e75d-d7bc-4147-90f0-4b0a74020a58",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1e4b7132-95e1-45c8-97c1-cecc6c6a9b1e",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9b83c4e6-3498-4f14-a0d0-11170528d1fd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-88d54ab2-31ba-4c40-80af-5e9647fbf7ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9360e174-a318-449f-adec-65e15e570362",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-65983adf-dbe5-41c4-9ea7-d9008449b5a4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9ce4cf20-32d6-423d-a6ae-262cfcf1ee20",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-637f3c8f-8c4f-4afd-83be-4797475b2c08",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "S8",
+            "description": "개발 작업 내부 모델 배분 정책·하네스와 요청/관측/미실행·독립 검토·토큰 효율화 목적을 연결하고, 앱 자동 모델 라우터 미구현과 토큰 절감 미측정을 명시한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-1f355f1b-c246-4546-bdcc-92b019464c8a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ec54e66a-9551-4d3f-baa8-e7df7378c88f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1206ba0f-d798-4640-8da9-826504e95f45",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-16429343-ba63-4729-85ba-9ca43389cab3",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5890bc3c-781f-4f1f-9e70-8ec21489801e",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-ce75d537-b502-4a91-b2d6-58ec5b35e3f0",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:41:49.454Z"
+          },
+          {
+            "id": "attempt-e0ace19e-4a2f-44ae-8690-33f00ed327e7",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:41:52.146Z"
+          },
+          {
+            "id": "attempt-82d441a7-7db1-4bb1-ae0d-190f3cd6ceaa",
+            "command": "node",
+            "args": [
+              "scripts/verify-sessions.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:41:54.645Z"
+          },
+          {
+            "id": "attempt-16429343-ba63-4729-85ba-9ca43389cab3",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import {execFileSync} from 'node:child_process';\nimport {readFile} from 'node:fs/promises';\nimport {readWork} from './scripts/workflow/work.ts';\nimport {captureSource,criteriaDigest} from './scripts/workflow/evidence.ts';\nimport {runReview,validateReview,loadReviewPolicy} from './scripts/workflow/review.ts';\nimport {writeFile} from 'node:fs/promises';\nconst w=await readWork({workId:'work-4573f7d4-62eb-4e72-9985-62994c1b30a8'});\nconst target={criteria:w.record.criteria.filter(c=>['S4','S8'].includes(c.id))};\nconst inputs=['docs/PRODUCT.md','docs/ARCHITECTURE.md','docs/DEVELOPMENT.md','docs/skills/WORKFLOW.md','docs/skills/MODEL_POLICY.md','skills/www/www-build/SKILL.md','skills/www/www-design/SKILL.md','docs/specs/chat.md','docs/specs/dashboard.md','docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/spec.md','src/main.ts','src/native-session.ts','src/renderer.tsx','src/session-api.tsx','scripts/workflow/model-allocation.ts','scripts/workflow/run.ts','test/native-session.test.ts'];\ninputs.push('docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/history/README.md','docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/history/before-implementation-work-record.json');\nconst archived=await readFile('docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/history/before-implementation-work-record.json');\nconst baseline=execFileSync('git',['show','--no-ext-diff','--no-textconv','aa0c3d4363f24109576bbe5bd9c256b90e71139c:docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/work.json']);\nif(!archived.equals(baseline))throw new Error('보존 원본이 Git 기준본과 다릅니다.');\nconsole.log('원래 수용 기준·권한·요청 해시의 전체 바이트가 Git 기준본과 일치합니다.');\nconst source=await captureSource({inputs});const policyInfo=await loadReviewPolicy({root:process.cwd()});const digest=criteriaDigest(target);\nconst review=await runReview({repo:process.cwd(),source,criteriaDigest:digest,policyInfo,allowFallback:false,inputPaths:['.www/session-implementation/home-semantic-contract-scope-2.json',...inputs,w.path.replace(process.cwd()+'/',''),'.www/session-implementation/home-projects-official.json','.www/session-implementation/model-currentness-final-status.json']});\nconst acceptance=validateReview({repo:process.cwd(),policy:policyInfo.policy,policyHash:policyInfo.hash,review,sourceDigest:source.digest,criteriaDigest:digest});\nawait writeFile('.www/session-implementation/home-semantic-contract-review-2.json',JSON.stringify({review,acceptance,scope:target,source},null,2));console.log(JSON.stringify({verdict:review.verdict,findings:review.findings,observedModel:review.observedModel,acceptance,receipt:review.execution}));process.exitCode=acceptance.usable?0:1;"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:42:37.359Z"
+          },
+          {
+            "id": "attempt-37abdd46-2212-4b1a-b87c-49e666d81320",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:50:13.295Z"
+          },
+          {
+            "id": "attempt-5890bc3c-781f-4f1f-9e70-8ec21489801e",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import {readWork} from './scripts/workflow/work.ts';import {captureSource,criteriaDigest} from './scripts/workflow/evidence.ts';import {runReview,validateReview,loadReviewPolicy} from './scripts/workflow/review.ts';import {hashRequest} from './scripts/workflow/route.ts';import {execFileSync} from 'node:child_process';import {readFile,writeFile} from 'node:fs/promises';\nconst w=await readWork({workId:'work-4573f7d4-62eb-4e72-9985-62994c1b30a8'});const request=\"Terra로 감사진행해야지. 이거 계속 막히네, Claude가 없으면 Terra로 ㅐ\";\nconst base='docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/';\nconst archived=await readFile(base+'history/before-implementation-work-record.json');const baseline=execFileSync('git',['show','--no-ext-diff','--no-textconv','aa0c3d4363f24109576bbe5bd9c256b90e71139c:'+base+'work.json']);if(!archived.equals(baseline))throw new Error('보존 원본이 Git 기준본과 다릅니다.');\nconst inputs=[base+'semantic-review-scope.json',base+'spec.md',base+'history/README.md',base+'history/before-implementation-work-record.json','docs/PRODUCT.md','docs/ARCHITECTURE.md','docs/DEVELOPMENT.md','docs/skills/WORKFLOW.md','docs/skills/MODEL_POLICY.md','docs/specs/chat.md','docs/specs/dashboard.md','skills/www/www-build/SKILL.md','skills/www/www-design/SKILL.md','src/main.ts','src/native-session.ts','src/session-api.tsx','scripts/workflow/model-allocation.ts','scripts/workflow/run.ts'];\nconst source=await captureSource({inputs});const policyInfo=await loadReviewPolicy({root:process.cwd()});const digest=criteriaDigest(w.record);\nconst authority={source:'cli_direct_user_request',workId:w.record.id,workRequestHash:w.record.workflow.requestHash,request,requestHash:hashRequest(request),model:'gpt-6.1-terra',stage:'review',sourceDigest:source.digest,criteriaDigest:digest,policyHash:policyInfo.hash};\nconst review=await runReview({repo:process.cwd(),source,criteriaDigest:digest,policyInfo,work:w.record,workPath:w.path,authority,directRequest:{direct:true,request},inputPaths:inputs,allowFallback:true});\nconst acceptance=validateReview({repo:process.cwd(),policy:policyInfo.policy,policyHash:policyInfo.hash,review,sourceDigest:source.digest,criteriaDigest:digest,work:w.record});await writeFile('.www/session-implementation/home-semantic-terra-review.json',JSON.stringify({review,acceptance,source,gitBytesMatched:true},null,2));console.log(JSON.stringify({verdict:review.verdict,observedModel:review.observedModel,findings:review.findings,acceptance,gitBytesMatched:true}));process.exitCode=acceptance.usable?0:1;"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:58:05.265Z"
+          },
+          {
+            "id": "attempt-8db57a69-a342-4bb8-8030-f3c54df60bb7",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:07:23.102Z"
+          },
+          {
+            "id": "attempt-9360e174-a318-449f-adec-65e15e570362",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:07:24.806Z"
+          },
+          {
+            "id": "attempt-65983adf-dbe5-41c4-9ea7-d9008449b5a4",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:44:45.118Z"
+          },
+          {
+            "id": "attempt-299e5d23-4d39-4345-bf5a-203d2a94048a",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:44:47.586Z"
+          },
+          {
+            "id": "attempt-c267f4a8-4104-44d9-aa38-5ab17b56534f",
+            "command": "node",
+            "args": [
+              "scripts/verify-sessions.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:44:52.827Z"
+          },
+          {
+            "id": "attempt-60763213-d2fc-4200-97c8-7832bcbde25c",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:44:55.907Z"
+          },
+          {
+            "id": "attempt-9ce4cf20-32d6-423d-a6ae-262cfcf1ee20",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:06:55.653Z"
+          },
+          {
+            "id": "attempt-4e20586d-4ca2-4899-ac6a-d54b36e1ebfa",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:07:00.100Z"
+          },
+          {
+            "id": "attempt-051ecaf1-b9ca-4b16-b847-82c897c81f75",
+            "command": "node",
+            "args": [
+              "scripts/verify-sessions.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:07:01.470Z"
+          },
+          {
+            "id": "attempt-a9be6dac-5ec7-4886-8810-66df4669b77b",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:07:08.999Z"
+          },
+          {
+            "id": "attempt-22a84134-dfe4-4110-a5f1-e26d82bebe19",
+            "command": "node",
+            "args": [
+              "scripts/verify-sessions.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:12:04.494Z"
+          },
+          {
+            "id": "attempt-2a8b7610-e139-45fc-8dfc-1633b86fb44a",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:12:10.393Z"
+          },
+          {
+            "id": "attempt-8a037391-d517-41c7-a583-23079ccdd8a0",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:12:33.275Z"
+          },
+          {
+            "id": "attempt-637f3c8f-8c4f-4afd-83be-4797475b2c08",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:12:43.179Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-c901e217-5c99-44e0-b167-02e969d22bd3",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-c901e217-5c99-44e0-b167-02e969d22bd3/opus.json",
+            "findings": [
+              "[범위] 셸 명령 대신 Read/Grep/Glob 도구로만 읽었다. 테스트·스크립트는 실행하지 않았다. 읽은 범위: work.json(검증 시도 메타데이터 전체), spec.md, verification.md, src/main.ts(25-164행), src/native-session.ts(470-839행), src/session-registry.ts, src/preload.ts, src/session-api.tsx, src/dashboard.ts, src/renderer.tsx(1095-1174행), scripts/verify-sessions.ts, scripts/verify-chat.ts(일부와 grep), scripts/check-workflow.ts, test/fixtures/sessions-app-server.ts, docs/skills/MODEL_POLICY.md(grep). .www/ 아래 증거 산출물(summary.json, home-final-*.json 등), test/*.test.ts, docs/specs/*.md, PRODUCT/ARCHITECTURE 본문은 읽지 않았다. 도구 읽기 실패는 없었다.",
+              "[결함·증거 범위 확대] S4와 S8이 work.json:73-90, 145-161에서 passed다. 근거 시도는 attempt-1f355f1b와 attempt-ec54e66a 두 개이며 둘 다 `node scripts/check-workflow.ts`다. 그러나 scripts/check-workflow.ts:89-135의 validateRepository는 스킬 SKILL.md 절 제목, 필수 파일 존재, Markdown 로컬 링크, work.json 스키마, UUID 중복, 관계 대상만 검사한다. MODEL_POLICY의 요청/관측/미실행 연결, 제품 자동 라우터 미구현 명시, 토큰 절감 미측정 명시(S8)와 제품 코드·현행 문서·검증의 동시 적용 및 이력 구분(S4)은 검사하지 않는다. MODEL_POLICY.md:13,27,33,41에 해당 문장이 실제로 있지만 이를 확인한 실행 근거가 없다. spec.md:218도 '작성된 문서와 소스 존재만으로 수용 기준 통과를 주장하지 않는다'고 한다. 따라서 구조 검사 종료 코드 0을 내용 기준 통과로 확대했다. documentationReviews(work.json:4795-4886)는 작성자의 자기 기록이고 reviews는 비어 있으므로(work.json:4793) 독립 근거가 되지 않는다.",
+              "[결함·증거 범위 확대] S3('프로젝트 추가·취소·실패')와 S1('RPA(+)')의 통과 근거는 attempt-7d5d8f6c(`scripts/verify-chat.ts`)뿐이다. 그런데 verify-chat.ts와 verify-sessions.ts 어디에도 'RPA 프로젝트 추가' 버튼(renderer.tsx:1130, aria-label='RPA 프로젝트 추가') 클릭, 폴더 선택 성공·취소(null), projects.register 실패(native-session.ts:498)를 실행하는 단계가 없다(grep '프로젝트 추가|폴더 선택|등록·저장에 실패' 결과 없음). main.ts:67-70의 chooseDirectory는 실제 dialog.showOpenDialog를 직접 호출하고 probe 대체 경로도 없어 자동 검증할 수 없는 구조다. spec.md:13의 현행 S3 시나리오는 '폴더 추가 정상 완료·사용자 취소·등록 실패를 확인한다'고 하므로 근거와 주장이 맞지 않는다.",
+              "[결함·증거 범위 확대] S2는 'RPA 또는 WWW 각각에서 대시보드·대화·생태계·리포트 순서와 실제 화면 전환'을 요구한다. verify-chat.ts는 open-current-workspace → target-dashboard → chat-nav와 reports-nav(377행)만 누른다. ecosystem-nav와 dashboard-nav 클릭, 메뉴 순서 단언은 없다(grep 'ecosystem|dashboard-nav' 결과 없음). WWW 대상 진입은 verify-sessions.ts:152-155에서 한 번 확인한다. 하지만 그 시도는 S6에만 연결되고 WWW에서의 공통 메뉴 동작은 확인하지 않는다. 구현(renderer.tsx:1131의 nav 순서 대시보드→대화→생태계→리포트)은 요구와 일치하지만 passed 근거로는 부족하다.",
+              "[확인·이상 없음] S6 구현과 검증은 대체로 일치한다. session-registry.ts:43-70의 (workspaceKey, threadId) 예약/소유 거부, native-session.ts:796-803의 탭 접두 승인 토큰 검사, :819-822의 실행·승인·전환 중 닫기 거부, main.ts:120의 마지막 탭 닫기 거부를 verify-sessions.ts:82-137, 146이 실제 Electron·IPC·별도 PID로 확인한다. 실패한 시도 14433c15 이후 바뀐 파일은 test/fixtures/sessions-app-server.ts뿐이다(digest d0882bb8→187ee1ec). 현재 fixture에서는 검증을 약화한 흔적을 찾지 못했다. 다만 이전 내용을 git diff로 대조하지는 못했다.",
+              "[확인·경미] S7 dashboard.ts는 읽기 전용 O_NOFOLLOW 열기, 심볼릭 링크·하드링크·크기·경로 재확인, coverage(empty/partial/failed/complete) 구분, 중복 UUID 제외를 구현해 기준과 맞는다. S7 근거 중 attempt-a732e75d는 이전 소스(b4a54e…)에서 실행됐지만 같은 명령이 현재 소스 계열(0d2dfc…)에서 다시 통과했으므로(1e4b7132) 문제로 보지 않는다.",
+              "[경미] main.ts:104-105의 unscoped 채널은 sessionId가 없으면 탭이 여러 개여도 기본 세션으로 조용히 보낸다. scoped 경로(main.ts:92)는 이 경우를 거부하므로 두 경로가 일관되지 않는다. 현재 renderer는 SessionApiProvider(session-api.tsx:16-27)로 항상 id를 넘기므로 재현되는 결함은 아니다.",
+              "[참고] 검토 대상 sourceDigest(bd3e70e7…)는 마지막 통과 시도들의 source digest(0d2dfc11…)와 다르다. 파일 목록을 대조하면 차이는 검토 묶음에 docs/skills/WORKFLOW.md가 추가 입력으로 포함된 것으로 보이며, 개별 파일 digest는 마지막 시도와 같다. 다만 이 digest 계산 방식은 직접 확인하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-85f30dc9-e26e-45f1-8264-00e0e285e907",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-85f30dc9-e26e-45f1-8264-00e0e285e907/opus.json",
+            "findings": [
+              "[범위] 셸 명령 없이 Read/Grep 도구로만 읽었고, 테스트와 스크립트는 실행하지 않았다. 읽은 범위는 다음과 같다. home-final-acceptance-map.json, spec.md, verification.md 전체, work.json 1-260행과 grep 결과, home-policy-navigation-official.json, home-semantic-contract-verification-2.json 앞부분, home-final-opus-review.json 앞부분, scripts/verify-home.ts 전체, .www/evidence/home-ui-j9aZLc/summary.json, src/renderer.tsx 1080-1159행, test/native-session.test.ts 155-184행과 370-469행, scripts/verify-chat.ts·test·scripts의 grep 결과다. src/main.ts, native-session.ts, session-registry.ts, dashboard.ts와 docs 본문은 직접 읽지 않았다. 도구 읽기 실패는 없었다(work.json은 크기 제한 때문에 일부만 읽었다).",
+              "[결함·증거 범위 확대] S1은 work.json:18-46에서 passed다. 그러나 spec.md:13의 현행 S1 시나리오인 '등록 RPA가 0개·여러 개인 첫 View Page'의 0개 상태를 실행한 근거가 없다. verify-home.ts:13-14,25,70-73은 probe 작업 폴더 하나를 등록한 상태에서만 RPA 추가 버튼, WWW, open-current-workspace를 확인한다. renderer.tsx:1130의 빈 상태 문구 '등록된 RPA 프로젝트가 없습니다.'와 home-project-list는 scripts/와 test/ 어디에서도 단언하지 않는다(grep 결과 없음). 또한 renderer.tsx:1130에서 RPA 추가 버튼은 `disabled={selectionBlocked || !workspace}`이므로, 0개·무선택 상태에서 추가 진입점이 활성인지가 바로 검증돼야 할 경계다. summary.json의 coverage에도 0개 상태가 범위 밖이라는 한계가 적혀 있지 않다.",
+              "[결함·증거 범위 확대] S5는 work.json:131-158에서 passed다. 그러나 spec.md:17의 '보드 조회만으로 Native를 시작하지 않는지 확인한다'를 검사한 근거가 없다. verify-home.ts는 View Page·대상 대시보드의 가시성과 복귀만 확인하고, Native child 생성 여부나 fixture 호출 수는 확인하지 않는다. test/dashboard.test.ts에도 Native/spawn/child 관련 단언이 없다(grep 결과 없음). '전체 보드와 선택 대상 보드의 범위 구분'도 verify-home.ts:55가 data-testid와 사이드바 이름만 확인하며, 카드 집합이 실제로 대상 범위로 좁혀지는지는 대조하지 않는다.",
+              "[확인] S2의 이전 결함(ecosystem-nav·dashboard-nav 미클릭, 순서 미단언, WWW 미검증)은 해소됐다. verify-home.ts:54-69가 RPA와 WWW 각각에서 네 메뉴의 data-testid 순서를 단언하고, 실제 CDP 포인터로 클릭한 뒤 화면 가시성, aria-current, window.www.workspace() 경로 유지를 확인한다. summary.json의 18개 check와 일치한다. 이 근거는 합성 Native fixture를 쓴다.",
+              "[확인] S3의 이전 결함(추가 성공·취소·실패 미실행)은 해소됐다. test/native-session.test.ts:372-468이 실제 NativeSession·createProjectRegistry로 성공 저장, 취소 null 시 projects-v1.json 바이트·선택·thread 보존, rename 실패 시 원인 보존·이전 선택 유지·재시도 성공을 단언한다. 실행·승인 중 전환 거부는 native-session.test.ts:160-181과 verify-chat.ts:700-703에서 확인한다. acceptance map이 OS 폴더 대화상자를 주입 응답으로 한정한 것도 정확하다.",
+              "[확인] S4/S8은 이제 check-workflow 구조 검사 대신 attempt-16429343의 실제 Opus 의미 검토와 아카이브 바이트 대조(git show 기준본과 Buffer.equals)에 연결돼 있다. 같은 기준의 이전 실패 attempt-1206ba0f도 삭제하지 않고 failed로 남아 있다.",
+              "[참고] 이번 검토 sourceDigest(49a0b3ee…)는 공식 검증 시도의 digest(ccab73de…)와 다르다. 파일 목록을 대조하면 개별 파일 digest는 같고, 차이는 이번 묶음에 docs/skills/WORKFLOW.md가 추가된 것으로 보인다. 또한 verify-home.ts는 source inputs가 아니라 artifact(sha256 969a5b91…)로만 고정된다. digest 계산 방식은 직접 확인하지 않았다.",
+              "[경미] verification.md:66의 attempt-532eba15는 '실행 결과: 실패; 종료 코드 0'과 '소스 유지: 변경 감지'다. work.json에서도 failed로 표시돼 통과 근거로 쓰이지 않으므로 결함으로 보지 않는다."
+            ]
+          },
+          {
+            "id"         : "review-e60d6826-eb53-459f-aa0a-2bc25a8172aa",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-e60d6826-eb53-459f-aa0a-2bc25a8172aa/opus.json",
+            "findings": []
+          }
+        ],
+        "omitted": {
+          "criteria"     : 0,
+          "evidence"     : 0,
+          "verifications": 14,
+          "reviews"      : 0,
+          "arguments"    : 21,
+          "findings"     : 0,
+          "unresolved"   : 3
+        }
+      },
+      "source": {
+        "recordPath"    : "docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/work.json",
+        "workRecordHash": "ab453706ddb62cd7e770dab7a9c680625af428e15c55d6c69abcbd299f7aecad",
+        "sourceDigest"  : "bbe0509132a0e9865208b67ddb27b5e24f4b35a41514d9850502bc94965c780b",
+        "criteriaDigest": "79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-5447d6fa-1a23-41e9-9b75-b37c47793eb8",
+      "workId"        : "work-4573f7d4-62eb-4e72-9985-62994c1b30a8",
+      "title"         : "RPA 프로젝트와 WWW 진입 및 공통 메뉴",
+      "summary"       : "실패 관찰. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "failed",
+      "createdAt"     : "2026-11-16T06:18:18.187Z",
+      "event"         : "build",
+      "workRecordHash": "ab453706ddb62cd7e770dab7a9c680625af428e15c55d6c69abcbd299f7aecad",
+      "sourceDigest"  : "f859b975842ab0ba40518e3a37ab5561e0b68157da6cdc8d4dabbe2bdff3ad2f",
+      "criteriaDigest": "79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0",
+      "semanticHash"  : "7180eccdc14444783931076e229ef481d66580556c12b8403c3ca6bca7f863dd",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "S1",
+            "description": "View Page의 왼쪽 탐색에 RPA(+)와 등록 프로젝트 목록, 별도 단일 WWW 진입점을 실제로 표시한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-532eba15-76a0-465d-9cb6-c7247c2081ce",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-7d5d8f6c-2e93-4bb6-9982-aaccd945974f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1cf117d3-9d87-4150-9dee-f8c9fed159d7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e0ace19e-4a2f-44ae-8690-33f00ed327e7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37abdd46-2212-4b1a-b87c-49e666d81320",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-60763213-d2fc-4200-97c8-7832bcbde25c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a9be6dac-5ec7-4886-8810-66df4669b77b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8a037391-d517-41c7-a583-23079ccdd8a0",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "S2",
+            "description": "RPA 프로젝트 또는 WWW 선택 후 대시보드·대화·생태계·리포트 순서의 공통 메뉴가 선택 대상 범위에서 동작한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-532eba15-76a0-465d-9cb6-c7247c2081ce",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-7d5d8f6c-2e93-4bb6-9982-aaccd945974f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1cf117d3-9d87-4150-9dee-f8c9fed159d7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e0ace19e-4a2f-44ae-8690-33f00ed327e7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37abdd46-2212-4b1a-b87c-49e666d81320",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-60763213-d2fc-4200-97c8-7832bcbde25c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a9be6dac-5ec7-4886-8810-66df4669b77b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8a037391-d517-41c7-a583-23079ccdd8a0",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "S3",
+            "description": "프로젝트 추가·취소·실패와 실행·승인 중 전환 경계의 관찰 및 검증 시나리오를 기록하고 기존 등록 자료를 보존한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-532eba15-76a0-465d-9cb6-c7247c2081ce",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-7d5d8f6c-2e93-4bb6-9982-aaccd945974f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-51a35c29-8442-4e96-be3a-28f290dea6dd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ce75d537-b502-4a91-b2d6-58ec5b35e3f0",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8db57a69-a342-4bb8-8030-f3c54df60bb7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-299e5d23-4d39-4345-bf5a-203d2a94048a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4e20586d-4ca2-4899-ac6a-d54b36e1ebfa",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-2a8b7610-e139-45fc-8dfc-1633b86fb44a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "S4",
+            "description": "이번 직접 구현 요청으로 확대된 권한 안에서 제품 코드·현행 문서·검증을 함께 적용하고, 최초 문서 한정 결정과 미구현 미래 목표는 역사로 구분해 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-1f355f1b-c246-4546-bdcc-92b019464c8a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ec54e66a-9551-4d3f-baa8-e7df7378c88f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1206ba0f-d798-4640-8da9-826504e95f45",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-16429343-ba63-4729-85ba-9ca43389cab3",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5890bc3c-781f-4f1f-9e70-8ec21489801e",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "S5",
+            "description": "프로젝트 선택 전 전체 대시보드 View Page와 선택 후 대상별 대시보드를 구분하고 RPA·WWW 진입 및 돌아가기를 제공한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-532eba15-76a0-465d-9cb6-c7247c2081ce",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-7d5d8f6c-2e93-4bb6-9982-aaccd945974f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1cf117d3-9d87-4150-9dee-f8c9fed159d7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e0ace19e-4a2f-44ae-8690-33f00ed327e7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37abdd46-2212-4b1a-b87c-49e666d81320",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-60763213-d2fc-4200-97c8-7832bcbde25c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a9be6dac-5ec7-4886-8810-66df4669b77b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8a037391-d517-41c7-a583-23079ccdd8a0",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "S6",
+            "description": "사용자가 선택한 독립 Codex 대화 탭 여러 개를 동시에 실행하고 출력·승인·중단·프로젝트 상태를 격리한다. 실행·승인 중 및 초안이 남은 탭 닫기와 마지막 탭 닫기를 차단한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-14433c15-e6d5-47b0-8d8f-b47c984b5f96",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-b0f65c03-afee-4fe7-a145-5ab43ae905ac",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bde236d6-2a0e-4b26-ab9e-d6cd3df0154d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-82d441a7-7db1-4bb1-ae0d-190f3cd6ceaa",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c267f4a8-4104-44d9-aa38-5ab17b56534f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-051ecaf1-b9ca-4b16-b847-82c897c81f75",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-22a84134-dfe4-4110-a5f1-e26d82bebe19",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "S7",
+            "description": "전체·대상별 칸반 대시보드는 실제 work.json의 UUID·상태·차단 이유를 읽기 전용으로 투영하고 빈 결과·부분 수집·오류를 구분한다. 참고 보드의 제안과 실제 제공 범위를 구별한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-a732e75d-d7bc-4147-90f0-4b0a74020a58",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1e4b7132-95e1-45c8-97c1-cecc6c6a9b1e",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9b83c4e6-3498-4f14-a0d0-11170528d1fd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-88d54ab2-31ba-4c40-80af-5e9647fbf7ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9360e174-a318-449f-adec-65e15e570362",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-65983adf-dbe5-41c4-9ea7-d9008449b5a4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9ce4cf20-32d6-423d-a6ae-262cfcf1ee20",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-637f3c8f-8c4f-4afd-83be-4797475b2c08",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "S8",
+            "description": "개발 작업 내부 모델 배분 정책·하네스와 요청/관측/미실행·독립 검토·토큰 효율화 목적을 연결하고, 앱 자동 모델 라우터 미구현과 토큰 절감 미측정을 명시한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-1f355f1b-c246-4546-bdcc-92b019464c8a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ec54e66a-9551-4d3f-baa8-e7df7378c88f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1206ba0f-d798-4640-8da9-826504e95f45",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-16429343-ba63-4729-85ba-9ca43389cab3",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5890bc3c-781f-4f1f-9e70-8ec21489801e",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-ce75d537-b502-4a91-b2d6-58ec5b35e3f0",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:41:49.454Z"
+          },
+          {
+            "id": "attempt-e0ace19e-4a2f-44ae-8690-33f00ed327e7",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:41:52.146Z"
+          },
+          {
+            "id": "attempt-82d441a7-7db1-4bb1-ae0d-190f3cd6ceaa",
+            "command": "node",
+            "args": [
+              "scripts/verify-sessions.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:41:54.645Z"
+          },
+          {
+            "id": "attempt-16429343-ba63-4729-85ba-9ca43389cab3",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import {execFileSync} from 'node:child_process';\nimport {readFile} from 'node:fs/promises';\nimport {readWork} from './scripts/workflow/work.ts';\nimport {captureSource,criteriaDigest} from './scripts/workflow/evidence.ts';\nimport {runReview,validateReview,loadReviewPolicy} from './scripts/workflow/review.ts';\nimport {writeFile} from 'node:fs/promises';\nconst w=await readWork({workId:'work-4573f7d4-62eb-4e72-9985-62994c1b30a8'});\nconst target={criteria:w.record.criteria.filter(c=>['S4','S8'].includes(c.id))};\nconst inputs=['docs/PRODUCT.md','docs/ARCHITECTURE.md','docs/DEVELOPMENT.md','docs/skills/WORKFLOW.md','docs/skills/MODEL_POLICY.md','skills/www/www-build/SKILL.md','skills/www/www-design/SKILL.md','docs/specs/chat.md','docs/specs/dashboard.md','docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/spec.md','src/main.ts','src/native-session.ts','src/renderer.tsx','src/session-api.tsx','scripts/workflow/model-allocation.ts','scripts/workflow/run.ts','test/native-session.test.ts'];\ninputs.push('docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/history/README.md','docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/history/before-implementation-work-record.json');\nconst archived=await readFile('docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/history/before-implementation-work-record.json');\nconst baseline=execFileSync('git',['show','--no-ext-diff','--no-textconv','aa0c3d4363f24109576bbe5bd9c256b90e71139c:docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/work.json']);\nif(!archived.equals(baseline))throw new Error('보존 원본이 Git 기준본과 다릅니다.');\nconsole.log('원래 수용 기준·권한·요청 해시의 전체 바이트가 Git 기준본과 일치합니다.');\nconst source=await captureSource({inputs});const policyInfo=await loadReviewPolicy({root:process.cwd()});const digest=criteriaDigest(target);\nconst review=await runReview({repo:process.cwd(),source,criteriaDigest:digest,policyInfo,allowFallback:false,inputPaths:['.www/session-implementation/home-semantic-contract-scope-2.json',...inputs,w.path.replace(process.cwd()+'/',''),'.www/session-implementation/home-projects-official.json','.www/session-implementation/model-currentness-final-status.json']});\nconst acceptance=validateReview({repo:process.cwd(),policy:policyInfo.policy,policyHash:policyInfo.hash,review,sourceDigest:source.digest,criteriaDigest:digest});\nawait writeFile('.www/session-implementation/home-semantic-contract-review-2.json',JSON.stringify({review,acceptance,scope:target,source},null,2));console.log(JSON.stringify({verdict:review.verdict,findings:review.findings,observedModel:review.observedModel,acceptance,receipt:review.execution}));process.exitCode=acceptance.usable?0:1;"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:42:37.359Z"
+          },
+          {
+            "id": "attempt-37abdd46-2212-4b1a-b87c-49e666d81320",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:50:13.295Z"
+          },
+          {
+            "id": "attempt-5890bc3c-781f-4f1f-9e70-8ec21489801e",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import {readWork} from './scripts/workflow/work.ts';import {captureSource,criteriaDigest} from './scripts/workflow/evidence.ts';import {runReview,validateReview,loadReviewPolicy} from './scripts/workflow/review.ts';import {hashRequest} from './scripts/workflow/route.ts';import {execFileSync} from 'node:child_process';import {readFile,writeFile} from 'node:fs/promises';\nconst w=await readWork({workId:'work-4573f7d4-62eb-4e72-9985-62994c1b30a8'});const request=\"Terra로 감사진행해야지. 이거 계속 막히네, Claude가 없으면 Terra로 ㅐ\";\nconst base='docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/';\nconst archived=await readFile(base+'history/before-implementation-work-record.json');const baseline=execFileSync('git',['show','--no-ext-diff','--no-textconv','aa0c3d4363f24109576bbe5bd9c256b90e71139c:'+base+'work.json']);if(!archived.equals(baseline))throw new Error('보존 원본이 Git 기준본과 다릅니다.');\nconst inputs=[base+'semantic-review-scope.json',base+'spec.md',base+'history/README.md',base+'history/before-implementation-work-record.json','docs/PRODUCT.md','docs/ARCHITECTURE.md','docs/DEVELOPMENT.md','docs/skills/WORKFLOW.md','docs/skills/MODEL_POLICY.md','docs/specs/chat.md','docs/specs/dashboard.md','skills/www/www-build/SKILL.md','skills/www/www-design/SKILL.md','src/main.ts','src/native-session.ts','src/session-api.tsx','scripts/workflow/model-allocation.ts','scripts/workflow/run.ts'];\nconst source=await captureSource({inputs});const policyInfo=await loadReviewPolicy({root:process.cwd()});const digest=criteriaDigest(w.record);\nconst authority={source:'cli_direct_user_request',workId:w.record.id,workRequestHash:w.record.workflow.requestHash,request,requestHash:hashRequest(request),model:'gpt-6.1-terra',stage:'review',sourceDigest:source.digest,criteriaDigest:digest,policyHash:policyInfo.hash};\nconst review=await runReview({repo:process.cwd(),source,criteriaDigest:digest,policyInfo,work:w.record,workPath:w.path,authority,directRequest:{direct:true,request},inputPaths:inputs,allowFallback:true});\nconst acceptance=validateReview({repo:process.cwd(),policy:policyInfo.policy,policyHash:policyInfo.hash,review,sourceDigest:source.digest,criteriaDigest:digest,work:w.record});await writeFile('.www/session-implementation/home-semantic-terra-review.json',JSON.stringify({review,acceptance,source,gitBytesMatched:true},null,2));console.log(JSON.stringify({verdict:review.verdict,observedModel:review.observedModel,findings:review.findings,acceptance,gitBytesMatched:true}));process.exitCode=acceptance.usable?0:1;"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:58:05.265Z"
+          },
+          {
+            "id": "attempt-8db57a69-a342-4bb8-8030-f3c54df60bb7",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:07:23.102Z"
+          },
+          {
+            "id": "attempt-9360e174-a318-449f-adec-65e15e570362",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:07:24.806Z"
+          },
+          {
+            "id": "attempt-65983adf-dbe5-41c4-9ea7-d9008449b5a4",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:44:45.118Z"
+          },
+          {
+            "id": "attempt-299e5d23-4d39-4345-bf5a-203d2a94048a",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:44:47.586Z"
+          },
+          {
+            "id": "attempt-c267f4a8-4104-44d9-aa38-5ab17b56534f",
+            "command": "node",
+            "args": [
+              "scripts/verify-sessions.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:44:52.827Z"
+          },
+          {
+            "id": "attempt-60763213-d2fc-4200-97c8-7832bcbde25c",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:44:55.907Z"
+          },
+          {
+            "id": "attempt-9ce4cf20-32d6-423d-a6ae-262cfcf1ee20",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:06:55.653Z"
+          },
+          {
+            "id": "attempt-4e20586d-4ca2-4899-ac6a-d54b36e1ebfa",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:07:00.100Z"
+          },
+          {
+            "id": "attempt-051ecaf1-b9ca-4b16-b847-82c897c81f75",
+            "command": "node",
+            "args": [
+              "scripts/verify-sessions.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:07:01.470Z"
+          },
+          {
+            "id": "attempt-a9be6dac-5ec7-4886-8810-66df4669b77b",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:07:08.999Z"
+          },
+          {
+            "id": "attempt-22a84134-dfe4-4110-a5f1-e26d82bebe19",
+            "command": "node",
+            "args": [
+              "scripts/verify-sessions.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:12:04.494Z"
+          },
+          {
+            "id": "attempt-2a8b7610-e139-45fc-8dfc-1633b86fb44a",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:12:10.393Z"
+          },
+          {
+            "id": "attempt-8a037391-d517-41c7-a583-23079ccdd8a0",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:12:33.275Z"
+          },
+          {
+            "id": "attempt-637f3c8f-8c4f-4afd-83be-4797475b2c08",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:12:43.179Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-c901e217-5c99-44e0-b167-02e969d22bd3",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-c901e217-5c99-44e0-b167-02e969d22bd3/opus.json",
+            "findings": [
+              "[범위] 셸 명령 대신 Read/Grep/Glob 도구로만 읽었다. 테스트·스크립트는 실행하지 않았다. 읽은 범위: work.json(검증 시도 메타데이터 전체), spec.md, verification.md, src/main.ts(25-164행), src/native-session.ts(470-839행), src/session-registry.ts, src/preload.ts, src/session-api.tsx, src/dashboard.ts, src/renderer.tsx(1095-1174행), scripts/verify-sessions.ts, scripts/verify-chat.ts(일부와 grep), scripts/check-workflow.ts, test/fixtures/sessions-app-server.ts, docs/skills/MODEL_POLICY.md(grep). .www/ 아래 증거 산출물(summary.json, home-final-*.json 등), test/*.test.ts, docs/specs/*.md, PRODUCT/ARCHITECTURE 본문은 읽지 않았다. 도구 읽기 실패는 없었다.",
+              "[결함·증거 범위 확대] S4와 S8이 work.json:73-90, 145-161에서 passed다. 근거 시도는 attempt-1f355f1b와 attempt-ec54e66a 두 개이며 둘 다 `node scripts/check-workflow.ts`다. 그러나 scripts/check-workflow.ts:89-135의 validateRepository는 스킬 SKILL.md 절 제목, 필수 파일 존재, Markdown 로컬 링크, work.json 스키마, UUID 중복, 관계 대상만 검사한다. MODEL_POLICY의 요청/관측/미실행 연결, 제품 자동 라우터 미구현 명시, 토큰 절감 미측정 명시(S8)와 제품 코드·현행 문서·검증의 동시 적용 및 이력 구분(S4)은 검사하지 않는다. MODEL_POLICY.md:13,27,33,41에 해당 문장이 실제로 있지만 이를 확인한 실행 근거가 없다. spec.md:218도 '작성된 문서와 소스 존재만으로 수용 기준 통과를 주장하지 않는다'고 한다. 따라서 구조 검사 종료 코드 0을 내용 기준 통과로 확대했다. documentationReviews(work.json:4795-4886)는 작성자의 자기 기록이고 reviews는 비어 있으므로(work.json:4793) 독립 근거가 되지 않는다.",
+              "[결함·증거 범위 확대] S3('프로젝트 추가·취소·실패')와 S1('RPA(+)')의 통과 근거는 attempt-7d5d8f6c(`scripts/verify-chat.ts`)뿐이다. 그런데 verify-chat.ts와 verify-sessions.ts 어디에도 'RPA 프로젝트 추가' 버튼(renderer.tsx:1130, aria-label='RPA 프로젝트 추가') 클릭, 폴더 선택 성공·취소(null), projects.register 실패(native-session.ts:498)를 실행하는 단계가 없다(grep '프로젝트 추가|폴더 선택|등록·저장에 실패' 결과 없음). main.ts:67-70의 chooseDirectory는 실제 dialog.showOpenDialog를 직접 호출하고 probe 대체 경로도 없어 자동 검증할 수 없는 구조다. spec.md:13의 현행 S3 시나리오는 '폴더 추가 정상 완료·사용자 취소·등록 실패를 확인한다'고 하므로 근거와 주장이 맞지 않는다.",
+              "[결함·증거 범위 확대] S2는 'RPA 또는 WWW 각각에서 대시보드·대화·생태계·리포트 순서와 실제 화면 전환'을 요구한다. verify-chat.ts는 open-current-workspace → target-dashboard → chat-nav와 reports-nav(377행)만 누른다. ecosystem-nav와 dashboard-nav 클릭, 메뉴 순서 단언은 없다(grep 'ecosystem|dashboard-nav' 결과 없음). WWW 대상 진입은 verify-sessions.ts:152-155에서 한 번 확인한다. 하지만 그 시도는 S6에만 연결되고 WWW에서의 공통 메뉴 동작은 확인하지 않는다. 구현(renderer.tsx:1131의 nav 순서 대시보드→대화→생태계→리포트)은 요구와 일치하지만 passed 근거로는 부족하다.",
+              "[확인·이상 없음] S6 구현과 검증은 대체로 일치한다. session-registry.ts:43-70의 (workspaceKey, threadId) 예약/소유 거부, native-session.ts:796-803의 탭 접두 승인 토큰 검사, :819-822의 실행·승인·전환 중 닫기 거부, main.ts:120의 마지막 탭 닫기 거부를 verify-sessions.ts:82-137, 146이 실제 Electron·IPC·별도 PID로 확인한다. 실패한 시도 14433c15 이후 바뀐 파일은 test/fixtures/sessions-app-server.ts뿐이다(digest d0882bb8→187ee1ec). 현재 fixture에서는 검증을 약화한 흔적을 찾지 못했다. 다만 이전 내용을 git diff로 대조하지는 못했다.",
+              "[확인·경미] S7 dashboard.ts는 읽기 전용 O_NOFOLLOW 열기, 심볼릭 링크·하드링크·크기·경로 재확인, coverage(empty/partial/failed/complete) 구분, 중복 UUID 제외를 구현해 기준과 맞는다. S7 근거 중 attempt-a732e75d는 이전 소스(b4a54e…)에서 실행됐지만 같은 명령이 현재 소스 계열(0d2dfc…)에서 다시 통과했으므로(1e4b7132) 문제로 보지 않는다.",
+              "[경미] main.ts:104-105의 unscoped 채널은 sessionId가 없으면 탭이 여러 개여도 기본 세션으로 조용히 보낸다. scoped 경로(main.ts:92)는 이 경우를 거부하므로 두 경로가 일관되지 않는다. 현재 renderer는 SessionApiProvider(session-api.tsx:16-27)로 항상 id를 넘기므로 재현되는 결함은 아니다.",
+              "[참고] 검토 대상 sourceDigest(bd3e70e7…)는 마지막 통과 시도들의 source digest(0d2dfc11…)와 다르다. 파일 목록을 대조하면 차이는 검토 묶음에 docs/skills/WORKFLOW.md가 추가 입력으로 포함된 것으로 보이며, 개별 파일 digest는 마지막 시도와 같다. 다만 이 digest 계산 방식은 직접 확인하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-85f30dc9-e26e-45f1-8264-00e0e285e907",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-85f30dc9-e26e-45f1-8264-00e0e285e907/opus.json",
+            "findings": [
+              "[범위] 셸 명령 없이 Read/Grep 도구로만 읽었고, 테스트와 스크립트는 실행하지 않았다. 읽은 범위는 다음과 같다. home-final-acceptance-map.json, spec.md, verification.md 전체, work.json 1-260행과 grep 결과, home-policy-navigation-official.json, home-semantic-contract-verification-2.json 앞부분, home-final-opus-review.json 앞부분, scripts/verify-home.ts 전체, .www/evidence/home-ui-j9aZLc/summary.json, src/renderer.tsx 1080-1159행, test/native-session.test.ts 155-184행과 370-469행, scripts/verify-chat.ts·test·scripts의 grep 결과다. src/main.ts, native-session.ts, session-registry.ts, dashboard.ts와 docs 본문은 직접 읽지 않았다. 도구 읽기 실패는 없었다(work.json은 크기 제한 때문에 일부만 읽었다).",
+              "[결함·증거 범위 확대] S1은 work.json:18-46에서 passed다. 그러나 spec.md:13의 현행 S1 시나리오인 '등록 RPA가 0개·여러 개인 첫 View Page'의 0개 상태를 실행한 근거가 없다. verify-home.ts:13-14,25,70-73은 probe 작업 폴더 하나를 등록한 상태에서만 RPA 추가 버튼, WWW, open-current-workspace를 확인한다. renderer.tsx:1130의 빈 상태 문구 '등록된 RPA 프로젝트가 없습니다.'와 home-project-list는 scripts/와 test/ 어디에서도 단언하지 않는다(grep 결과 없음). 또한 renderer.tsx:1130에서 RPA 추가 버튼은 `disabled={selectionBlocked || !workspace}`이므로, 0개·무선택 상태에서 추가 진입점이 활성인지가 바로 검증돼야 할 경계다. summary.json의 coverage에도 0개 상태가 범위 밖이라는 한계가 적혀 있지 않다.",
+              "[결함·증거 범위 확대] S5는 work.json:131-158에서 passed다. 그러나 spec.md:17의 '보드 조회만으로 Native를 시작하지 않는지 확인한다'를 검사한 근거가 없다. verify-home.ts는 View Page·대상 대시보드의 가시성과 복귀만 확인하고, Native child 생성 여부나 fixture 호출 수는 확인하지 않는다. test/dashboard.test.ts에도 Native/spawn/child 관련 단언이 없다(grep 결과 없음). '전체 보드와 선택 대상 보드의 범위 구분'도 verify-home.ts:55가 data-testid와 사이드바 이름만 확인하며, 카드 집합이 실제로 대상 범위로 좁혀지는지는 대조하지 않는다.",
+              "[확인] S2의 이전 결함(ecosystem-nav·dashboard-nav 미클릭, 순서 미단언, WWW 미검증)은 해소됐다. verify-home.ts:54-69가 RPA와 WWW 각각에서 네 메뉴의 data-testid 순서를 단언하고, 실제 CDP 포인터로 클릭한 뒤 화면 가시성, aria-current, window.www.workspace() 경로 유지를 확인한다. summary.json의 18개 check와 일치한다. 이 근거는 합성 Native fixture를 쓴다.",
+              "[확인] S3의 이전 결함(추가 성공·취소·실패 미실행)은 해소됐다. test/native-session.test.ts:372-468이 실제 NativeSession·createProjectRegistry로 성공 저장, 취소 null 시 projects-v1.json 바이트·선택·thread 보존, rename 실패 시 원인 보존·이전 선택 유지·재시도 성공을 단언한다. 실행·승인 중 전환 거부는 native-session.test.ts:160-181과 verify-chat.ts:700-703에서 확인한다. acceptance map이 OS 폴더 대화상자를 주입 응답으로 한정한 것도 정확하다.",
+              "[확인] S4/S8은 이제 check-workflow 구조 검사 대신 attempt-16429343의 실제 Opus 의미 검토와 아카이브 바이트 대조(git show 기준본과 Buffer.equals)에 연결돼 있다. 같은 기준의 이전 실패 attempt-1206ba0f도 삭제하지 않고 failed로 남아 있다.",
+              "[참고] 이번 검토 sourceDigest(49a0b3ee…)는 공식 검증 시도의 digest(ccab73de…)와 다르다. 파일 목록을 대조하면 개별 파일 digest는 같고, 차이는 이번 묶음에 docs/skills/WORKFLOW.md가 추가된 것으로 보인다. 또한 verify-home.ts는 source inputs가 아니라 artifact(sha256 969a5b91…)로만 고정된다. digest 계산 방식은 직접 확인하지 않았다.",
+              "[경미] verification.md:66의 attempt-532eba15는 '실행 결과: 실패; 종료 코드 0'과 '소스 유지: 변경 감지'다. work.json에서도 failed로 표시돼 통과 근거로 쓰이지 않으므로 결함으로 보지 않는다."
+            ]
+          },
+          {
+            "id"         : "review-e60d6826-eb53-459f-aa0a-2bc25a8172aa",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-e60d6826-eb53-459f-aa0a-2bc25a8172aa/opus.json",
+            "findings": []
+          }
+        ],
+        "omitted": {
+          "criteria"     : 0,
+          "evidence"     : 0,
+          "verifications": 14,
+          "reviews"      : 0,
+          "arguments"    : 21,
+          "findings"     : 0,
+          "unresolved"   : 3
+        }
+      },
+      "source": {
+        "recordPath"    : "docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/work.json",
+        "workRecordHash": "ab453706ddb62cd7e770dab7a9c680625af428e15c55d6c69abcbd299f7aecad",
+        "sourceDigest"  : "f859b975842ab0ba40518e3a37ab5561e0b68157da6cdc8d4dabbe2bdff3ad2f",
+        "criteriaDigest": "79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-46339a27-ac1f-46d2-8469-3baa94c97ada",
+      "workId"        : "work-4573f7d4-62eb-4e72-9985-62994c1b30a8",
+      "title"         : "RPA 프로젝트와 WWW 진입 및 공통 메뉴",
+      "summary"       : "실패 관찰. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "failed",
+      "createdAt"     : "2026-11-16T06:22:01.803Z",
+      "event"         : "build",
+      "workRecordHash": "ab453706ddb62cd7e770dab7a9c680625af428e15c55d6c69abcbd299f7aecad",
+      "sourceDigest"  : "4455d294cf26427dcab7e9a99c389299417a2b7f546ac8320d2e47e27bd2e6c1",
+      "criteriaDigest": "79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0",
+      "semanticHash"  : "113cb48e6e79abc1d1b4b72ee806472c1a9dff1d4bc5baf7458adf6b295fc1d4",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "S1",
+            "description": "View Page의 왼쪽 탐색에 RPA(+)와 등록 프로젝트 목록, 별도 단일 WWW 진입점을 실제로 표시한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-532eba15-76a0-465d-9cb6-c7247c2081ce",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-7d5d8f6c-2e93-4bb6-9982-aaccd945974f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1cf117d3-9d87-4150-9dee-f8c9fed159d7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e0ace19e-4a2f-44ae-8690-33f00ed327e7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37abdd46-2212-4b1a-b87c-49e666d81320",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-60763213-d2fc-4200-97c8-7832bcbde25c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a9be6dac-5ec7-4886-8810-66df4669b77b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8a037391-d517-41c7-a583-23079ccdd8a0",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "S2",
+            "description": "RPA 프로젝트 또는 WWW 선택 후 대시보드·대화·생태계·리포트 순서의 공통 메뉴가 선택 대상 범위에서 동작한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-532eba15-76a0-465d-9cb6-c7247c2081ce",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-7d5d8f6c-2e93-4bb6-9982-aaccd945974f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1cf117d3-9d87-4150-9dee-f8c9fed159d7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e0ace19e-4a2f-44ae-8690-33f00ed327e7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37abdd46-2212-4b1a-b87c-49e666d81320",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-60763213-d2fc-4200-97c8-7832bcbde25c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a9be6dac-5ec7-4886-8810-66df4669b77b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8a037391-d517-41c7-a583-23079ccdd8a0",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "S3",
+            "description": "프로젝트 추가·취소·실패와 실행·승인 중 전환 경계의 관찰 및 검증 시나리오를 기록하고 기존 등록 자료를 보존한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-532eba15-76a0-465d-9cb6-c7247c2081ce",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-7d5d8f6c-2e93-4bb6-9982-aaccd945974f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-51a35c29-8442-4e96-be3a-28f290dea6dd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ce75d537-b502-4a91-b2d6-58ec5b35e3f0",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8db57a69-a342-4bb8-8030-f3c54df60bb7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-299e5d23-4d39-4345-bf5a-203d2a94048a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4e20586d-4ca2-4899-ac6a-d54b36e1ebfa",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-2a8b7610-e139-45fc-8dfc-1633b86fb44a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "S4",
+            "description": "이번 직접 구현 요청으로 확대된 권한 안에서 제품 코드·현행 문서·검증을 함께 적용하고, 최초 문서 한정 결정과 미구현 미래 목표는 역사로 구분해 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-1f355f1b-c246-4546-bdcc-92b019464c8a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ec54e66a-9551-4d3f-baa8-e7df7378c88f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1206ba0f-d798-4640-8da9-826504e95f45",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-16429343-ba63-4729-85ba-9ca43389cab3",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5890bc3c-781f-4f1f-9e70-8ec21489801e",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "S5",
+            "description": "프로젝트 선택 전 전체 대시보드 View Page와 선택 후 대상별 대시보드를 구분하고 RPA·WWW 진입 및 돌아가기를 제공한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-532eba15-76a0-465d-9cb6-c7247c2081ce",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-7d5d8f6c-2e93-4bb6-9982-aaccd945974f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1cf117d3-9d87-4150-9dee-f8c9fed159d7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e0ace19e-4a2f-44ae-8690-33f00ed327e7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-37abdd46-2212-4b1a-b87c-49e666d81320",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-60763213-d2fc-4200-97c8-7832bcbde25c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a9be6dac-5ec7-4886-8810-66df4669b77b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8a037391-d517-41c7-a583-23079ccdd8a0",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "S6",
+            "description": "사용자가 선택한 독립 Codex 대화 탭 여러 개를 동시에 실행하고 출력·승인·중단·프로젝트 상태를 격리한다. 실행·승인 중 및 초안이 남은 탭 닫기와 마지막 탭 닫기를 차단한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-14433c15-e6d5-47b0-8d8f-b47c984b5f96",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-b0f65c03-afee-4fe7-a145-5ab43ae905ac",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bde236d6-2a0e-4b26-ab9e-d6cd3df0154d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-82d441a7-7db1-4bb1-ae0d-190f3cd6ceaa",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-c267f4a8-4104-44d9-aa38-5ab17b56534f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-051ecaf1-b9ca-4b16-b847-82c897c81f75",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-22a84134-dfe4-4110-a5f1-e26d82bebe19",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "S7",
+            "description": "전체·대상별 칸반 대시보드는 실제 work.json의 UUID·상태·차단 이유를 읽기 전용으로 투영하고 빈 결과·부분 수집·오류를 구분한다. 참고 보드의 제안과 실제 제공 범위를 구별한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-a732e75d-d7bc-4147-90f0-4b0a74020a58",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1e4b7132-95e1-45c8-97c1-cecc6c6a9b1e",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9b83c4e6-3498-4f14-a0d0-11170528d1fd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-88d54ab2-31ba-4c40-80af-5e9647fbf7ad",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9360e174-a318-449f-adec-65e15e570362",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-65983adf-dbe5-41c4-9ea7-d9008449b5a4",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9ce4cf20-32d6-423d-a6ae-262cfcf1ee20",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-637f3c8f-8c4f-4afd-83be-4797475b2c08",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "S8",
+            "description": "개발 작업 내부 모델 배분 정책·하네스와 요청/관측/미실행·독립 검토·토큰 효율화 목적을 연결하고, 앱 자동 모델 라우터 미구현과 토큰 절감 미측정을 명시한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-1f355f1b-c246-4546-bdcc-92b019464c8a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ec54e66a-9551-4d3f-baa8-e7df7378c88f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1206ba0f-d798-4640-8da9-826504e95f45",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-16429343-ba63-4729-85ba-9ca43389cab3",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5890bc3c-781f-4f1f-9e70-8ec21489801e",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-ce75d537-b502-4a91-b2d6-58ec5b35e3f0",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:41:49.454Z"
+          },
+          {
+            "id": "attempt-e0ace19e-4a2f-44ae-8690-33f00ed327e7",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:41:52.146Z"
+          },
+          {
+            "id": "attempt-82d441a7-7db1-4bb1-ae0d-190f3cd6ceaa",
+            "command": "node",
+            "args": [
+              "scripts/verify-sessions.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:41:54.645Z"
+          },
+          {
+            "id": "attempt-16429343-ba63-4729-85ba-9ca43389cab3",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import {execFileSync} from 'node:child_process';\nimport {readFile} from 'node:fs/promises';\nimport {readWork} from './scripts/workflow/work.ts';\nimport {captureSource,criteriaDigest} from './scripts/workflow/evidence.ts';\nimport {runReview,validateReview,loadReviewPolicy} from './scripts/workflow/review.ts';\nimport {writeFile} from 'node:fs/promises';\nconst w=await readWork({workId:'work-4573f7d4-62eb-4e72-9985-62994c1b30a8'});\nconst target={criteria:w.record.criteria.filter(c=>['S4','S8'].includes(c.id))};\nconst inputs=['docs/PRODUCT.md','docs/ARCHITECTURE.md','docs/DEVELOPMENT.md','docs/skills/WORKFLOW.md','docs/skills/MODEL_POLICY.md','skills/www/www-build/SKILL.md','skills/www/www-design/SKILL.md','docs/specs/chat.md','docs/specs/dashboard.md','docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/spec.md','src/main.ts','src/native-session.ts','src/renderer.tsx','src/session-api.tsx','scripts/workflow/model-allocation.ts','scripts/workflow/run.ts','test/native-session.test.ts'];\ninputs.push('docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/history/README.md','docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/history/before-implementation-work-record.json');\nconst archived=await readFile('docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/history/before-implementation-work-record.json');\nconst baseline=execFileSync('git',['show','--no-ext-diff','--no-textconv','aa0c3d4363f24109576bbe5bd9c256b90e71139c:docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/work.json']);\nif(!archived.equals(baseline))throw new Error('보존 원본이 Git 기준본과 다릅니다.');\nconsole.log('원래 수용 기준·권한·요청 해시의 전체 바이트가 Git 기준본과 일치합니다.');\nconst source=await captureSource({inputs});const policyInfo=await loadReviewPolicy({root:process.cwd()});const digest=criteriaDigest(target);\nconst review=await runReview({repo:process.cwd(),source,criteriaDigest:digest,policyInfo,allowFallback:false,inputPaths:['.www/session-implementation/home-semantic-contract-scope-2.json',...inputs,w.path.replace(process.cwd()+'/',''),'.www/session-implementation/home-projects-official.json','.www/session-implementation/model-currentness-final-status.json']});\nconst acceptance=validateReview({repo:process.cwd(),policy:policyInfo.policy,policyHash:policyInfo.hash,review,sourceDigest:source.digest,criteriaDigest:digest});\nawait writeFile('.www/session-implementation/home-semantic-contract-review-2.json',JSON.stringify({review,acceptance,scope:target,source},null,2));console.log(JSON.stringify({verdict:review.verdict,findings:review.findings,observedModel:review.observedModel,acceptance,receipt:review.execution}));process.exitCode=acceptance.usable?0:1;"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:42:37.359Z"
+          },
+          {
+            "id": "attempt-37abdd46-2212-4b1a-b87c-49e666d81320",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:50:13.295Z"
+          },
+          {
+            "id": "attempt-5890bc3c-781f-4f1f-9e70-8ec21489801e",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import {readWork} from './scripts/workflow/work.ts';import {captureSource,criteriaDigest} from './scripts/workflow/evidence.ts';import {runReview,validateReview,loadReviewPolicy} from './scripts/workflow/review.ts';import {hashRequest} from './scripts/workflow/route.ts';import {execFileSync} from 'node:child_process';import {readFile,writeFile} from 'node:fs/promises';\nconst w=await readWork({workId:'work-4573f7d4-62eb-4e72-9985-62994c1b30a8'});const request=\"Terra로 감사진행해야지. 이거 계속 막히네, Claude가 없으면 Terra로 ㅐ\";\nconst base='docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/';\nconst archived=await readFile(base+'history/before-implementation-work-record.json');const baseline=execFileSync('git',['show','--no-ext-diff','--no-textconv','aa0c3d4363f24109576bbe5bd9c256b90e71139c:'+base+'work.json']);if(!archived.equals(baseline))throw new Error('보존 원본이 Git 기준본과 다릅니다.');\nconst inputs=[base+'semantic-review-scope.json',base+'spec.md',base+'history/README.md',base+'history/before-implementation-work-record.json','docs/PRODUCT.md','docs/ARCHITECTURE.md','docs/DEVELOPMENT.md','docs/skills/WORKFLOW.md','docs/skills/MODEL_POLICY.md','docs/specs/chat.md','docs/specs/dashboard.md','skills/www/www-build/SKILL.md','skills/www/www-design/SKILL.md','src/main.ts','src/native-session.ts','src/session-api.tsx','scripts/workflow/model-allocation.ts','scripts/workflow/run.ts'];\nconst source=await captureSource({inputs});const policyInfo=await loadReviewPolicy({root:process.cwd()});const digest=criteriaDigest(w.record);\nconst authority={source:'cli_direct_user_request',workId:w.record.id,workRequestHash:w.record.workflow.requestHash,request,requestHash:hashRequest(request),model:'gpt-6.1-terra',stage:'review',sourceDigest:source.digest,criteriaDigest:digest,policyHash:policyInfo.hash};\nconst review=await runReview({repo:process.cwd(),source,criteriaDigest:digest,policyInfo,work:w.record,workPath:w.path,authority,directRequest:{direct:true,request},inputPaths:inputs,allowFallback:true});\nconst acceptance=validateReview({repo:process.cwd(),policy:policyInfo.policy,policyHash:policyInfo.hash,review,sourceDigest:source.digest,criteriaDigest:digest,work:w.record});await writeFile('.www/session-implementation/home-semantic-terra-review.json',JSON.stringify({review,acceptance,source,gitBytesMatched:true},null,2));console.log(JSON.stringify({verdict:review.verdict,observedModel:review.observedModel,findings:review.findings,acceptance,gitBytesMatched:true}));process.exitCode=acceptance.usable?0:1;"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:58:05.265Z"
+          },
+          {
+            "id": "attempt-8db57a69-a342-4bb8-8030-f3c54df60bb7",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:07:23.102Z"
+          },
+          {
+            "id": "attempt-9360e174-a318-449f-adec-65e15e570362",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:07:24.806Z"
+          },
+          {
+            "id": "attempt-65983adf-dbe5-41c4-9ea7-d9008449b5a4",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:44:45.118Z"
+          },
+          {
+            "id": "attempt-299e5d23-4d39-4345-bf5a-203d2a94048a",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:44:47.586Z"
+          },
+          {
+            "id": "attempt-c267f4a8-4104-44d9-aa38-5ab17b56534f",
+            "command": "node",
+            "args": [
+              "scripts/verify-sessions.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:44:52.827Z"
+          },
+          {
+            "id": "attempt-60763213-d2fc-4200-97c8-7832bcbde25c",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:44:55.907Z"
+          },
+          {
+            "id": "attempt-9ce4cf20-32d6-423d-a6ae-262cfcf1ee20",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:06:55.653Z"
+          },
+          {
+            "id": "attempt-4e20586d-4ca2-4899-ac6a-d54b36e1ebfa",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:07:00.100Z"
+          },
+          {
+            "id": "attempt-051ecaf1-b9ca-4b16-b847-82c897c81f75",
+            "command": "node",
+            "args": [
+              "scripts/verify-sessions.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:07:01.470Z"
+          },
+          {
+            "id": "attempt-a9be6dac-5ec7-4886-8810-66df4669b77b",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:07:08.999Z"
+          },
+          {
+            "id": "attempt-22a84134-dfe4-4110-a5f1-e26d82bebe19",
+            "command": "node",
+            "args": [
+              "scripts/verify-sessions.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:12:04.494Z"
+          },
+          {
+            "id": "attempt-2a8b7610-e139-45fc-8dfc-1633b86fb44a",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:12:10.393Z"
+          },
+          {
+            "id": "attempt-8a037391-d517-41c7-a583-23079ccdd8a0",
+            "command": "node",
+            "args": [
+              "scripts/verify-home.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:12:33.275Z"
+          },
+          {
+            "id": "attempt-637f3c8f-8c4f-4afd-83be-4797475b2c08",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:12:43.179Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-c901e217-5c99-44e0-b167-02e969d22bd3",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-c901e217-5c99-44e0-b167-02e969d22bd3/opus.json",
+            "findings": [
+              "[범위] 셸 명령 대신 Read/Grep/Glob 도구로만 읽었다. 테스트·스크립트는 실행하지 않았다. 읽은 범위: work.json(검증 시도 메타데이터 전체), spec.md, verification.md, src/main.ts(25-164행), src/native-session.ts(470-839행), src/session-registry.ts, src/preload.ts, src/session-api.tsx, src/dashboard.ts, src/renderer.tsx(1095-1174행), scripts/verify-sessions.ts, scripts/verify-chat.ts(일부와 grep), scripts/check-workflow.ts, test/fixtures/sessions-app-server.ts, docs/skills/MODEL_POLICY.md(grep). .www/ 아래 증거 산출물(summary.json, home-final-*.json 등), test/*.test.ts, docs/specs/*.md, PRODUCT/ARCHITECTURE 본문은 읽지 않았다. 도구 읽기 실패는 없었다.",
+              "[결함·증거 범위 확대] S4와 S8이 work.json:73-90, 145-161에서 passed다. 근거 시도는 attempt-1f355f1b와 attempt-ec54e66a 두 개이며 둘 다 `node scripts/check-workflow.ts`다. 그러나 scripts/check-workflow.ts:89-135의 validateRepository는 스킬 SKILL.md 절 제목, 필수 파일 존재, Markdown 로컬 링크, work.json 스키마, UUID 중복, 관계 대상만 검사한다. MODEL_POLICY의 요청/관측/미실행 연결, 제품 자동 라우터 미구현 명시, 토큰 절감 미측정 명시(S8)와 제품 코드·현행 문서·검증의 동시 적용 및 이력 구분(S4)은 검사하지 않는다. MODEL_POLICY.md:13,27,33,41에 해당 문장이 실제로 있지만 이를 확인한 실행 근거가 없다. spec.md:218도 '작성된 문서와 소스 존재만으로 수용 기준 통과를 주장하지 않는다'고 한다. 따라서 구조 검사 종료 코드 0을 내용 기준 통과로 확대했다. documentationReviews(work.json:4795-4886)는 작성자의 자기 기록이고 reviews는 비어 있으므로(work.json:4793) 독립 근거가 되지 않는다.",
+              "[결함·증거 범위 확대] S3('프로젝트 추가·취소·실패')와 S1('RPA(+)')의 통과 근거는 attempt-7d5d8f6c(`scripts/verify-chat.ts`)뿐이다. 그런데 verify-chat.ts와 verify-sessions.ts 어디에도 'RPA 프로젝트 추가' 버튼(renderer.tsx:1130, aria-label='RPA 프로젝트 추가') 클릭, 폴더 선택 성공·취소(null), projects.register 실패(native-session.ts:498)를 실행하는 단계가 없다(grep '프로젝트 추가|폴더 선택|등록·저장에 실패' 결과 없음). main.ts:67-70의 chooseDirectory는 실제 dialog.showOpenDialog를 직접 호출하고 probe 대체 경로도 없어 자동 검증할 수 없는 구조다. spec.md:13의 현행 S3 시나리오는 '폴더 추가 정상 완료·사용자 취소·등록 실패를 확인한다'고 하므로 근거와 주장이 맞지 않는다.",
+              "[결함·증거 범위 확대] S2는 'RPA 또는 WWW 각각에서 대시보드·대화·생태계·리포트 순서와 실제 화면 전환'을 요구한다. verify-chat.ts는 open-current-workspace → target-dashboard → chat-nav와 reports-nav(377행)만 누른다. ecosystem-nav와 dashboard-nav 클릭, 메뉴 순서 단언은 없다(grep 'ecosystem|dashboard-nav' 결과 없음). WWW 대상 진입은 verify-sessions.ts:152-155에서 한 번 확인한다. 하지만 그 시도는 S6에만 연결되고 WWW에서의 공통 메뉴 동작은 확인하지 않는다. 구현(renderer.tsx:1131의 nav 순서 대시보드→대화→생태계→리포트)은 요구와 일치하지만 passed 근거로는 부족하다.",
+              "[확인·이상 없음] S6 구현과 검증은 대체로 일치한다. session-registry.ts:43-70의 (workspaceKey, threadId) 예약/소유 거부, native-session.ts:796-803의 탭 접두 승인 토큰 검사, :819-822의 실행·승인·전환 중 닫기 거부, main.ts:120의 마지막 탭 닫기 거부를 verify-sessions.ts:82-137, 146이 실제 Electron·IPC·별도 PID로 확인한다. 실패한 시도 14433c15 이후 바뀐 파일은 test/fixtures/sessions-app-server.ts뿐이다(digest d0882bb8→187ee1ec). 현재 fixture에서는 검증을 약화한 흔적을 찾지 못했다. 다만 이전 내용을 git diff로 대조하지는 못했다.",
+              "[확인·경미] S7 dashboard.ts는 읽기 전용 O_NOFOLLOW 열기, 심볼릭 링크·하드링크·크기·경로 재확인, coverage(empty/partial/failed/complete) 구분, 중복 UUID 제외를 구현해 기준과 맞는다. S7 근거 중 attempt-a732e75d는 이전 소스(b4a54e…)에서 실행됐지만 같은 명령이 현재 소스 계열(0d2dfc…)에서 다시 통과했으므로(1e4b7132) 문제로 보지 않는다.",
+              "[경미] main.ts:104-105의 unscoped 채널은 sessionId가 없으면 탭이 여러 개여도 기본 세션으로 조용히 보낸다. scoped 경로(main.ts:92)는 이 경우를 거부하므로 두 경로가 일관되지 않는다. 현재 renderer는 SessionApiProvider(session-api.tsx:16-27)로 항상 id를 넘기므로 재현되는 결함은 아니다.",
+              "[참고] 검토 대상 sourceDigest(bd3e70e7…)는 마지막 통과 시도들의 source digest(0d2dfc11…)와 다르다. 파일 목록을 대조하면 차이는 검토 묶음에 docs/skills/WORKFLOW.md가 추가 입력으로 포함된 것으로 보이며, 개별 파일 digest는 마지막 시도와 같다. 다만 이 digest 계산 방식은 직접 확인하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-85f30dc9-e26e-45f1-8264-00e0e285e907",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-85f30dc9-e26e-45f1-8264-00e0e285e907/opus.json",
+            "findings": [
+              "[범위] 셸 명령 없이 Read/Grep 도구로만 읽었고, 테스트와 스크립트는 실행하지 않았다. 읽은 범위는 다음과 같다. home-final-acceptance-map.json, spec.md, verification.md 전체, work.json 1-260행과 grep 결과, home-policy-navigation-official.json, home-semantic-contract-verification-2.json 앞부분, home-final-opus-review.json 앞부분, scripts/verify-home.ts 전체, .www/evidence/home-ui-j9aZLc/summary.json, src/renderer.tsx 1080-1159행, test/native-session.test.ts 155-184행과 370-469행, scripts/verify-chat.ts·test·scripts의 grep 결과다. src/main.ts, native-session.ts, session-registry.ts, dashboard.ts와 docs 본문은 직접 읽지 않았다. 도구 읽기 실패는 없었다(work.json은 크기 제한 때문에 일부만 읽었다).",
+              "[결함·증거 범위 확대] S1은 work.json:18-46에서 passed다. 그러나 spec.md:13의 현행 S1 시나리오인 '등록 RPA가 0개·여러 개인 첫 View Page'의 0개 상태를 실행한 근거가 없다. verify-home.ts:13-14,25,70-73은 probe 작업 폴더 하나를 등록한 상태에서만 RPA 추가 버튼, WWW, open-current-workspace를 확인한다. renderer.tsx:1130의 빈 상태 문구 '등록된 RPA 프로젝트가 없습니다.'와 home-project-list는 scripts/와 test/ 어디에서도 단언하지 않는다(grep 결과 없음). 또한 renderer.tsx:1130에서 RPA 추가 버튼은 `disabled={selectionBlocked || !workspace}`이므로, 0개·무선택 상태에서 추가 진입점이 활성인지가 바로 검증돼야 할 경계다. summary.json의 coverage에도 0개 상태가 범위 밖이라는 한계가 적혀 있지 않다.",
+              "[결함·증거 범위 확대] S5는 work.json:131-158에서 passed다. 그러나 spec.md:17의 '보드 조회만으로 Native를 시작하지 않는지 확인한다'를 검사한 근거가 없다. verify-home.ts는 View Page·대상 대시보드의 가시성과 복귀만 확인하고, Native child 생성 여부나 fixture 호출 수는 확인하지 않는다. test/dashboard.test.ts에도 Native/spawn/child 관련 단언이 없다(grep 결과 없음). '전체 보드와 선택 대상 보드의 범위 구분'도 verify-home.ts:55가 data-testid와 사이드바 이름만 확인하며, 카드 집합이 실제로 대상 범위로 좁혀지는지는 대조하지 않는다.",
+              "[확인] S2의 이전 결함(ecosystem-nav·dashboard-nav 미클릭, 순서 미단언, WWW 미검증)은 해소됐다. verify-home.ts:54-69가 RPA와 WWW 각각에서 네 메뉴의 data-testid 순서를 단언하고, 실제 CDP 포인터로 클릭한 뒤 화면 가시성, aria-current, window.www.workspace() 경로 유지를 확인한다. summary.json의 18개 check와 일치한다. 이 근거는 합성 Native fixture를 쓴다.",
+              "[확인] S3의 이전 결함(추가 성공·취소·실패 미실행)은 해소됐다. test/native-session.test.ts:372-468이 실제 NativeSession·createProjectRegistry로 성공 저장, 취소 null 시 projects-v1.json 바이트·선택·thread 보존, rename 실패 시 원인 보존·이전 선택 유지·재시도 성공을 단언한다. 실행·승인 중 전환 거부는 native-session.test.ts:160-181과 verify-chat.ts:700-703에서 확인한다. acceptance map이 OS 폴더 대화상자를 주입 응답으로 한정한 것도 정확하다.",
+              "[확인] S4/S8은 이제 check-workflow 구조 검사 대신 attempt-16429343의 실제 Opus 의미 검토와 아카이브 바이트 대조(git show 기준본과 Buffer.equals)에 연결돼 있다. 같은 기준의 이전 실패 attempt-1206ba0f도 삭제하지 않고 failed로 남아 있다.",
+              "[참고] 이번 검토 sourceDigest(49a0b3ee…)는 공식 검증 시도의 digest(ccab73de…)와 다르다. 파일 목록을 대조하면 개별 파일 digest는 같고, 차이는 이번 묶음에 docs/skills/WORKFLOW.md가 추가된 것으로 보인다. 또한 verify-home.ts는 source inputs가 아니라 artifact(sha256 969a5b91…)로만 고정된다. digest 계산 방식은 직접 확인하지 않았다.",
+              "[경미] verification.md:66의 attempt-532eba15는 '실행 결과: 실패; 종료 코드 0'과 '소스 유지: 변경 감지'다. work.json에서도 failed로 표시돼 통과 근거로 쓰이지 않으므로 결함으로 보지 않는다."
+            ]
+          },
+          {
+            "id"         : "review-e60d6826-eb53-459f-aa0a-2bc25a8172aa",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-e60d6826-eb53-459f-aa0a-2bc25a8172aa/opus.json",
+            "findings": []
+          }
+        ],
+        "omitted": {
+          "criteria"     : 0,
+          "evidence"     : 0,
+          "verifications": 14,
+          "reviews"      : 0,
+          "arguments"    : 21,
+          "findings"     : 0,
+          "unresolved"   : 3
+        }
+      },
+      "source": {
+        "recordPath"    : "docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/work.json",
+        "workRecordHash": "ab453706ddb62cd7e770dab7a9c680625af428e15c55d6c69abcbd299f7aecad",
+        "sourceDigest"  : "4455d294cf26427dcab7e9a99c389299417a2b7f546ac8320d2e47e27bd2e6c1",
+        "criteriaDigest": "79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0"
+      }
     }
   ]
 }

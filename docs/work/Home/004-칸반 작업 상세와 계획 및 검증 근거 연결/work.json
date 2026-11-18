@@ -1,0 +1,685 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-84cda38b-7265-40d7-bf47-5a22ece1b3a2",
+  "title"        : "칸반 작업 상세와 계획 및 검증 근거 연결",
+  "kind"         : "feature",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner"        : "ui",
+  "status"       : "verifying",
+  "blockedReason": null,
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-4573f7d4-62eb-4e72-9985-62994c1b30a8"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "KANBAN-DETAIL",
+      "description": "기존 칸반 카드에서 같은 프로젝트·작업 UUID의 상세를 열고 명세·계획·검증 근거의 제공 여부와 내용을 확인한다. 임의 thread로 연결하지 않는다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+          "path"     : "verification.md#attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+          "path"     : "verification.md#attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "KANBAN-TRUTH",
+      "description": "원장의 기준 결과와 현재 재검증 적용성을 구분하며 계획·검증 기록 없음·읽기 실패를 구별한다. 완료를 임의 추정하거나 원장을 화면 탐색만으로 변경하지 않는다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+          "path"     : "verification.md#attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+          "path"     : "verification.md#attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "KANBAN-SCOPE",
+      "description": "등록 프로젝트와 고정 작업 폴더 범위에서만 자료를 읽고 다른 프로젝트·동일 UUID·선택 변경·늦은 응답·중복 ID·링크·과대 파일을 안전하게 처리한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+          "path"     : "verification.md#attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+          "path"     : "verification.md#attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "KANBAN-VERIFY",
+      "description": "정상·빈 자료·실패·선택 경합의 집중 검사와 strict 타입·빌드·실제 Electron 화면 및 읽기 전용 독립 검토의 근거를 기록한 뒤 완료한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": [
+        {
+          "attemptId": "attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+          "path"     : "verification.md#attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "kanban-work-plan-evidence-20261116",
+    "requestHash": "090afb3db4b7105c9a0bcf1cb42156bf5adb0747cdae4ed51e595e1818e27291",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "src",
+        "test",
+        "scripts",
+        "docs/specs/dashboard.md",
+        "docs/ARCHITECTURE.md",
+        "docs/DEVELOPMENT.md",
+        "docs/work/Home",
+        "docs/work/INDEX.md"
+      ],
+      "mutationSurfaces": [
+        "기존 칸반의 작업 상세·계획·검증 근거 조회와 직접 관련한 소스·테스트·문서"
+      ],
+      "verifierCommands": [
+        "[\"npm\",\"run\",\"check\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"npm\",\"run\",\"build\"]",
+        "[\"bun\",\"test\",\"test/dashboard.test.ts\"]",
+        "[\"node\",\"scripts/check-workflow.ts\"]",
+        "[\"node\",\"--input-type=module\",\"-e\",\"import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const commands=[['bun',['test','test/dashboard.test.ts','test/native-session.test.ts']],['node',['scripts/verify-home.ts']],['node',['scripts/verify-dashboard-race.ts']]];for(let i=0;i<commands.length;i++){const [cmd,args]=commands[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:4000000});writeFileSync('.www/evidence/session-completion-20261116/home-official-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}\"]",
+        "[\"node\",\"--input-type=module\",\"-e\",\"import {spawnSync} from 'node:child_process';import {writeFileSync,readFileSync} from 'node:fs';const commands=[['npm',['run','typecheck']],['npm',['run','build']],['bun',['test','test/dashboard.test.ts','test/native-session.test.ts']],['node',['scripts/verify-home.ts']],['node',['scripts/verify-dashboard-race.ts']]];for(let i=0;i<commands.length;i++){const [cmd,args]=commands[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:4000000});writeFileSync('.www/evidence/session-completion-20261116/home-bound-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);if(i===1)writeFileSync('.www/evidence/session-completion-20261116/home-bound-build-info.json',readFileSync('dist/build-info.json'));}\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "090afb3db4b7105c9a0bcf1cb42156bf5adb0747cdae4ed51e595e1818e27291"
+    },
+    "inputs": [
+      "docs/specs/dashboard.md",
+      "package.json",
+      "scripts/verify-dashboard-race.ts",
+      "scripts/verify-home.ts",
+      "src/dashboard-view.tsx",
+      "src/dashboard.css",
+      "src/dashboard.ts",
+      "src/main.ts",
+      "src/native-session.ts",
+      "src/preload.ts",
+      "src/renderer.tsx",
+      "src/shared.ts",
+      "test/dashboard.test.ts",
+      "test/native-session.test.ts",
+      "tsconfig.json",
+      "tsconfig.tools.json"
+    ],
+    "nextAction": "verify",
+    "verifications": [
+      {
+        "id"         : "attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+        "startedAt"  : "2026-11-16T07:31:20.471Z",
+        "completedAt": "2026-11-16T07:32:05.414Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "95b0501d590cf2ea5240c782893261e3024fc4c1d9ab80ba6f16df7a7b138a4a",
+          "inputs": [
+            "docs/specs/dashboard.md",
+            "package.json",
+            "scripts/verify-dashboard-race.ts",
+            "scripts/verify-home.ts",
+            "src/dashboard-view.tsx",
+            "src/dashboard.css",
+            "src/dashboard.ts",
+            "src/main.ts",
+            "src/native-session.ts",
+            "src/preload.ts",
+            "src/renderer.tsx",
+            "src/shared.ts",
+            "test/dashboard.test.ts",
+            "test/native-session.test.ts",
+            "tsconfig.json",
+            "tsconfig.tools.json"
+          ],
+          "files": [
+            {
+              "path"  : "docs/specs/dashboard.md",
+              "type"  : "file",
+              "digest": "168c3f11697bf631587471a4adac22020962833bf4661a8443f456ec48740d25",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "63ada4b17e605413de2dc77a54bbd94fd0e6d95554b91fe841ab52255e272ef4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-dashboard-race.ts",
+              "type"  : "file",
+              "digest": "d42e792fe3b247ab29dd9be54b58c790d2366d6d15ad8550c8320c9667224c6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-home.ts",
+              "type"  : "file",
+              "digest": "f69924045540def6085205f563a6c4979fe3738fac9970778aa49cc6ded8cb99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard-view.tsx",
+              "type"  : "file",
+              "digest": "45863e1d2a783c5bb4951e2ef94c2083b3a80967f22f2f46ff492932ae1c40ef",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.css",
+              "type"  : "file",
+              "digest": "26b1a2ade02454a5b0489572477310488e71e0ca332119fc531f5dd6b233ae00",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.ts",
+              "type"  : "file",
+              "digest": "874bc73f146fb1b9f5f16f9d685608bcbddbe211f6388c56969b0e9e790d1479",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "6775b5d59a9011931d5fca19a155d88521a347faee29e79caf081f2931ee65bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-session.ts",
+              "type"  : "file",
+              "digest": "fecc3ce94a8720f82b608b1526486c2980182c287a34320b1d3cd26ae2666ea6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "d67d44ed51b5556426d7e6345ff14bddfd12dcbbd6ead1fb1e3603e624526e12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "04ec9f403fd760e457e071adfdfb54a8f542b9931eba0f8f1d35c43e994c2b4a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "e1e67044d62609ff70efff0d73ca5a5f7c5a00cd61e2799afe61751e5bc015e1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/dashboard.test.ts",
+              "type"  : "file",
+              "digest": "9a41a0702907fffa6a0f4be93c86c6d0b26766f82a93ce1bea8e0d8c9c51ed87",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-session.test.ts",
+              "type"  : "file",
+              "digest": "f60a1b2296677feeb4dbad02e4e54d8fbd085d1a1d7395fa57cd3df0803f79a6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "1c500b27690f1ac82090054fd90bf75237ba5e42b69ea97f44860a61ec8479d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.tools.json",
+              "type"  : "file",
+              "digest": "43a861f044c589999e471a3c936f161c916ea634013990e8136547d41612ccd5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "06ebb9a8a9c841f5d7cd577c5639c4ea78c3a4138e5ab23b3a9e9fd912d604e8",
+        "criteriaSnapshot": [
+          {
+            "id"         : "KANBAN-DETAIL",
+            "description": "기존 칸반 카드에서 같은 프로젝트·작업 UUID의 상세를 열고 명세·계획·검증 근거의 제공 여부와 내용을 확인한다. 임의 thread로 연결하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "KANBAN-SCOPE",
+            "description": "등록 프로젝트와 고정 작업 폴더 범위에서만 자료를 읽고 다른 프로젝트·동일 UUID·선택 변경·늦은 응답·중복 ID·링크·과대 파일을 안전하게 처리한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "KANBAN-TRUTH",
+            "description": "원장의 기준 결과와 현재 재검증 적용성을 구분하며 계획·검증 기록 없음·읽기 실패를 구별한다. 완료를 임의 추정하거나 원장을 화면 탐색만으로 변경하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "KANBAN-VERIFY",
+            "description": "정상·빈 자료·실패·선택 경합의 집중 검사와 strict 타입·빌드·실제 Electron 화면 및 읽기 전용 독립 검토의 근거를 기록한 뒤 완료한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--input-type=module",
+          "-e",
+          "import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const commands=[['bun',['test','test/dashboard.test.ts','test/native-session.test.ts']],['node',['scripts/verify-home.ts']],['node',['scripts/verify-dashboard-race.ts']]];for(let i=0;i<commands.length;i++){const [cmd,args]=commands[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:4000000});writeFileSync('.www/evidence/session-completion-20261116/home-official-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "KANBAN-DETAIL",
+          "KANBAN-SCOPE",
+          "KANBAN-TRUTH",
+          "KANBAN-VERIFY"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 4714,
+            "digest"         : "9d4afda4b46f4027646e9d144988fa029e440ddc1531490e16fb3c054322fea2",
+            "truncated"      : false,
+            "retainedBytes"  : 4714,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 5296,
+            "digest"         : "777cbee11b9dc127b56cc6b224c97ff71aeff62994ba423775d58d51b7f88b24",
+            "truncated"      : false,
+            "retainedBytes"  : 5296,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+        "startedAt"  : "2026-11-16T07:44:12.424Z",
+        "completedAt": "2026-11-16T07:45:15.814Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "458e9916ac8a4cba9204d13e46e18b8e544b5567cdc5816672b472bec80c8387",
+          "inputs": [
+            "docs/specs/dashboard.md",
+            "package.json",
+            "scripts/verify-dashboard-race.ts",
+            "scripts/verify-home.ts",
+            "src/dashboard-view.tsx",
+            "src/dashboard.css",
+            "src/dashboard.ts",
+            "src/main.ts",
+            "src/native-session.ts",
+            "src/preload.ts",
+            "src/renderer.tsx",
+            "src/shared.ts",
+            "test/dashboard.test.ts",
+            "test/native-session.test.ts",
+            "tsconfig.json",
+            "tsconfig.tools.json"
+          ],
+          "files": [
+            {
+              "path"  : "docs/specs/dashboard.md",
+              "type"  : "file",
+              "digest": "168c3f11697bf631587471a4adac22020962833bf4661a8443f456ec48740d25",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "63ada4b17e605413de2dc77a54bbd94fd0e6d95554b91fe841ab52255e272ef4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-dashboard-race.ts",
+              "type"  : "file",
+              "digest": "d42e792fe3b247ab29dd9be54b58c790d2366d6d15ad8550c8320c9667224c6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-home.ts",
+              "type"  : "file",
+              "digest": "f69924045540def6085205f563a6c4979fe3738fac9970778aa49cc6ded8cb99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard-view.tsx",
+              "type"  : "file",
+              "digest": "45863e1d2a783c5bb4951e2ef94c2083b3a80967f22f2f46ff492932ae1c40ef",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.css",
+              "type"  : "file",
+              "digest": "26b1a2ade02454a5b0489572477310488e71e0ca332119fc531f5dd6b233ae00",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.ts",
+              "type"  : "file",
+              "digest": "874bc73f146fb1b9f5f16f9d685608bcbddbe211f6388c56969b0e9e790d1479",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "6775b5d59a9011931d5fca19a155d88521a347faee29e79caf081f2931ee65bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-session.ts",
+              "type"  : "file",
+              "digest": "fecc3ce94a8720f82b608b1526486c2980182c287a34320b1d3cd26ae2666ea6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "d67d44ed51b5556426d7e6345ff14bddfd12dcbbd6ead1fb1e3603e624526e12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "26ed0c27ad371d42d8ff233f903b3c5b96ccc34ae6857340d53e6f1ae087ff46",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "e1e67044d62609ff70efff0d73ca5a5f7c5a00cd61e2799afe61751e5bc015e1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/dashboard.test.ts",
+              "type"  : "file",
+              "digest": "9a41a0702907fffa6a0f4be93c86c6d0b26766f82a93ce1bea8e0d8c9c51ed87",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-session.test.ts",
+              "type"  : "file",
+              "digest": "f60a1b2296677feeb4dbad02e4e54d8fbd085d1a1d7395fa57cd3df0803f79a6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "1c500b27690f1ac82090054fd90bf75237ba5e42b69ea97f44860a61ec8479d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.tools.json",
+              "type"  : "file",
+              "digest": "43a861f044c589999e471a3c936f161c916ea634013990e8136547d41612ccd5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "06ebb9a8a9c841f5d7cd577c5639c4ea78c3a4138e5ab23b3a9e9fd912d604e8",
+        "criteriaSnapshot": [
+          {
+            "id"         : "KANBAN-DETAIL",
+            "description": "기존 칸반 카드에서 같은 프로젝트·작업 UUID의 상세를 열고 명세·계획·검증 근거의 제공 여부와 내용을 확인한다. 임의 thread로 연결하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "KANBAN-SCOPE",
+            "description": "등록 프로젝트와 고정 작업 폴더 범위에서만 자료를 읽고 다른 프로젝트·동일 UUID·선택 변경·늦은 응답·중복 ID·링크·과대 파일을 안전하게 처리한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "KANBAN-TRUTH",
+            "description": "원장의 기준 결과와 현재 재검증 적용성을 구분하며 계획·검증 기록 없음·읽기 실패를 구별한다. 완료를 임의 추정하거나 원장을 화면 탐색만으로 변경하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "KANBAN-VERIFY",
+            "description": "정상·빈 자료·실패·선택 경합의 집중 검사와 strict 타입·빌드·실제 Electron 화면 및 읽기 전용 독립 검토의 근거를 기록한 뒤 완료한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--input-type=module",
+          "-e",
+          "import {spawnSync} from 'node:child_process';import {writeFileSync,readFileSync} from 'node:fs';const commands=[['npm',['run','typecheck']],['npm',['run','build']],['bun',['test','test/dashboard.test.ts','test/native-session.test.ts']],['node',['scripts/verify-home.ts']],['node',['scripts/verify-dashboard-race.ts']]];for(let i=0;i<commands.length;i++){const [cmd,args]=commands[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:4000000});writeFileSync('.www/evidence/session-completion-20261116/home-bound-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);if(i===1)writeFileSync('.www/evidence/session-completion-20261116/home-bound-build-info.json',readFileSync('dist/build-info.json'));}"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "KANBAN-DETAIL",
+          "KANBAN-SCOPE",
+          "KANBAN-TRUTH"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 4876,
+            "digest"         : "c3fb6c46442ea07e234e1098d936036867cfe629dd07419e2465853f70ed10da",
+            "truncated"      : false,
+            "retainedBytes"  : 4876,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 5294,
+            "digest"         : "a7996a3485b6c83d9a473a56d4aa23bbefdb35385d32495a588056692f9e1c99",
+            "truncated"      : false,
+            "retainedBytes"  : 5294,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id"            : "review-f10adac1-d1c2-4ca7-a03a-36cbf064c5a4",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "a52048cc0af3ddf742ec3532a3bb891cd843617d3b060a3ed8f40afab705ee96",
+        "criteriaDigest": "06ebb9a8a9c841f5d7cd577c5639c4ea78c3a4138e5ab23b3a9e9fd912d604e8",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "dfb0b9b237a86c0cf94f40ddca4fb54f31ff371c20e05006c20fb072d541589d"
+        },
+        "failure": null,
+        "findings": [
+          "[검토 범위] Read/Grep 도구로 src/dashboard.ts, src/dashboard-view.tsx, src/native-session.ts:599-615(dashboard:get), package.json, scripts/verify-home.ts와 verify-dashboard-race.ts(검색으로 일부만), Home004 spec.md·verification.md·work.json, 증거 home-official-current.json·step-0/1/2.log·dashboard-race-Y2q9vk/summary.json을 읽었다. design.md·tasks.md·test 파일 본문·src/main.ts·preload.ts·dashboard.css·docs/specs/dashboard.md는 열어 보지 않았다. 명령이나 테스트는 하나도 실행하지 않았다. 읽기에 실패한 파일은 없다.",
+          "[소스 일치] 요청에 제시된 16개 입력 파일의 digest는 attempt-742d6cb6의 source.files와 모두 같다. 요청의 sourceDigest(a52048cc…)가 attempt 값(95b0501d…)과 다른 이유는 docs/ARCHITECTURE.md·DEVELOPMENT.md·PRODUCT.md·skills/WORKFLOW.md 4개가 더 포함됐기 때문으로 판단한다. criteriaDigest 06ebb9a8…은 서로 같다.",
+          "[구현 타당] 결함은 찾지 못했다. src/dashboard.ts:198-237 readDashboardWork는 main에 등록된 프로젝트와 키가 정확히 하나만 맞을 때만 진행한다. UUID 형식과 coverage==='complete'로 중복·불완전 목록을 거부하고, 같은 폴더의 네 문서만 읽는다(문서당 256KiB, 합계 1MiB, symlink·hardlink는 unsafe_path). work.json은 문서를 읽은 뒤 다시 읽어 바이트가 같은지 확인한다. src/native-session.ts:601-604는 detail 객체 키를 projectKey,workId로만 제한해 renderer가 경로를 넘기지 못한다. src/dashboard-view.tsx:66-84는 request 시퀀스와 key·scope 비교로 늦은 응답을 버리고, 닫기·필터 변경 때 시퀀스를 올린다. :144는 skipHtml을 쓰고 a를 span으로 바꾸며 img를 null로 처리한다. 명세 UC-01/03/05/07/08과 맞는다.",
+          "[결함·증거 범위 확대] work.json:59-71에서 KANBAN-VERIFY를 passed로 기록했다. 그러나 spec.md:43은 '독립 감사와 실제 화면 검증을 수행하기 전에는 KANBAN-VERIFY를 통과로 기록하지 않는다'고 정했고, 기준 설명도 'strict 타입·빌드·…읽기 전용 독립 검토의 근거를 기록한 뒤 완료'를 요구한다. 실제로 workflow.reviews는 빈 배열이다(work.json:324). 연결된 유일한 시도 attempt-742d6cb6은 bun test, verify-home, verify-dashboard-race만 실행했고 npm run typecheck와 npm run build는 실행하지 않았다(work.json:281). verification.md:71의 'strict·…빌드 실행은 … 별도로 확인했다'는 연결된 attempt ID나 로그가 없는 주장이다. 같은 기준의 evidence summary '실제 검증 passed; 현재 적용 가능'은 이 시도가 다루지 않은 typecheck·build·독립 검토까지 통과한 것처럼 보이게 한다. 수정: KANBAN-VERIFY를 unverified로 되돌리거나, typecheck·build 공식 시도와 독립 검토 기록을 연결한 뒤 passed로 기록한다.",
+          "[결함·증거 결속 누락] package.json:6에 따라 \"main\": \"dist/main.js\"이고, scripts/verify-home.ts:47과 verify-dashboard-race.ts:60은 Electron을 root로 실행하므로 빌드된 dist 산출물을 쓴다. 그런데 attempt-742d6cb6의 명령 목록에는 빌드 단계가 없고, source inputs에 dist가 없으며, 두 스크립트에서 dist의 최신성을 확인하는 코드(digest·mtime 등)도 검색되지 않았다. race 스크립트(:48)는 renderer용 DashboardView 번들만 다시 만들고, main·preload IPC 경로는 dist를 그대로 쓴다. 따라서 step-1/2 로그의 실제 Electron 통과가 소스 digest 95b0501d의 src/main.ts·native-session.ts·preload.ts·renderer.tsx에서 나온 결과라는 사실이 기록으로 증명되지 않는다. 그럼에도 KANBAN-DETAIL·SCOPE·TRUTH의 실제 GUI 근거로 쓰였다. 재현 근거: 이전 빌드의 dist가 남은 상태에서 src만 바꾸고 같은 명령을 실행해도 source digest만 새 값으로 기록되고 결과는 통과할 수 있다. 수정: 같은 시도 안에서 npm run build를 먼저 실행하거나, dist digest를 입력에 포함한다.",
+          "[참고] 늦은 응답 검증(dashboard-race summary.json)은 coverage 문구에 밝힌 대로 별도 mount에서 응답 전달 순서만 주입한 시험이다. verification.md:71도 이 한계를 적었으므로 과장으로 보지 않는다. 단, 위 dist 결속 문제는 이 시험의 preload·main 경로에도 똑같이 해당한다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-f10adac1-d1c2-4ca7-a03a-36cbf064c5a4/opus.json",
+        "startedAt"      : "2026-11-16T07:33:51.745Z",
+        "completedAt"    : "2026-11-16T07:35:06.866Z",
+        "workId"         : "work-84cda38b-7265-40d7-bf47-5a22ece1b3a2",
+        "workRequestHash": "090afb3db4b7105c9a0bcf1cb42156bf5adb0747cdae4ed51e595e1818e27291",
+        "recordingRejection": [
+          "review_not_passed"
+        ]
+      },
+      {
+        "id"            : "review-0a631754-c6ff-4e5b-9684-dff6eeb7f39d",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "9280e10093e063fb7e64dba174b26961cfa9a16e26b1e77f3e873a255ef5aa1e",
+        "criteriaDigest": "06ebb9a8a9c841f5d7cd577c5639c4ea78c3a4138e5ab23b3a9e9fd912d604e8",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "aa86a4762a15864a9b32ee13471b75deb1ec8e94f5c7f1458e72e15ebbe0afac"
+        },
+        "failure": null,
+        "findings": [
+          "검토 범위: Read/Grep 도구로 spec.md, tasks.md, verification.md, home-bound-verification.json, home-bound-build-info.json, home-bound-step-0~4.log, src/dashboard.ts 전체, src/dashboard-view.tsx 전체, src/native-session.ts:599-615, src/preload.ts:24-25, src/shared.ts:30-35·177, src/renderer.tsx:411-415·718-723·1180, test/dashboard.test.ts:228-311을 직접 읽었다. design.md, work.json, docs/specs/dashboard.md, scripts/verify-home.ts, scripts/verify-dashboard-race.ts, main.ts의 나머지 부분, CSS는 읽지 않았다. 파일 해시는 직접 계산하지 않았고, 요청의 파일별 digest가 home-bound-verification.json의 source.files digest 16개와 일치하는 것만 확인했다. 테스트·빌드는 실행하지 않았다. 도구 읽기 실패는 없었다.",
+          "KANBAN-DETAIL·SCOPE 경계: preload는 projectKey와 workId만 `dashboard:get`의 두 번째 인자로 보낸다. native-session.ts:601-604는 정확히 이 두 키의 문자열 객체만 받고, 경로는 main이 정한 wwwRoot와 등록 목록으로만 만든다(607-610). dashboard.ts:198-205는 프로젝트 key가 정확히 하나 일치하는지, UUID 형식이 맞는지, 목록 수집이 complete인지 확인하고 대소문자 무시로 유일한 카드를 찾는다. 중복 UUID는 readProject:175-181에서 제외되고, 수집이 불완전하면 상세를 거부해 모호한 원장을 임의로 채택하지 않는다. 결함은 없다.",
+          "문서 읽기: 각 문서는 256 KiB 한도로 readBytes를 거친다. readBytes는 디렉터리 symlink 검사, 일반 파일·nlink=1 여부, realpath, O_NOFOLLOW, 열기 전후 dev/ino/size/mtime/ctime 대조를 수행한다. ENOENT는 missing, 그 밖의 오류는 문서별 failed로 처리하고 잘못된 UTF-8은 invalid_utf8로 실패시킨다(dashboard.ts:219-231). 마지막에 work.json을 다시 읽어 바이트를 비교한다(232-233). test/dashboard.test.ts:267-281에서 symlink·hardlink·256 KiB+1 문서가 각각 failed로 처리되고 형제 문서는 그대로 남는 것을 확인했다(home-bound-step-2.log의 37 pass/0 fail와 일치).",
+          "KANBAN-TRUTH 표시: dashboard-view.tsx:126에 '기록된 결과이며 현재 재검증 결과를 뜻하지 않습니다'라는 문구가 있다. 144행은 missing·failed(role=alert)·빈 문서·tasks 미작성을 구분하고, ReactMarkdown의 skipHtml과 a→span, img→null 설정으로 HTML·링크·이미지를 실행하지 않는다. 갱신 실패 때는 이전 값을 유지한 채 '갱신 전 수집 내용'을 표시하고 재시도 버튼을 제공한다(128-129). 요구와 일치한다.",
+          "선택 경합: request ref의 sequence와 effect cleanup, 카드 변경·필터 변경·닫기 시 증가시키는 처리(dashboard-view.tsx:66-84, 91, 104, 121), 응답의 projectKey·workId 대조(74-76), renderer의 matchesSelection 재확인(renderer.tsx:721)이 늦은 응답의 반영을 막는다. verify-dashboard-race 로그는 별도 mount에서 전달 순서만 주입했다는 한계를 스스로 밝히고 있고, verification.md:71도 같은 한계를 기록해 증거 범위를 넓히지 않았다.",
+          "증거 결속: attempt-d13616ac의 명령은 typecheck→build→집중 테스트→verify-home→race를 같은 process에서 직렬 실행하며 sourceStable=true다. 연결 기준은 DETAIL·SCOPE·TRUTH 세 개뿐이고 KANBAN-VERIFY는 unverified로 남겨 두었다(verification.md:97). 이전 감사 review-f10adac1의 지적(빌드 결속, 감사 전 VERIFY 통과 처리)을 반영한 것으로 판단한다. build-info의 sourceDigest(87d1ff…)는 attempt의 source digest(458e99…)와 계산 방식이 달라 직접 대조할 수 없다. 다만 같은 시도 안에서 build 직후 GUI가 실행된 순서가 기록되어 있다.",
+          "비차단 관찰 1 — 실제로 걸리지 않는 누적 한도: 문서는 네 개이고 각각 256 KiB 이하이므로 합계 1 MiB 한도(dashboard.ts:217)는 정상 크기 변화로는 도달할 수 없다. tasks.md의 '총 문서 읽기 1 MiB 초과' 시나리오에 해당하는 테스트도 없다. 동작 결함은 아니지만, 이 시나리오를 검증했다고 주장해서는 안 된다.",
+          "비차단 관찰 2 — 상세 요약의 시점 혼합: dashboard-view.tsx:126의 상세 요약에서 title·status·blockedReason·기준 수는 상세 응답 값을 쓴다. 반면 원본 경로·담당·영역은 목록 snapshot의 card 값을 그대로 쓴다. 두 수집 사이에 원장이 바뀌면 한 패널에 서로 다른 시점의 값이 섞일 수 있다(DashboardWorkDetail에는 sourcePath가 있지만 owner·areas는 없다).",
+          "비차단 관찰 3 — 취소 작업 숨김 뒤 상태: '취소 작업 표시'를 끄면 상세는 사라지지만 selected는 남는다. 다시 켜면 상세가 자동으로 다시 열리고, 그 사이 상세 안에 있던 초점은 복귀 대상 없이 사라진다(dashboard-view.tsx:54, 106). 명세의 '표시 대상이 아닌 상세 제거'는 충족하므로 결함으로 판정하지 않는다.",
+          "비차단 관찰 4 — 프로젝트 전체 상세 차단: readDashboardWork는 프로젝트 coverage가 complete가 아니면 상세 전체를 거부한다. 따라서 같은 프로젝트에 손상된 work.json이나 문서가 아닌 symlink가 하나라도 있으면, 정상 카드의 상세도 열리지 않는다. 유일성을 확인하는 보수적 설계로는 타당하지만 사용성 제약으로 기록할 만하다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-0a631754-c6ff-4e5b-9684-dff6eeb7f39d/opus.json",
+        "startedAt"      : "2026-11-16T07:48:29.734Z",
+        "completedAt"    : "2026-11-16T07:50:03.617Z",
+        "workId"         : "work-84cda38b-7265-40d7-bf47-5a22ece1b3a2",
+        "workRequestHash": "090afb3db4b7105c9a0bcf1cb42156bf5adb0747cdae4ed51e595e1818e27291"
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-56488923-5d40-403f-9fc1-aa395e6f3deb",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T07:33:49.821Z",
+        "sourceDigest"   : "95b0501d590cf2ea5240c782893261e3024fc4c1d9ab80ba6f16df7a7b138a4a",
+        "criteriaDigest" : "06ebb9a8a9c841f5d7cd577c5639c4ea78c3a4138e5ab23b3a9e9fd912d604e8",
+        "documentsDigest": "fc1bb07819cff818a300a55a392c30835c39f0a3caf0829f730dc746cd8bad5f",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "프로젝트 목록·중앙 작업 선택과 읽기 전용 작업 근거의 책임 경계를 대조했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "실제 사용자 여정과 칸반 원장 인계 및 검증·독립 감사 책임을 연결했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "updated",
+            "reason"  : "칸반 카드에서 같은 프로젝트·UUID의 작업 문서를 읽는 제품 흐름을 반영했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "이 기능은 기존 UUID 원장과 문서 읽기 계약을 소비하며 별도 상태·완료 추정을 만들지 않는다."
+          },
+          {
+            "path"    : "docs/specs/dashboard.md",
+            "decision": "updated",
+            "reason"  : "DASHBOARD-WORK-01에 안전한 상세 문서 조회·미실행과 재검증 구분을 연결했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-520b2578-e698-4c51-8ceb-4503a8c95483",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T07:48:28.704Z",
+        "sourceDigest"   : "458e9916ac8a4cba9204d13e46e18b8e544b5567cdc5816672b472bec80c8387",
+        "criteriaDigest" : "06ebb9a8a9c841f5d7cd577c5639c4ea78c3a4138e5ab23b3a9e9fd912d604e8",
+        "documentsDigest": "a01c5d1361fa6bf69bdc39b6f2cee467e052f1cc723f50ea01004ae4155e71ed",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "프로젝트 목록·중앙 작업 선택과 읽기 전용 작업 근거의 책임 경계를 대조했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "실제 사용자 여정과 칸반 원장 인계 및 검증·독립 감사 책임을 연결했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "updated",
+            "reason"  : "칸반 카드에서 같은 프로젝트·UUID의 작업 문서를 읽는 제품 흐름을 반영했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "이 기능은 기존 UUID 원장과 문서 읽기 계약을 소비하며 별도 상태·완료 추정을 만들지 않는다."
+          },
+          {
+            "path"    : "docs/specs/dashboard.md",
+            "decision": "updated",
+            "reason"  : "DASHBOARD-WORK-01에 안전한 상세 문서 조회·미실행과 재검증 구분을 연결했다."
+          }
+        ]
+      }
+    ]
+  }
+}

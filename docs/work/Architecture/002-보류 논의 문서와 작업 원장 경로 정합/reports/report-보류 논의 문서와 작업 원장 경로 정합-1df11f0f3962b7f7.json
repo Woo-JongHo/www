@@ -1,0 +1,289 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-ea915058-a691-46d0-9b75-87fe0f3c6066",
+  "title"        : "보류 논의 문서와 작업 원장 경로 정합",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-31c9c745-5e24-4209-b7b3-39b8a8baad63",
+      "workId"        : "work-ea915058-a691-46d0-9b75-87fe0f3c6066",
+      "title"         : "보류 논의 문서와 작업 원장 경로 정합",
+      "summary"       : "전체 작업 문서 검사를 막던 보류 논의의 경로 분류를 정리했다. 논의 원문과 중앙화 개발 보류 결정은 그대로 유지하고 일반 아키텍처 논의 경로와 목차 링크로 이동했다. 원문·링크·이전 빈 폴더 검사와 전체 check-workflow가 통과했고 실제 Opus 감사도 세 기준을 수용했다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-16T22:53:29.252Z",
+      "event"         : "finish",
+      "workRecordHash": "50c4c4a89818b9f6eb57c879ee10e7d42632cd927642e9581fef4c414c1e62a3",
+      "sourceDigest"  : "5342eab895ec36699a59b3146e7a04b52c32e641efe33b416fda5f9ea1e87e8b",
+      "criteriaDigest": "f068a5a2412b8551dd03068c24a1d1b66c2dc080131619bed1aef58664ea34ed",
+      "semanticHash"  : "294101d711587df5885334e66940c04943125f98d9688c803408208c17d961d7",
+      "narrative": {
+        "summary": "전체 작업 문서 검사를 막던 보류 논의의 경로 분류를 정리했다. 논의 원문과 중앙화 개발 보류 결정은 그대로 유지하고 일반 아키텍처 논의 경로와 목차 링크로 이동했다. 원문·링크·이전 빈 폴더 검사와 전체 check-workflow가 통과했고 실제 Opus 감사도 세 기준을 수용했다.",
+        "before" : "개발 보류인 discussion.md만 docs/work/Architecture/001에 있어 work.json 없는 작업으로 수집됐다.",
+        "after"  : "논의는 docs/architecture/discussions/central-storage-local-execution.md에서 읽을 수 있고 INDEX의 보류된 논의 링크로 찾는다. 잘못된 작업 원장 폴더가 사라져 전체 문서 계약 검사를 통과한다.",
+        "changes": [
+          "보류 논의 원문을 동일 bytes로 이동",
+          "목차에 보류된 논의 링크 추가",
+          "같은 버그 UUID에 진단·명세·검증·문서 영향·독립 감사 기록"
+        ],
+        "decisions": [
+          "원장이나 검사 예외를 만들지 않고 문서 분류를 고쳤다. 중앙화 개발은 재개하지 않았다.",
+          "기존 W020의 과거 실패·보고서 문장은 당시 이력으로 보존했다."
+        ],
+        "limitations": [
+          "문서 경로와 계약 검사만 검증한 것으로 제품 기능·Windows·원격·W020 전체 검증 통과는 아니다.",
+          "범위 밖 기존 dirty 변경을 보존했고 커밋·push는 실행하지 않았다."
+        ],
+        "next": [
+          "공유 완료 core로 수용 상태를 판정하고 다음 로컬 검증을 이어간다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "DOC-BYTES",
+            "description": "보류 논의 원문의 bytes와 중앙화 개발 보류 결정을 보존한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-526424c9-4339-4786-ad22-76d3c034a82a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "DOC-FIND",
+            "description": "논의는 일반 아키텍처 문서 경로에 있으며 작업 목차 링크로 찾을 수 있다. 잘못된 작업 원장 디렉터리는 남지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-526424c9-4339-4786-ad22-76d3c034a82a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "DOC-CONTRACT",
+            "description": "현재 저장소의 check-workflow가 원장 누락 오류 없이 통과한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-cde3a7b7-39dc-4e7a-873f-e5f96748142b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-526424c9-4339-4786-ad22-76d3c034a82a",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import assert from 'node:assert/strict';import fs from 'node:fs';import {createHash} from 'node:crypto';const p=\"docs/architecture/discussions/central-storage-local-execution.md\";assert.equal(createHash('sha256').update(fs.readFileSync(p)).digest('hex'),\"71785f2a1fe3142a16f03a36b61cbf05b51074cf575648ac5eaca426d23ab3b7\");assert(!fs.existsSync(\"docs/work/Architecture/001-중앙 저장과 로컬 실행/discussion.md\"));assert(!fs.existsSync(\"docs/work/Architecture/001-중앙 저장과 로컬 실행\"));assert(fs.readFileSync('docs/work/INDEX.md','utf8').includes('../architecture/discussions/central-storage-local-execution.md'));assert(fs.readFileSync(p,'utf8').includes('중앙화 개발 보류'));console.log('DOC-BYTES/DOC-FIND: 원문 SHA·보류 결정·목차 링크·잘못된 작업 디렉터리 제거 확인');"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T22:49:41.125Z"
+          },
+          {
+            "id": "attempt-cde3a7b7-39dc-4e7a-873f-e5f96748142b",
+            "command": "node",
+            "args": [
+              "scripts/check-workflow.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T22:49:42.020Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-5ab0d64f-cd88-4a39-9dd1-184ddfdaa100",
+            "verdict"    : "pass",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/local-continue-20261117/discussion-opus/opus.json",
+            "findings": [
+              "읽은 범위: discussion-review-request.md, 002 작업의 spec.md·tasks.md·work.json 전체, 이동된 docs/architecture/discussions/central-storage-local-execution.md 전체, discussion-sha256.txt, discussion-attempt-0.json·discussion-attempt-1.json 전체를 읽었다. docs/work/INDEX.md는 관련 절(355-364행)만 Grep으로 확인했다. docs/work/Architecture 하위와 증거 디렉터리는 Glob으로 목록을 확인했고, 옛 경로 문자열은 저장소 전체를 Grep으로 검색했다. 이 세션에는 Bash 도구가 없어 git diff/status/show와 SHA 재계산은 실행하지 못했다. 테스트와 check-workflow도 실행하지 않았다. 도구 읽기 실패는 없었다.",
+              "DOC-BYTES: SHA 비교는 attempt-0의 assert.equal 결과와 sourceDigest의 파일 digest(71785f2a…)에 근거하며, 이 digest는 discussion-sha256.txt와 일치한다. 직접 재계산은 하지 않았다. 이동된 문서 4행의 '상태: 중앙화 개발 보류. … 구현 승인·완료 명세가 아니다'와 15행·82행·111행의 비승인 문구로 보류 결정이 유지된 것을 확인했다. 백업 discussion-original.md는 존재만 확인했고, 내용을 바이트 단위로 대조하지는 않았다.",
+              "DOC-FIND: INDEX.md 362-364행의 '보류된 논의' 절이 ../architecture/discussions/central-storage-local-execution.md를 링크하고, 이 대상 파일은 실재한다. Glob 결과 docs/work/Architecture 아래에는 002 디렉터리 파일 4개(spec/tasks/verification/work.json)만 있고 001 디렉터리는 남아 있지 않다. 따라서 잘못된 원장 디렉터리 제거가 확인된다.",
+              "DOC-CONTRACT: attempt-1은 node scripts/check-workflow.ts를 process로 실행해 exitCode 0, sourceStable=true를 기록했다. source digest 5342eab8…와 criteriaDigest f068a5a2…는 요청 번들 값과 같다. stdout 내용은 보존되지 않아(contentRetained=false) 출력 문구는 검토하지 못했다. 가짜 work.json이나 checker 예외가 추가됐는지는 docs/work/Architecture 파일 목록으로만 확인했다. scripts/check-workflow.ts의 변경 여부는 git diff를 실행하지 못해 미검토다.",
+              "옛 경로 '001-중앙 저장과 로컬 실행'은 002 자체 문서와 W020의 work.json·보고서(html/json)에만 남아 있다. W020 쪽 참조는 과거 리뷰·보고서 이력 문장이다. spec.md 13행이 기존 보고서·검증 이력을 바꾸지 않겠다고 정했으므로 이를 수정하지 않은 것은 타당하다. 열람 경로가 깨지는 현재 링크는 발견하지 못했다.",
+              "범위: work.json의 writePaths는 옛 문서, 새 문서, docs/work/Architecture, INDEX.md로 한정되고 commit/publish는 false다. 그러나 git status 스냅샷에는 docs/ARCHITECTURE.md·PRODUCT.md·DEVELOPMENT.md 등 다수 파일이 수정 상태로 나온다. 이들은 W020 등 다른 진행 작업의 변경으로 보이며, git diff를 실행하지 못해 이 작업이 범위 밖 파일을 바꿨는지는 독립 확인하지 못했다. 다만 이 수정분이 해당 문서를 바꿨다는 근거는 읽은 자료에서 찾지 못했다.",
+              "경미한 사항(결함 아님): tasks.md 8행은 '현재 단계 build'인데, 12행 인계와 work.json status는 verify/verifying이다. 문서 안에서 단계 표기가 어긋난다. 또 INDEX.md와 spec.md의 mode가 384(0600)로 다른 문서의 420(0644)과 다르다. Git은 실행 비트만 추적하므로 계약에 미치는 영향은 없어 보인다.",
+              "판정: 원문 보존, 중앙화 개발 보류 유지, 목차 참조, 잘못된 원장 디렉터리 제거, check-workflow 통과 근거가 서로 맞는다. 증거 요약 '현재 적용 가능'은 시도 digest가 현재 sourceDigest와 같아 과대 표기가 아니다. 이번 pass는 이 문서 분류 버그의 세 기준에만 해당하며, W020 전체나 제품 GUI 수용을 뜻하지 않는다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Architecture/002-보류 논의 문서와 작업 원장 경로 정합/work.json",
+        "workRecordHash": "50c4c4a89818b9f6eb57c879ee10e7d42632cd927642e9581fef4c414c1e62a3",
+        "sourceDigest"  : "5342eab895ec36699a59b3146e7a04b52c32e641efe33b416fda5f9ea1e87e8b",
+        "criteriaDigest": "f068a5a2412b8551dd03068c24a1d1b66c2dc080131619bed1aef58664ea34ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-228686e4-91dd-4697-baf8-77e900ec3ab7",
+      "workId"        : "work-ea915058-a691-46d0-9b75-87fe0f3c6066",
+      "title"         : "보류 논의 문서와 작업 원장 경로 정합",
+      "summary"       : "전체 작업 문서 검사를 막던 보류 논의의 경로 분류를 정리했다. 논의 원문과 중앙화 개발 보류 결정은 그대로 유지하고 일반 아키텍처 논의 경로와 목차 링크로 이동했다. 원문·링크·이전 빈 폴더 검사와 전체 check-workflow가 통과했고 실제 Opus 감사도 세 기준을 수용했다.",
+      "kind"          : "authored",
+      "outcome"       : "completed",
+      "createdAt"     : "2026-11-16T22:58:02.203Z",
+      "event"         : "complete",
+      "workRecordHash": "36e26f8c1e532d4aa2730ee8d48f0eccba38a755847d42dd1f0fbb5977ae3060",
+      "sourceDigest"  : "5342eab895ec36699a59b3146e7a04b52c32e641efe33b416fda5f9ea1e87e8b",
+      "criteriaDigest": "f068a5a2412b8551dd03068c24a1d1b66c2dc080131619bed1aef58664ea34ed",
+      "semanticHash"  : "f907e0a77a220b2303be4e3e5e25bba6e833da153bb1a9372560b59f7c419c2b",
+      "narrative": {
+        "summary": "전체 작업 문서 검사를 막던 보류 논의의 경로 분류를 정리했다. 논의 원문과 중앙화 개발 보류 결정은 그대로 유지하고 일반 아키텍처 논의 경로와 목차 링크로 이동했다. 원문·링크·이전 빈 폴더 검사와 전체 check-workflow가 통과했고 실제 Opus 감사도 세 기준을 수용했다.",
+        "before" : "개발 보류인 discussion.md만 docs/work/Architecture/001에 있어 work.json 없는 작업으로 수집됐다.",
+        "after"  : "논의는 docs/architecture/discussions/central-storage-local-execution.md에서 읽을 수 있고 INDEX의 보류된 논의 링크로 찾는다. 잘못된 작업 원장 폴더가 사라져 전체 문서 계약 검사를 통과한다.",
+        "changes": [
+          "보류 논의 원문을 동일 bytes로 이동",
+          "목차에 보류된 논의 링크 추가",
+          "같은 버그 UUID에 진단·명세·검증·문서 영향·독립 감사 기록"
+        ],
+        "decisions": [
+          "원장이나 검사 예외를 만들지 않고 문서 분류를 고쳤다. 중앙화 개발은 재개하지 않았다.",
+          "기존 W020의 과거 실패·보고서 문장은 당시 이력으로 보존했다."
+        ],
+        "limitations": [
+          "문서 경로와 계약 검사만 검증한 것으로 제품 기능·Windows·원격·W020 전체 검증 통과는 아니다.",
+          "범위 밖 기존 dirty 변경을 보존했고 커밋·push는 실행하지 않았다."
+        ],
+        "next": [
+          "공유 완료 core로 수용 상태를 판정하고 다음 로컬 검증을 이어간다."
+        ]
+      },
+      "work": {
+        "status": "done",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "DOC-BYTES",
+            "description": "보류 논의 원문의 bytes와 중앙화 개발 보류 결정을 보존한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-526424c9-4339-4786-ad22-76d3c034a82a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "DOC-FIND",
+            "description": "논의는 일반 아키텍처 문서 경로에 있으며 작업 목차 링크로 찾을 수 있다. 잘못된 작업 원장 디렉터리는 남지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-526424c9-4339-4786-ad22-76d3c034a82a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "DOC-CONTRACT",
+            "description": "현재 저장소의 check-workflow가 원장 누락 오류 없이 통과한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-cde3a7b7-39dc-4e7a-873f-e5f96748142b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-526424c9-4339-4786-ad22-76d3c034a82a",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import assert from 'node:assert/strict';import fs from 'node:fs';import {createHash} from 'node:crypto';const p=\"docs/architecture/discussions/central-storage-local-execution.md\";assert.equal(createHash('sha256').update(fs.readFileSync(p)).digest('hex'),\"71785f2a1fe3142a16f03a36b61cbf05b51074cf575648ac5eaca426d23ab3b7\");assert(!fs.existsSync(\"docs/work/Architecture/001-중앙 저장과 로컬 실행/discussion.md\"));assert(!fs.existsSync(\"docs/work/Architecture/001-중앙 저장과 로컬 실행\"));assert(fs.readFileSync('docs/work/INDEX.md','utf8').includes('../architecture/discussions/central-storage-local-execution.md'));assert(fs.readFileSync(p,'utf8').includes('중앙화 개발 보류'));console.log('DOC-BYTES/DOC-FIND: 원문 SHA·보류 결정·목차 링크·잘못된 작업 디렉터리 제거 확인');"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T22:49:41.125Z"
+          },
+          {
+            "id": "attempt-cde3a7b7-39dc-4e7a-873f-e5f96748142b",
+            "command": "node",
+            "args": [
+              "scripts/check-workflow.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T22:49:42.020Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-5ab0d64f-cd88-4a39-9dd1-184ddfdaa100",
+            "verdict"    : "pass",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/local-continue-20261117/discussion-opus/opus.json",
+            "findings": [
+              "읽은 범위: discussion-review-request.md, 002 작업의 spec.md·tasks.md·work.json 전체, 이동된 docs/architecture/discussions/central-storage-local-execution.md 전체, discussion-sha256.txt, discussion-attempt-0.json·discussion-attempt-1.json 전체를 읽었다. docs/work/INDEX.md는 관련 절(355-364행)만 Grep으로 확인했다. docs/work/Architecture 하위와 증거 디렉터리는 Glob으로 목록을 확인했고, 옛 경로 문자열은 저장소 전체를 Grep으로 검색했다. 이 세션에는 Bash 도구가 없어 git diff/status/show와 SHA 재계산은 실행하지 못했다. 테스트와 check-workflow도 실행하지 않았다. 도구 읽기 실패는 없었다.",
+              "DOC-BYTES: SHA 비교는 attempt-0의 assert.equal 결과와 sourceDigest의 파일 digest(71785f2a…)에 근거하며, 이 digest는 discussion-sha256.txt와 일치한다. 직접 재계산은 하지 않았다. 이동된 문서 4행의 '상태: 중앙화 개발 보류. … 구현 승인·완료 명세가 아니다'와 15행·82행·111행의 비승인 문구로 보류 결정이 유지된 것을 확인했다. 백업 discussion-original.md는 존재만 확인했고, 내용을 바이트 단위로 대조하지는 않았다.",
+              "DOC-FIND: INDEX.md 362-364행의 '보류된 논의' 절이 ../architecture/discussions/central-storage-local-execution.md를 링크하고, 이 대상 파일은 실재한다. Glob 결과 docs/work/Architecture 아래에는 002 디렉터리 파일 4개(spec/tasks/verification/work.json)만 있고 001 디렉터리는 남아 있지 않다. 따라서 잘못된 원장 디렉터리 제거가 확인된다.",
+              "DOC-CONTRACT: attempt-1은 node scripts/check-workflow.ts를 process로 실행해 exitCode 0, sourceStable=true를 기록했다. source digest 5342eab8…와 criteriaDigest f068a5a2…는 요청 번들 값과 같다. stdout 내용은 보존되지 않아(contentRetained=false) 출력 문구는 검토하지 못했다. 가짜 work.json이나 checker 예외가 추가됐는지는 docs/work/Architecture 파일 목록으로만 확인했다. scripts/check-workflow.ts의 변경 여부는 git diff를 실행하지 못해 미검토다.",
+              "옛 경로 '001-중앙 저장과 로컬 실행'은 002 자체 문서와 W020의 work.json·보고서(html/json)에만 남아 있다. W020 쪽 참조는 과거 리뷰·보고서 이력 문장이다. spec.md 13행이 기존 보고서·검증 이력을 바꾸지 않겠다고 정했으므로 이를 수정하지 않은 것은 타당하다. 열람 경로가 깨지는 현재 링크는 발견하지 못했다.",
+              "범위: work.json의 writePaths는 옛 문서, 새 문서, docs/work/Architecture, INDEX.md로 한정되고 commit/publish는 false다. 그러나 git status 스냅샷에는 docs/ARCHITECTURE.md·PRODUCT.md·DEVELOPMENT.md 등 다수 파일이 수정 상태로 나온다. 이들은 W020 등 다른 진행 작업의 변경으로 보이며, git diff를 실행하지 못해 이 작업이 범위 밖 파일을 바꿨는지는 독립 확인하지 못했다. 다만 이 수정분이 해당 문서를 바꿨다는 근거는 읽은 자료에서 찾지 못했다.",
+              "경미한 사항(결함 아님): tasks.md 8행은 '현재 단계 build'인데, 12행 인계와 work.json status는 verify/verifying이다. 문서 안에서 단계 표기가 어긋난다. 또 INDEX.md와 spec.md의 mode가 384(0600)로 다른 문서의 420(0644)과 다르다. Git은 실행 비트만 추적하므로 계약에 미치는 영향은 없어 보인다.",
+              "판정: 원문 보존, 중앙화 개발 보류 유지, 목차 참조, 잘못된 원장 디렉터리 제거, check-workflow 통과 근거가 서로 맞는다. 증거 요약 '현재 적용 가능'은 시도 digest가 현재 sourceDigest와 같아 과대 표기가 아니다. 이번 pass는 이 문서 분류 버그의 세 기준에만 해당하며, W020 전체나 제품 GUI 수용을 뜻하지 않는다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Architecture/002-보류 논의 문서와 작업 원장 경로 정합/work.json",
+        "workRecordHash": "36e26f8c1e532d4aa2730ee8d48f0eccba38a755847d42dd1f0fbb5977ae3060",
+        "sourceDigest"  : "5342eab895ec36699a59b3146e7a04b52c32e641efe33b416fda5f9ea1e87e8b",
+        "criteriaDigest": "f068a5a2412b8551dd03068c24a1d1b66c2dc080131619bed1aef58664ea34ed"
+      }
+    }
+  ]
+}

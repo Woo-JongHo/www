@@ -1,0 +1,185 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>로컬과 원격 실행 병목 진단 및 완료 단위 운영 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 17일 오전 10:17 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>로컬과 원격 실행 병목 진단 및 완료 단위 운영</h1><p class="lead">로컬·원격의 대형 재개 문맥·과도한 위임·공유 소스 변경·검사와 기준 연결 실패를 진단하고, 단일 작업군과 작은 문맥 실행을 적용했다. Sonnet 사전 검토와 최종 Opus 수정 재검토를 통과했다. Reports 완료량과 동일 조건 토큰 절감률은 아직 미입증이다.</p><div id="report-story" class="story">한 재개 thread에서 여러 제품군을 함께 수정·감사하면서 입력과 재검증이 반복됐다. 원격 약4시간의 위임 요청29회, 마지막 입력356744토큰을 관측했다.
+
+로컬은 운영 정책·관측만 소유한다. 원격 기존 root를 안전경계에서 종료하고 기술171파일·원장57개 SHA불변을 확인했다. 5162바이트 인계로 fresh Reports3 작업군을 시작하고 추가 agent기능을 비활성화했다. 초기 ACK와 설정·정책SHA는 관측했으며 실제 전체 업무 수용은 별도다. 후속 실행은 10:07경 정확한 차단을 보고하고 exit0 종료했으며, 추가 위임과 감사 모델 호출은0이었다. 현재 계속 실행중이라고 보고하지 않는다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 원격 CHECKPOINT의 별도 형식 승인 실패와 schema2 요청 재연결 부재를 분리해, 실제 원인 소유 파일과 필요한 공식 변경을 검토한다. 동일 실패의 감사 재호출은 하지 않는다.</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>한 재개 thread에서 여러 제품군을 함께 수정·감사하면서 입력과 재검증이 반복됐다. 원격 약4시간의 위임 요청29회, 마지막 입력356744토큰을 관측했다.</p></div><div><h3>접근과 결과</h3><p>로컬은 운영 정책·관측만 소유한다. 원격 기존 root를 안전경계에서 종료하고 기술171파일·원장57개 SHA불변을 확인했다. 5162바이트 인계로 fresh Reports3 작업군을 시작하고 추가 agent기능을 비활성화했다. 초기 ACK와 설정·정책SHA는 관측했으며 실제 전체 업무 수용은 별도다. 후속 실행은 10:07경 정확한 차단을 보고하고 exit0 종료했으며, 추가 위임과 감사 모델 호출은0이었다. 현재 계속 실행중이라고 보고하지 않는다.</p></div></div><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>완료 core나 수용기준을 낮추는 대신 소스동결과 검사/기준 적합성 확인을 감사 앞으로 이동했다.</li><li>이전 대화 resume 대신 새 문맥으로 시작하고, 과거 Task·실패·dirty는 유지했다.</li><li>최종 Opus는 실제 읽기 전용 공식 core로 실행했으며 allowFallback=false를 유지했다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>docs/skills/EXECUTION_EFFICIENCY.md 운영 절차 신규와 agents/www/AGENT.md 링크만 추가했다.</li><li>원격 AGENT는 원래 내용을 보존하고 같은 링크만 추가했으며 정책v2도 동일SHA로 적용했다.</li><li>종료 checkpoint·새 세션·정책ACK·원인집계·Sonnet/Opus 원문을 증거 경로에 보존했다.</li></ul></div><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>실제 호출·토큰·실패·소스 기록으로 원인과 미확인을 구분한다.</dt><dd>미검증으로 기록</dd></div><div><dt>이력·권한·필수 감사를 유지하며 작은 문맥·단일 작업군 실행을 로컬과 원격에 적용하고 관측한다.</dt><dd>미검증으로 기록</dd></div><div><dt>Sonnet 교차검증·Opus 감사와 적용 결과·측정 한계를 기록한다.</dt><dd>미검증으로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>EFF 전체를 check-workflow 하나에 연결하지 않았으므로 공식 세 기준은 unverified이며 업무 done을 주장하지 않는다.</li><li>초기 입력36694는 과거356744보다 작았으나 후속 큰 출력으로 문맥이 다시 증가했다. 동일 조건 완료 전후 절감률·속도 향상은 미입증이다.</li><li>현재 20분/2회실패/60k입력은 advisory이며 OS토큰강제제한이 아니다.</li><li>초기 ACK는 v1정책에 대한 최초 인계 관측이며 v2재수용·전체지침준수·제품완료와 다르다.</li><li>종료 전 안전관측의 원격 contemporaneous 영수증은 미보존했고 도구결과 사후회수본과 사전프로세스 목록의 범위를 명시했다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>원격 CHECKPOINT의 별도 형식 승인 실패와 schema2 요청 재연결 부재를 분리해, 실제 원인 소유 파일과 필요한 공식 변경을 검토한다. 동일 실패의 감사 재호출은 하지 않는다.</li><li>현재 작업군 완료/차단까지의 실제 토큰·새입력·캐시·호출수를 별도로 측정한다.</li><li>이 작업의 의미 수용 기준을 증명하는 정식 검증 연결은 별도 미완료로 유지한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 17일 오전 10:17 · 선택한 발행 기록 · 로컬·원격의 대형 재개 문맥·과도한 위임·공유 소스 변경·검사와 기준 연결 실패를 진단하고, 단일 작업군과 작은 문맥 실행을 적용했다. Sonnet 사전 검토와 최종 Opus 수정 재검토를 통과했다. Reports 완료량과 동일 조건 토큰 절감률은 아직 미입증이다.</p><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 1개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 17일 오전 10:04 · 작성자 보고서 · 로컬·원격의 대형 재개 문맥·과도한 위임·공유 소스 변경·검사와 기준 연결 실패를 진단하고, 단일 작업군과 작은 문맥 실행을 적용했다. Sonnet 사전 검토와 최종 Opus 수정 재검토를 통과했다. Reports 완료량과 동일 조건 토큰 절감률은 아직 미입증이다.</summary><article><h3>로컬과 원격 실행 병목 진단 및 완료 단위 운영</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">한 재개 thread에서 여러 제품군을 함께 수정·감사하면서 입력과 재검증이 반복됐다. 원격 약4시간의 위임 요청29회, 마지막 입력356744토큰을 관측했다.
+
+로컬은 운영 정책·관측만 소유한다. 원격 기존 root를 안전경계에서 종료하고 기술171파일·원장57개 SHA불변을 확인했다. 5162바이트 인계로 fresh Reports3 작업군을 시작하고 추가 agent기능을 비활성화했다. 초기 ACK와 설정·정책SHA는 관측했으며 실제 전체 업무 수용은 별도다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 원격 Reports3의 정확한 blocker·필요파일·후속명령을 회수하고 원인불명 감사 재호출을 하지 않는다.</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>docs/skills/EXECUTION_EFFICIENCY.md 운영 절차 신규와 agents/www/AGENT.md 링크만 추가했다.</li><li>원격 AGENT는 원래 내용을 보존하고 같은 링크만 추가했으며 정책v2도 동일SHA로 적용했다.</li><li>종료 checkpoint·새 세션·정책ACK·원인집계·Sonnet/Opus 원문을 증거 경로에 보존했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>실제 호출·토큰·실패·소스 기록으로 원인과 미확인을 구분한다.</dt><dd>미검증으로 기록</dd></div><div><dt>이력·권한·필수 감사를 유지하며 작은 문맥·단일 작업군 실행을 로컬과 원격에 적용하고 관측한다.</dt><dd>미검증으로 기록</dd></div><div><dt>Sonnet 교차검증·Opus 감사와 적용 결과·측정 한계를 기록한다.</dt><dd>미검증으로 기록</dd></div></dl><section class="paper" id="history-report-78c184b4-5396-42b1-83e9-be648ef697d5-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>완료 core나 수용기준을 낮추는 대신 소스동결과 검사/기준 적합성 확인을 감사 앞으로 이동했다.</li><li>이전 대화 resume 대신 새 문맥으로 시작하고, 과거 Task·실패·dirty는 유지했다.</li><li>최종 Opus는 실제 읽기 전용 공식 core로 실행했으며 allowFallback=false를 유지했다.</li></ul></section><section class="paper" id="history-report-78c184b4-5396-42b1-83e9-be648ef697d5-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>EFF 전체를 check-workflow 하나에 연결하지 않았으므로 공식 세 기준은 unverified이며 업무 done을 주장하지 않는다.</li><li>초기 입력36694는 과거356744보다 작았으나 후속 큰 출력으로 문맥이 다시 증가했다. 동일 조건 완료 전후 절감률·속도 향상은 미입증이다.</li><li>현재 20분/2회실패/60k입력은 advisory이며 OS토큰강제제한이 아니다.</li><li>초기 ACK는 v1정책에 대한 최초 인계 관측이며 v2재수용·전체지침준수·제품완료와 다르다.</li><li>종료 전 안전관측의 원격 contemporaneous 영수증은 미보존했고 도구결과 사후회수본과 사전프로세스 목록의 범위를 명시했다.</li></ul></section><section class="paper" id="history-report-78c184b4-5396-42b1-83e9-be648ef697d5-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>원격 Reports3의 정확한 blocker·필요파일·후속명령을 회수하고 원인불명 감사 재호출을 하지 않는다.</li><li>현재 작업군 완료/차단까지의 실제 토큰·새입력·캐시·호출수를 별도로 측정한다.</li><li>이 작업의 의미 수용 기준을 증명하는 정식 검증 연결은 별도 미완료로 유지한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-78c184b4-5396-42b1-83e9-be648ef697d5-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-d4b0bd27-66ac-4f56-932c-1f94fb59276f<br>report-78c184b4-5396-42b1-83e9-be648ef697d5</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>f43727f704784ff0b9ca049bc0845375af93278903d4fc7bc736109c10629367</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>9a62d738e404191f787f842c548661f0f7ff50a1174b4c34293e8285390d1011</code></dd></div><div><dt>기준 지문</dt><dd><code>32692b15713163b4493406689148052844c3d420b94c228edd0631c7b494f668</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;EFF-CAUSE&quot;,
+      &quot;description&quot;: &quot;실제 호출·토큰·실패·소스 기록으로 원인과 미확인을 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;EFF-APPLY&quot;,
+      &quot;description&quot;: &quot;이력·권한·필수 감사를 유지하며 작은 문맥·단일 작업군 실행을 로컬과 원격에 적용하고 관측한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;EFF-VERIFY&quot;,
+      &quot;description&quot;: &quot;Sonnet 교차검증·Opus 감사와 적용 결과·측정 한계를 기록한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-b5b85451-17bc-4504-8ec8-e754463999ca&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-b5b85451-17bc-4504-8ec8-e754463999ca/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;읽은 범위: inputPaths의 문서 9개 전체, 같은 폴더의 tasks.md, .www/evidence/efficiency-20261117/의 remote-stop-result.json·remote-policy-applied.json·remote-launch.json·remote-initial-observation.json·remote-ACK.md·diagnostic-summary.json. 그 밖의 evidence 파일은 Grep 결과로만 확인했다. git diff는 실행하지 않았고 AGENT.md는 현재 내용과 Grep으로만 확인했다. 테스트(check-workflow 포함)는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;[결함·증거 범위 확대] verification.md:9에서 종료 전 안전 조건인 &#39;실행중 tool없음, 실제 top-level work/report lock없음, 최근 원장 쓰기2분이상 안정&#39;과 &#39;code-mode-host7151도 종료&#39;를 관측 사실로 적고 원문을 remote-stop-result.json으로 지정했다. 그런데 이 파일에는 at, signal, oldPid 6973, aliveOldTree [], sourceChanged/recordsChanged [], recordCount 57, sourceCount 171, oldExitCode \&quot;1\&quot;만 있다. 모두 종료 뒤 상태다. 종료 전 tool·lock·원장 안정성 기록과 PID 7151은 evidence 폴더 어디에서도 검색되지 않는다(Grep &#39;7151|lock|stable|host|2분&#39; 결과 없음). EXECUTION_EFFICIENCY.md:27-28에서 이 조건들은 SIGINT를 보내기 전에 확인해야 하는 안전 선행조건이다. 따라서 보존된 증거 없이 충족했다고 쓰면 안 된다. 해당 checkpoint 원문을 보존하거나, 문구를 &#39;미보존·미입증&#39;으로 낮춰야 한다.&quot;,
+        &quot;[결함·경로 오류] verification.md:5는 AGENT 기존 바이트와 patch가 &#39;evidence/efficiency-20261117/agent-before.*&#39;에 있다고 적었다. 그러나 저장소 루트에 그 경로는 없고(Glob 결과 없음), 실제 파일은 .www/evidence/efficiency-20261117/agent-before.md와 .patch다. 같은 문서 19행은 .www/ 접두사를 정확히 썼으므로 5행과 서로 맞지 않는다.&quot;,
+        &quot;[결함·기록 불일치] verification.md:13과 23은 &#39;새 세션 최초 수용은 실제 관측했다&#39;고 적었다. 하지만 tasks.md:7의 &#39;원격 작은 문맥 실행의 실제 인계 수용 관측&#39;은 아직 [ ]로 남아 있다. 또 remote-launch.json의 state는 &#39;launched_not_yet_accepted&#39;다. ACK(remote-ACK.md)만 있으면 수용으로 보는지 판단 기준을 정하고, 계획 문서와 검증 기록 가운데 하나를 고쳐 둘을 맞춰야 한다.&quot;,
+        &quot;[주의·모델 관측 표현] verification.md:13의 &#39;turn_context도 gpt-6.1-sol/high&#39;는 remote-initial-observation.json의 turnContext와 일치한다. 그러나 remote-ACK.md:11에는 &#39;실제 observedModel은 아직 미관측(null)&#39;이라고 적혀 있다. turn_context는 요청 설정에 가깝다. 따라서 실제 응답 모델을 관측했다는 근거로 읽히지 않도록 구분해서 적는 것이 좋다.&quot;,
+        &quot;[주의·근거 미확인] diagnosis.md:5와 12의 여러 수치는 diagnostic-summary.json에 없어 이번 검토로 대조할 수 없었다. 해당 항목은 위임 모델별 분포(Sol13/Terra6/Astra6/Luna4), Terra 감사 29건(pass6/fail21/not_run2), &#39;agent thread limit reached&#39; 오류, &#39;v5 관측을 v6 이후 보존&#39; 로그다. 다음 수치는 diagnostic-summary.json과 일치한다: input 141465847, cached 138967040, uncached 2498807, output 385788, reasoning 252157, lastInput 356744, 위임 29, followup 36, message 70. &#39;입증된 원인&#39; 절에 쓰려면 원문 로그 위치와 hash를 연결해야 한다.&quot;,
+        &quot;[정상 확인] 다음 내용은 일치한다. 이번 변경은 work.json authorization.writePaths(agents/www/AGENT.md, docs/skills/EXECUTION_EFFICIENCY.md)와 맞는다. AGENT.md:21의 링크 문단이 EXECUTION_EFFICIENCY.md로 바르게 연결된다. remote-policy-applied.json과 remote-ACK.md의 policySha 598f0994…가 서로 같고, inputBundle에 있는 EXECUTION_EFFICIENCY.md digest와도 같다. 원격 AGENT after SHA 8af255d0…도 ACK와 일치한다. launch 기록은 resume=false, multi_agent/multi_agent_v2 disable, handoff 5162바이트다. 초기 토큰(total 60234/cache 23552/output 1110, last 36694)도 verification.md와 일치한다.&quot;,
+        &quot;[정상 확인] 이번 작업은 증거 범위를 지나치게 넓히지 않도록 적절히 제한했다. EFF-CAUSE, EFF-APPLY, EFF-VERIFY 세 기준은 모두 unverified이고 evidence는 비어 있다. 정적 check-workflow를 의미 기준 통과로 연결하지 않았다. 토큰 절감률, Reports 완료, OS 수준 강제를 주장하지 않는다고 명시했다. 예산은 advisory 기준으로 두었고, Sonnet 검토가 최종 Opus를 대체하지 않는다는 점과 자동 재시작·강제 kill 금지도 정책 문서에 모순 없이 반영되어 있다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-b4331833-a476-4a88-a4ed-518e2c90adfb&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-b4331833-a476-4a88-a4ed-518e2c90adfb/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;읽은 범위: 022 폴더의 spec.md, design.md, diagnosis.md, verification.md, tasks.md, work.json 전체, docs/skills/EXECUTION_EFFICIENCY.md 전체, agents/www/AGENT.md:21은 Grep 결과로 확인했다. .www/evidence/efficiency-20261117/의 safety-observation.txt, remote-diagnostic-provenance.json, acceptance-readback.json, remote-policy-v2-applied.json, remote-before-locks.json, agent-before.patch, check-workflow.log는 직접 읽었다. remote-before-processes.txt는 1~422행만 읽었다(전체 565행). MODEL_POLICY.md·WORKFLOW.md 본문과 git diff는 읽지 않았다. 테스트와 check-workflow는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;[이전 Opus 지적 해소·경로] verification.md:5의 AGENT 보존 경로는 이제 .www/evidence/efficiency-20261117/agent-before.*로 적혀 있다. 이 경로에 agent-before.md와 agent-before.patch가 실제로 있다. patch의 hunk(5단계 계획 인계, nextAction 연결 문단)는 이번 작업 이전부터 있던 dirty 변경이다. 이번 변경은 AGENT.md:21의 EXECUTION_EFFICIENCY 링크 문단뿐이며, work.json의 writePaths 범위 안에 있다.&quot;,
+        &quot;[이전 Opus 지적 해소·종료 전 안전조건] verification.md:9는 종료 전 tool·lock·원장 안정성 관측을 세션 도구 출력 기준으로 한정했다. 원격에서 SIGINT 당시 남긴 사전 영수증이 없다는 점도 명시했고, remote-stop-result.json만으로는 입증하지 않는다고 적었다. safety-observation.txt는 SIGINT 전 RUNNING_ITEMS {}, RECORD_LOCKS [], RECENT_RECORD_WRITE 09:03:58을 보존했고, 이 기록이 사후에 만든 사본이라는 점도 밝혔다. remote-before-processes.txt:229-230에서 PID6973(codex)과 그 자식 PID7151(codex-code-mode-host)을 확인했다. 종료 뒤 aliveOldTree []와 대조하면 &#39;host7151도 종료&#39;라는 기록이 뒷받침된다. 정책 v2(EXECUTION_EFFICIENCY.md:28)도 앞으로는 종료 전에 원시 영수증을 보존하도록 보완했다.&quot;,
+        &quot;[이전 Opus 지적 해소·ACK 수용 범위] tasks.md:7은 이제 &#39;ACK와 정책SHA·3TaskUUID 일치 관측(전체 실행 종료/제품수용 아님)&#39;으로 범위를 좁혔다. acceptance-readback.json은 state=initial_ack_observed_not_full_execution_acceptance로 기록하면서 launchStatePreserved=launched_not_yet_accepted와 actualResponseModel=null을 그대로 보존한다. verification.md:13과 23도 turn_context가 세션 설정 관측일 뿐이며 실제 응답 모델은 미확인이라고 구분한다. 계획 문서와 검증 기록이 서로 어긋나지 않는다.&quot;,
+        &quot;[이전 Opus 지적 해소·진단 근거] remote-diagnostic-provenance.json의 spawns 29건을 직접 세었다. Sol 13, Terra 6, Astra 6, Luna 4로 diagnosis.md:5와 일치한다. reviews 29건도 pass 6, fail 21, not_run 2로 일치한다. sessionPath와 SHA, progressExtract의 v6 재평가 문구도 함께 보존되어 있다. &#39;agent thread limit reached&#39;는 remote-restart-20261117-053618.stderr:1에 실제로 있다.&quot;,
+        &quot;[경미·개선 권고, 결함 아님] diagnosis.md의 &#39;입증된 원인&#39; 절은 근거 파일(remote-diagnostic-provenance.json, remote-restart-...stderr)을 직접 연결하지 않는다. 근거 위치는 verification.md:29에만 있다. 다음 재검토자가 diagnosis.md만 읽어도 출처를 찾을 수 있도록 원인 문장 옆에 근거 위치를 적어 두는 것이 좋다.&quot;,
+        &quot;[경미·참고] remote-before-locks.json에 실제로 기록된 lock은 cargo/tauri incremental lock과 evidence 후보의 update.lock뿐이다. work/report lock은 없다. 따라서 verification.md:9의 &#39;실제 top-level work/report lock없음&#39;과 모순되지 않는다. 다만 이 파일에는 관측 시각 필드가 없고, verification.md에서도 이 파일을 참조하지 않는다.&quot;,
+        &quot;[정상 확인·증거 범위] EFF-CAUSE, EFF-APPLY, EFF-VERIFY는 모두 unverified이고 evidence도 비어 있다. check-workflow.log(&#39;워크플로 계약 검증 통과&#39;)는 정적 계약 검사로만 기록됐고, 의미 기준 통과와 연결하지 않았다. 다음 항목도 모두 미입증으로 명시했다: 토큰 절감률, Reports 완료, v2 정책 재수용, OS 수준 강제. remote-policy-v2-applied.json의 newSha 8b0624ef…는 inputBundle에 있는 EXECUTION_EFFICIENCY.md digest와 일치하며, ackVersion &#39;v2 re-acceptance not observed&#39;도 verification.md:27과 맞는다. 현재 수정에서 수정이 필요한 구체적 결함은 확인하지 못했다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;로컬·원격의 대형 재개 문맥·과도한 위임·공유 소스 변경·검사와 기준 연결 실패를 진단하고, 단일 작업군과 작은 문맥 실행을 적용했다. Sonnet 사전 검토와 최종 Opus 수정 재검토를 통과했다. Reports 완료량과 동일 조건 토큰 절감률은 아직 미입증이다.&quot;,
+  &quot;before&quot;: &quot;한 재개 thread에서 여러 제품군을 함께 수정·감사하면서 입력과 재검증이 반복됐다. 원격 약4시간의 위임 요청29회, 마지막 입력356744토큰을 관측했다.&quot;,
+  &quot;after&quot;: &quot;로컬은 운영 정책·관측만 소유한다. 원격 기존 root를 안전경계에서 종료하고 기술171파일·원장57개 SHA불변을 확인했다. 5162바이트 인계로 fresh Reports3 작업군을 시작하고 추가 agent기능을 비활성화했다. 초기 ACK와 설정·정책SHA는 관측했으며 실제 전체 업무 수용은 별도다.&quot;,
+  &quot;changes&quot;: [
+    &quot;docs/skills/EXECUTION_EFFICIENCY.md 운영 절차 신규와 agents/www/AGENT.md 링크만 추가했다.&quot;,
+    &quot;원격 AGENT는 원래 내용을 보존하고 같은 링크만 추가했으며 정책v2도 동일SHA로 적용했다.&quot;,
+    &quot;종료 checkpoint·새 세션·정책ACK·원인집계·Sonnet/Opus 원문을 증거 경로에 보존했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;완료 core나 수용기준을 낮추는 대신 소스동결과 검사/기준 적합성 확인을 감사 앞으로 이동했다.&quot;,
+    &quot;이전 대화 resume 대신 새 문맥으로 시작하고, 과거 Task·실패·dirty는 유지했다.&quot;,
+    &quot;최종 Opus는 실제 읽기 전용 공식 core로 실행했으며 allowFallback=false를 유지했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;EFF 전체를 check-workflow 하나에 연결하지 않았으므로 공식 세 기준은 unverified이며 업무 done을 주장하지 않는다.&quot;,
+    &quot;초기 입력36694는 과거356744보다 작았으나 후속 큰 출력으로 문맥이 다시 증가했다. 동일 조건 완료 전후 절감률·속도 향상은 미입증이다.&quot;,
+    &quot;현재 20분/2회실패/60k입력은 advisory이며 OS토큰강제제한이 아니다.&quot;,
+    &quot;초기 ACK는 v1정책에 대한 최초 인계 관측이며 v2재수용·전체지침준수·제품완료와 다르다.&quot;,
+    &quot;종료 전 안전관측의 원격 contemporaneous 영수증은 미보존했고 도구결과 사후회수본과 사전프로세스 목록의 범위를 명시했다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;원격 Reports3의 정확한 blocker·필요파일·후속명령을 회수하고 원인불명 감사 재호출을 하지 않는다.&quot;,
+    &quot;현재 작업군 완료/차단까지의 실제 토큰·새입력·캐시·호출수를 별도로 측정한다.&quot;,
+    &quot;이 작업의 의미 수용 기준을 증명하는 정식 검증 연결은 별도 미완료로 유지한다.&quot;
+  ]
+}</pre></div></details></article></details></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Workflow/022-로컬과 원격 실행 병목 진단 및 완료 단위 운영/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-d4b0bd27-66ac-4f56-932c-1f94fb59276f<br>report-f32eb133-92d2-4d30-8a33-d06a5a931835</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>f43727f704784ff0b9ca049bc0845375af93278903d4fc7bc736109c10629367</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>9a62d738e404191f787f842c548661f0f7ff50a1174b4c34293e8285390d1011</code></dd></div><div><dt>기준 지문</dt><dd><code>32692b15713163b4493406689148052844c3d420b94c228edd0631c7b494f668</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;EFF-CAUSE&quot;,
+      &quot;description&quot;: &quot;실제 호출·토큰·실패·소스 기록으로 원인과 미확인을 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;EFF-APPLY&quot;,
+      &quot;description&quot;: &quot;이력·권한·필수 감사를 유지하며 작은 문맥·단일 작업군 실행을 로컬과 원격에 적용하고 관측한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;EFF-VERIFY&quot;,
+      &quot;description&quot;: &quot;Sonnet 교차검증·Opus 감사와 적용 결과·측정 한계를 기록한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-b5b85451-17bc-4504-8ec8-e754463999ca&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-b5b85451-17bc-4504-8ec8-e754463999ca/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;읽은 범위: inputPaths의 문서 9개 전체, 같은 폴더의 tasks.md, .www/evidence/efficiency-20261117/의 remote-stop-result.json·remote-policy-applied.json·remote-launch.json·remote-initial-observation.json·remote-ACK.md·diagnostic-summary.json. 그 밖의 evidence 파일은 Grep 결과로만 확인했다. git diff는 실행하지 않았고 AGENT.md는 현재 내용과 Grep으로만 확인했다. 테스트(check-workflow 포함)는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;[결함·증거 범위 확대] verification.md:9에서 종료 전 안전 조건인 &#39;실행중 tool없음, 실제 top-level work/report lock없음, 최근 원장 쓰기2분이상 안정&#39;과 &#39;code-mode-host7151도 종료&#39;를 관측 사실로 적고 원문을 remote-stop-result.json으로 지정했다. 그런데 이 파일에는 at, signal, oldPid 6973, aliveOldTree [], sourceChanged/recordsChanged [], recordCount 57, sourceCount 171, oldExitCode \&quot;1\&quot;만 있다. 모두 종료 뒤 상태다. 종료 전 tool·lock·원장 안정성 기록과 PID 7151은 evidence 폴더 어디에서도 검색되지 않는다(Grep &#39;7151|lock|stable|host|2분&#39; 결과 없음). EXECUTION_EFFICIENCY.md:27-28에서 이 조건들은 SIGINT를 보내기 전에 확인해야 하는 안전 선행조건이다. 따라서 보존된 증거 없이 충족했다고 쓰면 안 된다. 해당 checkpoint 원문을 보존하거나, 문구를 &#39;미보존·미입증&#39;으로 낮춰야 한다.&quot;,
+        &quot;[결함·경로 오류] verification.md:5는 AGENT 기존 바이트와 patch가 &#39;evidence/efficiency-20261117/agent-before.*&#39;에 있다고 적었다. 그러나 저장소 루트에 그 경로는 없고(Glob 결과 없음), 실제 파일은 .www/evidence/efficiency-20261117/agent-before.md와 .patch다. 같은 문서 19행은 .www/ 접두사를 정확히 썼으므로 5행과 서로 맞지 않는다.&quot;,
+        &quot;[결함·기록 불일치] verification.md:13과 23은 &#39;새 세션 최초 수용은 실제 관측했다&#39;고 적었다. 하지만 tasks.md:7의 &#39;원격 작은 문맥 실행의 실제 인계 수용 관측&#39;은 아직 [ ]로 남아 있다. 또 remote-launch.json의 state는 &#39;launched_not_yet_accepted&#39;다. ACK(remote-ACK.md)만 있으면 수용으로 보는지 판단 기준을 정하고, 계획 문서와 검증 기록 가운데 하나를 고쳐 둘을 맞춰야 한다.&quot;,
+        &quot;[주의·모델 관측 표현] verification.md:13의 &#39;turn_context도 gpt-6.1-sol/high&#39;는 remote-initial-observation.json의 turnContext와 일치한다. 그러나 remote-ACK.md:11에는 &#39;실제 observedModel은 아직 미관측(null)&#39;이라고 적혀 있다. turn_context는 요청 설정에 가깝다. 따라서 실제 응답 모델을 관측했다는 근거로 읽히지 않도록 구분해서 적는 것이 좋다.&quot;,
+        &quot;[주의·근거 미확인] diagnosis.md:5와 12의 여러 수치는 diagnostic-summary.json에 없어 이번 검토로 대조할 수 없었다. 해당 항목은 위임 모델별 분포(Sol13/Terra6/Astra6/Luna4), Terra 감사 29건(pass6/fail21/not_run2), &#39;agent thread limit reached&#39; 오류, &#39;v5 관측을 v6 이후 보존&#39; 로그다. 다음 수치는 diagnostic-summary.json과 일치한다: input 141465847, cached 138967040, uncached 2498807, output 385788, reasoning 252157, lastInput 356744, 위임 29, followup 36, message 70. &#39;입증된 원인&#39; 절에 쓰려면 원문 로그 위치와 hash를 연결해야 한다.&quot;,
+        &quot;[정상 확인] 다음 내용은 일치한다. 이번 변경은 work.json authorization.writePaths(agents/www/AGENT.md, docs/skills/EXECUTION_EFFICIENCY.md)와 맞는다. AGENT.md:21의 링크 문단이 EXECUTION_EFFICIENCY.md로 바르게 연결된다. remote-policy-applied.json과 remote-ACK.md의 policySha 598f0994…가 서로 같고, inputBundle에 있는 EXECUTION_EFFICIENCY.md digest와도 같다. 원격 AGENT after SHA 8af255d0…도 ACK와 일치한다. launch 기록은 resume=false, multi_agent/multi_agent_v2 disable, handoff 5162바이트다. 초기 토큰(total 60234/cache 23552/output 1110, last 36694)도 verification.md와 일치한다.&quot;,
+        &quot;[정상 확인] 이번 작업은 증거 범위를 지나치게 넓히지 않도록 적절히 제한했다. EFF-CAUSE, EFF-APPLY, EFF-VERIFY 세 기준은 모두 unverified이고 evidence는 비어 있다. 정적 check-workflow를 의미 기준 통과로 연결하지 않았다. 토큰 절감률, Reports 완료, OS 수준 강제를 주장하지 않는다고 명시했다. 예산은 advisory 기준으로 두었고, Sonnet 검토가 최종 Opus를 대체하지 않는다는 점과 자동 재시작·강제 kill 금지도 정책 문서에 모순 없이 반영되어 있다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-b4331833-a476-4a88-a4ed-518e2c90adfb&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-b4331833-a476-4a88-a4ed-518e2c90adfb/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;읽은 범위: 022 폴더의 spec.md, design.md, diagnosis.md, verification.md, tasks.md, work.json 전체, docs/skills/EXECUTION_EFFICIENCY.md 전체, agents/www/AGENT.md:21은 Grep 결과로 확인했다. .www/evidence/efficiency-20261117/의 safety-observation.txt, remote-diagnostic-provenance.json, acceptance-readback.json, remote-policy-v2-applied.json, remote-before-locks.json, agent-before.patch, check-workflow.log는 직접 읽었다. remote-before-processes.txt는 1~422행만 읽었다(전체 565행). MODEL_POLICY.md·WORKFLOW.md 본문과 git diff는 읽지 않았다. 테스트와 check-workflow는 실행하지 않았다. 도구 읽기 실패는 없었다.&quot;,
+        &quot;[이전 Opus 지적 해소·경로] verification.md:5의 AGENT 보존 경로는 이제 .www/evidence/efficiency-20261117/agent-before.*로 적혀 있다. 이 경로에 agent-before.md와 agent-before.patch가 실제로 있다. patch의 hunk(5단계 계획 인계, nextAction 연결 문단)는 이번 작업 이전부터 있던 dirty 변경이다. 이번 변경은 AGENT.md:21의 EXECUTION_EFFICIENCY 링크 문단뿐이며, work.json의 writePaths 범위 안에 있다.&quot;,
+        &quot;[이전 Opus 지적 해소·종료 전 안전조건] verification.md:9는 종료 전 tool·lock·원장 안정성 관측을 세션 도구 출력 기준으로 한정했다. 원격에서 SIGINT 당시 남긴 사전 영수증이 없다는 점도 명시했고, remote-stop-result.json만으로는 입증하지 않는다고 적었다. safety-observation.txt는 SIGINT 전 RUNNING_ITEMS {}, RECORD_LOCKS [], RECENT_RECORD_WRITE 09:03:58을 보존했고, 이 기록이 사후에 만든 사본이라는 점도 밝혔다. remote-before-processes.txt:229-230에서 PID6973(codex)과 그 자식 PID7151(codex-code-mode-host)을 확인했다. 종료 뒤 aliveOldTree []와 대조하면 &#39;host7151도 종료&#39;라는 기록이 뒷받침된다. 정책 v2(EXECUTION_EFFICIENCY.md:28)도 앞으로는 종료 전에 원시 영수증을 보존하도록 보완했다.&quot;,
+        &quot;[이전 Opus 지적 해소·ACK 수용 범위] tasks.md:7은 이제 &#39;ACK와 정책SHA·3TaskUUID 일치 관측(전체 실행 종료/제품수용 아님)&#39;으로 범위를 좁혔다. acceptance-readback.json은 state=initial_ack_observed_not_full_execution_acceptance로 기록하면서 launchStatePreserved=launched_not_yet_accepted와 actualResponseModel=null을 그대로 보존한다. verification.md:13과 23도 turn_context가 세션 설정 관측일 뿐이며 실제 응답 모델은 미확인이라고 구분한다. 계획 문서와 검증 기록이 서로 어긋나지 않는다.&quot;,
+        &quot;[이전 Opus 지적 해소·진단 근거] remote-diagnostic-provenance.json의 spawns 29건을 직접 세었다. Sol 13, Terra 6, Astra 6, Luna 4로 diagnosis.md:5와 일치한다. reviews 29건도 pass 6, fail 21, not_run 2로 일치한다. sessionPath와 SHA, progressExtract의 v6 재평가 문구도 함께 보존되어 있다. &#39;agent thread limit reached&#39;는 remote-restart-20261117-053618.stderr:1에 실제로 있다.&quot;,
+        &quot;[경미·개선 권고, 결함 아님] diagnosis.md의 &#39;입증된 원인&#39; 절은 근거 파일(remote-diagnostic-provenance.json, remote-restart-...stderr)을 직접 연결하지 않는다. 근거 위치는 verification.md:29에만 있다. 다음 재검토자가 diagnosis.md만 읽어도 출처를 찾을 수 있도록 원인 문장 옆에 근거 위치를 적어 두는 것이 좋다.&quot;,
+        &quot;[경미·참고] remote-before-locks.json에 실제로 기록된 lock은 cargo/tauri incremental lock과 evidence 후보의 update.lock뿐이다. work/report lock은 없다. 따라서 verification.md:9의 &#39;실제 top-level work/report lock없음&#39;과 모순되지 않는다. 다만 이 파일에는 관측 시각 필드가 없고, verification.md에서도 이 파일을 참조하지 않는다.&quot;,
+        &quot;[정상 확인·증거 범위] EFF-CAUSE, EFF-APPLY, EFF-VERIFY는 모두 unverified이고 evidence도 비어 있다. check-workflow.log(&#39;워크플로 계약 검증 통과&#39;)는 정적 계약 검사로만 기록됐고, 의미 기준 통과와 연결하지 않았다. 다음 항목도 모두 미입증으로 명시했다: 토큰 절감률, Reports 완료, v2 정책 재수용, OS 수준 강제. remote-policy-v2-applied.json의 newSha 8b0624ef…는 inputBundle에 있는 EXECUTION_EFFICIENCY.md digest와 일치하며, ackVersion &#39;v2 re-acceptance not observed&#39;도 verification.md:27과 맞는다. 현재 수정에서 수정이 필요한 구체적 결함은 확인하지 못했다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;로컬·원격의 대형 재개 문맥·과도한 위임·공유 소스 변경·검사와 기준 연결 실패를 진단하고, 단일 작업군과 작은 문맥 실행을 적용했다. Sonnet 사전 검토와 최종 Opus 수정 재검토를 통과했다. Reports 완료량과 동일 조건 토큰 절감률은 아직 미입증이다.&quot;,
+  &quot;before&quot;: &quot;한 재개 thread에서 여러 제품군을 함께 수정·감사하면서 입력과 재검증이 반복됐다. 원격 약4시간의 위임 요청29회, 마지막 입력356744토큰을 관측했다.&quot;,
+  &quot;after&quot;: &quot;로컬은 운영 정책·관측만 소유한다. 원격 기존 root를 안전경계에서 종료하고 기술171파일·원장57개 SHA불변을 확인했다. 5162바이트 인계로 fresh Reports3 작업군을 시작하고 추가 agent기능을 비활성화했다. 초기 ACK와 설정·정책SHA는 관측했으며 실제 전체 업무 수용은 별도다. 후속 실행은 10:07경 정확한 차단을 보고하고 exit0 종료했으며, 추가 위임과 감사 모델 호출은0이었다. 현재 계속 실행중이라고 보고하지 않는다.&quot;,
+  &quot;changes&quot;: [
+    &quot;docs/skills/EXECUTION_EFFICIENCY.md 운영 절차 신규와 agents/www/AGENT.md 링크만 추가했다.&quot;,
+    &quot;원격 AGENT는 원래 내용을 보존하고 같은 링크만 추가했으며 정책v2도 동일SHA로 적용했다.&quot;,
+    &quot;종료 checkpoint·새 세션·정책ACK·원인집계·Sonnet/Opus 원문을 증거 경로에 보존했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;완료 core나 수용기준을 낮추는 대신 소스동결과 검사/기준 적합성 확인을 감사 앞으로 이동했다.&quot;,
+    &quot;이전 대화 resume 대신 새 문맥으로 시작하고, 과거 Task·실패·dirty는 유지했다.&quot;,
+    &quot;최종 Opus는 실제 읽기 전용 공식 core로 실행했으며 allowFallback=false를 유지했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;EFF 전체를 check-workflow 하나에 연결하지 않았으므로 공식 세 기준은 unverified이며 업무 done을 주장하지 않는다.&quot;,
+    &quot;초기 입력36694는 과거356744보다 작았으나 후속 큰 출력으로 문맥이 다시 증가했다. 동일 조건 완료 전후 절감률·속도 향상은 미입증이다.&quot;,
+    &quot;현재 20분/2회실패/60k입력은 advisory이며 OS토큰강제제한이 아니다.&quot;,
+    &quot;초기 ACK는 v1정책에 대한 최초 인계 관측이며 v2재수용·전체지침준수·제품완료와 다르다.&quot;,
+    &quot;종료 전 안전관측의 원격 contemporaneous 영수증은 미보존했고 도구결과 사후회수본과 사전프로세스 목록의 범위를 명시했다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;원격 CHECKPOINT의 별도 형식 승인 실패와 schema2 요청 재연결 부재를 분리해, 실제 원인 소유 파일과 필요한 공식 변경을 검토한다. 동일 실패의 감사 재호출은 하지 않는다.&quot;,
+    &quot;현재 작업군 완료/차단까지의 실제 토큰·새입력·캐시·호출수를 별도로 측정한다.&quot;,
+    &quot;이 작업의 의미 수용 기준을 증명하는 정식 검증 연결은 별도 미완료로 유지한다.&quot;
+  ]
+}</pre></div></details></section></article></div></main></body></html>

@@ -1,0 +1,90 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>사이드바 탐색과 작업 화면 분리 평가 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 16일 오후 2:32 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>사이드바 탐색과 작업 화면 분리 평가</h1><p class="lead">프로젝트 목록 탐색만으로 중앙 작업 화면이 바뀌지 않도록 하는 개선안을 제시했습니다. 코드 확인과 사용성 평가만 진행했으며 구현은 하지 않았습니다.</p><div id="report-story" class="story">사용자는 ‘전체 보기’로 돌아갈 때 현재 작업 페이지까지 사라지는 불편을 제기했습니다. Native 답변은 코드 확인을 근거로 사이드바 탐색과 중앙 화면 전환이 결합되어 있다고 설명했습니다. 이에 프로젝트 목록 탐색과 현재 프로젝트 재선택에서는 작업 화면을 유지하는 개선안을 제시했습니다. 이번 작업은 평가에 한정되며, 실제 수정과 UI 검증은 후속 작업으로 남았습니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 사이드바 탐색과 중앙 화면 전환을 분리하고 행동별 유지·전환 시나리오를 검증합니다.</p><p class="blocker"><strong>남은 차단 사항</strong> Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>왼쪽 사이드바의 사용성을 평가하고 목록 탐색 중 메인 화면을 유지하는 방향을 검토한다.</h3><p class="result">요청 방향을 지지하고 행동별 사이드바·중앙 화면 동작을 제안했습니다.</p><p class="support"><strong>근거</strong> Native 답변의 동작 비교표와 ‘사이드바 탐색만으로 중앙 작업 화면이 바뀌지 않는다’는 수정 기준.</p><p class="limit">새 항목 클릭 시의 구체적인 전환 동작은 별도로 정리되지 않았습니다.</p></article></section><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>프로젝트 목록을 확인하는 탐색 행동이 현재 작업 맥락을 잃게 합니다.</h3><p><strong>선택</strong> 목록 탐색은 중앙 화면을 유지하고, 다른 프로젝트 선택은 화면을 전환하도록 권고했습니다.</p><p><strong>판단 근거</strong> 사용자의 불편 제보와 Native 답변의 코드 확인 결과.</p><h4>함께 검토한 대안</h4><ul><li>현재처럼 목록 진입과 중앙 홈 전환을 함께 유지</li><li>목록 탐색과 중앙 화면 전환을 분리</li></ul><p class="limit"><strong>감수한 점</strong> 전체 대시보드로 이동할 별도 진입 항목이 필요합니다.</p></article></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>‘전체 보기’와 프로젝트 선택의 화면 전환 코드</h3><dl><div><dt>확인 방법</dt><dd>기록된 rg 및 sed 명령으로 관련 코드와 명세를 조회했습니다.</dd></div><div><dt>기대 결과</dt><dd>사이드바 조작이 중앙 화면 전환에 연결되는 지점을 확인한다.</dd></div><div><dt>실제 관측</dt><dd>조회 명령은 종료 코드 0으로 완료됐고, Native 답변은 홈·대시보드 전환 동작을 보고했습니다.</dd></div><div><dt>확인 범위와 한계</dt><dd>명령 출력 전문이 제공되지 않았으며, 종료 코드 0은 UI 동작 검증이나 개선안 수용 완료를 뜻하지 않습니다.</dd></div></dl></article><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>구현 및 실제 UI 동작 검증은 수행하지 않았습니다.</li><li>입력 자료가 truncated=true이며 명령 출력 전문이 없어 코드 판독 근거 일부를 직접 확인할 수 없습니다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>사이드바 탐색과 중앙 화면 전환을 분리하고 행동별 유지·전환 시나리오를 검증합니다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>목록 열기·현재 프로젝트 재선택·추가 취소에서는 작업 화면이 유지되고, 다른 프로젝트 선택에서는 의도한 화면으로 전환됨을 확인했을 때.</dd></div><div><dt>영향</dt><dd>프로젝트를 탐색한 뒤 기존 작업 화면을 다시 찾아가는 부담을 줄입니다.</dd></div></dl></article></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><ol class="references"><li><p>사이드바와 프로젝트 선택의 화면 전환 흐름 확인</p><code>src/renderer.tsx</code></li><li><p>대시보드 관련 동작 검색</p><code>src/dashboard-view.tsx</code></li><li><p>대시보드 명세의 관련 내용 검색</p><code>docs/specs/dashboard.md</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Native/001-사이드바 탐색과 작업 화면 분리 평가/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-40c12cb7-9a53-4ead-b872-8c16d9525f67<br>report-deff3aa1-f428-4b87-b0d5-dda8441c7a22</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>e083179fede434694a5691d29d3b48ed891918968725a33d8185d940f165c776</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>기준 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-NATIVE&quot;,
+      &quot;description&quot;: &quot;보고서 생성과 업무 수용을 구분한다&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;프로젝트 목록 탐색만으로 중앙 작업 화면이 바뀌지 않도록 하는 개선안을 제시했습니다. 코드 확인과 사용성 평가만 진행했으며 구현은 하지 않았습니다.&quot;,
+  &quot;before&quot;: &quot;Native 답변에 따르면 ‘전체 보기’를 누르면 사이드바와 중앙 화면이 함께 홈으로 전환되고, 현재 프로젝트를 다시 선택해도 기존 작업 화면 대신 대시보드로 이동합니다.&quot;,
+  &quot;after&quot;: &quot;실제 동작 변경은 없습니다. ‘프로젝트 목록’을 열거나 현재 프로젝트를 다시 선택할 때 중앙 작업 화면을 유지하는 동작을 제안했습니다.&quot;,
+  &quot;changes&quot;: [
+    &quot;목록 열기·탐색·현재 프로젝트 재선택 시 중앙 화면을 유지하는 기준을 제시했습니다.&quot;,
+    &quot;다른 프로젝트 선택 시에만 해당 프로젝트로 전환하도록 제안했습니다.&quot;,
+    &quot;‘전체 보기’를 ‘프로젝트 목록’으로 바꾸고 전체 대시보드 진입은 별도로 두도록 제안했습니다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;사이드바 탐색과 중앙 작업 화면 전환을 분리하는 방향을 권고했습니다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;구현 및 실제 UI 동작 검증은 수행하지 않았습니다.&quot;,
+    &quot;입력 자료가 truncated=true이며 명령 출력 전문이 없어 코드 판독 근거 일부를 직접 확인할 수 없습니다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;제안된 동작 기준을 구현 범위로 확정한 뒤 화면 유지와 프로젝트 전환을 검증합니다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;사용자는 ‘전체 보기’로 돌아갈 때 현재 작업 페이지까지 사라지는 불편을 제기했습니다. Native 답변은 코드 확인을 근거로 사이드바 탐색과 중앙 화면 전환이 결합되어 있다고 설명했습니다. 이에 프로젝트 목록 탐색과 현재 프로젝트 재선택에서는 작업 화면을 유지하는 개선안을 제시했습니다. 이번 작업은 평가에 한정되며, 실제 수정과 UI 검증은 후속 작업으로 남았습니다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;왼쪽 사이드바의 사용성을 평가하고 목록 탐색 중 메인 화면을 유지하는 방향을 검토한다.&quot;,
+        &quot;result&quot;: &quot;요청 방향을 지지하고 행동별 사이드바·중앙 화면 동작을 제안했습니다.&quot;,
+        &quot;evidence&quot;: &quot;Native 답변의 동작 비교표와 ‘사이드바 탐색만으로 중앙 작업 화면이 바뀌지 않는다’는 수정 기준.&quot;,
+        &quot;limitations&quot;: &quot;새 항목 클릭 시의 구체적인 전환 동작은 별도로 정리되지 않았습니다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;‘전체 보기’와 프로젝트 선택의 화면 전환 코드&quot;,
+        &quot;method&quot;: &quot;기록된 rg 및 sed 명령으로 관련 코드와 명세를 조회했습니다.&quot;,
+        &quot;expected&quot;: &quot;사이드바 조작이 중앙 화면 전환에 연결되는 지점을 확인한다.&quot;,
+        &quot;observed&quot;: &quot;조회 명령은 종료 코드 0으로 완료됐고, Native 답변은 홈·대시보드 전환 동작을 보고했습니다.&quot;,
+        &quot;limitations&quot;: &quot;명령 출력 전문이 제공되지 않았으며, 종료 코드 0은 UI 동작 검증이나 개선안 수용 완료를 뜻하지 않습니다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;프로젝트 목록을 확인하는 탐색 행동이 현재 작업 맥락을 잃게 합니다.&quot;,
+        &quot;basis&quot;: &quot;사용자의 불편 제보와 Native 답변의 코드 확인 결과.&quot;,
+        &quot;alternatives&quot;: [
+          &quot;현재처럼 목록 진입과 중앙 홈 전환을 함께 유지&quot;,
+          &quot;목록 탐색과 중앙 화면 전환을 분리&quot;
+        ],
+        &quot;choice&quot;: &quot;목록 탐색은 중앙 화면을 유지하고, 다른 프로젝트 선택은 화면을 전환하도록 권고했습니다.&quot;,
+        &quot;tradeoff&quot;: &quot;전체 대시보드로 이동할 별도 진입 항목이 필요합니다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;src/renderer.tsx&quot;,
+        &quot;purpose&quot;: &quot;사이드바와 프로젝트 선택의 화면 전환 흐름 확인&quot;
+      },
+      {
+        &quot;path&quot;: &quot;src/dashboard-view.tsx&quot;,
+        &quot;purpose&quot;: &quot;대시보드 관련 동작 검색&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/specs/dashboard.md&quot;,
+        &quot;purpose&quot;: &quot;대시보드 명세의 관련 내용 검색&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;사이드바 탐색과 중앙 화면 전환을 분리하고 행동별 유지·전환 시나리오를 검증합니다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;목록 열기·현재 프로젝트 재선택·추가 취소에서는 작업 화면이 유지되고, 다른 프로젝트 선택에서는 의도한 화면으로 전환됨을 확인했을 때.&quot;,
+        &quot;impact&quot;: &quot;프로젝트를 탐색한 뒤 기존 작업 화면을 다시 찾아가는 부담을 줄입니다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></section></main></body></html>

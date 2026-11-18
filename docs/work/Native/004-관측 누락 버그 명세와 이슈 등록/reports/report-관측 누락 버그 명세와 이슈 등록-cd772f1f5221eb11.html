@@ -1,0 +1,119 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>관측 누락 버그 명세와 이슈 등록 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 16일 오후 2:57 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>관측 누락 버그 명세와 이슈 등록</h1><p class="lead">WWW 스킬 단계와 Plan·Progress 관측 누락을 개발 명세로 정리하고 GitHub 버그 이슈 #2를 등록했다. 제품 수정과 독립 검토는 아직 진행하지 않았다.</p><div id="report-story" class="story">작업 중인 스킬 단계와 Plan·Progress가 화면에 제대로 드러나지 않는 문제를 추적하기 위해 시작했다. 개발 명세와 진단·수정 계획을 작성하고 GitHub 버그 이슈 #2에 연결했다. Native 기록에는 실제 투영 함수에 합성 입력을 넣어 누락과 대기 표시를 확인하고 문서 계약 검사를 통과했다고 보고돼 있다. 다만 제품 동작은 수정 전이며, 실제 세션·앱 검증과 독립 검토를 거쳐야 완료 여부를 판단할 수 있다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 명세와 진단을 독립 검토한다.</p><p class="blocker"><strong>남은 차단 사항</strong> Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>버그의 개발 명세를 마련한다.</h3><p class="result">진단·수정 계획·회귀 시나리오와 수용 기준 8개를 작성했다.</p><p class="support"><strong>근거</strong> Chat015의 spec.md, diagnosis.md, tasks.md, verification.md 작성 기록</p><p class="limit">기준은 아직 unverified이며 독립 검토 대기 상태다.</p></article><article class="requirement"><h3>버그 이슈를 등록한다.</h3><p class="result">GitHub 이슈 #2를 bug 라벨과 열린 상태로 등록했다고 보고했다.</p><p class="support"><strong>근거</strong> https://github.com/Woo-JongHo/www/issues/2 및 gh issue create 명령의 종료 코드 0</p><p class="limit">제공 기록의 등록·재조회 보고에 근거하며 이 보고서에서 별도 조회하지 않았다.</p></article></section><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>표시된 상태를 실제 실행이나 완료로 오해할 위험</h3><p><strong>선택</strong> 근거 수준과 관측 한계를 분리하고 미관측을 대기로 단정하지 않는 기준을 세웠다.</p><p><strong>판단 근거</strong> 문서 참조·명시 요청·단계 선언·호스트 실행·완료의 근거 수준이 다르다.</p><p class="limit"><strong>감수한 점</strong> 표시 정확성을 높이려면 단계 사건의 연결 구조와 구현 검증이 추가로 필요하다.</p></article></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>Plan·Progress 및 스킬 상태 투영</h3><dl><div><dt>확인 방법</dt><dd>Native 기록에서 실제 투영 함수에 합성 공개 사건을 입력해 대조</dd></div><div><dt>기대 결과</dt><dd>계획 유무에 따른 공개 설명 처리와 미관측 상태 표시를 확인</dd></div><div><dt>실제 관측</dt><dd>Plan 없는 공개 설명 누락과 미관측 다섯 항목의 대기 표시를 재현했다고 보고했다.</dd></div><div><dt>확인 범위와 한계</dt><dd>실제 세션 원본 사건이나 앱 전체 동작 검증은 아니다.</dd></div></dl></article><article class="check"><h3>문서 계약과 작업 원장</h3><dl><div><dt>확인 방법</dt><dd>Native 기록의 check-workflow.ts 실행 및 최종 단언 검사</dd></div><div><dt>기대 결과</dt><dd>문서 계약 준수, 기준 8개 연결, 미검증 상태와 권한 경계 유지</dd></div><div><dt>실제 관측</dt><dd>명령 종료 코드 0이며 문서 계약 검사 통과가 보고됐다.</dd></div><div><dt>확인 범위와 한계</dt><dd>일부 명령 본문이 잘려 있으며 검사 통과는 구현 완료나 독립 승인과 다르다.</dd></div></dl></article><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>제공 자료가 truncated=true로 일부 명령과 근거가 잘려 있다.</li><li>실제 세션 원본 사건과 앱 빌드 동작은 확인되지 않았다.</li><li>수용 기준 8개는 unverified 상태이며 독립 검토가 남아 있다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>명세와 진단을 독립 검토한다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>검토 결과와 보완 사항이 기록됨</dd></div><div><dt>영향</dt><dd>구현 전 요구와 원인 판단의 오류를 줄인다.</dd></div></dl></article><article class="next"><h3>구현 승인 후 버그를 수정하고 회귀 검증한다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>수용 기준 8개의 결과와 실제 동작 증거가 기록됨</dd></div><div><dt>영향</dt><dd>작업 중 상태를 화면에서 신뢰할 수 있는지 판단할 수 있다.</dd></div></dl></article></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><ol class="references"><li><p>수정 요구와 수용 기준 확인</p><code>/Users/jonghoPro/woo/00_project/www/docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/spec.md</code></li><li><p>원인 진단과 입증 범위 확인</p><code>/Users/jonghoPro/woo/00_project/www/docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/diagnosis.md</code></li><li><p>수정 및 회귀 검증 계획 확인</p><code>/Users/jonghoPro/woo/00_project/www/docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/tasks.md</code></li><li><p>수행한 검증과 미확인 범위 확인</p><code>/Users/jonghoPro/woo/00_project/www/docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/verification.md</code></li><li><p>버그 추적과 후속 진행 확인</p><code>https://github.com/Woo-JongHo/www/issues/2</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Native/004-관측 누락 버그 명세와 이슈 등록/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-345d185f-45b0-444d-84c1-60097f64558d<br>report-ce5f5502-4ec3-4db0-8702-f4f52d197b5c</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>c9b48528d87995fa85657935f48756c86fa029da8eeb0ef93e4dcce86d91c9f0</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>기준 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-NATIVE&quot;,
+      &quot;description&quot;: &quot;보고서 생성과 업무 수용을 구분한다&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;WWW 스킬 단계와 Plan·Progress 관측 누락을 개발 명세로 정리하고 GitHub 버그 이슈 #2를 등록했다. 제품 수정과 독립 검토는 아직 진행하지 않았다.&quot;,
+  &quot;before&quot;: &quot;사용자는 작업 중에도 개요에 스킬 선택 미확인·대기와 Plan·Progress 미제공이 표시되어 진행 상태를 판단하기 어려웠다.&quot;,
+  &quot;after&quot;: &quot;같은 화면의 동작은 아직 바뀌지 않았지만, 수정 기준 8개와 진단·검증 계획 및 버그 추적 경로가 마련됐다.&quot;,
+  &quot;changes&quot;: [
+    &quot;Chat015 버그 작업의 명세·진단·수정 계획·검증 기록을 작성했다.&quot;,
+    &quot;관측 근거 수준, 미관측과 대기 구분, 계획 없는 공개 진행 설명, 실제 Subagent 집계에 대한 수용 기준 8개를 정의했다.&quot;,
+    &quot;GitHub에 bug 라벨의 열린 이슈 #2를 등록했다.&quot;,
+    &quot;합성 입력 재현과 문서 계약 검사 결과를 기록하고 작업 목차를 연결했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;문서 읽기나 자연어 언급을 실제 실행·완료의 증거로 취급하지 않도록 기준을 분리했다.&quot;,
+    &quot;합성 재현의 확인 범위를 실제 세션 및 앱 전체 검증과 구분했다.&quot;,
+    &quot;제품 코드 수정과 커밋·푸시는 이번 작업 범위에서 제외했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;제공 자료가 truncated=true로 일부 명령과 근거가 잘려 있다.&quot;,
+    &quot;실제 세션 원본 사건과 앱 빌드 동작은 확인되지 않았다.&quot;,
+    &quot;수용 기준 8개는 unverified 상태이며 독립 검토가 남아 있다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;명세와 진단에 대한 독립 검토를 진행한다.&quot;,
+    &quot;구현 승인 후 수정하고 회귀 시나리오와 수용 기준을 검증한다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;작업 중인 스킬 단계와 Plan·Progress가 화면에 제대로 드러나지 않는 문제를 추적하기 위해 시작했다. 개발 명세와 진단·수정 계획을 작성하고 GitHub 버그 이슈 #2에 연결했다. Native 기록에는 실제 투영 함수에 합성 입력을 넣어 누락과 대기 표시를 확인하고 문서 계약 검사를 통과했다고 보고돼 있다. 다만 제품 동작은 수정 전이며, 실제 세션·앱 검증과 독립 검토를 거쳐야 완료 여부를 판단할 수 있다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;버그의 개발 명세를 마련한다.&quot;,
+        &quot;result&quot;: &quot;진단·수정 계획·회귀 시나리오와 수용 기준 8개를 작성했다.&quot;,
+        &quot;evidence&quot;: &quot;Chat015의 spec.md, diagnosis.md, tasks.md, verification.md 작성 기록&quot;,
+        &quot;limitations&quot;: &quot;기준은 아직 unverified이며 독립 검토 대기 상태다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;버그 이슈를 등록한다.&quot;,
+        &quot;result&quot;: &quot;GitHub 이슈 #2를 bug 라벨과 열린 상태로 등록했다고 보고했다.&quot;,
+        &quot;evidence&quot;: &quot;https://github.com/Woo-JongHo/www/issues/2 및 gh issue create 명령의 종료 코드 0&quot;,
+        &quot;limitations&quot;: &quot;제공 기록의 등록·재조회 보고에 근거하며 이 보고서에서 별도 조회하지 않았다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;Plan·Progress 및 스킬 상태 투영&quot;,
+        &quot;method&quot;: &quot;Native 기록에서 실제 투영 함수에 합성 공개 사건을 입력해 대조&quot;,
+        &quot;expected&quot;: &quot;계획 유무에 따른 공개 설명 처리와 미관측 상태 표시를 확인&quot;,
+        &quot;observed&quot;: &quot;Plan 없는 공개 설명 누락과 미관측 다섯 항목의 대기 표시를 재현했다고 보고했다.&quot;,
+        &quot;limitations&quot;: &quot;실제 세션 원본 사건이나 앱 전체 동작 검증은 아니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;문서 계약과 작업 원장&quot;,
+        &quot;method&quot;: &quot;Native 기록의 check-workflow.ts 실행 및 최종 단언 검사&quot;,
+        &quot;expected&quot;: &quot;문서 계약 준수, 기준 8개 연결, 미검증 상태와 권한 경계 유지&quot;,
+        &quot;observed&quot;: &quot;명령 종료 코드 0이며 문서 계약 검사 통과가 보고됐다.&quot;,
+        &quot;limitations&quot;: &quot;일부 명령 본문이 잘려 있으며 검사 통과는 구현 완료나 독립 승인과 다르다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;표시된 상태를 실제 실행이나 완료로 오해할 위험&quot;,
+        &quot;basis&quot;: &quot;문서 참조·명시 요청·단계 선언·호스트 실행·완료의 근거 수준이 다르다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;근거 수준과 관측 한계를 분리하고 미관측을 대기로 단정하지 않는 기준을 세웠다.&quot;,
+        &quot;tradeoff&quot;: &quot;표시 정확성을 높이려면 단계 사건의 연결 구조와 구현 검증이 추가로 필요하다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;/Users/jonghoPro/woo/00_project/www/docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/spec.md&quot;,
+        &quot;purpose&quot;: &quot;수정 요구와 수용 기준 확인&quot;
+      },
+      {
+        &quot;path&quot;: &quot;/Users/jonghoPro/woo/00_project/www/docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/diagnosis.md&quot;,
+        &quot;purpose&quot;: &quot;원인 진단과 입증 범위 확인&quot;
+      },
+      {
+        &quot;path&quot;: &quot;/Users/jonghoPro/woo/00_project/www/docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/tasks.md&quot;,
+        &quot;purpose&quot;: &quot;수정 및 회귀 검증 계획 확인&quot;
+      },
+      {
+        &quot;path&quot;: &quot;/Users/jonghoPro/woo/00_project/www/docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/verification.md&quot;,
+        &quot;purpose&quot;: &quot;수행한 검증과 미확인 범위 확인&quot;
+      },
+      {
+        &quot;path&quot;: &quot;https://github.com/Woo-JongHo/www/issues/2&quot;,
+        &quot;purpose&quot;: &quot;버그 추적과 후속 진행 확인&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;명세와 진단을 독립 검토한다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;검토 결과와 보완 사항이 기록됨&quot;,
+        &quot;impact&quot;: &quot;구현 전 요구와 원인 판단의 오류를 줄인다.&quot;
+      },
+      {
+        &quot;action&quot;: &quot;구현 승인 후 버그를 수정하고 회귀 검증한다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;수용 기준 8개의 결과와 실제 동작 증거가 기록됨&quot;,
+        &quot;impact&quot;: &quot;작업 중 상태를 화면에서 신뢰할 수 있는지 판단할 수 있다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></section></main></body></html>

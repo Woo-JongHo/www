@@ -1,0 +1,279 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+  "title"        : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+  "kind"         : "maintenance",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "in_progress",
+  "blockedReason": null,
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-82e8475f-380f-460c-9cd2-5bbef0126625"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-dc931897-564a-4b95-a8c5-a23d7b03a8a3"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-fc3f6aea-c842-45f3-821b-5fc448809d35"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-f40cbde5-04ba-4e0a-9c8b-e604be629328"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-d43bfed7-e705-4c22-aceb-f00dc1ede0b8"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-62c5ae92-bd4f-4b0c-8ad3-f38c4424308e"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-048bfa71-3960-4ad0-a8fe-e6217100d6df"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-370f0fe9-8596-4475-b62b-7b7c70992a34"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-238ce4c1-73e8-4409-a2a3-09a263177210"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-403b8e0b-7859-4166-9ded-11b991069ff8"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-f5711e8a-33a0-41da-9f07-e2e956a43219"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-e9007dfb-f546-426b-88c6-58174641acc8"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-029fb7e2-61fa-4014-9362-5e915ab13197"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-eed41da3-f22e-4fb9-b9df-9a1a7d76c44f"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-64677750-337f-4488-a503-4e0265356bf5"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-16362e60-e269-4d5d-bf38-2869496efd2c"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-005bdf73-4e11-441b-a485-51468cc8acf4"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-632e43ce-dcb8-4726-ad34-8fe85034b6fd"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-baa0963b-ea71-48e7-a34f-0d229ba704b1"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-36d312bc-a767-4e3e-a581-01898b35f75f"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-84cda38b-7265-40d7-bf47-5a22ece1b3a2"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-4573f7d4-62eb-4e72-9985-62994c1b30a8"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-6825661e-9d06-4364-82fe-b612365a0072"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-0e282d77-1c00-4663-8860-483d28148f74"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-9727de0a-072d-47d9-874c-cf79b3de8526"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-566dd8f2-1121-4ae7-8c98-182283693c92"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-2654a232-11a8-40a3-907d-edad8ec066b4"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "SESSION-PLAN",
+      "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "SESSION-INTEGRATION",
+      "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "SESSION-USABILITY",
+      "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "SESSION-CLOSEOUT",
+      "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "session-completion-integration-20261116",
+    "requestHash": "7c9bfe8339c6893576958caf3f8e2226e07577539d3ca8f0124d1ea1207927c3",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "docs/ARCHITECTURE.md",
+        "docs/DEVELOPMENT.md",
+        "docs/PRODUCT.md",
+        "docs/architecture",
+        "docs/specs",
+        "docs/work",
+        "scripts/architecture-contract.ts",
+        "scripts/generate-architecture.ts",
+        "scripts/verify-architecture.ts",
+        "scripts/verify-chat.ts",
+        "scripts/verify-home.ts",
+        "scripts/verify-native-activity.ts",
+        "scripts/workflow.ts",
+        "scripts/workflow/completion-report.ts",
+        "scripts/workflow/decomposition.ts",
+        "scripts/workflow/model-allocation.ts",
+        "scripts/workflow/report-lifecycle.ts",
+        "scripts/workflow/report-view.ts",
+        "scripts/workflow/run.ts",
+        "scripts/workflow/schema.ts",
+        "scripts/workflow/statechart.ts",
+        "scripts/workflow/types.ts",
+        "scripts/workflow/work.ts",
+        "src/architecture-tree.ts",
+        "src/architecture.generated.json",
+        "src/architecture.ts",
+        "src/chat-composer.tsx",
+        "src/chat-status.ts",
+        "src/chat.css",
+        "src/command-card.tsx",
+        "src/command-preview.ts",
+        "src/ecosystem-view.tsx",
+        "src/ecosystem.css",
+        "src/main.ts",
+        "src/native-activity-view.tsx",
+        "src/native-activity.css",
+        "src/native-chat.ts",
+        "src/native-lifecycle.ts",
+        "src/native-session.ts",
+        "src/preload.ts",
+        "src/projection.ts",
+        "src/renderer.tsx",
+        "src/session-api.tsx",
+        "src/shared.ts",
+        "src/workflow-statechart-view.tsx",
+        "src/workflow-statechart.ts",
+        "test/chat-status.test.ts",
+        "test/command-preview.test.ts",
+        "test/fixtures/chat-ui-app-server.ts",
+        "test/input.test.ts",
+        "test/native-chat.test.ts",
+        "test/native-lifecycle.test.ts",
+        "test/native-session.test.ts",
+        "test/projection.test.ts",
+        "test/report-service.test.ts",
+        "test/workflow-completion-faults.test.ts",
+        "test/workflow-development.test.ts",
+        "test/workflow-model-allocation.test.ts",
+        "test/workflow-properties.test.ts",
+        "test/workflow-reports.test.ts",
+        "test/workflow-statechart-view.test.ts",
+        "test/workflow-statechart.test.ts",
+        "test/workflow-work.test.ts",
+        "test/www-activity-view.test.ts",
+        "test/chat-state.test.ts",
+        "test/architecture.test.ts",
+        "scripts/verify-sessions.ts",
+        "src/agent-overview.ts",
+        "src/agent-overview-view.tsx",
+        "src/agent-overview.css",
+        "src/www-activity.ts",
+        "test/agent-overview.test.ts",
+        "test/www-activity.test.ts",
+        "test/fixtures/activity-app-server.ts",
+        "src/index.html",
+        "scripts/verify-dashboard-race.ts",
+        "scripts/verify-reports.ts"
+      ],
+      "mutationSurfaces": [
+        "files"
+      ],
+      "verifierCommands": [
+        "[\"npm\",\"run\",\"check\"]",
+        "[\"npm\",\"run\",\"build\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"node\",\"scripts/check-workflow.ts\"]",
+        "[\"node\",\"scripts/verify-home.ts\"]",
+        "[\"node\",\"scripts/verify-chat.ts\"]",
+        "[\"node\",\"scripts/verify-native-activity.ts\",\"--ui-only\"]",
+        "[\"node\",\"scripts/verify-reports.ts\"]",
+        "[\"node\",\"scripts/verify-architecture.ts\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "7c9bfe8339c6893576958caf3f8e2226e07577539d3ca8f0124d1ea1207927c3"
+    },
+    "inputs": [
+      "agents",
+      "docs/architecture",
+      "docs/skills",
+      "docs/specs",
+      "package.json",
+      "scripts",
+      "skills",
+      "src",
+      "test",
+      "tsconfig.json",
+      "tsconfig.tools.json"
+    ],
+    "nextAction": "build",
+    "verifications": [],
+    "reviews": [],
+    "reportingRequired": true
+  }
+}

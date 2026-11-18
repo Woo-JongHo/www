@@ -616,3 +616,54 @@ Opus review-0bdcc7c7(실제 claude-opus-5-5)는 scripts/workflow/run.ts의 runBo
 ### 2026-11-15 부분 성공과 수용 기준의 잔여 구분
 
 회귀 수정 뒤 집중 Node 하네스(attempt-b7519965), source 정책(attempt-898177ec), strict 타입(attempt-f292df7c)은 실제 exit 0/sourceStable=true다. 공용 Node 전체도 148개가 통과했다(.www/hook-trust-20261115/current-node-suite.log). 그러나 Bun 전체의 이전 실패 3건과 Electron 최종 빌드·test:comparison 전체 완료 근거가 아직 없어 AC-2·AC-3의 result는 unverified로 유지하고 구체 blocker를 기록한다. 검증 시도와 연결은 보존하면서 현재 증거 요약은 부분 검사라는 범위를 명시했다. 전체 증거가 없는 상태에서는 완료 요청을 실행하지 않는다.
+
+<a id="attempt-cc6b4cb4-ea5e-473b-a533-a4d968faac37"></a>
+## 검증 시도 — 2026-11-16T07:48:54.254Z
+
+- 시도 ID: `attempt-cc6b4cb4-ea5e-473b-a533-a4d968faac37`
+- 실행 시각: 2026-11-16T07:48:47.931Z ~ 2026-11-16T07:48:54.254Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js","run","check:source"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `01cbba1eee9d72015a55971aea169f55daaf7aeb68c8391c1b7f3e6665bf090d`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 119바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-ef8062ef-a532-4c2c-a4ae-979e37549b22"></a>
+## 검증 시도 — 2026-11-16T07:49:07.459Z
+
+- 시도 ID: `attempt-ef8062ef-a532-4c2c-a4ae-979e37549b22`
+- 실행 시각: 2026-11-16T07:48:56.529Z ~ 2026-11-16T07:49:07.459Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","--test","test/workflow-contract.test.ts","test/workflow-harness.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `01cbba1eee9d72015a55971aea169f55daaf7aeb68c8391c1b7f3e6665bf090d`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 8584바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-72f722b2-e82b-47d0-b61c-723ee4cfc92b"></a>
+## 검증 시도 — 2026-11-16T07:54:19.358Z
+
+- 시도 ID: `attempt-72f722b2-e82b-47d0-b61c-723ee4cfc92b`
+- 실행 시각: 2026-11-16T07:53:32.827Z ~ 2026-11-16T07:54:19.358Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js","run","typecheck"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `01cbba1eee9d72015a55971aea169f55daaf7aeb68c8391c1b7f3e6665bf090d`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 76바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.

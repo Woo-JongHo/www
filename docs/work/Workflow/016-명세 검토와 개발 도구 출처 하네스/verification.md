@@ -144,3 +144,111 @@
 - 검증 중 소스 유지: 변경 감지
 - 출력: stdout 3465바이트, stderr 103141바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-ada93783-0c9d-4c73-ae9a-a542f4099c58"></a>
+## 검증 시도 — 2026-11-16T07:49:18.353Z
+
+- 시도 ID: `attempt-ada93783-0c9d-4c73-ae9a-a542f4099c58`
+- 실행 시각: 2026-11-16T07:48:47.850Z ~ 2026-11-16T07:49:18.353Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js","run","typecheck"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `test/workflow-artifacts.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `7053fee7a647ff259ff34e5d6276fda3f7da12e2a949c9a664023ccc07bb891e`
+- 기준 정의 식별: `c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 76바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-2a2d1d28-0c6b-4922-ab87-c3aa22f8d453"></a>
+## 검증 시도 — 2026-11-16T07:49:30.155Z
+
+- 시도 ID: `attempt-2a2d1d28-0c6b-4922-ab87-c3aa22f8d453`
+- 실행 시각: 2026-11-16T07:49:21.412Z ~ 2026-11-16T07:49:30.155Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js","run","check:source"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `test/workflow-artifacts.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `7053fee7a647ff259ff34e5d6276fda3f7da12e2a949c9a664023ccc07bb891e`
+- 기준 정의 식별: `c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 119바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-fd8db2c2-df92-496f-8e9b-72c58a9fde2c"></a>
+## 검증 시도 — 2026-11-16T07:49:39.173Z
+
+- 시도 ID: `attempt-fd8db2c2-df92-496f-8e9b-72c58a9fde2c`
+- 실행 시각: 2026-11-16T07:49:32.104Z ~ 2026-11-16T07:49:39.173Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","test","test/workflow-artifacts.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `test/workflow-artifacts.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `7053fee7a647ff259ff34e5d6276fda3f7da12e2a949c9a664023ccc07bb891e`
+- 기준 정의 식별: `c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 28바이트, stderr 821바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-65422ec9-af4d-447a-853c-c604d041820b"></a>
+## 검증 시도 — 2026-11-16T07:50:04.260Z
+
+- 시도 ID: `attempt-65422ec9-af4d-447a-853c-c604d041820b`
+- 실행 시각: 2026-11-16T07:49:41.514Z ~ 2026-11-16T07:50:04.260Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","test","test/workflow-completion-faults.test.ts"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `test/workflow-artifacts.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `7053fee7a647ff259ff34e5d6276fda3f7da12e2a949c9a664023ccc07bb891e`
+- 기준 정의 식별: `c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 28바이트, stderr 2486바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+
+## 2026-11-16 완료 fault 검사 예산 구분
+
+첫 공식 attempt-65422ec9는 sourceStable/environmentStable=true, exit1이었다. 별도 실제 원문 수집은 .www/evidence/session-completion-20261116/workflow016-completion-fault-diagnostic.log에 있으며 Bun 기본5초에서 세 사례가 timeout, 중단한 하위 CLI의 SIGTERM이 후속 한 사례에 영향을 주었다. 성능5초는 이 기능 기준이 아니므로 같은 assertion·입력·거부경계를 유지한 채 정확 argv에 --timeout 30000을 명시한 새 공식 시도를 연결한다. 첫 실패를 삭제/통과로 변경하지 않는다. 전체 suite의 기본 예산 문제나 제품 기능 정상은 이 예산 변경만으로 확정하지 않는다.
+
+<a id="attempt-c3c32406-d895-426c-97df-89370d07876e"></a>
+## 검증 시도 — 2026-11-16T07:53:04.476Z
+
+- 시도 ID: `attempt-c3c32406-d895-426c-97df-89370d07876e`
+- 실행 시각: 2026-11-16T07:52:43.107Z ~ 2026-11-16T07:53:04.476Z
+- 명령과 인자: `["/Users/jonghoPro/.bun/bin/bun","test","test/workflow-completion-faults.test.ts","--timeout","30000"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `test/workflow-artifacts.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `7053fee7a647ff259ff34e5d6276fda3f7da12e2a949c9a664023ccc07bb891e`
+- 기준 정의 식별: `c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 28바이트, stderr 1012바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-12443fb9-ab2e-4b62-a223-430f2b3290d8"></a>
+## 검증 시도 — 2026-11-16T07:54:20.782Z
+
+- 시도 ID: `attempt-12443fb9-ab2e-4b62-a223-430f2b3290d8`
+- 실행 시각: 2026-11-16T07:53:05.624Z ~ 2026-11-16T07:54:20.782Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","--test","test/workflow-development.test.ts","test/workflow-work.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `test/workflow-artifacts.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `7053fee7a647ff259ff34e5d6276fda3f7da12e2a949c9a664023ccc07bb891e`
+- 기준 정의 식별: `c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 20112바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.

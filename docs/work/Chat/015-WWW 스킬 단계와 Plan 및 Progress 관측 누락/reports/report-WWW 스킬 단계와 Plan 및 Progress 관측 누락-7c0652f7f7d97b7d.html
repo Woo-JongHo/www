@@ -1,0 +1,144 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>WWW 스킬 단계와 Plan 및 Progress 관측 누락 — WWW 작업 보고서</title><style>
+:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
+</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 16일 오후 2:56 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>WWW 스킬 단계와 Plan 및 Progress 관측 누락</h1><p class="lead">WWW 스킬 단계와 Plan·Progress의 관측 누락을 Chat015 버그로 명세화하고 GitHub #2에 bug 이슈로 등록했다. 실제 투영 함수의 합성 입력에서 Plan 없는 공개 설명의 누락과 미관측 다섯 항목의 대기 표시를 확인했다. 제품 코드는 수정하지 않았다.</p><div id="report-story" class="story">사용자가 작업 중인 스킬과 진행 상태가 보이지 않는다고 보고해 표시 조건을 조사했다. 현행 함수에 합성 사건을 넣자 공개 설명이 있어도 Plan이 없으면 Progress가 비고 미관측 항목 다섯 개가 대기로 표시됐다. 이 근거와 실제 세션에서 아직 모르는 부분을 분리해 다음 수정의 명세·진단·검증 계획을 작성하고 GitHub 버그로 등록했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 별도 문서 검토와 실제 세션 표본을 확보한 뒤 승인 범위에서 수정한다.</p><p class="state-note">저장 당시 기준 중 8개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><article class="requirement"><h3>버그 개발 명세와 이슈 등록</h3><p class="result">Chat015와 GitHub #2를 연결했다.</p><p class="support"><strong>근거</strong> https://github.com/Woo-JongHo/www/issues/2</p><p class="limit">로컬 문서는 미커밋·미푸시이며 제품 미수정</p></article></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>현행 투영과 참조 파서</h3><dl><div><dt>확인 방법</dt><dd>실제 함수를 합성 공개 사건과 Plan 유무·리터럴/복합 cat으로 대조</dd></div><div><dt>기대 결과</dt><dd>문제의 입력 조건과 정상 대조를 분리</dd></div><div><dt>실제 관측</dt><dd>Plan 없음: commentary 관측·Progress null·대기 5행. Plan 있음: 같은 설명 표시. 리터럴 참조 1개·복합 0개.</dd></div><div><dt>확인 범위와 한계</dt><dd>실제 Native·Electron·사용자 원본 사건 아님</dd></div></dl></article><article class="check"><h3>GitHub 등록</h3><dl><div><dt>확인 방법</dt><dd>연결 도구 실패 후 기존 CLI로 생성·별도 조회</dd></div><div><dt>기대 결과</dt><dd>버그 이슈의 URL·OPEN·bug 라벨과 작업 UUID 연결</dd></div><div><dt>실제 관측</dt><dd>#2 OPEN과 bug 라벨·본문 UUID 확인</dd></div><div><dt>확인 범위와 한계</dt><dd>앱 수정이나 Git 코드 게시를 뜻하지 않음</dd></div></dl></article><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>실제 사용자 세션·Electron·Native·IME·Windows 검증과 제품 수정·회귀 검사·타입·빌드는 미실행이다.</li><li>독립 문서 의미 검토·필수 최종 감사는 미실행이며 현재 작업은 verifying·다음 단계 review, 제품 기준은 모두 unverified다.</li><li>GitHub #2는 열린 상태이며 로컬 명세는 아직 Git에 게시되지 않았다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>별도 문서 검토와 실제 세션 표본을 확보한 뒤 승인 범위에서 수정한다.</h3><dl><div><dt>담당</dt><dd>Codex 통합 책임자</dd></div><div><dt>해소 조건</dt><dd>단계 근거·공개 설명·화면 표시가 실제 소스와 세션에서 일치함을 검증</dd></div><div><dt>영향</dt><dd>현재 버그는 아직 수정되지 않음</dd></div></dl></article></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><ol class="references"><li><p>버그 범위와 수정 기준을 확인한다.</p><code>docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/spec.md</code></li><li><p>관찰·가설·입증된 함수 동작과 미확인을 구분한다.</p><code>docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/diagnosis.md</code></li><li><p>실행 연결 계약과 회귀 검증 순서를 확인한다.</p><code>docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/tasks.md</code></li><li><p>실제 실행과 문서/이슈 등록의 한계를 확인한다.</p><code>docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/verification.md</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-36d312bc-a767-4e3e-a581-01898b35f75f<br>report-f332a10e-570d-4a58-a638-f5bc51a70805</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>c07981754f29f4773fd6cfcc88864e0eff25b0e37e0960e5dd00dd70ccb4871b</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>e769b7d0fa7826f8f277667eb291f7c76a5613db088ac660afb852f7db9626ab</code></dd></div><div><dt>기준 지문</dt><dd><code>7a9dba16078d79c2d52909b6cc87d4a3be266c2f6cc65b0d42758511aa31bf43</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;OBS-EVIDENCE&quot;,
+      &quot;description&quot;: &quot;문서 참조·구조화 읽기·명시적 Skill 요청·역할이 선언한 절차 적용·실제 하네스 실행·성공 완료를 구별하고 상태마다 출처·관측 한계를 표시한다. 문서 읽기나 자연어 언급만으로 실행·완료를 추정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;OBS-LIFECYCLE&quot;,
+      &quot;description&quot;: &quot;WWW 개발 역할이 선택·전환한 단계를 현재 session/thread/turn과 작업 UUID에 구조적으로 연결해 UI에 전달한다. 선택·시작·종료·실패·중단의 실제 근거와 중복·지연·재접속 처리를 정의하고, 외부 개발 세션 등 연결이 없는 표면은 미연결로 표시한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;OBS-UNKNOWN&quot;,
+      &quot;description&quot;: &quot;명시된 대기 사건이 없는 스킬은 대기로 단정하지 않고 미관측 또는 선택 미확인으로 표시한다. 복수 요청으로 현재 항목을 특정할 수 없으면 모호성을 표시하고 임의의 하나를 선택하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;PLAN-SOURCE&quot;,
+      &quot;description&quot;: &quot;계획 없음·자료 미제공·수집 실패를 구별하고 Native 계획과 명시적으로 연결한 계획 문서의 출처·현재성을 표시한다. tasks.md를 작성했다는 이유만으로 실행 계획을 받은 것으로 보거나 모든 항목을 실행 중으로 승격하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;PROGRESS-FALLBACK&quot;,
+      &quot;description&quot;: &quot;공개 진행 설명이 존재하면 활성 Plan이 없어도 현재 요청의 계획 미연결 설명으로 표시한다. 활성 항목이 제공된 경우에는 기존 항목 연결을 유지하며 과거·다른 턴·다른 탭의 설명을 섞지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AGENT-TRUTH&quot;,
+      &quot;description&quot;: &quot;실제 Native Subagent 사건만 Subagent 집계에 반영하고 부모·자식·상태·출처를 보존한다. 외부 CLI 검토 프로세스와 문서상의 역할은 별도 사실로 설명하며 표시를 채우기 위한 가짜 호출·완료를 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;OBS-REGRESSION&quot;,
+      &quot;description&quot;: &quot;선택/읽기만 관측·계획 없는 commentary·계획과 commentary 혼합·새 턴·중복·종료 후 지연·복원·2,000건 절단·탭 격리·상태 미제공을 행동 테스트와 실제 Electron에서 검증하고 근거를 해당 소스와 연결한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;ISSUE-TRACE&quot;,
+      &quot;description&quot;: &quot;사용자 증상·소스상 확인한 원인·미확인 실세션 근거·수정 범위·재현/회귀 시나리오를 개발 명세와 버그 기록에 남기고 GitHub 이슈에 연결한다. 문서/이슈 등록을 제품 수정 완료로 표시하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;WWW 스킬 단계와 Plan·Progress의 관측 누락을 Chat015 버그로 명세화하고 GitHub #2에 bug 이슈로 등록했다. 실제 투영 함수의 합성 입력에서 Plan 없는 공개 설명의 누락과 미관측 다섯 항목의 대기 표시를 확인했다. 제품 코드는 수정하지 않았다.&quot;,
+  &quot;before&quot;: &quot;문서 작업 중 오른쪽 개요가 현재 스킬 선택 미확인·다섯 항목 대기·Plan/Progress 미제공을 표시해 수행 여부를 판단하기 어렵다는 사용자 관찰이 있었다.&quot;,
+  &quot;after&quot;: &quot;문서 읽기·명시 요청·단계 선언·호스트 실행·완료의 근거 수준과 미관측/대기 구분, 계획 미연결 공개 설명, 실제 Subagent 집계의 수정 기준을 정의하고 버그 추적을 연결했다. 앱의 현재 동작은 아직 동일하다.&quot;,
+  &quot;changes&quot;: [
+    &quot;Chat015의 kind=bug 원장과 개발 명세·원인 가설/입증 범위·수정 및 검증 계획을 작성했다.&quot;,
+    &quot;실제 함수에 합성 공개 사건을 입력해 Plan 유무와 읽기 참조 파서를 대조하고 결과를 기록했다.&quot;,
+    &quot;GitHub 연결 도구의 403 실패를 보존하고 기존 CLI 인증으로 OPEN 상태의 bug 이슈 #2를 등록·재조회했다.&quot;,
+    &quot;기준 여덟 개를 문서와 계획에 연결하고 작업 목차·검증 기록·현행 문서 영향 판단을 남겼다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;사용자가 제시한 화면과 현행 소스·합성 재현을 구분하며 실제 세션의 원본 사건이나 앱 빌드까지 확인했다고 주장하지 않는다.&quot;,
+    &quot;Native Subagent 0개는 해당 표본과 일치하는 정상 경계로 보존하고 외부 CLI 검토 프로세스를 가짜 Subagent로 만들지 않는다.&quot;,
+    &quot;GitHub 이슈만 게시하고 미게시 로컬 명세의 Git 커밋·푸시와 제품 수정은 수행하지 않는다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;실제 사용자 세션·Electron·Native·IME·Windows 검증과 제품 수정·회귀 검사·타입·빌드는 미실행이다.&quot;,
+    &quot;독립 문서 의미 검토·필수 최종 감사는 미실행이며 현재 작업은 verifying·다음 단계 review, 제품 기준은 모두 unverified다.&quot;,
+    &quot;GitHub #2는 열린 상태이며 로컬 명세는 아직 Git에 게시되지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;구현 전 실제 세션·빌드·공개 사건 표본과 구조화 단계 연결 계약을 확인하고 별도 문서 검토를 수행한다.&quot;,
+    &quot;구현 권한을 받은 뒤 같은 UUID로 수정·회귀 검증하고 GitHub #2에 실제 결과를 연결한다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;사용자가 작업 중인 스킬과 진행 상태가 보이지 않는다고 보고해 표시 조건을 조사했다. 현행 함수에 합성 사건을 넣자 공개 설명이 있어도 Plan이 없으면 Progress가 비고 미관측 항목 다섯 개가 대기로 표시됐다. 이 근거와 실제 세션에서 아직 모르는 부분을 분리해 다음 수정의 명세·진단·검증 계획을 작성하고 GitHub 버그로 등록했다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;버그 개발 명세와 이슈 등록&quot;,
+        &quot;result&quot;: &quot;Chat015와 GitHub #2를 연결했다.&quot;,
+        &quot;evidence&quot;: &quot;https://github.com/Woo-JongHo/www/issues/2&quot;,
+        &quot;limitations&quot;: &quot;로컬 문서는 미커밋·미푸시이며 제품 미수정&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;현행 투영과 참조 파서&quot;,
+        &quot;method&quot;: &quot;실제 함수를 합성 공개 사건과 Plan 유무·리터럴/복합 cat으로 대조&quot;,
+        &quot;expected&quot;: &quot;문제의 입력 조건과 정상 대조를 분리&quot;,
+        &quot;observed&quot;: &quot;Plan 없음: commentary 관측·Progress null·대기 5행. Plan 있음: 같은 설명 표시. 리터럴 참조 1개·복합 0개.&quot;,
+        &quot;limitations&quot;: &quot;실제 Native·Electron·사용자 원본 사건 아님&quot;
+      },
+      {
+        &quot;target&quot;: &quot;GitHub 등록&quot;,
+        &quot;method&quot;: &quot;연결 도구 실패 후 기존 CLI로 생성·별도 조회&quot;,
+        &quot;expected&quot;: &quot;버그 이슈의 URL·OPEN·bug 라벨과 작업 UUID 연결&quot;,
+        &quot;observed&quot;: &quot;#2 OPEN과 bug 라벨·본문 UUID 확인&quot;,
+        &quot;limitations&quot;: &quot;앱 수정이나 Git 코드 게시를 뜻하지 않음&quot;
+      }
+    ],
+    &quot;decisions&quot;: [],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/spec.md&quot;,
+        &quot;purpose&quot;: &quot;버그 범위와 수정 기준을 확인한다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/diagnosis.md&quot;,
+        &quot;purpose&quot;: &quot;관찰·가설·입증된 함수 동작과 미확인을 구분한다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/tasks.md&quot;,
+        &quot;purpose&quot;: &quot;실행 연결 계약과 회귀 검증 순서를 확인한다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/verification.md&quot;,
+        &quot;purpose&quot;: &quot;실제 실행과 문서/이슈 등록의 한계를 확인한다.&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;별도 문서 검토와 실제 세션 표본을 확보한 뒤 승인 범위에서 수정한다.&quot;,
+        &quot;owner&quot;: &quot;Codex 통합 책임자&quot;,
+        &quot;doneWhen&quot;: &quot;단계 근거·공개 설명·화면 표시가 실제 소스와 세션에서 일치함을 검증&quot;,
+        &quot;impact&quot;: &quot;현재 버그는 아직 수정되지 않음&quot;
+      }
+    ]
+  }
+}</pre></div></details></section></main></body></html>
