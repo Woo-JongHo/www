@@ -18,6 +18,7 @@
     "test:comparison": "npm test && npm run build:tauri-ui && \"$HOME/.cargo/bin/cargo\" test --manifest-path spikes/tauri/src-tauri/Cargo.toml",
     "typecheck": "tsc --noEmit && tsc --project tsconfig.tools.json",
     "test": "node scripts/test.ts",
+    "test:boxbox": "node scripts/test.ts --boxbox",
     "check:architecture": "node scripts/check-architecture.ts",
     "check": "npm run check:environment && npm run check:architecture && npm run check:source && npm run check:workflow && npm run typecheck && npm test && npm run build",
     "check:environment": "node scripts/check-environment.ts",
