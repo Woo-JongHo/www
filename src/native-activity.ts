@@ -146,10 +146,15 @@ function subtract(current: UsageBreakdown, baseline: UsageBreakdown): UsageBreak
   return Object.values(result).every((value) => value >= 0) ? result : null;
 }
 function window(value: unknown, previous: LimitWindow | null = null): LimitWindow | null {
+  if (value === null) return null;
   const data        = record (value           ) ;
   const usedPercent = integer(data.usedPercent) ;
-  if (usedPercent === null) return null;
-  return { usedPercent, windowDurationMins: integer(data.windowDurationMins) ?? previous?.windowDurationMins ?? null, resetsAt: integer(data.resetsAt) ?? previous?.resetsAt ?? null };
+  if (usedPercent === null) return previous;
+  return {
+    usedPercent,
+    windowDurationMins: data.windowDurationMins === null ? null : integer(data.windowDurationMins) ?? previous?.windowDurationMins ?? null,
+    resetsAt: data.resetsAt === null ? null : integer(data.resetsAt) ?? previous?.resetsAt ?? null,
+  };
 }
 function mergeLimit(limits: LimitBucket[], value: unknown, key: string): void {
   const data = record(value);
@@ -160,8 +165,8 @@ function mergeLimit(limits: LimitBucket[], value: unknown, key: string): void {
     id ,
     name      : text(data.limitName) || previous?.name || id                               ,
     model     : text(data.normalModelSlug) || previous?.model || null                      ,
-    primary   : window(data.primary, previous?.primary) ?? previous?.primary ?? null       ,
-    secondary : window(data.secondary, previous?.secondary) ?? previous?.secondary ?? null ,
+    primary   : window(data.primary, previous?.primary)     ,
+    secondary : window(data.secondary, previous?.secondary) ,
   };
   if (previous) Object.assign(previous, bucket);
   else limits.push(bucket);
@@ -348,6 +353,17 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
   const turnTotals         = new Map<ActivityTurn, UsageBreakdown>()        ;
   const unsafeUsageThreads = new Set<string>()                              ;
   const settledTurns = new Set<ActivityTurn>();
+  const disconnectedTurns = new Set<ActivityTurn>();
+  const observedMessages = new Set<ActivityEntry>();
+  const completedMessages = new Set<ActivityEntry>();
+  const hookStartedAt = new Map<ActivityEntry, number | null>();
+  const suspendedTurns = new Map<ActivityTurn, string>();
+  const definitiveCompletions = new Map<ActivityTurn, Set<string>>();
+  const restoredScopes = new Map<string, string>();
+  const eventScope = (event: AppEvent): string => {
+    const fields = record(event);
+    return JSON.stringify([fields.connectionGeneration ?? null, fields.processEpoch ?? null, fields.sessionId ?? null, fields.workspaceKey ?? null, fields.selectionEpoch ?? null]);
+  };
 
   const requests       = new Map<string, ActivityTurn>()         ;
   const approvals      = new Map<string, ActivityTurn>()         ;
@@ -409,6 +425,12 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     if (!threadId && turnId) {
       const matches = turns.filter((turn) => turn.turnId === turnId);
       if (matches.length === 1) threadId = matches[0]?.threadId ?? "";
+    }
+    if (threadId && turnId) {
+      const owner = JSON.stringify([threadId, turnId]);
+      if (event.historical && !restoredScopes.has(owner)) restoredScopes.set(owner, eventScope(event));
+      const scope = restoredScopes.get(owner);
+      if (scope !== undefined && scope !== eventScope(event)) continue;
     }
     if (threadId) activeThread = threadId;
     if (event.method === "account/rateLimits/updated" || event.method === "account/rateLimits/read") {
@@ -474,8 +496,10 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
         existing.usage = observed && baseline ? subtract(observed, baseline) : null;
         existing.usageBasis = existing.usage ? "total_delta" : "unavailable";
         if (existing.usage && !existing.usageSeries.length) existing.usageSeries.push(existing.usage.totalTokens);
-        existing.prompt = pending.prompt;
-        existing.title = pending.title;
+        if (!existing.prompt) {
+          existing.prompt = pending.prompt;
+          existing.title = pending.title;
+        }
         requests.set(`${threadId}:${requestId}`, existing);
         turns.splice(turns.indexOf(pending), 1);
       } else if (pending) { pending.turnId = turnId; if (!pending.endedAt) pending.lastActivityAt = event.at; }
@@ -497,7 +521,9 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     }
     if (event.method === "transport/closed") {
       transport = "closed";
+      suspendedTurns.clear();
       for (const turn of turns) {
+        disconnectedTurns.add(turn);
         if (!turn.endedAt) {
           turn.endedSeq ??= event.seq;
           turn.lastActivityAt = event.at;
@@ -513,22 +539,55 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
       const run = nativeHookRun(data);
       if (!run) continue;
       const runId = text(run.id);
-      const target = threadId && turnId ? locate(threadId, turnId, event.at, event.historical === true)?.entries : sessionEntries;
+      const owner = threadId && turnId ? locate(threadId, turnId, event.at, event.historical === true) : undefined;
+      const target = threadId && turnId ? owner?.entries : sessionEntries;
       if (!target) continue;
       const hook = entry(target, `hook:${threadId}:${turnId}:${runId}`, "hook", text(run.eventName) || "Hook", event.at);
-      if (hook.endedAt && event.method === "hook/started") continue;
+      const rawTime = run.startedAt;
+      const parsedTime = typeof rawTime === "number" ? rawTime : typeof rawTime === "string" ? Date.parse(rawTime) : NaN;
+      const startedAt = Number.isFinite(parsedTime) ? parsedTime : null;
+      const previousTime = hookStartedAt.get(hook) ?? null;
+      const newerStart = startedAt !== null && previousTime !== null && startedAt > previousTime;
+      if (hookStartedAt.has(hook)) {
+        if (event.historical && !hook.historical) continue;
+        if (previousTime !== null && (startedAt === null || startedAt < previousTime)) continue;
+        // handler ID는 호출 ID가 아니다. 시각이 없는 완료 후 시작은 재전송과 구분할 수 없다.
+        if (event.method === "hook/started" && !newerStart) continue;
+        if (newerStart) {
+          hook.at = event.at;
+          hook.endedAt = null;
+          hook.durationMs = null;
+        }
+      }
+      hookStartedAt.set(hook, startedAt);
       if (target === sessionEntries) sessionThreads.set(hook, threadId || null);
       hook.historical = event.historical === true;
       const messages = list(run.entries).map(record).filter((output) => ["error", "warning", "stop"].includes(text(output.kind))).slice(0, 4).map((output) => text(output.text).slice(0, 800));
       const trustRequired = messages.some((message) => message.includes("hook approval required"));
       const details = [trustRequired ? "플러그인 변경으로 신뢰 검토 필요 · Hook 실행 전 차단" : "", text(run.sourcePath).slice(0, 500), text(run.statusMessage).slice(0, 800), ...messages].filter(Boolean);
       hook.description = details.join("\n") || null;
-      finish(hook, event.historical && status(run.status) === "running" ? "unknown" : status(run.status), event.at, run.durationMs);
+      const outcome = status(run.status);
+      const closedStart = event.method === "hook/started" && (transport === "closed" || owner?.endedSeq != null || !!owner?.endedAt);
+      finish(hook, (event.historical || closedStart) && outcome === "running" ? "unknown" : outcome, event.at, run.durationMs);
       continue;
     }
     if (!threadId || !turnId) continue;
     const turn = locate(threadId, turnId, event.at, event.historical === true);
     if (!turn) continue;
+    if (event.method === "turn/started" && !event.historical && transport !== "closed" && !disconnectedTurns.has(turn) && suspendedTurns.get(turn) === eventScope(event)) {
+      suspendedTurns.delete(turn);
+      turn.endedAt = null;
+      turn.endedSeq = null;
+      turn.historical = false;
+      turn.lastActivityAt = event.at;
+      for (const activity of turn.entries) if (!definitiveCompletions.get(turn)?.has(activity.id)) completedMessages.delete(activity);
+    }
+    if (event.method === "item/completed" && item.type === "agentMessage" && text(item.id)
+      && (!event.historical || (typeof item.completedAtMs === "number" && Number.isSafeInteger(item.completedAtMs)))) {
+      const completed = definitiveCompletions.get(turn) ?? new Set<string>();
+      completed.add(`item:${text(item.id)}`);
+      definitiveCompletions.set(turn, completed);
+    }
     const progressEvent = event.method === "turn/plan/updated"
       || (event.method === "item/agentMessage/delta" && data.phase === "commentary")
       || ((event.method === "item/started" || event.method === "item/completed") && item.type === "agentMessage" && item.phase === "commentary");
@@ -537,7 +596,8 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     if (event.method === "turn/completed"                                   ) {
       if (settledTurns.has(turn)) continue;
       const outcome = turnData.status === "completed" || turnData.status === "failed" || turnData.status === "interrupted" ? turnData.status : "unknown";
-      if (outcome !== "unknown") settledTurns.add(turn);
+      if (outcome !== "unknown") { settledTurns.add(turn); suspendedTurns.delete(turn); }
+      else if (event.historical) suspendedTurns.set(turn, eventScope(event));
       turn.endedSeq ??= event.seq;
       turn.status = outcome;
       turn.endedAt = event.at;
@@ -569,7 +629,7 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
       const last       = usage (tokenUsage.last ) ;
       if (!total || !last) continue;
       const previous  = turnTotals.get(turn)                                                                             ;
-      const latest    = turns.filter((candidate) => candidate.threadId === threadId && candidate.turnId !== null).at(-1) ;
+      const latest    = turns.filter((candidate) => candidate.threadId === threadId).at(-1) ;
       const reference = previous ?? (latest === turn ? totals.get(threadId) : undefined)                                 ;
       turnTotals.set(turn, total);
       turn.lastRequestUsage = last;
@@ -587,10 +647,13 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
       }
       if (latest === turn) totals.set(threadId, total);
       else if (!previous || Object.values(subtract(total, previous) ?? {}).some((value) => value > 0)) {
+        // 이전 턴 증가가 섞인 이후 snapshot은 다음 턴의 안전 기준도 될 수 없다.
+        unsafeUsageThreads.add(threadId);
         const index = turns.indexOf(turn);
         for (const subsequent of turns.slice(index + 1)) {
           if (subsequent.threadId !== threadId) continue;
           baselines.set(subsequent, null);
+          turnTotals.delete(subsequent);
           subsequent.usage       = null          ;
           subsequent.usageBasis  = "unavailable" ;
           subsequent.usageSeries = []            ;
@@ -611,17 +674,27 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     }
     const itemId = text(item.id) || text(data.itemId);
     if (!itemId) continue;
+    if (event.method === "item/agentMessage/delta" && definitiveCompletions.get(turn)?.has(`item:${itemId}`)) continue;
     if (event.method === "item/agentMessage/delta" && data.phase === "commentary") {
       const progress = entry(turn.entries, `item:${itemId}`, "progress", "진행 설명", event.at);
-      progress.description = (progress.description ?? "") + text(data.delta);
+      if (!completedMessages.has(progress)) {
+        progress.description = (progress.description ?? "") + text(data.delta);
+        progress.status = "running";
+        progress.endedAt = null;
+        observedMessages.add(progress);
+      }
     }
     if (event.method === "item/agentMessage/delta" && data.phase !== "analysis" && data.phase !== "reasoning" && data.phase !== "commentary") {
+      if (turn.endedAt || turn.endedSeq !== null) continue;
       const answer = entry(turn.entries, `item:${itemId}`, "answer", "답변 작성", event.at);
+      if (completedMessages.has(answer)) continue;
       answer.description = (answer.description ?? "") + text(data.delta);
+      observedMessages.add(answer);
       turn.answer = turn.entries.filter((row) => row.kind === "answer").map((row) => row.description ?? "").join("\n");
     }
     if (event.method !== "item/started" && event.method !== "item/completed") continue;
     const complete = event.method === "item/completed" ;
+    if (!complete && (turn.endedAt || turn.endedSeq !== null || transport === "closed")) continue;
     const type     = text(item.type)                   ;
     if (type === "userMessage") {
       for (const value of list(item.content)) {
@@ -648,10 +721,19 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     if (type === "agentMessage" && item.phase !== "analysis" && item.phase !== "reasoning" && item.phase !== "commentary") { kind = "answer"; label = "답변 작성"; }
     if (!kind) continue;
     const activity = entry(turn.entries, `item:${itemId}`, kind, label, event.at);
+    if ((kind === "progress" || kind === "answer") && !complete && observedMessages.has(activity)) continue;
     activity.label = label;
-    if (kind === "progress") activity.description = text(item.text) || activity.description;
+    if (kind === "progress" || kind === "answer") {
+      if (typeof item.text === "string") {
+        activity.description = item.text;
+        observedMessages.add(activity);
+      }
+      if (complete) {
+        observedMessages.add(activity);
+        completedMessages.add(activity);
+      }
+    }
     if (kind === "answer"          ) {
-      activity.description = text(item.text) || activity.description;
       turn.answer = turn.entries.filter((row) => row.kind === "answer").map((row) => row.description ?? "").join("\n");
     }
     if (complete                   ) {

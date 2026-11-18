@@ -26,6 +26,7 @@ async function seedHistory() {
   const answer = "## 저장된 답변\n\n**이어갈 작업**을 확인했습니다.\n\n| 항목 | 상태 |\n| --- | --- |\n| 저장 | 완료 |\n\n" + wideTable + "```ts\n    const saved = true;\n" + "    // 긴 코드 " + "x".repeat(1200) + "\n```\n\n[긴 URL](https://example.com/" + "path".repeat(400) + ")\n\nhttps://example.com/" + "long".repeat(400) + "\n\n" + Array.from({ length: 35 }, (_, index) => `기록 문단 ${index}\n\n`).join("") + "마지막 문장 접근 확인.";
   await fs.writeFile(path.join(workspace, "fixture-history.json"), JSON.stringify({
     "history-a": [{ id: "saved-turn-a", status: "completed", items: [
+      ...(process.argv.includes("--performance-only") ? Array.from({length:60}, (_, index) => ({id:`perf-${index}`,type:"commandExecution",command:`printf performance-${index}`,cwd:workspace,status:"completed",exitCode:0,aggregatedOutput:JSON.stringify({index,output:"기록 ".repeat(7500)})})) : []),
       {
         id: "saved-user", type: "userMessage",
         content: [{ type: "text", text: "저장된 작업 요청" }]
@@ -138,10 +139,14 @@ async function start(round: number, selectedWorkspace = workspace) {
       if (result.exceptionDetails) throw Error(JSON.stringify(result.exceptionDetails));
       return object(result.result).value;
     };
-    const wait = async (expression: string, label: string, timeoutMs = 20_000) => {
+    const wait = async (expression: string, label: string, timeoutMs = 20_000, retryResourceTransition = false) => {
       const until = Date.now() + timeoutMs;
+      const transient = "Error invoking remote method 'activity:resources': Error: 대화를 전환하고 있습니다. 리소스 조회를 다시 시도해 주세요.";
+      const predicate = retryResourceTransition
+        ? "(async()=>{try{return Boolean(await (" + expression + "));}catch(error){if(error instanceof Error && error.message===" + JSON.stringify(transient) + ")return false;throw error;}})()"
+        : "(async()=>Boolean(await (" + expression + ")))()";
       while (Date.now() < until) {
-        if (await evaluate("(async()=>Boolean(await (" + expression + ")))()")) { checks.push(label); return; }
+        if (await evaluate(predicate)) { checks.push(label); return; }
         await pause(40);
       }
       throw Error("화면 조건 실패: " + label + " / " + String(await evaluate("document.body.innerText")));
@@ -219,7 +224,8 @@ async function start(round: number, selectedWorkspace = workspace) {
           const to = node.scrollLeft;
           node.scrollLeft = original;
           result[key] = { ...size, movement: { from, to, restored: node.scrollLeft } };
-          if (size.clientWidth <= 0 || size.scrollWidth <= size.clientWidth || to <= from || !['auto', 'scroll'].includes(size.overflowX)) failures.push(key + ' 내부 가로 스크롤 불가');
+          if (key==='table' && (size.clientWidth<=0 || size.scrollWidth<=size.clientWidth || to<=from || !['auto','scroll'].includes(size.overflowX))) failures.push('table 가로 이동 불가');
+          if(key==='code' && (size.scrollWidth>size.clientWidth+1 || size.overflowY==='auto' || size.overflowY==='scroll')) failures.push('code 독립 스크롤 또는 넘침');
         }
         return result;
       })()`));
@@ -237,7 +243,8 @@ async function start(round: number, selectedWorkspace = workspace) {
     await wait("document.querySelector('[data-testid=\"target-dashboard\"]')", "현재 프로젝트 대시보드 진입");
     await click('[data-testid="chat-nav"]');
     await wait("document.querySelector('[data-thread-id=\"history-a\"]')", "프로젝트 저장 대화 목록");
-    return { command, evaluate, wait, click, input, screenshot, measureLayout, measureNavigation, terminate };
+    const toggleMonitor = async () => { const opened = await evaluate("!document.querySelector('[data-testid=\"session-monitoring\"]').hidden"); await click(opened ? '[data-testid="chat-nav"]' : '[data-testid="monitoring-nav"]'); };
+    return { command, evaluate, wait, click, input, screenshot, measureLayout, measureNavigation, terminate, toggleMonitor };
   } catch (error) { await terminate(); throw error; }
 }
 
@@ -249,7 +256,12 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
     if (!Array.isArray(events)) throw Error("실제 IPC 사건 배열이 없습니다.");
     return events.map(object);
   };
-  const submit          = async (prompt: string) => { await session.input(prompt); await session.click('[data-testid="send-button"]'); }                                                                                                                                                                                                                                                 ;
+  const submit = async (prompt: string) => {
+    const monitored = await session.evaluate("!document.querySelector('[data-testid=\"session-monitoring\"]').hidden");
+    if (monitored) await session.click('[data-testid="chat-nav"]');
+    await session.input(prompt); await session.click('[data-testid="send-button"]');
+    if (monitored) await session.click('[data-testid="monitoring-nav"]');
+  }                                                                                                                                                                                                                                                 ;
   const idle            = (label: string) => session.wait("!document.querySelector('[data-testid=\"new-conversation\"]').disabled && !document.querySelector('[data-testid=\"interrupt-button\"]')", label)                                                                                                                                                                              ;
   const visibleApproval = (command: string) => `(() => { const cards=Array.from(document.querySelectorAll('.approval.open')); const button=cards[0]?.querySelector('[data-decision="accept"]'); return cards.length===1 && cards[0].innerText.includes(${JSON.stringify(command)}) && button instanceof HTMLButtonElement && !button.disabled && button.getClientRects().length>0; })()` ;
   const approval = async (command: string) => {
@@ -300,10 +312,11 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
   await submit("경계 공개 설명 교차 순서");
   await session.wait("Array.from(document.querySelectorAll('.transcript [data-testid=\"public-explanation\"]')).map(node=>node.textContent.trim()).filter(text=>['경계 요약 A','경계 설명 B','경계 요약 C'].includes(text)).join('|')==='경계 요약 A|경계 설명 B|경계 요약 C'", "실제 stdio summary A·commentary B·summary C의 DOM 수신 순서");
   await fs.writeFile(path.join(workspace, "fixture-summary-release"), "release\n");
-  await session.wait("Array.from(document.querySelectorAll('.transcript [data-testid=\"public-explanation\"]')).map(node=>node.textContent.trim()).filter(text=>['경계 요약 A','경계 설명 B','경계 요약 C','경계 최종 요약'].includes(text)).join('|')==='경계 설명 B|경계 최종 요약'", "완료 snapshot은 이전 요약만 교체하고 commentary 순서를 보존");
+  await session.wait("Array.from(document.querySelectorAll('.transcript [data-testid=\"public-explanation\"]')).map(node=>node.textContent.trim()).filter(text=>['경계 요약 A','경계 설명 B','경계 요약 C','경계 최종 요','약','경계 최종 요약'].includes(text)).join('|')==='경계 최종 요|경계 설명 B|약'", "완료 요약은 기존 두 조각 위치와 commentary 상대 순서를 보존하고 A/C를 제거");
+  await session.wait("document.querySelector('.comm-warning')?.getAttribute('title')==='공개 요약 완료 내용이 정정되어 조각별 시간 위치의 대응은 미확인입니다.'", "정정된 요약 조각의 시간 위치 대응은 미확인 경고로 명시");
   await idle("교차 공개 설명 턴 종료");
 
-  await session.click('[data-testid="detail-monitor-toggle"]');
+  await session.toggleMonitor();
   await session.wait("!document.querySelector('[data-testid=\"activity-panel\"]').hidden", "복원 pulse를 검사할 실제 상세 모니터 열기");
   await submit("경계 유휴 종료 준비");
   await session.wait("document.querySelector('[data-row-id=\"hook:boundary-hook\"]')?.classList.contains('has-activity')", "Native Hook 사건은 실제 카탈로그 행에 관측됨");
@@ -337,7 +350,7 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
   const reactions = await session.evaluate("(() => {globalThis.__chatBoundaryObserver.disconnect();return globalThis.__chatBoundaryReactions;})()");
   if (!Array.isArray(reactions) || reactions.length !== 0) throw Error("복원된 과거 Hook을 새 pulse로 재생했습니다: " + JSON.stringify(reactions));
   checks.push("재연결 marker는 scope가 같은 historical snapshot이며 fresh userPrompt보다 앞섬", "새 Native PID의 read/resume/turns-list 뒤 같은 thread 후속 요청", "복원 중 과거 Hook pulse 추가 0개");
-  await session.click('[data-testid="detail-monitor-toggle"]');
+  await session.toggleMonitor();
 
   await submit("경계 재연결 실패 준비");
   await session.wait("(async()=>{const selected=await window.www.workspace();const events=await window.www.events(selected);const start=events.findLast(event=>event.method==='turn/userPrompt' && event.params?.text==='경계 재연결 실패 준비');return start && events.some(event=>event.method==='transport/closed' && event.seq>start.seq) && !document.querySelector('[data-testid=\"new-conversation\"]').disabled;})()", "실패 복구 검사 전 idle Native 종료");
@@ -415,6 +428,65 @@ async function verifyChat() {
 try {
   await seedHistory();
   session = await start(1);
+  if (process.argv.includes('--performance-only')) {
+    const measure = async (label: string) => {
+      const value = await session!.evaluate(`(async()=>{
+        const node=document.querySelector('[data-testid="prompt-input"]');
+        const setter=Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set;
+        const durations=[], tasks=[];let mutations=0;
+        const observer=new PerformanceObserver(list=>tasks.push(...list.getEntries().map(e=>e.duration)));
+        observer.observe({type:'longtask',buffered:false});
+        const changes=new MutationObserver(records=>{mutations+=records.length});
+        document.querySelectorAll('.command-card').forEach(card=>changes.observe(card,{childList:true,subtree:true,characterData:true}));
+        node.focus();
+        for(let i=0;i<40;i++){
+          const before=performance.now();setter.call(node,'입력 계측 '+i+' 가운데 편집');node.dispatchEvent(new Event('input',{bubbles:true}));
+          await new Promise(resolve=>requestAnimationFrame(resolve));durations.push(performance.now()-before);
+          if(node.value!=='입력 계측 '+i+' 가운데 편집')throw Error('입력 원문 누락');
+        }
+        changes.disconnect();observer.disconnect();durations.sort((a,b)=>a-b);
+        return {samples:durations.length,p50:durations[19],p95:durations[37],max:durations.at(-1),longTasks:tasks,commandDomMutations:mutations,commands:document.querySelectorAll('.command-card').length,viewport:{width:innerWidth,height:innerHeight},userAgent:navigator.userAgent};
+      })()`);
+      metrics.push({label,...object(value)});
+    };
+    await measure('short');
+    await session.click('[data-thread-id="history-a"]');
+    await session.wait("document.querySelectorAll('.command-card').length>=65", '성능 최대 보관 출력·완료 카드 60개 복원');
+    await measure('long-idle');
+    await session.input('성능 스트리밍 중단 확인');
+    await session.click('[data-testid="send-button"]');
+    await session.wait("document.querySelector('[data-testid=\"interrupt-button\"]')", '성능 실행 중 상태');
+    await measure('long-running');
+    await session.screenshot('performance');await session.terminate();session=null;
+    await fs.writeFile(path.join(directory,'performance.json'),JSON.stringify({metrics,checks,build:JSON.parse(await fs.readFile(path.join(root,'dist/build-info.json'),'utf8')),limitations:['합성 input→다음 frame 근사이며 OS 키보드/IME·React commit 측정과 다름','현재 fixture 실행 상태의 출력 빈도에 한정','최대 사건 2000개 경계는 별도 projection 집중검사']},null,2));
+    console.log(JSON.stringify({evidence:directory,metrics}));return;
+  }
+  if (process.argv.includes('--steer-only')) {
+    await session.input('Steer 중단 확인');await session.click('[data-testid="send-button"]');
+    await session.wait("document.querySelector('[data-testid=\"working-status\"]').textContent.includes('Working') && document.querySelector('[data-testid=\"send-button\"]').textContent.includes('Steer')", '같은 입력창의 Steer와 고정 Working');
+    await session.input('대기 추가 지시');await session.click('[data-testid="send-button"]');
+    await session.input('접수 중 작성한 다음 초안');
+    await session.wait("document.querySelector('[data-testid=\"send-button\"]').disabled && !document.querySelector('[data-testid=\"prompt-input\"]').disabled", '추가 지시 pending 중 편집 허용·중복 전송 잠금');
+    await session.evaluate("document.querySelector('[data-testid=\"send-button\"]').click()");
+    await fs.writeFile(path.join(workspace,'fixture-steer-release'),'release');
+    await session.wait("Array.from(document.querySelectorAll('[data-testid=\"user-request\"]')).some(node=>node.textContent.includes('대기 추가 지시')&&node.textContent.includes('접수됨')) && document.querySelector('[data-testid=\"prompt-input\"]').value==='접수 중 작성한 다음 초안'", '접수는 원문과 다음 초안을 보존하고 반영 완료와 구분');
+    await session.input('대기 추가 지시');await session.click('[data-testid="send-button"]');
+    await session.wait("Array.from(document.querySelectorAll('[data-testid=\"user-request\"]')).filter(node=>node.textContent.includes('대기 추가 지시')&&node.textContent.includes('접수됨')).length===2", '같은 원문 두 번의 의도적 추가 지시는 두 메시지');
+    await session.input('mismatch');await session.click('[data-testid="send-button"]');
+    await session.wait("document.querySelector('[data-testid=\"prompt-input\"]').value==='mismatch' && document.querySelector('.transcript').textContent.includes('접수 여부 미확인')", '응답 턴 불일치는 미확인과 원문 복원·자동재전송 없음');
+    await session.click('[data-testid="view-page-nav"]');
+    await session.wait("!document.querySelector('main.work').hidden", '실행 중 프로젝트 목록은 중앙 대화를 유지');
+    await session.click('[data-testid="project-list-close"]');
+    await session.click('[data-testid="monitoring-nav"]');await session.screenshot('steer-monitoring');
+    await session.click('[data-testid="monitoring-return-chat"]');
+    await session.wait("document.querySelector('[data-testid=\"working-status\"]').textContent.includes('Working')", '모니터 왕복에도 같은 활성 턴 유지');
+    await session.click('[data-testid="interrupt-button"]');
+    await session.wait("!document.querySelector('[data-testid=\"interrupt-button\"]')", '별도 중단 조작 후 실제 턴 종료');
+    const calls=(await fs.readFile(path.join(workspace,'fixture-calls.jsonl'),'utf8')).trim().split('\n').map(line=>object(JSON.parse(line)));
+    const turns=calls.filter(call=>call.method==='turn/start'), steers=calls.filter(call=>call.method==='turn/steer'), stops=calls.filter(call=>call.method==='turn/interrupt');
+    if(turns.length!==1||steers.length!==3||stops.length!==1||new Set(steers.map(call=>object(call.params).clientUserMessageId)).size!==3||new Set(steers.map(call=>object(call.params).expectedTurnId)).size!==1)throw Error('Steer 실제 stdio 중복/같은턴 경계 오류');
+    await session.terminate();session=null;await fs.writeFile(path.join(directory,'summary.json'),JSON.stringify({result:'passed',scope:'steer-only',checks,turnStarts:turns.length,steers:steers.length,interrupts:stops.length,limitations:['합성 Native 및 실제 Electron. 실제 모델의 추가 지시 반영과 OS IME는 별도 근거']},null,2));console.log(JSON.stringify({evidence:directory,checks}));return;
+  }
   let falsePredicateRejected = false;
   try { await session.wait("Promise.resolve(false)", "의도적인 비동기 false 조건", 100); }
   catch (error) {
@@ -465,9 +537,9 @@ try {
   await toggleShortcut(reviewCard + ' pre');
   await session.wait(`document.querySelector(${JSON.stringify(savedCard)}).querySelector('[aria-expanded]').getAttribute('aria-expanded')==='false' && document.querySelector('${reviewCard} [aria-expanded]').getAttribute('aria-expanded')==='false'`, '각 카드 Ctrl+T 접힘 독립 유지');
   await session.wait(`(() => { const c=document.querySelector('${reviewCard}'); return c?.innerText.includes('실행 종료') && c.innerText.includes('종료 코드 0') && c.innerText.includes('미실행') && c.innerText.includes('보고값') && c.querySelector('[data-testid="command-preview"]').textContent.includes('\\n  "id": "review-readable"'); })()`, "종료 코드 0과 검토 미실행 분리·JSON 2칸 정렬");
-  await session.wait(`(() => { const c=document.querySelector('${reviewCard}'); const key=c.querySelector('.syntax-key'); const string=c.querySelector('pre .syntax-string'); const number=c.querySelector('pre .syntax-number'); const literal=c.querySelector('pre .syntax-literal'); return [key,string,number,literal].every(Boolean) && new Set([key,string,number,literal].map(n=>getComputedStyle(n).color)).size===4 && c.querySelector('.cmdline .syntax-option') && c.querySelector('.cmdline').scrollWidth>c.querySelector('.cmdline').clientWidth; })()`, "실제 JSON 4종 색상·셸 옵션 강조·명령 내부 가로 스크롤");
+  await session.wait(`(() => { const c=document.querySelector('${reviewCard}'); const key=c.querySelector('.syntax-key'); const string=c.querySelector('pre .syntax-string'); const number=c.querySelector('pre .syntax-number'); const literal=c.querySelector('pre .syntax-literal'); return [key,string,number,literal].every(Boolean) && new Set([key,string,number,literal].map(n=>getComputedStyle(n).color)).size===4 && c.querySelector('.cmdline .syntax-option') && c.querySelector('.cmdline').scrollWidth<=c.querySelector('.cmdline').clientWidth+1; })()`, "실제 JSON 4종 색상·셸 옵션 강조·명령 줄바꿈");
   await activateByKey(reviewCard + ' [aria-expanded]', '출력 펼침 Enter');
-  await session.wait(`document.querySelector('${reviewCard} pre').textContent.includes('9007199254740993') && document.querySelector('${reviewCard} pre').scrollWidth>document.querySelector('${reviewCard} pre').clientWidth`, "정렬된 전체 출력의 큰 정수 보존·긴 줄 내부 스크롤");
+  await session.wait(`document.querySelector('${reviewCard} pre').textContent.includes('9007199254740993') && document.querySelector('${reviewCard} pre').scrollWidth<=document.querySelector('${reviewCard} pre').clientWidth+1`, "정렬된 전체 출력의 큰 정수 보존·긴 줄 줄바꿈");
   await session.evaluate(`document.querySelector('${reviewCard}').scrollIntoView({block:'start'})`);
   await session.screenshot('command-json-formatted');
   await session.evaluate(`document.querySelector('${reviewCard} button[aria-pressed]').focus()`);
@@ -496,7 +568,7 @@ try {
   await session.evaluate("(() => { const transcript=document.querySelector('.transcript'); transcript.scrollTop=transcript.scrollHeight; transcript.dispatchEvent(new Event('scroll')); })()");
   await session.wait("(() => { const t=document.querySelector('.transcript'); const last=document.querySelector('.agent .chat-markdown>:last-child'); const input=document.querySelector('.compose'); return last.textContent.includes('마지막 문장 접근 확인') && last.getBoundingClientRect().bottom<=t.getBoundingClientRect().bottom+1 && t.getBoundingClientRect().bottom<=input.getBoundingClientRect().top+1; })()", "긴 답변 마지막 문장과 입력창 분리");
   await session.measureLayout("기준선 DOM 치수");
-  await session.wait("document.documentElement.scrollWidth<=window.innerWidth && document.querySelector('.chat-code pre').scrollWidth>document.querySelector('.chat-code pre').clientWidth", "긴 URL과 코드의 가로 넘침 격리");
+  await session.wait("document.documentElement.scrollWidth<=window.innerWidth && document.querySelector('.chat-code pre').scrollWidth<=document.querySelector('.chat-code pre').clientWidth+1", "긴 URL과 코드 줄바꿈으로 가로 넘침 방지");
   for (const [width, height] of [[1040, 680], [1040, 900], [1440, 680], [860, 680], [1440, 900]]) {
     await session.command("Emulation.setDeviceMetricsOverride", { width, height, deviceScaleFactor: 1, mobile: false });
     await session.evaluate("new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
@@ -504,7 +576,7 @@ try {
     if (object(measurement.viewport).width !== width || object(measurement.viewport).height !== height || !Array.isArray(measurement.failures) || measurement.failures.length) throw Error("창 치수 검증 실패: " + JSON.stringify(measurement));
     checks.push(`창 ${width}x${height} 전체 넘침·프레임 가시 범위·본문 세로 이동·코드/긴 표 가로 이동`);
     await session.wait("(() => { const t=document.querySelector('.transcript'); const input=document.querySelector('.compose'); return t.clientHeight>0 && t.getBoundingClientRect().bottom<=input.getBoundingClientRect().top+1 && input.getBoundingClientRect().bottom<window.innerHeight && document.documentElement.scrollWidth<=window.innerWidth; })()", `창 폭 ${width}에서 본문·입력 접근`);
-    await session.wait(`(() => { const c=document.querySelector('${reviewCard}'); const t=document.querySelector('.transcript'); return c.getBoundingClientRect().width<=t.clientWidth && c.querySelector('.cmdline').scrollWidth>c.querySelector('.cmdline').clientWidth && document.documentElement.scrollWidth<=innerWidth; })()`, `창 ${width} 명령 카드 가로 넘침 격리`);
+    await session.wait(`(() => { const c=document.querySelector('${reviewCard}'); const t=document.querySelector('.transcript'); return c.getBoundingClientRect().width<=t.clientWidth && c.querySelector('.cmdline').scrollWidth<=c.querySelector('.cmdline').clientWidth+1 && document.documentElement.scrollWidth<=innerWidth; })()`, `창 ${width} 명령 카드 가로 넘침 격리`);
     await session.screenshot(height === 900 ? `chat-width-${width}` : `chat-viewport-${width}x${height}`);
   }
   if (process.argv.includes('--command-cards')) {
@@ -515,23 +587,9 @@ try {
     console.log(JSON.stringify(summary));
     return;
   }
-  const sidebarToggle = '[data-testid="resource-sidebar-toggle"]' ;
-  const detailToggle  = '[data-testid="detail-monitor-toggle"]'   ;
-  const panelState = (sidebar: boolean, detail: boolean, sidebarEnabled = sidebar) => `(() => {
-    const visible = (node) => node instanceof HTMLElement && !node.hidden && getComputedStyle(node).visibility !== 'hidden' && node.getClientRects().length > 0 && node.getBoundingClientRect().width > 0 && node.getBoundingClientRect().height > 0;
-    const sidebar = document.querySelector('[data-testid="resource-sidebar"]');
-    const detail = document.querySelector('[data-testid="activity-panel"]');
-    return sidebar instanceof HTMLElement && detail instanceof HTMLElement
-      && visible(sidebar) === ${sidebar} && visible(detail) === ${detail}
-      && document.querySelector(${JSON.stringify(sidebarToggle)})?.getAttribute('aria-pressed') === '${sidebarEnabled}'
-      && document.querySelector(${JSON.stringify(detailToggle)})?.getAttribute('aria-pressed') === '${detail}';
-  })()`;
-  const noSidebarCatalog = `(() => {
-    const sidebar = document.querySelector('[data-testid="resource-sidebar"]');
-    const catalog = document.querySelectorAll('[data-testid="activity-panel"] [data-testid="www-artifact"].www-unobserved');
-    return sidebar instanceof HTMLElement && catalog.length > 0
-      && !sidebar.querySelector('[data-testid="www-artifact"], [data-testid="activity-skill-row"], [data-testid="activity-hook-row"]')
-      && Array.from(catalog).every((row) => !Array.from(sidebar.querySelectorAll('.na-row-copy strong')).some((label) => label.textContent === row.querySelector('strong')?.textContent));
+  const panelState = (sidebar: boolean, detail: boolean, _sidebarEnabled = sidebar) => `(() => {
+    const visible = node => node instanceof HTMLElement && node.getClientRects().length>0 && node.getBoundingClientRect().width>0;
+    return visible(document.querySelector('[data-testid="resource-sidebar"]'))===${sidebar} && visible(document.querySelector('[data-testid="activity-panel"]'))===${detail};
   })()`;
   const wheelFrame = async (selector: string, atEnd: boolean, label: string) => {
     const before = object(await cardSession.evaluate(`(() => { const node=document.querySelector(${JSON.stringify(selector)}); if(${atEnd})node.scrollTop=node.scrollHeight; const r=node.getBoundingClientRect(); const input=document.querySelector('[data-testid="prompt-input"]').getBoundingClientRect(); return { x:r.right-4,y:r.top+4,document:document.documentElement.scrollTop,body:document.body.scrollTop,input:{x:input.x,y:input.y,width:input.width,height:input.height} }; })()`));
@@ -542,50 +600,26 @@ try {
     if (after.document !== before.document || after.body !== before.body || JSON.stringify(after.input) !== JSON.stringify(before.input)) throw Error(label + ' 프레임 이동: ' + JSON.stringify({ before, after }));
     checks.push(label + ' 실제 휠 뒤 문서 scrollTop·입력 사각형 유지');
   };
-  await session.wait(panelState(true, false), "기본 사이드바 가시성과 상세 모니터 닫힘");
-  await session.wait("document.querySelectorAll('[data-testid=\"agent-tree\"] [data-skill-id]').length===5 && Array.from(document.querySelectorAll('[data-testid=\"agent-tree\"] [data-skill-id]')).every(n=>n.innerText.includes('대기')) && document.querySelector('[data-testid=\"agent-plan\"]') && document.querySelector('[data-testid=\"agent-progress\"]') && !document.querySelector('[data-testid=\"resource-sidebar\"] [data-testid=\"activity-hook-row\"]')", "관측 전 고정 Skills 다섯 개 대기와 plan·progress·Hook 제외");
-  await session.wait(noSidebarCatalog, "기본 사이드바에 미관측 카탈로그 행 없음");
-  await wheelFrame('[data-testid="resource-sidebar"] .na-scroll', false, '사이드바 여백');
-  await wheelFrame('[data-testid="resource-sidebar"] .na-scroll', true, '사이드바 내부 끝 경계');
-  await session.input("모니터 전환 뒤 보존할 초안");
-  await session.evaluate("(() => { const t=document.querySelector('.transcript'); t.scrollTop=80; t.dispatchEvent(new Event('scroll')); })()");
+  await session.wait(panelState(true,false), '기본 Agent 개요와 모니터링 분리');
+  await session.wait("document.querySelectorAll('[data-testid=\"resource-sidebar\"] [data-skill-id]').length===5 && !document.querySelector('[data-testid=\"resource-sidebar\"] [data-testid=\"activity-hook-row\"]')", '기본 Skills 다섯 개와 상세 Hook 분리');
+  await session.wait("!document.querySelector('[data-testid=\"detail-monitor-toggle\"]') && !document.querySelector('[data-testid=\"resource-sidebar-toggle\"]')", '기존 토글은 DOM과 초점 순서에 없음');
+  await session.input('모니터 전환 뒤 보존할 초안');
+  await session.evaluate("(()=>{const t=document.querySelector('.transcript');t.scrollTop=80;t.dispatchEvent(new Event('scroll'));})()");
   const monitorScrollTop = Number(await session.evaluate("document.querySelector('.transcript').scrollTop"));
-  const chatPreserved = `(() => {
-    const t=document.querySelector('.transcript');
-    const input=document.querySelector('[data-testid="prompt-input"]');
-    const rect=input.getBoundingClientRect();
-    return input.value==='모니터 전환 뒤 보존할 초안' && !input.disabled
-      && Math.abs(t.scrollTop-${monitorScrollTop})<2 && t.scrollHeight>t.clientHeight
-      && rect.width>0 && rect.height>0 && rect.top>=0 && rect.bottom<=innerHeight && rect.left>=0 && rect.right<=innerWidth;
-  })()`;
-  await session.click(sidebarToggle);
-  await session.wait(panelState(false, false), "리소스 사이드바만 닫기: 실제 패널 숨김");
-  await session.evaluate("new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
-  await session.wait(chatPreserved, "사이드바 닫은 뒤 초안·과거 읽기·입력 접근 유지");
-  await session.click(sidebarToggle);
-  await session.wait(panelState(true, false), "리소스 사이드바만 열기: 실제 패널 복원");
-  await session.evaluate("new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
-  await session.wait(chatPreserved, "사이드바 다시 연 뒤 초안·과거 읽기·입력 접근 유지");
-  await session.click(detailToggle);
-  await session.wait(panelState(false, true, true), "상세 모니터 열기: 사이드바 설정을 유지하며 상세 패널 표시");
-  await session.evaluate("new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
-  await session.wait(noSidebarCatalog, "상세 조회 중에도 기본 사이드바에 카탈로그 행을 섞지 않음");
-  await session.wait(chatPreserved, "상세 조회 중 초안·과거 읽기·입력 접근 유지");
-  await session.click(detailToggle);
-  await session.wait(panelState(true, false), "상세 모니터 닫기: 기본 사이드바 복원");
-  await session.evaluate("new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
-  await session.wait(chatPreserved, "상세 닫은 뒤 초안·과거 읽기·입력 접근 복원");
-  await session.evaluate("document.querySelector('[data-testid=\"prompt-input\"]').focus()");
-  await session.wait("document.activeElement===document.querySelector('[data-testid=\"prompt-input\"]')", "모니터 왕복 뒤 입력창 포커스 접근");
-  await session.click(detailToggle);
-  await session.wait(panelState(false, true, true), "키보드 닫기 검증을 위한 상세 열기");
-  await session.wait("document.activeElement===document.querySelector('[data-testid=\"activity-panel\"]')", "상세 패널 열기 포커스");
-  await session.command("Input.dispatchKeyEvent", { type: "keyDown", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27, nativeVirtualKeyCode: 27 });
-  await session.command("Input.dispatchKeyEvent", { type: "keyUp", key: "Escape", code: "Escape", windowsVirtualKeyCode: 27, nativeVirtualKeyCode: 27 });
-  await session.wait(panelState(true, false), "Escape로 상세만 닫고 사이드바 복원");
-  await session.evaluate("new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
-  await session.wait("document.activeElement===document.querySelector('[data-testid=\"detail-monitor-toggle\"]')", "상세 닫기 뒤 기존 토글 focus ref로 복귀");
-  await session.wait(chatPreserved, "키보드 상세 왕복 뒤 초안·읽기 위치 유지");
+  const chatPreserved = `document.querySelector('[data-testid="prompt-input"]').value==='모니터 전환 뒤 보존할 초안' && Math.abs(document.querySelector('.transcript').scrollTop-${monitorScrollTop})<2`;
+  await session.click('[data-testid="view-page-nav"]');
+  await session.wait("document.querySelector('.home-sidebar') && !document.querySelector('main.work').hidden", '프로젝트 목록 탐색 중 중앙 대화 유지');
+  await session.click('[data-testid="open-current-workspace"]');
+  await session.wait(chatPreserved, '현재 프로젝트 재선택은 초안과 읽기 위치 보존');
+  await session.toggleMonitor();
+  await session.wait(panelState(false,true), '모니터링 메뉴의 세션 상세');
+  await session.wait("document.querySelector('[data-testid=\"session-monitoring\"]').innerText.includes('세션') && document.querySelector('[data-testid=\"session-monitoring\"]').innerText.includes('history-a')", '관측 대상 세션과 대화 식별');
+  await session.screenshot('session-monitoring');
+  await session.command('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+  await session.command('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+  await session.wait(panelState(true,false), 'Escape로 대화 복귀');
+  await session.wait(chatPreserved, '모니터링 왕복 후 초안과 과거 읽기 보존');
+  await session.wait("document.activeElement===document.querySelector('[data-testid=\"monitoring-nav\"]')", '모니터 닫기 뒤 의미 있는 메뉴 초점 복귀');
   await session.input("");
   await session.screenshot("restored-chat");
   await session.click('.chat-code button');
@@ -620,11 +654,11 @@ try {
   await session.wait("document.querySelector('[data-testid=\"subagent-list\"] [data-agent-id=\"sidebar-child\"][data-agent-status=\"completed\"]')", "Native 상태 완료 후 하위 작업 완료 표시");
   await session.wait(currentSidebar + ".innerText.includes('첫 요청 전용 단계') && !document.querySelector('[data-testid=\"resource-sidebar\"]').innerText.includes('preToolUse')", "기본 사이드바의 실제 첫 요청 plan과 Hook 제외");
   await session.wait("!document.querySelector('[data-testid=\"new-conversation\"]').disabled", "첫 요청 종료");
-  await session.click(detailToggle);
+  await session.toggleMonitor();
   await session.click('[data-testid="native-activity-details"] > summary');
   await session.wait("(() => { const rows=Array.from(document.querySelectorAll('[data-testid=\"native-activity-details\"] [data-testid=\"activity-entry\"]')).filter(row=>row.innerText.includes('preToolUse')); return rows.length===2 && rows.some(row=>row.innerText.includes('실패')) && rows.some(row=>row.innerText.includes('완료')); })()", "상세 모니터에 두 Hook 실패·완료 보존");
-  await session.click(detailToggle);
-  await session.wait("(async()=>{const selected=await window.www.workspace();const state=await window.www.activityResources(selected);const docs=state.observations.filter(row=>row.resource.kind==='document');return docs.length===2 && new Set(docs.map(row=>row.resource.identity)).size===2 && docs.every(row=>/^document-sha256:[a-f0-9]{64}$/.test(row.resource.identity)) && !JSON.stringify(state.observations).includes('.private-');})()", "실제 main 해시 경계에서 미등록 문서 두 개·중복 병합·비공개 경로 비저장 확인");
+  await session.toggleMonitor();
+  await session.wait("(async()=>{const selected=await window.www.workspace();const state=await window.www.activityResources(selected);const docs=state.observations.filter(row=>row.resource.kind==='document');return docs.length===2 && new Set(docs.map(row=>row.resource.identity)).size===2 && docs.every(row=>/^document-sha256:[a-f0-9]{64}$/.test(row.resource.identity)) && !JSON.stringify(state.observations).includes('.private-');})()", "실제 main 해시 경계에서 미등록 문서 두 개·중복 병합·비공개 경로 비저장 확인", 20_000, true);
   await session.screenshot("sidebar-first-request");
   await session.input("사이드바 두 번째 요청 확인");
   await session.click('[data-testid="send-button"]');
@@ -655,12 +689,12 @@ try {
   await session.input("전송 실패 확인");
   await session.click('[data-testid="send-button"]');
   await session.wait("document.querySelector('[data-testid=\"prompt-input\"]').value==='전송 실패 확인' && document.querySelector('.status')?.innerText.includes('합성 전송 실패')", "전송 실패 뒤 초안 보존과 오류 표시");
-  await session.click(detailToggle);
-  await session.wait(panelState(false, true, true), "실시간 통신 관측용 상세 모니터 열기");
   await session.input("실시간 카드 확인");
   await session.evaluate("document.querySelector('.transcript').scrollTop=0; document.querySelector('.transcript').dispatchEvent(new Event('scroll'))");
   const started = Date.now();
   await session.click('[data-testid="send-button"]');
+  await session.toggleMonitor();
+  await session.wait(panelState(false,true), "실시간 관측은 모니터링 페이지에서 확인");
   await session.wait("document.querySelector('[data-testid=\"work-flow\"]')?.innerText.match(/진행 중 · [0-4]초/) && document.querySelector('[data-testid=\"work-flow\"]')?.innerText.includes('마지막 활동')", "후속 요청 경과 시간은 현재 턴에서 시작");
   await session.wait("Array.from(document.querySelectorAll('.command-card')).some((card)=>card.innerText.includes('printf live') && card.innerText.includes('실행 중') && card.querySelector('[data-testid=\"command-preview\"]')?.textContent.startsWith('    실시간 출력 2'))", "턴 종료 전 실시간 카드 최근 10줄");
   await session.wait("document.querySelector('[data-testid=\"activity-live-monitor\"]')?.innerText.includes('최근 통신 경고') && document.querySelector('[data-testid=\"activity-live-monitor\"]')?.innerText.includes('Native 연결됨') && !document.querySelector('.status')?.innerText.includes('연결 error')", "잘못된 JSON 경고와 살아 있는 연결·명령 스트리밍 구분");
@@ -668,7 +702,7 @@ try {
   await session.wait("document.querySelector('.new-content') && document.querySelector('.transcript').scrollTop<2", "실시간 사건 중 과거 읽기 위치 유지");
   await session.wait("Array.from(document.querySelectorAll('.command-card')).some((card)=>card.innerText.includes('printf live') && card.classList.contains('item-failed') && card.querySelector('[aria-expanded]')?.getAttribute('aria-expanded')==='true' && card.querySelector('[data-testid=\"command-preview\"]')?.textContent.startsWith('    실시간 출력 1'))", "실패 종료 후 앞 10줄과 보관 출력 펼침");
   await session.wait("!document.querySelector('[data-testid=\"new-conversation\"]')?.disabled", "실시간 카드 턴 종료");
-  await session.click(detailToggle);
+  await session.toggleMonitor();
   await session.wait(panelState(true, false), "실시간 관측 뒤 상세 닫기와 기본 사이드바 복원");
   await session.input("무활동 확인");
   await session.click('[data-testid="send-button"]');
@@ -723,7 +757,7 @@ try {
   await session.click(a);
   await session.wait("document.body.innerText.includes('같은 대화 후속 요청')", "앱 재시작 뒤 Native 저장 이력 재열기");
   await session.screenshot("restart-chat");
-  await session.wait("(async () => { const selected = await window.www.workspace(); const state = await window.www.activityResources(selected); return state?.observations.length > 0 && state.storage === 'saved' && state.revision === state.durableRevision; })()", "재시작 뒤 실제 대화 원장과 마지막 저장 revision 복원");
+  await session.wait("(async () => { const selected = await window.www.workspace(); const state = await window.www.activityResources(selected); return state?.observations.length > 0 && state.storage === 'saved' && state.revision === state.durableRevision; })()", "재시작 뒤 실제 대화 원장과 마지막 저장 revision 복원", 20_000, true);
   const beforeA   = object(await session.evaluate("(async () => { const selected = await window.www.workspace(); return { selected, resources: await window.www.activityResources(selected) }; })()")) ;
   const selectedA = object(beforeA.selected)                                                                                                                                                           ;
   const rowsA     = object(beforeA.resources).observations                                                                                                                                             ;
@@ -731,7 +765,7 @@ try {
   const idsA      = rowsA.map((row) => String(object(row).id)).sort()                                   ;
   const favoriteA = `button[aria-label=${JSON.stringify(path.basename(workspace) + " 즐겨찾기 추가")}]` ;
   await session.click('[data-testid="view-page-nav"]');
-  await session.wait("document.querySelector('[data-testid=\"view-page\"]')", "즐겨찾기 조작을 위한 전체 보기");
+  await session.wait("document.querySelector('.home-sidebar')", "즐겨찾기 조작을 위한 프로젝트 목록");
   await session.evaluate("document.querySelector(" + JSON.stringify(favoriteA) + ").focus()");
   await session.wait("document.activeElement===document.querySelector(" + JSON.stringify(favoriteA) + ")", "접근 가능한 이름으로 프로젝트 즐겨찾기 키보드 초점 접근");
   await session.command("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", text: "\r", unmodifiedText: "\r", windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
@@ -747,7 +781,7 @@ try {
   await session.command("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
   await session.wait("(async () => { const selected = await window.www.workspace(); const projects = await window.www.listProjects(selected); return projects.length === 2 && projects.some(project => project.path === " + JSON.stringify(workspace) + " && project.favorite); })()", "다른 프로젝트 앱 재시작에서 최근·즐겨찾기 복원");
   await session.click(a);
-  await session.wait("(async () => { const selected = await window.www.workspace(); const state = await window.www.activityResources(selected); return state?.scope.threadId === 'history-a' && state.observations.length > 0; })()", "같은 thread 문자열의 프로젝트 B 관측 복원");
+  await session.wait("(async () => { const selected = await window.www.workspace(); const state = await window.www.activityResources(selected); return state?.scope.threadId === 'history-a' && state.observations.length > 0; })()", "같은 thread 문자열의 프로젝트 B 관측 복원", 20_000, true);
   const beforeB   = object(await session.evaluate("(async () => { const selected = await window.www.workspace(); return { selected, resources: await window.www.activityResources(selected) }; })()")) ;
   const selectedB = object(beforeB.selected)                                                                                                                                                           ;
   const rowsB     = object(beforeB.resources).observations                                                                                                                                             ;
@@ -773,7 +807,7 @@ try {
   const switchB = `button[title=${JSON.stringify(workspaceB)}]` ;
   const switchProject = async (selector: string, key: unknown, label: string) => {
     await session!.click('[data-testid="view-page-nav"]');
-    await session!.wait("document.querySelector('[data-testid=\"view-page\"]')", label + " 전체 보기");
+    await session!.wait("document.querySelector('.home-sidebar')", label + " 프로젝트 목록");
     await session!.click(selector);
     await session!.wait("document.querySelector('[data-testid=\"target-dashboard\"]') && window.www.workspace().then(s=>s.workspaceKey===" + JSON.stringify(key) + ")", label + " 대시보드");
     await session!.click('[data-testid="chat-nav"]');
@@ -801,19 +835,19 @@ try {
   try {
     await session.input("원장 저장 실패 확인");
     await session.click('[data-testid="send-button"]');
-    await session.wait("(async()=>{const selected=await window.www.workspace();const state=await window.www.activityResources(selected);return state?.storage==='volatile' && state.revision>state.durableRevision && !document.querySelector('[data-testid=\"new-conversation\"]').disabled;})()", "격리 profile 실제 파일 경로 방해로 원장 저장 실패와 미확정 revision 재현");
+    await session.wait("(async()=>{const selected=await window.www.workspace();const state=await window.www.activityResources(selected);return state?.storage==='volatile' && state.revision>state.durableRevision && !document.querySelector('[data-testid=\"new-conversation\"]').disabled;})()", "격리 profile 실제 파일 경로 방해로 원장 저장 실패와 미확정 revision 재현", 20_000, true);
     await switchProject(switchA, selectedA.workspaceKey, "저장 실패 뒤 A 전환");
     await session.wait("document.querySelector('.project-storage-warning')?.textContent.includes('workspace-b')", "다른 프로젝트로 전환해도 이전 B의 저장 미확정 경고 보전");
     const failureStillBelongsToB = "(()=>{const node=document.querySelector('.project-storage-warning');if(!node?.hasAttribute('data-failed-scopes'))return false;const scopes=JSON.parse(node.getAttribute('data-failed-scopes'));return Array.isArray(scopes)&&scopes.length===1&&scopes[0].workspaceKey===" + JSON.stringify(selectedB.workspaceKey) + "&&scopes[0].threadId==='history-a';})()";
     await session.wait(failureStillBelongsToB, "전체 flush의 실제 실패 scope B만 진단하고 정상 A로 귀속하지 않음");
-    await session.wait("(async()=>{const selected=await window.www.workspace();return selected.workspaceKey===" + JSON.stringify(selectedA.workspaceKey) + " && await window.www.activityResources(selected)===null;})()", "이전 저장 경고를 새 프로젝트의 원장 데이터로 수용하지 않음");
+    await session.wait("(async()=>{const selected=await window.www.workspace();return selected.workspaceKey===" + JSON.stringify(selectedA.workspaceKey) + " && await window.www.activityResources(selected)===null;})()", "이전 저장 경고를 새 프로젝트의 원장 데이터로 수용하지 않음", 20_000, true);
     await session.click('[data-testid="view-page-nav"]');
-    await session.wait("document.querySelector('[data-testid=\"view-page\"]') && " + failureStillBelongsToB, "전체 보기에서도 실제 실패 scope 진단 유지");
+    await session.wait("document.querySelector('.home-sidebar') && " + failureStillBelongsToB, "전체 보기에서도 실제 실패 scope 진단 유지");
     await session.screenshot("project-storage-warning");
     await session.click(switchB);
     await session.wait("document.querySelector('[data-testid=\"target-dashboard\"]') && " + failureStillBelongsToB, "B 실패 후 정상 A에서 다시 전환해도 A를 실패 대상으로 덮지 않음");
     await session.click('[data-testid="chat-nav"]');
-    await session.wait("(async()=>{const selected=await window.www.workspace();return selected.workspaceKey===" + JSON.stringify(selectedB.workspaceKey) + " && await window.www.activityResources(selected)===null;})()", "미선택 실패 thread의 경고와 새 빈 대화 리소스는 왕복 뒤에도 분리");
+    await session.wait("(async()=>{const selected=await window.www.workspace();return selected.workspaceKey===" + JSON.stringify(selectedB.workspaceKey) + " && await window.www.activityResources(selected)===null;})()", "미선택 실패 thread의 경고와 새 빈 대화 리소스는 왕복 뒤에도 분리", 20_000, true);
     await session.screenshot("project-storage-warning-roundtrip");
   } finally {
     await fs.rmdir(ledgerFile);

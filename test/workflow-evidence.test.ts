@@ -38,6 +38,59 @@ function options(repo: string, overrides: object = {}) {
   return { repo, record: record(), inputs: ["src", "check.ts"], command: process.execPath, args: ["check.ts"], criterionIds: ["AC-1"], ...overrides };
 }
 
+for (const drift of ['dependency', 'environment', 'configuration', 'tool'] as const) {
+  test(`세션 실제 실행의 확장 환경은 저장한 증거 평가에도 적용된다 — ${drift}`, async t => {
+    const { createVerificationSession, verifyInSession } = await import('../scripts/workflow/evidence.ts');
+    const repo = await fixture(); t.after(() => rm(repo, { recursive: true, force: true }));
+    await mkdir(path.join(repo, 'node_modules'));
+    await writeFile(path.join(repo, 'node_modules/input'), 'before');
+    const configuration = path.join(repo, '.www-local-configuration');
+    const tool = path.join(repo, '.www-local-tool');
+    await writeFile(configuration, 'before');
+    await writeFile(tool, '#!/bin/sh\nexit 0\n');
+    await chmod(tool, 0o755);
+    const variable = 'WWW_REUSE_EVIDENCE_ENVIRONMENT_FIXTURE';
+    const previous = process.env[variable];
+    process.env[variable] = 'before';
+    t.after(() => { if (previous === undefined) delete process.env[variable]; else process.env[variable] = previous; });
+    const session = createVerificationSession({ checkId: `durable-${drift}`, scenario: '실제 실행 뒤 적용성', phase: 'focused', maxAgeMs: 60_000, tools: [process.execPath, tool], environmentPaths: [configuration], environmentObserved: true });
+    const execution = await verifyInSession(session, options(repo));
+    assert.equal(execution.reuse.action, 'executed');
+    assert.equal(execution.attempt.result, 'passed');
+    // 복제한 시도만 전달해도 세션의 in-memory 후보 없이 같은 관측 범위를 평가한다.
+    const attempt = structuredClone(execution.attempt);
+    assert.equal((await evaluateEvidence({ repo, record: record(), attempt })).usable, true);
+    if (drift === 'dependency') await writeFile(path.join(repo, 'node_modules/input'), 'after');
+    if (drift === 'environment') process.env[variable] = 'after';
+    if (drift === 'configuration') await writeFile(configuration, 'after');
+    if (drift === 'tool') await writeFile(tool, '#!/bin/sh\nexit 1\n');
+    const evaluation = await evaluateEvidence({ repo, record: record(), attempt });
+    assert.equal(evaluation.usable, false);
+    assert.ok(evaluation.reasons.includes('observed_environment_changed'), evaluation.reasons.join(', '));
+  });
+}
+
+test('세션 확장 환경의 관측 실패·손상은 현재 환경으로 보완해 통과시키지 않는다', async t => {
+  const { createVerificationSession, verifyInSession } = await import('../scripts/workflow/evidence.ts');
+  const repo = await fixture(); t.after(() => rm(repo, { recursive: true, force: true }));
+  const tool = path.join(repo, '.local-tool');
+  await writeFile(tool, '#!/bin/sh\nexit 0\n');
+  await chmod(tool, 0o755);
+  const configuration = { checkId: 'unavailable-observation', scenario: '확장 환경 실패 보존', phase: 'focused' as const, maxAgeMs: 60_000, tools: [tool], environmentPaths: [], environmentObserved: true };
+  const valid = (await verifyInSession(createVerificationSession(configuration), options(repo))).attempt;
+  assert.equal(valid.result, 'passed');
+  await chmod(tool, 0o644);
+  assert.ok((await evaluateEvidence({ repo, record: record(), attempt: valid })).reasons.includes('environment_observation_unavailable'));
+  const unavailable = (await verifyInSession(createVerificationSession(configuration), options(repo))).attempt;
+  assert.equal(unavailable.exitCode, 0);
+  assert.equal(unavailable.result, 'failed');
+  await chmod(tool, 0o755);
+  assert.equal((await evaluateEvidence({ repo, record: record(), attempt: unavailable })).usable, false);
+  assert.ok(valid.environmentObservation);
+  Object.assign(valid.environmentObservation, { version: 2 });
+  assert.ok((await evaluateEvidence({ repo, record: record(), attempt: valid })).reasons.includes('invalid_environment_observation'));
+});
+
 test("실제 Node 검증 성공과 실패를 구분하고 원문 출력을 보관하지 않는다", async (t) => {
   const repo = await fixture(); t.after(() => rm(repo, { recursive: true, force: true }));
   const success = await verify(options(repo));
@@ -356,3 +409,288 @@ test("verifyWork가 선택 원문 의존성을 실제 검증 시도와 작업 �
   await writeFile(path.join(repo, proof), '{"status":"failed"}');
   assert.ok((await evaluateEvidence({ repo, record: saved.record, attempt })).reasons.includes("artifacts_changed"));
 });
+
+test('같은 동결 입력의 두 작업은 실제 검사를 한 번만 실행하고 각각 허용된 기준에 연결한다', async (t) => {
+  const { createVerificationSession } = await import('../scripts/workflow/evidence.ts');
+  const repo = await fixture(); t.after(() => rm(repo, { recursive: true, force: true }));
+  await writeFile(path.join(repo, 'docs/work/INDEX.md'), '# 작업 목차\n');
+  await mkdir(path.join(repo, '.www'), { recursive: true });
+  await writeFile(path.join(repo, 'check.ts'), "import { appendFileSync } from 'node:fs';\nimport { value } from './src/value.ts';\nappendFileSync('.www/counter', 'x');\nif(value !== 1) process.exit(1);\n");
+  const command = process.execPath;
+  const args = ['check.ts'];
+  const reuseSession = createVerificationSession({ checkId: 'fixture-common', scenario: '공통 값 검사', phase: 'common', maxAgeMs: 60_000, tools: [command], environmentPaths: [], environmentObserved: true });
+  const works = [];
+  for (const number of [1, 2]) works.push(await openWork({
+    repo, role: 'www-dev', direct: true, request: '검증 재사용 fixture', requestId: `reuse-${number}`, inputs: ['src', 'check.ts'],
+    decision: { intent: 'verify', area: 'Workflow', title: `공통 검사 ${number}`, criteria: [{ id: 'AC-1', description: '공통 값이 1이다', required: true }] },
+    approval: { implementation: false, writePaths: [], mutationSurfaces: [], verifierCommands: [JSON.stringify([command, ...args])] },
+  }));
+  const results = [];
+  for (const work of works) results.push(await verifyWork({ repo, workId: work.record.id, command, args, criterionIds: ['AC-1'], reuseSession }));
+  assert.equal(results[0].reuse?.action, 'executed');
+  assert.equal(results[1].reuse?.action, 'reused');
+  assert.equal(results[0].id, results[1].id);
+  assert.equal(await readFile(path.join(repo, '.www/counter'), 'utf8'), 'x');
+  for (const work of works) {
+    const current = await readWork({ repo, workId: work.record.id });
+    assert.equal(current.record.criteria[0].result, 'passed');
+    assert.equal(current.record.workflow?.reviews.length, 0);
+    assert.equal(current.record.workflow?.verifications.length, 1);
+  }
+  const again = await verifyWork({ repo, workId: works[1].record.id, command, args, criterionIds: ['AC-1'], reuseSession });
+  assert.equal(again.reuse?.action, 'reused');
+  assert.equal(await readFile(path.join(repo, '.www/counter'), 'utf8'), 'x');
+  const receipt = JSON.parse(await readFile(path.join(repo, again.reuseReceiptPath ?? ''), 'utf8'));
+  assert.equal(receipt.reuse.processExecutions, 0);
+  const workPath = works[1].path;
+  const current = await readWork({ repo, workId: works[1].record.id });
+  assert.ok(current.record.workflow);
+  current.record.workflow.authorization.verifierCommands = [];
+  await writeFile(workPath, JSON.stringify(current.record));
+  await assert.rejects(verifyWork({ repo, workId: works[1].record.id, command, args, criterionIds: ['AC-1'], reuseSession }), /허용하지 않은 검증 명령/);
+  assert.equal(await readFile(path.join(repo, '.www/counter'), 'utf8'), 'x');
+});
+
+test('재사용은 구현·테스트·설정·기준·범위·환경·도구·의존성·아티팩트 변화와 실패·주입을 거부한다', async (t) => {
+  const { createVerificationSession, verifyInSession } = await import('../scripts/workflow/evidence.ts');
+  const repo = await fixture(); t.after(() => rm(repo, { recursive: true, force: true }));
+  await mkdir(path.join(repo, '.www'), { recursive: true });
+  await mkdir(path.join(repo, 'node_modules'), { recursive: true });
+  await writeFile(path.join(repo, 'node_modules/dependency.txt'), 'v1');
+  await writeFile(path.join(repo, 'config.json'), '{}');
+  await writeFile(path.join(repo, '.www/artifact'), '검증 원문');
+  await writeFile(path.join(repo, 'check.ts'), "import { appendFileSync } from 'node:fs';\nimport { value } from './src/value.ts';\nappendFileSync('.www/counter', 'x');\nif(value !== 1) process.exit(1);\n");
+  const tool = path.join(repo, '.www/tool');
+  await copyFile(process.execPath, tool); await chmod(tool, 0o755);
+  const configuration = { checkId: 'focused-counter', scenario: '변경 무효화', phase: 'focused' as const, maxAgeMs: 60_000, tools: [tool], environmentPaths: [], environmentObserved: true };
+  const session = createVerificationSession(configuration);
+  let current = options(repo, { inputs: ['src', 'check.ts', 'config.json'], artifactPaths: ['.www/artifact'] });
+  const invoke = () => verifyInSession(session, current);
+  const first = await invoke(); assert.equal(first.attempt.result, 'passed');
+  const hit = await invoke(); assert.equal(hit.reuse.action, 'reused');
+  assert.equal(await readFile(path.join(repo, '.www/counter'), 'utf8'), 'x');
+  // 반환 객체를 바꿔도 세션 내부 원본은 바뀌지 않는다.
+  hit.attempt.result = 'failed';
+  assert.equal((await invoke()).reuse.action, 'reused');
+  const mutations: [string, () => Promise<unknown>][] = [
+    ['source_changed', () => appendFile(path.join(repo, 'src/value.ts'), '// 구현 변화\n')],
+    ['source_changed', () => appendFile(path.join(repo, 'check.ts'), '// 테스트 변화\n')],
+    ['source_changed', () => writeFile(path.join(repo, 'config.json'), '{"mode":"changed"}')],
+    ['artifacts_changed', () => writeFile(path.join(repo, '.www/artifact'), '새 원문')],
+    ['observed_environment_changed', () => writeFile(path.join(repo, 'node_modules/dependency.txt'), 'v2')],
+    ['observed_environment_changed', () => chmod(tool, 0o644)],
+  ];
+  for (const [reason, mutate] of mutations) {
+    await mutate();
+    const result = await invoke();
+    assert.equal(result.reuse.action, 'executed');
+    // 실행 불가 도구도 관측 실패로 재실행한다.
+    assert.ok(result.reuse.reasons.includes(reason) || result.reuse.reasons.includes('environment_observation_unavailable'), result.reuse.reasons.join(','));
+  }
+  await chmod(tool, 0o755); await invoke();
+  const prior = process.env.WWW_REUSE_TEST_ENV;
+  try {
+    process.env.WWW_REUSE_TEST_ENV = 'changed';
+    assert.ok((await invoke()).reuse.reasons.includes('observed_environment_changed'));
+  } finally { if (prior === undefined) delete process.env.WWW_REUSE_TEST_ENV; else process.env.WWW_REUSE_TEST_ENV = prior; }
+  await invoke();
+  const changed = record(); changed.criteria[0].description = '변경된 기준';
+  current = { ...current, record: changed };
+  assert.ok((await invoke()).reuse.reasons.includes('criteria_changed'));
+  current = { ...current, inputs: [...current.inputs, 'new-scope.ts'] };
+  assert.ok((await invoke()).reuse.reasons.includes('source_changed'));
+  await writeFile(path.join(repo, 'src/value.ts'), 'export const value = 9;\n');
+  const failed = await invoke(); assert.equal(failed.attempt.result, 'failed');
+  const failureAgain = await invoke();
+  assert.equal(failureAgain.reuse.action, 'executed');
+  assert.ok(failureAgain.reuse.reasons.includes('verification_failed'));
+  await writeFile(path.join(repo, 'src/value.ts'), 'export const value = 1;\n');
+  const injectedSession = createVerificationSession(configuration);
+  const injected = await verifyInSession(injectedSession, { ...current, run: () => ({ code: 0 }) });
+  assert.equal(injected.attempt.executor, 'injected');
+  const actual = await verifyInSession(injectedSession, current);
+  assert.equal(actual.reuse.action, 'executed');
+  assert.ok(actual.reuse.reasons.includes('untrusted_executor'));
+  const unseen = createVerificationSession({ ...configuration, environmentObserved: false });
+  await verifyInSession(unseen, current);
+  assert.ok((await verifyInSession(unseen, current)).reuse.reasons.includes('environment_unobserved'));
+  const expired = createVerificationSession({ ...configuration, maxAgeMs: 1 });
+  await verifyInSession(expired, current);
+  const later = performance.now() + 3;
+  while (performance.now() < later) { /* 단조 시계의 만료 경계만 기다린다. */ }
+  assert.ok((await verifyInSession(expired, current)).reuse.reasons.includes('observation_expired'));
+  const fresh = createVerificationSession(configuration);
+  assert.ok((await verifyInSession(fresh, current)).reuse.reasons.includes('no_session_observation'));
+  await assert.rejects(verifyInSession({ id: session.id }, current), /현재 프로세스/);
+  const concurrent = createVerificationSession(configuration);
+  const before = (await readFile(path.join(repo, '.www/counter'), 'utf8')).length;
+  const parallel = await Promise.all([verifyInSession(concurrent, current), verifyInSession(concurrent, current)]);
+  assert.deepEqual(parallel.map(item => item.reuse.action), ['executed', 'reused']);
+  assert.equal((await readFile(path.join(repo, '.www/counter'), 'utf8')).length, before + 1);
+  console.info(JSON.stringify({ experiment: 'identical-frozen-counter', requests: 2, processExecutions: 1, counterDelta: 1, avoidedExecutions: 1, scope: '실제 fixture 명령; 전체검사 시간·모델 토큰 절감 아님' }));
+});
+
+test('읽기 전용 의존성 링크의 실제 내용과 집중·통합 단계 경계를 구분한다', async (t) => {
+  const { createVerificationSession, verifyInSession } = await import('../scripts/workflow/evidence.ts');
+  const repo = await fixture(); t.after(() => rm(repo, { recursive: true, force: true }));
+  const dependencies = await fsDependency();
+  t.after(() => rm(dependencies, { recursive: true, force: true }));
+  await symlink(dependencies, path.join(repo, 'node_modules'));
+  const configuration = { checkId: 'linked-dependencies', scenario: '의존성 링크 관측', phase: 'focused' as const, maxAgeMs: 60_000, tools: [process.execPath], environmentPaths: [], environmentObserved: true };
+  const session = createVerificationSession(configuration);
+  await verifyInSession(session, options(repo));
+  assert.equal((await verifyInSession(session, options(repo))).reuse.action, 'reused');
+  await writeFile(path.join(dependencies, 'package.txt'), 'v2');
+  assert.ok((await verifyInSession(session, options(repo))).reuse.reasons.includes('observed_environment_changed'));
+  const integration = createVerificationSession({ ...configuration, phase: 'integration' });
+  assert.ok((await verifyInSession(integration, options(repo))).reuse.reasons.includes('no_session_observation'));
+  async function fsDependency() {
+    const directory = await mkdtemp(path.join(tmpdir(), 'www-reuse-dependency-'));
+    await writeFile(path.join(directory, 'package.txt'), 'v1');
+    return directory;
+  }
+});
+
+test('실행 중 추가 환경이 바뀌면 성공을 core 증거로 기록하지 않는다 — TERRA-01', async (t) => {
+  const { createVerificationSession, verifyInSession } = await import('../scripts/workflow/evidence.ts');
+  const repo = await fixture(); t.after(() => rm(repo, { recursive: true, force: true }));
+  await mkdir(path.join(repo, 'node_modules'));
+  await writeFile(path.join(repo, 'node_modules/input'), 'before');
+  await writeFile(path.join(repo, 'change-environment.ts'), "import {writeFileSync} from 'node:fs'; writeFileSync('node_modules/input','after');");
+  const session = createVerificationSession({ checkId: 'environment-during-run', scenario: '실행 중 환경 변경', phase: 'focused', maxAgeMs: 60_000, tools: [process.execPath], environmentPaths: [], environmentObserved: true });
+  const result = await verifyInSession(session, options(repo, { inputs: ['change-environment.ts'], args: ['change-environment.ts'] }));
+  assert.equal(result.attempt.exitCode, 0);
+  assert.equal(result.attempt.result, 'failed');
+  assert.equal(result.attempt.environmentStable, false);
+  assert.ok(result.reuse.reasons.includes('observed_environment_unstable'));
+  assert.equal((await evaluateEvidence({ repo, record: record(), attempt: result.attempt })).usable, false);
+});
+
+test('다른 명령 서명의 최근 실패가 같은 검사 세션의 이전 성공을 무효화한다 — TERRA-03', async (t) => {
+  const { createVerificationSession, verifyInSession } = await import('../scripts/workflow/evidence.ts');
+  const repo = await fixture(); t.after(() => rm(repo, { recursive: true, force: true }));
+  const session = createVerificationSession({ checkId: 'cross-signature-failure', scenario: '다른 서명 실패', phase: 'common', maxAgeMs: 60_000, tools: [process.execPath], environmentPaths: [], environmentObserved: true });
+  const first = await verifyInSession(session, options(repo));
+  assert.equal(first.attempt.result, 'passed');
+  const failure = await verifyInSession(session, options(repo, { args: ['-e', 'process.exit(7)'] }));
+  assert.equal(failure.attempt.result, 'failed');
+  const next = await verifyInSession(session, options(repo));
+  assert.equal(next.reuse.action, 'executed');
+  assert.notEqual(next.attempt.id, first.attempt.id);
+  assert.ok(next.reuse.reasons.includes('prior_session_failure'));
+});
+
+test('원장 잠금 대기 중 새 실패가 기록되면 이전 성공을 붙이지 않고 실제 재실행한다 — TERRA-02', async (t) => {
+  const { createVerificationSession } = await import('../scripts/workflow/evidence.ts');
+  const { withWorkLock } = await import('../scripts/workflow/lock.ts');
+  const { readdir } = await import('node:fs/promises');
+  const repo = await fixture(); t.after(() => rm(repo, { recursive: true, force: true }));
+  await writeFile(path.join(repo, 'docs/work/INDEX.md'), '# 작업 목차\n');
+  await mkdir(path.join(repo, '.www'), { recursive: true });
+  await writeFile(path.join(repo, 'check.ts'), "import {appendFileSync} from 'node:fs'; appendFileSync('.www/counter','x');");
+  const command = process.execPath, args = ['check.ts'];
+  const works = [];
+  for (const number of [1, 2]) works.push(await openWork({ repo, role: 'www-dev', direct: true, request: '재사용 경합 fixture', requestId: `race-${number}`, inputs: ['src', 'check.ts'],
+    decision: { intent: 'verify', area: 'Workflow', title: `경합 ${number}`, criteria: [{ id: 'AC-1', description: '실제 명령 검사', required: true }] },
+    approval: { implementation: false, writePaths: [], mutationSurfaces: [], verifierCommands: [JSON.stringify([command, ...args]), JSON.stringify([command, '-e', 'process.exit(7)'])] } }));
+  const session = createVerificationSession({ checkId: 'record-race', scenario: '기록 직전 실패', phase: 'common', maxAgeMs: 60_000, tools: [command], environmentPaths: [], environmentObserved: true });
+  const warm = await verifyWork({ repo, workId: works[0].record.id, command, args, criterionIds: ['AC-1'], reuseSession: session });
+  const target = works[1];
+  assert.ok(target.record.workflow);
+  const failure = await verify({ repo, record: target.record, inputs: target.record.workflow.inputs, command, args: ['-e', 'process.exit(7)'], criterionIds: ['AC-1'] });
+  const directory = path.join(repo, '.www/pending-results');
+  const existing = new Set(await readdir(directory));
+  let pending: ReturnType<typeof verifyWork> | undefined;
+  await withWorkLock(repo, async () => {
+    pending = verifyWork({ repo, workId: target.record.id, command, args, criterionIds: ['AC-1'], reuseSession: session });
+    const deadline = Date.now() + 2_000;
+    while (!(await readdir(directory)).some(file => !existing.has(file))) {
+      if (Date.now() > deadline) throw new Error('재사용 pending 대기 초과');
+      await new Promise(resolve => setTimeout(resolve, 5));
+    }
+    const latest = await readWork({ repo, workId: target.record.id });
+    assert.ok(latest.record.workflow);
+    latest.record.workflow.verifications.push(failure);
+    latest.record.criteria[0].result = 'failed';
+    await writeFile(latest.path, JSON.stringify(latest.record));
+  });
+  assert.ok(pending);
+  const result = await pending;
+  assert.equal(result.recorded, true);
+  assert.equal(result.reuse?.action, 'executed');
+  assert.ok(result.reuse?.reasons.includes('record_changed_before_reuse'));
+  assert.notEqual(result.id, warm.id);
+  const final = await readWork({ repo, workId: target.record.id });
+  assert.deepEqual(final.record.workflow?.verifications.map(item => item.id), [failure.id, result.id]);
+  assert.equal(await readFile(path.join(repo, '.www/counter'), 'utf8'), 'xx');
+});
+
+for (const mode of ['environment', 'session-failure', 'session-failure-pending', 'expired-pending', 'process-pending'] as const) {
+  test(`기록 시 확장 관측·세션을 재확인한다 — TERRA-04 ${mode}`, async (t) => {
+    const { createVerificationSession, verifyInSession } = await import('../scripts/workflow/evidence.ts');
+    const { withWorkLock } = await import('../scripts/workflow/lock.ts');
+    const { appendPending } = await import('../scripts/workflow/work.ts');
+    const { readdir } = await import('node:fs/promises');
+    const repo = await fixture(); t.after(() => rm(repo, { recursive: true, force: true }));
+    await writeFile(path.join(repo, 'docs/work/INDEX.md'), '# 작업 목차\n');
+    await mkdir(path.join(repo, 'node_modules'));
+    await writeFile(path.join(repo, 'node_modules/input'), 'before');
+    const command = process.execPath, args = ['check.ts'];
+    const works = [];
+    for (const number of [1, 2]) works.push(await openWork({ repo, role: 'www-dev', direct: true, request: '기록 관측 fixture', requestId: `${mode}-${number}`, inputs: ['src', 'check.ts'],
+      decision: { intent: 'verify', area: 'Workflow', title: `관측 ${number}`, criteria: [{ id: 'AC-1', description: '실제 명령 검사', required: true }] },
+      approval: { implementation: false, writePaths: [], mutationSurfaces: [], verifierCommands: [JSON.stringify([command, ...args])] } }));
+    const session = createVerificationSession({ checkId: `record-observation-${mode}`, scenario: '기록 시 관측', phase: 'common', maxAgeMs: mode === 'expired-pending' ? 1_000 : 60_000, tools: [command], environmentPaths: [], environmentObserved: true });
+    const warm = await verifyWork({ repo, workId: works[0].record.id, command, args, criterionIds: ['AC-1'], reuseSession: session });
+    const target = works[1];
+    const directory = path.join(repo, '.www/pending-results');
+    const existing = new Set(await readdir(directory));
+    let pending: ReturnType<typeof verifyWork> | undefined;
+    await withWorkLock(repo, async () => {
+      pending = verifyWork({ repo, workId: target.record.id, command, args, criterionIds: ['AC-1'], reuseSession: session });
+      const deadline = Date.now() + 2_000;
+      while (!(await readdir(directory)).some(file => !existing.has(file))) {
+        if (Date.now() > deadline) throw new Error('기록 관측 pending 대기 초과');
+        await new Promise(resolve => setTimeout(resolve, 5));
+      }
+      if (mode === 'environment') await writeFile(path.join(repo, 'node_modules/input'), 'changed-during-lock');
+      if (mode.startsWith('session-failure')) await verifyInSession(session, options(repo, { record: target.record, args: ['-e', 'process.exit(7)'] }));
+      // 재시도 예산보다 느린 정상 보류 경로를 시간 추정 없이 실제 잠금으로 강제한다.
+      if (mode === 'session-failure-pending') await pending;
+      if (mode === 'expired-pending' || mode === 'process-pending') await new Promise(resolve => setTimeout(resolve, 1_100));
+    });
+    assert.ok(pending);
+    let result = await pending;
+    if (mode === 'session-failure-pending') assert.equal(result.recorded, false);
+    let recoveredFromPending = false;
+    if (mode.startsWith('session-failure') && !result.recorded) {
+      assert.equal(result.reason, 'WORK_LOCK_BUSY');
+      assert.equal(result.reuse?.action, 'reused');
+      assert.equal(result.id, warm.id);
+      assert.equal((await readWork({ repo, workId: target.record.id })).record.workflow?.verifications.length, 0);
+      await assert.rejects(appendPending({ repo, workId: target.record.id, artifactPath: result.artifactPath }), /reuse_record_changed/);
+      result = await verifyWork({ repo, workId: target.record.id, command, args, criterionIds: ['AC-1'], reuseSession: session });
+      assert.ok(result.reuse?.reasons.includes('prior_session_failure'));
+      recoveredFromPending = true;
+    }
+    if (mode === 'expired-pending' || mode === 'process-pending') {
+      assert.equal(result.recorded, false);
+      assert.equal((await readWork({ repo, workId: target.record.id })).record.workflow?.verifications.length, 0);
+      if (mode === 'expired-pending') await assert.rejects(appendPending({ repo, workId: target.record.id, artifactPath: result.artifactPath }), /reuse_record_changed/);
+      else {
+        const module = new URL('../scripts/workflow/work.ts', import.meta.url).href;
+        const script = `const {appendPending}=await import(${JSON.stringify(module)});try{await appendPending(${JSON.stringify({ repo, workId: target.record.id, artifactPath: result.artifactPath })});process.exitCode=1;}catch(e){if(!String(e).includes('process_session_observation_missing'))throw e;console.log('new-process-reuse-rejected');}`;
+        assert.match((await exec(command, ['--input-type=module', '-e', script])).stdout, /new-process-reuse-rejected/);
+      }
+    } else {
+      assert.equal(result.recorded, true);
+      assert.equal(result.reuse?.action, 'executed');
+      if (!recoveredFromPending) assert.ok(result.reuse?.reasons.includes('record_changed_before_reuse'));
+      assert.equal(result.executor, 'process');
+      assert.equal(result.result, 'passed');
+      assert.equal(result.reuse?.processExecutions, 1);
+      assert.notEqual(result.id, warm.id);
+      assert.deepEqual((await readWork({ repo, workId: target.record.id })).record.workflow?.verifications.map(attempt => attempt.id), [result.id]);
+    }
+  });
+}

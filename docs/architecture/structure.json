@@ -141,7 +141,9 @@
       "parent"     : "arch.tooling",
       "title"      : "구조와 요구 선언 계약 검증",
       "description": "정본 구조 ID·단일 부모·요구·구현·테스트 선언과 허용 의존의 일관성을 검사한다. 선언의 의미상 충족은 별도 검토한다.",
-      "allowedDependencies": []
+      "allowedDependencies": [
+        "arch.development.records.state"
+      ]
     },
     {
       "id"         : "arch.tooling.map-validation",
@@ -344,7 +346,8 @@
       "description": "작업 레코드의 버전·필드·수용 기준·요구 참조·증거 연결 형식을 검사한다.",
       "allowedDependencies": [
         "arch.development.artifacts",
-        "arch.development.records.protocol"
+        "arch.development.records.protocol",
+        "arch.development.execution"
       ]
     },
     {
@@ -356,7 +359,8 @@
         "arch.development.artifacts",
         "arch.development.evidence.documentation",
         "arch.development.evidence.repository",
-        "arch.development.evidence.verification"
+        "arch.development.evidence.verification",
+        "arch.development.execution"
       ]
     },
     {
@@ -375,7 +379,9 @@
         "arch.development.records.validation",
         "arch.development.review",
         "arch.development.routing",
-        "arch.development.records.serialization"
+        "arch.development.records.serialization",
+        "arch.development.execution",
+        "arch.development.reporting.storage"
       ]
     },
     {
@@ -465,7 +471,8 @@
       "description": "구조 지도·개념 안내의 검색·계층 이동·노드 선택·상세·관계 보기·배율·이동 상태를 화면에 연결한다.",
       "allowedDependencies": [
         "arch.blueprint.ecosystem",
-        "arch.blueprint.layout"
+        "arch.blueprint.layout",
+        "arch.native.protocol"
       ]
     },
     {
@@ -503,7 +510,8 @@
         "arch.reports.judgement",
         "arch.reports.queue",
         "arch.reports.service",
-        "arch.native.build-info"
+        "arch.native.build-info",
+        "arch.chat.activity.artifacts"
       ]
     },
     {

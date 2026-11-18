@@ -2,6 +2,10 @@
  * @verifies RESP-CHAT-COMPOSER
  */
 import { expect, test } from "bun:test";
+import { project } from "../src/projection";
+import { restoreConversationEvents } from "../src/conversations";
+import { chatStatus } from "../src/chat-status";
+import type { ScopedAppEvent } from "../src/shared";
 import { handlePromptKeyDown, normalizeCompositionEnd, shouldSubmitPrompt } from "../src/input";
 
 test("일반 Enter만 요청 전송으로 처리한다", () => {
@@ -141,3 +145,14 @@ for (const invalid of [0, -1, NaN, Infinity, undefined]) {
     expect(actions).toEqual(["prevent", "submit", "prevent", "prevent", "submit"]);
   });
 }
+
+for (const boundary of ["generation", "process", "selection", "EOF", "current"] as const) test(`복원 unknown ${boundary} 경계가 입력을 Working 추가 지시로 바꾸지 않는다`, () => {
+  const scope = { sessionId: "s", workspaceKey: "w", selectionEpoch: 1, processEpoch: "p", connectionGeneration: 1 };
+  const history: ScopedAppEvent[] = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [] }], true).map((event, seq) => ({ ...event, ...scope, seq, at: "2026-11-17T00:00:00Z" }));
+  if (boundary === "EOF") history.push({ ...scope, seq: 20, at: "2026-11-17T00:00:00Z", kind: "transport", method: "transport/closed", params: {} });
+  history.push({ ...scope, connectionGeneration: boundary === "generation" ? 2 : 1, processEpoch: boundary === "process" ? "other" : "p", selectionEpoch: boundary === "selection" ? 2 : 1, seq: 21, at: "2026-11-17T00:00:00Z", kind: "notification", method: "turn/started", params: { threadId: "t", turn: { id: "a" } } });
+  const view = project(history);
+  const status = chatStatus({ ...view, sending: false, switching: false, transport: boundary === "EOF" ? "closed" : "connected", approvals: 0 });
+  expect(status.steer).toBe(boundary === "current");
+  expect(view.working).toBe(boundary === "current");
+});

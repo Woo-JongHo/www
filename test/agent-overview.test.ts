@@ -1,5 +1,6 @@
 /** @verifies RESP-CHAT-ACTIVITY-PROJECTION */
 import { describe, expect, test } from "bun:test";
+import { restoreConversationEvents } from "../src/conversations";
 import { projectAgentOverview } from "../src/agent-overview";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -39,7 +40,7 @@ describe("WWW Agent 개요", () => {
     const completedCall = call(3, {}, "item/completed");
     const done = item(4, { id: "activity", type: "subAgentActivity", agentThreadId: "child", kind: "completed", agentPath: "worker" });
     expect(projectAgentOverview([start(), call(2), completedCall], "t").subagents[0]?.status).toBe("pending");
-    expect(projectAgentOverview([start(), call(2), done], "t").subagents[0]?.status).toBe("completed");
+    expect(projectAgentOverview([start(), call(2), done], "t").subagents[0]?.status).toBe("unknown");
     const followup = call(5, { tool: "followupTask", agentsStates: { child: { status: "running" } } });
     expect(projectAgentOverview([start(), call(2), done, followup], "t").subagents[0]).toMatchObject({ id: "child", parentId: "t", path: "worker", status: "running" });
     expect(projectAgentOverview([start(), call(2), done, call(5, { tool: "followupTask" })], "t").subagents[0]?.status).toBe("pending");
@@ -99,7 +100,7 @@ describe("WWW Agent 개요", () => {
         : [start(), call(2, { id: "old", agentsStates: { child: { status: "running" } } }), event(3, "transport/closed", {})];
       const late = [item(4, { id: "late", type: "subAgentActivity", agentThreadId: "child", kind: "started" }), call(5, { id: "old", agentsStates: { child: { status: "running" } } }), call(6, { tool: "wait", agentsStates: { child: { status: "running" } } }, "item/completed")];
       expect(projectAgentOverview([...initial, ...late], "t").subagents[0]).toMatchObject({ status: "unknown", historical: restored });
-      expect(projectAgentOverview([...initial, ...late, call(7, { tool: "wait", agentsStates: { child: { status: "completed" } } }, "item/completed")], "t").subagents[0]?.status).toBe("completed");
+      expect(projectAgentOverview([...initial, ...late, call(7, { id: "current-wait", tool: "wait" }), call(8, { id: "current-wait", tool: "wait", agentsStates: { child: { status: "completed" } } }, "item/completed")], "t").subagents[0]?.status).toBe("completed");
       expect(projectAgentOverview([...initial, ...late, event(7, "transport/connected", {}), call(8, { tool: "followupTask", agentsStates: { child: { status: "running" } } })], "t").subagents[0]?.status).toBe("running");
       expect(projectAgentOverview([...initial, call(7, { tool: "followupTask", agentsStates: { child: { status: "running" } } }, "item/started", true)], "t").subagents[0]?.status).toBe("unknown");
     }
@@ -123,7 +124,7 @@ describe("WWW Agent 개요", () => {
       const late = call(3, { tool: "wait", agentsStates: { child: { status: "running" } } }, "item/completed");
       expect(projectAgentOverview([...initial, late], "t").subagents[0]?.status).toBe(closed === "shutdown" ? "interrupted" : "unknown");
       for (const status of ["completed", "errored", "interrupted"] as const) {
-        expect(projectAgentOverview([...initial, late, call(4, { tool: "wait", agentsStates: { child: { status } } }, "item/completed")], "t").subagents[0]?.status).toBe(status === "errored" ? "failed" : status);
+        expect(projectAgentOverview([...initial, late, call(4, { id: "current-wait", tool: "wait" }), call(5, { id: "current-wait", tool: "wait", agentsStates: { child: { status } } }, "item/completed")], "t").subagents[0]?.status).toBe(status === "errored" ? "failed" : status);
       }
     }
   });
@@ -330,4 +331,317 @@ describe("기본 오른쪽 바", () => {
     expect(sending).not.toContain("사용자 입력 검증을 확인하고 있습니다.");
     expect(sending.match(/data-skill-id=/g)).toHaveLength(5);
   });
+});
+
+test("계획 없는 공개 진행 설명은 미연결로 표시하고 빈 Native 계획과 미제공을 구별한다", () => {
+  const prose = item(2, { id: "p", type: "agentMessage", phase: "commentary", text: "계획 없이 확인 중입니다." });
+  const projection = projectAgentOverview([start(), prose], "t");
+  expect(projection.progress).toMatchObject({ text: "계획 없이 확인 중입니다.", planIndex: null });
+  expect(projection.planState).toBe("unprovided");
+  expect(projectAgentOverview([start(), plan(2, [])], "t").planState).toBe("empty");
+  const html = renderToStaticMarkup(createElement(ResourceActivitySidebar, { events: [start(), prose], resources: null, threadId: "t", sending: false, hidden: false, onOpenMonitor() {} }));
+  expect(html).toContain("계획 미연결 공개 진행 설명");
+  expect(html).not.toContain('ao-skill-state">대기');
+});
+
+test("역할 단계 선언은 문서 읽기와 하네스 실행을 구별하고 종료 뒤 선언을 무시한다", () => {
+  const stage = event(2, "www/developmentStage", { threadId: "t", turnId: "a", source: "role_declaration", workId: "work-36d312bc-a767-4e3e-a581-01898b35f75f", phase: "build", status: "running", attemptId: "attempt-1" });
+  const projection = projectAgentOverview([start(), stage], "t");
+  expect(projection.selectedSkillId).toBe("www-build");
+  expect(projection.selectionBasis).toContain("역할의 단계 선언");
+  expect(projection.skills.find(skill => skill.id === "www-build")?.basis).toContain("하네스 실행 미연결");
+  const ended = [...[start(), event(2, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } })], { ...stage, seq: 3 }];
+  expect(projectAgentOverview(ended, "t").selectedSkillId).toBeNull();
+  expect(projectAgentOverview([start(), { ...stage, historical: true }], "t").selectedSkillId).toBeNull();
+});
+
+test("계획 미연결 산문은 늦은 계획으로 재귀속하지 않고 새로운 메시지부터 연결한다", () => {
+  const delta = (seq: number, id: string, value = "설명") => event(seq, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: id, phase: "commentary", delta: value });
+  const before = [start(), delta(2, "before")];
+  expect(projectAgentOverview(before, "t").progress).toMatchObject({ planIndex: null, text: "설명" });
+  const latePlan = [...before, plan(3, [{ step: "뒤늦은 계획", status: "inProgress" }]), delta(4, "before")];
+  expect(projectAgentOverview(latePlan, "t").progress).toBeNull();
+  expect(projectAgentOverview([...latePlan, delta(5, "new")], "t").progress).toMatchObject({ planIndex: 0, text: "설명" });
+  const ambiguous = [start(), plan(2, [{ step: "A", status: "inProgress" }, { step: "B", status: "inProgress" }]), delta(3, "unlinked")];
+  expect(projectAgentOverview(ambiguous, "t").progress?.planIndex).toBeNull();
+});
+
+test("단계 선언의 시도·다른 턴·복수 작업·종료 및 복원 경계를 보존한다", () => {
+  const stage = (seq: number, overrides: object = {}) => event(seq, "www/developmentStage", { threadId: "t", turnId: "a", source: "role_declaration", workId: "work-36d312bc-a767-4e3e-a581-01898b35f75f", phase: "build", status: "running", attemptId: "one", ...overrides });
+  const prior = [start(), stage(2), stage(3, { status: "failed" }), stage(4)];
+  expect(projectAgentOverview(prior, "t").skills.find(s => s.id === "www-build")?.declaration?.status).toBe("failed");
+  expect(projectAgentOverview([...prior, stage(5, { attemptId: "two" })], "t").selectedSkillId).toBe("www-build");
+  expect(projectAgentOverview([...prior, stage(5, { attemptId: "two" }), stage(6, { attemptId: "one", status: "completed" })], "t").skills.find(s => s.id === "www-build")?.declaration?.attemptId).toBe("two");
+  const multiple = projectAgentOverview([start(), stage(2), stage(3, { workId: "work-aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", phase: "verify" })], "t");
+  expect(multiple.selectedSkillId).toBeNull();
+  expect(multiple.selectionBasis).toContain("복수 작업");
+  expect(projectAgentOverview([start(), stage(2, { turnId: "foreign" })], "t").selectedSkillId).toBeNull();
+  expect(projectAgentOverview([start(), event(2, "transport/closed", {}), stage(3)], "t").skills.every(s => !s.declaration)).toBe(true);
+  const restored = projectAgentOverview([event(1, "thread/configured", { threadId: "t", developmentStage: "resume_unavailable" }), start(2, "a", true), { ...stage(3), historical: true }], "t");
+  expect(restored.stageConnection).toContain("복원 대화");
+  expect(restored.selectedSkillId).toBeNull();
+});
+
+test("사건 절단 뒤 계획 없는 새 산문을 보여 주며 과거 계획을 합성하지 않는다", () => {
+  const events = [start(), plan(2, [{ step: "잘린 계획", status: "inProgress" }]), ...Array.from({ length: 2000 }, (_, index) => event(index + 3, "fixture/noise", { threadId: "t", turnId: "a" })), item(2003, { id: "new", type: "agentMessage", phase: "commentary", text: "남아 있는 공개 설명" })];
+  const projection = projectAgentOverview(events, "t");
+  expect(projection.historyTruncated).toBe(true);
+  expect(projection.plan).toEqual([]);
+  expect(projection.progress).toMatchObject({ planIndex: null, text: "남아 있는 공개 설명" });
+  expect(projectAgentOverview([start(), plan(2, [{ step: "손상", status: "unknown" }])], "t").planState).toBe("invalid");
+});
+
+test("혼합 손상 계획의 공개 산문은 미연결이며 같은 항목의 정상 계획에도 재귀속하지 않는다", () => {
+  const delta = (seq: number, id: string, value: string) => event(seq, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: id, phase: "commentary", delta: value });
+  const mixed = [start(), plan(2, [{ step: "A", status: "inProgress" }, { step: "B", status: "unknown" }]), delta(3, "p", "손상 시점 설명")];
+  const invalid = projectAgentOverview(mixed, "t");
+  expect(invalid.planState).toBe("invalid");
+  expect(invalid.plan).toEqual([]);
+  expect(invalid.activePlanIndex).toBeNull();
+  expect(invalid.progress).toMatchObject({ text: "손상 시점 설명", planIndex: null });
+  const html = renderToStaticMarkup(createElement(ResourceActivitySidebar, { events: mixed, resources: null, threadId: "t", sending: false, hidden: false, onOpenMonitor() {} }));
+  expect(html).toContain("계획 자료 해석 실패");
+  expect(html).toContain("계획 미연결 공개 진행 설명");
+  expect(html).not.toContain('data-plan-index="0"');
+  const repaired = [...mixed, plan(4, [{ step: "A", status: "inProgress" }]), delta(5, "p", "늦은 추가")];
+  expect(projectAgentOverview(repaired, "t").progress).toBeNull();
+  expect(projectAgentOverview([...repaired, delta(6, "new", "새 항목 설명")], "t").progress).toMatchObject({ text: "새 항목 설명", planIndex: 0 });
+});
+
+test("설정 사건이 절단돼도 현재 역할 선언 수신과 설정 미확인을 구별한다", () => {
+  const stage = event(2003, "www/developmentStage", { threadId: "t", turnId: "a", source: "role_declaration", workId: "work-36d312bc-a767-4e3e-a581-01898b35f75f", phase: "build", status: "running", attemptId: "one" });
+  const retained = [...Array.from({ length: 1998 }, (_, index) => event(index + 4, "fixture/noise", { threadId: "t", turnId: "a" })), item(2002, { id: "p", type: "agentMessage", phase: "commentary", text: "현재 공개 설명" }), stage];
+  expect(retained).toHaveLength(2000);
+  const projection = projectAgentOverview(retained, "t");
+  expect(projection.historyTruncated).toBe(true);
+  expect(projection.selectedSkillId).toBe("www-build");
+  expect(projection.stageConnection).toContain("설정 사건 미보관");
+  expect(projection.stageConnection).toContain("현재 턴의 역할 선언 수신");
+  expect(projection.stageConnection).toContain("하네스 실행 미연결");
+  expect(projection.stageConnection).not.toContain("단계 관측 미연결");
+  const unknown = projectAgentOverview([start()], "t");
+  expect(unknown.stageConnection).toContain("연결 설정 미확인");
+  expect(unknown.stageConnection).not.toContain("설정 사건 미보관");
+  for (const reason of ["resume_unavailable", "other_workspace"]) {
+    const unavailable = projectAgentOverview([event(1, "thread/configured", { threadId: "t", developmentStage: reason }), start(2), { ...stage, seq: 3 }], "t");
+    expect(unavailable.stageConnection).toContain("단계 관측 미연결");
+    expect(unavailable.stageConnection).not.toContain("설정 사건 미보관");
+    expect(unavailable.selectedSkillId).toBeNull();
+  }
+});
+
+
+test("이전 Subagent 호출의 중복 완료는 현재 후속 작업을 종료하지 않는다", () => {
+  const rows = [start(), call(2, { id: "A", agentsStates: { child: { status: "running" } } }), call(3, { id: "A", agentsStates: { child: { status: "completed" } } }, "item/completed"), call(4, { id: "B", tool: "followupTask", agentsStates: { child: { status: "running" } } }), call(5, { id: "A", agentsStates: { child: { status: "completed" } } }, "item/completed"), call(6, { id: "B", tool: "followupTask", agentsStates: { child: { status: "running" } } })];
+  expect(projectAgentOverview(rows, "t").subagents[0]?.status).toBe("running");
+  expect(projectAgentOverview([...rows, call(7, { id: "B", tool: "followupTask", agentsStates: { child: { status: "completed" } } }, "item/completed")], "t").subagents[0]?.status).toBe("completed");
+});
+test("선택이 verify로 바뀌면 build 진행 선언의 현재성은 미확인이다", () => {
+  const rows = [start(), ...(["build", "verify"] as const).map((phase, index) => event(index + 2, "www/developmentStage", { threadId: "t", turnId: "a", source: "role_declaration", workId: "work-36d312bc-a767-4e3e-a581-01898b35f75f", phase, status: "running", attemptId: `attempt-${phase}` }))];
+  const html = renderToStaticMarkup(createElement(ResourceActivitySidebar, { events: rows, resources: null, threadId: "t", sending: false, hidden: false, onOpenMonitor() {} }));
+  expect(html.match(/data-skill-id="www-build"[\s\S]*?<\/li>/)?.[0]).toContain("현재 상태 미확인");
+  expect(html.match(/data-skill-id="www-verify"[\s\S]*?<\/li>/)?.[0]).not.toContain("현재 상태 미확인");
+});
+
+
+test("저장된 실제 Subagent 공개 결과를 복원 parser부터 완료 표시까지 유지한다", () => {
+  const rows = restoreConversationEvents("t", [{ id: "a", status: "completed", items: [{ id: "call", type: "collabAgentToolCall", tool: "spawnAgent", senderThreadId: "t", receiverThreadIds: ["child"], status: "completed", agentsStates: { child: { status: "completed" } } }, { id: "activity", type: "subAgentActivity", agentThreadId: "child", agentPath: "worker", kind: "completed" }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `time-${index}` }));
+  expect(projectAgentOverview(rows, "t").subagents[0]).toMatchObject({ id: "child", parentId: "t", path: "worker", status: "completed", historical: true });
+});
+
+
+for (const status of ["errored", "running"] as const) test(`복원된 후속 Subagent의 ${status} 결과는 이전 성공을 대체한다`, () => {
+  const operation = (id: string, state: string) => ({ id, type: "collabAgentToolCall", tool: "sendInput", senderThreadId: "t", receiverThreadIds: ["child"], status: "completed", agentsStates: { child: { status: state, message: id } } });
+  const rows = restoreConversationEvents("t", [{ id: "a", status: "completed", items: [operation("A", "completed"), operation("B", status)] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `time-${index}` }));
+  expect(projectAgentOverview(rows, "t").subagents[0]).toMatchObject({ id: "child", status: status === "errored" ? "failed" : "unknown", message: "B", historical: true });
+});
+test("이전 Subagent activity 완료 재전송은 후속 작업을 정산하지 않는다", () => {
+  const a = item(2, { id: "activity-A", type: "subAgentActivity", agentThreadId: "child", agentPath: "worker", kind: "completed" }, "item/completed");
+  const b = call(3, { id: "operation-B", tool: "sendInput", agentsStates: { child: { status: "running", message: "B" } } });
+  const rows = [start(), a, b, { ...a, seq: 4 }];
+  expect(projectAgentOverview(rows, "t").subagents[0]).toMatchObject({ status: "running", message: "B" });
+  const completed = item(5, { id: "activity-B", type: "subAgentActivity", agentThreadId: "child", agentPath: "worker", kind: "completed" }, "item/completed");
+  expect(projectAgentOverview([...rows, completed], "t").subagents[0]?.status).toBe("unknown");
+  expect(projectAgentOverview([...rows, completed, call(6, { id: "operation-B", tool: "sendInput", agentsStates: { child: { status: "completed" } } }, "item/completed")], "t").subagents[0]?.status).toBe("completed");
+});
+test("Subagent opaque 식별자는 다른 턴의 새 호출과 activity를 전역 중복으로 버리지 않는다", () => {
+  const first = call(2, { id: "reused", agentsStates: { child: { status: "completed" } } }, "item/completed");
+  const next = { ...call(4, { id: "reused", tool: "sendInput", agentsStates: { child: { status: "running" } } }), params: { ...first.params as object, turnId: "b", item: { ...(first.params as { item: object }).item, tool: "sendInput", agentsStates: { child: { status: "running" } } } } };
+  expect(projectAgentOverview([start(), first, start(3, "b"), next], "t").subagents[0]?.status).toBe("running");
+});
+
+
+test("다른 턴의 opaque activity도 현재 호출의 완료를 확정하지 않는다", () => {
+  const a = item(2, { id: "reused-activity", type: "subAgentActivity", agentThreadId: "child", agentPath: "worker", kind: "completed" }, "item/completed");
+  const b = call(4, { id: "B", tool: "sendInput", agentsStates: { child: { status: "running" } } }, "item/started");
+  const scopedB = { ...b, params: { ...b.params as object, turnId: "b" } };
+  const actualB = { ...a, seq: 6, params: { ...a.params as object, turnId: "b" } };
+  const rows = [start(), a, start(3, "b"), scopedB, { ...a, seq: 5 }];
+  expect(projectAgentOverview(rows, "t").subagents[0]?.status).toBe("running");
+  expect(projectAgentOverview([...rows, actualB], "t").subagents[0]?.status).toBe("unknown");
+});
+test("식별자가 없는 완료 activity와 늦은 역사 호출은 현재 Subagent를 종료하지 않는다", () => {
+  const b = call(2, { id: "B", tool: "sendInput", agentsStates: { child: { status: "running" } } });
+  const invalid = item(3, { type: "subAgentActivity", agentThreadId: "child", agentPath: "worker", kind: "completed" }, "item/completed");
+  const old = call(4, { id: "old", tool: "sendInput", agentsStates: { child: { status: "errored" } } }, "item/completed", true);
+  expect(projectAgentOverview([start(), b, invalid, old], "t").subagents[0]?.status).toBe("running");
+});
+
+ test("첫 늦은 terminal activity는 현재 Subagent 작업 완료의 근거가 아니다", () => {
+  const rows = [start(), call(2, { id: "B", tool: "followupTask", agentsStates: { child: { status: "running" } } }), item(3, { id: "late-A", type: "subAgentActivity", agentThreadId: "child", agentPath: "worker", kind: "completed" }, "item/completed")];
+  expect(projectAgentOverview(rows, "t").subagents[0]?.status).toBe("unknown");
+  expect(projectAgentOverview([...rows, call(4, { id: "B", tool: "followupTask", agentsStates: { child: { status: "completed" } } }, "item/completed")], "t").subagents[0]?.status).toBe("completed");
+ });
+ test("이미 완료한 commentary 재전송은 현재 Progress를 되돌리지 않는다", () => {
+  const a = item(3, { id: "A", type: "agentMessage", phase: "commentary", text: "A 완료" }, "item/completed");
+  const rows = [start(), plan(2, [{ step: "구현", status: "inProgress" }]), a, item(4, { id: "B", type: "agentMessage", phase: "commentary", text: "B 진행" })];
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe("B 진행");
+  expect(projectAgentOverview([...rows, { ...a, seq: 5 }], "t").progress?.text).toBe("B 진행");
+ });
+
+ test("이전 작업 wait의 늦은 완료와 terminal-only wait는 현재 후속 작업을 닫지 않는다", () => {
+  const a = call(2, { id: "A", agentsStates: { child: { status: "completed" } } }, "item/completed");
+  const wait = call(3, { id: "wait-A", tool: "wait", agentsStates: {} });
+  const b = call(4, { id: "B", tool: "followupTask", agentsStates: { child: { status: "running", message: "B" } } });
+  for (const id of ["wait-A", "unseen-wait"]) {
+    const late = call(5, { id, tool: "wait", agentsStates: { child: { status: "completed" } } }, "item/completed");
+    const rows = [start(), a, wait, b, late, { ...late, seq: 6 }];
+    expect(projectAgentOverview(rows, "t").subagents[0]).toMatchObject({ status: "running", message: "B" });
+    expect(projectAgentOverview([...rows, call(7, { id: "B", tool: "followupTask", agentsStates: { child: { status: "completed" } } }, "item/completed")], "t").subagents[0]?.status).toBe("completed");
+  }
+  const currentWait = call(5, { id: "wait-B", tool: "wait", agentsStates: { child: { status: "running" } } });
+  const done = call(6, { id: "wait-B", tool: "wait", agentsStates: { child: { status: "completed" } } }, "item/completed");
+  expect(projectAgentOverview([start(), a, wait, b, currentWait, done], "t").subagents[0]?.status).toBe("completed");
+ });
+ test("이전 commentary의 첫 완료도 현재 Progress를 덮지 않는다", () => {
+  const delta = (seq: number, id: string) => event(seq, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: id, phase: "commentary", delta: id });
+  const rows = [start(), plan(2, [{ step: "구현", status: "inProgress" }]), delta(3, "A"), delta(4, "B")];
+  for (const text of ["A 최초 완료", ""]) {
+    const done = item(5, { id: "A", type: "agentMessage", phase: "commentary", text }, "item/completed");
+    expect(projectAgentOverview([...rows, done], "t").progress?.text).toBe("B");
+    expect(projectAgentOverview([...rows, done, { ...done, seq: 6 }], "t").progress?.text).toBe("B");
+  }
+  expect(projectAgentOverview([...rows, item(5, { id: "B", type: "agentMessage", phase: "commentary", text: "B 완료" }, "item/completed")], "t").progress?.text).toBe("B 완료");
+  expect(projectAgentOverview([...rows, item(5, { id: "C", type: "agentMessage", phase: "commentary", text: "새 C 완료" }, "item/completed")], "t").progress?.text).toBe("새 C 완료");
+ });
+
+ test("wait 귀속은 동일 호출의 turn과 thread를 지키고 started 재전송으로 바뀌지 않는다", () => {
+  const a = call(2, { id: "A", agentsStates: { child: { status: "running" } } });
+  const wait = call(3, { id: "wait", tool: "wait" });
+  const b = call(4, { id: "B", tool: "followupTask", agentsStates: { child: { status: "running", message: "B" } } });
+  const done = call(6, { id: "wait", tool: "wait", agentsStates: { child: { status: "completed" } } }, "item/completed");
+  expect(projectAgentOverview([start(), a, wait, b, { ...wait, seq: 5 }, done], "t").subagents[0]?.status).toBe("running");
+  for (const params of [{ threadId: "other" }, { turnId: "other" }]) {
+    const scoped = { ...done, params: { ...done.params as object, ...params } };
+    expect(projectAgentOverview([start(), a, wait, scoped], "t").subagents[0]?.status).toBe("running");
+  }
+ });
+ test("본문 없는 이전 commentary 시작의 첫 완료도 최신 Progress를 덮지 않는다", () => {
+  const rows = [start(), plan(2, [{ step: "구현", status: "inProgress" }]), item(3, { id: "A", type: "agentMessage", phase: "commentary" }), item(4, { id: "B", type: "agentMessage", phase: "commentary", text: "B" }), item(5, { id: "A", type: "agentMessage", phase: "commentary", text: "A 완료" }, "item/completed")];
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe("B");
+ });
+
+ test("본문 없는 현재 commentary의 최초 완료와 새 completed-only는 정산한다", () => {
+  const rows = [start(), plan(2, [{ step: "구현", status: "inProgress" }]), item(3, { id: "A", type: "agentMessage", phase: "commentary" })];
+  const done = item(4, { id: "A", type: "agentMessage", phase: "commentary", text: "A 완료" }, "item/completed");
+  expect(projectAgentOverview([...rows, done], "t").progress?.text).toBe("A 완료");
+  expect(projectAgentOverview([...rows, { ...done, params: { ...done.params as object, threadId: "other" } }], "t").progress).toBeNull();
+ });
+
+ for (const superseded of [false, true]) test(`다중 Agent wait는 ${superseded ? "한 Agent 후속 작업을 보존하고 다른 Agent만" : "서로 다른 현재 operation을 모두"} 정산한다`, () => {
+  const spawn = (seq: number, id: string, receiver: string) => call(seq, { id, receiverThreadIds: [receiver], agentsStates: { [receiver]: { status: "running" } } });
+  const wait = (seq: number, method: string) => call(seq, { id: "both-wait", tool: "wait", receiverThreadIds: ["a", "b"], agentsStates: method === "item/completed" ? { a: { status: "completed" }, b: { status: "completed" } } : {} }, method);
+  const rows = [start(), spawn(2, "spawn-a", "a"), spawn(3, "spawn-b", "b"), wait(4, "item/started")];
+  const states = (events: AppEvent[]) => Object.fromEntries(projectAgentOverview(events, "t").subagents.map(agent => [agent.id, agent.status]));
+  if (!superseded) {
+    expect(states([...rows, wait(5, "item/completed")])).toEqual({ a: "completed", b: "completed" });
+    return;
+  }
+  const followup = call(5, { id: "a2", tool: "followupTask", receiverThreadIds: ["a"], agentsStates: { a: { status: "running" } } });
+  expect(states([...rows, followup, wait(6, "item/completed")])).toEqual({ a: "running", b: "completed" });
+  expect(states([...rows, followup, wait(6, "item/completed"), wait(7, "item/completed")])).toEqual({ a: "running", b: "completed" });
+ });
+
+for (const linked of [false, true]) test(`A/B/A 늦은 delta는 현재 Progress를 되돌리지 않는다: 계획 연결 ${linked}`, () => {
+  const delta = (seq: number, id: string, value: string) => event(seq, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: id, phase: "commentary", delta: value });
+  const rows = [start(), ...(linked ? [plan(2, [{ step: "구현", status: "inProgress" }])] : []), delta(3, "A", "A 앞"), delta(4, "A", "뒤")];
+  expect(projectAgentOverview(rows, "t").progress).toMatchObject({ text: "A 앞뒤", planIndex: linked ? 0 : null });
+  rows.push(delta(5, "B", "B 앞"), delta(6, "A", "늦은 A 조각"));
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe("B 앞");
+  rows.push(delta(7, "B", "뒤"));
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe("B 앞뒤");
+  rows.push(item(8, { id: "A", type: "agentMessage", phase: "commentary", text: "늦은 A 완료" }, "item/completed"));
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe("B 앞뒤");
+  rows.push(item(9, { id: "B", type: "agentMessage", phase: "commentary", text: "B 정식 완료" }, "item/completed"));
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe("B 정식 완료");
+  rows.push(delta(10, "C", "새 C 설명"), delta(11, "B", "완료 뒤 B 조각"));
+  expect(projectAgentOverview(rows, "t").progress).toMatchObject({ text: "새 C 설명", planIndex: linked ? 0 : null });
+});
+
+// v6: 현재 Progress의 등장 순서·정지/재개·실제 완료를 함께 대조한다.
+for (const linked of [false, true]) for (const initialText of [undefined, ""]) for (const delivery of ["delta", "completed"]) test(`v6 F4 본문없는 B 시작과 정상 후속: ${linked}/${initialText}/${delivery}`, () => {
+  const delta = (seq: number, id: string, text: string) => event(seq, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: id, phase: "commentary", delta: text });
+  const rows = [start(), ...(linked ? [plan(2, [{ step: "구현", status: "inProgress" }])] : []), delta(3, "A", "A 설명"), item(4, { id: "B", type: "agentMessage", phase: "commentary", ...(initialText === undefined ? {} : { text: initialText }) })];
+  rows.push(delivery === "delta" ? delta(5, "B", "B 설명") : item(5, { id: "B", type: "agentMessage", phase: "commentary", text: "B 설명" }, "item/completed"));
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe("B 설명");
+  rows.push(delta(6, "A", "늦은 A"), item(7, { id: "A", type: "agentMessage", phase: "commentary", text: "늦은 A 완료" }, "item/completed"));
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe("B 설명");
+});
+for (const explanation of [undefined, "새 계획 설명"]) for (const delivery of ["delta", "completed", "empty"]) test(`v6 F5 계획 설명 순서 경계: ${explanation}/${delivery}`, () => {
+  const delta = (seq: number, id: string, text: string) => event(seq, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: id, phase: "commentary", delta: text });
+  const rows = [start(), plan(2, [{ step: "구현", status: "inProgress" }]), delta(3, "A", "A 설명"), plan(4, [{ step: "구현", status: "inProgress" }], explanation)];
+  rows.push(delivery === "delta" ? delta(5, "A", " 추가") : item(5, { id: "A", type: "agentMessage", phase: "commentary", text: delivery === "empty" ? "" : "A 정식 완료" }, "item/completed"));
+  expect(projectAgentOverview(rows, "t").progress?.text ?? null).toBe(explanation ?? (delivery === "delta" ? "A 설명 추가" : delivery === "empty" ? null : "A 정식 완료"));
+  rows.push(delta(6, "B", "새 B"));
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe("새 B");
+});
+for (const paused of ["delta", "started", "completed", "plan"]) test(`v6 F3 정지 구간 ${paused}를 재개 뒤 소급 수용하지 않는다`, () => {
+  const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "A", type: "agentMessage", phase: "commentary", text: "A 기존" }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `saved-${index}` }));
+  const delta = (seq: number, id: string, text: string) => event(seq, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: id, phase: "commentary", delta: text });
+  const late = paused === "delta" ? delta(10, "B", "정지 중 B") : paused === "plan" ? plan(10, [{ step: "정지 중 계획", status: "inProgress" }], "정지 중 설명") : item(10, { id: "B", type: "agentMessage", phase: "commentary", text: "정지 중 B" }, paused === "started" ? "item/started" : "item/completed");
+  const rows = [...saved, late];
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe("A 기존");
+  rows.push(start(20));
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe("A 기존");
+  expect(projectAgentOverview(rows, "t").planState).toBe("unprovided");
+  rows.push(delta(21, "C", "재개 후 C"));
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe("재개 후 C");
+  rows.push({ ...event(22, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } }), historical: true }, delta(23, "D", "두 번째 정지 D"), start(24));
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe("재개 후 C");
+});
+for (const definite of [false, true]) for (const actualBeforeResume of [false, true]) for (const boundary of ["valid", "EOF", "terminal", "scope"]) test(`v6 F6 합성 완료만 같은 scope 재개에서 해제: ${definite}/${actualBeforeResume}/${boundary}`, () => {
+  const scope = { connectionGeneration: 7, processEpoch: "p", sessionId: "s", workspaceKey: "w", selectionEpoch: 1 };
+  const saved = restoreConversationEvents("t", [{ id: "a", status: boundary === "terminal" ? "completed" : "inProgress", items: [{ id: "A", type: "agentMessage", phase: "commentary", text: "A 기존", ...(definite ? { completedAtMs: 100 } : {}) }] }], true).map((row, index) => ({ ...row, ...scope, seq: index + 1, at: `saved-${index}` }));
+  const completed = { ...item(10, { id: "A", type: "agentMessage", phase: "commentary", text: "실제 완료" }, "item/completed"), ...scope };
+  const rows = [...saved, ...(actualBeforeResume ? [completed] : []), ...(boundary === "EOF" ? [{ ...event(11, "transport/closed", {}), ...scope }] : []), { ...start(20), ...scope, ...(boundary === "scope" ? { connectionGeneration: 8 } : {}) }, { ...event(21, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase: "commentary", delta: " 추가" }), ...scope }];
+  expect(projectAgentOverview(rows, "t").progress?.text).toBe(!definite && !actualBeforeResume && boundary === "valid" ? "A 기존 추가" : "A 기존");
+});
+
+test("v6 최신 본문없는 B의 빈 완료는 이전 commentary를 비우되 계획 설명을 지우지 않는다", () => {
+  const delta = event(3, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase: "commentary", delta: "A 설명" });
+  for (const explanation of [undefined, "새 계획 설명"]) {
+    const rows = [start(), plan(2, [{ step: "구현", status: "inProgress" }]), delta, ...(explanation ? [plan(4, [{ step: "구현", status: "inProgress" }], explanation)] : []), item(5, { id: "B", type: "agentMessage", phase: "commentary" }), item(6, { id: "B", type: "agentMessage", phase: "commentary", text: "" }, "item/completed")];
+    expect(projectAgentOverview(rows, "t").progress?.text ?? null).toBe(explanation ?? null);
+  }
+});
+test("v6 실제 terminal과 EOF는 후행 unknown 이력으로 재개되지 않는다", () => {
+  for (const end of [event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), event(4, "transport/closed", {})]) {
+    const rows = [start(), item(3, { id: "A", type: "agentMessage", phase: "commentary", text: "기존" }), end, event(5, "transport/connected", {}), { ...event(6, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } }), historical: true }, start(7), event(8, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase: "commentary", delta: "늦음" })];
+    expect(projectAgentOverview(rows, "t").progress?.text).toBe("기존");
+  }
+});
+
+for (const field of ["connectionGeneration", "processEpoch", "sessionId", "workspaceKey", "selectionEpoch"] as const) test(`v6 개요도 재개 뒤 다른 ${field}의 설명·계획을 받지 않는다`, () => {
+  const scope = { connectionGeneration: 7, processEpoch: "p", sessionId: "s", workspaceKey: "w", selectionEpoch: 1 };
+  const changed = field === "connectionGeneration" || field === "selectionEpoch" ? { [field]: 99 } : { [field]: "other" };
+  const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "A", type: "agentMessage", phase: "commentary", text: "기존" }] }], true).map((row, index) => ({ ...row, ...scope, seq: index + 1, at: `saved-${index}` }));
+  const rows = [...saved, { ...start(20), ...scope }, { ...event(21, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase: "commentary", delta: " 정상" }), ...scope }];
+  const foreign = [{ ...event(22, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase: "commentary", delta: " 타 scope" }), ...scope, ...changed }, { ...item(23, { id: "A", type: "agentMessage", phase: "commentary", text: "타 scope 완료" }, "item/completed"), ...scope, ...changed }, { ...plan(24, [{ step: "타 scope 계획", status: "inProgress" }], "타 scope 설명"), ...scope, ...changed }];
+  const result = projectAgentOverview([...rows, ...foreign], "t");
+  expect(result.progress?.text).toBe("기존 정상");
+  expect(result.planState).toBe("unprovided");
+});
+for (const text of ["실제 완료", ""]) test(`v6 개요의 열린 구간 실제 완료는 unknown 재개 뒤에도 유지한다: ${text}`, () => {
+  const rows = [start(), event(2, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase: "commentary", delta: "기존" }), item(3, { id: "A", type: "agentMessage", phase: "commentary", text }, "item/completed"), { ...event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } }), historical: true }, start(5), event(6, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase: "commentary", delta: " 늦음" })];
+  expect(projectAgentOverview(rows, "t").progress?.text ?? null).toBe(text || null);
 });

@@ -4,6 +4,7 @@
  */
 import type { WorkRecord } from "./types.ts";
 import { artifactReviewErrors } from "./artifacts.ts";
+import { parseDecomposition } from "./decomposition.ts";
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { normalize, resolve, sep } from "node:path";
 
@@ -112,6 +113,10 @@ export function validateWorkRecord(value: unknown, options: ValidationOptions = 
     add(errors, ["spec", "design", "build", "diagnose", "verify", "review", "complete"].some(action => action === workflow.nextAction), "workflow.nextAction이 허용된 값이 아닙니다.");
     add(errors, Array.isArray(workflow?.verifications), "workflow.verifications 배열이 필요합니다.");
     add(errors, Array.isArray(workflow?.reviews), "workflow.reviews 배열이 필요합니다.");
+    if (workflow.decomposition !== undefined) {
+      try { parseDecomposition(workflow.decomposition); }
+      catch (error) { errors.push(error instanceof Error ? error.message : String(error)); }
+    }
     for (const review of objects(workflow.reviews)) if (review.recordingRejection !== undefined) add(errors, Array.isArray(review.recordingRejection) && review.recordingRejection.length > 0 && review.recordingRejection.every(reason => typeof reason === "string" && reason.trim()), "검토 기록 거부 이유는 비어 있지 않은 문자열 배열이어야 합니다.");
     if (workflow?.documentationReviews !== undefined) {
       add(errors, Array.isArray(workflow.documentationReviews), "workflow.documentationReviews는 배열이어야 합니다.");
@@ -137,6 +142,12 @@ export function validateWorkRecord(value: unknown, options: ValidationOptions = 
     }
     const attempts = new Map<string, Record<string, unknown>>();
     for (const attempt of objects(workflow.verifications)) {
+      if (attempt.environmentObservation !== undefined) {
+        const observation = object(attempt.environmentObservation);
+        add(errors, observation.version === 1 && Array.isArray(observation.tools) && observation.tools.length > 0
+          && ["tools", "environmentPaths"].every(field => Array.isArray(observation[field]) && list(observation[field]).every(item => typeof item === "string" && item.trim() && !item.includes("\0")))
+          && (observation.digest === null || typeof observation.digest === "string" && /^[a-f0-9]{64}$/.test(observation.digest)), "검증 시도의 확장 환경 관측 형식이 올바르지 않습니다.");
+      }
       add(errors, typeof attempt?.id === "string" && /^attempt-[a-f0-9-]+$/i.test(attempt.id) && !attempts.has(String(attempt.id)), "검증 시도 ID가 없거나 중복됩니다.");
       add(errors, /^[a-f0-9]{64}$/.test(String(object(attempt.source).digest ?? "")) && /^[a-f0-9]{64}$/.test(String(attempt?.criteriaDigest ?? "")), "검증 시도의 소스·기준 식별값이 필요합니다.");
       add(errors, Array.isArray(attempt?.criterionIds) && attempt.criterionIds.length > 0 && new Set(attempt.criterionIds).size === attempt.criterionIds.length && attempt.criterionIds.every((id) => typeof id === "string" && id.trim()), "검증 시도의 수용 기준 연결이 올바르지 않습니다.");

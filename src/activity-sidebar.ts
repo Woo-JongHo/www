@@ -562,7 +562,7 @@ export function updateActivitySidebarState(current: ActivitySidebarState, events
           }
           return false;
         }
-      } else if (started && !newerStart && !(previous.completed && previous.started)) return false;
+      } else if (started && !newerStart) return false;
     }
     if (otherTurn) remember(retiredTurn(previous.turnId));
     writeHookLifecycle(index, key, {
@@ -621,7 +621,16 @@ export function updateActivitySidebarState(current: ActivitySidebarState, events
       if (itemId && item.type === "commandExecution") {
         for (const value of list(item.commandActions)) {
           const action = record(value);
-          const path   = normalizedPath(action.path);
+          const rawPath = normalizedPath(action.path);
+          const cwd = absolutePath(item.cwd);
+          const joined = absolutePath(rawPath) || (cwd ? `${cwd}/${rawPath}` : rawPath);
+          const segments: string[] = [];
+          for (const segment of joined.split("/")) {
+            if (segment === ".") continue;
+            if (segment === ".." && segments.length > 1) segments.pop();
+            else if (segment !== "..") segments.push(segment);
+          }
+          const path = segments.join("/");
           if (action.type !== "read" || !/(^|\/)SKILL\.md$/.test(path)) continue;
           const readId = `${threadId}\u0000${text(params.turnId)}\u0000${itemId}\u0000${path}`;
           if (!remember(`read\u0000${readId}`)) continue;

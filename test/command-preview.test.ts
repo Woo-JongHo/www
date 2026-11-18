@@ -167,3 +167,12 @@ describe("명령 카드 구조화 출력", () => {
     expect(html).toContain('원문 복사');
   });
 });
+
+test('JSON 정렬 팽창은 32768 표시 상한 안에서만 사용하고 보관 원문을 보존한다', () => {
+  const raw = JSON.stringify(Array.from({length:7000},()=>0));
+  expect(raw.length).toBeLessThan(32768);
+  expect(commandOutput(raw,false,false)).toEqual({text:raw,json:false,review:null});
+  const small = commandOutput(JSON.stringify({value:[1,2,3]}),false,false);
+  expect(small.json).toBe(true);
+  expect(small.text.length).toBeLessThanOrEqual(32768);
+});

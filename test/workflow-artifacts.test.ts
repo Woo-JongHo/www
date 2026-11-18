@@ -10,7 +10,7 @@ import path from "node:path";
 import { ARTIFACT_CHECKS, artifactContext, artifactStatus, developmentTools } from "../scripts/workflow/artifacts.ts";
 import { openWork, readWork, recordArtifactReview } from "../scripts/workflow/work.ts";
 import { runTypedWorkflow } from "../scripts/workflow.ts";
-import { runDevelopmentWorkflow } from "../scripts/workflow/run.ts";
+import { runDevelopmentWorkflow, runProcess as runHostProcess } from "../scripts/workflow/run.ts";
 import type { WorkLocation } from "../scripts/workflow/types.ts";
 
 const directories: string[] = [];
@@ -146,7 +146,7 @@ test("개발 호스트에 정본·출처·검토 상태를 실제 전달하고 �
   let prompt = "";
   const result = await runDevelopmentWorkflow({ repo, role: "www-dev", direct: true, execute: true, request: "즐겨찾기 설계", eventId: "context-fixture", decision: { workId: work.record.id, intent: "design" } }, { runProcess: async invocation => {
     prompt = invocation.stdin ?? "";
-    return { ok: true, code: 0, outcome: "passed", stdout: "", stderr: "", outputTruncated: false, events: [] };
+    return { ok: true, code: 0, outcome: "passed", stdout: "", stderr: "", outputTruncated: false, events: [], inputDelivered: true };
   } });
   expect(result).toMatchObject({ executed: true });
   const policySource = "정본 내용: docs/skills/MODEL_POLICY.md\n";
@@ -155,7 +155,7 @@ test("개발 호스트에 정본·출처·검토 상태를 실제 전달하고 �
   const inventory = JSON.parse(prompt.split("\n").find(line => line.startsWith(inventoryPrefix))!.slice(inventoryPrefix.length));
   expect(inventory).toHaveLength(7);
   expect(inventory.find((item: { path: string }) => item.path === "docs/skills/MODEL_POLICY.md")).toMatchObject({
-    path: "docs/skills/MODEL_POLICY.md", digest: policyDigest, status: "available", provided: true, hostAcceptance: "unconfirmed",
+    path: "docs/skills/MODEL_POLICY.md", digest: policyDigest, status: "available", provided: false, hostAcceptance: "unconfirmed",
   });
   expect(prompt).toContain(`--- docs/skills/MODEL_POLICY.md ---\n${policySource}`);
   expect(prompt).toContain("not_run");
@@ -169,4 +169,194 @@ test("개발 호스트에 정본·출처·검토 상태를 실제 전달하고 �
   expect(receipt.tools.find((item: { path: string }) => item.path === "docs/skills/MODEL_POLICY.md")).toMatchObject({ digest: policyDigest, provided: true, hostAcceptance: "unconfirmed" });
   expect(receipt.sources).toContainEqual({ path: "docs/skills/MODEL_POLICY.md", hash: policyDigest });
   expect(receipt.artifactReviews[0].status).toBe("not_run");
+});
+
+async function deliveryFixture() {
+  const current = await fixture();
+  for (const file of ["AGENTS.md", "agents/www/AGENT.md", "docs/skills/WORKFLOW.md", "skills/www/www-design/SKILL.md", "docs/skills/profiles/desktop.md", "agents/www/review-policy.json", "docs/skills/MODEL_POLICY.md"]) await put(current.repo, file, `제공 정본: ${file}\n`);
+  await put(current.repo, ".gitignore", ".www/\n");
+  execFileSync("git", ["init", "-q", current.repo]);
+  execFileSync("git", ["-C", current.repo, "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "--allow-empty", "-qm", "fixture"]);
+  return { ...current, options: { repo: current.repo, role: "www-dev", direct: true, execute: true, request: "제공 사실 확인", eventId: "delivery", decision: { workId: current.work.record.id, intent: "design" } } };
+}
+function deliveryObject(value: unknown): value is Record<string, unknown> { return value !== null && typeof value === "object" && !Array.isArray(value); }
+async function deliveryReceipt(repo: string, receiptPath: unknown) {
+  if (typeof receiptPath !== "string") throw new Error("실제 영수증 경로가 필요합니다.");
+  const value: unknown = JSON.parse(await fs.readFile(path.join(repo, receiptPath), "utf8"));
+  if (!deliveryObject(value) || !Array.isArray(value.tools) || !deliveryObject(value.host)) throw new Error("제공 영수증 구조가 유효하지 않습니다.");
+  const tools = value.tools.map((item: unknown) => {
+    if (!deliveryObject(item) || typeof item.provided !== "boolean") throw new Error("제공 영수증 도구가 유효하지 않습니다.");
+    return { provided: item.provided };
+  });
+  return { tools, host: { inputDelivered: value.host.inputDelivered } };
+}
+
+test("환경 실패와 preview는 호스트에 제공하지 않은 문서를 제공으로 기록하지 않는다", async () => {
+  const { repo, options } = await deliveryFixture();
+  let calls = 0;
+  const dependencies = { runProcess: async () => { calls++; return { ok: true, code: 0, outcome: "passed" }; } };
+  const preview = await runDevelopmentWorkflow({ ...options, preview: true }, dependencies);
+  expect(preview.executed).toBe(false);
+  expect(preview.tools).toBeUndefined();
+  expect(preview.receiptPath).toBeUndefined();
+  expect(calls).toBe(0);
+  const result = await runDevelopmentWorkflow({ ...options, environment: { toolPaths: [path.join(repo, "missing-tool")] } }, dependencies);
+  expect(result.host?.outcome).toBe("environment_failed");
+  expect(calls).toBe(0);
+  expect(result.tools?.every(item => item.provided === false)).toBe(true);
+  const receipt = await deliveryReceipt(repo, result.receiptPath);
+  expect(receipt.tools.every((item: { provided: boolean }) => item.provided === false)).toBe(true);
+});
+
+test("주입 실행의 재환경 실패·spawn/stdin 오류·throw·미확인 결과는 실제 제공으로 승격하지 않는다", async () => {
+  for (const outcome of ["environment_failed", "spawn_error", "stdin_error", "spool_error", "unknown", "throw"]) {
+    const { repo, options } = await deliveryFixture();
+    let calls = 0;
+    const result = await runDevelopmentWorkflow(options, { runProcess: async invocation => {
+      calls++;
+      expect(invocation.stdin).toContain("제공 정본");
+      if (outcome === "throw") throw new Error("실행 전 예외");
+      return { ok: false, code: null, outcome, ...(outcome === "spool_error" ? { inputDelivered: true } : {}) };
+    } });
+    expect(calls).toBe(1);
+    expect(result.executor).toBe("injected");
+    expect(result.tools?.every(item => item.provided === false)).toBe(true);
+    expect((await deliveryReceipt(repo, result.receiptPath)).tools.every((item: { provided: boolean }) => item.provided === false)).toBe(true);
+  }
+});
+
+test("전달된 문서와 비정상 호스트 종료·의미적 수용은 별도로 보존한다", async () => {
+  const { repo, options } = await deliveryFixture();
+  const result = await runDevelopmentWorkflow(options, { runProcess: async invocation => {
+    expect(invocation.stdin).toContain("제공 정본");
+    return { ok: false, code: 3, outcome: "nonzero", inputDelivered: true };
+  } });
+  expect(result.host?.ok).toBe(false);
+  expect(result.executor).toBe("injected");
+  expect(result.tools?.every(item => item.provided === true && item.hostAcceptance === "unconfirmed")).toBe(true);
+  expect((await deliveryReceipt(repo, result.receiptPath)).tools.every((item: { provided: boolean }) => item.provided === true)).toBe(true);
+});
+
+test("주입 호스트의 종료 결과만으로 정본 전달을 추정하지 않는다", async () => {
+  for (const outcome of ["passed", "nonzero", "signal", "protocol_error", "host_error", "incomplete"]) {
+    for (const inputDelivered of [undefined, false, true]) {
+      const { repo, options } = await deliveryFixture();
+      const result = await runDevelopmentWorkflow(options, { runProcess: async invocation => {
+        if (inputDelivered === true) expect(invocation.stdin).toContain("제공 정본");
+        return { ok: outcome === "passed", code: outcome === "passed" ? 0 : 3, outcome, ...(inputDelivered === undefined ? {} : { inputDelivered }) };
+      } });
+      expect(result.executor).toBe("injected");
+      expect(result.tools?.every(item => item.provided === (inputDelivered === true) && item.hostAcceptance === "unconfirmed")).toBe(true);
+      expect((await deliveryReceipt(repo, result.receiptPath)).tools.every(item => item.provided === (inputDelivered === true))).toBe(true);
+    }
+  }
+});
+
+test("실제 Node stdin 전달은 비정상 종료에도 보존하고 조기 입력 종료는 제공으로 기록하지 않는다", async () => {
+  for (const earlyClose of [false, true]) {
+    const { repo, options } = await deliveryFixture();
+    // pipe보다 큰 본문으로 early close가 작은 버퍼의 우연한 flush로 가려지지 않게 한다.
+    if (earlyClose) await put(repo, "AGENTS.md", "전달 대상\n" + "한".repeat(200_000));
+    const program = earlyClose
+      ? "process.stdin.destroy();process.exitCode=3;"
+      : "let input='';process.stdin.setEncoding('utf8');process.stdin.on('data',x=>input+=x);process.stdin.on('end',()=>{console.log(JSON.stringify({type:'thread.started',thread_id:'delivery-fixture'}));console.log(JSON.stringify({type:'turn.completed'}));process.exitCode=input.includes('제공 정본')?3:4;});";
+    const result = await runDevelopmentWorkflow(options, { prepareInvocation: invocation => ({ ...invocation, command: "node", args: ["-e", program] }) });
+    expect(result.executor).toBe("process");
+    expect(result.host?.outcome).toBe("nonzero");
+    expect(result.host?.code).toBe(3);
+    expect(result.host?.inputDelivered).toBe(!earlyClose);
+    expect(result.tools).toHaveLength(7);
+    expect(result.tools?.every(item => item.provided === !earlyClose && item.hostAcceptance === "unconfirmed")).toBe(true);
+    const receipt = await deliveryReceipt(repo, result.receiptPath);
+    expect(receipt.host.inputDelivered).toBe(!earlyClose);
+    expect(receipt.tools.every((item: { provided: boolean }) => item.provided === !earlyClose)).toBe(true);
+  }
+});
+
+test("prepareInvocation이 본문을 제거했거나 명시 전달 실패이면 성공 코드로 제공을 꾸미지 않는다", async () => {
+  for (const removeInput of [false, true]) {
+    const { repo, options } = await deliveryFixture();
+    const result = await runDevelopmentWorkflow(options, {
+      prepareInvocation: invocation => removeInput ? { ...invocation, stdin: "제거됨" } : invocation,
+      runProcess: async () => ({ ok: true, code: 0, outcome: "passed", ...(removeInput ? {} : { inputDelivered: false }) })
+    });
+    expect(result.tools).toHaveLength(7);
+    expect(result.tools?.every(item => item.provided === false)).toBe(true);
+    expect((await deliveryReceipt(repo, result.receiptPath)).tools.every((item: { provided: boolean }) => item.provided === false)).toBe(true);
+  }
+});
+
+
+test("실제 runProcess 내부 환경 재검사 실패를 제공으로 기록하지 않는다", async () => {
+  const { repo, options } = await deliveryFixture();
+  let callbacks = 0;
+  const result = await runDevelopmentWorkflow(options, { runProcess: async (invocation, context) => {
+    callbacks++;
+    return runHostProcess(invocation, { ...context, cwd: path.join(repo, "missing-repository") });
+  } });
+  expect(callbacks).toBe(1);
+  expect(result.host?.outcome).toBe("environment_failed");
+  expect(result.host?.environment?.ok).toBe(false);
+  expect(result.tools).toHaveLength(7);
+  expect(result.tools?.every(item => item.provided === false)).toBe(true);
+  expect((await deliveryReceipt(repo, result.receiptPath)).tools.every(item => item.provided === false)).toBe(true);
+});
+
+test("실제 stdio의 출력 보존 실패는 입력 EOF 전달·조기 중단과 독립적으로 제공에 반영한다", async () => {
+  for (const appendGuidance of [false, true]) for (const earlyClose of [false, true]) {
+    const { repo, options } = await deliveryFixture();
+    if (earlyClose) await put(repo, "AGENTS.md", "전달 대상\n" + "한".repeat(200_000));
+    const child = earlyClose
+      ? "process.stdout.write('SPOOL-FAULT\\n');process.stdin.destroy();process.exitCode=3;"
+      : "process.stdin.resume();process.stdin.on('end',()=>{console.log('SPOOL-FAULT');});";
+    // 실제 디스크 용량을 바꾸지 않는다. 이 격리 Node의 spool write 한 곳에만 오류를 주입한다.
+    const script = `
+      import fs from 'node:fs';
+      import {syncBuiltinESMExports} from 'node:module';
+      const original=fs.writeSync;
+      let faults=0;
+      fs.writeSync=function(fd,data,...args){
+        if(Buffer.isBuffer(data)&&data.includes(Buffer.from('SPOOL-FAULT'))){faults++;throw Object.assign(new Error('fixture ENOSPC'),{code:'ENOSPC'});}
+        return original(fd,data,...args);
+      };
+      syncBuiltinESMExports();
+      try {
+        const {runDevelopmentWorkflow}=await import(${JSON.stringify(path.resolve(import.meta.dir, "../scripts/workflow/run.ts"))});
+        const result=await runDevelopmentWorkflow(${JSON.stringify(options)},{prepareInvocation:invocation=>({...invocation,stdin:invocation.stdin+${JSON.stringify(appendGuidance ? '\n\n작성 하네스 관찰 데이터\n'+JSON.stringify({fixture:true}) : '')},command:process.execPath,args:['-e',${JSON.stringify(child)}]})});
+        console.log(JSON.stringify({result,faults,runtime:process.version}));
+      } finally {fs.writeSync=original;syncBuiltinESMExports();}
+    `;
+    const raw: unknown = JSON.parse(execFileSync("node", ["--input-type=module", "-e", script], { encoding: "utf8", maxBuffer: 4_000_000 }));
+    if (!deliveryObject(raw) || !deliveryObject(raw.result)) throw new Error("실제 주입 결과가 필요합니다.");
+    const result = raw.result;
+    if (!deliveryObject(result.host) || !Array.isArray(result.tools)) throw new Error("실제 제공 영수증 구조가 필요합니다.");
+    console.info(JSON.stringify({spoolFixture:{runtime:raw.runtime,faults:raw.faults,outcome:result.host.outcome,inputDelivered:result.host.inputDelivered,earlyClose,appendGuidance}}));
+    expect(typeof raw.faults === "number" && raw.faults > 0).toBe(true);
+    expect(result.executor).toBe("process");
+    expect(result.host.outcome).toBe("spool_error");
+    expect(result.host.inputDelivered).toBe(!earlyClose);
+    expect(result.tools).toHaveLength(7);
+    expect(result.tools.every((item: unknown) => deliveryObject(item) && item.provided === !earlyClose && item.hostAcceptance === "unconfirmed")).toBe(true);
+    const receipt = await deliveryReceipt(repo, result.receiptPath);
+    expect(receipt.host.inputDelivered).toBe(!earlyClose);
+    expect(receipt.tools.every(item => item.provided === !earlyClose)).toBe(true);
+  }
+});
+
+
+test("원문 전체의 동일·append 전달만 제공이고 절단·변경·선두삽입·metadata 단독은 미제공이다", async () => {
+  for(const mode of ["same","append","truncate","change-middle","prepend","metadata-only"]) {
+    const {repo,options}=await deliveryFixture();
+    const suffix="\n\n작성 하네스 관찰 데이터\n"+JSON.stringify({fixture:true});
+    const result=await runDevelopmentWorkflow(options,{prepareInvocation:invocation=>{
+      const original=invocation.stdin;if(typeof original!=="string")throw new Error("원문 stdin 필요");
+      const stdin=mode==="append"?original+suffix:mode==="truncate"?original.slice(0,-32)+suffix:mode==="change-middle"?original.replace("제공 정본","변경 정본")+suffix:mode==="prepend"?"선두삽입"+original:mode==="metadata-only"?suffix:original;
+      return {...invocation,stdin,command:"node",args:["-e","process.stdin.resume();process.stdin.on('end',()=>{console.log(JSON.stringify({type:'thread.started',thread_id:'append-fixture'}));console.log(JSON.stringify({type:'turn.completed'}));});"]};
+    }});
+    expect(result.executor).toBe("process");expect(result.host?.outcome).toBe("passed");expect(result.host?.inputDelivered).toBe(true);
+    const expected=mode==="same"||mode==="append";
+    console.info(JSON.stringify({appendOnlyCase:mode,expected,provided:result.tools?.[0]?.provided,inputDelivered:result.host?.inputDelivered}));
+    expect(result.tools).toHaveLength(7);expect(result.tools?.every(item=>item.provided===expected&&item.hostAcceptance==="unconfirmed")).toBe(true);
+    const receipt=await deliveryReceipt(repo,result.receiptPath);expect(receipt.host.inputDelivered).toBe(true);expect(receipt.tools.every(item=>item.provided===expected)).toBe(true);
+  }
 });

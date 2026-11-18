@@ -53,17 +53,20 @@ function shellWords(source: string): string[] | null {
   if (active) words.push(word);
   return words;
 }
-export function readonlyCommand(command: unknown): boolean {
-  if (typeof command !== 'string') return false;
+function literalReadWords(command: unknown): string[] | null {
+  if (typeof command !== 'string') return null;
   let words = shellWords(command);
-  if (!words) return false;
+  if (!words) return null;
   if (['/bin/zsh', '/bin/bash', '/bin/sh'].includes(words[0] ?? '')) {
-    if (words.length !== 3 || words[1] !== '-lc') return false;
+    if (words.length !== 3 || words[1] !== '-lc') return null;
     words = shellWords(words[2]);
-    if (!words) return false;
   }
-  const [executable, ...args] = words;
-  const name = executable?.replace(/^\/(?:usr\/)?bin\//, '');
+  return words;
+}
+function readExecutable(words: string[]): string | undefined { return words[0]?.replace(/^\/(?:usr\/)?bin\//, ''); }
+function readonlyWords(words: string[]): boolean {
+  const [, ...args] = words;
+  const name = readExecutable(words);
   if (name === 'sed') return args.length >= 3 && args[0] === '-n' && /^[0-9]+(?:,[0-9]+)?p$/.test(args[1]) && args.slice(2).every(v => v && !v.startsWith('-'));
   const flags: Record<string, RegExp> = {
     cat: /^-(?:n|b|s|E|T|v)+$|^--$/,
@@ -76,6 +79,17 @@ export function readonlyCommand(command: unknown): boolean {
   };
   if (name === 'git') return ['diff', 'status', 'show'].includes(args[0]) && (args[0] === 'status' || (args.includes('--no-ext-diff') && args.includes('--no-textconv'))) && args.slice(1).every(v => !v.startsWith('-') || /^(?:--|--stat|--short|--branch|--name-only|--no-ext-diff|--no-textconv|--oneline|-U[0-9]+)$/.test(v));
   return !!name && !!flags[name] && args.every(v => !v.startsWith('-') || flags[name].test(v));
+}
+export function readonlyCommand(command: unknown): boolean {
+  const words = literalReadWords(command);
+  return words !== null && readonlyWords(words);
+}
+/** rg exit1은 정상 무일치다. null 출력은 stderr 확인이나 전체 독서를 뜻하지 않는다. */
+function completedReadResult(item: Record<string, unknown>, words: string[]): boolean {
+  if (item.exitCode === 0 && item.status === 'completed') return true;
+  return readExecutable(words) === 'rg' && item.exitCode === 1
+    && (item.status === 'completed' || item.status === 'failed')
+    && (item.aggregatedOutput === null || item.aggregatedOutput === '');
 }
 
 // 저장된 RPC 전체를 다시 대조한다. 모델의 자기보고나 JSONL model 필드는 사용하지 않는다.
@@ -140,7 +154,10 @@ export function inspectAppServer(value: unknown, cwd: string) {
           || Object.keys(content[0]).some(key => !['type', 'text', 'text_elements'].includes(key))
           || (content[0].text_elements !== undefined && (!Array.isArray(content[0].text_elements) || content[0].text_elements.length !== 0))) throw new Error('사용자 입력 echo 불일치');
       } else if (!['commandExecution', 'agentMessage', 'reasoning', 'plan', 'contextCompaction'].includes(String(item.type))) throw new Error('허용되지 않은 도구');
-      if (item.type === 'commandExecution' && (!readonlyCommand(item.command) || (message.method === 'item/completed' && (item.exitCode !== 0 || item.status !== 'completed')))) throw new Error('읽기 명령 실패 또는 금지 명령');
+      if (item.type === 'commandExecution') {
+        const words = literalReadWords(item.command);
+        if (!words || !readonlyWords(words) || (message.method === 'item/completed' && !completedReadResult(item, words))) throw new Error('읽기 명령 실패 또는 금지 명령');
+      }
       if (message.method === 'item/completed' && item.type === 'commandExecution' && typeof item.command === 'string') commandsObserved.push(item.command);
       if (message.method === 'item/completed' && item.type === 'agentMessage' && item.phase === 'final_answer' && typeof item.text === 'string') finalMessages.push({ thread: params.threadId, turn: params.turnId, text: item.text });
     }

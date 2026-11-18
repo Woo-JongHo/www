@@ -10,14 +10,16 @@ import { validateRequirementRefs, validateWorkRecord, parseWorkRecord } from "./
 import { findWorkRecord, resolveInside, validateWritePaths, workOutputColumns } from "./preflight.ts";
 import { serializeWorkRecord } from "./work-json.ts";
 import { hashRequest, normalizeApproval } from "./route.ts";
-import { captureSource, criteriaDigest, evaluateEvidence, renderAttempt, verify } from "./evidence.ts";
+import { captureSource, criteriaDigest, evaluateEvidence, renderAttempt, validEnvironmentObservation, verify, verifyInSession, withVerificationReuse } from "./evidence.ts";
 import { loadReviewPolicy, validateReview, durableJson } from "./review.ts";
 import { withWorkLock, inspectWorkLock, recoverWorkLock, retryWorkWriter, WorkLockBusyError } from "./lock.ts";
 import { checkRepository, assessRepositoryCheck } from "./consistency.ts";
 import { createDocumentationReview, assessDocumentation } from "./documentation.ts";
 import { createArtifactReview } from "./artifacts.ts";
-import type { CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions } from './types.ts';
-import type { VerificationAttempt } from './evidence.ts';
+import { assessCompletionReport } from "./completion-report.ts";
+import { assessDecompositionCompletion, validateWorkDecomposition } from "./decomposition.ts";
+import type { CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions, CriterionAssessment } from './types.ts';
+import type { VerificationAttempt, VerificationSession } from './evidence.ts';
 import type { DocumentationReview } from './documentation.ts';
 export type { WorkRecord, WorkLocation, WorkAssessment, WorkOptions } from './types.ts';
 export { inspectWorkLock, recoverWorkLock, checkRepository, assessRepositoryCheck };
@@ -225,8 +227,9 @@ export async function adoptWork({ repo = process.cwd(), role, direct, requestId,
   });
 }
 
-async function mutateWork(repo: string, workId: string, change: (record: CurrentWorkRecord, work: CurrentWorkLocation) => void | Promise<void>): Promise<CurrentWorkLocation> {
+async function mutateWork(repo: string, workId: string, change: (record: CurrentWorkRecord, work: CurrentWorkLocation) => void | Promise<void>, guard?: (mutate: () => Promise<CurrentWorkLocation>) => Promise<CurrentWorkLocation>): Promise<CurrentWorkLocation> {
   return withWorkLock(repo, async () => {
+    const mutate = async (): Promise<CurrentWorkLocation> => {
     const work = await readWork({ repo, workId });
     if (work.record.schemaVersion !== 2) throw new Error("현재 증거 판정은 schemaVersion 2 작업에 적용합니다. legacy 기록은 그대로 보존합니다.");
     const before  = hash           (await fs.readFile(work.path)) ;
@@ -241,6 +244,16 @@ async function mutateWork(repo: string, workId: string, change: (record: Current
     if (hash(await fs.readFile(work.path)) !== before) throw new Error("작업 갱신 중 다른 작성자가 내용을 바꿨습니다.");
     await atomicWrite(work.path, source);
     return { ...work, record, rawSource: source };
+    };
+    return guard ? guard(mutate) : mutate();
+  });
+}
+
+export async function setDecompositionPlan({ repo = process.cwd(), workId, plan }: WorkOptions & { plan: unknown }) {
+  return mutateWork(repo, workId, async record => {
+    const validated = await validateWorkDecomposition(repo, record, plan);
+    if (JSON.stringify(validated) === JSON.stringify(record.workflow.decomposition)) return;
+    record.workflow.decomposition = validated;
   });
 }
 
@@ -277,20 +290,56 @@ export async function setVerificationInputs({ repo = process.cwd(), workId, inpu
   });
 }
 
-export async function verifyWork({ repo = process.cwd(), workId, command, args = [], criterionIds, artifactPaths }: WorkOptions & { command: string; args?: string[]; criterionIds: string[]; artifactPaths?: string[] }) {
+interface ReuseRecordGuard { context: string; useId: string }
+function verificationContext(record: CurrentWorkRecord) {
+  return hash(JSON.stringify({ requestHash: record.workflow.requestHash, authorization: record.workflow.authorization, inputs: record.workflow.inputs, criteria: criteriaDigest(record), verifications: record.workflow.verifications }));
+}
+
+export async function verifyWork({ repo = process.cwd(), workId, command, args = [], criterionIds, artifactPaths, reuseSession }: WorkOptions & { command: string; args?: string[]; criterionIds: string[]; artifactPaths?: string[]; reuseSession?: VerificationSession }) {
   const work = await readWork({ repo, workId });
   if (work.record.schemaVersion !== 2) throw new Error("현재 검증 연결에는 schemaVersion 2 작업이 필요합니다.");
   const signature = JSON.stringify([command, ...args]);
   if (!work.record.workflow.authorization.verifierCommands.includes(signature)) throw new Error("이 작업에서 허용하지 않은 검증 명령입니다.");
-  const attempt      = await verify({ repo, record: work.record, inputs: work.record.workflow.inputs, command, args, criterionIds, artifactPaths }) ;
-  const artifactPath = await savePending(repo, workId, "verification", attempt, hash(signature), work.record.workflow.requestHash)                  ;
-  const { work: _work, ...recording } = await appendPending({ repo, workId, artifactPath });
-  return { ...attempt, ...recording };
+  const started = performance.now();
+  const options = { repo, record: work.record, inputs: work.record.workflow.inputs, command, args, criterionIds, artifactPaths };
+  let execution = reuseSession ? await verifyInSession(reuseSession, options) : null;
+  let attempt = execution?.attempt ?? await verify(options);
+  let requestHash = work.record.workflow.requestHash;
+  const reuseGuard = execution?.reuse.action === 'reused' ? { context: verificationContext(work.record), useId: execution.reuse.id } : undefined;
+  let artifactPath = await savePending(repo, workId, "verification", attempt, hash(signature), requestHash, reuseSession ? workId : undefined, reuseGuard);
+  let appended;
+  try { appended = await appendPending({ repo, workId, artifactPath }); }
+  catch (error) {
+    if (!reuseSession || !(error instanceof Error) || !error.message.startsWith('reuse_record_changed')) throw error;
+    const fresh = await readWork({ repo, workId });
+    if (fresh.record.schemaVersion !== 2 || !fresh.record.workflow.authorization.verifierCommands.includes(signature)) throw new Error('command_authorization_changed: 재사용 거부 후 명령 권한이 철회되었습니다.');
+    execution = await verifyInSession(reuseSession, { ...options, record: fresh.record, inputs: fresh.record.workflow.inputs }, true);
+    execution.reuse.reasons.push('record_changed_before_reuse');
+    attempt = execution.attempt;
+    requestHash = fresh.record.workflow.requestHash;
+    artifactPath = await savePending(repo, workId, "verification", attempt, hash(signature), requestHash, workId);
+    appended = await appendPending({ repo, workId, artifactPath });
+  }
+  const { work: _work, ...recording } = appended;
+  let reuseReceiptPath: string | undefined;
+  if (execution) {
+    execution.reuse.elapsedMs = performance.now() - started;
+    await resolveInside(repo, '.www');
+    await fs.mkdir(path.join(repo, '.www/evidence'), { recursive: true, mode: 0o700 });
+    await resolveInside(repo, '.www/evidence');
+    const directory = path.join(repo, '.www/evidence/verification-reuse');
+    await fs.mkdir(directory, { recursive: true, mode: 0o700 });
+    await resolveInside(repo, '.www/evidence/verification-reuse');
+    reuseReceiptPath = path.join('.www/evidence/verification-reuse', execution.reuse.id + '.json');
+    await durableJson(path.join(repo, reuseReceiptPath), JSON.stringify({ workId, workRequestHash: requestHash, attemptHash: hash(JSON.stringify(attempt)), reuse: execution.reuse }) + '\n');
+  }
+  return { ...attempt, ...recording, reuse: execution?.reuse, reuseReceiptPath };
 }
 
-async function appendVerification(repo: string, workId: string, attempt: VerificationAttempt, commandHash: string) {
+async function appendVerification(repo: string, workId: string, attempt: VerificationAttempt, commandHash: string, reuseGuard?: ReuseRecordGuard) {
   return mutateWork(repo, workId, async (record, current) => {
     if (!record.workflow.authorization.verifierCommands.some(command => hash(command) === commandHash)) throw new Error("command_authorization_changed: 검증 명령 권한이 철회되었습니다.");
+    if (reuseGuard && (verificationContext(record) !== reuseGuard.context || !(await evaluateEvidence({ repo, record, attempt })).usable)) throw new Error('reuse_record_changed: 기록 잠금 안에서 재사용 맥락이 달라졌습니다.');
     const existing = record.workflow.verifications.find(item => item.id === attempt.id);
     if (existing) { if (JSON.stringify(existing) !== JSON.stringify(attempt)) throw new Error("동일 attempt ID 내용 충돌"); return; }
     const report = path.join(path.dirname(current.path), "verification.md") ;
@@ -307,21 +356,52 @@ async function appendVerification(repo: string, workId: string, attempt: Verific
     }
     record.status              = "verifying"                                                ;
     record.blockedReason       = applicable.usable ? null : applicable.reasons.join("; ")   ;
-    record.workflow.nextAction = applicable.usable ? "review"
-      : attempt.result === "failed" && record.workflow.authorization.implementation ? "build" : "verify";
+    record.workflow.nextAction = await requiredEvidenceAction(repo, record, await assessRequiredCriteria(repo, record), "review");
+  }, reuseGuard ? mutate => withVerificationReuse(reuseGuard.useId, repo, attempt, mutate) : undefined);
+}
+
+/** 완료 판정과 다음 행동이 같은 필수 기준의 최신 실제 검증을 평가한다. */
+async function assessRequiredCriteria(repo: string, record: CurrentWorkRecord) {
+  const criteria = [];
+  for (const criterion of record.criteria.filter((item) => item.required)) {
+    const attempt    = record.workflow.verifications.filter((item) => item.criterionIds.includes(criterion.id)).at(-1)              ;
+    const evaluation = attempt ? await evaluateEvidence({ repo, record, attempt }) : { usable: false, reasons: ["검증 시도 없음"] } ;
+    criteria.push({ id: criterion.id, ...evaluation });
+  }
+  return criteria;
+}
+
+/** 필수 검증을 먼저 판정하고 분업의 현재 수용까지 갖춰야 다음 단계로 안내한다. */
+async function requiredEvidenceAction(repo: string, record: CurrentWorkRecord, criteria: CriterionAssessment[], ready: "review" | "complete") {
+  const failures = criteria.filter(criterion => {
+    const attempt = record.workflow.verifications.filter(item => item.criterionIds.includes(criterion.id)).at(-1);
+    return criterion.reasons.length === 1 && criterion.reasons[0] === "verification_failed"
+      && attempt?.executor === "process" && attempt.result === "failed"
+      && attempt.sourceStable === true && attempt.environmentStable === true
+      && attempt.artifactsStable !== false && (attempt.artifacts === undefined || attempt.artifactsStable === true);
   });
+  if (failures.length) {
+    record.blockedReason = failures.map(criterion => `${criterion.id}: verification_failed`).join("; ");
+    return record.workflow.authorization.implementation ? "build" : "verify";
+  }
+  if (!criteria.every(criterion => criterion.usable)) return "verify";
+  if (record.workflow.decomposition) {
+    const decomposition = await assessDecompositionCompletion(repo, record);
+    if (!decomposition.usable) {
+      record.blockedReason = decomposition.reasons.join("; ");
+      return record.workflow.authorization.implementation ? "build" : "verify";
+    }
+  }
+  return ready;
 }
 
 async function assessRecord(repo: string, work: WorkLocation, policyRoot?: string): Promise<WorkAssessment> {
   if (work.record.schemaVersion !== 2) return { ...work, legacy: true as const, complete: false, reasons: ["legacy 결과는 현재 소스의 검증으로 자동 승격하지 않습니다."] };
   const { record } = work;
-  const reasons  = validateRequirementRefs(record, { root: repo }) ;
-  const criteria = []                                              ;
-  for (const criterion of record.criteria.filter((item) => item.required)) {
-    const attempt    = record.workflow.verifications.filter((item) => item.criterionIds.includes(criterion.id)).at(-1)              ;
-    const evaluation = attempt ? await evaluateEvidence({ repo, record, attempt }) : { usable: false, reasons: ["검증 시도 없음"] } ;
-    criteria.push({ id: criterion.id, ...evaluation });
-    if (!evaluation.usable) reasons.push(`${criterion.id}: ${evaluation.reasons.join(", ")}`);
+  const reasons  = validateRequirementRefs(record, { root: repo });
+  const criteria = await assessRequiredCriteria(repo, record);
+  for (const criterion of criteria) {
+    if (!criterion.usable) reasons.push(`${criterion.id}: ${criterion.reasons.join(", ")}`);
   }
   const documentation = await assessDocumentation({ repo, record });
   if (!documentation.usable) reasons.push(...documentation.reasons);
@@ -342,8 +422,11 @@ async function assessRecord(repo: string, work: WorkLocation, policyRoot?: strin
     policyHash     : policyInfo.hash        ,
   }) : { usable: false, reasons: ["필수 독립 검토 없음"] };
   if (policyInfo.policy.required && !reviewState.usable) reasons.push(...reviewState.reasons);
+  if (record.workflow.decomposition) reasons.push(...(await assessDecompositionCompletion(repo, record)).reasons);
+  const report = await assessCompletionReport(repo, record);
+  if (report && !report.usable) reasons.push(...report.reasons);
   if (record.blockedReason && reasons.length === 0) reasons.push(record.blockedReason);
-  return { ...work, record, source, criteria, documentation, review: reviewState, repositoryConsistency: await assessRepositoryCheck({ repo }), complete: reasons.length === 0, reasons };
+  return { ...work, record, source, criteria, documentation, review: reviewState, repositoryConsistency: await assessRepositoryCheck({ repo }), ...(report ? { report } : {}), complete: reasons.length === 0, reasons };
 }
 
 export async function assessWork({ repo = process.cwd(), workId, policyRoot }: WorkOptions) {
@@ -356,7 +439,7 @@ export async function recordDocumentReview({ repo = process.cwd(), workId, docum
     (record.workflow.documentationReviews ??= []).push(review);
     record.status              = "verifying" ;
     record.blockedReason       = null        ;
-    record.workflow.nextAction = "review"    ;
+    record.workflow.nextAction = await requiredEvidenceAction(repo, record, await assessRequiredCriteria(repo, record), "review");
   });
 }
 
@@ -379,30 +462,28 @@ async function appendReview(repo: string, workId: string, review: unknown) {
     const applicable    = validateReview({ repo, work: record, policy: policy.policy, policyHash: policy.hash, review, sourceDigest: source.digest, criteriaDigest: criteriaDigest(record) }) ;
     record.workflow.reviews.push(applicable.usable ? saved : { ...saved, recordingRejection: applicable.reasons });
     record.status              = "verifying";
-    record.workflow.nextAction = applicable.usable ? "complete"
-      : saved.verdict === "fail" && record.workflow.authorization.implementation ? "build" : "review";
     record.blockedReason       = applicable.usable ? null
       : `독립 검토 ${String(saved.verdict ?? "미확인")}: ${saved.failure && typeof saved.failure === "object" && "kind" in saved.failure ? String(saved.failure.kind) : "수정 또는 검토 재실행 필요"}`;
+    record.workflow.nextAction = applicable.usable ? await requiredEvidenceAction(repo, record, await assessRequiredCriteria(repo, record), "complete")
+      : saved.verdict === "fail" && record.workflow.authorization.implementation ? "build" : "review";
   });
 }
 
 export async function resumeWork({ repo = process.cwd(), workId }: WorkOptions) {
   const assessment = await assessWork({ repo, workId });
   if (assessment.legacy) return assessment;
-  const work = await mutateWork(repo, workId, (record) => {
+  const work = await mutateWork(repo, workId, async (record) => {
     for (const criterion of assessment.criteria) if (!criterion.usable) record.criteria.find((item) => item.id === criterion.id)!.result = "unverified";
     if (!assessment.complete && record.status === "done") record.status = "verifying";
     const invalid    = assessment.criteria.filter((item) => !item.usable)                                                                                                     ;
-    const changed    = invalid.some((item) => item.reasons.some((reason) => ["source_changed", "scope_changed", "criteria_changed", "environment_changed"].includes(reason))) ;
-    const failed     = invalid.some((item) => item.reasons.includes("verification_failed"))                                                                                   ;
     const notStarted = invalid.length > 0 && invalid.every((item) => item.reasons.includes("검증 시도 없음"))                                                                 ;
     let nextAction   = "review"                                                                                                                                               ;
-    if (changed) nextAction = "verify";
-    else if (failed && record.workflow.authorization.implementation) nextAction = "build";
-    else if (notStarted && ["spec", "design", "build", "diagnose"].includes(record.workflow.nextAction)) nextAction = record.workflow.nextAction;
-    else if (invalid.length) nextAction = "verify";
-    else if (assessment.review.usable && assessment.documentation.usable) nextAction = "complete";
-    else if (record.workflow.reviews.at(-1)?.verdict === "fail" && record.workflow.authorization.implementation) nextAction = "build";
+    if (notStarted && ["spec", "design", "build", "diagnose"].includes(record.workflow.nextAction)) nextAction = record.workflow.nextAction;
+    else {
+      const ready = assessment.review.usable && assessment.documentation.usable ? "complete" : "review";
+      nextAction = await requiredEvidenceAction(repo, record, assessment.criteria, ready);
+      if (nextAction === "review" && record.workflow.reviews.at(-1)?.verdict === "fail" && record.workflow.authorization.implementation) nextAction = "build";
+    }
     record.workflow.nextAction = nextAction;
     record.blockedReason = assessment.reasons.length ? assessment.reasons.join("; ") : null;
   });
@@ -454,7 +535,7 @@ async function main() {
 
 if (import.meta.url && process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main().catch((error) => { process.stderr.write(`${error.message}\n`); process.exitCode = 1; });
 
-async function savePending(repo: string, workId: string, kind: "verification" | "review", payload: unknown, commandHash?: string, requestHash?: string) {
+async function savePending(repo: string, workId: string, kind: "verification" | "review", payload: unknown, commandHash?: string, requestHash?: string, verificationNamespace?: string, reuseGuard?: ReuseRecordGuard) {
   const root = await fs.realpath(repo);
   await resolveInside(root, ".www");
   const directory = path.join(root, ".www", "pending-results");
@@ -466,8 +547,8 @@ async function savePending(repo: string, workId: string, kind: "verification" | 
     if (current.record.schemaVersion !== 2) throw new Error("현재 작업이 필요합니다.");
     requestHash = current.record.workflow.requestHash;
   }
-  const text   = `${JSON.stringify({ version: 1, kind, workId, workRequestHash: requestHash, ...(commandHash ? { commandHash } : {}), payload })}\n` ;
-  const target = path.join(directory, `${kind === "review" ? "review" : "attempt"}-${hash(payload.id)}.json`)                                        ;
+  const text   = `${JSON.stringify({ version: 1, kind, workId, workRequestHash: requestHash, ...(commandHash ? { commandHash } : {}), ...(reuseGuard ? { reuseGuard } : {}), payload })}\n` ;
+  const target = path.join(directory, `${kind === "review" ? "review" : "attempt"}-${hash(verificationNamespace ? verificationNamespace + ":" + payload.id + ":" + JSON.stringify(reuseGuard ?? null) : payload.id)}.json`)                                        ;
   try { await durableJson(target, text); }
   catch (error) {
     if (!(error instanceof Error && "code" in error && error.code === "EEXIST") || await fs.readFile(target, "utf8") !== text) throw error;
@@ -488,7 +569,13 @@ export async function appendPending({ repo = process.cwd(), workId, artifactPath
       if (value.kind !== "verification" || !payload || typeof payload !== "object" || !("executor" in payload) || payload.executor !== "process") throw new Error("실제 검증 결과가 필요합니다.");
       assertPendingAttempt(payload);
       if (!("commandHash" in value) || typeof value.commandHash !== "string" || !/^[a-f0-9]{64}$/.test(value.commandHash)) throw new Error("회수할 검증 명령 식별 누락");
-      return appendVerification(repo, workId, payload, value.commandHash);
+      let reuseGuard: ReuseRecordGuard | undefined;
+      if ('reuseGuard' in value) {
+        const guard = value.reuseGuard;
+        if (!guard || typeof guard !== 'object' || !('context' in guard) || typeof guard.context !== 'string' || !/^[a-f0-9]{64}$/.test(guard.context) || !('useId' in guard) || typeof guard.useId !== 'string' || !/^verification-use-[a-f0-9-]+$/.test(guard.useId)) throw new Error('재사용 기록 맥락 형식 오류');
+        reuseGuard = { context: guard.context, useId: guard.useId };
+      }
+      return appendVerification(repo, workId, payload, value.commandHash, reuseGuard);
     });
     return { recorded: true as const, artifactPath, work };
   } catch (error) {
@@ -511,6 +598,7 @@ function assertPendingAttempt(value: unknown): asserts value is VerificationAtte
   if (!object(source) || !hashValue(source.digest) || !strings(source.inputs) || !nullableText(source.head) || !Array.isArray(source.files) || source.files.some(file => !object(file) || typeof file.path !== "string" || !["file", "directory", "missing"].includes(String(file.type)) || (file.type === "file" && (!hashValue(file.digest) || !Number.isInteger(file.mode))))) throw new Error("회수 검증 소스 형식 오류");
   if (!Array.isArray(value.criteriaSnapshot) || value.criteriaSnapshot.some(item => !object(item) || typeof item.id !== "string" || typeof item.description !== "string" || typeof item.required !== "boolean" || !strings(item.requirementRefs))) throw new Error("회수 검증 기준 형식 오류");
   if (!object(environment) || ["platform", "arch", "node"].some(field => typeof environment[field] !== "string") || !(environment.executable === null || (object(environment.executable) && typeof environment.executable.path === "string" && hashValue(environment.executable.digest)))) throw new Error("회수 검증 환경 형식 오류");
+  if (value.environmentObservation !== undefined && !validEnvironmentObservation(value.environmentObservation)) throw new Error("회수 검증 확장 환경 관측 형식 오류");
   if (value.artifactsStable !== undefined && typeof value.artifactsStable !== "boolean") throw new Error("회수 검증 artifact 현재성 오류");
   if (value.artifacts !== undefined && (!Array.isArray(value.artifacts) || value.artifacts.some(item => !object(item) || typeof item.path !== "string" || !Number.isInteger(item.size) || !hashValue(item.digest)))) throw new Error("회수 검증 artifact 형식 오류");
   if (value.output !== undefined) {

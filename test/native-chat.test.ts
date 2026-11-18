@@ -61,3 +61,13 @@ test("실제 stdio 사건의 공개 요약과 commentary를 투영하고 비공�
     child.kill();
   }
 }, 5000);
+
+test("WWW 단계 관측 도구는 명시한 새 WWW 대화에만 제공한다", () => {
+  const ordinary = nativeThreadStartParams("/workspace");
+  expect("dynamicTools" in ordinary).toBe(false);
+  const www = nativeThreadStartParams("/workspace", true);
+  expect(www.dynamicTools?.[0]).toMatchObject({ type: "function", name: "www_development_stage" });
+  expect(www.developerInstructions).toContain("도구가 실제 제공된 경우에만");
+  expect(www.developerInstructions).toContain("하네스 실행이나 업무 수용");
+  expect(www.dynamicTools?.[0]?.inputSchema.additionalProperties).toBe(false);
+});

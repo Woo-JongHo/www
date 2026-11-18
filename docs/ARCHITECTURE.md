@@ -8,6 +8,10 @@
 
 renderer는 프로젝트 선택 전 View Page와 선택 대상의 대시보드·대화·생태계·리포트를 구분한다. main의 `dashboard:get`만 등록 프로젝트와 WWW 실제 경로를 정해 `dashboard.ts`의 제한된 work.json reader로 넘긴다. renderer는 `DashboardSnapshot`을 필터·표시하며 업무 원장이나 임의 파일 경로를 쓰지 않는다. View Page 조회는 Native 연결을 요구하지 않고 대화 진입에서 목록·활동을 조회한다. 같은 대상 보기 전환은 실행 컨텍스트 전환과 분리한다.
 
+프로젝트 목록 표시와 중앙 `view`는 별도 상태다. 모니터링은 현재 대화 탭의 기존 관측을 독립 화면으로 보여 주고 대화·보고서·지도는 목록 탐색이나 모니터 왕복만으로 다시 만들지 않는다. 칸반 상세는 기존 `dashboard:get`에 projectKey/workId만 추가하며 main이 같은 승인 범위에서 문서를 읽는다. 같은 작업 재수집은 상세 내용을 유지하고 다른 선택의 늦은 응답은 renderer와 화면의 선택 경계에서 거부한다. 업무 상태를 조회 중 자동 변경하지 않는다.
+
+입력은 `chat-composer.tsx`의 로컬 상태와 명시적인 초안·인용·전송 경계로 관리한다. 대화 본문과 완료 카드는 memo 경계, Working 경과 시간은 별도 작은 컴포넌트로 갱신한다. `chat-status.ts`가 실제 관측 상태에서 고정 Working 문구와 Steer 가능 조건을 판정한다. `turn/steer`는 session/selection/thread/expectedTurnId와 사용자 메시지 ID를 검사하고 같은 턴의 API 접수와 모델의 지시 반영을 구분한다. 전송 실패·접수 미확인에서 자동 새 턴이나 자동 재전송을 만들지 않는다.
+
 `native-timing.ts`는 각 Native 세션의 요청 trace·단조 상대 시간·실패/취소 경계를 소유한다. 공유 DTO로 정제한 diagnostics/timing만 화면에 게시하고 실제 Native 사건과 앱 준비 관측을 구분한다. renderer의 수신→두 번째 animation frame은 별도 시간축이다. Agent 개요의 `agent-overview.ts`는 실제 subagent 상태·Native plan·활성 항목에 귀속되는 공개 진행 설명을 순수 투영한다.
 
 ## 제품 실행 구조
@@ -192,9 +196,9 @@ Native 자동 보고서는 src/native-report-input.ts의 공개 사건 수집 �
 
 src/conversations.ts는 Native thread/list·read·resume·turns/list 응답을 검증하고 공개 이력을 AppEvent snapshot으로 변환한다. Native가 대화 저장의 원본이며 WWW는 새 메시지 DB를 만들지 않는다. main은 현재 선택·진행 중 턴·승인·전환 guard를 소유하고 preload는 제한된 목록·선택·신규·외부 링크 IPC만 노출한다.
 
-renderer는 thread/cwd별 초안·읽기 위치·따라가기와 logical row 상태를 소유한다. 전환 세대와 사건 seq로 복원 snapshot·전환 중 도착한 live 사건을 병합하며 historical은 liveEvents에서 제외한다. src/chat-row-state.tsx와 chat-state.ts는 Ovis의 행 상태·입력·인용 코드를 개작하고 chat-message.tsx는 react-markdown/GFM을 실제 메시지에 연결한다. 출처·고정 revision·변형은 docs/third-party/ovis.md가 소유한다.
+renderer는 thread/cwd별 초안·읽기 위치·따라가기와 logical row 상태를 소유한다. 명시적 대화 선택은 전환 세대와 사건 seq로 복원 snapshot·전환 중 도착한 live 사건을 병합하며 historical은 liveEvents에서 제외한다. 자동 재연결에서 main은 연결·선택·thread에 묶인 전환 큐로 read/resume 중 RPC 메시지를 보류하고, 복원 snapshot과 `conversation/reconnected` marker 다음에 한 번 배출한다. 큐는 2,000건·4 MiB로 제한하며 한도 초과는 명시 실패다. terminal snapshot의 같은 turn/item에 속한 늦은 started/delta는 내용과 관계없이 억제해 완료 상태를 다시 열지 않는다. 공개 완료 내용이 다른 authoritative `item/completed`, 새 turn/item과 실제 요청 ID가 있는 승인은 보존한다. 배출 중 실행·승인·중단 대기가 확인되면 새 prompt와 turn/start를 보내지 않는다. renderer는 marker 이전의 임의 사건을 받아들이도록 넓히지 않는다. 현재 `sameWorkspace`는 POSIX 절대경로를 검사하므로 Windows 드라이브·UNC 경로의 대화 재개는 지원이 입증되지 않았다. src/chat-row-state.tsx와 chat-state.ts는 Ovis의 행 상태·입력·인용 코드를 개작하고 chat-message.tsx는 react-markdown/GFM을 실제 메시지에 연결한다. 출처·고정 revision·변형은 docs/third-party/ovis.md가 소유한다.
 
-복원은 기존 publish의 실시간 자동보고 경로를 항목마다 재호출하지 않는다. 원문 reasoning·과거 승인 요청은 복원 대상이 아니다. 완전한 snapshot marker와 실제 이력 절단을 구분하며 사용자 전송 결과 불확실을 자동 재전송으로 해결하지 않는다. 재개 정책은 Native 저장 설정을 보존한다.
+복원은 기존 publish의 실시간 자동보고 경로를 항목마다 재호출하지 않는다. 원문 reasoning·과거 승인 요청은 복원 대상이 아니다. 완전한 snapshot marker와 실제 이력 절단을 구분하며 사용자 전송 결과 불확실을 자동 재전송으로 해결하지 않는다. 재개 시 저장된 모델 설정을 보존하고 승인·sandbox 정책은 기존 WWW Native Bypass 정책인 `never`·`danger-full-access`로 전환한다.
 
 ## Chat 표시 컴포넌트와 디자인 역할
 

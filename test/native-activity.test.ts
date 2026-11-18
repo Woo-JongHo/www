@@ -7,8 +7,55 @@ import { resolve } from "node:path";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { NativeActivityView } from "../src/native-activity-view";
+import { restoreConversationEvents } from "../src/conversations";
 import { normalizeNativeResources, projectNativeActivity } from "../src/native-activity";
 import type { AppEvent } from "../src/shared";
+
+describe("v4 명시 null 한도와 종료 뒤 시작 경계", () => {
+  const limit = (seq: number, data: unknown) => event(seq, "account/rateLimits/updated", { rateLimits: data });
+  const baseline = { usedPercent: 35, windowDurationMins: 300, resetsAt: 200 };
+  for (const key of ["primary", "secondary"] as const) {
+    test(`${key} 명시 null은 창을 지우며 생략·잘못된 창과 구별한다`, () => {
+      const initial = limit(1, { limitId: "pro", [key]: baseline });
+      const cleared = [initial, limit(2, { limitId: "pro", [key]: null }), limit(3, { limitId: "pro", limitName: "새 이름" })];
+      expect(projectNativeActivity(cleared).limits[0]?.[key]).toBeNull();
+      const sparse = [initial, limit(2, { limitId: "pro", [key]: { usedPercent: 40 } })];
+      expect(projectNativeActivity(sparse).limits[0]?.[key]).toEqual({ ...baseline, usedPercent: 40 });
+      const invalid = [...sparse, limit(3, { limitId: "pro", [key]: { resetsAt: 900 } })];
+      expect(projectNativeActivity(invalid).limits[0]?.[key]).toEqual({ ...baseline, usedPercent: 40 });
+      expect(projectNativeActivity([...cleared, limit(4, { limitId: "pro", [key]: { usedPercent: 50 } })]).limits[0]?.[key]).toEqual({ usedPercent: 50, windowDurationMins: null, resetsAt: null });
+    });
+    for (const field of ["windowDurationMins", "resetsAt"] as const) {
+      test(`${key}.${field} null은 이전 숫자를 부활시키지 않는다`, () => {
+        const initial = limit(1, { limitId: "pro", [key]: baseline });
+        const cleared = [initial, limit(2, { limitId: "pro", [key]: { usedPercent: 40, [field]: null } })];
+        expect(projectNativeActivity(cleared).limits[0]?.[key]).toEqual({ ...baseline, usedPercent: 40, [field]: null });
+        expect(projectNativeActivity([...cleared, limit(3, { limitId: "pro", [key]: { usedPercent: 41 } })]).limits[0]?.[key]?.[field]).toBeNull();
+      });
+    }
+  }
+  for (const end of ["completed", "failed", "interrupted", "unknown", "eof"]) {
+    for (const type of ["commandExecution", "fileChange", "agentMessage", "mcpToolCall", "contextCompaction"]) {
+      test(`${end} 뒤 새 ${type} started는 상세 실행 행을 만들지 않는다`, () => {
+        const before = [started(1), item(2, "item/started", { id: "known", type: "commandExecution", command: "printf known" }),
+          end === "eof" ? event(3, "transport/closed", {}) : event(3, "turn/completed", { threadId: "t", turn: { id: "a", status: end } })];
+        const late = item(4, "item/started", { id: "late", type, command: "printf late", phase: "final_answer", tool: "late-tool", changes: [{ path: "late.ts" }] });
+        const result = projectNativeActivity([...before, late], "t");
+        expect(result.turns[0]?.entries.some(row => row.id === "item:late")).toBe(false);
+        expect(result.turns[0]?.entries.find(row => row.id === "item:known")?.status).toBe("unknown");
+        const settled = projectNativeActivity([...before, late,
+          item(5, "item/completed", { id: "known", type: "commandExecution", command: "printf known", status: "completed", exitCode: 0 }),
+          item(6, "item/completed", { id: "final", type: "agentMessage", phase: "final_answer", text: "후행 최종 결과" })], "t");
+        expect(settled.turns[0]?.entries.find(row => row.id === "item:known")?.status).toBe("completed");
+        expect(settled.turns[0]?.answer).toBe("후행 최종 결과");
+      });
+    }
+  }
+  test("활성 턴의 새 실행 시작은 그대로 관측한다", () => {
+    const result = projectNativeActivity([started(1), item(2, "item/started", { id: "active", type: "commandExecution", command: "printf active" })], "t");
+    expect(result.turns[0]?.entries.find(row => row.id === "item:active")?.status).toBe("running");
+  });
+});
 
 function event(seq: number, method: string, params: unknown): AppEvent {
   return { seq, method, params, at: `2026-11-12T00:00:${String(seq % 60).padStart(2, "0")}Z`, kind: "notification" };
@@ -26,6 +73,63 @@ function item(seq: number, method: string, value: unknown, turnId = "a"): AppEve
   return event(seq, method, { threadId: "t", turnId, item: value });
 }
 const configured = event(1, "thread/configured", { threadId: "t", model: "gpt", modelProvider: "openai", isNew: true });
+
+describe("Hook 핸들러의 최신 활동", () => {
+  function hook(seq: number, method: string, run: Record<string, unknown>, turnId: string | null = "a", threadId: string | null = "t"): AppEvent {
+    return event(seq, method, { threadId, turnId, run: { id: "handler", executionMode: "sync", eventName: "preToolUse", status: method === "hook/started" ? "running" : "completed", ...run } });
+  }
+
+  test("후속 시작은 같은 행의 타이머와 결과를 새로 갱신한다", () => {
+    for (const [firstTime, nextTime] of [[100, 200], ["2026-11-12T00:00:00Z", "2026-11-12T00:00:01Z"]]) {
+      const first = [hook(1, "hook/started", { startedAt: firstTime }), hook(2, "hook/completed", { startedAt: firstTime, durationMs: 8, statusMessage: "첫 결과" })];
+      const next = [...first, hook(3, "hook/started", { startedAt: nextTime, statusMessage: "진행 중" })];
+      const running = projectNativeActivity(next, "t").turns[0]?.entries;
+      expect(running).toHaveLength(1);
+      expect(running?.[0]).toMatchObject({ id: "hook:t:a:handler", at: next[2]?.at, status: "running", endedAt: null, durationMs: null, description: "진행 중" });
+      const delayed = [...next, hook(4, "hook/completed", { startedAt: firstTime, status: "failed", durationMs: 99 }), hook(5, "hook/started", { startedAt: firstTime }), hook(6, "hook/started", { startedAt: nextTime })];
+      expect(projectNativeActivity(delayed, "t").turns[0]?.entries).toEqual(running);
+      const completed = projectNativeActivity([...delayed, hook(7, "hook/completed", { startedAt: nextTime, status: "failed", durationMs: 12, statusMessage: "후속 결과" })], "t").turns[0]?.entries;
+      expect(completed).toHaveLength(1);
+      expect(completed?.[0]).toMatchObject({ at: next[2]?.at, status: "failed", endedAt: "2026-11-12T00:00:07Z", durationMs: 12, description: "후속 결과" });
+    }
+  });
+
+  test("완료를 먼저 수신해도 더 새로운 실행의 시작과 완료를 표시한다", () => {
+    const completed = hook(1, "hook/completed", { startedAt: 100, durationMs: 8 });
+    const replayed = projectNativeActivity([completed, hook(2, "hook/started", { startedAt: 100 })], "t").turns[0]?.entries;
+    expect(replayed).toEqual(projectNativeActivity([completed], "t").turns[0]?.entries);
+    const next = [completed, hook(2, "hook/started", { startedAt: 200 })];
+    expect(projectNativeActivity(next, "t").turns[0]?.entries[0]).toMatchObject({ status: "running", at: next[1]?.at, endedAt: null, durationMs: null });
+    const latest = projectNativeActivity([...next, hook(3, "hook/completed", { startedAt: 300, durationMs: 10 })], "t").turns[0]?.entries;
+    expect(latest).toHaveLength(1);
+    expect(latest?.[0]).toMatchObject({ status: "completed", at: "2026-11-12T00:00:03Z", durationMs: 10 });
+  });
+
+  test("복원 자료는 실시간 결과를 덮지 않고 다른 턴과 세션의 상태를 보존한다", () => {
+    const history = [hook(1, "hook/completed", { startedAt: 100, durationMs: 8 })].map(row => ({ ...row, historical: true }));
+    const live = [...history, hook(2, "hook/started", { startedAt: 200 })];
+    const replay = { ...hook(3, "hook/completed", { startedAt: 300, status: "failed" }), historical: true };
+    const result = projectNativeActivity([...live, replay, hook(4, "hook/completed", { startedAt: 50 }, "b"), hook(5, "hook/started", { startedAt: 10 }, null)], "t");
+    expect(result.turns[0]?.entries[0]).toMatchObject({ status: "running", historical: false, at: live[1]?.at, endedAt: null });
+    expect(result.turns[1]?.entries[0]).toMatchObject({ status: "completed", id: "hook:t:b:handler" });
+    expect(result.sessionEntries[0]).toMatchObject({ status: "running", id: "hook:t::handler" });
+    expect(projectNativeActivity([...live, replay, hook(6, "hook/completed", { startedAt: 200, durationMs: 11 })], "t").turns[0]?.entries[0]).toMatchObject({ status: "completed", historical: false, durationMs: 11 });
+  });
+
+  test("시작 시각이 불명확한 재수신은 완료된 행을 다시 열지 않는다", () => {
+    for (const startedAt of [undefined, null, "invalid", NaN, 100]) {
+      const before = [hook(1, "hook/started", { startedAt }), hook(2, "hook/completed", { startedAt, durationMs: 8 })];
+      const replay = [...before, hook(3, "hook/started", { startedAt })];
+      expect(projectNativeActivity(before, "t").turns[0]?.entries[0]).toMatchObject({ status: "completed", durationMs: 8 });
+      expect(projectNativeActivity(replay, "t").turns[0]?.entries).toEqual(projectNativeActivity(before, "t").turns[0]?.entries);
+    }
+    const current = [hook(1, "hook/started", { startedAt: 100 }), hook(2, "hook/completed", { startedAt: 100 }), hook(3, "hook/started", { startedAt: 200 })];
+    const ambiguous = [...current, hook(4, "hook/completed", { durationMs: 99 }), hook(5, "hook/started", {})];
+    expect(projectNativeActivity(ambiguous, "t").turns[0]?.entries).toEqual(projectNativeActivity(current, "t").turns[0]?.entries);
+    const ended = event(6, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } });
+    expect(projectNativeActivity([...ambiguous, ended], "t").turns[0]?.entries[0]).toMatchObject({ status: "unknown", endedAt: ended.at });
+  });
+});
 
 describe("계획·공개 진행 설명의 종료 경계", () => {
   test("종료·복원된 턴의 늦은 계획과 산문만 차단하고 후행 실행 결과는 보존한다", () => {
@@ -735,6 +839,31 @@ describe("실시간 Native 활동 투영", () => {
     expect(JSON.stringify(result)).not.toContain("숨김 원문");
   });
 
+  test("공개 설명은 완료 snapshot을 정산하고 늦은 시작과 delta를 무시한다", () => {
+    const delta = (seq: number, id: string, value: string, turnId = "a") => event(seq, "item/agentMessage/delta", { threadId: "t", turnId, itemId: id, phase: "commentary", delta: value });
+    const snapshot = (seq: number, method: string, id: string, value: Record<string, unknown>, turnId = "a") => item(seq, method, { id, type: "agentMessage", phase: "commentary", ...value }, turnId);
+    const description = (events: AppEvent[], turn = 0, id = "p") => projectNativeActivity(events, "t").turns[turn]?.entries.find(row => row.id === `item:${id}`)?.description;
+    for (const historical of [false, true]) {
+      const mark = (events: AppEvent[]) => events.map(row => ({ ...row, historical }));
+      const before = [started(1), delta(2, "p", "진행"), snapshot(3, "item/started", "p", { text: "늦은 시작" })];
+      expect(description(mark(before))).toBe("진행");
+      for (const completed of ["", "완료"]) {
+        const done = [...before, snapshot(4, "item/completed", "p", { text: completed })];
+        expect(description(mark(done))).toBe(completed);
+        expect(description(mark([...done, delta(5, "p", "늦음"), snapshot(6, "item/started", "p", { text: "늦음" })]))).toBe(completed);
+        expect(description(mark([...done, snapshot(5, "item/completed", "p", { text: "재정산" })]))).toBe("재정산");
+        expect(description(mark([...done, delta(5, "q", "다른 항목")]), 0, "q")).toBe("다른 항목");
+        expect(description(mark([...done, started(5, "b"), delta(6, "p", "새 턴", "b")]), 1)).toBe("새 턴");
+      }
+      expect(description(mark([...before, snapshot(4, "item/completed", "p", {})]))).toBe("진행");
+    }
+  });
+
+  test("빈 완료 snapshot은 누적된 공개 설명을 지운다", () => {
+    const events = [started(1), event(2, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase: "commentary", delta: "진행" }), item(3, "item/completed", { id: "p", type: "agentMessage", phase: "commentary", text: "" })];
+    expect(projectNativeActivity(events, "t").turns[0]?.entries[0]?.description).toBe("");
+  });
+
   test("패널은 WWW 전용 흐름을 중심에 두고 일반 활동과 토큰은 보조 펼침으로 둔다", () => {
     const events = [configured, event(2, "transport/connected", {}), started(3), item(4, "item/completed", { id: "u", type: "userMessage", content: [{ type: "skill", name: "demo" }] })] ;
     const html   = renderToStaticMarkup(createElement(NativeActivityView, { events, threadId: "t" }))                                                                                     ;
@@ -768,4 +897,96 @@ describe("실시간 Native 활동 투영", () => {
     expect(projectNativeActivity([complete, ...after]).historyTruncated).toBe(true);
   });
 
+});
+
+
+describe("현재 재개·후속 요청의 관측 경계", () => {
+  test("미접수 후속 요청도 이전 턴의 늦은 usage로 기준값을 잃는다", () => {
+    const events = [configured, started(2), update(3, "a", 100), event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), event(5, "turn/userPrompt", { threadId: "t", clientRequestId: "b", text: "새 요청" }), update(6, "a", 150), event(7, "turn/startAccepted", { threadId: "t", turnId: "b", clientRequestId: "b" }), started(8, "b"), update(9, "b", 200)];
+    expect(projectNativeActivity(events, "t").turns.find(turn => turn.turnId === "b")?.usage).toBeNull();
+  });
+  test("복원의 추가 지시는 최초 질문 제목을 바꾸지 않는다", () => {
+    const rows = restoreConversationEvents("t", [{ id: "a", status: "completed", items: [{ id: "u1", type: "userMessage", content: [{ type: "text", text: "최초 질문" }] }, { id: "u2", type: "userMessage", content: [{ type: "text", text: "추가 지시" }] }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `time-${index}` }));
+    expect(projectNativeActivity(rows, "t").turns[0]).toMatchObject({ prompt: "최초 질문", title: "최초 질문" });
+  });
+  test("종료 턴의 늦은 Hook 시작은 실행 중을 만들지 않는다", () => {
+    const rows = [started(1), event(2, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), event(3, "hook/started", { threadId: "t", turnId: "a", run: { id: "late", executionMode: "sync", eventName: "Stop", status: "running" } })];
+    expect(projectNativeActivity(rows, "t").turns[0]?.entries.every(row => row.status !== "running")).toBe(true);
+  });
+  for (const phase of ["commentary", "final_answer"] as const) for (const boundary of ["current", "generation", "process", "session", "workspace", "selection", "EOF", "completed"] as const) test(`복원 ${phase} 재개는 ${boundary} 경계를 지킨다`, () => {
+    const saved = restoreConversationEvents("t", [{ id: "a", status: boundary === "completed" ? "completed" : "inProgress", items: [{ id: "p", type: "agentMessage", phase, text: "기존" }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `time-${index}`, connectionGeneration: 1, processEpoch: "p", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 1 }));
+    const live = { ...started(20), connectionGeneration: boundary === "generation" ? 2 : 1, processEpoch: boundary === "process" ? "other" : "p", sessionId: boundary === "session" ? "other" : "session", workspaceKey: boundary === "workspace" ? "other" : "workspace", selectionEpoch: boundary === "selection" ? 2 : 1 };
+    const rows = [...saved, ...(boundary === "EOF" ? [event(19, "transport/closed", {})] : []), live, { ...event(21, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase, delta: "추가" }), connectionGeneration: 1, processEpoch: "p", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 1 }];
+    const result = projectNativeActivity(rows, "t").turns[0];
+    expect(result?.status).toBe(boundary === "current" ? "running" : boundary === "completed" ? "completed" : "unknown");
+    expect(result?.entries.find(row => row.kind === (phase === "commentary" ? "progress" : "answer"))?.description).toBe(boundary === "current" ? "기존추가" : "기존");
+  });
+});
+
+ test("완료 시각 있는 저장 답변은 같은 scope 재개에도 늦은 시작과 delta를 막는다", () => {
+  for (const completedAtMs of [undefined, 100]) {
+    const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "answer", type: "agentMessage", text: "기존", ...(completedAtMs === undefined ? {} : { completedAtMs }) }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `time-${index}` }));
+    const rows = [...saved, started(20), item(21, "item/started", { id: "answer", type: "agentMessage", text: "늦은 시작" }), event(22, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "answer", delta: "추가" })];
+    expect(projectNativeActivity(rows, "t").turns[0]?.answer).toBe(completedAtMs === undefined ? "기존추가" : "기존");
+  }
+ });
+ test("답변 완료의 명시 empty는 지우고 누락 null invalid는 보존한다", () => {
+  for (const value of [{}, { text: null }, { text: 1 }, { text: "" }, { text: "수정" }]) {
+    const rows = [started(1), event(2, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "answer", delta: "기존" }), item(3, "item/completed", { id: "answer", type: "agentMessage", ...value }), event(4, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "answer", delta: "늦음" })];
+    expect(projectNativeActivity(rows, "t").turns[0]?.answer).toBe(typeof value.text === "string" ? value.text : "기존");
+  }
+ });
+
+for (const accepted of [false, true]) for (const field of ["same", "inputTokens", "outputTokens", "cachedInputTokens", "reasoningOutputTokens", "totalTokens", "cacheWriteInputTokens"] as const) test(`v6 F1 늦은 누적의 다음 턴 기준 오염: ${accepted}/${field}`, () => {
+  const begin = (seq: number, id: string): AppEvent[] => accepted ? [event(seq, "turn/userPrompt", { threadId: "t", clientRequestId: id, text: id }), event(seq + 1, "turn/startAccepted", { threadId: "t", turnId: id, clientRequestId: id })] : [started(seq, id)];
+  const base = { ...tokens(100), cacheWriteInputTokens: 0 };
+  const late = field === "same" ? base : { ...base, [field]: base[field] + 50 };
+  const rows = [configured, ...begin(2, "a"), event(4, "thread/tokenUsage/updated", { threadId: "t", turnId: "a", tokenUsage: { total: base, last: tokens(1) } }), event(5, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), ...begin(6, "b"), update(8, "b", 120), event(9, "thread/tokenUsage/updated", { threadId: "t", turnId: "a", tokenUsage: { total: late, last: tokens(1) } }), event(10, "turn/completed", { threadId: "t", turn: { id: "b", status: "completed" } }), ...begin(11, "c"), update(13, "c", 200)];
+  expect(projectNativeActivity(rows, "t").turns.find(turn => turn.turnId === "c")?.usage?.totalTokens ?? null).toBe(field === "same" ? 80 : null);
+  const recovery = [...rows.map(row => row.seq >= 10 ? { ...row, seq: row.seq + 1 } : row), update(10, "b", 180)];
+  expect(projectNativeActivity(recovery, "t").turns.find(turn => turn.turnId === "c")?.usage?.totalTokens ?? null).toBe(field === "same" ? 20 : null);
+  const fresh = [event(20, "thread/configured", { threadId: "fresh", isNew: true }), event(21, "turn/started", { threadId: "fresh", turn: { id: "new" } }), event(22, "thread/tokenUsage/updated", { threadId: "fresh", turnId: "new", tokenUsage: { total: tokens(10), last: tokens(1) } })];
+  expect(projectNativeActivity([...rows, ...fresh], "fresh").turns.find(turn => turn.threadId === "fresh")?.usage?.totalTokens).toBe(10);
+});
+for (const phase of ["commentary", "final_answer"]) for (const when of ["before", "paused"]) for (const text of ["실제 완료", ""]) test(`v6 F7 실제 완료 사실은 재개로 해제되지 않는다: ${phase}/${when}/${text}`, () => {
+  const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "A", type: "agentMessage", phase, text: "기존" }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `saved-${index}` }));
+  const completed = item(10, "item/completed", { id: "A", type: "agentMessage", phase, text });
+  const before = when === "before" ? [started(9), completed, { ...event(11, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } }), historical: true }] : [completed];
+  const rows = [...saved, ...before, started(20), event(21, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase, delta: " 늦은 조각" })];
+  const result = projectNativeActivity(rows, "t").turns[0];
+  expect(result?.entries.find(row => row.id === "item:A")?.description).toBe(phase === "commentary" && when === "paused" ? "기존" : text);
+});
+for (const field of ["connectionGeneration", "processEpoch", "sessionId", "workspaceKey", "selectionEpoch"] as const) test(`v6 F2 활동은 재개 뒤 다른 ${field} 변이를 거부한다`, () => {
+  const scope = { connectionGeneration: 7, processEpoch: "p", sessionId: "s", workspaceKey: "w", selectionEpoch: 1 };
+  const changed = field === "connectionGeneration" || field === "selectionEpoch" ? { [field]: 99 } : { [field]: "other" };
+  for (const phase of ["commentary", "final_answer"]) for (const normalFirst of [false, true]) {
+    const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "A", type: "agentMessage", phase, text: "기존" }] }], true).map((row, index) => ({ ...row, ...scope, seq: index + 1, at: `saved-${index}` }));
+    const delta = (seq: number, text: string) => ({ ...event(seq, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase, delta: text }), ...scope });
+    const rows = [...saved, { ...started(20), ...scope }, ...(normalFirst ? [delta(21, " 정상")] : [])];
+    const before = projectNativeActivity(rows, "t").turns[0];
+    const foreign = [{ ...delta(22, " 타 scope"), ...changed }, { ...item(23, "item/completed", { id: "A", type: "agentMessage", phase, text: "타 scope 완료" }), ...scope, ...changed }, { ...event(24, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), ...scope, ...changed }];
+    expect(projectNativeActivity([...rows, ...foreign], "t").turns[0]).toEqual(before);
+    expect(projectNativeActivity([...rows, ...foreign, delta(25, " 이어서")], "t").turns[0]?.entries.find(row => row.id === "item:A")?.description).toBe("기존" + (normalFirst ? " 정상" : "") + " 이어서");
+  }
+});
+
+test("v6 EOF 이후 연결 안내와 후행 unknown은 이전 턴을 다시 열지 않는다", () => {
+  const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "A", type: "agentMessage", phase: "commentary", text: "기존" }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `saved-${index}` }));
+  const rows = [...saved, event(10, "transport/closed", {}), event(11, "transport/connected", {}), { ...event(12, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } }), historical: true }, started(13), event(14, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase: "commentary", delta: " 늦음" })];
+  expect(projectNativeActivity(rows, "t").turns[0]?.entries.find(row => row.id === "item:A")?.description).toBe("기존");
+});
+
+for (const field of ["connectionGeneration", "processEpoch", "sessionId", "workspaceKey", "selectionEpoch"] as const) test(`v6 다른 ${field}의 명령·파일 변이와 완료도 현재 활동을 변경하지 않는다`, () => {
+  const scope = { connectionGeneration: 7, processEpoch: "p", sessionId: "s", workspaceKey: "w", selectionEpoch: 1 };
+  const changed = field === "connectionGeneration" || field === "selectionEpoch" ? { [field]: 99 } : { [field]: "other" };
+  for (const type of ["commandExecution", "fileChange"]) {
+    const value = { id: "A", type, command: "기존 명령", status: "inProgress", changes: [{ path: "kept.ts" }] };
+    const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [value] }], true).map((row, index) => ({ ...row, ...scope, seq: index + 1, at: `saved-${index}` }));
+    const rows = [...saved, { ...started(20), ...scope }, { ...item(21, "item/started", value), ...scope }];
+    const before = projectNativeActivity(rows, "t").turns[0];
+    const foreign = [{ ...item(22, "item/started", { ...value, command: "다른 scope 명령" }), ...scope, ...changed }, { ...item(23, "item/completed", { ...value, status: "completed", exitCode: 0 }), ...scope, ...changed }, { ...event(24, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), ...scope, ...changed }];
+    expect(projectNativeActivity([...rows, ...foreign], "t").turns[0]).toEqual(before);
+    const settled = [...rows, ...foreign, { ...event(25, "transport/closed", {}), ...scope }, { ...item(26, "item/completed", { ...value, status: "completed", exitCode: 0 }), ...scope }];
+    expect(projectNativeActivity(settled, "t").turns[0]?.entries.find(row => row.id === "item:A")?.status).toBe("completed");
+  }
 });

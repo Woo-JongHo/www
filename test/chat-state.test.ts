@@ -13,6 +13,7 @@ import { ChatMessage } from "../src/chat-message";
 import { reduceConversationEvents, type ConversationEventState, blankReadingState, belongsToConversation, composerFull, conversationKey, currentTurnEvents, draftWithQuote, eventTurnId, externalChatUrl, MAX_PROMPT_CHARS, pasteOverflow } from "../src/chat-state";
 import { createActivitySidebarState, updateActivitySidebarSnapshot } from "../src/activity-sidebar";
 import { project } from "../src/projection";
+import { chatStatus } from "../src/chat-status";
 import type { AppEvent, ScopedAppEvent } from "../src/shared";
 
 describe("Ovis에서 개작한 Chat 입력과 대화 경계", () => {
@@ -132,6 +133,17 @@ describe("재연결 snapshot과 실제 renderer 대화 경계", () => {
     }
   });
 
+  test("main의 복원 큐가 marker 뒤에 배출한 live만 보존하며 임의 pre-marker·옛 세대 승인을 되살리지 않는다", () => {
+    const params = { threadId: "thread", turnId: "window", item: { id: "window-item", type: "agentMessage", text: "복원 중 live" } };
+    const rawBeforeMarker = event(15, "item/completed", params);
+    const drained = event(21, "item/completed", params);
+    const oldApproval = { ...event(19, "item/commandExecution/requestApproval", { threadId: "thread", turnId: "window" }, 1), kind: "request" as const, requestId: 42, approvalToken: "old", supported: true };
+    const result = reduce({ events: [rawBeforeMarker, oldApproval], reconnect: null }, [drained, marker(), drained]);
+    expect(result.events.filter(value => (value.params as { item?: { id?: string } })?.item?.id === "window-item")).toHaveLength(1);
+    expect(result.events.some(value => value.seq === 15 || value.kind === "request")).toBe(false);
+    expect(project(result.events).blocks.filter(block => block.kind === "answer" && block.text === "복원 중 live")).toHaveLength(1);
+  });
+
   test("중복·stale marker와 늦은 bootstrap snapshot은 현재 transcript를 되감지 않는다", () => {
     const current = reduce(empty(), [marker(), fresh()]);
     for (const stale of [marker(), marker(19), { ...marker(30), connectionGeneration: 1 }]) {
@@ -216,6 +228,8 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
       ${part("  const matchesSelection =", "\n  const acceptResources =")}
       const threadRef = { current: "thread" };
       const threadId = "thread";
+      const projection = { working: false, turn: "idle", turnId: null, transport: "connected", interrupt: "idle", blocks: [] };
+      const setInputNotice = () => {};
       const prompt = state.prompt;
       const promptRef = { get current() { return state.prompt; }, set current(value) { state.prompt = value; } };
       const failedDraftRef = { get current() { return state.failed; }, set current(value) { state.failed = value; } };
@@ -247,7 +261,7 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
       consumeEvents(snapshot: ScopedAppEvent[], live: ScopedAppEvent[]): void;
       select(selection: typeof selected): void;
       transcriptState: { current: ConversationEventState };
-    } = runInNewContext(new Bun.Transpiler({ loader: "ts" }).transformSync(code), { state, selected, request, reduceConversationEvents, MAX_PROMPT_CHARS, performance });
+    } = runInNewContext(new Bun.Transpiler({ loader: "ts" }).transformSync(code), { state, selected, request, reduceConversationEvents, MAX_PROMPT_CHARS, performance, chatStatus });
     const snapshot: ScopedAppEvent[] = [
       { ...selected, connectionGeneration: 2, seq: 10, at: "", kind: "transport", method: "transport/status", params: { state: "connected" }, historical: true },
       { ...selected, connectionGeneration: 2, seq: 11, at: "", kind: "notification", method: "thread/configured", params: { threadId: "thread" }, historical: true }

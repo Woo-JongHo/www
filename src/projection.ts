@@ -25,6 +25,9 @@ export type Block =
       text     : string        ;
       state    : RequestState  ;
       error    : string | null ;
+      steerStatus?: "pending" | "accepted" | "failed" | "uncertain";
+      clientUserMessageId?: string;
+      nativeItemId?: string;
     }
   | {
       kind              : "explanation"                                    ;
@@ -103,6 +106,7 @@ export interface ExecutionResultCounts {
   commands   : number ;
   files      : number ;
   failed     : number ;
+  declined   : number ;
   unresolved : number ;
 }
 
@@ -113,6 +117,7 @@ export function executionResultCounts(blocks: readonly Block[]): ExecutionResult
     commands   : commands.length                                                                                         ,
     files      : files.length                                                                                            ,
     failed     : [...commands, ...files].filter((block) => block.status === "failed").length                             ,
+    declined   : [...commands, ...files].filter((block) => block.status === "declined").length,
     unresolved : [...commands, ...files].filter((block) => block.status === "unknown" || block.running).length
   };
 }
@@ -176,11 +181,14 @@ export function project(events: readonly AppEvent[]): Projection {
   let interrupt : InterruptState = "idle"         ;
 
   const seen        = new Set<number>()                                                                            ;
+  const terminalScopes = new Map<string, string>();
   const closedTurns = new Set<string>()                                                                            ;
   const summaries   = new Map<string, { sections: Map<number, string>; completed: boolean; truncated: boolean }>() ;
   // fragment 소유권은 공개 Block 타입 대신 투영 내부에서 항목·섹션에 연결한다.
   const fragments = new Map<string, { owner: string; section: number }>();
   const messages = new Map<string, { source: "answer" | "commentary" | "publicPlan"; completed: boolean }>();
+  const restoredItems = new Map<string, { scope: string; ids: Set<string>; suspended: boolean; resumed: boolean }>();
+  const restoredTurnScopes = new Map<string, string>();
   const approvalScopes = new Map<string, { generation: unknown; process: unknown }>();
   const removeFragments = (owner: string) => {
     for (let index = blocks.length - 1; index >= 0; index--) {
@@ -223,7 +231,57 @@ export function project(events: readonly AppEvent[]): Projection {
     const itemId          = string(item.id) || string(params.itemId) || `event-${event.seq}`          ;
     const blockId         = `${relatedThreadId ?? "unknown"}:${relatedTurnId ?? "unknown"}:${itemId}` ;
     const activeTurn      = relatedThreadId === threadId && relatedTurnId === turnId                  ;
+    const scopeFields = object(event);
+    const scope = JSON.stringify([scopeFields.sessionId, scopeFields.workspaceKey, scopeFields.selectionEpoch, scopeFields.processEpoch, scopeFields.connectionGeneration]);
+    const key = turnKey(relatedThreadId, relatedTurnId);
+    // 복원 unknown의 소유권은 재개·종료·EOF 뒤 정산에도 유지한다.
+    const restoredScope = restoredTurnScopes.get(key);
+    if (restoredScope !== undefined && restoredScope !== scope) continue;
+    if (event.method === "turn/started" && !event.historical && (transport === "closed"
+      || restoredItems.get(key)?.suspended && restoredItems.get(key)?.scope !== scope
+      || closedTurns.has(key) && !terminalScopes.has(key) && !restoredItems.get(key)?.suspended)) continue;
+    if (event.method === "turn/started" && terminalScopes.get(key) === scope) continue;
+    if (event.method === "turn/started" && terminalScopes.has(key)) closedTurns.delete(key);
+    if (event.method === "turn/completed" && ["completed", "interrupted", "failed"].includes(string(object(params.turn).status))) terminalScopes.set(key, scope);
+    const recordedCompletion = typeof item.completedAtMs === "number" && Number.isSafeInteger(item.completedAtMs)
+      || item.type === "commandExecution" && ["completed", "failed", "declined"].includes(string(item.status))
+      || item.type === "fileChange" && ["completed", "failed", "declined"].includes(string(item.status));
+    if (event.historical && event.method === "item/completed" && !recordedCompletion) {
+      let restored = restoredItems.get(key);
+      if (!restored) {
+        restored = { scope, ids: new Set(), suspended: false, resumed: false };
+        restoredItems.set(key, restored);
+      }
+      restored.ids.add(blockId);
+      if (item.type === "reasoning") restored.ids.add(`reasoningSummary:${JSON.stringify([relatedThreadId, relatedTurnId, itemId])}`);
+    }
+    if (event.method === "item/completed" && (!event.historical || recordedCompletion) && restoredItems.get(key)?.scope === scope) {
+      restoredItems.get(key)?.ids.delete(blockId);
+      restoredItems.get(key)?.ids.delete(`reasoningSummary:${JSON.stringify([relatedThreadId, relatedTurnId, itemId])}`);
+    }
 
+    if (/^turn\/steer(Pending|Accepted|Failed|Uncertain)$/.test(event.method)) {
+      const clientId = string(params.clientUserMessageId);
+      if (clientId && relatedThreadId && relatedTurnId) {
+        let request = blocks.find((block): block is Extract<Block, {kind:'user'}> => block.kind === 'user' && block.clientUserMessageId === clientId && block.threadId === relatedThreadId && block.turnId === relatedTurnId);
+        const steerStatus = event.method === 'turn/steerPending' ? 'pending' : event.method === 'turn/steerAccepted' ? 'accepted' : event.method === 'turn/steerUncertain' ? 'uncertain' : 'failed';
+        if (!request) {
+          request = {kind:'user',id:`steer:${relatedThreadId}:${relatedTurnId}:${clientId}`,threadId:relatedThreadId,turnId:relatedTurnId,text:string(params.text),state:'sending',error:null,clientUserMessageId:clientId,steerStatus};
+          blocks.push(request);
+        }
+        request.steerStatus = steerStatus;
+        request.state = steerStatus === 'accepted' ? 'accepted' : steerStatus === 'pending' ? 'sending' : 'failed';
+        request.error = string(params.message) || null;
+      }
+    }
+    // Native가 명시적으로 같은 client ID를 돌려준 경우에만 optimistic 행과 합친다.
+    if ((event.method === 'item/started' || event.method === 'item/completed') && item.type === 'userMessage') {
+      const clientId = string(item.clientId) || string(item.clientUserMessageId) || string(params.clientUserMessageId);
+      if (clientId) {
+        const request = blocks.find((block): block is Extract<Block, {kind:'user'}> => block.kind === 'user' && block.clientUserMessageId === clientId && block.threadId === relatedThreadId && block.turnId === relatedTurnId);
+        if (request) request.nativeItemId = string(item.id) || request.nativeItemId;
+      }
+    }
     if (event.method === "turn/userPrompt"             ) {
       const id = string(params.clientRequestId) || `request-${event.seq}`;
       blocks.push({
@@ -267,14 +325,38 @@ export function project(events: readonly AppEvent[]): Projection {
     if (event.method === "turn/started" && !activeTurn && turnId !== null) closeMessages(threadId, turnId);
     if (event.method === "turn/completed") {
       closeMessages(relatedThreadId, relatedTurnId);
+      if (event.historical && object(params.turn).status === "unknown") {
+        restoredTurnScopes.set(key, scope);
+        const restored = restoredItems.get(key) ?? { scope, ids: new Set<string>(), suspended: false, resumed: false };
+        restored.suspended = true;
+        restoredItems.set(key, restored);
+      } else restoredItems.delete(key);
       for (const block of blocks) {
         if (block.kind === "command" && block.status === "unknown" && block.threadId === relatedThreadId && block.turnId === relatedTurnId && object(params.turn).status === "interrupted") block.turnInterrupted = true;
         if (block.kind === "command" && block.running && block.threadId === relatedThreadId && block.turnId === relatedTurnId) {
           Object.assign(block, { running: false, status: "unknown", endedAt: observedTime(event), turnInterrupted: object(params.turn).status === "interrupted" });
         }
+        if (block.kind === "files" && block.running && block.threadId === relatedThreadId && block.turnId === relatedTurnId) {
+          block.running = false;
+          block.status = "unknown";
+        }
       }
     }
     if (event.method === "turn/started"                ) {
+      const restored = restoredItems.get(key);
+      // 과거 unknown은 실행 증거가 아니다. 같은 선택의 실제 시작만 합성 종료를 해제한다.
+      if (!event.historical && activeTurn && turn === "unknown" && typeof params.threadId === "string" && typeof object(params.turn).id === "string"
+        && restored?.suspended && restored.scope === scope) {
+        closedTurns.delete(key);
+        restored.suspended = false;
+        restored.resumed = true;
+        for (const id of restored.ids) {
+          const message = messages.get(id);
+          if (message) message.completed = false;
+          const summary = summaries.get(id);
+          if (summary) summary.completed = false;
+        }
+      }
       threadId  = relatedThreadId ;
       turnId    = relatedTurnId   ;
       turn      = "running"       ;
@@ -296,6 +378,7 @@ export function project(events: readonly AppEvent[]): Projection {
     if (event.method === "transport/connected") transport = "connected";
     if (event.method === "transport/status" && (params.state === "connected" || params.state === "closed" || params.state === "error" || params.state === "disconnected")) transport = params.state;
     if (event.method === "transport/closed") {
+      restoredItems.clear();
       transport = "closed";
       closedTurns.add(turnKey(threadId, turnId));
       if (turn === "running" || turn === "starting") {
@@ -345,7 +428,6 @@ export function project(events: readonly AppEvent[]): Projection {
         const state = prior ?? { sections: new Map<number, string>(), completed: false, truncated: false };
         let acceptedDelta = "";
         if (summarySnapshot) {
-          removeFragments(summaryId);
           // 완료 snapshot은 빈 배열도 포함해 이전 공개 요약을 대체한다.
           if (event.method === "item/completed" || !state.completed) {
             state.sections.clear();
@@ -374,7 +456,27 @@ export function project(events: readonly AppEvent[]): Projection {
         summaries.set(summaryId, state);
         if (summarySnapshot) {
           const text = [...state.sections.values()].join("\n\n");
-          if (text.trim()) appendFragment(summaryId, -1, event.seq, "reasoningSummary", relatedThreadId, relatedTurnId, text, !closed && !state.completed, state.truncated);
+          const owned = blocks.filter((block): block is Extract<Block, { kind: "explanation" }> => block.kind === "explanation" && fragments.get(block.id)?.owner === summaryId);
+          if (!text.trim()) removeFragments(summaryId);
+          else if (!owned.length) appendFragment(summaryId, -1, event.seq, "reasoningSummary", relatedThreadId, relatedTurnId, text, !closed && !state.completed, state.truncated);
+          else {
+            const previous = owned.map(block => block.text).join("");
+            if (previous !== text && !text.startsWith(previous) && owned.length > 1) protocolWarning = { at: event.at, message: "공개 요약 완료 내용이 정정되어 조각별 시간 위치의 대응은 미확인입니다." };
+            let offset = 0;
+            for (const [position, block] of owned.entries()) {
+              const end = position === owned.length - 1 ? text.length : Math.min(text.length, offset + block.text.length);
+              block.text = text.slice(offset, end);
+              block.streaming = !closed && !state.completed;
+              offset = end;
+            }
+            for (let position = blocks.length - 1; position >= 0; position--) {
+              const block = blocks[position]!;
+              if (block.kind === "explanation" && fragments.get(block.id)?.owner === summaryId && !block.text) {
+                fragments.delete(block.id);
+                blocks.splice(position, 1);
+              }
+            }
+          }
         } else {
           appendFragment(summaryId, index, event.seq, "reasoningSummary", relatedThreadId, relatedTurnId, acceptedDelta, true, state.truncated);
         }
@@ -396,7 +498,8 @@ export function project(events: readonly AppEvent[]): Projection {
         const phase = string(params.phase) || string(item.phase);
         const explicitPlan = item.type === "publicPlan" || item.type === "plan" || event.method.includes("publicPlan");
         const preservesSource = !phase && !explicitPlan && !(prior?.source === "publicPlan" && item.type === "agentMessage");
-        const source = preservesSource ? prior?.source ?? messageKind : messageKind;
+        const explicitText = typeof item.text === "string" || typeof item.content === "string";
+        const source = !isDelta && !explicitText && prior ? prior.source : preservesSource ? prior?.source ?? messageKind : messageKind;
         let existingIndex = blocks.findIndex((block) => block.kind === "answer" && block.id === blockId);
         if (prior && prior.source !== source) {
           removeFragments(blockId);
@@ -404,20 +507,43 @@ export function project(events: readonly AppEvent[]): Projection {
           existingIndex = -1;
         }
         messages.set(blockId, { source, completed: isCompleted });
-        const text = isDelta ? string(params.delta) : string(item.text) || string(item.content);
+        const text = isDelta ? string(params.delta) : typeof item.text === "string" ? item.text : string(item.content);
         if (source !== "answer") {
-          // snapshot은 과거 위치를 갱신하지 않고 모든 fragment를 수신 위치에서 대체한다.
-          if (!isDelta && (!isMessageStarted || !prior || prior.source !== source)) {
-            removeFragments(blockId);
-            if (text.trim()) appendFragment(blockId, 0, event.seq, source, relatedThreadId, relatedTurnId, text, !isCompleted);
+          const owned = blocks.filter((block): block is Extract<Block, { kind: "explanation" }> =>
+            block.kind === "explanation" && fragments.get(block.id)?.owner === blockId);
+          if (!isDelta && explicitText && (!isMessageStarted || !prior || prior.source !== source)) {
+            if (!text.trim()) removeFragments(blockId);
+            else if (!owned.length) appendFragment(blockId, 0, event.seq, source, relatedThreadId, relatedTurnId, text, !isCompleted);
+            else {
+              const previous = owned.map(block => block.text).join("");
+              // 정정 snapshot의 조각별 대응은 알 수 없다. 기존 시간 위치를 유지하고 경계를 알린다.
+              if (previous !== text && !text.startsWith(previous) && owned.length > 1) {
+                protocolWarning = { at: event.at, message: "설명 완료 내용이 정정되어 조각별 시간 위치의 대응은 미확인입니다." };
+              }
+              let offset = 0;
+              for (const [index, block] of owned.entries()) {
+                const end = index === owned.length - 1 ? text.length : Math.min(text.length, offset + block.text.length);
+                block.text = text.slice(offset, end);
+                block.streaming = !isCompleted;
+                offset = end;
+              }
+              for (let index = blocks.length - 1; index >= 0; index--) {
+                const block = blocks[index]!;
+                if (block.kind === "explanation" && fragments.get(block.id)?.owner === blockId && !block.text) {
+                  fragments.delete(block.id);
+                  blocks.splice(index, 1);
+                }
+              }
+            }
           } else if (isDelta) {
             appendFragment(blockId, 0, event.seq, source, relatedThreadId, relatedTurnId, text, true);
           }
+          if (isCompleted) for (const block of owned) block.streaming = false;
         } else {
           const block = blocks[existingIndex];
           const existing = block?.kind === "answer" ? block : undefined;
           const replacement: Block = { kind: "answer", id: blockId, threadId: relatedThreadId, turnId: relatedTurnId,
-            text: isMessageStarted && existing ? existing.text : isDelta ? (existing?.text ?? "") + text : text || existing?.text || "",
+            text: isMessageStarted && existing ? existing.text : isDelta ? (existing?.text ?? "") + text : explicitText ? text : existing?.text ?? "",
             streaming: !isCompleted };
           if (existingIndex < 0) blocks.push(replacement);
           else blocks[existingIndex] = replacement;
@@ -433,7 +559,14 @@ export function project(events: readonly AppEvent[]): Projection {
         (block): block is Extract<Block, { kind: "command" }> =>
           block.kind === "command" && block.id === blockId
       );
-      if (command && !command.running) continue;
+      if (command && !command.running) {
+        const restored = restoredItems.get(key);
+        if (!event.historical && command.status === "unknown" && restored?.resumed && restored.scope === scope && restored.ids.has(blockId)) {
+          command.running = true;
+          command.status = "running";
+          command.endedAt = null;
+        } else continue;
+      }
       if (!command) {
         command = {
           kind            : "command"                ,
@@ -492,24 +625,34 @@ export function project(events: readonly AppEvent[]): Projection {
       command.exitCode = typeof item.exitCode === "number" ? item.exitCode : null ;
       command.status   = itemStatus(item)                                         ;
       const aggregatedOutput = string(item.aggregatedOutput);
-      if (aggregatedOutput) {
+      if (typeof item.aggregatedOutput === "string") {
         const limited = limitOutput(aggregatedOutput);
         command.output = limited.output;
-        command.outputTruncated ||= limited.truncated;
+        command.outputTruncated = limited.truncated;
       }
     }
 
     if (event.method === "item/started" && item.type === "fileChange") {
+      const closed = closedTurns.has(turnKey(relatedThreadId, relatedTurnId)) || transport === "closed" ||
+        (turnId !== null && !activeTurn);
+      if (closed) continue;
       let files = blocks.find(
         (block): block is Extract<Block, { kind: "files" }> =>
           block.kind === "files" && block.id === blockId
       );
+      if (files && !files.running) {
+        const restored = restoredItems.get(key);
+        if (!event.historical && files.status === "unknown" && restored?.resumed && restored.scope === scope && restored.ids.has(blockId)) {
+          files.running = true;
+          files.status = "running";
+        } else continue;
+      }
       if (!files) {
         files = { kind: "files", id: blockId, threadId: relatedThreadId, turnId: relatedTurnId, changes: [], running: true, status: "running" };
         blocks.push(files);
       }
       const changes = fileChanges(item);
-      if (changes.length) files.changes = changes;
+      if (changes !== null) files.changes = changes;
     }
     if (event.method === "item/completed" && item.type === "fileChange") {
       let files = blocks.find(
@@ -521,9 +664,9 @@ export function project(events: readonly AppEvent[]): Projection {
         blocks.push(files);
       }
       const changes = fileChanges(item);
-      if (changes.length) files.changes = changes;
+      if (changes !== null) files.changes = changes;
       files.running = false;
-      files.status = string(item.status) === "failed" ? "failed" : string(item.status) && string(item.status) !== "completed" ? "unknown" : "completed";
+      files.status = item.status === "completed" || item.status === "failed" || item.status === "declined" ? item.status : "unknown";
     }
 
     const approvalToken = "approvalToken" in event && typeof event.approvalToken === "string" && event.approvalToken ? event.approvalToken : null;
@@ -587,13 +730,13 @@ export function project(events: readonly AppEvent[]): Projection {
   };
 }
 
-function fileChanges(item: Record<string, unknown>): Extract<Block, { kind: "files" }>["changes"] {
+function fileChanges(item: Record<string, unknown>): Extract<Block, { kind: "files" }>["changes"] | null {
   const changes: Extract<Block, { kind: "files" }>["changes"] = [];
-  if (!Array.isArray(item.changes)) return changes;
+  if (!Array.isArray(item.changes)) return null;
   for (const value of item.changes) {
     const change = object(value      ) ;
     const path   = string(change.path) ;
-    if (!path) continue;
+    if (!path || change.diff !== undefined && change.diff !== null && typeof change.diff !== "string") return null;
     const diff    = typeof change.diff === "string" ? change.diff : null ;
     const limited = limitOutput(diff ?? "")                              ;
     changes.push({ path, diff: diff === null ? null : limited.output, truncated: limited.truncated });

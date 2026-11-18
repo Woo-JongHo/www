@@ -61,6 +61,12 @@ export interface CommandResult {
   output?          : { stdout: OutputSummary; stderr: OutputSummary } ;
 }
 export type VerificationRunner = (invocation: CommandInvocation, options: { cwd: string; captureOutput?: boolean }) => Promise<CommandResult> | CommandResult;
+export interface VerificationEnvironmentObservation {
+  version: 1;
+  tools: string[];
+  environmentPaths: string[];
+  digest: string | null;
+}
 export interface VerificationAttempt {
   id                : string                  ;
   startedAt         : string                  ;
@@ -82,6 +88,7 @@ export interface VerificationAttempt {
   artifactsStable?  : boolean                 ;
   environment       : ExecutionEnvironment    ;
   environmentStable : boolean                 ;
+  environmentObservation?: VerificationEnvironmentObservation;
   executor          : 'injected' | 'process'  ;
   output?           : CommandResult['output'] ;
 }
@@ -91,6 +98,12 @@ export interface EvidenceEvaluation {
 }
 function object(value: unknown): value is Record<string, unknown> { return value !== null && typeof value === 'object' && !Array.isArray(value); }
 function errorCode(error: unknown): unknown { return object(error) ? error.code : undefined; }
+
+export function validEnvironmentObservation(value: unknown): value is VerificationEnvironmentObservation {
+  const strings = (items: unknown): items is string[] => Array.isArray(items) && items.every(item => typeof item === 'string' && item.trim().length > 0 && !item.includes('\0'));
+  return object(value) && value.version === 1 && strings(value.tools) && value.tools.length > 0
+    && strings(value.environmentPaths) && (value.digest === null || typeof value.digest === 'string' && /^[a-f0-9]{64}$/.test(value.digest));
+}
 
 const exec         = promisify(execFile)                               ;
 const EXCLUDED     = new Set([".git", ".www", "node_modules", "dist"]) ;
@@ -364,6 +377,16 @@ export async function evaluateEvidence({ repo, record, attempt }: { repo?: strin
   } catch { reasons.push("invalid_attempt"); }
   const root = await fs.realpath(repo ?? process.cwd());
   if (!sameEnvironment(attempt.environment, await resolveExecutionEnvironment(root, attempt.environment?.executable?.path ?? attempt.command))) reasons.push("environment_changed");
+  if (attempt.environmentObservation !== undefined) {
+    const observation = attempt.environmentObservation;
+    if (!validEnvironmentObservation(observation)) reasons.push('invalid_environment_observation');
+    else if (observation.digest === null) reasons.push('environment_observation_unavailable');
+    else {
+      try {
+        if (await observeVerificationEnvironment(root, observation) !== observation.digest) reasons.push('observed_environment_changed');
+      } catch { reasons.push('environment_observation_unavailable'); }
+    }
+  }
   try {
     const source = await captureSource({ repo, inputs: attempt.source.inputs });
     if (source.digest !== attempt.source.digest) reasons.push("source_changed");
@@ -408,4 +431,200 @@ export function renderAttempt(attempt: VerificationAttempt) {
     "- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.",
     "",
   ].join("\n");
+}
+
+/** 같은 프로세스에서 직접 관측한 검증만 보유한다. 디스크의 과거 PASS는 가져오지 않는다. */
+export interface VerificationSession { readonly id: string }
+export interface VerificationSessionOptions {
+  checkId: string;
+  scenario: string;
+  phase: 'focused' | 'common' | 'integration';
+  maxAgeMs: number;
+  tools: string[];
+  environmentPaths: string[];
+  environmentObserved: boolean;
+}
+export interface VerificationReuseDecision {
+  id: string;
+  sessionId: string;
+  checkId: string;
+  scenario: string;
+  phase: VerificationSessionOptions['phase'];
+  action: 'reused' | 'executed';
+  reasons: string[];
+  sourceAttemptId: string | null;
+  attemptId: string;
+  environmentDigest: string | null;
+  checkedAt: string;
+  elapsedMs: number;
+  processExecutions: 0 | 1;
+}
+interface SessionCandidate {
+  signature: string;
+  attempt: VerificationAttempt;
+  observation: string | null;
+  capturedAt: number;
+}
+interface SessionState {
+  options: VerificationSessionOptions;
+  candidates: SessionCandidate[];
+  tail: Promise<void>;
+  lastFailureAttemptId: string | null;
+}
+const verificationSessions = new WeakMap<VerificationSession, SessionState>();
+const verificationReuseTickets = new Map<string, { session: VerificationSession; candidate: SessionCandidate; root: string; options: VerificationSessionOptions }>();
+
+export function createVerificationSession(options: VerificationSessionOptions): VerificationSession {
+  if (!options.checkId?.trim() || !options.scenario?.trim() || !['focused', 'common', 'integration'].includes(options.phase)
+    || !Number.isFinite(options.maxAgeMs) || options.maxAgeMs <= 0 || options.maxAgeMs > 3_600_000
+    || !Array.isArray(options.tools) || !options.tools.length || options.tools.some(tool => typeof tool !== 'string' || !tool.trim())
+    || !Array.isArray(options.environmentPaths) || options.environmentPaths.some(file => typeof file !== 'string' || !file.trim())
+    || typeof options.environmentObserved !== 'boolean') throw new Error('재사용에는 검사·시나리오·단계·관측 범위와 1시간 이하 유효기간이 필요합니다.');
+  const session = Object.freeze({ id: `verification-session-${randomUUID()}` });
+  verificationSessions.set(session, { options: structuredClone(options), candidates: [], tail: Promise.resolve(), lastFailureAttemptId: null });
+  return session;
+}
+
+// 환경변수 값은 저장하지 않는다. 의존 트리와 명시한 외부 설정·도구는 읽기만 한다.
+async function observeVerificationEnvironment(root: string, options: Pick<VerificationSessionOptions, 'tools' | 'environmentPaths'>): Promise<string> {
+  const os = await import('node:os');
+  const entries: unknown[] = [];
+  async function visit(file: string, ancestors: Set<string>): Promise<void> {
+    let stat;
+    try { stat = await fs.lstat(file); }
+    catch (error) { if (errorCode(error) !== 'ENOENT') throw error; entries.push([file, 'missing']); return; }
+    const resolved = await fs.realpath(file);
+    if (stat.isSymbolicLink()) {
+      entries.push([file, 'symlink', resolved]);
+      if (ancestors.has(resolved)) throw new Error('environment_symlink_cycle');
+      await visit(resolved, ancestors);
+    } else if (stat.isDirectory()) {
+      if (ancestors.has(resolved)) throw new Error('environment_directory_cycle');
+      entries.push([file, 'directory', stat.mode & 0o777]);
+      const next = new Set([...ancestors, resolved]);
+      for (const name of (await fs.readdir(file)).sort()) await visit(path.join(file, name), next);
+    } else if (stat.isFile()) entries.push([file, 'file', stat.mode & 0o777, digest(await fs.readFile(file))]);
+    else throw new Error('environment_special_file');
+  }
+  for (const file of [...new Set(['node_modules', ...options.environmentPaths])].sort()) await visit(path.resolve(root, file), new Set());
+  const tools = [];
+  for (const tool of [...new Set([process.execPath, ...options.tools])].sort()) {
+    const observed = await resolveExecutionEnvironment(root, tool);
+    if (!observed.executable) throw new Error('environment_tool_unavailable');
+    tools.push([tool, observed]);
+  }
+  return digest(JSON.stringify({ root, host: os.hostname(), release: os.release(), node: process.version,
+    env: Object.entries(process.env).sort(([a], [b]) => a.localeCompare(b)), tools, entries }));
+}
+
+/** 기존 core 판정을 추가 조건으로만 좁힌다. 주입 실행은 후보가 되어도 재사용할 수 없다. */
+export async function verifyInSession(session: VerificationSession, options: Parameters<typeof verify>[0], forceRun = false) {
+  const state = verificationSessions.get(session);
+  if (!state || !options) throw new Error('현재 프로세스에서 생성한 검증 세션이 필요합니다.');
+  const previous = state.tail;
+  let release = () => {};
+  state.tail = new Promise<void>(resolve => { release = resolve; });
+  await previous;
+  try {
+    const started = performance.now();
+    const root = await fs.realpath(options.repo ?? process.cwd());
+    const paths: unknown = options.artifactPaths ?? [];
+    if (!Array.isArray(paths) || paths.some(file => typeof file !== 'string')) throw new Error('아티팩트 경로 배열이 필요합니다.');
+    const signature = digest(JSON.stringify([root, options.command, options.args ?? [], [...(options.criterionIds ?? [])].sort(), [...new Set(paths)].sort()]));
+    const candidate = [...state.candidates].reverse().find(item => item.signature === signature);
+    const reasons: string[] = [];
+    if (forceRun) reasons.push('forced_after_record_change');
+    let observation: string | null = null;
+    const observedOptions = { ...state.options, tools: [...state.options.tools, ...(options.command ? [options.command] : [])] };
+    if (!state.options.environmentObserved) reasons.push('environment_unobserved');
+    else {
+      try { observation = await observeVerificationEnvironment(root, observedOptions); }
+      catch { reasons.push('environment_observation_unavailable'); }
+    }
+    if (!candidate) {
+      reasons.push('no_session_observation');
+      if (state.lastFailureAttemptId) reasons.push('prior_session_failure');
+    }
+    else {
+      if (performance.now() - candidate.capturedAt > state.options.maxAgeMs) reasons.push('observation_expired');
+      if (!candidate.observation || candidate.observation !== observation) reasons.push('observed_environment_changed');
+      if (candidate.attempt.argumentsRedacted) reasons.push('arguments_redacted');
+      if (options.run) reasons.push('injected_request');
+      if (object(options.record) && object(options.record.workflow) && Array.isArray(options.record.workflow.verifications)) {
+        const recorded = options.record.workflow.verifications.filter(item => object(item) && Array.isArray(item.criterionIds) && item.criterionIds.some(id => options.criterionIds?.includes(String(id))));
+        const latest = recorded.at(-1);
+        if (object(latest) && latest.id !== candidate.attempt.id) reasons.push('newer_recorded_verification');
+      }
+      const requestedSource = await captureSource({ repo: root, inputs: options.inputs });
+      if (JSON.stringify(requestedSource.inputs) !== JSON.stringify(candidate.attempt.source.inputs)) reasons.push('requested_scope_changed');
+      if (requestedSource.digest !== candidate.attempt.source.digest) reasons.push('source_changed');
+      const evaluation = await evaluateEvidence({ repo: root, record: options.record, attempt: candidate.attempt });
+      reasons.push(...evaluation.reasons);
+    }
+    let attempt: VerificationAttempt;
+    const reused = candidate !== undefined && reasons.length === 0;
+    if (reused) attempt = structuredClone(candidate.attempt);
+    else {
+      attempt = await verify(options);
+      let after: string | null = null;
+      if (observation) {
+        try { after = await observeVerificationEnvironment(root, observedOptions); }
+        catch { reasons.push('environment_observation_unavailable_after'); }
+        if (after !== observation) {
+          reasons.push('observed_environment_unstable');
+          attempt.environmentStable = false;
+          attempt.result = 'failed';
+        }
+      }
+      if (state.options.environmentObserved) {
+        // 실행 전 관측만 증거에 결속한다. 나중의 환경을 과거 실행의 관측으로 대체하지 않는다.
+        attempt.environmentObservation = { version: 1, tools: [...observedOptions.tools], environmentPaths: [...observedOptions.environmentPaths], digest: observation };
+        if (observation === null) {
+          attempt.environmentStable = false;
+          attempt.result = 'failed';
+        }
+      }
+      // 실패·불안정한 최근 결과도 보유하여 과거 성공으로 되돌아가지 않는다.
+      if (attempt.result !== 'passed' || attempt.executor !== 'process') {
+        state.candidates = [];
+        state.lastFailureAttemptId = attempt.id;
+      } else state.candidates = state.candidates.filter(item => item.signature !== signature);
+      state.candidates.push({ signature, attempt: structuredClone(attempt), observation: after === observation ? observation : null, capturedAt: performance.now() });
+    }
+    const reuse: VerificationReuseDecision = {
+      id: `verification-use-${randomUUID()}`, sessionId: session.id, checkId: state.options.checkId,
+      scenario: state.options.scenario, phase: state.options.phase, action: reused ? 'reused' : 'executed',
+      reasons: reused ? ['current_core_and_observations_match'] : [...new Set(reasons)],
+      sourceAttemptId: candidate?.attempt.id ?? null, attemptId: attempt.id, environmentDigest: observation,
+      checkedAt: new Date().toISOString(), elapsedMs: performance.now() - started, processExecutions: reused || options.run ? 0 : 1,
+    };
+    if (reused && candidate) {
+      for (const [id, ticket] of verificationReuseTickets) {
+        if (performance.now() - ticket.candidate.capturedAt > ticket.options.maxAgeMs) verificationReuseTickets.delete(id);
+      }
+      verificationReuseTickets.set(reuse.id, { session, candidate, root, options: observedOptions });
+    }
+    return { attempt, reuse };
+  } finally { release(); }
+}
+
+/** 원장 잠금을 얻은 호출자가 환경·만료·세션을 다시 확인하고 실제 저장까지 세션을 동결한다. */
+export async function withVerificationReuse<T>(id: string, repo: string, attempt: VerificationAttempt, record: () => Promise<T>): Promise<T> {
+  const ticket = verificationReuseTickets.get(id);
+  if (!ticket) throw new Error('reuse_record_changed: process_session_observation_missing');
+  const state = verificationSessions.get(ticket.session);
+  if (!state) throw new Error('reuse_record_changed: process_session_missing');
+  const previous = state.tail;
+  let release = () => {};
+  state.tail = new Promise<void>(resolve => { release = resolve; });
+  await previous;
+  try {
+    const current = () => state.candidates.includes(ticket.candidate) && performance.now() - ticket.candidate.capturedAt <= ticket.options.maxAgeMs;
+    if (!current() || ticket.root !== await fs.realpath(repo) || digest(JSON.stringify(attempt)) !== digest(JSON.stringify(ticket.candidate.attempt))) throw new Error('reuse_record_changed: session_candidate_changed_or_expired');
+    let environment: string;
+    try { environment = await observeVerificationEnvironment(ticket.root, ticket.options); }
+    catch { throw new Error('reuse_record_changed: environment_observation_unavailable_at_record'); }
+    if (!current() || environment !== ticket.candidate.observation) throw new Error('reuse_record_changed: environment_or_session_changed_at_record');
+    return await record();
+  } finally { release(); }
 }

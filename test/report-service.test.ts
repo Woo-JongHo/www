@@ -10,6 +10,7 @@ import path from "node:path";
 import test, { type TestContext } from "node:test";
 import { captureWorkReport, listWorkReports, publishWorkReport } from "../scripts/workflow/reports.ts";
 import { createReportService } from "../src/reports-service";
+import { reportFrameHtml } from "../src/reports-view";
 
 async function repository(t: TestContext, withWork = true) {
   const repo = await fs.mkdtemp(path.join(os.tmpdir(), "www-report-service-"));
@@ -61,7 +62,7 @@ test("보고서 서비스는 실제 저장된 authored 보고서와 안전한 HT
   assert.equal(document.stale, false);
   assert.equal(document.report.outcome, "blocked");
   assert.match(document.html, /&lt;script/);
-  assert.doesNotMatch(document.html, /<script|<iframe|<a\b/i);
+  assert.doesNotMatch(document.html, /<script|<iframe|href="(?:javascript:|https?:)/i);
   assert.deepEqual(catalog.warnings, []);
 });
 
@@ -98,7 +99,7 @@ test("같은 작업·제목은 한 항목으로 읽고 모든 기록을 독립 H
   assert.match(document.html, /현재 펼친 기록 외 2개의 기록/);
   assert.match(document.html, /추가 변경과 검증을 같은 보고서에 모았습니다/);
   assert.match(document.html, /앱에 작업 보고서를 연결했습니다/);
-  assert.doesNotMatch(document.html, /<script|<iframe|<a\b/i);
+  assert.doesNotMatch(document.html, /<script|<iframe|href="(?:javascript:|https?:)/i);
   const ids = [...document.html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
   assert.equal(new Set(ids).size, ids.length);
   assert.equal((await service.read(first.report.id)).report.summary, first.report.summary);
@@ -127,4 +128,25 @@ test("작업 기록이 없는 홈·빈 프로젝트는 오류 대신 빈 목록�
   assert.deepEqual(catalog.reports, []);
   assert.deepEqual(catalog.warnings, []);
   await assert.rejects(service.read(`report-${randomUUID()}`), /보고서 UUID가 없거나/);
+});
+
+
+test("iframe 보기만 정확한 생성 목차를 srcdoc 내부 주소로 바꾸고 저장 원문을 유지한다", async (t) => {
+  const { repo, workId } = await repository(t);
+  const written = await authoredReport(repo, workId);
+  const savedHtml = written.html;
+  const original = (await createReportService({ workspace: () => repo }).read(written.report.id)).html;
+  const frame = reportFrameHtml(original);
+  for (let index = 1; index <= 6; index++) {
+    assert.ok(original.includes(`href="#section-${index}"`));
+    assert.ok(frame.includes(`href="about:srcdoc#section-${index}"`));
+  }
+  assert.equal(frame.replaceAll('href="about:srcdoc#section-', 'href="#section-'), original);
+  assert.equal(written.html, savedHtml);
+  assert.match(frame, /base-uri 'none'/);
+  assert.doesNotMatch(frame, /<script|<base/);
+  const other = 'href="#section-7" href="#section-1-other" href="#other" &lt;a href=&quot;#section-2&quot;&gt;';
+  assert.equal(reportFrameHtml(other), other);
+  assert.equal(reportFrameHtml(frame), frame);
+  assert.equal((await createReportService({ workspace: () => repo }).read(written.report.id)).html, original);
 });

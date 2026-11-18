@@ -6,6 +6,9 @@ import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { ecosystemEdges, ecosystemGroups, ecosystemNodes, matchingNodes, nodeConnections, type EcosystemGroup, type EcosystemNode } from "./ecosystem";
 
 import { architecture } from "./architecture";
+import { useSessionApi } from "./session-api";
+import { developmentStatechart, readWorkflowReport, statechartSnapshotState, workflowModelFor } from "./workflow-statechart";
+import { WorkflowStatechartView } from "./workflow-statechart-view";
 import { createArchitectureTree, layoutResponsibilityGraph, responsibilityHierarchyPath, responsibilityEdgePath, responsibilityEdgePoints, responsibilityLines, responsibilityFit } from "./architecture-tree";
 
 const structureTree = createArchitectureTree(architecture);
@@ -123,7 +126,7 @@ function EcosystemGuide({ onLocate, active, namespace }: { onLocate: (id: string
   </>;
 }
 
-export const EcosystemView = memo(function EcosystemView({ hidden, namespace = "default" }: { hidden: boolean; namespace?: string }) {
+export const EcosystemView = memo(function EcosystemView({ hidden, namespace = "default", onNavigationChange }: { hidden: boolean; namespace?: string; onNavigationChange?: (open: boolean) => void }) {
   const [guide, setGuide] = useState(false);
   const [navigationOpen, setNavigationOpen] = useState(false);
   const [requested, setRequested] = useState<{ id: string; revision: number } | null>(null);
@@ -133,7 +136,7 @@ export const EcosystemView = memo(function EcosystemView({ hidden, namespace = "
   }
   return <section className="ecosystem-shell" hidden={hidden} data-navigation-open={navigationOpen} aria-label="WWW 구조 탐색">
     <nav className="blueprint-tabs" aria-label="구조 보기">
-      <button data-testid="architecture-navigation-toggle" aria-expanded={navigationOpen} aria-controls={`workspace-sidebar-${namespace}`} onClick={() => setNavigationOpen((open) => !open)}>{navigationOpen ? '탐색 접기' : '탐색 열기'}</button>
+      <button data-testid="architecture-navigation-toggle" aria-expanded={navigationOpen} aria-controls={`workspace-sidebar-${namespace}`} onClick={() => { const open = !navigationOpen; setNavigationOpen(open); onNavigationChange?.(open); }}>{navigationOpen ? '탐색 접기' : '탐색 열기'}</button>
       <button aria-pressed={!guide} onClick={() => setGuide(false)} data-testid="architecture-tab">기능·책임 지도</button>
       <button aria-pressed={guide} onClick={() => setGuide(true)} data-testid="ecosystem-guide-tab">개념 처리 관계</button>
       <span>{guide ? "개념 관계와 실제 코드 근거를 구별합니다" : "기능 → 처리 책임 → 담당 코드 · 안정 구조 ID"}</span>
@@ -144,6 +147,9 @@ export const EcosystemView = memo(function EcosystemView({ hidden, namespace = "
 });
 
 function CodeBlueprintView({ requested, namespace }: { requested: { id: string; revision: number } | null; namespace: string }) {
+  const api = useSessionApi();
+  const [statechartOpen, setStatechartOpen] = useState(false);
+  const statechartSnapshot = statechartSnapshotState(architecture);
   const arrowId = `${namespace}-blueprint-arrow`;
   const tree = structureTree;
   const [currentId, setCurrentId] = useState(architecture.structure.rootId);
@@ -207,6 +213,7 @@ function CodeBlueprintView({ requested, namespace }: { requested: { id: string; 
     setZoom((value) => Math.max(0.25, Math.min(2.5, value + delta)));
   }
   function navigate(id: string, keyboard = false) {
+    setStatechartOpen(false);
     const location = tree.location(id);
     setCurrentId(location.currentId);
     setSelectedId(location.selectedId);
@@ -214,6 +221,7 @@ function CodeBlueprintView({ requested, namespace }: { requested: { id: string; 
     focusAfterNavigation.current = keyboard;
   }
   function returnTo(id: string) {
+    setStatechartOpen(false);
     setDetailOpen(false);
     setCurrentId(id);
     setSelectedId(id);
@@ -242,7 +250,7 @@ function CodeBlueprintView({ requested, namespace }: { requested: { id: string; 
     document.getElementById(`${namespace}-architecture-node-${next}`)?.focus();
   }
   return <>
-    <main className="ecosystem-work blueprint-work" aria-label="WWW 기능과 코드 연결 지도" data-current-id={currentId} onKeyDown={(event) => { if (event.key === "Escape" && detailOpen) { event.preventDefault(); closeDetail(); } }}>
+    <main hidden={statechartOpen} className="ecosystem-work blueprint-work" aria-label="WWW 기능과 코드 연결 지도" data-current-id={currentId} onKeyDown={(event) => { if (event.key === "Escape" && detailOpen) { event.preventDefault(); closeDetail(); } }}>
       <header className="ecosystem-header blueprint-header"><div><h1>WWW 구조 지도</h1><p>역할과 구성을 살펴보고, 연결된 책임과 담당 코드를 찾습니다.</p></div></header>
       <div className="blueprint-summary"><span>현재 구조 <code data-testid="architecture-current">{currentId}</code></span><code title={architecture.digest}>snapshot {architecture.digest.slice(0, 10)}</code></div>
       <nav className="blueprint-breadcrumb" aria-label="구조 경로"><button data-testid="architecture-root" onClick={() => returnTo(architecture.structure.rootId)}>전체</button>{tree.breadcrumb(currentId).map((entry) => <button key={entry.id} data-ancestor-id={entry.id} aria-current={entry.id === currentId ? 'location' : undefined} onClick={() => returnTo(entry.id)}>{entry.title}</button>)}<button disabled={!current.parent} onClick={() => current.parent && returnTo(current.parent)}>뒤로</button></nav>
@@ -307,11 +315,14 @@ function CodeBlueprintView({ requested, namespace }: { requested: { id: string; 
       </div>}
       <section className="blueprint-selection-summary" aria-label="선택한 노드 요약" data-selected-id={selectedId}>
         <div><strong>{selected.title}</strong><p>{selected.description}</p><span>하위 구성 {overview.components.length}개 · 담당 코드 {overview.declarations.length}개</span></div>
-        <button data-testid="architecture-detail-toggle" aria-expanded={detailOpen} aria-controls={`${namespace}-architecture-detail`} onClick={() => detailOpen ? closeDetail() : setDetailOpen(true)}>{detailOpen ? '상세 접기' : '자세히 보기'}</button>
+        <div className="blueprint-selection-actions">{selectedId !== developmentStatechart.structureId && <button data-testid="architecture-workflow-locate" onClick={() => { navigate(developmentStatechart.structureId); setStatechartOpen(true); }}>개발 작업의 검증·수용·완료 상태도</button>}<button id={`${namespace}-statechart-open`} data-testid="architecture-statechart-open" onClick={() => setStatechartOpen(true)}>상태 전이 보기{workflowModelFor(selectedId) ? "" : " · 모델 없음"}</button>
+        <button data-testid="architecture-detail-toggle" aria-expanded={detailOpen} aria-controls={`${namespace}-architecture-detail`} onClick={() => detailOpen ? closeDetail() : setDetailOpen(true)}>{detailOpen ? '상세 접기' : '자세히 보기'}</button></div>
       </section>
+
       <footer className="ecosystem-legend"><span>배경 드래그로 이동 · 노드를 눌러 내부 구성 탐색</span><span>포함 관계와 코드 참조 · 실행 추적 아님</span></footer>
     </main>
-    <aside id={`${namespace}-architecture-detail`} className="ecosystem-detail blueprint-detail" hidden={!detailOpen} aria-label="선택한 책임 상세" data-selected-id={selectedId} onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); closeDetail(); } }}>
+    {statechartOpen && <WorkflowStatechartView key={selectedId} model={workflowModelFor(selectedId)} snapshotState={statechartSnapshot.state} modelDigest={statechartSnapshot.modelDigest} sourceDigest={statechartSnapshot.sourceDigest} onReadEvidence={id => api.developmentStatus(id)} onReadReport={id => readWorkflowReport(api, id)} onClose={() => { setStatechartOpen(false); requestAnimationFrame(() => document.getElementById(`${namespace}-statechart-open`)?.focus()); }}/>}
+    <aside id={`${namespace}-architecture-detail`} className="ecosystem-detail blueprint-detail" hidden={!detailOpen || statechartOpen} aria-label="선택한 책임 상세" data-selected-id={selectedId} onKeyDown={(event) => { if (event.key === "Escape") { event.preventDefault(); closeDetail(); } }}>
       <div className="ecosystem-detail-heading"><button data-testid="architecture-detail-close" aria-label="지도 선택 상세 닫기" onClick={closeDetail}>닫기</button>선택한 책임 <code>{selectedId}</code></div>
       <div className="ecosystem-detail-content"><h2>{selected.title}</h2>
         <section className="blueprint-role" aria-label="역할과 책임"><h3>역할과 책임</h3><p>{selected.description}</p></section>

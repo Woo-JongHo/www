@@ -96,7 +96,7 @@ function selectedSession(value: unknown) {
   return { session, selection };
 }
 function registerIpc(): void {
-  const scopedChannels = ["dashboard:get", "projects:www", "conversations:list", "conversations:open", "conversations:new", "activity:refresh", "activity:resources", "projects:list", "projects:favorite", "projects:switch", "workspace:choose", "thread:start", "turn:start", "turn:interrupt", "approval:respond", "events:get"];
+  const scopedChannels = ["dashboard:get", "projects:www", "conversations:list", "conversations:open", "conversations:new", "activity:refresh", "activity:resources", "projects:list", "projects:favorite", "projects:switch", "workspace:choose", "thread:start", "turn:start", "turn:steer", "turn:interrupt", "approval:respond", "events:get"];
   for (const channel of scopedChannels) ipcMain.handle(channel, (_event, ...args: unknown[]) => {
     const { session, selection } = selectedSession(args[0]);
     return session.invoke(channel, [selection, ...args.slice(1)]);
@@ -136,9 +136,37 @@ function registerIpc(): void {
     if (!PROBE_PATH) throw new Error("Probe mode is disabled");
     mkdirSync(join(PROBE_PATH, ".."), { recursive: true });
     if (!window) throw new Error("Probe window is unavailable");
+    if (typeof record(result).error === 'string') {
+      writeFileSync(PROBE_PATH, JSON.stringify({ shell: 'electron', ...record(result) }, null, 2) + '\n');
+      setImmediate(() => app.quit());
+      return;
+    }
     let reportArtifacts: Record<string, unknown> | null = null;
     if (process.env.WWW_PROBE_REPORTS === "1" && record(result).reportId) {
-      const saved                                   = await sessions.get().readReport(record(result).reportId) ;
+      const meaningReportId = process.env.WWW_PROBE_REPORT_MEANING_ID;
+      if (meaningReportId) {
+        if (!/^report-[a-f0-9-]+$/.test(meaningReportId)) throw new Error("Invalid meaning probe report ID");
+        const selected = await sessions.get().readReport(meaningReportId);
+        const mode = selected.report.kind === "authored" ? "작성 보고서" : "자동 기록";
+        await window.webContents.executeJavaScript(`(() => { const mode=[...document.querySelectorAll('.reports-modes button')].find(x=>x.textContent===${JSON.stringify(mode)}); if(!mode)throw Error('보고서 mode 없음'); mode.click(); })()`);
+        const selectionDeadline = Date.now() + 10_000;
+        let selectedFrame = false;
+        while (!selectedFrame && Date.now() < selectionDeadline) {
+          selectedFrame = await window.webContents.executeJavaScript(`(() => { const title=${JSON.stringify(selected.report.title)}; const button=[...document.querySelectorAll('.report-entry')].find(x=>x.querySelector('strong')?.textContent===title); button?.click(); const frame=document.querySelector('.report-frame'); return !!frame&&frame.title===title+' 작업 보고서'; })()`);
+          if (!selectedFrame) await new Promise(resolve => setTimeout(resolve, 40));
+        }
+        if (!selectedFrame) throw new Error("Meaning probe did not select the requested report through ReportsView");
+      }
+      const saved = await sessions.get().readReport(meaningReportId ?? record(result).reportId);
+      // Verification-only DOM observation, reused in the real sandbox frame and independent document.
+      const meaningExpression = `(() => {
+        const visible=e=>{if(!e||!e.getClientRects().length)return false;for(let p=e;p;p=p.parentElement){const s=getComputedStyle(p);if(s.display==='none'||s.visibility==='hidden'||Number(s.opacity)===0)return false;if(p.tagName==='DETAILS'&&!p.open&&!p.querySelector(':scope > summary')?.contains(e))return false;}return true;};
+        const text=e=>{if(!visible(e))return '';const w=document.createTreeWalker(e,NodeFilter.SHOW_TEXT);const parts=[];while(w.nextNode()){const p=w.currentNode.parentElement;if(visible(p)&&!p.closest('#report-raw,.history-entry'))parts.push(w.currentNode.textContent);}return parts.join(' ').replace(/\\s+/g,' ').trim();};
+        const regions={};for(const [key,selector] of Object.entries({conclusion:'#section-1',approach:'#section-2',results:'#section-3',verification:'#report-verification',next:'#report-next'})){const e=document.querySelector(selector);regions[key]={text:text(e),visible:visible(e),height:e?.getBoundingClientRect().height??0};}
+        const background=e=>{for(let p=e;p;p=p.parentElement){const c=getComputedStyle(p).backgroundColor;if(c!=='transparent'&&c!=='rgba(0, 0, 0, 0)')return c;}return getComputedStyle(document.body).backgroundColor;};
+        const states=[];for(const label of ['당시 통과로 기록','당시 실패로 기록','당시 차단으로 기록','미검증으로 기록']){const e=[...document.querySelectorAll('article.document *')].find(e=>visible(e)&&e.textContent.trim()===label&&![...e.children].some(c=>c.textContent.trim()===label));if(e){const c=getComputedStyle(e),opacityChain=[];for(let p=e;p;p=p.parentElement)opacityChain.push(Number(getComputedStyle(p).opacity));states.push({label,color:c.color,background:background(e),fontSize:c.fontSize,text:text(e),height:e.getBoundingClientRect().height,opacityChain,fullyOpaque:opacityChain.every(value=>value===1)});}}
+        const css=getComputedStyle(document.documentElement);return {title:document.querySelector('h1')?.textContent,regions,states,tokens:{green:css.getPropertyValue('--green').trim(),red:css.getPropertyValue('--red').trim(),amber:css.getPropertyValue('--amber').trim()},rawClosed:document.querySelector('#report-raw')?.open===false};
+      })()`;
       let embedded : Record<string, unknown> | null = null                                        ;
       const deadline                                = Date.now() + 10_000                         ;
       const walk = (value: unknown): Record<string, unknown>[] => {
@@ -180,6 +208,18 @@ function registerIpc(): void {
           }
           if (!embedded) await new Promise((resolve) => setTimeout(resolve, 40));
         }
+        if (embedded && meaningReportId && childSession) {
+          if (saved.report.kind === "authored") {
+            // Separate observer samples; remove temporary nodes before reading the actual report.
+            const sampleExpression = `(() => { const faded=document.createElement('div'),sample=document.createElement('p'); faded.style.opacity='0.1'; faded.innerHTML='<span>당시 통과로 기록</span>'; sample.textContent='literal-s s   sample   keeps'; document.querySelector('article.document').prepend(faded); document.querySelector('#section-1').prepend(sample); try { return ${meaningExpression}; } finally { faded.remove(); sample.remove(); } })()`;
+            const sampled = record(await window.webContents.debugger.sendCommand("Runtime.evaluate", { expression: sampleExpression, returnByValue: true }, childSession));
+            if (sampled.exceptionDetails) throw new Error(`Meaning observer sample failed: ${JSON.stringify(sampled.exceptionDetails)}`);
+            embedded.observerSamples = record(sampled.result).value;
+          }
+          const observed = record(await window.webContents.debugger.sendCommand("Runtime.evaluate", { expression: meaningExpression, returnByValue: true }, childSession));
+          if (observed.exceptionDetails) throw new Error(`Meaning iframe observation failed: ${JSON.stringify(observed.exceptionDetails)}`);
+          embedded.meaning = record(observed.result).value;
+        }
       } finally { window.webContents.debugger.detach(); }
       if (!embedded) {
         writeFileSync(join(PROBE_PATH, "..", "embedded-frames.json"), JSON.stringify(window.webContents.mainFrame.frames.map((frame) => ({ url: frame.url, processId: frame.processId, routingId: frame.routingId })), null, 2));
@@ -188,6 +228,7 @@ function registerIpc(): void {
       const reportWindow = new BrowserWindow({ show: false, width: 1200, height: 900, webPreferences: { sandbox: true, nodeIntegration: false, contextIsolation: true } });
       try {
         await reportWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(saved.html)}`);
+        const standaloneMeaning = meaningReportId ? await reportWindow.webContents.executeJavaScript(meaningExpression) : null;
         writeFileSync(join(PROBE_PATH, "..", "report-desktop.png"), (await reportWindow.webContents.capturePage()).toPNG());
         writeFileSync(join(PROBE_PATH, "..", "report-print.pdf"), await reportWindow.webContents.printToPDF({ printBackground: true, pageSize: "A4" }));
         reportWindow.setContentSize(360, 860);
@@ -198,7 +239,7 @@ function registerIpc(): void {
         await reportWindow.webContents.debugger.sendCommand("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
         const reducedMotion = await reportWindow.webContents.executeJavaScript("({enabled:matchMedia('(prefers-reduced-motion: reduce)').matches,animations:document.getAnimations().length})");
         reportWindow.webContents.debugger.detach();
-        reportArtifacts = { embedded, mobile, reducedMotion, printed: true };
+        reportArtifacts = { embedded, mobile, reducedMotion, printed: true, ...(meaningReportId ? { meaning: { reportId: meaningReportId, kind: saved.report.kind, standalone: standaloneMeaning } } : {}) };
       } finally { reportWindow.destroy(); }
     }
     const screenshot = await window.webContents.capturePage();

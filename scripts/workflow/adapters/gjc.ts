@@ -38,6 +38,8 @@ export interface ProcessResult {
   summaryTruncated?: boolean;
   usage?: Record<string, unknown> | null;
   environment?: { ok: boolean };
+  /** 입력 stream flush 관찰이며 호스트의 의미적 수용을 뜻하지 않는다. */
+  inputDelivered?: boolean;
 }
 export interface GjcInvocation extends ProcessInvocation {
   requestedModel    : string | null ;

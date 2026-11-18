@@ -16,6 +16,7 @@ import      {
               realpath ,
               rm       ,
               symlink  ,
+              stat     ,
               writeFile
                                                              } from "node:fs/promises"                ;
 import      { tmpdir                                         } from "node:os"                         ;
@@ -39,6 +40,7 @@ import      {
               recordReview               ,
               resumeWork as resumeAnyWork ,
               setVerificationInputs      ,
+              setDecompositionPlan       ,
               verifyWork
                                                              } from "../scripts/workflow/work.ts"     ;
 
@@ -73,6 +75,70 @@ const exec         = promisify(execFile                                   ) ;
 const root         = dirname  (dirname(fileURLToPath(import.meta.url))    ) ;
 const workCommand  = join     (root, "scripts", "workflow", "work.ts"     ) ;
 const reviewPolicy = join     (root, "agents", "www", "review-policy.json") ;
+
+for (const recording of ['immediate', 'pending', 'reused'] as const) {
+  for (const drift of ['dependency', 'environment', 'configuration'] as const) {
+    test(`세션 최초 실제 실행의 환경 drift는 회수·assess·resume에서 성공이 아니다 — ${recording} ${drift}`, async t => {
+      const { createVerificationSession } = await import('../scripts/workflow/evidence.ts');
+      const repo = await repository(t);
+      await mkdir(join(repo, 'node_modules'));
+      await writeFile(join(repo, 'node_modules/input'), 'before');
+      await writeFile(join(repo, '.local-setting'), 'before');
+      const variable = 'WWW_REUSE_WORK_ENVIRONMENT_FIXTURE';
+      const previous = process.env[variable];
+      process.env[variable] = 'before';
+      t.after(() => { if (previous === undefined) delete process.env[variable]; else process.env[variable] = previous; });
+      await writeFile(join(repo, 'checks/environment.ts'), `import { readFileSync } from 'node:fs';\nif (readFileSync('node_modules/input', 'utf8') !== 'before' || readFileSync('.local-setting', 'utf8') !== 'before' || process.env.${variable} !== 'before') process.exit(1);\n`);
+      const command = process.execPath, args = ['checks/environment.ts'];
+      const work = await openWork({ ...request(repo), requestId: `${recording}-${drift}`, inputs: ['src', 'checks'], approval: { implementation: false, writePaths: [], mutationSurfaces: [], verifierCommands: [JSON.stringify([command, ...args])] } });
+      const workId = work.record.id;
+      const session = createVerificationSession({ checkId: `${recording}-${drift}`, scenario: '최초 실행의 환경 적용성', phase: 'focused', maxAgeMs: 60_000, tools: [command], environmentPaths: ['.local-setting'], environmentObserved: true });
+      const run = () => verifyWork({ repo, workId, command, args, criterionIds: ['AC-1'], reuseSession: session });
+      if (recording === 'reused') await run();
+      const result = recording === 'pending' ? await withWorkLock(repo, run) : await run();
+      assert.equal(result.reuse?.action, recording === 'reused' ? 'reused' : 'executed');
+      assert.equal(result.result, 'passed');
+      assert.equal(result.recorded, recording !== 'pending');
+      if (drift === 'dependency') await writeFile(join(repo, 'node_modules/input'), 'after');
+      if (drift === 'environment') process.env[variable] = 'after';
+      if (drift === 'configuration') await writeFile(join(repo, '.local-setting'), 'after');
+      await assert.rejects(exec(command, args, { cwd: repo }), error => error !== null && typeof error === 'object' && 'code' in error && error.code === 1);
+      if (recording === 'pending') {
+        assert.equal((await appendPending({ repo, workId, artifactPath: result.artifactPath })).recorded, true);
+        assert.equal((await readWork({ repo, workId })).record.criteria[0].result, 'unverified');
+      }
+      const assessed = await assessWork({ repo, workId });
+      assert.equal(assessed.criteria[0].usable, false);
+      assert.ok(assessed.criteria[0].reasons.includes('observed_environment_changed'));
+      const resumed = await resumeWork({ repo, workId });
+      assert.equal(resumed.record.criteria[0].result, 'unverified');
+      assert.equal(resumed.nextAction, 'verify');
+    });
+  }
+}
+
+test('세션 실제 실행 pending은 새 프로세스에서도 저장된 관측으로 회수하고 손상은 거부한다', async t => {
+  const { createVerificationSession } = await import('../scripts/workflow/evidence.ts');
+  const repo = await repository(t);
+  const work = await openWork(request(repo));
+  const workId = work.record.id;
+  const session = createVerificationSession({ checkId: 'executed-pending-process', scenario: '최초 실행 회수', phase: 'focused', maxAgeMs: 60_000, tools: [process.execPath], environmentPaths: [], environmentObserved: true });
+  const pending = await withWorkLock(repo, () => verifyWork({ repo, workId, command: process.execPath, args: ['checks/pass.ts'], criterionIds: ['AC-1'], reuseSession: session }));
+  assert.equal(pending.recorded, false);
+  assert.equal(pending.reuse?.action, 'executed');
+  const file = join(repo, pending.artifactPath);
+  const original = await readFile(file, 'utf8');
+  const malformed = JSON.parse(original);
+  malformed.payload.environmentObservation = { version: 1, tools: [], environmentPaths: [], digest: 'invalid' };
+  await writeFile(file, JSON.stringify(malformed));
+  await assert.rejects(appendPending({ repo, workId, artifactPath: pending.artifactPath }), /확장 환경 관측 형식 오류/);
+  assert.equal((await readWork({ repo, workId })).record.workflow.verifications.length, 0);
+  await writeFile(file, original);
+  const module = new URL('../scripts/workflow/work.ts', import.meta.url).href;
+  const script = `const {appendPending}=await import(${JSON.stringify(module)}); const result=await appendPending(${JSON.stringify({ repo, workId, artifactPath: pending.artifactPath })}); console.log(JSON.stringify({recorded:result.recorded}));`;
+  assert.deepEqual(JSON.parse((await exec(process.execPath, ['--input-type=module', '-e', script])).stdout), { recorded: true });
+  assert.equal((await readWork({ repo, workId })).record.criteria[0].result, 'passed');
+});
 
 async function repository(t: import("node:test").TestContext) {
   const repo = await mkdtemp(join(tmpdir(), "www-work-record-"));
@@ -841,4 +907,300 @@ test("pending 명령 권한 철회는 append 전에 거부하고 문서 검토 �
   assert.equal(assessment.criteria[0].usable, false);
   await assert.rejects(completeWork({ repo, workId }), /현재 증거로 완료/);
   assert.equal(await readFile(join(repo, attempt.artifactPath), "utf8"), before);
+});
+
+
+test("분업 계획 저장은 부모 권한을 검사하고 같은 계획의 원장을 다시 쓰지 않는다", async t => {
+  const repo = await repository(t);
+  const work = await openWork(request(repo));
+  const workId = work.record.id;
+  const plan = { units: [{ taskId: "single", goal: "단일 소유 작업", inputs: ["src"], writePaths: ["src/item.ts"], excludedPaths: [], dependencies: [], artifacts: ["src/item.ts"], criterionIds: ["AC-1"], verification: { command: process.execPath, args: ["checks/pass.ts"] }, resultPath: "src/item.ts" }] };
+  const saved = await setDecompositionPlan({ repo, workId, plan });
+  assert.deepEqual(saved.record.workflow.decomposition, plan);
+  const before = await readFile(work.path, "utf8");
+  const beforeStat = await stat(work.path);
+  await setDecompositionPlan({ repo, workId, plan });
+  assert.equal(await readFile(work.path, "utf8"), before);
+  const afterStat = await stat(work.path);
+  assert.equal(afterStat.ino, beforeStat.ino);
+  assert.equal(afterStat.mtimeMs, beforeStat.mtimeMs);
+  await assert.rejects(setDecompositionPlan({ repo, workId, plan: { units: [{ ...plan.units[0], writePaths: ["outside.ts"] }] } }), /범위를 벗어/);
+  assert.equal(await readFile(work.path, "utf8"), before);
+  const assessment = await assessWork({ repo, workId });
+  assert.equal(assessment.complete, false);
+  assert.match(assessment.reasons.join("; "), /unit_acceptance_missing/);
+});
+
+test("부분 기준의 실제 검증 통과는 나머지 필수 검증 전까지 review로 승격하지 않는다", async t => {
+  const repo = await repository(t);
+  const initial = request(repo);
+  const work = await openWork({ ...initial, decision: { ...initial.decision, criteria: [...initial.decision.criteria,
+    { id: "AC-2", description: "두 번째 필수 기준의 실제 검증", required: true, requirementRefs: ["docs/specs/chat.md#CHAT-STOP-01"] }] } });
+  const workId = work.record.id;
+  const first = await verifyPass(repo, workId);
+  assert.equal(first.executor, "process");
+  const partial = await readWork({ repo, workId });
+  assert.equal(partial.record.workflow.nextAction, "verify");
+  assert.equal(partial.record.criteria[0].result, "passed");
+  assert.equal(partial.record.criteria[1].result, "unverified");
+  assert.equal(partial.record.workflow.verifications[0].id, first.id);
+  await verifyWork({ repo, workId, command: process.execPath, args: ["checks/pass.ts"], criterionIds: ["AC-2"] });
+  const current = await readWork({ repo, workId });
+  assert.equal(current.record.workflow.nextAction, "review");
+  assert.equal(current.record.workflow.verifications.length, 2);
+  assert.ok((await assessWork({ repo, workId })).criteria.every(item => item.usable));
+  await writeFile(join(repo, "src/item.ts"), "export const value = 1;\n// 다른 필수 기준의 과거 통과는 오래됨\n");
+  await verifyPass(repo, workId);
+  const stale = await assessWork({ repo, workId });
+  assert.equal(stale.record.workflow.nextAction, "verify");
+  assert.equal(stale.criteria[0].usable, true);
+  assert.ok(stale.criteria[1].reasons.includes("source_changed"));
+  await verifyWork({ repo, workId, command: process.execPath, args: ["checks/pass.ts"], criterionIds: ["AC-2"] });
+  assert.equal((await readWork({ repo, workId })).record.workflow.nextAction, "review");
+});
+
+test("문서 검토 기록은 미실행 또는 오래된 필수 검증을 review로 승격하지 않는다", async t => {
+  const repo = await repository(t);
+  const work = await openWork(request(repo));
+  const workId = work.record.id;
+  const unverified = await documentReview(repo, workId);
+  assert.equal(unverified.record.workflow.nextAction, "verify");
+  assert.equal((await assessWork({ repo, workId })).documentation.usable, true);
+  const attempt = await verifyPass(repo, workId);
+  const verified = await documentReview(repo, workId);
+  assert.equal(verified.record.workflow.nextAction, "review");
+  await writeFile(join(repo, "src/item.ts"), "export const value = 1;\n// 현재 소스의 내용 식별 변경\n");
+  const stale = await documentReview(repo, workId);
+  assert.equal(stale.record.workflow.nextAction, "verify");
+  assert.equal(stale.record.workflow.verifications[0].id, attempt.id);
+  assert.equal(stale.record.workflow.verifications[0].result, "passed");
+  assert.ok((await assessWork({ repo, workId })).criteria[0].reasons.includes("source_changed"));
+});
+
+async function passingNextActionReviewFixture(repo: string, workId: string) {
+  const assessment = await assessWork({ repo, workId });
+  const latest = assessment.record.workflow.verifications.at(-1);
+  assert.ok(latest);
+  // 실제 provider 감사가 아니다. 기존 완료 predicate와 다음 행동 분기를 격리 검사하는 명시적 fixture다.
+  const fixture = await runReview({ repo, source: assessment.source, criteriaDigest: latest.criteriaDigest, policyInfo: await loadReviewPolicy({ root: repo }), inputPaths: ["src/item.ts"],
+    run: async () => ({ code: 0, signal: null, error: null,
+      stdout: JSON.stringify({ type: "result", is_error: false, structured_output: { verdict: "pass", findings: ["다음 행동 predicate fixture: 실제 모델 감사 아님"] }, modelUsage: { "claude-opus-unit-fixture": {} } }),
+      stderr: "주입 fixture이며 실제 모델 감사 미실행" }) });
+  assert.equal(fixture.executor, "injected");
+  return recordReview({ repo, workId, review: { ...fixture, executor: "process" } });
+}
+
+test("usable 감사 기록도 미충족 필수 검증이 있으면 verify를 유지하고 현재 전체 통과만 complete로 안내한다", async t => {
+  const repo = await repository(t);
+  const initial = request(repo);
+  const work = await openWork({ ...initial, decision: { ...initial.decision, criteria: [...initial.decision.criteria,
+    { id: "AC-2", description: "감사 이전에 필요한 두 번째 필수 검증", required: true, requirementRefs: ["docs/specs/chat.md#CHAT-STOP-01"] }] } });
+  const workId = work.record.id;
+  await verifyPass(repo, workId);
+  await documentReview(repo, workId);
+  await passingNextActionReviewFixture(repo, workId);
+  const partial = await assessWork({ repo, workId });
+  assert.equal(partial.review.usable, true);
+  assert.equal(partial.record.workflow.nextAction, "verify");
+  assert.equal(partial.record.workflow.reviews.length, 1);
+  await assert.rejects(completeWork({ repo, workId }), /AC-2/);
+  await verifyWork({ repo, workId, command: process.execPath, args: ["checks/pass.ts"], criterionIds: ["AC-2"] });
+  await documentReview(repo, workId);
+  await passingNextActionReviewFixture(repo, workId);
+  const current = await assessWork({ repo, workId });
+  assert.equal(current.review.usable, true);
+  assert.equal(current.record.workflow.nextAction, "complete");
+  assert.equal((await completeWork({ repo, workId })).record.status, "done");
+  await writeFile(join(repo, "src/item.ts"), "export const value = 1;\n// 감사 자체가 현재여도 이전 검증은 오래됨\n");
+  await documentReview(repo, workId);
+  await passingNextActionReviewFixture(repo, workId);
+  const stale = await assessWork({ repo, workId });
+  assert.equal(stale.review.usable, true);
+  assert.equal(stale.record.workflow.nextAction, "verify");
+  assert.ok(stale.criteria.every(item => item.reasons.includes("source_changed")));
+  assert.equal(stale.record.workflow.reviews.length, 3);
+  assert.equal(stale.record.workflow.verifications.length, 2);
+});
+
+test("현재 필수 실제 실패는 문서 검토 뒤에도 build와 실패 이유를 유지하고 오래된 실패는 verify다", async t => {
+  for (const implementation of [true, false]) {
+    const repo = await repository(t);
+    const initial = request(repo);
+    const work = await openWork({ ...initial, approval: { ...initial.approval, implementation } });
+    const workId = work.record.id;
+    const failed = await verifyWork({ repo, workId, command: process.execPath, args: ["checks/fail.ts"], criterionIds: ["AC-1"] });
+    assert.equal(failed.executor, "process");
+    assert.equal(failed.exitCode, 7);
+    assert.equal(failed.sourceStable, true);
+    assert.equal(failed.environmentStable, true);
+    const expected = implementation ? "build" : "verify";
+    assert.equal((await readWork({ repo, workId })).record.workflow.nextAction, expected);
+    const documented = await documentReview(repo, workId);
+    assert.equal(documented.record.workflow.nextAction, expected);
+    assert.match(documented.record.blockedReason ?? "", /AC-1: verification_failed/);
+    assert.equal((await resumeWork({ repo, workId })).nextAction, expected);
+    await writeFile(join(repo, "src/item.ts"), "export const value = 1;\n// 이전 실제 실패의 소스가 오래됨\n");
+    assert.equal((await documentReview(repo, workId)).record.workflow.nextAction, "verify");
+    assert.equal((await resumeWork({ repo, workId })).nextAction, "verify");
+    const history = (await readWork({ repo, workId })).record.workflow.verifications;
+    assert.equal(history[0].id, failed.id);
+    assert.equal(history[0].result, "failed");
+    await verifyPass(repo, workId);
+    assert.equal((await documentReview(repo, workId)).record.workflow.nextAction, "review");
+  }
+});
+
+test("다른 필수 기준의 통과와 미실행은 현재 실패를 verify로 덮지 않으며 모든 실제 재통과 뒤 review다", async t => {
+  const repo = await repository(t);
+  const initial = request(repo);
+  const work = await openWork({ ...initial, decision: { ...initial.decision, criteria: [...initial.decision.criteria,
+    { id: "AC-2", description: "현재 실패와 독립된 두 번째 기준", required: true, requirementRefs: ["docs/specs/chat.md#CHAT-STOP-01"] }] } });
+  const workId = work.record.id;
+  const first = await verifyWork({ repo, workId, command: process.execPath, args: ["checks/fail.ts"], criterionIds: ["AC-1"] });
+  assert.equal((await documentReview(repo, workId)).record.workflow.nextAction, "build");
+  await verifyWork({ repo, workId, command: process.execPath, args: ["checks/pass.ts"], criterionIds: ["AC-2"] });
+  const partial = await assessWork({ repo, workId });
+  assert.equal(partial.record.workflow.nextAction, "build");
+  assert.match(partial.record.blockedReason ?? "", /AC-1: verification_failed/);
+  assert.equal(partial.criteria[1].usable, true);
+  assert.equal(partial.record.workflow.verifications[0].id, first.id);
+  assert.equal(partial.record.workflow.verifications[0].result, "failed");
+  assert.equal((await resumeWork({ repo, workId })).nextAction, "build");
+  await verifyPass(repo, workId);
+  assert.equal((await readWork({ repo, workId })).record.workflow.nextAction, "review");
+  assert.equal((await readWork({ repo, workId })).record.blockedReason, null);
+});
+
+test("현재 usable 감사도 실제 필수 실패의 build를 유지하고 실패가 오래되면 verify로 안내한다", async t => {
+  const repo = await repository(t);
+  const work = await openWork(request(repo));
+  const workId = work.record.id;
+  const failed = await verifyWork({ repo, workId, command: process.execPath, args: ["checks/fail.ts"], criterionIds: ["AC-1"] });
+  await documentReview(repo, workId);
+  await passingNextActionReviewFixture(repo, workId);
+  const current = await assessWork({ repo, workId });
+  assert.equal(current.review.usable, true);
+  assert.equal(current.record.workflow.nextAction, "build");
+  assert.match(current.record.blockedReason ?? "", /AC-1: verification_failed/);
+  assert.equal((await resumeWork({ repo, workId })).nextAction, "build");
+  await writeFile(join(repo, "src/item.ts"), "export const value = 1;\n// 실패는 오래됐지만 감사 자체는 새 현재 소스에서 수행\n");
+  await documentReview(repo, workId);
+  await passingNextActionReviewFixture(repo, workId);
+  const stale = await assessWork({ repo, workId });
+  assert.equal(stale.review.usable, true);
+  assert.equal(stale.record.workflow.nextAction, "verify");
+  assert.equal((await resumeWork({ repo, workId })).nextAction, "verify");
+  assert.equal(stale.record.workflow.verifications[0].id, failed.id);
+  assert.equal(stale.record.workflow.reviews.length, 2);
+  await verifyPass(repo, workId);
+  await documentReview(repo, workId);
+  await passingNextActionReviewFixture(repo, workId);
+  assert.equal((await readWork({ repo, workId })).record.workflow.nextAction, "complete");
+  assert.equal((await readWork({ repo, workId })).record.blockedReason, null);
+});
+
+test("현재 실패 이유만 있어도 불안정한 source·environment·artifact 검증은 build로 승격하지 않는다", async t => {
+  for (const flag of ["sourceStable", "environmentStable", "artifactsStable"] as const) {
+    const repo = await repository(t);
+    const work = await openWork(request(repo));
+    const workId = work.record.id;
+    await verifyWork({ repo, workId, command: process.execPath, args: ["checks/fail.ts"], criterionIds: ["AC-1"] });
+    const saved = await readWork({ repo, workId });
+    // 실제 원문을 건드리지 않는 격리 negative fixture다. 불완전한 안정성 metadata를 실제 현재 실패로 수용하면 안 된다.
+    saved.record.workflow.verifications[0][flag] = false;
+    await writeFile(saved.path, JSON.stringify(saved.record));
+    const assessment = await assessWork({ repo, workId });
+    assert.deepEqual(assessment.criteria[0].reasons, ["verification_failed"]);
+    assert.equal((await documentReview(repo, workId)).record.workflow.nextAction, "verify");
+    assert.equal((await resumeWork({ repo, workId })).nextAction, "verify");
+  }
+});
+
+test("분업 미수용은 기준 통과·문서·감사·재개 뒤에도 구현 권한에 맞는 복구 단계로 안내한다", async t => {
+  for (const implementation of [true, false]) {
+    const repo = await repository(t);
+    const initial = request(repo);
+    const work = await openWork({ ...initial, approval: { ...initial.approval, implementation } });
+    const workId = work.record.id;
+    await setDecompositionPlan({ repo, workId, plan: { units: [{ taskId: "pending-unit", goal: "결과 수용 대기", inputs: ["src"], writePaths: ["src/item.ts"], excludedPaths: [], dependencies: [], artifacts: ["src/item.ts"], criterionIds: ["AC-1"], verification: { command: process.execPath, args: ["checks/pass.ts"] }, resultPath: "src/item.ts" }] } });
+    assert.equal((await documentReview(repo, workId)).record.workflow.nextAction, "verify");
+    const passed = await verifyPass(repo, workId);
+    const expected = implementation ? "build" : "verify";
+    const assertPendingUnit = async () => {
+      const current = await assessWork({ repo, workId });
+      assert.ok(current.criteria.every(criterion => criterion.usable));
+      assert.equal(current.record.workflow.nextAction, expected);
+      assert.match(current.record.blockedReason ?? "", /pending-unit: unit_acceptance_missing/);
+      assert.notEqual(current.record.status, "done");
+    };
+    await assertPendingUnit();
+    await documentReview(repo, workId);
+    await assertPendingUnit();
+    await passingNextActionReviewFixture(repo, workId);
+    assert.equal((await assessWork({ repo, workId })).review.usable, true);
+    await assertPendingUnit();
+    assert.equal((await resumeWork({ repo, workId })).nextAction, expected);
+    await assert.rejects(completeWork({ repo, workId }), /pending-unit: unit_acceptance_missing/);
+    assert.equal((await readWork({ repo, workId })).record.workflow.verifications[0].id, passed.id);
+    await verifyWork({ repo, workId, command: process.execPath, args: ["checks/fail.ts"], criterionIds: ["AC-1"] });
+    const failed = await documentReview(repo, workId);
+    assert.equal(failed.record.workflow.nextAction, expected);
+    assert.equal(failed.record.blockedReason, "AC-1: verification_failed");
+    await writeFile(join(repo, "src/item.ts"), "export const value = 1;\n// 과거 검증은 현재 적용 불가\n");
+    assert.equal((await documentReview(repo, workId)).record.workflow.nextAction, "verify");
+    assert.equal((await resumeWork({ repo, workId })).nextAction, "verify");
+  }
+});
+
+test("수용한 분업은 보고서 준비로 진행하고 필수 기준 밖 산출물이 바뀌면 build로 복귀한다", async t => {
+  const { runDevelopmentWorkflow } = await import("../scripts/workflow/run.ts");
+  const { runReportedStage, finishWorkReport } = await import("../scripts/workflow/report-lifecycle.ts");
+  const repo = await repository(t);
+  for (const file of ["AGENTS.md", "agents/www/AGENT.md", "docs/skills/WORKFLOW.md", "skills/www/www-build/SKILL.md"]) {
+    await mkdir(dirname(join(repo, file)), { recursive: true });
+    await writeFile(join(repo, file), await readFile(join(root, file)));
+  }
+  await mkdir(join(repo, "out"));
+  const initial = request(repo);
+  const output = "out/result.txt";
+  const unit = { taskId: "output-unit", goal: "독립 결과 수용", inputs: ["src"], writePaths: [output], excludedPaths: [], dependencies: [], artifacts: [output], criterionIds: ["AC-2"], verification: { command: process.execPath, args: ["checks/pass.ts"] }, resultPath: output };
+  // 실제 Node subprocess fixture다. 모델 CLI나 실제 모델 감사는 실행하지 않는다.
+  const program = `process.stdin.resume();process.stdin.on('end',()=>{require('fs').writeFileSync('out/result.txt','결과 1');console.log(JSON.stringify({type:'thread.started',thread_id:'unit-next-action-fixture'}));console.log(JSON.stringify({type:'turn.completed'}));});`;
+  const execution = await runDevelopmentWorkflow({ ...initial, execute: true, eventId: "unit-next-action", writes: [output], surfaces: ["edit"],
+    approval: { ...initial.approval, writePaths: [...initial.approval.writePaths, output] },
+    decision: { ...initial.decision, criteria: [...initial.decision.criteria, { id: "AC-2", description: "별도 단위의 결과 수용", required: false }] },
+    allocation: { taskId: unit.taskId, ownerModel: "gpt-6.1-sol", kind: "small_implementation", risk: "low", model: "gpt-6-luna", reason: "격리 subprocess 수용 검사", inputs: unit.inputs, writePaths: unit.writePaths, dependencies: [], attempt: 1 },
+    decomposition: { units: [unit] }, verifier: { ...unit.verification, criterionIds: unit.criterionIds },
+  }, { prepareInvocation: invocation => ({ ...invocation, command: process.execPath, args: ["-e", program] }) });
+  assert.equal(execution.executor, "process");
+  assert.equal(execution.acceptance?.status, "accepted", execution.acceptance?.reasons.join(", "));
+  assert.ok(execution.workId);
+  const workId = execution.workId;
+  await runReportedStage({ repo, role: "www-dev", execute: true, workId, intent: "verify" }, async () => ({ executed: true, workId, verification: await verifyPass(repo, workId) }));
+  await documentReview(repo, workId);
+  await passingNextActionReviewFixture(repo, workId);
+  const ready = await assessWork({ repo, workId });
+  assert.equal(ready.review.usable, true);
+  assert.equal(ready.record.workflow.nextAction, "complete");
+  assert.equal(ready.report?.usable, false);
+  assert.equal((await resumeWork({ repo, workId })).nextAction, "complete");
+  await assert.rejects(completeWork({ repo, workId }), /저작 작업 보고서/);
+  await writeFile(join(repo, output), "결과 2");
+  await verifyPass(repo, workId);
+  const documented = await documentReview(repo, workId);
+  assert.equal(documented.record.workflow.nextAction, "build");
+  assert.match(documented.record.blockedReason ?? "", /output-unit: artifacts_changed/);
+  await passingNextActionReviewFixture(repo, workId);
+  const stale = await assessWork({ repo, workId });
+  assert.ok(stale.criteria.every(criterion => criterion.usable));
+  assert.equal(stale.review.usable, true);
+  assert.equal(stale.record.workflow.nextAction, "build");
+  assert.equal((await resumeWork({ repo, workId })).nextAction, "build");
+  await assert.rejects(completeWork({ repo, workId }), /output-unit: artifacts_changed/);
+  await verifyWork({ repo, workId, command: process.execPath, args: unit.verification.args, criterionIds: unit.criterionIds, artifactPaths: [output] });
+  await documentReview(repo, workId);
+  await passingNextActionReviewFixture(repo, workId);
+  assert.equal((await readWork({ repo, workId })).record.workflow.nextAction, "complete");
+  await finishWorkReport({ repo, workId, narrative: { summary: "분업 결과의 현재 수용 검사", before: "산출물 변경", after: "재검증한 산출물 수용", changes: ["현재 결과를 실제 검증했다."], decisions: [], limitations: ["감사는 주입 predicate fixture이며 실제 모델 감사가 아니다."], next: [] } });
+  assert.equal((await completeWork({ repo, workId })).record.status, "done");
 });

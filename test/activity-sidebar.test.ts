@@ -168,7 +168,7 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
       expect(turnEnded.hookLifecycles.map((bucket) => [...bucket])).toEqual(before);
       expect(first.pulses.map((pulse) => pulse.seq)).toEqual([1]);
       const restarted = updateActivitySidebarState(next, [end(8, "B"), start(9, "B"), start(10, "B")], { emitPulses: true });
-      expect(restarted.pulses.map((pulse) => pulse.seq)).toEqual([1, 3, 9]);
+      expect(restarted.pulses.map((pulse) => pulse.seq)).toEqual([1, 3]);
     }
   });
 
@@ -203,8 +203,8 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
           event(12, "hook/completed", { threadId: "thread", turnId: "B", run: { id: "handler", startedAt: newerTime } }), start(13, "B", newerTime),
           event(14, "hook/completed", { threadId: "thread", turnId: "B", run: { id: "handler", startedAt } }), start(15, "B", newerTime),
         ], { emitPulses: true });
-        expect(restarted.pulses.map((pulse) => pulse.seq)).toEqual([1, 7, 9, 13]);
-        expect(active(restarted)?.completed).toBe(false);
+        expect(restarted.pulses.map((pulse) => pulse.seq)).toEqual([1, 7, 9]);
+        expect(active(restarted)?.completed).toBe(true);
       }
       expect(completedFirst.hookLifecycles.map((bucket) => [...bucket])).toEqual(before);
       expect(first.hookLifecycles.flatMap((bucket) => [...bucket.values()])).toHaveLength(1);
@@ -250,7 +250,7 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
     expect(restored.hookLifecycles.map((bucket) => [...bucket])).toEqual(before);
   });
 
-  test("재사용 handler는 같은 초·같은 turn과 다른 turn의 새 lifecycle마다 반응한다", () => {
+  test("재사용 handler는 식별 근거 없는 같은 turn 재전송을 무시하고 다른 turn에 반응한다", () => {
     for (const startedAt of [undefined, 100, "2026-11-12T00:00:00Z"]) for (const nextTurn of ["turn", "next-turn"]) {
       const start = (seq: number, turnId: string): AppEvent => {
         const value = hookStart(seq, "handler", { startedAt });
@@ -259,13 +259,13 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
       const first = updateActivitySidebarState(createActivitySidebarState(), [start(1, "turn")], { emitPulses: true });
       const closed = updateActivitySidebarState(first, [event(2, "hook/completed", { threadId: "thread", turnId: "turn", run: { id: "handler", startedAt } })]);
       const next = updateActivitySidebarState(closed, [start(3, nextTurn), start(4, nextTurn)], { emitPulses: true });
-      expect(next.pulses.map((pulse) => pulse.seq)).toEqual([1, 3]);
-      expect(projectActivitySidebarState(next, "thread").hooks[0]?.lastActivitySeq).toBe(3);
+      expect(next.pulses.map((pulse) => pulse.seq)).toEqual(nextTurn === "turn" ? [1] : [1, 3]);
+      expect(projectActivitySidebarState(next, "thread").hooks[0]?.lastActivitySeq).toBe(nextTurn === "turn" ? 1 : 3);
       expect(first.pulses.map((pulse) => pulse.seq)).toEqual([1]);
       expect(closed.pulses.map((pulse) => pulse.seq)).toEqual([1]);
       expect([...first.hookLifecycles.flatMap((bucket) => [...bucket.values()])].map((run) => run.completed)).toEqual([false]);
       expect([...closed.hookLifecycles.flatMap((bucket) => [...bucket.values()])].map((run) => run.completed)).toEqual([true]);
-      expect(next.hookLifecycles.filter((bucket, index) => bucket !== closed.hookLifecycles[index])).toHaveLength(1);
+      expect(next.hookLifecycles.filter((bucket, index) => bucket !== closed.hookLifecycles[index])).toHaveLength(nextTurn === "turn" ? 0 : 1);
     }
   });
 
@@ -282,26 +282,28 @@ describe("Skills와 Hook 활동 사이드바 투영", () => {
       expect(replay.pulses.map((pulse) => pulse.seq)).toEqual([1, 3]);
       expect(first.dedupe.buckets.map((bucket) => [...bucket])).toEqual(before);
       const state = updateActivitySidebarState(replay, [start(6, "C"), end(7, "C"), start(8, "C")], { emitPulses: true });
-      expect(state.pulses.map((pulse) => pulse.seq)).toEqual([1, 3, 6, 8]);
+      expect(state.pulses.map((pulse) => pulse.seq)).toEqual([1, 3, 6]);
       const reset = updateActivitySidebarState(state, [event(9, "transport/connected", { connectionGeneration: 9 }), start(10, "A")], { emitPulses: true });
       expect(reset.pulses.at(-1)?.seq).toBe(10);
     }
   });
 
-  test("historical snapshot의 완료 상태를 복원한 뒤 같은 handler의 live 새 시작을 허용한다", () => {
+  test("historical 완료 뒤 같은 시각의 live 재전송은 억제하고 새 시각만 허용한다", () => {
     const restored = updateActivitySidebarSnapshot(createActivitySidebarState(), { snapshot: [
       hookStart(1, "handler", { startedAt: 100 }),
       event(2, "hook/completed", { threadId: "thread", turnId: "turn", run: { id: "handler", startedAt: 100 } }),
     ], live: [] });
     expect(restored.pulses).toEqual([]);
     const next = updateActivitySidebarState(restored, [hookStart(3, "handler", { startedAt: 100 })], { emitPulses: true });
-    expect(next.pulses.map((pulse) => pulse.seq)).toEqual([3]);
+    expect(next.pulses.map((pulse) => pulse.seq)).toEqual([]);
     const replay = updateActivitySidebarSnapshot(next, { snapshot: [
       { ...hookStart(4, "handler", { startedAt: 100 }), historical: true },
       event(5, "hook/completed", { threadId: "thread", run: { id: "handler", startedAt: 100 } }),
     ], live: [] });
     const duplicate = updateActivitySidebarState(replay, [hookStart(6, "handler", { startedAt: 100 })], { emitPulses: true });
-    expect(duplicate.pulses.map((pulse) => pulse.seq)).toEqual([3]);
+    expect(duplicate.pulses.map((pulse) => pulse.seq)).toEqual([]);
+    const fresh = updateActivitySidebarState(duplicate, [hookStart(7, "handler", { startedAt: 200 })], { emitPulses: true });
+    expect(fresh.pulses.map((pulse) => pulse.seq)).toEqual([7]);
   });
 
   test("구조화 시작 시각은 이전 실행의 늦은 시작·완료와 완료 선관측을 구분한다", () => {
@@ -672,3 +674,12 @@ describe("Skills와 Hook 목록 응답 검증", () => {
     ] });
   });
 });
+
+ test("상대 Skill 읽기는 유효 command cwd로 등록 identity에 반응한다", () => {
+  const catalog = event(1, "activity/skillsListed", { complete: true, skills: [{ name: "demo", path: "/repo/skills/demo/SKILL.md", enabled: true, scope: "repo" }] });
+  for (const cwd of ["/repo", "/other", "", "relative"]) for (const path of ["./skills/demo/SKILL.md", "skills/other/../demo/SKILL.md"]) {
+    const read = event(2, "item/started", { threadId: "thread", turnId: "turn", item: { id: "read", type: "commandExecution", cwd, commandActions: [{ type: "read", path }] } });
+    const result = projectActivitySidebar([catalog, read], "thread");
+    expect(result.skills.find(row => row.id === "skill:/repo/skills/demo/SKILL.md")?.lastActivitySeq).toBe(cwd === "/repo" ? 2 : null);
+  }
+ });

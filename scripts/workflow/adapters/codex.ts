@@ -45,6 +45,7 @@ const outputSpools = new WeakMap<ChildProcessWithoutNullStreams, { directory: st
 const LIMIT       = 1_048_576                                                       ;
 const SANDBOXES   = new Set(["read-only", "workspace-write", "danger-full-access"]) ;
 const inputErrors = new WeakMap<ChildProcessWithoutNullStreams, string>()           ;
+const deliveredInputs = new WeakSet<ChildProcessWithoutNullStreams>();
 const capability = Object.freeze({
   context              : true          ,
   nativeSkillInvoke    : false         ,
@@ -121,6 +122,7 @@ export function spawnCodex(invocation: ProcessInvocation, options: ProcessOption
   outputSpools.set(child, { directory, spool });
   actualInvocations.set(child, execution.actualInvocation);
   child.stdin.on("error", (error) => { inputErrors.set(child, ("code" in error && typeof error.code === "string" ? error.code : "stdin_error")); });
+  child.stdin.once("finish", () => { deliveredInputs.add(child); });
   child.stdin.end(invocation.stdin, "utf8");
   return child;
 }
@@ -269,6 +271,7 @@ export async function waitForCodex(child: ChildProcessWithoutNullStreams, { capt
         ...spool.result(),
         summaryTruncated: outputTruncated,
         usage,
+        inputDelivered: deliveredInputs.has(child) && !inputError && !spawnError,
         ok               : outcome === "passed"                                                               ,
         code                                                                                                  ,
         signal                                                                                                ,

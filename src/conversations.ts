@@ -2,7 +2,7 @@
  * @architecture arch.chat.sessions.restore
  * @implements RESP-CHAT-SESSIONS-RESTORE
  */
-import { resolve } from "node:path";
+import { isAbsolute, resolve } from "node:path";
 import { NATIVE_PERMISSIONS } from "./native-chat";
 import type { AppEvent, ConversationCatalog, ConversationSummary } from "./shared";
 
@@ -54,7 +54,7 @@ function cursorValue(value: unknown): string | null {
 }
 
 function sameWorkspace(value: unknown, cwd: string): boolean {
-  return typeof value === "string" && value.startsWith("/") && resolve(value) === resolve(cwd);
+  return typeof value === "string" && isAbsolute(value) && resolve(value) === resolve(cwd);
 }
 
 function threadRecord(value: unknown, cwd: string, expectedId?: string): Record<string, unknown> {
@@ -80,33 +80,63 @@ function summary(thread: Record<string, unknown>): ConversationSummary {
   };
 }
 
+const COLLAB_TOOLS = new Set(["spawnAgent", "sendInput", "resumeAgent", "wait", "closeAgent", "sendMessage", "followupTask", "interruptAgent", "listAgents"]);
+const COLLAB_STATUSES = new Set(["inProgress", "completed", "failed", "interrupted"]);
+const AGENT_STATUSES = new Set(["pendingInit", "running", "interrupted", "completed", "errored", "shutdown", "notFound"]);
+const ACTIVITY_KINDS = new Set(["started", "interacted", "interrupted", "completed"]);
+const MAX_PUBLIC_AGENTS = 128;
+const publicIdentity = (value: unknown): value is string => typeof value === "string" && !!value.trim() && value.length <= 512 && !/[\u0000-\u001f]/u.test(value);
+
+/** 설치 Native 저장 스키마의 공개 식별·상태만 받으며 내부 prompt와 tool 인자는 반입하지 않는다. */
+function publicAgentItem(value: Record<string, unknown>): Record<string, unknown> | null {
+  if (!publicIdentity(value.id)) return null;
+  const model = typeof value.model === "string" ? { model: value.model.slice(0, 512) } : {};
+  const reasoningEffort = typeof value.reasoningEffort === "string" ? { reasoningEffort: value.reasoningEffort.slice(0, 64) } : {};
+  if (value.type === "subAgentActivity") {
+    if (!publicIdentity(value.agentThreadId) || !publicIdentity(value.agentPath) || !ACTIVITY_KINDS.has(text(value.kind))) return null;
+    return { id: value.id, type: value.type, agentThreadId: value.agentThreadId, agentPath: value.agentPath, kind: value.kind, ...model, ...reasoningEffort };
+  }
+  if (value.type !== "collabAgentToolCall" || !publicIdentity(value.senderThreadId) || !Array.isArray(value.receiverThreadIds)
+    || !value.receiverThreadIds.every(publicIdentity) || !object(value.agentsStates) || !COLLAB_TOOLS.has(text(value.tool)) || !COLLAB_STATUSES.has(text(value.status))) return null;
+  const receivers = [...new Set<string>(value.receiverThreadIds)].slice(0, MAX_PUBLIC_AGENTS);
+  const states = value.agentsStates;
+  const agentsStates = Object.fromEntries(receivers.flatMap(id => {
+    const entry = states[id];
+    if (!object(entry) || !AGENT_STATUSES.has(text(entry.status))) return [];
+    return [[id, { status: entry.status, ...(typeof entry.message === "string" ? { message: entry.message.slice(0, 4096) } : {}) }]];
+  }));
+  return { id: value.id, type: value.type, senderThreadId: value.senderThreadId, receiverThreadIds: receivers, tool: value.tool, status: value.status, agentsStates, ...model, ...reasoningEffort };
+}
+
 /** 저장된 화면 기록은 공개 필드만 복원하며 승인 요청·원문 reasoning은 재생하지 않는다. */
 function publicItem(value: unknown): Record<string, unknown> | null {
   if (!object(value) || !text(value.id)) return null;
   const id = text(value.id);
+  if (value.type === "collabAgentToolCall" || value.type === "subAgentActivity") return publicAgentItem(value);
+  const completion = typeof value.completedAtMs === "number" && Number.isSafeInteger(value.completedAtMs)
+    ? { completedAtMs: value.completedAtMs } : {};
   if (value.type === "agentMessage" || value.type === "plan") {
     if (typeof value.text !== "string" || value.phase === "analysis" || value.phase === "reasoning") return null;
-    return { id, type: value.type, text: value.text, phase: value.phase === "commentary" ? "commentary" : null };
+    return { ...completion, id, type: value.type, text: value.text, phase: value.phase === "commentary" ? "commentary" : null };
   }
   if (value.type === "reasoning") {
-    const summary = list(value.summary).filter((part): part is string => typeof part === "string");
-    return summary.length ? { id, type: "reasoning", summary } : null;
+    const validSummary = Array.isArray(value.summary) && value.summary.every(part => typeof part === "string");
+    return { ...completion, id, type: "reasoning", ...(validSummary ? { summary: value.summary } : {}) };
   }
   if (value.type === "commandExecution") {
     return {
-      id, type: "commandExecution",
+      ...completion, id, type: "commandExecution",
       command          : text(value.command).slice(0, MAX_PUBLIC_TEXT)           ,
       cwd              : text(value.cwd) || null                                ,
-      aggregatedOutput : text(value.aggregatedOutput)            ,
+      ...(typeof value.aggregatedOutput === "string" ? { aggregatedOutput: value.aggregatedOutput } : {}),
       status           : value.status === "completed" || value.status === "failed" || value.status === "declined" ? value.status : "unknown",
       exitCode         : typeof value.exitCode === "number" && Number.isFinite(value.exitCode) ? value.exitCode : null
     };
   }
   if (value.type === "fileChange") {
-    const changes = list(value.changes).flatMap((entry) => object(entry) && text(entry.path)
-      ? [{ path: text(entry.path), diff: typeof entry.diff === "string" ? entry.diff : null }]
-      : []);
-    return { id, type: "fileChange", changes, status: value.status === "completed" || value.status === "failed" ? value.status : "unknown" };
+    const validChanges = Array.isArray(value.changes) && value.changes.every(entry => object(entry) && typeof entry.path === "string" && entry.path.length > 0 && (entry.diff === undefined || entry.diff === null || typeof entry.diff === "string"));
+    const changes = validChanges ? list(value.changes).flatMap(entry => object(entry) ? [{ path: entry.path, diff: typeof entry.diff === "string" ? entry.diff : null }] : []) : null;
+    return { ...completion, id, type: "fileChange", ...(changes !== null ? { changes } : {}), status: value.status === "completed" || value.status === "failed" || value.status === "declined" ? value.status : "unknown" };
   }
   return null;
 }

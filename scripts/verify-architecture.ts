@@ -36,7 +36,7 @@ try {
   try {
     child = spawn(binary, [root, `--remote-debugging-port=${port}`, `--user-data-dir=${path.join(directory, "profile")}`], {
       cwd: root, stdio: ["ignore", output.fd, output.fd],
-      env: { ...env, WWW_PROBE_PATH: path.join(directory, "disabled-probe.json"), WWW_NATIVE_PROBE: "1", WWW_PROBE_WORKSPACE: root, WWW_CODEX_BIN: path.join(root, "test/fixtures/fake-app-server.ts") },
+      env: { ...env, WWW_PROBE_PATH: path.join(directory, "disabled-probe.json"), WWW_NATIVE_PROBE: "1", WWW_PROBE_WORKSPACE: root, WWW_CODEX_BIN: path.join(root, "test/fixtures/sessions-app-server.ts"), WWW_SESSION_FIXTURE_DIR: directory },
     });
     let spawnError: Error | null = null;
     child.once("error", (error) => { spawnError = error; });
@@ -146,11 +146,28 @@ try {
     await assert("document.querySelector('.blueprint-detail').hidden && document.querySelector('.sidebar').getBoundingClientRect().width===64", '기본 지도는 64px rail과 접힌 상세로 시작');
     await assert("document.querySelector('.blueprint-viewport').clientWidth>=innerWidth*.9 && document.querySelector('.blueprint-viewport').clientHeight>=document.querySelector('.blueprint-work').clientHeight*.6", '중앙 지도가 가로 90%·main 높이 60% 이상 차지');
     await assert("getComputedStyle(document.querySelector('.sidebar>.agents')).display==='none'", '지도에서 프로젝트·대화 목록 기본 접힘');
+    const callsBefore = await fs.readFile(path.join(directory, "calls.jsonl"), "utf8").catch((error: NodeJS.ErrnoException) => { if (error.code === "ENOENT") return ""; throw error; });
+    if (callsBefore.trim()) throw Error("접힌 지도 진입만으로 합성 Native가 시작됐습니다.");
+    const seeded = object(await evaluate("(async()=>window.www.startThread(await window.www.workspace()))()"));
+    if (typeof seeded.threadId !== "string") throw Error("목록 관측용 합성 thread 사전 준비 실패");
+    await fs.writeFile(path.join(directory, "navigation-fixture.json"), JSON.stringify({ threadId: seeded.threadId, modelCalls: 0, scope: "실제 IPC와 합성 Native의 thread/list. 실제 계정 저장 대화/모델 결과가 아님." }, null, 2));
     await evaluate("document.querySelector('[data-testid=architecture-navigation-toggle]').focus()");
     await key('Enter');
     await assert("document.querySelector('[data-testid=architecture-navigation-toggle]').getAttribute('aria-expanded')==='true' && document.querySelector('.sidebar').getBoundingClientRect().width>64 && getComputedStyle(document.querySelector('.sidebar>.agents')).display!=='none'", '명시적으로 탐색을 열어 기존 목록 접근');
+    const listVisible = await evaluate("(()=>{const panel=document.querySelector('.chat-conversations');const search=document.querySelector('[data-testid=conversation-search]');return panel instanceof HTMLElement && !panel.closest('[hidden]') && panel.getBoundingClientRect().height>0 && search instanceof HTMLInputElement && search.getBoundingClientRect().width>0})()");
+    await capture("navigation-conversation-panel");
+    if (listVisible !== true) throw Error("탐색을 펼친 지도에서 저장 대화 구획·검색이 실제 보이지 않습니다.");
+    await assert("(()=>{const row=Array.from(document.querySelectorAll('[data-testid=conversation-item]')).find(node=>node.dataset.threadId===" + JSON.stringify(seeded.threadId) + ");return row instanceof HTMLButtonElement && row.getBoundingClientRect().height>0 && !row.closest('[hidden]')})()", '지도 탐색에 실제 합성 thread/list의 고유 대화 항목 표시');
+    await evaluate("document.querySelector('[data-testid=conversation-search]').focus()");
+    await command("Input.insertText", { text: seeded.threadId });
+    await assert("document.activeElement===document.querySelector('[data-testid=conversation-search]') && document.activeElement.value===" + JSON.stringify(seeded.threadId), '지도 대화 검색 키보드 초점·실제 입력');
+    await evaluate("document.querySelector('[data-testid=architecture-navigation-toggle]').focus()");
     await key(' ', 'Space');
-    await assert("document.querySelector('.sidebar').getBoundingClientRect().width===64", '탐색 접기 후 지도 폭 복구');
+    await assert("document.querySelector('.sidebar').getBoundingClientRect().width===64 && document.querySelector('.chat-conversations').getBoundingClientRect().height===0", '탐색 접기 후 지도 폭 복구와 대화 목록 비가시');
+    await key('Enter');
+    await assert("document.querySelector('[data-testid=conversation-search]').value===" + JSON.stringify(seeded.threadId) + " && document.querySelector('[data-testid=conversation-item]')?.getBoundingClientRect().height>0", '탐색 재열기 뒤 검색·대화 항목 보존');
+    await key(' ', 'Space');
+    await assert("document.querySelector('.sidebar').getBoundingClientRect().width===64", '다시 접고 원래 지도 검사 계속');
 
     await assert(`JSON.stringify([...document.querySelectorAll('.blueprint-node')].map(n=>n.dataset.nodeId).sort())===${JSON.stringify(JSON.stringify(rootChildren))}`, '처음은 정본 root의 직계 자식만 표시');
     await assert(`document.querySelector('.blueprint-parent').dataset.nodeId===${JSON.stringify(rootId)} && document.querySelectorAll('.blueprint-hierarchy').length===${rootChildren.length}`, '정본 부모와 각 직계 책임의 계층 연결 표시');
@@ -305,6 +322,31 @@ try {
     await assert(overview, '수동 확대·좁은 창 이후 desktop resize 전체 배치 복구');
     await assert(readable, 'desktop resize 후 모든 제목·역할 가독성');
     await capture('root-resized');
+    const beforeStatechart = await evaluate("JSON.stringify({current:document.querySelector('.blueprint-work').dataset.currentId,selected:document.querySelector('.blueprint-selection-summary').dataset.selectedId,zoom:document.querySelector('[data-testid=architecture-zoom]').textContent})");
+    await click('[data-testid="architecture-statechart-open"]');
+    await assert("document.querySelector('[data-testid=workflow-statechart-empty]')?.textContent.includes('상태 모델이 등록되지 않았습니다')", '모델 없는 책임의 빈 상태를 실제 화면에서 구분');
+    await capture('statechart-no-model');
+    await click('[data-testid="workflow-statechart-close"]');
+    await assert(`JSON.stringify({current:document.querySelector('.blueprint-work').dataset.currentId,selected:document.querySelector('.blueprint-selection-summary').dataset.selectedId,zoom:document.querySelector('[data-testid=architecture-zoom]').textContent})===${JSON.stringify(beforeStatechart)}`, '상태 모델 없음에서 원래 선택·경로·배율로 복귀');
+    await click('[data-testid="architecture-workflow-locate"]');
+    await assert("document.querySelector('[data-testid=workflow-statechart-model-status]')?.dataset.status==='unverified' && document.querySelector('[data-testid=workflow-statechart]')?.textContent.includes('실시간 실행 상태나 형식 증명이 아닙니다')", '같은 책임 ID의 상태 정의와 실제 행동 검증 미실행 구분');
+    await click('[data-transition-id="transition.complete"]');
+    await assert("document.querySelector('[data-testid=workflow-statechart-transition]')?.textContent.includes('rule.criteria-current') && document.querySelector('[data-testid=workflow-statechart-transition]')?.textContent.includes('rule.report-current')", '완료 전이의 현재성 조건·담당 코드·검사 선언 읽기');
+    await capture('statechart-completion-guards');
+    await click('.workflow-counterexamples details summary');
+    await assert("document.querySelector('.workflow-counterexamples details')?.open===true && document.querySelector('.workflow-counterexamples details')?.textContent.includes('거부 규칙')", '반례 사건 순서와 실제 검사 선언 펼치기');
+    await evaluate("(()=>{const n=document.querySelector('[aria-label=\"상태도의 작업 UUID\"]');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(n,'work-4573f7d4-62eb-4e72-9985-62994c1b30a8');n.dispatchEvent(new Event('input',{bubbles:true}));})()");
+    await click('[data-testid="workflow-evidence-read"]');
+    await assert("['stale','unverified','failed'].includes(document.querySelector('[data-testid=workflow-evidence-status]')?.dataset.status)", '실제 선택 프로젝트 작업의 미충족·오래된 근거를 완료 허용과 구별');
+    await click('[data-testid="workflow-report-read"]');
+    await assert("document.querySelector('[data-testid=workflow-report-frame]')?.getAttribute('sandbox')==='' && document.querySelector('[data-testid=workflow-report-status]')?.dataset.status==='stale'", '같은 UUID의 실제 보고서와 오래된 적용성을 sandbox에서 읽기');
+    await capture('statechart-stale-work-evidence');
+    await command('Emulation.setDeviceMetricsOverride', { width: 640, height: 900, deviceScaleFactor: 1, mobile: false });
+    await assert("document.querySelector('[data-testid=workflow-statechart-close]')?.getBoundingClientRect().width>0 && document.documentElement.scrollWidth<=innerWidth+1", '640px 상태도·근거·복귀 조작의 페이지 넘침 없음');
+    await capture('statechart-narrow');
+    await command('Emulation.setDeviceMetricsOverride', { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
+    await key('Escape');
+    await assert("!document.querySelector('[data-testid=workflow-statechart]') && document.activeElement===document.querySelector('[data-testid=architecture-statechart-open]')", '실제 Escape로 상태도 닫고 책임 노드 조작에 초점 복귀');
     await search(requirement.id);
     await click(`[data-result-id="${requirement.nodeId}"]`);
     await click('[aria-label="설계도 확대"]');

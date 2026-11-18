@@ -239,7 +239,7 @@ function TurnBody({ turn, expanded, onToggle }: { turn: ActivityTurn; expanded: 
 
 export function NativeActivityView({ activityState, events, threadId, hidden = false, onShowOverview, onShowEvents, workspacePath, onClose }: { activityState?: ActivitySidebarState; events: readonly AppEvent[]; threadId: string | null; hidden?: boolean; onShowOverview?: () => void; onShowEvents?: () => void; workspacePath?: string; onClose?: () => void }) {
   const panelRef = useRef<HTMLElement>(null);
-  useEffect(() => { if (!hidden) panelRef.current?.focus(); }, [hidden]);
+  useEffect(() => { if (!hidden) panelRef.current?.focus({ preventScroll: true }); }, [hidden]);
   const projection = useMemo(() => projectNativeActivity(events, threadId, workspacePath), [events, threadId, workspacePath]);
   const [selection, setSelection] = useState<{ threadId: string | null; id: string } | null>(null);
   const [now, setNow] = useState(Date.now);
@@ -296,7 +296,7 @@ export function NativeActivityView({ activityState, events, threadId, hidden = f
 
 /** 반복 핸들러 ID를 호출 ID로 세지 않고, 명시 범위의 마지막 상태만 표시한다. */
 /** 기본 오른쪽 바는 관측한 Agent와 계획·진행 설명을 연결한다. */
-export function ResourceActivitySidebar({ events, resources, threadId, workspacePath, sending, hidden, onOpenMonitor }: {
+export function ResourceActivitySidebar({ events, resources, threadId, workspacePath, sending, hidden, onOpenMonitor, testId = "resource-sidebar" }: {
   events: readonly AppEvent[];
   resources: ResourceSnapshot | null;
   threadId: string | null;
@@ -304,10 +304,11 @@ export function ResourceActivitySidebar({ events, resources, threadId, workspace
   sending: boolean;
   hidden: boolean;
   onOpenMonitor: () => void;
+  testId?: string;
 }) {
   const projection = useMemo(() => projectAgentOverview(events, threadId, workspacePath), [events, threadId, workspacePath]);
   const unavailable = events.some((event) => event.method === "activity/resourcesUnavailable");
-  return <aside className="native-activity-panel agent-sidebar" hidden={hidden} aria-label="Agent와 작업 개요" data-testid="resource-sidebar">
+  return <aside className="native-activity-panel agent-sidebar" hidden={hidden} aria-label="Agent와 작업 개요" data-testid={testId}>
     <header className="na-header"><div className="na-heading"><h2>Agent</h2><div className="na-nav"><button onClick={onOpenMonitor} aria-label="상세 실행 모니터 열기">상세 모니터</button></div></div></header>
     <div className="na-scroll" tabIndex={0} aria-label="Agent와 작업 개요 스크롤">
       <AgentOverviewView projection={projection} sending={sending}/>

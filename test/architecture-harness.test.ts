@@ -19,7 +19,7 @@ function record(value: unknown): Record<string, unknown> {
   return Object.fromEntries(Object.entries(value));
 }
 
-async function fixture(active: boolean, mutate: (repo: string) => void, inspect: (harness: Record<string, unknown>, prompt: string) => void, prepare: (repo: string) => void = () => {}, regenerate = false) {
+async function fixture(active: boolean, mutate: (repo: string) => void, inspect: (harness: Record<string, unknown>, prompt: string, result: Record<string, unknown>) => void, prepare: (repo: string) => void = () => {}, regenerate = false, denyGeneratedWrite = false) {
   const repo = mkdtempSync(path.join(tmpdir(), "www-architecture-harness-"));
   const put = (file: string, body: string) => {
     mkdirSync(path.dirname(path.join(repo, file)), { recursive: true });
@@ -61,7 +61,7 @@ async function fixture(active: boolean, mutate: (repo: string) => void, inspect:
     const result = await runTypedWorkflow({
       repo, role: "www-dev", direct: true, execute: true, eventId: id, requestId: id, request: "선언한 항목을 구현해줘",
       decision : { intent: "build", area: "Workflow", title: "계약 사후 검사", kind: "maintenance", areas: ["dev"], owner: "dev", criteria: [{ id: "AC-1", description: "계약 위반 차단", required: true }] }                                ,
-      approval : { implementation: true, writePaths: ["src/item.ts", "docs/architecture/structure.json", "scripts/check-architecture.ts", "package.json", ...(regenerate ? ["src/architecture.generated.json"] : [])], mutationSurfaces: ["edit"], verifierCommands: [], commit: false, publish: false } ,
+      approval : { implementation: true, writePaths: ["src/item.ts", "docs/architecture/structure.json", "scripts/check-architecture.ts", "package.json", ...(regenerate && !denyGeneratedWrite ? ["src/architecture.generated.json"] : [])], mutationSurfaces: ["edit"], verifierCommands: [], commit: false, publish: false } ,
       inputs   : ["src"]                                                                                                                                                                                                                     , writes: ["src/item.ts", "docs/architecture/structure.json", "scripts/check-architecture.ts", "package.json", ...(regenerate ? ["src/architecture.generated.json"] : [])],
     }, {
       runCommand: async (_command, args): Promise<CommandResult> => {
@@ -77,7 +77,7 @@ async function fixture(active: boolean, mutate: (repo: string) => void, inspect:
         return { ok: true, code: 0, outcome: "passed", stdout: "시험 호스트", stderr: "", outputTruncated: false, events: [] };
       },
     });
-    inspect(record(result.harness), prompt);
+    inspect(record(result.harness), prompt, result);
   } finally { rmSync(repo, { recursive: true, force: true }); }
 }
 
@@ -89,6 +89,8 @@ test("승인된 생성물은 신뢰한 공식 생성기로 갱신한 뒤 사후 
   }, (harness) => {
     expect(record(record(harness.pre).architecture).accepted).toBe(true);
     expect(record(record(harness.post).architecture).accepted).toBe(true);
+    expect(record(record(harness.pre).architecture).generatorExecuted).toBe(false);
+    expect(record(record(harness.post).architecture).generatorExecuted).toBe(true);
     expect(harness.ok).toBe(true);
     expect(readFileSync(path.join(root, "src/architecture.generated.json"), "utf8")).not.toBe(previous);
     expect(existsSync(path.join(root, "untrusted-generator-ran"))).toBe(false);
@@ -98,6 +100,51 @@ test("승인된 생성물은 신뢰한 공식 생성기로 갱신한 뒤 사후 
     writeArchitecture(repo);
     previous = readFileSync(path.join(repo, "src/architecture.generated.json"), "utf8");
   }, true);
+}, 60_000);
+
+test("check-only 성공은 생성기 실행 없이 기존 snapshot을 수용한다", async () => {
+  let root = "";
+  let previous = "";
+  await fixture(true, () => {}, (harness) => {
+    for (const phase of ["pre", "post"]) {
+      const gate = record(record(harness[phase]).architecture);
+      expect(gate.generatorExecuted).toBe(false);
+      expect(gate.accepted).toBe(true);
+    }
+    expect(readFileSync(path.join(root, "src/architecture.generated.json"), "utf8")).toBe(previous);
+  }, (repo) => {
+    root = repo;
+    previous = readFileSync(path.join(repo, "src/architecture.generated.json"), "utf8");
+  });
+}, 60_000);
+
+test("변경 권한이 거부되면 stale 생성물을 쓰지 않고 호스트도 실행하지 않는다", async () => {
+  let root = "", previous = "", calls = 0;
+  await fixture(true, () => { calls++; }, (harness, prompt, result) => {
+    expect(result.executed).toBe(false);
+    expect(record(result.mutation).reason).toBe("outside_approval");
+    expect(calls).toBe(0);
+    expect(prompt).toBe("");
+    expect(record(record(harness.post).architecture).generatorExecuted).toBe(false);
+    expect(record(record(harness.post).architecture).accepted).toBe(false);
+    expect(readFileSync(path.join(root, "src/architecture.generated.json"), "utf8")).toBe(previous);
+  }, repo => {
+    root = repo;
+    previous = readFileSync(path.join(repo, "src/architecture.generated.json"), "utf8");
+    writeFileSync(path.join(repo, "src/item.ts"), readFileSync(path.join(repo, "src/item.ts"), "utf8").replace("= 1", "= 2"));
+  }, true, true);
+}, 60_000);
+
+test("재생성 요청 후 child 실패는 생성기 실행 여부를 미확인으로 남긴다", async () => {
+  await fixture(true, (repo) => {
+    writeFileSync(path.join(repo, "src/item.ts"), "export const missing = 2;\n");
+  }, (harness) => {
+    const post = record(record(harness.post).architecture);
+    expect(post.generatorExecuted).toBeNull();
+    expect(post.ok).toBe(false);
+    expect(post.accepted).toBe(false);
+    expect(post.errors).not.toEqual([]);
+  }, () => {}, true);
 }, 60_000);
 
 for (const scenario of ["contract", "stale", "manifest", "all-signals"]) {
@@ -116,7 +163,7 @@ for (const scenario of ["contract", "stale", "manifest", "all-signals"]) {
       const post = record(record(harness.post).architecture) ;
       expect(pre.accepted               ).toBe     (true                                                                                ) ;
       expect(post.enabled               ).toBe     (true                                                                                ) ;
-      expect(post.generatorExecuted     ).toBe     (true                                                                                ) ;
+      expect(post.generatorExecuted     ).toBe     (false                                                                                ) ;
       expect(post.accepted              ).toBe     (false                                                                               ) ;
       expect(JSON.stringify(post.errors)).toMatch  (scenario === "contract" ? /구조 선언/ : scenario === "stale" ? /snapshot/ : /ENOENT/) ;
       expect(prompt                     ).toContain('"architecture":{"enabled":true'                                                    ) ;
@@ -146,7 +193,7 @@ for (const fault of ["contract", "stale"]) {
       const post = record(record(harness.post).architecture) ;
       expect(pre.ok                ).toBe     (false                                          ) ;
       expect(prompt                ).toContain(fault === "contract" ? "구조 선언" : "snapshot") ;
-      expect(post.generatorExecuted).toBe     (true                                           ) ;
+      expect(post.generatorExecuted).toBe     (false                                           ) ;
       expect(post.accepted         ).toBe     (true                                           ) ;
       expect(harness.ok            ).toBe     (true                                           ) ;
       expect(harness.toolExecutor  ).toBe     ("injected"                                     ) ;

@@ -77,6 +77,12 @@ TypeScript·Python·strict JSON·YAML 작성은 파일별 `guide --file <파일>
 
 `NO_GROUPS`는 검사기가 읽은 범위만 표시하며 전체 가독성 PASS 근거가 아니다. 미지원 언어는 미지원으로 보고하고 승인되지 않은 형태를 수동 공백 정렬·format·align으로 우회하지 않는다. align이나 formatter는 별도 명시 승인 없이 실행하지 않는다. 현재 승인되지 않은 BoxBox 형태는 별도 미해결 사항이며 TypeScript 전환만으로 모든 스타일 개선이 완료됐다고 쓰지 않는다. 실제 호스트가 guide·사전 검사 context를 수용했는지도 실행 근거로 확인하며 전역 자동 훅의 활성화를 주장하지 않는다.
 
+### 제품 검사와 BoxBox 외부 도구 검사
+
+`npm test`는 제품 테스트를 실행하며 `test/boxbox/`의 외부 도구 통합 검사는 포함하지 않는다. `test/work-json.test.ts`의 직렬화·보고서·크기 제한·보존 검사는 제품 검사에 그대로 남는다. BoxBox 승인 원본과 실제 CLI 왕복 검사는 `test/boxbox/work-json.test.ts`에 보존하며 `npm run test:boxbox`로만 명시 실행한다. 이 명령도 공식 런처의 프로젝트 mode가 `off`이면 `disabled`를 표시하고 비성공 종료하며 외부 테스트를 실행하지 않는다. 도구 오류나 알 수 없는 mode도 실패로 처리한다. 비활성화를 테스트 PASS로 세지 않는다.
+
+`bun test`를 인자 없이 직접 실행하면 Bun 자체의 자동 탐색이 외부 도구 검사까지 찾을 수 있다. 전체 제품 검사는 `npm test`를 사용한다. Reports 공식 복합 검사는 기존 `test/work-json.test.ts` 경로와 Task에 등록된 argv를 유지하므로, 새 권한 갱신 없이 실제 실행 결과를 기존 UUID의 `verifyWork`에 기록할 수 있다. 외부 도구 검사 분리는 기능 기준·필수 GUI·독립 감사의 생략을 뜻하지 않는다.
+
 ### 제품 파일과 전송 경계
 
 - `src/main.ts`: Electron 생명주기, 공유 원장·프로젝트 registry, 세션 생성·종료·IPC 라우팅
@@ -113,6 +119,18 @@ WWW 프로젝트 유형(Desktop 포함)의 여섯 Skills 정본은 `skills/www/`
 
 ## 개발 역할의 작업 인터페이스
 
+### 사용자 여정·칸반·병렬 인계
+
+개발 전 시나리오와 기대 결과를 기준 ID·검사 방법에 연결하는 규칙은 [작업 계약](skills/WORKFLOW.md)이 소유한다. 같은 UUID의 tasks.md와 nextAction은 칸반의 계획·현재 단계에 연결한다. 칸반은 카드 선택에서 `dashboardWork(selection, projectKey, workId)`를 통해 네 문서와 기준을 읽고, 읽기 실패·미작성·빈 문서를 구분한다. 현재 소스 적용성을 계산하는 API는 아니므로 기록된 통과를 재검증 완료로 표시하지 않는다.
+
+개발 실행의 선택적 `decomposition.units`는 taskId, goal, inputs, writePaths, excludedPaths, dependencies, artifacts, criterionIds, verification(command/args), resultPath를 가진다. 계획 검사는 파일 소유와 미정의·순환 의존을 실행 전에 확인한다. 기존 allocation.dependencies는 호스트 정상 종료의 의미를 유지하며, 새 분해 단위의 수용 의존은 실제 실행·필수 산출물·현재 검증을 추가로 확인한다. 명령 정상 종료와 업무 수용을 같은 사건으로 읽지 않는다. 동시 저작은 하나의 명시된 부모 쓰기 범위와 파일별 단일 소유자 아래 수행하고, 소스를 동결한 뒤 공통 검사를 실행한다. 외부 협업을 감싼 주입 하네스와 실제 모델 호출은 각각 기록한다.
+
+소유 충돌 검사는 기존 디렉터리 안의 일반 파일까지 device/inode로 대조해 다른 경로의 하드링크 소유와 겹치는지 확인한다. 대소문자는 실제 디렉터리에 별개 이름이 있는 경우와 같은 대상을 가리키는 조회 별칭을 구분한다. 심볼릭 링크·외부 대상·특수 파일·읽기 오류는 조용히 생략하지 않는다. 디렉터리 열거와 호출 전체 대상 방문은 각각 10,000개 상한이며 초과나 대소문자 판별 근거 부재는 명시 실패다. 이 검사는 읽기 전용 관찰이고 검사 후 다른 프로세스의 변경을 원자적으로 막는 잠금이 아니다. 실제 APFS 검증과 Windows·per-directory casefold 미실측은 작업 증거에서 구분한다.
+
+입력/스크롤/Steer와 새 모니터링 메뉴의 실제 Electron 시나리오는 `scripts/verify-chat.ts`와 `scripts/verify-home.ts`가 제공한다. `--performance-only`, `--steer-only`는 제한 범위 실행이며 전체 채팅 여정이나 실제 모델 반영의 통과로 승격하지 않는다. 성능은 같은 fixture·환경의 전후 원문과 분포를 비교한다. 합성 composition은 실제 OS IME 검사가 아니다.
+
+`node scripts/verify-native-activity.ts --observability`는 부모가 동결·빌드한 dist에서 새 WWW 스레드의 단계 선언 도구·계획 없는 Progress·미관측·탭 격리·좁은 화면·모션 축소를 실제 Electron+합성 stdio로 확인한다. 자체 빌드를 하지 않는다. 공식 schema와 실제 initialize/thread-start 등록은 별도 실측이며, 합성 tool/call 왕복과 실제 모델의 도구 선택을 구분한다. 기존 thread/resume의 단계 도구 미지원과 실제 하네스 영수증 미연결을 숨기지 않는다.
+
 구현 전 검토와 도구 출처는 공식 진입점의 `artifact-context`, `artifact-review`, `artifact-status`, `tool-inventory` action으로 제공한다. 입력·판단 책임·brief/full·상태의 의미는 [산출물 검토 계약](skills/ARTIFACT_REVIEW.md)을 따른다. 예를 들어 `node scripts/workflow.ts '{"action":"tool-inventory","skill":"www-spec"}'`는 실행 없이 출처를 조회한다. 개발 단계 실행은 해당 출처와 검토 상태를 컨텍스트·결과·로컬 영수증에 보존하며 호스트 의미 수용은 미확인으로 남긴다.
 
 현재 작업 접수·재개의 CLI는 `node scripts/workflow.ts '<JSON>'`이며 `action`으로 동작을 선택한다. 이 인터페이스가 구현돼 있다는 사실과 실제 Codex·GUI·검토 흐름의 통합 검증은 구분한다. 입력의 권한 정보는 사용자의 유효한 요청에서 정하며, 예제나 역할 선택이 실행 승인을 만들지 않는다.
@@ -136,11 +154,19 @@ WWW 프로젝트 유형(Desktop 포함)의 여섯 Skills 정본은 `skills/www/`
 
 `status.repositoryConsistency`는 작업의 기능 증거와 별개의 전체 저장소 검사 상태다. 작업이 완료돼도 이후 다른 작업 기록이 바뀌면 전체 검사는 오래된 상태일 수 있다. 최종 기록 갱신 후 `check-repository`에 `command`, `args`를 지정해 다시 검사한다. 기본 명령은 현재 Node로 작업 계약 검사기를 실행한다. 상세 정책과 잠금 복구의 한계는 [공통 계약](skills/WORKFLOW.md)을 따른다.
 
+검증·문서 영향 검토·독립 검토를 기록해도 필수 기준의 최신 검증이 누락되거나 오래되면 다음 행동은 `verify`다. 모든 필수 검증이 현재 적용 가능할 때 검증·문서 검토는 `review`로, 적용 가능한 독립 검토는 `complete`로 인계한다. 현재 검사 실패로 구현 수정이 필요한 경우의 `build` 인계는 유지한다. 단계 표시는 업무 완료 판정을 대신하지 않는다.
+
+선언한 분업의 필수 단위가 아직 수용되지 않았으면 기준 검사만 통과했더라도 구현 권한이 있는 작업은 `build`, 없는 작업은 `verify`로 인계하고 실제 미수용 사유를 남긴다. 분업이 없거나 수용된 작업에서 `complete`는 완료 판정을 준비하는 단계이며 즉시 수락됐다는 표시가 아니다. 보고서만 남았다면 보고서 계약의 저작 `report` 후 `report-complete` 순서를 따르고 최종 완료 core가 다시 판정한다.
+
 `open.decision`은 역할이 정리한 `intent`, `area`, `title`, `kind`, `areas`, `owner`, `criteria`와 필요한 기존 `workId`를 전달한다. 각 기준은 ID·설명·필수 여부와 선택적 `requirementRefs`를 가진다. `approval`은 구현·쓰기 경로·변경 표면·허용 검증 명령·커밋·게시 범위이고, `inputs`는 검사 의존 파일·디렉터리의 저장소 상대 경로다. 사용자 원문을 단순 키워드만으로 구현 승인으로 바꾸지 않는다.
 
 CLI의 `runDevelopmentWorkflow` 검토 경로는 선택적으로 `reviewInputPaths: string[]`를 받는다. renderer API/IPC에는 이 옵션을 추가하지 않는다. `runReview.inputPaths`는 inline으로 제공할 literal 파일 목록이다. Terra app-server 검토는 full source manifest와 source digest를 유지하면서 선택한 UTF-8 내용만 총 512KiB까지 제공한다. 지정하지 않은 CLI 호출은 full manifest의 일반 파일과 현재 작업/검증 파일을 기본 후보로 사용한다. 기본 Opus에는 Terra inline preflight를 적용하지 않으며 기존 inputPaths 생략·디렉터리 입력을 유지한다. 직접 Terra는 시작 전에 선택을 준비하고, 기본 Opus는 입증된 quota 소진으로 Terra fallback을 실행할 때만 선택을 준비·검증한다. Terra 시작 전 cap을 넘거나 파일이 없으면 거부하므로 큰 저장소의 Terra 검토에는 명시 선택이 필요하다. Terra 선택의 빈 목록·디렉터리·경로 탈출·심볼릭 링크·비 UTF-8·다른 작업의 원장·기준은 거부한다. full source에 없는 파일은 현재 `work.json`과 같은 폴더의 `verification.md`, `spec.md` 및 해당 작업 레코드만 추가할 수 있다. 그 외 문서는 full source의 일반 파일로 일치해야 한다.
 
 선택 receipt의 `inputSelection`은 경로별 UTF-8 bytes/hash, 합계·상한, 선택 내용이 제공되지 않은 full manifest 항목을 구분한다. 실제 명령 관측은 `appServer.readScope.commandsObserved`에 보존하며, `bundleOnly`는 명령 관측 없이 inline bytes를 제공했다는 뜻이다. 추가 관련 파일의 읽기 전용 도구 사용은 허용하지만 미포함 파일을 모두 읽었다고 간주하지 않는다. `validateReview`는 선택 snapshot·범위·bundle·raw prompt·현행 소스/기준/정책/직접 권한을 재대조한다. 잘못된 선택은 Terra 모델 시작 전에 거부하며 자동 재실행하지 않는다. 기본 Opus의 호출에는 Terra cap·선택 검증을 걸지 않는다. quota fallback의 선택이 거부되어도 먼저 저장한 Opus 소진 원문은 보존한다. 기본 Opus와 입증된 quota 소진의 Terra fallback, 기존 receipt 읽기 경로는 유지한다.
+
+새 Terra 실행 원문은 `promptVersion: "literal-read-v1"`로 실제 전달한 읽기 안내와 결속한다. 버전이 없는 과거 원문은 알려진 두 정확한 템플릿만 재구성하고, 명시 버전의 본문 불일치·알 수 없는 버전·임의 프롬프트 변조는 거부한다. 과거 `fail`을 성공으로 바꾸지 않으며 소스·기준의 현재 적용성도 별도로 검사한다. 안내는 실제 읽기 명령 검사기가 허용하는 옵션을 따르고 `rg -A/-B/-C`로 범위를 넓히지 않는다. 문맥은 `sed -n '10,40p'` 같은 제한된 행 읽기를 사용한다.
+
+선택한 일반 파일은 저장된 `inputSnapshot`과 현재 파일의 SHA·모드를 다시 대조한다. full source 밖에서 추가로 선택한 현재 작업의 `spec.md`·`verification.md`도 변경·삭제·심볼릭 링크 교체 뒤에는 옛 검토를 수용하지 않는다. 현재 작업의 `work.json` 자체는 검토 이력·완료 상태를 정상 저장할 때 바이트가 바뀌므로 이 파일 한 개만 전체 바이트 핀에서 제외하며, 기존 작업 ID·요청·권한·기준·단계·소스 결속 검사는 유지한다. 검토 뒤 선택 문서를 고쳐 놓고 보고서 작성만으로 과거 감사를 현행화하지 않는다.
 
 문서 영향 검토의 정본과 필수 문서 범위는 [공통 계약](skills/WORKFLOW.md#문서-영향-검토)을 따른다. 아래는 항목 형식의 부분 예시이며, 실제 호출에는 필수 문서 전체와 해당 작업의 요구 참조 문서를 포함한다. 판단 기록은 `node scripts/workflow/work.ts '{"action":"document-review","workId":"work-UUID","documents":[{"path":"docs/ARCHITECTURE.md","decision":"unchanged","reason":"모듈 책임과 데이터 흐름이 유지됨"}]}'`로 남긴다. 완료 시 현재 source·criteria·문서 digest에 맞는 기록이 요구된다.
 
@@ -313,6 +339,8 @@ WWW 디자인 역할의 계약은 `agents/www-design/AGENT.md`, 상태·토큰 �
 
 HookRunSummary의 statusMessage와 entries 중 error/warning/stop만 제한된 진단에 포함하며 context 등 지침은 표시하지 않는다. `plugin contents changed; hook approval required`는 실제 Native에서 신뢰 게이트가 실행 전에 거부한 경우로 관측됐다. 설치·enabled와 현재 내용에 대한 trust는 별도다. 전역 trust hash를 제품이 자동 변경하거나 보안 검토를 우회하지 않는다.
 
+상세 모니터의 반복 Hook handler 상태는 `bun test test/native-activity.test.ts test/activity-sidebar.test.ts test/www-activity.test.ts`로 검사한다. 더 새로운 숫자·ISO 시작 시각, 지연 완료·복원·다른 턴·세션과 시각 없는 모호한 사건을 구분하며 최신 상태를 호출 횟수로 세지 않는다. 이 합성 사건 검사는 실제 설치 Native·GUI·플러그인 신뢰 수용과 별도다.
+
 ## 코드 설계도 생성과 검사
 
 `node scripts/generate-architecture.ts`는 현재 WWW TypeScript의 실제 모듈 참조와 파일·행·원문·내용 해시를 `src/architecture.generated.json`에 생성한다. `--check`는 소스를 바꾸지 않고 생성 자료가 현재 소스와 일치하는지 확인한다. `npm run build`는 번들 전에 같은 생성을 수행한다. 생성 JSON을 손으로 수정하지 않는다. 구조 ID 계약·등록 검사·분석 범위와 한계는 [코드 설계도](CODE_BLUEPRINT.md)에 설명한다.
@@ -349,9 +377,9 @@ write/check는 동일 논리경로 `src/architecture.generated.json`의 격리�
 이미 승인한 v1을 재질문하거나 JSON을 중복 승인하지 않는다. 같은 key의 다른 파일도 자동 확대하지 않는다. 미승인 TS shape는 원문을 유지하고 delta로 남긴다. 이 저장소 변경은 설치본·전역 Skill 배포를 뜻하지 않는다. 실제 통합 테스트는 성능 기준과 실행 budget을 구분한다. `architecture-harness.test.ts`의 canonical generator·공식 CLI 왕복은 일반 통합 사례에 60초, 기존 장기 subprocess 사례에 120초를 주며 실제 시간과 실패 원문을 함께 기록한다.
 
 
-개발 검증 `bun test test/work-json.test.ts --timeout 300000`은 현재 저장소 승인 문서에서 v1 28키·86쌍을 도출하여 공개 guide proof와 대조하고, 고정 Git 기준점의 JSON 승인 bytes를 확인한다. 격리 복사본에서 현재 승인 소스의 dry-run·Align·재Align·source check, 실제 양성 쓰기와 범위 밖·압축 구조 거부를 새로 실행한다. 도메인 writer는 fresh WorkRecord와 생성한 WorkReport를 `canonicalArchitectureJson`의 공개 pinned CLI 출력과 byte 단위로 비교한다. 로컬 개발 설치가 필요하며 과거 영수증이나 artifact hash만으로 의미 검사를 대신하지 않는다. v3 고정 제안·질문은 미승인 자료로 읽고 현재 source와 다른 key/file은 별도 addendum으로 출력한다.
+제품 검증 `bun test test/work-json.test.ts --timeout 300000`은 직렬화·정책·크기 제한·원장과 보고서 보존의 제품 테스트 12개를 실행하며 외부 BoxBox CLI를 호출하지 않는다. v1 28키·86쌍의 공개 proof, 고정 Git 승인 bytes, 격리 복사본의 dry-run·Align·재Align·source check와 pinned CLI golden 비교 4개 시나리오는 `test/boxbox/work-json.test.ts`에 보존하며 `npm run test:boxbox`로 별도 실행한다. 이 명령은 프로젝트 mode가 off이면 disabled·비성공 종료로 실행을 거부한다. 실제 외부 검사는 로컬 개발 설치가 필요하며, 기존 실패나 미실행을 제품 검사 PASS로 대체하지 않는다. v3 고정 제안·질문은 미승인 자료로 읽고 현재 source와 다른 key/file은 별도 addendum으로 남긴다.
 
-`node scripts/verify-reports.ts`는 strict 검사 다음 위 실도구 테스트를 직렬로 실행하고 실패를 전파한 뒤 관련 집중 검사·빌드·Electron probe를 수행한다. 실도구 테스트별 예산은 300초, 전체 의미 테스트 자식 실행 예산은 900초다. runtime fixture의 개발 설정 부재, package runtime 의존성 및 main/preload/renderer bundle의 개발 CLI 경로 부재를 확인하고 Electron child PATH에는 Node와 git만 노출한다. 이 경계는 머신 전역 BoxBox 설치 제거를 뜻하지 않는다. 기존 fixture 보고서 bytes·legacy 원장 bytes/inode/mtime·no-op 원장의 재기록 여부를 실측하며, GUI 시작 실패는 원문과 prechecks를 보존하고 미확인으로 남긴다.
+`node scripts/verify-reports.ts`는 strict 검사 다음 제품 직렬화·보고서 테스트를 직렬로 실행하고 실패를 전파한 뒤 관련 집중 검사·빌드·Electron probe를 수행한다. 외부 BoxBox 실도구 검사는 이 경로와 semantic.log에 포함되지 않으며 별도 `npm run test:boxbox` 범위다. 현재 제품 의미 테스트의 테스트별 예산은 300초, 자식 실행 예산은 900초다. runtime fixture의 개발 설정 부재, package runtime 의존성 및 main/preload/renderer bundle의 개발 CLI 경로 부재를 확인하고 Electron child PATH에는 Node와 git만 노출한다. 기존 fixture 보고서 bytes·legacy 원장 bytes/inode/mtime·no-op 원장의 재기록 여부를 실측하며 GUI 시작 실패는 원문과 prechecks를 보존하고 미확인으로 남긴다.
 
 ## 빌드 버전과 배포
 

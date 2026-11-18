@@ -243,9 +243,9 @@ async function architectureGate(repo: string, required = false, regenerate = fal
     if (!object(response) || Object.keys(response).length !== 1 || typeof response.digest !== "string" || !/^[a-f0-9]{64}$/.test(response.digest)) {
       throw new Error("구조 검사 프로세스 JSON 응답이 올바르지 않습니다.");
     }
-    return { enabled, applicable: true, ok: true, signals, generatorExecuted: true, accepted: true, digest: response.digest, errors: [] };
+    return { enabled, applicable: true, ok: true, signals, generatorExecuted: regenerate, accepted: true, digest: response.digest, errors: [] };
   } catch (error) {
-    return { enabled, applicable: true, ok: false, signals, generatorExecuted: true, accepted: false, errors: [error instanceof Error ? error.message : String(error)] };
+    return { enabled, applicable: true, ok: false, signals, generatorExecuted: regenerate ? null : false, accepted: false, errors: [error instanceof Error ? error.message : String(error)] };
   }
 }
 
@@ -316,7 +316,9 @@ async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDe
   }
   const postTypes        = await typecheck(repo, postPolicy, run)                                                                                               ;
   const postBoxbox       = await boxbox(repo, local, [...new Set([...targets, ...changed])].filter(file => codeFile.test(file) && after.has(file)), false, run) ;
-  const postArchitecture = await architectureGate(repo, preArchitecture.enabled, writes.includes("src/architecture.generated.json"))                            ;
+  const canRegenerate = result.executed === true && object(result.mutation) && result.mutation.ok === true
+    && writes.includes("src/architecture.generated.json");
+  const postArchitecture = await architectureGate(repo, preArchitecture.enabled, canRegenerate)                                                              ;
   const finalPolicy      = await checkSourcePolicy(repo)                                                                                                        ;
   const sourceStable     = sameFiles(after, await fingerprints(repo, checkedFiles(finalPolicy)))                                                                ;
   errors.push(...finalPolicy.errors, ...postArchitecture.errors);

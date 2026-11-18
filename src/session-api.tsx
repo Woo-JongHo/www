@@ -13,6 +13,10 @@ export function SessionApiProvider({ id, children }: { id: string; children: Rea
     const base = window.www;
     const api: WwwApi = {
       ...base,
+      steerTurn: (selection, threadId, turnId, text, messageId) => {
+        if (selection.sessionId !== id) return Promise.reject(new Error("다른 대화 탭의 요청입니다."));
+        return base.steerTurn(selection, threadId, turnId, text, messageId);
+      },
       openExternal: (url) => base.openExternal(url, id),
       workspace: () => base.workspace(id),
       developmentPolicy: () => base.developmentPolicy(id),

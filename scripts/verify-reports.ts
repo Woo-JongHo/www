@@ -4,11 +4,16 @@ import { createHash, randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { openWork, readWork, advanceWork } from "./workflow/work.ts";
+import { openWork, readWork, advanceWork, verifyWork } from "./workflow/work.ts";
 import { serializeWorkRecord, serializeWorkReport } from "./workflow/work-json.ts";
 import { captureWorkReport, publishWorkReport, readWorkReport, listWorkReports } from "./workflow/reports.ts";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const options = process.argv.slice(2);
+if (options.length && (options.length !== 1 || options[0] !== "--meaning")) throw new Error("지원하는 옵션은 --meaning뿐입니다.");
+if (options[0] === "--meaning") {
+  await verifyReportMeaning();
+} else {
 await fs.mkdir(path.join(root, ".www/evidence"), { recursive: true });
 const directory = await fs.mkdtemp(path.join(root, ".www/evidence/reports-"));
 
@@ -47,7 +52,7 @@ try {
   const legacyWorkBefore = await fs.readFile(legacyPath)                                                                                ;
   const legacyStatBefore = await fs.stat(legacyPath)                                                                                    ;
   const legacy           = await captureWorkReport({ repo: fixture, workId: legacyId, event: "before_opt_in" })                         ;
-  const legacyFiles      = ["json", "html"].map((extension) => path.join(workDirectory, "reports", `${legacy.report.id}.${extension}`)) ;
+  const legacyFiles      = ["json", "html"].map((extension) => path.join(workDirectory, "reports", `${reportFileStem(legacy.report)}.${extension}`)) ;
   const legacyBytes      = await Promise.all(legacyFiles.map((file) => fs.readFile(file)))                                              ;
   await fs.mkdir(path.join(fixture, "docs/architecture"), { recursive: true });
   await fs.writeFile(path.join(fixture, "docs/architecture/work-output.json"), JSON.stringify({ version: 1, format: "boxbox-scalar-columns-v1", scope: "docs/work/**/*.json", approvalRef: ".www/architecture-contract/boxbox-side/human-approvals-20261114.json#json" }));
@@ -199,9 +204,132 @@ try {
     if (!/"id" +:/.test(raw) || document.report.workRecordHash !== createHash("sha256").update(raw).digest("hex")) throw new Error("Electron Native 최초 출력/hash 불일치");
   }
   await fs.writeFile(path.join(directory, "new-output.json"), JSON.stringify({ activePolicy: true, newWork: workId, rawHash: written.report.workRecordHash, nativeReports: nativeReports.length, oldReportsUnchanged, legacyWorkUnchanged, noOpUnchanged, runtimeBoxboxConfiguration }, null, 2));
-  console.log(JSON.stringify({ result: "passed", evidence: path.relative(root, directory), reportId: written.report.id, coverage: "실제 Electron+합성 Native·리포트 IPC·sandbox HTML·초안 보존·360px·모션 축소·PDF" }));
+  const meaning = await verifyReportMeaning(false);
+  if (meaning.result !== "passed") throw new Error(`보고서 양면 의미 검사 실패: ${meaning.evidence}`);
+  console.log(JSON.stringify({ result: "passed", evidence: path.relative(root, directory), reportId: written.report.id, meaningEvidence: meaning.evidence, coverage: "실제 Electron+합성 Native·리포트 IPC·sandbox HTML·초안 보존·360px·모션 축소·PDF·새/legacy 양면 의미색과 본문" }));
 } catch (error) {
   await fs.writeFile(path.join(directory, "failure.txt"), String(error));
   console.error(String(error));
   process.exitCode = 1;
+}
+
+}
+
+/** 실제 ReportsView와 독립 HTML을 같은 visible observer 결과로 비교한다. */
+async function verifyReportMeaning(emit = true) {
+await fs.mkdir(path.join(root, '.www/evidence'), { recursive: true });
+const directory = await fs.mkdtemp(path.join(root, '.www/evidence/report-meaning-'));
+const object = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
+const sha = (value: Buffer) => createHash('sha256').update(value).digest('hex');
+const productFiles = ['scripts/workflow/report-view.ts', 'scripts/workflow/reports.ts', 'src/reports-view.tsx', 'src/reports-service.ts', 'src/main.ts', 'scripts/verify-reports.ts'];
+async function fingerprints() { return Object.fromEntries(await Promise.all(productFiles.map(async file => [file, sha(await fs.readFile(path.join(root, file)))]))); }
+function run(command: string, argv: string[], env: NodeJS.ProcessEnv): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, argv, { cwd: root, env, stdio: ['ignore', 'pipe', 'pipe'] });
+    let output = '';
+    const timer = setTimeout(() => { child.kill('SIGTERM'); reject(new Error('의미 probe 시간 초과')); }, 120_000);
+    for (const stream of [child.stdout, child.stderr]) stream.on('data', chunk => { output = (output + chunk.toString()).slice(-2_000_000); });
+    child.once('error', error => { clearTimeout(timer); reject(error); });
+    child.once('close', (code, signal) => { clearTimeout(timer); if (code || signal) reject(new Error(`Electron 종료 ${code}/${signal}\n${output}`)); else resolve(output); });
+  });
+}
+function rgb(value: string): number[] {
+  if (value.startsWith('#')) { const h = value.slice(1); if (!/^[a-f0-9]{6}$/i.test(h)) throw new Error(`색상 형식: ${value}`); return [0, 2, 4].map(index => parseInt(h.slice(index, index + 2), 16)); }
+  const parts = value.match(/[\d.]+/g)?.map(Number);
+  if (!parts || parts.length < 3 || parts.length > 3 && parts[3] !== 1) throw new Error(`불투명 computed 색상 필요: ${value}`);
+  return parts.slice(0, 3);
+}
+function luminance(value: string) { const [r = 0, g = 0, b = 0] = rgb(value).map(x => { const s = x / 255; return s <= .04045 ? s / 12.92 : ((s + .055) / 1.055) ** 2.4; }); return .2126 * r + .7152 * g + .0722 * b; }
+function inspect(value: unknown, expected: Record<string, string[]>, label: string, failures: string[], includeBlocked = false) {
+  if (!object(value) || !object(value.regions) || !object(value.tokens) || !Array.isArray(value.states)) { failures.push(`${label}: 실제 의미 관측 없음`); return; }
+  const semanticTokens = value.tokens;
+  for (const [region, markers] of Object.entries(expected)) {
+    const found = value.regions[region];
+    for (const marker of markers) if (!object(found) || found.visible !== true || typeof found.text !== 'string' || !found.text.includes(marker)) failures.push(`${label}.${region}: visible marker 누락 ${marker}`);
+  }
+  const conclusion = value.regions.conclusion;
+  if (object(conclusion) && typeof conclusion.text === 'string' && conclusion.text.includes('의미검증-합성 인증 실패') && conclusion.text.includes('원인은 기록에서 확인되지 않았습니다')) failures.push(`${label}: 알고 있는 미실행 원인과 원인 미확인 안내 모순`);
+  if (value.rawClosed !== true) failures.push(`${label}: 원시 상세가 닫힌 기본 reader 관측이 아님`);
+  const stateExpectations: [string, string[]][] = [['당시 통과로 기록', ['green']], ['당시 실패로 기록', ['red', 'amber']], ['미검증으로 기록', ['amber']]];
+  if (includeBlocked) stateExpectations.push(['당시 차단으로 기록', ['amber']]);
+  for (const [text, tokens] of stateExpectations) {
+    const state = value.states.find(item => object(item) && item.label === text);
+    if (!object(state) || typeof state.color !== 'string' || typeof state.background !== 'string') { failures.push(`${label}: 상태 라벨 없음 ${text}`); continue; }
+    if (state.fullyOpaque !== true) { state.contrast = null; state.contrastStatus = 'unverified_partial_opacity'; failures.push(`${label}: ${text}의 라벨/조상 opacity가 1이 아니므로 대비 미검증`); continue; }
+    const actual = rgb(state.color).join(',');
+    if (!tokens.some(token => { const color = semanticTokens[token]; return typeof color === 'string' && rgb(color).join(',') === actual; })) failures.push(`${label}: ${text}의 computed 색이 선언된 ${tokens.join('/')} 의미 토큰과 다름`);
+    const a = luminance(state.color), b = luminance(state.background), contrast = (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+    state.contrast = contrast;
+    if (contrast < 4.5) failures.push(`${label}: ${text} 본문 대비 ${contrast.toFixed(3)} < 4.5`);
+  }
+  const positive = value.states.find(item => object(item) && item.label === '당시 통과로 기록');
+  const negative = value.states.find(item => object(item) && item.label === '당시 실패로 기록');
+  if (object(positive) && object(negative) && typeof positive.color === 'string' && typeof negative.color === 'string' && rgb(positive.color).join(',') === rgb(negative.color).join(',')) failures.push(`${label}: 성공/실패의 관측 의미색이 동일함`);
+}
+
+const before = await fingerprints();
+const failures: string[] = [];
+try {
+  const fixture = path.join(directory, 'fixture');
+  await fs.mkdir(path.join(fixture, 'src'), { recursive: true });
+  await fs.mkdir(path.join(fixture, 'docs/work'), { recursive: true });
+  await fs.writeFile(path.join(fixture, 'src/value.ts'), 'export const value = 1;\n');
+  await fs.writeFile(path.join(fixture, 'docs/work/INDEX.md'), '# 공개 합성 fixture\n');
+  const pass = ['-e', 'process.exit(0)'], fail = ['-e', 'process.exit(7)'];
+  const fresh = await openWork({ repo: fixture, role: 'www-dev', direct: true, requestId: 'report-meaning-public-fixture', request: '보고서 의미 관측용 공개 합성 자료', inputs: ['src'], decision: { intent: 'verify', area: 'Reports', title: '의미검증 신규 보고서', criteria: [{ id: 'AC-PASS', description: 'NEW-PASS-요구', required: true }, { id: 'AC-FAIL', description: 'NEW-FAIL-요구', required: true }, { id: 'AC-PENDING', description: 'NEW-UNVERIFIED-요구', required: true }] }, approval: { implementation: false, writePaths: [], mutationSurfaces: [], verifierCommands: [JSON.stringify([process.execPath, ...pass]), JSON.stringify([process.execPath, ...fail])] } });
+  await verifyWork({ repo: fixture, workId: fresh.record.id, command: process.execPath, args: pass, criterionIds: ['AC-PASS'] });
+  await verifyWork({ repo: fixture, workId: fresh.record.id, command: process.execPath, args: fail, criterionIds: ['AC-FAIL'] });
+  const authored = await publishWorkReport({ repo: fixture, workId: fresh.record.id, narrative: { summary: 'NEW-SUMMARY-합성 관측', before: 'NEW-BEFORE-시작점', after: 'NEW-AFTER-결과', changes: ['NEW-CHANGE-변경'], decisions: ['NEW-DECISION-BASIS-기존 서술의 선택 근거'], limitations: ['NEW-LIMIT-합성 범위'], next: ['NEW-NEXT-해소 행동'], reader: { story: 'NEW-STORY-공개 사용자 이야기', requirements: [{ requirement: 'NEW-REQ-행동', result: 'NEW-RESULT-결과', evidence: 'NEW-EVIDENCE-연결 근거', limitations: 'NEW-REQ-LIMIT-한계' }], checks: [{ target: 'NEW-CHECK-검증 대상', method: 'NEW-METHOD-실제 합성 명령', expected: 'NEW-EXPECTED-기대', observed: null, limitations: 'NEW-CHECK-LIMIT-미관측' }], decisions: [], references: [], nextActions: [] } } });
+  const legacyWork = path.join(fixture, 'docs/work/Reports/099-legacy');
+  await fs.mkdir(legacyWork, { recursive: true });
+  const legacyId = `work-${randomUUID()}`;
+  await fs.writeFile(path.join(legacyWork, 'work.json'), JSON.stringify({ schemaVersion: 1, id: legacyId, title: '의미검증 legacy 자동 기록', kind: 'maintenance', areas: ['dev'], owner: 'dev', status: 'verifying', blockedReason: '독립 검토 not_run: 의미검증-합성 인증 실패', relations: [], criteria: [{ id: 'OLD-PASS', description: 'LEGACY-PASS-요구', required: true, result: 'passed', evidence: [] }, { id: 'OLD-FAIL', description: 'LEGACY-FAIL-요구', required: true, result: 'failed', evidence: [] }, { id: 'OLD-BLOCKED', description: 'LEGACY-BLOCKED-요구', required: true, result: 'blocked', evidence: [] }, { id: 'OLD-UNVERIFIED', description: 'LEGACY-UNVERIFIED-요구', required: true, result: 'unverified', evidence: [] }] }));
+  const legacy = await captureWorkReport({ repo: fixture, workId: legacyId, event: 'meaning_legacy_fixture' });
+  const cases: { name: string; report: typeof authored.report; expected: Record<string, string[]> }[] = [
+    { name: 'new', report: authored.report, expected: { conclusion: ['NEW-SUMMARY', 'NEW-STORY'], approach: ['NEW-BEFORE', 'NEW-AFTER', 'NEW-DECISION-BASIS'], results: ['NEW-REQ-행동', 'NEW-RESULT', 'NEW-EVIDENCE', 'NEW-REQ-LIMIT', 'NEW-UNVERIFIED'], verification: ['NEW-CHECK', 'NEW-METHOD', 'NEW-EXPECTED', '관측 결과가 기록되지 않았습니다', 'NEW-LIMIT'], next: ['NEW-NEXT'] } },
+    { name: 'legacy', report: legacy.report, expected: { conclusion: ['의미검증-합성 인증 실패', '자동 기록에는 작성자가 서술한 작업 이야기가 없습니다'], results: ['LEGACY-PASS', 'LEGACY-FAIL', 'LEGACY-BLOCKED', 'LEGACY-UNVERIFIED'], verification: ['연결된 검사 시도가 없습니다. 미검증입니다', '연결된 독립 검토가 없습니다. 미실행입니다'] } }
+  ];
+  const binary = process.platform === 'darwin' ? path.join(root, 'node_modules/electron/dist/Electron.app/Contents/MacOS/Electron') : process.platform === 'win32' ? path.join(root, 'node_modules/electron/dist/electron.exe') : path.join(root, 'node_modules/electron/dist/electron');
+  for (const item of cases) {
+    const folder = path.join(directory, item.name); await fs.mkdir(folder);
+    const reportPath = path.join(folder, 'probe.json');
+    const env: NodeJS.ProcessEnv = { ...process.env, WWW_CODEX_BIN: path.join(root, 'test/fixtures/fake-app-server.ts'), WWW_PROBE_PATH: reportPath, WWW_PROBE_WORKSPACE: fixture, WWW_PROBE_REPORTS: '1' };
+    for (const key of ['ELECTRON_RUN_AS_NODE', 'WWW_NATIVE_PROBE', 'WWW_PROBE_NATIVE_REPORTS', 'WWW_PROBE_REPORT_JUDGE_BIN', 'WWW_PROBE_DEVELOPMENT_WORK_ID', 'WWW_PROBE_EXPECT_DEVELOPMENT_COMPLETE', 'WWW_PROBE_REPORT_MEANING_ID']) delete env[key];
+    env.WWW_PROBE_REPORT_MEANING_ID = item.report.id;
+    try {
+      await fs.writeFile(path.join(folder, 'electron.log'), await run(binary, [root, `--user-data-dir=${path.join(folder, 'profile')}`], env));
+      const value: unknown = JSON.parse(await fs.readFile(reportPath, 'utf8'));
+      if (!object(value) || value.error || !object(value.reportArtifacts) || !object(value.reportArtifacts.embedded)) throw new Error(`실제 probe 결과 오류 ${JSON.stringify(value)}`);
+      const artifacts = value.reportArtifacts, embedded = artifacts.embedded;
+      if (!object(embedded) || embedded.title !== item.report.title || typeof embedded.storyHeight !== 'number' || embedded.storyHeight <= 0) throw new Error('기존 iframe 제목/story 가시성 조건 실패');
+      for (const key of ['reportsNavigation', 'reportsSandboxed', 'reportsEmptySearch', 'reportsDraftPreserved', 'approvalRoundtrip']) if (value[key] !== true) throw new Error(`기존 probe 호환 필드 실패: ${key}`);
+      if (!object(artifacts.mobile) || artifacts.mobile.width !== 360 || typeof artifacts.mobile.scrollWidth !== 'number' || artifacts.mobile.scrollWidth > 360 || !object(artifacts.reducedMotion) || artifacts.reducedMotion.enabled !== true || artifacts.reducedMotion.animations !== 0 || artifacts.printed !== true) throw new Error('기존 mobile/motion/PDF 조건 실패');
+      {
+        if (!object(artifacts.meaning) || artifacts.meaning.reportId !== item.report.id || artifacts.meaning.kind !== item.report.kind) throw new Error('선택한 공개 report 객체 불일치');
+        if (item.name === 'new') {
+          const sample = embedded.observerSamples;
+          const normalized = object(sample) && object(sample.regions) && object(sample.regions.conclusion) ? sample.regions.conclusion.text : null;
+          if (typeof normalized !== 'string' || !normalized.includes('literal-s s sample keeps')) throw new Error('CDP literal s/연속 공백 정규화 표본 실패');
+          const sampleFailures: string[] = [];
+          inspect(sample, {}, 'observer-opacity-sample', sampleFailures);
+          if (!sampleFailures.some(message => message.includes('opacity'))) throw new Error('opacity 0.1 표본의 대비 미검증 판정을 확인하지 못함');
+          const state = object(sample) && Array.isArray(sample.states) ? sample.states.find(value => object(value) && value.label === '당시 통과로 기록') : null;
+          if (!object(state) || state.fullyOpaque !== false || !Array.isArray(state.opacityChain) || !state.opacityChain.includes(.1) || state.contrast !== null) throw new Error('실제 조상 opacity 0.1 관측 누락');
+          await fs.writeFile(path.join(folder, 'observer-samples.json'), JSON.stringify({ normalized, expectedNormalization: 'literal-s s sample keeps', expectedOpacityRejection: true, sampleFailures, sample }, null, 2)+'\n');
+        }
+        inspect(embedded.meaning, item.expected, `${item.name}.iframe`, failures, item.name === 'legacy');
+        inspect(artifacts.meaning.standalone, item.expected, `${item.name}.standalone`, failures, item.name === 'legacy');
+        await fs.writeFile(path.join(folder, 'meaning-observed.json'), JSON.stringify({ expected: item.expected, iframe: embedded.meaning, standalone: artifacts.meaning.standalone }, null, 2)+'\n');
+      }
+    } catch (error) { failures.push(`${item.name}: ${String(error)}`); await fs.writeFile(path.join(folder, 'failure.txt'), String(error)); }
+  }
+} catch (error) { failures.push(String(error)); }
+const after = await fingerprints();
+if (JSON.stringify(before) !== JSON.stringify(after)) failures.push('검사 중 제품/probe 입력 지문 변경');
+const summary = { result: failures.length ? 'failed' : 'passed', mode: 'new-and-legacy-visible-meaning', failures, productSourceBefore: before, productSourceAfter: after, sourceStable: JSON.stringify(before) === JSON.stringify(after), evidence: path.relative(root, directory), scope: '실제 React ReportsView sandbox OOPIF 및 독립 HTML. 명시 예상 marker·CSS 가시성·computed 의미색·본문 대비4.5. 합성 fixture/Native이며 실제 모델 호출 없음. 현재성 시점 문구는 의미 동일성 비교에서 제외.' };
+await fs.writeFile(path.join(directory, 'summary.json'), JSON.stringify(summary, null, 2)+'\n');
+if (emit) console.log(JSON.stringify(summary));
+if (failures.length) process.exitCode = 1;
+return summary;
+
 }

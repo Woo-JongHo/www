@@ -5,7 +5,7 @@ import { afterEach, test } from 'bun:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
-import { copyFile, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { chmod, copyFile, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -95,7 +95,7 @@ function fakeTools(change: () => Promise<void> = async () => {}) {
     prompt = String(invocation.stdin);
     hosted = true;
     await change();
-    return { ok: true, code: 0, outcome: 'passed', stdout: 'fixture', stderr: '', outputTruncated: false, threadId: 'fixture', events: [] };
+    return { ok: true, code: 0, outcome: 'passed', stdout: 'fixture', stderr: '', outputTruncated: false, threadId: 'fixture', events: [], inputDelivered: true };
   }
   return { faults, runCommand, runHost, commands, calls: () => calls, prompt: () => prompt };
 }
@@ -119,6 +119,13 @@ test('project mode off는 guide와 source check를 호출하지 않고 disabled�
   }
   const guidance = JSON.parse(tools.prompt().split('작성 하네스 관찰 데이터\n')[1]);
   assert.deepEqual(record(guidance).boxbox, { status: 'disabled', mode: 'off', observations: [], guides: [] });
+  assert(Array.isArray(result.tools));
+  assert(result.tools.some(item => isRecord(item) && item.status === 'available'));
+  for (const item of result.tools) {
+    assert(isRecord(item));
+    assert.equal(item.provided, item.status === 'available');
+    assert.equal(item.hostAcceptance, 'unconfirmed');
+  }
 });
 
 test('mode off여도 사후 타입·소스 정책·미선언 변경은 실패한다', async () => {
@@ -384,4 +391,37 @@ test('선언하지 않은 타입 검사 설정 변경도 사후에 거부한다'
   });
   const result = await runTypedWorkflow(options(repo), tools);
   assert.equal(record(result.harness).ok, false);
+});
+
+
+test('표준 typed guidance append는 실제 Node stdio에 정본을 제공하고 의미 수용은 미확인으로 둔다', async () => {
+  const repo=await fixture(),tools=fakeTools();tools.faults.mode='off';
+  const directory=path.join(repo,'.www/fixture/bin'),executable=path.join(directory,'codex');
+  await put(repo,'.www/fixture/bin/codex',`#!/usr/bin/env node
+const fs=require('node:fs');let input='';process.stdin.setEncoding('utf8');
+process.stdin.on('data',chunk=>input+=chunk);
+process.stdin.on('end',()=>{
+ fs.writeFileSync('.www/typed-received.txt',input);
+ for(const event of [{type:'thread.started',thread_id:'typed-guidance-fixture'},{type:'fixture.runtime',node:process.version,bun:process.versions.bun??null},{type:'turn.completed'}])console.log(JSON.stringify(event));
+});
+`);
+  await chmod(executable,0o700);
+  const result=await runTypedWorkflow(options(repo,{env:{PATH:directory+path.delimiter+(process.env.PATH??'')}}),{runCommand:tools.runCommand});
+  const harness=record(result.harness),host=record(result.host);
+  assert.equal(harness.ok,true);assert.equal(harness.executor,'process');assert.equal(harness.toolExecutor,'injected');
+  assert.equal(result.executor,'process');assert.equal(host.inputDelivered,true);assert.equal(host.outcome,'passed');
+  assert.equal(record(record(result.modelExecution).observed).model,null);
+  const input=await readFile(path.join(repo,'.www/typed-received.txt'),'utf8');
+  assert(input.includes('\n\n작성 하네스 관찰 데이터\n'));
+  const sourceFiles=['AGENTS.md','agents/www/AGENT.md','docs/skills/WORKFLOW.md','skills/www/www-build/SKILL.md','agents/www/review-policy.json'];
+  for(const file of sourceFiles)assert(input.includes('--- '+file+' ---\n'+await readFile(path.join(repo,file),'utf8')));
+  assert(Array.isArray(result.tools));assert.equal(result.tools.filter(item=>isRecord(item)&&item.status==='available').length,5);
+  for(const item of result.tools){assert(isRecord(item));assert.equal(item.provided,item.status==='available');assert.equal(item.hostAcceptance,'unconfirmed');}
+  const relative=result.receiptPath;assert(typeof relative==='string');
+  const receipt:unknown=JSON.parse(await readFile(path.join(repo,relative),'utf8'));assert(isRecord(receipt));
+  assert.deepEqual(receipt.tools,result.tools);assert.equal(record(receipt.host).inputDelivered,true);
+  const output=host.stdout;assert(typeof output==='string');
+  const runtime=output.split('\n').filter(Boolean).map((line):unknown=>JSON.parse(line)).find(item=>isRecord(item)&&item.type==='fixture.runtime');
+  assert(isRecord(runtime));assert.equal(runtime.bun,null);assert(typeof runtime.node==='string');
+  console.log(JSON.stringify({typedGuidanceFixture:{runtime:runtime.node,executor:result.executor,inputDelivered:host.inputDelivered,provided:5,hostAcceptance:'unconfirmed',modelObserved:null,scope:'실제 Node fake-Codex stdio, compiler/BoxBox는 명시 test double; 모델호출 아님'}}));
 });

@@ -70,8 +70,8 @@ try {
   await pause(1800);
   await wait(`(()=>{const t=document.querySelector(${JSON.stringify(surface(a) + ' .transcript')});return t.scrollHeight>t.clientHeight})()`, "A 읽기 위치를 확인할 스크롤 영역");
   await evaluate(`(()=>{const t=document.querySelector(${JSON.stringify(surface(a) + ' .transcript')});t.scrollTop=0;t.dispatchEvent(new Event('scroll'))})()`);
-  await click(surface(a) + ' [data-testid="detail-monitor-toggle"]');
   await input(a, "A 초안 보존");
+  await click(surface(a) + ' [data-testid="monitoring-nav"]');
   await click('[aria-label="새 대화 탭 추가"]');
   await wait("document.querySelectorAll('[role=tab]').length===2", "두 번째 독립 탭 생성");
   const second = (await sessions()).find(item => item.id !== a);
@@ -110,6 +110,7 @@ try {
   await wait(`document.querySelector(${JSON.stringify(tab(a))}).parentElement.querySelector('.session-tab-close').disabled && document.querySelector(${JSON.stringify(tab(b))}).parentElement.querySelector('.session-tab-close').disabled`, "실행·승인 탭 닫기 UI 제한");
   const closeBusy = String(await evaluate(`window.www.closeSession(${JSON.stringify(a)}).then(()=> 'allowed',e=>String(e))`));
   if (closeBusy === "allowed") throw Error("실행 탭 직접 닫기가 허용됐습니다.");
+  await click(surface(a) + ' [data-testid="monitoring-return-chat"]');
   await click(surface(a) + ' .approval.open [data-decision="accept"]');
   await wait(`window.www.listSessions().then(s=>s.find(x=>x.id===${JSON.stringify(a)})?.approvalCount===0 && s.find(x=>x.id===${JSON.stringify(b)})?.approvalCount===1)`, "A 승인 후 B 승인 대기 유지");
   await click(surface(a) + ' [data-testid="interrupt-button"]');

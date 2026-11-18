@@ -1,0 +1,245 @@
+{
+  "schemaVersion": 1,
+  "id": "statechart.development-work",
+  "structureId": "arch.development.records.state",
+  "title": "개발 작업의 검증·수용·완료",
+  "initial": "work.ready",
+  "states": [
+    {
+      "id": "work.ready",
+      "title": "실행 준비"
+    },
+    {
+      "id": "work.in_progress",
+      "title": "구현 중"
+    },
+    {
+      "id": "work.verifying",
+      "title": "검증과 검토"
+    },
+    {
+      "id": "work.done",
+      "title": "업무 완료"
+    }
+  ],
+  "rules": [
+    {
+      "id": "rule.authorized",
+      "description": "현재 요청의 권한과 입력 범위를 확인한다."
+    },
+    {
+      "id": "rule.host-only",
+      "description": "호스트 정상 종료는 실행 사실이며 업무 수용이 아니다."
+    },
+    {
+      "id": "rule.criteria-current",
+      "description": "필수 기준의 실제 프로세스 검증과 소스·기준·입력 범위가 현재여야 한다."
+    },
+    {
+      "id": "rule.review-current",
+      "description": "정책에서 요구하는 독립 검토가 현재 소스·기준에 적용돼야 한다."
+    },
+    {
+      "id": "rule.report-current",
+      "description": "보고서 적용 작업에는 현재 저작 보고서가 필요하다."
+    },
+    {
+      "id": "rule.source-stable",
+      "description": "완료 판정 중 소스가 바뀌면 거부한다."
+    },
+    {
+      "id": "rule.unit-acceptance",
+      "description": "분업 계획이 있는 작업은 모든 단위의 실제 호스트·필수 산출물·현재 검증이 수용되어야 한다."
+    }
+  ],
+  "transitions": [
+    {
+      "id": "transition.begin",
+      "from": "work.ready",
+      "to": "work.in_progress",
+      "event": "구현 단계 시작",
+      "guards": [
+        "rule.authorized"
+      ],
+      "effect": "허용된 범위에서 구현을 시작한다.",
+      "code": [
+        {
+          "file": "scripts/workflow/work.ts",
+          "symbol": "advanceWork"
+        }
+      ],
+      "tests": [
+        {
+          "file": "test/workflow-development.test.ts",
+          "symbol": "F01/F02 공개 개발 진입은 소유 충돌·미정의 의존·순환을 호스트 실행 전에 거부한다"
+        }
+      ]
+    },
+    {
+      "id": "transition.host-return",
+      "from": "work.in_progress",
+      "to": "work.in_progress",
+      "event": "호스트 정상 종료",
+      "guards": [
+        "rule.host-only"
+      ],
+      "effect": "실행 결과와 영수증을 보존한다. 업무 수용이나 완료로 승격하지 않는다.",
+      "code": [
+        {
+          "file": "scripts/workflow/run.ts",
+          "symbol": "allocationHistory"
+        }
+      ],
+      "tests": [
+        {
+          "file": "test/workflow-development.test.ts",
+          "symbol": "F03 정상 호스트 종료와 미실행·누락 산출물의 업무 수용을 구별하고 선행 승격을 차단한다"
+        }
+      ]
+    },
+    {
+      "id": "transition.unit-accept",
+      "from": "work.in_progress",
+      "to": "work.in_progress",
+      "event": "단위 산출물과 검증 수용",
+      "guards": [
+        "rule.unit-acceptance"
+      ],
+      "effect": "호스트 종료와 구별한 단위별 수용을 판단한다. 통합 뒤 완료 시점에는 현재성을 다시 확인한다.",
+      "code": [
+        {
+          "file": "scripts/workflow/decomposition.ts",
+          "symbol": "assessUnitAcceptance"
+        }
+      ],
+      "tests": [
+        {
+          "file": "test/workflow-development.test.ts",
+          "symbol": "C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 수용하고 통합 후 재검증으로 갱신한다"
+        }
+      ]
+    },
+    {
+      "id": "transition.verify",
+      "from": "work.in_progress",
+      "to": "work.verifying",
+      "event": "검증 시도 기록",
+      "guards": [
+        "rule.authorized"
+      ],
+      "effect": "성공·실패·주입 여부와 현재성 입력을 보존한다.",
+      "code": [
+        {
+          "file": "scripts/workflow/work.ts",
+          "symbol": "verifyWork"
+        }
+      ],
+      "tests": [
+        {
+          "file": "test/workflow-completion-faults.test.ts",
+          "symbol": "F04: 미실행과 실패는 서로 다른 이유로 완료를 거부하고 실패 이력을 보존한다"
+        }
+      ]
+    },
+    {
+      "id": "transition.rework",
+      "from": "work.verifying",
+      "to": "work.in_progress",
+      "event": "검증 실패 후 같은 범위 수정",
+      "guards": [
+        "rule.authorized"
+      ],
+      "effect": "실패 이력을 유지하고 허용된 구현으로 돌아간다.",
+      "code": [
+        {
+          "file": "scripts/workflow/work.ts",
+          "symbol": "advanceWork"
+        }
+      ],
+      "tests": [
+        {
+          "file": "test/workflow-development.test.ts",
+          "symbol": "주입 호스트 성공 뒤 실제 verifier 실패는 같은 작업의 실패와 수정 단계를 남긴다"
+        }
+      ]
+    },
+    {
+      "id": "transition.complete",
+      "from": "work.verifying",
+      "to": "work.done",
+      "event": "업무 완료 요청",
+      "guards": [
+        "rule.criteria-current",
+        "rule.review-current",
+        "rule.report-current",
+        "rule.source-stable",
+        "rule.unit-acceptance"
+      ],
+      "effect": "공통 완료 판정이 모두 충족되면 done을 기록한다.",
+      "code": [
+        {
+          "file": "scripts/workflow/work.ts",
+          "symbol": "completeWork"
+        },
+        {
+          "file": "scripts/workflow/decomposition.ts",
+          "symbol": "assessDecompositionCompletion"
+        },
+        {
+          "file": "scripts/workflow/completion-report.ts",
+          "symbol": "assessCompletionReport"
+        },
+        {
+          "file": "scripts/workflow/evidence.ts",
+          "symbol": "evaluateEvidence"
+        },
+        {
+          "file": "scripts/workflow/review.ts",
+          "symbol": "validateReview"
+        }
+      ],
+      "tests": [
+        {
+          "file": "test/workflow-completion-faults.test.ts",
+          "symbol": "F09/F11: 저작 보고서가 없으면 raw core와 wrapper·공개 CLI 모두 완료를 거부한다"
+        },
+        {
+          "file": "test/workflow-completion-faults.test.ts",
+          "symbol": "C01/F09: 현재 저작 보고서는 허용하고 보고서 작성 뒤 기록 변경은 거부한다"
+        },
+        {
+          "file": "test/workflow-completion-faults.test.ts",
+          "symbol": "F05/F08: 소스 변경은 옛 검사와 검토를 남기고 현재 완료를 거부한다"
+        }
+      ]
+    }
+  ],
+  "counterexamples": [
+    {
+      "id": "counterexample.stale-completion",
+      "events": [
+        "검증 통과",
+        "대상 소스 변경",
+        "완료 요청"
+      ],
+      "rejectedBy": "rule.criteria-current",
+      "test": {
+        "file": "test/workflow-work.test.ts",
+        "symbol": "같은 HEAD에서 관련 소스가 달라지면 과거 PASS를 보존하고 재검증으로 재개한다"
+      }
+    },
+    {
+      "id": "counterexample.host-only",
+      "events": [
+        "호스트 exit 0",
+        "필수 검증 미실행",
+        "완료 요청"
+      ],
+      "rejectedBy": "rule.host-only",
+      "test": {
+        "file": "test/workflow-statechart.test.ts",
+        "symbol": "호스트 종료의 자기 전이는 업무 완료를 뜻하지 않는다"
+      }
+    }
+  ]
+}

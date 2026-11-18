@@ -6,7 +6,7 @@
 import { constants } from "node:fs";
 import * as fs from "node:fs/promises";
 import { isAbsolute, join, relative, resolve, sep } from "node:path";
-import type { DashboardIssue, DashboardProject, DashboardProjectSnapshot, DashboardSnapshot, DashboardWork, WorkStatus } from "./shared";
+import type { DashboardIssue, DashboardProject, DashboardProjectSnapshot, DashboardSnapshot, DashboardWork, DashboardWorkDetail, WorkStatus } from "./shared";
 
 export const DASHBOARD_LIMITS = {
   projects: 100, files: 500, entries: 5000, depth: 5,
@@ -73,6 +73,7 @@ function parseWork(bytes: Buffer, projectKey: string, source: string): Dashboard
     || new Set(value.areas).size !== value.areas.length || typeof value.owner !== "string" || !value.areas.includes(value.owner)
     || !Array.isArray(value.criteria) || value.criteria.length === 0
     || value.criteria.some((criterion) => !object(criterion) || !text(criterion.id, 128)
+      || !text(criterion.description, 8000) || !(criterion.evidence === undefined || Array.isArray(criterion.evidence))
       || typeof criterion.required !== "boolean" || typeof criterion.result !== "string" || !RESULTS.includes(criterion.result))) {
     throw new ReadFailure("invalid_record", "작업 식별자·상태·차단 사유·기준의 형식이 올바르지 않습니다.");
   }
@@ -85,18 +86,18 @@ function parseWork(bytes: Buffer, projectKey: string, source: string): Dashboard
     passedCriteria: required.filter((criterion: Record<string, unknown>) => criterion.result === "passed").length };
 }
 
-async function readWork(root: string, file: string, projectKey: string, budget: { bytes: number }): Promise<DashboardWork> {
+async function readBytes(root: string, file: string, budget: { bytes: number }, limit: number): Promise<Buffer> {
   await directory(root, resolve(file, ".."));
   const info = await fs.lstat(file);
   if (!info.isFile() || info.isSymbolicLink() || info.nlink !== 1) throw new ReadFailure("unsafe_path", "일반 파일이 아닌 작업 기록과 링크를 거부했습니다.");
-  if (info.size > DASHBOARD_LIMITS.fileBytes) throw new ReadFailure("file_size_limit", "작업 기록 하나의 크기 한도(4 MiB)를 넘었습니다.");
-  if (info.size > budget.bytes) throw new ReadFailure("total_size_limit", "이번 전체 수집의 읽기 한도(32 MiB)를 넘었습니다.");
+  if (info.size > limit) throw new ReadFailure("file_size_limit", "파일 하나의 읽기 크기 한도를 넘었습니다.");
+  if (info.size > budget.bytes) throw new ReadFailure("total_size_limit", "이번 읽기의 전체 크기 한도를 넘었습니다.");
   if (await fs.realpath(file) !== file) throw new ReadFailure("unsafe_path", "작업 기록의 실제 경로가 바뀌었습니다.");
   const handle = await fs.open(file, constants.O_RDONLY | constants.O_NOFOLLOW);
   try {
     const opened = await handle.stat();
     if (!opened.isFile() || opened.nlink !== 1 || opened.dev !== info.dev || opened.ino !== info.ino) throw new ReadFailure("changed_during_read", "읽기 전에 작업 기록이 교체되었습니다.");
-    const capacity = Math.min(DASHBOARD_LIMITS.fileBytes, budget.bytes, info.size) + 1;
+    const capacity = Math.min(limit, budget.bytes, info.size) + 1;
     const bytes = Buffer.alloc(capacity);
     let length = 0;
     while (length < capacity) {
@@ -106,8 +107,8 @@ async function readWork(root: string, file: string, projectKey: string, budget: 
     }
     const remaining = budget.bytes;
     budget.bytes = Math.max(0, remaining - length);
-    if (length > DASHBOARD_LIMITS.fileBytes) throw new ReadFailure("file_size_limit", "읽는 중 작업 기록이 크기 한도를 넘었습니다.");
-    if (length > remaining) throw new ReadFailure("total_size_limit", "이번 전체 수집의 읽기 한도(32 MiB)를 넘었습니다.");
+    if (length > limit) throw new ReadFailure("file_size_limit", "읽는 중 파일이 크기 한도를 넘었습니다.");
+    if (length > remaining) throw new ReadFailure("total_size_limit", "이번 읽기의 전체 크기 한도를 넘었습니다.");
     await directory(root, resolve(file, ".."));
     const current = await fs.lstat(file);
     const after = await handle.stat();
@@ -115,10 +116,14 @@ async function readWork(root: string, file: string, projectKey: string, budget: 
       || after.nlink !== 1 || after.size !== info.size || length !== info.size || after.mtimeMs !== info.mtimeMs || after.ctimeMs !== info.ctimeMs) {
       throw new ReadFailure("changed_during_read", "수집 중 작업 기록이 바뀌어 이번 카드를 제외했습니다.");
     }
-    return parseWork(bytes.subarray(0, length), projectKey, sourcePath(root, file));
+    return bytes.subarray(0, length);
   } finally {
     await handle.close();
   }
+}
+
+async function readWork(root: string, file: string, projectKey: string, budget: { bytes: number }): Promise<DashboardWork> {
+  return parseWork(await readBytes(root, file, budget, DASHBOARD_LIMITS.fileBytes), projectKey, sourcePath(root, file));
 }
 
 async function readProject(project: DashboardProject, budget: { bytes: number }): Promise<DashboardProjectSnapshot> {
@@ -151,6 +156,7 @@ async function readProject(project: DashboardProject, budget: { bytes: number })
           if (++entries > DASHBOARD_LIMITS.entries) {
             limited = true; add(new ReadFailure("entry_limit", "프로젝트의 탐색 항목 한도(5,000개)를 넘었습니다."), path); break;
           }
+          if (entry.isSymbolicLink() && ["spec.md", "design.md", "tasks.md", "verification.md"].includes(entry.name)) continue;
           if (entry.isSymbolicLink()) { add(new ReadFailure("unsafe_path", "작업 기록 범위의 심볼릭 링크를 제외했습니다."), file); continue; }
           if (entry.name === "work.json") {
             if (++files > DASHBOARD_LIMITS.files) {
@@ -186,4 +192,47 @@ export async function readDashboard(projects: readonly DashboardProject[]): Prom
     } else snapshots.push(await readProject(project, budget));
   }
   return { capturedAt: new Date().toISOString(), projects: snapshots };
+}
+
+/** 프로젝트 snapshot에서 UUID 유일성을 확인하고 같은 작업 폴더의 문서만 읽는다. */
+export async function readDashboardWork(projects: readonly DashboardProject[], projectKey: string, workId: string): Promise<DashboardWorkDetail> {
+  const matches = projects.filter(project => project.key === projectKey);
+  if (matches.length !== 1 || !WORK_ID.test(workId)) throw new Error("프로젝트 또는 작업 식별자가 올바르지 않습니다.");
+  const project = matches[0]!;
+  const snapshot = await readProject(project, { bytes: DASHBOARD_LIMITS.totalBytes });
+  if (snapshot.coverage !== "complete") throw new Error("프로젝트 작업 목록이 불완전하여 작업의 유일성을 확인할 수 없습니다.");
+  const card = snapshot.cards.find(item => item.id.toLowerCase() === workId.toLowerCase());
+  if (!card) throw new Error("해당 프로젝트에서 작업을 찾을 수 없습니다.");
+  const file = join(project.path, card.sourcePath);
+  const bytes = await readBytes(project.path, file, { bytes: DASHBOARD_LIMITS.fileBytes }, DASHBOARD_LIMITS.fileBytes);
+  const current = parseWork(bytes, project.key, card.sourcePath);
+  if (current.id !== card.id) throw new Error("작업 기록이 수집 중 변경되었습니다.");
+  const value: unknown = JSON.parse(bytes.toString("utf8"));
+  if (!object(value) || !Array.isArray(value.criteria)) throw new Error("작업 기준이 올바르지 않습니다.");
+  const criteria: DashboardWorkDetail["criteria"] = value.criteria.map((criterion: Record<string, unknown>) => ({
+    id: criterion.id as string, description: criterion.description as string, required: criterion.required as boolean,
+    result: criterion.result as DashboardWorkDetail["criteria"][number]["result"],
+    evidenceCount: Array.isArray(criterion.evidence) ? criterion.evidence.length : 0,
+  }));
+  const budget = { bytes: 1024 * 1024 };
+  const documents: DashboardWorkDetail["documents"] = [];
+  for (const kind of ["spec", "design", "tasks", "verification"] as const) {
+    const path = join(resolve(file, ".."), `${kind}.md`);
+    const source = sourcePath(project.path, path);
+    try {
+      const content = await readBytes(project.path, path, budget, 256 * 1024);
+      const decoded = content.toString("utf8");
+      if (!content.equals(Buffer.from(decoded, "utf8"))) throw new ReadFailure("invalid_utf8", "UTF-8 문서가 아닙니다.");
+      documents.push({ kind, path: source, status: "available", content: decoded, message: null });
+    } catch (error) {
+      if (code(error) === "ENOENT") documents.push({ kind, path: source, status: "missing", content: null, message: "문서가 없습니다." });
+      else documents.push({ kind, path: source, status: "failed", content: null, message: issue(error, source).message });
+    }
+  }
+  const finalBytes = await readBytes(project.path, file, { bytes: DASHBOARD_LIMITS.fileBytes }, DASHBOARD_LIMITS.fileBytes);
+  if (!finalBytes.equals(bytes)) throw new Error("작업 기록이 수집 중 변경되었습니다.");
+  return { projectKey, workId: current.id, title: current.title, sourcePath: current.sourcePath, status: current.status,
+    owner: current.owner, areas: current.areas,
+    blockedReason: current.blockedReason, nextAction: object(value.workflow) && text(value.workflow.nextAction, 8000) ? value.workflow.nextAction : null,
+    capturedAt: new Date().toISOString(), criteria, documents };
 }

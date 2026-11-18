@@ -87,6 +87,7 @@ test("실제 fixture 자식 프로세스가 stdin EOF를 받고 JSONL 완료를 
   const { invocation, result } = await fixture(t, "success");
   assert.equal(result.ok, true);
   assert.equal(result.outcome, "passed");
+  assert.equal(result.inputDelivered, true);
   assert.equal(result.threadId, "fixture-thread");
   assert.equal(result.turnCompleted, true);
   const stdinEvent = result.events.find((event) => event.type === "fixture.stdin");
@@ -145,8 +146,10 @@ test("완료 사건 뒤 실제 비정상 종료와 신호를 구분한다", asyn
   assert.equal(nonzero.ok, false);
   assert.equal(nonzero.code, 3);
   assert.equal(nonzero.outcome, "nonzero");
+  assert.equal(nonzero.inputDelivered, true);
   const signal = (await fixture(t, "signal")).result;
   assert.equal(signal.ok, false);
+  assert.equal(signal.inputDelivered, true);
   assert.equal(signal.outcome, process.platform === "win32" ? "nonzero" : "signal");
   if (process.platform === "win32") { assert.equal(signal.signal, null); assert.notEqual(signal.code, 0); }
   else assert.equal(signal.signal, "SIGTERM");
@@ -163,7 +166,21 @@ test("없는 실행 파일은 stdin 오류를 유실하지 않고 spawn 실패�
   const result     = await waitForCodex(child, { captureOutput: true })                           ;
   assert.equal(result.ok, false);
   assert.equal(result.outcome, "spawn_error");
+  assert.equal(result.inputDelivered, false);
   assert.ok(result.error);
   assert.match(result.error, /missing-command/);
   assert.ok(result.code !== null && result.code < 0);
+});
+
+
+test("실제 stdin 조기 종료는 nonzero 결과와 독립적으로 전달 실패를 보존한다", async (t) => {
+  const repo = await mkdtemp(path.join(tmpdir(), "www-codex-input-close-"));
+  t.after(() => rm(repo, { recursive: true, force: true }));
+  const invocation = createCodexInvocation({ repo, systemPrompt: "큰 본문".repeat(1_000_000), request: "입력 전달 검사" });
+  const result = await runCodex({ ...invocation, command: process.execPath, args: ["-e", "process.stdin.destroy();process.exitCode=3;"] }, { cwd: repo, captureOutput: true, outputDirectory: repo });
+  assert.equal(result.ok, false);
+  assert.equal(result.code, 3);
+  assert.equal(result.outcome, "nonzero");
+  assert.equal(result.inputDelivered, false);
+  assert.match(result.error ?? "", /입력 전달 실패/);
 });

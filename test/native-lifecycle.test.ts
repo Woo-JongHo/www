@@ -6,7 +6,7 @@ import { spawn } from "node:child_process";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { createNativeLifecycle } from "../src/native-lifecycle";
+import { createNativeLifecycle, createRestoredMessageFilter } from "../src/native-lifecycle";
 import { JsonRpcClient } from "../src/rpc";
 import { createDevelopmentService } from "../src/development";
 import { runInNewContext } from "node:vm";
@@ -57,13 +57,59 @@ test("재연결은 Bypass로 재개한 뒤 새 턴을 한 번만 보낸다", asy
   expect(s.calls.filter((call) => call.method === "thread/resume")).toHaveLength(1);
 });
 
+test("복원 callback 실패는 명시 open 수용까지 재전송을 차단한다", async () => {
+  const s = setup();
+  await expect(s.lifecycle.start({ ...s.options, restored() { throw new Error("복원 버퍼 실패"); } })).rejects.toThrow("버퍼");
+  expect(s.calls.some(call => call.method === "turn/start")).toBe(false);
+  await expect(s.lifecycle.start(s.options)).rejects.toThrow("명시적으로");
+  expect(s.calls.filter(call => call.method === "thread/read")).toHaveLength(1);
+  const opened = await s.lifecycle.open(s.client, cwd, threadId, () => true);
+  opened.accept(() => true);
+  await s.lifecycle.start(s.options);
+  expect(s.calls.filter(call => call.method === "thread/read")).toHaveLength(2);
+  expect(s.calls.filter(call => call.method === "turn/start")).toHaveLength(1);
+});
+
+test("복원 중 승인 도착은 prompt와 turn/start 전에 차단하고 해소 뒤 한 번만 전송한다", async () => {
+  const s = setup();
+  let prompts = 0;
+  await expect(s.lifecycle.start({ ...s.options, restored() { s.lifecycle.approval(s.client, 91, threadId); }, beforeStart() { prompts++; } })).rejects.toThrow("승인");
+  expect(prompts).toBe(0);
+  expect(s.calls.some(call => call.method === "turn/start")).toBe(false);
+  s.lifecycle.resolved(s.client, { threadId, requestId: 91 });
+  await s.lifecycle.start({ ...s.options, beforeStart() { prompts++; } });
+  expect(prompts).toBe(1);
+  expect(s.calls.filter(call => call.method === "turn/start")).toHaveLength(1);
+});
+
+test("복원 최종 item의 중복·delta만 제외하고 새 item·다른 turn/thread·현재 승인은 보존한다", () => {
+  const item = { id: "item", type: "agentMessage", text: "전체 답변", phase: null };
+  const history: ConversationEvent[] = [
+    { kind: "notification", method: "item/completed", params: { threadId, turnId: "saved", item }, historical: true },
+    { kind: "notification", method: "turn/completed", params: { threadId, turn: { id: "saved", status: "completed" } }, historical: true }
+  ];
+  const covered = createRestoredMessageFilter(history);
+  const completion = { method: "item/completed", params: { threadId, turnId: "saved", item: { ...item, phase: "final_answer", extra: "native metadata" } } };
+  expect(covered(completion)).toBe(true);
+  expect(covered({ method: "item/agentMessage/delta", params: { threadId, turnId: "saved", itemId: "item", delta: "전체 답변" } })).toBe(true);
+  expect(covered({ method: "turn/started", params: { threadId, turn: { id: "saved" } } })).toBe(true);
+  expect(covered({ method: "turn/completed", params: { threadId, turn: { id: "saved", status: "failed" } } })).toBe(false);
+  expect(covered({ ...completion, params: { ...completion.params, item: { ...item, text: "다른 최종 답변" } } })).toBe(false);
+  expect(covered({ ...completion, params: { ...completion.params, item: { ...item, id: "new-item" } } })).toBe(false);
+  expect(covered({ ...completion, params: { ...completion.params, turnId: "other-turn" } })).toBe(false);
+  expect(covered({ ...completion, params: { ...completion.params, threadId: "other-thread" } })).toBe(false);
+  expect(covered({ ...completion, id: 7, method: "item/commandExecution/requestApproval" })).toBe(false);
+  expect(covered({ method: "serverRequest/resolved", params: { threadId, requestId: 7 } })).toBe(false);
+  expect(createRestoredMessageFilter(history.slice(0, 1))(completion)).toBe(false);
+});
+
 test("thread start/open의 준비 상태는 client·project·thread가 모두 같을 때만 재사용한다", async () => {
   const s = setup();
   s.lifecycle.markReady(s.client, cwd, threadId);
   await s.lifecycle.start(s.options);
   expect(s.calls.map((call) => call.method)).toEqual(["turn/start"]);
   s.lifecycle.reset();
-  await s.lifecycle.open(s.client, cwd, threadId, () => true);
+  (await s.lifecycle.open(s.client, cwd, threadId, () => true)).accept(() => true);
   s.calls.length = 0;
   await s.lifecycle.start(s.options);
   expect(s.calls.map((call) => call.method)).toEqual(["turn/start"]);
@@ -128,7 +174,7 @@ test("active 턴 중 disconnect는 사용자가 대화를 다시 열기 전 새 
   s.lifecycle.closed(s.client, "closed", threadId);
   await expect(s.lifecycle.start(s.options)).rejects.toThrow("이전 턴");
   expect(s.calls).toHaveLength(0);
-  await s.lifecycle.open(s.client, cwd, threadId, () => true);
+  (await s.lifecycle.open(s.client, cwd, threadId, () => true)).accept(() => true);
   await s.lifecycle.start(s.options);
   expect(s.calls.at(-1)?.method).toBe("turn/start");
 });
@@ -379,7 +425,15 @@ test("main 재복구 snapshot은 기존 log를 교체하고 marker 중첩 없이
     const stopping = false;
     const options = { id: "session", reports: { enabled: false }, onEvent(entry) { delivered.push(entry); } };
     const observeSummary = () => {};
-    const threadTransition = null;
+    let threadTransition = null;
+    const reconnectTransition = null;
+    const assertThreadTransition = () => {};
+    const finishThreadTransition = () => {};
+    const assertSelection = () => {};
+    const expected = {};
+    const activeTurnId = null;
+    const interruptingTurn = null;
+    const lifecycle = { approvalCount: 0 };
     const activeThreadId = "${threadId}";
     const eventThread = params => params?.threadId ?? null;
     const startedClient = null;
@@ -404,7 +458,7 @@ test("main 재복구 snapshot은 기존 log를 교체하고 marker 중첩 없이
     eventLog: import("../src/shared").ScopedAppEvent[];
     delivered: import("../src/shared").ScopedAppEvent[];
     selection(): import("../src/shared").SelectionRef;
-  } = runInNewContext(new Bun.Transpiler({ loader: "ts" }).transformSync(source));
+  } = runInNewContext(new Bun.Transpiler({ loader: "ts" }).transformSync(source), { createRestoredMessageFilter });
   const history: ConversationEvent[] = [{ kind: "notification", method: "turn/userPrompt", params: { threadId, text: "저장 입력" }, historical: true }];
   const value = { threadId, model: "saved", provider: "provider", approvalPolicy: "never", sandbox: "readOnly", events: history };
   for (let pass = 0; pass < 3; pass++) {
@@ -499,4 +553,77 @@ test("main 승인 IPC는 필수 문자열 token을 검증하고 원본 ID와 함
   await expect(handler(null, {}, 7, "accept", `session:${token}`)).rejects.toThrow("Unknown");
   await handler(null, {}, "7", "accept", `session:${token}`);
   expect(s.responses).toEqual([{ id: "7", value: { decision: "accept" } }]);
+});
+
+
+test("명시 open 준비는 수용 전 전송을 막고 수용 시점의 유효성을 다시 검사한다", async () => {
+  const s = setup();
+  s.lifecycle.markReady(s.client, cwd, threadId);
+  const prepared = await s.lifecycle.open(s.client, cwd, threadId, () => true);
+  await expect(s.lifecycle.start(s.options)).rejects.toThrow("다시 열어");
+  expect(() => prepared.accept(() => false)).toThrow("변경");
+  await expect(s.lifecycle.start(s.options)).rejects.toThrow("다시 열어");
+  expect(s.calls.some(call => call.method === "turn/start")).toBe(false);
+  prepared.accept(() => true);
+  await s.lifecycle.start(s.options);
+  expect(s.calls.filter(call => call.method === "thread/read")).toHaveLength(1);
+  expect(s.calls.filter(call => call.method === "turn/start")).toHaveLength(1);
+  expect(() => prepared.accept(() => true)).toThrow("변경");
+});
+
+for (const boundary of ["closed", "superseded"] as const) test(`open 준비는 ${boundary} 뒤 옛 수용으로 ready를 만들지 않는다`, async () => {
+  const s = setup();
+  const first = await s.lifecycle.open(s.client, cwd, threadId, () => true);
+  if (boundary === "closed") s.lifecycle.closed(s.client, "closed", threadId);
+  else await s.lifecycle.open(s.client, cwd, threadId, () => true);
+  expect(() => first.accept(() => true)).toThrow("변경");
+  if (boundary === "closed") await expect(s.lifecycle.start(s.options)).rejects.toThrow("이전 턴");
+  else await expect(s.lifecycle.start(s.options)).rejects.toThrow("다시 열어");
+  expect(s.calls.some(call => call.method === "turn/start")).toBe(false);
+});
+
+test("다른 대화의 준비 실패는 기존 수용된 대화의 ready를 바꾸지 않는다", async () => {
+  const s = setup();
+  s.lifecycle.markReady(s.client, cwd, threadId);
+  await expect(s.lifecycle.open(s.client, cwd, "other-thread", () => true)).rejects.toThrow("다릅니다");
+  const before = s.calls.length;
+  await s.lifecycle.start(s.options);
+  expect(s.calls.slice(before).map(call => call.method)).toEqual(["turn/start"]);
+});
+
+test("복원 terminal 본문의 중복 판정은 완료 시각 metadata와 분리한다", () => {
+  const item = { id: "i", type: "agentMessage", phase: null, text: "같은 최종 답변", completedAtMs: 100 };
+  const covered = createRestoredMessageFilter([{ kind: "notification", method: "item/completed", params: { threadId, turnId: "done", item }, historical: true }, { kind: "notification", method: "turn/completed", params: { threadId, turn: { id: "done", status: "completed" } }, historical: true }]);
+  expect(covered({ method: "item/completed", params: { threadId, turnId: "done", item: { id: "i", type: "agentMessage", text: "같은 최종 답변" } } })).toBe(true);
+  expect(covered({ method: "item/completed", params: { threadId, turnId: "done", item: { ...item, completedAtMs: 200 } } })).toBe(true);
+  expect(covered({ method: "item/completed", params: { threadId, turnId: "done", item: { ...item, text: "다른 정식 완료" } } })).toBe(false);
+});
+
+for (const entry of [
+  { id: "command", type: "commandExecution", command: "echo ok", status: "completed", aggregatedOutput: "정식 출력" },
+  { id: "files", type: "fileChange", status: "completed", changes: [{ path: "a.ts", diff: "+정식 변경" }] }
+]) test(`복원 ${entry.type}에 없는 공개 완료 필드는 큐에서 보존한다`, () => {
+  const { aggregatedOutput, changes, ...snapshot } = entry;
+  const completion = (item: unknown) => ({ method: "item/completed", params: { threadId, turnId: "done", item } });
+  const history: ConversationEvent[] = [
+    { kind: "notification", ...completion(snapshot), historical: true },
+    { kind: "notification", method: "turn/completed", params: { threadId, turn: { id: "done", status: "completed" } }, historical: true }
+  ];
+  expect(createRestoredMessageFilter(history)(completion(snapshot))).toBe(true);
+  expect(createRestoredMessageFilter(history)(completion(entry))).toBe(false);
+  const completeHistory = [{ ...history[0]!, ...completion(entry) }, history[1]!];
+  expect(createRestoredMessageFilter(completeHistory)(completion(entry))).toBe(true);
+});
+
+for (const field of ["summary", "model", "reasoningEffort"]) test(`복원에 없는 공개 ${field}도 정식 완료에서 보존한다`, () => {
+  const item = { id: "i", type: field === "summary" ? "reasoning" : "subAgentActivity" };
+  const completion = (value: unknown) => ({ method: "item/completed", params: { threadId, turnId: "done", item: value } });
+  const history: ConversationEvent[] = [
+    { kind: "notification", ...completion(item), historical: true },
+    { kind: "notification", method: "turn/completed", params: { threadId, turn: { id: "done", status: "completed" } }, historical: true }
+  ];
+  const enriched = { ...item, [field]: field === "summary" ? ["정식 공개 요약"] : "observed" };
+  const covered = createRestoredMessageFilter(history);
+  expect(covered(completion(item))).toBe(true);
+  expect(covered(completion(enriched))).toBe(false);
 });

@@ -8,19 +8,20 @@ import { CommandView } from "./command-card";
 import { NativeActivityView, ResourceActivitySidebar } from "./native-activity-view";
 import { ChatMessage } from "./chat-message";
 import { ChatDetails, ChatRowMemoryContext, type ChatRowMemory } from "./chat-row-state";
-import { reduceConversationEvents, type ConversationEventState, blankReadingState, belongsToConversation, composerFull, conversationKey, currentTurnEvents, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, pasteOverflow, type ConversationReadingState } from "./chat-state";
+import { reduceConversationEvents, type ConversationEventState, blankReadingState, belongsToConversation, conversationKey, currentTurnEvents, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, type ConversationReadingState } from "./chat-state";
 import { createActivitySidebarState, projectActivitySidebar, updateActivitySidebarSnapshot } from "./activity-sidebar";
 import { ReportsView } from "./reports-view";
 import { EcosystemView } from "./ecosystem-view";
 import { DashboardView } from "./dashboard-view";
 import { SessionApiProvider, useSessionApi } from "./session-api";
 import { SessionTabs } from "./session-tabs";
-import { handlePromptKeyDown, normalizeCompositionEnd } from "./input";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ChatComposer } from "./chat-composer";
+import { chatStatus, isVerificationCommand } from "./chat-status";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { executionResultCounts, MAX_OUTPUT_CODE_UNITS, project, type Block, type Projection } from "./projection";
 import type { AppEvent, ConversationSummary, TurnState, WorkspaceSelection, SelectionRef, ScopedAppEvent, ResourceSnapshot, ResourceScope, ProjectInfo, ConversationSelection, WwwApi } from "./shared";
-import type { NativeTimingEvent, DashboardSnapshot, NativeSessionSummary } from "./shared";
+import type { NativeTimingEvent, DashboardSnapshot, DashboardWork, NativeSessionSummary } from "./shared";
 
 document.title = `WWW ${appBuildInfo.label}`;
 
@@ -58,7 +59,7 @@ function fileStatus(block: Extract<Block, { kind: "files" }>): string {
 
 function BlockView({ block, decide, quote }: { block: Block; decide(id: string | number, decision: string, approvalToken: string | null): void; quote(text: string): void }) {
   if (block.kind === "user") {
-    return <div className={`user request-${block.state}`} data-testid="user-request"><div>{block.text}</div><span className="muted">{block.state === "sending" ? "요청을 보내는 중" : block.state === "accepted" ? "요청을 받았습니다" : `요청을 보내지 못했습니다 · ${block.error ?? "원인 미확인"}`}</span></div>;
+    return <div className={`user request-${block.state}`} data-testid="user-request"><div>{block.text}</div><span className="muted">{block.steerStatus ? block.steerStatus === "pending" ? "추가 지시 · 전송 중" : block.steerStatus === "accepted" ? "추가 지시 · 접수됨 · 반영 여부는 후속 행동에서 확인" : block.steerStatus === "uncertain" ? `추가 지시 · 접수 여부 미확인 · ${block.error ?? "다시 보내기 전 결과를 확인하세요"}` : `추가 지시 · 전송 실패 · ${block.error ?? "원인 미확인"}` : block.state === "sending" ? "요청을 보내는 중" : block.state === "accepted" ? "요청을 받았습니다" : `요청을 보내지 못했습니다 · ${block.error ?? "원인 미확인"}`}</span></div>;
   }
   if (block.kind === "explanation") {
     if (!block.text) return null;
@@ -77,6 +78,8 @@ function elapsedLabel(milliseconds: number): string {
   const minutes = Math.floor(seconds / 60);
   return `${minutes}분 ${seconds % 60}초`;
 }
+
+const MemoBlockView = memo(BlockView, (previous, next) => previous.decide === next.decide && previous.quote === next.quote && (previous.block === next.block || JSON.stringify(previous.block) === JSON.stringify(next.block)));
 
 function timingParams(event: AppEvent): NativeTimingEvent | null {
   if (event.method !== "diagnostics/timing" || !event.params || typeof event.params !== "object") return null;
@@ -112,14 +115,19 @@ function NativePreparation({ events, sinceSeq }: { events: readonly AppEvent[]; 
   </section>;
 }
 
-function WorkFlow({ turn, blocks, events, transport, interrupt, now }: {
+function WorkFlow({ turn, blocks, events, transport, interrupt }: {
   turn      : TurnState               ;
   blocks    : readonly Block[]         ;
   events    : readonly AppEvent[]      ;
   transport : Projection["transport"] ;
   interrupt : Projection["interrupt"] ;
-  now       : number                  ;
 }) {
+  const [now, setNow] = useState(Date.now);
+  useEffect(() => {
+    if (turn !== 'running' && turn !== 'starting') return;
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, [turn]);
   const explanations = blocks.filter((block): block is Extract<Block, { kind: "explanation" }> => block.kind === "explanation");
 
   const commands = blocks.filter((block): block is Extract<Block, { kind: "command" }> => block.kind === "command");
@@ -188,7 +196,7 @@ function ResultSummary({ blocks, turn }: { blocks: readonly Block[]; turn: TurnS
       <div><dt>최종 답변</dt><dd>{answers.length > 0 ? "수신됨" : "미제공"}</dd></div>
       <div><dt>실행</dt><dd>명령 {counts.commands}개 · 파일 변경 {counts.files}개</dd></div>
       <div><dt>검증</dt><dd>{verification.length > 0 ? `${verificationPassed}/${verification.length}개 성공` : "식별된 검사 없음"}</dd></div>
-      <div><dt>확인 필요</dt><dd>{counts.failed > 0 || counts.unresolved > 0 ? `실패 ${counts.failed}개 · 결과 미확인 ${counts.unresolved}개` : "관측된 실행 차단 없음"}</dd></div>
+      <div><dt>확인 필요</dt><dd>{counts.failed > 0 || counts.unresolved > 0 || counts.declined > 0 ? `실패 ${counts.failed}개 · 거절 ${counts.declined}개 · 결과 미확인 ${counts.unresolved}개` : "관측된 실행 차단 없음"}</dd></div>
     </dl>
     <p>응답 종료는 요청한 업무의 검증 완료와 다를 수 있습니다. 위 최종 답변과 실제 실행 근거를 함께 확인하세요.</p>
   </section>;
@@ -205,9 +213,6 @@ function turnLabel(turn: TurnState): string {
   return "실행 결과 미확인";
 }
 
-function isVerificationCommand(command: string): boolean {
-  return /(?:^|\s)(?:npm\s+(?:run\s+)?(?:check|test|typecheck|build)|bun\s+test|cargo\s+(?:test|check)|tsc(?:\s|$)|node\s+--test)(?:\s|$)/i.test(command);
-}
 
 function setTextareaValue(textarea: HTMLTextAreaElement, value: string): void {
   const setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value")?.set;
@@ -256,9 +261,14 @@ async function verifyNativeActivity(textarea: HTMLTextAreaElement, send: HTMLBut
   const draft          = textarea.value          ;
   const selectionStart = textarea.selectionStart ;
   const selectionEnd   = textarea.selectionEnd   ;
+  document.querySelector<HTMLButtonElement>('[data-testid="chat-nav"]')?.click();
+  await afterTwoFrames();
   setTextareaValue(textarea, "활동 패널 두 번째 답변 검증");
   await afterTwoFrames();
   send.click();
+  // 실시간 반응을 관찰할 패널을 다음 IPC 알림 전에 연다. 숨긴 동안의 과거 반응은 재생하지 않는다.
+  document.querySelector<HTMLButtonElement>('[data-testid="monitoring-nav"]')?.click();
+  await afterTwoFrames();
   const deadline = performance.now() + 5000;
   let observed   = projectActivitySidebar(await window.www.workspace().then((selected) => window.www.events(selected)), threadId);
   let skillsReacted = false;
@@ -314,6 +324,8 @@ async function verifyNativeActivity(textarea: HTMLTextAreaElement, send: HTMLBut
   const completionBaseline = Math.max(0, ...(await window.www.workspace().then((selected) => window.www.events(selected))).filter((event) => event.method === "turn/completed").map((event) => event.seq));
   const finishButton = document.querySelector<HTMLElement>("[data-testid=interrupt-button]");
   if (!(finishButton instanceof HTMLButtonElement) || finishButton.disabled) throw new Error("Activity probe expected the second running turn");
+  document.querySelector<HTMLButtonElement>('[data-testid="chat-nav"]')?.click();
+  await afterTwoFrames();
   finishButton.click();
   const finishDeadline = performance.now() + 5_000;
   let secondTurnFinished = false;
@@ -338,6 +350,12 @@ async function verifyNativeActivity(textarea: HTMLTextAreaElement, send: HTMLBut
     }
     throw new Error(`Activity probe did not switch to conversation ${id}`);
   };
+  await waitForEvent('serverRequest/resolved');
+  const interruptApprovalResolved = (await window.www.workspace().then((selected) => window.www.events(selected))).some((event) => {
+    const params = event.params;
+    return event.method === 'serverRequest/resolved' && event.seq > completionBaseline && !!params && typeof params === 'object' && 'requestId' in params && params.requestId === 42;
+  });
+  if (!interruptApprovalResolved) throw new Error('Activity probe expected explicit approval resolution before conversation restore');
   await selectConversationForProbe("thread-saved");
   await waitForEvent("fixture/lateHookAfterRestore");
   await selectConversationForProbe(threadId);
@@ -348,7 +366,7 @@ async function verifyNativeActivity(textarea: HTMLTextAreaElement, send: HTMLBut
   await afterTwoFrames();
   textarea.setSelectionRange(selectionStart, selectionEnd);
   if (textarea.value !== draft || textarea.selectionStart !== selectionStart || textarea.selectionEnd !== selectionEnd) throw new Error("Activity probe lost draft or selection after the second turn");
-  const result = { skillsListed, hooksListed, inventoryRaceSuppressed, skillsObserved, multipleSkillsObserved, hooksObserved, fixedOrder, extendedHighlight, historyNotReplayed, conversationRestoreDedupe, privateReasoningHidden, turnGrouping, historySelectionPreserved, usageNotDuplicated, modelRerouted, wwwRolesObserved, wwwSkillsObserved, generalHooksSecondary, hookFailureExplained };
+  const result = { skillsListed, hooksListed, interruptApprovalResolved, inventoryRaceSuppressed, skillsObserved, multipleSkillsObserved, hooksObserved, fixedOrder, extendedHighlight, historyNotReplayed, conversationRestoreDedupe, privateReasoningHidden, turnGrouping, historySelectionPreserved, usageNotDuplicated, modelRerouted, wwwRolesObserved, wwwSkillsObserved, generalHooksSecondary, hookFailureExplained };
   if (Object.values(result).some((value) => !value)) throw new Error(`Activity probe failed: ${JSON.stringify(result)}`);
   return result;
 }
@@ -364,7 +382,15 @@ function App({ sessionId, active, initial, onCloseState }: {
   onCloseState: (id: string, state: SessionCloseState) => void;
 }) {
   const api = useSessionApi();
-  const [view, setView] = useState<"home" | "dashboard" | "chat" | "ecosystem" | "reports">(initial ? "home" : "chat");
+  const [projectListOpen, setProjectListOpen] = useState(initial);
+  const projectListButton = useRef<HTMLButtonElement>(null);
+  const listPanel = useRef<HTMLElement>(null);
+  const closeProjectList = () => { setProjectListOpen(false); requestAnimationFrame(() => projectListButton.current?.focus()); };
+  useEffect(() => { if (projectListOpen) listPanel.current?.querySelector<HTMLButtonElement>('button:not(:disabled)')?.focus(); }, [projectListOpen]);
+  const [view, setView] = useState<"home" | "dashboard" | "chat" | "ecosystem" | "reports" | "monitoring">(initial ? "home" : "chat");
+  const [mapNavigationOpen, setMapNavigationOpen] = useState(false);
+  const [reportsOpened, setReportsOpened] = useState(false);
+  useEffect(() => { if (view === "reports") setReportsOpened(true); }, [view]);
   const [targetKey, setTargetKey] = useState<string | null>(null);
   const [dashboard, setDashboard] = useState<DashboardSnapshot | null>(null);
   const [dashboardLoading, setDashboardLoading] = useState(false);
@@ -384,7 +410,7 @@ function App({ sessionId, active, initial, onCloseState }: {
   const resourceVersion = useRef(0);
   const liveConnection = useRef(0);
   const resourceQueue = useRef<ResourceSnapshot[]>([]);
-  const [detailsVisible, setDetailsVisible] = useState(false);
+
   const monitorButton = useRef<HTMLButtonElement>(null);
   const requireSelection = (): WorkspaceSelection => {
     if (!selectionRef.current) throw new Error("프로젝트 선택을 기다려 주세요.");
@@ -402,7 +428,13 @@ function App({ sessionId, active, initial, onCloseState }: {
   const [events, setEvents] = useState<ScopedAppEvent[]>([]);
   const [activityState, setActivityState] = useState(createActivitySidebarState);
   const [threadId, setThreadId] = useState<string | null>(null);
-  const [prompt, setPrompt] = useState("");
+  const [promptSnapshot, setPromptSnapshot] = useState({ text: "", revision: 0 });
+  const [hasDraft, setHasDraft] = useState(false);
+  const setPrompt = useCallback((text: string) => {
+    promptRef.current = text;
+    setHasDraft(text.length > 0);
+    setPromptSnapshot((current) => ({ text, revision: current.revision + 1 }));
+  }, []);
   const [conversations, setConversations] = useState<ConversationSummary[]>([]);
   const [listCursor, setListCursor] = useState<string | null>(null);
   const [listLoading, setListLoading] = useState(false);
@@ -411,7 +443,7 @@ function App({ sessionId, active, initial, onCloseState }: {
   const [switching, setSwitching] = useState(false);
   const [inputNotice, setInputNotice] = useState("");
   const threadRef = useRef<string | null>(null);
-  const promptRef = useRef(prompt);
+  const promptRef = useRef("");
   const switchingRef = useRef(false);
   const switchGeneration = useRef(0);
   const queuedEvents = useRef<ScopedAppEvent[]>([]);
@@ -437,12 +469,10 @@ function App({ sessionId, active, initial, onCloseState }: {
     rowMemory = new Map();
     rowMemories.current.set(currentKey, rowMemory);
   }
-  promptRef.current = prompt;
-  const composing          = useRef(false)               ;
-  const lastCompositionEnd = useRef<number | null>(null) ;
+
   const [error, setError] = useState("");
   const [panel, setPanel] = useState<"activity" | "overview" | "events">("activity");
-  const [monitorVisible, setMonitorVisible] = useState(() => window.innerWidth >= 1000);
+  const [monitorVisible] = useState(() => window.innerWidth >= 1000);
   const [newContent, setNewContent] = useState(false);
   const [sending, setSending] = useState(false);
   const [pendingPrompt, setPendingPrompt] = useState<string | null>(null);
@@ -450,20 +480,12 @@ function App({ sessionId, active, initial, onCloseState }: {
   const timingReceipts = useRef(new Map<number, number>());
   const [failedDraft, setFailedDraft] = useState<string | null>(null);
   const failedDraftRef = useRef<string | null>(null);
-  const [now, setNow] = useState(Date.now);
   const transcriptRef       = useRef<HTMLDivElement>(null)             ;
   const transcriptScrollTop = useRef(0)                                ;
   const followTail          = useRef(true)                             ;
   const sendGeneration = useRef(0);
   const sendingRef          = useRef(false)                            ;
   const projection          = useMemo(() => project(events), [events]) ;
-
-  useEffect(() => {
-    setNow(Date.now());
-    if (!projection.working) return;
-    const timer = window.setInterval(() => setNow(Date.now()), 1_000);
-    return () => window.clearInterval(timer);
-  }, [projection.working, projection.turnId]);
 
   const selectionBlocked = failedDraft !== null || projection.working || sending || switching || projection.blocks.some((block) => block.kind === "approval" && block.open);
 
@@ -472,10 +494,10 @@ function App({ sessionId, active, initial, onCloseState }: {
       : projection.working ? "실행을 중단하고 결과를 확인한 뒤 닫아 주세요."
         : projection.blocks.some(block => block.kind === "approval" && block.open) ? "승인 요청을 처리한 뒤 닫아 주세요."
           : failedDraft !== null ? "실패한 요청을 복원하거나 버린 뒤 닫아 주세요."
-            : prompt.length > 0 || [...readingStates.current].some(([key, state]) => key !== currentKey && state.draft.length > 0)
+            : hasDraft || [...readingStates.current].some(([key, state]) => key !== currentKey && state.draft.length > 0)
               ? "이 탭의 대화에 남은 초안을 보내거나 비운 뒤 닫아 주세요." : undefined;
     onCloseState(sessionId, { allowed: reason === undefined, ...(reason ? { reason } : {}) });
-  }, [sessionId, currentKey, sending, switching, projection.working, projection.blocks, failedDraft, prompt, onCloseState]);
+  }, [sessionId, currentKey, sending, switching, projection.working, projection.blocks, failedDraft, hasDraft, onCloseState]);
 
   const refreshConversations = async (cursor?: string) => {
     const selected = requireSelection();
@@ -499,9 +521,9 @@ function App({ sessionId, active, initial, onCloseState }: {
   useEffect(() => {
     setConversations([]);
     setListCursor(null);
-    if (workspace && view === "chat") void refreshConversations();
+    if (workspace && (view === "chat" || (view === "ecosystem" && mapNavigationOpen))) void refreshConversations();
     return () => { listGeneration.current += 1; };
-  }, [workspace?.path, workspace?.selectionEpoch, view === "chat"]);
+  }, [workspace?.path, workspace?.selectionEpoch, view === "chat", view === "ecosystem" && mapNavigationOpen]);
 
   useEffect(() => {
     if (!workspace || view !== "chat") return;
@@ -510,11 +532,11 @@ function App({ sessionId, active, initial, onCloseState }: {
 
   useEffect(() => {
     readingStates.current.set(currentKey, {
-      draft: prompt,
+      draft: promptRef.current,
       scrollTop: transcriptScrollTop.current,
       followTail: followTail.current
     });
-  }, [currentKey, prompt]);
+  }, [currentKey, promptSnapshot]);
 
   const rememberReading = () => {
     readingStates.current.set(currentKey, {
@@ -697,6 +719,12 @@ function App({ sessionId, active, initial, onCloseState }: {
       if (generation === dashboardGeneration.current) setDashboardLoading(false);
     }
   };
+  const loadDashboardWork = useCallback(async (card: DashboardWork) => {
+    const selected = requireSelection();
+    const result = await api.dashboardWork(selected, card.projectKey, card.id);
+    if (!matchesSelection(selected)) throw new Error("프로젝트가 변경되어 이전 작업 상세를 표시하지 않습니다.");
+    return result;
+  }, [api]);
   useEffect(() => {
     if (!workspace || (view !== "home" && view !== "dashboard")) return;
     void refreshDashboard();
@@ -726,6 +754,7 @@ function App({ sessionId, active, initial, onCloseState }: {
       setListCursor(null);
       setConversationSearch("");
       setAutoReportHint("");
+      setReportsOpened(false);
       resourceRef.current = null;
       setResources(null);
       restoreReading(null, result.workspace.path);
@@ -734,6 +763,7 @@ function App({ sessionId, active, initial, onCloseState }: {
       setError("");
       setTargetKey(key === "www" || result.workspace.path === dashboard?.projects.find(item => item.project.kind === "www")?.project.path ? "www" : result.workspace.workspaceKey);
       setView("dashboard");
+      setProjectListOpen(false);
     } catch (failure) { setError(String(failure)); }
     finally {
       switchingRef.current = false;
@@ -750,7 +780,8 @@ function App({ sessionId, active, initial, onCloseState }: {
     const project = dashboard?.projects.find(item => item.project.key === key)?.project;
     if (key === workspace.workspaceKey || (project !== undefined && project.path === workspace.path)) {
       setTargetKey(key);
-      setView("dashboard");
+      if (view === "home") setView("dashboard");
+      closeProjectList();
     } else { void changeProject(key); }
   };
   const toggleFavorite = async (item: ProjectInfo) => {
@@ -786,12 +817,15 @@ function App({ sessionId, active, initial, onCloseState }: {
     resize.observe(element);
     for (const child of element.children) resize.observe(child);
     return () => resize.disconnect();
-  }, [events, view, monitorVisible, detailsVisible, active]);
+  }, [view, monitorVisible, active]);
 
   const run = async () => {
-    const draft = prompt;
+    const draft = promptRef.current;
     const text = draft.trim();
     if (!selectionRef.current || !text || failedDraftRef.current !== null || sendingRef.current || switchingRef.current || text.length > MAX_PROMPT_CHARS) return;
+    const status = chatStatus({ sending: sendingRef.current, switching: switchingRef.current, working: projection.working, turn: projection.turn, turnId: projection.turnId, transport: projection.transport, interrupt: projection.interrupt, approvals: projection.blocks.filter((block) => block.kind === 'approval' && block.open).length });
+    if (projection.working && (!status.steer || !threadRef.current || !projection.turnId)) { setInputNotice(status.reason); return; }
+    const steerTarget = projection.working && projection.turnId && threadRef.current ? { thread: threadRef.current, turn: projection.turnId, message: crypto.randomUUID() } : null;
     const selected = requireSelection();
     const generation = ++sendGeneration.current;
     const currentRequest = () => generation === sendGeneration.current && matchesSelection(selected);
@@ -800,11 +834,17 @@ function App({ sessionId, active, initial, onCloseState }: {
     performance.clearMarks("www:renderer-send");
     performance.mark("www:renderer-send");
     setSending(true);
-    setPendingPrompt(text);
+    if (!steerTarget) setPendingPrompt(text);
     setError("");
     promptRef.current = "";
     setPrompt("");
     try {
+      if (steerTarget) {
+        const response = await api.steerTurn(selected, steerTarget.thread, steerTarget.turn, draft, steerTarget.message);
+        if (!currentRequest()) return;
+        if (response.turnId !== steerTarget.turn) throw new Error('추가 지시의 접수 턴이 일치하지 않습니다. 접수 여부 미확인');
+        return;
+      }
       let id = threadId;
       if (!id) {
         id = (await api.startThread(selected)).threadId;
@@ -853,12 +893,12 @@ function App({ sessionId, active, initial, onCloseState }: {
     setFailedDraft(null);
   };
   const choose = () => changeProject();
-  const decide = async (id: string | number, decision: string, approvalToken: string | null) => {
+  const decide = useCallback(async (id: string | number, decision: string, approvalToken: string | null) => {
     if (approvalToken === null) return;
     const selected = requireSelection();
     try { await api.respond(selected, id, decision, approvalToken); }
     catch (failure) { if (matchesSelection(selected)) setError(String(failure)); }
-  };
+  }, [api]);
   const interrupt = async () => {
     if (!threadId || !projection.turnId) return;
     const selected = requireSelection();
@@ -931,10 +971,13 @@ function App({ sessionId, active, initial, onCloseState }: {
       if (outputToggle.getAttribute("aria-expanded") !== "true") outputToggle.click();
       await afterTwoFrames();
       outputToggle.click();
+      await afterTwoFrames();
       const transcript = document.querySelector(".transcript");
-      if (!(transcript instanceof HTMLDivElement)) throw new Error("Probe expected transcript");
+      if (!(transcript instanceof HTMLDivElement) || transcript.scrollHeight <= transcript.clientHeight) throw new Error("Probe expected scrollable transcript");
       transcript.scrollTop = 0;
       transcript.dispatchEvent(new Event("scroll", { bubbles: true }));
+      await afterTwoFrames();
+      if (transcript.scrollTop !== 0) throw new Error("Probe did not reach historical scroll position");
       const decline = document.querySelector('[data-decision="decline"]');
       if (!(decline instanceof HTMLButtonElement)) throw new Error("Probe expected decline button");
       decline.click();
@@ -998,7 +1041,7 @@ function App({ sessionId, active, initial, onCloseState }: {
       searchResult.click();
       await afterTwoFrames();
       if (document.querySelector('.ecosystem-page:not([hidden]) .ecosystem-detail h2')?.textContent !== "검증 증거") throw new Error("Probe did not navigate to search result");
-      const chatNavigation = document.querySelector('.workspace-nav button');
+      const chatNavigation = document.querySelector('[data-testid="chat-nav"]');
       if (!(chatNavigation instanceof HTMLButtonElement)) throw new Error("Probe expected chat navigation");
       chatNavigation.click();
       await afterTwoFrames();
@@ -1037,19 +1080,30 @@ function App({ sessionId, active, initial, onCloseState }: {
         await afterTwoFrames();
         if (textarea.value !== "보존할 입력 초안" || command.getAttribute("aria-expanded") === "true" || transcript.scrollTop !== readingPosition) throw new Error("Probe lost conversation state after report navigation");
         reportNavigation.click();
+        await afterTwoFrames();
+        if (!document.querySelector('.reports-screen:not([hidden])')) throw new Error("Probe did not reopen the report view");
+        const restoredSearch = document.querySelector('.reports-screen:not([hidden]) .reports-search input');
+        if (!(restoredSearch instanceof HTMLInputElement) || restoredSearch.value !== "존재하지않는보고서" || !document.querySelector('.reports-screen:not([hidden]) .reports-empty-list')?.textContent?.includes("일치하는 보고서가 없습니다")) throw new Error("Probe lost the report search after navigation");
+        Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set?.call(restoredSearch, "");
+        restoredSearch.dispatchEvent(new Event("input", { bubbles: true }));
         const opened = performance.now() + 15_000;
-        while (!document.querySelector('.report-frame') && performance.now() < opened) await new Promise((resolve) => setTimeout(resolve, 30));
-        if (!document.querySelector('.report-frame')) throw new Error("Probe did not reopen the report view");
+        while (!document.querySelector('.reports-screen:not([hidden]) .report-frame') && performance.now() < opened) await new Promise((resolve) => setTimeout(resolve, 30));
+        const restoredFrame = document.querySelector('.reports-screen:not([hidden]) .report-frame');
+        if (!(restoredFrame instanceof HTMLIFrameElement) || restoredFrame.getAttribute("sandbox") !== "" || !restoredFrame.srcdoc.includes(saved.title)) throw new Error("Probe did not restore the selected report after clearing search");
       }
       let nativeActivity = null;
       if (ready.checkActivity) {
         chatNavigation.click();
         setPanel("activity");
-        const detailToggle = document.querySelector<HTMLButtonElement>('[data-testid="detail-monitor-toggle"]');
+        const detailToggle = document.querySelector<HTMLButtonElement>('[data-testid="monitoring-nav"]');
         if (!detailToggle) throw new Error("Probe detail monitor control missing");
-        if (detailToggle.getAttribute("aria-pressed") !== "true") detailToggle.click();
+        detailToggle.click();
         await afterTwoFrames();
         nativeActivity = await verifyNativeActivity(textarea, send);
+        detailToggle.click();
+        await afterTwoFrames();
+        const visibleActivity = document.querySelector('[data-testid=activity-panel]:not([hidden])');
+        if (!(visibleActivity instanceof HTMLElement) || !visibleActivity.querySelector('.na-row')) throw new Error('Probe did not reopen the activity panel for capture');
       }
       await api.probeFinish({
         ...(ready.checkActivity ? { nativeActivity } : {}),
@@ -1112,14 +1166,15 @@ function App({ sessionId, active, initial, onCloseState }: {
   const explanations = activeBlocks.filter((block): block is Extract<Block, { kind: "explanation" }> => block.kind === "explanation"        ) ;
 
   const verificationCommands = commands.filter((block) => isVerificationCommand(block.command)       ) ;
-  const failedCommands       = commands.filter((block) => block.status === "failed"                  ) ;
-  const unresolvedCommands   = commands.filter((block) => block.status === "unknown" || block.running) ;
+  const observedResults = executionResultCounts(activeBlocks);
 
   const configuredPolicy = [...events].reverse().find((event) => event.method === "thread/configured")?.params;
   const policyLabel = configuredPolicy && typeof configuredPolicy === "object" && "approvalPolicy" in configuredPolicy && typeof configuredPolicy.approvalPolicy === "string" && "sandbox" in configuredPolicy && typeof configuredPolicy.sandbox === "string"
     ? `${configuredPolicy.sandbox} · ${configuredPolicy.approvalPolicy}`
     : "기본 정책: Bypass · danger-full-access · never";
 
+  const liveTurnEvents = currentTurnEvents(events, projection.turnId).filter((event) => !event.historical && Number.isFinite(Date.parse(event.at)));
+  const startedEvent = liveTurnEvents.find((event) => event.method === 'turn/started');
   const statusTone = approvals.length ? "blocked" : projection.turn === "failed" || projection.transport === "error" ? "failed" : projection.working ? "working" : "idle" ;
   const statusText = approvals.length ? "사용자 결정 대기" : turnLabel(projection.turn)                                                                                   ;
   const verificationText = verificationCommands.length
@@ -1127,15 +1182,21 @@ function App({ sessionId, active, initial, onCloseState }: {
     : "검사로 식별할 실행 근거 없음 · 미검증";
 
   return <>
-    {view === "home" && <aside className="sidebar home-sidebar" aria-label="프로젝트 선택"><div className="brand">WWW <small>{appBuildInfo.label}</small></div><div className="home-project-heading"><strong>RPA</strong><button className="secondary" aria-label="RPA 프로젝트 추가" onClick={choose} disabled={selectionBlocked || !workspace}>+</button></div><div className="home-project-list">{projects.filter(item => item.path !== dashboard?.projects.find(entry => entry.project.kind === "www")?.project.path).map(item => <div className="home-project-row" key={item.workspaceKey}><button className="secondary grow" data-testid={item.workspaceKey === workspace?.workspaceKey ? "open-current-workspace" : undefined} disabled={selectionBlocked && item.workspaceKey !== workspace?.workspaceKey} onClick={() => openDashboardProject(item.workspaceKey)} title={item.path}>{item.name}</button><button className="icon" aria-label={`${item.name} 즐겨찾기 ${item.favorite ? "해제" : "추가"}`} aria-pressed={item.favorite} onClick={() => { void toggleFavorite(item); }} disabled={favoritePending}>☆</button></div>)}{!projectLoading && projects.filter(item => item.path !== dashboard?.projects.find(entry => entry.project.kind === "www")?.project.path).length === 0 && <p className="muted">등록된 RPA 프로젝트가 없습니다.</p>}</div><button className="secondary home-www" data-testid={dashboard?.projects.find(item => item.project.kind === "www")?.project.path === workspace?.path ? "open-current-workspace" : "open-www"} disabled={!workspace || (selectionBlocked && dashboard?.projects.find(item => item.project.kind === "www")?.project.path !== workspace.path)} onClick={() => openDashboardProject("www")}>WWW</button>{projectError && <p role="alert">{projectError}</p>}<p className="muted home-scope-note">프로젝트를 선택하기 전 전체 작업 기록을 볼 수 있습니다.</p></aside>}
-    <aside id={`workspace-sidebar-${sessionId}`} className="sidebar target-sidebar" hidden={view === "home"}><div className="brand" title={`커밋 ${appBuildInfo.commit} · 소스 ${appBuildInfo.sourceDigest}`} >WWW <small data-testid="build-version">{appBuildInfo.label}</small></div><div className="sec"><button className="secondary" data-testid="view-page-nav" onClick={() => setView("home")}>← 전체 보기</button><button className="icon" aria-label="프로젝트 폴더 선택" onClick={choose} disabled={selectionBlocked || !workspace}><LineIcon kind="folder"/></button></div><div><div className="srow active"><span className="avatar">W</span><span className="name">{workspace?.name ?? "선택 중"}</span><span className="right">{workspace?.branch ?? "git 아님"}</span></div><nav className="workspace-nav" aria-label="화면 선택"><button aria-current={view === "dashboard" ? "page" : undefined} onClick={() => setView("dashboard")} data-testid="dashboard-nav"><LineIcon kind="map"/><span className="nav-label">대시보드</span></button><button data-testid="chat-nav" aria-label="대화" title="대화" aria-current={view === "chat" ? "page" : undefined} onClick={() => setView("chat")}><LineIcon kind="chat"/><span className="nav-label">대화</span>{failedDraft !== null && <span className="nav-hint">실패한 요청 확인</span>}</button><button aria-label="생태계 구조 지도" title="생태계 구조 지도" aria-current={view === "ecosystem" ? "page" : undefined} onClick={() => setView("ecosystem")} data-testid="ecosystem-nav"><LineIcon kind="map"/><span className="nav-label">생태계</span><span className="nav-hint">구조 지도</span></button><button aria-label="리포트" title="리포트" aria-current={view === "reports" ? "page" : undefined} onClick={() => { setView("reports"); setAutoReportHint(""); }} data-testid="reports-nav"><LineIcon kind="report"/><span className="nav-label">리포트</span><span className="nav-hint">{autoReportHint || "작업 이야기"}</span></button></nav></div><div className="agents"><div className="group">CODEX</div><div className="srow"><span className="agentmark"/><span>{statusText}</span></div><section className="chat-conversations" aria-label="저장된 대화" hidden={view !== "chat"}><div className="chat-conversation-heading"><strong>대화</strong><button type="button" data-testid="new-conversation" disabled={selectionBlocked} onClick={() => { void selectConversation(null); }}>새 대화</button></div><label className="chat-search"><span className="sr-only">불러온 대화 검색</span><input data-testid="conversation-search" value={conversationSearch} onChange={(event) => setConversationSearch(event.target.value)} placeholder="불러온 대화 검색"/></label><div className="chat-list-tools"><span>{listLoading ? "불러오는 중…" : `불러온 대화 ${conversations.length}개`}</span><button type="button" disabled={listLoading || switching} onClick={() => { void refreshConversations(); }} aria-label="대화 목록 새로고침">새로고침</button></div>{listError && <div role="status" className="chat-list-error">{listError}</div>}<div className="chat-conversation-list" data-testid="conversation-list">{conversations.filter((item) => `${item.title} ${item.preview}`.toLocaleLowerCase("ko-KR").includes(conversationSearch.toLocaleLowerCase("ko-KR"))).map((item) => <button type="button" key={item.id} data-testid="conversation-item" data-thread-id={item.id} className={item.id === threadId ? "is-current" : ""} aria-current={item.id === threadId ? "true" : undefined} disabled={selectionBlocked} onClick={() => { void selectConversation(item.id); }}><strong>{item.title || item.preview || "제목 없는 대화"}</strong><span>{item.preview || "내용 미제공"}</span>{item.updatedAt !== null && Number.isFinite(new Date(item.updatedAt * 1000).getTime()) && <time dateTime={new Date(item.updatedAt * 1000).toISOString()}>{new Date(item.updatedAt * 1000).toLocaleDateString("ko-KR")}</time>}</button>)}</div>{!listLoading && conversations.length === 0 && !listError && <p className="muted">이 작업 폴더에 저장된 대화가 없습니다.</p>}{conversations.length > 0 && conversationSearch && !conversations.some((item) => `${item.title} ${item.preview}`.toLocaleLowerCase("ko-KR").includes(conversationSearch.toLocaleLowerCase("ko-KR"))) && <p className="muted">불러온 대화 중 일치하는 항목이 없습니다.</p>}{listCursor && <button type="button" className="chat-load-more" data-testid="load-more-conversations" disabled={listLoading || switching} onClick={() => { void refreshConversations(listCursor); }}>이전 대화 더 불러오기</button>}</section></div><div className="footer"><span className="muted">{workspace?.path}</span><span>{workspace?.changes ?? 0} changes</span></div></aside>
-    <section className="dashboard-shell" hidden={view !== "home" && view !== "dashboard"} data-testid={view === "home" ? "view-page" : "target-dashboard"}><DashboardView snapshot={dashboard} loading={dashboardLoading} error={dashboardError || null} projectKey={view === "dashboard" ? targetKey ?? dashboard?.projects.find(item => item.project.path === workspace?.path)?.project.key ?? workspace?.workspaceKey : undefined} onRefresh={() => { void refreshDashboard(); }} onOpenProject={openDashboardProject}/>{view === "dashboard" && targetKey !== "www" && <p className="dashboard-scope-note">생태계는 현재 WWW 빌드의 구조를 표시합니다. 선택 프로젝트의 자동 분석은 제공하지 않습니다.</p>}</section>
-    <main className="work" hidden={view !== "chat"}><div className="tabrow"><button className="tab active">대화</button><span className="spacer"/><button ref={monitorButton} className="tool" data-testid="detail-monitor-toggle" aria-label="상세 실행 모니터" aria-pressed={detailsVisible} onClick={() => setDetailsVisible((visible) => !visible)}>상세 모니터 {detailsVisible ? "닫기" : "열기"}</button><button className="tool" data-testid="resource-sidebar-toggle" aria-label="실시간 리소스 사이드바" aria-pressed={monitorVisible} onClick={() => setMonitorVisible((visible) => !visible)}>세션 모니터 {monitorVisible ? "접기" : "열기"}</button><span className="tool selected">Codex app-server</span></div><section className="stage"><div className="pane focused"><div className="title"><span className="name">Codex</span><span className="path">{workspace?.name}</span></div><div className="body conversation"><div className="transcript" tabIndex={0} aria-label="대화 내용" ref={transcriptRef} onScroll={(event) => { if (view !== "chat") return; const element = event.currentTarget; transcriptScrollTop.current = element.scrollTop; followTail.current = element.scrollHeight - element.scrollTop - element.clientHeight < 48; readingStates.current.set(currentKey, { draft: promptRef.current, scrollTop: element.scrollTop, followTail: followTail.current }); if (followTail.current) setNewContent(false); }}>{projection.historyTruncated && <div className="history-warning">최근 {MAX_RAW_EVENTS.toLocaleString("ko-KR")}개 사건만 있어 이전 흐름은 완전히 복원할 수 없습니다.</div>}<ChatRowMemoryContext.Provider value={rowMemory}>{pendingPrompt && !projection.blocks.some((block) => block.kind === "user" && block.text === pendingPrompt && block.state === "sending") && <div className="chat-flow-item"><div className="user request-sending" data-testid="pending-user-request"><div>{pendingPrompt}</div><span className="muted">요청을 보내는 중</span></div><WorkFlow turn="starting" blocks={[]} events={[]} transport={projection.transport} interrupt={projection.interrupt} now={now}/></div>}{projection.blocks.length === 0 && !pendingPrompt ? <div className="empty">{switching ? "대화를 불러오는 중입니다." : "작업 폴더를 확인하고 메시지를 입력하거나 저장된 대화를 여세요."}</div> : projection.blocks.map((block) => <div className="chat-flow-item" key={`${currentKey}:${blockKey(block)}`}><BlockView block={block} decide={decide} quote={quote}/>{block.kind === "user" && (block.turnId === projection.turnId || block.state !== "accepted") && <WorkFlow turn={projection.turn} blocks={activeBlocks} events={events} transport={projection.transport} interrupt={projection.interrupt} now={now}/>}</div>)}<NativePreparation events={events} sinceSeq={sendEventStart}/><ResultSummary blocks={activeBlocks} turn={projection.turn}/></ChatRowMemoryContext.Provider></div>{newContent && <button className="secondary new-content" onClick={() => { followTail.current = true; transcriptRef.current?.scrollTo({ top: transcriptRef.current.scrollHeight, behavior: "smooth" }); setNewContent(false); }}>새 내용으로 이동</button>}{failedDraft !== null && <section className="history-warning" data-testid="failed-request" aria-label="실패한 요청" style={{ margin: "0 14px", maxHeight: 180, overflow: "auto" }}><strong>실패한 요청</strong><pre data-testid="failed-request-text" style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{failedDraft}</pre><p role="status">{prompt !== "" ? "새 초안이 있습니다. 입력창을 비운 뒤 원문을 복원할 수 있습니다." : "실패한 원문을 복원하거나 버려 주세요."} 해결 전에는 다음 전송과 대화·프로젝트 전환이 일시 중지됩니다.</p><button type="button" className="secondary" data-testid="restore-failed-request" onClick={restoreFailedDraft} disabled={prompt !== ""}>입력창으로 복원</button><button type="button" className="secondary" data-testid="discard-failed-request" onClick={discardFailedDraft}>실패한 요청 버리기</button></section>}<div className="compose"><span className="prompt">›</span><textarea ref={promptInput} data-testid="prompt-input" value={prompt} maxLength={MAX_PROMPT_CHARS} disabled={switching} aria-label="Codex에게 작업 요청" onChange={(event) => { promptRef.current = event.target.value; setPrompt(event.target.value); setInputNotice(composerFull(event.target.value.length, MAX_PROMPT_CHARS) ? "입력 한도에 도달했습니다." : ""); }} onPaste={(event) => { const count = pasteOverflow(prompt, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, event.clipboardData.getData("text/plain"), MAX_PROMPT_CHARS); if (count > 0) { event.preventDefault(); setInputNotice(`붙여넣을 내용이 입력 한도를 ${count.toLocaleString("ko-KR")}자 넘어서 추가하지 않았습니다.`); } }} onCompositionStart={() => { composing.current = true; }} onCompositionEnd={(event) => { composing.current = false; lastCompositionEnd.current = normalizeCompositionEnd(event.nativeEvent.timeStamp); }} onBlur={() => { composing.current = false; }} onKeyDown={(event) => { handlePromptKeyDown(event, () => { void run(); }, composing.current, lastCompositionEnd.current); }} placeholder="Codex에게 작업 요청"/><div className="actions">{projection.working && <button data-testid="interrupt-button" className="secondary" onClick={interrupt} disabled={projection.interrupt === "requested" || projection.interrupt === "accepted"}>{projection.interrupt === "accepted" ? "중단 접수됨" : projection.interrupt === "requested" ? "중단 요청 중" : "중단"}</button>}<button data-testid="send-button" className="primary" onClick={run} disabled={!workspace || !prompt.trim() || failedDraft !== null || sending || switching || prompt.length > MAX_PROMPT_CHARS}>{sending ? "전송 중" : "보내기"}</button></div></div><div className="chat-compose-note" role="status">{inputNotice || (switching ? "저장된 대화를 여는 중입니다." : `Enter 전송 · Shift+Enter 줄바꿈 · ${prompt.length.toLocaleString("ko-KR")}/${MAX_PROMPT_CHARS.toLocaleString("ko-KR")}`)}</div></div></div></section></main>
-    <ResourceActivitySidebar events={events} resources={resources} threadId={threadId} workspacePath={workspace?.path} sending={sending || pendingPrompt !== null} hidden={!active || view !== "chat" || !monitorVisible || detailsVisible} onOpenMonitor={() => setDetailsVisible(true)}/>
-    <NativeActivityView key={workspace?.workspaceKey ?? "initial"} activityState={activityState} events={events} threadId={threadId} workspacePath={workspace?.path} hidden={!active || view !== "chat" || !detailsVisible || panel !== "activity"} onClose={() => { setDetailsVisible(false); monitorButton.current?.focus(); }} onShowOverview={() => setPanel("overview")} onShowEvents={() => setPanel("events")}/>
-    <aside className="panel" onKeyDown={(event) => { if (event.key === "Escape") { setDetailsVisible(false); monitorButton.current?.focus(); } }} hidden={!active || view !== "chat" || !detailsVisible || panel === "activity"}><div className="phead"><span className="logo"/><span className="title">Codex</span><span className="pill">{threadId ?? "새 스레드"}</span></div><div className="ptabs"><button aria-label="상세 모니터 닫기" onClick={() => { setDetailsVisible(false); monitorButton.current?.focus(); }}>닫기</button><button className="ptab" onClick={() => setPanel("activity")}>흐름</button><button className={`ptab ${panel === "overview" ? "active" : ""}`} onClick={() => setPanel("overview")}>개요</button><button className={`ptab ${panel === "events" ? "active" : ""}`} onClick={() => setPanel("events")}>이벤트</button><span className="aside">{events.length}{projection.historyTruncated ? "+" : ""}</span></div><div className="pbody">{panel === "overview" ? <><div className={`headline t-${statusTone}`}><span className="glyph">{approvals.length ? "!" : projection.working ? "·" : projection.turn === "failed" ? "×" : "○"}</span><div><div className="h">{statusText}</div><div className="sub">연결 {projection.transport} · 중단 {projection.interrupt === "accepted" ? "접수됨 · 최종 결과 대기" : projection.interrupt} · 턴 {projection.turn}</div></div></div><div className="counts"><div className="count"><div className="n">{commands.length}</div><div className="l">현재 명령</div></div><div className="count blocked"><div className="n">{approvals.length}</div><div className="l">현재 요청</div></div><div className="count"><div className="n">{files.length}</div><div className="l">현재 변경</div></div></div><div className="ledger"><div className="entry"><span className="prov">공개 설명</span><span>{explanations.length ? explanations.map((block) => block.text).filter(Boolean).join(" · ") : "Native 공개 설명 미제공"}</span></div><div className="entry"><span className="prov">관측 결과</span><span>현재 턴 명령 {commands.length} · 파일 변경 {files.length} · 실패 {failedCommands.length} · 미확인 {unresolvedCommands.length}</span></div><div className="entry"><span className="prov">실제 검증</span><span>{verificationText}</span></div><div className="entry"><span className="prov">미해결</span><span>{approvals.length ? `승인 ${approvals.length}건 대기` : failedCommands.length ? `실패 명령 ${failedCommands.length}건` : unresolvedCommands.length ? `결과 미확인 명령 ${unresolvedCommands.length}건` : projection.transport !== "connected" ? `연결 ${projection.transport}` : "현재 턴에서 관측된 차단 없음"}</span></div></div></> : <div className="ledger">{projection.historyTruncated && <div className="history-warning">이벤트 앞부분이 없어 완전한 기록이 아닙니다.</div>}{events.map((event) => <div className="entry" key={`${event.processEpoch}:${event.connectionGeneration}:${event.seq}`}><span className="seq">{event.seq}</span><span className="prov">{event.kind}</span><span>{event.method}</span></div>)}</div>}</div><div className="pfooter"><span className="src">로컬 Codex CLI · Native 출력은 신뢰하지 않는 데이터 · 승인 UI는 OS sandbox 보장이 아님</span></div></aside>
-    <EcosystemView hidden={!active || view !== "ecosystem"} namespace={sessionId}/>
-    {view === "reports" && <ReportsView/>}
+    {projectListOpen && <aside ref={listPanel} onKeyDown={(event) => { if (event.key === "Escape" && view !== "home") closeProjectList(); }} className="sidebar home-sidebar" aria-label="프로젝트 선택"><div className="brand">WWW <small>{appBuildInfo.label}</small></div><div className="home-list-actions">{view !== "home" && <button className="secondary" data-testid="project-list-close" onClick={closeProjectList}>현재 화면으로 돌아가기</button>}<button className="secondary" data-testid="global-dashboard-nav" onClick={() => { setView("home"); setProjectListOpen(true); }}>전체 대시보드</button></div><div className="home-project-heading"><strong>RPA</strong><button className="secondary" aria-label="RPA 프로젝트 추가" onClick={choose} disabled={selectionBlocked || !workspace}>+</button></div><div className="home-project-list">{projects.filter(item => item.path !== dashboard?.projects.find(entry => entry.project.kind === "www")?.project.path).map(item => <div className="home-project-row" key={item.workspaceKey}><button className="secondary grow" data-testid={item.workspaceKey === workspace?.workspaceKey ? "open-current-workspace" : undefined} disabled={selectionBlocked && item.workspaceKey !== workspace?.workspaceKey} onClick={() => openDashboardProject(item.workspaceKey)} title={item.path}>{item.name}</button><button className="icon" aria-label={`${item.name} 즐겨찾기 ${item.favorite ? "해제" : "추가"}`} aria-pressed={item.favorite} onClick={() => { void toggleFavorite(item); }} disabled={favoritePending}>☆</button></div>)}{!projectLoading && projects.filter(item => item.path !== dashboard?.projects.find(entry => entry.project.kind === "www")?.project.path).length === 0 && <p className="muted">등록된 RPA 프로젝트가 없습니다.</p>}</div><button className="secondary home-www" data-testid={dashboard?.projects.find(item => item.project.kind === "www")?.project.path === workspace?.path ? "open-current-workspace" : "open-www"} disabled={!workspace || (selectionBlocked && dashboard?.projects.find(item => item.project.kind === "www")?.project.path !== workspace.path)} onClick={() => openDashboardProject("www")}>WWW</button>{projectError && <p role="alert">{projectError}</p>}<p className="muted home-scope-note">프로젝트를 선택하기 전 전체 작업 기록을 볼 수 있습니다.</p></aside>}
+    <aside id={`workspace-sidebar-${sessionId}`} className="sidebar target-sidebar" hidden={projectListOpen}><div className="brand" title={`커밋 ${appBuildInfo.commit} · 소스 ${appBuildInfo.sourceDigest}`} >WWW <small data-testid="build-version">{appBuildInfo.label}</small></div><div className="sec"><button className="secondary" ref={projectListButton} data-testid="view-page-nav" onClick={() => setProjectListOpen(true)}>← 프로젝트 목록</button><button className="icon" aria-label="프로젝트 폴더 선택" onClick={choose} disabled={selectionBlocked || !workspace}><LineIcon kind="folder"/></button></div><div><div className="srow active"><span className="avatar">W</span><span className="name">{workspace?.name ?? "선택 중"}</span><span className="right">{workspace?.branch ?? "git 아님"}</span></div><nav className="workspace-nav" aria-label="화면 선택"><button aria-current={view === "dashboard" ? "page" : undefined} onClick={() => setView("dashboard")} data-testid="dashboard-nav"><LineIcon kind="map"/><span className="nav-label">대시보드</span></button><button data-testid="chat-nav" aria-label="대화" title="대화" aria-current={view === "chat" ? "page" : undefined} onClick={() => setView("chat")}><LineIcon kind="chat"/><span className="nav-label">대화</span>{failedDraft !== null && <span className="nav-hint">실패한 요청 확인</span>}</button><button aria-label="생태계 구조 지도" title="생태계 구조 지도" aria-current={view === "ecosystem" ? "page" : undefined} onClick={() => setView("ecosystem")} data-testid="ecosystem-nav"><LineIcon kind="map"/><span className="nav-label">생태계</span><span className="nav-hint">구조 지도</span></button><button aria-label="리포트" title="리포트" aria-current={view === "reports" ? "page" : undefined} onClick={() => { setView("reports"); setAutoReportHint(""); }} data-testid="reports-nav"><LineIcon kind="report"/><span className="nav-label">리포트</span><span className="nav-hint">{autoReportHint || "작업 이야기"}</span></button><button ref={monitorButton} aria-label="세션 모니터링" title="세션 모니터링" aria-current={view === 'monitoring' ? 'page' : undefined} onClick={() => { setView('monitoring'); setPanel('activity'); }} data-testid="monitoring-nav"><LineIcon kind="map"/><span className="nav-label">모니터링</span></button></nav></div><div className="agents"><div className="group">CODEX</div><div className="srow"><span className="agentmark"/><span>{statusText}</span></div><section className="chat-conversations" aria-label="저장된 대화" hidden={view !== "chat" && view !== "ecosystem"}><div className="chat-conversation-heading"><strong>대화</strong><button type="button" data-testid="new-conversation" disabled={selectionBlocked} onClick={() => { void selectConversation(null); }}>새 대화</button></div><label className="chat-search"><span className="sr-only">불러온 대화 검색</span><input data-testid="conversation-search" value={conversationSearch} onChange={(event) => setConversationSearch(event.target.value)} placeholder="불러온 대화 검색"/></label><div className="chat-list-tools"><span>{listLoading ? "불러오는 중…" : `불러온 대화 ${conversations.length}개`}</span><button type="button" disabled={listLoading || switching} onClick={() => { void refreshConversations(); }} aria-label="대화 목록 새로고침">새로고침</button></div>{listError && <div role="status" className="chat-list-error">{listError}</div>}<div className="chat-conversation-list" data-testid="conversation-list">{conversations.filter((item) => `${item.title} ${item.preview}`.toLocaleLowerCase("ko-KR").includes(conversationSearch.toLocaleLowerCase("ko-KR"))).map((item) => <button type="button" key={item.id} data-testid="conversation-item" data-thread-id={item.id} className={item.id === threadId ? "is-current" : ""} aria-current={item.id === threadId ? "true" : undefined} disabled={selectionBlocked} onClick={() => { void selectConversation(item.id); }}><strong>{item.title || item.preview || "제목 없는 대화"}</strong><span>{item.preview || "내용 미제공"}</span>{item.updatedAt !== null && Number.isFinite(new Date(item.updatedAt * 1000).getTime()) && <time dateTime={new Date(item.updatedAt * 1000).toISOString()}>{new Date(item.updatedAt * 1000).toLocaleDateString("ko-KR")}</time>}</button>)}</div>{!listLoading && conversations.length === 0 && !listError && <p className="muted">이 작업 폴더에 저장된 대화가 없습니다.</p>}{conversations.length > 0 && conversationSearch && !conversations.some((item) => `${item.title} ${item.preview}`.toLocaleLowerCase("ko-KR").includes(conversationSearch.toLocaleLowerCase("ko-KR"))) && <p className="muted">불러온 대화 중 일치하는 항목이 없습니다.</p>}{listCursor && <button type="button" className="chat-load-more" data-testid="load-more-conversations" disabled={listLoading || switching} onClick={() => { void refreshConversations(listCursor); }}>이전 대화 더 불러오기</button>}</section></div><div className="footer"><span className="muted">{workspace?.path}</span><span>{workspace?.changes ?? 0} changes</span></div></aside>
+    <section className="dashboard-shell" hidden={view !== "home" && view !== "dashboard"} data-testid={view === "home" ? "view-page" : "target-dashboard"}><DashboardView key={`${workspace?.workspaceKey}:${workspace?.selectionEpoch}`} snapshot={dashboard} loading={dashboardLoading} error={dashboardError || null} projectKey={view === "dashboard" ? targetKey ?? dashboard?.projects.find(item => item.project.path === workspace?.path)?.project.key ?? workspace?.workspaceKey : undefined} onRefresh={() => { void refreshDashboard(); }} onOpenProject={openDashboardProject} onLoadWork={loadDashboardWork}/>{view === "dashboard" && targetKey !== "www" && <p className="dashboard-scope-note">생태계는 현재 WWW 빌드의 구조를 표시합니다. 선택 프로젝트의 자동 분석은 제공하지 않습니다.</p>}</section>
+    <main className="work" hidden={view !== "chat"}><div className="tabrow"><button className="tab active">대화</button><span className="spacer"/>{/* 기존 상세 모니터·세션 모니터 토글은 모니터링 메뉴로 통합했습니다.
+<button ref={monitorButton} className="tool" data-testid="detail-monitor-toggle" aria-label="상세 실행 모니터" aria-pressed={detailsVisible} onClick={() => setDetailsVisible((visible) => !visible)}>상세 모니터 {detailsVisible ? "닫기" : "열기"}</button><button className="tool" data-testid="resource-sidebar-toggle" aria-label="실시간 리소스 사이드바" aria-pressed={monitorVisible} onClick={() => setMonitorVisible((visible) => !visible)}>세션 모니터 {monitorVisible ? "접기" : "열기"}</button>
+*/}<span className="tool selected">Codex app-server</span></div><section className="stage"><div className="pane focused"><div className="title"><span className="name">Codex</span><span className="path">{workspace?.name}</span></div><div className="body conversation"><div className="transcript" tabIndex={0} aria-label="대화 내용" ref={transcriptRef} onScroll={(event) => { if (view !== "chat") return; const element = event.currentTarget; transcriptScrollTop.current = element.scrollTop; followTail.current = element.scrollHeight - element.scrollTop - element.clientHeight < 48; readingStates.current.set(currentKey, { draft: promptRef.current, scrollTop: element.scrollTop, followTail: followTail.current }); if (followTail.current) setNewContent(false); }}>{projection.historyTruncated && <div className="history-warning">최근 {MAX_RAW_EVENTS.toLocaleString("ko-KR")}개 사건만 있어 이전 흐름은 완전히 복원할 수 없습니다.</div>}<div className="transcript-content"><ChatRowMemoryContext.Provider value={rowMemory}>{pendingPrompt && !projection.blocks.some((block) => block.kind === "user" && block.text === pendingPrompt && block.state === "sending") && <div className="chat-flow-item"><div className="user request-sending" data-testid="pending-user-request"><div>{pendingPrompt}</div><span className="muted">요청을 보내는 중</span></div><WorkFlow turn="starting" blocks={[]} events={[]} transport={projection.transport} interrupt={projection.interrupt} /></div>}{projection.blocks.length === 0 && !pendingPrompt ? <div className="empty">{switching ? "대화를 불러오는 중입니다." : "작업 폴더를 확인하고 메시지를 입력하거나 저장된 대화를 여세요."}</div> : projection.blocks.map((block) => <div className="chat-flow-item" key={`${currentKey}:${blockKey(block)}`}><MemoBlockView block={block} decide={decide} quote={quote}/>{block.kind === "user" && !block.steerStatus && (block.turnId === projection.turnId || block.state !== "accepted") && <WorkFlow turn={projection.turn} blocks={activeBlocks} events={events} transport={projection.transport} interrupt={projection.interrupt} />}</div>)}<NativePreparation events={events} sinceSeq={sendEventStart}/><ResultSummary blocks={activeBlocks} turn={projection.turn}/></ChatRowMemoryContext.Provider></div></div>{newContent && <button className="secondary new-content" onClick={() => { followTail.current = true; transcriptRef.current?.scrollTo({ top: transcriptRef.current.scrollHeight, behavior: "smooth" }); setNewContent(false); }}>새 내용으로 이동</button>}{failedDraft !== null && <section className="history-warning" data-testid="failed-request" aria-label="실패한 요청" style={{ margin: "0 14px", maxHeight: 180, overflow: "auto" }}><strong>실패한 요청</strong><pre data-testid="failed-request-text" style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{failedDraft}</pre><p role="status">{hasDraft ? "새 초안이 있습니다. 입력창을 비운 뒤 원문을 복원할 수 있습니다." : "실패한 원문을 복원하거나 버려 주세요."} 해결 전에는 다음 전송과 대화·프로젝트 전환이 일시 중지됩니다.</p><button type="button" className="secondary" data-testid="restore-failed-request" onClick={restoreFailedDraft} disabled={hasDraft}>입력창으로 복원</button><button type="button" className="secondary" data-testid="discard-failed-request" onClick={discardFailedDraft}>실패한 요청 버리기</button></section>}<ChatComposer snapshot={promptSnapshot} inputRef={promptInput} onDraft={(text) => { promptRef.current = text; setHasDraft(text.length > 0); readingStates.current.set(currentKey, { draft: text, scrollTop: transcriptScrollTop.current, followTail: followTail.current }); }} onSubmit={() => { void run(); }} onInterrupt={() => { void interrupt(); }} status={chatStatus({ sending, switching, working: projection.working, turn: projection.turn, turnId: projection.turnId, transport: projection.transport, interrupt: projection.interrupt, approvals: approvals.length })} disabled={switching} blocked={!workspace || failedDraft !== null} sending={sending} working={projection.working} interruptPending={projection.interrupt === 'requested' || projection.interrupt === 'accepted'} notice={inputNotice} startedAt={startedEvent ? Date.parse(startedEvent.at) : null} lastActivityAt={liveTurnEvents.length ? Date.parse(liveTurnEvents.at(-1)!.at) : null}/></div></div></section></main>
+    <ResourceActivitySidebar events={events} resources={resources} threadId={threadId} workspacePath={workspace?.path} sending={sending || pendingPrompt !== null} hidden={!active || view !== "chat" || !monitorVisible} onOpenMonitor={() => { setView("monitoring"); setPanel("activity"); }}/>
+    <section className="monitoring-work" hidden={!active || view !== 'monitoring'} data-testid="session-monitoring" aria-label="현재 세션 모니터링">
+      <header className="monitoring-identity"><h1>세션 모니터링</h1><p>{workspace?.name ?? '프로젝트 준비 중'} · 세션 <code>{sessionId}</code> · 대화 <code>{threadId ?? '새 대화 · 아직 생성하지 않음'}</code></p><p>현재 선택한 탭의 공개 관측입니다. 실행 종료와 업무 완료는 다릅니다.</p><button className="secondary" data-testid="monitoring-return-chat" onClick={() => { setView('chat'); requestAnimationFrame(() => promptInput.current?.focus()); }}>대화로 돌아가기{approvals.length ? ` · 승인 ${approvals.length}건 처리` : ''}</button></header>
+      <ResourceActivitySidebar events={events} resources={resources} threadId={threadId} workspacePath={workspace?.path} sending={sending} hidden={!active || view !== 'monitoring'} testId="monitoring-overview" onOpenMonitor={() => setPanel('activity')}/>
+    <NativeActivityView key={workspace?.workspaceKey ?? "initial"} activityState={activityState} events={events} threadId={threadId} workspacePath={workspace?.path} hidden={!active || view !== "monitoring" || panel !== "activity"} onClose={() => { setView("chat"); requestAnimationFrame(() => monitorButton.current?.focus()); }} onShowOverview={() => setPanel("overview")} onShowEvents={() => setPanel("events")}/>
+    <aside className="panel" onKeyDown={(event) => { if (event.key === "Escape") { setView("chat"); requestAnimationFrame(() => monitorButton.current?.focus()); } }} hidden={!active || view !== "monitoring" || panel === "activity"}><div className="phead"><span className="logo"/><span className="title">Codex</span><span className="pill">{threadId ?? "새 스레드"}</span></div><div className="ptabs"><button aria-label="상세 모니터 닫기" onClick={() => { setView("chat"); requestAnimationFrame(() => monitorButton.current?.focus()); }}>닫기</button><button className="ptab" onClick={() => setPanel("activity")}>흐름</button><button className={`ptab ${panel === "overview" ? "active" : ""}`} onClick={() => setPanel("overview")}>개요</button><button className={`ptab ${panel === "events" ? "active" : ""}`} onClick={() => setPanel("events")}>이벤트</button><span className="aside">{events.length}{projection.historyTruncated ? "+" : ""}</span></div><div className="pbody">{panel === "overview" ? <><div className={`headline t-${statusTone}`}><span className="glyph">{approvals.length ? "!" : projection.working ? "·" : projection.turn === "failed" ? "×" : "○"}</span><div><div className="h">{statusText}</div><div className="sub">연결 {projection.transport} · 중단 {projection.interrupt === "accepted" ? "접수됨 · 최종 결과 대기" : projection.interrupt} · 턴 {projection.turn}</div></div></div><div className="counts"><div className="count"><div className="n">{commands.length}</div><div className="l">현재 명령</div></div><div className="count blocked"><div className="n">{approvals.length}</div><div className="l">현재 요청</div></div><div className="count"><div className="n">{files.length}</div><div className="l">현재 변경</div></div></div><div className="ledger"><div className="entry"><span className="prov">공개 설명</span><span>{explanations.length ? explanations.map((block) => block.text).filter(Boolean).join(" · ") : "Native 공개 설명 미제공"}</span></div><div className="entry"><span className="prov">관측 결과</span><span>현재 턴 명령 {commands.length} · 파일 변경 {files.length} · 실패 {observedResults.failed} · 거절 {observedResults.declined} · 미확인 {observedResults.unresolved}</span></div><div className="entry"><span className="prov">실제 검증</span><span>{verificationText}</span></div><div className="entry"><span className="prov">미해결</span><span>{approvals.length ? `승인 ${approvals.length}건 대기` : observedResults.failed ? `실패 실행 ${observedResults.failed}건` : observedResults.declined ? `거절된 실행 ${observedResults.declined}건` : observedResults.unresolved ? `결과 미확인 실행 ${observedResults.unresolved}건` : projection.transport !== "connected" ? `연결 ${projection.transport}` : "현재 턴에서 관측된 차단 없음"}</span></div></div></> : <div className="ledger">{projection.historyTruncated && <div className="history-warning">이벤트 앞부분이 없어 완전한 기록이 아닙니다.</div>}{events.map((event) => <div className="entry" key={`${event.processEpoch}:${event.connectionGeneration}:${event.seq}`}><span className="seq">{event.seq}</span><span className="prov">{event.kind}</span><span>{event.method}</span></div>)}</div>}</div><div className="pfooter"><span className="src">로컬 Codex CLI · Native 출력은 신뢰하지 않는 데이터 · 승인 UI는 OS sandbox 보장이 아님</span></div></aside>
+    </section>
+    <EcosystemView hidden={!active || view !== "ecosystem"} namespace={sessionId} onNavigationChange={setMapNavigationOpen}/>
+    {reportsOpened && <div key={workspace?.workspaceKey} className="reports-screen" hidden={view !== "reports"}><ReportsView/></div>}
     <footer className="status"><span title={`커밋 ${appBuildInfo.commit} · 소스 ${appBuildInfo.sourceDigest}`} data-testid="build-identity">{appBuildInfo.label}</span><span>{statusText}</span><span>연결 {projection.transport} · {policyLabel}</span>{projection.protocolWarning && <span className="comm-warning" title={projection.protocolWarning.message}>최근 통신 경고 · <time dateTime={projection.protocolWarning.at}>{new Date(projection.protocolWarning.at).toLocaleTimeString("ko-KR")}</time></span>}{projectStorageWarning && <span className="project-storage-warning" role="status" title={projectStorageWarning} data-failed-scopes={JSON.stringify(projectStorageWarnings)}>{projectStorageWarning}</span>}<span className="grow"/><span className="err">{error}</span></footer>
   </>;
 }

@@ -14,6 +14,10 @@ const outcomes: Record<WorkReportSummary["outcome"], string> = {
   in_progress : "진행 기록" ,
 };
 
+export function reportFrameHtml(html: string): string {
+  return html.replaceAll(/href="#(section-[1-6])"/g, 'href="about:srcdoc#$1"');
+}
+
 export function ReportsView() {
   const api = useSessionApi();
   const [catalog   , setCatalog   ] = useState<WorkReportCatalog | null>                            (   null   ) ;
@@ -30,6 +34,7 @@ export function ReportsView() {
   const [exporting , setExporting ] = useState                                                      (  false   ) ;
   const [auto      , setAuto      ] = useState<{ enabled: boolean; jobs: NativeReportJob[] } | null>(   null   ) ;
   const [autoError , setAutoError ] = useState                                                      (    ""    ) ;
+  const frameHtml = useMemo(() => document ? reportFrameHtml(document.html) : "", [document]);
   const exportInFlight = useRef(false) ;
   const readSelection  = useRef(""   ) ;
   const visible = useMemo(() => {
@@ -150,7 +155,7 @@ export function ReportsView() {
       <section className="reports-reader" aria-label="보고서 읽기">
         {reading ? <div className="reports-placeholder" role="status"><h2>보고서를 펼치고 있습니다.</h2></div> : readError ? <div className="reports-placeholder" role="alert"><h2>이 보고서를 읽지 못했습니다.</h2><p>{readError}</p><button className="secondary" onClick={() => setRevision((value) => value + 1)}>다시 읽기</button></div> : document ? <>
           {!document.current || document.stale ? <div className="reports-stale" role="status">기록 또는 검사 대상이 변경됐습니다. 아래는 저장 당시의 보고서입니다. <span>{document.reasons.join(" · ")}</span></div> : null}
-          <iframe className="report-frame" title={`${document.report.title} 작업 보고서`} sandbox="" referrerPolicy="no-referrer" srcDoc={document.html}/>
+          <iframe className="report-frame" title={`${document.report.title} 작업 보고서`} sandbox="" referrerPolicy="no-referrer" srcDoc={frameHtml}/>
         </> : <div className="reports-placeholder"><svg viewBox="0 0 160 125" aria-hidden="true"><rect x="34" y="21" width="80" height="94" rx="9" fill="#dcecf6" stroke="#a7c2d5"/><rect x="46" y="9" width="80" height="94" rx="9" fill="white" stroke="#a7c2d5"/><path d="M62 35h47M62 49h35M62 63h42" stroke="#6486a0" strokeWidth="4" strokeLinecap="round"/><circle cx="112" cy="91" r="22" fill="#f4ce62"/><path d="m102 91 7 7 13-15" fill="none" stroke="#203b4b" strokeWidth="4" strokeLinecap="round"/></svg><h2>작업의 끝을, 읽을 수 있는 한 장으로.</h2><p>목록에서 보고서를 선택하세요.<br/>변경 전후와 선택 이유, 검증 결과와 남은 일을 함께 보여줍니다.</p></div>}
       </section>
     </div>

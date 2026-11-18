@@ -45,3 +45,121 @@ describe("모델 배분 검증", () => {
     expect(validateModelAllocation({ ...allocation(), attempt: 2, previousAttempt: { eventId: "e1", reason: "환경 오류", kind: "retry", failureCause: "environment" } }, context).model).toBe("gpt-6-luna");
   });
 });
+
+test("아직 없는 출력의 대소문자 별칭은 실제 파일시스템 의미에 따라 소유 충돌로 거부한다", async () => {
+  const { mkdtemp, mkdir, writeFile, stat, rm } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const { validateDecomposition } = await import("../scripts/workflow/decomposition.ts");
+  const repo = await mkdtemp(join(tmpdir(), "www-plan-case-"));
+  try {
+    await mkdir(join(repo, "src"));
+    await writeFile(join(repo, "src/Existing.ts"), "기존 이름의 lookup 대조");
+    let insensitive = false;
+    try { const [a, b] = await Promise.all([stat(join(repo, "src/Existing.ts")), stat(join(repo, "src/existing.ts"))]); insensitive = a.dev === b.dev && a.ino === b.ino; }
+    catch (error) { if (!(error && typeof error === "object" && "code" in error && error.code === "ENOENT")) throw error; }
+    const command = process.execPath;
+    const units = ["Future.ts", "future.ts"].map((file, index) => ({ taskId: `unit-${index}`, goal: "독립 출력", inputs: ["src"], writePaths: [`src/${file}`], excludedPaths: [], dependencies: [], artifacts: [`src/${file}`], criterionIds: ["AC-1"], verification: { command, args: [] }, resultPath: `src/${file}` }));
+    const checked = validateDecomposition({ units }, { repo, inputs: ["src"], writePaths: ["src"], criterionIds: ["AC-1"], verifierCommands: [JSON.stringify([command])] });
+    if (insensitive) await expect(checked).rejects.toThrow("소유 충돌");
+    else expect((await checked).units).toHaveLength(2);
+    await mkdir(join(repo, "src/자료"));
+    const emptyUnits = units.map((item, index) => ({ ...item, writePaths: [`src/자료/${index === 0 ? "Future.ts" : "future.ts"}`], artifacts: [`src/자료/${index === 0 ? "Future.ts" : "future.ts"}`], resultPath: `src/자료/${index === 0 ? "Future.ts" : "future.ts"}` }));
+    const emptyChecked = validateDecomposition({ units: emptyUnits }, { repo, inputs: ["src"], writePaths: ["src"], criterionIds: ["AC-1"], verifierCommands: [JSON.stringify([command])] });
+    if (insensitive) await expect(emptyChecked).rejects.toThrow("소유 충돌");
+    else expect((await emptyChecked).units).toHaveLength(2);
+    const unicodeUnits = units.map((item, index) => ({ ...item, writePaths: [`src/${index === 0 ? "é.ts" : "e\u0301.ts"}`], artifacts: [`src/${index === 0 ? "é.ts" : "e\u0301.ts"}`], resultPath: `src/${index === 0 ? "é.ts" : "e\u0301.ts"}` }));
+    await expect(validateDecomposition({ units: unicodeUnits }, { repo, inputs: ["src"], writePaths: ["src"], criterionIds: ["AC-1"], verifierCommands: [JSON.stringify([command])] })).rejects.toThrow("소유 충돌");
+  } finally { await rm(repo, { recursive: true, force: true }); }
+});
+
+function ownershipPlan(files: string[]) {
+  const command = process.execPath;
+  return {
+    units: files.map((file, index) => ({ taskId: `owner-${index}`, goal: "실제 파일 소유 구분", inputs: ["src"], writePaths: [file], excludedPaths: [], dependencies: [], artifacts: [file], criterionIds: ["AC-1"], verification: { command, args: [] }, resultPath: file }))
+  };
+}
+async function checkOwnership(repo: string, files: string[]) {
+  const { validateDecomposition } = await import("../scripts/workflow/decomposition.ts");
+  return validateDecomposition(ownershipPlan(files), { repo, inputs: ["src"], writePaths: ["src"], criterionIds: ["AC-1"], verifierCommands: [JSON.stringify([process.execPath])] });
+}
+async function ownershipFixture() {
+  const { mkdtemp, mkdir } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const repo = await mkdtemp(join(process.env.WWW_DECOMPOSITION_FIXTURE_ROOT ?? tmpdir(), "www-ownership-"));
+  await mkdir(join(repo, "src"));
+  return repo;
+}
+
+test("디렉터리 내부 파일과 외부 파일·다른 디렉터리의 하드링크 소유 충돌을 거부한다", async () => {
+  const { mkdir, writeFile, link, rm } = await import("node:fs/promises");
+  const { join } = await import("node:path");
+  const repo = await ownershipFixture();
+  try {
+    await mkdir(join(repo, "src/owned/nested"), { recursive: true });
+    await mkdir(join(repo, "src/other"));
+    await writeFile(join(repo, "src/owned/nested/file"), "같은 실제 파일");
+    await link(join(repo, "src/owned/nested/file"), join(repo, "src/outside"));
+    await link(join(repo, "src/owned/nested/file"), join(repo, "src/other/alias"));
+    await expect(checkOwnership(repo, ["src/owned", "src/outside"])).rejects.toThrow("소유 충돌");
+    await expect(checkOwnership(repo, ["src/owned", "src/other"])).rejects.toThrow("소유 충돌");
+    await expect(checkOwnership(repo, ["src/outside", "src/owned"])).rejects.toThrow("소유 충돌");
+    await writeFile(join(repo, "src/independent"), "독립 파일");
+    expect((await checkOwnership(repo, ["src/owned", "src/independent"])).units).toHaveLength(2);
+    expect((await checkOwnership(repo, ["src/owned", "src/new/sub/file"])).units).toHaveLength(2);
+  } finally { await rm(repo, { recursive: true, force: true }); }
+});
+
+test("실제 a/A 별개 하드링크 항목을 대소문자 lookup 별칭으로 오판하지 않는다", async () => {
+  const { mkdir, writeFile, link, lstat, readdir, rm } = await import("node:fs/promises");
+  const { join } = await import("node:path");
+  const repo = await ownershipFixture();
+  try {
+    await mkdir(join(repo, "src/case"));
+    await writeFile(join(repo, "src/case/a"), "하드링크 원본");
+    let separateEntries = true;
+    try { await link(join(repo, "src/case/a"), join(repo, "src/case/A")); }
+    catch (error) {
+      if (!(error && typeof error === "object" && "code" in error && error.code === "EEXIST")) throw error;
+      separateEntries = false;
+    }
+    const names = await readdir(join(repo, "src/case"));
+    expect(names.includes("a") && names.includes("A")).toBe(separateEntries);
+    const [a, upper] = await Promise.all([lstat(join(repo, "src/case/a")), lstat(join(repo, "src/case/A"))]);
+    expect(`${a.dev}:${a.ino}`).toBe(`${upper.dev}:${upper.ino}`);
+    const checked = checkOwnership(repo, ["src/case/foo", "src/case/FOO"]);
+    if (separateEntries) expect((await checked).units).toHaveLength(2);
+    else await expect(checked).rejects.toThrow("소유 충돌");
+    console.info(JSON.stringify({ ownershipCase: separateEntries ? "separate-hardlink-entries" : "lookup-alias", names, inode: `${a.dev}:${a.ino}`, fixtureRoot: process.env.WWW_DECOMPOSITION_FIXTURE_ROOT ?? "OS 임시 디렉터리" }));
+  } finally { await rm(repo, { recursive: true, force: true }); }
+});
+
+test("디렉터리 내부 심볼릭 링크와 읽을 수 없는 하위 디렉터리를 생략하지 않는다", async () => {
+  const { mkdir, chmod, symlink, rm } = await import("node:fs/promises");
+  const { join } = await import("node:path");
+  const repo = await ownershipFixture();
+  try {
+    await mkdir(join(repo, "src/owned"));
+    await symlink(repo, join(repo, "src/owned/alias"));
+    await expect(checkOwnership(repo, ["src/owned"])).rejects.toThrow("심볼릭 링크");
+    await rm(join(repo, "src/owned/alias"));
+    await mkdir(join(repo, "src/owned/locked"));
+    await chmod(join(repo, "src/owned/locked"), 0);
+    try { await expect(checkOwnership(repo, ["src/owned"])).rejects.toThrow(/EACCES|EPERM/); }
+    finally { await chmod(join(repo, "src/owned/locked"), 0o700); }
+    expect((await checkOwnership(repo, ["src/owned"])).units).toHaveLength(1);
+  } finally { await rm(repo, { recursive: true, force: true }); }
+});
+
+test("소유 디렉터리 조사 한도를 넘으면 부분 검사로 통과시키지 않는다", async () => {
+  const { mkdir, writeFile, link, rm } = await import("node:fs/promises");
+  const { join } = await import("node:path");
+  const repo = await ownershipFixture();
+  try {
+    await mkdir(join(repo, "src/owned"));
+    await writeFile(join(repo, "src/origin"), "한도 검증 파일");
+    for (let index = 0; index < 10_001; index++) await link(join(repo, "src/origin"), join(repo, `src/owned/entry-${index}`));
+    await expect(checkOwnership(repo, ["src/owned"])).rejects.toThrow("조사 한도");
+  } finally { await rm(repo, { recursive: true, force: true }); }
+}, 60_000);

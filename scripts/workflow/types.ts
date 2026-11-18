@@ -6,6 +6,7 @@ import type { CapturedSource, VerificationAttempt } from './evidence.ts';
 import type { DocumentationAssessment, DocumentationReview } from './documentation.ts';
 import type { RepositoryCheckStatus } from './consistency.ts';
 import type { ArtifactReview } from './artifacts.ts';
+import type { DecompositionPlan } from './decomposition.ts';
 
 export interface Approval {
   implementation   : boolean  ;
@@ -39,6 +40,7 @@ export interface RecordedReview {
 }
 
 export interface WorkWorkflow {
+  decomposition?        : DecompositionPlan;
   role                  : string                                             ;
   requestId             : string                                             ;
   requestHash           : string                                             ;
