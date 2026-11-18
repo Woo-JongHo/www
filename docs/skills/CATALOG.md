@@ -45,7 +45,7 @@ Electron 패키징에서도 `skill-library/`와 `scripts/check-skill-library.ts`
 | feature-dev | `43fd1f9db0941b2b83cb62268e35970d4a67c202` | 6 |
 | spec-kit | `f29319d550d1f05404f7184b92e995600ca2293f` | 18 |
 
-초기 수집 기준은 195개 파일, 2,338,135바이트였다. 공개 범위 검사에서 gstack의 `NOTICE.md`가 가리키는 누락 법문 6개를 같은 고정 커밋에서 보완해 파일 수는 201개다. 이번 보완 통합은 한국어 자료 186개(Markdown 168개·YAML 9개·절 manifest JSON 9개), 원문 보존 15개, 총 2,826,697바이트다. 원문과 현재 지문은 `inventory.json`의 schemaVersion 2로 구분한다. Markdown 본문과 에이전트 UI 설명, 절 manifest의 사람용 문구는 한국어로 대체하되 법문·NOTICE·기계용 설정은 원문으로 보존한다. 저장소 전체 이력, 바이너리·이미지, lockfile, `node_modules`, 실행 스크립트, CLI 구현, 에디터 설치 래퍼는 포함하지 않는다. 업스트림 `AGENTS.md`와 `CLAUDE.md`도 이 저장소 규칙으로 오인되지 않도록 복사하지 않았다.
+초기 수집 기준은 195개 파일, 2,338,135바이트였다. 공개 범위 검사에서 gstack의 `NOTICE.md`가 가리키는 누락 법문 6개를 같은 고정 커밋에서 보완해 파일 수는 201개다. 보완 통합 당시 합계는 2,826,697바이트였으며, 2026-11-16 재개 초기 측정에서 `inventory.json`과 실제 201개 파일·Git HEAD blob을 대조한 합계는 2,826,709바이트였다. 이후 의미 대조로 번역을 수정하고 있으므로 현행 합계·파일별 지문은 `inventory.json`과 `node scripts/check-skill-library.ts`의 실제 결과를 따른다. 한국어 자료 186개(Markdown 168개·YAML 9개·절 manifest JSON 9개)와 원문 보존 15개 구성은 유지한다. 이후 한 번역 파일의 표현 수정으로 12바이트가 증가했으며 원문 고정 지문은 유지된다. 원문과 현재 지문은 `inventory.json`의 schemaVersion 2로 구분한다. Markdown 본문과 에이전트 UI 설명, 절 manifest의 사람용 문구는 한국어로 대체하되 법문·NOTICE·기계용 설정은 원문으로 보존한다. 저장소 전체 이력, 바이너리·이미지, lockfile, `node_modules`, 실행 스크립트, CLI 구현, 에디터 설치 래퍼는 포함하지 않는다. 업스트림 `AGENTS.md`와 `CLAUDE.md`도 이 저장소 규칙으로 오인되지 않도록 복사하지 않았다.
 
 ### 라이선스와 번역 수정 고지
 
