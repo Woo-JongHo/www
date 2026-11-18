@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-dc931897-564a-4b95-a8c5-a23d7b03a8a3",
+  "title"        : "참조 HTML 기반 한 페이지 보고서 양식 변경 명세",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-94765ceb-8033-4957-920e-562c932b2d7a",
+      "workId"        : "work-dc931897-564a-4b95-a8c5-a23d7b03a8a3",
+      "title"         : "참조 HTML 기반 한 페이지 보고서 양식 변경 명세",
+      "summary"       : "Downloads/www-report.html을 정적으로 분석해 한 페이지 보고서 양식 변경의 개발명세를 작성했다. 제품 양식은 바꾸지 않았다.",
+      "kind"          : "authored",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T05:43:44.427Z",
+      "event"         : "finish",
+      "workRecordHash": "58524c48b965e006d942c82c521cf5b2d92bef292b98f85a7aa012b07b27560e",
+      "sourceDigest"  : "3485dabab0f478216efdd6435561b488fdd52425558e1436313f1b2bd3dbe79c",
+      "criteriaDigest": "6b70bf39012ec889b2c5cf2b28d8ad6dcde5779f644ad30bbf72e8385beac44b",
+      "semanticHash"  : "af671d41067105a07060da79ed7b9067999e897ce4deab317210f1ab8cb36d4e",
+      "narrative": {
+        "summary": "Downloads/www-report.html을 정적으로 분석해 한 페이지 보고서 양식 변경의 개발명세를 작성했다. 제품 양식은 바꾸지 않았다.",
+        "before" : "현행 보고서는 독자 중심 정보를 제공하지만 사용자가 지정한 새 HTML의 번호 목차·여섯 절·간결한 문서 스타일과 차이가 있다.",
+        "after"  : "참조 원본의 내용 식별값·읽기 순서·시각 기준·반응형·기존 기록 보존·앱/독립 HTML 매핑과 검증 계획을 Reports 003에 기록했다.",
+        "changes": [
+          "개발명세·수용 기준 7개·작업 목차를 등록하고 Reports 002와 연결했다.",
+          "참고 원본은 Git 제외 로컬 증거에 보존하고 SHA-256을 명세에 기록했다."
+        ],
+        "decisions": [
+          "시안의 수치·날짜·Opus 문구는 예시로 구분하고 일반 보고서의 고정 사실로 사용하지 않는다.",
+          "원본 visualization wrapper와 스크립트를 복사하지 않고 기존 오프라인·의미 보존 계약을 유지하는 목표를 정했다."
+        ],
+        "limitations": [
+          "브라우저 접근 호스트 불가로 실제 렌더링·목차 클릭·인쇄는 확인하지 못했다.",
+          "제품 구현·실기·타입·빌드·독립 제품 감사는 수행하지 않았다."
+        ],
+        "next": [
+          "구현 요청 후 실제 참조 화면 확인과 기존 기록의 여섯 절 매핑부터 진행한다."
+        ]
+      },
+      "work": {
+        "status": "ready",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-5",
+            "description": "참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-6",
+            "description": "앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-7",
+            "description": "구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/work.json",
+        "workRecordHash": "58524c48b965e006d942c82c521cf5b2d92bef292b98f85a7aa012b07b27560e",
+        "sourceDigest"  : "3485dabab0f478216efdd6435561b488fdd52425558e1436313f1b2bd3dbe79c",
+        "criteriaDigest": "6b70bf39012ec889b2c5cf2b28d8ad6dcde5779f644ad30bbf72e8385beac44b"
+      }
+    }
+  ]
+}

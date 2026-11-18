@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-dc931897-564a-4b95-a8c5-a23d7b03a8a3",
+  "title"        : "참조 HTML 기반 한 페이지 보고서 양식 변경 명세",
+  "kind"         : "feature",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner"        : "ui",
+  "status"       : "ready",
+  "blockedReason": null,
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-fc3f6aea-c842-45f3-821b-5fc448809d35"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "참조 www-report.html의 여섯 절 순서와 왼쪽 목차·단일 본문·접는 상세 근거 구조를 앱 보고서와 독립 HTML에 적용한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-2",
+      "description": "상단에서 기록 시점·작업 결론·당시 상태·현재 적용 여부·필수 감사 상태를 구분하며 부분 완료·실패·미실행·오래된 근거를 숨기지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-3",
+      "description": "문제와 접근·사용자 행동의 변경 결과·검증 방법과 관측 및 한계·남은 일과 완료 조건을 실제 기록에서 구성하며 없는 사실·담당자·판정을 만들지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-4",
+      "description": "변경 이력과 수용 기준·검사·소스·측정 한계·원문 위치를 읽고 펼칠 수 있으며 기존 UUID·entries·semanticHash·과거 판정과 의미를 보존한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-5",
+      "description": "참조의 절제된 글자·간격·구획·의미색과 790px/540px 반응형 전환을 구현하고 키보드·접힘·포커스·좁은 창·인쇄·오프라인 읽기를 검증한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-6",
+      "description": "앱과 독립 HTML은 같은 내용·판정·누락 안내를 제공하며 기존 보고서와 reader 필드가 없는 기록도 읽을 수 있고 참조의 예시 수치·날짜·감사 모델을 고정하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-7",
+      "description": "구조화 기록 매핑·내용 보존·HTML 이스케이프·목차 링크·상태별 표시와 실제 Electron 및 브라우저의 반응형·인쇄를 검증하고 미실행 범위를 명시한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "report-reference-spec-20261116",
+    "requestHash": "98ccbaaffbabc045ab314aa0bb2b67855214a878093bac6789537583a158951b",
+    "authorization": {
+      "implementation": false,
+      "writePaths": [
+        "docs/work/Reports",
+        "docs/work/INDEX.md"
+      ],
+      "mutationSurfaces": [
+        "보고서 변경 명세와 작업 기록"
+      ],
+      "verifierCommands": [
+        "node scripts/check-workflow.ts"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "98ccbaaffbabc045ab314aa0bb2b67855214a878093bac6789537583a158951b"
+    },
+    "inputs": [
+      "docs/design-system.md",
+      "docs/skills/REPORTS.md",
+      "scripts/workflow/report-view.ts",
+      "scripts/workflow/reports.ts",
+      "src/reports-view.tsx",
+      "src/reports.css"
+    ],
+    "nextAction": "spec",
+    "verifications": [],
+    "reviews": [],
+    "artifactReviews": [
+      {
+        "id"        : "artifact-7c113b15-2f9e-4d2d-a1ec-981a485b08b7",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T05:43:43.882Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "저작 후 별도 문서 대조 패스에서 참고 HTML의 여섯 절·CSS 기준과 명세 전용 범위·예시 데이터 경계·보존 조건을 확인했다. 실제 화면과 독립 제품 감사는 미실행이다.",
+        "digest"    : "0bc8b5050f11597463a2195b15cad261f5dbc1daa1a75ad3eb4b4b66a5fc7e59",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "사용자 지정 HTML을 참조로 명세만 작성하며 기존 작업과 권한을 구분한다.",
+            "references": [
+              {
+                "path": "docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "여섯 절·목차·본문·상세의 읽기 순서와 앱/HTML을 정의한다.",
+            "references": [
+              {
+                "path": "docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/spec.md",
+                "line": 17
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "satisfied",
+            "reason": "예시 사실·과거 판정·legacy·entry 보존과 실제 미관측을 구분한다.",
+            "references": [
+              {
+                "path": "docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/spec.md",
+                "line": 47
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "satisfied",
+            "reason": "AC-1~AC-7의 매핑·내용 보존·실기·오프라인·인쇄 검증을 정의한다.",
+            "references": [
+              {
+                "path": "docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/spec.md",
+                "line": 87
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      }
+    ],
+    "reportingRequired": true
+  }
+}
