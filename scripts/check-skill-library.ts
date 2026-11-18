@@ -137,16 +137,17 @@ export async function validateSkillLibrary(root: string) {
   for (const { source, paths } of bySource.values()) {
     if (source.copiedPaths.length !== paths.size || source.copiedPaths.some((file) => !paths.has(file))) fail(`출처와 파일 목록 불일치: ${source.id}`);
   }
+  const allowedPaths = new Set([...localPaths, "skill-library/sources.json", "skill-library/inventory.json"]);
   const inspectDirectory = async (directory: string): Promise<void> => {
     for (const item of await readdir(directory, { withFileTypes: true })) {
       const local    = path.join(directory, item.name)                      ;
       const relative = path.relative(root, local).split(path.sep).join("/") ;
       if (item.isSymbolicLink()) fail(`보관소 심볼릭 링크: ${relative}`);
       if (item.isDirectory()) await inspectDirectory(local);
-      else if (!item.isFile() || !localPaths.has(relative)) fail(`목록에 없는 보관 파일: ${relative}`);
+      else if (!item.isFile() || !allowedPaths.has(relative)) fail(`목록에 없는 보관 파일: ${relative}`);
     }
   };
-  await inspectDirectory(path.join(library, "upstream"));
+  await inspectDirectory(library);
   return { sources: bySource.size, files: localPaths.size, translated, preserved, bytes: totalBytes };
 }
 

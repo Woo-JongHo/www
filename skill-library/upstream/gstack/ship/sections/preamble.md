@@ -81,7 +81,7 @@ Net: <one-line synthesis of what you're actually trading off>
 
 ELI10은 함수 이름이 아닌 쉬운 영어로 항상 제공하며 Recommendation도 반드시 포함한다. AUTO_DECIDE가 의존하므로 `(recommended)` 표식을 유지한다.
 
-완전성: 선택지의 검증 범위가 다를 때만 `Completeness: N/10`을 사용한다. 10은 완전한 범위, 7은 정상 경로, 3은 지름길이다. 종류가 다르면 `Note: options differ in kind, not coverage — no completeness score.`를 쓴다.
+완전성: 선택지가 충족하는 범위가 다를 때만 `Completeness: N/10`을 사용한다. 10은 완전한 범위, 7은 정상 경로, 3은 지름길이다. 종류가 다르면 `Note: options differ in kind, not coverage — no completeness score.`를 쓴다.
 
 수락된 지름길은 흔적을 남긴다. 사용자가 완전성 ≤7이며 동시에 지속적인 범위 결정(구조 또는 범위 축소, 단일 턴 선택은 아님)인 선택지를 고르면, 한계와 확장 조건을 이유에 담아 `gstack-decision-log`에 기록한다. 해당 선택지를 구현하는 같은 편집에서 추가 질문 없이 잘라 낸 각 부분에 해당 언어의 주석 구문으로 `gstack-shortcut(dec-<id>): <ceiling>, upgrade when <trigger>`를 표시한다. 에이전트가 먼저 시작하지 않는다. 표식은 사용자의 명시적 선택 뒤에만 생긴다. /retro는 결정 ID로 연결된 부채 원장에 이를 수집한다.
 
@@ -191,9 +191,9 @@ AskUserQuestion, 사용자 답변, 발견 사항에 적용한다. AskUserQuestio
 <a id="completeness-principle--boil-the-ocean"></a>
 ## 완전성 원칙: 전체를 다루기
 
-검증 범위는 완전하게, 코드는 최소한으로 한다. 테스트·경계 사례·오류 경로 등 요구사항 전체를 다루도록 권고하고 그 이상의 코드는 쓰지 않는다. 범위가 같으면 작은 diff를 우선하고 불가능한 상태를 검사하지 않는다. 재작성·여러 분기에 걸친 이관 같은 무관한 작업은 별도 범위로 알리며, 이를 누락의 핑계로 삼지 않는다.
+요구사항은 완전하게 다루고 코드는 최소한으로 한다. 테스트·경계 사례·오류 경로 등 요구사항 전체를 다루도록 권고하고 그 이상의 코드는 쓰지 않는다. 범위가 같으면 작은 diff를 우선하고 불가능한 상태를 검사하지 않는다. 재작성·여러 분기에 걸친 이관 같은 무관한 작업은 별도 범위로 알리며, 이를 누락의 핑계로 삼지 않는다.
 
-선택지의 검증 범위가 다르면 `Completeness: X/10`을 포함한다. 10은 모든 경계 사례, 7은 정상 경로, 3은 지름길이다. 종류가 다르면 `Note: options differ in kind, not coverage — no completeness score.`를 쓴다. 점수를 지어내지 않는다.
+선택지가 충족하는 범위가 다르면 `Completeness: X/10`을 포함한다. 10은 모든 경계 사례, 7은 정상 경로, 3은 지름길이다. 종류가 다르면 `Note: options differ in kind, not coverage — no completeness score.`를 쓴다. 점수를 지어내지 않는다.
 
 <a id="confusion-protocol"></a>
 ## 혼란 대응 절차

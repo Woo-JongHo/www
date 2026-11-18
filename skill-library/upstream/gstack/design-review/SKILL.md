@@ -1042,7 +1042,7 @@ Detector 발견 사항에는 `[rule-id]`가 붙는다. `IMPECCABLE_SKILL: presen
 
 ### 8a.5. 대상 목업(`DESIGN_READY`인 경우)
 
-gstack designer를 사용할 수 있고 발견 사항이 시각 레이아웃, 계층 또는 여백과 관련되면(잘못된 색상 또는 font-size 같은 CSS 값 수정만이 아님) 수정된 버전이 어떻게 보여야 하는지 나타내는 대상 목업을 생성한다. 발견 사항을 수정한 페이지 또는 component의 설명을 private 파일에 작성한다. brief는 캡처한 시스템(같은 색상, 글꼴, radius, spacing scale)을 문자 그대로 재사용하고 레이아웃 또는 구조만 바꾼다. 이미 있는 제품에 새 palette 또는 typeface를 절대 도입하지 않는다.
+gstack designer를 사용할 수 있고 발견 사항이 시각 레이아웃, 계층 또는 여백과 관련되면(잘못된 색상 또는 font-size 같은 CSS 값 수정만이 아님) 수정된 버전이 어떻게 보여야 하는지 나타내는 대상 목업을 생성한다. 발견 사항을 수정한 페이지 또는 component의 설명을 private 파일에 작성한다. brief는 캡처한 시스템(같은 색상, 글꼴, radius, spacing scale)을 문자 그대로 재사용하고 레이아웃 또는 구조만 바꾼다. 이미 palette 또는 typeface가 있는 제품에 새 palette 또는 typeface를 절대 도입하지 않는다.
 
 ```bash
 _GT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)/.gstack/tmp"

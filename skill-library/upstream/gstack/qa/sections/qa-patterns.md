@@ -126,7 +126,7 @@ console.log("ASIDE_DIR=" + pwd); await closeTab(pg); console.log("GSTACK_STEP_OK
 
 ### Phase 5: 문서화
 
-공용 루프의 정확한 재현 규칙으로 각 문제를 한 번 재시도해 확인한 뒤, 즉시 screenshot 근거를 최소화하고 보고하세요. 재현이 끝나기 전 timeout은 확인을 미완료로 남깁니다. 이후 timeout은 확인된 결함은 유지하되 근거나 최소화는 미완료입니다.
+공용 루프의 정확한 재현 규칙으로 각 문제를 한 번 재시도해 확인한 뒤, 문제의 재현 사례를 최소화하고 screenshot 근거를 즉시 보고하세요. 재현이 끝나기 전 timeout은 확인을 미완료로 남깁니다. 이후 timeout은 확인된 결함은 유지하되 근거나 최소화는 미완료입니다.
 
 **Interactive:** Phase 3에서 `flow = true`. 대안: `pg.fill("#email", "qa@example.com")`, `pg.getByRole("button", { name: "Save" }).click()`, `pg.waitForSelector("#done")`, `pg.waitForURL(/dashboard/)`. 재현 단계에 전/후 screenshot을 연결하세요.
 

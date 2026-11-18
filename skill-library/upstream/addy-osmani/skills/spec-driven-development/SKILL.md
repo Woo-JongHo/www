@@ -18,7 +18,7 @@ description: 코딩 전에 명세를 작성한다. 새 프로젝트, 기능, 중
 - 요구사항이 모호하거나 불완전할 때
 - 변경이 여러 파일이나 모듈에 영향을 줄 때
 - 아키텍처 결정을 내리려 할 때
-- 구현에 30분 이상 걸릴 작업일 때
+- 구현에 30분을 초과하여 걸릴 작업일 때
 
 **사용하지 않을 때:** 한 줄 수정, 오타 수정, 요구사항이 명확하고 자체 완결적인 변경.
 
@@ -53,7 +53,7 @@ description: 코딩 전에 명세를 작성한다. 새 프로젝트, 기능, 중
 |---|---|---|
 | identity | 계정, 세션, SSO | — |
 | billing | 요금제, 청구서, 결제 | identity |
-| notifications | 이메일과 웹훅 일괄 전달 | identity |
+| notifications | 이메일과 웹훅을 여러 수신처로 분기 전달 | identity |
 | reporting | 사용량 대시보드 | billing, notifications |
 
 구현 순서: identity → billing, notifications → reporting

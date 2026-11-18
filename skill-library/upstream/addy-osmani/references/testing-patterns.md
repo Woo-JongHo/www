@@ -2,7 +2,7 @@
 
 # 테스트 패턴 참조(JavaScript/TypeScript)
 
-`test-driven-development` 스킬의 보편적인 원리를 설명하는 JavaScript/TypeScript 테스트 패턴(Jest, React Testing Library, Supertest 및 Playwright)에 대한 빠른 참조입니다. 원칙(Arrange-Act-Assert, 명명, 모의 규율, 안티패턴)은 모든 생태계에 적용됩니다. 여기에 표시된 구문과 도구는 JS/TS 전용입니다. 다른 스택에서는 저장소의 자체 테스트 프레임워크 및 명령과 동일한 원칙을 따릅니다.
+`test-driven-development` 스킬의 보편적인 원리를 설명하는 JavaScript/TypeScript 테스트 패턴(Jest, React Testing Library, Supertest 및 Playwright)에 대한 빠른 참조입니다. 원칙(Arrange-Act-Assert, 명명, 모의 규율, 안티패턴)은 모든 생태계에 적용됩니다. 여기에 표시된 구문과 도구는 JS/TS 전용입니다. 다른 스택에서는 저장소 자체의 테스트 프레임워크와 명령을 사용하여 같은 원칙을 따릅니다.
 
 ## 목차
 
@@ -231,7 +231,7 @@ test('user can create and complete a task', async ({ page }) => {
 | 구현 세부정보 테스트 | 리팩터링 시 테스트가 깨짐 | 입력/출력 테스트 |
 | 모든 것을 스냅샷 | 스냅샷 차이점을 검토하는 사람이 없습니다 | 구체적인 값 검증 |
 | 공유 변경 가능 상태 | 테스트는 서로를 오염시킨다 | 테스트별 설정/해제 |
-| 타사 코드 테스트 | 버그가 아닌 시간 낭비 | 경계에서 모의 |
+| 타사 코드 테스트 | 자신의 코드에 있는 버그가 아니므로 시간 낭비 | 경계에서 모의 |
 | CI 통과를 위해 테스트 건너뛰기 | 실제 버그를 숨깁니다 | 테스트 수정 또는 삭제 |
 | `test.skip`를 영구적으로 사용 | 데드 코드 | 제거 또는 수정 |
 | 지나치게 광범위한 검증문 | 회귀를 포착하지 못함 | 구체적으로 |

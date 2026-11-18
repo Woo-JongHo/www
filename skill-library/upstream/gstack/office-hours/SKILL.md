@@ -576,7 +576,7 @@ Prompt file text(위의 Web research runs in Aside block으로 생성, write 및
   approach가 틀린 이유가 있나요?
 
 **Eureka check:** Layer 3 추론이 genuine insight를 드러내면 명명하세요.
-"EUREKA: 모두가 [assumption]을 가정하여 X를 하지만 [evidence from our conversation]는 여기서는 틀렸음을 보여 줍니다. 이는 [implication]을 뜻합니다." eureka moment를 log하세요(서문 참조).
+"EUREKA: 모두가 [assumption]을 가정하여 X를 하지만 [evidence from our conversation]는 여기서는 그것이 틀렸음을 시사합니다. 이는 [implication]을 뜻합니다." eureka moment를 log하세요(서문 참조).
 
 eureka moment가 없으면 다음과 같이 말하세요. "여기서는 통념이 타당해 보이므로 이를 바탕으로 만들겠습니다." Phase 3으로 진행하세요.
 

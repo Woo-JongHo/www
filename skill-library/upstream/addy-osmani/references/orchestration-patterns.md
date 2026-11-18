@@ -331,7 +331,7 @@ Sonnet 팀원 세 명이 약 10~15분 조사하면 같은 세 페르소나를 `/
 
 ### D. 깊은 페르소나 트리
 
-`/ship`이 `quality-coordinator`를 호출하고, 그것이 `code-reviewer`를 호출하는 `pre-ship-coordinator`를 호출한다.
+`/ship`이 `pre-ship-coordinator`를 호출하고, 이것이 `quality-coordinator`를 호출하며, 다시 `code-reviewer`를 호출한다.
 
 **실패하는 이유:**
 - 각 계층이 결정 가치는 더하지 않고 지연 시간과 토큰만 추가함

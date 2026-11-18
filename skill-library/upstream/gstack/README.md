@@ -39,7 +39,7 @@ Claude Code를 열고 이것을 붙여넣는다. 나머지는 Claude가 수행�
 
 > gstack 설치: **`git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup`**을 실행한 뒤, 모든 웹 탐색에 gstack의 /browse 스킬을 사용하고 mcp\_\_claude-in-chrome\_\_\* 도구는 절대 사용하지 말라고 적은 "gstack" 섹션을 CLAUDE.md에 추가한다. Claude Code는 설치된 스킬을 직접 나열하므로 섹션에 스킬 목록은 필요 없다. 그런 다음 팀원도 사용할 수 있도록 현재 프로젝트에 gstack을 추가할지 사용자에게 묻는다.
 
-**받게 되는 업데이트:** 새 설치는 main의 모든 병합 대신 `stable` 채널, 즉 태그된 릴리스(월요일과 목요일, 최대 72시간에 한 번, 중요한 수정은 약 하루 내, 절대 일주일 이상 뒤처지지 않으며 검증된 보안 및 회귀 수정 포함)를 따른다. `./setup`은 컴퓨터에서 처음 실행될 때 이를 기록하고 출력한다. 클론 자체는 main의 최신 커밋에서 시작하며 업데이터는 checkout을 뒤로 이동시키지 않으므로, 이를 통과하는 다음 릴리스 시점에(며칠 내) 릴리스로 이동한다. gstack 기여자의 checkout(`bin/dev-setup`으로 표시됨, origin의 기본 `main`이 아닌 브랜치에 있거나 로컬 커밋을 가짐)과 Capy crew 머신(설치 관리자가 `main`을 기록함)은 대신 `main`을 따릅니다. stable이 기본값이 되기 전에 설정한 설치는 계속 `main`을 따릅니다. 전환하려면 `~/.claude/skills/gstack/bin/gstack-config set update_channel main`(모든 병합) 또는 `~/.claude/skills/gstack/bin/gstack-config set update_channel stable`(릴리스만)을 실행합니다. 자세한 내용: [docs/releases.md](https://github.com/garrytan/gstack/blob/f0cd9f8c4b453c1eadd714e4149174ee01179eae/docs/releases.md#channels).
+**받게 되는 업데이트:** 새 설치는 main의 모든 병합 대신 `stable` 채널, 즉 태그된 릴리스(월요일과 목요일, 72시간당 최대 한 번, 중요한 수정은 약 하루 내, 절대 일주일 이상 뒤처지지 않으며 검증된 보안 및 회귀 수정 포함)를 따른다. `./setup`은 컴퓨터에서 처음 실행될 때 이를 기록하고 출력한다. 클론 자체는 main의 최신 커밋에서 시작하며 업데이터는 checkout을 뒤로 이동시키지 않으므로, 이를 통과하는 다음 릴리스 시점에(며칠 내) 릴리스로 이동한다. gstack 기여자의 checkout(`bin/dev-setup`으로 표시됨, origin의 기본 `main`이 아닌 브랜치에 있거나 로컬 커밋을 가짐)과 Capy crew 머신(설치 관리자가 `main`을 기록함)은 대신 `main`을 따릅니다. stable이 기본값이 되기 전에 설정한 설치는 계속 `main`을 따릅니다. 전환하려면 `~/.claude/skills/gstack/bin/gstack-config set update_channel main`(모든 병합) 또는 `~/.claude/skills/gstack/bin/gstack-config set update_channel stable`(릴리스만)을 실행합니다. 자세한 내용: [docs/releases.md](https://github.com/garrytan/gstack/blob/f0cd9f8c4b453c1eadd714e4149174ee01179eae/docs/releases.md#channels).
 
 ### 2단계: 팀 모드 — 공유 저장소 자동 업데이트(권장)
 
@@ -49,7 +49,7 @@ Claude Code를 열고 이것을 붙여넣는다. 나머지는 Claude가 수행�
 (cd ~/.claude/skills/gstack && ./setup --team) && ~/.claude/skills/gstack/bin/gstack-team-init required && git add .claude/ CLAUDE.md && git commit -m "require gstack for AI-assisted work"
 ```
 
-저장소에 vendored 파일이 없고, 버전 드리프트도 없으며, 수동 업그레이드도 없다. 모든 Claude Code 세션은 빠른 자동 업데이트 검사로 시작한다(시간당 한 번으로 제한, 네트워크 실패에 안전, 완전히 조용함). 팀 모드는 `update_channel`이 `auto`일 때(따라서 stable이 기본값이 되기 전 설치에서도) main의 모든 병합이 아닌 `stable` 채널을 따른다. 즉 태그된 릴리스(월요일과 목요일, 최대 72시간에 한 번, 중요한 수정은 약 하루 내, 절대 일주일 이상 뒤처지지 않으며 검증된 보안 및 회귀 수정 포함)다. `gstack-config set update_channel main`은 대신 모든 병합을 따른다. [docs/releases.md](https://github.com/garrytan/gstack/blob/f0cd9f8c4b453c1eadd714e4149174ee01179eae/docs/releases.md#channels)를 참조한다.
+저장소에 vendored 파일이 없고, 버전 드리프트도 없으며, 수동 업그레이드도 없다. 모든 Claude Code 세션은 빠른 자동 업데이트 검사로 시작한다(시간당 한 번으로 제한, 네트워크 실패에 안전, 완전히 조용함). 팀 모드는 `update_channel`이 `auto`일 때(따라서 stable이 기본값이 되기 전 설치에서도) main의 모든 병합이 아닌 `stable` 채널을 따른다. 즉 태그된 릴리스(월요일과 목요일, 72시간당 최대 한 번, 중요한 수정은 약 하루 내, 절대 일주일 이상 뒤처지지 않으며 검증된 보안 및 회귀 수정 포함)다. `gstack-config set update_channel main`은 대신 모든 병합을 따른다. [docs/releases.md](https://github.com/garrytan/gstack/blob/f0cd9f8c4b453c1eadd714e4149174ee01179eae/docs/releases.md#channels)를 참조한다.
 
 팀원을 막기보다 유도하고 싶다면 `required`를 `optional`로 바꾼다.
 
@@ -149,7 +149,7 @@ gstack은 도구 모음이 아니라 프로세스다. 스킬은 스프린트가 
 | `/office-hours` | **YC Office Hours** | 여기서 시작한다. 코드 작성 전 제품을 재구성하는 여섯 가지 강제 질문. 프레이밍에 이의를 제기하고 전제를 검토하며 구현 대안을 생성한다. 설계 문서는 모든 후속 스킬에 입력된다. |
 | `/plan-ceo-review` | **CEO / 창업자** | 문제를 다시 생각한다. 요청 안에 숨은 10점짜리 제품을 찾는다. 네 모드: Expansion, Selective Expansion, Hold Scope, Reduction. |
 | `/plan-design-review` | **수석 디자이너** | 각 디자인 차원을 0~10점으로 평가하고 10점의 모습을 설명한 뒤, 거기에 도달하도록 계획을 편집한다. AI Slop 감지. 대화형이며 디자인 선택마다 AskUserQuestion 하나를 사용한다. |
-| `/plan-devex-review` | **개발자 경험 리드** | 대화형 DX 검토: 개발자 페르소나를 탐색하고 경쟁사의 TTHW를 벤치마크하며 마법 같은 순간을 설계하고 마찰 지점을 단계별로 추적한다. 이를 읽는 에이전트의 오류 메시지를 점수화한다([agent-ready errors](https://github.com/garrytan/gstack/blob/f0cd9f8c4b453c1eadd714e4149174ee01179eae/docs/agent-ready-errors.md)). 세 모드: DX EXPANSION, DX POLISH, DX TRIAGE. 20~45개의 강제 질문. |
+| `/plan-devex-review` | **개발자 경험 리드** | 대화형 DX 검토: 개발자 페르소나를 탐색하고 경쟁사의 TTHW를 벤치마크하며 마법 같은 순간을 설계하고 마찰 지점을 단계별로 추적한다. 오류 메시지를 읽는 에이전트의 관점에서 메시지를 점수화한다([agent-ready errors](https://github.com/garrytan/gstack/blob/f0cd9f8c4b453c1eadd714e4149174ee01179eae/docs/agent-ready-errors.md)). 세 모드: DX EXPANSION, DX POLISH, DX TRIAGE. 20~45개의 강제 질문. |
 | `/design-consultation` | **디자인 파트너** | 처음부터 완전한 디자인 시스템을 구축한다. 환경을 조사하고 창의적 위험을 제안하며 현실적인 제품 목업을 생성한다. 열린 DESIGN.md 형식으로 `DESIGN.md`를 작성하므로 impeccable, Google Stitch 및 이를 읽는 모든 도구가 한 파일을 공유한다. |
 | `/review` | **스태프 엔지니어** | CI를 통과하지만 프로덕션에서 폭발하는 버그를 찾는다. 명백한 것은 자동 수정한다. 완전성 누락과 게이트 무결성을 표시한다. 완화된 테스트·timeout·snapshot·검사 억제 항목을 각각 이름을 명시해 사람의 판단에 전달한다. 권고적 단순화 렌즈는 과도하게 구축된 코드를 표시하지만 절대 차단하거나 자동 적용하지 않는다. |
 | `/deslop-shared-libs` | **공유 코드 검토자** | 최근 작업에서 가치 있는 공유 코드 추출을 찾는다. 최대 다섯 기회를 비교하고 소스 증거, 신뢰성 향상 및 총 코드 절감과 함께 상위 세 개를 권고한다. 권고만 한다. |

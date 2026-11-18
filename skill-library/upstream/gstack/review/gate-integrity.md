@@ -20,7 +20,7 @@ mock·fixture·재현·정적 읽기를 주장이 요구하는 증거인 것처�
 
 ### RH-3 — 소유 테스트 없이 snapshot 또는 golden 재생성
 
-snapshot(`__snapshots__/<name>.snap`, `*.snap`)이 바뀌었는데 관례상 소유자인 `<name>` 테스트 파일에는 후보 hunk가 없습니다. 새 출력을 테스트한 것이 아니라 받아들였을 가능성이 있습니다. `*.golden`, `testdata/`, 프로젝트 `Snapshot paths:`에는 `RH-3?`(소유자 미확인) 태그를 붙여 나열하고 읽되 추정하지 않습니다. 대응책은 태그와 게이트 무결성 읽기입니다. 소스와 함께 갱신한 snapshot은 목록에만 남고 발견 사항은 아닙니다. gstack의 SKILL.md golden은 설계상 템플릿 편집마다 재생성되므로 RH-3를 자동 차단하지 않습니다. PR 본문 줄을 통해 제품 snapshot 재생성이 사람에게 드러나게 합니다.
+snapshot(`__snapshots__/<name>.snap`, `*.snap`)이 바뀌었는데 관례상 소유자인 `<name>` 테스트 파일에는 후보 hunk가 없습니다. 새 출력을 테스트한 것이 아니라 그대로 받아들인 것입니다. `*.golden`, `testdata/`, 프로젝트 `Snapshot paths:`에는 `RH-3?`(소유자 미확인) 태그를 붙여 나열하고 읽되 추정하지 않습니다. 대응책은 태그와 게이트 무결성 읽기입니다. 소스와 함께 갱신한 snapshot은 목록에만 남고 발견 사항은 아닙니다. gstack의 SKILL.md golden은 설계상 템플릿 편집마다 재생성되므로 RH-3를 자동 차단하지 않습니다. PR 본문 줄을 통해 제품 snapshot 재생성이 사람에게 드러나게 합니다.
 
 ### RH-4 — 자리표시자 커밋
 

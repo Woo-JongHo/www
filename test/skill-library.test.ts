@@ -140,6 +140,31 @@ test("검증되지 않은 추가 파일을 게시 목록에 조용히 섞지 않
   });
 });
 
+test("라이브러리 루트의 미검토 파일을 거부한다", async () => {
+  await withFixture(async ({ root }) => {
+    await validateSkillLibrary(root);
+    await writeFile(path.join(root, "skill-library/unreviewed.md"), "미검토 루트 문서");
+    await assert.rejects(validateSkillLibrary(root), /목록에 없는 보관 파일: skill-library\/unreviewed.md/);
+  });
+});
+
+test("라이브러리 루트의 새 디렉터리 안에 숨긴 미검토 파일을 거부한다", async () => {
+  await withFixture(async ({ root }) => {
+    await validateSkillLibrary(root);
+    await mkdir(path.join(root, "skill-library/extra"));
+    await writeFile(path.join(root, "skill-library/extra/unreviewed.md"), "미검토 중첩 문서");
+    await assert.rejects(validateSkillLibrary(root), /목록에 없는 보관 파일: skill-library\/extra\/unreviewed.md/);
+  });
+});
+
+test("라이브러리 루트의 심볼릭 링크를 따라가지 않고 거부한다", async () => {
+  await withFixture(async ({ root }) => {
+    await validateSkillLibrary(root);
+    await symlink(path.join(root, "skill-library/upstream"), path.join(root, "skill-library/alias"), "dir");
+    await assert.rejects(validateSkillLibrary(root), /보관소 심볼릭 링크: skill-library\/alias/);
+  });
+});
+
 test("보관 파일을 외부 파일의 심볼릭 링크로 바꾸면 읽지 않고 거부한다", async () => {
   await withFixture(async ({ root, inventory }) => {
     const file    = path.join(root, inventory.files[1].localPath) ;

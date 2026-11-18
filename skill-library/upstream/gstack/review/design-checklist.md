@@ -55,7 +55,7 @@ _DJ=$(mktemp "${TMPDIR:-/tmp}/gstack-detect.XXXXXX"); bun --no-env-file --config
 **ASK**(그 외 모든 것 — 설계 판단 필요):
 - 모든 AI 슬롭 결과, 타이포그래피 구조, 간격 선택, 상호 작용 상태 격차, DESIGN.md 위반
 
-**LOW 신뢰 항목** → "가능: [설명]. 시각적으로 확인하거나 /design-review.를 실행하십시오"로 표시됨 절대 AUTO-FIX.
+**LOW 신뢰 항목** → "가능: [설명]. 시각적으로 확인하거나 /design-review.를 실행하십시오"로 표시됨 절대 AUTO-FIX하지 않는다.
 
 ---
 
@@ -97,7 +97,7 @@ Design Review: 문제 N개(X 자동 수정 가능, Y 입력 필요, Z 확인 필
 
 - **[HIGH]** [gradient-text] 강조점은 무게 또는 크기입니다. 그라데이션 텍스트는 의상에서 강조됩니다. 그라데이션 배경 옆에 있는 `background-clip: text`에 대한 Grep입니다.
 
-- **[HIGH]** [bounce-easing] UI 모션의 오버슈트 및 바운스 곡선. 이미 표시된 기본값에서 기하급수적으로 완화됩니다. 1을 넘는 제어점이 있거나 애니메이션 이름에 `bounce`가 있는 입방 베지어 곡선에 대한 Grep 전환 및 키프레임입니다.
+- **[HIGH]** [bounce-easing] UI 모션의 오버슈트 및 바운스 곡선. 기본 상태에서 이미 보이도록 두고 지수형 ease-out을 사용하세요. 1을 넘는 제어점이 있거나 애니메이션 이름에 `bounce`가 있는 입방 베지어 곡선에 대한 Grep 전환 및 키프레임입니다.
 
 - **[HIGH]** [dark-glow] 어두운 표면의 빛나는 가장자리: 두 번째 모습입니다. 깊이에는 오프셋이 있습니다. 제로 오프셋 컬러 후광은 장식입니다. 큰 흐림 효과와 채도가 높은 색상으로 x/y 오프셋이 0인 Grep `box-shadow`입니다.
 
@@ -107,9 +107,9 @@ Design Review: 문제 N개(X 자동 수정 가능, Y 입력 필요, Z 확인 필
 
 - **[MEDIUM]** [ai-color-palette] 보라색/보라색/남색 그라데이션 배경 또는 파란색에서 보라색으로의 색상 구성. `#6366f1`~`#8b5cf6` 범위의 값을 가진 `linear-gradient` 또는 보라색/보라색으로 해석되는 CSS 사용자 정의 속성을 찾습니다.
 
-- **[MEDIUM]** 모든 항목을 중앙에 배치합니다(모든 제목, 설명, 카드의 `text-align: center`). `text-align: center` 밀도에 대한 Grep: 텍스트 컨테이너의 60% 이상이 중앙에 있으면 플래그를 지정합니다.
+- **[MEDIUM]** 모든 항목을 중앙에 배치합니다(모든 제목, 설명, 카드의 `text-align: center`). `text-align: center` 밀도에 대한 Grep: 텍스트 컨테이너의 60% 초과가 중앙에 있으면 플래그를 지정합니다.
 
-- **[MEDIUM]** 모든 요소의 균일한 거품 테두리 반경(모든 요소의 동일한 큰 반경). `border-radius` 값 집계: 80% 이상이 16px 이상의 하나의 값을 공유하는 경우 플래그를 지정합니다. 모든 것에 대한 알약 반경은 극단적인 경우입니다.
+- **[MEDIUM]** 모든 요소의 균일한 거품 테두리 반경(모든 요소의 동일한 큰 반경). `border-radius` 값 집계: 80% 초과가 16px 이상의 하나의 값을 공유하는 경우 플래그를 지정합니다. 모든 것에 대한 알약 반경은 극단적인 경우입니다.
 
 - **[MEDIUM]** 디자인 요소로서의 이모티콘(제목의 로켓, 글머리 기호의 이모티콘) 아이콘이나 글머리 기호로 사용되는 이모티콘 코드 포인트의 Grep 제목, 목록 항목 및 버튼입니다.
 
@@ -119,7 +119,7 @@ Design Review: 문제 N개(X 자동 수정 가능, Y 입력 필요, Z 확인 필
 
 - **[MEDIUM]** [pulsing-dot] "Live"나 "Online" 옆에서 계속 깜박이는 작은 원입니다. 첫 반복 이후에는 새 정보를 주지 않습니다. 작은 원형 요소의 무한 keyframe 애니메이션을 검색합니다.
 
-- **[MEDIUM]** [kicker-above-heading] 제목 위의 키커는 가장 강력한 기본값입니다. 제목은 자체 무게를 지닙니다. 따라서 레이블을 삭제하세요. 어쨌든 사용자가 원하면 준수하고 절충안을 한 번 말하십시오. h1 또는 h2 바로 앞에 있는 짧은 대문자 추적 요소를 찾으세요.
+- **[MEDIUM]** [kicker-above-heading] 제목 위의 키커는 가장 강력한 기본값입니다. 제목은 자체 무게를 지닙니다. 따라서 레이블을 삭제하세요. 어쨌든 사용자가 원하면 준수하고 절충안을 한 번 말하십시오. h1 또는 h2 바로 앞에 있는, 자간을 조정한 짧은 대문자 텍스트 요소를 찾으세요.
 
 - **[MEDIUM]** [marketing-buzzword] "Seamless", "effortless", "supercharge", "streamline"처럼 아무것도 구체적으로 설명하지 않는 표현입니다. 제품이 하는 일을 명시합니다. 사용자에게 보이는 문구에서 seamless, effortless, supercharge, streamline, revolutionize, unlock, empower, elevate를 검색합니다.
 
@@ -171,7 +171,7 @@ Design Review: 문제 N개(X 자동 수정 가능, Y 입력 필요, Z 확인 필
 
 - **[HIGH]** 교체 초점 표시기가 없는 `outline: none` 또는 `outline: 0`. `outline:\s*none` 또는 `outline:\s*0`.에 대한 Grep 이렇게 하면 키보드 접근성이 제거됩니다.
 
-- **[LOW]** 대화형 요소에서 44px 미만의 대상을 터치하세요. 버튼과 링크에서 `min-height`/`min-width`/`padding`를 확인하세요. 여러 속성의 유효 크기를 계산해야 합니다. 코드만으로는 신뢰도가 낮습니다.
+- **[LOW]** 대화형 요소의 터치 대상 크기가 44px 미만인 경우. 버튼과 링크에서 `min-height`/`min-width`/`padding`를 확인하세요. 여러 속성의 유효 크기를 계산해야 합니다. 코드만으로는 신뢰도가 낮습니다.
 
 ### 5. DESIGN.md 위반(3개 항목, 조건부)
 

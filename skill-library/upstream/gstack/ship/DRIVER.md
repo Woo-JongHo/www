@@ -96,7 +96,7 @@ Step 8.1, 9.2.1의 probe, todos와 commits 파일에 대한 8.2(`Scope Check:`),
 <a id="5-voices-bind-and-version-steps-11-115-12"></a>
 ## 5. Voice, 바인딩 및 버전: Steps 11, 11.5, 12
 
-voice를 판정합니다. coverage 밖의 누락은 `clean`이 아니라 `unavailable`입니다. 대기열에 든 수정은 Phases
+voice를 판정합니다. 외부 검토 범위가 확인되지 않았으면 `clean`이 아니라 `unavailable`입니다. 대기열에 든 수정은 Phases
 3-4를 다시 실행합니다. 그다음 `gstack-review-dispatch verify`(`VERIFY: clean`)와 `gstack-review-read`: 최종 Step 9 및 Step 11의 네이티브 행(또는 계획된 건너뛰기 후 `CURRENT` 최신성)이
 `wtree`, `start_wtree`, `end_wtree`에서 일치해야 합니다. 해당 트리와 base `<b>`를 저장합니다. 그다음
 `gstack-ship-release version --base <base> [--bump micro|patch] --why '<line>'`; MINOR, MAJOR, `BUMP_ANSWER_REQUIRED`는
@@ -105,7 +105,7 @@ voice를 판정합니다. coverage 밖의 누락은 `clean`이 아니라 `unavai
 <a id="6-notes-and-documentation-steps-13-14-145"></a>
 ## 6. 노트 및 문서화: Steps 13, 14, 14.5
 
-Step 13: `NEXT:`가 지정하는 commits 파일에서 사용자 대상 항목 하나를 가져오고,
+Step 13: commits 파일을 바탕으로 `NEXT:`가 지정한 위치에 사용자 대상 항목 하나를 작성하고,
 `gstack-prose-lint <it> --base origin/<base> --gate`를 `PROSE_LINT: ok`가 될 때까지 실행합니다. Step 14: todos 파일에서 편집한 TODOS.md 연기 및
 완료 항목입니다. Step 14.5는 모든 ship에서 `sections/documentation.md`를 읽고 그 감사를 작성된 대로
 하나의 프로그램에서 실행한 뒤(위), `gstack-ship-receipt docs-caps --base <base>`를 실행합니다. `Documentation:`을 출력합니다.

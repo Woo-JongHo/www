@@ -13,7 +13,7 @@
    ~/.claude/skills/gstack/bin/gstack-ship-receipt write --base <base> --gate @.gstack/tmp/ship-gate.json --issues @.gstack/tmp/issues.json --out .gstack/tmp/ship-receipt.md
    ```
    11단계에서 `.gstack/tmp/targeted.json`을 저장했다면 해당 쓰기에 `--review-targeted @.gstack/tmp/targeted.json`을 추가한다.
-2. 완료 메시지는 식별자를 앞에 두고 다음 순서로 보낸다. `SHIP_RECEIPT:` 줄과 영수증 블록; `branch:`와 `sha:`(`git rev-parse HEAD`); 푸시됨 또는 `not pushed`; `inputs:`에 계획이나 이슈·기준 SHA·비용 상한; `before/after:`에 주장하는 지표별 한 행과 기준 및 이번 SHA에서 측정한 명령; `escalation:`에 병합을 중단시키는 조건 하나(`requires-remote` 레인·열린 게이트 발견 사항·미검증 주장) 또는 `none`.
+2. 완료 메시지는 식별자를 앞에 두고 다음 순서로 보낸다. `SHIP_RECEIPT:` 줄과 영수증 블록; `branch:`와 `sha:`(`git rev-parse HEAD`); 푸시됨 또는 `not pushed`; `inputs:`에 계획이나 이슈·기준 SHA·비용 상한; `before/after:`에 주장하는 지표마다 한 행씩 기준 SHA와 이번 SHA에서의 측정값 및 사용한 명령; `escalation:`에 병합을 중단시키는 조건 하나(`requires-remote` 레인·열린 게이트 발견 사항·미검증 주장) 또는 `none`.
    `issues:` 줄, 이슈로 승격하지 않은 후보와 조회 실패를 포함한다. 스레드 간 전달에는 전체 스레드 ID(`jam_…`)를 쓴다.
 3. 19단계와 21단계를 생략한다. NO_VERSION이 적용되면 `"version":null`로 20단계를 실행하고 이어 `--body .gstack/tmp/ship-receipt.md`로 22단계를 실행한다.
 
