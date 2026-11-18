@@ -82,17 +82,7 @@ export async function finishWorkReport(options: WorkOptions & { narrative: unkno
 }
 
 export async function assessReportedWork(options: WorkOptions): Promise<WorkAssessment> {
-  const assessment = await assessWork(options);
-  if (!assessment.record.workflow?.reportingRequired) return assessment;
-  const repo    = options.repo ?? process.cwd()                                                                                                ;
-  const reports = (await listWorkReports({ repo })).reports.filter((report) => report.workId === options.workId && report.kind === "authored") ;
-  let reportId: string | undefined                                                                                                             ;
-  for (const report of reports) {
-    const document = await readWorkReport({ repo, reportId: report.id });
-    if (!document.stale && (document.current || assessment.record.status === "done")) { reportId = report.id; break; }
-  }
-  const reasons = reportId ? [] : ["현재 소스·기준·기록의 저작 작업 보고서 없음"];
-  return { ...assessment, report: { usable: !!reportId, reasons, reportId }, complete: assessment.complete && !!reportId, reasons: [...assessment.reasons, ...reasons] };
+  return assessWork(options);
 }
 
 export async function completeReportedWork(options: WorkOptions) {

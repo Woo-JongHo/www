@@ -348,6 +348,8 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
   const turnTotals         = new Map<ActivityTurn, UsageBreakdown>()        ;
   const unsafeUsageThreads = new Set<string>()                              ;
   const settledTurns = new Set<ActivityTurn>();
+  const observedProgress = new Set<ActivityEntry>();
+  const completedProgress = new Set<ActivityEntry>();
 
   const requests       = new Map<string, ActivityTurn>()         ;
   const approvals      = new Map<string, ActivityTurn>()         ;
@@ -613,7 +615,10 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     if (!itemId) continue;
     if (event.method === "item/agentMessage/delta" && data.phase === "commentary") {
       const progress = entry(turn.entries, `item:${itemId}`, "progress", "진행 설명", event.at);
-      progress.description = (progress.description ?? "") + text(data.delta);
+      if (!completedProgress.has(progress)) {
+        progress.description = (progress.description ?? "") + text(data.delta);
+        observedProgress.add(progress);
+      }
     }
     if (event.method === "item/agentMessage/delta" && data.phase !== "analysis" && data.phase !== "reasoning" && data.phase !== "commentary") {
       const answer = entry(turn.entries, `item:${itemId}`, "answer", "답변 작성", event.at);
@@ -648,8 +653,18 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     if (type === "agentMessage" && item.phase !== "analysis" && item.phase !== "reasoning" && item.phase !== "commentary") { kind = "answer"; label = "답변 작성"; }
     if (!kind) continue;
     const activity = entry(turn.entries, `item:${itemId}`, kind, label, event.at);
+    if (kind === "progress" && !complete && observedProgress.has(activity)) continue;
     activity.label = label;
-    if (kind === "progress") activity.description = text(item.text) || activity.description;
+    if (kind === "progress") {
+      if (typeof item.text === "string") {
+        activity.description = item.text;
+        observedProgress.add(activity);
+      }
+      if (complete) {
+        observedProgress.add(activity);
+        completedProgress.add(activity);
+      }
+    }
     if (kind === "answer"          ) {
       activity.description = text(item.text) || activity.description;
       turn.answer = turn.entries.filter((row) => row.kind === "answer").map((row) => row.description ?? "").join("\n");

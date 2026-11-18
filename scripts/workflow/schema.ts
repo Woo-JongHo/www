@@ -4,6 +4,7 @@
  */
 import type { WorkRecord } from "./types.ts";
 import { artifactReviewErrors } from "./artifacts.ts";
+import { parseDecomposition } from "./decomposition.ts";
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { normalize, resolve, sep } from "node:path";
 
@@ -112,6 +113,10 @@ export function validateWorkRecord(value: unknown, options: ValidationOptions = 
     add(errors, ["spec", "design", "build", "diagnose", "verify", "review", "complete"].some(action => action === workflow.nextAction), "workflow.nextAction이 허용된 값이 아닙니다.");
     add(errors, Array.isArray(workflow?.verifications), "workflow.verifications 배열이 필요합니다.");
     add(errors, Array.isArray(workflow?.reviews), "workflow.reviews 배열이 필요합니다.");
+    if (workflow.decomposition !== undefined) {
+      try { parseDecomposition(workflow.decomposition); }
+      catch (error) { errors.push(error instanceof Error ? error.message : String(error)); }
+    }
     for (const review of objects(workflow.reviews)) if (review.recordingRejection !== undefined) add(errors, Array.isArray(review.recordingRejection) && review.recordingRejection.length > 0 && review.recordingRejection.every(reason => typeof reason === "string" && reason.trim()), "검토 기록 거부 이유는 비어 있지 않은 문자열 배열이어야 합니다.");
     if (workflow?.documentationReviews !== undefined) {
       add(errors, Array.isArray(workflow.documentationReviews), "workflow.documentationReviews는 배열이어야 합니다.");

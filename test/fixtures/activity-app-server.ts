@@ -41,6 +41,60 @@ const send = (message: unknown): void => { process.stdout.write(`${JSON.stringif
 
 const notify = (method: string, params: Record<string, unknown>): void => send({ jsonrpc: "2.0", method, params });
 
+// 별도 관측 시나리오: main의 등록·검증·응답 왕복을 검사한다. 실제 모델은 호출하지 않는다.
+const stageProbe = process.env.WWW_STAGE_PROBE === "1";
+const stageThread = `stage-thread-${process.pid}`;
+const stageWork = process.env.WWW_STAGE_WORK_ID ?? "work-36d312bc-a767-4e3e-a581-01898b35f75f";
+let stageRegistered = false;
+let stageTurn = "";
+let stagePrompt = "";
+let stageCalls: Record<string, unknown>[] = [];
+let stageCallIndex = 0;
+function nextStageCall(): void {
+  const call = stageCalls.shift();
+  if (call) send({ jsonrpc: "2.0", id: `stage-request-${++stageCallIndex}`, method: "item/tool/call", params: call });
+  else if (!stagePrompt.includes("유지")) notify("turn/completed", { threadId: stageThread, turn: { id: stageTurn, status: "completed" } });
+}
+function stageMessage(message: Record<string, unknown>): void {
+  const params = object(message.params) ? message.params : {};
+  if (message.method === "initialize") {
+    send({ jsonrpc: "2.0", id: message.id, result: {} });
+    notify("fixture/stageInitialized", { experimentalApi: object(params.capabilities) && params.capabilities.experimentalApi === true });
+  } else if (message.method === "thread/start") {
+    if (typeof params.cwd === "string") catalogCwd = params.cwd;
+    stageRegistered = Array.isArray(params.dynamicTools) && params.dynamicTools.some(tool => object(tool) && tool.name === "www_development_stage");
+    send({ jsonrpc: "2.0", id: message.id, result: { thread: { id: stageThread }, model: "fixture" } });
+    notify("fixture/stageRegistered", { threadId: stageThread, registered: stageRegistered });
+  } else if (message.method === "thread/read" || message.method === "thread/resume") {
+    stageRegistered = false;
+    send({ jsonrpc: "2.0", id: message.id, result: { thread: { id: params.threadId, cwd: catalogCwd, originator: "www", status: { type: "idle" }, turns: [] }, model: "fixture" } });
+  } else if (message.method === "thread/turns/list") send({ jsonrpc: "2.0", id: message.id, result: { data: [], nextCursor: null } });
+  else if (message.method === "turn/start") {
+    stageTurn = `stage-turn-${++turns}`;
+    stagePrompt = Array.isArray(params.input) && object(params.input[0]) ? String(params.input[0].text) : "";
+    send({ jsonrpc: "2.0", id: message.id, result: { turn: { id: stageTurn } } });
+    notify("turn/started", { threadId: params.threadId, turn: { id: stageTurn } });
+    notify("item/completed", { threadId: params.threadId, turnId: stageTurn, item: { id: `public-${stageTurn}`, type: "agentMessage", phase: "commentary", text: "계획 없이 현재 단계를 확인하고 있습니다." } });
+    const input = { workId: stageWork, phase: "build", status: "running", attemptId: "attempt-1" };
+    const call = (callId: string, argumentsValue: unknown = input, overrides = {}) => ({ threadId: params.threadId, turnId: stageTurn, callId, tool: "www_development_stage", arguments: argumentsValue, ...overrides });
+    stageCalls = stagePrompt.includes("종료지연") ? [call("after-end")] : stagePrompt.includes("유지") ? [call("running")]
+      : [call("selected", { ...input, status: "selected" }), call("running"), call("running"), call("completed", { ...input, status: "completed" }),
+        call("late-running"), call("unknown-work", { ...input, workId: "work-aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa" }),
+        call("extra-field", { ...input, reasoning: "PRIVATE_REASONING_DO_NOT_RENDER" }), call("foreign-turn", input, { turnId: "other-turn" }),
+        call("foreign-thread", input, { threadId: "other-thread" }), call("wrong-namespace", input, { namespace: "other" })];
+    // 동명 알림을 main 검증 사건으로 오인해서는 안 된다.
+    notify("www/developmentStage", { threadId: params.threadId, turnId: stageTurn, source: "role_declaration", ...input, phase: "verify" });
+    if (stagePrompt.includes("종료지연")) notify("turn/completed", { threadId: params.threadId, turn: { id: stageTurn, status: "completed" } });
+    nextStageCall();
+  } else if (!message.method && typeof message.id === "string" && message.id.startsWith("stage-request-")) {
+    notify("fixture/stageResponse", { threadId: stageThread, turnId: stageTurn, success: object(message.result) && message.result.success === true });
+    nextStageCall();
+  } else if (message.method === "turn/interrupt") {
+    send({ jsonrpc: "2.0", id: message.id, result: {} });
+    notify("turn/completed", { threadId: params.threadId, turn: { id: stageTurn, status: "interrupted" } });
+  } else if (message.id !== undefined) send({ jsonrpc: "2.0", id: message.id, result: {} });
+}
+
 
 function skillsResult(id: unknown, cwd: string, names: readonly string[]): void {
   send({ jsonrpc: "2.0", id, result: { data: [{ cwd, errors: [], skills: names.map((name) => ({
@@ -100,6 +154,7 @@ const input = createInterface({ input: process.stdin });
 input.on("line", (line) => {
   const message: unknown = JSON.parse(line);
   if (!object(message)) throw new Error("fixture 요청 객체가 필요합니다.");
+  if (stageProbe) { stageMessage(message); return; }
   if (message.method === "skills/list") {
     const params = object(message.params) ? message.params : {};
     const cwd    = Array.isArray(params.cwds) && typeof params.cwds[0] === "string" ? params.cwds[0] : "/fixture";

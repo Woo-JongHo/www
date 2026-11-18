@@ -27,6 +27,12 @@ export interface DashboardProjectSnapshot {
   cards: DashboardWork[]; issues: DashboardIssue[];
 }
 export interface DashboardSnapshot { capturedAt: string; projects: DashboardProjectSnapshot[] }
+export interface DashboardWorkDetail {
+  projectKey: string; workId: string; title: string; sourcePath: string; status: WorkStatus;
+  blockedReason: string | null; nextAction: string | null; capturedAt: string;
+  criteria: { id: string; description: string; required: boolean; result: "unverified" | "passed" | "failed" | "blocked"; evidenceCount: number }[];
+  documents: { kind: "spec" | "design" | "tasks" | "verification"; path: string; status: "available" | "missing" | "failed"; content: string | null; message: string | null }[];
+}
 
 export interface AppEvent {
   seq        : number                                   ;
@@ -168,11 +174,13 @@ export interface WwwApi {
   workspace(sessionId?: string): Promise<WorkspaceSelection>;
   listProjects(selection: SelectionRef): Promise<readonly ProjectInfo[]>;
   dashboard(selection: SelectionRef): Promise<DashboardSnapshot>;
+  dashboardWork(selection: SelectionRef, projectKey: string, workId: string): Promise<DashboardWorkDetail>;
   selectWww(selection: SelectionRef): Promise<ConversationSelection>;
   setProjectFavorite(selection: SelectionRef, workspaceKey: string, favorite: boolean): Promise<void>;
   switchProject(selection: SelectionRef, workspaceKey: string): Promise<ConversationSelection>;
   startThread(selection: SelectionRef): Promise<{ threadId: string }>;
   startTurn(selection: SelectionRef, threadId: string, text: string): Promise<{ turnId: string }>;
+  steerTurn(selection: SelectionRef, threadId: string, expectedTurnId: string, text: string, clientUserMessageId: string): Promise<{ turnId: string }>;
   interrupt(selection: SelectionRef, threadId: string, turnId: string): Promise<void>;
   respond(selection: SelectionRef, requestId: RpcId, decision: string, approvalToken: string): Promise<void>;
   events(selection: SelectionRef): Promise<ScopedAppEvent[]>;

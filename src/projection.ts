@@ -25,6 +25,9 @@ export type Block =
       text     : string        ;
       state    : RequestState  ;
       error    : string | null ;
+      steerStatus?: "pending" | "accepted" | "failed" | "uncertain";
+      clientUserMessageId?: string;
+      nativeItemId?: string;
     }
   | {
       kind              : "explanation"                                    ;
@@ -224,6 +227,28 @@ export function project(events: readonly AppEvent[]): Projection {
     const blockId         = `${relatedThreadId ?? "unknown"}:${relatedTurnId ?? "unknown"}:${itemId}` ;
     const activeTurn      = relatedThreadId === threadId && relatedTurnId === turnId                  ;
 
+    if (/^turn\/steer(Pending|Accepted|Failed|Uncertain)$/.test(event.method)) {
+      const clientId = string(params.clientUserMessageId);
+      if (clientId && relatedThreadId && relatedTurnId) {
+        let request = blocks.find((block): block is Extract<Block, {kind:'user'}> => block.kind === 'user' && block.clientUserMessageId === clientId && block.threadId === relatedThreadId && block.turnId === relatedTurnId);
+        const steerStatus = event.method === 'turn/steerPending' ? 'pending' : event.method === 'turn/steerAccepted' ? 'accepted' : event.method === 'turn/steerUncertain' ? 'uncertain' : 'failed';
+        if (!request) {
+          request = {kind:'user',id:`steer:${relatedThreadId}:${relatedTurnId}:${clientId}`,threadId:relatedThreadId,turnId:relatedTurnId,text:string(params.text),state:'sending',error:null,clientUserMessageId:clientId,steerStatus};
+          blocks.push(request);
+        }
+        request.steerStatus = steerStatus;
+        request.state = steerStatus === 'accepted' ? 'accepted' : steerStatus === 'pending' ? 'sending' : 'failed';
+        request.error = string(params.message) || null;
+      }
+    }
+    // Native가 명시적으로 같은 client ID를 돌려준 경우에만 optimistic 행과 합친다.
+    if ((event.method === 'item/started' || event.method === 'item/completed') && item.type === 'userMessage') {
+      const clientId = string(item.clientId) || string(item.clientUserMessageId) || string(params.clientUserMessageId);
+      if (clientId) {
+        const request = blocks.find((block): block is Extract<Block, {kind:'user'}> => block.kind === 'user' && block.clientUserMessageId === clientId && block.threadId === relatedThreadId && block.turnId === relatedTurnId);
+        if (request) request.nativeItemId = string(item.id) || request.nativeItemId;
+      }
+    }
     if (event.method === "turn/userPrompt"             ) {
       const id = string(params.clientRequestId) || `request-${event.seq}`;
       blocks.push({

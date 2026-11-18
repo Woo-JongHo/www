@@ -9,8 +9,8 @@ import { randomUUID } from "node:crypto";
 import * as fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { DASHBOARD_LIMITS, readDashboard } from "../src/dashboard";
-import { DashboardView } from "../src/dashboard-view";
+import { DASHBOARD_LIMITS, readDashboard, readDashboardWork } from "../src/dashboard";
+import { DashboardView, WorkDetailContent } from "../src/dashboard-view";
 import type { DashboardProject, DashboardSnapshot, WorkStatus } from "../src/shared";
 
 function record(status: WorkStatus = "in_progress", extra: Record<string, unknown> = {}) {
@@ -221,5 +221,91 @@ test("상태별 열은 실제 원본만 표시하고 악성 텍스트는 이스�
     expect(column("응답 필요")).not.toContain("실제 기록");
     expect(html).not.toContain("<script>");
     expect(html).toContain("&lt;script&gt;");
+  });
+});
+
+
+test("상세는 원본 기준과 네 문서를 읽기 전용으로 반환한다", async () => {
+  await fixture(async (project, _base, save) => {
+    const value = record("verifying", { workflow: { nextAction: "검증 확인" } });
+    const file = await save("detail", value);
+    const folder = join(file, "..");
+    const original = "# 명세\n<script>alert('원문')</script>";
+    await fs.writeFile(join(folder, "spec.md"), original);
+    await fs.writeFile(join(folder, "tasks.md"), Buffer.from([0xff]));
+    const detail = await readDashboardWork([project], project.key, value.id);
+    expect(detail.workId).toBe(value.id);
+    expect(detail.title).toBe(value.title);
+    expect(detail.nextAction).toBe("검증 확인");
+    expect(detail.criteria[0]).toEqual({ id: "C1", description: "상태를 보존한다", required: true, result: "passed", evidenceCount: 0 });
+    expect(detail.documents.map(item => item.status)).toEqual(["available", "missing", "failed", "missing"]);
+    expect(detail.documents[0]?.content).toBe(original);
+    expect(await fs.readFile(file, "utf8")).toBe(JSON.stringify(value));
+    expect(await fs.readFile(join(folder, "spec.md"), "utf8")).toBe(original);
+  });
+});
+
+test("상세는 미등록 프로젝트와 없는 UUID 및 중복 UUID를 거부한다", async () => {
+  await fixture(async (project, _base, save) => {
+    const value = record();
+    await save("one", value);
+    await expect(readDashboardWork([project], "other", value.id)).rejects.toThrow();
+    await expect(readDashboardWork([project], project.key, `work-${randomUUID()}`)).rejects.toThrow();
+    await save("two", value);
+    await expect(readDashboardWork([project], project.key, value.id)).rejects.toThrow();
+  });
+});
+
+test("다음 단계는 비계약 최상위 필드보다 workflow 정본을 따른다", async () => {
+  await fixture(async (project, _base, save) => {
+    const value = record("verifying", { nextAction: "complete", workflow: { nextAction: "build" } });
+    await save("stages", value);
+    expect((await readDashboardWork([project], project.key, value.id)).nextAction).toBe("build");
+  });
+});
+
+test("상세 문서의 링크와 크기 초과는 해당 문서만 실패로 보존한다", async () => {
+  await fixture(async (project, base, save) => {
+    const value = record();
+    const file = await save("detail", value);
+    const folder = join(file, "..");
+    const outside = join(base, "outside.md");
+    await fs.writeFile(outside, "외부");
+    await fs.symlink(outside, join(folder, "spec.md"));
+    await fs.link(outside, join(folder, "design.md"));
+    await fs.writeFile(join(folder, "tasks.md"), Buffer.alloc(256 * 1024 + 1, 65));
+    await fs.writeFile(join(folder, "verification.md"), "검증 기록");
+    const detail = await readDashboardWork([project], project.key, value.id);
+    expect(detail.documents.map(item => item.status)).toEqual(["failed", "failed", "failed", "available"]);
+    expect(detail.documents[3]?.content).toBe("검증 기록");
+  });
+});
+
+test("빈 기준 설명은 상세와 목록 모두에서 거부한다", async () => {
+  await fixture(async (project, _base, save) => {
+    const value = record("draft", { criteria: [{ id: "C1", description: " ", required: true, result: "passed", evidence: [] }] });
+    await save("bad", value);
+    expect((await readDashboard([project])).projects[0]?.issues[0]?.code).toBe("invalid_record");
+    await expect(readDashboardWork([project], project.key, value.id)).rejects.toThrow();
+  });
+});
+
+
+test("상세 Markdown은 HTML·링크·이미지를 실행하지 않고 누락과 빈 문서를 구분한다", async () => {
+  await fixture(async (project, _base, save) => {
+    const value = record();
+    const file = await save("detail", value);
+    await fs.writeFile(join(file, "..", "spec.md"), "<script>alert(1)</script>\n\n[링크](https://example.com) ![이미지](https://example.com/x.png)\n\n**강조**");
+    await fs.writeFile(join(file, "..", "design.md"), " ");
+    const detail = await readDashboardWork([project], project.key, value.id);
+    const html = renderToStaticMarkup(createElement(WorkDetailContent, { detail }));
+    expect(html).not.toContain("<script");
+    expect(html).not.toContain("<a ");
+    expect(html).not.toContain("<img");
+    expect(html).toContain("링크");
+    expect(html).toContain("<strong>강조</strong>");
+    expect(html).toContain("문서가 비어 있습니다.");
+    expect(html).toContain("기록된 계획이 없습니다.");
+    expect(html).toContain("현재 소스의 재검증 여부는 평가하지 않았습니다.");
   });
 });

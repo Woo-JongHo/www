@@ -17,11 +17,31 @@ export const NATIVE_PROGRESS_INSTRUCTIONS = [
 /** 새 대화와 저장 대화 재개에 같은 Bypass 정책을 적용한다. */
 export const NATIVE_PERMISSIONS = { approvalPolicy: "never", sandbox: "danger-full-access" };
 
-export function nativeThreadStartParams(cwd: string) {
+export const WWW_STAGE_TOOL = {
+  type: "function",
+  name: "www_development_stage",
+  description: "현재 WWW 개발 역할의 공개 단계 선택·진행·결과 선언을 읽기 전용으로 관측합니다. 하네스 실행·업무 수용·원장 쓰기를 수행하지 않습니다.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      workId: { type: "string", description: "현재 저장소 docs/work에 실재하는 작업 UUID" },
+      phase: { type: "string", enum: ["spec", "design", "build", "diagnose", "verify"] },
+      status: { type: "string", enum: ["selected", "running", "completed", "failed", "interrupted"] },
+      attemptId: { type: "string", description: "현재 단계 시도의 안정 식별자. 재시도는 새 식별자." },
+    },
+    required: ["workId", "phase", "status", "attemptId"],
+    additionalProperties: false,
+  },
+};
+
+const WWW_STAGE_INSTRUCTIONS = "www_development_stage 도구가 실제 제공된 경우에만, WWW 개발 역할로 현재 작업 UUID를 확인하고 정본 역할·스킬에 따라 단계를 선택·시작·종료할 때 이 도구로 공개 phase/status/workId/attemptId를 선언하세요. 도구가 없으면 호출을 만들어 내지 마세요. 같은 시도는 attemptId를 유지하고 재시도는 새 식별자를 사용하세요. 문서 읽기만으로 단계 적용을 선언하지 마세요. completed는 해당 절차의 저자 선언이며 하네스 실행이나 업무 수용·게시 완료를 뜻하지 않습니다. 비공개 reasoning이나 다른 내부 필드를 전달하지 마세요.";
+
+export function nativeThreadStartParams(cwd: string, developmentStage = false) {
   return {
     cwd,
     ...NATIVE_PERMISSIONS,
-    developerInstructions : NATIVE_PROGRESS_INSTRUCTIONS
+    developerInstructions : NATIVE_PROGRESS_INSTRUCTIONS + (developmentStage ? ` ${WWW_STAGE_INSTRUCTIONS}` : ""),
+    ...(developmentStage ? { dynamicTools: [WWW_STAGE_TOOL] } : {}),
   };
 }
 
@@ -31,4 +51,8 @@ export function nativeTurnStartParams(threadId: string, text: string) {
     input   : [{ type: "text", text, text_elements: [] }] ,
     summary : "detailed"
   };
+}
+
+export function nativeTurnSteerParams(threadId: string, expectedTurnId: string, text: string, clientUserMessageId: string) {
+  return { threadId, expectedTurnId, clientUserMessageId, input: [{ type: "text", text, text_elements: [] }] };
 }

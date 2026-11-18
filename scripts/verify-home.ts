@@ -19,7 +19,12 @@ if (mode === "multiple") {
   for (const [directory, title, id] of [[workspace, "RPA A 고유 카드", "work-11111111-1111-4111-8111-111111111111"], [workspaceB, "RPA B 고유 카드", "work-22222222-2222-4222-8222-222222222222"]]) {
     const work = path.join(directory!, "docs/work/Fixture/001-board");
     await fs.mkdir(work, { recursive: true });
-    await fs.writeFile(path.join(work, "work.json"), JSON.stringify({ schemaVersion: 1, id, title, status: "in_progress", blockedReason: null, areas: ["ui"], owner: "ui", criteria: [{ id: "AC-1", required: true, result: "unverified" }] }));
+    await fs.writeFile(path.join(work, "work.json"), JSON.stringify({ schemaVersion: 1, id, title, status: "in_progress", blockedReason: null, areas: ["ui"], owner: "ui", criteria: [{ id: "AC-1", description: `${title}의 작업 계획과 검증 근거를 확인한다`, required: true, result: "unverified" }] }));
+    if (directory === workspace) {
+      await fs.writeFile(path.join(work, "spec.md"), "# 칸반 상세 명세\n\n카드에서 같은 작업의 계획을 확인하고 돌아온다.\n\n<script>window.__dashboardInjected=true</script>\n\n[외부 링크](https://example.com)\n\n![원격 이미지](https://example.com/tracker.png)\n");
+      await fs.writeFile(path.join(work, "tasks.md"), "# 실행 계획\n\n| 할 일 | 확인 방법 |\n|---|---|\n| 작업 상세 읽기 | 실제 화면에서 확인 |\n");
+      await fs.writeFile(path.join(work, "verification.md"), "");
+    }
   }
   const modulePath = "../src/projects.ts";
   const { createProjectRegistry } = await import(modulePath);
@@ -69,19 +74,22 @@ try {
   const visible = (selector: string) => `(()=>{const n=document.querySelector(${JSON.stringify(selector)});return n instanceof HTMLElement && !n.closest('[hidden]') && n.getBoundingClientRect().width>0 && n.getBoundingClientRect().height>0})()`;
   const target = async (label: string, expectedPath: string) => {
     await wait(`${visible('[data-testid="target-dashboard"]')} && document.querySelector('.target-sidebar .srow.active .name')?.textContent===${JSON.stringify(path.basename(expectedPath))} && window.www.workspace().then(w=>w.path===${JSON.stringify(expectedPath)})`, `${label} 대상 대시보드와 화면 프로젝트명·선택 경로`);
-    await wait(`JSON.stringify(Array.from(document.querySelectorAll('.workspace-nav > button')).map(n=>n.dataset.testid))===${JSON.stringify(JSON.stringify(["dashboard-nav", "chat-nav", "ecosystem-nav", "reports-nav"]))}`, `${label} 네 공통 메뉴 순서`);
+    await wait(`JSON.stringify(Array.from(document.querySelectorAll('.workspace-nav > button')).map(n=>n.dataset.testid))===${JSON.stringify(JSON.stringify(["dashboard-nav", "chat-nav", "ecosystem-nav", "reports-nav", "monitoring-nav"]))}`, `${label} 다섯 공통 메뉴 순서`);
     for (const [name, selector, panel] of [
       ["대시보드", "dashboard-nav", '[data-testid="target-dashboard"]'],
       ["대화", "chat-nav", "main.work"],
       ["생태계", "ecosystem-nav", ".ecosystem-shell"],
       ["리포트", "reports-nav", "main.reports-work"],
+      ["모니터링", "monitoring-nav", '[data-testid="session-monitoring"]'],
     ]) {
       await click(`[data-testid="${selector}"]`);
       await wait(`${visible(panel!)} && document.querySelector('[data-testid="${selector}"]').getAttribute('aria-current')==='page' && window.www.workspace().then(w=>w.path===${JSON.stringify(expectedPath)})`, `${label} ${name} 실제 클릭·화면·선택 대상 유지`);
       await screenshot(`${label}-${selector}`);
     }
+    await click('[data-testid="monitoring-return-chat"]');
+    await wait(`${visible("main.work")} && document.querySelector('[data-testid="chat-nav"]').getAttribute('aria-current')==='page' && window.www.workspace().then(w=>w.path===${JSON.stringify(expectedPath)})`, `${label} 모니터링에서 대화 복귀·선택 대상 유지`);
     await click('[data-testid="dashboard-nav"]');
-    await wait(`${visible('[data-testid="target-dashboard"]')} && document.querySelector('[data-testid="dashboard-nav"]').getAttribute('aria-current')==='page'`, `${label} 대시보드 복귀`);
+    await wait(`${visible('[data-testid="target-dashboard"]')} && document.querySelector('[data-testid="dashboard-nav"]').getAttribute('aria-current')==='page' && window.www.workspace().then(w=>w.path===${JSON.stringify(expectedPath)})`, `${label} 대시보드 복귀·선택 대상 유지`);
   };
   const noNative = async (label: string) => {
     await pause(200);
@@ -115,6 +123,61 @@ try {
     const cardsB = group("rpa-b");
     const cardsWww = group("WWW");
     if (cardsA.length !== 1 || cardsB.length !== 1 || !cardsWww.length) throw Error("전체 보드 프로젝트별 fixture 집합 오류");
+    const workA = '[data-work-id="work-11111111-1111-4111-8111-111111111111"]';
+    const workB = '[data-work-id="work-22222222-2222-4222-8222-222222222222"]';
+    const workAFile = path.join(workspace, 'docs/work/Fixture/001-board/work.json');
+    const changedWork = object(JSON.parse(await fs.readFile(workAFile, 'utf8')));
+    changedWork.status = 'done';
+    changedWork.criteria = [{ id: 'AC-1', description: 'RPA A 고유 카드의 작업 계획과 검증 근거를 확인한다', required: true, result: 'passed' }];
+    await fs.writeFile(workAFile, JSON.stringify(changedWork));
+    await click(workA);
+    await wait("document.querySelector('.dashboard-criteria')?.textContent.includes('RPA A 고유 카드의 작업 계획') && document.querySelectorAll('.dashboard-document').length===4", "카드 선택에서 실제 IPC·같은 UUID 기준·네 문서 읽기");
+    await wait("document.activeElement===document.querySelector('.dashboard-detail h2')", "상세 제목으로 키보드 초점 이동");
+    await wait("document.querySelector('.dashboard-detail dl')?.textContent.includes('완료 (done)') && document.querySelector('.dashboard-detail dl')?.textContent.includes('1/1') && document.querySelector('.dashboard-criteria')?.textContent.includes('통과')", "목록 수집 이후 원장 변경에도 상세 요약과 기준은 동일 응답");
+    await click('.dashboard-document:nth-of-type(1) summary');
+    await wait("document.querySelector('.dashboard-markdown')?.textContent.includes('칸반 상세 명세') && !document.querySelector('.dashboard-detail script,.dashboard-detail img,.dashboard-detail a') && !window.__dashboardInjected", "명세 Markdown 표시·스크립트·링크·원격 이미지 비활성");
+    await click('.dashboard-document:nth-of-type(3) summary');
+    await wait("document.querySelector('.dashboard-document:nth-of-type(3) table')?.textContent.includes('작업 상세 읽기')", "같은 작업의 Todo·검사 방법 표 표시");
+    await click('.dashboard-document:nth-of-type(4) summary');
+    await wait("document.querySelector('.dashboard-document:nth-of-type(4)')?.textContent.includes('문서가 비어 있습니다.')", "빈 검증 문서와 미작성 문서 구분");
+    const beforeCapture = await evalPage("document.querySelector('.dashboard-detail-captured time')?.dateTime");
+    await click('.dashboard-header > button');
+    await wait(`document.querySelector('.dashboard-detail-captured time')?.dateTime!==${JSON.stringify(beforeCapture)} && !document.querySelector('.dashboard-detail-captured [role="status"]') && document.querySelector('.dashboard-document:nth-of-type(3)')?.open===true && document.querySelector('.dashboard-document:nth-of-type(3) table')?.textContent.includes('작업 상세 읽기')`, "보드 재수집과 상세 응답 완료 뒤 펼친 계획 문서 유지");
+    await command('Emulation.setDeviceMetricsOverride', { width: 640, height: 860, deviceScaleFactor: 1, mobile: false });
+    const narrowBounds = async () => object(await evalPage(`(() => {
+      const detail=document.querySelector('.dashboard-detail');
+      const heading=detail?.querySelector('h2');
+      const container=document.querySelector('.dashboard');
+      if(!detail||!heading||!container)throw Error('좁은 상세 촬영 대상 없음');
+      return {detail:detail.getBoundingClientRect().toJSON(),heading:heading.getBoundingClientRect().toJSON(),container:container.getBoundingClientRect().toJSON(),scrollTop:container.scrollTop,viewport:{width:innerWidth,height:innerHeight}};
+    })()`));
+    const narrowBefore = await narrowBounds();
+    for (let attempt=0;attempt<20;attempt++) {
+      const bounds=await narrowBounds();
+      const heading=object(bounds.heading), container=object(bounds.container);
+      if(typeof heading.top!=='number'||typeof heading.bottom!=='number'||typeof container.top!=='number'||typeof container.bottom!=='number'||typeof container.right!=='number')throw Error('좁은 상세 위치 정보 없음');
+      if(heading.top>=container.top+8&&heading.top<=container.top+120&&heading.bottom<container.bottom)break;
+      const deltaY=Math.max(-600,Math.min(600,heading.top-container.top-24));
+      await command('Input.dispatchMouseEvent',{type:'mouseWheel',x:container.right-12,y:container.top+80,deltaX:0,deltaY});
+      await pause(100);
+    }
+    await wait("(()=>{const detail=document.querySelector('.dashboard-detail'),heading=detail?.querySelector('h2'),title=detail?.querySelector('h3'),container=document.querySelector('.dashboard');if(!detail||!heading||!title||!container)return false;const d=detail.getBoundingClientRect(),h=heading.getBoundingClientRect(),t=title.getBoundingClientRect(),c=container.getBoundingClientRect();return h.top>=c.top+8&&h.bottom<c.bottom&&t.bottom<c.bottom&&d.bottom>c.top+200&&d.left>=c.left&&d.right<=innerWidth+1&&document.documentElement.scrollWidth<=innerWidth+1})()", "640px 실제 휠로 상세 제목과 본문을 가시 영역에 배치");
+    await fs.writeFile(path.join(evidence,'kanban-detail-narrow-bounds.json'),JSON.stringify({before:narrowBefore,after:await narrowBounds()},null,2));
+    await screenshot('kanban-detail-narrow');
+    await wait("document.querySelector('.dashboard-detail')?.textContent.includes('현재 적용성은 평가하지 않았습니다.') && document.querySelector('.dashboard-detail')?.getBoundingClientRect().width>0 && document.documentElement.scrollWidth<=window.innerWidth+1", "640px 좁은 화면에서 전체 가로 넘침 없이 근거·적용성 표시");
+    await command('Emulation.clearDeviceMetricsOverride');
+    await click('[aria-label="작업 상세 닫기"]');
+    await wait(`!document.querySelector('.dashboard-detail') && document.activeElement===document.querySelector(${JSON.stringify(workA)})`, "상태 변경으로 카드 열이 바뀐 뒤에도 현재 카드로 초점 복귀");
+    await command('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', text: '\r', unmodifiedText: '\r', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 36 });
+    await command('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 });
+    await wait("document.querySelector('.dashboard-detail h3')?.textContent==='RPA A 고유 카드'", "복귀 카드에서 실제 Enter로 상세 다시 열기");
+    await click(workA);
+    await click(workB);
+    await wait("document.querySelector('.dashboard-detail h3')?.textContent==='RPA B 고유 카드' && document.querySelector('.dashboard-criteria')?.textContent.includes('RPA B 고유 카드의 작업 계획')", "다른 카드 선택 뒤 이전 작업 내용 격리");
+    await click('.dashboard-document:nth-of-type(3) summary');
+    await wait("document.querySelector('.dashboard-document:nth-of-type(3)')?.textContent.includes('기록된 계획이 없습니다.') && !document.querySelector('.dashboard-detail')?.textContent.includes('작업 상세 읽기')", "계획 미작성 표시와 이전 계획 비노출");
+    await click('[aria-label="작업 상세 닫기"]');
+    await noNative("칸반 상세·계획·검증 근거 읽기");
     await noNative("다중 RPA 전체 보드 조회");
     await screenshot("multiple-global-board");
     await click('[data-testid="open-current-workspace"]');
@@ -122,6 +185,7 @@ try {
     await noNative("RPA A 대상 보드 조회");
     await screenshot("multiple-rpa-board");
     await click('[data-testid="view-page-nav"]');
+    await click('[data-testid="global-dashboard-nav"]');
     await wait(visible('[data-testid="view-page"]'), "보드 비교 중 전체 보기 복귀");
     await noNative("RPA 보드에서 전체 보기 복귀");
     await click('[data-testid="open-www"]');
@@ -129,15 +193,18 @@ try {
     await noNative("WWW 대상 보드 조회");
     await screenshot("multiple-www-board");
     await click('[data-testid="view-page-nav"]');
+    await click('[data-testid="global-dashboard-nav"]');
     await wait(visible('[data-testid="view-page"]'), "WWW 보드에서 전체 보기 복귀");
     await noNative("WWW 보드에서 전체 보기 복귀");
     await click(`button[title=${JSON.stringify(workspace)}]`);
     await target("RPA", workspace);
     await click('[data-testid="view-page-nav"]');
+    await click('[data-testid="global-dashboard-nav"]');
     await wait(visible('[data-testid="view-page"]'), "RPA에서 전체 보기 복귀");
     await click('[data-testid="open-www"]');
     await target("WWW", root);
     await click('[data-testid="view-page-nav"]');
+    await click('[data-testid="global-dashboard-nav"]');
     await wait(visible('[data-testid="view-page"]'), "WWW에서 전체 보기 복귀");
     await screenshot("view-page-return");
   }

@@ -16,7 +16,9 @@ import { withWorkLock, inspectWorkLock, recoverWorkLock, retryWorkWriter, WorkLo
 import { checkRepository, assessRepositoryCheck } from "./consistency.ts";
 import { createDocumentationReview, assessDocumentation } from "./documentation.ts";
 import { createArtifactReview } from "./artifacts.ts";
-import type { CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions } from './types.ts';
+import { assessCompletionReport } from "./completion-report.ts";
+import { assessDecompositionCompletion, validateWorkDecomposition } from "./decomposition.ts";
+import type { CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions, CriterionAssessment } from './types.ts';
 import type { VerificationAttempt } from './evidence.ts';
 import type { DocumentationReview } from './documentation.ts';
 export type { WorkRecord, WorkLocation, WorkAssessment, WorkOptions } from './types.ts';
@@ -244,6 +246,14 @@ async function mutateWork(repo: string, workId: string, change: (record: Current
   });
 }
 
+export async function setDecompositionPlan({ repo = process.cwd(), workId, plan }: WorkOptions & { plan: unknown }) {
+  return mutateWork(repo, workId, async record => {
+    const validated = await validateWorkDecomposition(repo, record, plan);
+    if (JSON.stringify(validated) === JSON.stringify(record.workflow.decomposition)) return;
+    record.workflow.decomposition = validated;
+  });
+}
+
 export async function recordArtifactReview({ repo = process.cwd(), workId, review }: WorkOptions & { review: unknown }) {
   return mutateWork(repo, workId, async (record, work) => {
     const result = await createArtifactReview(repo, work, review);
@@ -307,21 +317,44 @@ async function appendVerification(repo: string, workId: string, attempt: Verific
     }
     record.status              = "verifying"                                                ;
     record.blockedReason       = applicable.usable ? null : applicable.reasons.join("; ")   ;
-    record.workflow.nextAction = applicable.usable ? "review"
-      : attempt.result === "failed" && record.workflow.authorization.implementation ? "build" : "verify";
+    record.workflow.nextAction = requiredEvidenceAction(record, await assessRequiredCriteria(repo, record), "review");
   });
+}
+
+/** 완료 판정과 다음 행동이 같은 필수 기준의 최신 실제 검증을 평가한다. */
+async function assessRequiredCriteria(repo: string, record: CurrentWorkRecord) {
+  const criteria = [];
+  for (const criterion of record.criteria.filter((item) => item.required)) {
+    const attempt    = record.workflow.verifications.filter((item) => item.criterionIds.includes(criterion.id)).at(-1)              ;
+    const evaluation = attempt ? await evaluateEvidence({ repo, record, attempt }) : { usable: false, reasons: ["검증 시도 없음"] } ;
+    criteria.push({ id: criterion.id, ...evaluation });
+  }
+  return criteria;
+}
+
+/** 현재 실제 필수 실패는 구현으로, 미실행·오래된 증거는 검증으로 안내한다. */
+function requiredEvidenceAction(record: CurrentWorkRecord, criteria: CriterionAssessment[], ready: "review" | "complete") {
+  const failures = criteria.filter(criterion => {
+    const attempt = record.workflow.verifications.filter(item => item.criterionIds.includes(criterion.id)).at(-1);
+    return criterion.reasons.length === 1 && criterion.reasons[0] === "verification_failed"
+      && attempt?.executor === "process" && attempt.result === "failed"
+      && attempt.sourceStable === true && attempt.environmentStable === true
+      && attempt.artifactsStable !== false && (attempt.artifacts === undefined || attempt.artifactsStable === true);
+  });
+  if (failures.length) {
+    record.blockedReason = failures.map(criterion => `${criterion.id}: verification_failed`).join("; ");
+    return record.workflow.authorization.implementation ? "build" : "verify";
+  }
+  return criteria.every(criterion => criterion.usable) ? ready : "verify";
 }
 
 async function assessRecord(repo: string, work: WorkLocation, policyRoot?: string): Promise<WorkAssessment> {
   if (work.record.schemaVersion !== 2) return { ...work, legacy: true as const, complete: false, reasons: ["legacy 결과는 현재 소스의 검증으로 자동 승격하지 않습니다."] };
   const { record } = work;
-  const reasons  = validateRequirementRefs(record, { root: repo }) ;
-  const criteria = []                                              ;
-  for (const criterion of record.criteria.filter((item) => item.required)) {
-    const attempt    = record.workflow.verifications.filter((item) => item.criterionIds.includes(criterion.id)).at(-1)              ;
-    const evaluation = attempt ? await evaluateEvidence({ repo, record, attempt }) : { usable: false, reasons: ["검증 시도 없음"] } ;
-    criteria.push({ id: criterion.id, ...evaluation });
-    if (!evaluation.usable) reasons.push(`${criterion.id}: ${evaluation.reasons.join(", ")}`);
+  const reasons  = validateRequirementRefs(record, { root: repo });
+  const criteria = await assessRequiredCriteria(repo, record);
+  for (const criterion of criteria) {
+    if (!criterion.usable) reasons.push(`${criterion.id}: ${criterion.reasons.join(", ")}`);
   }
   const documentation = await assessDocumentation({ repo, record });
   if (!documentation.usable) reasons.push(...documentation.reasons);
@@ -342,8 +375,11 @@ async function assessRecord(repo: string, work: WorkLocation, policyRoot?: strin
     policyHash     : policyInfo.hash        ,
   }) : { usable: false, reasons: ["필수 독립 검토 없음"] };
   if (policyInfo.policy.required && !reviewState.usable) reasons.push(...reviewState.reasons);
+  if (record.workflow.decomposition) reasons.push(...(await assessDecompositionCompletion(repo, record)).reasons);
+  const report = await assessCompletionReport(repo, record);
+  if (report && !report.usable) reasons.push(...report.reasons);
   if (record.blockedReason && reasons.length === 0) reasons.push(record.blockedReason);
-  return { ...work, record, source, criteria, documentation, review: reviewState, repositoryConsistency: await assessRepositoryCheck({ repo }), complete: reasons.length === 0, reasons };
+  return { ...work, record, source, criteria, documentation, review: reviewState, repositoryConsistency: await assessRepositoryCheck({ repo }), ...(report ? { report } : {}), complete: reasons.length === 0, reasons };
 }
 
 export async function assessWork({ repo = process.cwd(), workId, policyRoot }: WorkOptions) {
@@ -356,7 +392,7 @@ export async function recordDocumentReview({ repo = process.cwd(), workId, docum
     (record.workflow.documentationReviews ??= []).push(review);
     record.status              = "verifying" ;
     record.blockedReason       = null        ;
-    record.workflow.nextAction = "review"    ;
+    record.workflow.nextAction = requiredEvidenceAction(record, await assessRequiredCriteria(repo, record), "review");
   });
 }
 
@@ -379,10 +415,10 @@ async function appendReview(repo: string, workId: string, review: unknown) {
     const applicable    = validateReview({ repo, work: record, policy: policy.policy, policyHash: policy.hash, review, sourceDigest: source.digest, criteriaDigest: criteriaDigest(record) }) ;
     record.workflow.reviews.push(applicable.usable ? saved : { ...saved, recordingRejection: applicable.reasons });
     record.status              = "verifying";
-    record.workflow.nextAction = applicable.usable ? "complete"
-      : saved.verdict === "fail" && record.workflow.authorization.implementation ? "build" : "review";
     record.blockedReason       = applicable.usable ? null
       : `독립 검토 ${String(saved.verdict ?? "미확인")}: ${saved.failure && typeof saved.failure === "object" && "kind" in saved.failure ? String(saved.failure.kind) : "수정 또는 검토 재실행 필요"}`;
+    record.workflow.nextAction = applicable.usable ? requiredEvidenceAction(record, await assessRequiredCriteria(repo, record), "complete")
+      : saved.verdict === "fail" && record.workflow.authorization.implementation ? "build" : "review";
   });
 }
 
@@ -393,14 +429,10 @@ export async function resumeWork({ repo = process.cwd(), workId }: WorkOptions) 
     for (const criterion of assessment.criteria) if (!criterion.usable) record.criteria.find((item) => item.id === criterion.id)!.result = "unverified";
     if (!assessment.complete && record.status === "done") record.status = "verifying";
     const invalid    = assessment.criteria.filter((item) => !item.usable)                                                                                                     ;
-    const changed    = invalid.some((item) => item.reasons.some((reason) => ["source_changed", "scope_changed", "criteria_changed", "environment_changed"].includes(reason))) ;
-    const failed     = invalid.some((item) => item.reasons.includes("verification_failed"))                                                                                   ;
     const notStarted = invalid.length > 0 && invalid.every((item) => item.reasons.includes("검증 시도 없음"))                                                                 ;
     let nextAction   = "review"                                                                                                                                               ;
-    if (changed) nextAction = "verify";
-    else if (failed && record.workflow.authorization.implementation) nextAction = "build";
-    else if (notStarted && ["spec", "design", "build", "diagnose"].includes(record.workflow.nextAction)) nextAction = record.workflow.nextAction;
-    else if (invalid.length) nextAction = "verify";
+    if (notStarted && ["spec", "design", "build", "diagnose"].includes(record.workflow.nextAction)) nextAction = record.workflow.nextAction;
+    else if (invalid.length) nextAction = requiredEvidenceAction(record, assessment.criteria, "review");
     else if (assessment.review.usable && assessment.documentation.usable) nextAction = "complete";
     else if (record.workflow.reviews.at(-1)?.verdict === "fail" && record.workflow.authorization.implementation) nextAction = "build";
     record.workflow.nextAction = nextAction;

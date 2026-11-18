@@ -8,6 +8,10 @@
 
 renderer는 프로젝트 선택 전 View Page와 선택 대상의 대시보드·대화·생태계·리포트를 구분한다. main의 `dashboard:get`만 등록 프로젝트와 WWW 실제 경로를 정해 `dashboard.ts`의 제한된 work.json reader로 넘긴다. renderer는 `DashboardSnapshot`을 필터·표시하며 업무 원장이나 임의 파일 경로를 쓰지 않는다. View Page 조회는 Native 연결을 요구하지 않고 대화 진입에서 목록·활동을 조회한다. 같은 대상 보기 전환은 실행 컨텍스트 전환과 분리한다.
 
+프로젝트 목록 표시와 중앙 `view`는 별도 상태다. 모니터링은 현재 대화 탭의 기존 관측을 독립 화면으로 보여 주고 대화·보고서·지도는 목록 탐색이나 모니터 왕복만으로 다시 만들지 않는다. 칸반 상세는 기존 `dashboard:get`에 projectKey/workId만 추가하며 main이 같은 승인 범위에서 문서를 읽는다. 같은 작업 재수집은 상세 내용을 유지하고 다른 선택의 늦은 응답은 renderer와 화면의 선택 경계에서 거부한다. 업무 상태를 조회 중 자동 변경하지 않는다.
+
+입력은 `chat-composer.tsx`의 로컬 상태와 명시적인 초안·인용·전송 경계로 관리한다. 대화 본문과 완료 카드는 memo 경계, Working 경과 시간은 별도 작은 컴포넌트로 갱신한다. `chat-status.ts`가 실제 관측 상태에서 고정 Working 문구와 Steer 가능 조건을 판정한다. `turn/steer`는 session/selection/thread/expectedTurnId와 사용자 메시지 ID를 검사하고 같은 턴의 API 접수와 모델의 지시 반영을 구분한다. 전송 실패·접수 미확인에서 자동 새 턴이나 자동 재전송을 만들지 않는다.
+
 `native-timing.ts`는 각 Native 세션의 요청 trace·단조 상대 시간·실패/취소 경계를 소유한다. 공유 DTO로 정제한 diagnostics/timing만 화면에 게시하고 실제 Native 사건과 앱 준비 관측을 구분한다. renderer의 수신→두 번째 animation frame은 별도 시간축이다. Agent 개요의 `agent-overview.ts`는 실제 subagent 상태·Native plan·활성 항목에 귀속되는 공개 진행 설명을 순수 투영한다.
 
 ## 제품 실행 구조

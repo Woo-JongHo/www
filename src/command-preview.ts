@@ -56,7 +56,7 @@ export function commandOutput(output: string, running: boolean, truncated: boole
       if (tokens[index - 1] !== '{' && tokens[index - 1] !== '[') formatted += newline();
       formatted += token;
     } else formatted += token === ',' ? ',' + newline() : token === ':' ? ': ' : token;
-    if (formatted.length > 131072) return raw;
+    if (formatted.length > 32768) return raw;
   }
   let review: 'pass' | 'fail' | 'not_run' | null = null;
   if (value && typeof value === 'object' && !Array.isArray(value)

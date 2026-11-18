@@ -134,3 +134,59 @@ html,body,#root{width:100%;height:100%;min-height:0;overflow:hidden;overscroll-b
 .session-shell{height:100%;display:grid;grid-template-rows:38px minmax(0,1fr);min-width:0;min-height:0;overflow:hidden}
 .session-surfaces{min-width:0;min-height:0;overflow:hidden}.session-surface{position:relative;width:100%;height:100%;min-width:0;min-height:0}
 @media(max-width:999px){.session-surface .work:not([hidden])~:is(.panel,.native-activity-panel):not([hidden]){position:absolute;top:44px;bottom:28px}}
+
+/* WWW Mint 의미 토큰: Ovis 기본 대화 표면과 상태 색을 같은 체계로 맞춘다. */
+:root{--bg:#0c0e0d;--surface:#141815;--raised:#18201a;--row:#18201a;--border:#4a504c;--text:#e6e8e6;--muted:#8a908c;--accent:#7ee08a;--ok:#7ee08a;--warn:#f2b84b;--error:#f07a6a;--info:#66c7cf;--chat-steel:#a7ada9}
+.chat-message .user{background:var(--raised);color:var(--text)}
+.chat-message .explanation{border-color:var(--info);color:var(--text)}
+.chat-message .prov,.chat-message .files{color:var(--chat-steel)}
+.chat-markdown code,.chat-code{background:var(--surface)}
+.chat-code pre,.chat-code code{color:var(--text)}
+.chat-code code{white-space:inherit;overflow-wrap:anywhere}
+.command-card{--syntax-key:var(--info);--syntax-string:var(--accent);--syntax-number:var(--warn);--syntax-literal:var(--chat-steel)}
+.command-card .cmdline,.command-card pre,.command-output pre,.chat-code pre,.files pre{max-height:none;overflow:visible;white-space:pre-wrap;overflow-wrap:anywhere;tab-size:4}
+.command-card .cmdline{color:var(--accent)}
+.command-card pre{max-width:100%}
+.chat-code pre{max-width:100%}
+.chat-markdown table{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain}
+.chat-working-status{display:flex;align-items:center;gap:8px;min-height:30px;padding:4px 14px;color:var(--accent);font-size:11px;font-weight:600}
+.chat-working-status [aria-hidden=true]{flex:none;color:currentColor}
+.chat-working-status.steer-state-waiting,.chat-working-status.steer-state-sending{color:var(--warn)}
+.chat-working-status.steer-state-failed,.chat-working-status.steer-state-error{color:var(--error)}
+.chat-working-status.steer-state-accepted{color:var(--info)}
+.chat-steer-notice{margin:0 14px 8px;padding:7px 9px;border-left:2px solid var(--info);background:color-mix(in srgb,var(--info) 8%,var(--surface));color:var(--text);font-size:11px;line-height:1.55;overflow-wrap:anywhere}
+.chat-steer-notice.steer-state-waiting,.chat-steer-notice.steer-state-sending{border-color:var(--warn)}
+.chat-steer-notice.steer-state-failed,.chat-steer-notice.steer-state-error{border-color:var(--error);color:var(--error)}
+.chat-steer-notice.steer-state-accepted{border-color:var(--ok)}
+
+/* Home003: 모니터링을 고정 우측 패널 대신 중앙의 스크롤 가능한 페이지로 둔다. */
+.monitoring-work{grid-column:2/-1;min-width:0;min-height:0;overflow:auto;overscroll-behavior:contain}
+.session-surface:has(.monitoring-work:not([hidden])){grid-template-columns:220px minmax(0,1fr);grid-template-rows:minmax(0,1fr) 28px}
+.monitoring-identity,.monitoring-sections{min-width:0;width:100%}
+.monitoring-identity{position:static}
+.monitoring-sections{display:grid;grid-template-columns:minmax(0,1fr);align-content:start}
+.monitoring-work :is(.resource-sidebar,.native-activity-panel,.panel){position:static;inset:auto;width:100%;min-width:0;min-height:0;max-width:none;box-shadow:none}
+.monitoring-work .native-activity-panel{border-left:0}
+.monitoring-work .panel{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr) auto;overflow:visible}
+@media(max-width:999px){.session-surface:has(.monitoring-work:not([hidden])){grid-template-columns:160px minmax(0,1fr)}.monitoring-work{grid-column:2/-1}.monitoring-sections{grid-template-columns:minmax(0,1fr)}.monitoring-work :is(.resource-sidebar,.native-activity-panel,.panel){position:static;inset:auto;width:100%;max-width:none;box-shadow:none}}
+@media(prefers-reduced-motion:reduce){.chat-working-status,.chat-steer-notice{scroll-behavior:auto}}
+
+.chat-working-status.is-waiting{color:var(--warn)}.chat-working-status.is-failed{color:var(--error)}.chat-working-status.is-idle{color:var(--chat-steel)}
+.monitoring-identity{padding:20px 24px;overflow-wrap:anywhere}.monitoring-identity h1{font-size:21px}.home-list-actions{display:grid;gap:8px;padding:8px 14px}.monitoring-work .na-scroll{overflow:visible}.monitoring-work .pbody{overflow:visible}
+
+.reports-screen{grid-column:2/-1;display:flex;min-height:0;min-width:0}.reports-screen>.reports-work{flex:1}
+.session-surface:has(.work:not([hidden])){grid-template-columns:268px minmax(0,1fr) 340px}
+.session-surface:has(.work:not([hidden])):not(:has(>.agent-sidebar:not([hidden]))){grid-template-columns:268px minmax(0,1fr) 0}
+.session-surface:has(.reports-screen:not([hidden])){grid-template-columns:220px minmax(0,1fr) 0}
+@media(max-width:1100px){.session-surface:has(.work:not([hidden])){grid-template-columns:180px minmax(0,1fr) 300px}}
+@media(max-width:999px){.session-surface:has(.work:not([hidden])),.session-surface:has(.work:not([hidden])):not(:has(>.agent-sidebar:not([hidden]))){grid-template-columns:160px minmax(0,1fr) 0}}
+/* 프레임의 기존 고정 강조색도 공통 의미 토큰을 따른다. */
+.primary,.avatar{background:var(--accent);color:var(--bg)}
+.pane{border-color:var(--accent)}
+.transcript .explanation{border-color:var(--info)}
+.transcript .user{background:var(--raised)}
+.transcript .user>.muted{color:var(--chat-steel)}
+.transcript .explanation .chat-message-actions{color:var(--info)}
+
+/* 작은 창의 Agent 개요는 모니터링 메뉴에서 조회한다. 입력과 개입 버튼을 가리지 않는다. */
+@media(max-width:999px){.session-surface>.agent-sidebar{display:none!important}}

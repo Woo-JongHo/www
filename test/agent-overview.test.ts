@@ -331,3 +331,100 @@ describe("기본 오른쪽 바", () => {
     expect(sending.match(/data-skill-id=/g)).toHaveLength(5);
   });
 });
+
+test("계획 없는 공개 진행 설명은 미연결로 표시하고 빈 Native 계획과 미제공을 구별한다", () => {
+  const prose = item(2, { id: "p", type: "agentMessage", phase: "commentary", text: "계획 없이 확인 중입니다." });
+  const projection = projectAgentOverview([start(), prose], "t");
+  expect(projection.progress).toMatchObject({ text: "계획 없이 확인 중입니다.", planIndex: null });
+  expect(projection.planState).toBe("unprovided");
+  expect(projectAgentOverview([start(), plan(2, [])], "t").planState).toBe("empty");
+  const html = renderToStaticMarkup(createElement(ResourceActivitySidebar, { events: [start(), prose], resources: null, threadId: "t", sending: false, hidden: false, onOpenMonitor() {} }));
+  expect(html).toContain("계획 미연결 공개 진행 설명");
+  expect(html).not.toContain('ao-skill-state">대기');
+});
+
+test("역할 단계 선언은 문서 읽기와 하네스 실행을 구별하고 종료 뒤 선언을 무시한다", () => {
+  const stage = event(2, "www/developmentStage", { threadId: "t", turnId: "a", source: "role_declaration", workId: "work-36d312bc-a767-4e3e-a581-01898b35f75f", phase: "build", status: "running", attemptId: "attempt-1" });
+  const projection = projectAgentOverview([start(), stage], "t");
+  expect(projection.selectedSkillId).toBe("www-build");
+  expect(projection.selectionBasis).toContain("역할의 단계 선언");
+  expect(projection.skills.find(skill => skill.id === "www-build")?.basis).toContain("하네스 실행 미연결");
+  const ended = [...[start(), event(2, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } })], { ...stage, seq: 3 }];
+  expect(projectAgentOverview(ended, "t").selectedSkillId).toBeNull();
+  expect(projectAgentOverview([start(), { ...stage, historical: true }], "t").selectedSkillId).toBeNull();
+});
+
+test("계획 미연결 산문은 늦은 계획으로 재귀속하지 않고 새로운 메시지부터 연결한다", () => {
+  const delta = (seq: number, id: string, value = "설명") => event(seq, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: id, phase: "commentary", delta: value });
+  const before = [start(), delta(2, "before")];
+  expect(projectAgentOverview(before, "t").progress).toMatchObject({ planIndex: null, text: "설명" });
+  const latePlan = [...before, plan(3, [{ step: "뒤늦은 계획", status: "inProgress" }]), delta(4, "before")];
+  expect(projectAgentOverview(latePlan, "t").progress).toBeNull();
+  expect(projectAgentOverview([...latePlan, delta(5, "new")], "t").progress).toMatchObject({ planIndex: 0, text: "설명" });
+  const ambiguous = [start(), plan(2, [{ step: "A", status: "inProgress" }, { step: "B", status: "inProgress" }]), delta(3, "unlinked")];
+  expect(projectAgentOverview(ambiguous, "t").progress?.planIndex).toBeNull();
+});
+
+test("단계 선언의 시도·다른 턴·복수 작업·종료 및 복원 경계를 보존한다", () => {
+  const stage = (seq: number, overrides: object = {}) => event(seq, "www/developmentStage", { threadId: "t", turnId: "a", source: "role_declaration", workId: "work-36d312bc-a767-4e3e-a581-01898b35f75f", phase: "build", status: "running", attemptId: "one", ...overrides });
+  const prior = [start(), stage(2), stage(3, { status: "failed" }), stage(4)];
+  expect(projectAgentOverview(prior, "t").skills.find(s => s.id === "www-build")?.declaration?.status).toBe("failed");
+  expect(projectAgentOverview([...prior, stage(5, { attemptId: "two" })], "t").selectedSkillId).toBe("www-build");
+  expect(projectAgentOverview([...prior, stage(5, { attemptId: "two" }), stage(6, { attemptId: "one", status: "completed" })], "t").skills.find(s => s.id === "www-build")?.declaration?.attemptId).toBe("two");
+  const multiple = projectAgentOverview([start(), stage(2), stage(3, { workId: "work-aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", phase: "verify" })], "t");
+  expect(multiple.selectedSkillId).toBeNull();
+  expect(multiple.selectionBasis).toContain("복수 작업");
+  expect(projectAgentOverview([start(), stage(2, { turnId: "foreign" })], "t").selectedSkillId).toBeNull();
+  expect(projectAgentOverview([start(), event(2, "transport/closed", {}), stage(3)], "t").skills.every(s => !s.declaration)).toBe(true);
+  const restored = projectAgentOverview([event(1, "thread/configured", { threadId: "t", developmentStage: "resume_unavailable" }), start(2, "a", true), { ...stage(3), historical: true }], "t");
+  expect(restored.stageConnection).toContain("복원 대화");
+  expect(restored.selectedSkillId).toBeNull();
+});
+
+test("사건 절단 뒤 계획 없는 새 산문을 보여 주며 과거 계획을 합성하지 않는다", () => {
+  const events = [start(), plan(2, [{ step: "잘린 계획", status: "inProgress" }]), ...Array.from({ length: 2000 }, (_, index) => event(index + 3, "fixture/noise", { threadId: "t", turnId: "a" })), item(2003, { id: "new", type: "agentMessage", phase: "commentary", text: "남아 있는 공개 설명" })];
+  const projection = projectAgentOverview(events, "t");
+  expect(projection.historyTruncated).toBe(true);
+  expect(projection.plan).toEqual([]);
+  expect(projection.progress).toMatchObject({ planIndex: null, text: "남아 있는 공개 설명" });
+  expect(projectAgentOverview([start(), plan(2, [{ step: "손상", status: "unknown" }])], "t").planState).toBe("invalid");
+});
+
+test("혼합 손상 계획의 공개 산문은 미연결이며 같은 항목의 정상 계획에도 재귀속하지 않는다", () => {
+  const delta = (seq: number, id: string, value: string) => event(seq, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: id, phase: "commentary", delta: value });
+  const mixed = [start(), plan(2, [{ step: "A", status: "inProgress" }, { step: "B", status: "unknown" }]), delta(3, "p", "손상 시점 설명")];
+  const invalid = projectAgentOverview(mixed, "t");
+  expect(invalid.planState).toBe("invalid");
+  expect(invalid.plan).toEqual([]);
+  expect(invalid.activePlanIndex).toBeNull();
+  expect(invalid.progress).toMatchObject({ text: "손상 시점 설명", planIndex: null });
+  const html = renderToStaticMarkup(createElement(ResourceActivitySidebar, { events: mixed, resources: null, threadId: "t", sending: false, hidden: false, onOpenMonitor() {} }));
+  expect(html).toContain("계획 자료 해석 실패");
+  expect(html).toContain("계획 미연결 공개 진행 설명");
+  expect(html).not.toContain('data-plan-index="0"');
+  const repaired = [...mixed, plan(4, [{ step: "A", status: "inProgress" }]), delta(5, "p", "늦은 추가")];
+  expect(projectAgentOverview(repaired, "t").progress).toBeNull();
+  expect(projectAgentOverview([...repaired, delta(6, "new", "새 항목 설명")], "t").progress).toMatchObject({ text: "새 항목 설명", planIndex: 0 });
+});
+
+test("설정 사건이 절단돼도 현재 역할 선언 수신과 설정 미확인을 구별한다", () => {
+  const stage = event(2003, "www/developmentStage", { threadId: "t", turnId: "a", source: "role_declaration", workId: "work-36d312bc-a767-4e3e-a581-01898b35f75f", phase: "build", status: "running", attemptId: "one" });
+  const retained = [...Array.from({ length: 1998 }, (_, index) => event(index + 4, "fixture/noise", { threadId: "t", turnId: "a" })), item(2002, { id: "p", type: "agentMessage", phase: "commentary", text: "현재 공개 설명" }), stage];
+  expect(retained).toHaveLength(2000);
+  const projection = projectAgentOverview(retained, "t");
+  expect(projection.historyTruncated).toBe(true);
+  expect(projection.selectedSkillId).toBe("www-build");
+  expect(projection.stageConnection).toContain("설정 사건 미보관");
+  expect(projection.stageConnection).toContain("현재 턴의 역할 선언 수신");
+  expect(projection.stageConnection).toContain("하네스 실행 미연결");
+  expect(projection.stageConnection).not.toContain("단계 관측 미연결");
+  const unknown = projectAgentOverview([start()], "t");
+  expect(unknown.stageConnection).toContain("연결 설정 미확인");
+  expect(unknown.stageConnection).not.toContain("설정 사건 미보관");
+  for (const reason of ["resume_unavailable", "other_workspace"]) {
+    const unavailable = projectAgentOverview([event(1, "thread/configured", { threadId: "t", developmentStage: reason }), start(2), { ...stage, seq: 3 }], "t");
+    expect(unavailable.stageConnection).toContain("단계 관측 미연결");
+    expect(unavailable.stageConnection).not.toContain("설정 사건 미보관");
+    expect(unavailable.selectedSkillId).toBeNull();
+  }
+});

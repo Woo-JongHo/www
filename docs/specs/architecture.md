@@ -408,6 +408,12 @@
 
 각 관리 소스의 첫 문장 앞 실제 JSDoc에 `@architecture arch.…` 하나와 `@implements RESP-…`를 선언한다. 테스트 첫 문장 앞 JSDoc의 `@verifies RESP-…`는 실제 테스트 호출이 있는 `.test.ts(x)`에서만 받는다. 문자열과 일반 주석은 선언이 아니다. 연결의 존재는 기능 충족이나 테스트 통과의 증명이 아니다.
 
+### 개발 작업의 상태 전이와 실행 근거
+
+기존 책임 ID `arch.development.records.state`에서 개발 작업의 상태 전이 보기를 연다. 정의는 `docs/architecture/statecharts/development-work.json` 한 곳이 소유하고 상태·전이·조건·효과·코드·검사·반례를 연결한다. `scripts/workflow/statechart.ts`의 collector가 정의와 근거의 내용 식별을 생성 snapshot의 statecharts에 묶는다. 상태도 폴더가 없는 기존 계약 fixture는 이 확장을 생략하지만, 폴더가 있으면 필수 정의·상태·구조 ID·완료 조건·코드/검사 근거 누락을 거부한다.
+
+생성 검사는 행동 테스트를 실행하지 않으며 checks는 not_run으로 남는다. 화면은 모델 없음·검증 미실행·번들 식별 불일치와 실제 작업의 검증 실패·오래된 근거·완료 허용을 구분한다. 같은 UUID의 기존 보고서에서 시도·방법·환경·산출물을 읽고, 보고서를 별도로 선택한 프로젝트가 현재 작업 범위와 다르면 근거 조회를 차단한다. 정적 상태도·등록된 검사·저장 당시 보고서를 현재 실행이나 현재 플랫폼 검증으로 승격하지 않는다. 닫기 후 기존 지도 선택·경로·배율과 대화 초안은 유지한다.
+
 의존성은 같은 구조 ID 내부만 자동 허용한다. 부모·자식·형제 사이도 `allowedDependencies`에 정확한 대상 ID가 있어야 한다. 목록은 기존 AST import의 타입·런타임 참조와 책임을 대조한 초기 경계다. 외부 패키지와 비관리 asset은 기존 추출의 excluded 근거로 남기며 wildcard는 허용하지 않는다.
 
 관리 범위는 `src`와 `scripts/workflow`의 TypeScript 및 루트 build, typed workflow, source policy, 지도 생성기, 계약 검사기다. 새 계약 검사 모듈도 자신의 구조·요구 선언이 필요하다. migration.json은 과거 이관 계획이며 실행기의 입력이 아니다.

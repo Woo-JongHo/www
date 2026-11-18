@@ -735,6 +735,31 @@ describe("실시간 Native 활동 투영", () => {
     expect(JSON.stringify(result)).not.toContain("숨김 원문");
   });
 
+  test("공개 설명은 완료 snapshot을 정산하고 늦은 시작과 delta를 무시한다", () => {
+    const delta = (seq: number, id: string, value: string, turnId = "a") => event(seq, "item/agentMessage/delta", { threadId: "t", turnId, itemId: id, phase: "commentary", delta: value });
+    const snapshot = (seq: number, method: string, id: string, value: Record<string, unknown>, turnId = "a") => item(seq, method, { id, type: "agentMessage", phase: "commentary", ...value }, turnId);
+    const description = (events: AppEvent[], turn = 0, id = "p") => projectNativeActivity(events, "t").turns[turn]?.entries.find(row => row.id === `item:${id}`)?.description;
+    for (const historical of [false, true]) {
+      const mark = (events: AppEvent[]) => events.map(row => ({ ...row, historical }));
+      const before = [started(1), delta(2, "p", "진행"), snapshot(3, "item/started", "p", { text: "늦은 시작" })];
+      expect(description(mark(before))).toBe("진행");
+      for (const completed of ["", "완료"]) {
+        const done = [...before, snapshot(4, "item/completed", "p", { text: completed })];
+        expect(description(mark(done))).toBe(completed);
+        expect(description(mark([...done, delta(5, "p", "늦음"), snapshot(6, "item/started", "p", { text: "늦음" })]))).toBe(completed);
+        expect(description(mark([...done, snapshot(5, "item/completed", "p", { text: "재정산" })]))).toBe("재정산");
+        expect(description(mark([...done, delta(5, "q", "다른 항목")]), 0, "q")).toBe("다른 항목");
+        expect(description(mark([...done, started(5, "b"), delta(6, "p", "새 턴", "b")]), 1)).toBe("새 턴");
+      }
+      expect(description(mark([...before, snapshot(4, "item/completed", "p", {})]))).toBe("진행");
+    }
+  });
+
+  test("빈 완료 snapshot은 누적된 공개 설명을 지운다", () => {
+    const events = [started(1), event(2, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase: "commentary", delta: "진행" }), item(3, "item/completed", { id: "p", type: "agentMessage", phase: "commentary", text: "" })];
+    expect(projectNativeActivity(events, "t").turns[0]?.entries[0]?.description).toBe("");
+  });
+
   test("패널은 WWW 전용 흐름을 중심에 두고 일반 활동과 토큰은 보조 펼침으로 둔다", () => {
     const events = [configured, event(2, "transport/connected", {}), started(3), item(4, "item/completed", { id: "u", type: "userMessage", content: [{ type: "skill", name: "demo" }] })] ;
     const html   = renderToStaticMarkup(createElement(NativeActivityView, { events, threadId: "t" }))                                                                                     ;

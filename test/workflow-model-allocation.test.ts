@@ -45,3 +45,30 @@ describe("모델 배분 검증", () => {
     expect(validateModelAllocation({ ...allocation(), attempt: 2, previousAttempt: { eventId: "e1", reason: "환경 오류", kind: "retry", failureCause: "environment" } }, context).model).toBe("gpt-6-luna");
   });
 });
+
+test("아직 없는 출력의 대소문자 별칭은 실제 파일시스템 의미에 따라 소유 충돌로 거부한다", async () => {
+  const { mkdtemp, mkdir, writeFile, stat, rm } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const { validateDecomposition } = await import("../scripts/workflow/decomposition.ts");
+  const repo = await mkdtemp(join(tmpdir(), "www-plan-case-"));
+  try {
+    await mkdir(join(repo, "src"));
+    await writeFile(join(repo, "src/Existing.ts"), "기존 이름의 lookup 대조");
+    let insensitive = false;
+    try { const [a, b] = await Promise.all([stat(join(repo, "src/Existing.ts")), stat(join(repo, "src/existing.ts"))]); insensitive = a.dev === b.dev && a.ino === b.ino; }
+    catch (error) { if (!(error && typeof error === "object" && "code" in error && error.code === "ENOENT")) throw error; }
+    const command = process.execPath;
+    const units = ["Future.ts", "future.ts"].map((file, index) => ({ taskId: `unit-${index}`, goal: "독립 출력", inputs: ["src"], writePaths: [`src/${file}`], excludedPaths: [], dependencies: [], artifacts: [`src/${file}`], criterionIds: ["AC-1"], verification: { command, args: [] }, resultPath: `src/${file}` }));
+    const checked = validateDecomposition({ units }, { repo, inputs: ["src"], writePaths: ["src"], criterionIds: ["AC-1"], verifierCommands: [JSON.stringify([command])] });
+    if (insensitive) await expect(checked).rejects.toThrow("소유 충돌");
+    else expect((await checked).units).toHaveLength(2);
+    await mkdir(join(repo, "src/자료"));
+    const emptyUnits = units.map((item, index) => ({ ...item, writePaths: [`src/자료/${index === 0 ? "Future.ts" : "future.ts"}`], artifacts: [`src/자료/${index === 0 ? "Future.ts" : "future.ts"}`], resultPath: `src/자료/${index === 0 ? "Future.ts" : "future.ts"}` }));
+    const emptyChecked = validateDecomposition({ units: emptyUnits }, { repo, inputs: ["src"], writePaths: ["src"], criterionIds: ["AC-1"], verifierCommands: [JSON.stringify([command])] });
+    if (insensitive) await expect(emptyChecked).rejects.toThrow("소유 충돌");
+    else expect((await emptyChecked).units).toHaveLength(2);
+    const unicodeUnits = units.map((item, index) => ({ ...item, writePaths: [`src/${index === 0 ? "é.ts" : "e\u0301.ts"}`], artifacts: [`src/${index === 0 ? "é.ts" : "e\u0301.ts"}`], resultPath: `src/${index === 0 ? "é.ts" : "e\u0301.ts"}` }));
+    await expect(validateDecomposition({ units: unicodeUnits }, { repo, inputs: ["src"], writePaths: ["src"], criterionIds: ["AC-1"], verifierCommands: [JSON.stringify([command])] })).rejects.toThrow("소유 충돌");
+  } finally { await rm(repo, { recursive: true, force: true }); }
+});

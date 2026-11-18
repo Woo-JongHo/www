@@ -119,6 +119,16 @@ WWW 프로젝트 유형(Desktop 포함)의 여섯 Skills 정본은 `skills/www/`
 
 ## 개발 역할의 작업 인터페이스
 
+### 사용자 여정·칸반·병렬 인계
+
+개발 전 시나리오와 기대 결과를 기준 ID·검사 방법에 연결하는 규칙은 [작업 계약](skills/WORKFLOW.md)이 소유한다. 같은 UUID의 tasks.md와 nextAction은 칸반의 계획·현재 단계에 연결한다. 칸반은 카드 선택에서 `dashboardWork(selection, projectKey, workId)`를 통해 네 문서와 기준을 읽고, 읽기 실패·미작성·빈 문서를 구분한다. 현재 소스 적용성을 계산하는 API는 아니므로 기록된 통과를 재검증 완료로 표시하지 않는다.
+
+개발 실행의 선택적 `decomposition.units`는 taskId, goal, inputs, writePaths, excludedPaths, dependencies, artifacts, criterionIds, verification(command/args), resultPath를 가진다. 계획 검사는 파일 소유와 미정의·순환 의존을 실행 전에 확인한다. 기존 allocation.dependencies는 호스트 정상 종료의 의미를 유지하며, 새 분해 단위의 수용 의존은 실제 실행·필수 산출물·현재 검증을 추가로 확인한다. 명령 정상 종료와 업무 수용을 같은 사건으로 읽지 않는다. 동시 저작은 하나의 명시된 부모 쓰기 범위와 파일별 단일 소유자 아래 수행하고, 소스를 동결한 뒤 공통 검사를 실행한다. 외부 협업을 감싼 주입 하네스와 실제 모델 호출은 각각 기록한다.
+
+입력/스크롤/Steer와 새 모니터링 메뉴의 실제 Electron 시나리오는 `scripts/verify-chat.ts`와 `scripts/verify-home.ts`가 제공한다. `--performance-only`, `--steer-only`는 제한 범위 실행이며 전체 채팅 여정이나 실제 모델 반영의 통과로 승격하지 않는다. 성능은 같은 fixture·환경의 전후 원문과 분포를 비교한다. 합성 composition은 실제 OS IME 검사가 아니다.
+
+`node scripts/verify-native-activity.ts --observability`는 부모가 동결·빌드한 dist에서 새 WWW 스레드의 단계 선언 도구·계획 없는 Progress·미관측·탭 격리·좁은 화면·모션 축소를 실제 Electron+합성 stdio로 확인한다. 자체 빌드를 하지 않는다. 공식 schema와 실제 initialize/thread-start 등록은 별도 실측이며, 합성 tool/call 왕복과 실제 모델의 도구 선택을 구분한다. 기존 thread/resume의 단계 도구 미지원과 실제 하네스 영수증 미연결을 숨기지 않는다.
+
 구현 전 검토와 도구 출처는 공식 진입점의 `artifact-context`, `artifact-review`, `artifact-status`, `tool-inventory` action으로 제공한다. 입력·판단 책임·brief/full·상태의 의미는 [산출물 검토 계약](skills/ARTIFACT_REVIEW.md)을 따른다. 예를 들어 `node scripts/workflow.ts '{"action":"tool-inventory","skill":"www-spec"}'`는 실행 없이 출처를 조회한다. 개발 단계 실행은 해당 출처와 검토 상태를 컨텍스트·결과·로컬 영수증에 보존하며 호스트 의미 수용은 미확인으로 남긴다.
 
 현재 작업 접수·재개의 CLI는 `node scripts/workflow.ts '<JSON>'`이며 `action`으로 동작을 선택한다. 이 인터페이스가 구현돼 있다는 사실과 실제 Codex·GUI·검토 흐름의 통합 검증은 구분한다. 입력의 권한 정보는 사용자의 유효한 요청에서 정하며, 예제나 역할 선택이 실행 승인을 만들지 않는다.
@@ -141,6 +151,8 @@ WWW 프로젝트 유형(Desktop 포함)의 여섯 Skills 정본은 `skills/www/`
 | `repository-status` | 전체 검사 이후 Git 파일·작업 기록이 달라졌는지 읽기 전용으로 확인 |
 
 `status.repositoryConsistency`는 작업의 기능 증거와 별개의 전체 저장소 검사 상태다. 작업이 완료돼도 이후 다른 작업 기록이 바뀌면 전체 검사는 오래된 상태일 수 있다. 최종 기록 갱신 후 `check-repository`에 `command`, `args`를 지정해 다시 검사한다. 기본 명령은 현재 Node로 작업 계약 검사기를 실행한다. 상세 정책과 잠금 복구의 한계는 [공통 계약](skills/WORKFLOW.md)을 따른다.
+
+검증·문서 영향 검토·독립 검토를 기록해도 필수 기준의 최신 검증이 누락되거나 오래되면 다음 행동은 `verify`다. 모든 필수 검증이 현재 적용 가능할 때 검증·문서 검토는 `review`로, 적용 가능한 독립 검토는 `complete`로 인계한다. 현재 검사 실패로 구현 수정이 필요한 경우의 `build` 인계는 유지한다. 단계 표시는 업무 완료 판정을 대신하지 않는다.
 
 `open.decision`은 역할이 정리한 `intent`, `area`, `title`, `kind`, `areas`, `owner`, `criteria`와 필요한 기존 `workId`를 전달한다. 각 기준은 ID·설명·필수 여부와 선택적 `requirementRefs`를 가진다. `approval`은 구현·쓰기 경로·변경 표면·허용 검증 명령·커밋·게시 범위이고, `inputs`는 검사 의존 파일·디렉터리의 저장소 상대 경로다. 사용자 원문을 단순 키워드만으로 구현 승인으로 바꾸지 않는다.
 
@@ -355,9 +367,9 @@ write/check는 동일 논리경로 `src/architecture.generated.json`의 격리�
 이미 승인한 v1을 재질문하거나 JSON을 중복 승인하지 않는다. 같은 key의 다른 파일도 자동 확대하지 않는다. 미승인 TS shape는 원문을 유지하고 delta로 남긴다. 이 저장소 변경은 설치본·전역 Skill 배포를 뜻하지 않는다. 실제 통합 테스트는 성능 기준과 실행 budget을 구분한다. `architecture-harness.test.ts`의 canonical generator·공식 CLI 왕복은 일반 통합 사례에 60초, 기존 장기 subprocess 사례에 120초를 주며 실제 시간과 실패 원문을 함께 기록한다.
 
 
-개발 검증 `bun test test/work-json.test.ts --timeout 300000`은 현재 저장소 승인 문서에서 v1 28키·86쌍을 도출하여 공개 guide proof와 대조하고, 고정 Git 기준점의 JSON 승인 bytes를 확인한다. 격리 복사본에서 현재 승인 소스의 dry-run·Align·재Align·source check, 실제 양성 쓰기와 범위 밖·압축 구조 거부를 새로 실행한다. 도메인 writer는 fresh WorkRecord와 생성한 WorkReport를 `canonicalArchitectureJson`의 공개 pinned CLI 출력과 byte 단위로 비교한다. 로컬 개발 설치가 필요하며 과거 영수증이나 artifact hash만으로 의미 검사를 대신하지 않는다. v3 고정 제안·질문은 미승인 자료로 읽고 현재 source와 다른 key/file은 별도 addendum으로 출력한다.
+제품 검증 `bun test test/work-json.test.ts --timeout 300000`은 직렬화·정책·크기 제한·원장과 보고서 보존의 제품 테스트 12개를 실행하며 외부 BoxBox CLI를 호출하지 않는다. v1 28키·86쌍의 공개 proof, 고정 Git 승인 bytes, 격리 복사본의 dry-run·Align·재Align·source check와 pinned CLI golden 비교 4개 시나리오는 `test/boxbox/work-json.test.ts`에 보존하며 `npm run test:boxbox`로 별도 실행한다. 이 명령은 프로젝트 mode가 off이면 disabled·비성공 종료로 실행을 거부한다. 실제 외부 검사는 로컬 개발 설치가 필요하며, 기존 실패나 미실행을 제품 검사 PASS로 대체하지 않는다. v3 고정 제안·질문은 미승인 자료로 읽고 현재 source와 다른 key/file은 별도 addendum으로 남긴다.
 
-`node scripts/verify-reports.ts`는 strict 검사 다음 위 실도구 테스트를 직렬로 실행하고 실패를 전파한 뒤 관련 집중 검사·빌드·Electron probe를 수행한다. 실도구 테스트별 예산은 300초, 전체 의미 테스트 자식 실행 예산은 900초다. runtime fixture의 개발 설정 부재, package runtime 의존성 및 main/preload/renderer bundle의 개발 CLI 경로 부재를 확인하고 Electron child PATH에는 Node와 git만 노출한다. 이 경계는 머신 전역 BoxBox 설치 제거를 뜻하지 않는다. 기존 fixture 보고서 bytes·legacy 원장 bytes/inode/mtime·no-op 원장의 재기록 여부를 실측하며, GUI 시작 실패는 원문과 prechecks를 보존하고 미확인으로 남긴다.
+`node scripts/verify-reports.ts`는 strict 검사 다음 제품 직렬화·보고서 테스트를 직렬로 실행하고 실패를 전파한 뒤 관련 집중 검사·빌드·Electron probe를 수행한다. 외부 BoxBox 실도구 검사는 이 경로와 semantic.log에 포함되지 않으며 별도 `npm run test:boxbox` 범위다. 현재 제품 의미 테스트의 테스트별 예산은 300초, 자식 실행 예산은 900초다. runtime fixture의 개발 설정 부재, package runtime 의존성 및 main/preload/renderer bundle의 개발 CLI 경로 부재를 확인하고 Electron child PATH에는 Node와 git만 노출한다. 기존 fixture 보고서 bytes·legacy 원장 bytes/inode/mtime·no-op 원장의 재기록 여부를 실측하며 GUI 시작 실패는 원문과 prechecks를 보존하고 미확인으로 남긴다.
 
 ## 빌드 버전과 배포
 

@@ -67,3 +67,10 @@ describe("보수적인 문서 읽기 명령 참조", () => {
     ]) expect(referencedWwwArtifacts(command, workspace)).toEqual([]);
   });
 });
+
+test("공개 단계 선언은 정확한 UUID·단계·상태·시도만 받고 내부 필드를 거부한다", async () => {
+  const { parseWwwDevelopmentStage } = await import("../src/www-activity");
+  const input = { workId: "work-36d312bc-a767-4e3e-a581-01898b35f75f", phase: "build", status: "running", attemptId: "try-1" } as const;
+  expect(parseWwwDevelopmentStage(input)).toEqual(input);
+  for (const value of [null, [], {}, { ...input, workId: "../work.json" }, { ...input, phase: "report" }, { ...input, status: "accepted" }, { ...input, attemptId: " " }, { ...input, reasoning: "private" }, { ...input, path: "/etc" }]) expect(parseWwwDevelopmentStage(value)).toBeNull();
+});

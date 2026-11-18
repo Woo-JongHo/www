@@ -4,7 +4,7 @@
 import { describe, expect, test } from "bun:test";
 import { randomUUID } from "node:crypto";
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
-import { mkdtemp, mkdir, readFile, realpath, rm } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, realpath, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { runInNewContext } from "node:vm";
@@ -24,7 +24,7 @@ async function until(check: () => boolean): Promise<void> {
     await new Promise(resolve => setTimeout(resolve, 10));
   }
 }
-async function setup(hooks: { beforeUpsert?: () => Promise<void>; projectIO?: ProjectRegistryIO } = {}) {
+async function setup(hooks: { beforeUpsert?: () => Promise<void>; projectIO?: ProjectRegistryIO; stageProbe?: boolean } = {}) {
   const root = await realpath(await mkdtemp(join(tmpdir(), "www-sessions-")));
   const userData = join(root, "profile");
   const first = join(root, "first");
@@ -51,7 +51,7 @@ async function setup(hooks: { beforeUpsert?: () => Promise<void>; projectIO?: Pr
       onEvent: event => events.push(event), onResources: snapshot => resources.push(snapshot), onChanged() { changes++; for (const existing of sessions.list()) existing.summary(); },
       chooseDirectory: async () => directory, exportReport: async () => null, openExternal: async () => {},
       spawnNative(cwd) {
-        const child = spawn(process.execPath, [join(import.meta.dir, "fixtures/chat-ui-app-server.ts")], { cwd, stdio: ["pipe", "pipe", "pipe"] });
+        const child = spawn(process.execPath, [join(import.meta.dir, hooks.stageProbe ? "fixtures/activity-app-server.ts" : "fixtures/chat-ui-app-server.ts")], { cwd, stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, ...(hooks.stageProbe ? { WWW_STAGE_PROBE: "1" } : {}) } });
         children.push(child);
         return child;
       }
@@ -465,4 +465,135 @@ describe("프로젝트 폴더 추가의 실제 runtime·registry 경계", () => 
       expect(renames).toBe(previousWrites + 2);
     } finally { fail = false; await s.close(); }
   });
+});
+
+test("Steer는 같은 턴에 원문과 ID를 한 번만 보내고 불일치·종료 경합을 구분한다", async () => {
+  const s = await setup();
+  try {
+    const session = s.add("steer", s.first);
+    const thread = await start(session);
+    const turn = await session.invoke("turn:start", [selected(session), thread, "Steer 중단 확인"]) as { turnId: string };
+    const selection = selected(session);
+    const text = "  추가 지시\n";
+    expect(await session.invoke("turn:steer", [selection, thread, turn.turnId, text, "steer-1"])).toEqual({ turnId: turn.turnId });
+    await expect(session.invoke("turn:steer", [selection, thread, turn.turnId, text, "steer-1"])).rejects.toThrow();
+    await expect(session.invoke("turn:steer", [selection, thread, "wrong", text, "steer-2"])).rejects.toThrow();
+    await expect(session.invoke("turn:steer", [selection, thread, turn.turnId, "mismatch", "steer-3"])).rejects.toThrow();
+    await expect(session.invoke("turn:steer", [selection, thread, turn.turnId, "종료 경합", "steer-4"])).rejects.toThrow();
+    await until(() => !session.summary().busy);
+    const events = s.events.filter(event => event.method.startsWith("turn/steer"));
+    expect(events.some(event => event.method === "turn/steerAccepted" && (event.params as { text?: string }).text === text)).toBe(true);
+    expect(events.some(event => event.method === "turn/steerUncertain" && (event.params as { clientUserMessageId?: string }).clientUserMessageId === "steer-3")).toBe(true);
+    const calls = (await readFile(join(s.first, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => JSON.parse(line));
+    const requests = calls.filter(call => call.method === "turn/steer");
+    expect(requests).toHaveLength(3);
+    expect(requests[0].params).toEqual({ threadId: thread, expectedTurnId: turn.turnId, clientUserMessageId: "steer-1", input: [{ type: "text", text, text_elements: [] }] });
+    expect(calls.filter(call => call.method === "turn/start")).toHaveLength(1);
+  } finally { await s.close(); }
+});
+
+test("Steer 대기·승인·중단·연결 종료와 다른 세션은 자동 재전송 없이 차단한다", async () => {
+  const s = await setup();
+  try {
+    const a = s.add("steer-a", s.first);
+    const b = s.add("steer-b", s.second);
+    const [thread, other] = await Promise.all([start(a), start(b)]);
+    const turn = await a.invoke("turn:start", [selected(a), thread, "Steer 중단 확인"]) as { turnId: string };
+    const selection = selected(a);
+    await expect(a.invoke("turn:steer", [selected(b), thread, turn.turnId, "다른 탭", "bad-tab"])).rejects.toThrow();
+    await expect(a.invoke("turn:steer", [{ ...selection, selectionEpoch: selection.selectionEpoch + 1 }, thread, turn.turnId, "이전 선택", "bad-selection"])).rejects.toThrow();
+    const waiting = a.invoke("turn:steer", [selection, thread, turn.turnId, "대기 추가 지시", "pending-id"]);
+    await until(() => s.events.some(event => event.method === "turn/steerPending"));
+    await expect(a.invoke("turn:steer", [selection, thread, turn.turnId, "중복", "pending-id"])).rejects.toThrow();
+    await expect(a.invoke("turn:steer", [selection, thread, turn.turnId, "연속", "next-id"])).rejects.toThrow();
+    await writeFile(join(s.first, "fixture-steer-release"), "");
+    await expect(waiting).resolves.toEqual({ turnId: turn.turnId });
+    await expect(a.invoke("turn:steer", [selection, thread, turn.turnId, "연결 종료 추가 지시", "closed-id"])).rejects.toThrow();
+    expect(s.events.some(event => event.method === "turn/steerUncertain" && (event.params as { clientUserMessageId?: string }).clientUserMessageId === "closed-id")).toBe(true);
+    const bTurn = await b.invoke("turn:start", [selected(b), other, "승인 확인"]) as { turnId: string };
+    await until(() => b.summary().approvalCount === 1);
+    await expect(b.invoke("turn:steer", [selected(b), other, bTurn.turnId, "승인 중", "approval-id"])).rejects.toThrow();
+    await b.invoke("turn:interrupt", [selected(b), other, bTurn.turnId]);
+    const calls = (await readFile(join(s.first, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => JSON.parse(line));
+    expect(calls.filter(call => call.method === "turn/steer")).toHaveLength(2);
+  } finally { await s.close(); }
+});
+
+test("승인 해소 후에도 중단된 턴의 종료 확인 전에는 Steer를 보내지 않는다", async () => {
+  const s = await setup();
+  try {
+    const session = s.add("interrupt", s.first);
+    const thread = await start(session);
+    const turn = await session.invoke("turn:start", [selected(session), thread, "경계 승인 해소 대기"]) as { turnId: string };
+    await until(() => session.summary().approvalCount === 1);
+    await session.invoke("turn:interrupt", [selected(session), thread, turn.turnId]);
+    await until(() => session.summary().approvalCount === 0);
+    await expect(session.invoke("turn:steer", [selected(session), thread, turn.turnId, "중단 경합", "interrupt-id"])).rejects.toThrow("중단");
+    await writeFile(join(s.first, "fixture-resolved-release"), "");
+    await until(() => !session.summary().busy);
+    const calls = await readFile(join(s.first, "fixture-calls.jsonl"), "utf8");
+    expect(calls).not.toContain('"method":"turn/steer"');
+  } finally { await s.close(); }
+});
+
+const STAGE_WORK_ID = "work-36d312bc-a767-4e3e-a581-01898b35f75f";
+async function writeStageWork(root: string, folder = "one", id = STAGE_WORK_ID): Promise<void> {
+  const path = join(root, "docs/work/Chat", folder);
+  await mkdir(path, { recursive: true });
+  await writeFile(join(path, "work.json"), JSON.stringify({ schemaVersion: 2, id, title: "단계 관측", status: "in_progress", blockedReason: null, areas: ["ui"], owner: "ui", criteria: [{ id: "STAGE", description: "관측", required: true, result: "unverified" }] }));
+}
+
+test("실제 stdio 단계 도구의 역할 선언만 수용하며 문서·UUID·턴·중복·종료 경계를 지킨다", async () => {
+  const s = await setup({ stageProbe: true });
+  try {
+    await writeStageWork(s.first);
+    const a = s.add("stage-a", s.first);
+    const id = await start(a);
+    await a.invoke("turn:start", [selected(a), id, "단계 관측 정상"]);
+    await until(() => s.events.filter(event => event.method === "fixture/stageResponse").length === 10);
+    await until(() => !a.summary().busy);
+    const declarations = s.events.filter(event => event.method === "www/developmentStage");
+    expect(declarations.map(event => (event.params as { status: string }).status)).toEqual(["selected", "running", "completed"]);
+    expect(declarations.every(event => event.sessionId === a.id && (event.params as { source: string; workId: string }).source === "role_declaration" && (event.params as { workId: string }).workId === STAGE_WORK_ID)).toBe(true);
+    expect(s.events.filter(event => event.method === "fixture/stageResponse").map(event => (event.params as { success: boolean }).success)).toEqual([true, true, true, true, false, false, false, false, false, false]);
+    expect(s.events.some(event => event.kind === "request" && event.method === "item/tool/call")).toBe(false);
+    expect(JSON.stringify(declarations)).not.toContain("PRIVATE_REASONING");
+    expect((s.events.find(event => event.method === "thread/configured")?.params as { developmentStage: string }).developmentStage).toBe("available");
+  } finally { await s.close(); }
+});
+
+test("다른 프로젝트·중복 UUID·복원 대화는 단계 생산자로 연결하지 않는다", async () => {
+  const s = await setup({ stageProbe: true });
+  try {
+    await Promise.all([writeStageWork(s.first), writeStageWork(s.first, "duplicate"), writeStageWork(s.second)]);
+    const a = s.add("duplicate", s.first);
+    const b = s.add("other", s.second);
+    const [ta, tb] = await Promise.all([start(a), start(b)]);
+    await Promise.all([a.invoke("turn:start", [selected(a), ta, "단계 관측 정상"]), b.invoke("turn:start", [selected(b), tb, "단계 관측 정상"])]);
+    await until(() => s.events.filter(event => event.method === "fixture/stageResponse").length === 20);
+    await until(() => !a.summary().busy && !b.summary().busy);
+    expect(s.events.filter(event => event.method === "www/developmentStage")).toHaveLength(0);
+    expect((s.events.find(event => event.sessionId === b.id && event.method === "thread/configured")?.params as { developmentStage: string }).developmentStage).toBe("other_workspace");
+    await rm(join(s.first, "docs/work/Chat/duplicate"), { recursive: true });
+    await a.invoke("conversations:open", [selected(a), ta]);
+    const reopened = await a.invoke("events:get", [selected(a)]) as ScopedAppEvent[];
+    expect((reopened.find(event => event.method === "thread/configured")?.params as { developmentStage: string }).developmentStage).toBe("resume_unavailable");
+    await a.invoke("turn:start", [selected(a), ta, "단계 관측 정상"]);
+    await until(() => s.events.filter(event => event.method === "fixture/stageResponse").length === 30);
+    expect(s.events.filter(event => event.method === "www/developmentStage")).toHaveLength(0);
+  } finally { await s.close(); }
+});
+
+test("턴 종료 뒤 늦은 단계 요청은 실제 stdio에서도 현재 역할 선언으로 채택하지 않는다", async () => {
+  const s = await setup({ stageProbe: true });
+  try {
+    await writeStageWork(s.first);
+    const a = s.add("late-stage", s.first);
+    const threadId = await start(a);
+    await a.invoke("turn:start", [selected(a), threadId, "단계 관측 종료지연"]);
+    await until(() => s.events.some(event => event.method === "fixture/stageResponse"));
+    expect(s.events.some(event => event.method === "www/developmentStage")).toBe(false);
+    expect((s.events.find(event => event.method === "fixture/stageResponse")?.params as { success: boolean }).success).toBe(false);
+    expect(a.summary().busy).toBe(false);
+  } finally { await s.close(); }
 });

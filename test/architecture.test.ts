@@ -2,6 +2,7 @@
  * @verifies RESP-BLUEPRINT-LAYOUT
  */
 import { describe, expect, test } from "bun:test";
+import assert from "node:assert/strict";
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -11,7 +12,7 @@ import { architecture, architectureConnections, architectureEdgePath, architectu
 describe("코드 기반 설계도", () => {
   test("실제 소스에서 생성된 snapshot이 결정적이며 파일·행 근거와 일치한다", () => {
     const root = path.resolve(import.meta.dir, "..");
-    expect(generateArchitecture(root)).toEqual(architecture);
+    assert.deepEqual(generateArchitecture(root), architecture);
     expect(generateArchitecture(root)).toEqual(generateArchitecture(root));
     for (const edge of architecture.edges) {
       const text = readFileSync(path.join(root, edge.from), "utf8");

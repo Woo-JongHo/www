@@ -22,6 +22,7 @@ let histories: Record<string, unknown[]> = {
 try { histories = JSON.parse(readFileSync(storePath, "utf8")); } catch { writeFileSync(storePath, JSON.stringify(histories)); }
 let turnCounter = 0;
 let pending: { threadId: string; turnId: string; prompt: string } | null = null;
+let performanceTimer: ReturnType<typeof setInterval> | null = null;
 let boundaryApproval = 0;
 const loadedThreads = new Set<string>();
 
@@ -42,6 +43,7 @@ function boundaryRequest() {
 }
 function finish(status = "completed", answerText?: string) {
   if (!pending) return;
+  if (performanceTimer) { clearInterval(performanceTimer); performanceTimer = null; }
   const { threadId, turnId, prompt } = pending;
   const answer = answerText ?? (status === "completed" ? "### 후속 요청 완료\n\n같은 대화에서 이어졌습니다." : "중단된 요청입니다.");
   const items = [
@@ -106,7 +108,20 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
     if (prompt === "사이드바 두 번째 요청 확인") await new Promise((resolve) => setTimeout(resolve, 450));
     result(message.id, { turn: { id: turnId } });
     notify("turn/started", { threadId, turn: { id: turnId } });
-    if (prompt === "경계 승인 ID 재사용") {
+    if (prompt === "성능 스트리밍 중단 확인") {
+      const id = "turn-performance";
+      let count = 0;
+      notify("item/started", { threadId, turnId, item: { id, type: "commandExecution", command: "fixture performance stream", cwd, status: "inProgress" } });
+      performanceTimer = setInterval(() => {
+        count++;
+        notify("item/commandExecution/outputDelta", { threadId, turnId, itemId: id, delta: `출력 ${count}\n` });
+        if (count === 120) {
+          notify("item/completed", { threadId, turnId, item: { id, type: "commandExecution", command: "fixture performance stream", cwd, status: "completed", exitCode: 0, aggregatedOutput: Array.from({ length: count }, (_, index) => `출력 ${index + 1}\n`).join("") } });
+          finish();
+        }
+      }, 20);
+    }
+    else if (prompt === "경계 승인 ID 재사용") {
       boundaryApproval = 0;
       boundaryRequest();
     }
@@ -203,6 +218,19 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
     else if (prompt.includes("무활동 확인")) setTimeout(() => finish(), 16_000);
     else if (prompt.includes("결과 미확인 확인")) setTimeout(() => finish("mystery"), 80);
     else if (!prompt.includes("중단 확인")) setTimeout(() => finish(), 80);
+  } else if (message.method === "turn/steer") {
+    const input = Array.isArray(params.input) ? object(params.input[0]) : {};
+    if (!pending || params.threadId !== pending.threadId || params.expectedTurnId !== pending.turnId) {
+      send({ jsonrpc: "2.0", id: message.id, error: { code: -32602, message: "활성 턴 불일치" } });
+    } else if (input.text === "대기 추가 지시") {
+      const current = pending.turnId;
+      releaseAfter("fixture-steer-release", () => result(message.id, { turnId: current }));
+    } else if (input.text === "연결 종료 추가 지시") process.exit(0);
+    else if (input.text === "mismatch") result(message.id, { turnId: "other-turn" });
+    else if (input.text === "종료 경합") {
+      finish();
+      send({ jsonrpc: "2.0", id: message.id, error: { code: -32602, message: "턴 종료" } });
+    } else result(message.id, { turnId: pending.turnId });
   } else if (message.method === "turn/interrupt") {
     result(message.id, {});
     if (pending?.prompt === "경계 승인 해소 대기") {

@@ -98,13 +98,44 @@ test("작성 보고서는 독립 HTML과 JSON 이력을 보존하고 주입 문�
   assert.equal(result.report.outcome, "partial");
   assert.equal(await fs.readFile(path.join(f.directory, "reports", `${reportFileStem(result.report)}.html`), "utf8"), result.html);
   assert.equal(JSON.parse(await fs.readFile(path.join(f.directory, "reports", `${reportFileStem(result.report)}.json`), "utf8")).entries[0].id, result.report.id);
-  assert.doesNotMatch(result.html, /<script|<img|<iframe|<link|<a\b/i);
+  assert.doesNotMatch(result.html, /<script|<img|<iframe|<link/i);
   assert.match(result.html, /&lt;script/);
   assert.match(result.html, /default-src 'none'/);
   assert.match(result.html, /prefers-reduced-motion:reduce/);
   assert.match(result.html, /@media print/);
-  assert.match(result.html, /@media\(max-width:700px\)/);
+  assert.match(result.html, /@media\(max-width:790px\)/);
   for (const section of ["요구와 결과", "기록된 변경", "기록에 남은 주요 선택", "무엇을 어떻게 확인했나요", "확인하지 못한 범위", "남은 일과 해소 행동"]) assert.ok(result.html.includes(section));
+});
+
+
+test("여섯 절과 내부 목차는 미기록·완료·인쇄에서 사실을 보존한다", async (t) => {
+  const f = await fixture(t);
+  const partial = await captureWorkReport(f);
+  const sections = ["결론과 상태", "문제와 접근", "변경 결과", "검증과 한계", "남은 일과 완료 조건", "변경 이력과 상세 근거"];
+  for (const [index, title] of sections.entries()) {
+    assert.match(partial.html, new RegExp(`href="#section-${index + 1}"`));
+    assert.match(partial.html, new RegExp(`id="section-${index + 1}"[^>]*><h2><span[^>]*>0${index + 1}</span>${title}`));
+  }
+  assert.match(partial.html, /남은 일과 완료 조건이 기록되지 않았습니다/);
+  assert.match(partial.html, /인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다/);
+  assert.match(partial.html, /@media print/);
+  assert.match(partial.html, /\.history-entry:not\(\[open\]\)\{display:none\}/);
+  f.record.status = "done";
+  await f.save();
+  const complete = await captureWorkReport(f);
+  assert.match(complete.html, /저장 당시 기록된 남은 일이 없습니다/);
+  assert.doesNotMatch(complete.html.split('<section class="chapter" id="section-6">')[0], /남은 일과 완료 조건이 기록되지 않았습니다/);
+});
+
+test("차단된 완료 기록은 남은 일이 없다고 표시하지 않는다", async (t) => {
+  const f = await fixture(t);
+  f.record.status = "done";
+  f.record.blockedReason = "검토가 남았습니다";
+  await f.save();
+  const saved = await captureWorkReport(f);
+  assert.match(saved.html, /검토가 남았습니다/);
+  assert.match(saved.html, /구체적인 해소 행동이 기록되지 않았습니다/);
+  assert.doesNotMatch(saved.html, /저장 당시 기록된 남은 일이 없습니다/);
 });
 
 test("같은 사건의 동시 재생은 보고서를 중복 생성하지 않고 다음 상태는 별도 이력이다", async (t) => {
@@ -275,6 +306,35 @@ test("reader는 저장·읽기에 보존되고 story에는 정확한 산문만 �
   assert.doesNotMatch(body, /일부 원본 항목이/);
 });
 
+test("완료된 reader의 빈 후속 행동도 원래 남은 일을 지우지 않는다", async (t) => {
+  const f = await fixture(t);
+  f.record.status = "done";
+  await f.save();
+  const saved = await publishWorkReport({ ...f, narrative: narrative({ next: ["Windows 재검증"], reader: reader({ nextActions: [] }) }) });
+  const next = saved.html.split('<section class="chapter" id="section-5">')[1].split('<section class="chapter" id="section-6">')[0];
+  assert.match(next, /Windows 재검증/);
+  assert.doesNotMatch(next, /저장 당시 기록된 남은 일이 없습니다/);
+});
+
+test("reader 후속 행동과 기존 서술의 서로 다른 남은 일을 함께 표시한다", async (t) => {
+  const f = await fixture(t);
+  const saved = await publishWorkReport({ ...f, narrative: narrative({ next: ["Windows 재검증"], reader: reader() }) });
+  const next = saved.html.split('<section class="chapter" id="section-5">')[1].split('<section class="chapter" id="section-6">')[0];
+  assert.match(next, /Windows 재검증/);
+  assert.match(next, /독립 검토를 실행합니다/);
+});
+
+test("reader의 서술과 실패한 수용 기준 판정을 함께 보여 준다", async (t) => {
+  const f = await fixture(t);
+  f.record.criteria[0].result = "failed";
+  await f.save();
+  const saved = await publishWorkReport({ ...f, narrative: narrative({ reader: reader() }) });
+  const results = saved.html.split('<section class="chapter" id="section-3">')[1].split('<section class="chapter" id="section-4">')[0];
+  assert.match(results, /읽기 순서를 바꿨습니다/);
+  assert.match(results, /보고서에서 변경 내용을 읽는다/);
+  assert.match(results, /당시 실패로 기록/);
+});
+
 test("저장 완료·검토 미실행·과거 PASS와 현행 적용성을 각각 표시한다", async (t) => {
   const f = await fixture(t);
   f.record.status                          = "done"                                                                                                                                                   ;
@@ -310,7 +370,7 @@ test("legacy 서술은 재배치만 하며 검토 전문·원시 메타는 상�
   assert.match(saved.html.slice(body.length), /very-long-path/);
   assert.match(body, /결과를 텍스트에서만 찾아야 했습니다/);
   assert.match(body, /앱의 리포트 목록에서 읽을 수 있습니다/);
-  assert.match(saved.html, /#report-raw\{display:none!important\}/);
+  assert.match(saved.html, /#report-raw,\.history-entry details\[id\$="-raw"\]\{display:none!important\}/);
 });
 
 test("실제 잘린 항목만 전체·표시·제외 개수와 숨겨진 미해결 상태를 알린다", async (t) => {
@@ -333,7 +393,7 @@ test("reader 악성 문자열을 실행하지 않고 실제 선택은 기록이 
   const value  = reader({ story: attack, decisions: [{ problem: "선택 문제", basis: null, alternatives: [], choice: attack, tradeoff: null }], references: [{ path: 'javascript:alert(1)', purpose: attack }], checks: [{ target: attack, method: attack, expected: null, observed: null, limitations: null }] }) ;
   const saved  = await publishWorkReport({ ...f, narrative: narrative({ reader: value }) })                                                                                                                                                                                                                       ;
   assert.match(saved.html, /중요한 선택과 그 이유/);
-  assert.doesNotMatch(saved.html, /<script|href=|함께 검토한 대안/);
+  assert.doesNotMatch(saved.html, /<script|href="javascript:|함께 검토한 대안/);
   assert.match(saved.html, /&lt;script&gt;/);
   assert.match(saved.html, /관측 결과가 기록되지 않았습니다/);
 });

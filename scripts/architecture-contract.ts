@@ -3,9 +3,10 @@
  * @implements RESP-TOOLING-STRUCTURE-CONTRACT
  */
 import { createHash } from "node:crypto";
-import { lstatSync, readFileSync, readdirSync, realpathSync } from "node:fs";
+import { existsSync, lstatSync, readFileSync, readdirSync, realpathSync } from "node:fs";
 import path from "node:path";
 import ts from "typescript";
+import { collectWorkflowStatecharts } from "./workflow/statechart.ts";
 
 export interface StructureNode {
   id                  : string        ;
@@ -336,6 +337,8 @@ export function checkArchitectureContract(root: string, dependencies: FileDepend
     if (!from || !to) fail(`관리 범위 밖 의존성 입력 ${edge.from} → ${edge.to}`);
     if (from !== to && !nodes.get(from)!.allowedDependencies.includes(to)) fail(`미허용 의존성 ${from} → ${to} (${edge.from} → ${edge.to})`);
   }
-  const digest = createHash("sha256").update(JSON.stringify({ contract: contract.raw, specs: contract.specFiles.map((file) => [file, read(root, file)]), declarations, tests: tests.map((test) => ({ ...test, source: read(root, test.file) })) })).digest("hex");
-  return { rootId: contract.rootId, nodes: contract.nodes, requirements, declarations, tests, digest };
+  const statecharts = existsSync(path.join(root, "docs/architecture/statecharts"))
+    ? collectWorkflowStatecharts(root, contract.nodes.map((node) => node.id)) : undefined;
+  const digest = createHash("sha256").update(JSON.stringify({ contract: contract.raw, specs: contract.specFiles.map((file) => [file, read(root, file)]), declarations, tests: tests.map((test) => ({ ...test, source: read(root, test.file) })), ...(statecharts ? { statecharts } : {}) })).digest("hex");
+  return { rootId: contract.rootId, nodes: contract.nodes, requirements, declarations, tests, digest, ...(statecharts ? { statecharts } : {}) };
 }

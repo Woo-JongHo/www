@@ -103,7 +103,7 @@ export function generateArchitecture(root: string, legacyInputFiles?: string[]) 
   const structure = checkArchitectureContract(root, imports.edges)                                                                                    ;
   const nodes     = imports.nodes.map((node) => ({ ...node, structureId: structure.declarations.find((entry) => entry.file === node.file)!.nodeId })) ;
   const digest    = createHash("sha256").update(JSON.stringify({ imports: imports.digest, structure: structure.digest })).digest("hex")               ;
-  return { ...imports, schemaVersion: 2, scope: "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts", digest, nodes, structure };
+  return { ...imports, schemaVersion: 2, scope: "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts", digest, nodes, structure, ...(structure.statecharts ? { statecharts: structure.statecharts } : {}) };
 }
 
 function jsonObject(value: unknown): Record<string, unknown> {

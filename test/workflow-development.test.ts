@@ -15,6 +15,7 @@ import { runDevelopmentWorkflow } from "../scripts/workflow/run.ts";
 import { completeWork, readWork } from "../scripts/workflow/work.ts";
 
 import type { ProcessInvocation } from "../scripts/workflow/adapters/gjc.ts";
+import type { ModelAllocation } from "../scripts/workflow/model-allocation.ts";
 
 const exec         = promisify(execFile)                                                                              ;
 const projectRoot  = dirname(dirname(fileURLToPath(import.meta.url)))                                                 ;
@@ -256,7 +257,7 @@ test("개발 역할은 읽기 전용·작업 폴더 sandbox만 선택하고 전�
   assert.equal(calls, 0);
 });
 
-function allocation(overrides: object = {}) {
+function allocation(overrides: object = {}): ModelAllocation {
   return {
     taskId: "fixture-task", ownerModel: "gpt-6.1-sol", kind: "small_implementation", risk: "low", model: "gpt-6-luna",
     reason: "반복되는 작은 구현", inputs: ["src"], writePaths: ["src/item.ts"], dependencies: [], attempt: 1, ...overrides,
@@ -531,4 +532,98 @@ test("정규화된 주입 결과의 ok와 outcome이 다르면 이전 성공으�
   }), runner);
   assert.equal(calls, 1);
   assert.equal(retry.host?.ok, true);
+});
+
+function decompositionUnit(taskId = "fixture-task", file = "src/item.ts", dependencies: string[] = []) {
+  return { taskId, goal: "소유한 산출물 작성과 실제 검사", inputs: ["src"], writePaths: [file], excludedPaths: [], dependencies,
+    artifacts: [file], criterionIds: ["AC-1"], verification: { command: process.execPath, args: ["checks/verify.ts"] }, resultPath: file };
+}
+
+test("F01/F02 공개 개발 진입은 소유 충돌·미정의 의존·순환을 호스트 실행 전에 거부한다", async t => {
+  const repo = await repository(t);
+  let calls = 0;
+  const runner = { runProcess: async () => { calls += 1; return hostResult(); } };
+  const first = decompositionUnit();
+  for (const units of [
+    [first, decompositionUnit("second")],
+    [{ ...first, dependencies: ["missing"] }],
+    [{ ...first, dependencies: ["second"] }, decompositionUnit("second", "src/other.ts", [first.taskId])],
+  ]) {
+    await assert.rejects(runDevelopmentWorkflow(request(repo, { allocation: allocation(), decomposition: { units },
+      approval: { ...request(repo).approval, writePaths: ["src/item.ts", "src/other.ts"] } }), runner), /소유 충돌|미정의|순환/);
+  }
+  assert.equal(calls, 0);
+});
+
+test("F03 정상 호스트 종료와 미실행·누락 산출물의 업무 수용을 구별하고 선행 승격을 차단한다", async t => {
+  const repo = await repository(t);
+  const units = [decompositionUnit(), decompositionUnit("second", "src/other.ts", ["fixture-task"])];
+  const options = request(repo, { allocation: allocation(), decomposition: { units }, verifier: undefined,
+    approval: { ...request(repo).approval, writePaths: ["src/item.ts", "src/other.ts"] } });
+  const first = await runDevelopmentWorkflow(options, { runProcess: async () => hostResult() });
+  assert.equal(first.host?.ok, true);
+  assert.equal(first.acceptance?.status, "rejected");
+  assert.ok(first.acceptance?.reasons.includes("verification_not_run"));
+  assert.ok(first.acceptance?.reasons.includes("injected_host"));
+  let calls = 0;
+  await assert.rejects(runDevelopmentWorkflow({ ...options, eventId: "second-event", writes: ["src/other.ts"],
+    allocation: allocation({ taskId: "second", writePaths: ["src/other.ts"] }) }, { runProcess: async () => { calls += 1; return hostResult(); } }), /선행 업무 수용 거부/);
+  assert.equal(calls, 0);
+  assert.ok(first.workId);
+  const runtime = await readRuntime(runtimePaths(repo, first.workId));
+  assert.ok(runtime.events.some(event => event.type === "host_result" && event.outcome === "passed"));
+  assert.ok(runtime.events.some(event => event.type === "task_acceptance" && event.status === "rejected"));
+});
+
+test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 수용하고 통합 후 재검증으로 갱신한다", async t => {
+  const repo = await repository(t);
+  const units = [decompositionUnit(), decompositionUnit("second", "src/other.ts", ["fixture-task"])];
+  const base = request(repo, { decomposition: { units }, allocation: allocation(),
+    approval: { ...request(repo).approval, writePaths: ["src/item.ts", "src/other.ts"] } });
+  function processHost(file: string, content: string) {
+    // Node fixture가 Codex JSONL 사건을 출력한다. 실제 모델 호출로 표시하지 않는다.
+    const program = `process.stdin.resume();process.stdin.on('end',()=>{require('fs').writeFileSync(${JSON.stringify(file)},${JSON.stringify(content)});console.log(JSON.stringify({type:'thread.started',thread_id:'decomposition-fixture'}));console.log(JSON.stringify({type:'turn.completed',usage:{input_tokens:0,output_tokens:0}}));});`;
+    return { prepareInvocation: (invocation: ProcessInvocation) => ({ ...invocation, command: process.execPath, args: ["-e", program] }) };
+  }
+  const first = await runDevelopmentWorkflow(base, processHost("src/item.ts", "export const value = 2;\n"));
+  assert.equal(first.executor, "process");
+  assert.equal(first.host?.ok, true);
+  assert.equal(first.acceptance?.status, "accepted", first.acceptance?.reasons.join(","));
+  await assert.rejects(runDevelopmentWorkflow({ ...base, decomposition: { units: units.map(item => ({ ...item, goal: "같은 사건 ID에 다른 계획" })) } },
+    { runProcess: async () => { throw new Error("다른 계획을 중복 사건으로 실행하면 안 된다"); } }), /같은 event id/);
+  assert.ok(first.workId);
+  assert.deepEqual((await readWork({ repo, workId: first.workId })).record.workflow?.decomposition, { units });
+  const second = await runDevelopmentWorkflow({ ...base, eventId: "second-real-process", writes: ["src/other.ts"],
+    allocation: allocation({ taskId: "second", writePaths: ["src/other.ts"] }) }, processHost("src/other.ts", "export const other = 3;\n"));
+  assert.equal(second.acceptance?.status, "accepted", second.acceptance?.reasons.join(","));
+  assert.ok(second.workId);
+  const { assessDecompositionCompletion } = await import("../scripts/workflow/decomposition.ts");
+  const { verifyWork } = await import("../scripts/workflow/work.ts");
+  const before = await readWork({ repo, workId: second.workId });
+  assert.equal(before.record.schemaVersion, 2);
+  assert.ok(before.record.workflow);
+  assert.equal((await assessDecompositionCompletion(repo, before.record)).usable, false);
+  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds: ["AC-1"], artifactPaths: ["src/item.ts", "src/other.ts"] });
+  const after = await readWork({ repo, workId: second.workId });
+  assert.equal(after.record.schemaVersion, 2);
+  assert.ok(after.record.workflow);
+  assert.equal((await assessDecompositionCompletion(repo, after.record)).usable, true);
+});
+
+test("F03 실제 fixture 프로세스가 정상 종료해도 필수 산출물이 없으면 수용하지 않는다", async t => {
+  const repo = await repository(t);
+  const item = { ...decompositionUnit(), writePaths: ["src/item.ts", "src/missing.ts"], artifacts: ["src/missing.ts"], resultPath: "src/missing.ts" };
+  const options = request(repo, { decomposition: { units: [item] }, allocation: allocation({ writePaths: item.writePaths }), writes: item.writePaths,
+    approval: { ...request(repo).approval, writePaths: item.writePaths } });
+  const program = "process.stdin.resume();process.stdin.on('end',()=>{console.log(JSON.stringify({type:'thread.started',thread_id:'missing-artifact-fixture'}));console.log(JSON.stringify({type:'turn.completed'}));});";
+  const result = await runDevelopmentWorkflow(options, { prepareInvocation: invocation => ({ ...invocation, command: process.execPath, args: ["-e", program] }) });
+  assert.equal(result.executor, "process");
+  assert.equal(result.host?.ok, true);
+  assert.equal(result.acceptance?.status, "rejected");
+  assert.ok(result.acceptance?.reasons.some(reason => reason.startsWith("verification_error:")));
+  assert.equal(result.verification, undefined);
+  assert.ok(result.workId);
+  const runtime = await readRuntime(runtimePaths(repo, result.workId));
+  assert.ok(runtime.events.some(event => event.type === "host_result" && event.outcome === "passed"));
+  assert.ok(runtime.events.some(event => event.type === "task_acceptance" && event.status === "rejected"));
 });

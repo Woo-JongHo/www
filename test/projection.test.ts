@@ -707,3 +707,21 @@ test("token이 있는 알림은 명시 thread만 교차검증하고 현재 대�
     event(3, "approval/responded", {}, { requestId: 7, approvalToken: "token" })];
   expect(project(events).blocks).toMatchObject([{ threadId: "t", state: "responded", open: false }]);
 });
+
+test('Steer는 같은 턴 Working을 보존하며 ID가 다른 동일 원문을 각각 표시한다', () => {
+  const events = [event(1,'transport/connected',{}),event(2,'turn/started',{threadId:'t',turn:{id:'a'}})];
+  const steer = (seq:number, method:string, id:string) => event(seq,method,{threadId:'t',turnId:'a',clientUserMessageId:id,text:'  같은 추가 지시  '});
+  const result = project([...events,steer(3,'turn/steerPending','one'),steer(4,'turn/steerAccepted','one'),steer(5,'turn/steerPending','two'),steer(6,'turn/steerUncertain','two')]);
+  expect(result).toMatchObject({turnId:'a',turn:'running',working:true});
+  expect(result.blocks.filter(block=>block.kind==='user')).toMatchObject([{text:'  같은 추가 지시  ',steerStatus:'accepted'},{text:'  같은 추가 지시  ',steerStatus:'uncertain'}]);
+});
+
+test('Native 명시 client ID와 범위만 추가 지시 행에 합치고 item ID나 동일본문은 추정하지 않는다', () => {
+  const events = [event(1,'turn/started',{threadId:'t',turn:{id:'a'}}),event(2,'turn/steerPending',{threadId:'t',turnId:'a',clientUserMessageId:'one',text:'추가'})];
+  const wrong = project([...events,event(3,'item/completed',{threadId:'other',turnId:'a',item:{id:'one',clientUserMessageId:'one',type:'userMessage',text:'추가'}})]);
+  expect(wrong.blocks[0]).toMatchObject({steerStatus:'pending'});
+  const right = project([...events,event(3,'item/completed',{threadId:'t',turnId:'a',item:{id:'native-id',clientId:'one',type:'userMessage',text:'추가'}})]);
+  expect(right.blocks.filter(block=>block.kind==='user')).toMatchObject([{steerStatus:'pending',nativeItemId:'native-id'}]);
+  const accepted = project([...events,event(3,'item/completed',{threadId:'t',turnId:'a',item:{id:'native-id',clientId:'one',type:'userMessage',text:'추가'}}),event(4,'turn/steerAccepted',{threadId:'t',turnId:'a',clientUserMessageId:'one',text:'추가'})]);
+  expect(accepted.blocks.filter(block=>block.kind==='user')).toMatchObject([{steerStatus:'accepted',nativeItemId:'native-id'}]);
+});

@@ -61,7 +61,7 @@ test("보고서 서비스는 실제 저장된 authored 보고서와 안전한 HT
   assert.equal(document.stale, false);
   assert.equal(document.report.outcome, "blocked");
   assert.match(document.html, /&lt;script/);
-  assert.doesNotMatch(document.html, /<script|<iframe|<a\b/i);
+  assert.doesNotMatch(document.html, /<script|<iframe|href="(?:javascript:|https?:)/i);
   assert.deepEqual(catalog.warnings, []);
 });
 
@@ -98,7 +98,7 @@ test("같은 작업·제목은 한 항목으로 읽고 모든 기록을 독립 H
   assert.match(document.html, /현재 펼친 기록 외 2개의 기록/);
   assert.match(document.html, /추가 변경과 검증을 같은 보고서에 모았습니다/);
   assert.match(document.html, /앱에 작업 보고서를 연결했습니다/);
-  assert.doesNotMatch(document.html, /<script|<iframe|<a\b/i);
+  assert.doesNotMatch(document.html, /<script|<iframe|href="(?:javascript:|https?:)/i);
   const ids = [...document.html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
   assert.equal(new Set(ids).size, ids.length);
   assert.equal((await service.read(first.report.id)).report.summary, first.report.summary);

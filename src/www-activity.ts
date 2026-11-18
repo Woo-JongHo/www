@@ -9,6 +9,25 @@ export interface WwwArtifact {
   path: string;
 }
 
+/** 도구가 받는 공개 선언이다. 실행 영수증과 업무 수용은 이 계약에 포함하지 않는다. */
+export interface WwwDevelopmentStage {
+  workId: string;
+  phase: "spec" | "design" | "build" | "diagnose" | "verify";
+  status: "selected" | "running" | "completed" | "failed" | "interrupted";
+  attemptId: string;
+}
+
+export function parseWwwDevelopmentStage(value: unknown): WwwDevelopmentStage | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const row = Object.fromEntries(Object.entries(value));
+  if (Object.keys(row).length !== 4 || Object.keys(row).some(key => !["workId", "phase", "status", "attemptId"].includes(key))) return null;
+  if (typeof row.workId !== "string" || !/^work-[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(row.workId)) return null;
+  if (row.phase !== "spec" && row.phase !== "design" && row.phase !== "build" && row.phase !== "diagnose" && row.phase !== "verify") return null;
+  if (row.status !== "selected" && row.status !== "running" && row.status !== "completed" && row.status !== "failed" && row.status !== "interrupted") return null;
+  if (typeof row.attemptId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$/.test(row.attemptId)) return null;
+  return { workId: row.workId, phase: row.phase, status: row.status, attemptId: row.attemptId };
+}
+
 /** 이름만의 언급이나 임의 AGENT.md를 WWW 역할로 분류하지 않는 정본 목록. */
 export const WWW_ARTIFACTS: readonly WwwArtifact[] = [
   { id: "www-dev", kind: "role", label: "개발 접수·통합", path: "agents/www/AGENT.md" },

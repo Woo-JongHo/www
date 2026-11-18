@@ -47,7 +47,7 @@ try {
   const legacyWorkBefore = await fs.readFile(legacyPath)                                                                                ;
   const legacyStatBefore = await fs.stat(legacyPath)                                                                                    ;
   const legacy           = await captureWorkReport({ repo: fixture, workId: legacyId, event: "before_opt_in" })                         ;
-  const legacyFiles      = ["json", "html"].map((extension) => path.join(workDirectory, "reports", `${legacy.report.id}.${extension}`)) ;
+  const legacyFiles      = ["json", "html"].map((extension) => path.join(workDirectory, "reports", `${reportFileStem(legacy.report)}.${extension}`)) ;
   const legacyBytes      = await Promise.all(legacyFiles.map((file) => fs.readFile(file)))                                              ;
   await fs.mkdir(path.join(fixture, "docs/architecture"), { recursive: true });
   await fs.writeFile(path.join(fixture, "docs/architecture/work-output.json"), JSON.stringify({ version: 1, format: "boxbox-scalar-columns-v1", scope: "docs/work/**/*.json", approvalRef: ".www/architecture-contract/boxbox-side/human-approvals-20261114.json#json" }));

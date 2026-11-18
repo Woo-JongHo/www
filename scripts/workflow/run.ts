@@ -12,9 +12,10 @@ import { createSessionBinding, findWorkRecord, loadCanonicalSkill, preflightMuta
 import { appendEvent, readRuntime, runtimePaths } from "./record.ts";
 import { validateModelAllocation } from "./model-allocation.ts";
 import type { ModelAllocation } from "./model-allocation.ts";
+import { validateWorkDecomposition, decompositionDigest, assessUnitAcceptance, assessDecompositionCompletion, type DecompositionPlan, type DecompositionUnit, type UnitAcceptance } from "./decomposition.ts";
 import { routeRequest } from "./route.ts";
 import { createCodexInvocation, codexCapabilities, runCodex } from "./adapters/codex.ts";
-import { assessWork, advanceWork, completeWork, openWork, readWork, recordReview, resumeWork, verifyWork } from "./work.ts";
+import { assessWork, advanceWork, completeWork, openWork, readWork, recordReview, resumeWork, verifyWork, setDecompositionPlan } from "./work.ts";
 import { captureSource, criteriaDigest } from "./evidence.ts";
 import { loadReviewPolicy, runReview } from "./review.ts";
 import { artifactStatus, developmentTools } from "./artifacts.ts";
@@ -60,6 +61,7 @@ export interface WorkflowOptions extends JsonObject {
   env?               : NodeJS.ProcessEnv       ;
   environment?: Pick<EnvironmentOptions, "git" | "toolPaths">;
   allocation?        : ModelAllocation         ;
+  decomposition?     : DecompositionPlan       ;
   model?             : string                  ;
   sandbox?           : string                  ;
   binding?           : SessionBinding          ;
@@ -132,6 +134,7 @@ export interface WorkflowResult extends JsonObject {
   capabilities?        : ReturnType<typeof gjcCapabilities>  ;
   environment?: EnvironmentReport;
   executor?: "process" | "injected";
+  acceptance?: UnitAcceptance;
   modelExecution?: ModelExecution;
   host?                : ProcessResult                       ;
   sources?             : { path: string; hash: string }[]    ;
@@ -279,7 +282,7 @@ function modelExecution(allocation: ModelAllocation | undefined, model: string |
   };
 }
 
-async function developmentContext(repo: string, work: WorkLocation, skill: string, allocation?: ModelAllocation) {
+async function developmentContext(repo: string, work: WorkLocation, skill: string, allocation?: ModelAllocation, unit?: DecompositionUnit) {
   if (work.record.schemaVersion !== 2) throw new Error("현재 개발 작업 계약이 필요합니다.");
   const inventory = await developmentTools(repo, skill);
   const documents = inventory.documents.filter((doc): doc is { path: string; source: string } => doc.source !== null);
@@ -300,6 +303,7 @@ async function developmentContext(repo: string, work: WorkLocation, skill: strin
       `허용 범위: ${JSON.stringify({ ...work.record.workflow.authorization, ...(allocation ? { writePaths: allocation.writePaths } : {}) })}`,
       `실행 입력 범위: ${JSON.stringify(allocation?.inputs ?? work.record.workflow.inputs)}`,
       ...(allocation ? [`작업 내부 모델 배분: ${JSON.stringify(allocation)}`, "이 배분은 작업 권한을 축소하며 독립 검토를 대체하지 않는다. 경로 제한은 advisory이며 OS 강제 차단으로 주장하지 않는다."] : []),
+      ...(unit ? [`검사한 분업 단위: ${JSON.stringify(unit)}`, "단위의 필수 산출물과 실제 검증을 갖춰야 업무 수용이 가능하다. 호스트 정상 종료는 수용이 아니다."] : []),
       `현재 기준: ${JSON.stringify(work.record.criteria.map(({ id, description, required, requirementRefs }) => ({ id, description, required, requirementRefs })))}`,
       `개발 도구 출처와 제공 대상: ${JSON.stringify(tools)}`,
       `명세 품질·구현 전 정합성 검토 상태: ${JSON.stringify(reviews)}`,
@@ -311,6 +315,7 @@ async function developmentContext(repo: string, work: WorkLocation, skill: strin
 
 export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, dependencies: WorkflowDependencies = {}): Promise<WorkflowResult> {
   const repo = await fs.realpath(options.repo ?? process.cwd());
+  if (options.decomposition !== undefined && !options.allocation) throw new Error("분업 계획 실행에는 현재 단위의 모델 배분이 필요합니다.");
   if (options.allocation !== undefined && (options.resume === true || ["answer", "verify", "review", "complete"].includes(options.decision?.intent ?? ""))) throw new Error("모델 배분은 실제 개발 호스트 실행에만 적용합니다. 검증 명령·독립 검토·완료를 대신하지 않습니다.");
   if (options.direct !== true || options.role !== "www-dev") throw new Error("직접 요청을 받은 www-dev 역할이 필요합니다.");
   if (typeof options.request !== "string" || !options.request.trim()) throw new Error("직접 받은 요청이 필요합니다.");
@@ -372,7 +377,15 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
     model: options.model, inputs: work.record.workflow.inputs, writes, authorizationWritePaths: work.record.workflow.authorization.writePaths,
   });
   if (allocation) await validateWritePaths(repo, [...allocation.inputs, ...allocation.writePaths]);
-  const context = await developmentContext(repo, work, route.skill, allocation);
+  const planInput = options.decomposition ?? work.record.workflow.decomposition;
+  if (planInput && !allocation) throw new Error("분업 계획이 있는 작업 실행에는 현재 단위의 모델 배분이 필요합니다.");
+  const plan = planInput === undefined ? undefined : await validateWorkDecomposition(repo, work.record, planInput);
+  const currentUnit = plan?.units.find(item => item.taskId === allocation?.taskId);
+  if (plan && (!currentUnit || JSON.stringify([...currentUnit.writePaths].sort()) !== JSON.stringify([...writes].sort())
+    || !allocation?.inputs.every(file => currentUnit.inputs.some(scope => file === scope || file.startsWith(`${scope}/`))))) throw new Error("실행 배분이 분업 계획의 현재 단위 소유·입력과 다릅니다.");
+  if (currentUnit && options.verifier && (options.verifier.command !== currentUnit.verification.command || JSON.stringify(options.verifier.args) !== JSON.stringify(currentUnit.verification.args)
+    || !currentUnit.criterionIds.every(id => options.verifier?.criterionIds?.includes(id)))) throw new Error("실행 검증이 분업 단위의 검증·기준과 다릅니다.");
+  const context = await developmentContext(repo, work, route.skill, allocation, currentUnit);
   if (options.sandbox !== undefined && !["read-only", "workspace-write"].includes(options.sandbox)) throw new Error("WWW 개발 역할은 read-only 또는 workspace-write 호스트 정책을 사용합니다.");
   const invocation = createCodexInvocation({
     repo,
@@ -401,11 +414,19 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
     await lease.writeFile(JSON.stringify({ eventId: options.eventId, pid: process.pid, startedAt: new Date().toISOString() }));
     const prior = (await readRuntime(runtimePaths(repo, work.record.id))).events.find(event => event.id === options.eventId);
     if (prior) {
-      if (prior.type !== "status" || prior.skill !== route.skill || prior.requestedModel !== invocation.requestedModel || JSON.stringify(prior.allocation ?? null) !== JSON.stringify(allocation ?? null)) throw new Error("같은 event id의 실행 요청이 다릅니다.");
+      if (prior.type !== "status" || prior.skill !== route.skill || prior.requestedModel !== invocation.requestedModel || JSON.stringify(prior.allocation ?? null) !== JSON.stringify(allocation ?? null)
+        || prior.planDigest !== (plan ? decompositionDigest(plan) : undefined)) throw new Error("같은 event id의 실행 요청이 다릅니다.");
       return { executed: false, duplicate: true, workId: work.record.id };
     }
+    if (plan) await setDecompositionPlan({ repo, workId: work.record.id, plan });
     const previous = allocation ? await allocationHistory(repo, work.record.id, options.eventId, allocation) : [];
-    const started = await appendEvent({ repo, workId: work.record.id, event: { id: options.eventId, type: "status", status: "running", role: "www-dev", skill: route.skill, sources: context.sources, requestedModel: invocation.requestedModel, ...(allocation ? { allocation } : {}) } });
+    if (plan && currentUnit) {
+      const current = await readWork({ repo, workId: work.record.id });
+      if (current.record.schemaVersion !== 2) throw new Error("현재 분업 수용에는 schemaVersion 2가 필요합니다.");
+      const evaluated = await assessDecompositionCompletion(repo, current.record, currentUnit.dependencies);
+      if (!evaluated.usable) throw new Error(`선행 업무 수용 거부: ${evaluated.reasons.join(", ")}`);
+    }
+    const started = await appendEvent({ repo, workId: work.record.id, event: { id: options.eventId, type: "status", status: "running", role: "www-dev", skill: route.skill, sources: context.sources, requestedModel: invocation.requestedModel, ...(allocation ? { allocation } : {}), ...(plan ? { planDigest: decompositionDigest(plan) } : {}) } });
     if (started.duplicate) return { executed: false, duplicate: true, workId: work.record.id };
     await advanceWork({ repo, workId: work.record.id, intent: route.intent ?? "answer", writes, surfaces });
     let host: ProcessResult;
@@ -426,9 +447,24 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
     await appendEvent({ repo, workId: work.record.id, event: { id: `${options.eventId}-host`, type: host.ok ? "host_result" : "post_failure", outcome: host.outcome, exitCode: host.code, threadId: host.threadId ?? null, injected: executor === "injected", observedModel: execution.observed.model, observedReason: execution.observed.reason, receiptPath: path.relative(repo, receiptFile).split(path.sep).join("/"), receiptHash, ...(allocation ? { taskId: allocation.taskId, attempt: allocation.attempt } : {}) } });
     await appendEvent({ repo, workId: work.record.id, event: { id: `${options.eventId}-stage`, type: "status", status: host.ok ? "completed" : "failed" } });
     const result: WorkflowResult = { executed: environment.ok && host.outcome !== "environment_failed", workId: work.record.id, route, mutation, host, environment, executor, sources: context.sources, tools: context.tools, artifactReviews: context.reviews, modelExecution: execution, receiptPath: path.relative(repo, receiptFile).split(path.sep).join("/") };
-    if (!host.ok || !options.verifier) return result;
-    const verification = await verifyWork({ repo, workId: work.record.id, ...options.verifier, criterionIds: options.verifier.criterionIds ?? [] });
-    return { ...result, verification };
+    let verification: VerificationAttempt | undefined;
+    let verificationError: string | undefined;
+    if (host.ok && options.verifier) {
+      try {
+        verification = await verifyWork({ repo, workId: work.record.id, ...options.verifier, criterionIds: options.verifier.criterionIds ?? [],
+          ...(currentUnit ? { artifactPaths: [...new Set([...(options.verifier.artifactPaths ?? []), ...currentUnit.artifacts, currentUnit.resultPath])] } : {}) });
+      } catch (error) {
+        if (!currentUnit) throw error;
+        verificationError = error instanceof Error ? error.message : String(error);
+      }
+    }
+    if (!currentUnit) return { ...result, ...(verification ? { verification } : {}) };
+    const current = await readWork({ repo, workId: work.record.id });
+    if (current.record.schemaVersion !== 2) throw new Error("현재 분업 수용에는 schemaVersion 2가 필요합니다.");
+    const acceptance = await assessUnitAcceptance({ repo, record: current.record, unit: currentUnit, host, executor, attempt: verification });
+    if (verificationError) acceptance.reasons.push(`verification_error: ${verificationError}`);
+    await appendEvent({ repo, workId: work.record.id, event: { id: `${options.eventId}-acceptance`, type: "task_acceptance", taskId: currentUnit.taskId, ...acceptance } });
+    return { ...result, ...(verification ? { verification } : {}), acceptance };
   } finally {
     await lease.close();
     await fs.unlink(leaseFile);
