@@ -1,0 +1,292 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-0e282d77-1c00-4663-8860-483d28148f74",
+  "title"        : "프로젝트 탐색과 세션 모니터링 메뉴 개편",
+  "kind"         : "feature",
+  "areas": [
+    "ui"
+  ],
+  "owner"        : "ui",
+  "status"       : "verifying",
+  "blockedReason": null,
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-4573f7d4-62eb-4e72-9985-62994c1b30a8"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-40c12cb7-9a53-4ead-b872-8c16d9525f67"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-65af9476-ebae-4edf-989b-012196fd0e1c"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "NAV-KEEP",
+      "description": "프로젝트 목록을 열고 탐색하거나 닫는 동안 중앙의 현재 프로젝트·화면·선택 상태를 유지하며 홈 보드로 강제 이동하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "NAV-SELECT",
+      "description": "현재 프로젝트 재선택은 기존 화면을 유지하고 다른 프로젝트의 명시 선택 성공 때만 해당 대상의 대시보드로 전환한다. 프로젝트 추가 취소·실패 시 기존 화면과 선택을 보존한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "NAV-GUARD",
+      "description": "프로젝트 목록 열기는 실행 중에도 가능하며 실제 다른 프로젝트 전환에는 전송·실행·대화 준비·미결 승인·실패 원문 보호를 유지한다. 사이드바 탐색으로 Native 실행을 중단하거나 새 요청을 만들지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "NAV-MENU",
+      "description": "프로젝트 공통 메뉴를 대시보드·대화·생태계·리포트·모니터링 순서로 제공하고 프로젝트 목록과 명시적 전체 대시보드 열기를 구분한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "MON-ENTRY",
+      "description": "대화 상단의 상세 모니터·세션 모니터 접기/열기 두 기존 버튼을 JSX 주석 처리해 비활성화하고 모니터링 메뉴로 세션 개요와 상세 관측에 접근한다. 숨은 버튼이 키보드 초점이나 클릭 대상에 남지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "MON-SCOPE",
+      "description": "모니터링은 현재 선택한 Codex 대화 탭의 sessionId·프로젝트·thread 범위에 연결되고 활성 턴과 과거 턴의 출처를 구분한다. 다른 탭의 사건·승인·리소스를 혼합하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "MON-STATES",
+      "description": "모니터링에서 기존 공개 실행·Plan/Progress·Skills/Hooks·리소스·사용량·사건 관측을 재사용하며 새 대화·자료 없음·로딩·연결 종료·수집 오류·부분 이력·오래된 관측을 사실에 따라 표시한다. 관측 열기만으로 새 thread/turn·자동 재전송을 만들지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "STATE-RETURN",
+      "description": "대화·모니터링·프로젝트 목록·다른 탭을 왕복해도 같은 대화의 입력 초안·읽기 위치·출력 카드 펼침을 유지하며 리포트 선택과 생태계 경로 등 현재 화면 상태를 보존한다. 비활성 화면에서도 실행 관측을 놓치지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "ACCESS-VERIFY",
+      "description": "프로젝트 목록·명시적 화면 이동·모니터링을 키보드와 좁은 창에서 사용할 수 있고 현재 프로젝트·세션·선택 메뉴와 초점이 식별된다. 실제 Electron과 합성 Native 시나리오·스크린샷·소스 식별을 연결해 검증한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "DOC-HANDOFF",
+      "description": "명세·설계·실행 계획에 기준별 구현·검증·관련 기존 작업과 권한을 연결하고 현행 구현·새 목표·미실행 검토를 구분한다. 문서 작성만으로 제품 구현이나 완료를 표시하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "resume-20261116-root-closeout-home003",
+    "requestHash": "c5609139546e3d12e2ca7c96e4eccf31024638e50958cad9319fbfc11bb281f7",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "src/renderer.tsx",
+        "src/chat.css",
+        "src/command-card.tsx",
+        "src/command-preview.ts",
+        "src/native-activity-view.tsx",
+        "src/native-activity.css",
+        "src/chat-composer.tsx",
+        "src/chat-status.ts",
+        "src/projection.ts",
+        "test/chat-status.test.ts",
+        "test/projection.test.ts",
+        "test/command-preview.test.ts",
+        "test/input.test.ts",
+        "test/www-activity-view.test.ts",
+        "scripts/verify-chat.ts",
+        "scripts/verify-home.ts",
+        "scripts/verify-native-activity.ts",
+        "src/native-session.ts",
+        "src/native-chat.ts",
+        "src/native-lifecycle.ts",
+        "src/main.ts",
+        "src/preload.ts",
+        "src/shared.ts",
+        "src/session-api.tsx",
+        "test/native-session.test.ts",
+        "test/native-chat.test.ts",
+        "test/native-lifecycle.test.ts",
+        "test/fixtures/chat-ui-app-server.ts",
+        "scripts/workflow/report-view.ts",
+        "test/workflow-reports.test.ts",
+        "test/report-service.test.ts",
+        "scripts/workflow/model-allocation.ts",
+        "scripts/workflow/run.ts",
+        "scripts/workflow/types.ts",
+        "scripts/workflow/schema.ts",
+        "scripts/workflow/work.ts",
+        "scripts/workflow/report-lifecycle.ts",
+        "scripts/workflow.ts",
+        "scripts/workflow/decomposition.ts",
+        "scripts/workflow/completion-report.ts",
+        "scripts/workflow/statechart.ts",
+        "test/workflow-completion-faults.test.ts",
+        "test/workflow-properties.test.ts",
+        "test/workflow-statechart.test.ts",
+        "test/workflow-statechart-view.test.ts",
+        "test/workflow-model-allocation.test.ts",
+        "test/workflow-work.test.ts",
+        "test/workflow-development.test.ts",
+        "src/ecosystem-view.tsx",
+        "src/ecosystem.css",
+        "src/architecture-tree.ts",
+        "src/architecture.ts",
+        "src/workflow-statechart-view.tsx",
+        "src/workflow-statechart.ts",
+        "scripts/architecture-contract.ts",
+        "scripts/generate-architecture.ts",
+        "src/architecture.generated.json",
+        "scripts/verify-architecture.ts",
+        "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편"
+      ],
+      "mutationSurfaces": [
+        "files"
+      ],
+      "verifierCommands": [
+        "[\"npm\",\"run\",\"check\"]",
+        "[\"npm\",\"run\",\"build\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"node\",\"scripts/check-workflow.ts\"]",
+        "[\"node\",\"scripts/verify-home.ts\"]",
+        "[\"node\",\"scripts/verify-chat.ts\"]",
+        "[\"node\",\"scripts/verify-chat.ts\",\"--command-cards\"]",
+        "[\"node\",\"scripts/verify-reports.ts\"]",
+        "[\"node\",\"scripts/verify-architecture.ts\"]",
+        "[\"bun\",\"test\",\"test/dashboard.test.ts\",\"test/native-session.test.ts\",\"test/session-registry.test.ts\",\"test/session-tabs.test.ts\",\"test/www-activity-view.test.ts\",\"test/www-activity.test.ts\",\"test/input.test.ts\",\"test/workflow-model-allocation.test.ts\",\"--timeout\",\"30000\"]",
+        "[\"node\",\"scripts/verify-sessions.ts\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "c5609139546e3d12e2ca7c96e4eccf31024638e50958cad9319fbfc11bb281f7"
+    },
+    "inputs": [
+      "build.ts",
+      "docs/ARCHITECTURE.md",
+      "docs/PRODUCT.md",
+      "docs/specs/chat.md",
+      "docs/specs/dashboard.md",
+      "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md",
+      "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md",
+      "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/tasks.md",
+      "package-lock.json",
+      "package.json",
+      "scripts/verify-chat.ts",
+      "scripts/verify-home.ts",
+      "scripts/verify-native-activity.ts",
+      "scripts/verify-sessions.ts",
+      "src",
+      "src/native-activity-view.tsx",
+      "src/renderer.tsx",
+      "src/session-api.tsx",
+      "src/session-tabs.tsx",
+      "test/input.test.ts",
+      "test/native-session.test.ts",
+      "test/session-registry.test.ts",
+      "test/session-tabs.test.ts",
+      "test/www-activity-view.test.ts",
+      "test/www-activity.test.ts",
+      "tsconfig.json",
+      "tsconfig.tools.json"
+    ],
+    "nextAction": "verify",
+    "verifications": [],
+    "reviews": [],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-940b4c47-3fc5-419e-922f-7816063d8e53",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T05:42:46.011Z",
+        "sourceDigest"   : "504dc9fa11d6bf8147b0ca345e3dda7f800f0831eaa20ea074a43a8aac3a8ebc",
+        "criteriaDigest" : "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393",
+        "documentsDigest": "4379b162fe33929e2fc69fc6f8de53b7b37f6c7f491af816cbb1badc512faf7d",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "현재 구조는 변경하지 않았다. 탐색·중앙 상태와 기존 세션 투영 재사용 설계는 새 작업 design.md에 기록하고 구현과 함께 현행 구조를 갱신한다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "실행 코드·검증 하네스를 변경하지 않았다. 새 사용자 시나리오의 실제 검사 명령과 범위는 구현 때 갱신한다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "이번에는 다음 구현의 작업 문서만 작성했다. 기존 제품 범위를 현재 제공 기능으로 보존하고 다섯 메뉴와 모니터링은 구현 시 갱신한다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "작업·권한·검증·검토 계약을 변경하지 않으며 기존 공식 접수·산출물 검토·보고서 절차를 사용한다."
+          },
+          {
+            "path"    : "docs/specs/chat.md",
+            "decision": "unchanged",
+            "reason"  : "현행 대화·승인·세션 격리·모니터 표현을 보존한다. 새 모니터링 진입과 왕복 보존은 Home003 구현 시 함께 반영한다."
+          },
+          {
+            "path"    : "docs/specs/dashboard.md",
+            "decision": "unchanged",
+            "reason"  : "기존 네 메뉴와 전체 보기의 현행 계약은 유지한다. 새 목록/중앙 분리와 다섯 메뉴 요구는 Home003의 미구현 목표로 기록했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-d1beb490-126d-4860-93a3-29dcb69e6ea1",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T08:32:07.479Z",
+        "sourceDigest"   : "38dc8d6818f3273a6dcc4639cd775c848d7cf1e4a3698f67f3c82e7a4ceb9636",
+        "criteriaDigest" : "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393",
+        "documentsDigest": "caa19f99e7edd08d0327ea95b56b2427ced8c22452090e92683b7a38ed88245d",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "Hook 정산은 기존 native-activity 순수 투영 책임에 속하고 프로세스·IPC·상태 소유 경계를 바꾸지 않았다. 현재 구조 ID 계약과 생성기는 통과했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "현재 Hook 집중 회귀 명령과 합성 사건·실제 Native/GUI/신뢰 수용의 분리 및 시각 모호성 검증 범위를 기록했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "현재 변경은 기존 개인용 로컬 Electron 관측·통제 목적 안의 투영/기록 정합성 수정이며 제품 목적·사용자·범위를 추가하지 않았다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "마지막 action 뒤 read/status 대조, record.blockedReason과 status.reasons, complete=false와 실제 complete 호출 거부를 명시적으로 분리했다."
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
+  }
+}

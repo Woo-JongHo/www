@@ -85,6 +85,420 @@
         "sourceDigest"  : "6d6a6d1b795c995b107e8872267e96ad84a501bb6eb5bb7476ae3788c75ee812",
         "criteriaDigest": "380ea7f93cab33195eac378c52d74b1323bfaede315ed1f04dd842c323c79867"
       }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-2c71fd3d-297f-49ca-b8fd-d06f1da11818",
+      "workId"        : "work-6825661e-9d06-4364-82fe-b612365a0072",
+      "title"         : "업무 진입점과 탐색 구조 연구",
+      "summary"       : "공식 출처와 연구 제안의 구분을 다시 확인하고 독립 검토를 연결했습니다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-16T07:52:53.152Z",
+      "event"         : "finish",
+      "workRecordHash": "6710ce1c4c26796b26421dca916414c13be73d7d35fce2f85dfec4fb4576221a",
+      "sourceDigest"  : "eb05998d76edbd44b702f378afbf627dbcc8ba4c3a8527da0e0001d10c8aa44d",
+      "criteriaDigest": "380ea7f93cab33195eac378c52d74b1323bfaede315ed1f04dd842c323c79867",
+      "semanticHash"  : "a598c88134283bc06fa04e8877e2a27cade8d3506c474c5f0f4d9bdea6f72d7b",
+      "narrative": {
+        "summary": "공식 출처와 연구 제안의 구분을 다시 확인하고 독립 검토를 연결했습니다.",
+        "before" : "기존 연구는 근거와 제안을 남겼지만 당시 Opus 로그인 실패로 독립 검토가 미실행이었습니다.",
+        "after"  : "14개 공식 출처의 현재 응답과 연구 내용을 대조하고 실제 읽기 전용 Opus 검토를 기록했습니다.",
+        "changes": [
+          "공식 출처별 관찰과 WWW 적용 추론, 2026-11-15 제품 관찰의 시점을 구분했습니다.",
+          "기존 작업 UUID와 이전 원장·검토를 보존하며 기준별 현재 검증을 연결했습니다."
+        ],
+        "decisions": [
+          "2026-11-15 연구를 과거 관찰로 유지하고 현재 제품의 완성도로 해석하지 않았습니다."
+        ],
+        "limitations": [
+          "원문은 현재 제공본이며 과거 revision의 불변은 검증하지 않았습니다.",
+          "참고 앱 조작·사용자 사용성 시험·OS 입력·제품 구현 검증은 수행하지 않았습니다."
+        ],
+        "next": [],
+        "reader": {
+          "story": "업무 진입점 연구를 다시 살펴 출처에서 말한 사실과 WWW에 제안한 판단을 분리했습니다. 실제 앱을 시험하지 않은 한계를 그대로 두고 연구 문서의 현재 검증과 독립 검토를 연결했습니다.",
+          "requirements": [
+            {
+              "requirement": "공식 출처와 적용 추론을 구분한다",
+              "result"     : "14개 현재 공식 원문과 관찰·제안의 대응을 별도 표로 정리했습니다.",
+              "evidence"   : "source-review.md와 보존 원문 manifest 및 R1 검증",
+              "limitations": "현재 공개본 대조이며 과거 revision 보존 여부는 미확인입니다."
+            },
+            {
+              "requirement": "대안·비용과 사용자 여정 및 검토를 기록한다",
+              "result"     : "기존 연구의 대안·실패·접근성·데이터 경계 및 여정을 확인하고 읽기 전용 Opus 검토를 받았습니다.",
+              "evidence"   : "R2/R3 시도와 review-4a47d85d-ba47-4536-9794-2785e1d2bcb1",
+              "limitations": "사용성이나 실제 제품 동작을 시험한 결과가 아닙니다."
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "공식 출처",
+              "method"     : "14개 HTTP 응답의 링크와 본문 해시 및 핵심 구절을 검사하고 문서 표를 대조",
+              "expected"   : "연구 출처가 확인되고 적용 추론이 구분됨",
+              "observed"   : "14개 응답 200, 해시와 핵심어 일치, 수동 대조 기록",
+              "limitations": "자동 검사는 모든 주장 의미를 검증하지 않으며 원문은 현재 시점입니다."
+            },
+            {
+              "target"     : "독립 검토",
+              "method"     : "현재 입력과 기준에 대해 읽기 전용 Claude Opus 실제 실행",
+              "expected"   : "연구의 근거와 한계 및 검증 범위 확인",
+              "observed"   : "claude-opus-5-5 pass, 검토자는 일부 원문을 직접 읽음",
+              "limitations": "검토자가 테스트를 실행하거나 원문 전체를 재검증한 것은 아닙니다."
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": "docs/work/Home/001-업무 진입점과 탐색 구조 연구/source-review.md",
+              "purpose": "공식 출처와 연구 적용 판단의 대응을 확인합니다."
+            },
+            {
+              "path": "docs/work/Home/001-업무 진입점과 탐색 구조 연구/verification.md",
+              "purpose": "기준별 실제 시도와 독립 검토 한계를 확인합니다."
+            }
+          ],
+          "nextActions": []
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "R1",
+            "description": "공식 원문을 열어 확인한 제품별 패턴과 출처, 관측 사실과 WWW 적용 추론을 분리한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-56333c0d-4794-43a1-98a1-5bdedb81ca37",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "R2",
+            "description": "대안과 비용을 비교하고 탐색·상세·전환·데이터 경계·반응형·접근성·실패 동작을 포함한 설계 제안을 작성한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-84ef62c4-b35c-448f-84ec-5c03e9947d60",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "R3",
+            "description": "사용자 여정과 검증 시나리오、미검증 가정을 명시하고 읽기 전용 독립 검토를 수행한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-a54082b1-4052-431e-b22f-d01784df84ce",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-56333c0d-4794-43a1-98a1-5bdedb81ca37",
+            "command": "node",
+            "args": [
+              ".www/evidence/session-completion-20261116/legacy-home001-check.ts",
+              "R1"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T07:47:29.203Z"
+          },
+          {
+            "id": "attempt-84ef62c4-b35c-448f-84ec-5c03e9947d60",
+            "command": "node",
+            "args": [
+              ".www/evidence/session-completion-20261116/legacy-home001-check.ts",
+              "R2"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T07:47:29.615Z"
+          },
+          {
+            "id": "attempt-a54082b1-4052-431e-b22f-d01784df84ce",
+            "command": "node",
+            "args": [
+              ".www/evidence/session-completion-20261116/legacy-home001-check.ts",
+              "R3"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T07:51:19.779Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-8c2d1472-1ec0-4cbc-8c78-861a4cf99eae",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-8c2d1472-1ec0-4cbc-8c78-861a4cf99eae/opus.json",
+            "findings": []
+          },
+          {
+            "id"         : "review-4a47d85d-ba47-4536-9794-2785e1d2bcb1",
+            "verdict"    : "pass",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-4a47d85d-ba47-4536-9794-2785e1d2bcb1/opus.json",
+            "findings": [
+              "검토 범위: inputPaths의 research.md, source-review.md, spec.md, verification.md 4개를 Read 도구로 직접 읽었다. 대조 자료로 같은 폴더의 work.json, .www/evidence/session-completion-20261116/legacy-home001-check.ts, home001-sources/manifest.json을 읽었고, 보존된 원문 HTML 04·05·06·09·10번을 일부 검색했다. 도구 읽기 실패는 없었다. 테스트와 검증 명령은 실행하지 않았으며, 원문 HTML의 sha256 값을 다시 계산하지 않았다.",
+              "출처 주장 일부를 보존된 원문과 대조했고, 확인한 범위에서는 원문이 연구 본문을 뒷받침한다. Linear Custom Views는 'available on many issue and project views'라고 쓰고 Space 키로 Peek를 켠다고 설명한다(04.html). Linear Search는 최근 이슈와 최근 검색에 접근하는 방법을 설명한다(05.html). Linear Inbox는 읽음/안 읽음 표시와 snooze를 다룬다(06.html). VS Code 접근성 문서는 'Once a toolbar or a tab list has focus, you can use the arrow keys'라고 쓰며, 이는 research.md:33의 '일부 복합 위젯의 방향키 이동'과 맞는다(09.html). Figma 문서는 'Additional labels are turned on by default'라고 쓰고, UI 최소화가 navigation bar와 왼쪽·오른쪽 사이드바를 함께 접는다고 설명한다(10.html:545,547).",
+              "R1 검증 스크립트(legacy-home001-check.ts:9-21)가 확인하는 범위는 세 가지다. 원문 14건이 HTTP 200인지와 sha256이 일치하는지, research.md의 고유 URL 14개가 manifest와 일치하는지, 출처마다 키워드 하나가 원문에 있는지다. 표의 각 주장이 원문과 의미상 맞는지는 검사하지 않는다. 따라서 work.json의 R1 'passed'는 원문 접근과 핵심 구절이 있다는 수준의 증거다. verification.md:54의 '한계' 문단과 스크립트의 출력 문구가 이 한계를 밝히고 있어 증거 범위를 부풀린 것으로 보지 않는다. 위 수동 대조로 일부 주장의 의미도 뒷받침된다.",
+              "R2 스크립트(legacy-home001-check.ts:22-24)는 research.md에 구절이 있는지만 확인한다. 검사하는 구절은 대안 비교, 정보 구조, 선택·상세·실행 계약, 너비 계약, 상태 소유, 실제 여정, '좁은 창'·'넓은 창' 등이다. 직접 읽어 보니 research.md:53-161에는 대안별 비용 표, 실패 시 보존할 항목, 모달과 비모달의 초점 처리, 너비 계산식, 데이터 소유 경계가 실제로 서술돼 있다. 구절만 맞춘 빈 문서가 아니다.",
+              "R3는 work.json:41-46에서 result 'unverified'이고 evidence가 비어 있다. verification.md:19-35는 2026-11-15 Opus 감사가 로그인 실패로 실행되지 않았다고 기록하고 '최종 완료를 선언하지 않는다'고 적었다. R3 스크립트(legacy-home001-check.ts:27-28)도 assessWork의 review.usable이 true여야 통과하도록 막는다. 독립 검토 전에 R3를 통과로 기록하거나 완료를 앞당겨 주장하는 결함은 없다.",
+              "source-review.md:22는 research.md:44의 view 종류(chat/ecosystem/reports)와 초기 상태가 2026-11-15 당시의 관찰이며 현재 제품 상태로 옮겨 읽지 말라고 밝힌다. 현재 src에 dashboard-view.tsx와 dashboard.ts가 실제로 있어 이 설명은 맞다. research.md 해당 행에는 이런 단서가 없지만, 3번째 줄에 '확인일: 2026-11-15'가 있고 spec.md:27도 이를 역사 기록으로 보존한다고 밝힌다. 결함으로 보지 않는다.",
+              "참고 사항(결함 아님): 입력 파일 중 spec.md만 mode 384(0600)이고 나머지는 420(0644)이다. 내용 검증에는 영향이 없다. verification.md:35의 'Opus 인증이 복구되면 재실행' 문구는 2026-11-15 시점의 기록이며, 이번 검토가 그 후속에 해당한다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Home/001-업무 진입점과 탐색 구조 연구/work.json",
+        "workRecordHash": "6710ce1c4c26796b26421dca916414c13be73d7d35fce2f85dfec4fb4576221a",
+        "sourceDigest"  : "eb05998d76edbd44b702f378afbf627dbcc8ba4c3a8527da0e0001d10c8aa44d",
+        "criteriaDigest": "380ea7f93cab33195eac378c52d74b1323bfaede315ed1f04dd842c323c79867"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-a7c04baa-328a-49bc-9f1b-d917e36afbb5",
+      "workId"        : "work-6825661e-9d06-4364-82fe-b612365a0072",
+      "title"         : "업무 진입점과 탐색 구조 연구",
+      "summary"       : "공식 출처와 연구 제안의 구분을 다시 확인하고 독립 검토를 연결했습니다.",
+      "kind"          : "authored",
+      "outcome"       : "completed",
+      "createdAt"     : "2026-11-16T07:53:59.105Z",
+      "event"         : "complete",
+      "workRecordHash": "acc2e04422a617c1a45a885824743d97161401d1be51921b760837d0402b9054",
+      "sourceDigest"  : "eb05998d76edbd44b702f378afbf627dbcc8ba4c3a8527da0e0001d10c8aa44d",
+      "criteriaDigest": "380ea7f93cab33195eac378c52d74b1323bfaede315ed1f04dd842c323c79867",
+      "semanticHash"  : "a86253b64c6eb6750bbbd96576d84f34b015f5261b941595be8c966ff818555f",
+      "narrative": {
+        "summary": "공식 출처와 연구 제안의 구분을 다시 확인하고 독립 검토를 연결했습니다.",
+        "before" : "기존 연구는 근거와 제안을 남겼지만 당시 Opus 로그인 실패로 독립 검토가 미실행이었습니다.",
+        "after"  : "14개 공식 출처의 현재 응답과 연구 내용을 대조하고 실제 읽기 전용 Opus 검토를 기록했습니다.",
+        "changes": [
+          "공식 출처별 관찰과 WWW 적용 추론, 2026-11-15 제품 관찰의 시점을 구분했습니다.",
+          "기존 작업 UUID와 이전 원장·검토를 보존하며 기준별 현재 검증을 연결했습니다."
+        ],
+        "decisions": [
+          "2026-11-15 연구를 과거 관찰로 유지하고 현재 제품의 완성도로 해석하지 않았습니다."
+        ],
+        "limitations": [
+          "원문은 현재 제공본이며 과거 revision의 불변은 검증하지 않았습니다.",
+          "참고 앱 조작·사용자 사용성 시험·OS 입력·제품 구현 검증은 수행하지 않았습니다."
+        ],
+        "next": [],
+        "reader": {
+          "story": "업무 진입점 연구를 다시 살펴 출처에서 말한 사실과 WWW에 제안한 판단을 분리했습니다. 실제 앱을 시험하지 않은 한계를 그대로 두고 연구 문서의 현재 검증과 독립 검토를 연결했습니다.",
+          "requirements": [
+            {
+              "requirement": "공식 출처와 적용 추론을 구분한다",
+              "result"     : "14개 현재 공식 원문과 관찰·제안의 대응을 별도 표로 정리했습니다.",
+              "evidence"   : "source-review.md와 보존 원문 manifest 및 R1 검증",
+              "limitations": "현재 공개본 대조이며 과거 revision 보존 여부는 미확인입니다."
+            },
+            {
+              "requirement": "대안·비용과 사용자 여정 및 검토를 기록한다",
+              "result"     : "기존 연구의 대안·실패·접근성·데이터 경계 및 여정을 확인하고 읽기 전용 Opus 검토를 받았습니다.",
+              "evidence"   : "R2/R3 시도와 review-4a47d85d-ba47-4536-9794-2785e1d2bcb1",
+              "limitations": "사용성이나 실제 제품 동작을 시험한 결과가 아닙니다."
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "공식 출처",
+              "method"     : "14개 HTTP 응답의 링크와 본문 해시 및 핵심 구절을 검사하고 문서 표를 대조",
+              "expected"   : "연구 출처가 확인되고 적용 추론이 구분됨",
+              "observed"   : "14개 응답 200, 해시와 핵심어 일치, 수동 대조 기록",
+              "limitations": "자동 검사는 모든 주장 의미를 검증하지 않으며 원문은 현재 시점입니다."
+            },
+            {
+              "target"     : "독립 검토",
+              "method"     : "현재 입력과 기준에 대해 읽기 전용 Claude Opus 실제 실행",
+              "expected"   : "연구의 근거와 한계 및 검증 범위 확인",
+              "observed"   : "claude-opus-5-5 pass, 검토자는 일부 원문을 직접 읽음",
+              "limitations": "검토자가 테스트를 실행하거나 원문 전체를 재검증한 것은 아닙니다."
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": "docs/work/Home/001-업무 진입점과 탐색 구조 연구/source-review.md",
+              "purpose": "공식 출처와 연구 적용 판단의 대응을 확인합니다."
+            },
+            {
+              "path": "docs/work/Home/001-업무 진입점과 탐색 구조 연구/verification.md",
+              "purpose": "기준별 실제 시도와 독립 검토 한계를 확인합니다."
+            }
+          ],
+          "nextActions": []
+        }
+      },
+      "work": {
+        "status": "done",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "R1",
+            "description": "공식 원문을 열어 확인한 제품별 패턴과 출처, 관측 사실과 WWW 적용 추론을 분리한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-56333c0d-4794-43a1-98a1-5bdedb81ca37",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "R2",
+            "description": "대안과 비용을 비교하고 탐색·상세·전환·데이터 경계·반응형·접근성·실패 동작을 포함한 설계 제안을 작성한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-84ef62c4-b35c-448f-84ec-5c03e9947d60",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "R3",
+            "description": "사용자 여정과 검증 시나리오、미검증 가정을 명시하고 읽기 전용 독립 검토를 수행한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-a54082b1-4052-431e-b22f-d01784df84ce",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-56333c0d-4794-43a1-98a1-5bdedb81ca37",
+            "command": "node",
+            "args": [
+              ".www/evidence/session-completion-20261116/legacy-home001-check.ts",
+              "R1"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T07:47:29.203Z"
+          },
+          {
+            "id": "attempt-84ef62c4-b35c-448f-84ec-5c03e9947d60",
+            "command": "node",
+            "args": [
+              ".www/evidence/session-completion-20261116/legacy-home001-check.ts",
+              "R2"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T07:47:29.615Z"
+          },
+          {
+            "id": "attempt-a54082b1-4052-431e-b22f-d01784df84ce",
+            "command": "node",
+            "args": [
+              ".www/evidence/session-completion-20261116/legacy-home001-check.ts",
+              "R3"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T07:51:19.779Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-8c2d1472-1ec0-4cbc-8c78-861a4cf99eae",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-8c2d1472-1ec0-4cbc-8c78-861a4cf99eae/opus.json",
+            "findings": []
+          },
+          {
+            "id"         : "review-4a47d85d-ba47-4536-9794-2785e1d2bcb1",
+            "verdict"    : "pass",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-4a47d85d-ba47-4536-9794-2785e1d2bcb1/opus.json",
+            "findings": [
+              "검토 범위: inputPaths의 research.md, source-review.md, spec.md, verification.md 4개를 Read 도구로 직접 읽었다. 대조 자료로 같은 폴더의 work.json, .www/evidence/session-completion-20261116/legacy-home001-check.ts, home001-sources/manifest.json을 읽었고, 보존된 원문 HTML 04·05·06·09·10번을 일부 검색했다. 도구 읽기 실패는 없었다. 테스트와 검증 명령은 실행하지 않았으며, 원문 HTML의 sha256 값을 다시 계산하지 않았다.",
+              "출처 주장 일부를 보존된 원문과 대조했고, 확인한 범위에서는 원문이 연구 본문을 뒷받침한다. Linear Custom Views는 'available on many issue and project views'라고 쓰고 Space 키로 Peek를 켠다고 설명한다(04.html). Linear Search는 최근 이슈와 최근 검색에 접근하는 방법을 설명한다(05.html). Linear Inbox는 읽음/안 읽음 표시와 snooze를 다룬다(06.html). VS Code 접근성 문서는 'Once a toolbar or a tab list has focus, you can use the arrow keys'라고 쓰며, 이는 research.md:33의 '일부 복합 위젯의 방향키 이동'과 맞는다(09.html). Figma 문서는 'Additional labels are turned on by default'라고 쓰고, UI 최소화가 navigation bar와 왼쪽·오른쪽 사이드바를 함께 접는다고 설명한다(10.html:545,547).",
+              "R1 검증 스크립트(legacy-home001-check.ts:9-21)가 확인하는 범위는 세 가지다. 원문 14건이 HTTP 200인지와 sha256이 일치하는지, research.md의 고유 URL 14개가 manifest와 일치하는지, 출처마다 키워드 하나가 원문에 있는지다. 표의 각 주장이 원문과 의미상 맞는지는 검사하지 않는다. 따라서 work.json의 R1 'passed'는 원문 접근과 핵심 구절이 있다는 수준의 증거다. verification.md:54의 '한계' 문단과 스크립트의 출력 문구가 이 한계를 밝히고 있어 증거 범위를 부풀린 것으로 보지 않는다. 위 수동 대조로 일부 주장의 의미도 뒷받침된다.",
+              "R2 스크립트(legacy-home001-check.ts:22-24)는 research.md에 구절이 있는지만 확인한다. 검사하는 구절은 대안 비교, 정보 구조, 선택·상세·실행 계약, 너비 계약, 상태 소유, 실제 여정, '좁은 창'·'넓은 창' 등이다. 직접 읽어 보니 research.md:53-161에는 대안별 비용 표, 실패 시 보존할 항목, 모달과 비모달의 초점 처리, 너비 계산식, 데이터 소유 경계가 실제로 서술돼 있다. 구절만 맞춘 빈 문서가 아니다.",
+              "R3는 work.json:41-46에서 result 'unverified'이고 evidence가 비어 있다. verification.md:19-35는 2026-11-15 Opus 감사가 로그인 실패로 실행되지 않았다고 기록하고 '최종 완료를 선언하지 않는다'고 적었다. R3 스크립트(legacy-home001-check.ts:27-28)도 assessWork의 review.usable이 true여야 통과하도록 막는다. 독립 검토 전에 R3를 통과로 기록하거나 완료를 앞당겨 주장하는 결함은 없다.",
+              "source-review.md:22는 research.md:44의 view 종류(chat/ecosystem/reports)와 초기 상태가 2026-11-15 당시의 관찰이며 현재 제품 상태로 옮겨 읽지 말라고 밝힌다. 현재 src에 dashboard-view.tsx와 dashboard.ts가 실제로 있어 이 설명은 맞다. research.md 해당 행에는 이런 단서가 없지만, 3번째 줄에 '확인일: 2026-11-15'가 있고 spec.md:27도 이를 역사 기록으로 보존한다고 밝힌다. 결함으로 보지 않는다.",
+              "참고 사항(결함 아님): 입력 파일 중 spec.md만 mode 384(0600)이고 나머지는 420(0644)이다. 내용 검증에는 영향이 없다. verification.md:35의 'Opus 인증이 복구되면 재실행' 문구는 2026-11-15 시점의 기록이며, 이번 검토가 그 후속에 해당한다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Home/001-업무 진입점과 탐색 구조 연구/work.json",
+        "workRecordHash": "acc2e04422a617c1a45a885824743d97161401d1be51921b760837d0402b9054",
+        "sourceDigest"  : "eb05998d76edbd44b702f378afbf627dbcc8ba4c3a8527da0e0001d10c8aa44d",
+        "criteriaDigest": "380ea7f93cab33195eac378c52d74b1323bfaede315ed1f04dd842c323c79867"
+      }
     }
   ]
 }

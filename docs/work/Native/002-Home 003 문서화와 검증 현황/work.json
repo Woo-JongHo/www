@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-65af9476-ebae-4edf-989b-012196fd0e1c",
+  "title"        : "Home 003 문서화와 검증 현황",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약을 원작업 work-0e282d77-1c00-4663-8860-483d28148f74에 관계·역사 근거로 회수했다. 원본 입력 절단 및 실제 기능 수용은 원작업에서 별도 검증한다.",
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-0e282d77-1c00-4663-8860-483d28148f74"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "c0592d1be1ac24936ea06bcc4db7d3b7a6598e10098d5b78065374f086c56b6a",
+    "threadId": "01a1e2c9-7195-7d30-b29e-f7bd06089013",
+    "turnId"  : "01a1e2da-f347-7e11-b708-8deec7502313",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"head -20 scripts/workflow/work.ts && rg -n 'export.*(workOutputColumns|serializeWorkRecord|withWorkLock)' scripts/workflow/preflight.ts scripts/workflow/work-json.ts scripts/workflow/*lock* && git status --short --branch\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib,subprocess\nctx=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());e=pathlib.Path(ctx['evidence']);d=ctx['directory'];wid=ctx['workId']\nscript='''import {readFile,writeFile,rename} from 'node:fs/promises';import {withWorkLock} from './scripts/workflow/lock.ts';import {readWork} from './scripts/workflow/work.ts';import {serializeWorkRecord} from './scripts/workflow/work-json.ts';import {workOutputColumns} from './scripts/workflow/preflight.ts';const c=JSON.parse(await readFile('/tmp/www-home-navigation-docs-context.json','utf8'));await withWorkLock(process.cwd(),async()=>{const w=await readWork({workId:c.workId});w.record.workflow.inputs=[...new Set([...w.record.workflow.inputs,...['spec.md','design.md','tasks.md'].map(n=>c.directory+'/'+n)])].sort();const bytes=serializeWorkRecord(w.record,await workOutputColumns(process.cwd()));await writeFile(w.path+'.docs.tmp',bytes,{flag:'wx'});await rename(w.path+'.d",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'node scripts/check-workflow.ts > /tmp/www-home-navigation-workflow-check.log 2>&1'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport pathlib,json\nctx=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());e=pathlib.Path(ctx['evidence'])\nfor name in ['review-execution.json','review.stderr.log']:\n p=e/name\n if p.exists():print(name,p.read_text()[:1000])\np=e/'review.stdout.json'\nif p.exists() and p.stat().st_size:print('review stdout:',p.read_text()[:1400])\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib,hashlib,subprocess\nctx=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());d=pathlib.Path(ctx['directory']);e=pathlib.Path(ctx['evidence']);record=json.loads((d/'work.json').read_text())\nassert record['status']=='ready' and record['workflow']['authorization']['implementation'] is False\nassert all(c['result']=='unverified' for c in record['criteria'])\nfor c in record['criteria']:\n for name in ['spec.md','tasks.md']:\n  assert c['id'] in (d/name).read_text(),(c['id'],name)\nprotected=json.loads((e/'before.json').read_text());same=[]\nfor f,h in protected.items():\n if f=='docs/work/INDEX.md':continue\n assert hashlib.sha256(pathlib.Path(f).read_bytes()).hexdigest()==h,f\n same.append(f)\nfor name in ['spec.md','design.md','tasks.md']:\n text=(d/name).read_text();assert not any(s in text for s in ['TODO','TBD','[실제','[사용자 요청','test.skip','test.only']),name\n assert text.endswith('\\\\n') and not text.endswith('\\\\n\\\\n')",
+        "status"  : "failed",
+        "exitCode": 1
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib,hashlib\nctx=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());d=pathlib.Path(ctx['directory']);e=pathlib.Path(ctx['evidence']);record=json.loads((d/'work.json').read_text())\nassert record['status']=='ready' and record['workflow']['authorization']['implementation'] is False\nassert all(c['result']=='unverified' for c in record['criteria'])\nfor c in record['criteria']:\n for name in ['spec.md','tasks.md']:assert c['id'] in (d/name).read_text(),(c['id'],name)\nprotected=json.loads((e/'before.json').read_text());changed=[f for f,h in protected.items() if f\"'!='\"'docs/work/INDEX.md' and hashlib.sha256(pathlib.Path(f).read_bytes()).hexdigest()\"'!=h]\nfor name in ['\"'spec.md','design.md','tasks.md']:\n s=(d/name).read_text();assert not any(x in s for x in ['TODO','TBD','[실제','[사용자 요청','test.skip','test.only']),name\n assert s.endswith('\\\\n') and not s.endswith('\\\\n\\\\n'),name\nsummary={'criteria':len(record['criteria'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport pathlib,json,subprocess\nctx=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());e=pathlib.Path(ctx['evidence'])\ndocuments=[{'path':p,'decision':'unchanged','reason':r} for p,r in [\n ('docs/PRODUCT.md','이번에는 다음 구현의 작업 문서만 작성했다. 기존 제품 범위를 현재 제공 기능으로 보존하고 다섯 메뉴와 모니터링은 구현 시 갱신한다.'),\n ('docs/ARCHITECTURE.md','현재 구조는 변경하지 않았다. 탐색·중앙 상태와 기존 세션 투영 재사용 설계는 새 작업 design.md에 기록하고 구현과 함께 현행 구조를 갱신한다.'),\n ('docs/DEVELOPMENT.md','실행 코드·검증 하네스를 변경하지 않았다. 새 사용자 시나리오의 실제 검사 명령과 범위는 구현 때 갱신한다.'),\n ('docs/skills/WORKFLOW.md','작업·권한·검증·검토 계약을 변경하지 않으며 기존 공식 접수·산출물 검토·보고서 절차를 사용한다.'),\n ('docs/specs/dashboard.md','기존 네 메뉴와 전체 보기의 현행 계약은 유지한다. 새 목록/중앙 분리와 다섯 메뉴 요구는 Home003의 미구현 목표로 기록했다.'),\n ('docs/specs/chat.md','현행 대화·승인·세션 격리·모니터 표현을 보존한다. 새 모니터링 진입과 왕복 보존은 Home003 구현 시 함께 반영한다.')]]\noptions={'action':'document-review','workId':ctx['workId'],'documents':documents}\nr=subprocess.run(['node','scripts/workflow/work.ts',json.dumps(options,ensur",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"rg -n -A 18 'action === \\\"report\\\"|case \\\"report\\\"|report-list|report-read' scripts/workflow/report-lifecycle.ts && python3 - <<'PY'\nimport json,pathlib,time\nc=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());p=pathlib.Path(c['evidence'])/'review-execution.json';print('독립 문서 검토:',p.read_text() if p.exists() else '실행 중')\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib\nc=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());e=pathlib.Path(c['evidence'])\nfor n in ['review-execution.json','review.stderr.log','review.stdout.json']:\n p=e/n\n if p.exists() and p.stat().st_size:print(n,p.read_text()[:2000])\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport pathlib,json,time\nc=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());p=pathlib.Path(c['evidence'])/'review-prompt.txt';print('문서 검토 경과:',round(time.time()-p.stat().st_mtime),'초')\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"node scripts/check-workflow.ts && git diff --check && git diff --numstat -- docs/work/INDEX.md && python3 - <<'PY'\nimport json,pathlib\nc=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());d=pathlib.Path(c['directory']);e=pathlib.Path(c['evidence']);print('산출물:',[p.name for p in d.iterdir()]);p=e/'review-execution.json';print('문서 검토:',p.read_text() if p.exists() else '실행 중')\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib,subprocess\nc=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());e=pathlib.Path(c['evidence']);print((e/'review-execution.json').read_text());print('stdout bytes:',(e/'review.stdout.json').stat().st_size,'stderr bytes:',(e/'review.stderr.log').stat().st_size)\nr=subprocess.run(['node','scripts/workflow.ts',json.dumps({'action':'artifact-status','workId':c['workId']})],capture_output=True,text=True);(e/'artifact-status.json').write_text(r.stdout);print(r.stdout)\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib,subprocess\nc=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());d=c['directory'];e=pathlib.Path(c['evidence'])\nnarrative={'summary':'프로젝트 목록 탐색 중 중앙 화면 유지와 다섯 공통 메뉴·현재 대화 탭의 세션 모니터링을 Home003의 명세·설계·실행 계획으로 정리했다. 제품 코드는 변경하지 않았다. 문서 계약과 기준별 연결은 확인했으며 별도 Claude Sonnet 5 의미 검토는 180초 응답 시간 초과로 미실행 상태다.','before':'기존 전체 보기 버튼은 사이드바와 중앙을 동시에 홈으로 바꾸고, 같은 프로젝트를 다시 선택해도 대시보드로 이동한다. 대화에는 상세 모니터와 세션 모니터 접기/열기 버튼이 있다.','after':'다음 구현의 기준으로 목록 탐색과 중앙 이동을 분리하고 현재 프로젝트 재선택 시 화면 유지, 다른 대상 선택 성공 시 전환, 대시보드·대화·생태계·리포트·모니터링 순서와 기존 두 버튼의 JSX 주석 처리를 문서화했다. 실제 앱 동작은 아직 동일하다.','changes':['명세에 사용자 확정 사항과 설계 기본안, 정상·취소·실패·보호·빈 상태·세션 격리 시나리오를 기록했다.','설계에 상태 소유와 기존 세션 API·투영 재사용, 화면 생명주기·초점·예상 영향 파일을 기록했다.','실행 계획에 기준 10개와 단계별 구현·검증·소유·의존성·문서 갱신을 연결했다.','작업 원장과 목차, 실제 문서 검사·검토 한계를 남겼다.'],'decisions':['Home002와 자동 Native001의 이력을 보존하고 후속 문서의 정본을 새 Home003 UUID로 연결했다.','현행 제품·기능 명세는 기존 구현을 설명하도록 유지하고 새 목표를 현재 제공 기능으로 승격하지 않았다.','모니터링",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib,subprocess,urllib.parse\nctx=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());e=pathlib.Path(ctx['evidence']);d=pathlib.Path(ctx['directory']);result=json.loads((e/'report-result.json').read_text());rid=result['report']['id']\nscript=\\\"import {listWorkReports,readWorkReport} from './scripts/workflow/reports.ts';const id=process.argv[1];const a=await listWorkReports({repo:process.cwd()});const r=await readWorkReport({repo:process.cwd(),reportId:id});console.log(JSON.stringify({listed:a.reports.some(x=>x.id===id),reportId:r.report.id,current:r.current,stale:r.stale,htmlLength:r.html.length}));\\\"\nr=subprocess.run(['node','--input-type=module','--eval',script,rid],capture_output=True,text=True);(e/'report-read-check.json').write_text(r.stdout)\nif r.returncode:raise SystemExit(r.stderr)\nread=json.loads(r.stdout);assert read['listed'] and read['current'] and not read['stale'] and read['htmlLength']>0\nchecks=su",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib\nc=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());e=pathlib.Path(c['evidence']);print((e/'report-read-check.json').read_text());r=json.loads((e/'report-result.json').read_text());print('저장 결과',r['report'].get('id'),'html',str(r.get('html'))[:180]);print('현재 작업 상태',json.loads((pathlib.Path(c['directory'])/'work.json').read_text())['status'])\nPY\n rg -n 'current:|stale:|reasons:|current =|stale =' scripts/workflow/reports.ts | tail -25\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"rg -n -A 14 'finishWorkReport' scripts/workflow/report-lifecycle.ts && python3 - <<'PY'\nimport json,pathlib\nc=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());r=json.loads((pathlib.Path(c['directory'])/'work.json').read_text());print(json.dumps({k:r[k] for k in ['status','blockedReason']},ensure_ascii=False));print('nextAction',r['workflow']['nextAction'])\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"head -11 scripts/workflow/reports.ts && rg -n 'resumeWork|status =|status:|advanceWork|nextAction' scripts/workflow/reports.ts scripts/workflow/report-lifecycle.ts && python3 - <<'PY'\nimport json,pathlib\nc=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());p=pathlib.Path(c['directory'])/'work.json';r=json.loads(p.read_text());print('review entries',len(r['workflow']['reviews']),'artifact entries',len(r['workflow'].get('artifactReviews',[])),'verification entries',len(r['workflow']['verifications']));print('work record mtime',p.stat().st_mtime)\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '145,158p' scripts/workflow/report-lifecycle.ts && rg -n -A 45 'export async function assessWork' scripts/workflow/work.ts && rg -n -A 18 'async function collect|captureWork|workflow/work|import\\\\(' scripts/workflow/reports.ts | tail -60\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib,subprocess\nc=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());e=pathlib.Path(c['evidence']);o=json.loads((e/'report-input.json').read_text());o['narrative']['limitations']=[s.replace('작업 ready와','작업 verifying·다음 단계 review와') for s in o['narrative']['limitations']];o['narrative']['changes'].append('초기 문서 대조의 ready와 문서 영향 검토 기록 뒤의 verifying를 구분해 현재 보고서의 상태 표현을 정정했다.');(e/'report-input-current.json').write_text(json.dumps(o,ensure_ascii=False,indent=2))\nr=subprocess.run(['node','scripts/workflow.ts',json.dumps(o,ensure_ascii=False)],capture_output=True,text=True);(e/'report-result-current.json').write_text(r.stdout)\nif r.returncode:raise SystemExit(r.stderr or r.stdout[:1000])\nprint('현재 원장 verifying·다음 단계 review와 일치하는 보고서 기록을 같은 JSON/HTML 묶음에 추가했다.')\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib,subprocess,urllib.parse\nc=json.loads(pathlib.Path('/tmp/www-home-navigation-docs-context.json').read_text());e=pathlib.Path(c['evidence']);d=pathlib.Path(c['directory']);rid=json.loads((e/'report-result-current.json').read_text())['report']['id']\nscript=\\\"import {listWorkReports,readWorkReport} from './scripts/workflow/reports.ts';const id=process.argv[1];const a=await listWorkReports({repo:process.cwd()});const r=await readWorkReport({repo:process.cwd(),reportId:id});console.log(JSON.stringify({listed:a.reports.some(x=>x.id===id),reportId:r.report.id,current:r.current,stale:r.stale,htmlLength:r.html.length}));\\\"\nr=subprocess.run(['node','--input-type=module','--eval',script,rid],capture_output=True,text=True);assert r.returncode==0,r.stderr;read=json.loads(r.stdout);assert read['listed'] and read['current'] and not read['stale'] and read['htmlLength']>0;(e/'report-read-check-current.json').write_text(r.stdout)\nchecks=subprocess.run(['",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [
+      "/Users/jonghoPro/woo/00_project/www/docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md",
+      "/Users/jonghoPro/woo/00_project/www/docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md",
+      "/Users/jonghoPro/woo/00_project/www/docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/tasks.md",
+      "/Users/jonghoPro/woo/00_project/www/docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/verification.md"
+    ],
+    "truncated": true
+  }
+}

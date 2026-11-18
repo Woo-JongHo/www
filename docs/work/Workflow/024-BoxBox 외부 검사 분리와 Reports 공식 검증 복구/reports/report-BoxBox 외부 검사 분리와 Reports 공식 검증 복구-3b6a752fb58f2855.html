@@ -1,0 +1,163 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>BoxBox 외부 검사 분리와 Reports 공식 검증 복구 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+dd.result-status{font-weight:600}dd.result-passed{color:var(--green)}dd.result-failed{color:var(--red)}dd.result-blocked,dd.result-unverified{color:var(--amber)}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 17일 AM 11:12 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>BoxBox 외부 검사 분리와 Reports 공식 검증 복구</h1><p class="lead">BoxBox 외부검사를 제품검사에서 분리한 선택패치를 적용하고 양쪽 제품실행과 Reports19기준 정식등록을 확인했다. 원래3Task는 review대기다.</p><div id="report-story" class="story">BoxBox off도 직접 CLI검사4건이 제품묶음에 섞여 실패했다.
+
+제품12개·외부4개 본문을 보존하고 기본제품검사와 명시BoxBox실행을 분리했다. off명령은 disabled/exit2/실행0. 원격 전체제품검사는 기존Codex번들rg PATH 전제 보완 후 공식 passed다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 1 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 원래Reports3의 지정고유감사·문서영향·완료처리를 진행한다.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>BoxBox off도 직접 CLI검사4건이 제품묶음에 섞여 실패했다.</p></div><div><h3>접근과 결과</h3><p>제품12개·외부4개 본문을 보존하고 기본제품검사와 명시BoxBox실행을 분리했다. off명령은 disabled/exit2/실행0. 원격 전체제품검사는 기존Codex번들rg PATH 전제 보완 후 공식 passed다.</p></div></div><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>기존 허용argv 유지로 schema2 재권한API를 만들지 않았다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>승인된7경로의 파일별SHA 비교 및 선택패치를 적용했다.</li><li>source/type/architecture typed post가 actual tool process로 통과했다. 호스트 adapter는 injected이며 실제모델호스트로 주장하지 않는다.</li><li>기존Reports3 UUID19기준을 실제 verifyWork로 등록해 현재 usable을 확인했다.</li></ul></div><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 1건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>BoxBox실도구4개 미실행.</li><li>이 원격 구현UUID의 고유완료감사는 미실행이다. 로컬 구현코드 Opus PASS는 참고이며 복사하지 않는다.</li><li>문서정정 뒤 구현원장의 과거증거 현재성·REGISTER 자동수용은 별도 미완료다. 원래Reports19개 기준은 현재유효하다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>원래Reports3의 지정고유감사·문서영향·완료처리를 진행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 17일 AM 11:12 · 선택한 발행 기록 · BoxBox 외부검사를 제품검사에서 분리한 선택패치를 적용하고 양쪽 제품실행과 Reports19기준 정식등록을 확인했다. 원래3Task는 review대기다.</p><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 2개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 17일 AM 10:48 · 자동 기록 · 진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</summary><article><h3>BoxBox 외부 검사 분리와 Reports 공식 검증 복구</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl><section class="paper" id="history-report-dd3789f6-a6e2-48d9-a783-c1ca3439e02c-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p></section><section class="paper" id="history-report-dd3789f6-a6e2-48d9-a783-c1ca3439e02c-next"><h2>남은 일과 해소 행동</h2><p>남은 일과 완료 조건이 기록되지 않았습니다. 업무가 완료됐다는 뜻은 아닙니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-dd3789f6-a6e2-48d9-a783-c1ca3439e02c-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54<br>report-dd3789f6-a6e2-48d9-a783-c1ca3439e02c</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>d09e04ea183210e5858e2a6d2b82dda2ea5ed610ae36d7b1b61196f3dd8cf395</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>b2897f989ce3da3ba89ff8892a386bfdd7b524966cae93aed7e15db08473c980</code></dd></div><div><dt>기준 지문</dt><dd><code>10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>in_progress</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;in_progress&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;PRODUCT&quot;,
+      &quot;description&quot;: &quot;BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;BOXBOX&quot;,
+      &quot;description&quot;: &quot;외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;REGISTER&quot;,
+      &quot;description&quot;: &quot;기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 17일 AM 10:43 · 자동 기록 · 진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</summary><article><h3>BoxBox 외부 검사 분리와 Reports 공식 검증 복구</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl><section class="paper" id="history-report-f511ea79-1878-4d50-a79f-4da924b0ce25-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p></section><section class="paper" id="history-report-f511ea79-1878-4d50-a79f-4da924b0ce25-next"><h2>남은 일과 해소 행동</h2><p>남은 일과 완료 조건이 기록되지 않았습니다. 업무가 완료됐다는 뜻은 아닙니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-f511ea79-1878-4d50-a79f-4da924b0ce25-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54<br>report-f511ea79-1878-4d50-a79f-4da924b0ce25</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>d09e04ea183210e5858e2a6d2b82dda2ea5ed610ae36d7b1b61196f3dd8cf395</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>63582c45e38a3b5fe9ff3d819f96e714d94e22487647eb0643edaa89c23bbe9e</code></dd></div><div><dt>기준 지문</dt><dd><code>10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>in_progress</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;in_progress&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;PRODUCT&quot;,
+      &quot;description&quot;: &quot;BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;BOXBOX&quot;,
+      &quot;description&quot;: &quot;외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;REGISTER&quot;,
+      &quot;description&quot;: &quot;기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre></div></details></article></details></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54<br>report-aacd5ab8-e9fd-4f10-bf4f-05bfc2495473</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>863e32ea99a26ab93dbdfbce4e1795194fda966a4e70921b26d5db5fee5d2109</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>91ff318198e005708d26fcd5a21bd7be89e2710c3f138be688b249ad82d800fc</code></dd></div><div><dt>기준 지문</dt><dd><code>10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;PRODUCT&quot;,
+      &quot;description&quot;: &quot;BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;BOXBOX&quot;,
+      &quot;description&quot;: &quot;외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;REGISTER&quot;,
+      &quot;description&quot;: &quot;기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-17T01:51:23.089Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-2278f383-9f70-463d-a64b-a3e4de0f063b&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-17T01:58:55.837Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;BoxBox 외부검사를 제품검사에서 분리한 선택패치를 적용하고 양쪽 제품실행과 Reports19기준 정식등록을 확인했다. 원래3Task는 review대기다.&quot;,
+  &quot;before&quot;: &quot;BoxBox off도 직접 CLI검사4건이 제품묶음에 섞여 실패했다.&quot;,
+  &quot;after&quot;: &quot;제품12개·외부4개 본문을 보존하고 기본제품검사와 명시BoxBox실행을 분리했다. off명령은 disabled/exit2/실행0. 원격 전체제품검사는 기존Codex번들rg PATH 전제 보완 후 공식 passed다.&quot;,
+  &quot;changes&quot;: [
+    &quot;승인된7경로의 파일별SHA 비교 및 선택패치를 적용했다.&quot;,
+    &quot;source/type/architecture typed post가 actual tool process로 통과했다. 호스트 adapter는 injected이며 실제모델호스트로 주장하지 않는다.&quot;,
+    &quot;기존Reports3 UUID19기준을 실제 verifyWork로 등록해 현재 usable을 확인했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;기존 허용argv 유지로 schema2 재권한API를 만들지 않았다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;BoxBox실도구4개 미실행.&quot;,
+    &quot;이 원격 구현UUID의 고유완료감사는 미실행이다. 로컬 구현코드 Opus PASS는 참고이며 복사하지 않는다.&quot;,
+    &quot;문서정정 뒤 구현원장의 과거증거 현재성·REGISTER 자동수용은 별도 미완료다. 원래Reports19개 기준은 현재유효하다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;원래Reports3의 지정고유감사·문서영향·완료처리를 진행한다.&quot;
+  ]
+}</pre></div></details></section></article></div></main></body></html>

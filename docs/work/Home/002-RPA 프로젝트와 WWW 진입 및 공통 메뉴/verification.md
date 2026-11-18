@@ -617,3 +617,144 @@
 - 검증 중 소스 유지: 확인
 - 출력: stdout 28바이트, stderr 1287바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-6a7ec502-194c-429e-8418-71ff7e830039"></a>
+## 검증 시도 — 2026-11-16T14:33:14.769Z
+
+- 시도 ID: `attempt-6a7ec502-194c-429e-8418-71ff7e830039`
+- 실행 시각: 2026-11-16T14:31:23.355Z ~ 2026-11-16T14:33:14.769Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {readFileSync,writeFileSync} from 'node:fs';import {captureSource,criteriaDigest} from './scripts/workflow/evidence.ts';import {readWork} from './scripts/workflow/work.ts';\nconst base='.www/evidence/resume-20261116/home004-repair/scratch',ids=['work-4573f7d4-62eb-4e72-9985-62994c1b30a8','work-0e282d77-1c00-4663-8860-483d28148f74'];const before=[];for(const workId of ids){const w=await readWork({workId});before.push({workId,source:await captureSource({inputs:w.record.workflow.inputs}),criteriaDigest:criteriaDigest(w.record)});}writeFileSync(base+'/home23-functional-v1-before.json',JSON.stringify(before,null,2));\nconst steps=[[\"bun\",\"test\",\"test/dashboard.test.ts\",\"test/native-session.test.ts\",\"test/session-registry.test.ts\",\"test/session-tabs.test.ts\",\"test/www-activity-view.test.ts\",\"test/www-activity.test.ts\",\"test/input.test.ts\",\"test/workflow-model-allocation.test.ts\",\"--timeout\",\"30000\"],[\"node\",\"--test\",\"test/workflow-development.test.ts\"],[\"node\",\"scripts/verify-sessions.ts\"],[\"node\",\"scripts/verify-chat.ts\"],[\"node\",\"scripts/verify-architecture.ts\"],[\"node\",\"scripts/verify-reports.ts\"]],results=[];for(let i=0;i<steps.length;i++){const[command,...args]=steps[i],startedAt=new Date().toISOString(),r=spawnSync(command,args,{encoding:'utf8',maxBuffer:24000000});const log=base+'/home23-functional-v1-step-'+i+'.log';writeFileSync(log,(r.stdout??'')+(r.stderr??''));results.push({command,args,startedAt,completedAt:new Date().toISOString(),code:r.status,signal:r.signal,error:r.error?String(r.error):null,log});process.stdout.write((r.stdout??'')+(r.stderr??''));if(r.status!==0)break;}\nconst after=[];for(const workId of ids){const w=await readWork({workId});after.push({workId,source:await captureSource({inputs:w.record.workflow.inputs}),criteriaDigest:criteriaDigest(w.record)});}writeFileSync(base+'/home23-functional-v1-after.json',JSON.stringify(after,null,2));const sourceStable=before.every((b,i)=>b.source.digest===after[i].source.digest&&b.criteriaDigest===after[i].criteriaDigest);writeFileSync(base+'/home23-functional-v1-steps.json',JSON.stringify({steps,results,sourceStable,before:before.map(b=>({workId:b.workId,sourceDigest:b.source.digest,criteriaDigest:b.criteriaDigest})),after:after.map(b=>({workId:b.workId,sourceDigest:b.source.digest,criteriaDigest:b.criteriaDigest}))},null,2));process.exit(results.length===steps.length&&results.every(r=>r.code===0)&&sourceStable?0:1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `S1`, `S2`, `S3`, `S5`, `S6`, `S7`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/MODEL_POLICY.md`, `docs/specs/chat.md`, `docs/specs/dashboard.md`, `package.json`, `scripts/verify-architecture.ts`, `scripts/verify-chat.ts`, `scripts/verify-ecosystem.ts`, `scripts/verify-home.ts`, `scripts/verify-sessions.ts`, `scripts/workflow/model-allocation.ts`, `scripts/workflow/run.ts`, `src`, `test/dashboard.test.ts`, `test/fixtures/chat-ui-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/fixtures/sessions-app-server.ts`, `test/native-lifecycle.test.ts`, `test/native-session.test.ts`, `test/session-registry.test.ts`, `test/session-tabs.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `tsconfig.json`
+- 소스 식별: `06b6f3f7f43185da4ae95de31b9114299a07f59f18a506c0945ecdad381e128e`
+- 기준 정의 식별: `79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 57585바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+## 현재 소스의 실제 실행과 감사 접수 준비 — 2026-11-16T14:35:18.304524+00:00
+
+공식 기능 시도 `attempt-6a7ec502-194c-429e-8418-71ff7e830039`는 실제 code 0, sourceStable/environmentStable true, recorded true다. 집중 99건/658 expect와 Node 개발 하네스 26건, 실제 Electron Sessions/Chat/Architecture/Reports를 직렬 실행했다. 결과는 `.www/evidence/resume-20261116/home004-repair/scratch/home23-functional-v1-steps.json`, 각 stdout/stderr 전문은 같은 prefix step-0~5.log다. 세션 검사는 실제 별도 child PID·동시 출력·동일 requestId의 토큰 격리·승인·중단·탭 닫기/초안 보호를 확인했다. Chat은 목록 탐색 중 중앙 유지·현재 프로젝트 재선택·모니터 왕복·활성/오류 관측·좁은 viewport를, 지도/리포트 검사는 각 선택과 초안·읽기 관련 실제 assertion을 수행했다.
+
+Home004 공식 `attempt-288460ce-798b-42e7-8d4e-ec413d385177`의 같은 현재 소스 build와 실제 Home empty/multiple 및 원장 chmod partial/failed·복원·삭제·선택 격리 결과는 별도 사실이다. 이를 이 UUID의 영수증으로 복사하지 않는다. Home004의 실제 실행은 프로젝트/메뉴/보드 여정의 추가 관측으로 원문을 읽고 현재 소스를 대조한다.
+
+S3의 폴더 선택 성공/취소/등록 실패는 실제 NativeSession 공개 invoke와 프로젝트 레지스트리 bytes/선택·thread 보존 회귀다. OS selector는 주입했으며 저장 실패는 beforeRename 오류 주입이다. 실제 OS 폴더 선택 대화상자·한국어 IME·Windows를 실행한 것은 아니다. S4/S8은 기능 검사만으로 선행 통과시키지 않고 현재 문서·개발 하네스·초기 원장 역사와 제품 자동 라우터 미구현/토큰 절감 미측정을 직접 Terra가 대조한 뒤 composite로 연결한다. 과거 실패·다른 머신 경로와 Opus 실패는 보존했다.
+
+공식 advance review의 이유는 현재 기능 근거는 있으나 S4/S8의 의미 검토 및 필수 독립 감사를 수행하기 위해서다. review 접수 자체가 기준 통과·업무 완료는 아니다.
+
+
+### 공식 review 접수 — 2026-11-16T14:36:17.742Z
+
+문서 영향 검토 documentation-fdfd9e96-4c1f-4bfe-89cb-f3b4f12c608d를 기록하고 실제 advance review를 실행했다. 현재 기능 근거 뒤 필수 직접 Terra 독립 감사와 감사 포함 의미 기준을 평가하려는 단계 접수이며 업무 완료·미검증 기준 통과를 뜻하지 않는다. Home003은 고유 공식 current functional composite attempt-d66ced47-121e-42d3-8f9f-6f47021f9756의 sourceStable/artifactsStable true를 확인했다.
+
+<a id="attempt-e8dc8e08-ddab-4289-8e9d-ea39d852a079"></a>
+## 검증 시도 — 2026-11-16T21:43:09.559Z
+
+- 시도 ID: `attempt-e8dc8e08-ddab-4289-8e9d-ea39d852a079`
+- 실행 시각: 2026-11-16T21:42:55.177Z ~ 2026-11-16T21:43:09.559Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test","test/dashboard.test.ts","test/native-session.test.ts","test/session-registry.test.ts","test/session-tabs.test.ts","test/www-activity-view.test.ts","test/www-activity.test.ts","test/input.test.ts","test/workflow-model-allocation.test.ts","--timeout","30000"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `S7`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/MODEL_POLICY.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/specs/dashboard.md`, `package.json`, `scripts/verify-architecture.ts`, `scripts/verify-chat.ts`, `scripts/verify-ecosystem.ts`, `scripts/verify-home.ts`, `scripts/verify-sessions.ts`, `scripts/workflow/model-allocation.ts`, `scripts/workflow/run.ts`, `src`, `test/dashboard.test.ts`, `test/fixtures/chat-ui-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/fixtures/sessions-app-server.ts`, `test/native-lifecycle.test.ts`, `test/native-session.test.ts`, `test/session-registry.test.ts`, `test/session-tabs.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `tsconfig.json`
+- 소스 식별: `6c70e205301966f8a2b343c033bb90cfe2d07dea260d9b5a86f16fd3850c987f`
+- 기준 정의 식별: `79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 143바이트, stderr 13972바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+## 현재 집중 검사 해석 — 2026-11-17
+
+공식 시도 `attempt-e8dc8e08-ddab-4289-8e9d-ea39d852a079`는 실제 Bun 집중 검사의 exit 0 및 sourceStable=true를 기록했다. 이 시도는 합성 fixture와 순수 상태/경계 동작을 확인하며 Electron 화면·OS picker·IME·Windows·실제 모델·독립 감사를 실행하지 않았다. 기준에 연결된 집중 증거만으로 복합 기준 전체의 관측을 완료로 판단하지 않는다. Root의 현재 GUI 결과와 최종 문서 정정 이후 source 시점, 문서 영향 검토, 별도 Terra actual process/receipt가 남아 있다.
+
+<a id="attempt-aabc10bd-3069-432e-b214-699831d1c0d0"></a>
+## 검증 시도 — 2026-11-16T21:50:29.356Z
+
+- 시도 ID: `attempt-aabc10bd-3069-432e-b214-699831d1c0d0`
+- 실행 시각: 2026-11-16T21:50:15.204Z ~ 2026-11-16T21:50:29.356Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test","test/dashboard.test.ts","test/native-session.test.ts","test/session-registry.test.ts","test/session-tabs.test.ts","test/www-activity-view.test.ts","test/www-activity.test.ts","test/input.test.ts","test/workflow-model-allocation.test.ts","--timeout","30000"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `S7`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/MODEL_POLICY.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/specs/dashboard.md`, `package.json`, `scripts/verify-architecture.ts`, `scripts/verify-chat.ts`, `scripts/verify-ecosystem.ts`, `scripts/verify-home.ts`, `scripts/verify-sessions.ts`, `scripts/workflow/model-allocation.ts`, `scripts/workflow/run.ts`, `src`, `test/dashboard.test.ts`, `test/fixtures/chat-ui-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/fixtures/sessions-app-server.ts`, `test/native-lifecycle.test.ts`, `test/native-session.test.ts`, `test/session-registry.test.ts`, `test/session-tabs.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `tsconfig.json`
+- 소스 식별: `ae183a572f1d6bb401257d637185824374c998b864be447270f952ae38bf522e`
+- 기준 정의 식별: `79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 143바이트, stderr 13981바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-671399c3-6692-4e59-9920-cf0c4996de14"></a>
+## 검증 시도 — 2026-11-16T21:51:49.516Z
+
+- 시도 ID: `attempt-671399c3-6692-4e59-9920-cf0c4996de14`
+- 실행 시각: 2026-11-16T21:51:38.434Z ~ 2026-11-16T21:51:49.516Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-home.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `S1`, `S2`, `S3`, `S5`, `S7`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/MODEL_POLICY.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/specs/dashboard.md`, `package.json`, `scripts/verify-architecture.ts`, `scripts/verify-chat.ts`, `scripts/verify-ecosystem.ts`, `scripts/verify-home.ts`, `scripts/verify-sessions.ts`, `scripts/workflow/model-allocation.ts`, `scripts/workflow/run.ts`, `src`, `test/dashboard.test.ts`, `test/fixtures/chat-ui-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/fixtures/sessions-app-server.ts`, `test/native-lifecycle.test.ts`, `test/native-session.test.ts`, `test/session-registry.test.ts`, `test/session-tabs.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `tsconfig.json`
+- 소스 식별: `ae183a572f1d6bb401257d637185824374c998b864be447270f952ae38bf522e`
+- 기준 정의 식별: `79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 5657바이트, stderr 494바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-7bf70d33-d23e-467c-a8bf-808a4611652d"></a>
+## 검증 시도 — 2026-11-16T23:11:29.966Z
+
+- 시도 ID: `attempt-7bf70d33-d23e-467c-a8bf-808a4611652d`
+- 실행 시각: 2026-11-16T23:11:12.567Z ~ 2026-11-16T23:11:29.966Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test","test/dashboard.test.ts","test/native-session.test.ts","test/session-registry.test.ts","test/session-tabs.test.ts","test/www-activity-view.test.ts","test/www-activity.test.ts","test/input.test.ts","test/workflow-model-allocation.test.ts","--timeout","30000"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `S7`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/MODEL_POLICY.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/specs/dashboard.md`, `package.json`, `scripts/verify-architecture.ts`, `scripts/verify-chat.ts`, `scripts/verify-ecosystem.ts`, `scripts/verify-home.ts`, `scripts/verify-sessions.ts`, `scripts/workflow/model-allocation.ts`, `scripts/workflow/run.ts`, `src`, `test/dashboard.test.ts`, `test/fixtures/chat-ui-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/fixtures/sessions-app-server.ts`, `test/native-lifecycle.test.ts`, `test/native-session.test.ts`, `test/session-registry.test.ts`, `test/session-tabs.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `tsconfig.json`
+- 소스 식별: `cf33245e79463341c168cb805d9432ffae93658c393174621c3d97856b85ae2d`
+- 기준 정의 식별: `79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 143바이트, stderr 13994바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-6b7def02-f009-4f95-9d15-1916a9df09a5"></a>
+## 검증 시도 — 2026-11-16T23:22:24.526Z
+
+- 시도 ID: `attempt-6b7def02-f009-4f95-9d15-1916a9df09a5`
+- 실행 시각: 2026-11-16T23:21:53.651Z ~ 2026-11-16T23:22:24.526Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test","test/dashboard.test.ts","test/native-session.test.ts","test/session-registry.test.ts","test/session-tabs.test.ts","test/www-activity-view.test.ts","test/www-activity.test.ts","test/input.test.ts","test/workflow-model-allocation.test.ts","--timeout","30000"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `S7`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/MODEL_POLICY.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/specs/dashboard.md`, `docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/design.md`, `docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/evidence-current-v5.md`, `docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/tasks.md`, `package.json`, `scripts/verify-architecture.ts`, `scripts/verify-chat.ts`, `scripts/verify-ecosystem.ts`, `scripts/verify-home.ts`, `scripts/verify-sessions.ts`, `scripts/workflow/model-allocation.ts`, `scripts/workflow/run.ts`, `src`, `test/dashboard.test.ts`, `test/fixtures/chat-ui-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/fixtures/sessions-app-server.ts`, `test/native-lifecycle.test.ts`, `test/native-session.test.ts`, `test/session-registry.test.ts`, `test/session-tabs.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `tsconfig.json`
+- 소스 식별: `8a77487aba3fc3fcc1685756674eeca69e00a7c1322f478deab841a1e1583b8e`
+- 기준 정의 식별: `79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/home-empty-CznAep/electron.stderr` (98바이트, sha256 a25eacbb57c7861b8b11dc68286c3e69262acf1b5d55fd5c3b9043426628fff9), `.www/evidence/home-empty-CznAep/electron.stdout` (0바이트, sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855), `.www/evidence/home-empty-CznAep/empty-view-page.png` (122129바이트, sha256 f42168146238bd353dd6655f7155950f03b8815f6126157ebb55bd18474374e7), `.www/evidence/home-empty-CznAep/empty-www-dashboard.png` (130698바이트, sha256 be251cdf3f2b059a64626eef056ee0cfbb07b407e1d8b9279fb74efb4fddc70b), `.www/evidence/home-empty-CznAep/summary.json` (801바이트, sha256 28d1907216c549e55925e05abe8af5a73669eb03b6e18843e4260e2b55e9bf4a), `.www/evidence/home-multiple-CzqZdH/RPA-chat-nav.png` (108463바이트, sha256 8f1774fd8d97cbf566523a82fb495112ac6fe5a41aa6bb61c93e3d18b7b2fd81), `.www/evidence/home-multiple-CzqZdH/RPA-dashboard-nav.png` (74835바이트, sha256 5113cce5cb835d05ca924ac2eec96db43bfeb1b22e34385dd0d84b78e20eba9d), `.www/evidence/home-multiple-CzqZdH/RPA-ecosystem-nav.png` (136136바이트, sha256 021fbffc4e390344cbc5467d2c0d96d59aca7c6e504fc098b029bf86ed66443f), `.www/evidence/home-multiple-CzqZdH/RPA-monitoring-nav.png` (89853바이트, sha256 eb10dd25988956644eb010c034591e24db4f1c66e636228f5b9565b938504279), `.www/evidence/home-multiple-CzqZdH/RPA-reports-nav.png` (103224바이트, sha256 24936ca459bed196cb14ee2e8fccace6f409de3936add5917a77cdcbb3073e1a), `.www/evidence/home-multiple-CzqZdH/WWW-chat-nav.png` (116489바이트, sha256 3bfb43e414a17576b180f386994d1f802a52cb18353372b05d2d011a8cb274ea), `.www/evidence/home-multiple-CzqZdH/WWW-dashboard-nav.png` (129201바이트, sha256 bd1be1c1c85089a20a5e1c402dd9fa1b3566268c94cf853bf7c978b82fb734de), `.www/evidence/home-multiple-CzqZdH/WWW-ecosystem-nav.png` (136290바이트, sha256 0d9dd039f666f1a573bfbdaca11dcf777dbb8f869bc1a4700a51a47bc611eeaa), `.www/evidence/home-multiple-CzqZdH/WWW-monitoring-nav.png` (90443바이트, sha256 a9fce7af7534011fab820f0c81b979cecfb408fcf8291027cce09552b45b9b0e), `.www/evidence/home-multiple-CzqZdH/WWW-reports-nav.png` (88281바이트, sha256 4d528bb18b9016fdcb13097c74887a5bedcc5fe896190d7c290a44fc08efcbba), `.www/evidence/home-multiple-CzqZdH/calls.jsonl` (4656바이트, sha256 ba8531fd836141c64d91454f5579e08ce45c5b7d9fd0dd1d1c6fe8dbf761417c), `.www/evidence/home-multiple-CzqZdH/electron.stderr` (1176바이트, sha256 1f98ee3d0a1d877756c4515a089e5b0bc955e4428e739765d9a075c7f848e239), `.www/evidence/home-multiple-CzqZdH/electron.stdout` (0바이트, sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855), `.www/evidence/home-multiple-CzqZdH/kanban-detail-narrow-bounds.json` (1377바이트, sha256 857e9032fd978446b0c788f021e65757d626348ea2b7fddd2a8be08779dc7ffa), `.www/evidence/home-multiple-CzqZdH/kanban-detail-narrow.png` (68275바이트, sha256 40ab62b3f2ec9eb162382f5638dfbce8e4becc632c3c020ba3739cdefdce231e), `.www/evidence/home-multiple-CzqZdH/kanban-permission-stale.png` (136314바이트, sha256 d33253e4b648023ed0feab5fe60987729d472dc891604bd4462160d0f5c6aaac), `.www/evidence/home-multiple-CzqZdH/multiple-global-board.png` (128562바이트, sha256 f729966165bfdd22e987cc4a1e16c3a61e4f7e7fcbd0e3301af6dae5a40a9304), `.www/evidence/home-multiple-CzqZdH/multiple-rpa-board.png` (71559바이트, sha256 32a6cd5f8c3b8bb0b4eb1ec211881151af255cc251da0e5522a6d6d32b6b65fb), `.www/evidence/home-multiple-CzqZdH/multiple-www-board.png` (130510바이트, sha256 74f3bf4c2095019aead5e79eb2bed68e1ebda9a78ca8420212b729a3c47266c6), `.www/evidence/home-multiple-CzqZdH/permission-failed.json` (487바이트, sha256 cd70d664fc430e63b178fb33ba6d7b8c5ba73dd43bfc46b548d0bf30d772c878), `.www/evidence/home-multiple-CzqZdH/permission-partial.json` (957바이트, sha256 bc68ade7d3b80e7f0e0377013b52eac6a6bfd95609cf6af308184c724c5b7507), `.www/evidence/home-multiple-CzqZdH/summary.json` (5317바이트, sha256 874947869871abbcefdb210310e2a32b79d0cd9c3dc5a2794205d6f620d9e8b6), `.www/evidence/home-multiple-CzqZdH/view-page-return.png` (124686바이트, sha256 4ea8380f4b3711d4e0eee6bf8e742e1057a9fcc52acf319adfa1649aa01091d3), `.www/evidence/reuse-integrate-resume-20261117/final/home002-gui-v5.process.json` (6520바이트, sha256 20d9f71034a87e3a515cfc66360deeb85e8d273b01c4017ffa58e712b7df4bdc), `.www/evidence/reuse-integrate-resume-20261117/final/home002-gui-v5.stderr` (494바이트, sha256 d19c9b49ebacb54211ee5abf8ce63900f164b86b2d90ad33d23be7b7ff363134), `.www/evidence/reuse-integrate-resume-20261117/final/home002-gui-v5.stdout` (5657바이트, sha256 69a59c654ebfda30dc3231b2d05b36d63f4173805d35ed213adc9cebb04e5432)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 143바이트, stderr 14861바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-f9f12fd9-ea0d-4df8-b28a-f0b5acc84e08"></a>
+## 검증 시도 — 2026-11-16T23:25:52.440Z
+
+- 시도 ID: `attempt-f9f12fd9-ea0d-4df8-b28a-f0b5acc84e08`
+- 실행 시각: 2026-11-16T23:25:45.672Z ~ 2026-11-16T23:25:52.440Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-sessions.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `S6`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/MODEL_POLICY.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/specs/dashboard.md`, `docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/design.md`, `docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/evidence-current-v5.md`, `docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/tasks.md`, `package.json`, `scripts/verify-architecture.ts`, `scripts/verify-chat.ts`, `scripts/verify-ecosystem.ts`, `scripts/verify-home.ts`, `scripts/verify-sessions.ts`, `scripts/workflow/model-allocation.ts`, `scripts/workflow/run.ts`, `src`, `test/dashboard.test.ts`, `test/fixtures/chat-ui-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/fixtures/sessions-app-server.ts`, `test/native-lifecycle.test.ts`, `test/native-session.test.ts`, `test/session-registry.test.ts`, `test/session-tabs.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `tsconfig.json`
+- 소스 식별: `8a77487aba3fc3fcc1685756674eeca69e00a7c1322f478deab841a1e1583b8e`
+- 기준 정의 식별: `79a207f08b49cd0f21fad447d8b2d84a11b1ca3be5d49f48a505f76b61bbe3a0`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 1704바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.

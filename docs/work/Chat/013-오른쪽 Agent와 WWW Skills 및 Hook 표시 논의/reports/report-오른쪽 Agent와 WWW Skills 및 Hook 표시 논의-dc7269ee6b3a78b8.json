@@ -1876,6 +1876,1416 @@
         "sourceDigest"  : "6b25721c3253157bd75281af1218e42600d1de3f34bd313d0bf44d0dc44a7cb0",
         "criteriaDigest": "5950d05d534dbcec78ab4ba9dcf4dc08ab4d84520b6255f49888b451227a7dd8"
       }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-9af15517-b4c5-43dd-a0f5-928a9a9898ba",
+      "workId"        : "work-64677750-337f-4488-a503-4e0265356bf5",
+      "title"         : "오른쪽 Agent와 WWW Skills 및 Hook 표시 논의",
+      "summary"       : "상세 모니터의 반복 Hook handler가 예전 완료에 고착되는 결함을 수정했다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T08:34:27.782Z",
+      "event"         : "finish",
+      "workRecordHash": "424d740fd63990da05ab33da2b296516bb8de081051d09660bd88f593284adec",
+      "sourceDigest"  : "4b6d7caa7c13515ceab8d53f508927006e204263a6bd3243ad9bbb132b7650ae",
+      "criteriaDigest": "5950d05d534dbcec78ab4ba9dcf4dc08ab4d84520b6255f49888b451227a7dd8",
+      "semanticHash"  : "7b917709c6cb24b65879556e0dff4c0d0684860e7803868fde76ee8266555bea",
+      "narrative": {
+        "summary": "상세 모니터의 반복 Hook handler가 예전 완료에 고착되는 결함을 수정했다.",
+        "before" : "같은 handler·같은 turn의 started100→completed100→started200도 예전 completed와 종료 시각을 유지했다.",
+        "after"  : "더 새로운 비교 가능한 시작은 같은 행의 상태·타이머를 새로 갱신한다. 집중103개와 Astra 독립4개가 통과했고 실제 투영/회귀 파일을 inputs에 보강했다.",
+        "changes": [
+          "더 새로운 비교 가능한 시작은 같은 행의 상태·타이머를 새로 갱신한다. 집중103개와 Astra 독립4개가 통과했고 실제 투영/회귀 파일을 inputs에 보강했다.",
+          "현재 계획은 같은 UUID의 tasks.md에 두고 이전 계획은 이력으로 구분했다."
+        ],
+        "decisions": [
+          "source-machine 기록과 현 머신의 실제 실행을 분리하고 기준·권한을 약화하지 않았다."
+        ],
+        "limitations": [
+          "시각이 불명확한 완료는 현재 실행의 완료로 단정하지 않는다. 실제 Native/GUI·필수 Opus와 BoxBox REFUSE/미정렬은 미해결이다.",
+          "Claude OAuth 만료 및 자동 갱신 실패로 필수 감사가 not_run이며 대체 모델은 실행하지 않았다. 커밋·push·배포·외부 쓰기를 하지 않았다."
+        ],
+        "next": [
+          "현재 원장의 다음 행동 verify에서 계획에 기록한 실제 미실행 구간을 확인한다.",
+          "GUI/Native/Opus 또는 BoxBox 전제가 필요한 경우 현재 금지된 인증·전역 설정·승인 변경을 이 실행에서 우회하지 않는다."
+        ],
+        "reader": {
+          "story": "상세 모니터의 반복 Hook handler가 예전 완료에 고착되는 결함을 수정했다. 더 새로운 비교 가능한 시작은 같은 행의 상태·타이머를 새로 갱신한다. 집중103개와 Astra 독립4개가 통과했고 실제 투영/회귀 파일을 inputs에 보강했다. 시각이 불명확한 완료는 현재 실행의 완료로 단정하지 않는다. 실제 Native/GUI·필수 Opus와 BoxBox REFUSE/미정렬은 미해결이다.",
+          "requirements": [
+            {
+              "requirement": "같은 UUID의 실제 결과와 미실행 구분",
+              "result"     : "더 새로운 비교 가능한 시작은 같은 행의 상태·타이머를 새로 갱신한다. 집중103개와 Astra 독립4개가 통과했고 실제 투영/회귀 파일을 inputs에 보강했다.",
+              "evidence"   : ".www/evidence/remote-20261116/scratch/hook-fix-review.md",
+              "limitations": "시각이 불명확한 완료는 현재 실행의 완료로 단정하지 않는다. 실제 Native/GUI·필수 Opus와 BoxBox REFUSE/미정렬은 미해결이다."
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "현재 원장과 증거 적용성",
+              "method"     : "공식 read/status 및 실제 명령·독립 읽기 전용 대조",
+              "expected"   : "과거 성공이나 부분 검사로 전체 완료를 만들지 않음",
+              "observed"   : "업무 완료 false를 유지하고 기준별 현재 적용성과 미검증을 나누었다.",
+              "limitations": "시각이 불명확한 완료는 현재 실행의 완료로 단정하지 않는다. 실제 Native/GUI·필수 Opus와 BoxBox REFUSE/미정렬은 미해결이다."
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": ".www/evidence/remote-20261116/scratch/hook-fix-review.md",
+              "purpose": "이 보고서의 실제 실행 범위와 실패/제한 원문 확인"
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "현재 인계 문서의 남은 실제 검증·필수 감사를 재개한다.",
+              "owner"   : "후속 Codex 통합자",
+              "doneWhen": "현재 기능·환경·필수 감사와 저작 보고서가 모두 적용 가능함",
+              "impact"  : "미충족 동안 업무 완료로 승격하지 않음"
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "AC-1: scope_changed, environment_changed, source_changed, artifacts_unavailable; AC-2: scope_changed, environment_changed, source_changed, artifacts_unavailable; AC-3: scope_changed, environment_changed, source_changed, artifacts_unavailable; AC-4: scope_changed, environment_changed, source_changed, artifacts_unavailable; AC-5: scope_changed, environment_changed, source_changed, artifacts_unavailable; recording_context_invalid; review_not_passed; source_changed; override_authority_invalid; reviewer_not_allowed; receipt_context_mismatch; receipt_execution_mismatch; receipt_unavailable; 현재 소스·기준·기록의 저작 작업 보고서 없음",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "오른쪽 바에 WWW 개발 Agent를 상위 항목으로 두고 spec/design/build/diagnose/verify 다섯 스킬 전체를 고정 표시하며 범용 스킬 전체 목록을 섞지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-151b029e-0132-45b8-96d4-28048c1fa0ef",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-da5f89a7-fe43-4426-ad31-a922d5834b09",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-00dccd0d-1b77-4c96-9531-b7db36fdd586",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4c7d13ef-1597-44d8-9098-b71e4c12e298",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-34100f7b-f178-49ef-823b-43eee759386c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1a1e486c-7398-4e75-b9f2-6b723a132f03",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3dbffd52-101a-4a12-b2cf-cd79e0d58cb5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1fb4224b-7051-4ca2-9fed-a85515f349e8",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "현재 선택·진행 중인 WWW 스킬을 식별 가능한 근거에 따라 강조하며 문서 읽기·이름 언급·설치 여부만으로 실행 중이라고 판정하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-151b029e-0132-45b8-96d4-28048c1fa0ef",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-da5f89a7-fe43-4426-ad31-a922d5834b09",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-00dccd0d-1b77-4c96-9531-b7db36fdd586",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4c7d13ef-1597-44d8-9098-b71e4c12e298",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-34100f7b-f178-49ef-823b-43eee759386c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1a1e486c-7398-4e75-b9f2-6b723a132f03",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3dbffd52-101a-4a12-b2cf-cd79e0d58cb5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1fb4224b-7051-4ca2-9fed-a85515f349e8",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "이번 오른쪽 바의 표시 범위에서 Hook 목록·실행 현황 보기를 제외한다. Agent·WWW Skills·실제 Subagent와 Plan·Progress를 표시하며, Hook 표시 제외를 Hook 실행 비활성화로 취급하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-151b029e-0132-45b8-96d4-28048c1fa0ef",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-da5f89a7-fe43-4426-ad31-a922d5834b09",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-00dccd0d-1b77-4c96-9531-b7db36fdd586",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4c7d13ef-1597-44d8-9098-b71e4c12e298",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-34100f7b-f178-49ef-823b-43eee759386c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1a1e486c-7398-4e75-b9f2-6b723a132f03",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3dbffd52-101a-4a12-b2cf-cd79e0d58cb5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1fb4224b-7051-4ca2-9fed-a85515f349e8",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "WWW Agent를 기본 표시하고 실제 Subagent 호출이 관측되면 해당 Subagent를 식별하여 표시한다. Subagent 작업 완료가 확인되면 항목을 유지한 채 완료 표시등으로 상태를 전환한다. 호출하지 않은 Subagent를 실행 중이라고 표시하지 않으며 역할 정의·일반 도구 호출과 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-151b029e-0132-45b8-96d4-28048c1fa0ef",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-da5f89a7-fe43-4426-ad31-a922d5834b09",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-00dccd0d-1b77-4c96-9531-b7db36fdd586",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4c7d13ef-1597-44d8-9098-b71e4c12e298",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-34100f7b-f178-49ef-823b-43eee759386c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1a1e486c-7398-4e75-b9f2-6b723a132f03",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3dbffd52-101a-4a12-b2cf-cd79e0d58cb5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1fb4224b-7051-4ca2-9fed-a85515f349e8",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "Plan은 Plan.md 등 작업 계획 문서나 Native가 요구사항을 처리하며 제공한 계획을 바탕으로 요구사항 단위의 작업 항목·상태를 보여준다. Progress는 현재 진행 중인 Plan 항목에 연결하여 Native가 제공하는 공개 판단 요약·진행 설명과 확인된 실행 사건을 바탕으로 작업 상황을 산문으로 요약한다. 계획 목록과 원시 로그를 반복 표시하지 않고 출처 없는 판단 이유·관측하지 않은 진행을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e467166f-9ff0-449b-9bda-8113acdd1647",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-151b029e-0132-45b8-96d4-28048c1fa0ef",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-da5f89a7-fe43-4426-ad31-a922d5834b09",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-00dccd0d-1b77-4c96-9531-b7db36fdd586",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4c7d13ef-1597-44d8-9098-b71e4c12e298",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-34100f7b-f178-49ef-823b-43eee759386c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1a1e486c-7398-4e75-b9f2-6b723a132f03",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3dbffd52-101a-4a12-b2cf-cd79e0d58cb5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1fb4224b-7051-4ca2-9fed-a85515f349e8",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:15:56.149Z"
+          },
+          {
+            "id": "attempt-e467166f-9ff0-449b-9bda-8113acdd1647",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:35:12.449Z"
+          },
+          {
+            "id": "attempt-151b029e-0132-45b8-96d4-28048c1fa0ef",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:07:30.647Z"
+          },
+          {
+            "id": "attempt-da5f89a7-fe43-4426-ad31-a922d5834b09",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:17:17.809Z"
+          },
+          {
+            "id": "attempt-00dccd0d-1b77-4c96-9531-b7db36fdd586",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:26:31.623Z"
+          },
+          {
+            "id": "attempt-4c7d13ef-1597-44d8-9098-b71e4c12e298",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:43:48.842Z"
+          },
+          {
+            "id": "attempt-34100f7b-f178-49ef-823b-43eee759386c",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v26.3.0"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:59:50.040Z"
+          },
+          {
+            "id": "attempt-1a1e486c-7398-4e75-b9f2-6b723a132f03",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v26.3.0"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:06:35.117Z"
+          },
+          {
+            "id": "attempt-3dbffd52-101a-4a12-b2cf-cd79e0d58cb5",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v26.3.0"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:10:41.358Z"
+          },
+          {
+            "id": "attempt-1fb4224b-7051-4ca2-9fed-a85515f349e8",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v26.3.0"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:15:51.416Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-92513dd3-0bc0-4c4e-b513-89f19f2926ce",
+            "verdict"    : "pass",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-92513dd3-0bc0-4c4e-b513-89f19f2926ce/opus.json",
+            "findings": [
+              "검토 범위: Read와 Grep 도구로 실제 작업트리 파일을 읽었다(inline bundle에만 의존하지 않음). 읽은 파일은 spec.md, verification.md, work.json(전체 1410행), src/agent-overview.ts, src/agent-overview-view.tsx, src/native-activity-view.tsx의 ResourceActivitySidebar(299~323행), src/native-activity.ts의 plan 처리 Grep, src/architecture.generated.json의 agent-overview Grep, test/agent-overview.test.ts, .www/session-implementation의 chat013-recheck-scope.json, chat013-regenerated-verification-result.json, chat013-opus-review-result.json이다. docs/PRODUCT·ARCHITECTURE·DEVELOPMENT·skills/WORKFLOW·specs/chat.md 본문, test/www-activity-view.test.ts, ui-acceptance-map.md, chat-ui-Mpd1UU/summary.json, home-supplement-structure-harness.json, CSS·renderer는 읽지 않았다. 테스트·빌드·GUI는 실행하지 않았다. 도구 읽기 실패는 없었다.",
+              "재검사 범위의 정합성: chat013-recheck-scope.json은 이전 digest 0a34f3bd…에서 현재 c782bbe4…로 바뀐 입력이 src/architecture.generated.json 하나뿐이라고 기록한다. 이 값은 요청에 주어진 sourceDigest c782bbe4…와 같다. 현재 bundle의 파일별 digest를 work.json verifications[1](attempt-e467166f) source.files와 대조하니 agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, native-activity-view.tsx ebdfb611…, native-activity.ts 4fa746b3…, architecture.generated.json f437938b…, 두 테스트 파일, fixture, scripts/verify-chat.ts, docs/specs/chat.md가 모두 일치했다. 그래서 재실행 attempt는 현재 소스를 대상으로 한 실행이다. 이전 attempt-fce5db7e의 architecture.generated.json은 d6590d65…로 현재 값과 다르다. 재생성으로 무효가 된 사실을 숨기지 않고 resumeWork 이후 새 attempt를 연결한 기록(verification.md 69~75행)은 실제 데이터와 맞는다.",
+              "architecture.generated.json 변경의 영향: Grep 결과 이 파일에서 agent-overview 관련 내용은 모듈·import 그래프 메타데이터(397~412, 1895~1933, 2216~2233, 5261~5597행 부근)뿐이다. agent-overview.ts와 agent-overview-view.tsx는 이 JSON을 import하지 않는다. 따라서 이 snapshot 변경이 AC1~5의 동작을 바꾼다는 근거는 없다.",
+              "AC-1/AC-3: WWW_AGENT_SKILLS 다섯 항목을 고정했다(src/agent-overview.ts:8-14). ResourceActivitySidebar는 AgentOverviewView만 렌더링하고 Hook과 누적 리소스 목록은 그리지 않는다. 상세 모니터 버튼은 남아 있다(src/native-activity-view.tsx:308-313). 테스트는 data-skill-id가 5개인지, preToolUse·www-commit·누적 리소스가 노출되지 않는지 확인한다(test/agent-overview.test.ts:102-112).",
+              "AC-2: 선택 강조는 다음 조건을 모두 만족할 때만 켜진다. 턴이 live 상태(historical 아님, 종료 시각 없음, running/pending/blocked)이고, 구조화된 skill 요청이 정확히 하나이며, wwwArtifact로 식별된다(src/agent-overview.ts:67-71). 문서 읽기와 명령 참조는 basis 문구로만 '적용 미확인'이라고 표시된다(73-75행). 이름만 있는 요청, 턴 종료, 복원 이력, 다른 thread, 복수 요청에서 선택이 없는 경로는 테스트 26-37, 76-83행이 다룬다. 전송 중에는 선택을 비운다(view 30-31행).",
+              "AC-4: Subagent는 senderThreadId가 현재 thread인 collabAgentToolCall의 receiver와 subAgentActivity에서만 등록된다. 도구 item/completed만으로는 completed가 되지 않는다. agentsStates.status나 subAgentActivity kind=completed가 있어야 같은 id 항목에 ✓가 표시된다(src/agent-overview.ts:96-127, view 47-48행). transport/closed와 historical 이벤트에서는 running/pending이 unknown으로 낮아진다(88-90, 108행).",
+              "AC-5: Plan과 Progress는 현재 turnId의 turn/plan/updated와 commentary만 사용한다. 활성 inProgress 항목이 정확히 하나일 때만 연결되며, epoch·contextKey로 늦은 재귀속을 막는다(src/agent-overview.ts:128-162). 테스트 57-95행이 항목 전환, A→B→A, 계획 이전 메시지, analysis phase, 다른 turn이 제외되는지 확인한다.",
+              "경미한 관찰(수정 필수 아님) 1: 루프는 마지막 2,000개 이벤트만 처리한다(src/agent-overview.ts:85). 최종 plan은 native 투영의 current.plan을 사용한다(160행). 따라서 아주 긴 턴에서 계획 갱신이 창 밖으로 밀리면 Plan은 보이고 Progress는 null로 나올 수 있다. 이 경우 근거 없는 산문을 만들지 않고 '공개 진행 설명이 아직 없습니다'로 보수적으로 표시하므로 AC 위반은 아니다.",
+              "경미한 관찰(수정 필수 아님) 2: 이전 Opus 감사가 지적한 사항이 그대로 남아 있다. 같은 활성 항목의 commentary 스트리밍 중에 explanation이 있는 plan 갱신이 끼면 messageId가 초기화되어 delta 조각이 일시적으로 표시될 수 있다(138, 150행). 이번 재생성과는 무관하다.",
+              "증거 범위: verification.md는 재실행 attempt-e467166f를 행동·SSR bun test로만 기술한다. GUI 실행, 실제 모델의 Subagent spawn, AC-2 양성 강조 GUI, AC-5 Plan+Progress 동시 GUI는 관찰하지 않았다고 유지한다(73행). 이전 Opus 감사(sourceDigest 0a34…)를 현재 소스의 감사로 바꿔 쓰지 않고 새 감사가 필요하다고 명시한다(75행). 증거 범위를 과장한 부분은 확인되지 않았다. 다만 work.json의 AC evidence summary '현재 적용 가능'은 기록 시점의 도구 판정이다. 본 검토에서 assessWork를 다시 실행해 확인하지는 않았다."
+            ]
+          },
+          {
+            "id"         : "review-7c6ea45a-1085-40ba-8cc1-bb04815c308e",
+            "verdict"    : "pass",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-7c6ea45a-1085-40ba-8cc1-bb04815c308e/opus.json",
+            "findings": [
+              "검토 범위: Read와 Grep으로 실제 작업트리 파일을 읽었고, inline bundle에만 의존하지 않았다. 읽은 파일은 다음과 같다. work.json 전체(1482행), verification.md 전체, docs/skills/WORKFLOW.md와 docs/skills/MODEL_POLICY.md의 독립 검토 관련 행(Grep), agents/www/review-policy.json 전체, scripts/workflow/review.ts 260~316행과 425~511행, chat013-policy-currentness.json, chat013-regenerated-post-review-assessment.json, docs/DEVELOPMENT.md의 Terra 관련 Grep. chat013-policy-document-review.json은 133,203자 중 앞 43,237자만 읽었으며, 그 부분은 work.json rawSource 사본이었다. spec.md, src/agent-overview.ts, src/agent-overview-view.tsx, 두 테스트 파일, chat013-regenerated-verification-result.json, chat013-regenerated-opus-result.json의 본문은 이번에 다시 읽지 않았다. 테스트·빌드·GUI·assessWork는 실행하지 않았고 digest도 다시 계산하지 않았다. 도구 읽기 실패는 없었다.",
+              "현재성 변경 범위: chat013-policy-currentness.json은 c782bbe4…에서 074277db…로 바뀌면서 변경된 파일이 docs/skills/WORKFLOW.md 하나뿐이라고 기록한다. 이 값은 요청의 sourceDigest와 같다. 요청 bundle의 파일별 digest는 attempt-e467166f source.files와 같다(예: agent-overview.ts dd418fe3…, agent-overview-view.tsx 879b3b70…, architecture.generated.json f437938b…, 두 테스트, fixture, chat.md 6fce6998…). WORKFLOW.md는 이전 평가 기록의 b1dd0353…에서 bundle의 b6d93028…로 바뀌었다. 이 기록상 기능 소스는 바뀌지 않았으므로 AC1~5가 attempt-e467166f를 근거로 계속 usable이라는 판정은 합당하다. 변경된 문서 때문에 문서 검토와 독립 감사만 적용 불가가 된 기록(documentation.usable=false, review source_changed/receipt_context_mismatch)도 core의 판정 규칙과 맞는다.",
+              "WORKFLOW.md와 core의 일치: WORKFLOW.md:134는 일반 정책이 Opus 기본이며, 사용량 소진이 확인된 경우에만 Terra로 대체하고 인증·네트워크 오류나 불합격은 대체 사유가 아니라고 쓴다. 이는 review-policy.json(primary opus, fallback gpt-6.1-terra, when primary_quota_exhausted)과 맞는다. review.ts:157, 199, 222~223의 quota 코드 검증과도 맞는다. WORKFLOW.md:136의 '직접 지침 시 allowFallback:false, Opus 미실행은 blocker'는 review.ts:508과 맞는다. 이 행은 verifiedQuota(failure)가 참이어도 allowFallback이 false이면 Terra를 호출하지 않고 Opus 실패 결과를 그대로 보존한다. 그 결과는 validateReview의 review_not_passed 경로로 사용 불가가 된다(review.ts:268). runReview의 allowFallback 기본값이 true라는 점(433행)도 MODEL_POLICY.md:41의 '일반 정책·기본값이 이 문서만으로 바뀌었다고 주장하지 않는다'와 맞는다.",
+              "Sonnet 보조검토 경계: MODEL_POLICY.md:39와 WORKFLOW.md:136은 Sonnet 교차검증을 역할이 외부에서 수행하는 보조 검토로 한정한다. 자동 core 단계나 필수 완료 감사로 승격하지도 않는다. 실제로 review.ts의 선택 경로는 primary(opus), quota fallback(Terra), 직접 Terra override 세 가지뿐이다. 따라서 문서가 core에 없는 Sonnet 단계를 있다고 주장하지 않는다.",
+              "경미한 관찰(수정 필수 아님): WORKFLOW.md:134는 '사용량 소진이 확인된 경우에만 Terra 대체를 허용한다'고 쓴다. 그런데 core에는 cli_direct_user_request authority로 묶인 직접 Terra override 경로도 있다(review.ts:276~281, 436, 473, 499). 이 경로는 대체(fallback)가 아니라 별도 직접 요청이고 DEVELOPMENT.md:141에 설명되어 있으므로 모순으로 보지 않는다. 다만 WORKFLOW만 읽으면 Terra 선택 경로가 quota 대체 하나뿐이라고 오해할 수 있다.",
+              "증거 범위: verification.md 83~87행은 이번 재개를 문서 영향검토와 새 독립 감사의 현재성 복구로만 기술한다. 기능 집중검사나 GUI를 새로 했다고 쓰지 않는다. 이전 GUI 미관찰 고지(AC-2 양성 강조, AC-5 Plan+Progress 동시 표시, 실제 모델 Subagent spawn 미실행)도 축소하지 않았다. 새 문서 검토 documentation-6c6bf704는 WORKFLOW.md만 updated로, 나머지 네 문서는 digest 동일로 unchanged 처리했다. 이는 currentness 기록의 변경 파일 범위와 맞는다. 단, 이 검토의 sourceDigest 필드는 canonical 074277db…가 아니라 verification source 6b25721c…이다. 직전 검토 c8f9a897도 같은 방식으로 기록됐고 이 방식으로 usable 판정을 받았으므로 일관된 관행으로 판단한다. 수용 여부는 이번 검토에서 assessWork로 재확인하지 않았다.",
+              "기존 감사에서 남긴 수정 필수가 아닌 관찰 두 가지는 이번 문서 변경과 무관하게 그대로 남아 있다. 하나는 같은 활성 항목에서 commentary 스트리밍 중 explanation을 포함한 plan 갱신이 끼면 Progress 일부가 일시적으로 앞부분 없이 표시되는 문제이고, 다른 하나는 2,000개 이벤트 창 밖으로 밀린 Progress의 자료 미제공 가능성이다. 이번 범위에서 새 결함은 확인되지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-00427ea8-9f33-4e08-97c4-87294fac2009",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-00427ea8-9f33-4e08-97c4-87294fac2009/terra.json",
+            "findings": [
+              "src/agent-overview.ts의 Plan·Progress 투영과 src/native-activity.ts의 turn/plan/updated 처리에는 턴 종료 경계 검사가 없다. turn/completed 뒤 같은 turnId의 늦은 계획 갱신이나 commentary delta가 도착하면 종료된 요청의 계획과 Progress가 다시 바뀌며 활성 항목의 현재 진행처럼 표시될 수 있다. 종료 뒤 늦은 사건을 차단하는 경계와 회귀 검증이 필요하다.",
+              "검토 범위는 제공된 inputBundle의 문서·소스·테스트이며, omitted 파일과 별도 GUI 증거 원문은 읽지 않았다. 테스트와 GUI는 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-c0f2facb-67d3-4925-a069-a1c54ed1ab32",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-c0f2facb-67d3-4925-a069-a1c54ed1ab32/terra.json",
+            "findings": [
+              "src/agent-overview.ts의 threadId 필터는 threadId가 없는 turn/completed를 종료 경계로 처리하기 전에 건너뛴다. 예를 들어 threadId가 있는 turn/started·plan·commentary 다음에 { turn: { id: \"a\", status: \"completed\" } }만 담긴 완료 사건과 같은 턴의 늦은 commentary가 오면, src/native-activity.ts는 기존 턴에서 threadId를 찾아 종료하지만 개요의 progressClosed는 설정되지 않아 종료 후 Progress가 바뀐다. test/native-activity.test.ts에도 threadId 없는 turn/completed 사례가 있으나 개요의 이 경계는 검증하지 않는다.",
+              "검토 범위는 제공된 inputBundle의 17개 파일이다. omitted 파일과 별도 로그·스크린샷은 읽지 않았으며 테스트나 GUI를 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-702ac369-e593-4ab4-a840-ea6d8f357077",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-702ac369-e593-4ab4-a840-ea6d8f357077/terra.json",
+            "findings": [
+              "src/native-activity.ts의 turn/completed 처리에서 endedSeq는 최초 종료 순서를 유지하지만 status와 endedAt은 이후 완료 사건마다 덮어쓴다. 예를 들어 같은 턴이 completed로 종료된 뒤 중복 또는 늦은 failed 완료 사건이 도착하면 개요의 요청 상태가 실패로 바뀐다. 최초 종료 뒤 늦은 사건이 확인된 결과를 되돌리지 않아야 하는 종료 경계가 빠져 있으며, 제공된 중복 완료 테스트는 같은 상태만 재전달해 이 경우를 검증하지 않는다.",
+              "검토 범위는 제공된 inputBundle의 소스·테스트·문서와 검증 기록이다. omitted 파일과 별도 증거 원문은 읽지 않았으며 테스트나 GUI를 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-fdf23cca-49d0-403a-ba74-93ec4a72c0e6",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-fdf23cca-49d0-403a-ba74-93ec4a72c0e6/terra.json",
+            "findings": [
+              "src/native-activity.ts의 transport/closed 처리는 승인 응답이 불확실해 status가 이미 unknown인 턴에 endedSeq만 기록하고 endedAt은 설정하지 않는다. 이후 같은 턴의 늦은 turn/started가 도착하면 !endedAt 조건을 통과해 status를 running으로 바꾼다. 따라서 연결이 끊긴 요청이 다시 진행 중으로 표시되고, src/agent-overview.ts에서도 해당 턴을 live로 판단할 수 있다. test/native-activity.test.ts의 불확실 승인 후 연결 종료 사례에는 늦은 turn/started가 포함되지 않는다.",
+              "검토 범위는 제공된 inputBundle의 명세·검증 기록·소스·테스트다. omitted 파일과 별도 로그·화면 증거는 읽지 않았으며 테스트나 GUI를 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-3fe8573d-624c-4568-8c95-53e492978043",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-3fe8573d-624c-4568-8c95-53e492978043/terra.json",
+            "findings": [
+              "src/agent-overview.ts의 Subagent 상태 갱신에는 완료 후 늦게 도착한 시작 사건을 구분하는 경계가 없다. 같은 agentThreadId의 subAgentActivity가 completed로 관측된 뒤 이전 started가 늦게 도착하면 기존 완료 항목이 running으로 바뀌어 완료 표시등이 꺼진다. 명시적인 후속 작업 없이도 확인된 완료가 뒤집히므로 AC-4의 완료 상태 유지에 어긋난다.",
+              "검토 범위는 제공된 inline inputBundle의 소스·문서·테스트와 검증 기록이다. omitted 파일과 별도 증거 원문은 읽지 않았으며 테스트와 GUI는 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-7d56b5e9-083c-4595-9d51-dfb2aea2ebae",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-7d56b5e9-083c-4595-9d51-dfb2aea2ebae/terra.json",
+            "findings": [
+              "src/agent-overview.ts의 transportClosed는 transport/closed에서 true로 설정되지만 이후 transport/connected에서 초기화되지 않는다. 연결이 끊긴 뒤 재연결하여 새로운 Subagent의 subAgentActivity started가 먼저 도착하면, 해당 Agent의 경계가 uncertain으로 만들어져 실제 시작을 관측했어도 상태가 unknown으로 표시된다. 새 연결에서 실제 시작을 구분하는 경계가 필요하다.",
+              "검토 범위는 제공된 inputBundle의 명세·검증 기록·소스·테스트다. omitted 파일과 별도 증거 원문은 읽지 않았으며, 테스트와 GUI를 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-db8060a9-e45a-43d3-b5f8-c3861dc1b391",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-db8060a9-e45a-43d3-b5f8-c3861dc1b391/terra.json",
+            "findings": [
+              "src/agent-overview.ts의 Subagent 경계 처리: transport/closed 뒤에 새 item.id를 가진 followupTask 또는 spawnAgent 사건이 늦게 도착하면, 연결이 복구되지 않았어도 newOperation이 경계를 open으로 바꾸고 running 상태를 표시한다. 연결 종료 후 관측 불가능한 작업을 다시 진행 중으로 표시할 수 있다.",
+              "src/agent-overview.ts의 Progress 투영: 활성 계획 항목에서 commentary의 item/completed snapshot을 받은 뒤 같은 itemId의 늦은 delta가 오면 기존 완료 본문에 덧붙인다. 예를 들어 완료 본문이 '확인 완료'이고 이후 delta가 '늦은 조각'이면 Progress가 '확인 완료늦은 조각'으로 바뀐다. 항목 완료 뒤 늦은 델타로 스트리밍을 다시 열지 않는 CHAT-OBSERVE-01의 경계와 충돌한다.",
+              "검토 범위는 제공된 inputBundle의 선택 파일과 그 안에 기록된 검증 요약이다. omitted 파일과 별도 로그·GUI 원문은 읽지 않았으며 테스트나 GUI를 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-996cd367-a1e6-4845-932e-70cf0da8c07b",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-996cd367-a1e6-4845-932e-70cf0da8c07b/terra.json",
+            "findings": [
+              "src/native-activity.ts의 공개 commentary 투영은 빈 완료 snapshot과 완료 후 늦은 delta를 처리하지 못한다. 같은 항목에서 delta로 ‘진행’을 받은 뒤 item/completed의 text가 빈 문자열이면 `text(item.text) || activity.description`이 이전 본문을 유지하고, 이후 delta도 종료 여부 확인 없이 덧붙인다. 기본 개요는 이 경계를 처리하지만 상세 모니터의 작업 흐름은 삭제된 설명이나 늦은 조각을 계속 표시하므로 CHAT-OBSERVE-01의 빈 snapshot 대체와 완료 후 스트리밍 종료 요구에 어긋난다.",
+              "검토 범위는 제공된 inline inputBundle의 문서·소스·테스트다. 생략된 manifest 파일과 별도 로그·GUI 증거는 읽지 않았으며 테스트를 실행하지 않았다."
+            ]
+          }
+        ],
+        "omitted": {
+          "criteria"     : 0,
+          "evidence"     : 0,
+          "verifications": 0,
+          "reviews"      : 1,
+          "arguments"    : 0,
+          "findings"     : 9,
+          "unresolved"   : 0
+        }
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/013-오른쪽 Agent와 WWW Skills 및 Hook 표시 논의/work.json",
+        "workRecordHash": "424d740fd63990da05ab33da2b296516bb8de081051d09660bd88f593284adec",
+        "sourceDigest"  : "4b6d7caa7c13515ceab8d53f508927006e204263a6bd3243ad9bbb132b7650ae",
+        "criteriaDigest": "5950d05d534dbcec78ab4ba9dcf4dc08ab4d84520b6255f49888b451227a7dd8"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-bf96bc56-e861-4d24-af47-7a099c6a47b8",
+      "workId"        : "work-64677750-337f-4488-a503-4e0265356bf5",
+      "title"         : "오른쪽 Agent와 WWW Skills 및 Hook 표시 논의",
+      "summary"       : "WWW Agent·다섯 스킬·Subagent·Plan/Progress을 같은 UUID와 현재 v5 소스의 실행 증거로 다시 확인했다. 실제 Terra 검토는 fail이며 지적 원문을 회수했다. 현재 미해결 지적·기본 검사 실패·증거 공백을 보존하여 부분 결과로 보고하며 업무 완료를 선언하지 않는다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T23:31:08.698Z",
+      "event"         : "finish",
+      "workRecordHash": "bbac999e8172319750cd4204f5b936cc2486f3c2865f0c7cdcb3adabbabd46ef",
+      "sourceDigest"  : "c582bf4890aec9e5581ad24ed9f98bba4d86fd6f307e107fde2980b4a1bfcb17",
+      "criteriaDigest": "5950d05d534dbcec78ab4ba9dcf4dc08ab4d84520b6255f49888b451227a7dd8",
+      "semanticHash"  : "e134f038b2288ab79bab489053d4ac089af8a4f0a0ea855e650b6072b34704f6",
+      "narrative": {
+        "summary": "WWW Agent·다섯 스킬·Subagent·Plan/Progress을 같은 UUID와 현재 v5 소스의 실행 증거로 다시 확인했다. 실제 Terra 검토는 fail이며 지적 원문을 회수했다. 현재 미해결 지적·기본 검사 실패·증거 공백을 보존하여 부분 결과로 보고하며 업무 완료를 선언하지 않는다.",
+        "before" : "기존 소스의 검증 수와 과거 감사 결과가 여러 시점에 섞여 있었다. 실제 새 반례를 그대로 남기고 소스·기준·직접 요청과 증거의 현재성을 다시 구분해야 했다.",
+        "after"  : "현재 UUID의 등록 검사와 전용 GUI/직접 기능 원문을 회수했고 외부 정본의 문서 영향 검토를 연결했다. 실제 감사 지적과 미실행 한계를 분리하고 후속 최소 수정·독립 반박은 준비 단계로 남겼다.",
+        "changes": [
+          "v4의 main quota 생략/null, A/B/A 늦은 delta, 복원 enriched 완료와 혼합 summary 경계를 공식 저작 전후 검사로 교정했다.",
+          "v5 같은 UUID의 실제 실행·원문·source/criteria 식별과 문서 검토·감사 상태를 다시 연결했다.",
+          "새 반례는 실제 원문과 별도 수정 준비에 남겼고 과거 실패를 삭제하거나 새 PASS로 바꾸지 않았다."
+        ],
+        "decisions": [
+          "현재 관측 가능한 입력·행동만 해당 검사 범위로 연결하고 전체 의미 수용은 실제 독립 검토·공식 core 판정과 구분했다.",
+          "제품·테스트의 추가 변경은 Root 공식 pre/post와 독립 반박 판정 뒤 수행하며 기준·검사 권한·일반 검토 정책을 약화하지 않는다."
+        ],
+        "limitations": [
+          "실제 Electron GUI는 합성 Native subprocess이며 실제 모델·실계정·OS IME·Windows 검증으로 확대하지 않는다.",
+          "등록 검사·직접 관측·의미 검토·업무 완료는 별도이며 artifact 존재만으로 기준을 PASS로 강제하지 않는다.",
+          "현재 독립 검토의 미해결 원문: src/agent-overview.ts:221은 최종 투영의 endedSeq 하나로 전체 사건을 걸러, 복원된 unknown 턴이 같은 범위의 실제 turn/started로 재개되면 정지 구간의 늦은 산문을 받아들인다. 예를 들어 복원 commentary A → historical turn/completed(unknown) → 늦은 commentary B → 동일 턴의 live turn/started 순서에서 src/native-activity.ts:568-579는 B를 무시하고 재개 시 endedSeq를 null로 지우지만, 개요는 최종 endedSeq가 null이므로 B를 Progress로 표시한다. 복원 정지와 재개 사이의 경계를 개요에서도 순서대로 적용해야 한다.",
+          "현재 독립 검토의 미해결 원문: 검증 기록의 해당 소스 식별에 연결된 집중 테스트 통과와 GUI 결과 일부를 읽었다. 이번 검토에서는 테스트나 GUI를 실행하지 않았다."
+        ],
+        "next": [
+          "Root의 반박 검토로 지적의 유효 범위와 최소 수정 범위를 확정한다.",
+          "추가 수정 후 최종 소스에서 직접 영향 검사·문서 영향·고유 독립 검토를 한 번 다시 회수한다.",
+          "현재 공식 완료 판정·read/status의 부족 조건을 그대로 남기고 모든 필수 조건이 충족하기 전에는 done으로 올리지 않는다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "독립 검토 fail: 수정 또는 검토 재실행 필요",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "오른쪽 바에 WWW 개발 Agent를 상위 항목으로 두고 spec/design/build/diagnose/verify 다섯 스킬 전체를 고정 표시하며 범용 스킬 전체 목록을 섞지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-1a1e486c-7398-4e75-b9f2-6b723a132f03",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3dbffd52-101a-4a12-b2cf-cd79e0d58cb5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1fb4224b-7051-4ca2-9fed-a85515f349e8",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a0e9280d-f19e-48cb-88cb-e989a7184906",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ffc194c9-4c02-4237-8fa1-b497a6fba97f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-af472f66-38d2-41c1-af1e-66148e501ffe",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4d515cd5-367d-4cfd-ba13-9d8c0654268c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e7bcf93d-63a3-40e2-b629-9fac038f30af",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3a6b3a1c-a0b2-430c-abb6-d0d99ac08fb7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5895f9bb-47ac-4fc2-9fb2-05fb82d44379",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "현재 선택·진행 중인 WWW 스킬을 식별 가능한 근거에 따라 강조하며 문서 읽기·이름 언급·설치 여부만으로 실행 중이라고 판정하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-1a1e486c-7398-4e75-b9f2-6b723a132f03",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3dbffd52-101a-4a12-b2cf-cd79e0d58cb5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1fb4224b-7051-4ca2-9fed-a85515f349e8",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a0e9280d-f19e-48cb-88cb-e989a7184906",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ffc194c9-4c02-4237-8fa1-b497a6fba97f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-af472f66-38d2-41c1-af1e-66148e501ffe",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4d515cd5-367d-4cfd-ba13-9d8c0654268c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e7bcf93d-63a3-40e2-b629-9fac038f30af",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3a6b3a1c-a0b2-430c-abb6-d0d99ac08fb7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5895f9bb-47ac-4fc2-9fb2-05fb82d44379",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "이번 오른쪽 바의 표시 범위에서 Hook 목록·실행 현황 보기를 제외한다. Agent·WWW Skills·실제 Subagent와 Plan·Progress를 표시하며, Hook 표시 제외를 Hook 실행 비활성화로 취급하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-1a1e486c-7398-4e75-b9f2-6b723a132f03",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3dbffd52-101a-4a12-b2cf-cd79e0d58cb5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1fb4224b-7051-4ca2-9fed-a85515f349e8",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a0e9280d-f19e-48cb-88cb-e989a7184906",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ffc194c9-4c02-4237-8fa1-b497a6fba97f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-af472f66-38d2-41c1-af1e-66148e501ffe",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4d515cd5-367d-4cfd-ba13-9d8c0654268c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e7bcf93d-63a3-40e2-b629-9fac038f30af",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3a6b3a1c-a0b2-430c-abb6-d0d99ac08fb7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5895f9bb-47ac-4fc2-9fb2-05fb82d44379",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "WWW Agent를 기본 표시하고 실제 Subagent 호출이 관측되면 해당 Subagent를 식별하여 표시한다. Subagent 작업 완료가 확인되면 항목을 유지한 채 완료 표시등으로 상태를 전환한다. 호출하지 않은 Subagent를 실행 중이라고 표시하지 않으며 역할 정의·일반 도구 호출과 구분한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-1a1e486c-7398-4e75-b9f2-6b723a132f03",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3dbffd52-101a-4a12-b2cf-cd79e0d58cb5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1fb4224b-7051-4ca2-9fed-a85515f349e8",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a0e9280d-f19e-48cb-88cb-e989a7184906",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ffc194c9-4c02-4237-8fa1-b497a6fba97f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-af472f66-38d2-41c1-af1e-66148e501ffe",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4d515cd5-367d-4cfd-ba13-9d8c0654268c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e7bcf93d-63a3-40e2-b629-9fac038f30af",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3a6b3a1c-a0b2-430c-abb6-d0d99ac08fb7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5895f9bb-47ac-4fc2-9fb2-05fb82d44379",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "Plan은 Plan.md 등 작업 계획 문서나 Native가 요구사항을 처리하며 제공한 계획을 바탕으로 요구사항 단위의 작업 항목·상태를 보여준다. Progress는 현재 진행 중인 Plan 항목에 연결하여 Native가 제공하는 공개 판단 요약·진행 설명과 확인된 실행 사건을 바탕으로 작업 상황을 산문으로 요약한다. 계획 목록과 원시 로그를 반복 표시하지 않고 출처 없는 판단 이유·관측하지 않은 진행을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-1a1e486c-7398-4e75-b9f2-6b723a132f03",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3dbffd52-101a-4a12-b2cf-cd79e0d58cb5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1fb4224b-7051-4ca2-9fed-a85515f349e8",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-a0e9280d-f19e-48cb-88cb-e989a7184906",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ffc194c9-4c02-4237-8fa1-b497a6fba97f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-af472f66-38d2-41c1-af1e-66148e501ffe",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4d515cd5-367d-4cfd-ba13-9d8c0654268c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e7bcf93d-63a3-40e2-b629-9fac038f30af",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-3a6b3a1c-a0b2-430c-abb6-d0d99ac08fb7",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5895f9bb-47ac-4fc2-9fb2-05fb82d44379",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-fce5db7e-96fb-49eb-a8dc-8ffb3306379b",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:15:56.149Z"
+          },
+          {
+            "id": "attempt-e467166f-9ff0-449b-9bda-8113acdd1647",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:35:12.449Z"
+          },
+          {
+            "id": "attempt-151b029e-0132-45b8-96d4-28048c1fa0ef",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:07:30.647Z"
+          },
+          {
+            "id": "attempt-da5f89a7-fe43-4426-ad31-a922d5834b09",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:17:17.809Z"
+          },
+          {
+            "id": "attempt-00dccd0d-1b77-4c96-9531-b7db36fdd586",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:26:31.623Z"
+          },
+          {
+            "id": "attempt-4c7d13ef-1597-44d8-9098-b71e4c12e298",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:43:48.842Z"
+          },
+          {
+            "id": "attempt-34100f7b-f178-49ef-823b-43eee759386c",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v26.3.0"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:59:50.040Z"
+          },
+          {
+            "id": "attempt-1a1e486c-7398-4e75-b9f2-6b723a132f03",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v26.3.0"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:06:35.117Z"
+          },
+          {
+            "id": "attempt-3dbffd52-101a-4a12-b2cf-cd79e0d58cb5",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v26.3.0"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:10:41.358Z"
+          },
+          {
+            "id": "attempt-1fb4224b-7051-4ca2-9fed-a85515f349e8",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v26.3.0"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:15:51.416Z"
+          },
+          {
+            "id": "attempt-a0e9280d-f19e-48cb-88cb-e989a7184906",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import{spawnSync}from'node:child_process';import{writeFileSync,mkdirSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/native-activity.test.ts\", \"test/activity-sidebar.test.ts\", \"test/agent-overview.test.ts\", \"test/www-activity-view.test.ts\", \"test/www-activity.test.ts\", \"test/native-chat.test.ts\", \"test/native-session.test.ts\", \"test/projection.test.ts\", \"test/chat-state.test.ts\", \"test/input.test.ts\"];mkdirSync(\".www/evidence/resume-20261116/chat008/chat013-recovery\",{recursive:true});const startedAt=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:32*1024*1024});const base=\".www/evidence/resume-20261116/chat008/chat013-recovery/official-focused-\"+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T12:37:58.283Z"
+          },
+          {
+            "id": "attempt-ffc194c9-4c02-4237-8fa1-b497a6fba97f",
+            "command": "node",
+            "args": [
+              ".www/evidence/resume-20261116/native-closeout/composite.mjs",
+              "work-64677750-337f-4488-a503-4e0265356bf5",
+              "baseline"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T14:57:06.929Z"
+          },
+          {
+            "id": "attempt-af472f66-38d2-41c1-af1e-66148e501ffe",
+            "command": "node",
+            "args": [
+              ".www/evidence/resume-20261116/native-closeout/final-current/composite.mjs",
+              "work-64677750-337f-4488-a503-4e0265356bf5",
+              "baseline"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T15:41:05.687Z"
+          },
+          {
+            "id": "attempt-4d515cd5-367d-4cfd-ba13-9d8c0654268c",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T21:42:42.483Z"
+          },
+          {
+            "id": "attempt-e7bcf93d-63a3-40e2-b629-9fac038f30af",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T21:49:12.173Z"
+          },
+          {
+            "id": "attempt-3a6b3a1c-a0b2-430c-abb6-d0d99ac08fb7",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:04:40.566Z"
+          },
+          {
+            "id": "attempt-5895f9bb-47ac-4fc2-9fb2-05fb82d44379",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-activity.test.ts",
+              "test/www-activity-view.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:21:43.376Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-702ac369-e593-4ab4-a840-ea6d8f357077",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-702ac369-e593-4ab4-a840-ea6d8f357077/terra.json",
+            "findings": [
+              "src/native-activity.ts의 turn/completed 처리에서 endedSeq는 최초 종료 순서를 유지하지만 status와 endedAt은 이후 완료 사건마다 덮어쓴다. 예를 들어 같은 턴이 completed로 종료된 뒤 중복 또는 늦은 failed 완료 사건이 도착하면 개요의 요청 상태가 실패로 바뀐다. 최초 종료 뒤 늦은 사건이 확인된 결과를 되돌리지 않아야 하는 종료 경계가 빠져 있으며, 제공된 중복 완료 테스트는 같은 상태만 재전달해 이 경우를 검증하지 않는다.",
+              "검토 범위는 제공된 inputBundle의 소스·테스트·문서와 검증 기록이다. omitted 파일과 별도 증거 원문은 읽지 않았으며 테스트나 GUI를 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-fdf23cca-49d0-403a-ba74-93ec4a72c0e6",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-fdf23cca-49d0-403a-ba74-93ec4a72c0e6/terra.json",
+            "findings": [
+              "src/native-activity.ts의 transport/closed 처리는 승인 응답이 불확실해 status가 이미 unknown인 턴에 endedSeq만 기록하고 endedAt은 설정하지 않는다. 이후 같은 턴의 늦은 turn/started가 도착하면 !endedAt 조건을 통과해 status를 running으로 바꾼다. 따라서 연결이 끊긴 요청이 다시 진행 중으로 표시되고, src/agent-overview.ts에서도 해당 턴을 live로 판단할 수 있다. test/native-activity.test.ts의 불확실 승인 후 연결 종료 사례에는 늦은 turn/started가 포함되지 않는다.",
+              "검토 범위는 제공된 inputBundle의 명세·검증 기록·소스·테스트다. omitted 파일과 별도 로그·화면 증거는 읽지 않았으며 테스트나 GUI를 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-3fe8573d-624c-4568-8c95-53e492978043",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-3fe8573d-624c-4568-8c95-53e492978043/terra.json",
+            "findings": [
+              "src/agent-overview.ts의 Subagent 상태 갱신에는 완료 후 늦게 도착한 시작 사건을 구분하는 경계가 없다. 같은 agentThreadId의 subAgentActivity가 completed로 관측된 뒤 이전 started가 늦게 도착하면 기존 완료 항목이 running으로 바뀌어 완료 표시등이 꺼진다. 명시적인 후속 작업 없이도 확인된 완료가 뒤집히므로 AC-4의 완료 상태 유지에 어긋난다.",
+              "검토 범위는 제공된 inline inputBundle의 소스·문서·테스트와 검증 기록이다. omitted 파일과 별도 증거 원문은 읽지 않았으며 테스트와 GUI는 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-7d56b5e9-083c-4595-9d51-dfb2aea2ebae",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-7d56b5e9-083c-4595-9d51-dfb2aea2ebae/terra.json",
+            "findings": [
+              "src/agent-overview.ts의 transportClosed는 transport/closed에서 true로 설정되지만 이후 transport/connected에서 초기화되지 않는다. 연결이 끊긴 뒤 재연결하여 새로운 Subagent의 subAgentActivity started가 먼저 도착하면, 해당 Agent의 경계가 uncertain으로 만들어져 실제 시작을 관측했어도 상태가 unknown으로 표시된다. 새 연결에서 실제 시작을 구분하는 경계가 필요하다.",
+              "검토 범위는 제공된 inputBundle의 명세·검증 기록·소스·테스트다. omitted 파일과 별도 증거 원문은 읽지 않았으며, 테스트와 GUI를 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-db8060a9-e45a-43d3-b5f8-c3861dc1b391",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-db8060a9-e45a-43d3-b5f8-c3861dc1b391/terra.json",
+            "findings": [
+              "src/agent-overview.ts의 Subagent 경계 처리: transport/closed 뒤에 새 item.id를 가진 followupTask 또는 spawnAgent 사건이 늦게 도착하면, 연결이 복구되지 않았어도 newOperation이 경계를 open으로 바꾸고 running 상태를 표시한다. 연결 종료 후 관측 불가능한 작업을 다시 진행 중으로 표시할 수 있다.",
+              "src/agent-overview.ts의 Progress 투영: 활성 계획 항목에서 commentary의 item/completed snapshot을 받은 뒤 같은 itemId의 늦은 delta가 오면 기존 완료 본문에 덧붙인다. 예를 들어 완료 본문이 '확인 완료'이고 이후 delta가 '늦은 조각'이면 Progress가 '확인 완료늦은 조각'으로 바뀐다. 항목 완료 뒤 늦은 델타로 스트리밍을 다시 열지 않는 CHAT-OBSERVE-01의 경계와 충돌한다.",
+              "검토 범위는 제공된 inputBundle의 선택 파일과 그 안에 기록된 검증 요약이다. omitted 파일과 별도 로그·GUI 원문은 읽지 않았으며 테스트나 GUI를 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-996cd367-a1e6-4845-932e-70cf0da8c07b",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-996cd367-a1e6-4845-932e-70cf0da8c07b/terra.json",
+            "findings": [
+              "src/native-activity.ts의 공개 commentary 투영은 빈 완료 snapshot과 완료 후 늦은 delta를 처리하지 못한다. 같은 항목에서 delta로 ‘진행’을 받은 뒤 item/completed의 text가 빈 문자열이면 `text(item.text) || activity.description`이 이전 본문을 유지하고, 이후 delta도 종료 여부 확인 없이 덧붙인다. 기본 개요는 이 경계를 처리하지만 상세 모니터의 작업 흐름은 삭제된 설명이나 늦은 조각을 계속 표시하므로 CHAT-OBSERVE-01의 빈 snapshot 대체와 완료 후 스트리밍 종료 요구에 어긋난다.",
+              "검토 범위는 제공된 inline inputBundle의 문서·소스·테스트다. 생략된 manifest 파일과 별도 로그·GUI 증거는 읽지 않았으며 테스트를 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-b8da3317-04d8-4cee-9c16-95932a865f37",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-b8da3317-04d8-4cee-9c16-95932a865f37/terra.json",
+            "findings": [
+              "src/agent-overview.ts:155-170: 이전 작업 A의 완료 후 같은 Subagent에 followup 작업 B가 시작된 상태에서 A의 완료 알림이 중복 도착하면, A의 operationKey가 이미 존재하더라도 완료 상태를 현재 열린 경계에 적용한다. 그 결과 B가 진행 중인데 완료 표시등이 켜지고, 이후 B의 running 관측도 settled 경계에서 무시된다. 작업별 완료와 현재 작업의 귀속을 구분해야 한다.",
+              "src/conversations.ts:84-113, 137 및 src/agent-overview.ts:149-190: 저장된 Native 턴에 collabAgentToolCall 또는 subAgentActivity 항목이 포함되어 있어도 publicItem이 이를 버린다. 따라서 대화를 다시 열면 실제 관측한 Subagent와 완료 표시가 사라진다. test/agent-overview.test.ts의 복원 사례는 historical 이벤트를 직접 주입하므로 이 복원 경로를 검증하지 못한다.",
+              "검토 범위는 제공된 inputBundle의 10개 파일과 추가로 읽은 src/agent-overview-view.tsx, test/agent-overview.test.ts의 관련 부분 및 두 소스 파일의 git diff다. 테스트는 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-5317b972-6075-4abb-86b5-54a309b88089",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-5317b972-6075-4abb-86b5-54a309b88089/terra.json",
+            "findings": [
+              "src/agent-overview.ts:193에서 처음 관측한 Subagent activity를 현재 작업에 귀속한다. 작업 A의 완료 activity가 처음으로 지연 도착하기 전에 같은 에이전트의 후속 작업 B가 시작되면, A의 완료가 B에 귀속되어 B가 실행 중인데도 완료 표시된다. test/agent-overview.test.ts:458의 회귀 검사는 A의 activity를 B 전에 이미 관측한 재전송만 다룬다.",
+              "src/agent-overview.ts:248과 src/agent-overview.ts:264에서 이미 완료된 commentary의 item/completed 재전송을 다시 적용한다. 같은 활성 Plan에서 메시지 A 완료 후 메시지 B의 진행 설명을 받은 다음 A의 완료가 재전송되면 Progress가 B에서 오래된 A로 되돌아간다."
+            ]
+          },
+          {
+            "id"         : "review-50247092-8c6f-49b6-b3e1-b6aef7028480",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-50247092-8c6f-49b6-b3e1-b6aef7028480/terra.json",
+            "findings": [
+              "src/agent-overview.ts:164-178 — 이전 작업을 기다리던 wait의 늦은 완료가 현재 후속 작업을 잘못 완료시킬 수 있다. A 완료 후 B followupTask가 running인 상태에서 A에 대한 wait가 child: completed를 반환하면, wait는 workOperation이 아니어서 현재 작업 ID 검사에 걸리지 않고 observeAgent가 B의 경계를 settled로 만든다. 이후 B의 running 상태도 무시되어 실제 진행 중인 Subagent에 완료 표시가 남는다.",
+              "src/agent-overview.ts:251-268 — 먼저 시작한 commentary A의 첫 완료 snapshot이 나중에 시작한 B의 현재 Progress를 덮는다. 같은 활성 계획에서 A delta, B delta, A item/completed 순으로 수신하면 A는 아직 completedMessages에 없으므로 완료 본문이 progress와 messageId를 A로 교체한다. 이미 완료된 A의 재전송만 막는 기존 사례는 이 순서를 다루지 않는다.",
+              "검토 범위는 제공된 inputBundle의 14개 파일과 src/agent-overview.ts의 관련 행 검색이다. 테스트는 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-29bf410a-aecc-4984-9217-45f845c90d79",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-29bf410a-aecc-4984-9217-45f845c90d79/terra.json",
+            "findings": [
+              "src/agent-overview.ts:221은 최종 투영의 endedSeq 하나로 전체 사건을 걸러, 복원된 unknown 턴이 같은 범위의 실제 turn/started로 재개되면 정지 구간의 늦은 산문을 받아들인다. 예를 들어 복원 commentary A → historical turn/completed(unknown) → 늦은 commentary B → 동일 턴의 live turn/started 순서에서 src/native-activity.ts:568-579는 B를 무시하고 재개 시 endedSeq를 null로 지우지만, 개요는 최종 endedSeq가 null이므로 B를 Progress로 표시한다. 복원 정지와 재개 사이의 경계를 개요에서도 순서대로 적용해야 한다.",
+              "검증 기록의 해당 소스 식별에 연결된 집중 테스트 통과와 GUI 결과 일부를 읽었다. 이번 검토에서는 테스트나 GUI를 실행하지 않았다."
+            ]
+          }
+        ],
+        "omitted": {
+          "criteria"     : 0,
+          "evidence"     : 35,
+          "verifications": 0,
+          "reviews"      : 5,
+          "arguments"    : 0,
+          "findings"     : 30,
+          "unresolved"   : 2
+        }
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/013-오른쪽 Agent와 WWW Skills 및 Hook 표시 논의/work.json",
+        "workRecordHash": "bbac999e8172319750cd4204f5b936cc2486f3c2865f0c7cdcb3adabbabd46ef",
+        "sourceDigest"  : "c582bf4890aec9e5581ad24ed9f98bba4d86fd6f307e107fde2980b4a1bfcb17",
+        "criteriaDigest": "5950d05d534dbcec78ab4ba9dcf4dc08ab4d84520b6255f49888b451227a7dd8"
+      }
     }
   ]
 }

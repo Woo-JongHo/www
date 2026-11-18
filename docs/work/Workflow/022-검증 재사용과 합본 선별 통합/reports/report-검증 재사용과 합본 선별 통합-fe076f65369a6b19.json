@@ -1,0 +1,508 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-d0fe5886-5dd6-443c-ad4e-7cdc262ec3ac",
+  "title"        : "검증 재사용과 합본 선별 통합",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-d5b0f300-70b1-4807-9b29-bc7fa5308803",
+      "workId"        : "work-d0fe5886-5dd6-443c-ad4e-7cdc262ec3ac",
+      "title"         : "검증 재사용과 합본 선별 통합",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T20:49:01.529Z",
+      "event"         : "build",
+      "workRecordHash": "67589f887fc9e1b188b14f9623546dea0697f7bc38b134dc006269b697598cc4",
+      "sourceDigest"  : "6f6a299ad163ed7905deb54e6b9eb848d355f918f8795ab39d28b56c7b9898fa",
+      "criteriaDigest": "a3183ba15060b8c54fb273bee5c9f427d7d5f29c2d6cbd9b0a9988253e6684b7",
+      "semanticHash"  : "02719af8ad52564db8421995a0b02e675617333c963e85b07df64b03eb3b7660",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "REUSE-CURRENT",
+            "description": "같은 프로세스에서 직접 관측한 실제 검증만 입력·기준·환경·명령·범위·산출물 일치 시 재사용하고 실행 0회와 실제 실행을 영수증으로 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "REUSE-SAFETY",
+            "description": "실패·주입·소스/기준/의존/설정/도구/환경/산출물 drift와 권한 철회·pending 회수·세션 부재를 거부하고 기존 현재성 및 완료 방어를 유지한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "INTEGRATE-CURRENT",
+            "description": "합본의 승인 비생성 hunk와 oracle 한 문단을 현재 main에 선별 통합하고 기존 Home 및 후속 변경을 보존하며 공식 snapshot과 필요한 집중·공통·GUI 검증을 현재 입력에 결속한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/022-검증 재사용과 합본 선별 통합/work.json",
+        "workRecordHash": "67589f887fc9e1b188b14f9623546dea0697f7bc38b134dc006269b697598cc4",
+        "sourceDigest"  : "6f6a299ad163ed7905deb54e6b9eb848d355f918f8795ab39d28b56c7b9898fa",
+        "criteriaDigest": "a3183ba15060b8c54fb273bee5c9f427d7d5f29c2d6cbd9b0a9988253e6684b7"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-133f317b-3d18-439d-80e7-8b0f30319170",
+      "workId"        : "work-d0fe5886-5dd6-443c-ad4e-7cdc262ec3ac",
+      "title"         : "검증 재사용과 합본 선별 통합",
+      "summary"       : "v6 검증 재사용 실제 실험을 회수했으며 통합 기준 전체의 정식 검증 경로 부족으로 부분 상태를 유지한다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-17T00:01:59.797Z",
+      "event"         : "finish",
+      "workRecordHash": "f581d7a533e0ab2e5a916e8461171d3f4b2a4629cc3e4f77720c81750d95427d",
+      "sourceDigest"  : "84ea5fe89cc68270aca77f1889f3cc396ddba922892a6adce8e8cbcab655df2f",
+      "criteriaDigest": "a3183ba15060b8c54fb273bee5c9f427d7d5f29c2d6cbd9b0a9988253e6684b7",
+      "semanticHash"  : "56d7c3cfdc7f8de45f086e835599443c6596bff05a174c6dacc34e489bb432aa",
+      "narrative": {
+        "summary": "v6 검증 재사용 실제 실험을 회수했으며 통합 기준 전체의 정식 검증 경로 부족으로 부분 상태를 유지한다.",
+        "before" : "v5 시도는 Native src/test 후속 변경으로 현행 증거가 아니었다.",
+        "after"  : "v6 동일 프로세스에서 exact Nodefocused 요청 2회·실제 실행 1회·재사용 1회를 관측했다. 통합 기준의 공통·GUI 관측은 별도이며 정식 기준 전체 수행으로 승격하지 않았다.",
+        "changes": [
+          "이전 실패·실험은 보존하고 v5 원문과 재사용 영수증을 별도 경로에 저장했다."
+        ],
+        "decisions": [
+          "기준 없는 관측 등록은 공식 coverage에서 허용되지 않으며, GUI만 실행하고 INTEGRATE-CURRENT 전체를 통과시킬 수 없다고 판단했다.",
+          "artifact 파일 결속과 이후 독립 review를 실행하지 않은 의미 검증의 대체로 사용하지 않았다."
+        ],
+        "limitations": [
+          "REUSE-CURRENT/SAFETY는 실제 exact 집중 검사와 동일 세션 실험 범위에서 회수했다.",
+          "INTEGRATE-CURRENT의 여러 필수 동작을 하나의 허용 attempt가 전체 수행하지 못하므로 현행 공식 수용 미충족이다.",
+          "review 단계 진입 전 실제 Terra 감사·업무 완료는 미실행이며 전체 npm check의 BoxBox pipeline 1개 실패를 유지한다."
+        ],
+        "next": [
+          "같은 UUID의 기준 전체를 실제 검증할 수 있는 정식 경로를 확보한 뒤 현재 소스·기준에 결속하여 검증과 실제 검토·보고서·완료를 회수한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "REUSE-CURRENT",
+            "description": "같은 프로세스에서 직접 관측한 실제 검증만 입력·기준·환경·명령·범위·산출물 일치 시 재사용하고 실행 0회와 실제 실행을 영수증으로 구분한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-11cc45b6-d3e2-43af-9a22-4d8044d38e39",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e8f540e1-b127-4db0-8b8b-beccfef191be",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1b552b9f-942a-4fd7-bc10-f8ccd7242252",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0ff919e1-0cd3-4409-aace-e12f6579e339",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "REUSE-SAFETY",
+            "description": "실패·주입·소스/기준/의존/설정/도구/환경/산출물 drift와 권한 철회·pending 회수·세션 부재를 거부하고 기존 현재성 및 완료 방어를 유지한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-11cc45b6-d3e2-43af-9a22-4d8044d38e39",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0670c052-9614-4a67-81a3-a8aadd81aedd",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-e8f540e1-b127-4db0-8b8b-beccfef191be",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1b552b9f-942a-4fd7-bc10-f8ccd7242252",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0ff919e1-0cd3-4409-aace-e12f6579e339",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "INTEGRATE-CURRENT",
+            "description": "합본의 승인 비생성 hunk와 oracle 한 문단을 현재 main에 선별 통합하고 기존 Home 및 후속 변경을 보존하며 공식 snapshot과 필요한 집중·공통·GUI 검증을 현재 입력에 결속한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-79355d8c-298c-4c50-80f8-bf76f32f721c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-11cc45b6-d3e2-43af-9a22-4d8044d38e39",
+            "command": "node",
+            "args": [
+              "--test",
+              "test/workflow-evidence.test.ts",
+              "test/workflow-work.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T21:16:45.115Z"
+          },
+          {
+            "id": "attempt-0670c052-9614-4a67-81a3-a8aadd81aedd",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T21:18:14.029Z"
+          },
+          {
+            "id": "attempt-e8f540e1-b127-4db0-8b8b-beccfef191be",
+            "command": "node",
+            "args": [
+              "--test",
+              "test/workflow-evidence.test.ts",
+              "test/workflow-work.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:06:11.168Z"
+          },
+          {
+            "id": "attempt-1b552b9f-942a-4fd7-bc10-f8ccd7242252",
+            "command": "node",
+            "args": [
+              "--test",
+              "test/workflow-evidence.test.ts",
+              "test/workflow-work.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:22:24.311Z"
+          },
+          {
+            "id": "attempt-79355d8c-298c-4c50-80f8-bf76f32f721c",
+            "command": "node",
+            "args": [
+              "scripts/verify-dashboard-race.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:25:39.954Z"
+          },
+          {
+            "id": "attempt-0ff919e1-0cd3-4409-aace-e12f6579e339",
+            "command": "node",
+            "args": [
+              "--test",
+              "test/workflow-evidence.test.ts",
+              "test/workflow-work.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T00:00:51.255Z"
+          }
+        ],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/022-검증 재사용과 합본 선별 통합/work.json",
+        "workRecordHash": "f581d7a533e0ab2e5a916e8461171d3f4b2a4629cc3e4f77720c81750d95427d",
+        "sourceDigest"  : "84ea5fe89cc68270aca77f1889f3cc396ddba922892a6adce8e8cbcab655df2f",
+        "criteriaDigest": "a3183ba15060b8c54fb273bee5c9f427d7d5f29c2d6cbd9b0a9988253e6684b7"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-89bfb428-067c-4280-9070-0654e98d6ed4",
+      "workId"        : "work-d0fe5886-5dd6-443c-ad4e-7cdc262ec3ac",
+      "title"         : "검증 재사용과 합본 선별 통합",
+      "summary"       : "v6 검증 재사용 실제 실험을 회수했으며 통합 기준 전체의 정식 검증 경로 부족으로 부분 상태를 유지한다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-17T00:04:26.908Z",
+      "event"         : "finish",
+      "workRecordHash": "f581d7a533e0ab2e5a916e8461171d3f4b2a4629cc3e4f77720c81750d95427d",
+      "sourceDigest"  : "84ea5fe89cc68270aca77f1889f3cc396ddba922892a6adce8e8cbcab655df2f",
+      "criteriaDigest": "a3183ba15060b8c54fb273bee5c9f427d7d5f29c2d6cbd9b0a9988253e6684b7",
+      "semanticHash"  : "f74dbd72798c3afd57ac21d9960ea6fca88a7ccccd4f8e01fa3f8fc18dfbb7a5",
+      "narrative": {
+        "summary": "v6 검증 재사용 실제 실험을 회수했으며 통합 기준 전체의 정식 검증 경로 부족으로 부분 상태를 유지한다.",
+        "before" : "v5 시도는 Native src/test 후속 변경으로 현행 증거가 아니었다.",
+        "after"  : "v6 동일 프로세스에서 exact Nodefocused 요청 2회·실제 실행 1회·재사용 1회가 당시 통과했으나 후속 공식 readback에서는 observed_environment_changed로 현재 적용 불가다. 통합 기준의 공통·GUI 관측은 별도이며 정식 기준 전체 수행으로 승격하지 않았다.",
+        "changes": [
+          "이전 실패·실험은 보존하고 v5 원문과 재사용 영수증을 별도 경로에 저장했다."
+        ],
+        "decisions": [
+          "기준 없는 관측 등록은 공식 coverage에서 허용되지 않으며, GUI만 실행하고 INTEGRATE-CURRENT 전체를 통과시킬 수 없다고 판단했다.",
+          "artifact 파일 결속과 이후 독립 review를 실행하지 않은 의미 검증의 대체로 사용하지 않았다."
+        ],
+        "limitations": [
+          "REUSE-CURRENT/SAFETY의 당시 실제 실험은 보존하나 현재 observed_environment_changed로 usable=false다. 현재 PASS로 복사하거나 실패 재사용하지 않는다.",
+          "INTEGRATE-CURRENT의 여러 필수 동작을 하나의 허용 attempt가 전체 수행하지 못하므로 현행 공식 수용 미충족이다.",
+          "review 단계 진입 전 실제 Terra 감사·업무 완료는 미실행이며 전체 npm check의 BoxBox pipeline 1개 실패를 유지한다."
+        ],
+        "next": [
+          "같은 UUID의 기준 전체를 실제 검증할 수 있는 정식 경로를 확보한 뒤 현재 소스·기준에 결속하여 검증과 실제 검토·보고서·완료를 회수한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "REUSE-CURRENT",
+            "description": "같은 프로세스에서 직접 관측한 실제 검증만 입력·기준·환경·명령·범위·산출물 일치 시 재사용하고 실행 0회와 실제 실행을 영수증으로 구분한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-11cc45b6-d3e2-43af-9a22-4d8044d38e39",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e8f540e1-b127-4db0-8b8b-beccfef191be",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1b552b9f-942a-4fd7-bc10-f8ccd7242252",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0ff919e1-0cd3-4409-aace-e12f6579e339",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "REUSE-SAFETY",
+            "description": "실패·주입·소스/기준/의존/설정/도구/환경/산출물 drift와 권한 철회·pending 회수·세션 부재를 거부하고 기존 현재성 및 완료 방어를 유지한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-11cc45b6-d3e2-43af-9a22-4d8044d38e39",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0670c052-9614-4a67-81a3-a8aadd81aedd",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-e8f540e1-b127-4db0-8b8b-beccfef191be",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-1b552b9f-942a-4fd7-bc10-f8ccd7242252",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0ff919e1-0cd3-4409-aace-e12f6579e339",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "INTEGRATE-CURRENT",
+            "description": "합본의 승인 비생성 hunk와 oracle 한 문단을 현재 main에 선별 통합하고 기존 Home 및 후속 변경을 보존하며 공식 snapshot과 필요한 집중·공통·GUI 검증을 현재 입력에 결속한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-79355d8c-298c-4c50-80f8-bf76f32f721c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-11cc45b6-d3e2-43af-9a22-4d8044d38e39",
+            "command": "node",
+            "args": [
+              "--test",
+              "test/workflow-evidence.test.ts",
+              "test/workflow-work.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T21:16:45.115Z"
+          },
+          {
+            "id": "attempt-0670c052-9614-4a67-81a3-a8aadd81aedd",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T21:18:14.029Z"
+          },
+          {
+            "id": "attempt-e8f540e1-b127-4db0-8b8b-beccfef191be",
+            "command": "node",
+            "args": [
+              "--test",
+              "test/workflow-evidence.test.ts",
+              "test/workflow-work.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:06:11.168Z"
+          },
+          {
+            "id": "attempt-1b552b9f-942a-4fd7-bc10-f8ccd7242252",
+            "command": "node",
+            "args": [
+              "--test",
+              "test/workflow-evidence.test.ts",
+              "test/workflow-work.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:22:24.311Z"
+          },
+          {
+            "id": "attempt-79355d8c-298c-4c50-80f8-bf76f32f721c",
+            "command": "node",
+            "args": [
+              "scripts/verify-dashboard-race.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:25:39.954Z"
+          },
+          {
+            "id": "attempt-0ff919e1-0cd3-4409-aace-e12f6579e339",
+            "command": "node",
+            "args": [
+              "--test",
+              "test/workflow-evidence.test.ts",
+              "test/workflow-work.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T00:00:51.255Z"
+          }
+        ],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/022-검증 재사용과 합본 선별 통합/work.json",
+        "workRecordHash": "f581d7a533e0ab2e5a916e8461171d3f4b2a4629cc3e4f77720c81750d95427d",
+        "sourceDigest"  : "84ea5fe89cc68270aca77f1889f3cc396ddba922892a6adce8e8cbcab655df2f",
+        "criteriaDigest": "a3183ba15060b8c54fb273bee5c9f427d7d5f29c2d6cbd9b0a9988253e6684b7"
+      }
+    }
+  ]
+}

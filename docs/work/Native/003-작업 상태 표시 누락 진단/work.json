@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-8da56280-20c6-4277-8aa1-27b64112d8f9",
+  "title"        : "작업 상태 표시 누락 진단",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약을 원작업 work-36d312bc-a767-4e3e-a581-01898b35f75f에 관계·역사 근거로 회수했다. 원본 입력 절단 및 실제 기능 수용은 원작업에서 별도 검증한다.",
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-36d312bc-a767-4e3e-a581-01898b35f75f"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "4ec05e226d9d9fbc1e119b1dd029040c4241e1a2991a57783f3535673d9f4a15",
+    "threadId": "01a1e2c9-7195-7d30-b29e-f7bd06089013",
+    "turnId"  : "01a1e2e5-2e2e-7350-bd03-59bfd1f2d836",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"sed -n '1,240p' src/agent-overview.ts && sed -n '1,180p' src/agent-overview-view.tsx\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"rg -n 'selected|skill|plan|progress|command_reference|read|미확인|미제공' src/www-activity.ts src/native-activity.ts src/agent-overview.ts test/agent-overview.test.ts docs/work/Chat/013-*/spec.md | head -105 && cat /tmp/www-home-navigation-docs-context.json && rg -n 'WWW|Hook|관측|Plan|Progress' docs/DEVELOPMENT.md | tail -22\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'pwd && git status --short --branch && cat ~/.codex/coding-guidelines.md && cat agents/www/AGENT.md && cat skills/www/www-diagnose/SKILL.md'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '1,102p' src/www-activity.ts && sed -n '138,205p' src/agent-overview.ts && sed -n '1,66p' src/agent-overview-view.tsx && sed -n '590,658p' src/native-activity.ts && sed -n '204,238p' src/native-activity.ts\"",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}

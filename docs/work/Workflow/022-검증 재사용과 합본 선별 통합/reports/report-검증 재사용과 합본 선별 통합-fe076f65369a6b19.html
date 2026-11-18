@@ -1,0 +1,440 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>검증 재사용과 합본 선별 통합 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+dd.result-status{font-weight:600}dd.result-passed{color:var(--green)}dd.result-failed{color:var(--red)}dd.result-blocked,dd.result-unverified{color:var(--amber)}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 17일 AM 9:04 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>검증 재사용과 합본 선별 통합</h1><p class="lead">v6 검증 재사용 실제 실험을 회수했으며 통합 기준 전체의 정식 검증 경로 부족으로 부분 상태를 유지한다.</p><div id="report-story" class="story">v5 시도는 Native src/test 후속 변경으로 현행 증거가 아니었다.
+
+v6 동일 프로세스에서 exact Nodefocused 요청 2회·실제 실행 1회·재사용 1회가 당시 통과했으나 후속 공식 readback에서는 observed_environment_changed로 현재 적용 불가다. 통합 기준의 공통·GUI 관측은 별도이며 정식 기준 전체 수행으로 승격하지 않았다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 5 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 같은 UUID의 기준 전체를 실제 검증할 수 있는 정식 경로를 확보한 뒤 현재 소스·기준에 결속하여 검증과 실제 검토·보고서·완료를 회수한다.</p></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>v5 시도는 Native src/test 후속 변경으로 현행 증거가 아니었다.</p></div><div><h3>접근과 결과</h3><p>v6 동일 프로세스에서 exact Nodefocused 요청 2회·실제 실행 1회·재사용 1회가 당시 통과했으나 후속 공식 readback에서는 observed_environment_changed로 현재 적용 불가다. 통합 기준의 공통·GUI 관측은 별도이며 정식 기준 전체 수행으로 승격하지 않았다.</p></div></div><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>기준 없는 관측 등록은 공식 coverage에서 허용되지 않으며, GUI만 실행하고 INTEGRATE-CURRENT 전체를 통과시킬 수 없다고 판단했다.</li><li>artifact 파일 결속과 이후 독립 review를 실행하지 않은 의미 검증의 대체로 사용하지 않았다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>이전 실패·실험은 보존하고 v5 원문과 재사용 영수증을 별도 경로에 저장했다.</li></ul></div><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>같은 프로세스에서 직접 관측한 실제 검증만 입력·기준·환경·명령·범위·산출물 일치 시 재사용하고 실행 0회와 실제 실행을 영수증으로 구분한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>실패·주입·소스/기준/의존/설정/도구/환경/산출물 drift와 권한 철회·pending 회수·세션 부재를 거부하고 기존 현재성 및 완료 방어를 유지한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>합본의 승인 비생성 hunk와 oracle 한 문단을 현재 main에 선별 통합하고 기존 Home 및 후속 변경을 보존하며 공식 snapshot과 필요한 집중·공통·GUI 검증을 현재 입력에 결속한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 5건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>REUSE-CURRENT/SAFETY의 당시 실제 실험은 보존하나 현재 observed_environment_changed로 usable=false다. 현재 PASS로 복사하거나 실패 재사용하지 않는다.</li><li>INTEGRATE-CURRENT의 여러 필수 동작을 하나의 허용 attempt가 전체 수행하지 못하므로 현행 공식 수용 미충족이다.</li><li>review 단계 진입 전 실제 Terra 감사·업무 완료는 미실행이며 전체 npm check의 BoxBox pipeline 1개 실패를 유지한다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>같은 UUID의 기준 전체를 실제 검증할 수 있는 정식 경로를 확보한 뒤 현재 소스·기준에 결속하여 검증과 실제 검토·보고서·완료를 회수한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 17일 AM 9:04 · 선택한 발행 기록 · v6 검증 재사용 실제 실험을 회수했으며 통합 기준 전체의 정식 검증 경로 부족으로 부분 상태를 유지한다.</p><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 2개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 17일 AM 9:01 · 작성자 보고서 · v6 검증 재사용 실제 실험을 회수했으며 통합 기준 전체의 정식 검증 경로 부족으로 부분 상태를 유지한다.</summary><article><h3>검증 재사용과 합본 선별 통합</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">v5 시도는 Native src/test 후속 변경으로 현행 증거가 아니었다.
+
+v6 동일 프로세스에서 exact Nodefocused 요청 2회·실제 실행 1회·재사용 1회를 관측했다. 통합 기준의 공통·GUI 관측은 별도이며 정식 기준 전체 수행으로 승격하지 않았다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 5 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 같은 UUID의 기준 전체를 실제 검증할 수 있는 정식 경로를 확보한 뒤 현재 소스·기준에 결속하여 검증과 실제 검토·보고서·완료를 회수한다.</p><h3>기록된 변경</h3><ul><li>이전 실패·실험은 보존하고 v5 원문과 재사용 영수증을 별도 경로에 저장했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>같은 프로세스에서 직접 관측한 실제 검증만 입력·기준·환경·명령·범위·산출물 일치 시 재사용하고 실행 0회와 실제 실행을 영수증으로 구분한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>실패·주입·소스/기준/의존/설정/도구/환경/산출물 drift와 권한 철회·pending 회수·세션 부재를 거부하고 기존 현재성 및 완료 방어를 유지한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>합본의 승인 비생성 hunk와 oracle 한 문단을 현재 main에 선별 통합하고 기존 Home 및 후속 변경을 보존하며 공식 snapshot과 필요한 집중·공통·GUI 검증을 현재 입력에 결속한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div></dl><section class="paper" id="history-report-133f317b-3d18-439d-80e7-8b0f30319170-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>기준 없는 관측 등록은 공식 coverage에서 허용되지 않으며, GUI만 실행하고 INTEGRATE-CURRENT 전체를 통과시킬 수 없다고 판단했다.</li><li>artifact 파일 결속과 이후 독립 review를 실행하지 않은 의미 검증의 대체로 사용하지 않았다.</li></ul></section><section class="paper" id="history-report-133f317b-3d18-439d-80e7-8b0f30319170-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 5건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>REUSE-CURRENT/SAFETY는 실제 exact 집중 검사와 동일 세션 실험 범위에서 회수했다.</li><li>INTEGRATE-CURRENT의 여러 필수 동작을 하나의 허용 attempt가 전체 수행하지 못하므로 현행 공식 수용 미충족이다.</li><li>review 단계 진입 전 실제 Terra 감사·업무 완료는 미실행이며 전체 npm check의 BoxBox pipeline 1개 실패를 유지한다.</li></ul></section><section class="paper" id="history-report-133f317b-3d18-439d-80e7-8b0f30319170-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>같은 UUID의 기준 전체를 실제 검증할 수 있는 정식 경로를 확보한 뒤 현재 소스·기준에 결속하여 검증과 실제 검토·보고서·완료를 회수한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-133f317b-3d18-439d-80e7-8b0f30319170-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-d0fe5886-5dd6-443c-ad4e-7cdc262ec3ac<br>report-133f317b-3d18-439d-80e7-8b0f30319170</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>f581d7a533e0ab2e5a916e8461171d3f4b2a4629cc3e4f77720c81750d95427d</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>84ea5fe89cc68270aca77f1889f3cc396ddba922892a6adce8e8cbcab655df2f</code></dd></div><div><dt>기준 지문</dt><dd><code>a3183ba15060b8c54fb273bee5c9f427d7d5f29c2d6cbd9b0a9988253e6684b7</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;REUSE-CURRENT&quot;,
+      &quot;description&quot;: &quot;같은 프로세스에서 직접 관측한 실제 검증만 입력·기준·환경·명령·범위·산출물 일치 시 재사용하고 실행 0회와 실제 실행을 영수증으로 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-11cc45b6-d3e2-43af-9a22-4d8044d38e39&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e8f540e1-b127-4db0-8b8b-beccfef191be&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-1b552b9f-942a-4fd7-bc10-f8ccd7242252&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0ff919e1-0cd3-4409-aace-e12f6579e339&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;REUSE-SAFETY&quot;,
+      &quot;description&quot;: &quot;실패·주입·소스/기준/의존/설정/도구/환경/산출물 drift와 권한 철회·pending 회수·세션 부재를 거부하고 기존 현재성 및 완료 방어를 유지한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-11cc45b6-d3e2-43af-9a22-4d8044d38e39&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0670c052-9614-4a67-81a3-a8aadd81aedd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e8f540e1-b127-4db0-8b8b-beccfef191be&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-1b552b9f-942a-4fd7-bc10-f8ccd7242252&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0ff919e1-0cd3-4409-aace-e12f6579e339&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;INTEGRATE-CURRENT&quot;,
+      &quot;description&quot;: &quot;합본의 승인 비생성 hunk와 oracle 한 문단을 현재 main에 선별 통합하고 기존 Home 및 후속 변경을 보존하며 공식 snapshot과 필요한 집중·공통·GUI 검증을 현재 입력에 결속한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-79355d8c-298c-4c50-80f8-bf76f32f721c&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-11cc45b6-d3e2-43af-9a22-4d8044d38e39&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/workflow-evidence.test.ts&quot;,
+        &quot;test/workflow-work.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:16:45.115Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0670c052-9614-4a67-81a3-a8aadd81aedd&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:18:14.029Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e8f540e1-b127-4db0-8b8b-beccfef191be&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/workflow-evidence.test.ts&quot;,
+        &quot;test/workflow-work.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:06:11.168Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-1b552b9f-942a-4fd7-bc10-f8ccd7242252&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/workflow-evidence.test.ts&quot;,
+        &quot;test/workflow-work.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:22:24.311Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-79355d8c-298c-4c50-80f8-bf76f32f721c&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-dashboard-race.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:25:39.954Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0ff919e1-0cd3-4409-aace-e12f6579e339&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/workflow-evidence.test.ts&quot;,
+        &quot;test/workflow-work.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-17T00:00:51.255Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;v6 검증 재사용 실제 실험을 회수했으며 통합 기준 전체의 정식 검증 경로 부족으로 부분 상태를 유지한다.&quot;,
+  &quot;before&quot;: &quot;v5 시도는 Native src/test 후속 변경으로 현행 증거가 아니었다.&quot;,
+  &quot;after&quot;: &quot;v6 동일 프로세스에서 exact Nodefocused 요청 2회·실제 실행 1회·재사용 1회를 관측했다. 통합 기준의 공통·GUI 관측은 별도이며 정식 기준 전체 수행으로 승격하지 않았다.&quot;,
+  &quot;changes&quot;: [
+    &quot;이전 실패·실험은 보존하고 v5 원문과 재사용 영수증을 별도 경로에 저장했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;기준 없는 관측 등록은 공식 coverage에서 허용되지 않으며, GUI만 실행하고 INTEGRATE-CURRENT 전체를 통과시킬 수 없다고 판단했다.&quot;,
+    &quot;artifact 파일 결속과 이후 독립 review를 실행하지 않은 의미 검증의 대체로 사용하지 않았다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;REUSE-CURRENT/SAFETY는 실제 exact 집중 검사와 동일 세션 실험 범위에서 회수했다.&quot;,
+    &quot;INTEGRATE-CURRENT의 여러 필수 동작을 하나의 허용 attempt가 전체 수행하지 못하므로 현행 공식 수용 미충족이다.&quot;,
+    &quot;review 단계 진입 전 실제 Terra 감사·업무 완료는 미실행이며 전체 npm check의 BoxBox pipeline 1개 실패를 유지한다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;같은 UUID의 기준 전체를 실제 검증할 수 있는 정식 경로를 확보한 뒤 현재 소스·기준에 결속하여 검증과 실제 검토·보고서·완료를 회수한다.&quot;
+  ]
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 17일 AM 5:49 · 자동 기록 · 진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</summary><article><h3>검증 재사용과 합본 선별 통합</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>같은 프로세스에서 직접 관측한 실제 검증만 입력·기준·환경·명령·범위·산출물 일치 시 재사용하고 실행 0회와 실제 실행을 영수증으로 구분한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>실패·주입·소스/기준/의존/설정/도구/환경/산출물 drift와 권한 철회·pending 회수·세션 부재를 거부하고 기존 현재성 및 완료 방어를 유지한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>합본의 승인 비생성 hunk와 oracle 한 문단을 현재 main에 선별 통합하고 기존 Home 및 후속 변경을 보존하며 공식 snapshot과 필요한 집중·공통·GUI 검증을 현재 입력에 결속한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl><section class="paper" id="history-report-d5b0f300-70b1-4807-9b29-bc7fa5308803-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p></section><section class="paper" id="history-report-d5b0f300-70b1-4807-9b29-bc7fa5308803-next"><h2>남은 일과 해소 행동</h2><p>남은 일과 완료 조건이 기록되지 않았습니다. 업무가 완료됐다는 뜻은 아닙니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-d5b0f300-70b1-4807-9b29-bc7fa5308803-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-d0fe5886-5dd6-443c-ad4e-7cdc262ec3ac<br>report-d5b0f300-70b1-4807-9b29-bc7fa5308803</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>67589f887fc9e1b188b14f9623546dea0697f7bc38b134dc006269b697598cc4</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>6f6a299ad163ed7905deb54e6b9eb848d355f918f8795ab39d28b56c7b9898fa</code></dd></div><div><dt>기준 지문</dt><dd><code>a3183ba15060b8c54fb273bee5c9f427d7d5f29c2d6cbd9b0a9988253e6684b7</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>in_progress</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;in_progress&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;REUSE-CURRENT&quot;,
+      &quot;description&quot;: &quot;같은 프로세스에서 직접 관측한 실제 검증만 입력·기준·환경·명령·범위·산출물 일치 시 재사용하고 실행 0회와 실제 실행을 영수증으로 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;REUSE-SAFETY&quot;,
+      &quot;description&quot;: &quot;실패·주입·소스/기준/의존/설정/도구/환경/산출물 drift와 권한 철회·pending 회수·세션 부재를 거부하고 기존 현재성 및 완료 방어를 유지한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;INTEGRATE-CURRENT&quot;,
+      &quot;description&quot;: &quot;합본의 승인 비생성 hunk와 oracle 한 문단을 현재 main에 선별 통합하고 기존 Home 및 후속 변경을 보존하며 공식 snapshot과 필요한 집중·공통·GUI 검증을 현재 입력에 결속한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre></div></details></article></details></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Workflow/022-검증 재사용과 합본 선별 통합/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-d0fe5886-5dd6-443c-ad4e-7cdc262ec3ac<br>report-89bfb428-067c-4280-9070-0654e98d6ed4</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>f581d7a533e0ab2e5a916e8461171d3f4b2a4629cc3e4f77720c81750d95427d</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>84ea5fe89cc68270aca77f1889f3cc396ddba922892a6adce8e8cbcab655df2f</code></dd></div><div><dt>기준 지문</dt><dd><code>a3183ba15060b8c54fb273bee5c9f427d7d5f29c2d6cbd9b0a9988253e6684b7</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;REUSE-CURRENT&quot;,
+      &quot;description&quot;: &quot;같은 프로세스에서 직접 관측한 실제 검증만 입력·기준·환경·명령·범위·산출물 일치 시 재사용하고 실행 0회와 실제 실행을 영수증으로 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-11cc45b6-d3e2-43af-9a22-4d8044d38e39&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e8f540e1-b127-4db0-8b8b-beccfef191be&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-1b552b9f-942a-4fd7-bc10-f8ccd7242252&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0ff919e1-0cd3-4409-aace-e12f6579e339&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;REUSE-SAFETY&quot;,
+      &quot;description&quot;: &quot;실패·주입·소스/기준/의존/설정/도구/환경/산출물 drift와 권한 철회·pending 회수·세션 부재를 거부하고 기존 현재성 및 완료 방어를 유지한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-11cc45b6-d3e2-43af-9a22-4d8044d38e39&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0670c052-9614-4a67-81a3-a8aadd81aedd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e8f540e1-b127-4db0-8b8b-beccfef191be&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-1b552b9f-942a-4fd7-bc10-f8ccd7242252&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0ff919e1-0cd3-4409-aace-e12f6579e339&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;INTEGRATE-CURRENT&quot;,
+      &quot;description&quot;: &quot;합본의 승인 비생성 hunk와 oracle 한 문단을 현재 main에 선별 통합하고 기존 Home 및 후속 변경을 보존하며 공식 snapshot과 필요한 집중·공통·GUI 검증을 현재 입력에 결속한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-79355d8c-298c-4c50-80f8-bf76f32f721c&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-11cc45b6-d3e2-43af-9a22-4d8044d38e39&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/workflow-evidence.test.ts&quot;,
+        &quot;test/workflow-work.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:16:45.115Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0670c052-9614-4a67-81a3-a8aadd81aedd&quot;,
+      &quot;command&quot;: &quot;npm&quot;,
+      &quot;args&quot;: [
+        &quot;run&quot;,
+        &quot;check&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:18:14.029Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e8f540e1-b127-4db0-8b8b-beccfef191be&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/workflow-evidence.test.ts&quot;,
+        &quot;test/workflow-work.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:06:11.168Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-1b552b9f-942a-4fd7-bc10-f8ccd7242252&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/workflow-evidence.test.ts&quot;,
+        &quot;test/workflow-work.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:22:24.311Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-79355d8c-298c-4c50-80f8-bf76f32f721c&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-dashboard-race.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:25:39.954Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0ff919e1-0cd3-4409-aace-e12f6579e339&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/workflow-evidence.test.ts&quot;,
+        &quot;test/workflow-work.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-17T00:00:51.255Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;v6 검증 재사용 실제 실험을 회수했으며 통합 기준 전체의 정식 검증 경로 부족으로 부분 상태를 유지한다.&quot;,
+  &quot;before&quot;: &quot;v5 시도는 Native src/test 후속 변경으로 현행 증거가 아니었다.&quot;,
+  &quot;after&quot;: &quot;v6 동일 프로세스에서 exact Nodefocused 요청 2회·실제 실행 1회·재사용 1회가 당시 통과했으나 후속 공식 readback에서는 observed_environment_changed로 현재 적용 불가다. 통합 기준의 공통·GUI 관측은 별도이며 정식 기준 전체 수행으로 승격하지 않았다.&quot;,
+  &quot;changes&quot;: [
+    &quot;이전 실패·실험은 보존하고 v5 원문과 재사용 영수증을 별도 경로에 저장했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;기준 없는 관측 등록은 공식 coverage에서 허용되지 않으며, GUI만 실행하고 INTEGRATE-CURRENT 전체를 통과시킬 수 없다고 판단했다.&quot;,
+    &quot;artifact 파일 결속과 이후 독립 review를 실행하지 않은 의미 검증의 대체로 사용하지 않았다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;REUSE-CURRENT/SAFETY의 당시 실제 실험은 보존하나 현재 observed_environment_changed로 usable=false다. 현재 PASS로 복사하거나 실패 재사용하지 않는다.&quot;,
+    &quot;INTEGRATE-CURRENT의 여러 필수 동작을 하나의 허용 attempt가 전체 수행하지 못하므로 현행 공식 수용 미충족이다.&quot;,
+    &quot;review 단계 진입 전 실제 Terra 감사·업무 완료는 미실행이며 전체 npm check의 BoxBox pipeline 1개 실패를 유지한다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;같은 UUID의 기준 전체를 실제 검증할 수 있는 정식 경로를 확보한 뒤 현재 소스·기준에 결속하여 검증과 실제 검토·보고서·완료를 회수한다.&quot;
+  ]
+}</pre></div></details></section></article></div></main></body></html>

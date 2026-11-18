@@ -1,3 +1,18 @@
+# 현재 원격 재개 — 플랫폼별 검증 분리
+
+현재 작업은 같은 UUID `work-e9007dfb-f546-426b-88c6-58174641acc8`의 새 source 사본에서 진행한다. 아래 접힌 과거 Mac/Windows 성공은 당시 소스·환경의 기록이며 현재 PASS가 아니다. 외부 `ssh chacada`와 릴리스/배포는 이번 범위 밖이므로 접속하거나 실행하지 않는다.
+
+현재 macOS 일반 호스트의 Electron39.8.10·Chrome 및 Native 읽기 실행은 가능하다. 원격머신 전체의 DB/GUI 고장으로 단정하지 않는다. 제품에 SQLite 중앙 DB를 구축하거나 Codex 자기 상태 DB를 이전·삭제하지 않는다.
+
+실제 OS 입력 가능성 조회는 `.www/evidence/resume-20261116/os-input-host/`에 보존했다. Swift의 조회 전용 API는 `consoleSession=1`, `loginDone=1`이고 `AXIsProcessTrusted=false`, `CGPreflightPostEventAccess=false`, `CGPreflightScreenCaptureAccess=false`를 반환했다. PATH의 Orca는 실제 spawn ENOENT다. 이는 이 조회 프로세스·현재 도구 출처의 권한이며 모든 앱의 영구 상태를 일반화하지 않는다. 인증·시스템 승인·입력 소스·전역 설정은 바꾸지 않았다. 실제 OS IME 조합 검사는 미실행이며 CDP·합성 composition 회귀로 대체하지 않는다.
+
+현재 수용 범위는 실제 가능한 Native·공통 중단/복원·잠금·완료 검토·일관성 동작을 현재 명령으로 검사하는 것이다. Windows x64 실행·패키지·한글/공백 경로와 양 OS 실제 IME는 별도 실환경 근거가 필요하다. 접근 승인 없이 권한을 바꾸거나 과거 Windows 근거를 현행으로 올리지 않는다. 다음 행동은 현재 공통 검사·관측 모델과 감사 출처의 구분·보고서 회수이며 미충족 기준은 완료로 바꾸지 않는다.
+
+추가로 Electron39.8.10/내장 Node22.22.1 프로세스의 공식 API 조회도 `accessibilityTrusted=false`, `screenCapture=denied`였다. 이 조회는 권한 요청 UI를 열지 않았고 Native나 앱 기능 검사를 대체하지 않는다. 실제 코드/strict/컴파일/프로세스 영수증은 `.www/evidence/resume-20261116/os-input-host/electron-*`에 보존했다.
+
+<details>
+<summary>이전 소스·환경의 실행과 인계 — 역사 기록</summary>
+
 # 실행 분리와 현재 상태
 
 ## Mac·공통 구현
@@ -23,3 +38,5 @@ Windows 구현·플랫폼별 자동 검사·패키징과 후속 수정은 chacad
 ## 다음 행동
 
 Mac의 이 범위 구현에는 필수 코드 수정이 남아 있지 않다. 이후 제품 기능은 이 작업의 목표를 임의로 늘리지 않고 별도 작업으로 접수한다. Windows 담당자는 자신의 결과·미검증·다음 행동을 원격 보고서에 유지한다. 전체 상태의 정본은 `work.json`, 소스별 실제 근거와 한계는 [검증 기록](verification.md)이다.
+
+</details>

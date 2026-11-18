@@ -1,209 +1,100 @@
 # 오픈소스 채팅 뼈대 도입 비교
 
-## 현행 결론 — 2026-11-15
+현재 구현·검사·검토의 결과와 적용성은 같은 UUID의 [작업 원장](work.json)과 [검증 기록](verification.md)의 최신 공식 read/status로 판단한다. 새 반례 이후의 소스 교정·집중 검증·문서 영향 검토·고유 독립 감사·저작 보고서·완료 판정은 별도 절차이며, 이 문서 작성으로 통과를 선언하지 않는다. 과거 숫자·모델 판정·미실행 설명은 당시 소스의 이력이다.
 
-사용자는 “내가 말한 오픈소스는 Herdr 같은 인기가 많은 것들”이라고 비교 대상을 정정했다. **Herdr 같은 완성 앱의 실행·세션·채팅 경계를 비교한 결과, 현재 WWW에는 Ovis의 공개 채팅 동작을 필요한 범위만 개작하고 Electron·Codex app-server·Native 원장·실시간 모니터·리포트를 보존하는 방식을 권장한다.** 이미 반입한 Ovis 행 상태·입력 계산·인용 동작을 기준으로 판단한다. assistant-ui 우선 권장은 정정 전 조사 이력이며 현행 도입안이나 사용자 결정이 아니다.
+작업 UUID: `work-029fb7e2-61fa-4014-9362-5e915ab13197`. 기준 정의와 결과의 정본은 work.json이다.
 
-완성 앱 중심 비교는 완성 앱 전체로 교체하라는 사용자 승인과 같지 않다. Herdr runtime·desktop·Ovis의 실제 책임을 비교한 뒤, WWW가 이미 가진 동작을 다시 만드는 비용과 실행 의미 보존을 고려한 저자 판단이다. 이번 변경은 비교 문서 현행화이며 신규 앱 설치·포크·제품 코드 이식이나 외부 runtime 도입을 실행하지 않았다. 아래 과거 표와 초기 권장은 날짜가 있는 이력으로 보존한다.
+## 현재 결론
 
-## WWW의 현재 구현과 검증 범위 — AC-1
+Herdr 같은 완성 앱의 실행·세션·채팅 경계를 비교한 결과, **Ovis의 필요한 채팅 동작만 개작**하고 WWW의 Electron·Native JSON-RPC·원장·관측·보고서를 보존하는 방식을 권장한다. Ovis의 행 상태·입력 길이·인용 세 동작은 이미 개작돼 있다. 전체 앱 교체·새 DB 도입이나 추가 코드 반입을 이 조사에서 실행하지 않았다. 정정 전 assistant-ui 우선안은 과거 이력이다.
 
-조사 기준은 2026-11-15 작업 사본의 HEAD `92de2389b943610f7e12c23a4cd211555d4cae1b`와 미커밋 변경이다. HEAD만으로 dirty 소스를 대표하지 않도록 직접 근거 21개 파일의 SHA-256 목록을 `.www/comparison-evidence/local-source-manifest.json`에 보존했다. 목록의 JSON SHA-256은 `90e616eda8a5f900b897505037784b3b7458d4dedf7e9b33c4841331a8f2a03d`다. 전체 저장소나 통합 후 소스의 지문은 아니다.
+이 비교의 완료는 현재 소스·고정 원문·라이선스·의존 경계와 단일 권장안의 정확성에 관한 것이다. 외부 앱 설치/실행·제품 이식·Windows/IME 실기를 새 완료 조건으로 추가하지 않는다. **외부 앱 호환 PASS가 아니다.**
 
-| 사용자 행동 | 기준 사본에서 직접 확인한 구현 | 실행 근거와 남은 한계 |
+## 현재 WWW의 구현·검증·한계 — AC-1
+
+| 사용자 흐름 | 직접 읽은 현재 책임 | 실제 근거와 남은 한계 |
 |---|---|---|
-| 프로젝트·새 대화·저장 대화 선택 | `src/renderer.tsx`, `src/main.ts`, `src/conversations.ts`: 프로젝트 선택, 목록·페이지 이동·읽기·재개. Native `thread/list` → `thread/read` → `thread/resume` → `thread/turns/list`를 연결 | 같은 cwd·originator `www`·비임시 thread로 제한. 다른 앱의 모든 Codex 대화를 가져오는 기능이 아님 |
-| 앱 종료 후 원래 thread로 후속 요청 | Native 원장이 저장 원본이며 별도 메시지 DB를 만들지 않음. 선택 thread ID를 `turn/start`에 사용. 공개 이력만 복원하고 과거 승인을 재실행하지 않음 | 실제 Native 프로세스 재시작·동일 thread 재개·후속 단문 응답의 과거 실측은 존재. 진행 중 crash·재접속·승인 대기 중 중단까지의 보장은 아님 |
-| 답변·코드·인용 읽기 | `src/chat-message.tsx`의 Markdown/GFM, 코드·답변 복사, 인용. `src/chat-state.ts`의 입력·인용, `src/chat-row-state.tsx`의 펼침 기억. `react-markdown` 10.1.0, `remark-gfm` 4.0.1 고정 | HTML 제외·외부 링크 검증·이미지 설명 처리. 복원은 제한된 공개 항목·최근 사건이며 완전한 무제한 이력 복원이 아님 |
-| 요청·명령·파일·승인·중단 확인 | `src/main.ts`, `src/projection.ts`, `src/native-chat.ts`: 구조화 사건, 공개 진행 설명·요약 요청, 승인 ID 보존·중복 억제, 중단 요청과 실제 종료 분리 | 모델이 항상 진행 설명을 생성한다는 보장 없음. 아래 완료 시나리오에서 결과 불명확·재연결을 별도 확인해야 함 |
-| 실시간 세션·리소스 확인 | `src/native-activity.ts`, `src/native-activity-view.tsx`, `src/activity-sidebar.ts`, `src/activity-ledger.ts`, `src/shared.ts`: Skill·Hook·문서·도구 관측, 턴·thread 격리, 토큰/quota, 관측 원장과 coverage/gap 표시 | 여기서 리소스는 Skill·Hook·문서·도구 활동. 읽기 관측을 실제 적용 성공으로 바꾸지 않으며 누락·단절·보존 한도를 유지 |
-| 개발 기록·자동 판단·리포트·생태계 사용 | `src/reports-service.ts`, `src/native-reports.ts`, `src/reports-view.tsx`, `src/ecosystem-view.tsx`: 작업·보고서 읽기/내보내기, Native 종료 후 별도 판단·저장, 생태계 탐색 | 채팅 앱 교체 시 이 기능과 work.json/보고서 계약·sandbox 표시·실패 상태를 함께 이주해야 함. HTML 존재를 업무 완료로 해석하지 않음 |
+| 프로젝트/새 대화/저장 대화 선택 | renderer/preload의 제한 IPC, native-session의 선택/소유 guard, conversations의 list/read/resume/turns-list | cwd·originator=www·비임시 thread를 검증한다. sameWorkspace는 실행 플랫폼의 Node path.isAbsolute/resolve를 사용한다. Windows drive/UNC의 win32 주입 대조와 실제 Windows OS 미실행을 구분한다. 다른 앱의 모든 원장을 가져오는 기능이 아니다. |
+| 자동 재연결·명시적 열기 | 둘 다 현재 thread raw bounded queue를 snapshot과 대조해 배출한다. terminal 같은 turn/item late started/delta는 내용과 관계없이 억제한다. | read 응답 전 live 유실과 explicit open의 terminal 재활성화를 실제 stdio 합성 red로 먼저 입증한 뒤 수정했다. 현재 승인·새 turn·변경된 정식 완료와 다른 thread를 구분하는 회귀가 있다. 실제 Native/GUI의 임의 race 전체는 미측정이다. |
+| 복원 실패 뒤 재시도 | lifecycle.open의 준비와 accept를 분리한다. main이 queue/예약/snapshot/drain 및 현재 scope를 수용한 뒤 ready/interrupted를 확정한다. | active disconnect와 idle 기존ready 모두 동일대화 overflow 뒤 전송을 차단하고 성공 재열기 뒤에만 허용하는 실제 stdio 회귀를 실행했다. 2000건/4MiB 초과는 명시 실패이며 이미 유실된 사건을 되찾는 기능은 아니다. |
+| unknown 이력과 현재 진행 | 현재 설치 schema의 유효 completedAtMs 또는 지원되는 terminal status를 보존하고 확인된 완료 항목은 닫힘을 유지한다. 미완료 잠정 항목만 같은 scope의 실제 live 시작에서 재개한다. |0은 유효 안전정수 시각이며 unknown과 다르다.0은 합성 경계값 검사이지 실제 Native가0을 보냈다는 관측이 아니다. 누락/null/invalid timestamp와 완료정보 없는 legacy의 실완료 여부를 발명하지 않는다. |
+| 답변/공개 요약/파일 변경 읽기 | Markdown/GFM·코드복사·인용·초안/펼침은 WWW 구성요소가 맡는다. live item/completed 투영에서 본문/출력의 explicit empty와 빈 changes 배열은 기존 값을 교체한다. 혼합 malformed live changes가 유효 항목만 남겨 기존 목록을 지운 반례는 과거 실패다. 현재 수용 요구는 명시 빈 배열의 제거·전체 유효 배열의 교체와 omitted/null/malformed의 보존을 구분하는 것이며, 교정 완료와 실제 결과는 최신 verification/status에서 확인한다. 저장 parser와 live projection의 검증 범위를 혼동하지 않는다. fileChange declined도 거절된 종료로 보존한다. | completed/failed/declined 파일의 late started는 상태와 diff를 바꾸지 않으며 새 authoritative 완료는 갱신한다. 저장 reasoning.summary와 live 완료 요약은 배열 전체가 문자열일 때만 유효한 공개 요약으로 받는다. 예를 들어 ["공개",42]처럼 혼합된 배열은 기존 요약을 덮어쓰지 않으며 명시 빈 배열은 공개 요약을 비운다. 저장 parser와 live projection의 해당 보존·빈값 경계는 각각 회귀로 확인하며, 다른 항목의 모든 정규화가 동등하다고 확대하지 않는다. 비공개 추론 본문은 복원하지 않는다. HTML 실행·외부 링크/이미지 처리는 기존 제한을 따른다. |
+| 승인·중단·리소스/모니터·리포트 | typed ID/token·서버 해소·실제 종료와 요청 접수를 구분한다. 리소스 읽기/역할 선언/하네스·업무완료는 다른 사실이다. | 현재 구조와 회귀를 확인한 범위다. 실제 모델의 일반 승인/변경 전 구간·모든 Hook 실행·비동기 내부 작업·Windows/OS IME까지 통과했다고 쓰지 않는다. |
 
-Ovis 반입의 정본은 [코드 사용 고지](../../../third-party/ovis.md)다. `src/lib/chatRowState.tsx`, `composerLength.ts`, `chatQuote.ts`를 WWW의 행·100,000자 입력·thread/cwd 초안에 맞게 개작했다. Ovis 전역 store·terminal/pane/PTY 전송은 반입하지 않았다. 따라서 “아직 오픈소스 코드 도입을 하지 않았다”는 초기 결론은 현행 상태와 다르다.
+출처 고지는 `docs/third-party/ovis.md`다. 고정 Ovis의 chatRowState/composerLength/chatQuote를 WWW 행·100,000자 입력·thread/cwd 초안에 맞게 개작했고 Ovis의 전역 store·PTY·터미널 전송·DB 읽기층은 반입하지 않았다.
 
-[Chat006 검증 기록](../006-오픈소스%20채팅%20뼈대와%20Native%20대화%20재개%20통합/verification.md)의 `attempt-5f97bdc1-6e29-4ec7-99d8-b8e6c2f7c311`는 실제 Native 재시작·동일 thread·후속 응답, `attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac`는 실제 Electron과 합성 Native의 145항목 GUI 검사를 기록한다. 이 과거 PASS는 당시 입력에서의 관측이다. 해당 기록은 이후 병행 소스 변경과 `source_changed`도 명시하므로 이번 문서의 현재 전체 제품 PASS로 승격하지 않는다.
+### 검사와 provenance
 
-기준 사본에서는 `serverRequest/resolved` 수신 처리가 없고, 연결 종료 뒤 선택 thread에 새 프로세스의 resume 없이 `turn/start`로 이어질 경로가 남아 있었다. 이는 [같은 기록의 최종 독립 감사](../006-오픈소스%20채팅%20뼈대와%20Native%20대화%20재개%20통합/verification.md)와 코드 대조에서 확인한 경계다. 실제 승인 대기 → 중단 → 해소 알림 발행/잔류와 실제 crash → 후속 전송의 복합 재현은 이 조사에서 실행하지 않았다. 후속 수정의 통과 여부는 수정된 통합 소스와 새 실행 증거로 다시 판단한다.
+Native 수정은 별도 부모 Workflow021(`work-40ae2dc5-86db-4b52-b1fc-09ca61c58898`)의 협업 저작으로 수행됐다. 이008의 새 검증/감사 영수증으로 복사하지 않는다.
+
+| 출처 | 실제 관찰 | 범위 |
+|---|---|---|
+| native-history-implementation | stdio read 전 유실 red→189개 집중/strict | 자동재연결 queue/marker·승인·한도 |
+| native-projection-implementation | 순수 red2→210개 집중/strict | historical unknown live와 explicit empty |
+| native-explicit-open-implementation | stdio red1→입력 포함226개 집중 | explicit open terminal 필터. worker 당시 병렬 파일 strict exit2 원문도 보존했고 이후 aggregate 검사와 구분한다. |
+| native-atomic-timestamps/worker | stdio/순수 red2→248개/936 expect·strict0 | open 최종수용, 유효 완료시각·빈 요약·legacy/종료/scope |
+| native-declined-completion/worker | 순수 red2→270개/962 expect·strict0 | 실제 PatchApplyStatus.declined·파일 late started 상태/diff guard |
+
+위270개는7파일/input 포함 worker 검사다. 이008의 별도 공식 집중은6파일이며 현재 실제 수와 sourceStable은 새 verification/status에서 확인한다. 합성 stdio·순수 투영·SSR은 actual Native 모델이나 실제 Electron을 대신하지 않는다.
+
+마지막 declined typed wrapper는 core 반환 뒤 보고서 enableReports의 전역 원장 잠금 경합으로 실패했다. 실패 원문과 원래 host 종료를 보존하고 원본 post JSON을 재구성해 PASS로 쓰지 않았다. `native-declined-completion/authoring-result.json`의 recovery는 별도 공식 멱등 pre/post 현재 재조회이며 ok/sourceStable/errors0·BoxBox disabled다. injected 협업과 실제 tool process를 구분하고 disabled를 PASS로 바꾸지 않는다.
+
+과거 Chat006의 실제 Native 단문·동일 thread 재개, 실제 Electron+합성145/246 항목 및 부모 UI20/관측14/unit159 표본은 각 당시 source의 관측이다. 과거122초 원인을 확정하지 않는다. 이 조사에서 upstream 앱이나 새 Native/GUI 복합 시나리오를 실행하지 않았고, 변경 뒤 현재 GUI 수용은 별도006 등의 작업이 회수한다.
 
 ## 완성 앱의 고정 소스 비교 — AC-2
 
-조회일은 2026-11-15이며 아래는 모두 고정 revision의 공식 저장소다. 버전은 해당 revision의 manifest 선언으로, 설치된 버전·배포 최신 버전·WWW 호환 성공을 뜻하지 않는다. 별 수는 2026-11-12의 과거 인지도 관측만 이력에 보존하고 현재 추천 점수로 사용하지 않는다.
+2026-11-15에 선택한 아래 고정 revision을 이번 2026-11-16에 공식 raw 소스에서 다시 회수했다. 재개 전 comparison.md의 commit 고정 URL 45개가 모두 HTTP 200으로 저장됐고, 각 URL·resolved URL·시각·bytes·SHA는 `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json`에 있다. 누락된 과거 원문 복구가 아니라 이번 새 증거다. 버전은 해당 revision의 manifest 선언으로, 설치된 버전·배포 최신 버전·WWW 호환 성공을 뜻하지 않는다. 별 수는 2026-11-12의 과거 인지도 관측만 이력에 보존하고 현재 추천 점수로 사용하지 않는다.
 
 | 후보·고정 revision | 실제 코드·패키지·라이선스 근거 | 가져오는 실행 경계와 WWW 비용 |
 |---|---|---|
 | Herdr runtime `ee5bfb5041bb3e4a49d591c72308aae3c81ecdde` | [Cargo.toml](https://github.com/herdrdev/herdr/blob/ee5bfb5041bb3e4a49d591c72308aae3c81ecdde/Cargo.toml): Rust `herdr` 0.9.5, `portable-pty =0.9.0`와 vendor patch. [PTY actor](https://github.com/herdrdev/herdr/blob/ee5bfb5041bb3e4a49d591c72308aae3c81ecdde/src/pty/actor.rs): master reader/writer·입력·resize·shutdown. [session.rs](https://github.com/herdrdev/herdr/blob/ee5bfb5041bb3e4a49d591c72308aae3c81ecdde/src/session.rs): 명명 세션·local socket·중지/삭제. [LICENSE](https://github.com/herdrdev/herdr/blob/ee5bfb5041bb3e4a49d591c72308aae3c81ecdde/LICENSE): Apache-2.0 | 터미널/프로세스·세션의 기반. [README](https://github.com/herdrdev/herdr/blob/ee5bfb5041bb3e4a49d591c72308aae3c81ecdde/README.md)는 클라이언트 detach 뒤 작업 유지와 서버/머신 재시작 후 layout·지원 agent 재개를 구분하며 원 프로세스 생존은 부정. WWW 외부 runtime으로 연결 가능성을 언어만으로 제외하지 않지만, 구조화 RPC의 승인·중단·이력 의미를 PTY와 대응하는 새 adapter가 필요 |
 | Herdr desktop `4c8c622d7965a6f6787f55b1896b70795fc68918` | [Cargo.toml](https://github.com/herdrdev/herdr-app/blob/4c8c622d7965a6f6787f55b1896b70795fc68918/Cargo.toml): Rust `herdr-app` 0.1.15, `gpui-pre =0.3.8`·`ghostty-sys`. [main.rs](https://github.com/herdrdev/herdr-app/blob/4c8c622d7965a6f6787f55b1896b70795fc68918/src/main.rs)와 [terminal.rs](https://github.com/herdrdev/herdr-app/blob/4c8c622d7965a6f6787f55b1896b70795fc68918/src/terminal.rs): GPUI/terminal 연결. [LICENSE](https://github.com/herdrdev/herdr-app/blob/4c8c622d7965a6f6787f55b1896b70795fc68918/LICENSE): Apache-2.0 | [hc.rs](https://github.com/herdrdev/herdr-app/blob/4c8c622d7965a6f6787f55b1896b70795fc68918/src/hc.rs)는 **별도 herdr-core**의 `hc connect` framed JSON-RPC와 `terminal.run/attach/kill` 등을 사용. 위 herdr runtime 저장소와 같은 API라고 가정하지 않음. 전체 포크는 GPUI 화면·core 운영과 WWW 기능 이주, mod는 앱의 별도 확장 계약. React 위젯 교체가 아님 |
 | Ovis `d505c75e26c54f31573057d1e9aa431ecc56677f` | [package.json](https://github.com/devswha/ovis/blob/d505c75e26c54f31573057d1e9aa431ecc56677f/package.json): 0.5.3, React `^19.3.0`, Bun `1.4.2`, node-pty·xterm. [Electron package](https://github.com/devswha/ovis/blob/d505c75e26c54f31573057d1e9aa431ecc56677f/app/electron/package.json): desktop version 0.0.0, Electron 45.2.2. [LICENSE](https://github.com/devswha/ovis/blob/d505c75e26c54f31573057d1e9aa431ecc56677f/LICENSE): MIT | [codex.ts](https://github.com/devswha/ovis/blob/d505c75e26c54f31573057d1e9aa431ecc56677f/server/codex.ts)는 rollout/transcript와 Herdr pane/process를 연결한다. WWW Electron/React와 가깝지만 전체 포크는 Bun server·PTY·store·인증/연결 경계의 채택도 수반한다. WWW는 현재 Electron `^39.2.1`·React `^19.2.0`를 선언하므로 manifest 차이를 무검증 호환으로 취급하지 않는다 |
-| T3 Code `ee90bdc9405d8d4b8ff78ce2133ccb04844298ab` | [README](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/README.md), [desktop package](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/apps/desktop/package.json): 0.1.9, Electron 44.10.1. [구조 문서](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/docs/internals/overview.md): server·client-runtime·영속 projection·outbox. [LICENSE](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/LICENSE): MIT | Codex 지원·대화 영속성의 전체 앱 비교 후보. 사건·projection·outbox를 DB transaction으로 묶는 자체 orchestration을 수용하고 WWW 원장·리포트·관측과 중복/이주를 정해야 함. 현재 Native 단문 재개가 구현된 뒤에는 “저장이 없으니 교체” 논거를 적용할 수 없음 |
+| T3 Code `ee90bdc9405d8d4b8ff78ce2133ccb04844298ab` | [README](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/README.md), [desktop package](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/apps/desktop/package.json): 0.1.9, Electron 44.10.1. [구조 문서](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/docs/internals/overview.md): server·client-runtime·영속 projection·outbox. [LICENSE](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/LICENSE): MIT | Codex 지원·대화 영속성의 전체 앱 비교 후보. 사건·projection·outbox를 DB transaction으로 묶는 자체 orchestration을 수용하고 WWW 원장·리포트·관측과 중복/이주를 정해야 함. 현재 POSIX 범위의 Native 단문 재개는 존재하므로 “저장이 없으니 교체” 논거는 맞지 않음. 플랫폼별 경로 처리·bounded 복원과 실제 Windows OS·Native/GUI 임의 race 미실측은 별도 검증 비용 |
+
+Ovis의 codex.ts는 `bun:sqlite`도 import하며 이는 전체 앱의 transcript/Native 상태 읽기 결합 경계다. 이 코드나 DB 읽기층을 WWW에 반입했다고 주장하지 않으며 부분 개작 세 파일에는 이 전송/저장 계층을 포함하지 않았다.
 
 Ovis의 [codex-daemon.ts](https://github.com/devswha/ovis/blob/d505c75e26c54f31573057d1e9aa431ecc56677f/server/codex-daemon.ts#L13-L20)는 기존 Codex 제어 socket에 읽기 전용 연결하며 `initialize`·`initialized`·`skills/list`만 보내고 thread·turn·approval 메서드를 보내지 않는다고 명시한다. 실제 `REQUESTS`와 요청 타입도 `initialize | skills/list`로 제한돼 있다. 이 파일에 app-server가 등장한다는 사실은 WWW의 stdio thread/turn/approval 전송 호환 근거가 아니다. README의 기능 소개도 해당 코드와 별도인 제품 실행 주장으로 구분한다.
 
+MIT/Apache-2.0 표시는 위 고정 revision의 실제 루트 LICENSE와 manifest를 읽은 결과다. 이 표의 전체 앱 라이선스만으로 vendor/native 의존성의 모든 고지 의무를 대조했다고 주장하지 않는다. 부분 반입은 가져온 파일·revision·원본 고지와 결합 경계를 함께 보존해야 한다. Ovis 세 파일과 현재 개작본·docs/third-party/ovis.md를 다시 대조했으며 chatQuote 원본의 pane/draft store·compose/replyComments 결합은 그대로 반입하지 않았다. Herdr의 portable-pty vendor patch, desktop의 GPUI/ghostty vendor 경계, T3의 private Effect workspace 의존도 전체 채택 비용에 포함한다. 외부 설치·실행·호환 성공은 측정하지 않았다.
+
+초기 이력의 AionCore 라이선스 불일치는 같은 고정 commit의 LICENSE를 보충 회수해 확인했다. [루트 LICENSE](https://github.com/iOfficeAI/AionCore/blob/503a87199eb978790ca77675b39c84b241535bf3/LICENSE)는 Apache-2.0이고 이미 회수한 Cargo workspace.package.license는 MIT다. 보충 URL은 기존 comparison에서 직접 추출된 45개와 구별해 supplemental-license-fetch.json에 기록했다. 이 차이는 해소됐다고 판단하지 않는다. 이번 중앙 DB 구축·원장 이전은 범위 밖이며 T3/AionCore의 DB 책임은 후보 교체 비용 비교일 뿐 WWW 중앙 DB 도입 권장이 아니다.
+
 Herdr desktop의 프로세스 지속성은 별도 core가 소유한다. 이번에는 desktop의 core 연결 코드까지 확인했으며 herdr-core 전체의 저장·crash 복구·라이선스 전파·WWW adapter 실행은 조사하지 않았다. 이 미확인을 runtime README의 복구 약속으로 채우지 않는다. AionUi·Cline·assistant-ui의 초기 조사와 라이선스는 아래 2026-11-12 이력이며 이번에 다시 검증한 현행 비교 후보와 구분한다.
 
-## 교체 비용과 보존 경계 — AC-3
+## 보존 경계와 권장 이유 — AC-3
 
-| 선택 | 얻는 뼈대 | 현재 WWW에서 다시 구현·검증할 범위 | 판단 |
-|---|---|---|---|
-| Herdr desktop 전체 포크 또는 runtime/core 채택 | 터미널·세션·pane, desktop 공간·tab·mod | GPUI 또는 외부 runtime adapter, Native 승인 ID/중단/동일 thread 의미, WWW 공개 사건·원장·보고서·생태계·개발 역할의 이주 | 터미널·다중 머신 운영이 별도 핵심 목표가 될 때 가치. 이번 채팅 완성의 최소 경계보다 큼 |
-| Ovis 전체 포크 | Electron·React 채팅과 Herdr pane·transcript 연결 | Bun server·PTY·store·배포 의존, 구조화 Native 사건 adapter, 기존 프로젝트/초안/이력·모니터·리포트의 이주와 회귀 | 화면 기술의 유사성만으로 총비용이 작아지지 않음. 이미 가져온 독립 동작을 버리고 전체 기반을 교체할 근거 부족 |
-| T3 Code 전체 기반 교체 | Codex 개발 채팅·영속 orchestration | 자체 DB·server·client-runtime/Effect 경계와 기존 Native/리소스 원장의 책임 조정, WWW 기능 이주 | 전체 제품 기반 교체 후보로 남지만 이식 실험·회귀 근거가 없음 |
-| **Ovis의 필요한 채팅 동작만 개작** | 실제 반입한 행 상태·입력·인용과 후속 필요한 UI 패턴 | 추가 반입 파일별 결합 분리·출처/라이선스 기록, 현행 Native 사건·선택·승인·중단·복구 회귀 | **이번 권장안.** 이미 구현한 Native 목록/읽기/재개·Markdown·리소스·보고서를 보존하며 남은 결함을 직접 고침 |
-
-| 보존할 경계 | 소유와 변경 조건 |
-|---|---|
-| 실행·승인·중단·연결 | WWW main/preload/rpc. 실제 request ID, 결과 불명확, Native 종료와 UI 접수 의미 유지. PTY 문자 전송으로 승인 완료를 대체하지 않음 |
-| 대화 저장·원래 thread 재개 | Native 원장과 `src/conversations.ts`. 화면 본문 재표시와 원래 thread의 후속 실행을 별도로 검증. 미확정 turn 자동 재전송 금지 |
-| Chat UI·입력·공개 메시지 | WWW renderer의 상태를 원본으로 Ovis 파일별 동작을 개작. upstream 전역 store·runtime을 무심코 동반 반입하지 않음 |
-| 관측·원장·보고서·생태계·개발 역할 | WWW 고유 기능 유지. 저장 범위·부분 관측·미확인·오류·판단 결과를 전송·화면 변경 뒤에도 보존 |
-
-현재 반입 파일의 [chatRowState](https://github.com/devswha/ovis/blob/d505c75e26c54f31573057d1e9aa431ecc56677f/src/lib/chatRowState.tsx), [composerLength](https://github.com/devswha/ovis/blob/d505c75e26c54f31573057d1e9aa431ecc56677f/src/lib/composerLength.ts), [chatQuote](https://github.com/devswha/ovis/blob/d505c75e26c54f31573057d1e9aa431ecc56677f/src/lib/chatQuote.ts)를 이번에 직접 다시 읽었다. 새 부분 반입은 파일·revision·라이선스 고지를 구체화하고 기존 동작과 비교한 뒤 수행한다. 전체 앱의 기능·품질을 이 세 파일의 반입 효과로 주장하지 않는다. 별도 assistant-ui 도입이나 전체 앱 교체 승인을 다시 묻는 것을 이번 정정 반영의 선행 조건으로 두지 않는다.
-
-## 완료 시나리오와 실제 미검증
-
-다음은 권장 방식의 완료 판정 조건이다. 이번 문서 저작이 이 시나리오를 새로 실행했다는 뜻은 아니다.
-
-1. 일반 요청 → 공개 설명·답변 → 명령·파일 변경을 같은 thread/turn에서 읽고 성공·실패·미확인을 구분한다.
-2. 실제 승인 요청 → 원래 문자열/숫자 ID의 승인·거절, 중복 응답 억제, 승인 대기 중 중단 → 서버 해소 알림/턴 종료 → 입력·대화 전환 복구를 확인한다. 중단 접수만으로 종료를 표시하지 않는다.
-3. Native 연결을 실행 중 끊고 새 연결을 만든다. 미확정 명령·승인을 성공으로 바꾸거나 요청을 자동 재전송하지 않는다. 새 Native 프로세스에서 선택 thread를 resume한 뒤에만 후속 턴을 보낸다.
-4. 앱 종료 → 재시작 → 프로젝트·저장 대화 선택 → 공개 이력 복원 → **원래 Native thread ID**의 후속 응답을 확인한다. 오래된 승인 재표시/재실행, 다른 cwd·thread의 출력 혼입을 거부한다.
-5. 복구 뒤 Ovis 유래 펼침·인용·입력 한도와 Markdown/복사, 대화별 초안·읽기 위치, 리소스 coverage/gap과 보고서 표시를 회귀 확인한다.
-
-실제 단문 Native 재개 표본과 합성 Native/Electron GUI의 과거 관측은 위에 분리했다. 이번 upstream 앱 설치·실행·호환 실험, 실제 crash 복구 및 승인 대기 중 중단의 복합 실측, Windows·OS 한국어 IME 실기, Herdr/core·Ovis 전체 기반 이식은 미실행이다. 추천은 소스 경계와 현재 구현 비용에 대한 판단이며 제품 완성이나 외부 앱 호환 PASS가 아니다.
-
-## 연구 검증과 원문 회수
-
-현재 문서 저작은 `work-7aaa8974-f791-4f76-8613-06e18f17b835`의 수정 권한에 연결된다. Chat008의 과거 `implementation=false` 검증 패스와 초기 검토 통과를 이번 내용의 저작 권한·독립 검토 성공으로 옮겨 쓰지 않는다.
-
-2026-11-15 공식 GitHub connector의 `fetch`로 각 고정 `https://raw.githubusercontent.com/<owner>/<repo>/<SHA>/<path>` 파일과 필요한 directory를 직접 회수했다. 일반 `curl -fsSL https://api.github.com/repos/herdrdev/herdr/git/trees/ee5bfb5041bb3e4a49d591c72308aae3c81ecdde?recursive=1`는 HTTP 403으로 실패해 tree 성공 근거로 사용하지 않았고 connector의 고정 src/server·src/pty·desktop src 목록과 개별 파일로 이어갔다. runtime README의 raw `curl -fL --retry 2`는 성공했다. 설치 script나 upstream 앱은 실행하지 않았다.
-
-원문은 작업 사본의 `.www/comparison-evidence/*.txt`에 URL과 tool 원본 응답으로 보존했다. `source-urls.json`은 조회 URL 목록, `local-source-manifest.json`은 현재 기능 표의 직접 파일 지문이다. 공유 근거는 위 영구 링크와 아래 대조 요약이며, 비추적 로컬 파일의 존재를 다른 머신 재현 보장으로 쓰지 않는다.
-
-| 검사 | 실제 확인한 항목 | 증거 해석 |
+| 방식 | 가져올 것과 비용 | 판단 |
 |---|---|---|
-| 현재 소스 대조 | 표에 명시한 경로 실재, Native 4개 조회/재개 메서드, Markdown·복사·인용, Ovis 고지·행/입력 파일, 리소스 scope/coverage, 보고서 연결 | 소스 존재·배선 근거. 새 GUI/실제 모델 실행을 대신하지 않음 |
-| 외부 source claim 대조 | Herdr/desktop Cargo 이름·버전·license, PTY reader/writer, desktop GPUI와 `hc connect`, Ovis manifest·daemon 메서드 제한·transcript/pane import, T3 desktop manifest/구조 문서와 네 LICENSE 본문 | 고정 소스·manifest 사실 확인. upstream 전체 라이선스 감사·실행 호환 인증이 아님 |
-| 권장 논거 대조 | 현재 Ovis 반입·Native 원장·관측·리포트 책임과 각 전체 앱의 실행/저장 경계를 나란히 확인 | 부분 재사용이 보존할 책임이 적다는 저자 판단. 비용 시간·성능을 실측한 값 없음 |
+| Herdr runtime 연결 | PTY·세션 운영을 얻지만 구조화 승인/중단/원장/관측 adapter가 필요 | 외부 runtime 가능성은 언어만으로 제외하지 않는다. 현재 구현을 대체할 동기와 새 검증 범위가 필요하다. |
+| Herdr desktop 전체 포크 | GPUI·별도 herdr-core 운영과 WWW 고유 화면/보고서 이주 | 작은 React 부품 반입과 다른 규모다. |
+| Ovis 전체 기반 | Bun server·PTY·store·버전/인증 경계 수용 | Electron/React가 비슷하다는 사실만으로 현재 Native 의미가 유지되지 않는다. |
+| Ovis 필요한 동작 개작 | 기존 세 동작과 추가로 필요한 공개 UI 패턴을 파일별 출처/결합 분리 | 권장안이다. WWW Native/원장/관측·보고서를 보존하고 추가 파일마다 라이선스/회귀를 확인한다. |
+| T3 전체 기반 | 영속 projection/outbox·DB transaction 기반 orchestration과 이주 | 중앙 DB를 이번 범위에 추가하지 않는다. 필요한 기능/이주 비용을 별도 결정한다. |
 
-일반 `npm run check`나 문서 링크 검사는 연구의 revision·라이선스·추천 논거 검증을 대체하지 않는다. 이번 내용의 최종 수용과 독립 검토 결과는 연결 작업의 새 원장에서 관리한다.
+다음 부분 반입은 가져올 파일·revision·고지와 실제 사용자 이득을 정한 뒤 현재 Native/선택/승인/중단/복원 회귀와 비교한다. 실제 성능·비용 시간을 측정한 값은 없으며 전체 앱 실행/이식 성공도 주장하지 않는다.
+
+## 현재 증거와 과거 이력
+
+고정45 URL과 보충 LICENSE의 새 원문·HTTP 시각·bytes/SHA는 chat008 증거에 있다. 옛 `.www/comparison-evidence`는 이 사본에 없으며 당시 원문을 복구했다고 쓰지 않는다. 현재 source 선택/정본 SHA는 최신 local-source-manifest/methodology-manifest에, 전체 source는 공식 capture에 기록한다.
+
+과거 Terra1~8의 실제 fail·권한·canonical 원문·당시 문서 SHA와 원장 summary는 보존한다. 좁은 Astra terminal 반박은 기존 late-delta 계약의 설명을 지지한 읽기 전용 판단이며 전체008 감사나 후속 실제 제품 수정 PASS가 아니다. 과거 evidence.summary의 “현재 적용 가능”은 기록 당시 요약이고 현재 적용성은 공식 status/evaluateEvidence가 계산한다.
+
+이 정리 전의 문서 전문은 [이력 사본](history/before-final-closure-comparison.md.txt)이다. 정정 전 assistant-ui 우선안, 옛 구현 공백·미실행/성공/실패·누적 정정 문구를 그 원문에서 읽는다. 현재 권장안과 남은 행동은 이 문서/spec/tasks와 마지막 read/status를 따른다.
+
+## 이전 수정·검증 기록 — 아래 현재와 수치는 당시를 뜻함
 
 <details>
-<summary>2026-11-12 조사 이력 — 아래 초기 현황표·assistant-ui 권장은 현행 판단이 아님</summary>
+<summary>Terra8 이후와 통합 반례 수정의 당시 기록</summary>
 
-이하 원문은 당시 HEAD `4ef13d29b18188642bf7f7bef6c7d1bb60bfc3c8` 및 당시 조사·검토 범위의 기록으로 보존한다. 초기 문서의 “현재”, “권장”, “아직 하지 않은 일”은 당시를 뜻하며, 2026-11-15의 구현·검증·사용자 결정으로 적용하지 않는다.
+## Terra8 이후 수정과 현재 검증 범위
 
-## 사용자 정정 — Herdr 같은 완성 앱을 기준으로 비교
+고유 actual Terra8(`review-6714dd3d-9aca-4f6c-8912-3f294687f7f5`)의 당시 fail은 보존한다. 이후 Native 수정은 A→B open 중 A의 실행·승인 사건을 A/B 합산 2,000건·4 MiB 한도 안에서 보관하며, 성공·실패 전환에서 기존 선택의 활성 상태와 승인을 잃지 않고 overflow의 불확실한 전송을 차단한다. 개별 완료 없는 running file은 turn 종료에서 결과 미확인으로 닫고 변경 내용을 보존한다. 현재 집중검사 429개(12파일, 실패 0)는 이 두 경계의 실제 stdio·순수 투영 회귀를 포함한다. 현재 Electron+합성 stdio의 Native UI·Chat 전체·관측 DOM 검사를 실행했으며 실제 모델·OS 한국어 IME·Windows 검증으로 확대하지 않는다. 새 UUID별 독립 감사와 복합 완료 판정은 별도다. 혼합 changes 및 저장/live 요약의 정규화 차이는 위 표의 현재 한계로 유지하며 코드 해결로 주장하지 않는다. 과거 원문은 `.www/evidence/resume-20261116/chat008/audit8-result.json`과 canonical review 경로, 새 실행 전문은 `.www/evidence/resume-20261116/native-closeout/focused.*` 및 `gui-*`에 보존한다.
 
-사용자는 후속 답변에서 “내가 말한 오픈소스는 Herdr 같은 인기가 많은 것들”이라고 비교 대상을 구체화했다. 아래 초기 assistant-ui 우선 권장은 사용자 선택이 아니며 현재 도입안으로 확정하지 않는다. 비교의 중심을 재사용 UI 라이브러리에서 실행·세션·채팅을 갖춘 에이전트 작업 앱으로 바꾼다. 기존 보고서는 정정 이전의 조사 이력이다.
 
-2026-11-12 공식 GitHub에서 Herdr main 50,471 stars, Herdr desktop 2,771 stars, Ovis 2,034 stars를 조회했다. 수치는 조회 시점의 인지도 지표이며 실제 품질·안정성의 증거가 아니다.
+## 통합 반례 수정 뒤 최종 검증
 
-| 후보 | 공식 소스에서 확인한 뼈대 | WWW와의 중요한 차이 |
-|---|---|---|
-| Herdr runtime | 터미널을 백그라운드에서 유지하고 클라이언트 재접속·에이전트 상태를 제공 | 구조화된 Chat RPC가 중심인 현재 WWW와 실행 계층이 다름 |
-| Herdr desktop | Rust·GPUI·Ghostty 기반 창, space/tab/pane, JavaScript mod와 layout | Electron·React 화면을 그대로 교체할 컴포넌트가 아님. 외부 runtime 연결과 전체 포크를 구분해야 함 |
-| Ovis | Herdr 생태계의 React·TypeScript 채팅·승인 카드·라이브 터미널, Electron 앱 | Codex transcript·pane/process 연결을 사용해 WWW app-server 이벤트와 단순 호환하지 않음 |
-| T3 Code | Electron·Codex 연계·대화 영속성·복구를 갖춘 전체 앱 구조 | 큰 server/client-runtime/contracts/Effect 경계와 WWW 고유 기능 이주 비용 |
+후속 actual Terra가 발견한 terminal 복원 뒤 live 늦은 시작, 전환 overflow 뒤 재열기 차단, 공개 진행 조각의 위치·누락 완료 처리, 거절 집계, 사용량·Hook·Subagent 현재성 경계는 같은 작업 범위에서 수정했다. 과거 fail과 재현은 삭제하지 않았으며 `repair-wave-2`와 `repair-integration`에 실제 red/green·공식 사후 결과를 보존한다. classifier는 구조 허용 책임에 맞춰 기존 `chat-status`로 통합했고 문자열 언급을 실제 검사로 세지 않는다. 최종 실행 원문은 `.www/evidence/resume-20261116/native-closeout/final-current`에 별도로 수집한다. 새 고유 독립 감사와 복합 완료 판정 전 이 문서만으로 제품 또는 조사 작업의 완료를 선언하지 않는다. 혼합 malformed changes의 부분 투영과 저장/live reasoning summary 정규화 차이는 여전히 위 표의 한계다.
 
-근거:
-
-- [Herdr README](https://github.com/herdrdev/herdr/blob/ee5bfb5041bb3e4a49d591c72308aae3c81ecdde/README.md): runtime·세션 유지·재시작 뒤 복구 의미를 확인했다. 서버·머신 재시작 전 프로세스가 그대로 살아남는다고 해석하지 않는다.
-- [Herdr desktop README](https://github.com/herdrdev/herdr-app/blob/4c8c622d7965a6f6787f55b1896b70795fc68918/README.md), [Cargo](https://github.com/herdrdev/herdr-app/blob/4c8c622d7965a6f6787f55b1896b70795fc68918/Cargo.toml), [mod 문서](https://github.com/herdrdev/herdr-app/blob/4c8c622d7965a6f6787f55b1896b70795fc68918/docs/mods.md): 실제 runtime과 화면의 책임, Rust/GPUI와 JavaScript mod 경계를 확인했다. 라이선스 표기는 Apache-2.0이다.
-- [Ovis README](https://github.com/devswha/ovis/blob/d505c75e26c54f31573057d1e9aa431ecc56677f/README.md), [package](https://github.com/devswha/ovis/blob/d505c75e26c54f31573057d1e9aa431ecc56677f/package.json), [Electron package](https://github.com/devswha/ovis/blob/d505c75e26c54f31573057d1e9aa431ecc56677f/app/electron/package.json): 채팅·승인·터미널과 React/TypeScript/Electron 소스를 확인했다. 라이선스 표기는 MIT이고 PTY 관련 Rust sidecar도 있어 전체 코드를 TS 전용으로 단정하지 않는다.
-- [Ovis Codex 처리](https://github.com/devswha/ovis/blob/d505c75e26c54f31573057d1e9aa431ecc56677f/server/codex.ts): rollout·transcript와 Herdr pane/process를 연결한다. [daemon 연결](https://github.com/devswha/ovis/blob/d505c75e26c54f31573057d1e9aa431ecc56677f/server/codex-daemon.ts)은 skills 조회만 수행하고 thread·turn·approval을 보내지 않는다고 소스에 명시돼 있다. app-server가 언급된다는 이유만으로 현재 WWW의 전송 경로와 같다고 보지 않는다.
-- [기존 skillshare 참고 경로](https://github.com/runkids/skillshare/blob/f1faa4bdd5faa163ce50dcf9350c3a2622884486/herdr/skillshare/README.md)는 Herdr용 skillshare 관리 패널이다. Herdr 본체의 채팅 엔진을 가져온 이력이 아니다.
-
-현재 판단은 Herdr를 실행·세션 뼈대의 기준, Ovis와 T3 Code를 실제 채팅 앱 뼈대의 비교 대상으로 삼는 것이다. 단지 언어가 다르다는 이유로 Herdr 외부 runtime 연결까지 제외하지 않는다. 사용자 정정 이후 후보 설치·실행·이식과 새 독립 검토는 아직 수행하지 않았다. 아래 초기 비교와 검토 통과는 이 추가 조사의 실행 검증으로 승격하지 않는다.
-
-## 결론과 결정 상태
-
-사용자는 개발 작업용 채팅을 완성하고 싶으며, 이미 공개된 오픈소스의 실제 코드 뼈대를 가져오는 방법을 검토하길 원한다. 2026-11-12 조회 기준으로 전체 앱 기반은 T3 Code가 가장 직접적인 후보이고, 현재 WWW 안에 채팅 뼈대를 도입하려면 assistant-ui가 작은 경계를 제공한다. 이는 소스 조사에 근거한 저자 판단이며 실행·이식 성공 판정은 아니다.
-
-권장은 **WWW의 Electron·Native 실행부를 유지하며 assistant-ui의 채팅 UI와 ExternalStoreRuntime을 도입하는 방식**이다. 대화 저장·Native 재개는 UI 라이브러리 도입만으로 해결되지 않으므로 별도 연결해야 한다. 전체 앱 기반 교체가 목표라면 T3 Code를 우선 비교 실행할 수 있지만, 현재 구조와 개발·보고서 기능의 이주 범위부터 결정해야 한다. 두 방법을 동시에 도입하지 않는다. 사용자 선택 전 제품 코드와 의존성은 변경하지 않았다.
-
-## WWW의 현재 상태 — AC-1
-
-확인 소스는 src/main.ts, shared.ts, renderer.tsx, projection.ts, input.ts, native-chat.ts와 현행 Chat 명세다. HEAD는 4ef13d29b18188642bf7f7bef6c7d1bb60bfc3c8이며 작업 시작 때 커밋 절차 관련 별도 미커밋 변경이 있었다. 이를 보존했다.
-
-| 사용자 행동 | 코드에서 확인한 상태 | 남은 범위 |
-|---|---|---|
-| 폴더를 선택하고 요청 | startThread/startTurn과 중복 제출 방지, 실패 시 초안 복구 | 첫 스레드 후 폴더 변경 제한, 새 대화 관리 없음 |
-| 답변·공개 설명 읽기 | 스트리밍과 공개 요약, 비공개 reasoning 제외 | 본문은 일반 텍스트, Markdown·코드 복사 UI 없음 |
-| 명령·파일 변경 확인 | 명령 카드·출력·diff·미확인·절단 표시 | 긴 이력과 변경 검토의 사용자 경험 보강 |
-| 승인·중단 | 승인 ID 보존, 중복 응답 억제, 중단 접수와 실제 종료 분리 | 실제 Native 변경·승인 전체 실기 검증 공백 |
-| 작업 흐름·사용량 확인 | 턴별 활동·Skill 읽기·Hook·토큰·quota 투영 | 수신하지 않은 관측은 제공하지 않음 |
-| 앱을 닫았다가 대화 재개 | API는 startThread/startTurn 중심, 메모리 최근 2,000개 사건 | 목록·영속 저장·읽기·동일 Native thread 복구 없음 |
-| 개발 기록·리포트·생태계 | 별도 제품 기능이 존재 | 전체 앱 교체 시 다시 통합할 비용 |
-
-이번 npm run check는 exit 0으로 끝났다. 소스 정책·작업 계약·앱/도구 타입 검사·Node/Bun 테스트·빌드가 실행됐다. Node 테스트 147개 통과를 확인했다. 이 결과는 현재 코드의 기준선이며 새로운 오픈소스 통합이나 실제 Electron GUI·Native 승인·Windows·한국어 IME 실기 통과를 뜻하지 않는다.
-
-## 공개 코드와 도입 경계 — AC-2
-
-외부 내용은 공식 저장소의 고정 SHA로 확인했다. README만으로 동작을 보증하지 않고 실제 소스·패키지 계약과 구분한다.
-
-### assistant-ui: 현재 WWW에 넣을 채팅 뼈대
-
-조회 SHA: 53ab9cbae076b569b37189795b93b71af0a40117.
-
-- [공식 README](https://github.com/assistant-ui/assistant-ui/blob/53ab9cbae076b569b37189795b93b71af0a40117/README.md)는 Thread·Message·Composer·ThreadList 같은 조합형 구성과 Markdown·코드 표시 등을 안내한다.
-- [실제 ExternalStoreAdapter](https://github.com/assistant-ui/assistant-ui/blob/53ab9cbae076b569b37189795b93b71af0a40117/packages/core/src/runtimes/external-store/external-store-adapter.ts)는 messages·convertMessage·onNew·onCancel·승인 응답 및 thread adapter 경계를 제공한다. 현재 AppEvent 투영을 상태 원본으로 유지할 후보다.
-- [외부 상태 연결 문서](https://github.com/assistant-ui/assistant-ui/blob/53ab9cbae076b569b37189795b93b71af0a40117/apps/docs/content/docs/runtimes/custom/external-store.mdx)는 상태와 저장을 호스트가 소유하고 callback에 따라 기능을 켜는 구조다.
-- [예제](https://github.com/assistant-ui/assistant-ui/blob/53ab9cbae076b569b37189795b93b71af0a40117/examples/with-external-store/app/MyRuntimeProvider.tsx)의 응답은 데모다. 해당 예제를 그대로 복사해 Native 연결 완료로 취급하지 않는다.
-- [패키지](https://github.com/assistant-ui/assistant-ui/blob/53ab9cbae076b569b37189795b93b71af0a40117/packages/react/package.json)는 React 18/19를 지원하고 다른 라이브러리에 의존한다. 최신 소스의 버전은 npm 배포·실제 설치 호환성을 검증한 값이 아니다.
-- [MIT 라이선스](https://github.com/assistant-ui/assistant-ui/blob/53ab9cbae076b569b37189795b93b71af0a40117/LICENSE)를 확인했다. 실제 도입 때 해당 고지와 도입 revision/패키지 버전을 보존한다.
-
-직접 얻을 수 있는 것은 채팅의 화면·조합·상호작용 뼈대다. Native thread 영속성·승인 정책·명령 실행·재연결은 WWW 책임으로 남는다. 편집·재생성·분기 callback을 실제 Native 동작에 연결하지 않고 노출하면 대화와 실행 상태가 달라질 수 있다. 초기 이식에서는 지원한 기능만 켠다.
-
-### T3 Code: 전체 개발 채팅 앱 기반
-
-조회 SHA: ee90bdc9405d8d4b8ff78ce2133ccb04844298ab.
-
-- [공식 README](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/README.md)와 [Electron package](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/apps/desktop/package.json)에서 데스크톱·Codex 지원과 Electron 의존성을 확인했다.
-- [구조 문서](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/docs/internals/overview.md)는 서버가 provider·파일·Git을 소유하고, client-runtime이 공유 상태를 소유하며, DB transaction으로 사건·projection·outbox를 기록하는 구조를 설명한다.
-- [Codex client](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/packages/effect-codex-app-server/src/client.ts)는 Effect와 생성 protocol/schema에 의존한다. [패키지](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/packages/effect-codex-app-server/package.json)는 private workspace 패키지이며 단일 공개 npm 의존성처럼 넣을 수 있다고 확인하지 않았다.
-- [ChatMarkdown](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/apps/web/src/components/ChatMarkdown.tsx)과 [ChatComposer](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/apps/web/src/components/chat/ChatComposer.tsx)는 contracts·client-runtime·Effect와 환경 상태 등에 연결돼 있다. 한두 파일 복사로 가져올 수 있는 독립 위젯으로 보기 어렵다.
-- [MIT 라이선스](https://github.com/pingdotgg/t3code/blob/ee90bdc9405d8d4b8ff78ce2133ccb04844298ab/LICENSE)를 확인했다. 루트 build scripts에는 Rust resource-monitor도 있으므로 전체 프로젝트를 순수 TypeScript만으로 단정하지 않는다.
-
-대화 저장·복구까지 포함한 완성 앱 기반을 원할 때 유력하다. 현재 WWW에 조각을 추출하기보다 별도 기반으로 실행·검증하고 WWW 고유 기능을 이주하는 접근이 더 명확할 수 있다. 하지만 재연결·보안·영속성의 의미가 같다는 실제 비교 실행은 아직 없다.
-
-### AionUi와 Cline
-
-별도 조사 전문은 .www/scratchpad/chat-skeleton-upstream.md에 보존했다. 다음은 회수한 실제 소스 근거다. 제품의 실행·이식 검증은 수행하지 않았다.
-
-- AionUi의 [구조 문서](https://github.com/iOfficeAI/AionUi/blob/e108b6b56b1a6eb99a00904878d0582f657b2908/docs/architecture/overview.md)와 [개발 안내](https://github.com/iOfficeAI/AionUi/blob/e108b6b56b1a6eb99a00904878d0582f657b2908/docs/contributing/development.md)는 대화·영속성을 별도 공개 AionCore에 둔다. [Core Cargo](https://github.com/iOfficeAI/AionCore/blob/503a87199eb978790ca77675b39c84b241535bf3/Cargo.toml)는 Rust·HTTP/WS·DB 구조다. UI만 가져오면 저장 엔진까지 따라오는 것은 아니다. [UI 라이선스](https://github.com/iOfficeAI/AionUi/blob/e108b6b56b1a6eb99a00904878d0582f657b2908/LICENSE)는 Apache-2.0이고, Core 루트 LICENSE와 Cargo 메타데이터의 라이선스 표기가 달라 실제 반입 범위에서 대조가 남는다.
-- Cline의 [desktop README](https://github.com/cline/cline/blob/50e77bc1e8f7ab023b7986821e4b5f82ff51b8c4/apps/examples/desktop-app/README.md)는 Tauri·Bun sidecar·Next.js를 사용한다. [실제 session](https://github.com/cline/cline/blob/50e77bc1e8f7ab023b7986821e4b5f82ff51b8c4/apps/examples/desktop-app/sidecar/chat-session.ts)은 자체 엔진에 연결돼 Native 대체 비용이 있다. [라이선스](https://github.com/cline/cline/blob/50e77bc1e8f7ab023b7986821e4b5f82ff51b8c4/LICENSE)는 Apache-2.0이다.
-- 별도 [@cline/ui README](https://github.com/cline/cline/blob/50e77bc1e8f7ab023b7986821e4b5f82ff51b8c4/sdk/packages/ui/README.md)와 [ADOPTION](https://github.com/cline/cline/blob/50e77bc1e8f7ab023b7986821e4b5f82ff51b8c4/sdk/packages/ui/ADOPTION.md)은 대화·도구·diff 표현 계층을 분리한다. Native 실행·저장·승인과 Markdown 정책은 호스트가 소유한다. agent-chat은 React 18.3/19, message-scroller는 React 19가 필요하다. 조사 담당자의 npm view는 0.2.0을 반환했으나 설치는 하지 않았다. 초기 API의 정확한 버전 고정과 scroller 외부 패치 요구가 남아 assistant-ui보다 첫 연결의 불확실성이 크다고 판단했다.
-
-| 후보 | 가져올 실제 뼈대 | WWW에서 추가할 책임 | 판단 |
-|---|---|---|---|
-| assistant-ui | 채팅 UI·외부 상태 runtime·Markdown 조합 | Native adapter·저장·재개 | 현재 앱 안에 도입할 우선 후보 |
-| T3 Code | Electron 개발 채팅·서버·영속 projection·Codex 연결 | WWW 고유 기능 이주·큰 workspace 유지 | 전체 앱 기반 교체의 우선 후보 |
-| AionUi + AionCore | Electron UI와 Rust 대화 backend | Rust·REST/WS·데이터 모델 수용 | 현재 TS 중심 기준에서 교체 범위 큼 |
-| Cline 전체 / @cline/ui | 자체 엔진 앱 / 별도 대화·도구 UI | 엔진 교체 / Native와 저장 adapter | 전체 교체보다 UI 패키지의 후속 비교 가치 |
-
-## 가져올 부분과 유지할 부분 — AC-3
-
-| 경계 | 권장안에서의 소유 |
-|---|---|
-| Thread·Message·Composer·Markdown·코드 표시·일반 메시지 조작 | assistant-ui 패키지 및 공개 UI 뼈대 |
-| AppEvent → 대화 메시지 변환 | WWW의 작은 연결 계층 |
-| 명령·파일·승인 카드와 오른쪽 활동·사용량 | 기존 WWW 상태 의미를 유지하며 UI에 연결 |
-| Native 프로세스·RPC·승인 ID·중단 결과·미확인 상태 | WWW main/preload/rpc |
-| 대화 목록·읽기·재개·연결 복구 | 설치된 Native protocol을 확인한 뒤 WWW의 main에 연결 |
-| 리포트·생태계·작업 기록 | 기존 WWW 기능 |
-
-저장된 본문을 다시 보여 주는 것과 같은 Native thread로 후속 요청을 보내는 것은 다른 수용 조건이다. UI에서 취소를 눌렀다고 서버 종료가 확인된 것으로 바꾸거나, 결과 불명확 요청을 자동 재전송하는 기능을 도입하지 않는다.
-
-권장 순서는 다음과 같다.
-
-1. 도입 패키지 버전·공개 UI 소스·라이선스를 고정하고 현재 Electron 빌드에서 최소 연결을 검증한다.
-2. 답변·공개 설명·명령·승인·diff를 실제 Native 사건으로 표시하고 현재 초안·읽기 위치·IME 동작을 회귀 확인한다.
-3. 새 대화·프로젝트별 목록·읽기·동일 thread 재개를 연결하고 앱 재시작 뒤에도 후속 요청이 같은 맥락을 사용하는지 검증한다.
-4. 연결 끊김·승인 대기·중단·실패·긴 출력의 복구를 확인한 뒤 채팅 완성을 판정한다.
-
-필수 완료 시나리오는 일반 요청 → 도구 실행 → 승인/거절 → 중단 → 앱 재시작 → 저장 대화 재열기 → 같은 Native thread 후속 요청이다. 최소 macOS 실제 Electron·Native에서 확인하고 Windows는 별도 검증 상태로 남긴다. 첨부·편집·분기·다중 모델은 실제 요구와 backend 지원을 정한 뒤 추가한다.
-
-## 아직 하지 않은 일
-
-오픈소스 설치·실행·코드 도입, 패키지 배포 버전 호환성 시험, 제품 GUI 재검증은 수행하지 않았다. 전체 앱 기반 교체와 기존 앱 안의 UI 뼈대 도입 중 사용자 선택이 남아 있다. 이 문서는 조사·권장안이며 채팅 완성 보고가 아니다.
 
 </details>

@@ -1,3 +1,15 @@
+# 원격 재개 계획
+
+## 현재 인계 — 2026-11-16 Mac mini
+
+- 같은 UUID: work-048bfa71-3960-4ad0-a8fe-e6217100d6df. 작업 root는 이 새 사본 source다.
+- 다음 실제 단계: verify. 공식 attempt-0ded7612-0837-4f3e-9aca-293917b91c3a에서 7개 core/속성 기준은 현재 적용 가능하다. STATE-VIEW·MAP-EVIDENCE의 실제 GUI, FLOW-REGRESSION의 실제 GUI·필수 Opus 감사는 미검증이다. 시간 예산 30초 변경은 assertions 약화가 아니다.
+- 원문 근거: .www/evidence/remote-20261116/ 아래 official019-result.json / official019-step-0.log / official019-step-1.log.
+- 커밋·push·배포·외부 쓰기·인증·전역 설정·BoxBox mode/승인 변경 금지.
+
+<details>
+<summary>이전 계획 이력 — 아래 단계는 현재 지시가 아님</summary>
+
 # 다음 구현 계획
 
 ## 재개와 실행 권한
@@ -93,3 +105,17 @@
 0 → 1 → {2A, 2B, 2C} → 3 통합 → 4 → 5 순서를 기본으로 한다. 3의 독립 UI 저작만 계약 동결 뒤 겹칠 수 있다. 동일 UUID 공식 CLI 호출은 기존 직렬 잠금을 유지하고 외부 협업의 파일별 병렬화와 구별한다. 공통 타입·설정·generator·snapshot은 Sol 단독 소유다.
 
 다음 세션의 첫 행동은 단계 0이다. 이 임시 대화에서는 서브에이전트를 실행하지 않았으며 작업 트리를 새로 만들지 않았다. 실제 구현의 위치·권한·가용 도구는 메인 세션에서 다시 확인한다.
+
+## 2026-11-16 실제 저작 인계
+
+- 분업·수용 실행부와 공통 타입/스키마는 Workflow019 통합 담당이 저작했다. 완료 보고서 우회 수정은 별도 core 담당, 상태도·지도 UI는 별도 화면 담당, seed 기반 생성 검사는 별도 검사 담당에 파일 소유를 나눠 병렬 수행했다.
+- 기존 보고서 renderer와 보고서 서비스 테스트, Native/Steer/공유 브리지는 다른 담당의 변경을 보존했다. 구조 계약·generator·snapshot·실제 GUI 하네스와 정본 개발 문서는 root가 단독 통합한다.
+- 완료 보고서 우회를 먼저 재현했고 공통 core로 수정했다. 분업 경로의 별도 읽기 검토에서 발견한 대소문자 및 NFC/NFD 별칭 반례 세 가지도 수정 후 실기 재확인했다. 이 내부 검토는 최종 독립 감사의 대체가 아니다.
+- 소유 소스는 동결해 root에 인계했다. 개별 집중 검사와 한계는 [verification.md](verification.md)에 연결한다. root의 현재 통합 소스 검사·실제 Electron 화면·필수 캡처·독립 검토·최종 저작 보고서가 남아 있다. 원장 AC 결과는 이 인계만으로 passed로 바꾸지 않았다.
+
+</details>
+
+
+## 2026-11-16 후속 통합 회수
+
+하드링크 소유 검사와 AST 정적 참조 설명을 회수했다. 현재 scripts/workflow 전체와 관련 테스트가 검증 입력에 포함됨을 확인했다. 다음은 승인 core 실제 재검증 → 최종 빌드의 Electron architecture 실제 검사 → 문서 영향 검토 → 직접 승인 Terra 읽기 전용 독립 감사 → 저작 보고서와 완료/readback이다. 정적 참조 존재를 테스트 실행으로 계산하지 않는다.

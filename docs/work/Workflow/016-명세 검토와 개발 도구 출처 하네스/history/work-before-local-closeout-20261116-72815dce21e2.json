@@ -1,0 +1,3344 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-370f0fe9-8596-4475-b62b-7b7c70992a34",
+  "title"        : "명세 검토와 개발 도구 출처 하네스",
+  "kind"         : "feature",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "동일 작업 트리의 병행 수정으로 전체 검사 exit 1 및 sourceStable=false가 반복됐다. 안정된 통합 소스의 검증과 최종 독립 감사가 필요하다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+      "required"   : true,
+      "result"     : "failed",
+      "evidence": [
+        {
+          "attemptId": "attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
+          "path"     : "verification.md#attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-a25016da-a543-48b0-b56d-3b1d63856021",
+          "path"     : "verification.md#attempt-a25016da-a543-48b0-b56d-3b1d63856021",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-1263334d-5822-4ccf-922a-60c5031a2b55",
+          "path"     : "verification.md#attempt-1263334d-5822-4ccf-922a-60c5031a2b55",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
+          "path"     : "verification.md#attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-2",
+      "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+      "required"   : true,
+      "result"     : "failed",
+      "evidence": [
+        {
+          "attemptId": "attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
+          "path"     : "verification.md#attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-a25016da-a543-48b0-b56d-3b1d63856021",
+          "path"     : "verification.md#attempt-a25016da-a543-48b0-b56d-3b1d63856021",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-1263334d-5822-4ccf-922a-60c5031a2b55",
+          "path"     : "verification.md#attempt-1263334d-5822-4ccf-922a-60c5031a2b55",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
+          "path"     : "verification.md#attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-3",
+      "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+      "required"   : true,
+      "result"     : "failed",
+      "evidence": [
+        {
+          "attemptId": "attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
+          "path"     : "verification.md#attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-a25016da-a543-48b0-b56d-3b1d63856021",
+          "path"     : "verification.md#attempt-a25016da-a543-48b0-b56d-3b1d63856021",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-8bb9f5b9-90a5-4293-8056-1baeb949e48e",
+          "path"     : "verification.md#attempt-8bb9f5b9-90a5-4293-8056-1baeb949e48e",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-74622172-3bdc-484f-a1f9-cfedf1fb91c6",
+          "path"     : "verification.md#attempt-74622172-3bdc-484f-a1f9-cfedf1fb91c6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-9f1696f9-fa02-4042-a6cf-64d79ab65227",
+          "path"     : "verification.md#attempt-9f1696f9-fa02-4042-a6cf-64d79ab65227",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
+          "path"     : "verification.md#attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "skills-quality-harness-20261116",
+    "requestHash": "87bdf128ca87957bfcb3c09225a3316b15dcc793d4dab3cfab8751311a1b2401",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "scripts/workflow",
+        "scripts/workflow.ts",
+        "test/workflow-artifacts.test.ts",
+        "skills/www",
+        "docs/skills",
+        "docs/DEVELOPMENT.md",
+        "docs/ARCHITECTURE.md",
+        "docs/architecture/structure.json",
+        "docs/specs/architecture.md",
+        "src/architecture.generated.json",
+        "test/workflow-development.test.ts"
+      ],
+      "mutationSurfaces": [
+        "edit"
+      ],
+      "verifierCommands": [
+        "[\"bun\",\"test\",\"test/workflow-artifacts.test.ts\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"npm\",\"run\",\"check\"]",
+        "[\"node\",\"--test\",\"test/workflow-development.test.ts\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "87bdf128ca87957bfcb3c09225a3316b15dcc793d4dab3cfab8751311a1b2401"
+    },
+    "inputs": [
+      "docs/ARCHITECTURE.md",
+      "docs/DEVELOPMENT.md",
+      "docs/architecture/structure.json",
+      "docs/skills",
+      "docs/specs/architecture.md",
+      "scripts/workflow",
+      "scripts/workflow.ts",
+      "skills/www/www-design/SKILL.md",
+      "skills/www/www-spec/SKILL.md",
+      "test/workflow-artifacts.test.ts",
+      "test/workflow-development.test.ts"
+    ],
+    "nextAction": "verify",
+    "verifications": [
+      {
+        "id"         : "attempt-81adfe8d-d2f3-4b3c-9317-41596c508e97",
+        "startedAt"  : "2026-11-15T23:48:23.036Z",
+        "completedAt": "2026-11-15T23:48:24.265Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "69742e191b9fd479e4d9df396e89a5464c5ae2766c09b0ef566a96a7a8f1e5fe",
+          "inputs": [
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/architecture/structure.json",
+            "docs/skills",
+            "docs/specs/architecture.md",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-design/SKILL.md",
+            "skills/www/www-spec/SKILL.md",
+            "test/workflow-artifacts.test.ts",
+            "test/workflow-development.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "0e984ad009b8cf98cf1d3b639334349a283cd7ccf4ee4722345ef2ff7fb04352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "c311f60085a6c971d4a72b0b5b3f54f03a2339b2470182f0f14393d4113f1fb1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "7e0d3033a9de0ada068c61926cc0fc1ff6c7eb7dc712e83ae152c70502bdd586",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "a43faa9ca80dfc5a8bdc47d3826475c0ea7818b3aae3f9fa663b241b3cfd01bb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/CATALOG.md",
+              "type"  : "file",
+              "digest": "826ca52a8d5af9fe2f601fc361c1c74712580a283d3d125aa692d5bcc0354511",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "a417875b9bb8e24ece626ba0d73f44b826aa167ff7a28223ed52119919996ef1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "555df5b1457d56d69e6f2e59765e960b64feb2616db97f621c5b51c81a02e090",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "64e6a18a530c137c6e5db4f8edee8a8a16f73214a844a1c82e2cfc1ffdb4ad0e",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/examples",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/examples/approval-waiting.md",
+              "type"  : "file",
+              "digest": "feb35c4c7b507ef011bda86460c09e7f0c7e831c17acf1379dbda99b6ff12c3c",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/profiles",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/profiles/desktop.md",
+              "type"  : "file",
+              "digest": "c2857bd2823ea7533096da05bee137ec3cf67aaa85079089c93cca39241c1c26",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "42493cc85cf9ced266f3fddf68f95820a86857bcf37a57167625ef8286b90b9e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "e4014c3db6ee5a7e3d1bc694143ed2ce8ab75719ee295c8abf40fd5024939a4c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "46909d8d3441565f96d92ae919dd7d1e594a99522988dfe1f32881bc0b41b6ac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "5f548c081138eea53ecdd25db0afa7cc343a8654b0a8dc11730c81571d6d6352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "c8c2c318b9fc31adeef845776a61080a5c30be060f6946ce0b74d06f626dac25",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "a146862d6d79ed98b36c30072cbe712e65f8cce78e7ba9fcf04ed05440c78731",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "3a94e57eb5a2bb4cd656a92e3a39d605adc9400dbc5ca974b9df05d6c69348b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "c0b392b8ef61a07432de9522054c3b13b9842c68df7ae2f05abd75495e251f2c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "4578f648bc31e0eee001a7d9190e5c28534b88c1145d99bc2a1ad22468bb68c6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "bbee7cd5ea38ccce553d1bd6dc7dd9579769f352ee82f47637ab12cd61559260",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4a19c4821914ae96999a2de5530b2134fa319b3f9cf9515b9ccf8a21fbf2ea14",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "5e06da11722aebdc5acca8230146af3930ae15bd1ca36817d9782bfda458b23e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "3c6826b6873ce158f2ceb9f9da791240d10c6c4c966f83a76dd22d3c5866cc7c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "4d46deb4f904056ac18eeb6e31b52e10d5c724e8052f6a5e44dea31613136c99",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/workflow-artifacts.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 819,
+            "digest"         : "97f0ccea8fe5524d373ca5a412e2870a278dce61bbb8a3e96f59ec1ac39f2aae",
+            "truncated"      : false,
+            "retainedBytes"  : 819,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-a25016da-a543-48b0-b56d-3b1d63856021",
+        "startedAt"  : "2026-11-15T23:50:22.783Z",
+        "completedAt": "2026-11-15T23:50:31.946Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "500e9167c0f4817615e7fb2e14437c204ce8ea3818b793d072aca45e55074ee0",
+          "inputs": [
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/architecture/structure.json",
+            "docs/skills",
+            "docs/specs/architecture.md",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-design/SKILL.md",
+            "skills/www/www-spec/SKILL.md",
+            "test/workflow-artifacts.test.ts",
+            "test/workflow-development.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "0e984ad009b8cf98cf1d3b639334349a283cd7ccf4ee4722345ef2ff7fb04352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "c311f60085a6c971d4a72b0b5b3f54f03a2339b2470182f0f14393d4113f1fb1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "7e0d3033a9de0ada068c61926cc0fc1ff6c7eb7dc712e83ae152c70502bdd586",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "a43faa9ca80dfc5a8bdc47d3826475c0ea7818b3aae3f9fa663b241b3cfd01bb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/CATALOG.md",
+              "type"  : "file",
+              "digest": "826ca52a8d5af9fe2f601fc361c1c74712580a283d3d125aa692d5bcc0354511",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "a417875b9bb8e24ece626ba0d73f44b826aa167ff7a28223ed52119919996ef1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "555df5b1457d56d69e6f2e59765e960b64feb2616db97f621c5b51c81a02e090",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "64e6a18a530c137c6e5db4f8edee8a8a16f73214a844a1c82e2cfc1ffdb4ad0e",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/examples",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/examples/approval-waiting.md",
+              "type"  : "file",
+              "digest": "feb35c4c7b507ef011bda86460c09e7f0c7e831c17acf1379dbda99b6ff12c3c",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/profiles",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/profiles/desktop.md",
+              "type"  : "file",
+              "digest": "c2857bd2823ea7533096da05bee137ec3cf67aaa85079089c93cca39241c1c26",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "42493cc85cf9ced266f3fddf68f95820a86857bcf37a57167625ef8286b90b9e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "e4014c3db6ee5a7e3d1bc694143ed2ce8ab75719ee295c8abf40fd5024939a4c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "46909d8d3441565f96d92ae919dd7d1e594a99522988dfe1f32881bc0b41b6ac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "5f548c081138eea53ecdd25db0afa7cc343a8654b0a8dc11730c81571d6d6352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "c8c2c318b9fc31adeef845776a61080a5c30be060f6946ce0b74d06f626dac25",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "a146862d6d79ed98b36c30072cbe712e65f8cce78e7ba9fcf04ed05440c78731",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "025b43f7ea5a32a853fbb7fc40ad84b19494201eaccc047ff17642af4fa475a5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "79027591a1b070d1f290062439944de8b4755f79a278e886b18b65607f521f97",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "c0b392b8ef61a07432de9522054c3b13b9842c68df7ae2f05abd75495e251f2c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "4578f648bc31e0eee001a7d9190e5c28534b88c1145d99bc2a1ad22468bb68c6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "bbee7cd5ea38ccce553d1bd6dc7dd9579769f352ee82f47637ab12cd61559260",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4a19c4821914ae96999a2de5530b2134fa319b3f9cf9515b9ccf8a21fbf2ea14",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "5e06da11722aebdc5acca8230146af3930ae15bd1ca36817d9782bfda458b23e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "6596726b2009fef21e96aa0e643ce8dfa7437eeba8c905a5b495df98c9f24ea4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "4d46deb4f904056ac18eeb6e31b52e10d5c724e8052f6a5e44dea31613136c99",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/workflow-artifacts.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 1,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 2193,
+            "digest"         : "0170664d25ad40c2f8c8a8064812207cf54ed65b134701dac0c89c2f25ab1dc5",
+            "truncated"      : false,
+            "retainedBytes"  : 2193,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-1263334d-5822-4ccf-922a-60c5031a2b55",
+        "startedAt"  : "2026-11-15T23:53:08.685Z",
+        "completedAt": "2026-11-15T23:53:11.887Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "edb3f96aab93d03a28d7f0246630a0dbe2ccbd1bf43e6139805684c23ca68783",
+          "inputs": [
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/architecture/structure.json",
+            "docs/skills",
+            "docs/specs/architecture.md",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-design/SKILL.md",
+            "skills/www/www-spec/SKILL.md",
+            "test/workflow-artifacts.test.ts",
+            "test/workflow-development.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "0e984ad009b8cf98cf1d3b639334349a283cd7ccf4ee4722345ef2ff7fb04352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "f6ad667d4d778614a73ec33202af9b98c7f1f1904576010424660607be685905",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "7e0d3033a9de0ada068c61926cc0fc1ff6c7eb7dc712e83ae152c70502bdd586",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "c65ece4a5155c0d5592184667b3b2db4d98015002d128687a344fccbe11d67d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/CATALOG.md",
+              "type"  : "file",
+              "digest": "826ca52a8d5af9fe2f601fc361c1c74712580a283d3d125aa692d5bcc0354511",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "a417875b9bb8e24ece626ba0d73f44b826aa167ff7a28223ed52119919996ef1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "17ebd806fdd26e95fe2dfdc1fb19618957132ac6b38a535713a1bdeb23165d2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "64e6a18a530c137c6e5db4f8edee8a8a16f73214a844a1c82e2cfc1ffdb4ad0e",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/examples",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/examples/approval-waiting.md",
+              "type"  : "file",
+              "digest": "feb35c4c7b507ef011bda86460c09e7f0c7e831c17acf1379dbda99b6ff12c3c",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/profiles",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/profiles/desktop.md",
+              "type"  : "file",
+              "digest": "c2857bd2823ea7533096da05bee137ec3cf67aaa85079089c93cca39241c1c26",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "42493cc85cf9ced266f3fddf68f95820a86857bcf37a57167625ef8286b90b9e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "e4014c3db6ee5a7e3d1bc694143ed2ce8ab75719ee295c8abf40fd5024939a4c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "46909d8d3441565f96d92ae919dd7d1e594a99522988dfe1f32881bc0b41b6ac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "5f548c081138eea53ecdd25db0afa7cc343a8654b0a8dc11730c81571d6d6352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "c8c2c318b9fc31adeef845776a61080a5c30be060f6946ce0b74d06f626dac25",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "57d45df784bac1938e6cff01ad723544663755f805ce469f8fe1ccea95cfab0c",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "79027591a1b070d1f290062439944de8b4755f79a278e886b18b65607f521f97",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "c0b392b8ef61a07432de9522054c3b13b9842c68df7ae2f05abd75495e251f2c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "1255ec1084078d5ee3f8fd57cb631d22e3c96205bdf3bed1f81f4d0b221922f3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "bbee7cd5ea38ccce553d1bd6dc7dd9579769f352ee82f47637ab12cd61559260",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4a19c4821914ae96999a2de5530b2134fa319b3f9cf9515b9ccf8a21fbf2ea14",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "5e06da11722aebdc5acca8230146af3930ae15bd1ca36817d9782bfda458b23e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "02edf1e6a98625fa68383c849b29edd9dd7d8e3f0a2ec6f2073e7ad98f92b7e1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "4d46deb4f904056ac18eeb6e31b52e10d5c724e8052f6a5e44dea31613136c99",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/jonghoPro/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/workflow-artifacts.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/Users/jonghoPro/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 820,
+            "digest"         : "0bf5930d80b3c8708719d9999cca1bee0461f368d339db1705e3240b08d1249b",
+            "truncated"      : false,
+            "retainedBytes"  : 820,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-8bb9f5b9-90a5-4293-8056-1baeb949e48e",
+        "startedAt"  : "2026-11-15T23:53:06.763Z",
+        "completedAt": "2026-11-15T23:53:14.461Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "edb3f96aab93d03a28d7f0246630a0dbe2ccbd1bf43e6139805684c23ca68783",
+          "inputs": [
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/architecture/structure.json",
+            "docs/skills",
+            "docs/specs/architecture.md",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-design/SKILL.md",
+            "skills/www/www-spec/SKILL.md",
+            "test/workflow-artifacts.test.ts",
+            "test/workflow-development.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "0e984ad009b8cf98cf1d3b639334349a283cd7ccf4ee4722345ef2ff7fb04352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "f6ad667d4d778614a73ec33202af9b98c7f1f1904576010424660607be685905",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "7e0d3033a9de0ada068c61926cc0fc1ff6c7eb7dc712e83ae152c70502bdd586",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "c65ece4a5155c0d5592184667b3b2db4d98015002d128687a344fccbe11d67d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/CATALOG.md",
+              "type"  : "file",
+              "digest": "826ca52a8d5af9fe2f601fc361c1c74712580a283d3d125aa692d5bcc0354511",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "a417875b9bb8e24ece626ba0d73f44b826aa167ff7a28223ed52119919996ef1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "17ebd806fdd26e95fe2dfdc1fb19618957132ac6b38a535713a1bdeb23165d2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "64e6a18a530c137c6e5db4f8edee8a8a16f73214a844a1c82e2cfc1ffdb4ad0e",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/examples",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/examples/approval-waiting.md",
+              "type"  : "file",
+              "digest": "feb35c4c7b507ef011bda86460c09e7f0c7e831c17acf1379dbda99b6ff12c3c",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/profiles",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/profiles/desktop.md",
+              "type"  : "file",
+              "digest": "c2857bd2823ea7533096da05bee137ec3cf67aaa85079089c93cca39241c1c26",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "42493cc85cf9ced266f3fddf68f95820a86857bcf37a57167625ef8286b90b9e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "e4014c3db6ee5a7e3d1bc694143ed2ce8ab75719ee295c8abf40fd5024939a4c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "46909d8d3441565f96d92ae919dd7d1e594a99522988dfe1f32881bc0b41b6ac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "5f548c081138eea53ecdd25db0afa7cc343a8654b0a8dc11730c81571d6d6352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "c8c2c318b9fc31adeef845776a61080a5c30be060f6946ce0b74d06f626dac25",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "57d45df784bac1938e6cff01ad723544663755f805ce469f8fe1ccea95cfab0c",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "79027591a1b070d1f290062439944de8b4755f79a278e886b18b65607f521f97",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "c0b392b8ef61a07432de9522054c3b13b9842c68df7ae2f05abd75495e251f2c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "1255ec1084078d5ee3f8fd57cb631d22e3c96205bdf3bed1f81f4d0b221922f3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "bbee7cd5ea38ccce553d1bd6dc7dd9579769f352ee82f47637ab12cd61559260",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4a19c4821914ae96999a2de5530b2134fa319b3f9cf9515b9ccf8a21fbf2ea14",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "5e06da11722aebdc5acca8230146af3930ae15bd1ca36817d9782bfda458b23e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "02edf1e6a98625fa68383c849b29edd9dd7d8e3f0a2ec6f2073e7ad98f92b7e1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "4d46deb4f904056ac18eeb6e31b52e10d5c724e8052f6a5e44dea31613136c99",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 1,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 2810,
+            "digest"         : "0403138ed460104321cc93fe68a20b053bb433db6531a8757acee94c64608169",
+            "truncated"      : false,
+            "retainedBytes"  : 2810,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 1422,
+            "digest"         : "094076ae4774252b305bb135a827ad71aaf4839eb80f82fbac690b64263328ec",
+            "truncated"      : false,
+            "retainedBytes"  : 1422,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-74622172-3bdc-484f-a1f9-cfedf1fb91c6",
+        "startedAt"  : "2026-11-15T23:56:30.189Z",
+        "completedAt": "2026-11-15T23:56:32.812Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "1ec2a50f0b5579938f2cd2d79cc7d32f96f60839590dd4441821b1b91064b564",
+          "inputs": [
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/architecture/structure.json",
+            "docs/skills",
+            "docs/specs/architecture.md",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-design/SKILL.md",
+            "skills/www/www-spec/SKILL.md",
+            "test/workflow-artifacts.test.ts",
+            "test/workflow-development.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "0e984ad009b8cf98cf1d3b639334349a283cd7ccf4ee4722345ef2ff7fb04352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "f6ad667d4d778614a73ec33202af9b98c7f1f1904576010424660607be685905",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "fd1551e6531cae13255e785d729ef01d1e8ee304f9eddf92a2c71471c7288821",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "c65ece4a5155c0d5592184667b3b2db4d98015002d128687a344fccbe11d67d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/CATALOG.md",
+              "type"  : "file",
+              "digest": "826ca52a8d5af9fe2f601fc361c1c74712580a283d3d125aa692d5bcc0354511",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "a417875b9bb8e24ece626ba0d73f44b826aa167ff7a28223ed52119919996ef1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "bfddb2835512a15e37a5fba43eb1cd578fb84850ec70fc202fa5049987e52c26",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "64e6a18a530c137c6e5db4f8edee8a8a16f73214a844a1c82e2cfc1ffdb4ad0e",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/examples",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/examples/approval-waiting.md",
+              "type"  : "file",
+              "digest": "feb35c4c7b507ef011bda86460c09e7f0c7e831c17acf1379dbda99b6ff12c3c",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/profiles",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/profiles/desktop.md",
+              "type"  : "file",
+              "digest": "c2857bd2823ea7533096da05bee137ec3cf67aaa85079089c93cca39241c1c26",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "42493cc85cf9ced266f3fddf68f95820a86857bcf37a57167625ef8286b90b9e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "e4014c3db6ee5a7e3d1bc694143ed2ce8ab75719ee295c8abf40fd5024939a4c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "46909d8d3441565f96d92ae919dd7d1e594a99522988dfe1f32881bc0b41b6ac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "5f548c081138eea53ecdd25db0afa7cc343a8654b0a8dc11730c81571d6d6352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "c8c2c318b9fc31adeef845776a61080a5c30be060f6946ce0b74d06f626dac25",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "74c26346f27987cf1a09b0b1f7eee7366f5ed6646fd343867c99576bc5ddaac6",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "79027591a1b070d1f290062439944de8b4755f79a278e886b18b65607f521f97",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "c0b392b8ef61a07432de9522054c3b13b9842c68df7ae2f05abd75495e251f2c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "a84c91ed3e87693e28bc2df941e3c8029b50560458e071c43b2c490cdfad7f5c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "bbee7cd5ea38ccce553d1bd6dc7dd9579769f352ee82f47637ab12cd61559260",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4a19c4821914ae96999a2de5530b2134fa319b3f9cf9515b9ccf8a21fbf2ea14",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "5e06da11722aebdc5acca8230146af3930ae15bd1ca36817d9782bfda458b23e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "02edf1e6a98625fa68383c849b29edd9dd7d8e3f0a2ec6f2073e7ad98f92b7e1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "4d46deb4f904056ac18eeb6e31b52e10d5c724e8052f6a5e44dea31613136c99",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--test",
+          "test/workflow-development.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-3"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 2027,
+            "digest"         : "5c1c990d1267384d07f7a3474f737a50b386bf19f1d69696226fafb825713937",
+            "truncated"      : false,
+            "retainedBytes"  : 2027,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-9f1696f9-fa02-4042-a6cf-64d79ab65227",
+        "startedAt"  : "2026-11-15T23:56:33.195Z",
+        "completedAt": "2026-11-15T23:56:58.374Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "1ec2a50f0b5579938f2cd2d79cc7d32f96f60839590dd4441821b1b91064b564",
+          "inputs": [
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/architecture/structure.json",
+            "docs/skills",
+            "docs/specs/architecture.md",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-design/SKILL.md",
+            "skills/www/www-spec/SKILL.md",
+            "test/workflow-artifacts.test.ts",
+            "test/workflow-development.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "0e984ad009b8cf98cf1d3b639334349a283cd7ccf4ee4722345ef2ff7fb04352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "f6ad667d4d778614a73ec33202af9b98c7f1f1904576010424660607be685905",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "fd1551e6531cae13255e785d729ef01d1e8ee304f9eddf92a2c71471c7288821",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "c65ece4a5155c0d5592184667b3b2db4d98015002d128687a344fccbe11d67d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/CATALOG.md",
+              "type"  : "file",
+              "digest": "826ca52a8d5af9fe2f601fc361c1c74712580a283d3d125aa692d5bcc0354511",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "a417875b9bb8e24ece626ba0d73f44b826aa167ff7a28223ed52119919996ef1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "bfddb2835512a15e37a5fba43eb1cd578fb84850ec70fc202fa5049987e52c26",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "64e6a18a530c137c6e5db4f8edee8a8a16f73214a844a1c82e2cfc1ffdb4ad0e",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/examples",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/examples/approval-waiting.md",
+              "type"  : "file",
+              "digest": "feb35c4c7b507ef011bda86460c09e7f0c7e831c17acf1379dbda99b6ff12c3c",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/profiles",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/profiles/desktop.md",
+              "type"  : "file",
+              "digest": "c2857bd2823ea7533096da05bee137ec3cf67aaa85079089c93cca39241c1c26",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "42493cc85cf9ced266f3fddf68f95820a86857bcf37a57167625ef8286b90b9e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "e4014c3db6ee5a7e3d1bc694143ed2ce8ab75719ee295c8abf40fd5024939a4c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "46909d8d3441565f96d92ae919dd7d1e594a99522988dfe1f32881bc0b41b6ac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "5f548c081138eea53ecdd25db0afa7cc343a8654b0a8dc11730c81571d6d6352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "c8c2c318b9fc31adeef845776a61080a5c30be060f6946ce0b74d06f626dac25",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "74c26346f27987cf1a09b0b1f7eee7366f5ed6646fd343867c99576bc5ddaac6",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "79027591a1b070d1f290062439944de8b4755f79a278e886b18b65607f521f97",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "c0b392b8ef61a07432de9522054c3b13b9842c68df7ae2f05abd75495e251f2c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "a84c91ed3e87693e28bc2df941e3c8029b50560458e071c43b2c490cdfad7f5c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "bbee7cd5ea38ccce553d1bd6dc7dd9579769f352ee82f47637ab12cd61559260",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4a19c4821914ae96999a2de5530b2134fa319b3f9cf9515b9ccf8a21fbf2ea14",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "5e06da11722aebdc5acca8230146af3930ae15bd1ca36817d9782bfda458b23e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "02edf1e6a98625fa68383c849b29edd9dd7d8e3f0a2ec6f2073e7ad98f92b7e1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "4d46deb4f904056ac18eeb6e31b52e10d5c724e8052f6a5e44dea31613136c99",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "typecheck"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "AC-3"
+        ],
+        "sourceStable": false,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 76,
+            "digest"         : "9777a80647c68b8bc13dcd097bfb23098450f6b43963611bdbea5a198280d180",
+            "truncated"      : false,
+            "retainedBytes"  : 76,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-c3b1bc2b-79bd-454a-b3fa-40d60147d4ff",
+        "startedAt"  : "2026-11-15T23:56:58.120Z",
+        "completedAt": "2026-11-16T00:00:52.046Z",
+        "source": {
+          "head": "aea78d16c1da202cfe0771b70ab2bdba2f2b2a04",
+          "digest": "cab63a6b651e9c1ff31c040b5f77bf4c18b5a888d5622afbe3d66162c29668da",
+          "inputs": [
+            "docs/ARCHITECTURE.md",
+            "docs/DEVELOPMENT.md",
+            "docs/architecture/structure.json",
+            "docs/skills",
+            "docs/specs/architecture.md",
+            "scripts/workflow",
+            "scripts/workflow.ts",
+            "skills/www/www-design/SKILL.md",
+            "skills/www/www-spec/SKILL.md",
+            "test/workflow-artifacts.test.ts",
+            "test/workflow-development.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "0e984ad009b8cf98cf1d3b639334349a283cd7ccf4ee4722345ef2ff7fb04352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "f6ad667d4d778614a73ec33202af9b98c7f1f1904576010424660607be685905",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "fd1551e6531cae13255e785d729ef01d1e8ee304f9eddf92a2c71471c7288821",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "c65ece4a5155c0d5592184667b3b2db4d98015002d128687a344fccbe11d67d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/CATALOG.md",
+              "type"  : "file",
+              "digest": "826ca52a8d5af9fe2f601fc361c1c74712580a283d3d125aa692d5bcc0354511",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "a417875b9bb8e24ece626ba0d73f44b826aa167ff7a28223ed52119919996ef1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "bfddb2835512a15e37a5fba43eb1cd578fb84850ec70fc202fa5049987e52c26",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "64e6a18a530c137c6e5db4f8edee8a8a16f73214a844a1c82e2cfc1ffdb4ad0e",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/examples",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/examples/approval-waiting.md",
+              "type"  : "file",
+              "digest": "feb35c4c7b507ef011bda86460c09e7f0c7e831c17acf1379dbda99b6ff12c3c",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/profiles",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/profiles/desktop.md",
+              "type"  : "file",
+              "digest": "c2857bd2823ea7533096da05bee137ec3cf67aaa85079089c93cca39241c1c26",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "42493cc85cf9ced266f3fddf68f95820a86857bcf37a57167625ef8286b90b9e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "e4014c3db6ee5a7e3d1bc694143ed2ce8ab75719ee295c8abf40fd5024939a4c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "46909d8d3441565f96d92ae919dd7d1e594a99522988dfe1f32881bc0b41b6ac",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "5f548c081138eea53ecdd25db0afa7cc343a8654b0a8dc11730c81571d6d6352",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "c8c2c318b9fc31adeef845776a61080a5c30be060f6946ce0b74d06f626dac25",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "74c26346f27987cf1a09b0b1f7eee7366f5ed6646fd343867c99576bc5ddaac6",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "b306cdf980bfe3ad41a2836a422f4d57399cea5a697660fe6dfa8e260124772f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "07e6ac81d4b4a39143849329c2f080561244090cc57ea9b83890d3da9922a730",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "f6de8e2f773be8e96252af00a8f22c4f137d33927b4a0ad6fe3c36cc4afc1739",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "928ae88ee67d81e709a4e42c50d3c6e9eccf4ded3467c9a5cf9136831fab817d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "79027591a1b070d1f290062439944de8b4755f79a278e886b18b65607f521f97",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "c0b392b8ef61a07432de9522054c3b13b9842c68df7ae2f05abd75495e251f2c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "e74f0bcd916bf5568041dc44c5d0baf76279af26b0712750425e41f9c43434ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "d8fdd211697ce71acba2c90a73f2d0de5897543af63fc15e25c6d06e7c7848de",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "3c24ff5acfa46522924901235705d5ab41910ce43bbb708c121f7da1c3e62192",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "19c0ae2758397c8b51e060571622607566524154fc6375ff7162dcba228b5f4f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6741c3f0f54fcfc53d06111178ccf78a1709eaab9d02f556c7f0eaa01105db39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "fc3fa63e09c09c1b89fba77a7dde8e56472ea4cda2b716aa0691c5df8ab181c7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "bbee7cd5ea38ccce553d1bd6dc7dd9579769f352ee82f47637ab12cd61559260",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "aeb18cf19fa7d7e0d39979913b7bed67875eb769373fdb95dcc72d40823ff1b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4a19c4821914ae96999a2de5530b2134fa319b3f9cf9515b9ccf8a21fbf2ea14",
+              "mode"  : 420
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "5e06da11722aebdc5acca8230146af3930ae15bd1ca36817d9782bfda458b23e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "02edf1e6a98625fa68383c849b29edd9dd7d8e3f0a2ec6f2073e7ad98f92b7e1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "4d46deb4f904056ac18eeb6e31b52e10d5c724e8052f6a5e44dea31613136c99",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "명세 품질·산출물 정합성 검토를 문서·기준 지문에 연결해 보존하고 오래된 결과를 구분한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "개발 도구 정본·발견 경로·제공과 호스트 수용 미확인을 구분해 조회한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "공식 하네스에 검토 상태·출처를 제공하고 기존 권한·완료 계약을 유지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+        "requestedCommand": "npm",
+        "args": [
+          "run",
+          "check"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 1,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "AC-1",
+          "AC-2",
+          "AC-3"
+        ],
+        "sourceStable": false,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js",
+            "digest": "8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 3465,
+            "digest"         : "ca7921107b061f71b23a200f3f1c1d92dc5f0c1ca2f11fb7c3b9a3c3411a7b63",
+            "truncated"      : false,
+            "retainedBytes"  : 3465,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 103141,
+            "digest"         : "4c901700b8af580d90c2c6475eeeb065bf03c06509e1ae2628c548c767f4af92",
+            "truncated"      : true,
+            "retainedBytes"  : 65536,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id"            : "review-86197f86-9986-4e61-b8aa-6c7d48d756c6",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "f224093adf8eb99f34868f0cb1c586c7c5945a8a4339be41da1af496b18030e8",
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "1c7b8fcb8d5cfe8a03520504b25073447079cad2457ffc1e582ed99ba932d6e5"
+        },
+        "failure": null,
+        "findings": [
+          "검토 범위: Read/Grep/Glob 도구로 이 파일들을 직접 읽었다. scripts/workflow/artifacts.ts 전체, scripts/workflow.ts:356-384, scripts/workflow/work.ts:86-91·200-279, scripts/workflow/run.ts:180-324, scripts/workflow/schema.ts:120-139, scripts/workflow/preflight.ts의 findWorkRecord·resolveInside, test/workflow-artifacts.test.ts 전체, test/workflow-development.test.ts의 Grep 결과, docs/skills/ARTIFACT_REVIEW.md, 016 작업의 spec·design·tasks·verification.md·work.json. git diff는 사용 가능한 도구가 아니어서 실행하지 못했다. 그래서 변경 전후 비교는 verification.md의 진술과 현재 파일 내용으로만 했다. 테스트는 실행하지 않았다. skills/www/*/SKILL.md, types.ts 전체, docs/ARCHITECTURE.md·DEVELOPMENT.md는 읽지 않았다.",
+          "[결함, 권한 범위 밖 수정] verification.md:23은 test/workflow-development.test.ts를 고쳤다고 적고 있다. 정책 문서를 추가로 제공하는 의도된 변경에 맞춰 출처 기대값을 갱신했다는 내용이다. 실제로 이 파일의 27행과 106행은 agents/www/review-policy.json을 sources에 포함하도록 기대하고 있다. 그런데 work.json:60-71의 workflow.authorization.writePaths에는 test/workflow-artifacts.test.ts만 있고 test/workflow-development.test.ts는 없다. spec.md:11은 '범위 확대는 기존 권한으로 간주하지 않는다'고 정한다. 따라서 이 수정은 승인된 쓰기 범위 밖의 변경이다. AC-3('기존 권한·완료 계약을 유지')이 passed로 기록돼 있는 것과도 충돌한다. 사용자에게 범위 확대 승인을 받아 writePaths에 반영하거나, 승인 없이 수정한 사실을 기록하고 처리해야 한다.",
+          "[증거 범위] work.json:13-53의 AC-1·AC-2·AC-3은 모두 bun test test/workflow-artifacts.test.ts 한 번의 실행(attempt-81adfe8d)으로 passed가 됐다. AC-3의 '기존 권한·완료 계약 유지'에 관한 회귀 근거는 verification.md:23-24에 있다. node --test test/workflow-development.test.ts의 7개 통과와 npm run typecheck 통과라는 서술이다. 하지만 이 두 실행은 공식 검증 시도로 기록되지 않았다. 특히 node --test는 authorization.verifierCommands(work.json:75-79)에 없는 명령이다. 서술만으로 AC-3의 회귀 증거가 확보됐다고 볼 수 없다. 허용된 npm run check 같은 명령을 공식 verify로 기록해야 한다.",
+          "[경미, 견고성] artifacts.ts:151-159의 developmentTools를 보면 발견 경로가 저장소 안의 디렉터리나 1 MiB를 넘는 파일로 해석될 수 있다. 그러면 document()가 예외를 던지고(artifacts.ts:61), tool-inventory와 개발 실행 컨텍스트 전체가 실패한다. mismatch로 보고되지 않는다. 설계는 일치·불일치·외부·누락을 구분해 표시한다고 정했으니, 이 경우도 mismatch로 낮추는 편이 맞다.",
+          "[확인, 정상] 주요 계약은 소스와 맞았다. 대상 문서·기준·requestHash를 묶은 digest와 stale 판정(artifacts.ts:76, 138), 제출 전후 digest 재확인(104, 124), 항목 완전성·중복, 실제 비어 있지 않은 행 근거, tasks.md 한정 coverage, 기준 중복·누락 거부(92-122), 잠금 안의 저장과 schema 재검증(work.ts:228-252, schema.ts:127-137)을 확인했다. 저장소 밖 경로·심볼릭 링크 거부(artifacts.ts:48-54), 제공한 문서에만 provided 표시와 hostAcceptance: unconfirmed 유지(run.ts:199-217, 317)도 확인했다. 검토 기록이 AC 결과를 바꾸지 않는다는 점은 test/workflow-artifacts.test.ts:44, 89에서 직접 검사한다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-86197f86-9986-4e61-b8aa-6c7d48d756c6/opus.json",
+        "startedAt"      : "2026-11-15T23:49:04.582Z",
+        "completedAt"    : "2026-11-15T23:50:29.842Z",
+        "workId"         : "work-370f0fe9-8596-4475-b62b-7b7c70992a34",
+        "workRequestHash": "87bdf128ca87957bfcb3c09225a3316b15dcc793d4dab3cfab8751311a1b2401",
+        "recordingRejection": [
+          "review_not_passed",
+          "source_changed",
+          "receipt_context_mismatch"
+        ]
+      },
+      {
+        "id"            : "review-fac82f50-9c2c-4e0e-b2b7-b7c06b6cba00",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "297516145e10828f246f531e7d8bf8af9afbd84f2ad177c3e30aee824c49ead6",
+        "criteriaDigest": "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "ee6699dc2faa553c490326de08bf0eca2aa73877ffd9c51b0dc3a0a55b428206"
+        },
+        "failure": null,
+        "findings": [
+          "검토 범위: Read와 Grep 도구로 다음 파일만 직접 읽었다. scripts/workflow/artifacts.ts 전체, scripts/workflow/run.ts:185-224와 317-320, scripts/workflow/work.ts:240-259, scripts/workflow.ts의 import부와 370-383, scripts/workflow/reports.ts 머리말, docs/architecture/structure.json의 일부(authoring 노드 172-188), test/workflow-artifacts.test.ts 전체, 016 작업의 spec·design·tasks·verification.md, work.json의 1-1290행과 1680-1989행. git diff, schema.ts·types.ts 본문, test/workflow-development.test.ts, ARTIFACT_REVIEW.md, SKILL.md 문서는 읽지 않았다. 테스트·typecheck·check는 실행하지 않았다.",
+          "[결함, 필수 기준의 증거 부재] work.json:61-81의 AC-3(required)은 result가 failed다. 연결된 공식 시도 중 마지막인 attempt-8bb9f5b9(npm run check, verification.md:70-85)는 현재와 같은 소스 식별 edb3f96a…에서 종료 코드 1로 실패했다. verification.md:51은 '마지막 안정 상태의 전체 검사 결과를 별도로 기록한다'고 적었지만 통과한 npm run check 시도는 없다. 같은 소스에 대한 attempt-1263334d는 AC-1·AC-2에만 연결돼 있다. 따라서 '기존 권한·완료 계약 유지'를 뒷받침할 현재 근거가 없고, 작업을 수용 가능한 상태로 볼 수 없다. 실패 원인으로 적은 workflow.ts→reports.ts 의존은 현재 structure.json:183의 arch.development.reporting.storage 허용으로 이미 해소된 것으로 보인다. 그렇다면 npm run check를 공식 verify로 다시 실행해 통과를 기록해야 한다.",
+          "[결함, 증거 범위 확대] verification.md:23-24는 'node --test test/workflow-development.test.ts 7개 통과'와 'npm run typecheck 통과'를 서술한다. 하지만 work.json의 verifications에는 이 두 명령의 공식 시도가 없다. node --test는 authorization.verifierCommands(work.json:106-110)에 없는 명령이기도 하다. 첫 독립 검토(review-86197f86)가 같은 점을 지적했고, verification.md:49는 이 지적을 '수용했다'고 적었다. 그런데도 공식 시도 기록은 여전히 없다. 서술만으로 회귀나 타입 검사 통과의 근거로 삼을 수 없다.",
+          "[결함, 오래된 저작 검토를 current로 진술] verification.md:25는 이번 작업의 spec/consistency 검토가 두 종류 모두 current라고 적는다. 그러나 artifactReviews(work.json:1718-1847)는 2026-11-15T23:47:36에 digest 8a7eefe2…/056f183d…로 저장됐다. 그 뒤 spec.md:13에 23:50:29에 끝난 첫 독립 검토의 지적과 경로 정정 문단이 추가됐다. artifacts.ts:76의 digest는 spec.md 원문을 포함하므로 artifactStatus(artifacts.ts:138)는 현재 두 검토를 stale로 판정해야 한다. 기록된 근거 행도 어긋났다. purpose 근거인 spec.md:13은 지금 범위 정정 문단이고, outcomes 근거인 spec.md:21은 '## 수용 기준' 제목 행이다. 현재 문서로 검토를 다시 기록하거나, verification.md의 진술을 당시 시점으로 한정해야 한다.",
+          "[경미, 견고성] artifacts.ts:46-59의 document()는 ENOENT만 누락으로 처리한다. 중간 경로가 파일이면 ENOTDIR 같은 다른 오류가 그대로 전파된다. 정본 경로(artifacts.ts:147)에서 이런 일이 생기면 tool-inventory와 개발 실행 컨텍스트(run.ts:198) 전체가 실패한다. 발견 경로는 159행에서 invalid로 낮추지만 정본 쪽은 같은 처리를 하지 않는다. 설계상 상태 구분을 유지하려면 정본 조회에도 같은 방식을 적용하는 편이 맞다.",
+          "[확인, 정상] 소스에서 다음 계약이 구현돼 있음을 읽었다. digest는 작업 ID·requestHash·대상 문서(누락 포함)·기준 지문을 포함한다(artifacts.ts:76). 제출 전후 digest를 다시 대조한다(104, 124). 항목 누락·중복, 배열을 enum 문자열로 쓴 입력, 실제 비어 있지 않은 행 근거, tasks.md에 한정한 coverage, 기준 중복·누락을 거부한다(84-123). 잠금 안에서 저장한다(work.ts:247-252). 직접 요청 없이 기록하면 거부한다(workflow.ts:380). 발견 경로의 missing/mismatch/outside/invalid를 구분한다(151-160). 제공 표시와 hostAcceptance: unconfirmed도 보존한다(run.ts:204, 317). 이 판단은 코드를 읽은 결과이며, 이번 검토에서 테스트를 다시 실행하지는 않았다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-fac82f50-9c2c-4e0e-b2b7-b7c06b6cba00/opus.json",
+        "startedAt"      : "2026-11-15T23:54:05.956Z",
+        "completedAt"    : "2026-11-15T23:55:22.640Z",
+        "workId"         : "work-370f0fe9-8596-4475-b62b-7b7c70992a34",
+        "workRequestHash": "87bdf128ca87957bfcb3c09225a3316b15dcc793d4dab3cfab8751311a1b2401",
+        "recordingRejection": [
+          "review_not_passed",
+          "source_changed",
+          "receipt_context_mismatch"
+        ]
+      }
+    ],
+    "artifactReviews": [
+      {
+        "id"        : "artifact-1a09c160-299f-4dcc-bcdb-0d217fb78c2b",
+        "version"   : 1,
+        "reviewedAt": "2026-11-15T23:47:36.326Z",
+        "kind"      : "spec",
+        "depth"     : "full",
+        "summary"   : "명세·설계·작업과 AC 연결을 확인했다. 의미 검토의 저작 기록이며 독립 감사와 구분한다.",
+        "digest"    : "8a7eefe217564b4ac60cf238cced65f2654749dc3314dbb6989fe5a55c842a4e",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "요청 목적과 포함·제외 범위를 명세에 연결했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 13
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "검토 기록과 구현 인계의 정상 여정을 명시했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 15
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "satisfied",
+            "reason": "문서 변경·누락·경로·행 오류와 호스트 수용 미확인을 구분했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 16
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "satisfied",
+            "reason": "AC 정의는 work.json에 두고 관측할 시나리오와 ID를 명세에 연결했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 21
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-21548096-6012-4df7-9fb6-2bd93ad73a2b",
+        "version"   : 1,
+        "reviewedAt": "2026-11-15T23:47:36.473Z",
+        "kind"      : "consistency",
+        "depth"     : "full",
+        "summary"   : "명세·설계·작업과 AC 연결을 확인했다. 의미 검토의 저작 기록이며 독립 감사와 구분한다.",
+        "digest"    : "056f183d95180dbfa089d3c8c73abe7950c0c645929ffb523e2c7773ab114c8b",
+        "checks": [
+          {
+            "id"    : "coverage",
+            "result": "satisfied",
+            "reason": "세 AC의 구현과 검사 단위가 작업 목록에 연결돼 있다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 12
+              }
+            ]
+          },
+          {
+            "id"    : "alignment",
+            "result": "satisfied",
+            "reason": "설계는 의미 판단과 형식 검사를 분리하고 자동 차단·완료 확대를 제외한다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/design.md",
+                "line": 5
+              }
+            ]
+          },
+          {
+            "id"    : "terminology",
+            "result": "satisfied",
+            "reason": "spec/consistency와 current/stale/not_run 의미가 명세·설계에서 일치한다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/design.md",
+                "line": 11
+              }
+            ]
+          }
+        ],
+        "coverage": [
+          {
+            "criterionId": "AC-1",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 5
+              }
+            ]
+          },
+          {
+            "criterionId": "AC-2",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 11
+              }
+            ]
+          },
+          {
+            "criterionId": "AC-3",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 13
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id"        : "artifact-0f614ccb-1f60-4ba4-981e-ea3309b8fbda",
+        "version"   : 1,
+        "reviewedAt": "2026-11-15T23:54:36.698Z",
+        "kind"      : "spec",
+        "depth"     : "full",
+        "summary"   : "독립 검토 지적을 반영한 명세·설계·작업 연결을 다시 확인했다. 실제 검사·최종 감사와는 별도 저작 검토다.",
+        "digest"    : "7915cc136917d6728d723135e748bdb227ccbe4504c5481c63cb346952f7209d",
+        "checks": [
+          {
+            "id": "purpose",
+            "reason": "목적·범위·원래 사용자 구현 권한과 접수 누락의 정정을 설명했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 13
+              }
+            ],
+            "result": "satisfied"
+          },
+          {
+            "id": "journeys",
+            "reason": "검토와 인계의 정상 여정을 명시했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 17
+              }
+            ],
+            "result": "satisfied"
+          },
+          {
+            "id": "boundaries",
+            "reason": "오래된 검토·행 오류·경로·호스트 수용 미확인을 구분했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 19
+              }
+            ],
+            "result": "satisfied"
+          },
+          {
+            "id": "outcomes",
+            "reason": "실제 관측 시나리오와 work.json의 세 기준을 연결했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/spec.md",
+                "line": 23
+              }
+            ],
+            "result": "satisfied"
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-18aad1db-0b81-4943-9953-d17c6e6073be",
+        "version"   : 1,
+        "reviewedAt": "2026-11-15T23:54:36.926Z",
+        "kind"      : "consistency",
+        "depth"     : "full",
+        "summary"   : "독립 검토 지적을 반영한 명세·설계·작업 연결을 다시 확인했다. 실제 검사·최종 감사와는 별도 저작 검토다.",
+        "digest"    : "4b97c9b981681425220b84d99e02a9bc088dd29a9d903363782272b1e6802347",
+        "checks": [
+          {
+            "id": "coverage",
+            "reason": "세 기준의 구현·검사 작업이 모두 연결돼 있다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 12
+              }
+            ],
+            "result": "satisfied"
+          },
+          {
+            "id": "alignment",
+            "reason": "설계와 명세가 의미 판단과 형식 검사·완료 판정의 책임을 구분한다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/design.md",
+                "line": 5
+              }
+            ],
+            "result": "satisfied"
+          },
+          {
+            "id": "terminology",
+            "reason": "문서 간 검토 종류와 현재성 상태의 의미를 일치시켰다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/design.md",
+                "line": 11
+              }
+            ],
+            "result": "satisfied"
+          }
+        ],
+        "coverage": [
+          {
+            "criterionId": "AC-1",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 5
+              }
+            ]
+          },
+          {
+            "criterionId": "AC-2",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 11
+              }
+            ]
+          },
+          {
+            "criterionId": "AC-3",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/tasks.md",
+                "line": 13
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true,
+    "documentationReviews": [
+      {
+        "id"             : "documentation-87238cdd-bd2a-4f21-a198-f88008f422cd",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T23:48:47.834Z",
+        "sourceDigest"   : "69742e191b9fd479e4d9df396e89a5464c5ae2766c09b0ef566a96a7a8f1e5fe",
+        "criteriaDigest" : "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "documentsDigest": "c409574674caf62bdd0c60689612ea2617f3b09fac329934d5052d950598ea9e",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "산출물 검토와 도구 출처 모듈·실행 연결 책임을 반영했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "공식 진입점의 네 action과 실행 출처 계약을 연결했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "앱 제품 범위와 사용자 흐름은 유지하며 자체 개발 하네스만 확장한다."
+          },
+          {
+            "path"    : "docs/skills/ARTIFACT_REVIEW.md",
+            "decision": "updated",
+            "reason"  : "검토 입력·항목·현재성·출처·제공과 수용의 구분을 정의했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "선택 검토 이력과 기존 완료 증거의 분리를 연결했다."
+          },
+          {
+            "path"    : "skills/www/www-design/SKILL.md",
+            "decision": "updated",
+            "reason"  : "구현 인계 전 산출물 정합성 검토를 연결했다."
+          },
+          {
+            "path"    : "skills/www/www-spec/SKILL.md",
+            "decision": "updated",
+            "reason"  : "명세 끝의 품질 검토를 연결했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-3d03c9af-00a2-4f5d-a1ea-39917dd94dd8",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T23:50:25.445Z",
+        "sourceDigest"   : "500e9167c0f4817615e7fb2e14437c204ce8ea3818b793d072aca45e55074ee0",
+        "criteriaDigest" : "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "documentsDigest": "c409574674caf62bdd0c60689612ea2617f3b09fac329934d5052d950598ea9e",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "산출물 검토와 출처 모듈 책임을 반영했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "공식 네 action을 문서화했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "앱 제품 범위를 바꾸지 않고 개발 하네스만 확장했다."
+          },
+          {
+            "path"    : "docs/skills/ARTIFACT_REVIEW.md",
+            "decision": "updated",
+            "reason"  : "항목·행 근거·기준 연결·현재성·도구 출처 계약을 정의했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "검토 이력과 기존 수용 증거를 구분했다."
+          },
+          {
+            "path"    : "skills/www/www-design/SKILL.md",
+            "decision": "updated",
+            "reason"  : "구현 인계 전 정합성 검토를 연결했다."
+          },
+          {
+            "path"    : "skills/www/www-spec/SKILL.md",
+            "decision": "updated",
+            "reason"  : "명세 끝의 품질 검토를 연결했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-33aa1708-2f4b-4861-8c50-1eacf6070b9c",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-15T23:54:04.920Z",
+        "sourceDigest"   : "edb3f96aab93d03a28d7f0246630a0dbe2ccbd1bf43e6139805684c23ca68783",
+        "criteriaDigest" : "c13dd3bbc94e7a0e6fb3d9c9e0a04c221321a379744b85e47b132f021d71bb38",
+        "documentsDigest": "aec282eb2c03e1674ef14b36df18771f6f63672da6401157e1e75702e27b57a9",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "새 검토와 출처 모듈 책임을 반영했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "공식 CLI 네 action을 연결했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "제품 범위를 유지한다."
+          },
+          {
+            "path"    : "docs/skills/ARTIFACT_REVIEW.md",
+            "decision": "updated",
+            "reason"  : "발견용 잘못된 파일의 invalid 처리와 의미 검토 책임을 정의했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "검토 이력을 기존 증거와 구분했다."
+          },
+          {
+            "path"    : "skills/www/www-design/SKILL.md",
+            "decision": "updated",
+            "reason"  : "구현 전 정합성 검토 인계를 연결했다."
+          },
+          {
+            "path"    : "skills/www/www-spec/SKILL.md",
+            "decision": "updated",
+            "reason"  : "명세 품질 검토 인계를 연결했다."
+          }
+        ]
+      }
+    ]
+  }
+}

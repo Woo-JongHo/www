@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+  "title"        : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-f511ea79-1878-4d50-a79f-4da924b0ce25",
+      "workId"        : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+      "title"         : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-17T01:43:41.267Z",
+      "event"         : "build",
+      "workRecordHash": "d09e04ea183210e5858e2a6d2b82dda2ea5ed610ae36d7b1b61196f3dd8cf395",
+      "sourceDigest"  : "63582c45e38a3b5fe9ff3d819f96e714d94e22487647eb0643edaa89c23bbe9e",
+      "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+      "semanticHash"  : "835e48d8965102fde1c1f717f699f8952b2a70eb3c0b1aab3d5cd001afa489f5",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json",
+        "workRecordHash": "d09e04ea183210e5858e2a6d2b82dda2ea5ed610ae36d7b1b61196f3dd8cf395",
+        "sourceDigest"  : "63582c45e38a3b5fe9ff3d819f96e714d94e22487647eb0643edaa89c23bbe9e",
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-dd3789f6-a6e2-48d9-a783-c1ca3439e02c",
+      "workId"        : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+      "title"         : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-17T01:48:32.182Z",
+      "event"         : "build",
+      "workRecordHash": "d09e04ea183210e5858e2a6d2b82dda2ea5ed610ae36d7b1b61196f3dd8cf395",
+      "sourceDigest"  : "b2897f989ce3da3ba89ff8892a386bfdd7b524966cae93aed7e15db08473c980",
+      "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+      "semanticHash"  : "16ce2939cdb4bc48d1e57820348d9a3a1699be478b5a79a5adf3626013b0d0b3",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json",
+        "workRecordHash": "d09e04ea183210e5858e2a6d2b82dda2ea5ed610ae36d7b1b61196f3dd8cf395",
+        "sourceDigest"  : "b2897f989ce3da3ba89ff8892a386bfdd7b524966cae93aed7e15db08473c980",
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-aacd5ab8-e9fd-4f10-bf4f-05bfc2495473",
+      "workId"        : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+      "title"         : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+      "summary"       : "BoxBox 외부검사를 제품검사에서 분리한 선택패치를 적용하고 양쪽 제품실행과 Reports19기준 정식등록을 확인했다. 원래3Task는 review대기다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-17T02:12:37.266Z",
+      "event"         : "finish",
+      "workRecordHash": "863e32ea99a26ab93dbdfbce4e1795194fda966a4e70921b26d5db5fee5d2109",
+      "sourceDigest"  : "91ff318198e005708d26fcd5a21bd7be89e2710c3f138be688b249ad82d800fc",
+      "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+      "semanticHash"  : "b2f1ef1e1a7d3719db906bae2836d8a7393b3ec9e1ebb92daba6608cf58a6b21",
+      "narrative": {
+        "summary": "BoxBox 외부검사를 제품검사에서 분리한 선택패치를 적용하고 양쪽 제품실행과 Reports19기준 정식등록을 확인했다. 원래3Task는 review대기다.",
+        "before" : "BoxBox off도 직접 CLI검사4건이 제품묶음에 섞여 실패했다.",
+        "after"  : "제품12개·외부4개 본문을 보존하고 기본제품검사와 명시BoxBox실행을 분리했다. off명령은 disabled/exit2/실행0. 원격 전체제품검사는 기존Codex번들rg PATH 전제 보완 후 공식 passed다.",
+        "changes": [
+          "승인된7경로의 파일별SHA 비교 및 선택패치를 적용했다.",
+          "source/type/architecture typed post가 actual tool process로 통과했다. 호스트 adapter는 injected이며 실제모델호스트로 주장하지 않는다.",
+          "기존Reports3 UUID19기준을 실제 verifyWork로 등록해 현재 usable을 확인했다."
+        ],
+        "decisions": [
+          "기존 허용argv 유지로 schema2 재권한API를 만들지 않았다."
+        ],
+        "limitations": [
+          "BoxBox실도구4개 미실행.",
+          "이 원격 구현UUID의 고유완료감사는 미실행이다. 로컬 구현코드 Opus PASS는 참고이며 복사하지 않는다.",
+          "문서정정 뒤 구현원장의 과거증거 현재성·REGISTER 자동수용은 별도 미완료다. 원래Reports19개 기준은 현재유효하다."
+        ],
+        "next": [
+          "원래Reports3의 지정고유감사·문서영향·완료처리를 진행한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:51:23.089Z"
+          },
+          {
+            "id": "attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:58:55.837Z"
+          }
+        ],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json",
+        "workRecordHash": "863e32ea99a26ab93dbdfbce4e1795194fda966a4e70921b26d5db5fee5d2109",
+        "sourceDigest"  : "91ff318198e005708d26fcd5a21bd7be89e2710c3f138be688b249ad82d800fc",
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8"
+      }
+    }
+  ]
+}

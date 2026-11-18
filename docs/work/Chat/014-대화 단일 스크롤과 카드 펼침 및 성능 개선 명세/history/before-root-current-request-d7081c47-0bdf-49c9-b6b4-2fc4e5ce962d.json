@@ -1,0 +1,434 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118",
+  "title"        : "대화 단일 스크롤과 카드 펼침 및 성능 개선 명세",
+  "kind"         : "feature",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner"        : "ui",
+  "status"       : "verifying",
+  "blockedReason": "AC-1: 검증 시도 없음; AC-2: 검증 시도 없음; AC-3: 검증 시도 없음; AC-4: 검증 시도 없음; AC-5: 검증 시도 없음; AC-6: 검증 시도 없음; AC-7: 검증 시도 없음; AC-8: 검증 시도 없음; AC-9: 검증 시도 없음; AC-10: 검증 시도 없음; AC-11: 검증 시도 없음; AC-12: 검증 시도 없음; AC-13: 검증 시도 없음; AC-14: 검증 시도 없음; 필수 독립 검토 없음; 현재 소스·기준·기록의 저작 작업 보고서 없음",
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-632e43ce-dcb8-4726-ad34-8fe85034b6fd"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "Chat 본문은 대화 전체만 세로 스크롤하며 명령·코드·diff 카드에 독립 세로 스크롤이 없고 입력창은 고정된다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-2",
+      "description": "선택한 명령 출력은 ^T 표시 버튼과 Control+T로 같은 자리에서 펼침·접힘을 전환하며 다른 카드와 입력창의 상태를 바꾸지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-3",
+      "description": "펼침은 보관된 원문 최대 32768 UTF-16 코드 단위 범위로 제한하고 생략·보관 초과를 명시하며 원문 복사와 JSON 보기의 의미를 보존한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-4",
+      "description": "출력 증가·펼침·접힘·대화 전환에서 최신 추적과 과거 읽기 위치 및 카드별 수동 선택을 보존한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-5",
+      "description": "동일 환경·fixture의 변경 전후 입력·스크롤·스트리밍을 계측하고 불필요한 완료 카드 재렌더와 반복 계산을 줄이며 입력 지연과 긴 프레임의 개선 및 미해결을 보고한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-6",
+      "description": "실제 Electron에서 휠·키보드·긴 출력·실시간 출력·실패·대화 전환 시나리오와 관련 집중 테스트·소스 정책·타입 검사·빌드를 검증한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-7",
+      "description": "P0: 입력 중 한글 조합·Enter·커서 편집·붙여넣기·인용·초안 복원을 보존하고, 스트리밍 유무별 입력 표시 지연을 계측해 입력으로 인한 불필요한 대화 전체 처리를 제거한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-8",
+      "description": "현재 대화의 Working 상태를 입력창 위 고정 줄에서 확인하고 전송·시작 대기·실행·승인·중단 확인·종료·실패·연결 미확인을 실제 상태에 맞게 구분한다. 과거 스크롤·모니터 접힘·대화 전환에서도 해당 상태가 정확히 보인다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-9",
+      "description": "99_www의 기본 WWW Mint 팔레트를 매트릭스 계열 기본안으로 앱 공통 의미 토큰에 연결하고 본문·보조·진행·정보·대기·오류·구문 역할을 구분한다. 실제 배경별 대비와 색 외 상태 문구·아이콘을 검증한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-10",
+      "description": "Working 상태 갱신과 테마 적용 후에도 Input P0 성능 기준 및 한글 조합·스크롤·포커스를 보존하며 과거 읽기·좁은 창·모션 축소·상태 전이 시나리오를 실제 Electron에서 검증한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-11",
+      "description": "활성 턴이 확인된 작업 중 입력창의 Steer 동작으로 같은 턴에 추가 지시를 보내며 원래 실행 중단·새 턴 시작 없이 Working을 유지하고 대기 중 일반 전송과 구분한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-12",
+      "description": "Steer를 세션 API·preload IPC·main·Native turn/steer에 연결하고 session/selection/thread/expectedTurnId를 검사하며 응답 turnId를 확인한다. 추가 메시지 ID로 pending·접수·이력을 연결해 중복과 다른 세션 전달을 방지한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-13",
+      "description": "Steer의 시작 대기·승인·중단·턴 종료 경합·불일치·미지원·전송 실패·접수 미확인을 구분하고 입력 원문과 새 초안을 보존한다. 자동 재전송·새 턴 전환을 하지 않고 중복 전송을 막는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-14",
+      "description": "Steer의 같은 턴 전달·연속 입력·IME·원문 복원·다른 세션 격리를 집중 테스트와 실제 Electron에서 검증하며 실제 Native 후속 행동 반영과 API 접수 성공을 구분하고 Input P0 성능을 보존한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "session-implementation-20261116-work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118",
+    "requestHash": "9eff0da0ea243298d559c8d61a2c4ff298e05c651e5d58046aac9f5ad5ddd8d1",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "src/renderer.tsx",
+        "src/chat.css",
+        "src/command-card.tsx",
+        "src/command-preview.ts",
+        "src/native-activity-view.tsx",
+        "src/native-activity.css",
+        "src/chat-composer.tsx",
+        "src/chat-status.ts",
+        "src/projection.ts",
+        "test/chat-status.test.ts",
+        "test/projection.test.ts",
+        "test/command-preview.test.ts",
+        "test/input.test.ts",
+        "test/www-activity-view.test.ts",
+        "scripts/verify-chat.ts",
+        "scripts/verify-home.ts",
+        "scripts/verify-native-activity.ts",
+        "src/native-session.ts",
+        "src/native-chat.ts",
+        "src/native-lifecycle.ts",
+        "src/main.ts",
+        "src/preload.ts",
+        "src/shared.ts",
+        "src/session-api.tsx",
+        "test/native-session.test.ts",
+        "test/native-chat.test.ts",
+        "test/native-lifecycle.test.ts",
+        "test/fixtures/chat-ui-app-server.ts",
+        "scripts/workflow/report-view.ts",
+        "test/workflow-reports.test.ts",
+        "test/report-service.test.ts",
+        "scripts/workflow/model-allocation.ts",
+        "scripts/workflow/run.ts",
+        "scripts/workflow/types.ts",
+        "scripts/workflow/schema.ts",
+        "scripts/workflow/work.ts",
+        "scripts/workflow/report-lifecycle.ts",
+        "scripts/workflow.ts",
+        "scripts/workflow/decomposition.ts",
+        "scripts/workflow/completion-report.ts",
+        "scripts/workflow/statechart.ts",
+        "test/workflow-completion-faults.test.ts",
+        "test/workflow-properties.test.ts",
+        "test/workflow-statechart.test.ts",
+        "test/workflow-statechart-view.test.ts",
+        "test/workflow-model-allocation.test.ts",
+        "test/workflow-work.test.ts",
+        "test/workflow-development.test.ts",
+        "src/ecosystem-view.tsx",
+        "src/ecosystem.css",
+        "src/architecture-tree.ts",
+        "src/architecture.ts",
+        "src/workflow-statechart-view.tsx",
+        "src/workflow-statechart.ts",
+        "scripts/architecture-contract.ts",
+        "scripts/generate-architecture.ts",
+        "src/architecture.generated.json",
+        "scripts/verify-architecture.ts",
+        "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세"
+      ],
+      "mutationSurfaces": [
+        "files"
+      ],
+      "verifierCommands": [
+        "[\"npm\",\"run\",\"check\"]",
+        "[\"npm\",\"run\",\"build\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"node\",\"scripts/check-workflow.ts\"]",
+        "[\"node\",\"scripts/verify-home.ts\"]",
+        "[\"node\",\"scripts/verify-chat.ts\"]",
+        "[\"node\",\"scripts/verify-chat.ts\",\"--command-cards\"]",
+        "[\"node\",\"scripts/verify-reports.ts\"]",
+        "[\"node\",\"scripts/verify-architecture.ts\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "9eff0da0ea243298d559c8d61a2c4ff298e05c651e5d58046aac9f5ad5ddd8d1"
+    },
+    "inputs": [
+      "docs/specs/chat.md",
+      "scripts/verify-chat.ts",
+      "src/chat-composer.tsx",
+      "src/chat-message.tsx",
+      "src/chat-row-state.tsx",
+      "src/chat-status.ts",
+      "src/chat.css",
+      "src/command-card.tsx",
+      "src/command-preview.ts",
+      "src/native-chat.ts",
+      "src/native-session.ts",
+      "src/preload.ts",
+      "src/projection.ts",
+      "src/renderer.tsx",
+      "src/session-api.tsx",
+      "src/shared.ts",
+      "test/chat-state.test.ts",
+      "test/chat-status.test.ts",
+      "test/command-preview.test.ts",
+      "test/native-session.test.ts"
+    ],
+    "nextAction": "verify",
+    "verifications": [],
+    "reviews": [],
+    "reportingRequired": true,
+    "artifactReviews": [
+      {
+        "id"        : "artifact-9782d5db-4803-4f9c-82c0-b51c9706a857",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T05:33:30.373Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "별도 문서 대조 및 읽기 전용 검토에서 요구 누락·모순을 발견하지 못했다. 외부 검토 전문은 .www/evidence/chat-scroll-performance/spec-review.md. 기능 검증·필수 제품 감사는 미실행이다.",
+        "digest"    : "39ed24e668a8b788c9a0970effc858930f730df63d0a183cc46abb0754449a64",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "Input P0와 명세 전용 범위가 연결된다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/spec.md",
+                "line": 9
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "한글 조합·커서·붙여넣기·스트리밍 시나리오를 포함한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/spec.md",
+                "line": 24
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "satisfied",
+            "reason": "보관 한도·실패·포커스·대화 복원을 다룬다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/spec.md",
+                "line": 33
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "satisfied",
+            "reason": "AC-1~AC-7의 실행 방법과 미검증 상태를 구분한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/spec.md",
+                "line": 45
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-e9e8eba1-9f77-4740-8601-407d8905d715",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T05:36:19.588Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "명세 수정 후 별도 대조 패스에서 Working 상태와 WWW Mint 원본 색상, AC-1~AC-10 및 명세 전용 권한을 확인했다. 구현·실기·대비·성능과 독립 제품 감사는 미실행이다.",
+        "digest"    : "bac1c4ec5027c8abe7ced10a79b60339401f9264f79f6bd30a76aa0a8fceed21",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "추가된 Working·색상 요구와 Input P0, 명세 전용 범위가 연결된다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/spec.md",
+                "line": 9
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "과거 스크롤·모니터 접힘·상태 전이·대화 전환의 상태 가시성을 정의했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/spec.md",
+                "line": 46
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "satisfied",
+            "reason": "matrix와 실제 mint ID의 차이, 색상 출처·대비·성능·런타임 경계를 명시했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/spec.md",
+                "line": 57
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "satisfied",
+            "reason": "AC-8~AC-10과 기존 Input·스크롤 기준의 검증을 연결하고 미실측을 구분했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/spec.md",
+                "line": 90
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-ffc61f4a-8ec7-4221-948d-15a1f99c32f8",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T05:39:53.701Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "수정 후 별도 문서 대조 패스에서 Steer의 같은 턴 의미·프로토콜 근거·경합·원문 보존·Input 성능 기준을 확인했다. 제품 기능과 독립 완료 감사는 미실행이다.",
+        "digest"    : "4ad2d193c34ab6d8d12257af211682e67562f01226771f51f385c440ffd83023",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "Input P0를 유지하며 Steer를 기존 작업의 명세 범위에 추가했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/spec.md",
+                "line": 9
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "일반 전송·Steer·연속 입력·접수 및 Working 상태를 구분한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/spec.md",
+                "line": 103
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "satisfied",
+            "reason": "세션/턴 경계와 종료 경합·접수 미확인·실패 원문 보존을 정의했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/spec.md",
+                "line": 113
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "satisfied",
+            "reason": "AC-11~AC-14의 실제 전송·입력·실기 및 모델 반영 검증을 구분한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/spec.md",
+                "line": 122
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-15f28edb-a380-4e70-94e9-397e967531f8",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T08:32:06.332Z",
+        "sourceDigest"   : "b57891b14b5cb3c8c609d0842da362c593d6c470c58963280130f45cce167e69",
+        "criteriaDigest" : "de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff",
+        "documentsDigest": "caa19f99e7edd08d0327ea95b56b2427ced8c22452090e92683b7a38ed88245d",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "Hook 정산은 기존 native-activity 순수 투영 책임에 속하고 프로세스·IPC·상태 소유 경계를 바꾸지 않았다. 현재 구조 ID 계약과 생성기는 통과했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "현재 Hook 집중 회귀 명령과 합성 사건·실제 Native/GUI/신뢰 수용의 분리 및 시각 모호성 검증 범위를 기록했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "현재 변경은 기존 개인용 로컬 Electron 관측·통제 목적 안의 투영/기록 정합성 수정이며 제품 목적·사용자·범위를 추가하지 않았다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "마지막 action 뒤 read/status 대조, record.blockedReason과 status.reasons, complete=false와 실제 complete 호출 거부를 명시적으로 분리했다."
+          }
+        ]
+      }
+    ]
+  }
+}

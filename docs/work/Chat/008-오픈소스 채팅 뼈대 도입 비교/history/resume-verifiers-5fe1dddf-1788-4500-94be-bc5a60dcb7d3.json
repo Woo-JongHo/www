@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-029fb7e2-61fa-4014-9362-5e915ab13197",
+  "title"        : "오픈소스 채팅 뼈대 도입 비교",
+  "kind"         : "maintenance",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "독립 검토 fail: 수정 또는 검토 재실행 필요",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-2",
+      "description": "후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-3",
+      "description": "권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "chat008-direct-resume-20261116",
+    "requestHash": "c5609139546e3d12e2ca7c96e4eccf31024638e50958cad9319fbfc11bb281f7",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md",
+        "docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md",
+        "docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md",
+        "docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/verification.md",
+        "docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/work.json",
+        "docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/history",
+        "docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/reports"
+      ],
+      "mutationSurfaces": [
+        "docs"
+      ],
+      "verifierCommands": [
+        "[\"bun\",\"test\",\"test/conversations.test.ts\",\"test/native-lifecycle.test.ts\",\"test/native-session.test.ts\",\"test/chat-state.test.ts\",\"test/native-chat.test.ts\",\"test/projection.test.ts\"]",
+        "[\"node\",\"--input-type=module\",\"--eval\",\"import assert from 'node:assert/strict';import{readFile,stat}from'node:fs/promises';import{createHash}from'node:crypto';const base='.www/evidence/resume-20261116/chat008';const hash=b=>createHash('sha256').update(b).digest('hex');const m=JSON.parse(await readFile(base+'/upstream-fetch-manifest.json','utf8'));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&&e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes('/blob/'+e.revision+'/'));assert(e.rawUrl.includes('/'+e.revision+'/'));}const at=async(owner,repo,file)=>{const e=m.entries.find(e=>e.url.includes('github.com/'+owner+'/'+repo+'/blob/')&&e.url.split('/blob/')[1].split('/').slice(1).join('/')===file);assert(e);return readFile(e.path,'utf8');};assert((await at('herdrdev','herdr','Cargo.toml')).includes('portable-pty = \\\"=0.9.0\\\"'));assert((await at('herdrdev','herdr','LICENSE')).includes('Apache License'));assert((await at('herdrdev','herdr-app','Cargo.toml')).includes('gpui-pre'));assert((await at('herdrdev','herdr-app','src/hc.rs')).includes('hc connect'));assert((await at('herdrdev','herdr-app','LICENSE')).includes('Apache License'));const ovis=JSON.parse(await at('devswha','ovis','package.json'));assert.equal(ovis.version,'0.5.3');assert.equal(ovis.dependencies.react,'^19.3.0');assert(ovis.dependencies['@lydell/node-pty']);assert((await at('devswha','ovis','LICENSE')).includes('MIT License'));const daemon=await at('devswha','ovis','server/codex-daemon.ts');assert(daemon.includes('new Set<string>([\\\"initialize\\\", \\\"skills/list\\\"])'));const t3=JSON.parse(await at('pingdotgg','t3code','packages/effect-codex-app-server/package.json'));assert(t3.private&&t3.dependencies.effect);assert((await at('pingdotgg','t3code','docs/internals/overview.md')).includes('one database transaction'));assert((await at('pingdotgg','t3code','LICENSE')).includes('MIT License'));const extra=JSON.parse(await readFile(base+'/supplemental-license-fetch.json','utf8'));const b=await readFile(extra.path);assert(extra.ok&&hash(b)===extra.sha256&&b.length===extra.bytes);assert(b.toString().includes('Apache License'));assert((await at('iOfficeAI','AionCore','Cargo.toml')).includes('license = \\\"MIT\\\"'));const work='docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/';const spec=await readFile(work+'spec.md','utf8');const comparison=await readFile(work+'comparison.md','utf8');const tasks=await readFile(work+'tasks.md','utf8');for(const id of['AC-1','AC-2','AC-3'])assert(spec.includes(id)&&comparison.includes(id));for(const id of['UC-LOCAL','UC-UPSTREAM','UC-DECISION'])assert(spec.includes(id));assert(spec.includes('Ovis에서 필요한 공개 채팅 동작만 개작'));assert(comparison.includes('**Ovis의 필요한 채팅 동작만 개작**'));assert(comparison.includes('외부 앱 호환 PASS가 아니다'));assert(tasks.includes('세 기준은 조사·비교·권장 기록의 수용 기준'));assert(tasks.includes('읽기 전용'));const{spawnSync}=await import('node:child_process');const checked=spawnSync(process.execPath,['scripts/check-workflow.ts'],{encoding:'utf8'});process.stdout.write(checked.stdout??'');process.stderr.write(checked.stderr??'');assert.equal(checked.status,0,'현재 작업 계약 검사 실패');console.log(JSON.stringify({result:'passed',scope:'고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님',fixedOriginals:45,supplemental:1,recommendation:'Ovis 부분 개작·WWW 핵심 경계 보존',unmeasured:['Windows','OS 한국어 IME','외부 앱 실행','신규 제품 이식']}));\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "c5609139546e3d12e2ca7c96e4eccf31024638e50958cad9319fbfc11bb281f7"
+    },
+    "inputs": [
+      "agents/www/review-policy.json",
+      "docs/ARCHITECTURE.md",
+      "docs/DEVELOPMENT.md",
+      "docs/PRODUCT.md",
+      "docs/skills/WORKFLOW.md",
+      "docs/specs/chat.md",
+      "docs/third-party/ovis.md",
+      "docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md",
+      "docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md",
+      "docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md",
+      "package.json",
+      "scripts/workflow",
+      "source-policy.json",
+      "src",
+      "test",
+      "tsconfig.json",
+      "tsconfig.tools.json"
+    ],
+    "nextAction": "review",
+    "verifications": [],
+    "reviews": [
+      {
+        "id"            : "review-e3af38b2-a1a7-454c-8e59-4966e9410195",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "pass",
+        "readOnly"      : true,
+        "sourceDigest"  : "585a4b768717648f417c534c5197c288ad760017f8461017dd46557fb97dbd10",
+        "criteriaDigest": "ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "c128ab0730a9c3ae193bb4525efe23c985bec87a943ecdb7e9a76f86c50298f2"
+        },
+        "failure": null,
+        "findings": [
+          "판정 pass: 이번 수정은 조사·권장 문서와 작업 레코드에 한정된다. 제품 코드와 의존성은 바뀌지 않았다. package.json의 dependencies는 react·react-dom뿐이고 assistant-ui·T3 Code 관련 패키지가 없다. 이는 work.json의 authorization.implementation=false, writePaths(docs/work/Chat, docs/work/INDEX.md)와 일치한다.",
+          "AC-1 현황표의 주장은 소스와 맞다. renderer.tsx:205-226에서 sendingRef로 중복 제출을 막고, 실패하면 setPrompt((current) => current || text)로 초안을 복구한다. main.ts:180은 threadStarted 뒤 작업 폴더 변경을 거부한다. main.ts:186-209는 thread/start와 turn/start만 사용한다. main.ts:44는 메모리 eventLog를 최근 2000개 사건으로 제한한다. src 전체에 thread/resume·thread/list·thread/read 호출이 없으므로 '목록·영속 저장·읽기·동일 Native thread 복구 없음'은 타당하다. Markdown 렌더러나 클립보드 UI도 src에 없어 '본문은 일반 텍스트'와 일치한다.",
+          "증거 범위 확대가 없다. comparison.md:23과 verification.md는 npm run check exit 0과 Node 테스트 147개를 현재 코드의 기준선으로만 둔다. Electron GUI·Native 승인·Windows·IME 실기와 후보 앱 실행·설치·이식은 미실행으로 명시돼 있다. comparison.md:93과 spec.md:21-23도 채팅 완성 보고가 아니라는 점과 사용자 선택이 남았다는 점을 유지한다. 이 검토에서는 npm run check를 다시 실행하지 않았다. 147개라는 수치는 문서에 기록된 관찰로만 확인했다.",
+          "work.json의 criteria는 AC-1~3 모두 result=unverified, evidence=[]이고 verifications=[], status=verifying, nextAction=review다. 통과를 미리 주장하지 않으므로 결함은 아니다. 다만 완료하려면 verification.md의 앵커 baseline-20261112·source-inspection-20261112를 workflow 검증 시도와 기준 증거로 실제 연결해야 한다. 현재 sourceDigest(585a…)는 documentationReviews에 기록된 sourceDigest(27e6…)와 다르다. 따라서 완료 전에 문서 영향 검토를 현재 입력 기준으로 다시 기록해야 한다(WORKFLOW.md:112 '검토 뒤 소스·기준…이 바뀌면 다시 검토').",
+          "보완 권고(차단 아님): comparison.md:56과 verification.md:14는 AionUi·Cline 조사 전문의 보존 위치로 .www/scratchpad/chat-skeleton-upstream.md를 인용한다. .www는 captureSource 자동 제외 경로이자 비추적 작업 영역이라 다른 환경에서는 재현할 수 없다. 해당 행의 실제 판단 근거는 고정 SHA 링크로 남아 있다. 다만 조사 담당자의 'npm view 0.2.0' 같은 관찰은 이 파일에만 의존하므로, 필요하면 요약을 추적 문서에 옮기는 편이 낫다.",
+          "외부 고정 SHA 링크(assistant-ui 53ab9cb…, T3 Code ee90bdc…, AionUi e108b6b…, AionCore 503a871…, Cline 50e77bc…)의 내용과 라이선스는 이 읽기 전용 검토에서 네트워크로 확인하지 않았다. 문서와 소스 사이의 내부 일관성만 대조했다.",
+          "docs/work/INDEX.md:34-37에 Chat 005 항목과 spec.md·work.json 링크가 등록돼 있다. spec.md는 수용 기준의 정본을 work.json으로 지정하고 AC-1~3을 comparison.md의 각 절과 연결하므로 WORKFLOW.md:86 계약을 따른다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-e3af38b2-a1a7-454c-8e59-4966e9410195/opus.json",
+        "startedAt"  : "2026-11-12T09:35:31.324Z",
+        "completedAt": "2026-11-12T09:36:22.471Z"
+      },
+      {
+        "id"            : "review-aaee6ab7-609e-445c-b860-67bc58c76904",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "447710337411797680a61d313322199950cf0da039d973daf54e7eed6b95743d",
+        "criteriaDigest": "ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "88695281654acb1c4511f35fa17969ee47fb6f7bc3380a0caebca4bd1ded9aed"
+        },
+        "failure": null,
+        "findings": [
+          "판정 fail: 산출물 comparison.md는 현재 구현과 맞지 않고 결론도 서로 어긋난다. work.json의 AC-1~3은 모두 result=unverified, evidence=[]이며 workflow.verifications=[]이다. 수정하지 않은 상태로는 이 작업을 완료할 수 없다. verification.md:20-24의 2026-11-15 재검토도 같은 결론을 스스로 기록하고 있다.",
+          "AC-1 현황표가 현재 소스와 다르다. comparison.md:39는 'Markdown·코드 복사 UI 없음'이라고 쓰지만, 현재 src/chat-message.tsx:6이 react-markdown을 import한다. 같은 파일 :22는 navigator.clipboard.writeText로 복사를 처리하고, :48은 remarkGfm으로 렌더링한다. comparison.md:43은 '목록·영속 저장·읽기·동일 Native thread 복구 없음'이라고 쓰지만, src/conversations.ts:150·160·162가 thread/list·thread/read·thread/resume을 호출한다. 표 머리(:34)는 HEAD 4ef13d29 시점만 밝힐 뿐, 이 내용이 현재 상태가 아니라는 표시가 본문 표에 없다. 그래서 문서만 읽는 사람은 이 표를 현행 공백으로 오해한다. 표를 다시 쓰거나 표 자체에 시점 한정과 현행 대비를 넣어야 한다.",
+          "AC-3 결론이 서로 모순된다. comparison.md:5는 'assistant-ui 우선 권장은 사용자 선택이 아니며 확정하지 않는다'고 하고, :24는 Herdr·Ovis·T3 Code 중심으로 비교 기준을 바꿨다. 그런데 '결론과 결정 상태'(:28-30), 후보표(:87), 경계표(:94-101), 권장 순서(:105-110)는 여전히 assistant-ui 도입을 단일 권장안으로 제시한다. 또 :87과 :96은 Markdown·코드 표시를 assistant-ui에서 가져올 이점으로 꼽지만, 이 기능은 이미 react-markdown으로 구현돼 있어 근거가 사라졌다. 사용자 정정을 반영한 하나의 권장안으로 다시 써야 한다.",
+          "AC-2 범위가 빠져 있다. 사용자 정정 이후 비교 대상은 Herdr runtime/desktop과 Ovis다(:9-22). 이들에는 고정 SHA 링크만 있고, assistant-ui·T3 Code처럼 실제 adapter·의존 경계·전체 교체 대 부분 재사용을 비교한 절이 없다. :24에서도 '새 독립 검토는 아직 수행하지 않았다'고 인정한다. 이 검토에서는 외부 링크를 네트워크로 조회하지 않았으므로, 링크된 내용과 라이선스의 진위는 확인하지 않았다.",
+          "작업 레코드의 증거가 연결되지 않았고 오래됐다. work.json documentationReviews[0].sourceDigest(27e6…)와 reviews[0].sourceDigest(585a…)는 모두 현재 입력 digest(4477…)와 다르다. blockedReason에도 source_changed·receipt_context_mismatch가 남아 있다. 이전 리뷰 pass(:76)는 오래된 소스 기준이고, 그때도 '목록·복구 없음은 타당'(:92)이라고 판단했다. 현재 소스에서는 이 판단이 틀렸으므로 근거로 재사용할 수 없다. 문서 영향 검토는 현재 입력 기준으로 다시 기록해야 한다(WORKFLOW 재검토 규칙). verification.md의 baseline-20261112·source-inspection-20261112 앵커도 workflow.verifications와 criteria evidence에 아직 연결되지 않았다.",
+          "verification.md:5-8의 npm run check exit 0과 Node 테스트 147개는 HEAD 4ef13d29 시점의 기준선이다. 현재 HEAD 92de238에서 다시 실행한 기록은 없다. 이 검토도 명령을 실행하지 않았으므로 현재 통과 여부는 확인하지 않았다. AC-1의 '실행 결과' 근거를 현재 코드에 맞춰 새로 만들어야 한다.",
+          "결함은 아니지만 보완을 권한다. AionUi·Cline 조사 전문(comparison.md:79, verification.md:14)은 비추적 경로 .www/scratchpad/chat-skeleton-upstream.md에만 있다. 'npm view 0.2.0' 같은 관찰(:83)은 다른 환경에서 재현할 수 없으므로, 필요한 요약은 추적되는 문서로 옮기는 편이 낫다.",
+          "범위 준수는 확인했다. 이 작업 문서들은 제품 코드나 의존성 변경을 주장하지 않는다. spec.md:21-23과 comparison.md:116은 채팅 완성 보고가 아니며 사용자 선택이 남았다고 유지한다. verification.md:22-24는 과거 조사와 현재 구현을 구분하고 링크가 있다는 것만으로 AC-2를 통과시키지 않는다. 따라서 증거 범위를 부풀린 서술은 없다. 다만 이것만으로 위 결함을 덮고 pass로 판정할 수는 없다."
+        ],
+        "receiptPath": ".www/evidence/reviews/review-aaee6ab7-609e-445c-b860-67bc58c76904/opus.json",
+        "startedAt"  : "2026-11-15T09:28:48.890Z",
+        "completedAt": "2026-11-15T09:29:28.608Z"
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-e186a8bc-3ca2-458e-a369-9b71fd6b27f0",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-12T09:35:30.524Z",
+        "sourceDigest"   : "27e6dcc32ff494803b6132b08bacfbbabc23961b5e12fe348bfb6ec0ce041541",
+        "criteriaDigest" : "ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0",
+        "documentsDigest": "a4d2b80aa99bcfcc23f3b2969fab4a2277af90b1b7eb86fd2da0db83750e9470",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "현재 제품 동작·구조·개발 계약은 유지하고 오픈소스 도입 목표와 미결정은 작업 비교 문서에만 기록했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "현재 제품 동작·구조·개발 계약은 유지하고 오픈소스 도입 목표와 미결정은 작업 비교 문서에만 기록했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "현재 제품 동작·구조·개발 계약은 유지하고 오픈소스 도입 목표와 미결정은 작업 비교 문서에만 기록했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "현재 제품 동작·구조·개발 계약은 유지하고 오픈소스 도입 목표와 미결정은 작업 비교 문서에만 기록했다."
+          },
+          {
+            "path"    : "docs/specs/chat.md",
+            "decision": "unchanged",
+            "reason"  : "현재 제품 동작·구조·개발 계약은 유지하고 오픈소스 도입 목표와 미결정은 작업 비교 문서에만 기록했다."
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
+  }
+}

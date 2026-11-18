@@ -1,0 +1,526 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-2edb1795-1f7b-4982-a849-e3caa6926426",
+  "title"        : "선택 라이브러리 잔여 의미 18문구 교정",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-8588d22f-abf5-4179-a539-33c20078f7ab",
+      "workId"        : "work-2edb1795-1f7b-4982-a849-e3caa6926426",
+      "title"         : "선택 라이브러리 잔여 의미 18문구 교정",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T22:41:31.836Z",
+      "event"         : "build",
+      "workRecordHash": "afb14288998decb54a3a9867d9ff5cf0e98fbe2a1faaec07d76741163ad963c4",
+      "sourceDigest"  : "7715c8a46963742c5ecdbd7c78563ef08e55b5b9d24fab6956a03ccf417593f3",
+      "criteriaDigest": "358fa6cd724163710be764be022872adc138ec48f37a16daad161dae3f62efcd",
+      "semanticHash"  : "b0e37424da22bc866549f297fa313f2f14de1e091623e6c2bdf99539c8ba713d",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "MATERIAL-18",
+            "description": "고정 원문과 현재 SHA에 결속한 7개 기존 한국어 문서의 18개 실질 의미 차이를 선별 교정하고 다른 본문은 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "LIBRARY-INTEGRITY",
+            "description": "선택 자료 201개와 한국어186·원문15, 원문 해시·크기·고정 출처 및 법문을 유지하고 변경된 로컬 해시·크기만 inventory에 반영한다. 코드 표지 오역 한 건은 원문의 diff 식별자로 복원한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "PARENT-TRACE",
+            "description": "기존 W005 UUID와 실제 하위 저작·검증 근거를 관계로 연결하고 과거 실패와 승인 목록을 보존한다. 하위 작업의 PASS나 리뷰를 W005 완료로 복사하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/023-선택 라이브러리 잔여 의미 18문구 교정/work.json",
+        "workRecordHash": "afb14288998decb54a3a9867d9ff5cf0e98fbe2a1faaec07d76741163ad963c4",
+        "sourceDigest"  : "7715c8a46963742c5ecdbd7c78563ef08e55b5b9d24fab6956a03ccf417593f3",
+        "criteriaDigest": "358fa6cd724163710be764be022872adc138ec48f37a16daad161dae3f62efcd"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-f3af53af-741c-4bde-b9a3-acbb4b0d9ea6",
+      "workId"        : "work-2edb1795-1f7b-4982-a849-e3caa6926426",
+      "title"         : "선택 라이브러리 잔여 의미 18문구 교정",
+      "summary"       : "선택 라이브러리의 잔여18문구를7문서에서교정하고고정원문·비대상본문·부모관계근거를실제대조했다. 마지막실제Terra검토와정규복합검증은통과했으며W005전체번역완료와분리한다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-16T23:15:33.707Z",
+      "event"         : "finish",
+      "workRecordHash": "195c1ec20c0382c21b7553c97b651bc8f7384170ae2dd86a88827fe1bb60c20c",
+      "sourceDigest"  : "1765de4e9b9a753381a8a6a59f378aba774242246ceb78f8f589fd8c0772d01d",
+      "criteriaDigest": "358fa6cd724163710be764be022872adc138ec48f37a16daad161dae3f62efcd",
+      "semanticHash"  : "105611bd906545813cc6950d8b64943cec2c77468b24987ac16507f0ca136121",
+      "narrative": {
+        "summary": "선택 라이브러리의 잔여18문구를7문서에서교정하고고정원문·비대상본문·부모관계근거를실제대조했다. 마지막실제Terra검토와정규복합검증은통과했으며W005전체번역완료와분리한다.",
+        "before" : "134개과거지적의현재판정에서18개실질의미차이가남아있었고7파일의한정교정이필요했다.",
+        "after"  : "18old/new를7before전체에재적용해현재7문서와bytes완전일치했다. 고정201raw·15원문보존·교정전inventory원문필드와현재값을전수대조했고마지막독립검토는구체결함없음으로통과했다.",
+        "changes": [
+          "7기존한국어문서18문구만공식주입Sol저작으로교정하고inventory로컬지문을갱신했다.",
+          "교정전7파일전문과201개고정raw/원문필드전수대조및전체재적용결과를baseline-proof.md에결속했다.",
+          "부모W005관계·권한불변접수·실제저작영수증과이전not_run을보존하고고유3기준만정규복합검증했다."
+        ],
+        "decisions": [
+          "checker자체가의미검사를한다는주장을하지않는다. 실제18patch대조·전체before재적용·고정raw대조와actualTerra내용검토를복합근거로연결했다.",
+          "W005의메뉴미수정과전체번역수용대기는W02318문구완료로복사하지않는다."
+        ],
+        "limitations": [
+          "첫감사는review_context_changed/not_run,두번째는app_server_receipt_invalid/not_run이다. 두번째원문안의내용근거부족지적을실제before/raw대조로보완하고마지막한번의검토를실행했다.",
+          "독립검토는7문서·제공증거·작업기록일부에한정하며W005전체/모든과거승인이력을독립확정한것이아니다.",
+          "check-workflow는baseline-proof.md의보존코드인용[...](<url>)까지링크로검사해실패한다. 감사후문서변경은하지않았고Root에검사기경계판단을전달했다.",
+          "실제commit/push/게시·전역변경없음."
+        ],
+        "next": [
+          "공유완료core로고유3기준·현재감사·문서영향·저작보고서의수용여부를확인한다.",
+          "W005는정확경로권한차단과전체기준추가검토를별도이어간다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "MATERIAL-18",
+            "description": "고정 원문과 현재 SHA에 결속한 7개 기존 한국어 문서의 18개 실질 의미 차이를 선별 교정하고 다른 본문은 보존한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-bc414df2-1b60-4af5-8c60-4b9b03f0e93d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "LIBRARY-INTEGRITY",
+            "description": "선택 자료 201개와 한국어186·원문15, 원문 해시·크기·고정 출처 및 법문을 유지하고 변경된 로컬 해시·크기만 inventory에 반영한다. 코드 표지 오역 한 건은 원문의 diff 식별자로 복원한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-c56d198d-c2c8-469e-818b-9c0a6504c010",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-22952fe3-4ed7-44b1-8d88-5ddc1288b5ae",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-2ec64f72-02cf-4a8a-907c-3f78d98c9816",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc414df2-1b60-4af5-8c60-4b9b03f0e93d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "PARENT-TRACE",
+            "description": "기존 W005 UUID와 실제 하위 저작·검증 근거를 관계로 연결하고 과거 실패와 승인 목록을 보존한다. 하위 작업의 PASS나 리뷰를 W005 완료로 복사하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-bc414df2-1b60-4af5-8c60-4b9b03f0e93d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-c56d198d-c2c8-469e-818b-9c0a6504c010",
+            "command": "node",
+            "args": [
+              "scripts/check-skill-library.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:05:37.051Z"
+          },
+          {
+            "id": "attempt-22952fe3-4ed7-44b1-8d88-5ddc1288b5ae",
+            "command": "node",
+            "args": [
+              "--test",
+              "test/skill-library.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:06:02.426Z"
+          },
+          {
+            "id": "attempt-2ec64f72-02cf-4a8a-907c-3f78d98c9816",
+            "command": "node",
+            "args": [
+              "scripts/check-skill-library.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:13:14.372Z"
+          },
+          {
+            "id": "attempt-bc414df2-1b60-4af5-8c60-4b9b03f0e93d",
+            "command": "node",
+            "args": [
+              "scripts/check-skill-library.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:14:58.408Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-eafc0c33-49ed-44eb-9a0f-e8ac5c898d52",
+            "verdict"    : "not_run",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-eafc0c33-49ed-44eb-9a0f-e8ac5c898d52/terra.json",
+            "findings": [
+              "제공된 18개 교정안과 원문 인용, 현재 본문 및 구현 패치를 대조한 범위에서 수정을 요구할 구체적 결함은 발견하지 못했다.",
+              "이번 검토는 W023의 교정과 제공된 근거에 한정한다. W005 전체 번역의 의미 보존이나 모든 비대상 본문의 보존을 독립적으로 확정한 것은 아니다.",
+              "검증 기록에는 checker와 단위 테스트의 종료 코드 0이 남아 있다. 이번 읽기 전용 검토에서는 테스트를 실행하지 않았다.",
+              "work.json과 authoring-result.json을 읽을 때 출력이 잘려 전체 내용을 확인하지 못했다. work.json의 수용 기준과 별도로 읽은 검증 기록은 확인했다."
+            ]
+          },
+          {
+            "id"         : "review-42096861-636d-4794-b5fe-555918961b7a",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-42096861-636d-4794-b5fe-555918961b7a/terra.json",
+            "findings": []
+          },
+          {
+            "id"         : "review-75e58c8a-92d2-4a8b-9901-4efba1a3bd36",
+            "verdict"    : "pass",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-75e58c8a-92d2-4a8b-9901-4efba1a3bd36/terra.json",
+            "findings": [
+              "제공된 18개 교정과 원문 인용, 현재 본문을 대조한 범위에서 수정이 필요한 구체적 결함을 발견하지 못했다.",
+              "검토 범위는 W023의 7개 문서와 제공된 검증 근거 및 작업 기록의 일부다. W005 전체 번역과 과거 승인 이력 전체를 독립적으로 확정한 것은 아니다.",
+              "기록에는 라이브러리 검사와 단위 테스트의 종료 코드 0이 있으나 출력 내용은 보존되지 않았다. 이번 검토에서는 테스트를 실행하지 않았다.",
+              "W023 work.json 전체 읽기와 W005 식별자 검색의 출력이 잘려 해당 출력 전체를 확인하지 못했다. 수용 기준과 부모 작업 파일의 첫 부분은 확인했다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/023-선택 라이브러리 잔여 의미 18문구 교정/work.json",
+        "workRecordHash": "195c1ec20c0382c21b7553c97b651bc8f7384170ae2dd86a88827fe1bb60c20c",
+        "sourceDigest"  : "1765de4e9b9a753381a8a6a59f378aba774242246ceb78f8f589fd8c0772d01d",
+        "criteriaDigest": "358fa6cd724163710be764be022872adc138ec48f37a16daad161dae3f62efcd"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-a487a23c-d2a5-4878-a3c7-c64543790f7c",
+      "workId"        : "work-2edb1795-1f7b-4982-a849-e3caa6926426",
+      "title"         : "선택 라이브러리 잔여 의미 18문구 교정",
+      "summary"       : "18문구교정과내용대조자료를회수했으나마지막독립감사가checker시도를의미·부모추적기준에연결한오류를지적해완료를보류했다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-16T23:18:30.845Z",
+      "event"         : "finish",
+      "workRecordHash": "a1ea37d19a74453fd4cd061f4ebb34e0d53c9841013d8d06bd602b06c7249b5a",
+      "sourceDigest"  : "1324abe85268f31cf5dd5f27acb8f7a250b786ee7b7da4e0f5abf9f68c50c06b",
+      "criteriaDigest": "358fa6cd724163710be764be022872adc138ec48f37a16daad161dae3f62efcd",
+      "semanticHash"  : "cb0149021d24b12b0e4702fafe1502c119e6541b55954d94ccefd79639bfd745",
+      "narrative": {
+        "summary": "18문구교정과내용대조자료를회수했으나마지막독립감사가checker시도를의미·부모추적기준에연결한오류를지적해완료를보류했다.",
+        "before" : "134개과거지적의현재판정에서18개실질의미차이가남아있었고7파일의한정교정이필요했다.",
+        "after"  : "고정원문201개와7before전체재적용자료및실제교정은보존했다. actual3PASS후문서표시를교정했고actual4는잘못된기준별검증연결로fail했다. MATERIAL-18/PARENT-TRACE는현재미검증이다.",
+        "changes": [
+          "7기존한국어문서18문구만공식주입Sol저작으로교정하고inventory로컬지문을갱신했다.",
+          "교정전7파일전문과201개고정raw/원문필드전수대조및전체재적용결과를baseline-proof.md에결속했다.",
+          "부모관계·권한불변접수·실제저작영수증·이전not_run을보존했다. 고유3기준의복합검증연결을시도했으나마지막독립감사가그중2기준의연결오류를지적해정정했다."
+        ],
+        "decisions": [
+          "checker자체가의미검사를한다는주장을하지않는다. 실제18patch대조·전체before재적용·고정raw대조와actualTerra내용검토를복합근거로연결했다.",
+          "W005의메뉴미수정과전체번역수용대기는W02318문구완료로복사하지않는다.",
+          "잘못된composite시도를의미PASS로사용하지않고공식입력재설정으로두기준을unverified로되돌렸다."
+        ],
+        "limitations": [
+          "첫감사는review_context_changed/not_run,두번째는app_server_receipt_invalid/not_run이다. 두번째원문안의내용근거부족지적을실제before/raw대조로보완하고마지막한번의검토를실행했다.",
+          "독립검토는7문서·제공증거·작업기록일부에한정하며W005전체/모든과거승인이력을독립확정한것이아니다.",
+          "실제commit/push/게시·전역변경없음.",
+          "actual4 review-4b391d30-fbff-44ab-a3b0-65752557b70a fail: checker명령이실행하지않는MATERIAL-18/PARENT-TRACE의passed근거로연결한오류다. artifactPaths존재나해시보존이내용검증을대신하지않는다.",
+          "전체check-workflow는보존인용링크표시수정후exit0이다. 제품·검사기정책을변경하지않았다."
+        ],
+        "next": [
+          "MATERIAL-18/PARENT-TRACE의실제내용검증을실행하고정식기준에기록할수있는허용경로를확보한뒤현재소스독립감사·저작보고서를다시회수한다.",
+          "기존checker/리뷰/원문자료와실패를보존하며현재업무완료를주장하지않는다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "MATERIAL-18",
+            "description": "고정 원문과 현재 SHA에 결속한 7개 기존 한국어 문서의 18개 실질 의미 차이를 선별 교정하고 다른 본문은 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-bc414df2-1b60-4af5-8c60-4b9b03f0e93d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "LIBRARY-INTEGRITY",
+            "description": "선택 자료 201개와 한국어186·원문15, 원문 해시·크기·고정 출처 및 법문을 유지하고 변경된 로컬 해시·크기만 inventory에 반영한다. 코드 표지 오역 한 건은 원문의 diff 식별자로 복원한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-c56d198d-c2c8-469e-818b-9c0a6504c010",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-22952fe3-4ed7-44b1-8d88-5ddc1288b5ae",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-2ec64f72-02cf-4a8a-907c-3f78d98c9816",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-bc414df2-1b60-4af5-8c60-4b9b03f0e93d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4f1a8d0d-d9fa-4ab7-8c9b-55a9f09d7d29",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9e018c1a-0824-4d5f-98fb-80266f69f213",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "PARENT-TRACE",
+            "description": "기존 W005 UUID와 실제 하위 저작·검증 근거를 관계로 연결하고 과거 실패와 승인 목록을 보존한다. 하위 작업의 PASS나 리뷰를 W005 완료로 복사하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-bc414df2-1b60-4af5-8c60-4b9b03f0e93d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-c56d198d-c2c8-469e-818b-9c0a6504c010",
+            "command": "node",
+            "args": [
+              "scripts/check-skill-library.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:05:37.051Z"
+          },
+          {
+            "id": "attempt-22952fe3-4ed7-44b1-8d88-5ddc1288b5ae",
+            "command": "node",
+            "args": [
+              "--test",
+              "test/skill-library.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:06:02.426Z"
+          },
+          {
+            "id": "attempt-2ec64f72-02cf-4a8a-907c-3f78d98c9816",
+            "command": "node",
+            "args": [
+              "scripts/check-skill-library.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:13:14.372Z"
+          },
+          {
+            "id": "attempt-bc414df2-1b60-4af5-8c60-4b9b03f0e93d",
+            "command": "node",
+            "args": [
+              "scripts/check-skill-library.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:14:58.408Z"
+          },
+          {
+            "id": "attempt-4f1a8d0d-d9fa-4ab7-8c9b-55a9f09d7d29",
+            "command": "node",
+            "args": [
+              "scripts/check-skill-library.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:16:14.411Z"
+          },
+          {
+            "id": "attempt-9e018c1a-0824-4d5f-98fb-80266f69f213",
+            "command": "node",
+            "args": [
+              "scripts/check-skill-library.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:18:09.663Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-eafc0c33-49ed-44eb-9a0f-e8ac5c898d52",
+            "verdict"    : "not_run",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-eafc0c33-49ed-44eb-9a0f-e8ac5c898d52/terra.json",
+            "findings": [
+              "제공된 18개 교정안과 원문 인용, 현재 본문 및 구현 패치를 대조한 범위에서 수정을 요구할 구체적 결함은 발견하지 못했다.",
+              "이번 검토는 W023의 교정과 제공된 근거에 한정한다. W005 전체 번역의 의미 보존이나 모든 비대상 본문의 보존을 독립적으로 확정한 것은 아니다.",
+              "검증 기록에는 checker와 단위 테스트의 종료 코드 0이 남아 있다. 이번 읽기 전용 검토에서는 테스트를 실행하지 않았다.",
+              "work.json과 authoring-result.json을 읽을 때 출력이 잘려 전체 내용을 확인하지 못했다. work.json의 수용 기준과 별도로 읽은 검증 기록은 확인했다."
+            ]
+          },
+          {
+            "id"         : "review-42096861-636d-4794-b5fe-555918961b7a",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-42096861-636d-4794-b5fe-555918961b7a/terra.json",
+            "findings": []
+          },
+          {
+            "id"         : "review-75e58c8a-92d2-4a8b-9901-4efba1a3bd36",
+            "verdict"    : "pass",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-75e58c8a-92d2-4a8b-9901-4efba1a3bd36/terra.json",
+            "findings": [
+              "제공된 18개 교정과 원문 인용, 현재 본문을 대조한 범위에서 수정이 필요한 구체적 결함을 발견하지 못했다.",
+              "검토 범위는 W023의 7개 문서와 제공된 검증 근거 및 작업 기록의 일부다. W005 전체 번역과 과거 승인 이력 전체를 독립적으로 확정한 것은 아니다.",
+              "기록에는 라이브러리 검사와 단위 테스트의 종료 코드 0이 있으나 출력 내용은 보존되지 않았다. 이번 검토에서는 테스트를 실행하지 않았다.",
+              "W023 work.json 전체 읽기와 W005 식별자 검색의 출력이 잘려 해당 출력 전체를 확인하지 못했다. 수용 기준과 부모 작업 파일의 첫 부분은 확인했다."
+            ]
+          },
+          {
+            "id"         : "review-4b391d30-fbff-44ab-a3b0-65752557b70a",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-4b391d30-fbff-44ab-a3b0-65752557b70a/terra.json",
+            "findings": [
+              "docs/work/Workflow/023-선택 라이브러리 잔여 의미 18문구 교정/verification.md:62는 attempt-bc414df2를 MATERIAL-18과 PARENT-TRACE의 통과 근거로 연결하지만, 실제 명령은 scripts/check-skill-library.ts 실행이다. 이 검사기는 18개 교정의 원문 대조·비대상 본문 보존이나 부모 작업의 승인·실패 이력을 검사하지 않는다. work.json에서도 같은 시도를 두 기준의 passed 근거로 제시하므로, 해당 연결을 바로잡고 각 기준에 적용되는 실제 검증 근거를 제시해야 한다.",
+              "검토 범위는 제공된 inputBundle의 W023 교정·원문 인용·검사기·테스트와 별도로 읽은 작업 기록 일부다. W005 전체 번역과 승인 이력 전체는 확인하지 않았다. work.json 읽기 출력은 잘려 전체를 확인하지 못했다.",
+              "기록된 검사기와 단위 테스트의 종료 코드는 0이지만 출력 본문은 보존되지 않았다. 이번 읽기 전용 검토에서는 테스트를 실행하지 않았다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/023-선택 라이브러리 잔여 의미 18문구 교정/work.json",
+        "workRecordHash": "a1ea37d19a74453fd4cd061f4ebb34e0d53c9841013d8d06bd602b06c7249b5a",
+        "sourceDigest"  : "1324abe85268f31cf5dd5f27acb8f7a250b786ee7b7da4e0f5abf9f68c50c06b",
+        "criteriaDigest": "358fa6cd724163710be764be022872adc138ec48f37a16daad161dae3f62efcd"
+      }
+    }
+  ]
+}

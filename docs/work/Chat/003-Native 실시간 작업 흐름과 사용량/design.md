@@ -1,3 +1,18 @@
+# 현재 구조 책임과 과거 설계
+
+현재 구현·검사·검토의 결과와 적용성은 같은 UUID의 [작업 원장](work.json)과 [검증 기록](verification.md)의 최신 공식 read/status로 판단한다. 새 반례 이후의 소스 교정·집중 검증·문서 영향 검토·고유 독립 감사·저작 보고서·완료 판정은 별도 절차이며, 이 문서 작성으로 통과를 선언하지 않는다. 과거 숫자·모델 판정·미실행 설명은 당시 소스의 이력이다.
+
+현재 공개 사건은 native-session→AppEvent/리소스 snapshot→native-activity/activity-sidebar 순수 투영→상세 모니터 DOM으로 흐른다. 기본 Agent 개요는 후속013 요구가 소유하며 Hook 목록을 숨기는 것과 실제 Hook 실행·상세 관측을 구분한다.
+
+Hook handler ID는 호출별 고유 ID가 아니다. sidebar는 turn/startedAt/완료 lifecycle으로 중복과 새 시작을 대조하며, 상세 activity는 같은 thread/turn/handler 항목을 새 시각에서 최신 상태로 갱신한다. 식별정보 없는 반복에서 무제한 호출횟수/타임라인을 보존한다고 쓰지 않는다. renderer는 snapshot과 arrived live를 consumeEvents로 합친다. 이 현행 코드를 새 단위·독립 profile GUI에서 확인할 계획이고 코드 존재만으로 PASS하지 않는다.
+
+설정 모델·관측 전환·계정 quota·total/last 사용량은 서로 다른 근거다. 실제 Native 읽기 표본과 합성/SSR/actual Electron을 분리하고 Windows·OS IME·모델별 비용을 추측하지 않는다. 자세한 여정과 같은 기준 연결은 현재 spec.md다.
+
+## 과거 설계 원문 — 당시 책임/BoxBox/미실행 설명
+
+<details>
+<summary>변경 전 설계 이력</summary>
+
 # Native 실시간 활동 설계
 
 ## 상태와 책임
@@ -21,3 +36,5 @@ thread 설정 모델은 configured, model/rerouted는 해당 턴의 관측 전�
 순수 투영은 재생·중복·지연·잘못된 값·누락된 종료·Skill 근거·Hook 귀속·비공개 텍스트 배제·누적 차분·quota merge를 합성 테스트로 확인한다. 실제 Electron에 합성 Native subprocess를 연결한 왕복과 실제 Native의 제공 필드 표본을 별도 증거로 남긴다. 타입 검사·빌드·기존 회귀 및 독립 검토도 현재 소스에 적용해야 한다.
 
 최종 통합·실제 Native·GUI 검증과 독립 감사는 이 문서 작성 시점에 완료로 판정하지 않았다. 확인되지 않은 플랫폼·비동기 Hook·모델별 과금은 미검증 또는 미제공으로 유지한다. BoxBox 미승인 형태·FIXABLE은 별도 미해결이며 정렬 승인 없이 우회하지 않는다.
+
+</details>

@@ -126,3 +126,20 @@ Opus `review-da4e09f7-b2bd-478c-b2ac-c183f3c80791`는 verify-ecosystem.ts가 AC-
 ## 2026-11-15 최종 현재성 재평가와 부분 반환
 
 별도 세션에서 `docs/specs/ecosystem.md`, `scripts/verify-architecture.ts`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/renderer.tsx`가 검사 도중 다시 바뀌었다. 우리 병렬 작업자의 제품 소스 동결과 실제 전체 워크스페이스의 동결은 달랐다. 통과 영수증은 당시 소스에 묶인 결과로 보존하고 현재 소스 통과로 승격하지 않는다. 공식 resume로 현재 기준·검토·문서 적용성을 재평가했으며 완료를 요청하지 않는다. 추가 유료 검사는 중단했고, 다른 세션 종료 후 현재 소스 재검증 또는 고정 스냅샷 기준의 마감 선택이 남았다. 부분 저작 보고서에 실제 확인 범위·실패·소스 변화·남은 조건을 연결한다.
+
+<a id="attempt-7bfbad2b-6065-4b7c-bc82-893386be9bd8"></a>
+## 검증 시도 — 2026-11-16T23:58:38.439Z
+
+- 시도 ID: `attempt-7bfbad2b-6065-4b7c-bc82-893386be9bd8`
+- 실행 시각: 2026-11-16T23:58:31.554Z ~ 2026-11-16T23:58:38.439Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-ecosystem.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-4`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `build.ts`, `docs/ARCHITECTURE.md`, `docs/CODE_BLUEPRINT.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/design-system.md`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/ecosystem.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/verify-ecosystem.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `test/architecture.test.ts`, `test/ecosystem.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `631ba37e902acfa1edbfa67ee4705ab80a90480583cdc1f59595b521568af6a0`
+- 기준 정의 식별: `c6bf19975fc9cd9096600c89e9f5e4b01e0c4c19ab1dbed9d6dc7b64560c61ff`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 236바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.

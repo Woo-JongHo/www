@@ -1,0 +1,314 @@
+# 검증과 조사 근거
+
+## baseline-20261112
+
+- 저장소: /Users/jonghoPro/woo/00_project/www, main, HEAD 4ef13d29b18188642bf7f7bef6c7d1bb60bfc3c8.
+- 실행: npm run check, 이번 세션 PTY 5483, exit 0.
+- 관측: 소스 정책, 작업 계약, 앱·도구 타입 검사, Bun/Node 테스트, 빌드 통과. Node tests 147, fail 0, skipped 0, todo 0. Bun 테스트도 성공 후 Node 검사와 빌드로 이어졌다.
+- 범위: 오픈소스 도입 전 제품 코드의 기준선. 이후 변경은 이 조사 작업 문서와 목차다. 전체 저장소 검사는 최종 문서 상태를 별도 검사한다.
+- 한계: 이번에 실제 Electron GUI·Native 승인·Windows·IME 실기 또는 후보 앱 실행을 수행하지 않았다.
+
+## source-inspection-20261112
+
+- comparison.md의 고정 SHA 링크를 공식 GitHub 연결 도구로 조회하고 adapter·package·license·실제 컴포넌트 import를 읽었다.
+- AionUi·Cline 조사 전문: .www/scratchpad/chat-skeleton-upstream.md. 주 저자가 전문을 다시 읽고 비교 문서에 반영했다.
+- 목록/README와 실제 코드 존재, 설치·실행, 이식 성공은 별개다. 이 조사에서 마지막 둘은 미실행이다.
+- 현재 코어 소스에서 TODO·test.skip·test.only를 검색했고 검색 결과는 없었다. 이는 모든 저장소 파일의 완성 판정이 아니다.
+- 최초 공식 typed 진입점에 open을 넘긴 호출은 execute:true 누락으로 실패했고, 실제 신규 등록은 문서화된 work.ts의 open으로 수행했다. 앞선 실패는 제품 검사 성공으로 취급하지 않는다.
+- 생성 work.json은 BoxBox 정렬 미준수 경고가 있어 최종 후보에서 직접 검사한다.
+
+## 2026-11-15 마감 재검토 — 과거 조사와 현재 구현 구분
+
+현재 HEAD 92de2389의 제품 기준과 src/renderer.tsx, src/native-chat.ts를 comparison.md의 당시 현황과 대조했다. 현재는 Codex 대화 목록·동일 스레드 재개, Markdown·코드 복사·인용이 구현되어 있으므로 comparison.md의 “목록·영속 저장·읽기·복구 없음”, “Markdown·코드 복사 UI 없음”은 2026-11-12 당시 기준선이며 현재 제품 상태가 아니다. 최신 사용자 정정은 Herdr 같은 완성 앱 중심의 비교를 요구하고, 문서 앞부분은 기존 assistant-ui 우선 권장이 확정안이 아님을 명시한다. 그러나 뒤 결론은 여전히 초기 권장을 사용하므로 현재 권장안의 단일 결론으로 승격할 수 없다.
+
+고정 SHA와 공식 소스·라이선스 링크가 있다는 사실은 확인했다. 이번 패스에서 외부 후보를 설치·실행하거나 새 원격 소스를 조회하지 않았으며 링크 존재만으로 AC-2의 재확인·실제 호환 검증을 통과시키지 않았다. AC-1은 현행 기능표의 재작성·현재 실행 근거 연결, AC-2는 최신 비교 범위의 고정 소스 재확인, AC-3은 사용자 정정을 반영한 일관된 권장안과 후속 선택의 재저작이 남는다. 이전 비교 전문을 덮어쓰지 않고 이 검증 기록으로 시점과 미완료를 구분한다.
+
+
+## resume-20261116-current — 현재 재개 저작과 새 근거
+
+기존 2026-11-12 기준선·2026-11-15 미수정 감사 이력은 위와 history에 보존한다. 위 문구의 “현재 결론 불일치·재저작 남음”은 당시 관측이며 이번 spec/comparison 저작 뒤의 현행 평가로 재사용하지 않는다. 이번 현재 권장안은 Ovis 부분 개작·WWW 핵심 경계 보존이고 assistant-ui 우선안은 이력이다.
+
+- 원시 `.www/comparison-evidence/local-source-manifest.json` 및 과거 묶음은 누락돼 있다. 기존 SHA가 남아 있어도 원문을 복구했다고 쓰지 않는다. 새 자료는 `.www/evidence/resume-20261116/chat008/`에 URL·HTTP 시각·bytes·SHA와 사본을 보존했다.
+- 직접 주요21 소스의 새 선택 digest `ae4e2ff2954265e7b3292bcadcd169ec12838b5d39b56b1d27f8bf4fd8b1e3e3`와 HEAD `a720468172a0ea64cb3b4a8e1de36289144df98d`를 기록했다. 과거21파일과 동일 목록이라고 증명한 것이 아니며 전체 제품 digest가 아니다.
+- 실제 `bun test test/conversations.test.ts test/native-lifecycle.test.ts test/native-session.test.ts test/chat-state.test.ts test/native-chat.test.ts test/projection.test.ts` exit 0. 180 pass/0 fail. 전후 선택 입력 captureSource digest `5bc2790056c4d1b8ac2952ab839ff92c89087bfecf0861aa01281d1d1c6605b8` 동일. 주요21+직접테스트6 선택 지문이며 전이 의존성 전체를 식별했다고 주장하지 않는다. 최종 공식 연결은 src/test/core 전체 입력에서 재실행한다. 합성 stdio 재시작·resume 선행/한 번 전송·해소 ID/token race·snapshot 교체 등을 실행했으며 실계정 전체 기능이나 GUI 수용을 대신하지 않는다. stdout/stderr/process 원문은 focused-tests.*에 있다.
+- comparison에 고정된 공식 URL 45개를 새로 회수했고 전부 HTTP 200이다. AionCore 같은 commit의 LICENSE는 보충 회수로 구별했다. 모든 SHA·bytes·시각은 upstream-fetch-manifest.json/supplemental-license-fetch.json에 있다. LICENSE/manifest/실제 코드의 결합을 읽었으며 외부 앱 설치·실행·이식은 하지 않았다.
+- 현재 Native lifecycle의 재연결 준비·active disconnect 거부·serverRequest/resolved 처리는 소스와 새 집중 검사로 확인했다. 과거 이 공백을 현행 미구현으로 쓰지 않는다. current GUI/Native 실사례와 개별 source 결속 한계는 comparison의 AC-1 절 및 current-execution-reference-manifest.json에 연결했다. 과거 122초대 timeout의 원인을 새로 확정하지 않는다.
+- `.www/evidence/chat-ui-iftrMP/summary.json`: 실제 Electron+합성 Native 246확인, sameNativeThread=true, numeric/string 승인ID 재사용·서버해소·재연결/초안 복구. summary에는 sourceDigest가 없어 현재 전체소스 동일성을 단정하지 않는다.
+- Chat015 observability `.www/evidence/native-activity-UID601/summary.json`: build digest `5225c5af7ccf5c8305293fd26fa3629d2f6009949faab7b5e10b70e87029b583`, 합성 stdio의 실제 main 단계선언·계획없는 Progress·탭격리 등 14확인. 실제 모델 도구선택·하네스 실행 수용은 미측정.
+- 실제 Native 읽기 표본 native-activity-live-nWBNPm과 합성 공개 입력 2개에 실제 판단한 native-report-live-6iULJh는 각 원문의 executor·한계를 보존한다. 하나의 읽기 표본/인사 생략/설계 보고서 저장을 실제 구현·일반 판단품질로 올리지 않는다.
+
+이 절의 새 집중 실행 외 공식 기준 연결·문서 검토·최종 직접 Terra 감사·저작보고서·complete 결과는 해당 실제 action 후 별도 추가한다. 부모가 공유core를 동결하기 전 최종 감사를 시작하지 않는다.
+
+### 연구자료 사전 대조의 명령 결함
+
+공식 원장 연결 전 실제 Node 사전 대조 첫 호출은 Ovis package 선택을 suffix로만 처리해 desktop 0.0.0을 루트 0.5.3과 대조하며 exit1이었다. 고정 commit 뒤의 정확 상대경로로 선택하도록 검사명령을 수정한 뒤 새 실제 호출은 exit0이었다. 제품/외부 원문/비교 주장은 바꾸지 않았다. 원문은 chat008/research-precheck.*와 research-precheck.retry1.*에 각각 보존한다. 이 사전 대조는 공식 기준 판정·독립 의미 감사·제품 호환 검증을 대신하지 않는다.
+
+<a id="attempt-067b5704-76aa-4660-b69d-bb7b20c78fad"></a>
+## 검증 시도 — 2026-11-16T09:48:25.364Z
+
+- 시도 ID: `attempt-067b5704-76aa-4660-b69d-bb7b20c78fad`
+- 실행 시각: 2026-11-16T09:48:22.939Z ~ 2026-11-16T09:48:25.364Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/conversations.test.ts\", \"test/native-lifecycle.test.ts\", \"test/native-session.test.ts\", \"test/chat-state.test.ts\", \"test/native-chat.test.ts\", \"test/projection.test.ts\"];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:16*1024*1024});const base='.www/evidence/resume-20261116/chat008/official-focused-'+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+'\\n');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md`, `package.json`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `4e4366cae8c456d84447cd45b31e9230c6c58f639008f91a3c754c4190fbfe34`
+- 기준 정의 식별: `ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/chat008/local-source-manifest.final.json` (6115바이트, sha256 3c89e22ce5ade08c8eca3dade8931fb7d6d342cea2eb1ce3d44b57d7b18f2f86), `.www/evidence/resume-20261116/chat008/supplemental-license-fetch.json` (611바이트, sha256 dd4a02845721e6b66ae232d8afe6ad06d844bb19a77d99b358fb6cb7f4fc94e1), `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json` (95179바이트, sha256 a3f94d931f5a0f45cca2f67345d1ba8e3967cd01af3a3cd9c8f2d7ff62063194)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 149바이트, stderr 21551바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-d14cd067-76cd-48fa-bdb2-2e74ec11289c"></a>
+## 검증 시도 — 2026-11-16T09:48:26.003Z
+
+- 시도 ID: `attempt-d14cd067-76cd-48fa-bdb2-2e74ec11289c`
+- 실행 시각: 2026-11-16T09:48:25.662Z ~ 2026-11-16T09:48:26.003Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"node\",args=[\"--input-type=module\", \"--eval\", \"import assert from 'node:assert/strict';import{readFile,stat}from'node:fs/promises';import{createHash}from'node:crypto';const base='.www/evidence/resume-20261116/chat008';const hash=b=>createHash('sha256').update(b).digest('hex');const m=JSON.parse(await readFile(base+'/upstream-fetch-manifest.json','utf8'));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&&e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes('/blob/'+e.revision+'/'));assert(e.rawUrl.includes('/'+e.revision+'/'));}const at=async(owner,repo,file)=>{const e=m.entries.find(e=>e.url.includes('github.com/'+owner+'/'+repo+'/blob/')&&e.url.split('/blob/')[1].split('/').slice(1).join('/')===file);assert(e);return readFile(e.path,'utf8');};assert((await at('herdrdev','herdr','Cargo.toml')).includes('portable-pty = \\\"=0.9.0\\\"'));assert((await at('herdrdev','herdr','LICENSE')).includes('Apache License'));assert((await at('herdrdev','herdr-app','Cargo.toml')).includes('gpui-pre'));assert((await at('herdrdev','herdr-app','src/hc.rs')).includes('hc connect'));assert((await at('herdrdev','herdr-app','LICENSE')).includes('Apache License'));const ovis=JSON.parse(await at('devswha','ovis','package.json'));assert.equal(ovis.version,'0.5.3');assert.equal(ovis.dependencies.react,'^19.3.0');assert(ovis.dependencies['@lydell/node-pty']);assert((await at('devswha','ovis','LICENSE')).includes('MIT License'));const daemon=await at('devswha','ovis','server/codex-daemon.ts');assert(daemon.includes('new Set<string>([\\\"initialize\\\", \\\"skills/list\\\"])'));const t3=JSON.parse(await at('pingdotgg','t3code','packages/effect-codex-app-server/package.json'));assert(t3.private&&t3.dependencies.effect);assert((await at('pingdotgg','t3code','docs/internals/overview.md')).includes('one database transaction'));assert((await at('pingdotgg','t3code','LICENSE')).includes('MIT License'));const extra=JSON.parse(await readFile(base+'/supplemental-license-fetch.json','utf8'));const b=await readFile(extra.path);assert(extra.ok&&hash(b)===extra.sha256&&b.length===extra.bytes);assert(b.toString().includes('Apache License'));assert((await at('iOfficeAI','AionCore','Cargo.toml')).includes('license = \\\"MIT\\\"'));const work='docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/';const spec=await readFile(work+'spec.md','utf8');const comparison=await readFile(work+'comparison.md','utf8');const tasks=await readFile(work+'tasks.md','utf8');for(const id of['AC-1','AC-2','AC-3'])assert(spec.includes(id)&&comparison.includes(id));for(const id of['UC-LOCAL','UC-UPSTREAM','UC-DECISION'])assert(spec.includes(id));assert(spec.includes('Ovis에서 필요한 공개 채팅 동작만 개작'));assert(comparison.includes('**Ovis의 필요한 채팅 동작만 개작**'));assert(comparison.includes('외부 앱 호환 PASS가 아니다'));assert(tasks.includes('세 기준은 조사·비교·권장 기록의 수용 기준'));assert(tasks.includes('읽기 전용'));const{spawnSync}=await import('node:child_process');const checked=spawnSync(process.execPath,['scripts/check-workflow.ts'],{encoding:'utf8'});process.stdout.write(checked.stdout??'');process.stderr.write(checked.stderr??'');assert.equal(checked.status,0,'현재 작업 계약 검사 실패');console.log(JSON.stringify({result:'passed',scope:'고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님',fixedOriginals:45,supplemental:1,recommendation:'Ovis 부분 개작·WWW 핵심 경계 보존',unmeasured:['Windows','OS 한국어 IME','외부 앱 실행','신규 제품 이식']}));\"];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:16*1024*1024});const base='.www/evidence/resume-20261116/chat008/official-research-contract-'+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+'\\n');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md`, `package.json`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `4e4366cae8c456d84447cd45b31e9230c6c58f639008f91a3c754c4190fbfe34`
+- 기준 정의 식별: `ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/chat008/local-source-manifest.final.json` (6115바이트, sha256 3c89e22ce5ade08c8eca3dade8931fb7d6d342cea2eb1ce3d44b57d7b18f2f86), `.www/evidence/resume-20261116/chat008/supplemental-license-fetch.json` (611바이트, sha256 dd4a02845721e6b66ae232d8afe6ad06d844bb19a77d99b358fb6cb7f4fc94e1), `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json` (95179바이트, sha256 a3f94d931f5a0f45cca2f67345d1ba8e3967cd01af3a3cd9c8f2d7ff62063194)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 131바이트, stderr 1224바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+### 공식 조사·계약 검증 첫 실패와 보존 형식 수정
+
+공식 `attempt-d14cd067-76cd-48fa-bdb2-2e74ec11289c`는 연구자료 대조 뒤 작업 계약 검사에서 exit1이었다. history/로 옮긴 과거 Markdown의 상대 링크 4건이 새 디렉터리 기준에서 깨졌기 때문이다. 검사기를 완화하지 않고 과거 원문 bytes를 그대로 유지한 `.md.txt` 보존 파일로 이름만 바꿨다. 현재 비교의 보존 경로를 맞췄다. 실패 원문은 chat008/official-research-contract-2cb47f54-a37c-4161-9392-10a002348cc2.stderr이며 과거 attempt/result는 보존한다. 이번 수정 뒤 같은 명령의 새 실행으로 판단한다.
+
+<a id="attempt-f5d3569b-1884-4737-92d0-ba19eaf4f1ae"></a>
+## 검증 시도 — 2026-11-16T09:49:27.571Z
+
+- 시도 ID: `attempt-f5d3569b-1884-4737-92d0-ba19eaf4f1ae`
+- 실행 시각: 2026-11-16T09:49:25.075Z ~ 2026-11-16T09:49:27.571Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/conversations.test.ts\", \"test/native-lifecycle.test.ts\", \"test/native-session.test.ts\", \"test/chat-state.test.ts\", \"test/native-chat.test.ts\", \"test/projection.test.ts\"];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:16*1024*1024});const base='.www/evidence/resume-20261116/chat008/official-focused-'+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+'\\n');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md`, `package.json`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `4c50ed4a2a1c79d859d2094a24b4bd1f2acc18d5714c58b6d1c4e0da87d70c4c`
+- 기준 정의 식별: `ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/chat008/local-source-manifest.final.json` (6115바이트, sha256 3c89e22ce5ade08c8eca3dade8931fb7d6d342cea2eb1ce3d44b57d7b18f2f86), `.www/evidence/resume-20261116/chat008/supplemental-license-fetch.json` (611바이트, sha256 dd4a02845721e6b66ae232d8afe6ad06d844bb19a77d99b358fb6cb7f4fc94e1), `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json` (95179바이트, sha256 a3f94d931f5a0f45cca2f67345d1ba8e3967cd01af3a3cd9c8f2d7ff62063194)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 149바이트, stderr 21561바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-435cc9b2-ecc0-43cb-972c-d108fa6c1d5d"></a>
+## 검증 시도 — 2026-11-16T09:49:28.438Z
+
+- 시도 ID: `attempt-435cc9b2-ecc0-43cb-972c-d108fa6c1d5d`
+- 실행 시각: 2026-11-16T09:49:28.014Z ~ 2026-11-16T09:49:28.438Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"node\",args=[\"--input-type=module\", \"--eval\", \"import assert from 'node:assert/strict';import{readFile,stat}from'node:fs/promises';import{createHash}from'node:crypto';const base='.www/evidence/resume-20261116/chat008';const hash=b=>createHash('sha256').update(b).digest('hex');const m=JSON.parse(await readFile(base+'/upstream-fetch-manifest.json','utf8'));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&&e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes('/blob/'+e.revision+'/'));assert(e.rawUrl.includes('/'+e.revision+'/'));}const at=async(owner,repo,file)=>{const e=m.entries.find(e=>e.url.includes('github.com/'+owner+'/'+repo+'/blob/')&&e.url.split('/blob/')[1].split('/').slice(1).join('/')===file);assert(e);return readFile(e.path,'utf8');};assert((await at('herdrdev','herdr','Cargo.toml')).includes('portable-pty = \\\"=0.9.0\\\"'));assert((await at('herdrdev','herdr','LICENSE')).includes('Apache License'));assert((await at('herdrdev','herdr-app','Cargo.toml')).includes('gpui-pre'));assert((await at('herdrdev','herdr-app','src/hc.rs')).includes('hc connect'));assert((await at('herdrdev','herdr-app','LICENSE')).includes('Apache License'));const ovis=JSON.parse(await at('devswha','ovis','package.json'));assert.equal(ovis.version,'0.5.3');assert.equal(ovis.dependencies.react,'^19.3.0');assert(ovis.dependencies['@lydell/node-pty']);assert((await at('devswha','ovis','LICENSE')).includes('MIT License'));const daemon=await at('devswha','ovis','server/codex-daemon.ts');assert(daemon.includes('new Set<string>([\\\"initialize\\\", \\\"skills/list\\\"])'));const t3=JSON.parse(await at('pingdotgg','t3code','packages/effect-codex-app-server/package.json'));assert(t3.private&&t3.dependencies.effect);assert((await at('pingdotgg','t3code','docs/internals/overview.md')).includes('one database transaction'));assert((await at('pingdotgg','t3code','LICENSE')).includes('MIT License'));const extra=JSON.parse(await readFile(base+'/supplemental-license-fetch.json','utf8'));const b=await readFile(extra.path);assert(extra.ok&&hash(b)===extra.sha256&&b.length===extra.bytes);assert(b.toString().includes('Apache License'));assert((await at('iOfficeAI','AionCore','Cargo.toml')).includes('license = \\\"MIT\\\"'));const work='docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/';const spec=await readFile(work+'spec.md','utf8');const comparison=await readFile(work+'comparison.md','utf8');const tasks=await readFile(work+'tasks.md','utf8');for(const id of['AC-1','AC-2','AC-3'])assert(spec.includes(id)&&comparison.includes(id));for(const id of['UC-LOCAL','UC-UPSTREAM','UC-DECISION'])assert(spec.includes(id));assert(spec.includes('Ovis에서 필요한 공개 채팅 동작만 개작'));assert(comparison.includes('**Ovis의 필요한 채팅 동작만 개작**'));assert(comparison.includes('외부 앱 호환 PASS가 아니다'));assert(tasks.includes('세 기준은 조사·비교·권장 기록의 수용 기준'));assert(tasks.includes('읽기 전용'));const{spawnSync}=await import('node:child_process');const checked=spawnSync(process.execPath,['scripts/check-workflow.ts'],{encoding:'utf8'});process.stdout.write(checked.stdout??'');process.stderr.write(checked.stderr??'');assert.equal(checked.status,0,'현재 작업 계약 검사 실패');console.log(JSON.stringify({result:'passed',scope:'고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님',fixedOriginals:45,supplemental:1,recommendation:'Ovis 부분 개작·WWW 핵심 경계 보존',unmeasured:['Windows','OS 한국어 IME','외부 앱 실행','신규 제품 이식']}));\"];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:16*1024*1024});const base='.www/evidence/resume-20261116/chat008/official-research-contract-'+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+'\\n');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md`, `package.json`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `4c50ed4a2a1c79d859d2094a24b4bd1f2acc18d5714c58b6d1c4e0da87d70c4c`
+- 기준 정의 식별: `ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/chat008/local-source-manifest.final.json` (6115바이트, sha256 3c89e22ce5ade08c8eca3dade8931fb7d6d342cea2eb1ce3d44b57d7b18f2f86), `.www/evidence/resume-20261116/chat008/supplemental-license-fetch.json` (611바이트, sha256 dd4a02845721e6b66ae232d8afe6ad06d844bb19a77d99b358fb6cb7f4fc94e1), `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json` (95179바이트, sha256 a3f94d931f5a0f45cca2f67345d1ba8e3967cd01af3a3cd9c8f2d7ff62063194)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 627바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+### 첫 GO 후 공식 검증과 재동결 대기
+
+문서 보존 형식 수정 뒤 `attempt-f5d3569b-1884-4737-92d0-ba19eaf4f1ae`(AC-1 집중)와 `attempt-435cc9b2-ecc0-43cb-972c-d108fa6c1d5d`(AC-2/3 연구자료·작업계약)는 실제 process exit0·passed·sourceStable=true·recorded=true였다. 앞선 history 링크 실패 attempt는 그대로 남겼다.
+
+이후 부모가 선택 문서의 사후 drift 감지 강화와 합성 activity fixture의 ACK thread scope 교정을 위해 추가 소스 수정을 알렸으므로 최종 직접 Terra 감사는 시작하지 않았다. 위 결과는 해당 source digest의 당시 통과이며 추가 변경 뒤의 전체소스 통과로 옮기지 않는다. 새 GO 뒤 source/기준/artifact/readscope를 다시 결속하고 실제 검증·문서검토·감사를 이어간다. 진행 중 Native ui-only도 성공으로 발명하지 않는다.
+
+## final-go2-20261116 — 최종 검증·감사 입력 확정
+
+부모의 두 번째 최종 GO를 받았다. review.ts의 선택 input snapshot SHA/파일 mode 사후 재검증과 docs/DEVELOPMENT.md 안내가 현재 입력에 포함된다. 주요21파일을 local-source-manifest.go2.json에 새로 식별하며 첫 GO의 원문·실패·통과는 그대로 보존한다.
+
+이 절 뒤 공식 verify가 기록한 실제 source/criteria/artifact/환경의 시도와 문서 검토를 기반으로 같은 UUID의 실제 직접 Terra 감사를 수행한다. 감사 시작 뒤 이 spec/verification 문서를 다시 저작하지 않는다. 최종 감사의 관측모델·process·receipt 수용과 최종보고서/complete/readback은 원장과 해당 실제 원문에서 확인한다. 이 문장 자체는 감사 통과·Native ui-only 성공·업무 완료의 주장이 아니다.
+
+<a id="attempt-75842dfe-d986-47ac-8637-599a2c51fdec"></a>
+## 검증 시도 — 2026-11-16T10:05:36.001Z
+
+- 시도 ID: `attempt-75842dfe-d986-47ac-8637-599a2c51fdec`
+- 실행 시각: 2026-11-16T10:05:33.520Z ~ 2026-11-16T10:05:36.001Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/conversations.test.ts\", \"test/native-lifecycle.test.ts\", \"test/native-session.test.ts\", \"test/chat-state.test.ts\", \"test/native-chat.test.ts\", \"test/projection.test.ts\"];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:16*1024*1024});const base='.www/evidence/resume-20261116/chat008/official-focused-'+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+'\\n');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md`, `package.json`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `5f166a28c58bc4ac5daf5b2f59246b1ecd1cb080f5517ced559519518e33265e`
+- 기준 정의 식별: `ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/chat008/local-source-manifest.go2.json` (5981바이트, sha256 a1d0d2894969dc804130fb28404069805764acd1e5fca8c93bb4676af1ee0cb3), `.www/evidence/resume-20261116/chat008/supplemental-license-fetch.json` (611바이트, sha256 dd4a02845721e6b66ae232d8afe6ad06d844bb19a77d99b358fb6cb7f4fc94e1), `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json` (95179바이트, sha256 a3f94d931f5a0f45cca2f67345d1ba8e3967cd01af3a3cd9c8f2d7ff62063194)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 149바이트, stderr 21563바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-f410df5d-1216-4f55-9fc1-71f1993d1c89"></a>
+## 검증 시도 — 2026-11-16T10:05:36.823Z
+
+- 시도 ID: `attempt-f410df5d-1216-4f55-9fc1-71f1993d1c89`
+- 실행 시각: 2026-11-16T10:05:36.448Z ~ 2026-11-16T10:05:36.823Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"node\",args=[\"--input-type=module\", \"--eval\", \"import assert from 'node:assert/strict';import{readFile,stat}from'node:fs/promises';import{createHash}from'node:crypto';const base='.www/evidence/resume-20261116/chat008';const hash=b=>createHash('sha256').update(b).digest('hex');const m=JSON.parse(await readFile(base+'/upstream-fetch-manifest.json','utf8'));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&&e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes('/blob/'+e.revision+'/'));assert(e.rawUrl.includes('/'+e.revision+'/'));}const at=async(owner,repo,file)=>{const e=m.entries.find(e=>e.url.includes('github.com/'+owner+'/'+repo+'/blob/')&&e.url.split('/blob/')[1].split('/').slice(1).join('/')===file);assert(e);return readFile(e.path,'utf8');};assert((await at('herdrdev','herdr','Cargo.toml')).includes('portable-pty = \\\"=0.9.0\\\"'));assert((await at('herdrdev','herdr','LICENSE')).includes('Apache License'));assert((await at('herdrdev','herdr-app','Cargo.toml')).includes('gpui-pre'));assert((await at('herdrdev','herdr-app','src/hc.rs')).includes('hc connect'));assert((await at('herdrdev','herdr-app','LICENSE')).includes('Apache License'));const ovis=JSON.parse(await at('devswha','ovis','package.json'));assert.equal(ovis.version,'0.5.3');assert.equal(ovis.dependencies.react,'^19.3.0');assert(ovis.dependencies['@lydell/node-pty']);assert((await at('devswha','ovis','LICENSE')).includes('MIT License'));const daemon=await at('devswha','ovis','server/codex-daemon.ts');assert(daemon.includes('new Set<string>([\\\"initialize\\\", \\\"skills/list\\\"])'));const t3=JSON.parse(await at('pingdotgg','t3code','packages/effect-codex-app-server/package.json'));assert(t3.private&&t3.dependencies.effect);assert((await at('pingdotgg','t3code','docs/internals/overview.md')).includes('one database transaction'));assert((await at('pingdotgg','t3code','LICENSE')).includes('MIT License'));const extra=JSON.parse(await readFile(base+'/supplemental-license-fetch.json','utf8'));const b=await readFile(extra.path);assert(extra.ok&&hash(b)===extra.sha256&&b.length===extra.bytes);assert(b.toString().includes('Apache License'));assert((await at('iOfficeAI','AionCore','Cargo.toml')).includes('license = \\\"MIT\\\"'));const work='docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/';const spec=await readFile(work+'spec.md','utf8');const comparison=await readFile(work+'comparison.md','utf8');const tasks=await readFile(work+'tasks.md','utf8');for(const id of['AC-1','AC-2','AC-3'])assert(spec.includes(id)&&comparison.includes(id));for(const id of['UC-LOCAL','UC-UPSTREAM','UC-DECISION'])assert(spec.includes(id));assert(spec.includes('Ovis에서 필요한 공개 채팅 동작만 개작'));assert(comparison.includes('**Ovis의 필요한 채팅 동작만 개작**'));assert(comparison.includes('외부 앱 호환 PASS가 아니다'));assert(tasks.includes('세 기준은 조사·비교·권장 기록의 수용 기준'));assert(tasks.includes('읽기 전용'));const{spawnSync}=await import('node:child_process');const checked=spawnSync(process.execPath,['scripts/check-workflow.ts'],{encoding:'utf8'});process.stdout.write(checked.stdout??'');process.stderr.write(checked.stderr??'');assert.equal(checked.status,0,'현재 작업 계약 검사 실패');console.log(JSON.stringify({result:'passed',scope:'고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님',fixedOriginals:45,supplemental:1,recommendation:'Ovis 부분 개작·WWW 핵심 경계 보존',unmeasured:['Windows','OS 한국어 IME','외부 앱 실행','신규 제품 이식']}));\"];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:16*1024*1024});const base='.www/evidence/resume-20261116/chat008/official-research-contract-'+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+'\\n');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md`, `package.json`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `5f166a28c58bc4ac5daf5b2f59246b1ecd1cb080f5517ced559519518e33265e`
+- 기준 정의 식별: `ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/chat008/local-source-manifest.go2.json` (5981바이트, sha256 a1d0d2894969dc804130fb28404069805764acd1e5fca8c93bb4676af1ee0cb3), `.www/evidence/resume-20261116/chat008/supplemental-license-fetch.json` (611바이트, sha256 dd4a02845721e6b66ae232d8afe6ad06d844bb19a77d99b358fb6cb7f4fc94e1), `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json` (95179바이트, sha256 a3f94d931f5a0f45cca2f67345d1ba8e3967cd01af3a3cd9c8f2d7ff62063194)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 627바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+### 최종 재확정 GO와 Native015 원문 회수
+
+부모의 최종 묶음 attempt-001c7bf4-ef68-4108-bb0b-8b1a01c4ae23을 실제 읽었다. UI 전용20/관측14/unit159가 통과했고 공식source digest 637a5bdb51c87f17fa18c1bb315444751729b0c4bd7e9ff834162fc853c5aee3에서 sourceStable=true다. UI-only의 전체타입검사 not_run, Electron+합성Native scope, 실제모델·실계정·Windows/OS IME 미검증을 보존한다. 원문4개를 chat008/parent-final-native015/로 SHA 동일 사본 회수했으며 manifest에 실제 원본 경로·bytes·SHA를 기록했다.
+
+현재 주요21자료는 local-source-manifest.go3.json에 재수집했다. 이 문서에 뒤따르는 공식검증 기록까지 입력을 확정하고, 실제 Terra 감사 시작 뒤 spec/verification은 수정하지 않는다. 최종수용과 nextAction은 감사/보고서/완료의 실제 원장·readback을 따른다.
+
+<a id="attempt-65b4dc98-2af5-4e0c-82f4-6613d1500629"></a>
+## 검증 시도 — 2026-11-16T10:08:47.665Z
+
+- 시도 ID: `attempt-65b4dc98-2af5-4e0c-82f4-6613d1500629`
+- 실행 시각: 2026-11-16T10:08:45.180Z ~ 2026-11-16T10:08:47.665Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/conversations.test.ts\", \"test/native-lifecycle.test.ts\", \"test/native-session.test.ts\", \"test/chat-state.test.ts\", \"test/native-chat.test.ts\", \"test/projection.test.ts\"];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:16*1024*1024});const base='.www/evidence/resume-20261116/chat008/official-focused-'+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+'\\n');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md`, `package.json`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `123a9a15ccd5c703f28a3fd4288589fd3318e9e23fa4a2e6dac3572841dfb23c`
+- 기준 정의 식별: `ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/chat008/local-source-manifest.go3.json` (5452바이트, sha256 66d681dbda6d9936b3eeaf86d7ec459ffa7ddf76f8bd81a76c27c225ed95b880), `.www/evidence/resume-20261116/chat008/parent-final-native015-manifest.json` (1511바이트, sha256 f07905173655edf297bc4e4a5eedafb4640d5b60bb34bdbf0067b8d917ed2922), `.www/evidence/resume-20261116/chat008/supplemental-license-fetch.json` (611바이트, sha256 dd4a02845721e6b66ae232d8afe6ad06d844bb19a77d99b358fb6cb7f4fc94e1), `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json` (95179바이트, sha256 a3f94d931f5a0f45cca2f67345d1ba8e3967cd01af3a3cd9c8f2d7ff62063194)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 149바이트, stderr 21578바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-edc9d536-33f3-4b25-8f59-6129c44fad32"></a>
+## 검증 시도 — 2026-11-16T10:08:48.529Z
+
+- 시도 ID: `attempt-edc9d536-33f3-4b25-8f59-6129c44fad32`
+- 실행 시각: 2026-11-16T10:08:48.142Z ~ 2026-11-16T10:08:48.529Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"node\",args=[\"--input-type=module\", \"--eval\", \"import assert from 'node:assert/strict';import{readFile,stat}from'node:fs/promises';import{createHash}from'node:crypto';const base='.www/evidence/resume-20261116/chat008';const hash=b=>createHash('sha256').update(b).digest('hex');const m=JSON.parse(await readFile(base+'/upstream-fetch-manifest.json','utf8'));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&&e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes('/blob/'+e.revision+'/'));assert(e.rawUrl.includes('/'+e.revision+'/'));}const at=async(owner,repo,file)=>{const e=m.entries.find(e=>e.url.includes('github.com/'+owner+'/'+repo+'/blob/')&&e.url.split('/blob/')[1].split('/').slice(1).join('/')===file);assert(e);return readFile(e.path,'utf8');};assert((await at('herdrdev','herdr','Cargo.toml')).includes('portable-pty = \\\"=0.9.0\\\"'));assert((await at('herdrdev','herdr','LICENSE')).includes('Apache License'));assert((await at('herdrdev','herdr-app','Cargo.toml')).includes('gpui-pre'));assert((await at('herdrdev','herdr-app','src/hc.rs')).includes('hc connect'));assert((await at('herdrdev','herdr-app','LICENSE')).includes('Apache License'));const ovis=JSON.parse(await at('devswha','ovis','package.json'));assert.equal(ovis.version,'0.5.3');assert.equal(ovis.dependencies.react,'^19.3.0');assert(ovis.dependencies['@lydell/node-pty']);assert((await at('devswha','ovis','LICENSE')).includes('MIT License'));const daemon=await at('devswha','ovis','server/codex-daemon.ts');assert(daemon.includes('new Set<string>([\\\"initialize\\\", \\\"skills/list\\\"])'));const t3=JSON.parse(await at('pingdotgg','t3code','packages/effect-codex-app-server/package.json'));assert(t3.private&&t3.dependencies.effect);assert((await at('pingdotgg','t3code','docs/internals/overview.md')).includes('one database transaction'));assert((await at('pingdotgg','t3code','LICENSE')).includes('MIT License'));const extra=JSON.parse(await readFile(base+'/supplemental-license-fetch.json','utf8'));const b=await readFile(extra.path);assert(extra.ok&&hash(b)===extra.sha256&&b.length===extra.bytes);assert(b.toString().includes('Apache License'));assert((await at('iOfficeAI','AionCore','Cargo.toml')).includes('license = \\\"MIT\\\"'));const work='docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/';const spec=await readFile(work+'spec.md','utf8');const comparison=await readFile(work+'comparison.md','utf8');const tasks=await readFile(work+'tasks.md','utf8');for(const id of['AC-1','AC-2','AC-3'])assert(spec.includes(id)&&comparison.includes(id));for(const id of['UC-LOCAL','UC-UPSTREAM','UC-DECISION'])assert(spec.includes(id));assert(spec.includes('Ovis에서 필요한 공개 채팅 동작만 개작'));assert(comparison.includes('**Ovis의 필요한 채팅 동작만 개작**'));assert(comparison.includes('외부 앱 호환 PASS가 아니다'));assert(tasks.includes('세 기준은 조사·비교·권장 기록의 수용 기준'));assert(tasks.includes('읽기 전용'));const{spawnSync}=await import('node:child_process');const checked=spawnSync(process.execPath,['scripts/check-workflow.ts'],{encoding:'utf8'});process.stdout.write(checked.stdout??'');process.stderr.write(checked.stderr??'');assert.equal(checked.status,0,'현재 작업 계약 검사 실패');console.log(JSON.stringify({result:'passed',scope:'고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님',fixedOriginals:45,supplemental:1,recommendation:'Ovis 부분 개작·WWW 핵심 경계 보존',unmeasured:['Windows','OS 한국어 IME','외부 앱 실행','신규 제품 이식']}));\"];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:16*1024*1024});const base='.www/evidence/resume-20261116/chat008/official-research-contract-'+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+'\\n');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md`, `package.json`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `123a9a15ccd5c703f28a3fd4288589fd3318e9e23fa4a2e6dac3572841dfb23c`
+- 기준 정의 식별: `ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/chat008/local-source-manifest.go3.json` (5452바이트, sha256 66d681dbda6d9936b3eeaf86d7ec459ffa7ddf76f8bd81a76c27c225ed95b880), `.www/evidence/resume-20261116/chat008/parent-final-native015-manifest.json` (1511바이트, sha256 f07905173655edf297bc4e4a5eedafb4640d5b60bb34bdbf0067b8d917ed2922), `.www/evidence/resume-20261116/chat008/supplemental-license-fetch.json` (611바이트, sha256 dd4a02845721e6b66ae232d8afe6ad06d844bb19a77d99b358fb6cb7f4fc94e1), `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json` (95179바이트, sha256 a3f94d931f5a0f45cca2f67345d1ba8e3967cd01af3a3cd9c8f2d7ff62063194)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 627바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+## terra-findings-correction-20261116 — 첫 실제 감사 fail의 정확성 수정
+
+`review-add46944-20d0-4fdb-a249-229b176c1938`은 actual process, 요청/관측 gpt-6.1-terra, verdict=fail이다. canonical terra.json과 chat008/audit-result.json은 수정하지 않는다. 지적은 자동 재연결 중 snapshot에 없는 marker 이전 live 사건 유실 경계(native-session.ts:827/chat-state.ts:171-175)와 sameWorkspace의 Windows 드라이브/UNC 거부(conversations.ts:56-57)다. 해당 소스를 다시 읽었으며 새 복합 제품 재현·Windows 실기를 수행한 것은 아니다.
+
+부모가 “비교/선택 작업이므로 제품 구현 없이 현재 소스의 실제 제한을 명확히 반영해 재검증·재감사”하도록 명시했다. 이에 이전 동결 네 문서를 history/before-terra-findings-correction-20261116-*.md.txt로 bytes 보존한 뒤 spec/comparison/tasks/verification의 현재 설명·후속 개선 경계를 교정했다. 과거 실패를 지우거나 수용 기준을 바꾸지 않는다. 첫 감사 뒤 동결 지침의 이 후속 명시 저작 권한을 구분하며, 새 재감사 시작 뒤에는 네 문서를 다시 쓰지 않는다. 공식 재검증의 새 source/criteria/artifact와 새 직접 Terra 결과로만 최종 수용을 판단한다.
+
+<a id="attempt-0385abc4-d975-4f29-83af-13b45df65744"></a>
+## 검증 시도 — 2026-11-16T10:15:03.324Z
+
+- 시도 ID: `attempt-0385abc4-d975-4f29-83af-13b45df65744`
+- 실행 시각: 2026-11-16T10:15:00.429Z ~ 2026-11-16T10:15:03.324Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/conversations.test.ts\", \"test/native-lifecycle.test.ts\", \"test/native-session.test.ts\", \"test/chat-state.test.ts\", \"test/native-chat.test.ts\", \"test/projection.test.ts\"];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:16*1024*1024});const base='.www/evidence/resume-20261116/chat008/official-focused-'+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+'\\n');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md`, `package.json`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `77b92788876b91ba674e5790f6ba423c623dfcb815b5d94e262c83229298ca37`
+- 기준 정의 식별: `ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/chat008/local-source-manifest.go3.json` (5452바이트, sha256 66d681dbda6d9936b3eeaf86d7ec459ffa7ddf76f8bd81a76c27c225ed95b880), `.www/evidence/resume-20261116/chat008/parent-final-native015-manifest.json` (1511바이트, sha256 f07905173655edf297bc4e4a5eedafb4640d5b60bb34bdbf0067b8d917ed2922), `.www/evidence/resume-20261116/chat008/supplemental-license-fetch.json` (611바이트, sha256 dd4a02845721e6b66ae232d8afe6ad06d844bb19a77d99b358fb6cb7f4fc94e1), `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json` (95179바이트, sha256 a3f94d931f5a0f45cca2f67345d1ba8e3967cd01af3a3cd9c8f2d7ff62063194)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 149바이트, stderr 21563바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-a8fe8791-17bb-4168-9aca-8a1549e541a4"></a>
+## 검증 시도 — 2026-11-16T10:15:04.289Z
+
+- 시도 ID: `attempt-a8fe8791-17bb-4168-9aca-8a1549e541a4`
+- 실행 시각: 2026-11-16T10:15:03.812Z ~ 2026-11-16T10:15:04.289Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"node\",args=[\"--input-type=module\", \"--eval\", \"import assert from 'node:assert/strict';import{readFile,stat}from'node:fs/promises';import{createHash}from'node:crypto';const base='.www/evidence/resume-20261116/chat008';const hash=b=>createHash('sha256').update(b).digest('hex');const m=JSON.parse(await readFile(base+'/upstream-fetch-manifest.json','utf8'));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&&e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes('/blob/'+e.revision+'/'));assert(e.rawUrl.includes('/'+e.revision+'/'));}const at=async(owner,repo,file)=>{const e=m.entries.find(e=>e.url.includes('github.com/'+owner+'/'+repo+'/blob/')&&e.url.split('/blob/')[1].split('/').slice(1).join('/')===file);assert(e);return readFile(e.path,'utf8');};assert((await at('herdrdev','herdr','Cargo.toml')).includes('portable-pty = \\\"=0.9.0\\\"'));assert((await at('herdrdev','herdr','LICENSE')).includes('Apache License'));assert((await at('herdrdev','herdr-app','Cargo.toml')).includes('gpui-pre'));assert((await at('herdrdev','herdr-app','src/hc.rs')).includes('hc connect'));assert((await at('herdrdev','herdr-app','LICENSE')).includes('Apache License'));const ovis=JSON.parse(await at('devswha','ovis','package.json'));assert.equal(ovis.version,'0.5.3');assert.equal(ovis.dependencies.react,'^19.3.0');assert(ovis.dependencies['@lydell/node-pty']);assert((await at('devswha','ovis','LICENSE')).includes('MIT License'));const daemon=await at('devswha','ovis','server/codex-daemon.ts');assert(daemon.includes('new Set<string>([\\\"initialize\\\", \\\"skills/list\\\"])'));const t3=JSON.parse(await at('pingdotgg','t3code','packages/effect-codex-app-server/package.json'));assert(t3.private&&t3.dependencies.effect);assert((await at('pingdotgg','t3code','docs/internals/overview.md')).includes('one database transaction'));assert((await at('pingdotgg','t3code','LICENSE')).includes('MIT License'));const extra=JSON.parse(await readFile(base+'/supplemental-license-fetch.json','utf8'));const b=await readFile(extra.path);assert(extra.ok&&hash(b)===extra.sha256&&b.length===extra.bytes);assert(b.toString().includes('Apache License'));assert((await at('iOfficeAI','AionCore','Cargo.toml')).includes('license = \\\"MIT\\\"'));const work='docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/';const spec=await readFile(work+'spec.md','utf8');const comparison=await readFile(work+'comparison.md','utf8');const tasks=await readFile(work+'tasks.md','utf8');for(const id of['AC-1','AC-2','AC-3'])assert(spec.includes(id)&&comparison.includes(id));for(const id of['UC-LOCAL','UC-UPSTREAM','UC-DECISION'])assert(spec.includes(id));assert(spec.includes('Ovis에서 필요한 공개 채팅 동작만 개작'));assert(comparison.includes('**Ovis의 필요한 채팅 동작만 개작**'));assert(comparison.includes('외부 앱 호환 PASS가 아니다'));assert(tasks.includes('세 기준은 조사·비교·권장 기록의 수용 기준'));assert(tasks.includes('읽기 전용'));const{spawnSync}=await import('node:child_process');const checked=spawnSync(process.execPath,['scripts/check-workflow.ts'],{encoding:'utf8'});process.stdout.write(checked.stdout??'');process.stderr.write(checked.stderr??'');assert.equal(checked.status,0,'현재 작업 계약 검사 실패');console.log(JSON.stringify({result:'passed',scope:'고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님',fixedOriginals:45,supplemental:1,recommendation:'Ovis 부분 개작·WWW 핵심 경계 보존',unmeasured:['Windows','OS 한국어 IME','외부 앱 실행','신규 제품 이식']}));\"];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:16*1024*1024});const base='.www/evidence/resume-20261116/chat008/official-research-contract-'+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+'\\n');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md`, `package.json`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `77b92788876b91ba674e5790f6ba423c623dfcb815b5d94e262c83229298ca37`
+- 기준 정의 식별: `ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/chat008/local-source-manifest.go3.json` (5452바이트, sha256 66d681dbda6d9936b3eeaf86d7ec459ffa7ddf76f8bd81a76c27c225ed95b880), `.www/evidence/resume-20261116/chat008/parent-final-native015-manifest.json` (1511바이트, sha256 f07905173655edf297bc4e4a5eedafb4640d5b60bb34bdbf0067b8d917ed2922), `.www/evidence/resume-20261116/chat008/supplemental-license-fetch.json` (611바이트, sha256 dd4a02845721e6b66ae232d8afe6ad06d844bb19a77d99b358fb6cb7f4fc94e1), `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json` (95179바이트, sha256 a3f94d931f5a0f45cca2f67345d1ba8e3967cd01af3a3cd9c8f2d7ff62063194)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 627바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+## second-terra-currentness-correction-20261116
+
+두 번째 actual Terra review-fec624cb-8a00-4891-bb8c-9dc1d4ef86c6도 fail이었다. 공유 ARCHITECTURE의 자동 재연결 설명을 root 소유자가 정확히 교정했고 이를 직접 읽었다. 두 번째 지적인 과거 evidence.summary의 “현재 적용 가능”은 저장 당시 공식 요약이므로 부모 지시에 따라 수동 재서술하지 않는다. attempt/결과/source/과거 reviews를 그대로 보존한다.
+
+대신 실제 공식 evaluateEvidence와 assessWork를 호출해 네 과거 passed 시도의 현재 usable=false/source_changed를 확인했다. 원문 evidence-history-currentness.process.json/stdout/stderr 및 JSON에 시각·당시 source·측정시점 source·저장 summary를 함께 보존했다. comparison에 실제 digest/ID/측정시각과 현재성 판정 책임을 설명했다. summary 문구가 현재 계산을 override하지 않으며 최종 현재 상태는 새 공식 verify/status로 판단한다. 과거 요약을 보존한 이유와 실제 반증을 남기는 것이며 사용자 행동의 미검증을 현재 PASS로 선언하지 않는다.
+
+이 교정 뒤 새 source로 공식 재검증·문서 검토·새 직접 Terra 감사에 연결한다. 원장 기준 정의는 바꾸지 않았고 제품 구현은 하지 않았다. 새 감사 입력을 확정한 뒤에는 추가 문서 저작을 하지 않는다.
+
+<a id="attempt-7dfafeb0-55f2-435c-ac69-bbe9dcdf056a"></a>
+## 검증 시도 — 2026-11-16T10:20:37.428Z
+
+- 시도 ID: `attempt-7dfafeb0-55f2-435c-ac69-bbe9dcdf056a`
+- 실행 시각: 2026-11-16T10:20:34.268Z ~ 2026-11-16T10:20:37.428Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/conversations.test.ts\", \"test/native-lifecycle.test.ts\", \"test/native-session.test.ts\", \"test/chat-state.test.ts\", \"test/native-chat.test.ts\", \"test/projection.test.ts\"];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:16*1024*1024});const base='.www/evidence/resume-20261116/chat008/official-focused-'+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+'\\n');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md`, `package.json`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `000ced036c3897abf0dae1d03fe20cb84c6b49d8cb2ba993d2461d9a70f001f5`
+- 기준 정의 식별: `ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/chat008/evidence-history-currentness.json` (2765바이트, sha256 e668e17835f0f348b37cc651a6d9d97a8f88d075325483db72e286634eb2673e), `.www/evidence/resume-20261116/chat008/local-source-manifest.go3.json` (5452바이트, sha256 66d681dbda6d9936b3eeaf86d7ec459ffa7ddf76f8bd81a76c27c225ed95b880), `.www/evidence/resume-20261116/chat008/parent-final-native015-manifest.json` (1511바이트, sha256 f07905173655edf297bc4e4a5eedafb4640d5b60bb34bdbf0067b8d917ed2922), `.www/evidence/resume-20261116/chat008/supplemental-license-fetch.json` (611바이트, sha256 dd4a02845721e6b66ae232d8afe6ad06d844bb19a77d99b358fb6cb7f4fc94e1), `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json` (95179바이트, sha256 a3f94d931f5a0f45cca2f67345d1ba8e3967cd01af3a3cd9c8f2d7ff62063194)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 149바이트, stderr 21699바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-d490dce7-5aed-43c4-add0-dec8297c976f"></a>
+## 검증 시도 — 2026-11-16T10:20:38.515Z
+
+- 시도 ID: `attempt-d490dce7-5aed-43c4-add0-dec8297c976f`
+- 실행 시각: 2026-11-16T10:20:38.005Z ~ 2026-11-16T10:20:38.515Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"node\",args=[\"--input-type=module\", \"--eval\", \"import assert from 'node:assert/strict';import{readFile,stat}from'node:fs/promises';import{createHash}from'node:crypto';const base='.www/evidence/resume-20261116/chat008';const hash=b=>createHash('sha256').update(b).digest('hex');const m=JSON.parse(await readFile(base+'/upstream-fetch-manifest.json','utf8'));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&&e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes('/blob/'+e.revision+'/'));assert(e.rawUrl.includes('/'+e.revision+'/'));}const at=async(owner,repo,file)=>{const e=m.entries.find(e=>e.url.includes('github.com/'+owner+'/'+repo+'/blob/')&&e.url.split('/blob/')[1].split('/').slice(1).join('/')===file);assert(e);return readFile(e.path,'utf8');};assert((await at('herdrdev','herdr','Cargo.toml')).includes('portable-pty = \\\"=0.9.0\\\"'));assert((await at('herdrdev','herdr','LICENSE')).includes('Apache License'));assert((await at('herdrdev','herdr-app','Cargo.toml')).includes('gpui-pre'));assert((await at('herdrdev','herdr-app','src/hc.rs')).includes('hc connect'));assert((await at('herdrdev','herdr-app','LICENSE')).includes('Apache License'));const ovis=JSON.parse(await at('devswha','ovis','package.json'));assert.equal(ovis.version,'0.5.3');assert.equal(ovis.dependencies.react,'^19.3.0');assert(ovis.dependencies['@lydell/node-pty']);assert((await at('devswha','ovis','LICENSE')).includes('MIT License'));const daemon=await at('devswha','ovis','server/codex-daemon.ts');assert(daemon.includes('new Set<string>([\\\"initialize\\\", \\\"skills/list\\\"])'));const t3=JSON.parse(await at('pingdotgg','t3code','packages/effect-codex-app-server/package.json'));assert(t3.private&&t3.dependencies.effect);assert((await at('pingdotgg','t3code','docs/internals/overview.md')).includes('one database transaction'));assert((await at('pingdotgg','t3code','LICENSE')).includes('MIT License'));const extra=JSON.parse(await readFile(base+'/supplemental-license-fetch.json','utf8'));const b=await readFile(extra.path);assert(extra.ok&&hash(b)===extra.sha256&&b.length===extra.bytes);assert(b.toString().includes('Apache License'));assert((await at('iOfficeAI','AionCore','Cargo.toml')).includes('license = \\\"MIT\\\"'));const work='docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/';const spec=await readFile(work+'spec.md','utf8');const comparison=await readFile(work+'comparison.md','utf8');const tasks=await readFile(work+'tasks.md','utf8');for(const id of['AC-1','AC-2','AC-3'])assert(spec.includes(id)&&comparison.includes(id));for(const id of['UC-LOCAL','UC-UPSTREAM','UC-DECISION'])assert(spec.includes(id));assert(spec.includes('Ovis에서 필요한 공개 채팅 동작만 개작'));assert(comparison.includes('**Ovis의 필요한 채팅 동작만 개작**'));assert(comparison.includes('외부 앱 호환 PASS가 아니다'));assert(tasks.includes('세 기준은 조사·비교·권장 기록의 수용 기준'));assert(tasks.includes('읽기 전용'));const{spawnSync}=await import('node:child_process');const checked=spawnSync(process.execPath,['scripts/check-workflow.ts'],{encoding:'utf8'});process.stdout.write(checked.stdout??'');process.stderr.write(checked.stderr??'');assert.equal(checked.status,0,'현재 작업 계약 검사 실패');console.log(JSON.stringify({result:'passed',scope:'고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님',fixedOriginals:45,supplemental:1,recommendation:'Ovis 부분 개작·WWW 핵심 경계 보존',unmeasured:['Windows','OS 한국어 IME','외부 앱 실행','신규 제품 이식']}));\"];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:16*1024*1024});const base='.www/evidence/resume-20261116/chat008/official-research-contract-'+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+'\\n');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `agents/www/review-policy.json`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md`, `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/tasks.md`, `package.json`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `000ced036c3897abf0dae1d03fe20cb84c6b49d8cb2ba993d2461d9a70f001f5`
+- 기준 정의 식별: `ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/resume-20261116/chat008/evidence-history-currentness.json` (2765바이트, sha256 e668e17835f0f348b37cc651a6d9d97a8f88d075325483db72e286634eb2673e), `.www/evidence/resume-20261116/chat008/local-source-manifest.go3.json` (5452바이트, sha256 66d681dbda6d9936b3eeaf86d7ec459ffa7ddf76f8bd81a76c27c225ed95b880), `.www/evidence/resume-20261116/chat008/parent-final-native015-manifest.json` (1511바이트, sha256 f07905173655edf297bc4e4a5eedafb4640d5b60bb34bdbf0067b8d917ed2922), `.www/evidence/resume-20261116/chat008/supplemental-license-fetch.json` (611바이트, sha256 dd4a02845721e6b66ae232d8afe6ad06d844bb19a77d99b358fb6cb7f4fc94e1), `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json` (95179바이트, sha256 a3f94d931f5a0f45cca2f67345d1ba8e3967cd01af3a3cd9c8f2d7ff62063194)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 627바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+

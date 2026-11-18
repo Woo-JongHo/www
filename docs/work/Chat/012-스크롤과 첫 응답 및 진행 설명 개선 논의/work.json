@@ -9,7 +9,7 @@
   ],
   "owner"        : "ui",
   "status"       : "verifying",
-  "blockedReason": "verification_failed",
+  "blockedReason": null,
   "relations": [
     {
       "type": "relates_to",
@@ -29,7 +29,7 @@
       "id"         : "AC-1",
       "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
       "required"   : true,
-      "result"     : "failed",
+      "result"     : "unverified",
       "evidence": [
         {
           "attemptId": "attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
@@ -67,14 +67,14 @@
       "id"         : "AC-2",
       "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
       "required"   : true,
-      "result"     : "blocked",
+      "result"     : "unverified",
       "evidence": []
     },
     {
       "id"         : "AC-3",
       "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
       "required"   : true,
-      "result"     : "failed",
+      "result"     : "unverified",
       "evidence": [
         {
           "attemptId": "attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
@@ -112,7 +112,7 @@
       "id"         : "AC-4",
       "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
       "required"   : true,
-      "result"     : "failed",
+      "result"     : "unverified",
       "evidence": [
         {
           "attemptId": "attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
@@ -149,8 +149,8 @@
   ],
   "workflow": {
     "role"       : "www-dev",
-    "requestId"  : "chat-implementation-012-20261116",
-    "requestHash": "bee623549f8b762b643ce8253a9a444585bc6004c78049bbb9aa609c3409ae44",
+    "requestId"  : "resume-20261116-root-current-work-632e43ce-dcb8-4726-ad34-8fe85034b6fd",
+    "requestHash": "c5609139546e3d12e2ca7c96e4eccf31024638e50958cad9319fbfc11bb281f7",
     "authorization": {
       "implementation": true,
       "writePaths": [
@@ -192,20 +192,31 @@
       "commit"     : false,
       "publish"    : false,
       "source"     : "direct_user_request",
-      "requestHash": "bee623549f8b762b643ce8253a9a444585bc6004c78049bbb9aa609c3409ae44"
+      "requestHash": "c5609139546e3d12e2ca7c96e4eccf31024638e50958cad9319fbfc11bb281f7"
     },
     "inputs": [
+      "build.ts",
+      "docs/architecture",
+      "docs/specs",
       "docs/specs/chat.md",
       "docs/specs/dashboard.md",
+      "package-lock.json",
+      "package.json",
+      "scripts",
       "scripts/verify-chat.ts",
+      "source-policy.json",
+      "spikes/tauri/scripts",
       "src",
+      "test",
       "test/chat-state.test.ts",
       "test/command-preview.test.ts",
       "test/fixtures/chat-ui-app-server.ts",
       "test/native-lifecycle.test.ts",
-      "test/native-timing.test.ts"
+      "test/native-timing.test.ts",
+      "tsconfig.json",
+      "tsconfig.tools.json"
     ],
-    "nextAction": "build",
+    "nextAction": "verify",
     "verifications": [
       {
         "id"         : "attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",

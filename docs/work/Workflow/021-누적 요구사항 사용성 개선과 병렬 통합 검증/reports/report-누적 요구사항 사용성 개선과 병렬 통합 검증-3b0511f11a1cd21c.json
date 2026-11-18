@@ -1,0 +1,3424 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+  "title"        : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-438eaa14-7cff-4660-b704-28eeeeda48c3",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T06:38:07.170Z",
+      "event"         : "build",
+      "workRecordHash": "0de3698ac48022a7d5bb5f36f5a64ae544ad72f97e806d158c6400e97660129a",
+      "sourceDigest"  : "0d3c77144962ae7585f02b3397dd29fd619dae4f0ce7a2e57a8b64805fd06dc7",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "b9d1193f2d7ae48dd585b576c53889ee37709ca25bc3b706da43dfd34a805158",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "0de3698ac48022a7d5bb5f36f5a64ae544ad72f97e806d158c6400e97660129a",
+        "sourceDigest"  : "0d3c77144962ae7585f02b3397dd29fd619dae4f0ce7a2e57a8b64805fd06dc7",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-b5d56d12-5c7e-41cf-b25b-9d35da03e42d",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T06:40:12.424Z",
+      "event"         : "build",
+      "workRecordHash": "fdf58a3d74acb4d54b3942a7084898e34426bce677bcff0c20ddbaf154fc31bb",
+      "sourceDigest"  : "a2343717fb0948fe61d230a0f63be220428af95ca65fbe622160b781391226dc",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "5376829b2b08d9a1b3e71c872214bfef455fd3fe69e25971a399ba9ef82320de",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "fdf58a3d74acb4d54b3942a7084898e34426bce677bcff0c20ddbaf154fc31bb",
+        "sourceDigest"  : "a2343717fb0948fe61d230a0f63be220428af95ca65fbe622160b781391226dc",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-7821e9bc-62c0-4f97-b2d9-71d0b6ead703",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T06:41:52.171Z",
+      "event"         : "build",
+      "workRecordHash": "913e407b2067b56d9f88dc4a2cd6608659fa331210d4faac33a44582d99cbb7a",
+      "sourceDigest"  : "5f51e6b4710a727eb921d21c44e72668e32d9539ff0fde9c76f50caab438fb20",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "7777b6b6b794c5b2e9bb9c1824e1747d20238193dc5291f7d5706e9f1d09a71e",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "913e407b2067b56d9f88dc4a2cd6608659fa331210d4faac33a44582d99cbb7a",
+        "sourceDigest"  : "5f51e6b4710a727eb921d21c44e72668e32d9539ff0fde9c76f50caab438fb20",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-1d455ced-9e54-48ec-8664-fdb2bdc313f7",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T07:03:53.409Z",
+      "event"         : "build",
+      "workRecordHash": "7d7cf271ab067ae548c8188c98014574067a2d5e1a11873dd2e375d432d299bd",
+      "sourceDigest"  : "0ff2ed6222c7d02682e2d3dc4bb428156b696c99be7caa36a2ae90123669ef36",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "26f7d79ba6b04f8f0e8586e6d195e9a3b13fc5d424787bdd78f98654b0f0eba8",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "7d7cf271ab067ae548c8188c98014574067a2d5e1a11873dd2e375d432d299bd",
+        "sourceDigest"  : "0ff2ed6222c7d02682e2d3dc4bb428156b696c99be7caa36a2ae90123669ef36",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-30b22f0e-d831-40d4-ac21-24931a6334a2",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T07:08:40.320Z",
+      "event"         : "build",
+      "workRecordHash": "36a5b8311384e1689a5b8b735d91e15c99a4387e383438f7057c2acf4b300547",
+      "sourceDigest"  : "c4fd973a7f92af58126dd5de6b4449705f6b3d0c295c33e74e59c14099c44a11",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "d0b138c68b9c38b03d1cbe729d989d61ba5a6d43f0a1b6fe01a64c0af6c891ec",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "36a5b8311384e1689a5b8b735d91e15c99a4387e383438f7057c2acf4b300547",
+        "sourceDigest"  : "c4fd973a7f92af58126dd5de6b4449705f6b3d0c295c33e74e59c14099c44a11",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-e9fdb542-411d-4b8d-8ffa-5b886c0ae40e",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T07:15:16.186Z",
+      "event"         : "build",
+      "workRecordHash": "36a5b8311384e1689a5b8b735d91e15c99a4387e383438f7057c2acf4b300547",
+      "sourceDigest"  : "39d658fc98549f33935f59cea4efda2b024db0dd7d57b5e65eff9d8267865a4c",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "9306c698f2712081a50dbd5801c674b7826d09768d776b5e5ad760b65fba3476",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "36a5b8311384e1689a5b8b735d91e15c99a4387e383438f7057c2acf4b300547",
+        "sourceDigest"  : "39d658fc98549f33935f59cea4efda2b024db0dd7d57b5e65eff9d8267865a4c",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-956b11b3-0d26-4f5e-841c-7a879fa3ba01",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T07:22:08.063Z",
+      "event"         : "build",
+      "workRecordHash": "36a5b8311384e1689a5b8b735d91e15c99a4387e383438f7057c2acf4b300547",
+      "sourceDigest"  : "4337a07527e96a50612bf32f69bdc6eb71a2a48be51176d399ec3242671ff461",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "fb2251faa77a06cc058e2cb3e4cee37cf3a5488361fc8306630e2d1d4d25c6c3",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "36a5b8311384e1689a5b8b735d91e15c99a4387e383438f7057c2acf4b300547",
+        "sourceDigest"  : "4337a07527e96a50612bf32f69bdc6eb71a2a48be51176d399ec3242671ff461",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-478e19f4-1596-4638-966f-f873d07e7458",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T07:28:51.243Z",
+      "event"         : "build",
+      "workRecordHash": "602713809be80b0c41d5485cb72d99286aa0d6b25a1c5abe072c43c63df9a8f2",
+      "sourceDigest"  : "fc90ff2e50a7d508b794814f7db281e7b92c5520411c92eb2fa405689d9dab9f",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "db07e696eb0dd642788740953951211e87b6b2d29a61d44feae3a8adf90f5351",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "602713809be80b0c41d5485cb72d99286aa0d6b25a1c5abe072c43c63df9a8f2",
+        "sourceDigest"  : "fc90ff2e50a7d508b794814f7db281e7b92c5520411c92eb2fa405689d9dab9f",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-7a05ec0c-97e6-4a99-9b33-58265563dac0",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T07:34:57.564Z",
+      "event"         : "build",
+      "workRecordHash": "602713809be80b0c41d5485cb72d99286aa0d6b25a1c5abe072c43c63df9a8f2",
+      "sourceDigest"  : "12c6da93dc7c9939187c2706121da0676920f5896d22b773b2158dd1848c4260",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "2d75fe4d6b8cb84c54da888f382e38b408db9409bbb45a01fa1780c8694f8140",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "602713809be80b0c41d5485cb72d99286aa0d6b25a1c5abe072c43c63df9a8f2",
+        "sourceDigest"  : "12c6da93dc7c9939187c2706121da0676920f5896d22b773b2158dd1848c4260",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-ef61df9b-88a9-4c52-bda5-f035c94a42cf",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T07:37:38.395Z",
+      "event"         : "build",
+      "workRecordHash": "602713809be80b0c41d5485cb72d99286aa0d6b25a1c5abe072c43c63df9a8f2",
+      "sourceDigest"  : "eb4f3ddf03553469604e3fc038c3dbed7131a39251c52b30c60cad53bdfd1b4a",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "f77326ff162472c6dcc5f73f0dc0e33e215451fe990df3efb9e44477caec0599",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "602713809be80b0c41d5485cb72d99286aa0d6b25a1c5abe072c43c63df9a8f2",
+        "sourceDigest"  : "eb4f3ddf03553469604e3fc038c3dbed7131a39251c52b30c60cad53bdfd1b4a",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-ac0afa56-d455-48f0-9126-033047da4574",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T07:43:16.779Z",
+      "event"         : "build",
+      "workRecordHash": "602713809be80b0c41d5485cb72d99286aa0d6b25a1c5abe072c43c63df9a8f2",
+      "sourceDigest"  : "d307165309ae65d28c4dd1dee2e2ce70242a8a3f1ac5ffcb69d0e87d9d999114",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "c3c19e8bd9f432051360570b12067f2fffa574c37c68a6b13e9d43cc1927d7ea",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "602713809be80b0c41d5485cb72d99286aa0d6b25a1c5abe072c43c63df9a8f2",
+        "sourceDigest"  : "d307165309ae65d28c4dd1dee2e2ce70242a8a3f1ac5ffcb69d0e87d9d999114",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-64fdf391-b947-4bc6-8b6d-0269b78e1530",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T08:20:33.698Z",
+      "event"         : "host_failed",
+      "workRecordHash": "063a7828020058e18984f2620652bb2b4ea6b0d22b2b20efde1392a7b4256cb6",
+      "sourceDigest"  : "20e160a24f33276b3701ad1e39ffb6ee111f347e16b039525f78d22cd375ac42",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "4f275318c34aba662d4e876a766a455dbcf2a5de4a19594075abbd8af34cea16",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": "개발 호스트 실행 실패: execution_error",
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "063a7828020058e18984f2620652bb2b4ea6b0d22b2b20efde1392a7b4256cb6",
+        "sourceDigest"  : "20e160a24f33276b3701ad1e39ffb6ee111f347e16b039525f78d22cd375ac42",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-d4bf7f25-569a-4207-b9a0-91b1abb89554",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T08:22:06.320Z",
+      "event"         : "build",
+      "workRecordHash": "e9b328d37f05d4cb774ad7f96a8b5656d6f6a5e24a5d2beb8c3b02fc014964c7",
+      "sourceDigest"  : "20e160a24f33276b3701ad1e39ffb6ee111f347e16b039525f78d22cd375ac42",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "c01b879f5b1f379bca82b56441548f00909edb0348ff440ad29a940c9e30d33d",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "e9b328d37f05d4cb774ad7f96a8b5656d6f6a5e24a5d2beb8c3b02fc014964c7",
+        "sourceDigest"  : "20e160a24f33276b3701ad1e39ffb6ee111f347e16b039525f78d22cd375ac42",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-dca06d72-4deb-4dac-b341-e8339a3c96b3",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "Mac mini의 새 source 사본에서 실제 개발·검증을 이어가 Hook 결함을 수정하고 최종 전체 검사를 통과시켰다. 필수 감사·GUI·Native runtime·BoxBox 조건이 차단되어 전체 완료는 보류한다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T08:39:50.630Z",
+      "event"         : "finish",
+      "workRecordHash": "e4f4a4dbcf6b8dc52b936fdb7cd5827e9fd5487ededb018ea642e66d5bcc0a75",
+      "sourceDigest"  : "a44b4448088c6bc1e10edf1bcf90714efb33331169d31c0cf55bbe84b65c7815",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "7ec59daafd44852904de7691e1b923072b5b54862b0e57d4c537509ea6452c49",
+      "narrative": {
+        "summary": "Mac mini의 새 source 사본에서 실제 개발·검증을 이어가 Hook 결함을 수정하고 최종 전체 검사를 통과시켰다. 필수 감사·GUI·Native runtime·BoxBox 조건이 차단되어 전체 완료는 보류한다.",
+        "before" : "이관 당시 dirty 변경과55개 원장, 보고서 GUI 재실행·core timeout·Skills 의미 검증·필수 감사가 남았다. 과거 머신의 PASS와 현 머신의 실행 조건이 달랐다.",
+        "after"  : "반복 Hook handler의 최신 상태 결함을 수정했다. 공식 npm run check가 Bun1040·Node210·타입·소스·구조·계약·빌드까지 통과했다. Workflow019의7기준과 Workflow009/016의각3기준은 현재 공식 증거를 연결했다. 중요한11 UUID의 인계·문서 영향·저작 보고서를 갱신했고 기존 done23건을 역사로 보존했다.",
+        "changes": [
+          "로컬 도구 경로를 실제 BoxBox0.2.8/Node22.23.1에 연결하고 승인 registry4개의SHA 동일성을 확인했다. npm ci 및 로컬 PyYAML 설치는 이 사본 안에만 수행했다.",
+          "같은 handler의 더 새로운 비교 가능한 시작은 상태·타이머를 갱신하고 지연·복원·모호한 사건은 최신 실시간 상태를 덮지 않게 했다. 집중103개와 Astra 독립4개가 통과했다.",
+          "Workflow019는 같은 assertions의 예산만30초로 분리해 실제 Node73+Bun34를 공식 재실행했다. 과거 실패는 보존했다.",
+          "Skills 최종 readback 필드 구분을 공통 계약 한 곳에 명시했다. 새 재개 실험114파일과 여정 명세 실험83파일·정본25개SHA를 동결하고 Astra가 별도 대조했다.",
+          "네 quick_validate는 PyYAML 누락 실패 뒤 .www 아래 의존성을 설치해 통과했다. 고정 pstack/GJC revision의 LICENSE도 실제 재조회했다. 형식·출처 검사를 전체 행동 성공으로 확대하지 않았다.",
+          "Chat013/014/015의 누락된 구현·회귀 파일을 공식 inputs에 보강했다. 현재 계획과 이전 이력을 분리하고 공식 read/status로 같은 UUID를 재조회했다.",
+          "이관본에 없는 과거 로그 요약은 현재 확인 불가로 표시했다. 보류 중앙화 논의는 원문 SHA를 보존해 docs/architecture/central-storage-discussion.md로 옮겼다.",
+          "전체55건의 기존 done23건과 active32건을 final-inventory.json에 회수했다. 새로운 done·취소·외부 게시를 만들지 않았다."
+        ],
+        "decisions": [
+          "source-machine 기능·Opus·GUI 성공은 역사로 보존하고 현재 머신 PASS로 승격하지 않았다.",
+          "필수 실제 Opus는 allowFallback=false로 호출했다. OAuth 만료·갱신 실패여서 not_run이며 하향 대체하지 않았다.",
+          "Electron 시작과 Native 상태 SQLite 초기화 실패를 보존하고 같은 실행을 반복하지 않았다. 인증·전역 설정·승인·BoxBox mode를 바꾸지 않았다.",
+          "필요한 부모021/019/009의 범위만 현재 직접 요청에 재연결했다. 전체 원장 history 백업·잠금·요청hash/auth 일치·공식 serializer·atomic rename과 commit/publish=false를 유지했다."
+        ],
+        "limitations": [
+          "실제 Opus review-ef85f115-1120-4ef4-b7cc-d4acb198fe67은 not_run/authentication, observedModel=null이며 OAuth session expired and could not be refreshed를 반환했다. Astra/Terra 보조 검토는 필수 감사를 대신하지 않는다.",
+          "Reports는 타입·실도구·집중·빌드·runtime precheck 후 Electron SIGABRT로 중단됐다. 단독 --version도 종료134이고 macOS crash stack은 SSH 실행의 RegisterApplication/NSApplication 초기화를 가리킨다. 근본원인과 해제 조건은 미확정이며 GUI·인쇄/PDF는 미실행이다.",
+          "실제 Native 활동/보고서 판단은 각1회 실패했다. 추가 모델 없는 시작 진단에서 /Users/woojongho/.codex의 SQLite state runtime 초기화 실패를 확인했다. 인증·전역 상태 위치·승인 정책을 변경하지 않았다.",
+          "typed 하네스는 소스·strict 타입·구조·사후 지문이 통과했지만 BoxBox REFUSE/미정렬로 전체 false다. 사전28·38, 사후30·44이며 승인·align·mode 변경으로 우회하지 않았다.",
+          "첫 injected callback은 필수 ok 필드 누락으로 실패했다. 원문을 보존하고 형식을 교정한 별도 injected 사후 검사를 수행했다. 이는 새 실제 CLI 모델 실행이나 저작을 뜻하지 않는다.",
+          "Skills 두 실험의 제한 범위 문서 적용은 보조 대조 PASS지만 UC-2/UC-3 전체 실제 개발·CLI 자동 호스트 수용·GUI·필수 감사는 미검증이다.",
+          "Windows·실제 OS IME·actual Steer 의미 반영·기존122초 지연 원자료는 미실측/미확인이다. 외부 RPA·커밋·push·PR·릴리스·배포·메일·외부 이슈 쓰기는 이번 권한 밖이다.",
+          "원장 blockedReason과 status.reasons는 별개다. 부분 기준 통과나 프로세스 종료로 전체 업무 완료를 만들지 않았다."
+        ],
+        "next": [
+          "현재 build의 미해결 BoxBox source 형태와 기존 승인 경계를 확인한다. 이번 실행에서는 새 승인·align·mode 변경을 하지 않는다.",
+          "허용된 데스크톱 실행 조건에서 Reports/Home/Chat/상태도 공식 GUI·인쇄/PDF를 재개한다.",
+          "기존 Codex 상태 런타임 초기화와 Claude OAuth 갱신 문제를 후속 유효 환경에서 해결한 뒤 실제 Native 표본·Opus allowFallback=false 감사를 수행한다.",
+          "Skills 남은 전체 실제 개발 행동 적용을 독립 수행하고 최종 read/status·계획·보고서를 대조한다.",
+          "각 UUID의 현재 기준·환경·필수 감사·저작 보고서가 모두 충족한 항목만 complete/readback 한다. 커밋·게시 권한은 이번 요청에서 부여되지 않았다."
+        ],
+        "reader": {
+          "story": "로컬 세션 종료 뒤 이관 사본에서 실제 개발·검증을 이어갔다. 전체 테스트 뒤에도 남아 있던 Hook 결함을 독립 반박으로 찾아 수정했고 최종 전체 검사는 다시 통과했다. 주요 원장과 계획·저작 보고서를 같은 UUID로 회수했다. 필수 감사와 실제 GUI·모델 실행, BoxBox 미해결이 남아 전체 완료로 보고하지 않는다.",
+          "requirements": [
+            {
+              "requirement": "Native 실시간 작업 흐름과 사용량 / work-005bdf73-4e11-441b-a485-51468cc8acf4；Skills와 Hook 활동 사이드바 / work-16362e60-e269-4d5d-bf38-2869496efd2c",
+              "result"     : "work-005bdf73-4e11-441b-a485-51468cc8acf4: verifying / next=verify / AC-1=blocked, AC-2=unverified, AC-3=blocked, AC-4=unverified, AC-5=unverified, AC-6=blocked, AC-7=blocked；work-16362e60-e269-4d5d-bf38-2869496efd2c: verifying / next=verify / AC-1=unverified, AC-2=blocked, AC-3=blocked, AC-4=unverified, AC-5=unverified",
+              "evidence"   : "docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/work.json；docs/work/Chat/005-Skills와 Hook 활동 사이드바/work.json",
+              "limitations": "최신 Opus fail로 확인한 활동/재개 경계 미해결; 다른 세션의 renderer·생태계·구조 snapshot/정본 변경으로 현재 전체 입력 적용성 재확인 필요；최신 Opus fail로 확인한 활동/재개 경계 미해결; 다른 세션의 renderer·생태계·구조 snapshot/정본 변경으로 현재 전체 입력 적용성 재확인 필요"
+            },
+            {
+              "requirement": "오픈소스 채팅 뼈대와 Native 대화 재개 통합 / work-baa0963b-ea71-48e7-a34f-0d229ba704b1；실시간 세션 모니터와 채팅 가독성 / work-eed41da3-f22e-4fb9-b9df-9a1a7d76c44f",
+              "result"     : "work-baa0963b-ea71-48e7-a34f-0d229ba704b1: verifying / next=verify / AC-1=unverified, AC-2=blocked, AC-3=blocked, AC-4=unverified；work-eed41da3-f22e-4fb9-b9df-9a1a7d76c44f: in_progress / next=verify / AC-01=passed, AC-02=passed, AC-03=passed, AC-04=passed, AC-05=blocked, AC-06=passed, AC-07=passed, AC-08=passed, AC-09=passed, AC-10=blocked, AC-11=passed, AC-12=passed",
+              "evidence"   : "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/work.json；docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/work.json",
+              "limitations": "최신 Opus fail로 확인한 활동/재개 경계 미해결; 다른 세션의 renderer·생태계·구조 snapshot/정본 변경으로 현재 전체 입력 적용성 재확인 필요；WWW 전용 흐름 피드백 구현·Electron·Opus 검토는 통과. 기존 실제 OS IME·Windows·BoxBox 미해결과 외부 플러그인 Hook 재승인 필요는 남아 있음."
+            },
+            {
+              "requirement": "오픈소스 채팅 뼈대 도입 비교 / work-029fb7e2-61fa-4014-9362-5e915ab13197；스크롤과 첫 응답 및 진행 설명 개선 논의 / work-632e43ce-dcb8-4726-ad34-8fe85034b6fd",
+              "result"     : "work-029fb7e2-61fa-4014-9362-5e915ab13197: verifying / next=review / AC-1=unverified, AC-2=unverified, AC-3=unverified；work-632e43ce-dcb8-4726-ad34-8fe85034b6fd: verifying / next=build / AC-1=failed, AC-2=blocked, AC-3=failed, AC-4=failed",
+              "evidence"   : "docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/work.json；docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/work.json",
+              "limitations": "독립 검토 fail: 수정 또는 검토 재실행 필요；verification_failed"
+            },
+            {
+              "requirement": "오른쪽 Agent와 WWW Skills 및 Hook 표시 논의 / work-64677750-337f-4488-a503-4e0265356bf5；대화 단일 스크롤과 카드 펼침 및 성능 개선 명세 / work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118",
+              "result"     : "work-64677750-337f-4488-a503-4e0265356bf5: verifying / next=verify / AC-1=unverified, AC-2=unverified, AC-3=unverified, AC-4=unverified, AC-5=unverified；work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118: verifying / next=verify / AC-1=unverified, AC-2=unverified, AC-3=unverified, AC-4=unverified, AC-5=unverified, AC-6=unverified, AC-7=unverified, AC-8=unverified, AC-9=unverified, AC-10=unverified, AC-11=unverified, AC-12=unverified, AC-13=unverified, AC-14=unverified",
+              "evidence"   : "docs/work/Chat/013-오른쪽 Agent와 WWW Skills 및 Hook 표시 논의/work.json；docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/work.json",
+              "limitations": "AC-1: scope_changed, environment_changed, source_changed, artifacts_unavailable; AC-2: scope_changed, environment_changed, source_changed, artifacts_unavailable; AC-3: scope_changed, environment_changed, source_changed, artifacts_unavailable; AC-4: scope_changed, environment_changed, source_changed, artifacts_unavailable; AC-5: scope_changed, environment_changed, source_changed, artifacts_unavailable; recording_context_invalid; review_not_passed; source_changed; override_authority_invalid; reviewer_not_allowed; receipt_context_mismatch; receipt_execution_mismatch; receipt_unavailable; 현재 소스·기준·기록의 저작 작업 보고서 없음；AC-1: 검증 시도 없음; AC-2: 검증 시도 없음; AC-3: 검증 시도 없음; AC-4: 검증 시도 없음; AC-5: 검증 시도 없음; AC-6: 검증 시도 없음; AC-7: 검증 시도 없음; AC-8: 검증 시도 없음; AC-9: 검증 시도 없음; AC-10: 검증 시도 없음; AC-11: 검증 시도 없음; AC-12: 검증 시도 없음; AC-13: 검증 시도 없음; AC-14: 검증 시도 없음; 필수 독립 검토 없음; 현재 소스·기준·기록의 저작 작업 보고서 없음"
+            },
+            {
+              "requirement": "WWW 스킬 단계와 Plan 및 Progress 관측 누락 / work-36d312bc-a767-4e3e-a581-01898b35f75f；Mac과 Windows 실사용 및 검증 신뢰성 완성 / work-e9007dfb-f546-426b-88c6-58174641acc8",
+              "result"     : "work-36d312bc-a767-4e3e-a581-01898b35f75f: verifying / next=verify / OBS-EVIDENCE=unverified, OBS-LIFECYCLE=unverified, OBS-UNKNOWN=unverified, PLAN-SOURCE=unverified, PROGRESS-FALLBACK=unverified, AGENT-TRUTH=unverified, OBS-REGRESSION=unverified, ISSUE-TRACE=unverified；work-e9007dfb-f546-426b-88c6-58174641acc8: verifying / next=verify / AC-1=unverified, AC-2=unverified, AC-3=unverified, AC-4=unverified, AC-5=unverified, AC-6=unverified, AC-7=unverified, AC-8=unverified",
+              "evidence"   : "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/work.json；docs/work/Development/001-Mac과 Windows 실사용 및 검증 신뢰성 완성/work.json",
+              "limitations": "OBS-EVIDENCE: 검증 시도 없음; OBS-LIFECYCLE: 검증 시도 없음; OBS-UNKNOWN: 검증 시도 없음; PLAN-SOURCE: 검증 시도 없음; PROGRESS-FALLBACK: 검증 시도 없음; AGENT-TRUTH: 검증 시도 없음; OBS-REGRESSION: 검증 시도 없음; ISSUE-TRACE: 검증 시도 없음; 필수 독립 검토 없음; 현재 소스·기준·기록의 저작 작업 보고서 없음；현재 Windows/Native 플랫폼 증거 및 양 OS IME 미실측; 최신 Opus fail; 다른 세션의 renderer·생태계·구조 snapshot/정본 변경으로 현재 전체 입력 적용성 재확인 필요"
+            },
+            {
+              "requirement": "WWW 생태계 노드 탐색 / work-566dd8f2-1121-4ae7-8c98-182283693c92；코드 기반 아키텍처 설계도와 계층형 Node 그래프 / work-9727de0a-072d-47d9-874c-cf79b3de8526",
+              "result"     : "work-566dd8f2-1121-4ae7-8c98-182283693c92: verifying / next=verify / AC-1=unverified, AC-2=unverified, AC-3=unverified, AC-4=unverified；work-9727de0a-072d-47d9-874c-cf79b3de8526: verifying / next=verify / AC-1=unverified, AC-2=unverified, AC-3=unverified, AC-4=unverified, AC-5=unverified",
+              "evidence"   : "docs/work/Ecosystem/001-WWW 생태계 노드 탐색/work.json；docs/work/Ecosystem/002-코드 기반 아키텍처 설계도와 계층형 Node 그래프/work.json",
+              "limitations": "AC-1: source_changed; AC-2: source_changed; AC-3: source_changed, artifacts_changed; AC-4: source_changed; 문서 검토 후 소스 변경; 문서 검토 후 문서 변경; source_changed; receipt_context_mismatch；AC-1: source_changed; AC-2: source_changed; AC-3: source_changed; AC-4: source_changed; AC-5: scope_changed, environment_changed, source_changed, artifacts_unavailable; 문서 검토 후 소스 변경; 문서 검토 후 문서 변경; review_not_passed; source_changed; receipt_context_mismatch"
+            },
+            {
+              "requirement": "중앙 지도 중심의 탐색과 선택 요약 / work-2654a232-11a8-40a3-907d-edad8ec066b4；RPA 프로젝트와 WWW 진입 및 공통 메뉴 / work-4573f7d4-62eb-4e72-9985-62994c1b30a8",
+              "result"     : "work-2654a232-11a8-40a3-907d-edad8ec066b4: verifying / next=review / CANVAS-SPACE=failed, CANVAS-SELECT=failed, CANVAS-CONTROL=failed；work-4573f7d4-62eb-4e72-9985-62994c1b30a8: in_progress / next=build / S1=passed, S2=passed, S3=failed, S4=unverified, S5=passed, S6=passed, S7=failed, S8=unverified",
+              "evidence"   : "docs/work/Ecosystem/005-중앙 지도 중심의 탐색과 선택 요약/work.json；docs/work/Home/002-RPA 프로젝트와 WWW 진입 및 공통 메뉴/work.json",
+              "limitations": "차단 필드 null은 전체 완료가 아니며 개별 status/검증에서 미실행을 확인한다.；차단 필드 null은 전체 완료가 아니며 개별 status/검증에서 미실행을 확인한다."
+            },
+            {
+              "requirement": "프로젝트 탐색과 세션 모니터링 메뉴 개편 / work-0e282d77-1c00-4663-8860-483d28148f74；칸반 작업 상세와 계획 및 검증 근거 연결 / work-84cda38b-7265-40d7-bf47-5a22ece1b3a2",
+              "result"     : "work-0e282d77-1c00-4663-8860-483d28148f74: verifying / next=verify / NAV-KEEP=unverified, NAV-SELECT=unverified, NAV-GUARD=unverified, NAV-MENU=unverified, MON-ENTRY=unverified, MON-SCOPE=unverified, MON-STATES=unverified, STATE-RETURN=unverified, ACCESS-VERIFY=unverified, DOC-HANDOFF=unverified；work-84cda38b-7265-40d7-bf47-5a22ece1b3a2: verifying / next=verify / KANBAN-DETAIL=unverified, KANBAN-TRUTH=unverified, KANBAN-SCOPE=unverified, KANBAN-VERIFY=unverified",
+              "evidence"   : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/work.json；docs/work/Home/004-칸반 작업 상세와 계획 및 검증 근거 연결/work.json",
+              "limitations": "NAV-KEEP: 검증 시도 없음; NAV-SELECT: 검증 시도 없음; NAV-GUARD: 검증 시도 없음; NAV-MENU: 검증 시도 없음; MON-ENTRY: 검증 시도 없음; MON-SCOPE: 검증 시도 없음; MON-STATES: 검증 시도 없음; STATE-RETURN: 검증 시도 없음; ACCESS-VERIFY: 검증 시도 없음; DOC-HANDOFF: 검증 시도 없음; 필수 독립 검토 없음; 현재 소스·기준·기록의 저작 작업 보고서 없음；KANBAN-DETAIL: environment_changed; KANBAN-TRUTH: environment_changed; KANBAN-SCOPE: environment_changed; KANBAN-VERIFY: environment_changed, source_changed; source_changed; receipt_context_mismatch"
+            },
+            {
+              "requirement": "사이드바 탐색과 작업 화면 분리 평가 / work-40c12cb7-9a53-4ead-b872-8c16d9525f67；Home 003 문서화와 검증 현황 / work-65af9476-ebae-4edf-989b-012196fd0e1c",
+              "result"     : "work-40c12cb7-9a53-4ead-b872-8c16d9525f67: verifying / next=legacy미제공 / AC-NATIVE=unverified；work-65af9476-ebae-4edf-989b-012196fd0e1c: verifying / next=legacy미제공 / AC-NATIVE=unverified",
+              "evidence"   : "docs/work/Native/001-사이드바 탐색과 작업 화면 분리 평가/work.json；docs/work/Native/002-Home 003 문서화와 검증 현황/work.json",
+              "limitations": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.；Native 실행 요약이며 업무 수용·독립 검토는 별도입니다."
+            },
+            {
+              "requirement": "작업 상태 표시 누락 진단 / work-8da56280-20c6-4277-8aa1-27b64112d8f9；관측 누락 버그 명세와 이슈 등록 / work-345d185f-45b0-444d-84c1-60097f64558d",
+              "result"     : "work-8da56280-20c6-4277-8aa1-27b64112d8f9: verifying / next=legacy미제공 / AC-NATIVE=unverified；work-345d185f-45b0-444d-84c1-60097f64558d: verifying / next=legacy미제공 / AC-NATIVE=unverified",
+              "evidence"   : "docs/work/Native/003-작업 상태 표시 누락 진단/work.json；docs/work/Native/004-관측 누락 버그 명세와 이슈 등록/work.json",
+              "limitations": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.；Native 실행 요약이며 업무 수용·독립 검토는 별도입니다."
+            },
+            {
+              "requirement": "공통 절차와 표준 하네스 및 프로젝트 공간 / work-f5711e8a-33a0-41da-9f07-e2e956a43219；커밋 버전과 릴리즈 및 CI CD 구축 / work-403b8e0b-7859-4166-9ded-11b991069ff8",
+              "result"     : "work-f5711e8a-33a0-41da-9f07-e2e956a43219: ready / next=design / RPA-ENTRY=unverified, RPA-FLOW=unverified, RPA-STRUCTURE=unverified, RPA-CORE=unverified, RPA-CASE=unverified, RPA-LOG=unverified, RPA-MAIL=unverified, RPA-PACKAGE=unverified, RPA-MAP=unverified, RPA-DASHBOARD=unverified, RPA-EVIDENCE=unverified, RPA-ADOPTION=unverified；work-403b8e0b-7859-4166-9ded-11b991069ff8: in_progress / next=build / AC-VERSION=unverified, AC-RELEASE=unverified, AC-PIPELINE=unverified",
+              "evidence"   : "docs/work/RPA/001-공통 절차와 표준 하네스 및 프로젝트 공간/work.json；docs/work/Release/001-커밋 버전과 릴리즈 및 CI CD 구축/work.json",
+              "limitations": "차단 필드 null은 전체 완료가 아니며 개별 status/검증에서 미실행을 확인한다.；차단 필드 null은 전체 완료가 아니며 개별 status/검증에서 미실행을 확인한다."
+            },
+            {
+              "requirement": "작업 종료 보고서와 앱 리포트 / work-82e8475f-380f-460c-9cd2-5bbef0126625；독자의 판단을 돕는 보고서 양식 / work-fc3f6aea-c842-45f3-821b-5fc448809d35",
+              "result"     : "work-82e8475f-380f-460c-9cd2-5bbef0126625: verifying / next=verify / AC-1=unverified, AC-2=unverified, AC-3=unverified, AC-4=unverified, AC-5=unverified, AC-6=unverified；work-fc3f6aea-c842-45f3-821b-5fc448809d35: verifying / next=verify / AC-1=unverified, AC-2=unverified, AC-3=unverified, AC-4=unverified, AC-5=unverified, AC-6=unverified",
+              "evidence"   : "docs/work/Reports/001-작업 종료 보고서와 앱 리포트/work.json；docs/work/Reports/002-독자의 판단을 돕는 보고서 양식/work.json",
+              "limitations": "AC-1: verification_failed, source_changed; AC-2: verification_failed, source_changed; AC-3: verification_failed, source_changed; AC-4: verification_failed, source_changed; AC-5: verification_failed, source_changed; AC-6: source_changed; 문서 검토 후 소스 변경; 문서 검토 후 문서 변경; source_changed; receipt_context_mismatch；AC-1: verification_failed, source_changed; AC-2: verification_failed, source_changed; AC-3: verification_failed, source_changed; AC-4: verification_failed, source_changed; AC-5: verification_failed, source_changed; AC-6: verification_failed, source_changed; 문서 검토 후 소스 변경; 문서 검토 후 문서 변경; source_changed; receipt_context_mismatch"
+            },
+            {
+              "requirement": "참조 HTML 기반 한 페이지 보고서 양식 변경 명세 / work-dc931897-564a-4b95-a8c5-a23d7b03a8a3；Skills 라이브러리 한국어 대체 / work-f40cbde5-04ba-4e0a-9c8b-e604be629328",
+              "result"     : "work-dc931897-564a-4b95-a8c5-a23d7b03a8a3: verifying / next=verify / AC-1=unverified, AC-2=unverified, AC-3=unverified, AC-4=unverified, AC-5=unverified, AC-6=unverified, AC-7=unverified；work-f40cbde5-04ba-4e0a-9c8b-e604be629328: in_progress / next=build / AC-1=unverified, AC-2=unverified, AC-3=unverified, AC-4=unverified",
+              "evidence"   : "docs/work/Reports/003-참조 HTML 기반 한 페이지 보고서 양식 변경 명세/work.json；docs/work/Workflow/005-Skills 라이브러리 한국어 대체/work.json",
+              "limitations": "AC-1: verification_failed, environment_changed, source_changed; AC-2: verification_failed, environment_changed, source_changed; AC-3: verification_failed, environment_changed, source_changed; AC-4: verification_failed, environment_changed, source_changed; AC-5: verification_failed, environment_changed, source_changed; AC-6: verification_failed, environment_changed, source_changed; AC-7: verification_failed, environment_changed, source_changed; 필수 독립 검토 없음; 현재 소스·기준·기록의 저작 작업 보고서 없음；차단 필드 null은 전체 완료가 아니며 개별 status/검증에서 미실행을 확인한다."
+            },
+            {
+              "requirement": "JavaScript 전체 TypeScript 이관 / work-62c5ae92-bd4f-4b0c-8ad3-f38c4424308e；BoxBox 저작과 전체 변경 검증 / work-238ce4c1-73e8-4409-a2a3-09a263177210",
+              "result"     : "work-62c5ae92-bd4f-4b0c-8ad3-f38c4424308e: verifying / next=review / AC-1=passed, AC-2=passed, AC-3=passed；work-238ce4c1-73e8-4409-a2a3-09a263177210: verifying / next=complete / AC-1=unverified, AC-2=unverified, AC-3=unverified, AC-4=unverified, AC-5=unverified",
+              "evidence"   : "docs/work/Workflow/009-JavaScript 전체 TypeScript 이관/work.json；docs/work/Workflow/010-BoxBox 저작과 전체 변경 검증/work.json",
+              "limitations": "source_changed; receipt_context_mismatch; 현재 소스·기준·기록의 저작 작업 보고서 없음；차단 필드 null은 전체 완료가 아니며 개별 status/검증에서 미실행을 확인한다."
+            },
+            {
+              "requirement": "명세 검토와 개발 도구 출처 하네스 / work-370f0fe9-8596-4475-b62b-7b7c70992a34；분업 계약과 완료 게이트 강화 및 상태도 연결 / work-048bfa71-3960-4ad0-a8fe-e6217100d6df",
+              "result"     : "work-370f0fe9-8596-4475-b62b-7b7c70992a34: verifying / next=review / AC-1=passed, AC-2=passed, AC-3=passed；work-048bfa71-3960-4ad0-a8fe-e6217100d6df: verifying / next=verify / FLOW-PLAN=passed, FLOW-ACCEPT=passed, FLOW-COMPLETE=passed, FLOW-FAULTS=passed, STATE-LINK=passed, STATE-VIEW=unverified, STATE-CHECK=passed, FLOW-REGRESSION=unverified, FLOW-PROPERTY=passed, MAP-EVIDENCE=unverified",
+              "evidence"   : "docs/work/Workflow/016-명세 검토와 개발 도구 출처 하네스/work.json；docs/work/Workflow/019-분업 계약과 완료 게이트 강화 및 상태도 연결/work.json",
+              "limitations": "recording_context_invalid; review_not_passed; source_changed; receipt_context_mismatch; 현재 소스·기준·기록의 저작 작업 보고서 없음；STATE-VIEW: 검증 시도 없음; FLOW-REGRESSION: 검증 시도 없음; MAP-EVIDENCE: 검증 시도 없음; 필수 독립 검토 없음"
+            },
+            {
+              "requirement": "사용자 여정과 칸반 인계를 개발 스킬에 연결 / work-d43bfed7-e705-4c22-aceb-f00dc1ede0b8；누적 요구사항 사용성 개선과 병렬 통합 검증 / work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+              "result"     : "work-d43bfed7-e705-4c22-aceb-f00dc1ede0b8: verifying / next=verify / SKILL-JOURNEYS=unverified, SKILL-HANDOFF=unverified, SKILL-VALIDATE=unverified；work-40ae2dc5-86db-4b52-b1fc-09ca61c58898: in_progress / next=build / SESSION-PLAN=unverified, SESSION-INTEGRATION=unverified, SESSION-USABILITY=unverified, SESSION-CLOSEOUT=unverified",
+              "evidence"   : "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/work.json；docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+              "limitations": "SKILL-JOURNEYS: environment_changed, source_changed; SKILL-HANDOFF: environment_changed, source_changed; SKILL-VALIDATE: environment_changed, source_changed; recording_context_invalid; review_not_passed; source_changed; receipt_context_mismatch；SESSION-PLAN: 검증 시도 없음; SESSION-INTEGRATION: 검증 시도 없음; SESSION-USABILITY: 검증 시도 없음; SESSION-CLOSEOUT: 검증 시도 없음; recording_context_invalid; review_not_passed; source_changed; observed_model_missing; receipt_context_mismatch; receipt_result_mismatch; 현재 소스·기준·기록의 저작 작업 보고서 없음"
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "최종 전체 검사",
+              "method"     : "Workflow009의 공식 실제 npm run check",
+              "expected"   : "소스·타입·구조·계약·Bun/Node 회귀·빌드 통과",
+              "observed"   : "Bun1040/Node210 pass,0 fail,source/environment stable=true",
+              "limitations": "BoxBox source·GUI·실제 모델·필수 감사는 별도"
+            },
+            {
+              "target"     : "Hook 결함",
+              "method"     : "공개 투영 API 재현·집중103개·Astra 독립4개",
+              "expected"   : "새 시작은 같은 handler 최신 running, 늦은 사건은 역행하지 않음",
+              "observed"   : "원래 실패 해소·103+4 pass",
+              "limitations": "합성 사건이며 실제 Native/GUI 미확인"
+            },
+            {
+              "target"     : "필수 Opus",
+              "method"     : "공유 review core allowFallback=false 실제 CLI",
+              "expected"   : "실제 모델 관측과 읽기 전용 감사",
+              "observed"   : "not_run; OAuth 만료/갱신 실패; observedModel=null",
+              "limitations": "대체하지 않음"
+            },
+            {
+              "target"     : "Electron",
+              "method"     : "Reports 전체 및 단독 --version 진단",
+              "expected"   : "GUI/PDF 시나리오 시작",
+              "observed"   : "SIGABRT / macOS 앱 등록 초기화 stack",
+              "limitations": "GUI/PDF 미실행"
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": ".www/evidence/remote-20261116/official009-full-check.log",
+              "purpose": "최종 전체 검사 원문"
+            },
+            {
+              "path": ".www/evidence/remote-20261116/hook-postcheck-result.json",
+              "purpose": "주입/실도구 구분 및 BoxBox 포함 사후 하네스 실패"
+            },
+            {
+              "path": ".www/evidence/remote-20261116/final-inventory.json",
+              "purpose": "55개 같은 UUID 원장 상태 전체"
+            },
+            {
+              "path": ".www/evidence/remote-20261116/scratch/local-remaining.md",
+              "purpose": "활성32건의 미완료 기준·권한·환경 구분"
+            },
+            {
+              "path": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+              "purpose": "필수 감사 실제 호출 실패 원문"
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "BoxBox 기존 승인 경계와 미해결 source 형태를 확인한다.",
+              "owner"   : "후속 Codex 통합자",
+              "doneWhen": "유효 권한 안에서 source 검사를 실제 수용",
+              "impact"  : "typed 하네스 전체 통과 불가"
+            },
+            {
+              "action"  : "GUI·기존 모델 런타임·인증 실행 조건을 확인한다.",
+              "owner"   : "후속 머신 실행 담당자",
+              "doneWhen": "실제 Electron/Native와 읽기 전용 Opus 정상 시작",
+              "impact"  : "사용자 여정과 필수 감사 미검증"
+            },
+            {
+              "action"  : "각 UUID의 남은 실제 여정·필수 감사·완료 판정을 재개한다.",
+              "owner"   : "후속 Codex 통합자",
+              "doneWhen": "모든 필수 근거가 현재 기준·소스·환경에 적용 가능",
+              "impact"  : "충족 전 업무 완료 false"
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "in_progress",
+        "blockedReason": "SESSION-PLAN: 검증 시도 없음; SESSION-INTEGRATION: 검증 시도 없음; SESSION-USABILITY: 검증 시도 없음; SESSION-CLOSEOUT: 검증 시도 없음; recording_context_invalid; review_not_passed; source_changed; observed_model_missing; receipt_context_mismatch; receipt_result_mismatch; 현재 소스·기준·기록의 저작 작업 보고서 없음",
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "e4f4a4dbcf6b8dc52b936fdb7cd5827e9fd5487ededb018ea642e66d5bcc0a75",
+        "sourceDigest"  : "a44b4448088c6bc1e10edf1bcf90714efb33331169d31c0cf55bbe84b65c7815",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-d45d6401-28e4-4639-8005-a233f5b1894a",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T09:07:26.119Z",
+      "event"         : "build",
+      "workRecordHash": "c8be3b7e7434cdf5cceede1801165cb3d883ba7328d9e02f31483334427d5f14",
+      "sourceDigest"  : "bdff61b5a1f08243d909ac81d49f8d71e3c5b8813987580d9022bede05c34c26",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "02594f15f83c099ce64c944d562759889284f9775640e5016b53da5373e41249",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "c8be3b7e7434cdf5cceede1801165cb3d883ba7328d9e02f31483334427d5f14",
+        "sourceDigest"  : "bdff61b5a1f08243d909ac81d49f8d71e3c5b8813987580d9022bede05c34c26",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-1f19ef49-527d-441a-b1e9-f3c05beeb562",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T09:19:38.875Z",
+      "event"         : "build",
+      "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+      "sourceDigest"  : "be4b4d27e1b791da0b2d9d323fbddd8df0f8db3af544638e57f7b4083fd0e2b6",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "9732d0e36c510c1fca83aa7e7d4b600fead10afabc2bc54cf5a9d6dd8f108d84",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+        "sourceDigest"  : "be4b4d27e1b791da0b2d9d323fbddd8df0f8db3af544638e57f7b4083fd0e2b6",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-9410c21d-77d1-4020-8a94-ec9b0f61cc1b",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T09:21:45.953Z",
+      "event"         : "build",
+      "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+      "sourceDigest"  : "fbf73dc2b5639aa43a5919418b7d1e07841f990799dace9eb9980c3eebe6629e",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "dd2c8bf855d435d90c546527f311882f7e8fac506e30fab39cbdb57fdfd24ba1",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+        "sourceDigest"  : "fbf73dc2b5639aa43a5919418b7d1e07841f990799dace9eb9980c3eebe6629e",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-a2ceeaf6-20ff-4cf5-9fd3-6f25a324e238",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T09:29:44.007Z",
+      "event"         : "build",
+      "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+      "sourceDigest"  : "b05a2bdf7e49cdcfe651e65c15d24abfc6890bd248f424f1a17e062e577e27ae",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "614e9409b8b9b6fc9244c0b0446a23c7c93f19ff295901132419d5a089868543",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+        "sourceDigest"  : "b05a2bdf7e49cdcfe651e65c15d24abfc6890bd248f424f1a17e062e577e27ae",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-33321029-5bb5-45ea-a261-0c7b02222f38",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T09:41:08.868Z",
+      "event"         : "build",
+      "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+      "sourceDigest"  : "ef752a0bfb5983f8184a82eeafe4ef01778073bedd80bf92d0c0867eb5189f23",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "425aed6dfc84df31b99ba33dd82a85ecf1a7b459aaa48cac06b2c5f309c1d9a7",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+        "sourceDigest"  : "ef752a0bfb5983f8184a82eeafe4ef01778073bedd80bf92d0c0867eb5189f23",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-7396e633-b993-41f4-8964-2f6d42f487b7",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T09:42:46.149Z",
+      "event"         : "build",
+      "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+      "sourceDigest"  : "ba2c90993feb0eddc565a45bd7cb65086e7095b6814bfa1acb029ce4494d4964",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "775c2e3f70941a9ebc12799a1737a15aa0dc9202fa6d3ac4b79ec2262e695f35",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+        "sourceDigest"  : "ba2c90993feb0eddc565a45bd7cb65086e7095b6814bfa1acb029ce4494d4964",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-0dbab271-7010-4f59-b978-e8b27d013412",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T09:56:49.776Z",
+      "event"         : "build",
+      "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+      "sourceDigest"  : "bee95399ebf4acda6c025e41ca937f6de11096a1d7ba6545f16361d8379d5da8",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "3330dde54f1bd0e26283af9bcb73f7c0f777ff09f42e2b4ffe6588cc8ed9d622",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+        "sourceDigest"  : "bee95399ebf4acda6c025e41ca937f6de11096a1d7ba6545f16361d8379d5da8",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-6f5a1d9e-19dc-480f-a6e6-2fcc4ac9f72e",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T10:06:51.737Z",
+      "event"         : "build",
+      "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+      "sourceDigest"  : "791ef9f1547667f8e1eaa9adb9915f15d7af91789eb64efa97ab686fab615018",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "b5dd0df0b954ca75037ab6116252ca84b10e55588dd1cf65c01765118bc64418",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "937f4ceb6423b6dbdabcd68a536f6e05e7752a12bd13a67929d18efd8c6ec353",
+        "sourceDigest"  : "791ef9f1547667f8e1eaa9adb9915f15d7af91789eb64efa97ab686fab615018",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-e6c2fa2b-2665-432b-baad-b83852669b23",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T10:10:55.616Z",
+      "event"         : "build",
+      "workRecordHash": "0eea36527f1dece82ebafd641b29c43c7b60f41397e03d31a8bf34ba0636be8d",
+      "sourceDigest"  : "791ef9f1547667f8e1eaa9adb9915f15d7af91789eb64efa97ab686fab615018",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "541f6bdad9ff87509e6d432e7b8304367c6f30ced3f16e039d251884e6c538ad",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "0eea36527f1dece82ebafd641b29c43c7b60f41397e03d31a8bf34ba0636be8d",
+        "sourceDigest"  : "791ef9f1547667f8e1eaa9adb9915f15d7af91789eb64efa97ab686fab615018",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-c79f0a39-c05e-4f84-9407-2b30413e230b",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T10:13:57.237Z",
+      "event"         : "build",
+      "workRecordHash": "6f17f57502d5ef52a6e02faf837b1dbe8010ce0d4c8686ff16a3d37b220128fe",
+      "sourceDigest"  : "ab7cf3ebe469847987d6456d420f242f38c5daba91297b08c47df17057973a65",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "31e473a12c789ae0d345e9f76abd89f1ae75ae8385be28a162e7afb615335fb3",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "6f17f57502d5ef52a6e02faf837b1dbe8010ce0d4c8686ff16a3d37b220128fe",
+        "sourceDigest"  : "ab7cf3ebe469847987d6456d420f242f38c5daba91297b08c47df17057973a65",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-1a334416-1ed2-42a6-a308-d2e06182b314",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T10:24:41.730Z",
+      "event"         : "build",
+      "workRecordHash": "6f17f57502d5ef52a6e02faf837b1dbe8010ce0d4c8686ff16a3d37b220128fe",
+      "sourceDigest"  : "d1a0a84e164ba17e3b1ba95bc6eaa1597ec8c7a67d14e5944081092634dbf703",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "c8771bb3902114feaf71ce6e8d57ed751b3a6a9b30489d584798d5b659104a5b",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "6f17f57502d5ef52a6e02faf837b1dbe8010ce0d4c8686ff16a3d37b220128fe",
+        "sourceDigest"  : "d1a0a84e164ba17e3b1ba95bc6eaa1597ec8c7a67d14e5944081092634dbf703",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-427b9b59-ed3b-441f-8e5a-1f2a87f405da",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T10:45:38.096Z",
+      "event"         : "build",
+      "workRecordHash": "a0a5f7c65bc82e63f5c7bf321b2b8bdc280455e3d87fed2b65565931fcafe1d9",
+      "sourceDigest"  : "0f2b648aa62e352cb549d28d97ee6a35bf0c832eddec181135becfb827d298e0",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "bcb9ceb6d6e4065ae1695d7bc4d631bdf838aa205654ad11c806bef19597a309",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "a0a5f7c65bc82e63f5c7bf321b2b8bdc280455e3d87fed2b65565931fcafe1d9",
+        "sourceDigest"  : "0f2b648aa62e352cb549d28d97ee6a35bf0c832eddec181135becfb827d298e0",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-f39da646-225d-4103-a90f-71e597576f70",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T11:13:15.206Z",
+      "event"         : "build",
+      "workRecordHash": "a0a5f7c65bc82e63f5c7bf321b2b8bdc280455e3d87fed2b65565931fcafe1d9",
+      "sourceDigest"  : "691c53706a661f4cd7fa003be266a156d90c5132b3cb84abb270dc2f1a52186b",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "86da396a4fd8a2a4f84608a98f2b0cb640d3e9e74b0065c4a1e0b6d0a5cff82a",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "a0a5f7c65bc82e63f5c7bf321b2b8bdc280455e3d87fed2b65565931fcafe1d9",
+        "sourceDigest"  : "691c53706a661f4cd7fa003be266a156d90c5132b3cb84abb270dc2f1a52186b",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-c474b6ac-5f15-49cb-b010-aba7f755efb1",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T11:21:18.115Z",
+      "event"         : "build",
+      "workRecordHash": "b8ab62dcf37ed9fca72fcac6ff03b658220471dcaf8a0de904ff83bb94be7fe2",
+      "sourceDigest"  : "36b123d44a5841ef3c332d1fff66e70866ec265ffbe7ace1e3797738ae72b8d2",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "3b239c486c98b9d3000d78ea199b0bc919c06ae92288dd9dd65f4a145d8bdfb0",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "b8ab62dcf37ed9fca72fcac6ff03b658220471dcaf8a0de904ff83bb94be7fe2",
+        "sourceDigest"  : "36b123d44a5841ef3c332d1fff66e70866ec265ffbe7ace1e3797738ae72b8d2",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-ecf3da5f-7e25-445a-b47f-e6dbebc70541",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T12:02:19.620Z",
+      "event"         : "build",
+      "workRecordHash": "10de14758cfc3f363ce661a840382adb1078e50545d8d495c1839a87ea934221",
+      "sourceDigest"  : "b3e2a476a633047cea0ceae32ab347b1661c7078202636b60752602b9a81351d",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "70c46c933d3a68aaba1d20d752e72138510a57556c3e99c3766a0df5521e4183",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "10de14758cfc3f363ce661a840382adb1078e50545d8d495c1839a87ea934221",
+        "sourceDigest"  : "b3e2a476a633047cea0ceae32ab347b1661c7078202636b60752602b9a81351d",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-7c41d9da-0050-4e33-a6b1-b7128e0f92ba",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T12:13:24.268Z",
+      "event"         : "build",
+      "workRecordHash": "10de14758cfc3f363ce661a840382adb1078e50545d8d495c1839a87ea934221",
+      "sourceDigest"  : "0ad5d4e817156fc630782c1e66a17d7d506a7508c4a1e4651d163d5cf683bfa1",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "8ecda45da69323e1b6d7f7cb0476228d833879349e63820e0054c76ea164ac38",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "10de14758cfc3f363ce661a840382adb1078e50545d8d495c1839a87ea934221",
+        "sourceDigest"  : "0ad5d4e817156fc630782c1e66a17d7d506a7508c4a1e4651d163d5cf683bfa1",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-b26d6c73-8fe8-4401-88d0-efde7fa80cc3",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T12:27:08.514Z",
+      "event"         : "build",
+      "workRecordHash": "570c30854daf9c19d9191399e6f9edbaa84d48f2f0274af78af9436dc3b090a4",
+      "sourceDigest"  : "36ad2ca970b9aadcd1daf200e8b64c5805db290551efb46287b27d962d979430",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "2db6e0de4d9506a2c90f3c97d93db89c9d005767d55d05c67ac48b30315e7c8c",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "570c30854daf9c19d9191399e6f9edbaa84d48f2f0274af78af9436dc3b090a4",
+        "sourceDigest"  : "36ad2ca970b9aadcd1daf200e8b64c5805db290551efb46287b27d962d979430",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-75b100de-80e3-43b9-99fe-7e9f040a9983",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T12:28:41.818Z",
+      "event"         : "build",
+      "workRecordHash": "26b589ef3b13bb21063296a8b2732930bb0351be62de38df45c83af8dac25e55",
+      "sourceDigest"  : "557b8928c4b4a55429e41bf8fcca236944188e239dfc34641997e44561b85cc6",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "2f8814b2e9b20f1fdd2291adf00bcbd31ea48c8a4b5cc8796ae0dc908ae264fc",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "26b589ef3b13bb21063296a8b2732930bb0351be62de38df45c83af8dac25e55",
+        "sourceDigest"  : "557b8928c4b4a55429e41bf8fcca236944188e239dfc34641997e44561b85cc6",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-64e2546a-b613-462f-87c8-1030aef8104a",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T12:40:20.076Z",
+      "event"         : "build",
+      "workRecordHash": "7dd05eccecfa949712b4c31ea5b2a7ba34871edd8bf42d2d7b61960fa78617de",
+      "sourceDigest"  : "0dc467d599e80a4cc888c14d0eab243f117eed4faa82fa18d2876babf6fcbd20",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "ed7efd88ad86b973d586e5a11c749142ad770b0387bcc59c31eb72615700c9ed",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "7dd05eccecfa949712b4c31ea5b2a7ba34871edd8bf42d2d7b61960fa78617de",
+        "sourceDigest"  : "0dc467d599e80a4cc888c14d0eab243f117eed4faa82fa18d2876babf6fcbd20",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-3f38e869-8bbc-4ae6-afb8-7934edba0bae",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T12:50:16.185Z",
+      "event"         : "host_exception",
+      "workRecordHash": "7dd05eccecfa949712b4c31ea5b2a7ba34871edd8bf42d2d7b61960fa78617de",
+      "sourceDigest"  : "5c70d513760b0050061730cdc397120496df618750d0591decf387d301fe8f44",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "6f6be09729fcb397d6c503ab920412ed4fe1bf8b114147d9cd7f160d91bf2487",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "7dd05eccecfa949712b4c31ea5b2a7ba34871edd8bf42d2d7b61960fa78617de",
+        "sourceDigest"  : "5c70d513760b0050061730cdc397120496df618750d0591decf387d301fe8f44",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-bf28ad18-ea94-44ae-89ac-037b63b3d467",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T13:35:52.039Z",
+      "event"         : "build",
+      "workRecordHash": "1074f2fdd8086ba0a46b7397652bd830011f8a360dfe5a31188a9151a254265b",
+      "sourceDigest"  : "92aa54dd26d05dc2bf269174ee91a886d8a5919e8a6cd23065045b59f2e6e0bf",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "0a0d0ac03ea2d22590239e4fe1d65d0f0573fd6e6e2599cb2bccddf36a493247",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "1074f2fdd8086ba0a46b7397652bd830011f8a360dfe5a31188a9151a254265b",
+        "sourceDigest"  : "92aa54dd26d05dc2bf269174ee91a886d8a5919e8a6cd23065045b59f2e6e0bf",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-e106cdd5-1d06-4b32-ba43-bc15a36ebbaf",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T14:15:35.018Z",
+      "event"         : "build",
+      "workRecordHash": "5bf2861649bc6a18f42cb536f3aa0540bc77ad5dd06c5e0bf1dd533cd8ab72a7",
+      "sourceDigest"  : "0740fe07297c86a2ca81f074310a3861364e5ad76a3dfdec8528d271c51582ef",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "b7fac48215c197d9e18e1292b3c3c2dcf7c5765d2f100a53ecc05e8c6b87bc50",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "5bf2861649bc6a18f42cb536f3aa0540bc77ad5dd06c5e0bf1dd533cd8ab72a7",
+        "sourceDigest"  : "0740fe07297c86a2ca81f074310a3861364e5ad76a3dfdec8528d271c51582ef",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-be39f988-5705-47ab-b22b-a3432721742b",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T14:50:16.252Z",
+      "event"         : "build",
+      "workRecordHash": "28c59f742126df98df4d21d038c32b450bd8d392e7d8f7f74e661ce2af87715b",
+      "sourceDigest"  : "579c601a0861051a98b586eb538a06bcba0b87eeeb7370954f402b6ed136b694",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "bb0f6f028f08c885d7f95b3e75ad8813919ddcb3602df2aedc6ffbc02ad0d8ff",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "28c59f742126df98df4d21d038c32b450bd8d392e7d8f7f74e661ce2af87715b",
+        "sourceDigest"  : "579c601a0861051a98b586eb538a06bcba0b87eeeb7370954f402b6ed136b694",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-0fe41dca-4053-4031-8a34-eec0da9e1b36",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T15:28:00.777Z",
+      "event"         : "build",
+      "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+      "sourceDigest"  : "7f1f1337c904e637cc55fd031c7586a8935fcc5f7a1c6f7e9670c498777ee525",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "c89d374af0cc0474de20998ddc4b7f33c1215008dbb6e147eac067f1adbdb0f8",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+        "sourceDigest"  : "7f1f1337c904e637cc55fd031c7586a8935fcc5f7a1c6f7e9670c498777ee525",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-613e90cd-c5a8-4dfa-ad64-07ca4c3002a5",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T15:32:12.080Z",
+      "event"         : "build",
+      "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+      "sourceDigest"  : "b742f1e07857c4c4972bbdb33e8c9819219bf3b5456a859465fccf92be290d40",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "f741934c2e0c4c4e8495713c05381734dcca2f1cf87eab9e27064ad8c6bb7d73",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+        "sourceDigest"  : "b742f1e07857c4c4972bbdb33e8c9819219bf3b5456a859465fccf92be290d40",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-74e85602-c417-4a87-a12b-40007ae0f7e4",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T21:06:45.075Z",
+      "event"         : "build",
+      "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+      "sourceDigest"  : "cb3befc6fcea660de3156c686b91d182b0889754798a01ec62e7358f8c9be857",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "27bd1c7704f24f7e8bb887c76dcac881479c73ec1229b085e7f38ea27c330c52",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+        "sourceDigest"  : "cb3befc6fcea660de3156c686b91d182b0889754798a01ec62e7358f8c9be857",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-2871ad62-67c3-4f4b-8c7e-7e81d25d86a9",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T21:09:44.695Z",
+      "event"         : "build",
+      "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+      "sourceDigest"  : "250f77df433a6a6ec7ec9777cfc5603017290a9a7d883e74fa9a408db0626fc5",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "d6cbb4742ad05594769bc43cd3288dee5a82b096b62e7819bcdedffc9d7de9a3",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+        "sourceDigest"  : "250f77df433a6a6ec7ec9777cfc5603017290a9a7d883e74fa9a408db0626fc5",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-075c0c95-a3c8-427d-a460-5726d3f5688f",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T21:13:03.562Z",
+      "event"         : "build",
+      "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+      "sourceDigest"  : "3cb5d4efa4842ef1dcb9b848e3b0ddd5bb5c33face6e0960e3f6e83822de893c",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "8489652596becaa4d1a6a10926120f3b35b46319b5dde254797bfeec2285f29c",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+        "sourceDigest"  : "3cb5d4efa4842ef1dcb9b848e3b0ddd5bb5c33face6e0960e3f6e83822de893c",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-2cc8f209-730a-4289-8a46-85bd8d6e362e",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T21:39:38.786Z",
+      "event"         : "build",
+      "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+      "sourceDigest"  : "f8eeca4e61b5f0a74181e38f3be808d03ac5ace4924e008a88b37a534e86c189",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "9a331db107efc2f215b7ff3722eb21a1ddd3fe5b8009ee3f952a12c4b82e5cb5",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+        "sourceDigest"  : "f8eeca4e61b5f0a74181e38f3be808d03ac5ace4924e008a88b37a534e86c189",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-1e099bb6-9e7b-4273-a8f4-81ded29b3874",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T21:46:14.751Z",
+      "event"         : "build",
+      "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+      "sourceDigest"  : "6954a32f4146be9f6f079c5a60dc2c0ae41056c52c801597596e67369bdebf29",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "2200b848fc09002535a934ef5906907762fd4f0473974c0bd0b2df782e66e0ec",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+        "sourceDigest"  : "6954a32f4146be9f6f079c5a60dc2c0ae41056c52c801597596e67369bdebf29",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-cac67e74-b527-4dff-84a5-76475eea5395",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T22:07:32.789Z",
+      "event"         : "build",
+      "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+      "sourceDigest"  : "a3c2afbaf246ea8ca4509ea3060a326381590e29ce312ef4063fefaff00ce93b",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "9411a53b5e94d72c0e86302a971ebceadd894ec67cd31aacf1e5f20eb510ff15",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+        "sourceDigest"  : "a3c2afbaf246ea8ca4509ea3060a326381590e29ce312ef4063fefaff00ce93b",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-3321013f-e009-4b15-bbd8-6c6fa01a1f00",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T23:18:16.812Z",
+      "event"         : "build",
+      "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+      "sourceDigest"  : "c33bfcf67a94962a075baed8d90b628419ea0f55f8c381cea7f1da55178e43b3",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "c8cfa08b8845524e14baaf232b897981c42a92aaed12518aaa51eaf3915da23b",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+        "sourceDigest"  : "c33bfcf67a94962a075baed8d90b628419ea0f55f8c381cea7f1da55178e43b3",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-aa20925a-cdff-4c0e-be13-257577ecb344",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T23:43:13.025Z",
+      "event"         : "build",
+      "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+      "sourceDigest"  : "0b3f167e5708552f1a5636d5bbc4581049cff731fcab0f17c40caab572cb05ab",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "4d0a046d4c521a27d814b1c7ea3d7659f5c0e74f940615e226783cfc1c6e06de",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+        "sourceDigest"  : "0b3f167e5708552f1a5636d5bbc4581049cff731fcab0f17c40caab572cb05ab",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-d20454f6-e367-4d9e-b13e-c7c0e3d80468",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-17T00:17:00.403Z",
+      "event"         : "build",
+      "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+      "sourceDigest"  : "94b2794050be9df47e07c9c323e45465d297bb65684cd693f4ace68c22d68050",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "b3c949d9def447c489d93ed8be527a3e8a2dd94319f8c308e5b986c779ecf5c2",
+      "narrative"     : null,
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+        "sourceDigest"  : "94b2794050be9df47e07c9c323e45465d297bb65684cd693f4ace68c22d68050",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-5d5bdbbc-057b-496a-a6f5-41b363b3d094",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "오늘 로컬·원격의 잔여 Task를 실제 원장과 프로세스로 조사하고 Workflow021의 오늘 Todo에 담당·순서·완료 조건을 연결했다. 양쪽 전체 제품 검사는 통과했다. 두 main의 공통 변경98개가 달라 게시 방식 선택을 요청했으며 commit·push는 아직 실행하지 않았다. 원격 Bun1413개·Node246개 및 타입·소스·구조·빌드 검사가 통과했다.",
+      "kind"          : "authored",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-18T23:25:50.026Z",
+      "event"         : "finish",
+      "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+      "sourceDigest"  : "208e29d534dcb967220e6be9d134c94aabfad6574e03b1a5437c36999c5a4e12",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "1cb172d405ca1dee66d77e23aed8b7419798b8e6fd7bb25426b163a4fed562ee",
+      "narrative": {
+        "summary": "오늘 로컬·원격의 잔여 Task를 실제 원장과 프로세스로 조사하고 Workflow021의 오늘 Todo에 담당·순서·완료 조건을 연결했다. 양쪽 전체 제품 검사는 통과했다. 두 main의 공통 변경98개가 달라 게시 방식 선택을 요청했으며 commit·push는 아직 실행하지 않았다. 원격 Bun1413개·Node246개 및 타입·소스·구조·빌드 검사가 통과했다.",
+        "before" : "양쪽 main은 같은 a720468에서 미커밋 변경이 쌓였고 별도 개발 실행은 없었다. 원격에서 완료한 Reports3건과 Chat005가 로컬에서는 낡은 미완료 상태로 남아 있었다.",
+        "after"  : "today-20261119.md와 tasks.md 링크로 로컬 하네스·스킬, 원격 지도·Chat·Home·번역 및 후속 환경·배포 작업을 나눴다. 완료된 동일UUID와 파생Native 기록은 새 기능 수에서 분리했다.",
+        "changes": [
+          "오늘 계획 문서를 양쪽 기존Workflow021 UUID에 저장하고 기존tasks에서 연결했다.",
+          "현재 변경의 사본·SHA·키형식 검사와 용도/역할별 커밋 후보를 Git제외 증거에 보존했다.",
+          "git diff --check가 지적한 검증기록의 끝빈줄과 줄끝공백만 정리했다. 제품코드와 테스트는 변경하지 않았다."
+        ],
+        "decisions": [
+          "원격·로컬 변경을 한쪽으로 덮지 않는다. 게시 대상 선택 뒤 후보별 격리검증·commit·push·원격ref 확인을 수행한다.",
+          "동일한 전체 제품 검사를 후보 수만큼 반복하지 않고 현재 통합 검사와 후보별 검사를 구분한다."
+        ],
+        "limitations": [
+          "게시방식 선택 대기: 원격main+로컬checkpoint/local-20261119 권장 또는 통합후main. 아직 stage·commit·push하지 않았다.",
+          "기존미완료 작업은 이번 계획 작성으로 완료하지 않았다. Windows실기·태그·릴리즈·배포는 별도범위이며 미실행이다.",
+          "테스트는 현재 전체사본을 검증했고 커밋후보별 격리 검증은 아직 하지 않았다."
+        ],
+        "next": [
+          "게시대상 선택을 반영해 승인된 범위를 목적별로 commit+push하고 원격ref를 확인한다.",
+          "로컬L1 Workflow016과 원격R1 Ecosystem3건부터 첫완료묶음을 진행한다."
+        ]
+      },
+      "work": {
+        "status": "in_progress",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "761b75253cc067ac0a672ea33dad6732f0d317fb95fd174d5ef0211d4841aca3",
+        "sourceDigest"  : "208e29d534dcb967220e6be9d134c94aabfad6574e03b1a5437c36999c5a4e12",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    }
+  ]
+}

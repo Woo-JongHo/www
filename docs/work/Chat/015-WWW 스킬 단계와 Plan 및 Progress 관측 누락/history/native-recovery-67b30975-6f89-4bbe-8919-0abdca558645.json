@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-36d312bc-a767-4e3e-a581-01898b35f75f",
+  "title"        : "WWW 스킬 단계와 Plan 및 Progress 관측 누락",
+  "kind"         : "bug",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner"        : "ui",
+  "status"       : "verifying",
+  "blockedReason": "OBS-EVIDENCE: 검증 시도 없음; OBS-LIFECYCLE: 검증 시도 없음; OBS-UNKNOWN: 검증 시도 없음; PLAN-SOURCE: 검증 시도 없음; PROGRESS-FALLBACK: 검증 시도 없음; AGENT-TRUTH: 검증 시도 없음; OBS-REGRESSION: 검증 시도 없음; ISSUE-TRACE: 검증 시도 없음; 필수 독립 검토 없음; 현재 소스·기준·기록의 저작 작업 보고서 없음",
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-64677750-337f-4488-a503-4e0265356bf5"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-0e282d77-1c00-4663-8860-483d28148f74"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "OBS-EVIDENCE",
+      "description": "문서 참조·구조화 읽기·명시적 Skill 요청·역할이 선언한 절차 적용·실제 하네스 실행·성공 완료를 구별하고 상태마다 출처·관측 한계를 표시한다. 문서 읽기나 자연어 언급만으로 실행·완료를 추정하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "OBS-LIFECYCLE",
+      "description": "WWW 개발 역할이 선택·전환한 단계를 현재 session/thread/turn과 작업 UUID에 구조적으로 연결해 UI에 전달한다. 선택·시작·종료·실패·중단의 실제 근거와 중복·지연·재접속 처리를 정의하고, 외부 개발 세션 등 연결이 없는 표면은 미연결로 표시한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "OBS-UNKNOWN",
+      "description": "명시된 대기 사건이 없는 스킬은 대기로 단정하지 않고 미관측 또는 선택 미확인으로 표시한다. 복수 요청으로 현재 항목을 특정할 수 없으면 모호성을 표시하고 임의의 하나를 선택하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "PLAN-SOURCE",
+      "description": "계획 없음·자료 미제공·수집 실패를 구별하고 Native 계획과 명시적으로 연결한 계획 문서의 출처·현재성을 표시한다. tasks.md를 작성했다는 이유만으로 실행 계획을 받은 것으로 보거나 모든 항목을 실행 중으로 승격하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "PROGRESS-FALLBACK",
+      "description": "공개 진행 설명이 존재하면 활성 Plan이 없어도 현재 요청의 계획 미연결 설명으로 표시한다. 활성 항목이 제공된 경우에는 기존 항목 연결을 유지하며 과거·다른 턴·다른 탭의 설명을 섞지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AGENT-TRUTH",
+      "description": "실제 Native Subagent 사건만 Subagent 집계에 반영하고 부모·자식·상태·출처를 보존한다. 외부 CLI 검토 프로세스와 문서상의 역할은 별도 사실로 설명하며 표시를 채우기 위한 가짜 호출·완료를 만들지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "OBS-REGRESSION",
+      "description": "선택/읽기만 관측·계획 없는 commentary·계획과 commentary 혼합·새 턴·중복·종료 후 지연·복원·2,000건 절단·탭 격리·상태 미제공을 행동 테스트와 실제 Electron에서 검증하고 근거를 해당 소스와 연결한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "ISSUE-TRACE",
+      "description": "사용자 증상·소스상 확인한 원인·미확인 실세션 근거·수정 범위·재현/회귀 시나리오를 개발 명세와 버그 기록에 남기고 GitHub 이슈에 연결한다. 문서/이슈 등록을 제품 수정 완료로 표시하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "session-implementation-20261116-work-36d312bc-a767-4e3e-a581-01898b35f75f",
+    "requestHash": "3a9d4e4cde9415eaf84c3d5d859a5f39010129e63f7e419e1681b41fb6cb5628",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "src/chat.css",
+        "src/native-activity-view.tsx",
+        "scripts/verify-chat.ts",
+        "scripts/verify-sessions.ts",
+        "scripts/workflow/work.ts",
+        "scripts/workflow/run.ts",
+        "scripts/workflow/decomposition.ts",
+        "src/agent-overview.ts",
+        "src/agent-overview-view.tsx",
+        "src/agent-overview.css",
+        "src/www-activity.ts",
+        "src/native-chat.ts",
+        "src/native-session.ts",
+        "src/shared.ts",
+        "test/agent-overview.test.ts",
+        "test/www-activity.test.ts",
+        "test/native-chat.test.ts",
+        "test/native-session.test.ts",
+        "test/fixtures/activity-app-server.ts",
+        "scripts/verify-native-activity.ts",
+        "src/architecture.generated.json",
+        "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락"
+      ],
+      "mutationSurfaces": [
+        "files"
+      ],
+      "verifierCommands": [
+        "[\"npm\",\"run\",\"check\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"npm\",\"run\",\"build\"]",
+        "[\"node\",\"scripts/verify-native-activity.ts\",\"--ui-only\"]",
+        "[\"bun\",\"test\",\"test/agent-overview.test.ts\",\"test/native-session.test.ts\",\"test/native-chat.test.ts\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "3a9d4e4cde9415eaf84c3d5d859a5f39010129e63f7e419e1681b41fb6cb5628"
+    },
+    "inputs": [
+      "docs/ARCHITECTURE.md",
+      "docs/PRODUCT.md",
+      "docs/specs/chat.md",
+      "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/diagnosis.md",
+      "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/spec.md",
+      "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/tasks.md",
+      "scripts/verify-native-activity.ts",
+      "scripts/workflow/run.ts",
+      "src/agent-overview-view.tsx",
+      "src/agent-overview.ts",
+      "src/main.ts",
+      "src/native-activity.ts",
+      "src/native-chat.ts",
+      "src/native-session.ts",
+      "src/session-api.tsx",
+      "src/shared.ts",
+      "src/www-activity.ts",
+      "test/agent-overview.test.ts",
+      "test/native-activity.test.ts",
+      "test/native-chat.test.ts",
+      "test/native-session.test.ts"
+    ],
+    "nextAction": "verify",
+    "verifications": [],
+    "reviews": [],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-f42871ee-ca79-40d9-bbf9-a8b7b9acf448",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T05:55:42.246Z",
+        "sourceDigest"   : "e769b7d0fa7826f8f277667eb291f7c76a5613db088ac660afb852f7db9626ab",
+        "criteriaDigest" : "7a9dba16078d79c2d52909b6cc87d4a3be266c2f6cc65b0d42758511aa31bf43",
+        "documentsDigest": "4a17bb4f8e8aecac453597184093d893e2e6b68bf1eb02a5201c91795e9251dc",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "실행·관측 연결의 부족을 진단했으며 새 단계 사건의 생산자·소비자·신뢰 경계는 구현 전 설계에서 확정한다. 현재 구조는 변경하지 않았다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "제품 코드·테스트·하네스는 변경하지 않았다. 합성 함수 대조의 실제 범위는 새 작업 verification.md에 기록했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "이번에는 표시 버그의 명세·진단·이슈만 등록했다. 실제 제품 변경과 함께 스킬 단계·계획 없는 공개 설명 표현을 갱신한다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "작업·권한·독립 검토 계약은 유지한다. 절차 적용 선언을 실제 호스트 실행이나 제품 완료로 승격하지 않는다."
+          },
+          {
+            "path"    : "docs/specs/chat.md",
+            "decision": "unchanged",
+            "reason"  : "현행 공개 관측·세션 격리 요구를 보존한다. 미관측/대기와 계획 미연결 Progress의 새 목표는 Chat015의 미구현 기준으로 기록했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-f91b5367-5045-4ad2-961d-c1db8759c044",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T08:32:07.051Z",
+        "sourceDigest"   : "fb609b21c99f7c8b8b28dbe815dda5adb5b2e28dfbdee3c378ed27ce69b7f465",
+        "criteriaDigest" : "7a9dba16078d79c2d52909b6cc87d4a3be266c2f6cc65b0d42758511aa31bf43",
+        "documentsDigest": "caa19f99e7edd08d0327ea95b56b2427ced8c22452090e92683b7a38ed88245d",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "Hook 정산은 기존 native-activity 순수 투영 책임에 속하고 프로세스·IPC·상태 소유 경계를 바꾸지 않았다. 현재 구조 ID 계약과 생성기는 통과했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "현재 Hook 집중 회귀 명령과 합성 사건·실제 Native/GUI/신뢰 수용의 분리 및 시각 모호성 검증 범위를 기록했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "현재 변경은 기존 개인용 로컬 Electron 관측·통제 목적 안의 투영/기록 정합성 수정이며 제품 목적·사용자·범위를 추가하지 않았다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "마지막 action 뒤 read/status 대조, record.blockedReason과 status.reasons, complete=false와 실제 complete 호출 거부를 명시적으로 분리했다."
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
+  }
+}

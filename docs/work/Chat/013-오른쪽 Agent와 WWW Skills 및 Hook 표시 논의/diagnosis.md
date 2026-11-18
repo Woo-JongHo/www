@@ -1,3 +1,14 @@
+# 현재 진단 회수와 과거 원문
+
+현재 scope는 해당UUID의 문서·허용 검증·독립 감사 회수다. source/전역/인증/Hook 설정을 바꾸지 않는다. 같은 사용자 증상과 실제 관측, 코드로 입증한 경계와 미확인 세션 원인을 구분한다.
+
+current agent-overview는 현재 structured role declaration/명시 요청과 읽기 관측을 나누고 계획 없는 공개 설명을 별도로 보여 준다. 실제 Subagent의 종료/연결 경계와 empty commentary·late delta 회귀가 코드에 있다. 상세 native-activity의 공개 설명 정산 경계도 현재 tests와 대조한다. 이는 코드/검사 준비의 관찰이며 새 GUI/actual 모델 도구선택 성공이 아니다. 현재 단계 선언은 하네스 실행·업무 수용 영수증으로 승격하지 않는다.
+
+과거 전역설정/호스트/차단/실패 설명은 아래 당시 이력이다. 현재 새 증거는 spec/verification의 실행 시각과 source로 연결하고 원본 실패를 삭제하지 않는다.
+
+<details>
+<summary>기존 진단 원문</summary>
+
 # Vercel 플러그인 Hook 등록 경로 조사
 
 ## 요청과 권한
@@ -31,3 +42,5 @@
 후속 직접 요청 “비활성화로 돌려 이건 아예”에 따라 사용자 전역 Codex 설정의 vercel@claude-plugins-official enabled 값만 false로 변경했다. 변경 전 사본은 같은 작업의 Git 제외 증거 폴더에 0600으로 보관했고 TOML 파싱 결과에서 다른 설정이 동일함을 대조했다. 플러그인 파일 삭제는 하지 않았다.
 
 새 codex app-server 프로세스에서 hooks/list·skills/list를 실제 조회했다. complete=true, Vercel Hook 0개·Vercel 스킬 0개, 남은 Hook은 BoxBox 3개였다. 전체 스킬 수는 조회 범위에서 71개였다. 기존 프로세스의 재로딩이나 모든 실행 중인 세션의 적용 상태까지 검증한 결과는 아니다. 근거는 .www/evidence/work-64677750-337f-4488-a503-4e0265356bf5/vercel-disabled-verification.json이다.
+
+</details>

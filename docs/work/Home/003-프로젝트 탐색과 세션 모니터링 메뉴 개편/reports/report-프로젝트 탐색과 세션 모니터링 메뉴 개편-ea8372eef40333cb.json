@@ -1,0 +1,962 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-0e282d77-1c00-4663-8860-483d28148f74",
+  "title"        : "프로젝트 탐색과 세션 모니터링 메뉴 개편",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-422bf9e8-1d3a-4d88-a779-9934c39032b5",
+      "workId"        : "work-0e282d77-1c00-4663-8860-483d28148f74",
+      "title"         : "프로젝트 탐색과 세션 모니터링 메뉴 개편",
+      "summary"       : "프로젝트 목록 탐색 중 중앙 화면 유지와 다섯 공통 메뉴·현재 대화 탭의 세션 모니터링을 Home003의 명세·설계·실행 계획으로 정리했다. 제품 코드는 변경하지 않았다. 문서 계약과 기준별 연결은 확인했으며 별도 Claude Sonnet 5 의미 검토는 180초 응답 시간 초과로 미실행 상태다.",
+      "kind"          : "authored",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T05:45:17.905Z",
+      "event"         : "finish",
+      "workRecordHash": "b71a28598ecd00c9b75c6988b2b7a662eff8feca0ebe74090beb73b1f7abbf88",
+      "sourceDigest"  : "504dc9fa11d6bf8147b0ca345e3dda7f800f0831eaa20ea074a43a8aac3a8ebc",
+      "criteriaDigest": "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393",
+      "semanticHash"  : "a71fea2505c9136d3ad314b4da15347f4b53415daeb2ca0e532cf1e907ac3b0c",
+      "narrative": {
+        "summary": "프로젝트 목록 탐색 중 중앙 화면 유지와 다섯 공통 메뉴·현재 대화 탭의 세션 모니터링을 Home003의 명세·설계·실행 계획으로 정리했다. 제품 코드는 변경하지 않았다. 문서 계약과 기준별 연결은 확인했으며 별도 Claude Sonnet 5 의미 검토는 180초 응답 시간 초과로 미실행 상태다.",
+        "before" : "기존 전체 보기 버튼은 사이드바와 중앙을 동시에 홈으로 바꾸고, 같은 프로젝트를 다시 선택해도 대시보드로 이동한다. 대화에는 상세 모니터와 세션 모니터 접기/열기 버튼이 있다.",
+        "after"  : "다음 구현의 기준으로 목록 탐색과 중앙 이동을 분리하고 현재 프로젝트 재선택 시 화면 유지, 다른 대상 선택 성공 시 전환, 대시보드·대화·생태계·리포트·모니터링 순서와 기존 두 버튼의 JSX 주석 처리를 문서화했다. 실제 앱 동작은 아직 동일하다.",
+        "changes": [
+          "명세에 사용자 확정 사항과 설계 기본안, 정상·취소·실패·보호·빈 상태·세션 격리 시나리오를 기록했다.",
+          "설계에 상태 소유와 기존 세션 API·투영 재사용, 화면 생명주기·초점·예상 영향 파일을 기록했다.",
+          "실행 계획에 기준 10개와 단계별 구현·검증·소유·의존성·문서 갱신을 연결했다.",
+          "작업 원장과 목차, 실제 문서 검사·검토 한계를 남겼다."
+        ],
+        "decisions": [
+          "Home002와 자동 Native001의 이력을 보존하고 후속 문서의 정본을 새 Home003 UUID로 연결했다.",
+          "현행 제품·기능 명세는 기존 구현을 설명하도록 유지하고 새 목표를 현재 제공 기능으로 승격하지 않았다.",
+          "모니터링은 선택한 대화 탭의 세션 범위로 한정하고 기존 승인·실행 보호와 Chat014의 읽기·성능 요구를 재사용한다."
+        ],
+        "limitations": [
+          "제품 구현·행동 테스트·GUI·IME·Windows 실기 검증과 필수 제품 감사는 미실행이다.",
+          "Claude Sonnet 5 문서 검토는 180초 응답 시간 초과로 spec·consistency 모두 not_run이며 실제 모델 metadata와 검토 승인을 얻지 못했다.",
+          "작업 ready와 모든 수용 기준 unverified를 유지한다. 커밋·푸시는 실행하지 않았다."
+        ],
+        "next": [
+          "유효한 별도 문서 의미 검토를 받아 spec·consistency 결과를 기록한다.",
+          "제품 코드 쓰기 권한을 받은 뒤 같은 UUID로 탐색 분리·모니터링 연결을 구현하고 계획의 실제 시나리오를 검증한다."
+        ],
+        "reader": {
+          "story": "목록을 살펴보는 동안 하던 작업이 사라지는 불편을 줄이기 위해 탐색과 중앙 화면을 분리하는 다음 구현 기준을 작성했다. 사용자가 정한 다섯 메뉴와 세션 모니터링 범위를 명세·설계·실행 계획에 연결했다. 문서 구조와 기준 연결은 확인했지만 앱은 변경하지 않았으며 별도 의미 검토의 응답은 받지 못했다.",
+          "requirements": [
+            {
+              "requirement": "프로젝트 목록 탐색 중 현재 화면 유지",
+              "result"     : "정상·현재 대상 재선택·다른 대상 선택·추가 취소와 실패의 전환 규칙을 문서화했다.",
+              "evidence"   : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md",
+              "limitations": "제품 행동 미검증"
+            },
+            {
+              "requirement": "다섯 메뉴와 세션 모니터링",
+              "result"     : "메뉴 순서·두 기존 버튼의 주석 처리·현재 탭의 세션 격리와 화면 왕복 보존을 정의했다.",
+              "evidence"   : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md",
+              "limitations": "제품 구현 미실행"
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "작업 문서 계약",
+              "method"     : "node scripts/check-workflow.ts 및 기준별 참조 대조",
+              "expected"   : "목차·스키마·링크와 기준 10개 연결이 유효함",
+              "observed"   : "종료 코드 0과 10개 기준의 spec/tasks 참조를 확인했다.",
+              "limitations": "의미 승인과 기능 검증을 대체하지 않음"
+            },
+            {
+              "target"     : "별도 문서 의미 검토",
+              "method"     : "도구 없는 Claude CLI에 claude-sonnet-5를 요청",
+              "expected"   : "spec/consistency의 근거 있는 검토 응답",
+              "observed"   : "180초 응답 시간 초과, stdout/stderr 0바이트, 공식 상태 not_run",
+              "limitations": "실제 모델과 실패 원인 미확인"
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md",
+              "purpose": "사용자 여정·전환 규칙·범위를 확인한다."
+            },
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md",
+              "purpose": "상태·세션·화면 생명주기와 영향 파일을 확인한다."
+            },
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/tasks.md",
+              "purpose": "기준별 구현·검증·소유와 다음 실행 순서를 확인한다."
+            },
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/verification.md",
+              "purpose": "실제 문서 검사와 검토 미실행의 한계를 확인한다."
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "별도 문서 의미 검토와 제품 구현 권한을 확인한 뒤 계획을 실행한다.",
+              "owner"   : "Codex 통합 책임자",
+              "doneWhen": "현재 기준과 source에 연결된 실제 구현·검증·필수 검토가 확보됨",
+              "impact"  : "현재 앱의 탐색 동작은 그대로 유지됨"
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "NAV-KEEP",
+            "description": "프로젝트 목록을 열고 탐색하거나 닫는 동안 중앙의 현재 프로젝트·화면·선택 상태를 유지하며 홈 보드로 강제 이동하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-SELECT",
+            "description": "현재 프로젝트 재선택은 기존 화면을 유지하고 다른 프로젝트의 명시 선택 성공 때만 해당 대상의 대시보드로 전환한다. 프로젝트 추가 취소·실패 시 기존 화면과 선택을 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-GUARD",
+            "description": "프로젝트 목록 열기는 실행 중에도 가능하며 실제 다른 프로젝트 전환에는 전송·실행·대화 준비·미결 승인·실패 원문 보호를 유지한다. 사이드바 탐색으로 Native 실행을 중단하거나 새 요청을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-MENU",
+            "description": "프로젝트 공통 메뉴를 대시보드·대화·생태계·리포트·모니터링 순서로 제공하고 프로젝트 목록과 명시적 전체 대시보드 열기를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-ENTRY",
+            "description": "대화 상단의 상세 모니터·세션 모니터 접기/열기 두 기존 버튼을 JSX 주석 처리해 비활성화하고 모니터링 메뉴로 세션 개요와 상세 관측에 접근한다. 숨은 버튼이 키보드 초점이나 클릭 대상에 남지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-SCOPE",
+            "description": "모니터링은 현재 선택한 Codex 대화 탭의 sessionId·프로젝트·thread 범위에 연결되고 활성 턴과 과거 턴의 출처를 구분한다. 다른 탭의 사건·승인·리소스를 혼합하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-STATES",
+            "description": "모니터링에서 기존 공개 실행·Plan/Progress·Skills/Hooks·리소스·사용량·사건 관측을 재사용하며 새 대화·자료 없음·로딩·연결 종료·수집 오류·부분 이력·오래된 관측을 사실에 따라 표시한다. 관측 열기만으로 새 thread/turn·자동 재전송을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "STATE-RETURN",
+            "description": "대화·모니터링·프로젝트 목록·다른 탭을 왕복해도 같은 대화의 입력 초안·읽기 위치·출력 카드 펼침을 유지하며 리포트 선택과 생태계 경로 등 현재 화면 상태를 보존한다. 비활성 화면에서도 실행 관측을 놓치지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "ACCESS-VERIFY",
+            "description": "프로젝트 목록·명시적 화면 이동·모니터링을 키보드와 좁은 창에서 사용할 수 있고 현재 프로젝트·세션·선택 메뉴와 초점이 식별된다. 실제 Electron과 합성 Native 시나리오·스크린샷·소스 식별을 연결해 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "DOC-HANDOFF",
+            "description": "명세·설계·실행 계획에 기준별 구현·검증·관련 기존 작업과 권한을 연결하고 현행 구현·새 목표·미실행 검토를 구분한다. 문서 작성만으로 제품 구현이나 완료를 표시하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/work.json",
+        "workRecordHash": "b71a28598ecd00c9b75c6988b2b7a662eff8feca0ebe74090beb73b1f7abbf88",
+        "sourceDigest"  : "504dc9fa11d6bf8147b0ca345e3dda7f800f0831eaa20ea074a43a8aac3a8ebc",
+        "criteriaDigest": "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-8b40eff3-86e2-4fa3-b777-72dd94c0152b",
+      "workId"        : "work-0e282d77-1c00-4663-8860-483d28148f74",
+      "title"         : "프로젝트 탐색과 세션 모니터링 메뉴 개편",
+      "summary"       : "프로젝트 목록 탐색 중 중앙 화면 유지와 다섯 공통 메뉴·현재 대화 탭의 세션 모니터링을 Home003의 명세·설계·실행 계획으로 정리했다. 제품 코드는 변경하지 않았다. 문서 계약과 기준별 연결은 확인했으며 별도 Claude Sonnet 5 의미 검토는 180초 응답 시간 초과로 미실행 상태다.",
+      "kind"          : "authored",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T05:46:30.169Z",
+      "event"         : "finish",
+      "workRecordHash": "b71a28598ecd00c9b75c6988b2b7a662eff8feca0ebe74090beb73b1f7abbf88",
+      "sourceDigest"  : "504dc9fa11d6bf8147b0ca345e3dda7f800f0831eaa20ea074a43a8aac3a8ebc",
+      "criteriaDigest": "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393",
+      "semanticHash"  : "b5d27942aebbb51dc7c108d43b94f2fba9ef976527de35ec8502f8e082561477",
+      "narrative": {
+        "summary": "프로젝트 목록 탐색 중 중앙 화면 유지와 다섯 공통 메뉴·현재 대화 탭의 세션 모니터링을 Home003의 명세·설계·실행 계획으로 정리했다. 제품 코드는 변경하지 않았다. 문서 계약과 기준별 연결은 확인했으며 별도 Claude Sonnet 5 의미 검토는 180초 응답 시간 초과로 미실행 상태다.",
+        "before" : "기존 전체 보기 버튼은 사이드바와 중앙을 동시에 홈으로 바꾸고, 같은 프로젝트를 다시 선택해도 대시보드로 이동한다. 대화에는 상세 모니터와 세션 모니터 접기/열기 버튼이 있다.",
+        "after"  : "다음 구현의 기준으로 목록 탐색과 중앙 이동을 분리하고 현재 프로젝트 재선택 시 화면 유지, 다른 대상 선택 성공 시 전환, 대시보드·대화·생태계·리포트·모니터링 순서와 기존 두 버튼의 JSX 주석 처리를 문서화했다. 실제 앱 동작은 아직 동일하다.",
+        "changes": [
+          "명세에 사용자 확정 사항과 설계 기본안, 정상·취소·실패·보호·빈 상태·세션 격리 시나리오를 기록했다.",
+          "설계에 상태 소유와 기존 세션 API·투영 재사용, 화면 생명주기·초점·예상 영향 파일을 기록했다.",
+          "실행 계획에 기준 10개와 단계별 구현·검증·소유·의존성·문서 갱신을 연결했다.",
+          "작업 원장과 목차, 실제 문서 검사·검토 한계를 남겼다.",
+          "초기 문서 대조의 ready와 문서 영향 검토 기록 뒤의 verifying를 구분해 현재 보고서의 상태 표현을 정정했다."
+        ],
+        "decisions": [
+          "Home002와 자동 Native001의 이력을 보존하고 후속 문서의 정본을 새 Home003 UUID로 연결했다.",
+          "현행 제품·기능 명세는 기존 구현을 설명하도록 유지하고 새 목표를 현재 제공 기능으로 승격하지 않았다.",
+          "모니터링은 선택한 대화 탭의 세션 범위로 한정하고 기존 승인·실행 보호와 Chat014의 읽기·성능 요구를 재사용한다."
+        ],
+        "limitations": [
+          "제품 구현·행동 테스트·GUI·IME·Windows 실기 검증과 필수 제품 감사는 미실행이다.",
+          "Claude Sonnet 5 문서 검토는 180초 응답 시간 초과로 spec·consistency 모두 not_run이며 실제 모델 metadata와 검토 승인을 얻지 못했다.",
+          "작업 verifying·다음 단계 review와 모든 수용 기준 unverified를 유지한다. 커밋·푸시는 실행하지 않았다."
+        ],
+        "next": [
+          "유효한 별도 문서 의미 검토를 받아 spec·consistency 결과를 기록한다.",
+          "제품 코드 쓰기 권한을 받은 뒤 같은 UUID로 탐색 분리·모니터링 연결을 구현하고 계획의 실제 시나리오를 검증한다."
+        ],
+        "reader": {
+          "story": "목록을 살펴보는 동안 하던 작업이 사라지는 불편을 줄이기 위해 탐색과 중앙 화면을 분리하는 다음 구현 기준을 작성했다. 사용자가 정한 다섯 메뉴와 세션 모니터링 범위를 명세·설계·실행 계획에 연결했다. 문서 구조와 기준 연결은 확인했지만 앱은 변경하지 않았으며 별도 의미 검토의 응답은 받지 못했다.",
+          "requirements": [
+            {
+              "requirement": "프로젝트 목록 탐색 중 현재 화면 유지",
+              "result"     : "정상·현재 대상 재선택·다른 대상 선택·추가 취소와 실패의 전환 규칙을 문서화했다.",
+              "evidence"   : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md",
+              "limitations": "제품 행동 미검증"
+            },
+            {
+              "requirement": "다섯 메뉴와 세션 모니터링",
+              "result"     : "메뉴 순서·두 기존 버튼의 주석 처리·현재 탭의 세션 격리와 화면 왕복 보존을 정의했다.",
+              "evidence"   : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md",
+              "limitations": "제품 구현 미실행"
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "작업 문서 계약",
+              "method"     : "node scripts/check-workflow.ts 및 기준별 참조 대조",
+              "expected"   : "목차·스키마·링크와 기준 10개 연결이 유효함",
+              "observed"   : "종료 코드 0과 10개 기준의 spec/tasks 참조를 확인했다.",
+              "limitations": "의미 승인과 기능 검증을 대체하지 않음"
+            },
+            {
+              "target"     : "별도 문서 의미 검토",
+              "method"     : "도구 없는 Claude CLI에 claude-sonnet-5를 요청",
+              "expected"   : "spec/consistency의 근거 있는 검토 응답",
+              "observed"   : "180초 응답 시간 초과, stdout/stderr 0바이트, 공식 상태 not_run",
+              "limitations": "실제 모델과 실패 원인 미확인"
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md",
+              "purpose": "사용자 여정·전환 규칙·범위를 확인한다."
+            },
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md",
+              "purpose": "상태·세션·화면 생명주기와 영향 파일을 확인한다."
+            },
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/tasks.md",
+              "purpose": "기준별 구현·검증·소유와 다음 실행 순서를 확인한다."
+            },
+            {
+              "path": "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/verification.md",
+              "purpose": "실제 문서 검사와 검토 미실행의 한계를 확인한다."
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "별도 문서 의미 검토와 제품 구현 권한을 확인한 뒤 계획을 실행한다.",
+              "owner"   : "Codex 통합 책임자",
+              "doneWhen": "현재 기준과 source에 연결된 실제 구현·검증·필수 검토가 확보됨",
+              "impact"  : "현재 앱의 탐색 동작은 그대로 유지됨"
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "NAV-KEEP",
+            "description": "프로젝트 목록을 열고 탐색하거나 닫는 동안 중앙의 현재 프로젝트·화면·선택 상태를 유지하며 홈 보드로 강제 이동하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-SELECT",
+            "description": "현재 프로젝트 재선택은 기존 화면을 유지하고 다른 프로젝트의 명시 선택 성공 때만 해당 대상의 대시보드로 전환한다. 프로젝트 추가 취소·실패 시 기존 화면과 선택을 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-GUARD",
+            "description": "프로젝트 목록 열기는 실행 중에도 가능하며 실제 다른 프로젝트 전환에는 전송·실행·대화 준비·미결 승인·실패 원문 보호를 유지한다. 사이드바 탐색으로 Native 실행을 중단하거나 새 요청을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-MENU",
+            "description": "프로젝트 공통 메뉴를 대시보드·대화·생태계·리포트·모니터링 순서로 제공하고 프로젝트 목록과 명시적 전체 대시보드 열기를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-ENTRY",
+            "description": "대화 상단의 상세 모니터·세션 모니터 접기/열기 두 기존 버튼을 JSX 주석 처리해 비활성화하고 모니터링 메뉴로 세션 개요와 상세 관측에 접근한다. 숨은 버튼이 키보드 초점이나 클릭 대상에 남지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-SCOPE",
+            "description": "모니터링은 현재 선택한 Codex 대화 탭의 sessionId·프로젝트·thread 범위에 연결되고 활성 턴과 과거 턴의 출처를 구분한다. 다른 탭의 사건·승인·리소스를 혼합하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-STATES",
+            "description": "모니터링에서 기존 공개 실행·Plan/Progress·Skills/Hooks·리소스·사용량·사건 관측을 재사용하며 새 대화·자료 없음·로딩·연결 종료·수집 오류·부분 이력·오래된 관측을 사실에 따라 표시한다. 관측 열기만으로 새 thread/turn·자동 재전송을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "STATE-RETURN",
+            "description": "대화·모니터링·프로젝트 목록·다른 탭을 왕복해도 같은 대화의 입력 초안·읽기 위치·출력 카드 펼침을 유지하며 리포트 선택과 생태계 경로 등 현재 화면 상태를 보존한다. 비활성 화면에서도 실행 관측을 놓치지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "ACCESS-VERIFY",
+            "description": "프로젝트 목록·명시적 화면 이동·모니터링을 키보드와 좁은 창에서 사용할 수 있고 현재 프로젝트·세션·선택 메뉴와 초점이 식별된다. 실제 Electron과 합성 Native 시나리오·스크린샷·소스 식별을 연결해 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "DOC-HANDOFF",
+            "description": "명세·설계·실행 계획에 기준별 구현·검증·관련 기존 작업과 권한을 연결하고 현행 구현·새 목표·미실행 검토를 구분한다. 문서 작성만으로 제품 구현이나 완료를 표시하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/work.json",
+        "workRecordHash": "b71a28598ecd00c9b75c6988b2b7a662eff8feca0ebe74090beb73b1f7abbf88",
+        "sourceDigest"  : "504dc9fa11d6bf8147b0ca345e3dda7f800f0831eaa20ea074a43a8aac3a8ebc",
+        "criteriaDigest": "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-542d8308-1f9e-45f0-90de-8185a5485db0",
+      "workId"        : "work-0e282d77-1c00-4663-8860-483d28148f74",
+      "title"         : "프로젝트 탐색과 세션 모니터링 메뉴 개편",
+      "summary"       : "프로젝트 탐색·모니터링 메뉴의 현재 미검증 범위와 다음 행동을 회수했다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T08:34:28.881Z",
+      "event"         : "finish",
+      "workRecordHash": "4f5dc24c26603085c6d680aa832b953091d52d7b1a8e87dc96c67898631a3db2",
+      "sourceDigest"  : "38dc8d6818f3273a6dcc4639cd775c848d7cf1e4a3698f67f3c82e7a4ceb9636",
+      "criteriaDigest": "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393",
+      "semanticHash"  : "6952b55b139de04c253dcf61b95392621c07be0e66344fd80bbc1e639067bad9",
+      "narrative": {
+        "summary": "프로젝트 탐색·모니터링 메뉴의 현재 미검증 범위와 다음 행동을 회수했다.",
+        "before" : "구현·source-machine GUI와 새 머신의 현재 검증을 혼동하지 않는 인계가 필요했다.",
+        "after"  : "같은 UUID의 단일 현재 계획과 문서 영향 검토를 기록하고 verify로 인계했다. 전체 unit 검사는 별도 통과 사실로 유지했다.",
+        "changes": [
+          "같은 UUID의 단일 현재 계획과 문서 영향 검토를 기록하고 verify로 인계했다. 전체 unit 검사는 별도 통과 사실로 유지했다.",
+          "현재 계획은 같은 UUID의 tasks.md에 두고 이전 계획은 이력으로 구분했다."
+        ],
+        "decisions": [
+          "source-machine 기록과 현 머신의 실제 실행을 분리하고 기준·권한을 약화하지 않았다."
+        ],
+        "limitations": [
+          "선택·키보드·왕복·세션 격리의 실제 GUI와 필수 Opus는 현재 미실행이다.",
+          "Claude OAuth 만료 및 자동 갱신 실패로 필수 감사가 not_run이며 대체 모델은 실행하지 않았다. 커밋·push·배포·외부 쓰기를 하지 않았다."
+        ],
+        "next": [
+          "현재 원장의 다음 행동 verify에서 계획에 기록한 실제 미실행 구간을 확인한다.",
+          "GUI/Native/Opus 또는 BoxBox 전제가 필요한 경우 현재 금지된 인증·전역 설정·승인 변경을 이 실행에서 우회하지 않는다."
+        ],
+        "reader": {
+          "story": "프로젝트 탐색·모니터링 메뉴의 현재 미검증 범위와 다음 행동을 회수했다. 같은 UUID의 단일 현재 계획과 문서 영향 검토를 기록하고 verify로 인계했다. 전체 unit 검사는 별도 통과 사실로 유지했다. 선택·키보드·왕복·세션 격리의 실제 GUI와 필수 Opus는 현재 미실행이다.",
+          "requirements": [
+            {
+              "requirement": "같은 UUID의 실제 결과와 미실행 구분",
+              "result"     : "같은 UUID의 단일 현재 계획과 문서 영향 검토를 기록하고 verify로 인계했다. 전체 unit 검사는 별도 통과 사실로 유지했다.",
+              "evidence"   : ".www/evidence/remote-20261116/scratch/local-remaining.md",
+              "limitations": "선택·키보드·왕복·세션 격리의 실제 GUI와 필수 Opus는 현재 미실행이다."
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "현재 원장과 증거 적용성",
+              "method"     : "공식 read/status 및 실제 명령·독립 읽기 전용 대조",
+              "expected"   : "과거 성공이나 부분 검사로 전체 완료를 만들지 않음",
+              "observed"   : "업무 완료 false를 유지하고 기준별 현재 적용성과 미검증을 나누었다.",
+              "limitations": "선택·키보드·왕복·세션 격리의 실제 GUI와 필수 Opus는 현재 미실행이다."
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": ".www/evidence/remote-20261116/scratch/local-remaining.md",
+              "purpose": "이 보고서의 실제 실행 범위와 실패/제한 원문 확인"
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "현재 인계 문서의 남은 실제 검증·필수 감사를 재개한다.",
+              "owner"   : "후속 Codex 통합자",
+              "doneWhen": "현재 기능·환경·필수 감사와 저작 보고서가 모두 적용 가능함",
+              "impact"  : "미충족 동안 업무 완료로 승격하지 않음"
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "NAV-KEEP: 검증 시도 없음; NAV-SELECT: 검증 시도 없음; NAV-GUARD: 검증 시도 없음; NAV-MENU: 검증 시도 없음; MON-ENTRY: 검증 시도 없음; MON-SCOPE: 검증 시도 없음; MON-STATES: 검증 시도 없음; STATE-RETURN: 검증 시도 없음; ACCESS-VERIFY: 검증 시도 없음; DOC-HANDOFF: 검증 시도 없음; 필수 독립 검토 없음; 현재 소스·기준·기록의 저작 작업 보고서 없음",
+        "criteria": [
+          {
+            "id"         : "NAV-KEEP",
+            "description": "프로젝트 목록을 열고 탐색하거나 닫는 동안 중앙의 현재 프로젝트·화면·선택 상태를 유지하며 홈 보드로 강제 이동하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-SELECT",
+            "description": "현재 프로젝트 재선택은 기존 화면을 유지하고 다른 프로젝트의 명시 선택 성공 때만 해당 대상의 대시보드로 전환한다. 프로젝트 추가 취소·실패 시 기존 화면과 선택을 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-GUARD",
+            "description": "프로젝트 목록 열기는 실행 중에도 가능하며 실제 다른 프로젝트 전환에는 전송·실행·대화 준비·미결 승인·실패 원문 보호를 유지한다. 사이드바 탐색으로 Native 실행을 중단하거나 새 요청을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "NAV-MENU",
+            "description": "프로젝트 공통 메뉴를 대시보드·대화·생태계·리포트·모니터링 순서로 제공하고 프로젝트 목록과 명시적 전체 대시보드 열기를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-ENTRY",
+            "description": "대화 상단의 상세 모니터·세션 모니터 접기/열기 두 기존 버튼을 JSX 주석 처리해 비활성화하고 모니터링 메뉴로 세션 개요와 상세 관측에 접근한다. 숨은 버튼이 키보드 초점이나 클릭 대상에 남지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-SCOPE",
+            "description": "모니터링은 현재 선택한 Codex 대화 탭의 sessionId·프로젝트·thread 범위에 연결되고 활성 턴과 과거 턴의 출처를 구분한다. 다른 탭의 사건·승인·리소스를 혼합하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "MON-STATES",
+            "description": "모니터링에서 기존 공개 실행·Plan/Progress·Skills/Hooks·리소스·사용량·사건 관측을 재사용하며 새 대화·자료 없음·로딩·연결 종료·수집 오류·부분 이력·오래된 관측을 사실에 따라 표시한다. 관측 열기만으로 새 thread/turn·자동 재전송을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "STATE-RETURN",
+            "description": "대화·모니터링·프로젝트 목록·다른 탭을 왕복해도 같은 대화의 입력 초안·읽기 위치·출력 카드 펼침을 유지하며 리포트 선택과 생태계 경로 등 현재 화면 상태를 보존한다. 비활성 화면에서도 실행 관측을 놓치지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "ACCESS-VERIFY",
+            "description": "프로젝트 목록·명시적 화면 이동·모니터링을 키보드와 좁은 창에서 사용할 수 있고 현재 프로젝트·세션·선택 메뉴와 초점이 식별된다. 실제 Electron과 합성 Native 시나리오·스크린샷·소스 식별을 연결해 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "DOC-HANDOFF",
+            "description": "명세·설계·실행 계획에 기준별 구현·검증·관련 기존 작업과 권한을 연결하고 현행 구현·새 목표·미실행 검토를 구분한다. 문서 작성만으로 제품 구현이나 완료를 표시하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/work.json",
+        "workRecordHash": "4f5dc24c26603085c6d680aa832b953091d52d7b1a8e87dc96c67898631a3db2",
+        "sourceDigest"  : "38dc8d6818f3273a6dcc4639cd775c848d7cf1e4a3698f67f3c82e7a4ceb9636",
+        "criteriaDigest": "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-fa469905-56b1-453e-bf79-a6211a75e428",
+      "workId"        : "work-0e282d77-1c00-4663-8860-483d28148f74",
+      "title"         : "프로젝트 탐색과 세션 모니터링 메뉴 개편",
+      "summary"       : "프로젝트 탐색·모니터링과 대화·탭 상태 보존의 v5 실제 관측을 같은 UUID에서 부분 회수했다. 고유 verify-home의 프로젝트·메뉴·모니터링 진입과 공식 verify-chat·verify-sessions의 대화 복원·초안/읽기 위치·실행/승인 보호·동시 탭 격리 actual assertion을 회수했다. 추가 Native 실제 감사 반례에 따른 v6 교정을 기다리며 전체 업무 완료를 주장하지 않는다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-16T23:30:16.908Z",
+      "event"         : "finish",
+      "workRecordHash": "3fcaaafa59cd120b4c7f6ea35def9a371b16687102d8d3b0d44333aac9bd67ff",
+      "sourceDigest"  : "bc13db13b1e59a831b17203f5d7e83efd99f9250a8ecfbee4a6c575a8b4e1fa6",
+      "criteriaDigest": "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393",
+      "semanticHash"  : "84d0c43943819599474286debe7dba16ea3a0a8e1b07ade98666100f5418d17e",
+      "narrative": {
+        "summary": "프로젝트 탐색·모니터링과 대화·탭 상태 보존의 v5 실제 관측을 같은 UUID에서 부분 회수했다. 고유 verify-home의 프로젝트·메뉴·모니터링 진입과 공식 verify-chat·verify-sessions의 대화 복원·초안/읽기 위치·실행/승인 보호·동시 탭 격리 actual assertion을 회수했다. 추가 Native 실제 감사 반례에 따른 v6 교정을 기다리며 전체 업무 완료를 주장하지 않는다.",
+        "before" : "과거 집중/GUI 기록은 후속 공유 소스 변경 때문에 최신 전체 검증으로 사용할 수 없었다. 단순 파일 존재·해시 검사와 실제 사용자 시나리오의 실행도 구분해야 했다.",
+        "after"  : "고유 verify-home의 프로젝트·메뉴·모니터링 진입과 공식 verify-chat·verify-sessions의 대화 복원·초안/읽기 위치·실행/승인 보호·동시 탭 격리 actual assertion을 회수했다. actual process·등록 verify 시도·summary assertion·원본 artifact의 bytes/SHA를 구분해 evidence-current-v5.md에 보존하고 현재 계획과 공식 문서 영향 검토를 연결했다.",
+        "changes": [
+          "같은 UUID·기준·원래 권한·과거 실패를 보존했다.",
+          "고유 actual 관측의 범위와 미관측을 own 근거 문서에 고정하고 작업 inputs와 현재 다음 행동을 연결했다.",
+          "현재 의미/감사 기준은 파일 checker 또는 단위 명령의 성공만으로 통과시키지 않았다."
+        ],
+        "decisions": [
+          "Root 단독 GUI 실행에서 각 UUID의 고유 관측을 받았으며 다른 UUID의 PASS를 복사하지 않았다.",
+          "제품 기술 v5 fingerprint와 문서 추가로 달라진 작업 scope를 분리했다.",
+          "Root 추가 반례 교정 전 실제 full Terra 감사를 보류해 중간 소스의 감사를 반복하지 않았다."
+        ],
+        "limitations": [
+          "Root Native003/006/013/015 실제 감사가 추가 반례를 발견하여 projection·native-activity·agent-overview 및 관련 검사/oracle의 v6 교정을 준비한다. broad src 입력에 영향을 주므로 v5 관측을 새 소스의 통과로 승격하지 않는다.",
+          "이 Home UUID의 전체 기준 actual Terra 감사·업무 완료 action은 아직 실행하지 않았다. 부분 관측을 전체 수용으로 표시하지 않는다.",
+          "실제 Electron/IPC/별도 stdio 프로세스는 합성 Native fixture를 사용했다. 실제 OS picker·IME·Windows·외부 RPA·실제 Native 모델은 이 검증 범위 밖이다."
+        ],
+        "next": [
+          "Root v6 교정 후 영향 검사를 적용하고 실제 필요한 정확 GUI 관측을 같은 UUID로 회수한다.",
+          "최종 동결 뒤 전체 기준 actual gpt-6.1-terra 읽기 전용 감사의 내용 수용과 공식 결과 기록을 확인한다.",
+          "현재 저작 보고서·공식 완료 조건과 원장/HTML readback을 다시 확인한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "NAV-KEEP",
+            "description": "프로젝트 목록을 열고 탐색하거나 닫는 동안 중앙의 현재 프로젝트·화면·선택 상태를 유지하며 홈 보드로 강제 이동하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6210c47e-aad3-481b-8349-2d7d80ffc66a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "NAV-SELECT",
+            "description": "현재 프로젝트 재선택은 기존 화면을 유지하고 다른 프로젝트의 명시 선택 성공 때만 해당 대상의 대시보드로 전환한다. 프로젝트 추가 취소·실패 시 기존 화면과 선택을 보존한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "NAV-GUARD",
+            "description": "프로젝트 목록 열기는 실행 중에도 가능하며 실제 다른 프로젝트 전환에는 전송·실행·대화 준비·미결 승인·실패 원문 보호를 유지한다. 사이드바 탐색으로 Native 실행을 중단하거나 새 요청을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-889f6a50-ae31-47a4-b2c3-7811fa63840d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-76fdc565-22d9-4071-9474-235188661756",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d16486fd-0d65-482f-a93e-5a02854230d5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6210c47e-aad3-481b-8349-2d7d80ffc66a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "NAV-MENU",
+            "description": "프로젝트 공통 메뉴를 대시보드·대화·생태계·리포트·모니터링 순서로 제공하고 프로젝트 목록과 명시적 전체 대시보드 열기를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "MON-ENTRY",
+            "description": "대화 상단의 상세 모니터·세션 모니터 접기/열기 두 기존 버튼을 JSX 주석 처리해 비활성화하고 모니터링 메뉴로 세션 개요와 상세 관측에 접근한다. 숨은 버튼이 키보드 초점이나 클릭 대상에 남지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "MON-SCOPE",
+            "description": "모니터링은 현재 선택한 Codex 대화 탭의 sessionId·프로젝트·thread 범위에 연결되고 활성 턴과 과거 턴의 출처를 구분한다. 다른 탭의 사건·승인·리소스를 혼합하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-889f6a50-ae31-47a4-b2c3-7811fa63840d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-76fdc565-22d9-4071-9474-235188661756",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d16486fd-0d65-482f-a93e-5a02854230d5",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-cabcf10f-a7c3-46f6-95d2-d46cdc49d780",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "MON-STATES",
+            "description": "모니터링에서 기존 공개 실행·Plan/Progress·Skills/Hooks·리소스·사용량·사건 관측을 재사용하며 새 대화·자료 없음·로딩·연결 종료·수집 오류·부분 이력·오래된 관측을 사실에 따라 표시한다. 관측 열기만으로 새 thread/turn·자동 재전송을 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-889f6a50-ae31-47a4-b2c3-7811fa63840d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "STATE-RETURN",
+            "description": "대화·모니터링·프로젝트 목록·다른 탭을 왕복해도 같은 대화의 입력 초안·읽기 위치·출력 카드 펼침을 유지하며 리포트 선택과 생태계 경로 등 현재 화면 상태를 보존한다. 비활성 화면에서도 실행 관측을 놓치지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-889f6a50-ae31-47a4-b2c3-7811fa63840d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6210c47e-aad3-481b-8349-2d7d80ffc66a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-cabcf10f-a7c3-46f6-95d2-d46cdc49d780",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "ACCESS-VERIFY",
+            "description": "프로젝트 목록·명시적 화면 이동·모니터링을 키보드와 좁은 창에서 사용할 수 있고 현재 프로젝트·세션·선택 메뉴와 초점이 식별된다. 실제 Electron과 합성 Native 시나리오·스크린샷·소스 식별을 연결해 검증한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6210c47e-aad3-481b-8349-2d7d80ffc66a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "DOC-HANDOFF",
+            "description": "명세·설계·실행 계획에 기준별 구현·검증·관련 기존 작업과 권한을 연결하고 현행 구현·새 목표·미실행 검토를 구분한다. 문서 작성만으로 제품 구현이나 완료를 표시하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-d66ced47-121e-42d3-8f9f-6f47021f9756",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import {readFile} from 'node:fs/promises';import {createHash} from 'node:crypto';import {readWork} from './scripts/workflow/work.ts';import {captureSource,criteriaDigest} from './scripts/workflow/evidence.ts';import {validateWorkRecord} from './scripts/workflow/schema.ts';import path from 'node:path';const base='.www/evidence/resume-20261116/home004-repair/scratch',workId='work-0e282d77-1c00-4663-8860-483d28148f74',w=await readWork({workId}),source=await captureSource({inputs:w.record.workflow.inputs}),steps=JSON.parse(await readFile(base+'/home23-functional-v1-steps.json','utf8')),manifest=JSON.parse(await readFile(base+'/functional-artifact-manifest-v1.json','utf8'));if(steps.results.length!==6||steps.results.some(r=>r.code!==0||r.signal||r.error)||steps.sourceStable!==true)throw Error('실제 기능 검사 실패/누락');const before=steps.before.find(x=>x.workId===workId),after=steps.after.find(x=>x.workId===workId);if(!before||!after||before.sourceDigest!==source.digest||after.sourceDigest!==source.digest||before.criteriaDigest!==criteriaDigest(w.record)||after.criteriaDigest!==criteriaDigest(w.record))throw Error('Home003 현재 source/criteria 불일치');for(const[file,saved]of Object.entries(manifest)){const bytes=await readFile(file);if(bytes.length!==saved.bytes||createHash('sha256').update(bytes).digest('hex')!==saved.sha256)throw Error('실행 원문 SHA 불일치: '+file);}const errors=validateWorkRecord(w.record,{baseDir:path.dirname(w.path)});if(errors.length)throw Error(errors.join(';'));for(const kind of ['spec','design','tasks','verification']){const text=await readFile(path.join(path.dirname(w.path),kind+'.md'),'utf8');if(!text.trim())throw Error('작업 문서 없음: '+kind);}console.log(JSON.stringify({workId,result:'passed',sourceDigest:source.digest,criteriaDigest:criteriaDigest(w.record),actualExecutionSteps:6,actualSourceStable:true,rawArtifactsValidated:Object.keys(manifest).length,scope:'실제 집중/개발하네스/Electron Session·Chat·지도·리포트 및 Home 관측과 같은 UUID 문서의 현재 결속. OS picker/IME/Windows/실모델 미실측.'}));"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T14:35:30.997Z"
+          },
+          {
+            "id": "attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts",
+              "test/native-session.test.ts",
+              "test/session-registry.test.ts",
+              "test/session-tabs.test.ts",
+              "test/www-activity-view.test.ts",
+              "test/www-activity.test.ts",
+              "test/input.test.ts",
+              "test/workflow-model-allocation.test.ts",
+              "--timeout",
+              "30000"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T21:43:24.338Z"
+          },
+          {
+            "id": "attempt-889f6a50-ae31-47a4-b2c3-7811fa63840d",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts",
+              "test/native-session.test.ts",
+              "test/session-registry.test.ts",
+              "test/session-tabs.test.ts",
+              "test/www-activity-view.test.ts",
+              "test/www-activity.test.ts",
+              "test/input.test.ts",
+              "test/workflow-model-allocation.test.ts",
+              "--timeout",
+              "30000"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T21:50:44.598Z"
+          },
+          {
+            "id": "attempt-76fdc565-22d9-4071-9474-235188661756",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts",
+              "test/native-session.test.ts",
+              "test/session-registry.test.ts",
+              "test/session-tabs.test.ts",
+              "test/www-activity-view.test.ts",
+              "test/www-activity.test.ts",
+              "test/input.test.ts",
+              "test/workflow-model-allocation.test.ts",
+              "--timeout",
+              "30000"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:11:39.042Z"
+          },
+          {
+            "id": "attempt-d16486fd-0d65-482f-a93e-5a02854230d5",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts",
+              "test/native-session.test.ts",
+              "test/session-registry.test.ts",
+              "test/session-tabs.test.ts",
+              "test/www-activity-view.test.ts",
+              "test/www-activity.test.ts",
+              "test/input.test.ts",
+              "test/workflow-model-allocation.test.ts",
+              "--timeout",
+              "30000"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:22:25.123Z"
+          },
+          {
+            "id": "attempt-6210c47e-aad3-481b-8349-2d7d80ffc66a",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:26:28.589Z"
+          },
+          {
+            "id": "attempt-cabcf10f-a7c3-46f6-95d2-d46cdc49d780",
+            "command": "node",
+            "args": [
+              "scripts/verify-sessions.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:26:37.619Z"
+          }
+        ],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/work.json",
+        "workRecordHash": "3fcaaafa59cd120b4c7f6ea35def9a371b16687102d8d3b0d44333aac9bd67ff",
+        "sourceDigest"  : "bc13db13b1e59a831b17203f5d7e83efd99f9250a8ecfbee4a6c575a8b4e1fa6",
+        "criteriaDigest": "a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393"
+      }
+    }
+  ]
+}

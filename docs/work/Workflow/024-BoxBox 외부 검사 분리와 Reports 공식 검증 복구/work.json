@@ -1,0 +1,482 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+  "title"        : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+  "kind"         : "bug",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "PRODUCT",
+      "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+          "path"     : "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+          "path"     : "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "BOXBOX",
+      "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+      "required"   : true,
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+          "path"     : "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+          "path"     : "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    },
+    {
+      "id"         : "REGISTER",
+      "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "harness-boxbox-separation-remote-20261117",
+    "requestHash": "f9f131ad01737ee56bcd9eb2e1459f703810fc35d37eaaca8a50097957660768",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "test/work-json.test.ts",
+        "test/boxbox/work-json.test.ts",
+        "scripts/test.ts",
+        "test/test-runner.test.ts",
+        "package.json",
+        "docs/DEVELOPMENT.md",
+        "src/architecture.generated.json"
+      ],
+      "mutationSurfaces": [
+        "remote_test_tools",
+        "work_verification"
+      ],
+      "verifierCommands": [
+        "[\"bun\",\"test\",\"test/work-json.test.ts\",\"test/test-runner.test.ts\"]",
+        "[\"node\",\"scripts/test.ts\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "f9f131ad01737ee56bcd9eb2e1459f703810fc35d37eaaca8a50097957660768"
+    },
+    "inputs": [
+      "docs/DEVELOPMENT.md",
+      "package.json",
+      "scripts/test.ts",
+      "scripts/verify-reports.ts",
+      "test/boxbox/work-json.test.ts",
+      "test/test-runner.test.ts",
+      "test/work-json.test.ts"
+    ],
+    "nextAction": "verify",
+    "verifications": [
+      {
+        "id"         : "attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+        "startedAt"  : "2026-11-17T01:49:12.639Z",
+        "completedAt": "2026-11-17T01:51:23.089Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "b2897f989ce3da3ba89ff8892a386bfdd7b524966cae93aed7e15db08473c980",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "package.json",
+            "scripts/test.ts",
+            "scripts/verify-reports.ts",
+            "test/boxbox/work-json.test.ts",
+            "test/test-runner.test.ts",
+            "test/work-json.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "e4fd3866f8f15c5fad4fe6aae047f5483cc4b683e5aa34bef1ab7acfbe5f02b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "d05aac85f41d6703e115cd69e581bd1e0281a4a6b7722c140de53b278e2ce76b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "8c717be482f700d75c8416130eaf70135ec4ebd8ecf60fee3477048f5fa9bd30",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "4d540cf453209ae3d2dfc53f00907f6669865c6af6fd629df4eaecb79285c463",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/boxbox/work-json.test.ts",
+              "type"  : "file",
+              "digest": "0ccb53efbcd13ab89fef7a0f185bc2af3d70c1959adbd3a03266ec4cc35f719a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/test-runner.test.ts",
+              "type"  : "file",
+              "digest": "98494937a38e92b290f155dbc05a806e8ebc2f828292d35fa8c9c3ad09cb09dd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "f66f4f5d1d0b1e8a77989b35bcb30efd5db66c832fbcf657f069d811cdcc0e4c",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+        "criteriaSnapshot": [
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.hermes/node/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 1,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "BOXBOX",
+          "PRODUCT"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.hermes/node/bin/node",
+            "digest": "2e3f1286a7eb3736346ed1803e458a0ff909e2b2d5bc746144dcb76970e9b99d"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 67817,
+            "digest"         : "536db635ef11ab00955072c1d66d27177f1ca596ad8f3197e521f3d91809cb19",
+            "truncated"      : true,
+            "retainedBytes"  : 65536,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 153971,
+            "digest"         : "07447af3739f439ad8ec21e2eca681b1f7e3dc833acdfd6317a92266a2e7adc7",
+            "truncated"      : true,
+            "retainedBytes"  : 65536,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+        "startedAt"  : "2026-11-17T01:56:44.137Z",
+        "completedAt": "2026-11-17T01:58:55.837Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "b2897f989ce3da3ba89ff8892a386bfdd7b524966cae93aed7e15db08473c980",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "package.json",
+            "scripts/test.ts",
+            "scripts/verify-reports.ts",
+            "test/boxbox/work-json.test.ts",
+            "test/test-runner.test.ts",
+            "test/work-json.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "e4fd3866f8f15c5fad4fe6aae047f5483cc4b683e5aa34bef1ab7acfbe5f02b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "d05aac85f41d6703e115cd69e581bd1e0281a4a6b7722c140de53b278e2ce76b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "8c717be482f700d75c8416130eaf70135ec4ebd8ecf60fee3477048f5fa9bd30",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "4d540cf453209ae3d2dfc53f00907f6669865c6af6fd629df4eaecb79285c463",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/boxbox/work-json.test.ts",
+              "type"  : "file",
+              "digest": "0ccb53efbcd13ab89fef7a0f185bc2af3d70c1959adbd3a03266ec4cc35f719a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/test-runner.test.ts",
+              "type"  : "file",
+              "digest": "98494937a38e92b290f155dbc05a806e8ebc2f828292d35fa8c9c3ad09cb09dd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "f66f4f5d1d0b1e8a77989b35bcb30efd5db66c832fbcf657f069d811cdcc0e4c",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+        "criteriaSnapshot": [
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.hermes/node/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "BOXBOX",
+          "PRODUCT"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.hermes/node/bin/node",
+            "digest": "2e3f1286a7eb3736346ed1803e458a0ff909e2b2d5bc746144dcb76970e9b99d"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 67149,
+            "digest"         : "c8469e90e98676f890a27204427c4f20f1d5bc0f1c1ffc9c9b6344ce69f457ba",
+            "truncated"      : true,
+            "retainedBytes"  : 65536,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 153797,
+            "digest"         : "90c1d0492eb0a7c7f6952cc0cc6062df5890d0f3fee382541dad9ee0c72ca0aa",
+            "truncated"      : true,
+            "retainedBytes"  : 65536,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [],
+    "artifactReviews": [
+      {
+        "id"        : "artifact-c6110495-0230-4c25-b8f8-38c1bc001044",
+        "version"   : 1,
+        "reviewedAt": "2026-11-17T01:42:52.148Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "사전 Sonnet 지적의 정확 argv·16시나리오 보존·단일소유·SHA CAS·disabled 비성공 경계를 별도 대조하고 원격 적용만 준비했다.",
+        "digest"    : "f282aaa90c455e747ee76d66a850902166db3ea39bea95af04e3cceac6e80f35",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "기존 Reports argv 유지와 외부도구분리/범위/실제검증을 설계와 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/spec.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "기존 Reports argv 유지와 외부도구분리/범위/실제검증을 설계와 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/spec.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "satisfied",
+            "reason": "기존 Reports argv 유지와 외부도구분리/범위/실제검증을 설계와 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/spec.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "satisfied",
+            "reason": "기존 Reports argv 유지와 외부도구분리/범위/실제검증을 설계와 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/spec.md",
+                "line": 1
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-88ce9097-0493-4b78-a16d-c9cc34d6201c",
+        "version"   : 1,
+        "reviewedAt": "2026-11-17T01:42:52.271Z",
+        "kind"      : "consistency",
+        "depth"     : "brief",
+        "summary"   : "사전 Sonnet 지적의 정확 argv·16시나리오 보존·단일소유·SHA CAS·disabled 비성공 경계를 별도 대조하고 원격 적용만 준비했다.",
+        "digest"    : "7d94cdce610633c611d0c80b0dad7fba0d281014250d3b8c051dfafa8e5a0a03",
+        "checks": [
+          {
+            "id"    : "coverage",
+            "result": "satisfied",
+            "reason": "기존 Reports argv 유지와 외부도구분리/범위/실제검증을 설계와 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/design.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "alignment",
+            "result": "satisfied",
+            "reason": "기존 Reports argv 유지와 외부도구분리/범위/실제검증을 설계와 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/design.md",
+                "line": 1
+              }
+            ]
+          },
+          {
+            "id"    : "terminology",
+            "result": "satisfied",
+            "reason": "기존 Reports argv 유지와 외부도구분리/범위/실제검증을 설계와 대조했다.",
+            "references": [
+              {
+                "path": "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/design.md",
+                "line": 1
+              }
+            ]
+          }
+        ],
+        "coverage": [
+          {
+            "criterionId": "PRODUCT",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/tasks.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "criterionId": "BOXBOX",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/tasks.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "criterionId": "REGISTER",
+            "tasks": [
+              {
+                "path": "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/tasks.md",
+                "line": 3
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
+  }
+}

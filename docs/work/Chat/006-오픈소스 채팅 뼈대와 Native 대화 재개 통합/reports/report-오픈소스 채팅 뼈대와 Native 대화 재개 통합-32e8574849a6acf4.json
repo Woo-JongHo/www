@@ -1961,6 +1961,702 @@
         "sourceDigest"  : "ec58bc3ea520a603531a06970a6179d756f8e061b93a2278f52d1089ccc61f19",
         "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101"
       }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-8c74ccf5-b270-4ee3-854b-7122f1e5c6c7",
+      "workId"        : "work-baa0963b-ea71-48e7-a34f-0d229ba704b1",
+      "title"         : "오픈소스 채팅 뼈대와 Native 대화 재개 통합",
+      "summary"       : "Native 저장 대화 재개와 공개 채팅 경계을 같은 UUID와 현재 v5 소스의 실행 증거로 다시 확인했다. 실제 Terra 검토는 fail이며 지적 원문을 회수했다. 현재 미해결 지적·기본 검사 실패·증거 공백을 보존하여 부분 결과로 보고하며 업무 완료를 선언하지 않는다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T23:30:55.303Z",
+      "event"         : "finish",
+      "workRecordHash": "c110b31bb16d8960f1da721bf0c4c1f8c644722906dc818e36ebc521edd8e94d",
+      "sourceDigest"  : "00ad9a468e1af369d84da12f3c9cbc9d7be9cb3b16abd8e48e4cbae5c541e2b6",
+      "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101",
+      "semanticHash"  : "3f93692b68232f3842ad1b1d45baef737b0fc730d2c673816a080e69e43339ac",
+      "narrative": {
+        "summary": "Native 저장 대화 재개와 공개 채팅 경계을 같은 UUID와 현재 v5 소스의 실행 증거로 다시 확인했다. 실제 Terra 검토는 fail이며 지적 원문을 회수했다. 현재 미해결 지적·기본 검사 실패·증거 공백을 보존하여 부분 결과로 보고하며 업무 완료를 선언하지 않는다.",
+        "before" : "기존 소스의 검증 수와 과거 감사 결과가 여러 시점에 섞여 있었다. 실제 새 반례를 그대로 남기고 소스·기준·직접 요청과 증거의 현재성을 다시 구분해야 했다.",
+        "after"  : "현재 UUID의 등록 검사와 전용 GUI/직접 기능 원문을 회수했고 외부 정본의 문서 영향 검토를 연결했다. 실제 감사 지적과 미실행 한계를 분리하고 후속 최소 수정·독립 반박은 준비 단계로 남겼다.",
+        "changes": [
+          "v4의 main quota 생략/null, A/B/A 늦은 delta, 복원 enriched 완료와 혼합 summary 경계를 공식 저작 전후 검사로 교정했다.",
+          "v5 같은 UUID의 실제 실행·원문·source/criteria 식별과 문서 검토·감사 상태를 다시 연결했다.",
+          "새 반례는 실제 원문과 별도 수정 준비에 남겼고 과거 실패를 삭제하거나 새 PASS로 바꾸지 않았다."
+        ],
+        "decisions": [
+          "현재 관측 가능한 입력·행동만 해당 검사 범위로 연결하고 전체 의미 수용은 실제 독립 검토·공식 core 판정과 구분했다.",
+          "제품·테스트의 추가 변경은 Root 공식 pre/post와 독립 반박 판정 뒤 수행하며 기준·검사 권한·일반 검토 정책을 약화하지 않는다."
+        ],
+        "limitations": [
+          "실제 Electron GUI는 합성 Native subprocess이며 실제 모델·실계정·OS IME·Windows 검증으로 확대하지 않는다.",
+          "등록 검사·직접 관측·의미 검토·업무 완료는 별도이며 artifact 존재만으로 기준을 PASS로 강제하지 않는다.",
+          "등록 기본5초 집중 명령은 실패했다. 같은 입력·모든 assertions의 별도30초 직접 기능 검사는 통과했지만 기본 명령 PASS를 대체하지 않는다. 대량 원장 수집 비용은 미해결 위험이다.",
+          "완료 snapshot에 대한 채팅 본문 정산과 현재 Agent Progress의 종료 경계를 혼동했는지 별도 반박이 필요하며 해당 finding을 수기 PASS로 바꾸지 않는다.",
+          "현재 독립 검토의 미해결 원문: src/projection.ts:344,422,492 — 복원된 unknown 턴을 같은 scope의 실제 turn/started로 재개한 뒤에는 후속 delta의 scope를 검사하지 않는다. 예를 들어 generation 7의 저장 이력과 시작 뒤 같은 thread/turn/item에 generation 8의 답변 또는 요약 delta를 넣으면 기존 본문에 추가된다. 완료 snapshot도 scope 검사 없이 수용한다. 다른 generation·process·selection이 복원 본문에 영향을 주지 않아야 하는 UC-LIVE 경계가 빠졌으며, 제공된 테스트는 다른 scope의 시작을 거부한 뒤 현재 scope delta를 보내는 경우까지만 대조한다.",
+          "현재 독립 검토의 미해결 원문: src/native-activity.ts:576-579 및 src/agent-overview.ts:221 — 턴 종료 또는 EOF 뒤 도착한 같은 scope의 commentary item/completed도 일괄 무시한다. 예를 들어 공개 설명 delta가 ‘초안’이고 turn/completed 뒤 정식 완료 text가 ‘최종’ 또는 빈 문자열이면 채팅 투영은 정산하지만 활동 기록과 Agent 개요는 이전 ‘초안’을 유지한다. 공개 설명의 authoritative 완료 snapshot으로 과거 본문을 정산한다는 현재 명세와 화면 간 결과가 어긋난다.",
+          "현재 독립 검토의 미해결 원문: 검토 범위는 제공된 inputBundle과 추가로 읽은 src/chat-state.ts, docs/specs/chat.md의 관련 검색 결과다. 테스트나 빌드는 실행하지 않았다."
+        ],
+        "next": [
+          "Root의 반박 검토로 지적의 유효 범위와 최소 수정 범위를 확정한다.",
+          "추가 수정 후 최종 소스에서 직접 영향 검사·문서 영향·고유 독립 검토를 한 번 다시 회수한다.",
+          "현재 공식 완료 판정·read/status의 부족 조건을 그대로 남기고 모든 필수 조건이 충족하기 전에는 done으로 올리지 않는다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "독립 검토 fail: 수정 또는 검토 재실행 필요",
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "실제 upstream 출처·revision·라이선스를 보존한 채팅 코드가 Native 답변·공개 설명·도구·변경·승인을 표현하고 Markdown·코드복사·인용 입력을 제공한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-46b3393d-7c30-41be-b712-f9d983a3b49b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4f43e9cd-f6ab-4b5b-855f-b5b7788c92de",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-23d12ead-0a6d-4882-b3ca-ccebd7ba3f66",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b4538c8b-34e8-4548-993b-854cc6e7117a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-65a322fb-fcb6-40d1-b9b9-80edecd0b593",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-3bca5241-aee9-49ed-9a06-aedd184a7cf1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "프로젝트 대화 목록·새 대화·저장 이력 재열기·동일 Native thread 후속 요청을 지원하며 과거 이력을 현재 실행·승인으로 재생하지 않는다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-62221972-b7fc-4920-b17c-06d07fbb192d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-91837bed-a07d-4140-9d39-613303ea8f4a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-46b3393d-7c30-41be-b712-f9d983a3b49b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4f43e9cd-f6ab-4b5b-855f-b5b7788c92de",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-23d12ead-0a6d-4882-b3ca-ccebd7ba3f66",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b4538c8b-34e8-4548-993b-854cc6e7117a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-65a322fb-fcb6-40d1-b9b9-80edecd0b593",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-3bca5241-aee9-49ed-9a06-aedd184a7cf1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0d6bb6a5-06b6-497f-94c5-6fef2c4968b9",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "대화별 초안·읽기 위치·펼침 상태를 보존하고 전송 실패·중복·중단·한국어 입력의 기존 의미를 유지한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2e86d68a-f7fd-4abc-8883-4295efed1652",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-62221972-b7fc-4920-b17c-06d07fbb192d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-91837bed-a07d-4140-9d39-613303ea8f4a",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-46b3393d-7c30-41be-b712-f9d983a3b49b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-4f43e9cd-f6ab-4b5b-855f-b5b7788c92de",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-23d12ead-0a6d-4882-b3ca-ccebd7ba3f66",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b4538c8b-34e8-4548-993b-854cc6e7117a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-65a322fb-fcb6-40d1-b9b9-80edecd0b593",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-3bca5241-aee9-49ed-9a06-aedd184a7cf1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "집중 테스트·타입·빌드와 실제 Electron 합성 경계 검증을 수행하고 기존 사이드바 변경 및 Native 실기·독립 검토 한계를 구분한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-d6a44bcb-190c-4954-9e8e-550ffa6f0b59",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-e35dc33c-616e-40db-90bd-9aba9b30614c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-b4538c8b-34e8-4548-993b-854cc6e7117a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-65a322fb-fcb6-40d1-b9b9-80edecd0b593",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-3bca5241-aee9-49ed-9a06-aedd184a7cf1",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-d6a44bcb-190c-4954-9e8e-550ffa6f0b59",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T22:53:24.543Z"
+          },
+          {
+            "id": "attempt-e35dc33c-616e-40db-90bd-9aba9b30614c",
+            "command": "npm",
+            "args": [
+              "run",
+              "check"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T22:55:06.171Z"
+          },
+          {
+            "id": "attempt-9ca37ad6-68fc-4e1e-ac57-6f87a80eafee",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T22:55:11.829Z"
+          },
+          {
+            "id": "attempt-14994d5d-6e05-43fe-a15b-bd8df5824e8b",
+            "command": "bun",
+            "args": [
+              "test/verify-chat-live.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-12T22:58:08.168Z"
+          },
+          {
+            "id": "attempt-756411e7-de22-46fc-a831-cabafd00a940",
+            "command": "bun",
+            "args": [
+              "test/verify-chat-live.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": false,
+            "completedAt" : "2026-11-12T22:58:37.183Z"
+          },
+          {
+            "id": "attempt-2e86d68a-f7fd-4abc-8883-4295efed1652",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/conversations.test.ts",
+              "test/chat-state.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:26:05.282Z"
+          },
+          {
+            "id": "attempt-5c3dcfd2-2202-49d6-8637-082aba374f07",
+            "command": "bun",
+            "args": [
+              "test/verify-chat-live.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": false,
+            "completedAt" : "2026-11-15T09:27:11.893Z"
+          },
+          {
+            "id": "attempt-5f97bdc1-6e29-4ec7-99d8-b8e6c2f7c311",
+            "command": "bun",
+            "args": [
+              "test/verify-chat-live.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:36:46.568Z"
+          },
+          {
+            "id": "attempt-084a9dd3-3756-4ecb-bfbe-e2a2b5c84fac",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-15T09:41:59.494Z"
+          },
+          {
+            "id": "attempt-62221972-b7fc-4920-b17c-06d07fbb192d",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import{spawnSync}from'node:child_process';import{writeFileSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/conversations.test.ts\", \"test/native-lifecycle.test.ts\", \"test/native-session.test.ts\", \"test/chat-state.test.ts\", \"test/native-chat.test.ts\", \"test/projection.test.ts\"];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:16*1024*1024});const base='.www/evidence/resume-20261116/chat008/chat006-integration/official-focused-'+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+'\\n');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T11:32:03.049Z"
+          },
+          {
+            "id": "attempt-91837bed-a07d-4140-9d39-613303ea8f4a",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import{spawnSync}from'node:child_process';import{writeFileSync,mkdirSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/conversations.test.ts\", \"test/native-lifecycle.test.ts\", \"test/native-session.test.ts\", \"test/chat-state.test.ts\", \"test/native-chat.test.ts\", \"test/projection.test.ts\", \"test/input.test.ts\"];mkdirSync(\".www/evidence/resume-20261116/chat008/chat006-recovery\",{recursive:true});const startedAt=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:32*1024*1024});const base=\".www/evidence/resume-20261116/chat008/chat006-recovery/official-focused-\"+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T12:37:58.017Z"
+          },
+          {
+            "id": "attempt-46b3393d-7c30-41be-b712-f9d983a3b49b",
+            "command": "node",
+            "args": [
+              ".www/evidence/resume-20261116/native-closeout/composite.mjs",
+              "work-baa0963b-ea71-48e7-a34f-0d229ba704b1",
+              "baseline"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T14:56:39.273Z"
+          },
+          {
+            "id": "attempt-4f43e9cd-f6ab-4b5b-855f-b5b7788c92de",
+            "command": "node",
+            "args": [
+              ".www/evidence/resume-20261116/native-closeout/final-current/composite.mjs",
+              "work-baa0963b-ea71-48e7-a34f-0d229ba704b1",
+              "baseline"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T15:40:25.843Z"
+          },
+          {
+            "id": "attempt-23d12ead-0a6d-4882-b3ca-ccebd7ba3f66",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/conversations.test.ts",
+              "test/native-lifecycle.test.ts",
+              "test/native-session.test.ts",
+              "test/chat-state.test.ts",
+              "test/native-chat.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T21:49:09.478Z"
+          },
+          {
+            "id": "attempt-b4538c8b-34e8-4548-993b-854cc6e7117a",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/conversations.test.ts",
+              "test/native-lifecycle.test.ts",
+              "test/native-session.test.ts",
+              "test/chat-state.test.ts",
+              "test/native-chat.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:04:50.960Z"
+          },
+          {
+            "id": "attempt-65a322fb-fcb6-40d1-b9b9-80edecd0b593",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/conversations.test.ts",
+              "test/native-lifecycle.test.ts",
+              "test/native-session.test.ts",
+              "test/chat-state.test.ts",
+              "test/native-chat.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:05:49.131Z"
+          },
+          {
+            "id": "attempt-3bca5241-aee9-49ed-9a06-aedd184a7cf1",
+            "command": "npm",
+            "args": [
+              "run",
+              "typecheck"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:11:54.255Z"
+          },
+          {
+            "id": "attempt-0d6bb6a5-06b6-497f-94c5-6fef2c4968b9",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/conversations.test.ts",
+              "test/native-lifecycle.test.ts",
+              "test/native-session.test.ts",
+              "test/chat-state.test.ts",
+              "test/native-chat.test.ts",
+              "test/projection.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:21:17.105Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-32355cdb-ad40-446b-ba2b-69999fd7ee61",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-32355cdb-ad40-446b-ba2b-69999fd7ee61/opus.json",
+            "findings": []
+          },
+          {
+            "id"         : "review-bf7a0192-d57f-4422-b3cb-0a243bd91dd1",
+            "verdict"    : "pass",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-bf7a0192-d57f-4422-b3cb-0a243bd91dd1/opus.json",
+            "findings": [
+              "판정 근거(소스 대조): 현재 입력의 개별 파일 digest(src/conversations.ts 6fede61c…, src/native-chat.ts 5593df69…, src/main.ts 357b6525…, test/fixtures/conversations-app-server.ts cf35fafe…, scripts/verify-chat.ts b17491a5… 등)는 work.json의 세 검증 시도(d126edd7… 소스)에 기록된 값과 같다. 전체 sourceDigest(aea9e85e…)가 다른 것은 이번 검토 입력에 docs/skills/WORKFLOW.md·work.json·verification.md·evidence JSON이 추가됐기 때문으로 보이며, 검증 이후 제품 소스가 바뀐 흔적은 없다. criteriaDigest e58ba493…도 일치한다.",
+              "AC-1: src/chat-row-state.tsx:1-3과 src/chat-state.ts:1-3에 devswha/ovis@d505c75e… 출처와 MIT 고지가 있다. docs/third-party/ovis.md에는 반입 파일, 제외 범위, 라이선스 전문이 있다. Markdown·코드복사·인용은 합성 Electron 검증(attempt-9ca37ad6, exit 0)의 범위로 기록돼 있다.",
+              "AC-2 경계: src/conversations.ts:150은 목록을 cwd·originator==='www'·ephemeral 기준으로 거르고, :55-63 threadRecord는 read·resume 응답에서 같은 조건과 같은 ID를 다시 검사한다. :79-107 publicItem은 analysis/reasoning 원문과 승인 요청을 복원하지 않는다. main.ts:130-135는 복원 이벤트를 publish를 거치지 않고 eventLog에 넣으므로 자동보고·승인 상태(pendingApprovals)가 재생되지 않는다. projection.ts:431도 historical 요청을 승인 대상에서 뺀다. 실행·승인·전환 중 선택 차단(main.ts:125-128)과 다른 thread로의 turn:start 거부(main.ts:338)를 확인했다.",
+              "sourceKinds 수정: verification.md의 native-source-diagnosis 기록(실제 source=vscode, originator=clientInfo.name)과 conversations.ts:147의 sourceKinds:['appServer','vscode'], :150의 originator==='www' 필터가 일치한다. main.ts:110에서 clientInfo.name이 'www'로 설정돼 있다.",
+              "증거 범위(결함 아님, 한계): AC-1~3의 공식 receipt(attempt-9ca37ad6)는 합성 app-server 기반이다. 실제 Native 재시작→목록→동일 thread resume→후속 응답의 근거인 chat-native-live.json(22:52:28~22:52:37)에는 소스 digest가 연결돼 있지 않고 공식 attempt로도 등록되지 않았다. 이 실행이 d126edd7 소스에서 이뤄졌는지는 기록만으로 확정할 수 없다. 또 verify-chat-live.ts:121은 approvalPolicy:'never', sandbox:'read-only'로 시작해 제품 경로(nativeThreadStartParams)의 on-request/workspace-write를 재현하지 않는다. 따라서 실제 Native 재개 성공은 '읽기 전용 단문 표본'으로 한정해 보고해야 한다. verification.md는 이미 합성/실기를 구분하므로 현재 기술은 확대 주장이 아니다.",
+              "잔여 위험(미확인, 수정 필수 아님): conversations.ts:158-160의 thread/resume은 approvalPolicy·sandbox·developerInstructions를 넘기지 않는다. docs/specs/chat.md:109는 '저장 설정을 덮어쓰지 않는다'고 정했지만, Codex app-server가 resume 때 원래 thread의 승인·sandbox를 복원하는지, 아니면 현재 config.toml 기본값을 적용하는지는 이번 증거로 확인되지 않는다. 기본값이 적용된다면 재개 대화가 새 대화의 on-request/workspace-write 정책과 다르게 실행될 수 있다. main.ts:293이 resume 응답의 approvalPolicy·sandbox를 표시하지만 검증하거나 강제하지는 않으며, 실기 표본도 resume 후 정책 값을 기록하지 않았다. 후속 검증에서 resume 응답의 정책 값을 관측해 기록하기를 권한다.",
+              "AC-4: npm run check의 첫 시도(attempt-d6a44bcb, exit 1)는 실패로 보존됐다. 원인은 입력 범위 밖인 Chat 005 문서의 링크 계약 위반이며, 수정 후 재시도(attempt-e35dc33c, exit 0)가 같은 소스 digest에서 통과했다. 원격 Opus 검토 not_run(authentication)과 BoxBox misaligned/REFUSE 잔존도 통과로 바꾸지 않고 기록돼 있어 한계 구분 요건에 맞는다. 이 검토는 읽기 전용이며 어떤 테스트도 직접 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-8dc45833-b9b7-4b5a-ba92-b758c774723c",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/scratchpad/chat-006-critical-review-20261113/receipt-keychain/opus.json",
+            "findings": [
+              "[결함·증거 범위 확대] 현재 검토 대상(HEAD 1509280, sourceDigest cea65e2f…)을 검증한 공식 시도는 하나도 없다. work.json의 다섯 시도는 모두 HEAD 4ef13d29의 소스 d126edd7… 또는 977e0094…에서 실행됐다. 현재 핵심 파일의 digest는 그때와 다르다: src/conversations.ts fd85d613 (검증 시 6fede61c), src/main.ts 34952bd1 (357b6525), src/renderer.tsx c186f81c (fc4e011d), src/preload.ts 7330b041 (69a22504), src/shared.ts a204c69a (a483d866), src/native-activity-view.tsx·native-activity.css, test/conversations.test.ts c4508904 (8919770e), test/fixtures/conversations-app-server.ts b086bcb5 (cf35fafe), test/verify-chat-live.ts 0f9de563 (99b6aad9), docs/specs/chat.md, ARCHITECTURE, DEVELOPMENT, PRODUCT, third-party/ovis.md도 바뀌었다. 검증 당시 있던 src/activity-sidebar.ts와 test/activity-sidebar.test.ts는 현재 없다. 그런데도 work.json의 AC-1·AC-2·AC-3 evidence(attempt-9ca37ad6)와 AC-4 evidence(attempt-e35dc33c)는 여전히 '실제 검증 passed; 현재 적용 가능'으로 적혀 있다. 이 표시는 현재 소스에는 맞지 않으므로 고치거나 현재 소스로 다시 검증해야 한다.",
+              "[결함·기록 불일치] work.json의 workflow.authorization은 commit:false, publish:false다. verification.md handoff-20261113도 '커밋·push하지 않았다'고 적었다. 그러나 현재 main HEAD 1509280의 커밋 '오픈소스 채팅과 Native 대화 재개를 통합한다'에 이 작업이 들어가 있다. 별도 권한으로 커밋했다면 그 근거와 커밋된 소스의 검증 상태가 기록돼야 하는데 work.json·verification.md·보고서(report-ccd22113, sourceDigest a31449d9…)에 반영돼 있지 않다.",
+              "[결함·독립 검토 적용성] 기존 Opus 검토 review-bf7a0192는 판정 근거로 src/conversations.ts 6fede61c… 와 src/main.ts 357b6525… 의 digest·행 번호를 인용했다(예: main.ts:338 turn:start 거부, main.ts:130-135 replaceConversationEvents). 현재 main.ts에서 같은 로직은 :273과 :126-131에 있다. 약 65행이 줄어 내용이 바뀐 것이 확인되므로 이 pass 판정을 현재 커밋에 옮겨 적용할 수 없다. 보고서는 Skill/Hook pulse를 다시 실행하지 않는다고 주장하는데, 이 주장도 activity-sidebar.ts가 있던 소스에서만 확인됐다. 사이드바가 빠진 현재 구성에서는 다시 확인해야 한다.",
+              "[코드 대조·문제 없음] src/conversations.ts:147,150,55-63의 sourceKinds [appServer,vscode], cwd 검사, originator==='www' 검사, ephemeral 검사는 design.md의 '실제 Native 목록 출처 보정'과 일치한다. publicItem(:79-107)은 reasoning 본문과 승인 요청을 버린다. src/native-chat.ts:20-26의 turn/start에는 approvalPolicy·sandbox override가 없다. src/main.ts:126-131은 복원 사건을 publish를 거치지 않고 eventLog에 넣으므로 자동 보고서가 다시 실행되지 않는다. projection.ts:431은 historical 요청을 승인 블록에서 뺀다. 렌더러 src/renderer.tsx:254-285는 switchingRef와 generation으로 전환을 직렬화한다. 이 경계들은 소스상 명세와 맞는다. 단, 위의 이유로 현재 소스에서 실행 근거는 없다.",
+              "[미확인 위험] src/main.ts:43,73-77,302-318에서 pendingApprovals는 사용자 응답이나 연결 종료 때만 지워진다. Native가 승인 대기 중 중단 등으로 서버 요청을 스스로 해소해도 이를 처리하는 코드가 없다(저장소 안에 serverRequest/resolved 처리 없음). 이번 작업에서 assertConversationIdle(:121-124)은 turn:start(:272)·thread:start·대화 전환까지 막는다. 따라서 '승인 대기 → 중단' 뒤 이전 승인 블록에 응답하기 전까지 새 요청과 대화 전환이 막힐 수 있다. scripts/verify-chat.ts:142-152는 승인과 중단을 따로 검사하고 승인 대기 중 중단은 검사하지 않는다. Codex 0.166.0의 실제 해소 알림 여부를 schema로 확인해야 한다.",
+              "[미확인 위험] app-server가 실행 중 종료되면 src/main.ts:69-80에서 rpc만 null이 되고 activeThreadId는 남는다. 다음 turn:start는 새 프로세스에 resume 없이 turn/start를 보낸다. 렌더러 selectConversation(src/renderer.tsx:255)은 같은 id를 다시 선택하면 바로 반환하므로 같은 대화를 다시 열어 복구할 수도 없다. 기존 동작에서 이어진 문제일 수 있지만, 이번 재개 기능이 있는데도 연결 재생성 경로에 resume을 하지 않는다.",
+              "[경미] src/conversations.ts:158-162는 thread/resume을 보낸 뒤 응답이 active이거나 검증에 실패하면 예외를 던진다. 이때 Native 쪽 thread는 이미 load된 상태로 남고 main의 activeThreadId는 바뀌지 않는다. :95는 aggregatedOutput을, :102는 diff를 길이 제한 없이 IPC로 넘긴다(command만 100k로 자른다). 화면 표시는 projection.ts:102-105에서 32,768로 잘리지만, 복원 payload와 메모리는 최대 1,990개 사건 × 원문 크기까지 커질 수 있다. 또 :137의 slice(-1990)는 턴 중간을 자를 수 있어서, 복원된 첫 턴에 turn/started나 turn/userPrompt 없이 이후 사건만 남을 수 있다.",
+              "[검토 한계] 이 검토는 읽기 전용 소스·문서 대조다. npm run check, scripts/verify-chat.ts, test/verify-chat-live.ts를 포함해 어떤 테스트도 실행하지 않았다. 실제 Native·Electron 동작과 BoxBox 상태도 직접 확인하지 않았다. 통과로 판정하려면 현재 HEAD 소스(cea65e2f…)에서 npm run check, node scripts/verify-chat.ts, 실제 Native 재개 검증을 다시 실행해야 한다. 그다음 work.json evidence의 적용 표시와 커밋 기록을 고쳐야 한다."
+            ]
+          },
+          {
+            "id"         : "review-0bfaab3e-4c7b-484d-8013-dd6909bfd7ec",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-0bfaab3e-4c7b-484d-8013-dd6909bfd7ec/opus.json",
+            "findings": [
+              "[결함·AC-2] 연결 종료 뒤 같은 thread 후속 요청에서 thread/resume을 하지 않는다. src/main.ts:194-211의 closed 처리기는 rpc·activeTurnId·pendingApprovals는 초기화하지만 activeThreadId·threadStarted는 그대로 둔다. 이후 turn:start(src/main.ts:573-599)는 connect()로 새 app-server 프로세스를 띄우고 바로 turn/start를 보낸다(588행). 새 프로세스에 그 thread를 다시 불러오는 thread/resume은 conversations.ts:162의 open 경로에만 있다. 그런데 renderer.tsx:457은 `id === threadRef.current`이면 바로 반환하므로, 사용자가 같은 대화를 다시 눌러도 resume이 일어나지 않는다. 재현 경로: 대화를 열거나 시작한다 → Native 프로세스가 종료된다(transport/closed) → 같은 대화에서 후속 메시지를 보낸다 → 새 프로세스에서 thread를 불러오지 않은 채 turn/start가 나간다. AC-2의 '동일 Native thread 후속 요청'이 연결 경계에서 지켜지지 않는다. verification.md 197-199행과 254행도 이 위험을 미해결로 적어 두었다.",
+              "[결함·AC-3] 승인 대기 중 중단하거나 서버가 요청을 해소해도 pendingApprovals가 남는다. pendingApprovals는 사용자 응답(src/main.ts:630,634), 연결 종료(204행), 프로젝트 전환(420행)에서만 비워진다. serverRequest/resolved 알림이나 turn/completed를 받아도 해당 승인 요청을 지우는 분기가 없다(src 전체에서 'serverRequest/resolved' 검색 결과 0건). 그런데 assertConversationIdle(262행)은 `pendingApprovals.size > 0`이면 turn:start·대화 전환·새 대화·프로젝트 전환을 모두 거부한다. 그래서 중단 뒤 서버가 이미 해소한 승인이 남아 있으면 사용자는 낡은 승인 카드에 응답하기 전까지 다음 요청이나 대화 전환을 할 수 없다. verification.md 231행은 Codex 0.169.0 schema에 serverRequest/resolved(requestId, threadId)가 있다는 것을 확인했다. AC-3의 '중단의 기존 의미 유지'에 해당하는 경계가 빠져 있다.",
+              "[증거 범위 확대] work.json은 AC-2와 AC-3을 result=passed로 기록했다. 하지만 그 근거로 연결된 attempt-084a9dd3(합성 fixture GUI), attempt-5f97bdc1(실제 Native 단문 재개, tools=0), attempt-2e86d68a(단위 테스트)는 모두 위 두 경계(연결 종료 후 재개, 승인 대기 중 중단 뒤 잔류)를 검증하지 않는다. verification.md 199·231·254행이 직접 '해결됐다고 쓰지 않는다'고 밝힌 위험이 남아 있는데 기준 결과는 passed로 승격돼 있다. AC-2 evidence에는 failed 시도(14994d5d, 756411e7, 5c3dcfd2)와 passed 시도가 함께 있고, passed 판정은 일부 경계만 본 표본에 기대고 있다.",
+              "[확인된 정상 부분] conversations:open은 thread/read 다음에 thread/resume을 호출하고 originator를 확인한 뒤 공개 이력을 historical 이벤트로 바꾼다(main.ts:481-507, conversations.ts:150-174). 그래서 과거 이력을 현재 실행·승인으로 다시 실행하지 않는 구조로 보인다. turn:start는 activeThreadId가 일치하는지와 프롬프트 길이(100,000자)를 검사하고, approval:respond는 approvalAttempts로 중복 응답을 막는다. 이 검토는 소스 대조로만 했으며 테스트·Electron·Native는 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-58e18adb-15c7-4f86-980e-b438dd288d86",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-58e18adb-15c7-4f86-980e-b438dd288d86/terra.json",
+            "findings": [
+              "src/native-session.ts:412, 717 및 867: 복원 snapshot을 반영하고 보관 큐를 비운 뒤 동일 terminal 턴의 늦은 turn/started가 도착하면 복원 필터를 거치지 않고 activeTurnId를 다시 설정한다. 예를 들어 완료된 대화를 연 직후 같은 턴의 started가 도착하면 실제 실행이 없어도 새 전송과 대화 전환이 차단된다. src/projection.ts:331도 이 사건을 무조건 running으로 표시한다.",
+              "src/projection.ts:476-482: commentary 또는 공개 계획의 기존 delta 뒤 item/completed에 text와 content가 누락되거나 null인 경우에도 removeFragments가 실행되어 기존 내용이 사라진다. 명시적 빈 문자열만 내용을 지워야 하고 누락·null·잘못된 값은 기존 의미를 유지해야 한다는 UC-EMPTY와 다르다.",
+              "src/native-activity.ts의 projectNativeActivity에서 historical unknown turn/completed는 endedAt과 endedSeq를 설정하지만, 같은 scope의 실제 turn/started는 이를 해제하지 않는다. 따라서 복원 후 현재 시작과 commentary delta가 도착해도 활동 모니터는 해당 턴을 unknown으로 유지하고 진행 설명을 무시한다.",
+              "검토 범위는 제공된 inputBundle의 10개 파일과 src/native-session.ts 및 src/projection.ts의 관련 위치 검색이다. 제공된 검증 수치의 원본 로그나 생략된 테스트 파일은 확인하지 않았으며 테스트를 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-51da1e30-34ac-4922-93de-ab78cf8a526c",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-51da1e30-34ac-4922-93de-ab78cf8a526c/terra.json",
+            "findings": [
+              "src/native-activity.ts:663,710에서 공개 답변의 완료 경계를 보존하지 않는다. 완료 시각이 있는 저장 답변을 복원하고 같은 턴이 live로 시작된 뒤 늦은 답변 delta가 오면 완료된 본문에 덧붙인다. 또한 정식 완료의 text가 빈 문자열이면 기존 본문을 유지한다. 채팅 투영과 달리 모니터의 답변 활동 상세에는 오래되거나 잘못 이어진 내용이 표시된다.",
+              "src/projection.ts:337에서 복원된 unknown 턴에 다른 generation·process·selection의 turn/started가 오거나 EOF 뒤 늦은 turn/started가 와도 무조건 turn을 running으로 바꾼다. 기존 경계 테스트는 본문과 streaming만 검사하므로 working=true가 되는 상태 오류를 놓친다. 이 상태는 입력과 대화 선택 판단에 사용된다.",
+              "src/conversations.ts의 publicItem은 commandExecution의 누락·null·잘못된 aggregatedOutput을 빈 문자열로, fileChange의 잘못된 changes를 빈 배열로 바꾼다. 같은 항목의 앞선 저장 내용 뒤에 이런 값이 복원되면 src/projection.ts가 명시적 빈 완료로 받아 기존 출력이나 변경 목록을 지운다. 이는 명시 empty와 누락·잘못된 값을 구분한다는 기준과 다르다.",
+              "검토는 제공된 inputBundle과 추가로 읽은 projection 테스트 및 활동 화면 소스에 한정했다. 테스트와 실제 Native·GUI 검증은 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-121ac83f-20cc-40c3-b755-48954c55ca07",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-121ac83f-20cc-40c3-b755-48954c55ca07/terra.json",
+            "findings": [
+              "src/projection.ts의 fileChange 완료 처리와 fileChanges 함수는 changes 배열에 유효한 항목과 잘못된 항목이 섞여 있으면 유효한 항목만 추출해 기존 목록을 덮어쓴다. 예를 들어 기존 keep.ts 뒤에 changes: [{path: \"new.ts\"}, {path: 42}]가 도착하면 keep.ts가 사라진다. malformed 완료는 기존 의미를 유지해야 한다는 UC-EMPTY 기준과 다르며, 제공된 live 투영 테스트는 모든 항목이 잘못된 배열만 검사한다.",
+              "src/native-activity.ts의 projectNativeActivity는 턴 종료 또는 transport/closed 뒤 도착한 commandExecution·fileChange item/started에 종료 경계를 적용하지 않는다. 종료된 턴에서 새 item/started가 들어오면 entry가 기본값 running으로 생성되어 상세 모니터에 종료된 턴의 실행 중 활동으로 표시된다. snapshot에 없는 항목은 src/native-lifecycle.ts의 복원 필터도 제외하지 않으므로 이 경로에 도달할 수 있다.",
+              "검토 범위는 제공된 inputBundle의 14개 파일과 그 안에 서술된 검증 근거다. 별도 파일이나 원본 로그는 읽지 않았으며 테스트는 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-ba391f48-818b-4471-a0bb-2b66f4fdb95d",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ba391f48-818b-4471-a0bb-2b66f4fdb95d/terra.json",
+            "findings": [
+              "src/native-lifecycle.ts:26,63: 복원 snapshot의 필드만 부분 비교하므로 snapshot에 aggregatedOutput이나 changes가 누락된 완료 항목도, 그 필드를 포함한 큐의 실제 item/completed와 같다고 판정해 버릴 수 있다. 예를 들어 완료된 명령 snapshot에 출력이 없고 큐의 동일 완료에 출력이 있으면 출력이 복원되지 않는다. 이는 snapshot에 없는 live 사건을 보존해야 하는 UC-QUEUE 경계에 어긋난다.",
+              "src/conversations.ts:122-124: 저장 reasoning의 summary에서 유효하지 않은 항목을 걸러낸 뒤 나머지를 유효한 snapshot으로 취급한다. 같은 항목의 기존 요약 뒤에 [\"새 내용\", 42]가 제공되면 잘못된 배열 전체를 보존 대상으로 처리하지 않고 \"새 내용\"으로 덮어쓴다. live projection은 혼합 배열 전체를 거부하므로 저장 parser와 동작도 다르다.",
+              "검증 기록의 동일 sourceDigest 집중 테스트 두 시도는 종료 코드 1이다. 진단 문서는 count overflow 테스트의 시간 초과와 격리 실행 통과를 구분하며, 이를 전체 집중 테스트 통과의 근거로 사용할 수 없다. 타입 검사 통과는 별도 증거다.",
+              "검토 범위는 제공된 inputBundle의 선택 파일과 verification.md 마지막 60행, v4-overflow-diagnosis.md 및 해당 소스 위치 검색 결과다. 테스트는 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-4272915c-a204-4d15-ace7-bf5dc70e2019",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-4272915c-a204-4d15-ace7-bf5dc70e2019/terra.json",
+            "findings": [
+              "src/projection.ts:344,422,492 — 복원된 unknown 턴을 같은 scope의 실제 turn/started로 재개한 뒤에는 후속 delta의 scope를 검사하지 않는다. 예를 들어 generation 7의 저장 이력과 시작 뒤 같은 thread/turn/item에 generation 8의 답변 또는 요약 delta를 넣으면 기존 본문에 추가된다. 완료 snapshot도 scope 검사 없이 수용한다. 다른 generation·process·selection이 복원 본문에 영향을 주지 않아야 하는 UC-LIVE 경계가 빠졌으며, 제공된 테스트는 다른 scope의 시작을 거부한 뒤 현재 scope delta를 보내는 경우까지만 대조한다.",
+              "src/native-activity.ts:576-579 및 src/agent-overview.ts:221 — 턴 종료 또는 EOF 뒤 도착한 같은 scope의 commentary item/completed도 일괄 무시한다. 예를 들어 공개 설명 delta가 ‘초안’이고 turn/completed 뒤 정식 완료 text가 ‘최종’ 또는 빈 문자열이면 채팅 투영은 정산하지만 활동 기록과 Agent 개요는 이전 ‘초안’을 유지한다. 공개 설명의 authoritative 완료 snapshot으로 과거 본문을 정산한다는 현재 명세와 화면 간 결과가 어긋난다.",
+              "검토 범위는 제공된 inputBundle과 추가로 읽은 src/chat-state.ts, docs/specs/chat.md의 관련 검색 결과다. 테스트나 빌드는 실행하지 않았다."
+            ]
+          }
+        ],
+        "omitted": {
+          "criteria"     : 0,
+          "evidence"     : 7,
+          "verifications": 0,
+          "reviews"      : 0,
+          "arguments"    : 0,
+          "findings"     : 0,
+          "unresolved"   : 0
+        }
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/work.json",
+        "workRecordHash": "c110b31bb16d8960f1da721bf0c4c1f8c644722906dc818e36ebc521edd8e94d",
+        "sourceDigest"  : "00ad9a468e1af369d84da12f3c9cbc9d7be9cb3b16abd8e48e4cbae5c541e2b6",
+        "criteriaDigest": "e58ba4931bb5f500f46b045f140a1040e6173619539fbfa0cad74f1da3739101"
+      }
     }
   ]
 }

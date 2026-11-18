@@ -1,0 +1,53 @@
+# 오픈소스 채팅 뼈대 도입 비교
+
+작업 UUID는 `work-029fb7e2-61fa-4014-9362-5e915ab13197`다. 기준 정의·필수 여부·결과의 정본은 같은 폴더 work.json이다.
+
+## 요청과 현재 목표
+
+개발용 채팅 완성을 위해 현재 기능·공백·실행 한계를 점검하고, Herdr 같은 완성 앱의 실제 고정 코드·라이선스·의존 경계를 비교한다. 최신 직접 재개 요청은 남은 제품·개발 작업의 부족한 검증 연결·문서·저작 보고서·독립 감사를 실제 증거로 회수하도록 허용한다. 근거 원문은 상위 TASK-RESUME.md와 `.www/evidence/resume-20261116/direct-resume-instructions.txt`, 감사의 별도 직접 원문은 direct-user-original.txt다. 기존 Opus fail과 당시 증거는 보존하고 현재 지적을 고친 소스로 다시 판단한다.
+
+첫 Terra 감사는 당시 marker 이전 live 유실과 Windows 경로 거부를 지적했다. 별도 Native006 범위에서 기존 bounded raw 큐를 read/resume 전부터 열고 snapshot+marker 뒤 배출하도록 수정했으며, 실제 stdio 합성 재현 red 뒤 189개 집중 검사와 엄격 타입검사를 통과했다. 이 비교는 그 현재 구현/증거를 회수한다. 2000건/4MiB 초과·이미 유실된 사건·실제 Native 모델/GUI race는 보장하지 않고 Windows 드라이브/UNC 제한은 여전히 남는다. 기준 AC-1~3의 정의·필수 여부와 과거 실패는 보존한다. 과거 evidence summary는 기록 당시 문구이며 현재 적용성은 같은 UUID의 공식 status/evaluateEvidence로 판단한다.
+
+현재 권장안은 [comparison.md](comparison.md)의 **Ovis에서 필요한 공개 채팅 동작만 개작하고 WWW의 Electron·Native 전송·원장·모니터·보고서를 보존**하는 것이다. 이미 세 독립 동작이 개작된 현재 사실을 반영한다. 이는 전체 앱 교체에 대한 새 사용자 승인이 아니며, 정정 전 assistant-ui 우선안이나 “아직 선택만 남음”을 현행 결론으로 유지하지 않는다. 추가 부분 반입·전체 포크는 파일/범위별 별도 구현 결정과 검증이 필요하다.
+
+## 범위와 권한
+
+이번 변경은 이 작업의 문서·증거 회수·검증 연결·최종 검토와 보고서다. 제품 코드·패키지·공유 정책·중앙 DB·배포·외부 앱 설치/실행은 변경하지 않는다. commit/publish=false다. 과거 implementation=false는 당시 권한이며 현재 요청에 의한 문서 쓰기/허용 검증 명령만 필요 시 같은 UUID의 역사 백업·잠금·공식 직렬화·원자 저장과 requestHash 일치로 재연결한다. schema2 adopt no-op을 승인 갱신으로 쓰거나 기준을 수동 통과시키지 않는다.
+
+## 기준과 조사 여정
+
+AC-1·AC-2·AC-3의 기존 설명·필수 여부는 바꾸지 않는다. 이 작업은 조사·비교이므로 정적 존재만으로 제품 기능 통과를 만들지 않고 실제 코드 읽기·새 집중 실행·고정 원문·선택 근거를 각각 연결한다.
+
+| 여정 | 입력·행동 | 기대 산출물·관찰 | 기준 | 확인 방법과 한계 |
+|---|---|---|---|---|
+| UC-LOCAL | 현재 dirty checkout의 대화/재연결/승인·렌더링·관측·보고서 코드를 읽고 기존 실행 결과와 대조 | 현행 구현과 과거 공백, 코드/합성 subprocess/실제 Electron+합성 Native/실제 Native 표본의 차이를 설명 | AC-1 | 새 주요21 SHA와 공식 captureSource, 여섯 집중 테스트 실제 실행, current GUI/Native summary의 원문·SHA·소스 식별 대조. Windows·실제 한국어 IME·실계정 전체 승인 흐름은 미측정 |
+| UC-UPSTREAM | comparison의 fixed commit URL에서 코드·manifest·LICENSE를 새 회수하고 주장과 대조 | 후보별 revision·라이선스·의존/결합 경계와 전체/부분 재사용 비용이 같은 자료로 추적됨 | AC-2 | 45개 공식 원문 HTTP/bytes/SHA, AionCore LICENSE 보충 회수, Herdr runtime/core 구분·Ovis 제한된 daemon 요청·T3 private workspace를 직접 확인. 링크 존재만·설치 호환 성공으로 취급하지 않음 |
+| UC-DECISION | 현행 제공 기능과 후보 비용을 비교해 단일 권장안·보존 경계·후속 제품 시나리오 작성 | Ovis 부분 개작 권장과 제외/추가 반입 조건이 일관되고 남은 실행과 감사가 식별됨 | AC-3 | comparison의 책임 분리·여정·후속 결정 내용 대조와 현재 직접 권한의 읽기 전용 독립 의미 검토. 외부 앱 설치·제품 이식 성공을 이 조사 완료 요건으로 추가하지 않음 |
+
+## 현재 상태와 다음 행동
+
+변경 전 비교·명세·검증은 history/before-resume-20261116-*에 보존한다. 2026-11-12/15의 관측·감사·실패 원문 경로와 현재 새 자료를 구분하고 누락된 `.www/comparison-evidence`를 복구했다고 쓰지 않는다. 새 실행/원문·미실행은 verification.md, 단일 현재 인계는 tasks.md에서 읽는다.
+
+현재 권장안을 다시 고르는 사용자 질문은 필요하지 않다. 이번 재개 수행 절차는 최종 동결 소스의 기준별 검증 연결·문서 영향 검토·별도 직접 Terra 감사·저작 보고서와 read/status 대조다. 실제 최종 수용과 남은 단계는 원장·현재 저작 보고서에서 확인한다. 실제 제품 이식·Windows·IME·외부 앱 실행은 이번 비교와 별개이며 미측정으로 남긴다.
+
+## terminal 완료와 변경 내용의 구분
+
+Terra4 지적 뒤 “변경된 내용 보존”은 authoritative item/completed의 공개 완료 필드 변경으로 한정한다. terminal snapshot의 동일 item에 늦게 온 started/delta는 텍스트와 관계없이 억제하며 완료된 본문을 다시 스트리밍하지 않는다. 새 turn/item·현재 승인은 별도 보존한다. 기존 종료 guard와 기준 정의는 유지하고, 감사4 원문·당시 문서 사본은 이력으로 보존한다.
+
+공유 ARCH/Chat도 terminal late started/delta 억제와 변경된 authoritative 완료 보존을 같은 뜻으로 정정했음을 직접 읽었다. 기존 projection 회귀는 유지하며 추가 source/test 저작은 없다. 위 terminal 분석은 저자의 반박·정확성 교정이고 독립 승인으로 취급하지 않는다. 그 준비 시점에는 추가 Astra 호출이 시작되지 않았으며, 이어 실제 Terra5를 별도로 실행했다. 이후 좁은 반박 결과는 뒤의 후속 이력에서 구분한다. 정본25의 현재 SHA는 methodology-manifest.go5.json, 주요21은 go4 manifest와 source21-go5-unchanged.json으로 대조한다.
+
+## Native006 투영 수정 후 재개 이력 — 종합 GO 전
+
+Terra5 `review-62e6e995-7215-431a-9fc3-9c92f266aeb0`는 historical inProgress→unknown 합성 종료가 fresh 같은turn delta를 닫는 문제와 빈 authoritative 완료의 truthy fallback을 지적했다. 당시4문서와 audit5-frozen SHA 일치 사본은 history/before-native-projection-fix-*.md.txt 및 audit5-history-preservation.json에 보존했다. source 순수 함수 재현도 audit5-author-source-repro-bun.*에 별도 보존하며 첫 Node import 실패를 지우지 않는다.
+
+이후 부모 Native006 제품 범위에서 projection.ts/test 두파일을 수정했다. 같은 session/workspace/selection/process/connection·thread/turn의 실제 현재 시작에서만 historical unknown의 합성 종료를 풀고 실제 terminal/live 완료·EOF guard는 유지한다. 유효한 명시 빈 text/output/changes는 교체하고 omitted/null/malformed는 기존 의미를 보존한다. red2 실패 뒤 최종6파일 **210 PASS/0 FAIL·813 expect**, 엄격 타입0을 native-projection-implementation에 보존했다. 새 경계는 순수 restore/project 검사이며 기존 stdio 합성 경계를 포함한 묶음이다. 앞선189개 queue/marker 결과와 두 수정의 parent021 typed pre/post sourceStable/accepted·BoxBox disabled는 출처로 구분한다. 이 조사008의 새 검증/감사 영수증으로 복사하지 않는다.
+
+새 turn/item의 raw 배출과 화면 표시를 구분한다. terminal 같은turn의 늦은 delta는 새 item ID라도 기존 projection guard가 억제할 수 있으며, 완료를 새 스트리밍으로 다시 열지 않는다. 변경된 authoritative 완료의 explicit empty 처리까지 현재 코드에 반영됐지만 실제 Native 새 모델/GUI 복합 race·Windows/IME는 이210개로 입증하지 않았다. Windows drive/UNC 제한과 2000건/4MiB 큐 초과 명시 실패는 남는다.
+
+추가 Astra 호출 미시작이라는 앞 절은 그 시점의 상태다. 이후 부모가 제공한 `.www/evidence/resume-20261116/scratch/native-terminal-astra-review.md/json`의 좁은 읽기 전용 반박을 읽었다. terminal late delta 억제의 기존 계약과 raw 배출/화면 표시 구분에 대한 반박 타당 판정이며 테스트 미실행이고 이008 전체 독립 감사/완료를 대체하지 않는다. 과거 Terra4/5 fail을 pass로 덮지 않는다.
+
+그 문서화 시점에는 별도019 source 수정과 새 DOM probe를 기다리며 최종 verify/감사6/complete를 호출하지 않았다. GO 뒤 주요 source/정본 SHA와 권한/입력을 새로 결속해 같은 UUID의 공식 verify→문서 영향 검토→고유 actual Terra→보고서/완료/readback을 수행한다. 새 probe 성공을 미리 기록하지 않는다.
+
+## 현재 재개 — 최종 종합 GO 뒤
+
+019 하드링크 수정과 마지막 DEVELOPMENT 소유권 안내 반영 뒤 종합 source GO를 받았다. 현재 주요21 SHA는 local-source-manifest.go6.json/source21-go6이며 선택 digest는 `b8a23b54ad6787afd324fbaf97a285a5b364b6753473486d7cb866bc6b1af116`다. 정본25 source/copy SHA는 methodology-manifest.go6.json이다. 이전go4/go5는 당시 이력이다. 현재210개 집중 검사와 공식 연구·원문검증→문서 영향 검토→정확 직접 권한의 고유 actual Terra6→저작 보고서/완료/readback을 이008 UUID에서 새로 실행한다. 실제 Native/GUI/Windows 미실측 한계는 그대로다.006 새 Electron DOM3경계 probe는 별도 작업/실행이며 이008의 연구 완료조건으로 확대하거나 미리 PASS로 쓰지 않는다.

@@ -1,0 +1,590 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-84cda38b-7265-40d7-bf47-5a22ece1b3a2",
+  "title"        : "칸반 작업 상세와 계획 및 검증 근거 연결",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-029e2ec3-6b9e-487e-bb01-730e4e900bb5",
+      "workId"        : "work-84cda38b-7265-40d7-bf47-5a22ece1b3a2",
+      "title"         : "칸반 작업 상세와 계획 및 검증 근거 연결",
+      "summary"       : "칸반 상세의 과거 기능·Opus 증거와 현재 재검증 공백을 구분해 인계했다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T08:34:27.402Z",
+      "event"         : "finish",
+      "workRecordHash": "230014607f6d16e8657b543e62a0d156dcd4b0bef08089cd96192135df6fcbe8",
+      "sourceDigest"  : "458e9916ac8a4cba9204d13e46e18b8e544b5567cdc5816672b472bec80c8387",
+      "criteriaDigest": "06ebb9a8a9c841f5d7cd577c5639c4ea78c3a4138e5ab23b3a9e9fd912d604e8",
+      "semanticHash"  : "e4df3be752724467dad8851299cdd3f3222ec4bb489f2ffbc54fdbb7fb8e59ce",
+      "narrative": {
+        "summary": "칸반 상세의 과거 기능·Opus 증거와 현재 재검증 공백을 구분해 인계했다.",
+        "before" : "source-machine 기능 3기준과 Opus 통과가 있었지만 KANBAN-VERIFY 합성 기준은 미검증이었다.",
+        "after"  : "같은 UUID를 유지하고 현재 계획·문서 영향 검토와 실제 차단을 연결했다. 과거 성공을 현 머신 PASS로 승격하지 않았다.",
+        "changes": [
+          "같은 UUID를 유지하고 현재 계획·문서 영향 검토와 실제 차단을 연결했다. 과거 성공을 현 머신 PASS로 승격하지 않았다.",
+          "현재 계획은 같은 UUID의 tasks.md에 두고 이전 계획은 이력으로 구분했다."
+        ],
+        "decisions": [
+          "source-machine 기록과 현 머신의 실제 실행을 분리하고 기준·권한을 약화하지 않았다."
+        ],
+        "limitations": [
+          "현재 GUI와 필수 Opus가 없어 정상·빈 자료·실패·응답 경합 전체의 현재 수용을 완료하지 않았다.",
+          "Claude OAuth 만료 및 자동 갱신 실패로 필수 감사가 not_run이며 대체 모델은 실행하지 않았다. 커밋·push·배포·외부 쓰기를 하지 않았다."
+        ],
+        "next": [
+          "현재 원장의 다음 행동 verify에서 계획에 기록한 실제 미실행 구간을 확인한다.",
+          "GUI/Native/Opus 또는 BoxBox 전제가 필요한 경우 현재 금지된 인증·전역 설정·승인 변경을 이 실행에서 우회하지 않는다."
+        ],
+        "reader": {
+          "story": "칸반 상세의 과거 기능·Opus 증거와 현재 재검증 공백을 구분해 인계했다. 같은 UUID를 유지하고 현재 계획·문서 영향 검토와 실제 차단을 연결했다. 과거 성공을 현 머신 PASS로 승격하지 않았다. 현재 GUI와 필수 Opus가 없어 정상·빈 자료·실패·응답 경합 전체의 현재 수용을 완료하지 않았다.",
+          "requirements": [
+            {
+              "requirement": "같은 UUID의 실제 결과와 미실행 구분",
+              "result"     : "같은 UUID를 유지하고 현재 계획·문서 영향 검토와 실제 차단을 연결했다. 과거 성공을 현 머신 PASS로 승격하지 않았다.",
+              "evidence"   : ".www/evidence/remote-20261116/pre-report-status.json",
+              "limitations": "현재 GUI와 필수 Opus가 없어 정상·빈 자료·실패·응답 경합 전체의 현재 수용을 완료하지 않았다."
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "현재 원장과 증거 적용성",
+              "method"     : "공식 read/status 및 실제 명령·독립 읽기 전용 대조",
+              "expected"   : "과거 성공이나 부분 검사로 전체 완료를 만들지 않음",
+              "observed"   : "업무 완료 false를 유지하고 기준별 현재 적용성과 미검증을 나누었다.",
+              "limitations": "현재 GUI와 필수 Opus가 없어 정상·빈 자료·실패·응답 경합 전체의 현재 수용을 완료하지 않았다."
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": ".www/evidence/remote-20261116/pre-report-status.json",
+              "purpose": "이 보고서의 실제 실행 범위와 실패/제한 원문 확인"
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "현재 인계 문서의 남은 실제 검증·필수 감사를 재개한다.",
+              "owner"   : "후속 Codex 통합자",
+              "doneWhen": "현재 기능·환경·필수 감사와 저작 보고서가 모두 적용 가능함",
+              "impact"  : "미충족 동안 업무 완료로 승격하지 않음"
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "KANBAN-DETAIL: environment_changed; KANBAN-TRUTH: environment_changed; KANBAN-SCOPE: environment_changed; KANBAN-VERIFY: environment_changed, source_changed; source_changed; receipt_context_mismatch",
+        "criteria": [
+          {
+            "id"         : "KANBAN-DETAIL",
+            "description": "기존 칸반 카드에서 같은 프로젝트·작업 UUID의 상세를 열고 명세·계획·검증 근거의 제공 여부와 내용을 확인한다. 임의 thread로 연결하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "KANBAN-TRUTH",
+            "description": "원장의 기준 결과와 현재 재검증 적용성을 구분하며 계획·검증 기록 없음·읽기 실패를 구별한다. 완료를 임의 추정하거나 원장을 화면 탐색만으로 변경하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "KANBAN-SCOPE",
+            "description": "등록 프로젝트와 고정 작업 폴더 범위에서만 자료를 읽고 다른 프로젝트·동일 UUID·선택 변경·늦은 응답·중복 ID·링크·과대 파일을 안전하게 처리한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "KANBAN-VERIFY",
+            "description": "정상·빈 자료·실패·선택 경합의 집중 검사와 strict 타입·빌드·실제 Electron 화면 및 읽기 전용 독립 검토의 근거를 기록한 뒤 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const commands=[['bun',['test','test/dashboard.test.ts','test/native-session.test.ts']],['node',['scripts/verify-home.ts']],['node',['scripts/verify-dashboard-race.ts']]];for(let i=0;i<commands.length;i++){const [cmd,args]=commands[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:4000000});writeFileSync('.www/evidence/session-completion-20261116/home-official-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T07:32:05.414Z"
+          },
+          {
+            "id": "attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import {spawnSync} from 'node:child_process';import {writeFileSync,readFileSync} from 'node:fs';const commands=[['npm',['run','typecheck']],['npm',['run','build']],['bun',['test','test/dashboard.test.ts','test/native-session.test.ts']],['node',['scripts/verify-home.ts']],['node',['scripts/verify-dashboard-race.ts']]];for(let i=0;i<commands.length;i++){const [cmd,args]=commands[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:4000000});writeFileSync('.www/evidence/session-completion-20261116/home-bound-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);if(i===1)writeFileSync('.www/evidence/session-completion-20261116/home-bound-build-info.json',readFileSync('dist/build-info.json'));}"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T07:45:15.814Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-f10adac1-d1c2-4ca7-a03a-36cbf064c5a4",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f10adac1-d1c2-4ca7-a03a-36cbf064c5a4/opus.json",
+            "findings": [
+              "[검토 범위] Read/Grep 도구로 src/dashboard.ts, src/dashboard-view.tsx, src/native-session.ts:599-615(dashboard:get), package.json, scripts/verify-home.ts와 verify-dashboard-race.ts(검색으로 일부만), Home004 spec.md·verification.md·work.json, 증거 home-official-current.json·step-0/1/2.log·dashboard-race-Y2q9vk/summary.json을 읽었다. design.md·tasks.md·test 파일 본문·src/main.ts·preload.ts·dashboard.css·docs/specs/dashboard.md는 열어 보지 않았다. 명령이나 테스트는 하나도 실행하지 않았다. 읽기에 실패한 파일은 없다.",
+              "[소스 일치] 요청에 제시된 16개 입력 파일의 digest는 attempt-742d6cb6의 source.files와 모두 같다. 요청의 sourceDigest(a52048cc…)가 attempt 값(95b0501d…)과 다른 이유는 docs/ARCHITECTURE.md·DEVELOPMENT.md·PRODUCT.md·skills/WORKFLOW.md 4개가 더 포함됐기 때문으로 판단한다. criteriaDigest 06ebb9a8…은 서로 같다.",
+              "[구현 타당] 결함은 찾지 못했다. src/dashboard.ts:198-237 readDashboardWork는 main에 등록된 프로젝트와 키가 정확히 하나만 맞을 때만 진행한다. UUID 형식과 coverage==='complete'로 중복·불완전 목록을 거부하고, 같은 폴더의 네 문서만 읽는다(문서당 256KiB, 합계 1MiB, symlink·hardlink는 unsafe_path). work.json은 문서를 읽은 뒤 다시 읽어 바이트가 같은지 확인한다. src/native-session.ts:601-604는 detail 객체 키를 projectKey,workId로만 제한해 renderer가 경로를 넘기지 못한다. src/dashboard-view.tsx:66-84는 request 시퀀스와 key·scope 비교로 늦은 응답을 버리고, 닫기·필터 변경 때 시퀀스를 올린다. :144는 skipHtml을 쓰고 a를 span으로 바꾸며 img를 null로 처리한다. 명세 UC-01/03/05/07/08과 맞는다.",
+              "[결함·증거 범위 확대] work.json:59-71에서 KANBAN-VERIFY를 passed로 기록했다. 그러나 spec.md:43은 '독립 감사와 실제 화면 검증을 수행하기 전에는 KANBAN-VERIFY를 통과로 기록하지 않는다'고 정했고, 기준 설명도 'strict 타입·빌드·…읽기 전용 독립 검토의 근거를 기록한 뒤 완료'를 요구한다. 실제로 workflow.reviews는 빈 배열이다(work.json:324). 연결된 유일한 시도 attempt-742d6cb6은 bun test, verify-home, verify-dashboard-race만 실행했고 npm run typecheck와 npm run build는 실행하지 않았다(work.json:281). verification.md:71의 'strict·…빌드 실행은 … 별도로 확인했다'는 연결된 attempt ID나 로그가 없는 주장이다. 같은 기준의 evidence summary '실제 검증 passed; 현재 적용 가능'은 이 시도가 다루지 않은 typecheck·build·독립 검토까지 통과한 것처럼 보이게 한다. 수정: KANBAN-VERIFY를 unverified로 되돌리거나, typecheck·build 공식 시도와 독립 검토 기록을 연결한 뒤 passed로 기록한다.",
+              "[결함·증거 결속 누락] package.json:6에 따라 \"main\": \"dist/main.js\"이고, scripts/verify-home.ts:47과 verify-dashboard-race.ts:60은 Electron을 root로 실행하므로 빌드된 dist 산출물을 쓴다. 그런데 attempt-742d6cb6의 명령 목록에는 빌드 단계가 없고, source inputs에 dist가 없으며, 두 스크립트에서 dist의 최신성을 확인하는 코드(digest·mtime 등)도 검색되지 않았다. race 스크립트(:48)는 renderer용 DashboardView 번들만 다시 만들고, main·preload IPC 경로는 dist를 그대로 쓴다. 따라서 step-1/2 로그의 실제 Electron 통과가 소스 digest 95b0501d의 src/main.ts·native-session.ts·preload.ts·renderer.tsx에서 나온 결과라는 사실이 기록으로 증명되지 않는다. 그럼에도 KANBAN-DETAIL·SCOPE·TRUTH의 실제 GUI 근거로 쓰였다. 재현 근거: 이전 빌드의 dist가 남은 상태에서 src만 바꾸고 같은 명령을 실행해도 source digest만 새 값으로 기록되고 결과는 통과할 수 있다. 수정: 같은 시도 안에서 npm run build를 먼저 실행하거나, dist digest를 입력에 포함한다.",
+              "[참고] 늦은 응답 검증(dashboard-race summary.json)은 coverage 문구에 밝힌 대로 별도 mount에서 응답 전달 순서만 주입한 시험이다. verification.md:71도 이 한계를 적었으므로 과장으로 보지 않는다. 단, 위 dist 결속 문제는 이 시험의 preload·main 경로에도 똑같이 해당한다."
+            ]
+          },
+          {
+            "id"         : "review-0a631754-c6ff-4e5b-9684-dff6eeb7f39d",
+            "verdict"    : "pass",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-0a631754-c6ff-4e5b-9684-dff6eeb7f39d/opus.json",
+            "findings": [
+              "검토 범위: Read/Grep 도구로 spec.md, tasks.md, verification.md, home-bound-verification.json, home-bound-build-info.json, home-bound-step-0~4.log, src/dashboard.ts 전체, src/dashboard-view.tsx 전체, src/native-session.ts:599-615, src/preload.ts:24-25, src/shared.ts:30-35·177, src/renderer.tsx:411-415·718-723·1180, test/dashboard.test.ts:228-311을 직접 읽었다. design.md, work.json, docs/specs/dashboard.md, scripts/verify-home.ts, scripts/verify-dashboard-race.ts, main.ts의 나머지 부분, CSS는 읽지 않았다. 파일 해시는 직접 계산하지 않았고, 요청의 파일별 digest가 home-bound-verification.json의 source.files digest 16개와 일치하는 것만 확인했다. 테스트·빌드는 실행하지 않았다. 도구 읽기 실패는 없었다.",
+              "KANBAN-DETAIL·SCOPE 경계: preload는 projectKey와 workId만 `dashboard:get`의 두 번째 인자로 보낸다. native-session.ts:601-604는 정확히 이 두 키의 문자열 객체만 받고, 경로는 main이 정한 wwwRoot와 등록 목록으로만 만든다(607-610). dashboard.ts:198-205는 프로젝트 key가 정확히 하나 일치하는지, UUID 형식이 맞는지, 목록 수집이 complete인지 확인하고 대소문자 무시로 유일한 카드를 찾는다. 중복 UUID는 readProject:175-181에서 제외되고, 수집이 불완전하면 상세를 거부해 모호한 원장을 임의로 채택하지 않는다. 결함은 없다.",
+              "문서 읽기: 각 문서는 256 KiB 한도로 readBytes를 거친다. readBytes는 디렉터리 symlink 검사, 일반 파일·nlink=1 여부, realpath, O_NOFOLLOW, 열기 전후 dev/ino/size/mtime/ctime 대조를 수행한다. ENOENT는 missing, 그 밖의 오류는 문서별 failed로 처리하고 잘못된 UTF-8은 invalid_utf8로 실패시킨다(dashboard.ts:219-231). 마지막에 work.json을 다시 읽어 바이트를 비교한다(232-233). test/dashboard.test.ts:267-281에서 symlink·hardlink·256 KiB+1 문서가 각각 failed로 처리되고 형제 문서는 그대로 남는 것을 확인했다(home-bound-step-2.log의 37 pass/0 fail와 일치).",
+              "KANBAN-TRUTH 표시: dashboard-view.tsx:126에 '기록된 결과이며 현재 재검증 결과를 뜻하지 않습니다'라는 문구가 있다. 144행은 missing·failed(role=alert)·빈 문서·tasks 미작성을 구분하고, ReactMarkdown의 skipHtml과 a→span, img→null 설정으로 HTML·링크·이미지를 실행하지 않는다. 갱신 실패 때는 이전 값을 유지한 채 '갱신 전 수집 내용'을 표시하고 재시도 버튼을 제공한다(128-129). 요구와 일치한다.",
+              "선택 경합: request ref의 sequence와 effect cleanup, 카드 변경·필터 변경·닫기 시 증가시키는 처리(dashboard-view.tsx:66-84, 91, 104, 121), 응답의 projectKey·workId 대조(74-76), renderer의 matchesSelection 재확인(renderer.tsx:721)이 늦은 응답의 반영을 막는다. verify-dashboard-race 로그는 별도 mount에서 전달 순서만 주입했다는 한계를 스스로 밝히고 있고, verification.md:71도 같은 한계를 기록해 증거 범위를 넓히지 않았다.",
+              "증거 결속: attempt-d13616ac의 명령은 typecheck→build→집중 테스트→verify-home→race를 같은 process에서 직렬 실행하며 sourceStable=true다. 연결 기준은 DETAIL·SCOPE·TRUTH 세 개뿐이고 KANBAN-VERIFY는 unverified로 남겨 두었다(verification.md:97). 이전 감사 review-f10adac1의 지적(빌드 결속, 감사 전 VERIFY 통과 처리)을 반영한 것으로 판단한다. build-info의 sourceDigest(87d1ff…)는 attempt의 source digest(458e99…)와 계산 방식이 달라 직접 대조할 수 없다. 다만 같은 시도 안에서 build 직후 GUI가 실행된 순서가 기록되어 있다.",
+              "비차단 관찰 1 — 실제로 걸리지 않는 누적 한도: 문서는 네 개이고 각각 256 KiB 이하이므로 합계 1 MiB 한도(dashboard.ts:217)는 정상 크기 변화로는 도달할 수 없다. tasks.md의 '총 문서 읽기 1 MiB 초과' 시나리오에 해당하는 테스트도 없다. 동작 결함은 아니지만, 이 시나리오를 검증했다고 주장해서는 안 된다.",
+              "비차단 관찰 2 — 상세 요약의 시점 혼합: dashboard-view.tsx:126의 상세 요약에서 title·status·blockedReason·기준 수는 상세 응답 값을 쓴다. 반면 원본 경로·담당·영역은 목록 snapshot의 card 값을 그대로 쓴다. 두 수집 사이에 원장이 바뀌면 한 패널에 서로 다른 시점의 값이 섞일 수 있다(DashboardWorkDetail에는 sourcePath가 있지만 owner·areas는 없다).",
+              "비차단 관찰 3 — 취소 작업 숨김 뒤 상태: '취소 작업 표시'를 끄면 상세는 사라지지만 selected는 남는다. 다시 켜면 상세가 자동으로 다시 열리고, 그 사이 상세 안에 있던 초점은 복귀 대상 없이 사라진다(dashboard-view.tsx:54, 106). 명세의 '표시 대상이 아닌 상세 제거'는 충족하므로 결함으로 판정하지 않는다.",
+              "비차단 관찰 4 — 프로젝트 전체 상세 차단: readDashboardWork는 프로젝트 coverage가 complete가 아니면 상세 전체를 거부한다. 따라서 같은 프로젝트에 손상된 work.json이나 문서가 아닌 symlink가 하나라도 있으면, 정상 카드의 상세도 열리지 않는다. 유일성을 확인하는 보수적 설계로는 타당하지만 사용성 제약으로 기록할 만하다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Home/004-칸반 작업 상세와 계획 및 검증 근거 연결/work.json",
+        "workRecordHash": "230014607f6d16e8657b543e62a0d156dcd4b0bef08089cd96192135df6fcbe8",
+        "sourceDigest"  : "458e9916ac8a4cba9204d13e46e18b8e544b5567cdc5816672b472bec80c8387",
+        "criteriaDigest": "06ebb9a8a9c841f5d7cd577c5639c4ea78c3a4138e5ab23b3a9e9fd912d604e8"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-a0f858c1-1096-44bd-824b-8ad3f5cebcad",
+      "workId"        : "work-84cda38b-7265-40d7-bf47-5a22ece1b3a2",
+      "title"         : "칸반 작업 상세와 계획 및 검증 근거 연결",
+      "summary"       : "같은 프로젝트·UUID의 칸반 상세와 계획·검증 근거의 v5 실제 관측을 같은 UUID에서 부분 회수했다. 고유 fullHome의 정상/빈자료·실제 권한 오류/복원·삭제·필터·프로젝트/UUID 격리·640px·초점 복귀와 별도 race의 늦은 응답·부분 수집 보존·닫기·A실패/B내용 비노출 assertion을 회수했다. 추가 Native 실제 감사 반례에 따른 v6 교정을 기다리며 전체 업무 완료를 주장하지 않는다.",
+      "kind"          : "authored",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T23:30:18.348Z",
+      "event"         : "finish",
+      "workRecordHash": "c89dbfeb2150a0d27b27a28e86c410bc3c3528f3a216255e9649b3a7ac9dfbe4",
+      "sourceDigest"  : "cb2a127c03c0f3c8b911c82e00944e94bdc3cc53f71f76bda8ddef70e7edd0e7",
+      "criteriaDigest": "06ebb9a8a9c841f5d7cd577c5639c4ea78c3a4138e5ab23b3a9e9fd912d604e8",
+      "semanticHash"  : "cace0c0b89f5fdc31846f11ca7be776192ecdcd51b15e52677df2c40031bbdf2",
+      "narrative": {
+        "summary": "같은 프로젝트·UUID의 칸반 상세와 계획·검증 근거의 v5 실제 관측을 같은 UUID에서 부분 회수했다. 고유 fullHome의 정상/빈자료·실제 권한 오류/복원·삭제·필터·프로젝트/UUID 격리·640px·초점 복귀와 별도 race의 늦은 응답·부분 수집 보존·닫기·A실패/B내용 비노출 assertion을 회수했다. 추가 Native 실제 감사 반례에 따른 v6 교정을 기다리며 전체 업무 완료를 주장하지 않는다.",
+        "before" : "과거 집중/GUI 기록은 후속 공유 소스 변경 때문에 최신 전체 검증으로 사용할 수 없었다. 단순 파일 존재·해시 검사와 실제 사용자 시나리오의 실행도 구분해야 했다.",
+        "after"  : "고유 fullHome의 정상/빈자료·실제 권한 오류/복원·삭제·필터·프로젝트/UUID 격리·640px·초점 복귀와 별도 race의 늦은 응답·부분 수집 보존·닫기·A실패/B내용 비노출 assertion을 회수했다. actual process·등록 verify 시도·summary assertion·원본 artifact의 bytes/SHA를 구분해 evidence-current-v5.md에 보존하고 현재 계획과 공식 문서 영향 검토를 연결했다.",
+        "changes": [
+          "같은 UUID·기준·원래 권한·과거 실패를 보존했다.",
+          "고유 actual 관측의 범위와 미관측을 own 근거 문서에 고정하고 작업 inputs와 현재 다음 행동을 연결했다.",
+          "현재 의미/감사 기준은 파일 checker 또는 단위 명령의 성공만으로 통과시키지 않았다."
+        ],
+        "decisions": [
+          "Root 단독 GUI 실행에서 각 UUID의 고유 관측을 받았으며 다른 UUID의 PASS를 복사하지 않았다.",
+          "제품 기술 v5 fingerprint와 문서 추가로 달라진 작업 scope를 분리했다.",
+          "Root 추가 반례 교정 전 실제 full Terra 감사를 보류해 중간 소스의 감사를 반복하지 않았다."
+        ],
+        "limitations": [
+          "Root Native003/006/013/015 실제 감사가 추가 반례를 발견하여 projection·native-activity·agent-overview 및 관련 검사/oracle의 v6 교정을 준비한다. broad src 입력에 영향을 주므로 v5 관측을 새 소스의 통과로 승격하지 않는다.",
+          "이 Home UUID의 전체 기준 actual Terra 감사·업무 완료 action은 아직 실행하지 않았다. 부분 관측을 전체 수용으로 표시하지 않는다.",
+          "실제 Electron/IPC/별도 stdio 프로세스는 합성 Native fixture를 사용했다. 실제 OS picker·IME·Windows·외부 RPA·실제 Native 모델은 이 검증 범위 밖이다.",
+          "race는 정상 backend 응답의 전달 순서·합성 표식과 renderer API 실패를 주입했다. 자연 발생 경합·실제 backend 오류의 실행 증거로 확대하지 않는다."
+        ],
+        "next": [
+          "Root v6 교정 후 영향 검사를 적용하고 실제 필요한 정확 GUI 관측을 같은 UUID로 회수한다.",
+          "최종 동결 뒤 전체 기준 actual gpt-6.1-terra 읽기 전용 감사의 내용 수용과 공식 결과 기록을 확인한다.",
+          "현재 저작 보고서·공식 완료 조건과 원장/HTML readback을 다시 확인한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "KANBAN-DETAIL",
+            "description": "기존 칸반 카드에서 같은 프로젝트·작업 UUID의 상세를 열고 명세·계획·검증 근거의 제공 여부와 내용을 확인한다. 임의 thread로 연결하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+                "summary": "당시 검증 passed; 2026-11-16T12:48:36.232Z 평가에서 현재 적용 불가(environment_changed, source_changed). 현재 검증과 별도 역사 기록"
+              },
+              {
+                "path": "verification.md#attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+                "summary": "당시 검증 passed; 2026-11-16T12:48:36.232Z 평가에서 현재 적용 불가(environment_changed, source_changed). 현재 검증과 별도 역사 기록"
+              },
+              {
+                "path": "verification.md#attempt-54ed8713-94cf-4b92-a18d-8d0a8b88331a",
+                "summary": "당시 검증 passed; 2026-11-16T12:48:36.232Z 평가에서 현재 적용 불가(source_changed). 현재 검증과 별도 역사 기록"
+              },
+              {
+                "path": "verification.md#attempt-b9cb3ef0-7092-40b4-a588-9a072dbafe33",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-288460ce-798b-42e7-8d4e-ec413d385177",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e9eea20b-c4c2-480e-8f92-f71942137b10",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d5155fa3-27cc-43fa-9dd4-873602ff3301",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "KANBAN-TRUTH",
+            "description": "원장의 기준 결과와 현재 재검증 적용성을 구분하며 계획·검증 기록 없음·읽기 실패를 구별한다. 완료를 임의 추정하거나 원장을 화면 탐색만으로 변경하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+                "summary": "당시 검증 passed; 2026-11-16T12:48:36.232Z 평가에서 현재 적용 불가(environment_changed, source_changed). 현재 검증과 별도 역사 기록"
+              },
+              {
+                "path": "verification.md#attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+                "summary": "당시 검증 passed; 2026-11-16T12:48:36.232Z 평가에서 현재 적용 불가(environment_changed, source_changed). 현재 검증과 별도 역사 기록"
+              },
+              {
+                "path": "verification.md#attempt-54ed8713-94cf-4b92-a18d-8d0a8b88331a",
+                "summary": "당시 검증 passed; 2026-11-16T12:48:36.232Z 평가에서 현재 적용 불가(source_changed). 현재 검증과 별도 역사 기록"
+              },
+              {
+                "path": "verification.md#attempt-b9cb3ef0-7092-40b4-a588-9a072dbafe33",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-288460ce-798b-42e7-8d4e-ec413d385177",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e9eea20b-c4c2-480e-8f92-f71942137b10",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d5155fa3-27cc-43fa-9dd4-873602ff3301",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "KANBAN-SCOPE",
+            "description": "등록 프로젝트와 고정 작업 폴더 범위에서만 자료를 읽고 다른 프로젝트·동일 UUID·선택 변경·늦은 응답·중복 ID·링크·과대 파일을 안전하게 처리한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+                "summary": "당시 검증 passed; 2026-11-16T12:48:36.232Z 평가에서 현재 적용 불가(environment_changed, source_changed). 현재 검증과 별도 역사 기록"
+              },
+              {
+                "path": "verification.md#attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+                "summary": "당시 검증 passed; 2026-11-16T12:48:36.232Z 평가에서 현재 적용 불가(environment_changed, source_changed). 현재 검증과 별도 역사 기록"
+              },
+              {
+                "path": "verification.md#attempt-54ed8713-94cf-4b92-a18d-8d0a8b88331a",
+                "summary": "당시 검증 passed; 2026-11-16T12:48:36.232Z 평가에서 현재 적용 불가(source_changed). 현재 검증과 별도 역사 기록"
+              },
+              {
+                "path": "verification.md#attempt-b9cb3ef0-7092-40b4-a588-9a072dbafe33",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-288460ce-798b-42e7-8d4e-ec413d385177",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-e9eea20b-c4c2-480e-8f92-f71942137b10",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-d5155fa3-27cc-43fa-9dd4-873602ff3301",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "KANBAN-VERIFY",
+            "description": "정상·빈 자료·실패·선택 경합의 집중 검사와 strict 타입·빌드·실제 Electron 화면 및 읽기 전용 독립 검토의 근거를 기록한 뒤 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+                "summary": "당시 검증 passed; 2026-11-16T12:48:36.232Z 평가에서 현재 적용 불가(environment_changed, source_changed). 현재 검증과 별도 역사 기록"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-742d6cb6-06ad-49aa-be8f-651f217d3702",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const commands=[['bun',['test','test/dashboard.test.ts','test/native-session.test.ts']],['node',['scripts/verify-home.ts']],['node',['scripts/verify-dashboard-race.ts']]];for(let i=0;i<commands.length;i++){const [cmd,args]=commands[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:4000000});writeFileSync('.www/evidence/session-completion-20261116/home-official-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T07:32:05.414Z"
+          },
+          {
+            "id": "attempt-d13616ac-9758-406f-b7ff-84061b0d62da",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import {spawnSync} from 'node:child_process';import {writeFileSync,readFileSync} from 'node:fs';const commands=[['npm',['run','typecheck']],['npm',['run','build']],['bun',['test','test/dashboard.test.ts','test/native-session.test.ts']],['node',['scripts/verify-home.ts']],['node',['scripts/verify-dashboard-race.ts']]];for(let i=0;i<commands.length;i++){const [cmd,args]=commands[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:4000000});writeFileSync('.www/evidence/session-completion-20261116/home-bound-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);if(i===1)writeFileSync('.www/evidence/session-completion-20261116/home-bound-build-info.json',readFileSync('dist/build-info.json'));}"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T07:45:15.814Z"
+          },
+          {
+            "id": "attempt-54ed8713-94cf-4b92-a18d-8d0a8b88331a",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import{spawnSync}from\"node:child_process\";import{writeFileSync}from\"node:fs\";const steps=[[\"npm\",[\"run\",\"typecheck\"]],[\"npm\",[\"run\",\"build\"]],[\"bun\",[\"test\",\"test/dashboard.test.ts\",\"test/native-session.test.ts\",\"--timeout\",\"30000\"]],[\"node\",[\"scripts/verify-home.ts\"]],[\"node\",[\"scripts/verify-dashboard-race.ts\"]]];const results=[];for(let i=0;i<steps.length;i++){const[command,args]=steps[i],r=spawnSync(command,args,{encoding:\"utf8\",maxBuffer:16000000});writeFileSync(\".www/evidence/resume-20261116/home004-step-\"+i+\".log\",(r.stdout??\"\")+(r.stderr??\"\"));process.stdout.write((r.stdout??\"\")+(r.stderr??\"\"));results.push({command,args,code:r.status,signal:r.signal});if(r.status!==0)break;}writeFileSync(\".www/evidence/resume-20261116/home004-steps.json\",JSON.stringify({scope:\"실제 strict/build와 집중검사·Electron/IPC. 합성 원장/fixture, OS IME/외부RPA/실모델 아님.\",results},null,2));process.exit(results.length===steps.length&&results.every(r=>r.code===0)?0:1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T10:17:42.406Z"
+          },
+          {
+            "id": "attempt-b9cb3ef0-7092-40b4-a588-9a072dbafe33",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import{spawnSync}from\"node:child_process\";import{writeFileSync}from\"node:fs\";const steps=[[\"npm\",[\"run\",\"typecheck\"]],[\"npm\",[\"run\",\"build\"]],[\"bun\",[\"test\",\"test/dashboard.test.ts\",\"test/native-session.test.ts\",\"--timeout\",\"30000\"]],[\"node\",[\"scripts/verify-home.ts\"]],[\"node\",[\"scripts/verify-dashboard-race.ts\"]]];const results=[];for(let i=0;i<steps.length;i++){const[command,args]=steps[i],r=spawnSync(command,args,{encoding:\"utf8\",maxBuffer:16000000});writeFileSync(\".www/evidence/resume-20261116/home004-step-\"+i+\".log\",(r.stdout??\"\")+(r.stderr??\"\"));process.stdout.write((r.stdout??\"\")+(r.stderr??\"\"));results.push({command,args,code:r.status,signal:r.signal});if(r.status!==0)break;}writeFileSync(\".www/evidence/resume-20261116/home004-steps.json\",JSON.stringify({scope:\"실제 strict/build와 집중검사·Electron/IPC. 합성 원장/fixture, OS IME/외부RPA/실모델 아님.\",results},null,2));process.exit(results.length===steps.length&&results.every(r=>r.code===0)?0:1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T12:56:59.630Z"
+          },
+          {
+            "id": "attempt-288460ce-798b-42e7-8d4e-ec413d385177",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import{spawnSync}from\"node:child_process\";import{writeFileSync}from\"node:fs\";const steps=[[\"npm\",[\"run\",\"typecheck\"]],[\"npm\",[\"run\",\"build\"]],[\"bun\",[\"test\",\"test/dashboard.test.ts\",\"test/native-session.test.ts\",\"--timeout\",\"30000\"]],[\"node\",[\"scripts/verify-home.ts\"]],[\"node\",[\"scripts/verify-dashboard-race.ts\"]]];const results=[];for(let i=0;i<steps.length;i++){const[command,args]=steps[i],r=spawnSync(command,args,{encoding:\"utf8\",maxBuffer:16000000});writeFileSync(\".www/evidence/resume-20261116/home004-repair/scratch/functional-v2-step-\"+i+\".log\",(r.stdout??\"\")+(r.stderr??\"\"));process.stdout.write((r.stdout??\"\")+(r.stderr??\"\"));results.push({command,args,code:r.status,signal:r.signal});if(r.status!==0)break;}writeFileSync(\".www/evidence/resume-20261116/home004-repair/scratch/functional-v2-steps.json\",JSON.stringify({scope:\"실제 strict/build와 집중검사·Electron/IPC. 합성 원장/fixture, OS IME/외부RPA/실모델 아님.\",results},null,2));process.exit(results.length===steps.length&&results.every(r=>r.code===0)?0:1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T14:29:34.188Z"
+          },
+          {
+            "id": "attempt-e9eea20b-c4c2-480e-8f92-f71942137b10",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T21:43:25.766Z"
+          },
+          {
+            "id": "attempt-d5155fa3-27cc-43fa-9dd4-873602ff3301",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/dashboard.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:11:25.526Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-f10adac1-d1c2-4ca7-a03a-36cbf064c5a4",
+            "verdict"    : "fail",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f10adac1-d1c2-4ca7-a03a-36cbf064c5a4/opus.json",
+            "findings": [
+              "[검토 범위] Read/Grep 도구로 src/dashboard.ts, src/dashboard-view.tsx, src/native-session.ts:599-615(dashboard:get), package.json, scripts/verify-home.ts와 verify-dashboard-race.ts(검색으로 일부만), Home004 spec.md·verification.md·work.json, 증거 home-official-current.json·step-0/1/2.log·dashboard-race-Y2q9vk/summary.json을 읽었다. design.md·tasks.md·test 파일 본문·src/main.ts·preload.ts·dashboard.css·docs/specs/dashboard.md는 열어 보지 않았다. 명령이나 테스트는 하나도 실행하지 않았다. 읽기에 실패한 파일은 없다.",
+              "[소스 일치] 요청에 제시된 16개 입력 파일의 digest는 attempt-742d6cb6의 source.files와 모두 같다. 요청의 sourceDigest(a52048cc…)가 attempt 값(95b0501d…)과 다른 이유는 docs/ARCHITECTURE.md·DEVELOPMENT.md·PRODUCT.md·skills/WORKFLOW.md 4개가 더 포함됐기 때문으로 판단한다. criteriaDigest 06ebb9a8…은 서로 같다.",
+              "[구현 타당] 결함은 찾지 못했다. src/dashboard.ts:198-237 readDashboardWork는 main에 등록된 프로젝트와 키가 정확히 하나만 맞을 때만 진행한다. UUID 형식과 coverage==='complete'로 중복·불완전 목록을 거부하고, 같은 폴더의 네 문서만 읽는다(문서당 256KiB, 합계 1MiB, symlink·hardlink는 unsafe_path). work.json은 문서를 읽은 뒤 다시 읽어 바이트가 같은지 확인한다. src/native-session.ts:601-604는 detail 객체 키를 projectKey,workId로만 제한해 renderer가 경로를 넘기지 못한다. src/dashboard-view.tsx:66-84는 request 시퀀스와 key·scope 비교로 늦은 응답을 버리고, 닫기·필터 변경 때 시퀀스를 올린다. :144는 skipHtml을 쓰고 a를 span으로 바꾸며 img를 null로 처리한다. 명세 UC-01/03/05/07/08과 맞는다.",
+              "[결함·증거 범위 확대] work.json:59-71에서 KANBAN-VERIFY를 passed로 기록했다. 그러나 spec.md:43은 '독립 감사와 실제 화면 검증을 수행하기 전에는 KANBAN-VERIFY를 통과로 기록하지 않는다'고 정했고, 기준 설명도 'strict 타입·빌드·…읽기 전용 독립 검토의 근거를 기록한 뒤 완료'를 요구한다. 실제로 workflow.reviews는 빈 배열이다(work.json:324). 연결된 유일한 시도 attempt-742d6cb6은 bun test, verify-home, verify-dashboard-race만 실행했고 npm run typecheck와 npm run build는 실행하지 않았다(work.json:281). verification.md:71의 'strict·…빌드 실행은 … 별도로 확인했다'는 연결된 attempt ID나 로그가 없는 주장이다. 같은 기준의 evidence summary '실제 검증 passed; 현재 적용 가능'은 이 시도가 다루지 않은 typecheck·build·독립 검토까지 통과한 것처럼 보이게 한다. 수정: KANBAN-VERIFY를 unverified로 되돌리거나, typecheck·build 공식 시도와 독립 검토 기록을 연결한 뒤 passed로 기록한다.",
+              "[결함·증거 결속 누락] package.json:6에 따라 \"main\": \"dist/main.js\"이고, scripts/verify-home.ts:47과 verify-dashboard-race.ts:60은 Electron을 root로 실행하므로 빌드된 dist 산출물을 쓴다. 그런데 attempt-742d6cb6의 명령 목록에는 빌드 단계가 없고, source inputs에 dist가 없으며, 두 스크립트에서 dist의 최신성을 확인하는 코드(digest·mtime 등)도 검색되지 않았다. race 스크립트(:48)는 renderer용 DashboardView 번들만 다시 만들고, main·preload IPC 경로는 dist를 그대로 쓴다. 따라서 step-1/2 로그의 실제 Electron 통과가 소스 digest 95b0501d의 src/main.ts·native-session.ts·preload.ts·renderer.tsx에서 나온 결과라는 사실이 기록으로 증명되지 않는다. 그럼에도 KANBAN-DETAIL·SCOPE·TRUTH의 실제 GUI 근거로 쓰였다. 재현 근거: 이전 빌드의 dist가 남은 상태에서 src만 바꾸고 같은 명령을 실행해도 source digest만 새 값으로 기록되고 결과는 통과할 수 있다. 수정: 같은 시도 안에서 npm run build를 먼저 실행하거나, dist digest를 입력에 포함한다.",
+              "[참고] 늦은 응답 검증(dashboard-race summary.json)은 coverage 문구에 밝힌 대로 별도 mount에서 응답 전달 순서만 주입한 시험이다. verification.md:71도 이 한계를 적었으므로 과장으로 보지 않는다. 단, 위 dist 결속 문제는 이 시험의 preload·main 경로에도 똑같이 해당한다."
+            ]
+          },
+          {
+            "id"         : "review-0a631754-c6ff-4e5b-9684-dff6eeb7f39d",
+            "verdict"    : "pass",
+            "model"      : "claude-opus-5-5",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-0a631754-c6ff-4e5b-9684-dff6eeb7f39d/opus.json",
+            "findings": [
+              "검토 범위: Read/Grep 도구로 spec.md, tasks.md, verification.md, home-bound-verification.json, home-bound-build-info.json, home-bound-step-0~4.log, src/dashboard.ts 전체, src/dashboard-view.tsx 전체, src/native-session.ts:599-615, src/preload.ts:24-25, src/shared.ts:30-35·177, src/renderer.tsx:411-415·718-723·1180, test/dashboard.test.ts:228-311을 직접 읽었다. design.md, work.json, docs/specs/dashboard.md, scripts/verify-home.ts, scripts/verify-dashboard-race.ts, main.ts의 나머지 부분, CSS는 읽지 않았다. 파일 해시는 직접 계산하지 않았고, 요청의 파일별 digest가 home-bound-verification.json의 source.files digest 16개와 일치하는 것만 확인했다. 테스트·빌드는 실행하지 않았다. 도구 읽기 실패는 없었다.",
+              "KANBAN-DETAIL·SCOPE 경계: preload는 projectKey와 workId만 `dashboard:get`의 두 번째 인자로 보낸다. native-session.ts:601-604는 정확히 이 두 키의 문자열 객체만 받고, 경로는 main이 정한 wwwRoot와 등록 목록으로만 만든다(607-610). dashboard.ts:198-205는 프로젝트 key가 정확히 하나 일치하는지, UUID 형식이 맞는지, 목록 수집이 complete인지 확인하고 대소문자 무시로 유일한 카드를 찾는다. 중복 UUID는 readProject:175-181에서 제외되고, 수집이 불완전하면 상세를 거부해 모호한 원장을 임의로 채택하지 않는다. 결함은 없다.",
+              "문서 읽기: 각 문서는 256 KiB 한도로 readBytes를 거친다. readBytes는 디렉터리 symlink 검사, 일반 파일·nlink=1 여부, realpath, O_NOFOLLOW, 열기 전후 dev/ino/size/mtime/ctime 대조를 수행한다. ENOENT는 missing, 그 밖의 오류는 문서별 failed로 처리하고 잘못된 UTF-8은 invalid_utf8로 실패시킨다(dashboard.ts:219-231). 마지막에 work.json을 다시 읽어 바이트를 비교한다(232-233). test/dashboard.test.ts:267-281에서 symlink·hardlink·256 KiB+1 문서가 각각 failed로 처리되고 형제 문서는 그대로 남는 것을 확인했다(home-bound-step-2.log의 37 pass/0 fail와 일치).",
+              "KANBAN-TRUTH 표시: dashboard-view.tsx:126에 '기록된 결과이며 현재 재검증 결과를 뜻하지 않습니다'라는 문구가 있다. 144행은 missing·failed(role=alert)·빈 문서·tasks 미작성을 구분하고, ReactMarkdown의 skipHtml과 a→span, img→null 설정으로 HTML·링크·이미지를 실행하지 않는다. 갱신 실패 때는 이전 값을 유지한 채 '갱신 전 수집 내용'을 표시하고 재시도 버튼을 제공한다(128-129). 요구와 일치한다.",
+              "선택 경합: request ref의 sequence와 effect cleanup, 카드 변경·필터 변경·닫기 시 증가시키는 처리(dashboard-view.tsx:66-84, 91, 104, 121), 응답의 projectKey·workId 대조(74-76), renderer의 matchesSelection 재확인(renderer.tsx:721)이 늦은 응답의 반영을 막는다. verify-dashboard-race 로그는 별도 mount에서 전달 순서만 주입했다는 한계를 스스로 밝히고 있고, verification.md:71도 같은 한계를 기록해 증거 범위를 넓히지 않았다.",
+              "증거 결속: attempt-d13616ac의 명령은 typecheck→build→집중 테스트→verify-home→race를 같은 process에서 직렬 실행하며 sourceStable=true다. 연결 기준은 DETAIL·SCOPE·TRUTH 세 개뿐이고 KANBAN-VERIFY는 unverified로 남겨 두었다(verification.md:97). 이전 감사 review-f10adac1의 지적(빌드 결속, 감사 전 VERIFY 통과 처리)을 반영한 것으로 판단한다. build-info의 sourceDigest(87d1ff…)는 attempt의 source digest(458e99…)와 계산 방식이 달라 직접 대조할 수 없다. 다만 같은 시도 안에서 build 직후 GUI가 실행된 순서가 기록되어 있다.",
+              "비차단 관찰 1 — 실제로 걸리지 않는 누적 한도: 문서는 네 개이고 각각 256 KiB 이하이므로 합계 1 MiB 한도(dashboard.ts:217)는 정상 크기 변화로는 도달할 수 없다. tasks.md의 '총 문서 읽기 1 MiB 초과' 시나리오에 해당하는 테스트도 없다. 동작 결함은 아니지만, 이 시나리오를 검증했다고 주장해서는 안 된다.",
+              "비차단 관찰 2 — 상세 요약의 시점 혼합: dashboard-view.tsx:126의 상세 요약에서 title·status·blockedReason·기준 수는 상세 응답 값을 쓴다. 반면 원본 경로·담당·영역은 목록 snapshot의 card 값을 그대로 쓴다. 두 수집 사이에 원장이 바뀌면 한 패널에 서로 다른 시점의 값이 섞일 수 있다(DashboardWorkDetail에는 sourcePath가 있지만 owner·areas는 없다).",
+              "비차단 관찰 3 — 취소 작업 숨김 뒤 상태: '취소 작업 표시'를 끄면 상세는 사라지지만 selected는 남는다. 다시 켜면 상세가 자동으로 다시 열리고, 그 사이 상세 안에 있던 초점은 복귀 대상 없이 사라진다(dashboard-view.tsx:54, 106). 명세의 '표시 대상이 아닌 상세 제거'는 충족하므로 결함으로 판정하지 않는다.",
+              "비차단 관찰 4 — 프로젝트 전체 상세 차단: readDashboardWork는 프로젝트 coverage가 complete가 아니면 상세 전체를 거부한다. 따라서 같은 프로젝트에 손상된 work.json이나 문서가 아닌 symlink가 하나라도 있으면, 정상 카드의 상세도 열리지 않는다. 유일성을 확인하는 보수적 설계로는 타당하지만 사용성 제약으로 기록할 만하다."
+            ]
+          },
+          {
+            "id"         : "review-e616a299-8b71-4d28-afa3-e7f64aaa30ad",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-e616a299-8b71-4d28-afa3-e7f64aaa30ad/terra.json",
+            "findings": [
+              "검증 근거 범위가 확대되었다. docs/work/Home/004-칸반 작업 상세와 계획 및 검증 근거 연결/verification.md:71은 실제 Electron에서 동일 UUID를 확인했다고 기록하지만, scripts/verify-home.ts:19의 두 프로젝트에는 서로 다른 UUID가 들어 있고 scripts/verify-dashboard-race.ts:13도 서로 다른 UUID를 사용한다. test/dashboard.test.ts:62는 같은 UUID의 프로젝트별 목록 격리를 검사하지만 상세 선택과 Electron 화면의 격리를 입증하지 않는다. 기록을 실제 범위에 맞게 수정하고, UC-06의 동일 UUID 상세 격리 근거를 보완해야 한다.",
+              "검토 범위는 제공된 inputBundle 8개 파일과 src/renderer.tsx 일부, Home004 work.json의 출력된 부분, verification.md 마지막 60행, .www/evidence/resume-20261116/home004-steps.json이다. work.json 전체 읽기 출력은 잘려 일부 내용을 확인하지 못했다. 테스트와 빌드는 실행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-b0d460db-534b-41ed-a3a1-bb15241dbf57",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-b0d460db-534b-41ed-a3a1-bb15241dbf57/terra.json",
+            "findings": [
+              "src/dashboard-view.tsx:54,126 및 src/renderer.tsx:717 — 상세를 연 상태에서 선택한 work.json이 일시적인 권한 오류나 읽기 오류로 새 보드 수집에서 제외되면, 실패한 프로젝트 snapshot이 기존 snapshot을 대체하고 detail이 없어져 기존 상세와 수집 시각이 사라진다. 갱신 실패 시 이전 내용을 유지하라는 명세와 다르며, 상세의 재시도 버튼에도 접근할 수 없다.",
+              "src/dashboard-view.tsx:58,126 및 src/dashboard.ts:234 — 상세의 제목·상태·기준은 상세 응답을 쓰지만 담당·영역·원본 경로는 이전 목록 snapshot에서 가져온다. 목록 수집과 상세 조회 사이에 담당이나 영역이 바뀌면 한 상세 패널에 서로 다른 시점의 원장 값이 표시되어 상세 요약과 기준이 같은 상세 원장 응답을 사용해야 한다는 계약을 위반한다.",
+              "검토 범위는 제공된 inputBundle의 14개 파일, 지정된 검증 결과 JSON과 로그 5개, verification.md 마지막 60행, work.json의 출력된 부분이다. work.json 읽기 출력이 잘려 전체 내용은 확인하지 못했다. 이번 검토에서 테스트나 빌드는 실행하지 않았다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Home/004-칸반 작업 상세와 계획 및 검증 근거 연결/work.json",
+        "workRecordHash": "c89dbfeb2150a0d27b27a28e86c410bc3c3528f3a216255e9649b3a7ac9dfbe4",
+        "sourceDigest"  : "cb2a127c03c0f3c8b911c82e00944e94bdc3cc53f71f76bda8ddef70e7edd0e7",
+        "criteriaDigest": "06ebb9a8a9c841f5d7cd577c5639c4ea78c3a4138e5ab23b3a9e9fd912d604e8"
+      }
+    }
+  ]
+}

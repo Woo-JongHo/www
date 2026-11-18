@@ -1,8 +1,192 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>업무 진입점과 탐색 구조 연구 — WWW 작업 보고서</title><style>
-:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
-</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 15일 오후 11:12 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>업무 진입점과 탐색 구조 연구</h1><p class="lead">개인 업무관리 진입점과 탐색 구조를 위해 Figma·VS Code·Linear 공식 문서 및 현재 WWW 코드를 연구했다. 기본은 이름 있는 단일 사이드바, 축소하면 아이콘 바, 중앙은 오늘 업무, 오른쪽은 필요한 상세를 권고한다. 공식 근거와 적용 추론·비용·시험 계획을 분리했다. Opus 독립 감사는 CLI 로그인 실패로 미실행이며 제품 구현과 사용성 검증은 하지 않았다.</p><div id="report-story" class="story">앞선 대화에는 아이콘 레일과 탐색 패널을 상시 나란히 두는 초기 구상만 있었고 패턴 결합 비용과 화면별 전환 경계가 충분히 정리되지 않았다.
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>업무 진입점과 탐색 구조 연구 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 16일 오후 4:53 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>업무 진입점과 탐색 구조 연구</h1><p class="lead">공식 출처와 연구 제안의 구분을 다시 확인하고 독립 검토를 연결했습니다.</p><div id="report-story" class="story">업무 진입점 연구를 다시 살펴 출처에서 말한 사실과 WWW에 제안한 판단을 분리했습니다. 실제 앱을 시험하지 않은 한계를 그대로 두고 연구 문서의 현재 검증과 독립 검토를 연결했습니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 3 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>완료로 기록</strong></p></div></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>기존 연구는 근거와 제안을 남겼지만 당시 Opus 로그인 실패로 독립 검토가 미실행이었습니다.</p></div><div><h3>접근과 결과</h3><p>14개 공식 출처의 현재 응답과 연구 내용을 대조하고 실제 읽기 전용 Opus 검토를 기록했습니다.</p></div></div></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>공식 출처별 관찰과 WWW 적용 추론, 2026-11-15 제품 관찰의 시점을 구분했습니다.</li><li>기존 작업 UUID와 이전 원장·검토를 보존하며 기준별 현재 검증을 연결했습니다.</li></ul></div><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">공식 출처와 적용 추론을 구분한다</td><td data-label="바뀐 동작">14개 현재 공식 원문과 관찰·제안의 대응을 별도 표로 정리했습니다.</td><td data-label="근거와 한계">source-review.md와 보존 원문 manifest 및 R1 검증<p class="limit">현재 공개본 대조이며 과거 revision 보존 여부는 미확인입니다.</p></td></tr><tr><td data-label="항목">대안·비용과 사용자 여정 및 검토를 기록한다</td><td data-label="바뀐 동작">기존 연구의 대안·실패·접근성·데이터 경계 및 여정을 확인하고 읽기 전용 Opus 검토를 받았습니다.</td><td data-label="근거와 한계">R2/R3 시도와 review-4a47d85d-ba47-4536-9794-2785e1d2bcb1<p class="limit">사용성이나 실제 제품 동작을 시험한 결과가 아닙니다.</p></td></tr></tbody></table><h3>저장 당시 수용 기준 판정</h3><dl class="requirements"><div><dt>공식 원문을 열어 확인한 제품별 패턴과 출처, 관측 사실과 WWW 적용 추론을 분리한다.</dt><dd>당시 통과로 기록</dd></div><div><dt>대안과 비용을 비교하고 탐색·상세·전환·데이터 경계·반응형·접근성·실패 동작을 포함한 설계 제안을 작성한다.</dt><dd>당시 통과로 기록</dd></div><div><dt>사용자 여정과 검증 시나리오、미검증 가정을 명시하고 읽기 전용 독립 검토를 수행한다.</dt><dd>당시 통과로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>공식 출처</h3><dl><div><dt>확인 방법</dt><dd>14개 HTTP 응답의 링크와 본문 해시 및 핵심 구절을 검사하고 문서 표를 대조</dd></div><div><dt>기대 결과</dt><dd>연구 출처가 확인되고 적용 추론이 구분됨</dd></div><div><dt>실제 관측</dt><dd>14개 응답 200, 해시와 핵심어 일치, 수동 대조 기록</dd></div><div><dt>확인 범위와 한계</dt><dd>자동 검사는 모든 주장 의미를 검증하지 않으며 원문은 현재 시점입니다.</dd></div></dl></article><article class="check"><h3>독립 검토</h3><dl><div><dt>확인 방법</dt><dd>현재 입력과 기준에 대해 읽기 전용 Claude Opus 실제 실행</dd></div><div><dt>기대 결과</dt><dd>연구의 근거와 한계 및 검증 범위 확인</dd></div><div><dt>실제 관측</dt><dd>claude-opus-5-5 pass, 검토자는 일부 원문을 직접 읽음</dd></div><div><dt>확인 범위와 한계</dt><dd>검토자가 테스트를 실행하거나 원문 전체를 재검증한 것은 아닙니다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 3건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>원문은 현재 제공본이며 과거 revision의 불변은 검증하지 않았습니다.</li><li>참고 앱 조작·사용자 사용성 시험·OS 입력·제품 구현 검증은 수행하지 않았습니다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><p>저장 당시 기록된 남은 일이 없습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 16일 오후 4:53 · 선택한 발행 기록 · 공식 출처와 연구 제안의 구분을 다시 확인하고 독립 검토를 연결했습니다.</p><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 2개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 16일 오후 4:52 · 작성자 보고서 · 공식 출처와 연구 제안의 구분을 다시 확인하고 독립 검토를 연결했습니다.</summary><article><h3>업무 진입점과 탐색 구조 연구</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">업무 진입점 연구를 다시 살펴 출처에서 말한 사실과 WWW에 제안한 판단을 분리했습니다. 실제 앱을 시험하지 않은 한계를 그대로 두고 연구 문서의 현재 검증과 독립 검토를 연결했습니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 3 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><h3>기록된 변경</h3><ul><li>공식 출처별 관찰과 WWW 적용 추론, 2026-11-15 제품 관찰의 시점을 구분했습니다.</li><li>기존 작업 UUID와 이전 원장·검토를 보존하며 기준별 현재 검증을 연결했습니다.</li></ul><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">공식 출처와 적용 추론을 구분한다</td><td data-label="바뀐 동작">14개 현재 공식 원문과 관찰·제안의 대응을 별도 표로 정리했습니다.</td><td data-label="근거와 한계">source-review.md와 보존 원문 manifest 및 R1 검증<p class="limit">현재 공개본 대조이며 과거 revision 보존 여부는 미확인입니다.</p></td></tr><tr><td data-label="항목">대안·비용과 사용자 여정 및 검토를 기록한다</td><td data-label="바뀐 동작">기존 연구의 대안·실패·접근성·데이터 경계 및 여정을 확인하고 읽기 전용 Opus 검토를 받았습니다.</td><td data-label="근거와 한계">R2/R3 시도와 review-4a47d85d-ba47-4536-9794-2785e1d2bcb1<p class="limit">사용성이나 실제 제품 동작을 시험한 결과가 아닙니다.</p></td></tr></tbody></table><section class="paper" id="history-report-2c71fd3d-297f-49ca-b8fd-d06f1da11818-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>공식 출처</h3><dl><div><dt>확인 방법</dt><dd>14개 HTTP 응답의 링크와 본문 해시 및 핵심 구절을 검사하고 문서 표를 대조</dd></div><div><dt>기대 결과</dt><dd>연구 출처가 확인되고 적용 추론이 구분됨</dd></div><div><dt>실제 관측</dt><dd>14개 응답 200, 해시와 핵심어 일치, 수동 대조 기록</dd></div><div><dt>확인 범위와 한계</dt><dd>자동 검사는 모든 주장 의미를 검증하지 않으며 원문은 현재 시점입니다.</dd></div></dl></article><article class="check"><h3>독립 검토</h3><dl><div><dt>확인 방법</dt><dd>현재 입력과 기준에 대해 읽기 전용 Claude Opus 실제 실행</dd></div><div><dt>기대 결과</dt><dd>연구의 근거와 한계 및 검증 범위 확인</dd></div><div><dt>실제 관측</dt><dd>claude-opus-5-5 pass, 검토자는 일부 원문을 직접 읽음</dd></div><div><dt>확인 범위와 한계</dt><dd>검토자가 테스트를 실행하거나 원문 전체를 재검증한 것은 아닙니다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 3건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>원문은 현재 제공본이며 과거 revision의 불변은 검증하지 않았습니다.</li><li>참고 앱 조작·사용자 사용성 시험·OS 입력·제품 구현 검증은 수행하지 않았습니다.</li></ul></section><section class="paper" id="history-report-2c71fd3d-297f-49ca-b8fd-d06f1da11818-next"><h2>남은 일과 해소 행동</h2><p>남은 일과 완료 조건이 기록되지 않았습니다. 업무가 완료됐다는 뜻은 아닙니다.</p></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>공식 출처와 연구 적용 판단의 대응을 확인합니다.</p><code>docs/work/Home/001-업무 진입점과 탐색 구조 연구/source-review.md</code></li><li><p>기준별 실제 시도와 독립 검토 한계를 확인합니다.</p><code>docs/work/Home/001-업무 진입점과 탐색 구조 연구/verification.md</code></li></ol><details id="history-report-2c71fd3d-297f-49ca-b8fd-d06f1da11818-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-6825661e-9d06-4364-82fe-b612365a0072<br>report-2c71fd3d-297f-49ca-b8fd-d06f1da11818</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>6710ce1c4c26796b26421dca916414c13be73d7d35fce2f85dfec4fb4576221a</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>eb05998d76edbd44b702f378afbf627dbcc8ba4c3a8527da0e0001d10c8aa44d</code></dd></div><div><dt>기준 지문</dt><dd><code>380ea7f93cab33195eac378c52d74b1323bfaede315ed1f04dd842c323c79867</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;R1&quot;,
+      &quot;description&quot;: &quot;공식 원문을 열어 확인한 제품별 패턴과 출처, 관측 사실과 WWW 적용 추론을 분리한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-56333c0d-4794-43a1-98a1-5bdedb81ca37&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;R2&quot;,
+      &quot;description&quot;: &quot;대안과 비용을 비교하고 탐색·상세·전환·데이터 경계·반응형·접근성·실패 동작을 포함한 설계 제안을 작성한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-84ef62c4-b35c-448f-84ec-5c03e9947d60&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;R3&quot;,
+      &quot;description&quot;: &quot;사용자 여정과 검증 시나리오、미검증 가정을 명시하고 읽기 전용 독립 검토를 수행한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a54082b1-4052-431e-b22f-d01784df84ce&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-56333c0d-4794-43a1-98a1-5bdedb81ca37&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/session-completion-20261116/legacy-home001-check.ts&quot;,
+        &quot;R1&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T07:47:29.203Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-84ef62c4-b35c-448f-84ec-5c03e9947d60&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/session-completion-20261116/legacy-home001-check.ts&quot;,
+        &quot;R2&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T07:47:29.615Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-a54082b1-4052-431e-b22f-d01784df84ce&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/session-completion-20261116/legacy-home001-check.ts&quot;,
+        &quot;R3&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T07:51:19.779Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-8c2d1472-1ec0-4cbc-8c78-861a4cf99eae&quot;,
+      &quot;verdict&quot;: &quot;not_run&quot;,
+      &quot;model&quot;: null,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-8c2d1472-1ec0-4cbc-8c78-861a4cf99eae/opus.json&quot;,
+      &quot;findings&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;review-4a47d85d-ba47-4536-9794-2785e1d2bcb1&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-4a47d85d-ba47-4536-9794-2785e1d2bcb1/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: inputPaths의 research.md, source-review.md, spec.md, verification.md 4개를 Read 도구로 직접 읽었다. 대조 자료로 같은 폴더의 work.json, .www/evidence/session-completion-20261116/legacy-home001-check.ts, home001-sources/manifest.json을 읽었고, 보존된 원문 HTML 04·05·06·09·10번을 일부 검색했다. 도구 읽기 실패는 없었다. 테스트와 검증 명령은 실행하지 않았으며, 원문 HTML의 sha256 값을 다시 계산하지 않았다.&quot;,
+        &quot;출처 주장 일부를 보존된 원문과 대조했고, 확인한 범위에서는 원문이 연구 본문을 뒷받침한다. Linear Custom Views는 &#39;available on many issue and project views&#39;라고 쓰고 Space 키로 Peek를 켠다고 설명한다(04.html). Linear Search는 최근 이슈와 최근 검색에 접근하는 방법을 설명한다(05.html). Linear Inbox는 읽음/안 읽음 표시와 snooze를 다룬다(06.html). VS Code 접근성 문서는 &#39;Once a toolbar or a tab list has focus, you can use the arrow keys&#39;라고 쓰며, 이는 research.md:33의 &#39;일부 복합 위젯의 방향키 이동&#39;과 맞는다(09.html). Figma 문서는 &#39;Additional labels are turned on by default&#39;라고 쓰고, UI 최소화가 navigation bar와 왼쪽·오른쪽 사이드바를 함께 접는다고 설명한다(10.html:545,547).&quot;,
+        &quot;R1 검증 스크립트(legacy-home001-check.ts:9-21)가 확인하는 범위는 세 가지다. 원문 14건이 HTTP 200인지와 sha256이 일치하는지, research.md의 고유 URL 14개가 manifest와 일치하는지, 출처마다 키워드 하나가 원문에 있는지다. 표의 각 주장이 원문과 의미상 맞는지는 검사하지 않는다. 따라서 work.json의 R1 &#39;passed&#39;는 원문 접근과 핵심 구절이 있다는 수준의 증거다. verification.md:54의 &#39;한계&#39; 문단과 스크립트의 출력 문구가 이 한계를 밝히고 있어 증거 범위를 부풀린 것으로 보지 않는다. 위 수동 대조로 일부 주장의 의미도 뒷받침된다.&quot;,
+        &quot;R2 스크립트(legacy-home001-check.ts:22-24)는 research.md에 구절이 있는지만 확인한다. 검사하는 구절은 대안 비교, 정보 구조, 선택·상세·실행 계약, 너비 계약, 상태 소유, 실제 여정, &#39;좁은 창&#39;·&#39;넓은 창&#39; 등이다. 직접 읽어 보니 research.md:53-161에는 대안별 비용 표, 실패 시 보존할 항목, 모달과 비모달의 초점 처리, 너비 계산식, 데이터 소유 경계가 실제로 서술돼 있다. 구절만 맞춘 빈 문서가 아니다.&quot;,
+        &quot;R3는 work.json:41-46에서 result &#39;unverified&#39;이고 evidence가 비어 있다. verification.md:19-35는 2026-11-15 Opus 감사가 로그인 실패로 실행되지 않았다고 기록하고 &#39;최종 완료를 선언하지 않는다&#39;고 적었다. R3 스크립트(legacy-home001-check.ts:27-28)도 assessWork의 review.usable이 true여야 통과하도록 막는다. 독립 검토 전에 R3를 통과로 기록하거나 완료를 앞당겨 주장하는 결함은 없다.&quot;,
+        &quot;source-review.md:22는 research.md:44의 view 종류(chat/ecosystem/reports)와 초기 상태가 2026-11-15 당시의 관찰이며 현재 제품 상태로 옮겨 읽지 말라고 밝힌다. 현재 src에 dashboard-view.tsx와 dashboard.ts가 실제로 있어 이 설명은 맞다. research.md 해당 행에는 이런 단서가 없지만, 3번째 줄에 &#39;확인일: 2026-11-15&#39;가 있고 spec.md:27도 이를 역사 기록으로 보존한다고 밝힌다. 결함으로 보지 않는다.&quot;,
+        &quot;참고 사항(결함 아님): 입력 파일 중 spec.md만 mode 384(0600)이고 나머지는 420(0644)이다. 내용 검증에는 영향이 없다. verification.md:35의 &#39;Opus 인증이 복구되면 재실행&#39; 문구는 2026-11-15 시점의 기록이며, 이번 검토가 그 후속에 해당한다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;공식 출처와 연구 제안의 구분을 다시 확인하고 독립 검토를 연결했습니다.&quot;,
+  &quot;before&quot;: &quot;기존 연구는 근거와 제안을 남겼지만 당시 Opus 로그인 실패로 독립 검토가 미실행이었습니다.&quot;,
+  &quot;after&quot;: &quot;14개 공식 출처의 현재 응답과 연구 내용을 대조하고 실제 읽기 전용 Opus 검토를 기록했습니다.&quot;,
+  &quot;changes&quot;: [
+    &quot;공식 출처별 관찰과 WWW 적용 추론, 2026-11-15 제품 관찰의 시점을 구분했습니다.&quot;,
+    &quot;기존 작업 UUID와 이전 원장·검토를 보존하며 기준별 현재 검증을 연결했습니다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;2026-11-15 연구를 과거 관찰로 유지하고 현재 제품의 완성도로 해석하지 않았습니다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;원문은 현재 제공본이며 과거 revision의 불변은 검증하지 않았습니다.&quot;,
+    &quot;참고 앱 조작·사용자 사용성 시험·OS 입력·제품 구현 검증은 수행하지 않았습니다.&quot;
+  ],
+  &quot;next&quot;: [],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;업무 진입점 연구를 다시 살펴 출처에서 말한 사실과 WWW에 제안한 판단을 분리했습니다. 실제 앱을 시험하지 않은 한계를 그대로 두고 연구 문서의 현재 검증과 독립 검토를 연결했습니다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;공식 출처와 적용 추론을 구분한다&quot;,
+        &quot;result&quot;: &quot;14개 현재 공식 원문과 관찰·제안의 대응을 별도 표로 정리했습니다.&quot;,
+        &quot;evidence&quot;: &quot;source-review.md와 보존 원문 manifest 및 R1 검증&quot;,
+        &quot;limitations&quot;: &quot;현재 공개본 대조이며 과거 revision 보존 여부는 미확인입니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;대안·비용과 사용자 여정 및 검토를 기록한다&quot;,
+        &quot;result&quot;: &quot;기존 연구의 대안·실패·접근성·데이터 경계 및 여정을 확인하고 읽기 전용 Opus 검토를 받았습니다.&quot;,
+        &quot;evidence&quot;: &quot;R2/R3 시도와 review-4a47d85d-ba47-4536-9794-2785e1d2bcb1&quot;,
+        &quot;limitations&quot;: &quot;사용성이나 실제 제품 동작을 시험한 결과가 아닙니다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;공식 출처&quot;,
+        &quot;method&quot;: &quot;14개 HTTP 응답의 링크와 본문 해시 및 핵심 구절을 검사하고 문서 표를 대조&quot;,
+        &quot;expected&quot;: &quot;연구 출처가 확인되고 적용 추론이 구분됨&quot;,
+        &quot;observed&quot;: &quot;14개 응답 200, 해시와 핵심어 일치, 수동 대조 기록&quot;,
+        &quot;limitations&quot;: &quot;자동 검사는 모든 주장 의미를 검증하지 않으며 원문은 현재 시점입니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;독립 검토&quot;,
+        &quot;method&quot;: &quot;현재 입력과 기준에 대해 읽기 전용 Claude Opus 실제 실행&quot;,
+        &quot;expected&quot;: &quot;연구의 근거와 한계 및 검증 범위 확인&quot;,
+        &quot;observed&quot;: &quot;claude-opus-5-5 pass, 검토자는 일부 원문을 직접 읽음&quot;,
+        &quot;limitations&quot;: &quot;검토자가 테스트를 실행하거나 원문 전체를 재검증한 것은 아닙니다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;docs/work/Home/001-업무 진입점과 탐색 구조 연구/source-review.md&quot;,
+        &quot;purpose&quot;: &quot;공식 출처와 연구 적용 판단의 대응을 확인합니다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Home/001-업무 진입점과 탐색 구조 연구/verification.md&quot;,
+        &quot;purpose&quot;: &quot;기준별 실제 시도와 독립 검토 한계를 확인합니다.&quot;
+      }
+    ],
+    &quot;nextActions&quot;: []
+  }
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 15일 오후 11:12 · 작성자 보고서 · 개인 업무관리 진입점과 탐색 구조를 위해 Figma·VS Code·Linear 공식 문서 및 현재 WWW 코드를 연구했다. 기본은 이름 있는 단일 사이드바, 축소하면 아이콘 바, 중앙은 오늘 업무, 오른쪽은 필요한 상세를 권고한다. 공식 근거와 적용 추론·비용·시험 계획을 분리했다. Opus 독립 감사는 CLI 로그인 실패로 미실행이며 제품 구현과 사용성 검증은 하지 않았다.</summary><article><h3>업무 진입점과 탐색 구조 연구</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">앞선 대화에는 아이콘 레일과 탐색 패널을 상시 나란히 두는 초기 구상만 있었고 패턴 결합 비용과 화면별 전환 경계가 충분히 정리되지 않았다.
 
-research.md에 공식 출처 14개, 기존 코드 근거, 대안 비교, 업무·일정 의미, 패널·포커스·너비·전환·실패 규칙과 대표 사용자 여정을 정리했다. 제품 코드는 변경하지 않았다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 원인 미확인</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> Opus 인증 복구 뒤 같은 연구 입력에 독립 감사를 실행한다.</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>연구 본문과 최소 접수 명세·작업 원장을 추가하고 작업 목차에 연결했다.</li><li>현행 제품·구조·디자인 요구를 읽고 연구 제안과 제공 기능을 구별했다.</li><li>실제 형식 검사와 Opus 감사 미실행 영수증을 verification.md에 남겼다.</li></ul></div></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>공식 원문을 열어 확인한 제품별 패턴과 출처, 관측 사실과 WWW 적용 추론을 분리한다.</dt><dd>미검증으로 기록</dd></div><div><dt>대안과 비용을 비교하고 탐색·상세·전환·데이터 경계·반응형·접근성·실패 동작을 포함한 설계 제안을 작성한다.</dt><dd>미검증으로 기록</dd></div><div><dt>사용자 여정과 검증 시나리오、미검증 가정을 명시하고 읽기 전용 독립 검토를 수행한다.</dt><dd>미검증으로 기록</dd></div></dl></section><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>기본 탐색은 이름 있는 단일 사이드바로 권고하고 축소 시 아이콘 바로 전환한다. 상시 두 탐색 열의 폭 비용을 줄이되 발견 가능성을 유지하려는 선택이다.</li><li>업무 상세 확인과 실제 Native 프로젝트 전환을 분리하고 기존 실행·승인 제약을 유지한다.</li><li>외부 연동과 자유 도킹보다 작업 맥락 보존·정확한 완료 의미·실패 복구를 우선한다.</li></ul></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 미실행으로 기록 · 관측 모델 미확인.</p><h3>확인하지 못한 범위</h3><ul><li>Opus CLI가 Not logged in 오류로 종료되어 실제 모델이 관측되지 않았다. 독립 감사 통과를 주장하지 않고 다른 모델로 대체하지 않았다.</li><li>참고 제품 직접 조작·WWW GUI·파일럿 사용성 시험은 실행하지 않았다. 너비와 전환 규칙은 실측 전 권고안이다.</li><li>문서 형식 검사 통과는 연구의 최종 감사나 제품 완성도 증명이 아니다. 원장의 필수 기준은 자동 통과 처리하지 않았다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><ul><li>Opus 인증 복구 뒤 같은 연구 입력에 독립 감사를 실행한다.</li><li>구현 파일럿에서 홈→업무 상세→대화→복귀와 실행 중 승인 도착을 먼저 확인한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Home/001-업무 진입점과 탐색 구조 연구/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-6825661e-9d06-4364-82fe-b612365a0072<br>report-687ff8c3-1ae3-4e79-aef7-e14193f0b0b9</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>3908d1a2481f83c065664baa8c49cf0982be65bbd559c3dcf3ddf14cab44a34d</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>6d6a6d1b795c995b107e8872267e96ad84a501bb6eb5bb7476ae3788c75ee812</code></dd></div><div><dt>기준 지문</dt><dd><code>380ea7f93cab33195eac378c52d74b1323bfaede315ed1f04dd842c323c79867</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+research.md에 공식 출처 14개, 기존 코드 근거, 대안 비교, 업무·일정 의미, 패널·포커스·너비·전환·실패 규칙과 대표 사용자 여정을 정리했다. 제품 코드는 변경하지 않았다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 원인 미확인</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> Opus 인증 복구 뒤 같은 연구 입력에 독립 감사를 실행한다.</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>연구 본문과 최소 접수 명세·작업 원장을 추가하고 작업 목차에 연결했다.</li><li>현행 제품·구조·디자인 요구를 읽고 연구 제안과 제공 기능을 구별했다.</li><li>실제 형식 검사와 Opus 감사 미실행 영수증을 verification.md에 남겼다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>공식 원문을 열어 확인한 제품별 패턴과 출처, 관측 사실과 WWW 적용 추론을 분리한다.</dt><dd>미검증으로 기록</dd></div><div><dt>대안과 비용을 비교하고 탐색·상세·전환·데이터 경계·반응형·접근성·실패 동작을 포함한 설계 제안을 작성한다.</dt><dd>미검증으로 기록</dd></div><div><dt>사용자 여정과 검증 시나리오、미검증 가정을 명시하고 읽기 전용 독립 검토를 수행한다.</dt><dd>미검증으로 기록</dd></div></dl><section class="paper" id="history-report-687ff8c3-1ae3-4e79-aef7-e14193f0b0b9-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>기본 탐색은 이름 있는 단일 사이드바로 권고하고 축소 시 아이콘 바로 전환한다. 상시 두 탐색 열의 폭 비용을 줄이되 발견 가능성을 유지하려는 선택이다.</li><li>업무 상세 확인과 실제 Native 프로젝트 전환을 분리하고 기존 실행·승인 제약을 유지한다.</li><li>외부 연동과 자유 도킹보다 작업 맥락 보존·정확한 완료 의미·실패 복구를 우선한다.</li></ul></section><section class="paper" id="history-report-687ff8c3-1ae3-4e79-aef7-e14193f0b0b9-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 미실행으로 기록 · 관측 모델 미확인.</p><h3>확인하지 못한 범위</h3><ul><li>Opus CLI가 Not logged in 오류로 종료되어 실제 모델이 관측되지 않았다. 독립 감사 통과를 주장하지 않고 다른 모델로 대체하지 않았다.</li><li>참고 제품 직접 조작·WWW GUI·파일럿 사용성 시험은 실행하지 않았다. 너비와 전환 규칙은 실측 전 권고안이다.</li><li>문서 형식 검사 통과는 연구의 최종 감사나 제품 완성도 증명이 아니다. 원장의 필수 기준은 자동 통과 처리하지 않았다.</li></ul></section><section class="paper" id="history-report-687ff8c3-1ae3-4e79-aef7-e14193f0b0b9-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>Opus 인증 복구 뒤 같은 연구 입력에 독립 감사를 실행한다.</li><li>구현 파일럿에서 홈→업무 상세→대화→복귀와 실행 중 승인 도착을 먼저 확인한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-687ff8c3-1ae3-4e79-aef7-e14193f0b0b9-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-6825661e-9d06-4364-82fe-b612365a0072<br>report-687ff8c3-1ae3-4e79-aef7-e14193f0b0b9</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>3908d1a2481f83c065664baa8c49cf0982be65bbd559c3dcf3ddf14cab44a34d</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>6d6a6d1b795c995b107e8872267e96ad84a501bb6eb5bb7476ae3788c75ee812</code></dd></div><div><dt>기준 지문</dt><dd><code>380ea7f93cab33195eac378c52d74b1323bfaede315ed1f04dd842c323c79867</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
   &quot;status&quot;: &quot;verifying&quot;,
   &quot;blockedReason&quot;: null,
   &quot;criteria&quot;: [
@@ -62,4 +246,188 @@ research.md에 공식 출처 14개, 기존 코드 근거, 대안 비교, 업무�
     &quot;Opus 인증 복구 뒤 같은 연구 입력에 독립 감사를 실행한다.&quot;,
     &quot;구현 파일럿에서 홈→업무 상세→대화→복귀와 실행 중 승인 도착을 먼저 확인한다.&quot;
   ]
-}</pre></div></details></section></main></body></html>
+}</pre></div></details></article></details></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>공식 출처와 연구 적용 판단의 대응을 확인합니다.</p><code>docs/work/Home/001-업무 진입점과 탐색 구조 연구/source-review.md</code></li><li><p>기준별 실제 시도와 독립 검토 한계를 확인합니다.</p><code>docs/work/Home/001-업무 진입점과 탐색 구조 연구/verification.md</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Home/001-업무 진입점과 탐색 구조 연구/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-6825661e-9d06-4364-82fe-b612365a0072<br>report-a7c04baa-328a-49bc-9f1b-d917e36afbb5</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>acc2e04422a617c1a45a885824743d97161401d1be51921b760837d0402b9054</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>eb05998d76edbd44b702f378afbf627dbcc8ba4c3a8527da0e0001d10c8aa44d</code></dd></div><div><dt>기준 지문</dt><dd><code>380ea7f93cab33195eac378c52d74b1323bfaede315ed1f04dd842c323c79867</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>done</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;done&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;R1&quot;,
+      &quot;description&quot;: &quot;공식 원문을 열어 확인한 제품별 패턴과 출처, 관측 사실과 WWW 적용 추론을 분리한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-56333c0d-4794-43a1-98a1-5bdedb81ca37&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;R2&quot;,
+      &quot;description&quot;: &quot;대안과 비용을 비교하고 탐색·상세·전환·데이터 경계·반응형·접근성·실패 동작을 포함한 설계 제안을 작성한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-84ef62c4-b35c-448f-84ec-5c03e9947d60&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;R3&quot;,
+      &quot;description&quot;: &quot;사용자 여정과 검증 시나리오、미검증 가정을 명시하고 읽기 전용 독립 검토를 수행한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a54082b1-4052-431e-b22f-d01784df84ce&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-56333c0d-4794-43a1-98a1-5bdedb81ca37&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/session-completion-20261116/legacy-home001-check.ts&quot;,
+        &quot;R1&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T07:47:29.203Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-84ef62c4-b35c-448f-84ec-5c03e9947d60&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/session-completion-20261116/legacy-home001-check.ts&quot;,
+        &quot;R2&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T07:47:29.615Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-a54082b1-4052-431e-b22f-d01784df84ce&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/session-completion-20261116/legacy-home001-check.ts&quot;,
+        &quot;R3&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T07:51:19.779Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-8c2d1472-1ec0-4cbc-8c78-861a4cf99eae&quot;,
+      &quot;verdict&quot;: &quot;not_run&quot;,
+      &quot;model&quot;: null,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-8c2d1472-1ec0-4cbc-8c78-861a4cf99eae/opus.json&quot;,
+      &quot;findings&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;review-4a47d85d-ba47-4536-9794-2785e1d2bcb1&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-4a47d85d-ba47-4536-9794-2785e1d2bcb1/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: inputPaths의 research.md, source-review.md, spec.md, verification.md 4개를 Read 도구로 직접 읽었다. 대조 자료로 같은 폴더의 work.json, .www/evidence/session-completion-20261116/legacy-home001-check.ts, home001-sources/manifest.json을 읽었고, 보존된 원문 HTML 04·05·06·09·10번을 일부 검색했다. 도구 읽기 실패는 없었다. 테스트와 검증 명령은 실행하지 않았으며, 원문 HTML의 sha256 값을 다시 계산하지 않았다.&quot;,
+        &quot;출처 주장 일부를 보존된 원문과 대조했고, 확인한 범위에서는 원문이 연구 본문을 뒷받침한다. Linear Custom Views는 &#39;available on many issue and project views&#39;라고 쓰고 Space 키로 Peek를 켠다고 설명한다(04.html). Linear Search는 최근 이슈와 최근 검색에 접근하는 방법을 설명한다(05.html). Linear Inbox는 읽음/안 읽음 표시와 snooze를 다룬다(06.html). VS Code 접근성 문서는 &#39;Once a toolbar or a tab list has focus, you can use the arrow keys&#39;라고 쓰며, 이는 research.md:33의 &#39;일부 복합 위젯의 방향키 이동&#39;과 맞는다(09.html). Figma 문서는 &#39;Additional labels are turned on by default&#39;라고 쓰고, UI 최소화가 navigation bar와 왼쪽·오른쪽 사이드바를 함께 접는다고 설명한다(10.html:545,547).&quot;,
+        &quot;R1 검증 스크립트(legacy-home001-check.ts:9-21)가 확인하는 범위는 세 가지다. 원문 14건이 HTTP 200인지와 sha256이 일치하는지, research.md의 고유 URL 14개가 manifest와 일치하는지, 출처마다 키워드 하나가 원문에 있는지다. 표의 각 주장이 원문과 의미상 맞는지는 검사하지 않는다. 따라서 work.json의 R1 &#39;passed&#39;는 원문 접근과 핵심 구절이 있다는 수준의 증거다. verification.md:54의 &#39;한계&#39; 문단과 스크립트의 출력 문구가 이 한계를 밝히고 있어 증거 범위를 부풀린 것으로 보지 않는다. 위 수동 대조로 일부 주장의 의미도 뒷받침된다.&quot;,
+        &quot;R2 스크립트(legacy-home001-check.ts:22-24)는 research.md에 구절이 있는지만 확인한다. 검사하는 구절은 대안 비교, 정보 구조, 선택·상세·실행 계약, 너비 계약, 상태 소유, 실제 여정, &#39;좁은 창&#39;·&#39;넓은 창&#39; 등이다. 직접 읽어 보니 research.md:53-161에는 대안별 비용 표, 실패 시 보존할 항목, 모달과 비모달의 초점 처리, 너비 계산식, 데이터 소유 경계가 실제로 서술돼 있다. 구절만 맞춘 빈 문서가 아니다.&quot;,
+        &quot;R3는 work.json:41-46에서 result &#39;unverified&#39;이고 evidence가 비어 있다. verification.md:19-35는 2026-11-15 Opus 감사가 로그인 실패로 실행되지 않았다고 기록하고 &#39;최종 완료를 선언하지 않는다&#39;고 적었다. R3 스크립트(legacy-home001-check.ts:27-28)도 assessWork의 review.usable이 true여야 통과하도록 막는다. 독립 검토 전에 R3를 통과로 기록하거나 완료를 앞당겨 주장하는 결함은 없다.&quot;,
+        &quot;source-review.md:22는 research.md:44의 view 종류(chat/ecosystem/reports)와 초기 상태가 2026-11-15 당시의 관찰이며 현재 제품 상태로 옮겨 읽지 말라고 밝힌다. 현재 src에 dashboard-view.tsx와 dashboard.ts가 실제로 있어 이 설명은 맞다. research.md 해당 행에는 이런 단서가 없지만, 3번째 줄에 &#39;확인일: 2026-11-15&#39;가 있고 spec.md:27도 이를 역사 기록으로 보존한다고 밝힌다. 결함으로 보지 않는다.&quot;,
+        &quot;참고 사항(결함 아님): 입력 파일 중 spec.md만 mode 384(0600)이고 나머지는 420(0644)이다. 내용 검증에는 영향이 없다. verification.md:35의 &#39;Opus 인증이 복구되면 재실행&#39; 문구는 2026-11-15 시점의 기록이며, 이번 검토가 그 후속에 해당한다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;공식 출처와 연구 제안의 구분을 다시 확인하고 독립 검토를 연결했습니다.&quot;,
+  &quot;before&quot;: &quot;기존 연구는 근거와 제안을 남겼지만 당시 Opus 로그인 실패로 독립 검토가 미실행이었습니다.&quot;,
+  &quot;after&quot;: &quot;14개 공식 출처의 현재 응답과 연구 내용을 대조하고 실제 읽기 전용 Opus 검토를 기록했습니다.&quot;,
+  &quot;changes&quot;: [
+    &quot;공식 출처별 관찰과 WWW 적용 추론, 2026-11-15 제품 관찰의 시점을 구분했습니다.&quot;,
+    &quot;기존 작업 UUID와 이전 원장·검토를 보존하며 기준별 현재 검증을 연결했습니다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;2026-11-15 연구를 과거 관찰로 유지하고 현재 제품의 완성도로 해석하지 않았습니다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;원문은 현재 제공본이며 과거 revision의 불변은 검증하지 않았습니다.&quot;,
+    &quot;참고 앱 조작·사용자 사용성 시험·OS 입력·제품 구현 검증은 수행하지 않았습니다.&quot;
+  ],
+  &quot;next&quot;: [],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;업무 진입점 연구를 다시 살펴 출처에서 말한 사실과 WWW에 제안한 판단을 분리했습니다. 실제 앱을 시험하지 않은 한계를 그대로 두고 연구 문서의 현재 검증과 독립 검토를 연결했습니다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;공식 출처와 적용 추론을 구분한다&quot;,
+        &quot;result&quot;: &quot;14개 현재 공식 원문과 관찰·제안의 대응을 별도 표로 정리했습니다.&quot;,
+        &quot;evidence&quot;: &quot;source-review.md와 보존 원문 manifest 및 R1 검증&quot;,
+        &quot;limitations&quot;: &quot;현재 공개본 대조이며 과거 revision 보존 여부는 미확인입니다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;대안·비용과 사용자 여정 및 검토를 기록한다&quot;,
+        &quot;result&quot;: &quot;기존 연구의 대안·실패·접근성·데이터 경계 및 여정을 확인하고 읽기 전용 Opus 검토를 받았습니다.&quot;,
+        &quot;evidence&quot;: &quot;R2/R3 시도와 review-4a47d85d-ba47-4536-9794-2785e1d2bcb1&quot;,
+        &quot;limitations&quot;: &quot;사용성이나 실제 제품 동작을 시험한 결과가 아닙니다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;공식 출처&quot;,
+        &quot;method&quot;: &quot;14개 HTTP 응답의 링크와 본문 해시 및 핵심 구절을 검사하고 문서 표를 대조&quot;,
+        &quot;expected&quot;: &quot;연구 출처가 확인되고 적용 추론이 구분됨&quot;,
+        &quot;observed&quot;: &quot;14개 응답 200, 해시와 핵심어 일치, 수동 대조 기록&quot;,
+        &quot;limitations&quot;: &quot;자동 검사는 모든 주장 의미를 검증하지 않으며 원문은 현재 시점입니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;독립 검토&quot;,
+        &quot;method&quot;: &quot;현재 입력과 기준에 대해 읽기 전용 Claude Opus 실제 실행&quot;,
+        &quot;expected&quot;: &quot;연구의 근거와 한계 및 검증 범위 확인&quot;,
+        &quot;observed&quot;: &quot;claude-opus-5-5 pass, 검토자는 일부 원문을 직접 읽음&quot;,
+        &quot;limitations&quot;: &quot;검토자가 테스트를 실행하거나 원문 전체를 재검증한 것은 아닙니다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;docs/work/Home/001-업무 진입점과 탐색 구조 연구/source-review.md&quot;,
+        &quot;purpose&quot;: &quot;공식 출처와 연구 적용 판단의 대응을 확인합니다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Home/001-업무 진입점과 탐색 구조 연구/verification.md&quot;,
+        &quot;purpose&quot;: &quot;기준별 실제 시도와 독립 검토 한계를 확인합니다.&quot;
+      }
+    ],
+    &quot;nextActions&quot;: []
+  }
+}</pre></div></details></section></article></div></main></body></html>

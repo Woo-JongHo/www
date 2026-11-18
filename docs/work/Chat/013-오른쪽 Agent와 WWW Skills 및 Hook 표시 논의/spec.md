@@ -1,3 +1,31 @@
+# 오른쪽 Agent와 WWW Skills 및 Hook 표시 — 현재 재개
+
+현재 구현·검사·검토의 결과와 적용성은 같은 UUID의 [작업 원장](work.json)과 [검증 기록](verification.md)의 최신 공식 read/status로 판단한다. 새 반례 이후의 소스 교정·집중 검증·문서 영향 검토·고유 독립 감사·저작 보고서·완료 판정은 별도 절차이며, 이 문서 작성으로 통과를 선언하지 않는다. 과거 숫자·모델 판정·미실행 설명은 당시 소스의 이력이다.
+
+작업 UUID는 `work-64677750-337f-4488-a503-4e0265356bf5`다. 기존 수용 기준의 ID·설명·필수 여부는 work.json 그대로 유지한다. 최신 TASK-RESUME 전체 requestHash와 문서/승인 exact 검증권한을 사전 대조해 같은UUID에 연결했다. source·generated·전역·인증·commit/publish 쓰기는 불허이며 과거 레코드 전체를 잠금/공식직렬화/atomic 저장 전에 백업했다.
+
+## 현재 사용자 흐름과 검증 연결
+
+| 여정 | 실제 입력·행동 | 기대 결과 | 기준 | 검사 방법과 구분 |
+|---|---|---|---|---|
+| UC-TREE | 근거없음/명시요청/유효 role declaration을 현재turn에 제공 | WWW Agent+고정5개만 표시, 무근거는 미관측/선택미확인이고 읽기만으로 실행강조하지 않음 | AC-1·AC-2 | agent-overview/www-activity-view SSR·producer stdio·Electron DOM |
+| UC-SUBAGENT | 실제 structured spawn/followup/결과·EOF·복원·늦은새operation을 대조 | 호출/완료만 집계, closed뒤 새id도 임의running으로 열지 않음. 외부CLI는 별개 | AC-4 | agent-overview lifecycle 회귀 및 실제 Electron 합성 |
+| UC-PROGRESS | Plan없음/활성항목/late Plan과 commentary start/delta/empty completion/late delta | 현재항목과 설명귀속 보존, 완료/빈snapshot으로 정산하고 늦은delta로 재개하지 않음 | AC-5 | overview 및 상세native-activity empty/terminal 회귀·DOM |
+| UC-HOOK-SCOPE | 기본Agent개요와 상세모니터 리소스 화면 전환 | 기본개요에서Hook목록 제외. 상세기능존재/Hook실행 자체 비활성화와 구분 | AC-3 | 고정트리 SSR/실제 Electron 화면·source 구분 |
+
+## 현재 source 관찰과 남은 실행
+
+현재 실행 대상 소스와 문서가 고정되면 이 UUID의 허용 exact 명령과 최신 증거를 연결한다. GUI·build·실제 Native 읽기 표본은 Root가 소유한다. 과거 Opus/Terra fail·원문·시도는 보존하고 현재 적용성은 공식 status로 재평가한다. 최종 고유 감사 전에는 수정 계획이나 단위 결과를 전체 완료로 표시하지 않는다.
+
+설정 모델 이름과 model/rerouted 관측, 실제 서버선택 감사모델을 구분한다. 실제 stdio 합성/SSR·순수투영·actual Electron·actual Native 표본은 각자의 명령/source로 연결하고 다른UUID의 영수증을 복사하지 않는다. Windows/OS IME·비공개추론·계정별과금·임의모델의 항상같은도구선택은 입증하지 않았다. BoxBox는 현재프로젝트 off/disabled 출처이고 이를 PASS로 표시하거나 과거REFUSE를 지우지 않는다.
+
+과거지적의 disconnected Subagent/완료commentary/빈완료와 late delta 경계를 current agent-overview 및 native-activity/tests에서 직접 읽었다. 이것은 구현/검사코드 관찰이며 새 GUI나 실제 모델 Subagent실행 PASS가 아니다. 과거Vercel 전역설정은 당시 이력이고 이번재개에서 전역설정을 읽거나 바꾸지 않았다.
+
+## 과거 명세 원문 — 아래 현재/권한은 당시를 뜻함
+
+<details>
+<summary>기존 명세와 결정 이력</summary>
+
 # 오른쪽 Agent와 WWW Skills 및 Hook 표시 논의
 
 ## 요청과 권한
@@ -78,3 +106,7 @@ Plan은 Plan.md 등 계획 문서 또는 Native가 요구사항을 처리하며 
 ## 2026-11-16 구현 착수
 
 사용자가 앞선 1·2 범위 전체와 작업 내부 모델 배분의 스킬·하네스 반영을 요청하고 작업 시작을 지시했다. 기존 문서 전용 권한은 당시 이력으로 보존하며 현재 구현·검증·같은 범위 실패 수정을 허용한다. 커밋·push는 하지 않는다. Sol이 통합을 소유하고 Luna 수집·Terra의 경계가 분명한 구현을 분담한다. 실제 검증·독립 검토 전에는 완료로 기록하지 않는다.
+
+</details>
+
+현재 재개에서 직접 읽은 정본25의 source/copy SHA는 `.www/evidence/resume-20261116/chat008/methodology-manifest.go8.json`에 보존했다. Native8 뒤 주요21 선택은 local-source-manifest.go8.json이며 전체 official source digest와 다르다. 앞선214/226/248개 등은 각 명령/시점의 범위이고, 이UUID 현재 실행 수와 적용성은 뒤의 새 공식attempt/status에서 판단한다.

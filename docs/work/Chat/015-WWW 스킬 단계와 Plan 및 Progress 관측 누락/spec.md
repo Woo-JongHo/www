@@ -1,0 +1,131 @@
+# WWW 스킬 단계와 Plan 및 Progress 관측 누락 — 현재 재개
+
+현재 구현·검사·검토의 결과와 적용성은 같은 UUID의 [작업 원장](work.json)과 [검증 기록](verification.md)의 최신 공식 read/status로 판단한다. 새 반례 이후의 소스 교정·집중 검증·문서 영향 검토·고유 독립 감사·저작 보고서·완료 판정은 별도 절차이며, 이 문서 작성으로 통과를 선언하지 않는다. 과거 숫자·모델 판정·미실행 설명은 당시 소스의 이력이다.
+
+작업 UUID는 `work-36d312bc-a767-4e3e-a581-01898b35f75f`다. 기존 수용 기준의 ID·설명·필수 여부는 work.json 그대로 유지한다. 최신 TASK-RESUME 전체 requestHash와 문서/승인 exact 검증권한을 사전 대조해 같은UUID에 연결했다. source·generated·전역·인증·commit/publish 쓰기는 불허이며 과거 레코드 전체를 잠금/공식직렬화/atomic 저장 전에 백업했다.
+
+## 현재 사용자 흐름과 검증 연결
+
+| 여정 | 실제 입력·행동 | 기대 결과 | 기준 | 검사 방법과 구분 |
+|---|---|---|---|---|
+| UC-STAGE | 읽기만/이름언급/명시요청/유효 workId·phase·status·attemptId 선언, 다른scope/중복/역행/복원 대조 | 읽기·선택·역할선언·실제하네스·성공완료를 출처별구분하고 현재scope만수용 | OBS-EVIDENCE·OBS-LIFECYCLE·OBS-UNKNOWN | native-session producer/WWW parser/overview 단위·실제 stdio·Electron DOM |
+| UC-PLAN | 계획미제공/빈 Native계획/수집실패/명시문서계획·복수요청 | 자료미제공·없음·실패/모호성 구분, tasks.md 존재만으로 실행계획/임의pending 만들지 않음 | PLAN-SOURCE·OBS-UNKNOWN | overview와 resource source/coverage 회귀·DOM |
+| UC-PROSE | Plan없는 현재 commentary, Plan연결·late Plan·종료·empty/late delta 대조 | 계획 미연결 설명을 표시하며 과거/다른턴 산문을 현재에 섞지 않음 | PROGRESS-FALLBACK | overview/native-activity 공개본문·빈완료/late 회귀·DOM |
+| UC-AGENT | Native subagent 실제사건·외부검토CLI·EOF·재연결·같은프로젝트 두탭 | 실제식별/부모/상태만집계하고 관측불가를 가짜호출로 채우지 않음 | AGENT-TRUTH·OBS-REGRESSION | 단위/SSR·실제 Electron 독립 profile·관측 검사. 항목 수와 적용성은 최신 verification/status 참조 |
+| UC-ISSUE | GitHub#2를 읽기조회하고 repo/번호/bug/본문 UUID와 현재명세 링크 대조 | 기존이슈와 같은UUID를 추적, 생성/닫기/외부쓰기나 제품완료로 바꾸지 않음 | ISSUE-TRACE | 실제GitHub도구 원문 chat015-issue-readonly.json 및 승인 exact issueTrace검사 |
+
+## 현재 source 관찰과 남은 실행
+
+현재 실행 대상 소스와 문서가 고정되면 이 UUID의 허용 exact 명령과 최신 증거를 연결한다. GUI·build·실제 Native 읽기 표본은 Root가 소유한다. 과거 Opus/Terra fail·원문·시도는 보존하고 현재 적용성은 공식 status로 재평가한다. 최종 고유 감사 전에는 수정 계획이나 단위 결과를 전체 완료로 표시하지 않는다.
+
+설정 모델 이름과 model/rerouted 관측, 실제 서버선택 감사모델을 구분한다. 실제 stdio 합성/SSR·순수투영·actual Electron·actual Native 표본은 각자의 명령/source로 연결하고 다른UUID의 영수증을 복사하지 않는다. Windows/OS IME·비공개추론·계정별과금·임의모델의 항상같은도구선택은 입증하지 않았다. BoxBox는 현재프로젝트 off/disabled 출처이고 이를 PASS로 표시하거나 과거REFUSE를 지우지 않는다.
+
+GitHub [#2](https://github.com/Woo-JongHo/www/issues/2)는 실제 연결도구로 2026-11-16T12:03:05.441Z에 새로 읽어 open·bug·본문 동일UUID를 확인했다. 원문은 chat015-issue-readonly.json이며 Root의별도 chat015-existing-issue-read.json과 출처/시각을 혼합하지 않는다. 외부쓰기/이슈닫기/문서게시를 하지 않았다. 이 관측과 exact 데이터대조만 ISSUE-TRACE에 연결하며 제품기능완료로 승격하지 않는다.
+
+현재 www_development_stage는 새지원thread에 제공되는 구조화 role declaration이고 workId/phase/status/attemptId를 현재 session/thread/turn에 검증해 게시한다. 이 선언은 실제하네스 실행/업무수용 영수증이 아니다. 기존thread·외부개발세션처럼 연결없는표면은 미연결로 남는다. 실제모델이 항상 이 도구를 선택한다는 보장은 하지 않는다.
+
+## 같은 scope 완료 정산과 현재 Progress의 구분
+
+v3 고유 감사의 늦은 commentary/publicPlan 완료 지적은 같은 scope의 채팅 이력 정산과 현재 Progress 귀속을 나눠 검토한다. [Chat 정본](../../../specs/chat.md#chat-observe-01)과 projection의 종료/EOF 뒤 snapshot 복원 회귀는 같은 scope의 authoritative 완료 정산을 허용하고, 늦은 started/delta로 스트리밍을 재개하는 것은 막는다. 기존 조각 위치·빈 snapshot 제거·최종답변·명령/파일의 후행 완료도 보존 대상이다.
+
+읽기 전용 Astra 반박 원문은 저장소의 `.www/evidence/reuse-integrate-resume-20261117/native-closeout/015-late-completion-rebuttal.md`와 동명 JSON에 있다. 이 단일 지적의 반박은 다른 작업의 wait 결과를 현재 Subagent에 귀속하는 별도 반례나 현재 Progress 교체 문제를 해소하지 않으며, v3 fail 전체를 PASS로 바꾸지 않는다. 수정 후 고유 actual 검토에서 현재 소스·기준·정상 대조를 다시 확인해야 한다.
+
+## 과거 명세 원문 — 아래 현재/권한은 당시를 뜻함
+
+<details>
+<summary>기존 명세와 결정 이력</summary>
+
+# WWW 스킬 단계와 Plan 및 Progress 관측 누락
+
+## 요청과 버그 요약
+
+사용자는 문서 작업이 진행되는 동안 오른쪽 WWW Agent에서 현재 스킬 선택 미확인, 다섯 스킬 모두 대기, Plan·Progress 자료 미제공이 표시되는 현상을 제시했다. 이어 “이것도 개발명세서 잡아놔 버그 이슈사항 올려놓고”라고 요청했다.
+
+이 작업은 위 표시 문제의 개발 명세·진단·수정 계획과 GitHub 버그 이슈를 등록한다. 제품 코드는 아직 수정하지 않으며, 문서·이슈의 등록을 실제 기능 수정이나 수용으로 표시하지 않는다. 기준의 정의·필수 여부·결과는 [work.json](work.json)이 소유한다.
+
+GitHub 이슈는 [#2 — WWW 스킬 단계와 Plan·Progress가 작업 중에도 미확인·대기로 표시됨](https://github.com/Woo-JongHo/www/issues/2)이다. 기존 CLI 인증으로 생성한 뒤 열린 상태와 bug 라벨을 다시 조회해 확인했다. 로컬 문서는 아직 커밋·푸시 전이며 이슈 본문에도 해당 상태를 명시했다.
+
+## 사용자 관찰과 실제 수행의 구분
+
+사용자가 제공한 표시 내용은 다음과 같다.
+
+| 영역 | 관찰한 표시 |
+|---|---|
+| WWW Agent | 현재 스킬 선택 미확인 |
+| spec · design · build · diagnose · verify | 모두 대기 |
+| Subagent | 0개 관측 · 실제 Subagent 호출 미제공 |
+| 개요 | 진행 중 · 문서화다 만들어놔 |
+| Plan | 자료 미제공 · 단계·체크리스트 미제공 |
+| Progress | 자료 미제공 · 계획이 제공되면 활성 항목의 공개 진행 설명을 연결합니다. |
+
+직전 Home 003 문서 작업에서는 spec·design·report 절차 문서를 읽고 작업 문서를 작성했으며, work CLI 접수·문서 영향 기록·보고서 writer와 문서 계약 검사를 실행했다. 별도의 개발 단계 호스트를 실행한 사실과는 구별한다. Native의 명시적 Skill 입력·계획 갱신 사건은 이 작업에서 발행하지 않았다. 단계 절차를 적용했다는 저자의 선언은 독립 검증된 완료를 뜻하지 않는다.
+
+Subagent 0개는 이 표본에서 실제 Native Subagent를 호출하지 않은 상황과 일치한다. 별도로 시도한 Claude CLI 검토는 Native Subagent 사건이 아니며, 응답 시간 초과였으므로 완료한 Subagent로 만들어 집계해서는 안 된다. report·commit은 기존 고정 다섯 스킬 트리의 바깥 항목이다. 이번 버그를 이유로 항목을 자동 추가하지 않는다.
+
+## 관련 작업과 적용 범위
+
+Chat 013은 WWW Agent·다섯 스킬·실제 Subagent·Plan/Progress의 원래 표시 요구를 보존한다. 이번 작업은 그 요구를 실제 단계 근거와 연결하는 누락 및 미관측 상태 표현을 다룬다. Home 003은 이번 증상을 발견한 문서 작업이며 이후 모니터링 메뉴로 표현 위치가 바뀌어도 본 기준을 유지한다. Chat 014의 입력·스크롤·Working 개선과 함께 적용해야 하며 기존 문서는 덮어쓰지 않는다.
+
+현행 CHAT-ACTIVITY-01·CHAT-OBSERVE-01·CHAT-SESSIONS-01·CHAT-USAGE-01의 공개 사건·세션 격리·출처 구분을 유지한다. 고정 트리, Hook 비표시, 실제 사건 기반 Subagent 집계, 비공개 추론 비노출은 그대로다.
+
+## 수정 목표와 시나리오
+
+### 스킬의 근거와 상태
+
+연결 기준: OBS-EVIDENCE, OBS-LIFECYCLE, OBS-UNKNOWN.
+
+- 문서 참조·읽기 관측, 명시적 사용자 Skill 요청, 개발 역할의 절차 적용 선언, 실제 하네스 실행, 성공 완료를 구분한다. 서로 다른 사실을 같은 실행 중 표시로 합치지 않는다.
+- 개발 역할이 단계 선택·전환을 할 때 현재 탭의 session/thread/turn 및 작업 UUID와 연결된 구조화 근거를 제공하는 경로를 정한다. 역할의 선언과 실제 호스트 실행 영수증은 각각 출처를 표시한다. 자연어 “스킬을 적용합니다”만 파싱해 강한 근거로 삼지 않는다.
+- 외부 개발 세션처럼 현재 대화에 연결할 근거가 없는 작업은 미연결로 표시한다. 같은 저장소에서 돌아가는 다른 작업의 상태를 현재 대화에 붙이지 않는다.
+- 실제 pending 근거가 없는 항목은 미관측 또는 선택 미확인으로 표현한다. 명시적으로 대기 중인 실행과 자료가 없는 상태를 구분한다. 복수 요청에서 현재 단계를 특정할 수 없으면 모호성을 표시한다.
+- 선언된 단계의 완료와 업무 수용·검증·게시 완료는 각각 구분한다. 오래된 원장이나 같은 작업의 이전 시도를 현재 턴의 단계로 승격하지 않는다.
+
+### Plan과 Progress
+
+연결 기준: PLAN-SOURCE, PROGRESS-FALLBACK.
+
+- Native 계획, 명시적으로 연결한 계획 문서, 계획 없음, 미제공, 수집 실패를 구분한다. 계획 문서를 지원한다면 승인된 저장소·작업 범위에서만 읽고 사용자 요청과 현재성의 근거를 표시한다.
+- `tasks.md` 작성 자체를 Native 실행 계획 수신으로 표시하지 않는다. 정확한 문서 경로나 체크리스트 상태의 의미가 확정되지 않았으면 미연결로 남긴다. 문서와 Native 계획이 함께 있을 때 출처·갱신 시점을 구분하고 자동으로 한쪽을 덮어쓰지 않는다.
+- 공개 진행 설명이 있으면 활성 Plan 없이도 현재 요청의 설명을 표시한다. 이 경우 **계획 미연결 공개 진행 설명**처럼 항목에 연결되지 않았음을 알린다. 가짜 Plan 항목은 만들지 않는다.
+- 유효한 활성 항목이 제공되면 기존 항목별 Progress 연결을 유지한다. 계획이 늦게 오거나 활성 항목이 바뀌어도 앞선 설명을 새 항목의 설명으로 재귀속하지 않는다.
+- 다른 탭·thread·turn, 과거 복원, 종료 뒤 늦은 산문을 현재 작업의 새 설명으로 섞지 않는다. 공개 commentary와 제공된 공개 계획 설명만 사용한다.
+
+### Subagent와 기존 화면의 회귀 경계
+
+연결 기준: AGENT-TRUTH, OBS-REGRESSION.
+
+Native Subagent의 실제 식별자·부모·상태를 유지한다. 외부 검토 프로세스를 표시할 필요가 생기면 별도 출처로 명명하고 Native Subagent 개수에 합치지 않는다. 이번 표본의 0개를 무조건 버그로 처리하거나 표시를 채우기 위해 실제 호출을 발생시키지 않는다.
+
+새 턴, 중복·지연 사건, 종료·실패·중단·연결 종료, 복원·사건 절단, 동일 프로젝트의 서로 다른 탭을 검증한다. 상태 갱신이 Chat 014의 Input P0나 스크롤·카드 펼침을 해치지 않아야 한다. Home 003의 모니터링 이동은 표시 위치를 바꾸는 후속 작업이며 근거 계약을 대체하지 않는다.
+
+## 재현·검증 계획
+
+OBS-REGRESSION의 핵심 대조는 다음과 같다.
+
+| 입력/행동 | 기대할 구분 |
+|---|---|
+| 스킬 문서 읽기만 제공 | 읽기 관측, 실행·완료 미확인 |
+| 유효한 단계 선언과 실제 실행 영수증 | 선언과 실행 출처를 구분한 현재 단계 |
+| 자료 없음 또는 복수 요청 | 미관측/미확인/모호성, 임의 pending·단일 선택 없음 |
+| Plan 없이 공개 commentary 제공 | Plan 미제공과 공개 진행 설명을 동시에 표시 |
+| 활성 Plan과 연결 가능한 commentary 제공 | 해당 항목의 설명 표시 |
+| commentary 뒤 늦은 Plan·다음 항목 | 앞선 설명의 잘못된 재귀속 없음 |
+| Native Subagent 없음 + 외부 CLI 실행 | Native Subagent 0개 유지, 프로세스의 다른 출처 구분 |
+| 두 탭·복원·중복·종료 뒤 늦은 사건 | 해당 범위의 이력·현재 상태 격리 |
+
+구체적인 소스 관찰과 미확인 사항은 [diagnosis.md](diagnosis.md), 수정 순서·근거 계약·실행 검증은 [tasks.md](tasks.md)에 기록한다. 실제 DOM·현재 세션의 원본 사건과 단계 영수증까지 대조하기 전에는 실행 배선 전체가 검증됐다고 하지 않는다.
+
+## 결정과 열린 사항
+
+사용자는 이 현상을 개발 명세와 버그 이슈로 등록하도록 요청했다. 계획 미연결 Progress 표시와 미관측/대기 구분은 이번 평가에 따른 수정 목표다. 구조화 단계 사건의 정확한 전송 방식과 신뢰 검증, 명시적 계획 문서의 형식은 구현 전 설계에서 확정한다. 새 전역 감시기나 자동 스킬 실행 엔진을 이 문서로 선점하지 않는다.
+
+현재 권한은 버그 기록·읽기 전용 조사·문서 검사·GitHub 이슈 등록이다. 제품 구현·전역 설정·훅 변경·커밋·푸시는 포함하지 않는다. 원장의 publish=false는 Git 게시를 허용하지 않는다는 뜻이며 GitHub 버그 이슈 등록은 이번 직접 요청의 별도 범위다. ISSUE-TRACE의 기계 식별은 work.json의 ISSUE-TRACE를 따른다.
+
+
+## 2026-11-16 누적 요구 구현 재개
+
+사용자는 누적 기능·검증 공백과 사용성을 병렬로 개선하도록 직접 요청했다. 같은 UUID에 이번 구현 권한을 연결하고 이전 전체 원장 bytes는 history/before-session-implementation-20261116.json에 보존했다. 새 WWW 스레드의 구조화 단계 선언과 실제 하네스 증거를 구분하며, 지원되지 않는 기존 스레드·외부 세션은 미연결로 표시한다. 과거 명세 전용 권한 설명은 당시 이력이며 현재 권한은 work.json이 소유한다. 커밋·푸시·전역 설정은 이번 범위에 포함하지 않는다.
+
+</details>
+
+현재 재개에서 직접 읽은 정본25의 source/copy SHA는 `.www/evidence/resume-20261116/chat008/methodology-manifest.go8.json`에 보존했다. Native8 뒤 주요21 선택은 local-source-manifest.go8.json이며 전체 official source digest와 다르다. 앞선214/226/248개 등은 각 명령/시점의 범위이고, 이UUID 현재 실행 수와 적용성은 뒤의 새 공식attempt/status에서 판단한다.

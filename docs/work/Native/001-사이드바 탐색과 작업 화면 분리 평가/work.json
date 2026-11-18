@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-40c12cb7-9a53-4ead-b872-8c16d9525f67",
+  "title"        : "사이드바 탐색과 작업 화면 분리 평가",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약을 원작업 work-0e282d77-1c00-4663-8860-483d28148f74에 관계·역사 근거로 회수했다. 원본 입력 절단 및 실제 기능 수용은 원작업에서 별도 검증한다.",
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-0e282d77-1c00-4663-8860-483d28148f74"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "1bbd403cfa0f17cf93aba93e93fbaef01d03538fd0d0c5ffc1263b2f7543b5ba",
+    "threadId": "01a1e2c9-7195-7d30-b29e-f7bd06089013",
+    "turnId"  : "01a1e2d7-3862-7fe2-9623-01454416f235",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"rg -n '전체 보기|setView\\\\(\\\"home\\\"\\\\)|targetKey|openDashboardProject|changeProject|view === \\\"home\\\"|view-page|target-sidebar' src/renderer.tsx src/dashboard-view.tsx src/dashboard.css docs/specs/dashboard.md && sed -n '680,765p' src/renderer.tsx && sed -n '1100,1185p' src/renderer.tsx\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'pwd && git status --short --branch && cat ~/.codex/coding-guidelines.md && cat AGENTS.md && cat agents/www/AGENT.md'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '1,44p' docs/skills/WORKFLOW.md && sed -n '707,758p' src/renderer.tsx && sed -n '362,373p' src/renderer.tsx && rg -n 'view === \\\"reports\\\" &&|setView\\\\(\\\"home\\\"\\\\)' src/renderer.tsx | cut -c 1-420\"",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}

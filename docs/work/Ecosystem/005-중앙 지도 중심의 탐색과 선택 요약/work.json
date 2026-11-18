@@ -9,24 +9,34 @@
   ],
   "owner"        : "ui",
   "status"       : "verifying",
-  "blockedReason": null,
+  "blockedReason": "독립 검토 fail: 수정 또는 검토 재실행 필요",
   "relations": [],
   "criteria": [
     {
       "id"         : "CANVAS-SPACE",
       "description": "지도 기본 화면에서 왼쪽 프로젝트/대화 목록과 오른쪽 상세를 접고 중앙 viewport가 가로 폭과 높이의 주 영역을 차지한다.",
       "required"   : true,
-      "result"     : "failed",
+      "result"     : "passed",
       "evidence": [
         {
           "attemptId": "attempt-10f6d1c1-7dfa-4291-b525-7a75adbe8856",
           "path"     : "verification.md#attempt-10f6d1c1-7dfa-4291-b525-7a75adbe8856",
-          "summary"  : "실제 검증 passed; 현재 적용 가능"
+          "summary"  : "당시 검증 passed; 2026-11-16T12:48:37.026Z 평가에서 현재 적용 불가(environment_changed, source_changed). 현재 검증과 별도 역사 기록"
         },
         {
           "attemptId": "attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd",
           "path"     : "verification.md#attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd",
           "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-05a9fab0-3a02-424c-831e-ca8cfef17cce",
+          "path"     : "verification.md#attempt-05a9fab0-3a02-424c-831e-ca8cfef17cce",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-e6e2aa0d-57e1-4068-b31d-10d356c2d73f",
+          "path"     : "verification.md#attempt-e6e2aa0d-57e1-4068-b31d-10d356c2d73f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
         }
       ]
     },
@@ -34,17 +44,27 @@
       "id"         : "CANVAS-SELECT",
       "description": "노드·검색·참조 강조 선택 시 지도에 역할과 구성 수 요약을 표시하며 상세 패널은 명시적으로 열 때만 나타난다.",
       "required"   : true,
-      "result"     : "failed",
+      "result"     : "passed",
       "evidence": [
         {
           "attemptId": "attempt-10f6d1c1-7dfa-4291-b525-7a75adbe8856",
           "path"     : "verification.md#attempt-10f6d1c1-7dfa-4291-b525-7a75adbe8856",
-          "summary"  : "실제 검증 passed; 현재 적용 가능"
+          "summary"  : "당시 검증 passed; 2026-11-16T12:48:37.026Z 평가에서 현재 적용 불가(environment_changed, source_changed). 현재 검증과 별도 역사 기록"
         },
         {
           "attemptId": "attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd",
           "path"     : "verification.md#attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd",
           "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-05a9fab0-3a02-424c-831e-ca8cfef17cce",
+          "path"     : "verification.md#attempt-05a9fab0-3a02-424c-831e-ca8cfef17cce",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-e6e2aa0d-57e1-4068-b31d-10d356c2d73f",
+          "path"     : "verification.md#attempt-e6e2aa0d-57e1-4068-b31d-10d356c2d73f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
         }
       ]
     },
@@ -52,20 +72,30 @@
       "id"         : "CANVAS-CONTROL",
       "description": "접힌 탐색과 상세를 키보드로 열고 닫을 수 있으며 포커스·계층·검색·보기·배율·대화 초안을 보존한다.",
       "required"   : true,
-      "result"     : "failed",
+      "result"     : "passed",
       "evidence": [
         {
           "attemptId": "attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd",
           "path"     : "verification.md#attempt-a8f8dcdb-d458-4e1c-886e-dfd1510d61dd",
           "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-05a9fab0-3a02-424c-831e-ca8cfef17cce",
+          "path"     : "verification.md#attempt-05a9fab0-3a02-424c-831e-ca8cfef17cce",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-e6e2aa0d-57e1-4068-b31d-10d356c2d73f",
+          "path"     : "verification.md#attempt-e6e2aa0d-57e1-4068-b31d-10d356c2d73f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
         }
       ]
     }
   ],
   "workflow": {
     "role"       : "www-dev",
-    "requestId"  : "node-map-canvas-first-20261115",
-    "requestHash": "b6e57dda20bdb3ad3c8b73d8888b2a42f03192dda69a63c66979b007e66ae2c6",
+    "requestId"  : "resume-20261116-root-closeout-ecosystem005",
+    "requestHash": "c5609139546e3d12e2ca7c96e4eccf31024638e50958cad9319fbfc11bb281f7",
     "authorization": {
       "implementation": true,
       "writePaths": [
@@ -79,7 +109,8 @@
         "docs/DEVELOPMENT.md",
         "docs/CODE_BLUEPRINT.md",
         "docs/specs/ecosystem.md",
-        "docs/specs/architecture.md"
+        "docs/specs/architecture.md",
+        "docs/work/Ecosystem/005-중앙 지도 중심의 탐색과 선택 요약"
       ],
       "mutationSurfaces": [
         "ui",
@@ -96,24 +127,40 @@
       "commit"     : false,
       "publish"    : false,
       "source"     : "direct_user_request",
-      "requestHash": "b6e57dda20bdb3ad3c8b73d8888b2a42f03192dda69a63c66979b007e66ae2c6"
+      "requestHash": "c5609139546e3d12e2ca7c96e4eccf31024638e50958cad9319fbfc11bb281f7"
     },
     "inputs": [
+      "build.ts",
+      "docs/ARCHITECTURE.md",
+      "docs/CODE_BLUEPRINT.md",
+      "docs/DEVELOPMENT.md",
+      "docs/PRODUCT.md",
+      "docs/architecture",
       "docs/architecture/structure.json",
+      "docs/design-system.md",
+      "docs/skills/WORKFLOW.md",
+      "docs/specs",
       "docs/specs/architecture.md",
       "docs/specs/ecosystem.md",
+      "package-lock.json",
       "package.json",
+      "scripts",
       "scripts/architecture-contract.ts",
       "scripts/generate-architecture.ts",
       "scripts/verify-architecture.ts",
       "scripts/verify-ecosystem.ts",
+      "source-policy.json",
+      "spikes/tauri/scripts",
       "src",
+      "test",
       "test/architecture-contract.test.ts",
       "test/architecture-tree.test.ts",
       "test/architecture.test.ts",
-      "test/ecosystem.test.ts"
+      "test/ecosystem.test.ts",
+      "tsconfig.json",
+      "tsconfig.tools.json"
     ],
-    "nextAction": "review",
+    "nextAction": "build",
     "verifications": [
       {
         "id"         : "attempt-10f6d1c1-7dfa-4291-b525-7a75adbe8856",
@@ -883,9 +930,2626 @@
             "contentRetained": false
           }
         }
+      },
+      {
+        "id"         : "attempt-05a9fab0-3a02-424c-831e-ca8cfef17cce",
+        "startedAt"  : "2026-11-16T15:04:42.859Z",
+        "completedAt": "2026-11-16T15:04:57.122Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "6d554462df329cb65fd5d785c2b84da9aec290dd562bdebef22aa01ba4b5a5ec",
+          "inputs": [
+            "build.ts",
+            "docs/architecture",
+            "docs/architecture/structure.json",
+            "docs/specs",
+            "docs/specs/architecture.md",
+            "docs/specs/ecosystem.md",
+            "package-lock.json",
+            "package.json",
+            "scripts",
+            "scripts/architecture-contract.ts",
+            "scripts/generate-architecture.ts",
+            "scripts/verify-architecture.ts",
+            "scripts/verify-ecosystem.ts",
+            "source-policy.json",
+            "spikes/tauri/scripts",
+            "src",
+            "test",
+            "test/architecture-contract.test.ts",
+            "test/architecture-tree.test.ts",
+            "test/architecture.test.ts",
+            "test/ecosystem.test.ts",
+            "tsconfig.json",
+            "tsconfig.tools.json"
+          ],
+          "files": [
+            {
+              "path"  : "build.ts",
+              "type"  : "file",
+              "digest": "6ea477ae8e582c635d5eb14a21f95828849a3fde6a8dd244b9ce00f12ced1acf",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/architecture",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/architecture/central-storage-discussion.md",
+              "type"  : "file",
+              "digest": "71785f2a1fe3142a16f03a36b61cbf05b51074cf575648ac5eaca426d23ab3b7",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/architecture/statecharts",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/architecture/statecharts/development-work.json",
+              "type"  : "file",
+              "digest": "06667bf9628304ce40c264ba372ba0a083d80f62f8629f0848a31743acdb1835",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "4247a762d0ef5ed91db2cd511dba5215bec30e7ec0136dc02f0d2e1b361c14b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/work-output.json",
+              "type"  : "file",
+              "digest": "60cd4a77e169fa70ea12551449c20d8bd6975b45d28eb7fdb526c94c84b04ba2",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/specs",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "083e07860b39d900cf318396352b8e429b0db409d4894de35dc1ad9344a8655b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "ac596e0e53b06bb47cd5ed734fe6e81fcb2495d1a30ffe3b6d2e84e8522f9ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/dashboard.md",
+              "type"  : "file",
+              "digest": "168c3f11697bf631587471a4adac22020962833bf4661a8443f456ec48740d25",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/ecosystem.md",
+              "type"  : "file",
+              "digest": "464aa1c209241e0ca71e2664c3434f2527bee168f2b2adca521bd72cf7fcac57",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "11d5307563634d0ada73f1b681dff624e97825acfcfb8b91b282121c41d92daa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package-lock.json",
+              "type"  : "file",
+              "digest": "f4209136de49f3649cd1bdb7af1002b2c2d01405a0b381d4897ea4e549c1eb51",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "4e1c6c838defb18e10b8ef81ad630e11b54c99bbde49384edae6cd5fef461ed8",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "fd16561a9c5451a564a24253e920eaa5c7126f3f26a9b4809ccb760dcd905bd4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-architecture.ts",
+              "type"  : "file",
+              "digest": "bf40ca9962c3049ef7491c1cb8e1fcf128019ff49770311a2a2e20e35c59fca6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-environment.ts",
+              "type"  : "file",
+              "digest": "05ad73550de9774ded1b7b9dacc047a53bee24376a532d0e8dc1e8601ffd90c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-skill-library.ts",
+              "type"  : "file",
+              "digest": "163d63a124a1956ac28e12fdc296011c47ca1ff5d52f012f3c8a183508b45875",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.ts",
+              "type"  : "file",
+              "digest": "4b8116e52b337e2467dfd013785768c0156c65719f2caa5a16ee20cb7b90338f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "53231d638f7969dba7c51881bcf7af1f4a4d3df6951877feb777c4b0845fae4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/package.json",
+              "type"  : "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/release.ts",
+              "type"  : "file",
+              "digest": "f33d35141e723abb5ce6bec50986862a9bee2c9af339216da40555c620ea1af5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/setup-ci.ts",
+              "type"  : "file",
+              "digest": "29de80de6edd9ea9d47f4321dda978fd9d4d1c62cfef6f88c595df6940b7815b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/source-policy.ts",
+              "type"  : "file",
+              "digest": "09d4b0eae97ca3b0b55015123969c815916672486cc004bfd8d83328506b0705",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "ce7c99a7ef05b14be6e229c48da575402cdeaa05d7a17b35ea8cae01009e8d40",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "8a404a03708d91c580e60c41c1e4628bd8753c6c89c74cc6dfb46dd6c55f1462",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "2f00dd92ad50ff9b483f6ec57659889832cd49419857ec9e789e7f439b03eeb1",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-dashboard-race.ts",
+              "type"  : "file",
+              "digest": "d42e792fe3b247ab29dd9be54b58c790d2366d6d15ad8550c8320c9667224c6a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.ts",
+              "type"  : "file",
+              "digest": "d0af92b3c963f969756aefdb7fa95f8a70916be988200cd5d61648d55fab8aa7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-home.ts",
+              "type"  : "file",
+              "digest": "d6f9262aa6f57e9b054a9e55c37f9e7ee127182cc0e6f3b898dae8cd117b560b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-native-activity.ts",
+              "type"  : "file",
+              "digest": "632a044ce6b94716e090e42d546f15f56fd5f52db14f6df972c5b92e5e5c2e25",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "bb86a31b710a761b8e88f9fcf1b40810a3c6ee10722fb936234f8e776772ea95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-sessions.ts",
+              "type"  : "file",
+              "digest": "90e91b4af5c534410910f8cc7e4e701c190a410f6943f4cc68bab75d7edb686b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.ts",
+              "type"  : "file",
+              "digest": "4f95b6c8443f3acdbdfad274619c67942398fcc4d8aac9ace183d6f946c99e9d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.ts",
+              "type"  : "file",
+              "digest": "3ef00cebaf54f7ceda48cc242eb5ecf1fc180905b2dd3ff1b8a508ce78cd631d",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "39eeb15e22b36ba076e23a294ac7aabfd07c347ba9bec993ee496307a153aa45",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "e1045bde0226e167538d55d8b9f633831177987eaa3b65f1c201e6cc04ce5270",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "fdaa814280f8eb72a4a25cd1f9e657fb811772574bc76ed6c188400f83ce7290",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "80f486cac3409ae54d67bda2985242e7ed1da529ed9f7ba9cf7b5a5c79964725",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/completion-report.ts",
+              "type"  : "file",
+              "digest": "fcdc2f56a235d26b8b3d457ded94f874eec7c1682d17ac5e9c063e1901ea3c9f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/decomposition.ts",
+              "type"  : "file",
+              "digest": "d16cac7f1cb19a15adb5ca8a03ff7e0556fb7dc093535f426afa222ec8e28df0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "799d5ef94fbdb629219e85d2ce5b8f0fd479fed8e2973c880bfc4badf2480060",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/model-allocation.ts",
+              "type"  : "file",
+              "digest": "efb5879017eb309f8d2914dfc61e53c4947deac7ed9848153fef702e6d028513",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "1896ceb74a17dfd957357fbd8e3e3d17abef07a8e5b13bd986a57011d542b843",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "e8dc8b0c7ce6db751bb6720dc9513eb7417eae50ed41557e75b87a5229a45f10",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "30c0c253617b7631c44e424f8fd821e08e5a3c73bf88387c2c5492e24d318848",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "c88d76cf56e1cb4126245fc2e9eb59738c395db8d1d0f2acf23496f7d7a9ccf9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "9516a5707d513dab67c9da0c226217cd4d22671f813bbb42425e70ed01a697d4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "643201985256dbc5cc3a4c6af422bc9abde8045785c8f39a197a31634c1fc2c0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "6aec5571181e076f0bc0f32b274caf893074c06d9ee645229575685ca32f6643",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/statechart.ts",
+              "type"  : "file",
+              "digest": "8a5fd240f3cc7e9fa007164db8921b69b2cc85b64e7de53bce8de6e2575c11f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "9516375ab8c2e77bf616b170d242f0bfee48da6416301bd3e704d6703db0a72e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "a7dbbc308848d5a20ac6d90c8bd1fdb5b96aaee6afbc0bc4f531845a827dd3ae",
+              "mode"  : 420
+            },
+            {
+              "path"  : "source-policy.json",
+              "type"  : "file",
+              "digest": "06ad234ca147201bad0127fa34cedbeda9c21a5524fb061d4d9bdbde039ae7b2",
+              "mode"  : 420
+            },
+            {
+              "path": "spikes/tauri/scripts",
+              "type": "directory"
+            },
+            {
+              "path"  : "spikes/tauri/scripts/compare.ts",
+              "type"  : "file",
+              "digest": "859178ca3d18b0830e961079fc9c5a87567046ffd6ccbbbf2349339eaef80807",
+              "mode"  : 420
+            },
+            {
+              "path"  : "spikes/tauri/scripts/package.json",
+              "type"  : "file",
+              "digest": "1239d4d885dcad42201a27ed9324f8f0f760b78700d8db9ced39a511cffe7eae",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "373e57bce951355c6f827cfd93fa13ff851130cf4f50ab1ae472d3ca1ebd8270",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview-view.tsx",
+              "type"  : "file",
+              "digest": "75feacbcf362bd41bdf0c877f16469b427ccf31b9506eef6810b17269c89303d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.css",
+              "type"  : "file",
+              "digest": "e23c29698573148b0074ba129099587684b31101763854c5f63bcc376fb54c35",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.ts",
+              "type"  : "file",
+              "digest": "ca4ec21c29f3e08071d662368743b6fc209e486ae9c48bd6db81679205c62d60",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "118a5555c238aad70fc88a7e2ca9105cdf57343f012835c7d5ea45453ba3680f",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/build-info.ts",
+              "type"  : "file",
+              "digest": "fcee1f41180acb0990e73e73fd6b3078500d807f3ad207891c8a8c0985f200eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-composer.tsx",
+              "type"  : "file",
+              "digest": "8cd4897196afc82057ea3f4b5ccd91bafdfe3b9bcd0305a58a445ec85bc35513",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "24fefd6e282d973c8888e1c454abf1a192588c778c4de9aa287be5e10b8473ae",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-status.ts",
+              "type"  : "file",
+              "digest": "dddab3dd8d0a7b4271249643c667d3cb3729465f83e77db2e3cdc5476d4d4e1d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "bf3aeec5fc8e7dd308d845eef2a43026fd048af57b77c4efa9d04f6fd28c8ef7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "b891d5582dab552e76d5031b84781851285c4f87473a7e8051ffb9e464b30623",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "b4cb33940c88bb742a5a9a2678c5118ab54a673c67d4174d29bdf65c8a45ea50",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "620b00d32434190cb15253e02948e09c3d253754fbdfa41ebc2482b4885897b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard-view.tsx",
+              "type"  : "file",
+              "digest": "1763c15da62cc2c963fbe0de9fae4ee2b94c94053eee935c100af255363515eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.css",
+              "type"  : "file",
+              "digest": "26b1a2ade02454a5b0489572477310488e71e0ca332119fc531f5dd6b233ae00",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.ts",
+              "type"  : "file",
+              "digest": "ef9ae3ecd63fc629e32d92c47f5f51767d233ddb3a28b83e1ee3d32303f894ae",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "7bb97f1fd58fc9213d962f3a12522ba94c57a2eedb8fd4f64a2233b311ee402d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "5aefca28fc7521a779c0067cddce7e3cf3ae3dddcc4c8c720543f8aa533cef05",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "9cb56dc2ceeea1c42088f96ccde6dcbdb3d5f94901b9b29f78b74f7909c7adff",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "aea979bfacf29a22f3db0860305de604d52bb51f79bc23e56ba473fb55ca582f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "2b05b7defac3da4b50eb2fc1d93c670337c216973d264c126007909e27e95a1b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "8fb9988f05a20619b212bbc1d29b538a57d8c49d964f3cd2124b5aa8843ae1b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "31d2bb187e4056ef8e4baf28218dc7224807e3a6e89ab14681eb5bd7966813cf",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "6e9612667518a3d9638f5a9af4aaef20d28a818ec5a58376e623e3974687637d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-lifecycle.ts",
+              "type"  : "file",
+              "digest": "0d6d5af254b4b55451d6d3d7895112a752c38272bf193d793915d85c83e6d53b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-session.ts",
+              "type"  : "file",
+              "digest": "c2e9727ac01f388e2626e49ebcfd9d081ed6d7b80e35d2bbce274e100300e370",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-timing.ts",
+              "type"  : "file",
+              "digest": "6c697f5fccb51a3591e2c9bc62dfb89d4edfb24fa95fdbb7462e39b76bb1598f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "d67d44ed51b5556426d7e6345ff14bddfd12dcbbd6ead1fb1e3603e624526e12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "2c371b3e2fda741b58d11863d5ccf922a233ec0cb095722988ecf85efc43f820",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "c41a973a1ec82a9c1310b048cc12e8a94db03e0be804230238b53931256a74e1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "7556cec14e44b25d3fbeaaf7a59939852e9a2880c6214a4bb2ec2428138310b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-api.tsx",
+              "type"  : "file",
+              "digest": "3e20cd508dfe5e87f7adbfc0b60e0acf65b92be59adda7cc971d6c7e7f295bec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-registry.ts",
+              "type"  : "file",
+              "digest": "a880ee36f4046de97aa0a7890f180f3097350926082509a4f04f82b54ec1f713",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.css",
+              "type"  : "file",
+              "digest": "4a2e7ad32575e024688b0365ccb4554707cc6b79c4f2026efac63b4e34287d95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.tsx",
+              "type"  : "file",
+              "digest": "3f809d591c8490dd5a2e9ee7ee581ebd4279422d55ad4512cb6745d9bbd5f8f8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "dac71d3e83659615cffd0b1d9ffe6aa595ea2cf7fa7c2d0f0d6a890ab83a9385",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/workflow-statechart-view.tsx",
+              "type"  : "file",
+              "digest": "f2d0dc197a03ae07ba63bfb1ac8213bfbb7bfd9522a1c086b2d9cc6be4b45b0d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/workflow-statechart.ts",
+              "type"  : "file",
+              "digest": "23c0da11d6942ffcc3bbff960b6a7857f64277d5868f495980563260ad18b8ef",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "49e2ee3efbd7ab2fe2f78eb1ca23ff79febfed74169774767a3b097dddc2bddc",
+              "mode"  : 420
+            },
+            {
+              "path": "test",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/activity-ledger.test.ts",
+              "type"  : "file",
+              "digest": "4e7e1fd556186af22680bc3ed5d688d0aa2a9beeaa291dbf3017178f2ad1a1cc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/activity-sidebar.test.ts",
+              "type"  : "file",
+              "digest": "9072e4c7189170e4823c9ed0a8b23e212b693d3e8e1c130358a77a8263ee05c0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/agent-overview.test.ts",
+              "type"  : "file",
+              "digest": "51393fc194f6346b1e79304c155d12b17859584667bc1c49666bb4e5633adb9b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-contract.test.ts",
+              "type"  : "file",
+              "digest": "3ac01231c0fecddae29de3ca36bfb6875a1c8c5418fafe89dd0cd33beafc848a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-harness.test.ts",
+              "type"  : "file",
+              "digest": "34ba92a30b17502b559f4522fd7805cb69903ce30ea3c777b3e0e05be4e1cc39",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-tree.test.ts",
+              "type"  : "file",
+              "digest": "2886b515e0f00e94f297ddb73c7c412ba1611a5043701bd5df9aee94741b715f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture.test.ts",
+              "type"  : "file",
+              "digest": "c54a8aea7770bbee3c659ee02826f89875fdad8a6a53fb53e2da2e04b023ed59",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/chat-state.test.ts",
+              "type"  : "file",
+              "digest": "3e557940b5e6b115e4a872c7993707e656138df16ea53e1ecc1f112591f21e05",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/chat-status.test.ts",
+              "type"  : "file",
+              "digest": "8e71e302887f76cb1f58db3c07e7022e46210d042fbcd4b7148e6c78dbc82cca",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/command-preview.test.ts",
+              "type"  : "file",
+              "digest": "609f6bfa5ce59ed1730b56626bd26f65ec9dd31c6c8f4acb87d7d4d2c3686dff",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/conversations.test.ts",
+              "type"  : "file",
+              "digest": "4a14722d75a2f1bc993767c67642b2e0a988921de365424fd02cdd69a56c800b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/dashboard.test.ts",
+              "type"  : "file",
+              "digest": "800f724eeda4414ed6e96d2dd87859afc4ad6cfc84acbf47cfa9c8a91aa0f3f9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/development-policy.test.ts",
+              "type"  : "file",
+              "digest": "7ea3e9baa81ff39ef90c8bade168ee37a049200f1b6afcb3387426cc1384b706",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/ecosystem.test.ts",
+              "type"  : "file",
+              "digest": "c614897563c657539053f8c54327dec4f2440d1bb0822e83162131de5544c2c5",
+              "mode"  : 420
+            },
+            {
+              "path": "test/fixtures",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/fixtures/activity-app-server.ts",
+              "type"  : "file",
+              "digest": "265b4b7c8f201b246d370d049ee16942681a47d93ccba5a2693a06e0d7f478e3",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/chat-ui-app-server.ts",
+              "type"  : "file",
+              "digest": "ba230e36c57b788a1f1c471967b00ac869ce0184bc3afca2c7f7e75dea8fb219",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/conversations-app-server.ts",
+              "type"  : "file",
+              "digest": "eeb1b5b791e8131ab26933befebc72f30511c59dbda16e7eaf9f86f32a456f3d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/fixtures/fake-app-server.ts",
+              "type"  : "file",
+              "digest": "ba4320ebf0fac8a0b2f48ed1749ba071c41d1800a3fa352bc8a1ddb2e39e2028",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/fake-workflow-host.ts",
+              "type"  : "file",
+              "digest": "577b1015eb64e7372e73bef353c7df14d23775e7ab0e394ee5cd83fc5cc50da4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/fixtures/sessions-app-server.ts",
+              "type"  : "file",
+              "digest": "187ee1ec7e775e523b39234aecad0e807426b31f3cf743d2da98b95bd7184a5b",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/input.test.ts",
+              "type"  : "file",
+              "digest": "127bae79c1b3a17344e1b95f4fa068a451541932e4bbfef8cf02ddb13c05034d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-activity.test.ts",
+              "type"  : "file",
+              "digest": "e1cdca3a4182ece503807c83e077bdcb5daf77829f6105e144825422649cde14",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-chat.test.ts",
+              "type"  : "file",
+              "digest": "d367bf121e10e4530b671905a099e0797a8e1acccf884f65de56174f2de032c5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "54c4f64a4db6403e84ab126f436336f6a39baf0b8ad781d95f4ec91f2b018d37",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-report-input.test.ts",
+              "type"  : "file",
+              "digest": "eccfc817694dc1aaae9ac863ea6c3944b6f78b24756b923d1f488338a4f37906",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-session.test.ts",
+              "type"  : "file",
+              "digest": "4edcaebaef7c355566466e3b17ac050f208bfbff323e4ecd82e63332621ee9b1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-timing.test.ts",
+              "type"  : "file",
+              "digest": "0009c6e524273461d24467be2faab4024e9d869cbad964abb23f63d512ebe556",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/package.json",
+              "type"  : "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/projection.test.ts",
+              "type"  : "file",
+              "digest": "ad2aa6318df0838a145b17767e7575aeb211963a7c662a90e524020d7d2642f3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/projects.test.ts",
+              "type"  : "file",
+              "digest": "e383fecdc0372090185e43dbed37c7a61971af472da57e6d972d07ff0cbc4c72",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/release.test.ts",
+              "type"  : "file",
+              "digest": "da7cbb02ea984e97ff88777184cf3d193a6fdd83711c8983ed5f6bd2bac146bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-judge.test.ts",
+              "type"  : "file",
+              "digest": "ea8ec0a16f48050435ba81d12f4f02e35cb37ada03331670e85453a15af0b905",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "d04b457919a3079d7c2b98c5a5e124b4f2191f4127f9155889533c041280248b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "60176c426c49f97c386e91ef66d0f961a61580be2f54af370c40e5ecc8006f2e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-service.test.ts",
+              "type"  : "file",
+              "digest": "33cf8e460ee4762aa4d762098d54fa47af2efc4c85baa86e39873b28cff9f084",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/review-app-server.test.ts",
+              "type"  : "file",
+              "digest": "fdf3eb135dc148948c2804f775bf8a63f29bd4ba35f35710e9f65fd240288470",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.fixture.test.ts",
+              "type"  : "file",
+              "digest": "32df37530e3ecb6830c7d5c18653c695c2afb09f3e49eb3c8f2b3f098bb3dad0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.test.ts",
+              "type"  : "file",
+              "digest": "a3ccecd21e339c1ebc85145d526890e0d2fd94bbe646c4ce9d2313f230b1d91f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/session-registry.test.ts",
+              "type"  : "file",
+              "digest": "3b6155a8dc2a16cf33b005bbd7bb98ff12a3e462dd1b82b9fd8229dbdaf4c013",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/session-tabs.test.ts",
+              "type"  : "file",
+              "digest": "f536c4dd72b1197891734f2a5c268b97d8947f60692eedb8913559c0bb6e238d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/skill-library.test.ts",
+              "type"  : "file",
+              "digest": "eaff4a28b6919c783a88debf408e2874c29d4a121c4f401ba3cce724177adb6c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/source-policy.test.ts",
+              "type"  : "file",
+              "digest": "2b57994081d004329855624ac4a8877c36ba2495a8eb314789b3ec5d4f89eb55",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/typed-workflow.test.ts",
+              "type"  : "file",
+              "digest": "a50ae6de60ea64079fd0d669e1bc07135731e36f6ba3d2fe7e43b36accfe30f8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/verify-chat-live.ts",
+              "type"  : "file",
+              "digest": "0f9de5631053cf45054e8278665b80e2baee60961f3db38fe8b275e133a8c321",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/verify-native-activity-live.ts",
+              "type"  : "file",
+              "digest": "ff733010722f0da4a23f0a03b1c28ece29b78bd1a16a9df1bae69c3bb1845970",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/verify-native-report-live.ts",
+              "type"  : "file",
+              "digest": "d20808d46845aa62ae9b97132188836d8cc1b06db07c651bd96f33bdbea2399b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/windows-native.test.ts",
+              "type"  : "file",
+              "digest": "0c27a9205cb8863670785b845a83591b8419fb984b545b5412e50604761572d9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "4a7bdb19b876771a4b763554b2e04bd811028acfc180cc9abbb2505e8c5a5bad",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "9fcced7344dde58392ebf1b596caf4e659eeaaabf93d1c6621d9286154620d2a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-codex.test.ts",
+              "type"  : "file",
+              "digest": "03af52d435e07e72e7736b0b389982d53f47b5240f8cde96c1eed94c8e1e3e1d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-completion-faults.test.ts",
+              "type"  : "file",
+              "digest": "0c2892eaffe54bf82e8c33b9c0138fe38f7d10a9321cbdda78f6725d5f4ada6d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-contract.test.ts",
+              "type"  : "file",
+              "digest": "870300c2b2e14cc0263d0a233fd80f905a0a76038b9ece555da0b22ebc661ecc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "d8eb8c1459f2b0e1d6b48d092683c516f7b370af72d61f7a1f955630017d7652",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-environment.test.ts",
+              "type"  : "file",
+              "digest": "f748a90599346acd402873ec1b4ddb37e33569db8468dba5737f54ceb057b792",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-evidence.test.ts",
+              "type"  : "file",
+              "digest": "5cb46cbbc9bd701b5e46d91fc0ab6632c33124b399cf70fdae2531c0d046c162",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-harness.test.ts",
+              "type"  : "file",
+              "digest": "61589f16436d9e2f4dd3ab06348c9d0c5addf338ecce7a3898e0fad74d1ff73c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-model-allocation.test.ts",
+              "type"  : "file",
+              "digest": "c0c82bb9701044466d2c435897be2e512874d3e5e4e9b14840c915fa24fbd6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-properties.test.ts",
+              "type"  : "file",
+              "digest": "72e50ae17b36a20ab0ccf66c539dc1f919b2118fb3c88ee2f9ef54ac8d920acc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "fecb3e95527f075157233f9965c4b31c3aa6deffcfa3bf19978a494ce8081c01",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-review.test.ts",
+              "type"  : "file",
+              "digest": "1f2d2e0e8e6a959c07b2657862bfde1d2fbf580ad68ce8539c13f50f20872bc9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-statechart-view.test.ts",
+              "type"  : "file",
+              "digest": "99016fe215c7ae9c848877f991483788ecc9c352a3a3732a1f842355bad02b18",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-statechart.test.ts",
+              "type"  : "file",
+              "digest": "fbe9cce97afc3d705209ca5a45cc8b895e94348bfdb1984e2455decd30bb9f0b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-windows-command.test.ts",
+              "type"  : "file",
+              "digest": "341a52ab51b5c72ddf3987870e7ab61571a88a5be308cdf1ca95b8f35b55f71d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.ts",
+              "type"  : "file",
+              "digest": "47be03e361898f89389e0a4afdc8bc6c5739782c24b06e943c867d3751964d0b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/www-activity-view.test.ts",
+              "type"  : "file",
+              "digest": "0e47c09c4170f8561bb7c64fb9331f272a6fb9292ab3981b7b41feb9bbcaee75",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/www-activity.test.ts",
+              "type"  : "file",
+              "digest": "ed69d171dc64a7acd4fa3dcbbd86182bd1680c4a6bc57434bf941a1cc26dfe0f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "1c500b27690f1ac82090054fd90bf75237ba5e42b69ea97f44860a61ec8479d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.tools.json",
+              "type"  : "file",
+              "digest": "43a861f044c589999e471a3c936f161c916ea634013990e8136547d41612ccd5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "64c10ccb549acf2b2cd57581a48656d4726a10590153c92248e25f7745cd68b7",
+        "criteriaSnapshot": [
+          {
+            "id"         : "CANVAS-CONTROL",
+            "description": "접힌 탐색과 상세를 키보드로 열고 닫을 수 있으며 포커스·계층·검색·보기·배율·대화 초안을 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "CANVAS-SELECT",
+            "description": "노드·검색·참조 강조 선택 시 지도에 역할과 구성 수 요약을 표시하며 상세 패널은 명시적으로 열 때만 나타난다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "CANVAS-SPACE",
+            "description": "지도 기본 화면에서 왼쪽 프로젝트/대화 목록과 오른쪽 상세를 접고 중앙 viewport가 가로 폭과 높이의 주 영역을 차지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.hermes/node/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "CANVAS-CONTROL",
+          "CANVAS-SELECT",
+          "CANVAS-SPACE"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.hermes/node/bin/node",
+            "digest": "2e3f1286a7eb3736346ed1803e458a0ff909e2b2d5bc746144dcb76970e9b99d"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 5195,
+            "digest"         : "8a765228ef7fcf44907913e1e90dda9334e1f22cb2532811ff33d9dece306780",
+            "truncated"      : false,
+            "retainedBytes"  : 5195,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-e6e2aa0d-57e1-4068-b31d-10d356c2d73f",
+        "startedAt"  : "2026-11-16T23:58:15.602Z",
+        "completedAt": "2026-11-16T23:58:30.355Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "0d30dae4fff0888b0e9f2931a4996ff66ede273115bb2946246b2dc291eeb275",
+          "inputs": [
+            "build.ts",
+            "docs/ARCHITECTURE.md",
+            "docs/CODE_BLUEPRINT.md",
+            "docs/DEVELOPMENT.md",
+            "docs/PRODUCT.md",
+            "docs/architecture",
+            "docs/architecture/structure.json",
+            "docs/design-system.md",
+            "docs/skills/WORKFLOW.md",
+            "docs/specs",
+            "docs/specs/architecture.md",
+            "docs/specs/ecosystem.md",
+            "package-lock.json",
+            "package.json",
+            "scripts",
+            "scripts/architecture-contract.ts",
+            "scripts/generate-architecture.ts",
+            "scripts/verify-architecture.ts",
+            "scripts/verify-ecosystem.ts",
+            "source-policy.json",
+            "spikes/tauri/scripts",
+            "src",
+            "test",
+            "test/architecture-contract.test.ts",
+            "test/architecture-tree.test.ts",
+            "test/architecture.test.ts",
+            "test/ecosystem.test.ts",
+            "tsconfig.json",
+            "tsconfig.tools.json"
+          ],
+          "files": [
+            {
+              "path"  : "build.ts",
+              "type"  : "file",
+              "digest": "6ea477ae8e582c635d5eb14a21f95828849a3fde6a8dd244b9ce00f12ced1acf",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/ARCHITECTURE.md",
+              "type"  : "file",
+              "digest": "75294726adec3cec80c76ece39302955556cae346bdc602778783edd09c154ce",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/CODE_BLUEPRINT.md",
+              "type"  : "file",
+              "digest": "06361c4fae949697bfc9783811b25d025dcc5cea684aa949ffc0c93a05dd1735",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "1d514cb59c54c059d076f16901c9858977cd4a215bdef2916a27b488ca68ede3",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/PRODUCT.md",
+              "type"  : "file",
+              "digest": "dcd5f64355b76f91d2cb524ad06485b0de4078211021f3aa730725a084ef5510",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/architecture",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/architecture/central-storage-discussion.md",
+              "type"  : "file",
+              "digest": "71785f2a1fe3142a16f03a36b61cbf05b51074cf575648ac5eaca426d23ab3b7",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/architecture/statecharts",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/architecture/statecharts/development-work.json",
+              "type"  : "file",
+              "digest": "06667bf9628304ce40c264ba372ba0a083d80f62f8629f0848a31743acdb1835",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/structure.json",
+              "type"  : "file",
+              "digest": "4247a762d0ef5ed91db2cd511dba5215bec30e7ec0136dc02f0d2e1b361c14b2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/architecture/work-output.json",
+              "type"  : "file",
+              "digest": "60cd4a77e169fa70ea12551449c20d8bd6975b45d28eb7fdb526c94c84b04ba2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/design-system.md",
+              "type"  : "file",
+              "digest": "cb34803b0334e5a3e8d5a513dc2f0733470ef7fafe1a18be939406e5d1d5249e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "3cb3a4e6a77ac944ed7c705d53bc37d5c9dc94f968553de1abea4740e1b2a029",
+              "mode"  : 384
+            },
+            {
+              "path": "docs/specs",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/specs/architecture.md",
+              "type"  : "file",
+              "digest": "083e07860b39d900cf318396352b8e429b0db409d4894de35dc1ad9344a8655b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "dc8d7b5f0c334252c3760ed6c6bc48bfc3b69db19dc97e46b1ca8f124bb7c88e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/dashboard.md",
+              "type"  : "file",
+              "digest": "168c3f11697bf631587471a4adac22020962833bf4661a8443f456ec48740d25",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/ecosystem.md",
+              "type"  : "file",
+              "digest": "464aa1c209241e0ca71e2664c3434f2527bee168f2b2adca521bd72cf7fcac57",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/reports.md",
+              "type"  : "file",
+              "digest": "11d5307563634d0ada73f1b681dff624e97825acfcfb8b91b282121c41d92daa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package-lock.json",
+              "type"  : "file",
+              "digest": "f4209136de49f3649cd1bdb7af1002b2c2d01405a0b381d4897ea4e549c1eb51",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "4e1c6c838defb18e10b8ef81ad630e11b54c99bbde49384edae6cd5fef461ed8",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/architecture-contract.ts",
+              "type"  : "file",
+              "digest": "fd16561a9c5451a564a24253e920eaa5c7126f3f26a9b4809ccb760dcd905bd4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-architecture.ts",
+              "type"  : "file",
+              "digest": "bf40ca9962c3049ef7491c1cb8e1fcf128019ff49770311a2a2e20e35c59fca6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-environment.ts",
+              "type"  : "file",
+              "digest": "05ad73550de9774ded1b7b9dacc047a53bee24376a532d0e8dc1e8601ffd90c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-skill-library.ts",
+              "type"  : "file",
+              "digest": "163d63a124a1956ac28e12fdc296011c47ca1ff5d52f012f3c8a183508b45875",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/check-workflow.ts",
+              "type"  : "file",
+              "digest": "4b8116e52b337e2467dfd013785768c0156c65719f2caa5a16ee20cb7b90338f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/generate-architecture.ts",
+              "type"  : "file",
+              "digest": "53231d638f7969dba7c51881bcf7af1f4a4d3df6951877feb777c4b0845fae4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/package.json",
+              "type"  : "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/release.ts",
+              "type"  : "file",
+              "digest": "f33d35141e723abb5ce6bec50986862a9bee2c9af339216da40555c620ea1af5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/setup-ci.ts",
+              "type"  : "file",
+              "digest": "29de80de6edd9ea9d47f4321dda978fd9d4d1c62cfef6f88c595df6940b7815b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/source-policy.ts",
+              "type"  : "file",
+              "digest": "09d4b0eae97ca3b0b55015123969c815916672486cc004bfd8d83328506b0705",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "ce7c99a7ef05b14be6e229c48da575402cdeaa05d7a17b35ea8cae01009e8d40",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-architecture.ts",
+              "type"  : "file",
+              "digest": "8a404a03708d91c580e60c41c1e4628bd8753c6c89c74cc6dfb46dd6c55f1462",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "7d2324ed6d2f6106b3ea7aa772d9c8a18b30085e58067e33c9ea2d025352c250",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-dashboard-race.ts",
+              "type"  : "file",
+              "digest": "dbcd40643b35b641b04528cb0ce32156992154a28bc9ef36fbae9fc6a50d2433",
+              "mode"  : 384
+            },
+            {
+              "path"  : "scripts/verify-ecosystem.ts",
+              "type"  : "file",
+              "digest": "fe072a6d962e9050f7f3d16b86d13c1d698b2cfcc007bcdc8bf3fced3dbc7740",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-eight-items.ts",
+              "type"  : "file",
+              "digest": "d0af92b3c963f969756aefdb7fa95f8a70916be988200cd5d61648d55fab8aa7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-home.ts",
+              "type"  : "file",
+              "digest": "d6f9262aa6f57e9b054a9e55c37f9e7ee127182cc0e6f3b898dae8cd117b560b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-native-activity.ts",
+              "type"  : "file",
+              "digest": "33d8780323829b936786623f1685c10b30b1024b56afc16b52f474962ab4fbd1",
+              "mode"  : 493
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "4d540cf453209ae3d2dfc53f00907f6669865c6af6fd629df4eaecb79285c463",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-sessions.ts",
+              "type"  : "file",
+              "digest": "90e91b4af5c534410910f8cc7e4e701c190a410f6943f4cc68bab75d7edb686b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-package.ts",
+              "type"  : "file",
+              "digest": "4f95b6c8443f3acdbdfad274619c67942398fcc4d8aac9ace183d6f946c99e9d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/windows-setup.ts",
+              "type"  : "file",
+              "digest": "3ef00cebaf54f7ceda48cc242eb5ecf1fc180905b2dd3ff1b8a508ce78cd631d",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow.ts",
+              "type"  : "file",
+              "digest": "a58facd328a9268fd6b6dc23c149c4e56af045090fb9894efbfb0afabb094aaf",
+              "mode"  : 420
+            },
+            {
+              "path": "scripts/workflow/adapters",
+              "type": "directory"
+            },
+            {
+              "path"  : "scripts/workflow/adapters/codex.ts",
+              "type"  : "file",
+              "digest": "e1045bde0226e167538d55d8b9f633831177987eaa3b65f1c201e6cc04ce5270",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/gjc.ts",
+              "type"  : "file",
+              "digest": "fdaa814280f8eb72a4a25cd1f9e657fb811772574bc76ed6c188400f83ce7290",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/adapters/windows-command.ts",
+              "type"  : "file",
+              "digest": "8152657f0c472ee3dc3c5b86025a33bfd54aa79b657b67da7c391d702920b501",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/artifacts.ts",
+              "type"  : "file",
+              "digest": "80f486cac3409ae54d67bda2985242e7ed1da529ed9f7ba9cf7b5a5c79964725",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/completion-report.ts",
+              "type"  : "file",
+              "digest": "fcdc2f56a235d26b8b3d457ded94f874eec7c1682d17ac5e9c063e1901ea3c9f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/consistency.ts",
+              "type"  : "file",
+              "digest": "a504b0e6576bca3836857a9467d2e63af5ab95389bde89eef5c5921fe5725e7b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/decomposition.ts",
+              "type"  : "file",
+              "digest": "d16cac7f1cb19a15adb5ca8a03ff7e0556fb7dc093535f426afa222ec8e28df0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/documentation.ts",
+              "type"  : "file",
+              "digest": "a3fa7b2abc1a290a546f8e6ec36556ab1cb581d262f17ab661b6089a51c0b161",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/environment.ts",
+              "type"  : "file",
+              "digest": "cf781570332d1a9152168daae9260f0164f6b08738db7a7ab6640fb5cf956f4e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/evidence.ts",
+              "type"  : "file",
+              "digest": "efb011831eeeaa927f4b1afa0355f8be3674090a7354cf7ea50312e970032c09",
+              "mode"  : 384
+            },
+            {
+              "path"  : "scripts/workflow/lock.ts",
+              "type"  : "file",
+              "digest": "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/model-allocation.ts",
+              "type"  : "file",
+              "digest": "efb5879017eb309f8d2914dfc61e53c4947deac7ed9848153fef702e6d028513",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/preflight.ts",
+              "type"  : "file",
+              "digest": "b9a5f2621a79e94cd80ae8f38e8ee4d7561157e7ee069d93ef875a650cc80cd5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/record.ts",
+              "type"  : "file",
+              "digest": "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-lifecycle.ts",
+              "type"  : "file",
+              "digest": "1896ceb74a17dfd957357fbd8e3e3d17abef07a8e5b13bd986a57011d542b843",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-names.ts",
+              "type"  : "file",
+              "digest": "403222658bacc632cf07ba33d27615a187f93f9c819569af6d3de2170abd31c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/report-view.ts",
+              "type"  : "file",
+              "digest": "eedf8c0dbd49d1493da4129ea7f0e4a1d02e4ebf535c224acb197c8480420601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/reports.ts",
+              "type"  : "file",
+              "digest": "30c0c253617b7631c44e424f8fd821e08e5a3c73bf88387c2c5492e24d318848",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review-app-server.ts",
+              "type"  : "file",
+              "digest": "c88d76cf56e1cb4126245fc2e9eb59738c395db8d1d0f2acf23496f7d7a9ccf9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/review.ts",
+              "type"  : "file",
+              "digest": "9516a5707d513dab67c9da0c226217cd4d22671f813bbb42425e70ed01a697d4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/route.ts",
+              "type"  : "file",
+              "digest": "5eda57d153de4f8a88b54267986184b77776511d9cff2c95ecf8e236a0b42308",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/run.ts",
+              "type"  : "file",
+              "digest": "67751b5a090461eef8e610092bea2a4a53aea53b17ec56fd90121bbaa4951cbe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/schema.ts",
+              "type"  : "file",
+              "digest": "be85df6822f5e14f8243429960064edd256e99c95f70c53386ad82460719bb6e",
+              "mode"  : 384
+            },
+            {
+              "path"  : "scripts/workflow/statechart.ts",
+              "type"  : "file",
+              "digest": "8a5fd240f3cc7e9fa007164db8921b69b2cc85b64e7de53bce8de6e2575c11f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/types.ts",
+              "type"  : "file",
+              "digest": "9516375ab8c2e77bf616b170d242f0bfee48da6416301bd3e704d6703db0a72e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work-json.ts",
+              "type"  : "file",
+              "digest": "eaac0aa004bbb002e220efd0dc76360d0ff3d489d582026bfc319f4d3adf519f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/workflow/work.ts",
+              "type"  : "file",
+              "digest": "82a1a8a2256c530e36eaf652079364f4d685639e6090010079d2063324742ee0",
+              "mode"  : 384
+            },
+            {
+              "path"  : "source-policy.json",
+              "type"  : "file",
+              "digest": "06ad234ca147201bad0127fa34cedbeda9c21a5524fb061d4d9bdbde039ae7b2",
+              "mode"  : 420
+            },
+            {
+              "path": "spikes/tauri/scripts",
+              "type": "directory"
+            },
+            {
+              "path"  : "spikes/tauri/scripts/compare.ts",
+              "type"  : "file",
+              "digest": "859178ca3d18b0830e961079fc9c5a87567046ffd6ccbbbf2349339eaef80807",
+              "mode"  : 420
+            },
+            {
+              "path"  : "spikes/tauri/scripts/package.json",
+              "type"  : "file",
+              "digest": "1239d4d885dcad42201a27ed9324f8f0f760b78700d8db9ced39a511cffe7eae",
+              "mode"  : 420
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "55234451ee112be29d6057ac653fbf85d02cc23e32dcedaee72aa6ef7c902cae",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview-view.tsx",
+              "type"  : "file",
+              "digest": "eb4a8b6074389cd2ffa978ad2e9008741caadfe8aa8abb11257d908c8996a18e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.css",
+              "type"  : "file",
+              "digest": "e23c29698573148b0074ba129099587684b31101763854c5f63bcc376fb54c35",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.ts",
+              "type"  : "file",
+              "digest": "f3f7f420aa0075adf861fa544cd6c9469fe90a73ffb5f234a9c79543b0733ba3",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "031e250a9087031ed9421cff24eda49da89346c88e6896948de60ffeb66d27a9",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/build-info.ts",
+              "type"  : "file",
+              "digest": "fcee1f41180acb0990e73e73fd6b3078500d807f3ad207891c8a8c0985f200eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-composer.tsx",
+              "type"  : "file",
+              "digest": "8cd4897196afc82057ea3f4b5ccd91bafdfe3b9bcd0305a58a445ec85bc35513",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "24fefd6e282d973c8888e1c454abf1a192588c778c4de9aa287be5e10b8473ae",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-status.ts",
+              "type"  : "file",
+              "digest": "2f19627931c883d34609bb2f2d9cc80a71770302572877ad21d562a07e5f7d99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "bf3aeec5fc8e7dd308d845eef2a43026fd048af57b77c4efa9d04f6fd28c8ef7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "b891d5582dab552e76d5031b84781851285c4f87473a7e8051ffb9e464b30623",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "b4cb33940c88bb742a5a9a2678c5118ab54a673c67d4174d29bdf65c8a45ea50",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "436b5251fdb12c88d58714cb23c8def832a91769398a49b4f0b781953d0ca5ec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard-view.tsx",
+              "type"  : "file",
+              "digest": "1763c15da62cc2c963fbe0de9fae4ee2b94c94053eee935c100af255363515eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.css",
+              "type"  : "file",
+              "digest": "26b1a2ade02454a5b0489572477310488e71e0ca332119fc531f5dd6b233ae00",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.ts",
+              "type"  : "file",
+              "digest": "ef9ae3ecd63fc629e32d92c47f5f51767d233ddb3a28b83e1ee3d32303f894ae",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "7bb97f1fd58fc9213d962f3a12522ba94c57a2eedb8fd4f64a2233b311ee402d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "5aefca28fc7521a779c0067cddce7e3cf3ae3dddcc4c8c720543f8aa533cef05",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "9cb56dc2ceeea1c42088f96ccde6dcbdb3d5f94901b9b29f78b74f7909c7adff",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "e92ee6b3b2caea7a8f09cd68da57675ace884d8a22eace0453e631cc2419d715",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "2b05b7defac3da4b50eb2fc1d93c670337c216973d264c126007909e27e95a1b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "8fb9988f05a20619b212bbc1d29b538a57d8c49d964f3cd2124b5aa8843ae1b4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "6549f6956dacfdf963c5c22027bcea6d95500fc493634a708c1369841a0623a6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "6e9612667518a3d9638f5a9af4aaef20d28a818ec5a58376e623e3974687637d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-lifecycle.ts",
+              "type"  : "file",
+              "digest": "57042a8d01bca2d960dc9b3582756247072e3c6db629f52ff47b63d291bc9ab4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-session.ts",
+              "type"  : "file",
+              "digest": "353b24823036f758b882ca98bc1496bd095f275af046607306bc6f56506df7de",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/native-timing.ts",
+              "type"  : "file",
+              "digest": "6c697f5fccb51a3591e2c9bc62dfb89d4edfb24fa95fdbb7462e39b76bb1598f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "d67d44ed51b5556426d7e6345ff14bddfd12dcbbd6ead1fb1e3603e624526e12",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "7feff79d5e1f3fd711d80ffc9c15d27beddbb2e48d5f3c71b3530663b65204e7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "3e8fd9919da14314df150a59fd1104f0455a679965d096749f216bac4ce7f188",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "aa1ee7040131e6c2bfefe93878f546fc93494aab0e99404998a4cbffaca7c873",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-api.tsx",
+              "type"  : "file",
+              "digest": "3e20cd508dfe5e87f7adbfc0b60e0acf65b92be59adda7cc971d6c7e7f295bec",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-registry.ts",
+              "type"  : "file",
+              "digest": "a880ee36f4046de97aa0a7890f180f3097350926082509a4f04f82b54ec1f713",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.css",
+              "type"  : "file",
+              "digest": "4a2e7ad32575e024688b0365ccb4554707cc6b79c4f2026efac63b4e34287d95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.tsx",
+              "type"  : "file",
+              "digest": "3f809d591c8490dd5a2e9ee7ee581ebd4279422d55ad4512cb6745d9bbd5f8f8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "dac71d3e83659615cffd0b1d9ffe6aa595ea2cf7fa7c2d0f0d6a890ab83a9385",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/workflow-statechart-view.tsx",
+              "type"  : "file",
+              "digest": "f2d0dc197a03ae07ba63bfb1ac8213bfbb7bfd9522a1c086b2d9cc6be4b45b0d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/workflow-statechart.ts",
+              "type"  : "file",
+              "digest": "23c0da11d6942ffcc3bbff960b6a7857f64277d5868f495980563260ad18b8ef",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "49e2ee3efbd7ab2fe2f78eb1ca23ff79febfed74169774767a3b097dddc2bddc",
+              "mode"  : 420
+            },
+            {
+              "path": "test",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/activity-ledger.test.ts",
+              "type"  : "file",
+              "digest": "4e7e1fd556186af22680bc3ed5d688d0aa2a9beeaa291dbf3017178f2ad1a1cc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/activity-sidebar.test.ts",
+              "type"  : "file",
+              "digest": "f7519dbb19c33502db196550e0d621890f944c5507e98034776f410e8a228e3a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/agent-overview.test.ts",
+              "type"  : "file",
+              "digest": "330fc45357ebc9b9cb3e10a8f7f10b8b3a3e9825163a04f13d96141a8eee74d4",
+              "mode"  : 384
+            },
+            {
+              "path"  : "test/architecture-contract.test.ts",
+              "type"  : "file",
+              "digest": "3ac01231c0fecddae29de3ca36bfb6875a1c8c5418fafe89dd0cd33beafc848a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-harness.test.ts",
+              "type"  : "file",
+              "digest": "f88d3a5eadeff79f644a6674c73c8ce852b05ebfabcbd49b5214da476a2b6955",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture-tree.test.ts",
+              "type"  : "file",
+              "digest": "2886b515e0f00e94f297ddb73c7c412ba1611a5043701bd5df9aee94741b715f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/architecture.test.ts",
+              "type"  : "file",
+              "digest": "c54a8aea7770bbee3c659ee02826f89875fdad8a6a53fb53e2da2e04b023ed59",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/chat-state.test.ts",
+              "type"  : "file",
+              "digest": "3e557940b5e6b115e4a872c7993707e656138df16ea53e1ecc1f112591f21e05",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/chat-status.test.ts",
+              "type"  : "file",
+              "digest": "801ffd8aade7c94bc615670a79bf4ab0aed1784cd32e0bf5974cd1a2a61b38fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/command-preview.test.ts",
+              "type"  : "file",
+              "digest": "609f6bfa5ce59ed1730b56626bd26f65ec9dd31c6c8f4acb87d7d4d2c3686dff",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/conversations.test.ts",
+              "type"  : "file",
+              "digest": "dd879d852fcb5c3acee275a584270dc28604d99c00a700867a57cb84b53052cc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/dashboard.test.ts",
+              "type"  : "file",
+              "digest": "800f724eeda4414ed6e96d2dd87859afc4ad6cfc84acbf47cfa9c8a91aa0f3f9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/development-policy.test.ts",
+              "type"  : "file",
+              "digest": "7ea3e9baa81ff39ef90c8bade168ee37a049200f1b6afcb3387426cc1384b706",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/ecosystem.test.ts",
+              "type"  : "file",
+              "digest": "c614897563c657539053f8c54327dec4f2440d1bb0822e83162131de5544c2c5",
+              "mode"  : 420
+            },
+            {
+              "path": "test/fixtures",
+              "type": "directory"
+            },
+            {
+              "path"  : "test/fixtures/activity-app-server.ts",
+              "type"  : "file",
+              "digest": "265b4b7c8f201b246d370d049ee16942681a47d93ccba5a2693a06e0d7f478e3",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/chat-ui-app-server.ts",
+              "type"  : "file",
+              "digest": "ba230e36c57b788a1f1c471967b00ac869ce0184bc3afca2c7f7e75dea8fb219",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/conversations-app-server.ts",
+              "type"  : "file",
+              "digest": "eeb1b5b791e8131ab26933befebc72f30511c59dbda16e7eaf9f86f32a456f3d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/fixtures/fake-app-server.ts",
+              "type"  : "file",
+              "digest": "ba4320ebf0fac8a0b2f48ed1749ba071c41d1800a3fa352bc8a1ddb2e39e2028",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/fixtures/fake-workflow-host.ts",
+              "type"  : "file",
+              "digest": "577b1015eb64e7372e73bef353c7df14d23775e7ab0e394ee5cd83fc5cc50da4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/fixtures/sessions-app-server.ts",
+              "type"  : "file",
+              "digest": "187ee1ec7e775e523b39234aecad0e807426b31f3cf743d2da98b95bd7184a5b",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/input.test.ts",
+              "type"  : "file",
+              "digest": "1d732f8d643e85e7f36a728dbbd9c10db0a23a516d000e9e3c751a96039234d1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-activity.test.ts",
+              "type"  : "file",
+              "digest": "4d0619248e539d44ecc4ac18399a4a1eb579782ddcda5f4a37d8648306bee342",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-chat.test.ts",
+              "type"  : "file",
+              "digest": "d367bf121e10e4530b671905a099e0797a8e1acccf884f65de56174f2de032c5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "18ee8c8d350066136bbeaeb472b3937a6209d755ca9841d5191f152fb39c3de1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-report-input.test.ts",
+              "type"  : "file",
+              "digest": "eccfc817694dc1aaae9ac863ea6c3944b6f78b24756b923d1f488338a4f37906",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-reports.test.ts",
+              "type"  : "file",
+              "digest": "5150bcb5d4ce57daf86927d7bb5231a0493eff0e0f6332923441fbb9e70ab59d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-session.test.ts",
+              "type"  : "file",
+              "digest": "46280ade90fd8d0e4060b37ab140d9ddd93689fe471b6fb2070c1208fcbe5dfd",
+              "mode"  : 384
+            },
+            {
+              "path"  : "test/native-timing.test.ts",
+              "type"  : "file",
+              "digest": "0009c6e524273461d24467be2faab4024e9d869cbad964abb23f63d512ebe556",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/package.json",
+              "type"  : "file",
+              "digest": "3ca9d4afd21425087cf31893b8f9f63c81b0b8408db5e343ca76e5f8aa26ab9a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/projection.test.ts",
+              "type"  : "file",
+              "digest": "d941e95b2ae6bc284cc8427b0ab525e39cc681d2d6d2e521fe5b51f247a4977c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/projects.test.ts",
+              "type"  : "file",
+              "digest": "e383fecdc0372090185e43dbed37c7a61971af472da57e6d972d07ff0cbc4c72",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/release.test.ts",
+              "type"  : "file",
+              "digest": "da7cbb02ea984e97ff88777184cf3d193a6fdd83711c8983ed5f6bd2bac146bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-judge.test.ts",
+              "type"  : "file",
+              "digest": "ea8ec0a16f48050435ba81d12f4f02e35cb37ada03331670e85453a15af0b905",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "d04b457919a3079d7c2b98c5a5e124b4f2191f4127f9155889533c041280248b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-maintenance-entry.test.ts",
+              "type"  : "file",
+              "digest": "60176c426c49f97c386e91ef66d0f961a61580be2f54af370c40e5ecc8006f2e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/report-service.test.ts",
+              "type"  : "file",
+              "digest": "73665a826e103f6eea0b9cca06b05d33543cfac3c5989a24994bbd9740ad1726",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/review-app-server.test.ts",
+              "type"  : "file",
+              "digest": "fdf3eb135dc148948c2804f775bf8a63f29bd4ba35f35710e9f65fd240288470",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.fixture.test.ts",
+              "type"  : "file",
+              "digest": "32df37530e3ecb6830c7d5c18653c695c2afb09f3e49eb3c8f2b3f098bb3dad0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/rpc.test.ts",
+              "type"  : "file",
+              "digest": "a3ccecd21e339c1ebc85145d526890e0d2fd94bbe646c4ce9d2313f230b1d91f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/session-registry.test.ts",
+              "type"  : "file",
+              "digest": "3b6155a8dc2a16cf33b005bbd7bb98ff12a3e462dd1b82b9fd8229dbdaf4c013",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/session-tabs.test.ts",
+              "type"  : "file",
+              "digest": "f536c4dd72b1197891734f2a5c268b97d8947f60692eedb8913559c0bb6e238d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/skill-library.test.ts",
+              "type"  : "file",
+              "digest": "eaff4a28b6919c783a88debf408e2874c29d4a121c4f401ba3cce724177adb6c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/source-policy.test.ts",
+              "type"  : "file",
+              "digest": "2b57994081d004329855624ac4a8877c36ba2495a8eb314789b3ec5d4f89eb55",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/typed-workflow.test.ts",
+              "type"  : "file",
+              "digest": "a609231b10bffedce23257d0cee11bbc4a51bdf51b10aac0b3a5e53f8bc7a4cf",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/verify-chat-live.ts",
+              "type"  : "file",
+              "digest": "0f9de5631053cf45054e8278665b80e2baee60961f3db38fe8b275e133a8c321",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/verify-native-activity-live.ts",
+              "type"  : "file",
+              "digest": "ff733010722f0da4a23f0a03b1c28ece29b78bd1a16a9df1bae69c3bb1845970",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/verify-native-report-live.ts",
+              "type"  : "file",
+              "digest": "d20808d46845aa62ae9b97132188836d8cc1b06db07c651bd96f33bdbea2399b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/windows-native.test.ts",
+              "type"  : "file",
+              "digest": "0c27a9205cb8863670785b845a83591b8419fb984b545b5412e50604761572d9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "4a7bdb19b876771a4b763554b2e04bd811028acfc180cc9abbb2505e8c5a5bad",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-artifacts.test.ts",
+              "type"  : "file",
+              "digest": "8ae1db6de227aae55659129e70ef9ecc8690e64d50addf6b12fc35d24ce6fd92",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-codex.test.ts",
+              "type"  : "file",
+              "digest": "03af52d435e07e72e7736b0b389982d53f47b5240f8cde96c1eed94c8e1e3e1d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-completion-faults.test.ts",
+              "type"  : "file",
+              "digest": "0c2892eaffe54bf82e8c33b9c0138fe38f7d10a9321cbdda78f6725d5f4ada6d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-contract.test.ts",
+              "type"  : "file",
+              "digest": "870300c2b2e14cc0263d0a233fd80f905a0a76038b9ece555da0b22ebc661ecc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-development.test.ts",
+              "type"  : "file",
+              "digest": "d8eb8c1459f2b0e1d6b48d092683c516f7b370af72d61f7a1f955630017d7652",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-environment.test.ts",
+              "type"  : "file",
+              "digest": "f748a90599346acd402873ec1b4ddb37e33569db8468dba5737f54ceb057b792",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-evidence.test.ts",
+              "type"  : "file",
+              "digest": "d71add0d2c614a2aa9f80786a6fc9ed7c2ae037ce958a46074d62de34cc52f6a",
+              "mode"  : 384
+            },
+            {
+              "path"  : "test/workflow-harness.test.ts",
+              "type"  : "file",
+              "digest": "61589f16436d9e2f4dd3ab06348c9d0c5addf338ecce7a3898e0fad74d1ff73c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-model-allocation.test.ts",
+              "type"  : "file",
+              "digest": "c0c82bb9701044466d2c435897be2e512874d3e5e4e9b14840c915fa24fbd6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-properties.test.ts",
+              "type"  : "file",
+              "digest": "72e50ae17b36a20ab0ccf66c539dc1f919b2118fb3c88ee2f9ef54ac8d920acc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-reports.test.ts",
+              "type"  : "file",
+              "digest": "0c45c14a5959196cea806898283d352778438fc55efcfee3ee7e49c8a1307c00",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-review.test.ts",
+              "type"  : "file",
+              "digest": "1f2d2e0e8e6a959c07b2657862bfde1d2fbf580ad68ce8539c13f50f20872bc9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-statechart-view.test.ts",
+              "type"  : "file",
+              "digest": "99016fe215c7ae9c848877f991483788ecc9c352a3a3732a1f842355bad02b18",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-statechart.test.ts",
+              "type"  : "file",
+              "digest": "fbe9cce97afc3d705209ca5a45cc8b895e94348bfdb1984e2455decd30bb9f0b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-windows-command.test.ts",
+              "type"  : "file",
+              "digest": "341a52ab51b5c72ddf3987870e7ab61571a88a5be308cdf1ca95b8f35b55f71d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/workflow-work.test.ts",
+              "type"  : "file",
+              "digest": "6f9136b8ecd42bbad05f360c155e6a514612832fa3f7700439770e3715f5a26a",
+              "mode"  : 384
+            },
+            {
+              "path"  : "test/www-activity-view.test.ts",
+              "type"  : "file",
+              "digest": "0e47c09c4170f8561bb7c64fb9331f272a6fb9292ab3981b7b41feb9bbcaee75",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/www-activity.test.ts",
+              "type"  : "file",
+              "digest": "ed69d171dc64a7acd4fa3dcbbd86182bd1680c4a6bc57434bf941a1cc26dfe0f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.json",
+              "type"  : "file",
+              "digest": "1c500b27690f1ac82090054fd90bf75237ba5e42b69ea97f44860a61ec8479d0",
+              "mode"  : 420
+            },
+            {
+              "path"  : "tsconfig.tools.json",
+              "type"  : "file",
+              "digest": "43a861f044c589999e471a3c936f161c916ea634013990e8136547d41612ccd5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "64c10ccb549acf2b2cd57581a48656d4726a10590153c92248e25f7745cd68b7",
+        "criteriaSnapshot": [
+          {
+            "id"         : "CANVAS-CONTROL",
+            "description": "접힌 탐색과 상세를 키보드로 열고 닫을 수 있으며 포커스·계층·검색·보기·배율·대화 초안을 보존한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "CANVAS-SELECT",
+            "description": "노드·검색·참조 강조 선택 시 지도에 역할과 구성 수 요약을 표시하며 상세 패널은 명시적으로 열 때만 나타난다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "CANVAS-SPACE",
+            "description": "지도 기본 화면에서 왼쪽 프로젝트/대화 목록과 오른쪽 상세를 접고 중앙 viewport가 가로 폭과 높이의 주 영역을 차지한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.hermes/node/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-architecture.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "CANVAS-CONTROL",
+          "CANVAS-SELECT",
+          "CANVAS-SPACE"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.hermes/node/bin/node",
+            "digest": "2e3f1286a7eb3736346ed1803e458a0ff909e2b2d5bc746144dcb76970e9b99d"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 5195,
+            "digest"         : "0cd50490f45cbe38977a9253e5bd79637a34e16aadb99a96d8e7a45fa83c655c",
+            "truncated"      : false,
+            "retainedBytes"  : 5195,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
       }
     ],
-    "reviews": [],
+    "reviews": [
+      {
+        "id": "review-c393808c-6046-4c38-aab0-f4ce9d884b43",
+        "authority": {
+          "path": ".www/evidence/reviews/review-c393808c-6046-4c38-aab0-f4ce9d884b43/authority.json",
+          "hash": "4c8165030c40db46391dc675308b4f47ef56c8bbae0f89d96a4e1c010a3cfeb7"
+        },
+        "inputPathsHash"      : "0452ea59f2d40507e55eb503427492371fd8d1c08740e01d6801d141090f85a9",
+        "observedModelMeaning": "server-selected",
+        "provider"            : "openai",
+        "model"               : "gpt-6.1-terra",
+        "observedModel"       : "gpt-6.1-terra",
+        "verdict"             : "fail",
+        "readOnly"            : true,
+        "sourceDigest"        : "0d30dae4fff0888b0e9f2931a4996ff66ede273115bb2946246b2dc291eeb275",
+        "criteriaDigest"      : "64c10ccb549acf2b2cd57581a48656d4726a10590153c92248e25f7745cd68b7",
+        "policyHash"          : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"            : "process",
+        "fallbackReason"      : null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "9c259e8e87c4597d69075c4f7a4b24a708aedbcb337fa6443abef70023c83b81"
+        },
+        "failure": null,
+        "findings": [
+          "src/renderer.tsx:1185에서 저장된 대화 목록을 view !== \"chat\"일 때 숨긴다. 따라서 기능·책임 지도에서 ‘탐색 열기’를 눌러도 대화 목록에 접근할 수 없어, 탐색을 열면 프로젝트·대화 목록을 확인할 수 있다는 docs/specs/ecosystem.md의 요구와 다르다. scripts/verify-architecture.ts:151은 상위 .agents만 표시되는지 확인해 숨겨진 대화 목록을 놓친다.",
+          "docs/work/Ecosystem/005-중앙 지도 중심의 탐색과 선택 요약/work.json:34, 62, 85는 attempt-05a9fab0을 ‘현재 적용 가능’으로 기록한다. 그러나 해당 시도의 입력에는 현재 manifest와 다른 src/renderer.tsx를 비롯한 파일이 포함되어 있어 당시 성공을 현재 소스의 적용 가능한 증거로 표시할 수 없다. 이후 attempt-e6e2aa0d는 별도로 기록되어 있다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-c393808c-6046-4c38-aab0-f4ce9d884b43/terra.json",
+        "startedAt"      : "2026-11-17T00:01:14.998Z",
+        "completedAt"    : "2026-11-17T00:01:50.561Z",
+        "workId"         : "work-2654a232-11a8-40a3-907d-edad8ec066b4",
+        "workRequestHash": "c5609139546e3d12e2ca7c96e4eccf31024638e50958cad9319fbfc11bb281f7",
+        "recordingRejection": [
+          "review_not_passed"
+        ]
+      }
+    ],
     "documentationReviews": [
       {
         "id"             : "documentation-6c26f6d9-d83a-48c8-84ba-26714f83545b",
@@ -934,6 +3598,96 @@
             "path"    : "docs/specs/ecosystem.md",
             "decision": "updated",
             "reason"  : "사용자 선택에 따라 자동 상세 열기를 없애고 접힌 탐색·선택 요약·명시적 열기를 정의했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-dde308bc-cb0d-4016-85ed-a4049d70c29a",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T23:50:02.199Z",
+        "sourceDigest"   : "0d30dae4fff0888b0e9f2931a4996ff66ede273115bb2946246b2dc291eeb275",
+        "criteriaDigest" : "64c10ccb549acf2b2cd57581a48656d4726a10590153c92248e25f7745cd68b7",
+        "documentsDigest": "08606efe82627bffa2077a778742855024fc7eca9f6c488d9b7446ae5b5aef27",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "지도와 수동 안내의 구현 책임 및 실행 추적과의 경계를 설명한다."
+          },
+          {
+            "path"    : "docs/CODE_BLUEPRINT.md",
+            "decision": "unchanged",
+            "reason"  : "현재 구조 snapshot 추출 범위와 중앙 지도·선택 요약을 설명한다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "현재 공식 검사 명령과 Electron·합성 fixture의 한계를 설명한다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "생태계 안내와 코드 설계도의 화면 전환·선택·정적 snapshot 경계를 설명한다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "기준별 현재 증거와 별도 독립 검토 계약을 소유하며 이 검증에서 내용 변경이 필요하지 않다."
+          },
+          {
+            "path"    : "docs/specs/architecture.md",
+            "decision": "unchanged",
+            "reason"  : "구조 책임과 중앙 지도 동작의 현재 요구를 설명한다."
+          },
+          {
+            "path"    : "docs/specs/ecosystem.md",
+            "decision": "unchanged",
+            "reason"  : "안내 및 기능·책임 지도와 대화 상태 보존의 현재 요구를 설명한다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-72752f15-9c1a-4b17-b9c5-01da54ec36e7",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-17T00:01:05.409Z",
+        "sourceDigest"   : "0d30dae4fff0888b0e9f2931a4996ff66ede273115bb2946246b2dc291eeb275",
+        "criteriaDigest" : "64c10ccb549acf2b2cd57581a48656d4726a10590153c92248e25f7745cd68b7",
+        "documentsDigest": "08606efe82627bffa2077a778742855024fc7eca9f6c488d9b7446ae5b5aef27",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "지도와 수동 안내의 구현 책임 및 실행 추적과의 경계를 설명한다."
+          },
+          {
+            "path"    : "docs/CODE_BLUEPRINT.md",
+            "decision": "unchanged",
+            "reason"  : "현재 구조 snapshot 추출 범위와 중앙 지도·선택 요약을 설명한다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "현재 공식 검사 명령과 Electron·합성 fixture의 한계를 설명한다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "생태계 안내와 코드 설계도의 화면 전환·선택·정적 snapshot 경계를 설명한다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "기준별 현재 증거와 별도 독립 검토 계약을 소유하며 이 검증에서 내용 변경이 필요하지 않다."
+          },
+          {
+            "path"    : "docs/specs/architecture.md",
+            "decision": "unchanged",
+            "reason"  : "구조 책임과 중앙 지도 동작의 현재 요구를 설명한다."
+          },
+          {
+            "path"    : "docs/specs/ecosystem.md",
+            "decision": "unchanged",
+            "reason"  : "안내 및 기능·책임 지도와 대화 상태 보존의 현재 요구를 설명한다."
           }
         ]
       }

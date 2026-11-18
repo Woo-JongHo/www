@@ -1,10 +1,10 @@
-# 2026-11-15 현재 마감 판단과 증거 위치
+# 2026-11-15 당시 마감 판단과 증거 위치
 
-이 절은 과거 이력과 현재 판정을 구분한다. 아래 기존 시도·근거의 “현재 적용 가능” 문자열은 **각 시도가 기록될 당시**의 관찰 요약이며, 현재 적용성은 최신 입력/기준의 공유 status 결과와 아래 새 시도로 판단한다. 과거 시도·원문·요약을 소급해 다시 쓰지 않았다.
+이 절은 2026-11-15 당시 이력이다. 2026-11-17 현재 기존 attempt-4aa48cb3·attempt-c9dbc39a는 소스와 환경 변경으로 적용되지 않으며, 최신 원장의 문서 검토와 새 시도를 따른다. AC-3·AC-4·AC-5는 미검증이다. 이 절은 과거 이력과 현재 판정을 구분한다. 아래 기존 시도·근거의 “현재 적용 가능” 문자열은 **각 시도가 기록될 당시**의 관찰 요약이며, 현재 적용성은 최신 입력/기준의 공유 status 결과와 아래 새 시도로 판단한다. 과거 시도·원문·요약을 소급해 다시 쓰지 않았다.
 
-- 현행 기능 AC-1·2·3: `attempt-4aa48cb3-2276-44e5-a7db-bd3f3ce72cfe` 실제 현재 Electron architecture 검사 75개 통과.
-- 현행 AC-4: `attempt-c9dbc39a-87f6-4a94-afab-f7c708c87701`의 `node scripts/verify-ecosystem.ts`는 **스크립트 36~40행에서 npm typecheck·집중 Bun·npm build를 실제 실행한 다음** Electron을 실행한다. `.www/evidence/ecosystem-tkcOwy/typecheck.log`는 두 strict 프로젝트 성공, `model-test.log`는 8개 테스트·35,254 assertion 통과, `build.log`는 현재 dist 빌드 성공, `electron-probe.json`은 전환·초안/읽기 상태 보존 관찰이다. 종료코드 0이며 sourceStable/environmentStable=true다. 이를 단순 GUI-only 실행으로 읽지 않는다.
-- 최신 문서 영향 검토는 `workflow.documentationReviews`의 **마지막** `documentation-27845fb4-d003-45b0-9160-c71710a5ab9b`다. digest는 현재 기능 검사와 같은 `d11ec3ede028d74464d595922111433066c78985c781d054492d02e7a3e9b9a6`이다. 초기 2026-11-13 문서 검토만 현재 기록으로 사용하지 않는다.
+- 당시 기능 AC-1·2·3: `attempt-4aa48cb3-2276-44e5-a7db-bd3f3ce72cfe` 실제 현재 Electron architecture 검사 75개 통과.
+- 당시 AC-4: `attempt-c9dbc39a-87f6-4a94-afab-f7c708c87701`의 `node scripts/verify-ecosystem.ts`는 **스크립트 36~40행에서 npm typecheck·집중 Bun·npm build를 실제 실행한 다음** Electron을 실행한다. `.www/evidence/ecosystem-tkcOwy/typecheck.log`는 두 strict 프로젝트 성공, `model-test.log`는 8개 테스트·35,254 assertion 통과, `build.log`는 현재 dist 빌드 성공, `electron-probe.json`은 전환·초안/읽기 상태 보존 관찰이다. 종료코드 0이며 sourceStable/environmentStable=true다. 이를 단순 GUI-only 실행으로 읽지 않는다.
+- 당시 문서 영향 검토는 `workflow.documentationReviews`의 **마지막** `documentation-27845fb4-d003-45b0-9160-c71710a5ab9b`다. 당시 digest는 해당 기능 검사와 같은 `d11ec3ede028d74464d595922111433066c78985c781d054492d02e7a3e9b9a6`이다. 초기 2026-11-13 문서 검토만 현재 기록으로 사용하지 않는다.
 - AC-5는 **unverified**다. 과거 Mac mini 분리 저작 원문들이 현재 checkout에 없어 당시 SHA/산문만으로 새 적용성이나 현재 실제 저작을 입증하지 않는다. 원문 회수·진위/적용성 확인 또는 실제 허용 환경의 새로운 분리 저작 검사가 남았다.
 - 공통 전체 저장소의 BoxBox 승인 proof 실패는 아직 남아 있고 이를 이 작업의 현재 타입·집중·build·Electron 통과로 지우지 않는다. 전체 check와 작업 고유 수용 검사를 구분한다.
 
@@ -460,3 +460,20 @@ AC-5의 Mac mini detached tmux·실제 저작·검사 영수증은 당시 이력
 ## 2026-11-15 최종 현재성 재평가와 부분 반환
 
 별도 세션에서 `docs/specs/ecosystem.md`, `scripts/verify-architecture.ts`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/renderer.tsx`가 검사 도중 다시 바뀌었다. 우리 병렬 작업자의 제품 소스 동결과 실제 전체 워크스페이스의 동결은 달랐다. 통과 영수증은 당시 소스에 묶인 결과로 보존하고 현재 소스 통과로 승격하지 않는다. 공식 resume로 현재 기준·검토·문서 적용성을 재평가했으며 완료를 요청하지 않는다. 추가 유료 검사는 중단했고, 다른 세션 종료 후 현재 소스 재검증 또는 고정 스냅샷 기준의 마감 선택이 남았다. 부분 저작 보고서에 실제 확인 범위·실패·소스 변화·남은 조건을 연결한다.
+
+<a id="attempt-dc8c85ac-e8fe-48bd-95df-575b22680399"></a>
+## 검증 시도 — 2026-11-16T23:58:54.395Z
+
+- 시도 ID: `attempt-dc8c85ac-e8fe-48bd-95df-575b22680399`
+- 실행 시각: 2026-11-16T23:58:39.947Z ~ 2026-11-16T23:58:54.395Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-architecture.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/CODE_BLUEPRINT.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/design-system.md`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/chat.md`, `docs/specs/ecosystem.md`, `package-lock.json`, `package.json`, `scripts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `f2773f4192e2a9faf891d06f1dd366048259f5cc768d1948ceda430b8aacdfd7`
+- 기준 정의 식별: `43484fe65ac2cba0bbad71a5617e5580fcc141a05be4361ea8acded360b47bcf`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 5195바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.

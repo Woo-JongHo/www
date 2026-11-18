@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-345d185f-45b0-444d-84c1-60097f64558d",
+  "title"        : "관측 누락 버그 명세와 이슈 등록",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약을 원작업 work-36d312bc-a767-4e3e-a581-01898b35f75f에 관계·역사 근거로 회수했다. 원본 입력 절단 및 실제 기능 수용은 원작업에서 별도 검증한다.",
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-36d312bc-a767-4e3e-a581-01898b35f75f"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "b907e4ba34a6b23e996489453fe4611b82055b9038c5287046a552ca91ae9e7b",
+    "threadId": "01a1e2c9-7195-7d30-b29e-f7bd06089013",
+    "turnId"  : "01a1e2e8-3db0-7aa1-bc28-c2506b8dac06",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"pwd && git status --short --branch && cat ~/.codex/coding-guidelines.md && cat skills/www/www-spec/SKILL.md && cat skills/www/www-diagnose/SKILL.md && cat docs/skills/templates/diagnosis.md && sed -n '1,65p' docs/work/Chat/013-*/spec.md && python3 - <<'PY'\nimport pathlib,json\nfor p in pathlib.Path('docs/work/Chat').glob('*/work.json'):\n d=json.loads(p.read_text());print(p.parent.name,d['id'],d['title'])\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '58,83p' src/agent-overview.ts && sed -n '181,221p' src/agent-overview.ts && sed -n '18,30p' src/agent-overview-view.tsx && sed -n '88,117p' src/www-activity.ts && sed -n '624,643p' src/native-activity.ts\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport pathlib,json,subprocess,uuid\nroot=pathlib.Path.cwd();e=root/'.www/evidence'/('agent-observation-issue-'+str(uuid.uuid4())[:8]);e.mkdir(parents=True)\ncriteria=[\n('OBS-EVIDENCE','문서 참조·구조화 읽기·명시적 Skill 요청·역할이 선언한 절차 적용·실제 하네스 실행·성공 완료를 구별하고 상태마다 출처·관측 한계를 표시한다. 문서 읽기나 자연어 언급만으로 실행·완료를 추정하지 않는다.'),\n('OBS-LIFECYCLE','WWW 개발 역할이 선택·전환한 단계를 현재 session/thread/turn과 작업 UUID에 구조적으로 연결해 UI에 전달한다. 선택·시작·종료·실패·중단의 실제 근거와 중복·지연·재접속 처리를 정의하고, 외부 개발 세션 등 연결이 없는 표면은 미연결로 표시한다.'),\n('OBS-UNKNOWN','명시된 대기 사건이 없는 스킬은 대기로 단정하지 않고 미관측 또는 선택 미확인으로 표시한다. 복수 요청으로 현재 항목을 특정할 수 없으면 모호성을 표시하고 임의의 하나를 선택하지 않는다.'),\n('PLAN-SOURCE','계획 없음·자료 미제공·수집 실패를 구별하고 Native 계획과 명시적으로 연결한 계획 문서의 출처·현재성을 표시한다. tasks.md를 작성했다는 이유만으로 실행 계획을 받은 것으로 보거나 모든 항목을 실행 중으로 승격하지 않는다.'),\n('PROGRESS-FALLBACK','공개 진행 설명이 존재하면 활성 Plan이 없어도 현재 요청의 계획 미연결 설명으로 표시한다. 활성 항목이 제공된 경우에는 기존 항목 연결을 유지하며 과거·다른 턴·다른 탭의 설명을 섞지 않는다.'),\n('AGENT-TRUTH','실제 Native Subagent 사건만 Subagent 집계에 반영하고 부모·자식·상태·출처를 보존한다. 외부 CLI 검",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport pathlib,json,urllib.parse,subprocess\nc=json.loads(pathlib.Path('/tmp/www-agent-observation-issue-context.json').read_text());d=pathlib.Path(c['directory']);p=d/'spec.md';p.write_text(p.read_text().replace('ISS\\\\u200bUE-TRACE','ISSUE-TRACE'))\np=pathlib.Path('docs/work/INDEX.md');s=p.read_text();base=urllib.parse.quote(str(d.relative_to('docs/work')),safe='/');key='- [작업 레코드]('+base+'/work.json)';assert s.count(key)==1;s=s.replace(key,key+'\\\\n- [진단]('+base+'/diagnosis.md)\\\\n- [수정 및 검증 계획]('+base+'/tasks.md)');p.write_text(s)\n# 공식 직렬화와 잠금으로 문서 입력만 추가한다. 수용 결과·상태는 바꾸지 않는다.\nscript=\\\"import {readFile,writeFile,rename} from 'node:fs/promises';import {readWork} from './scripts/workflow/work.ts';import {withWorkLock} from './scripts/workflow/lock.ts';import {serializeWorkRecord} from './scripts/workflow/work-json.ts';import {workOutputColumns} from './scripts/workflow/preflight.ts';const c=JSON.parse(await readFile('/tmp/www-agent-observation-issue-context.",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"command -v gh && gh api repos/Woo-JongHo/www --jq '{full_name, has_issues, permissions}'\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"nl -ba src/agent-overview-view.tsx | sed -n '30,42p' && node scripts/check-workflow.ts\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport pathlib,json,subprocess\nc=json.loads(pathlib.Path('/tmp/www-agent-observation-issue-context.json').read_text());e=pathlib.Path(c['evidence'])\n# 同じ対象の既存認証を使い、権限設定やラベルは作らない。\nlabels=subprocess.run(['gh','label','list','--repo','Woo-JongHo/www','--search','bug','--json','name'],capture_output=True,text=True)\nknown=json.loads(labels.stdout) if labels.returncode==0 else []\ncmd=['gh','issue','create','--repo','Woo-JongHo/www','--title','WWW スキル段階と Plan・Progress が作業中でも未確認・待機と表示される','--body-file',str(e/'github-issue-body.md')]\n# 公開タイトルは韓国語の要求文書に合わせる。\ncmd[cmd.index('--title')+1]='WWW 스킬 단계와 Plan·Progress가 작업 중에도 미확인·대기로 표시됨'\nif any(x['name']=='bug' for x in known):cmd+=['--label','bug']\nr=subprocess.run(cmd,capture_output=True,text=True);(e/'github-cli-create.stdout').write_text(r.stdout);(e/'github-cli-create.stderr').write_text(r.stderr)\nif r.returncode:raise SystemExit(r.stderr)\nurl=r.stdout.strip();assert url.startswith('https://github.com/Woo-JongHo/www",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib,subprocess\nc=json.loads(pathlib.Path('/tmp/www-agent-observation-issue-context.json').read_text());e=pathlib.Path(c['evidence'])\nscript=r'''import {projectAgentOverview} from './src/agent-overview';import {projectNativeActivity} from './src/native-activity';import {referencedWwwArtifacts} from './src/www-activity';import {AgentOverviewView} from './src/agent-overview-view';import {createElement} from 'react';import {renderToStaticMarkup} from 'react-dom/server';\nconst at='2026-11-16T12:00:00Z';const started={seq:1,at,kind:'notification',method:'turn/started',params:{threadId:'synthetic-thread',turn:{id:'synthetic-turn',threadId:'synthetic-thread',status:'inProgress'}}};const commentary={seq:3,at,kind:'notification',method:'item/completed',params:{threadId:'synthetic-thread',turnId:'synthetic-turn',item:{id:'synthetic-message',type:'agentMessage',phase:'commentary',text:'문서 기준을 확인하고 있습니다.'}}};const plan={seq:2,at,kind:'notification',met",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport pathlib,json,subprocess\nc=json.loads(pathlib.Path('/tmp/www-agent-observation-issue-context.json').read_text());e=pathlib.Path(c['evidence'])\nr=subprocess.run(['node','scripts/workflow.ts',json.dumps({'action':'artifact-context','workId':c['workId'],'kind':'spec'})],capture_output=True,text=True);assert r.returncode==0,r.stderr;(e/'spec-review-context.json').write_text(r.stdout)\ndocs=[{'path':p,'decision':'unchanged','reason':reason} for p,reason in [\n ('docs/PRODUCT.md','이번에는 표시 버그의 명세·진단·이슈만 등록했다. 실제 제품 변경과 함께 스킬 단계·계획 없는 공개 설명 표현을 갱신한다.'),\n ('docs/ARCHITECTURE.md','실행·관측 연결의 부족을 진단했으며 새 단계 사건의 생산자·소비자·신뢰 경계는 구현 전 설계에서 확정한다. 현재 구조는 변경하지 않았다.'),\n ('docs/DEVELOPMENT.md','제품 코드·테스트·하네스는 변경하지 않았다. 합성 함수 대조의 실제 범위는 새 작업 verification.md에 기록했다.'),\n ('docs/skills/WORKFLOW.md','작업·권한·독립 검토 계약은 유지한다. 절차 적용 선언을 실제 호스트 실행이나 제품 완료로 승격하지 않는다.'),\n ('docs/specs/chat.md','현행 공개 관측·세션 격리 요구를 보존한다. 미관측/대기와 계획 미연결 Progress의 새 목표는 Chat015의 미구현 기준으로 기록했다.')]]\nr=subpro",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib,subprocess\nc=json.loads(pathlib.Path('/tmp/www-agent-observation-issue-context.json').read_text());e=pathlib.Path(c['evidence']);d=c['directory']\nn={'summary':'WWW 스킬 단계와 Plan·Progress의 관측 누락을 Chat015 버그로 명세화하고 GitHub #2에 bug 이슈로 등록했다. 실제 투영 함수의 합성 입력에서 Plan 없는 공개 설명의 누락과 미관측 다섯 항목의 대기 표시를 확인했다. 제품 코드는 수정하지 않았다.','before':'문서 작업 중 오른쪽 개요가 현재 스킬 선택 미확인·다섯 항목 대기·Plan/Progress 미제공을 표시해 수행 여부를 판단하기 어렵다는 사용자 관찰이 있었다.','after':'문서 읽기·명시 요청·단계 선언·호스트 실행·완료의 근거 수준과 미관측/대기 구분, 계획 미연결 공개 설명, 실제 Subagent 집계의 수정 기준을 정의하고 버그 추적을 연결했다. 앱의 현재 동작은 아직 동일하다.','changes':['Chat015의 kind=bug 원장과 개발 명세·원인 가설/입증 범위·수정 및 검증 계획을 작성했다.','실제 함수에 합성 공개 사건을 입력해 Plan 유무와 읽기 참조 파서를 대조하고 결과를 기록했다.','GitHub 연결 도구의 403 실패를 보존하고 기존 CLI 인증으로 OPEN 상태의 bug 이슈 #2를 등록·재조회했다.','기준 여덟 개를 문서와 계획에 연결하고 작업 목차·검증 기록·현행 문서 영향 판단을 남겼다.'],'decisions':['사용자가 제시한 화면과 현행 소스·합성 재현을 구분하며 실제 세션의 원본 사건이나 앱 빌드까지 확인했다고 주장하지 않는다.','Native Subagent 0개는 해당 표본과 일치하는 정상 경계로 보존하고 외부 CLI 검토 프로세스를 가짜",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport pathlib,json,subprocess,urllib.parse\nc=json.loads(pathlib.Path('/tmp/www-agent-observation-issue-context.json').read_text());d=pathlib.Path(c['directory']);e=pathlib.Path(c['evidence'])\nr=subprocess.run(['node','scripts/check-workflow.ts'],capture_output=True,text=True);(e/'final-workflow-check.log').write_text(r.stdout+r.stderr);assert r.returncode==0,r.stdout+r.stderr\nw=json.loads((d/'work.json').read_text());assert w['kind']=='bug' and w['status']=='verifying';assert len(w['criteria'])==8 and all(x['result']=='unverified' for x in w['criteria']);assert not any(w['workflow']['authorization'][x] for x in ['implementation','commit','publish'])\nfor x in w['criteria']:\n for n in ['spec.md','diagnosis.md','tasks.md']:assert x['id'] in (d/n).read_text(),(x['id'],n)\nfor n in ['spec.md','diagnosis.md','tasks.md','verification.md']:\n s=(d/n).read_text();assert s.endswith('\\\\n') and not s.endswith('\\\\n\\\\n');assert '\\\\u200b' not in s;assert not any(l.endswi",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"tail -9 docs/work/INDEX.md && python3 - <<'PY'\nimport pathlib,json\nc=json.loads(pathlib.Path('/tmp/www-agent-observation-issue-context.json').read_text());e=pathlib.Path(c['evidence']);p=e/'final-result.json';r=json.loads(p.read_text());r['sharedIndexWhitespace']='공유 INDEX.md 끝의 추가 빈 줄을 관측했다. Chat015 항목의 링크와 본 작업 문서 공백은 유효하며 다른 영역의 목차 내용은 보존했다.';p.write_text(json.dumps(r,ensure_ascii=False,indent=2)+'\\\\n')\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [
+      "/Users/jonghoPro/woo/00_project/www/docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/diagnosis.md",
+      "/Users/jonghoPro/woo/00_project/www/docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/spec.md",
+      "/Users/jonghoPro/woo/00_project/www/docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/tasks.md",
+      "/Users/jonghoPro/woo/00_project/www/.www/evidence/agent-observation-issue-ae40a31f/github-issue-body.md",
+      "/Users/jonghoPro/woo/00_project/www/docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/verification.md"
+    ],
+    "truncated": true
+  }
+}

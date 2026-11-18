@@ -1,0 +1,1849 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-d43bfed7-e705-4c22-aceb-f00dc1ede0b8",
+  "title"        : "사용자 여정과 칸반 인계를 개발 스킬에 연결",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "독립 검토 fail: 수정 또는 검토 재실행 필요",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "SKILL-JOURNEYS",
+      "description": "명세에서 작업에 필요한 사용자 여정·경계·오류·복원과 기대 결과를 기준 ID 및 구체 검증 방법에 연결한다. 작은 작업은 범위에 맞게 간소화한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "SKILL-HANDOFF",
+      "description": "설계·구현·검증의 인계가 화면·API·저장·재조회와 칸반 원장의 같은 UUID로 연결되고, 문서·코드의 존재를 사용자 행동 검증으로 승격하지 않는다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "SKILL-VALIDATE",
+      "description": "정본·발견 경로와 기존 권한·검토 정책을 유지하고 수정 스킬의 형식·링크·행동 적용성을 독립 패스로 확인한다. 오픈소스 채택은 공식 출처·revision·라이선스와 연결한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": [
+        {
+          "attemptId": "attempt-8dbb91e1-df83-4d38-bb90-f19630624095",
+          "path"     : "verification.md#attempt-8dbb91e1-df83-4d38-bb90-f19630624095",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "skills-usecase-kanban-20261116",
+    "requestHash": "8ea875c01004092fcc616f12ea36a81e4f5963e6a62e6853311066d2681c3fbe",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "skills/www",
+        "agents/www/AGENT.md",
+        "docs/skills/WORKFLOW.md",
+        "docs/skills/ARTIFACT_REVIEW.md",
+        "docs/skills/templates",
+        "docs/work/Workflow",
+        "docs/work/INDEX.md",
+        "docs/skills/MODEL_POLICY.md",
+        "docs/skills/REPORTS.md",
+        "docs/DEVELOPMENT.md"
+      ],
+      "mutationSurfaces": [
+        "WWW 개발 스킬·역할·공통 계약·템플릿과 같은 작업 기록"
+      ],
+      "verifierCommands": [
+        "[\"node\",\"scripts/check-workflow.ts\"]",
+        "[\"node\",\"--input-type=module\",\"-e\",\"import assert from 'node:assert/strict';import {readFile,readdir} from 'node:fs/promises';import path from 'node:path';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';import {readWork,openWork,assessWork} from './scripts/workflow/work.ts';import {listWorkReports} from './scripts/workflow/reports.ts';\\nconst base=path.resolve('.www/evidence/session-completion-20261116/skills-forward-current');const initial=await readFile(path.join(base,'source-before.sha256'),'utf8');assert.equal(initial,await readFile(path.join(base,'source-after.sha256'),'utf8'));assert.equal(initial,await readFile(path.join(base,'source-retry-after.sha256'),'utf8'));let sourceFiles=0;for(const line of initial.trim().split('\\\\n')){const m=/^([a-f0-9]{64})\\\\s+(.+)$/.exec(line);assert(m);assert.equal(createHash('sha256').update(await readFile(m[2])).digest('hex'),m[1],m[2]);sourceFiles++;}\\nasync function records(dir){let found=[];for(const item of await readdir(dir,{withFileTypes:true})){const f=path.join(dir,item.name);if(item.isDirectory())found.push(...await records(f));else if(item.name==='work.json')found.push(f);}return found;}\\nconst summary=[];for(const name of ['a','b','c2']){const repo=path.join(base,name);const files=await records(path.join(repo,'docs/work'));assert.equal(files.length,1);const raw=JSON.parse(await readFile(files[0],'utf8'));const w=await readWork({repo,workId:raw.id});assert(w.record.criteria.every(c=>c.result!=='passed'));const state=await assessWork({repo,workId:raw.id});assert.equal(state.complete,false);assert(state.reasons.length>0);assert(w.record.workflow.documentationReviews.length>0);const catalog=await listWorkReports({repo});assert(catalog.reports.some(r=>r.workId===raw.id&&r.kind==='authored'));if(name==='a'){assert.equal(raw.id,'work-84cda38b-7265-40d7-bf47-5a22ece1b3a2');const reopened=await openWork({repo,role:'www-dev',direct:true,decision:{workId:raw.id}});assert.equal(reopened.created,false);const consistency=w.record.workflow.artifactReviews.find(r=>r.kind==='consistency');assert(consistency);assert.equal(consistency.coverage.length,4);const tasks=await readFile(path.join(path.dirname(files[0]),'tasks.md'),'utf8');for(const criterion of raw.criteria)assert(tasks.includes(criterion.id));}if(name==='b'){assert.deepEqual(raw.criteria.map(c=>c.id),['EXPORT-SAVE','EXPORT-ERROR']);execFileSync(process.execPath,['--test','test/export.test.ts'],{cwd:repo,stdio:'pipe'});}summary.push({name,workId:raw.id,records:1,complete:state.complete,unverified:raw.criteria.map(c=>c.id)});}\\nconst trace=(await readFile(path.join(base,'retry.jsonl'),'utf8')).trim().split('\\\\n').map(line=>JSON.parse(line));const execution=trace.find(x=>x.label==='retry-typed-result').data;assert.equal(execution.harness.ok,true);assert.equal(execution.harness.sourceStable,true);assert.equal(execution.harness.executor,'injected');assert.equal(execution.harness.toolExecutor,'process');for(const stage of ['pre','post']){assert(execution.harness[stage].typecheck.every(t=>t.code===0));assert.equal(execution.harness[stage].boxboxStatus,'disabled');}const c2=JSON.parse(await readFile((await records(path.join(base,'c2/docs/work')))[0],'utf8'));const spec=c2.workflow.artifactReviews.find(r=>r.kind==='spec');assert(spec);assert(Date.parse(spec.reviewedAt)<=Date.parse(trace.find(x=>x.label==='retry-injected-host-context').time));const text=await readFile(path.join(base,'c2/src/text.ts'),'utf8');assert(text.includes('저장하기'));assert(!text.includes('저장하가'));console.log(JSON.stringify({scope:'최신 스킬의 독립 격리 산출물·UUID·절차 순서·실제 컴파일러·불충분 근거 완료 거부 확인. 제품 GUI·모델 의미 수용·필수 감사 통과 아님.',sourceFiles,summary,harness:{ok:true,executor:'injected',toolExecutor:'process',boxbox:'disabled'}}));\"]",
+        "[\"node\",\"--input-type=module\",\"-e\",\"import assert from 'node:assert/strict';import {readFile,readdir} from 'node:fs/promises';import path from 'node:path';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';import {readWork,openWork,assessWork} from './scripts/workflow/work.ts';import {listWorkReports} from './scripts/workflow/reports.ts';\\nconst base=path.resolve('.www/evidence/session-completion-20261116/skills-forward-current');const initial=await readFile(path.join(base,'source-before.sha256'),'utf8');assert.equal(initial,await readFile(path.join(base,'source-after.sha256'),'utf8'));assert.equal(initial,await readFile(path.join(base,'source-retry-after.sha256'),'utf8'));let sourceFiles=0;for(const line of initial.trim().split('\\\\n')){const m=/^([a-f0-9]{64})\\\\s+(.+)$/.exec(line);assert(m);assert.equal(createHash('sha256').update(await readFile(m[2])).digest('hex'),m[1],m[2]);sourceFiles++;}\\nasync function records(dir){let found=[];for(const item of await readdir(dir,{withFileTypes:true})){const f=path.join(dir,item.name);if(item.isDirectory())found.push(...await records(f));else if(item.name==='work.json')found.push(f);}return found;}\\nconst summary=[];for(const name of ['a','b','c4']){const repo=path.join(base,name);const files=await records(path.join(repo,'docs/work'));assert.equal(files.length,1);const raw=JSON.parse(await readFile(files[0],'utf8'));const w=await readWork({repo,workId:raw.id});assert(w.record.criteria.every(c=>c.result!=='passed'));assert.equal(w.record.workflow.nextAction,'verify',name);const taskText=await readFile(path.join(path.dirname(files[0]),'tasks.md'),'utf8');assert(taskText.includes('verify'),name);if(name!=='a'){const specText=await readFile(path.join(path.dirname(files[0]),'spec.md'),'utf8');const scenarioRows=specText.split('\\\\n').filter(l=>l.startsWith('|')).map(l=>l.split('|').slice(1,-1).map(v=>v.trim()));for(const criterion of raw.criteria){const row=scenarioRows.find(r=>r[0]===criterion.id);assert(row,criterion.id);assert(row[1].includes('입력:')&&row[1].includes('행동:'),criterion.id);assert(row[2].length>0&&row[3].length>0,criterion.id);}}const state=await assessWork({repo,workId:raw.id});assert.equal(state.complete,false);assert(state.reasons.length>0);assert(w.record.workflow.documentationReviews.length>0);const catalog=await listWorkReports({repo});assert(catalog.reports.some(r=>r.workId===raw.id&&r.kind==='authored'));if(name==='a'){assert.equal(raw.id,'work-84cda38b-7265-40d7-bf47-5a22ece1b3a2');const reopened=await openWork({repo,role:'www-dev',direct:true,decision:{workId:raw.id}});assert.equal(reopened.created,false);const consistency=w.record.workflow.artifactReviews.find(r=>r.kind==='consistency');assert(consistency);assert.equal(consistency.coverage.length,4);const tasks=await readFile(path.join(path.dirname(files[0]),'tasks.md'),'utf8');for(const criterion of raw.criteria)assert(tasks.includes(criterion.id));}if(name==='b'){assert.deepEqual(raw.criteria.map(c=>c.id),['EXPORT-SAVE','EXPORT-ERROR']);execFileSync(process.execPath,['--test','test/export.test.ts'],{cwd:repo,stdio:'pipe'});}summary.push({name,workId:raw.id,records:1,complete:state.complete,unverified:raw.criteria.map(c=>c.id)});}\\nconst trace=(await readFile(path.join(base,'c4-run.jsonl'),'utf8')).trim().split('\\\\n').map(line=>JSON.parse(line));const real=trace.find(x=>x.label==='real-result');assert.equal(real.data.code,0);assert.equal(real.data.timeout,false);const execution=JSON.parse(real.data.stdout);assert.equal(execution.executor,'process');assert.equal(execution.harness.executor,'process');assert.equal(execution.harness.toolExecutor,'process');assert.equal(execution.harness.ok,true);assert.equal(execution.harness.sourceStable,true);assert.equal(execution.host.code,0);for(const stage of ['pre','post']){assert(execution.harness[stage].typecheck.every(t=>t.code===0));assert.equal(execution.harness[stage].boxboxStatus,'disabled');}const before=JSON.parse(await readFile(path.join(base,'c4-context-sha256.json'),'utf8'));const after=JSON.parse(await readFile(path.join(base,'c4-context-after.json'),'utf8'));assert.equal(before.length,20);assert.deepEqual(before,after);for(const item of before){assert.equal(item.equal,true);assert.equal(createHash('sha256').update(await readFile(item.file)).digest('hex'),item.source,item.file);}const c4=JSON.parse(await readFile((await records(path.join(base,'c4/docs/work')))[0],'utf8'));const spec=c4.workflow.artifactReviews.find(r=>r.kind==='spec');assert(spec);assert(Date.parse(spec.reviewedAt)<=Date.parse(trace.find(x=>x.label==='real-start').time));const text=await readFile(path.join(base,'c4/src/text.ts'),'utf8');assert(text.includes('저장하기'));assert(!text.includes('저장하가'));console.log(JSON.stringify({scope:'스킬 독립 실제 산출물의 구체 여정 행·UUID·원장/계획 단계·실제 Codex CLI·문맥 20파일·실제 컴파일러·미검증 완료 거부. 제품 GUI·의미 수용·필수 감사 통과 아님.',sourceFiles,summary,process:{executor:'process',toolExecutor:'process',requestedModel:execution.modelExecution.requested.model,observed:execution.modelExecution.observed,boxbox:'disabled'}}));\"]",
+        "[\"node\",\"--input-type=module\",\"-e\",\"import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const r=spawnSync(process.execPath,['--input-type=module','-e',\\\"import assert from 'node:assert/strict';import {readFile,readdir} from 'node:fs/promises';import path from 'node:path';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';import {readWork,openWork,assessWork} from './scripts/workflow/work.ts';import {listWorkReports} from './scripts/workflow/reports.ts';\\\\nconst base=path.resolve('.www/evidence/session-completion-20261116/skills-forward-current');const initial=await readFile(path.join(base,'source-before.sha256'),'utf8');assert.equal(initial,await readFile(path.join(base,'source-after.sha256'),'utf8'));assert.equal(initial,await readFile(path.join(base,'source-retry-after.sha256'),'utf8'));let sourceFiles=0;for(const line of initial.trim().split('\\\\\\\\n')){const m=/^([a-f0-9]{64})\\\\\\\\s+(.+)$/.exec(line);assert(m);assert.equal(createHash('sha256').update(await readFile(m[2])).digest('hex'),m[1],m[2]);sourceFiles++;}\\\\nasync function records(dir){let found=[];for(const item of await readdir(dir,{withFileTypes:true})){const f=path.join(dir,item.name);if(item.isDirectory())found.push(...await records(f));else if(item.name==='work.json')found.push(f);}return found;}\\\\nconst summary=[];for(const name of ['a','b','c4']){const repo=path.join(base,name);const files=await records(path.join(repo,'docs/work'));assert.equal(files.length,1);const raw=JSON.parse(await readFile(files[0],'utf8'));const w=await readWork({repo,workId:raw.id});assert(w.record.criteria.every(c=>c.result!=='passed'));assert.equal(w.record.workflow.nextAction,'verify',name);const taskText=await readFile(path.join(path.dirname(files[0]),'tasks.md'),'utf8');assert(taskText.includes('verify'),name);if(name!=='a'){const specText=await readFile(path.join(path.dirname(files[0]),'spec.md'),'utf8');const scenarioRows=specText.split('\\\\\\\\n').filter(l=>l.startsWith('|')).map(l=>l.split('|').slice(1,-1).map(v=>v.trim()));for(const criterion of raw.criteria){const row=scenarioRows.find(r=>r[0]===criterion.id);assert(row,criterion.id);assert(row[1].includes('입력:')&&row[1].includes('행동:'),criterion.id);assert(row[2].length>0&&row[3].length>0,criterion.id);}}const state=await assessWork({repo,workId:raw.id});assert.equal(state.complete,false);assert(state.reasons.length>0);assert(w.record.workflow.documentationReviews.length>0);const catalog=await listWorkReports({repo});assert(catalog.reports.some(r=>r.workId===raw.id&&r.kind==='authored'));if(name==='a'){assert.equal(raw.id,'work-84cda38b-7265-40d7-bf47-5a22ece1b3a2');const reopened=await openWork({repo,role:'www-dev',direct:true,decision:{workId:raw.id}});assert.equal(reopened.created,false);const consistency=w.record.workflow.artifactReviews.find(r=>r.kind==='consistency');assert(consistency);assert.equal(consistency.coverage.length,4);const tasks=await readFile(path.join(path.dirname(files[0]),'tasks.md'),'utf8');for(const criterion of raw.criteria)assert(tasks.includes(criterion.id));}if(name==='b'){assert.deepEqual(raw.criteria.map(c=>c.id),['EXPORT-SAVE','EXPORT-ERROR']);execFileSync(process.execPath,['--test','test/export.test.ts'],{cwd:repo,stdio:'pipe'});}summary.push({name,workId:raw.id,records:1,complete:state.complete,unverified:raw.criteria.map(c=>c.id)});}\\\\nconst trace=(await readFile(path.join(base,'c4-run.jsonl'),'utf8')).trim().split('\\\\\\\\n').map(line=>JSON.parse(line));const real=trace.find(x=>x.label==='real-result');assert.equal(real.data.code,0);assert.equal(real.data.timeout,false);const execution=JSON.parse(real.data.stdout);assert.equal(execution.executor,'process');assert.equal(execution.harness.executor,'process');assert.equal(execution.harness.toolExecutor,'process');assert.equal(execution.harness.ok,true);assert.equal(execution.harness.sourceStable,true);assert.equal(execution.host.code,0);for(const stage of ['pre','post']){assert(execution.harness[stage].typecheck.every(t=>t.code===0));assert.equal(execution.harness[stage].boxboxStatus,'disabled');}const before = JSON.parse(await readFile(path.join(base, 'c4-context-sha256.json'), 'utf8'));\\\\nconst after = JSON.parse(await readFile(path.join(base, 'c4-context-after.json'), 'utf8'));\\\\nassert.equal(before.length, 20);\\\\nassert.equal(after.length, 20);\\\\nconst byPath = rows => {\\\\n  const result = new Map();\\\\n  for (const row of rows) {\\\\n    assert.equal(typeof row.file, 'string');\\\\n    assert(!result.has(row.file), `중복 문맥 경로: ${row.file}`);\\\\n    result.set(row.file, row);\\\\n  }\\\\n  return result;\\\\n};\\\\nconst initialByPath = byPath(before);\\\\nconst finalByPath = byPath(after);\\\\nassert.deepEqual([...initialByPath.keys()].sort(), [...finalByPath.keys()].sort());\\\\nfor (const [file, initial] of initialByPath) {\\\\n  const final = finalByPath.get(file);\\\\n  assert.equal(initial.equal, true, file);\\\\n  assert.match(initial.source, /^[a-f0-9]{64}$/);\\\\n  assert.equal(initial.copy, initial.source, file);\\\\n  assert.equal(final.before, initial.source, file);\\\\n  assert.equal(final.rootAfter, initial.source, file);\\\\n  assert.equal(final.fixtureAfter, initial.source, file);\\\\n  for (const candidate of [file, path.join(base, 'c4', file)]) {\\\\n    const actual = createHash('sha256').update(await readFile(candidate)).digest('hex');\\\\n    assert.equal(actual, initial.source, candidate);\\\\n  }\\\\n}\\\\n\\\\nconst c4=JSON.parse(await readFile((await records(path.join(base,'c4/docs/work')))[0],'utf8'));const spec=c4.workflow.artifactReviews.find(r=>r.kind==='spec');assert(spec);assert(Date.parse(spec.reviewedAt)<=Date.parse(trace.find(x=>x.label==='real-start').time));const text=await readFile(path.join(base,'c4/src/text.ts'),'utf8');assert(text.includes('저장하기'));assert(!text.includes('저장하가'));console.log(JSON.stringify({scope:'스킬 독립 실제 산출물의 구체 여정 행·UUID·원장/계획 단계·실제 Codex CLI·문맥 20파일·실제 컴파일러·미검증 완료 거부. 제품 GUI·의미 수용·필수 감사 통과 아님.',sourceFiles,summary,process:{executor:'process',toolExecutor:'process',requestedModel:execution.modelExecution.requested.model,observed:execution.modelExecution.observed,boxbox:'disabled'}}));\\\"],{encoding:'utf8',maxBuffer:4000000});writeFileSync(\\\".www/evidence/session-completion-20261116/skills-process-current.stdout\\\",r.stdout??'');writeFileSync(\\\".www/evidence/session-completion-20261116/skills-process-current.stderr\\\",r.stderr??'');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');process.exit(r.status??1);\"]",
+        "[\"node\",\"--input-type=module\",\"-e\",\"import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const r=spawnSync(process.execPath,['--input-type=module','-e',\\\"import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';import {writeFileSync,readFileSync} from 'node:fs';import {createHash} from 'node:crypto';for(const s of ['www-spec','www-design','www-build','www-verify']){const r=spawnSync('python3',['/Users/jonghoPro/.codex/skills/.system/skill-creator/scripts/quick_validate.py','skills/www/'+s],{encoding:'utf8'});console.log(s,r.stdout,r.stderr);assert.equal(r.status,0);}const w=spawnSync(process.execPath,['scripts/check-workflow.ts'],{encoding:'utf8'});console.log(w.stdout,w.stderr);assert.equal(w.status,0);for(const [name,url] of [['pstack','https://raw.githubusercontent.com/cursor/plugins/bf0c7cd80abdbf7fe47b634978a7d1b4071f71a7/pstack/LICENSE'],['gajae-code','https://raw.githubusercontent.com/Yeachan-Heo/gajae-code/51fd21e58ddef6b3482575d97eac48fbddc838e5/LICENSE']]){const r=spawnSync('curl',['--fail','--silent','--show-error','--max-time','30',url],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);assert(r.stdout.includes('MIT License'));writeFileSync('.www/evidence/session-completion-20261116/'+name+'-license-current.txt',r.stdout);console.log(name,url,createHash('sha256').update(r.stdout).digest('hex'));}console.log('형식·발견 링크·원장계약·고정 revision 라이선스 실제 확인. 스킬 행동·제품 GUI 검증 아님.');\\\"],{encoding:'utf8',maxBuffer:1000000});writeFileSync('.www/evidence/session-completion-20261116/skills-format-current.stdout',r.stdout??'');writeFileSync('.www/evidence/session-completion-20261116/skills-format-current.stderr',r.stderr??'');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');process.exit(r.status??1);\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "8ea875c01004092fcc616f12ea36a81e4f5963e6a62e6853311066d2681c3fbe"
+    },
+    "inputs": [
+      "agents/www/AGENT.md",
+      "docs/skills/ARTIFACT_REVIEW.md",
+      "docs/skills/MODEL_POLICY.md",
+      "docs/skills/REPORTS.md",
+      "docs/skills/WORKFLOW.md",
+      "docs/skills/templates",
+      "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/design.md",
+      "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/spec.md",
+      "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/tasks.md",
+      "skills/www"
+    ],
+    "nextAction": "build",
+    "verifications": [
+      {
+        "id"         : "attempt-d629ee20-9554-4f97-b937-b722e87f90ab",
+        "startedAt"  : "2026-11-16T06:40:04.579Z",
+        "completedAt": "2026-11-16T06:40:05.476Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "f306a90dee64f7f133561b9da73ba6cd6889436630c08fab7b9474c0bde7e6f9",
+          "inputs": [
+            "agents/www/AGENT.md",
+            "docs/skills/ARTIFACT_REVIEW.md",
+            "docs/skills/MODEL_POLICY.md",
+            "docs/skills/REPORTS.md",
+            "docs/skills/WORKFLOW.md",
+            "docs/skills/templates",
+            "skills/www"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "f637761fa41867392450521de509da9b8149c88182d0757e6a2d3d4029c7d8a4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "707b9f18418b02125192454b73e1216bcfac66aafa52d024cad03fd2d3a29e47",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "0c6808f1d0b6ccb3ced9cbdbf4a470baab618c1bc93a1f6bf90121a8ebe91046",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "c94676ad5da39ea49d3861f625d246a6bf613ed1d96da25102f9fa2257345648",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "328803a1ea89b16f6a5accd56dfff4b8749918ff6c2c4d20694394adde9c21d2",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "45a96438ac2fdc0e7741a1ebdc878dad61e3fa80d6f96fea518a8967c93ae542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "14451a10bdd1278385ec2b906fb483182096ab91837904c9d46328781ceb571f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "fd4922e9927582284f55f406560f7b039f1c190cfe57276d50ed1b9358e45c82",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "c9247a7acc174b7884977f5273a6534b94e06693dbcc9953ea68c29b71442e7f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www",
+              "type": "directory"
+            },
+            {
+              "path": "skills/www/www-build",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-build/SKILL.md",
+              "type"  : "file",
+              "digest": "0fdda41c4c60aa18542b29c3f515f49642ff25a7bf54e62eca25f44fdb1e5fa8",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-commit",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-commit/SKILL.md",
+              "type"  : "file",
+              "digest": "1bc4a0ce3157cd533738857b56809d8ea4ea0351228cff51225aaeb93d76ee04",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-design",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4b0b18d19eeef148dc77fab45adfc036333eb146bf786e83b552fef0bcc83a0c",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-diagnose",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-diagnose/SKILL.md",
+              "type"  : "file",
+              "digest": "3678511c0e8bdcee9d69a48919662cb822a3be84ccfba39c9cafd44e4cc8f8ed",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-report",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-spec",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "87ccb5189d28edaf675e5f6af2e340d6eba059043ac42712cdf8e76338ee260a",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-verify",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-verify/SKILL.md",
+              "type"  : "file",
+              "digest": "db74b742764b5f80afaff048ec0cee14168c744d7dba7a279457ca4578a1bca5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "criteriaSnapshot": [
+          {
+            "id"         : "SKILL-HANDOFF",
+            "description": "설계·구현·검증의 인계가 화면·API·저장·재조회와 칸반 원장의 같은 UUID로 연결되고, 문서·코드의 존재를 사용자 행동 검증으로 승격하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "SKILL-JOURNEYS",
+            "description": "명세에서 작업에 필요한 사용자 여정·경계·오류·복원과 기대 결과를 기준 ID 및 구체 검증 방법에 연결한다. 작은 작업은 범위에 맞게 간소화한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "SKILL-VALIDATE",
+            "description": "정본·발견 경로와 기존 권한·검토 정책을 유지하고 수정 스킬의 형식·링크·행동 적용성을 독립 패스로 확인한다. 오픈소스 채택은 공식 출처·revision·라이선스와 연결한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/check-workflow.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "SKILL-HANDOFF",
+          "SKILL-JOURNEYS",
+          "SKILL-VALIDATE"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/evidence/session-completion-20261116/opensource-workflow-reference.md",
+            "size"  : 8612,
+            "digest": "63c80b9b166a6e4135158bb1e58d790297dfc83363a4489e14a09d7fec7158c0"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-authoring.md",
+            "size"  : 8805,
+            "digest": "68b04da4ce2fa6fad1b27ce7331da7d56a38009ab7298ce4ac67c2eaaef88ee9"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-test.md",
+            "size"  : 9554,
+            "digest": "0b7171d8bcf7b5f246172c2079a53744325d5b34174cf6e4170d23d464c7f8a0"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 96,
+            "digest"         : "63b443e7d5abc2eb0513b7375e27d3ed1bfbb9110abb5ccf34a85adfb3c4fd5e",
+            "truncated"      : false,
+            "retainedBytes"  : 96,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-fed22ec4-716a-4402-9d5c-664bb57ee537",
+        "startedAt"  : "2026-11-16T06:59:22.957Z",
+        "completedAt": "2026-11-16T06:59:23.522Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "4261c5b2c09bb8316b84c3123d847b1b083d3b248afd0d9b1abc938f2a29af9d",
+          "inputs": [
+            "agents/www/AGENT.md",
+            "docs/skills/ARTIFACT_REVIEW.md",
+            "docs/skills/MODEL_POLICY.md",
+            "docs/skills/REPORTS.md",
+            "docs/skills/WORKFLOW.md",
+            "docs/skills/templates",
+            "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/design.md",
+            "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/spec.md",
+            "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/tasks.md",
+            "skills/www"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "f637761fa41867392450521de509da9b8149c88182d0757e6a2d3d4029c7d8a4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "707b9f18418b02125192454b73e1216bcfac66aafa52d024cad03fd2d3a29e47",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "0c6808f1d0b6ccb3ced9cbdbf4a470baab618c1bc93a1f6bf90121a8ebe91046",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "c94676ad5da39ea49d3861f625d246a6bf613ed1d96da25102f9fa2257345648",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "328803a1ea89b16f6a5accd56dfff4b8749918ff6c2c4d20694394adde9c21d2",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "45a96438ac2fdc0e7741a1ebdc878dad61e3fa80d6f96fea518a8967c93ae542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "14451a10bdd1278385ec2b906fb483182096ab91837904c9d46328781ceb571f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "fd4922e9927582284f55f406560f7b039f1c190cfe57276d50ed1b9358e45c82",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "c9247a7acc174b7884977f5273a6534b94e06693dbcc9953ea68c29b71442e7f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/design.md",
+              "type"  : "file",
+              "digest": "b654d85697e0da7f93b1a8402350211d4be6a55c5df64f136b15b11c0541a9dc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/spec.md",
+              "type"  : "file",
+              "digest": "9507f150c15fc13582fc0e455f1da0cc0916885dbda62653d0aa8181676eb532",
+              "mode"  : 384
+            },
+            {
+              "path"  : "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/tasks.md",
+              "type"  : "file",
+              "digest": "a23112e35bbc74264c69ff41a1447bbfe43cce529e6d9c3773d66fc7c99cc685",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www",
+              "type": "directory"
+            },
+            {
+              "path": "skills/www/www-build",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-build/SKILL.md",
+              "type"  : "file",
+              "digest": "0fdda41c4c60aa18542b29c3f515f49642ff25a7bf54e62eca25f44fdb1e5fa8",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-commit",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-commit/SKILL.md",
+              "type"  : "file",
+              "digest": "1bc4a0ce3157cd533738857b56809d8ea4ea0351228cff51225aaeb93d76ee04",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-design",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4b0b18d19eeef148dc77fab45adfc036333eb146bf786e83b552fef0bcc83a0c",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-diagnose",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-diagnose/SKILL.md",
+              "type"  : "file",
+              "digest": "3678511c0e8bdcee9d69a48919662cb822a3be84ccfba39c9cafd44e4cc8f8ed",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-report",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-spec",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "87ccb5189d28edaf675e5f6af2e340d6eba059043ac42712cdf8e76338ee260a",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-verify",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-verify/SKILL.md",
+              "type"  : "file",
+              "digest": "db74b742764b5f80afaff048ec0cee14168c744d7dba7a279457ca4578a1bca5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "criteriaSnapshot": [
+          {
+            "id"         : "SKILL-HANDOFF",
+            "description": "설계·구현·검증의 인계가 화면·API·저장·재조회와 칸반 원장의 같은 UUID로 연결되고, 문서·코드의 존재를 사용자 행동 검증으로 승격하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "SKILL-JOURNEYS",
+            "description": "명세에서 작업에 필요한 사용자 여정·경계·오류·복원과 기대 결과를 기준 ID 및 구체 검증 방법에 연결한다. 작은 작업은 범위에 맞게 간소화한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "SKILL-VALIDATE",
+            "description": "정본·발견 경로와 기존 권한·검토 정책을 유지하고 수정 스킬의 형식·링크·행동 적용성을 독립 패스로 확인한다. 오픈소스 채택은 공식 출처·revision·라이선스와 연결한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--input-type=module",
+          "-e",
+          "import assert from 'node:assert/strict';import {readFile,readdir} from 'node:fs/promises';import path from 'node:path';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';import {readWork,openWork,assessWork} from './scripts/workflow/work.ts';import {listWorkReports} from './scripts/workflow/reports.ts';\nconst base=path.resolve('.www/evidence/session-completion-20261116/skills-forward-current');const initial=await readFile(path.join(base,'source-before.sha256'),'utf8');assert.equal(initial,await readFile(path.join(base,'source-after.sha256'),'utf8'));assert.equal(initial,await readFile(path.join(base,'source-retry-after.sha256'),'utf8'));let sourceFiles=0;for(const line of initial.trim().split('\\n')){const m=/^([a-f0-9]{64})\\s+(.+)$/.exec(line);assert(m);assert.equal(createHash('sha256').update(await readFile(m[2])).digest('hex'),m[1],m[2]);sourceFiles++;}\nasync function records(dir){let found=[];for(const item of await readdir(dir,{withFileTypes:true})){const f=path.join(dir,item.name);if(item.isDirectory())found.push(...await records(f));else if(item.name==='work.json')found.push(f);}return found;}\nconst summary=[];for(const name of ['a','b','c2']){const repo=path.join(base,name);const files=await records(path.join(repo,'docs/work'));assert.equal(files.length,1);const raw=JSON.parse(await readFile(files[0],'utf8'));const w=await readWork({repo,workId:raw.id});assert(w.record.criteria.every(c=>c.result!=='passed'));const state=await assessWork({repo,workId:raw.id});assert.equal(state.complete,false);assert(state.reasons.length>0);assert(w.record.workflow.documentationReviews.length>0);const catalog=await listWorkReports({repo});assert(catalog.reports.some(r=>r.workId===raw.id&&r.kind==='authored'));if(name==='a'){assert.equal(raw.id,'work-84cda38b-7265-40d7-bf47-5a22ece1b3a2');const reopened=await openWork({repo,role:'www-dev',direct:true,decision:{workId:raw.id}});assert.equal(reopened.created,false);const consistency=w.record.workflow.artifactReviews.find(r=>r.kind==='consistency');assert(consistency);assert.equal(consistency.coverage.length,4);const tasks=await readFile(path.join(path.dirname(files[0]),'tasks.md'),'utf8');for(const criterion of raw.criteria)assert(tasks.includes(criterion.id));}if(name==='b'){assert.deepEqual(raw.criteria.map(c=>c.id),['EXPORT-SAVE','EXPORT-ERROR']);execFileSync(process.execPath,['--test','test/export.test.ts'],{cwd:repo,stdio:'pipe'});}summary.push({name,workId:raw.id,records:1,complete:state.complete,unverified:raw.criteria.map(c=>c.id)});}\nconst trace=(await readFile(path.join(base,'retry.jsonl'),'utf8')).trim().split('\\n').map(line=>JSON.parse(line));const execution=trace.find(x=>x.label==='retry-typed-result').data;assert.equal(execution.harness.ok,true);assert.equal(execution.harness.sourceStable,true);assert.equal(execution.harness.executor,'injected');assert.equal(execution.harness.toolExecutor,'process');for(const stage of ['pre','post']){assert(execution.harness[stage].typecheck.every(t=>t.code===0));assert.equal(execution.harness[stage].boxboxStatus,'disabled');}const c2=JSON.parse(await readFile((await records(path.join(base,'c2/docs/work')))[0],'utf8'));const spec=c2.workflow.artifactReviews.find(r=>r.kind==='spec');assert(spec);assert(Date.parse(spec.reviewedAt)<=Date.parse(trace.find(x=>x.label==='retry-injected-host-context').time));const text=await readFile(path.join(base,'c2/src/text.ts'),'utf8');assert(text.includes('저장하기'));assert(!text.includes('저장하가'));console.log(JSON.stringify({scope:'최신 스킬의 독립 격리 산출물·UUID·절차 순서·실제 컴파일러·불충분 근거 완료 거부 확인. 제품 GUI·모델 의미 수용·필수 감사 통과 아님.',sourceFiles,summary,harness:{ok:true,executor:'injected',toolExecutor:'process',boxbox:'disabled'}}));"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "SKILL-HANDOFF",
+          "SKILL-JOURNEYS",
+          "SKILL-VALIDATE"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current.md",
+            "size"  : 7692,
+            "digest": "b1f58b59472e50321e8a2947e9aae6a2b77145ad20d04cd978ad2f6a35bba143"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current/retry.jsonl",
+            "size"  : 201287,
+            "digest": "fd00de2954f156d7b1077aa89c8302789a6b1c4f9d2424b2974d12d11e856efc"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current/source-before.sha256",
+            "size"  : 1408,
+            "digest": "cbb3e308df0f2a1600adec8e43cc2ed9f2b1105394032d83eca5060e4c2ba97e"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current/source-retry-after.sha256",
+            "size"  : 1408,
+            "digest": "cbb3e308df0f2a1600adec8e43cc2ed9f2b1105394032d83eca5060e4c2ba97e"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 750,
+            "digest"         : "762608f8d4eae0081542e1f55619c969de755a17153e35e0188caac9507a4aa6",
+            "truncated"      : false,
+            "retainedBytes"  : 750,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-3b612b91-bc8c-4120-9140-b333dd934248",
+        "startedAt"  : "2026-11-16T07:14:45.954Z",
+        "completedAt": "2026-11-16T07:14:48.020Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "fc4619faa89e0ae89c3cea8bb3873fa20574673bb01dd2eb495e18674d1bc185",
+          "inputs": [
+            "agents/www/AGENT.md",
+            "docs/skills/ARTIFACT_REVIEW.md",
+            "docs/skills/MODEL_POLICY.md",
+            "docs/skills/REPORTS.md",
+            "docs/skills/WORKFLOW.md",
+            "docs/skills/templates",
+            "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/design.md",
+            "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/spec.md",
+            "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/tasks.md",
+            "skills/www"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "f637761fa41867392450521de509da9b8149c88182d0757e6a2d3d4029c7d8a4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "707b9f18418b02125192454b73e1216bcfac66aafa52d024cad03fd2d3a29e47",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "0c6808f1d0b6ccb3ced9cbdbf4a470baab618c1bc93a1f6bf90121a8ebe91046",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "c94676ad5da39ea49d3861f625d246a6bf613ed1d96da25102f9fa2257345648",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "328803a1ea89b16f6a5accd56dfff4b8749918ff6c2c4d20694394adde9c21d2",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "45a96438ac2fdc0e7741a1ebdc878dad61e3fa80d6f96fea518a8967c93ae542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "14451a10bdd1278385ec2b906fb483182096ab91837904c9d46328781ceb571f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "fd4922e9927582284f55f406560f7b039f1c190cfe57276d50ed1b9358e45c82",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "c9247a7acc174b7884977f5273a6534b94e06693dbcc9953ea68c29b71442e7f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/design.md",
+              "type"  : "file",
+              "digest": "b654d85697e0da7f93b1a8402350211d4be6a55c5df64f136b15b11c0541a9dc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/spec.md",
+              "type"  : "file",
+              "digest": "c1c599b665903275823f05700855368a12e6cc5c2d201035780866f84b81e961",
+              "mode"  : 384
+            },
+            {
+              "path"  : "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/tasks.md",
+              "type"  : "file",
+              "digest": "a23112e35bbc74264c69ff41a1447bbfe43cce529e6d9c3773d66fc7c99cc685",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www",
+              "type": "directory"
+            },
+            {
+              "path": "skills/www/www-build",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-build/SKILL.md",
+              "type"  : "file",
+              "digest": "0fdda41c4c60aa18542b29c3f515f49642ff25a7bf54e62eca25f44fdb1e5fa8",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-commit",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-commit/SKILL.md",
+              "type"  : "file",
+              "digest": "1bc4a0ce3157cd533738857b56809d8ea4ea0351228cff51225aaeb93d76ee04",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-design",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4b0b18d19eeef148dc77fab45adfc036333eb146bf786e83b552fef0bcc83a0c",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-diagnose",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-diagnose/SKILL.md",
+              "type"  : "file",
+              "digest": "3678511c0e8bdcee9d69a48919662cb822a3be84ccfba39c9cafd44e4cc8f8ed",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-report",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-spec",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "87ccb5189d28edaf675e5f6af2e340d6eba059043ac42712cdf8e76338ee260a",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-verify",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-verify/SKILL.md",
+              "type"  : "file",
+              "digest": "db74b742764b5f80afaff048ec0cee14168c744d7dba7a279457ca4578a1bca5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "criteriaSnapshot": [
+          {
+            "id"         : "SKILL-HANDOFF",
+            "description": "설계·구현·검증의 인계가 화면·API·저장·재조회와 칸반 원장의 같은 UUID로 연결되고, 문서·코드의 존재를 사용자 행동 검증으로 승격하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "SKILL-JOURNEYS",
+            "description": "명세에서 작업에 필요한 사용자 여정·경계·오류·복원과 기대 결과를 기준 ID 및 구체 검증 방법에 연결한다. 작은 작업은 범위에 맞게 간소화한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "SKILL-VALIDATE",
+            "description": "정본·발견 경로와 기존 권한·검토 정책을 유지하고 수정 스킬의 형식·링크·행동 적용성을 독립 패스로 확인한다. 오픈소스 채택은 공식 출처·revision·라이선스와 연결한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--input-type=module",
+          "-e",
+          "import assert from 'node:assert/strict';import {readFile,readdir} from 'node:fs/promises';import path from 'node:path';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';import {readWork,openWork,assessWork} from './scripts/workflow/work.ts';import {listWorkReports} from './scripts/workflow/reports.ts';\nconst base=path.resolve('.www/evidence/session-completion-20261116/skills-forward-current');const initial=await readFile(path.join(base,'source-before.sha256'),'utf8');assert.equal(initial,await readFile(path.join(base,'source-after.sha256'),'utf8'));assert.equal(initial,await readFile(path.join(base,'source-retry-after.sha256'),'utf8'));let sourceFiles=0;for(const line of initial.trim().split('\\n')){const m=/^([a-f0-9]{64})\\s+(.+)$/.exec(line);assert(m);assert.equal(createHash('sha256').update(await readFile(m[2])).digest('hex'),m[1],m[2]);sourceFiles++;}\nasync function records(dir){let found=[];for(const item of await readdir(dir,{withFileTypes:true})){const f=path.join(dir,item.name);if(item.isDirectory())found.push(...await records(f));else if(item.name==='work.json')found.push(f);}return found;}\nconst summary=[];for(const name of ['a','b','c4']){const repo=path.join(base,name);const files=await records(path.join(repo,'docs/work'));assert.equal(files.length,1);const raw=JSON.parse(await readFile(files[0],'utf8'));const w=await readWork({repo,workId:raw.id});assert(w.record.criteria.every(c=>c.result!=='passed'));assert.equal(w.record.workflow.nextAction,'verify',name);const taskText=await readFile(path.join(path.dirname(files[0]),'tasks.md'),'utf8');assert(taskText.includes('verify'),name);if(name!=='a'){const specText=await readFile(path.join(path.dirname(files[0]),'spec.md'),'utf8');const scenarioRows=specText.split('\\n').filter(l=>l.startsWith('|')).map(l=>l.split('|').slice(1,-1).map(v=>v.trim()));for(const criterion of raw.criteria){const row=scenarioRows.find(r=>r[0]===criterion.id);assert(row,criterion.id);assert(row[1].includes('입력:')&&row[1].includes('행동:'),criterion.id);assert(row[2].length>0&&row[3].length>0,criterion.id);}}const state=await assessWork({repo,workId:raw.id});assert.equal(state.complete,false);assert(state.reasons.length>0);assert(w.record.workflow.documentationReviews.length>0);const catalog=await listWorkReports({repo});assert(catalog.reports.some(r=>r.workId===raw.id&&r.kind==='authored'));if(name==='a'){assert.equal(raw.id,'work-84cda38b-7265-40d7-bf47-5a22ece1b3a2');const reopened=await openWork({repo,role:'www-dev',direct:true,decision:{workId:raw.id}});assert.equal(reopened.created,false);const consistency=w.record.workflow.artifactReviews.find(r=>r.kind==='consistency');assert(consistency);assert.equal(consistency.coverage.length,4);const tasks=await readFile(path.join(path.dirname(files[0]),'tasks.md'),'utf8');for(const criterion of raw.criteria)assert(tasks.includes(criterion.id));}if(name==='b'){assert.deepEqual(raw.criteria.map(c=>c.id),['EXPORT-SAVE','EXPORT-ERROR']);execFileSync(process.execPath,['--test','test/export.test.ts'],{cwd:repo,stdio:'pipe'});}summary.push({name,workId:raw.id,records:1,complete:state.complete,unverified:raw.criteria.map(c=>c.id)});}\nconst trace=(await readFile(path.join(base,'c4-run.jsonl'),'utf8')).trim().split('\\n').map(line=>JSON.parse(line));const real=trace.find(x=>x.label==='real-result');assert.equal(real.data.code,0);assert.equal(real.data.timeout,false);const execution=JSON.parse(real.data.stdout);assert.equal(execution.executor,'process');assert.equal(execution.harness.executor,'process');assert.equal(execution.harness.toolExecutor,'process');assert.equal(execution.harness.ok,true);assert.equal(execution.harness.sourceStable,true);assert.equal(execution.host.code,0);for(const stage of ['pre','post']){assert(execution.harness[stage].typecheck.every(t=>t.code===0));assert.equal(execution.harness[stage].boxboxStatus,'disabled');}const before=JSON.parse(await readFile(path.join(base,'c4-context-sha256.json'),'utf8'));const after=JSON.parse(await readFile(path.join(base,'c4-context-after.json'),'utf8'));assert.equal(before.length,20);assert.deepEqual(before,after);for(const item of before){assert.equal(item.equal,true);assert.equal(createHash('sha256').update(await readFile(item.file)).digest('hex'),item.source,item.file);}const c4=JSON.parse(await readFile((await records(path.join(base,'c4/docs/work')))[0],'utf8'));const spec=c4.workflow.artifactReviews.find(r=>r.kind==='spec');assert(spec);assert(Date.parse(spec.reviewedAt)<=Date.parse(trace.find(x=>x.label==='real-start').time));const text=await readFile(path.join(base,'c4/src/text.ts'),'utf8');assert(text.includes('저장하기'));assert(!text.includes('저장하가'));console.log(JSON.stringify({scope:'스킬 독립 실제 산출물의 구체 여정 행·UUID·원장/계획 단계·실제 Codex CLI·문맥 20파일·실제 컴파일러·미검증 완료 거부. 제품 GUI·의미 수용·필수 감사 통과 아님.',sourceFiles,summary,process:{executor:'process',toolExecutor:'process',requestedModel:execution.modelExecution.requested.model,observed:execution.modelExecution.observed,boxbox:'disabled'}}));"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 1,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "SKILL-HANDOFF",
+          "SKILL-JOURNEYS",
+          "SKILL-VALIDATE"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current.md",
+            "size"  : 15844,
+            "digest": "17279a7dcea79cd7546e274a9a4a60cba13d034864f330c7e4358519eed151b1"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current/alignment-observed.json",
+            "size"  : 4611,
+            "digest": "d12a8b68b5507cb82a66f9953470b9d7b3a498dc724e5031b639f37e4bbc2e69"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current/c4-context-after.json",
+            "size"  : 6089,
+            "digest": "12e40ea02a85e0aebd351e9cfe60e4e5803dfa31085d60bff7f629e943553514"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current/c4-context-sha256.json",
+            "size"  : 4609,
+            "digest": "60967be9265bdcc99107c834c964b9db4355abfce5e4cb956b15cdfd25fc980a"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current/c4-run.jsonl",
+            "size"  : 191801,
+            "digest": "1614f2125f7fa6b21c1d97e99a79c3e19f79f91f56fb02b9c32c56e3f3e13f75"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current/journeys-observed.json",
+            "size"  : 2199,
+            "digest": "e6f4da229c438b95c794fbac1ff739dc53a5ae93b73984bbd84669a48f0917a4"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 21013,
+            "digest"         : "1691032bdfaa3115d23cefe4615fb3ac0d5fafaa2aed3d8747cff79774b55a74",
+            "truncated"      : false,
+            "retainedBytes"  : 21013,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-21899a93-dbcf-44c1-b143-80f58bf69ca6",
+        "startedAt"  : "2026-11-16T07:19:48.593Z",
+        "completedAt": "2026-11-16T07:19:54.936Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "fc4619faa89e0ae89c3cea8bb3873fa20574673bb01dd2eb495e18674d1bc185",
+          "inputs": [
+            "agents/www/AGENT.md",
+            "docs/skills/ARTIFACT_REVIEW.md",
+            "docs/skills/MODEL_POLICY.md",
+            "docs/skills/REPORTS.md",
+            "docs/skills/WORKFLOW.md",
+            "docs/skills/templates",
+            "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/design.md",
+            "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/spec.md",
+            "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/tasks.md",
+            "skills/www"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "f637761fa41867392450521de509da9b8149c88182d0757e6a2d3d4029c7d8a4",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "707b9f18418b02125192454b73e1216bcfac66aafa52d024cad03fd2d3a29e47",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "0c6808f1d0b6ccb3ced9cbdbf4a470baab618c1bc93a1f6bf90121a8ebe91046",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "c94676ad5da39ea49d3861f625d246a6bf613ed1d96da25102f9fa2257345648",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "328803a1ea89b16f6a5accd56dfff4b8749918ff6c2c4d20694394adde9c21d2",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "45a96438ac2fdc0e7741a1ebdc878dad61e3fa80d6f96fea518a8967c93ae542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "14451a10bdd1278385ec2b906fb483182096ab91837904c9d46328781ceb571f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "fd4922e9927582284f55f406560f7b039f1c190cfe57276d50ed1b9358e45c82",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "c9247a7acc174b7884977f5273a6534b94e06693dbcc9953ea68c29b71442e7f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/design.md",
+              "type"  : "file",
+              "digest": "b654d85697e0da7f93b1a8402350211d4be6a55c5df64f136b15b11c0541a9dc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/spec.md",
+              "type"  : "file",
+              "digest": "c1c599b665903275823f05700855368a12e6cc5c2d201035780866f84b81e961",
+              "mode"  : 384
+            },
+            {
+              "path"  : "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/tasks.md",
+              "type"  : "file",
+              "digest": "a23112e35bbc74264c69ff41a1447bbfe43cce529e6d9c3773d66fc7c99cc685",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www",
+              "type": "directory"
+            },
+            {
+              "path": "skills/www/www-build",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-build/SKILL.md",
+              "type"  : "file",
+              "digest": "0fdda41c4c60aa18542b29c3f515f49642ff25a7bf54e62eca25f44fdb1e5fa8",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-commit",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-commit/SKILL.md",
+              "type"  : "file",
+              "digest": "1bc4a0ce3157cd533738857b56809d8ea4ea0351228cff51225aaeb93d76ee04",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-design",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4b0b18d19eeef148dc77fab45adfc036333eb146bf786e83b552fef0bcc83a0c",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-diagnose",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-diagnose/SKILL.md",
+              "type"  : "file",
+              "digest": "3678511c0e8bdcee9d69a48919662cb822a3be84ccfba39c9cafd44e4cc8f8ed",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-report",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-spec",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "87ccb5189d28edaf675e5f6af2e340d6eba059043ac42712cdf8e76338ee260a",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-verify",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-verify/SKILL.md",
+              "type"  : "file",
+              "digest": "db74b742764b5f80afaff048ec0cee14168c744d7dba7a279457ca4578a1bca5",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "criteriaSnapshot": [
+          {
+            "id"         : "SKILL-HANDOFF",
+            "description": "설계·구현·검증의 인계가 화면·API·저장·재조회와 칸반 원장의 같은 UUID로 연결되고, 문서·코드의 존재를 사용자 행동 검증으로 승격하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "SKILL-JOURNEYS",
+            "description": "명세에서 작업에 필요한 사용자 여정·경계·오류·복원과 기대 결과를 기준 ID 및 구체 검증 방법에 연결한다. 작은 작업은 범위에 맞게 간소화한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "SKILL-VALIDATE",
+            "description": "정본·발견 경로와 기존 권한·검토 정책을 유지하고 수정 스킬의 형식·링크·행동 적용성을 독립 패스로 확인한다. 오픈소스 채택은 공식 출처·revision·라이선스와 연결한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--input-type=module",
+          "-e",
+          "import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const r=spawnSync(process.execPath,['--input-type=module','-e',\"import assert from 'node:assert/strict';import {readFile,readdir} from 'node:fs/promises';import path from 'node:path';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';import {readWork,openWork,assessWork} from './scripts/workflow/work.ts';import {listWorkReports} from './scripts/workflow/reports.ts';\\nconst base=path.resolve('.www/evidence/session-completion-20261116/skills-forward-current');const initial=await readFile(path.join(base,'source-before.sha256'),'utf8');assert.equal(initial,await readFile(path.join(base,'source-after.sha256'),'utf8'));assert.equal(initial,await readFile(path.join(base,'source-retry-after.sha256'),'utf8'));let sourceFiles=0;for(const line of initial.trim().split('\\\\n')){const m=/^([a-f0-9]{64})\\\\s+(.+)$/.exec(line);assert(m);assert.equal(createHash('sha256').update(await readFile(m[2])).digest('hex'),m[1],m[2]);sourceFiles++;}\\nasync function records(dir){let found=[];for(const item of await readdir(dir,{withFileTypes:true})){const f=path.join(dir,item.name);if(item.isDirectory())found.push(...await records(f));else if(item.name==='work.json')found.push(f);}return found;}\\nconst summary=[];for(const name of ['a','b','c4']){const repo=path.join(base,name);const files=await records(path.join(repo,'docs/work'));assert.equal(files.length,1);const raw=JSON.parse(await readFile(files[0],'utf8'));const w=await readWork({repo,workId:raw.id});assert(w.record.criteria.every(c=>c.result!=='passed'));assert.equal(w.record.workflow.nextAction,'verify',name);const taskText=await readFile(path.join(path.dirname(files[0]),'tasks.md'),'utf8');assert(taskText.includes('verify'),name);if(name!=='a'){const specText=await readFile(path.join(path.dirname(files[0]),'spec.md'),'utf8');const scenarioRows=specText.split('\\\\n').filter(l=>l.startsWith('|')).map(l=>l.split('|').slice(1,-1).map(v=>v.trim()));for(const criterion of raw.criteria){const row=scenarioRows.find(r=>r[0]===criterion.id);assert(row,criterion.id);assert(row[1].includes('입력:')&&row[1].includes('행동:'),criterion.id);assert(row[2].length>0&&row[3].length>0,criterion.id);}}const state=await assessWork({repo,workId:raw.id});assert.equal(state.complete,false);assert(state.reasons.length>0);assert(w.record.workflow.documentationReviews.length>0);const catalog=await listWorkReports({repo});assert(catalog.reports.some(r=>r.workId===raw.id&&r.kind==='authored'));if(name==='a'){assert.equal(raw.id,'work-84cda38b-7265-40d7-bf47-5a22ece1b3a2');const reopened=await openWork({repo,role:'www-dev',direct:true,decision:{workId:raw.id}});assert.equal(reopened.created,false);const consistency=w.record.workflow.artifactReviews.find(r=>r.kind==='consistency');assert(consistency);assert.equal(consistency.coverage.length,4);const tasks=await readFile(path.join(path.dirname(files[0]),'tasks.md'),'utf8');for(const criterion of raw.criteria)assert(tasks.includes(criterion.id));}if(name==='b'){assert.deepEqual(raw.criteria.map(c=>c.id),['EXPORT-SAVE','EXPORT-ERROR']);execFileSync(process.execPath,['--test','test/export.test.ts'],{cwd:repo,stdio:'pipe'});}summary.push({name,workId:raw.id,records:1,complete:state.complete,unverified:raw.criteria.map(c=>c.id)});}\\nconst trace=(await readFile(path.join(base,'c4-run.jsonl'),'utf8')).trim().split('\\\\n').map(line=>JSON.parse(line));const real=trace.find(x=>x.label==='real-result');assert.equal(real.data.code,0);assert.equal(real.data.timeout,false);const execution=JSON.parse(real.data.stdout);assert.equal(execution.executor,'process');assert.equal(execution.harness.executor,'process');assert.equal(execution.harness.toolExecutor,'process');assert.equal(execution.harness.ok,true);assert.equal(execution.harness.sourceStable,true);assert.equal(execution.host.code,0);for(const stage of ['pre','post']){assert(execution.harness[stage].typecheck.every(t=>t.code===0));assert.equal(execution.harness[stage].boxboxStatus,'disabled');}const before = JSON.parse(await readFile(path.join(base, 'c4-context-sha256.json'), 'utf8'));\\nconst after = JSON.parse(await readFile(path.join(base, 'c4-context-after.json'), 'utf8'));\\nassert.equal(before.length, 20);\\nassert.equal(after.length, 20);\\nconst byPath = rows => {\\n  const result = new Map();\\n  for (const row of rows) {\\n    assert.equal(typeof row.file, 'string');\\n    assert(!result.has(row.file), `중복 문맥 경로: ${row.file}`);\\n    result.set(row.file, row);\\n  }\\n  return result;\\n};\\nconst initialByPath = byPath(before);\\nconst finalByPath = byPath(after);\\nassert.deepEqual([...initialByPath.keys()].sort(), [...finalByPath.keys()].sort());\\nfor (const [file, initial] of initialByPath) {\\n  const final = finalByPath.get(file);\\n  assert.equal(initial.equal, true, file);\\n  assert.match(initial.source, /^[a-f0-9]{64}$/);\\n  assert.equal(initial.copy, initial.source, file);\\n  assert.equal(final.before, initial.source, file);\\n  assert.equal(final.rootAfter, initial.source, file);\\n  assert.equal(final.fixtureAfter, initial.source, file);\\n  for (const candidate of [file, path.join(base, 'c4', file)]) {\\n    const actual = createHash('sha256').update(await readFile(candidate)).digest('hex');\\n    assert.equal(actual, initial.source, candidate);\\n  }\\n}\\n\\nconst c4=JSON.parse(await readFile((await records(path.join(base,'c4/docs/work')))[0],'utf8'));const spec=c4.workflow.artifactReviews.find(r=>r.kind==='spec');assert(spec);assert(Date.parse(spec.reviewedAt)<=Date.parse(trace.find(x=>x.label==='real-start').time));const text=await readFile(path.join(base,'c4/src/text.ts'),'utf8');assert(text.includes('저장하기'));assert(!text.includes('저장하가'));console.log(JSON.stringify({scope:'스킬 독립 실제 산출물의 구체 여정 행·UUID·원장/계획 단계·실제 Codex CLI·문맥 20파일·실제 컴파일러·미검증 완료 거부. 제품 GUI·의미 수용·필수 감사 통과 아님.',sourceFiles,summary,process:{executor:'process',toolExecutor:'process',requestedModel:execution.modelExecution.requested.model,observed:execution.modelExecution.observed,boxbox:'disabled'}}));\"],{encoding:'utf8',maxBuffer:4000000});writeFileSync(\".www/evidence/session-completion-20261116/skills-process-current.stdout\",r.stdout??'');writeFileSync(\".www/evidence/session-completion-20261116/skills-process-current.stderr\",r.stderr??'');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');process.exit(r.status??1);"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "SKILL-HANDOFF",
+          "SKILL-JOURNEYS",
+          "SKILL-VALIDATE"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current.md",
+            "size"  : 15844,
+            "digest": "17279a7dcea79cd7546e274a9a4a60cba13d034864f330c7e4358519eed151b1"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current/alignment-observed.json",
+            "size"  : 4611,
+            "digest": "d12a8b68b5507cb82a66f9953470b9d7b3a498dc724e5031b639f37e4bbc2e69"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current/c4-context-after.json",
+            "size"  : 6089,
+            "digest": "12e40ea02a85e0aebd351e9cfe60e4e5803dfa31085d60bff7f629e943553514"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current/c4-context-sha256.json",
+            "size"  : 4609,
+            "digest": "60967be9265bdcc99107c834c964b9db4355abfce5e4cb956b15cdfd25fc980a"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current/c4-run.jsonl",
+            "size"  : 191801,
+            "digest": "1614f2125f7fa6b21c1d97e99a79c3e19f79f91f56fb02b9c32c56e3f3e13f75"
+          },
+          {
+            "path"  : ".www/evidence/session-completion-20261116/skills-forward-current/journeys-observed.json",
+            "size"  : 2199,
+            "digest": "e6f4da229c438b95c794fbac1ff739dc53a5ae93b73984bbd84669a48f0917a4"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 864,
+            "digest"         : "5c283e96661d0c4caa8bcd411bec6c8528644dac605b477d84cb1984bfcb0547",
+            "truncated"      : false,
+            "retainedBytes"  : 864,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-8dbb91e1-df83-4d38-bb90-f19630624095",
+        "startedAt"  : "2026-11-16T07:28:06.480Z",
+        "completedAt": "2026-11-16T07:28:08.467Z",
+        "source": {
+          "head": "a720468172a0ea64cb3b4a8e1de36289144df98d",
+          "digest": "a14608edb84f3ac62d4558c21fc15dfb06a594a196e81ab4a9592e51fe49f98c",
+          "inputs": [
+            "agents/www/AGENT.md",
+            "docs/skills/ARTIFACT_REVIEW.md",
+            "docs/skills/MODEL_POLICY.md",
+            "docs/skills/REPORTS.md",
+            "docs/skills/WORKFLOW.md",
+            "docs/skills/templates",
+            "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/design.md",
+            "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/spec.md",
+            "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/tasks.md",
+            "skills/www"
+          ],
+          "files": [
+            {
+              "path"  : "agents/www/AGENT.md",
+              "type"  : "file",
+              "digest": "c9c2f118a26a7484c4c9c629ac25ec06b2e280cd4daef2b4154ac9ccf2cf956d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/ARTIFACT_REVIEW.md",
+              "type"  : "file",
+              "digest": "707b9f18418b02125192454b73e1216bcfac66aafa52d024cad03fd2d3a29e47",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/MODEL_POLICY.md",
+              "type"  : "file",
+              "digest": "0c6808f1d0b6ccb3ced9cbdbf4a470baab618c1bc93a1f6bf90121a8ebe91046",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/REPORTS.md",
+              "type"  : "file",
+              "digest": "c94676ad5da39ea49d3861f625d246a6bf613ed1d96da25102f9fa2257345648",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/WORKFLOW.md",
+              "type"  : "file",
+              "digest": "98599da42781749ad30fc2a817740d013bdeb52a439a512c6e1655a6c670a0bd",
+              "mode"  : 420
+            },
+            {
+              "path": "docs/skills/templates",
+              "type": "directory"
+            },
+            {
+              "path"  : "docs/skills/templates/commit.md",
+              "type"  : "file",
+              "digest": "6ad46289e00fcf125f55dd47af9654ed0f207fd8ea0e43feb4b5755b4df2ab77",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/design.md",
+              "type"  : "file",
+              "digest": "45a96438ac2fdc0e7741a1ebdc878dad61e3fa80d6f96fea518a8967c93ae542",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/diagnosis.md",
+              "type"  : "file",
+              "digest": "e2acde41cae76d18ff72406840d8f55278d4b619e07ad302a2157ec95740ead1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/spec.md",
+              "type"  : "file",
+              "digest": "14451a10bdd1278385ec2b906fb483182096ab91837904c9d46328781ceb571f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/tasks.md",
+              "type"  : "file",
+              "digest": "e626ede8fe43e24669ff88dbd4a18e6bba7838060e9a7a72e408a0ea358532f5",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/verification.md",
+              "type"  : "file",
+              "digest": "c9247a7acc174b7884977f5273a6534b94e06693dbcc9953ea68c29b71442e7f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/skills/templates/work.json",
+              "type"  : "file",
+              "digest": "4c81bc3daf66957cf3fc672d081f2c96c0c8c83bbe3726db53b2fc10c50970fa",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/design.md",
+              "type"  : "file",
+              "digest": "b654d85697e0da7f93b1a8402350211d4be6a55c5df64f136b15b11c0541a9dc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/spec.md",
+              "type"  : "file",
+              "digest": "bfa6bc9fdff22b62a55b2255f1a2f0a2afad126e052de30bdfc42e3c32a4621c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/work/Workflow/020-사용자 여정과 칸반 인계를 개발 스킬에 연결/tasks.md",
+              "type"  : "file",
+              "digest": "817aed7ab267dfaa455d1afd433cf02bc4dc722282ddbed911e5601acdbe7f4a",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www",
+              "type": "directory"
+            },
+            {
+              "path": "skills/www/www-build",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-build/SKILL.md",
+              "type"  : "file",
+              "digest": "0fdda41c4c60aa18542b29c3f515f49642ff25a7bf54e62eca25f44fdb1e5fa8",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-commit",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-commit/SKILL.md",
+              "type"  : "file",
+              "digest": "1bc4a0ce3157cd533738857b56809d8ea4ea0351228cff51225aaeb93d76ee04",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-design",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-design/SKILL.md",
+              "type"  : "file",
+              "digest": "4b0b18d19eeef148dc77fab45adfc036333eb146bf786e83b552fef0bcc83a0c",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-diagnose",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-diagnose/SKILL.md",
+              "type"  : "file",
+              "digest": "3678511c0e8bdcee9d69a48919662cb822a3be84ccfba39c9cafd44e4cc8f8ed",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-report",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-report/SKILL.md",
+              "type"  : "file",
+              "digest": "5b7d6b2f2a098f6599fadef1e53778f4a8e25375f6d85dcc3094baa250d23c66",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-spec",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-spec/SKILL.md",
+              "type"  : "file",
+              "digest": "87ccb5189d28edaf675e5f6af2e340d6eba059043ac42712cdf8e76338ee260a",
+              "mode"  : 420
+            },
+            {
+              "path": "skills/www/www-verify",
+              "type": "directory"
+            },
+            {
+              "path"  : "skills/www/www-verify/SKILL.md",
+              "type"  : "file",
+              "digest": "1e2e3afa16df1ff55b5899df557cc2aff6213884defa57f488969381198a09aa",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "criteriaSnapshot": [
+          {
+            "id"         : "SKILL-HANDOFF",
+            "description": "설계·구현·검증의 인계가 화면·API·저장·재조회와 칸반 원장의 같은 UUID로 연결되고, 문서·코드의 존재를 사용자 행동 검증으로 승격하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "SKILL-JOURNEYS",
+            "description": "명세에서 작업에 필요한 사용자 여정·경계·오류·복원과 기대 결과를 기준 ID 및 구체 검증 방법에 연결한다. 작은 작업은 범위에 맞게 간소화한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "SKILL-VALIDATE",
+            "description": "정본·발견 경로와 기존 권한·검토 정책을 유지하고 수정 스킬의 형식·링크·행동 적용성을 독립 패스로 확인한다. 오픈소스 채택은 공식 출처·revision·라이선스와 연결한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--input-type=module",
+          "-e",
+          "import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const r=spawnSync(process.execPath,['--input-type=module','-e',\"import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';import {writeFileSync,readFileSync} from 'node:fs';import {createHash} from 'node:crypto';for(const s of ['www-spec','www-design','www-build','www-verify']){const r=spawnSync('python3',['/Users/jonghoPro/.codex/skills/.system/skill-creator/scripts/quick_validate.py','skills/www/'+s],{encoding:'utf8'});console.log(s,r.stdout,r.stderr);assert.equal(r.status,0);}const w=spawnSync(process.execPath,['scripts/check-workflow.ts'],{encoding:'utf8'});console.log(w.stdout,w.stderr);assert.equal(w.status,0);for(const [name,url] of [['pstack','https://raw.githubusercontent.com/cursor/plugins/bf0c7cd80abdbf7fe47b634978a7d1b4071f71a7/pstack/LICENSE'],['gajae-code','https://raw.githubusercontent.com/Yeachan-Heo/gajae-code/51fd21e58ddef6b3482575d97eac48fbddc838e5/LICENSE']]){const r=spawnSync('curl',['--fail','--silent','--show-error','--max-time','30',url],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);assert(r.stdout.includes('MIT License'));writeFileSync('.www/evidence/session-completion-20261116/'+name+'-license-current.txt',r.stdout);console.log(name,url,createHash('sha256').update(r.stdout).digest('hex'));}console.log('형식·발견 링크·원장계약·고정 revision 라이선스 실제 확인. 스킬 행동·제품 GUI 검증 아님.');\"],{encoding:'utf8',maxBuffer:1000000});writeFileSync('.www/evidence/session-completion-20261116/skills-format-current.stdout',r.stdout??'');writeFileSync('.www/evidence/session-completion-20261116/skills-format-current.stderr',r.stderr??'');process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');process.exit(r.status??1);"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "SKILL-VALIDATE"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/evidence/session-completion-20261116/opensource-workflow-reference.md",
+            "size"  : 8612,
+            "digest": "63c80b9b166a6e4135158bb1e58d790297dfc83363a4489e14a09d7fec7158c0"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 692,
+            "digest"         : "8f126310242813f79f797ee552c140ab55b627b0059b7b622b88ccb205029faf",
+            "truncated"      : false,
+            "retainedBytes"  : 692,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [
+      {
+        "id"            : "review-b12830bc-d1c6-49b6-8741-dc45134f6f43",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "2cb227a5dfdd254f52e1d228efcc7e9faa51729885335b66429ef753fd080c90",
+        "criteriaDigest": "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "50d424bfc127e66a76001e46591f5c685d992dffd36f7d076a618fe33b3f6c1c"
+        },
+        "failure": null,
+        "findings": [
+          "검토 범위: Bash 도구가 없어 git diff/status/show는 실행하지 못했다. 변경 전후 diff는 대조하지 못했고, Read/Grep/Glob으로 현재 작업 트리의 내용만 읽었다. 읽은 파일은 AGENTS.md, agents/www/AGENT.md, docs/skills/WORKFLOW.md·ARTIFACT_REVIEW.md·REPORTS.md(MODEL_POLICY.md는 grep), 네 SKILL.md(spec/design/build/verify), 네 템플릿(spec/design/tasks/verification), 작업 020의 work.json·spec.md·tasks.md·verification.md, docs/work/INDEX.md, 그리고 .www/evidence/session-completion-20261116/의 skills-forward-test.md와 opensource-workflow-reference.md(grep)다. 요청의 criteriaDigest 427560f8…는 작업 020(work-d43bfed7-e705-4c22-aceb-f00dc1ede0b8)과 일치했다. 요청의 파일별 digest는 검증 시도 attempt-d629ee20의 파일 목록과 일치했다. 테스트·검사는 실행하지 않았다.",
+          "문서 본문 자체에는 구체적인 결함을 찾지 못했다. WORKFLOW.md:100-108은 사용자 여정→기준 ID→검사 방법→실제 관찰의 추적 규칙을 한 곳에 둔다. WORKFLOW.md:35-39는 같은 UUID의 계획과 칸반 인계(nextAction·blockedReason)를 기존 원장 필드로 연결하고 새 상태·자동 동기화는 부정한다. 네 스킬과 네 템플릿은 이 두 절을 참조만 하고 규칙을 다시 정의하지 않는다. 사전 행동 분석에서 지적된 두 문제도 반영됐다. 과거 Terra 대체 예외는 WORKFLOW.md:152와 MODEL_POLICY.md:41에서 현재 직접 지침과 구분된다. 감사 미실행 시 보고 순서는 REPORTS.md:9에 정리됐다. 기존 권한 승계, 작은 작업 간소화, ARTIFACT_REVIEW의 advisory 성격도 유지된다.",
+          "결함(증거 범위 확대): work.json:13-52에서 SKILL-JOURNEYS·SKILL-HANDOFF·SKILL-VALIDATE 세 기준이 모두 result:\"passed\"이고, 증거 요약은 \"실제 검증 passed; 현재 적용 가능\"이다. 그런데 연결된 시도 attempt-d629ee20(work.json:91-342, verification.md:47-64)은 `node scripts/check-workflow.ts` 한 번뿐이고 exit 0이다. 같은 verification.md:10은 이 검사를 '형식·존재·연결 검사'라고 적고, :21-25의 표는 UC-1 '독립 요청 적용·실제 칸반 관측 미실행', UC-2 '스킬 행동검사 미실행', UC-3 '독립 적용 미실행'으로 남겨 두었다. 이는 WORKFLOW.md:108('실제 흐름을 실행하지 못했으면 그 구간을 미검증으로 남기고, 관측한 범위만 기준 결과에 반영'), :124('타입 검사나 링크 존재만으로 사용자 동작을 관찰했다고 쓰지 않는다'), www-verify SKILL.md:24에 어긋난다. 통과로 기록한 범위가 실제로 관찰한 범위보다 넓다.",
+          "결함(명세의 검사 방법과 불일치): spec.md:26은 UC-1/SKILL-HANDOFF의 확인 방법을 '독립 에이전트에 실제 역할과 최소 요청을 주고 생성/선택한 원장·계획·인계 산출물을 검사'로 정했다. 시도의 artifacts로 연결된 skills-forward-test.md:5와 :34는 스스로 '가상 접수', '실제 원장·소스 변경, 공식 하네스나 앱의 실행 … 하지 않았다', '모의 행동 분석이다. 어떠한 테스트·GUI·독립 감사도 실행하거나 통과시키지 않았다'라고 밝힌다. 따라서 명세가 요구한 생성 산출물 검사는 수행되지 않았는데 SKILL-HANDOFF가 passed다.",
+          "결함(옛 소스에 대한 증거를 현재 결과로 사용): skills-forward-test.md:29-30은 수정 전 WORKFLOW.md:152와 REPORTS.md:9 문구를 근거로 지적한다. 즉 이 분석은 시도 3 수정 이전의 소스를 대상으로 했다. verification.md:43-45도 이후 WORKFLOW·MODEL_POLICY·REPORTS를 수정했고 '이 수정의 독립 확인과 필수 완료 감사는 통합 담당에게 인계한다'고 적는다. 그런데 이 원문이 수정 후 source digest f306a9…의 시도에 artifact로 묶여 SKILL-VALIDATE('행동 적용성을 독립 패스로 확인')의 passed 근거가 됐다. 그 결과 수정 후 내용에 대한 독립 행동 확인이 없는데도 '현재 적용 가능'으로 표시된다. tasks.md:17-23의 단위 3도 '필요 수정 후 현재 입력에 맞는 검증'을 요구한다. 수정 방향: 세 기준을 실제로 관찰한 범위에 맞춰 unverified(또는 부분 관찰과 한계를 적은 결과)로 되돌린다. 또는 수정 후 소스에 대해 명세가 정한 독립 적용 검사를 실제로 수행하고 그 시도를 연결한다.",
+          "경미한 결함: docs/work/INDEX.md:219-222의 020 항목에는 명세와 작업 레코드 링크만 있다. 실제로 있는 design.md와 tasks.md 링크가 빠져 있다. WORKFLOW.md:58('생성된 design.md·tasks.md … 링크')과 019 등 다른 항목의 관례에 어긋난다. tasks.md:23·31과 spec.md:36의 '저작 시점 미실행' 서술도 사전 행동 분석 회수 이후 상태로 갱신되지 않았다.",
+          "참고: 오픈소스 출처 연결(opensource-workflow-reference.md:7·9·41의 공식 저장소 HEAD SHA, MIT 라이선스, 코드 미반입)은 SKILL-VALIDATE의 출처·revision·라이선스 요구를 충족하는 근거로 보인다. reviews는 비어 있고(work.json:344) status는 verifying이다. done으로 잘못 승격되지는 않았다. 다만 위 기준 결과의 과대 기록은 완료 판정의 입력이 되므로 수정이 필요하다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-b12830bc-d1c6-49b6-8741-dc45134f6f43/opus.json",
+        "startedAt"      : "2026-11-16T06:41:59.607Z",
+        "completedAt"    : "2026-11-16T06:43:29.601Z",
+        "workId"         : "work-d43bfed7-e705-4c22-aceb-f00dc1ede0b8",
+        "workRequestHash": "8ea875c01004092fcc616f12ea36a81e4f5963e6a62e6853311066d2681c3fbe",
+        "recordingRejection": [
+          "review_not_passed"
+        ]
+      },
+      {
+        "id"            : "review-0f18193f-1b53-4675-b4cd-782ace1d91fc",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "9f37cebd1a5ea4e1ff68daaee041d875faef96154e380d540fe6549df059ef76",
+        "criteriaDigest": "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "6941e2469ff2125ba3132f19d1d657dcb83c94f39273584a7d7a1c73e5dc0624"
+        },
+        "failure": null,
+        "findings": [
+          "검토 범위: Read/Grep/Glob으로 현재 작업 트리를 읽었다. 대상은 agents/www/AGENT.md, docs/skills/WORKFLOW.md·ARTIFACT_REVIEW.md, MODEL_POLICY.md 제목(grep), 네 SKILL.md(spec/design/build/verify), 네 템플릿, 작업 020의 spec/design/tasks/verification/work.json, skills-forward-current.md, skills-current-verification.json이다. retry.jsonl은 label만 grep했다. fixture A/B/C/C2 work.json은 nextAction·status만, fixture A tasks.md는 일부 줄만 grep했다. git diff/status/show는 실행하지 않아 변경 전후는 대조하지 못했다. 테스트와 검사도 실행하지 않았다. REPORTS.md 본문과 MODEL_POLICY.md 본문은 읽지 않았다.",
+          "문서 본문 자체에서는 구체적 결함을 찾지 못했다. WORKFLOW.md:35-39(계획과 칸반 인계)와 :100-108(사용자 여정과 기준별 추적)이 정본 역할을 하고, 네 스킬·AGENT.md:17,54·ARTIFACT_REVIEW.md:16·네 템플릿은 이 두 절을 참조만 한다. 참조 앵커 #사용자-여정과-기준별-추적, #계획과-칸반-인계, #문서-영향-검토, #독립-검토의-책임, MODEL_POLICY의 #분해와-실행·#독립-검토는 실제 제목과 일치한다. 권한 승계, 작은 작업 간소화, advisory 한계, 새 상태·필드를 만들지 않는다는 점도 유지된다.",
+          "결함(행동 증거와 원장 결과 불일치, SKILL-HANDOFF/UC-1): fixture A의 계획 문서 a/docs/work/Home/004-…/tasks.md:55는 '다음 단계는 기존 원장의 verify'라고 쓴다. 같은 fixture의 원장 work.json:89는 \"nextAction\": \"review\"다. 원래 정본 docs/work/Home/004-…/work.json:89는 verify였다. WORKFLOW.md:39는 계획 문서의 다음 행동을 원장 workflow.nextAction과 연결하도록 요구한다. 결국 forward 산출물 자체가 계획과 원장의 불일치를 보여 준다. 그런데 attempt-fed22ec4 검사 스크립트는 tasks.md에 기준 ID가 있는지와 consistency coverage 수만 확인하고 nextAction 대응은 검사하지 않았다. 그 상태로 SKILL-HANDOFF를 passed로 매핑했다. skills-forward-current.md:7의 '다음 단계 verify를 추가했다'는 서술도 최종 원장 상태와 다르다.",
+          "결함(증거 범위 확대, SKILL-JOURNEYS): attempt-fed22ec4의 단언은 a/b/c2 원장 개수, UUID, complete=false, 기준 미통과, 문서 검토와 보고서의 존재, harness.ok, 타입 검사 종료 코드, 명세 검토 시각, text.ts 문자열만 확인한다. B·C2 spec.md에 입력·행동·기대 결과·기준 ID·검사 방법을 잇는 여정이 있는지는 하나도 검사하지 않는다. 여정 내용은 skills-forward-current.md:13,19의 서술에만 근거한다. 이 서술은 검증 의존 원문이지 관찰이 아니다. 그런데도 work.json:15-30은 SKILL-JOURNEYS를 '실제 검증 passed; 현재 적용 가능'으로 기록한다. 이는 WORKFLOW.md:108·124의 '관측한 범위만 기준 결과에 반영'에 어긋난다.",
+          "결함(주입 실행기를 완료 증거로 사용): attempt-fed22ec4는 execution.harness.executor==='injected'를 단언하고, 그 성공을 세 기준의 passed 근거에 포함한다. skills-forward-current.md:33도 C2 수정은 '실제 외부 모델 저작이 아니다', :23은 'B·C의 생성 산출물은 수동으로 채웠으며 공식 호스트가 스킬을 실제로 수용했는지 확인하지 않았다'고 밝힌다. WORKFLOW.md:96은 '테스트 주입 실행기의 성공은 … 완료 증거로 사용하지 않는다'고 정한다. 따라서 UC-3의 작은 수정 적용과 SKILL-VALIDATE의 '행동 적용성을 독립 패스로 확인'을 passed로 둔 것은 실제 관찰 범위를 넘는다.",
+          "결함(오래된 시도를 현재 증거로 유지): work.json의 세 기준은 attempt-d629ee20도 '실제 검증 passed; 현재 적용 가능'이라는 요약으로 계속 연결한다. 이 시도는 Opus review-b12830bc가 과대 매핑이라고 fail 판정한 대상이다(work.json:666-668). verification.md:70은 기준을 다시 unverified로 두었다고 적지만 현재 결과는 다시 passed다. 또 이 시도의 inputs는 020 spec/design/tasks가 빠진 7개뿐이다(work.json:117-125). 현재 workflow.inputs(10개)와 다르므로 WORKFLOW.md:122에 따르면 scope_changed 대상이다. 그런데도 '현재 적용 가능'으로 남아 있다.",
+          "결함(권한 범위 밖 변경의 미연결): work.json:75-83 authorization.writePaths에는 docs/skills/MODEL_POLICY.md, docs/skills/REPORTS.md, docs/DEVELOPMENT.md가 없다. 그러나 documentationReviews(work.json:742-764)는 세 파일을 모두 'updated'로 기록한다. verification.md:43도 '통합 담당의 범위 확대로' MODEL_POLICY·REPORTS를 수정했다고 적는다. spec.md:13은 '범위 확대는 기존 권한으로 간주하지 않는다', :16은 '모델/검토 정책 변경'을 제외로 둔다. 확대를 허용한 직접 요청 근거나 갱신된 authorization이 원장에 연결되어 있지 않다. 변경 자체(WORKFLOW.md:152의 과거 예외 비승계)는 내용상 타당해 보인다. 다만 권한 기록이 이를 뒷받침하지 않는다.",
+          "정상 확인: work.json status는 verifying, nextAction은 review이고 reviews에는 fail 한 건뿐이므로 done으로 승격되지 않았다. tasks.md:23,31과 skills-forward-current.md:23,34-36은 GUI·호스트 수용·필수 Opus 감사가 미실행임을 명시한다. 첫 C의 순서 위반과 C2 설정 실패도 보존돼 있다. 오픈소스 출처의 revision·MIT 라이선스 연결은 design.md:36-37에 있다.",
+          "수정 방향: 세 기준을 실제 관찰 범위에 맞게 unverified 또는 부분 결과로 되돌린다. 예를 들어 UC-1의 원장 연결, 완료 거부 경계, 타입 검사 등 관측한 하위 항목만 한계와 함께 기록한다. fixture A의 계획과 nextAction 불일치를 해소하거나 실패로 기록한다. 여정 내용을 실제로 검사하는 단언을 추가하고, 주입 실행기 결과는 완료 증거에서 제외한다. attempt-d629ee20의 '현재 적용 가능' 요약을 정정한다. MODEL_POLICY·REPORTS·DEVELOPMENT 변경의 직접 권한 근거를 authorization에 연결한다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-0f18193f-1b53-4675-b4cd-782ace1d91fc/opus.json",
+        "startedAt"      : "2026-11-16T06:59:50.917Z",
+        "completedAt"    : "2026-11-16T07:01:23.361Z",
+        "workId"         : "work-d43bfed7-e705-4c22-aceb-f00dc1ede0b8",
+        "workRequestHash": "8ea875c01004092fcc616f12ea36a81e4f5963e6a62e6853311066d2681c3fbe",
+        "recordingRejection": [
+          "review_not_passed"
+        ]
+      },
+      {
+        "id"            : "review-06cb38d1-38de-48ec-a1cc-c15875db145f",
+        "provider"      : "anthropic",
+        "model"         : "opus",
+        "observedModel" : "claude-opus-5-5",
+        "verdict"       : "fail",
+        "readOnly"      : true,
+        "sourceDigest"  : "2e5683995ce35f6d90609fdb3aff983764e232d0bf2825919e373fb05b662afb",
+        "criteriaDigest": "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "policyHash"    : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"      : "process",
+        "fallbackReason": null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "882a78b1599c2be29a55053eba42feb896edec4d698017c91b7eb1948794c779"
+        },
+        "failure": null,
+        "findings": [
+          "검토 범위: Read/Grep만 사용했고, 실행한 테스트나 검사는 없다. 읽은 파일: 작업 020의 spec.md·tasks.md·verification.md·work.json(1-701행과 1160-1445행, 그 사이는 grep으로 digest·result·review만 확인), skills-forward-current.md, alignment-observed.json, journeys-observed.json, skills-process-current.stdout, fixture c4 spec.md, fixture b tasks.md. git diff/show는 실행하지 않았다. 네 SKILL.md, 네 템플릿, WORKFLOW·ARTIFACT_REVIEW·MODEL_POLICY·REPORTS·AGENT.md의 본문은 이번에 다시 읽지 않았다. 따라서 문서 본문의 정합성은 판정하지 않았고, 이전 Opus 두 건의 '본문 결함 없음'이라는 소견을 재검증했다고 주장하지 않는다.",
+          "결함(사후 교정한 fixture를 스킬 행동 증거로 사용, SKILL-HANDOFF): 두 번째 Opus(review-0f18193f, 06:59-07:01Z)는 fixture A에서 tasks.md:55의 verify와 원장 nextAction=review가 어긋난다고 지적했다. 그 뒤 07:05 UTC에 실험자가 A에서 공식 `advance verify`를 호출해 원장을 계획에 맞췄다(skills-forward-current.md:40). B도 '계획을 실제 이력에 맞게 수정'한 다음 advance verify를 실행했다(같은 파일 :62). 그런데 정본 스킬의 해시는 처음부터 끝까지 같다(source-before=after=retry-after, :72 '정본 20개 해시는 … 같았다'). 결국 현재 스킬을 적용한 원래 결과는 계획과 원장의 불일치를 만들었고, 그 불일치는 스킬이 아니라 리뷰 지적을 받은 실험자가 손으로 메웠다. attempt-21899a93은 `nextAction==='verify'`를 단언(work.json:94)하는데, 이것은 교정된 fixture를 검사할 뿐 스킬이 인계 정합을 이끌어 낸다는 것을 보여 주지 못한다. 그런데도 work.json:33-49는 SKILL-HANDOFF를 passed / '현재 적용 가능'으로 기록한다. 원래 불일치를 실패 관측으로 남기고 기준을 unverified로 두거나, 스킬을 고친 뒤 새 독립 실행으로 다시 확인해야 한다.",
+          "결함(수동 작성·사후 보강한 여정 행을 통과 근거로 사용, SKILL-JOURNEYS): skills-forward-current.md:23은 'B·C의 생성 산출물은 수동으로 채웠으며 공식 호스트가 스킬을 실제로 수용했는지 확인하지 않았다'고 적는다. :41-42는 Opus 지적 뒤 B·C2 spec 표에 '입력'을 보강하고 다시 검토했다고 적는다. C4 spec.md:7의 `입력: … 행동: …` 행도 실제 CLI 실행 전에 실험자가 쓴 것이다. Codex CLI가 바꾼 것은 src/text.ts 한 줄뿐이다(:54-56). attempt-21899a93의 여정 단언은 `row[1].includes('입력:')&&row[1].includes('행동:')`과 빈 셀 여부만 본다. 즉 리뷰 지적 뒤 사람이 넣은 문자열이 있는지를 확인하는 셈이다. 스킬 지침이 여정→기준→검사 연결을 이끌어 낸다는 독립 행동 증거가 아니므로, '실제 검증 passed; 현재 적용 가능'(work.json:26-28)은 관측 범위를 넘는다. 또 journeys-observed.json은 C4가 아니라 C2 행만 담고 있어, 현재 검증 대상(c4)과 증거 원문이 서로 다르다.",
+          "결함(SKILL-VALIDATE의 구성 요소가 현재 시도로 검사되지 않음): 이 기준은 '수정 스킬의 형식·링크·행동 적용성'과 '오픈소스 채택의 공식 출처·revision·라이선스 연결'을 요구한다(work.json:52). 그런데 현재 기준에 연결된 유일한 통과 시도 attempt-21899a93의 스크립트에는 quick_validate, check-workflow 링크 검사, design.md/opensource-workflow-reference.md의 revision·라이선스 확인이 하나도 없다. check-workflow를 돌린 attempt-d629ee20은 소스 digest f306a9…와 7개 입력만 다룬 옛 범위다. 그래서 현재 기준 evidence에서도 빠졌다(work.json:19-66). quick_validate는 verification.md:9의 서술일 뿐, 원장에 기록된 실행 시도가 없다. 따라서 SKILL-VALIDATE를 passed로 둘 현재 근거가 원장에 없다.",
+          "결함(독립성·행동 증거의 범위): 유일한 실제 모델 행동은 C4의 Codex CLI 한 줄 수정이다. 요청 모델은 gpt-6-luna이고 관측 모델은 null(host_metadata_unavailable)이다(skills-process-current.stdout). 이 실행은 이미 쓰인 명세에 따라 오타를 고쳤을 뿐이다. UC-1(계획 요청 접수·재개)과 UC-2(명세→설계→구현→검증 인계)에서 스킬이 산출물을 만들어 냈는지는 관측하지 않았다. spec.md:26-28은 '독립 에이전트에 실제 역할과 최소 요청을 주고 생성/선택한 원장·계획·인계 산출물을 검사'하도록 정했지만, A/B 산출물은 실험자가 공식 API를 직접 호출하고 손으로 쓴 것이다. 세 기준을 전부 passed로 둔 것은 WORKFLOW의 '관측한 범위만 기준 결과에 반영' 원칙을 넘는다(앞선 Opus가 이 줄을 근거로 들었고, 이번에는 해당 줄을 다시 읽지 않았다).",
+          "경미한 결함(작업 문서가 현재 상태와 다름): tasks.md:23과 spec.md:36은 아직 '격리 A/B/C2'만 언급하고, 현재 근거인 C4 실제 CLI 실행과 A/B의 사후 정합 교정을 반영하지 않았다. spec.md:16은 '모델/검토 정책 변경'을 제외 범위로 두고 있다. 반면 :45와 authorization.writePaths(work.json:83-85)에는 MODEL_POLICY·REPORTS·DEVELOPMENT가 추가됐다. 제외 목록의 표현이 '정책 값 변경 제외, 문구 정합화 포함'으로 갱신되지 않아 범위를 읽을 때 혼동될 수 있다.",
+          "정상 확인: 작업 status는 verifying, nextAction은 review다. reviews에는 Opus fail 두 건만 있어 done으로 승격되지 않았다. A/B/C4 fixture의 기준은 모두 unverified이고 공식 complete=false로 거부됐다(skills-process-current.stdout). verification.md:151, skills-forward-current.md는 GUI·의미 수용·필수 감사 미실행을 명시한다. 이전의 실패한 시도(3b612b91)와 injected C2, 개발 안내 누락 C3도 이력으로 보존돼 있다. MODEL_POLICY·REPORTS·DEVELOPMENT 변경은 writePaths와 spec.md:45로 권한이 연결됐다.",
+          "수정 방향: SKILL-HANDOFF·SKILL-JOURNEYS·SKILL-VALIDATE를 unverified로 되돌리거나, 실제 관측한 하위 항목만 한계와 함께 적은 부분 결과로 바꾼다. 하위 항목은 UUID 재사용, 완료 거부 경계, 실제 tsc 종료 코드, 정본 해시 불변이다. A/B의 원래 계획·원장 불일치는 스킬 적용의 실패 관측으로 기록한다. 그다음 필요하면 스킬을 고치고, 손대지 않은 새 독립 실행의 산출물을 그대로 검사한다. SKILL-VALIDATE에는 현재 소스를 대상으로 quick_validate, check-workflow, OSS revision·라이선스 확인을 실제로 실행한 시도를 연결한다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-06cb38d1-38de-48ec-a1cc-c15875db145f/opus.json",
+        "startedAt"      : "2026-11-16T07:20:48.602Z",
+        "completedAt"    : "2026-11-16T07:22:15.842Z",
+        "workId"         : "work-d43bfed7-e705-4c22-aceb-f00dc1ede0b8",
+        "workRequestHash": "8ea875c01004092fcc616f12ea36a81e4f5963e6a62e6853311066d2681c3fbe",
+        "recordingRejection": [
+          "review_not_passed"
+        ]
+      },
+      {
+        "id": "review-bab8d83a-067d-4a2c-b2f1-6feefe5db83e",
+        "authority": {
+          "path": ".www/evidence/reviews/review-bab8d83a-067d-4a2c-b2f1-6feefe5db83e/authority.json",
+          "hash": "326cc4189255543e25a954edb490258b2c8772af8edabef335b2546b6f929b0f"
+        },
+        "inputPathsHash"      : "bb0b70a3e262e34cb995c612d4c876c7064d5c37b26bd589ca7618cf38eacf10",
+        "observedModelMeaning": "server-selected",
+        "provider"            : "openai",
+        "model"               : "gpt-6.1-terra",
+        "observedModel"       : "gpt-6.1-terra",
+        "verdict"             : "fail",
+        "readOnly"            : true,
+        "sourceDigest"        : "a16d742d76e3050a7945a19f37df8a20f780b16f5d6504ea2763bc8504408825",
+        "criteriaDigest"      : "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "policyHash"          : "65aa42f0e1108d6bd5851986660b3fc17dd9f116daf9c25c3c72f9eb2cea00a0",
+        "executor"            : "process",
+        "fallbackReason"      : null,
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "f86b2a3dcdaf16a5626ce7e921f1ed80e9caa57652fccb45ce259aa1c4397012"
+        },
+        "failure": null,
+        "findings": [
+          "계획과 원장의 다음 단계가 일치하지 않는다. 작업 폴더의 tasks.md 현재 인계는 다음 실제 단계를 verify로 지정하지만, 같은 폴더 work.json:87의 workflow.nextAction은 review다. tasks.md에는 공식 감사도 남았다고 적혀 있어 어느 단계를 먼저 수행할지 모호하며, 공식 기록 변경 후 원장과 계획을 맞추도록 한 WORKFLOW.md의 계획·칸반 인계 규칙과 어긋난다.",
+          "work.json:35-37은 SKILL-VALIDATE에 연결된 attempt-8dbb91e1을 '현재 적용 가능'으로 표시하지만, 해당 시도의 소스 목록에 기록된 WORKFLOW.md와 tasks.md의 digest는 이번 검토 입력의 digest와 다르다. 기준 자체는 unverified로 유지되어 있으나, 이 증거 연결의 현재성 표시는 소스 변경을 반영하지 못한다. 기존 시도를 보존하면서 현재 적용성을 다시 판단해야 한다.",
+          "검토 범위는 제공된 inputBundle, 작업 원장의 일부, 네 템플릿과 UC-2 보조 검토 결과다. git status 출력은 길이 제한으로 일부 잘렸다. 테스트와 검증 명령은 실행하지 않았다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-bab8d83a-067d-4a2c-b2f1-6feefe5db83e/terra.json",
+        "startedAt"      : "2026-11-16T12:20:14.792Z",
+        "completedAt"    : "2026-11-16T12:21:00.406Z",
+        "workId"         : "work-d43bfed7-e705-4c22-aceb-f00dc1ede0b8",
+        "workRequestHash": "8ea875c01004092fcc616f12ea36a81e4f5963e6a62e6853311066d2681c3fbe",
+        "recordingRejection": [
+          "review_not_passed"
+        ]
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-fd785f9c-102a-4aa2-80e2-b97d365cfea2",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T06:41:58.362Z",
+        "sourceDigest"   : "f306a90dee64f7f133561b9da73ba6cd6889436630c08fab7b9474c0bde7e6f9",
+        "criteriaDigest" : "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "documentsDigest": "1f48e58a5c6c33b0604da37535a10027866ad6beb91f5cfdef89e3e6f8442163",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "현재 칸반·입력·프로세스 책임과 충돌하지 않으며 이 작업은 역할·스킬의 수행 절차를 소유한다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "유스케이스·칸반 인계와 병렬 소유의 실제 실행 경로를 연결했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "스킬 보강은 제품 목적을 바꾸지 않으며 실제 구현의 칸반·탐색 설명과 인계 책임을 대조했다."
+          },
+          {
+            "path"    : "docs/skills/ARTIFACT_REVIEW.md",
+            "decision": "updated",
+            "reason"  : "시나리오별 검증 연결을 의미 검토에 연결하고 advisory와 강제 완료 검사를 구분했다."
+          },
+          {
+            "path"    : "docs/skills/MODEL_POLICY.md",
+            "decision": "updated",
+            "reason"  : "과거 세션의 예외 허용을 새 세션의 직접 승인으로 간주하지 않도록 현재 지침과 분리했다."
+          },
+          {
+            "path"    : "docs/skills/REPORTS.md",
+            "decision": "updated",
+            "reason"  : "미실행 감사의 사유를 남긴 뒤 부분 보고서를 작성하는 순서와 현행 보고서·공유 완료 책임을 정합화했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "여정→기준→실행 관찰과 같은 UUID 계획 인계, 현재 직접 권한의 책임을 정본에 보강했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-3ff8dedf-0989-45e1-a67c-db8c8936cb6c",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T06:59:50.370Z",
+        "sourceDigest"   : "4261c5b2c09bb8316b84c3123d847b1b083d3b248afd0d9b1abc938f2a29af9d",
+        "criteriaDigest" : "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "documentsDigest": "1f48e58a5c6c33b0604da37535a10027866ad6beb91f5cfdef89e3e6f8442163",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "현재 칸반·입력·프로세스 책임과 충돌하지 않으며 이 작업은 역할·스킬의 수행 절차를 소유한다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "유스케이스·칸반 인계와 병렬 소유의 실제 실행 경로를 연결했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "스킬 보강은 제품 목적을 바꾸지 않으며 실제 구현의 칸반·탐색 설명과 인계 책임을 대조했다."
+          },
+          {
+            "path"    : "docs/skills/ARTIFACT_REVIEW.md",
+            "decision": "updated",
+            "reason"  : "시나리오별 검증 연결을 의미 검토에 연결하고 advisory와 강제 완료 검사를 구분했다."
+          },
+          {
+            "path"    : "docs/skills/MODEL_POLICY.md",
+            "decision": "updated",
+            "reason"  : "과거 세션의 예외 허용을 새 세션의 직접 승인으로 간주하지 않도록 현재 지침과 분리했다."
+          },
+          {
+            "path"    : "docs/skills/REPORTS.md",
+            "decision": "updated",
+            "reason"  : "미실행 감사의 사유를 남긴 뒤 부분 보고서를 작성하는 순서와 현행 보고서·공유 완료 책임을 정합화했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "여정→기준→실행 관찰과 같은 UUID 계획 인계, 현재 직접 권한의 책임을 정본에 보강했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-a0725ef7-c8cf-4855-a6a6-f5c9edf31236",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T07:20:46.765Z",
+        "sourceDigest"   : "fc4619faa89e0ae89c3cea8bb3873fa20574673bb01dd2eb495e18674d1bc185",
+        "criteriaDigest" : "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "documentsDigest": "e96ce8c3c6afd9c4ae6243d056ac1c1fd1ed99373f8a27987995c03b2d1c9e4c",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "현재 칸반·입력·프로세스 책임과 충돌하지 않으며 이 작업은 역할·스킬의 수행 절차를 소유한다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "유스케이스·칸반 인계와 병렬 소유의 실제 실행 경로를 연결했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "스킬 보강은 제품 목적을 바꾸지 않으며 실제 구현의 칸반·탐색 설명과 인계 책임을 대조했다."
+          },
+          {
+            "path"    : "docs/skills/ARTIFACT_REVIEW.md",
+            "decision": "updated",
+            "reason"  : "시나리오별 검증 연결을 의미 검토에 연결하고 advisory와 강제 완료 검사를 구분했다."
+          },
+          {
+            "path"    : "docs/skills/MODEL_POLICY.md",
+            "decision": "updated",
+            "reason"  : "과거 세션의 예외 허용을 새 세션의 직접 승인으로 간주하지 않도록 현재 지침과 분리했다."
+          },
+          {
+            "path"    : "docs/skills/REPORTS.md",
+            "decision": "updated",
+            "reason"  : "미실행 감사의 사유를 남긴 뒤 부분 보고서를 작성하는 순서와 현행 보고서·공유 완료 책임을 정합화했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "여정→기준→실행 관찰과 같은 UUID 계획 인계, 현재 직접 권한의 책임을 정본에 보강했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-0edc9a03-9fd5-492b-b839-81044b25c9ce",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T08:32:03.645Z",
+        "sourceDigest"   : "6ffb895ea9b9ab8fdaac2b9a220544e70bb2be874227b1fbc3ed1c7108577a14",
+        "criteriaDigest" : "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "documentsDigest": "caa19f99e7edd08d0327ea95b56b2427ced8c22452090e92683b7a38ed88245d",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "Hook 정산은 기존 native-activity 순수 투영 책임에 속하고 프로세스·IPC·상태 소유 경계를 바꾸지 않았다. 현재 구조 ID 계약과 생성기는 통과했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "현재 Hook 집중 회귀 명령과 합성 사건·실제 Native/GUI/신뢰 수용의 분리 및 시각 모호성 검증 범위를 기록했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "현재 변경은 기존 개인용 로컬 Electron 관측·통제 목적 안의 투영/기록 정합성 수정이며 제품 목적·사용자·범위를 추가하지 않았다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "마지막 action 뒤 read/status 대조, record.blockedReason과 status.reasons, complete=false와 실제 complete 호출 거부를 명시적으로 분리했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-a5732066-f10f-49f6-917b-bf4bdb07319f",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T08:36:57.690Z",
+        "sourceDigest"   : "b10797b9b7c1a9b7b87fb89141a77f2bdbee2c987cc3de91ba0ecbd474d022f2",
+        "criteriaDigest" : "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "documentsDigest": "caa19f99e7edd08d0327ea95b56b2427ced8c22452090e92683b7a38ed88245d",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "기존 제품 목적·프로세스·모듈 책임을 유지하고 스킬 절차 변경으로 제품 자동 배치나 호스트 수용을 새로 주장하지 않았다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "실행/합성/미실행 경계와 공식 검사 표면을 현재 절차와 대조했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "기존 제품 목적·프로세스·모듈 책임을 유지하고 스킬 절차 변경으로 제품 자동 배치나 호스트 수용을 새로 주장하지 않았다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "최종 read/status의 필드 구분을 소유 공통 계약 한 곳에 보완했고 새 독립 명세/인계 실험과 대조했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-34eae17d-2344-4da4-a0e6-a980924bb224",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T12:20:14.236Z",
+        "sourceDigest"   : "2a80b02db5967d0a28a30bd581bf079f561e0e490ddf110ad8ab875d0ddb4282",
+        "criteriaDigest" : "427560f8508bc258bf23ce8bdde0e2630365f73279df084d3e44a65c9d6b4d0f",
+        "documentsDigest": "2e90294a7cacd508b9cad0cb57c3b9f7a7f8cfe2f668140a89507d0cac56e7b5",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "현재 번역 및 격리 CSV 스킬 적용의 증거 회수는 제품 목적·구조·기존 개발/공통 계약을 바꾸지 않는다. 실제 focused 검사·공식 원장 수용·자동 발견·GUI의 현재 미확인 경계는 같은 작업 문서에 분리했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "현재 번역 및 격리 CSV 스킬 적용의 증거 회수는 제품 목적·구조·기존 개발/공통 계약을 바꾸지 않는다. 실제 focused 검사·공식 원장 수용·자동 발견·GUI의 현재 미확인 경계는 같은 작업 문서에 분리했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "현재 번역 및 격리 CSV 스킬 적용의 증거 회수는 제품 목적·구조·기존 개발/공통 계약을 바꾸지 않는다. 실제 focused 검사·공식 원장 수용·자동 발견·GUI의 현재 미확인 경계는 같은 작업 문서에 분리했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "현재 번역 및 격리 CSV 스킬 적용의 증거 회수는 제품 목적·구조·기존 개발/공통 계약을 바꾸지 않는다. 실제 focused 검사·공식 원장 수용·자동 발견·GUI의 현재 미확인 경계는 같은 작업 문서에 분리했다."
+          }
+        ]
+      }
+    ],
+    "reportingRequired": true
+  }
+}

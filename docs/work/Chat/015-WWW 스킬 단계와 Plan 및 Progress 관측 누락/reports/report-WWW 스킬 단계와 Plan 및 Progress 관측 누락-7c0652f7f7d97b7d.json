@@ -1,0 +1,1011 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-36d312bc-a767-4e3e-a581-01898b35f75f",
+  "title"        : "WWW 스킬 단계와 Plan 및 Progress 관측 누락",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-f332a10e-570d-4a58-a638-f5bc51a70805",
+      "workId"        : "work-36d312bc-a767-4e3e-a581-01898b35f75f",
+      "title"         : "WWW 스킬 단계와 Plan 및 Progress 관측 누락",
+      "summary"       : "WWW 스킬 단계와 Plan·Progress의 관측 누락을 Chat015 버그로 명세화하고 GitHub #2에 bug 이슈로 등록했다. 실제 투영 함수의 합성 입력에서 Plan 없는 공개 설명의 누락과 미관측 다섯 항목의 대기 표시를 확인했다. 제품 코드는 수정하지 않았다.",
+      "kind"          : "authored",
+      "outcome"       : "in_progress",
+      "createdAt"     : "2026-11-16T05:56:20.253Z",
+      "event"         : "finish",
+      "workRecordHash": "c07981754f29f4773fd6cfcc88864e0eff25b0e37e0960e5dd00dd70ccb4871b",
+      "sourceDigest"  : "e769b7d0fa7826f8f277667eb291f7c76a5613db088ac660afb852f7db9626ab",
+      "criteriaDigest": "7a9dba16078d79c2d52909b6cc87d4a3be266c2f6cc65b0d42758511aa31bf43",
+      "semanticHash"  : "f88111ad6ae8095861de73edfd961c801e0d8df7a7fd30753768e6cb5c6bb8ee",
+      "narrative": {
+        "summary": "WWW 스킬 단계와 Plan·Progress의 관측 누락을 Chat015 버그로 명세화하고 GitHub #2에 bug 이슈로 등록했다. 실제 투영 함수의 합성 입력에서 Plan 없는 공개 설명의 누락과 미관측 다섯 항목의 대기 표시를 확인했다. 제품 코드는 수정하지 않았다.",
+        "before" : "문서 작업 중 오른쪽 개요가 현재 스킬 선택 미확인·다섯 항목 대기·Plan/Progress 미제공을 표시해 수행 여부를 판단하기 어렵다는 사용자 관찰이 있었다.",
+        "after"  : "문서 읽기·명시 요청·단계 선언·호스트 실행·완료의 근거 수준과 미관측/대기 구분, 계획 미연결 공개 설명, 실제 Subagent 집계의 수정 기준을 정의하고 버그 추적을 연결했다. 앱의 현재 동작은 아직 동일하다.",
+        "changes": [
+          "Chat015의 kind=bug 원장과 개발 명세·원인 가설/입증 범위·수정 및 검증 계획을 작성했다.",
+          "실제 함수에 합성 공개 사건을 입력해 Plan 유무와 읽기 참조 파서를 대조하고 결과를 기록했다.",
+          "GitHub 연결 도구의 403 실패를 보존하고 기존 CLI 인증으로 OPEN 상태의 bug 이슈 #2를 등록·재조회했다.",
+          "기준 여덟 개를 문서와 계획에 연결하고 작업 목차·검증 기록·현행 문서 영향 판단을 남겼다."
+        ],
+        "decisions": [
+          "사용자가 제시한 화면과 현행 소스·합성 재현을 구분하며 실제 세션의 원본 사건이나 앱 빌드까지 확인했다고 주장하지 않는다.",
+          "Native Subagent 0개는 해당 표본과 일치하는 정상 경계로 보존하고 외부 CLI 검토 프로세스를 가짜 Subagent로 만들지 않는다.",
+          "GitHub 이슈만 게시하고 미게시 로컬 명세의 Git 커밋·푸시와 제품 수정은 수행하지 않는다."
+        ],
+        "limitations": [
+          "실제 사용자 세션·Electron·Native·IME·Windows 검증과 제품 수정·회귀 검사·타입·빌드는 미실행이다.",
+          "독립 문서 의미 검토·필수 최종 감사는 미실행이며 현재 작업은 verifying·다음 단계 review, 제품 기준은 모두 unverified다.",
+          "GitHub #2는 열린 상태이며 로컬 명세는 아직 Git에 게시되지 않았다."
+        ],
+        "next": [
+          "구현 전 실제 세션·빌드·공개 사건 표본과 구조화 단계 연결 계약을 확인하고 별도 문서 검토를 수행한다.",
+          "구현 권한을 받은 뒤 같은 UUID로 수정·회귀 검증하고 GitHub #2에 실제 결과를 연결한다."
+        ],
+        "reader": {
+          "story": "사용자가 작업 중인 스킬과 진행 상태가 보이지 않는다고 보고해 표시 조건을 조사했다. 현행 함수에 합성 사건을 넣자 공개 설명이 있어도 Plan이 없으면 Progress가 비고 미관측 항목 다섯 개가 대기로 표시됐다. 이 근거와 실제 세션에서 아직 모르는 부분을 분리해 다음 수정의 명세·진단·검증 계획을 작성하고 GitHub 버그로 등록했다.",
+          "requirements": [
+            {
+              "requirement": "버그 개발 명세와 이슈 등록",
+              "result"     : "Chat015와 GitHub #2를 연결했다.",
+              "evidence"   : "https://github.com/Woo-JongHo/www/issues/2",
+              "limitations": "로컬 문서는 미커밋·미푸시이며 제품 미수정"
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "현행 투영과 참조 파서",
+              "method"     : "실제 함수를 합성 공개 사건과 Plan 유무·리터럴/복합 cat으로 대조",
+              "expected"   : "문제의 입력 조건과 정상 대조를 분리",
+              "observed"   : "Plan 없음: commentary 관측·Progress null·대기 5행. Plan 있음: 같은 설명 표시. 리터럴 참조 1개·복합 0개.",
+              "limitations": "실제 Native·Electron·사용자 원본 사건 아님"
+            },
+            {
+              "target"     : "GitHub 등록",
+              "method"     : "연결 도구 실패 후 기존 CLI로 생성·별도 조회",
+              "expected"   : "버그 이슈의 URL·OPEN·bug 라벨과 작업 UUID 연결",
+              "observed"   : "#2 OPEN과 bug 라벨·본문 UUID 확인",
+              "limitations": "앱 수정이나 Git 코드 게시를 뜻하지 않음"
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/spec.md",
+              "purpose": "버그 범위와 수정 기준을 확인한다."
+            },
+            {
+              "path": "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/diagnosis.md",
+              "purpose": "관찰·가설·입증된 함수 동작과 미확인을 구분한다."
+            },
+            {
+              "path": "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/tasks.md",
+              "purpose": "실행 연결 계약과 회귀 검증 순서를 확인한다."
+            },
+            {
+              "path": "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/verification.md",
+              "purpose": "실제 실행과 문서/이슈 등록의 한계를 확인한다."
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "별도 문서 검토와 실제 세션 표본을 확보한 뒤 승인 범위에서 수정한다.",
+              "owner"   : "Codex 통합 책임자",
+              "doneWhen": "단계 근거·공개 설명·화면 표시가 실제 소스와 세션에서 일치함을 검증",
+              "impact"  : "현재 버그는 아직 수정되지 않음"
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "OBS-EVIDENCE",
+            "description": "문서 참조·구조화 읽기·명시적 Skill 요청·역할이 선언한 절차 적용·실제 하네스 실행·성공 완료를 구별하고 상태마다 출처·관측 한계를 표시한다. 문서 읽기나 자연어 언급만으로 실행·완료를 추정하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "OBS-LIFECYCLE",
+            "description": "WWW 개발 역할이 선택·전환한 단계를 현재 session/thread/turn과 작업 UUID에 구조적으로 연결해 UI에 전달한다. 선택·시작·종료·실패·중단의 실제 근거와 중복·지연·재접속 처리를 정의하고, 외부 개발 세션 등 연결이 없는 표면은 미연결로 표시한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "OBS-UNKNOWN",
+            "description": "명시된 대기 사건이 없는 스킬은 대기로 단정하지 않고 미관측 또는 선택 미확인으로 표시한다. 복수 요청으로 현재 항목을 특정할 수 없으면 모호성을 표시하고 임의의 하나를 선택하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "PLAN-SOURCE",
+            "description": "계획 없음·자료 미제공·수집 실패를 구별하고 Native 계획과 명시적으로 연결한 계획 문서의 출처·현재성을 표시한다. tasks.md를 작성했다는 이유만으로 실행 계획을 받은 것으로 보거나 모든 항목을 실행 중으로 승격하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "PROGRESS-FALLBACK",
+            "description": "공개 진행 설명이 존재하면 활성 Plan이 없어도 현재 요청의 계획 미연결 설명으로 표시한다. 활성 항목이 제공된 경우에는 기존 항목 연결을 유지하며 과거·다른 턴·다른 탭의 설명을 섞지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AGENT-TRUTH",
+            "description": "실제 Native Subagent 사건만 Subagent 집계에 반영하고 부모·자식·상태·출처를 보존한다. 외부 CLI 검토 프로세스와 문서상의 역할은 별도 사실로 설명하며 표시를 채우기 위한 가짜 호출·완료를 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "OBS-REGRESSION",
+            "description": "선택/읽기만 관측·계획 없는 commentary·계획과 commentary 혼합·새 턴·중복·종료 후 지연·복원·2,000건 절단·탭 격리·상태 미제공을 행동 테스트와 실제 Electron에서 검증하고 근거를 해당 소스와 연결한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "ISSUE-TRACE",
+            "description": "사용자 증상·소스상 확인한 원인·미확인 실세션 근거·수정 범위·재현/회귀 시나리오를 개발 명세와 버그 기록에 남기고 GitHub 이슈에 연결한다. 문서/이슈 등록을 제품 수정 완료로 표시하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/work.json",
+        "workRecordHash": "c07981754f29f4773fd6cfcc88864e0eff25b0e37e0960e5dd00dd70ccb4871b",
+        "sourceDigest"  : "e769b7d0fa7826f8f277667eb291f7c76a5613db088ac660afb852f7db9626ab",
+        "criteriaDigest": "7a9dba16078d79c2d52909b6cc87d4a3be266c2f6cc65b0d42758511aa31bf43"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-6f0fd0c8-13a1-4f51-93ba-830b80c14a03",
+      "workId"        : "work-36d312bc-a767-4e3e-a581-01898b35f75f",
+      "title"         : "WWW 스킬 단계와 Plan 및 Progress 관측 누락",
+      "summary"       : "단계 관측의 생산자·main·공유 계약과 실제 회귀를 검사 입력에 포함했다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T08:34:28.530Z",
+      "event"         : "finish",
+      "workRecordHash": "efdc3fa89124e4c1d62081dad148dbced9e3fb7facf501ba247b3881a430e3dc",
+      "sourceDigest"  : "fb609b21c99f7c8b8b28dbe815dda5adb5b2e28dfbdee3c378ed27ce69b7f465",
+      "criteriaDigest": "7a9dba16078d79c2d52909b6cc87d4a3be266c2f6cc65b0d42758511aa31bf43",
+      "semanticHash"  : "54ca8fe2943f448cdc25cfaef37be4b6af775c45f7d1edbb5bf5bb3fb82fdd52",
+      "narrative": {
+        "summary": "단계 관측의 생산자·main·공유 계약과 실제 회귀를 검사 입력에 포함했다.",
+        "before" : "소스와 source-machine 관측은 있었으나 실제 생산자 파일 전체의 검사 의존 연결과 current 검증이 남았다.",
+        "after"  : "native-chat/native-session/main/shared와 회귀를 공식 inputs에 연결하고 선택·실행·하네스 영수증·업무 완료의 구분을 유지했다.",
+        "changes": [
+          "native-chat/native-session/main/shared와 회귀를 공식 inputs에 연결하고 선택·실행·하네스 영수증·업무 완료의 구분을 유지했다.",
+          "현재 계획은 같은 UUID의 tasks.md에 두고 이전 계획은 이력으로 구분했다."
+        ],
+        "decisions": [
+          "source-machine 기록과 현 머신의 실제 실행을 분리하고 기준·권한을 약화하지 않았다."
+        ],
+        "limitations": [
+          "actual 모델 tool-choice와 하네스 결속은 미관측이며 현재 Native/GUI·필수 감사도 차단이다. ISSUE-TRACE의 외부 이슈 쓰기는 이번 요청에서 금지여서 실행하지 않았다.",
+          "Claude OAuth 만료 및 자동 갱신 실패로 필수 감사가 not_run이며 대체 모델은 실행하지 않았다. 커밋·push·배포·외부 쓰기를 하지 않았다."
+        ],
+        "next": [
+          "현재 원장의 다음 행동 verify에서 계획에 기록한 실제 미실행 구간을 확인한다.",
+          "GUI/Native/Opus 또는 BoxBox 전제가 필요한 경우 현재 금지된 인증·전역 설정·승인 변경을 이 실행에서 우회하지 않는다."
+        ],
+        "reader": {
+          "story": "단계 관측의 생산자·main·공유 계약과 실제 회귀를 검사 입력에 포함했다. native-chat/native-session/main/shared와 회귀를 공식 inputs에 연결하고 선택·실행·하네스 영수증·업무 완료의 구분을 유지했다. actual 모델 tool-choice와 하네스 결속은 미관측이며 현재 Native/GUI·필수 감사도 차단이다. ISSUE-TRACE의 외부 이슈 쓰기는 이번 요청에서 금지여서 실행하지 않았다.",
+          "requirements": [
+            {
+              "requirement": "같은 UUID의 실제 결과와 미실행 구분",
+              "result"     : "native-chat/native-session/main/shared와 회귀를 공식 inputs에 연결하고 선택·실행·하네스 영수증·업무 완료의 구분을 유지했다.",
+              "evidence"   : ".www/evidence/remote-20261116/input-scope-updates.json",
+              "limitations": "actual 모델 tool-choice와 하네스 결속은 미관측이며 현재 Native/GUI·필수 감사도 차단이다. ISSUE-TRACE의 외부 이슈 쓰기는 이번 요청에서 금지여서 실행하지 않았다."
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "현재 원장과 증거 적용성",
+              "method"     : "공식 read/status 및 실제 명령·독립 읽기 전용 대조",
+              "expected"   : "과거 성공이나 부분 검사로 전체 완료를 만들지 않음",
+              "observed"   : "업무 완료 false를 유지하고 기준별 현재 적용성과 미검증을 나누었다.",
+              "limitations": "actual 모델 tool-choice와 하네스 결속은 미관측이며 현재 Native/GUI·필수 감사도 차단이다. ISSUE-TRACE의 외부 이슈 쓰기는 이번 요청에서 금지여서 실행하지 않았다."
+            }
+          ],
+          "decisions": [],
+          "references": [
+            {
+              "path": ".www/evidence/remote-20261116/input-scope-updates.json",
+              "purpose": "이 보고서의 실제 실행 범위와 실패/제한 원문 확인"
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "현재 인계 문서의 남은 실제 검증·필수 감사를 재개한다.",
+              "owner"   : "후속 Codex 통합자",
+              "doneWhen": "현재 기능·환경·필수 감사와 저작 보고서가 모두 적용 가능함",
+              "impact"  : "미충족 동안 업무 완료로 승격하지 않음"
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "OBS-EVIDENCE: 검증 시도 없음; OBS-LIFECYCLE: 검증 시도 없음; OBS-UNKNOWN: 검증 시도 없음; PLAN-SOURCE: 검증 시도 없음; PROGRESS-FALLBACK: 검증 시도 없음; AGENT-TRUTH: 검증 시도 없음; OBS-REGRESSION: 검증 시도 없음; ISSUE-TRACE: 검증 시도 없음; 필수 독립 검토 없음; 현재 소스·기준·기록의 저작 작업 보고서 없음",
+        "criteria": [
+          {
+            "id"         : "OBS-EVIDENCE",
+            "description": "문서 참조·구조화 읽기·명시적 Skill 요청·역할이 선언한 절차 적용·실제 하네스 실행·성공 완료를 구별하고 상태마다 출처·관측 한계를 표시한다. 문서 읽기나 자연어 언급만으로 실행·완료를 추정하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "OBS-LIFECYCLE",
+            "description": "WWW 개발 역할이 선택·전환한 단계를 현재 session/thread/turn과 작업 UUID에 구조적으로 연결해 UI에 전달한다. 선택·시작·종료·실패·중단의 실제 근거와 중복·지연·재접속 처리를 정의하고, 외부 개발 세션 등 연결이 없는 표면은 미연결로 표시한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "OBS-UNKNOWN",
+            "description": "명시된 대기 사건이 없는 스킬은 대기로 단정하지 않고 미관측 또는 선택 미확인으로 표시한다. 복수 요청으로 현재 항목을 특정할 수 없으면 모호성을 표시하고 임의의 하나를 선택하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "PLAN-SOURCE",
+            "description": "계획 없음·자료 미제공·수집 실패를 구별하고 Native 계획과 명시적으로 연결한 계획 문서의 출처·현재성을 표시한다. tasks.md를 작성했다는 이유만으로 실행 계획을 받은 것으로 보거나 모든 항목을 실행 중으로 승격하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "PROGRESS-FALLBACK",
+            "description": "공개 진행 설명이 존재하면 활성 Plan이 없어도 현재 요청의 계획 미연결 설명으로 표시한다. 활성 항목이 제공된 경우에는 기존 항목 연결을 유지하며 과거·다른 턴·다른 탭의 설명을 섞지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AGENT-TRUTH",
+            "description": "실제 Native Subagent 사건만 Subagent 집계에 반영하고 부모·자식·상태·출처를 보존한다. 외부 CLI 검토 프로세스와 문서상의 역할은 별도 사실로 설명하며 표시를 채우기 위한 가짜 호출·완료를 만들지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "OBS-REGRESSION",
+            "description": "선택/읽기만 관측·계획 없는 commentary·계획과 commentary 혼합·새 턴·중복·종료 후 지연·복원·2,000건 절단·탭 격리·상태 미제공을 행동 테스트와 실제 Electron에서 검증하고 근거를 해당 소스와 연결한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "ISSUE-TRACE",
+            "description": "사용자 증상·소스상 확인한 원인·미확인 실세션 근거·수정 범위·재현/회귀 시나리오를 개발 명세와 버그 기록에 남기고 GitHub 이슈에 연결한다. 문서/이슈 등록을 제품 수정 완료로 표시하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/work.json",
+        "workRecordHash": "efdc3fa89124e4c1d62081dad148dbced9e3fb7facf501ba247b3881a430e3dc",
+        "sourceDigest"  : "fb609b21c99f7c8b8b28dbe815dda5adb5b2e28dfbdee3c378ed27ce69b7f465",
+        "criteriaDigest": "7a9dba16078d79c2d52909b6cc87d4a3be266c2f6cc65b0d42758511aa31bf43"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-33ba878e-62eb-4768-832c-db0c0030b3d2",
+      "workId"        : "work-36d312bc-a767-4e3e-a581-01898b35f75f",
+      "title"         : "WWW 스킬 단계와 Plan 및 Progress 관측 누락",
+      "summary"       : "단계 관측 출처·Plan 없는 Progress·현재성을 같은 UUID와 현재 v5 소스의 실행 증거로 다시 확인했다. 실제 Terra 검토는 fail이며 지적 원문을 회수했다. 현재 미해결 지적·기본 검사 실패·증거 공백을 보존하여 부분 결과로 보고하며 업무 완료를 선언하지 않는다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-16T23:31:12.907Z",
+      "event"         : "finish",
+      "workRecordHash": "4e16330ed567063e962f8f27b88244af3379defab09be2b2c5596eea3cf4f22e",
+      "sourceDigest"  : "8c0b7f688727f0074913fef03e6d69757f867a0b402b3f883475438b892f706b",
+      "criteriaDigest": "7a9dba16078d79c2d52909b6cc87d4a3be266c2f6cc65b0d42758511aa31bf43",
+      "semanticHash"  : "5ebad9700666fb1de0ea4d0519af23d6b1b175b9942bdbec4387731174317c57",
+      "narrative": {
+        "summary": "단계 관측 출처·Plan 없는 Progress·현재성을 같은 UUID와 현재 v5 소스의 실행 증거로 다시 확인했다. 실제 Terra 검토는 fail이며 지적 원문을 회수했다. 현재 미해결 지적·기본 검사 실패·증거 공백을 보존하여 부분 결과로 보고하며 업무 완료를 선언하지 않는다.",
+        "before" : "기존 소스의 검증 수와 과거 감사 결과가 여러 시점에 섞여 있었다. 실제 새 반례를 그대로 남기고 소스·기준·직접 요청과 증거의 현재성을 다시 구분해야 했다.",
+        "after"  : "현재 UUID의 등록 검사와 전용 GUI/직접 기능 원문을 회수했고 외부 정본의 문서 영향 검토를 연결했다. 실제 감사 지적과 미실행 한계를 분리하고 후속 최소 수정·독립 반박은 준비 단계로 남겼다.",
+        "changes": [
+          "v4의 main quota 생략/null, A/B/A 늦은 delta, 복원 enriched 완료와 혼합 summary 경계를 공식 저작 전후 검사로 교정했다.",
+          "v5 같은 UUID의 실제 실행·원문·source/criteria 식별과 문서 검토·감사 상태를 다시 연결했다.",
+          "새 반례는 실제 원문과 별도 수정 준비에 남겼고 과거 실패를 삭제하거나 새 PASS로 바꾸지 않았다."
+        ],
+        "decisions": [
+          "현재 관측 가능한 입력·행동만 해당 검사 범위로 연결하고 전체 의미 수용은 실제 독립 검토·공식 core 판정과 구분했다.",
+          "제품·테스트의 추가 변경은 Root 공식 pre/post와 독립 반박 판정 뒤 수행하며 기준·검사 권한·일반 검토 정책을 약화하지 않는다."
+        ],
+        "limitations": [
+          "실제 Electron GUI는 합성 Native subprocess이며 실제 모델·실계정·OS IME·Windows 검증으로 확대하지 않는다.",
+          "등록 검사·직접 관측·의미 검토·업무 완료는 별도이며 artifact 존재만으로 기준을 PASS로 강제하지 않는다.",
+          "등록 기본5초 집중 명령은 실패했다. 같은 입력·모든 assertions의 별도30초 직접 기능 검사는 통과했지만 기본 명령 PASS를 대체하지 않는다. 대량 원장 수집 비용은 미해결 위험이다.",
+          "현재 독립 검토의 미해결 원문: src/agent-overview.ts:259-281: 설명 A가 표시된 뒤 본문 없는 commentary B의 item/started를 받고 B의 delta 또는 완료 본문을 받으면, B는 이미 알려진 메시지이지만 messageId는 여전히 A여서 새 본문이 무시된다. 따라서 정상적인 후속 공개 진행 설명이 Progress에 나타나지 않는다.",
+          "현재 독립 검토의 미해결 원문: src/agent-overview.ts:253-269: 설명 A 뒤 같은 활성 항목의 plan/updated가 새 explanation을 제공하면 messageId를 빈 문자열로 지운다. 이후 A의 늦은 delta가 도착하면 이전 메시지 차단 조건을 통과해 새 계획 설명을 덮어쓴다. 계획 설명보다 오래된 commentary가 현재 Progress로 되돌아온다.",
+          "현재 독립 검토의 미해결 원문: 검토는 제공된 inline 소스·명세·테스트와 agent-overview.ts의 관련 행 읽기에 한정했다. 테스트는 실행하지 않았으며 별도의 검증 로그는 제공되지 않았다."
+        ],
+        "next": [
+          "Root의 반박 검토로 지적의 유효 범위와 최소 수정 범위를 확정한다.",
+          "추가 수정 후 최종 소스에서 직접 영향 검사·문서 영향·고유 독립 검토를 한 번 다시 회수한다.",
+          "현재 공식 완료 판정·read/status의 부족 조건을 그대로 남기고 모든 필수 조건이 충족하기 전에는 done으로 올리지 않는다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "독립 검토 fail: 수정 또는 검토 재실행 필요",
+        "criteria": [
+          {
+            "id"         : "OBS-EVIDENCE",
+            "description": "문서 참조·구조화 읽기·명시적 Skill 요청·역할이 선언한 절차 적용·실제 하네스 실행·성공 완료를 구별하고 상태마다 출처·관측 한계를 표시한다. 문서 읽기나 자연어 언급만으로 실행·완료를 추정하지 않는다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-16f3c5a2-3c24-4f9d-93b6-2307e420dd7f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-001c7bf4-ef68-4108-bb0b-8b1a01c4ae23",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ae4f7995-939d-47de-9c9e-29cfcadd40d9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-dfc99936-fe1f-4e3c-b702-32e44b1d0252",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-540d9058-0621-4fcb-a3d9-0d3ed70dd999",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-11c600f6-23b2-41dc-a3cf-cdf933ae68a9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0c88834a-aa3e-483a-bbee-f8048431e216",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ef65c117-17f8-4efe-8a0d-39b3e6b2938f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-85fac668-f9aa-41d6-85f5-44cdd5c9d16d",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-ffe76579-9e69-443d-bd68-8b3998d3e5cf",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "OBS-LIFECYCLE",
+            "description": "WWW 개발 역할이 선택·전환한 단계를 현재 session/thread/turn과 작업 UUID에 구조적으로 연결해 UI에 전달한다. 선택·시작·종료·실패·중단의 실제 근거와 중복·지연·재접속 처리를 정의하고, 외부 개발 세션 등 연결이 없는 표면은 미연결로 표시한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-16f3c5a2-3c24-4f9d-93b6-2307e420dd7f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-001c7bf4-ef68-4108-bb0b-8b1a01c4ae23",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ae4f7995-939d-47de-9c9e-29cfcadd40d9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-dfc99936-fe1f-4e3c-b702-32e44b1d0252",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-540d9058-0621-4fcb-a3d9-0d3ed70dd999",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-11c600f6-23b2-41dc-a3cf-cdf933ae68a9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0c88834a-aa3e-483a-bbee-f8048431e216",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ef65c117-17f8-4efe-8a0d-39b3e6b2938f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-85fac668-f9aa-41d6-85f5-44cdd5c9d16d",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-ffe76579-9e69-443d-bd68-8b3998d3e5cf",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "OBS-UNKNOWN",
+            "description": "명시된 대기 사건이 없는 스킬은 대기로 단정하지 않고 미관측 또는 선택 미확인으로 표시한다. 복수 요청으로 현재 항목을 특정할 수 없으면 모호성을 표시하고 임의의 하나를 선택하지 않는다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-16f3c5a2-3c24-4f9d-93b6-2307e420dd7f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-001c7bf4-ef68-4108-bb0b-8b1a01c4ae23",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ae4f7995-939d-47de-9c9e-29cfcadd40d9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-dfc99936-fe1f-4e3c-b702-32e44b1d0252",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-540d9058-0621-4fcb-a3d9-0d3ed70dd999",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-11c600f6-23b2-41dc-a3cf-cdf933ae68a9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0c88834a-aa3e-483a-bbee-f8048431e216",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ef65c117-17f8-4efe-8a0d-39b3e6b2938f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-85fac668-f9aa-41d6-85f5-44cdd5c9d16d",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-ffe76579-9e69-443d-bd68-8b3998d3e5cf",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "PLAN-SOURCE",
+            "description": "계획 없음·자료 미제공·수집 실패를 구별하고 Native 계획과 명시적으로 연결한 계획 문서의 출처·현재성을 표시한다. tasks.md를 작성했다는 이유만으로 실행 계획을 받은 것으로 보거나 모든 항목을 실행 중으로 승격하지 않는다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-16f3c5a2-3c24-4f9d-93b6-2307e420dd7f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-001c7bf4-ef68-4108-bb0b-8b1a01c4ae23",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ae4f7995-939d-47de-9c9e-29cfcadd40d9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-dfc99936-fe1f-4e3c-b702-32e44b1d0252",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-540d9058-0621-4fcb-a3d9-0d3ed70dd999",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-11c600f6-23b2-41dc-a3cf-cdf933ae68a9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0c88834a-aa3e-483a-bbee-f8048431e216",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ef65c117-17f8-4efe-8a0d-39b3e6b2938f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-85fac668-f9aa-41d6-85f5-44cdd5c9d16d",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-ffe76579-9e69-443d-bd68-8b3998d3e5cf",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "PROGRESS-FALLBACK",
+            "description": "공개 진행 설명이 존재하면 활성 Plan이 없어도 현재 요청의 계획 미연결 설명으로 표시한다. 활성 항목이 제공된 경우에는 기존 항목 연결을 유지하며 과거·다른 턴·다른 탭의 설명을 섞지 않는다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-16f3c5a2-3c24-4f9d-93b6-2307e420dd7f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-001c7bf4-ef68-4108-bb0b-8b1a01c4ae23",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ae4f7995-939d-47de-9c9e-29cfcadd40d9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-dfc99936-fe1f-4e3c-b702-32e44b1d0252",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-540d9058-0621-4fcb-a3d9-0d3ed70dd999",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-11c600f6-23b2-41dc-a3cf-cdf933ae68a9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0c88834a-aa3e-483a-bbee-f8048431e216",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ef65c117-17f8-4efe-8a0d-39b3e6b2938f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-85fac668-f9aa-41d6-85f5-44cdd5c9d16d",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-ffe76579-9e69-443d-bd68-8b3998d3e5cf",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "AGENT-TRUTH",
+            "description": "실제 Native Subagent 사건만 Subagent 집계에 반영하고 부모·자식·상태·출처를 보존한다. 외부 CLI 검토 프로세스와 문서상의 역할은 별도 사실로 설명하며 표시를 채우기 위한 가짜 호출·완료를 만들지 않는다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-16f3c5a2-3c24-4f9d-93b6-2307e420dd7f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-001c7bf4-ef68-4108-bb0b-8b1a01c4ae23",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ae4f7995-939d-47de-9c9e-29cfcadd40d9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-dfc99936-fe1f-4e3c-b702-32e44b1d0252",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-540d9058-0621-4fcb-a3d9-0d3ed70dd999",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-11c600f6-23b2-41dc-a3cf-cdf933ae68a9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0c88834a-aa3e-483a-bbee-f8048431e216",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ef65c117-17f8-4efe-8a0d-39b3e6b2938f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-85fac668-f9aa-41d6-85f5-44cdd5c9d16d",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-ffe76579-9e69-443d-bd68-8b3998d3e5cf",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "OBS-REGRESSION",
+            "description": "선택/읽기만 관측·계획 없는 commentary·계획과 commentary 혼합·새 턴·중복·종료 후 지연·복원·2,000건 절단·탭 격리·상태 미제공을 행동 테스트와 실제 Electron에서 검증하고 근거를 해당 소스와 연결한다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-f6698f15-a08d-4350-a5e1-b6cf0f92db7b",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-16f3c5a2-3c24-4f9d-93b6-2307e420dd7f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-001c7bf4-ef68-4108-bb0b-8b1a01c4ae23",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-dfc99936-fe1f-4e3c-b702-32e44b1d0252",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-540d9058-0621-4fcb-a3d9-0d3ed70dd999",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-11c600f6-23b2-41dc-a3cf-cdf933ae68a9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0c88834a-aa3e-483a-bbee-f8048431e216",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ef65c117-17f8-4efe-8a0d-39b3e6b2938f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-85fac668-f9aa-41d6-85f5-44cdd5c9d16d",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          },
+          {
+            "id"         : "ISSUE-TRACE",
+            "description": "사용자 증상·소스상 확인한 원인·미확인 실세션 근거·수정 범위·재현/회귀 시나리오를 개발 명세와 버그 기록에 남기고 GitHub 이슈에 연결한다. 문서/이슈 등록을 제품 수정 완료로 표시하지 않는다.",
+            "required"   : true,
+            "result"     : "failed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-981c78e9-0b12-498d-b5a1-cd831bc37d20",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-dfc99936-fe1f-4e3c-b702-32e44b1d0252",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-540d9058-0621-4fcb-a3d9-0d3ed70dd999",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-11c600f6-23b2-41dc-a3cf-cdf933ae68a9",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-0c88834a-aa3e-483a-bbee-f8048431e216",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-ef65c117-17f8-4efe-8a0d-39b3e6b2938f",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-85fac668-f9aa-41d6-85f5-44cdd5c9d16d",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-f6698f15-a08d-4350-a5e1-b6cf0f92db7b",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "\nimport {spawnSync} from \"node:child_process\";import {writeFileSync} from \"node:fs\";\nconst steps=[[\"node\",[\"scripts/verify-native-activity.ts\",\"--ui-only\"]],[\"node\",[\"scripts/verify-native-activity.ts\",\"--observability\"]],[\"bun\",[\"test\",\"test/agent-overview.test.ts\",\"test/native-activity.test.ts\",\"test/www-activity.test.ts\",\"test/activity-sidebar.test.ts\",\"test/native-session.test.ts\",\"test/native-chat.test.ts\",\"--timeout\",\"30000\"]]];\nconst results=[];for(let i=0;i<steps.length;i++){const [command,args]=steps[i];const r=spawnSync(command,args,{encoding:\"utf8\",maxBuffer:16000000});const output=(r.stdout??\"\")+(r.stderr??\"\");writeFileSync(\".www/evidence/resume-20261116/observability-final-step-\"+i+\".log\",output);process.stdout.write(output);results.push({command,args,code:r.status,signal:r.signal});}\nwriteFileSync(\".www/evidence/resume-20261116/observability-final-steps.json\",JSON.stringify({scope:\"actual Electron/main/IPC와 합성 stdio 사건, 실제 unit/protocol assertions. 실제 모델의 단계도구 선택·실제 외부하네스 결속 성공이나 Windows/OS IME가 아님.\",results},null,2));process.exit(results.every(r=>r.code===0)?0:1);\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T09:45:04.535Z"
+          },
+          {
+            "id": "attempt-16f3c5a2-3c24-4f9d-93b6-2307e420dd7f",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "\nimport {spawnSync} from \"node:child_process\";import {writeFileSync} from \"node:fs\";\nconst steps=[[\"node\",[\"scripts/verify-native-activity.ts\",\"--ui-only\"]],[\"node\",[\"scripts/verify-native-activity.ts\",\"--observability\"]],[\"bun\",[\"test\",\"test/agent-overview.test.ts\",\"test/native-activity.test.ts\",\"test/www-activity.test.ts\",\"test/activity-sidebar.test.ts\",\"test/native-session.test.ts\",\"test/native-chat.test.ts\",\"--timeout\",\"30000\"]]];\nconst results=[];for(let i=0;i<steps.length;i++){const [command,args]=steps[i];const r=spawnSync(command,args,{encoding:\"utf8\",maxBuffer:16000000});const output=(r.stdout??\"\")+(r.stderr??\"\");writeFileSync(\".www/evidence/resume-20261116/observability-final-step-\"+i+\".log\",output);process.stdout.write(output);results.push({command,args,code:r.status,signal:r.signal});}\nwriteFileSync(\".www/evidence/resume-20261116/observability-final-steps.json\",JSON.stringify({scope:\"actual Electron/main/IPC와 합성 stdio 사건, 실제 unit/protocol assertions. 실제 모델의 단계도구 선택·실제 외부하네스 결속 성공이나 Windows/OS IME가 아님.\",results},null,2));process.exit(results.every(r=>r.code===0)?0:1);\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T10:04:53.701Z"
+          },
+          {
+            "id": "attempt-001c7bf4-ef68-4108-bb0b-8b1a01c4ae23",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "\nimport {spawnSync} from \"node:child_process\";import {writeFileSync} from \"node:fs\";\nconst steps=[[\"node\",[\"scripts/verify-native-activity.ts\",\"--ui-only\"]],[\"node\",[\"scripts/verify-native-activity.ts\",\"--observability\"]],[\"bun\",[\"test\",\"test/agent-overview.test.ts\",\"test/native-activity.test.ts\",\"test/www-activity.test.ts\",\"test/activity-sidebar.test.ts\",\"test/native-session.test.ts\",\"test/native-chat.test.ts\",\"--timeout\",\"30000\"]]];\nconst results=[];for(let i=0;i<steps.length;i++){const [command,args]=steps[i];const r=spawnSync(command,args,{encoding:\"utf8\",maxBuffer:16000000});const output=(r.stdout??\"\")+(r.stderr??\"\");writeFileSync(\".www/evidence/resume-20261116/observability-final-step-\"+i+\".log\",output);process.stdout.write(output);results.push({command,args,code:r.status,signal:r.signal});}\nwriteFileSync(\".www/evidence/resume-20261116/observability-final-steps.json\",JSON.stringify({scope:\"actual Electron/main/IPC와 합성 stdio 사건, 실제 unit/protocol assertions. 실제 모델의 단계도구 선택·실제 외부하네스 결속 성공이나 Windows/OS IME가 아님.\",results},null,2));process.exit(results.every(r=>r.code===0)?0:1);\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T10:07:22.957Z"
+          },
+          {
+            "id": "attempt-ae4f7995-939d-47de-9c9e-29cfcadd40d9",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import{spawnSync}from'node:child_process';import{writeFileSync,mkdirSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/native-activity.test.ts\", \"test/activity-sidebar.test.ts\", \"test/agent-overview.test.ts\", \"test/www-activity-view.test.ts\", \"test/www-activity.test.ts\", \"test/native-chat.test.ts\", \"test/native-session.test.ts\", \"test/projection.test.ts\", \"test/chat-state.test.ts\", \"test/input.test.ts\"];mkdirSync(\".www/evidence/resume-20261116/chat008/chat015-recovery\",{recursive:true});const startedAt=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:32*1024*1024});const base=\".www/evidence/resume-20261116/chat008/chat015-recovery/official-focused-\"+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T12:37:58.277Z"
+          },
+          {
+            "id": "attempt-981c78e9-0b12-498d-b5a1-cd831bc37d20",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import{spawnSync}from'node:child_process';import{writeFileSync,mkdirSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"node\",args=[\"--input-type=module\", \"--eval\", \"import assert from'node:assert/strict';import{readFile}from'node:fs/promises';const base='.www/evidence/resume-20261116/chat008',raw=JSON.parse(await readFile(base+'/chat015-issue-readonly.json','utf8')),issue=raw.result.structuredContent.issue;assert.equal(raw.tool,'mcp__codex_apps__github_fetch_issue');assert.equal(raw.arguments.repository_full_name,'Woo-JongHo/www');assert.equal(raw.arguments.issue_number,2);assert.equal(issue.url,'https://github.com/Woo-JongHo/www/issues/2');assert.equal(issue.state,'open');assert(issue.labels.some(label=>label.name==='bug'));assert(issue.body.includes('work-36d312bc-a767-4e3e-a581-01898b35f75f'));const spec=await readFile('docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/spec.md','utf8');assert(spec.includes(issue.url));assert(spec.includes('work-36d312bc-a767-4e3e-a581-01898b35f75f'));console.log(JSON.stringify({result:'passed',criterion:'ISSUE-TRACE',scope:'실제 GitHub tool 읽기 snapshot과 같은UUID 문서 연결 검사. 새 제품 기능·이슈상태변경·게시가 아님',retrievedAt:raw.retrievedAt,url:issue.url,state:issue.state}));\"];mkdirSync(\".www/evidence/resume-20261116/chat008/chat015-recovery\",{recursive:true});const startedAt=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:32*1024*1024});const base=\".www/evidence/resume-20261116/chat008/chat015-recovery/official-issue-trace-\"+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T12:42:28.871Z"
+          },
+          {
+            "id": "attempt-dfc99936-fe1f-4e3c-b702-32e44b1d0252",
+            "command": "node",
+            "args": [
+              ".www/evidence/resume-20261116/native-closeout/composite.mjs",
+              "work-36d312bc-a767-4e3e-a581-01898b35f75f",
+              "baseline"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T14:57:15.703Z"
+          },
+          {
+            "id": "attempt-540d9058-0621-4fcb-a3d9-0d3ed70dd999",
+            "command": "node",
+            "args": [
+              ".www/evidence/resume-20261116/native-closeout/final-current/composite.mjs",
+              "work-36d312bc-a767-4e3e-a581-01898b35f75f",
+              "baseline"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T15:41:19.397Z"
+          },
+          {
+            "id": "attempt-11c600f6-23b2-41dc-a3cf-cdf933ae68a9",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/agent-overview.test.ts",
+              "test/native-session.test.ts",
+              "test/native-chat.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T21:42:53.966Z"
+          },
+          {
+            "id": "attempt-0c88834a-aa3e-483a-bbee-f8048431e216",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import{spawnSync}from'node:child_process';import{writeFileSync,mkdirSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/native-activity.test.ts\", \"test/activity-sidebar.test.ts\", \"test/agent-overview.test.ts\", \"test/www-activity-view.test.ts\", \"test/www-activity.test.ts\", \"test/native-chat.test.ts\", \"test/native-session.test.ts\", \"test/projection.test.ts\", \"test/chat-state.test.ts\", \"test/input.test.ts\"];mkdirSync(\".www/evidence/resume-20261116/chat008/chat015-recovery\",{recursive:true});const startedAt=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:32*1024*1024});const base=\".www/evidence/resume-20261116/chat008/chat015-recovery/official-focused-\"+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T21:49:23.837Z"
+          },
+          {
+            "id": "attempt-ef65c117-17f8-4efe-8a0d-39b3e6b2938f",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import{spawnSync}from'node:child_process';import{writeFileSync,mkdirSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/native-activity.test.ts\", \"test/activity-sidebar.test.ts\", \"test/agent-overview.test.ts\", \"test/www-activity-view.test.ts\", \"test/www-activity.test.ts\", \"test/native-chat.test.ts\", \"test/native-session.test.ts\", \"test/projection.test.ts\", \"test/chat-state.test.ts\", \"test/input.test.ts\"];mkdirSync(\".www/evidence/resume-20261116/chat008/chat015-recovery\",{recursive:true});const startedAt=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:32*1024*1024});const base=\".www/evidence/resume-20261116/chat008/chat015-recovery/official-focused-\"+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:04:54.829Z"
+          },
+          {
+            "id": "attempt-85fac668-f9aa-41d6-85f5-44cdd5c9d16d",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import{spawnSync}from'node:child_process';import{writeFileSync,mkdirSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/native-activity.test.ts\", \"test/activity-sidebar.test.ts\", \"test/agent-overview.test.ts\", \"test/www-activity-view.test.ts\", \"test/www-activity.test.ts\", \"test/native-chat.test.ts\", \"test/native-session.test.ts\", \"test/projection.test.ts\", \"test/chat-state.test.ts\", \"test/input.test.ts\"];mkdirSync(\".www/evidence/resume-20261116/chat008/chat015-recovery\",{recursive:true});const startedAt=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:32*1024*1024});const base=\".www/evidence/resume-20261116/chat008/chat015-recovery/official-focused-\"+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:06:22.162Z"
+          },
+          {
+            "id": "attempt-ffe76579-9e69-443d-bd68-8b3998d3e5cf",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import{spawnSync}from'node:child_process';import{writeFileSync,mkdirSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/native-activity.test.ts\", \"test/activity-sidebar.test.ts\", \"test/agent-overview.test.ts\", \"test/www-activity-view.test.ts\", \"test/www-activity.test.ts\", \"test/native-chat.test.ts\", \"test/native-session.test.ts\", \"test/projection.test.ts\", \"test/chat-state.test.ts\", \"test/input.test.ts\"];mkdirSync(\".www/evidence/resume-20261116/chat008/chat015-recovery\",{recursive:true});const startedAt=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:32*1024*1024});const base=\".www/evidence/resume-20261116/chat008/chat015-recovery/official-focused-\"+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T23:22:10.667Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-a510ea12-6bde-4950-aead-41ab8ab1e585",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-a510ea12-6bde-4950-aead-41ab8ab1e585/terra.json",
+            "findings": [
+              "src/agent-overview.ts:157-164에서 Subagent의 최신 작업 호출을 추적하지 않아 이전 호출의 중복 완료가 새 작업을 종료할 수 있다. 예를 들어 child의 spawn 호출이 완료된 뒤 followupTask가 running으로 시작하고, 이전 spawn의 item/completed가 다시 도착하면 이를 확정 결과로 받아 child를 completed로 표시한다. 이후 새 작업의 running 관측도 닫힌 경계에서 무시된다.",
+              "src/agent-overview.ts:265 및 src/agent-overview-view.tsx:46에서 이전 단계의 진행 선언이 현재 단계처럼 남는다. 같은 턴에 build running 선언 후 verify running 선언이 오면 verify가 선택되지만 build 행에도 ‘진행 선언’이 표시된다. ‘현재 상태 미확인’ 조건은 해당 행이 선택됐는지가 아니라 선택된 스킬이 하나라도 있는지만 검사하므로, 이전 build의 현재성은 표시에서 구분되지 않는다.",
+              "검토 범위는 제공된 inputBundle과 읽기 도구로 확인한 관련 diff, src/agent-overview-view.tsx, test/agent-overview.test.ts다. 제공된 실행 로그는 없었으며 테스트는 실행하지 않았다. diff 출력은 도구에서 잘렸다."
+            ]
+          },
+          {
+            "id"         : "review-b9844050-0361-4896-b4c0-79dd537bd6b3",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-b9844050-0361-4896-b4c0-79dd537bd6b3/terra.json",
+            "findings": [
+              "src/agent-overview.ts:164-178에서 현재 호출과의 일치 검사는 작업 호출에만 적용된다. 작업 A를 기다리던 wait의 완료가 후속 작업 B의 running 관측 뒤 늦게 도착하고 agentsStates에 A의 completed가 있으면, B의 결과로 확정되어 Subagent가 완료로 표시된다. 이후 B의 running 사건도 이미 닫힌 경계에서 무시된다.",
+              "src/projection.ts:490-492는 턴이 종료되었거나 연결이 끊겨 closed가 참이어도 모든 item/completed를 수용한다. turn/completed 뒤 새로운 commentary 항목의 완료 snapshot이 늦게 도착하면 종료 후 산문이 대화에 추가되고, 기존 항목의 snapshot이면 본문을 바꿀 수 있다. 종료 뒤 늦은 산문을 현재 작업에 섞지 않는 경계가 채팅 투영에는 적용되지 않는다.",
+              "검토 범위는 제공된 inputBundle의 소스·문서·테스트와 src/agent-overview.ts 및 src/projection.ts의 추가 읽기다. 테스트 실행이나 외부 검증은 수행하지 않았다."
+            ]
+          },
+          {
+            "id"         : "review-bd1572ab-8682-4bb6-a6fd-8bff1a103657",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-bd1572ab-8682-4bb6-a6fd-8bff1a103657/terra.json",
+            "findings": [
+              "src/agent-overview.ts:259-281: 설명 A가 표시된 뒤 본문 없는 commentary B의 item/started를 받고 B의 delta 또는 완료 본문을 받으면, B는 이미 알려진 메시지이지만 messageId는 여전히 A여서 새 본문이 무시된다. 따라서 정상적인 후속 공개 진행 설명이 Progress에 나타나지 않는다.",
+              "src/agent-overview.ts:253-269: 설명 A 뒤 같은 활성 항목의 plan/updated가 새 explanation을 제공하면 messageId를 빈 문자열로 지운다. 이후 A의 늦은 delta가 도착하면 이전 메시지 차단 조건을 통과해 새 계획 설명을 덮어쓴다. 계획 설명보다 오래된 commentary가 현재 Progress로 되돌아온다.",
+              "검토는 제공된 inline 소스·명세·테스트와 agent-overview.ts의 관련 행 읽기에 한정했다. 테스트는 실행하지 않았으며 별도의 검증 로그는 제공되지 않았다."
+            ]
+          }
+        ],
+        "omitted": {
+          "criteria"     : 0,
+          "evidence"     : 6,
+          "verifications": 0,
+          "reviews"      : 0,
+          "arguments"    : 0,
+          "findings"     : 0,
+          "unresolved"   : 0
+        }
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/work.json",
+        "workRecordHash": "4e16330ed567063e962f8f27b88244af3379defab09be2b2c5596eea3cf4f22e",
+        "sourceDigest"  : "8c0b7f688727f0074913fef03e6d69757f867a0b402b3f883475438b892f706b",
+        "criteriaDigest": "7a9dba16078d79c2d52909b6cc87d4a3be266c2f6cc65b0d42758511aa31bf43"
+      }
+    }
+  ]
+}

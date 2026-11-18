@@ -1,0 +1,22 @@
+# Chat008 현재 인계와 완료 절차
+
+작업 UUID: `work-029fb7e2-61fa-4014-9362-5e915ab13197`. 현재 기준은 work.json, 조사 여정은 spec.md, 단일 권장 비교는 comparison.md다.
+
+## 현재 인계
+
+현재 인계는 **같은 UUID를 공식 read/status로 읽고 원장의 nextAction에 따라 아래 한 단계를 선택**하는 것이다. verify이면 새 동결 소스에서 공식 검사와 문서 영향 검토, review이면 정확한 직접 권한의 실제 읽기 전용 Terra 감사, complete이면 현재 저작 보고서와 공식 완료 판정·재읽기를 수행한다. status=done이면 이 조사 범위에 남은 구현/검증 지시를 새로 만들지 않는다. 기준이 오래됐거나 감사가 미수용이면 실제 사유를 보고하고 해당 단계로 돌아간다. 과거 통과·Opus pass를 현재 수용으로 승격하지 않는다.
+
+Native006 수정과 공유 정본의 bounded 큐 한계 반영, 개발 안내 번역 후 최종 제품 소스 GO를 받았다. 현재21 소스·정본25 SHA를 다시 잡고 현재 입력에서 공식 검증→문서 영향 검토→고유 실제 Terra 재감사→보고서/완료/readback을 수행한다. 이전 감사3회와 당시 문서/원문은 보존했다. 현재 구현/189개 실제 stdio 합성 회귀는 구분해 회수하고, Windows 경로·실제 모델/GUI race 미실측을 그대로 남긴다. 다음 감사 시작 뒤 네 문서를 수정하지 않는다.
+1. 완료한 저작·회수: 주요21파일 새 SHA 사본, 45 fixed URL의 공식 코드/manifest/LICENSE 새 회수, AionCore LICENSE 보충 회수, Native006 수정 후 여섯 집중 테스트 189개 실제 통과와 전후 source 동일성, 과거 미구현/현재 구현·GUI/Native 표본 한계 분리. 원본 .www/comparison-evidence 누락은 그대로 기록한다.
+2. 동결 뒤: 현재 입력·기준·artifact SHA로 공식 verify를 실제 실행하고 AC-1·AC-2·AC-3의 조사 범위에만 연결한다. 조사 문서·원문 정합성을 제품의 외부 앱 실행 PASS로 올리지 않는다. 실패는 원문을 보존하고 같은 UUID에서 수정/재검증한다.
+3. 읽은 현행 PRODUCT/ARCHITECTURE/DEVELOPMENT/WORKFLOW/Chat 요구·Ovis 고지에 대한 문서 영향 판단을 이 작업의 document-review로 기록한다. 공유 정본은 변경하지 않는다.
+4. 부모 GO 뒤 direct-user-original.txt의 정확한 원문으로 ReviewAuthority+directRequest를 묶어 공식 gpt-6.1-terra 읽기 전용 감사를 실행한다. request/workRequest/source/criteria/policy digest·실제 model/process/receipt를 확인하고 과거 Opus fail을 보존한다. 일반 정책을 수정하거나 다른 UUID의 영수증을 복사하지 않는다.
+5. 실제 결과와 한계를 같은 UUID 저작 보고서로 저장하고 마지막 read/status·보고서 현재성을 확인한다. 모든 조사 기준·문서 검토·유효한 독립 감사·현재 보고서 조건이 충족한 경우에만 공식 complete로 업무 수용을 기록한다. commit/push/PR/배포는 하지 않는다.
+
+## 완료 경계
+
+세 기준은 조사·비교·권장 기록의 수용 기준이다. Windows·한국어 IME 실기·외부 앱 전체 실행·추가 제품 이식·실제 모델의 임의 승인/변경 전 구간을 Chat008의 새 필수 조건으로 만들지 않는다. 해당 기능의 검증 한계를 comparison/verification에 분명히 남기는 것이 이번 조사 범위다.
+
+현재 Terra4는 terminal 동일 item delta 억제를 내용 비교라고 일반화한 문구를 지적했다. 해당 문구를 authoritative 완료 변경과 늦은 delta 억제로 구분해 고쳤다. source guard/기준 정의는 유지한다. 공유 정본의 같은 표현 정합성을 확인한 뒤 위 단일 nextAction 절차대로 재검증·문서 영향 검토·고유 재감사한다. 이전 감사4 기록과 영수증은 수정하지 않는다.
+
+공유 ARCH/Chat도 terminal late started/delta 억제와 변경된 authoritative 완료 보존을 같은 뜻으로 정정했음을 직접 읽었다. 기존 projection 회귀는 유지하며 추가 source/test 저작은 없다. 위 terminal 분석은 저자의 반박·정확성 교정이고 독립 승인으로 취급하지 않는다. 추가 Astra 호출은 시작하지 못했으므로 새 Astra PASS는 없으며, 이 문서 상태에 대한 새 독립 판정은 실제 직접 Terra5로 별도 실행한다. 정본25의 현재 SHA는 methodology-manifest.go5.json, 주요21은 go4 manifest와 source21-go5-unchanged.json으로 대조한다.

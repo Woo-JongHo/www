@@ -616,3 +616,439 @@ Opus review-0bdcc7c7(실제 claude-opus-5-5)는 scripts/workflow/run.ts의 runBo
 ### 2026-11-15 부분 성공과 수용 기준의 잔여 구분
 
 회귀 수정 뒤 집중 Node 하네스(attempt-b7519965), source 정책(attempt-898177ec), strict 타입(attempt-f292df7c)은 실제 exit 0/sourceStable=true다. 공용 Node 전체도 148개가 통과했다(.www/hook-trust-20261115/current-node-suite.log). 그러나 Bun 전체의 이전 실패 3건과 Electron 최종 빌드·test:comparison 전체 완료 근거가 아직 없어 AC-2·AC-3의 result는 unverified로 유지하고 구체 blocker를 기록한다. 검증 시도와 연결은 보존하면서 현재 증거 요약은 부분 검사라는 범위를 명시했다. 전체 증거가 없는 상태에서는 완료 요청을 실행하지 않는다.
+
+<a id="attempt-cc6b4cb4-ea5e-473b-a533-a4d968faac37"></a>
+## 검증 시도 — 2026-11-16T07:48:54.254Z
+
+- 시도 ID: `attempt-cc6b4cb4-ea5e-473b-a533-a4d968faac37`
+- 실행 시각: 2026-11-16T07:48:47.931Z ~ 2026-11-16T07:48:54.254Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js","run","check:source"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `01cbba1eee9d72015a55971aea169f55daaf7aeb68c8391c1b7f3e6665bf090d`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 119바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-ef8062ef-a532-4c2c-a4ae-979e37549b22"></a>
+## 검증 시도 — 2026-11-16T07:49:07.459Z
+
+- 시도 ID: `attempt-ef8062ef-a532-4c2c-a4ae-979e37549b22`
+- 실행 시각: 2026-11-16T07:48:56.529Z ~ 2026-11-16T07:49:07.459Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/bin/node","--test","test/workflow-contract.test.ts","test/workflow-harness.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `01cbba1eee9d72015a55971aea169f55daaf7aeb68c8391c1b7f3e6665bf090d`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 8584바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-72f722b2-e82b-47d0-b61c-723ee4cfc92b"></a>
+## 검증 시도 — 2026-11-16T07:54:19.358Z
+
+- 시도 ID: `attempt-72f722b2-e82b-47d0-b61c-723ee4cfc92b`
+- 실행 시각: 2026-11-16T07:53:32.827Z ~ 2026-11-16T07:54:19.358Z
+- 명령과 인자: `["/opt/homebrew/Cellar/node@22/22.22.3/lib/node_modules/npm/bin/npm-cli.js","run","typecheck"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `01cbba1eee9d72015a55971aea169f55daaf7aeb68c8391c1b7f3e6665bf090d`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 76바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-7cc86e4e-1b34-47e6-be7b-e58e7518af74"></a>
+## 검증 시도 — 2026-11-16T08:27:07.208Z
+
+- 시도 ID: `attempt-7cc86e4e-1b34-47e6-be7b-e58e7518af74`
+- 실행 시각: 2026-11-16T08:24:59.658Z ~ 2026-11-16T08:27:07.208Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const r=spawnSync('npm',['run','check'],{encoding:'utf8',maxBuffer:16000000});writeFileSync('.www/evidence/remote-20261116/official009-full-check.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `bec3f70836591c8f79093f72a9cfc2838fe3b179119c6552f6fe96e2bd1eeb0d`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 65536바이트, stderr 65536바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+## remote-20261116 — 현재 공식 검증
+
+공식 npm run check(attempt-7cc86e4e-1b34-47e6-be7b-e58e7518af74)는 당시 source/environment stable=true이며 Bun1040·Node210·소스 정책·strict 타입·구조·계약·빌드가 통과했다. 원장의 세 기능 기준은 passed이고 공식 status는 검증 근거를 usable로 평가한다. 다만 명세의 test:comparison 전체 실행은 이 검사에 포함되지 않아 현재 머신의 실행 근거가 남아 있다. 직접 Terra 감사 시도 review-c5b9d225는 이 공백을 지적하는 응답을 냈으나 영수증 오류로 not_run이며 유효 감사가 아니다. 읽기 명령 영수증 원인을 해결하고 비교 검증을 수행한 뒤 현재 소스에서 감사한다. 전체 check는 BoxBox 형식 합격·실제 GUI·Windows·OS IME를 뜻하지 않는다.
+
+원문은 .www/evidence/remote-20261116/official009-full-check.log, official009-check-result.json, official016-result.json 및 scratch/document-impact-review.md에서 구분한다.
+
+<a id="attempt-e71491db-8d33-4975-9ea9-6aa03cad7e4c"></a>
+## 검증 시도 — 2026-11-16T09:13:57.800Z
+
+- 시도 ID: `attempt-e71491db-8d33-4975-9ea9-6aa03cad7e4c`
+- 실행 시각: 2026-11-16T09:10:39.353Z ~ 2026-11-16T09:13:57.800Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","\nimport {spawnSync} from \"node:child_process\";import {writeFileSync,existsSync} from \"node:fs\";import path from \"node:path\";\nconst steps=[[\"npm\",[\"run\",\"build:tauri-ui\"]],[\"/opt/homebrew/bin/cargo\",[\"test\",\"--locked\",\"--manifest-path\",\"spikes/tauri/src-tauri/Cargo.toml\"]]];\nconst results=[];for(let i=0;i<steps.length;i++){const [cmd,args]=steps[i];const r=spawnSync(cmd,args,{encoding:\"utf8\",maxBuffer:16000000,env:{...process.env,CARGO_BUILD_JOBS:\"2\",CARGO_TARGET_DIR:path.resolve(\".www/tauri-target\")}});const output=(r.stdout??\"\")+(r.stderr??\"\");writeFileSync(\".www/evidence/resume-20261116/comparison-step-\"+i+\".log\",output);console.log(JSON.stringify({command:cmd,args,code:r.status,signal:r.signal,error:r.error?.message??null}));process.stdout.write(output);results.push({command:cmd,args,code:r.status});}\nconst deadline=Date.now()+600000;while(!existsSync(\".www/evidence/resume-20261116/gui-build-slot-free.json\")){if(Date.now()>deadline)throw Error(\"GUI build slot 600초 대기 초과\");await new Promise(r=>setTimeout(r,500));}\nconst r=spawnSync(\"npm\",[\"run\",\"check\"],{encoding:\"utf8\",maxBuffer:16000000});const output=(r.stdout??\"\")+(r.stderr??\"\");writeFileSync(\".www/evidence/resume-20261116/comparison-step-2.log\",output);process.stdout.write(output);results.push({command:\"npm\",args:[\"run\",\"check\"],code:r.status});writeFileSync(\".www/evidence/resume-20261116/comparison-steps.json\",JSON.stringify({scope:\"실제 npm test/strict/source/architecture/workflow/Electron build와 동일 Tauri UI/Cargo assertions. 설치된 Homebrew Cargo 경로와 locked dependency로 실행. 별도 중앙DB/배포 없음.\",results},null,2));process.exit(results.every(x=>x.code===0)?0:1);\n"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `2d406950fd1f42d748c0fdeed16db9faa4a29c08b02241d4af5c58e5a6228860`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 81471바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-ccaac2f7-dd50-4adc-a927-a5d0910f22ef"></a>
+## 검증 시도 — 2026-11-16T10:10:07.953Z
+
+- 시도 ID: `attempt-ccaac2f7-dd50-4adc-a927-a5d0910f22ef`
+- 실행 시각: 2026-11-16T10:07:48.511Z ~ 2026-11-16T10:10:07.953Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","\nimport {spawnSync} from \"node:child_process\";import {writeFileSync,existsSync} from \"node:fs\";import path from \"node:path\";\nconst steps=[[\"npm\",[\"run\",\"build:tauri-ui\"]],[\"/opt/homebrew/bin/cargo\",[\"test\",\"--locked\",\"--manifest-path\",\"spikes/tauri/src-tauri/Cargo.toml\"]]];\nconst results=[];for(let i=0;i<steps.length;i++){const [cmd,args]=steps[i];const r=spawnSync(cmd,args,{encoding:\"utf8\",maxBuffer:16000000,env:{...process.env,CARGO_BUILD_JOBS:\"2\",CARGO_TARGET_DIR:path.resolve(\".www/tauri-target\")}});const output=(r.stdout??\"\")+(r.stderr??\"\");writeFileSync(\".www/evidence/resume-20261116/comparison-step-\"+i+\".log\",output);console.log(JSON.stringify({command:cmd,args,code:r.status,signal:r.signal,error:r.error?.message??null}));process.stdout.write(output);results.push({command:cmd,args,code:r.status});}\nconst deadline=Date.now()+600000;while(!existsSync(\".www/evidence/resume-20261116/gui-build-slot-free.json\")){if(Date.now()>deadline)throw Error(\"GUI build slot 600초 대기 초과\");await new Promise(r=>setTimeout(r,500));}\nconst r=spawnSync(\"npm\",[\"run\",\"check\"],{encoding:\"utf8\",maxBuffer:16000000});const output=(r.stdout??\"\")+(r.stderr??\"\");writeFileSync(\".www/evidence/resume-20261116/comparison-step-2.log\",output);process.stdout.write(output);results.push({command:\"npm\",args:[\"run\",\"check\"],code:r.status});writeFileSync(\".www/evidence/resume-20261116/comparison-steps.json\",JSON.stringify({scope:\"실제 npm test/strict/source/architecture/workflow/Electron build와 동일 Tauri UI/Cargo assertions. 설치된 Homebrew Cargo 경로와 locked dependency로 실행. 별도 중앙DB/배포 없음.\",results},null,2));process.exit(results.every(x=>x.code===0)?0:1);\n"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src-tauri/src/lib.rs`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `f545a0efa991452c4fb764c7ac19c83e044efdd381aab6cbdeff2e17592db30b`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 66754바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-64826dac-4fed-4638-b99e-0870096c36e3"></a>
+## 검증 시도 — 2026-11-16T10:16:36.231Z
+
+- 시도 ID: `attempt-64826dac-4fed-4638-b99e-0870096c36e3`
+- 실행 시각: 2026-11-16T10:14:36.598Z ~ 2026-11-16T10:16:36.231Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","test:comparison"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `c64bfadab814ba2a9ca61b00a198a13cff9acc2124de9298b12bb05f503e6379`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 19592바이트, stderr 115321바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-af6a66d1-5b8e-438c-94b6-c91158f732dd"></a>
+## 검증 시도 — 2026-11-16T10:21:44.699Z
+
+- 시도 ID: `attempt-af6a66d1-5b8e-438c-94b6-c91158f732dd`
+- 실행 시각: 2026-11-16T10:19:31.676Z ~ 2026-11-16T10:21:44.699Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","-e","const {spawnSync}=require('node:child_process');const fs=require('node:fs');const r=spawnSync('npm',['run','test:comparison'],{encoding:'utf8',maxBuffer:16000000});fs.writeFileSync('.www/evidence/resume-20261116/scratch/final009-comparison-stdout.log',r.stdout||'');fs.writeFileSync('.www/evidence/resume-20261116/scratch/final009-comparison-stderr.log',r.stderr||'');process.stdout.write(r.stdout||'');process.stderr.write(r.stderr||'');if(r.error)throw r.error;process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `67f9a1376d896327cbb45ba5ffedc379e7a193edee2bc87496d7524258deb672`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 65536바이트, stderr 65536바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-71b01117-087a-4cdb-a794-3eb2ce271123"></a>
+## 검증 시도 — 2026-11-16T10:53:37.274Z
+
+- 시도 ID: `attempt-71b01117-087a-4cdb-a794-3eb2ce271123`
+- 실행 시각: 2026-11-16T10:51:20.871Z ~ 2026-11-16T10:53:37.274Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","-e","const {spawnSync}=require('node:child_process');const fs=require('node:fs');const r=spawnSync('npm',['run','test:comparison'],{encoding:'utf8',maxBuffer:16000000});fs.writeFileSync('.www/evidence/resume-20261116/scratch/final009-comparison-stdout.log',r.stdout||'');fs.writeFileSync('.www/evidence/resume-20261116/scratch/final009-comparison-stderr.log',r.stderr||'');process.stdout.write(r.stdout||'');process.stderr.write(r.stderr||'');if(r.error)throw r.error;process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `02dfe522e39cb0ca2cf23a0e66f52579535b924c107da2965cf978135018b90a`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 65536바이트, stderr 65536바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-0462c3f1-2a93-43fa-afe9-c9ee6593bfe0"></a>
+## 검증 시도 — 2026-11-16T10:56:32.605Z
+
+- 시도 ID: `attempt-0462c3f1-2a93-43fa-afe9-c9ee6593bfe0`
+- 실행 시각: 2026-11-16T10:54:17.525Z ~ 2026-11-16T10:56:32.605Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const r=spawnSync('npm',['run','check'],{encoding:'utf8',maxBuffer:16000000});writeFileSync('.www/evidence/remote-20261116/official009-full-check.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package.json`, `scripts`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `02dfe522e39cb0ca2cf23a0e66f52579535b924c107da2965cf978135018b90a`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 65536바이트, stderr 65536바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+## 2026-11-16 과거 시도 적용성 요약 재평가
+
+독립 검토에서 확대 전 입력으로 실행한 과거 시도의 원장 요약이 현재 적용 가능으로 남아 있음을 지적했다. 공식 `evaluateEvidence`로 원장에 연결된 각 시도를 현재 입력·환경·소스·기준과 대조하여 실제로 적용 불가인 요약 18개를 구체 사유와 함께 수정했다. 시도 원본·당시 결과·ID는 변경하지 않았고 수정 전 원장과 전체 변경 목록은 `.www/evidence/resume-20261116/scratch/freeze009-before-reassess.json`, `freeze009-reassess.log`에 보존했다. 최종 비교와 전체 검사 두 시도는 각각 실제 프로세스로 통과했으며 현재 증거 평가는 별도로 수행한다.
+
+<a id="attempt-a905a8e0-c7a7-4adc-b158-c09420019631"></a>
+## 검증 시도 — 2026-11-16T11:31:09.964Z
+
+- 시도 ID: `attempt-a905a8e0-c7a7-4adc-b158-c09420019631`
+- 실행 시각: 2026-11-16T11:28:49.385Z ~ 2026-11-16T11:31:09.964Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","-e","const {spawnSync}=require('node:child_process');const fs=require('node:fs');const r=spawnSync('npm',['run','test:comparison'],{encoding:'utf8',maxBuffer:16000000});fs.writeFileSync('.www/evidence/resume-20261116/scratch/final009-comparison-stdout.log',r.stdout||'');fs.writeFileSync('.www/evidence/resume-20261116/scratch/final009-comparison-stderr.log',r.stderr||'');process.stdout.write(r.stdout||'');process.stderr.write(r.stderr||'');if(r.error)throw r.error;process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `5d0eb21c298848a6ab8119d0f4c3e273d2e347a6f6a30545502786b192b25e1b`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 65536바이트, stderr 65536바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-5b90e501-76bf-4b79-a0ae-9486446990c8"></a>
+## 검증 시도 — 2026-11-16T11:33:26.632Z
+
+- 시도 ID: `attempt-5b90e501-76bf-4b79-a0ae-9486446990c8`
+- 실행 시각: 2026-11-16T11:31:10.697Z ~ 2026-11-16T11:33:26.632Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const r=spawnSync('npm',['run','check'],{encoding:'utf8',maxBuffer:16000000});writeFileSync('.www/evidence/remote-20261116/official009-full-check.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `5d0eb21c298848a6ab8119d0f4c3e273d2e347a6f6a30545502786b192b25e1b`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 65536바이트, stderr 65536바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+2026-11-16 통합 재검증은 실제 검사 의존의 `skill-library` 전체와 루트 `package-lock.json`을 기존 Tauri 입력에 추가한 뒤 수행했다. 공식 비교 `attempt-a905a8e0-c7a7-4adc-b158-c09420019631`과 전체 검사 `attempt-5b90e501-76bf-4b79-a0ae-9486446990c8`은 실제 프로세스 통과 및 소스 안정으로 기록됐다. 입력 확대와 소스 변경으로 낡은 과거 시도 요약 6건을 공식 `evaluateEvidence`로 재평가해 사유와 함께 바로잡았다. 당시 시도 및 수정 전 원장은 `.www/evidence/resume-20261116/scratch/integrated009-before-reassess.json`과 `integrated009-reassess.log`에 보존한다.
+
+<a id="attempt-ebe9572e-7e03-46c5-9c0a-4805ca3a894e"></a>
+## 검증 시도 — 2026-11-16T12:08:47.215Z
+
+- 시도 ID: `attempt-ebe9572e-7e03-46c5-9c0a-4805ca3a894e`
+- 실행 시각: 2026-11-16T12:06:04.907Z ~ 2026-11-16T12:08:47.215Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","-e","const {spawnSync}=require('node:child_process');const fs=require('node:fs');const r=spawnSync('npm',['run','test:comparison'],{encoding:'utf8',maxBuffer:16000000});fs.writeFileSync('.www/evidence/resume-20261116/scratch/final009-comparison-stdout.log',r.stdout||'');fs.writeFileSync('.www/evidence/resume-20261116/scratch/final009-comparison-stderr.log',r.stderr||'');process.stdout.write(r.stdout||'');process.stderr.write(r.stderr||'');if(r.error)throw r.error;process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `87cd0307b3897a4e5884d58c51606d4c0c66bea250eef10326e24231a3889764`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 65536바이트, stderr 65536바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-e6bb04f3-873d-4971-bef4-1b634f4cdd7b"></a>
+## 검증 시도 — 2026-11-16T12:09:11.086Z
+
+- 시도 ID: `attempt-e6bb04f3-873d-4971-bef4-1b634f4cdd7b`
+- 실행 시각: 2026-11-16T12:08:47.893Z ~ 2026-11-16T12:09:11.086Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const r=spawnSync('npm',['run','check'],{encoding:'utf8',maxBuffer:16000000});writeFileSync('.www/evidence/remote-20261116/official009-full-check.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');process.exit(r.status??1);"]`
+- 실행 결과: 실패; 종료 코드 미확인, 신호 SIGTERM
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `87cd0307b3897a4e5884d58c51606d4c0c66bea250eef10326e24231a3889764`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 0바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+
+## 2026-11-16 추가 source 수정 전후와 중단 시도의 보존
+
+확대된 입력 목록은 package-lock·skill-library와 Tauri/Rust source·Cargo manifest/lock·스키마·bridge를 유지한다. 실제 npm test:comparison의 `attempt-ebe9572e-7e03-46c5-9c0a-4805ca3a894e`는 당시 source에서 통과하고 sourceStable true로 기록됐다. 이어 자동 실행된 전체 check는 016 출력 보존 오류 수정에 앞서 root의 빌드 중단 지시에 따라 종료됐고 `attempt-e6bb04f3-873d-4971-bef4-1b634f4cdd7b`를 실제 failed로 남겼다. 부분 실행을 전체 검사 통과로 기록하지 않는다. 당시 출력은 새 prefix 백업과 SHA를 보존했으며 후속 source 변경 뒤에는 두 조건을 모두 새 실제 검사로 회수해야 한다.
+
+<a id="attempt-7e7c64d1-37ea-47a9-b3f4-1352abde4216"></a>
+## 검증 시도 — 2026-11-16T12:31:12.844Z
+
+- 시도 ID: `attempt-7e7c64d1-37ea-47a9-b3f4-1352abde4216`
+- 실행 시각: 2026-11-16T12:28:56.533Z ~ 2026-11-16T12:31:12.844Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","-e","const {spawnSync}=require('node:child_process');const fs=require('node:fs');const r=spawnSync('npm',['run','test:comparison'],{encoding:'utf8',maxBuffer:16000000});fs.writeFileSync('.www/evidence/resume-20261116/scratch/final009-comparison-stdout.log',r.stdout||'');fs.writeFileSync('.www/evidence/resume-20261116/scratch/final009-comparison-stderr.log',r.stderr||'');process.stdout.write(r.stdout||'');process.stderr.write(r.stderr||'');if(r.error)throw r.error;process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `0709e91e8dc8d12d8d7caee3250996f06c98c60fdc3c0200d7b13ee725940ef0`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 65536바이트, stderr 65536바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-e9cf4659-d08e-4138-871c-693ac7253c72"></a>
+## 검증 시도 — 2026-11-16T12:33:34.376Z
+
+- 시도 ID: `attempt-e9cf4659-d08e-4138-871c-693ac7253c72`
+- 실행 시각: 2026-11-16T12:31:13.549Z ~ 2026-11-16T12:33:34.376Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const r=spawnSync('npm',['run','check'],{encoding:'utf8',maxBuffer:16000000});writeFileSync('.www/evidence/remote-20261116/official009-full-check.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `0709e91e8dc8d12d8d7caee3250996f06c98c60fdc3c0200d7b13ee725940ef0`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 65536바이트, stderr 65536바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+
+## 최종 동결 source의 실제 전체 조건 회수
+
+최종 Native8 source·공통 계약2문서·번역 교정 뒤 별도 UUID의 영수증을 복사하지 않고 기존 승인 exact argv를 실제 재실행했다. `attempt-7e7c64d1-37ea-47a9-b3f4-1352abde4216`는 npm test:comparison의 npm test·Tauri UI build·Cargo assertions를 그대로 실행해 passed/sourceStable true로 기록했다. `attempt-e9cf4659-d08e-4138-871c-693ac7253c72`는 공식 npm run check의 환경·구조·source 정책·workflow·strict·전체 tests·Electron build를 그대로 실행해 passed/sourceStable true로 기록했다. 두 시도 모두 정본 recorded true이며 세 기준에 연결됐다. 과거 중단된 check 실패는 그대로 보존한다.
+
+원장 상단의 과거 시도 요약 중 현재 실제 evaluateEvidence가 stale로 판정한 링크만 당시 결과와 현재 적용 불가로 명확화했다. 전체 raw backup·해시·정확 summary diff를 contract-stale-summary-009-*에 보존했고 verifications/reviews/보고서 이력 배열과 기준 정의·result는 변경하지 않았다. 현재 적용 가능한 두 실제 시도는 그대로 보존했다.
+
+<a id="attempt-9321d3c0-646e-4ae0-bf6f-60eb05e65aac"></a>
+## 검증 시도 — 2026-11-16T21:17:51.038Z
+
+- 시도 ID: `attempt-9321d3c0-646e-4ae0-bf6f-60eb05e65aac`
+- 실행 시각: 2026-11-16T21:17:50.147Z ~ 2026-11-16T21:17:51.038Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","check:source"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `f0b2045470a5000400662c275676fa0c589d25ba047021f40968226b87e1f650`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 119바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-c6d617a2-049c-4f75-bac9-9516b94636a4"></a>
+## 검증 시도 — 2026-11-16T21:18:00.703Z
+
+- 시도 ID: `attempt-c6d617a2-049c-4f75-bac9-9516b94636a4`
+- 실행 시각: 2026-11-16T21:17:56.617Z ~ 2026-11-16T21:18:00.703Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","typecheck"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `f0b2045470a5000400662c275676fa0c589d25ba047021f40968226b87e1f650`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 76바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-7770c9f4-3041-441f-987d-74d5a5463a38"></a>
+## 검증 시도 — 2026-11-16T21:18:08.089Z
+
+- 시도 ID: `attempt-7770c9f4-3041-441f-987d-74d5a5463a38`
+- 실행 시각: 2026-11-16T21:18:06.202Z ~ 2026-11-16T21:18:08.089Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--test","test/workflow-contract.test.ts","test/workflow-harness.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `f0b2045470a5000400662c275676fa0c589d25ba047021f40968226b87e1f650`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 8575바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-1c74d2a1-f32c-476f-8ab6-97ebf7d99f66"></a>
+## 검증 시도 — 2026-11-16T21:19:23.781Z
+
+- 시도 ID: `attempt-1c74d2a1-f32c-476f-8ab6-97ebf7d99f66`
+- 실행 시각: 2026-11-16T21:19:22.972Z ~ 2026-11-16T21:19:23.781Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","check:source"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `9e459ab6bf1be2bbd73de7f35ecc4a841eea2d644380bfbab93b9e656e97b56c`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 119바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-4d017150-dcca-4db5-ae88-8408edc0190e"></a>
+## 검증 시도 — 2026-11-16T21:19:29.938Z
+
+- 시도 ID: `attempt-4d017150-dcca-4db5-ae88-8408edc0190e`
+- 실행 시각: 2026-11-16T21:19:26.297Z ~ 2026-11-16T21:19:29.938Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","typecheck"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `9e459ab6bf1be2bbd73de7f35ecc4a841eea2d644380bfbab93b9e656e97b56c`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 76바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-4e8a3de2-a4ed-4308-b735-0e93db6af49d"></a>
+## 검증 시도 — 2026-11-16T21:19:34.241Z
+
+- 시도 ID: `attempt-4e8a3de2-a4ed-4308-b735-0e93db6af49d`
+- 실행 시각: 2026-11-16T21:19:32.522Z ~ 2026-11-16T21:19:34.241Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--test","test/workflow-contract.test.ts","test/workflow-harness.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `9e459ab6bf1be2bbd73de7f35ecc4a841eea2d644380bfbab93b9e656e97b56c`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 8569바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-c2dbf687-04f0-4354-8c48-4965822f9cab"></a>
+## 검증 시도 — 2026-11-16T21:21:07.246Z
+
+- 시도 ID: `attempt-c2dbf687-04f0-4354-8c48-4965822f9cab`
+- 실행 시각: 2026-11-16T21:21:05.305Z ~ 2026-11-16T21:21:07.246Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","build"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `9e459ab6bf1be2bbd73de7f35ecc4a841eea2d644380bfbab93b9e656e97b56c`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 110바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-5c14b524-5aa3-489b-aa4b-3ee8c50ac6ef"></a>
+## 검증 시도 — 2026-11-16T21:23:53.828Z
+
+- 시도 ID: `attempt-5c14b524-5aa3-489b-aa4b-3ee8c50ac6ef`
+- 실행 시각: 2026-11-16T21:22:10.121Z ~ 2026-11-16T21:23:53.828Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","test:comparison"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`, `AC-3`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `package.json`, `scripts`, `skill-library`, `skills/www`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/scripts/compare.ts`, `spikes/tauri/scripts/package.json`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/build.rs`, `spikes/tauri/src-tauri/capabilities/default.json`, `spikes/tauri/src-tauri/gen/schemas/acl-manifests.json`, `spikes/tauri/src-tauri/gen/schemas/capabilities.json`, `spikes/tauri/src-tauri/gen/schemas/desktop-schema.json`, `spikes/tauri/src-tauri/gen/schemas/macOS-schema.json`, `spikes/tauri/src-tauri/icons/icon.png`, `spikes/tauri/src-tauri/src/lib.rs`, `spikes/tauri/src-tauri/src/main.rs`, `spikes/tauri/src-tauri/tauri.conf.json`, `spikes/tauri/src/bridge.ts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `9e459ab6bf1be2bbd73de7f35ecc4a841eea2d644380bfbab93b9e656e97b56c`
+- 기준 정의 식별: `6a772b0189796b3d1ee5d11cbd08e044c69f5a76f17a4cae55259732e3a0a021`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 21031바이트, stderr 136308바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.

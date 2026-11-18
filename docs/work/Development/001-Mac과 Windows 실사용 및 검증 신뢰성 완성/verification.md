@@ -306,3 +306,32 @@ Mac 실제 Native 전체 시나리오는 동결된 현재 코드로 다시 실�
 검사 종료 뒤 다른 세션에서 renderer.tsx·ecosystem-view.tsx/CSS·architecture.generated.json 및 제품/구조/개발 정본 문서의 추가 변경을 관측했다. 이번 담당자는 해당 소스를 덮어쓰지 않았고 새 유료 검사나 제품 수정을 추가하지 않았다. 확보한 실제 프로세스 PASS/FAIL과 그 당시 sourceStable 결과는 원장에 그대로 보존한다. 현재 전체 입력 지문이 달라진 시도는 최신 status에서 source_changed로 구분하며 검사 당시 통과를 현재 전체 소스의 통과로 승격하지 않는다.
 
 최종 보고서는 이 부분 완료와 미실측/결함/병행 변경 한계를 반영한 현재 스냅샷이다. 보고서가 앱에서 current로 읽힌다는 사실은 업무 complete나 모든 기능 증거 usable을 뜻하지 않는다. 다른 세션의 후속 편집 뒤에는 보고서와 문서 검토도 다시 stale로 바뀔 수 있다. 구현/기준 동결 시점을 다시 정한 뒤 필요한 범위의 검증과 독립 검토를 회수해야 한다.
+
+## 현재 일반 호스트의 OS 입력 가능성 조회
+
+2026-11-16T12:37:02.226274+00:00에 실제 Swift 조회 API가 exit0으로 접근성·OS 이벤트 전송·화면 캡처 권한 false, 콘솔/login true를 반환했다. Orca spawn은 ENOENT였다. 원문 및 argv/exit 영수증은 `.www/evidence/resume-20261116/os-input-host/{swift,orca}.{stdout,stderr,process.json}`에 보존했다. UI 승인이나 설정을 변경하지 않았으며 실제 IME 검사는 수행하지 않았다. Electron/CDP·Chrome GUI 성공과 이 OS 입력 경계는 별개다. 현재 소스의 나머지 공통 검사는 별도 시도로 연결하고, source-machine/옛 Windows/Opus 성공을 현재 PASS로 승격하지 않는다.
+
+
+## 현재 Electron 프로세스의 OS 입력 관련 권한 조회
+
+
+추가로 Electron39.8.10/내장 Node22.22.1 프로세스의 공식 API 조회도 `accessibilityTrusted=false`, `screenCapture=denied`였다. 이 조회는 권한 요청 UI를 열지 않았고 Native나 앱 기능 검사를 대체하지 않는다. 실제 코드/strict/컴파일/프로세스 영수증은 `.www/evidence/resume-20261116/os-input-host/electron-*`에 보존했다.
+
+이 조회 결과는 AC-4의 실제 OS IME 검사가 미실행인 이유를 한정한다. CDP screenshot·합성 composition이나 일반 GUI 실행의 실패로 일반화하지 않으며 기준 PASS로 연결하지 않았다.
+
+<a id="attempt-1fac06c2-8ca2-4e12-90af-a3f2e8dec7ef"></a>
+## 검증 시도 — 2026-11-16T15:05:37.556Z
+
+- 시도 ID: `attempt-1fac06c2-8ca2-4e12-90af-a3f2e8dec7ef`
+- 실행 시각: 2026-11-16T15:04:59.993Z ~ 2026-11-16T15:05:37.556Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';import assert from 'node:assert/strict';const steps=[['bun',['test','test/native-session.test.ts','test/projection.test.ts','test/input.test.ts','--timeout','30000']],['node',['--test','test/workflow-work.test.ts']]];const receipts=[];for(const [i,[command,args]] of steps.entries()){const startedAt=new Date().toISOString();const r=spawnSync(command,args,{encoding:'utf8',timeout:180000,maxBuffer:6000000});const file='.www/evidence/resume-20261116/root-closeout/development-current-step-'+i+'.log';writeFileSync(file,(r.stdout??'')+(r.stderr??''));receipts.push({command,args,startedAt,completedAt:new Date().toISOString(),status:r.status,signal:r.signal,error:r.error?.message,log:file});writeFileSync('.www/evidence/resume-20261116/root-closeout/development-current-steps.json',JSON.stringify(receipts,null,2));assert.equal(r.status,0,command+' failed; see '+file);assert.equal(r.signal,null);}console.log(JSON.stringify({result:'passed',steps:receipts,scope:'현재 Native 합성 interrupt/늦은사건회귀 및 실제자식SIGKILL·잠금회수·동시보호·근거현재성',limitations:['실제사용자Native승인/OSIME/Windows/actualOpus실행아님']}));"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-5`, `AC-6`, `AC-8`
+- 소스 HEAD: `a720468172a0ea64cb3b4a8e1de36289144df98d`
+- 검증 입력: `.gitattributes`, `AGENTS.md`, `agents/www`, `build.ts`, `docs/DEVELOPMENT.md`, `docs/architecture`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/chat.md`, `docs/windows.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/check-workflow.mjs`, `scripts/check-workflow.ts`, `scripts/verify-eight-items.mjs`, `scripts/verify-eight-items.ts`, `scripts/windows-package.mjs`, `scripts/windows-package.ts`, `scripts/windows-setup.mjs`, `scripts/windows-setup.ts`, `scripts/workflow`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `f1bfd9e0516738798d4ffe4494f548fd336d6cff35cb19f2c749f20cd6cce2bd`
+- 기준 정의 식별: `656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 815바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.

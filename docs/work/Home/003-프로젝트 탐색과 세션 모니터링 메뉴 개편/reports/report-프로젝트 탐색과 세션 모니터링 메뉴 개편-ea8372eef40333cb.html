@@ -1,0 +1,869 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>프로젝트 탐색과 세션 모니터링 메뉴 개편 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+dd.result-status{font-weight:600}dd.result-passed{color:var(--green)}dd.result-failed{color:var(--red)}dd.result-blocked,dd.result-unverified{color:var(--amber)}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 17일 AM 8:30 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>프로젝트 탐색과 세션 모니터링 메뉴 개편</h1><p class="lead">프로젝트 탐색·모니터링과 대화·탭 상태 보존의 v5 실제 관측을 같은 UUID에서 부분 회수했다. 고유 verify-home의 프로젝트·메뉴·모니터링 진입과 공식 verify-chat·verify-sessions의 대화 복원·초안/읽기 위치·실행/승인 보호·동시 탭 격리 actual assertion을 회수했다. 추가 Native 실제 감사 반례에 따른 v6 교정을 기다리며 전체 업무 완료를 주장하지 않는다.</p><div id="report-story" class="story">과거 집중/GUI 기록은 후속 공유 소스 변경 때문에 최신 전체 검증으로 사용할 수 없었다. 단순 파일 존재·해시 검사와 실제 사용자 시나리오의 실행도 구분해야 했다.
+
+고유 verify-home의 프로젝트·메뉴·모니터링 진입과 공식 verify-chat·verify-sessions의 대화 복원·초안/읽기 위치·실행/승인 보호·동시 탭 격리 actual assertion을 회수했다. actual process·등록 verify 시도·summary assertion·원본 artifact의 bytes/SHA를 구분해 evidence-current-v5.md에 보존하고 현재 계획과 공식 문서 영향 검토를 연결했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 7 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> Root v6 교정 후 영향 검사를 적용하고 실제 필요한 정확 GUI 관측을 같은 UUID로 회수한다.</p><p class="state-note">저장 당시 기준 중 5개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>과거 집중/GUI 기록은 후속 공유 소스 변경 때문에 최신 전체 검증으로 사용할 수 없었다. 단순 파일 존재·해시 검사와 실제 사용자 시나리오의 실행도 구분해야 했다.</p></div><div><h3>접근과 결과</h3><p>고유 verify-home의 프로젝트·메뉴·모니터링 진입과 공식 verify-chat·verify-sessions의 대화 복원·초안/읽기 위치·실행/승인 보호·동시 탭 격리 actual assertion을 회수했다. actual process·등록 verify 시도·summary assertion·원본 artifact의 bytes/SHA를 구분해 evidence-current-v5.md에 보존하고 현재 계획과 공식 문서 영향 검토를 연결했다.</p></div></div><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>Root 단독 GUI 실행에서 각 UUID의 고유 관측을 받았으며 다른 UUID의 PASS를 복사하지 않았다.</li><li>제품 기술 v5 fingerprint와 문서 추가로 달라진 작업 scope를 분리했다.</li><li>Root 추가 반례 교정 전 실제 full Terra 감사를 보류해 중간 소스의 감사를 반복하지 않았다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>같은 UUID·기준·원래 권한·과거 실패를 보존했다.</li><li>고유 actual 관측의 범위와 미관측을 own 근거 문서에 고정하고 작업 inputs와 현재 다음 행동을 연결했다.</li><li>현재 의미/감사 기준은 파일 checker 또는 단위 명령의 성공만으로 통과시키지 않았다.</li></ul></div><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>프로젝트 목록을 열고 탐색하거나 닫는 동안 중앙의 현재 프로젝트·화면·선택 상태를 유지하며 홈 보드로 강제 이동하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>현재 프로젝트 재선택은 기존 화면을 유지하고 다른 프로젝트의 명시 선택 성공 때만 해당 대상의 대시보드로 전환한다. 프로젝트 추가 취소·실패 시 기존 화면과 선택을 보존한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>프로젝트 목록 열기는 실행 중에도 가능하며 실제 다른 프로젝트 전환에는 전송·실행·대화 준비·미결 승인·실패 원문 보호를 유지한다. 사이드바 탐색으로 Native 실행을 중단하거나 새 요청을 만들지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>프로젝트 공통 메뉴를 대시보드·대화·생태계·리포트·모니터링 순서로 제공하고 프로젝트 목록과 명시적 전체 대시보드 열기를 구분한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>대화 상단의 상세 모니터·세션 모니터 접기/열기 두 기존 버튼을 JSX 주석 처리해 비활성화하고 모니터링 메뉴로 세션 개요와 상세 관측에 접근한다. 숨은 버튼이 키보드 초점이나 클릭 대상에 남지 않는다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>모니터링은 현재 선택한 Codex 대화 탭의 sessionId·프로젝트·thread 범위에 연결되고 활성 턴과 과거 턴의 출처를 구분한다. 다른 탭의 사건·승인·리소스를 혼합하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>모니터링에서 기존 공개 실행·Plan/Progress·Skills/Hooks·리소스·사용량·사건 관측을 재사용하며 새 대화·자료 없음·로딩·연결 종료·수집 오류·부분 이력·오래된 관측을 사실에 따라 표시한다. 관측 열기만으로 새 thread/turn·자동 재전송을 만들지 않는다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>대화·모니터링·프로젝트 목록·다른 탭을 왕복해도 같은 대화의 입력 초안·읽기 위치·출력 카드 펼침을 유지하며 리포트 선택과 생태계 경로 등 현재 화면 상태를 보존한다. 비활성 화면에서도 실행 관측을 놓치지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>프로젝트 목록·명시적 화면 이동·모니터링을 키보드와 좁은 창에서 사용할 수 있고 현재 프로젝트·세션·선택 메뉴와 초점이 식별된다. 실제 Electron과 합성 Native 시나리오·스크린샷·소스 식별을 연결해 검증한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>명세·설계·실행 계획에 기준별 구현·검증·관련 기존 작업과 권한을 연결하고 현행 구현·새 목표·미실행 검토를 구분한다. 문서 작성만으로 제품 구현이나 완료를 표시하지 않는다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 7건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>Root Native003/006/013/015 실제 감사가 추가 반례를 발견하여 projection·native-activity·agent-overview 및 관련 검사/oracle의 v6 교정을 준비한다. broad src 입력에 영향을 주므로 v5 관측을 새 소스의 통과로 승격하지 않는다.</li><li>이 Home UUID의 전체 기준 actual Terra 감사·업무 완료 action은 아직 실행하지 않았다. 부분 관측을 전체 수용으로 표시하지 않는다.</li><li>실제 Electron/IPC/별도 stdio 프로세스는 합성 Native fixture를 사용했다. 실제 OS picker·IME·Windows·외부 RPA·실제 Native 모델은 이 검증 범위 밖이다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>Root v6 교정 후 영향 검사를 적용하고 실제 필요한 정확 GUI 관측을 같은 UUID로 회수한다.</li><li>최종 동결 뒤 전체 기준 actual gpt-6.1-terra 읽기 전용 감사의 내용 수용과 공식 결과 기록을 확인한다.</li><li>현재 저작 보고서·공식 완료 조건과 원장/HTML readback을 다시 확인한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 17일 AM 8:30 · 선택한 발행 기록 · 프로젝트 탐색·모니터링과 대화·탭 상태 보존의 v5 실제 관측을 같은 UUID에서 부분 회수했다. 고유 verify-home의 프로젝트·메뉴·모니터링 진입과 공식 verify-chat·verify-sessions의 대화 복원·초안/읽기 위치·실행/승인 보호·동시 탭 격리 actual assertion을 회수했다. 추가 Native 실제 감사 반례에 따른 v6 교정을 기다리며 전체 업무 완료를 주장하지 않는다.</p><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 3개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 16일 PM 5:34 · 작성자 보고서 · 프로젝트 탐색·모니터링 메뉴의 현재 미검증 범위와 다음 행동을 회수했다.</summary><article><h3>프로젝트 탐색과 세션 모니터링 메뉴 개편</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">프로젝트 탐색·모니터링 메뉴의 현재 미검증 범위와 다음 행동을 회수했다. 같은 UUID의 단일 현재 계획과 문서 영향 검토를 기록하고 verify로 인계했다. 전체 unit 검사는 별도 통과 사실로 유지했다. 선택·키보드·왕복·세션 격리의 실제 GUI와 필수 Opus는 현재 미실행이다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 현재 인계 문서의 남은 실제 검증·필수 감사를 재개한다.</p><p class="blocker"><strong>남은 차단 사항</strong> NAV-KEEP: 검증 시도 없음; NAV-SELECT: 검증 시도 없음; NAV-GUARD: 검증 시도 없음; NAV-MENU: 검증 시도 없음; MON-ENTRY: 검증 시도 없음; MON-SCOPE: 검증 시도 없음; MON-STATES: 검증 시도 없음; STATE-RETURN: 검증 시도 없음; ACCESS-VERIFY: 검증 시도 없음; DOC-HANDOFF: 검증 시도 없음; 필수 독립 검토 없음; 현재 소스·기준·기록의 저작 작업 보고서 없음</p><p class="state-note">저장 당시 기준 중 10개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>같은 UUID의 단일 현재 계획과 문서 영향 검토를 기록하고 verify로 인계했다. 전체 unit 검사는 별도 통과 사실로 유지했다.</li><li>현재 계획은 같은 UUID의 tasks.md에 두고 이전 계획은 이력으로 구분했다.</li></ul><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">같은 UUID의 실제 결과와 미실행 구분</td><td data-label="바뀐 동작">같은 UUID의 단일 현재 계획과 문서 영향 검토를 기록하고 verify로 인계했다. 전체 unit 검사는 별도 통과 사실로 유지했다.</td><td data-label="근거와 한계">.www/evidence/remote-20261116/scratch/local-remaining.md<p class="limit">선택·키보드·왕복·세션 격리의 실제 GUI와 필수 Opus는 현재 미실행이다.</p></td></tr></tbody></table><section class="paper" id="history-report-542d8308-1f9e-45f0-90de-8185a5485db0-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>source-machine 기록과 현 머신의 실제 실행을 분리하고 기준·권한을 약화하지 않았다.</li></ul></section><section class="paper" id="history-report-542d8308-1f9e-45f0-90de-8185a5485db0-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>현재 원장과 증거 적용성</h3><dl><div><dt>확인 방법</dt><dd>공식 read/status 및 실제 명령·독립 읽기 전용 대조</dd></div><div><dt>기대 결과</dt><dd>과거 성공이나 부분 검사로 전체 완료를 만들지 않음</dd></div><div><dt>실제 관측</dt><dd>업무 완료 false를 유지하고 기준별 현재 적용성과 미검증을 나누었다.</dd></div><div><dt>확인 범위와 한계</dt><dd>선택·키보드·왕복·세션 격리의 실제 GUI와 필수 Opus는 현재 미실행이다.</dd></div></dl></article><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>선택·키보드·왕복·세션 격리의 실제 GUI와 필수 Opus는 현재 미실행이다.</li><li>Claude OAuth 만료 및 자동 갱신 실패로 필수 감사가 not_run이며 대체 모델은 실행하지 않았다. 커밋·push·배포·외부 쓰기를 하지 않았다.</li></ul></section><section class="paper" id="history-report-542d8308-1f9e-45f0-90de-8185a5485db0-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>현재 인계 문서의 남은 실제 검증·필수 감사를 재개한다.</h3><dl><div><dt>담당</dt><dd>후속 Codex 통합자</dd></div><div><dt>해소 조건</dt><dd>현재 기능·환경·필수 감사와 저작 보고서가 모두 적용 가능함</dd></div><div><dt>영향</dt><dd>미충족 동안 업무 완료로 승격하지 않음</dd></div></dl></article><h3>기존 서술에 기록된 남은 일</h3><ul><li>현재 원장의 다음 행동 verify에서 계획에 기록한 실제 미실행 구간을 확인한다.</li><li>GUI/Native/Opus 또는 BoxBox 전제가 필요한 경우 현재 금지된 인증·전역 설정·승인 변경을 이 실행에서 우회하지 않는다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>이 보고서의 실제 실행 범위와 실패/제한 원문 확인</p><code>.www/evidence/remote-20261116/scratch/local-remaining.md</code></li></ol><details id="history-report-542d8308-1f9e-45f0-90de-8185a5485db0-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-0e282d77-1c00-4663-8860-483d28148f74<br>report-542d8308-1f9e-45f0-90de-8185a5485db0</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>4f5dc24c26603085c6d680aa832b953091d52d7b1a8e87dc96c67898631a3db2</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>38dc8d6818f3273a6dcc4639cd775c848d7cf1e4a3698f67f3c82e7a4ceb9636</code></dd></div><div><dt>기준 지문</dt><dd><code>a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;NAV-KEEP: 검증 시도 없음; NAV-SELECT: 검증 시도 없음; NAV-GUARD: 검증 시도 없음; NAV-MENU: 검증 시도 없음; MON-ENTRY: 검증 시도 없음; MON-SCOPE: 검증 시도 없음; MON-STATES: 검증 시도 없음; STATE-RETURN: 검증 시도 없음; ACCESS-VERIFY: 검증 시도 없음; DOC-HANDOFF: 검증 시도 없음; 필수 독립 검토 없음; 현재 소스·기준·기록의 저작 작업 보고서 없음&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;NAV-KEEP&quot;,
+      &quot;description&quot;: &quot;프로젝트 목록을 열고 탐색하거나 닫는 동안 중앙의 현재 프로젝트·화면·선택 상태를 유지하며 홈 보드로 강제 이동하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;NAV-SELECT&quot;,
+      &quot;description&quot;: &quot;현재 프로젝트 재선택은 기존 화면을 유지하고 다른 프로젝트의 명시 선택 성공 때만 해당 대상의 대시보드로 전환한다. 프로젝트 추가 취소·실패 시 기존 화면과 선택을 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;NAV-GUARD&quot;,
+      &quot;description&quot;: &quot;프로젝트 목록 열기는 실행 중에도 가능하며 실제 다른 프로젝트 전환에는 전송·실행·대화 준비·미결 승인·실패 원문 보호를 유지한다. 사이드바 탐색으로 Native 실행을 중단하거나 새 요청을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;NAV-MENU&quot;,
+      &quot;description&quot;: &quot;프로젝트 공통 메뉴를 대시보드·대화·생태계·리포트·모니터링 순서로 제공하고 프로젝트 목록과 명시적 전체 대시보드 열기를 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;MON-ENTRY&quot;,
+      &quot;description&quot;: &quot;대화 상단의 상세 모니터·세션 모니터 접기/열기 두 기존 버튼을 JSX 주석 처리해 비활성화하고 모니터링 메뉴로 세션 개요와 상세 관측에 접근한다. 숨은 버튼이 키보드 초점이나 클릭 대상에 남지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;MON-SCOPE&quot;,
+      &quot;description&quot;: &quot;모니터링은 현재 선택한 Codex 대화 탭의 sessionId·프로젝트·thread 범위에 연결되고 활성 턴과 과거 턴의 출처를 구분한다. 다른 탭의 사건·승인·리소스를 혼합하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;MON-STATES&quot;,
+      &quot;description&quot;: &quot;모니터링에서 기존 공개 실행·Plan/Progress·Skills/Hooks·리소스·사용량·사건 관측을 재사용하며 새 대화·자료 없음·로딩·연결 종료·수집 오류·부분 이력·오래된 관측을 사실에 따라 표시한다. 관측 열기만으로 새 thread/turn·자동 재전송을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;STATE-RETURN&quot;,
+      &quot;description&quot;: &quot;대화·모니터링·프로젝트 목록·다른 탭을 왕복해도 같은 대화의 입력 초안·읽기 위치·출력 카드 펼침을 유지하며 리포트 선택과 생태계 경로 등 현재 화면 상태를 보존한다. 비활성 화면에서도 실행 관측을 놓치지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;ACCESS-VERIFY&quot;,
+      &quot;description&quot;: &quot;프로젝트 목록·명시적 화면 이동·모니터링을 키보드와 좁은 창에서 사용할 수 있고 현재 프로젝트·세션·선택 메뉴와 초점이 식별된다. 실제 Electron과 합성 Native 시나리오·스크린샷·소스 식별을 연결해 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;DOC-HANDOFF&quot;,
+      &quot;description&quot;: &quot;명세·설계·실행 계획에 기준별 구현·검증·관련 기존 작업과 권한을 연결하고 현행 구현·새 목표·미실행 검토를 구분한다. 문서 작성만으로 제품 구현이나 완료를 표시하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;프로젝트 탐색·모니터링 메뉴의 현재 미검증 범위와 다음 행동을 회수했다.&quot;,
+  &quot;before&quot;: &quot;구현·source-machine GUI와 새 머신의 현재 검증을 혼동하지 않는 인계가 필요했다.&quot;,
+  &quot;after&quot;: &quot;같은 UUID의 단일 현재 계획과 문서 영향 검토를 기록하고 verify로 인계했다. 전체 unit 검사는 별도 통과 사실로 유지했다.&quot;,
+  &quot;changes&quot;: [
+    &quot;같은 UUID의 단일 현재 계획과 문서 영향 검토를 기록하고 verify로 인계했다. 전체 unit 검사는 별도 통과 사실로 유지했다.&quot;,
+    &quot;현재 계획은 같은 UUID의 tasks.md에 두고 이전 계획은 이력으로 구분했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;source-machine 기록과 현 머신의 실제 실행을 분리하고 기준·권한을 약화하지 않았다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;선택·키보드·왕복·세션 격리의 실제 GUI와 필수 Opus는 현재 미실행이다.&quot;,
+    &quot;Claude OAuth 만료 및 자동 갱신 실패로 필수 감사가 not_run이며 대체 모델은 실행하지 않았다. 커밋·push·배포·외부 쓰기를 하지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;현재 원장의 다음 행동 verify에서 계획에 기록한 실제 미실행 구간을 확인한다.&quot;,
+    &quot;GUI/Native/Opus 또는 BoxBox 전제가 필요한 경우 현재 금지된 인증·전역 설정·승인 변경을 이 실행에서 우회하지 않는다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;프로젝트 탐색·모니터링 메뉴의 현재 미검증 범위와 다음 행동을 회수했다. 같은 UUID의 단일 현재 계획과 문서 영향 검토를 기록하고 verify로 인계했다. 전체 unit 검사는 별도 통과 사실로 유지했다. 선택·키보드·왕복·세션 격리의 실제 GUI와 필수 Opus는 현재 미실행이다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;같은 UUID의 실제 결과와 미실행 구분&quot;,
+        &quot;result&quot;: &quot;같은 UUID의 단일 현재 계획과 문서 영향 검토를 기록하고 verify로 인계했다. 전체 unit 검사는 별도 통과 사실로 유지했다.&quot;,
+        &quot;evidence&quot;: &quot;.www/evidence/remote-20261116/scratch/local-remaining.md&quot;,
+        &quot;limitations&quot;: &quot;선택·키보드·왕복·세션 격리의 실제 GUI와 필수 Opus는 현재 미실행이다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;현재 원장과 증거 적용성&quot;,
+        &quot;method&quot;: &quot;공식 read/status 및 실제 명령·독립 읽기 전용 대조&quot;,
+        &quot;expected&quot;: &quot;과거 성공이나 부분 검사로 전체 완료를 만들지 않음&quot;,
+        &quot;observed&quot;: &quot;업무 완료 false를 유지하고 기준별 현재 적용성과 미검증을 나누었다.&quot;,
+        &quot;limitations&quot;: &quot;선택·키보드·왕복·세션 격리의 실제 GUI와 필수 Opus는 현재 미실행이다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;.www/evidence/remote-20261116/scratch/local-remaining.md&quot;,
+        &quot;purpose&quot;: &quot;이 보고서의 실제 실행 범위와 실패/제한 원문 확인&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;현재 인계 문서의 남은 실제 검증·필수 감사를 재개한다.&quot;,
+        &quot;owner&quot;: &quot;후속 Codex 통합자&quot;,
+        &quot;doneWhen&quot;: &quot;현재 기능·환경·필수 감사와 저작 보고서가 모두 적용 가능함&quot;,
+        &quot;impact&quot;: &quot;미충족 동안 업무 완료로 승격하지 않음&quot;
+      }
+    ]
+  }
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 PM 2:46 · 작성자 보고서 · 프로젝트 목록 탐색 중 중앙 화면 유지와 다섯 공통 메뉴·현재 대화 탭의 세션 모니터링을 Home003의 명세·설계·실행 계획으로 정리했다. 제품 코드는 변경하지 않았다. 문서 계약과 기준별 연결은 확인했으며 별도 Claude Sonnet 5 의미 검토는 180초 응답 시간 초과로 미실행 상태다.</summary><article><h3>프로젝트 탐색과 세션 모니터링 메뉴 개편</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">목록을 살펴보는 동안 하던 작업이 사라지는 불편을 줄이기 위해 탐색과 중앙 화면을 분리하는 다음 구현 기준을 작성했다. 사용자가 정한 다섯 메뉴와 세션 모니터링 범위를 명세·설계·실행 계획에 연결했다. 문서 구조와 기준 연결은 확인했지만 앱은 변경하지 않았으며 별도 의미 검토의 응답은 받지 못했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 별도 문서 의미 검토와 제품 구현 권한을 확인한 뒤 계획을 실행한다.</p><p class="state-note">저장 당시 기준 중 10개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>명세에 사용자 확정 사항과 설계 기본안, 정상·취소·실패·보호·빈 상태·세션 격리 시나리오를 기록했다.</li><li>설계에 상태 소유와 기존 세션 API·투영 재사용, 화면 생명주기·초점·예상 영향 파일을 기록했다.</li><li>실행 계획에 기준 10개와 단계별 구현·검증·소유·의존성·문서 갱신을 연결했다.</li><li>작업 원장과 목차, 실제 문서 검사·검토 한계를 남겼다.</li><li>초기 문서 대조의 ready와 문서 영향 검토 기록 뒤의 verifying를 구분해 현재 보고서의 상태 표현을 정정했다.</li></ul><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">프로젝트 목록 탐색 중 현재 화면 유지</td><td data-label="바뀐 동작">정상·현재 대상 재선택·다른 대상 선택·추가 취소와 실패의 전환 규칙을 문서화했다.</td><td data-label="근거와 한계">docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md<p class="limit">제품 행동 미검증</p></td></tr><tr><td data-label="항목">다섯 메뉴와 세션 모니터링</td><td data-label="바뀐 동작">메뉴 순서·두 기존 버튼의 주석 처리·현재 탭의 세션 격리와 화면 왕복 보존을 정의했다.</td><td data-label="근거와 한계">docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md<p class="limit">제품 구현 미실행</p></td></tr></tbody></table><section class="paper" id="history-report-8b40eff3-86e2-4fa3-b777-72dd94c0152b-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>Home002와 자동 Native001의 이력을 보존하고 후속 문서의 정본을 새 Home003 UUID로 연결했다.</li><li>현행 제품·기능 명세는 기존 구현을 설명하도록 유지하고 새 목표를 현재 제공 기능으로 승격하지 않았다.</li><li>모니터링은 선택한 대화 탭의 세션 범위로 한정하고 기존 승인·실행 보호와 Chat014의 읽기·성능 요구를 재사용한다.</li></ul></section><section class="paper" id="history-report-8b40eff3-86e2-4fa3-b777-72dd94c0152b-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>작업 문서 계약</h3><dl><div><dt>확인 방법</dt><dd>node scripts/check-workflow.ts 및 기준별 참조 대조</dd></div><div><dt>기대 결과</dt><dd>목차·스키마·링크와 기준 10개 연결이 유효함</dd></div><div><dt>실제 관측</dt><dd>종료 코드 0과 10개 기준의 spec/tasks 참조를 확인했다.</dd></div><div><dt>확인 범위와 한계</dt><dd>의미 승인과 기능 검증을 대체하지 않음</dd></div></dl></article><article class="check"><h3>별도 문서 의미 검토</h3><dl><div><dt>확인 방법</dt><dd>도구 없는 Claude CLI에 claude-sonnet-5를 요청</dd></div><div><dt>기대 결과</dt><dd>spec/consistency의 근거 있는 검토 응답</dd></div><div><dt>실제 관측</dt><dd>180초 응답 시간 초과, stdout/stderr 0바이트, 공식 상태 not_run</dd></div><div><dt>확인 범위와 한계</dt><dd>실제 모델과 실패 원인 미확인</dd></div></dl></article><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>제품 구현·행동 테스트·GUI·IME·Windows 실기 검증과 필수 제품 감사는 미실행이다.</li><li>Claude Sonnet 5 문서 검토는 180초 응답 시간 초과로 spec·consistency 모두 not_run이며 실제 모델 metadata와 검토 승인을 얻지 못했다.</li><li>작업 verifying·다음 단계 review와 모든 수용 기준 unverified를 유지한다. 커밋·푸시는 실행하지 않았다.</li></ul></section><section class="paper" id="history-report-8b40eff3-86e2-4fa3-b777-72dd94c0152b-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>별도 문서 의미 검토와 제품 구현 권한을 확인한 뒤 계획을 실행한다.</h3><dl><div><dt>담당</dt><dd>Codex 통합 책임자</dd></div><div><dt>해소 조건</dt><dd>현재 기준과 source에 연결된 실제 구현·검증·필수 검토가 확보됨</dd></div><div><dt>영향</dt><dd>현재 앱의 탐색 동작은 그대로 유지됨</dd></div></dl></article><h3>기존 서술에 기록된 남은 일</h3><ul><li>유효한 별도 문서 의미 검토를 받아 spec·consistency 결과를 기록한다.</li><li>제품 코드 쓰기 권한을 받은 뒤 같은 UUID로 탐색 분리·모니터링 연결을 구현하고 계획의 실제 시나리오를 검증한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>사용자 여정·전환 규칙·범위를 확인한다.</p><code>docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md</code></li><li><p>상태·세션·화면 생명주기와 영향 파일을 확인한다.</p><code>docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md</code></li><li><p>기준별 구현·검증·소유와 다음 실행 순서를 확인한다.</p><code>docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/tasks.md</code></li><li><p>실제 문서 검사와 검토 미실행의 한계를 확인한다.</p><code>docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/verification.md</code></li></ol><details id="history-report-8b40eff3-86e2-4fa3-b777-72dd94c0152b-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-0e282d77-1c00-4663-8860-483d28148f74<br>report-8b40eff3-86e2-4fa3-b777-72dd94c0152b</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>b71a28598ecd00c9b75c6988b2b7a662eff8feca0ebe74090beb73b1f7abbf88</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>504dc9fa11d6bf8147b0ca345e3dda7f800f0831eaa20ea074a43a8aac3a8ebc</code></dd></div><div><dt>기준 지문</dt><dd><code>a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;NAV-KEEP&quot;,
+      &quot;description&quot;: &quot;프로젝트 목록을 열고 탐색하거나 닫는 동안 중앙의 현재 프로젝트·화면·선택 상태를 유지하며 홈 보드로 강제 이동하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;NAV-SELECT&quot;,
+      &quot;description&quot;: &quot;현재 프로젝트 재선택은 기존 화면을 유지하고 다른 프로젝트의 명시 선택 성공 때만 해당 대상의 대시보드로 전환한다. 프로젝트 추가 취소·실패 시 기존 화면과 선택을 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;NAV-GUARD&quot;,
+      &quot;description&quot;: &quot;프로젝트 목록 열기는 실행 중에도 가능하며 실제 다른 프로젝트 전환에는 전송·실행·대화 준비·미결 승인·실패 원문 보호를 유지한다. 사이드바 탐색으로 Native 실행을 중단하거나 새 요청을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;NAV-MENU&quot;,
+      &quot;description&quot;: &quot;프로젝트 공통 메뉴를 대시보드·대화·생태계·리포트·모니터링 순서로 제공하고 프로젝트 목록과 명시적 전체 대시보드 열기를 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;MON-ENTRY&quot;,
+      &quot;description&quot;: &quot;대화 상단의 상세 모니터·세션 모니터 접기/열기 두 기존 버튼을 JSX 주석 처리해 비활성화하고 모니터링 메뉴로 세션 개요와 상세 관측에 접근한다. 숨은 버튼이 키보드 초점이나 클릭 대상에 남지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;MON-SCOPE&quot;,
+      &quot;description&quot;: &quot;모니터링은 현재 선택한 Codex 대화 탭의 sessionId·프로젝트·thread 범위에 연결되고 활성 턴과 과거 턴의 출처를 구분한다. 다른 탭의 사건·승인·리소스를 혼합하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;MON-STATES&quot;,
+      &quot;description&quot;: &quot;모니터링에서 기존 공개 실행·Plan/Progress·Skills/Hooks·리소스·사용량·사건 관측을 재사용하며 새 대화·자료 없음·로딩·연결 종료·수집 오류·부분 이력·오래된 관측을 사실에 따라 표시한다. 관측 열기만으로 새 thread/turn·자동 재전송을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;STATE-RETURN&quot;,
+      &quot;description&quot;: &quot;대화·모니터링·프로젝트 목록·다른 탭을 왕복해도 같은 대화의 입력 초안·읽기 위치·출력 카드 펼침을 유지하며 리포트 선택과 생태계 경로 등 현재 화면 상태를 보존한다. 비활성 화면에서도 실행 관측을 놓치지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;ACCESS-VERIFY&quot;,
+      &quot;description&quot;: &quot;프로젝트 목록·명시적 화면 이동·모니터링을 키보드와 좁은 창에서 사용할 수 있고 현재 프로젝트·세션·선택 메뉴와 초점이 식별된다. 실제 Electron과 합성 Native 시나리오·스크린샷·소스 식별을 연결해 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;DOC-HANDOFF&quot;,
+      &quot;description&quot;: &quot;명세·설계·실행 계획에 기준별 구현·검증·관련 기존 작업과 권한을 연결하고 현행 구현·새 목표·미실행 검토를 구분한다. 문서 작성만으로 제품 구현이나 완료를 표시하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;프로젝트 목록 탐색 중 중앙 화면 유지와 다섯 공통 메뉴·현재 대화 탭의 세션 모니터링을 Home003의 명세·설계·실행 계획으로 정리했다. 제품 코드는 변경하지 않았다. 문서 계약과 기준별 연결은 확인했으며 별도 Claude Sonnet 5 의미 검토는 180초 응답 시간 초과로 미실행 상태다.&quot;,
+  &quot;before&quot;: &quot;기존 전체 보기 버튼은 사이드바와 중앙을 동시에 홈으로 바꾸고, 같은 프로젝트를 다시 선택해도 대시보드로 이동한다. 대화에는 상세 모니터와 세션 모니터 접기/열기 버튼이 있다.&quot;,
+  &quot;after&quot;: &quot;다음 구현의 기준으로 목록 탐색과 중앙 이동을 분리하고 현재 프로젝트 재선택 시 화면 유지, 다른 대상 선택 성공 시 전환, 대시보드·대화·생태계·리포트·모니터링 순서와 기존 두 버튼의 JSX 주석 처리를 문서화했다. 실제 앱 동작은 아직 동일하다.&quot;,
+  &quot;changes&quot;: [
+    &quot;명세에 사용자 확정 사항과 설계 기본안, 정상·취소·실패·보호·빈 상태·세션 격리 시나리오를 기록했다.&quot;,
+    &quot;설계에 상태 소유와 기존 세션 API·투영 재사용, 화면 생명주기·초점·예상 영향 파일을 기록했다.&quot;,
+    &quot;실행 계획에 기준 10개와 단계별 구현·검증·소유·의존성·문서 갱신을 연결했다.&quot;,
+    &quot;작업 원장과 목차, 실제 문서 검사·검토 한계를 남겼다.&quot;,
+    &quot;초기 문서 대조의 ready와 문서 영향 검토 기록 뒤의 verifying를 구분해 현재 보고서의 상태 표현을 정정했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;Home002와 자동 Native001의 이력을 보존하고 후속 문서의 정본을 새 Home003 UUID로 연결했다.&quot;,
+    &quot;현행 제품·기능 명세는 기존 구현을 설명하도록 유지하고 새 목표를 현재 제공 기능으로 승격하지 않았다.&quot;,
+    &quot;모니터링은 선택한 대화 탭의 세션 범위로 한정하고 기존 승인·실행 보호와 Chat014의 읽기·성능 요구를 재사용한다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;제품 구현·행동 테스트·GUI·IME·Windows 실기 검증과 필수 제품 감사는 미실행이다.&quot;,
+    &quot;Claude Sonnet 5 문서 검토는 180초 응답 시간 초과로 spec·consistency 모두 not_run이며 실제 모델 metadata와 검토 승인을 얻지 못했다.&quot;,
+    &quot;작업 verifying·다음 단계 review와 모든 수용 기준 unverified를 유지한다. 커밋·푸시는 실행하지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;유효한 별도 문서 의미 검토를 받아 spec·consistency 결과를 기록한다.&quot;,
+    &quot;제품 코드 쓰기 권한을 받은 뒤 같은 UUID로 탐색 분리·모니터링 연결을 구현하고 계획의 실제 시나리오를 검증한다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;목록을 살펴보는 동안 하던 작업이 사라지는 불편을 줄이기 위해 탐색과 중앙 화면을 분리하는 다음 구현 기준을 작성했다. 사용자가 정한 다섯 메뉴와 세션 모니터링 범위를 명세·설계·실행 계획에 연결했다. 문서 구조와 기준 연결은 확인했지만 앱은 변경하지 않았으며 별도 의미 검토의 응답은 받지 못했다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;프로젝트 목록 탐색 중 현재 화면 유지&quot;,
+        &quot;result&quot;: &quot;정상·현재 대상 재선택·다른 대상 선택·추가 취소와 실패의 전환 규칙을 문서화했다.&quot;,
+        &quot;evidence&quot;: &quot;docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md&quot;,
+        &quot;limitations&quot;: &quot;제품 행동 미검증&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;다섯 메뉴와 세션 모니터링&quot;,
+        &quot;result&quot;: &quot;메뉴 순서·두 기존 버튼의 주석 처리·현재 탭의 세션 격리와 화면 왕복 보존을 정의했다.&quot;,
+        &quot;evidence&quot;: &quot;docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md&quot;,
+        &quot;limitations&quot;: &quot;제품 구현 미실행&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;작업 문서 계약&quot;,
+        &quot;method&quot;: &quot;node scripts/check-workflow.ts 및 기준별 참조 대조&quot;,
+        &quot;expected&quot;: &quot;목차·스키마·링크와 기준 10개 연결이 유효함&quot;,
+        &quot;observed&quot;: &quot;종료 코드 0과 10개 기준의 spec/tasks 참조를 확인했다.&quot;,
+        &quot;limitations&quot;: &quot;의미 승인과 기능 검증을 대체하지 않음&quot;
+      },
+      {
+        &quot;target&quot;: &quot;별도 문서 의미 검토&quot;,
+        &quot;method&quot;: &quot;도구 없는 Claude CLI에 claude-sonnet-5를 요청&quot;,
+        &quot;expected&quot;: &quot;spec/consistency의 근거 있는 검토 응답&quot;,
+        &quot;observed&quot;: &quot;180초 응답 시간 초과, stdout/stderr 0바이트, 공식 상태 not_run&quot;,
+        &quot;limitations&quot;: &quot;실제 모델과 실패 원인 미확인&quot;
+      }
+    ],
+    &quot;decisions&quot;: [],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md&quot;,
+        &quot;purpose&quot;: &quot;사용자 여정·전환 규칙·범위를 확인한다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md&quot;,
+        &quot;purpose&quot;: &quot;상태·세션·화면 생명주기와 영향 파일을 확인한다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/tasks.md&quot;,
+        &quot;purpose&quot;: &quot;기준별 구현·검증·소유와 다음 실행 순서를 확인한다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/verification.md&quot;,
+        &quot;purpose&quot;: &quot;실제 문서 검사와 검토 미실행의 한계를 확인한다.&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;별도 문서 의미 검토와 제품 구현 권한을 확인한 뒤 계획을 실행한다.&quot;,
+        &quot;owner&quot;: &quot;Codex 통합 책임자&quot;,
+        &quot;doneWhen&quot;: &quot;현재 기준과 source에 연결된 실제 구현·검증·필수 검토가 확보됨&quot;,
+        &quot;impact&quot;: &quot;현재 앱의 탐색 동작은 그대로 유지됨&quot;
+      }
+    ]
+  }
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 PM 2:45 · 작성자 보고서 · 프로젝트 목록 탐색 중 중앙 화면 유지와 다섯 공통 메뉴·현재 대화 탭의 세션 모니터링을 Home003의 명세·설계·실행 계획으로 정리했다. 제품 코드는 변경하지 않았다. 문서 계약과 기준별 연결은 확인했으며 별도 Claude Sonnet 5 의미 검토는 180초 응답 시간 초과로 미실행 상태다.</summary><article><h3>프로젝트 탐색과 세션 모니터링 메뉴 개편</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">목록을 살펴보는 동안 하던 작업이 사라지는 불편을 줄이기 위해 탐색과 중앙 화면을 분리하는 다음 구현 기준을 작성했다. 사용자가 정한 다섯 메뉴와 세션 모니터링 범위를 명세·설계·실행 계획에 연결했다. 문서 구조와 기준 연결은 확인했지만 앱은 변경하지 않았으며 별도 의미 검토의 응답은 받지 못했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 별도 문서 의미 검토와 제품 구현 권한을 확인한 뒤 계획을 실행한다.</p><p class="state-note">저장 당시 기준 중 10개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>명세에 사용자 확정 사항과 설계 기본안, 정상·취소·실패·보호·빈 상태·세션 격리 시나리오를 기록했다.</li><li>설계에 상태 소유와 기존 세션 API·투영 재사용, 화면 생명주기·초점·예상 영향 파일을 기록했다.</li><li>실행 계획에 기준 10개와 단계별 구현·검증·소유·의존성·문서 갱신을 연결했다.</li><li>작업 원장과 목차, 실제 문서 검사·검토 한계를 남겼다.</li></ul><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">프로젝트 목록 탐색 중 현재 화면 유지</td><td data-label="바뀐 동작">정상·현재 대상 재선택·다른 대상 선택·추가 취소와 실패의 전환 규칙을 문서화했다.</td><td data-label="근거와 한계">docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md<p class="limit">제품 행동 미검증</p></td></tr><tr><td data-label="항목">다섯 메뉴와 세션 모니터링</td><td data-label="바뀐 동작">메뉴 순서·두 기존 버튼의 주석 처리·현재 탭의 세션 격리와 화면 왕복 보존을 정의했다.</td><td data-label="근거와 한계">docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md<p class="limit">제품 구현 미실행</p></td></tr></tbody></table><section class="paper" id="history-report-422bf9e8-1d3a-4d88-a779-9934c39032b5-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>Home002와 자동 Native001의 이력을 보존하고 후속 문서의 정본을 새 Home003 UUID로 연결했다.</li><li>현행 제품·기능 명세는 기존 구현을 설명하도록 유지하고 새 목표를 현재 제공 기능으로 승격하지 않았다.</li><li>모니터링은 선택한 대화 탭의 세션 범위로 한정하고 기존 승인·실행 보호와 Chat014의 읽기·성능 요구를 재사용한다.</li></ul></section><section class="paper" id="history-report-422bf9e8-1d3a-4d88-a779-9934c39032b5-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>작업 문서 계약</h3><dl><div><dt>확인 방법</dt><dd>node scripts/check-workflow.ts 및 기준별 참조 대조</dd></div><div><dt>기대 결과</dt><dd>목차·스키마·링크와 기준 10개 연결이 유효함</dd></div><div><dt>실제 관측</dt><dd>종료 코드 0과 10개 기준의 spec/tasks 참조를 확인했다.</dd></div><div><dt>확인 범위와 한계</dt><dd>의미 승인과 기능 검증을 대체하지 않음</dd></div></dl></article><article class="check"><h3>별도 문서 의미 검토</h3><dl><div><dt>확인 방법</dt><dd>도구 없는 Claude CLI에 claude-sonnet-5를 요청</dd></div><div><dt>기대 결과</dt><dd>spec/consistency의 근거 있는 검토 응답</dd></div><div><dt>실제 관측</dt><dd>180초 응답 시간 초과, stdout/stderr 0바이트, 공식 상태 not_run</dd></div><div><dt>확인 범위와 한계</dt><dd>실제 모델과 실패 원인 미확인</dd></div></dl></article><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>제품 구현·행동 테스트·GUI·IME·Windows 실기 검증과 필수 제품 감사는 미실행이다.</li><li>Claude Sonnet 5 문서 검토는 180초 응답 시간 초과로 spec·consistency 모두 not_run이며 실제 모델 metadata와 검토 승인을 얻지 못했다.</li><li>작업 ready와 모든 수용 기준 unverified를 유지한다. 커밋·푸시는 실행하지 않았다.</li></ul></section><section class="paper" id="history-report-422bf9e8-1d3a-4d88-a779-9934c39032b5-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>별도 문서 의미 검토와 제품 구현 권한을 확인한 뒤 계획을 실행한다.</h3><dl><div><dt>담당</dt><dd>Codex 통합 책임자</dd></div><div><dt>해소 조건</dt><dd>현재 기준과 source에 연결된 실제 구현·검증·필수 검토가 확보됨</dd></div><div><dt>영향</dt><dd>현재 앱의 탐색 동작은 그대로 유지됨</dd></div></dl></article><h3>기존 서술에 기록된 남은 일</h3><ul><li>유효한 별도 문서 의미 검토를 받아 spec·consistency 결과를 기록한다.</li><li>제품 코드 쓰기 권한을 받은 뒤 같은 UUID로 탐색 분리·모니터링 연결을 구현하고 계획의 실제 시나리오를 검증한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>사용자 여정·전환 규칙·범위를 확인한다.</p><code>docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md</code></li><li><p>상태·세션·화면 생명주기와 영향 파일을 확인한다.</p><code>docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md</code></li><li><p>기준별 구현·검증·소유와 다음 실행 순서를 확인한다.</p><code>docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/tasks.md</code></li><li><p>실제 문서 검사와 검토 미실행의 한계를 확인한다.</p><code>docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/verification.md</code></li></ol><details id="history-report-422bf9e8-1d3a-4d88-a779-9934c39032b5-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-0e282d77-1c00-4663-8860-483d28148f74<br>report-422bf9e8-1d3a-4d88-a779-9934c39032b5</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>b71a28598ecd00c9b75c6988b2b7a662eff8feca0ebe74090beb73b1f7abbf88</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>504dc9fa11d6bf8147b0ca345e3dda7f800f0831eaa20ea074a43a8aac3a8ebc</code></dd></div><div><dt>기준 지문</dt><dd><code>a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;NAV-KEEP&quot;,
+      &quot;description&quot;: &quot;프로젝트 목록을 열고 탐색하거나 닫는 동안 중앙의 현재 프로젝트·화면·선택 상태를 유지하며 홈 보드로 강제 이동하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;NAV-SELECT&quot;,
+      &quot;description&quot;: &quot;현재 프로젝트 재선택은 기존 화면을 유지하고 다른 프로젝트의 명시 선택 성공 때만 해당 대상의 대시보드로 전환한다. 프로젝트 추가 취소·실패 시 기존 화면과 선택을 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;NAV-GUARD&quot;,
+      &quot;description&quot;: &quot;프로젝트 목록 열기는 실행 중에도 가능하며 실제 다른 프로젝트 전환에는 전송·실행·대화 준비·미결 승인·실패 원문 보호를 유지한다. 사이드바 탐색으로 Native 실행을 중단하거나 새 요청을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;NAV-MENU&quot;,
+      &quot;description&quot;: &quot;프로젝트 공통 메뉴를 대시보드·대화·생태계·리포트·모니터링 순서로 제공하고 프로젝트 목록과 명시적 전체 대시보드 열기를 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;MON-ENTRY&quot;,
+      &quot;description&quot;: &quot;대화 상단의 상세 모니터·세션 모니터 접기/열기 두 기존 버튼을 JSX 주석 처리해 비활성화하고 모니터링 메뉴로 세션 개요와 상세 관측에 접근한다. 숨은 버튼이 키보드 초점이나 클릭 대상에 남지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;MON-SCOPE&quot;,
+      &quot;description&quot;: &quot;모니터링은 현재 선택한 Codex 대화 탭의 sessionId·프로젝트·thread 범위에 연결되고 활성 턴과 과거 턴의 출처를 구분한다. 다른 탭의 사건·승인·리소스를 혼합하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;MON-STATES&quot;,
+      &quot;description&quot;: &quot;모니터링에서 기존 공개 실행·Plan/Progress·Skills/Hooks·리소스·사용량·사건 관측을 재사용하며 새 대화·자료 없음·로딩·연결 종료·수집 오류·부분 이력·오래된 관측을 사실에 따라 표시한다. 관측 열기만으로 새 thread/turn·자동 재전송을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;STATE-RETURN&quot;,
+      &quot;description&quot;: &quot;대화·모니터링·프로젝트 목록·다른 탭을 왕복해도 같은 대화의 입력 초안·읽기 위치·출력 카드 펼침을 유지하며 리포트 선택과 생태계 경로 등 현재 화면 상태를 보존한다. 비활성 화면에서도 실행 관측을 놓치지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;ACCESS-VERIFY&quot;,
+      &quot;description&quot;: &quot;프로젝트 목록·명시적 화면 이동·모니터링을 키보드와 좁은 창에서 사용할 수 있고 현재 프로젝트·세션·선택 메뉴와 초점이 식별된다. 실제 Electron과 합성 Native 시나리오·스크린샷·소스 식별을 연결해 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;DOC-HANDOFF&quot;,
+      &quot;description&quot;: &quot;명세·설계·실행 계획에 기준별 구현·검증·관련 기존 작업과 권한을 연결하고 현행 구현·새 목표·미실행 검토를 구분한다. 문서 작성만으로 제품 구현이나 완료를 표시하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;프로젝트 목록 탐색 중 중앙 화면 유지와 다섯 공통 메뉴·현재 대화 탭의 세션 모니터링을 Home003의 명세·설계·실행 계획으로 정리했다. 제품 코드는 변경하지 않았다. 문서 계약과 기준별 연결은 확인했으며 별도 Claude Sonnet 5 의미 검토는 180초 응답 시간 초과로 미실행 상태다.&quot;,
+  &quot;before&quot;: &quot;기존 전체 보기 버튼은 사이드바와 중앙을 동시에 홈으로 바꾸고, 같은 프로젝트를 다시 선택해도 대시보드로 이동한다. 대화에는 상세 모니터와 세션 모니터 접기/열기 버튼이 있다.&quot;,
+  &quot;after&quot;: &quot;다음 구현의 기준으로 목록 탐색과 중앙 이동을 분리하고 현재 프로젝트 재선택 시 화면 유지, 다른 대상 선택 성공 시 전환, 대시보드·대화·생태계·리포트·모니터링 순서와 기존 두 버튼의 JSX 주석 처리를 문서화했다. 실제 앱 동작은 아직 동일하다.&quot;,
+  &quot;changes&quot;: [
+    &quot;명세에 사용자 확정 사항과 설계 기본안, 정상·취소·실패·보호·빈 상태·세션 격리 시나리오를 기록했다.&quot;,
+    &quot;설계에 상태 소유와 기존 세션 API·투영 재사용, 화면 생명주기·초점·예상 영향 파일을 기록했다.&quot;,
+    &quot;실행 계획에 기준 10개와 단계별 구현·검증·소유·의존성·문서 갱신을 연결했다.&quot;,
+    &quot;작업 원장과 목차, 실제 문서 검사·검토 한계를 남겼다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;Home002와 자동 Native001의 이력을 보존하고 후속 문서의 정본을 새 Home003 UUID로 연결했다.&quot;,
+    &quot;현행 제품·기능 명세는 기존 구현을 설명하도록 유지하고 새 목표를 현재 제공 기능으로 승격하지 않았다.&quot;,
+    &quot;모니터링은 선택한 대화 탭의 세션 범위로 한정하고 기존 승인·실행 보호와 Chat014의 읽기·성능 요구를 재사용한다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;제품 구현·행동 테스트·GUI·IME·Windows 실기 검증과 필수 제품 감사는 미실행이다.&quot;,
+    &quot;Claude Sonnet 5 문서 검토는 180초 응답 시간 초과로 spec·consistency 모두 not_run이며 실제 모델 metadata와 검토 승인을 얻지 못했다.&quot;,
+    &quot;작업 ready와 모든 수용 기준 unverified를 유지한다. 커밋·푸시는 실행하지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;유효한 별도 문서 의미 검토를 받아 spec·consistency 결과를 기록한다.&quot;,
+    &quot;제품 코드 쓰기 권한을 받은 뒤 같은 UUID로 탐색 분리·모니터링 연결을 구현하고 계획의 실제 시나리오를 검증한다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;목록을 살펴보는 동안 하던 작업이 사라지는 불편을 줄이기 위해 탐색과 중앙 화면을 분리하는 다음 구현 기준을 작성했다. 사용자가 정한 다섯 메뉴와 세션 모니터링 범위를 명세·설계·실행 계획에 연결했다. 문서 구조와 기준 연결은 확인했지만 앱은 변경하지 않았으며 별도 의미 검토의 응답은 받지 못했다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;프로젝트 목록 탐색 중 현재 화면 유지&quot;,
+        &quot;result&quot;: &quot;정상·현재 대상 재선택·다른 대상 선택·추가 취소와 실패의 전환 규칙을 문서화했다.&quot;,
+        &quot;evidence&quot;: &quot;docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md&quot;,
+        &quot;limitations&quot;: &quot;제품 행동 미검증&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;다섯 메뉴와 세션 모니터링&quot;,
+        &quot;result&quot;: &quot;메뉴 순서·두 기존 버튼의 주석 처리·현재 탭의 세션 격리와 화면 왕복 보존을 정의했다.&quot;,
+        &quot;evidence&quot;: &quot;docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md&quot;,
+        &quot;limitations&quot;: &quot;제품 구현 미실행&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;작업 문서 계약&quot;,
+        &quot;method&quot;: &quot;node scripts/check-workflow.ts 및 기준별 참조 대조&quot;,
+        &quot;expected&quot;: &quot;목차·스키마·링크와 기준 10개 연결이 유효함&quot;,
+        &quot;observed&quot;: &quot;종료 코드 0과 10개 기준의 spec/tasks 참조를 확인했다.&quot;,
+        &quot;limitations&quot;: &quot;의미 승인과 기능 검증을 대체하지 않음&quot;
+      },
+      {
+        &quot;target&quot;: &quot;별도 문서 의미 검토&quot;,
+        &quot;method&quot;: &quot;도구 없는 Claude CLI에 claude-sonnet-5를 요청&quot;,
+        &quot;expected&quot;: &quot;spec/consistency의 근거 있는 검토 응답&quot;,
+        &quot;observed&quot;: &quot;180초 응답 시간 초과, stdout/stderr 0바이트, 공식 상태 not_run&quot;,
+        &quot;limitations&quot;: &quot;실제 모델과 실패 원인 미확인&quot;
+      }
+    ],
+    &quot;decisions&quot;: [],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/spec.md&quot;,
+        &quot;purpose&quot;: &quot;사용자 여정·전환 규칙·범위를 확인한다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/design.md&quot;,
+        &quot;purpose&quot;: &quot;상태·세션·화면 생명주기와 영향 파일을 확인한다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/tasks.md&quot;,
+        &quot;purpose&quot;: &quot;기준별 구현·검증·소유와 다음 실행 순서를 확인한다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/verification.md&quot;,
+        &quot;purpose&quot;: &quot;실제 문서 검사와 검토 미실행의 한계를 확인한다.&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;별도 문서 의미 검토와 제품 구현 권한을 확인한 뒤 계획을 실행한다.&quot;,
+        &quot;owner&quot;: &quot;Codex 통합 책임자&quot;,
+        &quot;doneWhen&quot;: &quot;현재 기준과 source에 연결된 실제 구현·검증·필수 검토가 확보됨&quot;,
+        &quot;impact&quot;: &quot;현재 앱의 탐색 동작은 그대로 유지됨&quot;
+      }
+    ]
+  }
+}</pre></div></details></article></details></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Home/003-프로젝트 탐색과 세션 모니터링 메뉴 개편/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-0e282d77-1c00-4663-8860-483d28148f74<br>report-fa469905-56b1-453e-bf79-a6211a75e428</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>3fcaaafa59cd120b4c7f6ea35def9a371b16687102d8d3b0d44333aac9bd67ff</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>bc13db13b1e59a831b17203f5d7e83efd99f9250a8ecfbee4a6c575a8b4e1fa6</code></dd></div><div><dt>기준 지문</dt><dd><code>a84db83fd0b7f08c63a6bce9ab7b9b94cda673028f7d4c7f088d3521b29a8393</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;NAV-KEEP&quot;,
+      &quot;description&quot;: &quot;프로젝트 목록을 열고 탐색하거나 닫는 동안 중앙의 현재 프로젝트·화면·선택 상태를 유지하며 홈 보드로 강제 이동하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-6210c47e-aad3-481b-8349-2d7d80ffc66a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;NAV-SELECT&quot;,
+      &quot;description&quot;: &quot;현재 프로젝트 재선택은 기존 화면을 유지하고 다른 프로젝트의 명시 선택 성공 때만 해당 대상의 대시보드로 전환한다. 프로젝트 추가 취소·실패 시 기존 화면과 선택을 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;NAV-GUARD&quot;,
+      &quot;description&quot;: &quot;프로젝트 목록 열기는 실행 중에도 가능하며 실제 다른 프로젝트 전환에는 전송·실행·대화 준비·미결 승인·실패 원문 보호를 유지한다. 사이드바 탐색으로 Native 실행을 중단하거나 새 요청을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-889f6a50-ae31-47a4-b2c3-7811fa63840d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-76fdc565-22d9-4071-9474-235188661756&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d16486fd-0d65-482f-a93e-5a02854230d5&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-6210c47e-aad3-481b-8349-2d7d80ffc66a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;NAV-MENU&quot;,
+      &quot;description&quot;: &quot;프로젝트 공통 메뉴를 대시보드·대화·생태계·리포트·모니터링 순서로 제공하고 프로젝트 목록과 명시적 전체 대시보드 열기를 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;MON-ENTRY&quot;,
+      &quot;description&quot;: &quot;대화 상단의 상세 모니터·세션 모니터 접기/열기 두 기존 버튼을 JSX 주석 처리해 비활성화하고 모니터링 메뉴로 세션 개요와 상세 관측에 접근한다. 숨은 버튼이 키보드 초점이나 클릭 대상에 남지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;MON-SCOPE&quot;,
+      &quot;description&quot;: &quot;모니터링은 현재 선택한 Codex 대화 탭의 sessionId·프로젝트·thread 범위에 연결되고 활성 턴과 과거 턴의 출처를 구분한다. 다른 탭의 사건·승인·리소스를 혼합하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-889f6a50-ae31-47a4-b2c3-7811fa63840d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-76fdc565-22d9-4071-9474-235188661756&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d16486fd-0d65-482f-a93e-5a02854230d5&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-cabcf10f-a7c3-46f6-95d2-d46cdc49d780&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;MON-STATES&quot;,
+      &quot;description&quot;: &quot;모니터링에서 기존 공개 실행·Plan/Progress·Skills/Hooks·리소스·사용량·사건 관측을 재사용하며 새 대화·자료 없음·로딩·연결 종료·수집 오류·부분 이력·오래된 관측을 사실에 따라 표시한다. 관측 열기만으로 새 thread/turn·자동 재전송을 만들지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-889f6a50-ae31-47a4-b2c3-7811fa63840d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;STATE-RETURN&quot;,
+      &quot;description&quot;: &quot;대화·모니터링·프로젝트 목록·다른 탭을 왕복해도 같은 대화의 입력 초안·읽기 위치·출력 카드 펼침을 유지하며 리포트 선택과 생태계 경로 등 현재 화면 상태를 보존한다. 비활성 화면에서도 실행 관측을 놓치지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-889f6a50-ae31-47a4-b2c3-7811fa63840d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-6210c47e-aad3-481b-8349-2d7d80ffc66a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-cabcf10f-a7c3-46f6-95d2-d46cdc49d780&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;ACCESS-VERIFY&quot;,
+      &quot;description&quot;: &quot;프로젝트 목록·명시적 화면 이동·모니터링을 키보드와 좁은 창에서 사용할 수 있고 현재 프로젝트·세션·선택 메뉴와 초점이 식별된다. 실제 Electron과 합성 Native 시나리오·스크린샷·소스 식별을 연결해 검증한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-6210c47e-aad3-481b-8349-2d7d80ffc66a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;DOC-HANDOFF&quot;,
+      &quot;description&quot;: &quot;명세·설계·실행 계획에 기준별 구현·검증·관련 기존 작업과 권한을 연결하고 현행 구현·새 목표·미실행 검토를 구분한다. 문서 작성만으로 제품 구현이나 완료를 표시하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d66ced47-121e-42d3-8f9f-6f47021f9756&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-d66ced47-121e-42d3-8f9f-6f47021f9756&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;-e&quot;,
+        &quot;import {readFile} from &#39;node:fs/promises&#39;;import {createHash} from &#39;node:crypto&#39;;import {readWork} from &#39;./scripts/workflow/work.ts&#39;;import {captureSource,criteriaDigest} from &#39;./scripts/workflow/evidence.ts&#39;;import {validateWorkRecord} from &#39;./scripts/workflow/schema.ts&#39;;import path from &#39;node:path&#39;;const base=&#39;.www/evidence/resume-20261116/home004-repair/scratch&#39;,workId=&#39;work-0e282d77-1c00-4663-8860-483d28148f74&#39;,w=await readWork({workId}),source=await captureSource({inputs:w.record.workflow.inputs}),steps=JSON.parse(await readFile(base+&#39;/home23-functional-v1-steps.json&#39;,&#39;utf8&#39;)),manifest=JSON.parse(await readFile(base+&#39;/functional-artifact-manifest-v1.json&#39;,&#39;utf8&#39;));if(steps.results.length!==6||steps.results.some(r=&gt;r.code!==0||r.signal||r.error)||steps.sourceStable!==true)throw Error(&#39;실제 기능 검사 실패/누락&#39;);const before=steps.before.find(x=&gt;x.workId===workId),after=steps.after.find(x=&gt;x.workId===workId);if(!before||!after||before.sourceDigest!==source.digest||after.sourceDigest!==source.digest||before.criteriaDigest!==criteriaDigest(w.record)||after.criteriaDigest!==criteriaDigest(w.record))throw Error(&#39;Home003 현재 source/criteria 불일치&#39;);for(const[file,saved]of Object.entries(manifest)){const bytes=await readFile(file);if(bytes.length!==saved.bytes||createHash(&#39;sha256&#39;).update(bytes).digest(&#39;hex&#39;)!==saved.sha256)throw Error(&#39;실행 원문 SHA 불일치: &#39;+file);}const errors=validateWorkRecord(w.record,{baseDir:path.dirname(w.path)});if(errors.length)throw Error(errors.join(&#39;;&#39;));for(const kind of [&#39;spec&#39;,&#39;design&#39;,&#39;tasks&#39;,&#39;verification&#39;]){const text=await readFile(path.join(path.dirname(w.path),kind+&#39;.md&#39;),&#39;utf8&#39;);if(!text.trim())throw Error(&#39;작업 문서 없음: &#39;+kind);}console.log(JSON.stringify({workId,result:&#39;passed&#39;,sourceDigest:source.digest,criteriaDigest:criteriaDigest(w.record),actualExecutionSteps:6,actualSourceStable:true,rawArtifactsValidated:Object.keys(manifest).length,scope:&#39;실제 집중/개발하네스/Electron Session·Chat·지도·리포트 및 Home 관측과 같은 UUID 문서의 현재 결속. OS picker/IME/Windows/실모델 미실측.&#39;}));&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:35:30.997Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-5ebecbe0-d89a-49f6-a988-52470b9e86cd&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/dashboard.test.ts&quot;,
+        &quot;test/native-session.test.ts&quot;,
+        &quot;test/session-registry.test.ts&quot;,
+        &quot;test/session-tabs.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;,
+        &quot;test/www-activity.test.ts&quot;,
+        &quot;test/input.test.ts&quot;,
+        &quot;test/workflow-model-allocation.test.ts&quot;,
+        &quot;--timeout&quot;,
+        &quot;30000&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:43:24.338Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-889f6a50-ae31-47a4-b2c3-7811fa63840d&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/dashboard.test.ts&quot;,
+        &quot;test/native-session.test.ts&quot;,
+        &quot;test/session-registry.test.ts&quot;,
+        &quot;test/session-tabs.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;,
+        &quot;test/www-activity.test.ts&quot;,
+        &quot;test/input.test.ts&quot;,
+        &quot;test/workflow-model-allocation.test.ts&quot;,
+        &quot;--timeout&quot;,
+        &quot;30000&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:50:44.598Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-76fdc565-22d9-4071-9474-235188661756&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/dashboard.test.ts&quot;,
+        &quot;test/native-session.test.ts&quot;,
+        &quot;test/session-registry.test.ts&quot;,
+        &quot;test/session-tabs.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;,
+        &quot;test/www-activity.test.ts&quot;,
+        &quot;test/input.test.ts&quot;,
+        &quot;test/workflow-model-allocation.test.ts&quot;,
+        &quot;--timeout&quot;,
+        &quot;30000&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:11:39.042Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d16486fd-0d65-482f-a93e-5a02854230d5&quot;,
+      &quot;command&quot;: &quot;bun&quot;,
+      &quot;args&quot;: [
+        &quot;test&quot;,
+        &quot;test/dashboard.test.ts&quot;,
+        &quot;test/native-session.test.ts&quot;,
+        &quot;test/session-registry.test.ts&quot;,
+        &quot;test/session-tabs.test.ts&quot;,
+        &quot;test/www-activity-view.test.ts&quot;,
+        &quot;test/www-activity.test.ts&quot;,
+        &quot;test/input.test.ts&quot;,
+        &quot;test/workflow-model-allocation.test.ts&quot;,
+        &quot;--timeout&quot;,
+        &quot;30000&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:22:25.123Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-6210c47e-aad3-481b-8349-2d7d80ffc66a&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-chat.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:26:28.589Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-cabcf10f-a7c3-46f6-95d2-d46cdc49d780&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-sessions.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:26:37.619Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;프로젝트 탐색·모니터링과 대화·탭 상태 보존의 v5 실제 관측을 같은 UUID에서 부분 회수했다. 고유 verify-home의 프로젝트·메뉴·모니터링 진입과 공식 verify-chat·verify-sessions의 대화 복원·초안/읽기 위치·실행/승인 보호·동시 탭 격리 actual assertion을 회수했다. 추가 Native 실제 감사 반례에 따른 v6 교정을 기다리며 전체 업무 완료를 주장하지 않는다.&quot;,
+  &quot;before&quot;: &quot;과거 집중/GUI 기록은 후속 공유 소스 변경 때문에 최신 전체 검증으로 사용할 수 없었다. 단순 파일 존재·해시 검사와 실제 사용자 시나리오의 실행도 구분해야 했다.&quot;,
+  &quot;after&quot;: &quot;고유 verify-home의 프로젝트·메뉴·모니터링 진입과 공식 verify-chat·verify-sessions의 대화 복원·초안/읽기 위치·실행/승인 보호·동시 탭 격리 actual assertion을 회수했다. actual process·등록 verify 시도·summary assertion·원본 artifact의 bytes/SHA를 구분해 evidence-current-v5.md에 보존하고 현재 계획과 공식 문서 영향 검토를 연결했다.&quot;,
+  &quot;changes&quot;: [
+    &quot;같은 UUID·기준·원래 권한·과거 실패를 보존했다.&quot;,
+    &quot;고유 actual 관측의 범위와 미관측을 own 근거 문서에 고정하고 작업 inputs와 현재 다음 행동을 연결했다.&quot;,
+    &quot;현재 의미/감사 기준은 파일 checker 또는 단위 명령의 성공만으로 통과시키지 않았다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;Root 단독 GUI 실행에서 각 UUID의 고유 관측을 받았으며 다른 UUID의 PASS를 복사하지 않았다.&quot;,
+    &quot;제품 기술 v5 fingerprint와 문서 추가로 달라진 작업 scope를 분리했다.&quot;,
+    &quot;Root 추가 반례 교정 전 실제 full Terra 감사를 보류해 중간 소스의 감사를 반복하지 않았다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;Root Native003/006/013/015 실제 감사가 추가 반례를 발견하여 projection·native-activity·agent-overview 및 관련 검사/oracle의 v6 교정을 준비한다. broad src 입력에 영향을 주므로 v5 관측을 새 소스의 통과로 승격하지 않는다.&quot;,
+    &quot;이 Home UUID의 전체 기준 actual Terra 감사·업무 완료 action은 아직 실행하지 않았다. 부분 관측을 전체 수용으로 표시하지 않는다.&quot;,
+    &quot;실제 Electron/IPC/별도 stdio 프로세스는 합성 Native fixture를 사용했다. 실제 OS picker·IME·Windows·외부 RPA·실제 Native 모델은 이 검증 범위 밖이다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;Root v6 교정 후 영향 검사를 적용하고 실제 필요한 정확 GUI 관측을 같은 UUID로 회수한다.&quot;,
+    &quot;최종 동결 뒤 전체 기준 actual gpt-6.1-terra 읽기 전용 감사의 내용 수용과 공식 결과 기록을 확인한다.&quot;,
+    &quot;현재 저작 보고서·공식 완료 조건과 원장/HTML readback을 다시 확인한다.&quot;
+  ]
+}</pre></div></details></section></article></div></main></body></html>

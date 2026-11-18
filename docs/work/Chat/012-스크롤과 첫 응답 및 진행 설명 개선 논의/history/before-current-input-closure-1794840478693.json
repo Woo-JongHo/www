@@ -1,0 +1,3362 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-632e43ce-dcb8-4726-ad34-8fe85034b6fd",
+  "title"        : "스크롤과 첫 응답 및 진행 설명 개선 논의",
+  "kind"         : "bug",
+  "areas": [
+    "ui",
+    "dev"
+  ],
+  "owner"        : "ui",
+  "status"       : "verifying",
+  "blockedReason": "verification_failed",
+  "relations": [
+    {
+      "type": "relates_to",
+      "target": "work-673ddd6a-b9e6-4dd2-99c5-c37f4b02c96b"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-17ba7e7d-64e2-4450-b637-2c5f1c7ce0b2"
+    },
+    {
+      "type": "relates_to",
+      "target": "work-9e0dfecb-5a69-4d13-bd34-768a9fb8890e"
+    }
+  ],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
+      "required"   : true,
+      "result"     : "failed",
+      "evidence": [
+        {
+          "attemptId": "attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+          "path"     : "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+          "path"     : "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+          "path"     : "verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-73362f9c-945f-4bf3-9179-e733cb97af99",
+          "path"     : "verification.md#attempt-73362f9c-945f-4bf3-9179-e733cb97af99",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-7b9014e5-76c4-4888-bfc0-4d680509198d",
+          "path"     : "verification.md#attempt-7b9014e5-76c4-4888-bfc0-4d680509198d",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5",
+          "path"     : "verification.md#attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-2",
+      "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
+      "required"   : true,
+      "result"     : "blocked",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-3",
+      "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
+      "required"   : true,
+      "result"     : "failed",
+      "evidence": [
+        {
+          "attemptId": "attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+          "path"     : "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+          "path"     : "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+          "path"     : "verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-73362f9c-945f-4bf3-9179-e733cb97af99",
+          "path"     : "verification.md#attempt-73362f9c-945f-4bf3-9179-e733cb97af99",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-7b9014e5-76c4-4888-bfc0-4d680509198d",
+          "path"     : "verification.md#attempt-7b9014e5-76c4-4888-bfc0-4d680509198d",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5",
+          "path"     : "verification.md#attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    },
+    {
+      "id"         : "AC-4",
+      "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
+      "required"   : true,
+      "result"     : "failed",
+      "evidence": [
+        {
+          "attemptId": "attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+          "path"     : "verification.md#attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+          "path"     : "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+          "path"     : "verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-73362f9c-945f-4bf3-9179-e733cb97af99",
+          "path"     : "verification.md#attempt-73362f9c-945f-4bf3-9179-e733cb97af99",
+          "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-7b9014e5-76c4-4888-bfc0-4d680509198d",
+          "path"     : "verification.md#attempt-7b9014e5-76c4-4888-bfc0-4d680509198d",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        },
+        {
+          "attemptId": "attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5",
+          "path"     : "verification.md#attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5",
+          "summary"  : "실제 검증 failed; 현재 적용 불가"
+        }
+      ]
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "resume-20261116-root-current-work-632e43ce-dcb8-4726-ad34-8fe85034b6fd",
+    "requestHash": "c5609139546e3d12e2ca7c96e4eccf31024638e50958cad9319fbfc11bb281f7",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "scripts/workflow.ts",
+        "scripts/workflow/run.ts",
+        "scripts/workflow/types.ts",
+        "scripts/workflow/schema.ts",
+        "scripts/workflow/model-allocation.ts",
+        "test/workflow-model-allocation.test.ts",
+        "test/workflow-development.test.ts",
+        "src/command-card.tsx",
+        "src/command-output.css",
+        "test/command-preview.test.ts",
+        "src/native-activity-view.tsx",
+        "src/agent-overview.ts",
+        "src/agent-overview-view.tsx",
+        "src/agent-overview.css",
+        "test/agent-overview.test.ts",
+        "src/renderer.tsx",
+        "src/main.ts",
+        "src/shared.ts",
+        "src/chat.css",
+        "src/native-timing.ts",
+        "test/native-timing.test.ts",
+        "src/architecture.generated.json",
+        "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의"
+      ],
+      "mutationSurfaces": [
+        "files"
+      ],
+      "verifierCommands": [
+        "npm run typecheck",
+        "npm run check:source",
+        "npm run build",
+        "node scripts/verify-chat.ts",
+        "[\"node\",\"scripts/verify-chat.ts\"]",
+        "[\"bun\",\"test\",\"test/agent-overview.test.ts\",\"test/www-activity-view.test.ts\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "c5609139546e3d12e2ca7c96e4eccf31024638e50958cad9319fbfc11bb281f7"
+    },
+    "inputs": [
+      "docs/specs/chat.md",
+      "docs/specs/dashboard.md",
+      "scripts/verify-chat.ts",
+      "src",
+      "test/chat-state.test.ts",
+      "test/command-preview.test.ts",
+      "test/fixtures/chat-ui-app-server.ts",
+      "test/native-lifecycle.test.ts",
+      "test/native-timing.test.ts"
+    ],
+    "nextAction": "build",
+    "verifications": [
+      {
+        "id"         : "attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+        "startedAt"  : "2026-11-16T02:27:30.398Z",
+        "completedAt": "2026-11-16T02:28:08.347Z",
+        "source": {
+          "head": "aa0c3d4363f24109576bbe5bd9c256b90e71139c",
+          "digest": "1bf6a800b9cb2505c31cc9d8bcf11f901af7678f92c8d39d2a95b66169c086a7",
+          "inputs": [
+            "docs/specs/chat.md",
+            "docs/specs/dashboard.md",
+            "scripts/verify-chat.ts",
+            "src",
+            "test/chat-state.test.ts",
+            "test/command-preview.test.ts",
+            "test/fixtures/chat-ui-app-server.ts",
+            "test/native-lifecycle.test.ts",
+            "test/native-timing.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "749bab2e64d0bf3325a181b587fc3a5abd05f73c6c58375d69de17a09623562b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/dashboard.md",
+              "type"  : "file",
+              "digest": "e6334b67eda30c2cc2e1820763580a6f399da7d8b308989c4a685043ae9d1696",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "2c3d70b29cd4bd921ade0292f1043def8ae70dbb0e8c635167945fdb0083e4f5",
+              "mode"  : 493
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "373e57bce951355c6f827cfd93fa13ff851130cf4f50ab1ae472d3ca1ebd8270",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview-view.tsx",
+              "type"  : "file",
+              "digest": "879b3b704d3d68b5e6efd6b55976c89c1fa9116870216ef1bb8ff5bc167cc1cb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.css",
+              "type"  : "file",
+              "digest": "e23c29698573148b0074ba129099587684b31101763854c5f63bcc376fb54c35",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.ts",
+              "type"  : "file",
+              "digest": "dd418fe3ec47815f0fa326301051bf457fc45aa80f3ad54dc142c4f184e7f069",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "08c827b253f153d341a55a6e13104419262bb2044b2b24693360a14af806dec0",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/build-info.ts",
+              "type"  : "file",
+              "digest": "fcee1f41180acb0990e73e73fd6b3078500d807f3ad207891c8a8c0985f200eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "24fefd6e282d973c8888e1c454abf1a192588c778c4de9aa287be5e10b8473ae",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "58a3fe8d4a9db93451cf7e67c707780cef0e2b9248635d15da9038120282698e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "125f5fc4daa54232e2d2499e4b4ae490beb28df62f5109ad7529f70d1fb6bd58",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "4821e105a0d9d41b260c551eb0423e6b2174b72911fafe017229979fcf0f7ba2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "b47eae2dc28075eaa7458ed80c26b0bc84d23293400a8f01f5d2c1fdd094f36e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard-view.tsx",
+              "type"  : "file",
+              "digest": "cc94c54c0a5430fe40fa5722287e6b04857b48fbf411cc6a5804b1c7cb670d3e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.css",
+              "type"  : "file",
+              "digest": "c7bafd10aab7fb51338c9e98bdea38bfe7dfe9290c471b9f0ff9152545802115",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.ts",
+              "type"  : "file",
+              "digest": "918893e0571179ea55c55a9f4d66d5e3b5a8801ed1d7868e586e1675924bcbc1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "40b03a8d6f47357160c7ff2301b50d8795cdfac65dff4baebbcb95fa02474bbf",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "aa01b84fb1286433e66c91035048795715535bf57954720b11e2d4897ab97dd6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "fb9ae7db6a7a13f34913cceac4ab8f7c12860b94190fce7b3a44be8405b3fa83",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "7425909790640c7ecb2bca811c8d8120f9a5ac7b154e3ea6ae5bb06928fcda71",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ebdfb611ad246ec9db02a01a440db3e5412c1927457cff046ade52b1c487063b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "edda3567ab519caf5a50473662ad281bd99345f0cd270099ba073b335bbec729",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-lifecycle.ts",
+              "type"  : "file",
+              "digest": "79021fd7b1ace3f32768bc4fbeb2597086cf0b2c90e07bc6ae40a3cb83eab722",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-timing.ts",
+              "type"  : "file",
+              "digest": "6c697f5fccb51a3591e2c9bc62dfb89d4edfb24fa95fdbb7462e39b76bb1598f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "7a73a9f192a5de74c3d7c9300b45234c90baa082ebe94adce918b4be2fa391ff",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "2506275d83d64cb3ded5a709f48287abbe8088e052db81f7ac103694bfa9fddb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "9b93d28b0918c73f5461afcbf4e33b2b45b22ee6aae4dee82fb94c97e115cd21",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "e4a8fae10083d2c76f8927b58b3edcf22512959c89f4403ebcdb08332fe9c5ea",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "a5bf3d81c065314f3e8c3ece9b39fe38d95b97fa3d04f6443bf7e311dbb38e8b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/chat-state.test.ts",
+              "type"  : "file",
+              "digest": "5c0a0d27ddc75c4201f9600e5f0709a9cddcc50e8a36875fd7884aa6f8e44b62",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/command-preview.test.ts",
+              "type"  : "file",
+              "digest": "aedf0676739bc02cb5751fe6c214a69530e086db32ec4b7deae060c798489ef9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/fixtures/chat-ui-app-server.ts",
+              "type"  : "file",
+              "digest": "aae94fb1db08f1fc813330f4a7702d5bf0548405d96e0bd064b4a7a251716556",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/native-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "b79fa305044d447938271f00049c942175f7c8e162d96c6b0746b5c29c1ae774",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-timing.test.ts",
+              "type"  : "file",
+              "digest": "0009c6e524273461d24467be2faab4024e9d869cbad964abb23f63d512ebe556",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-3",
+          "AC-4"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : "dist/agent-overview.css",
+            "size"  : 3950,
+            "digest": "e23c29698573148b0074ba129099587684b31101763854c5f63bcc376fb54c35"
+          },
+          {
+            "path"  : "dist/chat.css",
+            "size"  : 12291,
+            "digest": "58a3fe8d4a9db93451cf7e67c707780cef0e2b9248635d15da9038120282698e"
+          },
+          {
+            "path"  : "dist/dashboard.css",
+            "size"  : 4255,
+            "digest": "c7bafd10aab7fb51338c9e98bdea38bfe7dfe9290c471b9f0ff9152545802115"
+          },
+          {
+            "path"  : "dist/index.html",
+            "size"  : 12973,
+            "digest": "fb9ae7db6a7a13f34913cceac4ab8f7c12860b94190fce7b3a44be8405b3fa83"
+          },
+          {
+            "path"  : "dist/main.js",
+            "size"  : 420664,
+            "digest": "56a95be7e221b1f7153b76a5945a0f6a9f02e5a8d7dd83c96ad11a68fb087ebe"
+          },
+          {
+            "path"  : "dist/preload.js",
+            "size"  : 3636,
+            "digest": "e787d6da42defa32d8dee111e3c8cb6a7419bd4fc39f4dfef8f8dcbd2e28cb4e"
+          },
+          {
+            "path"  : "dist/renderer.js",
+            "size"  : 2204934,
+            "digest": "fb2d6a35b7770e86f7112d88b7c43bb5c43506539784be457d57893e39af9c21"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 31537,
+            "digest"         : "489fbb3ec6ac4579e965352a0412485747b5b006168f23a41f0aff4da960e9e2",
+            "truncated"      : false,
+            "retainedBytes"  : 31537,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+        "startedAt"  : "2026-11-16T03:21:42.388Z",
+        "completedAt": "2026-11-16T03:22:28.833Z",
+        "source": {
+          "head": "aa0c3d4363f24109576bbe5bd9c256b90e71139c",
+          "digest": "85503940ed9493375727cf27a4597689d551044ae82869f5e91239841002c385",
+          "inputs": [
+            "docs/specs/chat.md",
+            "docs/specs/dashboard.md",
+            "scripts/verify-chat.ts",
+            "src",
+            "test/chat-state.test.ts",
+            "test/command-preview.test.ts",
+            "test/fixtures/chat-ui-app-server.ts",
+            "test/native-lifecycle.test.ts",
+            "test/native-timing.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "6fce6998feb19df6d29d4b79c926ad036b3655224a9578bd06a64570cd9fa0cc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/dashboard.md",
+              "type"  : "file",
+              "digest": "67f58a2f4b0ebe3bfd070e8588afe241d624d02aea438200d88ebf5e6cf89f6d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "49d3a4f9dabf25728ec0849901944020cc5cda6c1f626be0dff42e3433df73ac",
+              "mode"  : 493
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "373e57bce951355c6f827cfd93fa13ff851130cf4f50ab1ae472d3ca1ebd8270",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview-view.tsx",
+              "type"  : "file",
+              "digest": "879b3b704d3d68b5e6efd6b55976c89c1fa9116870216ef1bb8ff5bc167cc1cb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.css",
+              "type"  : "file",
+              "digest": "e23c29698573148b0074ba129099587684b31101763854c5f63bcc376fb54c35",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.ts",
+              "type"  : "file",
+              "digest": "dd418fe3ec47815f0fa326301051bf457fc45aa80f3ad54dc142c4f184e7f069",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "d6590d653becf5827a559548f9dc452bec3c1a9658ccbc299b29465061e10d73",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/build-info.ts",
+              "type"  : "file",
+              "digest": "fcee1f41180acb0990e73e73fd6b3078500d807f3ad207891c8a8c0985f200eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "24fefd6e282d973c8888e1c454abf1a192588c778c4de9aa287be5e10b8473ae",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "1339f021f83733561a7aae13109c3174ae503a0f180efad9304bdfe67fc4a8be",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "125f5fc4daa54232e2d2499e4b4ae490beb28df62f5109ad7529f70d1fb6bd58",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "4821e105a0d9d41b260c551eb0423e6b2174b72911fafe017229979fcf0f7ba2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "b47eae2dc28075eaa7458ed80c26b0bc84d23293400a8f01f5d2c1fdd094f36e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard-view.tsx",
+              "type"  : "file",
+              "digest": "cc94c54c0a5430fe40fa5722287e6b04857b48fbf411cc6a5804b1c7cb670d3e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.css",
+              "type"  : "file",
+              "digest": "c7bafd10aab7fb51338c9e98bdea38bfe7dfe9290c471b9f0ff9152545802115",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.ts",
+              "type"  : "file",
+              "digest": "918893e0571179ea55c55a9f4d66d5e3b5a8801ed1d7868e586e1675924bcbc1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "f761d6b07b6e4b3d57bfc5657fc19ceb4d7f6edde8952f79224eedb81cb102e8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "f4c2b245d61f48c0c6371a578f262038e000d084aceb26402f04988c2debb410",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "c0b483b3e304858845a4d116d579eb0a364ea4dac85067ab8c6a2d65d5495a52",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "938f90dc1179b5f2b34116e049f44bf2c5fa49e19d0f05592f701721d8e4011b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ebdfb611ad246ec9db02a01a440db3e5412c1927457cff046ade52b1c487063b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "edda3567ab519caf5a50473662ad281bd99345f0cd270099ba073b335bbec729",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-lifecycle.ts",
+              "type"  : "file",
+              "digest": "79021fd7b1ace3f32768bc4fbeb2597086cf0b2c90e07bc6ae40a3cb83eab722",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-session.ts",
+              "type"  : "file",
+              "digest": "a6afcc457336ca03f342f89f2ab36a5e792716c2020d645314b2a6942d441a82",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-timing.ts",
+              "type"  : "file",
+              "digest": "6c697f5fccb51a3591e2c9bc62dfb89d4edfb24fa95fdbb7462e39b76bb1598f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "e47cb6b16567524b7d588a6ae5658e27167f2370f52b9aec8faa824ede0b247d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "2506275d83d64cb3ded5a709f48287abbe8088e052db81f7ac103694bfa9fddb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "1fe3e8cd82f146929515f4ca2740f22ecf5196fdd8fcd56bd735a5035402ee59",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "7556cec14e44b25d3fbeaaf7a59939852e9a2880c6214a4bb2ec2428138310b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-api.tsx",
+              "type"  : "file",
+              "digest": "05e2152c31ae4e5eb89e3582693df159e7ef0cd0a81c0d1a072563e0beaabc1d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-registry.ts",
+              "type"  : "file",
+              "digest": "a880ee36f4046de97aa0a7890f180f3097350926082509a4f04f82b54ec1f713",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.css",
+              "type"  : "file",
+              "digest": "4a2e7ad32575e024688b0365ccb4554707cc6b79c4f2026efac63b4e34287d95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.tsx",
+              "type"  : "file",
+              "digest": "3f809d591c8490dd5a2e9ee7ee581ebd4279422d55ad4512cb6745d9bbd5f8f8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "6adfdc5f1ee481fd870f25fe1730f310636a6d5c65b87c187f83cb17d4a3db2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/chat-state.test.ts",
+              "type"  : "file",
+              "digest": "5a3c98bd2a0c8ae17696392a11f0a7a1c863a0fcea7e71cb5edd7c77582b3003",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/command-preview.test.ts",
+              "type"  : "file",
+              "digest": "aedf0676739bc02cb5751fe6c214a69530e086db32ec4b7deae060c798489ef9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/fixtures/chat-ui-app-server.ts",
+              "type"  : "file",
+              "digest": "aae94fb1db08f1fc813330f4a7702d5bf0548405d96e0bd064b4a7a251716556",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/native-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "03a9bf94886c91c0f3798417612b301e27ff467772f13f09506470b05edf2efd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-timing.test.ts",
+              "type"  : "file",
+              "digest": "0009c6e524273461d24467be2faab4024e9d869cbad964abb23f63d512ebe556",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-3",
+          "AC-4"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/session-implementation/sessions-final-authoring-harness-result.json",
+            "size"  : 24733,
+            "digest": "ddb6ae8dd46a082ae2eb53cd79f55d595e21e3fdc326bbb8652c582e01a3724a"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 31559,
+            "digest"         : "bdb08a81b0d3f72dfc059aae1a590351c8c807420d8db3b7d7996c7729ad81d0",
+            "truncated"      : false,
+            "retainedBytes"  : 31559,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+        "startedAt"  : "2026-11-16T03:36:14.886Z",
+        "completedAt": "2026-11-16T03:36:54.809Z",
+        "source": {
+          "head": "aa0c3d4363f24109576bbe5bd9c256b90e71139c",
+          "digest": "3920c3115d66f9fa8887fa049bf563c2f0248784f04e09d9a51b8af153e2080b",
+          "inputs": [
+            "docs/specs/chat.md",
+            "docs/specs/dashboard.md",
+            "scripts/verify-chat.ts",
+            "src",
+            "test/chat-state.test.ts",
+            "test/command-preview.test.ts",
+            "test/fixtures/chat-ui-app-server.ts",
+            "test/native-lifecycle.test.ts",
+            "test/native-timing.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "6fce6998feb19df6d29d4b79c926ad036b3655224a9578bd06a64570cd9fa0cc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/dashboard.md",
+              "type"  : "file",
+              "digest": "67f58a2f4b0ebe3bfd070e8588afe241d624d02aea438200d88ebf5e6cf89f6d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "49d3a4f9dabf25728ec0849901944020cc5cda6c1f626be0dff42e3433df73ac",
+              "mode"  : 493
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "373e57bce951355c6f827cfd93fa13ff851130cf4f50ab1ae472d3ca1ebd8270",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview-view.tsx",
+              "type"  : "file",
+              "digest": "879b3b704d3d68b5e6efd6b55976c89c1fa9116870216ef1bb8ff5bc167cc1cb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.css",
+              "type"  : "file",
+              "digest": "e23c29698573148b0074ba129099587684b31101763854c5f63bcc376fb54c35",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.ts",
+              "type"  : "file",
+              "digest": "dd418fe3ec47815f0fa326301051bf457fc45aa80f3ad54dc142c4f184e7f069",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "f437938b241faa3c95b85c969c5703dbca24e9a9216516b8d4cd7674227ba0d9",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/build-info.ts",
+              "type"  : "file",
+              "digest": "fcee1f41180acb0990e73e73fd6b3078500d807f3ad207891c8a8c0985f200eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "24fefd6e282d973c8888e1c454abf1a192588c778c4de9aa287be5e10b8473ae",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "1339f021f83733561a7aae13109c3174ae503a0f180efad9304bdfe67fc4a8be",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "125f5fc4daa54232e2d2499e4b4ae490beb28df62f5109ad7529f70d1fb6bd58",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "4821e105a0d9d41b260c551eb0423e6b2174b72911fafe017229979fcf0f7ba2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "b47eae2dc28075eaa7458ed80c26b0bc84d23293400a8f01f5d2c1fdd094f36e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard-view.tsx",
+              "type"  : "file",
+              "digest": "cc94c54c0a5430fe40fa5722287e6b04857b48fbf411cc6a5804b1c7cb670d3e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.css",
+              "type"  : "file",
+              "digest": "c7bafd10aab7fb51338c9e98bdea38bfe7dfe9290c471b9f0ff9152545802115",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.ts",
+              "type"  : "file",
+              "digest": "918893e0571179ea55c55a9f4d66d5e3b5a8801ed1d7868e586e1675924bcbc1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "f761d6b07b6e4b3d57bfc5657fc19ceb4d7f6edde8952f79224eedb81cb102e8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "f4c2b245d61f48c0c6371a578f262038e000d084aceb26402f04988c2debb410",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "c0b483b3e304858845a4d116d579eb0a364ea4dac85067ab8c6a2d65d5495a52",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "938f90dc1179b5f2b34116e049f44bf2c5fa49e19d0f05592f701721d8e4011b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ebdfb611ad246ec9db02a01a440db3e5412c1927457cff046ade52b1c487063b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "4fa746b39baf495a0a66fa2da5767bf74996691b8d5ac1341af43e0970981c04",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "edda3567ab519caf5a50473662ad281bd99345f0cd270099ba073b335bbec729",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-lifecycle.ts",
+              "type"  : "file",
+              "digest": "79021fd7b1ace3f32768bc4fbeb2597086cf0b2c90e07bc6ae40a3cb83eab722",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-session.ts",
+              "type"  : "file",
+              "digest": "a6afcc457336ca03f342f89f2ab36a5e792716c2020d645314b2a6942d441a82",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-timing.ts",
+              "type"  : "file",
+              "digest": "6c697f5fccb51a3591e2c9bc62dfb89d4edfb24fa95fdbb7462e39b76bb1598f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "e47cb6b16567524b7d588a6ae5658e27167f2370f52b9aec8faa824ede0b247d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "2506275d83d64cb3ded5a709f48287abbe8088e052db81f7ac103694bfa9fddb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "1fe3e8cd82f146929515f4ca2740f22ecf5196fdd8fcd56bd735a5035402ee59",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "7556cec14e44b25d3fbeaaf7a59939852e9a2880c6214a4bb2ec2428138310b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-api.tsx",
+              "type"  : "file",
+              "digest": "05e2152c31ae4e5eb89e3582693df159e7ef0cd0a81c0d1a072563e0beaabc1d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-registry.ts",
+              "type"  : "file",
+              "digest": "a880ee36f4046de97aa0a7890f180f3097350926082509a4f04f82b54ec1f713",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.css",
+              "type"  : "file",
+              "digest": "4a2e7ad32575e024688b0365ccb4554707cc6b79c4f2026efac63b4e34287d95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.tsx",
+              "type"  : "file",
+              "digest": "3f809d591c8490dd5a2e9ee7ee581ebd4279422d55ad4512cb6745d9bbd5f8f8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "6adfdc5f1ee481fd870f25fe1730f310636a6d5c65b87c187f83cb17d4a3db2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/chat-state.test.ts",
+              "type"  : "file",
+              "digest": "5a3c98bd2a0c8ae17696392a11f0a7a1c863a0fcea7e71cb5edd7c77582b3003",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/command-preview.test.ts",
+              "type"  : "file",
+              "digest": "aedf0676739bc02cb5751fe6c214a69530e086db32ec4b7deae060c798489ef9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/fixtures/chat-ui-app-server.ts",
+              "type"  : "file",
+              "digest": "aae94fb1db08f1fc813330f4a7702d5bf0548405d96e0bd064b4a7a251716556",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/native-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "03a9bf94886c91c0f3798417612b301e27ff467772f13f09506470b05edf2efd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-timing.test.ts",
+              "type"  : "file",
+              "digest": "0009c6e524273461d24467be2faab4024e9d869cbad964abb23f63d512ebe556",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-3",
+          "AC-4"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/session-implementation/home-supplement-structure-harness.json",
+            "size"  : 24727,
+            "digest": "8cf6baee5998fab7cda218815bade2921766ac7b55fa931b6770e7928af5bdb8"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 31544,
+            "digest"         : "a56903555c7f9eca83df515f6d56bece5f6e9bd3008f79c5723609f15740beeb",
+            "truncated"      : false,
+            "retainedBytes"  : 31544,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-73362f9c-945f-4bf3-9179-e733cb97af99",
+        "startedAt"  : "2026-11-16T04:44:41.180Z",
+        "completedAt": "2026-11-16T04:45:22.174Z",
+        "source": {
+          "head": "5704d09ce6545bb8af262bc71a321b4a0958afd0",
+          "digest": "03b6ea1ce1754266ae676265d723cd32ba32883b4aac4736271bb087276b8054",
+          "inputs": [
+            "docs/specs/chat.md",
+            "docs/specs/dashboard.md",
+            "scripts/verify-chat.ts",
+            "src",
+            "test/chat-state.test.ts",
+            "test/command-preview.test.ts",
+            "test/fixtures/chat-ui-app-server.ts",
+            "test/native-lifecycle.test.ts",
+            "test/native-timing.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "6fce6998feb19df6d29d4b79c926ad036b3655224a9578bd06a64570cd9fa0cc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/dashboard.md",
+              "type"  : "file",
+              "digest": "67f58a2f4b0ebe3bfd070e8588afe241d624d02aea438200d88ebf5e6cf89f6d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "49d3a4f9dabf25728ec0849901944020cc5cda6c1f626be0dff42e3433df73ac",
+              "mode"  : 493
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "373e57bce951355c6f827cfd93fa13ff851130cf4f50ab1ae472d3ca1ebd8270",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview-view.tsx",
+              "type"  : "file",
+              "digest": "879b3b704d3d68b5e6efd6b55976c89c1fa9116870216ef1bb8ff5bc167cc1cb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.css",
+              "type"  : "file",
+              "digest": "e23c29698573148b0074ba129099587684b31101763854c5f63bcc376fb54c35",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.ts",
+              "type"  : "file",
+              "digest": "f289607d6695b754ad62f3dd23489fbeaf4e4d1cdb3bdd1456acd38731e6d2c2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "17c74fc8036cc8107ada33d98e5f0b762250a3b0598a793978e65b93d5495523",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/build-info.ts",
+              "type"  : "file",
+              "digest": "fcee1f41180acb0990e73e73fd6b3078500d807f3ad207891c8a8c0985f200eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "24fefd6e282d973c8888e1c454abf1a192588c778c4de9aa287be5e10b8473ae",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "1339f021f83733561a7aae13109c3174ae503a0f180efad9304bdfe67fc4a8be",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "125f5fc4daa54232e2d2499e4b4ae490beb28df62f5109ad7529f70d1fb6bd58",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "4821e105a0d9d41b260c551eb0423e6b2174b72911fafe017229979fcf0f7ba2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "b47eae2dc28075eaa7458ed80c26b0bc84d23293400a8f01f5d2c1fdd094f36e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard-view.tsx",
+              "type"  : "file",
+              "digest": "cc94c54c0a5430fe40fa5722287e6b04857b48fbf411cc6a5804b1c7cb670d3e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.css",
+              "type"  : "file",
+              "digest": "c7bafd10aab7fb51338c9e98bdea38bfe7dfe9290c471b9f0ff9152545802115",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.ts",
+              "type"  : "file",
+              "digest": "918893e0571179ea55c55a9f4d66d5e3b5a8801ed1d7868e586e1675924bcbc1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "f761d6b07b6e4b3d57bfc5657fc19ceb4d7f6edde8952f79224eedb81cb102e8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "f4c2b245d61f48c0c6371a578f262038e000d084aceb26402f04988c2debb410",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "c0b483b3e304858845a4d116d579eb0a364ea4dac85067ab8c6a2d65d5495a52",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "938f90dc1179b5f2b34116e049f44bf2c5fa49e19d0f05592f701721d8e4011b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ebdfb611ad246ec9db02a01a440db3e5412c1927457cff046ade52b1c487063b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "82ac1e4e5eeee72cb019eee9253c05cb69d1027fcba4e44351b821d0576ae0f6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "edda3567ab519caf5a50473662ad281bd99345f0cd270099ba073b335bbec729",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-lifecycle.ts",
+              "type"  : "file",
+              "digest": "79021fd7b1ace3f32768bc4fbeb2597086cf0b2c90e07bc6ae40a3cb83eab722",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-session.ts",
+              "type"  : "file",
+              "digest": "a6afcc457336ca03f342f89f2ab36a5e792716c2020d645314b2a6942d441a82",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-timing.ts",
+              "type"  : "file",
+              "digest": "6c697f5fccb51a3591e2c9bc62dfb89d4edfb24fa95fdbb7462e39b76bb1598f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "e47cb6b16567524b7d588a6ae5658e27167f2370f52b9aec8faa824ede0b247d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "2506275d83d64cb3ded5a709f48287abbe8088e052db81f7ac103694bfa9fddb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "1fe3e8cd82f146929515f4ca2740f22ecf5196fdd8fcd56bd735a5035402ee59",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "7556cec14e44b25d3fbeaaf7a59939852e9a2880c6214a4bb2ec2428138310b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-api.tsx",
+              "type"  : "file",
+              "digest": "05e2152c31ae4e5eb89e3582693df159e7ef0cd0a81c0d1a072563e0beaabc1d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-registry.ts",
+              "type"  : "file",
+              "digest": "a880ee36f4046de97aa0a7890f180f3097350926082509a4f04f82b54ec1f713",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.css",
+              "type"  : "file",
+              "digest": "4a2e7ad32575e024688b0365ccb4554707cc6b79c4f2026efac63b4e34287d95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.tsx",
+              "type"  : "file",
+              "digest": "3f809d591c8490dd5a2e9ee7ee581ebd4279422d55ad4512cb6745d9bbd5f8f8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "6adfdc5f1ee481fd870f25fe1730f310636a6d5c65b87c187f83cb17d4a3db2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/chat-state.test.ts",
+              "type"  : "file",
+              "digest": "5a3c98bd2a0c8ae17696392a11f0a7a1c863a0fcea7e71cb5edd7c77582b3003",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/command-preview.test.ts",
+              "type"  : "file",
+              "digest": "aedf0676739bc02cb5751fe6c214a69530e086db32ec4b7deae060c798489ef9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/fixtures/chat-ui-app-server.ts",
+              "type"  : "file",
+              "digest": "aae94fb1db08f1fc813330f4a7702d5bf0548405d96e0bd064b4a7a251716556",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/native-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "03a9bf94886c91c0f3798417612b301e27ff467772f13f09506470b05edf2efd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-timing.test.ts",
+              "type"  : "file",
+              "digest": "0009c6e524273461d24467be2faab4024e9d869cbad964abb23f63d512ebe556",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "AC-1",
+          "AC-3",
+          "AC-4"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 31559,
+            "digest"         : "38e6ca7d32501d30b63b50faa64ad5fbcbd85c047708b8f56e149025d1ce96e0",
+            "truncated"      : false,
+            "retainedBytes"  : 31559,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-7b9014e5-76c4-4888-bfc0-4d680509198d",
+        "startedAt"  : "2026-11-16T05:06:39.193Z",
+        "completedAt": "2026-11-16T05:06:52.609Z",
+        "source": {
+          "head": "5704d09ce6545bb8af262bc71a321b4a0958afd0",
+          "digest": "e1d0cf5ca2af93f5e2a9089012388fbbd4572826f956a3cf54a0b2d88e63c301",
+          "inputs": [
+            "docs/specs/chat.md",
+            "docs/specs/dashboard.md",
+            "scripts/verify-chat.ts",
+            "src",
+            "test/chat-state.test.ts",
+            "test/command-preview.test.ts",
+            "test/fixtures/chat-ui-app-server.ts",
+            "test/native-lifecycle.test.ts",
+            "test/native-timing.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "6fce6998feb19df6d29d4b79c926ad036b3655224a9578bd06a64570cd9fa0cc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/dashboard.md",
+              "type"  : "file",
+              "digest": "67f58a2f4b0ebe3bfd070e8588afe241d624d02aea438200d88ebf5e6cf89f6d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "49d3a4f9dabf25728ec0849901944020cc5cda6c1f626be0dff42e3433df73ac",
+              "mode"  : 493
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "373e57bce951355c6f827cfd93fa13ff851130cf4f50ab1ae472d3ca1ebd8270",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview-view.tsx",
+              "type"  : "file",
+              "digest": "879b3b704d3d68b5e6efd6b55976c89c1fa9116870216ef1bb8ff5bc167cc1cb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.css",
+              "type"  : "file",
+              "digest": "e23c29698573148b0074ba129099587684b31101763854c5f63bcc376fb54c35",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.ts",
+              "type"  : "file",
+              "digest": "2bdda821bec2cf84b8e57b9c49d693c48bff9977dcb00e2d2e6da75448015fdc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "f3c61d6bdd1c7a54c89cc7e8391b2963a1fde67d69f7e0f04138f845a2b8a293",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/build-info.ts",
+              "type"  : "file",
+              "digest": "fcee1f41180acb0990e73e73fd6b3078500d807f3ad207891c8a8c0985f200eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "24fefd6e282d973c8888e1c454abf1a192588c778c4de9aa287be5e10b8473ae",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "1339f021f83733561a7aae13109c3174ae503a0f180efad9304bdfe67fc4a8be",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "125f5fc4daa54232e2d2499e4b4ae490beb28df62f5109ad7529f70d1fb6bd58",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "4821e105a0d9d41b260c551eb0423e6b2174b72911fafe017229979fcf0f7ba2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "b47eae2dc28075eaa7458ed80c26b0bc84d23293400a8f01f5d2c1fdd094f36e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard-view.tsx",
+              "type"  : "file",
+              "digest": "cc94c54c0a5430fe40fa5722287e6b04857b48fbf411cc6a5804b1c7cb670d3e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.css",
+              "type"  : "file",
+              "digest": "c7bafd10aab7fb51338c9e98bdea38bfe7dfe9290c471b9f0ff9152545802115",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.ts",
+              "type"  : "file",
+              "digest": "918893e0571179ea55c55a9f4d66d5e3b5a8801ed1d7868e586e1675924bcbc1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "f761d6b07b6e4b3d57bfc5657fc19ceb4d7f6edde8952f79224eedb81cb102e8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "f4c2b245d61f48c0c6371a578f262038e000d084aceb26402f04988c2debb410",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "c0b483b3e304858845a4d116d579eb0a364ea4dac85067ab8c6a2d65d5495a52",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "938f90dc1179b5f2b34116e049f44bf2c5fa49e19d0f05592f701721d8e4011b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ebdfb611ad246ec9db02a01a440db3e5412c1927457cff046ade52b1c487063b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "82ac1e4e5eeee72cb019eee9253c05cb69d1027fcba4e44351b821d0576ae0f6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "edda3567ab519caf5a50473662ad281bd99345f0cd270099ba073b335bbec729",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-lifecycle.ts",
+              "type"  : "file",
+              "digest": "79021fd7b1ace3f32768bc4fbeb2597086cf0b2c90e07bc6ae40a3cb83eab722",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-session.ts",
+              "type"  : "file",
+              "digest": "a6afcc457336ca03f342f89f2ab36a5e792716c2020d645314b2a6942d441a82",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-timing.ts",
+              "type"  : "file",
+              "digest": "6c697f5fccb51a3591e2c9bc62dfb89d4edfb24fa95fdbb7462e39b76bb1598f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "e47cb6b16567524b7d588a6ae5658e27167f2370f52b9aec8faa824ede0b247d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "2506275d83d64cb3ded5a709f48287abbe8088e052db81f7ac103694bfa9fddb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "1fe3e8cd82f146929515f4ca2740f22ecf5196fdd8fcd56bd735a5035402ee59",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "7556cec14e44b25d3fbeaaf7a59939852e9a2880c6214a4bb2ec2428138310b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-api.tsx",
+              "type"  : "file",
+              "digest": "05e2152c31ae4e5eb89e3582693df159e7ef0cd0a81c0d1a072563e0beaabc1d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-registry.ts",
+              "type"  : "file",
+              "digest": "a880ee36f4046de97aa0a7890f180f3097350926082509a4f04f82b54ec1f713",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.css",
+              "type"  : "file",
+              "digest": "4a2e7ad32575e024688b0365ccb4554707cc6b79c4f2026efac63b4e34287d95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.tsx",
+              "type"  : "file",
+              "digest": "3f809d591c8490dd5a2e9ee7ee581ebd4279422d55ad4512cb6745d9bbd5f8f8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "6adfdc5f1ee481fd870f25fe1730f310636a6d5c65b87c187f83cb17d4a3db2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/chat-state.test.ts",
+              "type"  : "file",
+              "digest": "5a3c98bd2a0c8ae17696392a11f0a7a1c863a0fcea7e71cb5edd7c77582b3003",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/command-preview.test.ts",
+              "type"  : "file",
+              "digest": "aedf0676739bc02cb5751fe6c214a69530e086db32ec4b7deae060c798489ef9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/fixtures/chat-ui-app-server.ts",
+              "type"  : "file",
+              "digest": "aae94fb1db08f1fc813330f4a7702d5bf0548405d96e0bd064b4a7a251716556",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/native-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "03a9bf94886c91c0f3798417612b301e27ff467772f13f09506470b05edf2efd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-timing.test.ts",
+              "type"  : "file",
+              "digest": "0009c6e524273461d24467be2faab4024e9d869cbad964abb23f63d512ebe556",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 1,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "AC-1",
+          "AC-3",
+          "AC-4"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 403,
+            "digest"         : "dafec1ca3bdb3e72fd77875ff16aef23c5fa7278cf1fd5aff3e7c6153c9c335e",
+            "truncated"      : false,
+            "retainedBytes"  : 403,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5",
+        "startedAt"  : "2026-11-16T05:11:29.523Z",
+        "completedAt": "2026-11-16T05:13:03.783Z",
+        "source": {
+          "head": "5704d09ce6545bb8af262bc71a321b4a0958afd0",
+          "digest": "f5af2de07ecaebbc97bce4afca2afa6bfc46b1e60086f648a511c7683b15e64f",
+          "inputs": [
+            "docs/specs/chat.md",
+            "docs/specs/dashboard.md",
+            "scripts/verify-chat.ts",
+            "src",
+            "test/chat-state.test.ts",
+            "test/command-preview.test.ts",
+            "test/fixtures/chat-ui-app-server.ts",
+            "test/native-lifecycle.test.ts",
+            "test/native-timing.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/specs/chat.md",
+              "type"  : "file",
+              "digest": "6fce6998feb19df6d29d4b79c926ad036b3655224a9578bd06a64570cd9fa0cc",
+              "mode"  : 420
+            },
+            {
+              "path"  : "docs/specs/dashboard.md",
+              "type"  : "file",
+              "digest": "67f58a2f4b0ebe3bfd070e8588afe241d624d02aea438200d88ebf5e6cf89f6d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-chat.ts",
+              "type"  : "file",
+              "digest": "49d3a4f9dabf25728ec0849901944020cc5cda6c1f626be0dff42e3433df73ac",
+              "mode"  : 493
+            },
+            {
+              "path": "src",
+              "type": "directory"
+            },
+            {
+              "path"  : "src/activity-ledger.ts",
+              "type"  : "file",
+              "digest": "a65c6f46efa51ec6d7eef6342184c4eb3f4a74ffcf5c019230e0a11b2a34c24a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/activity-sidebar.ts",
+              "type"  : "file",
+              "digest": "373e57bce951355c6f827cfd93fa13ff851130cf4f50ab1ae472d3ca1ebd8270",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview-view.tsx",
+              "type"  : "file",
+              "digest": "879b3b704d3d68b5e6efd6b55976c89c1fa9116870216ef1bb8ff5bc167cc1cb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.css",
+              "type"  : "file",
+              "digest": "e23c29698573148b0074ba129099587684b31101763854c5f63bcc376fb54c35",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/agent-overview.ts",
+              "type"  : "file",
+              "digest": "9d69b07c715e74df7089b2c3ac8dacb3721303214aee3c0ca2a08b8254209cb7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture-tree.ts",
+              "type"  : "file",
+              "digest": "6f2e4a5f0beb82ad1ec3af88995714516c22ef69a713adf546aa8e8aa1379a8c",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/architecture.generated.json",
+              "type"  : "file",
+              "digest": "3eba634dd082a364f014babc30386dc62942897ef993a828b2b57a07d39e4a0c",
+              "mode"  : 384
+            },
+            {
+              "path"  : "src/architecture.ts",
+              "type"  : "file",
+              "digest": "e7264cb9946fd58984a4d184aca1500ea72fe0ee5ea4041110697d336a8fa6e9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/build-info.ts",
+              "type"  : "file",
+              "digest": "fcee1f41180acb0990e73e73fd6b3078500d807f3ad207891c8a8c0985f200eb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-message.tsx",
+              "type"  : "file",
+              "digest": "9114ee81c2eb912ed763f8116d809d003691caa2f6166fb0c882ebb278204c86",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-row-state.tsx",
+              "type"  : "file",
+              "digest": "e23639d7ebfcb43464d080d9b6b555d0206940f575856b93edc70bcf9c43fc99",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat-state.ts",
+              "type"  : "file",
+              "digest": "24fefd6e282d973c8888e1c454abf1a192588c778c4de9aa287be5e10b8473ae",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/chat.css",
+              "type"  : "file",
+              "digest": "1339f021f83733561a7aae13109c3174ae503a0f180efad9304bdfe67fc4a8be",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-card.tsx",
+              "type"  : "file",
+              "digest": "125f5fc4daa54232e2d2499e4b4ae490beb28df62f5109ad7529f70d1fb6bd58",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/command-preview.ts",
+              "type"  : "file",
+              "digest": "4821e105a0d9d41b260c551eb0423e6b2174b72911fafe017229979fcf0f7ba2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/conversations.ts",
+              "type"  : "file",
+              "digest": "b47eae2dc28075eaa7458ed80c26b0bc84d23293400a8f01f5d2c1fdd094f36e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard-view.tsx",
+              "type"  : "file",
+              "digest": "cc94c54c0a5430fe40fa5722287e6b04857b48fbf411cc6a5804b1c7cb670d3e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.css",
+              "type"  : "file",
+              "digest": "c7bafd10aab7fb51338c9e98bdea38bfe7dfe9290c471b9f0ff9152545802115",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/dashboard.ts",
+              "type"  : "file",
+              "digest": "918893e0571179ea55c55a9f4d66d5e3b5a8801ed1d7868e586e1675924bcbc1",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/development.ts",
+              "type"  : "file",
+              "digest": "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem-view.tsx",
+              "type"  : "file",
+              "digest": "f761d6b07b6e4b3d57bfc5657fc19ceb4d7f6edde8952f79224eedb81cb102e8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.css",
+              "type"  : "file",
+              "digest": "f4c2b245d61f48c0c6371a578f262038e000d084aceb26402f04988c2debb410",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/ecosystem.ts",
+              "type"  : "file",
+              "digest": "85a1b9705997a10722bf66dec087b0a726110b166b606fb7234a0c7499f02dfd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/index.html",
+              "type"  : "file",
+              "digest": "c0b483b3e304858845a4d116d579eb0a364ea4dac85067ab8c6a2d65d5495a52",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/input.ts",
+              "type"  : "file",
+              "digest": "6a76196b674d5ac588c6d12c294fae16499b4b100ffef75818c34186580ec122",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/main.ts",
+              "type"  : "file",
+              "digest": "938f90dc1179b5f2b34116e049f44bf2c5fa49e19d0f05592f701721d8e4011b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity-view.tsx",
+              "type"  : "file",
+              "digest": "ebdfb611ad246ec9db02a01a440db3e5412c1927457cff046ade52b1c487063b",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.css",
+              "type"  : "file",
+              "digest": "bf26b1bb26b78724061a80c0af9cedbfc1046ecd60085f819b206f7f9e7d5619",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-activity.ts",
+              "type"  : "file",
+              "digest": "82ac1e4e5eeee72cb019eee9253c05cb69d1027fcba4e44351b821d0576ae0f6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-chat.ts",
+              "type"  : "file",
+              "digest": "edda3567ab519caf5a50473662ad281bd99345f0cd270099ba073b335bbec729",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-command.ts",
+              "type"  : "file",
+              "digest": "bb15e1d93e3f7b2795357ed4278d3cabb9a889d956ac731e8fd533e496b4e05e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-lifecycle.ts",
+              "type"  : "file",
+              "digest": "79021fd7b1ace3f32768bc4fbeb2597086cf0b2c90e07bc6ae40a3cb83eab722",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-report-input.ts",
+              "type"  : "file",
+              "digest": "093553694084bdc94723d2b8eee7a8c913e4e75317bcf1444ad570d5c4b0967e",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-reports.ts",
+              "type"  : "file",
+              "digest": "6d1a59e1ad35c52ad5a25edf6af6c0fa811d4a36f8d5fe1d74ea5e8d8bcb06b6",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-session.ts",
+              "type"  : "file",
+              "digest": "a6afcc457336ca03f342f89f2ab36a5e792716c2020d645314b2a6942d441a82",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/native-timing.ts",
+              "type"  : "file",
+              "digest": "6c697f5fccb51a3591e2c9bc62dfb89d4edfb24fa95fdbb7462e39b76bb1598f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/preload.ts",
+              "type"  : "file",
+              "digest": "e47cb6b16567524b7d588a6ae5658e27167f2370f52b9aec8faa824ede0b247d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projection.ts",
+              "type"  : "file",
+              "digest": "2506275d83d64cb3ded5a709f48287abbe8088e052db81f7ac103694bfa9fddb",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/projects.ts",
+              "type"  : "file",
+              "digest": "d0b10d8040efb04c34aa07b018b8867675fe3f99918245950588ff894c6e8ab7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/renderer.tsx",
+              "type"  : "file",
+              "digest": "1fe3e8cd82f146929515f4ca2740f22ecf5196fdd8fcd56bd735a5035402ee59",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/report-judge.ts",
+              "type"  : "file",
+              "digest": "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-service.ts",
+              "type"  : "file",
+              "digest": "e412a43714441241a51013f239731332af51de831a7b0b0b29083f963af8e601",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/reports-view.tsx",
+              "type"  : "file",
+              "digest": "7556cec14e44b25d3fbeaaf7a59939852e9a2880c6214a4bb2ec2428138310b8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/rpc.ts",
+              "type"  : "file",
+              "digest": "396bf547fdd4d364699c760fdb081510b0cedaf52ba935b8b506f3bce0aa36bd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-api.tsx",
+              "type"  : "file",
+              "digest": "05e2152c31ae4e5eb89e3582693df159e7ef0cd0a81c0d1a072563e0beaabc1d",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-registry.ts",
+              "type"  : "file",
+              "digest": "a880ee36f4046de97aa0a7890f180f3097350926082509a4f04f82b54ec1f713",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.css",
+              "type"  : "file",
+              "digest": "4a2e7ad32575e024688b0365ccb4554707cc6b79c4f2026efac63b4e34287d95",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/session-tabs.tsx",
+              "type"  : "file",
+              "digest": "3f809d591c8490dd5a2e9ee7ee581ebd4279422d55ad4512cb6745d9bbd5f8f8",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/shared.ts",
+              "type"  : "file",
+              "digest": "6adfdc5f1ee481fd870f25fe1730f310636a6d5c65b87c187f83cb17d4a3db2f",
+              "mode"  : 420
+            },
+            {
+              "path"  : "src/www-activity.ts",
+              "type"  : "file",
+              "digest": "2098c33582f1ab7843ff882df16fcf62d3c4bb8c23606d0bcc480987023780f7",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/chat-state.test.ts",
+              "type"  : "file",
+              "digest": "5a3c98bd2a0c8ae17696392a11f0a7a1c863a0fcea7e71cb5edd7c77582b3003",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/command-preview.test.ts",
+              "type"  : "file",
+              "digest": "aedf0676739bc02cb5751fe6c214a69530e086db32ec4b7deae060c798489ef9",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/fixtures/chat-ui-app-server.ts",
+              "type"  : "file",
+              "digest": "aae94fb1db08f1fc813330f4a7702d5bf0548405d96e0bd064b4a7a251716556",
+              "mode"  : 493
+            },
+            {
+              "path"  : "test/native-lifecycle.test.ts",
+              "type"  : "file",
+              "digest": "03a9bf94886c91c0f3798417612b301e27ff467772f13f09506470b05edf2efd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/native-timing.test.ts",
+              "type"  : "file",
+              "digest": "0009c6e524273461d24467be2faab4024e9d869cbad964abb23f63d512ebe556",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+        "criteriaSnapshot": [
+          {
+            "id"         : "AC-1",
+            "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-2",
+            "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/verify-chat.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 1,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "AC-1",
+          "AC-3",
+          "AC-4"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.22.3",
+          "executable": {
+            "path": "/opt/homebrew/Cellar/node@22/22.22.3/bin/node",
+            "digest": "e67e9c664f5b3d6d9fc0050ac895d8f30d213ce340c84439750edc9cc449d010"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 402,
+            "digest"         : "9fa32f741e61050ca0b542507db4f600d8eeb20f457723beac32fc45286f9fee",
+            "truncated"      : false,
+            "retainedBytes"  : 402,
+            "contentRetained": false
+          }
+        }
+      }
+    ],
+    "reviews": [],
+    "artifactReviews": [
+      {
+        "id"        : "artifact-2fcd6a45-9da9-493f-8136-4c88f2e007b2",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:25:55.259Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "관측·목표·권한과 제안을 분리한 논의 초안이다. 03의 출력 위치와 02·04의 세부 목표가 열려 있어 draft로 유지한다.",
+        "digest"    : "520e358093f10d45e56a8188186b5d7c920bf6475e1d5714d2e87b7ac1ee0752",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "다음 개발을 위한 논의이며 구현 권한이 없음을 명시했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "여백 스크롤·첫 의미 있는 사건·출력 확장·진행 설명 시나리오를 구분했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 14
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "finding",
+            "reason": "출력 위치와 응답 공백·설명 표현 목표는 사용자 논의가 더 필요하다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 27
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "finding",
+            "reason": "네 기준은 등록했으나 초기 공백의 표시 목표와 출력 위치는 아직 제안·미결정이다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 16
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-db488516-9b63-46bd-9c09-3fbf5d633664",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:28:24.073Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "03의 동일 위치 전환을 사용자 결정으로 반영했다. 단축키 범위와 초기 공백·설명 표현의 미결정은 draft로 유지한다.",
+        "digest"    : "99f0857ed681d1afdd551a05522e2cb27b0c1edecececede08c7ad193dc65cff",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "구현 없이 다음 개발을 위한 논의를 진행한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "03의 동일 영역 전환과 키보드 접근을 구체화했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 20
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "finding",
+            "reason": "단축키 적용 범위와 02·04의 표현 목표가 미결정이다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 29
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "finding",
+            "reason": "단축키 범위와 첫 유의미한 내용의 표시 목표가 아직 확정되지 않았다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 16
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-c363fac8-a78c-43fb-a316-5cf36a670fdb",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:32:04.862Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "03의 동일 위치·선택한 출력 하나 적용을 확정했다. 04의 설명 생성 범위와 02의 초기 공백 목표는 논의 중이다.",
+        "digest"    : "43318e326477122922bd8d76f0e16cb950866de4947cf8a960efb4f78a76ff8b",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "다음 개발 준비를 위한 명세 논의이며 구현 권한은 없다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "선택한 출력의 독립 펼침과 다른 출력 상태 보존을 연결했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 20
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "finding",
+            "reason": "앱이 작성하는 진행 설명의 추가 여부와 초기 공백 목표를 확인해야 한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 29
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "finding",
+            "reason": "03은 구체화됐으나 02·04의 세부 기준이 남았다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 16
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-91347463-57d1-40a9-870b-b7a796f27650",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:33:42.419Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "04의 앱 진행 설명 추가를 확인했다. 관측 범위·출처 구분을 반영하고 02의 지연 양상을 확인하는 단계로 이동한다.",
+        "digest"    : "9c80ba5fbdf68d2e0abe052d4952a43babe67591e41b2efc3615c9edfeac16a9",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "다음 개발을 위한 논의와 구현 미승인 범위를 유지한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "Native 공개 설명과 실제 사건 기반 앱 설명의 채팅 읽기 시나리오를 구분했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 21
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "finding",
+            "reason": "02의 지연이 시작 구간만인지 이후 사건도 일괄 표시되는지 아직 확인되지 않았다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 29
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "finding",
+            "reason": "02의 첫 의미 있는 내용에 대한 구체 목표는 관측 보완 후 정리한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 19
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-3f9c02ea-125b-4471-bff2-ead343f351aa",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:34:57.924Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "02의 첫 내용 이후 개별 표시 관측을 반영했다. 원인을 단정하지 않고 초기 공백의 표시 방식을 다음 결정으로 남긴다.",
+        "digest"    : "83c5673fa534c9b7bbae7a091b893ed14428a9eb8ff356a1b406e976694e3cf0",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "구현 없이 다음 개발의 요구와 관측을 정리한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "초기 공백과 이후 개별 사건 표시를 구분했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 10
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "finding",
+            "reason": "실제 내용이 없을 때의 채팅 표시 방식이 미결정이다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 29
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "finding",
+            "reason": "초기 지연 개선과 대기 안내의 구체 기준을 더 정리해야 한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 19
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      },
+      {
+        "id"        : "artifact-b7b02026-e1be-451d-abb7-dd6544593d25",
+        "version"   : 1,
+        "reviewedAt": "2026-11-16T00:39:18.604Z",
+        "kind"      : "spec",
+        "depth"     : "brief",
+        "summary"   : "확인된 관측과 사용자 결정을 개발 인계 기준으로 정리했다. 초기 원인은 후속 진단 대상으로 남기고 구현·검증 완료로 판정하지 않는다.",
+        "digest"    : "715af793a6cf73adb99a020b5b6600b3bf22a319fa62a05e4a961649d7b30738",
+        "checks": [
+          {
+            "id"    : "purpose",
+            "result": "satisfied",
+            "reason": "논의·읽기 전용 원인 조사 범위와 구현 미승인을 구분했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 3
+              }
+            ]
+          },
+          {
+            "id"    : "journeys",
+            "result": "satisfied",
+            "reason": "여백 스크롤·첫 작업 흐름·선택한 출력 전환 시나리오를 정리했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 27
+              }
+            ]
+          },
+          {
+            "id"    : "boundaries",
+            "result": "satisfied",
+            "reason": "원인 미확정과 사용자 선택 미결정을 구분하고 다음 개발의 계측 경계를 제시했다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 35
+              }
+            ]
+          },
+          {
+            "id"    : "outcomes",
+            "result": "satisfied",
+            "reason": "관측 가능한 네 기준을 원장에 두고 구현·검증 결과는 미검증으로 유지한다.",
+            "references": [
+              {
+                "path": "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/spec.md",
+                "line": 16
+              }
+            ]
+          }
+        ],
+        "coverage": []
+      }
+    ],
+    "reportingRequired": true,
+    "documentationReviews": [
+      {
+        "id"             : "documentation-5c65fa3d-b01d-4298-b6f1-c8c114bc09c8",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T03:23:39.700Z",
+        "sourceDigest"   : "85503940ed9493375727cf27a4597689d551044ae82869f5e91239841002c385",
+        "criteriaDigest" : "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+        "documentsDigest": "cc093be45694f0a0b6afec2a9a5b37faffd8c02dad1a4c8f07ff1c3b3addbf8e",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "native-timing의 main 단조시간과 renderer 별도시간, 탭별 Native 소유와 공개 진행 투영을 대조했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "타입·소스 정책·BoxBox disabled 경계와 합성 Electron/실제 Native 검증의 차이를 확인했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "updated",
+            "reason"  : "Chat 읽기·명령 펼침·Agent 기본바와 상세 모니터, 탭별 상태 보존의 제품 범위를 확인했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "소스·기준·입력·문서·독립검토의 현재 적용성과 과거 증거 보존 계약을 유지했다."
+          },
+          {
+            "path"    : "docs/specs/chat.md",
+            "decision": "updated",
+            "reason"  : "단일 출력영역·카드별 Ctrl+T·내부 스크롤·계측 출처와 지연 원인 미확정을 현행 요구와 대조했다."
+          },
+          {
+            "path"    : "docs/specs/dashboard.md",
+            "decision": "updated",
+            "reason"  : "첫 View Page와 대상별 진입, 독립 탭/보드 범위를 Chat 입력과 분리함을 확인했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-d941eca1-c3df-4a4e-a390-7a1440734be6",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T03:37:16.347Z",
+        "sourceDigest"   : "3920c3115d66f9fa8887fa049bf563c2f0248784f04e09d9a51b8af153e2080b",
+        "criteriaDigest" : "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+        "documentsDigest": "cc093be45694f0a0b6afec2a9a5b37faffd8c02dad1a4c8f07ff1c3b3addbf8e",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "native-timing의 main 단조시간과 renderer 별도시간, 탭별 Native 소유와 공개 진행 투영을 대조했다. 이후 구조 스냅샷의 테스트 연결 갱신만 발생했고 문서 내용과 해당 계약은 동일함을 재대조했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "타입·소스 정책·BoxBox disabled 경계와 합성 Electron/실제 Native 검증의 차이를 확인했다. 이후 구조 스냅샷의 테스트 연결 갱신만 발생했고 문서 내용과 해당 계약은 동일함을 재대조했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "updated",
+            "reason"  : "Chat 읽기·명령 펼침·Agent 기본바와 상세 모니터, 탭별 상태 보존의 제품 범위를 확인했다. 이후 구조 스냅샷의 테스트 연결 갱신만 발생했고 문서 내용과 해당 계약은 동일함을 재대조했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "소스·기준·입력·문서·독립검토의 현재 적용성과 과거 증거 보존 계약을 유지했다. 이후 구조 스냅샷의 테스트 연결 갱신만 발생했고 문서 내용과 해당 계약은 동일함을 재대조했다."
+          },
+          {
+            "path"    : "docs/specs/chat.md",
+            "decision": "updated",
+            "reason"  : "단일 출력영역·카드별 Ctrl+T·내부 스크롤·계측 출처와 지연 원인 미확정을 현행 요구와 대조했다. 이후 구조 스냅샷의 테스트 연결 갱신만 발생했고 문서 내용과 해당 계약은 동일함을 재대조했다."
+          },
+          {
+            "path"    : "docs/specs/dashboard.md",
+            "decision": "updated",
+            "reason"  : "첫 View Page와 대상별 진입, 독립 탭/보드 범위를 Chat 입력과 분리함을 확인했다. 이후 구조 스냅샷의 테스트 연결 갱신만 발생했고 문서 내용과 해당 계약은 동일함을 재대조했다."
+          }
+        ]
+      },
+      {
+        "id"             : "documentation-6ccaea8e-d870-43b4-922a-a66da3f647eb",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-16T03:42:17.635Z",
+        "sourceDigest"   : "3920c3115d66f9fa8887fa049bf563c2f0248784f04e09d9a51b8af153e2080b",
+        "criteriaDigest" : "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+        "documentsDigest": "743e17bd258793b02e2d91332f7938a4c9cb8fd75ba0cb0aad9e81f2f6d4cad2",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "updated",
+            "reason"  : "native-timing의 main 단조시간과 renderer 별도시간, 탭별 Native 소유와 공개 진행 투영을 대조했다. 이후 구조 스냅샷의 테스트 연결 갱신만 발생했고 문서 내용과 해당 계약은 동일함을 재대조했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "updated",
+            "reason"  : "타입·소스 정책·BoxBox disabled 경계와 합성 Electron/실제 Native 검증의 차이를 확인했다. 이후 구조 스냅샷의 테스트 연결 갱신만 발생했고 문서 내용과 해당 계약은 동일함을 재대조했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "updated",
+            "reason"  : "Chat 읽기·명령 펼침·Agent 기본바와 상세 모니터, 탭별 상태 보존의 제품 범위를 확인했다. 이후 구조 스냅샷의 테스트 연결 갱신만 발생했고 문서 내용과 해당 계약은 동일함을 재대조했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "updated",
+            "reason"  : "필수 core 일반 정책과 직접 사용자 지침의 최종 Opus 대체 금지·외부 Sonnet 보조 검토를 구분한 현행 설명을 확인했다."
+          },
+          {
+            "path"    : "docs/specs/chat.md",
+            "decision": "updated",
+            "reason"  : "단일 출력영역·카드별 Ctrl+T·내부 스크롤·계측 출처와 지연 원인 미확정을 현행 요구와 대조했다. 이후 구조 스냅샷의 테스트 연결 갱신만 발생했고 문서 내용과 해당 계약은 동일함을 재대조했다."
+          },
+          {
+            "path"    : "docs/specs/dashboard.md",
+            "decision": "updated",
+            "reason"  : "첫 View Page와 대상별 진입, 독립 탭/보드 범위를 Chat 입력과 분리함을 확인했다. 이후 구조 스냅샷의 테스트 연결 갱신만 발생했고 문서 내용과 해당 계약은 동일함을 재대조했다."
+          }
+        ]
+      }
+    ]
+  }
+}

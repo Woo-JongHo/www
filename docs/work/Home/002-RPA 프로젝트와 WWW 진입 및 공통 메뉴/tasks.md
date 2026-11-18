@@ -1,5 +1,20 @@
 # 후속 설계·구현·검증 단위
 
+## 현재 재개 인계 — 2026-11-17 Home 검증 회수
+
+현재 실제 다음 단계는 verify다. 고유 v5 GUI·IPC와 공식 sessions/chat 시도를 evidence-current-v5.md에 원문 assertion·artifact SHA·범위로 보존했다. Root의 추가 Native 실제 감사 반례에 따른 v6 최소 교정 대기 중이며, v5 관측을 새 소스 전체 PASS로 승격하지 않는다. v6 뒤 영향 검사와 필요한 정확 GUI를 회수한 다음 전체 기준 actual Terra 감사·저작 보고서·공식 완료/readback을 이어간다. 이번 보고서는 부분 회수이며 업무 완료가 아니다.
+
+현재 제품 소스는 Root가 단독 동결·통합한다. 이 작업의 검증 담당자는 제품 코드·공유 문서·빌드·GUI를 변경하거나 실행하지 않는다. 각 UUID의 기존 JSON argv 권한을 그대로 유지하고 문서 영향 대상과 inputs의 공식 합집합을 연결했다. 2026-11-17 집중 검사는 같은 UUID의 공식 verify로 기록했으며 실제 Electron·독립 감사·업무 완료를 대신하지 않는다. Root의 최종 문서 정정과 동결 뒤 해당 UUID의 실제 GUI 관측을 연결하고 현재 소스·기준에 묶인 별도 읽기 전용 Terra 감사, 저작 보고서, report-complete 및 status/readback 순서로 회수한다. 과거 실패·관측·권한 원문은 보존한다.
+
+
+## 최신 실행 인계 — 2026-11-16T14:29:06.532372+00:00
+
+Root의 공유 소스 동결과 typed post PASS·sourceStable true를 확인하고 Home002·003·004의 단독 build/GUI 슬롯을 받았다. 현재 full TASK 원문 SHA와 각 원장의 요청·권한 해시가 일치하며 commit/publish는 false다. 검증 명령은 기존 기준·과거 이력을 보존한 full history backup 뒤 정확 argv로 추가했다. 제품 소스는 추가 수정하지 않는다.
+
+먼저 Home004의 실제 strict→build→집중 검사→Electron Home(empty/multiple, 실제 chmod partial/failed·복원·삭제·닫기·필터·선택 변경)→별도 IPC 경합을 실행한다. Home004의 감사 포함 KANBAN-VERIFY는 선행 기능 검사에 매핑하지 않는다. 이후 Home002/003의 기준별 집중·GUI·문서 검사와 각 UUID의 직접 Terra 재감사, 현재 기능/감사/문서 composite, 저작 보고서·공식 완료/readback을 잇는다. 실제 OS 폴더 선택·IME·Windows 및 실제 모델과 합성 Native를 구분하고, 실패·미검증은 통과로 대체하지 않는다.
+
+이 절 아래의 기존 현재 인계·실행 전 표현은 해당 시점의 역사다. 현행 결과는 work.json과 새 verification 시도의 현재 적용성으로 판단한다.
+
 이 문서는 구현 착수 전 실행 계획의 이력이다. 당시 권한은 문서 작성이었고 각 단위의 미결정 해소와 별도 구현 요청이 필요했다. 2026-11-16 전체 구현과 독립 Codex 탭·동시 실행을 허용한 후속 직접 요청은 [명세의 현행 범위](spec.md#현행-범위와-초기-기록의-구분)에 연결했다. 아래의 ‘후속’, ‘미정’, ‘구현하지 않는다’는 당시 계획 상태이며 현재 완료 판정은 work.json과 실제 검증 기록을 따른다. 현행 데이터·화면·세션 계약은 [대시보드 명세](../../../specs/dashboard.md)와 [Chat 명세](../../../specs/chat.md#chat-sessions-01)를 따른다.
 
 ## 초기 계획 T1 — 진입과 탐색 — 이력

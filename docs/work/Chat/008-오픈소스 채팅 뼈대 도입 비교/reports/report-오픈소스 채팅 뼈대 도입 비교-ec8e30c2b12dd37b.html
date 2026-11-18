@@ -1,8 +1,205 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>오픈소스 채팅 뼈대 도입 비교 — WWW 작업 보고서</title><style>
-:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
-</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 15일 오후 6:38 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>오픈소스 채팅 뼈대 도입 비교</h1><p class="lead">오픈소스 채팅 뼈대 비교의 마감 검토에서 현재 기능표와 권장 결론의 불일치를 확인했으며, 완료로 처리하지 않았다.</p><div id="report-story" class="story">이전 비교가 현행 제품 기능과 최신 사용자 정정을 충분히 반영하는지 다시 확인할 필요가 있었다.
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>오픈소스 채팅 뼈대 도입 비교 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+dd.result-status{font-weight:600}dd.result-passed{color:var(--green)}dd.result-failed{color:var(--red)}dd.result-blocked,dd.result-unverified{color:var(--amber)}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 17일 AM 8:31 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>오픈소스 채팅 뼈대 도입 비교</h1><p class="lead">오픈소스 후보 조사와 부분 재사용 권장을 같은 UUID와 현재 v5 소스의 실행 증거로 다시 확인했다. 현재 실제 독립 검토는 미실행으로 남겼다. 현재 미해결 지적·기본 검사 실패·증거 공백을 보존하여 부분 결과로 보고하며 업무 완료를 선언하지 않는다.</p><div id="report-story" class="story">기존 소스의 검증 수와 과거 감사 결과가 여러 시점에 섞여 있었다. 실제 새 반례를 그대로 남기고 소스·기준·직접 요청과 증거의 현재성을 다시 구분해야 했다.
 
-대화 재개와 Markdown·복사는 현재 구현되어 있지만 비교표에는 미제공으로 남아 있고, Herdr 중심 재비교와 초기 assistant-ui 권장이 문서 안에서 충돌함을 확인했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> comparison.md의 현재 기능표를 실제 코드와 최신 실행 근거로 다시 작성한다.</p><p class="blocker"><strong>남은 차단 사항</strong> 독립 검토 fail: 수정 또는 검토 재실행 필요</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>2026-11-15 verification.md에 과거 기준선과 현재 구현의 차이 및 남은 재저작 범위를 기록했다.</li><li>공식 resume로 과거 증거를 현재 통과로 승격하지 않았다.</li><li>실제 claude-opus-5-5의 독립 감사가 fail로 같은 불일치와 증거 공백을 확인했다.</li></ul></div></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.</dt><dd>미검증으로 기록</dd></div><div><dt>후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.</dt><dd>미검증으로 기록</dd></div><div><dt>권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.</dt><dd>미검증으로 기록</dd></div></dl></section><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>비교표·권장 결론·고정 소스 대조를 보완하기 전에는 AC-1~3을 통과시키지 않는다.</li><li>제품 코드·의존성 도입이나 외부 후보 설치는 이번 검증 패스에서 실행하지 않는다.</li></ul></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>외부 후보의 고정 SHA·공식 소스·라이선스를 이번 패스에서 네트워크로 재조회하지 않았다.</li><li>현재 문서는 재개·Markdown 도입 전 기준선이며 최신 권장안으로 사용할 수 없다.</li><li>제품 소스 동결 뒤 현시점 부분 보고서를 새로 작성했다. Workflow009의 외부 런처 회귀 수정과 생성물 갱신은 이 작업의 연구·외부 엔진 수용 기준을 대체하지 않으며, 이전 독립 검토의 현재 적용성은 별도 상태로 확인한다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><ul><li>comparison.md의 현재 기능표를 실제 코드와 최신 실행 근거로 다시 작성한다.</li><li>Herdr runtime/desktop·Ovis·T3 Code의 실제 의존·재사용 경계를 고정 소스로 재대조하고 사용자 정정을 반영한 하나의 권장안을 작성한다.</li><li>현재 문서 영향 검토·실제 검증 증거 연결과 독립 감사를 다시 수행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-029fb7e2-61fa-4014-9362-5e915ab13197<br>report-bca04485-40e6-4eb6-b443-fd15227e6f0f</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>fa376e82bc065161589f5b89860b4d592b4de41309dd5724417daeab04648cc2</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>137932ff4208bd52b68de6109ac5d0b57c3c75f5a7e2b6736c4e0b785c7824f4</code></dd></div><div><dt>기준 지문</dt><dd><code>ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+현재 UUID의 등록 검사와 전용 GUI/직접 기능 원문을 회수했고 외부 정본의 문서 영향 검토를 연결했다. 실제 감사 지적과 미실행 한계를 분리하고 후속 최소 수정·독립 반박은 준비 단계로 남겼다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 17 · 실패 3 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> Root의 반박 검토로 지적의 유효 범위와 최소 수정 범위를 확정한다.</p><p class="blocker"><strong>남은 차단 사항</strong> AC-1: verification_failed</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><aside class="omission"><strong>일부 원본 항목이 이 보고서에 보관되지 않았습니다.</strong><p>기준 근거 전체 56개 중 30개 표시 (26개 제외), 검사 이력 전체 32개 중 20개 표시 (12개 제외), 검토 이력 전체 13개 중 10개 표시 (3개 제외), 명령 인자 전체 96개 중 60개 표시 (36개 제외), 검토 지적 전체 48개 중 31개 표시 (17개 제외). 제외된 당시 기록 중 실패·차단·미확인 항목이 3건 있습니다. 더 넓은 기록은 근거의 작업 파일과 대조해야 합니다.</p></aside></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>기존 소스의 검증 수와 과거 감사 결과가 여러 시점에 섞여 있었다. 실제 새 반례를 그대로 남기고 소스·기준·직접 요청과 증거의 현재성을 다시 구분해야 했다.</p></div><div><h3>접근과 결과</h3><p>현재 UUID의 등록 검사와 전용 GUI/직접 기능 원문을 회수했고 외부 정본의 문서 영향 검토를 연결했다. 실제 감사 지적과 미실행 한계를 분리하고 후속 최소 수정·독립 반박은 준비 단계로 남겼다.</p></div></div><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>현재 관측 가능한 입력·행동만 해당 검사 범위로 연결하고 전체 의미 수용은 실제 독립 검토·공식 core 판정과 구분했다.</li><li>제품·테스트의 추가 변경은 Root 공식 pre/post와 독립 반박 판정 뒤 수행하며 기준·검사 권한·일반 검토 정책을 약화하지 않는다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>v4의 main quota 생략/null, A/B/A 늦은 delta, 복원 enriched 완료와 혼합 summary 경계를 공식 저작 전후 검사로 교정했다.</li><li>v5 같은 UUID의 실제 실행·원문·source/criteria 식별과 문서 검토·감사 상태를 다시 연결했다.</li><li>새 반례는 실제 원문과 별도 수정 준비에 남겼고 과거 실패를 삭제하거나 새 PASS로 바꾸지 않았다.</li></ul></div><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.</dt><dd class="result-status result-failed">당시 실패로 기록</dd></div><div><dt>후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.</dt><dd class="result-status result-failed">당시 실패로 기록</dd></div><div><dt>권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.</dt><dd class="result-status result-failed">당시 실패로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 17건, 실패 3건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>실제 Electron GUI는 합성 Native subprocess이며 실제 모델·실계정·OS IME·Windows 검증으로 확대하지 않는다.</li><li>등록 검사·직접 관측·의미 검토·업무 완료는 별도이며 artifact 존재만으로 기준을 PASS로 강제하지 않는다.</li><li>등록 기본5초 집중 명령은 실패했다. 같은 입력·모든 assertions의 별도30초 직접 기능 검사는 통과했지만 기본 명령 PASS를 대체하지 않는다. 대량 원장 수집 비용은 미해결 위험이다.</li><li>전용 Chat GUI 첫 실행은 전환 중 activity:resources 조회 거절로 실패했다. 같은 소스의 재시도와 타이밍 원인 판정은 Root가 소유하며 이 보고서에서 성공으로 쓰지 않는다.</li><li>추가 감사는 Root의 최종 저작 동결 지시에 따라 시작하지 않았다. 과거 PASS를 현재 검토로 재사용하지 않는다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>Root의 반박 검토로 지적의 유효 범위와 최소 수정 범위를 확정한다.</li><li>추가 수정 후 최종 소스에서 직접 영향 검사·문서 영향·고유 독립 검토를 한 번 다시 회수한다.</li><li>현재 공식 완료 판정·read/status의 부족 조건을 그대로 남기고 모든 필수 조건이 충족하기 전에는 done으로 올리지 않는다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 17일 AM 8:31 · 선택한 발행 기록 · 오픈소스 후보 조사와 부분 재사용 권장을 같은 UUID와 현재 v5 소스의 실행 증거로 다시 확인했다. 현재 실제 독립 검토는 미실행으로 남겼다. 현재 미해결 지적·기본 검사 실패·증거 공백을 보존하여 부분 결과로 보고하며 업무 완료를 선언하지 않는다.</p><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 6개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 16일 PM 6:52 · 작성자 보고서 · Chat008의 현행 비교와 명세를 Ovis 부분 개작 권장안으로 맞추고 고정 공개 원문을 새로 회수했다. 공식 집중·조사/계약 검증은 해당 소스에서 통과했으나 공유 검토코어와 합성fixture 추가 수정으로 현재 적용성은 source_changed다. 최종 직접 Terra 감사는 시작하지 않고 재동결을 기다린다.</summary><article><h3>오픈소스 채팅 뼈대 도입 비교</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">명세에는 전체 교체/부분 도입 선택이 남았다고 했지만 비교 앞부분은 이미 Ovis 부분 개작을 권장했다. 과거 Native 공백과 현재 구현·검증을 구분한 재개 기록이 부족했고 과거 comparison-evidence 원문은 누락돼 있었다.
+
+같은 UUID의 명세·비교·검증·인계가 현행 Ovis 부분 개작 권장·WWW 핵심 책임 보존으로 연결된다. 과거 공백의 현행 lifecycle/resolved 구현과 실제 코드/합성 subprocess/실제 Electron+합성Native/실제Native 표본을 구분하고 새 고정 원문의 URL·시각·bytes·SHA를 남겼다. 현재 원장은 verify·세기준 미검증으로 재동결 후 검사를 기다린다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 3 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 새부모GO후주요21SHA·전체src/test/core·readscope를다시잡고같은공식집중/조사계약검증을실행한다.</p><p class="blocker"><strong>남은 차단 사항</strong> AC-1: source_changed; AC-2: source_changed; AC-3: source_changed; 문서 검토 후 소스 변경; 문서 검토 후 문서 변경; review_not_passed; source_changed; receipt_context_mismatch; 현재 소스·기준·기록의 저작 작업 보고서 없음</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>변경 전 문서와 전체 원장을 history에 보존하고 최신 직접 요청과 같은 hash의 문서/허용검사 권한을 재연결했다. 기준 정의·필수 여부와 과거 Opus pass/fail은 그대로다.</li><li>재개 전 comparison의45개 고정URL을 모두 새 HTTP200으로 회수했고 AionCore 같은commit LICENSE를 보충 회수했다. 누락된 과거 원문을 복구했다고 쓰지 않는다.</li><li>현재21소스 사본·중간/첫GO 뒤내용식별과 실제 집중180검사 원문, 연구/계약 command의 stdout/stderr/exit 원문을 보존했다.</li><li>역사Markdown 상대링크 실패는 원문bytes를 보존하는 .md.txt로 수정했고 같은 공식 검증을 다시 실행했다. 실패attempt도 남겼다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl><section class="paper" id="history-report-ba4690ef-fb52-4462-b278-8d11613cc4cb-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>현행 추천은 Ovis의 필요한 동작만 개작하며 Electron·Native thread/승인/중단·원장·모니터·리포트를 보존하는 것이다. 외부앱 전체실행/신규이식 성공을 조사3AC의 새로운 완료요구로 추가하지 않는다.</li><li>현재Native 연결준비/해소 구현과 code/subprocess 검사를 실제계정의 임의crash/승인/변경 전구간 보장으로 확대하지 않는다.</li><li>부모의 추가코어수정 알림 뒤 최종감사를 보류하고 공식resume으로 source_changed를 재평가했다. 당시PASS를 현재소스에 승격하지 않는다.</li></ul></section><section class="paper" id="history-report-ba4690ef-fb52-4462-b278-8d11613cc4cb-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 3건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>현재공식status는 complete=false, nextAction=verify이며 세기준source_changed다. 고유document-review는 입력만 준비했고 최종실행은 새동결후 수행한다.</li><li>최종직접Terra 감사0회. 부모가검토코어선택문서drift검사·합성activityfixture ACKscope를수정중이므로새GO전호출하지않는다.</li><li>Windows·OS한국어IME·외부앱설치실행·신규제품이식·실제모델의일반승인/변경전구간은미측정이다. 과거122초원인을확정하지않았고현재부모ui-only결과도아직인용하지않는다.</li><li>현재GUI246확인summary에는sourceDigest가없고observability14확인은별도builddigest다. 실제Native읽기1표본/합성공개입력2개실제판단은일반품질이나제품완성증거가아니다.</li></ul></section><section class="paper" id="history-report-ba4690ef-fb52-4462-b278-8d11613cc4cb-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>새부모GO후주요21SHA·전체src/test/core·readscope를다시잡고같은공식집중/조사계약검증을실행한다.</li><li>고유문서검토후정확direct-user-original의ReviewAuthority+directRequest로실제읽기전용Terra감사를실행하고현재정책/소스/기준/모델/영수증을대조한다.</li><li>감사수용후현재저작보고서와공식complete/read/status를수행한다. 실패하면그대로기록하고제품/정책/전역/commit/publish범위를늘리지않는다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-ba4690ef-fb52-4462-b278-8d11613cc4cb-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-029fb7e2-61fa-4014-9362-5e915ab13197<br>report-ba4690ef-fb52-4462-b278-8d11613cc4cb</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>55d8de5fdf715fc651097054880e92021584c177dca22061cc465cf7bc849dd5</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>fff420eea7f69f49d4179808e4a50401ba36d743e760d27d6c35f7edf6ae97a2</code></dd></div><div><dt>기준 지문</dt><dd><code>ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;AC-1: source_changed; AC-2: source_changed; AC-3: source_changed; 문서 검토 후 소스 변경; 문서 검토 후 문서 변경; review_not_passed; source_changed; receipt_context_mismatch; 현재 소스·기준·기록의 저작 작업 보고서 없음&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-067b5704-76aa-4660-b69d-bb7b20c78fad&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f5d3569b-1884-4737-92d0-ba19eaf4f1ae&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d14cd067-76cd-48fa-bdb2-2e74ec11289c&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-435cc9b2-ecc0-43cb-972c-d108fa6c1d5d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d14cd067-76cd-48fa-bdb2-2e74ec11289c&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-435cc9b2-ecc0-43cb-972c-d108fa6c1d5d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-067b5704-76aa-4660-b69d-bb7b20c78fad&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;bun\&quot;,args=[\&quot;test\&quot;, \&quot;test/conversations.test.ts\&quot;, \&quot;test/native-lifecycle.test.ts\&quot;, \&quot;test/native-session.test.ts\&quot;, \&quot;test/chat-state.test.ts\&quot;, \&quot;test/native-chat.test.ts\&quot;, \&quot;test/projection.test.ts\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-focused-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T09:48:25.364Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d14cd067-76cd-48fa-bdb2-2e74ec11289c&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;node\&quot;,args=[\&quot;--input-type=module\&quot;, \&quot;--eval\&quot;, \&quot;import assert from &#39;node:assert/strict&#39;;import{readFile,stat}from&#39;node:fs/promises&#39;;import{createHash}from&#39;node:crypto&#39;;const base=&#39;.www/evidence/resume-20261116/chat008&#39;;const hash=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);const m=JSON.parse(await readFile(base+&#39;/upstream-fetch-manifest.json&#39;,&#39;utf8&#39;));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&amp;&amp;e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes(&#39;/blob/&#39;+e.revision+&#39;/&#39;));assert(e.rawUrl.includes(&#39;/&#39;+e.revision+&#39;/&#39;));}const at=async(owner,repo,file)=&gt;{const e=m.entries.find(e=&gt;e.url.includes(&#39;github.com/&#39;+owner+&#39;/&#39;+repo+&#39;/blob/&#39;)&amp;&amp;e.url.split(&#39;/blob/&#39;)[1].split(&#39;/&#39;).slice(1).join(&#39;/&#39;)===file);assert(e);return readFile(e.path,&#39;utf8&#39;);};assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;Cargo.toml&#39;)).includes(&#39;portable-pty = \\\&quot;=0.9.0\\\&quot;&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;Cargo.toml&#39;)).includes(&#39;gpui-pre&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;src/hc.rs&#39;)).includes(&#39;hc connect&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));const ovis=JSON.parse(await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;package.json&#39;));assert.equal(ovis.version,&#39;0.5.3&#39;);assert.equal(ovis.dependencies.react,&#39;^19.3.0&#39;);assert(ovis.dependencies[&#39;@lydell/node-pty&#39;]);assert((await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const daemon=await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;server/codex-daemon.ts&#39;);assert(daemon.includes(&#39;new Set&lt;string&gt;([\\\&quot;initialize\\\&quot;, \\\&quot;skills/list\\\&quot;])&#39;));const t3=JSON.parse(await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;packages/effect-codex-app-server/package.json&#39;));assert(t3.private&amp;&amp;t3.dependencies.effect);assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;docs/internals/overview.md&#39;)).includes(&#39;one database transaction&#39;));assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const extra=JSON.parse(await readFile(base+&#39;/supplemental-license-fetch.json&#39;,&#39;utf8&#39;));const b=await readFile(extra.path);assert(extra.ok&amp;&amp;hash(b)===extra.sha256&amp;&amp;b.length===extra.bytes);assert(b.toString().includes(&#39;Apache License&#39;));assert((await at(&#39;iOfficeAI&#39;,&#39;AionCore&#39;,&#39;Cargo.toml&#39;)).includes(&#39;license = \\\&quot;MIT\\\&quot;&#39;));const work=&#39;docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/&#39;;const spec=await readFile(work+&#39;spec.md&#39;,&#39;utf8&#39;);const comparison=await readFile(work+&#39;comparison.md&#39;,&#39;utf8&#39;);const tasks=await readFile(work+&#39;tasks.md&#39;,&#39;utf8&#39;);for(const id of[&#39;AC-1&#39;,&#39;AC-2&#39;,&#39;AC-3&#39;])assert(spec.includes(id)&amp;&amp;comparison.includes(id));for(const id of[&#39;UC-LOCAL&#39;,&#39;UC-UPSTREAM&#39;,&#39;UC-DECISION&#39;])assert(spec.includes(id));assert(spec.includes(&#39;Ovis에서 필요한 공개 채팅 동작만 개작&#39;));assert(comparison.includes(&#39;**Ovis의 필요한 채팅 동작만 개작**&#39;));assert(comparison.includes(&#39;외부 앱 호환 PASS가 아니다&#39;));assert(tasks.includes(&#39;세 기준은 조사·비교·권장 기록의 수용 기준&#39;));assert(tasks.includes(&#39;읽기 전용&#39;));const{spawnSync}=await import(&#39;node:child_process&#39;);const checked=spawnSync(process.execPath,[&#39;scripts/check-workflow.ts&#39;],{encoding:&#39;utf8&#39;});process.stdout.write(checked.stdout??&#39;&#39;);process.stderr.write(checked.stderr??&#39;&#39;);assert.equal(checked.status,0,&#39;현재 작업 계약 검사 실패&#39;);console.log(JSON.stringify({result:&#39;passed&#39;,scope:&#39;고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님&#39;,fixedOriginals:45,supplemental:1,recommendation:&#39;Ovis 부분 개작·WWW 핵심 경계 보존&#39;,unmeasured:[&#39;Windows&#39;,&#39;OS 한국어 IME&#39;,&#39;외부 앱 실행&#39;,&#39;신규 제품 이식&#39;]}));\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-research-contract-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T09:48:26.003Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f5d3569b-1884-4737-92d0-ba19eaf4f1ae&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;bun\&quot;,args=[\&quot;test\&quot;, \&quot;test/conversations.test.ts\&quot;, \&quot;test/native-lifecycle.test.ts\&quot;, \&quot;test/native-session.test.ts\&quot;, \&quot;test/chat-state.test.ts\&quot;, \&quot;test/native-chat.test.ts\&quot;, \&quot;test/projection.test.ts\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-focused-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T09:49:27.571Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-435cc9b2-ecc0-43cb-972c-d108fa6c1d5d&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;node\&quot;,args=[\&quot;--input-type=module\&quot;, \&quot;--eval\&quot;, \&quot;import assert from &#39;node:assert/strict&#39;;import{readFile,stat}from&#39;node:fs/promises&#39;;import{createHash}from&#39;node:crypto&#39;;const base=&#39;.www/evidence/resume-20261116/chat008&#39;;const hash=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);const m=JSON.parse(await readFile(base+&#39;/upstream-fetch-manifest.json&#39;,&#39;utf8&#39;));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&amp;&amp;e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes(&#39;/blob/&#39;+e.revision+&#39;/&#39;));assert(e.rawUrl.includes(&#39;/&#39;+e.revision+&#39;/&#39;));}const at=async(owner,repo,file)=&gt;{const e=m.entries.find(e=&gt;e.url.includes(&#39;github.com/&#39;+owner+&#39;/&#39;+repo+&#39;/blob/&#39;)&amp;&amp;e.url.split(&#39;/blob/&#39;)[1].split(&#39;/&#39;).slice(1).join(&#39;/&#39;)===file);assert(e);return readFile(e.path,&#39;utf8&#39;);};assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;Cargo.toml&#39;)).includes(&#39;portable-pty = \\\&quot;=0.9.0\\\&quot;&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;Cargo.toml&#39;)).includes(&#39;gpui-pre&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;src/hc.rs&#39;)).includes(&#39;hc connect&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));const ovis=JSON.parse(await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;package.json&#39;));assert.equal(ovis.version,&#39;0.5.3&#39;);assert.equal(ovis.dependencies.react,&#39;^19.3.0&#39;);assert(ovis.dependencies[&#39;@lydell/node-pty&#39;]);assert((await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const daemon=await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;server/codex-daemon.ts&#39;);assert(daemon.includes(&#39;new Set&lt;string&gt;([\\\&quot;initialize\\\&quot;, \\\&quot;skills/list\\\&quot;])&#39;));const t3=JSON.parse(await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;packages/effect-codex-app-server/package.json&#39;));assert(t3.private&amp;&amp;t3.dependencies.effect);assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;docs/internals/overview.md&#39;)).includes(&#39;one database transaction&#39;));assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const extra=JSON.parse(await readFile(base+&#39;/supplemental-license-fetch.json&#39;,&#39;utf8&#39;));const b=await readFile(extra.path);assert(extra.ok&amp;&amp;hash(b)===extra.sha256&amp;&amp;b.length===extra.bytes);assert(b.toString().includes(&#39;Apache License&#39;));assert((await at(&#39;iOfficeAI&#39;,&#39;AionCore&#39;,&#39;Cargo.toml&#39;)).includes(&#39;license = \\\&quot;MIT\\\&quot;&#39;));const work=&#39;docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/&#39;;const spec=await readFile(work+&#39;spec.md&#39;,&#39;utf8&#39;);const comparison=await readFile(work+&#39;comparison.md&#39;,&#39;utf8&#39;);const tasks=await readFile(work+&#39;tasks.md&#39;,&#39;utf8&#39;);for(const id of[&#39;AC-1&#39;,&#39;AC-2&#39;,&#39;AC-3&#39;])assert(spec.includes(id)&amp;&amp;comparison.includes(id));for(const id of[&#39;UC-LOCAL&#39;,&#39;UC-UPSTREAM&#39;,&#39;UC-DECISION&#39;])assert(spec.includes(id));assert(spec.includes(&#39;Ovis에서 필요한 공개 채팅 동작만 개작&#39;));assert(comparison.includes(&#39;**Ovis의 필요한 채팅 동작만 개작**&#39;));assert(comparison.includes(&#39;외부 앱 호환 PASS가 아니다&#39;));assert(tasks.includes(&#39;세 기준은 조사·비교·권장 기록의 수용 기준&#39;));assert(tasks.includes(&#39;읽기 전용&#39;));const{spawnSync}=await import(&#39;node:child_process&#39;);const checked=spawnSync(process.execPath,[&#39;scripts/check-workflow.ts&#39;],{encoding:&#39;utf8&#39;});process.stdout.write(checked.stdout??&#39;&#39;);process.stderr.write(checked.stderr??&#39;&#39;);assert.equal(checked.status,0,&#39;현재 작업 계약 검사 실패&#39;);console.log(JSON.stringify({result:&#39;passed&#39;,scope:&#39;고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님&#39;,fixedOriginals:45,supplemental:1,recommendation:&#39;Ovis 부분 개작·WWW 핵심 경계 보존&#39;,unmeasured:[&#39;Windows&#39;,&#39;OS 한국어 IME&#39;,&#39;외부 앱 실행&#39;,&#39;신규 제품 이식&#39;]}));\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-research-contract-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T09:49:28.438Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-e3af38b2-a1a7-454c-8e59-4966e9410195&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-e3af38b2-a1a7-454c-8e59-4966e9410195/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;판정 pass: 이번 수정은 조사·권장 문서와 작업 레코드에 한정된다. 제품 코드와 의존성은 바뀌지 않았다. package.json의 dependencies는 react·react-dom뿐이고 assistant-ui·T3 Code 관련 패키지가 없다. 이는 work.json의 authorization.implementation=false, writePaths(docs/work/Chat, docs/work/INDEX.md)와 일치한다.&quot;,
+        &quot;AC-1 현황표의 주장은 소스와 맞다. renderer.tsx:205-226에서 sendingRef로 중복 제출을 막고, 실패하면 setPrompt((current) =&gt; current || text)로 초안을 복구한다. main.ts:180은 threadStarted 뒤 작업 폴더 변경을 거부한다. main.ts:186-209는 thread/start와 turn/start만 사용한다. main.ts:44는 메모리 eventLog를 최근 2000개 사건으로 제한한다. src 전체에 thread/resume·thread/list·thread/read 호출이 없으므로 &#39;목록·영속 저장·읽기·동일 Native thread 복구 없음&#39;은 타당하다. Markdown 렌더러나 클립보드 UI도 src에 없어 &#39;본문은 일반 텍스트&#39;와 일치한다.&quot;,
+        &quot;증거 범위 확대가 없다. comparison.md:23과 verification.md는 npm run check exit 0과 Node 테스트 147개를 현재 코드의 기준선으로만 둔다. Electron GUI·Native 승인·Windows·IME 실기와 후보 앱 실행·설치·이식은 미실행으로 명시돼 있다. comparison.md:93과 spec.md:21-23도 채팅 완성 보고가 아니라는 점과 사용자 선택이 남았다는 점을 유지한다. 이 검토에서는 npm run check를 다시 실행하지 않았다. 147개라는 수치는 문서에 기록된 관찰로만 확인했다.&quot;,
+        &quot;work.json의 criteria는 AC-1~3 모두 result=unverified, evidence=[]이고 verifications=[], status=verifying, nextAction=review다. 통과를 미리 주장하지 않으므로 결함은 아니다. 다만 완료하려면 verification.md의 앵커 baseline-20261112·source-inspection-20261112를 workflow 검증 시도와 기준 증거로 실제 연결해야 한다. 현재 sourceDigest(585a…)는 documentationReviews에 기록된 sourceDigest(27e6…)와 다르다. 따라서 완료 전에 문서 영향 검토를 현재 입력 기준으로 다시 기록해야 한다(WORKFLOW.md:112 &#39;검토 뒤 소스·기준…이 바뀌면 다시 검토&#39;).&quot;,
+        &quot;보완 권고(차단 아님): comparison.md:56과 verification.md:14는 AionUi·Cline 조사 전문의 보존 위치로 .www/scratchpad/chat-skeleton-upstream.md를 인용한다. .www는 captureSource 자동 제외 경로이자 비추적 작업 영역이라 다른 환경에서는 재현할 수 없다. 해당 행의 실제 판단 근거는 고정 SHA 링크로 남아 있다. 다만 조사 담당자의 &#39;npm view 0.2.0&#39; 같은 관찰은 이 파일에만 의존하므로, 필요하면 요약을 추적 문서에 옮기는 편이 낫다.&quot;,
+        &quot;외부 고정 SHA 링크(assistant-ui 53ab9cb…, T3 Code ee90bdc…, AionUi e108b6b…, AionCore 503a871…, Cline 50e77bc…)의 내용과 라이선스는 이 읽기 전용 검토에서 네트워크로 확인하지 않았다. 문서와 소스 사이의 내부 일관성만 대조했다.&quot;,
+        &quot;docs/work/INDEX.md:34-37에 Chat 005 항목과 spec.md·work.json 링크가 등록돼 있다. spec.md는 수용 기준의 정본을 work.json으로 지정하고 AC-1~3을 comparison.md의 각 절과 연결하므로 WORKFLOW.md:86 계약을 따른다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-aaee6ab7-609e-445c-b860-67bc58c76904&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-aaee6ab7-609e-445c-b860-67bc58c76904/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;판정 fail: 산출물 comparison.md는 현재 구현과 맞지 않고 결론도 서로 어긋난다. work.json의 AC-1~3은 모두 result=unverified, evidence=[]이며 workflow.verifications=[]이다. 수정하지 않은 상태로는 이 작업을 완료할 수 없다. verification.md:20-24의 2026-11-15 재검토도 같은 결론을 스스로 기록하고 있다.&quot;,
+        &quot;AC-1 현황표가 현재 소스와 다르다. comparison.md:39는 &#39;Markdown·코드 복사 UI 없음&#39;이라고 쓰지만, 현재 src/chat-message.tsx:6이 react-markdown을 import한다. 같은 파일 :22는 navigator.clipboard.writeText로 복사를 처리하고, :48은 remarkGfm으로 렌더링한다. comparison.md:43은 &#39;목록·영속 저장·읽기·동일 Native thread 복구 없음&#39;이라고 쓰지만, src/conversations.ts:150·160·162가 thread/list·thread/read·thread/resume을 호출한다. 표 머리(:34)는 HEAD 4ef13d29 시점만 밝힐 뿐, 이 내용이 현재 상태가 아니라는 표시가 본문 표에 없다. 그래서 문서만 읽는 사람은 이 표를 현행 공백으로 오해한다. 표를 다시 쓰거나 표 자체에 시점 한정과 현행 대비를 넣어야 한다.&quot;,
+        &quot;AC-3 결론이 서로 모순된다. comparison.md:5는 &#39;assistant-ui 우선 권장은 사용자 선택이 아니며 확정하지 않는다&#39;고 하고, :24는 Herdr·Ovis·T3 Code 중심으로 비교 기준을 바꿨다. 그런데 &#39;결론과 결정 상태&#39;(:28-30), 후보표(:87), 경계표(:94-101), 권장 순서(:105-110)는 여전히 assistant-ui 도입을 단일 권장안으로 제시한다. 또 :87과 :96은 Markdown·코드 표시를 assistant-ui에서 가져올 이점으로 꼽지만, 이 기능은 이미 react-markdown으로 구현돼 있어 근거가 사라졌다. 사용자 정정을 반영한 하나의 권장안으로 다시 써야 한다.&quot;,
+        &quot;AC-2 범위가 빠져 있다. 사용자 정정 이후 비교 대상은 Herdr runtime/desktop과 Ovis다(:9-22). 이들에는 고정 SHA 링크만 있고, assistant-ui·T3 Code처럼 실제 adapter·의존 경계·전체 교체 대 부분 재사용을 비교한 절이 없다. :24에서도 &#39;새 독립 검토는 아직 수행하지 않았다&#39;고 인정한다. 이 검토에서는 외부 링크를 네트워크로 조회하지 않았으므로, 링크된 내용과 라이선스의 진위는 확인하지 않았다.&quot;,
+        &quot;작업 레코드의 증거가 연결되지 않았고 오래됐다. work.json documentationReviews[0].sourceDigest(27e6…)와 reviews[0].sourceDigest(585a…)는 모두 현재 입력 digest(4477…)와 다르다. blockedReason에도 source_changed·receipt_context_mismatch가 남아 있다. 이전 리뷰 pass(:76)는 오래된 소스 기준이고, 그때도 &#39;목록·복구 없음은 타당&#39;(:92)이라고 판단했다. 현재 소스에서는 이 판단이 틀렸으므로 근거로 재사용할 수 없다. 문서 영향 검토는 현재 입력 기준으로 다시 기록해야 한다(WORKFLOW 재검토 규칙). verification.md의 baseline-20261112·source-inspection-20261112 앵커도 workflow.verifications와 criteria evidence에 아직 연결되지 않았다.&quot;,
+        &quot;verification.md:5-8의 npm run check exit 0과 Node 테스트 147개는 HEAD 4ef13d29 시점의 기준선이다. 현재 HEAD 92de238에서 다시 실행한 기록은 없다. 이 검토도 명령을 실행하지 않았으므로 현재 통과 여부는 확인하지 않았다. AC-1의 &#39;실행 결과&#39; 근거를 현재 코드에 맞춰 새로 만들어야 한다.&quot;,
+        &quot;결함은 아니지만 보완을 권한다. AionUi·Cline 조사 전문(comparison.md:79, verification.md:14)은 비추적 경로 .www/scratchpad/chat-skeleton-upstream.md에만 있다. &#39;npm view 0.2.0&#39; 같은 관찰(:83)은 다른 환경에서 재현할 수 없으므로, 필요한 요약은 추적되는 문서로 옮기는 편이 낫다.&quot;,
+        &quot;범위 준수는 확인했다. 이 작업 문서들은 제품 코드나 의존성 변경을 주장하지 않는다. spec.md:21-23과 comparison.md:116은 채팅 완성 보고가 아니며 사용자 선택이 남았다고 유지한다. verification.md:22-24는 과거 조사와 현재 구현을 구분하고 링크가 있다는 것만으로 AC-2를 통과시키지 않는다. 따라서 증거 범위를 부풀린 서술은 없다. 다만 이것만으로 위 결함을 덮고 pass로 판정할 수는 없다.&quot;
+      ]
+    }
+  ]
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;Chat008의 현행 비교와 명세를 Ovis 부분 개작 권장안으로 맞추고 고정 공개 원문을 새로 회수했다. 공식 집중·조사/계약 검증은 해당 소스에서 통과했으나 공유 검토코어와 합성fixture 추가 수정으로 현재 적용성은 source_changed다. 최종 직접 Terra 감사는 시작하지 않고 재동결을 기다린다.&quot;,
+  &quot;before&quot;: &quot;명세에는 전체 교체/부분 도입 선택이 남았다고 했지만 비교 앞부분은 이미 Ovis 부분 개작을 권장했다. 과거 Native 공백과 현재 구현·검증을 구분한 재개 기록이 부족했고 과거 comparison-evidence 원문은 누락돼 있었다.&quot;,
+  &quot;after&quot;: &quot;같은 UUID의 명세·비교·검증·인계가 현행 Ovis 부분 개작 권장·WWW 핵심 책임 보존으로 연결된다. 과거 공백의 현행 lifecycle/resolved 구현과 실제 코드/합성 subprocess/실제 Electron+합성Native/실제Native 표본을 구분하고 새 고정 원문의 URL·시각·bytes·SHA를 남겼다. 현재 원장은 verify·세기준 미검증으로 재동결 후 검사를 기다린다.&quot;,
+  &quot;changes&quot;: [
+    &quot;변경 전 문서와 전체 원장을 history에 보존하고 최신 직접 요청과 같은 hash의 문서/허용검사 권한을 재연결했다. 기준 정의·필수 여부와 과거 Opus pass/fail은 그대로다.&quot;,
+    &quot;재개 전 comparison의45개 고정URL을 모두 새 HTTP200으로 회수했고 AionCore 같은commit LICENSE를 보충 회수했다. 누락된 과거 원문을 복구했다고 쓰지 않는다.&quot;,
+    &quot;현재21소스 사본·중간/첫GO 뒤내용식별과 실제 집중180검사 원문, 연구/계약 command의 stdout/stderr/exit 원문을 보존했다.&quot;,
+    &quot;역사Markdown 상대링크 실패는 원문bytes를 보존하는 .md.txt로 수정했고 같은 공식 검증을 다시 실행했다. 실패attempt도 남겼다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;현행 추천은 Ovis의 필요한 동작만 개작하며 Electron·Native thread/승인/중단·원장·모니터·리포트를 보존하는 것이다. 외부앱 전체실행/신규이식 성공을 조사3AC의 새로운 완료요구로 추가하지 않는다.&quot;,
+    &quot;현재Native 연결준비/해소 구현과 code/subprocess 검사를 실제계정의 임의crash/승인/변경 전구간 보장으로 확대하지 않는다.&quot;,
+    &quot;부모의 추가코어수정 알림 뒤 최종감사를 보류하고 공식resume으로 source_changed를 재평가했다. 당시PASS를 현재소스에 승격하지 않는다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;현재공식status는 complete=false, nextAction=verify이며 세기준source_changed다. 고유document-review는 입력만 준비했고 최종실행은 새동결후 수행한다.&quot;,
+    &quot;최종직접Terra 감사0회. 부모가검토코어선택문서drift검사·합성activityfixture ACKscope를수정중이므로새GO전호출하지않는다.&quot;,
+    &quot;Windows·OS한국어IME·외부앱설치실행·신규제품이식·실제모델의일반승인/변경전구간은미측정이다. 과거122초원인을확정하지않았고현재부모ui-only결과도아직인용하지않는다.&quot;,
+    &quot;현재GUI246확인summary에는sourceDigest가없고observability14확인은별도builddigest다. 실제Native읽기1표본/합성공개입력2개실제판단은일반품질이나제품완성증거가아니다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;새부모GO후주요21SHA·전체src/test/core·readscope를다시잡고같은공식집중/조사계약검증을실행한다.&quot;,
+    &quot;고유문서검토후정확direct-user-original의ReviewAuthority+directRequest로실제읽기전용Terra감사를실행하고현재정책/소스/기준/모델/영수증을대조한다.&quot;,
+    &quot;감사수용후현재저작보고서와공식complete/read/status를수행한다. 실패하면그대로기록하고제품/정책/전역/commit/publish범위를늘리지않는다.&quot;
+  ]
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 15일 PM 6:38 · 작성자 보고서 · 오픈소스 채팅 뼈대 비교의 마감 검토에서 현재 기능표와 권장 결론의 불일치를 확인했으며, 완료로 처리하지 않았다.</summary><article><h3>오픈소스 채팅 뼈대 도입 비교</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">이전 비교가 현행 제품 기능과 최신 사용자 정정을 충분히 반영하는지 다시 확인할 필요가 있었다.
+
+대화 재개와 Markdown·복사는 현재 구현되어 있지만 비교표에는 미제공으로 남아 있고, Herdr 중심 재비교와 초기 assistant-ui 권장이 문서 안에서 충돌함을 확인했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> comparison.md의 현재 기능표를 실제 코드와 최신 실행 근거로 다시 작성한다.</p><p class="blocker"><strong>남은 차단 사항</strong> 독립 검토 fail: 수정 또는 검토 재실행 필요</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>2026-11-15 verification.md에 과거 기준선과 현재 구현의 차이 및 남은 재저작 범위를 기록했다.</li><li>공식 resume로 과거 증거를 현재 통과로 승격하지 않았다.</li><li>실제 claude-opus-5-5의 독립 감사가 fail로 같은 불일치와 증거 공백을 확인했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl><section class="paper" id="history-report-bca04485-40e6-4eb6-b443-fd15227e6f0f-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>비교표·권장 결론·고정 소스 대조를 보완하기 전에는 AC-1~3을 통과시키지 않는다.</li><li>제품 코드·의존성 도입이나 외부 후보 설치는 이번 검증 패스에서 실행하지 않는다.</li></ul></section><section class="paper" id="history-report-bca04485-40e6-4eb6-b443-fd15227e6f0f-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>외부 후보의 고정 SHA·공식 소스·라이선스를 이번 패스에서 네트워크로 재조회하지 않았다.</li><li>현재 문서는 재개·Markdown 도입 전 기준선이며 최신 권장안으로 사용할 수 없다.</li><li>제품 소스 동결 뒤 현시점 부분 보고서를 새로 작성했다. Workflow009의 외부 런처 회귀 수정과 생성물 갱신은 이 작업의 연구·외부 엔진 수용 기준을 대체하지 않으며, 이전 독립 검토의 현재 적용성은 별도 상태로 확인한다.</li></ul></section><section class="paper" id="history-report-bca04485-40e6-4eb6-b443-fd15227e6f0f-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>comparison.md의 현재 기능표를 실제 코드와 최신 실행 근거로 다시 작성한다.</li><li>Herdr runtime/desktop·Ovis·T3 Code의 실제 의존·재사용 경계를 고정 소스로 재대조하고 사용자 정정을 반영한 하나의 권장안을 작성한다.</li><li>현재 문서 영향 검토·실제 검증 증거 연결과 독립 감사를 다시 수행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-bca04485-40e6-4eb6-b443-fd15227e6f0f-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-029fb7e2-61fa-4014-9362-5e915ab13197<br>report-bca04485-40e6-4eb6-b443-fd15227e6f0f</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>fa376e82bc065161589f5b89860b4d592b4de41309dd5724417daeab04648cc2</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>137932ff4208bd52b68de6109ac5d0b57c3c75f5a7e2b6736c4e0b785c7824f4</code></dd></div><div><dt>기준 지문</dt><dd><code>ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
   &quot;status&quot;: &quot;verifying&quot;,
   &quot;blockedReason&quot;: &quot;독립 검토 fail: 수정 또는 검토 재실행 필요&quot;,
   &quot;criteria&quot;: [
@@ -87,9 +284,9 @@
     &quot;Herdr runtime/desktop·Ovis·T3 Code의 실제 의존·재사용 경계를 고정 소스로 재대조하고 사용자 정정을 반영한 하나의 권장안을 작성한다.&quot;,
     &quot;현재 문서 영향 검토·실제 검증 증거 연결과 독립 감사를 다시 수행한다.&quot;
   ]
-}</pre></div></details></section><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 4개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 15일 오후 6:30 · 작성자 보고서 · 오픈소스 채팅 뼈대 비교의 마감 검토에서 현재 기능표와 권장 결론의 불일치를 확인했으며, 완료로 처리하지 않았다.</summary><article><h3>오픈소스 채팅 뼈대 도입 비교</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">이전 비교가 현행 제품 기능과 최신 사용자 정정을 충분히 반영하는지 다시 확인할 필요가 있었다.
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 15일 PM 6:30 · 작성자 보고서 · 오픈소스 채팅 뼈대 비교의 마감 검토에서 현재 기능표와 권장 결론의 불일치를 확인했으며, 완료로 처리하지 않았다.</summary><article><h3>오픈소스 채팅 뼈대 도입 비교</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">이전 비교가 현행 제품 기능과 최신 사용자 정정을 충분히 반영하는지 다시 확인할 필요가 있었다.
 
-대화 재개와 Markdown·복사는 현재 구현되어 있지만 비교표에는 미제공으로 남아 있고, Herdr 중심 재비교와 초기 assistant-ui 권장이 문서 안에서 충돌함을 확인했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> comparison.md의 현재 기능표를 실제 코드와 최신 실행 근거로 다시 작성한다.</p><p class="blocker"><strong>남은 차단 사항</strong> 독립 검토 fail: 수정 또는 검토 재실행 필요</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>2026-11-15 verification.md에 과거 기준선과 현재 구현의 차이 및 남은 재저작 범위를 기록했다.</li><li>공식 resume로 과거 증거를 현재 통과로 승격하지 않았다.</li><li>실제 claude-opus-5-5의 독립 감사가 fail로 같은 불일치와 증거 공백을 확인했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.</dt><dd>미검증으로 기록</dd></div><div><dt>후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.</dt><dd>미검증으로 기록</dd></div><div><dt>권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.</dt><dd>미검증으로 기록</dd></div></dl><section class="paper" id="history-report-95e65b3f-7b5d-48a5-ae27-ce0620f63b86-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>비교표·권장 결론·고정 소스 대조를 보완하기 전에는 AC-1~3을 통과시키지 않는다.</li><li>제품 코드·의존성 도입이나 외부 후보 설치는 이번 검증 패스에서 실행하지 않는다.</li></ul></section><section class="paper" id="history-report-95e65b3f-7b5d-48a5-ae27-ce0620f63b86-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>외부 후보의 고정 SHA·공식 소스·라이선스를 이번 패스에서 네트워크로 재조회하지 않았다.</li><li>현재 문서는 재개·Markdown 도입 전 기준선이며 최신 권장안으로 사용할 수 없다.</li></ul></section><section class="paper" id="history-report-95e65b3f-7b5d-48a5-ae27-ce0620f63b86-next"><h2>남은 일과 해소 행동</h2><ul><li>comparison.md의 현재 기능표를 실제 코드와 최신 실행 근거로 다시 작성한다.</li><li>Herdr runtime/desktop·Ovis·T3 Code의 실제 의존·재사용 경계를 고정 소스로 재대조하고 사용자 정정을 반영한 하나의 권장안을 작성한다.</li><li>현재 문서 영향 검토·실제 검증 증거 연결과 독립 감사를 다시 수행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-95e65b3f-7b5d-48a5-ae27-ce0620f63b86-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-029fb7e2-61fa-4014-9362-5e915ab13197<br>report-95e65b3f-7b5d-48a5-ae27-ce0620f63b86</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>fa376e82bc065161589f5b89860b4d592b4de41309dd5724417daeab04648cc2</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>e33cbaa7a0ad5b28f767f712944cda7a955f15265085b000f0a9e4159ad459f3</code></dd></div><div><dt>기준 지문</dt><dd><code>ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+대화 재개와 Markdown·복사는 현재 구현되어 있지만 비교표에는 미제공으로 남아 있고, Herdr 중심 재비교와 초기 assistant-ui 권장이 문서 안에서 충돌함을 확인했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> comparison.md의 현재 기능표를 실제 코드와 최신 실행 근거로 다시 작성한다.</p><p class="blocker"><strong>남은 차단 사항</strong> 독립 검토 fail: 수정 또는 검토 재실행 필요</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>2026-11-15 verification.md에 과거 기준선과 현재 구현의 차이 및 남은 재저작 범위를 기록했다.</li><li>공식 resume로 과거 증거를 현재 통과로 승격하지 않았다.</li><li>실제 claude-opus-5-5의 독립 감사가 fail로 같은 불일치와 증거 공백을 확인했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl><section class="paper" id="history-report-95e65b3f-7b5d-48a5-ae27-ce0620f63b86-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>비교표·권장 결론·고정 소스 대조를 보완하기 전에는 AC-1~3을 통과시키지 않는다.</li><li>제품 코드·의존성 도입이나 외부 후보 설치는 이번 검증 패스에서 실행하지 않는다.</li></ul></section><section class="paper" id="history-report-95e65b3f-7b5d-48a5-ae27-ce0620f63b86-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>외부 후보의 고정 SHA·공식 소스·라이선스를 이번 패스에서 네트워크로 재조회하지 않았다.</li><li>현재 문서는 재개·Markdown 도입 전 기준선이며 최신 권장안으로 사용할 수 없다.</li></ul></section><section class="paper" id="history-report-95e65b3f-7b5d-48a5-ae27-ce0620f63b86-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>comparison.md의 현재 기능표를 실제 코드와 최신 실행 근거로 다시 작성한다.</li><li>Herdr runtime/desktop·Ovis·T3 Code의 실제 의존·재사용 경계를 고정 소스로 재대조하고 사용자 정정을 반영한 하나의 권장안을 작성한다.</li><li>현재 문서 영향 검토·실제 검증 증거 연결과 독립 감사를 다시 수행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-95e65b3f-7b5d-48a5-ae27-ce0620f63b86-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-029fb7e2-61fa-4014-9362-5e915ab13197<br>report-95e65b3f-7b5d-48a5-ae27-ce0620f63b86</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>fa376e82bc065161589f5b89860b4d592b4de41309dd5724417daeab04648cc2</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>e33cbaa7a0ad5b28f767f712944cda7a955f15265085b000f0a9e4159ad459f3</code></dd></div><div><dt>기준 지문</dt><dd><code>ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
   &quot;status&quot;: &quot;verifying&quot;,
   &quot;blockedReason&quot;: &quot;독립 검토 fail: 수정 또는 검토 재실행 필요&quot;,
   &quot;criteria&quot;: [
@@ -173,7 +370,7 @@
     &quot;Herdr runtime/desktop·Ovis·T3 Code의 실제 의존·재사용 경계를 고정 소스로 재대조하고 사용자 정정을 반영한 하나의 권장안을 작성한다.&quot;,
     &quot;현재 문서 영향 검토·실제 검증 증거 연결과 독립 감사를 다시 수행한다.&quot;
   ]
-}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 15일 오후 6:29 · 자동 기록 · 차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</summary><article><h3>오픈소스 채팅 뼈대 도입 비교</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="blocker"><strong>남은 차단 사항</strong> 독립 검토 fail: 수정 또는 검토 재실행 필요</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.</dt><dd>미검증으로 기록</dd></div><div><dt>후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.</dt><dd>미검증으로 기록</dd></div><div><dt>권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.</dt><dd>미검증으로 기록</dd></div></dl><section class="paper" id="history-report-1bea68d6-ce19-4585-af0e-911fc178ad16-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p></section><section class="paper" id="history-report-1bea68d6-ce19-4585-af0e-911fc178ad16-next"><h2>남은 일과 해소 행동</h2><p>차단 사항은 남아 있지만 구체적인 해소 행동이 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-1bea68d6-ce19-4585-af0e-911fc178ad16-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-029fb7e2-61fa-4014-9362-5e915ab13197<br>report-1bea68d6-ce19-4585-af0e-911fc178ad16</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>fa376e82bc065161589f5b89860b4d592b4de41309dd5724417daeab04648cc2</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>a655f5a5db0338ae8fee701aa1d88a01844f451a673a8d17fa398f20b55590b1</code></dd></div><div><dt>기준 지문</dt><dd><code>ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 15일 PM 6:29 · 자동 기록 · 차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</summary><article><h3>오픈소스 채팅 뼈대 도입 비교</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="blocker"><strong>남은 차단 사항</strong> 독립 검토 fail: 수정 또는 검토 재실행 필요</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl><section class="paper" id="history-report-1bea68d6-ce19-4585-af0e-911fc178ad16-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p></section><section class="paper" id="history-report-1bea68d6-ce19-4585-af0e-911fc178ad16-next"><h2>남은 일과 해소 행동</h2><p>차단 사항은 남아 있지만 구체적인 해소 행동이 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-1bea68d6-ce19-4585-af0e-911fc178ad16-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-029fb7e2-61fa-4014-9362-5e915ab13197<br>report-1bea68d6-ce19-4585-af0e-911fc178ad16</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>fa376e82bc065161589f5b89860b4d592b4de41309dd5724417daeab04648cc2</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>a655f5a5db0338ae8fee701aa1d88a01844f451a673a8d17fa398f20b55590b1</code></dd></div><div><dt>기준 지문</dt><dd><code>ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
   &quot;status&quot;: &quot;verifying&quot;,
   &quot;blockedReason&quot;: &quot;독립 검토 fail: 수정 또는 검토 재실행 필요&quot;,
   &quot;criteria&quot;: [
@@ -235,9 +432,9 @@
       ]
     }
   ]
-}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 12일 오후 6:36 · 작성자 보고서 · 현재 Chat 기능과 공개 오픈소스 뼈대를 비교했다. WWW 안의 채팅 뼈대 도입은 assistant-ui, 전체 앱 기반 교체는 T3 Code를 우선 후보로 제안한다.</summary><article><h3>오픈소스 채팅 뼈대 도입 비교</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">현재 WWW에는 Native 실행·승인·중단·활동·보고서가 있으나 일반 텍스트 답변과 메모리 사건만 제공해 대화 저장·재열기가 부족하다.
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 12일 PM 6:36 · 작성자 보고서 · 현재 Chat 기능과 공개 오픈소스 뼈대를 비교했다. WWW 안의 채팅 뼈대 도입은 assistant-ui, 전체 앱 기반 교체는 T3 Code를 우선 후보로 제안한다.</summary><article><h3>오픈소스 채팅 뼈대 도입 비교</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">현재 WWW에는 Native 실행·승인·중단·활동·보고서가 있으나 일반 텍스트 답변과 메모리 사건만 제공해 대화 저장·재열기가 부족하다.
 
-현행 기능과 공백, 후보의 고정 SHA·라이선스·실제 코드 경계를 비교 문서에 기록했다. 제품 코드와 의존성은 그대로이며 도입 방식 선택과 실행 실험이 남아 있다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 사용자에게 제시한 도입 방식 선택을 반영한다.</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>Chat 005 작업·비교 문서·검증 기록과 목차를 등록했다.</li><li>assistant-ui·T3 Code·AionUi/Core·Cline/UI의 실제 공개 코드와 이식 경계를 확인했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.</dt><dd>미검증으로 기록</dd></div><div><dt>후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.</dt><dd>미검증으로 기록</dd></div><div><dt>권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.</dt><dd>미검증으로 기록</dd></div></dl><section class="paper" id="history-report-40192346-5437-425d-b9b0-f6b1bb01103b-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>기존 앱 안의 도입을 우선 권장한다. assistant-ui의 외부 상태 연결로 현재 Native 상태 소유를 유지할 수 있고 전체 앱 교체 범위가 작기 때문이다.</li><li>UI 저장과 동일 Native thread 재개를 별도 수용 시나리오로 둔다.</li></ul></section><section class="paper" id="history-report-40192346-5437-425d-b9b0-f6b1bb01103b-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>후보 설치·실행·실제 이식은 수행하지 않았다.</li><li>이번 전체 check는 코드 기준선이며 GUI·Native 승인·Windows·IME 실기는 미실행이다.</li><li>기준별 실제 증거의 기계 연결과 사용자 도입 선택이 남아 업무 상태를 완료로 바꾸지 않았다.</li></ul></section><section class="paper" id="history-report-40192346-5437-425d-b9b0-f6b1bb01103b-next"><h2>남은 일과 해소 행동</h2><ul><li>사용자에게 제시한 도입 방식 선택을 반영한다.</li><li>선택한 뼈대와 현재 Native 상태를 실제 Electron에서 연결하고 저장·재개까지 검증한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-40192346-5437-425d-b9b0-f6b1bb01103b-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-029fb7e2-61fa-4014-9362-5e915ab13197<br>report-40192346-5437-425d-b9b0-f6b1bb01103b</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>ecc915c2efc2ff2fc8d01673496b91ad2f1aa6da11c79282162f24366369aba7</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>27e6dcc32ff494803b6132b08bacfbbabc23961b5e12fe348bfb6ec0ce041541</code></dd></div><div><dt>기준 지문</dt><dd><code>ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+현행 기능과 공백, 후보의 고정 SHA·라이선스·실제 코드 경계를 비교 문서에 기록했다. 제품 코드와 의존성은 그대로이며 도입 방식 선택과 실행 실험이 남아 있다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 사용자에게 제시한 도입 방식 선택을 반영한다.</p><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>Chat 005 작업·비교 문서·검증 기록과 목차를 등록했다.</li><li>assistant-ui·T3 Code·AionUi/Core·Cline/UI의 실제 공개 코드와 이식 경계를 확인했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl><section class="paper" id="history-report-40192346-5437-425d-b9b0-f6b1bb01103b-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>기존 앱 안의 도입을 우선 권장한다. assistant-ui의 외부 상태 연결로 현재 Native 상태 소유를 유지할 수 있고 전체 앱 교체 범위가 작기 때문이다.</li><li>UI 저장과 동일 Native thread 재개를 별도 수용 시나리오로 둔다.</li></ul></section><section class="paper" id="history-report-40192346-5437-425d-b9b0-f6b1bb01103b-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>후보 설치·실행·실제 이식은 수행하지 않았다.</li><li>이번 전체 check는 코드 기준선이며 GUI·Native 승인·Windows·IME 실기는 미실행이다.</li><li>기준별 실제 증거의 기계 연결과 사용자 도입 선택이 남아 업무 상태를 완료로 바꾸지 않았다.</li></ul></section><section class="paper" id="history-report-40192346-5437-425d-b9b0-f6b1bb01103b-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>사용자에게 제시한 도입 방식 선택을 반영한다.</li><li>선택한 뼈대와 현재 Native 상태를 실제 Electron에서 연결하고 저장·재개까지 검증한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-40192346-5437-425d-b9b0-f6b1bb01103b-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-029fb7e2-61fa-4014-9362-5e915ab13197<br>report-40192346-5437-425d-b9b0-f6b1bb01103b</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>ecc915c2efc2ff2fc8d01673496b91ad2f1aa6da11c79282162f24366369aba7</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>27e6dcc32ff494803b6132b08bacfbbabc23961b5e12fe348bfb6ec0ce041541</code></dd></div><div><dt>기준 지문</dt><dd><code>ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
   &quot;status&quot;: &quot;verifying&quot;,
   &quot;blockedReason&quot;: null,
   &quot;criteria&quot;: [
@@ -303,7 +500,7 @@
     &quot;사용자에게 제시한 도입 방식 선택을 반영한다.&quot;,
     &quot;선택한 뼈대와 현재 Native 상태를 실제 Electron에서 연결하고 저장·재개까지 검증한다.&quot;
   ]
-}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 12일 오후 6:36 · 자동 기록 · 진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</summary><article><h3>오픈소스 채팅 뼈대 도입 비교</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.</dt><dd>미검증으로 기록</dd></div><div><dt>후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.</dt><dd>미검증으로 기록</dd></div><div><dt>권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.</dt><dd>미검증으로 기록</dd></div></dl><section class="paper" id="history-report-e967c604-af26-46ec-bedf-4eed1b2c3846-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-e967c604-af26-46ec-bedf-4eed1b2c3846-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-029fb7e2-61fa-4014-9362-5e915ab13197<br>report-e967c604-af26-46ec-bedf-4eed1b2c3846</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>ecc915c2efc2ff2fc8d01673496b91ad2f1aa6da11c79282162f24366369aba7</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>27e6dcc32ff494803b6132b08bacfbbabc23961b5e12fe348bfb6ec0ce041541</code></dd></div><div><dt>기준 지문</dt><dd><code>ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 12일 PM 6:36 · 자동 기록 · 진행 기록. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.</summary><article><h3>오픈소스 채팅 뼈대 도입 비교</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">자동 기록에는 작성자가 서술한 작업 이야기가 없습니다. 아래는 저장 당시 관찰값입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>진행 중 기록</strong></p></div><p class="state-note">저장 당시 기준 중 3개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl><section class="paper" id="history-report-e967c604-af26-46ec-bedf-4eed1b2c3846-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p></section><section class="paper" id="history-report-e967c604-af26-46ec-bedf-4eed1b2c3846-next"><h2>남은 일과 해소 행동</h2><p>남은 일과 완료 조건이 기록되지 않았습니다. 업무가 완료됐다는 뜻은 아닙니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-e967c604-af26-46ec-bedf-4eed1b2c3846-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-029fb7e2-61fa-4014-9362-5e915ab13197<br>report-e967c604-af26-46ec-bedf-4eed1b2c3846</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>ecc915c2efc2ff2fc8d01673496b91ad2f1aa6da11c79282162f24366369aba7</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>27e6dcc32ff494803b6132b08bacfbbabc23961b5e12fe348bfb6ec0ce041541</code></dd></div><div><dt>기준 지문</dt><dd><code>ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
   &quot;status&quot;: &quot;verifying&quot;,
   &quot;blockedReason&quot;: null,
   &quot;criteria&quot;: [
@@ -348,4 +545,692 @@
       ]
     }
   ]
-}</pre></div></details></article></details></section></main></body></html>
+}</pre></div></details></article></details></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-029fb7e2-61fa-4014-9362-5e915ab13197<br>report-703b432f-ff29-4fa3-a544-de64b17d9a7f</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>1d3eee64dd74df4dc4572b823d718563e59978dbd88f4d1190eb57953abc9c99</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>eb76adbc9b1aad9dd2bcaf207527eeb44fafba49edac02941d9b28a2c02d8e27</code></dd></div><div><dt>기준 지문</dt><dd><code>ac35fa680d59e323ae0da4f89e550bc093cb3a250638b2dddc2d660075dce6b0</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;AC-1: verification_failed&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;현재 Chat의 제공 기능·구현 공백·검증 한계를 소스와 실행 결과로 구분한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-dacdaed0-4216-4626-abbc-1831165c76dd&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7dd8e9fe-048a-4f01-8018-7f223b9dab20&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-8f91c4a5-04db-4fd9-a2ef-878978390c79&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-91305f98-fb9a-48fb-abaa-0173d075d5dc&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-b4d20943-2589-4de8-9ff0-c96c6e6f05e7&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-655adf7a-5b2f-49ff-81c0-bdfbf5a8e18e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7373aa03-7ccd-4f64-a727-560cca27ef14&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-74c90364-0059-4a79-8abe-ef851357d252&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2493d7b5-11d7-4918-9fff-2f282bf05a08&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d670430e-1aee-4c95-b670-0028174ec007&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;후보의 고정 revision·공개 코드·라이선스·의존 경계를 확인하고 전체 교체와 부분 재사용을 비교한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-449bd925-8c77-4c96-bd8b-835375e13b3c&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-dfd95d1c-ebe3-4970-8996-8d1fae05d65b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0a273129-bec5-4bf8-a1de-88d0679bf765&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2451f6b6-4125-47cd-9464-dad6ec3d7049&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-91305f98-fb9a-48fb-abaa-0173d075d5dc&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-b4d20943-2589-4de8-9ff0-c96c6e6f05e7&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-655adf7a-5b2f-49ff-81c0-bdfbf5a8e18e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7373aa03-7ccd-4f64-a727-560cca27ef14&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-74c90364-0059-4a79-8abe-ef851357d252&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2493d7b5-11d7-4918-9fff-2f282bf05a08&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;권장 도입 방식·완료 시나리오·후속 결정을 근거와 함께 기록한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-449bd925-8c77-4c96-bd8b-835375e13b3c&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-dfd95d1c-ebe3-4970-8996-8d1fae05d65b&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-0a273129-bec5-4bf8-a1de-88d0679bf765&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2451f6b6-4125-47cd-9464-dad6ec3d7049&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-91305f98-fb9a-48fb-abaa-0173d075d5dc&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-b4d20943-2589-4de8-9ff0-c96c6e6f05e7&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-655adf7a-5b2f-49ff-81c0-bdfbf5a8e18e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7373aa03-7ccd-4f64-a727-560cca27ef14&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-74c90364-0059-4a79-8abe-ef851357d252&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2493d7b5-11d7-4918-9fff-2f282bf05a08&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-0119ca21-0cf0-4db4-87a8-60b8239f34ac&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;bun\&quot;,args=[\&quot;test\&quot;, \&quot;test/conversations.test.ts\&quot;, \&quot;test/native-lifecycle.test.ts\&quot;, \&quot;test/native-session.test.ts\&quot;, \&quot;test/chat-state.test.ts\&quot;, \&quot;test/native-chat.test.ts\&quot;, \&quot;test/projection.test.ts\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-focused-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T10:54:15.495Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-ef42c7a0-51cd-446d-a8a1-9f74f22da1a9&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;node\&quot;,args=[\&quot;--input-type=module\&quot;, \&quot;--eval\&quot;, \&quot;import assert from &#39;node:assert/strict&#39;;import{readFile,stat}from&#39;node:fs/promises&#39;;import{createHash}from&#39;node:crypto&#39;;const base=&#39;.www/evidence/resume-20261116/chat008&#39;;const hash=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);const m=JSON.parse(await readFile(base+&#39;/upstream-fetch-manifest.json&#39;,&#39;utf8&#39;));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&amp;&amp;e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes(&#39;/blob/&#39;+e.revision+&#39;/&#39;));assert(e.rawUrl.includes(&#39;/&#39;+e.revision+&#39;/&#39;));}const at=async(owner,repo,file)=&gt;{const e=m.entries.find(e=&gt;e.url.includes(&#39;github.com/&#39;+owner+&#39;/&#39;+repo+&#39;/blob/&#39;)&amp;&amp;e.url.split(&#39;/blob/&#39;)[1].split(&#39;/&#39;).slice(1).join(&#39;/&#39;)===file);assert(e);return readFile(e.path,&#39;utf8&#39;);};assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;Cargo.toml&#39;)).includes(&#39;portable-pty = \\\&quot;=0.9.0\\\&quot;&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;Cargo.toml&#39;)).includes(&#39;gpui-pre&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;src/hc.rs&#39;)).includes(&#39;hc connect&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));const ovis=JSON.parse(await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;package.json&#39;));assert.equal(ovis.version,&#39;0.5.3&#39;);assert.equal(ovis.dependencies.react,&#39;^19.3.0&#39;);assert(ovis.dependencies[&#39;@lydell/node-pty&#39;]);assert((await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const daemon=await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;server/codex-daemon.ts&#39;);assert(daemon.includes(&#39;new Set&lt;string&gt;([\\\&quot;initialize\\\&quot;, \\\&quot;skills/list\\\&quot;])&#39;));const t3=JSON.parse(await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;packages/effect-codex-app-server/package.json&#39;));assert(t3.private&amp;&amp;t3.dependencies.effect);assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;docs/internals/overview.md&#39;)).includes(&#39;one database transaction&#39;));assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const extra=JSON.parse(await readFile(base+&#39;/supplemental-license-fetch.json&#39;,&#39;utf8&#39;));const b=await readFile(extra.path);assert(extra.ok&amp;&amp;hash(b)===extra.sha256&amp;&amp;b.length===extra.bytes);assert(b.toString().includes(&#39;Apache License&#39;));assert((await at(&#39;iOfficeAI&#39;,&#39;AionCore&#39;,&#39;Cargo.toml&#39;)).includes(&#39;license = \\\&quot;MIT\\\&quot;&#39;));const work=&#39;docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/&#39;;const spec=await readFile(work+&#39;spec.md&#39;,&#39;utf8&#39;);const comparison=await readFile(work+&#39;comparison.md&#39;,&#39;utf8&#39;);const tasks=await readFile(work+&#39;tasks.md&#39;,&#39;utf8&#39;);for(const id of[&#39;AC-1&#39;,&#39;AC-2&#39;,&#39;AC-3&#39;])assert(spec.includes(id)&amp;&amp;comparison.includes(id));for(const id of[&#39;UC-LOCAL&#39;,&#39;UC-UPSTREAM&#39;,&#39;UC-DECISION&#39;])assert(spec.includes(id));assert(spec.includes(&#39;Ovis에서 필요한 공개 채팅 동작만 개작&#39;));assert(comparison.includes(&#39;**Ovis의 필요한 채팅 동작만 개작**&#39;));assert(comparison.includes(&#39;외부 앱 호환 PASS가 아니다&#39;));assert(tasks.includes(&#39;세 기준은 조사·비교·권장 기록의 수용 기준&#39;));assert(tasks.includes(&#39;읽기 전용&#39;));const{spawnSync}=await import(&#39;node:child_process&#39;);const checked=spawnSync(process.execPath,[&#39;scripts/check-workflow.ts&#39;],{encoding:&#39;utf8&#39;});process.stdout.write(checked.stdout??&#39;&#39;);process.stderr.write(checked.stderr??&#39;&#39;);assert.equal(checked.status,0,&#39;현재 작업 계약 검사 실패&#39;);console.log(JSON.stringify({result:&#39;passed&#39;,scope:&#39;고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님&#39;,fixedOriginals:45,supplemental:1,recommendation:&#39;Ovis 부분 개작·WWW 핵심 경계 보존&#39;,unmeasured:[&#39;Windows&#39;,&#39;OS 한국어 IME&#39;,&#39;외부 앱 실행&#39;,&#39;신규 제품 이식&#39;]}));\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-research-contract-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T10:54:16.303Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-430dec8a-6da2-48f5-81f0-d117056b126a&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;bun\&quot;,args=[\&quot;test\&quot;, \&quot;test/conversations.test.ts\&quot;, \&quot;test/native-lifecycle.test.ts\&quot;, \&quot;test/native-session.test.ts\&quot;, \&quot;test/chat-state.test.ts\&quot;, \&quot;test/native-chat.test.ts\&quot;, \&quot;test/projection.test.ts\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-focused-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T11:00:56.072Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-6aac448a-a5ed-4850-b8cc-00acbea0522c&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;node\&quot;,args=[\&quot;--input-type=module\&quot;, \&quot;--eval\&quot;, \&quot;import assert from &#39;node:assert/strict&#39;;import{readFile,stat}from&#39;node:fs/promises&#39;;import{createHash}from&#39;node:crypto&#39;;const base=&#39;.www/evidence/resume-20261116/chat008&#39;;const hash=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);const m=JSON.parse(await readFile(base+&#39;/upstream-fetch-manifest.json&#39;,&#39;utf8&#39;));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&amp;&amp;e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes(&#39;/blob/&#39;+e.revision+&#39;/&#39;));assert(e.rawUrl.includes(&#39;/&#39;+e.revision+&#39;/&#39;));}const at=async(owner,repo,file)=&gt;{const e=m.entries.find(e=&gt;e.url.includes(&#39;github.com/&#39;+owner+&#39;/&#39;+repo+&#39;/blob/&#39;)&amp;&amp;e.url.split(&#39;/blob/&#39;)[1].split(&#39;/&#39;).slice(1).join(&#39;/&#39;)===file);assert(e);return readFile(e.path,&#39;utf8&#39;);};assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;Cargo.toml&#39;)).includes(&#39;portable-pty = \\\&quot;=0.9.0\\\&quot;&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;Cargo.toml&#39;)).includes(&#39;gpui-pre&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;src/hc.rs&#39;)).includes(&#39;hc connect&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));const ovis=JSON.parse(await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;package.json&#39;));assert.equal(ovis.version,&#39;0.5.3&#39;);assert.equal(ovis.dependencies.react,&#39;^19.3.0&#39;);assert(ovis.dependencies[&#39;@lydell/node-pty&#39;]);assert((await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const daemon=await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;server/codex-daemon.ts&#39;);assert(daemon.includes(&#39;new Set&lt;string&gt;([\\\&quot;initialize\\\&quot;, \\\&quot;skills/list\\\&quot;])&#39;));const t3=JSON.parse(await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;packages/effect-codex-app-server/package.json&#39;));assert(t3.private&amp;&amp;t3.dependencies.effect);assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;docs/internals/overview.md&#39;)).includes(&#39;one database transaction&#39;));assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const extra=JSON.parse(await readFile(base+&#39;/supplemental-license-fetch.json&#39;,&#39;utf8&#39;));const b=await readFile(extra.path);assert(extra.ok&amp;&amp;hash(b)===extra.sha256&amp;&amp;b.length===extra.bytes);assert(b.toString().includes(&#39;Apache License&#39;));assert((await at(&#39;iOfficeAI&#39;,&#39;AionCore&#39;,&#39;Cargo.toml&#39;)).includes(&#39;license = \\\&quot;MIT\\\&quot;&#39;));const work=&#39;docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/&#39;;const spec=await readFile(work+&#39;spec.md&#39;,&#39;utf8&#39;);const comparison=await readFile(work+&#39;comparison.md&#39;,&#39;utf8&#39;);const tasks=await readFile(work+&#39;tasks.md&#39;,&#39;utf8&#39;);for(const id of[&#39;AC-1&#39;,&#39;AC-2&#39;,&#39;AC-3&#39;])assert(spec.includes(id)&amp;&amp;comparison.includes(id));for(const id of[&#39;UC-LOCAL&#39;,&#39;UC-UPSTREAM&#39;,&#39;UC-DECISION&#39;])assert(spec.includes(id));assert(spec.includes(&#39;Ovis에서 필요한 공개 채팅 동작만 개작&#39;));assert(comparison.includes(&#39;**Ovis의 필요한 채팅 동작만 개작**&#39;));assert(comparison.includes(&#39;외부 앱 호환 PASS가 아니다&#39;));assert(tasks.includes(&#39;세 기준은 조사·비교·권장 기록의 수용 기준&#39;));assert(tasks.includes(&#39;읽기 전용&#39;));const{spawnSync}=await import(&#39;node:child_process&#39;);const checked=spawnSync(process.execPath,[&#39;scripts/check-workflow.ts&#39;],{encoding:&#39;utf8&#39;});process.stdout.write(checked.stdout??&#39;&#39;);process.stderr.write(checked.stderr??&#39;&#39;);assert.equal(checked.status,0,&#39;현재 작업 계약 검사 실패&#39;);console.log(JSON.stringify({result:&#39;passed&#39;,scope:&#39;고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님&#39;,fixedOriginals:45,supplemental:1,recommendation:&#39;Ovis 부분 개작·WWW 핵심 경계 보존&#39;,unmeasured:[&#39;Windows&#39;,&#39;OS 한국어 IME&#39;,&#39;외부 앱 실행&#39;,&#39;신규 제품 이식&#39;]}));\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-research-contract-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T11:00:56.890Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-a5f7feb6-8b64-45f0-b58e-cb72f9f3be6a&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;bun\&quot;,args=[\&quot;test\&quot;, \&quot;test/conversations.test.ts\&quot;, \&quot;test/native-lifecycle.test.ts\&quot;, \&quot;test/native-session.test.ts\&quot;, \&quot;test/chat-state.test.ts\&quot;, \&quot;test/native-chat.test.ts\&quot;, \&quot;test/projection.test.ts\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-focused-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T11:30:36.562Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-449bd925-8c77-4c96-bd8b-835375e13b3c&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;node\&quot;,args=[\&quot;--input-type=module\&quot;, \&quot;--eval\&quot;, \&quot;import assert from &#39;node:assert/strict&#39;;import{readFile,stat}from&#39;node:fs/promises&#39;;import{createHash}from&#39;node:crypto&#39;;const base=&#39;.www/evidence/resume-20261116/chat008&#39;;const hash=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);const m=JSON.parse(await readFile(base+&#39;/upstream-fetch-manifest.json&#39;,&#39;utf8&#39;));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&amp;&amp;e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes(&#39;/blob/&#39;+e.revision+&#39;/&#39;));assert(e.rawUrl.includes(&#39;/&#39;+e.revision+&#39;/&#39;));}const at=async(owner,repo,file)=&gt;{const e=m.entries.find(e=&gt;e.url.includes(&#39;github.com/&#39;+owner+&#39;/&#39;+repo+&#39;/blob/&#39;)&amp;&amp;e.url.split(&#39;/blob/&#39;)[1].split(&#39;/&#39;).slice(1).join(&#39;/&#39;)===file);assert(e);return readFile(e.path,&#39;utf8&#39;);};assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;Cargo.toml&#39;)).includes(&#39;portable-pty = \\\&quot;=0.9.0\\\&quot;&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;Cargo.toml&#39;)).includes(&#39;gpui-pre&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;src/hc.rs&#39;)).includes(&#39;hc connect&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));const ovis=JSON.parse(await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;package.json&#39;));assert.equal(ovis.version,&#39;0.5.3&#39;);assert.equal(ovis.dependencies.react,&#39;^19.3.0&#39;);assert(ovis.dependencies[&#39;@lydell/node-pty&#39;]);assert((await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const daemon=await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;server/codex-daemon.ts&#39;);assert(daemon.includes(&#39;new Set&lt;string&gt;([\\\&quot;initialize\\\&quot;, \\\&quot;skills/list\\\&quot;])&#39;));const t3=JSON.parse(await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;packages/effect-codex-app-server/package.json&#39;));assert(t3.private&amp;&amp;t3.dependencies.effect);assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;docs/internals/overview.md&#39;)).includes(&#39;one database transaction&#39;));assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const extra=JSON.parse(await readFile(base+&#39;/supplemental-license-fetch.json&#39;,&#39;utf8&#39;));const b=await readFile(extra.path);assert(extra.ok&amp;&amp;hash(b)===extra.sha256&amp;&amp;b.length===extra.bytes);assert(b.toString().includes(&#39;Apache License&#39;));assert((await at(&#39;iOfficeAI&#39;,&#39;AionCore&#39;,&#39;Cargo.toml&#39;)).includes(&#39;license = \\\&quot;MIT\\\&quot;&#39;));const work=&#39;docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/&#39;;const spec=await readFile(work+&#39;spec.md&#39;,&#39;utf8&#39;);const comparison=await readFile(work+&#39;comparison.md&#39;,&#39;utf8&#39;);const tasks=await readFile(work+&#39;tasks.md&#39;,&#39;utf8&#39;);for(const id of[&#39;AC-1&#39;,&#39;AC-2&#39;,&#39;AC-3&#39;])assert(spec.includes(id)&amp;&amp;comparison.includes(id));for(const id of[&#39;UC-LOCAL&#39;,&#39;UC-UPSTREAM&#39;,&#39;UC-DECISION&#39;])assert(spec.includes(id));assert(spec.includes(&#39;Ovis에서 필요한 공개 채팅 동작만 개작&#39;));assert(comparison.includes(&#39;**Ovis의 필요한 채팅 동작만 개작**&#39;));assert(comparison.includes(&#39;외부 앱 호환 PASS가 아니다&#39;));assert(tasks.includes(&#39;세 기준은 조사·비교·권장 기록의 수용 기준&#39;));assert(tasks.includes(&#39;읽기 전용&#39;));const{spawnSync}=await import(&#39;node:child_process&#39;);const checked=spawnSync(process.execPath,[&#39;scripts/check-workflow.ts&#39;],{encoding:&#39;utf8&#39;});process.stdout.write(checked.stdout??&#39;&#39;);process.stderr.write(checked.stderr??&#39;&#39;);assert.equal(checked.status,0,&#39;현재 작업 계약 검사 실패&#39;);console.log(JSON.stringify({result:&#39;passed&#39;,scope:&#39;고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님&#39;,fixedOriginals:45,supplemental:1,recommendation:&#39;Ovis 부분 개작·WWW 핵심 경계 보존&#39;,unmeasured:[&#39;Windows&#39;,&#39;OS 한국어 IME&#39;,&#39;외부 앱 실행&#39;,&#39;신규 제품 이식&#39;]}));\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-research-contract-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T11:30:37.493Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e721816c-b1ba-4120-83b9-b64f0b5b27d3&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;bun\&quot;,args=[\&quot;test\&quot;, \&quot;test/conversations.test.ts\&quot;, \&quot;test/native-lifecycle.test.ts\&quot;, \&quot;test/native-session.test.ts\&quot;, \&quot;test/chat-state.test.ts\&quot;, \&quot;test/native-chat.test.ts\&quot;, \&quot;test/projection.test.ts\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-focused-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T12:08:56.370Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-dfd95d1c-ebe3-4970-8996-8d1fae05d65b&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;node\&quot;,args=[\&quot;--input-type=module\&quot;, \&quot;--eval\&quot;, \&quot;import assert from &#39;node:assert/strict&#39;;import{readFile,stat}from&#39;node:fs/promises&#39;;import{createHash}from&#39;node:crypto&#39;;const base=&#39;.www/evidence/resume-20261116/chat008&#39;;const hash=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);const m=JSON.parse(await readFile(base+&#39;/upstream-fetch-manifest.json&#39;,&#39;utf8&#39;));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&amp;&amp;e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes(&#39;/blob/&#39;+e.revision+&#39;/&#39;));assert(e.rawUrl.includes(&#39;/&#39;+e.revision+&#39;/&#39;));}const at=async(owner,repo,file)=&gt;{const e=m.entries.find(e=&gt;e.url.includes(&#39;github.com/&#39;+owner+&#39;/&#39;+repo+&#39;/blob/&#39;)&amp;&amp;e.url.split(&#39;/blob/&#39;)[1].split(&#39;/&#39;).slice(1).join(&#39;/&#39;)===file);assert(e);return readFile(e.path,&#39;utf8&#39;);};assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;Cargo.toml&#39;)).includes(&#39;portable-pty = \\\&quot;=0.9.0\\\&quot;&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;Cargo.toml&#39;)).includes(&#39;gpui-pre&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;src/hc.rs&#39;)).includes(&#39;hc connect&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));const ovis=JSON.parse(await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;package.json&#39;));assert.equal(ovis.version,&#39;0.5.3&#39;);assert.equal(ovis.dependencies.react,&#39;^19.3.0&#39;);assert(ovis.dependencies[&#39;@lydell/node-pty&#39;]);assert((await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const daemon=await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;server/codex-daemon.ts&#39;);assert(daemon.includes(&#39;new Set&lt;string&gt;([\\\&quot;initialize\\\&quot;, \\\&quot;skills/list\\\&quot;])&#39;));const t3=JSON.parse(await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;packages/effect-codex-app-server/package.json&#39;));assert(t3.private&amp;&amp;t3.dependencies.effect);assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;docs/internals/overview.md&#39;)).includes(&#39;one database transaction&#39;));assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const extra=JSON.parse(await readFile(base+&#39;/supplemental-license-fetch.json&#39;,&#39;utf8&#39;));const b=await readFile(extra.path);assert(extra.ok&amp;&amp;hash(b)===extra.sha256&amp;&amp;b.length===extra.bytes);assert(b.toString().includes(&#39;Apache License&#39;));assert((await at(&#39;iOfficeAI&#39;,&#39;AionCore&#39;,&#39;Cargo.toml&#39;)).includes(&#39;license = \\\&quot;MIT\\\&quot;&#39;));const work=&#39;docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/&#39;;const spec=await readFile(work+&#39;spec.md&#39;,&#39;utf8&#39;);const comparison=await readFile(work+&#39;comparison.md&#39;,&#39;utf8&#39;);const tasks=await readFile(work+&#39;tasks.md&#39;,&#39;utf8&#39;);for(const id of[&#39;AC-1&#39;,&#39;AC-2&#39;,&#39;AC-3&#39;])assert(spec.includes(id)&amp;&amp;comparison.includes(id));for(const id of[&#39;UC-LOCAL&#39;,&#39;UC-UPSTREAM&#39;,&#39;UC-DECISION&#39;])assert(spec.includes(id));assert(spec.includes(&#39;Ovis에서 필요한 공개 채팅 동작만 개작&#39;));assert(comparison.includes(&#39;**Ovis의 필요한 채팅 동작만 개작**&#39;));assert(comparison.includes(&#39;외부 앱 호환 PASS가 아니다&#39;));assert(tasks.includes(&#39;세 기준은 조사·비교·권장 기록의 수용 기준&#39;));assert(tasks.includes(&#39;읽기 전용&#39;));const{spawnSync}=await import(&#39;node:child_process&#39;);const checked=spawnSync(process.execPath,[&#39;scripts/check-workflow.ts&#39;],{encoding:&#39;utf8&#39;});process.stdout.write(checked.stdout??&#39;&#39;);process.stderr.write(checked.stderr??&#39;&#39;);assert.equal(checked.status,0,&#39;현재 작업 계약 검사 실패&#39;);console.log(JSON.stringify({result:&#39;passed&#39;,scope:&#39;고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님&#39;,fixedOriginals:45,supplemental:1,recommendation:&#39;Ovis 부분 개작·WWW 핵심 경계 보존&#39;,unmeasured:[&#39;Windows&#39;,&#39;OS 한국어 IME&#39;,&#39;외부 앱 실행&#39;,&#39;신규 제품 이식&#39;]}));\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-research-contract-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T12:08:57.287Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-dacdaed0-4216-4626-abbc-1831165c76dd&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;bun\&quot;,args=[\&quot;test\&quot;, \&quot;test/conversations.test.ts\&quot;, \&quot;test/native-lifecycle.test.ts\&quot;, \&quot;test/native-session.test.ts\&quot;, \&quot;test/chat-state.test.ts\&quot;, \&quot;test/native-chat.test.ts\&quot;, \&quot;test/projection.test.ts\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-focused-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T12:37:58.018Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-7dd8e9fe-048a-4f01-8018-7f223b9dab20&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;bun\&quot;,args=[\&quot;test\&quot;, \&quot;test/conversations.test.ts\&quot;, \&quot;test/native-lifecycle.test.ts\&quot;, \&quot;test/native-session.test.ts\&quot;, \&quot;test/chat-state.test.ts\&quot;, \&quot;test/native-chat.test.ts\&quot;, \&quot;test/projection.test.ts\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-focused-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T12:42:16.894Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-0a273129-bec5-4bf8-a1de-88d0679bf765&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;node\&quot;,args=[\&quot;--input-type=module\&quot;, \&quot;--eval\&quot;, \&quot;import assert from &#39;node:assert/strict&#39;;import{readFile,stat}from&#39;node:fs/promises&#39;;import{createHash}from&#39;node:crypto&#39;;const base=&#39;.www/evidence/resume-20261116/chat008&#39;;const hash=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);const m=JSON.parse(await readFile(base+&#39;/upstream-fetch-manifest.json&#39;,&#39;utf8&#39;));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&amp;&amp;e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes(&#39;/blob/&#39;+e.revision+&#39;/&#39;));assert(e.rawUrl.includes(&#39;/&#39;+e.revision+&#39;/&#39;));}const at=async(owner,repo,file)=&gt;{const e=m.entries.find(e=&gt;e.url.includes(&#39;github.com/&#39;+owner+&#39;/&#39;+repo+&#39;/blob/&#39;)&amp;&amp;e.url.split(&#39;/blob/&#39;)[1].split(&#39;/&#39;).slice(1).join(&#39;/&#39;)===file);assert(e);return readFile(e.path,&#39;utf8&#39;);};assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;Cargo.toml&#39;)).includes(&#39;portable-pty = \\\&quot;=0.9.0\\\&quot;&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;Cargo.toml&#39;)).includes(&#39;gpui-pre&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;src/hc.rs&#39;)).includes(&#39;hc connect&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));const ovis=JSON.parse(await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;package.json&#39;));assert.equal(ovis.version,&#39;0.5.3&#39;);assert.equal(ovis.dependencies.react,&#39;^19.3.0&#39;);assert(ovis.dependencies[&#39;@lydell/node-pty&#39;]);assert((await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const daemon=await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;server/codex-daemon.ts&#39;);assert(daemon.includes(&#39;new Set&lt;string&gt;([\\\&quot;initialize\\\&quot;, \\\&quot;skills/list\\\&quot;])&#39;));const t3=JSON.parse(await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;packages/effect-codex-app-server/package.json&#39;));assert(t3.private&amp;&amp;t3.dependencies.effect);assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;docs/internals/overview.md&#39;)).includes(&#39;one database transaction&#39;));assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const extra=JSON.parse(await readFile(base+&#39;/supplemental-license-fetch.json&#39;,&#39;utf8&#39;));const b=await readFile(extra.path);assert(extra.ok&amp;&amp;hash(b)===extra.sha256&amp;&amp;b.length===extra.bytes);assert(b.toString().includes(&#39;Apache License&#39;));assert((await at(&#39;iOfficeAI&#39;,&#39;AionCore&#39;,&#39;Cargo.toml&#39;)).includes(&#39;license = \\\&quot;MIT\\\&quot;&#39;));const work=&#39;docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/&#39;;const spec=await readFile(work+&#39;spec.md&#39;,&#39;utf8&#39;);const comparison=await readFile(work+&#39;comparison.md&#39;,&#39;utf8&#39;);const tasks=await readFile(work+&#39;tasks.md&#39;,&#39;utf8&#39;);for(const id of[&#39;AC-1&#39;,&#39;AC-2&#39;,&#39;AC-3&#39;])assert(spec.includes(id)&amp;&amp;comparison.includes(id));for(const id of[&#39;UC-LOCAL&#39;,&#39;UC-UPSTREAM&#39;,&#39;UC-DECISION&#39;])assert(spec.includes(id));assert(spec.includes(&#39;Ovis에서 필요한 공개 채팅 동작만 개작&#39;));assert(comparison.includes(&#39;**Ovis의 필요한 채팅 동작만 개작**&#39;));assert(comparison.includes(&#39;외부 앱 호환 PASS가 아니다&#39;));assert(tasks.includes(&#39;세 기준은 조사·비교·권장 기록의 수용 기준&#39;));assert(tasks.includes(&#39;읽기 전용&#39;));const{spawnSync}=await import(&#39;node:child_process&#39;);const checked=spawnSync(process.execPath,[&#39;scripts/check-workflow.ts&#39;],{encoding:&#39;utf8&#39;});process.stdout.write(checked.stdout??&#39;&#39;);process.stderr.write(checked.stderr??&#39;&#39;);assert.equal(checked.status,0,&#39;현재 작업 계약 검사 실패&#39;);console.log(JSON.stringify({result:&#39;passed&#39;,scope:&#39;고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님&#39;,fixedOriginals:45,supplemental:1,recommendation:&#39;Ovis 부분 개작·WWW 핵심 경계 보존&#39;,unmeasured:[&#39;Windows&#39;,&#39;OS 한국어 IME&#39;,&#39;외부 앱 실행&#39;,&#39;신규 제품 이식&#39;]}));\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-research-contract-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T12:42:17.784Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-8f91c4a5-04db-4fd9-a2ef-878978390c79&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;bun\&quot;,args=[\&quot;test\&quot;, \&quot;test/conversations.test.ts\&quot;, \&quot;test/native-lifecycle.test.ts\&quot;, \&quot;test/native-session.test.ts\&quot;, \&quot;test/chat-state.test.ts\&quot;, \&quot;test/native-chat.test.ts\&quot;, \&quot;test/projection.test.ts\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-focused-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T12:59:20.554Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-2451f6b6-4125-47cd-9464-dad6ec3d7049&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;node\&quot;,args=[\&quot;--input-type=module\&quot;, \&quot;--eval\&quot;, \&quot;import assert from &#39;node:assert/strict&#39;;import{readFile,stat}from&#39;node:fs/promises&#39;;import{createHash}from&#39;node:crypto&#39;;const base=&#39;.www/evidence/resume-20261116/chat008&#39;;const hash=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);const m=JSON.parse(await readFile(base+&#39;/upstream-fetch-manifest.json&#39;,&#39;utf8&#39;));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&amp;&amp;e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes(&#39;/blob/&#39;+e.revision+&#39;/&#39;));assert(e.rawUrl.includes(&#39;/&#39;+e.revision+&#39;/&#39;));}const at=async(owner,repo,file)=&gt;{const e=m.entries.find(e=&gt;e.url.includes(&#39;github.com/&#39;+owner+&#39;/&#39;+repo+&#39;/blob/&#39;)&amp;&amp;e.url.split(&#39;/blob/&#39;)[1].split(&#39;/&#39;).slice(1).join(&#39;/&#39;)===file);assert(e);return readFile(e.path,&#39;utf8&#39;);};assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;Cargo.toml&#39;)).includes(&#39;portable-pty = \\\&quot;=0.9.0\\\&quot;&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;Cargo.toml&#39;)).includes(&#39;gpui-pre&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;src/hc.rs&#39;)).includes(&#39;hc connect&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));const ovis=JSON.parse(await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;package.json&#39;));assert.equal(ovis.version,&#39;0.5.3&#39;);assert.equal(ovis.dependencies.react,&#39;^19.3.0&#39;);assert(ovis.dependencies[&#39;@lydell/node-pty&#39;]);assert((await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const daemon=await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;server/codex-daemon.ts&#39;);assert(daemon.includes(&#39;new Set&lt;string&gt;([\\\&quot;initialize\\\&quot;, \\\&quot;skills/list\\\&quot;])&#39;));const t3=JSON.parse(await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;packages/effect-codex-app-server/package.json&#39;));assert(t3.private&amp;&amp;t3.dependencies.effect);assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;docs/internals/overview.md&#39;)).includes(&#39;one database transaction&#39;));assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const extra=JSON.parse(await readFile(base+&#39;/supplemental-license-fetch.json&#39;,&#39;utf8&#39;));const b=await readFile(extra.path);assert(extra.ok&amp;&amp;hash(b)===extra.sha256&amp;&amp;b.length===extra.bytes);assert(b.toString().includes(&#39;Apache License&#39;));assert((await at(&#39;iOfficeAI&#39;,&#39;AionCore&#39;,&#39;Cargo.toml&#39;)).includes(&#39;license = \\\&quot;MIT\\\&quot;&#39;));const work=&#39;docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/&#39;;const spec=await readFile(work+&#39;spec.md&#39;,&#39;utf8&#39;);const comparison=await readFile(work+&#39;comparison.md&#39;,&#39;utf8&#39;);const tasks=await readFile(work+&#39;tasks.md&#39;,&#39;utf8&#39;);for(const id of[&#39;AC-1&#39;,&#39;AC-2&#39;,&#39;AC-3&#39;])assert(spec.includes(id)&amp;&amp;comparison.includes(id));for(const id of[&#39;UC-LOCAL&#39;,&#39;UC-UPSTREAM&#39;,&#39;UC-DECISION&#39;])assert(spec.includes(id));assert(spec.includes(&#39;Ovis에서 필요한 공개 채팅 동작만 개작&#39;));assert(comparison.includes(&#39;**Ovis의 필요한 채팅 동작만 개작**&#39;));assert(comparison.includes(&#39;외부 앱 호환 PASS가 아니다&#39;));assert(tasks.includes(&#39;세 기준은 조사·비교·권장 기록의 수용 기준&#39;));assert(tasks.includes(&#39;읽기 전용&#39;));const{spawnSync}=await import(&#39;node:child_process&#39;);const checked=spawnSync(process.execPath,[&#39;scripts/check-workflow.ts&#39;],{encoding:&#39;utf8&#39;});process.stdout.write(checked.stdout??&#39;&#39;);process.stderr.write(checked.stderr??&#39;&#39;);assert.equal(checked.status,0,&#39;현재 작업 계약 검사 실패&#39;);console.log(JSON.stringify({result:&#39;passed&#39;,scope:&#39;고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님&#39;,fixedOriginals:45,supplemental:1,recommendation:&#39;Ovis 부분 개작·WWW 핵심 경계 보존&#39;,unmeasured:[&#39;Windows&#39;,&#39;OS 한국어 IME&#39;,&#39;외부 앱 실행&#39;,&#39;신규 제품 이식&#39;]}));\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-research-contract-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T12:59:21.438Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-91305f98-fb9a-48fb-abaa-0173d075d5dc&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/resume-20261116/native-closeout/composite.mjs&quot;,
+        &quot;work-029fb7e2-61fa-4014-9362-5e915ab13197&quot;,
+        &quot;baseline&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:56:58.663Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-b4d20943-2589-4de8-9ff0-c96c6e6f05e7&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/resume-20261116/native-closeout/final-current/composite.mjs&quot;,
+        &quot;work-029fb7e2-61fa-4014-9362-5e915ab13197&quot;,
+        &quot;baseline&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T15:40:52.709Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-655adf7a-5b2f-49ff-81c0-bdfbf5a8e18e&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;node\&quot;,args=[\&quot;--input-type=module\&quot;, \&quot;--eval\&quot;, \&quot;import assert from &#39;node:assert/strict&#39;;import{readFile,stat}from&#39;node:fs/promises&#39;;import{createHash}from&#39;node:crypto&#39;;const base=&#39;.www/evidence/resume-20261116/chat008&#39;;const hash=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);const m=JSON.parse(await readFile(base+&#39;/upstream-fetch-manifest.json&#39;,&#39;utf8&#39;));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&amp;&amp;e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes(&#39;/blob/&#39;+e.revision+&#39;/&#39;));assert(e.rawUrl.includes(&#39;/&#39;+e.revision+&#39;/&#39;));}const at=async(owner,repo,file)=&gt;{const e=m.entries.find(e=&gt;e.url.includes(&#39;github.com/&#39;+owner+&#39;/&#39;+repo+&#39;/blob/&#39;)&amp;&amp;e.url.split(&#39;/blob/&#39;)[1].split(&#39;/&#39;).slice(1).join(&#39;/&#39;)===file);assert(e);return readFile(e.path,&#39;utf8&#39;);};assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;Cargo.toml&#39;)).includes(&#39;portable-pty = \\\&quot;=0.9.0\\\&quot;&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;Cargo.toml&#39;)).includes(&#39;gpui-pre&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;src/hc.rs&#39;)).includes(&#39;hc connect&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));const ovis=JSON.parse(await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;package.json&#39;));assert.equal(ovis.version,&#39;0.5.3&#39;);assert.equal(ovis.dependencies.react,&#39;^19.3.0&#39;);assert(ovis.dependencies[&#39;@lydell/node-pty&#39;]);assert((await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const daemon=await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;server/codex-daemon.ts&#39;);assert(daemon.includes(&#39;new Set&lt;string&gt;([\\\&quot;initialize\\\&quot;, \\\&quot;skills/list\\\&quot;])&#39;));const t3=JSON.parse(await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;packages/effect-codex-app-server/package.json&#39;));assert(t3.private&amp;&amp;t3.dependencies.effect);assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;docs/internals/overview.md&#39;)).includes(&#39;one database transaction&#39;));assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const extra=JSON.parse(await readFile(base+&#39;/supplemental-license-fetch.json&#39;,&#39;utf8&#39;));const b=await readFile(extra.path);assert(extra.ok&amp;&amp;hash(b)===extra.sha256&amp;&amp;b.length===extra.bytes);assert(b.toString().includes(&#39;Apache License&#39;));assert((await at(&#39;iOfficeAI&#39;,&#39;AionCore&#39;,&#39;Cargo.toml&#39;)).includes(&#39;license = \\\&quot;MIT\\\&quot;&#39;));const work=&#39;docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/&#39;;const spec=await readFile(work+&#39;spec.md&#39;,&#39;utf8&#39;);const comparison=await readFile(work+&#39;comparison.md&#39;,&#39;utf8&#39;);const tasks=await readFile(work+&#39;tasks.md&#39;,&#39;utf8&#39;);for(const id of[&#39;AC-1&#39;,&#39;AC-2&#39;,&#39;AC-3&#39;])assert(spec.includes(id)&amp;&amp;comparison.includes(id));for(const id of[&#39;UC-LOCAL&#39;,&#39;UC-UPSTREAM&#39;,&#39;UC-DECISION&#39;])assert(spec.includes(id));assert(spec.includes(&#39;Ovis에서 필요한 공개 채팅 동작만 개작&#39;));assert(comparison.includes(&#39;**Ovis의 필요한 채팅 동작만 개작**&#39;));assert(comparison.includes(&#39;외부 앱 호환 PASS가 아니다&#39;));assert(tasks.includes(&#39;세 기준은 조사·비교·권장 기록의 수용 기준&#39;));assert(tasks.includes(&#39;읽기 전용&#39;));const{spawnSync}=await import(&#39;node:child_process&#39;);const checked=spawnSync(process.execPath,[&#39;scripts/check-workflow.ts&#39;],{encoding:&#39;utf8&#39;});process.stdout.write(checked.stdout??&#39;&#39;);process.stderr.write(checked.stderr??&#39;&#39;);assert.equal(checked.status,0,&#39;현재 작업 계약 검사 실패&#39;);console.log(JSON.stringify({result:&#39;passed&#39;,scope:&#39;고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님&#39;,fixedOriginals:45,supplemental:1,recommendation:&#39;Ovis 부분 개작·WWW 핵심 경계 보존&#39;,unmeasured:[&#39;Windows&#39;,&#39;OS 한국어 IME&#39;,&#39;외부 앱 실행&#39;,&#39;신규 제품 이식&#39;]}));\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-research-contract-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:43:11.622Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-7373aa03-7ccd-4f64-a727-560cca27ef14&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;node\&quot;,args=[\&quot;--input-type=module\&quot;, \&quot;--eval\&quot;, \&quot;import assert from &#39;node:assert/strict&#39;;import{readFile,stat}from&#39;node:fs/promises&#39;;import{createHash}from&#39;node:crypto&#39;;const base=&#39;.www/evidence/resume-20261116/chat008&#39;;const hash=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);const m=JSON.parse(await readFile(base+&#39;/upstream-fetch-manifest.json&#39;,&#39;utf8&#39;));assert.equal(m.entries.length,45);for(const e of m.entries){assert(e.ok&amp;&amp;e.status===200);const b=await readFile(e.path);assert.equal(b.length,e.bytes);assert.equal(hash(b),e.sha256);assert(e.url.includes(&#39;/blob/&#39;+e.revision+&#39;/&#39;));assert(e.rawUrl.includes(&#39;/&#39;+e.revision+&#39;/&#39;));}const at=async(owner,repo,file)=&gt;{const e=m.entries.find(e=&gt;e.url.includes(&#39;github.com/&#39;+owner+&#39;/&#39;+repo+&#39;/blob/&#39;)&amp;&amp;e.url.split(&#39;/blob/&#39;)[1].split(&#39;/&#39;).slice(1).join(&#39;/&#39;)===file);assert(e);return readFile(e.path,&#39;utf8&#39;);};assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;Cargo.toml&#39;)).includes(&#39;portable-pty = \\\&quot;=0.9.0\\\&quot;&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;Cargo.toml&#39;)).includes(&#39;gpui-pre&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;src/hc.rs&#39;)).includes(&#39;hc connect&#39;));assert((await at(&#39;herdrdev&#39;,&#39;herdr-app&#39;,&#39;LICENSE&#39;)).includes(&#39;Apache License&#39;));const ovis=JSON.parse(await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;package.json&#39;));assert.equal(ovis.version,&#39;0.5.3&#39;);assert.equal(ovis.dependencies.react,&#39;^19.3.0&#39;);assert(ovis.dependencies[&#39;@lydell/node-pty&#39;]);assert((await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const daemon=await at(&#39;devswha&#39;,&#39;ovis&#39;,&#39;server/codex-daemon.ts&#39;);assert(daemon.includes(&#39;new Set&lt;string&gt;([\\\&quot;initialize\\\&quot;, \\\&quot;skills/list\\\&quot;])&#39;));const t3=JSON.parse(await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;packages/effect-codex-app-server/package.json&#39;));assert(t3.private&amp;&amp;t3.dependencies.effect);assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;docs/internals/overview.md&#39;)).includes(&#39;one database transaction&#39;));assert((await at(&#39;pingdotgg&#39;,&#39;t3code&#39;,&#39;LICENSE&#39;)).includes(&#39;MIT License&#39;));const extra=JSON.parse(await readFile(base+&#39;/supplemental-license-fetch.json&#39;,&#39;utf8&#39;));const b=await readFile(extra.path);assert(extra.ok&amp;&amp;hash(b)===extra.sha256&amp;&amp;b.length===extra.bytes);assert(b.toString().includes(&#39;Apache License&#39;));assert((await at(&#39;iOfficeAI&#39;,&#39;AionCore&#39;,&#39;Cargo.toml&#39;)).includes(&#39;license = \\\&quot;MIT\\\&quot;&#39;));const work=&#39;docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/&#39;;const spec=await readFile(work+&#39;spec.md&#39;,&#39;utf8&#39;);const comparison=await readFile(work+&#39;comparison.md&#39;,&#39;utf8&#39;);const tasks=await readFile(work+&#39;tasks.md&#39;,&#39;utf8&#39;);for(const id of[&#39;AC-1&#39;,&#39;AC-2&#39;,&#39;AC-3&#39;])assert(spec.includes(id)&amp;&amp;comparison.includes(id));for(const id of[&#39;UC-LOCAL&#39;,&#39;UC-UPSTREAM&#39;,&#39;UC-DECISION&#39;])assert(spec.includes(id));assert(spec.includes(&#39;Ovis에서 필요한 공개 채팅 동작만 개작&#39;));assert(comparison.includes(&#39;**Ovis의 필요한 채팅 동작만 개작**&#39;));assert(comparison.includes(&#39;외부 앱 호환 PASS가 아니다&#39;));assert(tasks.includes(&#39;세 기준은 조사·비교·권장 기록의 수용 기준&#39;));assert(tasks.includes(&#39;읽기 전용&#39;));const{spawnSync}=await import(&#39;node:child_process&#39;);const checked=spawnSync(process.execPath,[&#39;scripts/check-workflow.ts&#39;],{encoding:&#39;utf8&#39;});process.stdout.write(checked.stdout??&#39;&#39;);process.stderr.write(checked.stderr??&#39;&#39;);assert.equal(checked.status,0,&#39;현재 작업 계약 검사 실패&#39;);console.log(JSON.stringify({result:&#39;passed&#39;,scope:&#39;고정 원문 SHA/bytes와 실제 manifest/LICENSE/API 계약·같은UUID 조사 권장 기록의 형식/출처 정합성. 제품이식/외부앱실행/독립 의미감사가 아님&#39;,fixedOriginals:45,supplemental:1,recommendation:&#39;Ovis 부분 개작·WWW 핵심 경계 보존&#39;,unmeasured:[&#39;Windows&#39;,&#39;OS 한국어 IME&#39;,&#39;외부 앱 실행&#39;,&#39;신규 제품 이식&#39;]}));\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-research-contract-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:49:11.639Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-74c90364-0059-4a79-8abe-ef851357d252&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;bun\&quot;,args=[\&quot;test\&quot;, \&quot;test/conversations.test.ts\&quot;, \&quot;test/native-lifecycle.test.ts\&quot;, \&quot;test/native-session.test.ts\&quot;, \&quot;test/chat-state.test.ts\&quot;, \&quot;test/native-chat.test.ts\&quot;, \&quot;test/projection.test.ts\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-focused-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:04:53.926Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-2493d7b5-11d7-4918-9fff-2f282bf05a08&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;bun\&quot;,args=[\&quot;test\&quot;, \&quot;test/conversations.test.ts\&quot;, \&quot;test/native-lifecycle.test.ts\&quot;, \&quot;test/native-session.test.ts\&quot;, \&quot;test/chat-state.test.ts\&quot;, \&quot;test/native-chat.test.ts\&quot;, \&quot;test/projection.test.ts\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-focused-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:06:07.330Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d670430e-1aee-4c95-b670-0028174ec007&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;--eval&quot;,
+        &quot;import{spawnSync}from&#39;node:child_process&#39;;import{writeFileSync}from&#39;node:fs&#39;;import{randomUUID}from&#39;node:crypto&#39;;const command=\&quot;bun\&quot;,args=[\&quot;test\&quot;, \&quot;test/conversations.test.ts\&quot;, \&quot;test/native-lifecycle.test.ts\&quot;, \&quot;test/native-session.test.ts\&quot;, \&quot;test/chat-state.test.ts\&quot;, \&quot;test/native-chat.test.ts\&quot;, \&quot;test/projection.test.ts\&quot;];const start=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:&#39;utf8&#39;,maxBuffer:16*1024*1024});const base=&#39;.www/evidence/resume-20261116/chat008/official-focused-&#39;+randomUUID();writeFileSync(base+&#39;.stdout&#39;,r.stdout??&#39;&#39;);writeFileSync(base+&#39;.stderr&#39;,r.stderr??&#39;&#39;);writeFileSync(base+&#39;.process.json&#39;,JSON.stringify({command,args,cwd:process.cwd(),startedAt:start,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2)+&#39;\\n&#39;);process.stdout.write(r.stdout??&#39;&#39;);process.stderr.write(r.stderr??&#39;&#39;);console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:21:39.354Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-fec624cb-8a00-4891-bb8c-9dc1d4ef86c6&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-fec624cb-8a00-4891-bb8c-9dc1d4ef86c6/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;docs/ARCHITECTURE.md의 ‘오픈소스 채팅과 저장 대화 연결’은 복원 중 도착한 live 사건을 snapshot과 병합한다고 설명하지만, src/native-session.ts의 자동 재연결은 별도 전환 큐 없이 eventLog를 교체하고 src/chat-state.ts는 marker 이후의 live 사건만 유지한다. 따라서 snapshot에 없고 marker 전에 도착한 사건은 유실될 수 있다. comparison.md가 이 제한을 정확히 기록한 만큼 현행 아키텍처 설명에도 자동 재연결의 예외를 반영해야 한다.&quot;,
+        &quot;docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/work.json의 AC-1~AC-3 증거 요약은 이전 소스의 여러 통과 시도를 각각 ‘현재 적용 가능’으로 표시한다. 예를 들어 attempt-65b4dc98은 verification.md에서 소스 digest 123a9a15…에 연결되어 있지만 이번 검토 대상 digest는 77b92788…이다. comparison.md와 verification.md는 이후 변경에 따라 과거 통과를 현재 소스에 승격하지 않는다고 설명하므로, 원장 요약도 당시 결과와 현재 적용성을 구분해야 한다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-a138e44e-6e30-47c0-95a5-4fe6fa2aed9a&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-a138e44e-6e30-47c0-95a5-4fe6fa2aed9a/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;docs/ARCHITECTURE.md:201은 재개 정책이 Native 저장 설정을 보존한다고 설명하지만, src/conversations.ts:164는 재개 요청에 NATIVE_PERMISSIONS를 전달해 저장된 승인·sandbox 설정을 각각 never와 danger-full-access로 덮어쓴다. docs/DEVELOPMENT.md:187과 docs/specs/chat.md:137도 모델 설정만 유지하고 승인·sandbox 정책은 전환한다고 설명한다. 아키텍처 문구를 모델 설정과 권한 정책으로 구분해 수정해야 한다.&quot;,
+        &quot;검토는 제공된 inline 파일과 추가로 읽은 work.json의 앞부분, 현재성 측정 JSON 및 dashboard 관련 검색 결과를 대상으로 했다. 테스트와 네트워크 조회는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-ba1fc2ab-8493-43b2-9d54-9e81d44bcbcd&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-ba1fc2ab-8493-43b2-9d54-9e81d44bcbcd/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;src/native-lifecycle.ts:38,63의 복원 중복 필터는 완료 snapshot에 같은 thread·turn·item ID가 있으면 delta의 내용을 비교하지 않고 모두 제외한다. 예를 들어 snapshot의 답변이 \&quot;기존\&quot;이고 복원 중 큐에 같은 item의 새 delta \&quot;추가\&quot;가 들어와도 그 delta가 사라진다. 이는 이미 포함된 내용만 제외하고 변경된 내용은 보존한다는 docs/specs/chat.md의 CHAT-HISTORY-01 및 comparison.md의 설명과 다르다. test/native-lifecycle.test.ts의 해당 검사는 같은 내용의 delta 제외와 변경된 완료 항목 보존을 확인하지만, 변경된 delta는 확인하지 않는다.&quot;,
+        &quot;검토 범위는 제공된 inline 자료와 추가로 읽은 src/native-lifecycle.ts 및 src/projection.ts의 해당 부분이다. 테스트는 실행하지 않았으며, 제공된 과거 실행 기록을 현재 검토에서 재실행한 결과로 취급하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-62e6e995-7215-431a-9fc3-9c92f266aeb0&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-62e6e995-7215-431a-9fc3-9c92f266aeb0/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;src/conversations.ts:139-140은 저장된 턴 상태가 inProgress여도 unknown인 turn/completed를 생성한다. 재연결 중 새 턴이 시작되어 turns/list snapshot에 포함되고 그 turn/started와 delta가 큐에 들어온 경우, src/projection.ts:294가 snapshot의 해당 턴을 닫은 뒤 같은 턴의 live delta를 거부한다. 큐가 사건을 배출해도 진행 내용이 화면에 반영되지 않으므로, 새 turn/item의 live를 보존한다는 docs/specs/chat.md의 재연결 계약과 맞지 않는다.&quot;,
+        &quot;src/native-session.ts:838-847은 snapshot과 다른 item/completed를 배출하지만, src/projection.ts:445는 완료 답변의 빈 문자열을 기존 텍스트로 대체하고, 520행과 549행도 빈 명령 출력과 빈 변경 목록을 적용하지 않는다. 예를 들어 snapshot 답변이 &#39;기존&#39;이고 큐의 정식 완료 text가 빈 문자열이면 화면에는 &#39;기존&#39;이 남는다. 변경된 authoritative 완료를 기존 완료 경로가 처리한다는 comparison.md의 설명과 실제 동작이 다르다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle과 도구로 읽은 src/projection.ts의 관련 행이다. 테스트는 실행하지 않았고, 번들 밖의 나머지 소스와 원시 검증 로그 전체는 읽지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-0afcfd9f-6a0f-474a-b0bb-856c39b487d9&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-0afcfd9f-6a0f-474a-b0bb-856c39b487d9/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;src/native-session.ts:695의 명시적 대화 열기는 복원 중 큐에 들어온 메시지를 필터 없이 모두 재생한다. 반면 자동 재연결 경로는 같은 파일 838~847행에서 createRestoredMessageFilter를 적용한다. 저장 snapshot에 이미 완료된 턴의 늦은 turn/started가 명시적 열기 중 큐에 들어오면 393행이 activeTurnId를 다시 설정해 완료된 대화가 실행 중으로 남고 후속 전송·대화 전환이 차단될 수 있다. docs/specs/chat.md의 복원 중 terminal snapshot 경계와 비교 문서의 현행 구현 설명에도 이 차이가 반영되지 않았다. 명시적 열기에서도 완료 snapshot과 큐를 대조하고 해당 경합을 검증해야 한다.&quot;,
+        &quot;검토에는 제공된 inline 자료와 추가로 읽은 src/projection.ts, test/native-session.test.ts의 검색 결과, 작업 원장 일부 및 집중 검사 process 기록을 사용했다. 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-ae76acf4-6213-4c34-9252-c59866c116f3&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-ae76acf4-6213-4c34-9252-c59866c116f3/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;src/native-lifecycle.ts:104–108은 명시적 열기의 복원 응답 직후 interruptedThread를 해제하고 ready를 설정하지만, src/native-session.ts:678의 전환 큐 한도 검사는 그 뒤에 수행한다. 실행 중 연결이 끊긴 대화를 다시 열 때 큐가 초과되면 열기는 실패해도 같은 client·thread가 준비된 상태로 남는다. 이어 사용자가 같은 대화에 전송하면 read/resume과 snapshot 복원을 건너뛰고 turn/start를 보낼 수 있어, 초과 시 다시 열어야 한다는 계약과 맞지 않는다. 제공된 테스트는 자동 재연결 초과와 다른 대화 열기 초과를 다루지만 이 동일 대화 재시도 경계는 확인하지 않는다.&quot;,
+        &quot;src/projection.ts:239–240, 334–336은 복원한 진행 중 턴의 모든 공개 항목을 같은 방식으로 기억하고, 같은 턴의 live 시작을 받으면 각 메시지와 요약의 완료 상태를 일괄 해제한다. 예를 들어 이미 완료된 commentary 또는 공개 요약 뒤에 다른 작업이 아직 진행 중인 턴을 복원한 다음 같은 턴 시작과 완료된 항목의 늦은 delta를 받으면, 그 delta가 기존 본문에 추가되어 완료된 항목이 다시 열린다. 이는 항목 완료 뒤 늦은 delta를 무시하는 CHAT-OBSERVE-01과 충돌한다.&quot;,
+        &quot;검토 범위는 제공된 inline 선택 파일과 추가로 읽은 verification.md의 마지막 60행이다. 테스트나 명령을 실행해 동작을 재현하지 않았으며, 위 판단은 소스 경로와 제공된 테스트를 대조한 결과다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-6714dd3d-9aca-4f6c-8912-3f294687f7f5&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-6714dd3d-9aca-4f6c-8912-3f294687f7f5/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;src/native-session.ts:376: 대화 A에서 B를 여는 동안 A의 사건은 후보 thread가 아니라는 이유로 버려진다. B의 read/resume이 실패하면 A의 선택과 소유권은 유지되지만, 전환 중 A에 도착한 turn/started 또는 승인 요청은 처리되지 않는다. 이후 A가 실행이나 승인 대기 중인데도 새 요청을 허용할 수 있다.&quot;,
+        &quot;src/projection.ts:606, src/projection.ts:673: 파일 변경 완료의 changes 배열에 유효한 항목과 잘못된 항목이 섞이면 잘못된 항목만 제거한 부분 목록으로 기존 변경 목록을 덮어쓴다. 예를 들어 기존 목록 뒤에 changes가 [{path: \&quot;new.ts\&quot;}, null]로 오면 기존 목록은 보존되지 않는다. 이는 malformed 목록을 보존한다는 comparison.md의 설명보다 넓은 처리다.&quot;,
+        &quot;src/projection.ts:313: turn/completed는 실행 중인 명령을 결과 미확인으로 닫지만 실행 중인 fileChange는 닫지 않는다. item/started(fileChange) 다음 개별 item/completed 없이 turn/completed가 오면 파일 행이 계속 running으로 남는다.&quot;,
+        &quot;src/conversations.ts:94: 저장된 reasoning summary에서 문자열만 걸러내므로 [\&quot;공개 조각\&quot;, 42] 같은 잘못된 배열이 유효한 요약으로 표시된다. 실시간 투영은 배열 전체를 검증해 같은 입력을 거부하므로 복원 경로가 CHAT-OBSERVE-01의 잘못된 summary 처리와 일치하지 않는다.&quot;,
+        &quot;제공된 inline 소스·문서·테스트와 verification.md의 마지막 60행, 관련 소스 행을 읽어 판단했다. 테스트는 직접 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-4190525e-3c0e-42dc-95ba-20a27bd4ba51&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-4190525e-3c0e-42dc-95ba-20a27bd4ba51/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;src/native-session.ts:392-412, 717-723와 src/projection.ts:312-348: 복원 snapshot의 terminal turn을 거르는 필터는 복원 중 보관한 큐에만 적용된다. 복원 완료 후 같은 turn의 늦은 turn/started가 도착하면 activeTurnId와 화면 상태가 다시 실행 중이 되어 새 전송과 대화 전환이 차단된다. 이는 comparison.md의 terminal turn에 대한 늦은 시작 억제 설명보다 좁은 동작이다.&quot;,
+        &quot;src/native-session.ts:173-175, 392-400, 451-453: A에서 B를 여는 중 A의 turn/started를 큐에 넣은 뒤 한도를 초과하고 A의 turn/completed가 유실되면, 실패 처리에서 보관된 시작을 배출해 activeTurnId를 설정하지만 lifecycle.closed는 이를 지우지 않는다. 연결은 살아 있고 대화 재열기도 assertConversationIdle에 막혀, 문서가 제시한 재열기 복구 경로를 사용할 수 없다. test/native-session.test.ts:884-910의 한도 초과 회귀는 승인 사건만 다뤄 이 순서를 확인하지 않는다.&quot;,
+        &quot;src/projection.ts:112-119와 src/renderer.tsx:194-199: fileChange가 declined로 종료되고 다른 실패나 미확인 항목이 없으면 결과 요약에 &#39;관측된 실행 차단 없음&#39;이 표시된다. declined는 failed와 unresolved 어느 집계에도 포함되지 않아, 개별 카드의 &#39;거절&#39; 표시와 결과 요약이 모순된다.&quot;,
+        &quot;검토는 제공된 inline 대상 소스·문서와 읽기 도구로 확인한 테스트 및 verification.md 일부에 한정했다. 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-f670b571-8a5b-4903-b263-d6d1f62d020b&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-f670b571-8a5b-4903-b263-d6d1f62d020b/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;src/native-session.ts:407, 602, 764 — 새 대화 또는 프로젝트 전환의 clear 구간에는 candidate와 previous가 모두 null이어서 현재 대화의 사건도 보관하지 않고 버린다. 전환 대기 중 현재 대화의 turn/started나 승인 요청이 도착하면 activeTurnId와 승인 목록이 갱신되지 않아, 실행·승인이 생겼는데도 전환이 진행되거나 전환 실패 후 기존 화면에서 해당 사건이 사라질 수 있다.&quot;,
+        &quot;src/native-session.ts:892, 929 및 src/native-lifecycle.ts:129 — 자동 재연결 복원 중 큐가 2,000건 또는 4 MiB를 초과하면 첫 전송은 실패하지만 finally가 큐를 버리고, 자동 복원 경로는 unacceptedOpen이나 interruptedThread를 설정하지 않는다. 따라서 다음 전송 시 명시적 재열기 없이 자동 복원을 다시 시도하고 turn/start까지 진행할 수 있어, comparison.md의 초과 후 명시적 재열기까지 전송을 차단한다는 설명과 다르다.&quot;,
+        &quot;src/projection.ts:423, 452 — 공개 reasoning 요약의 완료 snapshot을 처리할 때 기존 조각을 모두 삭제하고 완료 사건 위치에 다시 추가한다. 요약 delta A → 명령 시작 → 요약 delta B → 완료 snapshot 순서라면 원래 명령 앞에 있던 A까지 명령 뒤로 이동해 실행과 설명의 시간 순서가 왜곡된다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle의 11개 파일과 읽기 도구로 확인한 소스 일부 및 verification.md 마지막 60행이다. 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-fed39d8a-890a-42f2-b888-5f0fda06e339&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-fed39d8a-890a-42f2-b888-5f0fda06e339/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;src/native-activity.ts:571, 698 — 턴 종료 뒤의 늦은 item/started는 commentary만 차단한다. 예를 들어 turn/completed 이후 같은 턴에 처음 보는 commandExecution 또는 fileChange의 item/started가 도착하면 새 ActivityEntry가 running으로 생성되고 다시 닫히지 않는다. 채팅 투영의 종료 경계와 달리 상세 모니터에는 종료된 턴의 실행이 진행 중으로 남을 수 있다.&quot;,
+        &quot;docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/comparison.md:15, 51 및 spec.md:23 — sameWorkspace가 Windows drive와 UNC 경로를 거부한다고 단정한다. src/conversations.ts:56은 실행 플랫폼의 node:path isAbsolute와 resolve를 사용하며, test/conversations.test.ts:238 이후의 win32 주입 사례도 해당 절대경로를 수용하도록 작성돼 있다. 실제 Windows 실행 여부는 별도 미검증으로 남겨야 한다.&quot;,
+        &quot;docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/spec.md:27 — Terra8이 지적한 두 결함의 수정과 새 검증이 아직 남았다고 현재 상태로 적지만, comparison.md:85는 같은 결함을 수정하고 집중 검증했다고 기록한다. 현재 조사 상태와 남은 조건을 판단할 수 있도록 두 문서를 일치시켜야 한다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle과 관련 위치를 확인한 읽기 전용 검색 결과다. 별도 실행 로그는 읽지 않았으며 테스트를 실행하지 않았다.&quot;
+      ]
+    }
+  ],
+  &quot;omitted&quot;: {
+    &quot;criteria&quot;: 0,
+    &quot;evidence&quot;: 26,
+    &quot;verifications&quot;: 12,
+    &quot;reviews&quot;: 3,
+    &quot;arguments&quot;: 36,
+    &quot;findings&quot;: 17,
+    &quot;unresolved&quot;: 3
+  }
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;오픈소스 후보 조사와 부분 재사용 권장을 같은 UUID와 현재 v5 소스의 실행 증거로 다시 확인했다. 현재 실제 독립 검토는 미실행으로 남겼다. 현재 미해결 지적·기본 검사 실패·증거 공백을 보존하여 부분 결과로 보고하며 업무 완료를 선언하지 않는다.&quot;,
+  &quot;before&quot;: &quot;기존 소스의 검증 수와 과거 감사 결과가 여러 시점에 섞여 있었다. 실제 새 반례를 그대로 남기고 소스·기준·직접 요청과 증거의 현재성을 다시 구분해야 했다.&quot;,
+  &quot;after&quot;: &quot;현재 UUID의 등록 검사와 전용 GUI/직접 기능 원문을 회수했고 외부 정본의 문서 영향 검토를 연결했다. 실제 감사 지적과 미실행 한계를 분리하고 후속 최소 수정·독립 반박은 준비 단계로 남겼다.&quot;,
+  &quot;changes&quot;: [
+    &quot;v4의 main quota 생략/null, A/B/A 늦은 delta, 복원 enriched 완료와 혼합 summary 경계를 공식 저작 전후 검사로 교정했다.&quot;,
+    &quot;v5 같은 UUID의 실제 실행·원문·source/criteria 식별과 문서 검토·감사 상태를 다시 연결했다.&quot;,
+    &quot;새 반례는 실제 원문과 별도 수정 준비에 남겼고 과거 실패를 삭제하거나 새 PASS로 바꾸지 않았다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;현재 관측 가능한 입력·행동만 해당 검사 범위로 연결하고 전체 의미 수용은 실제 독립 검토·공식 core 판정과 구분했다.&quot;,
+    &quot;제품·테스트의 추가 변경은 Root 공식 pre/post와 독립 반박 판정 뒤 수행하며 기준·검사 권한·일반 검토 정책을 약화하지 않는다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;실제 Electron GUI는 합성 Native subprocess이며 실제 모델·실계정·OS IME·Windows 검증으로 확대하지 않는다.&quot;,
+    &quot;등록 검사·직접 관측·의미 검토·업무 완료는 별도이며 artifact 존재만으로 기준을 PASS로 강제하지 않는다.&quot;,
+    &quot;등록 기본5초 집중 명령은 실패했다. 같은 입력·모든 assertions의 별도30초 직접 기능 검사는 통과했지만 기본 명령 PASS를 대체하지 않는다. 대량 원장 수집 비용은 미해결 위험이다.&quot;,
+    &quot;전용 Chat GUI 첫 실행은 전환 중 activity:resources 조회 거절로 실패했다. 같은 소스의 재시도와 타이밍 원인 판정은 Root가 소유하며 이 보고서에서 성공으로 쓰지 않는다.&quot;,
+    &quot;추가 감사는 Root의 최종 저작 동결 지시에 따라 시작하지 않았다. 과거 PASS를 현재 검토로 재사용하지 않는다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;Root의 반박 검토로 지적의 유효 범위와 최소 수정 범위를 확정한다.&quot;,
+    &quot;추가 수정 후 최종 소스에서 직접 영향 검사·문서 영향·고유 독립 검토를 한 번 다시 회수한다.&quot;,
+    &quot;현재 공식 완료 판정·read/status의 부족 조건을 그대로 남기고 모든 필수 조건이 충족하기 전에는 done으로 올리지 않는다.&quot;
+  ]
+}</pre></div></details></section></article></div></main></body></html>
