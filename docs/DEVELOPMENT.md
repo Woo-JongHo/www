@@ -77,6 +77,12 @@ TypeScript·Python·strict JSON·YAML 작성은 파일별 `guide --file <파일>
 
 `NO_GROUPS`는 검사기가 읽은 범위만 표시하며 전체 가독성 PASS 근거가 아니다. 미지원 언어는 미지원으로 보고하고 승인되지 않은 형태를 수동 공백 정렬·format·align으로 우회하지 않는다. align이나 formatter는 별도 명시 승인 없이 실행하지 않는다. 현재 승인되지 않은 BoxBox 형태는 별도 미해결 사항이며 TypeScript 전환만으로 모든 스타일 개선이 완료됐다고 쓰지 않는다. 실제 호스트가 guide·사전 검사 context를 수용했는지도 실행 근거로 확인하며 전역 자동 훅의 활성화를 주장하지 않는다.
 
+### 제품 검사와 BoxBox 외부 도구 검사
+
+`npm test`는 제품 테스트를 실행하며 `test/boxbox/`의 외부 도구 통합 검사는 포함하지 않는다. `test/work-json.test.ts`의 직렬화·보고서·크기 제한·보존 검사는 제품 검사에 그대로 남는다. BoxBox 승인 원본과 실제 CLI 왕복 검사는 `test/boxbox/work-json.test.ts`에 보존하며 `npm run test:boxbox`로만 명시 실행한다. 이 명령도 공식 런처의 프로젝트 mode가 `off`이면 `disabled`를 표시하고 비성공 종료하며 외부 테스트를 실행하지 않는다. 도구 오류나 알 수 없는 mode도 실패로 처리한다. 비활성화를 테스트 PASS로 세지 않는다.
+
+`bun test`를 인자 없이 직접 실행하면 Bun 자체의 자동 탐색이 외부 도구 검사까지 찾을 수 있다. 전체 제품 검사는 `npm test`를 사용한다. Reports 공식 복합 검사는 기존 `test/work-json.test.ts` 경로와 Task에 등록된 argv를 유지하므로, 새 권한 갱신 없이 실제 실행 결과를 기존 UUID의 `verifyWork`에 기록할 수 있다. 외부 도구 검사 분리는 기능 기준·필수 GUI·독립 감사의 생략을 뜻하지 않는다.
+
 ### 제품 파일과 전송 경계
 
 - `src/main.ts`: Electron 생명주기, 공유 원장·프로젝트 registry, 세션 생성·종료·IPC 라우팅
