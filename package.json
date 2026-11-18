@@ -15,7 +15,7 @@
     "workflow:work": "node scripts/workflow/work.ts",
     "check:workflow": "node scripts/check-workflow.ts",
     "tauri": "npm --prefix spikes/tauri run tauri",
-    "test:comparison": "npm test && npm run build:tauri-ui && \"$HOME/.cargo/bin/cargo\" test --manifest-path spikes/tauri/src-tauri/Cargo.toml",
+    "test:comparison": "npm test && npm run build:tauri-ui && cargo test --manifest-path spikes/tauri/src-tauri/Cargo.toml",
     "typecheck": "tsc --noEmit && tsc --project tsconfig.tools.json",
     "test": "node scripts/test.ts",
     "test:boxbox": "node scripts/test.ts --boxbox",
