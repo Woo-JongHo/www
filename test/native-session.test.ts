@@ -981,10 +981,16 @@ for (const limit of ["count", "bytes"] as const) test(`A started 뒤 ${limit} ov
     await a.invoke("conversations:open", [selected(a), "history-a"]);
     const opening = a.invoke("conversations:open", [selected(a), "history-b"]);
     inject(s.children[0]!, "turn/started", { threadId: "history-a", turn: { id: "lost-end" } });
-    if (limit === "count") for (let i = 0; i < 2000; i++) inject(s.children[0]!, "item/completed", command("history-a", `overflow-${i}`));
-    else for (let i = 0; i < 2; i++) inject(s.children[0]!, "item/agentMessage/delta", { threadId: "history-a", turnId: "lost-end", itemId: "x", delta: "x".repeat(2 * 1024 * 1024) });
+    // 텍스트 조각으로 보관 한도를 재현해 도구 관측의 원장 부하는 분리한다.
+    const chunks = limit === "count" ? { count: 2000, delta: "x" } : { count: 2, delta: "x".repeat(2 * 1024 * 1024) };
+    for (let i = 0; i < chunks.count; i++) {
+      inject(s.children[0]!, "item/agentMessage/delta", { threadId: "history-a", turnId: "lost-end", itemId: "x", delta: chunks.delta });
+    }
     inject(s.children[0]!, "turn/completed", { threadId: "history-a", turn: { id: "lost-end", status: "completed" } });
     await expect(opening).rejects.toThrow("보관 한도");
+    const replayed = s.events.filter(event => event.method === "item/agentMessage/delta"
+      && (event.params as { turnId?: string })?.turnId === "lost-end");
+    expect(replayed).toHaveLength(chunks.count - 1);
     expect(a.summary()).toMatchObject({ threadId: "history-a", busy: false, approvalCount: 0 });
     await expect(a.invoke("turn:start", [selected(a), "history-a", "차단 요청"])).rejects.toThrow("다시 열어");
     const events = await a.invoke("events:get", [selected(a)]) as ScopedAppEvent[];
