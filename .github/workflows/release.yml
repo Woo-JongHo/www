@@ -29,8 +29,8 @@ jobs:
       - name: 공개 BoxBox headless 설치
         run: |
           export XDG_DATA_HOME="$RUNNER_TEMP/boxbox-engine"
-          npm exec --yes --package=boxbox-plugin@0.2.8 -- boxbox --engine-only
-          echo "BOXBOX_CI_ROOT=$XDG_DATA_HOME/boxbox/codex/0.2.8" >> "$GITHUB_ENV"
+          npm exec --yes --package=boxbox-plugin@0.2.9 -- boxbox --engine-only
+          echo "BOXBOX_CI_ROOT=$XDG_DATA_HOME/boxbox/codex/0.2.9" >> "$GITHUB_ENV"
       - run: npm run setup:ci
       - run: npm run release:check
       - name: 검증과 패키징
