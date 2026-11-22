@@ -14,14 +14,14 @@ import { createReportService } from "./reports-service";
 import type { createNativeReportHarness } from "./native-reports";
 import { NativeCompletionCollector } from "./native-report-input";
 import { resolveNativeCodex } from "./native-command";
-import { nativeThreadStartParams, nativeTurnSteerParams, WWW_STAGE_TOOL } from "./native-chat";
-import { parseWwwDevelopmentStage } from "./www-activity";
+import { nativeThreadStartParams, nativeTurnSteerParams, WWW_HARNESS_TOOL, WWW_PLAN_TOOL, WWW_STAGE_TOOL } from "./native-chat";
+import { parseWwwDevelopmentStage, parseWwwHarnessAttempt, parseWwwPlanLink, requestedWwwPlanWorkIds } from "./www-activity";
 import { createNativeLifecycle, createRestoredMessageFilter } from "./native-lifecycle";
 import { createNativeTiming } from "./native-timing";
 import { parseHooksListResponse, parseSkillsListResponse } from "./activity-sidebar";
 import type { ActivityLedger } from "./activity-ledger";
 import { createProjectRegistry } from "./projects";
-import { readDashboard, readDashboardWork } from "./dashboard";
+import { readDashboard, readDashboardPlan, readDashboardWork } from "./dashboard";
 import { readRpaStandard } from "./rpa-standard";
 import { normalizeNativeResources } from "./native-activity";
 import type { AppEvent, ScopedAppEvent, SelectionRef, WorkspaceSelection, ResourceScope, ResourceSnapshot, RpcId, NativeSessionSummary, NativeReportJob, WorkReportDocument } from "./shared";
@@ -103,9 +103,12 @@ export function createNativeSession(options: NativeSessionOptions) {
   let uncertainSelection: { threadId: string; epoch: number } | null = null;
   let developmentBinding: { client: JsonRpcClient; root: string; threadId: string } | null = null;
   let developmentQueue = Promise.resolve();
-  const developmentCalls = new Map<string, string>();
-  const developmentAttempts = new Map<string, string>();
+  const developmentCalls = new Map<string, { signature: string; message: string }>();
+  const developmentAttempts = new Map<string, { status: string; eventId: string | null; observed: boolean }>();
   const latestDevelopmentAttempts = new Map<string, string>();
+  const declaredDevelopmentWorks = new Set<string>();
+  const requestedDevelopmentWorks = new Set<string>();
+  let pendingPlanSteer: Promise<void> | null = null;
 
   let reportRepository : string | null                                       = null ;
   let nativeReports    : ReturnType<typeof createNativeReportHarness> | null = null ;
@@ -344,10 +347,15 @@ export function createNativeSession(options: NativeSessionOptions) {
   function developmentAvailable(): boolean {
     try { return realpathSync(workspace) === realpathSync(options.wwwRoot); } catch { return false; }
   }
+  function publishPlanAmbiguity(turnId: string, reason?: "steer_uncertain"): void {
+    publish({ kind: "notification", method: "www/planAmbiguous", params: { threadId: activeThreadId, turnId, source: "work_document", reason } });
+  }
   function observeDevelopmentCall(client: JsonRpcClient, requestId: RpcId, raw: unknown): void {
     const expected = selection();
     const params = optionalRecord(raw);
-    const stage = parseWwwDevelopmentStage(params?.arguments);
+    const stage = params?.tool === WWW_STAGE_TOOL.name ? parseWwwDevelopmentStage(params.arguments) : null;
+    const plan = params?.tool === WWW_PLAN_TOOL.name ? parseWwwPlanLink(params.arguments) : null;
+    const observation = params?.tool === WWW_HARNESS_TOOL.name ? parseWwwHarnessAttempt(params.arguments) : null;
     const binding = developmentBinding;
     const turnId = activeTurnId;
     const valid = () => isCurrent(expected) && rpc === client && developmentBinding === binding && binding?.client === client
@@ -355,17 +363,49 @@ export function createNativeSession(options: NativeSessionOptions) {
       && !!turnId && params?.turnId === turnId && activeTurnId === turnId && !endedTurns.has(`${activeThreadId}:${turnId}`);
     developmentQueue = developmentQueue.then(async () => {
       let success = false;
-      let message = "단계 선언을 수용하지 않았습니다. 현재 연결·작업 UUID·공개 입력 형식을 확인하세요.";
+      let message = "관측 요청을 수용하지 않았습니다. 현재 연결·작업 UUID·공개 입력 형식을 확인하세요.";
       try {
-        if (!stage || !valid() || params?.tool !== WWW_STAGE_TOOL.name || (params.namespace !== undefined && params.namespace !== null)
+        if (plan && pendingPlanSteer) await pendingPlanSteer;
+        if (!turnId || (!stage && !plan && !observation) || !valid() || !params || (params.namespace !== undefined && params.namespace !== null)
           || typeof params.callId !== "string" || !params.callId || params.callId.length > 200) throw new Error("invalid_development_observation");
         const callKey = JSON.stringify([expected.selectionEpoch, connectionGeneration, params.callId]);
-        const signature = JSON.stringify([turnId, stage]);
+        const signature = JSON.stringify([turnId, params.tool, stage ?? plan ?? observation]);
         const priorCall = developmentCalls.get(callKey);
-        if (priorCall !== undefined) {
-          if (priorCall !== signature) throw new Error("reused_development_call");
-          success = true;
-        } else {
+        if (priorCall) {
+          if (priorCall.signature !== signature) throw new Error("reused_development_call");
+          message = priorCall.message;
+        } else if (plan) {
+          const conflictingDeclaration = requestedDevelopmentWorks.size > 0
+            && ![...declaredDevelopmentWorks].every(id => requestedDevelopmentWorks.has(id));
+          if (requestedDevelopmentWorks.size > 1 || conflictingDeclaration) {
+            publishPlanAmbiguity(turnId);
+            message = "현재 턴의 작업 UUID를 하나로 정할 수 없어 계획을 연결하지 않았습니다.";
+            throw new Error("ambiguous_plan_work");
+          }
+          if (!requestedDevelopmentWorks.has(plan.workId)) {
+            message = "현재 턴에서 사용자가 /plan으로 지정한 작업 UUID가 필요합니다.";
+            throw new Error("unlinked_plan_work");
+          }
+          const result = await readDashboardPlan({ key: expected.workspaceKey, name: "WWW", path: workspace, kind: "www" }, plan.workId, plan.sha256)
+            .catch(() => ({ ...plan, path: null, status: "failed" as const, content: null }));
+          if (!valid()) throw new Error("stale_plan_link");
+          publish({ kind: "notification", method: "www/planLinked", params: { threadId: activeThreadId, turnId, source: "work_document", ...result } });
+          message = result.status === "available" ? "현재 턴에 확인한 계획 문서 버전을 연결했습니다."
+            : result.status === "changed" ? "계획 문서의 버전이 달라졌습니다. 다시 확인하세요."
+            : result.status === "missing" ? "현재 작업의 계획 문서가 없습니다." : "현재 작업의 계획 문서를 읽지 못했습니다.";
+        } else if (observation) {
+          const workKey = JSON.stringify([activeThreadId, turnId, observation.workId]);
+          const attemptKey = JSON.stringify([workKey, observation.phase, observation.attemptId]);
+          const attempt = developmentAttempts.get(attemptKey);
+          if (!attempt?.eventId || latestDevelopmentAttempts.get(workKey) !== attemptKey) throw new Error("unlinked_harness_attempt");
+          if (!attempt.observed) {
+            const receipt = await development.harnessReceipt(observation.workId, observation.phase, attempt.eventId);
+            if (!valid() || !receipt || latestDevelopmentAttempts.get(workKey) !== attemptKey) throw new Error("unconfirmed_harness_execution");
+            attempt.observed = true;
+            publish({ kind: "notification", method: "www/harnessObserved", params: { threadId: activeThreadId, turnId, source: "workflow_receipt", ...observation, outcome: receipt.outcome, completedAt: receipt.completedAt } });
+          }
+          message = "같은 턴의 공식 실행 영수증을 확인했습니다. 업무 수용은 별도 판정입니다.";
+        } else if (stage) {
           // main이 승인한 현재 저장소만 안전하게 읽는다. 불완전한 목록에서는 UUID 유일성을 추측하지 않는다.
           const snapshot = await readDashboard([{ key: expected.workspaceKey, name: "WWW", path: workspace, kind: "www" }]);
           const project = snapshot.projects[0];
@@ -374,16 +414,19 @@ export function createNativeSession(options: NativeSessionOptions) {
           const attemptKey = JSON.stringify([workKey, stage.phase, stage.attemptId]);
           const prior = developmentAttempts.get(attemptKey);
           if (prior && latestDevelopmentAttempts.get(workKey) !== attemptKey) throw new Error("superseded_development_attempt");
-          if (prior && !["selected", "running"].includes(prior) && prior !== stage.status) throw new Error("settled_development_attempt");
-          if (prior === "running" && stage.status === "selected") throw new Error("reversed_development_attempt");
-          developmentCalls.set(callKey, signature);
-          developmentAttempts.set(attemptKey, stage.status);
+          if (prior && !["selected", "running"].includes(prior.status) && prior.status !== stage.status) throw new Error("settled_development_attempt");
+          if (prior?.status === "running" && stage.status === "selected") throw new Error("reversed_development_attempt");
+          const eventId = prior?.eventId ?? (["selected", "running"].includes(stage.status) ? `www-chat-${randomUUID()}` : null);
+          developmentAttempts.set(attemptKey, { status: stage.status, eventId, observed: prior?.observed ?? false });
           latestDevelopmentAttempts.set(workKey, attemptKey);
-          if (prior !== stage.status) publish({ kind: "notification", method: "www/developmentStage", params: { threadId: activeThreadId, turnId, source: "role_declaration", ...stage } });
-          success = true;
+          declaredDevelopmentWorks.add(stage.workId);
+          if (prior?.status !== stage.status) publish({ kind: "notification", method: "www/developmentStage", params: { threadId: activeThreadId, turnId, source: "role_declaration", ...stage } });
+          message = "공개 역할 선언을 관측했습니다. 하네스 실행·검증·업무 수용은 이 선언으로 확인하지 않습니다."
+            + (eventId ? ` 현재 시도 실행 ID: ${eventId}` : "");
         }
-        message = "공개 역할 선언을 관측했습니다. 하네스 실행·검증·업무 수용은 확인하지 않았으며 원장을 변경하지 않았습니다.";
-      } catch { /* 거부한 선언은 실제 단계 사건으로 게시하지 않는다. */ }
+        if (!priorCall) developmentCalls.set(callKey, { signature, message });
+        success = true;
+      } catch { /* 거부한 입력은 관측 사건으로 게시하지 않는다. */ }
       await client.respond(requestId, { success, contentItems: [{ type: "inputText", text: message }] });
     }).catch((error: unknown) => { console.warn("단계 관측 응답 전송 실패", String(error)); });
   }
@@ -408,6 +451,7 @@ export function createNativeSession(options: NativeSessionOptions) {
     const root = workspace;
     const valid = () => !stopping && token === clientToken && workspace === root;
     connectionGeneration += 1;
+    transport = "disconnected";
     const pending: Promise<JsonRpcClient> = new Promise<JsonRpcClient>((resolveClient, reject) => {
       const child = options.spawnNative ? options.spawnNative(workspace) : spawn(resolveNativeCodex(), ["app-server"], { cwd: workspace, stdio: ["pipe", "pipe", "pipe"] });
       nativeChildren.add(child);
@@ -447,7 +491,7 @@ export function createNativeSession(options: NativeSessionOptions) {
       const receiveMessage = (message: RpcMessage) => {
         if (!valid()) return;
         // 이 사건은 검증한 도구 요청만 main이 생산한다. Native의 동명 알림을 신뢰하지 않는다.
-        if (message.method === "www/developmentStage") return;
+        if (message.method === "www/developmentStage" || message.method === "www/planLinked" || message.method === "www/planAmbiguous" || message.method === "www/harnessObserved") return;
         if (message.method === "item/tool/call" && (typeof message.id === "string" || typeof message.id === "number")) {
           observeDevelopmentCall(client, message.id, message.params);
           return;
@@ -925,7 +969,9 @@ export function createNativeSession(options: NativeSessionOptions) {
     const path = await options.chooseDirectory("프로젝트 폴더 선택", true);
     assertSelection(expected);
     if (!path) return null;
-    return switchWorkspace(expected, path);
+    const selected = realpathSync(path);
+    if (selected === workspace) return null;
+    return switchWorkspace(expected, selected);
   });
   handle("thread:start", async (_event, expected: unknown) => {
     assertSelection(expected);
@@ -955,6 +1001,8 @@ export function createNativeSession(options: NativeSessionOptions) {
       developmentCalls.clear();
       developmentAttempts.clear();
       latestDevelopmentAttempts.clear();
+      declaredDevelopmentWorks.clear();
+      requestedDevelopmentWorks.clear();
       finishThreadTransition();
       void currentResources(expected).catch((error: unknown) => {
         console.warn(error);
@@ -1041,6 +1089,9 @@ export function createNativeSession(options: NativeSessionOptions) {
     developmentCalls.clear();
     developmentAttempts.clear();
     latestDevelopmentAttempts.clear();
+    declaredDevelopmentWorks.clear();
+    requestedDevelopmentWorks.clear();
+    for (const workId of requestedWwwPlanWorkIds(prompt)) requestedDevelopmentWorks.add(workId);
     let startedClient: JsonRpcClient | null = null;
     let reconnectTransition: ThreadTransition | null = null;
     let promptPublished = false;
@@ -1116,6 +1167,9 @@ export function createNativeSession(options: NativeSessionOptions) {
     const client = rpc;
     if (!client || thread !== activeThreadId || turn !== activeTurnId) throw new Error("현재 실행 중인 턴을 확인할 수 없습니다.");
     const params = { threadId: thread, turnId: turn, clientUserMessageId: id, text };
+    const planWorkIds = requestedWwwPlanWorkIds(text);
+    let releasePlanSteer = () => {};
+    const planDecision = planWorkIds.length ? new Promise<void>(resolve => { releasePlanSteer = resolve; }) : null;
     steerIds.add(id);
     steering = true;
     let sent = false;
@@ -1123,6 +1177,7 @@ export function createNativeSession(options: NativeSessionOptions) {
       publish({ kind: "notification", method: "turn/steerPending", params });
       assertSelection(expected);
       if (rpc !== client || activeThreadId !== thread || activeTurnId !== turn || lifecycle.approvalCount > 0 || interruptingTurn !== null) throw new Error("추가 지시 전송 전에 실행 상태가 변경됐습니다.");
+      if (planDecision) pendingPlanSteer = planDecision;
       sent = true;
       let timer: ReturnType<typeof setTimeout> | undefined;
       let value: unknown;
@@ -1134,15 +1189,30 @@ export function createNativeSession(options: NativeSessionOptions) {
       } finally { if (timer) clearTimeout(timer); }
       if (!isCurrent(expected) || rpc !== client) throw new RpcClosedError("추가 지시 접수 여부를 확인할 수 없습니다.", true);
       if (optionalRecord(value)?.turnId !== turn) throw new RpcClosedError("추가 지시 응답의 턴이 일치하지 않습니다.", true);
+      if (activeThreadId === thread && activeTurnId === turn && planWorkIds.length) {
+        for (const workId of planWorkIds) requestedDevelopmentWorks.add(workId);
+        if (requestedDevelopmentWorks.size > 1 || [...declaredDevelopmentWorks].some(workId => !requestedDevelopmentWorks.has(workId))) {
+          publishPlanAmbiguity(turn);
+        }
+      }
       publish({ kind: "notification", method: "turn/steerAccepted", params });
       return { turnId: turn };
     } catch (error) {
       if (isCurrent(expected) && activeThreadId === thread) {
         const uncertain = sent && error instanceof RpcClosedError && error.uncertain;
+        if (uncertain && rpc === client && activeTurnId === turn && planWorkIds.some(workId => !requestedDevelopmentWorks.has(workId))) {
+          publishPlanAmbiguity(turn, "steer_uncertain");
+        }
         publish({ kind: "notification", method: uncertain ? "turn/steerUncertain" : "turn/steerFailed", params: { ...params, message: String(error) } });
       }
       throw error;
-    } finally { steering = false; }
+    } finally {
+      if (planDecision) {
+        if (pendingPlanSteer === planDecision) pendingPlanSteer = null;
+        releasePlanSteer();
+      }
+      steering = false;
+    }
   });
   handle("turn:interrupt", async (_event, expected: unknown, threadId: unknown, turnId: unknown) => {
     assertSelection(expected);

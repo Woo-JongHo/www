@@ -35,13 +35,47 @@ export const WWW_STAGE_TOOL = {
 };
 
 const WWW_STAGE_INSTRUCTIONS = "www_development_stage 도구가 실제 제공된 경우에만, WWW 개발 역할로 현재 작업 UUID를 확인하고 정본 역할·스킬에 따라 단계를 선택·시작·종료할 때 이 도구로 공개 phase/status/workId/attemptId를 선언하세요. 도구가 없으면 호출을 만들어 내지 마세요. 같은 시도는 attemptId를 유지하고 재시도는 새 식별자를 사용하세요. 문서 읽기만으로 단계 적용을 선언하지 마세요. completed는 해당 절차의 저자 선언이며 하네스 실행이나 업무 수용·게시 완료를 뜻하지 않습니다. 비공개 reasoning이나 다른 내부 필드를 전달하지 마세요.";
+export const WWW_HARNESS_TOOL = {
+  type: "function",
+  name: "www_observe_harness",
+  description: "같은 턴에서 실행한 공식 WWW 하네스의 종료 영수증을 읽기 전용으로 관측합니다.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      workId: WWW_STAGE_TOOL.inputSchema.properties.workId,
+      phase: WWW_STAGE_TOOL.inputSchema.properties.phase,
+      attemptId: WWW_STAGE_TOOL.inputSchema.properties.attemptId,
+    },
+    required: ["workId", "phase", "attemptId"],
+    additionalProperties: false,
+  },
+};
+
+const WWW_HARNESS_INSTRUCTIONS = "현재 턴에서 사용자가 승인한 공식 WWW 하네스를 실행할 때는 단계 선언 응답의 실행 ID를 node scripts/workflow.ts 옵션의 eventId로 사용하세요. 이 ID는 실행 승인이 아닙니다. 명령이 종료된 뒤 제공된 www_observe_harness 도구에 같은 workId·phase·attemptId를 전달하세요. 명령 실행이 없으면 호출하지 마세요.";
+
+export const WWW_PLAN_TOOL = {
+  type: "function",
+  name: "www_link_plan",
+  description: "사용자 입력의 첫 줄에 /plan <작업 UUID>가 있을 때 해당 WWW 작업의 tasks.md를 읽기 전용으로 Plan에 연결합니다. 사용자 요청에 지정된 작업 UUID와 원문 SHA-256을 전달하세요.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      workId: { type: "string", description: "현재 저장소 docs/work에 실재하는 작업 UUID" },
+      sha256: { type: "string", description: "현재 작업 tasks.md 원문 바이트의 소문자 SHA-256" },
+    },
+    required: ["workId", "sha256"],
+    additionalProperties: false,
+  },
+};
+
+const WWW_PLAN_INSTRUCTIONS = "사용자가 현재 WWW 작업의 계획 문서 연결을 명시적으로 요청하고 www_link_plan 도구가 제공되면, 작업 UUID와 같은 폴더의 tasks.md 원문 바이트의 SHA-256을 확인해 전달하세요. 파일을 읽거나 작성했다는 이유만으로 호출하지 마세요. 문서가 바뀌면 버전을 다시 확인하세요.";
 
 export function nativeThreadStartParams(cwd: string, developmentStage = false) {
   return {
     cwd,
     ...NATIVE_PERMISSIONS,
-    developerInstructions : NATIVE_PROGRESS_INSTRUCTIONS + (developmentStage ? ` ${WWW_STAGE_INSTRUCTIONS}` : ""),
-    ...(developmentStage ? { dynamicTools: [WWW_STAGE_TOOL] } : {}),
+    developerInstructions : NATIVE_PROGRESS_INSTRUCTIONS + (developmentStage ? ` ${WWW_STAGE_INSTRUCTIONS} ${WWW_HARNESS_INSTRUCTIONS} ${WWW_PLAN_INSTRUCTIONS}` : ""),
+    ...(developmentStage ? { dynamicTools: [WWW_STAGE_TOOL, WWW_PLAN_TOOL, WWW_HARNESS_TOOL] } : {}),
   };
 }
 

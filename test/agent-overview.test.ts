@@ -24,6 +24,61 @@ function call(seq: number, overrides: object = {}, method = "item/started", hist
 }
 
 describe("WWW Agent 개요", () => {
+  test("공식 실행 영수증을 같은 턴의 최신 단계 시도와만 결속한다", () => {
+    const workId = "work-36d312bc-a767-4e3e-a581-01898b35f75f";
+    const stage = { threadId: "t", turnId: "a", workId, phase: "verify", attemptId: "first" };
+    const declaration = event(2, "www/developmentStage", { ...stage, source: "role_declaration", status: "running" });
+    const data = { ...stage, source: "workflow_receipt", outcome: "passed", completedAt: "2026-11-22T12:30:00.000Z" };
+    const execution = event(3, "www/harnessObserved", data);
+    const basis = (rows: AppEvent[]) => projectAgentOverview(rows, "t").skills.find(skill => skill.id === "www-verify")?.basis;
+    expect(basis([start(), declaration])).toContain("하네스 실행 미연결");
+    expect(basis([start(), declaration, execution])).toContain("하네스 실행 확인 · 성공");
+    expect(basis([start(), declaration, { ...execution, historical: true }])).toContain("하네스 실행 미연결");
+    expect(basis([start(), declaration, event(3, "www/harnessObserved", { ...data, source: "role_declaration" })])).toContain("하네스 실행 미연결");
+    expect(basis([start(), declaration, event(3, "www/harnessObserved", { ...data, turnId: "other" })])).toContain("하네스 실행 미연결");
+    const newer = event(4, "www/developmentStage", { ...stage, source: "role_declaration", status: "selected", attemptId: "second" });
+    expect(basis([start(), declaration, execution, newer, { ...execution, seq: 5 }])).toContain("하네스 실행 미연결");
+    const nextPhase = event(4, "www/developmentStage", { ...stage, source: "role_declaration", phase: "build", status: "selected", attemptId: "build-next" });
+    expect(basis([start(), declaration, execution, nextPhase])).toContain("하네스 실행 확인 · 성공");
+  });
+
+  test("별개의 빈 설명이 완료돼도 직전 공개 진행 설명을 표시한다", () => {
+    const previous = item(2, { id: "previous", type: "agentMessage", phase: "commentary", text: "파일 근거를 확인했습니다." }, "item/completed");
+    const empty = item(3, { id: "empty", type: "agentMessage", phase: "commentary", text: "" }, "item/completed");
+    expect(projectAgentOverview([start(), previous, empty], "t").progress).toMatchObject({ text: "파일 근거를 확인했습니다.", planIndex: null });
+  });
+
+  test("명시 계획 문서와 Native 계획을 분리하고 이전 턴·복원 자료를 연결하지 않는다", () => {
+    const document = {
+      threadId: "t", turnId: "a", source: "work_document", workId: "work-36d312bc-a767-4e3e-a581-01898b35f75f",
+      path: "docs/work/Chat/015-plan/tasks.md", sha256: "a".repeat(64), status: "available", content: "- [ ] 원문",
+    };
+    const commentary = item(2, { id: "progress", type: "agentMessage", phase: "commentary", text: "공개 설명" }, "item/completed");
+    const linked = event(3, "www/planLinked", document);
+    const unrelated = event(4, "www/planLinked", { ...document, turnId: "other", content: "잘못된 문서" });
+    const before = projectAgentOverview([start(), commentary, linked, unrelated], "t");
+    expect(before.planDocument).toMatchObject({ content: document.content, at: "time-3" });
+    expect(before.planState).toBe("unprovided");
+    expect(before.progress).toMatchObject({ text: "공개 설명", planIndex: null });
+    const native = plan(5, [{ step: "Native 항목", status: "inProgress" }]);
+    const both = projectAgentOverview([start(), linked, native], "t");
+    expect(both.planDocument).toMatchObject({ content: document.content });
+    expect(both.plan).toEqual([{ step: "Native 항목", status: "inProgress" }]);
+    expect(both.nativePlanAt).toBe("time-5");
+    const failed = event(6, "www/planLinked", { ...document, path: null, status: "failed", content: null });
+    expect(projectAgentOverview([start(), failed], "t").planDocument).toMatchObject({ path: null, status: "failed", content: null });
+    const other = event(6, "www/planLinked", { ...document, workId: "work-efeaecc7-814e-412f-bb53-0cbf1c56303d" });
+    const ambiguous = projectAgentOverview([start(), linked, native, other], "t");
+    expect(ambiguous.planAmbiguous).toBe(true);
+    expect(ambiguous.planDocument).toBeNull();
+    expect(ambiguous.plan).toEqual(both.plan);
+    const ambiguity = event(7, "www/planAmbiguous", { threadId: "t", turnId: "a", source: "work_document" });
+    expect(projectAgentOverview([start(), linked, ambiguity], "t")).toMatchObject({ planDocument: null, planAmbiguous: true });
+    expect(projectAgentOverview([start(), linked, { ...ambiguity, historical: true }], "t").planAmbiguous).toBe(false);
+    expect(projectAgentOverview([start(), linked, start(6, "b")], "t").planDocument).toBeNull();
+    expect(projectAgentOverview([start(1, "a", true), { ...linked, historical: true }], "t").planDocument).toBeNull();
+  });
+
   test("항상 다섯 스킬만 표시하고 실제 구조화 경로 요청만 선택한다", () => {
     const base = projectAgentOverview([], "t", "/repo");
     expect(base.skills.map((skill) => skill.name)).toEqual(["spec", "design", "build", "diagnose", "verify"]);
@@ -37,14 +92,14 @@ describe("WWW Agent 개요", () => {
     expect(projectAgentOverview([start(), request], "other", "/repo").selectedSkillId).toBeNull();
   });
   test("도구 완료와 에이전트 완료를 구분하고 후속 작업으로 다시 실행한다", () => {
-    const completedCall = call(3, {}, "item/completed");
+    const completedCall = call(3, { id: "initial-operation" }, "item/completed");
     const done = item(4, { id: "activity", type: "subAgentActivity", agentThreadId: "child", kind: "completed", agentPath: "worker" });
-    expect(projectAgentOverview([start(), call(2), completedCall], "t").subagents[0]?.status).toBe("pending");
+    expect(projectAgentOverview([start(), call(2, { id: "initial-operation" }), completedCall], "t").subagents[0]?.status).toBe("pending");
     expect(projectAgentOverview([start(), call(2), done], "t").subagents[0]?.status).toBe("unknown");
     const followup = call(5, { tool: "followupTask", agentsStates: { child: { status: "running" } } });
     expect(projectAgentOverview([start(), call(2), done, followup], "t").subagents[0]).toMatchObject({ id: "child", parentId: "t", path: "worker", status: "running" });
     expect(projectAgentOverview([start(), call(2), done, call(5, { tool: "followupTask" })], "t").subagents[0]?.status).toBe("pending");
-    expect(projectAgentOverview([start(), call(2), done, call(5, { tool: "followupTask" }), call(6, { tool: "followupTask", status: "failed" }, "item/completed")], "t").subagents[0]?.status).toBe("unknown");
+    expect(projectAgentOverview([start(), call(2), done, call(5, { id: "followup", tool: "followupTask" }), call(6, { id: "followup", tool: "followupTask", status: "failed" }, "item/completed")], "t").subagents[0]?.status).toBe("unknown");
   });
   test("상태 근거, 외부 sender, 전송 종료와 복원 이력을 구분한다", () => {
     const failed = call(2, { agentsStates: { child: { status: "errored", message: "실패" } } }, "item/completed");
@@ -261,7 +316,7 @@ describe("WWW Agent 개요", () => {
     expect(projectAgentOverview(resumed, "t").progress?.text).toBe("B 설명");
   });
   test("부모 턴 종료 뒤 제공된 Subagent 완료는 계속 관측한다", () => {
-    const events = [start(), call(2, { agentsStates: { child: { status: "running" } } }), event(3, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), call(4, { agentsStates: { child: { status: "completed" } } }, "item/completed")];
+    const events = [start(), call(2, { id: "spawn", agentsStates: { child: { status: "running" } } }), event(3, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), call(4, { id: "spawn", agentsStates: { child: { status: "completed" } } }, "item/completed")];
     expect(projectAgentOverview(events, "t").subagents[0]?.status).toBe("completed");
   });
   test("Native가 식별한 완료 형태를 소비해 누락·중첩 thread의 늦은 산문도 막는다", () => {
@@ -444,6 +499,12 @@ test("선택이 verify로 바뀌면 build 진행 선언의 현재성은 미확�
 });
 
 
+test("시작 사건을 볼 수 없는 이전 호출의 완료는 현재 후속 작업을 정산하지 않는다", () => {
+  const active = call(2, { id: "new-operation", tool: "sendInput", agentsStates: { child: { status: "running", message: "현재 작업" } } });
+  const late = call(3, { id: "omitted-old-operation", tool: "sendInput", agentsStates: { child: { status: "completed", message: "이전 결과" } } }, "item/completed");
+  expect(projectAgentOverview([start(), active, late], "t").subagents[0]).toMatchObject({ status: "running", message: "현재 작업" });
+});
+
 test("저장된 실제 Subagent 공개 결과를 복원 parser부터 완료 표시까지 유지한다", () => {
   const rows = restoreConversationEvents("t", [{ id: "a", status: "completed", items: [{ id: "call", type: "collabAgentToolCall", tool: "spawnAgent", senderThreadId: "t", receiverThreadIds: ["child"], status: "completed", agentsStates: { child: { status: "completed" } } }, { id: "activity", type: "subAgentActivity", agentThreadId: "child", agentPath: "worker", kind: "completed" }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `time-${index}` }));
   expect(projectAgentOverview(rows, "t").subagents[0]).toMatchObject({ id: "child", parentId: "t", path: "worker", status: "completed", historical: true });
@@ -454,6 +515,30 @@ for (const status of ["errored", "running"] as const) test(`복원된 후속 Sub
   const operation = (id: string, state: string) => ({ id, type: "collabAgentToolCall", tool: "sendInput", senderThreadId: "t", receiverThreadIds: ["child"], status: "completed", agentsStates: { child: { status: state, message: id } } });
   const rows = restoreConversationEvents("t", [{ id: "a", status: "completed", items: [operation("A", "completed"), operation("B", status)] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `time-${index}` }));
   expect(projectAgentOverview(rows, "t").subagents[0]).toMatchObject({ id: "child", status: status === "errored" ? "failed" : "unknown", message: "B", historical: true });
+});
+test("시작을 확인하지 못한 이전 activity는 대기 중인 후속 호출을 시작하지 않는다", () => {
+  const first = call(2, { id: "A", agentsStates: { child: { status: "completed" } } }, "item/completed");
+  const next = call(3, { id: "B", tool: "followupTask", agentsStates: { child: { status: "completed" } } });
+  const before = [start(), first, next];
+  for (const kind of ["started", "interacted"]) {
+    const late = item(4, { id: "late-A", type: "subAgentActivity", agentThreadId: "child", kind, agentPath: "worker" });
+    expect(projectAgentOverview([...before, late], "t").subagents[0]).toMatchObject({ status: "pending", path: "worker" });
+  }
+});
+test("시작을 보지 못한 다른 호출의 완료가 현재 확정 결과를 덮지 않는다", () => {
+  const earlier = call(2, { id: "unseen-A", tool: "sendInput", receiverThreadIds: [] });
+  const next = call(3, { id: "B", tool: "followupTask", agentsStates: { child: { status: "running" } } });
+  const finished = call(4, { id: "B", tool: "followupTask", agentsStates: { child: { status: "completed", message: "B 결과" } } }, "item/completed");
+  const late = call(5, { id: "unseen-A", tool: "sendInput", agentsStates: { child: { status: "errored", message: "A 결과" } } }, "item/completed");
+  for (const prior of [[], [earlier]]) {
+    expect(projectAgentOverview([start(), ...prior, next, finished, late], "t").subagents[0]).toMatchObject({ status: "completed", message: "B 결과" });
+  }
+});
+test("활성 계획 항목이 없어도 Native의 공개 설명을 Progress에 표시한다", () => {
+  for (const steps of [[], [{ step: "검증", status: "pending" }]]) {
+    const projected = projectAgentOverview([start(), plan(2, steps, "검증 대상을 확인하고 있습니다.")], "t");
+    expect(projected.progress).toMatchObject({ text: "검증 대상을 확인하고 있습니다.", planIndex: null, source: "plan-explanation" });
+  }
 });
 test("이전 Subagent activity 완료 재전송은 후속 작업을 정산하지 않는다", () => {
   const a = item(2, { id: "activity-A", type: "subAgentActivity", agentThreadId: "child", agentPath: "worker", kind: "completed" }, "item/completed");
@@ -617,13 +702,23 @@ for (const definite of [false, true]) for (const actualBeforeResume of [false, t
   expect(projectAgentOverview(rows, "t").progress?.text).toBe(!definite && !actualBeforeResume && boundary === "valid" ? "A 기존 추가" : "A 기존");
 });
 
-test("v6 최신 본문없는 B의 빈 완료는 이전 commentary를 비우되 계획 설명을 지우지 않는다", () => {
+test("별개의 본문 없는 설명으로 완료돼도 기존 진행 설명을 보존한다", () => {
   const delta = event(3, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase: "commentary", delta: "A 설명" });
   for (const explanation of [undefined, "새 계획 설명"]) {
     const rows = [start(), plan(2, [{ step: "구현", status: "inProgress" }]), delta, ...(explanation ? [plan(4, [{ step: "구현", status: "inProgress" }], explanation)] : []), item(5, { id: "B", type: "agentMessage", phase: "commentary" }), item(6, { id: "B", type: "agentMessage", phase: "commentary", text: "" }, "item/completed")];
-    expect(projectAgentOverview(rows, "t").progress?.text ?? null).toBe(explanation ?? null);
+    expect(projectAgentOverview(rows, "t").progress?.text ?? null).toBe(explanation ?? "A 설명");
   }
 });
+test("같은 thread와 turn의 다른 연결에서 온 계획은 현재 설명과 연결하지 않는다", () => {
+  const current = { connectionGeneration: 3, processEpoch: "p", sessionId: "s", workspaceKey: "w", selectionEpoch: 1 };
+  const other = { ...current, connectionGeneration: 4 };
+  const first = { ...plan(2, [{ step: "현재 계획", status: "inProgress" }], "현재 설명"), ...current };
+  const stale = { ...plan(3, [{ step: "다른 연결", status: "inProgress" }]), ...other };
+  const view = projectAgentOverview([{ ...start(), ...current }, first, stale], "t");
+  expect(view.plan.map(step => step.step)).toEqual(["현재 계획"]);
+  expect(view.progress).toMatchObject({ text: "현재 설명", planIndex: 0 });
+});
+
 test("v6 실제 terminal과 EOF는 후행 unknown 이력으로 재개되지 않는다", () => {
   for (const end of [event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), event(4, "transport/closed", {})]) {
     const rows = [start(), item(3, { id: "A", type: "agentMessage", phase: "commentary", text: "기존" }), end, event(5, "transport/connected", {}), { ...event(6, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } }), historical: true }, start(7), event(8, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase: "commentary", delta: "늦음" })];
