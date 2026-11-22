@@ -220,16 +220,15 @@ export function classifyOpusFailure(result: ReviewExecutionResult = {}): ReviewF
   try { const parsed: unknown = JSON.parse(stdout); if (!object(parsed)) throw new Error("invalid response"); body = parsed; }
   catch { return { kind: "unknown", verified: false, receiptHash }; }
   if (code === 0 && !signal && body?.is_error === false) return null;
-  const terminalUsageCode = body.terminal_reason === "api_error" && body.api_error_status === 429 && body.api_error_type === "rate_limit_error"
-    ? body.api_error
-    : undefined;
-  const codes = [
+  const terminalError = body.terminal_reason !== undefined || body.api_error_status !== undefined
+    || body.api_error_type !== undefined || body.api_error !== undefined;
+  const legacyCodes = [
     object(body.error) ? body.error.code : undefined,
     ...(Array.isArray(body.errors) ? body.errors.map((error: unknown) => object(error) ? error.code : undefined) : []),
-    terminalUsageCode,
   ];
   const message = typeof body.result === "string" ? body.result.trim() : "";
-  const auth = codes.some((value) => value === "authentication_error" || value === "invalid_api_key")
+  const auth = body.api_error_status === 401
+    || [...legacyCodes, body.api_error_type, body.api_error].some((value) => value === "authentication_error" || value === "invalid_api_key")
     || /^Failed to authenticate:/.test(message);
   if (signal) return { kind: "interrupted", verified: false, receiptHash };
   if (auth) return { kind: "authentication", verified: false, receiptHash };
@@ -237,8 +236,14 @@ export function classifyOpusFailure(result: ReviewExecutionResult = {}): ReviewF
     return { kind: "unknown", verified: false, receiptHash };
   }
   const usageMessage = /^You've hit your (?:session|weekly|Opus) limit(?:\s*·\s*resets\s+[^\r\n]+)?$/.test(message);
-  const quotaCode = codes.find((value): value is string => typeof value === "string" && QUOTA_CODES.has(value))
-    ?? (usageMessage ? "claude_usage_window_exhausted" : null);
+  let quotaCode: string | null = null;
+  if (terminalError) {
+    if (body.terminal_reason === "api_error" && body.api_error_status === 429 && body.api_error_type === "rate_limit_error"
+      && typeof body.api_error === "string" && QUOTA_CODES.has(body.api_error)) quotaCode = body.api_error;
+  } else {
+    quotaCode = legacyCodes.find((value): value is string => typeof value === "string" && QUOTA_CODES.has(value))
+      ?? (usageMessage ? "claude_usage_window_exhausted" : null);
+  }
   if (quotaCode) return { kind: "quota_exhausted", verified: true, provider: "anthropic", model: "opus", code: quotaCode, receiptHash, source: "claude-cli" };
   return { kind: "unknown", verified: false, receiptHash };
 }
