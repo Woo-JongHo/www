@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "84b3f79164fcbc4144d49f6c2d50e01308d581924251c3c8553461e3f2ef0311",
+  "digest"       : "c14e98c0bd7cfbe4eb24546b5213827f6de8df2793dbca781b06054764dbc072",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -103,8 +103,8 @@
       "layer"      : "tooling",
       "role"       : "앱 모듈 · workflow",
       "line"       : 1,
-      "lines"      : 441,
-      "digest"     : "2d86c9e1091737c905a9bf9b3e50a37a176a1bf13818b50e9478b0fe6f3dcaa4",
+      "lines"      : 444,
+      "digest"     : "08b801ff993709fb9f4bb170e431d775ea4dd4223ed6fd339c9d458485a29e86",
       "structureId": "arch.development.authoring"
     },
     {
@@ -218,14 +218,25 @@
       "structureId": "arch.development.evidence.verification"
     },
     {
+      "id"         : "scripts/workflow/issue-loop.ts",
+      "file"       : "scripts/workflow/issue-loop.ts",
+      "title"      : "issue-loop",
+      "layer"      : "workflow",
+      "role"       : "개발 절차 모듈 · issue-loop",
+      "line"       : 1,
+      "lines"      : 317,
+      "digest"     : "aa8957fadd447ab680f5348174c64ba1c4f110b710e1646204c1f1993c2ba0f2",
+      "structureId": "arch.development.authoring"
+    },
+    {
       "id"         : "scripts/workflow/lock.ts",
       "file"       : "scripts/workflow/lock.ts",
       "title"      : "lock",
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · lock",
       "line"       : 1,
-      "lines"      : 122,
-      "digest"     : "a0f2af32797dcce0462a6b3a65b47c835e2b3d1b03719452e3dc5e8de2753d7d",
+      "lines"      : 125,
+      "digest"     : "aa5645b04bb630e9f30204e223b2e1dfc69a255989c42a6a279b5b60c97a1358",
       "structureId": "arch.development.records.lock"
     },
     {
@@ -345,8 +356,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · run",
       "line"       : 1,
-      "lines"      : 848,
-      "digest"     : "67751b5a090461eef8e610092bea2a4a53aea53b17ec56fd90121bbaa4951cbe",
+      "lines"      : 851,
+      "digest"     : "8579bd3bafde7d66d4003a88a944282437426041b47a47ae84d527897a6605f7",
       "structureId": "arch.development.execution"
     },
     {
@@ -1014,67 +1025,78 @@
     {
       "id"       : "scripts/workflow.ts:362",
       "from"     : "scripts/workflow.ts",
+      "to"       : "scripts/workflow/issue-loop.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./workflow/issue-loop.ts",
+      "line"     : 8,
+      "endLine"  : 8,
+      "statement": "import { runIssueLoop } from \"./workflow/issue-loop.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow.ts:419",
+      "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/reports.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./workflow/reports.ts",
-      "line"     : 8,
-      "endLine"  : 8,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import { inspectReportLocks, maintainWorkReports, recoverReportLock } from \"./workflow/reports.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:700",
+      "id"       : "scripts/workflow.ts:757",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/source-policy.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./source-policy.ts",
-      "line"     : 14,
-      "endLine"  : 14,
+      "line"     : 15,
+      "endLine"  : 15,
       "statement": "import { assertTypeScriptWrites, checkSourcePolicy } from \"./source-policy.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:780",
+      "id"       : "scripts/workflow.ts:837",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/run.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./workflow/run.ts",
-      "line"     : 15,
-      "endLine"  : 15,
+      "line"     : 16,
+      "endLine"  : 16,
       "statement": "import { runWorkflow } from \"./workflow/run.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:829",
+      "id"       : "scripts/workflow.ts:886",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/preflight.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./workflow/preflight.ts",
-      "line"     : 16,
-      "endLine"  : 16,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import { validateWritePaths } from \"./workflow/preflight.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:891",
+      "id"       : "scripts/workflow.ts:948",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/route.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./workflow/route.ts",
-      "line"     : 17,
-      "endLine"  : 17,
+      "line"     : 18,
+      "endLine"  : 18,
       "statement": "import { namedSkill } from \"./workflow/route.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:941",
+      "id"       : "scripts/workflow.ts:998",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/adapters/gjc.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./workflow/adapters/gjc.ts",
-      "line"     : 18,
-      "endLine"  : 18,
+      "line"     : 19,
+      "endLine"  : 19,
       "statement": "import type { ProcessInvocation, ProcessOptions } from \"./workflow/adapters/gjc.ts\";"
     },
     {
@@ -1296,6 +1318,105 @@
       "line"     : 11,
       "endLine"  : 11,
       "statement": "import { checkSourcePolicy } from \"../source-policy.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/issue-loop.ts:220",
+      "from"     : "scripts/workflow/issue-loop.ts",
+      "to"       : "scripts/workflow/adapters/codex.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./adapters/codex.ts",
+      "line"     : 8,
+      "endLine"  : 8,
+      "statement": "import { createCodexInvocation, runCodex } from \"./adapters/codex.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/issue-loop.ts:291",
+      "from"     : "scripts/workflow/issue-loop.ts",
+      "to"       : "scripts/workflow/documentation.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./documentation.ts",
+      "line"     : 9,
+      "endLine"  : 9,
+      "statement": "import { requiredDocumentation } from \"./documentation.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/issue-loop.ts:351",
+      "from"     : "scripts/workflow/issue-loop.ts",
+      "to"       : "scripts/workflow/documentation.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./documentation.ts",
+      "line"     : 10,
+      "endLine"  : 10,
+      "statement": "import type { DocumentationDocument } from \"./documentation.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/issue-loop.ts:416",
+      "from"     : "scripts/workflow/issue-loop.ts",
+      "to"       : "scripts/workflow/evidence.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./evidence.ts",
+      "line"     : 11,
+      "endLine"  : 11,
+      "statement": "import { captureSource, criteriaDigest, resolveExecutionEnvironment } from \"./evidence.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/issue-loop.ts:508",
+      "from"     : "scripts/workflow/issue-loop.ts",
+      "to"       : "scripts/workflow/lock.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./lock.ts",
+      "line"     : 12,
+      "endLine"  : 12,
+      "statement": "import { inspectWorkLock, recoverWorkLock, withWorkLock } from \"./lock.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/issue-loop.ts:584",
+      "from"     : "scripts/workflow/issue-loop.ts",
+      "to"       : "scripts/workflow/preflight.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./preflight.ts",
+      "line"     : 13,
+      "endLine"  : 13,
+      "statement": "import { validateWritePaths } from \"./preflight.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/issue-loop.ts:637",
+      "from"     : "scripts/workflow/issue-loop.ts",
+      "to"       : "scripts/workflow/record.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./record.ts",
+      "line"     : 14,
+      "endLine"  : 14,
+      "statement": "import { appendEvent, readRuntime, runtimePaths } from \"./record.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/issue-loop.ts:707",
+      "from"     : "scripts/workflow/issue-loop.ts",
+      "to"       : "scripts/workflow/types.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./types.ts",
+      "line"     : 15,
+      "endLine"  : 15,
+      "statement": "import type { CurrentWorkAssessment, RecordedReview } from \"./types.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow/issue-loop.ts:780",
+      "from"     : "scripts/workflow/issue-loop.ts",
+      "to"       : "scripts/workflow/work.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./work.ts",
+      "line"     : 16,
+      "endLine"  : 16,
+      "statement": "import { assessWork, openWork, recordDocumentReview } from \"./work.ts\";"
     },
     {
       "id"       : "scripts/workflow/preflight.ts:332",
@@ -3485,31 +3606,31 @@
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 9,
+      "line"     : 10,
       "specifier": "node:child_process",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 10,
+      "line"     : 11,
       "specifier": "node:crypto",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 11,
+      "line"     : 12,
       "specifier": "node:fs/promises",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 12,
+      "line"     : 13,
       "specifier": "node:path",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow.ts",
-      "line"     : 13,
+      "line"     : 14,
       "specifier": "node:url",
       "reason"   : "external"
     },
@@ -3721,6 +3842,24 @@
       "file"     : "scripts/workflow/evidence.ts",
       "line"     : 490,
       "specifier": "node:os",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/issue-loop.ts",
+      "line"     : 5,
+      "specifier": "node:crypto",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/issue-loop.ts",
+      "line"     : 6,
+      "specifier": "node:fs",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/issue-loop.ts",
+      "line"     : 7,
+      "specifier": "node:path",
       "reason"   : "external"
     },
     {
@@ -4507,17 +4646,23 @@
         "id"         : "arch.development.authoring",
         "parent"     : "arch.development",
         "title"      : "typed 저작 하네스",
-        "description": "공식 저작 진입점에서 쓰기 계획을 확인하고 실행 전후 소스·타입·BoxBox·구조 검사와 변경 지문을 연결한다.",
+        "description": "공식 저작 진입점에서 쓰기 계획과 실행 전후 검사를 확인하고, 이슈 실행을 실제 검증·감사·완료 판정과 연결한다.",
         "allowedDependencies": [
           "arch.development.artifacts",
           "arch.tooling.map-validation",
           "arch.development.authorization",
+          "arch.development.evidence.documentation",
+          "arch.development.evidence.verification",
           "arch.development.execution",
+          "arch.development.providers.codex",
           "arch.development.providers.gjc",
           "arch.development.reporting.lifecycle",
           "arch.development.reporting.storage",
           "arch.development.routing",
           "arch.tooling.source-policy",
+          "arch.development.records.events",
+          "arch.development.records.lock",
+          "arch.development.records.protocol",
           "arch.development.records.state"
         ]
       },
@@ -5665,6 +5810,14 @@
         "line": 2
       },
       {
+        "file": "scripts/workflow/issue-loop.ts",
+        "nodeId": "arch.development.authoring",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-AUTHORING"
+        ],
+        "line": 2
+      },
+      {
         "file": "scripts/workflow/lock.ts",
         "nodeId": "arch.development.records.lock",
         "requirementIds": [
@@ -6520,6 +6673,13 @@
         "line": 2
       },
       {
+        "file": "test/workflow-issue-loop.test.ts",
+        "requirementIds": [
+          "RESP-DEVELOPMENT-AUTHORING"
+        ],
+        "line": 2
+      },
+      {
         "file": "test/workflow-model-allocation.test.ts",
         "requirementIds": [
           "RESP-DEVELOPMENT-EXECUTION"
@@ -6597,7 +6757,7 @@
         "line": 2
       }
     ],
-    "digest": "9beb4d3423ecf854c0f3d382a6989c6ba6c20b2b0e9c0ac59ec2068e9aeda211",
+    "digest": "c727f678677e5523bc7a3308cbf2d730c42ab404c80d57640253c7548fb3eddd",
     "statecharts": {
       "models": [
         {
@@ -6847,7 +7007,7 @@
         }
       ],
       "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-      "sourceDigest": "c39e98d702c3e1a11b5763faaa02dce97b8c3b65e82d4648548bcdf78c739fe5",
+      "sourceDigest": "b2da3bab19ca38016a222804212be74d9552428aa91547473f66904b84139628",
       "sources": [
         {
           "file": "scripts/workflow/completion-report.ts",
@@ -6867,7 +7027,7 @@
         },
         {
           "file": "scripts/workflow/run.ts",
-          "digest": "67751b5a090461eef8e610092bea2a4a53aea53b17ec56fd90121bbaa4951cbe"
+          "digest": "8579bd3bafde7d66d4003a88a944282437426041b47a47ae84d527897a6605f7"
         },
         {
           "file": "scripts/workflow/statechart.ts",
@@ -7149,7 +7309,7 @@
       }
     ],
     "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-    "sourceDigest": "c39e98d702c3e1a11b5763faaa02dce97b8c3b65e82d4648548bcdf78c739fe5",
+    "sourceDigest": "b2da3bab19ca38016a222804212be74d9552428aa91547473f66904b84139628",
     "sources": [
       {
         "file": "scripts/workflow/completion-report.ts",
@@ -7169,7 +7329,7 @@
       },
       {
         "file": "scripts/workflow/run.ts",
-        "digest": "67751b5a090461eef8e610092bea2a4a53aea53b17ec56fd90121bbaa4951cbe"
+        "digest": "8579bd3bafde7d66d4003a88a944282437426041b47a47ae84d527897a6605f7"
       },
       {
         "file": "scripts/workflow/statechart.ts",

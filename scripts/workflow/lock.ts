@@ -25,12 +25,15 @@ export interface WorkLockInspection {
 function hasCode(error: unknown, code: string): boolean { return error !== null && typeof error === 'object' && 'code' in error && error.code === code; }
 function object(value: unknown): value is Record<string, unknown> { return value !== null && typeof value === 'object' && !Array.isArray(value); }
 
-async function location(repo: string) {
+type LockScope = "records" | "issue-loop";
+
+async function location(repo: string, scope: unknown = "records") {
+  if (scope !== "records" && scope !== "issue-loop") throw new Error("지원하지 않는 작업 잠금 범위입니다.");
   const root      = await fs.realpath(repo) ;
   const directory = path.join(root, ".www") ;
   await fs.mkdir(directory, { recursive: true });
   if ((await fs.lstat(directory)).isSymbolicLink()) throw new Error("작업 잠금 경로는 심볼릭 링크일 수 없습니다.");
-  return { root, file: path.join(directory, "work-records.lock") };
+  return { root, file: path.join(directory, scope === "issue-loop" ? "issue-loop.lock" : "work-records.lock") };
 }
 
 async function owner(file: string): Promise<WorkLockValue | null> {
@@ -56,15 +59,15 @@ function state(value: WorkLockValue | null): WorkLockState {
   catch (error) { return hasCode(error, "ESRCH") ? "owner_exited" : "owner_unconfirmed"; }
 }
 
-export async function inspectWorkLock({ repo = process.cwd() }: { repo?: string } = {}): Promise<WorkLockInspection> {
-  const { file } = await location(repo);
+export async function inspectWorkLock({ repo = process.cwd(), scope }: { repo?: string; scope?: unknown } = {}): Promise<WorkLockInspection> {
+  const { file } = await location(repo, scope);
   const value  = await owner(file) ;
   const status = state(value)      ;
   return { status, owner: value, recoverable: status === "owner_exited" };
 }
 
-export async function recoverWorkLock({ repo = process.cwd(), token }: { repo?: string; token?: unknown } = {}) {
-  const { file } = await location(repo);
+export async function recoverWorkLock({ repo = process.cwd(), token, scope }: { repo?: string; token?: unknown; scope?: unknown } = {}) {
+  const { file } = await location(repo, scope);
   const gate = `${file}.recovery`;
   let handle;
   try { handle = await fs.open(gate, "wx", 0o600); }
@@ -80,8 +83,8 @@ export async function recoverWorkLock({ repo = process.cwd(), token }: { repo?: 
   } finally { await handle.close(); await fs.unlink(gate); }
 }
 
-export async function withWorkLock<T>(repo: string, action: (root: string) => Promise<T>): Promise<T> {
-  const { root, file } = await location(repo);
+export async function withWorkLock<T>(repo: string, action: (root: string) => Promise<T>, scope?: LockScope): Promise<T> {
+  const { root, file } = await location(repo, scope);
   const value     = metadata()                            ;
   const temporary = `${file}.${value.token}.tmp`          ;
   const handle    = await fs.open(temporary, "wx", 0o600) ;

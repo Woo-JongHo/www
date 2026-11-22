@@ -5,6 +5,7 @@
 import { addVerificationCommand, appendPending, readWork, recordArtifactReview } from "./workflow/work.ts";
 import { artifactContext, artifactStatus, developmentTools } from "./workflow/artifacts.ts";
 import { runReportedStage } from "./workflow/report-lifecycle.ts";
+import { runIssueLoop } from "./workflow/issue-loop.ts";
 import { inspectReportLocks, maintainWorkReports, recoverReportLock } from "./workflow/reports.ts";
 import { execFile, spawn } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -354,6 +355,7 @@ async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDe
 }
 
 export async function runTypedWorkflow(options: JsonObject, dependencies: HarnessDependencies = {}): Promise<JsonObject> {
+  if (options.action === "issue-loop") return runIssueLoop(options, stage => runTypedWorkflow(stage, dependencies));
   if (options.action === "add-verifier") {
     if (options.repo !== undefined && typeof options.repo !== "string") throw new Error("저장소 경로는 문자열이어야 합니다.");
     if (typeof options.workId !== "string" || typeof options.requestId !== "string" || typeof options.request !== "string" || typeof options.expectedRequestHash !== "string" || typeof options.expectedAuthorizationDigest !== "string" || typeof options.command !== "string") throw new Error("검증 명령 추가 입력이 필요합니다.");
@@ -409,6 +411,7 @@ export async function runTypedWorkflow(options: JsonObject, dependencies: Harnes
 }
 
 function exitCode(result: JsonObject): number {
+  if (object(result.loop) && result.loop.status !== "done") return 1;
   if (result.recorded === false || (object(result.recording) && result.recording.recorded === false) || (object(result.verification) && result.verification.recorded === false)) {
     return 1;
   }
