@@ -517,8 +517,8 @@ function validateReport(input: unknown): WorkReport {
 }
 
 export function renderWorkReport(input: unknown, state: ReportState = { current: true, stale: false, reasons: [] }, history: WorkReport[] = []): string {
-  const report = validateReport(input);
-  const validated = history.map(validateReport);
+  const report    = validateReport(input         ) ;
+  const validated = history.map   (validateReport) ;
   for (const entry of validated) if (Buffer.byteLength(renderReportDocument(entry, { current: true, stale: false, reasons: [] })) > HTML_LIMIT) throw new Error("개별 보고서 HTML이 2 MiB를 초과합니다.");
   const html = renderReportDocument(report, state, validated);
   if (Buffer.byteLength(html) > (history.length ? BUNDLE_HTML_LIMIT : HTML_LIMIT)) throw new Error(history.length ? "묶음 보고서 HTML이 32 MiB를 초과합니다." : "생성된 보고서 HTML이 2 MiB를 초과합니다.");
@@ -532,9 +532,9 @@ interface StoredReport {
   bundled : boolean      ;
 }
 
-const entryMeaning = (entry: WorkReport): string => JSON.stringify(validateReport(entry));
-const entryOrder = (left: WorkReport, right: WorkReport): number => left.createdAt.localeCompare(right.createdAt) || left.id.localeCompare(right.id);
-const sameTitle = (left: string, right: string): boolean => left.normalize("NFC") === right.normalize("NFC");
+const entryMeaning = (entry: WorkReport): string => JSON.stringify(validateReport(entry))                                                              ;
+const entryOrder   = (left: WorkReport, right: WorkReport): number => left.createdAt.localeCompare(right.createdAt) || left.id.localeCompare(right.id) ;
+const sameTitle    = (left: string, right: string): boolean => left.normalize("NFC") === right.normalize("NFC")                                        ;
 
 function reportEntries(value: unknown): { entries: WorkReport[]; bundled: boolean } {
   const object = objectValue(value);
@@ -542,8 +542,8 @@ function reportEntries(value: unknown): { entries: WorkReport[]; bundled: boolea
   exactFields(object, ["schemaVersion", "workId", "title", "entries"]);
   const rows = arrayValue(object.entries);
   if (!rows.length || rows.length > 2000) throw new Error("묶음 보고서는 1~2000개 기록이어야 합니다.");
-  const entries = rows.map(validateReport);
-  const seen = new Set<string>();
+  const entries = rows.map(validateReport) ;
+  const seen    = new Set<string>()        ;
   for (const entry of entries) {
     if (entry.workId !== object.workId || !sameTitle(entry.title, text(object.title, 4000))) throw new Error("묶음 보고서의 작업·제목이 일치하지 않습니다.");
     if (seen.has(entry.id)) throw new Error("묶음 안에 중복 보고서 UUID가 있습니다.");
@@ -575,10 +575,10 @@ async function storedReport(root: string, work: WorkLocation, name: string): Pro
 }
 
 async function storedReports(root: string, work: WorkLocation, warnings: string[] = []): Promise<WorkReport[]> {
-  const directory = path.join(path.dirname(work.path), "reports");
-  const names = await reportNames(root, directory);
-  const found = new Map<string, WorkReport>();
-  const conflicts = new Set<string>();
+  const directory = path.join(path.dirname(work.path), "reports") ;
+  const names     = await reportNames(root, directory)            ;
+  const found     = new Map<string, WorkReport>()                 ;
+  const conflicts = new Set<string>()                             ;
   for (const name of names.filter((entry) => entry.endsWith(".json"))) {
     try {
       const item = await storedReport(root, work, name);
@@ -616,17 +616,17 @@ async function reportLockOwner(root: string, file: string): Promise<ReportLockOw
 }
 
 function reportLockState(owner: Awaited<ReturnType<typeof reportLockOwner>>): ReportLockStatus {
-  if (!owner) return "absent";
-  if (owner === "unknown") return "unknown_owner";
+  if (!owner                          ) return "absent";
+  if (owner === "unknown"             ) return "unknown_owner";
   if (owner.hostname !== os.hostname()) return "different_host";
   try { process.kill(owner.pid, 0); return "owner_alive"; }
   catch (error) { return errorCode(error) === "ESRCH" ? "owner_exited" : "owner_unconfirmed"; }
 }
 
 async function reportLease(root: string, directory: string): Promise<{ close: () => Promise<void> }> {
-  const file = path.join(directory, ".report-write.lock");
-  const owner = { token: randomUUID(), pid: process.pid, hostname: os.hostname(), createdAt: new Date().toISOString() };
-  const temporaryDirectory = path.join(root, ".www/report-locks");
+  const file               = path.join(directory, ".report-write.lock")                                                              ;
+  const owner              = { token: randomUUID(), pid: process.pid, hostname: os.hostname(), createdAt: new Date().toISOString() } ;
+  const temporaryDirectory = path.join(root, ".www/report-locks")                                                                    ;
   await inside(root, temporaryDirectory, true);
   await fs.mkdir(temporaryDirectory, { recursive: true });
   await inside(root, temporaryDirectory);
@@ -652,9 +652,9 @@ export async function inspectReportLocks({ repo = process.cwd() }: { repo?: stri
   if (warnings.length) throw new Error(warnings.join("; "));
   const locks = [];
   for (const work of works) {
-    const directory = path.join(path.dirname(work.path), "reports");
-    const owner = await reportLockOwner(root, path.join(directory, ".report-write.lock"));
-    const status = reportLockState(owner);
+    const directory = path.join(path.dirname(work.path), "reports")                           ;
+    const owner     = await reportLockOwner(root, path.join(directory, ".report-write.lock")) ;
+    const status    = reportLockState(owner)                                                  ;
     if (status !== "absent") locks.push({ directory: path.relative(root, directory).split(path.sep).join("/"), status, owner, recoverable: status === "owner_exited" });
   }
   return { locks };
@@ -667,8 +667,8 @@ export async function recoverReportLock({ repo = process.cwd(), directory, token
   if (!works.some((work) => path.join(path.dirname(work.path), "reports") === candidate)) throw new Error("등록된 작업의 보고서 디렉터리만 복구할 수 있습니다.");
   const file = path.join(candidate, ".report-write.lock");
   await inside(root, file);
-  const gate = `${file}.recovery`;
-  const handle = await fs.open(gate, "wx", 0o600);
+  const gate   = `${file}.recovery`               ;
+  const handle = await fs.open(gate, "wx", 0o600) ;
   try {
     const owner = await reportLockOwner(root, file);
     if (!owner || owner === "unknown" || owner.token !== token) throw new Error("관찰한 보고서 잠금 토큰과 현재 소유자가 일치하지 않습니다.");
@@ -707,20 +707,20 @@ function bundleSource(entries: WorkReport[], columns: boolean): string {
 
 async function publish({ repo = process.cwd(), workId, narrative = null, event, kind }: { repo?: string; workId: string; narrative?: ReportNarrative | null; event: string; kind: "authored" | "snapshot" }): Promise<ReportResult> {
   text(event, 100);
-  const work = await locateWork(repo, workId);
-  const details = narrative === null ? null : narrativeValue(narrative);
-  const identity = await sourceIdentity(work.root, work.record);
-  const workRecordHash = digest(work.source);
-  const semanticHash = digest(JSON.stringify({ kind, event, workRecordHash, ...identity, narrative: details }));
-  const columns = await workOutputColumns(work.root);
-  const directory = path.join(path.dirname(work.path), "reports");
+  const work           = await locateWork(repo, workId)                                                           ;
+  const details        = narrative === null ? null : narrativeValue(narrative)                                    ;
+  const identity       = await sourceIdentity(work.root, work.record)                                             ;
+  const workRecordHash = digest(work.source)                                                                      ;
+  const semanticHash   = digest(JSON.stringify({ kind, event, workRecordHash, ...identity, narrative: details })) ;
+  const columns        = await workOutputColumns(work.root)                                                       ;
+  const directory      = path.join(path.dirname(work.path), "reports")                                            ;
   await inside(work.root, directory, true);
   await fs.mkdir(directory, { recursive: true });
   await inside(work.root, directory);
   const lease = await reportLease(work.root, directory);
   try {
-    const warnings: string[] = [];
-    const entries = await storedReports(work.root, work, warnings);
+    const warnings: string[] = []                                             ;
+    const entries            = await storedReports(work.root, work, warnings) ;
     if (warnings.length) throw new Error(`기존 보고서 확인 실패: ${warnings.join("; ")}`);
     const existing = entries.find((report) => report.semanticHash === semanticHash);
     if (existing) {
@@ -728,8 +728,8 @@ async function publish({ repo = process.cwd(), workId, narrative = null, event, 
       await applyReportGroups(work.root, plans);
       return { report: existing, html: renderWorkReport(existing, undefined, entries.filter((entry) => sameTitle(entry.title, existing.title))), created: false };
     }
-    const id = `report-${randomUUID()}`;
-    const source = { recordPath: path.relative(work.root, work.path).split(path.sep).join("/"), workRecordHash, ...identity };
+    const id     = `report-${randomUUID()}`                                                                                   ;
+    const source = { recordPath: path.relative(work.root, work.path).split(path.sep).join("/"), workRecordHash, ...identity } ;
     const report: WorkReport = {
       schemaVersion: 1, id, workId: work.record.id.toLowerCase(), title: text(work.record.title, 4000),
       summary: details?.summary ?? `${LABELS[outcomeFor(work.record)]}. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.`,
@@ -738,13 +738,13 @@ async function publish({ repo = process.cwd(), workId, narrative = null, event, 
     };
     if (Buffer.byteLength(serializeWorkReport(report, columns)) > JSON_LIMIT) throw new Error("보고서 JSON이 1 MiB를 초과합니다.");
     renderWorkReport(report);
-    const history = [...entries.filter((entry) => sameTitle(entry.title, report.title)), report];
-    const json = bundleSource(history, columns);
-    const html = renderWorkReport(representative(history), undefined, history);
-    const stem = reportFileStem(report);
-    const jsonFile = path.join(directory, `${stem}.json`);
-    const htmlFile = path.join(directory, `${stem}.html`);
-    const oldJson = await reportBytes(work.root, jsonFile, BUNDLE_JSON_LIMIT);
+    const history  = [...entries.filter((entry) => sameTitle(entry.title, report.title)), report] ;
+    const json     = bundleSource(history, columns)                                               ;
+    const html     = renderWorkReport(representative(history), undefined, history)                ;
+    const stem     = reportFileStem(report)                                                       ;
+    const jsonFile = path.join(directory, `${stem}.json`)                                         ;
+    const htmlFile = path.join(directory, `${stem}.html`)                                         ;
+    const oldJson  = await reportBytes(work.root, jsonFile, BUNDLE_JSON_LIMIT)                    ;
     if (oldJson) reportEntries(JSON.parse(oldJson.toString("utf8")));
     const oldHtml = await reportBytes(work.root, htmlFile, BUNDLE_HTML_LIMIT);
     if (!oldJson && oldHtml) throw new Error("묶음 JSON 없이 기존 HTML이 있어 임의 덮어쓰지 않습니다.");
@@ -785,29 +785,29 @@ export interface ReportFileChange {
 }
 
 export interface ReportMaintenanceResult {
-  result : "planned" | "applied" | "no_changes";
-  counts : { reports: number; files: number; groups: number; entries: number; writtenFiles: number };
-  changes : ReportFileChange[];
-  entries : { reportId: string; sha256: string }[];
-  backupPath : string | null;
+  result     : "planned" | "applied" | "no_changes"                                                      ;
+  counts     : { reports: number; files: number; groups: number; entries: number; writtenFiles: number } ;
+  changes    : ReportFileChange[]                                                                        ;
+  entries    : { reportId: string; sha256: string }[]                                                    ;
+  backupPath : string | null                                                                             ;
 }
 
 interface MigrationSource { path: string; bytes: Buffer; reportId: string }
 interface MigrationGroup {
-  entries : WorkReport[];
-  jsonFile : string;
-  htmlFile : string;
-  json : string;
-  html : string;
-  oldJson : Buffer | null;
-  oldHtml : Buffer | null;
-  sources : MigrationSource[];
-  dirty : boolean;
+  entries  : WorkReport[]      ;
+  jsonFile : string            ;
+  htmlFile : string            ;
+  json     : string            ;
+  html     : string            ;
+  oldJson  : Buffer | null     ;
+  oldHtml  : Buffer | null     ;
+  sources  : MigrationSource[] ;
+  dirty    : boolean           ;
 }
 
 function representative(entries: WorkReport[]): WorkReport {
-  const ordered = [...entries].sort(entryOrder);
-  const selected = ordered.filter((entry) => entry.kind === "authored").at(-1) ?? ordered.at(-1);
+  const ordered  = [...entries].sort(entryOrder)                                                 ;
+  const selected = ordered.filter((entry) => entry.kind === "authored").at(-1) ?? ordered.at(-1) ;
   if (!selected) throw new Error("보고서 기록이 없습니다.");
   return selected;
 }
@@ -826,16 +826,16 @@ async function reportBytes(root: string, file: string, limit: number): Promise<B
 }
 
 async function migrationGroups(root: string, works: WorkLocation[]): Promise<MigrationGroup[]> {
-  const result: MigrationGroup[] = [];
-  const allIds = new Set<string>();
-  const targets = new Map<string, string>();
-  const columns = await workOutputColumns(root);
+  const result: MigrationGroup[] = []                            ;
+  const allIds                   = new Set<string>()             ;
+  const targets                  = new Map<string, string>()     ;
+  const columns                  = await workOutputColumns(root) ;
   for (const work of works) {
-    const directory = path.join(path.dirname(work.path), "reports");
-    const names = await reportNames(root, directory);
-    const files: StoredReport[] = [];
-    const groups = new Map<string, Map<string, WorkReport>>();
-    const allowed = new Set<string>([".report-write.lock"]);
+    const directory             = path.join(path.dirname(work.path), "reports") ;
+    const names                 = await reportNames(root, directory)            ;
+    const files: StoredReport[] = []                                            ;
+    const groups                = new Map<string, Map<string, WorkReport>>()    ;
+    const allowed               = new Set<string>([".report-write.lock"])       ;
     for (const name of names.filter((entry) => entry.endsWith(".json"))) {
       const item = await storedReport(root, work, name);
       files.push(item);
@@ -855,27 +855,27 @@ async function migrationGroups(root: string, works: WorkLocation[]): Promise<Mig
         if (allIds.has(entry.id)) throw new Error("다른 묶음에 중복된 보고서 UUID가 있습니다.");
         allIds.add(entry.id);
       }
-      const first = representative(entries);
-      const stem = reportFileStem({ title });
-      const jsonFile = path.join(directory, `${stem}.json`);
-      const htmlFile = path.join(directory, `${stem}.html`);
-      const key = jsonFile.normalize("NFD").toLocaleLowerCase("und");
+      const first    = representative(entries)                            ;
+      const stem     = reportFileStem({ title })                          ;
+      const jsonFile = path.join(directory, `${stem}.json`)               ;
+      const htmlFile = path.join(directory, `${stem}.html`)               ;
+      const key      = jsonFile.normalize("NFD").toLocaleLowerCase("und") ;
       if (targets.has(key) && targets.get(key) !== `${first.workId}:${title}`) throw new Error("서로 다른 보고서의 제목 파일명이 충돌합니다.");
       targets.set(key, `${first.workId}:${title}`);
-      const oldJson = await reportBytes(root, jsonFile, BUNDLE_JSON_LIMIT);
-      const oldHtml = await reportBytes(root, htmlFile, BUNDLE_HTML_LIMIT);
-      const sources: MigrationSource[] = [];
-      const members = files.filter((file) => sameTitle(file.entries[0]?.title ?? "", title));
+      const oldJson                    = await reportBytes(root, jsonFile, BUNDLE_JSON_LIMIT)                   ;
+      const oldHtml                    = await reportBytes(root, htmlFile, BUNDLE_HTML_LIMIT)                   ;
+      const sources: MigrationSource[] = []                                                                     ;
+      const members                    = files.filter((file) => sameTitle(file.entries[0]?.title ?? "", title)) ;
       if (!oldJson && oldHtml) throw new Error("묶음 JSON 없이 기존 HTML이 있어 임의 덮어쓰지 않습니다.");
       for (const file of members) {
-        const source = path.join(directory, file.name);
-        const bytes = await reportBytes(root, source, BUNDLE_JSON_LIMIT);
+        const source = path.join(directory, file.name)                    ;
+        const bytes  = await reportBytes(root, source, BUNDLE_JSON_LIMIT) ;
         if (!bytes?.equals(file.bytes)) throw new Error("이전 검사 중 보고서 JSON 원본이 바뀌었습니다.");
         sources.push({ path: source, bytes, reportId: file.entries[0]?.id ?? first.id });
         allowed.add(file.name.normalize("NFC"));
-        const htmlName = file.name.slice(0, -5) + ".html";
-        const htmlPath = path.join(directory, htmlName);
-        const htmlBytes = await reportBytes(root, htmlPath, file.bundled ? BUNDLE_HTML_LIMIT : HTML_LIMIT);
+        const htmlName  = file.name.slice(0, -5) + ".html"                                                 ;
+        const htmlPath  = path.join(directory, htmlName)                                                   ;
+        const htmlBytes = await reportBytes(root, htmlPath, file.bundled ? BUNDLE_HTML_LIMIT : HTML_LIMIT) ;
         if (!htmlBytes && !file.bundled && !oldJson) throw new Error("보고서 JSON·HTML 쌍이 없습니다.");
         if (htmlBytes) sources.push({ path: htmlPath, bytes: htmlBytes, reportId: file.entries[0]?.id ?? first.id });
         allowed.add(htmlName.normalize("NFC"));
@@ -894,8 +894,8 @@ async function migrationGroups(root: string, works: WorkLocation[]): Promise<Mig
       }
       allowed.add(`${stem}.json`.normalize("NFC"));
       allowed.add(`${stem}.html`.normalize("NFC"));
-      const json = bundleSource(entries, columns);
-      const html = renderWorkReport(first, undefined, entries);
+      const json = bundleSource    (entries, columns         ) ;
+      const html = renderWorkReport(first, undefined, entries) ;
       const dirty = sources.some((source) => source.path !== jsonFile && source.path !== htmlFile)
         || !oldJson?.equals(Buffer.from(json)) || !oldHtml?.equals(Buffer.from(html));
       result.push({ entries, jsonFile, htmlFile, json, html, oldJson, oldHtml, sources, dirty });
@@ -909,16 +909,16 @@ async function backupReportSources(root: string, groups: MigrationGroup[]): Prom
   const backup = path.join(root, ".www/report-merge-backups", randomUUID());
   await inside(root, backup, true);
   await fs.mkdir(backup, { recursive: true });
-  const manifest = [];
-  const seen = new Set<string>();
+  const manifest = []                ;
+  const seen     = new Set<string>() ;
   for (const group of groups) {
     for (const source of group.sources) {
       if (seen.has(source.path)) continue;
       seen.add(source.path);
       const current = await reportBytes(root, source.path, BUNDLE_HTML_LIMIT);
       if (!current?.equals(source.bytes)) throw new Error("백업 전에 보고서 원본이 바뀌었습니다.");
-      const relative = path.relative(root, source.path);
-      const destination = path.join(backup, relative);
+      const relative    = path.relative(root, source.path) ;
+      const destination = path.join    (backup, relative ) ;
       await fs.mkdir(path.dirname(destination), { recursive: true });
       await fs.writeFile(destination, source.bytes, { flag: "wx", mode: 0o600 });
       if (!(await fs.readFile(destination)).equals(source.bytes)) throw new Error("보고서 원본 백업 검증에 실패했습니다.");
@@ -966,14 +966,14 @@ export async function maintainWorkReports({ repo = process.cwd(), apply = false 
     }
     const groups = await migrationGroups(root, works);
     const changes = groups.flatMap((group) => group.sources.filter((source) => source.path !== group.jsonFile && source.path !== group.htmlFile).map((source) => ({
-      reportId: source.reportId,
-      from: path.relative(root, source.path).split(path.sep).join("/"),
-      to: path.relative(root, source.path.endsWith(".json") ? group.jsonFile : group.htmlFile).split(path.sep).join("/"),
-      sha256: createHash("sha256").update(source.bytes).digest("hex"),
+      reportId : source.reportId                                                                                                ,
+      from     : path.relative(root, source.path).split(path.sep).join("/")                                                     ,
+      to       : path.relative(root, source.path.endsWith(".json") ? group.jsonFile : group.htmlFile).split(path.sep).join("/") ,
+      sha256   : createHash("sha256").update(source.bytes).digest("hex")                                                        ,
     })));
-    const entries = groups.flatMap((group) => group.entries.map((entry) => ({ reportId: entry.id, sha256: digest(entryMeaning(entry)) })));
-    const dirty = groups.filter((group) => group.dirty).length;
-    const backupPath = apply ? await applyReportGroups(root, groups) : null;
+    const entries    = groups.flatMap((group) => group.entries.map((entry) => ({ reportId: entry.id, sha256: digest(entryMeaning(entry)) }))) ;
+    const dirty      = groups.filter((group) => group.dirty).length                                                                           ;
+    const backupPath = apply ? await applyReportGroups(root, groups) : null                                                                   ;
     return { result: dirty ? apply ? "applied" : "planned" : "no_changes", counts: { reports: entries.length, files: changes.length, groups: groups.length, entries: entries.length, writtenFiles: dirty * 2 }, changes, entries, backupPath };
   } finally { for (const lease of leases.reverse()) await lease.close(); }
 }
@@ -984,11 +984,11 @@ export async function readWorkReport({ repo = process.cwd(), reportId }: { repo?
   const matches: { report: WorkReport; work: WorkLocation; history: WorkReport[] }[] = [];
   let firstFailure: { name: string; error: unknown } | undefined;
   for (const work of works) {
-    const directory = path.join(path.dirname(work.path), "reports");
-    const names = await reportNames(root, directory);
-    const found = new Map<string, WorkReport>();
-    const conflictingIds = new Set<string>();
-    const errors: { name: string; error: unknown }[] = [];
+    const directory                                  = path.join(path.dirname(work.path), "reports") ;
+    const names                                      = await reportNames(root, directory)            ;
+    const found                                      = new Map<string, WorkReport>()                 ;
+    const conflictingIds                             = new Set<string>()                             ;
+    const errors: { name: string; error: unknown }[] = []                                            ;
     for (const name of names.filter((entry) => entry.endsWith(".json"))) {
       try {
         const item = await storedReport(root, work, name);
@@ -1004,8 +1004,8 @@ export async function readWorkReport({ repo = process.cwd(), reportId }: { repo?
     }
     firstFailure ??= errors[0];
     if (conflictingIds.has(reportId)) throw new Error("같은 보고서 UUID의 내용이 충돌합니다.");
-    const report = found.get(reportId);
-    const shortId = reportId.slice(7).replaceAll("-", "").slice(0, 16);
+    const report  = found.get(reportId)                                ;
+    const shortId = reportId.slice(7).replaceAll("-", "").slice(0, 16) ;
     for (const failure of errors) {
       if (failure.name === `${reportId}.json` || failure.name.endsWith(`-${shortId}.json`)
         || (report && failure.name.normalize("NFC") === `${reportFileStem(report)}.json`)) throw failure.error;

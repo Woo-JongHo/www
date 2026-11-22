@@ -40,7 +40,7 @@ export interface RecordedReview {
 }
 
 export interface WorkWorkflow {
-  decomposition?        : DecompositionPlan;
+  decomposition?        : DecompositionPlan                                  ;
   role                  : string                                             ;
   requestId             : string                                             ;
   requestHash           : string                                             ;

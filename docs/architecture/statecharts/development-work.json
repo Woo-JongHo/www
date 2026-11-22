@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "statechart.development-work",
-  "structureId": "arch.development.records.state",
-  "title": "개발 작업의 검증·수용·완료",
-  "initial": "work.ready",
+  "id"           : "statechart.development-work",
+  "structureId"  : "arch.development.records.state",
+  "title"        : "개발 작업의 검증·수용·완료",
+  "initial"      : "work.ready",
   "states": [
     {
       "id": "work.ready",
@@ -54,9 +54,9 @@
   ],
   "transitions": [
     {
-      "id": "transition.begin",
-      "from": "work.ready",
-      "to": "work.in_progress",
+      "id"   : "transition.begin",
+      "from" : "work.ready",
+      "to"   : "work.in_progress",
       "event": "구현 단계 시작",
       "guards": [
         "rule.authorized"
@@ -76,9 +76,9 @@
       ]
     },
     {
-      "id": "transition.host-return",
-      "from": "work.in_progress",
-      "to": "work.in_progress",
+      "id"   : "transition.host-return",
+      "from" : "work.in_progress",
+      "to"   : "work.in_progress",
       "event": "호스트 정상 종료",
       "guards": [
         "rule.host-only"
@@ -98,9 +98,9 @@
       ]
     },
     {
-      "id": "transition.unit-accept",
-      "from": "work.in_progress",
-      "to": "work.in_progress",
+      "id"   : "transition.unit-accept",
+      "from" : "work.in_progress",
+      "to"   : "work.in_progress",
       "event": "단위 산출물과 검증 수용",
       "guards": [
         "rule.unit-acceptance"
@@ -120,9 +120,9 @@
       ]
     },
     {
-      "id": "transition.verify",
-      "from": "work.in_progress",
-      "to": "work.verifying",
+      "id"   : "transition.verify",
+      "from" : "work.in_progress",
+      "to"   : "work.verifying",
       "event": "검증 시도 기록",
       "guards": [
         "rule.authorized"
@@ -142,9 +142,9 @@
       ]
     },
     {
-      "id": "transition.rework",
-      "from": "work.verifying",
-      "to": "work.in_progress",
+      "id"   : "transition.rework",
+      "from" : "work.verifying",
+      "to"   : "work.in_progress",
       "event": "검증 실패 후 같은 범위 수정",
       "guards": [
         "rule.authorized"
@@ -164,9 +164,9 @@
       ]
     },
     {
-      "id": "transition.complete",
-      "from": "work.verifying",
-      "to": "work.done",
+      "id"   : "transition.complete",
+      "from" : "work.verifying",
+      "to"   : "work.done",
       "event": "업무 완료 요청",
       "guards": [
         "rule.criteria-current",

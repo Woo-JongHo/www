@@ -38,8 +38,8 @@ test("WWW 역할·스킬이 먼저 보이고 범용 실패 목록과 모델은 �
   expect(html                         )    .toContain   ("읽기 명령 관측"                                                                ) ;
   expect(html                         )    .toContain   ("www-build"                                                                     ) ;
   expect(html                         )    .toContain   ("읽는 중"                                                                       ) ;
-  expect(html).toContain("Hook 관측 · 호출 횟수 미제공 · 실패 관측 · 신뢰 검토 필요");
-  expect(html).not.toContain("Hook 1건 · 실패 1건");
+  expect(html                         )    .toContain   ("Hook 관측 · 호출 횟수 미제공 · 실패 관측 · 신뢰 검토 필요"                     ) ;
+  expect(html                         ).not.toContain   ("Hook 1건 · 실패 1건"                                                           ) ;
   expect(html                         )    .toMatch     (/<details class="www-native-details"[^>]*data-testid="native-activity-details">/) ;
   expect(html                         )    .toContain   ("실제 역할·스킬 적용을 확인한 근거가 없으면 완료로 추정하지 않습니다"           ) ;
   expect(html                         ).not.toContain   ("PRIVATE_CONTEXT_DO_NOT_RENDER"                                                 ) ;
@@ -58,16 +58,16 @@ test("기본 Agent 개요는 고정 Skills 다섯 개와 계획을 보이고 Hoo
   const sidebar = resourceSidebar(events);
   expect(sidebar.match(/data-skill-id=/g)?.length).toBe(5);
   for (const name of ["www-spec", "www-design", "www-build", "www-diagnose", "www-verify"]) expect(sidebar).toContain(name);
-  expect(sidebar).toContain('data-testid="agent-tree"');
-  expect(sidebar).toContain('data-testid="agent-plan"');
-  expect(sidebar).toContain('data-testid="agent-progress"');
-  expect(sidebar).toContain("현재 계획");
-  expect(sidebar).not.toContain("postToolUse");
-  expect(sidebar).not.toContain("/plugin/hooks.json");
+  expect(sidebar)    .toContain('data-testid="agent-tree"'    ) ;
+  expect(sidebar)    .toContain('data-testid="agent-plan"'    ) ;
+  expect(sidebar)    .toContain('data-testid="agent-progress"') ;
+  expect(sidebar)    .toContain("현재 계획"                   ) ;
+  expect(sidebar).not.toContain("postToolUse"                 ) ;
+  expect(sidebar).not.toContain("/plugin/hooks.json"          ) ;
   const detail = renderToStaticMarkup(createElement(NativeActivityView, { events, threadId: "t", workspacePath: "/repo" }));
-  expect(detail).toContain("postToolUse");
-  expect(detail).toContain("실패 관측");
-  expect(detail).not.toContain("PRIVATE_CONTEXT_DO_NOT_RENDER");
+  expect(detail)    .toContain("postToolUse"                  ) ;
+  expect(detail)    .toContain("실패 관측"                    ) ;
+  expect(detail).not.toContain("PRIVATE_CONTEXT_DO_NOT_RENDER") ;
 });
 
 test("전송 중에는 과거 요청의 계획을 새 요청으로 표시하지 않는다", () => {
@@ -78,9 +78,9 @@ test("전송 중에는 과거 요청의 계획을 새 요청으로 표시하지 
   ];
   expect(resourceSidebar(events)).toContain("OLD_PLAN");
   const sending = resourceSidebar(events, true);
-  expect(sending).toContain("새 요청을 보내고 있습니다");
-  expect(sending).not.toContain("OLD_PLAN");
-  expect(sending).not.toContain("OLD_CALL");
+  expect(sending)    .toContain("새 요청을 보내고 있습니다") ;
+  expect(sending).not.toContain("OLD_PLAN"                 ) ;
+  expect(sending).not.toContain("OLD_CALL"                 ) ;
 });
 
 test("대화 경계가 있거나 없는 Hook 모두 기본 Agent 개요에 표시하지 않는다", () => {

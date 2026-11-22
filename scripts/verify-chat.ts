@@ -140,8 +140,8 @@ async function start(round: number, selectedWorkspace = workspace) {
       return object(result.result).value;
     };
     const wait = async (expression: string, label: string, timeoutMs = 20_000, retryResourceTransition = false) => {
-      const until = Date.now() + timeoutMs;
-      const transient = "Error invoking remote method 'activity:resources': Error: 대화를 전환하고 있습니다. 리소스 조회를 다시 시도해 주세요.";
+      const until     = Date.now() + timeoutMs                                                                                                  ;
+      const transient = "Error invoking remote method 'activity:resources': Error: 대화를 전환하고 있습니다. 리소스 조회를 다시 시도해 주세요." ;
       const predicate = retryResourceTransition
         ? "(async()=>{try{return Boolean(await (" + expression + "));}catch(error){if(error instanceof Error && error.message===" + JSON.stringify(transient) + ")return false;throw error;}})()"
         : "(async()=>Boolean(await (" + expression + ")))()";
@@ -605,8 +605,8 @@ try {
   await session.wait("!document.querySelector('[data-testid=\"detail-monitor-toggle\"]') && !document.querySelector('[data-testid=\"resource-sidebar-toggle\"]')", '기존 토글은 DOM과 초점 순서에 없음');
   await session.input('모니터 전환 뒤 보존할 초안');
   await session.evaluate("(()=>{const t=document.querySelector('.transcript');t.scrollTop=80;t.dispatchEvent(new Event('scroll'));})()");
-  const monitorScrollTop = Number(await session.evaluate("document.querySelector('.transcript').scrollTop"));
-  const chatPreserved = `document.querySelector('[data-testid="prompt-input"]').value==='모니터 전환 뒤 보존할 초안' && Math.abs(document.querySelector('.transcript').scrollTop-${monitorScrollTop})<2`;
+  const monitorScrollTop = Number(await session.evaluate("document.querySelector('.transcript').scrollTop"))                                                                                                ;
+  const chatPreserved    = `document.querySelector('[data-testid="prompt-input"]').value==='모니터 전환 뒤 보존할 초안' && Math.abs(document.querySelector('.transcript').scrollTop-${monitorScrollTop})<2` ;
   await session.click('[data-testid="view-page-nav"]');
   await session.wait("document.querySelector('.home-sidebar') && !document.querySelector('main.work').hidden", '프로젝트 목록 탐색 중 중앙 대화 유지');
   await session.click('[data-testid="open-current-workspace"]');
@@ -788,9 +788,9 @@ try {
   if (!Array.isArray(rowsB) || selectedB.workspaceKey === selectedA.workspaceKey) throw Error("다른 실제 프로젝트 경계가 합쳐졌습니다.");
   const idsB = rowsB.map((row) => String(object(row).id)).sort();
   if (idsB.some((id) => idsA.includes(id))) throw Error("서로 다른 프로젝트의 관측 ID가 섞였습니다.");
-  const staleBefore = await fs.readFile(path.join(workspaceB, "fixture-calls.jsonl"), "utf8");
-  const staleProject = await session.evaluate("(async () => { try { await window.www.startTurn(" + JSON.stringify(selectedA) + ", 'history-a', 'stale-project-must-not-run'); return 'allowed'; } catch(error) { return String(error); } })()");
-  const staleAfter = await fs.readFile(path.join(workspaceB, "fixture-calls.jsonl"), "utf8");
+  const staleBefore  = await fs.readFile(path.join(workspaceB, "fixture-calls.jsonl"), "utf8")                                                                                                                                                  ;
+  const staleProject = await session.evaluate("(async () => { try { await window.www.startTurn(" + JSON.stringify(selectedA) + ", 'history-a', 'stale-project-must-not-run'); return 'allowed'; } catch(error) { return String(error); } })()") ;
+  const staleAfter   = await fs.readFile(path.join(workspaceB, "fixture-calls.jsonl"), "utf8")                                                                                                                                                  ;
   if (typeof staleProject !== "string" || !["프로젝트 선택이 변경", "세션을 찾을 수 없습니다"].some(message => staleProject.includes(message)) || staleAfter.slice(staleBefore.length).includes("stale-project-must-not-run")) throw Error("이전 프로세스·프로젝트 요청이 Native에 차단되지 않았습니다: " + String(staleProject));
   const nativeCallsB         = path.join(workspaceB, "fixture-calls.jsonl")                                                                                                                           ;
   const initializations      = async () => (await fs.readFile(nativeCallsB, "utf8")).trim().split("\n").map((line) => object(JSON.parse(line))).filter((call) => call.method === "initialize").length ;

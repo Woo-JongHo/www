@@ -171,13 +171,13 @@ test("저장 공개 항목의 유효 완료 시각은 보존하고 비공개 필
     { id: "command", type: "commandExecution", status: "completed", completedAtMs: 30 },
     { id: "files", type: "fileChange", status: "completed", changes: [], completedAtMs: 40 }
   ];
-  const restored = restoreConversationEvents("thread", [{ id: "turn", status: "inProgress", items: values }], true);
-  const items = restored.filter(event => event.method === "item/completed").map(event => (event.params as { item: Record<string, unknown> }).item);
+  const restored = restoreConversationEvents("thread", [{ id: "turn", status: "inProgress", items: values }], true)                                   ;
+  const items    = restored.filter(event => event.method === "item/completed").map(event => (event.params as { item: Record<string, unknown> }).item) ;
   expect(items.map(item => item.completedAtMs)).toEqual([0, 10, 20, 30, 40]);
   expect(JSON.stringify(restored)).not.toContain("PRIVATE");
   for (const value of [undefined, null, "100", 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1]) {
-    const result = restoreConversationEvents("thread", [{ id: "turn", status: "inProgress", items: [{ id: "a", type: "agentMessage", text: "기존", completedAtMs: value }] }], true);
-    const item = (result.find(event => event.method === "item/completed")?.params as { item: Record<string, unknown> }).item;
+    const result = restoreConversationEvents("thread", [{ id: "turn", status: "inProgress", items: [{ id: "a", type: "agentMessage", text: "기존", completedAtMs: value }] }], true) ;
+    const item   = (result.find(event => event.method === "item/completed")?.params as { item: Record<string, unknown> }).item                                                       ;
     expect("completedAtMs" in item).toBe(false);
   }
 });
@@ -189,11 +189,11 @@ test("저장 Subagent 공개 식별·상태는 복원하고 내부 prompt와 임
     { id: "invalid", type: "subAgentActivity", agentThreadId: "child", agentPath: "/root/child" }
   ] }], true);
   const items = restored.filter(e => e.method === "item/completed").map(e => (e.params as { item: unknown }).item);
-  expect(items).toHaveLength(2);
-  expect(items[0]).toEqual({ id: "spawn", type: "collabAgentToolCall", senderThreadId: "parent", receiverThreadIds: ["child"], tool: "spawnAgent", status: "completed", agentsStates: { child: { status: "completed", message: "공개 결과" } } });
-  expect(items[1]).toMatchObject({ id: "activity", type: "subAgentActivity", agentThreadId: "child", agentPath: "/root/child", kind: "completed", model: "observed-model", reasoningEffort: "high" });
-  expect(restored.every(e => e.historical)).toBe(true);
-  expect(JSON.stringify(restored)).not.toContain("PRIVATE_");
+  expect(items                            )    .toHaveLength (2                                                                                                                                                                                                                    ) ;
+  expect(items[0]                         )    .toEqual      ({ id: "spawn", type: "collabAgentToolCall", senderThreadId: "parent", receiverThreadIds: ["child"], tool: "spawnAgent", status: "completed", agentsStates: { child: { status: "completed", message: "공개 결과" } } }) ;
+  expect(items[1]                         )    .toMatchObject({ id: "activity", type: "subAgentActivity", agentThreadId: "child", agentPath: "/root/child", kind: "completed", model: "observed-model", reasoningEffort: "high" }                                                  ) ;
+  expect(restored.every(e => e.historical))    .toBe         (true                                                                                                                                                                                                                 ) ;
+  expect(JSON.stringify(restored)         ).not.toContain    ("PRIVATE_"                                                                                                                                                                                                           ) ;
 });
 
 test("저장 Subagent의 누락·미지원 상태는 성공으로 추정하지 않고 공개 필드의 크기를 제한한다", () => {
@@ -206,10 +206,10 @@ test("저장 Subagent의 누락·미지원 상태는 성공으로 추정하지 �
     { ...base, id: "bounded", receiverThreadIds: Array.from({ length: 140 }, (_, i) => `child-${i}`), agentsStates: { "child-0": { status: "errored", message: "x".repeat(5000) } } }
   ] }], true);
   const items = restored.filter(e => e.method === "item/completed").map(e => (e.params as { item: Record<string, unknown> }).item);
-  expect(items).toHaveLength(2);
-  expect(items[0]).toMatchObject({ id: "unknown-child", agentsStates: {} });
-  expect((items[1]?.receiverThreadIds as string[])).toHaveLength(128);
-  expect((items[1]?.agentsStates as Record<string, { message: string }>)["child-0"]?.message).toHaveLength(4096);
+  expect(items                                                                              ).toHaveLength (2                                        ) ;
+  expect(items[0]                                                                           ).toMatchObject({ id: "unknown-child", agentsStates: {} }) ;
+  expect((items[1]?.receiverThreadIds as string[])                                          ).toHaveLength (128                                      ) ;
+  expect((items[1]?.agentsStates as Record<string, { message: string }>)["child-0"]?.message).toHaveLength (4096                                     ) ;
 });
 
 for (const output of [undefined, null, "", "새 출력"]) test(`저장 명령 output ${String(output)}의 존재 의미를 보존한다`, () => {
@@ -236,8 +236,8 @@ test("작업 폴더 경계는 실제 플랫폼 Node path 절대·정규화 의�
   ], nextCursor: null }));
   expect((await createConversationService(client, nativeCwd).list()).threads.map(value => value.id)).toEqual([thread.id]);
   // 실제 소유 함수에 win32 의존성만 주입한다. Windows OS 실행 증거는 아니다.
-  const source = await readFile(join(import.meta.dir, "../src/conversations.ts"), "utf8");
-  const fn = source.match(/function sameWorkspace[\s\S]*?\n}/)?.[0];
+  const source = await readFile(join(import.meta.dir, "../src/conversations.ts"), "utf8") ;
+  const fn     = source.match(/function sameWorkspace[\s\S]*?\n}/)?.[0]                   ;
   if (!fn) throw new Error("sameWorkspace 함수를 찾지 못했습니다.");
   const compiled = ts.transpile(fn + "; result = sameWorkspace(value, cwd);", { target: ts.ScriptTarget.ES2022 });
   const cases: [unknown, string, boolean][] = [

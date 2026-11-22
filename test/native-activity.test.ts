@@ -12,12 +12,12 @@ import { normalizeNativeResources, projectNativeActivity } from "../src/native-a
 import type { AppEvent } from "../src/shared";
 
 describe("v4 명시 null 한도와 종료 뒤 시작 경계", () => {
-  const limit = (seq: number, data: unknown) => event(seq, "account/rateLimits/updated", { rateLimits: data });
-  const baseline = { usedPercent: 35, windowDurationMins: 300, resetsAt: 200 };
+  const limit    = (seq: number, data: unknown) => event(seq, "account/rateLimits/updated", { rateLimits: data }) ;
+  const baseline = { usedPercent: 35, windowDurationMins: 300, resetsAt: 200 }                                    ;
   for (const key of ["primary", "secondary"] as const) {
     test(`${key} 명시 null은 창을 지우며 생략·잘못된 창과 구별한다`, () => {
-      const initial = limit(1, { limitId: "pro", [key]: baseline });
-      const cleared = [initial, limit(2, { limitId: "pro", [key]: null }), limit(3, { limitId: "pro", limitName: "새 이름" })];
+      const initial = limit(1, { limitId: "pro", [key]: baseline })                                                            ;
+      const cleared = [initial, limit(2, { limitId: "pro", [key]: null }), limit(3, { limitId: "pro", limitName: "새 이름" })] ;
       expect(projectNativeActivity(cleared).limits[0]?.[key]).toBeNull();
       const sparse = [initial, limit(2, { limitId: "pro", [key]: { usedPercent: 40 } })];
       expect(projectNativeActivity(sparse).limits[0]?.[key]).toEqual({ ...baseline, usedPercent: 40 });
@@ -27,8 +27,8 @@ describe("v4 명시 null 한도와 종료 뒤 시작 경계", () => {
     });
     for (const field of ["windowDurationMins", "resetsAt"] as const) {
       test(`${key}.${field} null은 이전 숫자를 부활시키지 않는다`, () => {
-        const initial = limit(1, { limitId: "pro", [key]: baseline });
-        const cleared = [initial, limit(2, { limitId: "pro", [key]: { usedPercent: 40, [field]: null } })];
+        const initial = limit(1, { limitId: "pro", [key]: baseline })                                      ;
+        const cleared = [initial, limit(2, { limitId: "pro", [key]: { usedPercent: 40, [field]: null } })] ;
         expect(projectNativeActivity(cleared).limits[0]?.[key]).toEqual({ ...baseline, usedPercent: 40, [field]: null });
         expect(projectNativeActivity([...cleared, limit(3, { limitId: "pro", [key]: { usedPercent: 41 } })]).limits[0]?.[key]?.[field]).toBeNull();
       });
@@ -39,8 +39,8 @@ describe("v4 명시 null 한도와 종료 뒤 시작 경계", () => {
       test(`${end} 뒤 새 ${type} started는 상세 실행 행을 만들지 않는다`, () => {
         const before = [started(1), item(2, "item/started", { id: "known", type: "commandExecution", command: "printf known" }),
           end === "eof" ? event(3, "transport/closed", {}) : event(3, "turn/completed", { threadId: "t", turn: { id: "a", status: end } })];
-        const late = item(4, "item/started", { id: "late", type, command: "printf late", phase: "final_answer", tool: "late-tool", changes: [{ path: "late.ts" }] });
-        const result = projectNativeActivity([...before, late], "t");
+        const late   = item                 (4, "item/started", { id: "late", type, command: "printf late", phase: "final_answer", tool: "late-tool", changes: [{ path: "late.ts" }] }) ;
+        const result = projectNativeActivity([...before, late], "t"                                                                                                                   ) ;
         expect(result.turns[0]?.entries.some(row => row.id === "item:late")).toBe(false);
         expect(result.turns[0]?.entries.find(row => row.id === "item:known")?.status).toBe("unknown");
         const settled = projectNativeActivity([...before, late,
@@ -81,9 +81,9 @@ describe("Hook 핸들러의 최신 활동", () => {
 
   test("후속 시작은 같은 행의 타이머와 결과를 새로 갱신한다", () => {
     for (const [firstTime, nextTime] of [[100, 200], ["2026-11-12T00:00:00Z", "2026-11-12T00:00:01Z"]]) {
-      const first = [hook(1, "hook/started", { startedAt: firstTime }), hook(2, "hook/completed", { startedAt: firstTime, durationMs: 8, statusMessage: "첫 결과" })];
-      const next = [...first, hook(3, "hook/started", { startedAt: nextTime, statusMessage: "진행 중" })];
-      const running = projectNativeActivity(next, "t").turns[0]?.entries;
+      const first   = [hook(1, "hook/started", { startedAt: firstTime }), hook(2, "hook/completed", { startedAt: firstTime, durationMs: 8, statusMessage: "첫 결과" })] ;
+      const next    = [...first, hook(3, "hook/started", { startedAt: nextTime, statusMessage: "진행 중" })]                                                            ;
+      const running = projectNativeActivity(next, "t").turns[0]?.entries                                                                                                ;
       expect(running).toHaveLength(1);
       expect(running?.[0]).toMatchObject({ id: "hook:t:a:handler", at: next[2]?.at, status: "running", endedAt: null, durationMs: null, description: "진행 중" });
       const delayed = [...next, hook(4, "hook/completed", { startedAt: firstTime, status: "failed", durationMs: 99 }), hook(5, "hook/started", { startedAt: firstTime }), hook(6, "hook/started", { startedAt: nextTime })];
@@ -95,8 +95,8 @@ describe("Hook 핸들러의 최신 활동", () => {
   });
 
   test("완료를 먼저 수신해도 더 새로운 실행의 시작과 완료를 표시한다", () => {
-    const completed = hook(1, "hook/completed", { startedAt: 100, durationMs: 8 });
-    const replayed = projectNativeActivity([completed, hook(2, "hook/started", { startedAt: 100 })], "t").turns[0]?.entries;
+    const completed = hook(1, "hook/completed", { startedAt: 100, durationMs: 8 })                                           ;
+    const replayed  = projectNativeActivity([completed, hook(2, "hook/started", { startedAt: 100 })], "t").turns[0]?.entries ;
     expect(replayed).toEqual(projectNativeActivity([completed], "t").turns[0]?.entries);
     const next = [completed, hook(2, "hook/started", { startedAt: 200 })];
     expect(projectNativeActivity(next, "t").turns[0]?.entries[0]).toMatchObject({ status: "running", at: next[1]?.at, endedAt: null, durationMs: null });
@@ -106,25 +106,25 @@ describe("Hook 핸들러의 최신 활동", () => {
   });
 
   test("복원 자료는 실시간 결과를 덮지 않고 다른 턴과 세션의 상태를 보존한다", () => {
-    const history = [hook(1, "hook/completed", { startedAt: 100, durationMs: 8 })].map(row => ({ ...row, historical: true }));
-    const live = [...history, hook(2, "hook/started", { startedAt: 200 })];
-    const replay = { ...hook(3, "hook/completed", { startedAt: 300, status: "failed" }), historical: true };
-    const result = projectNativeActivity([...live, replay, hook(4, "hook/completed", { startedAt: 50 }, "b"), hook(5, "hook/started", { startedAt: 10 }, null)], "t");
-    expect(result.turns[0]?.entries[0]).toMatchObject({ status: "running", historical: false, at: live[1]?.at, endedAt: null });
-    expect(result.turns[1]?.entries[0]).toMatchObject({ status: "completed", id: "hook:t:b:handler" });
-    expect(result.sessionEntries[0]).toMatchObject({ status: "running", id: "hook:t::handler" });
-    expect(projectNativeActivity([...live, replay, hook(6, "hook/completed", { startedAt: 200, durationMs: 11 })], "t").turns[0]?.entries[0]).toMatchObject({ status: "completed", historical: false, durationMs: 11 });
+    const history = [hook(1, "hook/completed", { startedAt: 100, durationMs: 8 })].map(row => ({ ...row, historical: true }))                                          ;
+    const live    = [...history, hook(2, "hook/started", { startedAt: 200 })]                                                                                          ;
+    const replay  = { ...hook(3, "hook/completed", { startedAt: 300, status: "failed" }), historical: true }                                                           ;
+    const result  = projectNativeActivity([...live, replay, hook(4, "hook/completed", { startedAt: 50 }, "b"), hook(5, "hook/started", { startedAt: 10 }, null)], "t") ;
+    expect(result.turns[0]?.entries[0]                                                                                                      ).toMatchObject({ status: "running", historical: false, at: live[1]?.at, endedAt: null }) ;
+    expect(result.turns[1]?.entries[0]                                                                                                      ).toMatchObject({ status: "completed", id: "hook:t:b:handler" }                         ) ;
+    expect(result.sessionEntries[0]                                                                                                         ).toMatchObject({ status: "running", id: "hook:t::handler" }                            ) ;
+    expect(projectNativeActivity([...live, replay, hook(6, "hook/completed", { startedAt: 200, durationMs: 11 })], "t").turns[0]?.entries[0]).toMatchObject({ status: "completed", historical: false, durationMs: 11 }              ) ;
   });
 
   test("시작 시각이 불명확한 재수신은 완료된 행을 다시 열지 않는다", () => {
     for (const startedAt of [undefined, null, "invalid", NaN, 100]) {
-      const before = [hook(1, "hook/started", { startedAt }), hook(2, "hook/completed", { startedAt, durationMs: 8 })];
-      const replay = [...before, hook(3, "hook/started", { startedAt })];
+      const before = [hook(1, "hook/started", { startedAt }), hook(2, "hook/completed", { startedAt, durationMs: 8 })] ;
+      const replay = [...before, hook(3, "hook/started", { startedAt })]                                               ;
       expect(projectNativeActivity(before, "t").turns[0]?.entries[0]).toMatchObject({ status: "completed", durationMs: 8 });
       expect(projectNativeActivity(replay, "t").turns[0]?.entries).toEqual(projectNativeActivity(before, "t").turns[0]?.entries);
     }
-    const current = [hook(1, "hook/started", { startedAt: 100 }), hook(2, "hook/completed", { startedAt: 100 }), hook(3, "hook/started", { startedAt: 200 })];
-    const ambiguous = [...current, hook(4, "hook/completed", { durationMs: 99 }), hook(5, "hook/started", {})];
+    const current   = [hook(1, "hook/started", { startedAt: 100 }), hook(2, "hook/completed", { startedAt: 100 }), hook(3, "hook/started", { startedAt: 200 })] ;
+    const ambiguous = [...current, hook(4, "hook/completed", { durationMs: 99 }), hook(5, "hook/started", {})]                                                  ;
     expect(projectNativeActivity(ambiguous, "t").turns[0]?.entries).toEqual(projectNativeActivity(current, "t").turns[0]?.entries);
     const ended = event(6, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } });
     expect(projectNativeActivity([...ambiguous, ended], "t").turns[0]?.entries[0]).toMatchObject({ status: "unknown", endedAt: ended.at });
@@ -135,27 +135,27 @@ describe("계획·공개 진행 설명의 종료 경계", () => {
   test("종료·복원된 턴의 늦은 계획과 산문만 차단하고 후행 실행 결과는 보존한다", () => {
     for (const historical of [false, true]) {
       for (const status of ["completed", "failed", "interrupted"] as const) {
-        const events = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "종료 전 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "종료 전 설명" }), item(4, "item/started", { id: "cmd", type: "commandExecution", command: "printf result" }), event(5, "turn/completed", { threadId: "t", turn: { id: "a", status } }), started(6), event(7, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "늦은 계획", status: "inProgress" }] }), event(8, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "msg", phase: "commentary", delta: "늦은 조각" }), item(9, "item/completed", { id: "late", type: "agentMessage", phase: "commentary", text: "늦은 산문" }), item(10, "item/completed", { id: "cmd", type: "commandExecution", command: "printf result", exitCode: 0 }), item(11, "item/completed", { id: "answer", type: "agentMessage", phase: "final_answer", text: "최종 결과" })].map((row) => ({ ...row, historical }));
-        const turn = projectNativeActivity(events, "t").turns[0];
-        expect(turn?.plan).toEqual([{ step: "종료 전 계획", status: "inProgress" }]);
-        expect(turn?.entries.filter((entry) => entry.kind === "progress").map((entry) => entry.description)).toEqual(["종료 전 설명"]);
-        expect(turn?.entries.find((entry) => entry.kind === "command")?.status).toBe("completed");
-        expect(turn?.answer).toBe("최종 결과");
-        expect(turn?.status).toBe(status);
-        expect(turn?.historical).toBe(historical);
-        expect(turn?.endedSeq).toBe(5);
+        const events = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "종료 전 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "종료 전 설명" }), item(4, "item/started", { id: "cmd", type: "commandExecution", command: "printf result" }), event(5, "turn/completed", { threadId: "t", turn: { id: "a", status } }), started(6), event(7, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "늦은 계획", status: "inProgress" }] }), event(8, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "msg", phase: "commentary", delta: "늦은 조각" }), item(9, "item/completed", { id: "late", type: "agentMessage", phase: "commentary", text: "늦은 산문" }), item(10, "item/completed", { id: "cmd", type: "commandExecution", command: "printf result", exitCode: 0 }), item(11, "item/completed", { id: "answer", type: "agentMessage", phase: "final_answer", text: "최종 결과" })].map((row) => ({ ...row, historical })) ;
+        const turn   = projectNativeActivity(events, "t").turns[0]                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ;
+        expect(turn?.plan                                                                                  ).toEqual([{ step: "종료 전 계획", status: "inProgress" }]) ;
+        expect(turn?.entries.filter((entry) => entry.kind === "progress").map((entry) => entry.description)).toEqual(["종료 전 설명"]                                ) ;
+        expect(turn?.entries.find((entry) => entry.kind === "command")?.status                             ).toBe   ("completed"                                     ) ;
+        expect(turn?.answer                                                                                ).toBe   ("최종 결과"                                     ) ;
+        expect(turn?.status                                                                                ).toBe   (status                                          ) ;
+        expect(turn?.historical                                                                            ).toBe   (historical                                      ) ;
+        expect(turn?.endedSeq                                                                              ).toBe   (5                                               ) ;
       }
     }
   });
   test("다른 새 턴의 계획과 재사용된 메시지 ID는 이전 턴의 늦은 사건과 섞이지 않는다", () => {
-    const events = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "A 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "shared", type: "agentMessage", phase: "commentary", text: "A 설명" }), event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), started(5, "b"), event(6, "turn/plan/updated", { threadId: "t", turnId: "b", plan: [{ step: "B 계획", status: "inProgress" }] }), item(7, "item/completed", { id: "shared", type: "agentMessage", phase: "commentary", text: "B 설명" }, "b"), event(8, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "늦은 A 계획", status: "inProgress" }] }), item(9, "item/completed", { id: "shared", type: "agentMessage", phase: "commentary", text: "늦은 A 설명" })];
-    const turns = projectNativeActivity(events, "t").turns;
+    const events = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "A 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "shared", type: "agentMessage", phase: "commentary", text: "A 설명" }), event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), started(5, "b"), event(6, "turn/plan/updated", { threadId: "t", turnId: "b", plan: [{ step: "B 계획", status: "inProgress" }] }), item(7, "item/completed", { id: "shared", type: "agentMessage", phase: "commentary", text: "B 설명" }, "b"), event(8, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "늦은 A 계획", status: "inProgress" }] }), item(9, "item/completed", { id: "shared", type: "agentMessage", phase: "commentary", text: "늦은 A 설명" })] ;
+    const turns  = projectNativeActivity(events, "t").turns                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ;
     expect(turns.map((turn) => turn.plan[0]?.step)).toEqual(["A 계획", "B 계획"]);
     expect(turns.map((turn) => turn.entries.find((entry) => entry.kind === "progress")?.description)).toEqual(["A 설명", "B 설명"]);
   });
   test("연결 종료도 계획·공개 산문의 경계이며 새 턴에는 전파하지 않는다", () => {
-    const closed = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "A 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "A 설명" }), event(4, "transport/closed", {}), event(5, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "늦은 계획", status: "inProgress" }] }), item(6, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "늦은 설명" })];
-    const turns = projectNativeActivity([...closed, started(7, "b"), event(8, "turn/plan/updated", { threadId: "t", turnId: "b", plan: [{ step: "B 계획", status: "inProgress" }] }), item(9, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "B 설명" }, "b")], "t").turns;
+    const closed = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "A 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "A 설명" }), event(4, "transport/closed", {}), event(5, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "늦은 계획", status: "inProgress" }] }), item(6, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "늦은 설명" })] ;
+    const turns  = projectNativeActivity([...closed, started(7, "b"), event(8, "turn/plan/updated", { threadId: "t", turnId: "b", plan: [{ step: "B 계획", status: "inProgress" }] }), item(9, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "B 설명" }, "b")], "t").turns                                                                                                                                                                                                        ;
     expect(turns.map((turn) => turn.plan[0]?.step)).toEqual(["A 계획", "B 계획"]);
     expect(turns.map((turn) => turn.entries.find((entry) => entry.kind === "progress")?.description)).toEqual(["A 설명", "B 설명"]);
   });
@@ -177,13 +177,13 @@ describe("계획·공개 진행 설명의 종료 경계", () => {
     expect(projectNativeActivity(futureCollision, "t").turns[0]?.endedSeq).toBe(2);
   });
   test("승인 결과가 불확실한 턴도 연결 종료 seq 뒤 공개 진행을 갱신하지 않는다", () => {
-    const request: AppEvent = { ...event(4, "item/commandExecution/requestApproval", { threadId: "t", turnId: "a" }), kind: "request", requestId: 42 };
-    const uncertain: AppEvent = { ...event(5, "approval/uncertain", {}), requestId: 42 };
-    const events = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "A 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "처음" }), request, uncertain, event(6, "transport/closed", {}), item(7, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "늦은 설명" })];
-    const turn = projectNativeActivity(events, "t").turns[0];
-    expect(turn?.status).toBe("unknown");
-    expect(turn?.endedSeq).toBe(6);
-    expect(turn?.entries.find((entry) => entry.kind === "progress")?.description).toBe("처음");
+    const request   : AppEvent = { ...event(4, "item/commandExecution/requestApproval", { threadId: "t", turnId: "a" }), kind: "request", requestId: 42 }                                                                                                                                                                                                                                                                       ;
+    const uncertain : AppEvent = { ...event(5, "approval/uncertain", {}), requestId: 42 }                                                                                                                                                                                                                                                                                                                                       ;
+    const events               = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "A 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "처음" }), request, uncertain, event(6, "transport/closed", {}), item(7, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "늦은 설명" })] ;
+    const turn                 = projectNativeActivity(events, "t").turns[0]                                                                                                                                                                                                                                                                                                                                                    ;
+    expect(turn?.status                                                         ).toBe("unknown") ;
+    expect(turn?.endedSeq                                                       ).toBe(6        ) ;
+    expect(turn?.entries.find((entry) => entry.kind === "progress")?.description).toBe("처음"   ) ;
   });
   test("확정된 Native 종료 상태와 시각은 교차 상태·동일 상태 재전달로 바뀌지 않는다", () => {
     for (const first of ["completed", "failed", "interrupted"] as const) {
@@ -191,9 +191,9 @@ describe("계획·공개 진행 설명의 종료 경계", () => {
         const events = [started(1), event(2, "turn/completed", { threadId: "t", turn: { id: "a", status: first } }), event(3, "turn/completed", { threadId: "t", turn: { id: "a", status: duplicate } })];
         for (const historical of [false, true]) {
           const turn = projectNativeActivity(events.map((row) => ({ ...row, historical })), "t").turns[0];
-          expect(turn?.status).toBe(first);
-          expect(turn?.endedAt).toBe(events[1]?.at);
-          expect(turn?.endedSeq).toBe(2);
+          expect(turn?.status  ).toBe(first        ) ;
+          expect(turn?.endedAt ).toBe(events[1]?.at) ;
+          expect(turn?.endedSeq).toBe(2            ) ;
         }
       }
     }
@@ -201,60 +201,60 @@ describe("계획·공개 진행 설명의 종료 경계", () => {
   test("연결 종료·미확인 Native 완료는 뒤늦은 확정 결과로 정제할 수 있다", () => {
     for (const status of ["completed", "failed", "interrupted"] as const) {
       for (const unknown of [event(2, "transport/closed", {}), event(2, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } })]) {
-        const terminal = event(3, "turn/completed", { threadId: "t", turn: { id: "a", status } });
-        const duplicate = event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: status === "failed" ? "completed" : "failed" } });
-        const turn = projectNativeActivity([started(1), unknown, terminal, duplicate], "t").turns[0];
-        expect(turn?.status).toBe(status);
-        expect(turn?.endedAt).toBe(terminal.at);
-        expect(turn?.endedSeq).toBe(2);
+        const terminal  = event(3, "turn/completed", { threadId: "t", turn: { id: "a", status } })                                               ;
+        const duplicate = event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: status === "failed" ? "completed" : "failed" } }) ;
+        const turn      = projectNativeActivity([started(1), unknown, terminal, duplicate], "t").turns[0]                                        ;
+        expect(turn?.status  ).toBe(status     ) ;
+        expect(turn?.endedAt ).toBe(terminal.at) ;
+        expect(turn?.endedSeq).toBe(2          ) ;
       }
     }
   });
   test("클라이언트 startFailed를 Native의 확정 종료로 오인하지 않는다", () => {
-    const terminal = event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } });
-    const events = [event(1, "turn/userPrompt", { threadId: "t", clientRequestId: "r", text: "요청" }), event(2, "turn/startFailed", { threadId: "t", clientRequestId: "r" }), event(3, "turn/startAccepted", { threadId: "t", turnId: "a", clientRequestId: "r" }), terminal, event(5, "turn/completed", { threadId: "t", turn: { id: "a", status: "failed" } })];
-    const turn = projectNativeActivity(events, "t").turns[0];
-    expect(turn?.status).toBe("completed");
-    expect(turn?.endedAt).toBe(terminal.at);
-    expect(turn?.endedSeq).toBe(2);
+    const terminal = event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } })                                                                                                                                                                                                                                                           ;
+    const events   = [event(1, "turn/userPrompt", { threadId: "t", clientRequestId: "r", text: "요청" }), event(2, "turn/startFailed", { threadId: "t", clientRequestId: "r" }), event(3, "turn/startAccepted", { threadId: "t", turnId: "a", clientRequestId: "r" }), terminal, event(5, "turn/completed", { threadId: "t", turn: { id: "a", status: "failed" } })] ;
+    const turn     = projectNativeActivity(events, "t").turns[0]                                                                                                                                                                                                                                                                                                     ;
+    expect(turn?.status  ).toBe("completed") ;
+    expect(turn?.endedAt ).toBe(terminal.at) ;
+    expect(turn?.endedSeq).toBe(2          ) ;
   });
   test("불확실 승인 턴의 연결 종료 뒤 시작·승인·산문은 재활성화하지 않는다", () => {
-    const request: AppEvent = { ...event(4, "item/commandExecution/requestApproval", { threadId: "t", turnId: "a" }), kind: "request", requestId: 42 };
-    const uncertain: AppEvent = { ...event(5, "approval/uncertain", {}), requestId: 42 };
-    const closed = event(6, "transport/closed", {});
-    const responded: AppEvent = { ...event(8, "approval/responded", { decision: "accept" }), requestId: 42 };
-    const lateRequest: AppEvent = { ...event(9, "item/commandExecution/requestApproval", { threadId: "t", turnId: "a" }), kind: "request", requestId: 43 };
-    const events = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "A 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "처음" }), request, uncertain, closed, started(7), responded, lateRequest, item(10, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "늦은 설명" }), event(11, "transport/closed", {})];
-    const turn = projectNativeActivity(events, "t").turns[0];
-    expect(turn?.status).toBe("unknown");
-    expect(turn?.endedAt).toBe(closed.at);
-    expect(turn?.endedSeq).toBe(closed.seq);
-    expect(turn?.lastActivityAt).toBe(closed.at);
-    expect(turn?.entries.find((entry) => entry.kind === "progress")?.description).toBe("처음");
-    expect(turn?.entries.find((entry) => entry.id === "request:number:43")?.status).toBe("unknown");
+    const request     : AppEvent = { ...event(4, "item/commandExecution/requestApproval", { threadId: "t", turnId: "a" }), kind: "request", requestId: 42 }                                                                                                                                                                                                                                                                                                                     ;
+    const uncertain   : AppEvent = { ...event(5, "approval/uncertain", {}), requestId: 42 }                                                                                                                                                                                                                                                                                                                                                                                     ;
+    const closed                 = event(6, "transport/closed", {})                                                                                                                                                                                                                                                                                                                                                                                                             ;
+    const responded   : AppEvent = { ...event(8, "approval/responded", { decision: "accept" }), requestId: 42 }                                                                                                                                                                                                                                                                                                                                                                 ;
+    const lateRequest : AppEvent = { ...event(9, "item/commandExecution/requestApproval", { threadId: "t", turnId: "a" }), kind: "request", requestId: 43 }                                                                                                                                                                                                                                                                                                                     ;
+    const events                 = [started(1), event(2, "turn/plan/updated", { threadId: "t", turnId: "a", plan: [{ step: "A 계획", status: "inProgress" }] }), item(3, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "처음" }), request, uncertain, closed, started(7), responded, lateRequest, item(10, "item/completed", { id: "msg", type: "agentMessage", phase: "commentary", text: "늦은 설명" }), event(11, "transport/closed", {})] ;
+    const turn                   = projectNativeActivity(events, "t").turns[0]                                                                                                                                                                                                                                                                                                                                                                                                  ;
+    expect(turn?.status                                                           ).toBe("unknown" ) ;
+    expect(turn?.endedAt                                                          ).toBe(closed.at ) ;
+    expect(turn?.endedSeq                                                         ).toBe(closed.seq) ;
+    expect(turn?.lastActivityAt                                                   ).toBe(closed.at ) ;
+    expect(turn?.entries.find((entry) => entry.kind === "progress")?.description  ).toBe("처음"    ) ;
+    expect(turn?.entries.find((entry) => entry.id === "request:number:43")?.status).toBe("unknown" ) ;
   });
   test("완료 사건의 canonical 확정3종 외 값은 unknown이며 뒤늦은 확정으로 정제한다", () => {
     const unknownValues: unknown[] = ["inProgress", "running", "pending", "blocked", "declined", "stopped", "unknown", "other", null, undefined, 42];
     for (const rawStatus of unknownValues) {
-      const uncertain = event(2, "turn/completed", { threadId: "t", turn: { id: "a", status: rawStatus } });
-      const before = projectNativeActivity([started(1), uncertain], "t").turns[0];
-      expect(before?.status).toBe("unknown");
-      expect(before?.endedAt).toBe(uncertain.at);
-      expect(before?.endedSeq).toBe(2);
+      const uncertain = event(2, "turn/completed", { threadId: "t", turn: { id: "a", status: rawStatus } }) ;
+      const before    = projectNativeActivity([started(1), uncertain], "t").turns[0]                        ;
+      expect(before?.status  ).toBe("unknown"   ) ;
+      expect(before?.endedAt ).toBe(uncertain.at) ;
+      expect(before?.endedSeq).toBe(2           ) ;
       for (const status of ["completed", "failed", "interrupted"] as const) {
-        const terminal = event(3, "turn/completed", { threadId: "t", turn: { id: "a", status } });
-        const duplicate = event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: status === "failed" ? "completed" : "failed" } });
-        const turn = projectNativeActivity([started(1), uncertain, terminal, duplicate], "t").turns[0];
-        expect(turn?.status).toBe(status);
-        expect(turn?.endedAt).toBe(terminal.at);
-        expect(turn?.endedSeq).toBe(2);
+        const terminal  = event(3, "turn/completed", { threadId: "t", turn: { id: "a", status } })                                               ;
+        const duplicate = event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: status === "failed" ? "completed" : "failed" } }) ;
+        const turn      = projectNativeActivity([started(1), uncertain, terminal, duplicate], "t").turns[0]                                      ;
+        expect(turn?.status  ).toBe(status     ) ;
+        expect(turn?.endedAt ).toBe(terminal.at) ;
+        expect(turn?.endedSeq).toBe(2          ) ;
       }
     }
   });
   test("모든 종료 생성 경로의 각 prefix에서 종료 시각과 비활성 상태가 정합하다", () => {
-    const request: AppEvent = { ...event(2, "item/commandExecution/requestApproval", { threadId: "t", turnId: "a" }), kind: "request", requestId: 42 };
-    const uncertain: AppEvent = { ...event(3, "approval/uncertain", {}), requestId: 42 };
-    const lateApproval: AppEvent = { ...event(8, "approval/responded", { decision: "accept" }), requestId: 42 };
+    const request      : AppEvent = { ...event(2, "item/commandExecution/requestApproval", { threadId: "t", turnId: "a" }), kind: "request", requestId: 42 } ;
+    const uncertain    : AppEvent = { ...event(3, "approval/uncertain", {}), requestId: 42 }                                                                 ;
+    const lateApproval : AppEvent = { ...event(8, "approval/responded", { decision: "accept" }), requestId: 42 }                                             ;
     const closers: AppEvent[][] = [
       [started(1), event(5, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } })],
       [started(1), event(5, "turn/completed", { threadId: "t", turn: { id: "a", status: "inProgress" } })],
@@ -301,9 +301,9 @@ describe("Native 원장 입력 정규화", () => {
     const lateOptional = normalizeNativeResources(item(3, "item/completed", {
       id: "cmd", type: "commandExecution", invocationId: "late", exitCode: 0,
     }), root);
-    expect(lateOptional.observations[0]?.source).toEqual({ kind: "item", itemId: "cmd", turnId: "a", nativeInvocationId: "late" });
-    expect(lateOptional.observations[0]?.resource).toEqual(end.observations[0]?.resource);
-    expect(JSON.stringify(start)).not.toContain("private command");
+    expect(lateOptional.observations[0]?.source  )    .toEqual  ({ kind: "item", itemId: "cmd", turnId: "a", nativeInvocationId: "late" }) ;
+    expect(lateOptional.observations[0]?.resource)    .toEqual  (end.observations[0]?.resource                                           ) ;
+    expect(JSON.stringify(start)                 ).not.toContain("private command"                                                       ) ;
   });
 
   test("명시 thread/turn/item 누락을 다른 필드나 현재 대화로 추정하지 않는다", () => {
@@ -313,9 +313,9 @@ describe("Native 원장 입력 정규화", () => {
       { threadId: "t", turnId: "a", itemId: "cmd", item: { type: "commandExecution" } },
     ]) {
       const result = normalizeNativeResources(event(1, "item/started", params), root);
-      expect(result.observations).toEqual([]);
-      expect(result.gaps).toEqual(["native-missing"]);
-      expect(result.threadId).toBe("threadId" in params ? "t" : null);
+      expect(result.observations).toEqual([]                               ) ;
+      expect(result.gaps        ).toEqual(["native-missing"]               ) ;
+      expect(result.threadId    ).toBe   ("threadId" in params ? "t" : null) ;
     }
   });
 
@@ -356,37 +356,37 @@ describe("Native 원장 입력 정규화", () => {
       { source: { kind: "item", itemId: "read", turnId: "a" }, resource: { kind: "document", identity: "skills/www/www-build/SKILL.md", label: "www-build" }, action: "read", status: "completed" },
       { source: { kind: "item", itemId: "read", turnId: "a" }, resource: { kind: "document", identity: "agents/www/AGENT.md", label: "www-dev" }, action: "read", status: "completed" },
     ]);
-    expect(result.gaps).toEqual(["native-missing"]);
-    expect(result.observations.some((row) => row.resource.kind === "skill")).toBe(false);
-    expect(JSON.stringify(result)).not.toContain("/private/secret");
-    expect(JSON.stringify(result)).not.toContain("src/main.ts");
+    expect(result.gaps                                                     )    .toEqual  (["native-missing"]) ;
+    expect(result.observations.some((row) => row.resource.kind === "skill"))    .toBe     (false             ) ;
+    expect(JSON.stringify(result)                                          ).not.toContain("/private/secret" ) ;
+    expect(JSON.stringify(result)                                          ).not.toContain("src/main.ts"     ) ;
   });
 
   test("서로 다른 비공개 문서는 실제 hash로 구별하고 같은 경로의 중복·재전달·복원 identity는 유지한다", () => {
-    const paths = ["/synthetic/private-alpha/SKILL.md", "/synthetic/private-beta/SKILL.md"];
-    const options = { documentIdentity: (path: string, cwd: string) => `document-sha256:${createHash("sha256").update(resolve(root, cwd, path)).digest("hex")}` };
+    const paths   = ["/synthetic/private-alpha/SKILL.md", "/synthetic/private-beta/SKILL.md"]                                                                     ;
+    const options = { documentIdentity: (path: string, cwd: string) => `document-sha256:${createHash("sha256").update(resolve(root, cwd, path)).digest("hex")}` } ;
     const fields = {
       id: "private-read", type: "commandExecution", cwd: root,
       command: "SYNTHETIC_PRIVATE_COMMAND", aggregatedOutput: "SYNTHETIC_PRIVATE_OUTPUT", reasoning: "SYNTHETIC_PRIVATE_REASONING",
       commandActions: [...paths, paths[0]].map((path) => ({ type: "read", path })),
     };
-    const start = normalizeNativeResources(item(1, "item/started", fields), root, options);
-    const completed = item(2, "item/completed", { ...fields, exitCode: 0 });
-    const end = normalizeNativeResources(completed, root, options);
-    const redelivery = normalizeNativeResources({ ...completed, seq: 3 }, root, options);
-    const restored = normalizeNativeResources({ ...completed, seq: 4, historical: true }, root, options);
-    const other = normalizeNativeResources(item(5, "item/completed", { ...fields, id: "another-read", exitCode: 0 }), root, options);
-    const reads = end.observations.filter((row) => row.action === "read");
+    const start      = normalizeNativeResources(item(1, "item/started", fields), root, options                                          ) ;
+    const completed  = item                    (2, "item/completed", { ...fields, exitCode: 0 }                                         ) ;
+    const end        = normalizeNativeResources(completed, root, options                                                                ) ;
+    const redelivery = normalizeNativeResources({ ...completed, seq: 3 }, root, options                                                 ) ;
+    const restored   = normalizeNativeResources({ ...completed, seq: 4, historical: true }, root, options                               ) ;
+    const other      = normalizeNativeResources(item(5, "item/completed", { ...fields, id: "another-read", exitCode: 0 }), root, options) ;
+    const reads      = end.observations.filter ((row) => row.action === "read"                                                          ) ;
     expect(reads).toEqual(paths.map((path) => ({
       source: { kind: "item", itemId: "private-read", turnId: "a" },
       resource: { kind: "document", identity: `document-sha256:${createHash("sha256").update(path).digest("hex")}`, label: "SKILL.md" },
       action: "read", status: "completed",
     })));
-    expect(new Set(reads.map((row) => row.resource.identity)).size).toBe(2);
-    expect(start.observations).toEqual(end.observations.map((row) => ({ ...row, status: "running" })));
-    expect(redelivery).toEqual(end);
-    expect(restored).toEqual(end);
-    expect(other.observations).toEqual(end.observations.map((row) => ({ ...row, source: { kind: "item", itemId: "another-read", turnId: "a" } })));
+    expect(new Set(reads.map((row) => row.resource.identity)).size).toBe   (2                                                                                                         ) ;
+    expect(start.observations                                     ).toEqual(end.observations.map((row) => ({ ...row, status: "running" }))                                            ) ;
+    expect(redelivery                                             ).toEqual(end                                                                                                       ) ;
+    expect(restored                                               ).toEqual(end                                                                                                       ) ;
+    expect(other.observations                                     ).toEqual(end.observations.map((row) => ({ ...row, source: { kind: "item", itemId: "another-read", turnId: "a" } }))) ;
     const historicalStart = normalizeNativeResources({ ...item(6, "item/started", fields), historical: true }, root, options);
     expect(historicalStart.observations).toEqual(start.observations.map((row) => ({ ...row, status: "unknown" })));
     const failed = normalizeNativeResources(item(7, "item/completed", { ...fields, exitCode: 1 }), root, options);
@@ -406,11 +406,11 @@ describe("Native 원장 입력 정규화", () => {
       id: "cwd-read", type: "commandExecution", cwd, exitCode: 0,
       commandActions: paths.map((path) => ({ type: "read", path })),
     }), root, options);
-    const alpha = normalize("/synthetic/private-alpha", ["SKILL.md", "/synthetic/private-alpha/SKILL.md"]);
-    const beta = normalize("/synthetic/private-beta", ["SKILL.md"]);
-    const fallback = normalize("", ["SKILL.md", `${root}/SKILL.md`]);
-    const relativeCwd = normalize("synthetic/private-alpha", ["SKILL.md"]);
-    const results = [alpha, beta, fallback, relativeCwd];
+    const alpha       = normalize("/synthetic/private-alpha", ["SKILL.md", "/synthetic/private-alpha/SKILL.md"]) ;
+    const beta        = normalize("/synthetic/private-beta", ["SKILL.md"])                                       ;
+    const fallback    = normalize("", ["SKILL.md", `${root}/SKILL.md`])                                          ;
+    const relativeCwd = normalize("synthetic/private-alpha", ["SKILL.md"])                                       ;
+    const results     = [alpha, beta, fallback, relativeCwd]                                                     ;
     const identities = results.map((result) => {
       const reads = result.observations.filter((row) => row.action === "read");
       expect(reads).toHaveLength(1);
@@ -467,9 +467,9 @@ describe("Native 원장 입력 정규화", () => {
       normalizeNativeResources(input, root, { documentIdentity: () => { throw new Error(paths.join(" ")); } }),
     ];
     for (const result of results) {
-      expect(result.gaps).toEqual(["native-missing"]);
-      expect(result.observations).toHaveLength(1);
-      expect(result.observations[0]?.resource.kind).toBe("tool");
+      expect(result.gaps                          ).toEqual     (["native-missing"]) ;
+      expect(result.observations                  ).toHaveLength(1                 ) ;
+      expect(result.observations[0]?.resource.kind).toBe        ("tool"            ) ;
       for (const path of paths) expect(JSON.stringify(result)).not.toContain(path);
     }
   });
@@ -483,10 +483,10 @@ describe("Native 원장 입력 정규화", () => {
         reasoning: privateBody, arguments: { secret: privateBody }, result: { content: privateBody },
         changes: [{ path: privateBody }], payload: privateBody,
       }), root);
-      expect(result.observations).toHaveLength(1);
-      expect(result.observations[0]?.source).toEqual({ kind: "item", itemId: "exec", turnId: "a" });
-      expect(result.observations[0]?.status).toBe("completed");
-      expect(JSON.stringify(result)).not.toContain(privateBody);
+      expect(result.observations           )    .toHaveLength(1                                            ) ;
+      expect(result.observations[0]?.source)    .toEqual     ({ kind: "item", itemId: "exec", turnId: "a" }) ;
+      expect(result.observations[0]?.status)    .toBe        ("completed"                                  ) ;
+      expect(JSON.stringify(result)        ).not.toContain   (privateBody                                  ) ;
       if (type === "mcpToolCall") expect(result.observations[0]?.resource).toEqual({ kind: "tool", identity: '["mcpToolCall","docs","lookup"]', label: "docs/lookup" });
     }
     for (const fields of [{ tool: "lookup" }, { server: "docs" }, { server: "docs", tool: "private body\ntext" }]) {
@@ -521,19 +521,19 @@ describe("Native 원장 입력 정규화", () => {
     for (const turnId of [null, "a", "b"]) {
       for (const method of ["hook/started", "hook/completed"]) {
         const result = normalizeNativeResources(event(1, method, { threadId: "t", turnId, run }), root);
-        expect(result).toEqual({ threadId: "t", observations: [], gaps: ["unstable-id"] });
-        expect(JSON.stringify(result)).not.toContain("/private/hooks");
-        expect(JSON.stringify(result)).not.toContain("private hook body");
+        expect(result                )    .toEqual  ({ threadId: "t", observations: [], gaps: ["unstable-id"] }) ;
+        expect(JSON.stringify(result)).not.toContain("/private/hooks"                                          ) ;
+        expect(JSON.stringify(result)).not.toContain("private hook body"                                       ) ;
       }
     }
     expect(normalizeNativeResources(event(2, "hook/completed", { turnId: "a", run }), root)).toEqual({ threadId: null, observations: [], gaps: ["native-missing"] });
   });
 
   test("유일성을 보증한 fixture namespace만 Hook을 받으며 null→명시 turn source를 보존한다", () => {
-    const options = { providerRunNamespace: "fixture-unique-runs" };
-    const run = { id: "fixture-call-1", executionMode: "sync", eventName: "Stop", status: "running" };
-    const start = normalizeNativeResources(event(1, "hook/started", { threadId: "t", turnId: null, run }), root, options);
-    const end = normalizeNativeResources(event(2, "hook/completed", { threadId: "t", turnId: "a", run: { ...run, status: "completed" } }), root, options);
+    const options = { providerRunNamespace: "fixture-unique-runs" }                                                                                           ;
+    const run     = { id: "fixture-call-1", executionMode: "sync", eventName: "Stop", status: "running" }                                                     ;
+    const start   = normalizeNativeResources(event(1, "hook/started", { threadId: "t", turnId: null, run }), root, options)                                   ;
+    const end     = normalizeNativeResources(event(2, "hook/completed", { threadId: "t", turnId: "a", run: { ...run, status: "completed" } }), root, options) ;
     expect(start).toEqual({ threadId: "t", gaps: [], observations: [{
       source: { kind: "hook", hookRunId: "fixture-call-1", providerRunNamespace: "fixture-unique-runs", turnId: null },
       resource: { kind: "hook", identity: "Stop", label: "Stop" }, action: "invoke", status: "running",
@@ -840,20 +840,20 @@ describe("실시간 Native 활동 투영", () => {
   });
 
   test("공개 설명은 완료 snapshot을 정산하고 늦은 시작과 delta를 무시한다", () => {
-    const delta = (seq: number, id: string, value: string, turnId = "a") => event(seq, "item/agentMessage/delta", { threadId: "t", turnId, itemId: id, phase: "commentary", delta: value });
-    const snapshot = (seq: number, method: string, id: string, value: Record<string, unknown>, turnId = "a") => item(seq, method, { id, type: "agentMessage", phase: "commentary", ...value }, turnId);
-    const description = (events: AppEvent[], turn = 0, id = "p") => projectNativeActivity(events, "t").turns[turn]?.entries.find(row => row.id === `item:${id}`)?.description;
+    const delta       = (seq: number, id: string, value: string, turnId = "a") => event(seq, "item/agentMessage/delta", { threadId: "t", turnId, itemId: id, phase: "commentary", delta: value })         ;
+    const snapshot    = (seq: number, method: string, id: string, value: Record<string, unknown>, turnId = "a") => item(seq, method, { id, type: "agentMessage", phase: "commentary", ...value }, turnId) ;
+    const description = (events: AppEvent[], turn = 0, id = "p") => projectNativeActivity(events, "t").turns[turn]?.entries.find(row => row.id === `item:${id}`)?.description                             ;
     for (const historical of [false, true]) {
-      const mark = (events: AppEvent[]) => events.map(row => ({ ...row, historical }));
-      const before = [started(1), delta(2, "p", "진행"), snapshot(3, "item/started", "p", { text: "늦은 시작" })];
+      const mark   = (events: AppEvent[]) => events.map(row => ({ ...row, historical }))                          ;
+      const before = [started(1), delta(2, "p", "진행"), snapshot(3, "item/started", "p", { text: "늦은 시작" })] ;
       expect(description(mark(before))).toBe("진행");
       for (const completed of ["", "완료"]) {
         const done = [...before, snapshot(4, "item/completed", "p", { text: completed })];
-        expect(description(mark(done))).toBe(completed);
-        expect(description(mark([...done, delta(5, "p", "늦음"), snapshot(6, "item/started", "p", { text: "늦음" })]))).toBe(completed);
-        expect(description(mark([...done, snapshot(5, "item/completed", "p", { text: "재정산" })]))).toBe("재정산");
-        expect(description(mark([...done, delta(5, "q", "다른 항목")]), 0, "q")).toBe("다른 항목");
-        expect(description(mark([...done, started(5, "b"), delta(6, "p", "새 턴", "b")]), 1)).toBe("새 턴");
+        expect(description(mark(done))                                                                                ).toBe(completed  ) ;
+        expect(description(mark([...done, delta(5, "p", "늦음"), snapshot(6, "item/started", "p", { text: "늦음" })]))).toBe(completed  ) ;
+        expect(description(mark([...done, snapshot(5, "item/completed", "p", { text: "재정산" })]))                   ).toBe("재정산"   ) ;
+        expect(description(mark([...done, delta(5, "q", "다른 항목")]), 0, "q")                                       ).toBe("다른 항목") ;
+        expect(description(mark([...done, started(5, "b"), delta(6, "p", "새 턴", "b")]), 1)                          ).toBe("새 턴"    ) ;
       }
       expect(description(mark([...before, snapshot(4, "item/completed", "p", {})]))).toBe("진행");
     }
@@ -914,10 +914,10 @@ describe("현재 재개·후속 요청의 관측 경계", () => {
     expect(projectNativeActivity(rows, "t").turns[0]?.entries.every(row => row.status !== "running")).toBe(true);
   });
   for (const phase of ["commentary", "final_answer"] as const) for (const boundary of ["current", "generation", "process", "session", "workspace", "selection", "EOF", "completed"] as const) test(`복원 ${phase} 재개는 ${boundary} 경계를 지킨다`, () => {
-    const saved = restoreConversationEvents("t", [{ id: "a", status: boundary === "completed" ? "completed" : "inProgress", items: [{ id: "p", type: "agentMessage", phase, text: "기존" }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `time-${index}`, connectionGeneration: 1, processEpoch: "p", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 1 }));
-    const live = { ...started(20), connectionGeneration: boundary === "generation" ? 2 : 1, processEpoch: boundary === "process" ? "other" : "p", sessionId: boundary === "session" ? "other" : "session", workspaceKey: boundary === "workspace" ? "other" : "workspace", selectionEpoch: boundary === "selection" ? 2 : 1 };
-    const rows = [...saved, ...(boundary === "EOF" ? [event(19, "transport/closed", {})] : []), live, { ...event(21, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase, delta: "추가" }), connectionGeneration: 1, processEpoch: "p", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 1 }];
-    const result = projectNativeActivity(rows, "t").turns[0];
+    const saved  = restoreConversationEvents("t", [{ id: "a", status: boundary === "completed" ? "completed" : "inProgress", items: [{ id: "p", type: "agentMessage", phase, text: "기존" }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `time-${index}`, connectionGeneration: 1, processEpoch: "p", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 1 })) ;
+    const live   = { ...started(20), connectionGeneration: boundary === "generation" ? 2 : 1, processEpoch: boundary === "process" ? "other" : "p", sessionId: boundary === "session" ? "other" : "session", workspaceKey: boundary === "workspace" ? "other" : "workspace", selectionEpoch: boundary === "selection" ? 2 : 1 }                                                               ;
+    const rows   = [...saved, ...(boundary === "EOF" ? [event(19, "transport/closed", {})] : []), live, { ...event(21, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase, delta: "추가" }), connectionGeneration: 1, processEpoch: "p", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 1 }]                                                       ;
+    const result = projectNativeActivity(rows, "t").turns[0]                                                                                                                                                                                                                                                                                                                                  ;
     expect(result?.status).toBe(boundary === "current" ? "running" : boundary === "completed" ? "completed" : "unknown");
     expect(result?.entries.find(row => row.kind === (phase === "commentary" ? "progress" : "answer"))?.description).toBe(boundary === "current" ? "기존추가" : "기존");
   });
@@ -925,8 +925,8 @@ describe("현재 재개·후속 요청의 관측 경계", () => {
 
  test("완료 시각 있는 저장 답변은 같은 scope 재개에도 늦은 시작과 delta를 막는다", () => {
   for (const completedAtMs of [undefined, 100]) {
-    const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "answer", type: "agentMessage", text: "기존", ...(completedAtMs === undefined ? {} : { completedAtMs }) }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `time-${index}` }));
-    const rows = [...saved, started(20), item(21, "item/started", { id: "answer", type: "agentMessage", text: "늦은 시작" }), event(22, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "answer", delta: "추가" })];
+    const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "answer", type: "agentMessage", text: "기존", ...(completedAtMs === undefined ? {} : { completedAtMs }) }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `time-${index}` })) ;
+    const rows  = [...saved, started(20), item(21, "item/started", { id: "answer", type: "agentMessage", text: "늦은 시작" }), event(22, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "answer", delta: "추가" })]                                                        ;
     expect(projectNativeActivity(rows, "t").turns[0]?.answer).toBe(completedAtMs === undefined ? "기존추가" : "기존");
   }
  });
@@ -938,10 +938,10 @@ describe("현재 재개·후속 요청의 관측 경계", () => {
  });
 
 for (const accepted of [false, true]) for (const field of ["same", "inputTokens", "outputTokens", "cachedInputTokens", "reasoningOutputTokens", "totalTokens", "cacheWriteInputTokens"] as const) test(`v6 F1 늦은 누적의 다음 턴 기준 오염: ${accepted}/${field}`, () => {
-  const begin = (seq: number, id: string): AppEvent[] => accepted ? [event(seq, "turn/userPrompt", { threadId: "t", clientRequestId: id, text: id }), event(seq + 1, "turn/startAccepted", { threadId: "t", turnId: id, clientRequestId: id })] : [started(seq, id)];
-  const base = { ...tokens(100), cacheWriteInputTokens: 0 };
-  const late = field === "same" ? base : { ...base, [field]: base[field] + 50 };
-  const rows = [configured, ...begin(2, "a"), event(4, "thread/tokenUsage/updated", { threadId: "t", turnId: "a", tokenUsage: { total: base, last: tokens(1) } }), event(5, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), ...begin(6, "b"), update(8, "b", 120), event(9, "thread/tokenUsage/updated", { threadId: "t", turnId: "a", tokenUsage: { total: late, last: tokens(1) } }), event(10, "turn/completed", { threadId: "t", turn: { id: "b", status: "completed" } }), ...begin(11, "c"), update(13, "c", 200)];
+  const begin = (seq: number, id: string): AppEvent[] => accepted ? [event(seq, "turn/userPrompt", { threadId: "t", clientRequestId: id, text: id }), event(seq + 1, "turn/startAccepted", { threadId: "t", turnId: id, clientRequestId: id })] : [started(seq, id)]                                                                                                                                                                                                                                                                                    ;
+  const base  = { ...tokens(100), cacheWriteInputTokens: 0 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ;
+  const late  = field === "same" ? base : { ...base, [field]: base[field] + 50 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ;
+  const rows  = [configured, ...begin(2, "a"), event(4, "thread/tokenUsage/updated", { threadId: "t", turnId: "a", tokenUsage: { total: base, last: tokens(1) } }), event(5, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), ...begin(6, "b"), update(8, "b", 120), event(9, "thread/tokenUsage/updated", { threadId: "t", turnId: "a", tokenUsage: { total: late, last: tokens(1) } }), event(10, "turn/completed", { threadId: "t", turn: { id: "b", status: "completed" } }), ...begin(11, "c"), update(13, "c", 200)] ;
   expect(projectNativeActivity(rows, "t").turns.find(turn => turn.turnId === "c")?.usage?.totalTokens ?? null).toBe(field === "same" ? 80 : null);
   const recovery = [...rows.map(row => row.seq >= 10 ? { ...row, seq: row.seq + 1 } : row), update(10, "b", 180)];
   expect(projectNativeActivity(recovery, "t").turns.find(turn => turn.turnId === "c")?.usage?.totalTokens ?? null).toBe(field === "same" ? 20 : null);
@@ -949,42 +949,42 @@ for (const accepted of [false, true]) for (const field of ["same", "inputTokens"
   expect(projectNativeActivity([...rows, ...fresh], "fresh").turns.find(turn => turn.threadId === "fresh")?.usage?.totalTokens).toBe(10);
 });
 for (const phase of ["commentary", "final_answer"]) for (const when of ["before", "paused"]) for (const text of ["실제 완료", ""]) test(`v6 F7 실제 완료 사실은 재개로 해제되지 않는다: ${phase}/${when}/${text}`, () => {
-  const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "A", type: "agentMessage", phase, text: "기존" }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `saved-${index}` }));
-  const completed = item(10, "item/completed", { id: "A", type: "agentMessage", phase, text });
-  const before = when === "before" ? [started(9), completed, { ...event(11, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } }), historical: true }] : [completed];
-  const rows = [...saved, ...before, started(20), event(21, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase, delta: " 늦은 조각" })];
-  const result = projectNativeActivity(rows, "t").turns[0];
+  const saved     = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "A", type: "agentMessage", phase, text: "기존" }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `saved-${index}` })) ;
+  const completed = item(10, "item/completed", { id: "A", type: "agentMessage", phase, text })                                                                                                                                         ;
+  const before    = when === "before" ? [started(9), completed, { ...event(11, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } }), historical: true }] : [completed]                                           ;
+  const rows      = [...saved, ...before, started(20), event(21, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase, delta: " 늦은 조각" })]                                                                  ;
+  const result    = projectNativeActivity(rows, "t").turns[0]                                                                                                                                                                          ;
   expect(result?.entries.find(row => row.id === "item:A")?.description).toBe(phase === "commentary" && when === "paused" ? "기존" : text);
 });
 for (const field of ["connectionGeneration", "processEpoch", "sessionId", "workspaceKey", "selectionEpoch"] as const) test(`v6 F2 활동은 재개 뒤 다른 ${field} 변이를 거부한다`, () => {
-  const scope = { connectionGeneration: 7, processEpoch: "p", sessionId: "s", workspaceKey: "w", selectionEpoch: 1 };
-  const changed = field === "connectionGeneration" || field === "selectionEpoch" ? { [field]: 99 } : { [field]: "other" };
+  const scope   = { connectionGeneration: 7, processEpoch: "p", sessionId: "s", workspaceKey: "w", selectionEpoch: 1 }    ;
+  const changed = field === "connectionGeneration" || field === "selectionEpoch" ? { [field]: 99 } : { [field]: "other" } ;
   for (const phase of ["commentary", "final_answer"]) for (const normalFirst of [false, true]) {
-    const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "A", type: "agentMessage", phase, text: "기존" }] }], true).map((row, index) => ({ ...row, ...scope, seq: index + 1, at: `saved-${index}` }));
-    const delta = (seq: number, text: string) => ({ ...event(seq, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase, delta: text }), ...scope });
-    const rows = [...saved, { ...started(20), ...scope }, ...(normalFirst ? [delta(21, " 정상")] : [])];
-    const before = projectNativeActivity(rows, "t").turns[0];
-    const foreign = [{ ...delta(22, " 타 scope"), ...changed }, { ...item(23, "item/completed", { id: "A", type: "agentMessage", phase, text: "타 scope 완료" }), ...scope, ...changed }, { ...event(24, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), ...scope, ...changed }];
+    const saved   = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "A", type: "agentMessage", phase, text: "기존" }] }], true).map((row, index) => ({ ...row, ...scope, seq: index + 1, at: `saved-${index}` }))                                                               ;
+    const delta   = (seq: number, text: string) => ({ ...event(seq, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase, delta: text }), ...scope })                                                                                                                                   ;
+    const rows    = [...saved, { ...started(20), ...scope }, ...(normalFirst ? [delta(21, " 정상")] : [])]                                                                                                                                                                                                     ;
+    const before  = projectNativeActivity(rows, "t").turns[0]                                                                                                                                                                                                                                                  ;
+    const foreign = [{ ...delta(22, " 타 scope"), ...changed }, { ...item(23, "item/completed", { id: "A", type: "agentMessage", phase, text: "타 scope 완료" }), ...scope, ...changed }, { ...event(24, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), ...scope, ...changed }] ;
     expect(projectNativeActivity([...rows, ...foreign], "t").turns[0]).toEqual(before);
     expect(projectNativeActivity([...rows, ...foreign, delta(25, " 이어서")], "t").turns[0]?.entries.find(row => row.id === "item:A")?.description).toBe("기존" + (normalFirst ? " 정상" : "") + " 이어서");
   }
 });
 
 test("v6 EOF 이후 연결 안내와 후행 unknown은 이전 턴을 다시 열지 않는다", () => {
-  const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "A", type: "agentMessage", phase: "commentary", text: "기존" }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `saved-${index}` }));
-  const rows = [...saved, event(10, "transport/closed", {}), event(11, "transport/connected", {}), { ...event(12, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } }), historical: true }, started(13), event(14, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase: "commentary", delta: " 늦음" })];
+  const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [{ id: "A", type: "agentMessage", phase: "commentary", text: "기존" }] }], true).map((row, index) => ({ ...row, seq: index + 1, at: `saved-${index}` }))                                                                                                        ;
+  const rows  = [...saved, event(10, "transport/closed", {}), event(11, "transport/connected", {}), { ...event(12, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } }), historical: true }, started(13), event(14, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "A", phase: "commentary", delta: " 늦음" })] ;
   expect(projectNativeActivity(rows, "t").turns[0]?.entries.find(row => row.id === "item:A")?.description).toBe("기존");
 });
 
 for (const field of ["connectionGeneration", "processEpoch", "sessionId", "workspaceKey", "selectionEpoch"] as const) test(`v6 다른 ${field}의 명령·파일 변이와 완료도 현재 활동을 변경하지 않는다`, () => {
-  const scope = { connectionGeneration: 7, processEpoch: "p", sessionId: "s", workspaceKey: "w", selectionEpoch: 1 };
-  const changed = field === "connectionGeneration" || field === "selectionEpoch" ? { [field]: 99 } : { [field]: "other" };
+  const scope   = { connectionGeneration: 7, processEpoch: "p", sessionId: "s", workspaceKey: "w", selectionEpoch: 1 }    ;
+  const changed = field === "connectionGeneration" || field === "selectionEpoch" ? { [field]: 99 } : { [field]: "other" } ;
   for (const type of ["commandExecution", "fileChange"]) {
-    const value = { id: "A", type, command: "기존 명령", status: "inProgress", changes: [{ path: "kept.ts" }] };
-    const saved = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [value] }], true).map((row, index) => ({ ...row, ...scope, seq: index + 1, at: `saved-${index}` }));
-    const rows = [...saved, { ...started(20), ...scope }, { ...item(21, "item/started", value), ...scope }];
-    const before = projectNativeActivity(rows, "t").turns[0];
-    const foreign = [{ ...item(22, "item/started", { ...value, command: "다른 scope 명령" }), ...scope, ...changed }, { ...item(23, "item/completed", { ...value, status: "completed", exitCode: 0 }), ...scope, ...changed }, { ...event(24, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), ...scope, ...changed }];
+    const value   = { id: "A", type, command: "기존 명령", status: "inProgress", changes: [{ path: "kept.ts" }] }                                                                                                                                                                                                                                   ;
+    const saved   = restoreConversationEvents("t", [{ id: "a", status: "inProgress", items: [value] }], true).map((row, index) => ({ ...row, ...scope, seq: index + 1, at: `saved-${index}` }))                                                                                                                                                     ;
+    const rows    = [...saved, { ...started(20), ...scope }, { ...item(21, "item/started", value), ...scope }]                                                                                                                                                                                                                                      ;
+    const before  = projectNativeActivity(rows, "t").turns[0]                                                                                                                                                                                                                                                                                       ;
+    const foreign = [{ ...item(22, "item/started", { ...value, command: "다른 scope 명령" }), ...scope, ...changed }, { ...item(23, "item/completed", { ...value, status: "completed", exitCode: 0 }), ...scope, ...changed }, { ...event(24, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), ...scope, ...changed }] ;
     expect(projectNativeActivity([...rows, ...foreign], "t").turns[0]).toEqual(before);
     const settled = [...rows, ...foreign, { ...event(25, "transport/closed", {}), ...scope }, { ...item(26, "item/completed", { ...value, status: "completed", exitCode: 0 }), ...scope }];
     expect(projectNativeActivity(settled, "t").turns[0]?.entries.find(row => row.id === "item:A")?.status).toBe("completed");

@@ -382,11 +382,11 @@ test("공개 요약의 섹션·중복 seq·완료 snapshot과 commentary의 시�
   events.push(summaryEvent(8, "item/completed", { item: { id: "summary", type: "reasoning", summary: ["최종 첫 문단", "최종 다음 문단"], content: ["PRIVATE"] } }));
   events.push(summaryEvent(9, "item/reasoning/summaryTextDelta", { summaryIndex: 0, delta: "늦음" }));
   const completed = project(events);
-  expect(completed.blocks.flatMap(block => block.kind === "explanation" && block.source === "reasoningSummary" ? [block.text] : []).join("")).toBe("최종 첫 문단\n\n최종 다음 문단");
-  expect(completed.blocks[1]).toMatchObject({ source: "commentary", text: "확인했습니다." });
-  expect(completed.blocks.every(block => block.kind !== "explanation" || block.source !== "reasoningSummary" || !block.streaming)).toBe(true);
-  expect(completed.protocolWarning?.message).toContain("위치");
-  expect(JSON.stringify(project(events).blocks)).not.toContain("PRIVATE");
+  expect(completed.blocks.flatMap(block => block.kind === "explanation" && block.source === "reasoningSummary" ? [block.text] : []).join(""))    .toBe         ("최종 첫 문단\n\n최종 다음 문단"               ) ;
+  expect(completed.blocks[1]                                                                                                                )    .toMatchObject({ source: "commentary", text: "확인했습니다." }) ;
+  expect(completed.blocks.every(block => block.kind !== "explanation" || block.source !== "reasoningSummary" || !block.streaming)           )    .toBe         (true                                           ) ;
+  expect(completed.protocolWarning?.message                                                                                                 )    .toContain    ("위치"                                         ) ;
+  expect(JSON.stringify(project(events).blocks)                                                                                             ).not.toContain    ("PRIVATE"                                      ) ;
 });
 
 test("완료 snapshot만으로 요약을 표시하고 빈 authoritative snapshot은 기존 본문을 제거한다", () => {
@@ -540,9 +540,9 @@ test("동일 요약 섹션과 commentary가 교차해도 A/B/C/D 수신순을 �
 });
 
 test("재사용 승인 ID의 새 token만 최신 카드를 닫고 terminal은 보호한다", () => {
-  const request = (seq: number, approvalToken: string) => event(seq, "item/commandExecution/requestApproval", { threadId: "t" }, { kind: "request", requestId: 7, supported: true, approvalToken });
-  const response = (seq: number, approvalToken: string, method = "approval/responded") => event(seq, method, { threadId: "t" }, { requestId: 7, approvalToken });
-  const events = [request(1, "old"), response(2, "old"), request(3, "new"), response(4, "old"), response(5, "new", "approval/responding")];
+  const request  = (seq: number, approvalToken: string) => event(seq, "item/commandExecution/requestApproval", { threadId: "t" }, { kind: "request", requestId: 7, supported: true, approvalToken }) ;
+  const response = (seq: number, approvalToken: string, method = "approval/responded") => event(seq, method, { threadId: "t" }, { requestId: 7, approvalToken })                                     ;
+  const events   = [request(1, "old"), response(2, "old"), request(3, "new"), response(4, "old"), response(5, "new", "approval/responding")]                                                         ;
   expect(project(events).blocks).toMatchObject([{ state: "responded", open: false, approvalToken: "old" }, { state: "responding", open: false, approvalToken: "new" }]);
   events.push(response(6, "new"), response(7, "new", "approval/responding"));
   expect(project(events).blocks).toMatchObject([{ state: "responded" }, { state: "responded" }]);
@@ -560,10 +560,10 @@ test("연속 동일 섹션만 합치고 0/1/0·별도 항목은 수신순과 고
     summaryDelta(5, "C"), summaryDelta(6, "D", 0, "other"), summaryDelta(7, "E")];
   expect(publicTexts(events)).toEqual(["Aa", "B", "C", "D", "E"]);
   const result = project(events);
-  expect(new Set(result.blocks.map((block) => block.id)).size).toBe(result.blocks.length);
-  expect(project([...events, events[2]!])).toEqual(result);
-  expect(project(events)).toEqual(result);
-  expect(project(events.slice(0, 2)).blocks[0]?.id).toBe(result.blocks[0]?.id);
+  expect(new Set(result.blocks.map((block) => block.id)).size).toBe   (result.blocks.length) ;
+  expect(project([...events, events[2]!])                    ).toEqual(result              ) ;
+  expect(project(events)                                     ).toEqual(result              ) ;
+  expect(project(events.slice(0, 2)).blocks[0]?.id           ).toBe   (result.blocks[0]?.id) ;
 });
 
 for (const snapshot of [[], [""], [" ", "\n\t"]]) {
@@ -617,8 +617,8 @@ test("여러 fragment·섹션의 UTF16 총예산과 구분자 비용은 항목�
 });
 
 for (const source of ["commentary", "publicPlan"]) {
-  const delta = (seq: number, text: string) => summaryEvent(seq, source === "publicPlan" ? "item/publicPlan/delta" : "item/agentMessage/delta", { itemId: "message", phase: source === "commentary" ? source : undefined, delta: text });
-  const snapshot = (seq: number, text: string, method = "item/completed") => summaryEvent(seq, method, { item: { id: "message", type: source === "publicPlan" ? source : "agentMessage", phase: source === "commentary" ? source : undefined, text } });
+  const delta    = (seq: number, text: string) => summaryEvent(seq, source === "publicPlan" ? "item/publicPlan/delta" : "item/agentMessage/delta", { itemId: "message", phase: source === "commentary" ? source : undefined, delta: text })             ;
+  const snapshot = (seq: number, text: string, method = "item/completed") => summaryEvent(seq, method, { item: { id: "message", type: source === "publicPlan" ? source : "agentMessage", phase: source === "commentary" ? source : undefined, text } }) ;
   test(`${source}도 연속 delta만 합치고 정정 snapshot의 기존 시간 위치를 유지한다`, () => {
     const events = [summaryStart, delta(2, "A"), delta(3, "a"), summaryDelta(4, "B"), delta(5, "C")];
     expect(publicTexts(events)).toEqual(["Aa", "B", "C"]);
@@ -680,9 +680,9 @@ test("같은 승인 ID의 다른 thread·숫자문자·unsupported 카드와 위
 
 test("identity 없는 legacy는 클릭 불가이며 scoped/token 카드에는 대응하지 않는다", () => {
   const legacy = event(1, "item/commandExecution/requestApproval", { threadId: "t", approvalToken: "위조" }, { kind: "request", requestId: 7, supported: true });
-  expect(project([legacy]).blocks).toMatchObject([{ approvalToken: null, state: "open", open: false }]);
-  expect(project([legacy, event(2, "approval/responding", { threadId: "t" }, { requestId: 7 })]).blocks).toMatchObject([{ state: "open", open: false }]);
-  expect(project([legacy, event(2, "approval/responded", { threadId: "t" }, { requestId: 7 })]).blocks).toMatchObject([{ state: "responded", open: false }]);
+  expect(project([legacy]).blocks                                                                      ).toMatchObject([{ approvalToken: null, state: "open", open: false }]) ;
+  expect(project([legacy, event(2, "approval/responding", { threadId: "t" }, { requestId: 7 })]).blocks).toMatchObject([{ state: "open", open: false }]                     ) ;
+  expect(project([legacy, event(2, "approval/responded", { threadId: "t" }, { requestId: 7 })]).blocks ).toMatchObject([{ state: "responded", open: false }]                ) ;
   const events = [approvalRequest(1, "token"), event(2, "approval/responded", { threadId: "t" }, { requestId: 7 })];
   expect(project(events).blocks).toMatchObject([{ state: "open", open: true }]);
   const noToken = [approvalRequest(1, undefined), event(2, "approval/responded", { threadId: "t" }, { requestId: 7 })];
@@ -712,16 +712,16 @@ test("token이 있는 알림은 명시 thread만 교차검증하고 현재 대�
 });
 
 test('Steer는 같은 턴 Working을 보존하며 ID가 다른 동일 원문을 각각 표시한다', () => {
-  const events = [event(1,'transport/connected',{}),event(2,'turn/started',{threadId:'t',turn:{id:'a'}})];
-  const steer = (seq:number, method:string, id:string) => event(seq,method,{threadId:'t',turnId:'a',clientUserMessageId:id,text:'  같은 추가 지시  '});
-  const result = project([...events,steer(3,'turn/steerPending','one'),steer(4,'turn/steerAccepted','one'),steer(5,'turn/steerPending','two'),steer(6,'turn/steerUncertain','two')]);
+  const events = [event(1,'transport/connected',{}),event(2,'turn/started',{threadId:'t',turn:{id:'a'}})]                                                                            ;
+  const steer  = (seq:number, method:string, id:string) => event(seq,method,{threadId:'t',turnId:'a',clientUserMessageId:id,text:'  같은 추가 지시  '})                              ;
+  const result = project([...events,steer(3,'turn/steerPending','one'),steer(4,'turn/steerAccepted','one'),steer(5,'turn/steerPending','two'),steer(6,'turn/steerUncertain','two')]) ;
   expect(result).toMatchObject({turnId:'a',turn:'running',working:true});
   expect(result.blocks.filter(block=>block.kind==='user')).toMatchObject([{text:'  같은 추가 지시  ',steerStatus:'accepted'},{text:'  같은 추가 지시  ',steerStatus:'uncertain'}]);
 });
 
 test('Native 명시 client ID와 범위만 추가 지시 행에 합치고 item ID나 동일본문은 추정하지 않는다', () => {
-  const events = [event(1,'turn/started',{threadId:'t',turn:{id:'a'}}),event(2,'turn/steerPending',{threadId:'t',turnId:'a',clientUserMessageId:'one',text:'추가'})];
-  const wrong = project([...events,event(3,'item/completed',{threadId:'other',turnId:'a',item:{id:'one',clientUserMessageId:'one',type:'userMessage',text:'추가'}})]);
+  const events = [event(1,'turn/started',{threadId:'t',turn:{id:'a'}}),event(2,'turn/steerPending',{threadId:'t',turnId:'a',clientUserMessageId:'one',text:'추가'})]   ;
+  const wrong  = project([...events,event(3,'item/completed',{threadId:'other',turnId:'a',item:{id:'one',clientUserMessageId:'one',type:'userMessage',text:'추가'}})]) ;
   expect(wrong.blocks[0]).toMatchObject({steerStatus:'pending'});
   const right = project([...events,event(3,'item/completed',{threadId:'t',turnId:'a',item:{id:'native-id',clientId:'one',type:'userMessage',text:'추가'}})]);
   expect(right.blocks.filter(block=>block.kind==='user')).toMatchObject([{steerStatus:'pending',nativeItemId:'native-id'}]);
@@ -769,16 +769,16 @@ for (const boundary of ["no-start", "other-thread", "other-turn", "other-generat
 test("현재 live 시작 뒤에만 복원 요약과 미확정 명령의 새 출력이 이어진다", () => {
   const restored = suspendedHistory("inProgress", [{ id: "summary", type: "reasoning", summary: ["기존 요약"] }, { id: "command", type: "commandExecution", command: "example", status: "inProgress", aggregatedOutput: "이전 출력" }]);
   expect(project(restored).blocks).toMatchObject([{ text: "기존 요약", streaming: false }, { kind: "command", status: "unknown", running: false }]);
-  const scope = { connectionGeneration: 7, processEpoch: "current", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 3 };
-  const result = project([...restored, event(20, "turn/started", { threadId: "thread", turn: { id: "turn" } }, scope), event(21, "item/reasoning/summaryTextDelta", { threadId: "thread", turnId: "turn", itemId: "summary", summaryIndex: 0, delta: "추가" }, scope), event(22, "item/commandExecution/outputDelta", { threadId: "thread", turnId: "turn", itemId: "command", delta: "추가" }, scope)]);
+  const scope  = { connectionGeneration: 7, processEpoch: "current", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 3 }                                                                                                                                                                                                                                                                ;
+  const result = project([...restored, event(20, "turn/started", { threadId: "thread", turn: { id: "turn" } }, scope), event(21, "item/reasoning/summaryTextDelta", { threadId: "thread", turnId: "turn", itemId: "summary", summaryIndex: 0, delta: "추가" }, scope), event(22, "item/commandExecution/outputDelta", { threadId: "thread", turnId: "turn", itemId: "command", delta: "추가" }, scope)]) ;
   expect(result.blocks.filter(block => block.kind === "explanation").map(block => block.text).join("")).toBe("기존 요약추가");
   expect(result.blocks.find(block => block.kind === "command")).toMatchObject({ output: "이전 출력추가", running: true, status: "running", startedAt: null, endedAt: null });
 });
 
 for (const missing of [undefined, null, 42] as const) test(`완료 필드 ${String(missing)}는 기존 공개 내용을 지우지 않는다`, () => {
-  const item = (seq: number, value: unknown) => event(seq, "item/completed", { threadId: "thread", turnId: "turn", item: value });
-  const absent = missing === undefined ? {} : { text: missing, aggregatedOutput: missing, changes: missing };
-  const result = project([item(1, { id: "a", type: "agentMessage", text: "본문" }), item(2, { id: "a", type: "agentMessage", ...absent }), item(3, { id: "c", type: "commandExecution", aggregatedOutput: "출력" }), item(4, { id: "c", type: "commandExecution", ...absent }), item(5, { id: "f", type: "fileChange", changes: [{ path: "keep.ts" }] }), item(6, { id: "f", type: "fileChange", ...absent })]);
+  const item   = (seq: number, value: unknown) => event(seq, "item/completed", { threadId: "thread", turnId: "turn", item: value })                                                                                                                                                                                                                                                                             ;
+  const absent = missing === undefined ? {} : { text: missing, aggregatedOutput: missing, changes: missing }                                                                                                                                                                                                                                                                                                    ;
+  const result = project([item(1, { id: "a", type: "agentMessage", text: "본문" }), item(2, { id: "a", type: "agentMessage", ...absent }), item(3, { id: "c", type: "commandExecution", aggregatedOutput: "출력" }), item(4, { id: "c", type: "commandExecution", ...absent }), item(5, { id: "f", type: "fileChange", changes: [{ path: "keep.ts" }] }), item(6, { id: "f", type: "fileChange", ...absent })]) ;
   expect(result.blocks).toMatchObject([{ text: "본문" }, { output: "출력" }, { changes: [{ path: "keep.ts" }] }]);
 });
 
@@ -812,14 +812,14 @@ for (const completion of [undefined, null, "100", 1.5, Infinity, Number.MAX_SAFE
 });
 
 for (const status of ["completed", "failed", "declined"] as const) test(`완료시각 없는 저장 명령의 ${status} 상태도 live 출력으로 재개하지 않는다`, () => {
-  const restored = suspendedHistory("inProgress", [{ id: "command", type: "commandExecution", command: "example", status, aggregatedOutput: "정식 출력" }]);
-  const scope = { connectionGeneration: 7, processEpoch: "current", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 3 };
+  const restored = suspendedHistory("inProgress", [{ id: "command", type: "commandExecution", command: "example", status, aggregatedOutput: "정식 출력" }]) ;
+  const scope    = { connectionGeneration: 7, processEpoch: "current", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 3 }                 ;
   expect(project([...restored, event(20, "turn/started", { threadId: "thread", turn: { id: "turn" } }, scope), event(21, "item/commandExecution/outputDelta", { threadId: "thread", turnId: "turn", itemId: "command", delta: "늦은 출력" }, scope)]).blocks).toMatchObject([{ kind: "command", output: "정식 출력", status, running: false }]);
 });
 
 for (const timestamp of [0, -1, 100]) test(`유효 완료시각 ${timestamp}의 답변은 current live 시작에도 닫힘을 유지한다`, () => {
-  const restored = suspendedHistory("inProgress", [{ id: "answer", type: "agentMessage", text: "정식 답변", completedAtMs: timestamp }]);
-  const scope = { connectionGeneration: 7, processEpoch: "current", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 3 };
+  const restored = suspendedHistory("inProgress", [{ id: "answer", type: "agentMessage", text: "정식 답변", completedAtMs: timestamp }])    ;
+  const scope    = { connectionGeneration: 7, processEpoch: "current", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 3 } ;
   expect(project([...restored, event(20, "turn/started", { threadId: "thread", turn: { id: "turn" } }, scope), event(21, "item/agentMessage/delta", { threadId: "thread", turnId: "turn", itemId: "answer", delta: "늦은 답변" }, scope)]).blocks).toMatchObject([{ kind: "answer", text: "정식 답변", streaming: false }]);
 });
 
@@ -831,30 +831,30 @@ test("빈 완료 요약의 시각 권위와 뒤따른 historical 완료는 합�
   ]);
   expect(restored.filter(event => event.method === "item/completed")).toHaveLength(2);
   expect(JSON.stringify(restored)).not.toContain("PRIVATE");
-  const scope = { connectionGeneration: 7, processEpoch: "current", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 3 };
-  const result = project([...restored, event(20, "turn/started", { threadId: "thread", turn: { id: "turn" } }, scope), event(21, "item/reasoning/summaryTextDelta", { threadId: "thread", turnId: "turn", itemId: "summary", summaryIndex: 0, delta: "되살리면 안 됨" }, scope)]);
+  const scope  = { connectionGeneration: 7, processEpoch: "current", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 3 }                                                                                                                                         ;
+  const result = project([...restored, event(20, "turn/started", { threadId: "thread", turn: { id: "turn" } }, scope), event(21, "item/reasoning/summaryTextDelta", { threadId: "thread", turnId: "turn", itemId: "summary", summaryIndex: 0, delta: "되살리면 안 됨" }, scope)]) ;
   expect(result.blocks).toEqual([]);
 });
 
 
 test("unknown 저장 턴의 declined 파일은 같은 live 시작 뒤 late started로 상태나 diff를 바꾸지 않는다", () => {
-  const restored = suspendedHistory("inProgress", [{ id: "files", type: "fileChange", status: "declined", changes: [{ path: "keep.ts", diff: "거절된 원문" }], completedAtMs: null }]);
-  const scope = { connectionGeneration: 7, processEpoch: "current", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 3 };
-  const result = project([...restored, event(20, "turn/started", { threadId: "thread", turn: { id: "turn" } }, scope), event(21, "item/started", { threadId: "thread", turnId: "turn", item: { id: "files", type: "fileChange", changes: [{ path: "late.ts", diff: "늦은 덮어쓰기" }] } }, scope)]);
+  const restored = suspendedHistory("inProgress", [{ id: "files", type: "fileChange", status: "declined", changes: [{ path: "keep.ts", diff: "거절된 원문" }], completedAtMs: null }])                                                                                                                ;
+  const scope    = { connectionGeneration: 7, processEpoch: "current", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 3 }                                                                                                                                                           ;
+  const result   = project([...restored, event(20, "turn/started", { threadId: "thread", turn: { id: "turn" } }, scope), event(21, "item/started", { threadId: "thread", turnId: "turn", item: { id: "files", type: "fileChange", changes: [{ path: "late.ts", diff: "늦은 덮어쓰기" }] } }, scope)]) ;
   expect(result.blocks).toMatchObject([{ kind: "files", status: "declined", running: false, changes: [{ path: "keep.ts", diff: "거절된 원문" }] }]);
 });
 
 test("완료된 파일의 늦은 started는 diff를 바꾸지 않고 정식 새 완료만 갱신한다", () => {
-  const before = [event(1, "turn/started", { threadId: "t", turn: { id: "a" } }), event(2, "item/completed", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", status: "completed", changes: [{ path: "keep.ts", diff: "확정 원문" }] } })];
-  const late = event(3, "item/started", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", changes: [{ path: "late.ts", diff: "늦음" }] } });
+  const before = [event(1, "turn/started", { threadId: "t", turn: { id: "a" } }), event(2, "item/completed", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", status: "completed", changes: [{ path: "keep.ts", diff: "확정 원문" }] } })] ;
+  const late   = event(3, "item/started", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", changes: [{ path: "late.ts", diff: "늦음" }] } })                                                                                               ;
   expect(project([...before, late]).blocks).toMatchObject([{ kind: "files", status: "completed", running: false, changes: [{ path: "keep.ts", diff: "확정 원문" }] }]);
   expect(project([...before, late, event(4, "item/completed", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", status: "failed", changes: [{ path: "final.ts", diff: "정식 변경" }] } })]).blocks).toMatchObject([{ status: "failed", running: false, changes: [{ path: "final.ts", diff: "정식 변경" }] }]);
 });
 
 
 for (const ending of ["completed", "failed", "declined"] as const) test(`실제 파일 완료 ${ending}는 late started를 무시하고 새 authoritative 완료는 수용한다`, () => {
-  const done = [event(1, "turn/started", { threadId: "t", turn: { id: "a" } }), event(2, "item/completed", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", status: ending, changes: [{ path: "keep.ts" }] } })];
-  const late = event(3, "item/started", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", changes: [{ path: "late.ts" }] } });
+  const done = [event(1, "turn/started", { threadId: "t", turn: { id: "a" } }), event(2, "item/completed", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", status: ending, changes: [{ path: "keep.ts" }] } })] ;
+  const late = event(3, "item/started", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", changes: [{ path: "late.ts" }] } })                                                                                     ;
   expect(project([...done, late]).blocks).toMatchObject([{ status: ending, running: false, changes: [{ path: "keep.ts" }] }]);
   expect(project([...done, late, event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: "completed" } }), event(5, "item/completed", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", status: "completed", changes: [{ path: "new.ts" }] } })]).blocks).toMatchObject([{ status: "completed", running: false, changes: [{ path: "new.ts" }] }]);
 });
@@ -888,10 +888,10 @@ for (const status of ["completed", "interrupted", "failed"] as const) test(`개�
   const otherTurn = event(4, "turn/completed", { threadId: "t", turn: { id: "other", status } });
   expect(project([...started, otherThread, otherTurn]).blocks).toMatchObject([{ kind: "files", running: true, status: "running", changes: [{ path: "kept.ts", diff: "original" }] }]);
   const closed = [...started, otherThread, otherTurn, event(5, "turn/completed", { threadId: "t", turn: { id: "a", status } })];
-  expect(project(closed).blocks).toMatchObject([{ kind: "files", running: false, status: "unknown", changes: [{ path: "kept.ts", diff: "original" }] }]);
-  expect(executionResultCounts(project(closed).blocks)).toMatchObject({ unresolved: 1, failed: 0 });
-  expect(project([...closed, event(6, "item/started", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", changes: [{ path: "late.ts" }] } })]).blocks).toMatchObject([{ running: false, status: "unknown", changes: [{ path: "kept.ts", diff: "original" }] }]);
-  expect(project([...closed, event(7, "item/completed", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", status: "completed", changes: [{ path: "final.ts" }] } })]).blocks).toMatchObject([{ running: false, status: "completed", changes: [{ path: "final.ts" }] }]);
+  expect(project(closed).blocks                                                                                                                                                              ).toMatchObject([{ kind: "files", running: false, status: "unknown", changes: [{ path: "kept.ts", diff: "original" }] }]) ;
+  expect(executionResultCounts(project(closed).blocks)                                                                                                                                       ).toMatchObject({ unresolved: 1, failed: 0 }                                                                            ) ;
+  expect(project([...closed, event(6, "item/started", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", changes: [{ path: "late.ts" }] } })]).blocks                        ).toMatchObject([{ running: false, status: "unknown", changes: [{ path: "kept.ts", diff: "original" }] }]               ) ;
+  expect(project([...closed, event(7, "item/completed", { threadId: "t", turnId: "a", item: { id: "f", type: "fileChange", status: "completed", changes: [{ path: "final.ts" }] } })]).blocks).toMatchObject([{ running: false, status: "completed", changes: [{ path: "final.ts" }] }]                              ) ;
 });
 
 for (const status of ["completed", "interrupted", "failed"] as const) test(`복원 ${status} 뒤 같은 scope 늦은 시작은 종료를 유지한다`, () => {
@@ -922,17 +922,17 @@ for (const snapshot of ["AB", "수정한 최종 설명", ""]) test(`설명 완�
     event(3, "item/started", { threadId: "t", turnId: "a", item: { id: "c", type: "commandExecution", command: "pwd" } }),
     event(4, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "x", phase: "commentary", delta: "B" })
   ];
-  const done = event(5, "item/completed", { threadId: "t", turnId: "a", item: { id: "x", type: "agentMessage", text: snapshot } });
-  const result = project([...prefix, done, { ...done, seq: 6 }]);
-  expect(result.blocks.filter(b => b.kind === "explanation").map(b => b.text).join("")).toBe(snapshot);
-  expect(result.blocks.map(b => b.kind)).toEqual(snapshot ? ["explanation", "command", "explanation"] : ["command"]);
-  expect(result.blocks.filter(b => b.kind === "explanation").every(b => !b.streaming)).toBe(true);
+  const done   = event  (5, "item/completed", { threadId: "t", turnId: "a", item: { id: "x", type: "agentMessage", text: snapshot } }) ;
+  const result = project([...prefix, done, { ...done, seq: 6 }]                                                                      ) ;
+  expect(result.blocks.filter(b => b.kind === "explanation").map(b => b.text).join("")).toBe   (snapshot                                                          ) ;
+  expect(result.blocks.map(b => b.kind)                                               ).toEqual(snapshot ? ["explanation", "command", "explanation"] : ["command"]) ;
+  expect(result.blocks.filter(b => b.kind === "explanation").every(b => !b.streaming) ).toBe   (true                                                              ) ;
   if (snapshot && snapshot !== "AB") expect(result.protocolWarning?.message).toContain("위치");
 });
 
 test("거절 결과는 실패와 미확인에 섞지 않고 중복 없이 집계한다", () => {
-  const completion = event(1, "item/completed", { item: { id: "f", type: "fileChange", status: "declined", changes: [] } });
-  const blocks = project([completion, { ...completion, seq: 2 }]).blocks;
+  const completion = event(1, "item/completed", { item: { id: "f", type: "fileChange", status: "declined", changes: [] } }) ;
+  const blocks     = project([completion, { ...completion, seq: 2 }]).blocks                                                ;
   expect(executionResultCounts(blocks)).toEqual({ commands: 0, files: 1, failed: 0, declined: 1, unresolved: 0 });
 });
 
@@ -941,17 +941,17 @@ for (const snapshot of ["AB", "수정한 최종 요약", ""]) test(`공개 요�
     event(2, "item/reasoning/summaryTextDelta", { threadId: "t", turnId: "a", itemId: "r", summaryIndex: 0, delta: "A" }),
     event(3, "item/started", { threadId: "t", turnId: "a", item: { id: "c", type: "commandExecution", command: "pwd" } }),
     event(4, "item/reasoning/summaryTextDelta", { threadId: "t", turnId: "a", itemId: "r", summaryIndex: 0, delta: "B" })];
-  const done = event(5, "item/completed", { threadId: "t", turnId: "a", item: { id: "r", type: "reasoning", summary: snapshot ? [snapshot] : [], content: ["PRIVATE"] } });
-  const result = project([...prefix, done, { ...done, seq: 6 }]);
-  expect(result.blocks.filter(b => b.kind === "explanation").map(b => b.text).join("")).toBe(snapshot);
-  expect(result.blocks.map(b => b.kind)).toEqual(snapshot ? ["explanation", "command", "explanation"] : ["command"]);
-  expect(JSON.stringify(result.blocks)).not.toContain("PRIVATE");
+  const done   = event  (5, "item/completed", { threadId: "t", turnId: "a", item: { id: "r", type: "reasoning", summary: snapshot ? [snapshot] : [], content: ["PRIVATE"] } }) ;
+  const result = project([...prefix, done, { ...done, seq: 6 }]                                                                                                              ) ;
+  expect(result.blocks.filter(b => b.kind === "explanation").map(b => b.text).join(""))    .toBe     (snapshot                                                          ) ;
+  expect(result.blocks.map(b => b.kind)                                               )    .toEqual  (snapshot ? ["explanation", "command", "explanation"] : ["command"]) ;
+  expect(JSON.stringify(result.blocks)                                                ).not.toContain("PRIVATE"                                                         ) ;
   if (snapshot && snapshot !== "AB") expect(result.protocolWarning?.message).toContain("위치");
 });
 
 test("EOF 뒤 unknown 턴의 늦은 시작은 실행 상태도 되살리지 않는다", () => {
-  const restored = suspendedHistory("inProgress", []);
-  const scope = { connectionGeneration: 7, processEpoch: "current", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 3 };
+  const restored = suspendedHistory("inProgress", [])                                                                                       ;
+  const scope    = { connectionGeneration: 7, processEpoch: "current", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 3 } ;
   expect(project([...restored, event(20, "transport/closed", {}, scope), event(21, "turn/started", { threadId: "thread", turn: { id: "turn" } }, scope)])).toMatchObject({ turn: "unknown", working: false });
 });
 
@@ -1050,10 +1050,10 @@ for (const ending of ["EOF", "completed", "interrupted", "failed"] as const) for
     const events = completed.map((item, index) => event(70 + index, "item/completed", { threadId: "thread", turnId: "turn", item }, resumedScope));
     events.push(event(80, "item/completed", { threadId: "thread", turnId: "turn", item: { id: "new", type: "agentMessage", text: "새 완료" } }, resumedScope));
     const settled = project([...prefix, ...events]);
-    expect(settled.blocks.filter(block => block.kind === "answer")).toMatchObject([{ text: empty ? "" : "정산", streaming: false }, { text: "새 완료", streaming: false }]);
-    expect(settled.blocks.filter(block => block.kind === "explanation").map(block => block.text)).toEqual(empty ? [] : ["정산", "정산", "정산"]);
-    expect(settled.blocks.find(block => block.kind === "command")).toMatchObject({ output: empty ? "" : "정산", status: "completed", running: false });
-    expect(settled.blocks.find(block => block.kind === "files")).toMatchObject({ changes: empty ? [] : [{ path: "final.ts" }], status: "completed", running: false });
+    expect(settled.blocks.filter(block => block.kind === "answer")                              ).toMatchObject([{ text: empty ? "" : "정산", streaming: false }, { text: "새 완료", streaming: false }]) ;
+    expect(settled.blocks.filter(block => block.kind === "explanation").map(block => block.text)).toEqual      (empty ? [] : ["정산", "정산", "정산"]                                                   ) ;
+    expect(settled.blocks.find(block => block.kind === "command")                               ).toMatchObject({ output: empty ? "" : "정산", status: "completed", running: false }                    ) ;
+    expect(settled.blocks.find(block => block.kind === "files")                                 ).toMatchObject({ changes: empty ? [] : [{ path: "final.ts" }], status: "completed", running: false }   ) ;
     const late = [...resumedChanges, ...resumedStarts].map(([method, params], index) => event(90 + index, method, { threadId: "thread", turnId: "turn", ...params }, resumedScope));
     expect(project([...prefix, ...events, event(85, "turn/started", { threadId: "thread", turn: { id: "turn" } }, resumedScope), ...late])).toEqual(settled);
   });

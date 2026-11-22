@@ -21,9 +21,9 @@ import type { CurrentWorkRecord } from "../scripts/workflow/types.ts";
 const seedText = process.env.WORKFLOW_PROPERTY_SEED ?? "16072026";
 const seed = Number(seedText);
 if (!Number.isSafeInteger(seed) || seed < 0 || seed > 0xffffffff) throw new Error("WORKFLOW_PROPERTY_SEED는 uint32 정수여야 합니다.");
-const PLAN_TRIALS = 160;
-const TRACE_TRIALS = 12;
-const TRACE_LENGTH = 12;
+const PLAN_TRIALS  = 160 ;
+const TRACE_TRIALS = 12  ;
+const TRACE_LENGTH = 12  ;
 function random(initial: number) {
   let state = initial >>> 0;
   return (limit: number) => { state = (Math.imul(state, 1664525) + 1013904223) >>> 0; return state % limit; };

@@ -40,14 +40,14 @@ test("긴 출력은 한 영역에서 펼치며 짧은 출력에는 전환이 없
     const render = (open: boolean) => renderToStaticMarkup(createElement(ChatRowMemoryContext.Provider, { value: new Map([[block.id, open]]) }, createElement(CommandView, { block })));
     const collapsed = render(false);
     const expanded = render(true);
-    expect((collapsed.match(/data-testid="command-preview"/g) ?? []).length).toBe(1);
-    expect((expanded.match(/data-testid="command-preview"/g) ?? []).length).toBe(1);
-    expect(collapsed.includes("aria-expanded=")).toBe(count > 10);
-    expect(expanded.includes("aria-expanded=")).toBe(count > 10);
+    expect((collapsed.match(/data-testid="command-preview"/g) ?? []).length).toBe(1         ) ;
+    expect((expanded.match(/data-testid="command-preview"/g) ?? []).length ).toBe(1         ) ;
+    expect(collapsed.includes("aria-expanded=")                            ).toBe(count > 10) ;
+    expect(expanded.includes("aria-expanded=")                             ).toBe(count > 10) ;
     if (count > 10) {
-      expect(collapsed).not.toContain("줄-10");
-      expect(expanded).toContain("줄-10");
-      expect((expanded.match(/줄-0/g) ?? []).length).toBe(1);
+      expect(collapsed                             ).not.toContain("줄-10") ;
+      expect(expanded                              )    .toContain("줄-10") ;
+      expect((expanded.match(/줄-0/g) ?? []).length)    .toBe     (1      ) ;
     }
   }
 });
@@ -84,11 +84,11 @@ test("명령별 펼침과 JSON 원문 선택은 서로 독립적이다", () => {
   const render = (block: typeof first) => renderToStaticMarkup(createElement(ChatRowMemoryContext.Provider, { value: memory }, createElement(CommandView, { block })));
   const firstHtml = render(first);
   const secondHtml = render(second);
-  expect(firstHtml).toContain("key11");
-  expect(firstHtml).toContain('aria-expanded="true"');
-  expect(secondHtml).toContain('aria-pressed="true"');
-  expect(secondHtml).not.toContain("aria-expanded=");
-  expect(secondHtml).toContain("key11");
+  expect(firstHtml )    .toContain("key11"               ) ;
+  expect(firstHtml )    .toContain('aria-expanded="true"') ;
+  expect(secondHtml)    .toContain('aria-pressed="true"' ) ;
+  expect(secondHtml).not.toContain("aria-expanded="      ) ;
+  expect(secondHtml)    .toContain("key11"               ) ;
 });
 
 test("원본 보관 한도 초과는 보관된 범위의 미리보기와 원본 줄 수 미확인으로 안내한다", () => {
@@ -120,13 +120,13 @@ describe("명령 카드 구조화 출력", () => {
   test("숫자·중복 키·이스케이프 토큰을 바꾸지 않고 들여쓴다", () => {
     const raw = ' {"n":9007199254740993,"n":-0,"e":1e+09,"s":"\\u003cscript>\\n","a":[true,null,{},[]]}\n';
     const view = commandOutput(raw, false, false);
-    expect(view.json).toBe(true);
-    expect(view.text).toContain('\n  "n": 9007199254740993,\n  "n": -0,');
-    expect(view.text).toContain('"e": 1e+09');
-    expect(view.text).toContain('"s": "\\u003cscript>\\n"');
-    expect(JSON.parse(view.text)).toEqual(JSON.parse(raw));
-    expect(jsonTokens(view.text).map(token => token.text).join('')).toBe(view.text);
-    expect(new Set(jsonTokens(view.text).map(token => token.kind))).toEqual(new Set(['plain','key','number','string','literal']));
+    expect(view.json                                              ).toBe     (true                                                ) ;
+    expect(view.text                                              ).toContain('\n  "n": 9007199254740993,\n  "n": -0,'            ) ;
+    expect(view.text                                              ).toContain('"e": 1e+09'                                        ) ;
+    expect(view.text                                              ).toContain('"s": "\\u003cscript>\\n"'                          ) ;
+    expect(JSON.parse(view.text)                                  ).toEqual  (JSON.parse(raw)                                     ) ;
+    expect(jsonTokens(view.text).map(token => token.text).join('')).toBe     (view.text                                           ) ;
+    expect(new Set(jsonTokens(view.text).map(token => token.kind))).toEqual  (new Set(['plain','key','number','string','literal'])) ;
   });
   test("일반 로그·NDJSON·스칼라·실시간·절단·깊이 제한은 원문 그대로다", () => {
     for (const raw of ['  log\n\tkeep', '{"a":', '{"a":1}\n{"b":2}', 'true', '"text"', '['.repeat(25)+'0'+']'.repeat(25), ' '.repeat(32768)+'{}']) {
@@ -144,13 +144,13 @@ describe("명령 카드 구조화 출력", () => {
       const block = project([{seq:1,at:'2026-11-15T00:00:00Z',kind:'notification',method:'item/completed',params:{item:{id:'review',type:'commandExecution',command:'node --input-type=module -e \'test\'',status:'completed',exitCode:0,aggregatedOutput:raw}}}]).blocks[0];
       if (block?.kind !== 'command') throw Error('명령 없음');
       const html = renderToStaticMarkup(createElement(CommandView,{block}));
-      expect(html).toContain('실행 종료');
-      expect(html).toContain('종료 코드 0');
-      expect(html).toContain({pass:'통과',fail:'수정 필요',not_run:'미실행'}[verdict]);
-      expect(html).toContain('업무 완료를 보증하지 않습니다');
-      expect(html).toContain('syntax-option');
-      expect(html).toContain('syntax-string');
-      expect(block.output).toBe(raw);
+      expect(html        ).toContain('실행 종료'                                             ) ;
+      expect(html        ).toContain('종료 코드 0'                                           ) ;
+      expect(html        ).toContain({pass:'통과',fail:'수정 필요',not_run:'미실행'}[verdict]) ;
+      expect(html        ).toContain('업무 완료를 보증하지 않습니다'                         ) ;
+      expect(html        ).toContain('syntax-option'                                         ) ;
+      expect(html        ).toContain('syntax-string'                                         ) ;
+      expect(block.output).toBe     (raw                                                     ) ;
     }
     expect(commandOutput('{"verdict":"pass"}',false,false).review).toBeNull();
   });
@@ -160,11 +160,11 @@ describe("명령 카드 구조화 출력", () => {
     const block = project([{seq:1,at:'2026-11-15T00:00:00Z',kind:'notification',method:'item/completed',params:{item:{id:'xss',type:'commandExecution',command,status:'completed',exitCode:0,aggregatedOutput:'{"html":"<img src=x onerror=alert(1)>"}'}}}]).blocks[0];
     if (block?.kind !== 'command') throw Error('명령 없음');
     const html=renderToStaticMarkup(createElement(CommandView,{block}));
-    expect(html).not.toContain('<script>');
-    expect(html).not.toContain('<img');
-    expect(html).toContain('&lt;img');
-    expect(html).toContain('원문 보기');
-    expect(html).toContain('원문 복사');
+    expect(html).not.toContain('<script>' ) ;
+    expect(html).not.toContain('<img'     ) ;
+    expect(html)    .toContain('&lt;img'  ) ;
+    expect(html)    .toContain('원문 보기') ;
+    expect(html)    .toContain('원문 복사') ;
   });
 });
 

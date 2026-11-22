@@ -13,8 +13,8 @@ import { runInNewContext } from "node:vm";
 import type { ConversationEvent } from "../src/conversations";
 import type { RpcId } from "../src/shared";
 
-const cwd = "/workspace/project";
-const threadId = "thread-persisted";
+const cwd      = "/workspace/project" ;
+const threadId = "thread-persisted"   ;
 function deferred<T>() {
   let resolve!: (value: T) => void;
   let reject!: (reason: Error) => void;

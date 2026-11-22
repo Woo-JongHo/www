@@ -112,14 +112,14 @@ describe("재연결 snapshot과 실제 renderer 대화 경계", () => {
     ] };
     expect(project(old.events).blocks.some((block) => block.kind === "approval" && block.open)).toBe(true);
     const next = reduce(old, [marker(), fresh()]);
-    expect(next.events.map((value) => value.seq)).toEqual([10, 11, 12, 21]);
-    expect(next.replaced).toBe(true);
-    expect(next.snapshot.every((value) => value.historical)).toBe(true);
-    expect(next.live.map((value) => value.seq)).toEqual([21]);
-    expect(project(next.events).blocks.some((block) => block.kind === "approval" || block.kind === "command")).toBe(false);
-    expect(project(next.events).working).toBe(false);
-    expect(project(next.events).blocks.some((block) => block.kind === "user" && block.text === "이전 미결 입력")).toBe(false);
-    expect(old.events).toHaveLength(4);
+    expect(next.events.map((value) => value.seq)                                                                ).toEqual     ([10, 11, 12, 21]) ;
+    expect(next.replaced                                                                                        ).toBe        (true            ) ;
+    expect(next.snapshot.every((value) => value.historical)                                                     ).toBe        (true            ) ;
+    expect(next.live.map((value) => value.seq)                                                                  ).toEqual     ([21]            ) ;
+    expect(project(next.events).blocks.some((block) => block.kind === "approval" || block.kind === "command")   ).toBe        (false           ) ;
+    expect(project(next.events).working                                                                         ).toBe        (false           ) ;
+    expect(project(next.events).blocks.some((block) => block.kind === "user" && block.text === "이전 미결 입력")).toBe        (false           ) ;
+    expect(old.events                                                                                           ).toHaveLength(4               ) ;
   });
 
   test("marker보다 먼저 받은 freshlive와 순서가 뒤섞인 외부 큐도 같은 reducer로 보존한다", () => {
@@ -127,9 +127,9 @@ describe("재연결 snapshot과 실제 renderer 대화 경계", () => {
       const success = reduce(empty(), queued, [event(1, "turn/started", {}, 1)]);
       const failed = reduce({ events: [event(1, "turn/started", {}, 1)], reconnect: null }, queued);
       const waiting = reduce(reduce(empty(), [fresh()]), [marker()], [event(1, "turn/started", {}, 1)]);
-      expect(success.events).toEqual(failed.events);
-      expect(waiting.events).toEqual(success.events);
-      expect(success.events.map((value) => value.seq)).toEqual([10, 11, 12, 21]);
+      expect(success.events                          ).toEqual(failed.events   ) ;
+      expect(waiting.events                          ).toEqual(success.events  ) ;
+      expect(success.events.map((value) => value.seq)).toEqual([10, 11, 12, 21]) ;
     }
   });
 
@@ -139,18 +139,18 @@ describe("재연결 snapshot과 실제 renderer 대화 경계", () => {
     const drained = event(21, "item/completed", params);
     const oldApproval = { ...event(19, "item/commandExecution/requestApproval", { threadId: "thread", turnId: "window" }, 1), kind: "request" as const, requestId: 42, approvalToken: "old", supported: true };
     const result = reduce({ events: [rawBeforeMarker, oldApproval], reconnect: null }, [drained, marker(), drained]);
-    expect(result.events.filter(value => (value.params as { item?: { id?: string } })?.item?.id === "window-item")).toHaveLength(1);
-    expect(result.events.some(value => value.seq === 15 || value.kind === "request")).toBe(false);
-    expect(project(result.events).blocks.filter(block => block.kind === "answer" && block.text === "복원 중 live")).toHaveLength(1);
+    expect(result.events.filter(value => (value.params as { item?: { id?: string } })?.item?.id === "window-item")).toHaveLength(1    ) ;
+    expect(result.events.some(value => value.seq === 15 || value.kind === "request")                              ).toBe        (false) ;
+    expect(project(result.events).blocks.filter(block => block.kind === "answer" && block.text === "복원 중 live")).toHaveLength(1    ) ;
   });
 
   test("중복·stale marker와 늦은 bootstrap snapshot은 현재 transcript를 되감지 않는다", () => {
     const current = reduce(empty(), [marker(), fresh()]);
     for (const stale of [marker(), marker(19), { ...marker(30), connectionGeneration: 1 }]) {
       const next = reduce(current, [stale], [event(1, "turn/started", {}, 1)]);
-      expect(next.events).toEqual(current.events);
-      expect(next.replaced).toBe(false);
-      expect(next.reconnect).toBe(current.reconnect);
+      expect(next.events   ).toEqual(current.events   ) ;
+      expect(next.replaced ).toBe   (false            ) ;
+      expect(next.reconnect).toBe   (current.reconnect) ;
     }
     const many = Array.from({ length: 2_100 }, (_, index) => event(index + 22, "account/updated", {}));
     const capped = reduce(current, many);
@@ -275,9 +275,9 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
     const pending = s.renderer.run();
     expect(s.state.prompt).toBe("");
     s.renderer.consumeEvents([], [s.marker]);
-    expect(s.renderer.transcriptState.current.reconnect?.seq).toBe(12);
-    expect(s.state.sending).toBe(true);
-    expect(s.state.pending).toBe("재연결 뒤 실패해도 보존할 초안");
+    expect(s.renderer.transcriptState.current.reconnect?.seq).toBe(12                              ) ;
+    expect(s.state.sending                                  ).toBe(true                            ) ;
+    expect(s.state.pending                                  ).toBe("재연결 뒤 실패해도 보존할 초안") ;
     s.reject(new Error("재연결 뒤 합성 전송 실패"));
     await pending;
     expect(s.state.prompt).toBe("재연결 뒤 실패해도 보존할 초안");

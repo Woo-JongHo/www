@@ -1,34 +1,34 @@
 {
   "schemaVersion": 2,
-  "id": "work-00000000-0000-4000-8000-000000000000",
-  "title": "[템플릿] 실제 요청 제목으로 교체",
-  "kind": "feature",
+  "id"           : "work-00000000-0000-4000-8000-000000000000",
+  "title"        : "[템플릿] 실제 요청 제목으로 교체",
+  "kind"         : "feature",
   "areas": ["dev"],
-  "owner": "dev",
-  "status": "draft",
+  "owner"        : "dev",
+  "status"       : "draft",
   "blockedReason": null,
   "relations": [],
   "criteria": [
     {
-      "id": "AC-1",
+      "id"         : "AC-1",
       "description": "[템플릿] 관찰 가능한 수용 기준으로 교체",
-      "required": true,
-      "result": "unverified",
+      "required"   : true,
+      "result"     : "unverified",
       "evidence": []
     }
   ],
   "workflow": {
-    "role": "www-dev",
-    "requestId": "[템플릿] 호스트 접수 ID로 교체",
+    "role"       : "www-dev",
+    "requestId"  : "[템플릿] 호스트 접수 ID로 교체",
     "requestHash": "0000000000000000000000000000000000000000000000000000000000000000",
     "authorization": {
       "implementation": false,
       "writePaths": [],
       "mutationSurfaces": [],
       "verifierCommands": [],
-      "commit": false,
-      "publish": false,
-      "source": "direct_user_request",
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
       "requestHash": "0000000000000000000000000000000000000000000000000000000000000000"
     },
     "inputs": ["src", "test", "package.json", "package-lock.json", "tsconfig.json"],
