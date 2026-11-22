@@ -179,6 +179,10 @@ test("실제 CLI 종료 형식의 명시적 사용량 소진에서만 대체 검
   }
   const malformed = JSON.stringify({ ...terminal, api_error: undefined, result: legacyMessage, error: { code: "quota_exhausted" } });
   assert.equal(classifyOpusFailure({ code: 1, stdout: malformed })?.verified, false);
+  for (const terminal_reason of ["interrupted", "cancelled", "success", null]) {
+    const stdout = JSON.stringify({ type: "result", is_error: true, terminal_reason, result: legacyMessage });
+    assert.equal(classifyOpusFailure({ code: 1, stdout })?.verified, false);
+  }
 });
 
 test("실행 영수증 없는 자기 선언은 필수 검토를 통과할 수 없다", () => {

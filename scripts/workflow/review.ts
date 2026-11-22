@@ -220,7 +220,7 @@ export function classifyOpusFailure(result: ReviewExecutionResult = {}): ReviewF
   try { const parsed: unknown = JSON.parse(stdout); if (!object(parsed)) throw new Error("invalid response"); body = parsed; }
   catch { return { kind: "unknown", verified: false, receiptHash }; }
   if (code === 0 && !signal && body?.is_error === false) return null;
-  const terminalError = body.terminal_reason === "api_error" || body.api_error_status !== undefined
+  const terminalError = body.terminal_reason !== undefined || body.api_error_status !== undefined
     || body.api_error_type !== undefined || body.api_error !== undefined;
   const legacyCodes = [
     object(body.error) ? body.error.code : undefined,
