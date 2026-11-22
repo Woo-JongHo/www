@@ -45,11 +45,12 @@ export function nativeThreadStartParams(cwd: string, developmentStage = false) {
   };
 }
 
-export function nativeTurnStartParams(threadId: string, text: string) {
+export function nativeTurnStartParams(threadId: string, text: string, model?: string) {
   return {
     threadId                                              ,
     input   : [{ type: "text", text, text_elements: [] }] ,
-    summary : "detailed"
+    summary : "detailed",
+    ...(model === undefined ? {} : { model })
   };
 }
 

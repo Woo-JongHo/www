@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // 실제 Electron 화면·IPC·stdio와 디스크를 유지한 재시작을 검증한다. 모델은 합성 fixture다.
-import { spawn, type ChildProcess } from "node:child_process";
+import { execFileSync, spawn, type ChildProcess } from "node:child_process";
 import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import { createServer } from "node:net";
@@ -12,6 +12,7 @@ const object    = (value: unknown): Data => value && typeof value === "object" &
 const root      = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")                                           ;
 const directory = await fs.mkdtemp(path.join(root, ".www/evidence/chat-ui-"))                                                ;
 const workspace = path.join(directory, "workspace")                                                                          ;
+const nativeSlash = process.argv.includes("--native-slash");
 await fs.mkdir(workspace);
 const checks  : string[] = []                                                                      ;
 const metrics : Data[]   = []                                                                      ;
@@ -74,6 +75,17 @@ async function freePort(): Promise<number> {
   return port;
 }
 
+async function resolveNativeExecutable() {
+  const selected = execFileSync("/usr/bin/which", ["codex"], { encoding: "utf8" }).trim();
+  const executable = await fs.realpath(selected);
+  const version = execFileSync(executable, ["--version"], { encoding: "utf8", timeout: 10_000 }).trim();
+  if (!/^codex-cli \d+\.\d+\.\d+/.test(version)) throw new Error("Native 검증에 사용할 Codex CLI 버전을 확인하지 못했습니다.");
+  return { selected, executable, version };
+}
+
+const nativeExecutable = nativeSlash ? await resolveNativeExecutable() : null;
+if (nativeExecutable) await fs.writeFile(path.join(directory, "native-executable.json"), JSON.stringify(nativeExecutable, null, 2));
+
 async function start(round: number, selectedWorkspace = workspace) {
   const callsBefore = await fs.readFile(path.join(selectedWorkspace, "fixture-calls.jsonl"), "utf8").catch(() => "");
 
@@ -85,7 +97,7 @@ async function start(round: number, selectedWorkspace = workspace) {
   const binary = path.join(root, "node_modules/electron/dist/Electron.app/Contents/MacOS/Electron");
   const child: ChildProcess = spawn(binary, [root, "--remote-debugging-port=" + port, "--user-data-dir=" + path.join(directory, "profile")], {
     cwd: root, stdio: ["ignore", stdout.fd, stderr.fd],
-    env: { ...env, WWW_PROBE_PATH: path.join(directory, "disabled-probe.json"), WWW_NATIVE_PROBE: "1", WWW_PROBE_WORKSPACE: selectedWorkspace, WWW_CODEX_BIN: path.join(root, "test/fixtures/chat-ui-app-server.ts"), WWW_PROBE_NATIVE_REPORTS: "0" }
+    env: { ...env, WWW_PROBE_PATH: path.join(directory, "disabled-probe.json"), WWW_NATIVE_PROBE: "1", WWW_PROBE_WORKSPACE: selectedWorkspace, WWW_CODEX_BIN: nativeExecutable?.executable ?? path.join(root, "test/fixtures/chat-ui-app-server.ts"), WWW_PROBE_NATIVE_REPORTS: "0" }
   });
   let ws: WebSocket | null = null;
   const terminate = async () => {
@@ -242,7 +254,7 @@ async function start(round: number, selectedWorkspace = workspace) {
     await click('[data-testid="open-current-workspace"]');
     await wait("document.querySelector('[data-testid=\"target-dashboard\"]')", "현재 프로젝트 대시보드 진입");
     await click('[data-testid="chat-nav"]');
-    await wait("document.querySelector('[data-thread-id=\"history-a\"]')", "프로젝트 저장 대화 목록");
+    if (!nativeSlash) await wait("document.querySelector('[data-thread-id=\"history-a\"]')", "프로젝트 저장 대화 목록");
     const toggleMonitor = async () => { const opened = await evaluate("!document.querySelector('[data-testid=\"session-monitoring\"]').hidden"); await click(opened ? '[data-testid="chat-nav"]' : '[data-testid="monitoring-nav"]'); };
     return { command, evaluate, wait, click, input, screenshot, measureLayout, measureNavigation, terminate, toggleMonitor };
   } catch (error) { await terminate(); throw error; }
@@ -426,8 +438,72 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
 let session: Awaited<ReturnType<typeof start>> | null = null;
 async function verifyChat() {
 try {
-  await seedHistory();
+  if (!nativeSlash) await seedHistory();
   session = await start(1);
+  if (nativeSlash) {
+    await session.input("/model");
+    await session.click('[data-testid="send-button"]');
+    await session.wait("document.querySelectorAll('dialog[open] .chat-model-options button').length>0", "실제 Native 모델 목록 표시", 30_000);
+    await session.click('dialog[open] > button');
+    await session.input("도구를 사용하지 말고 검증 준비 완료라고 한 문장으로 답하세요.");
+    await session.click('[data-testid="send-button"]');
+    await session.wait("document.querySelector('[data-testid=\"working-status\"]').textContent.includes('응답 종료')", "실제 Native 대화 이력 생성", 45_000);
+    await session.input("/compact");
+    await session.click('[data-testid="send-button"]');
+    await session.wait("document.querySelector('.chat-compose-note').textContent.includes('대화 압축 완료')", "실제 Native 압축 완료 표시", 80_000);
+    await session.terminate();
+    session = null;
+    console.log(JSON.stringify({ evidence: directory, checks }));
+    return;
+  }
+  if (process.argv.includes("--slash-only")) {
+    const submit = async (value: string) => {
+      await session!.input(value);
+      await session!.click('[data-testid="send-button"]');
+    };
+    await submit("/compact");
+    await session.wait("document.querySelector('.chat-compose-note').textContent.includes('압축할 이력')", "빈 대화 압축 방지");
+    await submit("/model");
+    await session.wait("document.querySelector('dialog[open] button[aria-pressed=true]')?.textContent==='기본 모델'", "현재 모델 선택기에 표시");
+    await session.click('dialog[open] .chat-model-options button:nth-child(2)');
+    await submit("/model");
+    await session.wait("document.querySelector('dialog[open] button[aria-pressed=true]')?.textContent==='다른 모델'", "선택한 모델 유지");
+    await session.click('dialog[open] > button');
+    await session.wait("document.activeElement===document.querySelector('[data-testid=\"prompt-input\"]')", "모델 선택 취소 시 입력창으로 초점 복귀");
+    const hideOtherModel = path.join(workspace, "fixture-hide-other-model");
+    await fs.writeFile(hideOtherModel, "hide");
+    try {
+      await submit("/model");
+      await session.wait("document.querySelector('[data-testid=\"unavailable-current-option\"]')?.textContent.includes('fixture-other') && document.querySelector('dialog[open] .chat-model-options').textContent.includes('기본 모델') && !document.querySelector('dialog[open] button[aria-pressed=true]')", "목록에서 빠진 현재 모델과 선택 가능한 모델을 함께 표시");
+      await session.click('dialog[open] > button');
+    } finally {
+      await fs.rm(hideOtherModel);
+    }
+    await submit("/model이 아닌 일반 요청");
+    await session.wait("document.querySelector('[data-testid=\"working-status\"]').textContent.includes('응답 종료')", "문장에 포함된 슬래시 일반 전송");
+    const rejectCompaction = path.join(workspace, "fixture-compact-reject");
+    await fs.writeFile(rejectCompaction, "reject");
+    try {
+      await submit("/compact");
+      await session.wait("document.querySelector('.chat-compose-note').textContent.includes('합성 압축 요청 거절') && !document.querySelector('.chat-compose-note').textContent.includes('대화 압축 중')", "Native 접수 거절 알림과 압축 잠금 해제");
+    } finally {
+      await fs.rm(rejectCompaction);
+    }
+    await submit("/compact");
+    await session.wait("document.querySelector('.chat-compose-note').textContent.includes('대화 압축 중')", "Native 압축 진행 표시");
+    await session.wait("document.querySelector('.chat-compose-note').textContent.includes('대화 압축 완료')", "Native 압축 완료 표시");
+    const calls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
+    const turns = calls.filter(call => call.method === "turn/start");
+    const compactions = calls.filter(call => call.method === "thread/compact/start");
+    if (turns.length !== 1 || compactions.length !== 2 || object(turns[0]?.params).model !== "fixture-other" ||
+      compactions.some(call => object(call.params).threadId !== object(turns[0]?.params).threadId) || calls.some(call => call.method === "turn/steer")) {
+      throw Error("슬래시 명령의 stdio 전달 범위가 일치하지 않습니다.");
+    }
+    await session.terminate();
+    session = null;
+    console.log(JSON.stringify({ evidence: directory, checks }));
+    return;
+  }
   if (process.argv.includes('--performance-only')) {
     const measure = async (label: string) => {
       const value = await session!.evaluate(`(async()=>{

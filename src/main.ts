@@ -96,7 +96,7 @@ function selectedSession(value: unknown) {
   return { session, selection };
 }
 function registerIpc(): void {
-  const scopedChannels = ["dashboard:get", "rpa:standard", "projects:www", "conversations:list", "conversations:open", "conversations:new", "activity:refresh", "activity:resources", "projects:list", "projects:favorite", "projects:switch", "workspace:choose", "thread:start", "turn:start", "turn:steer", "turn:interrupt", "approval:respond", "events:get"];
+  const scopedChannels = ["dashboard:get", "rpa:standard", "projects:www", "conversations:list", "conversations:open", "conversations:new", "activity:refresh", "activity:resources", "projects:list", "projects:favorite", "projects:switch", "workspace:choose", "thread:start", "models:list", "thread:compact", "turn:start", "turn:steer", "turn:interrupt", "approval:respond", "events:get"];
   for (const channel of scopedChannels) ipcMain.handle(channel, (_event, ...args: unknown[]) => {
     const { session, selection } = selectedSession(args[0]);
     return session.invoke(channel, [selection, ...args.slice(1)]);

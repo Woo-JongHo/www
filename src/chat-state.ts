@@ -9,6 +9,13 @@ import type { AppEvent, ScopedAppEvent, SelectionRef } from "./shared";
 
 export const MAX_PROMPT_CHARS = 100_000;
 
+export function slashCommand(text: string): "model" | "compact" | null {
+  const value = text.trim();
+  if (value === "/model") return "model";
+  if (value === "/compact") return "compact";
+  return null;
+}
+
 export function composerFull(length: number, max: number): boolean {
   return length >= max;
 }

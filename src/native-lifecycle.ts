@@ -92,6 +92,9 @@ export function createNativeLifecycle(emit: Emit) {
   });
   const currentApproval = (id: RpcId, approval: Approval, valid: () => boolean) => valid() && pending.get(id) === approval;
   return {
+    isReady(client: Client, cwd: string, threadId: string): boolean {
+      return ready?.client === client && ready.cwd === cwd && ready.threadId === threadId && interruptedThread !== threadId;
+    },
     get approvalCount() { return pending.size; },
     markReady(client: Client, cwd: string, threadId: string) { ready = { client, cwd, threadId }; unacceptedOpen = null; },
     reset() { ready = null; interruptedThread = null; unacceptedOpen = null; },
@@ -124,6 +127,7 @@ export function createNativeLifecycle(emit: Emit) {
       cwd: string;
       threadId: string;
       prompt: string;
+      model?: string;
       restored(value: RestoredConversation): void;
       beforeStart(): void;
       requestBoundary?(method: string, status: "started" | "completed" | "failed"): void;
@@ -151,7 +155,7 @@ export function createNativeLifecycle(emit: Emit) {
         if (pending.size > 0) throw new Error("복원 중 도착한 승인 요청을 먼저 처리해 주세요.");
         options.beforeStart();
         mutation = { client, threadId: options.threadId };
-        return await transport.request("turn/start", nativeTurnStartParams(options.threadId, options.prompt));
+        return await transport.request("turn/start", nativeTurnStartParams(options.threadId, options.prompt, options.model));
       } finally { mutation = null; starting = false; }
     },
     approval(client: Client, requestId: RpcId, threadId: unknown): string | null {
