@@ -7,12 +7,12 @@ export type RpcId = string | number;
 export type NativeTimingPhase = "request" | "connect" | "initialize" | "thread/start" | "thread/read" | "thread/resume" | "thread/turns/list" | "turn/start" | "first-native";
 export type NativeTimingStatus = "started" | "completed" | "failed" | "cancelled";
 export interface NativeTimingEvent {
-  traceId: string;
-  threadId: string | null;
-  phase: NativeTimingPhase;
-  status: NativeTimingStatus;
-  elapsedMs: number;
-  source: "www" | "native";
+  traceId   : string             ;
+  threadId  : string | null      ;
+  phase     : NativeTimingPhase  ;
+  status    : NativeTimingStatus ;
+  elapsedMs : number             ;
+  source    : "www" | "native"   ;
 }
 
 export type WorkStatus = "draft" | "ready" | "in_progress" | "verifying" | "done" | "cancelled";
@@ -36,40 +36,40 @@ export interface DashboardWorkDetail {
 }
 
 export interface AppEvent {
-  seq        : number                                   ;
-  at         : string                                   ;
-  kind       : "notification" | "request" | "transport" ;
-  method     : string                                   ;
-  params     : unknown                                  ;
-  requestId? : RpcId                                    ;
-  approvalToken?: string;
-  supported? : boolean                                  ;
-  historical?: boolean                                  ;
+  seq            : number                                   ;
+  at             : string                                   ;
+  kind           : "notification" | "request" | "transport" ;
+  method         : string                                   ;
+  params         : unknown                                  ;
+  requestId?     : RpcId                                    ;
+  approvalToken? : string                                   ;
+  supported?     : boolean                                  ;
+  historical?    : boolean                                  ;
 }
 
 /** 실제 IPC 배달과 요청의 필수 선택 경계. */
 export interface SelectionRef {
-  sessionId?: string;
-  workspaceKey: string;
-  selectionEpoch: number;
-  processEpoch: string;
+  sessionId?     : string ;
+  workspaceKey   : string ;
+  selectionEpoch : number ;
+  processEpoch   : string ;
 }
 export interface ScopedAppEvent extends AppEvent, SelectionRef {
   connectionGeneration: number;
 }
 export interface WorkspaceSelection extends WorkspaceInfo, SelectionRef {}
 export interface ProjectInfo {
-  workspaceKey: string;
-  name: string;
-  path: string;
-  favorite: boolean;
+  workspaceKey : string  ;
+  name         : string  ;
+  path         : string  ;
+  favorite     : boolean ;
 }
 export interface ConversationSelection {
-  workspace: WorkspaceSelection;
-  threadId: string | null;
-  events: ScopedAppEvent[];
-  resources: ResourceSnapshot | null;
-  resourceStorageWarnings?: ResourceScope[];
+  workspace                : WorkspaceSelection      ;
+  threadId                 : string | null           ;
+  events                   : ScopedAppEvent[]        ;
+  resources                : ResourceSnapshot | null ;
+  resourceStorageWarnings? : ResourceScope[]         ;
 }
 
 export type TransportState = "disconnected" | "connected" | "closed" | "error"                                    ;
@@ -139,12 +139,12 @@ export interface NativeReportJob {
 }
 
 export interface ConversationSummary {
-  id        : string                      ;
-  title     : string                      ;
-  preview   : string                      ;
-  cwd       : string                      ;
-  updatedAt : number | null               ;
-  status    : "idle" | "active" | "unknown";
+  id        : string                        ;
+  title     : string                        ;
+  preview   : string                        ;
+  cwd       : string                        ;
+  updatedAt : number | null                 ;
+  status    : "idle" | "active" | "unknown" ;
 }
 
 export interface ConversationCatalog {
@@ -153,13 +153,13 @@ export interface ConversationCatalog {
 }
 
 export interface NativeSessionSummary {
-  id: string;
-  title: string;
-  workspace: WorkspaceSelection;
-  threadId: string | null;
-  busy: boolean;
-  approvalCount: number;
-  failed: boolean;
+  id            : string             ;
+  title         : string             ;
+  workspace     : WorkspaceSelection ;
+  threadId      : string | null      ;
+  busy          : boolean            ;
+  approvalCount : number             ;
+  failed        : boolean            ;
 }
 
 export interface WwwApi {
@@ -214,12 +214,12 @@ export type ResourceSource =
   | { kind: "item"; itemId: string; turnId: string; nativeInvocationId?: string };
 
 export interface ResourceObservation {
-  id: string;
-  source: ResourceSource;
-  resource: { kind: "skill" | "hook" | "document" | "tool"; identity: string; label: string };
-  action: "invoke" | "read";
-  status: "observed" | "running" | "completed" | "failed" | "unknown";
-  conflicts?: { turn?: true; terminal?: true };
+  id         : string                                                                            ;
+  source     : ResourceSource                                                                    ;
+  resource   : { kind: "skill" | "hook" | "document" | "tool"; identity: string; label: string } ;
+  action     : "invoke" | "read"                                                                 ;
+  status     : "observed" | "running" | "completed" | "failed" | "unknown"                       ;
+  conflicts? : { turn?: true; terminal?: true }                                                  ;
 }
 
 /** 검증·정규화한 관측만 전달한다. namespace의 실제 유일성 근거는 caller가 소유한다. */
@@ -228,19 +228,19 @@ export type ResourceGap = "native-missing" | "unstable-id" | "disconnect" | "unc
   | "retention-limit" | "corrupt" | "unsupported-version" | "read-failed" | "write-failed";
 
 export interface ResourceCoverage {
-  startedAt: string | null;
-  completeness: "partial" | "complete-for-covered-range";
-  gaps: ResourceGap[];
+  startedAt    : string | null                            ;
+  completeness : "partial" | "complete-for-covered-range" ;
+  gaps         : ResourceGap[]                            ;
 }
 
 export interface ResourceSnapshot {
-  sessionId?: string;
-  scope: ResourceScope;
-  processEpoch: string;
-  selectionEpoch: number;
-  revision: number;
-  durableRevision: number;
-  observations: ResourceObservation[];
-  coverage: ResourceCoverage;
-  storage: "saved" | "saving" | "volatile" | "full" | "corrupt" | "unavailable";
+  sessionId?      : string                                                               ;
+  scope           : ResourceScope                                                        ;
+  processEpoch    : string                                                               ;
+  selectionEpoch  : number                                                               ;
+  revision        : number                                                               ;
+  durableRevision : number                                                               ;
+  observations    : ResourceObservation[]                                                ;
+  coverage        : ResourceCoverage                                                     ;
+  storage         : "saved" | "saving" | "volatile" | "full" | "corrupt" | "unavailable" ;
 }
