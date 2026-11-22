@@ -7,6 +7,10 @@
  * @verifies RESP-DEVELOPMENT-RECORDS-STATE
  */
 import assert from "node:assert/strict";
+import { addVerificationCommand, authorizationDigest } from "../scripts/workflow/work.ts";
+import { createHash } from "node:crypto";
+import { runTypedWorkflow } from "../scripts/workflow.ts";
+import { validateWorkRecord } from "../scripts/workflow/schema.ts";
 import      { execFile, spawn                                } from "node:child_process"              ;
 import      {
               mkdir    ,
@@ -1203,4 +1207,58 @@ test("수용한 분업은 보고서 준비로 진행하고 필수 기준 밖 산
   assert.equal((await readWork({ repo, workId })).record.workflow.nextAction, "complete");
   await finishWorkReport({ repo, workId, narrative: { summary: "분업 결과의 현재 수용 검사", before: "산출물 변경", after: "재검증한 산출물 수용", changes: ["현재 결과를 실제 검증했다."], decisions: [], limitations: ["감사는 주입 predicate fixture이며 실제 모델 감사가 아니다."], next: [] } });
   assert.equal((await completeWork({ repo, workId })).record.status, "done");
+});
+
+test("현재 직접 요청으로 검증 argv만 CAS 추가하고 실제 Node 실행·이력·멱등·거부 경계를 보존한다", async t => {
+  const repo = await repository(t);
+  const work = await openWork(request(repo));
+  await verifyPass(repo, work.record.id);
+  const before = structuredClone((await readWork({ repo, workId: work.record.id })).record);
+  const input = { repo, workId: work.record.id, role: "www-dev", direct: true, requestId: "append-node-1", request: "현재 Node 관측 명령을 추가하고 실행해줘", expectedRequestHash: work.record.workflow.requestHash, expectedAuthorizationDigest: authorizationDigest(work.record.workflow.authorization), command: process.execPath, args: ["-e", "require('node:assert/strict').equal(2 + 2, 4)"] };
+  await assert.rejects(verifyWork({ ...input, criterionIds: ["AC-1"] }), /허용하지 않은/);
+  await assert.rejects(addVerificationCommand({ ...input, direct: false }), /직접 요청/);
+  await assert.rejects(addVerificationCommand({ ...input, role: "other" }), /역할/);
+  await assert.rejects(addVerificationCommand({ ...input, expectedRequestHash: "0".repeat(64) }), /requestHash/);
+  await assert.rejects(addVerificationCommand({ ...input, expectedAuthorizationDigest: "0".repeat(64) }), /CAS/);
+  for (const command of ["", " ", "node\0"]) await assert.rejects(addVerificationCommand({ ...input, command }), /argv/);
+  await assert.rejects(runTypedWorkflow({ action: "add-verifier", ...input, args: [42] }), /문자열 배열/);
+  await assert.rejects(runTypedWorkflow({ action: "add-verifier", ...input, args: undefined }), /문자열 배열/);
+  await assert.rejects(addVerificationCommand({ ...input, args: ["\0"] }), /argv/);
+  await assert.rejects(runTypedWorkflow({ action: "add-verifier", ...input, direct: undefined }), /직접 요청/);
+  await assert.rejects(addVerificationCommand({ ...input, requestId: before.workflow.requestId }), /재사용/);
+  await assert.rejects(addVerificationCommand({ ...input, workId: (await legacyWork(repo)).record.id }), /schemaVersion 2/);
+  await withWorkLock(repo, async () => {
+    await assert.rejects(addVerificationCommand(input), /lock-status/);
+  });
+  await runTypedWorkflow({ action: "add-verifier", ...input });
+  const first = await readWork(input);
+  assert.deepEqual(first.record.criteria, before.criteria);
+  assert.deepEqual(first.record.workflow.verifications, before.workflow.verifications);
+  assert.equal(first.record.workflow.verifications.length, 1);
+  assert.equal(first.record.workflow.requestHash, before.workflow.requestHash);
+  assert.equal(first.record.workflow.nextAction, "verify");
+  const history = first.record.workflow.verifierAuthorizations;
+  assert.ok(history);
+  assert.equal(history.length, 1);
+  assert.deepEqual(history[0].before, before.workflow.authorization);
+  assert.equal(history[0].requestHash, createHash("sha256").update(input.request).digest("hex"));
+  assert.deepEqual(first.record.workflow.authorization, { ...before.workflow.authorization, verifierCommands: [...before.workflow.authorization.verifierCommands, JSON.stringify([input.command, ...input.args])] });
+  const bytes = await readFile(first.path, "utf8");
+  await addVerificationCommand(input);
+  assert.equal(await readFile(first.path, "utf8"), bytes);
+  await assert.rejects(addVerificationCommand({ ...input, request: "다른 요청" }), /내용이 달라/);
+  await assert.rejects(addVerificationCommand({ ...input, args: [] }), /내용이 달라/);
+  await assert.rejects(addVerificationCommand({ ...input, requestId: "stale" }), /CAS/);
+  const duplicate = { ...input, requestId: "already-allowed", expectedAuthorizationDigest: authorizationDigest(first.record.workflow.authorization) };
+  await exec(process.execPath, [workCommand, JSON.stringify({ action: "add-verifier", ...duplicate })], { cwd: repo });
+  const same = await readWork(input);
+  assert.equal(same.record.workflow.verifierAuthorizations?.[1].added, false);
+  assert.deepEqual(same.record.workflow.authorization, first.record.workflow.authorization);
+  assert.equal((await verifyWork({ ...input, criterionIds: ["AC-1"] })).result, "passed");
+  const failing = { ...input, requestId: "failing-command", expectedAuthorizationDigest: authorizationDigest(same.record.workflow.authorization), args: ["-e", "process.exit(7)"] };
+  await addVerificationCommand(failing);
+  assert.equal((await verifyWork({ ...failing, criterionIds: ["AC-1"] })).result, "failed");
+  const malformed = structuredClone(first.record);
+  if (malformed.workflow.verifierAuthorizations) malformed.workflow.verifierAuthorizations[0].after.commit = true;
+  assert.ok(validateWorkRecord(malformed, { baseDir: dirname(first.path) }).some(error => error.includes("snapshot digest")));
 });

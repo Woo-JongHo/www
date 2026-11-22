@@ -18,7 +18,7 @@ import { createDocumentationReview, assessDocumentation } from "./documentation.
 import { createArtifactReview } from "./artifacts.ts";
 import { assessCompletionReport } from "./completion-report.ts";
 import { assessDecompositionCompletion, validateWorkDecomposition } from "./decomposition.ts";
-import type { CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions, CriterionAssessment } from './types.ts';
+import type { AddVerifierOptions, WorkAuthorization, CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions, CriterionAssessment } from './types.ts';
 import type { VerificationAttempt, VerificationSession } from './evidence.ts';
 import type { DocumentationReview } from './documentation.ts';
 export type { WorkRecord, WorkLocation, WorkAssessment, WorkOptions } from './types.ts';
@@ -246,6 +246,43 @@ async function mutateWork(repo: string, workId: string, change: (record: Current
     return { ...work, record, rawSource: source };
     };
     return guard ? guard(mutate) : mutate();
+  });
+}
+
+/** 전체 권한의 JSON 표현에 대한 CAS 식별값이다. */
+export function authorizationDigest(authorization: WorkAuthorization): string {
+  return hash(JSON.stringify(authorization));
+}
+
+export async function addVerificationCommand(options: AddVerifierOptions) {
+  const { repo = process.cwd(), workId, role, direct, requestId, request, expectedRequestHash, expectedAuthorizationDigest, command, args } = options;
+  assertRole(role, direct);
+  if (typeof requestId !== "string" || !requestId.trim()) throw new Error("검증 명령 추가 requestId가 필요합니다.");
+  const requestHash = hashRequest(request);
+  if (![expectedRequestHash, expectedAuthorizationDigest].every(value => typeof value === "string" && /^[a-f0-9]{64}$/.test(value))) throw new Error("기대 요청 hash와 권한 digest가 필요합니다.");
+  if (typeof command !== "string" || !command.trim() || command.includes("\0") || !Array.isArray(args) || !args.every(arg => typeof arg === "string" && !arg.includes("\0"))) throw new Error("검증 command와 args는 NUL 없는 정확한 문자열 argv여야 합니다.");
+  const payloadDigest = hash(JSON.stringify({ workId, requestHash, expectedRequestHash, expectedAuthorizationDigest, command, args }));
+  return mutateWork(repo, workId, record => {
+    if (record.workflow.requestHash !== expectedRequestHash) throw new Error("원래 작업 requestHash가 일치하지 않습니다.");
+    if (record.workflow.requestId === requestId) throw new Error("기존 접수 requestId를 검증 명령 추가에 재사용할 수 없습니다.");
+    const existing = record.workflow.verifierAuthorizations?.find(item => item.requestId === requestId);
+    if (existing) {
+      if (existing.payloadDigest !== payloadDigest) throw new Error("같은 requestId의 검증 명령 추가 내용이 달라졌습니다.");
+      return;
+    }
+    const before = structuredClone(record.workflow.authorization);
+    const beforeDigest = authorizationDigest(before);
+    if (beforeDigest !== expectedAuthorizationDigest) throw new Error("authorization digest CAS가 일치하지 않습니다.");
+    const signature = JSON.stringify([command, ...args]);
+    const added = !before.verifierCommands.includes(signature);
+    if (added) record.workflow.authorization.verifierCommands.push(signature);
+    const after = structuredClone(record.workflow.authorization);
+    (record.workflow.verifierAuthorizations ??= []).push({
+      version: 1, requestId, requestHash, originalRequestHash: expectedRequestHash, payloadDigest,
+      authorizedAt: new Date().toISOString(), command, args: [...args], added,
+      beforeDigest, afterDigest: authorizationDigest(after), before, after,
+    });
+    record.workflow.nextAction = "verify";
   });
 }
 
@@ -508,6 +545,7 @@ async function main() {
   const options    = raw        ;
   const actionName = raw.action ;
   const actions = {
+    "add-verifier": addVerificationCommand,
     "lock-status"       : inspectWorkLock       ,
     "recover-lock"      : recoverWorkLock       ,
     "check-repository"  : checkRepository       ,

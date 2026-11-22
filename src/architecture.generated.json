@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "81341aa214f03e48ebf8b283637d883e5a58b78f63bb144e82ae709aa57cf214",
+  "digest"       : "78e585a78450e7f3a2934771c4af66f01e33bbed119f9933fe4430536ef76466",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -103,8 +103,8 @@
       "layer"      : "tooling",
       "role"       : "앱 모듈 · workflow",
       "line"       : 1,
-      "lines"      : 436,
-      "digest"     : "a58facd328a9268fd6b6dc23c149c4e56af045090fb9894efbfb0afabb094aaf",
+      "lines"      : 441,
+      "digest"     : "2d86c9e1091737c905a9bf9b3e50a37a176a1bf13818b50e9478b0fe6f3dcaa4",
       "structureId": "arch.development.authoring"
     },
     {
@@ -356,8 +356,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · schema",
       "line"       : 1,
-      "lines"      : 182,
-      "digest"     : "be85df6822f5e14f8243429960064edd256e99c95f70c53386ad82460719bb6e",
+      "lines"      : 212,
+      "digest"     : "86441abbce9c12b172eb7ee5d13c2d717d6306b02b3de7aabd2af6d47768e852",
       "structureId": "arch.development.records.validation"
     },
     {
@@ -378,8 +378,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · types",
       "line"       : 1,
-      "lines"      : 159,
-      "digest"     : "92f51dc3b754fddbc54cefd0dddca1732f2ef8922de2904bcf42f4b6a73aab23",
+      "lines"      : 189,
+      "digest"     : "4f563d3dc0e6719e747d68011599749a2b701c0f2b1081f74dcdca9c726e2807",
       "structureId": "arch.development.records.protocol"
     },
     {
@@ -400,8 +400,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · work",
       "line"       : 1,
-      "lines"      : 609,
-      "digest"     : "82a1a8a2256c530e36eaf652079364f4d685639e6090010079d2063324742ee0",
+      "lines"      : 647,
+      "digest"     : "9d2085d2822a44fb734746b0c2e414ebc8ee448a13fd2c57bcf865dba71a5862",
       "structureId": "arch.development.records.state"
     },
     {
@@ -965,10 +965,10 @@
       "specifier": "./workflow/work.ts",
       "line"     : 5,
       "endLine"  : 5,
-      "statement": "import { appendPending, readWork, recordArtifactReview } from \"./workflow/work.ts\";"
+      "statement": "import { addVerificationCommand, appendPending, readWork, recordArtifactReview } from \"./workflow/work.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:178",
+      "id"       : "scripts/workflow.ts:202",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/artifacts.ts",
       "mode"     : "runtime",
@@ -979,7 +979,7 @@
       "statement": "import { artifactContext, artifactStatus, developmentTools } from \"./workflow/artifacts.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:271",
+      "id"       : "scripts/workflow.ts:295",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/report-lifecycle.ts",
       "mode"     : "runtime",
@@ -990,7 +990,7 @@
       "statement": "import { runReportedStage } from \"./workflow/report-lifecycle.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:338",
+      "id"       : "scripts/workflow.ts:362",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/reports.ts",
       "mode"     : "runtime",
@@ -1001,7 +1001,7 @@
       "statement": "import { inspectReportLocks, maintainWorkReports, recoverReportLock } from \"./workflow/reports.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:676",
+      "id"       : "scripts/workflow.ts:700",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/source-policy.ts",
       "mode"     : "runtime",
@@ -1012,7 +1012,7 @@
       "statement": "import { assertTypeScriptWrites, checkSourcePolicy } from \"./source-policy.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:756",
+      "id"       : "scripts/workflow.ts:780",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/run.ts",
       "mode"     : "runtime",
@@ -1023,7 +1023,7 @@
       "statement": "import { runWorkflow } from \"./workflow/run.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:805",
+      "id"       : "scripts/workflow.ts:829",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/preflight.ts",
       "mode"     : "runtime",
@@ -1034,7 +1034,7 @@
       "statement": "import { validateWritePaths } from \"./workflow/preflight.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:867",
+      "id"       : "scripts/workflow.ts:891",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/route.ts",
       "mode"     : "runtime",
@@ -1045,7 +1045,7 @@
       "statement": "import { namedSkill } from \"./workflow/route.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:917",
+      "id"       : "scripts/workflow.ts:941",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/adapters/gjc.ts",
       "mode"     : "type",
@@ -1793,36 +1793,36 @@
       "statement": "import type { RuntimeState, RuntimeEvent } from \"./record.ts\";"
     },
     {
-      "id"       : "scripts/workflow/schema.ts:112",
+      "id"       : "scripts/workflow/schema.ts:154",
       "from"     : "scripts/workflow/schema.ts",
       "to"       : "scripts/workflow/types.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./types.ts",
-      "line"     : 5,
-      "endLine"  : 5,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import type { WorkRecord } from \"./types.ts\";"
     },
     {
-      "id"       : "scripts/workflow/schema.ts:158",
+      "id"       : "scripts/workflow/schema.ts:200",
       "from"     : "scripts/workflow/schema.ts",
       "to"       : "scripts/workflow/artifacts.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./artifacts.ts",
-      "line"     : 6,
-      "endLine"  : 6,
+      "line"     : 7,
+      "endLine"  : 7,
       "statement": "import { artifactReviewErrors } from \"./artifacts.ts\";"
     },
     {
-      "id"       : "scripts/workflow/schema.ts:213",
+      "id"       : "scripts/workflow/schema.ts:255",
       "from"     : "scripts/workflow/schema.ts",
       "to"       : "scripts/workflow/decomposition.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./decomposition.ts",
-      "line"     : 7,
-      "endLine"  : 7,
+      "line"     : 8,
+      "endLine"  : 8,
       "statement": "import { parseDecomposition } from \"./decomposition.ts\";"
     },
     {
@@ -2043,10 +2043,10 @@
       "specifier": "./types.ts",
       "line"     : 21,
       "endLine"  : 21,
-      "statement": "import type { CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions, CriterionAssessment } from './types.ts';"
+      "statement": "import type { AddVerifierOptions, WorkAuthorization, CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions, CriterionAssessment } from './types.ts';"
     },
     {
-      "id"       : "scripts/workflow/work.ts:1497",
+      "id"       : "scripts/workflow/work.ts:1536",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "type",
@@ -2057,7 +2057,7 @@
       "statement": "import type { VerificationAttempt, VerificationSession } from './evidence.ts';"
     },
     {
-      "id"       : "scripts/workflow/work.ts:1576",
+      "id"       : "scripts/workflow/work.ts:1615",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/documentation.ts",
       "mode"     : "type",
@@ -2068,7 +2068,7 @@
       "statement": "import type { DocumentationReview } from './documentation.ts';"
     },
     {
-      "id"       : "scripts/workflow/work.ts:1639",
+      "id"       : "scripts/workflow/work.ts:1678",
       "from"     : "scripts/workflow/work.ts",
       "to"       : "scripts/workflow/types.ts",
       "mode"     : "type",
@@ -3846,13 +3846,19 @@
     },
     {
       "file"     : "scripts/workflow/schema.ts",
-      "line"     : 8,
-      "specifier": "node:fs",
+      "line"     : 5,
+      "specifier": "node:crypto",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow/schema.ts",
       "line"     : 9,
+      "specifier": "node:fs",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "scripts/workflow/schema.ts",
+      "line"     : 10,
       "specifier": "node:path",
       "reason"   : "external"
     },
@@ -6462,7 +6468,7 @@
         "line": 2
       }
     ],
-    "digest": "461f892b769f3e433e51a4760879fdf204842a58d636f8ea29b3cb6df8d98d10",
+    "digest": "03739636e384946dd30a0dc3ba6a009af748eac69c3c27b980a76d9a7b7272d3",
     "statecharts": {
       "models": [
         {
@@ -6712,7 +6718,7 @@
         }
       ],
       "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-      "sourceDigest": "da506a56ed54415e1d74cb93aeacba6a855652aa2d53f80652a6da760edd79da",
+      "sourceDigest": "c39e98d702c3e1a11b5763faaa02dce97b8c3b65e82d4648548bcdf78c739fe5",
       "sources": [
         {
           "file": "scripts/workflow/completion-report.ts",
@@ -6740,7 +6746,7 @@
         },
         {
           "file": "scripts/workflow/work.ts",
-          "digest": "82a1a8a2256c530e36eaf652079364f4d685639e6090010079d2063324742ee0"
+          "digest": "9d2085d2822a44fb734746b0c2e414ebc8ee448a13fd2c57bcf865dba71a5862"
         },
         {
           "file": "test/workflow-completion-faults.test.ts",
@@ -6756,7 +6762,7 @@
         },
         {
           "file": "test/workflow-work.test.ts",
-          "digest": "6f9136b8ecd42bbad05f360c155e6a514612832fa3f7700439770e3715f5a26a"
+          "digest": "e40829fae1c52a4719877e3f5e65c4c0173fa7af2b0c4a7ae3af12dae579a5b9"
         }
       ],
       "checks": {
@@ -7014,7 +7020,7 @@
       }
     ],
     "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-    "sourceDigest": "da506a56ed54415e1d74cb93aeacba6a855652aa2d53f80652a6da760edd79da",
+    "sourceDigest": "c39e98d702c3e1a11b5763faaa02dce97b8c3b65e82d4648548bcdf78c739fe5",
     "sources": [
       {
         "file": "scripts/workflow/completion-report.ts",
@@ -7042,7 +7048,7 @@
       },
       {
         "file": "scripts/workflow/work.ts",
-        "digest": "82a1a8a2256c530e36eaf652079364f4d685639e6090010079d2063324742ee0"
+        "digest": "9d2085d2822a44fb734746b0c2e414ebc8ee448a13fd2c57bcf865dba71a5862"
       },
       {
         "file": "test/workflow-completion-faults.test.ts",
@@ -7058,7 +7064,7 @@
       },
       {
         "file": "test/workflow-work.test.ts",
-        "digest": "6f9136b8ecd42bbad05f360c155e6a514612832fa3f7700439770e3715f5a26a"
+        "digest": "e40829fae1c52a4719877e3f5e65c4c0173fa7af2b0c4a7ae3af12dae579a5b9"
       }
     ],
     "checks": {

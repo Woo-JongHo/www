@@ -39,12 +39,42 @@ export interface RecordedReview {
   failure?            : unknown  ;
 }
 
+export type WorkAuthorization = Approval & { source: string; requestHash: string };
+
+export interface VerifierAuthorization {
+  version: 1;
+  requestId: string;
+  requestHash: string;
+  originalRequestHash: string;
+  payloadDigest: string;
+  authorizedAt: string;
+  command: string;
+  args: string[];
+  added: boolean;
+  beforeDigest: string;
+  afterDigest: string;
+  before: WorkAuthorization;
+  after: WorkAuthorization;
+}
+
+export interface AddVerifierOptions extends WorkOptions {
+  role?: string;
+  direct?: boolean;
+  requestId: string;
+  request: string;
+  expectedRequestHash: string;
+  expectedAuthorizationDigest: string;
+  command: string;
+  args: string[];
+}
+
 export interface WorkWorkflow {
+  verifierAuthorizations?: VerifierAuthorization[];
   decomposition?        : DecompositionPlan                                  ;
   role                  : string                                             ;
   requestId             : string                                             ;
   requestHash           : string                                             ;
-  authorization         : Approval & { source: string; requestHash: string } ;
+  authorization         : WorkAuthorization ;
   inputs                : string[]                                           ;
   nextAction            : string                                             ;
   reportingRequired?    : boolean                                            ;
