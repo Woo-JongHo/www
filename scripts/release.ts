@@ -116,7 +116,7 @@ export async function packageRelease(): Promise<string> {
     const { packager } = await import("@electron/packager");
     const electron: unknown = JSON.parse(readFileSync(join(root, "node_modules/electron/package.json"), "utf8"));
     if (!electron || typeof electron !== "object" || !("version" in electron) || typeof electron.version !== "string") throw Error("Electron 버전을 확인할 수 없습니다.");
-    const packages = await packager({ dir: stage, name: "WWW", platform: "darwin", arch: "arm64", out: join(stage, "packages"), appVersion: info.version, buildVersion: info.version, electronVersion: electron.version, overwrite: true, prune: false });
+    const packages = await packager({ dir: stage, name: "WWW", platform: "darwin", arch: "arm64", out: join(stage, "packages"), appVersion: info.version, buildVersion: info.version, electronVersion: electron.version, overwrite: true, prune: false, asar: false });
     const directory = packages[0];
     if (!directory) throw Error("Electron 패키지 생성 실패");
     const packagedInfo: unknown = JSON.parse(readFileSync(join(directory, "WWW.app/Contents/Resources/app/dist/build-info.json"), "utf8"));
