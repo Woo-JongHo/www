@@ -36,7 +36,7 @@
 
 ### 기존 122초 표본에서 분리할 수 있는 범위
 
-정제 원본 [initial-timeline.json](../../../../.www/evidence/work-632e43ce-dcb8-4726-ad34-8fe85034b6fd/initial-timeline.json)은 출처 SHA-256 `076386ac91f0c68a6cd104b23c7709028084d9f291f6ac4565a06ef9d8269dfe`를 보존한다. 사건 시각은 다음과 같다.
+정제 원본 initial-timeline.json (`.www/evidence/work-632e43ce-dcb8-4726-ad34-8fe85034b6fd/initial-timeline.json`)은 출처 SHA-256 `076386ac91f0c68a6cd104b23c7709028084d9f291f6ac4565a06ef9d8269dfe`를 보존한다. 사건 시각은 다음과 같다.
 
 | Native 원장 사건 | UTC 기록 시각 | 앞의 기준 사건과 간격 |
 |---|---|---:|
@@ -50,7 +50,7 @@
 
 ### 새 단일 요청 표본에서 관측한 구간
 
-당시 실행 요약과 [정제 메타데이터](../../../../.www/evidence/native-timing-live-DTuec7/summary.json)를 확인했다. 실행 요약의 원래 경로 `.www/session-implementation/real-native-timing.md`는 이관본에 없으며 현재 직접 재확인한 자료로 취급하지 않는다. 격리 Electron profile·빈 workspace·설치된 실제 Codex app-server를 사용했고 합성 fixture는 아니다. 도구 없는 단문을 1회 보냈으며 턴 완료와 응답 표식 일치 DOM을 관측했다. 실험 도중 Home 진입 경합 수정이 진행됐으므로 해당 표본은 그 수정 전 빌드의 결과다.
+당시 실행 요약과 정제 메타데이터 (`.www/evidence/native-timing-live-DTuec7/summary.json`)를 확인했다. 실행 요약의 원래 경로 `.www/session-implementation/real-native-timing.md`는 이관본에 없으며 현재 직접 재확인한 자료로 취급하지 않는다. 격리 Electron profile·빈 workspace·설치된 실제 Codex app-server를 사용했고 합성 fixture는 아니다. 도구 없는 단문을 1회 보냈으며 턴 완료와 응답 표식 일치 DOM을 관측했다. 실험 도중 Home 진입 경합 수정이 진행됐으므로 해당 표본은 그 수정 전 빌드의 결과다.
 
 | main 경계 | 요청 기준 시작→완료 ms | 직접 계산한 구간 ms |
 |---|---:|---:|
@@ -66,7 +66,7 @@ renderer `frames`의 첫 해당 기록은 같은 trace·`seq:38`의 `first-nativ
 
 ### 새 두 탭 동시 요청 표본
 
-당시 실행 요약과 [정제 메타데이터](../../../../.www/evidence/native-sessions-live-icxcTQ/summary.json)는 당시 최신 dist에서 실제 Native 요청 2회의 중첩과 각각의 완료를 보고한다. 실행 요약의 원래 경로 `.www/session-implementation/real-native-sessions.md`는 이관본에 없으며 현재 직접 재확인한 자료로 취급하지 않는다. 서로 다른 session·thread·turn의 요청이며 첫 단일 요청 표본과 빌드 및 부하 조건이 다르다.
+당시 실행 요약과 정제 메타데이터 (`.www/evidence/native-sessions-live-icxcTQ/summary.json`)는 당시 최신 dist에서 실제 Native 요청 2회의 중첩과 각각의 완료를 보고한다. 실행 요약의 원래 경로 `.www/session-implementation/real-native-sessions.md`는 이관본에 없으며 현재 직접 재확인한 자료로 취급하지 않는다. 서로 다른 session·thread·turn의 요청이며 첫 단일 요청 표본과 빌드 및 부하 조건이 다르다.
 
 | 각 요청 내부 main 구간 | 탭 A ms | 탭 B ms |
 |---|---:|---:|
