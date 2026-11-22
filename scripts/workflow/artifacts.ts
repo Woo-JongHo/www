@@ -59,7 +59,10 @@ async function document(repo: string, relative: string): Promise<ArtifactDocumen
   }
   const stat = await fs.stat(current);
   if (!stat.isFile() || stat.size > 1_048_576) throw new Error("검토 문서는 1 MiB 이하 일반 파일이어야 합니다.");
-  return { path: relative, source: await fs.readFile(current, "utf8") };
+  const bytes = await fs.readFile(current);
+  const source = bytes.toString("utf8");
+  if (!Buffer.from(source, "utf8").equals(bytes)) throw new Error(`검토 문서는 손실 없는 UTF-8이어야 합니다: ${relative}`);
+  return { path: relative, source };
 }
 
 export async function artifactContext(repo: string, work: WorkLocation, requestedKind: unknown) {

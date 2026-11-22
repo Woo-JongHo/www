@@ -360,3 +360,70 @@ test("원문 전체의 동일·append 전달만 제공이고 절단·변경·선
     const receipt=await deliveryReceipt(repo,result.receiptPath);expect(receipt.host.inputDelivered).toBe(true);expect(receipt.tools.every(item=>item.provided===expected)).toBe(true);
   }
 });
+
+
+for (const [name, bytes] of [
+  ["ff", [0xff]], ["fe", [0xfe]], ["overlong", [0xc0, 0xaf]],
+  ["truncated", [0xe2, 0x82]], ["surrogate", [0xed, 0xa0, 0x80]],
+] as const) test(`UTF8 손실 디코딩 ${name} 원문을 정상 context로 받지 않는다`, async () => {
+  const { repo, work } = await fixture();
+  await fs.writeFile(path.join(path.dirname(work.path), "spec.md"), Buffer.from(bytes));
+  await expect(artifactContext(repo, work, "spec")).rejects.toThrow("UTF-8");
+});
+
+for (const [name, source] of [
+  ["한국어", "# 정상 한글\n"], ["대체문자", "# 실제 \ufffd 문자\n"],
+  ["BOM", "\ufeff# BOM 원문\n"], ["빈 문서", ""],
+] as const) test(`UTF8 정상 ${name}의 원문과 동일 바이트 digest를 보존한다`, async () => {
+  const { repo, work } = await fixture();
+  await fs.writeFile(path.join(path.dirname(work.path), "spec.md"), source);
+  const first = await artifactContext(repo, work, "spec");
+  const second = await artifactContext(repo, work, "spec");
+  expect(first.documents[0].source).toBe(source);
+  expect(first.digest).toBe(second.digest);
+});
+
+test("UTF8 상태 조회는 손실 원문을 stale로 보고 정상 바이트 복원만 다시 인정한다", async () => {
+  const { repo, work } = await fixture();
+  const spec = path.join(path.dirname(work.path), "spec.md");
+  const original = await fs.readFile(spec);
+  const input = await submission(repo, work);
+  const saved = await recordArtifactReview({ repo, workId: work.record.id, review: input });
+  await fs.writeFile(spec, Buffer.from([0xff]));
+  expect((await artifactStatus(repo, saved))[0].status).toBe("stale");
+  await expect(recordArtifactReview({ repo, workId: work.record.id, review: input })).rejects.toThrow("UTF-8");
+  await fs.writeFile(spec, original);
+  expect((await artifactStatus(repo, saved))[0].status).toBe("current");
+  expect((await readWork({ repo, workId: work.record.id })).record.criteria.every(c => c.result === "unverified")).toBe(true);
+});
+
+for (const name of ["design.md", "tasks.md"] as const) test(`UTF8 consistency의 ${name}도 손실 문서를 거부한다`, async () => {
+  const { repo, work } = await fixture();
+  const target = path.join(path.dirname(work.path), name);
+  await fs.writeFile(target, "# 정상 문서\n");
+  const first = await artifactContext(repo, work, "consistency");
+  expect(first.documents.find(d => d.path.endsWith("/" + name))?.source).toBe("# 정상 문서\n");
+  await fs.writeFile(target, Buffer.from([0xfe]));
+  await expect(artifactContext(repo, work, "consistency")).rejects.toThrow("UTF-8");
+});
+
+test("UTF8 도구 정본의 손실은 거부하고 발견 사본의 손실은 invalid로 구분한다", async () => {
+  const { repo } = await fixture();
+  const canonical = "skills/www/www-spec/SKILL.md";
+  const discovery = ".agents/skills/www-spec/SKILL.md";
+  await put(repo, canonical, "# 정상 정본\n");
+  await put(repo, discovery, "# 정상 사본\n");
+  await fs.writeFile(path.join(repo, discovery), Buffer.from([0xff]));
+  expect((await developmentTools(repo, "www-spec")).items[3].discovery).toBe("invalid");
+  await fs.writeFile(path.join(repo, canonical), Buffer.from([0xfe]));
+  await expect(developmentTools(repo, "www-spec")).rejects.toThrow("UTF-8");
+});
+
+test("UTF8 CLI도 잘못된 원문 context를 발행하지 않고 원장을 보존한다", async () => {
+  const { repo, work } = await fixture();
+  await fs.writeFile(path.join(path.dirname(work.path), "spec.md"), Buffer.from([0xff]));
+  const before = await fs.readFile(work.path);
+  const cli = path.resolve(import.meta.dir, "../scripts/workflow.ts");
+  expect(() => execFileSync(process.execPath, [cli, JSON.stringify({ repo, action: "artifact-context", workId: work.record.id, kind: "spec" })], { encoding: "utf8", stdio: "pipe" })).toThrow("UTF-8");
+  expect(await fs.readFile(work.path)).toEqual(before);
+});
