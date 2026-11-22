@@ -8,12 +8,17 @@ import { cpSync, mkdtempSync, mkdirSync, readFileSync, renameSync, rmSync, symli
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { checkArchitectureContract } from "../scripts/architecture-contract.ts";
-import { generateArchitecture, writeArchitecture } from "../scripts/generate-architecture.ts";
+import { architectureCanonicalTool, architectureBoxboxMode, generateArchitecture, writeArchitecture } from "../scripts/generate-architecture.ts";
+
+const sourceRoot = path.resolve(import.meta.dir, "..");
+const fixtureMode = architectureBoxboxMode(sourceRoot, architectureCanonicalTool(sourceRoot));
 
 const declaration = "/**\n * @architecture arch.feature\n * @implements FEATURE-OWNERSHIP\n */\nexport const marker = 1;\n"                                       ;
 const testSource  = "/** @verifies FEATURE-OWNERSHIP */\nimport { test } from 'bun:test';\ntest('실행', () => { if (1 + 1 !== 2) throw Error('실행 실패'); });\n" ;
 
 function fixture(run: (root: string) => void) {
+  const previousMode = process.env.BOXBOX_MODE;
+  process.env.BOXBOX_MODE = fixtureMode;
   const root = mkdtempSync(path.join(tmpdir(), "www-structure-contract-"));
   try {
     for (const directory of ["src", "scripts/workflow", "test", "docs/architecture", "docs/specs"]) mkdirSync(path.join(root, directory), { recursive: true });
@@ -26,7 +31,10 @@ function fixture(run: (root: string) => void) {
     writeFileSync(path.join(root, "docs/architecture/structure.json"), JSON.stringify({ schemaVersion: 1, rootId: "arch.www", specFiles: ["docs/specs/architecture.md"], nodes }));
     writeFileSync(path.join(root, "docs/specs/architecture.md"), '```architecture-requirements\n[{"id":"FEATURE-OWNERSHIP","nodeId":"arch.feature","description":"기능 책임","implementationRequired":true,"verificationRequired":true}]\n```\n');
     run(root);
-  } finally { rmSync(root, { recursive: true, force: true }); }
+  } finally {
+    if (previousMode === undefined) delete process.env.BOXBOX_MODE; else process.env.BOXBOX_MODE = previousMode;
+    rmSync(root, { recursive: true, force: true });
+  }
 }
 function change(root: string, file: string, transform: (source: string) => string) {
   const target = path.join(root, file);

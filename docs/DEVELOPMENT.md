@@ -356,13 +356,15 @@ GUI 프로세스와 루프백 디버깅 포트를 허용하는 데스크톱 실�
 
 ### 생성 snapshot의 개발용 BoxBox 설치 계약
 
-코드 설계도 snapshot은 개발·빌드 시 설치된 BoxBox 공개 CLI로 canonical 직렬화한다. 앱 runtime이나 work/report writer의 의존성이 아니다. 새 머신에서는 BoxBox 설치, 기존 프로젝트 JSON 승인 근거 복구, `.www/development.local.json` 설정이 먼저 필요하다. 설치가 없거나 설정·승인 근거가 어긋나면 생성·check·build가 실패하며 다른 직렬화로 대체하지 않는다.
+코드 설계도 snapshot은 개발·빌드 시 설치된 BoxBox 공개 launcher의 project mode를 조회한다. OFF이면 외부 align/check 없이 결정적 JSON으로 생성하며, enabled이면 공개 CLI로 canonical 직렬화한다. 앱 runtime이나 work/report writer의 의존성이 아니다. 새 머신에서는 BoxBox 설치, 기존 프로젝트 JSON 승인 근거 복구, `.www/development.local.json` 설정이 먼저 필요하다. 모든 mode에서 설치·Node/CLI/runtime/package·기존 registry 출처를 검증한다. 설치·설정·승인 근거·mode 조회가 잘못되면 실패하며 OFF로 간주하지 않는다.
 
 기존 `boxboxNode`·`boxboxLauncher`를 유지하고 같은 로컬 설정에 `architectureCanonical` 객체를 추가한다. `runtime`은 설치 launcher의 상위 `runtime.json`, `cli`는 그 runtime의 실제 `cli` 경로다. `cliSha256`은 그 공개 CLI 파일의 SHA-256, `version`은 설치 package.json의 버전, `nodeVersion`은 고정 Node의 `--version` 출력이다. 이 값은 머신 설치를 직접 확인해 명시적으로 설정한다. 경로·Node 패치·승인 SHA를 제품 소스에 고정하지 않는다. generator는 launcher/runtime 연결, runtime의 node/cli, 실제 Node 버전, package 버전과 CLI SHA를 대조한다.
 
 `architectureCanonical.registry`에는 기존 `.boxbox/examples.jsonl`, `.boxbox/conventions.jsonl`, `.boxbox/decisions.jsonl`, `.boxbox/rules/json-scalar-fields.md` 네 파일의 전체 SHA-256만 넣는다. 새 승인 기록을 만들어 채우는 절차가 아니다. 실제 승인 변경 후에는 변경 이유와 원래 승인 증거를 확인하고 네 파일을 다시 읽어 로컬 pin을 갱신한다. TS 승인 추가도 공유 JSONL 전체 SHA를 바꾸므로 `승인 근거가 바뀌었습니다` 오류가 날 수 있다. 이 경우 JSON 승인이 새로 필요하다고 추측하거나 검증을 생략하지 않고 승인 이력과 설치·설정을 대조한다.
 
-write/check는 동일 논리경로 `src/architecture.generated.json`의 격리된 staging에서 공식 `align --dry-run`, `align`, 재차 `align`의 바이트 fixed point, `check --source`를 사용한다. JSON 프로젝트 승인 proof와 syntax valid, misaligned/refused 0, 값·속성 순서 보존을 모두 확인한다. check는 최종 파일을 쓰지 않고 write는 모든 검사 후 atomic rename한다. 실패·stale·도구 누락·승인 drift에서는 원본이 유지된다. 외부 프로세스의 마지막 순간 쓰기를 OS compare-and-swap으로 직렬화하지는 않으므로 검사 중 다른 저작·빌드로 snapshot을 바꾸지 않는다.
+OFF에서 write/check는 JSON 값·속성 순서·결정성과 소스 현재성을 검증한다. 현재 snapshot의 의미와 순서가 같으면 기존 bytes를 보존하고, 달라지면 순수 generator의 2-space JSON을 생성한다. 오래된 snapshot은 check가 거부한다. 기존 snapshot은 Buffer→UTF-8→Buffer 왕복으로 원본 bytes를 확인하며 잘못된 UTF-8은 direct 생성·write·check 모두 원본을 보존하고 실패한다. 정상 U+FFFD는 보존한다. UTF-8이 유효한 BOM·잘못된 JSON은 check에서 거부하고 명시 write에서 재생성한다. 외부 형식 검사는 disabled이며 PASS가 아니다. 실설치 OFF는 테스트에서도 켜지 않으며 enabled canonical은 격리 fake CLI subprocess 회귀로 구분해 검증한다.
+
+enabled의 write/check는 동일 논리경로 `src/architecture.generated.json`의 격리된 staging에서 공식 `align --dry-run`, `align`, 재차 `align`의 바이트 fixed point, `check --source`를 사용한다. JSON 프로젝트 승인 proof와 syntax valid, misaligned/refused 0, 값·속성 순서 보존을 모두 확인한다. check는 최종 파일을 쓰지 않고 write는 모든 검사 후 atomic rename한다. 실패·stale·도구 누락·승인 drift에서는 원본이 유지된다. 외부 프로세스의 마지막 순간 쓰기를 OS compare-and-swap으로 직렬화하지는 않으므로 검사 중 다른 저작·빌드로 snapshot을 바꾸지 않는다.
 
 ### 새 작업·보고서 JSON 최초 출력
 

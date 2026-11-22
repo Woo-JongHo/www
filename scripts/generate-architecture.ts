@@ -131,10 +131,11 @@ export function architectureCanonicalTool(root: string): CanonicalTool {
   const runtime  = text(config.runtime      ) ;
   if (!path.isAbsolute(launcher) || realpathSync(runtime) !== realpathSync(path.resolve(path.dirname(launcher), "../runtime.json"))) throw Error("BoxBox launcher/runtime.json 경로가 다릅니다.");
   for (const value of [local.boxboxNode, config.cli, runtime]) if (!path.isAbsolute(text(value))) throw Error("BoxBox 설치 경로는 머신 로컬 절대경로여야 합니다.");
-  return { node: text(local.boxboxNode), cli: text(config.cli), runtime, cliSha256: text(config.cliSha256), version: text(config.version), nodeVersion: text(config.nodeVersion), registry: proof };
+  return { launcher, node: text(local.boxboxNode), cli: text(config.cli), runtime, cliSha256: text(config.cliSha256), version: text(config.version), nodeVersion: text(config.nodeVersion), registry: proof };
 }
 
 export interface CanonicalTool {
+  launcher    : string                           ;
   node        : string                           ;
   cli         : string                           ;
   cliSha256   : string                           ;
@@ -146,7 +147,37 @@ export interface CanonicalTool {
 
 const digest = (value: string | Buffer) => createHash("sha256").update(value).digest("hex");
 
-/** JSON 의미 객체를 공개 CLI의 승인·parser·preservation·fixed-point 경로에 통과시킨다. */
+/** 공개 project mode를 엄격히 읽는다. 실패나 알 수 없는 mode는 OFF가 아니다. */
+export function architectureBoxboxMode(root: string, tool: CanonicalTool): string {
+  if (!path.isAbsolute(tool.launcher) || !lstatSync(tool.launcher).isFile()
+    || realpathSync(tool.runtime) !== realpathSync(path.resolve(path.dirname(tool.launcher), "../runtime.json"))) throw Error("BoxBox launcher/runtime.json 경로가 다릅니다.");
+  const result = spawnSync(tool.node, [tool.launcher, "mode", "--json"], { cwd: root, encoding: "utf8", timeout: 30_000, maxBuffer: 1_048_576 });
+  if (result.error || result.status !== 0) throw Error(`BoxBox mode 조회 실패: ${result.error?.message ?? `${result.stdout}\n${result.stderr}`}`);
+  const report = jsonObject(JSON.parse(result.stdout));
+  if (report.tool !== "boxbox" || report.command !== "mode" || report.scope !== "project" || report.ok !== true || report.error
+    || typeof report.mode !== "string" || !["off", "check", "align", "refactor"].includes(report.mode)) throw Error("BoxBox project mode 응답이 잘못됐습니다.");
+  return report.mode;
+}
+
+/** OFF에서도 값·속성 순서를 검증하며 같은 snapshot의 기존 bytes는 보존한다. */
+function disabledArchitectureJson(root: string, value: unknown): string {
+  const compact = JSON.stringify(value);
+  if (compact === undefined) throw Error("구조 snapshot JSON 값이 필요합니다.");
+  const input = JSON.stringify(value, null, 2) + "\n";
+  if (JSON.stringify(JSON.parse(input)) !== compact || JSON.stringify(value) !== compact) throw Error("JSON 값 또는 속성 순서·결정성이 바뀌었습니다.");
+  const file = path.join(root, "src/architecture.generated.json");
+  if (existsSync(file)) {
+    if (!lstatSync(file).isFile() || lstatSync(file).isSymbolicLink()) throw Error("snapshot은 정규 파일이어야 합니다.");
+    const bytes   = readFileSync  (file  ) ;
+    const current = bytes.toString("utf8") ;
+    if (!Buffer.from(current, "utf8").equals(bytes)) throw Error("구조 snapshot은 유효한 UTF-8이어야 합니다.");
+    try { if (JSON.stringify(JSON.parse(current)) === compact) return current; }
+    catch (error) { if (!(error instanceof SyntaxError)) throw error; }
+  }
+  return input;
+}
+
+/** 출처와 project mode 검증 뒤 OFF는 순수 JSON, enabled는 기존 canonical 경로를 사용한다. */
 export function canonicalArchitectureJson(root: string, value: unknown, tool: CanonicalTool): string {
   if (!existsSync(tool.node) || !existsSync(tool.cli)) throw new Error("개발용 고정 BoxBox 설치가 필요합니다. JSON.stringify fallback은 허용하지 않습니다.");
   if (digest(readFileSync(tool.cli)) !== tool.cliSha256) throw new Error("BoxBox CLI 버전/해시가 다릅니다.");
@@ -156,6 +187,12 @@ export function canonicalArchitectureJson(root: string, value: unknown, tool: Ca
   if (version.status !== 0 || version.stdout.trim() !== tool.nodeVersion) throw new Error("BoxBox Node 버전이 개발 설치 계약과 다릅니다.");
   const manifest = jsonObject(JSON.parse(readFileSync(path.join(path.dirname(tool.cli), "../package.json"), "utf8")));
   if (manifest.version !== tool.version) throw new Error("BoxBox package 버전이 다릅니다.");
+  for (const [relative, expected] of Object.entries(tool.registry)) {
+    if (!relative.startsWith(".boxbox/") || relative.split("/").includes("..")) throw Error("승인 근거 경로가 잘못됐습니다.");
+    const original = path.join(root, relative);
+    if (!lstatSync(original).isFile() || lstatSync(original).isSymbolicLink() || digest(readFileSync(original)) !== expected) throw Error(`승인 근거가 바뀌었습니다: ${relative}`);
+  }
+  if (architectureBoxboxMode(root, tool) === "off") return disabledArchitectureJson(root, value);
   const logical = "src/architecture.generated.json"                         ;
   const stage   = mkdtempSync(path.join(tmpdir(), "www-boxbox-canonical-")) ;
   const run = (args: string[]) => {

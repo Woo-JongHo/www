@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "081359c0418cd773ed24395356dbaeddfb12cd1580812fb6b51a7b1dd83fd3c4",
+  "digest"       : "b6d04e947e8494881783f8fbea4b9d8f35928007b607c8b8deeb1b88c544d4d2",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -81,8 +81,8 @@
       "layer"      : "tooling",
       "role"       : "앱 모듈 · generate-architecture",
       "line"       : 1,
-      "lines"      : 236,
-      "digest"     : "53231d638f7969dba7c51881bcf7af1f4a4d3df6951877feb777c4b0845fae4e",
+      "lines"      : 273,
+      "digest"     : "39d6c51cf2a0c9a4d925325f7b4eeac6f249bae3b300b1eee8e0ae8096763b9c",
       "structureId": "arch.tooling.map-generation"
     },
     {
@@ -6090,6 +6090,13 @@
         "line": 2
       },
       {
+        "file": "test/architecture-mode.test.ts",
+        "requirementIds": [
+          "RESP-TOOLING-MAP-VALIDATION"
+        ],
+        "line": 1
+      },
+      {
         "file": "test/architecture-tree.test.ts",
         "requirementIds": [
           "RESP-BLUEPRINT-LAYOUT"
@@ -6455,7 +6462,7 @@
         "line": 2
       }
     ],
-    "digest": "f7756e5b5cde001b8f2eebd0bfd759b8274bc056bccf392b0179d77811a35d67",
+    "digest": "3559924d740026fddb0b46360cf43a28d29d3692dd09609c0e9598970cd5494a",
     "statecharts": {
       "models": [
         {

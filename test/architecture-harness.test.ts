@@ -9,10 +9,11 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symli
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { writeArchitecture } from "../scripts/generate-architecture.ts";
+import { architectureCanonicalTool, architectureBoxboxMode, writeArchitecture } from "../scripts/generate-architecture.ts";
 import { runTypedWorkflow, type CommandResult } from "../scripts/workflow.ts";
 
 const sourceRoot = path.resolve(import.meta.dir, "..");
+const fixtureMode = architectureBoxboxMode(sourceRoot, architectureCanonicalTool(sourceRoot));
 
 function record(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw Error("검사 결과 객체가 필요합니다.");
@@ -20,6 +21,8 @@ function record(value: unknown): Record<string, unknown> {
 }
 
 async function fixture(active: boolean, mutate: (repo: string) => void, inspect: (harness: Record<string, unknown>, prompt: string, result: Record<string, unknown>) => void, prepare: (repo: string) => void = () => {}, regenerate = false, denyGeneratedWrite = false) {
+  const previousMode = process.env.BOXBOX_MODE;
+  process.env.BOXBOX_MODE = fixtureMode;
   const repo = mkdtempSync(path.join(tmpdir(), "www-architecture-harness-"));
   const put = (file: string, body: string) => {
     mkdirSync(path.dirname(path.join(repo, file)), { recursive: true });
@@ -78,7 +81,10 @@ async function fixture(active: boolean, mutate: (repo: string) => void, inspect:
       },
     });
     inspect(record(result.harness), prompt, result);
-  } finally { rmSync(repo, { recursive: true, force: true }); }
+  } finally {
+    if (previousMode === undefined) delete process.env.BOXBOX_MODE; else process.env.BOXBOX_MODE = previousMode;
+    rmSync(repo, { recursive: true, force: true });
+  }
 }
 
 test("승인된 생성물은 신뢰한 공식 생성기로 갱신한 뒤 사후 검사하며 대상 저장소 생성기는 실행하지 않는다", async () => {
@@ -239,6 +245,7 @@ for (const runtime of ["node", "bun"]) {
         import { tmpdir } from 'node:os';
         import path from 'node:path';
         const sourceRoot = ${JSON.stringify(sourceRoot)};
+        const fixtureMode = ${JSON.stringify(fixtureMode)};
         const { runTypedWorkflow } = await import(${JSON.stringify(workflow)});
         const { writeArchitecture } = await import(${JSON.stringify(generator)});
         ${record.toString()}

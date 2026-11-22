@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { architectureCanonicalTool, canonicalArchitectureJson, writeCanonicalArchitecture, extractArchitectureImports, generateArchitecture } from "../scripts/generate-architecture.ts";
+import { architectureCanonicalTool, architectureBoxboxMode, canonicalArchitectureJson, writeCanonicalArchitecture, extractArchitectureImports, generateArchitecture } from "../scripts/generate-architecture.ts";
 import { architecture, architectureConnections, architectureEdgePath, architectureLayout, architectureMatches, layerConnections } from "../src/architecture";
 
 describe("코드 기반 설계도", () => {
@@ -99,15 +99,17 @@ describe("코드 기반 설계도", () => {
 });
 
 
-describe("공식 실설치 BoxBox canonical snapshot", () => {
+describe("실설치 project mode에 따른 snapshot 생성 계약", () => {
   const sourceRoot = path.resolve(import.meta.dir, "..")                                                                                ;
   const tool       = architectureCanonicalTool(sourceRoot)                                                                              ;
   const value      = { short: 1, longerName: "한글", third: false, nested: { alpha: true, beta: null, gamma: "nested", list: [1, 2] } } ;
 
-  test("공식 CLI의 결정성·값과 속성 순서·write/check 동등성", () => {
+  test("선택된 mode의 결정성·값과 속성 순서·write/check 동등성", () => {
     const first = canonicalArchitectureJson(sourceRoot, value, tool);
     expect(canonicalArchitectureJson(sourceRoot, value, tool)).toBe(first);
     expect(JSON.stringify(JSON.parse(first))).toBe(JSON.stringify(value));
+    const previousMode = process.env.BOXBOX_MODE;
+    process.env.BOXBOX_MODE = architectureBoxboxMode(sourceRoot, tool);
     const root = mkdtempSync(path.join(tmpdir(), "www-canonical-real-"));
     try {
       mkdirSync(path.join(root, "src"));
@@ -133,6 +135,9 @@ describe("공식 실설치 BoxBox canonical snapshot", () => {
         expect(() => writeCanonicalArchitecture(root, value, false, invalid)).toThrow();
         expect(readFileSync(target, "utf8")).toBe(first);
       }
-    } finally { rmSync(root, { recursive: true, force: true }); }
+    } finally {
+      if (previousMode === undefined) delete process.env.BOXBOX_MODE; else process.env.BOXBOX_MODE = previousMode;
+      rmSync(root, { recursive: true, force: true });
+    }
   }, 30000);
 });
