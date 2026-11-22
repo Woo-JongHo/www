@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-1a9a76b4-83eb-455c-9c9f-ce2a9b0ee675",
+  "title"        : "대시보드 ‘검토 필요’ 41건 재분류",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "6913bb09b785269ba76f337d82c3857bc04e8d834e7be9eac9a3c2c924e18012",
+    "threadId": "01a20260-f2c8-70b2-b2b3-6baf87fff822",
+    "turnId"  : "01a20292-77a0-7b92-8761-5f2e3f951a38",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"node --experimental-transform-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --input-type=module - <<'JS'\nimport {readDashboard} from './src/dashboard.ts';\nimport {readFile} from 'node:fs/promises';\nimport {resolve} from 'node:path';\nconst {projects:[p]}=await readDashboard([{key:'www',name:'WWW',path:process.cwd(),kind:'www'}]);\nconst groups={};\nconst rows=p.cards.filter(c=>c.status==='verifying');\nfor(const c of rows){\n const w=JSON.parse(await readFile(resolve(c.sourcePath),'utf8'));\n const next=w.workflow?.nextAction ?? (c.sourcePath.startsWith('docs/work/Native/')?'nativeSummary':'unknown');\n (groups[next]??=[]).push({path:c.sourcePath.split('/').slice(-3,-1).join('/'),blocked:c.blockedReason});\n}\nconsole.log(JSON.stringify({coverage:p.coverage,reviewColumn:rows.length,groups:Object.fromEntries(Object.entries(groups).map(([k,v])=>[k,{count:v.length,items:k==='review'||k==='unknown'?v:undefined}]))},null,2));\nJS\"",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}

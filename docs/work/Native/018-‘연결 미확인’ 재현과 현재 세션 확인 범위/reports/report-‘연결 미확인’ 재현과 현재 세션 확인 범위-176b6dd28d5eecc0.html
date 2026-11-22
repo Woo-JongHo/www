@@ -1,0 +1,92 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>‘연결 미확인’ 재현과 현재 세션 확인 범위 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+dd.result-status{font-weight:600}dd.result-passed{color:var(--green)}dd.result-failed{color:var(--red)}dd.result-blocked,dd.result-unverified{color:var(--amber)}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 22일 오후 6:24 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>‘연결 미확인’ 재현과 현재 세션 확인 범위</h1><p class="lead">최근 이벤트 2,000건만 보관하는 과정에서 연결 확인 이벤트가 밀려나면, 답변이 계속 표시돼도 입력창이 ‘연결 미확인’으로 바뀌고 추가 지시가 막힐 수 있다고 Native 답변이 보고했습니다. 현재 세션에서 같은 증상이 제보됐지만, 당시 입력창이 사용한 연결 이벤트가 저장 기록에 없어 직접 원인은 확인하지 못했습니다.</p><div id="report-story" class="story">사용자가 현재 세션에서도 ‘연결 미확인’이 뜬다고 알려 이벤트 보관과 연결 상태 계산 경로를 조사했습니다. Native 답변은 최근 이벤트 2,000건에서 연결 확인 이벤트가 밀려나면 답변이 계속 표시되는 동안에도 추가 지시가 막힐 수 있다고 보고했습니다. 제공된 기록에는 코드 조회와 합성 이벤트 실행이 남아 있지만, 재현 명령의 끝부분과 상세 출력은 없고 현재 세션의 당시 연결 이벤트도 확인되지 않았습니다. 다음에 증상이 나타나면 이벤트 목록과 입력창 상태를 같은 시점에 확보해 이 경로가 실제 원인이었는지 확인할 수 있습니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 증상이 재발할 때 입력창이 참조한 이벤트 목록과 화면 상태를 같은 시점에 기록합니다.</p><p class="blocker"><strong>남은 차단 사항</strong> Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>사용자가 현재 세션에서 답변을 받는 도중 ‘연결 미확인’ 표시를 봤다고 제보했습니다. 당시 입력창이 참조한 이벤트와 추가 지시의 실제 전송 결과는 미확인입니다.</p></div><div><h3>접근과 결과</h3><p>같은 상황에서 답변 표시와 입력 가능 여부가 어긋날 수 있는 경로를 확인했다고 Native 답변이 보고했습니다. 현재 세션의 표시나 입력 동작이 수정 또는 복구됐다는 근거는 없습니다.</p></div></div><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>재현한 경로를 현재 세션의 직접 원인으로 볼 수 있는가?</h3><p><strong>선택</strong> 재현한 경로와 현재 세션에서 확인한 사실을 분리해 보고했습니다.</p><p><strong>판단 근거</strong> 같은 증상을 재현했다고 보고했지만 현재 세션의 증상 시점 이벤트가 없었습니다.</p><p class="limit"><strong>감수한 점</strong> 가능한 설명은 제시할 수 있지만, 해당 세션의 원인 확정은 추가 관측이 필요합니다.</p></article><h3>함께 기록된 선택</h3><ul><li>합성 이벤트에서 재현했다고 보고한 경로를 현재 세션의 확정 원인으로 간주하지 않았습니다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">현재 세션에서 ‘연결 미확인’이 뜨는 현상을 설명한다.</td><td data-label="바뀐 동작">연결이 끊기지 않아도 같은 표시가 나올 수 있는 경로를 설명했지만, 현재 세션의 직접 원인은 확인하지 못했습니다.</td><td data-label="근거와 한계">사용자 제보, Native 답변, 이벤트 보관 및 상태 처리 코드 조회와 합성 이벤트 실행 기록.<p class="limit">현재 세션의 증상 발생 시점에 입력창이 참조한 연결 이벤트가 남아 있지 않았습니다.</p></td></tr></tbody></table><h3>저장 당시 수용 기준 판정</h3><dl class="requirements"><div><dt>보고서 생성과 업무 수용을 구분한다</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>이벤트 보관 한도에 도달했을 때의 연결 상태 계산</h3><dl><div><dt>확인 방법</dt><dd>Native 조사에서는 연결 확인 이벤트를 맨 앞에 둔 2,000건의 합성 이벤트에 응답 조각 한 건을 추가하고 상태 계산 코드를 실행했습니다.</dd></div><div><dt>기대 결과</dt><dd>응답 조각은 계속 반영되지만 연결 확인 이벤트가 보관 범위에서 빠지면 입력창은 ‘연결 미확인’ 상태로 바뀝니다.</dd></div><div><dt>실제 관측</dt><dd>Native 답변은 이 경로를 재현했다고 보고했으며, 명령 기록에는 종료 코드 0이 있습니다.</dd></div><div><dt>확인 범위와 한계</dt><dd>명령 후반과 상세 출력이 없어 이 보고에서 결과를 독립적으로 검증하지 않았으며, 실제 UI 조작 결과도 확인되지 않았습니다.</dd></div></dl></article><article class="check"><h3>현재 세션에서 증상이 발생한 직접 원인</h3><dl><div><dt>확인 방법</dt><dd>Native 조사에서 로컬 세션 기록과 연결 상태 전달 코드를 조회했습니다.</dd></div><div><dt>기대 결과</dt><dd>증상 시점에 입력창이 참조한 이벤트를 찾아 연결 확인 이벤트가 보관 한도로 빠졌는지 판별합니다.</dd></div><div><dt>실제 관측</dt><dd>Native 답변에 따르면 저장 기록에 당시 입력창이 사용한 연결 이벤트가 없어 원인을 확정하지 못했습니다.</dd></div><div><dt>확인 범위와 한계</dt><dd>합성 이벤트 재현은 현재 세션의 원인을 입증하지 않습니다.</dd></div></dl></article><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>입력 자료가 잘려 합성 재현 명령의 마지막 부분과 상세 출력이 제공되지 않았습니다.</li><li>명령 종료 코드 0은 실행 종료 기록입니다. 재현 결과는 Native 답변의 보고이며, 실제 UI에서의 독립 검증이나 사용자 수용 확인을 뜻하지 않습니다.</li><li>현재 세션의 증상 발생 시점에 입력창이 사용한 연결 이벤트는 저장 기록에서 확인되지 않았습니다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>증상이 재발할 때 입력창이 참조한 이벤트 목록과 화면 상태를 같은 시점에 기록합니다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>연결 확인 이벤트가 2,000건 한도로 제외됐는지, 아니면 다른 경로에서 상태가 바뀌었는지 판단할 근거를 확보합니다.</dd></div><div><dt>영향</dt><dd>합성 재현 경로가 실제 증상에도 적용되는지 판단할 수 있습니다.</dd></div></dl></article><h3>기존 서술에 기록된 남은 일</h3><ul><li>증상이 다시 나타나면 같은 시점의 이벤트 목록과 입력창 상태를 함께 확보해, 연결 확인 이벤트가 보관 한도 때문에 빠졌는지 대조합니다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 22일 오후 6:24 · 선택한 발행 기록 · 최근 이벤트 2,000건만 보관하는 과정에서 연결 확인 이벤트가 밀려나면, 답변이 계속 표시돼도 입력창이 ‘연결 미확인’으로 바뀌고 추가 지시가 막힐 수 있다고 Native 답변이 보고했습니다. 현재 세션에서 같은 증상이 제보됐지만, 당시 입력창이 사용한 연결 이벤트가 저장 기록에 없어 직접 원인은 확인하지 못했습니다.</p><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>최근 이벤트의 보관 한도와 오래된 이벤트가 밀려나는 경로를 살펴봅니다.</p><code>src/chat-state.ts:181</code></li><li><p>Native 조사에서 조회한 기존 재현·등록 작업 기록입니다.</p><code>docs/work/Native/016-답변 스트리밍 중 ‘연결 미확인’ 버그 재현 및 등록/spec.md</code></li><li><p>Native 답변이 안내한 관련 이슈입니다.</p><code>https://github.com/Woo-JongHo/www/issues/4</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Native/018-‘연결 미확인’ 재현과 현재 세션 확인 범위/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-81c91c8c-1e9c-42b0-b548-43d01109fb1f<br>report-064b9a1a-db87-4bd5-a00b-c9212923a341</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>3804f78782b5f2cee8da31ab6d688758e78ab1df8fcd0b78e56e520e3d7ebf8e</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>기준 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-NATIVE&quot;,
+      &quot;description&quot;: &quot;보고서 생성과 업무 수용을 구분한다&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;최근 이벤트 2,000건만 보관하는 과정에서 연결 확인 이벤트가 밀려나면, 답변이 계속 표시돼도 입력창이 ‘연결 미확인’으로 바뀌고 추가 지시가 막힐 수 있다고 Native 답변이 보고했습니다. 현재 세션에서 같은 증상이 제보됐지만, 당시 입력창이 사용한 연결 이벤트가 저장 기록에 없어 직접 원인은 확인하지 못했습니다.&quot;,
+  &quot;before&quot;: &quot;사용자가 현재 세션에서 답변을 받는 도중 ‘연결 미확인’ 표시를 봤다고 제보했습니다. 당시 입력창이 참조한 이벤트와 추가 지시의 실제 전송 결과는 미확인입니다.&quot;,
+  &quot;after&quot;: &quot;같은 상황에서 답변 표시와 입력 가능 여부가 어긋날 수 있는 경로를 확인했다고 Native 답변이 보고했습니다. 현재 세션의 표시나 입력 동작이 수정 또는 복구됐다는 근거는 없습니다.&quot;,
+  &quot;changes&quot;: [],
+  &quot;decisions&quot;: [
+    &quot;합성 이벤트에서 재현했다고 보고한 경로를 현재 세션의 확정 원인으로 간주하지 않았습니다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;입력 자료가 잘려 합성 재현 명령의 마지막 부분과 상세 출력이 제공되지 않았습니다.&quot;,
+    &quot;명령 종료 코드 0은 실행 종료 기록입니다. 재현 결과는 Native 답변의 보고이며, 실제 UI에서의 독립 검증이나 사용자 수용 확인을 뜻하지 않습니다.&quot;,
+    &quot;현재 세션의 증상 발생 시점에 입력창이 사용한 연결 이벤트는 저장 기록에서 확인되지 않았습니다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;증상이 다시 나타나면 같은 시점의 이벤트 목록과 입력창 상태를 함께 확보해, 연결 확인 이벤트가 보관 한도 때문에 빠졌는지 대조합니다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;사용자가 현재 세션에서도 ‘연결 미확인’이 뜬다고 알려 이벤트 보관과 연결 상태 계산 경로를 조사했습니다. Native 답변은 최근 이벤트 2,000건에서 연결 확인 이벤트가 밀려나면 답변이 계속 표시되는 동안에도 추가 지시가 막힐 수 있다고 보고했습니다. 제공된 기록에는 코드 조회와 합성 이벤트 실행이 남아 있지만, 재현 명령의 끝부분과 상세 출력은 없고 현재 세션의 당시 연결 이벤트도 확인되지 않았습니다. 다음에 증상이 나타나면 이벤트 목록과 입력창 상태를 같은 시점에 확보해 이 경로가 실제 원인이었는지 확인할 수 있습니다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;현재 세션에서 ‘연결 미확인’이 뜨는 현상을 설명한다.&quot;,
+        &quot;result&quot;: &quot;연결이 끊기지 않아도 같은 표시가 나올 수 있는 경로를 설명했지만, 현재 세션의 직접 원인은 확인하지 못했습니다.&quot;,
+        &quot;evidence&quot;: &quot;사용자 제보, Native 답변, 이벤트 보관 및 상태 처리 코드 조회와 합성 이벤트 실행 기록.&quot;,
+        &quot;limitations&quot;: &quot;현재 세션의 증상 발생 시점에 입력창이 참조한 연결 이벤트가 남아 있지 않았습니다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;이벤트 보관 한도에 도달했을 때의 연결 상태 계산&quot;,
+        &quot;method&quot;: &quot;Native 조사에서는 연결 확인 이벤트를 맨 앞에 둔 2,000건의 합성 이벤트에 응답 조각 한 건을 추가하고 상태 계산 코드를 실행했습니다.&quot;,
+        &quot;expected&quot;: &quot;응답 조각은 계속 반영되지만 연결 확인 이벤트가 보관 범위에서 빠지면 입력창은 ‘연결 미확인’ 상태로 바뀝니다.&quot;,
+        &quot;observed&quot;: &quot;Native 답변은 이 경로를 재현했다고 보고했으며, 명령 기록에는 종료 코드 0이 있습니다.&quot;,
+        &quot;limitations&quot;: &quot;명령 후반과 상세 출력이 없어 이 보고에서 결과를 독립적으로 검증하지 않았으며, 실제 UI 조작 결과도 확인되지 않았습니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;현재 세션에서 증상이 발생한 직접 원인&quot;,
+        &quot;method&quot;: &quot;Native 조사에서 로컬 세션 기록과 연결 상태 전달 코드를 조회했습니다.&quot;,
+        &quot;expected&quot;: &quot;증상 시점에 입력창이 참조한 이벤트를 찾아 연결 확인 이벤트가 보관 한도로 빠졌는지 판별합니다.&quot;,
+        &quot;observed&quot;: &quot;Native 답변에 따르면 저장 기록에 당시 입력창이 사용한 연결 이벤트가 없어 원인을 확정하지 못했습니다.&quot;,
+        &quot;limitations&quot;: &quot;합성 이벤트 재현은 현재 세션의 원인을 입증하지 않습니다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;재현한 경로를 현재 세션의 직접 원인으로 볼 수 있는가?&quot;,
+        &quot;basis&quot;: &quot;같은 증상을 재현했다고 보고했지만 현재 세션의 증상 시점 이벤트가 없었습니다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;재현한 경로와 현재 세션에서 확인한 사실을 분리해 보고했습니다.&quot;,
+        &quot;tradeoff&quot;: &quot;가능한 설명은 제시할 수 있지만, 해당 세션의 원인 확정은 추가 관측이 필요합니다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;src/chat-state.ts:181&quot;,
+        &quot;purpose&quot;: &quot;최근 이벤트의 보관 한도와 오래된 이벤트가 밀려나는 경로를 살펴봅니다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Native/016-답변 스트리밍 중 ‘연결 미확인’ 버그 재현 및 등록/spec.md&quot;,
+        &quot;purpose&quot;: &quot;Native 조사에서 조회한 기존 재현·등록 작업 기록입니다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;https://github.com/Woo-JongHo/www/issues/4&quot;,
+        &quot;purpose&quot;: &quot;Native 답변이 안내한 관련 이슈입니다.&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;증상이 재발할 때 입력창이 참조한 이벤트 목록과 화면 상태를 같은 시점에 기록합니다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;연결 확인 이벤트가 2,000건 한도로 제외됐는지, 아니면 다른 경로에서 상태가 바뀌었는지 판단할 근거를 확보합니다.&quot;,
+        &quot;impact&quot;: &quot;합성 재현 경로가 실제 증상에도 적용되는지 판단할 수 있습니다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></section></article></div></main></body></html>

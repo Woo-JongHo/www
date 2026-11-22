@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-1a9a76b4-83eb-455c-9c9f-ce2a9b0ee675",
+  "title"        : "대시보드 ‘검토 필요’ 41건 재분류",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-bd9cd5e0-8e40-450e-b776-8ecdc0b41148",
+      "workId"        : "work-1a9a76b4-83eb-455c-9c9f-ce2a9b0ee675",
+      "title"         : "대시보드 ‘검토 필요’ 41건 재분류",
+      "summary"       : "대시보드의 ‘검토 필요’ 41건은 모두 리뷰할 작업이 아닙니다. Native 답변은 WWW 원장의 `verifying` 항목을 재집계해, 다음 단계가 리뷰인 항목은 Chat/013과 Workflow/016 두 건이라고 보고했습니다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-22T09:25:40.655Z",
+      "event"         : "native_completed",
+      "workRecordHash": "98dd25cc1b6e016c58be0a1458f7ee1bc4f34ea9d069573ac1ae3e88527422d1",
+      "sourceDigest"  : null,
+      "criteriaDigest": null,
+      "semanticHash"  : "9b18119df2fb80626f55efb834ab59d7f4d02f40cc56b338ea16444d6b0275d8",
+      "narrative": {
+        "summary": "대시보드의 ‘검토 필요’ 41건은 모두 리뷰할 작업이 아닙니다. Native 답변은 WWW 원장의 `verifying` 항목을 재집계해, 다음 단계가 리뷰인 항목은 Chat/013과 Workflow/016 두 건이라고 보고했습니다.",
+        "before" : "대시보드에서 ‘검토 필요’를 보면 기능 검증, 수정, 리뷰, 완료 처리, Native 실행 요약이 한 열에 표시돼 모두 리뷰해야 하는 것처럼 보일 수 있었습니다.",
+        "after"  : "같은 대시보드 항목을 원장의 다음 단계로 나눠 보면 기능 검증 17건, 구현·수정 3건, 리뷰 2건, 완료 처리 1건, 다음 단계가 없는 Native 실행 요약 18건입니다. 대시보드 표시를 변경한 것이 아니라 표시된 건수의 의미를 확인했습니다.",
+        "changes": [
+          "Native 답변은 이전 34건에서 현재 41건으로 늘어난 7건이 모두 Native 실행 요약이며, 원장상 리뷰 건수는 2건으로 그대로라고 설명했습니다."
+        ],
+        "decisions": [
+          "리뷰 대상은 대시보드 열 이름이 아니라 원장에 기록된 다음 단계로 판단했습니다."
+        ],
+        "limitations": [
+          "제공 기록이 일부 잘려 명령의 전체 출력과 이전 34건 집계 원본은 확인할 수 없습니다. 구체적인 건수와 항목은 Native 답변에 근거합니다.",
+          "명령은 종료 코드 0으로 끝났지만, 이는 개별 리뷰의 통과나 업무 완료를 뜻하지 않습니다. 이 보고서에서 재집계나 독립 검증을 수행하지 않았습니다."
+        ],
+        "next": [
+          "리뷰 대상을 확인할 때는 Chat/013과 Workflow/016을 보면 됩니다. Workflow/016은 이전 독립 검토 실패 기록에 따라 수정 또는 재검토가 필요합니다."
+        ],
+        "reader": {
+          "story": "대시보드에 보이는 약 40건을 모두 리뷰해야 하는지 확인하기 위해 WWW 원장의 다음 단계를 다시 집계했습니다. Native 답변에 따르면 ‘검토 필요’ 41건 중 실제 다음 단계가 리뷰인 것은 두 건이며, 이전보다 늘어난 7건은 모두 Native 실행 요약입니다. 명령의 정상 종료는 관찰됐지만 원출력이 제공되지 않아 세부 집계와 이전 비교는 Native 답변에 근거합니다. 리뷰 범위는 Chat/013과 Workflow/016으로 좁히고, Workflow/016은 이전 검토 실패 기록을 바탕으로 수정 또는 재검토를 진행하면 됩니다.",
+          "requirements": [
+            {
+              "requirement": "‘검토 필요’에 보이는 작업을 모두 리뷰해야 하는지 확인한다.",
+              "result"     : "아닙니다. 41건 중 원장상 다음 단계가 리뷰인 것은 Chat/013과 Workflow/016 두 건입니다.",
+              "evidence"   : "Native 답변의 다음 단계별 집계와 리뷰 대상 목록",
+              "limitations": "집계 명령의 원출력과 두 항목의 원장 본문은 제공되지 않았습니다."
+            },
+            {
+              "requirement": "대시보드 건수가 늘어난 이유를 설명한다.",
+              "result"     : "Native 답변은 34건에서 41건으로 늘어난 7건이 모두 Native 실행 요약이고, 리뷰는 2건 그대로라고 설명했습니다.",
+              "evidence"   : "Native 답변의 이전·현재 집계 비교",
+              "limitations": "이전 34건의 집계 원본은 확인할 수 없습니다."
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "WWW 대시보드의 ‘검토 필요’ 열과 원장에 기록된 다음 단계",
+              "method"     : "Native 실행에서 `readDashboard`로 읽은 카드 중 `verifying`만 골라 원장 JSON의 `workflow.nextAction`으로 분류했습니다. 다음 단계가 없고 Native 경로에 있는 카드에는 별도 분류를 적용했습니다.",
+              "expected"   : "대시보드 열 전체 건수와 실제 리뷰 건수를 분리한다.",
+              "observed"   : "명령 종료 코드는 0이었습니다. Native 답변은 전체 41건, 리뷰 2건이라고 보고했습니다.",
+              "limitations": "명령의 원출력과 개별 원장 본문이 없어 분류 결과를 독립적으로 대조하지 못했습니다."
+            }
+          ],
+          "decisions": [
+            {
+              "problem": "‘검토 필요’라는 열 이름만으로는 각 작업에 필요한 조치를 구분할 수 없습니다.",
+              "basis": "대시보드는 상태가 `verifying`인 카드를 같은 열에 넣지만, 원장에는 서로 다른 다음 단계가 기록돼 있습니다.",
+              "alternatives": [],
+              "choice": "다음 단계가 `review`로 기록된 항목만 리뷰 대상으로 집계했습니다.",
+              "tradeoff": "당장 리뷰할 범위는 명확해지지만 대시보드의 열 이름이나 분류 방식은 바뀌지 않습니다."
+            }
+          ],
+          "references": [
+            {
+              "path": "src/dashboard.ts",
+              "purpose": "재집계 명령이 WWW 대시보드 카드를 읽는 데 사용한 모듈입니다."
+            },
+            {
+              "path": "docs/work/Native/",
+              "purpose": "다음 단계가 없는 Native 실행 요약을 별도로 분류하는 데 사용한 경로입니다."
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "Workflow/016의 이전 독립 검토 실패 기록을 확인하고 필요한 수정 또는 재검토를 진행합니다.",
+              "owner"   : null,
+              "doneWhen": "이전 실패에 대한 조치와 재검토 결과가 원장에 기록됩니다.",
+              "impact"  : "실패 이력이 있는 리뷰 항목의 상태를 확인하고 다음 처리를 결정할 수 있습니다."
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+        "criteria": [
+          {
+            "id"         : "AC-NATIVE",
+            "description": "보고서 생성과 업무 수용을 구분한다",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Native/020-대시보드 ‘검토 필요’ 41건 재분류/work.json",
+        "workRecordHash": "98dd25cc1b6e016c58be0a1458f7ee1bc4f34ea9d069573ac1ae3e88527422d1",
+        "sourceDigest"  : null,
+        "criteriaDigest": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-99eb0d98-b8f6-4462-b08e-eccd1c5200bc",
+  "title"        : "이슈 #4 응답 중 추가 지시 차단 해결안 게시",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "3cc0e12661cc62781845bac56e3cde1b77cfd246f8679ee3ba0dc47b07b6a669",
+    "threadId": "01a20260-f2c8-70b2-b2b3-6baf87fff822",
+    "turnId"  : "01a20291-f325-78a2-bb53-c5faaffaf1e0",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"rg -n 'let transport|transport/connected|transport/status|transport/closed' src/projection.ts; rg -n 'sameSelection|connectionGeneration|slice\\\\(-2_000\\\\)' src/chat-state.ts | tail -22; rg -n 'rpc ===|activeTurnId|steerTurn' src/native-session.ts | tail -24\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"gh issue view 4 --repo woo-jongho/www --json state,url,comments --jq '{state,url,comments:[.comments[].body]}'; git status --short --branch | head -7\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'issue_note=$(mktemp -t www-issue-4)\ncat > \"$issue_note\" <<'\"'EOF'\n### 해결안\n\n현재 입력창은 최근 2,000개 이벤트에서 연결 상태를 다시 계산합니다. 로컬 재현에서 이벤트 2,001번째로 현재 턴의 응답 조각을 추가하자 \"'`transport/connected`가 밀려났습니다. 응답은 렌더링됐지만 연결 상태는 `disconnected`로 돌아갔고, 입력창은 ‘연결 미확인’을 표시하며 추가 지시를 차단했습니다. 실제 제보 세션에서 같은 원인이었는지는 확인하지 못했습니다.\n\n- 네이티브 세션이 현재 연결 상태를 소유하고, 채팅 이력과 별도의 초기 상태 및 갱신으로 입력창에 전달합니다. 이벤트 이력은 기존 보관 한도를 유지합니다.\n- 수신한 연결 상태는 세션·선택·연결 세대로 확인하고, 해당 범위의 최신 상태만 적용합니다. 세션 전환이나 재연결 전의 늦은 이벤트로 현재 상태를 덮어쓰지 않습니다.\n- 추가 지시는 확인된 연결과 현재 대화의 실행 중인 턴을 함께 요구합니다. 서버의 기존 턴·승인·중단 검사도 유지합니다. 응답 조각 수신만으로 연결을 확인하지 않습니다.\n\n### 검증 기준\n\n- [ ] 응답 중 최초 연결 이벤트가 2,000개 보관 범위 밖으로 밀려나도 작업 중 표시와 추가 지시 가능 상태가 유지됩니다.\n- [ ] 실제 연결이 종료되면 추가 지시가 즉시 차단되고, 이전 연결에서 늦게 도착한 이벤트나 과거 응답이 이를 해제하지 않습니다.\n- [ ] 탭 전환과 재연결 뒤 해당 세션의 상태만 적용됩니다. 실제 WWW Native 창에서 스트리밍 중 추가 지시를 보내고 같은 턴에서 접수되는지 확인합니다.\nEOF\ngh issue comment 4 --repo woo-jongho/www --body-file \"$issue_note\"'",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}

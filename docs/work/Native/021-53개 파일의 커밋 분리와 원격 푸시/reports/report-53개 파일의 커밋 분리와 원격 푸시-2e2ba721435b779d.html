@@ -1,0 +1,144 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>53개 파일의 커밋 분리와 원격 푸시 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+dd.result-status{font-weight:600}dd.result-passed{color:var(--green)}dd.result-failed{color:var(--red)}dd.result-blocked,dd.result-unverified{color:var(--amber)}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 22일 오후 6:29 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>53개 파일의 커밋 분리와 원격 푸시</h1><p class="lead">Native는 요청 범위인 53개 파일을 목적별 8개 커밋으로 나눠 `origin/main`에 푸시하고, 원격 HEAD가 `c157358`임을 확인했다고 보고했다. 이후 자동 생성된 17개 파일은 로컬에 남았다고 보고했다.</p><div id="report-story" class="story">사용자는 이미 집계한 변경 파일 53개를 저장소 커밋 규칙에 맞게 나눠 푸시해 달라고 요청했다. Native는 이를 목적별 8개 커밋으로 나눠 `origin/main`에 게시했고 원격 HEAD가 `c157358`이라고 확인했다. 제공된 기록에는 푸시 후 원격 브랜치 대조, 릴리즈 테스트 명령 성공, 보고서 검증의 실패 및 후속 명령 성공이 남아 있다. 다만 격리 환경 검증 명령의 실패 이후 전체 검증이 통과했는지는 근거가 잘려 확인할 수 없으므로, 후속 로그를 대조하고 기존 링크 오류와 남은 17개 파일의 처리 여부를 정해야 한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 격리 환경 검증의 실패 단계와 후속 결과를 대조한다.</p><p class="blocker"><strong>남은 차단 사항</strong> Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>사용자가 커밋·푸시하려는 53개 파일은 작업 시작 시 목적별 커밋으로 분리되어 원격에 게시되기 전이었다.</p></div><div><h3>접근과 결과</h3><p>같은 53개 파일은 8개 커밋으로 분리되어 `origin/main`에 게시됐다. 이후 자동 생성된 보고서 4건의 16개 파일과 목차 변경 1개는 이번 푸시 범위에 포함되지 않았다.</p></div></div><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>서로 다른 목적의 53개 변경 파일과 작업 중 새로 생성된 파일을 어떻게 게시할 것인가.</h3><p><strong>선택</strong> 처음 집계한 범위만 목적별 8개 커밋으로 게시하고, 이후 생성된 17개 파일은 제외했다.</p><p><strong>판단 근거</strong> 사용자는 처음 집계한 53개 파일을 커밋 규칙에 맞게 나눠 달라고 요청했고, 그 집계 이후 보고서와 목차 변경이 추가로 생성됐다.</p><p class="limit"><strong>감수한 점</strong> 요청한 게시 범위는 유지했지만 자동 생성된 변경은 로컬에 남아 별도 판단이 필요하다.</p></article><article class="decision"><h3>공개 보고서에서 머신별 절대 경로를 어떻게 처리할 것인가.</h3><p><strong>선택</strong> 공개본의 경로를 정리하고 원본은 별도로 보존했다.</p><p><strong>판단 근거</strong> 공개 준비 과정에서 머신 절대 경로를 점검한 명령과 원본을 별도로 보존했다는 Native 기록이 있다.</p><p class="limit"><strong>감수한 점</strong> 공개본에서 머신 환경을 드러내는 경로를 줄이면서 원본을 유지했으나, 기존 로컬 증거 링크 오류 3개는 남았다.</p></article><h3>함께 기록된 선택</h3><ul><li>처음 집계한 53개 파일만 이번 게시 범위로 고정하고 목적별로 커밋했다. 이후 자동 생성된 17개 파일은 로컬에 남겼다.</li><li>공개 보고서에서는 머신별 절대 경로를 정리하되 원본은 별도로 보존했다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>`8a55c69`: CI·릴리즈의 BoxBox 0.2.9 전환</li><li>`76d40fc`: BoxBox 첫 적용 범위와 정렬 제한 조사</li><li>`e6c9595`: WWW 단계 미관측 조사</li><li>`88ec533`: Native 채팅 입력과 명령 동작 조사</li><li>`36406fc`: BoxBox 승인 안내와 WWW 파일럿</li><li>`8f113eb`: 대시보드 검토 필요 항목 분류</li><li>`ff0c5fc`: WWW BoxBox 변경 게시 확인</li><li>`c157358`: Native 스트리밍 중 연결 상태 오류 재현</li><li>공개 보고서의 머신 절대 경로를 정리하고 원본은 별도로 보존했다고 보고했다.</li></ul></div><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">기존 변경 파일 53개를 빠짐없이 포함하고 저장소 커밋 규칙에 맞춰 나눈다.</td><td data-label="바뀐 동작">목적별 8개 커밋으로 분리했다고 보고했다.</td><td data-label="근거와 한계">Native 답변의 8개 커밋 목록, 커밋 구성 명령의 종료 코드 0, 예정 커밋 순서와 실제 로컬 커밋 순서를 대조하는 푸시 명령 기록.<p class="limit">커밋 규칙 전문과 파일별 배치 결과는 제공되지 않았다.</p></td></tr><tr><td data-label="항목">분리한 커밋을 원격에 푸시한다.</td><td data-label="바뀐 동작">`origin/main`에 푸시하고 원격 HEAD가 `c157358`임을 확인했다고 보고했다.</td><td data-label="근거와 한계">푸시 명령은 종료 코드 0이며, 푸시 후 원격 `main`이 마지막 예정 커밋과 일치하는지 검사하는 코드가 보인다.<p class="limit">원격 조회의 원문 출력은 제공되지 않았다.</p></td></tr><tr><td data-label="항목">처음 집계한 53개 파일을 이번 게시 대상으로 삼는다.</td><td data-label="바뀐 동작">이후 자동 생성된 보고서 4건의 16개 파일과 목차 변경 1개는 로컬에 남겼다고 보고했다.</td><td data-label="근거와 한계">Native 최종 답변의 잔여 파일 집계.<p class="limit">최종 작업 트리 상태의 원문 출력은 제공되지 않았다.</p></td></tr></tbody></table><h3>저장 당시 수용 기준 판정</h3><dl class="requirements"><div><dt>보고서 생성과 업무 수용을 구분한다</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>게시 대상 커밋과 원격 `main`</h3><dl><div><dt>확인 방법</dt><dd>푸시 전에 현재 브랜치·푸시 주소·기준 커밋·예정 커밋 순서·스테이징 상태를 검사하고, 푸시 후 원격 브랜치를 다시 조회했다.</dd></div><div><dt>기대 결과</dt><dd>예정된 커밋만 게시되고 원격 `main`이 마지막 예정 커밋을 가리킨다.</dd></div><div><dt>실제 관측</dt><dd>명령은 종료 코드 0이며 Native가 보고한 원격 HEAD는 `c157358`이다.</dd></div><div><dt>확인 범위와 한계</dt><dd>현재 보고에서 원격 상태를 다시 조회하지 않았다.</dd></div></dl></article><article class="check"><h3>BoxBox 0.2.9 CI·빌드 및 릴리즈 테스트</h3><dl><div><dt>확인 방법</dt><dd>격리 작업 사본에서 Headless 설치와 CI 설정·검사·빌드를 연결해 실행하고, `test/release.test.ts`는 별도로 실행했다.</dd></div><div><dt>기대 결과</dt><dd>설치·검사·빌드와 릴리즈 테스트가 성공한다.</dd></div><div><dt>실제 관측</dt><dd>별도 릴리즈 테스트 명령은 종료 코드 0이며 Native는 10개 테스트 통과를 보고했다. 격리 환경 통합 명령은 종료 코드 1이지만 Native는 최종 답변에서 Headless 설치·타입 검사·빌드 통과를 보고했다.</dd></div><div><dt>확인 범위와 한계</dt><dd>통합 명령의 실패 단계와 후속 성공 로그, 원격 CI 결과는 확인되지 않았다.</dd></div></dl></article><article class="check"><h3>공개 보고서 12건의 JSON·HTML 정합성과 기존 증거 링크</h3><dl><div><dt>확인 방법</dt><dd>보고서 읽기·렌더링과 저장소 검사 코드를 사용해 준비본을 대조했다.</dd></div><div><dt>기대 결과</dt><dd>공개 JSON과 HTML이 일치하고 새 검증 오류가 추가되지 않는다.</dd></div><div><dt>실제 관측</dt><dd>첫 검증 명령은 종료 코드 1, 후속 명령은 종료 코드 0이다. Native는 12건 대조 통과와 기존 로컬 증거 링크 오류 3개 잔존을 보고했다.</dd></div><div><dt>확인 범위와 한계</dt><dd>첫 실패 원인과 후속 명령의 상세 판정 및 오류 목록은 제공되지 않았다.</dd></div></dl></article><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>입력이 잘려 있어 일부 명령 본문과 검증 근거를 볼 수 없다. 이 보고서에서는 명령을 다시 실행하거나 파일을 독립 검증하지 않았다.</li><li>Native는 Headless 설치·타입 검사·빌드가 통과했다고 보고했지만, 제공된 격리 환경 통합 명령은 종료 코드 1이다. 실패 단계, 후속 전체 재실행 성공 여부, 원격 CI 결과는 확인할 수 없다.</li><li>저장소 커밋 규칙 전문과 커밋별 전체 파일 목록이 없어 규칙 준수와 53개 파일의 배치를 항목별로 독립 대조할 수 없다.</li><li>기존 로컬 증거 링크 오류 3개가 남았다고 보고됐다. 푸시 확인과 사용자 수용 완료는 별개이며, 사용자 수용 여부는 확인되지 않았다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>격리 환경 검증의 실패 단계와 후속 결과를 대조한다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>실패 원인과 Headless 설치·타입 검사·빌드의 최종 결과를 단계별 로그로 확인할 수 있다.</dd></div><div><dt>영향</dt><dd>Native가 보고한 통과와 제공된 실패 기록의 관계를 명확히 한다.</dd></div></dl></article><article class="next"><h3>기존 로컬 증거 링크 오류 3개를 검토한다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>세 링크의 원인과 수정 또는 유지 여부를 각각 기록한다.</dd></div><div><dt>영향</dt><dd>보고서에서 따라갈 수 없는 근거를 명확히 한다.</dd></div></dl></article><article class="next"><h3>남은 자동 생성 파일 17개의 처리 범위를 정한다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>보고서 4건과 목차 변경을 별도로 게시할지 로컬에 유지할지 결정한다.</dd></div><div><dt>영향</dt><dd>이미 푸시한 53개 파일과 후속 변경의 범위를 섞지 않는다.</dd></div></dl></article><h3>기존 서술에 기록된 남은 일</h3><ul><li>격리 환경 검증의 실패 단계와 후속 실행 결과를 대조해 Headless 설치·타입 검사·빌드 상태를 확정한다.</li><li>기존 로컬 증거 링크 오류 3개의 원인과 수정 범위를 확인한다.</li><li>로컬에 남은 자동 생성 파일 17개의 별도 게시 여부를 결정한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 22일 오후 6:29 · 선택한 발행 기록 · Native는 요청 범위인 53개 파일을 목적별 8개 커밋으로 나눠 `origin/main`에 푸시하고, 원격 HEAD가 `c157358`임을 확인했다고 보고했다. 이후 자동 생성된 17개 파일은 로컬에 남았다고 보고했다.</p><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>BoxBox 0.2.9 전환의 변경 범위와 검증 대상을 파악한다.</p><code>.github/workflows/ci.yml, .github/workflows/release.yml, scripts/setup-ci.ts, docs/RELEASING.md</code></li><li><p>공개 보고서와 목차가 커밋 범위를 구성하는 방식과 이후 생성된 잔여 변경을 추적한다.</p><code>docs/work/Native/, docs/work/INDEX.md</code></li><li><p>보고서 읽기·렌더링, 저장소 검사, 릴리즈 테스트의 근거를 찾는다.</p><code>scripts/workflow/reports.ts, scripts/check-workflow.ts, test/release.test.ts</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Native/021-53개 파일의 커밋 분리와 원격 푸시/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-52075cf3-1053-45de-aef8-51c496f9cf86<br>report-d5d59b8e-0dcb-44ef-a4ca-9350db6e29d6</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>bb3a31c96a00119a1ec478825f371c3c9b5b9d040f8fea305d53a4921507c210</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>기준 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-NATIVE&quot;,
+      &quot;description&quot;: &quot;보고서 생성과 업무 수용을 구분한다&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;Native는 요청 범위인 53개 파일을 목적별 8개 커밋으로 나눠 `origin/main`에 푸시하고, 원격 HEAD가 `c157358`임을 확인했다고 보고했다. 이후 자동 생성된 17개 파일은 로컬에 남았다고 보고했다.&quot;,
+  &quot;before&quot;: &quot;사용자가 커밋·푸시하려는 53개 파일은 작업 시작 시 목적별 커밋으로 분리되어 원격에 게시되기 전이었다.&quot;,
+  &quot;after&quot;: &quot;같은 53개 파일은 8개 커밋으로 분리되어 `origin/main`에 게시됐다. 이후 자동 생성된 보고서 4건의 16개 파일과 목차 변경 1개는 이번 푸시 범위에 포함되지 않았다.&quot;,
+  &quot;changes&quot;: [
+    &quot;`8a55c69`: CI·릴리즈의 BoxBox 0.2.9 전환&quot;,
+    &quot;`76d40fc`: BoxBox 첫 적용 범위와 정렬 제한 조사&quot;,
+    &quot;`e6c9595`: WWW 단계 미관측 조사&quot;,
+    &quot;`88ec533`: Native 채팅 입력과 명령 동작 조사&quot;,
+    &quot;`36406fc`: BoxBox 승인 안내와 WWW 파일럿&quot;,
+    &quot;`8f113eb`: 대시보드 검토 필요 항목 분류&quot;,
+    &quot;`ff0c5fc`: WWW BoxBox 변경 게시 확인&quot;,
+    &quot;`c157358`: Native 스트리밍 중 연결 상태 오류 재현&quot;,
+    &quot;공개 보고서의 머신 절대 경로를 정리하고 원본은 별도로 보존했다고 보고했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;처음 집계한 53개 파일만 이번 게시 범위로 고정하고 목적별로 커밋했다. 이후 자동 생성된 17개 파일은 로컬에 남겼다.&quot;,
+    &quot;공개 보고서에서는 머신별 절대 경로를 정리하되 원본은 별도로 보존했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;입력이 잘려 있어 일부 명령 본문과 검증 근거를 볼 수 없다. 이 보고서에서는 명령을 다시 실행하거나 파일을 독립 검증하지 않았다.&quot;,
+    &quot;Native는 Headless 설치·타입 검사·빌드가 통과했다고 보고했지만, 제공된 격리 환경 통합 명령은 종료 코드 1이다. 실패 단계, 후속 전체 재실행 성공 여부, 원격 CI 결과는 확인할 수 없다.&quot;,
+    &quot;저장소 커밋 규칙 전문과 커밋별 전체 파일 목록이 없어 규칙 준수와 53개 파일의 배치를 항목별로 독립 대조할 수 없다.&quot;,
+    &quot;기존 로컬 증거 링크 오류 3개가 남았다고 보고됐다. 푸시 확인과 사용자 수용 완료는 별개이며, 사용자 수용 여부는 확인되지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;격리 환경 검증의 실패 단계와 후속 실행 결과를 대조해 Headless 설치·타입 검사·빌드 상태를 확정한다.&quot;,
+    &quot;기존 로컬 증거 링크 오류 3개의 원인과 수정 범위를 확인한다.&quot;,
+    &quot;로컬에 남은 자동 생성 파일 17개의 별도 게시 여부를 결정한다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;사용자는 이미 집계한 변경 파일 53개를 저장소 커밋 규칙에 맞게 나눠 푸시해 달라고 요청했다. Native는 이를 목적별 8개 커밋으로 나눠 `origin/main`에 게시했고 원격 HEAD가 `c157358`이라고 확인했다. 제공된 기록에는 푸시 후 원격 브랜치 대조, 릴리즈 테스트 명령 성공, 보고서 검증의 실패 및 후속 명령 성공이 남아 있다. 다만 격리 환경 검증 명령의 실패 이후 전체 검증이 통과했는지는 근거가 잘려 확인할 수 없으므로, 후속 로그를 대조하고 기존 링크 오류와 남은 17개 파일의 처리 여부를 정해야 한다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;기존 변경 파일 53개를 빠짐없이 포함하고 저장소 커밋 규칙에 맞춰 나눈다.&quot;,
+        &quot;result&quot;: &quot;목적별 8개 커밋으로 분리했다고 보고했다.&quot;,
+        &quot;evidence&quot;: &quot;Native 답변의 8개 커밋 목록, 커밋 구성 명령의 종료 코드 0, 예정 커밋 순서와 실제 로컬 커밋 순서를 대조하는 푸시 명령 기록.&quot;,
+        &quot;limitations&quot;: &quot;커밋 규칙 전문과 파일별 배치 결과는 제공되지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;분리한 커밋을 원격에 푸시한다.&quot;,
+        &quot;result&quot;: &quot;`origin/main`에 푸시하고 원격 HEAD가 `c157358`임을 확인했다고 보고했다.&quot;,
+        &quot;evidence&quot;: &quot;푸시 명령은 종료 코드 0이며, 푸시 후 원격 `main`이 마지막 예정 커밋과 일치하는지 검사하는 코드가 보인다.&quot;,
+        &quot;limitations&quot;: &quot;원격 조회의 원문 출력은 제공되지 않았다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;처음 집계한 53개 파일을 이번 게시 대상으로 삼는다.&quot;,
+        &quot;result&quot;: &quot;이후 자동 생성된 보고서 4건의 16개 파일과 목차 변경 1개는 로컬에 남겼다고 보고했다.&quot;,
+        &quot;evidence&quot;: &quot;Native 최종 답변의 잔여 파일 집계.&quot;,
+        &quot;limitations&quot;: &quot;최종 작업 트리 상태의 원문 출력은 제공되지 않았다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;게시 대상 커밋과 원격 `main`&quot;,
+        &quot;method&quot;: &quot;푸시 전에 현재 브랜치·푸시 주소·기준 커밋·예정 커밋 순서·스테이징 상태를 검사하고, 푸시 후 원격 브랜치를 다시 조회했다.&quot;,
+        &quot;expected&quot;: &quot;예정된 커밋만 게시되고 원격 `main`이 마지막 예정 커밋을 가리킨다.&quot;,
+        &quot;observed&quot;: &quot;명령은 종료 코드 0이며 Native가 보고한 원격 HEAD는 `c157358`이다.&quot;,
+        &quot;limitations&quot;: &quot;현재 보고에서 원격 상태를 다시 조회하지 않았다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;BoxBox 0.2.9 CI·빌드 및 릴리즈 테스트&quot;,
+        &quot;method&quot;: &quot;격리 작업 사본에서 Headless 설치와 CI 설정·검사·빌드를 연결해 실행하고, `test/release.test.ts`는 별도로 실행했다.&quot;,
+        &quot;expected&quot;: &quot;설치·검사·빌드와 릴리즈 테스트가 성공한다.&quot;,
+        &quot;observed&quot;: &quot;별도 릴리즈 테스트 명령은 종료 코드 0이며 Native는 10개 테스트 통과를 보고했다. 격리 환경 통합 명령은 종료 코드 1이지만 Native는 최종 답변에서 Headless 설치·타입 검사·빌드 통과를 보고했다.&quot;,
+        &quot;limitations&quot;: &quot;통합 명령의 실패 단계와 후속 성공 로그, 원격 CI 결과는 확인되지 않았다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;공개 보고서 12건의 JSON·HTML 정합성과 기존 증거 링크&quot;,
+        &quot;method&quot;: &quot;보고서 읽기·렌더링과 저장소 검사 코드를 사용해 준비본을 대조했다.&quot;,
+        &quot;expected&quot;: &quot;공개 JSON과 HTML이 일치하고 새 검증 오류가 추가되지 않는다.&quot;,
+        &quot;observed&quot;: &quot;첫 검증 명령은 종료 코드 1, 후속 명령은 종료 코드 0이다. Native는 12건 대조 통과와 기존 로컬 증거 링크 오류 3개 잔존을 보고했다.&quot;,
+        &quot;limitations&quot;: &quot;첫 실패 원인과 후속 명령의 상세 판정 및 오류 목록은 제공되지 않았다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;서로 다른 목적의 53개 변경 파일과 작업 중 새로 생성된 파일을 어떻게 게시할 것인가.&quot;,
+        &quot;basis&quot;: &quot;사용자는 처음 집계한 53개 파일을 커밋 규칙에 맞게 나눠 달라고 요청했고, 그 집계 이후 보고서와 목차 변경이 추가로 생성됐다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;처음 집계한 범위만 목적별 8개 커밋으로 게시하고, 이후 생성된 17개 파일은 제외했다.&quot;,
+        &quot;tradeoff&quot;: &quot;요청한 게시 범위는 유지했지만 자동 생성된 변경은 로컬에 남아 별도 판단이 필요하다.&quot;
+      },
+      {
+        &quot;problem&quot;: &quot;공개 보고서에서 머신별 절대 경로를 어떻게 처리할 것인가.&quot;,
+        &quot;basis&quot;: &quot;공개 준비 과정에서 머신 절대 경로를 점검한 명령과 원본을 별도로 보존했다는 Native 기록이 있다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;공개본의 경로를 정리하고 원본은 별도로 보존했다.&quot;,
+        &quot;tradeoff&quot;: &quot;공개본에서 머신 환경을 드러내는 경로를 줄이면서 원본을 유지했으나, 기존 로컬 증거 링크 오류 3개는 남았다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;.github/workflows/ci.yml, .github/workflows/release.yml, scripts/setup-ci.ts, docs/RELEASING.md&quot;,
+        &quot;purpose&quot;: &quot;BoxBox 0.2.9 전환의 변경 범위와 검증 대상을 파악한다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/work/Native/, docs/work/INDEX.md&quot;,
+        &quot;purpose&quot;: &quot;공개 보고서와 목차가 커밋 범위를 구성하는 방식과 이후 생성된 잔여 변경을 추적한다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/workflow/reports.ts, scripts/check-workflow.ts, test/release.test.ts&quot;,
+        &quot;purpose&quot;: &quot;보고서 읽기·렌더링, 저장소 검사, 릴리즈 테스트의 근거를 찾는다.&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;격리 환경 검증의 실패 단계와 후속 결과를 대조한다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;실패 원인과 Headless 설치·타입 검사·빌드의 최종 결과를 단계별 로그로 확인할 수 있다.&quot;,
+        &quot;impact&quot;: &quot;Native가 보고한 통과와 제공된 실패 기록의 관계를 명확히 한다.&quot;
+      },
+      {
+        &quot;action&quot;: &quot;기존 로컬 증거 링크 오류 3개를 검토한다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;세 링크의 원인과 수정 또는 유지 여부를 각각 기록한다.&quot;,
+        &quot;impact&quot;: &quot;보고서에서 따라갈 수 없는 근거를 명확히 한다.&quot;
+      },
+      {
+        &quot;action&quot;: &quot;남은 자동 생성 파일 17개의 처리 범위를 정한다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;보고서 4건과 목차 변경을 별도로 게시할지 로컬에 유지할지 결정한다.&quot;,
+        &quot;impact&quot;: &quot;이미 푸시한 53개 파일과 후속 변경의 범위를 섞지 않는다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></section></article></div></main></body></html>

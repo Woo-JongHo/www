@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-81c91c8c-1e9c-42b0-b548-43d01109fb1f",
+  "title"        : "‘연결 미확인’ 재현과 현재 세션 확인 범위",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "7ea7648c0f9e300a4c43f8b82d8e9834d1d9676ac6aa5c2cfbf60a18aed4c56a",
+    "threadId": "01a20260-f2c8-70b2-b2b3-6baf87fff822",
+    "turnId"  : "01a20291-0873-7090-80a4-cf9fbdfb7093",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"sed -n '85,220p' src/chat-state.ts; sed -n '420,485p' src/renderer.tsx; rg -n 'belongsToConversation|transcriptState|reset.*Events|transport/status' src/renderer.tsx src/chat-state.ts\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'rg --files --hidden \"$HOME/Library/Application Support/www\" | rg '\"'activity|event|session|log' | head -45; rg -n 'publish\\\\(|MAX_.*EVENT|slice\\\\(-|transport/status' src/native-session.ts | head -65; rg -n '연결 미확인|issues/4' docs/work/INDEX.md docs/work --glob 'spec.md' | head -15\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"cat 'docs/work/Native/016-답변 스트리밍 중 ‘연결 미확인’ 버그 재현 및 등록/spec.md'\nsed -n '264,286p' src/native-session.ts\nsed -n '36,58p' src/chat-state.ts\ngh issue view 4 --repo woo-jongho/www --json comments --jq '.comments | length'\npython3 - <<'PY'\nimport pathlib,json,collections\nd=pathlib.Path.home()/'.codex/sessions/2026/11/22'\nmatches=[]\nfor f in sorted(d.glob('*.jsonl'),key=lambda x:x.stat().st_mtime,reverse=True)[:15]:\n if '지금 여기 세션도 연결미확인뜨네' in f.read_text(): matches.append(f)\nfor f in matches[:1]:\n print(f.name)\n counts=collections.Counter()\n for l in f.open():\n  x=json.loads(l);p=x.get('payload',{})\n  if x.get('type')=='event_msg': counts[p.get('type')]+=1\n print(counts)\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '18,27p' src/main.ts\nsed -n '600,667p' src/renderer.tsx\nsed -n '772,805p' src/native-session.ts\nrg -n 'getAppState|stateFor|onNativeEvent|eventsSnapshot' src/{main.ts,native-session.ts,preload.ts}\nps -axo pid,comm | rg -i 'Electron|Codex|/www' | head -25\nrg -n 'project\\\\(events\\\\)|project\\\\(' src/renderer.tsx | tail -10\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"node --experimental-transform-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --input-type=module - <<'JS'\nimport { reduceConversationEvents } from './src/chat-state.ts';\nimport { project } from './src/projection.ts';\nimport { chatStatus } from './src/chat-status.ts';\nconst selection = {workspaceKey:'w', selectionEpoch:1, processEpoch:'p'};\nconst e = (seq,method,params) => ({...selection, connectionGeneration:1, seq, method, params, kind:'notification', at:new Date().toISOString()});\nconst connected = e(1,'transport/connected',{});\nconst older = Array.from({length:1998},(_,i)=>e(i+2,'diagnostics/timing',{}));\nconst start = e(2000,'turn/started',{threadId:'t',turn:{id:'a'}});\nlet state = {events:[],reconnect:null};\nfor (const incoming of [[connected,...older,start],[e(2001,'item/agentMessage/delta',{threadId:'t',turnId:'a',itemId:'m',delta:'응답'})]]) {\n state = reduceConversationEvents(state,[],incoming,selection,'t');\n const p = p",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}

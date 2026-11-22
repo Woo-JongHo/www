@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-31948fa1-1e23-4cb7-98e0-070116ddf396",
+  "title"        : "WWW 커밋 2개와 로컬 잔여 변경 확인",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "dcc9ca6497e6e00e2722f57574f3d0bcaca83c79b9116a07f1c9948395b8519e",
+    "threadId": "01a2025a-5d0d-7083-a9f9-e522ad2a59b5",
+    "turnId"  : "01a20290-8c3f-7102-8bc7-24572aa3386c",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"pwd && git status --short --branch && python3 - <<'PY'\nimport subprocess\nfor args in [('diff','--name-only','-z'),('diff','--cached','--name-only','-z'),('ls-files','--others','--exclude-standard','-z')]:\n p=subprocess.check_output(['git',*args])\n print(args,p.count(b'\\\\0'))\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"pwd && git log -2 --oneline --decorate && python3 - <<'PY'\nimport collections,subprocess\ndef git(*args): return subprocess.check_output(['git',*args]).decode().strip('\\\\0\\\\n')\nprint(git('status','--short','--branch','--untracked-files=normal'))\nfor args in [('diff','--name-only','-z'),('diff','--cached','--name-only','-z'),('ls-files','--others','--exclude-standard','-z')]:\n items=[v for v in git(*args).split('\\\\0') if v]\n print(args,len(items))\n if args[0]=='ls-files':\n  print(collections.Counter('/'.join(p.split('/')[:4]) for p in items))\nfor h in ('2304dad','6c041fd'):\n print(h,len(git('diff-tree','--no-commit-id','--name-only','-r','-z',h).split('\\\\0')))\nprint('distinct committed',len(git('diff','--name-only','-z','e855ea2..6c041fd').split('\\\\0')))\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}

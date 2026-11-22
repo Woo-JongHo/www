@@ -1,0 +1,96 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>이슈 #4 응답 중 추가 지시 차단 해결안 게시 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+dd.result-status{font-weight:600}dd.result-passed{color:var(--green)}dd.result-failed{color:var(--red)}dd.result-blocked,dd.result-unverified{color:var(--amber)}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 22일 오후 6:25 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>이슈 #4 응답 중 추가 지시 차단 해결안 게시</h1><p class="lead">최근 2,000개 채팅 이벤트에서 최초 연결 이벤트가 밀려나면 응답이 계속 표시되는 중에도 추가 지시가 차단될 수 있다. 현재 연결 상태를 채팅 이력과 별도로 관리하는 해결안과 검증 기준을 GitHub 이슈 #4에 게시했다. 코드 수정이나 수정 후 검증은 확인되지 않았다.</p><div id="report-story" class="story">응답이 계속 표시되는데도 추가 지시가 막히는 문제의 해결안을 이슈에 남기는 작업이었다. Native 답변은 로컬에서 기록한 재현 조건을 바탕으로, 연결 상태를 채팅 이력과 분리하는 제안을 이슈 #4에 게시했다고 보고했다. 제공된 자료에는 댓글 게시 명령의 종료 코드 0과 댓글 링크가 있지만, 실제 제보 세션의 원인이나 수정 후 동작은 확인되지 않았다. 구현 뒤에는 실제 Native 창에서 스트리밍 중 보낸 추가 지시가 같은 턴에 접수되는지 확인해야 한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 현재 연결 상태를 채팅 이력과 별도로 전달하고, 해당 세션과 연결 세대의 상태만 적용하도록 구현한다.</p><p class="blocker"><strong>남은 차단 사항</strong> Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>로컬 재현 기록에서는 응답이 스트리밍되는 중 최초 연결 이벤트가 최근 2,000개 범위 밖으로 밀려나자, 응답은 계속 표시됐지만 입력창이 ‘연결 미확인’을 표시해 추가 지시를 차단했다.</p></div><div><h3>접근과 결과</h3><p>같은 상황에서도 연결과 현재 턴이 유효하면 추가 지시를 보낼 수 있도록 설계안을 게시했다. 제안이 구현됐거나 사용자 동작이 바뀌었다는 근거는 없다.</p></div></div><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>길이가 제한된 채팅 이력에서 연결 상태를 재계산하면 최초 연결 이벤트가 밀려날 때 현재 연결 상태를 잃을 수 있다.</h3><p><strong>선택</strong> 네이티브 세션이 현재 연결 상태를 별도로 전달하고, 수신 측은 세션·선택·연결 세대가 일치하는 최신 상태만 적용하도록 제안했다. 추가 지시는 확인된 연결과 현재 실행 중인 턴을 모두 요구한다.</p><p><strong>판단 근거</strong> 게시 댓글에 기록된 로컬 재현에서는 응답이 표시된 상태에서도 최초 연결 이벤트가 사라지자 추가 지시가 차단됐다.</p><h4>함께 검토한 대안</h4><ul><li>최근 채팅 이력에서 연결 상태를 재계산하는 기존 방식</li><li>응답 조각 수신을 연결 확인으로 간주하는 방식</li></ul><p class="limit"><strong>감수한 점</strong> 이력 보관 한도를 유지하면서 연결 상태가 누락되거나 오래된 이벤트로 덮이는 일을 막는 대신, 별도의 상태 전달과 세대 확인이 필요하다.</p></article><h3>함께 기록된 선택</h3><ul><li>최근 2,000개 채팅 이벤트 보관 한도는 유지하고, 현재 연결 상태는 네이티브 세션이 별도로 관리하도록 제안했다.</li><li>응답 조각 수신만으로 연결을 확인하지 않고, 해당 세션의 확인된 연결과 현재 대화에서 실행 중인 턴을 함께 요구하도록 제안했다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>GitHub 이슈 #4에 로컬 재현 조건, 연결 상태 관리 방안, 세 가지 검증 기준을 담은 댓글을 게시했다.</li></ul></div><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">이슈 #4에 문제를 어떻게 해결할지 게시한다.</td><td data-label="바뀐 동작">로컬 재현 조건, 연결 상태 분리 설계, 구현 후 검증 기준을 이슈 댓글에 게시했다.</td><td data-label="근거와 한계">Native 답변이 이슈 댓글 링크를 제공했고, `gh issue comment` 명령은 종료 코드 0으로 기록됐다.<p class="limit">해결안 게시까지의 결과이며, 구현 완료나 제안 수용을 뜻하지 않는다.</p></td></tr></tbody></table><h3>저장 당시 수용 기준 판정</h3><dl class="requirements"><div><dt>보고서 생성과 업무 수용을 구분한다</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>최초 연결 이벤트가 보관 범위를 벗어난 뒤의 추가 지시 동작</h3><dl><div><dt>확인 방법</dt><dd>게시 댓글에 따르면, 로컬에서 현재 턴의 응답 조각을 2,001번째 이벤트로 추가했다.</dd></div><div><dt>기대 결과</dt><dd>연결과 현재 턴이 유효하면 응답 표시와 추가 지시 가능 상태가 유지된다.</dd></div><div><dt>실제 관측</dt><dd>과거 로컬 기록상 응답은 표시됐지만 연결 상태가 `disconnected`로 돌아가 추가 지시가 차단됐다.</dd></div><div><dt>확인 범위와 한계</dt><dd>실행 로그가 없고, 실제 제보 세션에서 같은 원인이었는지는 확인되지 않았다.</dd></div></dl></article><article class="check"><h3>GitHub 이슈 #4 해결안 게시</h3><dl><div><dt>확인 방법</dt><dd>`gh issue comment`에 해결안과 검증 기준을 담은 본문을 전달했다.</dd></div><div><dt>기대 결과</dt><dd>이슈 #4에 해결안 댓글을 남긴다.</dd></div><div><dt>실제 관측</dt><dd>명령의 종료 코드가 0으로 기록됐고, Native 답변에 댓글 링크가 포함됐다.</dd></div><div><dt>확인 범위와 한계</dt><dd>게시 후 독립 확인이나 제안 수용 기록은 제공되지 않았다.</dd></div></dl></article><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>로컬 재현 결과는 게시 댓글에 남은 과거 기록이며, 재현 실행 로그는 제공되지 않았다. 실제 제보 세션의 원인이 같은지는 미확인이다.</li><li>제공 자료가 일부 잘려 있어 명령 출력 전문과 전체 작업 경과를 확인할 수 없다.</li><li>코드 변경, 수정 후 Native 창 검증, 이슈 해결 승인은 확인되지 않았다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>현재 연결 상태를 채팅 이력과 별도로 전달하고, 해당 세션과 연결 세대의 상태만 적용하도록 구현한다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>이력 한도를 유지하면서 추가 지시가 확인된 연결과 현재 실행 중인 턴을 모두 요구하고, 기존 서버 측 검사는 유지된다.</dd></div><div><dt>영향</dt><dd>오래된 연결 이벤트가 이력에서 밀려나도 유효한 연결에서 추가 지시를 보낼 수 있게 한다.</dd></div></dl></article><article class="next"><h3>이력 한도 초과와 실제 연결 종료를 검증하고, Native 창에서 탭 전환·재연결 후 스트리밍 중 추가 지시를 보낸다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>유효한 연결에서는 같은 턴에 지시가 접수되고, 연결이 끊기면 즉시 차단되며, 이전 연결의 늦은 이벤트가 차단을 해제하지 않는다.</dd></div><div><dt>영향</dt><dd>추가 지시가 잘못 차단되는 문제와 끊어진 연결이 잘못 허용되는 문제를 함께 점검한다.</dd></div></dl></article><h3>기존 서술에 기록된 남은 일</h3><ul><li>연결 상태 분리를 구현한 뒤 이력 한도 초과, 실제 연결 종료, 탭 전환 및 재연결 상황에서 추가 지시가 기대대로 동작하는지 검증한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 22일 오후 6:25 · 선택한 발행 기록 · 최근 2,000개 채팅 이벤트에서 최초 연결 이벤트가 밀려나면 응답이 계속 표시되는 중에도 추가 지시가 차단될 수 있다. 현재 연결 상태를 채팅 이력과 별도로 관리하는 해결안과 검증 기준을 GitHub 이슈 #4에 게시했다. 코드 수정이나 수정 후 검증은 확인되지 않았다.</p><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>게시한 해결안과 구현 후 검증 기준을 확인한다.</p><code>https://github.com/Woo-JongHo/www/issues/4#issuecomment-7077128797</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Native/019-이슈 #4 응답 중 추가 지시 차단 해결안 게시/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-99eb0d98-b8f6-4462-b08e-eccd1c5200bc<br>report-63b4e49e-cf40-41ce-92e7-de10735cb0d4</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>1cb5f93eb2171a0f17feaa743e038a0f76c745ea042ae463337166584ca96366</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>기준 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-NATIVE&quot;,
+      &quot;description&quot;: &quot;보고서 생성과 업무 수용을 구분한다&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;최근 2,000개 채팅 이벤트에서 최초 연결 이벤트가 밀려나면 응답이 계속 표시되는 중에도 추가 지시가 차단될 수 있다. 현재 연결 상태를 채팅 이력과 별도로 관리하는 해결안과 검증 기준을 GitHub 이슈 #4에 게시했다. 코드 수정이나 수정 후 검증은 확인되지 않았다.&quot;,
+  &quot;before&quot;: &quot;로컬 재현 기록에서는 응답이 스트리밍되는 중 최초 연결 이벤트가 최근 2,000개 범위 밖으로 밀려나자, 응답은 계속 표시됐지만 입력창이 ‘연결 미확인’을 표시해 추가 지시를 차단했다.&quot;,
+  &quot;after&quot;: &quot;같은 상황에서도 연결과 현재 턴이 유효하면 추가 지시를 보낼 수 있도록 설계안을 게시했다. 제안이 구현됐거나 사용자 동작이 바뀌었다는 근거는 없다.&quot;,
+  &quot;changes&quot;: [
+    &quot;GitHub 이슈 #4에 로컬 재현 조건, 연결 상태 관리 방안, 세 가지 검증 기준을 담은 댓글을 게시했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;최근 2,000개 채팅 이벤트 보관 한도는 유지하고, 현재 연결 상태는 네이티브 세션이 별도로 관리하도록 제안했다.&quot;,
+    &quot;응답 조각 수신만으로 연결을 확인하지 않고, 해당 세션의 확인된 연결과 현재 대화에서 실행 중인 턴을 함께 요구하도록 제안했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;로컬 재현 결과는 게시 댓글에 남은 과거 기록이며, 재현 실행 로그는 제공되지 않았다. 실제 제보 세션의 원인이 같은지는 미확인이다.&quot;,
+    &quot;제공 자료가 일부 잘려 있어 명령 출력 전문과 전체 작업 경과를 확인할 수 없다.&quot;,
+    &quot;코드 변경, 수정 후 Native 창 검증, 이슈 해결 승인은 확인되지 않았다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;연결 상태 분리를 구현한 뒤 이력 한도 초과, 실제 연결 종료, 탭 전환 및 재연결 상황에서 추가 지시가 기대대로 동작하는지 검증한다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;응답이 계속 표시되는데도 추가 지시가 막히는 문제의 해결안을 이슈에 남기는 작업이었다. Native 답변은 로컬에서 기록한 재현 조건을 바탕으로, 연결 상태를 채팅 이력과 분리하는 제안을 이슈 #4에 게시했다고 보고했다. 제공된 자료에는 댓글 게시 명령의 종료 코드 0과 댓글 링크가 있지만, 실제 제보 세션의 원인이나 수정 후 동작은 확인되지 않았다. 구현 뒤에는 실제 Native 창에서 스트리밍 중 보낸 추가 지시가 같은 턴에 접수되는지 확인해야 한다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;이슈 #4에 문제를 어떻게 해결할지 게시한다.&quot;,
+        &quot;result&quot;: &quot;로컬 재현 조건, 연결 상태 분리 설계, 구현 후 검증 기준을 이슈 댓글에 게시했다.&quot;,
+        &quot;evidence&quot;: &quot;Native 답변이 이슈 댓글 링크를 제공했고, `gh issue comment` 명령은 종료 코드 0으로 기록됐다.&quot;,
+        &quot;limitations&quot;: &quot;해결안 게시까지의 결과이며, 구현 완료나 제안 수용을 뜻하지 않는다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;최초 연결 이벤트가 보관 범위를 벗어난 뒤의 추가 지시 동작&quot;,
+        &quot;method&quot;: &quot;게시 댓글에 따르면, 로컬에서 현재 턴의 응답 조각을 2,001번째 이벤트로 추가했다.&quot;,
+        &quot;expected&quot;: &quot;연결과 현재 턴이 유효하면 응답 표시와 추가 지시 가능 상태가 유지된다.&quot;,
+        &quot;observed&quot;: &quot;과거 로컬 기록상 응답은 표시됐지만 연결 상태가 `disconnected`로 돌아가 추가 지시가 차단됐다.&quot;,
+        &quot;limitations&quot;: &quot;실행 로그가 없고, 실제 제보 세션에서 같은 원인이었는지는 확인되지 않았다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;GitHub 이슈 #4 해결안 게시&quot;,
+        &quot;method&quot;: &quot;`gh issue comment`에 해결안과 검증 기준을 담은 본문을 전달했다.&quot;,
+        &quot;expected&quot;: &quot;이슈 #4에 해결안 댓글을 남긴다.&quot;,
+        &quot;observed&quot;: &quot;명령의 종료 코드가 0으로 기록됐고, Native 답변에 댓글 링크가 포함됐다.&quot;,
+        &quot;limitations&quot;: &quot;게시 후 독립 확인이나 제안 수용 기록은 제공되지 않았다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;길이가 제한된 채팅 이력에서 연결 상태를 재계산하면 최초 연결 이벤트가 밀려날 때 현재 연결 상태를 잃을 수 있다.&quot;,
+        &quot;basis&quot;: &quot;게시 댓글에 기록된 로컬 재현에서는 응답이 표시된 상태에서도 최초 연결 이벤트가 사라지자 추가 지시가 차단됐다.&quot;,
+        &quot;alternatives&quot;: [
+          &quot;최근 채팅 이력에서 연결 상태를 재계산하는 기존 방식&quot;,
+          &quot;응답 조각 수신을 연결 확인으로 간주하는 방식&quot;
+        ],
+        &quot;choice&quot;: &quot;네이티브 세션이 현재 연결 상태를 별도로 전달하고, 수신 측은 세션·선택·연결 세대가 일치하는 최신 상태만 적용하도록 제안했다. 추가 지시는 확인된 연결과 현재 실행 중인 턴을 모두 요구한다.&quot;,
+        &quot;tradeoff&quot;: &quot;이력 보관 한도를 유지하면서 연결 상태가 누락되거나 오래된 이벤트로 덮이는 일을 막는 대신, 별도의 상태 전달과 세대 확인이 필요하다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;https://github.com/Woo-JongHo/www/issues/4#issuecomment-7077128797&quot;,
+        &quot;purpose&quot;: &quot;게시한 해결안과 구현 후 검증 기준을 확인한다.&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;현재 연결 상태를 채팅 이력과 별도로 전달하고, 해당 세션과 연결 세대의 상태만 적용하도록 구현한다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;이력 한도를 유지하면서 추가 지시가 확인된 연결과 현재 실행 중인 턴을 모두 요구하고, 기존 서버 측 검사는 유지된다.&quot;,
+        &quot;impact&quot;: &quot;오래된 연결 이벤트가 이력에서 밀려나도 유효한 연결에서 추가 지시를 보낼 수 있게 한다.&quot;
+      },
+      {
+        &quot;action&quot;: &quot;이력 한도 초과와 실제 연결 종료를 검증하고, Native 창에서 탭 전환·재연결 후 스트리밍 중 추가 지시를 보낸다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;유효한 연결에서는 같은 턴에 지시가 접수되고, 연결이 끊기면 즉시 차단되며, 이전 연결의 늦은 이벤트가 차단을 해제하지 않는다.&quot;,
+        &quot;impact&quot;: &quot;추가 지시가 잘못 차단되는 문제와 끊어진 연결이 잘못 허용되는 문제를 함께 점검한다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></section></article></div></main></body></html>

@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-52075cf3-1053-45de-aef8-51c496f9cf86",
+  "title"        : "53개 파일의 커밋 분리와 원격 푸시",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "8e97beb3b8b4d921454573a199347c8a1448ce7e6005f845158e34e182322caa",
+    "threadId": "01a2025a-5d0d-7083-a9f9-e522ad2a59b5",
+    "turnId"  : "01a20291-b2e3-76e2-b25f-8960bd48547c",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"git diff -- .github/workflows/ci.yml .github/workflows/release.yml docs/RELEASING.md scripts/setup-ci.ts && git diff -- docs/work/INDEX.md && git ls-files --others --exclude-standard -z | python3 -c 'import sys,collections; p=[x for x in sys.stdin.buffer.read().decode().split(chr(0)) if x]; print(len(p)); print(*collections.Counter(\\\"/\\\".join(x.split(\\\"/\\\")[:4]) for x in p).items(),sep=\\\"\\\\n\\\")'\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'pwd && git status --short --branch --untracked-files=normal && git diff --cached --stat && git ls-remote --heads origin refs/heads/main && git diff --stat'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"'[사용자 홈]/.hermes/node/bin/node' --version && '[사용자 홈]/.hermes/node/bin/node' -p 'process.execPath' && ls -ld [사용자 홈]/.local/share/boxbox/codex/0.2.9 && rg -n \\\"setup:ci|release:verify|check:workflow\\\" package.json scripts/release.ts && git rev-list '@{upstream}..HEAD'\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport collections,json,pathlib,re,subprocess\nall_paths=subprocess.check_output(['git','ls-files','--others','--exclude-standard','-z']).decode().split('\\\\0')\npaths=[pathlib.Path(p) for p in all_paths if re.match(r'docs/work/Native/(00[5-9]|01[0-6])-',p)]\nchecks={'homePath':r'/Users/[\"'^'\"\\\\s<\\\"\\\\\\\\]+|/home/[\"'^'\"\\\\s<\\\"\\\\\\\\]+|[A-Za-z]:\\\\\\\\\\\\\\\\Users\\\\\\\\\\\\\\\\[\"'^'\"\\\\s<\\\"]+','secret':r'gh[pousr]_[A-Za-z0-9]{20,}|sk-(?:proj-)?[A-Za-z0-9_-]{30,}|Bearer\\\\s+[A-Za-z0-9_=-]{30,}|-----BEGIN (?:OPENSSH |RSA |EC )?PRIVATE KEY-----','raw':r'\\\"(?:rawPrompt|rawAnswer|transcript|promptText|rawCommand|rawOutput)\\\"\\\\s*:'}\nprint(len(paths))\nfor directory in sorted({p.parts[3] for p in paths}):\n print(directory)\n for p in [x for x in paths if x.parts[3]==directory]:\n  d=p.read_text(); hits={k:len(re.findall(v,d,re.I)) for k,v in checks.items()}\n  print(' ',p.suffix,p.stat().st_size,{k:v for k,v in hits.items() if v})\n  if p.suffix=='.json':\n   j=json.loads(d)\n   print('  keys",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"rg -n 'render.*Report|html.*hash|sha.*html|rawSource' scripts/workflow/reports.ts scripts/workflow/report-view.ts scripts/workflow/report-lifecycle.ts | head -48\npython3 - <<'PY'\nimport json,pathlib,re\nfor p in pathlib.Path('docs/work/Native').glob('*'):\n if not re.match(r'(00[5-9]|01[0-6])-',p.name): continue\n for f in p.rglob('*.json'):\n  d=json.loads(f.read_text())\n  def paths(v,keys):\n   if isinstance(v,dict):\n    for k,val in v.items(): paths(val,[*keys,k])\n   if isinstance(v,list):\n    for val in v: paths(val,[*keys,'[]'])\n   if isinstance(v,str) and re.search(r'/Users/|/home/|/var/folders/',v):\n    categories=[]\n    for pattern,name in [('/Users/[\"'^/]+/woo/00_project/www'\"','www'),('/Users/[\"'^/]+/woo/00_project/98_boxbox'\"','boxbox'),('/Users/[\"'^/]+/'\"\\\\\\\\.(?:codex|local|hermes)','tools'),('/(?:private/)?var/folders/','tmp')]:\n     if re.search(pattern,v): categories.append(name)\n    print(p.name[:3],f.suffix,'.'.join(keys),','.join(categories) or 'other')\n  pat",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'boxbox_ci_stage=$(mktemp -d -t www-ci-029)\ngit clone --shared --quiet \"$PWD\" \"$boxbox_ci_stage/tree\" &&\n  cp scripts/setup-ci.ts \"$boxbox_ci_stage/tree/scripts/setup-ci.ts\" &&\n  cp .github/workflows/ci.yml .github/workflows/release.yml \"$boxbox_ci_stage/tree/.github/workflows/\" &&\n  cp docs/RELEASING.md \"$boxbox_ci_stage/tree/docs/RELEASING.md\" &&\n  ln -s \"$PWD/node_modules\" \"$boxbox_ci_stage/tree/node_modules\" &&\n  printf '\"'\\\\n/node_modules\\\\n' >> \\\"\"'$boxbox_ci_stage/tree/.git/info/exclude\" &&\n  boxbox_ci_node=$(npm exec --yes --package=node@22.22.3 -- node -p process.execPath) &&\n  export PATH=\"$(dirname \"$boxbox_ci_node\"):$PATH\" &&\n  export XDG_DATA_HOME=\"$boxbox_ci_stage/data\" &&\n  cd \"$boxbox_ci_stage/tree\" &&\n  node --version &&\n  npm exec --yes --package=boxbox-plugin@0.2.9 -- boxbox --engine-only &&\n  BOXBOX_CI_ROOT=\"$XDG_DATA_HOME/boxbox/codex/0.2.9\" npm run setup:ci &&\n  npm run check:architecture && npm run check:source && npm run typecheck && npm run build &",
+        "status"  : "failed",
+        "exitCode": 1
+      },
+      {
+        "command" : "/bin/zsh -lc \"cat skills/www/www-report/SKILL.md && sed -n '510,529p' scripts/workflow/reports.ts && rg -n 'function readReportBundle|interface WorkReportBundle|representative\\\\(' scripts/workflow/reports.ts\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"rg -n 'semanticHash:|semanticHash =|function .*emantic|recordPath' scripts/workflow/reports.ts | head -36\nrg -n '압축|절대|원문|SHA|작업 보고서' docs/skills/REPORTS.md | head -30\ngit grep -l '/Users/' HEAD -- docs/work/Native | wc -l\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'boxbox_ci_node=$(npm exec --yes --package=node@22.22.3 -- node -p process.execPath) &&\n  PATH=\"$(dirname \"$boxbox_ci_node\"):$PATH\" bun test test/release.test.ts'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '707,751p' scripts/workflow/reports.ts && sed -n '796,820p' scripts/workflow/reports.ts && rg -n 'Report.*(Path|Source|hash)|current.*workRecordHash' scripts/workflow/reports.ts | tail -25 && cat docs/skills/REPORTS.md | sed -n '40,56p'\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'boxbox_commit_stage=$(mktemp -d -t www-53-commits)\nexport WWW_53_STAGE=\"$boxbox_commit_stage\"\nnode --input-type=module <<'\"'JS'\nimport { createHash } from \\\"node:crypto\\\";\nimport { execFileSync } from \\\"node:child_process\\\";\nimport { mkdirSync, readFileSync, writeFileSync } from \\\"node:fs\\\";\nimport path from \\\"node:path\\\";\nimport { renderWorkReport } from \\\"./scripts/workflow/reports.ts\\\";\nconst stage = process.env.WWW_53_STAGE;\nconst git = (...args) => execFileSync(\\\"git\\\", args).toString();\nconst sha = value => createHash(\\\"sha256\\\").update(value).digest(\\\"hex\\\");\nconst index = \\\"docs/work/INDEX.md\\\";\nconst base = git(\\\"rev-parse\\\", \\\"HEAD\\\").trim();\nconst reports = git(\\\"ls-files\\\", \\\"--others\\\", \\\"--exclude-standard\\\", \\\"-z\\\").split(\\\"\\\\0\\\")\n  .filter(f => /\"'^docs'\"\\\\/work\\\\/Native\\\\/(00[5-9]|01[0-6])-/.test(f));\nif (reports.length \"'!== 48) throw Error(\"대상 Native 파일 수가 48개와 다릅니다.\");\nconst ci = [\".github/workflows/ci.yml\", \".github/workflows/release.yml\", \"docs/RELEA",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"rg -n 'export async function (listWorkReports|readWorkReport|locateWork)' scripts/workflow/reports.ts && sed -n '979,1028p' scripts/workflow/reports.ts && sed -n '1,105p' scripts/check-workflow.ts\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"WWW_53_STAGE=/var/folders/np/n6nl2gln5czgpfbr9tcrkfx40000gn/T/www-53-commits.bKGh7liv6l WWW_53_VERIFY=/var/folders/np/n6nl2gln5czgpfbr9tcrkfx40000gn/T/www-ci-029.1EImLacr4i/tree node --input-type=module <<'JS'\nimport assert from \\\"node:assert/strict\\\";\nimport { execFileSync } from \\\"node:child_process\\\";\nimport { copyFileSync, existsSync, mkdirSync, readFileSync } from \\\"node:fs\\\";\nimport path from \\\"node:path\\\";\nimport { validateRepository } from \\\"./scripts/check-workflow.ts\\\";\nimport { readWorkReport, renderWorkReport } from \\\"./scripts/workflow/reports.ts\\\";\nconst stage = process.env.WWW_53_STAGE;\nconst tree = process.env.WWW_53_VERIFY;\nconst plan = JSON.parse(readFileSync(path.join(stage, \\\"plan.json\\\")));\nconst baseline = validateRepository(tree).sort();\nconst copy = (from, to) => {\n  const dst = path.join(tree, to);\n  mkdirSync(path.dirname(dst), { recursive: true });\n  copyFileSync(path.join(stage, from), dst);\n};\nfor (const group of plan.groups.filter(group => gr",
+        "status"  : "failed",
+        "exitCode": 1
+      },
+      {
+        "command" : "/bin/zsh -lc \"WWW_53_STAGE=/var/folders/np/n6nl2gln5czgpfbr9tcrkfx40000gn/T/www-53-commits.bKGh7liv6l WWW_53_VERIFY=/var/folders/np/n6nl2gln5czgpfbr9tcrkfx40000gn/T/www-ci-029.1EImLacr4i/tree node --input-type=module <<'JS'\nimport assert from \\\"node:assert/strict\\\";\nimport { execFileSync } from \\\"node:child_process\\\";\nimport { readFileSync, writeFileSync } from \\\"node:fs\\\";\nimport path from \\\"node:path\\\";\nimport { validateRepository } from \\\"./scripts/check-workflow.ts\\\";\nimport { readWorkReport, renderWorkReport } from \\\"./scripts/workflow/reports.ts\\\";\nconst stage = process.env.WWW_53_STAGE;\nconst tree = process.env.WWW_53_VERIFY;\nconst plan = JSON.parse(readFileSync(path.join(stage, \\\"plan.json\\\")));\nconst files = plan.reports.filter(p => p.includes(\\\"/reports/\\\") && p.endsWith(\\\".json\\\"));\nlet regenerated = 0;\nfor (const f of files) {\n  const bundle = JSON.parse(readFileSync(path.join(stage, \\\"public\\\", f)));\n  const entry = bundle.entries[0];\n  const original = JSON.parse(readFile",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - /var/folders/np/n6nl2gln5czgpfbr9tcrkfx40000gn/T/www-53-commits.bKGh7liv6l <<'PY'\nimport hashlib,json,os,pathlib,stat,subprocess,sys,tempfile\nstage=pathlib.Path(sys.argv[1])\nplan=json.loads((stage/'plan.json').read_text())\nindex=plan['index']\ndef git(*args,data=None): return subprocess.check_output(['git',*args],input=data)\ndef val(*args): return git(*args).decode().strip()\ndef staged(): return {f for f in git('diff','--cached','--name-only','-z').decode().split('\\\\0') if f}\ndef check_hash(f): return hashlib.sha256(pathlib.Path(f).read_bytes()).hexdigest()==plan['originals'][f]\ndef replace(f,payload):\n    target=pathlib.Path(f)\n    if target.read_bytes()==payload: return\n    with tempfile.NamedTemporaryFile(dir=target.parent,prefix='.'+target.name+'.',delete=False) as tmp:\n        tmp.write(payload)\n        os.fchmod(tmp.fileno(),stat.S_IMODE(target.stat().st_mode))\n    os.replace(tmp.name,target)\nassert val('branch','--show-current')=='main' and val('rev-parse'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - /var/folders/np/n6nl2gln5czgpfbr9tcrkfx40000gn/T/www-53-commits.bKGh7liv6l <<'PY'\nimport json,pathlib,subprocess,sys\nt=pathlib.Path(sys.argv[1])\np=json.loads((t/'plan.json').read_text())\nrequested=json.loads((t/'commits.json').read_text())\ndef git(*args): return subprocess.check_output(['git',*args]).decode().strip()\nassert git('branch','--show-current')=='main'\nassert git('remote','get-url','--push','--all','origin')=='https://github.com/woo-jongho/www.git'\nremote=lambda: git('ls-remote','--heads','origin','refs/heads/main').split()[0]\nassert remote()==p['base']\nassert git('rev-list','--reverse',p['base']+'..HEAD').splitlines()==requested\nassert git('rev-parse','HEAD')==requested[-1]\nassert not git('diff','--cached','--name-only')\nprint(git('log','-8','--oneline'),flush=True)\nsubprocess.run(['git','push','origin','HEAD:refs/heads/main'],check=True)\nactual=remote()\nassert actual==requested[-1]\nprint('원격 HEAD',actual)\nprint(git('status','--short','--branch','--un",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}
