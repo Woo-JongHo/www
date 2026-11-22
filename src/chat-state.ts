@@ -9,10 +9,11 @@ import type { AppEvent, ScopedAppEvent, SelectionRef } from "./shared";
 
 export const MAX_PROMPT_CHARS = 100_000;
 
-export function slashCommand(text: string): "model" | "compact" | null {
+export function slashCommand(text: string): "model" | "compact" | "theme" | null {
   const value = text.trim();
   if (value === "/model") return "model";
   if (value === "/compact") return "compact";
+  if (value === "/theme") return "theme";
   return null;
 }
 

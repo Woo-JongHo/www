@@ -208,7 +208,11 @@ export interface NativeSessionSummary {
   compaction    : NativeCompaction   ;
 }
 
+export type ChatTheme = "terminal-basic" | "www-mint";
+
 export interface WwwApi {
+  chatTheme(): Promise<ChatTheme>;
+  setChatTheme(theme: ChatTheme): Promise<ChatTheme>;
   listSessions(): Promise<NativeSessionSummary[]>;
   createSession(selection?: SelectionRef): Promise<NativeSessionSummary>;
   closeSession(sessionId: string): Promise<void>;

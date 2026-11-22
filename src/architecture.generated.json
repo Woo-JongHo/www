@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "cf8f10e6d2d2ddcf421722d2c0a0968a9c8f911aec2367a4d6ebaa09ef06d361",
+  "digest"       : "fbe34b1b0976a2001e8793c0acc13233ab33709a5e418dd109d0386ef65a396f",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -521,8 +521,8 @@
       "layer"      : "model",
       "role"       : "앱 모듈 · chat-state",
       "line"       : 1,
-      "lines"      : 193,
-      "digest"     : "a14b0c7c56ca14f96054b0c8132c2a6388ef62a9132901f60975367e3eb75cb1",
+      "lines"      : 194,
+      "digest"     : "f62c50774d64b02ee6a74c12358ebd2a5a14cc2caf228571528ada0ad317c116",
       "structureId": "arch.chat.sessions.reading"
     },
     {
@@ -642,8 +642,8 @@
       "layer"      : "host",
       "role"       : "앱·Native 수명주기와 IPC 처리",
       "line"       : 1,
-      "lines"      : 320,
-      "digest"     : "2dcf5b63224d559536c560ff116a62d62a9d9a821e987cdf85a90c345d42104d",
+      "lines"      : 341,
+      "digest"     : "28e2db47f89f17ce0cce848032f0218a9d3101f422ca824673505e63edc4411c",
       "structureId": "arch.native.lifecycle"
     },
     {
@@ -752,8 +752,8 @@
       "layer"      : "contract",
       "role"       : "제한된 WwwApi 노출",
       "line"       : 1,
-      "lines"      : 64,
-      "digest"     : "62b4978117de302dc10f2c099e8514179a2d504a95392bf63f8ecf31a3d64720",
+      "lines"      : 66,
+      "digest"     : "80f1d5ac82b1c8dda9c8ef2c3d2cc0b33cc99cbc935a3c9a26581f668480efb8",
       "structureId": "arch.native.bridge"
     },
     {
@@ -785,8 +785,8 @@
       "layer"      : "presentation",
       "role"       : "화면 전환과 대화 상태 통합",
       "line"       : 1,
-      "lines"      : 1375,
-      "digest"     : "2bcb11c80b56aff450ab672061162a91194cd64becb8cc395cc56eb1c1eac0df",
+      "lines"      : 1427,
+      "digest"     : "d02aba5525750d0fc940d8742234b7d64f8af27990a8218c0b4b48990472469f",
       "structureId": "arch.chat.workspace"
     },
     {
@@ -895,8 +895,8 @@
       "layer"      : "contract",
       "role"       : "프로세스 간 공용 타입 계약",
       "line"       : 1,
-      "lines"      : 296,
-      "digest"     : "3afd487d9688919bd805eca2066b9c63ef66a5f4faf317794c428827594a01ce",
+      "lines"      : 300,
+      "digest"     : "4453d2549329a0d93c9f685b4f1a27c5804b6899f93faaf29c339ed9f68e9fcf",
       "structureId": "arch.native.protocol"
     },
     {
@@ -2431,7 +2431,7 @@
       "statement": "import { appBuildInfo } from \"./build-info\";"
     },
     {
-      "id"       : "src/main.ts:351",
+      "id"       : "src/main.ts:385",
       "from"     : "src/main.ts",
       "to"       : "src/native-session.ts",
       "mode"     : "runtime",
@@ -2442,7 +2442,7 @@
       "statement": "import { createNativeSession } from \"./native-session\";"
     },
     {
-      "id"       : "src/main.ts:407",
+      "id"       : "src/main.ts:441",
       "from"     : "src/main.ts",
       "to"       : "src/session-registry.ts",
       "mode"     : "runtime",
@@ -2453,7 +2453,7 @@
       "statement": "import { createSessionRegistry } from \"./session-registry\";"
     },
     {
-      "id"       : "src/main.ts:467",
+      "id"       : "src/main.ts:501",
       "from"     : "src/main.ts",
       "to"       : "src/activity-ledger.ts",
       "mode"     : "mixed",
@@ -2464,7 +2464,7 @@
       "statement": "import { createActivityLedger, type ActivityLedger } from \"./activity-ledger\";"
     },
     {
-      "id"       : "src/main.ts:546",
+      "id"       : "src/main.ts:580",
       "from"     : "src/main.ts",
       "to"       : "src/projects.ts",
       "mode"     : "runtime",
@@ -2475,7 +2475,7 @@
       "statement": "import { createProjectRegistry } from \"./projects\";"
     },
     {
-      "id"       : "src/main.ts:598",
+      "id"       : "src/main.ts:632",
       "from"     : "src/main.ts",
       "to"       : "src/native-reports.ts",
       "mode"     : "runtime",
@@ -2486,7 +2486,7 @@
       "statement": "import { createNativeReportHarness } from \"./native-reports\";"
     },
     {
-      "id"       : "src/main.ts:660",
+      "id"       : "src/main.ts:694",
       "from"     : "src/main.ts",
       "to"       : "src/report-judge.ts",
       "mode"     : "runtime",
@@ -2497,14 +2497,25 @@
       "statement": "import { judgeNativeReport } from \"./report-judge\";"
     },
     {
-      "id"       : "src/main.ts:712",
+      "id"       : "src/main.ts:746",
+      "from"     : "src/main.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./shared",
+      "line"     : 16,
+      "endLine"  : 16,
+      "statement": "import type { ChatTheme } from \"./shared\";"
+    },
+    {
+      "id"       : "src/main.ts:789",
       "from"     : "src/main.ts",
       "to"       : "scripts/workflow/report-names.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "../scripts/workflow/report-names.ts",
-      "line"     : 16,
-      "endLine"  : 16,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import { reportFileStem } from \"../scripts/workflow/report-names.ts\";"
     },
     {
@@ -3187,7 +3198,7 @@
       "specifier": "./shared",
       "line"     : 25,
       "endLine"  : 25,
-      "statement": "import type { NativeTimingEvent, DashboardSnapshot, DashboardWork, NativeModelOption, NativeSessionSummary } from \"./shared\";"
+      "statement": "import type { NativeTimingEvent, ChatTheme, DashboardSnapshot, DashboardWork, NativeModelOption, NativeSessionSummary } from \"./shared\";"
     },
     {
       "id"       : "src/report-judge.ts:228",
