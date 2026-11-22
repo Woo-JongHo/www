@@ -7,9 +7,12 @@
  * @verifies RESP-DEVELOPMENT-RECORDS-STATE
  */
 import assert from "node:assert/strict";
-import { addVerificationCommand, authorizationDigest } from "../scripts/workflow/work.ts";
+import { addVerificationCommand, authorizationDigest, withWorkExecutionLease } from "../scripts/workflow/work.ts";
 import { createHash } from "node:crypto";
 import { runTypedWorkflow } from "../scripts/workflow.ts";
+import { runDevelopmentWorkflow, runWorkflow } from "../scripts/workflow/run.ts";
+import { readRuntime, runtimePaths } from "../scripts/workflow/record.ts";
+import { captureSource } from "../scripts/workflow/evidence.ts";
 import { validateWorkRecord } from "../scripts/workflow/schema.ts";
 import      { execFile, spawn                                } from "node:child_process"              ;
 import      {
@@ -31,7 +34,7 @@ import test from "node:test";
 import      { once                                           } from "node:events"                     ;
 import      { inspectWorkLock, recoverWorkLock, withWorkLock, retryWorkWriter } from "../scripts/workflow/lock.ts"     ;
 import      { evaluateEvidence                               } from "../scripts/workflow/evidence.ts" ;
-import      { loadReviewPolicy, runReview                    } from "../scripts/workflow/review.ts"   ;
+import      { loadReviewPolicy, runReview, validateReview    } from "../scripts/workflow/review.ts"   ;
 import      {
               appendPending              ,
               adoptWork                  ,
@@ -163,6 +166,13 @@ async function repository(t: import("node:test").TestContext) {
   await exec("git", ["add", "."], { cwd: repo });
   await exec("git", ["commit", "-qm", "초기 테스트 상태"], { cwd: repo });
   return repo;
+}
+
+async function installDevelopmentContext(repo: string, skills = ["www-build"]) {
+  for (const file of ["AGENTS.md", "agents/www/AGENT.md", "docs/skills/WORKFLOW.md", ...skills.map(skill => `skills/www/${skill}/SKILL.md`)]) {
+    await mkdir(dirname(join(repo, file)), { recursive: true });
+    await writeFile(join(repo, file), await readFile(join(root, file)));
+  }
 }
 
 function request(repo: string, overrides: object = {}) {
@@ -1183,10 +1193,7 @@ test("수용한 분업은 보고서 준비로 진행하고 필수 기준 밖 산
   const { runDevelopmentWorkflow } = await import("../scripts/workflow/run.ts");
   const { runReportedStage, finishWorkReport } = await import("../scripts/workflow/report-lifecycle.ts");
   const repo = await repository(t);
-  for (const file of ["AGENTS.md", "agents/www/AGENT.md", "docs/skills/WORKFLOW.md", "skills/www/www-build/SKILL.md"]) {
-    await mkdir(dirname(join(repo, file)), { recursive: true });
-    await writeFile(join(repo, file), await readFile(join(root, file)));
-  }
+  await installDevelopmentContext(repo);
   await mkdir(join(repo, "out"));
   const initial = request(repo);
   const output = "out/result.txt";
@@ -1284,4 +1291,293 @@ test("현재 직접 요청으로 검증 argv만 CAS 추가하고 실제 Node 실
   const malformed = structuredClone(first.record);
   if (malformed.workflow.verifierAuthorizations) malformed.workflow.verifierAuthorizations[0].after.commit = true;
   assert.ok(validateWorkRecord(malformed, { baseDir: dirname(first.path) }).some(error => error.includes("snapshot digest")));
+});
+
+test("강제 종료된 실행 잠금은 같은 작업의 토큰으로 복구한다", { timeout: 30_000 }, async t => {
+  const repo = await repository(t);
+  const { record } = await openWork(request(repo));
+  const workId = record.id;
+  const module = new URL("../scripts/workflow/work.ts", import.meta.url).href;
+  const alias = workId.toUpperCase();
+  const script = `const {withWorkExecutionLease}=await import(${JSON.stringify(module)});await withWorkExecutionLease(${JSON.stringify(repo)},${JSON.stringify(alias)},"execution-sample",async()=>{console.log("LOCKED");await new Promise(()=>setInterval(()=>{},1000));});`;
+  const child = spawn(process.execPath, ["--input-type=module", "-e", script], { stdio: ["ignore", "pipe", "pipe"] });
+  t.after(() => { if (child.exitCode === null && child.signalCode === null) child.kill("SIGKILL"); });
+  await once(child.stdout, "data");
+  assert.equal((await inspectWorkLock({ repo })).status, "absent");
+  const active = await inspectWorkLock({ repo, workId });
+  assert.equal(active.status, "owner_alive");
+  assert.ok(active.owner && "token" in active.owner);
+  assert.deepEqual(await readdir(join(repo, ".www/runtime")), [workId]);
+  assert.deepEqual(await inspectWorkLock({ repo, workId: alias }), active);
+  await assert.rejects(withWorkExecutionLease(repo, workId, "same-job", async () => undefined), /같은 작업이 실행 중/);
+  await assert.rejects(recoverWorkLock({ repo, workId, token: active.owner.token }), /종료가 확인/);
+  const exit = once(child, "exit");
+  child.kill("SIGKILL");
+  await exit;
+  assert.equal((await inspectWorkLock({ repo, workId })).status, "owner_exited");
+  await recoverWorkLock({ repo, workId: alias, token: active.owner.token });
+  assert.equal((await inspectWorkLock({ repo, workId })).status, "absent");
+  assert.equal(await withWorkExecutionLease(repo, workId, "again", async () => "resumed"), "resumed");
+});
+
+test("기존 대문자 경로의 실행 잠금도 같은 UUID로 조회하고 획득을 막는다", async t => {
+  const repo = await repository(t);
+  const { record } = await openWork(request(repo));
+  const directory = join(repo, ".www/runtime", record.id.toUpperCase());
+  await mkdir(directory, { recursive: true });
+  const token = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
+  await writeFile(join(directory, "execution.lock"), JSON.stringify({ schemaVersion: 1, token, pid: process.pid, hostname: (await import("node:os")).hostname() }));
+  const active = await inspectWorkLock({ repo, workId: record.id });
+  assert.equal(active.status, "owner_alive");
+  assert.ok(active.owner && "token" in active.owner && active.owner.token === token);
+  await assert.rejects(withWorkExecutionLease(repo, record.id, "alias-lock", async () => undefined), /같은 작업이 실행 중/);
+});
+
+test("부모가 종료되어도 실제 실행 호스트가 남아 있으면 잠금을 회수하지 않는다", { timeout: 30_000 }, async t => {
+  const repo = await repository(t);
+  const { record } = await openWork(request(repo));
+  const workId = record.id;
+  const lockModule = new URL("../scripts/workflow/work.ts", import.meta.url).href;
+  const runModule = new URL("../scripts/workflow/run.ts", import.meta.url).href;
+  const worker = "require('node:fs').writeFileSync('fixture-host.pid',String(process.pid));setTimeout(()=>{},15000);";
+  const script = `
+    const { withWorkExecutionLease } = await import(${JSON.stringify(lockModule)});
+    const { runProcess } = await import(${JSON.stringify(runModule)});
+    await withWorkExecutionLease(${JSON.stringify(repo)}, ${JSON.stringify(workId)}, "orphan-host", host =>
+      runProcess({ command:process.execPath, args:["-e", ${JSON.stringify(worker)}] }, {cwd:${JSON.stringify(repo)}}, host));
+  `;
+  const parent = spawn(process.execPath, ["--input-type=module", "-e", script], { stdio: ["ignore", "ignore", "pipe"] });
+  let parentError = "";
+  parent.stderr.setEncoding("utf8");
+  parent.stderr.on("data", chunk => { parentError = (parentError + chunk).slice(-2000); });
+  let hostPid: number | undefined;
+  let hostStopped = false;
+  t.after(async () => {
+    if (hostPid === undefined && !hostStopped) {
+      const source = await readFile(join(repo, "fixture-host.pid"), "utf8").catch(() => "");
+      if (/^[1-9][0-9]*$/.test(source)) hostPid = Number(source);
+    }
+    if (hostPid !== undefined && !hostStopped) try { process.kill(hostPid, "SIGTERM"); } catch { /* 이미 종료한 fixture다. */ }
+    if (parent.exitCode === null && parent.signalCode === null) {
+      const exited = once(parent, "exit");
+      parent.kill("SIGKILL");
+      await exited;
+    }
+  });
+  const waiting = async (check: (lock: Awaited<ReturnType<typeof inspectWorkLock>>) => boolean | Promise<boolean>) => {
+    const deadline = Date.now() + 8_000;
+    for (;;) {
+      const lock = await inspectWorkLock({ repo, workId });
+      if (await check(lock)) return lock;
+      if (Date.now() >= deadline) throw new Error(`실행 잠금 상태 대기 실패 ${lock.status} ${parentError}`);
+      await new Promise(resolve => setTimeout(resolve, 20));
+    }
+  };
+  const active = await waiting(async lock => !!lock.owner && "token" in lock.owner && lock.owner.host?.state === "registered"
+    && await readFile(join(repo, "fixture-host.pid"), "utf8").catch(() => "") === String(lock.owner.host.pid));
+  assert.ok(active.owner && "token" in active.owner && active.owner.host?.state === "registered");
+  hostPid = active.owner.host.pid;
+  assert.equal(await readFile(join(repo, "fixture-host.pid"), "utf8"), String(hostPid));
+  const exited = once(parent, "exit");
+  parent.kill("SIGKILL");
+  await exited;
+  assert.equal((await inspectWorkLock({ repo, workId })).status, "host_alive");
+  await assert.rejects(recoverWorkLock({ repo, workId, token: active.owner.token }), /종료가 확인/);
+  await assert.rejects(withWorkExecutionLease(repo, workId, "next-host", async () => undefined), /같은 작업이 실행 중/);
+  process.kill(hostPid, "SIGTERM");
+  await waiting(lock => lock.status === "owner_exited");
+  hostStopped = true;
+  await recoverWorkLock({ repo, workId, token: active.owner.token });
+  assert.equal((await inspectWorkLock({ repo, workId })).status, "absent");
+});
+
+test("부모가 PID를 기록하기 전에 종료하면 자동으로 실행 잠금을 회수하지 않는다", { timeout: 30_000 }, async t => {
+  const repo = await repository(t);
+  const { record } = await openWork(request(repo));
+  const workId = record.id;
+  const module = new URL("../scripts/workflow/work.ts", import.meta.url).href;
+  const script = `const {withWorkExecutionLease}=await import(${JSON.stringify(module)});await withWorkExecutionLease(${JSON.stringify(repo)},${JSON.stringify(workId)},"unconfirmed-host",async host=>{await host.beforeSpawn();console.log("LAUNCHING");await new Promise(()=>setInterval(()=>{},1000));});`;
+  const parent = spawn(process.execPath, ["--input-type=module", "-e", script], { stdio: ["ignore", "pipe", "pipe"] });
+  t.after(() => { if (parent.exitCode === null && parent.signalCode === null) parent.kill("SIGKILL"); });
+  await once(parent.stdout, "data");
+  const active = await inspectWorkLock({ repo, workId });
+  assert.ok(active.owner && "token" in active.owner && active.owner.host?.state === "launching");
+  const exited = once(parent, "exit");
+  parent.kill("SIGKILL");
+  await exited;
+  assert.equal((await inspectWorkLock({ repo, workId })).status, "host_unconfirmed");
+  await assert.rejects(recoverWorkLock({ repo, workId, token: active.owner.token }), /종료가 확인/);
+});
+
+test("후속 구현 요청은 같은 UUID에서 권한을 갱신하고 이전 요청과 검증 허용 이력을 보존한다", async t => {
+  const repo = await repository(t);
+  const original = request(repo);
+  const opened = await openWork({ ...original, decision: { ...original.decision, intent: "design" }, approval: { ...original.approval, implementation: false, writePaths: [], mutationSurfaces: [] } });
+  const workId = opened.record.id;
+  const old = { repo, workId, role: "www-dev", direct: true, expectedRequestHash: opened.record.workflow.requestHash };
+  await addVerificationCommand({ ...old, requestId: "old-verifier", request: "검증 명령 추가", expectedAuthorizationDigest: authorizationDigest(opened.record.workflow.authorization), command: process.execPath, args: ["-e", "process.exit(0)"] });
+  await verifyPass(repo, workId);
+  const before = (await readWork(old)).record;
+  const input = { ...old, action: "continue-work", requestId: "build-follow-up", request: "진행하자", expectedRequestId: before.workflow.requestId,
+    expectedAuthorizationDigest: authorizationDigest(before.workflow.authorization), approval: original.approval, inputs: original.inputs };
+  await assert.rejects(runTypedWorkflow({ ...input, direct: false }), /직접 요청/);
+  await assert.rejects(runTypedWorkflow({ ...input, approval: { ...input.approval, publish: true } }), /publish/);
+  await assert.rejects(runTypedWorkflow({ ...input, approval: { ...input.approval, writePaths: ["../outside"] } }), /traversal/);
+  await assert.rejects(runTypedWorkflow({ ...input, expectedAuthorizationDigest: "0".repeat(64) }), /CAS/);
+  await runTypedWorkflow({ ...input, workId: workId.toUpperCase() });
+  const active = await readWork(old);
+  assert.equal(active.record.id, workId);
+  assert.equal(active.record.workflow.requestId, input.requestId);
+  assert.equal(active.record.workflow.nextAction, "build");
+  assert.equal(active.record.criteria[0].result, "unverified");
+  assert.deepEqual(active.record.criteria[0].evidence, before.criteria[0].evidence);
+  assert.deepEqual(active.record.workflow.verifications, before.workflow.verifications);
+  const otherLegacy = await legacyWork(repo);
+  await assert.rejects(adoptWork({ repo, role: "www-dev", direct: true, workId: otherLegacy.record.id,
+    requestId: input.requestId, request: "다른 작업 채택", approval: original.approval, inputs: original.inputs, intent: "build" }), /이미 사용/);
+  assert.equal(await readFile(otherLegacy.file, "utf8"), otherLegacy.source);
+  const assessment = await assessWork({ repo, workId });
+  assert.equal(assessment.criteria[0]?.usable, false);
+  await assert.rejects(runDevelopmentWorkflow({ ...original, execute: true, eventId: "stale-build", decision: { intent: "build", workId } }), /현재 연결된 사용자 요청/);
+  await assert.rejects(runDevelopmentWorkflow({ ...original, execute: true, eventId: "stale-explicit-build",
+    explicitSkill: "www-build", decision: { intent: "design", workId } }), /현재 연결된 사용자 요청/);
+  await assert.rejects(runDevelopmentWorkflow({ ...original, execute: true, eventId: "stale-write-sandbox",
+    decision: { intent: "design", workId } }), /현재 연결된 사용자 요청/);
+  await assert.rejects(runWorkflow({ repo, workId, request: original.request, direct: true, execute: true,
+    eventId: "legacy-continuation", explicitSkill: "www-build", approval: original.approval }), /www-dev 역할/);
+  assert.deepEqual(active.record.workflow.continuations?.[0].previousVerifiers, before.workflow.verifierAuthorizations);
+  assert.deepEqual(active.record.workflow.continuations?.[0].before.authorization, before.workflow.authorization);
+  assert.equal((await openWork(original)).record.id, workId);
+  await advanceWork({ repo, workId, intent: "build", writes: original.approval.writePaths, surfaces: original.approval.mutationSurfaces });
+  const stable = await readFile(active.path, "utf8");
+  await runTypedWorkflow(input);
+  assert.equal(await readFile(active.path, "utf8"), stable);
+  await assert.rejects(runTypedWorkflow({ ...input, request: "바뀐 원문" }), /내용이 달라/);
+  await assert.rejects(runTypedWorkflow({ ...input, requestId: "stale-implementation" }), /requestHash CAS/);
+  await assert.rejects(runTypedWorkflow({ ...input, requestId: "old-verifier" }), /재사용/);
+  await withWorkLock(repo, async () => {
+    await assert.rejects(runTypedWorkflow({ ...input, requestId: "locked-implementation" }), /lock-status/);
+  });
+  const next = { ...input, requestId: "next-implementation", request: "후속 구현",
+    expectedRequestId: active.record.workflow.requestId, expectedRequestHash: active.record.workflow.requestHash, expectedAuthorizationDigest: authorizationDigest(active.record.workflow.authorization) };
+  await withWorkExecutionLease(repo, workId, "running-build", async () => {
+    await assert.rejects(runTypedWorkflow(next), /같은 작업이 실행 중/);
+    await assert.rejects(addVerificationCommand({ ...old, request: "검증 명령 추가", requestId: "running-write-verifier",
+      expectedRequestHash: active.record.workflow.requestHash, expectedAuthorizationDigest: authorizationDigest(active.record.workflow.authorization),
+      command: process.execPath, args: ["--version"] }), /같은 작업이 실행 중/);
+    assert.equal((await readWork(old)).record.workflow.requestId, active.record.workflow.requestId);
+  });
+  await runTypedWorkflow(next);
+  const samePermission = { ...next, requestId: "same-text-next", expectedRequestId: next.requestId,
+    expectedRequestHash: (await readWork(old)).record.workflow.requestHash,
+    expectedAuthorizationDigest: authorizationDigest((await readWork(old)).record.workflow.authorization) };
+  const verifier = { ...old, requestId: "prepared-verifier", request: "검증 명령 추가", command: process.execPath, args: ["--version"],
+    expectedRequestId: samePermission.expectedRequestId, expectedRequestHash: samePermission.expectedRequestHash,
+    expectedAuthorizationDigest: samePermission.expectedAuthorizationDigest };
+  await runTypedWorkflow(samePermission);
+  const verifierRequest = { ...verifier, action: "add-verifier" };
+  await assert.rejects(runTypedWorkflow(verifierRequest), /requestId CAS/);
+  await assert.rejects(runTypedWorkflow({ ...verifierRequest, expectedRequestId: undefined }), /requestId CAS/);
+  await assert.rejects(runTypedWorkflow({ ...verifierRequest, expectedRequestId: 42 }), /검증 명령 추가 입력/);
+  const currentVerifier = { ...verifierRequest, expectedRequestId: samePermission.requestId };
+  await runTypedWorkflow({ ...currentVerifier, workId: workId.toUpperCase() });
+  const added = await readWork(old);
+  assert.equal(added.record.workflow.verifierAuthorizations?.at(-1)?.originalRequestId, samePermission.requestId);
+  const afterAddition = await readFile(added.path, "utf8");
+  await runTypedWorkflow(currentVerifier);
+  assert.equal(await readFile(added.path, "utf8"), afterAddition);
+  await assert.rejects(runTypedWorkflow({ ...samePermission, requestId: "concurrent-old", request: "같은 권한으로 낡은 요청" }), /requestId CAS/);
+  await runTypedWorkflow(input);
+  const latest = (await readWork(old)).record;
+  assert.equal(latest.workflow.requestId, samePermission.requestId);
+  assert.equal(latest.workflow.continuations?.length, 3);
+  const { policy } = await loadReviewPolicy({ root: repo });
+  const pastReview = { id: "review-prior-request", workId, workRequestId: next.requestId, workRequestHash: latest.workflow.requestHash };
+  assert.ok(validateReview({ review: pastReview, policy, work: latest }).reasons.includes("review_request_changed"));
+  const newReview = { ...pastReview, workRequestId: latest.workflow.requestId };
+  assert.ok(!validateReview({ review: newReview, policy, work: latest }).reasons.includes("review_request_changed"));
+  await verifyPass(repo, workId);
+  assert.equal((await assessWork({ repo, workId })).criteria[0]?.usable, true);
+  const tampered = structuredClone(latest);
+  tampered.workflow.continuations![0]!.after.authorization.commit = true;
+  assert.ok(validateWorkRecord(tampered, { baseDir: dirname(active.path) }).some(error => error.includes("후속 요청")));
+});
+
+test("현재 후속 요청으로 공식 호스트를 실행하고 같은 원문의 새 요청과 실행 ID를 구분한다", async t => {
+  const repo = await repository(t);
+  await installDevelopmentContext(repo, ["www-build", "www-design"]);
+  const initial = request(repo);
+  const { record } = await openWork({ ...initial, decision: { ...initial.decision, intent: "design" },
+    approval: { ...initial.approval, implementation: false, writePaths: [], mutationSurfaces: [] } });
+  const workId = record.id;
+  const continueRequest = {
+    ...initial, action: "continue-work", workId, requestId: "current-host-request", request: "후속 구현을 실행해줘",
+    expectedRequestId: record.workflow.requestId, expectedRequestHash: record.workflow.requestHash,
+    expectedAuthorizationDigest: authorizationDigest(record.workflow.authorization),
+  };
+  await runTypedWorkflow(continueRequest);
+  const execution = {
+    ...initial, request: continueRequest.request, requestId: continueRequest.requestId, eventId: "current-host-event",
+    decision: { intent: "build", workId }, writes: initial.approval.writePaths, surfaces: initial.approval.mutationSurfaces, execute: true,
+  };
+  const program = `
+    const {readFileSync,writeFileSync} = require("node:fs");
+    process.stdin.resume();
+    process.stdin.on("end", async () => {
+      const file = ${JSON.stringify(`.www/runtime/${workId}/execution.lock`)};
+      const deadline = Date.now() + 5000;
+      while (JSON.parse(readFileSync(file,"utf8")).host?.pid !== process.pid) {
+        if (Date.now() >= deadline) process.exit(3);
+        await new Promise(resolve => setTimeout(resolve,20));
+      }
+      if (process.argv[1] === "write") writeFileSync("src/item.ts", "export const value = 2;\\n");
+      console.log(JSON.stringify({type:"thread.started",thread_id:"current-followup-fixture"}));
+      console.log(JSON.stringify({type:"turn.completed"}));
+    });
+  `;
+  const fixture = (mode: "read" | "write") => ({ prepareInvocation: (invocation: import("../scripts/workflow/adapters/gjc.ts").ProcessInvocation) =>
+    ({ ...invocation, command: process.execPath, args: ["-e", program, mode] }) });
+  const dependencies = fixture("write");
+  const executed = await runDevelopmentWorkflow(execution, dependencies);
+  assert.equal(executed.executor, "process");
+  assert.equal(executed.host?.ok, true);
+  assert.equal(await readFile(join(repo, "src/item.ts"), "utf8"), "export const value = 2;\n");
+  assert.ok(typeof executed.receiptPath === "string");
+  const receipt = JSON.parse(await readFile(join(repo, executed.receiptPath), "utf8"));
+  const events = (await readRuntime(runtimePaths(repo, workId))).events;
+  const start = events.find(event => event.id === execution.eventId);
+  assert.equal(start?.workRequestId, execution.requestId);
+  assert.equal(receipt.workRequestId, execution.requestId);
+  assert.equal(receipt.workRequestHash, start?.workRequestHash);
+  assert.match(String(receipt.executionScopeDigest), /^[0-9a-f]{64}$/);
+  assert.equal(receipt.executionScopeDigest, start?.executionScopeDigest);
+  assert.equal((await runDevelopmentWorkflow(execution, dependencies)).duplicate, true);
+  for (const changed of [{ writes: [] }, { surfaces: [] }, { sandbox: "read-only" }]) {
+    await assert.rejects(runDevelopmentWorkflow({ ...execution, ...changed }, dependencies), /같은 event id의 실행 요청이 다릅니다/);
+  }
+  const eventId = "readonly-host-event";
+  const readOnly = await runDevelopmentWorkflow({ ...execution, eventId, sandbox: "read-only", writes: [], surfaces: [] }, fixture("read"));
+  assert.equal(readOnly.host?.ok, true);
+  await assert.rejects(runDevelopmentWorkflow({ ...execution, eventId }, dependencies), /같은 event id의 실행 요청이 다릅니다/);
+  const inquiry = { ...execution, eventId: "design-inquiry-event", requestId: "design-inquiry", request: "현재 구현을 읽고 설계를 확인해줘",
+    decision: { intent: "design", workId }, sandbox: "read-only", writes: [], surfaces: [] };
+  const design = await runDevelopmentWorkflow(inquiry, fixture("read"));
+  assert.equal(design.host?.ok, true);
+  assert.ok(typeof design.receiptPath === "string");
+  const designReceipt = JSON.parse(await readFile(join(repo, design.receiptPath), "utf8"));
+  const designStart = (await readRuntime(runtimePaths(repo, workId))).events.find(event => event.id === inquiry.eventId);
+  assert.equal(designReceipt.workRequestHash, receipt.workRequestHash);
+  assert.equal(designReceipt.executionRequestHash, createHash("sha256").update(inquiry.request).digest("hex"));
+  assert.equal(designStart?.executionRequestHash, designReceipt.executionRequestHash);
+  assert.equal(designReceipt.executionRequestId, inquiry.requestId);
+  assert.equal((await runDevelopmentWorkflow(inquiry, fixture("read"))).duplicate, true);
+  await assert.rejects(runDevelopmentWorkflow({ ...inquiry, request: "다음 구현을 위한 설계를 검토해줘" }, fixture("read")), /같은 event id의 실행 요청이 다릅니다/);
+  const before = (await readWork({ repo, workId })).record.workflow;
+  const next = { ...continueRequest, requestId: "second-host-request", expectedRequestId: before.requestId,
+    expectedRequestHash: before.requestHash, expectedAuthorizationDigest: authorizationDigest(before.authorization) };
+  await runTypedWorkflow(next);
+  await assert.rejects(runDevelopmentWorkflow({ ...execution, requestId: next.requestId }, dependencies), /같은 event id의 실행 요청이 다릅니다/);
+  const after = await runDevelopmentWorkflow({ ...execution, requestId: next.requestId, eventId: "second-host-event" }, dependencies);
+  assert.equal(after.host?.ok, true);
+  assert.equal((await inspectWorkLock({ repo, workId })).status, "absent");
 });
