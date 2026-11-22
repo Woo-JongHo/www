@@ -4,13 +4,14 @@
  * @implements RESP-NATIVE-PROJECTS
  */
 import { constants } from "node:fs";
+import { createHash } from "node:crypto";
 import * as fs from "node:fs/promises";
 import { isAbsolute, join, relative, resolve, sep } from "node:path";
 import type { DashboardIssue, DashboardProject, DashboardProjectSnapshot, DashboardSnapshot, DashboardWork, DashboardWorkDetail, WorkStatus } from "./shared";
 
 export const DASHBOARD_LIMITS = {
   projects: 100, files: 500, entries: 5000, depth: 5,
-  fileBytes: 4 * 1024 * 1024, totalBytes: 32 * 1024 * 1024,
+  fileBytes: 8 * 1024 * 1024, totalBytes: 64 * 1024 * 1024,
 } as const;
 
 const WORK_ID = /^work-[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -192,6 +193,34 @@ export async function readDashboard(projects: readonly DashboardProject[]): Prom
     } else snapshots.push(await readProject(project, budget));
   }
   return { capturedAt: new Date().toISOString(), projects: snapshots };
+}
+
+/** 목록과 같은 작업의 식별을 재확인한 뒤 고정 이름의 계획 파일만 읽는다. */
+export async function readDashboardPlan(project: DashboardProject, workId: string, expectedSha256: string) {
+  const snapshot = await readProject(project, { bytes: DASHBOARD_LIMITS.totalBytes });
+  const card = snapshot.coverage === "complete" && snapshot.cards.find(item => item.id === workId);
+  if (!card) throw new Error("현재 프로젝트의 계획 작업 UUID를 확인할 수 없습니다.");
+  const file = join(project.path, card.sourcePath);
+  const plan = join(resolve(file, ".."), "tasks.md");
+  const path = sourcePath(project.path, plan);
+  const workLimit = DASHBOARD_LIMITS.fileBytes;
+  const work = await readBytes(project.path, file, { bytes: workLimit }, workLimit);
+  if (parseWork(work, project.key, card.sourcePath).id !== workId) throw new Error("계획 작업의 UUID가 바뀌었습니다.");
+  let status: "available" | "missing" | "failed" | "changed";
+  let content: string | null = null;
+  try {
+    const limit = 64 * 1024;
+    const bytes = await readBytes(project.path, plan, { bytes: limit }, limit);
+    const decoded = bytes.toString("utf8");
+    if (!bytes.equals(Buffer.from(decoded, "utf8"))) throw new ReadFailure("invalid_utf8", "UTF-8 계획 문서가 아닙니다.");
+    status = createHash("sha256").update(bytes).digest("hex") === expectedSha256 ? "available" : "changed";
+    if (status === "available") content = decoded;
+  } catch (error) {
+    status = code(error) === "ENOENT" ? "missing" : "failed";
+  }
+  const latest = await readBytes(project.path, file, { bytes: workLimit }, workLimit);
+  if (!latest.equals(work)) throw new Error("계획을 읽는 동안 작업 기록이 바뀌었습니다.");
+  return { workId, path, sha256: expectedSha256, status, content };
 }
 
 /** 프로젝트 snapshot에서 UUID 유일성을 확인하고 같은 작업 폴더의 문서만 읽는다. */

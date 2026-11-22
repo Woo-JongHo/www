@@ -14,6 +14,7 @@ import { fileURLToPath } from "node:url";
 import { assertTypeScriptWrites, checkSourcePolicy } from "./source-policy.ts";
 import { runWorkflow } from "./workflow/run.ts";
 import { validateWritePaths } from "./workflow/preflight.ts";
+import { appendEvent, CHAT_HARNESS_PHASES, isChatHarnessEventId, type ChatHarnessPhase } from "./workflow/record.ts";
 import { namedSkill } from "./workflow/route.ts";
 import type { ProcessInvocation, ProcessOptions } from "./workflow/adapters/gjc.ts";
 
@@ -426,13 +427,51 @@ function exitCode(result: JsonObject): number {
   return 0;
 }
 
+async function reserveChatHarness(options: JsonObject) {
+  if (!isChatHarnessEventId(options.eventId)) return null;
+  const decision = object(options.decision) ? options.decision : {};
+  const phase = CHAT_HARNESS_PHASES.find(value => value === decision.intent);
+  if (!phase || options.role !== "www-dev" || options.direct !== true || options.execute !== true
+    || options.preview === true || options.resume === true || options.action !== undefined
+    || typeof decision.workId !== "string") throw new Error("단계 실행 ID에는 기존 WWW 작업의 직접 실행이 필요합니다.");
+  const binding = object(options.binding) ? options.binding : {};
+  const root = options.repo ?? binding.repo ?? process.cwd();
+  if (typeof root !== "string") throw new Error("단계 실행 저장소를 확인할 수 없습니다.");
+  const repo = await realpath(root);
+  const workId = (await readWork({ repo, workId: decision.workId })).record.id;
+  const eventId = options.eventId;
+  const start = await appendEvent({ repo, workId, event: { id: `${eventId}-chat-start`, type: "chat_harness_start", phase, workId } });
+  if (start.duplicate) throw new Error("이미 사용한 대화 단계 실행 ID입니다. 새 단계 시도로 다시 실행하세요.");
+  return { repo, workId, eventId, phase };
+}
+
+async function recordChatHarnessResult(context: { repo: string; workId: string; eventId: string; phase: ChatHarnessPhase }, result: JsonObject, outcomeCode: number) {
+  const { repo, workId, eventId, phase } = context;
+  if (result.executed !== true || result.workId !== workId) return;
+  const verification = object(result.verification) ? result.verification : {};
+  const host = object(result.host) ? result.host : {};
+  const settled = (code: unknown, signal: unknown) => Number.isInteger(code) || typeof signal === "string" && signal.length > 0;
+  if (phase === "verify") {
+    if (verification.executor !== "process" || verification.recorded !== true || typeof verification.id !== "string"
+      || !settled(verification.exitCode, verification.signal)) return;
+  } else if (result.executor !== "process" || !settled(host.code, host.signal)) return;
+  await appendEvent({ repo, workId, event: {
+    id: `${eventId}-chat-receipt`, type: "chat_harness_receipt", phase, workId,
+    outcome: outcomeCode === 0 ? "passed" : "failed",
+    ...(phase === "verify" ? { verificationId: verification.id } : {}),
+  } });
+}
+
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     const options: unknown = JSON.parse(process.argv[2] ?? "null");
     if (!object(options)) throw new Error("JSON 옵션 객체 하나가 필요합니다.");
-    const result = await runTypedWorkflow(options);
+    const context = await reserveChatHarness(options);
+    const result = await runTypedWorkflow(context ? { ...options, repo: context.repo } : options);
+    const code = exitCode(result);
+    if (context) await recordChatHarnessResult(context, result, code);
     console.log(JSON.stringify(result));
-    process.exitCode = exitCode(result);
+    process.exitCode = code;
   } catch (error) {
     console.error(error instanceof Error ? error.message : String(error));
     process.exitCode = 1;

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "323119e982bc8796352d7ed62f247815d00dc4c1aef7f1911121350c6c762f22",
+  "digest"       : "3af261a3ecfc8c75c53c6891eeff8d4c5d32c9446c3bbcfe29ecdea8c005b0ab",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -103,8 +103,8 @@
       "layer"      : "tooling",
       "role"       : "앱 모듈 · workflow",
       "line"       : 1,
-      "lines"      : 441,
-      "digest"     : "2d86c9e1091737c905a9bf9b3e50a37a176a1bf13818b50e9478b0fe6f3dcaa4",
+      "lines"      : 480,
+      "digest"     : "17b9746b92fcd3bce418c1d6abaf4f97d36f8351f07a62395b0ad85667aa922b",
       "structureId": "arch.development.authoring"
     },
     {
@@ -257,8 +257,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · record",
       "line"       : 1,
-      "lines"      : 220,
-      "digest"     : "b42a52cf356c76539f96ae9f4677de9e8b661a857f03887b19a3600ce3517468",
+      "lines"      : 269,
+      "digest"     : "8de1bd2d18adae158761cdd940cee6acefc9d73a7ee1034e63a2746592521268",
       "structureId": "arch.development.records.events"
     },
     {
@@ -433,8 +433,8 @@
       "layer"      : "presentation",
       "role"       : "앱 모듈 · agent-overview-view",
       "line"       : 1,
-      "lines"      : 77,
-      "digest"     : "eb4a8b6074389cd2ffa978ad2e9008741caadfe8aa8abb11257d908c8996a18e",
+      "lines"      : 97,
+      "digest"     : "44423d9f959f989e85e10905e8aa823f250fc7b043fb285792a33e8efd6eca49",
       "structureId": "arch.chat.activity.view"
     },
     {
@@ -444,8 +444,8 @@
       "layer"      : "host",
       "role"       : "앱 모듈 · agent-overview",
       "line"       : 1,
-      "lines"      : 348,
-      "digest"     : "f3f7f420aa0075adf861fa544cd6c9469fe90a73ffb5f234a9c79543b0733ba3",
+      "lines"      : 408,
+      "digest"     : "bb36db38e6352bdfd223702042957998bc272cc1d0a1c2f399fa44cde92a7425",
       "structureId": "arch.chat.activity.projection"
     },
     {
@@ -587,8 +587,8 @@
       "layer"      : "host",
       "role"       : "앱 모듈 · dashboard",
       "line"       : 1,
-      "lines"      : 239,
-      "digest"     : "ef9ae3ecd63fc629e32d92c47f5f51767d233ddb3a28b83e1ee3d32303f894ae",
+      "lines"      : 268,
+      "digest"     : "aa889ef2ce376778bdd60dc748c77da926b450a115d849cbbc158409d6922433",
       "structureId": "arch.native.projects"
     },
     {
@@ -598,8 +598,8 @@
       "layer"      : "host",
       "role"       : "개발 상태와 완료 서비스",
       "line"       : 1,
-      "lines"      : 56,
-      "digest"     : "2e4c286ca6e23af92106cd70c3b17fbc651539086873cdfda0fe396c096e28a2",
+      "lines"      : 69,
+      "digest"     : "d9731caa1a124db90aad4f2a4b13fc7a4f92cd4a8c1b3a5ee782fc4308aeea1a",
       "structureId": "arch.development.service"
     },
     {
@@ -675,8 +675,8 @@
       "layer"      : "model",
       "role"       : "앱 모듈 · native-chat",
       "line"       : 1,
-      "lines"      : 60,
-      "digest"     : "c9af57a4cde4d073b03e8d035d4669c0a6b4009aceef0a2fee1e5ddc55a21761",
+      "lines"      : 94,
+      "digest"     : "ba010e42269e397c79f7e5548f95e419fc9c2c02488878d0607a071c141ee431",
       "structureId": "arch.chat.sessions.requests"
     },
     {
@@ -730,8 +730,8 @@
       "layer"      : "host",
       "role"       : "앱 모듈 · native-session",
       "line"       : 1,
-      "lines"      : 1225,
-      "digest"     : "5ebd5fea875709f327b6861723f9e9c09a3610df729c1cd81823175ba61b8bef",
+      "lines"      : 1295,
+      "digest"     : "9eb66b12db6f020b4489ae96d772b27698210b068e8c5552220c62d39df21b48",
       "structureId": "arch.native.lifecycle"
     },
     {
@@ -928,8 +928,8 @@
       "layer"      : "host",
       "role"       : "앱 모듈 · www-activity",
       "line"       : 1,
-      "lines"      : 136,
-      "digest"     : "49e2ee3efbd7ab2fe2f78eb1ca23ff79febfed74169774767a3b097dddc2bddc",
+      "lines"      : 182,
+      "digest"     : "79719996980edb4bf82c84ae267febd4e76f53b5c381e3a8203df7e6ae2b169b",
       "structureId": "arch.chat.activity.artifacts"
     }
   ],
@@ -1058,23 +1058,34 @@
     {
       "id"       : "scripts/workflow.ts:891",
       "from"     : "scripts/workflow.ts",
+      "to"       : "scripts/workflow/record.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
+      "specifier": "./workflow/record.ts",
+      "line"     : 17,
+      "endLine"  : 17,
+      "statement": "import { appendEvent, CHAT_HARNESS_PHASES, isChatHarnessEventId, type ChatHarnessPhase } from \"./workflow/record.ts\";"
+    },
+    {
+      "id"       : "scripts/workflow.ts:1009",
+      "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/route.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./workflow/route.ts",
-      "line"     : 17,
-      "endLine"  : 17,
+      "line"     : 18,
+      "endLine"  : 18,
       "statement": "import { namedSkill } from \"./workflow/route.ts\";"
     },
     {
-      "id"       : "scripts/workflow.ts:941",
+      "id"       : "scripts/workflow.ts:1059",
       "from"     : "scripts/workflow.ts",
       "to"       : "scripts/workflow/adapters/gjc.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./workflow/adapters/gjc.ts",
-      "line"     : 18,
-      "endLine"  : 18,
+      "line"     : 19,
+      "endLine"  : 19,
       "statement": "import type { ProcessInvocation, ProcessOptions } from \"./workflow/adapters/gjc.ts\";"
     },
     {
@@ -1317,7 +1328,7 @@
       "specifier": "./preflight.ts",
       "line"     : 8,
       "endLine"  : 8,
-      "statement": "import { assertWorkId }              from \"./preflight.ts\";"
+      "statement": "import { assertWorkId, validateWritePaths } from \"./preflight.ts\";"
     },
     {
       "id"       : "scripts/workflow/report-lifecycle.ts:240",
@@ -2175,7 +2186,7 @@
       "specifier": "./www-activity",
       "line"     : 7,
       "endLine"  : 7,
-      "statement": "import { parseWwwDevelopmentStage, type WwwDevelopmentStage } from \"./www-activity\";"
+      "statement": "import { parseWwwDevelopmentStage, parseWwwHarnessAttempt, parseWwwPlanSnapshot, type WwwDevelopmentStage, type WwwPlanSnapshot } from \"./www-activity\";"
     },
     {
       "id"       : "src/chat-composer.tsx:172",
@@ -2310,14 +2321,14 @@
       "statement": "import type { DashboardProject, DashboardSnapshot, DashboardWork, DashboardWorkDetail, WorkStatus } from \"./shared\";"
     },
     {
-      "id"       : "src/dashboard.ts:282",
+      "id"       : "src/dashboard.ts:324",
       "from"     : "src/dashboard.ts",
       "to"       : "src/shared.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./shared",
-      "line"     : 9,
-      "endLine"  : 9,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import type { DashboardIssue, DashboardProject, DashboardProjectSnapshot, DashboardSnapshot, DashboardWork, DashboardWorkDetail, WorkStatus } from \"./shared\";"
     },
     {
@@ -2345,12 +2356,34 @@
     {
       "id"       : "src/development.ts:286",
       "from"     : "src/development.ts",
+      "to"       : "scripts/workflow/record.ts",
+      "mode"     : "mixed",
+      "syntax"   : "import",
+      "specifier": "../scripts/workflow/record.ts",
+      "line"     : 7,
+      "endLine"  : 7,
+      "statement": "import { readChatHarnessReceipt, type ChatHarnessPhase } from \"../scripts/workflow/record.ts\";"
+    },
+    {
+      "id"       : "src/development.ts:381",
+      "from"     : "src/development.ts",
+      "to"       : "scripts/workflow/work.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "../scripts/workflow/work.ts",
+      "line"     : 8,
+      "endLine"  : 8,
+      "statement": "import { readWork } from \"../scripts/workflow/work.ts\";"
+    },
+    {
+      "id"       : "src/development.ts:437",
+      "from"     : "src/development.ts",
       "to"       : "src/shared.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./shared",
-      "line"     : 7,
-      "endLine"  : 7,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import type { DevelopmentPolicyInfo, DevelopmentWorkStatus } from \"./shared\";"
     },
     {
@@ -2835,10 +2868,10 @@
       "specifier": "./native-chat",
       "line"     : 17,
       "endLine"  : 17,
-      "statement": "import { nativeThreadStartParams, nativeTurnSteerParams, WWW_STAGE_TOOL } from \"./native-chat\";"
+      "statement": "import { nativeThreadStartParams, nativeTurnSteerParams, WWW_HARNESS_TOOL, WWW_PLAN_TOOL, WWW_STAGE_TOOL } from \"./native-chat\";"
     },
     {
-      "id"       : "src/native-session.ts:934",
+      "id"       : "src/native-session.ts:967",
       "from"     : "src/native-session.ts",
       "to"       : "src/www-activity.ts",
       "mode"     : "runtime",
@@ -2846,10 +2879,10 @@
       "specifier": "./www-activity",
       "line"     : 18,
       "endLine"  : 18,
-      "statement": "import { parseWwwDevelopmentStage } from \"./www-activity\";"
+      "statement": "import { parseWwwDevelopmentStage, parseWwwHarnessAttempt, parseWwwPlanLink, requestedWwwPlanWorkIds } from \"./www-activity\";"
     },
     {
-      "id"       : "src/native-session.ts:993",
+      "id"       : "src/native-session.ts:1093",
       "from"     : "src/native-session.ts",
       "to"       : "src/native-lifecycle.ts",
       "mode"     : "runtime",
@@ -2860,7 +2893,7 @@
       "statement": "import { createNativeLifecycle, createRestoredMessageFilter } from \"./native-lifecycle\";"
     },
     {
-      "id"       : "src/native-session.ts:1082",
+      "id"       : "src/native-session.ts:1182",
       "from"     : "src/native-session.ts",
       "to"       : "src/native-timing.ts",
       "mode"     : "runtime",
@@ -2871,7 +2904,7 @@
       "statement": "import { createNativeTiming } from \"./native-timing\";"
     },
     {
-      "id"       : "src/native-session.ts:1136",
+      "id"       : "src/native-session.ts:1236",
       "from"     : "src/native-session.ts",
       "to"       : "src/activity-sidebar.ts",
       "mode"     : "runtime",
@@ -2882,7 +2915,7 @@
       "statement": "import { parseHooksListResponse, parseSkillsListResponse } from \"./activity-sidebar\";"
     },
     {
-      "id"       : "src/native-session.ts:1222",
+      "id"       : "src/native-session.ts:1322",
       "from"     : "src/native-session.ts",
       "to"       : "src/activity-ledger.ts",
       "mode"     : "type",
@@ -2893,7 +2926,7 @@
       "statement": "import type { ActivityLedger } from \"./activity-ledger\";"
     },
     {
-      "id"       : "src/native-session.ts:1279",
+      "id"       : "src/native-session.ts:1379",
       "from"     : "src/native-session.ts",
       "to"       : "src/projects.ts",
       "mode"     : "runtime",
@@ -2904,7 +2937,7 @@
       "statement": "import { createProjectRegistry } from \"./projects\";"
     },
     {
-      "id"       : "src/native-session.ts:1331",
+      "id"       : "src/native-session.ts:1431",
       "from"     : "src/native-session.ts",
       "to"       : "src/dashboard.ts",
       "mode"     : "runtime",
@@ -2912,10 +2945,10 @@
       "specifier": "./dashboard",
       "line"     : 24,
       "endLine"  : 24,
-      "statement": "import { readDashboard, readDashboardWork } from \"./dashboard\";"
+      "statement": "import { readDashboard, readDashboardPlan, readDashboardWork } from \"./dashboard\";"
     },
     {
-      "id"       : "src/native-session.ts:1395",
+      "id"       : "src/native-session.ts:1514",
       "from"     : "src/native-session.ts",
       "to"       : "src/rpa-standard.ts",
       "mode"     : "runtime",
@@ -2926,7 +2959,7 @@
       "statement": "import { readRpaStandard } from \"./rpa-standard\";"
     },
     {
-      "id"       : "src/native-session.ts:1445",
+      "id"       : "src/native-session.ts:1564",
       "from"     : "src/native-session.ts",
       "to"       : "src/native-activity.ts",
       "mode"     : "runtime",
@@ -2937,7 +2970,7 @@
       "statement": "import { normalizeNativeResources } from \"./native-activity\";"
     },
     {
-      "id"       : "src/native-session.ts:1507",
+      "id"       : "src/native-session.ts:1626",
       "from"     : "src/native-session.ts",
       "to"       : "src/shared.ts",
       "mode"     : "type",
@@ -4097,12 +4130,18 @@
     {
       "file"     : "src/dashboard.ts",
       "line"     : 7,
-      "specifier": "node:fs/promises",
+      "specifier": "node:crypto",
       "reason"   : "external"
     },
     {
       "file"     : "src/dashboard.ts",
       "line"     : 8,
+      "specifier": "node:fs/promises",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/dashboard.ts",
+      "line"     : 9,
       "specifier": "node:path",
       "reason"   : "external"
     },
@@ -4529,7 +4568,8 @@
           "arch.development.reporting.storage",
           "arch.development.routing",
           "arch.tooling.source-policy",
-          "arch.development.records.state"
+          "arch.development.records.state",
+          "arch.development.records.events"
         ]
       },
       {
@@ -4801,10 +4841,12 @@
         "id"         : "arch.development.service",
         "parent"     : "arch.development",
         "title"      : "개발 상태 서비스",
-        "description": "앱에서 개발 작업 상태·완료·검토를 조회하고 workflow core에 연결하는 서비스를 제공한다.",
+        "description": "앱에서 개발 작업 상태·완료·검토 및 현재 대화의 실행 영수증을 조회하고 workflow core에 연결한다.",
         "allowedDependencies": [
           "arch.development.reporting.lifecycle",
           "arch.development.review",
+          "arch.development.records.events",
+          "arch.development.records.state",
           "arch.native.protocol"
         ]
       },
@@ -6608,7 +6650,7 @@
         "line": 2
       }
     ],
-    "digest": "31bf0df0d18021c47d1fae4c5ebd1666bee5571e1a6c7d763b8af7cb61eb7980",
+    "digest": "c7a919db9abf86badf099d00002dc02d74c5514f19e48dbb6658de9bc28db4f9",
     "statecharts": {
       "models": [
         {

@@ -4,7 +4,7 @@
  */
 import { projectNativeActivity, type ActivityTurn, type PlanStep } from "./native-activity";
 import type { AppEvent } from "./shared";
-import { parseWwwDevelopmentStage, type WwwDevelopmentStage } from "./www-activity";
+import { parseWwwDevelopmentStage, parseWwwHarnessAttempt, parseWwwPlanSnapshot, type WwwDevelopmentStage, type WwwPlanSnapshot } from "./www-activity";
 
 export const WWW_AGENT_SKILLS = [
   { id: "www-spec", name: "spec", label: "명세" },
@@ -37,6 +37,10 @@ export interface AgentOverviewProjection {
   plan: PlanStep[];
   activePlanIndex: number | null;
   planState: "provided" | "empty" | "unprovided" | "invalid";
+  nativePlanAt: string | null;
+  planDocument: WwwPlanSnapshot | null;
+  planAmbiguous: boolean;
+  planSteerUncertain: boolean;
   historyTruncated: boolean;
   progress: { text: string; planIndex: number | null; source: "commentary" | "plan-explanation"; at: string } | null;
 }
@@ -67,8 +71,8 @@ function activeIndex(plan: PlanStep[]): number | null {
 
 /** 공개 이벤트의 근거만 사용해 WWW 개요를 만든다. */
 export function projectAgentOverview(events: readonly AppEvent[], threadId: string | null, workspacePath?: string): AgentOverviewProjection {
-  // 선언 자체로 Native 턴을 만들거나 현재 요청을 바꾸지 않는다.
-  const native = projectNativeActivity(events.filter(event => event.method !== "www/developmentStage"), threadId, workspacePath);
+  // WWW 관측 사건은 Native 턴을 만들거나 현재 요청을 바꾸지 않는다.
+  const native = projectNativeActivity(events.filter(event => event.method !== "www/developmentStage" && event.method !== "www/planLinked" && event.method !== "www/planAmbiguous" && event.method !== "www/harnessObserved"), threadId, workspacePath);
   const current = threadId ? native.turns.at(-1) ?? null : null;
   const live = current && !current.historical && !current.endedAt && ["running", "pending", "blocked"].includes(current.status);
   const requested = live ? current.entries.filter((entry) => entry.source === "request" && entry.wwwArtifact?.kind === "skill") : [];
@@ -81,13 +85,19 @@ export function projectAgentOverview(events: readonly AppEvent[], threadId: stri
   const declarations = new Map<SkillId, WwwDevelopmentStage>();
   const stageAttempts = new Map<string, string>();
   const latestStageAttempts = new Map<string, string>();
+  const harnessReceipts = new Map<string, { outcome: "passed" | "failed"; completedAt: string }>();
   const stageWorks = new Set<string>();
   let latestStage: WwwDevelopmentStage | null = null;
   let planState: AgentOverviewProjection["planState"] = "unprovided";
+  let nativePlanAt: string | null = null;
+  let planDocument: WwwPlanSnapshot | null = null;
+  let planAmbiguous = false;
+  let planSteerUncertain = false;
   const agents = new Map<string, Subagent>();
   const boundaries = new Map<string, AgentBoundary>();
   const operations = new Set<string>();
-  const currentOperations = new Map<string, string>();
+  const operationStarts = new Map<string, number>();
+  const currentOperations = new Map<string, { key: string; seq: number }>();
   const activityOperations = new Map<string, string | null>();
   const observationOperations = new Map<string, string | null>();
   const operationScope = (event: AppEvent, turnId: unknown): string => {
@@ -175,21 +185,31 @@ export function projectAgentOverview(events: readonly AppEvent[], threadId: stri
     if ((event.method === "item/started" || event.method === "item/completed") && item.type === "collabAgentToolCall" && text(item.senderThreadId) === threadId) {
       const states = record(item.agentsStates);
       const receivers = Array.isArray(item.receiverThreadIds) ? item.receiverThreadIds.filter((id): id is string => typeof id === "string" && !!id) : [];
+      const scope = operationScope(event, data.turnId);
+      const callId = text(item.id);
+      const callKey = JSON.stringify([scope, callId]);
+      const workOperation = !!callId && ["spawnAgent", "sendInput", "resumeAgent", "followupTask"].includes(text(item.tool));
+      if (workOperation && event.method === "item/started" && !operationStarts.has(callKey)) operationStarts.set(callKey, event.seq);
+      const startSeq = operationStarts.get(callKey);
       for (const id of new Set(receivers)) {
         const state = record(states[id]);
         const existing = agents.get(id);
         const agent: Subagent = existing ?? { id, parentId: threadId, path: null, status: "unknown", message: null, model: null, historical: event.historical === true };
         const explicit = text(state.status);
-        const operationKey = JSON.stringify([operationScope(event, data.turnId), text(item.id), id]);
-        const workOperation = !!text(item.id) && ["spawnAgent", "sendInput", "resumeAgent", "followupTask"].includes(text(item.tool));
+        const operationKey = JSON.stringify([scope, callId, id]);
+        const currentOperation = currentOperations.get(id);
+        // 대상이 완료 시점에 처음 제공되는 호출도 해당 시작의 순서로 귀속한다.
+        if (workOperation && !event.historical && event.method === "item/completed" && currentOperation
+          && currentOperation.key !== operationKey && !operations.has(operationKey)
+          && (startSeq === undefined || startSeq <= currentOperation.seq)) continue;
         // 저장 이력의 새 호출도 앞선 결과를 대체한다. 실행 중 이력은 observeAgent에서 미확인으로 바꾼다.
         const newOperation = workOperation && !operations.has(operationKey) && !transportClosed && (!event.historical || !existing || existing.historical);
         if (workOperation) operations.add(operationKey);
-        if (newOperation || (workOperation && !currentOperations.has(id))) currentOperations.set(id, operationKey);
+        if (newOperation || (workOperation && !currentOperations.has(id))) currentOperations.set(id, { key: operationKey, seq: startSeq ?? event.seq });
         // 이전 호출의 재전송은 현재 후속 작업의 상태 근거가 아니다.
-        if (workOperation && currentOperations.get(id) !== operationKey) continue;
+        if (workOperation && currentOperations.get(id)?.key !== operationKey) continue;
         if (!workOperation) {
-          const operation = currentOperations.get(id) ?? null;
+          const operation = currentOperations.get(id)?.key ?? null;
           // wait 등의 관측 호출은 시작 시점의 작업만 정산할 수 있다.
           if (text(item.id) && event.method === "item/started" && !observationOperations.has(operationKey)) observationOperations.set(operationKey, operation);
           if (operation !== null && (event.method !== "item/completed" || !observationOperations.has(operationKey) || observationOperations.get(operationKey) !== operation)) continue;
@@ -216,7 +236,7 @@ export function projectAgentOverview(events: readonly AppEvent[], threadId: stri
         const kind = text(item.kind);
         const activityId = text(item.id);
         const activityKey = JSON.stringify([operationScope(event, data.turnId), id, activityId]);
-        const operation = currentOperations.get(id) ?? null;
+        const operation = currentOperations.get(id)?.key ?? null;
         if (activityId && !activityOperations.has(activityKey)) activityOperations.set(activityKey, operation);
         // 처음 관측한 호출에 귀속한 activity는 후속 호출을 정산하지 못한다.
         const currentActivity = !!activityId && activityOperations.get(activityKey) === operation;
@@ -226,7 +246,7 @@ export function projectAgentOverview(events: readonly AppEvent[], threadId: stri
         const conclusive = terminal && !ambiguous;
         const status = ambiguous ? "unknown" : kind === "completed" ? "completed" : kind === "interrupted" ? "interrupted"
           : kind === "started" || kind === "interacted" ? "running" : agent.status;
-        if (currentActivity && observeAgent(agent, status, conclusive, event.historical === true)) {
+        if (currentActivity && (operation === null || terminal) && observeAgent(agent, status, conclusive, event.historical === true)) {
           agent.path = text(item.agentPath) || agent.path;
           agent.model = text(item.model) || agent.model;
         }
@@ -278,7 +298,34 @@ export function projectAgentOverview(events: readonly AppEvent[], threadId: stri
       if (stageConnectionState === "unknown") stageConnection = `단계 관측 연결 설정 미확인${missingConfiguration} · 현재 턴의 역할 선언 수신 · 하네스 실행 미연결`;
       continue;
     }
+    if ((event.method === "www/planLinked" || event.method === "www/planAmbiguous") && data.source === "work_document" && !event.historical && !current.historical) {
+      if (stageConnectionState !== "resume_unavailable" && stageConnectionState !== "other_workspace" && stageConnectionState !== "closed") {
+        if (event.method === "www/planAmbiguous") {
+          if (data.reason === "steer_uncertain") planSteerUncertain = true;
+          else planAmbiguous = true;
+        } else {
+          const linked = parseWwwPlanSnapshot(data, event.at);
+          if (linked) {
+            if (planDocument && planDocument.workId !== linked.workId) planAmbiguous = true;
+            planDocument = linked;
+          }
+        }
+      }
+      continue;
+    }
+    if (event.method === "www/harnessObserved" && data.source === "workflow_receipt" && !event.historical && !current.historical) {
+      if (stageConnectionState === "resume_unavailable" || stageConnectionState === "other_workspace" || stageConnectionState === "closed") continue;
+      const attempt = parseWwwHarnessAttempt({ workId: data.workId, phase: data.phase, attemptId: data.attemptId });
+      if (!attempt || (data.outcome !== "passed" && data.outcome !== "failed") || typeof data.completedAt !== "string"
+        || !Number.isFinite(Date.parse(data.completedAt))) continue;
+      const key = JSON.stringify([attempt.workId, attempt.phase, attempt.attemptId]);
+      if (stageAttempts.has(key) && latestStageAttempts.get(attempt.workId) === key && !harnessReceipts.has(key)) {
+        harnessReceipts.set(key, { outcome: data.outcome, completedAt: data.completedAt });
+      }
+      continue;
+    }
     if (event.method === "turn/plan/updated") {
+      nativePlanAt = event.at;
       planState = !Array.isArray(data.plan) ? "invalid" : data.plan.length ? "provided" : "empty";
       plan = Array.isArray(data.plan) ? data.plan.flatMap((value): PlanStep[] => {
         const row = record(value);
@@ -291,7 +338,8 @@ export function projectAgentOverview(events: readonly AppEvent[], threadId: stri
       const key = index === null ? "" : `${index}:${plan[index]?.step}`;
       if (key !== progressKey) { progress = null; messageId = ""; progressEpoch++; }
       progressKey = key;
-      if (index !== null && text(data.explanation)) { progress = { text: text(data.explanation), planIndex: index, source: "plan-explanation", at: event.at }; messageId = ""; progressEpoch++; }
+      const explanation = text(data.explanation);
+      if (explanation) { progress = { text: explanation, planIndex: index, source: "plan-explanation", at: event.at }; messageId = ""; progressEpoch++; }
       continue;
     }
     const index = activeIndex(plan);
@@ -323,25 +371,37 @@ export function projectAgentOverview(events: readonly AppEvent[], threadId: stri
         progress = { text: item.text, planIndex: index, source: "commentary", at: event.at };
         messageId = id;
         messageBodies.add(id);
-      } else if (event.method === "item/completed" && progress?.source === "commentary") {
+      } else if (event.method === "item/completed" && messageId === id && progress?.source === "commentary") {
         progress = null;
         messageId = id;
       }
     }
   }
-  const finalPlan = planState === "invalid" ? [] : current?.plan ?? [];
+  const finalPlan = plan;
   const activePlanIndex = activeIndex(finalPlan);
+  const receiptFor = (stage: WwwDevelopmentStage) => {
+    const key = JSON.stringify([stage.workId, stage.phase, stage.attemptId]);
+    return harnessReceipts.get(key);
+  };
   if (latestStage) {
     selectedSkillId = live && stageWorks.size === 1 && ["selected", "running"].includes(latestStage.status) ? `www-${latestStage.phase}` : null;
-    selectionBasis = stageWorks.size > 1 ? "복수 작업의 역할 선언 · 현재 단계 모호" : "역할의 단계 선언 · 하네스 실행 미연결";
+    const receipt = receiptFor(latestStage);
+    selectionBasis = stageWorks.size > 1 ? "복수 작업의 역할 선언 · 현재 단계 모호"
+      : receipt ? "역할의 단계 선언 · 하네스 실행 확인" : "역할의 단계 선언 · 하네스 실행 미연결";
+    if (receipt && (stageConnectionState === "available" || stageConnectionState === "unknown")) {
+      stageConnection = "같은 턴의 공식 하네스 영수증 확인 · 업무 수용 미확인";
+    }
   }
   const skills = WWW_AGENT_SKILLS.map((skill) => {
     const observations = current?.entries.filter((entry) => entry.wwwArtifact?.id === skill.id && (entry.source === "file_read" || entry.source === "command_reference")) ?? [];
     const declaration = declarations.get(skill.id) ?? null;
     const reading = observations.some((entry) => entry.source === "file_read") ? "구조화된 문서 읽기 관측 · 적용 미확인" : observations.length ? "명령의 문서 참조 · 읽기·적용 미확인" : null;
-    const declared = declaration ? `역할의 단계 선언 · ${declaration.workId} · 시도 ${declaration.attemptId} · 하네스 실행 미연결 · 업무 수용 미확인` : null;
+    const receipt = declaration ? receiptFor(declaration) : undefined;
+    const execution = receipt ? `하네스 실행 확인 · ${receipt.outcome === "passed" ? "성공" : "실패"} · ${receipt.completedAt}` : "하네스 실행 미연결";
+    const declared = declaration ? `역할의 단계 선언 · ${declaration.workId} · 시도 ${declaration.attemptId} · ${execution} · 업무 수용 미확인` : null;
     const basis = declared ? [declared, reading].filter(Boolean).join(" · ") : skill.id === selectedSkillId ? selectionBasis : reading;
     return { ...skill, observed: observations.length > 0, selected: skill.id === selectedSkillId, basis, declaration };
   });
-  return { threadId, current, selectedSkillId, selectionBasis, stageConnection, skills, subagents: [...agents.values()], plan: finalPlan, activePlanIndex, planState, historyTruncated: native.historyTruncated, progress };
+  if (planDocument && (stageWorks.size > 1 || (stageWorks.size === 1 && !stageWorks.has(planDocument.workId)))) planAmbiguous = true;
+  return { threadId, current, selectedSkillId, selectionBasis, stageConnection, skills, subagents: [...agents.values()], plan: finalPlan, activePlanIndex, planState, nativePlanAt, planDocument: planAmbiguous || planSteerUncertain ? null : planDocument, planAmbiguous, planSteerUncertain, historyTruncated: native.historyTruncated, progress };
 }

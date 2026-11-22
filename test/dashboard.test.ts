@@ -5,11 +5,11 @@
 import { expect, test } from "bun:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import * as fs from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { DASHBOARD_LIMITS, readDashboard, readDashboardWork } from "../src/dashboard";
+import { dirname, join } from "node:path";
+import { DASHBOARD_LIMITS, readDashboard, readDashboardPlan, readDashboardWork } from "../src/dashboard";
 import { DashboardView, WorkDetailContent } from "../src/dashboard-view";
 import type { DashboardProject, DashboardSnapshot, WorkStatus } from "../src/shared";
 
@@ -34,6 +34,30 @@ async function fixture(run: (project: DashboardProject, base: string, save: (fol
   };
   try { await run(project, base, save); } finally { await fs.rm(base, { recursive: true, force: true }); }
 }
+
+test("명시한 작업의 계획 버전만 읽고 변경·부재·읽기 실패를 구분한다", async () => {
+  await fixture(async (project, base, save) => {
+    const work = record();
+    const file = await save("001-plan", work);
+    const tasks = join(dirname(file), "tasks.md");
+    const content = "# 이번 계획\n- [ ] UI 확인\n";
+    const sha = createHash("sha256").update(content).digest("hex");
+    const read = () => readDashboardPlan(project, work.id, sha);
+    expect(await read()).toMatchObject({ status: "missing", content: null });
+    await fs.writeFile(tasks, content);
+    expect(await read()).toMatchObject({ workId: work.id, status: "available", content, sha256: sha });
+    await fs.writeFile(tasks, content + "다음 버전");
+    expect(await read()).toMatchObject({ status: "changed", content: null });
+    await fs.writeFile(tasks, Buffer.from([0xff]));
+    expect(await read()).toMatchObject({ status: "failed", content: null });
+    await fs.rm(tasks);
+    const outside = join(base, "외부.md");
+    await fs.writeFile(outside, content);
+    await fs.symlink(outside, tasks);
+    expect(await read()).toMatchObject({ status: "failed", content: null });
+    await expect(readDashboardPlan(project, record().id, sha)).rejects.toThrow("계획 작업 UUID");
+  });
+});
 
 test("원본 업무 상태·UUID·차단 이유와 필수 기준을 읽고 파일을 수정하지 않는다", async () => {
   await fixture(async (project, _base, save) => {
@@ -152,6 +176,26 @@ test("단일 크기·깊이·파일수 한도를 넘으면 완전 수집이라�
     expect(limited.coverage).toBe("partial");
     expect(limited.cards).toHaveLength(DASHBOARD_LIMITS.files);
     expect(limited.issues.some((entry) => entry.code === "file_count_limit")).toBe(true);
+  });
+});
+
+test("원장 합계가 32MiB를 넘는 프로젝트에서도 작업 계획을 찾는다", async () => {
+  await fixture(async (project, _base, save) => {
+    const target = record("in_progress", { history: "x".repeat(5 * 1024 * 1024) });
+    const file = await save("target", target);
+    const history = "x".repeat(3_750_000);
+    for (let index = 0; index < 9; index++) {
+      await save(`history-${index}`, record("done", { history }));
+    }
+    const content = "# 현재 계획\n";
+    await fs.writeFile(join(dirname(file), "tasks.md"), content);
+    const hash = createHash("sha256").update(content).digest("hex");
+    const board = await readDashboard([project]);
+    expect(board.projects[0]).toMatchObject({ coverage: "complete", issues: [] });
+    expect(board.projects[0]?.cards).toHaveLength(10);
+    expect(await readDashboardPlan(project, target.id, hash)).toMatchObject({
+      workId: target.id, status: "available", content,
+    });
   });
 });
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // 실제 Native 대신 동결된 subprocess에 합성 활동 알림을 덧붙이는 검증 fixture다.
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { createInterface } from "node:readline";
 import { fileURLToPath } from "node:url";
 
@@ -45,15 +45,19 @@ const notify = (method: string, params: Record<string, unknown>): void => send({
 // 별도 관측 시나리오: main의 등록·검증·응답 왕복을 검사한다. 실제 모델은 호출하지 않는다.
 const stageProbe = process.env.WWW_STAGE_PROBE === "1";
 const stageThread = `stage-thread-${process.pid}`;
+const stageRestoredThread = "stage-probe-restored";
 const stageWork = process.env.WWW_STAGE_WORK_ID ?? "work-36d312bc-a767-4e3e-a581-01898b35f75f";
 let stageRegistered = false;
+let planRegistered = false;
 let stageTurn = "";
 let stagePrompt = "";
 let stageCalls: Record<string, unknown>[] = [];
 let stageCallIndex = 0;
+let stageCall: Record<string, unknown> | undefined;
+let harnessEventId: string | undefined;
 function nextStageCall(): void {
-  const call = stageCalls.shift();
-  if (call) send({ jsonrpc: "2.0", id: `stage-request-${++stageCallIndex}`, method: "item/tool/call", params: call });
+  stageCall = stageCalls.shift();
+  if (stageCall) send({ jsonrpc: "2.0", id: `stage-request-${++stageCallIndex}`, method: "item/tool/call", params: stageCall });
   else if (!stagePrompt.includes("유지")) notify("turn/completed", { threadId: stageThread, turn: { id: stageTurn, status: "completed" } });
 }
 function stageMessage(message: Record<string, unknown>): void {
@@ -64,12 +68,24 @@ function stageMessage(message: Record<string, unknown>): void {
   } else if (message.method === "thread/start") {
     if (typeof params.cwd === "string") catalogCwd = params.cwd;
     stageRegistered = Array.isArray(params.dynamicTools) && params.dynamicTools.some(tool => object(tool) && tool.name === "www_development_stage");
+    planRegistered = Array.isArray(params.dynamicTools) && params.dynamicTools.some(tool => object(tool) && tool.name === "www_link_plan");
     send({ jsonrpc: "2.0", id: message.id, result: { thread: { id: stageThread }, model: "fixture" } });
     notify("fixture/stageRegistered", { threadId: stageThread, registered: stageRegistered });
+  } else if (message.method === "thread/list") {
+    send({ jsonrpc: "2.0", id: message.id, result: { data: [{
+      id: stageRestoredThread, cwd: catalogCwd, originator: "www", source: "vscode", status: { type: "idle" },
+      name: "복원 관측 표본", preview: "이전 대화의 공개 설명", updatedAt: Math.floor(Date.now() / 1000),
+    }], nextCursor: null } });
   } else if (message.method === "thread/read" || message.method === "thread/resume") {
     stageRegistered = false;
+    planRegistered = false;
     send({ jsonrpc: "2.0", id: message.id, result: { thread: { id: params.threadId, cwd: catalogCwd, originator: "www", status: { type: "idle" }, turns: [] }, model: "fixture" } });
-  } else if (message.method === "thread/turns/list") send({ jsonrpc: "2.0", id: message.id, result: { data: [], nextCursor: null } });
+  } else if (message.method === "thread/turns/list") {
+    const data = params.threadId === stageRestoredThread ? [{
+      id: "stage-probe-restored-turn", status: "completed", items: [{ id: "restored-public-commentary", type: "agentMessage", phase: "commentary", text: "이전 대화의 공개 설명" }],
+    }] : [];
+    send({ jsonrpc: "2.0", id: message.id, result: { data, nextCursor: null } });
+  }
   else if (message.method === "turn/start") {
     stageTurn = `stage-turn-${++turns}`;
     stagePrompt = Array.isArray(params.input) && object(params.input[0]) ? String(params.input[0].text) : "";
@@ -83,12 +99,66 @@ function stageMessage(message: Record<string, unknown>): void {
         call("late-running"), call("unknown-work", { ...input, workId: "work-aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa" }),
         call("extra-field", { ...input, reasoning: "PRIVATE_REASONING_DO_NOT_RENDER" }), call("foreign-turn", input, { turnId: "other-turn" }),
         call("foreign-thread", input, { threadId: "other-thread" }), call("wrong-namespace", input, { namespace: "other" })];
+    if (planRegistered && stagePrompt.includes("계획 문서 연결")) {
+      const args = { workId: stageWork, sha256: process.env.WWW_PLAN_PROBE_SHA256 };
+      const linked = call("plan-link", args, { tool: "www_link_plan" });
+      const foreignWork = call("foreign-work-plan", { workId: process.env.WWW_PLAN_PROBE_OTHER_WORK, sha256: process.env.WWW_PLAN_PROBE_OTHER_SHA256 }, { tool: "www_link_plan" });
+      stageCalls.push({ ...linked, callId: "foreign-plan", turnId: "other-turn" }, foreignWork, linked, linked);
+      notify("www/planLinked", { threadId: params.threadId, turnId: stageTurn, source: "work_document", ...args, path: "docs/work/Chat/forged/tasks.md", status: "available", content: "FORGED_PLAN" });
+      notify("turn/plan/updated", { threadId: params.threadId, turnId: stageTurn, plan: [{ step: "Native 계획 항목", status: "inProgress" }] });
+    }
+    if (planRegistered && stagePrompt.includes("없는 작업의 계획 확인")) {
+      const workId = stagePrompt.split("\n", 1)[0]?.split(" ")[1];
+      stageCalls = [call("unavailable-plan", { workId, sha256: process.env.WWW_PLAN_PROBE_SHA256 }, { tool: "www_link_plan" })];
+    }
+    if (process.env.WWW_HARNESS_PROBE_OPTIONS) {
+      harnessEventId = undefined;
+      const attempt = { workId: stageWork, phase: "verify", attemptId: "harness-sample" };
+      const observe = (id: string, overrides = {}) => call(id, attempt, { tool: "www_observe_harness", ...overrides });
+      stageCalls = [
+        call("harness-start", { ...attempt, status: "running" }),
+        observe("before-process"),
+        observe("outside-turn", { turnId: "another-turn" }),
+        observe("confirm-process"),
+        observe("repeat-process"),
+      ];
+      notify("www/harnessObserved", { threadId: params.threadId, turnId: stageTurn, source: "workflow_receipt", ...attempt, outcome: "failed", completedAt: new Date().toISOString() });
+    }
     // 동명 알림을 main 검증 사건으로 오인해서는 안 된다.
     notify("www/developmentStage", { threadId: params.threadId, turnId: stageTurn, source: "role_declaration", ...input, phase: "verify" });
     if (stagePrompt.includes("종료지연")) notify("turn/completed", { threadId: params.threadId, turn: { id: stageTurn, status: "completed" } });
     nextStageCall();
+  } else if (message.method === "turn/steer") {
+    const input = Array.isArray(params.input) && object(params.input[0]) ? String(params.input[0].text) : "";
+    if (input.includes("합성 추가 지시 거절")) {
+      send({ jsonrpc: "2.0", id: message.id, error: { code: -32603, message: "합성 추가 지시 거절" } });
+      return;
+    }
+    const steerTurn = input.includes("합성 추가 지시 접수 미확인") ? "unconfirmed-turn" : stageTurn;
+    send({ jsonrpc: "2.0", id: message.id, result: { turnId: steerTurn } });
+    if (input === "관측 검증 이력 절단") {
+      for (let index = 0; index < 2_050; index++) notify("fixture/stageOverflow", { threadId: params.threadId, turnId: stageTurn, index });
+    }
+    if (planRegistered && input.startsWith("/plan ") && !input.includes("도구 미호출 표본")) {
+      const otherWorkId = process.env.WWW_PLAN_PROBE_OTHER_WORK;
+      const foreign = otherWorkId !== undefined && input.includes(otherWorkId);
+      const workId = foreign ? otherWorkId : stageWork;
+      const sha256 = foreign ? process.env.WWW_PLAN_PROBE_OTHER_SHA256 : process.env.WWW_PLAN_PROBE_SHA256;
+      stageCalls.push({ threadId: params.threadId, turnId: stageTurn, callId: params.clientUserMessageId, tool: "www_link_plan", arguments: { workId, sha256 } });
+      nextStageCall();
+    }
   } else if (!message.method && typeof message.id === "string" && message.id.startsWith("stage-request-")) {
-    notify("fixture/stageResponse", { threadId: stageThread, turnId: stageTurn, success: object(message.result) && message.result.success === true });
+    const result = object(message.result) ? message.result : {};
+    const callId = stageCall?.callId;
+    notify("fixture/stageResponse", { threadId: stageThread, turnId: stageTurn, success: result.success === true, callId });
+    if (callId === "harness-start") harnessEventId = JSON.stringify(result.contentItems).match(/www-chat-[0-9a-f-]{36}/)?.[0];
+    if (callId === "before-process" && harnessEventId && process.env.WWW_HARNESS_PROBE_OPTIONS && process.env.WWW_HARNESS_PROBE_ENTRY) {
+      const options = JSON.parse(process.env.WWW_HARNESS_PROBE_OPTIONS);
+      const args = [process.env.WWW_HARNESS_PROBE_ENTRY, JSON.stringify({ ...options, eventId: harnessEventId })];
+      const first = spawnSync(process.execPath, args, { encoding: "utf8", maxBuffer: 8 * 1024 * 1024 });
+      const second = spawnSync(process.execPath, args, { encoding: "utf8", maxBuffer: 8 * 1024 * 1024 });
+      notify("fixture/harnessProcess", { threadId: stageThread, turnId: stageTurn, exitCode: first.status, duplicateExit: second.status, duplicateRejected: second.stderr?.includes("이미 사용한 대화 단계 실행 ID") === true });
+    }
     nextStageCall();
   } else if (message.method === "turn/interrupt") {
     send({ jsonrpc: "2.0", id: message.id, result: {} });

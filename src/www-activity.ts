@@ -16,12 +16,58 @@ export interface WwwDevelopmentStage {
   status: "selected" | "running" | "completed" | "failed" | "interrupted";
   attemptId: string;
 }
+export type WwwHarnessAttempt = Omit<WwwDevelopmentStage, "status">;
+
+export function parseWwwHarnessAttempt(value: unknown): WwwHarnessAttempt | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const input = Object.fromEntries(Object.entries(value));
+  if (Object.keys(input).length !== 3 || "status" in input) return null;
+  const stage = parseWwwDevelopmentStage({ ...input, status: "running" });
+  if (!stage) return null;
+  return { workId: stage.workId, phase: stage.phase, attemptId: stage.attemptId };
+}
+
+const workIdPattern = /^work-[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+const sha256Pattern = /^[0-9a-f]{64}$/;
+
+export function requestedWwwPlanWorkIds(prompt: string): string[] {
+  const firstLine = prompt.trim().split(/\r?\n/, 1)[0] ?? "";
+  const [command, ...ids] = firstLine.trim().split(/[ \t]+/);
+  return command === "/plan" && ids.every(id => workIdPattern.test(id)) ? ids : [];
+}
+
+export function parseWwwPlanLink(value: unknown): { workId: string; sha256: string } | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const { workId, sha256, ...rest } = Object.fromEntries(Object.entries(value));
+  if (Object.keys(rest).length || typeof workId !== "string" || !workIdPattern.test(workId)
+    || typeof sha256 !== "string" || !sha256Pattern.test(sha256)) return null;
+  return { workId, sha256 };
+}
+
+export interface WwwPlanSnapshot {
+  workId: string;
+  path: string | null;
+  sha256: string;
+  status: "available" | "missing" | "failed" | "changed";
+  content: string | null;
+  at: string;
+}
+
+export function parseWwwPlanSnapshot(value: Record<string, unknown>, at: string): WwwPlanSnapshot | null {
+  const { workId, sha256, path, status, content } = value;
+  const link = parseWwwPlanLink({ workId, sha256 });
+  if (!link || (path !== null && typeof path !== "string")) return null;
+  if (path === null ? status !== "failed" : !path.startsWith("docs/work/") || !path.endsWith("/tasks.md")) return null;
+  if (status !== "available" && status !== "missing" && status !== "failed" && status !== "changed") return null;
+  if (status === "available" ? typeof content !== "string" : content !== null) return null;
+  return { ...link, path, status, content: typeof content === "string" ? content : null, at };
+}
 
 export function parseWwwDevelopmentStage(value: unknown): WwwDevelopmentStage | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const row = Object.fromEntries(Object.entries(value));
   if (Object.keys(row).length !== 4 || Object.keys(row).some(key => !["workId", "phase", "status", "attemptId"].includes(key))) return null;
-  if (typeof row.workId !== "string" || !/^work-[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(row.workId)) return null;
+  if (typeof row.workId !== "string" || !workIdPattern.test(row.workId)) return null;
   if (row.phase !== "spec" && row.phase !== "design" && row.phase !== "build" && row.phase !== "diagnose" && row.phase !== "verify") return null;
   if (row.status !== "selected" && row.status !== "running" && row.status !== "completed" && row.status !== "failed" && row.status !== "interrupted") return null;
   if (typeof row.attemptId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$/.test(row.attemptId)) return null;
