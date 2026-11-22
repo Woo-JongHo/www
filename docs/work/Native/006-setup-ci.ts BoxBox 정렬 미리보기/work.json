@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-92333440-aa30-41bf-b631-fe6e16e54116",
+  "title"        : "setup-ci.ts BoxBox 정렬 미리보기",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "db3b525cf4c36f5e12755504a88bb7e2adc7e57d73c68b09a0739e0cf68bcb82",
+    "threadId": "01a2025a-5d0d-7083-a9f9-e522ad2a59b5",
+    "turnId"  : "01a2025e-aab1-7453-8e5f-6da9e09cfff9",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"pwd && git status --short --branch && '~/.hermes/node/bin/node' '~/.local/share/boxbox/codex/0.2.9/plugin/scripts/boxbox.mjs' align --file scripts/setup-ci.ts --dry-run --json\"",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": false
+  }
+}

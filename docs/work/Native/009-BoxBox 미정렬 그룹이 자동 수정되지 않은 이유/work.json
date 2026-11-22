@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-370bfe4e-538d-46a0-8922-f6e43b041003",
+  "title"        : "BoxBox 미정렬 그룹이 자동 수정되지 않은 이유",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "a2c346351efbadba5d24bb38f52730a17cfe82daa62be989617ea2fb3b514c4b",
+    "threadId": "01a2025a-5d0d-7083-a9f9-e522ad2a59b5",
+    "turnId"  : "01a20267-6628-7483-a4fe-7a0b1e6cdc37",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"python3 - $TMPDIR/www-boxbox-plan-9k0grn08.json <<'PY'\nimport json,sys,pathlib\nd=json.load(open(sys.argv[1]))\nfor row in d['rows']:\n    if row['file'] not in ('src/projection.ts','src/native-session.ts','scripts/setup-ci.ts','src/shared.ts'): continue\n    result=row['result']; lines=pathlib.Path(row['file']).read_text().splitlines()\n    print(row['file'])\n    groups=result['results'][0]['groups']\n    for state in ('FIXABLE','REFUSE'):\n        g=next((g for g in groups if g['state']==state and g['endLine']-g['startLine']<=5),None)\n        if not g: continue\n        print(g)\n        for fact in result['formatReadiness'].get('approvalFacts',[]):\n            if any(loc['startLine']==g['startLine'] for loc in fact['locations']): print({k:fact.get(k) for k in ('key','status','reasons')})\n        for i in range(g['startLine'],g['endLine']+1): print(i,lines[i-1][:250])\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}

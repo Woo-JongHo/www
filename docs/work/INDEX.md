@@ -366,3 +366,23 @@ Native와의 대화에서 실행 흐름을 통제하고 진행·근거·승인·
 
 - [명세](Native/004-%EA%B4%80%EC%B8%A1%20%EB%88%84%EB%9D%BD%20%EB%B2%84%EA%B7%B8%20%EB%AA%85%EC%84%B8%EC%99%80%20%EC%9D%B4%EC%8A%88%20%EB%93%B1%EB%A1%9D/spec.md)
 - [작업 레코드](Native/004-%EA%B4%80%EC%B8%A1%20%EB%88%84%EB%9D%BD%20%EB%B2%84%EA%B7%B8%20%EB%AA%85%EC%84%B8%EC%99%80%20%EC%9D%B4%EC%8A%88%20%EB%93%B1%EB%A1%9D/work.json)
+
+### BoxBox 첫 적용 범위 사전 점검
+
+- [명세](Native/005-BoxBox%20%EC%B2%AB%20%EC%A0%81%EC%9A%A9%20%EB%B2%94%EC%9C%84%20%EC%82%AC%EC%A0%84%20%EC%A0%90%EA%B2%80/spec.md)
+- [작업 레코드](Native/005-BoxBox%20%EC%B2%AB%20%EC%A0%81%EC%9A%A9%20%EB%B2%94%EC%9C%84%20%EC%82%AC%EC%A0%84%20%EC%A0%90%EA%B2%80/work.json)
+
+### setup-ci.ts BoxBox 정렬 미리보기
+
+- [명세](Native/006-setup-ci.ts%20BoxBox%20%EC%A0%95%EB%A0%AC%20%EB%AF%B8%EB%A6%AC%EB%B3%B4%EA%B8%B0/spec.md)
+- [작업 레코드](Native/006-setup-ci.ts%20BoxBox%20%EC%A0%95%EB%A0%AC%20%EB%AF%B8%EB%A6%AC%EB%B3%B4%EA%B8%B0/work.json)
+
+### 전체 소스 파악 BoxBox 검사 결과와 남은 범위
+
+- [명세](Native/007-%EC%A0%84%EC%B2%B4%20%EC%86%8C%EC%8A%A4%20%ED%8C%8C%EC%95%85%20BoxBox%20%EA%B2%80%EC%82%AC%20%EA%B2%B0%EA%B3%BC%EC%99%80%20%EB%82%A8%EC%9D%80%20%EB%B2%94%EC%9C%84/spec.md)
+- [작업 레코드](Native/007-%EC%A0%84%EC%B2%B4%20%EC%86%8C%EC%8A%A4%20%ED%8C%8C%EC%95%85%20BoxBox%20%EA%B2%80%EC%82%AC%20%EA%B2%B0%EA%B3%BC%EC%99%80%20%EB%82%A8%EC%9D%80%20%EB%B2%94%EC%9C%84/work.json)
+
+### BoxBox 미정렬 그룹이 자동 수정되지 않은 이유
+
+- [명세](Native/009-BoxBox%20%EB%AF%B8%EC%A0%95%EB%A0%AC%20%EA%B7%B8%EB%A3%B9%EC%9D%B4%20%EC%9E%90%EB%8F%99%20%EC%88%98%EC%A0%95%EB%90%98%EC%A7%80%20%EC%95%8A%EC%9D%80%20%EC%9D%B4%EC%9C%A0/spec.md)
+- [작업 레코드](Native/009-BoxBox%20%EB%AF%B8%EC%A0%95%EB%A0%AC%20%EA%B7%B8%EB%A3%B9%EC%9D%B4%20%EC%9E%90%EB%8F%99%20%EC%88%98%EC%A0%95%EB%90%98%EC%A7%80%20%EC%95%8A%EC%9D%80%20%EC%9D%B4%EC%9C%A0/work.json)

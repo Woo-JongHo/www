@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-1c424432-821f-4c59-82fe-339390208895",
+  "title"        : "BoxBox 첫 적용 범위 사전 점검",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "103caa5fe1fff9329ca0643a595c0b617a495e882f02d72fe42b5db22ab05083",
+    "threadId": "01a2025a-5d0d-7083-a9f9-e522ad2a59b5",
+    "turnId"  : "01a2025a-5f80-7212-ac75-880c9988a8b0",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc 'cat ~/.codex/plugins/cache/boxbox-plugins/boxbox/0.2.9/skills/boxbox/SKILL.md'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"cat AGENTS.md agents/www/AGENT.md && rg -n 'BoxBox|boxbox' docs/DEVELOPMENT.md docs/skills/WORKFLOW.md\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'pwd && git status --short --branch && git diff --stat && git diff --cached --stat'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"git diff -- scripts/setup-ci.ts .github/workflows/ci.yml .github/workflows/release.yml && sed -n '70,79p' docs/DEVELOPMENT.md && rg -n 'BoxBox' docs/work/INDEX.md && rg -n '명시|스킬' docs/skills/WORKFLOW.md | head -25\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"'~/.hermes/node/bin/node' '~/.local/share/boxbox/codex/0.2.9/plugin/scripts/boxbox.mjs' mode --json\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"'~/.hermes/node/bin/node' '~/.local/share/boxbox/codex/0.2.9/plugin/scripts/boxbox.mjs' check --source --file scripts/setup-ci.ts --file .github/workflows/ci.yml --file .github/workflows/release.yml --json\"",
+        "status"  : "failed",
+        "exitCode": 1
+      },
+      {
+        "command" : "/bin/zsh -lc \"'~/.hermes/node/bin/node' '~/.local/share/boxbox/codex/0.2.9/plugin/scripts/boxbox.mjs' guide --file scripts/setup-ci.ts --json\"",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": false
+  }
+}

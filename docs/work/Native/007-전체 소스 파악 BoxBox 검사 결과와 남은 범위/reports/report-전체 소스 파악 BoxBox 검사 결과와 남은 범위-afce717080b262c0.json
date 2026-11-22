@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-16fd0308-aa5a-4c40-bc31-432adbb4b23c",
+  "title"        : "전체 소스 파악 BoxBox 검사 결과와 남은 범위",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-48f2cf65-ffe7-4914-8f11-a7850cc6a1ab",
+      "workId"        : "work-16fd0308-aa5a-4c40-bc31-432adbb4b23c",
+      "title"         : "전체 소스 파악 BoxBox 검사 결과와 남은 범위",
+      "summary"       : "Native 답변은 저장소 구조를 살피고 TypeScript·TSX·JSON·YAML 433개 파일을 BoxBox로 읽기 전용 검사해 모두 구문이 유효했다고 보고했습니다. 다만 파일별 역할과 실행 흐름을 파악하는 전체 소스 검토는 완료하지 않았습니다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-22T08:31:12.763Z",
+      "event"         : "native_completed",
+      "workRecordHash": "bbb4d0ef399e343b46eab0fc28e61f3bd2218f77dd24c595faab7e146faf32b6",
+      "sourceDigest"  : null,
+      "criteriaDigest": null,
+      "semanticHash"  : "93a8972d0e2d9d2c13a9c16cc6726b28e6a12149b879a32fae31d752b872bc0a",
+      "narrative": {
+        "summary": "Native 답변은 저장소 구조를 살피고 TypeScript·TSX·JSON·YAML 433개 파일을 BoxBox로 읽기 전용 검사해 모두 구문이 유효했다고 보고했습니다. 다만 파일별 역할과 실행 흐름을 파악하는 전체 소스 검토는 완료하지 않았습니다.",
+        "before" : "사용자는 일부 파일의 정렬 여부가 아니라 저장소 전체 소스가 어떻게 구성되고 동작하는지 파악해야 한다고 짚었습니다. 요청 전 어디까지 소스를 이해했는지는 제공 자료에서 확인되지 않습니다.",
+        "after"  : "사용자는 저장소 구조 조사와 433개 파일의 구문·정렬 검사 결과를 받았습니다. 전체 소스의 역할과 실행 흐름을 설명하는 결과는 받지 못했습니다.",
+        "changes": [
+          "소스 수정이나 정렬 적용 없이 저장소 구조와 BoxBox 검사 결과를 정리했습니다.",
+          "`src/`는 47개 파일에서 미정렬 113그룹과 승인 규칙 적용 0그룹, `scripts/`는 50개에서 127그룹과 35그룹, `test/`는 69개에서 680그룹과 124그룹이 보고됐습니다."
+        ],
+        "decisions": [
+          "검사기가 감지한 미정렬 그룹과 현재 승인 규칙이 적용되는 그룹을 구분해 보고했습니다. 미정렬 그룹이 많은 제품 파일도 승인 규칙이 적용되지 않아 자동 정렬 대상으로 제시하지 않았습니다."
+        ],
+        "limitations": [
+          "입력 자료가 잘려 일부 명령 전문과 출력이 제공되지 않았습니다. 구문 및 그룹 수치는 Native 답변의 보고이며, 이 보고서에서 재실행하거나 독립적으로 확인하지 않았습니다.",
+          "CSS·HTML은 BoxBox 검사 범위 밖이었습니다. 파일별 실행 흐름과 줄 단위 가독성은 검토하지 않았고, 런타임 동작이나 테스트 통과도 확인되지 않았습니다."
+        ],
+        "next": [
+          "제품 진입점에서 주요 모듈이 어떻게 연결되는지 추적하고, 개발 스크립트·테스트·BoxBox 검사 범위 밖의 소스까지 포함해 파일의 역할과 빠진 범위를 정리합니다."
+        ],
+        "reader": {
+          "story": "사용자는 일부 파일의 정렬 상태를 확인하는 데 그치지 말고 저장소 전체 소스를 파악해야 한다고 지적했습니다. Native는 저장소 구조를 살펴보고 433개 파일의 BoxBox 구문 검사와 영역별 정렬 후보 집계를 보고했습니다. 이 결과로 기계 검사의 범위와 후보 분포는 알 수 있지만, CSS·HTML을 포함한 전체 소스의 동작을 이해했다고 볼 수는 없습니다. 다음 단계는 진입점부터 주요 모듈의 호출 관계를 추적하고, 검토 범위와 제외 이유를 명시하는 것입니다.",
+          "requirements": [
+            {
+              "requirement": "저장소 전체 소스를 파악한다.",
+              "result"     : "저장소 구조와 지원 형식 433개 파일의 기계 검사까지 수행했다고 보고했습니다. 전체 소스의 파일별 역할과 실행 흐름 파악은 남았습니다.",
+              "evidence"   : "아키텍처 문서, 파일 목록, BoxBox 검사 명령 기록과 Native 답변의 영역별 결과.",
+              "limitations": "CSS·HTML은 BoxBox에서 제외됐으며, 파일별 실행 흐름과 줄 단위 가독성 검토는 하지 않았습니다."
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "BoxBox 대상 파일의 구문과 정렬 그룹",
+              "method"     : "Native 작업에서 Git 목록을 바탕으로 대상 파일을 모으고 BoxBox `check --source --json`을 읽기 전용으로 실행했습니다.",
+              "expected"   : "대상 파일의 구문 상태와 미정렬 그룹을 확인하고, 승인 규칙이 적용되는 그룹을 별도로 집계합니다.",
+              "observed"   : "Native 답변은 433개 모두 구문이 유효했다고 보고했습니다. 제공된 명령 기록의 종료 코드는 0입니다.",
+              "limitations": "일부 명령 전문과 출력이 잘려 파일별 검사 결과는 독립적으로 확인할 수 없습니다. 종료 코드 0은 전체 소스 파악이나 런타임 검증을 뜻하지 않습니다."
+            }
+          ],
+          "decisions": [
+            {
+              "problem": "미정렬로 감지된 그룹을 자동 정렬 대상으로 볼 수 있는가?",
+              "basis": "`src/`에서 미정렬 113그룹이 검출됐지만 현재 승인 규칙이 적용되는 그룹은 0개로 보고됐습니다.",
+              "alternatives": [],
+              "choice": "미정렬 그룹과 승인 규칙 적용 그룹을 구분하고 정렬은 적용하지 않았습니다.",
+              "tradeoff": "승인 범위를 넘지 않았지만, 감지된 그룹을 실제로 바꾸는 것이 가독성에 도움이 되는지는 별도 검토가 필요합니다."
+            }
+          ],
+          "references": [
+            {
+              "path": "docs/ARCHITECTURE.md",
+              "purpose": "저장소 구조 조사의 출발점입니다."
+            },
+            {
+              "path": "docs/work/Native/005-BoxBox 첫 적용 범위 사전 점검/spec.md",
+              "purpose": "BoxBox 적용 범위를 확인하기 위해 Native가 조회한 작업 명세입니다."
+            },
+            {
+              "path": "src/projection.ts",
+              "purpose": "제품 코드에서 미정렬 그룹이 가장 많이 보고된 파일입니다."
+            },
+            {
+              "path": "src/agent-overview.ts",
+              "purpose": "미정렬 그룹이 다수 감지됐지만 현재 규칙으로 자동 정렬할 수 없다고 보고된 제품 파일입니다."
+            },
+            {
+              "path": "scripts/workflow/reports.ts",
+              "purpose": "승인 규칙 적용 후보가 28그룹으로 보고된 개발 도구 파일입니다."
+            },
+            {
+              "path": "test/native-activity.test.ts",
+              "purpose": "승인 규칙 적용 후보가 51그룹으로 보고된 테스트 파일입니다."
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "저장소 진입점과 주요 모듈의 연결을 추적하고, 개발 도구·테스트·BoxBox 비대상 소스의 역할까지 정리합니다.",
+              "owner"   : null,
+              "doneWhen": "주요 실행 흐름을 관련 파일 경로로 설명할 수 있고, 조사하지 못한 영역과 그 이유가 구분돼 있습니다.",
+              "impact"  : "형식 검사 결과와 실제 소스 이해를 구분하고, 가독성 검토나 정렬 작업의 우선순위를 정할 근거가 됩니다."
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+        "criteria": [
+          {
+            "id"         : "AC-NATIVE",
+            "description": "보고서 생성과 업무 수용을 구분한다",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Native/007-전체 소스 파악 BoxBox 검사 결과와 남은 범위/work.json",
+        "workRecordHash": "bbb4d0ef399e343b46eab0fc28e61f3bd2218f77dd24c595faab7e146faf32b6",
+        "sourceDigest"  : null,
+        "criteriaDigest": null
+      }
+    }
+  ]
+}

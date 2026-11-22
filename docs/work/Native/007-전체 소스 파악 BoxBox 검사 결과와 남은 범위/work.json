@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-16fd0308-aa5a-4c40-bc31-432adbb4b23c",
+  "title"        : "전체 소스 파악 BoxBox 검사 결과와 남은 범위",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "0220543f19e589957fb110cd244081fbfb64f145f3aceefac5d4c94ff72b1ce9",
+    "threadId": "01a2025a-5d0d-7083-a9f9-e522ad2a59b5",
+    "turnId"  : "01a2025f-0142-71c1-8f5c-2467bc22b33d",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"ls -a && sed -n '1,145p' docs/ARCHITECTURE.md && rg -n '\\\"(scripts|main|name)\\\"|check:architecture' package.json\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"pwd && git status --short --branch && git ls-files -z | python3 -c 'import sys,collections,pathlib; p=sys.stdin.buffer.read().decode().split(chr(0)); c=collections.Counter((x.split(\\\"/\\\")[0] if \\\"/\\\" in x else \\\"(root)\\\",pathlib.PurePath(x).suffix) for x in p if pathlib.PurePath(x).suffix in (\\\".ts\\\",\\\".tsx\\\",\\\".mts\\\",\\\".cts\\\",\\\".py\\\",\\\".json\\\",\\\".yml\\\",\\\".yaml\\\",\\\".js\\\",\\\".mjs\\\",\\\".cjs\\\")); print(*sorted(c.items()),sep=\\\"\\\\n\\\")'\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"rg --files src scripts test | sort | head -95 && rg -n '\"'^#|BoxBox|전체'\"' 'docs/work/Native/005-BoxBox 첫 적용 범위 사전 점검/spec.md' && git ls-files '*.css' '*.html' '*.jsonl' | wc -l\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport collections as C, concurrent.futures as F, hashlib, json, pathlib, subprocess\nroot=pathlib.Path.cwd()\nfiles=sorted({p for p in subprocess.check_output(['git','ls-files','-z','--cached','--others','--exclude-standard']).decode().split('\\\\0') if p and pathlib.Path(p).suffix in {'.ts','.tsx','.mts','.cts','.py','.json','.yaml','.yml'} and pathlib.Path(p).is_file()})\nlauncher=['~/.hermes/node/bin/node','~/.local/share/boxbox/codex/0.2.9/plugin/scripts/boxbox.mjs','check','--source','--json']\ndef fingerprint():\n    return hashlib.sha256(b''.join(hashlib.sha256(pathlib.Path(p).read_bytes()).digest() for p in files)).hexdigest()\ndef run(batch):\n    p=subprocess.run(launcher+[item for f in batch for item in ('--file',f)],capture_output=True,text=True)\n    try:\n        data=json.loads(p.stdout)\n        if len(data.get('results',[]))\"'!=len(batch): print('\"'BATCH',p.returncode,len(batch),len(data.get('results',[])),str(data)[:45",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"cat 'docs/work/Native/005-BoxBox 첫 적용 범위 사전 점검/spec.md' && git ls-files src '*.css' '*.html' | awk -F. '{n[\"'$NF]++} END {for (e in n) print e,n[e]}'\"' && git status --short --branch\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '1,65p' build.ts && rg -n '\"'^(export (async )?(function|class)|const .* = (create|new)|import .* from )'\"' src/{main,preload,renderer,native-session}.t* scripts/workflow.ts | head -65\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport collections as C, json, pathlib, subprocess\nfiles=sorted({p for p in subprocess.check_output(['git','ls-files','-z','--cached','--others','--exclude-standard']).decode().split('\\\\0') if p and pathlib.Path(p).suffix in {'.ts','.tsx','.mts','.cts','.py','.json','.yaml','.yml'} and pathlib.Path(p).is_file()})[:24]\nprint('first batch:', files)\ntargets=[f for f in files if not f.startswith('.boxbox/')]+['usage.json','src/projection.ts','src/agent-overview.ts','src/architecture.generated.json']\nlauncher=['~/.hermes/node/bin/node','~/.local/share/boxbox/codex/0.2.9/plugin/scripts/boxbox.mjs','check','--source','--json']\ndef check(targets):\n    p=subprocess.run(launcher+[item for f in targets for item in ('--file',f)],capture_output=True,text=True)\n    return json.loads(p.stdout)\nfor row in check(targets).get('results',[]):\n    outer=row.get('result') or {}; src=(outer.get('results') or [{}])[0]\n    print(row['file'],outer.get",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"'~/.hermes/node/bin/node' '~/.local/share/boxbox/codex/0.2.9/plugin/scripts/boxbox.mjs' check --source --file '.boxbox/approvals/chat-final-two-response.json' --json; git status --short --branch\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,subprocess\nlaunch=['~/.hermes/node/bin/node','~/.local/share/boxbox/codex/0.2.9/plugin/scripts/boxbox.mjs','check','--source','--json','--file']\nfor f in ('chat-final-two-response','ts-v1-response','ts-v3-extra4-response'):\n    p=subprocess.run(launch+[f'.boxbox/approvals/{f}.json'],capture_output=True,text=True)\n    j=json.loads(p.stdout)\n    print(f,j.get('syntax',{}).get('status'),j.get('formatReadiness',{}).get('approvedFixableGroups'))\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}
