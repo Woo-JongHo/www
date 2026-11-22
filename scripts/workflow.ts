@@ -157,6 +157,18 @@ async function typecheck(repo: string, policy: PolicyResult, run: NonNullable<Ha
   return results;
 }
 
+async function parallelChecks(
+  types: Promise<CommandResult[]>,
+  layout: ReturnType<typeof boxbox>,
+  architecture?: ReturnType<typeof architectureGate>,
+) {
+  const [typeResult, layoutResult, architectureResult] = await Promise.allSettled([types, layout, architecture]);
+  if (typeResult.status === "rejected") throw typeResult.reason;
+  if (layoutResult.status === "rejected") throw layoutResult.reason;
+  if (architectureResult.status === "rejected") throw architectureResult.reason;
+  return { types: typeResult.value, layout: layoutResult.value, architecture: architectureResult.value };
+}
+
 async function fingerprints(repo: string, files: string[]): Promise<Map<string, string>> {
   const result = new Map<string, string>();
   for (const file of files) {
@@ -284,15 +296,17 @@ async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDe
   const before          = await fingerprints(repo, checkedFiles(prePolicy)) ;
   const frozenBefore    = await frozenPolicy(repo)                          ;
   const targets         = writes.filter(file => codeFile.test(file))        ;
-  const preTypes        = await typecheck(repo, prePolicy, run)             ;
-  const preBoxbox       = await boxbox(repo, local, targets, true, run)     ;
-  const preArchitecture = await architectureGate(repo)                      ;
+  const pre = await parallelChecks(typecheck(repo, prePolicy, run), boxbox(repo, local, targets, true, run), architectureGate(repo));
+  const preArchitecture = pre.architecture;
+  if (!preArchitecture || !sameFiles(before, await fingerprints(repo, checkedFiles(prePolicy)))) {
+    throw new Error("사전 검사 중 소스 또는 프로젝트 설정이 바뀌었습니다. 다시 검사하세요.");
+  }
   const guidance = JSON.stringify({
     policy:
       "새 앱·Node 실행 코드는 TypeScript로 작성하고 우회 주석이나 legacy 해시 갱신으로 검사를 통과시키지 않는다.",
     source       : prePolicy ,
-    typecheck    : preTypes  ,
-    boxbox       : preBoxbox ,
+    typecheck    : pre.types  ,
+    boxbox       : pre.layout ,
     architecture : preArchitecture
   });
   if (Buffer.byteLength(guidance) > 1_048_576) throw new Error("작성 안내가 너무 큽니다. 변경 범위를 나누세요.");
@@ -315,17 +329,20 @@ async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDe
     try { await lstat(path.join(repo, file)); errors.push(`삭제 계획의 파일이 남아 있습니다: ${file}`); }
     catch (error) { if (!(object(error) && error.code === "ENOENT")) throw error; }
   }
-  const postTypes        = await typecheck(repo, postPolicy, run)                                                                                               ;
-  const postBoxbox       = await boxbox(repo, local, [...new Set([...targets, ...changed])].filter(file => codeFile.test(file) && after.has(file)), false, run) ;
   const canRegenerate = result.executed === true && object(result.mutation) && result.mutation.ok === true
     && writes.includes("src/architecture.generated.json");
-  const postArchitecture = await architectureGate(repo, preArchitecture.enabled, canRegenerate)                                                              ;
+  const postTargets = [...new Set([...targets, ...changed])].filter(file => codeFile.test(file) && after.has(file));
+  const post = await parallelChecks(
+    typecheck(repo, postPolicy, run), boxbox(repo, local, postTargets, false, run),
+    canRegenerate ? undefined : architectureGate(repo, preArchitecture.enabled),
+  );
+  const postArchitecture = post.architecture ?? await architectureGate(repo, preArchitecture.enabled, true);
   const finalPolicy      = await checkSourcePolicy(repo)                                                                                                        ;
   const sourceStable     = sameFiles(after, await fingerprints(repo, checkedFiles(finalPolicy)))                                                                ;
   errors.push(...finalPolicy.errors, ...postArchitecture.errors);
   if (!sourceStable) errors.push("사후 검사 중 소스 또는 프로젝트 설정이 바뀌었습니다. 다시 검사하세요.");
-  if (postTypes.some(item => item.code !== 0 || item.outputTruncated)) errors.push("작성 후 타입 검사가 통과하지 않았습니다.");
-  if (postBoxbox.observations.some(item => item.syntax !== "valid" || item.misaligned > 0 || item.refused > 0)) errors.push("작성 후 BoxBox 미해결 항목이 있습니다.");
+  if (post.types.some(item => item.code !== 0 || item.outputTruncated)) errors.push("작성 후 타입 검사가 통과하지 않았습니다.");
+  if (post.layout.observations.some(item => item.syntax !== "valid" || item.misaligned > 0 || item.refused > 0)) errors.push("작성 후 BoxBox 미해결 항목이 있습니다.");
   return {
     ...result,
     harness: {
@@ -336,19 +353,19 @@ async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDe
       sourceStable,
       pre  : {
         source       : prePolicy              ,
-        typecheck    : preTypes               ,
+        typecheck    : pre.types              ,
         architecture : preArchitecture        ,
-        boxbox       : preBoxbox.observations ,
-        boxboxStatus : preBoxbox.status       ,
-        boxboxMode   : preBoxbox.mode
+        boxbox       : pre.layout.observations ,
+        boxboxStatus : pre.layout.status       ,
+        boxboxMode   : pre.layout.mode
       },
       post : {
         source       : finalPolicy             ,
-        typecheck    : postTypes               ,
+        typecheck    : post.types              ,
         architecture : postArchitecture        ,
-        boxbox       : postBoxbox.observations ,
-        boxboxStatus : postBoxbox.status       ,
-        boxboxMode   : postBoxbox.mode
+        boxbox       : post.layout.observations ,
+        boxboxStatus : post.layout.status       ,
+        boxboxMode   : post.layout.mode
       }
     }
   };

@@ -3,7 +3,7 @@
  */
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { copyFile, mkdir, mkdtemp, realpath, rm, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { delimiter, join } from "node:path";
 import test from "node:test";
@@ -82,10 +82,8 @@ function stageHarness(repo: string, build: (attempt: number) => Promise<void>) {
   return { calls, runStage };
 }
 
-async function authorDocumentation({ phase }: { phase: string }) {
-  assert.equal(phase, "documentation");
-  const reviewed = documents.map(path => ({ path, decision: "unchanged", reason: "fixture의 숫자 표시만 수정했다." }));
-  return { documents: reviewed };
+async function authorBeforeAudit() {
+  assert.fail("현재 후보의 독립 감사 전에 저작을 요청했다.");
 }
 
 test("한 번 입력한 이슈가 실제 실패를 수정으로 돌리며 재개할 때 통과한 검사를 재실행하지 않는다", { timeout: 30_000 }, async t => {
@@ -96,7 +94,7 @@ test("한 번 입력한 이슈가 실제 실패를 수정으로 돌리며 재개
 
   const options = requestFor(repo);
 
-  const first = await runIssueLoop(options, runStage, authorDocumentation);
+  const first = await runIssueLoop(options, runStage, authorBeforeAudit);
   assert.equal(first.loop.status, "blocked");
   assert.equal(first.loop.phase, "review", JSON.stringify(first.loop));
   assert.deepEqual(calls, ["verify", "build", "verify", "build", "verify", "review"]);
@@ -105,10 +103,10 @@ test("한 번 입력한 이슈가 실제 실패를 수정으로 돌리며 재개
   assert.ok(work.record.schemaVersion === 2);
   assert.notEqual(work.record.status, "done");
   assert.deepEqual(work.record.workflow.verifications.map(attempt => attempt.result), ["failed", "failed", "passed"]);
-  assert.equal(work.record.workflow.documentationReviews?.length, 1);
+  assert.equal(work.record.workflow.documentationReviews?.length ?? 0, 0);
 
   calls.length = 0;
-  const resumed = await runIssueLoop(options, runStage, authorDocumentation);
+  const resumed = await runIssueLoop(options, runStage, authorBeforeAudit);
   assert.equal(resumed.workId, first.workId);
   assert.equal(resumed.loop.status, "blocked");
   assert.deepEqual(calls, ["review"]);
@@ -122,7 +120,7 @@ test("기준선이 이미 통과하면 소스 수정 없이 이슈 재현을 차
   const { calls, runStage } = stageHarness(repo, async () => {
     assert.fail("재현 없이 구현을 시작했다.");
   });
-  const result = await runIssueLoop(requestFor(repo), runStage, authorDocumentation);
+  const result = await runIssueLoop(requestFor(repo), runStage, authorBeforeAudit);
   assert.equal(result.loop.status, "blocked");
   assert.equal(result.loop.phase, "baseline", JSON.stringify(result.loop));
   assert.deepEqual(calls, ["verify"]);
@@ -134,7 +132,7 @@ test("검사 입력이 구현 중 바뀌면 후보를 검증하거나 승인하�
     await writeFile(join(repo, source), "export const value = 2;\n");
     await writeFile(join(repo, verifier.args[0]), "process.exit(0);\n");
   });
-  const result = await runIssueLoop(requestFor(repo), runStage, authorDocumentation);
+  const result = await runIssueLoop(requestFor(repo), runStage, authorBeforeAudit);
   assert.equal(result.loop.status, "blocked");
   assert.deepEqual(calls, ["verify", "build"]);
 });
@@ -142,17 +140,62 @@ test("검사 입력이 구현 중 바뀌면 후보를 검증하거나 승인하�
 test("중단된 구현은 같은 작업에서 새 구현이나 검증을 자동 실행하지 않는다", async t => {
   const repo = await repository(t);
   const { calls, runStage } = stageHarness(repo, async () => { throw new Error("호스트 중단"); });
-  const interrupted = await runIssueLoop(requestFor(repo), runStage, authorDocumentation);
+  const interrupted = await runIssueLoop(requestFor(repo), runStage, authorBeforeAudit);
   assert.deepEqual(interrupted.loop, { status: "blocked", phase: "building", reason: "호스트 중단" });
   assert.deepEqual(calls, ["verify", "build"]);
 
   calls.length = 0;
-  const resumed = await runIssueLoop(requestFor(repo), runStage, authorDocumentation);
+  const resumed = await runIssueLoop(requestFor(repo), runStage, authorBeforeAudit);
   assert.equal(resumed.workId, interrupted.workId);
   assert.equal(resumed.loop.status, "blocked");
   assert.ok("reason" in resumed.loop && typeof resumed.loop.reason === "string");
   assert.match(resumed.loop.reason, /중단된 저작/);
   assert.deepEqual(calls, []);
+});
+
+test("격리 모드의 두 이슈가 한 저장소에서 동시에 쓰고 검증하며 각 후보와 작업을 유지한다", { timeout: 30_000 }, async t => {
+  const repo = await repository(t);
+  await writeFile(join(repo, ".www/development.local.json"), "{}\n");
+  await exec("git", ["add", ".gitignore", "src", "checks", "agents", "docs"], { cwd: repo });
+  await exec("git", ["-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "격리 기준 소스"], { cwd: repo });
+  await writeFile(join(repo, source), "export const value = 99;\n");
+
+  const workspaces = new Set<string>();
+  let allowWrites = () => {};
+  const bothBuilding = new Promise<void>(resolve => { allowWrites = resolve; });
+  async function runStage(options: Record<string, unknown>) {
+    const decision = options.decision;
+    assert.ok(decision && typeof decision === "object" && "intent" in decision);
+    if (decision.intent === "verify") return runTypedWorkflow(options);
+    if (decision.intent === "build") {
+      assert.equal(typeof options.repo, "string");
+      assert.equal(typeof options.request, "string");
+      const workspace = String(options.repo);
+      workspaces.add(workspace);
+      if (workspaces.size === 2) allowWrites();
+      await bothBuilding;
+      await writeFile(join(workspace, source), `// ${String(options.request)}\nexport const value = 2;\n`);
+      return { executed: true, host: { ok: true }, harness: { ok: true } };
+    }
+    assert.equal(decision.intent, "review");
+    return { executed: true, review: { verdict: "blocked" } };
+  }
+
+  const requests = ["첫 이슈 표시값 수정", "둘째 이슈 표시값 수정"];
+  const options = requests.map(request => ({ ...requestFor(repo), request, isolated: true }));
+  const results = await Promise.all(options.map(input => runIssueLoop(input, runStage, authorBeforeAudit)));
+  assert.notEqual(results[0]?.workId, results[1]?.workId);
+  for (const [index, result] of results.entries()) {
+    assert.equal(result.loop.phase, "review");
+    assert.ok(result.workspace && workspaces.has(result.workspace));
+    assert.match(await readFile(join(result.workspace, source), "utf8"), new RegExp(requests[index] ?? ""));
+    const { record } = await readWork({ repo: result.workspace, workId: result.workId });
+    assert.equal(record.schemaVersion, 2);
+    assert.deepEqual(record.workflow?.verifications.map(attempt => attempt.exitCode), [7, 0]);
+  }
+  assert.equal(await readFile(join(repo, source), "utf8"), "export const value = 99;\n");
+  const repeated = await runIssueLoop(options[0] ?? {}, runStage, authorBeforeAudit);
+  assert.deepEqual(repeated, results[0]);
 });
 
 async function reviewWithFixture(repo: string, workId: string, options: Record<string, unknown>, verdict: "pass" | "fail") {
@@ -198,7 +241,7 @@ async function reviewWithFixture(repo: string, workId: string, options: Record<s
   }
 }
 
-test("재개 시 독립 검토 실패를 수정에 전달하고 통과 영수증으로 보고서를 완료한다", { timeout: 30_000 }, async t => {
+test("재개 시 감사 실패를 수정에 전달하고 같은 통과 후보의 문서 판단과 보고서를 한 번에 받는다", { timeout: 30_000 }, async t => {
   const calls: string[] = [];
 
   let builds = 0;
@@ -231,9 +274,13 @@ test("재개 시 독립 검토 실패를 수정에 전달하고 통과 영수증
     await writeFile(join(repo, source), content);
     return { executed: true, host: { ok: true }, harness: { ok: true } };
   }
-  const author = async (input: { phase: string }) => {
-    if (input.phase === "documentation") return authorDocumentation(input);
-    return {
+  let authorCalls = 0;
+  const author = async ({ workPath, context }: { workPath: string; context: string }) => {
+    authorCalls += 1;
+    const latest = JSON.parse(await readFile(workPath, "utf8")).workflow.reviews.at(-1);
+    assert.equal(latest.verdict, "pass");
+    assert.equal(JSON.parse(context).auditId, latest.id);
+    const narrative = {
       summary: "값을 2로 수정했다.",
       before: "값이 0이었다.", after: "값이 2다.",
 
@@ -243,21 +290,38 @@ test("재개 시 독립 검토 실패를 수정에 전달하고 통과 영수증
       limitations: ["독립 검토 CLI는 fixture를 사용했다."],
       next: [],
     };
+    const paths = authorCalls === 1 ? [...documents, "docs/audit-outside.md"] : documents;
+    return { narrative, documents: paths.map(path => ({ path, decision: "unchanged", reason: "fixture의 숫자 표시만 수정했다." })) };
   };
   const options = requestFor(repo);
 
   const interrupted = await runIssueLoop(options, runStage, author);
   assert.deepEqual(interrupted.loop, { status: "blocked", phase: "review", reason: "검토 기록 이후 실행 중단" });
   assert.deepEqual(calls, ["verify", "build", "verify", "review"]);
+  assert.equal(authorCalls, 0);
   const failedAudit = await assessWork({ repo, workId: interrupted.workId });
   assert.ok(!failedAudit.legacy);
   assert.equal(failedAudit.record.workflow.reviews.at(-1)?.verdict, "fail");
 
   calls.length = 0;
+  const outside = await runIssueLoop(options, runStage, author);
+  assert.deepEqual(calls, ["build", "verify", "review"]);
+  assert.equal(outside.loop.phase, "report");
+  assert.equal(outside.loop.status, "blocked");
+  assert.ok("reason" in outside.loop && typeof outside.loop.reason === "string");
+  assert.match(outside.loop.reason, /감사에 묶이지 않은 문서/);
+  const unfinished = await assessWork({ repo, workId: outside.workId });
+  assert.ok(!unfinished.legacy);
+  assert.equal(unfinished.documentation.usable, false);
+  assert.equal(unfinished.report?.usable, false);
+  assert.equal(unfinished.review.usable, true);
+
+  calls.length = 0;
   const result = await runIssueLoop(options, runStage, author);
   assert.equal(result.workId, interrupted.workId);
   assert.deepEqual(result.loop, { status: "done", phase: "complete" });
-  assert.deepEqual(calls, ["build", "verify", "review", "report", "report-complete"]);
+  assert.deepEqual(calls, ["report", "report-complete"]);
+  assert.equal(authorCalls, 2);
   const assessment = await assessWork({ repo, workId: result.workId });
   assert.ok(!assessment.legacy);
   assert.equal(assessment.record.status, "done");
