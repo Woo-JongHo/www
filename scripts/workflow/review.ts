@@ -213,20 +213,48 @@ export function selectReviewer({ policy, opusFailure }: { policy?: unknown; opus
 }
 
 export function classifyOpusFailure(result: ReviewExecutionResult = {}): ReviewFailure | null {
-  const { code, signal, stdout = "", outputTruncated = false } = result;
+  const { code, signal, error, stdout = "", outputTruncated = false } = result;
   const receiptHash = hash(receiptSource(result));
-  if (outputTruncated)                                   return { kind: "unknown", verified: false, receiptHash };
+  if (outputTruncated || error != null) return { kind: "unknown", verified: false, receiptHash };
   let body: Record<string, unknown>;
   try { const parsed: unknown = JSON.parse(stdout); if (!object(parsed)) throw new Error("invalid response"); body = parsed; }
   catch { return { kind: "unknown", verified: false, receiptHash }; }
   if (code === 0 && !signal && body?.is_error === false) return null;
-  const codes        = [object(body.error) ? body.error.code : undefined, ...(Array.isArray(body.errors) ? body.errors.map((error: unknown) => object(error) ? error.code : undefined) : [])]                                                       ;
-  const usageMessage = typeof body?.result === "string" && /^You've hit your (?:session|weekly|Opus) limit(?:\s*·\s*resets\s+[^\r\n]+)?$/.test(body.result.trim())                                                                                  ;
-  const quotaCode    = body?.type === "result" && body.is_error === true && !signal ? codes.find((value): value is string => typeof value === "string" && QUOTA_CODES.has(value)) ?? (usageMessage ? "claude_usage_window_exhausted" : null) : null ;
-  if (quotaCode)                                         return { kind: "quota_exhausted", verified: true, provider: "anthropic", model: "opus", code: quotaCode, receiptHash, source: "claude-cli" };
-  const message = String(body?.result ?? "")                                                                                                                                  ;
-  const auth    = codes.some((value) => typeof value === "string" && ["authentication_error", "invalid_api_key"].includes(value)) || /^Failed to authenticate:/.test(message) ;
-  return { kind: auth ? "authentication" : signal ? "interrupted" : "unknown", verified: false, receiptHash };
+  const terminalError = body.terminal_reason !== undefined || body.api_error_status !== undefined
+    || body.api_error_type !== undefined || body.api_error !== undefined;
+  const legacyErrorValues = [
+    ...(body.error === undefined ? [] : [body.error]),
+    ...(Array.isArray(body.errors) ? body.errors : []),
+  ];
+  const legacyErrors = legacyErrorValues.filter(object);
+  const legacyCodes = legacyErrors.flatMap(entry => [entry.code, entry.type]);
+  const legacyStatuses = legacyErrors.map(entry => entry.status);
+  const message = typeof body.result === "string" ? body.result.trim() : "";
+  const auth = [body.api_error_status, ...legacyStatuses].some(status => status === 401 || status === 403)
+    || [...legacyCodes, body.api_error_type, body.api_error].some((value) => value === "authentication_error" || value === "invalid_api_key")
+    || /^Failed to authenticate:/.test(message);
+  if (signal) return { kind: "interrupted", verified: false, receiptHash };
+  if (auth) return { kind: "authentication", verified: false, receiptHash };
+  if (body.type !== "result" || body.is_error !== true || !Number.isInteger(code) || code === 0) {
+    return { kind: "unknown", verified: false, receiptHash };
+  }
+  let quotaCode: string | null = null;
+  if (terminalError) {
+    if (body.error === undefined && body.errors === undefined
+      && body.terminal_reason === "api_error" && body.api_error_status === 429 && body.api_error_type === "rate_limit_error"
+      && typeof body.api_error === "string" && QUOTA_CODES.has(body.api_error)) quotaCode = body.api_error;
+  } else if (legacyErrorValues.length === legacyErrors.length && (body.errors === undefined || Array.isArray(body.errors))) {
+    const conflictingStatus = legacyStatuses.some(status => status !== undefined && status !== 429);
+    const conflictingCode = legacyCodes.some(value => value !== undefined && (typeof value !== "string"
+      || (value !== "rate_limit_error" && !QUOTA_CODES.has(value))));
+    if (conflictingStatus || conflictingCode) return { kind: "unknown", verified: false, receiptHash };
+    const usageMessage = legacyErrors.length === 0
+      && /^You've hit your (?:session|weekly|Opus) limit(?:\s*·\s*resets\s+[^\r\n]+)?$/.test(message);
+    quotaCode = legacyCodes.find((value): value is string => typeof value === "string" && QUOTA_CODES.has(value))
+      ?? (usageMessage ? "claude_usage_window_exhausted" : null);
+  }
+  if (quotaCode) return { kind: "quota_exhausted", verified: true, provider: "anthropic", model: "opus", code: quotaCode, receiptHash, source: "claude-cli" };
+  return { kind: "unknown", verified: false, receiptHash };
 }
 
 function readReceipt(repo: string | undefined, relative: unknown) {
