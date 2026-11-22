@@ -158,7 +158,17 @@ test("실제 CLI 종료 형식의 명시적 사용량 소진에서만 대체 검
     const stdout = JSON.stringify({ ...terminal, ...change });
     assert.equal(classifyOpusFailure({ code: 1, stdout })?.verified, false);
   }
-  assert.equal(classifyOpusFailure({ code: 1, signal: "SIGTERM", stdout: JSON.stringify(terminal) })?.verified, false);
+  const stdout = JSON.stringify(terminal);
+  for (const execution of [
+    { code: 0 },
+    { code: 1, error: "runner_error" },
+    { code: null },
+    { code: 1, signal: "SIGTERM" as const },
+  ]) {
+    assert.equal(classifyOpusFailure({ stdout, ...execution })?.verified, false);
+  }
+  const conflicting = JSON.stringify({ ...terminal, result: "Failed to authenticate: OAuth session expired" });
+  assert.equal(classifyOpusFailure({ code: 1, stdout: conflicting })?.kind, "authentication");
 });
 
 test("실행 영수증 없는 자기 선언은 필수 검토를 통과할 수 없다", () => {

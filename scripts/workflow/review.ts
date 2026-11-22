@@ -213,9 +213,9 @@ export function selectReviewer({ policy, opusFailure }: { policy?: unknown; opus
 }
 
 export function classifyOpusFailure(result: ReviewExecutionResult = {}): ReviewFailure | null {
-  const { code, signal, stdout = "", outputTruncated = false } = result;
+  const { code, signal, error, stdout = "", outputTruncated = false } = result;
   const receiptHash = hash(receiptSource(result));
-  if (outputTruncated)                                   return { kind: "unknown", verified: false, receiptHash };
+  if (outputTruncated || error != null) return { kind: "unknown", verified: false, receiptHash };
   let body: Record<string, unknown>;
   try { const parsed: unknown = JSON.parse(stdout); if (!object(parsed)) throw new Error("invalid response"); body = parsed; }
   catch { return { kind: "unknown", verified: false, receiptHash }; }
@@ -228,12 +228,19 @@ export function classifyOpusFailure(result: ReviewExecutionResult = {}): ReviewF
     ...(Array.isArray(body.errors) ? body.errors.map((error: unknown) => object(error) ? error.code : undefined) : []),
     terminalUsageCode,
   ];
-  const usageMessage = typeof body?.result === "string" && /^You've hit your (?:session|weekly|Opus) limit(?:\s*·\s*resets\s+[^\r\n]+)?$/.test(body.result.trim())                                                                                  ;
-  const quotaCode    = body?.type === "result" && body.is_error === true && !signal ? codes.find((value): value is string => typeof value === "string" && QUOTA_CODES.has(value)) ?? (usageMessage ? "claude_usage_window_exhausted" : null) : null ;
-  if (quotaCode)                                         return { kind: "quota_exhausted", verified: true, provider: "anthropic", model: "opus", code: quotaCode, receiptHash, source: "claude-cli" };
-  const message = String(body?.result ?? "")                                                                                                                                  ;
-  const auth    = codes.some((value) => typeof value === "string" && ["authentication_error", "invalid_api_key"].includes(value)) || /^Failed to authenticate:/.test(message) ;
-  return { kind: auth ? "authentication" : signal ? "interrupted" : "unknown", verified: false, receiptHash };
+  const message = typeof body.result === "string" ? body.result.trim() : "";
+  const auth = codes.some((value) => value === "authentication_error" || value === "invalid_api_key")
+    || /^Failed to authenticate:/.test(message);
+  if (signal) return { kind: "interrupted", verified: false, receiptHash };
+  if (auth) return { kind: "authentication", verified: false, receiptHash };
+  if (body.type !== "result" || body.is_error !== true || !Number.isInteger(code) || code === 0) {
+    return { kind: "unknown", verified: false, receiptHash };
+  }
+  const usageMessage = /^You've hit your (?:session|weekly|Opus) limit(?:\s*·\s*resets\s+[^\r\n]+)?$/.test(message);
+  const quotaCode = codes.find((value): value is string => typeof value === "string" && QUOTA_CODES.has(value))
+    ?? (usageMessage ? "claude_usage_window_exhausted" : null);
+  if (quotaCode) return { kind: "quota_exhausted", verified: true, provider: "anthropic", model: "opus", code: quotaCode, receiptHash, source: "claude-cli" };
+  return { kind: "unknown", verified: false, receiptHash };
 }
 
 function readReceipt(repo: string | undefined, relative: unknown) {
