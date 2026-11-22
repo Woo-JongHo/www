@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-2fc2bf16-c8ed-4df3-8259-1d92ac2c82fa",
+  "title"        : "BoxBox 승인 안내 개선과 WWW 정렬 파일럿",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "f16294705da5d7ab4ff52a54e7bea02de3e660d9c30ac58462d6ee5e126b3c6f",
+    "threadId": "01a2025a-5d0d-7083-a9f9-e522ad2a59b5",
+    "turnId"  : "01a20269-3f41-7453-a53d-19c7fa8f6f55",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"sed -n '1,255p' product/engine/common/approval-gate.ts && sed -n '1,210p' test/approval-gate.test.ts && rg -n 'no matching convention' test docs product/engine --glob '\"'!*.jsonl'\"'\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'boxbox_issue_body=$(mktemp -t boxbox-issue-body)\ncat > \"$boxbox_issue_body\" <<'\"'EOF'\n## Reproduction\n\nBoxBox 0.2.9 detects these data fields as a \"'`FIXABLE` TypeScript group.\n\n```ts\ninterface Snapshot {\n  key: string;\n  region: string | null;\n  elapsedMs: number;\n  source: \"local\" | \"remote\";\n}\n```\n\nRun `boxbox check --source --file pilot.ts --json`. The group key is `v1|typescript|InterfaceDeclaration|interface-members|colon>semicolon`. In a downstream pilot, this exact rule already had human approval for other individual files. Checking a new file only reported `no matching convention`, the same message as when no exact rule exists.\n\n## Expected behavior\n\nExplain when the exact key is already approved elsewhere and the checked file is outside its scope. Keep the result non-writable until the new scope has valid approval. Preserve exact-key matching, proof validation, token preservation, parser checks, and the fixed-point check.\n\nThe public snippet reproduces the struc",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '45,142p' test/approval-gate.test.ts && sed -n '84,107p' docs/user/modes.md && for boxbox_target in product/engine/common/approval-gate.ts test/approval-gate.test.ts; do '~/.hermes/node/bin/node' '~/.local/share/boxbox/codex/0.2.9/plugin/scripts/boxbox.mjs' guide --file \\\"\"'$boxbox_target\" --authoring --brief --json; done'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"bun test test/approval-gate.test.ts -t 'outside the target file'\"",
+        "status"  : "failed",
+        "exitCode": 1
+      },
+      {
+        "command" : "/bin/zsh -lc 'bun test test/approval-gate.test.ts test/alignment-only.test.ts test/cli.test.ts --timeout 60000 > /tmp/boxbox-68-tests.log 2>&1; boxbox_test_status=$?; tail -14 /tmp/boxbox-68-tests.log; exit \"$boxbox_test_status\"'",
+        "status"  : "failed",
+        "exitCode": 1
+      },
+      {
+        "command" : "/bin/zsh -lc \"bun boxbox/product/engine/cli.ts check --source --file src/shared.ts --json | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get(\\\"syntax\\\"), d.get(\\\"error\\\")); print(*[f for f in d.get(\\\"formatReadiness\\\",{}).get(\\\"approvalFacts\\\",[]) if \\\"interface-members|colon>semicolon\\\" in f.get(\\\"key\\\",\\\"\\\")],sep=\\\"\\\\n\\\")'\"",
+        "status"  : "failed",
+        "exitCode": 1
+      },
+      {
+        "command" : "/bin/zsh -lc 'bunx tsc --noEmit && git diff --check -- product/engine/common/approval-gate.ts test/approval-gate.test.ts docs/user/modes.md'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"rg -n 'export (async )?function.*(cli|main)|function.*context|import.meta.main' product/engine/cli.ts product/packages/cli development/tools/build-cli-artifact.ts && sed -n '1,110p' test/cli.test.ts && rg -n 'sectionHash|pilot' ../www/.boxbox/rules | head -8\"",
+        "status"  : "failed",
+        "exitCode": 1
+      },
+      {
+        "command" : "/bin/zsh -lc \"tail -70 product/engine/cli.ts; ls product/packages/cli; sed -n '1,70p' test/cli.test.ts; cat product/packages/cli/package.json | head -35\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"bun boxbox/product/packages/cli/entry.ts check --source --file src/shared.ts --json | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get(\\\"syntax\\\"),d.get(\\\"error\\\")); print(*[f for f in d.get(\\\"formatReadiness\\\",{}).get(\\\"approvalFacts\\\",[]) if \\\"interface-members|colon>semicolon\\\" in f.get(\\\"key\\\",\\\"\\\")],sep=\\\"\\\\n\\\")'\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport hashlib,json,pathlib,shutil,subprocess,tempfile\nroot=pathlib.Path.cwd()\nsandbox=pathlib.Path(tempfile.mkdtemp(prefix='www-boxbox-68-pilot-'))\nbox=sandbox/'.boxbox'\nbox.mkdir()\ndef load(name):\n    return [json.loads(line) for line in (root/'.boxbox'/f'{name}.jsonl').read_text().splitlines() if line]\nkey='v1|typescript|InterfaceDeclaration|interface-members|colon>semicolon'\nscope='src/native-reports.ts'\nconvention=next(r for r in load('conventions') if r['key']==key and r['scope']==scope)\ndecision=next(r for r in load('decisions') if r['id']==convention['id'])\nexamples=[r for r in load('examples') if r['id'] in convention['examples']]\nfor name,rows in [('conventions',[convention]),('decisions',[decision]),('examples',examples)]:\n    (box/f'{name}.jsonl').write_text(''.join(json.dumps(r,ensure_ascii=False)+'\\\\n' for r in rows))\nref=decision['ref'].split('#')[0]\np=sandbox/ref\np.parent.mkdir(parents=True,exist_ok=True)\nshutil.copyfile(root/ref,p)\ntarget",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"rg -n 'async function check|sourceOnly|check --|source-only|function format' product/engine/cli.ts | head -25 && git diff --stat -- product/engine/common/approval-gate.ts test/approval-gate.test.ts && tail -12 /tmp/boxbox-68-tests.log\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"bun boxbox/product/packages/cli/entry.ts check --file src/shared.ts --json | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get(\\\"syntax\\\"),d.get(\\\"error\\\")); print(*[f for f in d.get(\\\"formatReadiness\\\",{}).get(\\\"approvalFacts\\\",[]) if \\\"interface-members|colon>semicolon\\\" in f.get(\\\"key\\\",\\\"\\\")],sep=\\\"\\\\n\\\")'\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'bun test test/approval-gate.test.ts && git diff --check -- product/engine/common/approval-gate.ts test/approval-gate.test.ts docs/user/modes.md'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"rg -n -A 46 -B 6 'a compressed TypeScript interface leaves' test/alignment-only.test.ts test/cli.test.ts && git status --short -- product/engine/common/approval-gate.ts test/approval-gate.test.ts docs/user/modes.md\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"bun test test/alignment-only.test.ts -t 'a compressed TypeScript interface leaves' \"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'boxbox_baseline=$(mktemp -d -t boxbox-68-baseline)\ncp -R product test tsconfig.json package.json \"$boxbox_baseline\" &&\n  ln -s \"$PWD/node_modules\" \"$boxbox_baseline/node_modules\" &&\n  git show HEAD:product/engine/common/approval-gate.ts > \"$boxbox_baseline/product/engine/common/approval-gate.ts\" &&\n  (cd \"$boxbox_baseline\" && bun test test/alignment-only.test.ts -t '\"'a compressed TypeScript interface leaves')\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'boxbox_retry_log=$(mktemp -t boxbox-68-tests)\nbun test test/approval-gate.test.ts test/alignment-only.test.ts test/cli.test.ts --timeout 60000 > \"$boxbox_retry_log\" 2>&1\nboxbox_retry_status=$?\ntail -12 \"$boxbox_retry_log\"\nexit \"$boxbox_retry_status\"'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'gh issue view 68 --repo Woo-JongHo/boxbox --json state,title,url && git status --short -- src/shared.ts .boxbox && ls -t \"$TMPDIR\" | rg '\"'\"'^boxbox-68-tests'\"' | head -3\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'tail -10 \"$TMPDIR/boxbox-68-tests.v2Lj3tGVG4\"'",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [
+      "boxbox/test/approval-gate.test.ts",
+      "boxbox/docs/user/modes.md",
+      "boxbox/product/engine/common/approval-gate.ts"
+    ],
+    "truncated": true
+  }
+}

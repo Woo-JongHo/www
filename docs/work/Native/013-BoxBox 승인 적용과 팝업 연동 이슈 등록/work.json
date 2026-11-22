@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-cde64880-0e8f-471f-9dfa-1b973d8d875a",
+  "title"        : "BoxBox 승인 적용과 팝업 연동 이슈 등록",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "7f2cce88900e73fd335f56c1dd3ba416a0f7efb0f9c71dd99c809c2cd25fec0b",
+    "threadId": "01a2025a-5d0d-7083-a9f9-e522ad2a59b5",
+    "turnId"  : "01a20279-2390-7511-94fa-1b7f76d03649",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"pwd && git status --short --branch && git diff -- src/shared.ts .boxbox\npython3 - <<'PY'\nimport json,pathlib\nroot=pathlib.Path('.boxbox')\nkey='www-ts-v3-26e1121b0fdd-1a2dcbd4ff9d'\nd=next(json.loads(s) for s in (root/'decisions.jsonl').read_text().splitlines() if key in s and json.loads(s)['id']==key)\nprint(d)\nprint([p.name for p in (root/'rules').iterdir()])\nPY\nrg -n -A 14 'export function sectionHash' boxbox/product/engine/common/examples.ts\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"gh issue view 68 --repo Woo-JongHo/boxbox --json state,title,url && gh issue list --repo Woo-JongHo/boxbox --state open --search 'approval host popup' --limit 15 --json number,title,url\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '61,105p' ../98_boxbox/product/engine/common/examples.ts && sed -n '1,68p' .boxbox/rules/www-ts-v3-approved.md && sed -n '356,367p' docs/DEVELOPMENT.md && rg -n 'sectionText|function sha256' ../98_boxbox/product/engine/common/examples.ts\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'boxbox_issue_body=$(mktemp -t boxbox-approval-issue)\ncat > \"$boxbox_issue_body\" <<'\"'EOF'\n## Problem\n\nDuring a downstream pilot for #68, the agent requested approval for a file-scoped TypeScript alignment rule. The host accepted the question request, but the user saw no question or choices in the conversation and had to ask where to respond. The source write correctly waited for explicit approval, but the request could not be acted on.\n\n## Proposed flow\n\n1. Return a structured approval request for a fixable exact key with no applicable approval. Include the project-relative target, rule key, file scope, affected groups, fixed before/after and preservation examples, and a digest of the proposal.\n2. Let the host render a visible approval card with Approve and Keep preview options. If the host cannot show a card or cannot confirm delivery, present those same choices in the conversation and identify the proposal.\n3. Separate tool acceptance, visible delivery, and the user's d",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport hashlib,json,pathlib,shutil,subprocess,tempfile\nroot=pathlib.Path.cwd()\nstage=pathlib.Path(tempfile.mkdtemp(prefix='www-boxbox-shared-approval-'))\nproposal=pathlib.Path('$TMPDIR/www-boxbox-68-pilot-p9wz67vn/src/native-reports.ts')\nsource=root/'src/shared.ts'\nscope='src/shared.ts'\nheading='인터페이스 필드 정렬 승인'\nref='.boxbox/rules/www-shared-interface-members-approved.md'\nkey='v1|typescript|InterfaceDeclaration|interface-members|colon>semicolon'\nrule_id='www-ts-shared-interface-members-v1'\nexample_ids=[rule_id+'-positive',rule_id+'-literal-counter']\ndate='2026-11-22'\nversions={'lookupKey':1,'conventionSchema':1,'exampleSchema':1,'decisionSchema':1}\nsha=lambda data: hashlib.sha256(data).hexdigest()\nbefore=source.read_text().splitlines()[8:16]\nafter=proposal.read_text().splitlines()[8:16]\nassert before[0]==after[0]=='export interface NativeTimingEvent {'\nassert before[-1]==after[-1]=='}'\npositive=('\\\\n'.join(before)+'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - $TMPDIR/www-boxbox-shared-approval-aeqjw1vb <<'PY'\nimport hashlib,json,os,pathlib,stat,subprocess,sys,tempfile\np=pathlib.Path(sys.argv[1])\nbase=p/'project'\nbackup=p/'before'\nsource=pathlib.Path('src/shared.ts')\nlocal=pathlib.Path('.www/development.local.json')\nnames=['examples.jsonl','decisions.jsonl','conventions.jsonl']\ndoc=pathlib.Path('.boxbox/rules/www-shared-interface-members-approved.md')\nfiles=[pathlib.Path('.boxbox')/n for n in names]\nfor file in [*files,source,local]:\n    assert file.read_bytes()==(backup/file.name).read_bytes(), f'{file} changed after preview'\nassert not doc.exists()\ndef replace(path,data):\n    mode=stat.S_IMODE(path.stat().st_mode) if path.exists() else 0o644\n    with tempfile.NamedTemporaryFile(dir=path.parent,prefix='.'+path.name+'.',delete=False) as dst:\n        dst.write(data)\n        os.fchmod(dst.fileno(),mode)\n    os.replace(dst.name,path)\nsettings=json.loads(local.read_text())\nfor file",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"git status --short -- src/shared.ts .boxbox && git diff --check -- src/shared.ts .boxbox && git diff -w --exit-code -- src/shared.ts && rg --files test | rg 'timing|projection|native-activity|dashboard.test' \"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'npm run check:source && npm run typecheck'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'gh issue view 69 --repo Woo-JongHo/boxbox --json state,title,url'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'npm run build && npm run check:architecture'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'boxbox_focus_log=$(mktemp -t www-boxbox-shared-tests)\nbun test test/native-timing.test.ts test/native-activity.test.ts test/projection.test.ts test/dashboard.test.ts > \"$boxbox_focus_log\" 2>&1\nboxbox_focus_status=$?\ntail -9 \"$boxbox_focus_log\"\nexit \"$boxbox_focus_status\"'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"git diff --check -- src/shared.ts src/architecture.generated.json .boxbox && git diff --numstat -- src/shared.ts src/architecture.generated.json .boxbox && rg -n 'traceId   : string|interface WwwApi' src/shared.ts\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'boxbox_integration_log=$(mktemp -t www-boxbox-integration)\nnpm run test:boxbox > \"$boxbox_integration_log\" 2>&1\nboxbox_integration_status=$?\ntail -16 \"$boxbox_integration_log\"\nexit \"$boxbox_integration_status\"'",
+        "status"  : "failed",
+        "exitCode": 1
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport pathlib,os\nlogs=list(pathlib.Path(os.environ['TMPDIR']).glob('www-boxbox-integration*'))\np=max(logs,key=lambda p:p.stat().st_mtime)\nlines=p.read_text().splitlines()\nfor i,l in enumerate(lines):\n if 'error:' in l or 'Expected:' in l or 'Received:' in l or 'at checked' in l:\n  print(i+1,l[:2700])\nPY\nsed -n '137,182p' test/boxbox/work-json.test.ts && sed -n '279,302p' test/boxbox/work-json.test.ts\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '1,137p' test/boxbox/work-json.test.ts && sed -n '1,26p' $TMPDIR/www-boxbox-integration*\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - $TMPDIR/www-boxbox-shared-approval-aeqjw1vb <<'PY'\nimport json,pathlib,shutil,subprocess,sys,tempfile\nroot=pathlib.Path.cwd()\nbackup=pathlib.Path(sys.argv[1])/'before'\nsettings=json.loads((backup/'development.local.json').read_text())\ntool=settings['architectureCanonical']\nwith tempfile.TemporaryDirectory(prefix='www-boxbox-proof-diff-') as td:\n    stage=pathlib.Path(td)\n    (stage/'.git').mkdir()\n    (stage/'scripts').mkdir()\n    shutil.copytree(root/'.boxbox',stage/'.boxbox')\n    files=['scripts/architecture-contract.ts','scripts/workflow.ts']\n    for f in files: shutil.copyfile(root/f,stage/f)\n    def check(f):\n        p=subprocess.run([settings['boxboxNode'],tool['cli'],'check','--source','--file',f,'--json'],cwd=stage,capture_output=True,text=True)\n        d=json.loads(p.stdout)\n        a=d['formatReadiness']\n        return (p.returncode,a['approvalEligible'],[(x['key'],x['status'],x['reasons']) for x in a['approvalF",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"'~/.hermes/node/bin/node' '~/.local/share/boxbox/codex/0.2.9/plugin/scripts/boxbox.mjs' check --source --file scripts/workflow.ts --json | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d[\\\"formatReadiness\\\"][\\\"reasons\\\"]); print(d[\\\"results\\\"][0][\\\"summary\\\"]); print([(g[\\\"startLine\\\"],g[\\\"endLine\\\"],g.get(\\\"reason\\\")) for g in d[\\\"results\\\"][0][\\\"groups\\\"] if g[\\\"state\\\"]==\\\"REFUSE\\\"][:4])'\"",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}
