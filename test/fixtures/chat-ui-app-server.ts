@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 // 실제 Electron IPC·stdio 경계를 검사하는 합성 Native. 모델을 실행하지 않는다.
 import { createInterface } from "node:readline";
+import { randomUUID } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -72,6 +73,33 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
   }
   if (message.id === undefined) continue;
   if (message.method === "initialize") result(message.id, { userAgent: "fixture" });
+  else if (message.method === "model/list") result(message.id, {
+    data: [
+      { model: "fixture", displayName: "기본 모델", isDefault: true },
+      ...(existsSync(join(cwd, "fixture-hide-other-model")) ? [] : [{ model: "fixture-other", displayName: "다른 모델", isDefault: false }])
+    ],
+    nextCursor: null
+  });
+  else if (message.method === "thread/compact/start") {
+    if (existsSync(join(cwd, "fixture-compact-reject"))) {
+      send({ jsonrpc: "2.0", id: message.id, error: { code: -32603, message: "합성 압축 요청 거절" } });
+      continue;
+    }
+    const threadId = String(params.threadId);
+    const turnId = "fixture-compact-" + randomUUID();
+    const item = { type: "contextCompaction", id: turnId + "-item" };
+    if (existsSync(join(cwd, "fixture-compact-no-response"))) continue;
+    result(message.id, {});
+    if (existsSync(join(cwd, "fixture-compact-no-start"))) continue;
+    notify("turn/started", { threadId, turn: { id: turnId, status: "inProgress", items: [] } });
+    notify("item/started", { threadId, turnId, item });
+    if (existsSync(join(cwd, "fixture-compact-no-completion"))) continue;
+    setTimeout(() => {
+      const failed = existsSync(join(cwd, "fixture-compact-fail"));
+      if (!failed) notify("item/completed", { threadId, turnId, item });
+      notify("turn/completed", { threadId, turn: { id: turnId, status: failed ? "failed" : "completed", items: [] } });
+    }, 450);
+  }
   else if (message.method === "thread/list") result(message.id, { data: Object.keys(histories).map((id) => ({ id, name: id === "history-a" ? "저장 작업 A" : id === "history-b" ? "저장 작업 B" : "새 작업", preview: "복원 가능한 대화", cwd, updatedAt: 1794470000, source: "vscode", originator: "www", status: { type: "idle" } })), nextCursor: null });
   else if (message.method === "thread/read" || message.method === "thread/resume") {
     if (message.method === "thread/resume") loadedThreads.add(String(params.threadId));

@@ -16,7 +16,7 @@ import { createNativeReportHarness } from "../src/native-reports";
 import { judgeNativeReport } from "../src/report-judge";
 import { reduceConversationEvents } from "../src/chat-state";
 import { projectNativeActivity } from "../src/native-activity";
-import type { ConversationSelection, ResourceSnapshot, ScopedAppEvent, SelectionRef } from "../src/shared";
+import type { ConversationSelection, NativeSessionSummary, ResourceSnapshot, ScopedAppEvent, SelectionRef } from "../src/shared";
 
 type Session = ReturnType<typeof createNativeSession>;
 async function until(check: () => boolean): Promise<void> {
@@ -26,7 +26,7 @@ async function until(check: () => boolean): Promise<void> {
     await new Promise(resolve => setTimeout(resolve, 10));
   }
 }
-async function setup(hooks: { beforeUpsert?: () => Promise<void>; projectIO?: ProjectRegistryIO; stageProbe?: boolean; onChild?: (child: ChildProcessWithoutNullStreams, count: number) => void } = {}) {
+async function setup(hooks: { beforeUpsert?: () => Promise<void>; projectIO?: ProjectRegistryIO; stageProbe?: boolean; compactionTimeoutMs?: number; onChild?: (child: ChildProcessWithoutNullStreams, count: number) => void } = {}) {
   const root = await realpath(await mkdtemp(join(tmpdir(), "www-sessions-")));
   const userData = join(root, "profile");
   const first = join(root, "first");
@@ -36,6 +36,7 @@ async function setup(hooks: { beforeUpsert?: () => Promise<void>; projectIO?: Pr
   const events: ScopedAppEvent[] = [];
   const resources: ResourceSnapshot[] = [];
   const children: ChildProcessWithoutNullStreams[] = [];
+  let publishedSummaries: NativeSessionSummary[] = [];
   const processEpoch = randomUUID();
   const projects = createProjectRegistry({ userData, io: hooks.projectIO });
   await Promise.all([projects.register(first), projects.register(second)]);
@@ -49,8 +50,8 @@ async function setup(hooks: { beforeUpsert?: () => Promise<void>; projectIO?: Pr
   function add(id: string, workspace: string, workspaceMetadata?: (workspace: string) => { branch: string | null; changes: number }, registrationError?: string) {
     const session = createNativeSession({
       id, workspace, processEpoch, appVersion: "test", ledger, projects, workspaceMetadata, registrationError, wwwRoot: first, dist: root,
-      reports: { enabled: false }, reportHarness: () => reports, ownership: sessions,
-      onEvent: event => events.push(event), onResources: snapshot => resources.push(snapshot), onChanged() { changes++; for (const existing of sessions.list()) existing.summary(); },
+      reports: { enabled: false }, reportHarness: () => reports, ownership: sessions, compactionTimeoutMs: hooks.compactionTimeoutMs,
+      onEvent: event => events.push(event), onResources: snapshot => resources.push(snapshot), onChanged() { changes++; publishedSummaries = sessions.list().map(existing => existing.summary()); },
       chooseDirectory: async () => directory, exportReport: async () => null, openExternal: async () => {},
       spawnNative(cwd) {
         const child = spawn(process.execPath, [join(import.meta.dir, hooks.stageProbe ? "fixtures/activity-app-server.ts" : "fixtures/chat-ui-app-server.ts")], { cwd, stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, ...(hooks.stageProbe ? { WWW_STAGE_PROBE: "1" } : {}) } });
@@ -67,12 +68,91 @@ async function setup(hooks: { beforeUpsert?: () => Promise<void>; projectIO?: Pr
     await ledger.close();
     await rm(root, { recursive: true, force: true });
   }
-  return { root, first, second, add, close, sessions, events, resources, children, changes: () => changes, choose(path: string | null) { directory = path; } };
+  return { root, first, second, add, close, sessions, events, resources, children, latestSummaries: () => publishedSummaries, changes: () => changes, choose(path: string | null) { directory = path; } };
 }
 const selected = (session: Session): SelectionRef => session.workspaceInfo();
 async function start(session: Session): Promise<string> {
   const result = await session.invoke("thread:start", [selected(session)]) as { threadId: string };
   return result.threadId;
+}
+
+test("모델 적용과 압축의 요청·성공·실패는 한 Native 대화와 탭에만 귀속된다", async () => {
+  const fixture = await setup();
+  try {
+    const a = fixture.add("a", fixture.first);
+    const b = fixture.add("b", fixture.second);
+    const threadA = await start(a);
+    const threadB = await start(b);
+    const selectionA = selected(a);
+    const selectionB = selected(b);
+    await expect(a.invoke("models:list", [selectionA])).resolves.toEqual([
+      { model: "fixture", displayName: "기본 모델", isDefault: true },
+      { model: "fixture-other", displayName: "다른 모델", isDefault: false },
+    ]);
+    await expect(a.invoke("thread:compact", [selectionA, threadA])).rejects.toThrow("압축할 이력");
+    await Promise.all([
+      a.invoke("turn:start", [selectionA, threadA, "첫 탭 요청", "fixture-other"]),
+      b.invoke("turn:start", [selectionB, threadB, "둘째 탭 요청"]),
+    ]);
+    await until(() => !a.summary().busy && !b.summary().busy);
+    const rejected = join(fixture.first, "fixture-compact-reject");
+    await writeFile(rejected, "reject");
+    await expect(a.invoke("thread:compact", [selectionA, threadA])).rejects.toThrow("합성 압축 요청 거절");
+    expect(fixture.latestSummaries().find(snapshot => snapshot.id === a.id)?.compaction).toMatchObject({ state: "failed" });
+    expect(fixture.latestSummaries().find(snapshot => snapshot.id === b.id)?.compaction.state).toBe("idle");
+    await rm(rejected);
+    await a.invoke("thread:compact", [selectionA, threadA]);
+    expect(["pending", "running"]).toContain(a.summary().compaction.state);
+    expect(b.summary().compaction.state).toBe("idle");
+    await expect(a.invoke("turn:start", [selectionA, threadA, "압축 중 요청"])).rejects.toThrow("압축이 끝난 뒤");
+    await until(() => a.summary().compaction.state === "completed");
+    await writeFile(join(fixture.first, "fixture-compact-fail"), "fail");
+    await a.invoke("thread:compact", [selectionA, threadA]);
+    await until(() => a.summary().compaction.state === "failed");
+    const calls = await Promise.all([fixture.first, fixture.second].map(async (path) =>
+      (await readFile(join(path, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => JSON.parse(line))));
+    expect(calls[0]?.find(call => call.method === "turn/start")?.params.model).toBe("fixture-other");
+    expect(calls[1]?.find(call => call.method === "turn/start")?.params.model).toBeUndefined();
+    expect(calls[1]?.some(call => call.method === "thread/compact/start")).toBe(false);
+    await a.invoke("thread:compact", [selectionA, threadA]);
+    fixture.children[0]?.kill();
+    await until(() => a.summary().compaction.state === "failed" && !a.summary().busy);
+    expect(a.summary().compaction).toEqual({ state: "failed", message: "연결이 종료되어 압축 결과를 확인할 수 없습니다." });
+    expect(a.summary().busy).toBe(false);
+  } finally { await fixture.close(); }
+});
+
+for (const missing of ["response", "start", "completion"] as const) {
+  test(`압축의 ${missing} 근거가 멈추면 같은 대화를 명시적으로 다시 열어 복구한다`, async () => {
+    const fixture = await setup({ compactionTimeoutMs: 200 });
+    try {
+      const session = fixture.add("compacting", fixture.first);
+      const other = fixture.add("other", fixture.second);
+      const thread = await start(session);
+      await start(other);
+      const selection = selected(session);
+      await session.invoke("turn:start", [selection, thread, "압축할 대화"]);
+      await until(() => !session.summary().busy);
+      const marker = join(fixture.first, `fixture-compact-no-${missing}`);
+      await writeFile(marker, "missing");
+      const compact = session.invoke("thread:compact", [selection, thread]);
+      if (missing === "response") await expect(compact).rejects.toThrow("같은 대화를 다시 열어 주세요");
+      else await compact;
+      await until(() => session.summary().compaction.state === "failed" && !session.summary().busy);
+      expect(session.summary()).toMatchObject({ busy: false, compaction: { state: "failed", message: "압축 결과를 확인할 수 없습니다. 같은 대화를 다시 열어 주세요." } });
+      expect(other.summary()).toMatchObject({ compaction: { state: "idle" } });
+      const otherThread = other.summary().threadId!;
+      await other.invoke("turn:start", [selected(other), otherThread, "다른 탭의 정상 요청"]);
+      await until(() => !other.summary().busy);
+      await rm(marker);
+      await session.invoke("conversations:open", [selection, thread]);
+      await session.invoke("turn:start", [selected(session), thread, "다시 연 대화에 이어서 작성"]);
+      await until(() => !session.summary().busy);
+      expect(session.summary().compaction.state).toBe("idle");
+      const calls = await readFile(join(fixture.first, "fixture-calls.jsonl"), "utf8");
+      expect(calls.split("\n").filter(line => line.includes('"method":"thread/compact/start"'))).toHaveLength(1);
+    } finally { await fixture.close(); }
+  });
 }
 
 test("두 실제 Native child는 동시에 실행하며 승인 ID·token·이벤트·중단·원장을 격리한다", async () => {

@@ -187,6 +187,16 @@ export interface ConversationCatalog {
   nextCursor : string | null         ;
 }
 
+export interface NativeModelOption {
+  model: string;
+  displayName: string;
+  isDefault: boolean;
+}
+
+export type NativeCompaction =
+  | { state: "idle" | "pending" | "running" | "completed" }
+  | { state: "failed"; message: string };
+
 export interface NativeSessionSummary {
   id            : string             ;
   title         : string             ;
@@ -195,6 +205,7 @@ export interface NativeSessionSummary {
   busy          : boolean            ;
   approvalCount : number             ;
   failed        : boolean            ;
+  compaction    : NativeCompaction   ;
 }
 
 export interface WwwApi {
@@ -216,7 +227,9 @@ export interface WwwApi {
   setProjectFavorite(selection: SelectionRef, workspaceKey: string, favorite: boolean): Promise<void>;
   switchProject(selection: SelectionRef, workspaceKey: string): Promise<ConversationSelection>;
   startThread(selection: SelectionRef): Promise<{ threadId: string }>;
-  startTurn(selection: SelectionRef, threadId: string, text: string): Promise<{ turnId: string }>;
+  startTurn(selection: SelectionRef, threadId: string, text: string, model?: string): Promise<{ turnId: string }>;
+  listModels(selection: SelectionRef): Promise<NativeModelOption[]>;
+  compactThread(selection: SelectionRef, threadId: string): Promise<void>;
   steerTurn(selection: SelectionRef, threadId: string, expectedTurnId: string, text: string, clientUserMessageId: string): Promise<{ turnId: string }>;
   interrupt(selection: SelectionRef, threadId: string, turnId: string): Promise<void>;
   respond(selection: SelectionRef, requestId: RpcId, decision: string, approvalToken: string): Promise<void>;

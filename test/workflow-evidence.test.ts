@@ -642,7 +642,11 @@ for (const mode of ['environment', 'session-failure', 'session-failure-pending',
     for (const number of [1, 2]) works.push(await openWork({ repo, role: 'www-dev', direct: true, request: '기록 관측 fixture', requestId: `${mode}-${number}`, inputs: ['src', 'check.ts'],
       decision: { intent: 'verify', area: 'Workflow', title: `관측 ${number}`, criteria: [{ id: 'AC-1', description: '실제 명령 검사', required: true }] },
       approval: { implementation: false, writePaths: [], mutationSurfaces: [], verifierCommands: [JSON.stringify([command, ...args])] } }));
-    const session = createVerificationSession({ checkId: `record-observation-${mode}`, scenario: '기록 시 관측', phase: 'common', maxAgeMs: mode === 'expired-pending' ? 1_000 : 60_000, tools: [command], environmentPaths: [], environmentObserved: true });
+    const maxAgeMs = 60_000;
+    const now = performance.now.bind(performance);
+    let elapsedAfterPending = 0;
+    if (mode === 'expired-pending') t.mock.method(performance, 'now', () => now() + elapsedAfterPending);
+    const session = createVerificationSession({ checkId: `record-observation-${mode}`, scenario: '기록 시 관측', phase: 'common', maxAgeMs, tools: [command], environmentPaths: [], environmentObserved: true });
     const warm = await verifyWork({ repo, workId: works[0].record.id, command, args, criterionIds: ['AC-1'], reuseSession: session });
     const target = works[1];
     const directory = path.join(repo, '.www/pending-results');
@@ -658,8 +662,8 @@ for (const mode of ['environment', 'session-failure', 'session-failure-pending',
       if (mode === 'environment') await writeFile(path.join(repo, 'node_modules/input'), 'changed-during-lock');
       if (mode.startsWith('session-failure')) await verifyInSession(session, options(repo, { record: target.record, args: ['-e', 'process.exit(7)'] }));
       // 재시도 예산보다 느린 정상 보류 경로를 시간 추정 없이 실제 잠금으로 강제한다.
-      if (mode === 'session-failure-pending') await pending;
-      if (mode === 'expired-pending' || mode === 'process-pending') await new Promise(resolve => setTimeout(resolve, 1_100));
+      if (mode === 'session-failure-pending' || mode === 'expired-pending' || mode === 'process-pending') await pending;
+      if (mode === 'expired-pending') elapsedAfterPending = maxAgeMs + 1;
     });
     assert.ok(pending);
     let result = await pending;
@@ -677,6 +681,9 @@ for (const mode of ['environment', 'session-failure', 'session-failure-pending',
     }
     if (mode === 'expired-pending' || mode === 'process-pending') {
       assert.equal(result.recorded, false);
+      assert.equal(result.reason, 'WORK_LOCK_BUSY');
+      assert.equal(result.reuse?.action, 'reused');
+      assert.equal(result.id, warm.id);
       assert.equal((await readWork({ repo, workId: target.record.id })).record.workflow?.verifications.length, 0);
       if (mode === 'expired-pending') await assert.rejects(appendPending({ repo, workId: target.record.id, artifactPath: result.artifactPath }), /reuse_record_changed/);
       else {

@@ -49,8 +49,18 @@ export interface NativeSessionOptions {
   exportReport(document: WorkReportDocument): Promise<string | null>;
   openExternal(url: string): Promise<void>;
   spawnNative?(workspace: string): ChildProcessWithoutNullStreams;
+  compactionTimeoutMs?: number;
   registrationError?: string | null;
   workspaceMetadata?(workspace: string): { branch: string | null; changes: number };
+}
+
+const COMPACTION_TIMEOUT_MESSAGE = "압축 결과를 확인할 수 없습니다. 같은 대화를 다시 열어 주세요.";
+
+interface CompactTurn {
+  id: string | null;
+  itemCompleted: boolean;
+  timedOut: boolean;
+  timeout: ReturnType<typeof setTimeout>;
 }
 
 export function createNativeSession(options: NativeSessionOptions) {
@@ -103,6 +113,16 @@ export function createNativeSession(options: NativeSessionOptions) {
 
   const nativeCompletions = new Map<string, NativeCompletionCollector>()                             ;
 
+  let hasConversationHistory = false;
+  let compaction: NativeSessionSummary["compaction"] = { state: "idle" };
+  let compactTurn: CompactTurn | null = null;
+
+  function finishCompaction(result: NativeSessionSummary["compaction"]): void {
+    if (compactTurn) clearTimeout(compactTurn.timeout);
+    compactTurn = null;
+    compaction = result;
+  }
+
   let seq                       = 0                        ;
   let connectionGeneration      = 0                        ;
   let activityRequestGeneration = 0                        ;
@@ -138,7 +158,16 @@ export function createNativeSession(options: NativeSessionOptions) {
     if (entry.kind === "transport" || entry.method.startsWith("approval/") || ["thread/configured", "turn/started", "turn/completed", "turn/startAccepted", "turn/startFailed", "turn/userPrompt"].includes(entry.method) || entry.kind === "request") options.onChanged();
   }
   function summary(): NativeSessionSummary {
-    return { id: options.id, title, workspace: workspaceSnapshot(), threadId: activeThreadId, busy: turnStarting || steering || activeTurnId !== null || switchingConversation, approvalCount: lifecycle.approvalCount, failed };
+    return {
+      id: options.id,
+      title,
+      workspace: workspaceSnapshot(),
+      threadId: activeThreadId,
+      busy: turnStarting || steering || activeTurnId !== null || switchingConversation || compactTurn !== null,
+      approvalCount: lifecycle.approvalCount,
+      failed,
+      compaction,
+    };
   }
   function selection(): SelectionRef {
     return { sessionId: options.id, workspaceKey: createHash("sha256").update(workspace).digest("hex"), selectionEpoch, processEpoch };
@@ -381,6 +410,10 @@ export function createNativeSession(options: NativeSessionOptions) {
         const interruptedThread = activeTurnId !== null ? activeThreadId : null;
         activeTurnId = null;
         interruptingTurn = null;
+        if (compactTurn) {
+          const message = compactTurn.timedOut ? COMPACTION_TIMEOUT_MESSAGE : "연결이 종료되어 압축 결과를 확인할 수 없습니다.";
+          finishCompaction({ state: "failed", message });
+        }
         // 준비 중인 IPC의 finally만 잠금을 해제한다. closed에서 내리면 복구가 겹친다.
         lifecycle.closed(client, error.message, interruptedThread);
         if (activeThreadId && !threadTransition) {
@@ -430,6 +463,17 @@ export function createNativeSession(options: NativeSessionOptions) {
           if (uncertainSelection?.threadId === activeThreadId && uncertainSelection.epoch === selectionEpoch) return;
           if (terminalSelection?.client === client && terminalSelection.epoch === selectionEpoch && terminalSelection.turns.has(turn.id)) return;
           activeTurnId = turn.id;
+          if (compactTurn && compactTurn.id === null) {
+            compactTurn.id = turn.id;
+            compaction = { state: "running" };
+            if (!compactTurn.timedOut) compactTurn.timeout.refresh();
+          }
+        }
+        const item = optionalRecord(params?.item);
+        if (method === "item/completed" && item?.type === "contextCompaction" && params?.threadId === activeThreadId
+          && typeof params.turnId === "string" && compactTurn && compactTurn.id === params.turnId) {
+          compactTurn.itemCompleted = true;
+          if (!compactTurn.timedOut) compactTurn.timeout.refresh();
         }
         if (method === "turn/completed" && params && turn && typeof turn.id === "string") {
           endedTurns.add(`${String(params.threadId)}:${turn.id}`);
@@ -439,6 +483,11 @@ export function createNativeSession(options: NativeSessionOptions) {
           }
           if (params.threadId === activeThreadId && activeTurnId === turn.id) activeTurnId = null;
           if (params.threadId === activeThreadId && interruptingTurn === turn.id) interruptingTurn = null;
+          if (params.threadId === activeThreadId && compactTurn?.id === turn.id) {
+            finishCompaction(turn.status === "completed" && compactTurn.itemCompleted
+              ? { state: "completed" }
+              : { state: "failed", message: "대화 압축을 완료했다는 확인을 받지 못했습니다." });
+          }
         }
         if (typeof id === "string" || typeof id === "number") {
           const supported = SUPPORTED.has(method);
@@ -475,6 +524,7 @@ export function createNativeSession(options: NativeSessionOptions) {
 
   function assertConversationIdle(): void {
     if (switchingConversation) throw new Error("대화를 전환하고 있습니다. 잠시 기다려 주세요.");
+    if (compactTurn) throw new Error("대화 압축이 끝난 뒤 다시 시도해 주세요.");
     if (turnStarting || steering || activeTurnId !== null || lifecycle.approvalCount > 0) throw new Error("실행 또는 승인 요청이 끝난 뒤 대화를 전환할 수 있습니다.");
   }
 
@@ -634,6 +684,8 @@ export function createNativeSession(options: NativeSessionOptions) {
       selectionEpoch++;
       activeThreadId = null;
       activeTurnId = null;
+      hasConversationHistory = false;
+      compaction = { state: "idle" };
       lifecycle.reset();
       threadStarted = false;
       eventLog.splice(0);
@@ -750,6 +802,8 @@ export function createNativeSession(options: NativeSessionOptions) {
       const restoredPrompt = optionalRecord(restored.events.find(event => event.method === "turn/userPrompt")?.params);
       title = typeof restoredPrompt?.text === "string" ? restoredPrompt.text.slice(0, 40) : "저장 대화";
       activeThreadId = restored.threadId;
+      hasConversationHistory = restored.events.some(event => event.method === "turn/completed");
+      compaction = { state: "idle" };
       developmentBinding = null;
       activeTurnId = null;
       threadStarted = true;
@@ -793,6 +847,8 @@ export function createNativeSession(options: NativeSessionOptions) {
       selectionEpoch++;
       activeThreadId = null;
       activeTurnId = null;
+      hasConversationHistory = false;
+      compaction = { state: "idle" };
       lifecycle.reset();
       threadStarted = false;
       threadTransition = null;
@@ -874,17 +930,77 @@ export function createNativeSession(options: NativeSessionOptions) {
     } catch (error) { trace.cancel("failed"); throw error; }
     finally { threadTransition = null; switchingConversation = false; }
   });
-  handle("turn:start", async (_event, expected: unknown, threadId: unknown, text: unknown) => {
+  handle("models:list", async (_event, expected: unknown) => {
+    assertSelection(expected);
+    assertConversationIdle();
+    const client = await connect();
+    const models = new Map<string, { model: string; displayName: string; isDefault: boolean }>();
+    const seen = new Set<string>();
+    let cursor: string | null = null;
+    do {
+      assertSelection(expected);
+      const page = record(await client.request("model/list", { cursor, limit: 100, includeHidden: false }));
+      assertSelection(expected);
+      if (rpc !== client || !Array.isArray(page.data)) throw new Error("현재 연결의 모델 목록을 확인할 수 없습니다.");
+      for (const raw of page.data) {
+        const item = optionalRecord(raw);
+        if (typeof item?.model !== "string" || !item.model || typeof item.displayName !== "string" || item.hidden === true) continue;
+        models.set(item.model, { model: item.model, displayName: item.displayName, isDefault: item.isDefault === true });
+      }
+      cursor = typeof page.nextCursor === "string" && page.nextCursor ? page.nextCursor : null;
+      if (cursor) {
+        if (seen.has(cursor) || seen.size >= 20) throw new Error("모델 목록의 페이지를 모두 확인할 수 없습니다.");
+        seen.add(cursor);
+      }
+    } while (cursor);
+    return [...models.values()];
+  });
+
+  handle("thread:compact", async (_event, expected: unknown, threadId: unknown) => {
+    assertSelection(expected);
+    assertConversationIdle();
+    const thread = requiredString(threadId, "thread ID");
+    if (thread !== activeThreadId || !hasConversationHistory) throw new Error("압축할 이력이 있는 대화를 먼저 열어 주세요.");
+    const client = rpc;
+    const child = childProcess;
+    if (!client || !child || !lifecycle.isReady(client, workspace, thread)) throw new Error("Native 연결을 확인할 수 없습니다. 대화를 다시 열어 주세요.");
+    const pending: CompactTurn = { id: null, itemCompleted: false, timedOut: false, timeout: setTimeout(() => {
+      if (compactTurn !== pending || rpc !== client || childProcess !== child) return;
+      pending.timedOut = true;
+      // 종료가 확인될 때까지 같은 대화의 새 요청을 막는다.
+      void terminateChild(child);
+    }, options.compactionTimeoutMs ?? 120_000) };
+    compactTurn = pending;
+    compaction = { state: "pending" };
+    options.onChanged();
+    try {
+      await client.request("thread/compact/start", { threadId: thread });
+      assertSelection(expected);
+      if (rpc !== client) throw new Error("연결이 종료되어 압축 결과를 확인할 수 없습니다.");
+      if (compactTurn === pending && !pending.timedOut) pending.timeout.refresh();
+    } catch (error) {
+      if (pending.timedOut) throw new Error(COMPACTION_TIMEOUT_MESSAGE);
+      if (compactTurn === pending) {
+        finishCompaction({ state: "failed", message: error instanceof Error ? error.message : String(error) });
+        options.onChanged();
+      }
+      throw error;
+    }
+  });
+
+  handle("turn:start", async (_event, expected: unknown, threadId: unknown, text: unknown, model: unknown) => {
     assertSelection(expected);
     const validThreadId = requiredString(threadId, "thread ID");
     assertSelection(expected);
     assertConversationIdle();
     if (validThreadId !== activeThreadId) throw new Error("현재 선택한 대화에만 요청을 보낼 수 있습니다.");
     if (typeof text !== "string" || !text.trim() || text.length > 100_000) throw new Error("Invalid prompt");
+    if (model !== undefined && (typeof model !== "string" || !model.trim() || model.length > 200)) throw new Error("유효한 모델을 선택해 주세요.");
     const prompt          = text.trim () ;
     const clientRequestId = randomUUID() ;
     const trace = nativeTiming.forTurn(validThreadId, () => isCurrent(expected));
     turnStarting = true;
+    compaction = { state: "idle" };
     endedTurns.clear();
     developmentCalls.clear();
     developmentAttempts.clear();
@@ -903,7 +1019,7 @@ export function createNativeSession(options: NativeSessionOptions) {
           return client;
         },
         valid: (client) => isCurrent(expected) && rpc === client && workspace === root && activeThreadId === validThreadId,
-        cwd: root, threadId: validThreadId, prompt,
+        cwd: root, threadId: validThreadId, prompt, ...(typeof model === "string" ? { model } : {}),
         requestBoundary: (method, status) => {
           if (method === "thread/read" || method === "thread/resume" || method === "thread/turns/list" || method === "turn/start") trace.mark(method, status);
         },
@@ -939,6 +1055,7 @@ export function createNativeSession(options: NativeSessionOptions) {
       trace.bindTurn(turnId);
       trace.mark("request", "completed");
       if (!endedTurns.has(`${validThreadId}:${turnId}`)) activeTurnId = turnId;
+      hasConversationHistory = true;
       publish({ kind: "notification", method: "turn/startAccepted", params: { clientRequestId, threadId: validThreadId, turnId } });
       return { turnId };
     } catch (error) {
@@ -959,7 +1076,7 @@ export function createNativeSession(options: NativeSessionOptions) {
     if (id.length > 200 || typeof text !== "string" || !text.trim() || text.length > 100_000) throw new Error("Invalid steer input");
     if (steerIds.has(id)) throw new Error("이미 전송한 추가 지시 ID입니다.");
     if (steering) throw new Error("이전 추가 지시의 접수를 확인하고 있습니다.");
-    if (switchingConversation || turnStarting || lifecycle.approvalCount > 0 || interruptingTurn !== null) throw new Error("시작·승인·중단 처리가 끝난 뒤 추가 지시를 보낼 수 있습니다.");
+    if (switchingConversation || turnStarting || compactTurn || lifecycle.approvalCount > 0 || interruptingTurn !== null) throw new Error("시작·승인·중단·압축 처리가 끝난 뒤 추가 지시를 보낼 수 있습니다.");
     const client = rpc;
     if (!client || thread !== activeThreadId || turn !== activeTurnId) throw new Error("현재 실행 중인 턴을 확인할 수 없습니다.");
     const params = { threadId: thread, turnId: turn, clientUserMessageId: id, text };
@@ -1036,7 +1153,7 @@ export function createNativeSession(options: NativeSessionOptions) {
     readReport: reports.read,
     assertClosable() {
       if (stopping) throw new Error("대화 탭을 닫고 있습니다.");
-      if (turnStarting || steering || activeTurnId !== null || switchingConversation || lifecycle.approvalCount > 0) throw new Error("실행 또는 승인 요청이 남아 있습니다. 중단하고 승인 요청을 처리한 뒤 탭을 닫아 주세요.");
+      if (turnStarting || steering || activeTurnId !== null || switchingConversation || compactTurn || lifecycle.approvalCount > 0) throw new Error("실행 또는 승인 요청이 남아 있습니다. 중단하고 승인 요청을 처리한 뒤 탭을 닫아 주세요.");
     },
     async invoke(channel: string, args: unknown[]): Promise<unknown> {
       if (stopping) throw new Error("대화 탭을 닫고 있습니다.");
@@ -1058,6 +1175,7 @@ export function createNativeSession(options: NativeSessionOptions) {
     stop(): Promise<void> {
       if (stopPromise) return stopPromise;
       stopping = true;
+      if (compactTurn) clearTimeout(compactTurn.timeout);
       nativeTiming.cancel();
       clientToken++;
       rpc = null;
