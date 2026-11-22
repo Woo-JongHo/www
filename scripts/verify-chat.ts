@@ -456,6 +456,76 @@ try {
     console.log(JSON.stringify({ evidence: directory, checks }));
     return;
   }
+  if (process.argv.includes("--theme-only")) {
+    const openPicker = async () => {
+      await session!.input("/theme");
+      await session!.click('[data-testid="send-button"]');
+      await session!.wait("document.querySelector('dialog[open] h2')?.textContent==='채팅 테마 선택'", "테마 선택기 열기");
+    };
+    const key = async (name: string, code: number, text?: string) => {
+      const physical = name === " " ? "Space" : name;
+      await session!.command("Input.dispatchKeyEvent", { type: "keyDown", key: name, code: physical, windowsVirtualKeyCode: code, nativeVirtualKeyCode: code, ...(text ? { text, unmodifiedText: text } : {}) });
+      await session!.command("Input.dispatchKeyEvent", { type: "keyUp", key: name, code: physical, windowsVirtualKeyCode: code, nativeVirtualKeyCode: code });
+    };
+    const themeFile = path.join(directory, "profile", "chat-theme.json");
+    const mint = `document.querySelector('.session-surface:not([hidden]) main.work').dataset.chatTheme==='www-mint'`;
+    const basic = 'getComputedStyle(document.querySelector(".session-surface:not([hidden]) main.work")).backgroundColor==="rgb(255, 255, 255)"';
+    const focused = "document.activeElement===document.querySelector('[data-testid=\"prompt-input\"]')";
+    const panelColors = (background: string, foreground: string) => `(() => {
+      const surface=document.querySelector('.session-surface:not([hidden])');
+      const panels=['.target-sidebar','[data-testid="resource-sidebar"]'];
+      return innerWidth>=1000 && panels.every(selector=>{
+        const panel=surface?.querySelector(selector);
+        if(!panel||panel.getBoundingClientRect().width===0) return false;
+        const style=getComputedStyle(panel);
+        return style.backgroundColor===${JSON.stringify(background)} && style.color===${JSON.stringify(foreground)};
+      });
+    })()`;
+    const basicPanels = panelColors("rgb(255, 255, 255)", "rgb(23, 23, 23)");
+    const mintPanels = panelColors("rgb(12, 14, 13)", "rgb(230, 232, 230)");
+    await session.click('[data-thread-id="history-a"]');
+    await session.wait("document.querySelector('.command-card')", "기존 명령 카드가 있는 대화 열기");
+    await session.wait(`${basic} && getComputedStyle(document.querySelector('.command-card')).backgroundColor==='rgb(246, 246, 246)'`, "미설정 프로필의 기본 배경색이 채팅과 명령 카드에 적용");
+    await session.wait(basicPanels, "넓은 창의 대화 목록과 Agent 패널에 Basic 배경색·글자색 적용");
+    await openPicker();
+    await session.wait("document.querySelector('dialog[open] button[aria-pressed=true]')?.textContent==='Terminal Basic'", "Basic 기본 선택 표시");
+    await key("Tab", 9);
+    await session.wait("document.activeElement?.textContent==='WWW Mint'", "키보드로 WWW Mint 이동");
+    await key(" ", 32, " ");
+    await session.wait(`${mint} && ${focused} && !document.querySelector('dialog[open]')`, "키보드 적용·입력창 초점 복귀");
+    await session.wait(mintPanels, "테마를 선택하면 대화 목록과 Agent 패널도 Mint로 전환");
+    await session.wait("getComputedStyle(document.querySelector('.command-card')).backgroundColor==='rgb(20, 24, 21)'", "명령 카드의 배경색도 Mint로 전환");
+    await openPicker();
+    await key("Escape", 27);
+    await session.wait(`${mint} && ${focused} && !document.querySelector('dialog[open]')`, "Escape 취소 시 테마·입력창 초점 유지");
+    await session.click(".session-tab-create");
+    await session.wait(`${mint} && document.querySelectorAll('main.work[data-chat-theme=www-mint]').length===2`, "기존 탭과 새 탭에 같은 테마 적용");
+    await session.click("button[role=tab]");
+    await openPicker();
+    await fs.rename(themeFile, themeFile + ".preserved");
+    await fs.mkdir(themeFile);
+    try {
+      await session.click("dialog[open] .chat-model-options button");
+      await session.wait(`${mint} && document.querySelector('.chat-compose-note').textContent.includes('테마를 저장하지 못했습니다')`, "저장 실패 알림과 기존 테마 유지");
+    } finally {
+      await fs.rmdir(themeFile);
+      await fs.rename(themeFile + ".preserved", themeFile);
+    }
+    const calls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
+    if (calls.some(call => call.method === "turn/start" || call.method === "turn/steer")) throw Error("테마 명령이 Native 사용자 요청을 발행했습니다.");
+    await session.terminate();
+    session = await start(2);
+    await session.wait(`${mint} && ${mintPanels}`, "같은 앱 프로필 재시작 후 대화와 두 패널에 선택 테마 복원");
+    await session.terminate();
+    session = null;
+    await fs.writeFile(themeFile, '"obsolete-theme"');
+    session = await start(3);
+    await session.wait(basic, "지원하지 않는 저장값에서 Basic 적용");
+    await session.terminate();
+    session = null;
+    console.log(JSON.stringify({ evidence: directory, checks }));
+    return;
+  }
   if (process.argv.includes("--slash-only")) {
     const submit = async (value: string) => {
       await session!.input(value);

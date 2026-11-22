@@ -6,6 +6,8 @@ import { contextBridge, ipcRenderer } from "electron";
 import type { NativeSessionSummary, ResourceSnapshot, ScopedAppEvent, WwwApi } from "./shared";
 
 const api: WwwApi = {
+  chatTheme: () => ipcRenderer.invoke("chat-theme:get"),
+  setChatTheme: (theme) => ipcRenderer.invoke("chat-theme:set", theme),
   listSessions: () => ipcRenderer.invoke("sessions:list"),
   createSession: selection => ipcRenderer.invoke("sessions:create", selection),
   closeSession: sessionId => ipcRenderer.invoke("sessions:close", sessionId),

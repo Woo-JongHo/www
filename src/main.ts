@@ -5,7 +5,7 @@
 import { appBuildInfo } from "./build-info";
 import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
 import { randomUUID } from "node:crypto";
-import { mkdirSync, realpathSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, realpathSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { createNativeSession } from "./native-session";
 import { createSessionRegistry } from "./session-registry";
@@ -13,6 +13,7 @@ import { createActivityLedger, type ActivityLedger } from "./activity-ledger";
 import { createProjectRegistry } from "./projects";
 import { createNativeReportHarness } from "./native-reports";
 import { judgeNativeReport } from "./report-judge";
+import type { ChatTheme } from "./shared";
 import { reportFileStem } from "../scripts/workflow/report-names.ts";
 
 const DIST = join(app.getAppPath(), "dist");
@@ -95,6 +96,26 @@ function selectedSession(value: unknown) {
   session.assertSelection(selection);
   return { session, selection };
 }
+function registerChatTheme(): void {
+  const file = join(app.getPath("userData"), "chat-theme.json");
+  let theme: ChatTheme = "terminal-basic";
+  try {
+    const saved: unknown = JSON.parse(readFileSync(file, "utf8"));
+    if (saved === "www-mint") theme = saved;
+  } catch { /* 저장값이 없거나 읽을 수 없으면 기본 테마를 사용한다. */ }
+  ipcMain.handle("chat-theme:get", () => theme);
+  ipcMain.handle("chat-theme:set", (_event, value: unknown) => {
+    if (value !== "terminal-basic" && value !== "www-mint") throw new Error("지원하지 않는 채팅 테마입니다.");
+    const temporary = `${file}.${randomUUID()}.tmp`;
+    try {
+      writeFileSync(temporary, JSON.stringify(value) + "\n", { flag: "wx", mode: 0o600 });
+      renameSync(temporary, file);
+    } finally { rmSync(temporary, { force: true }); }
+    theme = value;
+    return theme;
+  });
+}
+
 function registerIpc(): void {
   const scopedChannels = ["dashboard:get", "rpa:standard", "projects:www", "conversations:list", "conversations:open", "conversations:new", "activity:refresh", "activity:resources", "projects:list", "projects:favorite", "projects:switch", "workspace:choose", "thread:start", "models:list", "thread:compact", "turn:start", "turn:steer", "turn:interrupt", "approval:respond", "events:get"];
   for (const channel of scopedChannels) ipcMain.handle(channel, (_event, ...args: unknown[]) => {
@@ -294,7 +315,7 @@ if (ownsInstance) void app.whenReady().then(async () => {
   ledger = createActivityLedger({ userData, processEpoch, onSnapshot: snapshot => { for (const session of sessions.list()) session.acceptResourceSnapshot(snapshot); } });
   let registrationError: string | null = null;
   if (PROBE_PATH && process.env.WWW_PROBE_WORKSPACE) await projects.register(workspace).catch((error: unknown) => { registrationError = String(error); console.warn("현재 프로젝트 등록 실패", error); });
-  if (!stopping) { addSession(workspace, registrationError); registerIpc(); createWindow(); }
+  if (!stopping) { addSession(workspace, registrationError); registerChatTheme(); registerIpc(); createWindow(); }
 }).catch((error: unknown) => { console.error("WWW 초기화 실패", error); app.quit(); });
 app.on("window-all-closed", () => app.quit());
 let quitFinished = false;
