@@ -24,6 +24,8 @@ BoxBox는 [공개 npm boxbox-plugin@0.2.9](https://www.npmjs.com/package/boxbox-
 
 새 CI 러너에서는 BoxBox의 모드를 `BOXBOX_MODE=check`로 지정한다. 사용자 설정이 없는 설치본의 기본값은 `auto`이며, WWW 구조 검사는 명시한 검사 모드를 요구한다.
 
+검토 RPC 테스트는 실제 `rg`의 무일치 결과를 검사한다. CI 러너는 `rg`가 없으면 Homebrew로 설치하고 검증 전에 실행 버전을 기록한다. [Homebrew ripgrep](https://formulae.brew.sh/formula/ripgrep)
+
 [GitHub 공식 runner 목록](https://docs.github.com/en/actions/reference/runners/github-hosted-runners)의 arm64 `macos-15`를 사용한다. 외부 fork를 포함한 PR은 contents read 권한의 새 hosted VM에서 동일 검사를 받는다. 환경 검사가 요구하는 Codex 실행파일은 고정 `@openai/codex@0.167.2`로 설치하며 로그인하지 않는다. workflow_dispatch, 45분 제한과 artifact 14일 보존을 명시한다. 게시 job만 contents write를 갖고 10분 제한으로 실행한다. 단일 artifact는 이번 실행 output 디렉터리의 파일만 업로드한다. [download-artifact의 단일 named artifact 경로](https://github.com/actions/download-artifact#download-single-artifact)는 파일을 지정 디렉터리에 직접 풀므로 게시 glob는 `release-assets/*`다.
 
 `npm run release:check`는 dirty·shallow·잘못된 태그·태그 HEAD 불일치와 origin/main first-parent 밖 커밋을 거부한다. CI의 full-history checkout은 origin/main을 포함한다. 로컬에서는 먼저 main ref를 fetch해야 한다. tag 없는 clean main CD도 허용한다. `release:verify`는 빌드 전에 구조 snapshot 현재성을 검사하므로 stale clean snapshot을 빌드로 고쳐 통과시키지 않는다. `package:electron`은 기존 개발 패키징 명령으로 dirty 개발 소스를 허용하며 정식 `release:package`와 구분한다. 원격 workflow·artifact 게시·Release는 아직 실행하지 않았다.
