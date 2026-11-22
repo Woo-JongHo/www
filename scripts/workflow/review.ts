@@ -220,7 +220,14 @@ export function classifyOpusFailure(result: ReviewExecutionResult = {}): ReviewF
   try { const parsed: unknown = JSON.parse(stdout); if (!object(parsed)) throw new Error("invalid response"); body = parsed; }
   catch { return { kind: "unknown", verified: false, receiptHash }; }
   if (code === 0 && !signal && body?.is_error === false) return null;
-  const codes        = [object(body.error) ? body.error.code : undefined, ...(Array.isArray(body.errors) ? body.errors.map((error: unknown) => object(error) ? error.code : undefined) : [])]                                                       ;
+  const terminalUsageCode = body.terminal_reason === "api_error" && body.api_error_status === 429 && body.api_error_type === "rate_limit_error"
+    ? body.api_error
+    : undefined;
+  const codes = [
+    object(body.error) ? body.error.code : undefined,
+    ...(Array.isArray(body.errors) ? body.errors.map((error: unknown) => object(error) ? error.code : undefined) : []),
+    terminalUsageCode,
+  ];
   const usageMessage = typeof body?.result === "string" && /^You've hit your (?:session|weekly|Opus) limit(?:\s*·\s*resets\s+[^\r\n]+)?$/.test(body.result.trim())                                                                                  ;
   const quotaCode    = body?.type === "result" && body.is_error === true && !signal ? codes.find((value): value is string => typeof value === "string" && QUOTA_CODES.has(value)) ?? (usageMessage ? "claude_usage_window_exhausted" : null) : null ;
   if (quotaCode)                                         return { kind: "quota_exhausted", verified: true, provider: "anthropic", model: "opus", code: quotaCode, receiptHash, source: "claude-cli" };

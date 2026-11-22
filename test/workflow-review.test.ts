@@ -133,6 +133,34 @@ test("인증 오류·일반 429·모델 출력의 소진 주장은 대체 근거
   assert.equal(classifyOpusFailure({ code: 1, stdout: JSON.stringify({ type: "result", is_error: true, result: "Server is temporarily limiting requests" }) })?.verified, false);
 });
 
+test("실제 CLI 종료 형식의 명시적 사용량 소진에서만 대체 검토를 시작한다", () => {
+  const terminal = {
+    type: "result",
+    is_error: true,
+    terminal_reason: "api_error",
+    api_error_status: 429,
+    api_error_type: "rate_limit_error",
+    api_error: "usage_limit_reached",
+    result: "You've hit your 5-hour limit · resets 10:40am (Asia/Seoul) · out of usage credits",
+  };
+  const failure = classifyOpusFailure({ code: 1, stdout: JSON.stringify(terminal) });
+  assert.ok(failure?.kind === "quota_exhausted");
+  assert.equal(failure.code, "usage_limit_reached");
+  assert.equal(selectReviewer({ policy, opusFailure: failure }).model, "gpt-6.1-terra");
+  for (const change of [
+    { api_error: undefined },
+    { api_error: "overloaded_error" },
+    { api_error_status: 503 },
+    { api_error_type: "authentication_error" },
+    { terminal_reason: undefined },
+    { type: "assistant" },
+  ]) {
+    const stdout = JSON.stringify({ ...terminal, ...change });
+    assert.equal(classifyOpusFailure({ code: 1, stdout })?.verified, false);
+  }
+  assert.equal(classifyOpusFailure({ code: 1, signal: "SIGTERM", stdout: JSON.stringify(terminal) })?.verified, false);
+});
+
 test("실행 영수증 없는 자기 선언은 필수 검토를 통과할 수 없다", () => {
   assert.equal(validate(review()).usable, false);
   assert.ok(validate(review()).reasons.includes("receipt_unavailable"));
