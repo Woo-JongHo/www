@@ -138,6 +138,7 @@ WWW 프로젝트 유형(Desktop 포함)의 여섯 Skills 정본은 `skills/www/`
 | `action` | 입력과 동작 |
 |---|---|
 | `open` | 직접 요청을 받은 `www-dev` 역할이 `requestId`, `request`, `decision`, `approval`, `inputs`로 새 작업을 등록. 기존 UUID는 `decision.workId`로 읽음. `decision.adoptLegacy: true`는 아래 명시 연결을 선택. 같은 접수 ID·요청의 중복 등록을 구분 |
+| `continue-work` | 미완료 schemaVersion 2 작업에 새 직접 구현 요청을 연결. `workId`, `requestId`, `request`, `expectedRequestId`, `expectedRequestHash`, `expectedAuthorizationDigest`, `approval`, `inputs`와 `role: "www-dev"`, `direct: true`를 지정 |
 | `adopt` | 현재 직접 요청·`requestId`·권한·`inputs`·`intent`를 기존 `workId`에 연결. 같은 UUID로 schema2를 사용하고 원래 레코드는 `workflow.legacyRecord`에 보존. 과거 통과를 현재 증거로 승격하지 않음 |
 | `read` | `workId`의 레코드를 읽고 구조를 확인. legacy1을 새 증거로 자동 변환하지 않음 |
 | `advance` | `workId`, `intent`, 필요한 `writes`·`surfaces`로 허용된 다음 단계를 기록. 완료는 별도 판정으로만 수행 |

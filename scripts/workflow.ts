@@ -2,7 +2,7 @@
  * @architecture arch.development.authoring
  * @implements RESP-DEVELOPMENT-AUTHORING
  */
-import { addVerificationCommand, appendPending, readWork, recordArtifactReview } from "./workflow/work.ts";
+import { addVerificationCommand, continueWork, appendPending, readWork, recordArtifactReview } from "./workflow/work.ts";
 import { artifactContext, artifactStatus, developmentTools } from "./workflow/artifacts.ts";
 import { runReportedStage } from "./workflow/report-lifecycle.ts";
 import { inspectReportLocks, maintainWorkReports, recoverReportLock } from "./workflow/reports.ts";
@@ -355,10 +355,22 @@ async function runTypedWorkflowCore(options: JsonObject, dependencies: HarnessDe
 }
 
 export async function runTypedWorkflow(options: JsonObject, dependencies: HarnessDependencies = {}): Promise<JsonObject> {
+  if (options.action === "continue-work") {
+    if (options.repo !== undefined && typeof options.repo !== "string") throw new Error("저장소 경로는 문자열이어야 합니다.");
+    const { workId, requestId, request, expectedRequestId, expectedRequestHash, expectedAuthorizationDigest } = options;
+    if (typeof workId !== "string" || typeof requestId !== "string" || typeof request !== "string" ||
+      typeof expectedRequestId !== "string" || typeof expectedRequestHash !== "string" || typeof expectedAuthorizationDigest !== "string") throw new Error("후속 구현 요청 입력이 필요합니다.");
+    return { ...await continueWork({ repo: options.repo, role: typeof options.role === "string" ? options.role : undefined,
+      direct: options.direct === true, workId, requestId, request, expectedRequestId, expectedRequestHash, expectedAuthorizationDigest,
+      approval: options.approval, inputs: strings(options.inputs, "inputs") }) };
+  }
   if (options.action === "add-verifier") {
     if (options.repo !== undefined && typeof options.repo !== "string") throw new Error("저장소 경로는 문자열이어야 합니다.");
-    if (typeof options.workId !== "string" || typeof options.requestId !== "string" || typeof options.request !== "string" || typeof options.expectedRequestHash !== "string" || typeof options.expectedAuthorizationDigest !== "string" || typeof options.command !== "string") throw new Error("검증 명령 추가 입력이 필요합니다.");
-    return { ...await addVerificationCommand({ repo: options.repo, workId: options.workId, role: typeof options.role === "string" ? options.role : undefined, direct: options.direct === true, requestId: options.requestId, request: options.request, expectedRequestHash: options.expectedRequestHash, expectedAuthorizationDigest: options.expectedAuthorizationDigest, command: options.command, args: strings(options.args, "args") }) };
+    if (typeof options.workId !== "string" || typeof options.requestId !== "string" || typeof options.request !== "string"
+      || (options.expectedRequestId !== undefined && typeof options.expectedRequestId !== "string")
+      || typeof options.expectedRequestHash !== "string" || typeof options.expectedAuthorizationDigest !== "string"
+      || typeof options.command !== "string") throw new Error("검증 명령 추가 입력이 필요합니다.");
+    return { ...await addVerificationCommand({ repo: options.repo, workId: options.workId, role: typeof options.role === "string" ? options.role : undefined, direct: options.direct === true, requestId: options.requestId, request: options.request, expectedRequestId: options.expectedRequestId, expectedRequestHash: options.expectedRequestHash, expectedAuthorizationDigest: options.expectedAuthorizationDigest, command: options.command, args: strings(options.args, "args") }) };
   }
   switch (options.action) {
     case "report-lock-status":

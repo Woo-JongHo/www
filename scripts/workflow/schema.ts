@@ -51,6 +51,91 @@ function object(value: unknown): Record<string, unknown> {
 }
 function objects(value: unknown): Record<string, unknown>[] { return Array.isArray(value) ? value.map(object) : []; }
 function list(value: unknown): unknown[] { return Array.isArray(value) ? value : []; }
+function validateVerifierHistory(
+  errors: string[], workId: unknown, requestId: unknown,
+  authorization: Record<string, unknown>, history: unknown,
+): Record<string, unknown> {
+  if (history !== undefined) {
+      add(errors, Array.isArray(history), "verifierAuthorizations는 배열이어야 합니다.");
+      const ids = new Set<unknown>();
+      const digest = (value: unknown) => createHash("sha256").update(JSON.stringify(value) ?? "").digest("hex");
+      let previous: unknown;
+      for (const item of list(history)) {
+        const entry = object(item);
+        add(errors, entry.version === 1 && typeof entry.authorizedAt === "string" && Number.isFinite(Date.parse(entry.authorizedAt)), "검증 명령 권한 이력 버전·시각이 올바르지 않습니다.");
+        add(errors, typeof entry.requestId === "string" && entry.requestId.trim() && entry.requestId !== requestId && !ids.has(entry.requestId), "검증 명령 권한 requestId가 없거나 중복됩니다.");
+        ids.add(entry.requestId);
+        for (const field of ["requestHash", "originalRequestHash", "payloadDigest", "beforeDigest", "afterDigest"]) add(errors, typeof entry[field] === "string" && /^[a-f0-9]{64}$/.test(entry[field]), `검증 명령 권한 ${field}가 필요합니다.`);
+        add(errors, entry.originalRequestHash === authorization.requestHash, "검증 명령 권한 원래 요청 hash 불일치");
+        if (entry.originalRequestId !== undefined) add(errors, typeof entry.originalRequestId === "string" && !!entry.originalRequestId.trim() && entry.originalRequestId === requestId, "검증 명령 권한 원래 요청 ID 불일치");
+        const argvValid = typeof entry.command === "string" && entry.command.trim() && !entry.command.includes("\0") && Array.isArray(entry.args) && entry.args.every(arg => typeof arg === "string" && !arg.includes("\0"));
+        add(errors, argvValid, "검증 명령 권한 argv가 올바르지 않습니다.");
+        const before = object(entry.before), after = object(entry.after);
+        add(errors, entry.beforeDigest === digest(before) && entry.afterDigest === digest(after), "검증 명령 권한 snapshot digest 불일치");
+        const { verifierCommands: _currentCommands, ...currentScope } = authorization;
+        const { verifierCommands: _beforeCommands, ...beforeScope } = before;
+        add(errors, JSON.stringify(currentScope) === JSON.stringify(beforeScope) && Array.isArray(before.verifierCommands) && before.verifierCommands.every(command => typeof command === "string" && command.trim()), "검증 명령 권한 snapshot의 전체 권한이 현재 범위와 다릅니다.");
+        if (previous !== undefined) add(errors, JSON.stringify(previous) === JSON.stringify(before), "검증 명령 권한 이력 연결 불일치");
+        previous = after;
+        const signature = JSON.stringify([entry.command, ...list(entry.args)]);
+        const commands = list(before.verifierCommands);
+        const added = !commands.includes(signature);
+        add(errors, typeof entry.added === "boolean" && entry.added === added && JSON.stringify(after) === JSON.stringify({ ...before, verifierCommands: added ? [...commands, signature] : commands }), "검증 명령 권한은 정확 argv append만 허용합니다.");
+        add(errors, entry.payloadDigest === digest({ workId, requestHash: entry.requestHash, expectedRequestHash: entry.originalRequestHash, expectedAuthorizationDigest: entry.beforeDigest, command: entry.command, args: entry.args, expectedRequestId: entry.originalRequestId }), "검증 명령 권한 payload digest 불일치");
+      }
+      if (previous !== undefined) add(errors, JSON.stringify(previous) === JSON.stringify(authorization), "검증 명령 권한 이력과 현재 권한 불일치");
+      if (list(history).length) return object(object(list(history)[0]).before);
+    }
+  return authorization;
+}
+
+function validateContinuations(
+  errors: string[], workId: unknown, workflow: Record<string, unknown>, authorization: Record<string, unknown>,
+) {
+  const initialAuthorization = validateVerifierHistory(errors, workId, workflow.requestId, authorization, workflow.verifierAuthorizations);
+  if (workflow.continuations === undefined) return;
+  add(errors, Array.isArray(workflow.continuations), "후속 요청 이력은 배열이어야 합니다.");
+  const digest = (value: unknown) => createHash("sha256").update(JSON.stringify(value) ?? "").digest("hex");
+  const ids = new Set<unknown>();
+  const register = (id: unknown) => {
+    add(errors, typeof id === "string" && id.trim() && !ids.has(id), "후속 요청 이력의 requestId가 없거나 중복됩니다.");
+    ids.add(id);
+  };
+  const validBinding = (binding: Record<string, unknown>) => {
+    const auth = object(binding.authorization);
+    return typeof binding.requestId === "string" && binding.requestId.trim() &&
+      typeof auth.requestHash === "string" && /^[a-f0-9]{64}$/.test(auth.requestHash) &&
+      auth.source === "direct_user_request" && ["implementation", "commit", "publish"].every(key => typeof auth[key] === "boolean") &&
+      ["writePaths", "mutationSurfaces", "verifierCommands"].every(key => Array.isArray(auth[key]) && list(auth[key]).every(part => typeof part === "string" && part.trim())) &&
+      Array.isArray(binding.inputs) && binding.inputs.length && binding.inputs.every(part => typeof part === "string" && part.trim());
+  };
+  let previous: Record<string, unknown> | undefined;
+  let verificationStart = 0;
+  for (const entry of objects(workflow.continuations)) {
+    const before = object(entry.before), after = object(entry.after);
+    const previousAuth = object(before.authorization), nextAuth = object(after.authorization);
+    add(errors, (entry.version === 1 || entry.version === 2) && typeof entry.authorizedAt === "string" && Number.isFinite(Date.parse(entry.authorizedAt)), "후속 요청 이력 버전·시각이 올바르지 않습니다.");
+    if (entry.version === 2 || entry.verificationStart !== undefined) {
+      add(errors, typeof entry.verificationStart === "number" && Number.isSafeInteger(entry.verificationStart) &&
+        entry.verificationStart >= verificationStart && entry.verificationStart <= list(workflow.verifications).length, "후속 요청의 검증 시작 위치가 올바르지 않습니다.");
+      if (typeof entry.verificationStart === "number") verificationStart = entry.verificationStart;
+    }
+    add(errors, validBinding(before) && validBinding(after), "후속 요청 이력의 작업 범위가 올바르지 않습니다.");
+    add(errors, nextAuth.implementation === true && nextAuth.commit === false && nextAuth.publish === false && list(nextAuth.writePaths).length && list(nextAuth.mutationSurfaces).length, "후속 요청의 권한은 구현 범위여야 합니다.");
+    const previousInitial = validateVerifierHistory(errors, workId, before.requestId, previousAuth, entry.previousVerifiers);
+    if (!previous) register(before.requestId);
+    else add(errors, previous.requestId === before.requestId && digest(previous.authorization) === digest(previousInitial), "후속 요청 이력 연결이 일치하지 않습니다.");
+    for (const verifier of objects(entry.previousVerifiers)) register(verifier.requestId);
+    register(after.requestId);
+    add(errors, entry.payloadDigest === digest({ workId, expectedRequestHash: previousAuth.requestHash,
+      expectedAuthorizationDigest: digest(previousAuth), after, ...(entry.version === 2 ? { expectedRequestId: before.requestId } : {}) }), "후속 요청 내용 digest가 일치하지 않습니다.");
+    previous = after;
+  }
+  for (const verifier of objects(workflow.verifierAuthorizations)) register(verifier.requestId);
+  if (previous) add(errors, previous.requestId === workflow.requestId &&
+    digest(previous.authorization) === digest(initialAuthorization), "후속 요청 이력과 현재 요청이 일치하지 않습니다.");
+}
+
 export function validateWorkRecord(value: unknown, options: ValidationOptions = {}): string[] {
   const record           = object(value)                             ;
   const errors: string[] = []                                        ;
@@ -114,35 +199,7 @@ export function validateWorkRecord(value: unknown, options: ValidationOptions = 
     add(errors, ["spec", "design", "build", "diagnose", "verify", "review", "complete"].some(action => action === workflow.nextAction), "workflow.nextAction이 허용된 값이 아닙니다.");
     add(errors, Array.isArray(workflow?.verifications), "workflow.verifications 배열이 필요합니다.");
     add(errors, Array.isArray(workflow?.reviews), "workflow.reviews 배열이 필요합니다.");
-    if (workflow.verifierAuthorizations !== undefined) {
-      add(errors, Array.isArray(workflow.verifierAuthorizations), "verifierAuthorizations는 배열이어야 합니다.");
-      const ids = new Set<unknown>();
-      const digest = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
-      let previous: unknown;
-      for (const item of list(workflow.verifierAuthorizations)) {
-        const entry = object(item);
-        add(errors, entry.version === 1 && typeof entry.authorizedAt === "string" && Number.isFinite(Date.parse(entry.authorizedAt)), "검증 명령 권한 이력 버전·시각이 올바르지 않습니다.");
-        add(errors, typeof entry.requestId === "string" && entry.requestId.trim() && entry.requestId !== workflow.requestId && !ids.has(entry.requestId), "검증 명령 권한 requestId가 없거나 중복됩니다.");
-        ids.add(entry.requestId);
-        for (const field of ["requestHash", "originalRequestHash", "payloadDigest", "beforeDigest", "afterDigest"]) add(errors, typeof entry[field] === "string" && /^[a-f0-9]{64}$/.test(entry[field]), `검증 명령 권한 ${field}가 필요합니다.`);
-        add(errors, entry.originalRequestHash === workflow.requestHash, "검증 명령 권한 원래 요청 hash 불일치");
-        const argvValid = typeof entry.command === "string" && entry.command.trim() && !entry.command.includes("\0") && Array.isArray(entry.args) && entry.args.every(arg => typeof arg === "string" && !arg.includes("\0"));
-        add(errors, argvValid, "검증 명령 권한 argv가 올바르지 않습니다.");
-        const before = object(entry.before), after = object(entry.after);
-        add(errors, entry.beforeDigest === digest(before) && entry.afterDigest === digest(after), "검증 명령 권한 snapshot digest 불일치");
-        const { verifierCommands: _currentCommands, ...currentScope } = authorization;
-        const { verifierCommands: _beforeCommands, ...beforeScope } = before;
-        add(errors, JSON.stringify(currentScope) === JSON.stringify(beforeScope) && Array.isArray(before.verifierCommands) && before.verifierCommands.every(command => typeof command === "string" && command.trim()), "검증 명령 권한 snapshot의 전체 권한이 현재 범위와 다릅니다.");
-        if (previous !== undefined) add(errors, JSON.stringify(previous) === JSON.stringify(before), "검증 명령 권한 이력 연결 불일치");
-        previous = after;
-        const signature = JSON.stringify([entry.command, ...list(entry.args)]);
-        const commands = list(before.verifierCommands);
-        const added = !commands.includes(signature);
-        add(errors, typeof entry.added === "boolean" && entry.added === added && JSON.stringify(after) === JSON.stringify({ ...before, verifierCommands: added ? [...commands, signature] : commands }), "검증 명령 권한은 정확 argv append만 허용합니다.");
-        add(errors, entry.payloadDigest === digest({ workId: record.id, requestHash: entry.requestHash, expectedRequestHash: entry.originalRequestHash, expectedAuthorizationDigest: entry.beforeDigest, command: entry.command, args: entry.args }), "검증 명령 권한 payload digest 불일치");
-      }
-      if (previous !== undefined) add(errors, JSON.stringify(previous) === JSON.stringify(authorization), "검증 명령 권한 이력과 현재 권한 불일치");
-    }
+    validateContinuations(errors, record.id, workflow, authorization);
     if (workflow.decomposition !== undefined) {
       try { parseDecomposition(workflow.decomposition); }
       catch (error) { errors.push(error instanceof Error ? error.message : String(error)); }

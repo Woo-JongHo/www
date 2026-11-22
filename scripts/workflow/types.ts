@@ -42,47 +42,78 @@ export interface RecordedReview {
 export type WorkAuthorization = Approval & { source: string; requestHash: string };
 
 export interface VerifierAuthorization {
-  version: 1;
-  requestId: string;
-  requestHash: string;
-  originalRequestHash: string;
-  payloadDigest: string;
-  authorizedAt: string;
-  command: string;
-  args: string[];
-  added: boolean;
-  beforeDigest: string;
-  afterDigest: string;
-  before: WorkAuthorization;
-  after: WorkAuthorization;
+  originalRequestId?  : string            ;
+  version             : 1                 ;
+  requestId           : string            ;
+  requestHash         : string            ;
+  originalRequestHash : string            ;
+  payloadDigest       : string            ;
+  authorizedAt        : string            ;
+  command             : string            ;
+  args                : string[]          ;
+  added               : boolean           ;
+  beforeDigest        : string            ;
+  afterDigest         : string            ;
+  before              : WorkAuthorization ;
+  after               : WorkAuthorization ;
 }
 
 export interface AddVerifierOptions extends WorkOptions {
-  role?: string;
-  direct?: boolean;
-  requestId: string;
-  request: string;
-  expectedRequestHash: string;
-  expectedAuthorizationDigest: string;
-  command: string;
-  args: string[];
+  expectedRequestId?          : string   ;
+  role?                       : string   ;
+  direct?                     : boolean  ;
+  requestId                   : string   ;
+  request                     : string   ;
+  expectedRequestHash         : string   ;
+  expectedAuthorizationDigest : string   ;
+  command                     : string   ;
+  args                        : string[] ;
+}
+
+export interface WorkRequestBinding {
+  requestId     : string            ;
+  authorization : WorkAuthorization ;
+  inputs        : string[]          ;
+}
+
+export interface WorkContinuation {
+  version            : 1 | 2                   ;
+  authorizedAt       : string                  ;
+  payloadDigest      : string                  ;
+  before             : WorkRequestBinding      ;
+  after              : WorkRequestBinding      ;
+  previousVerifiers? : VerifierAuthorization[] ;
+  verificationStart? : number                  ;
+}
+
+export interface ContinueWorkOptions extends WorkOptions {
+  role?                       : string   ;
+  direct?                     : boolean  ;
+  requestId                   : string   ;
+  request                     : string   ;
+  expectedRequestId           : string   ;
+  expectedRequestHash         : string   ;
+  expectedAuthorizationDigest : string   ;
+  approval                    : unknown  ;
+  inputs                      : string[] ;
 }
 
 export interface WorkWorkflow {
-  verifierAuthorizations?: VerifierAuthorization[];
-  decomposition?        : DecompositionPlan                                  ;
-  role                  : string                                             ;
-  requestId             : string                                             ;
-  requestHash           : string                                             ;
-  authorization         : WorkAuthorization ;
-  inputs                : string[]                                           ;
-  nextAction            : string                                             ;
-  reportingRequired?    : boolean                                            ;
-  verifications         : VerificationAttempt[]                              ;
-  reviews               : RecordedReview[]                                   ;
-  documentationReviews? : DocumentationReview[]                              ;
-  artifactReviews?      : ArtifactReview[]                                   ;
-  legacyRecord?         : WorkRecord                                         ;
+  continuations?          : WorkContinuation[]      ;
+  verifierAuthorizations? : VerifierAuthorization[] ;
+  decomposition?          : DecompositionPlan       ;
+  role                    : string                  ;
+  requestId               : string                  ;
+  requestHash             : string                  ;
+  authorization           : WorkAuthorization       ;
+  inputs                  : string[]                ;
+  nextAction              : string                  ;
+  reportingRequired?      : boolean                 ;
+  verifications           : VerificationAttempt[]   ;
+  reviews                 : RecordedReview[]        ;
+  documentationReviews?   : DocumentationReview[]   ;
+  artifactReviews?        : ArtifactReview[]        ;
+  legacyRecord?           : WorkRecord              ;
 }
 
 interface WorkRecordBase {

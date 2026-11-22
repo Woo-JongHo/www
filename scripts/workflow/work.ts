@@ -13,16 +13,18 @@ import { hashRequest, normalizeApproval } from "./route.ts";
 import { captureSource, criteriaDigest, evaluateEvidence, renderAttempt, validEnvironmentObservation, verificationCommandFailed, verify, verifyInSession, withVerificationReuse } from "./evidence.ts";
 import { loadReviewPolicy, validateReview, durableJson } from "./review.ts";
 import { withWorkLock, inspectWorkLock, recoverWorkLock, retryWorkWriter, WorkLockBusyError } from "./lock.ts";
+import type { WorkExecutionHost } from "./lock.ts";
 import { checkRepository, assessRepositoryCheck } from "./consistency.ts";
 import { createDocumentationReview, assessDocumentation } from "./documentation.ts";
 import { createArtifactReview } from "./artifacts.ts";
 import { assessCompletionReport } from "./completion-report.ts";
 import { assessDecompositionCompletion, validateWorkDecomposition } from "./decomposition.ts";
-import type { AddVerifierOptions, WorkAuthorization, CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions, CriterionAssessment } from './types.ts';
+import type { AddVerifierOptions, ContinueWorkOptions, WorkAuthorization, CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions, CriterionAssessment } from './types.ts';
 import type { VerificationAttempt, VerificationSession } from './evidence.ts';
 import type { DocumentationReview } from './documentation.ts';
 export type { WorkRecord, WorkLocation, WorkAssessment, WorkOptions } from './types.ts';
-export { inspectWorkLock, recoverWorkLock, checkRepository, assessRepositoryCheck };
+export type { WorkExecutionHost } from "./lock.ts";
+export { inspectWorkLock, recoverWorkLock, retryWorkWriter, checkRepository, assessRepositoryCheck };
 
 const ACTIONS    = new Set(["spec", "design", "build", "diagnose", "verify", "review", "complete"]) ;
 const hash       = (value: string | Buffer) => createHash("sha256").update(value).digest("hex")     ;
@@ -59,6 +61,8 @@ interface ExistingWorkSummary {
     workflow?: {
       requestId?: string;
       requestHash?: string;
+      priorRequests?: { requestId: string; requestHash: string }[];
+      verifierIds?: string[];
     };
   };
 }
@@ -68,6 +72,13 @@ function summarizeRecord(value: unknown): ExistingWorkSummary['record'] {
   return { id: typeof raw.id === 'string' ? raw.id : '', workflow: {
     ...(typeof workflow.requestId === 'string' ? { requestId: workflow.requestId } : {}),
     ...(typeof workflow.requestHash === 'string' ? { requestHash: workflow.requestHash } : {}),
+    verifierIds: [workflow.verifierAuthorizations, ...(Array.isArray(workflow.continuations) ? workflow.continuations.map(item => item?.previousVerifiers) : [])]
+      .flatMap(history => Array.isArray(history) ? history.flatMap(item => typeof item?.requestId === "string" ? [item.requestId] : []) : []),
+    priorRequests: Array.isArray(workflow.continuations) ? workflow.continuations.flatMap(item => {
+      const before = item?.before;
+      return typeof before?.requestId === "string" && typeof before.authorization?.requestHash === "string"
+        ? [{ requestId: before.requestId, requestHash: before.authorization.requestHash }] : [];
+    }) : [],
   } };
 }
 async function records(repo: string): Promise<ExistingWorkSummary[]> {
@@ -128,12 +139,18 @@ export async function openWork(options: NewWorkOptions = {}): Promise<WorkLocati
   const inputs = verificationInputs(options.inputs, decision.criteria);
   return withWorkLock(repo, async (root) => {
     const all      = await records(root)                                                  ;
-    const existing = all.filter(({ record }) => record.workflow?.requestId === requestId) ;
+    const existing = all.flatMap(location => {
+      const workflow = location.record.workflow;
+      const requestHash = workflow?.requestId === requestId ? workflow.requestHash
+        : workflow?.priorRequests?.find(entry => entry.requestId === requestId)?.requestHash;
+      return requestHash ? [{ location, requestHash }] : [];
+    });
     if (existing.length > 1) throw new Error("접수 ID가 둘 이상의 작업에 연결돼 있습니다.");
     if (existing.length) {
-      if (existing[0].record.workflow?.requestHash !== hashRequest(request)) throw new Error("같은 접수 ID의 요청 내용이 달라졌습니다.");
-      return { ...await readWork({ repo: root, workId: existing[0].record.id }), created: false };
+      if (existing[0].requestHash !== hashRequest(request)) throw new Error("같은 접수 ID의 요청 내용이 달라졌습니다.");
+      return { ...await readWork({ repo: root, workId: existing[0].location.record.id }), created: false };
     }
+    if (all.some(({ record }) => record.workflow?.verifierIds?.includes(requestId))) throw new Error("검증 요청에 사용한 requestId를 접수에 재사용할 수 없습니다.");
     const columns = await workOutputColumns(root);
     await captureSource({ repo: root, inputs });
     await validateWritePaths(root, normalizeApproval(approval).writePaths);
@@ -196,6 +213,9 @@ export async function adoptWork({ repo = process.cwd(), role, direct, requestId,
   return withWorkLock(repo, async (root) => {
     const work = await readWork({ repo: root, workId });
     if (work.record.schemaVersion === 2) return { ...work, created: false };
+    if ((await records(root)).some(item => item.record.id !== workId && requestKnown(item, requestId))) {
+      throw new Error("다른 작업에서 같은 requestId를 이미 사용했습니다.");
+    }
     inputs = verificationInputs(inputPaths, work.record.criteria);
     const columns = await workOutputColumns(root);
     await captureSource({ repo: root, inputs });
@@ -254,21 +274,38 @@ export function authorizationDigest(authorization: WorkAuthorization): string {
   return hash(JSON.stringify(authorization));
 }
 
+export async function withWorkExecutionLease<T>(repo: string, workId: string, eventId: string, action: (host: WorkExecutionHost) => Promise<T>): Promise<T> {
+  return withWorkLock(repo, (_root, host) => {
+    if (!host) throw new Error("작업 실행 잠금이 필요합니다.");
+    return action(host);
+  }, { workId, eventId });
+}
+
 export async function addVerificationCommand(options: AddVerifierOptions) {
-  const { repo = process.cwd(), workId, role, direct, requestId, request, expectedRequestHash, expectedAuthorizationDigest, command, args } = options;
+  const { repo = process.cwd(), workId, role, direct, requestId, request, expectedRequestId, expectedRequestHash, expectedAuthorizationDigest, command, args } = options;
   assertRole(role, direct);
   if (typeof requestId !== "string" || !requestId.trim()) throw new Error("검증 명령 추가 requestId가 필요합니다.");
   const requestHash = hashRequest(request);
   if (![expectedRequestHash, expectedAuthorizationDigest].every(value => typeof value === "string" && /^[a-f0-9]{64}$/.test(value))) throw new Error("기대 요청 hash와 권한 digest가 필요합니다.");
   if (typeof command !== "string" || !command.trim() || command.includes("\0") || !Array.isArray(args) || !args.every(arg => typeof arg === "string" && !arg.includes("\0"))) throw new Error("검증 command와 args는 NUL 없는 정확한 문자열 argv여야 합니다.");
-  const payloadDigest = hash(JSON.stringify({ workId, requestHash, expectedRequestHash, expectedAuthorizationDigest, command, args }));
-  return mutateWork(repo, workId, record => {
+  if (expectedRequestId !== undefined && (typeof expectedRequestId !== "string" || !expectedRequestId.trim())) throw new Error("기대 요청 ID가 올바르지 않습니다.");
+  return withWorkExecutionLease(repo, workId, requestId, () => mutateWork(repo, workId, async record => {
+    const payloadDigest = hash(JSON.stringify({ workId: record.id, requestHash, expectedRequestHash, expectedAuthorizationDigest, command, args, expectedRequestId }));
+    if (expectedRequestId === undefined ? record.workflow.continuations?.length : record.workflow.requestId !== expectedRequestId) {
+      throw new Error("현재 작업 requestId CAS가 일치하지 않습니다.");
+    }
     if (record.workflow.requestHash !== expectedRequestHash) throw new Error("원래 작업 requestHash가 일치하지 않습니다.");
-    if (record.workflow.requestId === requestId) throw new Error("기존 접수 requestId를 검증 명령 추가에 재사용할 수 없습니다.");
+    if (record.workflow.requestId === requestId || record.workflow.continuations?.some(item =>
+      item.before.requestId === requestId || item.previousVerifiers?.some(e => e.requestId === requestId))) {
+      throw new Error("기존 접수 requestId를 검증 명령 추가에 재사용할 수 없습니다.");
+    }
     const existing = record.workflow.verifierAuthorizations?.find(item => item.requestId === requestId);
     if (existing) {
       if (existing.payloadDigest !== payloadDigest) throw new Error("같은 requestId의 검증 명령 추가 내용이 달라졌습니다.");
       return;
+    }
+    if ((await records(repo)).some(item => item.record.id !== record.id && requestKnown(item, requestId))) {
+      throw new Error("다른 작업에서 같은 requestId를 이미 사용했습니다.");
     }
     const before = structuredClone(record.workflow.authorization);
     const beforeDigest = authorizationDigest(before);
@@ -278,12 +315,73 @@ export async function addVerificationCommand(options: AddVerifierOptions) {
     if (added) record.workflow.authorization.verifierCommands.push(signature);
     const after = structuredClone(record.workflow.authorization);
     (record.workflow.verifierAuthorizations ??= []).push({
-      version: 1, requestId, requestHash, originalRequestHash: expectedRequestHash, payloadDigest,
+      version: 1, requestId, requestHash, ...(expectedRequestId === undefined ? {} : { originalRequestId: expectedRequestId }), originalRequestHash: expectedRequestHash, payloadDigest,
       authorizedAt: new Date().toISOString(), command, args: [...args], added,
       beforeDigest, afterDigest: authorizationDigest(after), before, after,
     });
     record.workflow.nextAction = "verify";
-  });
+  }));
+}
+
+function requestKnown(item: ExistingWorkSummary, requestId: string): boolean {
+  const workflow = item.record.workflow;
+  return workflow?.requestId === requestId || workflow?.priorRequests?.some(entry => entry.requestId === requestId) === true
+    || workflow?.verifierIds?.includes(requestId) === true;
+}
+
+/** 직접 받은 후속 구현 요청을 기존 UUID의 현재 요청으로 연결한다. */
+export async function continueWork(options: ContinueWorkOptions) {
+  const { repo = process.cwd(), workId, role, direct, requestId, request, expectedRequestId, expectedRequestHash, expectedAuthorizationDigest, approval, inputs } = options;
+  assertRole(role, direct);
+  if (typeof requestId !== "string" || !requestId.trim() || typeof expectedRequestId !== "string" || !expectedRequestId.trim()) throw new Error("후속 구현 요청 requestId가 필요합니다.");
+  const requestHash = hashRequest(request);
+  if (![expectedRequestHash, expectedAuthorizationDigest].every(value => typeof value === "string" && /^[a-f0-9]{64}$/.test(value))) throw new Error("기대 요청 hash와 권한 digest가 필요합니다.");
+  if (!Array.isArray(inputs) || !inputs.length || inputs.some(input => typeof input !== "string" || !input.trim())) throw new Error("검증 입력 경로가 필요합니다.");
+  const authorization = { ...normalizeApproval(approval), source: "direct_user_request", requestHash };
+  if (!authorization.implementation || !authorization.writePaths.length || !authorization.mutationSurfaces.length || authorization.commit || authorization.publish) {
+    throw new Error("후속 요청에 명시된 구현 범위가 필요하며 commit·publish 권한은 연결할 수 없습니다.");
+  }
+  for (const signature of authorization.verifierCommands) {
+    const argv: unknown = JSON.parse(signature);
+    if (!Array.isArray(argv) || typeof argv[0] !== "string" || !argv[0].trim() || argv.some(part => typeof part !== "string" || part.includes("\0")) || JSON.stringify(argv) !== signature) throw new Error("검증 실행은 정확 argv로 지정해야 합니다.");
+  }
+  return withWorkExecutionLease(repo, workId, requestId, () => mutateWork(repo, workId, async record => {
+    const workflow = record.workflow;
+    const after = { requestId, authorization, inputs: verificationInputs(inputs, record.criteria) };
+    const payload = { workId: record.id, expectedRequestHash, expectedAuthorizationDigest, after };
+    const payloadDigest = hash(JSON.stringify({ ...payload, expectedRequestId }));
+    const existing = workflow.continuations?.find(item => item.after.requestId === requestId);
+    if (existing) {
+      if (existing.before.requestId !== expectedRequestId ||
+        existing.payloadDigest !== (existing.version === 1 ? hash(JSON.stringify(payload)) : payloadDigest)) throw new Error("같은 requestId의 후속 구현 요청 내용이 달라졌습니다.");
+      return;
+    }
+    if (record.status === "done" || record.status === "cancelled") throw new Error("완료·취소된 작업에는 후속 구현 요청을 연결할 수 없습니다.");
+    if (workflow.requestId === requestId || workflow.continuations?.some(item =>
+      item.before.requestId === requestId || item.previousVerifiers?.some(e => e.requestId === requestId))
+      || workflow.verifierAuthorizations?.some(item => item.requestId === requestId)) throw new Error("기존 접수 requestId를 재사용할 수 없습니다.");
+    if ((await records(repo)).some(item => item.record.id !== record.id && requestKnown(item, requestId))) throw new Error("다른 작업에서 같은 requestId를 이미 사용했습니다.");
+    if (workflow.requestHash !== expectedRequestHash) throw new Error("현재 작업 requestHash CAS가 일치하지 않습니다.");
+    if (workflow.requestId !== expectedRequestId) throw new Error("현재 작업 requestId CAS가 일치하지 않습니다.");
+    if (authorizationDigest(workflow.authorization) !== expectedAuthorizationDigest) throw new Error("authorization digest CAS가 일치하지 않습니다.");
+    await validateWritePaths(repo, authorization.writePaths);
+    await captureSource({ repo, inputs: after.inputs });
+    (workflow.continuations ??= []).push({
+      version: 2, authorizedAt: new Date().toISOString(), payloadDigest,
+      verificationStart: workflow.verifications.length,
+      before: { requestId: workflow.requestId, authorization: workflow.authorization, inputs: workflow.inputs },
+      after, ...(workflow.verifierAuthorizations ? { previousVerifiers: workflow.verifierAuthorizations } : {}),
+    });
+    delete workflow.verifierAuthorizations;
+    workflow.requestId = requestId;
+    workflow.requestHash = requestHash;
+    workflow.authorization = authorization;
+    workflow.inputs = after.inputs;
+    workflow.nextAction = "build";
+    record.status = "in_progress";
+    record.blockedReason = null;
+    for (const criterion of record.criteria) criterion.result = "unverified";
+  }));
 }
 
 export async function setDecompositionPlan({ repo = process.cwd(), workId, plan }: WorkOptions & { plan: unknown }) {
@@ -340,10 +438,15 @@ export async function verifyWork({ repo = process.cwd(), workId, command, args =
   const started = performance.now();
   const options = { repo, record: work.record, inputs: work.record.workflow.inputs, command, args, criterionIds, artifactPaths };
   let execution = reuseSession ? await verifyInSession(reuseSession, options) : null;
+  if (reuseSession && execution?.reuse.action === "reused" && work.record.workflow.continuations?.length &&
+    !currentVerifications(work.record).some(item => item.id === execution?.attempt.id)) {
+    execution = await verifyInSession(reuseSession, options, true);
+  }
   let attempt = execution?.attempt ?? await verify(options);
   let requestHash = work.record.workflow.requestHash;
+  let requestId = work.record.workflow.requestId;
   const reuseGuard = execution?.reuse.action === 'reused' ? { context: verificationContext(work.record), useId: execution.reuse.id } : undefined;
-  let artifactPath = await savePending(repo, workId, "verification", attempt, hash(signature), requestHash, reuseSession ? workId : undefined, reuseGuard);
+  let artifactPath = await savePending(repo, workId, "verification", attempt, hash(signature), requestHash, reuseSession ? workId : undefined, reuseGuard, requestId);
   let appended;
   try { appended = await appendPending({ repo, workId, artifactPath }); }
   catch (error) {
@@ -354,7 +457,8 @@ export async function verifyWork({ repo = process.cwd(), workId, command, args =
     execution.reuse.reasons.push('record_changed_before_reuse');
     attempt = execution.attempt;
     requestHash = fresh.record.workflow.requestHash;
-    artifactPath = await savePending(repo, workId, "verification", attempt, hash(signature), requestHash, workId);
+    requestId = fresh.record.workflow.requestId;
+    artifactPath = await savePending(repo, workId, "verification", attempt, hash(signature), requestHash, workId, undefined, requestId);
     appended = await appendPending({ repo, workId, artifactPath });
   }
   const { work: _work, ...recording } = appended;
@@ -373,8 +477,10 @@ export async function verifyWork({ repo = process.cwd(), workId, command, args =
   return { ...attempt, ...recording, reuse: execution?.reuse, reuseReceiptPath };
 }
 
-async function appendVerification(repo: string, workId: string, attempt: VerificationAttempt, commandHash: string, reuseGuard?: ReuseRecordGuard) {
+async function appendVerification(repo: string, workId: string, attempt: VerificationAttempt, commandHash: string, expectedRequestHash: string, expectedRequestId: string | undefined, reuseGuard?: ReuseRecordGuard) {
   return mutateWork(repo, workId, async (record, current) => {
+    if (record.workflow.requestHash !== expectedRequestHash ||
+      (expectedRequestId === undefined ? record.workflow.continuations?.length : record.workflow.requestId !== expectedRequestId)) throw new Error("회수 결과의 요청 식별 불일치");
     if (!record.workflow.authorization.verifierCommands.some(command => hash(command) === commandHash)) throw new Error("command_authorization_changed: 검증 명령 권한이 철회되었습니다.");
     if (reuseGuard && (verificationContext(record) !== reuseGuard.context || !(await evaluateEvidence({ repo, record, attempt })).usable)) throw new Error('reuse_record_changed: 기록 잠금 안에서 재사용 맥락이 달라졌습니다.');
     const existing = record.workflow.verifications.find(item => item.id === attempt.id);
@@ -397,11 +503,19 @@ async function appendVerification(repo: string, workId: string, attempt: Verific
   }, reuseGuard ? mutate => withVerificationReuse(reuseGuard.useId, repo, attempt, mutate) : undefined);
 }
 
+function currentVerifications(record: CurrentWorkRecord): VerificationAttempt[] {
+  const { verifications, continuations } = record.workflow;
+  const current = continuations?.at(-1);
+  if (!current) return verifications;
+  if (current.verificationStart !== undefined) return verifications.slice(current.verificationStart);
+  return verifications.filter(attempt => Date.parse(attempt.startedAt) >= Date.parse(current.authorizedAt));
+}
+
 /** 완료 판정과 다음 행동이 같은 필수 기준의 최신 실제 검증을 평가한다. */
 async function assessRequiredCriteria(repo: string, record: CurrentWorkRecord) {
   const criteria = [];
   for (const criterion of record.criteria.filter((item) => item.required)) {
-    const attempt    = record.workflow.verifications.filter((item) => item.criterionIds.includes(criterion.id)).at(-1)              ;
+    const attempt    = currentVerifications(record).filter((item) => item.criterionIds.includes(criterion.id)).at(-1)              ;
     const evaluation = attempt ? await evaluateEvidence({ repo, record, attempt }) : { usable: false, reasons: ["검증 시도 없음"] } ;
     criteria.push({ id: criterion.id, ...evaluation });
   }
@@ -419,7 +533,7 @@ function isCurrentCommandFailure(attempt: VerificationAttempt | undefined, reaso
 /** 필수 검증을 먼저 판정하고 분업의 현재 수용까지 갖춰야 다음 단계로 안내한다. */
 async function requiredEvidenceAction(repo: string, record: CurrentWorkRecord, criteria: CriterionAssessment[], ready: "review" | "complete") {
   const failures = criteria.filter(criterion => {
-    const attempt = record.workflow.verifications.filter(item => item.criterionIds.includes(criterion.id)).at(-1);
+    const attempt = currentVerifications(record).filter(item => item.criterionIds.includes(criterion.id)).at(-1);
     return isCurrentCommandFailure(attempt, criterion.reasons);
   });
   if (failures.length) {
@@ -485,15 +599,17 @@ export async function recordDocumentReview({ repo = process.cwd(), workId, docum
   });
 }
 
-export async function recordReview({ repo = process.cwd(), workId, review }: WorkOptions & { review: unknown }) {
+export async function recordReview({ repo = process.cwd(), workId, review, requestId }: WorkOptions & { review: unknown; requestId?: string }) {
   const requestHash  = review && typeof review === "object" && "workRequestHash" in review && typeof review.workRequestHash === "string" ? review.workRequestHash : undefined ;
-  const artifactPath = await savePending(repo, workId, "review", review, undefined, requestHash)                                                                              ;
+  const artifactPath = await savePending(repo, workId, "review", review, undefined, requestHash, undefined, undefined, requestId)                                                                              ;
   const result       = await appendPending({ repo, workId, artifactPath })                                                                                                    ;
   return result.recorded ? { ...result.work, recorded: true as const, artifactPath } : result;
 }
 
-async function appendReview(repo: string, workId: string, review: unknown) {
+async function appendReview(repo: string, workId: string, review: unknown, expectedRequestHash: string, expectedRequestId?: string) {
   return mutateWork(repo, workId, async (record) => {
+    if (record.workflow.requestHash !== expectedRequestHash ||
+      (expectedRequestId === undefined ? record.workflow.continuations?.length : record.workflow.requestId !== expectedRequestId)) throw new Error("회수 결과의 요청 식별 불일치");
     if (!review || typeof review !== "object" || !("id" in review) || typeof review.id !== "string" || !review.id) throw new Error("식별 가능한 실제 검토 기록이 필요합니다.");
     const existing = record.workflow.reviews.find(item => item.id === review.id);
     if (existing) { const { recordingRejection: _rejection, ...original } = existing; if (JSON.stringify(original) !== JSON.stringify(review)) throw new Error("동일 review ID 내용 충돌"); return; }
@@ -551,6 +667,7 @@ async function main() {
   const actionName = raw.action ;
   const actions = {
     "add-verifier": addVerificationCommand,
+    "continue-work": continueWork,
     "lock-status"       : inspectWorkLock       ,
     "recover-lock"      : recoverWorkLock       ,
     "check-repository"  : checkRepository       ,
@@ -578,19 +695,20 @@ async function main() {
 
 if (import.meta.url && process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main().catch((error) => { process.stderr.write(`${error.message}\n`); process.exitCode = 1; });
 
-async function savePending(repo: string, workId: string, kind: "verification" | "review", payload: unknown, commandHash?: string, requestHash?: string, verificationNamespace?: string, reuseGuard?: ReuseRecordGuard) {
+async function savePending(repo: string, workId: string, kind: "verification" | "review", payload: unknown, commandHash?: string, requestHash?: string, verificationNamespace?: string, reuseGuard?: ReuseRecordGuard, requestId?: string) {
   const root = await fs.realpath(repo);
   await resolveInside(root, ".www");
   const directory = path.join(root, ".www", "pending-results");
   await fs.mkdir(directory, { recursive: true, mode: 0o700 });
   await resolveInside(root, ".www/pending-results");
   if (!payload || typeof payload !== "object" || !("id" in payload) || typeof payload.id !== "string" || !/^[a-zA-Z0-9-]+$/.test(payload.id)) throw new Error("결과 ID 오류");
-  if (!requestHash) {
+  if (!requestHash || !requestId) {
     const current = await readWork({ repo, workId });
     if (current.record.schemaVersion !== 2) throw new Error("현재 작업이 필요합니다.");
-    requestHash = current.record.workflow.requestHash;
+    requestHash ??= current.record.workflow.requestHash;
+    requestId ??= current.record.workflow.requestId;
   }
-  const text   = `${JSON.stringify({ version: 1, kind, workId, workRequestHash: requestHash, ...(commandHash ? { commandHash } : {}), ...(reuseGuard ? { reuseGuard } : {}), payload })}\n` ;
+  const text   = `${JSON.stringify({ version: 1, kind, workId, workRequestHash: requestHash, workRequestId: requestId, ...(commandHash ? { commandHash } : {}), ...(reuseGuard ? { reuseGuard } : {}), payload })}\n` ;
   const target = path.join(directory, `${kind === "review" ? "review" : "attempt"}-${hash(verificationNamespace ? verificationNamespace + ":" + payload.id + ":" + JSON.stringify(reuseGuard ?? null) : payload.id)}.json`)                                        ;
   try { await durableJson(target, text); }
   catch (error) {
@@ -604,11 +722,16 @@ export async function appendPending({ repo = process.cwd(), workId, artifactPath
   const value: unknown = JSON.parse(await fs.readFile(target, "utf8")) ;
   if (!value || typeof value !== "object" || !("version" in value) || value.version !== 1 || !("workId" in value) || value.workId !== workId || !("payload" in value) || !("kind" in value)) throw new Error("회수 결과의 작업 불일치");
   const current = await readWork({ repo, workId });
-  if (current.record.schemaVersion !== 2 || !("workRequestHash" in value) || current.record.workflow.requestHash !== value.workRequestHash) throw new Error("회수 결과의 요청 hash 불일치");
+  if (current.record.schemaVersion !== 2 || !("workRequestHash" in value) || typeof value.workRequestHash !== "string" || current.record.workflow.requestHash !== value.workRequestHash) throw new Error("회수 결과의 요청 hash 불일치");
   const payload = value.payload;
+  const expectedRequestHash = value.workRequestHash;
+  const expectedRequestId = "workRequestId" in value && typeof value.workRequestId === "string" ? value.workRequestId : undefined;
+  if (expectedRequestId !== undefined ? expectedRequestId !== current.record.workflow.requestId : !!current.record.workflow.continuations?.length) {
+    throw new Error("회수 결과의 요청 ID 불일치");
+  }
   try {
     const work = await retryWorkWriter(async () => {
-      if (value.kind === "review") return appendReview(repo, workId, payload);
+      if (value.kind === "review") return appendReview(repo, workId, payload, expectedRequestHash, expectedRequestId);
       if (value.kind !== "verification" || !payload || typeof payload !== "object" || !("executor" in payload) || payload.executor !== "process") throw new Error("실제 검증 결과가 필요합니다.");
       assertPendingAttempt(payload);
       if (!("commandHash" in value) || typeof value.commandHash !== "string" || !/^[a-f0-9]{64}$/.test(value.commandHash)) throw new Error("회수할 검증 명령 식별 누락");
@@ -618,7 +741,7 @@ export async function appendPending({ repo = process.cwd(), workId, artifactPath
         if (!guard || typeof guard !== 'object' || !('context' in guard) || typeof guard.context !== 'string' || !/^[a-f0-9]{64}$/.test(guard.context) || !('useId' in guard) || typeof guard.useId !== 'string' || !/^verification-use-[a-f0-9-]+$/.test(guard.useId)) throw new Error('재사용 기록 맥락 형식 오류');
         reuseGuard = { context: guard.context, useId: guard.useId };
       }
-      return appendVerification(repo, workId, payload, value.commandHash, reuseGuard);
+      return appendVerification(repo, workId, payload, value.commandHash, expectedRequestHash, expectedRequestId, reuseGuard);
     });
     return { recorded: true as const, artifactPath, work };
   } catch (error) {
