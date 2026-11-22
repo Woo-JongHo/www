@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-9b9bec98-af70-49bf-8f4c-946b88126592",
+  "title"        : "답변 스트리밍 중 ‘연결 미확인’ 버그 재현 및 등록",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "22188477d7bf9b8af21437406edb6239443581dde13490366c419e0b7ba04db1",
+    "threadId": "01a20260-f2c8-70b2-b2b3-6baf87fff822",
+    "turnId"  : "01a2028f-545d-7e70-87d5-485feaacd5c2",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"pwd && git status --short --branch | head -8 && rg -n '연결 미확인|연결을 확인한 뒤|chatStatus\\\\(|transport/connected|transport =' src/chat-status.ts src/projection.ts src/renderer.tsx src/native-session.ts test | head -100\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'gh issue list --repo woo-jongho/www --state all --json number,title,url; git rev-parse HEAD'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '1,31p' src/chat-status.ts; rg -n 'export function|let transport|agentMessage/delta' src/projection.ts | head -24; head -28 src/projection.ts; sed -n '1,25p' test/projection.test.ts\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --input-type=module - <<'JS'\nimport { project } from './src/projection.ts';\nimport { chatStatus } from './src/chat-status.ts';\nconst e = (seq,method,params) => ({ seq,method,params,kind:'notification',at:new Date().toISOString() });\nconst diff = [e(2,'turn/started',{threadId:'t',turn:{id:'a'}}), e(3,'item/agentMessage/delta',{threadId:'t',turnId:'a',itemId:'m',delta:'스트리밍 중'})];\nfor (const events of [diff,[e(1,'transport/connected',{}),...diff]]) {\n const p = project(events);\n console.log(JSON.stringify({ transport:p.transport, working:p.working, output:p.blocks.some(x=>x.text==='스트리밍 중'), ...chatStatus({...p, sending:false,switching:false,approvals:0}) }));\n}\nJS\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'issue_body=$(mktemp -t www-stream-status)\ncat > \"$issue_body\" <<'\"'EOF'\n## 현상\n\nWWW Native 채팅에서 답변이 화면에 계속 추가되는 동안 입력창에 아래 문구가 표시됩니다.\n\n> ○ 연결 미확인  \n> 연결을 확인한 뒤 추가 지시를 보낼 수 있습니다.\n\n사용자는 응답이 들어오는 것을 볼 수 있지만 입력창은 연결 확인을 요구합니다.\n\n## 확인한 재현 조건\n\n현재 투영 함수에 같은 대화의 \"'`turn/started`와 `item/agentMessage/delta`를 넣으면 응답 텍스트가 표시되고 `working=true`가 됩니다. 연결 확인 이벤트가 없으면 `transport=disconnected`가 유지되어 입력 상태는 ‘연결 미확인’, `steer=false`가 됩니다. 앞에 `transport/connected`를 추가한 비교 실행에서는 같은 응답이 표시되고 ‘Working · 작업 중’, `steer=true`가 반환됩니다.\n\n이 검사는 합성 이벤트를 사용했습니다. 제보한 세션에서 연결 상태가 왜 확인되지 않았는지는 아직 확인하지 못했습니다.\n\n## 수용 기준\n\n- [ ] 실제 Native 세션에서 답변이 스트리밍되는 동안 입력창의 연결 상태가 같은 탭의 현재 연결 및 턴과 일치합니다.\n- [ ] 현재 연결과 턴이 확인되고 승인·중단 등 차단 조건이 없으면 같은 턴에 추가 지시를 보낼 수 있습니다.\n- [ ] 실제 연결 종료, 복원된 과거 응답, 이전 연결에서 늦게 도착한 응답 조각은 추가 지시 가능 상태를 만들지 않습니다.\n- [ ] 응답 투영과 입력창 상태를 함께 검증하고, 실제 Native 재현에서 연결 이벤트의 수신과 화면 반영을 확인합니다.\nEOF\ngh issue create --repo woo-jongho/www --title '\"'WWW Native 응답 스트리밍 중 입력창에 연결 미확인이 표시됨' --body-file \\\"\"'$issue_body\"",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}

@@ -1,0 +1,95 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>답변 스트리밍 중 ‘연결 미확인’ 버그 재현 및 등록 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+dd.result-status{font-weight:600}dd.result-passed{color:var(--green)}dd.result-failed{color:var(--red)}dd.result-blocked,dd.result-unverified{color:var(--amber)}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 22일 PM 6:22 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>답변 스트리밍 중 ‘연결 미확인’ 버그 재현 및 등록</h1><p class="lead">답변이 화면에 계속 표시되는데도 입력창이 ‘연결 미확인’으로 남아 추가 지시를 막는 문제를 GitHub 이슈 #4에 등록했다고 Native 답변에 기록했습니다. 합성 이벤트 비교에서는 연결 확인 이벤트가 없을 때 응답 표시는 계속되지만 추가 지시가 비활성화됐습니다. 실제 제보 세션의 원인은 미확인입니다.</p><div id="report-story" class="story">답변이 들어오는데도 추가 지시를 보낼 수 없다는 제보를 받고 응답 표시와 입력창 상태를 비교했습니다. 합성 실행에서는 연결 확인 이벤트가 없을 때 응답 텍스트가 표시되면서도 입력창은 ‘연결 미확인’으로 남았고, 이벤트를 추가한 비교 실행에서는 추가 지시가 가능한 상태로 계산됐습니다. Native 답변은 이 결과를 GitHub 이슈 #4에 등록했다고 안내했습니다. 실제 세션에서 왜 상태가 미확인으로 남았는지는 아직 밝혀지지 않았으므로, 다음 단계는 같은 탭과 턴에서 연결 이벤트 수신과 화면 반영을 함께 확인하는 것입니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 실제 Native 세션의 같은 탭·턴에서 연결 이벤트 수신과 입력창 상태 반영을 대조합니다.</p><p class="blocker"><strong>남은 차단 사항</strong> Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>사용자가 답변이 스트리밍되는 턴에 추가 지시를 보내려 했지만, 입력창에는 ‘연결 미확인’이 표시되고 추가 지시를 보낼 수 없었습니다.</p></div><div><h3>접근과 결과</h3><p>같은 행동에 대한 실제 Native 화면의 개선은 확인되지 않았습니다. 합성 비교에서는 연결 확인 이벤트가 포함된 경우에만 응답 표시와 추가 지시 가능 상태가 함께 나타났습니다.</p></div></div><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>응답이 들어오는 것과 입력창이 연결을 확인한 상태가 왜 어긋나는지 구분해야 했습니다.</h3><p><strong>선택</strong> 비교 결과는 재현 조건으로 기록하고, 실제 세션의 원인 판단은 보류했습니다.</p><p><strong>판단 근거</strong> 같은 응답 이벤트에 연결 확인 이벤트를 추가하는 것만으로 합성 실행의 입력 상태가 달라졌습니다.</p><p class="limit"><strong>감수한 점</strong> 재현 조건을 좁혔지만 실제 세션의 이벤트 흐름을 조사하기 전에는 수정 지점을 확정할 수 없습니다.</p></article><h3>함께 기록된 선택</h3><ul><li>합성 이벤트로 확인한 증상 발생 조건과 실제 제보 세션의 원인을 구분했습니다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>GitHub 이슈 #4에 증상, 합성 재현 조건, 실제 Native 세션에서 확인할 수용 기준을 정리했습니다.</li><li>제공 기록에서 코드 수정이나 회귀 테스트 추가는 확인되지 않습니다.</li></ul></div><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">답변 스트리밍 중 ‘연결 미확인’으로 표시되어 추가 지시가 막히는 제보를 확인합니다.</td><td data-label="바뀐 동작">합성 이벤트로 해당 상태 조합을 재현하고, 재현 조건과 수용 기준을 이슈에 남겼다고 보고했습니다.</td><td data-label="근거와 한계">이벤트 비교 실행 명령, 이슈 생성 명령, 이슈 #4 링크가 포함된 Native 답변<p class="limit">실제 제보 세션의 원인, 코드 수정, 수용 기준 충족은 확인되지 않았습니다.</p></td></tr></tbody></table><h3>저장 당시 수용 기준 판정</h3><dl class="requirements"><div><dt>보고서 생성과 업무 수용을 구분한다</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>스트리밍 응답 투영과 추가 지시 가능 상태</h3><dl><div><dt>확인 방법</dt><dd>Native 작업에서 동일한 턴 시작·응답 조각 이벤트를 사용하고, 앞에 연결 확인 이벤트를 넣은 경우와 넣지 않은 경우를 비교했습니다.</dd></div><div><dt>기대 결과</dt><dd>응답은 두 경우 모두 표시되고, 다른 차단 조건이 없는 비교에서 연결 확인 유무에 따라 추가 지시 가능 상태가 달라집니다.</dd></div><div><dt>실제 관측</dt><dd>제공 기록상 연결 확인 이벤트가 없으면 ‘연결 미확인’과 steer=false, 있으면 ‘Working · 작업 중’과 steer=true가 반환됐습니다.</dd></div><div><dt>확인 범위와 한계</dt><dd>합성 이벤트 수준의 검사입니다. 원본 출력은 제공되지 않았으며, 실제 입력창 조작이나 추가 지시 전송은 검사하지 않았습니다.</dd></div></dl></article><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>자료가 잘려 있어 명령의 원본 출력 등 일부 근거가 제공되지 않았습니다. 비교 결과는 Native 답변과 이슈 본문을 작성한 명령에 기록된 내용입니다.</li><li>합성 검사는 응답 투영과 입력 상태 계산을 비교한 것이며, 실제 Native 화면에서 이벤트가 수신·반영됐거나 추가 지시가 전송됐는지는 확인하지 않았습니다.</li><li>명령 종료 코드 0은 실행 종료 상태이며, 수정 완료나 수용 기준 충족을 뜻하지 않습니다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>실제 Native 세션의 같은 탭·턴에서 연결 이벤트 수신과 입력창 상태 반영을 대조합니다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>연결 상태가 미확인으로 남는 지점을 실제 세션 기록으로 좁힙니다.</dd></div><div><dt>영향</dt><dd>합성 재현 조건과 실제 제보의 원인을 연결할 수 있습니다.</dd></div></dl></article><article class="next"><h3>수정 후 정상 스트리밍과 차단 조건을 함께 검증합니다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>현재 연결과 턴이 확인되고 차단 조건이 없을 때만 같은 턴에 추가 지시를 보낼 수 있으며, 연결 종료나 과거·이전 연결의 응답 조각으로는 입력이 열리지 않음을 확인합니다.</dd></div><div><dt>영향</dt><dd>버그 수정과 기존 차단 조건 유지를 함께 확인할 수 있습니다.</dd></div></dl></article><h3>기존 서술에 기록된 남은 일</h3><ul><li>실제 Native 세션에서 같은 탭과 턴의 연결 이벤트 수신 여부와 입력창 반영 여부를 대조합니다.</li><li>수정 후 정상 스트리밍 중에는 추가 지시가 가능하고, 실제 연결 종료나 과거·이전 연결의 응답 조각은 추가 지시를 활성화하지 않는지 확인합니다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 22일 PM 6:22 · 선택한 발행 기록 · 답변이 화면에 계속 표시되는데도 입력창이 ‘연결 미확인’으로 남아 추가 지시를 막는 문제를 GitHub 이슈 #4에 등록했다고 Native 답변에 기록했습니다. 합성 이벤트 비교에서는 연결 확인 이벤트가 없을 때 응답 표시는 계속되지만 추가 지시가 비활성화됐습니다. 실제 제보 세션의 원인은 미확인입니다.</p><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>버그 증상, 합성 재현 조건, 수정 수용 기준을 확인합니다.</p><code>https://github.com/Woo-JongHo/www/issues/4</code></li><li><p>합성 검사에서 이벤트가 응답과 연결 상태로 투영되는 경로를 추적합니다.</p><code>src/projection.ts</code></li><li><p>합성 검사에서 표시 문구와 추가 지시 가능 여부가 계산되는 경로를 추적합니다.</p><code>src/chat-status.ts</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Native/016-답변 스트리밍 중 ‘연결 미확인’ 버그 재현 및 등록/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-9b9bec98-af70-49bf-8f4c-946b88126592<br>report-78585921-2c25-46ae-a95e-7d40822725ba</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>6882dac60ed612be1b79e2bb55d79bed9376c05e36e924a9b6b7132fa605debf</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>기준 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-NATIVE&quot;,
+      &quot;description&quot;: &quot;보고서 생성과 업무 수용을 구분한다&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;답변이 화면에 계속 표시되는데도 입력창이 ‘연결 미확인’으로 남아 추가 지시를 막는 문제를 GitHub 이슈 #4에 등록했다고 Native 답변에 기록했습니다. 합성 이벤트 비교에서는 연결 확인 이벤트가 없을 때 응답 표시는 계속되지만 추가 지시가 비활성화됐습니다. 실제 제보 세션의 원인은 미확인입니다.&quot;,
+  &quot;before&quot;: &quot;사용자가 답변이 스트리밍되는 턴에 추가 지시를 보내려 했지만, 입력창에는 ‘연결 미확인’이 표시되고 추가 지시를 보낼 수 없었습니다.&quot;,
+  &quot;after&quot;: &quot;같은 행동에 대한 실제 Native 화면의 개선은 확인되지 않았습니다. 합성 비교에서는 연결 확인 이벤트가 포함된 경우에만 응답 표시와 추가 지시 가능 상태가 함께 나타났습니다.&quot;,
+  &quot;changes&quot;: [
+    &quot;GitHub 이슈 #4에 증상, 합성 재현 조건, 실제 Native 세션에서 확인할 수용 기준을 정리했습니다.&quot;,
+    &quot;제공 기록에서 코드 수정이나 회귀 테스트 추가는 확인되지 않습니다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;합성 이벤트로 확인한 증상 발생 조건과 실제 제보 세션의 원인을 구분했습니다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;자료가 잘려 있어 명령의 원본 출력 등 일부 근거가 제공되지 않았습니다. 비교 결과는 Native 답변과 이슈 본문을 작성한 명령에 기록된 내용입니다.&quot;,
+    &quot;합성 검사는 응답 투영과 입력 상태 계산을 비교한 것이며, 실제 Native 화면에서 이벤트가 수신·반영됐거나 추가 지시가 전송됐는지는 확인하지 않았습니다.&quot;,
+    &quot;명령 종료 코드 0은 실행 종료 상태이며, 수정 완료나 수용 기준 충족을 뜻하지 않습니다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;실제 Native 세션에서 같은 탭과 턴의 연결 이벤트 수신 여부와 입력창 반영 여부를 대조합니다.&quot;,
+    &quot;수정 후 정상 스트리밍 중에는 추가 지시가 가능하고, 실제 연결 종료나 과거·이전 연결의 응답 조각은 추가 지시를 활성화하지 않는지 확인합니다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;답변이 들어오는데도 추가 지시를 보낼 수 없다는 제보를 받고 응답 표시와 입력창 상태를 비교했습니다. 합성 실행에서는 연결 확인 이벤트가 없을 때 응답 텍스트가 표시되면서도 입력창은 ‘연결 미확인’으로 남았고, 이벤트를 추가한 비교 실행에서는 추가 지시가 가능한 상태로 계산됐습니다. Native 답변은 이 결과를 GitHub 이슈 #4에 등록했다고 안내했습니다. 실제 세션에서 왜 상태가 미확인으로 남았는지는 아직 밝혀지지 않았으므로, 다음 단계는 같은 탭과 턴에서 연결 이벤트 수신과 화면 반영을 함께 확인하는 것입니다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;답변 스트리밍 중 ‘연결 미확인’으로 표시되어 추가 지시가 막히는 제보를 확인합니다.&quot;,
+        &quot;result&quot;: &quot;합성 이벤트로 해당 상태 조합을 재현하고, 재현 조건과 수용 기준을 이슈에 남겼다고 보고했습니다.&quot;,
+        &quot;evidence&quot;: &quot;이벤트 비교 실행 명령, 이슈 생성 명령, 이슈 #4 링크가 포함된 Native 답변&quot;,
+        &quot;limitations&quot;: &quot;실제 제보 세션의 원인, 코드 수정, 수용 기준 충족은 확인되지 않았습니다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;스트리밍 응답 투영과 추가 지시 가능 상태&quot;,
+        &quot;method&quot;: &quot;Native 작업에서 동일한 턴 시작·응답 조각 이벤트를 사용하고, 앞에 연결 확인 이벤트를 넣은 경우와 넣지 않은 경우를 비교했습니다.&quot;,
+        &quot;expected&quot;: &quot;응답은 두 경우 모두 표시되고, 다른 차단 조건이 없는 비교에서 연결 확인 유무에 따라 추가 지시 가능 상태가 달라집니다.&quot;,
+        &quot;observed&quot;: &quot;제공 기록상 연결 확인 이벤트가 없으면 ‘연결 미확인’과 steer=false, 있으면 ‘Working · 작업 중’과 steer=true가 반환됐습니다.&quot;,
+        &quot;limitations&quot;: &quot;합성 이벤트 수준의 검사입니다. 원본 출력은 제공되지 않았으며, 실제 입력창 조작이나 추가 지시 전송은 검사하지 않았습니다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;응답이 들어오는 것과 입력창이 연결을 확인한 상태가 왜 어긋나는지 구분해야 했습니다.&quot;,
+        &quot;basis&quot;: &quot;같은 응답 이벤트에 연결 확인 이벤트를 추가하는 것만으로 합성 실행의 입력 상태가 달라졌습니다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;비교 결과는 재현 조건으로 기록하고, 실제 세션의 원인 판단은 보류했습니다.&quot;,
+        &quot;tradeoff&quot;: &quot;재현 조건을 좁혔지만 실제 세션의 이벤트 흐름을 조사하기 전에는 수정 지점을 확정할 수 없습니다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;https://github.com/Woo-JongHo/www/issues/4&quot;,
+        &quot;purpose&quot;: &quot;버그 증상, 합성 재현 조건, 수정 수용 기준을 확인합니다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;src/projection.ts&quot;,
+        &quot;purpose&quot;: &quot;합성 검사에서 이벤트가 응답과 연결 상태로 투영되는 경로를 추적합니다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;src/chat-status.ts&quot;,
+        &quot;purpose&quot;: &quot;합성 검사에서 표시 문구와 추가 지시 가능 여부가 계산되는 경로를 추적합니다.&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;실제 Native 세션의 같은 탭·턴에서 연결 이벤트 수신과 입력창 상태 반영을 대조합니다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;연결 상태가 미확인으로 남는 지점을 실제 세션 기록으로 좁힙니다.&quot;,
+        &quot;impact&quot;: &quot;합성 재현 조건과 실제 제보의 원인을 연결할 수 있습니다.&quot;
+      },
+      {
+        &quot;action&quot;: &quot;수정 후 정상 스트리밍과 차단 조건을 함께 검증합니다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;현재 연결과 턴이 확인되고 차단 조건이 없을 때만 같은 턴에 추가 지시를 보낼 수 있으며, 연결 종료나 과거·이전 연결의 응답 조각으로는 입력이 열리지 않음을 확인합니다.&quot;,
+        &quot;impact&quot;: &quot;버그 수정과 기존 차단 조건 유지를 함께 확인할 수 있습니다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></section></article></div></main></body></html>
