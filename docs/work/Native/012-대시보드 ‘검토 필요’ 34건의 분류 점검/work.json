@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-15d4b49e-b046-4f03-8c72-72e912ed231b",
+  "title"        : "대시보드 ‘검토 필요’ 34건의 분류 점검",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "16396bce415c892304b1ca5a9b9e31ed5142294574b29b0b4fe967dcd0d30e17",
+    "threadId": "01a20260-f2c8-70b2-b2b3-6baf87fff822",
+    "turnId"  : "01a20279-a667-77d3-b5ca-66adbf44fa4c",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"rg --files src | rg -i 'dashboard|kanban|work-list|work-board'; rg -n '검토' docs/specs | rg -i '대시보드|칸반|카드' | head -25\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"pwd && git status --short --branch | head -12 && rg -n '검토 대기|검토 필요|검토 중|검토할|reviewPending|in_review|needs_review' src | head -100\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '1,150p' src/dashboard-view.tsx; rg -n 'export|work.json|status' src/dashboard.ts; cat docs/specs/dashboard.md\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport json,collections\ncounts=collections.Counter()\nfor f in sorted(Path('docs/work').glob('*/*/work.json')):\n d=json.loads(f.read_text()); s=d.get('status'); counts[s]+=1\n if s=='verifying':\n  w=d.get('workflow') or {}\n  print(json.dumps({'path':str(f.parent),'id':d.get('id'),'blocked':d.get('blockedReason'),'next':w.get('nextAction'),'criteria':[(c.get('id'),c.get('status'),c.get('required')) for c in d.get('criteria',[])],'workflow_keys':list(w)},ensure_ascii=False))\nprint(counts)\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '1,22p;65,90p;184,198p' src/dashboard.ts\nrg -n 'interface DashboardProject|type DashboardProject|dashboardSnapshot|readDashboard\\\\(' src/shared.ts src/native-session.ts\nnode --disable-warning=ExperimentalWarning --input-type=module - <<'JS'\nimport {readDashboard} from './src/dashboard.ts';\nimport {readFile} from 'node:fs/promises';\nconst root = process.cwd();\nconst snapshot = await readDashboard([{key:'www',name:'WWW',root,cwd:root,path:root}]);\nfor (const p of snapshot.projects) {\n  const statuses = {}, next = {}, items = {}, tests = {};\n  for (const c of p.cards) {\n    statuses[c.status] = (statuses[c.status] ?? 0) + 1;\n    if (c.status \"'!== '\"'verifying') continue;\n    const row = JSON.parse(await readFile(c.sourcePath, 'utf8'));\n    const action = row.workflow?.nextAction ?? 'none';\n    next[action] = (next[action] ?? 0) + 1;\n    if (action \"'!== '\"'verify') (items[action] ??= []).push(c.sourcePath.split('/').slice(-3,-1).join('/').split('-')[0]);\n    const pa",
+        "status"  : "failed",
+        "exitCode": 1
+      },
+      {
+        "command" : "/bin/zsh -lc \"node --experimental-transform-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --input-type=module - <<'JS'\nimport {readDashboard} from './src/dashboard.ts';\nimport {readFile} from 'node:fs/promises';\nimport {resolve} from 'node:path';\nconst root = process.cwd();\nconst {projects:[p]} = await readDashboard([{key:'www',name:'WWW',path:root,kind:'www'}]);\nconst statuses = {}, next = {}, items = {}, tests = {};\nfor (const c of p.cards) {\n  statuses[c.status] = (statuses[c.status] ?? 0) + 1;\n  if (c.status \"'!== '\"'verifying') continue;\n  const row = JSON.parse(await readFile(resolve(root,c.sourcePath), 'utf8'));\n  const action = row.workflow?.nextAction ?? 'none';\n  next[action] = (next[action] ?? 0) + 1;\n  if (action \"'!== '\"'verify' && action \"'!== '\"'none') (items[action] ??= []).push(c.sourcePath.split('/').slice(-3,-1).join('/').split('-')[0]);\n  const group = c.passedCriteria===c.requiredCriteria ? 'all_passed' : c.passedCriteri",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}
