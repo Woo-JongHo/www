@@ -16,6 +16,41 @@ export interface NativeTimingEvent {
 }
 
 export type WorkStatus = "draft" | "ready" | "in_progress" | "verifying" | "done" | "cancelled";
+export interface RpaStandardUnit {
+  id: string;
+  effect: "none" | "read" | "write_local" | "write_external";
+  rerun: boolean | "unknown";
+  abort: boolean | null;
+}
+
+export type RpaStandardRun =
+  | { state: "missing" | "invalid" | "limit" }
+  | { state: "unfinished"; id: string }
+  | {
+      state: "observed"; id: string; status: "completed" | "partial" | "incomplete" | "failed";
+      finishedAt: string; exitCode: number;
+      units: { id: string; status: "completed" | "failed" | "skipped"; seconds: number }[];
+      logs: { name: string; present: boolean }[];
+    };
+
+export interface RpaStandardCase {
+  id: string;
+  unit: string;
+  condition: string;
+  expected: string;
+  handling: string;
+  rerun: "safe" | "unsafe" | "unknown";
+}
+export type RpaStandardSnapshot = {
+  projectId: string;
+  standardVersion: string;
+  coreVersion: string;
+  processes: { id: string; name: string; tasks: { id: string; name: string; units: RpaStandardUnit[] }[] }[];
+  core: { status: "matched" | "different" | "missing" | "invalid"; matched: number; total: number; differences: string[] };
+  cases: RpaStandardCase[] | null;
+  run: RpaStandardRun;
+} | null;
+
 export interface DashboardProject { key: string; name: string; path: string; kind: "rpa" | "www" }
 export interface DashboardWork {
   id: string; projectKey: string; title: string; status: WorkStatus; blockedReason: string | null;
@@ -57,7 +92,7 @@ export interface SelectionRef {
 export interface ScopedAppEvent extends AppEvent, SelectionRef {
   connectionGeneration: number;
 }
-export interface WorkspaceSelection extends WorkspaceInfo, SelectionRef {}
+export interface WorkspaceSelection extends WorkspaceInfo, SelectionRef { hasRpaProfile?: boolean }
 export interface ProjectInfo {
   workspaceKey : string  ;
   name         : string  ;
@@ -175,6 +210,7 @@ export interface WwwApi {
   workspace(sessionId?: string): Promise<WorkspaceSelection>;
   listProjects(selection: SelectionRef): Promise<readonly ProjectInfo[]>;
   dashboard(selection: SelectionRef): Promise<DashboardSnapshot>;
+  rpaStandard(selection: SelectionRef): Promise<RpaStandardSnapshot>;
   dashboardWork(selection: SelectionRef, projectKey: string, workId: string): Promise<DashboardWorkDetail>;
   selectWww(selection: SelectionRef): Promise<ConversationSelection>;
   setProjectFavorite(selection: SelectionRef, workspaceKey: string, favorite: boolean): Promise<void>;

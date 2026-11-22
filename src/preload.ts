@@ -22,6 +22,7 @@ const api: WwwApi = {
   workspace: (sessionId) => ipcRenderer.invoke("workspace:get", sessionId),
   listProjects: (selection) => ipcRenderer.invoke("projects:list", selection),
   dashboard: (selection) => ipcRenderer.invoke("dashboard:get", selection),
+  rpaStandard: (selection) => ipcRenderer.invoke("rpa:standard", selection),
   dashboardWork: (selection, projectKey, workId) => ipcRenderer.invoke("dashboard:get", selection, { projectKey, workId }),
   selectWww: (selection) => ipcRenderer.invoke("projects:www", selection),
   setProjectFavorite: (selection, key, favorite) => ipcRenderer.invoke("projects:favorite", selection, key, favorite),

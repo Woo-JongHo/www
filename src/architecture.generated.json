@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "8cacf1e137f446253b8199954c08cc77aba38df0c632b865c45fa1c57e3a5aff",
+  "digest"       : "84b3f79164fcbc4144d49f6c2d50e01308d581924251c3c8553461e3f2ef0311",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -643,7 +643,7 @@
       "role"       : "앱·Native 수명주기와 IPC 처리",
       "line"       : 1,
       "lines"      : 320,
-      "digest"     : "86e82f0cbaef2cec7ead8782642daaa52910201fee6b84f60207dc2dc0998eef",
+      "digest"     : "2e74aa133d223b50a9f486fe36bc6032ec303318ff203625e1661cd702418164",
       "structureId": "arch.native.lifecycle"
     },
     {
@@ -730,8 +730,8 @@
       "layer"      : "host",
       "role"       : "앱 모듈 · native-session",
       "line"       : 1,
-      "lines"      : 1059,
-      "digest"     : "353b24823036f758b882ca98bc1496bd095f275af046607306bc6f56506df7de",
+      "lines"      : 1071,
+      "digest"     : "880e8bfb7171e06b7d958c54ed2435f6fefc60f7d7588b03302aced0e0d07c43",
       "structureId": "arch.native.lifecycle"
     },
     {
@@ -752,8 +752,8 @@
       "layer"      : "contract",
       "role"       : "제한된 WwwApi 노출",
       "line"       : 1,
-      "lines"      : 61,
-      "digest"     : "d67d44ed51b5556426d7e6345ff14bddfd12dcbbd6ead1fb1e3603e624526e12",
+      "lines"      : 62,
+      "digest"     : "5bf5e9cf398179b5b2288cdfcc50ca195c7f691f6df9ca4715770dc6296918ff",
       "structureId": "arch.native.bridge"
     },
     {
@@ -785,8 +785,8 @@
       "layer"      : "presentation",
       "role"       : "화면 전환과 대화 상태 통합",
       "line"       : 1,
-      "lines"      : 1279,
-      "digest"     : "62440fb221984def9e26ad73aac85baa4a2fca1ff0258e0d11e94b817f4c54cb",
+      "lines"      : 1282,
+      "digest"     : "a8b29d4a8b6c5fa636c02cf78c9ea8e3e17ceca3aa4b44e0996470c09d6c15f3",
       "structureId": "arch.chat.workspace"
     },
     {
@@ -821,6 +821,28 @@
       "lines"      : 164,
       "digest"     : "aa1ee7040131e6c2bfefe93878f546fc93494aab0e99404998a4cbffaca7c873",
       "structureId": "arch.reports.view"
+    },
+    {
+      "id"         : "src/rpa-standard-view.tsx",
+      "file"       : "src/rpa-standard-view.tsx",
+      "title"      : "rpa-standard-view",
+      "layer"      : "presentation",
+      "role"       : "앱 모듈 · rpa-standard-view",
+      "line"       : 1,
+      "lines"      : 102,
+      "digest"     : "8ae843158645716c340f67c8c0eb26324c4d0fcbe140a032a08a278148532254",
+      "structureId": "arch.chat.workspace"
+    },
+    {
+      "id"         : "src/rpa-standard.ts",
+      "file"       : "src/rpa-standard.ts",
+      "title"      : "rpa-standard",
+      "layer"      : "host",
+      "role"       : "앱 모듈 · rpa-standard",
+      "line"       : 1,
+      "lines"      : 216,
+      "digest"     : "44717ebea90e63f443aab7c6730cb7937637ecf2ee96ecc787760711c22dbdfd",
+      "structureId": "arch.native.lifecycle"
     },
     {
       "id"         : "src/rpc.ts",
@@ -873,8 +895,8 @@
       "layer"      : "contract",
       "role"       : "프로세스 간 공용 타입 계약",
       "line"       : 1,
-      "lines"      : 247,
-      "digest"     : "18b1b00551437112e67b540e2d3bbf9663f061adac3e1796a384dedb9cf43a3a",
+      "lines"      : 283,
+      "digest"     : "8824b3fbe85c62e9360acf1586da89cbe56abd0df4bc0e75c3639fd4a431ba4f",
       "structureId": "arch.native.protocol"
     },
     {
@@ -2717,7 +2739,7 @@
       "statement": "import type { NativeReportDecision, NativeReportInput } from \"./report-judge\";"
     },
     {
-      "id"       : "src/native-session.ts:359",
+      "id"       : "src/native-session.ts:377",
       "from"     : "src/native-session.ts",
       "to"       : "src/rpc.ts",
       "mode"     : "mixed",
@@ -2728,7 +2750,7 @@
       "statement": "import { JsonRpcClient, RpcClosedError, type RpcMessage } from \"./rpc\";"
     },
     {
-      "id"       : "src/native-session.ts:431",
+      "id"       : "src/native-session.ts:449",
       "from"     : "src/native-session.ts",
       "to"       : "src/conversations.ts",
       "mode"     : "mixed",
@@ -2739,7 +2761,7 @@
       "statement": "import { createConversationService, type ConversationEvent } from \"./conversations\";"
     },
     {
-      "id"       : "src/native-session.ts:516",
+      "id"       : "src/native-session.ts:534",
       "from"     : "src/native-session.ts",
       "to"       : "src/development.ts",
       "mode"     : "runtime",
@@ -2750,7 +2772,7 @@
       "statement": "import { createDevelopmentService } from \"./development\";"
     },
     {
-      "id"       : "src/native-session.ts:574",
+      "id"       : "src/native-session.ts:592",
       "from"     : "src/native-session.ts",
       "to"       : "src/reports-service.ts",
       "mode"     : "runtime",
@@ -2761,7 +2783,7 @@
       "statement": "import { createReportService } from \"./reports-service\";"
     },
     {
-      "id"       : "src/native-session.ts:631",
+      "id"       : "src/native-session.ts:649",
       "from"     : "src/native-session.ts",
       "to"       : "src/native-reports.ts",
       "mode"     : "type",
@@ -2772,7 +2794,7 @@
       "statement": "import type { createNativeReportHarness } from \"./native-reports\";"
     },
     {
-      "id"       : "src/native-session.ts:698",
+      "id"       : "src/native-session.ts:716",
       "from"     : "src/native-session.ts",
       "to"       : "src/native-report-input.ts",
       "mode"     : "runtime",
@@ -2783,7 +2805,7 @@
       "statement": "import { NativeCompletionCollector } from \"./native-report-input\";"
     },
     {
-      "id"       : "src/native-session.ts:765",
+      "id"       : "src/native-session.ts:783",
       "from"     : "src/native-session.ts",
       "to"       : "src/native-command.ts",
       "mode"     : "runtime",
@@ -2794,7 +2816,7 @@
       "statement": "import { resolveNativeCodex } from \"./native-command\";"
     },
     {
-      "id"       : "src/native-session.ts:820",
+      "id"       : "src/native-session.ts:838",
       "from"     : "src/native-session.ts",
       "to"       : "src/native-chat.ts",
       "mode"     : "runtime",
@@ -2805,7 +2827,7 @@
       "statement": "import { nativeThreadStartParams, nativeTurnSteerParams, WWW_STAGE_TOOL } from \"./native-chat\";"
     },
     {
-      "id"       : "src/native-session.ts:916",
+      "id"       : "src/native-session.ts:934",
       "from"     : "src/native-session.ts",
       "to"       : "src/www-activity.ts",
       "mode"     : "runtime",
@@ -2816,7 +2838,7 @@
       "statement": "import { parseWwwDevelopmentStage } from \"./www-activity\";"
     },
     {
-      "id"       : "src/native-session.ts:975",
+      "id"       : "src/native-session.ts:993",
       "from"     : "src/native-session.ts",
       "to"       : "src/native-lifecycle.ts",
       "mode"     : "runtime",
@@ -2827,7 +2849,7 @@
       "statement": "import { createNativeLifecycle, createRestoredMessageFilter } from \"./native-lifecycle\";"
     },
     {
-      "id"       : "src/native-session.ts:1064",
+      "id"       : "src/native-session.ts:1082",
       "from"     : "src/native-session.ts",
       "to"       : "src/native-timing.ts",
       "mode"     : "runtime",
@@ -2838,7 +2860,7 @@
       "statement": "import { createNativeTiming } from \"./native-timing\";"
     },
     {
-      "id"       : "src/native-session.ts:1118",
+      "id"       : "src/native-session.ts:1136",
       "from"     : "src/native-session.ts",
       "to"       : "src/activity-sidebar.ts",
       "mode"     : "runtime",
@@ -2849,7 +2871,7 @@
       "statement": "import { parseHooksListResponse, parseSkillsListResponse } from \"./activity-sidebar\";"
     },
     {
-      "id"       : "src/native-session.ts:1204",
+      "id"       : "src/native-session.ts:1222",
       "from"     : "src/native-session.ts",
       "to"       : "src/activity-ledger.ts",
       "mode"     : "type",
@@ -2860,7 +2882,7 @@
       "statement": "import type { ActivityLedger } from \"./activity-ledger\";"
     },
     {
-      "id"       : "src/native-session.ts:1261",
+      "id"       : "src/native-session.ts:1279",
       "from"     : "src/native-session.ts",
       "to"       : "src/projects.ts",
       "mode"     : "runtime",
@@ -2871,7 +2893,7 @@
       "statement": "import { createProjectRegistry } from \"./projects\";"
     },
     {
-      "id"       : "src/native-session.ts:1313",
+      "id"       : "src/native-session.ts:1331",
       "from"     : "src/native-session.ts",
       "to"       : "src/dashboard.ts",
       "mode"     : "runtime",
@@ -2882,25 +2904,36 @@
       "statement": "import { readDashboard, readDashboardWork } from \"./dashboard\";"
     },
     {
-      "id"       : "src/native-session.ts:1377",
+      "id"       : "src/native-session.ts:1395",
+      "from"     : "src/native-session.ts",
+      "to"       : "src/rpa-standard.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./rpa-standard",
+      "line"     : 25,
+      "endLine"  : 25,
+      "statement": "import { readRpaStandard } from \"./rpa-standard\";"
+    },
+    {
+      "id"       : "src/native-session.ts:1445",
       "from"     : "src/native-session.ts",
       "to"       : "src/native-activity.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./native-activity",
-      "line"     : 25,
-      "endLine"  : 25,
+      "line"     : 26,
+      "endLine"  : 26,
       "statement": "import { normalizeNativeResources } from \"./native-activity\";"
     },
     {
-      "id"       : "src/native-session.ts:1439",
+      "id"       : "src/native-session.ts:1507",
       "from"     : "src/native-session.ts",
       "to"       : "src/shared.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./shared",
-      "line"     : 26,
-      "endLine"  : 26,
+      "line"     : 27,
+      "endLine"  : 27,
       "statement": "import type { AppEvent, ScopedAppEvent, SelectionRef, WorkspaceSelection, ResourceScope, ResourceSnapshot, RpcId, NativeSessionSummary, NativeReportJob, WorkReportDocument } from \"./shared\";"
     },
     {
@@ -3060,82 +3093,82 @@
     {
       "id"       : "src/renderer.tsx:912",
       "from"     : "src/renderer.tsx",
+      "to"       : "src/rpa-standard-view.tsx",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./rpa-standard-view",
+      "line"     : 15,
+      "endLine"  : 15,
+      "statement": "import { RpaStandardView } from \"./rpa-standard-view\";"
+    },
+    {
+      "id"       : "src/renderer.tsx:967",
+      "from"     : "src/renderer.tsx",
       "to"       : "src/dashboard-view.tsx",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./dashboard-view",
-      "line"     : 15,
-      "endLine"  : 15,
+      "line"     : 16,
+      "endLine"  : 16,
       "statement": "import { DashboardView } from \"./dashboard-view\";"
     },
     {
-      "id"       : "src/renderer.tsx:962",
+      "id"       : "src/renderer.tsx:1017",
       "from"     : "src/renderer.tsx",
       "to"       : "src/session-api.tsx",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./session-api",
-      "line"     : 16,
-      "endLine"  : 16,
+      "line"     : 17,
+      "endLine"  : 17,
       "statement": "import { SessionApiProvider, useSessionApi } from \"./session-api\";"
     },
     {
-      "id"       : "src/renderer.tsx:1029",
+      "id"       : "src/renderer.tsx:1084",
       "from"     : "src/renderer.tsx",
       "to"       : "src/session-tabs.tsx",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./session-tabs",
-      "line"     : 17,
-      "endLine"  : 17,
+      "line"     : 18,
+      "endLine"  : 18,
       "statement": "import { SessionTabs } from \"./session-tabs\";"
     },
     {
-      "id"       : "src/renderer.tsx:1075",
+      "id"       : "src/renderer.tsx:1130",
       "from"     : "src/renderer.tsx",
       "to"       : "src/chat-composer.tsx",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./chat-composer",
-      "line"     : 18,
-      "endLine"  : 18,
+      "line"     : 19,
+      "endLine"  : 19,
       "statement": "import { ChatComposer } from \"./chat-composer\";"
     },
     {
-      "id"       : "src/renderer.tsx:1123",
+      "id"       : "src/renderer.tsx:1178",
       "from"     : "src/renderer.tsx",
       "to"       : "src/chat-status.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./chat-status",
-      "line"     : 19,
-      "endLine"  : 19,
+      "line"     : 20,
+      "endLine"  : 20,
       "statement": "import { chatStatus, isVerificationCommand } from \"./chat-status\";"
     },
     {
-      "id"       : "src/renderer.tsx:1318",
+      "id"       : "src/renderer.tsx:1373",
       "from"     : "src/renderer.tsx",
       "to"       : "src/projection.ts",
       "mode"     : "mixed",
       "syntax"   : "import",
       "specifier": "./projection",
-      "line"     : 22,
-      "endLine"  : 22,
+      "line"     : 23,
+      "endLine"  : 23,
       "statement": "import { executionResultCounts, MAX_OUTPUT_CODE_UNITS, project, type Block, type Projection } from \"./projection\";"
     },
     {
-      "id"       : "src/renderer.tsx:1433",
-      "from"     : "src/renderer.tsx",
-      "to"       : "src/shared.ts",
-      "mode"     : "type",
-      "syntax"   : "import",
-      "specifier": "./shared",
-      "line"     : 23,
-      "endLine"  : 23,
-      "statement": "import type { AppEvent, ConversationSummary, TurnState, WorkspaceSelection, SelectionRef, ScopedAppEvent, ResourceSnapshot, ResourceScope, ProjectInfo, ConversationSelection, WwwApi } from \"./shared\";"
-    },
-    {
-      "id"       : "src/renderer.tsx:1634",
+      "id"       : "src/renderer.tsx:1488",
       "from"     : "src/renderer.tsx",
       "to"       : "src/shared.ts",
       "mode"     : "type",
@@ -3143,6 +3176,17 @@
       "specifier": "./shared",
       "line"     : 24,
       "endLine"  : 24,
+      "statement": "import type { AppEvent, ConversationSummary, TurnState, WorkspaceSelection, SelectionRef, ScopedAppEvent, ResourceSnapshot, ResourceScope, ProjectInfo, ConversationSelection, WwwApi } from \"./shared\";"
+    },
+    {
+      "id"       : "src/renderer.tsx:1689",
+      "from"     : "src/renderer.tsx",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./shared",
+      "line"     : 25,
+      "endLine"  : 25,
       "statement": "import type { NativeTimingEvent, DashboardSnapshot, DashboardWork, NativeSessionSummary } from \"./shared\";"
     },
     {
@@ -3221,6 +3265,39 @@
       "line"     : 7,
       "endLine"  : 7,
       "statement": "import type { NativeReportJob, WorkReportCatalog, WorkReportDocument, WorkReportSummary } from \"./shared\";"
+    },
+    {
+      "id"       : "src/rpa-standard-view.tsx:125",
+      "from"     : "src/rpa-standard-view.tsx",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./shared",
+      "line"     : 6,
+      "endLine"  : 6,
+      "statement": "import type { RpaStandardCase, RpaStandardSnapshot, WorkspaceSelection } from \"./shared\";"
+    },
+    {
+      "id"       : "src/rpa-standard-view.tsx:215",
+      "from"     : "src/rpa-standard-view.tsx",
+      "to"       : "src/session-api.tsx",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./session-api",
+      "line"     : 7,
+      "endLine"  : 7,
+      "statement": "import { useSessionApi } from \"./session-api\";"
+    },
+    {
+      "id"       : "src/rpa-standard.ts:302",
+      "from"     : "src/rpa-standard.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./shared",
+      "line"     : 10,
+      "endLine"  : 10,
+      "statement": "import type { RpaStandardCase, RpaStandardRun, RpaStandardSnapshot, RpaStandardUnit } from \"./shared\";"
     },
     {
       "id"       : "src/rpc.ts:202",
@@ -4134,13 +4211,13 @@
     },
     {
       "file"     : "src/renderer.tsx",
-      "line"     : 20,
+      "line"     : 21,
       "specifier": "react",
       "reason"   : "external"
     },
     {
       "file"     : "src/renderer.tsx",
-      "line"     : 21,
+      "line"     : 22,
       "specifier": "react-dom/client",
       "reason"   : "external"
     },
@@ -4172,6 +4249,42 @@
       "file"     : "src/reports-view.tsx",
       "line"     : 5,
       "specifier": "react",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/rpa-standard-view.tsx",
+      "line"     : 5,
+      "specifier": "react",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/rpa-standard.ts",
+      "line"     : 5,
+      "specifier": "node:crypto",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/rpa-standard.ts",
+      "line"     : 6,
+      "specifier": "node:fs",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/rpa-standard.ts",
+      "line"     : 7,
+      "specifier": "node:fs/promises",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/rpa-standard.ts",
+      "line"     : 8,
+      "specifier": "node:path",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/rpa-standard.ts",
+      "line"     : 9,
+      "specifier": "yaml",
       "reason"   : "external"
     },
     {
@@ -5992,6 +6105,22 @@
         "line": 2
       },
       {
+        "file": "src/rpa-standard-view.tsx",
+        "nodeId": "arch.chat.workspace",
+        "requirementIds": [
+          "RESP-CHAT-WORKSPACE"
+        ],
+        "line": 2
+      },
+      {
+        "file": "src/rpa-standard.ts",
+        "nodeId": "arch.native.lifecycle",
+        "requirementIds": [
+          "RESP-NATIVE-LIFECYCLE"
+        ],
+        "line": 2
+      },
+      {
         "file": "src/rpc.ts",
         "nodeId": "arch.native.transport",
         "requirementIds": [
@@ -6468,7 +6597,7 @@
         "line": 2
       }
     ],
-    "digest": "03739636e384946dd30a0dc3ba6a009af748eac69c3c27b980a76d9a7b7272d3",
+    "digest": "9beb4d3423ecf854c0f3d382a6989c6ba6c20b2b0e9c0ac59ec2068e9aeda211",
     "statecharts": {
       "models": [
         {

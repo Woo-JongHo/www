@@ -5,8 +5,8 @@
  */
 import { spawn, execFileSync, type ChildProcessWithoutNullStreams } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
-import { realpathSync } from "node:fs";
-import { basename, resolve } from "node:path";
+import { existsSync, realpathSync } from "node:fs";
+import { basename, join, resolve } from "node:path";
 import { JsonRpcClient, RpcClosedError, type RpcMessage } from "./rpc";
 import { createConversationService, type ConversationEvent } from "./conversations";
 import { createDevelopmentService } from "./development";
@@ -22,6 +22,7 @@ import { parseHooksListResponse, parseSkillsListResponse } from "./activity-side
 import type { ActivityLedger } from "./activity-ledger";
 import { createProjectRegistry } from "./projects";
 import { readDashboard, readDashboardWork } from "./dashboard";
+import { readRpaStandard } from "./rpa-standard";
 import { normalizeNativeResources } from "./native-activity";
 import type { AppEvent, ScopedAppEvent, SelectionRef, WorkspaceSelection, ResourceScope, ResourceSnapshot, RpcId, NativeSessionSummary, NativeReportJob, WorkReportDocument } from "./shared";
 
@@ -72,7 +73,7 @@ export function createNativeSession(options: NativeSessionOptions) {
   const collections = new Set<Promise<unknown>>();
   const resourceCollections = new Map<string, Promise<void>>();
   let workspace = options.workspace;
-  let metadata: { path: string; branch: string | null; changes: number } | null = null;
+  let metadata: { path: string; branch: string | null; changes: number; hasRpaProfile: boolean } | null = null;
 
   let rpc    : JsonRpcClient | null = null  ;
   let threadStarted                 = false ;
@@ -486,13 +487,14 @@ export function createNativeSession(options: NativeSessionOptions) {
 
   function workspaceSnapshot(): WorkspaceSelection {
     const current = metadata?.path === workspace ? metadata : null;
-    return { ...selection(), name: basename(workspace), path: workspace, branch: current?.branch ?? null, changes: current?.changes ?? 0 };
+    return { ...selection(), name: basename(workspace), path: workspace, branch: current?.branch ?? null, changes: current?.changes ?? 0, hasRpaProfile: current?.hasRpaProfile ?? false };
   }
   function workspaceInfo(): WorkspaceSelection {
-    if (options.workspaceMetadata) metadata = { path: workspace, ...options.workspaceMetadata(workspace) };
+    const hasRpaProfile = workspace !== options.wwwRoot && existsSync(join(workspace, "rpa-workspace.json"));
+    if (options.workspaceMetadata) metadata = { path: workspace, ...options.workspaceMetadata(workspace), hasRpaProfile };
     else {
       const git = (args: string[]) => { try { return execFileSync("git", args, { cwd: workspace, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim(); } catch { return ""; } };
-      metadata = { path: workspace, branch: git(["branch", "--show-current"]) || null, changes: git(["status", "--porcelain"]).split("\n").filter(Boolean).length };
+      metadata = { path: workspace, branch: git(["branch", "--show-current"]) || null, changes: git(["status", "--porcelain"]).split("\n").filter(Boolean).length, hasRpaProfile };
     }
     return workspaceSnapshot();
   }
@@ -645,6 +647,16 @@ export function createNativeSession(options: NativeSessionOptions) {
     } finally { drainPreviousThread(transition); threadTransition = null; if (isCurrent(expected) || selectionEpoch === expected.selectionEpoch + 1) switchingConversation = false; }
   }
 
+  handle("rpa:standard", async (_event, expected: unknown) => {
+    assertSelection(expected);
+    const root = workspace;
+    const registered = await projects.list();
+    assertSelection(expected);
+    if (root === options.wwwRoot || !registered.some(project => project.path === root)) return null;
+    const result = await readRpaStandard(root);
+    assertSelection(expected);
+    return result;
+  });
   handle("dashboard:get", async (_event, expected: unknown, detail: unknown) => {
     assertSelection(expected);
     if (detail !== undefined && (detail === null || typeof detail !== "object" || Array.isArray(detail)
