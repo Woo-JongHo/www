@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-1af5a8b9-d11a-4614-b012-685e1343c509",
+  "title"        : "WWW 단계 미관측 조사 및 이슈 업데이트",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "4d773b56fc8d591545895bf323fae62518bf5fab0131af8a739625e6bfe6cf59",
+    "threadId": "01a20260-f2c8-70b2-b2b3-6baf87fff822",
+    "turnId"  : "01a20262-3ca7-7c22-a974-487efe19cdb5",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc 'cat ~/.agents/skills/computer-use/SKILL.md'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'cat AGENTS.md agents/www/AGENT.md docs/skills/WORKFLOW.md'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'printenv ORCA_CLI_COMMAND; command -v orca; command -v gh; ls -d ~/.codex/sessions'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"pwd && git status --short --branch && git remote -v && rg -l 'www_development_stage|현재 스킬 선택 미확인|하네스 실행 미연결' | head -35\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"command -v orca-dev; ls /Applications | rg -i 'orca|codex|www'; ls -t ~/.codex/sessions/2026/11/22 | head -18\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"git log -8 --oneline; rg -n '이슈|https://github.com|미관측|tool' 'docs/work/Chat/015-WWW 스킬 단계와 Plan 및 Progress 관측 누락/diagnosis.md' 'docs/work/Native/004-관측 누락 버그 명세와 이슈 등록/work.json' | cut -c1-350\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"gh issue list --repo woo-jongho/www --state all --search '관측 누락' --json number,title,state,url\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json, pathlib\nbase=pathlib.Path.home()/'.codex/sessions/2026/11/22'\nfor f in sorted(base.glob('*.jsonl'),key=lambda x:x.stat().st_mtime,reverse=True)[:25]:\n calls=[]; output={}; user=''; meta={}\n for l in f.open():\n  try: x=json.loads(l)\n  except ValueError: continue\n  p=x.get('payload',{}); t=p.get('type')\n  if x.get('type')=='session_meta': meta=p\n  if t=='user_message' and not user: user=p.get('message','').splitlines()[0][:130]\n  if t in ('function_call','custom_tool_call') and 'www_development_stage' in p.get('name',''): calls.append((p.get('call_id'),p.get('arguments',p.get('input'))))\n  if t in ('function_call_output','custom_tool_call_output'): output[p.get('call_id')]=p.get('output')\n if meta.get('cwd','').endswith('/www') or calls:\n  print(f.name,meta.get('originator'),user, 'calls',len(calls))\n  for cid,args in calls[-12:]: print(' ',args, str(output.get(cid))[:650])\nPY\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"gh issue view 2 --repo woo-jongho/www --json body,comments,url; rg -n 'www_development_stage|phaseDeclaration|stageDeclaration|미관측' src/native-chat.ts src/agent-overview.ts src/agent-overview-view.tsx\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport json,collections\nbase=Path.home()/'.codex/sessions/2026/11/22'\nfor prefix in ['17-30','17-23']:\n for f in base.glob('rollout-2026-11-22T'+prefix+'*'):\n  types=collections.Counter()\n  print(f.name)\n  for l in f.open():\n   x=json.loads(l);p=x.get('payload',{});t=p.get('type');types[(x.get('type'),t)]+=1\n   if t=='message' and p.get('role')=='user':\n    s=' '.join(c.get('text','') for c in p.get('content',[]))\n    if not s.startswith('# AGENTS.md'): print('user',s[:180])\n   if t in ('function_call','custom_tool_call'): print('call',p.get('name'))\n  print(types)\nPY\nrg -n 'WWW_STAGE|wwwStage|declaration|stageObserver' src/native-chat.ts src/agent-overview.ts | head -65\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport json,re\nd=Path.home()/'.codex/sessions/2026/11/22'\nfor f in sorted(d.glob('rollout-2026-11-22T17-[23][03]*')):\n print(f.name)\n for l in f.open():\n  x=json.loads(l);p=x.get('payload',{});t=p.get('type')\n  if t=='additional_tools':\n   print('registered', [v for v in re.findall(r'\\\"name\\\"\\\\s*:\\\\s*\\\"([\"'^\"]+)\"'\"',l) if v=='www_development_stage'])\n  if t in ('function_call','custom_tool_call') and p.get('name')=='exec':\n   s=str(p.get('input',p.get('arguments','')))\n   if any(k in s for k in ['www_development_stage','www-build','www-spec','www-design','www-verify','www-diagnose','scripts/workflow','boxbox']):\n    print('exec markers', [k for k in ['www_development_stage','www-build','www-spec','www-design','www-verify','www-diagnose','scripts/workflow','boxbox'] if k in s])\nPY\ngit rev-parse --short HEAD\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json, pathlib\nfor prefix in ['17-23','17-30']:\n for f in (pathlib.Path.home()/'.codex/sessions/2026/11/22').glob('rollout-2026-11-22T'+prefix+'*'):\n  for l in f.open():\n   p=json.loads(l).get('payload',{})\n   if p.get('type')=='additional_tools':\n    print(prefix, [*p], 'www_development_stage' in l, l[:250])\n   if p.get('type')=='custom_tool_call' and ('www-build/SKILL.md' in str(p.get('input','')) or 'artifact-context' in str(p.get('input',''))) and prefix=='17-23':\n    print('role call',str(p.get('input',''))[:900])\nPY\nrg -n 'developmentStage.*true|www/developmentStage|dynamicTools' src/native-chat.ts src/*chat* | head -50\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib,collections\ndef walk(v):\n if isinstance(v,dict):\n  yield v\n  for a in v.values(): yield from walk(a)\n if isinstance(v,list):\n  for a in v: yield from walk(a)\nfor prefix in ['17-23','17-30']:\n for f in (pathlib.Path.home()/'.codex/sessions/2026/11/22').glob('rollout-2026-11-22T'+prefix+'*'):\n  n=collections.Counter()\n  for l in f.open():\n   x=json.loads(l);p=x.get('payload',{})\n   if p.get('type')=='additional_tools':\n    for q in walk(p['tools']):\n     if q.get('name')=='www_development_stage' or q.get('namespace')=='www_development_stage': print(prefix,{k:q[k] for k in ['type','name','namespace'] if k in q})\n   if p.get('type') in ['function_call','custom_tool_call'] and p.get('name')=='www_development_stage': n['calls']+=1\n   if x.get('type')=='event_msg' and p.get('type')=='item_completed' and any(q.get('name')=='www_development_stage' or q.get('tool')=='www_development_stage' for q in walk(p)): n['completion']+=1\n  print(prefix,dic",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport json,pathlib,re\nf=next((pathlib.Path.home()/'.codex/sessions/2026/11/22').glob('*T17-23*'))\nfor l in f.open():\n p=json.loads(l).get('payload',{})\n if p.get('type')=='additional_tools':\n  for m in list(re.finditer('www_development_stage',l))[:8]: print(l[max(0,m.start()-95):m.start()+180])\nPY\nrg -n '역할 선언 도구 연결|developmentStage:|developmentStage\\\\)' src | head -50\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'issue_note=$(mktemp -t www-issue-2)\ncat > \"$issue_note\" <<'\"'EOF'\n### 2026-11-22 추가 관측\n\n- Native WWW의 이미지 첨부 질문을 마친 화면에서 ‘현재 새 WWW 대화에 역할 선언 도구 연결 · 하네스 실행 미연결’이 표시됐습니다. 다섯 단계는 모두 ‘미관측’이었고, Plan 없이도 공개 진행 설명은 ‘계획 미연결’ 상태로 표시됐습니다.\n- 같은 저장소에서 동시에 열린 BoxBox 작업 세션의 공개 도구 기록을 확인했습니다. 해당 세션에 제공된 도구 설명에 \"'`www_development_stage`가 있었고, 저장소 조사와 `www-build` 절차 문서 읽기가 기록됐습니다. 확인 시점까지 `www_development_stage` 호출이나 그 반환은 기록에서 발견되지 않았습니다.\n- 단계 선언이 실제로 발생한 뒤 HUD에서 누락되는 경우는 이 표본으로 확인하지 못했습니다. 다음 재현에서는 유효한 작업 UUID로 절차를 실제 선택·시작하는 순간의 도구 호출과 반환, 같은 세션의 `www/developmentStage` 이벤트, HUD 갱신을 함께 확인하면 선언 호출이 빠진 경우와 호출 이후 전달이 빠진 경우를 구분할 수 있습니다.\nEOF\ngh issue comment 2 --repo woo-jongho/www --body-file \"$issue_note\"'",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}
