@@ -113,6 +113,8 @@ export function createNativeSession(options: NativeSessionOptions) {
 
   const nativeCompletions = new Map<string, NativeCompletionCollector>()                             ;
 
+  let transport: NativeSessionSummary["transport"] = "disconnected";
+  const pendingApprovalEvents = new Map<string, ScopedAppEvent[]>();
   let hasConversationHistory = false;
   let compaction: NativeSessionSummary["compaction"] = { state: "idle" };
   let compactTurn: CompactTurn | null = null;
@@ -155,7 +157,7 @@ export function createNativeSession(options: NativeSessionOptions) {
     if (["transport/closed", "transport/error", "turn/startFailed"].includes(entry.method) || (entry.method === "turn/completed" && turn?.status === "failed")) failed = true;
     if (["transport/connected", "turn/startAccepted"].includes(entry.method)) failed = false;
     if (entry.method === "turn/userPrompt" && title === "새 대화" && typeof params?.text === "string") title = params.text.slice(0, 40);
-    if (entry.kind === "transport" || entry.method.startsWith("approval/") || ["thread/configured", "turn/started", "turn/completed", "turn/startAccepted", "turn/startFailed", "turn/userPrompt"].includes(entry.method) || entry.kind === "request") options.onChanged();
+    if (entry.kind === "transport" || entry.method.startsWith("approval/") || ["thread/configured", "turn/started", "turn/completed", "turn/startAccepted", "turn/startFailed", "turn/userPrompt", "turn/interruptRequested"].includes(entry.method) || entry.kind === "request") options.onChanged();
   }
   function summary(): NativeSessionSummary {
     return {
@@ -167,6 +169,12 @@ export function createNativeSession(options: NativeSessionOptions) {
       approvalCount: lifecycle.approvalCount,
       failed,
       compaction,
+      connectionGeneration,
+      transport,
+      activeTurnId,
+      turnStarting,
+      interrupting: interruptingTurn !== null,
+      ...(pendingApprovalEvents.size ? { pendingApprovalEvents: [...pendingApprovalEvents.values()].flat() } : {}),
     };
   }
   function selection(): SelectionRef {
@@ -299,6 +307,12 @@ export function createNativeSession(options: NativeSessionOptions) {
     const threadId = eventThread(event.params);
     if (stopping || (event.method !== "diagnostics/timing" && threadId !== null && (threadTransition !== null || threadId !== activeThreadId))) return;
     const entry = wire(event.approvalToken ? { ...event, approvalToken: `${options.id}:${event.approvalToken}` } : event);
+    const token = entry.approvalToken;
+    if (token) {
+      if (entry.kind === "request" && entry.supported === true) pendingApprovalEvents.set(token, [entry]);
+      if (entry.method === "approval/responding") pendingApprovalEvents.get(token)?.push(entry);
+      if (entry.method === "approval/responded" || entry.method === "approval/uncertain") pendingApprovalEvents.delete(token);
+    }
     observeSummary(entry);
     collectResources(entry);
     eventLog.push(entry);
@@ -390,6 +404,7 @@ export function createNativeSession(options: NativeSessionOptions) {
     if (rpc) return Promise.resolve(rpc);
     if (connecting) return connecting;
     const token = ++clientToken;
+    transport = "disconnected";
     const root = workspace;
     const valid = () => !stopping && token === clientToken && workspace === root;
     connectionGeneration += 1;
@@ -405,6 +420,7 @@ export function createNativeSession(options: NativeSessionOptions) {
         nativeTiming.cancel("failed");
         clientToken++;
         rpc = null;
+        transport = "closed";
         developmentBinding = null;
         childProcess = null;
         const interruptedThread = activeTurnId !== null ? activeThreadId : null;
@@ -459,6 +475,9 @@ export function createNativeSession(options: NativeSessionOptions) {
         const id     = message.id             ;
         const params = optionalRecord(message.params);
         const turn   = params && optionalRecord(params.turn);
+        const completesActiveTurn = method === "turn/completed" && params?.threadId === activeThreadId
+          && typeof turn?.id === "string" && turn.id === activeTurnId
+          && ["completed", "interrupted", "failed"].includes(String(turn.status));
         if (method === "turn/started" && params?.threadId === activeThreadId && turn && typeof turn.id === "string") {
           if (uncertainSelection?.threadId === activeThreadId && uncertainSelection.epoch === selectionEpoch) return;
           if (terminalSelection?.client === client && terminalSelection.epoch === selectionEpoch && terminalSelection.turns.has(turn.id)) return;
@@ -493,7 +512,12 @@ export function createNativeSession(options: NativeSessionOptions) {
           const supported = SUPPORTED.has(method);
           const token = supported ? lifecycle.approval(client, id, params?.threadId) : null;
           publish({ kind: "request", method, params: message.params, requestId: id, ...(token === null ? {} : { approvalToken: token }), supported: token !== null });
-        } else publish({ kind: "notification", method, params: method === "account/rateLimits/updated" ? rateLimitPayload(message.params) : message.params });
+        } else publish({
+          kind: "notification",
+          method,
+          params: method === "account/rateLimits/updated" ? rateLimitPayload(message.params) : message.params,
+          ...(completesActiveTurn ? { completedActiveTurn: true as const } : {}),
+        });
         if (method === "serverRequest/resolved") lifecycle.resolved(client, message.params);
         if (method === "skills/changed") void loadSkills(client, true);
       };
@@ -506,6 +530,7 @@ export function createNativeSession(options: NativeSessionOptions) {
           client.notify("initialized", {});
           trace?.mark("initialize", "completed");
           rpc = client;
+          transport = "connected";
           settled = true;
           publish({ kind: "transport", method: "transport/connected", params: { connectionGeneration } });
           resolveClient(client);
@@ -514,7 +539,14 @@ export function createNativeSession(options: NativeSessionOptions) {
         .catch((error: unknown) => {
           trace?.mark("initialize", "failed");
           settled = true;
-          if (valid()) { clientToken++; rpc = null; childProcess = null; void terminateChild(child); }
+          if (valid()) {
+            clientToken++;
+            rpc = null;
+            transport = "error";
+            childProcess = null;
+            void terminateChild(child);
+            options.onChanged();
+          }
           reject(error);
         });
     }).finally(() => { if (connecting === pending) connecting = null; });
@@ -674,6 +706,7 @@ export function createNativeSession(options: NativeSessionOptions) {
       nativeTiming.cancel();
       clientToken++;
       rpc = null;
+      transport = "disconnected";
       connecting = null;
       const previousChild = childProcess;
       childProcess = null;
@@ -682,6 +715,7 @@ export function createNativeSession(options: NativeSessionOptions) {
       failed = false;
       workspace = actual;
       selectionEpoch++;
+      pendingApprovalEvents.clear();
       activeThreadId = null;
       activeTurnId = null;
       hasConversationHistory = false;
@@ -798,6 +832,7 @@ export function createNativeSession(options: NativeSessionOptions) {
       if (turnStarting || steering || activeTurnId !== null || lifecycle.approvalCount > 0 || interruptingTurn !== null) throw new Error("새 실행 또는 승인 요청이 생겨 대화 전환을 취소했습니다.");
       nativeTiming.cancel();
       selectionEpoch++;
+      pendingApprovalEvents.clear();
       reservation.commit();
       const restoredPrompt = optionalRecord(restored.events.find(event => event.method === "turn/userPrompt")?.params);
       title = typeof restoredPrompt?.text === "string" ? restoredPrompt.text.slice(0, 40) : "저장 대화";
@@ -845,6 +880,7 @@ export function createNativeSession(options: NativeSessionOptions) {
       failed = false;
       nativeTiming.cancel();
       selectionEpoch++;
+      pendingApprovalEvents.clear();
       activeThreadId = null;
       activeTurnId = null;
       hasConversationHistory = false;

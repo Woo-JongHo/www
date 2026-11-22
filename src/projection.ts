@@ -362,7 +362,12 @@ export function project(events: readonly AppEvent[]): Projection {
       turn      = "running"       ;
       interrupt = "idle"          ;
     }
-    if (event.method === "turn/completed" && activeTurn) {
+    const confirmedActiveCompletion = event.kind === "notification" && event.completedActiveTurn === true && !event.historical;
+    if (event.method === "turn/completed" && (activeTurn || confirmedActiveCompletion)) {
+      if (confirmedActiveCompletion) {
+        threadId = relatedThreadId;
+        turnId = relatedTurnId;
+      }
       const status = string(object(params.turn).status);
       if (status === "completed") turn = "completed";
       else if (status === "interrupted") turn = "interrupted";

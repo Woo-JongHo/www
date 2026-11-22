@@ -80,6 +80,7 @@ export interface AppEvent {
   approvalToken? : string                                   ;
   supported?     : boolean                                  ;
   historical?    : boolean                                  ;
+  completedActiveTurn?: true;
 }
 
 /** 실제 IPC 배달과 요청의 필수 선택 경계. */
@@ -206,6 +207,12 @@ export interface NativeSessionSummary {
   approvalCount : number             ;
   failed        : boolean            ;
   compaction    : NativeCompaction   ;
+  connectionGeneration: number;
+  transport: TransportState;
+  activeTurnId: string | null;
+  turnStarting: boolean;
+  interrupting: boolean;
+  pendingApprovalEvents?: ScopedAppEvent[];
 }
 
 export type ChatTheme = "terminal-basic" | "www-mint";

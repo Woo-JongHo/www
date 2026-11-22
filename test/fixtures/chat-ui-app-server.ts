@@ -134,8 +134,10 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
     const turnId = "live-" + Date.now() + "-" + ++turnCounter;
     pending = { threadId, turnId, prompt };
     if (prompt === "사이드바 두 번째 요청 확인") await new Promise((resolve) => setTimeout(resolve, 450));
+    const startedBeforeResponse = prompt === "스트리밍 이력 절단 중단 확인";
+    if (startedBeforeResponse) notify("turn/started", { threadId, turn: { id: turnId } });
     result(message.id, { turn: { id: turnId } });
-    notify("turn/started", { threadId, turn: { id: turnId } });
+    if (!startedBeforeResponse) notify("turn/started", { threadId, turn: { id: turnId } });
     if (prompt === "성능 스트리밍 중단 확인") {
       const id = "turn-performance";
       let count = 0;
@@ -242,7 +244,17 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
         finish(prompt === "턴 중단 확인" ? "interrupted" : "completed");
       }, 80);
     }
+    else if (prompt === "스트리밍 승인 보존") {
+      send({ jsonrpc: "2.0", id: 42, method: "item/commandExecution/requestApproval", params: { threadId, turnId, command: "printf retained-approval" } });
+      for (let index = 0; index < 2_050; index++) notify("fixture/stream", { threadId, turnId, index });
+    }
     else if (prompt.includes("승인 확인")) send({ jsonrpc: "2.0", id: 42, method: "item/commandExecution/requestApproval", params: { threadId, turnId, command: "printf approved" } });
+    else if (prompt === "스트리밍 이력 절단 중단 확인") {
+      setTimeout(() => {
+        for (let index = 0; index < 2_050; index++) notify("fixture/stream", { threadId, turnId, index });
+        notify("item/agentMessage/delta", { threadId, turnId, itemId: turnId + "-streamed", delta: "이력 절단 뒤에도 들어온 응답" });
+      }, 60);
+    }
     else if (prompt.includes("무활동 확인")) setTimeout(() => finish(), 16_000);
     else if (prompt.includes("결과 미확인 확인")) setTimeout(() => finish("mystery"), 80);
     else if (!prompt.includes("중단 확인")) setTimeout(() => finish(), 80);
