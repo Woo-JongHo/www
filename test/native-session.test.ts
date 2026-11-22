@@ -14,7 +14,9 @@ import { createSessionRegistry } from "../src/session-registry";
 import { createProjectRegistry, type ProjectRegistryIO } from "../src/projects";
 import { createNativeReportHarness } from "../src/native-reports";
 import { judgeNativeReport } from "../src/report-judge";
-import { reduceConversationEvents } from "../src/chat-state";
+import { reduceConversationEvents, liveChatInput } from "../src/chat-state";
+import { chatStatus } from "../src/chat-status";
+import { project } from "../src/projection";
 import { projectNativeActivity } from "../src/native-activity";
 import type { ConversationSelection, NativeSessionSummary, ResourceSnapshot, ScopedAppEvent, SelectionRef } from "../src/shared";
 
@@ -37,6 +39,7 @@ async function setup(hooks: { beforeUpsert?: () => Promise<void>; projectIO?: Pr
   const resources: ResourceSnapshot[] = [];
   const children: ChildProcessWithoutNullStreams[] = [];
   let publishedSummaries: NativeSessionSummary[] = [];
+  const interruptSnapshots: NativeSessionSummary[] = [];
   const processEpoch = randomUUID();
   const projects = createProjectRegistry({ userData, io: hooks.projectIO });
   await Promise.all([projects.register(first), projects.register(second)]);
@@ -51,7 +54,10 @@ async function setup(hooks: { beforeUpsert?: () => Promise<void>; projectIO?: Pr
     const session = createNativeSession({
       id, workspace, processEpoch, appVersion: "test", ledger, projects, workspaceMetadata, registrationError, wwwRoot: first, dist: root,
       reports: { enabled: false }, reportHarness: () => reports, ownership: sessions, compactionTimeoutMs: hooks.compactionTimeoutMs,
-      onEvent: event => events.push(event), onResources: snapshot => resources.push(snapshot), onChanged() { changes++; publishedSummaries = sessions.list().map(existing => existing.summary()); },
+      onEvent: event => {
+        events.push(event);
+        if (event.method === "turn/interruptRequested") interruptSnapshots.push(...publishedSummaries);
+      }, onResources: snapshot => resources.push(snapshot), onChanged() { changes++; publishedSummaries = sessions.list().map(existing => existing.summary()); },
       chooseDirectory: async () => directory, exportReport: async () => null, openExternal: async () => {},
       spawnNative(cwd) {
         const child = spawn(process.execPath, [join(import.meta.dir, hooks.stageProbe ? "fixtures/activity-app-server.ts" : "fixtures/chat-ui-app-server.ts")], { cwd, stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, ...(hooks.stageProbe ? { WWW_STAGE_PROBE: "1" } : {}) } });
@@ -68,13 +74,53 @@ async function setup(hooks: { beforeUpsert?: () => Promise<void>; projectIO?: Pr
     await ledger.close();
     await rm(root, { recursive: true, force: true });
   }
-  return { root, first, second, add, close, sessions, events, resources, children, latestSummaries: () => publishedSummaries, changes: () => changes, choose(path: string | null) { directory = path; } };
+  return { root, first, second, add, close, sessions, events, resources, children, interruptSnapshots, latestSummaries: () => publishedSummaries, changes: () => changes, choose(path: string | null) { directory = path; } };
 }
 const selected = (session: Session): SelectionRef => session.workspaceInfo();
 async function start(session: Session): Promise<string> {
   const result = await session.invoke("thread:start", [selected(session)]) as { threadId: string };
   return result.threadId;
 }
+
+test("이력 절단 뒤 현재 Native 턴에 추가 지시를 보내며 닫힌 연결이나 다른 선택은 사용할 수 없다", async () => {
+  const fixture = await setup();
+  try {
+    const session = fixture.add("streaming", fixture.first);
+    const other = fixture.add("other", fixture.first);
+    const threadId = await start(session);
+    const selection = selected(session);
+    const { turnId } = await session.invoke("turn:start", [selection, threadId, "스트리밍 이력 절단 중단 확인"]) as { turnId: string };
+    const turnLifecycle = fixture.events.filter(event => ["turn/started", "turn/startAccepted"].includes(event.method));
+    expect(turnLifecycle.map(event => event.method)).toEqual(["turn/started", "turn/startAccepted"]);
+    expect(fixture.latestSummaries().find(snapshot => snapshot.id === session.id)).toMatchObject({ activeTurnId: turnId, turnStarting: false });
+    await until(() => fixture.events.filter(event => event.method === "fixture/stream").length === 2_050);
+    const events = await session.invoke("events:get", [selection]) as ScopedAppEvent[];
+    expect(events).toHaveLength(2_000);
+    expect(events.some(event => ["transport/connected", "turn/started", "turn/startAccepted"].includes(event.method))).toBe(false);
+    const history = project(events);
+    const connected = session.summary();
+    const status = (snapshot: typeof connected, scope = selection, thread: string | null = threadId, generation = connected.connectionGeneration) =>
+      chatStatus({ ...liveChatInput(snapshot, scope, thread, generation, history), sending: false, switching: false });
+    expect(status(connected).steer).toBe(true);
+    expect(status(connected, selected(other)).steer).toBe(false);
+    expect(status(connected, selection, "restored-thread").steer).toBe(false);
+    expect(status(connected, selection, threadId, connected.connectionGeneration + 1).steer).toBe(false);
+    expect(status({ ...connected, approvalCount: 1 }).steer).toBe(false);
+    expect(status({ ...connected, interrupting: true }).steer).toBe(false);
+    await expect(session.invoke("turn:steer", [selection, threadId, turnId, "같은 턴", "stream-steer"])).resolves.toEqual({ turnId });
+    const interrupt = session.invoke("turn:interrupt", [selection, threadId, turnId]);
+    const interrupted = fixture.interruptSnapshots.find(snapshot => snapshot.id === session.id);
+    expect(interrupted?.interrupting).toBe(true);
+    if (!interrupted) throw new Error("중단 요청 전에 세션 상태를 받지 못했습니다.");
+    expect(status(interrupted).steer).toBe(false);
+    await interrupt;
+
+    fixture.children[0]?.kill();
+    await until(() => session.summary().transport === "closed");
+    expect(status(session.summary()).steer).toBe(false);
+    await expect(session.invoke("turn:steer", [selection, threadId, turnId, "이전 턴", "stale-steer"])).rejects.toThrow("현재 실행 중인 턴");
+  } finally { await fixture.close(); }
+});
 
 test("모델 적용과 압축의 요청·성공·실패는 한 Native 대화와 탭에만 귀속된다", async () => {
   const fixture = await setup();

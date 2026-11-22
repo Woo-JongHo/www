@@ -5,7 +5,7 @@
 // 입력 한도와 인용 결합은 Ovis에서 개작. Copyright (c) 2026 devswha, MIT.
 // 원본 revision: d505c75e26c54f31573057d1e9aa431ecc56677f
 // src/lib/composerLength.ts, src/lib/chatQuote.ts. docs/third-party/ovis.md 참고.
-import type { AppEvent, ScopedAppEvent, SelectionRef } from "./shared";
+import type { AppEvent, InterruptState, NativeSessionSummary, ScopedAppEvent, SelectionRef, TransportState, TurnState } from "./shared";
 
 export const MAX_PROMPT_CHARS = 100_000;
 
@@ -113,7 +113,38 @@ export interface ConversationEventBatch extends ConversationEventState {
 }
 
 function sameSelection(left: SelectionRef, right: SelectionRef): boolean {
-  return left.workspaceKey === right.workspaceKey && left.selectionEpoch === right.selectionEpoch && left.processEpoch === right.processEpoch;
+  return left.sessionId === right.sessionId && left.workspaceKey === right.workspaceKey
+    && left.selectionEpoch === right.selectionEpoch && left.processEpoch === right.processEpoch;
+}
+
+interface ChatInputState {
+  transport: TransportState;
+  turn: TurnState;
+  turnId: string | null;
+  working: boolean;
+  interrupt: InterruptState;
+  approvals: number;
+}
+
+export function liveChatInput(
+  session: NativeSessionSummary,
+  selection: SelectionRef | null,
+  threadId: string | null,
+  connectionGeneration: number,
+  history: Pick<ChatInputState, "turn" | "interrupt">,
+): ChatInputState {
+  if (!selection || !sameSelection(session.workspace, selection) || session.threadId !== threadId
+    || session.connectionGeneration < connectionGeneration) {
+    const working = history.turn === "starting" || history.turn === "running";
+    return { transport: "disconnected", turn: history.turn, turnId: null, working, interrupt: "idle", approvals: 0 };
+  }
+  const turnId = session.transport === "connected" && threadId !== null ? session.activeTurnId : null;
+  const historicalTurn = history.turn === "running" || history.turn === "starting"
+    ? (session.transport === "connected" ? "idle" : "unknown")
+    : history.turn;
+  const turn = session.turnStarting ? "starting" : turnId ? "running" : historicalTurn;
+  const interrupt = !session.interrupting ? "idle" : history.interrupt === "accepted" ? "accepted" : "requested";
+  return { transport: session.transport, turn, turnId, working: turn === "starting" || turn === "running", interrupt, approvals: session.approvalCount };
 }
 
 function scopedEvent(value: unknown): value is ScopedAppEvent {
@@ -170,7 +201,7 @@ export function reduceConversationEvents(
       || marker.connectionGeneration === reconnect.connectionGeneration && marker.seq <= reconnect.seq)) continue;
     const replacement = reconnectSnapshot(marker, threadId);
     if (!replacement) continue;
-    reconnect = { workspaceKey: marker.workspaceKey, selectionEpoch: marker.selectionEpoch, processEpoch: marker.processEpoch,
+    reconnect = { sessionId: marker.sessionId, workspaceKey: marker.workspaceKey, selectionEpoch: marker.selectionEpoch, processEpoch: marker.processEpoch,
       connectionGeneration: marker.connectionGeneration, seq: marker.seq, threadId: eventThreadId(marker) ?? "" };
     restored = replacement;
     replaced = true;

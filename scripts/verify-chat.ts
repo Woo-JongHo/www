@@ -13,6 +13,8 @@ const root      = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..
 const directory = await fs.mkdtemp(path.join(root, ".www/evidence/chat-ui-"))                                                ;
 const workspace = path.join(directory, "workspace")                                                                          ;
 const nativeSlash = process.argv.includes("--native-slash");
+const nativeSteer = process.argv.includes("--native-steer");
+const nativeProbe = nativeSlash || nativeSteer;
 await fs.mkdir(workspace);
 const checks  : string[] = []                                                                      ;
 const metrics : Data[]   = []                                                                      ;
@@ -83,7 +85,7 @@ async function resolveNativeExecutable() {
   return { selected, executable, version };
 }
 
-const nativeExecutable = nativeSlash ? await resolveNativeExecutable() : null;
+const nativeExecutable = nativeProbe ? await resolveNativeExecutable() : null;
 if (nativeExecutable) await fs.writeFile(path.join(directory, "native-executable.json"), JSON.stringify(nativeExecutable, null, 2));
 
 async function start(round: number, selectedWorkspace = workspace) {
@@ -254,7 +256,7 @@ async function start(round: number, selectedWorkspace = workspace) {
     await click('[data-testid="open-current-workspace"]');
     await wait("document.querySelector('[data-testid=\"target-dashboard\"]')", "현재 프로젝트 대시보드 진입");
     await click('[data-testid="chat-nav"]');
-    if (!nativeSlash) await wait("document.querySelector('[data-thread-id=\"history-a\"]')", "프로젝트 저장 대화 목록");
+    if (!nativeProbe) await wait("document.querySelector('[data-thread-id=\"history-a\"]')", "프로젝트 저장 대화 목록");
     const toggleMonitor = async () => { const opened = await evaluate("!document.querySelector('[data-testid=\"session-monitoring\"]').hidden"); await click(opened ? '[data-testid="chat-nav"]' : '[data-testid="monitoring-nav"]'); };
     return { command, evaluate, wait, click, input, screenshot, measureLayout, measureNavigation, terminate, toggleMonitor };
   } catch (error) { await terminate(); throw error; }
@@ -438,8 +440,25 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
 let session: Awaited<ReturnType<typeof start>> | null = null;
 async function verifyChat() {
 try {
-  if (!nativeSlash) await seedHistory();
+  if (!nativeProbe) await seedHistory();
   session = await start(1);
+  if (nativeSteer) {
+    await session.input("도구를 사용하지 말고 001부터 250까지 숫자를 한 줄에 하나씩 출력하세요.");
+    await session.click('[data-testid="send-button"]');
+    await session.wait("document.querySelector('.transcript .agent .chat-markdown')?.textContent.match(/00[1-9]/) && document.querySelector('[data-testid=\"send-button\"]').textContent.includes('Steer')", "실제 Native 응답 스트리밍과 추가 지시 버튼", 35_000);
+    await session.input("현재 응답의 끝에 확인이라고 덧붙여 주세요.");
+    await session.click('[data-testid="send-button"]');
+    await session.wait(`(async()=>{const events=await window.www.workspace().then(scope=>window.www.events(scope));
+      const start=events.find(event=>event.method==='turn/started');
+      return !!start && events.some(event=>event.method==='turn/steerAccepted'
+        && event.params.threadId===start.params.threadId && event.params.turnId===start.params.turn.id);})()`, "실제 Native가 스트리밍 중 같은 턴에 추가 지시를 접수", 30_000);
+    await session.wait("!document.querySelector('[data-testid=\"interrupt-button\"]')", "실제 턴 종료 뒤 검사용 앱 종료", 45_000);
+    await fs.writeFile(path.join(directory, "native-steer-summary.txt"), checks.join("\n") + "\n");
+    await session.terminate();
+    session = null;
+    console.log(JSON.stringify({ evidence: directory, nativeExecutable, checks }));
+    return;
+  }
   if (nativeSlash) {
     await session.input("/model");
     await session.click('[data-testid="send-button"]');
@@ -608,8 +627,16 @@ try {
     console.log(JSON.stringify({evidence:directory,metrics}));return;
   }
   if (process.argv.includes('--steer-only')) {
-    await session.input('Steer 중단 확인');await session.click('[data-testid="send-button"]');
+    await session.input('스트리밍 이력 절단 중단 확인');await session.click('[data-testid="send-button"]');
+    await session.wait(`(async()=>{const events=await window.www.workspace().then(scope=>window.www.events(scope));
+      return events.length===2000 && !events.some(event=>['transport/connected','turn/started','turn/startAccepted'].includes(event.method))
+        && document.querySelector('.transcript').textContent.includes('이력 절단 뒤에도 들어온 응답');})()`, '연결과 턴 시작이 이력에서 밀려난 뒤에도 스트리밍 표시');
     await session.wait("document.querySelector('[data-testid=\"working-status\"]').textContent.includes('Working') && document.querySelector('[data-testid=\"send-button\"]').textContent.includes('Steer')", '같은 입력창의 Steer와 고정 Working');
+    await session.wait("document.querySelector('.agentmark')?.nextElementSibling?.textContent==='실행 중' && document.querySelector('footer.status').textContent.includes('연결 connected') && document.querySelector('footer.status').textContent.includes('실행 중')", '이력이 잘려도 사이드바와 하단에 현재 실행 상태 표시');
+    await session.click('[data-testid="monitoring-nav"]');
+    await session.click('.panel button.ptab:nth-of-type(3)');
+    await session.wait("document.querySelector('.panel .headline .h')?.textContent==='실행 중' && document.querySelector('.panel .headline .sub')?.textContent.includes('연결 connected') && document.querySelector('.panel .headline .sub')?.textContent.includes('턴 running')", '상세 모니터에도 현재 Native 연결과 실행 턴 표시');
+    await session.click('.panel button[aria-label="상세 모니터 닫기"]');
     await session.input('대기 추가 지시');await session.click('[data-testid="send-button"]');
     await session.input('접수 중 작성한 다음 초안');
     await session.wait("document.querySelector('[data-testid=\"send-button\"]').disabled && !document.querySelector('[data-testid=\"prompt-input\"]').disabled", '추가 지시 pending 중 편집 허용·중복 전송 잠금');
@@ -628,9 +655,16 @@ try {
     await session.wait("document.querySelector('[data-testid=\"working-status\"]').textContent.includes('Working')", '모니터 왕복에도 같은 활성 턴 유지');
     await session.click('[data-testid="interrupt-button"]');
     await session.wait("!document.querySelector('[data-testid=\"interrupt-button\"]')", '별도 중단 조작 후 실제 턴 종료');
+    await session.wait("document.querySelector('[data-testid=\"working-status\"]').textContent.includes('중단됨') && document.querySelector('[data-testid=\"result-summary\"] .result-summary-heading')?.textContent.includes('중단됨')", '시작 사건이 잘린 뒤에도 실제 중단 결과와 요약 표시');
     const calls=(await fs.readFile(path.join(workspace,'fixture-calls.jsonl'),'utf8')).trim().split('\n').map(line=>object(JSON.parse(line)));
     const turns=calls.filter(call=>call.method==='turn/start'), steers=calls.filter(call=>call.method==='turn/steer'), stops=calls.filter(call=>call.method==='turn/interrupt');
     if(turns.length!==1||steers.length!==3||stops.length!==1||new Set(steers.map(call=>object(call.params).clientUserMessageId)).size!==3||new Set(steers.map(call=>object(call.params).expectedTurnId)).size!==1)throw Error('Steer 실제 stdio 중복/같은턴 경계 오류');
+    await session.input('스트리밍 승인 보존');
+    await session.click('[data-testid="send-button"]');
+    await session.wait(`(async()=>{const scope=await window.www.workspace();const events=await window.www.events(scope);
+      return events.length===2000 && !events.some(event=>event.kind==='request') && Array.from(document.querySelectorAll('.approval.open')).some(node=>node.textContent.includes('printf retained-approval') && !node.querySelector('[data-decision="decline"]')?.disabled);})()`, '원본 승인 사건이 이력에서 빠져도 거절 버튼을 제공');
+    await session.click('.approval.open [data-decision="decline"]');
+    await session.wait("!document.querySelector('.approval.open') && document.querySelector('[data-testid=\"working-status\"]').textContent.includes('응답 종료')", '보존한 승인 요청을 실제 거절하면 대기가 해소됨');
     await session.terminate();session=null;await fs.writeFile(path.join(directory,'summary.json'),JSON.stringify({result:'passed',scope:'steer-only',checks,turnStarts:turns.length,steers:steers.length,interrupts:stops.length,limitations:['합성 Native 및 실제 Electron. 실제 모델의 추가 지시 반영과 OS IME는 별도 근거']},null,2));console.log(JSON.stringify({evidence:directory,checks}));return;
   }
   let falsePredicateRejected = false;
