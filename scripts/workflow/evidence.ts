@@ -406,8 +406,13 @@ export async function evaluateEvidence({ repo, record, attempt }: { repo?: strin
 
 function inline(value: unknown) { return String(value).replace(/`/g, "\\`").replace(/[\r\n]/g, " "); }
 
+export function verificationCommandFailed(attempt: VerificationAttempt): boolean {
+  return Boolean(attempt.signal || attempt.error || (typeof attempt.exitCode === "number" && attempt.exitCode !== 0));
+}
+
 export function renderAttempt(attempt: VerificationAttempt) {
   if (!attempt || !/^attempt-[a-f0-9-]+$/i.test(attempt.id ?? "")) throw new Error("검증 시도의 올바른 ID가 필요합니다.");
+  const commandResult = verificationCommandFailed(attempt) ? "실패" : attempt.exitCode === 0 ? "정상 종료" : "미확인";
   return [
     `<a id="${attempt.id}"></a>`,
     `## 검증 시도 — ${attempt.completedAt}`,
@@ -415,7 +420,8 @@ export function renderAttempt(attempt: VerificationAttempt) {
     `- 시도 ID: \`${attempt.id}\``,
     `- 실행 시각: ${attempt.startedAt} ~ ${attempt.completedAt}`,
     `- 명령과 인자: \`${inline(JSON.stringify([attempt.command, ...attempt.args]))}\``,
-    `- 실행 결과: ${attempt.result === "passed" ? "통과" : "실패"}; 종료 코드 ${attempt.exitCode ?? "미확인"}, 신호 ${attempt.signal ?? "없음"}`,
+    `- 명령 결과: ${commandResult}, 종료 코드 ${attempt.exitCode ?? "미확인"}, 신호 ${attempt.signal ?? "없음"}`,
+    `- 검증 시도 결과: ${attempt.result === "passed" ? "통과" : "증거 불충족"}`,
     `- 실행기: ${attempt.executor === "process" ? "실제 자식 프로세스" : "테스트 주입 실행기 — 완료 증거로 사용하지 않음"}`,
     `- 관련 기준: ${attempt.criterionIds.map((id) => `\`${inline(id)}\``).join(", ")}`,
     `- 소스 HEAD: \`${attempt.source.head ?? "없음"}\``,
@@ -423,6 +429,7 @@ export function renderAttempt(attempt: VerificationAttempt) {
     `- 소스 식별: \`${attempt.source.digest}\``,
     `- 기준 정의 식별: \`${attempt.criteriaDigest}\``,
     `- 검증 중 소스 유지: ${attempt.sourceStable ? "확인" : "변경 감지"}`,
+    `- 검증 중 실행 환경 유지: ${attempt.environmentStable ? "확인" : "확인 실패"}`,
     ...(attempt.artifacts?.length ? [
       `- 검증 의존 원문: ${attempt.artifacts.map((artifact) => `\`${inline(artifact.path)}\` (${artifact.size}바이트, sha256 ${artifact.digest})`).join(", ")}`,
       `- 검증 중 원문 유지: ${attempt.artifactsStable ? "확인" : "변경 또는 읽기 실패 감지"}`,

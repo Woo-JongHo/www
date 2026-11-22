@@ -1120,6 +1120,29 @@ test("현재 실패 이유만 있어도 불안정한 source·environment·artifa
   }
 });
 
+test("정상 종료한 명령이 첨부 원문을 바꾸면 기준을 미검증으로 기록한다", async t => {
+  const repo = await repository(t);
+  const proof = ".www/proof.txt";
+  const args = ["checks/rewrite-proof.ts"];
+  await mkdir(join(repo, ".www"), { recursive: true });
+  await writeFile(join(repo, proof), "실행 전 원문\n");
+  await writeFile(join(repo, args[0]), "import { writeFileSync } from 'node:fs';\nwriteFileSync('.www/proof.txt', '실행 후 원문');\n");
+  const initial = request(repo);
+  initial.approval.verifierCommands.push(JSON.stringify([process.execPath, ...args]));
+  const { record } = await openWork(initial);
+  const workId = record.id;
+  await verifyPass(repo, workId);
+  const attempt = await verifyWork({ repo, workId, command: process.execPath, args, criterionIds: ["AC-1"], artifactPaths: [proof] });
+  assert.equal(attempt.exitCode, 0);
+  assert.equal(attempt.artifactsStable, false);
+  assert.equal(attempt.result, "failed");
+  const current = await assessWork({ repo, workId });
+  assert.equal(current.record.criteria[0].result, "unverified");
+  assert.equal(current.record.workflow.nextAction, "verify");
+  assert.equal(current.criteria[0].usable, false);
+  assert.equal(current.record.workflow.verifications.length, 2);
+});
+
 test("분업 미수용은 기준 통과·문서·감사·재개 뒤에도 구현 권한에 맞는 복구 단계로 안내한다", async t => {
   for (const implementation of [true, false]) {
     const repo = await repository(t);

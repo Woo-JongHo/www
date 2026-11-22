@@ -362,6 +362,8 @@ test("실제 검증 중 원문 변경·삭제는 종료 코드 0이어도 실패
     assert.ok(attempt.artifacts);
     assert.equal(attempt.artifactsStable, false);
     assert.equal(attempt.result, "failed");
+    assert.match(renderAttempt(attempt), /명령 결과: 정상 종료, 종료 코드 0/u);
+    assert.match(renderAttempt(attempt), /검증 시도 결과: 증거 불충족/u);
     assert.ok(attempt.artifacts);
     assert.equal(attempt.artifacts.length, 1);
     assert.equal((await evaluateEvidence({ repo, record: record(), attempt })).usable, false);

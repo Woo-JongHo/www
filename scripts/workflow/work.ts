@@ -10,7 +10,7 @@ import { validateRequirementRefs, validateWorkRecord, parseWorkRecord } from "./
 import { findWorkRecord, resolveInside, validateWritePaths, workOutputColumns } from "./preflight.ts";
 import { serializeWorkRecord } from "./work-json.ts";
 import { hashRequest, normalizeApproval } from "./route.ts";
-import { captureSource, criteriaDigest, evaluateEvidence, renderAttempt, validEnvironmentObservation, verify, verifyInSession, withVerificationReuse } from "./evidence.ts";
+import { captureSource, criteriaDigest, evaluateEvidence, renderAttempt, validEnvironmentObservation, verificationCommandFailed, verify, verifyInSession, withVerificationReuse } from "./evidence.ts";
 import { loadReviewPolicy, validateReview, durableJson } from "./review.ts";
 import { withWorkLock, inspectWorkLock, recoverWorkLock, retryWorkWriter, WorkLockBusyError } from "./lock.ts";
 import { checkRepository, assessRepositoryCheck } from "./consistency.ts";
@@ -388,8 +388,8 @@ async function appendVerification(repo: string, workId: string, attempt: Verific
     const applicable = await evaluateEvidence({ repo, record, attempt });
     for (const criterion of record.criteria) {
       if (!attempt.criterionIds.includes(criterion.id)) continue;
-      criterion.result = applicable.usable ? "passed" : attempt.result === "failed" ? "failed" : "unverified";
-      criterion.evidence.push({ attemptId: attempt.id, path: `verification.md#${attempt.id}`, summary: `실제 검증 ${attempt.result}; 현재 적용 ${applicable.usable ? "가능" : "불가"}` });
+      criterion.result = applicable.usable ? "passed" : isCurrentCommandFailure(attempt, applicable.reasons) ? "failed" : "unverified";
+      criterion.evidence.push({ attemptId: attempt.id, path: `verification.md#${attempt.id}`, summary: `종료 코드 ${attempt.exitCode ?? "미확인"}, 기준 ${criterion.result}` });
     }
     record.status              = "verifying"                                                ;
     record.blockedReason       = applicable.usable ? null : applicable.reasons.join("; ")   ;
@@ -408,14 +408,19 @@ async function assessRequiredCriteria(repo: string, record: CurrentWorkRecord) {
   return criteria;
 }
 
+function isCurrentCommandFailure(attempt: VerificationAttempt | undefined, reasons: string[]): boolean {
+  return reasons.length === 1 && reasons[0] === "verification_failed"
+    && attempt?.executor === "process" && attempt.result === "failed"
+    && verificationCommandFailed(attempt)
+    && attempt.sourceStable === true && attempt.environmentStable === true
+    && attempt.artifactsStable !== false && (attempt.artifacts === undefined || attempt.artifactsStable === true);
+}
+
 /** 필수 검증을 먼저 판정하고 분업의 현재 수용까지 갖춰야 다음 단계로 안내한다. */
 async function requiredEvidenceAction(repo: string, record: CurrentWorkRecord, criteria: CriterionAssessment[], ready: "review" | "complete") {
   const failures = criteria.filter(criterion => {
     const attempt = record.workflow.verifications.filter(item => item.criterionIds.includes(criterion.id)).at(-1);
-    return criterion.reasons.length === 1 && criterion.reasons[0] === "verification_failed"
-      && attempt?.executor === "process" && attempt.result === "failed"
-      && attempt.sourceStable === true && attempt.environmentStable === true
-      && attempt.artifactsStable !== false && (attempt.artifacts === undefined || attempt.artifactsStable === true);
+    return isCurrentCommandFailure(attempt, criterion.reasons);
   });
   if (failures.length) {
     record.blockedReason = failures.map(criterion => `${criterion.id}: verification_failed`).join("; ");
