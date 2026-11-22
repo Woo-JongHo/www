@@ -169,6 +169,16 @@ test("실제 CLI 종료 형식의 명시적 사용량 소진에서만 대체 검
   }
   const conflicting = JSON.stringify({ ...terminal, result: "Failed to authenticate: OAuth session expired" });
   assert.equal(classifyOpusFailure({ code: 1, stdout: conflicting })?.kind, "authentication");
+  const legacyMessage = "You've hit your Opus limit";
+  for (const fields of [
+    { api_error_status: 401, api_error_type: "authentication_error" },
+    { api_error_status: 429, api_error_type: "authentication_error" },
+  ]) {
+    const stdout = JSON.stringify({ ...terminal, result: legacyMessage, ...fields });
+    assert.equal(classifyOpusFailure({ code: 1, stdout })?.kind, "authentication");
+  }
+  const malformed = JSON.stringify({ ...terminal, api_error: undefined, result: legacyMessage, error: { code: "quota_exhausted" } });
+  assert.equal(classifyOpusFailure({ code: 1, stdout: malformed })?.verified, false);
 });
 
 test("실행 영수증 없는 자기 선언은 필수 검토를 통과할 수 없다", () => {
