@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-1bafbd8e-cf7c-4de2-acf5-b8f39ed30706",
+  "title"        : "WWW 채팅 입력과 명령 카드 문제 조사",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-557b599d-1662-458b-af35-ae68100755db",
+      "workId"        : "work-1bafbd8e-cf7c-4de2-acf5-b8f39ed30706",
+      "title"         : "WWW 채팅 입력과 명령 카드 문제 조사",
+      "summary"       : "WWW 채팅의 이미지 붙여넣기 미지원과 명령 카드의 혼합 출력 처리 방식을 확인했습니다. Enter 전송은 입력 핸들러의 한글 조합 관련 차단 조건을 확인했지만, 실제 앱에서 조합을 끝낸 뒤 첫 Enter가 누락되는 현상은 재현하지 못했습니다. 이번 작업은 조사이며 수정은 보고되지 않았습니다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-22T08:40:20.799Z",
+      "event"         : "native_completed",
+      "workRecordHash": "4cd452d7baf66d8aaed902bbff8dc42309fe3c2410bbe8461f8b6b7be8eb62b2",
+      "sourceDigest"  : null,
+      "criteriaDigest": null,
+      "semanticHash"  : "3b6e52decb391ae85899da6a3b37ff59003e9cd5bb59579e32b6fc5ddce93a10",
+      "narrative": {
+        "summary": "WWW 채팅의 이미지 붙여넣기 미지원과 명령 카드의 혼합 출력 처리 방식을 확인했습니다. Enter 전송은 입력 핸들러의 한글 조합 관련 차단 조건을 확인했지만, 실제 앱에서 조합을 끝낸 뒤 첫 Enter가 누락되는 현상은 재현하지 못했습니다. 이번 작업은 조사이며 수정은 보고되지 않았습니다.",
+        "before" : "사용자는 채팅에 이미지를 붙여넣으려 했으나 첨부되지 않았고, 명령 카드에서 단독 JSON은 읽기 쉬웠지만 여러 줄 명령이나 혼합 출력은 읽기 어려웠다고 보고했습니다. 메시지를 보내려면 Enter를 두 번 눌러야 하는 경우도 보고했습니다.",
+        "after"  : "같은 동작을 개선하는 변경은 보고되지 않았습니다. 이미지 붙여넣기는 현재 텍스트 전용 입력·전송 경로에서 지원되지 않고, 명령 카드는 JSON 뒤에 다른 출력이 붙으면 전체를 원문으로 표시합니다. 실제 앱에서 Enter를 두 번 눌러야 하는 조건은 여전히 미확인입니다.",
+        "changes": [],
+        "decisions": [
+          "앞서 안내한 ⌘V와 드래그 첨부가 현재 WWW 채팅 화면에는 적용되지 않는다고 정정했습니다.",
+          "입력 핸들러에서 확인한 한글 조합 중 전송 차단과 사용자가 실제 앱에서 보고한 첫 Enter 누락을 같은 원인으로 단정하지 않았습니다."
+        ],
+        "limitations": [
+          "입력 자료가 절단되어 함수 검사 명령의 뒷부분과 원시 출력이 보이지 않습니다. 관측 결과는 공개 Native 답변에 보고된 범위로 한정합니다.",
+          "명령의 종료 코드 0은 명령이 정상 종료됐다는 기록이며, 실제 앱에서의 재현, 제품 수용 또는 독립 검증을 뜻하지 않습니다."
+        ],
+        "next": [
+          "실제 WWW 앱에서 한글 조합을 끝낸 직후 첫 Enter와 두 번째 Enter의 입력 이벤트와 전송 여부를 비교합니다.",
+          "단독 JSON의 가독성을 유지하면서 혼합 출력과 긴 명령도 읽기 쉽게 표시할 개선안을 실제 카드에서 검증합니다.",
+          "이미지 첨부가 필요하다면 붙여넣기부터 Native 전송까지 지원 범위를 정합니다."
+        ],
+        "reader": {
+          "story": "사용자가 WWW 채팅에서 이미지가 붙지 않고, 일부 명령 카드가 읽기 어려우며, Enter를 두 번 눌러야 메시지가 전송된다고 보고해 세 동작을 조사했습니다. 입력·전송 코드는 텍스트 전용이었고, 명령 카드에서는 단독 JSON과 혼합 출력의 표시 차이가 재현됐다고 Native 답변이 보고했습니다. Enter는 핸들러 수준에서 일반 입력과 한글 조합 관련 차단을 확인했지만, 실제 앱에서 조합 종료 후 첫 키가 누락되는 현상은 재현하지 못했습니다. 수정은 보고되지 않았으며, Enter 증상을 실제 앱에서 재현해 차단 조건과 대조하는 것이 다음 단계입니다.",
+          "requirements": [
+            {
+              "requirement": "현재 WWW 채팅에서 이미지 붙여넣기가 가능한지 확인",
+              "result"     : "텍스트 전용 입력·전송 경로로 확인하고, 앞서 안내한 ⌘V와 드래그 첨부가 이 화면에는 적용되지 않는다고 정정했습니다.",
+              "evidence"   : "Native 답변의 입력창 및 전송 코드 확인",
+              "limitations": "실제 앱에서 클립보드나 드래그 동작을 시험한 기록은 없습니다."
+            },
+            {
+              "requirement": "명령 카드가 어떤 조건에서 읽기 어려워지는지 확인",
+              "result"     : "단독 JSON은 두 칸 들여쓰기로 표시되지만 뒤에 검색 결과가 붙으면 전체가 원문으로 표시됩니다. 여러 줄 명령은 명령 본문 전체가 표시됩니다.",
+              "evidence"   : "명령 출력 함수에 단독 JSON과 혼합 출력을 전달한 검사, 명령 카드 표시 코드 확인",
+              "limitations": "표시를 개선하거나 변경 화면을 검증한 기록은 없습니다."
+            },
+            {
+              "requirement": "Enter를 두 번 눌러야 전송되는 제보 확인",
+              "result"     : "핸들러에서 일반 Enter는 한 번에 전송되고, 한글 조합 중이거나 조합 종료와 같은 시각의 Enter는 차단된다고 확인했습니다. 사용자가 겪은 실제 앱 증상의 원인은 미확인입니다.",
+              "evidence"   : "입력 핸들러에 모의 키 이벤트를 전달한 검사와 Native 답변",
+              "limitations": "실제 앱에서 한글 조합 종료 후 첫 Enter가 누락되는 현상은 재현하지 못했습니다."
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "이미지 입력 및 Native 전송 경로",
+              "method"     : "입력창과 전송 코드에서 이미지 처리 경로를 조사했습니다.",
+              "expected"   : null,
+              "observed"   : "Native 답변은 두 경로가 텍스트만 처리한다고 보고했습니다.",
+              "limitations": "실제 앱에서 이미지 붙여넣기와 드래그를 실행한 기록은 없습니다."
+            },
+            {
+              "target"     : "명령 카드의 출력 형식 선택",
+              "method"     : "단독 JSON과 JSON 뒤에 rg 결과를 붙인 표본을 출력 처리 함수에 입력했습니다.",
+              "expected"   : null,
+              "observed"   : "Native 답변은 단독 JSON은 정형 표시되고 혼합 출력은 원문으로 표시되는 차이를 재현했다고 보고했습니다.",
+              "limitations": "절단된 자료에 원시 검사 출력과 실제 카드 화면은 포함되지 않았습니다."
+            },
+            {
+              "target"     : "Enter 처리와 한글 조합 경계",
+              "method"     : "일반 Enter, 조합 중 Enter, 조합 종료와 같은 시각의 Enter, 조합 종료 이후의 새 Enter를 모의 이벤트로 구성했습니다.",
+              "expected"   : "일반 Enter는 한 번에 전송되고, 조합 확정에 쓰인 Enter는 메시지를 전송하지 않아야 합니다.",
+              "observed"   : "Native 답변은 일반 Enter 전송과 조합 중·조합 종료 시각의 차단을 확인했습니다.",
+              "limitations": "조합 종료 이후의 새 Enter에 대한 원시 결과는 자료에 없으며, 실제 앱의 첫 Enter 누락은 재현하지 못했습니다."
+            }
+          ],
+          "decisions": [
+            {
+              "problem": "입력 핸들러의 조합 차단으로 실제 앱의 Enter 두 번 전송 현상까지 설명할 수 있는가",
+              "basis": "모의 이벤트로 차단 조건은 확인했지만 실제 앱의 첫 Enter 누락은 재현되지 않았습니다.",
+              "alternatives": [],
+              "choice": "확인된 핸들러 동작만 보고하고 실제 앱 증상의 원인은 미확인으로 남겼습니다.",
+              "tradeoff": null
+            }
+          ],
+          "references": [
+            {
+              "path": "src/chat-composer.tsx:48",
+              "purpose": "채팅 입력창의 첨부 처리 범위 확인"
+            },
+            {
+              "path": "src/native-chat.ts:47",
+              "purpose": "Native로 전달되는 입력 형식 확인"
+            },
+            {
+              "path": "src/command-preview.ts:35",
+              "purpose": "단독 JSON과 혼합 출력의 표시 분기 확인"
+            },
+            {
+              "path": "src/command-card.tsx:70",
+              "purpose": "여러 줄 명령 본문의 표시 방식 확인"
+            },
+            {
+              "path": "src/input.ts:17",
+              "purpose": "Enter 전송과 한글 조합 차단 조건 확인"
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "실제 WWW 앱에서 한글 조합 종료 직후 Enter 전송을 확인합니다.",
+              "owner"   : null,
+              "doneWhen": "첫 Enter와 두 번째 Enter의 이벤트 순서 및 전송 여부를 기록하고, 첫 Enter가 누락된다면 어느 조건에서 차단됐는지 확인합니다.",
+              "impact"  : "정상적인 조합 확정 동작과 전송 버그를 구분할 수 있습니다."
+            },
+            {
+              "action"  : "명령 카드 표시 개선안을 단독 JSON, 혼합 출력, 긴 여러 줄 명령으로 비교합니다.",
+              "owner"   : null,
+              "doneWhen": "단독 JSON의 들여쓰기가 유지되고 혼합 출력과 긴 명령의 결과를 실제 카드에서 쉽게 읽을 수 있는지 확인합니다.",
+              "impact"  : "읽기 쉬운 기존 JSON 표시를 유지하면서 긴 카드의 가독성을 개선할 수 있습니다."
+            },
+            {
+              "action"  : "이미지 첨부가 필요하면 입력과 Native 전송의 지원 범위를 정합니다.",
+              "owner"   : null,
+              "doneWhen": "지원할 첨부 방식과 입력부터 전송까지의 수용 기준이 정리됩니다.",
+              "impact"  : "현재 텍스트 전용 동작과 향후 첨부 기능의 범위를 분명히 할 수 있습니다."
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+        "criteria": [
+          {
+            "id"         : "AC-NATIVE",
+            "description": "보고서 생성과 업무 수용을 구분한다",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Native/010-WWW 채팅 입력과 명령 카드 문제 조사/work.json",
+        "workRecordHash": "4cd452d7baf66d8aaed902bbff8dc42309fe3c2410bbe8461f8b6b7be8eb62b2",
+        "sourceDigest"  : null,
+        "criteriaDigest": null
+      }
+    }
+  ]
+}

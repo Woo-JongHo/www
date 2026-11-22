@@ -1,0 +1,87 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>WWW Native 슬래시 명령 미동작 이슈 등록 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+dd.result-status{font-weight:600}dd.result-passed{color:var(--green)}dd.result-failed{color:var(--red)}dd.result-blocked,dd.result-unverified{color:var(--amber)}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 22일 PM 6:17 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>WWW Native 슬래시 명령 미동작 이슈 등록</h1><p class="lead">WWW Native에서 `/model`과 `/compact`가 동작하지 않는다는 제보를 바탕으로 입력 처리 경로를 조사하고, 재현 절차와 수용 기준을 GitHub 이슈 #3에 등록했다고 Native 답변이 보고했다. 이번 작업은 조사와 이슈 등록까지이며, 기능 수정은 포함하지 않았다.</p><div id="report-story" class="story">WWW Native 대화창에서 `/model`과 `/compact`가 작동하지 않는다는 제보를 받고 이슈 등록을 진행했다. Native 조사에서는 입력이 명령으로 분기되지 않고 일반 텍스트로 전달되는 경로를 확인했으며, 재현 절차와 기대 동작을 GitHub 이슈 #3에 정리했다고 보고했다. 앱에서 증상을 직접 재현하거나 수정한 것은 아니며, 제공된 이슈 작성 기록도 일부 잘려 있다. 다음 단계는 두 명령을 별도로 처리한 뒤 현재 탭에서 동작과 일반 메시지 전송을 함께 확인하는 것이다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 이슈 #3의 수용 기준에 맞춰 두 명령을 구현하고 실제 앱에서 동작을 검증한다.</p><p class="blocker"><strong>남은 차단 사항</strong> Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>WWW Native 대화창에서 `/model`이나 `/compact`를 단독으로 제출해도 모델 선택이나 대화 압축이 실행되지 않는다는 사용자 제보가 있었다.</p></div><div><h3>접근과 결과</h3><p>같은 명령을 제출했을 때의 앱 동작은 다시 확인하지 않았다. 코드 수정은 보고되지 않았으며, 두 명령의 기대 동작과 재현 절차가 GitHub 이슈 #3에 기록됐다.</p></div></div><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>사용자가 본 증상과 조사에서 확인한 사실을 어떻게 구분해 이슈에 기록할지 결정해야 했다.</h3><p><strong>선택</strong> 앱 증상은 사용자 제보로 명시하고, 일반 텍스트 전달 경로는 코드 근거와 함께 적었다.</p><p><strong>판단 근거</strong> 사용자는 앱에서의 미동작을 제보했고, Native 조사에서는 입력 제출 코드를 확인했다.</p><p class="limit"><strong>감수한 점</strong> 수정의 출발점은 제시했지만, 실행 환경에서의 재현과 수용 기준 충족 여부는 후속 검증으로 남았다.</p></article><h3>함께 기록된 선택</h3><ul><li>앱의 미동작은 사용자 제보로, 입력이 일반 텍스트로 전달되는 동작은 소스 조사 결과로 구분해 이슈에 적었다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>GitHub 이슈 #3에 증상, 재현 절차, 소스 근거와 수용 기준을 정리했다.</li></ul></div><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">WWW Native 대화창에서 `/model`과 `/compact`가 동작하지 않는 문제를 이슈로 등록한다.</td><td data-label="바뀐 동작">Native 답변은 GitHub 이슈 #3에 등록했다고 보고했다. 보이는 이슈 본문에는 현재 탭의 모델 선택과 대화 압축, 일반 메시지로 전송하지 않는 조건이 포함됐다.</td><td data-label="근거와 한계">Native 최종 답변의 이슈 링크와 제공된 이슈 본문 작성 기록.<p class="limit">원격 이슈를 독립적으로 확인하지 않았고, 다른 슬래시 명령의 동작은 조사 범위가 확인되지 않는다.</p></td></tr></tbody></table><h3>저장 당시 수용 기준 판정</h3><dl class="requirements"><div><dt>보고서 생성과 업무 수용을 구분한다</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>WWW Native 입력 제출과 요청 구성 경로</h3><dl><div><dt>확인 방법</dt><dd>Native 조사에서 `src/renderer.tsx`와 `src/native-chat.ts`의 관련 구간을 읽어 입력이 요청으로 바뀌는 경로를 추적했다.</dd></div><div><dt>기대 결과</dt><dd>두 명령은 일반 메시지 요청과 분리되어 각각 모델 선택과 대화 압축을 실행한다.</dd></div><div><dt>실제 관측</dt><dd>조사 기록에 따르면 제출 경로에 슬래시 명령 분기가 없으며, 일반 입력은 `startTurn`을 거쳐 `turn/start`의 텍스트 입력으로 구성된다. 실행 중 추가 지시도 텍스트 입력을 사용한다.</dd></div><div><dt>확인 범위와 한계</dt><dd>소스 수준의 확인이며, 실제 앱에서 명령을 입력해 재현한 기록은 없다.</dd></div></dl></article><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>실제 앱에서 두 명령을 재현하거나 수정 후 동작을 검증한 기록은 없다.</li><li>제공된 기록이 잘려 있어 이슈 생성 명령의 전체 내용과 마지막 수용 기준의 전문은 확인할 수 없다. 이슈 번호와 링크는 Native 답변에서 확인했으며, 이 보고서에서 원격 이슈를 독립적으로 열어 보지는 않았다.</li><li>두 명령 외 다른 슬래시 명령은 조사 범위가 확인되지 않는다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>이슈 #3의 수용 기준에 맞춰 두 명령을 구현하고 실제 앱에서 동작을 검증한다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>현재 탭에서 `/model`의 선택·취소와 선택 모델 적용, `/compact`의 진행·완료 또는 실패 표시를 확인한다. 두 명령이 일반 메시지로 전송되지 않고, 사용할 수 없을 때 이유가 표시되며, 일반 메시지와 추가 지시가 계속 동작하는지도 확인한다.</dd></div><div><dt>영향</dt><dd>슬래시 명령을 현재 대화에서 사용할 수 있게 하고 기존 메시지 입력의 회귀를 막는다.</dd></div></dl></article><h3>기존 서술에 기록된 남은 일</h3><ul><li>이슈 #3에서 두 명령을 일반 메시지와 분리해 처리하고, 현재 탭의 모델 선택·대화 압축과 일반 메시지 전송을 실제 앱에서 확인한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 22일 PM 6:17 · 선택한 발행 기록 · WWW Native에서 `/model`과 `/compact`가 동작하지 않는다는 제보를 바탕으로 입력 처리 경로를 조사하고, 재현 절차와 수용 기준을 GitHub 이슈 #3에 등록했다고 Native 답변이 보고했다. 이번 작업은 조사와 이슈 등록까지이며, 기능 수정은 포함하지 않았다.</p><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>Native 답변이 보고한 이슈의 재현 절차와 수용 기준을 확인할 위치.</p><code>https://github.com/Woo-JongHo/www/issues/3</code></li><li><p>대화 입력의 제출과 분기 처리를 확인할 소스 위치.</p><code>https://github.com/woo-jongho/www/blob/e855ea2fafdc3c5c56239f4e08a64d94e11c5f82/src/renderer.tsx#L821</code></li><li><p>입력이 Native 텍스트 요청으로 구성되는 경로를 확인할 소스 위치.</p><code>https://github.com/woo-jongho/www/blob/e855ea2fafdc3c5c56239f4e08a64d94e11c5f82/src/native-chat.ts#L47</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Native/014-WWW Native 슬래시 명령 미동작 이슈 등록/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-fc3bec96-863e-49a0-808c-0b0717a79356<br>report-1c571cfd-112c-4ee9-abef-b1d43078111f</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>535c23933b332d51c734991fc556edbaeac136f11fe96b702bc6a9a47fc3551c</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>기준 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-NATIVE&quot;,
+      &quot;description&quot;: &quot;보고서 생성과 업무 수용을 구분한다&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;WWW Native에서 `/model`과 `/compact`가 동작하지 않는다는 제보를 바탕으로 입력 처리 경로를 조사하고, 재현 절차와 수용 기준을 GitHub 이슈 #3에 등록했다고 Native 답변이 보고했다. 이번 작업은 조사와 이슈 등록까지이며, 기능 수정은 포함하지 않았다.&quot;,
+  &quot;before&quot;: &quot;WWW Native 대화창에서 `/model`이나 `/compact`를 단독으로 제출해도 모델 선택이나 대화 압축이 실행되지 않는다는 사용자 제보가 있었다.&quot;,
+  &quot;after&quot;: &quot;같은 명령을 제출했을 때의 앱 동작은 다시 확인하지 않았다. 코드 수정은 보고되지 않았으며, 두 명령의 기대 동작과 재현 절차가 GitHub 이슈 #3에 기록됐다.&quot;,
+  &quot;changes&quot;: [
+    &quot;GitHub 이슈 #3에 증상, 재현 절차, 소스 근거와 수용 기준을 정리했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;앱의 미동작은 사용자 제보로, 입력이 일반 텍스트로 전달되는 동작은 소스 조사 결과로 구분해 이슈에 적었다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;실제 앱에서 두 명령을 재현하거나 수정 후 동작을 검증한 기록은 없다.&quot;,
+    &quot;제공된 기록이 잘려 있어 이슈 생성 명령의 전체 내용과 마지막 수용 기준의 전문은 확인할 수 없다. 이슈 번호와 링크는 Native 답변에서 확인했으며, 이 보고서에서 원격 이슈를 독립적으로 열어 보지는 않았다.&quot;,
+    &quot;두 명령 외 다른 슬래시 명령은 조사 범위가 확인되지 않는다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;이슈 #3에서 두 명령을 일반 메시지와 분리해 처리하고, 현재 탭의 모델 선택·대화 압축과 일반 메시지 전송을 실제 앱에서 확인한다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;WWW Native 대화창에서 `/model`과 `/compact`가 작동하지 않는다는 제보를 받고 이슈 등록을 진행했다. Native 조사에서는 입력이 명령으로 분기되지 않고 일반 텍스트로 전달되는 경로를 확인했으며, 재현 절차와 기대 동작을 GitHub 이슈 #3에 정리했다고 보고했다. 앱에서 증상을 직접 재현하거나 수정한 것은 아니며, 제공된 이슈 작성 기록도 일부 잘려 있다. 다음 단계는 두 명령을 별도로 처리한 뒤 현재 탭에서 동작과 일반 메시지 전송을 함께 확인하는 것이다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;WWW Native 대화창에서 `/model`과 `/compact`가 동작하지 않는 문제를 이슈로 등록한다.&quot;,
+        &quot;result&quot;: &quot;Native 답변은 GitHub 이슈 #3에 등록했다고 보고했다. 보이는 이슈 본문에는 현재 탭의 모델 선택과 대화 압축, 일반 메시지로 전송하지 않는 조건이 포함됐다.&quot;,
+        &quot;evidence&quot;: &quot;Native 최종 답변의 이슈 링크와 제공된 이슈 본문 작성 기록.&quot;,
+        &quot;limitations&quot;: &quot;원격 이슈를 독립적으로 확인하지 않았고, 다른 슬래시 명령의 동작은 조사 범위가 확인되지 않는다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;WWW Native 입력 제출과 요청 구성 경로&quot;,
+        &quot;method&quot;: &quot;Native 조사에서 `src/renderer.tsx`와 `src/native-chat.ts`의 관련 구간을 읽어 입력이 요청으로 바뀌는 경로를 추적했다.&quot;,
+        &quot;expected&quot;: &quot;두 명령은 일반 메시지 요청과 분리되어 각각 모델 선택과 대화 압축을 실행한다.&quot;,
+        &quot;observed&quot;: &quot;조사 기록에 따르면 제출 경로에 슬래시 명령 분기가 없으며, 일반 입력은 `startTurn`을 거쳐 `turn/start`의 텍스트 입력으로 구성된다. 실행 중 추가 지시도 텍스트 입력을 사용한다.&quot;,
+        &quot;limitations&quot;: &quot;소스 수준의 확인이며, 실제 앱에서 명령을 입력해 재현한 기록은 없다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;사용자가 본 증상과 조사에서 확인한 사실을 어떻게 구분해 이슈에 기록할지 결정해야 했다.&quot;,
+        &quot;basis&quot;: &quot;사용자는 앱에서의 미동작을 제보했고, Native 조사에서는 입력 제출 코드를 확인했다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;앱 증상은 사용자 제보로 명시하고, 일반 텍스트 전달 경로는 코드 근거와 함께 적었다.&quot;,
+        &quot;tradeoff&quot;: &quot;수정의 출발점은 제시했지만, 실행 환경에서의 재현과 수용 기준 충족 여부는 후속 검증으로 남았다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;https://github.com/Woo-JongHo/www/issues/3&quot;,
+        &quot;purpose&quot;: &quot;Native 답변이 보고한 이슈의 재현 절차와 수용 기준을 확인할 위치.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;https://github.com/woo-jongho/www/blob/e855ea2fafdc3c5c56239f4e08a64d94e11c5f82/src/renderer.tsx#L821&quot;,
+        &quot;purpose&quot;: &quot;대화 입력의 제출과 분기 처리를 확인할 소스 위치.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;https://github.com/woo-jongho/www/blob/e855ea2fafdc3c5c56239f4e08a64d94e11c5f82/src/native-chat.ts#L47&quot;,
+        &quot;purpose&quot;: &quot;입력이 Native 텍스트 요청으로 구성되는 경로를 확인할 소스 위치.&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;이슈 #3의 수용 기준에 맞춰 두 명령을 구현하고 실제 앱에서 동작을 검증한다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;현재 탭에서 `/model`의 선택·취소와 선택 모델 적용, `/compact`의 진행·완료 또는 실패 표시를 확인한다. 두 명령이 일반 메시지로 전송되지 않고, 사용할 수 없을 때 이유가 표시되며, 일반 메시지와 추가 지시가 계속 동작하는지도 확인한다.&quot;,
+        &quot;impact&quot;: &quot;슬래시 명령을 현재 대화에서 사용할 수 있게 하고 기존 메시지 입력의 회귀를 막는다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></section></article></div></main></body></html>

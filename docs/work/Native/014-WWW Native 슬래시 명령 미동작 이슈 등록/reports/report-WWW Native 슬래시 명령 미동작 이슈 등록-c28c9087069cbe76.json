@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 2,
+  "workId"       : "work-fc3bec96-863e-49a0-808c-0b0717a79356",
+  "title"        : "WWW Native 슬래시 명령 미동작 이슈 등록",
+  "entries": [
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-1c571cfd-112c-4ee9-abef-b1d43078111f",
+      "workId"        : "work-fc3bec96-863e-49a0-808c-0b0717a79356",
+      "title"         : "WWW Native 슬래시 명령 미동작 이슈 등록",
+      "summary"       : "WWW Native에서 `/model`과 `/compact`가 동작하지 않는다는 제보를 바탕으로 입력 처리 경로를 조사하고, 재현 절차와 수용 기준을 GitHub 이슈 #3에 등록했다고 Native 답변이 보고했다. 이번 작업은 조사와 이슈 등록까지이며, 기능 수정은 포함하지 않았다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-22T09:17:06.301Z",
+      "event"         : "native_completed",
+      "workRecordHash": "535c23933b332d51c734991fc556edbaeac136f11fe96b702bc6a9a47fc3551c",
+      "sourceDigest"  : null,
+      "criteriaDigest": null,
+      "semanticHash"  : "351dd613bd9d8950cff70ac466922dea3b51e5209bd6bfd224207c79dbab94b3",
+      "narrative": {
+        "summary": "WWW Native에서 `/model`과 `/compact`가 동작하지 않는다는 제보를 바탕으로 입력 처리 경로를 조사하고, 재현 절차와 수용 기준을 GitHub 이슈 #3에 등록했다고 Native 답변이 보고했다. 이번 작업은 조사와 이슈 등록까지이며, 기능 수정은 포함하지 않았다.",
+        "before" : "WWW Native 대화창에서 `/model`이나 `/compact`를 단독으로 제출해도 모델 선택이나 대화 압축이 실행되지 않는다는 사용자 제보가 있었다.",
+        "after"  : "같은 명령을 제출했을 때의 앱 동작은 다시 확인하지 않았다. 코드 수정은 보고되지 않았으며, 두 명령의 기대 동작과 재현 절차가 GitHub 이슈 #3에 기록됐다.",
+        "changes": [
+          "GitHub 이슈 #3에 증상, 재현 절차, 소스 근거와 수용 기준을 정리했다."
+        ],
+        "decisions": [
+          "앱의 미동작은 사용자 제보로, 입력이 일반 텍스트로 전달되는 동작은 소스 조사 결과로 구분해 이슈에 적었다."
+        ],
+        "limitations": [
+          "실제 앱에서 두 명령을 재현하거나 수정 후 동작을 검증한 기록은 없다.",
+          "제공된 기록이 잘려 있어 이슈 생성 명령의 전체 내용과 마지막 수용 기준의 전문은 확인할 수 없다. 이슈 번호와 링크는 Native 답변에서 확인했으며, 이 보고서에서 원격 이슈를 독립적으로 열어 보지는 않았다.",
+          "두 명령 외 다른 슬래시 명령은 조사 범위가 확인되지 않는다."
+        ],
+        "next": [
+          "이슈 #3에서 두 명령을 일반 메시지와 분리해 처리하고, 현재 탭의 모델 선택·대화 압축과 일반 메시지 전송을 실제 앱에서 확인한다."
+        ],
+        "reader": {
+          "story": "WWW Native 대화창에서 `/model`과 `/compact`가 작동하지 않는다는 제보를 받고 이슈 등록을 진행했다. Native 조사에서는 입력이 명령으로 분기되지 않고 일반 텍스트로 전달되는 경로를 확인했으며, 재현 절차와 기대 동작을 GitHub 이슈 #3에 정리했다고 보고했다. 앱에서 증상을 직접 재현하거나 수정한 것은 아니며, 제공된 이슈 작성 기록도 일부 잘려 있다. 다음 단계는 두 명령을 별도로 처리한 뒤 현재 탭에서 동작과 일반 메시지 전송을 함께 확인하는 것이다.",
+          "requirements": [
+            {
+              "requirement": "WWW Native 대화창에서 `/model`과 `/compact`가 동작하지 않는 문제를 이슈로 등록한다.",
+              "result"     : "Native 답변은 GitHub 이슈 #3에 등록했다고 보고했다. 보이는 이슈 본문에는 현재 탭의 모델 선택과 대화 압축, 일반 메시지로 전송하지 않는 조건이 포함됐다.",
+              "evidence"   : "Native 최종 답변의 이슈 링크와 제공된 이슈 본문 작성 기록.",
+              "limitations": "원격 이슈를 독립적으로 확인하지 않았고, 다른 슬래시 명령의 동작은 조사 범위가 확인되지 않는다."
+            }
+          ],
+          "checks": [
+            {
+              "target"     : "WWW Native 입력 제출과 요청 구성 경로",
+              "method"     : "Native 조사에서 `src/renderer.tsx`와 `src/native-chat.ts`의 관련 구간을 읽어 입력이 요청으로 바뀌는 경로를 추적했다.",
+              "expected"   : "두 명령은 일반 메시지 요청과 분리되어 각각 모델 선택과 대화 압축을 실행한다.",
+              "observed"   : "조사 기록에 따르면 제출 경로에 슬래시 명령 분기가 없으며, 일반 입력은 `startTurn`을 거쳐 `turn/start`의 텍스트 입력으로 구성된다. 실행 중 추가 지시도 텍스트 입력을 사용한다.",
+              "limitations": "소스 수준의 확인이며, 실제 앱에서 명령을 입력해 재현한 기록은 없다."
+            }
+          ],
+          "decisions": [
+            {
+              "problem": "사용자가 본 증상과 조사에서 확인한 사실을 어떻게 구분해 이슈에 기록할지 결정해야 했다.",
+              "basis": "사용자는 앱에서의 미동작을 제보했고, Native 조사에서는 입력 제출 코드를 확인했다.",
+              "alternatives": [],
+              "choice": "앱 증상은 사용자 제보로 명시하고, 일반 텍스트 전달 경로는 코드 근거와 함께 적었다.",
+              "tradeoff": "수정의 출발점은 제시했지만, 실행 환경에서의 재현과 수용 기준 충족 여부는 후속 검증으로 남았다."
+            }
+          ],
+          "references": [
+            {
+              "path": "https://github.com/Woo-JongHo/www/issues/3",
+              "purpose": "Native 답변이 보고한 이슈의 재현 절차와 수용 기준을 확인할 위치."
+            },
+            {
+              "path": "https://github.com/woo-jongho/www/blob/e855ea2fafdc3c5c56239f4e08a64d94e11c5f82/src/renderer.tsx#L821",
+              "purpose": "대화 입력의 제출과 분기 처리를 확인할 소스 위치."
+            },
+            {
+              "path": "https://github.com/woo-jongho/www/blob/e855ea2fafdc3c5c56239f4e08a64d94e11c5f82/src/native-chat.ts#L47",
+              "purpose": "입력이 Native 텍스트 요청으로 구성되는 경로를 확인할 소스 위치."
+            }
+          ],
+          "nextActions": [
+            {
+              "action"  : "이슈 #3의 수용 기준에 맞춰 두 명령을 구현하고 실제 앱에서 동작을 검증한다.",
+              "owner"   : null,
+              "doneWhen": "현재 탭에서 `/model`의 선택·취소와 선택 모델 적용, `/compact`의 진행·완료 또는 실패 표시를 확인한다. 두 명령이 일반 메시지로 전송되지 않고, 사용할 수 없을 때 이유가 표시되며, 일반 메시지와 추가 지시가 계속 동작하는지도 확인한다.",
+              "impact"  : "슬래시 명령을 현재 대화에서 사용할 수 있게 하고 기존 메시지 입력의 회귀를 막는다."
+            }
+          ]
+        }
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+        "criteria": [
+          {
+            "id"         : "AC-NATIVE",
+            "description": "보고서 생성과 업무 수용을 구분한다",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Native/014-WWW Native 슬래시 명령 미동작 이슈 등록/work.json",
+        "workRecordHash": "535c23933b332d51c734991fc556edbaeac136f11fe96b702bc6a9a47fc3551c",
+        "sourceDigest"  : null,
+        "criteriaDigest": null
+      }
+    }
+  ]
+}

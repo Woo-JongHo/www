@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-fc3bec96-863e-49a0-808c-0b0717a79356",
+  "title"        : "WWW Native 슬래시 명령 미동작 이슈 등록",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "b9ab83706ee8fdaeb69325a1c72982217fbef92eb764a494d3f6db2e13774cbe",
+    "threadId": "01a20260-f2c8-70b2-b2b3-6baf87fff822",
+    "turnId"  : "01a2028a-8af3-7383-9588-a9bb48c98e0c",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"pwd && git status --short --branch | head -8 && rg -n 'slash|슬러시|/model|/compact|turn/start|makeTurn|startTurn' src docs/specs/chat.md | head -95\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'gh issue list --repo woo-jongho/www --state all --json number,title,url; git rev-parse --short HEAD'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '816,875p' src/renderer.tsx; sed -n '37,62p' src/native-chat.ts; rg -n 'model/list|compact/start|modelPicker|modelProvider' src/preload.ts src/shared.ts src/native-session.ts | head -30; git rev-parse HEAD\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'issue_body=$(mktemp -t www-slash-issue)\ncat > \"$issue_body\" <<'\"'EOF'\n## 현상\n\nWWW Native 대화 입력창에서 \"'`/model`, `/compact`를 입력하고 Enter를 눌러도 모델 선택이나 대화 압축 명령이 실행되지 않습니다.\n\n## 재현\n\n1. WWW Native에서 대화를 엽니다.\n2. 작업 실행이 끝난 상태에서 `/model`을 단독으로 입력해 제출합니다.\n3. 대화 이력이 있는 같은 탭에서 `/compact`를 단독으로 입력해 제출합니다.\n\n## 소스에서 확인한 동작\n\n입력 제출 경로에는 슬래시 명령을 분기하는 처리가 없습니다. 일반 제출은 입력을 `startTurn`으로 넘기고, Native 요청은 이를 `turn/start`의 `type: \"text\"` 입력으로 구성합니다. 실행 중 추가 지시 역시 텍스트 입력을 사용합니다. [입력 제출](https://github.com/woo-jongho/www/blob/e855ea2fafdc3c5c56239f4e08a64d94e11c5f82/src/renderer.tsx#L821) · [Native 요청 구성](https://github.com/woo-jongho/www/blob/e855ea2fafdc3c5c56239f4e08a64d94e11c5f82/src/native-chat.ts#L47)\n\n실제 앱에서의 증상은 사용자 제보이며, 조사에서는 제출 코드 경로를 확인했습니다.\n\n## 수용 기준\n\n- [ ] `/model`을 제출하면 현재 탭에서 모델 선택이 열리고, 선택한 모델이 이후 요청에 적용됩니다. 취소하면 기존 설정이 유지됩니다.\n- [ ] `/compact`를 제출하면 현재 대화에 압축을 요청하고, 진행과 완료 또는 실패를 화면에 표시합니다.\n- [ ] 두 명령은 일반 대화 메시지로 전송되지 않습니다. 실행 상태나 대화 이력 때문에 사용할 수 없으면 이유를 표시합니다.\n- [ ] 일반 메시지 전송과 추가 지시",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}

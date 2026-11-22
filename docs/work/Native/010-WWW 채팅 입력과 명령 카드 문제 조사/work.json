@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-1bafbd8e-cf7c-4de2-acf5-b8f39ed30706",
+  "title"        : "WWW 채팅 입력과 명령 카드 문제 조사",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "0eb71684c0abf310a384b9b7e74338ea95b387ff089f5467973ff95dd5dbb807",
+    "threadId": "01a20260-f2c8-70b2-b2b3-6baf87fff822",
+    "turnId"  : "01a20268-87a3-7f63-a22c-e3dd1af4900b",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"rg -n '원문 출력|출력 펼치기|원문 보기|JSON ·|JSON.parse\\\\(' src | head -100; rg -n '도구 출력|가독성|JSON' docs/work/INDEX.md | head -20\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"pwd && git status --short --branch && rg -n 'onPaste|clipboardData|localImage|image_url|imageUrl|이미지 첨부|이미지 붙여넣기' src docs/specs/chat.md | head -75\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"cat src/chat-composer.tsx src/command-preview.ts; sed -n '35,110p' src/command-card.tsx\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"rg -n 'composer|isComposing|composition|keyCode|onSend|sendPrompt' src/chat* test | head -110; gh issue list --repo woo-jongho/www --state open --json number,title,url\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"cat src/input.ts; rg -n 'Input|type: \\\"text\\\"|type: .text.' src/native-chat.ts src/native-session.ts | head -35; rg -n 'cmdline|command-preview' src --glob '*.css'; rg -n 'Enter|IME|이미지|JSON' docs/specs/chat.md | head -30\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'gh issue list --repo woo-jongho/www --state all --json number,title,url && git rev-parse --short HEAD'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"node --disable-warning=ExperimentalWarning --input-type=module - <<'JS'\nimport { commandOutput } from './src/command-preview.ts';\nimport { handlePromptKeyDown } from './src/input.ts';\nconst payload = '{\\\"body\\\":\\\"## 문제\\\\\\\\n본문\\\",\\\"comments\\\":[],\\\"url\\\":\\\"https://example.test/2\\\"}';\nfor (const [label, output] of [['JSON만', payload], ['JSON과 rg 결과', payload + '\\\\nsrc/native-chat.ts:22:  name: \\\"www_development_stage\\\",']]) {\n  const view = commandOutput(output, false, false);\n  console.log(JSON.stringify({ label, json: view.json }));\n}\nfor (const [label, nativeEvent, boundary] of [\n  ['일반 Enter', { keyCode: 13, timeStamp: 101 }, null],\n  ['조합 중 Enter', { isComposing: true, keyCode: 229, timeStamp: 99 }, null],\n  ['조합 종료 시각과 같은 Enter', { keyCode: 13, timeStamp: 100 }, 100],\n  ['조합 종료 후 새 Enter', { keyCode: 13, timeStamp: 101 }, 100],\n]) {\n  let sent = 0;\n  handlePromptKeyDown({ key: 'Enter', shiftKey: false, nativeEvent, preventDefault() {} }, () => sent++, false, boundary);\n",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}
