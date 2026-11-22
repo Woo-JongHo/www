@@ -19,9 +19,11 @@ const distribution   = join(root, "dist")                          ;
 const policyRelative = join("agents", "www", "review-policy.json") ;
 const workId         = "work-44acdd6e-637b-4ef8-a3d9-f682112da634" ;
 
+const buildTimeoutMs = 30_000;
+
 beforeAll(async () => {
-  await exec("bun", ["run", "build.ts"], { cwd: root });
-});
+  await exec("bun", ["run", "build.ts"], { cwd: root, timeout: buildTimeoutMs, killSignal: "SIGKILL" });
+}, buildTimeoutMs + 5_000);
 
 async function repository(schemaVersion = 2) {
   const repo          = await mkdtemp(join(tmpdir(), "www-development-policy-")) ;
