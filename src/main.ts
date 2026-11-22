@@ -219,6 +219,19 @@ function registerIpc(): void {
           const observed = record(await window.webContents.debugger.sendCommand("Runtime.evaluate", { expression: meaningExpression, returnByValue: true }, childSession));
           if (observed.exceptionDetails) throw new Error(`Meaning iframe observation failed: ${JSON.stringify(observed.exceptionDetails)}`);
           embedded.meaning = record(observed.result).value;
+          const parentBefore = await window.webContents.executeJavaScript("location.href");
+          const anchors: unknown[] = [];
+          for (let index = 1; index <= 6; index++) {
+            const clickExpression = `(() => { const link=document.querySelector('.toc a[href="about:srcdoc#section-${index}"]'); if(!link)throw Error('iframe anchor missing'); const before=scrollY; link.click(); return {before}; })()`;
+            const clicked = record(await window.webContents.debugger.sendCommand("Runtime.evaluate", { expression: clickExpression, returnByValue: true }, childSession));
+            if (clicked.exceptionDetails) throw new Error(`iframe anchor click failed: ${JSON.stringify(clicked.exceptionDetails)}`);
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const expression = `(() => { const target=document.querySelector('#section-${index}'); if(!target)throw Error('iframe section missing'); const top=target.getBoundingClientRect().top; return {index:${index},hash:location.hash,top,viewport:innerHeight,after:scrollY,visible:top>=-1&&top<innerHeight}; })()`;
+            const navigation = record(await window.webContents.debugger.sendCommand("Runtime.evaluate", { expression, returnByValue: true }, childSession));
+            if (navigation.exceptionDetails) throw new Error(`iframe anchor navigation failed: ${JSON.stringify(navigation.exceptionDetails)}`);
+            anchors.push({ ...record(record(navigation.result).value), before: record(record(clicked.result).value).before });
+          }
+          embedded.anchorNavigation = { anchors, parentUnchanged: parentBefore === await window.webContents.executeJavaScript("location.href") };
         }
       } finally { window.webContents.debugger.detach(); }
       if (!embedded) {

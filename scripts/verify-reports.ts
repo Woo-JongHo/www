@@ -250,7 +250,7 @@ function inspect(value: unknown, expected: Record<string, string[]>, label: stri
   const conclusion = value.regions.conclusion;
   if (object(conclusion) && typeof conclusion.text === 'string' && conclusion.text.includes('의미검증-합성 인증 실패') && conclusion.text.includes('원인은 기록에서 확인되지 않았습니다')) failures.push(`${label}: 알고 있는 미실행 원인과 원인 미확인 안내 모순`);
   if (value.rawClosed !== true) failures.push(`${label}: 원시 상세가 닫힌 기본 reader 관측이 아님`);
-  const stateExpectations: [string, string[]][] = [['당시 통과로 기록', ['green']], ['당시 실패로 기록', ['red', 'amber']], ['미검증으로 기록', ['amber']]];
+  const stateExpectations: [string, string[]][] = [['당시 통과로 기록', ['green']], ['당시 실패로 기록', ['red']], ['미검증으로 기록', ['amber']]];
   if (includeBlocked) stateExpectations.push(['당시 차단으로 기록', ['amber']]);
   for (const [text, tokens] of stateExpectations) {
     const state = value.states.find(item => object(item) && item.label === text);
@@ -302,6 +302,9 @@ try {
       if (!object(value) || value.error || !object(value.reportArtifacts) || !object(value.reportArtifacts.embedded)) throw new Error(`실제 probe 결과 오류 ${JSON.stringify(value)}`);
       const artifacts = value.reportArtifacts, embedded = artifacts.embedded;
       if (!object(embedded) || embedded.title !== item.report.title || typeof embedded.storyHeight !== 'number' || embedded.storyHeight <= 0) throw new Error('기존 iframe 제목/story 가시성 조건 실패');
+      const navigation = embedded.anchorNavigation;
+      if (!object(navigation) || navigation.parentUnchanged !== true || !Array.isArray(navigation.anchors) || navigation.anchors.length !== 6 || navigation.anchors.some((entry, index) => !object(entry) || entry.index !== index + 1 || entry.hash !== `#section-${index + 1}` || entry.visible !== true)) throw new Error('실제 sandbox iframe 목차 이동/상위문서 불변 관측 실패');
+      await fs.writeFile(path.join(folder, 'iframe-anchor-navigation.json'), JSON.stringify(navigation, null, 2)+'\n');
       for (const key of ['reportsNavigation', 'reportsSandboxed', 'reportsEmptySearch', 'reportsDraftPreserved', 'approvalRoundtrip']) if (value[key] !== true) throw new Error(`기존 probe 호환 필드 실패: ${key}`);
       if (!object(artifacts.mobile) || artifacts.mobile.width !== 360 || typeof artifacts.mobile.scrollWidth !== 'number' || artifacts.mobile.scrollWidth > 360 || !object(artifacts.reducedMotion) || artifacts.reducedMotion.enabled !== true || artifacts.reducedMotion.animations !== 0 || artifacts.printed !== true) throw new Error('기존 mobile/motion/PDF 조건 실패');
       {
