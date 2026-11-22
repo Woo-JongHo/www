@@ -115,6 +115,7 @@ interface SelectedReviewer {
 export interface ReviewResult {
   workId?: string;
   workRequestHash?: string;
+  workRequestId?: string;
   authority?: AuthorityRef;
   inputPathsHash?: string;
   observedModelMeaning?: "server-selected";
@@ -295,6 +296,8 @@ export function validateReview({ repo, policy, review, sourceDigest, criteriaDig
   const execution = object(review.execution) ? review.execution : {}                    ;
   const quota     = verifiedQuota(review.fallbackReason) ? review.fallbackReason : null ;
   if (review.recordingRejection !== undefined) reasons.push("recording_context_invalid");
+  if (work?.workflow.continuations?.length && (review.workId !== work.id || review.workRequestId !== work.workflow.requestId
+    || review.workRequestHash !== work.workflow.requestHash)) reasons.push("review_request_changed");
   if (review.executor !== "process") reasons.push("untrusted_executor");
   if (review.verdict !== "pass" || execution.exitCode !== 0 || execution.signal || execution.error) reasons.push("review_not_passed");
   if (review.readOnly !== true) reasons.push("review_not_read_only");
@@ -491,7 +494,7 @@ export async function runReview({ repo, source, criteriaDigest, policyInfo, inpu
     authorityRef = { path: path.relative(root, target), hash: hash(text) };
   }
   const persist = async (review: ReviewResult) => {
-    const result = { ...review, ...(work ? { workId: work.id, workRequestHash: work.workflow.requestHash } : {}) };
+    const result = { ...review, ...(work ? { workId: work.id, workRequestId: work.workflow.requestId, workRequestHash: work.workflow.requestHash } : {}) };
     await durableJson(path.join(directory, "result.json"), `${JSON.stringify(result)}\n`);
     return result;
   };
@@ -500,7 +503,7 @@ export async function runReview({ repo, source, criteriaDigest, policyInfo, inpu
     const relative = path.relative(root, path.resolve(root, workPath));
     if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) throw new Error("작업 경로 오류");
     const current = readWorkMetadata(root, relative.split(path.sep).join("/"));
-    if (!work || !object(current) || current.id !== work.id || !object(current.workflow) || current.workflow.requestHash !== work.workflow.requestHash || current.workflow.nextAction !== "review" || !object(current.workflow.authorization) || current.workflow.authorization.source !== "direct_user_request" || current.workflow.authorization.requestHash !== work.workflow.requestHash || digestCriteria(current) !== criteriaDigest || (await loadReviewPolicy({ root })).hash !== policyInfo.hash) throw new Error("검토 중 작업 맥락 변경");
+    if (!work || !object(current) || current.id !== work.id || !object(current.workflow) || current.workflow.requestId !== work.workflow.requestId || current.workflow.requestHash !== work.workflow.requestHash || current.workflow.nextAction !== "review" || !object(current.workflow.authorization) || current.workflow.authorization.source !== "direct_user_request" || current.workflow.authorization.requestHash !== work.workflow.requestHash || digestCriteria(current) !== criteriaDigest || (await loadReviewPolicy({ root })).hash !== policyInfo.hash) throw new Error("검토 중 작업 맥락 변경");
   };
   const selected = authority ? { provider: "openai", model: "gpt-6.1-terra", fallbackReason: null } : selectReviewer({ policy: policyInfo.policy });
   const terra = async (reviewer: SelectedReviewer, failure: ReviewFailure | null) => {
