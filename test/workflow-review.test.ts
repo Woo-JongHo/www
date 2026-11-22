@@ -179,6 +179,22 @@ test("실제 CLI 종료 형식의 명시적 사용량 소진에서만 대체 검
   }
   const malformed = JSON.stringify({ ...terminal, api_error: undefined, result: legacyMessage, error: { code: "quota_exhausted" } });
   assert.equal(classifyOpusFailure({ code: 1, stdout: malformed })?.verified, false);
+  for (const legacy of [
+    { error: { code: "quota_exhausted", status: 401 } },
+    { errors: [{ code: "quota_exhausted" }, { status: 403 }] },
+    { errors: [{ code: "quota_exhausted" }, { type: "authentication_error" }] },
+  ]) {
+    const stdout = JSON.stringify({ type: "result", is_error: true, ...legacy });
+    assert.equal(classifyOpusFailure({ code: 1, stdout })?.kind, "authentication");
+  }
+  const unavailable = JSON.stringify({ type: "result", is_error: true, result: legacyMessage, error: { code: "quota_exhausted", status: 503 } });
+  assert.equal(classifyOpusFailure({ code: 1, stdout: unavailable })?.verified, false);
+  for (const error of [{ status: 503 }, { code: "server_error" }, { code: 503 }, { code: "quota_exhausted" }]) {
+    const stdout = JSON.stringify({ ...terminal, error });
+    assert.equal(classifyOpusFailure({ code: 1, stdout })?.verified, false);
+  }
+  const mixedAuth = JSON.stringify({ ...terminal, error: { type: "authentication_error" } });
+  assert.equal(classifyOpusFailure({ code: 1, stdout: mixedAuth })?.kind, "authentication");
   for (const terminal_reason of ["interrupted", "cancelled", "success", null]) {
     const stdout = JSON.stringify({ type: "result", is_error: true, terminal_reason, result: legacyMessage });
     assert.equal(classifyOpusFailure({ code: 1, stdout })?.verified, false);

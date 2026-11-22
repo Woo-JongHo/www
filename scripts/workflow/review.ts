@@ -222,12 +222,15 @@ export function classifyOpusFailure(result: ReviewExecutionResult = {}): ReviewF
   if (code === 0 && !signal && body?.is_error === false) return null;
   const terminalError = body.terminal_reason !== undefined || body.api_error_status !== undefined
     || body.api_error_type !== undefined || body.api_error !== undefined;
-  const legacyCodes = [
-    object(body.error) ? body.error.code : undefined,
-    ...(Array.isArray(body.errors) ? body.errors.map((error: unknown) => object(error) ? error.code : undefined) : []),
+  const legacyErrorValues = [
+    ...(body.error === undefined ? [] : [body.error]),
+    ...(Array.isArray(body.errors) ? body.errors : []),
   ];
+  const legacyErrors = legacyErrorValues.filter(object);
+  const legacyCodes = legacyErrors.flatMap(entry => [entry.code, entry.type]);
+  const legacyStatuses = legacyErrors.map(entry => entry.status);
   const message = typeof body.result === "string" ? body.result.trim() : "";
-  const auth = body.api_error_status === 401
+  const auth = [body.api_error_status, ...legacyStatuses].some(status => status === 401 || status === 403)
     || [...legacyCodes, body.api_error_type, body.api_error].some((value) => value === "authentication_error" || value === "invalid_api_key")
     || /^Failed to authenticate:/.test(message);
   if (signal) return { kind: "interrupted", verified: false, receiptHash };
@@ -235,12 +238,18 @@ export function classifyOpusFailure(result: ReviewExecutionResult = {}): ReviewF
   if (body.type !== "result" || body.is_error !== true || !Number.isInteger(code) || code === 0) {
     return { kind: "unknown", verified: false, receiptHash };
   }
-  const usageMessage = /^You've hit your (?:session|weekly|Opus) limit(?:\s*·\s*resets\s+[^\r\n]+)?$/.test(message);
   let quotaCode: string | null = null;
   if (terminalError) {
-    if (body.terminal_reason === "api_error" && body.api_error_status === 429 && body.api_error_type === "rate_limit_error"
+    if (body.error === undefined && body.errors === undefined
+      && body.terminal_reason === "api_error" && body.api_error_status === 429 && body.api_error_type === "rate_limit_error"
       && typeof body.api_error === "string" && QUOTA_CODES.has(body.api_error)) quotaCode = body.api_error;
-  } else {
+  } else if (legacyErrorValues.length === legacyErrors.length && (body.errors === undefined || Array.isArray(body.errors))) {
+    const conflictingStatus = legacyStatuses.some(status => status !== undefined && status !== 429);
+    const conflictingCode = legacyCodes.some(value => value !== undefined && (typeof value !== "string"
+      || (value !== "rate_limit_error" && !QUOTA_CODES.has(value))));
+    if (conflictingStatus || conflictingCode) return { kind: "unknown", verified: false, receiptHash };
+    const usageMessage = legacyErrors.length === 0
+      && /^You've hit your (?:session|weekly|Opus) limit(?:\s*·\s*resets\s+[^\r\n]+)?$/.test(message);
     quotaCode = legacyCodes.find((value): value is string => typeof value === "string" && QUOTA_CODES.has(value))
       ?? (usageMessage ? "claude_usage_window_exhausted" : null);
   }
