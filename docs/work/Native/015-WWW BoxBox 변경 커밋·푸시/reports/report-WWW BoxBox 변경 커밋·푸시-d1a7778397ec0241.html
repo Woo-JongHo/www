@@ -1,0 +1,113 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>WWW BoxBox 변경 커밋·푸시 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+dd.result-status{font-weight:600}dd.result-passed{color:var(--green)}dd.result-failed{color:var(--red)}dd.result-blocked,dd.result-unverified{color:var(--amber)}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 22일 PM 6:22 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>WWW BoxBox 변경 커밋·푸시</h1><p class="lead">WWW `main`에 BoxBox 소스 정렬과 공용 인터페이스 파일럿을 두 커밋으로 나누어 `origin/main`에 푸시했습니다. Native 답변은 원격 `main`이 두 번째 커밋 `6c041fd`를 가리키는 것을 확인했다고 보고했습니다.</p><div id="report-story" class="story">사용자가 현재까지의 변경을 커밋하고 푸시해 달라고 요청했습니다. BoxBox 소스 정렬과 공용 인터페이스 파일럿을 두 커밋으로 나누어 올렸고, Native 작업 기록에는 원격 `main`이 `6c041fd`를 가리킨다는 확인이 남아 있습니다. 두 후보의 격리 검사와 집중 테스트는 통과한 것으로 보고됐지만, 워크플로 문서 검사는 기존 로컬 증거 링크 세 개가 누락돼 실패했습니다. 별도 로컬 변경은 이번 푸시에 넣지 않았으며, 다음으로 증거 링크를 확인한 뒤 문서 검사를 다시 실행할 수 있습니다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>미검증 · 연결 기록 없음</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 누락된 로컬 증거 링크 세 개를 확인하고 워크플로 문서 검사를 다시 실행합니다.</p><p class="blocker"><strong>남은 차단 사항</strong> Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>커밋·푸시 요청 시점에는 이번 BoxBox 변경과 별도로 남길 기존 로컬 변경을 구분해야 했습니다.</p></div><div><h3>접근과 결과</h3><p>이번 BoxBox 변경 두 건은 `origin/main`에 반영됐고, 기존 CI 버전 변경과 자동 작업 보고서, 별도 BoxBox 저장소의 #68 수정은 로컬에 남았습니다.</p></div></div><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>BoxBox 소스 정렬과 파일럿 승인을 어떻게 커밋하고, 기존 로컬 변경을 어떻게 다룰 것인가.</h3><p><strong>선택</strong> 변경 목적에 따라 두 커밋으로 분리하고 기존 로컬 변경은 제외했습니다.</p><p><strong>판단 근거</strong> 기록상 소스 정렬만 담은 후보와 파일럿을 추가한 후보를 각각 검증했고, 기존 CI 버전 변경과 보고서는 로컬에 남겼습니다.</p><p class="limit"><strong>감수한 점</strong> 커밋별 변경 범위를 확인하기 쉬워졌지만, 제외한 변경은 필요할 때 별도로 처리해야 합니다.</p></article><h3>함께 기록된 선택</h3><ul><li>소스 열 정렬과 공용 인터페이스 파일럿을 별도 커밋으로 나누고, 기존 로컬 변경은 이번 푸시에서 제외했습니다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>`2304dad`: 승인된 BoxBox 규칙으로 저장소 소스의 열을 정렬했습니다.</li><li>`6c041fd`: 공용 인터페이스 필드에 BoxBox 파일럿 승인을 적용했습니다.</li></ul></div><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">현재까지의 WWW 작업을 커밋하고 원격에 푸시한다.</td><td data-label="바뀐 동작">BoxBox 변경을 `2304dad`와 `6c041fd`로 커밋해 `origin/main`에 푸시했습니다.</td><td data-label="근거와 한계">두 커밋을 생성한 명령과 푸시 후 원격 브랜치를 조회한 명령이 모두 종료 코드 0으로 기록됐고, Native 답변에 커밋 해시가 명시됐습니다.<p class="limit">기존 CI 버전 변경, 자동 작업 보고서, 별도 BoxBox 저장소의 #68 수정은 포함되지 않았습니다.</p></td></tr></tbody></table><h3>저장 당시 수용 기준 판정</h3><dl class="requirements"><div><dt>보고서 생성과 업무 수용을 구분한다</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>두 BoxBox 커밋 후보</h3><dl><div><dt>확인 방법</dt><dd>격리된 후보별로 소스 검사, 타입 검사, 빌드, 아키텍처 검사, `git diff --check`, 집중 테스트를 실행했습니다.</dd></div><div><dt>기대 결과</dt><dd>두 후보의 검사와 지정 테스트가 모두 통과합니다.</dd></div><div><dt>실제 관측</dt><dd>두 명령 묶음은 종료 코드 0이었으며, Native 답변은 집중 테스트 두 묶음에서 각각 526개와 380개가 통과했다고 보고했습니다.</dd></div><div><dt>확인 범위와 한계</dt><dd>집중 테스트 범위에 한정되며, 전체 테스트 스위트나 독립 리뷰 결과는 확인되지 않습니다.</dd></div></dl></article><article class="check"><h3>워크플로 문서</h3><dl><div><dt>확인 방법</dt><dd>`npm run check:workflow`를 실행했습니다.</dd></div><div><dt>기대 결과</dt><dd>문서 검사가 통과합니다.</dd></div><div><dt>실제 관측</dt><dd>종료 코드는 1이었습니다. Native 답변에 따르면 기존 로컬 증거 링크 세 개가 누락됐습니다.</dd></div><div><dt>확인 범위와 한계</dt><dd>누락된 링크의 경로와 오류 출력은 제공 기록에 없습니다.</dd></div></dl></article><article class="check"><h3>원격 `main`</h3><dl><div><dt>확인 방법</dt><dd>푸시 직후 `git ls-remote --heads origin refs/heads/main`을 실행했습니다.</dd></div><div><dt>기대 결과</dt><dd>원격 `main`이 두 번째 커밋을 가리킵니다.</dd></div><div><dt>실제 관측</dt><dd>명령 묶음의 종료 코드는 0이었고, Native 답변은 원격 해시를 `6c041fd`로 확인했다고 보고했습니다.</dd></div><div><dt>확인 범위와 한계</dt><dd>이 확인은 Git 브랜치 반영에 한정되며 서버 색인 반영은 확인하지 않았습니다.</dd></div></dl></article><p class="record-result">연결된 검사 시도가 없습니다. 미검증입니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>`npm run check:workflow`는 실패했습니다. Native 답변은 기존 로컬 증거 링크 세 개의 누락을 원인으로 보고했습니다.</li><li>서버 색인 상태는 확인하지 않았습니다.</li><li>제공 기록이 잘려 있어 일부 명령 전문과 실행 출력은 볼 수 없습니다. 이 보고서에서 검사를 다시 실행하지 않았습니다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>누락된 로컬 증거 링크 세 개를 확인하고 워크플로 문서 검사를 다시 실행합니다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>`npm run check:workflow`가 통과합니다.</dd></div><div><dt>영향</dt><dd>이번 작업에서 실패한 문서 검사를 해소합니다.</dd></div></dl></article><article class="next"><h3>서버 색인 반영이 필요한 경우 두 커밋의 반영 여부를 별도로 확인합니다.</h3><dl><div><dt>담당</dt><dd>미지정</dd></div><div><dt>해소 조건</dt><dd>서버 색인에서 이번 커밋의 반영 여부를 확인합니다.</dd></div><div><dt>영향</dt><dd>Git 푸시 성공과 서버 색인 반영을 구분할 수 있습니다.</dd></div></dl></article><h3>기존 서술에 기록된 남은 일</h3><ul><li>누락된 로컬 증거 링크 세 개를 확인하고 워크플로 문서 검사를 다시 실행합니다.</li><li>서버 색인 반영이 필요하면 원격 커밋 확인과 별도로 점검합니다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 22일 PM 6:22 · 선택한 발행 기록 · WWW `main`에 BoxBox 소스 정렬과 공용 인터페이스 파일럿을 두 커밋으로 나누어 `origin/main`에 푸시했습니다. Native 답변은 원격 `main`이 두 번째 커밋 `6c041fd`를 가리키는 것을 확인했다고 보고했습니다.</p><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>Native 작업에서 참조한 커밋 절차입니다.</p><code>skills/www/www-commit/SKILL.md</code></li><li><p>Native 작업에서 참조한 워크플로 문서입니다.</p><code>docs/skills/WORKFLOW.md</code></li><li><p>두 번째 커밋 후보에 포함된 공용 인터페이스 파일럿 승인 규칙입니다.</p><code>.boxbox/rules/www-shared-interface-members-approved.md</code></li><li><p>두 번째 커밋 후보에서 파일럿이 적용된 공용 소스입니다.</p><code>src/shared.ts</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Native/015-WWW BoxBox 변경 커밋·푸시/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-716a4363-a5ee-40ee-9671-f9b0da04f3dc<br>report-655177ad-b23d-49c8-90e0-025e8b04d7ab</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>60cf51f80eb7a218f71bd47e3d9152a21b358ecb9f86fb5a2184dc1dccf0583f</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>기준 지문</dt><dd><code>legacy · 미확인</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: &quot;Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.&quot;,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-NATIVE&quot;,
+      &quot;description&quot;: &quot;보고서 생성과 업무 수용을 구분한다&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    }
+  ],
+  &quot;verifications&quot;: [],
+  &quot;reviews&quot;: []
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;WWW `main`에 BoxBox 소스 정렬과 공용 인터페이스 파일럿을 두 커밋으로 나누어 `origin/main`에 푸시했습니다. Native 답변은 원격 `main`이 두 번째 커밋 `6c041fd`를 가리키는 것을 확인했다고 보고했습니다.&quot;,
+  &quot;before&quot;: &quot;커밋·푸시 요청 시점에는 이번 BoxBox 변경과 별도로 남길 기존 로컬 변경을 구분해야 했습니다.&quot;,
+  &quot;after&quot;: &quot;이번 BoxBox 변경 두 건은 `origin/main`에 반영됐고, 기존 CI 버전 변경과 자동 작업 보고서, 별도 BoxBox 저장소의 #68 수정은 로컬에 남았습니다.&quot;,
+  &quot;changes&quot;: [
+    &quot;`2304dad`: 승인된 BoxBox 규칙으로 저장소 소스의 열을 정렬했습니다.&quot;,
+    &quot;`6c041fd`: 공용 인터페이스 필드에 BoxBox 파일럿 승인을 적용했습니다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;소스 열 정렬과 공용 인터페이스 파일럿을 별도 커밋으로 나누고, 기존 로컬 변경은 이번 푸시에서 제외했습니다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;`npm run check:workflow`는 실패했습니다. Native 답변은 기존 로컬 증거 링크 세 개의 누락을 원인으로 보고했습니다.&quot;,
+    &quot;서버 색인 상태는 확인하지 않았습니다.&quot;,
+    &quot;제공 기록이 잘려 있어 일부 명령 전문과 실행 출력은 볼 수 없습니다. 이 보고서에서 검사를 다시 실행하지 않았습니다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;누락된 로컬 증거 링크 세 개를 확인하고 워크플로 문서 검사를 다시 실행합니다.&quot;,
+    &quot;서버 색인 반영이 필요하면 원격 커밋 확인과 별도로 점검합니다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;사용자가 현재까지의 변경을 커밋하고 푸시해 달라고 요청했습니다. BoxBox 소스 정렬과 공용 인터페이스 파일럿을 두 커밋으로 나누어 올렸고, Native 작업 기록에는 원격 `main`이 `6c041fd`를 가리킨다는 확인이 남아 있습니다. 두 후보의 격리 검사와 집중 테스트는 통과한 것으로 보고됐지만, 워크플로 문서 검사는 기존 로컬 증거 링크 세 개가 누락돼 실패했습니다. 별도 로컬 변경은 이번 푸시에 넣지 않았으며, 다음으로 증거 링크를 확인한 뒤 문서 검사를 다시 실행할 수 있습니다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;현재까지의 WWW 작업을 커밋하고 원격에 푸시한다.&quot;,
+        &quot;result&quot;: &quot;BoxBox 변경을 `2304dad`와 `6c041fd`로 커밋해 `origin/main`에 푸시했습니다.&quot;,
+        &quot;evidence&quot;: &quot;두 커밋을 생성한 명령과 푸시 후 원격 브랜치를 조회한 명령이 모두 종료 코드 0으로 기록됐고, Native 답변에 커밋 해시가 명시됐습니다.&quot;,
+        &quot;limitations&quot;: &quot;기존 CI 버전 변경, 자동 작업 보고서, 별도 BoxBox 저장소의 #68 수정은 포함되지 않았습니다.&quot;
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;두 BoxBox 커밋 후보&quot;,
+        &quot;method&quot;: &quot;격리된 후보별로 소스 검사, 타입 검사, 빌드, 아키텍처 검사, `git diff --check`, 집중 테스트를 실행했습니다.&quot;,
+        &quot;expected&quot;: &quot;두 후보의 검사와 지정 테스트가 모두 통과합니다.&quot;,
+        &quot;observed&quot;: &quot;두 명령 묶음은 종료 코드 0이었으며, Native 답변은 집중 테스트 두 묶음에서 각각 526개와 380개가 통과했다고 보고했습니다.&quot;,
+        &quot;limitations&quot;: &quot;집중 테스트 범위에 한정되며, 전체 테스트 스위트나 독립 리뷰 결과는 확인되지 않습니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;워크플로 문서&quot;,
+        &quot;method&quot;: &quot;`npm run check:workflow`를 실행했습니다.&quot;,
+        &quot;expected&quot;: &quot;문서 검사가 통과합니다.&quot;,
+        &quot;observed&quot;: &quot;종료 코드는 1이었습니다. Native 답변에 따르면 기존 로컬 증거 링크 세 개가 누락됐습니다.&quot;,
+        &quot;limitations&quot;: &quot;누락된 링크의 경로와 오류 출력은 제공 기록에 없습니다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;원격 `main`&quot;,
+        &quot;method&quot;: &quot;푸시 직후 `git ls-remote --heads origin refs/heads/main`을 실행했습니다.&quot;,
+        &quot;expected&quot;: &quot;원격 `main`이 두 번째 커밋을 가리킵니다.&quot;,
+        &quot;observed&quot;: &quot;명령 묶음의 종료 코드는 0이었고, Native 답변은 원격 해시를 `6c041fd`로 확인했다고 보고했습니다.&quot;,
+        &quot;limitations&quot;: &quot;이 확인은 Git 브랜치 반영에 한정되며 서버 색인 반영은 확인하지 않았습니다.&quot;
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;BoxBox 소스 정렬과 파일럿 승인을 어떻게 커밋하고, 기존 로컬 변경을 어떻게 다룰 것인가.&quot;,
+        &quot;basis&quot;: &quot;기록상 소스 정렬만 담은 후보와 파일럿을 추가한 후보를 각각 검증했고, 기존 CI 버전 변경과 보고서는 로컬에 남겼습니다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;변경 목적에 따라 두 커밋으로 분리하고 기존 로컬 변경은 제외했습니다.&quot;,
+        &quot;tradeoff&quot;: &quot;커밋별 변경 범위를 확인하기 쉬워졌지만, 제외한 변경은 필요할 때 별도로 처리해야 합니다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;skills/www/www-commit/SKILL.md&quot;,
+        &quot;purpose&quot;: &quot;Native 작업에서 참조한 커밋 절차입니다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;docs/skills/WORKFLOW.md&quot;,
+        &quot;purpose&quot;: &quot;Native 작업에서 참조한 워크플로 문서입니다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;.boxbox/rules/www-shared-interface-members-approved.md&quot;,
+        &quot;purpose&quot;: &quot;두 번째 커밋 후보에 포함된 공용 인터페이스 파일럿 승인 규칙입니다.&quot;
+      },
+      {
+        &quot;path&quot;: &quot;src/shared.ts&quot;,
+        &quot;purpose&quot;: &quot;두 번째 커밋 후보에서 파일럿이 적용된 공용 소스입니다.&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;누락된 로컬 증거 링크 세 개를 확인하고 워크플로 문서 검사를 다시 실행합니다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;`npm run check:workflow`가 통과합니다.&quot;,
+        &quot;impact&quot;: &quot;이번 작업에서 실패한 문서 검사를 해소합니다.&quot;
+      },
+      {
+        &quot;action&quot;: &quot;서버 색인 반영이 필요한 경우 두 커밋의 반영 여부를 별도로 확인합니다.&quot;,
+        &quot;owner&quot;: null,
+        &quot;doneWhen&quot;: &quot;서버 색인에서 이번 커밋의 반영 여부를 확인합니다.&quot;,
+        &quot;impact&quot;: &quot;Git 푸시 성공과 서버 색인 반영을 구분할 수 있습니다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></section></article></div></main></body></html>

@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "id"           : "work-716a4363-a5ee-40ee-9671-f9b0da04f3dc",
+  "title"        : "WWW BoxBox 변경 커밋·푸시",
+  "kind"         : "maintenance",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": "Native 실행 요약이며 업무 수용·독립 검토는 별도입니다.",
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-NATIVE",
+      "description": "보고서 생성과 업무 수용을 구분한다",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "native": {
+    "key"     : "51e4f6e8df94c6e5ed65c978b6c38aac2321b46264fdc3b78da558b03856fda8",
+    "threadId": "01a2025a-5d0d-7083-a9f9-e522ad2a59b5",
+    "turnId"  : "01a2028c-3061-7e62-aecb-bbf125cd8579",
+    "commands": [
+      {
+        "command" : "/bin/zsh -lc \"cat skills/www/www-commit/SKILL.md && sed -n '172,187p' docs/skills/WORKFLOW.md && cat docs/skills/profiles/desktop.md\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'pwd && git status --short --branch && git log -5 --oneline --decorate && git remote -v && git diff --stat && git diff --cached --stat'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"sed -n '1,130p' docs/skills/MODEL_POLICY.md && cat docs/skills/templates/commit.md && git config --get core.hooksPath\"",
+        "status"  : "failed",
+        "exitCode": 1
+      },
+      {
+        "command" : "/bin/zsh -lc \"git ls-remote --heads origin refs/heads/main && git remote get-url --push --all origin && git rev-parse --symbolic-full-name '@{upstream}' && git log --oneline '@{upstream}..HEAD' && git diff -- scripts/setup-ci.ts src/architecture.generated.json\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - <<'PY'\nimport hashlib,io,json,os,pathlib,shutil,subprocess,tarfile,tempfile\nroot=pathlib.Path.cwd()\nbase=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()\nworkspace=pathlib.Path(tempfile.mkdtemp(prefix='www-boxbox-publish-'))\nprint(workspace,flush=True)\nwork=workspace/'tree'; work.mkdir()\narchive=subprocess.check_output(['git','archive',base])\nwith tarfile.open(fileobj=io.BytesIO(archive)) as tar:\n    tar.extractall(work,filter='data')\n(work/'node_modules').symlink_to(root/'node_modules',target_is_directory=True)\nfirst=['agents/www/review-policy.json','docs/architecture/statecharts/development-work.json','docs/architecture/structure.json','docs/skills/templates/work.json','package.json','scripts/setup-ci.ts','scripts/verify-architecture.ts','scripts/verify-chat.ts','scripts/workflow/reports.ts','scripts/workflow/types.ts','spikes/tauri/src-tauri/capabilities/default.json','spikes/tauri/src-tauri/tauri.conf.json','test/activity-sidebar.test.ts",
+        "status"  : "failed",
+        "exitCode": 1
+      },
+      {
+        "command" : "/bin/zsh -lc 'boxbox_publish_stage=$TMPDIR/www-boxbox-publish-rvtb593n\ngit clone --shared --no-checkout \"$PWD\" \"$boxbox_publish_stage/git-metadata\" &&\n  mv \"$boxbox_publish_stage/git-metadata/.git\" \"$boxbox_publish_stage/tree/.git\" &&\n  git -C \"$boxbox_publish_stage/tree\" read-tree HEAD &&\n  git -C \"$boxbox_publish_stage/tree\" status --short'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - $TMPDIR/www-boxbox-publish-rvtb593n <<'PY'\nimport hashlib,json,pathlib,shutil,subprocess,sys\nroot=pathlib.Path.cwd(); workspace=pathlib.Path(sys.argv[1]); first=workspace/'tree'; second=workspace/'final'\nshutil.copytree(first,second,symlinks=True)\nfor tree in (first,second):\n    with (tree/'.git/info/exclude').open('a') as out: out.write('\\\\n/node_modules\\\\n')\npilot=['.boxbox/conventions.jsonl','.boxbox/decisions.jsonl','.boxbox/examples.jsonl','.boxbox/rules/www-shared-interface-members-approved.md','src/shared.ts']\nfor name in pilot: shutil.copyfile(root/name,second/name)\nlocal='.www/development.local.json'\nshutil.copyfile(root/local,second/local)\nsetup='scripts/setup-ci.ts'; snapshot='src/architecture.generated.json'\nfiles=subprocess.check_output(['git','diff','--name-only','-z'],cwd=first).decode().strip('\\\\0').split('\\\\0')\nassert len(files)==23 and snapshot in files and setup in files\nsha=lambda data: hashlib.sha256(",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'set -o pipefail\nnpm run build && npm run check:architecture && npm run check:source && npm run typecheck && git diff --check &&\n  (bun test test/native-timing.test.ts test/native-activity.test.ts test/projection.test.ts test/dashboard.test.ts 2>&1 | tail -9)'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'set -o pipefail\nnpm run check:source && npm run typecheck && npm run build && npm run check:architecture && git diff --check &&\n  (bun test test/activity-sidebar.test.ts test/architecture-harness.test.ts test/chat-state.test.ts test/command-preview.test.ts test/conversations.test.ts test/native-activity.test.ts test/native-lifecycle.test.ts test/projection.test.ts test/workflow-properties.test.ts test/www-activity-view.test.ts --timeout 60000 2>&1 | tail -9)'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"git diff --check -- . ':(exclude)docs/work/INDEX.md' && git diff --cached --quiet && git status --porcelain=v1 --untracked-files=no .github/workflows docs/work/INDEX.md docs/RELEASING.md\"",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'git diff -w --stat && git diff --numstat && git status --porcelain --untracked-files=no | wc -l'",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - $TMPDIR/www-boxbox-publish-rvtb593n <<'PY'\nimport hashlib,json,pathlib,subprocess,sys\nw=pathlib.Path(sys.argv[1])\np=json.loads((w/'plan.json').read_text())\ndef git(*args,data=None):\n    return subprocess.check_output(['git',*args],input=data)\ndef text(*args):\n    return git(*args).decode().strip()\nassert text('rev-parse','HEAD')==p['base'] and text('branch','--show-current')=='main'\nassert not git('diff','--cached','--name-only','-z')\nassert all(hashlib.sha256(pathlib.Path(f).read_bytes()).hexdigest()==h for f,h in p['hashes'].items())\nspecial={p['setup'],p['snapshot']}\ngit('add','--',*[f for f in p['first'] if f not in special])\nfor f in special:\n    mode=text('ls-tree','HEAD','--',f).split()[0]\n    oid=git('hash-object','-w','--stdin',data=(w/'tree'/f).read_bytes()).decode().strip()\n    git('update-index','--cacheinfo',f'{mode},{oid},{f}')\nassert set(git('diff','--cached','--name-only','-z').decode().rstrip('\\\\0').split",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'npm run check:workflow'",
+        "status"  : "failed",
+        "exitCode": 1
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - $TMPDIR/www-boxbox-publish-rvtb593n <<'PY'\nimport hashlib,json,pathlib,subprocess,sys\nw=pathlib.Path(sys.argv[1]); p=json.loads((w/'plan.json').read_text())\ndef git(*args):\n    return subprocess.check_output(['git',*args])\ndef text(*args):\n    return git(*args).decode().strip()\ndef staged():\n    return set(git('diff','--cached','--name-only','-z').decode().rstrip('\\\\0').split('\\\\0'))-{''}\nassert text('branch','--show-current')=='main' and text('rev-parse','HEAD')==p['base']\ntree=(w/'first-index').read_text()\nassert text('write-tree')==tree and staged()==set(p['first'])\nprint(text('commit','-m','승인된 BoxBox 규칙으로 저장소 소스의 열을 정렬한다'),flush=True)\nhead=text('rev-parse','HEAD')\nassert text('rev-parse','HEAD\"'^'\"')==p['base'] and text('rev-parse','HEAD\"'^{tree}'\"')==tree and not staged()\n(w/'first-head').write_text(head)\nassert all(hashlib.sha256(pathlib.Path(f).read_bytes()).hexdigest()==p['hashes'][f] for f in p['second'])\ngit('a",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc \"python3 - $TMPDIR/www-boxbox-publish-rvtb593n <<'PY'\nimport json,pathlib,subprocess,sys\nw=pathlib.Path(sys.argv[1]); p=json.loads((w/'plan.json').read_text())\ndef git(*args): return subprocess.check_output(['git',*args]).decode().strip()\nparent=(w/'first-head').read_text()\ntree=(w/'second-index').read_text()\nassert git('branch','--show-current')=='main'\nassert git('rev-parse','HEAD')==parent and git('write-tree')==tree\nassert set(git('diff','--cached','--name-only','-z').rstrip('\\\\0').split('\\\\0'))==set(p['second'])\nprint(git('commit','-m','공용 인터페이스 필드에 BoxBox 파일럿 승인을 적용한다'),flush=True)\nhead=git('rev-parse','HEAD')\nassert git('rev-parse','HEAD\"'^'\"')==parent and git('rev-parse','HEAD\"'^{tree}'\"')==tree\nassert not git('diff','--cached','--name-only')\nassert git('remote','get-url','--push','--all','origin')=='https://github.com/woo-jongho/www.git'\nassert git('ls-remote','--heads','origin','refs/heads/main').split()[0]==p['base']\nasse",
+        "status"  : "completed",
+        "exitCode": 0
+      },
+      {
+        "command" : "/bin/zsh -lc 'git push origin HEAD:refs/heads/main &&\n  git ls-remote --heads origin refs/heads/main &&\n  git log -2 --oneline --decorate &&\n  git -c core.quotePath=false status --short --branch --untracked-files=normal'",
+        "status"  : "completed",
+        "exitCode": 0
+      }
+    ],
+    "files": [],
+    "truncated": true
+  }
+}
