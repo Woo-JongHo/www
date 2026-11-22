@@ -14,6 +14,8 @@ jobs:
   validate:
     runs-on: macos-15
     timeout-minutes: 45
+    env:
+      BOXBOX_MODE: check
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,6 +30,12 @@ jobs:
           bun-version: 1.4.0
       - run: npm ci
       - run: npm install --global @openai/codex@0.167.2
+      - name: 검토 읽기 검사에 필요한 ripgrep 준비
+        run: |
+          if ! command -v rg >/dev/null; then
+            HOMEBREW_NO_AUTO_UPDATE=1 brew install ripgrep
+          fi
+          rg --version
       - name: 공개 BoxBox headless 설치
         run: |
           export XDG_DATA_HOME="$RUNNER_TEMP/boxbox-engine"
