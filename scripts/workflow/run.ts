@@ -500,7 +500,19 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
     if (!currentUnit) return { ...result, ...(verification ? { verification } : {}) };
     const current = await readWork({ repo, workId: work.record.id });
     if (current.record.schemaVersion !== 2) throw new Error("현재 분업 수용에는 schemaVersion 2가 필요합니다.");
-    const acceptance = await assessUnitAcceptance({ repo, record: current.record, unit: currentUnit, host, executor, attempt: verification });
+    const recordedVerification = verification
+      ? current.record.workflow.verifications.find(attempt => attempt.id === verification.id)
+      : undefined;
+    if (verification && !recordedVerification) verificationError = "verification_not_recorded";
+    let acceptance: UnitAcceptance;
+    if (recordedVerification) {
+      const assessed = await assessDecompositionCompletion(repo, current.record, [currentUnit.taskId]);
+      const prefix = currentUnit.taskId + ": ";
+      acceptance = { status: assessed.usable ? "accepted" : "rejected",
+        reasons: assessed.reasons.map(reason => reason.startsWith(prefix) ? reason.slice(prefix.length) : reason), attemptId: recordedVerification.id };
+    } else {
+      acceptance = await assessUnitAcceptance({ repo, record: current.record, unit: currentUnit, host, executor });
+    }
     if (verificationError) acceptance.reasons.push(`verification_error: ${verificationError}`);
     await appendEvent({ repo, workId: work.record.id, event: { id: `${eventId}-acceptance`, type: "task_acceptance", taskId: currentUnit.taskId, ...acceptance } });
     return { ...result, ...(verification ? { verification } : {}), acceptance };
@@ -878,7 +890,7 @@ async function main() {
   else if (result.environment?.ok === false) process.exitCode = 1;
   else if (result.mutation?.ok === false || result.confirmation === true) process.exitCode = 2;
   else if (options.role === "www-dev") {
-    if (result.host?.ok === false || property(result.verification, "result") === "failed" || (result.review && result.review.verdict !== "pass")) process.exitCode = 1;
+    if (result.host?.ok === false || result.acceptance?.status === "rejected" || property(result.verification, "result") === "failed" || (result.review && result.review.verdict !== "pass")) process.exitCode = 1;
   } else if (result.executed && (!result.host?.ok || result.postError || result.verificationSummary?.result !== "passed")) process.exitCode = 1;
 }
 

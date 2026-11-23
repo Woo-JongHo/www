@@ -421,7 +421,7 @@ export async function runTypedWorkflow(options: JsonObject, dependencies: Harnes
   return runReportedStage(options, () => runTypedWorkflowCore(options, dependencies));
 }
 
-function exitCode(result: JsonObject): number {
+export function exitCode(result: JsonObject): number {
   if (result.recorded === false || (object(result.recording) && result.recording.recorded === false) || (object(result.verification) && result.verification.recorded === false)) {
     return 1;
   }
@@ -430,6 +430,7 @@ function exitCode(result: JsonObject): number {
   if ((object(result.mutation) && result.mutation.ok === false)
     || result.confirmation === true) return 2;
   if ((object(result.host) && result.host.ok === false)
+    || (object(result.acceptance) && result.acceptance.status === "rejected")
     || result.postError
     || (object(result.verification) && result.verification.result === "failed")
     || (object(result.review) && result.review.verdict !== "pass")) return 1;

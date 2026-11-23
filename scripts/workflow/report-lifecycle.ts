@@ -5,21 +5,14 @@
 import { createHash, randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { assessWork, completeWork, readWork, type WorkAssessment, type WorkOptions, type WorkLocation } from "./work.ts";
+import { assessWork, completeWork, readWork, type WorkAssessment, type WorkOptions, type WorkLocation, type ReportHookResult } from "./work.ts";
 import { serializeWorkRecord } from "./work-json.ts";
 import { workOutputColumns } from "./preflight.ts";
 import { withWorkLock } from "./lock.ts";
-import { captureWorkReport, listWorkReports, parseReportReader, publishWorkReport, readWorkReport, WORK_RECORD_JSON_LIMIT, type ReportNarrative } from "./reports.ts";
+import { captureWorkReport, parseReportReader, publishWorkReport, WORK_RECORD_JSON_LIMIT, type ReportNarrative } from "./reports.ts";
 
 type JsonObject = Record<string, unknown>;
-export type ReportHookResult = {
-  status   : "written" ;
-  reportId : string    ;
-  created  : boolean   ;
-} | {
-  status  : "failed" ;
-  message : string   ;
-};
+export type { ReportHookResult } from "./work.ts";
 
 function object(value: unknown): value is JsonObject {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -87,21 +80,9 @@ export async function assessReportedWork(options: WorkOptions): Promise<WorkAsse
 
 export async function completeReportedWork(options: WorkOptions) {
   await enableReports(options);
-  const assessment = await assessReportedWork(options);
-  if (!assessment.complete) throw new Error(`현재 증거로 완료할 수 없습니다: ${assessment.reasons.join("; ")}`);
-  const listed = await listWorkReports({ repo: options.repo })     ;
-  const id     = assessment.report?.reportId                       ;
-  const prior  = listed.reports.find((report) => report.id === id) ;
-  if (!prior) throw new Error("완료할 작업의 저작 보고서를 찾지 못했습니다.");
-  const document = await readWorkReport({ repo: options.repo, reportId: prior.id }) ;
-  const saved    = await completeWork(options)                                      ;
-  let reportHook: ReportHookResult                                                  ;
-  try {
-    if (!document.report.narrative) throw new Error("저작 서술이 없습니다.");
-    const result = await publishWorkReport({ ...options, narrative: document.report.narrative, event: "complete" });
-    reportHook = { status: "written", reportId: result.report.id, created: result.created };
-  } catch (error) { reportHook = { status: "failed", message: `업무 완료 기록은 저장됐지만 보고서 갱신에 실패했습니다: ${error instanceof Error ? error.message : String(error)}` }; }
-  return { ...saved, reportHook };
+  const saved = await completeWork(options);
+  if (!saved.reportHook) throw new Error("완료 보고서 생성 결과가 없습니다.");
+  return { ...saved, reportHook: saved.reportHook };
 }
 
 function workId(options: JsonObject, result?: JsonObject): string | undefined {
