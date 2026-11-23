@@ -3,7 +3,7 @@
  */
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { appendFile, chmod, copyFile, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
+import { appendFile, chmod, copyFile, mkdir, mkdtemp, readFile, rename, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
@@ -605,6 +605,7 @@ test('원장 잠금 대기 중 새 실패가 기록되면 이전 성공을 붙�
   let pending: ReturnType<typeof verifyWork> | undefined;
   await withWorkLock(repo, async () => {
     pending = verifyWork({ repo, workId: target.record.id, command, args, criterionIds: ['AC-1'], reuseSession: session });
+    void pending.catch(() => undefined);
     const deadline = Date.now() + 2_000;
     while (!(await readdir(directory)).some(file => !existing.has(file))) {
       if (Date.now() > deadline) throw new Error('재사용 pending 대기 초과');
@@ -614,7 +615,10 @@ test('원장 잠금 대기 중 새 실패가 기록되면 이전 성공을 붙�
     assert.ok(latest.record.workflow);
     latest.record.workflow.verifications.push(failure);
     latest.record.criteria[0].result = 'failed';
-    await writeFile(latest.path, JSON.stringify(latest.record));
+    // 실제 원장 저장처럼 교체해 읽는 실행이 중간 바이트를 보지 않게 한다.
+    const temporary = latest.path + '.pending';
+    await writeFile(temporary, JSON.stringify(latest.record), { flag: 'wx' });
+    await rename(temporary, latest.path);
   });
   assert.ok(pending);
   const result = await pending;
