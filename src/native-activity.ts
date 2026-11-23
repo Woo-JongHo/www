@@ -364,6 +364,7 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     const fields = record(event);
     return JSON.stringify([fields.connectionGeneration ?? null, fields.processEpoch ?? null, fields.sessionId ?? null, fields.workspaceKey ?? null, fields.selectionEpoch ?? null]);
   };
+  const progressScopes = new Map<ActivityEntry, string>();
 
   const requests       = new Map<string, ActivityTurn>()         ;
   const approvals      = new Map<string, ActivityTurn>()         ;
@@ -582,20 +583,31 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
       turn.lastActivityAt = event.at;
       for (const activity of turn.entries) if (!definitiveCompletions.get(turn)?.has(activity.id)) completedMessages.delete(activity);
     }
-    if (event.method === "item/completed" && item.type === "agentMessage" && text(item.id)
-      && (!event.historical || (typeof item.completedAtMs === "number" && Number.isSafeInteger(item.completedAtMs)))) {
-      const completed = definitiveCompletions.get(turn) ?? new Set<string>();
-      completed.add(`item:${text(item.id)}`);
-      definitiveCompletions.set(turn, completed);
-    }
+    const definitiveMessageId = event.method === "item/completed" && item.type === "agentMessage"
+      && (!event.historical || (typeof item.completedAtMs === "number" && Number.isSafeInteger(item.completedAtMs)))
+      ? text(item.id) : "";
+    const commentary = item.type === "agentMessage" && item.phase === "commentary";
     const progressEvent = event.method === "turn/plan/updated"
       || (event.method === "item/agentMessage/delta" && data.phase === "commentary")
-      || ((event.method === "item/started" || event.method === "item/completed") && item.type === "agentMessage" && item.phase === "commentary");
-    if ((turn.endedAt || turn.endedSeq !== null) && progressEvent) continue;
+      || ((event.method === "item/started" || event.method === "item/completed") && commentary);
+    const endedProgress = progressEvent && (turn.endedAt !== null || turn.endedSeq !== null);
+    if (endedProgress && !suspendedTurns.has(turn)) {
+      // 실시간 종료와 복원 이력의 합성 정지를 구분한다.
+      if (turn.historical || !definitiveMessageId || !commentary || typeof item.text !== "string") continue;
+      const existing = turn.entries.find(row => row.id === `item:${definitiveMessageId}` && row.kind === "progress");
+      if (!existing || progressScopes.get(existing) !== eventScope(event) || definitiveCompletions.get(turn)?.has(existing.id)) continue;
+    }
+    if (definitiveMessageId) {
+      const completed = definitiveCompletions.get(turn) ?? new Set<string>();
+      completed.add(`item:${definitiveMessageId}`);
+      definitiveCompletions.set(turn, completed);
+    }
+    if (endedProgress && suspendedTurns.has(turn)) continue;
     if (event.method === "turn/started" && !turn.endedAt) turn.status = "running";
     if (event.method === "turn/completed"                                   ) {
       if (settledTurns.has(turn)) continue;
       const outcome = turnData.status === "completed" || turnData.status === "failed" || turnData.status === "interrupted" ? turnData.status : "unknown";
+      if (outcome === "unknown" && event.historical && turn.endedSeq !== null) continue;
       if (outcome !== "unknown") { settledTurns.add(turn); suspendedTurns.delete(turn); }
       else if (event.historical) suspendedTurns.set(turn, eventScope(event));
       turn.endedSeq ??= event.seq;
@@ -677,6 +689,7 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     if (event.method === "item/agentMessage/delta" && definitiveCompletions.get(turn)?.has(`item:${itemId}`)) continue;
     if (event.method === "item/agentMessage/delta" && data.phase === "commentary") {
       const progress = entry(turn.entries, `item:${itemId}`, "progress", "진행 설명", event.at);
+      if (!progressScopes.has(progress)) progressScopes.set(progress, eventScope(event));
       if (!completedMessages.has(progress)) {
         progress.description = (progress.description ?? "") + text(data.delta);
         progress.status = "running";
@@ -721,6 +734,7 @@ export function projectNativeActivity(events: readonly AppEvent[], selectedThrea
     if (type === "agentMessage" && item.phase !== "analysis" && item.phase !== "reasoning" && item.phase !== "commentary") { kind = "answer"; label = "답변 작성"; }
     if (!kind) continue;
     const activity = entry(turn.entries, `item:${itemId}`, kind, label, event.at);
+    if (kind === "progress" && !progressScopes.has(activity)) progressScopes.set(activity, eventScope(event));
     if ((kind === "progress" || kind === "answer") && !complete && observedMessages.has(activity)) continue;
     activity.label = label;
     if (kind === "progress" || kind === "answer") {

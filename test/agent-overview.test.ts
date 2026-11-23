@@ -232,6 +232,31 @@ describe("WWW Agent 개요", () => {
     expect(projectAgentOverview([...before, ended, delta(6, "fresh", "종료 뒤"), snapshot(7, "종료 뒤 snapshot")], "t").progress?.text).toBe("확인 완료");
     expect(projectAgentOverview([start(), plan(2, active), snapshot(3, ""), delta(4, "msg", "빈 완료 뒤")], "t").progress).toBeNull();
   });
+  for (const boundary of ["completed", "failed", "interrupted", "inProgress", "missing", "EOF"]) for (const final of ["최종 설명", ""]) {
+    test(`종료한 턴의 첫 정식 공개 설명 완료를 반영한다 — ${boundary}/${final ? "본문" : "빈 본문"}`, () => {
+      const scope = { connectionGeneration: 7, processEpoch: "process", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 1 };
+      function scoped(row: AppEvent) { return { ...row, ...scope }; }
+      function snapshot(seq: number, id: string, text?: string) {
+        return scoped(item(seq, { id, type: "agentMessage", phase: "commentary", text }, "item/completed"));
+      }
+      const ended = boundary === "EOF" ? event(4, "transport/closed", {})
+        : event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: boundary === "missing" ? undefined : boundary } });
+      const before = [scoped(start()), scoped(plan(2, [{ step: "확인", status: "inProgress" }])), scoped(event(3, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase: "commentary", delta: "초안" })), scoped(ended)];
+      const late = [
+        { ...snapshot(5, "p", "다른 연결"), connectionGeneration: 8 },
+        snapshot(6, "new", "종료 뒤 처음 본 설명"),
+        snapshot(7, "p"),
+        snapshot(8, "p", final),
+        snapshot(9, "p", "두 번째 완료"),
+        scoped(event(10, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase: "commentary", delta: "늦은 조각" })),
+      ];
+      expect(projectAgentOverview(before, "t").progress?.text).toBe("초안");
+      const settled = projectAgentOverview([...before, ...late], "t").progress;
+      if (final) expect(settled).toMatchObject({ text: final, planIndex: 0, source: "commentary" });
+      else expect(settled).toBeNull();
+    });
+  }
+
   test("빈 완료 snapshot은 해당 산문을 제거하고 늦은 시작은 기존 조각을 덮지 않는다", () => {
     const active = [{ step: "확인", status: "inProgress" }];
     const delta = (seq: number, id: string, value: string) => event(seq, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: id, phase: "commentary", delta: value });
