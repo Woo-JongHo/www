@@ -610,8 +610,8 @@ try {
     await session.command("Input.insertText", { text: "두 줄\n내용" });
     await session.wait(input + ".value===" + JSON.stringify("첫 두 줄\n내용 끝") + " && document.activeElement===" + input, "선택 구간 여러 줄 교체와 포커스 보존");
     await session.wait(transcript + ".scrollHeight>" + transcript + ".clientHeight+100 && " + transcript + ".scrollTop<40 && (()=>{const r=" + status + ".getBoundingClientRect();return r.height>0 && r.top>=0 && r.bottom<=innerHeight})()", "지난 대화를 읽는 위치와 고정 상태줄 유지");
-    await session.click('.chat-message-actions button:last-child');
     const history = JSON.parse(await fs.readFile(path.join(workspace, "fixture-history.json"), "utf8"));
+    await session.click('.chat-message-actions button:last-child');
     const answer = history["history-a"][0].items.find((item: Data) => item.id === "saved-answer")?.text;
     if (typeof answer !== "string" || !answer.startsWith("## 저장된 답변")) throw Error("인용 원문을 확인할 수 없습니다.");
     const draft = "첫 두 줄\n내용 끝\n\n" + answer.split("\n").map(line => "> " + line).join("\n") + "\n\n";
