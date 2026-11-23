@@ -364,11 +364,7 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
       authority: options.reviewAuthority,
       workPath: current.path,
       directRequest: options.direct === true && typeof options.request === "string" ? { direct: true, request: options.request } : undefined,
-      inputPaths     : options.reviewInputPaths !== undefined ? options.reviewInputPaths : [
-        ...source.files.filter(file => file.type === "file").map(file => file.path),
-        path.relative(repo, current.path),
-        path.relative(repo, path.join(path.dirname(current.path), "verification.md")),
-      ],
+      inputPaths     : options.reviewInputPaths,
     });
     const recording = await recordReview({ repo, workId: work.record.id, review, requestId: current.record.workflow.requestId });
     return { executed: true, review, ...(recording.recorded ? { work: recording } : {}), recording };

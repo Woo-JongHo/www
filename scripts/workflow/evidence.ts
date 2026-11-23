@@ -228,7 +228,7 @@ export async function captureSource({ repo, inputs }: { repo?: string; inputs?: 
   return { head, digest: digest(JSON.stringify({ inputs: selected, files })), inputs: selected, files };
 }
 
-function definitions(record: unknown): CriterionDefinition[] {
+export function criterionDefinitions(record: unknown): CriterionDefinition[] {
   if (!object(record) || !Array.isArray(record.criteria) || !record.criteria.length) throw new Error("수용 기준 정의가 필요합니다.");
   const seen = new Set<string>();
   return record.criteria.map((criterion) => {
@@ -242,10 +242,10 @@ function definitions(record: unknown): CriterionDefinition[] {
   }).sort((left, right) => left.id < right.id ? -1 : left.id > right.id ? 1 : 0);
 }
 
-export function criteriaDigest(record: unknown) { return digest(JSON.stringify(definitions(record))); }
+export function criteriaDigest(record: unknown) { return digest(JSON.stringify(criterionDefinitions(record))); }
 
 function coverage(record: unknown, criterionIds: unknown): string[] {
-  const known = new Set(definitions(record).map((criterion) => criterion.id));
+  const known = new Set(criterionDefinitions(record).map((criterion) => criterion.id));
   if (!Array.isArray(criterionIds) || !criterionIds.length || new Set(criterionIds).size !== criterionIds.length || criterionIds.some((id) => typeof id !== "string" || !known.has(id))) {
     throw new Error("검증 범위에는 중복 없는 실제 수용 기준 ID가 하나 이상 필요합니다.");
   }
@@ -335,7 +335,7 @@ export async function verify({ repo, record, inputs, command, args = [], criteri
     completedAt  : new Date().toISOString()  ,
     source                                   ,
     criteriaDigest    : criteria                                                                                                ,
-    criteriaSnapshot  : definitions(record)                                                                                     ,
+    criteriaSnapshot  : criterionDefinitions(record)                                                                                     ,
     command           : redactArgument(executableCommand)                                                                       ,
     requestedCommand  : redactArgument(command)                                                                                 ,
     args              : argumentsForRecord                                                                                      ,
