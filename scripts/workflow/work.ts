@@ -504,18 +504,23 @@ async function appendVerification(repo: string, workId: string, attempt: Verific
     if (!old.includes(`id="${attempt.id}"`) && !old.includes(`## ${attempt.id}`)) await atomicWrite(report, `${old.trimEnd()}\n\n${renderAttempt(attempt)}\n`);
     record.workflow.verifications.push(attempt);
     const applicable = await evaluateEvidence({ repo, record, attempt });
-    const attemptedResult = applicable.usable ? "passed" : isCurrentCommandFailure(attempt, applicable.reasons) ? "failed" : "unverified";
+    const currentReasons = new Set<string>();
     const chronological = currentVerifications(record.workflow.verifications, record.workflow.continuations?.at(-1));
     let currentObservation = false;
     for (const criterion of record.criteria) {
       if (!attempt.criterionIds.includes(criterion.id)) continue;
+      const projected = criterionEvidence(record, attempt, criterion.id, applicable);
+      const attemptedResult = projected.usable ? "passed" : isCurrentCommandFailure(attempt, projected.reasons) ? "failed" : "unverified";
       const latest = latestVerificationGroup(chronological.filter(item => item.criterionIds.includes(criterion.id)));
       if (latest.some(item => item.id === attempt.id)) {
+        for (const reason of projected.reasons) currentReasons.add(reason);
         criterion.result = attemptedResult;
         if (latest.length > 1) {
           const outcomes = await Promise.all(latest.map(async item => {
             const evaluation = item.id === attempt.id ? applicable : await evaluateEvidence({ repo, record, attempt: item });
-            return evaluation.usable ? "passed" : isCurrentCommandFailure(item, evaluation.reasons) ? "failed" : "unverified";
+            const scoped = criterionEvidence(record, item, criterion.id, evaluation);
+            for (const reason of scoped.reasons) currentReasons.add(reason);
+            return scoped.usable ? "passed" : isCurrentCommandFailure(item, scoped.reasons) ? "failed" : "unverified";
           }));
           criterion.result = outcomes.includes("failed") ? "failed" : outcomes.includes("unverified") ? "unverified" : "passed";
         }
@@ -524,7 +529,7 @@ async function appendVerification(repo: string, workId: string, attempt: Verific
       criterion.evidence.push({ attemptId: attempt.id, path: `verification.md#${attempt.id}`, summary: `종료 코드 ${attempt.exitCode ?? "미확인"}, 기준 ${attemptedResult}` });
     }
     record.status              = "verifying"                                                ;
-    if (currentObservation) record.blockedReason = applicable.usable ? null : applicable.reasons.join("; ");
+    if (currentObservation) record.blockedReason = currentReasons.size ? [...currentReasons].join("; ") : null;
     record.workflow.nextAction = await requiredEvidenceAction(repo, record, await assessRequiredCriteria(repo, record), "review");
   }, reuseGuard ? mutate => withVerificationReuse(reuseGuard.useId, repo, attempt, mutate) : undefined);
 }

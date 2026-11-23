@@ -92,6 +92,14 @@ function stageMessage(message: Record<string, unknown>): void {
     send({ jsonrpc: "2.0", id: message.id, result: { turn: { id: stageTurn } } });
     notify("turn/started", { threadId: params.threadId, turn: { id: stageTurn } });
     notify("item/completed", { threadId: params.threadId, turnId: stageTurn, item: { id: `public-${stageTurn}`, type: "agentMessage", phase: "commentary", text: "계획 없이 현재 단계를 확인하고 있습니다." } });
+    if (process.env.WWW_CHAT007_PROBE === "1") {
+      const items = [
+        { id: "request", type: "userMessage", content: [{ type: "skill", name: "www-spec", path: fixtureWorkspace + "/skills/www/www-spec" }] },
+        { id: "read", type: "commandExecution", cwd: fixtureWorkspace, exitCode: 0, commandActions: [{ type: "read", path: fixtureWorkspace + "/skills/www/www-build/SKILL.md" }] },
+        { id: "cmd", type: "commandExecution", cwd: fixtureWorkspace, exitCode: 0, command: "cat skills/www/www-design/SKILL.md" },
+      ];
+      for (const item of items) notify("item/completed", { threadId: params.threadId, turnId: stageTurn, item });
+    }
     const input = { workId: stageWork, phase: "build", status: "running", attemptId: "attempt-1" };
     const call = (callId: string, argumentsValue: unknown = input, overrides = {}) => ({ threadId: params.threadId, turnId: stageTurn, callId, tool: "www_development_stage", arguments: argumentsValue, ...overrides });
     stageCalls = stagePrompt.includes("종료지연") ? [call("after-end")] : stagePrompt.includes("유지") ? [call("running")]
