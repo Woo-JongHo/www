@@ -8,6 +8,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { openWork } from "./workflow/work.ts";
 
+const chat007 = process.argv.includes("--chat007-monitor");
 const uiOnly = process.argv.slice(2).includes("--ui-only");
 const liveObservability = process.argv.includes("--observability-live");
 const livePlan = process.argv.includes("--plan-document-live");
@@ -111,7 +112,7 @@ async function verifyObservability(): Promise<void> {
   const planSha = planProbe ? createHash("sha256").update(await fs.readFile(path.join(workspace, planPath))).digest("hex") : "";
   const workflowOptions = { repo: workspace, role: "www-dev", direct: true, execute: true, request, decision: { intent: "verify", workId }, verifier };
   const usesLiveModel = liveObservability || livePlan || liveHarness;
-  const env: NodeJS.ProcessEnv = { ...process.env, WWW_NATIVE_PROBE: "1", WWW_PROBE_PATH: path.join(directory, "disabled.json"), WWW_PROBE_WORKSPACE: workspace, WWW_CODEX_BIN: usesLiveModel ? process.env.WWW_CODEX_BIN || "codex" : path.join(root, "test/fixtures/activity-app-server.ts"), WWW_STAGE_PROBE: "1", WWW_STAGE_WORK_ID: workId, WWW_PROBE_NATIVE_REPORTS: "0", WWW_PLAN_PROBE_SHA256: planSha,
+  const env: NodeJS.ProcessEnv = { ...process.env, WWW_NATIVE_PROBE: "1", WWW_PROBE_PATH: path.join(directory, "disabled.json"), WWW_PROBE_WORKSPACE: workspace, WWW_CODEX_BIN: usesLiveModel ? process.env.WWW_CODEX_BIN || "codex" : path.join(root, "test/fixtures/activity-app-server.ts"), WWW_STAGE_PROBE: "1", WWW_CHAT007_PROBE: chat007 ? "1" : "0", WWW_STAGE_WORK_ID: workId, WWW_PROBE_NATIVE_REPORTS: "0", WWW_PLAN_PROBE_SHA256: planSha,
     ...(harnessProbe && !liveHarness ? { WWW_HARNESS_PROBE_ENTRY: workflowEntry, WWW_HARNESS_PROBE_OPTIONS: JSON.stringify(workflowOptions) } : {}),
   };
   if (fixturePlan) {
@@ -149,6 +150,11 @@ async function verifyObservability(): Promise<void> {
     const first: unknown = await evaluate("window.www.listSessions().then(s=>s[0]?.id)");
     if (typeof first !== "string") throw new Error("첫 탭 식별자가 없습니다.");
     const surface = `[data-session-id="${first}"]`;
+    const sidebar = chat007 ? await evaluate(`(() => {
+      const root = document.querySelector(${JSON.stringify(surface + ' [data-testid="resource-sidebar"]')});
+      const text = e => e?.checkVisibility({opacityProperty:true,visibilityProperty:true}) && e.getBoundingClientRect().width > 0 ? e.innerText.trim() : "";
+      return {agent: text(root?.querySelector(".ao-agent-root h3")), sidebar: Array.from(root?.querySelectorAll(".ao-skills > li") ?? [], row => text(row.querySelector("strong")) + ":" + text(row.querySelector("small")))};
+    })()`) : undefined;
     const prompt = liveHarness ? `현재 독립 검증 공간의 아래 읽기 전용 명령 한 번을 승인합니다. 먼저 www_development_stage에 workId ${workId}, phase verify, status running, attemptId harness-sample을 전달하세요. 응답의 실행 ID를 다음 공식 명령의 eventId 값에 넣어 정확히 한 번 실행하세요. ${JSON.stringify(nodeBinary)} ${JSON.stringify(workflowEntry)} '${JSON.stringify({...workflowOptions,eventId:"여기에-발급-ID"})}' 이어 www_observe_harness에 동일 workId와 phase verify, attemptId harness-sample을 전달한 뒤 종료하세요. 다른 파일이나 명령은 실행하지 마세요.`
       : harnessProbe ? "실제 하네스 영수증 검증 유지"
       : livePlan ? `/plan ${observabilityWorkId}\n파일 쓰기나 다른 도구 없이 www_link_plan을 한 번 호출하세요. 확인할 SHA-256은 ${planSha}입니다.`
@@ -160,6 +166,22 @@ async function verifyObservability(): Promise<void> {
     await wait(`window.www.workspace(${JSON.stringify(first)}).then(s=>window.www.events(s)).then(e=>e.some(x=>x.method===${JSON.stringify(method)}))`, "실제 main 관측 사건 수신");
     await click(surface + ' [data-testid="monitoring-nav"]');
     const monitor = surface + ' [data-testid="monitoring-overview"]';
+    if (chat007) {
+      const flow = JSON.stringify(surface + ' [data-testid="www-flow"]');
+      await evaluate(`Array.from(document.querySelector(${flow}).querySelectorAll("[data-artifact-id] details:not([open]) summary"), e => e.click())`);
+      await wait(`document.querySelector(${flow})?.querySelectorAll("[data-artifact-id] details[open]").length === 8`, "상세 정의 8개 펼침");
+      const details = await evaluate(`(() => {
+        const root = document.querySelector(${JSON.stringify(surface + ' [data-testid="www-flow"]')});
+        const text = e => e?.checkVisibility({opacityProperty:true,visibilityProperty:true}) && e.getBoundingClientRect().width > 0 ? e.innerText.trim() : "";
+        const rows = Array.from(root?.querySelectorAll("[data-artifact-id]") ?? []);
+        return { detail: rows.map(row => {
+          return [text(row.querySelector("strong")), text(row.querySelector("small")), text(row.querySelector("code")), text(row.querySelector(".www-artifact-state"))];
+        }), applicationEvidence: text(root?.querySelector(".www-flow-note:last-child")) };
+      })()`);
+      if (!object(sidebar) || !object(details)) throw Error("AC-11 화면 읽기 실패");
+      console.log(JSON.stringify({ ...sidebar, ...details }));
+      return;
+    }
     if (harnessProbe) {
       const expected = failedHarness ? "실패" : "성공";
       const skill = monitor + ' [data-skill-id="www-verify"]';
@@ -353,7 +375,7 @@ async function verifyObservability(): Promise<void> {
   }
 }
 
-if (process.argv.includes("--observability") || liveObservability || planProbe || harnessProbe) {
+if (chat007 || process.argv.includes("--observability") || liveObservability || planProbe || harnessProbe) {
   try { await verifyObservability(); } catch (error) { await fs.writeFile(path.join(directory, "failure.txt"), String(error)); console.error(`${String(error)}\n증거: ${directory}`); process.exitCode = 1; }
   process.exit(process.exitCode ?? 0);
 }

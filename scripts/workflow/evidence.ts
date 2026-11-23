@@ -2,6 +2,7 @@
  * @architecture arch.development.evidence.verification
  * @implements RESP-DEVELOPMENT-EVIDENCE-VERIFICATION
  */
+import { monitorContract, monitorCriterion, monitorInputs } from "../verification/chat007-contract.ts";
 import { observeTimedChild, timedPhase, timingEvent } from "./timing.ts";
 import { createHash, randomUUID }    from "node:crypto";
 import { spawn, execFile }           from "node:child_process";
@@ -89,6 +90,7 @@ export interface VerificationAttempt {
   artifactsStable?  : boolean                 ;
   environment       : ExecutionEnvironment    ;
   environmentStable : boolean                 ;
+  monitorObservation?: { version: 1; declaredScopeDigest: string; values: typeof monitorContract.observations };
   environmentObservation?: VerificationEnvironmentObservation;
   executor          : 'injected' | 'process'  ;
   output?           : CommandResult['output'] ;
@@ -197,12 +199,14 @@ export interface SourceReader {
   fileHash(path: string): Promise<string>;
 }
 
-export async function captureSource({ repo, inputs, reader }: { repo?: string; inputs?: unknown; reader?: SourceReader } = {}): Promise<CapturedSource> {
+export async function captureSource({ repo, inputs, reader, scope }: { repo?: string; inputs?: unknown; reader?: SourceReader; scope?: "chat007-monitor" } = {}): Promise<CapturedSource> {
   const root = await fs.realpath(repo ?? process.cwd());
   if (!(await fs.stat(root)).isDirectory()) throw new Error("저장소 경로가 디렉터리가 아닙니다.");
   const selected = inputPaths(inputs)              ;
   const captured = new Map<string, CapturedFile>() ;
+  const omitGeneratedMap = scope === "chat007-monitor" && JSON.stringify(selected) === JSON.stringify(monitorInputs);
   async function visit(relative: string) {
+    if (omitGeneratedMap && relative === "src/architecture.generated.json") return;
     if (reader && captured.has(relative)) return;
     const target = path.resolve(root, relative);
     if (target !== root && !target.startsWith(`${root}${path.sep}`)) throw new Error("검증 입력이 저장소를 벗어납니다.");
@@ -308,13 +312,26 @@ function redactArgument(value: string) {
     .replace(/((?:password|secret|token|api[-_]?key)\s*[=:]\s*)[^\s,;]+/gi, "$1[REDACTED]");
 }
 
+function monitorInvocation(record: unknown, command: unknown, args: unknown, ids: unknown) {
+  if (!object(record) || record.id !== monitorContract.workId || command !== "bun" || JSON.stringify(args) !== JSON.stringify([monitorContract.verifier]) || JSON.stringify(ids) !== '["AC-11"]') return false;
+  const criterion = criterionDefinitions(record).find(item => item.id === monitorContract.criterion);
+  return criterion?.required && criterion.description === monitorCriterion && JSON.stringify(criterion.requirementRefs) === '["docs/specs/chat.md#chat-activity-01"]';
+}
+
+function observedMonitorOutput(output: OutputSummary | undefined) {
+  const line = JSON.stringify(monitorContract.observations) + "\n";
+  return output?.digest === digest(line) && output.bytes === Buffer.byteLength(line) && output.truncated === false;
+}
+
 export async function verify({ repo, record, inputs, command, args = [], criterionIds, artifactPaths = [], run }: { repo?: string; record?: unknown; inputs?: unknown; command?: string; args?: string[]; criterionIds?: string[]; artifactPaths?: unknown; run?: VerificationRunner } = {}): Promise<VerificationAttempt> {
   if (typeof command !== "string" || !command.trim() || command.includes("\0") || !Array.isArray(args) || args.some((value) => typeof value !== "string" || value.includes("\0"))) throw new Error("실제 검증 명령과 문자열 인자가 필요합니다.");
   if (run !== undefined && typeof run !== "function") throw new Error("테스트 실행기는 함수여야 합니다.");
   const argv                 = [...args]                                        ;
   const covered              = coverage(record, criterionIds)                   ;
   const root                 = await fs.realpath(repo ?? process.cwd())         ;
-  const source               = await captureSource({ repo: root, inputs })      ;
+  const scoped = !run && monitorInvocation(record, command, args, covered);
+  const sourceInputs = scoped ? monitorInputs : inputs;
+  const source               = await captureSource({ repo: root, inputs: sourceInputs, scope: scoped ? "chat007-monitor" : undefined })      ;
   const artifacts            = await captureArtifacts(root, artifactPaths)      ;
   const criteria             = criteriaDigest(record)                           ;
   const executionEnvironment = await resolveExecutionEnvironment(root, command) ;
@@ -328,7 +345,7 @@ export async function verify({ repo, record, inputs, command, args = [], criteri
   }
   catch (error) { result = { code: null, signal: null, error: String(errorCode(error) ?? "runner_error") }; }
   let after: CapturedSource | null = null;
-  try { after = await captureSource({ repo: root, inputs }); }
+  try { after = await captureSource({ repo: root, inputs: sourceInputs, scope: scoped ? "chat007-monitor" : undefined }); }
   catch { /* 실행 후 입력을 읽을 수 없어도 실패 시도 자체는 보존한다. */ }
   const sourceStable                    = source.digest === after?.digest ;
   let artifactsAfter: Artifact[] | null = null                            ;
@@ -346,6 +363,7 @@ export async function verify({ repo, record, inputs, command, args = [], criteri
     startedAt                                ,
     completedAt  : new Date().toISOString()  ,
     source                                   ,
+    ...(scoped && observedMonitorOutput(result.output?.stdout) ? { monitorObservation: { version: 1 as const, declaredScopeDigest: digest(JSON.stringify(inputPaths(inputs))), values: structuredClone(monitorContract.observations) } } : {}),
     criteriaDigest    : criteria                                                                                                ,
     criteriaSnapshot  : criterionDefinitions(record)                                                                                     ,
     command           : redactArgument(executableCommand)                                                                       ,
@@ -358,6 +376,7 @@ export async function verify({ repo, record, inputs, command, args = [], criteri
     result       :    result?.code === 0
                   && !result.signal
                   && !result.error
+                  && (!scoped || observedMonitorOutput(result.output?.stdout))
                   &&  sourceStable
                   &&  artifactsStable
                   &&  environmentStable
@@ -386,6 +405,9 @@ function matchingCriterion(record: unknown, attempt: VerificationAttempt, criter
 }
 
 export function criterionEvidence(record: unknown, attempt: VerificationAttempt, criterionId: string, evaluation: EvidenceEvaluation): EvidenceEvaluation {
+  if (object(record) && record.id === monitorContract.workId && criterionId === monitorContract.criterion && !attempt.monitorObservation) {
+    return { usable: false, reasons: [...new Set([...evaluation.reasons, "monitor_observation_mismatch"])] };
+  }
   if (!Array.isArray(attempt.criterionIds) || !attempt.criterionIds.includes(criterionId)) {
     return { usable: false, reasons: [...new Set([...evaluation.reasons, "invalid_coverage"])] };
   }
@@ -396,7 +418,7 @@ export function criterionEvidence(record: unknown, attempt: VerificationAttempt,
 
 /** 읽기 전용 화면은 같은 판정에 한도와 경로 제한을 적용한 관측값을 제공한다. */
 export interface EvidenceObservations {
-  source(inputs: string[]): Promise<string>;
+  source(inputs: string[], scope?: "chat007-monitor"): Promise<string>;
   artifacts(paths: string[]): Promise<Artifact[]>;
   environment(command: string): Promise<ExecutionEnvironment>;
   observedEnvironment(observation: VerificationEnvironmentObservation): Promise<string>;
@@ -411,7 +433,16 @@ export async function evaluateEvidence({ repo, record, attempt, criterionId, obs
   catch { reasons.push("invalid_coverage"); }
   if (attempt.criteriaDigest !== criteriaDigest(record)) reasons.push("criteria_changed");
   try {
-    if (object(record) && object(record.workflow) && record.workflow.inputs && JSON.stringify(inputPaths(record.workflow.inputs)) !== JSON.stringify(inputPaths(attempt.source.inputs))) reasons.push("scope_changed");
+    if (attempt.monitorObservation !== undefined) {
+      const receipt = attempt.monitorObservation;
+      if (!receipt || receipt.version !== 1 || attempt.command !== attempt.environment?.executable?.path || !monitorInvocation(record, attempt.requestedCommand, attempt.args, attempt.criterionIds)
+        || JSON.stringify(attempt.source.inputs) !== JSON.stringify(monitorInputs) || !observedMonitorOutput(attempt.output?.stdout)
+        || JSON.stringify(receipt.values) !== JSON.stringify(monitorContract.observations)) reasons.push("monitor_observation_mismatch");
+      if (!object(record) || !object(record.workflow) || receipt?.declaredScopeDigest !== digest(JSON.stringify(inputPaths(record.workflow.inputs)))) reasons.push("scope_changed");
+    } else {
+      if (object(record) && record.id === monitorContract.workId && JSON.stringify(attempt.criterionIds) === '["AC-11"]') reasons.push("monitor_observation_mismatch");
+      if (object(record) && object(record.workflow) && record.workflow.inputs && JSON.stringify(inputPaths(record.workflow.inputs)) !== JSON.stringify(inputPaths(attempt.source.inputs))) reasons.push("scope_changed");
+    }
   } catch { reasons.push("invalid_attempt"); }
   const root = await fs.realpath(repo ?? process.cwd());
   const command = attempt.environment?.executable?.path ?? attempt.command;
@@ -433,7 +464,8 @@ export async function evaluateEvidence({ repo, record, attempt, criterionId, obs
     }
   }
   try {
-    const current = observations ? await observations.source(attempt.source.inputs) : (await captureSource({ repo, inputs: attempt.source.inputs })).digest;
+    const scope = attempt.monitorObservation ? "chat007-monitor" : undefined;
+    const current = observations ? await observations.source(attempt.source.inputs, scope) : (await captureSource({ repo, inputs: attempt.source.inputs, scope })).digest;
     if (current !== attempt.source.digest) reasons.push("source_changed");
   } catch { reasons.push("source_unavailable"); }
   if (attempt.artifacts !== undefined) {
@@ -471,6 +503,7 @@ export function renderAttempt(attempt: VerificationAttempt) {
     `- 검증 시도 결과: ${attempt.result === "passed" ? "통과" : "증거 불충족"}`,
     `- 실행기: ${attempt.executor === "process" ? "실제 자식 프로세스" : "테스트 주입 실행기 — 완료 증거로 사용하지 않음"}`,
     `- 관련 기준: ${attempt.criterionIds.map((id) => `\`${inline(id)}\``).join(", ")}`,
+    ...(attempt.monitorObservation ? [`- AC-11 화면 관찰값: \`${inline(JSON.stringify(attempt.monitorObservation.values))}\``] : []),
     `- 소스 HEAD: \`${attempt.source.head ?? "없음"}\``,
     `- 검증 입력: ${attempt.source.inputs.map((value) => `\`${inline(value)}\``).join(", ")}`,
     `- 소스 식별: \`${attempt.source.digest}\``,
@@ -609,7 +642,9 @@ export async function verifyInSession(session: VerificationSession, options: Par
         const latest = recorded.at(-1);
         if (object(latest) && latest.id !== candidate.attempt.id) reasons.push('newer_recorded_verification');
       }
-      const requestedSource = await captureSource({ repo: root, inputs: options.inputs });
+      const proof = candidate.attempt.monitorObservation;
+      if (proof && proof.declaredScopeDigest !== digest(JSON.stringify(inputPaths(options.inputs)))) reasons.push("requested_scope_changed");
+      const requestedSource = await captureSource({ repo: root, inputs: proof ? monitorInputs : options.inputs, scope: proof ? "chat007-monitor" : undefined });
       if (JSON.stringify(requestedSource.inputs) !== JSON.stringify(candidate.attempt.source.inputs)) reasons.push('requested_scope_changed');
       if (requestedSource.digest !== candidate.attempt.source.digest) reasons.push('source_changed');
       const evaluation = await evaluateEvidence({ repo: root, record: options.record, attempt: candidate.attempt });

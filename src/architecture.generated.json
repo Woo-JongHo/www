@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "38e73535b9562d8f21d2614da8efbf4c4c2bc4766e0f431ce1756b48cb5d984e",
+  "digest"       : "256c9eb5e584dd497ff8de9c9a295e405d604cb446e1be2db52d576c75f43774",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -48,8 +48,8 @@
       "layer"      : "tooling",
       "role"       : "앱 모듈 · build",
       "line"       : 1,
-      "lines"      : 47,
-      "digest"     : "0621a1e02a0330f2aa08b21825d069c8a432cf109787d71c5e77c20a7ba4ff9c",
+      "lines"      : 53,
+      "digest"     : "cb76259d687d196713832b03936002e91c092cc220d5d08d35f0321b7e4cc37b",
       "structureId": "arch.tooling.bundle"
     },
     {
@@ -213,8 +213,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · evidence",
       "line"       : 1,
-      "lines"      : 686,
-      "digest"     : "075ebdb23bd1034f86e125092597abd7af23fdf3df97f20d1bc9af919b437c2f",
+      "lines"      : 721,
+      "digest"     : "8db85b5fe10382cf5818ea104672685e71eac284889deaa3c4e06988dfcfb568",
       "structureId": "arch.development.evidence.verification"
     },
     {
@@ -433,8 +433,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · work",
       "line"       : 1,
-      "lines"      : 843,
-      "digest"     : "4a4c96b984a796978d749da689288e1097691521352a2fed132498add3723faa",
+      "lines"      : 848,
+      "digest"     : "90cf69218db68ab98126e0cb2708bf707e14a6a0d213f93aec3505395bf9b00c",
       "structureId": "arch.development.records.state"
     },
     {
@@ -609,8 +609,8 @@
       "layer"      : "host",
       "role"       : "앱 모듈 · dashboard-evidence",
       "line"       : 1,
-      "lines"      : 177,
-      "digest"     : "ebc0d24721eeece8af22878be82ba25fecd11ddc840bfcd23578a2bcdafd11bb",
+      "lines"      : 178,
+      "digest"     : "c517eeb16bef0c5939cff53d5c7469d7e3a15be1f153a531b1bc705bddd77960",
       "structureId": "arch.native.projects"
     },
     {
@@ -1364,14 +1364,14 @@
       "statement": "import { checkSourcePolicy } from \"../source-policy.ts\";"
     },
     {
-      "id"       : "scripts/workflow/evidence.ts:118",
+      "id"       : "scripts/workflow/evidence.ts:222",
       "from"     : "scripts/workflow/evidence.ts",
       "to"       : "scripts/workflow/timing.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./timing.ts",
-      "line"     : 5,
-      "endLine"  : 5,
+      "line"     : 6,
+      "endLine"  : 6,
       "statement": "import { observeTimedChild, timedPhase, timingEvent } from \"./timing.ts\";"
     },
     {
@@ -3756,6 +3756,12 @@
     {
       "file"     : "build.ts",
       "line"     : 8,
+      "specifier": "./scripts/verification/chat007-inputs.ts",
+      "reason"   : "outside-scope"
+    },
+    {
+      "file"     : "build.ts",
+      "line"     : 9,
       "specifier": "./scripts/release.ts",
       "reason"   : "outside-scope"
     },
@@ -4085,37 +4091,43 @@
     },
     {
       "file"     : "scripts/workflow/evidence.ts",
-      "line"     : 6,
+      "line"     : 5,
+      "specifier": "../verification/chat007-contract.ts",
+      "reason"   : "outside-scope"
+    },
+    {
+      "file"     : "scripts/workflow/evidence.ts",
+      "line"     : 7,
       "specifier": "node:crypto",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow/evidence.ts",
-      "line"     : 7,
+      "line"     : 8,
       "specifier": "node:child_process",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow/evidence.ts",
-      "line"     : 8,
+      "line"     : 9,
       "specifier": "node:fs",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow/evidence.ts",
-      "line"     : 9,
+      "line"     : 10,
       "specifier": "node:path",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow/evidence.ts",
-      "line"     : 10,
+      "line"     : 11,
       "specifier": "node:util",
       "reason"   : "external"
     },
     {
       "file"     : "scripts/workflow/evidence.ts",
-      "line"     : 544,
+      "line"     : 577,
       "specifier": "node:os",
       "reason"   : "external"
     },
@@ -7170,7 +7182,7 @@
         "line": 2
       }
     ],
-    "digest": "716361ab65b719ba0dac650f5b43f4ba545a5d8910dd258f1952ef59cbcfc575",
+    "digest": "2ff1f46aa0cb239c974e8bda2ae6830ad094958b603335e3e410c6b4781c090d",
     "statecharts": {
       "models": [
         {
@@ -7420,7 +7432,7 @@
         }
       ],
       "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-      "sourceDigest": "133bf06764f50d850e8c2abdbc738f2dde62797600660c4b3df21b0ecb6de4c8",
+      "sourceDigest": "166110fd5327bfffd2bec3a0d850e738fe24c8b150963b6ffa03d7797faeb50b",
       "sources": [
         {
           "file": "scripts/workflow/completion-report.ts",
@@ -7432,7 +7444,7 @@
         },
         {
           "file": "scripts/workflow/evidence.ts",
-          "digest": "075ebdb23bd1034f86e125092597abd7af23fdf3df97f20d1bc9af919b437c2f"
+          "digest": "8db85b5fe10382cf5818ea104672685e71eac284889deaa3c4e06988dfcfb568"
         },
         {
           "file": "scripts/workflow/review.ts",
@@ -7448,7 +7460,7 @@
         },
         {
           "file": "scripts/workflow/work.ts",
-          "digest": "4a4c96b984a796978d749da689288e1097691521352a2fed132498add3723faa"
+          "digest": "90cf69218db68ab98126e0cb2708bf707e14a6a0d213f93aec3505395bf9b00c"
         },
         {
           "file": "test/workflow-completion-faults.test.ts",
@@ -7722,7 +7734,7 @@
       }
     ],
     "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-    "sourceDigest": "133bf06764f50d850e8c2abdbc738f2dde62797600660c4b3df21b0ecb6de4c8",
+    "sourceDigest": "166110fd5327bfffd2bec3a0d850e738fe24c8b150963b6ffa03d7797faeb50b",
     "sources": [
       {
         "file": "scripts/workflow/completion-report.ts",
@@ -7734,7 +7746,7 @@
       },
       {
         "file": "scripts/workflow/evidence.ts",
-        "digest": "075ebdb23bd1034f86e125092597abd7af23fdf3df97f20d1bc9af919b437c2f"
+        "digest": "8db85b5fe10382cf5818ea104672685e71eac284889deaa3c4e06988dfcfb568"
       },
       {
         "file": "scripts/workflow/review.ts",
@@ -7750,7 +7762,7 @@
       },
       {
         "file": "scripts/workflow/work.ts",
-        "digest": "4a4c96b984a796978d749da689288e1097691521352a2fed132498add3723faa"
+        "digest": "90cf69218db68ab98126e0cb2708bf707e14a6a0d213f93aec3505395bf9b00c"
       },
       {
         "file": "test/workflow-completion-faults.test.ts",
