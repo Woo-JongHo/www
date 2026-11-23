@@ -3419,6 +3419,743 @@
         "sourceDigest"  : "208e29d534dcb967220e6be9d134c94aabfad6574e03b1a5437c36999c5a4e12",
         "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
       }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-7e89c7dd-908a-40cd-86cb-56c49ad06feb",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "대시보드 12건의 마감 이력과 현재 결합 후보 판정을 같은 칸반에서 확인할 수 있다. 일곱 작업의 첫 마감 뒤 번역 마감으로 완료 이력은 8/12가 됐다. 나머지 네 작업의 후속은 #25~#28에 열려 있다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-23T23:25:18.823Z",
+      "event"         : "finish",
+      "workRecordHash": "1b0a5780dec120b370c3e5a6c37bbbbc925d54af8504fcc570f9fae518d56567",
+      "sourceDigest"  : "fa1e858b4265091528c84b1737123adce2ff41d86d318f13cd5767be7fd8fa1d",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "7225888c7ac2e3924e27de1c8fc32e2fc07dbe214771a9f90deb17e2eef502b5",
+      "narrative": {
+        "summary": "대시보드 12건의 마감 이력과 현재 결합 후보 판정을 같은 칸반에서 확인할 수 있다. 일곱 작업의 첫 마감 뒤 번역 마감으로 완료 이력은 8/12가 됐다. 나머지 네 작업의 후속은 #25~#28에 열려 있다.",
+        "before" : "완료 보고서와 공개 원장 상태가 일부 달랐고 세션 원장의 작업 간 연결에 Workflow/023·024가 빠져 있었다. 최근 계획보다 11월 16일 이전 계획이 먼저 표시됐다.",
+        "after"  : "칸반 계획에서 12개 UUID의 저장 상태·필수 기준 수·현행 유효 수·담당과 다음 행동을 조회한다. 기존 관계 18개도 보존했고 최종 결합 후보 8ca894c의 원장과 보고서 원문 SHA-256을 확인했다.",
+        "changes": [
+          "#41의 일곱 완료 기록과 #37의 번역 완료를 원래 UUID로 연결했다.",
+          "Workflow/023·024를 원장 관계에 추가하고 공식 하네스와 칸반 상세의 세션 계획을 연결했다.",
+          "검증 문서에 12개 원장·보고서 원문 지문과 부분 확인한 사용자 여정, 확인하지 못한 조건을 기록했다."
+        ],
+        "decisions": [
+          "결합 전 집중 검사와 공용 renderer 변경에 따른 AC-11 새 검사, 실제 Mac 사용자 입력과 합성 Native를 구분했다.",
+          "Chat/007은 저장된 10/12 중 공용 변경 후 실제 Electron 검증을 갱신한 AC-11 한 건만 현행 유효하다. Workflow/005는 4/4가 현재 수용된다."
+        ],
+        "limitations": [
+          "#26의 과거 122.414초 지연 원인은 당시 IPC·프레임 구간이 없어 미확정이다. 현재 계측 순번 복구와 그 원인은 따로 추적한다.",
+          "#25·#28 Windows 물리 입력은 사용자 시험 대기다. #27은 표시 창 스트리밍 입력 개선을 기록했고 대기·스크롤 개선과 IME·Steer·탭 격리는 미확인이다."
+        ],
+        "next": [
+          "#25·#28에서 Windows 두벌식 마지막 가의 일반 Enter 1회 전송·Shift 줄바꿈을 확인한다.",
+          "#26은 원래 시간 구간을 연결하는 자료, #27은 미검증 사용자 여정을 확보해 개별 기준을 갱신한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-f27c0c3e-e500-43b1-b01c-a4a4491f4c02",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-018d2a9e-7107-4c4b-9b0f-9ef408981057",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-bc82c736-adb6-4c09-a1c0-128998e24fb3",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-f27c0c3e-e500-43b1-b01c-a4a4491f4c02",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:23:27.569Z"
+          },
+          {
+            "id": "attempt-018d2a9e-7107-4c4b-9b0f-9ef408981057",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:24:01.689Z"
+          },
+          {
+            "id": "attempt-bc82c736-adb6-4c09-a1c0-128998e24fb3",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:24:53.885Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "1b0a5780dec120b370c3e5a6c37bbbbc925d54af8504fcc570f9fae518d56567",
+        "sourceDigest"  : "fa1e858b4265091528c84b1737123adce2ff41d86d318f13cd5767be7fd8fa1d",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-2c65be29-a82c-4601-a919-177d53cb6ead",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "대시보드 12건의 마감 이력과 현재 결합 후보 판정을 같은 칸반에서 확인할 수 있다. 일곱 작업의 첫 마감 뒤 번역 마감으로 완료 이력은 8/12가 됐다. 나머지 네 작업의 후속은 #25~#28에 열려 있다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-23T23:26:17.602Z",
+      "event"         : "finish",
+      "workRecordHash": "1b0a5780dec120b370c3e5a6c37bbbbc925d54af8504fcc570f9fae518d56567",
+      "sourceDigest"  : "fa1e858b4265091528c84b1737123adce2ff41d86d318f13cd5767be7fd8fa1d",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "f99d7c2bb9793bb62fabb4822a41c4f83516ff8f952becf88663d21dd30f6ffc",
+      "narrative": {
+        "summary": "대시보드 12건의 마감 이력과 현재 결합 후보 판정을 같은 칸반에서 확인할 수 있다. 일곱 작업의 첫 마감 뒤 번역 마감으로 완료 이력은 8/12가 됐다. 나머지 네 작업의 후속은 #25~#28에 열려 있다.",
+        "before" : "완료 보고서와 공개 원장 상태가 일부 달랐고 세션 원장의 작업 간 연결에 Workflow/023·024가 빠져 있었다. 최근 계획보다 11월 16일 이전 계획이 먼저 표시됐다.",
+        "after"  : "칸반 계획에서 12개 UUID의 저장 상태·필수 기준 수·현행 유효 수·담당과 다음 행동을 조회한다. 기존 관계 18개도 보존했고 최종 결합 후보 8ca894c의 원장과 보고서 원문 SHA-256을 확인했다.",
+        "changes": [
+          "#41의 일곱 완료 기록과 #37의 번역 완료를 원래 UUID로 연결했다.",
+          "Workflow/023·024를 원장 관계에 추가하고 공식 하네스와 칸반 상세의 세션 계획을 연결했다.",
+          "검증 문서에 12개 원장·보고서 원문 지문과 부분 확인한 사용자 여정, 확인하지 못한 조건을 기록했다."
+        ],
+        "decisions": [
+          "결합 전 집중 검사와 공용 renderer 변경에 따른 AC-11 새 검사, 실제 Mac 사용자 입력과 합성 Native를 구분했다.",
+          "Chat/007은 저장된 10/12 중 공용 변경 후 실제 Electron 검증을 갱신한 AC-11 한 건만 현행 유효하다. Workflow/005는 공식 하네스에서 4/4다. 칸반 상세는 실행 파일 확인 범위 때문에 2/4만 현재 유효, AC-1·4는 미평가로 표시한다."
+        ],
+        "limitations": [
+          "#26의 과거 122.414초 지연 원인은 당시 IPC·프레임 구간이 없어 미확정이다. 현재 계측 순번 복구와 그 원인은 따로 추적한다.",
+          "#25·#28 Windows 물리 입력은 사용자 시험 대기다. #27은 표시 창 스트리밍 입력 개선을 기록했고 대기·스크롤 개선과 IME·Steer·탭 격리는 미확인이다."
+        ],
+        "next": [
+          "#25·#28에서 Windows 두벌식 마지막 가의 일반 Enter 1회 전송·Shift 줄바꿈을 확인한다.",
+          "#26은 원래 시간 구간을 연결하는 자료, #27은 미검증 사용자 여정을 확보해 개별 기준을 갱신한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-f27c0c3e-e500-43b1-b01c-a4a4491f4c02",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-018d2a9e-7107-4c4b-9b0f-9ef408981057",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-bc82c736-adb6-4c09-a1c0-128998e24fb3",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-f27c0c3e-e500-43b1-b01c-a4a4491f4c02",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:23:27.569Z"
+          },
+          {
+            "id": "attempt-018d2a9e-7107-4c4b-9b0f-9ef408981057",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:24:01.689Z"
+          },
+          {
+            "id": "attempt-bc82c736-adb6-4c09-a1c0-128998e24fb3",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:24:53.885Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "1b0a5780dec120b370c3e5a6c37bbbbc925d54af8504fcc570f9fae518d56567",
+        "sourceDigest"  : "fa1e858b4265091528c84b1737123adce2ff41d86d318f13cd5767be7fd8fa1d",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-44820ac2-c5a6-46a7-b291-638f1bdfe5be",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "대시보드 12건의 마감 이력과 현재 결합 후보 판정을 같은 칸반에서 확인할 수 있다. 일곱 작업의 첫 마감 뒤 번역 마감으로 완료 이력은 8/12가 됐다. 결합 PR #47의 전체 CI가 통과했고 검증한 트리 0d5c08e가 main에 병합됐다. 나머지 네 작업의 후속은 #25~#28에 열려 있다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-23T23:32:41.015Z",
+      "event"         : "finish",
+      "workRecordHash": "595cf5d467fd91ed94b295679c5d1c76cc7b1fe28654b01d27d67a461f394b9f",
+      "sourceDigest"  : "fa1e858b4265091528c84b1737123adce2ff41d86d318f13cd5767be7fd8fa1d",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "c04fd03fe7e62aa044c2b37a6a862fa9af24ba5b783e706e1cde85b534197f33",
+      "narrative": {
+        "summary": "대시보드 12건의 마감 이력과 현재 결합 후보 판정을 같은 칸반에서 확인할 수 있다. 일곱 작업의 첫 마감 뒤 번역 마감으로 완료 이력은 8/12가 됐다. 결합 PR #47의 전체 CI가 통과했고 검증한 트리 0d5c08e가 main에 병합됐다. 나머지 네 작업의 후속은 #25~#28에 열려 있다.",
+        "before" : "완료 보고서와 공개 원장 상태가 일부 달랐고 세션 원장의 작업 간 연결에 Workflow/023·024가 빠져 있었다. 최근 계획보다 11월 16일 이전 계획이 먼저 표시됐다.",
+        "after"  : "칸반 계획에서 12개 UUID의 저장 상태·필수 기준 수·현행 유효 수·담당과 다음 행동을 조회한다. 기존 관계 18개도 보존했고 최종 결합 후보 8ca894c의 원장과 보고서 원문 SHA-256을 확인했다.",
+        "changes": [
+          "#41의 일곱 완료 기록과 #37의 번역 완료를 원래 UUID로 연결했다.",
+          "Workflow/023·024를 원장 관계에 추가하고 공식 하네스와 칸반 상세의 세션 계획을 연결했다.",
+          "검증 문서에 12개 원장·보고서 원문 지문과 부분 확인한 사용자 여정, 확인하지 못한 조건을 기록했다."
+        ],
+        "decisions": [
+          "결합 전 집중 검사와 공용 renderer 변경에 따른 AC-11 새 검사, 실제 Mac 사용자 입력과 합성 Native를 구분했다.",
+          "Chat/007은 저장된 10/12 중 공용 변경 후 실제 Electron 검증을 갱신한 AC-11 한 건만 현행 유효하다. Workflow/005는 공식 하네스에서 4/4다. 칸반 상세는 실행 파일 확인 범위 때문에 2/4만 현재 유효, AC-1·4는 미평가로 표시한다."
+        ],
+        "limitations": [
+          "#26의 과거 122.414초 지연 원인은 당시 IPC·프레임 구간이 없어 미확정이다. 현재 계측 순번 복구와 그 원인은 따로 추적한다.",
+          "#25·#28 Windows 물리 입력은 사용자 시험 대기다. #27은 표시 창 스트리밍 입력 개선을 기록했고 대기·스크롤 개선과 IME·Steer·탭 격리는 미확인이다."
+        ],
+        "next": [
+          "#25·#28에서 Windows 두벌식 마지막 가의 일반 Enter 1회 전송·Shift 줄바꿈을 확인한다.",
+          "#26은 원래 시간 구간을 연결하는 자료, #27은 미검증 사용자 여정을 확보해 개별 기준을 갱신한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-f27c0c3e-e500-43b1-b01c-a4a4491f4c02",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-018d2a9e-7107-4c4b-9b0f-9ef408981057",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-bc82c736-adb6-4c09-a1c0-128998e24fb3",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-b14ac4d2-231e-4753-973f-d09a13811f26",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-c7695c6a-e91b-474c-b19f-32eba4fc5eb6",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-f27c0c3e-e500-43b1-b01c-a4a4491f4c02",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:23:27.569Z"
+          },
+          {
+            "id": "attempt-018d2a9e-7107-4c4b-9b0f-9ef408981057",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:24:01.689Z"
+          },
+          {
+            "id": "attempt-bc82c736-adb6-4c09-a1c0-128998e24fb3",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:24:53.885Z"
+          },
+          {
+            "id": "attempt-b14ac4d2-231e-4753-973f-d09a13811f26",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:31:33.758Z"
+          },
+          {
+            "id": "attempt-c7695c6a-e91b-474c-b19f-32eba4fc5eb6",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";import {execFileSync} from \"node:child_process\";import {createHash} from \"node:crypto\";\nconst sha=\"8ca894c94b4f3b0b2280e9a798c6d0b620f77391\",runId=\"45288478553\",jobId=\"138091082985\",repo=\"Woo-JongHo/www\";\nconst git=(...args)=>execFileSync(\"git\",args,{encoding:\"utf8\"}).trim(),api=p=>JSON.parse(execFileSync(\"gh\",[\"api\",\"repos/\"+repo+\"/\"+p],{encoding:\"utf8\"}));\nconst run=api(\"actions/runs/\"+runId),job=api(\"actions/jobs/\"+jobId);assert.equal(run.head_sha,sha);assert.equal(job.run_id,Number(runId));assert.equal(job.name,\"validate\");assert.equal(job.conclusion,\"success\");assert.equal(job.steps.find(s=>s.name===\"체크아웃 검증 및 필요한 패키징\")?.conclusion,\"success\");\nfor(const part of [\"src\",\"test\",\"scripts\",\"package.json\",\".github/workflows/ci.yml\"]){assert.equal(git(\"rev-parse\",\"HEAD:\"+part),git(\"rev-parse\",sha+\":\"+part));}\nconst log=execFileSync(\"gh\",[\"run\",\"view\",runId,\"--repo\",repo,\"--job\",jobId,\"--log\"],{maxBuffer:32*1024*1024,encoding:\"utf8\"});const markers=[...log.matchAll(/WWW_VERIFIED_TREE ([0-9a-f]{40}) ([0-9a-f]{40}) ([0-9a-f]{40}) ([0-9a-f]{40})/g)];assert(markers.some(m=>m[2]===git(\"rev-parse\",sha+\"^{tree}\")&&m[4]===sha));for(const stage of [\"check:architecture\",\"check:source\",\"typecheck\",\"test\",\"build\"]){assert(log.includes(\" \"+stage),stage);}\nconsole.log(JSON.stringify({head:sha,tree:git(\"rev-parse\",sha+\"^{tree}\"),runId,jobId,started:job.started_at,finished:job.completed_at,logSha256:createHash(\"sha256\").update(log).digest(\"hex\")}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:32:28.447Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "595cf5d467fd91ed94b295679c5d1c76cc7b1fe28654b01d27d67a461f394b9f",
+        "sourceDigest"  : "fa1e858b4265091528c84b1737123adce2ff41d86d318f13cd5767be7fd8fa1d",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-e4bbfce1-cc54-4aeb-9994-5588ae7f4be1",
+      "workId"        : "work-40ae2dc5-86db-4b52-b1fc-09ca61c58898",
+      "title"         : "누적 요구사항 사용성 개선과 병렬 통합 검증",
+      "summary"       : "대시보드 12건의 마감 이력과 현재 결합 후보 판정을 같은 칸반에서 확인할 수 있다. 일곱 작업의 첫 마감 뒤 번역 마감으로 완료 이력은 8/12가 됐다. 결합 PR #47의 전체 CI가 통과했고 검증한 트리 0d5c08e가 main에 병합됐다. 나머지 네 작업의 후속은 #25~#28에 열려 있다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-23T23:33:18.620Z",
+      "event"         : "finish",
+      "workRecordHash": "9d574db1cc663408789f45fa8cdc0ca78bd19e33996e8c5e8546821d266ca000",
+      "sourceDigest"  : "fa1e858b4265091528c84b1737123adce2ff41d86d318f13cd5767be7fd8fa1d",
+      "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed",
+      "semanticHash"  : "1b2bc2e30020256298b6aac1785e395bc055a7752bf7b6ba28c39e383f1e88c7",
+      "narrative": {
+        "summary": "대시보드 12건의 마감 이력과 현재 결합 후보 판정을 같은 칸반에서 확인할 수 있다. 일곱 작업의 첫 마감 뒤 번역 마감으로 완료 이력은 8/12가 됐다. 결합 PR #47의 전체 CI가 통과했고 검증한 트리 0d5c08e가 main에 병합됐다. 나머지 네 작업의 후속은 #25~#28에 열려 있다.",
+        "before" : "완료 보고서와 공개 원장 상태가 일부 달랐고 세션 원장의 작업 간 연결에 Workflow/023·024가 빠져 있었다. 최근 계획보다 11월 16일 이전 계획이 먼저 표시됐다.",
+        "after"  : "칸반 계획에서 12개 UUID의 저장 상태·필수 기준 수·현행 유효 수·담당과 다음 행동을 조회한다. 기존 관계 18개도 보존했고 최종 결합 후보 8ca894c의 원장과 보고서 원문 SHA-256을 확인했다.",
+        "changes": [
+          "#41의 일곱 완료 기록과 #37의 번역 완료를 원래 UUID로 연결했다.",
+          "Workflow/023·024를 원장 관계에 추가하고 공식 하네스와 칸반 상세의 세션 계획을 연결했다.",
+          "검증 문서에 12개 원장·보고서 원문 지문과 부분 확인한 사용자 여정, 확인하지 못한 조건을 기록했다."
+        ],
+        "decisions": [
+          "결합 전 집중 검사와 공용 renderer 변경에 따른 AC-11 새 검사, 실제 Mac 사용자 입력과 합성 Native를 구분했다.",
+          "Chat/007은 저장된 10/12 중 공용 변경 후 실제 Electron 검증을 갱신한 AC-11 한 건만 현행 유효하다. Workflow/005는 공식 하네스에서 4/4다. 칸반 상세는 실행 파일 확인 범위 때문에 2/4만 현재 유효, AC-1·4는 미평가로 표시한다."
+        ],
+        "limitations": [
+          "#26의 과거 122.414초 지연 원인은 당시 IPC·프레임 구간이 없어 미확정이다. 현재 계측 순번 복구와 그 원인은 따로 추적한다.",
+          "#25·#28 Windows 물리 입력은 사용자 시험 대기다. #27은 표시 창 스트리밍 입력 개선을 기록했고 대기·스크롤 개선과 IME·Steer·탭 격리는 미확인이다."
+        ],
+        "next": [
+          "#25·#28에서 Windows 두벌식 마지막 가의 일반 Enter 1회 전송·Shift 줄바꿈을 확인한다.",
+          "#26은 원래 시간 구간을 연결하는 자료, #27은 미검증 사용자 여정을 확보해 개별 기준을 갱신한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "SESSION-PLAN",
+            "description": "기존 미완료 작업 UUID와 사용자 우려를 누락 없이 연결하고 단위별 소유·제외 파일, 의존성, 모델, 검증 방법을 실행 계획과 칸반 원장에 기록한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-f27c0c3e-e500-43b1-b01c-a4a4491f4c02",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-018d2a9e-7107-4c4b-9b0f-9ef408981057",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-bc82c736-adb6-4c09-a1c0-128998e24fb3",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-b14ac4d2-231e-4753-973f-d09a13811f26",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "SESSION-INTEGRATION",
+            "description": "독립 작업은 병렬 수행하고 공유 파일은 단일 소유자로 통합한다. 실제 저작 호출과 주입 하네스를 구분하며 현재 통합 소스의 타입·소스 정책·구조·집중 테스트·빌드 결과를 기록한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-c7695c6a-e91b-474c-b19f-32eba4fc5eb6",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "SESSION-USABILITY",
+            "description": "명세의 실제 사용자 여정을 화면·API·기록·재조회·복귀까지 검사하고 정상·빈 자료·실패·중단·복원·경합 및 미실행 환경을 구분한다. 작업별 증거와 독립 검토가 충족된 경우만 해당 업무를 완료한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "SESSION-CLOSEOUT",
+            "description": "관련 작업별 현재 완료 여부·차단·남은 행동을 칸반과 보고서로 읽을 수 있게 남긴다. 실제 플랫폼·모델·검토 미실행은 완료로 바꾸지 않으며 저장소 최종 검사와 게시 여부를 구분한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-2cffa84a-3613-43d7-8ae0-4ae95ceba018",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-f27c0c3e-e500-43b1-b01c-a4a4491f4c02",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:23:27.569Z"
+          },
+          {
+            "id": "attempt-018d2a9e-7107-4c4b-9b0f-9ef408981057",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:24:01.689Z"
+          },
+          {
+            "id": "attempt-bc82c736-adb6-4c09-a1c0-128998e24fb3",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:24:53.885Z"
+          },
+          {
+            "id": "attempt-b14ac4d2-231e-4753-973f-d09a13811f26",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:31:33.758Z"
+          },
+          {
+            "id": "attempt-c7695c6a-e91b-474c-b19f-32eba4fc5eb6",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";import {execFileSync} from \"node:child_process\";import {createHash} from \"node:crypto\";\nconst sha=\"8ca894c94b4f3b0b2280e9a798c6d0b620f77391\",runId=\"45288478553\",jobId=\"138091082985\",repo=\"Woo-JongHo/www\";\nconst git=(...args)=>execFileSync(\"git\",args,{encoding:\"utf8\"}).trim(),api=p=>JSON.parse(execFileSync(\"gh\",[\"api\",\"repos/\"+repo+\"/\"+p],{encoding:\"utf8\"}));\nconst run=api(\"actions/runs/\"+runId),job=api(\"actions/jobs/\"+jobId);assert.equal(run.head_sha,sha);assert.equal(job.run_id,Number(runId));assert.equal(job.name,\"validate\");assert.equal(job.conclusion,\"success\");assert.equal(job.steps.find(s=>s.name===\"체크아웃 검증 및 필요한 패키징\")?.conclusion,\"success\");\nfor(const part of [\"src\",\"test\",\"scripts\",\"package.json\",\".github/workflows/ci.yml\"]){assert.equal(git(\"rev-parse\",\"HEAD:\"+part),git(\"rev-parse\",sha+\":\"+part));}\nconst log=execFileSync(\"gh\",[\"run\",\"view\",runId,\"--repo\",repo,\"--job\",jobId,\"--log\"],{maxBuffer:32*1024*1024,encoding:\"utf8\"});const markers=[...log.matchAll(/WWW_VERIFIED_TREE ([0-9a-f]{40}) ([0-9a-f]{40}) ([0-9a-f]{40}) ([0-9a-f]{40})/g)];assert(markers.some(m=>m[2]===git(\"rev-parse\",sha+\"^{tree}\")&&m[4]===sha));for(const stage of [\"check:architecture\",\"check:source\",\"typecheck\",\"test\",\"build\"]){assert(log.includes(\" \"+stage),stage);}\nconsole.log(JSON.stringify({head:sha,tree:git(\"rev-parse\",sha+\"^{tree}\"),runId,jobId,started:job.started_at,finished:job.completed_at,logSha256:createHash(\"sha256\").update(log).digest(\"hex\")}));\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:32:28.447Z"
+          },
+          {
+            "id": "attempt-2cffa84a-3613-43d7-8ae0-4ae95ceba018",
+            "command": "bun",
+            "args": [
+              "-e",
+              "import assert from \"node:assert/strict\";import fs from \"node:fs\";import path from \"node:path\";import {createHash} from \"node:crypto\";import {readDashboardWork} from \"./src/dashboard.ts\";import {assessWork} from \"./scripts/workflow/work.ts\";\nconst root=process.cwd(),project={key:\"www\",path:root,name:\"WWW\",kind:\"www\"},sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst detail=await readDashboardWork([project],project.key,sessionId),task=detail.documents.find(x=>x.kind===\"tasks\").content,proof=detail.documents.find(x=>x.kind===\"verification\").content;\nconst hash=b=>createHash(\"sha256\").update(b).digest(\"hex\");\nconst listed=task.split(\"\\n\").filter(s=>s.includes(\"| `work-\")&&s.split(\"|\").length===8);\nassert.equal(listed.length,12);let done=0;\nfor(const line of listed){const cells=line.split(\"|\").map(x=>x.trim());const id=cells[2].replaceAll(\"`\",\"\");const a=await assessWork({repo:root,workId:id});const d=await readDashboardWork([project],project.key,id);const req=d.criteria.filter(c=>c.required),stored=req.filter(x=>x.result===\"passed\").length,valid=req.filter(x=>x.applicability?.status===\"current\").length;const applicable=a.criteria.filter(c=>c.usable&&req.some(r=>r.id===c.id));for(const c of applicable){const ui=req.find(x=>x.id===c.id)?.applicability;if(ui?.status===\"current\")continue;assert.equal(id,\"work-f40cbde5-04ba-4e0a-9c8b-e604be629328\");assert([\"AC-1\",\"AC-4\"].includes(c.id));assert.equal(ui?.status,\"unassessed\");assert(ui?.reasons.includes(\"실행 파일 확인 범위 밖\"));}for(const c of req.filter(x=>x.applicability?.status===\"current\"))assert(applicable.some(x=>x.id===c.id));assert.equal(cells[3],d.status);assert.equal(cells[4],stored+\"/\"+req.length);assert.equal(cells[5],applicable.length+\"/\"+req.length);assert(cells[6].length>0);assert(proof.includes(hash(fs.readFileSync(d.sourcePath))));const reportDir=path.join(path.dirname(d.sourcePath),\"reports\");const reports=fs.readdirSync(reportDir).filter(p=>p.endsWith(\".json\"));assert.equal(reports.length,1);assert(proof.includes(hash(fs.readFileSync(path.join(reportDir,reports[0])))));if(d.status===\"done\")done++;}\nassert.equal(done,8);assert(proof.includes(\"122.414초\"));assert(proof.includes(\"Windows\"));console.log(JSON.stringify({checked:listed.length,historicalDone:done,explicitDashboardLimits:[\"Workflow/005 AC-1\",\"Workflow/005 AC-4\"]}));\n\nconst sessionReportDir=path.join(path.dirname(detail.sourcePath),\"reports\");\nconst reports=fs.readdirSync(sessionReportDir).filter(p=>p.endsWith(\".json\"));\nconst entry=JSON.parse(fs.readFileSync(path.join(sessionReportDir,reports[0]),\"utf8\")).entries.at(-1);\nconst narrative=JSON.stringify(entry.narrative);for(const term of [\"8/12\",\"122.414초\",\"Windows\",\"2/4\"])assert(narrative.includes(term),term);\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:32:59.814Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-ef85f115-1120-4ef4-b7cc-d4acb198fe67",
+            "verdict"    : "not_run",
+            "model"      : null,
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-ef85f115-1120-4ef4-b7cc-d4acb198fe67/opus.json",
+            "findings": []
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/work.json",
+        "workRecordHash": "9d574db1cc663408789f45fa8cdc0ca78bd19e33996e8c5e8546821d266ca000",
+        "sourceDigest"  : "fa1e858b4265091528c84b1737123adce2ff41d86d318f13cd5767be7fd8fa1d",
+        "criteriaDigest": "5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed"
+      }
     }
   ]
 }
