@@ -7,7 +7,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { validateWritePaths } from "./preflight.ts";
 import { evaluateEvidence, type VerificationAttempt } from "./evidence.ts";
-import type { CurrentWorkRecord } from "./types.ts";
+import { currentVerifications, latestVerificationGroup, type CurrentWorkRecord } from "./types.ts";
 import { readRuntime, runtimePaths } from "./record.ts";
 
 export interface DecompositionUnit {
@@ -181,11 +181,13 @@ export function validateWorkDecomposition(repo: string, record: CurrentWorkRecor
 export function decompositionDigest(plan: DecompositionPlan): string { return createHash("sha256").update(JSON.stringify(plan)).digest("hex"); }
 
 /** 호스트 종료와 업무 수용을 분리하고 기존 실제 검증/현재성 판정을 그대로 사용한다. */
-export async function assessUnitAcceptance({ repo, record, unit: item, host, executor, attempt }: { repo: string; record: CurrentWorkRecord; unit: DecompositionUnit; host: { ok?: unknown; outcome?: unknown }; executor: "process" | "injected"; attempt?: VerificationAttempt }): Promise<UnitAcceptance> {
+export async function assessUnitAcceptance({ repo, record, unit: item, host, executor, attempt, hostCompletedAt }: { repo: string; record: CurrentWorkRecord; unit: DecompositionUnit; host: { ok?: unknown; outcome?: unknown }; executor: "process" | "injected"; attempt?: VerificationAttempt; hostCompletedAt?: unknown }): Promise<UnitAcceptance> {
   const reasons: string[] = [];
   if (host.ok !== true || host.outcome !== "passed") reasons.push("host_failed");
   if (executor !== "process") reasons.push("injected_host");
-  if (!attempt) reasons.push("verification_not_run");
+  if (!attempt || (hostCompletedAt !== undefined && !(typeof hostCompletedAt === "string" && Date.parse(attempt.startedAt) > Date.parse(hostCompletedAt)))) {
+    reasons.push("verification_not_run");
+  }
   else {
     if (attempt.requestedCommand !== item.verification.command || JSON.stringify(attempt.args) !== JSON.stringify(item.verification.args)) reasons.push("verification_command_changed");
     if (!item.criterionIds.every(id => attempt.criterionIds.includes(id))) reasons.push("criterion_coverage_missing");
@@ -203,6 +205,8 @@ export async function assessDecompositionCompletion(repo: string, record: Curren
   try {
     const plan = await validateWorkDecomposition(repo, record, record.workflow.decomposition);
     const { events } = await readRuntime(runtimePaths(repo, record.id));
+    const continuation = record.workflow.continuations?.at(-1);
+    const verifications = currentVerifications(record.workflow.verifications, continuation);
     for (const item of plan.units) {
       if (requiredTaskIds && !requiredTaskIds.includes(item.taskId)) continue;
       const start = events.filter(event => event.type === "status" && event.status === "running" && object(event.allocation) && event.allocation.taskId === item.taskId).at(-1);
@@ -219,12 +223,28 @@ export async function assessDecompositionCompletion(repo: string, record: Curren
       if (!object(receipt) || receipt.eventId !== start.id || receipt.workId !== record.id || !object(receipt.host) || !object(receipt.modelExecution)
         || JSON.stringify(receipt.modelExecution.allocation) !== JSON.stringify(start.allocation) || completion.taskId !== item.taskId
         || completion.outcome !== receipt.host.outcome || (receipt.host.ok ? "host_result" : "post_failure") !== completion.type) throw new Error(`${item.taskId}: unit_receipt_invalid`);
-      const evaluation = await assessUnitAcceptance({ repo, record, unit: item, host: receipt.host,
-        executor: receipt.modelExecution.executor === "process" ? "process" : "injected", attempt: record.workflow.verifications.filter(attempt =>
-          typeof completion.recordedAt === "string" && Date.parse(attempt.startedAt) >= Date.parse(completion.recordedAt)
-          && attempt.requestedCommand === item.verification.command && JSON.stringify(attempt.args) === JSON.stringify(item.verification.args)
-          && item.criterionIds.every(id => attempt.criterionIds.includes(id))).at(-1) });
-      reasons.push(...evaluation.reasons.map(reason => `${item.taskId}: ${reason}`));
+      if (continuation && (receipt.workRequestId !== record.workflow.requestId || receipt.workRequestHash !== record.workflow.requestHash)) {
+        reasons.push(item.taskId + ": unit_request_changed");
+        continue;
+      }
+      const matching = verifications.filter(attempt => attempt.requestedCommand === item.verification.command
+        && JSON.stringify(attempt.args) === JSON.stringify(item.verification.args)
+        && attempt.artifacts?.some(artifact => artifact.path === item.resultPath));
+      const latestByCriterion = new Map<VerificationAttempt | undefined, string[]>();
+      for (const id of item.criterionIds) {
+        const latest = latestVerificationGroup(matching.filter(candidate => candidate.criterionIds.includes(id)));
+        for (const attempt of latest.length ? latest : [undefined]) {
+          const group = latestByCriterion.get(attempt) ?? [];
+          latestByCriterion.set(attempt, [...group, id]);
+        }
+      }
+      const unitReasons = new Set<string>();
+      for (const [attempt, criterionIds] of latestByCriterion) {
+        const evaluation = await assessUnitAcceptance({ repo, record, unit: { ...item, criterionIds }, host: receipt.host,
+          executor: receipt.modelExecution.executor === "process" ? "process" : "injected", hostCompletedAt: completion.recordedAt ?? null, attempt });
+        for (const reason of evaluation.reasons) unitReasons.add(reason);
+      }
+      reasons.push(...[...unitReasons].map(reason => `${item.taskId}: ${reason}`));
     }
   } catch (error) { reasons.push(error instanceof Error ? error.message : String(error)); }
   return { usable: reasons.length === 0, reasons };

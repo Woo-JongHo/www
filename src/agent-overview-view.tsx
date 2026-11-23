@@ -28,11 +28,18 @@ const agentStates = {
 const declarationStates = {
   selected: "선택 선언", running: "진행 선언", completed: "완료 선언", failed: "실패 선언", interrupted: "중단 선언",
 };
+const planDocumentStates = {
+  available: "연결 당시 문서",
+  missing: "계획 문서 없음",
+  failed: "계획 문서 읽기 실패",
+  changed: "문서 버전 변경 · 다시 연결 필요",
+};
 
 export function AgentOverviewView({ projection, sending }: { projection: AgentOverviewProjection; sending: boolean }) {
   const current = sending ? null : projection.current;
   const selected = sending ? null : projection.selectedSkillId;
   const plan = current ? projection.plan : [];
+  const planDocument = current ? projection.planDocument : null;
   const progress = current ? projection.progress : null;
   const active = current && projection.activePlanIndex !== null ? plan[projection.activePlanIndex] : null;
   return <>
@@ -63,7 +70,20 @@ export function AgentOverviewView({ projection, sending }: { projection: AgentOv
         {plan.length ? <ol>{plan.map((step, index) => <li key={`${index}:${step.step}`} data-plan-index={index} data-plan-status={step.status} className={`ao-plan-${step.status}`} aria-current={projection.activePlanIndex === index ? "step" : undefined}>
           <span className="ao-plan-mark" aria-hidden="true">{step.status === "completed" ? "✓" : step.status === "inProgress" ? "●" : "○"}</span>
           <span>{step.step}<small>{step.status === "completed" ? "완료" : step.status === "inProgress" ? "진행 중" : "대기"}</small></span>
-        </li>)}</ol> : <p className="ao-empty">{!sending && projection.planState === "empty" ? "Native가 빈 계획을 제공했습니다." : !sending && projection.planState === "invalid" ? "제공된 계획의 형식을 확인하지 못했습니다." : "단계·체크리스트 미제공 · 계획 문서 미연결"}</p>}
+        </li>)}</ol> : <p className="ao-empty">{!sending && projection.planState === "empty" ? "Native가 빈 계획을 제공했습니다." : !sending && projection.planState === "invalid" ? "제공된 계획의 형식을 확인하지 못했습니다." : planDocument ? "Native 계획 미제공" : "단계·체크리스트 미제공 · 계획 문서 미연결"}</p>}
+        {current && projection.nativePlanAt && <p className="ao-empty">Native 수신 시각 <time dateTime={projection.nativePlanAt}>{projection.nativePlanAt}</time></p>}
+        {current && projection.planAmbiguous && <p className="ao-empty" data-testid="agent-plan-ambiguous">현재 턴에 여러 작업이 연결되어 계획 문서를 특정할 수 없습니다.</p>}
+        {current && projection.planSteerUncertain && !projection.planAmbiguous && <p className="ao-empty" data-testid="agent-plan-uncertain">추가 지시가 접수됐는지 확인할 수 없어 현재 계획 문서를 특정할 수 없습니다.</p>}
+        {planDocument && <div className="ao-plan-document" data-testid="agent-plan-document" data-document-status={planDocument.status}>
+          <p>계획 문서 · {planDocumentStates[planDocument.status]}</p>
+          {planDocument.path && <p>{planDocument.path}</p>}
+          <p>확인 시각 <time dateTime={planDocument.at}>{planDocument.at}</time></p>
+          {planDocument.content !== null && <details>
+            <summary>확인한 문서 원문</summary>
+            <p>SHA-256 <code>{planDocument.sha256}</code></p>
+            <pre>{planDocument.content}</pre>
+          </details>}
+        </div>}
         {projection.historyTruncated && <p className="ao-empty">일부 이력만 보관되어 이전 계획의 제공 여부는 확인할 수 없습니다.</p>}
       </section>
       <section className="ao-progress" aria-label="Progress" data-testid="agent-progress" data-plan-index={progress?.planIndex}>

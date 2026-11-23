@@ -67,7 +67,7 @@ test("서로 다른 이슈의 병렬 체크아웃은 부모의 dirty 소스·인
   const [checkoutA, checkoutB] = await withWorkLock(repo, () => Promise.all([
     prepareIssueWorkspace(repo, request(first)),
     prepareIssueWorkspace(repo, request(second)),
-  ]), "issue-loop");
+  ]), { scope: "issue-loop" });
 
   assert.notEqual(checkoutA, checkoutB);
   assert.equal(await git(repo, "show-ref"), originalRefs);
@@ -85,7 +85,7 @@ test("서로 다른 이슈의 병렬 체크아웃은 부모의 dirty 소스·인
     await git(checkoutA, "add", source);
     assert.equal(await readFile(join(checkoutB, source), "utf8"), "export const value = 0;\n");
     assert.equal(await git(checkoutB, "status", "--porcelain=v1"), "");
-  }, "issue-loop"), "issue-loop");
+  }, { scope: "issue-loop" }), { scope: "issue-loop" });
   assert.deepEqual(await readFile(join(repo, ".git/index")), originalIndex);
   assert.equal(await git(repo, "status", "--porcelain=v1"), originalStatus);
   assert.equal(await readFile(join(repo, source), "utf8"), "export const value = 2;\n");

@@ -3,24 +3,26 @@
  * @implements RESP-DEVELOPMENT-EXECUTION
  */
 import { checkEnvironment, mergeEnvironment } from "./environment.ts";
+import type { ChildProcess } from "node:child_process";
 import type { EnvironmentOptions, EnvironmentReport } from "./environment.ts";
 import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { createGjcInvocation, gjcCapabilities, spawnGjc, waitForChild } from "./adapters/gjc.ts";
 import { createSessionBinding, findWorkRecord, loadCanonicalSkill, preflightMutation, validateSessionBinding, validateWritePaths } from "./preflight.ts";
-import { appendEvent, readRuntime, runtimePaths } from "./record.ts";
+import { appendEvent, hostReceiptPath, readRuntime, runtimePaths } from "./record.ts";
 import { validateModelAllocation } from "./model-allocation.ts";
 import type { ModelAllocation } from "./model-allocation.ts";
 import { validateWorkDecomposition, decompositionDigest, assessUnitAcceptance, assessDecompositionCompletion, type DecompositionPlan, type DecompositionUnit, type UnitAcceptance } from "./decomposition.ts";
-import { routeRequest } from "./route.ts";
-import { createCodexInvocation, codexCapabilities, runCodex } from "./adapters/codex.ts";
-import { assessWork, advanceWork, completeWork, openWork, readWork, recordReview, resumeWork, verifyWork, setDecompositionPlan } from "./work.ts";
+import { hashRequest, routeRequest } from "./route.ts";
+import { createCodexInvocation, codexCapabilities, spawnCodex, waitForCodex } from "./adapters/codex.ts";
+import { assessWork, advanceWork, authorizationDigest, completeWork, openWork, readWork, recordReview, resumeWork, retryWorkWriter, verifyWork, setDecompositionPlan, withWorkExecutionLease } from "./work.ts";
 import { captureSource, criteriaDigest } from "./evidence.ts";
 import { loadReviewPolicy, runReview } from "./review.ts";
 import { artifactStatus, developmentTools } from "./artifacts.ts";
 
 import type { Approval, WorkRecord, WorkLocation, WorkDecision } from "./types.ts";
+import type { WorkExecutionHost } from "./work.ts";
 import type { SessionBinding, CanonicalSkill, MutationResult } from "./preflight.ts";
 import type { RouteResult } from "./route.ts";
 import type { ProcessInvocation, ProcessOptions, ProcessResult } from "./adapters/gjc.ts";
@@ -193,14 +195,35 @@ function publicPrepared(prepared: PreparedRun) {
   };
 }
 
-export async function runProcess(invocation: ProcessInvocation, options: ProcessOptions = {}): Promise<ProcessResult> {
+async function runTrackedChild<T extends ChildProcess>(create: () => T, wait: (child: T) => Promise<ProcessResult>, host?: WorkExecutionHost): Promise<ProcessResult> {
+  if (!host) return wait(create());
+  await host.beforeSpawn();
+  let child: T;
+  try { child = create(); }
+  catch (error) { await host.finished(); throw error; }
+  const closed = new Promise<void>(resolve => { child.once("close", () => resolve()); });
+  const registered = child.pid === undefined ? Promise.resolve() : host.register(child.pid);
+  try {
+    const [result] = await Promise.all([wait(child), registered]);
+    return result;
+  } catch (error) {
+    if (child.pid !== undefined && child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
+    throw error;
+  } finally {
+    await closed;
+    await registered.catch(() => undefined);
+    await host.finished();
+  }
+}
+
+export async function runProcess(invocation: ProcessInvocation, options: ProcessOptions = {}, host?: WorkExecutionHost): Promise<ProcessResult> {
   if (invocation.mode === "codex-exec" || invocation.mode === "prompt" || /^(?:codex|gjc)(?:\.(?:exe|cmd))?$/i.test(path.basename(invocation.command))) {
     const report = checkEnvironment({ repo: options.cwd ?? process.cwd(), commands: [invocation.command], env: options.env, outputDirectory: options.outputDirectory });
     if (!report.ok) return { ok: false, code: null, outcome: "environment_failed", environment: report };
   }
   const effective = { ...options, env: mergeEnvironment(options.env) };
-  if (invocation.mode === "codex-exec") return runCodex(invocation, effective);
-  return waitForChild(spawnGjc(invocation, effective), effective);
+  if (invocation.mode === "codex-exec") return runTrackedChild(() => spawnCodex(invocation, effective), child => waitForCodex(child, effective), host);
+  return runTrackedChild(() => spawnGjc(invocation, effective), child => waitForChild(child, effective), host);
 }
 
 export interface ModelExecution {
@@ -213,12 +236,8 @@ export interface ModelExecution {
   failure: { outcome: string; error: string | null } | null;
 }
 
-function allocationReceiptPath(repo: string, workId: string, eventId: string): string {
-  return path.join(repo, ".www", "evidence", workId, `${createHash("sha256").update(eventId).digest("hex")}.json`);
-}
-
 async function readAllocationReceipt(repo: string, workId: string, start: RuntimeEvent, events: RuntimeEvent[]): Promise<JsonObject> {
-  const file = allocationReceiptPath(repo, workId, start.id);
+  const file = hostReceiptPath(repo, workId, start.id);
   const completion = events.find(event => event.id === `${start.id}-host`);
   await validateWritePaths(repo, [path.relative(repo, file).split(path.sep).join("/")]);
   let bytes: Buffer;
@@ -326,6 +345,7 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
   if (options.preview === true) return { executed: false, preview: true, role: "www-dev", proposedDecision: options.decision ?? null };
   if (options.execute !== true) throw new Error("역할 실행에는 execute: true가 필요합니다.");
   if (typeof options.eventId !== "string" || !options.eventId.trim()) throw new Error("역할 실행을 구분할 안정적인 eventId가 필요합니다.");
+  const eventId = options.eventId;
   const work = await openWork({ ...options, repo });
   if (work.record.schemaVersion !== 2) throw new Error("legacy 작업은 기존 호출을 지원합니다. 현재 권한·입력·접수 ID를 연결하고 decision.adoptLegacy를 명시하면 같은 UUID로 현재 증거 계약을 적용합니다.");
   if (options.resume === true) return { executed: true, resumed: true, work: await resumeWork({ repo, workId: work.record.id }) };
@@ -334,7 +354,7 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
   if (intent === "review") {
     const current    = await readWork({ repo, workId: work.record.id })   ;
     const assessment = await assessWork({ repo, workId: work.record.id }) ;
-    if (!("source" in assessment)) throw new Error("현재 작업의 검토 소스가 필요합니다.");
+    if (current.record.schemaVersion !== 2 || !("source" in assessment)) throw new Error("현재 작업의 검토 소스가 필요합니다.");
     const { source } = assessment;
     const policyInfo = await loadReviewPolicy({ root: repo });
     const review = await runReview({
@@ -342,18 +362,14 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
       source                                          ,
       criteriaDigest : criteriaDigest(current.record) ,
       policyInfo                                      ,
-      work: current.record.schemaVersion === 2 ? current.record : undefined,
+      work: current.record,
       authority: options.reviewAuthority,
       allowFallback: options.allowReviewFallback,
       workPath: current.path,
       directRequest: options.direct === true && typeof options.request === "string" ? { direct: true, request: options.request } : undefined,
-      inputPaths     : options.reviewInputPaths !== undefined ? options.reviewInputPaths : [
-        ...source.files.filter(file => file.type === "file").map(file => file.path),
-        path.relative(repo, current.path),
-        path.relative(repo, path.join(path.dirname(current.path), "verification.md")),
-      ],
+      inputPaths     : options.reviewInputPaths,
     });
-    const recording = await recordReview({ repo, workId: work.record.id, review });
+    const recording = await recordReview({ repo, workId: work.record.id, review, requestId: current.record.workflow.requestId });
     return { executed: true, review, ...(recording.recorded ? { work: recording } : {}), recording };
   }
   if (intent === "verify") {
@@ -366,8 +382,16 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
   }
   const route = routeRequest({ ...options, workId: work.record.id, status: work.record.status, approval: work.record.workflow.authorization });
   if (!route.skill) return { executed: false, workId: work.record.id, route };
-  const writes   = options.writes ?? []   ;
-  const surfaces = options.surfaces ?? [] ;
+  const executionRequest = work.record.workflow;
+  const executionRequestHash = hashRequest(options.request);
+  const executionRequestId = options.requestId ?? null;
+  const writes = options.writes ?? [];
+  const surfaces = options.surfaces ?? [];
+  const writesAllowed = options.sandbox !== "read-only" || writes.length > 0 || surfaces.length > 0 || route.intent === "build";
+  if (writesAllowed && executionRequest.continuations?.length &&
+    (executionRequestId !== executionRequest.requestId || executionRequestHash !== executionRequest.requestHash)) {
+    throw new Error("후속 요청의 쓰기 가능한 실행은 현재 연결된 사용자 요청과 일치해야 합니다.");
+  }
   const mutation = preflightMutation({
     approval        : work.record.workflow.authorization ,
     writes                                               ,
@@ -391,14 +415,19 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
     || !currentUnit.criterionIds.every(id => options.verifier?.criterionIds?.includes(id)))) throw new Error("실행 검증이 분업 단위의 검증·기준과 다릅니다.");
   const context = await developmentContext(repo, work, route.skill, allocation, currentUnit, options.evidence);
   if (options.sandbox !== undefined && !["read-only", "workspace-write"].includes(options.sandbox)) throw new Error("WWW 개발 역할은 read-only 또는 workspace-write 호스트 정책을 사용합니다.");
+  const sandbox = options.sandbox ?? "workspace-write";
   const invocation = createCodexInvocation({
     repo,
     systemPrompt : context.text                         ,
     request      : options.request                      ,
     model        : allocation?.model ?? options.model   ,
     thinking     : options.thinking                     ,
-    sandbox      : options.sandbox ?? "workspace-write" ,
+    sandbox                                              ,
   });
+  const verifier = options.verifier;
+  const executionScopeDigest = hashRequest(JSON.stringify({ intent: route.intent, sandbox, writes, surfaces,
+    thinking: options.thinking ?? null, requireHardGate: options.requireHardGate === true,
+    verifier: verifier ? { command: verifier.command, args: verifier.args, criterionIds: verifier.criterionIds ?? [], artifactPaths: verifier.artifactPaths ?? [] } : null }));
   const executionInvocation = dependencies.prepareInvocation ? dependencies.prepareInvocation(invocation) : invocation;
   const runtimeDirectory = path.join(repo, ".www", "runtime", work.record.id);
   await validateWritePaths(repo, [path.relative(repo, runtimeDirectory).split(path.sep).join("/")]);
@@ -406,37 +435,39 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
   const executor = dependencies.runProcess ? "injected" : "process";
 
   const env = mergeEnvironment(options.env);
-  await fs.mkdir(runtimeDirectory, { recursive: true });
-  const leaseFile = path.join(runtimeDirectory, "execution.lock");
-  let lease;
-  try { lease = await fs.open(leaseFile, "wx", 0o600); }
-  catch (error) {
-    if (object(error) && error.code === "EEXIST") throw new Error("같은 작업이 실행 중입니다. 불명확한 이전 실행을 자동 재시도하지 않습니다.");
-    throw error;
-  }
-  try {
-    await lease.writeFile(JSON.stringify({ eventId: options.eventId, pid: process.pid, startedAt: new Date().toISOString() }));
-    const prior = (await readRuntime(runtimePaths(repo, work.record.id))).events.find(event => event.id === options.eventId);
+  return withWorkExecutionLease(repo, work.record.id, eventId, async executionHost => {
+    const activeRequest = (await readWork({ repo, workId: work.record.id })).record.workflow;
+    if (!activeRequest || activeRequest.requestId !== executionRequest.requestId || activeRequest.requestHash !== executionRequest.requestHash
+      || authorizationDigest(activeRequest.authorization) !== authorizationDigest(executionRequest.authorization)) {
+      throw new Error("호스트 실행 전에 현재 사용자 요청 또는 허용 범위가 변경됐습니다.");
+    }
+    const requestBinding = { workRequestId: activeRequest.requestId, workRequestHash: activeRequest.requestHash,
+      executionRequestId, executionRequestHash, executionScopeDigest };
+    const prior = (await readRuntime(runtimePaths(repo, work.record.id))).events.find(event => event.id === eventId);
     if (prior) {
+      const sameRequest = prior.workRequestId === requestBinding.workRequestId && prior.workRequestHash === requestBinding.workRequestHash;
+      if (!sameRequest || prior.executionRequestId !== executionRequestId || prior.executionRequestHash !== executionRequestHash
+        || prior.executionScopeDigest !== executionScopeDigest) throw new Error("같은 event id의 실행 요청이 다릅니다.");
       if (prior.type !== "status" || prior.skill !== route.skill || prior.requestedModel !== invocation.requestedModel || JSON.stringify(prior.allocation ?? null) !== JSON.stringify(allocation ?? null)
         || prior.planDigest !== (plan ? decompositionDigest(plan) : undefined)) throw new Error("같은 event id의 실행 요청이 다릅니다.");
       return { executed: false, duplicate: true, workId: work.record.id };
     }
     if (plan) await setDecompositionPlan({ repo, workId: work.record.id, plan });
-    const previous = allocation ? await allocationHistory(repo, work.record.id, options.eventId, allocation) : [];
+    const previous = allocation ? await allocationHistory(repo, work.record.id, eventId, allocation) : [];
     if (plan && currentUnit) {
       const current = await readWork({ repo, workId: work.record.id });
       if (current.record.schemaVersion !== 2) throw new Error("현재 분업 수용에는 schemaVersion 2가 필요합니다.");
       const evaluated = await assessDecompositionCompletion(repo, current.record, currentUnit.dependencies);
       if (!evaluated.usable) throw new Error(`선행 업무 수용 거부: ${evaluated.reasons.join(", ")}`);
     }
-    const started = await appendEvent({ repo, workId: work.record.id, event: { id: options.eventId, type: "status", status: "running", role: "www-dev", skill: route.skill, sources: context.sources, requestedModel: invocation.requestedModel, ...(allocation ? { allocation } : {}), ...(plan ? { planDigest: decompositionDigest(plan) } : {}) } });
+    await retryWorkWriter(() => advanceWork({ repo, workId: work.record.id, intent: route.intent ?? "answer", writes, surfaces }));
+    const started = await appendEvent({ repo, workId: work.record.id, event: { id: eventId, type: "status", status: "running", role: "www-dev", skill: route.skill, sources: context.sources, requestedModel: invocation.requestedModel, ...requestBinding, ...(allocation ? { allocation } : {}), ...(plan ? { planDigest: decompositionDigest(plan) } : {}) } });
     if (started.duplicate) return { executed: false, duplicate: true, workId: work.record.id };
-    await advanceWork({ repo, workId: work.record.id, intent: route.intent ?? "answer", writes, surfaces });
     let host: ProcessResult;
     try {
+      const processOptions = { cwd: repo, env, captureOutput: true, outputDirectory: runtimeDirectory };
       host = environment.ok
-        ? processResult(await (dependencies.runProcess ?? runProcess)(executionInvocation, { cwd: repo, env, captureOutput: true, outputDirectory: runtimeDirectory }))
+        ? processResult(await (dependencies.runProcess ? dependencies.runProcess(executionInvocation, processOptions) : runProcess(executionInvocation, processOptions, executionHost)))
         : { ok: false, code: null, outcome: "environment_failed", error: "환경 사전점검 실패로 호스트를 실행하지 않았습니다." };
     } catch (error) {
       host = { ok: false, code: null, outcome: "execution_error", error: error instanceof Error ? error.message : String(error) };
@@ -449,14 +480,14 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
       && (executor === "injected" ? deliveryOutcome : executionInvocation.mode === "codex-exec");
     const tools = context.tools.map(item => ({ ...item, provided: delivered && item.status === "available" }));
     const execution = modelExecution(allocation, invocation.requestedModel, options.thinking, executor, host, previous);
-    const receiptFile = allocationReceiptPath(repo, work.record.id, options.eventId);
+    const receiptFile = hostReceiptPath(repo, work.record.id, eventId);
     await validateWritePaths(repo, [path.relative(repo, receiptFile).split(path.sep).join("/")]);
     await fs.mkdir(path.dirname(receiptFile), { recursive: true });
-    const receiptBytes = `${JSON.stringify({ eventId: options.eventId, workId: work.record.id, sources: context.sources, tools, artifactReviews: context.reviews, modelExecution: execution, host }, null, 2)}\n`;
+    const receiptBytes = `${JSON.stringify({ eventId, workId: work.record.id, ...requestBinding, sources: context.sources, tools, artifactReviews: context.reviews, modelExecution: execution, host }, null, 2)}\n`;
     await fs.writeFile(receiptFile, receiptBytes, { flag: "wx", mode: 0o600 });
     const receiptHash = createHash("sha256").update(receiptBytes).digest("hex");
-    await appendEvent({ repo, workId: work.record.id, event: { id: `${options.eventId}-host`, type: host.ok ? "host_result" : "post_failure", outcome: host.outcome, exitCode: host.code, threadId: host.threadId ?? null, injected: executor === "injected", observedModel: execution.observed.model, observedReason: execution.observed.reason, receiptPath: path.relative(repo, receiptFile).split(path.sep).join("/"), receiptHash, ...(allocation ? { taskId: allocation.taskId, attempt: allocation.attempt } : {}) } });
-    await appendEvent({ repo, workId: work.record.id, event: { id: `${options.eventId}-stage`, type: "status", status: host.ok ? "completed" : "failed" } });
+    await appendEvent({ repo, workId: work.record.id, event: { id: `${eventId}-host`, type: host.ok ? "host_result" : "post_failure", outcome: host.outcome, exitCode: host.code, threadId: host.threadId ?? null, injected: executor === "injected", observedModel: execution.observed.model, observedReason: execution.observed.reason, receiptPath: path.relative(repo, receiptFile).split(path.sep).join("/"), receiptHash, ...(allocation ? { taskId: allocation.taskId, attempt: allocation.attempt } : {}) } });
+    await appendEvent({ repo, workId: work.record.id, event: { id: `${eventId}-stage`, type: "status", status: host.ok ? "completed" : "failed" } });
     const result: WorkflowResult = { executed: environment.ok && host.outcome !== "environment_failed", workId: work.record.id, route, mutation, host, environment, executor, sources: context.sources, tools, artifactReviews: context.reviews, modelExecution: execution, receiptPath: path.relative(repo, receiptFile).split(path.sep).join("/") };
     let verification: VerificationAttempt | undefined;
     let verificationError: string | undefined;
@@ -472,14 +503,23 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
     if (!currentUnit) return { ...result, ...(verification ? { verification } : {}) };
     const current = await readWork({ repo, workId: work.record.id });
     if (current.record.schemaVersion !== 2) throw new Error("현재 분업 수용에는 schemaVersion 2가 필요합니다.");
-    const acceptance = await assessUnitAcceptance({ repo, record: current.record, unit: currentUnit, host, executor, attempt: verification });
+    const recordedVerification = verification
+      ? current.record.workflow.verifications.find(attempt => attempt.id === verification.id)
+      : undefined;
+    if (verification && !recordedVerification) verificationError = "verification_not_recorded";
+    let acceptance: UnitAcceptance;
+    if (recordedVerification) {
+      const assessed = await assessDecompositionCompletion(repo, current.record, [currentUnit.taskId]);
+      const prefix = currentUnit.taskId + ": ";
+      acceptance = { status: assessed.usable ? "accepted" : "rejected",
+        reasons: assessed.reasons.map(reason => reason.startsWith(prefix) ? reason.slice(prefix.length) : reason), attemptId: recordedVerification.id };
+    } else {
+      acceptance = await assessUnitAcceptance({ repo, record: current.record, unit: currentUnit, host, executor });
+    }
     if (verificationError) acceptance.reasons.push(`verification_error: ${verificationError}`);
-    await appendEvent({ repo, workId: work.record.id, event: { id: `${options.eventId}-acceptance`, type: "task_acceptance", taskId: currentUnit.taskId, ...acceptance } });
+    await appendEvent({ repo, workId: work.record.id, event: { id: `${eventId}-acceptance`, type: "task_acceptance", taskId: currentUnit.taskId, ...acceptance } });
     return { ...result, ...(verification ? { verification } : {}), acceptance };
-  } finally {
-    await lease.close();
-    await fs.unlink(leaseFile);
-  }
+  });
 }
 
 export async function prepareRun({ binding, skill: skillName, expectedSkillHash, request, model, thinking, facts, evidence, route }: { binding?: SessionBinding; skill?: unknown; expectedSkillHash?: string; request?: unknown; model?: unknown; thinking?: unknown; facts?: unknown; evidence?: unknown; route?: RouteResult & { repo: string } } = {}): Promise<PreparedRun> {
@@ -614,6 +654,11 @@ function verificationSummary(record: unknown, verifier: WorkflowVerifier, result
   };
 }
 
+function hasFollowUpRequest(record: unknown): boolean {
+  const continuations = property(property(record, "workflow"), "continuations");
+  return Array.isArray(continuations) && continuations.length > 0;
+}
+
 export async function runWorkflow(options: WorkflowOptions = {}, dependencies: WorkflowDependencies = {}): Promise<WorkflowResult> {
   if (options.allocation !== undefined && options.role !== "www-dev") throw new Error("작업 내부 모델 배분은 www-dev 실행에만 적용합니다.");
   if (options.role === "www-dev") return runDevelopmentWorkflow(options, dependencies);
@@ -623,6 +668,9 @@ export async function runWorkflow(options: WorkflowOptions = {}, dependencies: W
     workId: options.workId,
   });
   if (work.record.id.toLowerCase() !== options.workId?.toLowerCase()) throw new Error("work UUID invariant 위반");
+  if (options.execute === true && options.preview !== true && hasFollowUpRequest(work.record)) {
+    throw new Error("후속 요청이 연결된 작업은 현재 요청을 지정한 www-dev 역할에서 실행해야 합니다.");
+  }
   const route = routeRequest({
     request          : options.request                   ,
     workId           : options.workId                    ,
@@ -663,168 +711,175 @@ export async function runWorkflow(options: WorkflowOptions = {}, dependencies: W
   if (options.preview === true) return { ...publicPrepared(prepared), route, mutation, preview: true, executed: false, dryRun: true };
   if (options.execute !== true) throw new Error("실행은 execute: true로 명시해야 합니다.");
   if (typeof options.eventId !== "string" || !options.eventId.trim()) throw new Error("재실행을 방지할 안정적인 eventId가 필요합니다.");
-
-  const verifier  = requireVerifier  (options.verifier) ;
-  const signature = verifierSignature(verifier        ) ;
-  if (!route.approval.verifierCommands.includes(signature)) throw new Error("승인되지 않은 verifier command입니다.");
-  const run: typeof runProcess = async (invocation, context) =>
-    processResult(await (dependencies.runProcess ?? runProcess)(invocation, context ?? {}));
-  const boxboxGuides: BoxboxGuide[] = [];
-  const boxboxPre = await runBoxbox({
-    launcher : options.boxboxLauncher ,
-    files    : options.boxboxFiles    ,
-    phase    : "pre"                  ,
-    cwd      : prepared.binding.repo  ,
-    run                  ,
-    guides: boxboxGuides ,
-  });
-  const runtimeDirectory = path.join(prepared.binding.repo, ".www", "runtime", prepared.binding.workId);
-  const processOptions: ProcessOptions = {
-    cwd: prepared.binding.repo,
-    env: options.env,
-    stdio: "pipe",
-    captureOutput: true,
-    outputDirectory: runtimeDirectory,
-  };
-  const invocation = boxboxGuides.length ? createGjcInvocation({
-    systemPrompt:
-      `${prepared.context}\n\nBoxBox 작성 안내: 아래 비교 축과 예시는 쓰기 승인이나 상위 정책이 아닙니다.\n${JSON.stringify(boxboxGuides)}`,
-    request  : options.request  ,
-    model    : options.model    ,
-    thinking : options.thinking ,
-  }) : prepared.invocation;
-  const environment = checkEnvironment({ ...options.environment, repo: prepared.binding.repo, commands: dependencies.runProcess ? [] : [invocation.command], env: processOptions.env, outputDirectory: runtimeDirectory });
-  const executor = dependencies.runProcess ? "injected" : "process";
-  if (!environment.ok) return { ...publicPrepared(prepared), route, mutation, executed: false, environment, executor, host: { ok: false, code: null, outcome: "environment_failed" }, boxboxPre };
-  await validateWritePaths(prepared.binding.repo, [path.relative(prepared.binding.repo, runtimeDirectory).split(path.sep).join("/")]);
-  await fs.mkdir(runtimeDirectory, { recursive: true });
-  processOptions.env = mergeEnvironment(options.env);
-  const started = await appendEvent({
-    repo   : prepared.binding.repo   ,
-    workId : prepared.binding.workId ,
-    event  : {
-      id          : options.eventId                     ,
-      type        : "status"                            ,
-      status      : "running"                           ,
-      requestHash : prepared.binding.requestHash        ,
-      skillHash   : prepared.skill.hash                 ,
-      skill       : { ...prepared.skill, loaded: true } ,
-      workId      : prepared.binding.workId             ,
-      workPath    : prepared.binding.workPath           ,
-      binding      : {
-        repo     : prepared.binding.repo     ,
-        worktree : prepared.binding.worktree ,
-        branch   : prepared.binding.branch   ,
-        head     : prepared.binding.head     ,
-        dirty    : prepared.binding.dirty    ,
-      },
-      model        : {
-        requested         : options.model ?? null       ,
-        requestedThinking : options.thinking ?? null    ,
-        observed          : null                        ,
-        observedReason    : "host_metadata_unavailable" ,
-      },
-      capabilities : prepared.capabilities          ,
-      approval     : approvalRecord(route.approval) ,
-    },
-  });
-  if (started.duplicate) {
-    return { ...publicPrepared(prepared), route, mutation, executed: false, duplicate: true, session: started.session };
-  }
-
-  const executionInvocation = dependencies.prepareInvocation ? dependencies.prepareInvocation(invocation) : invocation;
-  const hostResult = await run(executionInvocation, processOptions);
-  if (!hostResult.ok) {
-    await appendEvent({
-      repo             : prepared.binding.repo                                                                ,
-      workId           : prepared.binding.workId                                                              ,
-      expectedRevision : started.session.revision                                                             ,
-      event            : { id: `${options.eventId}-host`, type: "post_failure", outcome: hostResult.outcome } ,
-    });
-    return { ...publicPrepared(prepared), route, mutation, executed: hostResult.outcome !== "environment_failed", host: hostResult, environment, executor, boxboxPre };
-  }
-  await appendEvent({
-    repo   : prepared.binding.repo                                                                                                                    ,
-    workId : prepared.binding.workId                                                                                                                  ,
-    event  : { id: `${options.eventId}-host-exit`, type: "host_result", outcome: hostResult.outcome, exitCode: hostResult.code, observedModel: null } ,
-  });
-  const currentWork = await findWorkRecord({ repo: prepared.binding.repo, workId: prepared.binding.workId });
-  if (criteriaFingerprint(currentWork.record) !== criteriaFingerprint(work.record)) {
-    await appendEvent({
-      repo   : prepared.binding.repo                                                                        ,
-      workId : prepared.binding.workId                                                                      ,
-      event  : { id: `${options.eventId}-criteria-drift`, type: "post_failure", outcome: "criteria_drift" } ,
-    });
-    return { ...publicPrepared(prepared), route, mutation, executed: true, host: hostResult, environment, executor, postError: "실행 중 수용 기준이 바뀌어 완료 판정을 중단했습니다.", boxboxPre };
-  }
-
-  let boxboxPost;
-  try {
-    boxboxPost = await runBoxbox({
+  const eventId = options.eventId;
+  const rawRequest = options.request;
+  return withWorkExecutionLease(prepared.binding.repo, prepared.binding.workId, eventId, async executionHost => {
+    const current = await findWorkRecord({ repo: prepared.binding.repo, workId: prepared.binding.workId });
+    if (hasFollowUpRequest(current.record)) {
+      throw new Error("후속 요청이 연결된 작업은 현재 요청을 지정한 www-dev 역할에서 실행해야 합니다.");
+    }
+    const verifier  = requireVerifier  (options.verifier) ;
+    const signature = verifierSignature(verifier        ) ;
+    if (!route.approval.verifierCommands.includes(signature)) throw new Error("승인되지 않은 verifier command입니다.");
+    const run: typeof runProcess = async (invocation, context) => processResult(await (dependencies.runProcess
+      ? dependencies.runProcess(invocation, context ?? {}) : runProcess(invocation, context, executionHost)));
+    const boxboxGuides: BoxboxGuide[] = [];
+    const boxboxPre = await runBoxbox({
       launcher : options.boxboxLauncher ,
       files    : options.boxboxFiles    ,
-      phase    : "post"                 ,
+      phase    : "pre"                  ,
       cwd      : prepared.binding.repo  ,
-      run,
+      run                  ,
+      guides: boxboxGuides ,
     });
-  } catch (error) {
-    await appendEvent({
-      repo   : prepared.binding.repo                                                                         ,
-      workId : prepared.binding.workId                                                                       ,
-      event  : { id: `${options.eventId}-boxbox-post`, type: "post_failure", outcome: "boxbox_post_failed" } ,
-    });
-    return {
-      ...publicPrepared(prepared),
-      route                                                              ,
-      mutation                                                           ,
-      executed  : true                                                   ,
-      host      : hostResult                                             ,
-      environment,
-      executor,
-      boxboxPre                                                          ,
-      postError : error instanceof Error ? error.message : String(error) ,
+    const runtimeDirectory = path.join(prepared.binding.repo, ".www", "runtime", prepared.binding.workId);
+    const processOptions: ProcessOptions = {
+      cwd: prepared.binding.repo,
+      env: options.env,
+      stdio: "pipe",
+      captureOutput: true,
+      outputDirectory: runtimeDirectory,
     };
-  }
-
-  const verifierResult = await run({
-    command: verifier.command,
-    args: verifier.args,
-  }, processOptions);
-  const summary = verificationSummary(work.record, verifier, verifierResult);
-  const verificationEvent = await appendEvent({
-    repo   : prepared.binding.repo   ,
-    workId : prepared.binding.workId ,
-    event  : {
-      id   : `${options.eventId}-verification` ,
-      type : "verification"                    ,
-      summary                                  ,
-    },
-  });
-  if (summary.result === "passed") {
-    await appendEvent({
-      repo             : prepared.binding.repo              ,
-      workId           : prepared.binding.workId            ,
-      expectedRevision : verificationEvent.session.revision ,
-      event: {
-        id     : `${options.eventId}-done` ,
-        type   : "status"                  ,
-        status : "done"                    ,
+    const invocation = boxboxGuides.length ? createGjcInvocation({
+      systemPrompt:
+        `${prepared.context}\n\nBoxBox 작성 안내: 아래 비교 축과 예시는 쓰기 승인이나 상위 정책이 아닙니다.\n${JSON.stringify(boxboxGuides)}`,
+      request  : rawRequest  ,
+      model    : options.model    ,
+      thinking : options.thinking ,
+    }) : prepared.invocation;
+    const environment = checkEnvironment({ ...options.environment, repo: prepared.binding.repo, commands: dependencies.runProcess ? [] : [invocation.command], env: processOptions.env, outputDirectory: runtimeDirectory });
+    const executor = dependencies.runProcess ? "injected" : "process";
+    if (!environment.ok) return { ...publicPrepared(prepared), route, mutation, executed: false, environment, executor, host: { ok: false, code: null, outcome: "environment_failed" }, boxboxPre };
+    await validateWritePaths(prepared.binding.repo, [path.relative(prepared.binding.repo, runtimeDirectory).split(path.sep).join("/")]);
+    await fs.mkdir(runtimeDirectory, { recursive: true });
+    processOptions.env = mergeEnvironment(options.env);
+    const started = await appendEvent({
+      repo   : prepared.binding.repo   ,
+      workId : prepared.binding.workId ,
+      event  : {
+        id          : eventId                     ,
+        type        : "status"                            ,
+        status      : "running"                           ,
+        requestHash : prepared.binding.requestHash        ,
+        skillHash   : prepared.skill.hash                 ,
+        skill       : { ...prepared.skill, loaded: true } ,
+        workId      : prepared.binding.workId             ,
+        workPath    : prepared.binding.workPath           ,
+        binding      : {
+          repo     : prepared.binding.repo     ,
+          worktree : prepared.binding.worktree ,
+          branch   : prepared.binding.branch   ,
+          head     : prepared.binding.head     ,
+          dirty    : prepared.binding.dirty    ,
+        },
+        model        : {
+          requested         : options.model ?? null       ,
+          requestedThinking : options.thinking ?? null    ,
+          observed          : null                        ,
+          observedReason    : "host_metadata_unavailable" ,
+        },
+        capabilities : prepared.capabilities          ,
+        approval     : approvalRecord(route.approval) ,
       },
     });
-  }
-  return {
-    ...publicPrepared(prepared),
-    route      ,
-    mutation   ,
-    executed            : true           ,
-    host                : hostResult     ,
-    environment,
-    executor,
-    verification        : verifierResult ,
-    verificationSummary : summary        ,
-    boxboxPre  ,
-    boxboxPost ,
-  };
+    if (started.duplicate) {
+      return { ...publicPrepared(prepared), route, mutation, executed: false, duplicate: true, session: started.session };
+    }
+
+    const executionInvocation = dependencies.prepareInvocation ? dependencies.prepareInvocation(invocation) : invocation;
+    const hostResult = await run(executionInvocation, processOptions);
+    if (!hostResult.ok) {
+      await appendEvent({
+        repo             : prepared.binding.repo                                                                ,
+        workId           : prepared.binding.workId                                                              ,
+        expectedRevision : started.session.revision                                                             ,
+        event            : { id: `${eventId}-host`, type: "post_failure", outcome: hostResult.outcome } ,
+      });
+      return { ...publicPrepared(prepared), route, mutation, executed: hostResult.outcome !== "environment_failed", host: hostResult, environment, executor, boxboxPre };
+    }
+    await appendEvent({
+      repo   : prepared.binding.repo                                                                                                                    ,
+      workId : prepared.binding.workId                                                                                                                  ,
+      event  : { id: `${eventId}-host-exit`, type: "host_result", outcome: hostResult.outcome, exitCode: hostResult.code, observedModel: null } ,
+    });
+    const currentWork = await findWorkRecord({ repo: prepared.binding.repo, workId: prepared.binding.workId });
+    if (criteriaFingerprint(currentWork.record) !== criteriaFingerprint(work.record)) {
+      await appendEvent({
+        repo   : prepared.binding.repo                                                                        ,
+        workId : prepared.binding.workId                                                                      ,
+        event  : { id: `${eventId}-criteria-drift`, type: "post_failure", outcome: "criteria_drift" } ,
+      });
+      return { ...publicPrepared(prepared), route, mutation, executed: true, host: hostResult, environment, executor, postError: "실행 중 수용 기준이 바뀌어 완료 판정을 중단했습니다.", boxboxPre };
+    }
+
+    let boxboxPost;
+    try {
+      boxboxPost = await runBoxbox({
+        launcher : options.boxboxLauncher ,
+        files    : options.boxboxFiles    ,
+        phase    : "post"                 ,
+        cwd      : prepared.binding.repo  ,
+        run,
+      });
+    } catch (error) {
+      await appendEvent({
+        repo   : prepared.binding.repo                                                                         ,
+        workId : prepared.binding.workId                                                                       ,
+        event  : { id: `${eventId}-boxbox-post`, type: "post_failure", outcome: "boxbox_post_failed" } ,
+      });
+      return {
+        ...publicPrepared(prepared),
+        route                                                              ,
+        mutation                                                           ,
+        executed  : true                                                   ,
+        host      : hostResult                                             ,
+        environment,
+        executor,
+        boxboxPre                                                          ,
+        postError : error instanceof Error ? error.message : String(error) ,
+      };
+    }
+
+    const verifierResult = await run({
+      command: verifier.command,
+      args: verifier.args,
+    }, processOptions);
+    const summary = verificationSummary(work.record, verifier, verifierResult);
+    const verificationEvent = await appendEvent({
+      repo   : prepared.binding.repo   ,
+      workId : prepared.binding.workId ,
+      event  : {
+        id   : `${eventId}-verification` ,
+        type : "verification"                    ,
+        summary                                  ,
+      },
+    });
+    if (summary.result === "passed") {
+      await appendEvent({
+        repo             : prepared.binding.repo              ,
+        workId           : prepared.binding.workId            ,
+        expectedRevision : verificationEvent.session.revision ,
+        event: {
+          id     : `${eventId}-done` ,
+          type   : "status"                  ,
+          status : "done"                    ,
+        },
+      });
+    }
+    return {
+      ...publicPrepared(prepared),
+      route      ,
+      mutation   ,
+      executed            : true           ,
+      host                : hostResult     ,
+      environment,
+      executor,
+      verification        : verifierResult ,
+      verificationSummary : summary        ,
+      boxboxPre  ,
+      boxboxPost ,
+    };
+  });
 }
 
 async function main() {
@@ -838,7 +893,7 @@ async function main() {
   else if (result.environment?.ok === false) process.exitCode = 1;
   else if (result.mutation?.ok === false || result.confirmation === true) process.exitCode = 2;
   else if (options.role === "www-dev") {
-    if (result.host?.ok === false || property(result.verification, "result") === "failed" || (result.review && result.review.verdict !== "pass")) process.exitCode = 1;
+    if (result.host?.ok === false || result.acceptance?.status === "rejected" || property(result.verification, "result") === "failed" || (result.review && result.review.verdict !== "pass")) process.exitCode = 1;
   } else if (result.executed && (!result.host?.ok || result.postError || result.verificationSummary?.result !== "passed")) process.exitCode = 1;
 }
 

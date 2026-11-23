@@ -190,3 +190,49 @@ html,body,#root{width:100%;height:100%;min-height:0;overflow:hidden;overscroll-b
 
 /* 작은 창의 Agent 개요는 모니터링 메뉴에서 조회한다. 입력과 개입 버튼을 가리지 않는다. */
 @media(max-width:999px){.session-surface>.agent-sidebar{display:none!important}}
+
+.chat-model-picker{width:min(420px,calc(100vw - 40px));max-height:calc(100vh - 40px);overflow:auto;padding:20px;border:1px solid var(--border);border-radius:10px;background:var(--surface);color:var(--text)}
+.chat-model-picker::backdrop{background:#0008}
+.chat-model-picker h2{margin:0 0 14px;font-size:16px}
+.chat-model-options{display:grid;gap:6px;margin-bottom:14px}
+.chat-model-options button{text-align:left}
+.chat-model-options button[aria-pressed=true]{border-color:var(--accent);background:var(--raised)}
+
+[data-chat-theme="terminal-basic"],
+.session-surface:has(> .work[data-chat-theme="terminal-basic"]:not([hidden])) {
+  color-scheme: light;
+  --bg:#fff;
+  --surface:#f6f6f6;
+  --raised:#ebebeb;
+  --row:#ebebeb;
+  --border:#c6c6c6;
+  --text:#171717;
+  --muted:#535353;
+  --accent:#174ea6;
+  --ok:#237a37;
+  --warn:#855a12;
+  --error:#a12823;
+  --info:#195a70;
+  --chat-steel:#535353;
+  --chat-card-surface:var(--surface);
+  --chat-card-border:var(--border);
+  --chat-state-running:var(--accent);
+  --chat-state-failed:var(--error);
+  --chat-state-unknown:var(--warn);
+}
+[data-chat-theme],
+.session-surface:has(> .work[data-chat-theme]:not([hidden])) > .target-sidebar { background-color:var(--bg);color:var(--text) }
+[data-chat-theme] :is(.pane,.chat-code,.command-card,.panel) { border-color:var(--border) }
+[data-chat-theme].chat-model-picker { background-color:var(--surface) }
+
+[data-chat-theme="terminal-basic"] .native-activity-panel {
+  --na-ink:var(--bg);
+  --na-surface:var(--surface);
+  --na-text:var(--text);
+  --na-muted:var(--muted);
+  --na-accent:var(--info);
+  --na-warm:var(--warn);
+  --na-border:var(--border);
+  --na-divider:var(--border);
+  --na-control-border:#878787;
+}

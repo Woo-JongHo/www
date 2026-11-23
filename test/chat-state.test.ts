@@ -10,7 +10,7 @@ import { runInNewContext } from "node:vm";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { ChatMessage } from "../src/chat-message";
-import { reduceConversationEvents, type ConversationEventState, blankReadingState, belongsToConversation, composerFull, conversationKey, currentTurnEvents, draftWithQuote, eventTurnId, externalChatUrl, MAX_PROMPT_CHARS, pasteOverflow } from "../src/chat-state";
+import { reduceConversationEvents, liveChatInput, slashCommand, type ConversationEventState, blankReadingState, belongsToConversation, composerFull, conversationKey, currentTurnEvents, draftWithQuote, eventTurnId, externalChatUrl, MAX_PROMPT_CHARS, pasteOverflow } from "../src/chat-state";
 import { createActivitySidebarState, updateActivitySidebarSnapshot } from "../src/activity-sidebar";
 import { project } from "../src/projection";
 import { chatStatus } from "../src/chat-status";
@@ -228,6 +228,8 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
       ${part("  const matchesSelection =", "\n  const acceptResources =")}
       const threadRef = { current: "thread" };
       const threadId = "thread";
+      const latestSession = { current: { workspace: selected, threadId, connectionGeneration: 1, transport: "connected", activeTurnId: null, turnStarting: false, interrupting: false, approvalCount: 0, compaction: { state: "idle" } } };
+      const modelChoice = { current: undefined };
       const projection = { working: false, turn: "idle", turnId: null, transport: "connected", interrupt: "idle", blocks: [] };
       const setInputNotice = () => {};
       const prompt = state.prompt;
@@ -261,7 +263,7 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
       consumeEvents(snapshot: ScopedAppEvent[], live: ScopedAppEvent[]): void;
       select(selection: typeof selected): void;
       transcriptState: { current: ConversationEventState };
-    } = runInNewContext(new Bun.Transpiler({ loader: "ts" }).transformSync(code), { state, selected, request, reduceConversationEvents, MAX_PROMPT_CHARS, performance, chatStatus });
+    } = runInNewContext(new Bun.Transpiler({ loader: "ts" }).transformSync(code), { state, selected, request, reduceConversationEvents, liveChatInput, slashCommand, MAX_PROMPT_CHARS, performance, chatStatus });
     const snapshot: ScopedAppEvent[] = [
       { ...selected, connectionGeneration: 2, seq: 10, at: "", kind: "transport", method: "transport/status", params: { state: "connected" }, historical: true },
       { ...selected, connectionGeneration: 2, seq: 11, at: "", kind: "notification", method: "thread/configured", params: { threadId: "thread" }, historical: true }

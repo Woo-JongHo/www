@@ -6,6 +6,8 @@ import { contextBridge, ipcRenderer } from "electron";
 import type { NativeSessionSummary, ResourceSnapshot, ScopedAppEvent, WwwApi } from "./shared";
 
 const api: WwwApi = {
+  chatTheme: () => ipcRenderer.invoke("chat-theme:get"),
+  setChatTheme: (theme) => ipcRenderer.invoke("chat-theme:set", theme),
   listSessions: () => ipcRenderer.invoke("sessions:list"),
   createSession: selection => ipcRenderer.invoke("sessions:create", selection),
   closeSession: sessionId => ipcRenderer.invoke("sessions:close", sessionId),
@@ -28,7 +30,9 @@ const api: WwwApi = {
   setProjectFavorite: (selection, key, favorite) => ipcRenderer.invoke("projects:favorite", selection, key, favorite),
   switchProject: (selection, key) => ipcRenderer.invoke("projects:switch", selection, key),
   startThread: (selection) => ipcRenderer.invoke("thread:start", selection),
-  startTurn: (selection, threadId, text) => ipcRenderer.invoke("turn:start", selection, threadId, text),
+  startTurn: (selection, threadId, text, model) => ipcRenderer.invoke("turn:start", selection, threadId, text, model),
+  listModels: (selection) => ipcRenderer.invoke("models:list", selection),
+  compactThread: (selection, threadId) => ipcRenderer.invoke("thread:compact", selection, threadId),
   steerTurn: (selection, threadId, turnId, text, id) => ipcRenderer.invoke("turn:steer", selection, threadId, turnId, text, id),
   interrupt: (selection, threadId, turnId) => ipcRenderer.invoke("turn:interrupt", selection, threadId, turnId),
   respond: (selection, requestId, decision, approvalToken) => ipcRenderer.invoke("approval:respond", selection, requestId, decision, approvalToken),

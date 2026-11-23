@@ -154,6 +154,7 @@ npm run workflow -- '{"action":"issue-loop","direct":true,"execute":true,"reques
 | `action` | 입력과 동작 |
 |---|---|
 | `open` | 직접 요청을 받은 `www-dev` 역할이 `requestId`, `request`, `decision`, `approval`, `inputs`로 새 작업을 등록. 기존 UUID는 `decision.workId`로 읽음. `decision.adoptLegacy: true`는 아래 명시 연결을 선택. 같은 접수 ID·요청의 중복 등록을 구분 |
+| `continue-work` | 미완료 schemaVersion 2 작업에 새 직접 구현 요청을 연결. `workId`, `requestId`, `request`, `expectedRequestId`, `expectedRequestHash`, `expectedAuthorizationDigest`, `approval`, `inputs`와 `role: "www-dev"`, `direct: true`를 지정 |
 | `adopt` | 현재 직접 요청·`requestId`·권한·`inputs`·`intent`를 기존 `workId`에 연결. 같은 UUID로 schema2를 사용하고 원래 레코드는 `workflow.legacyRecord`에 보존. 과거 통과를 현재 증거로 승격하지 않음 |
 | `read` | `workId`의 레코드를 읽고 구조를 확인. legacy1을 새 증거로 자동 변환하지 않음 |
 | `advance` | `workId`, `intent`, 필요한 `writes`·`surfaces`로 허용된 다음 단계를 기록. 완료는 별도 판정으로만 수행 |
@@ -182,7 +183,7 @@ CLI의 `runDevelopmentWorkflow` 검토 경로는 선택적으로 `reviewInputPat
 
 새 Terra 실행 원문은 `promptVersion: "literal-read-v1"`로 실제 전달한 읽기 안내와 결속한다. 버전이 없는 과거 원문은 알려진 두 정확한 템플릿만 재구성하고, 명시 버전의 본문 불일치·알 수 없는 버전·임의 프롬프트 변조는 거부한다. 과거 `fail`을 성공으로 바꾸지 않으며 소스·기준의 현재 적용성도 별도로 검사한다. 안내는 실제 읽기 명령 검사기가 허용하는 옵션을 따르고 `rg -A/-B/-C`로 범위를 넓히지 않는다. 문맥은 `sed -n '10,40p'` 같은 제한된 행 읽기를 사용한다.
 
-선택한 일반 파일은 저장된 `inputSnapshot`과 현재 파일의 SHA·모드를 다시 대조한다. full source 밖에서 추가로 선택한 현재 작업의 `spec.md`·`verification.md`도 변경·삭제·심볼릭 링크 교체 뒤에는 옛 검토를 수용하지 않는다. 현재 작업의 `work.json` 자체는 검토 이력·완료 상태를 정상 저장할 때 바이트가 바뀌므로 이 파일 한 개만 전체 바이트 핀에서 제외하며, 기존 작업 ID·요청·권한·기준·단계·소스 결속 검사는 유지한다. 검토 뒤 선택 문서를 고쳐 놓고 보고서 작성만으로 과거 감사를 현행화하지 않는다.
+선택한 일반 파일은 저장된 `inputSnapshot`과 현재 파일의 SHA·모드를 다시 대조한다. 현재 작업의 `spec.md`와 `verification.md`는 인라인 선택 여부와 관계없이 별도 지문으로 보존한다. 두 문서의 생성·변경·삭제·심볼릭 링크 교체를 대조하고 변경 뒤에는 옛 검토를 수용하지 않는다. 현재 작업의 `work.json` 자체는 검토 이력·완료 상태를 정상 저장할 때 바이트가 바뀌므로 이 파일 한 개만 전체 바이트 핀에서 제외하며, 기존 작업 ID·요청·권한·기준·단계·소스 결속 검사는 유지한다. 검토 뒤 선택 문서를 고쳐 놓고 보고서 작성만으로 과거 감사를 현행화하지 않는다.
 
 문서 영향 검토의 정본과 필수 문서 범위는 [공통 계약](skills/WORKFLOW.md#문서-영향-검토)을 따른다. 아래는 항목 형식의 부분 예시이며, 실제 호출에는 필수 문서 전체와 해당 작업의 요구 참조 문서를 포함한다. 판단 기록은 `node scripts/workflow/work.ts '{"action":"document-review","workId":"work-UUID","documents":[{"path":"docs/ARCHITECTURE.md","decision":"unchanged","reason":"모듈 책임과 데이터 흐름이 유지됨"}]}'`로 남긴다. 완료 시 현재 source·criteria·문서 digest에 맞는 기록이 요구된다.
 

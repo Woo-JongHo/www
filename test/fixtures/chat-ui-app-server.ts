@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 // 실제 Electron IPC·stdio 경계를 검사하는 합성 Native. 모델을 실행하지 않는다.
 import { createInterface } from "node:readline";
+import { randomUUID } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -72,6 +73,33 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
   }
   if (message.id === undefined) continue;
   if (message.method === "initialize") result(message.id, { userAgent: "fixture" });
+  else if (message.method === "model/list") result(message.id, {
+    data: [
+      { model: "fixture", displayName: "기본 모델", isDefault: true },
+      ...(existsSync(join(cwd, "fixture-hide-other-model")) ? [] : [{ model: "fixture-other", displayName: "다른 모델", isDefault: false }])
+    ],
+    nextCursor: null
+  });
+  else if (message.method === "thread/compact/start") {
+    if (existsSync(join(cwd, "fixture-compact-reject"))) {
+      send({ jsonrpc: "2.0", id: message.id, error: { code: -32603, message: "합성 압축 요청 거절" } });
+      continue;
+    }
+    const threadId = String(params.threadId);
+    const turnId = "fixture-compact-" + randomUUID();
+    const item = { type: "contextCompaction", id: turnId + "-item" };
+    if (existsSync(join(cwd, "fixture-compact-no-response"))) continue;
+    result(message.id, {});
+    if (existsSync(join(cwd, "fixture-compact-no-start"))) continue;
+    notify("turn/started", { threadId, turn: { id: turnId, status: "inProgress", items: [] } });
+    notify("item/started", { threadId, turnId, item });
+    if (existsSync(join(cwd, "fixture-compact-no-completion"))) continue;
+    setTimeout(() => {
+      const failed = existsSync(join(cwd, "fixture-compact-fail"));
+      if (!failed) notify("item/completed", { threadId, turnId, item });
+      notify("turn/completed", { threadId, turn: { id: turnId, status: failed ? "failed" : "completed", items: [] } });
+    }, 450);
+  }
   else if (message.method === "thread/list") result(message.id, { data: Object.keys(histories).map((id) => ({ id, name: id === "history-a" ? "저장 작업 A" : id === "history-b" ? "저장 작업 B" : "새 작업", preview: "복원 가능한 대화", cwd, updatedAt: 1794470000, source: "vscode", originator: "www", status: { type: "idle" } })), nextCursor: null });
   else if (message.method === "thread/read" || message.method === "thread/resume") {
     if (message.method === "thread/resume") loadedThreads.add(String(params.threadId));
@@ -106,8 +134,10 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
     const turnId = "live-" + Date.now() + "-" + ++turnCounter;
     pending = { threadId, turnId, prompt };
     if (prompt === "사이드바 두 번째 요청 확인") await new Promise((resolve) => setTimeout(resolve, 450));
+    const startedBeforeResponse = prompt === "스트리밍 이력 절단 중단 확인";
+    if (startedBeforeResponse) notify("turn/started", { threadId, turn: { id: turnId } });
     result(message.id, { turn: { id: turnId } });
-    notify("turn/started", { threadId, turn: { id: turnId } });
+    if (!startedBeforeResponse) notify("turn/started", { threadId, turn: { id: turnId } });
     if (prompt === "성능 스트리밍 중단 확인") {
       const id = "turn-performance";
       let count = 0;
@@ -214,7 +244,17 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
         finish(prompt === "턴 중단 확인" ? "interrupted" : "completed");
       }, 80);
     }
+    else if (prompt === "스트리밍 승인 보존") {
+      send({ jsonrpc: "2.0", id: 42, method: "item/commandExecution/requestApproval", params: { threadId, turnId, command: "printf retained-approval" } });
+      for (let index = 0; index < 2_050; index++) notify("fixture/stream", { threadId, turnId, index });
+    }
     else if (prompt.includes("승인 확인")) send({ jsonrpc: "2.0", id: 42, method: "item/commandExecution/requestApproval", params: { threadId, turnId, command: "printf approved" } });
+    else if (prompt === "스트리밍 이력 절단 중단 확인") {
+      setTimeout(() => {
+        for (let index = 0; index < 2_050; index++) notify("fixture/stream", { threadId, turnId, index });
+        notify("item/agentMessage/delta", { threadId, turnId, itemId: turnId + "-streamed", delta: "이력 절단 뒤에도 들어온 응답" });
+      }, 60);
+    }
     else if (prompt.includes("무활동 확인")) setTimeout(() => finish(), 16_000);
     else if (prompt.includes("결과 미확인 확인")) setTimeout(() => finish("mystery"), 80);
     else if (!prompt.includes("중단 확인")) setTimeout(() => finish(), 80);

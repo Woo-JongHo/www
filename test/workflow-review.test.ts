@@ -7,7 +7,8 @@ import { promises as fs } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
-import { captureSource } from "../scripts/workflow/evidence.ts";
+import { captureSource, criteriaDigest } from "../scripts/workflow/evidence.ts";
+import { advanceWork, openWork } from "../scripts/workflow/work.ts";
 import { assertReviewPolicy, classifyOpusFailure, loadReviewPolicy, runReview, selectReviewer, validateReview } from "../scripts/workflow/review.ts";
 
 const root          = path.resolve(import.meta.dirname, "..") ;
@@ -131,6 +132,74 @@ test("인증 오류·일반 429·모델 출력의 소진 주장은 대체 근거
   assert.ok(exhausted?.kind === "quota_exhausted");
   assert.equal(exhausted.code, "claude_usage_window_exhausted");
   assert.equal(classifyOpusFailure({ code: 1, stdout: JSON.stringify({ type: "result", is_error: true, result: "Server is temporarily limiting requests" }) })?.verified, false);
+});
+
+test("실제 CLI 종료 형식의 명시적 사용량 소진에서만 대체 검토를 시작한다", () => {
+  const terminal = {
+    type: "result",
+    is_error: true,
+    terminal_reason: "api_error",
+    api_error_status: 429,
+    api_error_type: "rate_limit_error",
+    api_error: "usage_limit_reached",
+    result: "You've hit your 5-hour limit · resets 10:40am (Asia/Seoul) · out of usage credits",
+  };
+  const failure = classifyOpusFailure({ code: 1, stdout: JSON.stringify(terminal) });
+  assert.ok(failure?.kind === "quota_exhausted");
+  assert.equal(failure.code, "usage_limit_reached");
+  assert.equal(selectReviewer({ policy, opusFailure: failure }).model, "gpt-6.1-terra");
+  for (const change of [
+    { api_error: undefined },
+    { api_error: "overloaded_error" },
+    { api_error_status: 503 },
+    { api_error_type: "authentication_error" },
+    { terminal_reason: undefined },
+    { type: "assistant" },
+  ]) {
+    const stdout = JSON.stringify({ ...terminal, ...change });
+    assert.equal(classifyOpusFailure({ code: 1, stdout })?.verified, false);
+  }
+  const stdout = JSON.stringify(terminal);
+  for (const execution of [
+    { code: 0 },
+    { code: 1, error: "runner_error" },
+    { code: null },
+    { code: 1, signal: "SIGTERM" as const },
+  ]) {
+    assert.equal(classifyOpusFailure({ stdout, ...execution })?.verified, false);
+  }
+  const conflicting = JSON.stringify({ ...terminal, result: "Failed to authenticate: OAuth session expired" });
+  assert.equal(classifyOpusFailure({ code: 1, stdout: conflicting })?.kind, "authentication");
+  const legacyMessage = "You've hit your Opus limit";
+  for (const fields of [
+    { api_error_status: 401, api_error_type: "authentication_error" },
+    { api_error_status: 429, api_error_type: "authentication_error" },
+  ]) {
+    const stdout = JSON.stringify({ ...terminal, result: legacyMessage, ...fields });
+    assert.equal(classifyOpusFailure({ code: 1, stdout })?.kind, "authentication");
+  }
+  const malformed = JSON.stringify({ ...terminal, api_error: undefined, result: legacyMessage, error: { code: "quota_exhausted" } });
+  assert.equal(classifyOpusFailure({ code: 1, stdout: malformed })?.verified, false);
+  for (const legacy of [
+    { error: { code: "quota_exhausted", status: 401 } },
+    { errors: [{ code: "quota_exhausted" }, { status: 403 }] },
+    { errors: [{ code: "quota_exhausted" }, { type: "authentication_error" }] },
+  ]) {
+    const stdout = JSON.stringify({ type: "result", is_error: true, ...legacy });
+    assert.equal(classifyOpusFailure({ code: 1, stdout })?.kind, "authentication");
+  }
+  const unavailable = JSON.stringify({ type: "result", is_error: true, result: legacyMessage, error: { code: "quota_exhausted", status: 503 } });
+  assert.equal(classifyOpusFailure({ code: 1, stdout: unavailable })?.verified, false);
+  for (const error of [{ status: 503 }, { code: "server_error" }, { code: 503 }, { code: "quota_exhausted" }]) {
+    const stdout = JSON.stringify({ ...terminal, error });
+    assert.equal(classifyOpusFailure({ code: 1, stdout })?.verified, false);
+  }
+  const mixedAuth = JSON.stringify({ ...terminal, error: { type: "authentication_error" } });
+  assert.equal(classifyOpusFailure({ code: 1, stdout: mixedAuth })?.kind, "authentication");
+  for (const terminal_reason of ["interrupted", "cancelled", "success", null]) {
+    const stdout = JSON.stringify({ type: "result", is_error: true, terminal_reason, result: legacyMessage });
+    assert.equal(classifyOpusFailure({ code: 1, stdout })?.verified, false);
+  }
 });
 
 test("실행 영수증 없는 자기 선언은 필수 검토를 통과할 수 없다", () => {
@@ -300,7 +369,7 @@ test("quota fallback은 Opus 원문 저장 뒤 선택을 검증하고 잘못된 
     const source = await captureSource({ repo: directory, inputs: ["input.ts"] });
     const response = { code: 1, stdout: JSON.stringify({ type: "result", is_error: true, error: { code: "quota_exhausted" } }) };
     let calls = 0;
-    await assert.rejects(runReview({ repo: directory, source, criteriaDigest: criterionHash, policyInfo,
+    await assert.rejects(runReview({ repo: directory, source, criteriaDigest: criterionHash, policyInfo, inputPaths: [],
       run: async invocation => { calls++; assert.equal(invocation.command, "claude"); return response; } }), /비어/);
     assert.equal(calls, 1);
     const reviews = path.join(directory, ".www/evidence/reviews");
@@ -310,6 +379,148 @@ test("quota fallback은 Opus 원문 저장 뒤 선택을 검증하고 잘못된 
     const receipt = JSON.parse(await fs.readFile(path.join(receiptDirectory, "opus.json"), "utf8"));
     assert.equal(receipt.stdout, response.stdout);
     assert.equal(classifyOpusFailure(receipt)?.verified, true);
+  });
+});
+
+test("기본 quota fallback은 전체 식별을 보존하고 512KiB 안의 선택 입력으로 실행한다", async () => {
+  await temporary(async (directory) => {
+    await fs.mkdir(path.join(directory, "src"));
+    await fs.writeFile(path.join(directory, "src/large.ts"), "x".repeat(512 * 1024 + 1));
+    await fs.writeFile(path.join(directory, "src/small.ts"), "export {};\n");
+    await fs.writeFile(path.join(directory, "src/asset.bin"), Buffer.from([0xff]));
+    await fs.mkdir(path.join(directory, "docs/work"), { recursive: true });
+    await fs.writeFile(path.join(directory, "docs/work/INDEX.md"), "# 작업 목차\n");
+    const work = (await openWork({ repo: directory, role: "www-dev", direct: true, requestId: "default-review-fixture",
+      request: "대체 입력이 현재 기준을 포함하는지 확인", decision: { intent: "verify", area: "Workflow", title: "기준 전달",
+        criteria: [{ id: "AC-1", description: "현재 기준 원문을 검토에 제공한다.", required: true }] }, inputs: ["src"], approval: {} })).record;
+    if (work.schemaVersion !== 2) throw new Error("현재 작업 fixture가 필요합니다.");
+    const source = await captureSource({ repo: directory, inputs: ["src"] });
+    const calls: string[] = [];
+    const primaryInputs: { criteriaDigest: string; criteriaSnapshot: unknown }[] = [];
+    const inputs: Array<{
+      inputSnapshot: { inputs: string[] };
+      inputBundle: { path: string; content: string }[];
+      inputSelection: { omitted: { path: string }[]; limit: number };
+      criteriaSnapshot: { id: string; description: string }[];
+    }> = [];
+    const result = await runReview({ repo: directory, source, criteriaDigest: criteriaDigest(work), policyInfo, work,
+      run: async (invocation, { input }) => {
+        calls.push(invocation.command);
+        if (invocation.command === "claude") {
+          primaryInputs.push(JSON.parse(input.trim().split("\n").at(-1)!));
+          return { code: 1, stdout: JSON.stringify({ type: "result", is_error: true, error: { code: "quota_exhausted" } }) };
+        }
+        inputs.push(JSON.parse(input.trim().split("\n").at(-1)!));
+        return { code: 0, stdout: "" };
+      },
+    });
+    assert.deepEqual(calls, ["claude", "codex"]);
+    assert.equal(result.sourceDigest, source.digest);
+    const [selection] = inputs;
+    assert.ok(selection);
+    assert.deepEqual(selection.inputSnapshot.inputs, ["src/small.ts"]);
+    assert.deepEqual(selection.inputBundle, [{ path: "src/small.ts", content: "export {};\n" }]);
+    assert.ok(selection.inputSelection.omitted.some(file => file.path === "src/large.ts"));
+    assert.ok(selection.inputSelection.omitted.some(file => file.path === "src/asset.bin"));
+    assert.equal(selection.inputSelection.limit, 512 * 1024);
+    assert.equal(selection.criteriaSnapshot[0]?.description, "현재 기준 원문을 검토에 제공한다.");
+    assert.equal(primaryInputs.length, 1);
+    assert.equal(primaryInputs[0].criteriaDigest, criteriaDigest(work));
+    assert.deepEqual(primaryInputs[0].criteriaSnapshot, selection.criteriaSnapshot);
+  });
+});
+
+test("문서 전용 권한의 기본 대체 검토에 집중 테스트와 좁은 구현 범위를 먼저 전달한다", async () => {
+  await temporary(async directory => {
+    const implementation = "scripts/workflow/artifacts.ts";
+    const focusedTest = "test/workflow-artifacts.test.ts";
+    const note = "docs/large-note.md";
+    const receipt = ".boxbox/earlier-receipt.json";
+    const files: [string, string][] = [
+      [implementation, `export const marker = true;\n${" ".repeat(16 * 1024)}`],
+      [focusedTest, `import "../scripts/workflow/artifacts.ts";\n${" ".repeat(16 * 1024)}`],
+      [note, "a".repeat(500 * 1024)],
+      [receipt, JSON.stringify({ earlier: "b".repeat(500 * 1024) })],
+      ["docs/work/INDEX.md", "# 작업 목차\n"],
+    ];
+    for (const [file, content] of files) {
+      await fs.mkdir(path.dirname(path.join(directory, file)), { recursive: true });
+      await fs.writeFile(path.join(directory, file), content);
+    }
+    const inputs = [".boxbox", note, "scripts", "scripts/workflow", "test", focusedTest];
+    const opened = await openWork({ repo: directory, role: "www-dev", direct: true, requestId: "documentation-only-review",
+      request: "기존 구현과 검사를 검토한다", decision: { intent: "verify", area: "Workflow", title: "기존 구현 대조",
+        criteria: [{ id: "AC-1", description: "기존 구현과 집중 테스트를 연결한다.", required: true }] },
+      inputs, approval: { implementation: true, writePaths: [note], mutationSurfaces: ["edit"] } });
+    const { record: work } = opened;
+    if (work.schemaVersion !== 2) throw new Error("현재 작업 fixture가 필요합니다.");
+    const source = await captureSource({ repo: directory, inputs });
+    let fallback: { inputBundle: { path: string }[]; inputSelection: { omitted: { path: string }[] } } | undefined;
+    const result = await runReview({ repo: directory, source, criteriaDigest: criteriaDigest(work), policyInfo, work,
+      run: async (invocation, { input }) => {
+        if (invocation.command === "claude") return { code: 1, stdout: JSON.stringify({ type: "result", is_error: true, error: { code: "quota_exhausted" } }) };
+        fallback = JSON.parse(input.trim().split("\n").at(-1)!);
+        return { code: 0, stdout: "" };
+      },
+    });
+    assert.equal(result.sourceDigest, source.digest);
+    assert.ok(fallback);
+    assert.deepEqual(fallback.inputBundle.map(entry => entry.path).sort(), [implementation, focusedTest]);
+    assert.ok(fallback.inputSelection.omitted.some(file => file.path === note));
+    assert.ok(fallback.inputSelection.omitted.some(file => file.path === receipt));
+  });
+});
+
+test("인라인에서 생략한 공식 검증 문서가 검토 중 바뀌면 대체 검토를 거부한다", async () => {
+  await temporary(async directory => {
+    await fs.mkdir(path.join(directory, "src"));
+    await fs.mkdir(path.join(directory, "docs/work"), { recursive: true });
+    await fs.writeFile(path.join(directory, "docs/work/INDEX.md"), "# 작업 목차\n");
+    await fs.writeFile(path.join(directory, "src/sample.ts"), "export {};\n");
+    await fs.mkdir(path.join(directory, "agents/www"), { recursive: true });
+    await fs.copyFile(path.join(root, "agents/www/review-policy.json"), path.join(directory, "agents/www/review-policy.json"));
+    const opened = await openWork({ repo: directory, role: "www-dev", direct: true, requestId: "review-document-drift",
+      request: "공식 검증 문서를 읽기 전용으로 대조한다.", decision: { intent: "review", area: "Workflow", title: "검증 문서 현재성",
+        criteria: [{ id: "AC-1", description: "문서 변경은 이전 검토를 만료시킨다.", required: true }] },
+      inputs: ["src"], approval: {} });
+    const { record: work, path: workPath } = await advanceWork({ repo: directory, workId: opened.record.id, intent: "review" });
+    const document = path.join(path.dirname(workPath), "verification.md");
+    const relative = path.relative(await fs.realpath(directory), document);
+    let captured: { inputBundle: { path: string }[]; workDocuments: { files: { path: string; digest: string }[] } } | undefined;
+    let primaryDocuments: unknown;
+    await fs.writeFile(document, "v".repeat(512 * 1024 + 1));
+    const source = await captureSource({ repo: directory, inputs: ["src"] });
+    const outcome = await runReview({ repo: directory, source, criteriaDigest: criteriaDigest(work), policyInfo, work, workPath,
+      run: async (invocation, { input }) => {
+        const prompt = JSON.parse(input.trim().split("\n").at(-1)!);
+        if (invocation.command === "claude") {
+          primaryDocuments = prompt.workDocuments;
+          return { code: 1, stdout: JSON.stringify({ type: "result", is_error: true, error: { code: "quota_exhausted" } }) };
+        }
+        captured = prompt;
+        await fs.appendFile(document, "변경");
+        return { code: 0, stdout: "" };
+      },
+    });
+    assert.ok(captured);
+    assert.ok(!captured.inputBundle.some(file => file.path === relative));
+    assert.match(captured.workDocuments.files.find(file => file.path === relative)?.digest ?? "", /^[0-9a-f]{64}$/);
+    assert.deepEqual(primaryDocuments, captured.workDocuments);
+    assert.equal(outcome.execution.error, "review_evidence_changed");
+    const primary = await runReview({ repo: directory, source, criteriaDigest: criteriaDigest(work), policyInfo, work, workPath,
+      run: async invocation => {
+        assert.equal(invocation.command, "claude");
+        await fs.appendFile(document, "Opus 실행 중 변경");
+        return { code: 0, stdout: "" };
+      } });
+    assert.equal(primary.execution.error, "review_evidence_changed");
+    const drift = await runReview({ repo: directory, source, criteriaDigest: criteriaDigest(work), policyInfo, work, workPath,
+      run: async invocation => {
+        assert.equal(invocation.command, "claude");
+        await fs.appendFile(path.join(directory, "src/sample.ts"), "export const changed = true;\n");
+        return { code: 0, stdout: "" };
+      } });
+    assert.equal(drift.execution.error, "source_changed");
   });
 });
 

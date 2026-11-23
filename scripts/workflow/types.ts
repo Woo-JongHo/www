@@ -42,47 +42,78 @@ export interface RecordedReview {
 export type WorkAuthorization = Approval & { source: string; requestHash: string };
 
 export interface VerifierAuthorization {
-  version: 1;
-  requestId: string;
-  requestHash: string;
-  originalRequestHash: string;
-  payloadDigest: string;
-  authorizedAt: string;
-  command: string;
-  args: string[];
-  added: boolean;
-  beforeDigest: string;
-  afterDigest: string;
-  before: WorkAuthorization;
-  after: WorkAuthorization;
+  originalRequestId?  : string            ;
+  version             : 1                 ;
+  requestId           : string            ;
+  requestHash         : string            ;
+  originalRequestHash : string            ;
+  payloadDigest       : string            ;
+  authorizedAt        : string            ;
+  command             : string            ;
+  args                : string[]          ;
+  added               : boolean           ;
+  beforeDigest        : string            ;
+  afterDigest         : string            ;
+  before              : WorkAuthorization ;
+  after               : WorkAuthorization ;
 }
 
 export interface AddVerifierOptions extends WorkOptions {
-  role?: string;
-  direct?: boolean;
-  requestId: string;
-  request: string;
-  expectedRequestHash: string;
-  expectedAuthorizationDigest: string;
-  command: string;
-  args: string[];
+  expectedRequestId?          : string   ;
+  role?                       : string   ;
+  direct?                     : boolean  ;
+  requestId                   : string   ;
+  request                     : string   ;
+  expectedRequestHash         : string   ;
+  expectedAuthorizationDigest : string   ;
+  command                     : string   ;
+  args                        : string[] ;
+}
+
+export interface WorkRequestBinding {
+  requestId     : string            ;
+  authorization : WorkAuthorization ;
+  inputs        : string[]          ;
+}
+
+export interface WorkContinuation {
+  version            : 1 | 2                   ;
+  authorizedAt       : string                  ;
+  payloadDigest      : string                  ;
+  before             : WorkRequestBinding      ;
+  after              : WorkRequestBinding      ;
+  previousVerifiers? : VerifierAuthorization[] ;
+  verificationStart? : number                  ;
+}
+
+export interface ContinueWorkOptions extends WorkOptions {
+  role?                       : string   ;
+  direct?                     : boolean  ;
+  requestId                   : string   ;
+  request                     : string   ;
+  expectedRequestId           : string   ;
+  expectedRequestHash         : string   ;
+  expectedAuthorizationDigest : string   ;
+  approval                    : unknown  ;
+  inputs                      : string[] ;
 }
 
 export interface WorkWorkflow {
-  verifierAuthorizations?: VerifierAuthorization[];
-  decomposition?        : DecompositionPlan                                  ;
-  role                  : string                                             ;
-  requestId             : string                                             ;
-  requestHash           : string                                             ;
-  authorization         : WorkAuthorization ;
-  inputs                : string[]                                           ;
-  nextAction            : string                                             ;
-  reportingRequired?    : boolean                                            ;
-  verifications         : VerificationAttempt[]                              ;
-  reviews               : RecordedReview[]                                   ;
-  documentationReviews? : DocumentationReview[]                              ;
-  artifactReviews?      : ArtifactReview[]                                   ;
-  legacyRecord?         : WorkRecord                                         ;
+  continuations?          : WorkContinuation[]      ;
+  verifierAuthorizations? : VerifierAuthorization[] ;
+  decomposition?          : DecompositionPlan       ;
+  role                    : string                  ;
+  requestId               : string                  ;
+  requestHash             : string                  ;
+  authorization           : WorkAuthorization       ;
+  inputs                  : string[]                ;
+  nextAction              : string                  ;
+  reportingRequired?      : boolean                 ;
+  verifications           : VerificationAttempt[]   ;
+  reviews                 : RecordedReview[]        ;
+  documentationReviews?   : DocumentationReview[]   ;
+  artifactReviews?        : ArtifactReview[]        ;
+  legacyRecord?           : WorkRecord              ;
 }
 
 interface WorkRecordBase {
@@ -185,4 +216,35 @@ export interface NewWorkOptions {
   decision?  : WorkDecision ;
   approval?  : unknown      ;
   inputs?    : string[]     ;
+}
+
+export type ReportHookResult = {
+  status   : "written" ;
+  reportId : string    ;
+  created  : boolean   ;
+} | {
+  status  : "failed" ;
+  message : string   ;
+};
+
+function verificationTime(value: unknown): number {
+  return typeof value === "string" ? Date.parse(value) : NaN;
+}
+
+export function currentVerifications<T extends { startedAt: unknown }>(
+  verifications: readonly T[], continuation?: { verificationStart?: unknown; authorizedAt: unknown },
+): T[] {
+  const eligible = !continuation
+    ? verifications
+    : typeof continuation.verificationStart === "number"
+      ? verifications.slice(continuation.verificationStart)
+      : verifications.filter(attempt => verificationTime(attempt.startedAt) >= verificationTime(continuation.authorizedAt));
+  return eligible.filter(attempt => Number.isFinite(verificationTime(attempt.startedAt)))
+    .sort((left, right) => verificationTime(left.startedAt) - verificationTime(right.startedAt));
+}
+
+/** 시작 시각이 같은 후보는 순서를 입증할 수 없어 모두 검사한다. */
+export function latestVerificationGroup<T extends { startedAt: unknown }>(chronological: readonly T[]): T[] {
+  const latest = chronological.at(-1);
+  return latest ? chronological.filter(attempt => verificationTime(attempt.startedAt) === verificationTime(latest.startedAt)) : [];
 }

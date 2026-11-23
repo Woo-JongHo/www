@@ -18,6 +18,7 @@ export interface BuildInfo {
   label: string;
 }
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+export const ovisNoticePath = "third-party/ovis.md";
 function git(cwd: string, args: string[]): string {
   return execFileSync("git", args, { cwd, encoding: "utf8" }).trim();
 }
@@ -116,11 +117,14 @@ export async function packageRelease(): Promise<string> {
     const { packager } = await import("@electron/packager");
     const electron: unknown = JSON.parse(readFileSync(join(root, "node_modules/electron/package.json"), "utf8"));
     if (!electron || typeof electron !== "object" || !("version" in electron) || typeof electron.version !== "string") throw Error("Electron 버전을 확인할 수 없습니다.");
-    const packages = await packager({ dir: stage, name: "WWW", platform: "darwin", arch: "arm64", out: join(stage, "packages"), appVersion: info.version, buildVersion: info.version, electronVersion: electron.version, overwrite: true, prune: false });
+    const packages = await packager({ dir: stage, name: "WWW", platform: "darwin", arch: "arm64", out: join(stage, "packages"), appVersion: info.version, buildVersion: info.version, electronVersion: electron.version, overwrite: true, prune: false, asar: false });
     const directory = packages[0];
     if (!directory) throw Error("Electron 패키지 생성 실패");
-    const packagedInfo: unknown = JSON.parse(readFileSync(join(directory, "WWW.app/Contents/Resources/app/dist/build-info.json"), "utf8"));
+    const packagedDist = join(directory, "WWW.app/Contents/Resources/app/dist");
+    const packagedInfo: unknown = JSON.parse(readFileSync(join(packagedDist, "build-info.json"), "utf8"));
     if (JSON.stringify(packagedInfo) !== JSON.stringify(info)) throw Error("패키지 빌드 식별이 다릅니다.");
+    const notice = readFileSync(join(root, "docs", ovisNoticePath));
+    if (!readFileSync(join(packagedDist, ovisNoticePath)).equals(notice)) throw Error("패키지의 Ovis 사용 고지가 원문과 다릅니다.");
     const finalSource = buildInfo();
     assertRelease(finalSource, tag);
     if (finalSource.sourceDigest !== info.sourceDigest || finalSource.commit !== info.commit) throw Error("패키징 중 소스가 변경됐습니다.");

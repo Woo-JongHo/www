@@ -5,7 +5,7 @@ import { SessionTabs, sessionTabDestination } from "../src/session-tabs";
 import type { NativeSessionSummary } from "../src/shared";
 
 const workspace = { name: "프로젝트", path: "/repo", branch: null, changes: 0, workspaceKey: "repo", selectionEpoch: 1, processEpoch: "p" };
-const tab = (id: string, extra: Partial<NativeSessionSummary> = {}): NativeSessionSummary => ({ id, title: id, workspace, threadId: null, busy: false, approvalCount: 0, failed: false, ...extra });
+const tab = (id: string, extra: Partial<NativeSessionSummary> = {}): NativeSessionSummary => ({ id, title: id, workspace, threadId: null, busy: false, approvalCount: 0, failed: false, compaction: { state: "idle" }, connectionGeneration: 0, transport: "disconnected", activeTurnId: null, turnStarting: false, interrupting: false, ...extra });
 const render = (tabs: NativeSessionSummary[], activeId: string, canClose?: (id: string) => { allowed: boolean; reason?: string }) => renderToStaticMarkup(createElement(SessionTabs, { tabs, activeId, creating: false, onSelect: () => {}, onCreate: () => {}, onClose: () => {}, canClose }));
 
 test("탭의 선택과 패널 연결, 실제 상태 및 닫기 제한을 제공한다", () => {

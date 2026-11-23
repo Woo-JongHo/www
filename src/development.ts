@@ -4,6 +4,8 @@
  */
 import { loadReviewPolicy } from "../scripts/workflow/review.ts";
 import { assessReportedWork as assessWork, completeReportedWork as completeWork } from "../scripts/workflow/report-lifecycle.ts";
+import { readChatHarnessReceipt, type ChatHarnessPhase } from "../scripts/workflow/record.ts";
+import { readWork } from "../scripts/workflow/work.ts";
 import type { DevelopmentPolicyInfo, DevelopmentWorkStatus } from "./shared";
 
 const WORK_ID = /^work-[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -51,5 +53,16 @@ export function createDevelopmentService({ policyRoot, workspace }: { policyRoot
     return { workId: result.record.id, status: result.record.status };
   }
 
-  return { policy, status, complete };
+  async function harnessReceipt(id: string, phase: ChatHarnessPhase, eventId: string) {
+    const repo = workspace();
+    const receipt = await readChatHarnessReceipt(repo, id, eventId, phase);
+    if (receipt?.verificationId) {
+      const { record } = await readWork({ repo, workId: id });
+      if (record.schemaVersion !== 2 || !record.workflow.verifications.some(attempt => attempt.id === receipt.verificationId
+        && attempt.executor === "process" && (attempt.exitCode !== null || attempt.signal !== null))) return null;
+    }
+    return receipt;
+  }
+
+  return { policy, status, complete, harnessReceipt };
 }

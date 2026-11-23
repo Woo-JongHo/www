@@ -333,5 +333,5 @@ export async function runIssueLoop(options: JsonObject, runStage: StageRunner, a
         return blocked(error instanceof Error ? error.message : String(error));
       }
     }
-  }, scope);
+  }, { scope });
 }

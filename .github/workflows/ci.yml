@@ -2,6 +2,7 @@ name: WWW CI
 on:
   workflow_dispatch:
   pull_request:
+  merge_group:
   push:
     branches: [main]
 permissions:
@@ -41,18 +42,38 @@ jobs:
           npm exec --yes --package=boxbox-plugin@0.2.9 -- boxbox --engine-only
           echo "BOXBOX_CI_ROOT=$XDG_DATA_HOME/boxbox/codex/0.2.9" >> "$GITHUB_ENV"
       - run: npm run setup:ci
-      - run: npm run release:verify
-      - if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        name: 검증과 패키징
-        id: package
+      - name: 체크아웃 검증 및 필요한 패키징
+        id: validate
+        env:
+          WWW_PACKAGE: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
+          WWW_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+          WWW_PR_HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
-          npm run release:check
-          npm run release:package
-      - if: steps.package.outcome == 'success'
+          verify_checkout() {
+            test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+            git diff --exit-code HEAD --
+            untracked=$(git ls-files --others --exclude-standard)
+            if [ -n "$untracked" ]; then
+              printf '검증 체크아웃에 추적되지 않는 경로가 있습니다.\n%s\n' "$untracked" >&2
+              return 1
+            fi
+          }
+          verify_checkout
+          if [ "$WWW_PACKAGE" = true ]; then
+            npm run release:package
+          else
+            npm run release:verify
+          fi
+          verify_checkout
+          checked_tree=$(git rev-parse 'HEAD^{tree}')
+          checked_parents=$(git show -s --format=%P "$GITHUB_SHA")
+          printf 'WWW_VERIFIED_TREE %s %s %s %s\n' "$GITHUB_SHA" "$checked_tree" "${WWW_BASE_SHA:-없음}" "${WWW_PR_HEAD:-없음}" | tee -a "$GITHUB_STEP_SUMMARY"
+          printf 'WWW_VERIFIED_PARENTS %s %s\n' "$GITHUB_SHA" "$checked_parents" | tee -a "$GITHUB_STEP_SUMMARY"
+      - if: steps.validate.outcome == 'success' && steps.validate.outputs.path != ''
         uses: actions/upload-artifact@v4
         with:
           name: www-${{ github.sha }}-darwin-arm64
-          path: ${{ steps.package.outputs.path }}/*
+          path: ${{ steps.validate.outputs.path }}/*
           retention-days: 14
           include-hidden-files: true
           if-no-files-found: error

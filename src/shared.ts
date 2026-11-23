@@ -80,6 +80,7 @@ export interface AppEvent {
   approvalToken? : string                                   ;
   supported?     : boolean                                  ;
   historical?    : boolean                                  ;
+  completedActiveTurn?: true;
 }
 
 /** 실제 IPC 배달과 요청의 필수 선택 경계. */
@@ -187,6 +188,16 @@ export interface ConversationCatalog {
   nextCursor : string | null         ;
 }
 
+export interface NativeModelOption {
+  model: string;
+  displayName: string;
+  isDefault: boolean;
+}
+
+export type NativeCompaction =
+  | { state: "idle" | "pending" | "running" | "completed" }
+  | { state: "failed"; message: string };
+
 export interface NativeSessionSummary {
   id            : string             ;
   title         : string             ;
@@ -195,9 +206,20 @@ export interface NativeSessionSummary {
   busy          : boolean            ;
   approvalCount : number             ;
   failed        : boolean            ;
+  compaction    : NativeCompaction   ;
+  connectionGeneration: number;
+  transport: TransportState;
+  activeTurnId: string | null;
+  turnStarting: boolean;
+  interrupting: boolean;
+  pendingApprovalEvents?: ScopedAppEvent[];
 }
 
+export type ChatTheme = "terminal-basic" | "www-mint";
+
 export interface WwwApi {
+  chatTheme(): Promise<ChatTheme>;
+  setChatTheme(theme: ChatTheme): Promise<ChatTheme>;
   listSessions(): Promise<NativeSessionSummary[]>;
   createSession(selection?: SelectionRef): Promise<NativeSessionSummary>;
   closeSession(sessionId: string): Promise<void>;
@@ -216,7 +238,9 @@ export interface WwwApi {
   setProjectFavorite(selection: SelectionRef, workspaceKey: string, favorite: boolean): Promise<void>;
   switchProject(selection: SelectionRef, workspaceKey: string): Promise<ConversationSelection>;
   startThread(selection: SelectionRef): Promise<{ threadId: string }>;
-  startTurn(selection: SelectionRef, threadId: string, text: string): Promise<{ turnId: string }>;
+  startTurn(selection: SelectionRef, threadId: string, text: string, model?: string): Promise<{ turnId: string }>;
+  listModels(selection: SelectionRef): Promise<NativeModelOption[]>;
+  compactThread(selection: SelectionRef, threadId: string): Promise<void>;
   steerTurn(selection: SelectionRef, threadId: string, expectedTurnId: string, text: string, clientUserMessageId: string): Promise<{ turnId: string }>;
   interrupt(selection: SelectionRef, threadId: string, turnId: string): Promise<void>;
   respond(selection: SelectionRef, requestId: RpcId, decision: string, approvalToken: string): Promise<void>;

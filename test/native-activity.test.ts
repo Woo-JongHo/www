@@ -608,12 +608,13 @@ describe("실시간 Native 활동 투영", () => {
       item(3, "item/completed", { id: "mention", type: "commandExecution", command: "echo skill SKILL.md", exitCode: 0 }),
       item(4, "item/completed", { id: "read", type: "commandExecution", command: "cat", exitCode: 0, commandActions: [{ type: "read", path: "/skills/demo/SKILL.md" }] }),
       item(5, "item/completed", { id: "bad", type: "commandExecution", exitCode: 1, commandActions: [{ type: "read", path: "/skills/bad/SKILL.md" }] }),
-      item(6, "item/completed", { id: "user", type: "userMessage", content: [{ type: "skill", name: "demo", path: "/skills/demo" }] }),
-      event(7, "skills/changed", {}),
+      item(6, "item/completed", { id: "failed-status", type: "commandExecution", status: "failed", exitCode: 0, commandActions: [{ type: "read", path: "/skills/failed/SKILL.md" }] }),
+      item(7, "item/completed", { id: "user", type: "userMessage", content: [{ type: "skill", name: "demo", path: "/skills/demo" }] }),
+      event(8, "skills/changed", {}),
     ]);
     const skills = result.turns[0]?.entries.filter((row) => row.kind === "skill");
-    expect(skills?.map((row) => row.source)).toEqual(["file_read", "file_read", "request"]);
-    expect(skills?.map((row) => row.status)).toEqual(["completed", "failed", "pending"]);
+    expect(skills?.map((row) => row.source)).toEqual(["file_read", "file_read", "file_read", "request"]);
+    expect(skills?.map((row) => row.status)).toEqual(["completed", "failed", "failed", "pending"]);
   });
 
   test("선택 저장소의 전용 역할·스킬 읽기를 이름과 근거로 보존한다", () => {
@@ -857,6 +858,50 @@ describe("실시간 Native 활동 투영", () => {
       }
       expect(description(mark([...before, snapshot(4, "item/completed", "p", {})]))).toBe("진행");
     }
+  });
+
+  for (const boundary of ["completed", "failed", "interrupted", "inProgress", "missing", "EOF"]) for (const final of ["최종 설명", ""]) {
+    test(`종료한 턴의 첫 정식 공개 설명 완료를 반영한다 — ${boundary}/${final ? "본문" : "빈 본문"}`, () => {
+      const scope = { connectionGeneration: 7, processEpoch: "process", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 1 };
+      function scoped(row: AppEvent) { return { ...row, ...scope }; }
+      function snapshot(seq: number, id: string, text?: string) {
+        return scoped(item(seq, "item/completed", { id, type: "agentMessage", phase: "commentary", text }));
+      }
+      const ended = boundary === "EOF" ? event(3, "transport/closed", {})
+        : event(3, "turn/completed", { threadId: "t", turn: { id: "a", status: boundary === "missing" ? undefined : boundary } });
+      const before = [scoped(started(1)), scoped(event(2, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase: "commentary", delta: "초안" })), scoped(ended)];
+      const late = [
+        { ...snapshot(4, "p", "다른 연결"), connectionGeneration: 8 },
+        snapshot(5, "new", "종료 뒤 처음 본 설명"),
+        snapshot(6, "p"),
+        snapshot(7, "p", final),
+        snapshot(8, "p", "두 번째 완료"),
+        scoped(event(9, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase: "commentary", delta: "늦은 조각" })),
+      ];
+      const original = projectNativeActivity(before, "t").turns[0];
+      const [settled] = projectNativeActivity([...before, ...late], "t").turns;
+      expect(settled).toMatchObject({ endedAt: original?.endedAt, status: original?.status });
+
+      expect(settled?.entries).toMatchObject([{ id: "item:p", description: final, status: "completed" }]);
+    });
+  }
+
+  test("실시간 상태 미확인 종료 뒤 저장 이력은 다시 정지시키지 않는다", () => {
+    const before = [
+      started(1),
+      event(2, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase: "commentary", delta: "초안" }),
+      event(3, "turn/completed", { threadId: "t", turn: { id: "a" } }),
+    ];
+    const prior = projectNativeActivity(before, "t").turns[0];
+    const [settled] = projectNativeActivity([
+      ...before,
+      { ...event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } }), historical: true },
+      started(5),
+      item(6, "item/completed", { id: "p", type: "agentMessage", phase: "commentary", text: "최종 설명" }),
+    ], "t").turns;
+    expect(settled).toMatchObject({ endedAt: prior?.endedAt, status: "unknown" });
+
+    expect(settled?.entries).toMatchObject([{ description: "최종 설명", status: "completed" }]);
   });
 
   test("빈 완료 snapshot은 누적된 공개 설명을 지운다", () => {

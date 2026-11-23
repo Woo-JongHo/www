@@ -14,6 +14,8 @@ macOS arm64에서 깨끗한 소스로 `npm run release:package`를 실행한다.
 
 출력은 실행별로 격리된 `.www/releases/0.1.n-<임의값>/`의 `WWW-0.1.n-darwin-arm64.zip`, `manifest.json`, `SHA256SUMS`다. manifest는 버전·커밋·dirty·소스 digest·대상 플랫폼·실행한 검사 목록과 zip의 크기·SHA-256을 가진다. 번들만 격리 staging에 복사해 소스·문서·로컬 설정·개발 CLI를 앱에 넣지 않는다. 서명·공증은 적용하지 않았고 manifest에도 이를 명시한다. macOS의 배포 신뢰 처리와 실제 설치 실행 확인은 별도다. Codex CLI는 여전히 사용 머신에 필요하다.
 
+앱의 `Contents/Resources/app/dist/third-party/ovis.md`에 [Ovis 코드 사용 고지](third-party/ovis.md)를 포함한다. ZIP을 생성하기 전에 패키지 내부 고지와 저장소 원문의 바이트가 일치하는지 확인한다.
+
 Packager의 `appVersion`, `buildVersion`, `electronVersion`은 [공식 옵션](https://electron.github.io/packager/main/interfaces/Options.html)에 따라 전달한다. ZIP bytes의 재현성을 약속하지 않으며 같은 소스 버전과 실제 산출물 체크섬을 구분한다.
 
 ## GitHub Actions 준비와 게시

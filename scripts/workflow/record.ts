@@ -4,8 +4,8 @@
  */
 import { promises as fs, constants } from "node:fs";
 import path                          from "node:path";
-import { randomUUID }                from "node:crypto";
-import { assertWorkId }              from "./preflight.ts";
+import { createHash, randomUUID }    from "node:crypto";
+import { assertWorkId, validateWritePaths } from "./preflight.ts";
 
 export interface RuntimePaths {
   directory : string ;
@@ -25,6 +25,55 @@ export interface RuntimeState extends Record<string, unknown> {
   mutationUnknown? : boolean  ;
   verification?    : unknown  ;
 }
+export const CHAT_HARNESS_PHASES = ["spec", "design", "build", "diagnose", "verify"] as const;
+export type ChatHarnessPhase = typeof CHAT_HARNESS_PHASES[number];
+
+export function isChatHarnessEventId(value: unknown): value is string {
+  return typeof value === "string" && /^www-chat-[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(value);
+}
+
+export function hostReceiptPath(repo: string, workId: string, eventId: string): string {
+  return path.join(repo, ".www", "evidence", workId, `${createHash("sha256").update(eventId).digest("hex")}.json`);
+}
+
+export async function readChatHarnessReceipt(repo: string, workId: string, eventId: string, phase: ChatHarnessPhase) {
+  if (!isChatHarnessEventId(eventId)) return null;
+  const paths = runtimePaths(repo, workId);
+  await validateWritePaths(repo, [`.www/runtime/${workId}/session.json`, `.www/runtime/${workId}/events.jsonl`]);
+  const { events } = await readRuntime(paths);
+  const start = events.find(event => event.id === `${eventId}-chat-start`);
+  const receipt = events.find(event => event.id === `${eventId}-chat-receipt`);
+  if (start?.type !== "chat_harness_start" || receipt?.type !== "chat_harness_receipt"
+    || start.phase !== phase || receipt.phase !== phase || start.workId !== workId || receipt.workId !== workId
+    || typeof start.revision !== "number" || typeof receipt.revision !== "number" || start.revision >= receipt.revision
+    || typeof receipt.recordedAt !== "string" || (receipt.outcome !== "passed" && receipt.outcome !== "failed")) return null;
+  if (phase === "verify") {
+    if (typeof receipt.verificationId !== "string" || !/^attempt-[a-f0-9-]{36}$/.test(receipt.verificationId)) return null;
+  } else {
+    const run = events.find(event => event.id === eventId);
+    const host = events.find(event => event.id === `${eventId}-host`);
+    if (run?.skill !== `www-${phase}` || run.type !== "status" || run.status !== "running" || !host
+      || typeof run.revision !== "number" || run.revision <= start.revision
+      || host.injected !== false || (host.type !== "host_result" && host.type !== "post_failure")
+      || typeof host.receiptHash !== "string" || !/^[a-f0-9]{64}$/.test(host.receiptHash)
+      || typeof host.revision !== "number" || host.revision <= run.revision || host.revision >= receipt.revision) return null;
+    const file = hostReceiptPath(repo, workId, eventId);
+    const relative = path.relative(repo, file).split(path.sep).join("/");
+    if (host.receiptPath !== relative) return null;
+    await validateWritePaths(repo, [relative]);
+    const handle = await fs.open(file, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
+    try {
+      const info = await handle.stat();
+      if (!info.isFile() || info.nlink !== 1 || info.size > 16 * 1024 * 1024) return null;
+      const bytes = await handle.readFile();
+      if (bytes.length !== info.size || createHash("sha256").update(bytes).digest("hex") !== host.receiptHash) return null;
+    } finally {
+      await handle.close();
+    }
+  }
+  return { outcome: receipt.outcome, completedAt: receipt.recordedAt, verificationId: typeof receipt.verificationId === "string" ? receipt.verificationId : null };
+}
+
 function object(value: unknown): value is Record<string, unknown> { return value !== null && typeof value === "object" && !Array.isArray(value); }
 function eventValue(value: unknown): RuntimeEvent {
   if (!object(value) || typeof value.id !== "string" || !value.id || (value.revision !== undefined && typeof value.revision !== "number")) throw new Error("잘못된 event 기록입니다.");
