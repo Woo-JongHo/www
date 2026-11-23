@@ -370,7 +370,25 @@ export async function verify({ repo, record, inputs, command, args = [], criteri
   };
 }
 
-export async function evaluateEvidence({ repo, record, attempt }: { repo?: string; record?: unknown; attempt?: VerificationAttempt } = {}): Promise<EvidenceEvaluation> {
+function matchingCriterion(record: unknown, attempt: VerificationAttempt, criterionId: string): boolean {
+  if (!Array.isArray(attempt.criterionIds) || !attempt.criterionIds.includes(criterionId) || !Array.isArray(attempt.criteriaSnapshot)) return false;
+  if (digest(JSON.stringify(attempt.criteriaSnapshot)) !== attempt.criteriaDigest) return false;
+  const previous = attempt.criteriaSnapshot.find(item => item.id === criterionId);
+  if (!previous) return false;
+  const current = criterionDefinitions(record).find(item => item.id === criterionId);
+  return JSON.stringify(current) === JSON.stringify(previous);
+}
+
+export function criterionEvidence(record: unknown, attempt: VerificationAttempt, criterionId: string, evaluation: EvidenceEvaluation): EvidenceEvaluation {
+  if (!Array.isArray(attempt.criterionIds) || !attempt.criterionIds.includes(criterionId)) {
+    return { usable: false, reasons: [...new Set([...evaluation.reasons, "invalid_coverage"])] };
+  }
+  if (!evaluation.reasons.includes("criteria_changed") || !matchingCriterion(record, attempt, criterionId)) return evaluation;
+  const reasons = evaluation.reasons.filter(reason => reason !== "criteria_changed");
+  return { usable: reasons.length === 0, reasons };
+}
+
+export async function evaluateEvidence({ repo, record, attempt, criterionId }: { repo?: string; record?: unknown; attempt?: VerificationAttempt; criterionId?: string } = {}): Promise<EvidenceEvaluation> {
   const reasons: string[] = [];
   if (!attempt || typeof attempt.id !== "string" || !/^attempt-[a-f0-9-]+$/i.test(attempt.id) || !HASH.test(attempt.source?.digest ?? "") || !HASH.test(attempt.criteriaDigest ?? "") || typeof attempt.command !== "string" || !attempt.command.trim() || attempt.command.includes("\0")) return { usable: false, reasons: ["invalid_attempt"] };
   if (attempt.executor !== "process") reasons.push("untrusted_executor");
@@ -407,7 +425,8 @@ export async function evaluateEvidence({ repo, record, attempt }: { repo?: strin
       } catch { reasons.push("artifacts_unavailable"); }
     }
   }
-  return { usable: reasons.length === 0, reasons: [...new Set(reasons)] };
+  const evaluation = { usable: reasons.length === 0, reasons: [...new Set(reasons)] };
+  return criterionId === undefined ? evaluation : criterionEvidence(record, attempt, criterionId, evaluation);
 }
 
 function inline(value: unknown) { return String(value).replace(/`/g, "\\`").replace(/[\r\n]/g, " "); }

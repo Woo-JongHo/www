@@ -1065,3 +1065,24 @@ checker 실제201/186/15/2,828,729bytes 통과와 원문15bytes·original필드 
 - 검증 중 소스 유지: 확인
 - 출력: stdout 3579바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+## GitHub #29 계획 검토 문서 세 개의 교정 (2026-11-24)
+
+고정 영어 원문과 한국어 전체를 읽은 Claude Opus 5.5가 조건과 명령의 의미 손실을 발견했다. 아래의 교정본은 같은 모델의 별도 읽기 전용 실행에서 변경된 문맥을 다시 검토했다. 문서별 지문으로 이번 판정의 범위를 기록한다.
+
+| gstack 문서 | 확인한 동작 | 최종 번역 SHA-256 |
+|---|---|---|
+| `plan-design-review/SKILL.md` | 기준 브랜치와 기본 브랜치를 구분하고 계획 파일이 없을 때 검사를 생략하는 조건을 복원했다. | `2583391a227c32f6621e35e1e6a1dea4d15053b36cbcbaf4ecdbe7368b82f284` |
+| `plan-design-review/sections/review-sections.md` | 선택된 수정의 승인, 설계 지시서 파일 전달, 점수와 보고서 출력 레이블을 복원했다. | `aad9571337b9e4438112087197bfea587f6f56802bcc262bf10574472f5b2923` |
+| `plan-eng-review/SKILL.md` | 도구 출력의 영문 판정 문자열, 쿼리 정제 대상, 검토 재개 순서와 실제 절 제목을 연결했다. | `e899efedd6dfb71cd8465629e549a65e7e9533dc6c4e815e38033bc13159aa97` |
+
+검토에 사용한 실행 식별자는 다음과 같다. 엔지니어링 문서의 첫 교정 검토에서 절 제목이 한 줄에 남아 이를 바로잡은 뒤 해당 참조만 다시 확인했다.
+
+- 전체 대조 `plan-design-review/SKILL.md` · `review-ad078e20-f211-48e9-bd65-2614e6358129` · 지적 발견
+- 전체 대조 `plan-design-review/sections/review-sections.md` · `review-d1c1b56e-9983-41d9-8123-d3cc265f491b` · 지적 발견
+- 전체 대조 `plan-eng-review/SKILL.md` · `review-29e2e3aa-9996-4e6f-b4bc-80764dd03661` · 지적 발견
+- 교정 검토 `design-pass` · `review-ad70b2fc-01d7-4e23-bff0-3cffad96f3e9` · pass · 영수증 SHA-256 `a8600ad8086d43478c48bd62d103431db17aef9dfcdef23f484323eba15aeada`
+- 교정 검토 `eng-pass` · `review-9ad57f95-e03e-4dd3-9ba7-982a311ce0e2` · fail · 영수증 SHA-256 `d1953910def21f8a81484c773bb1c20f7c2b7845d174834c39fc41641bab6ce4`
+- 교정 검토 `eng-ref` · `review-67a4fd47-fa86-4987-ac6a-15490d91c205` · pass · 영수증 SHA-256 `64d96fd0dd1b7c7772de763c78e7f85fbbca67560dbb9427262afa7686873a8b`
+
+PR 후보에서 목록 검사 `bun scripts/check-skill-library.ts`가 201개 파일(번역 186개, 원문 보존 15개)을 확인했고 `node --experimental-strip-types --test test/skill-library.test.ts`의 15개 검사가 모두 통과했다. 전체 번역의 최종 수용 판정과 다른 파일의 교정은 [이슈 #29](https://github.com/Woo-JongHo/www/issues/29)에서 이어간다.

@@ -65,6 +65,10 @@ test("기본 Agent 개요는 고정 Skills 다섯 개와 계획을 보이고 Hoo
   expect(sidebar).not.toContain("postToolUse"                 ) ;
   expect(sidebar).not.toContain("/plugin/hooks.json"          ) ;
   const detail = renderToStaticMarkup(createElement(NativeActivityView, { events, threadId: "t", workspacePath: "/repo" }));
+  expect(Array.from(detail.matchAll(/data-artifact-id="([^"]+)"/g), ([, id]) => id)).toEqual([
+    "www-dev", "www-design-agent",
+    "www-spec", "www-design", "www-build", "www-diagnose", "www-verify", "www-commit",
+  ]);
   expect(detail)    .toContain("postToolUse"                  ) ;
   expect(detail)    .toContain("실패 관측"                    ) ;
   expect(detail).not.toContain("PRIVATE_CONTEXT_DO_NOT_RENDER") ;

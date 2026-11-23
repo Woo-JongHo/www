@@ -170,6 +170,21 @@ test("기준 결과·증거와 달리 같은 ID의 설명·필수 여부·요구
   }
 });
 
+test("기준별 판정은 원본 지문과 해당 기준을 대조하고 전체 시도의 재사용은 따로 판정한다", async (t) => {
+  const repo = await fixture();
+  t.after(() => rm(repo, { recursive: true, force: true }));
+  const attempt = await verify(options(repo, { criterionIds: ["AC-1", "AC-2"] }));
+  assert.equal(attempt.result, "passed");
+  const changed = record();
+  changed.criteria[1].description = "새 관찰";
+  const context = { repo, attempt, record: changed };
+  assert.equal((await evaluateEvidence({ ...context, criterionId: "AC-1" })).usable, true);
+  assert.equal((await evaluateEvidence({ ...context, criterionId: "AC-2" })).usable, false);
+  assert.equal((await evaluateEvidence(context)).usable, false);
+  attempt.criteriaSnapshot[1].description = "새 관찰";
+  assert.equal((await evaluateEvidence({ ...context, criterionId: "AC-1" })).usable, false);
+});
+
 test("검증 명령 실행 중 대상이 바뀌면 종료 코드가 0이어도 통과하지 않는다", async (t) => {
   const repo = await fixture(); t.after(() => rm(repo, { recursive: true, force: true }));
   await writeFile(path.join(repo, "mutate.ts"), "import { writeFileSync } from 'node:fs'; writeFileSync('src/value.ts', 'export const value = 3;');\n");
