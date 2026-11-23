@@ -3,7 +3,7 @@
 <!-- scripts/resolvers/design-checklist.ts를 통해 lib/design-catalog.ts의 GENERATED. 실행: bun run gen:skill-docs -->
 # 설계 검토 체크리스트(라이트)
 
-> **카탈로그에서 생성됨.** 카테고리 1은 grep으로 감지 가능한 `lib/design-catalog.ts`의 슬롭 항목과 레거시 블랙리스트 라인을 렌더링합니다. 이는 DESIGN_METHODOLOGY 카테고리 9가 렌더링하는 것의 하위 집합으로, 동일한 카탈로그에서 가져온 것이므로 공유 항목이 표류할 수 없습니다. 카탈로그를 편집한 다음 `bun run gen:skill-docs`.를 실행하세요.
+> **카탈로그에서 생성됨.** 카테고리 1은 grep으로 감지 가능한 `lib/design-catalog.ts`의 슬롭 항목과 레거시 블랙리스트 라인을 렌더링합니다. 이는 DESIGN_METHODOLOGY 카테고리 9가 렌더링하는 것의 하위 집합으로, 동일한 카탈로그에서 가져온 것이므로 공유 항목이 표류할 수 없습니다. 카탈로그를 편집한 다음 `bun run gen:skill-docs`를 실행하세요.
 
 ## 지침
 
@@ -36,7 +36,7 @@ _DJ=$(mktemp "${TMPDIR:-/tmp}/gstack-detect.XXXXXX"); bun --no-env-file --config
 
 - **[HIGH]** — grep/pattern 일치를 통해 안정적으로 감지할 수 있습니다. 확실한 결과.
 - **[MEDIUM]** — 패턴 집계 또는 휴리스틱을 통해 감지 가능합니다. 발견 항목으로 플래그를 지정하지만 약간의 소음이 발생할 수 있습니다.
-- **[LOW]** — 시각적 의도를 이해해야 합니다. 다음과 같이 표시됩니다. "가능한 문제 - 시각적으로 확인하거나 /design-review.를 실행하세요."
+- **[LOW]** — 시각적 의도를 이해해야 합니다. 다음과 같이 표시됩니다. "가능한 문제 - 시각적으로 확인하거나 /design-review를 실행하세요."
 
 괄호로 묶인 `[rule-id]`는 동일한 패턴에 대한 결정적 검출기 규칙의 이름을 지정합니다. 탐지기의 적중과 동일한 파일:줄에 있는 이 체크리스트의 적중이 하나의 발견입니다.
 
@@ -47,7 +47,7 @@ _DJ=$(mktemp "${TMPDIR:-/tmp}/gstack-detect.XXXXXX"); bun --no-env-file --config
 **AUTO-FIX**(기계적 CSS 수정만 해당 - HIGH 신뢰도, 설계 판단 필요 없음):
 - 교체 없이 `outline: none` → `outline: revert` 또는 `&:focus-visible { outline: 2px solid currentColor; }` 추가
 - 새 CSS의 `!important` → 이를 제거하고 선택자 우선순위를 올바르게 수정
-- [layout-transition] `transition: all` 또는 너비, 높이, 위쪽, 왼쪽으로 전환됩니다. 변형 및 불투명도에 애니메이션을 적용합니다.
+- [layout-transition] `transition: all` 또는 width, height, top, left의 transition. transform과 opacity를 애니메이션합니다.
 - [justified-text] 웹의 양쪽 정렬된 본문 텍스트는 강을 남깁니다. 왼쪽 정렬.
 - [tiny-text] 본문 텍스트가 16px 미만입니다. 16px로 올립니다.
 - [all-caps-body] 대문자 단락. 캡은 짧은 라벨용입니다.
@@ -55,7 +55,7 @@ _DJ=$(mktemp "${TMPDIR:-/tmp}/gstack-detect.XXXXXX"); bun --no-env-file --config
 **ASK**(그 외 모든 것 — 설계 판단 필요):
 - 모든 AI 슬롭 결과, 타이포그래피 구조, 간격 선택, 상호 작용 상태 격차, DESIGN.md 위반
 
-**LOW 신뢰 항목** → "가능: [설명]. 시각적으로 확인하거나 /design-review.를 실행하십시오"로 표시됨 절대 AUTO-FIX하지 않는다.
+**LOW 신뢰 항목** → "가능: [설명]. 시각적으로 확인하거나 /design-review를 실행하십시오"로 표시합니다. 절대 AUTO-FIX하지 않습니다.
 
 ---
 
@@ -93,9 +93,9 @@ Design Review: 문제 N개(X 자동 수정 가능, Y 입력 필요, Z 확인 필
 
 - **[HIGH]** [side-tab] 카드의 색상 왼쪽 테두리(`border-left: 3px solid <accent>`). 카드, 콜아웃 또는 목록 항목 선택기의 `border-left: <n>px solid`에 대한 Grep입니다.
 
-- **[HIGH]** system-ui 또는 PRIMARY 디스플레이/본문 글꼴인 `-apple-system` — "타이포그래피를 포기했습니다" 신호입니다. 실제 서체를 선택하세요. 스택의 첫 번째 면인 `system-ui` 또는 `-apple-system`의 본문, 제목 및 기본 스타일에 대한 Grep `font-family`.
+- **[HIGH]** PRIMARY 디스플레이/본문 글꼴로 쓰인 system-ui 또는 `-apple-system` — "타이포그래피를 포기했습니다"라는 신호입니다. 실제 서체를 선택하세요. 본문, 제목 및 기본 스타일의 `font-family`에서 스택의 첫 번째 서체가 `system-ui` 또는 `-apple-system`인지 Grep합니다.
 
-- **[HIGH]** [gradient-text] 강조점은 무게 또는 크기입니다. 그라데이션 텍스트는 의상에서 강조됩니다. 그라데이션 배경 옆에 있는 `background-clip: text`에 대한 Grep입니다.
+- **[HIGH]** [gradient-text] 강조는 굵기나 크기로 합니다. 그라데이션 텍스트는 강조가 장식으로 변장한 것입니다. 그라데이션 배경 옆의 `background-clip: text`를 Grep합니다.
 
 - **[HIGH]** [bounce-easing] UI 모션의 오버슈트 및 바운스 곡선. 기본 상태에서 이미 보이도록 두고 지수형 ease-out을 사용하세요. 1을 넘는 제어점이 있거나 애니메이션 이름에 `bounce`가 있는 입방 베지어 곡선에 대한 Grep 전환 및 키프레임입니다.
 
@@ -103,7 +103,7 @@ Design Review: 문제 N개(X 자동 수정 가능, Y 입력 필요, Z 확인 필
 
 - **[HIGH]** [oversized-h1] 포스터가 아닌 페이지에 6rem을 초과하는 표시 유형입니다. 크기는 계층 구조가 아닙니다. Grep h1 및 6rem 또는 96px 이상의 글꼴 크기에 대한 디스플레이 선택기.
 
-- **[HIGH]** [extreme-negative-tracking] 디스플레이 유형에서 문자 간격이 -0.04em 미만입니다. 긴밀한 추적은 취향입니다. 짓눌린 추적은 말해줍니다. -0.04em 미만의 값에 대해 Grep `letter-spacing`.
+- **[HIGH]** [extreme-negative-tracking] 디스플레이 서체에서 자간이 -0.04em 미만입니다. 촘촘한 자간은 취향이지만, 짓눌린 자간은 티가 나는 징후입니다. -0.04em 미만인 `letter-spacing` 값을 Grep합니다.
 
 - **[MEDIUM]** [ai-color-palette] 보라색/보라색/남색 그라데이션 배경 또는 파란색에서 보라색으로의 색상 구성. `#6366f1`~`#8b5cf6` 범위의 값을 가진 `linear-gradient` 또는 보라색/보라색으로 해석되는 CSS 사용자 정의 속성을 찾습니다.
 
@@ -115,7 +115,7 @@ Design Review: 문제 N개(X 자동 수정 가능, Y 입력 필요, Z 확인 필
 
 - **[MEDIUM]** 상투적인 대표 문구("Welcome to [X]", "Unlock the power of...", "Your all-in-one solution for..."). HTML/JSX에서 "Welcome to", "Unlock the power of", "Your all-in-one solution", "Revolutionize your", "Streamline your workflow"를 검색합니다.
 
-- **[MEDIUM]** [overused-font] 디스플레이 음성으로 훈련 데이터 기본값은 보기를 중단했음을 의미합니다. Operate 또는 Read 표면의 본문 또는 UI로서 이들 중 일부는 괜찮습니다. 어느 것과 그 이유를 말해보세요. 디스플레이 선택기(h1, h2, .hero, .display)의 첫 번째 얼굴로 나열된 얼굴에 대한 Grep `font-family`. 얼굴: Inter, Roboto, Arial, Helvetica, Open Sans, Lato, Montserrat, Poppins, Space Grotesk, Space Mono, Fraunces, Playfair Display, Cormorant, Lora, Crimson, Newsreader, Syne, IBM Plex Sans, IBM Plex Serif, DM Sans, DM Serif, Outfit, Plus Jakarta Sans, Instrument Sans, Geist.
+- **[MEDIUM]** [overused-font] 훈련 데이터의 기본 서체를 디스플레이 보이스로 쓰는 것은 더 찾아보기를 멈췄다는 뜻입니다. Operate 또는 Read 표면의 본문이나 UI에는 이들 중 일부가 괜찮습니다. 어느 서체인지와 그 이유를 밝히세요. 디스플레이 선택기(h1, h2, .hero, .display)의 첫 번째 서체로 나열된 서체를 `font-family`에서 Grep합니다. 서체: Inter, Roboto, Arial, Helvetica, Open Sans, Lato, Montserrat, Poppins, Space Grotesk, Space Mono, Fraunces, Playfair Display, Cormorant, Lora, Crimson, Newsreader, Syne, IBM Plex Sans, IBM Plex Serif, DM Sans, DM Serif, Outfit, Plus Jakarta Sans, Instrument Sans, Geist.
 
 - **[MEDIUM]** [pulsing-dot] "Live"나 "Online" 옆에서 계속 깜박이는 작은 원입니다. 첫 반복 이후에는 새 정보를 주지 않습니다. 작은 원형 요소의 무한 keyframe 애니메이션을 검색합니다.
 
@@ -125,7 +125,7 @@ Design Review: 문제 N개(X 자동 수정 가능, Y 입력 필요, Z 확인 필
 
 - **[MEDIUM]** [theater-slop-phrase] "Built for the way you work", "Designed for teams like yours", "Meet your new..."처럼 내용을 설명하기보다 출시를 연출하는 문구입니다. "built for", "designed for", "meet your new", "ship faster", "the future of"를 검색합니다.
 
-- **[MEDIUM]** [image-hover-transform] 마우스를 올리면 이미지 크기가 조정됩니다. 정보가 없는 모션입니다. `transform: scale`. 이미지에 대한 Grep `:hover` 규칙
+- **[MEDIUM]** [image-hover-transform] 마우스를 올리면 이미지가 확대됩니다. 아무런 정보도 전달하지 않는 모션입니다. 이미지의 `:hover` 규칙에서 `transform: scale`을 Grep합니다.
 
 - **[MEDIUM]** 기본 클릭 유도 문구로 사용되는 그라데이션 버튼입니다. 팔레트가 소유한 단색 1개. 그라데이션 배경을 위한 Grep 버튼 및 CTA 선택기.
 
@@ -133,11 +133,11 @@ Design Review: 문제 N개(X 자동 수정 가능, Y 입력 필요, Z 확인 필
 
 - **[MEDIUM]** 기본 표면으로 흐릿한 배경이 있는 반투명 유리 패널. 모든 곳이 아닌 깊이를 설명하는 하나의 반투명 레이어입니다. 둘 이상의 컨테이너에서 `backdrop-filter: blur`에 대한 Grep입니다.
 
-- **[MEDIUM]** 라벨과 본문 문구의 고정 폭은 기술적으로 보입니다. Mono는 코드 및 데이터 열용입니다. 코드나 테이블 형식이 아닌 선택기의 고정 폭 스택용 Grep `font-family`입니다.
+- **[MEDIUM]** 기술적으로 보이게 하려고 라벨과 본문 문구에 고정폭 서체를 사용합니다. Mono는 코드와 데이터 열에 사용합니다. 코드나 표 형식이 아닌 선택기의 고정폭 스택을 `font-family`에서 Grep합니다.
 
 - **[MEDIUM]** 선택 색상, 캐럿, 스크롤 막대, 포커스 링, 밑줄 오프셋, 표 형식 숫자는 브라우저 기본값으로 유지됩니다. 팔레트에서 테마를 지정하세요. `::selection`, `caret-color`, `accent-color`, `scrollbar-color`, `text-underline-offset`, `font-variant-numeric`에 대한 Grep: 존재하지 않는 것은 테마가 없음을 의미합니다.
 
-- **[LOW]** **3열 기능 그리드:** 색상으로 표시된 원 아이콘 + 굵은 제목 + 2줄 설명, 대칭으로 3배 반복됩니다. THE 가장 잘 알려진 AI 레이아웃. 각각 원형 요소 + 제목 + 단락을 포함하는 정확히 3개의 하위 항목이 있는 그리드/플렉스 컨테이너를 찾습니다.
+- **[LOW]** **3열 기능 그리드:** 색이 있는 원 안의 아이콘 + 굵은 제목 + 2줄 설명이 대칭으로 3번 반복됩니다. 가장 알아보기 쉬운 AI 레이아웃입니다. 각각 원형 요소 + 제목 + 단락을 포함하는 자식이 정확히 3개인 그리드/플렉스 컨테이너를 찾습니다.
 
 - **[LOW]** 섹션 장식으로 색상이 지정된 원 안의 아이콘(SaaS 시작 템플릿 모양). 아이콘의 장식 컨테이너로 사용되는 `border-radius: 50%` + 배경색이 있는 요소를 찾으세요.
 
@@ -163,19 +163,19 @@ Design Review: 문제 N개(X 자동 수정 가능, Y 입력 필요, Z 확인 필
 
 - **[MEDIUM]** 텍스트 컨테이너에서 `max-width` 누락: `max-width`가 설정되지 않은 본문 텍스트 또는 단락 컨테이너로 75자를 초과하는 줄을 허용합니다. 텍스트 래퍼에서 `max-width`를 확인하세요.
 
-- **[HIGH]** 새로운 CSS 규칙의 `!important`. 추가된 줄에 `!important`에 대한 Grep이 있습니다. 거의 항상 적절하게 고정되어야 하는 특이성 탈출구입니다.
+- **[HIGH]** 새로운 CSS 규칙의 `!important`. 추가된 줄에서 `!important`를 Grep합니다. 거의 언제나 우선순위를 올바르게 수정해야 하는 specificity 탈출구입니다.
 
 ### 4. 상호작용 상태(3개 항목)
 
 - **[MEDIUM]** 대화형 요소(버튼, 링크, 입력)에 마우스 오버/포커스 상태가 없습니다. 새로운 대화형 요소 스타일에 대해 `:hover` 및 `:focus` 또는 `:focus-visible` 의사 클래스가 있는지 확인하세요.
 
-- **[HIGH]** 교체 초점 표시기가 없는 `outline: none` 또는 `outline: 0`. `outline:\s*none` 또는 `outline:\s*0`.에 대한 Grep 이렇게 하면 키보드 접근성이 제거됩니다.
+- **[HIGH]** 대체 초점 표시기가 없는 `outline: none` 또는 `outline: 0`. `outline:\s*none` 또는 `outline:\s*0`을 Grep합니다. 이렇게 하면 키보드 접근성이 제거됩니다.
 
 - **[LOW]** 대화형 요소의 터치 대상 크기가 44px 미만인 경우. 버튼과 링크에서 `min-height`/`min-width`/`padding`를 확인하세요. 여러 속성의 유효 크기를 계산해야 합니다. 코드만으로는 신뢰도가 낮습니다.
 
 ### 5. DESIGN.md 위반(3개 항목, 조건부)
 
-`DESIGN.md` 또는 `design-system.md`가 존재하는 경우에만 적용됩니다. 파일에 YAML 머리말(공개 DESIGN.md 형식)이 있는 경우 `bun --no-env-file --config=/dev/null run ~/.claude/skills/gstack/bin/gstack-design-md.ts tokens DESIGN.md`는 ​​플랫 토큰 맵을 인쇄하고 보정 소스입니다. 토큰에 있는 값은 결코 결과가 아닙니다.
+`DESIGN.md` 또는 `design-system.md`가 존재하는 경우에만 적용됩니다. 파일에 YAML 머리말(공개 DESIGN.md 형식)이 있는 경우 `bun --no-env-file --config=/dev/null run ~/.claude/skills/gstack/bin/gstack-design-md.ts tokens DESIGN.md`는 플랫 토큰 맵을 인쇄하고 보정 소스입니다. 토큰에 있는 값은 결코 결과가 아닙니다.
 
 - **[MEDIUM]** 명시된 팔레트에 없는 색상입니다. 변경된 CSS의 색상 값을 DESIGN.md에 정의된 팔레트와 비교합니다.
 

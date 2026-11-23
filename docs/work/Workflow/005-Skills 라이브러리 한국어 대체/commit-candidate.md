@@ -1,5 +1,8 @@
 # 이 작업의 게시 후보와 검사 한계
 
+2026-11-24 검토 대상은 맨 아래 **#29 최종 교정 후보** 절의 13개 경로다. 그 앞의 “현재”·“후보”·커밋 메시지와 파일 수는 각 절 작성 당시의 제출 이력이다.
+
+
 현재 재개 요청은 커밋·push·게시를 금지한다. 아래는 검토용 제안이며 stage 또는 실행을 뜻하지 않는다.
 
 - 후보: 이 작업에 속한 `skill-library/` 201개 선택 자료와 `sources.json`·`inventory.json`, `scripts/check-skill-library.ts`, `test/skill-library.test.ts`, `docs/skills/CATALOG.md`, 관련 패키징 제외 설정, 이 작업 문서·원장. 실제 diff와 과거 커밋 포함 여부를 게시 시점에 다시 대조해 변경이 없는 파일은 커밋에 넣지 않는다.
@@ -103,3 +106,27 @@
 ## 현재304문구 — 기존 지적의 현재 재사용 대조
 
 다국어 결과 키를 다시 파싱해 파일별 판독185건과 실제출력누락1건을구분했다. 이전134개지적을현재원문과다시대조해이미교정84·문맥상반박28·원문모호4·추가의미교정18로분리했고,현재8문서쌍의전문읽기도별도로회수했다. 새18문구는공식하위유지보수작업 `work-2edb1795-1f7b-4982-a849-e3caa6926426`에한정접수해기존W005정확권한목록을수기로바꾸지않고선별반영했다. 기존선택201자료안의7파일이며새라이브러리·제품기능·모델대체권한이아니다. 로컬지문·크기만갱신했고원문15·고정출처/법문/비대상본문과명령을보존했다. diff코드표지오역1건은원문식별자로복원했다. 하위저작typed post/sourceStable통과는W005전체의미통과/완료가아니며각UUID의고유감사·보고·완료영수증을복사하지않는다. 감사10제목지적은primary소비지침근거부족으로11에서재판정됐지만전체AC1/4수용은아직별도다. stage/commit/push0과새공식감사대기를유지한다.
+
+## #29 최종 교정 후보 (2026-11-24)
+
+[PR #33](https://github.com/Woo-JongHo/www/pull/33)에 세 계획 문서를 먼저 제출했다. 후속 후보에는 아래 번역 12개와 해당 로컬 해시·크기의 목록을 포함한다. 제안 커밋 메시지는 **검토·배포 스킬 번역의 조건과 출력 형식을 복원**이다. 검사 제출물에는 이 작업의 검증 근거와 후보 설명도 포함한다. 원문, 실행 로그, 자격 증명, 임시 파일은 로컬에 보관한다.
+
+- `skill-library/inventory.json`
+- `skill-library/upstream/addy-osmani/references/security-checklist.md`
+- `skill-library/upstream/addy-osmani/skills/api-and-interface-design/SKILL.md`
+- `skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md`
+- `skill-library/upstream/gstack/qa/sections/preamble.md`
+- `skill-library/upstream/gstack/review/checklist.md`
+- `skill-library/upstream/gstack/review/design-checklist.md`
+- `skill-library/upstream/gstack/review/greptile-triage.md`
+- `skill-library/upstream/gstack/review/sections/adversarial.md`
+- `skill-library/upstream/gstack/review/sections/plan-completion.md`
+- `skill-library/upstream/gstack/ship/sections/capy-pr.md`
+- `skill-library/upstream/gstack/ship/sections/pr-body.md`
+- `skill-library/upstream/matt-pocock/README.md`
+
+inventory의 201개 선택 파일을 고정 출처의 보존 원문과 대조했다. 원문 보존 대상 15개는 바이트가 일치한다. 번역 186개 중 164개는 기존 전체 대조와 입력 지문이 같고, 22개는 별도 전체 대조와 해당 파일에 대한 교정 기록이 있다. 이전 전체 감사에서 실패했던 메뉴 지시(“Reply with A, B, or C.”)는 답변을 요청하도록 교정돼 PR #33에 반영됐다. 개별 문맥 대조와 전체 작업의 수용 여부는 각각 판정한다. 원문 자체의 모호성 네 곳과 엔지니어링 절의 어색한 표기는 남아 있다.
+
+이 문서는 후속 PR을 만들기 전에 사용자가 검사할 수 있도록 코드·메시지·근거·한계를 제출하는 AC-4 산출물이다. 이 문서를 생성한 Workflow/005 하네스의 commit·publish 권한은 false이며 이 후속 후보에 대한 commit·push는 이 단계에서 실행하지 않았다. 새 이슈 코멘트로 후보 명세를 제출한 후 상위 세션이 별도로 승인된 게시 작업을 수행한다. 진행 상황은 기존 이슈 본문에 덮어쓰지 않고 새 코멘트에 남긴다.
+
+[커밋·푸시 전 후보 제출 코멘트](https://github.com/Woo-JongHo/www/issues/29#issuecomment-7116184870)
