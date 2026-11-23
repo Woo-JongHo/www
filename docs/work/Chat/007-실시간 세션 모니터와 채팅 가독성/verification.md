@@ -1135,3 +1135,23 @@ Chat 013의 사용자 결정에 따라 기본 화면 다섯 스킬과 상세 모
 - 검증 중 실행 환경 유지: 확인
 - 출력: stdout 921바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-190cd690-fa59-48c4-adca-f2a48e10ba00"></a>
+## 검증 시도 — 2026-11-23T23:32:02.457Z
+
+- 시도 ID: `attempt-190cd690-fa59-48c4-adca-f2a48e10ba00`
+- 실행 시각: 2026-11-23T23:31:57.792Z ~ 2026-11-23T23:32:02.457Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","scripts/verification/chat007-monitor.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-11`
+- AC-11 화면 관찰값: `{"agent":"WWW Agent","sidebar":["spec:명세","design:설계","build:구현","diagnose:진단","verify:검증"],"detail":[["www-dev","개발 접수·통합","agents/www/AGENT.md","관측 없음"],["www-design-agent","화면·디자인 인계","agents/www-design/AGENT.md","관측 없음"],["www-spec","요구·수용 기준","skills/www/www-spec/SKILL.md","요청됨"],["www-design","구조·검증 설계","skills/www/www-design/SKILL.md","읽기 명령 관측"],["www-build","허용된 구현","skills/www/www-build/SKILL.md","읽기 완료"],["www-diagnose","원인 진단","skills/www/www-diagnose/SKILL.md","관측 없음"],["www-verify","동작·근거 검증","skills/www/www-verify/SKILL.md","관측 없음"],["www-commit","커밋·게시 절차","skills/www/www-commit/SKILL.md","관측 없음"]],"applicationEvidence":"문서 읽기 관측을 실제 역할·스킬 적용 완료로 표시하지 않습니다."}`
+- 소스 HEAD: `89af4451fa776883e646c4a6d09b554e57005a52`
+- 검증 입력: `agents/www-design/AGENT.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `bunfig.toml`, `docs/architecture`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts`, `skills/www/www-build/SKILL.md`, `skills/www/www-commit/SKILL.md`, `skills/www/www-design/SKILL.md`, `skills/www/www-diagnose/SKILL.md`, `skills/www/www-spec/SKILL.md`, `skills/www/www-verify/SKILL.md`, `src`, `test/fixtures/activity-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/fixtures/package.json`, `test/package.json`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `ea3ca70bcfbabd585dc21c2384a5054045f932ecfc4bd34935d29b69da1dbd72`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 921바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
