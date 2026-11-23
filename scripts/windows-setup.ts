@@ -1,11 +1,16 @@
-import { spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { lstatSync, readFileSync, readlinkSync, realpathSync, symlinkSync, unlinkSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 if (process.platform !== "win32") throw new Error("Windows 네이티브 Node에서 실행해야 합니다.");
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-for (const name of ["www-spec", "www-design", "www-build", "www-diagnose", "www-verify", "www-commit"]) {
+// 현재 체크아웃에서 Git이 추적하는 스킬 링크만 복구한다.
+const entries = execFileSync("git.exe", ["ls-files", "--stage", "-z", "--", ".agents/skills"], { cwd: root, encoding: "utf8" });
+for (const entry of entries.split("\0")) {
+  const match = /^120000 [0-9a-f]+ 0\t\.agents\/skills\/([^/]+)$/.exec(entry);
+  if (!match) continue;
+  const name = match[1]!;
   const link      = join        (root, ".agents", "skills", name) ;
   const target    = join        (  root, "skills", "www", name  ) ;
   const canonical = realpathSync(            target             ) ;
@@ -32,7 +37,7 @@ const current = spawnSync("git.exe", ["-C", root, "config", "--local", "--get", 
 if (current.error) throw current.error;
 if (current.status !== 0 && current.status !== 1) throw new Error("저장소 로컬 심볼릭 링크 설정 조회 실패");
 if (current.stdout.trim() !== "true") {
-  const configuration = spawnSync("git.exe", ["-C", root, "config", "--local", "core.symlinks", "true"], { stdio: "inherit", shell: false });
+  const configuration = spawnSync("git.exe", ["-C", root, "config", "--local", "--replace-all", "core.symlinks", "true"], { stdio: "inherit", shell: false });
   if (configuration.error) throw configuration.error;
   if (configuration.status !== 0) throw new Error("저장소 로컬 심볼릭 링크 설정 실패");
 }
