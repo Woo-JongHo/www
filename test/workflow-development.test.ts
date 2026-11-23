@@ -598,7 +598,7 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
   assert.equal(second.acceptance?.status, "accepted", second.acceptance?.reasons.join(","));
   assert.ok(second.workId);
   const { assessDecompositionCompletion } = await import("../scripts/workflow/decomposition.ts");
-  const { verifyWork } = await import("../scripts/workflow/work.ts");
+  const { authorizationDigest, continueWork, verifyWork } = await import("../scripts/workflow/work.ts");
   const before = await readWork({ repo, workId: second.workId });
   assert.equal(before.record.schemaVersion, 2);
   assert.ok(before.record.workflow);
@@ -615,6 +615,22 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
   if (independentlyVerified.schemaVersion !== 2) throw new Error("현재 작업 기록이 필요합니다.");
   const acceptance = await assessDecompositionCompletion(repo, independentlyVerified);
   assert.equal(acceptance.usable, true, acceptance.reasons.join(","));
+  // 기록 완료 순서가 시작 순서와 뒤바뀐 fixture다.
+  const inverted = structuredClone(independentlyVerified);
+  const early = inverted.workflow.verifications.filter(v => v.artifacts?.some(a => a.path === "src/item.ts")).at(-1);
+  assert.ok(early);
+  const later = { ...early, id: "attempt-22024943-2a31-4414-84dc-8382820358c6", result: "failed" as const, exitCode: 1, startedAt: new Date(Date.parse(early.startedAt) + 1).toISOString() };
+  inverted.workflow.verifications = [...inverted.workflow.verifications.filter(v => v.id !== early.id), later, early];
+  assert.match((await assessDecompositionCompletion(repo, inverted)).reasons.join(","), /fixture-task: verification_failed/);
+  const workflow = independentlyVerified.workflow;
+  await continueWork({ repo, workId: second.workId, role: "www-dev", direct: true, requestId: "follow-up-fixture",
+    request: "같은 입력의 후속 요청", expectedRequestId: workflow.requestId, expectedRequestHash: workflow.requestHash,
+    expectedAuthorizationDigest: authorizationDigest(workflow.authorization), inputs: workflow.inputs,
+    approval: { ...workflow.authorization, commit: false, publish: false } });
+  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds: ["AC-1"] });
+  const continued = (await readWork({ repo, workId: second.workId })).record;
+  if (continued.schemaVersion !== 2) throw new Error("현재 작업 기록이 필요합니다.");
+  assert.match((await assessDecompositionCompletion(repo, continued)).reasons.join(","), /unit_request_changed/);
 });
 
 test("F03 실제 fixture 프로세스가 정상 종료해도 필수 산출물이 없으면 수용하지 않는다", async t => {

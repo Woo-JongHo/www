@@ -6,7 +6,7 @@ import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { validateWritePaths } from "./preflight.ts";
-import { evaluateEvidence, type VerificationAttempt } from "./evidence.ts";
+import { currentVerifications, evaluateEvidence, type VerificationAttempt } from "./evidence.ts";
 import type { CurrentWorkRecord } from "./types.ts";
 import { readRuntime, runtimePaths } from "./record.ts";
 
@@ -203,6 +203,8 @@ export async function assessDecompositionCompletion(repo: string, record: Curren
   try {
     const plan = await validateWorkDecomposition(repo, record, record.workflow.decomposition);
     const { events } = await readRuntime(runtimePaths(repo, record.id));
+    const continuation = record.workflow.continuations?.at(-1);
+    const verifications = currentVerifications(record.workflow.verifications, continuation);
     for (const item of plan.units) {
       if (requiredTaskIds && !requiredTaskIds.includes(item.taskId)) continue;
       const start = events.filter(event => event.type === "status" && event.status === "running" && object(event.allocation) && event.allocation.taskId === item.taskId).at(-1);
@@ -219,8 +221,12 @@ export async function assessDecompositionCompletion(repo: string, record: Curren
       if (!object(receipt) || receipt.eventId !== start.id || receipt.workId !== record.id || !object(receipt.host) || !object(receipt.modelExecution)
         || JSON.stringify(receipt.modelExecution.allocation) !== JSON.stringify(start.allocation) || completion.taskId !== item.taskId
         || completion.outcome !== receipt.host.outcome || (receipt.host.ok ? "host_result" : "post_failure") !== completion.type) throw new Error(`${item.taskId}: unit_receipt_invalid`);
+      if (continuation && (receipt.workRequestId !== record.workflow.requestId || receipt.workRequestHash !== record.workflow.requestHash)) {
+        reasons.push(item.taskId + ": unit_request_changed");
+        continue;
+      }
       const evaluation = await assessUnitAcceptance({ repo, record, unit: item, host: receipt.host,
-        executor: receipt.modelExecution.executor === "process" ? "process" : "injected", attempt: record.workflow.verifications.filter(attempt =>
+        executor: receipt.modelExecution.executor === "process" ? "process" : "injected", attempt: verifications.filter(attempt =>
           typeof completion.recordedAt === "string" && Date.parse(attempt.startedAt) >= Date.parse(completion.recordedAt)
           && attempt.requestedCommand === item.verification.command && JSON.stringify(attempt.args) === JSON.stringify(item.verification.args)
           && item.criterionIds.every(id => attempt.criterionIds.includes(id))

@@ -10,7 +10,7 @@ import { validateRequirementRefs, validateWorkRecord, parseWorkRecord } from "./
 import { findWorkRecord, resolveInside, validateWritePaths, workOutputColumns } from "./preflight.ts";
 import { serializeWorkRecord } from "./work-json.ts";
 import { hashRequest, normalizeApproval } from "./route.ts";
-import { captureSource, criteriaDigest, evaluateEvidence, renderAttempt, validEnvironmentObservation, verificationCommandFailed, verify, verifyInSession, withVerificationReuse } from "./evidence.ts";
+import { captureSource, criteriaDigest, currentVerifications, evaluateEvidence, renderAttempt, validEnvironmentObservation, verificationCommandFailed, verify, verifyInSession, withVerificationReuse } from "./evidence.ts";
 import { loadReviewPolicy, validateReview, durableJson } from "./review.ts";
 import { withWorkLock, inspectWorkLock, recoverWorkLock, retryWorkWriter, WorkLockBusyError } from "./lock.ts";
 import type { WorkExecutionHost } from "./lock.ts";
@@ -440,7 +440,7 @@ export async function verifyWork({ repo = process.cwd(), workId, command, args =
   const options = { repo, record: work.record, inputs: work.record.workflow.inputs, command, args, criterionIds, artifactPaths };
   let execution = reuseSession ? await verifyInSession(reuseSession, options) : null;
   if (reuseSession && execution?.reuse.action === "reused" && work.record.workflow.continuations?.length &&
-    !currentVerifications(work.record).some(item => item.id === execution?.attempt.id)) {
+    !currentVerifications(work.record.workflow.verifications, work.record.workflow.continuations?.at(-1)).some(item => item.id === execution?.attempt.id)) {
     execution = await verifyInSession(reuseSession, options, true);
   }
   let attempt = execution?.attempt ?? await verify(options);
@@ -493,30 +493,30 @@ async function appendVerification(repo: string, workId: string, attempt: Verific
     if (!old.includes(`id="${attempt.id}"`) && !old.includes(`## ${attempt.id}`)) await atomicWrite(report, `${old.trimEnd()}\n\n${renderAttempt(attempt)}\n`);
     record.workflow.verifications.push(attempt);
     const applicable = await evaluateEvidence({ repo, record, attempt });
+    const attemptedResult = applicable.usable ? "passed" : isCurrentCommandFailure(attempt, applicable.reasons) ? "failed" : "unverified";
+    const chronological = currentVerifications(record.workflow.verifications, record.workflow.continuations?.at(-1));
+    let currentObservation = false;
     for (const criterion of record.criteria) {
       if (!attempt.criterionIds.includes(criterion.id)) continue;
-      criterion.result = applicable.usable ? "passed" : isCurrentCommandFailure(attempt, applicable.reasons) ? "failed" : "unverified";
-      criterion.evidence.push({ attemptId: attempt.id, path: `verification.md#${attempt.id}`, summary: `종료 코드 ${attempt.exitCode ?? "미확인"}, 기준 ${criterion.result}` });
+      const latest = chronological.filter(item => item.criterionIds.includes(criterion.id)).at(-1);
+      if (latest?.id === attempt.id) {
+        criterion.result = attemptedResult;
+        currentObservation = true;
+      }
+      criterion.evidence.push({ attemptId: attempt.id, path: `verification.md#${attempt.id}`, summary: `종료 코드 ${attempt.exitCode ?? "미확인"}, 기준 ${attemptedResult}` });
     }
     record.status              = "verifying"                                                ;
-    record.blockedReason       = applicable.usable ? null : applicable.reasons.join("; ")   ;
+    if (currentObservation) record.blockedReason = applicable.usable ? null : applicable.reasons.join("; ");
     record.workflow.nextAction = await requiredEvidenceAction(repo, record, await assessRequiredCriteria(repo, record), "review");
   }, reuseGuard ? mutate => withVerificationReuse(reuseGuard.useId, repo, attempt, mutate) : undefined);
-}
-
-function currentVerifications(record: CurrentWorkRecord): VerificationAttempt[] {
-  const { verifications, continuations } = record.workflow;
-  const current = continuations?.at(-1);
-  if (!current) return verifications;
-  if (current.verificationStart !== undefined) return verifications.slice(current.verificationStart);
-  return verifications.filter(attempt => Date.parse(attempt.startedAt) >= Date.parse(current.authorizedAt));
 }
 
 /** 완료 판정과 다음 행동이 같은 필수 기준의 최신 실제 검증을 평가한다. */
 async function assessRequiredCriteria(repo: string, record: CurrentWorkRecord) {
   const criteria = [];
-  for (const criterion of record.criteria.filter((item) => item.required)) {
-    const attempt    = currentVerifications(record).filter((item) => item.criterionIds.includes(criterion.id)).at(-1)              ;
+  const verifications = currentVerifications(record.workflow.verifications, record.workflow.continuations?.at(-1));
+  for (const criterion of record.criteria.filter(item => item.required)) {
+    const attempt = verifications.filter(item => item.criterionIds.includes(criterion.id)).at(-1);
     const evaluation = attempt ? await evaluateEvidence({ repo, record, attempt }) : { usable: false, reasons: ["검증 시도 없음"] } ;
     criteria.push({ id: criterion.id, ...evaluation });
   }
@@ -533,8 +533,9 @@ function isCurrentCommandFailure(attempt: VerificationAttempt | undefined, reaso
 
 /** 필수 검증을 먼저 판정하고 분업의 현재 수용까지 갖춰야 다음 단계로 안내한다. */
 async function requiredEvidenceAction(repo: string, record: CurrentWorkRecord, criteria: CriterionAssessment[], ready: "review" | "complete") {
+  const verifications = currentVerifications(record.workflow.verifications, record.workflow.continuations?.at(-1));
   const failures = criteria.filter(criterion => {
-    const attempt = currentVerifications(record).filter(item => item.criterionIds.includes(criterion.id)).at(-1);
+    const attempt = verifications.filter(item => item.criterionIds.includes(criterion.id)).at(-1);
     return isCurrentCommandFailure(attempt, criterion.reasons);
   });
   if (failures.length) {
