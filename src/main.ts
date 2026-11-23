@@ -145,6 +145,7 @@ function registerIpc(): void {
   });
   ipcMain.handle("probe:ready", () => ({
     enabled: !!PROBE_PATH && process.env.WWW_NATIVE_PROBE !== "1",
+    ...(PROBE_PATH ? { windowVisible: window?.isVisible() === true } : {}),
     ...(PROBE_PATH && process.env.WWW_PROBE_ACTIVITY === "1" ? { checkActivity: true } : {}),
     ...(PROBE_PATH && process.env.WWW_PROBE_REPORTS === "1" ? { checkReports: true } : {}),
     ...(PROBE_PATH && process.env.WWW_PROBE_NATIVE_REPORTS === "1" ? { checkNativeReports: true } : {}),
@@ -297,7 +298,7 @@ function registerIpc(): void {
 }
 
 function createWindow(): void {
-  window = new BrowserWindow({ show: !(PROBE_PATH && process.env.WWW_NATIVE_PROBE === "1"), width: 1440, height: 900, minWidth: 1040, minHeight: 680, backgroundColor: "#0b0b0c", webPreferences: { preload: join(DIST, "preload.js"), contextIsolation: true, nodeIntegration: false, sandbox: true } });
+  window = new BrowserWindow({ show: !(PROBE_PATH && process.env.WWW_NATIVE_PROBE === "1") || process.env.WWW_PROBE_SHOW_WINDOW === "1", width: 1440, height: 900, minWidth: 1040, minHeight: 680, backgroundColor: "#0b0b0c", webPreferences: { preload: join(DIST, "preload.js"), contextIsolation: true, nodeIntegration: false, sandbox: true } });
   if (PROBE_PATH && process.env.WWW_PROBE_REPORTS === "1") window.webContents.on("console-message", (_event, ...details) => console.log("report-probe-console", ...details));
   window.webContents.on("will-navigate", (event) => event.preventDefault());
   window.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
