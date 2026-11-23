@@ -91,6 +91,53 @@ test("C01/F09: 현재 저작 보고서는 허용하고 보고서 작성 뒤 기�
   const completed = await completeReportedWork({ repo, workId });
   assert.equal(completed.record.status, "done");
   assert.equal((await assessWork({ repo, workId })).complete, true);
+  const edited = await readWork({ repo, workId });
+  edited.record.title = "완료 저장 이후 변경한 업무 제목";
+  await fs.writeFile(context.file, JSON.stringify(edited.record));
+  assert.equal((await assessWork({ repo, workId })).report?.usable, false);
+  await assert.rejects(completeReportedWork({ repo, workId }), /저작 작업 보고서/);
+});
+
+test("완료 보고서 잠금이 끝나지 않으면 앱 실패를 반환하고 원장을 되돌린다", { timeout: 15_000 }, async t => {
+  const context = await fixture(t);
+  const { repo, workId } = context;
+  await context.verify();
+  await context.review();
+  await finishWorkReport({ repo, workId, narrative });
+  const before = await fs.readFile(context.file, "utf8");
+  const lock = path.join(path.dirname(context.file), "reports", ".report-write.lock");
+  await fs.writeFile(lock, JSON.stringify({ token: "held", pid: process.pid, hostname: os.hostname(), createdAt: new Date().toISOString() }), { flag: "wx" });
+  const app = createDevelopmentService({ policyRoot: repo, workspace: () => repo });
+  await assert.rejects(app.complete(workId), /완료 보고서 저장 실패.*잠금/);
+  assert.equal(await fs.readFile(context.file, "utf8"), before);
+  assert.notEqual((await readWork({ repo, workId })).record.status, "done");
+  await fs.unlink(lock);
+  assert.equal((await app.complete(workId)).status, "done");
+});
+
+test("완료 보고서 대기 중 외부 원장 변경을 보존하고 성공을 응답하지 않는다", { timeout: 15_000 }, async t => {
+  const context = await fixture(t);
+  const { repo, workId } = context;
+  await context.verify();
+  await context.review();
+  await finishWorkReport({ repo, workId, narrative });
+  const lock = path.join(path.dirname(context.file), "reports", ".report-write.lock");
+  await fs.writeFile(lock, JSON.stringify({ token: "held", pid: process.pid, hostname: os.hostname(), createdAt: new Date().toISOString() }), { flag: "wx" });
+  const app = createDevelopmentService({ policyRoot: repo, workspace: () => repo });
+  const completion = app.complete(workId).then(() => null, error => error);
+  let edited = await readWork({ repo, workId });
+  for (let attempt = 0; edited.record.status !== "done" && attempt < 100; attempt++) {
+    await new Promise(resolve => setTimeout(resolve, 10));
+    edited = await readWork({ repo, workId });
+  }
+  assert.equal(edited.record.status, "done");
+  // 잠금을 따르지 않는 외부 편집을 주입한다.
+  edited.record.title = "보고서 대기 중 외부 변경";
+  await fs.writeFile(context.file, JSON.stringify(edited.record));
+  await fs.unlink(lock);
+  assert.match(String(await completion), /완료 보고서 저장 실패.*작업 기록이 바뀌었습니다/);
+  assert.equal((await readWork({ repo, workId })).record.title, "보고서 대기 중 외부 변경");
+  assert.equal((await assessWork({ repo, workId })).complete, false);
 });
 
 async function rejectBoth(repo: string, workId: string, reason: RegExp) {

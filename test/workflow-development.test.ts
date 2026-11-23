@@ -608,6 +608,13 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
   assert.equal(after.record.schemaVersion, 2);
   assert.ok(after.record.workflow);
   assert.equal((await assessDecompositionCompletion(repo, after.record)).usable, true);
+  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds: ["AC-1"], artifactPaths: ["src/item.ts"] });
+  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds: ["AC-1"], artifactPaths: ["src/other.ts"] });
+  const independentlyVerified = (await readWork({ repo, workId: second.workId })).record;
+  assert.equal(independentlyVerified.schemaVersion, 2);
+  if (independentlyVerified.schemaVersion !== 2) throw new Error("현재 작업 기록이 필요합니다.");
+  const acceptance = await assessDecompositionCompletion(repo, independentlyVerified);
+  assert.equal(acceptance.usable, true, acceptance.reasons.join(","));
 });
 
 test("F03 실제 fixture 프로세스가 정상 종료해도 필수 산출물이 없으면 수용하지 않는다", async t => {

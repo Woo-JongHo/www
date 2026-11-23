@@ -18,11 +18,12 @@ import { checkRepository, assessRepositoryCheck } from "./consistency.ts";
 import { createDocumentationReview, assessDocumentation } from "./documentation.ts";
 import { createArtifactReview } from "./artifacts.ts";
 import { assessCompletionReport } from "./completion-report.ts";
+import { publishWorkReport, readWorkReport, type ReportNarrative } from "./reports.ts";
 import { assessDecompositionCompletion, validateWorkDecomposition } from "./decomposition.ts";
-import type { AddVerifierOptions, ContinueWorkOptions, WorkAuthorization, CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions, CriterionAssessment } from './types.ts';
+import type { AddVerifierOptions, ContinueWorkOptions, WorkAuthorization, CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions, CriterionAssessment, ReportHookResult } from './types.ts';
 import type { VerificationAttempt, VerificationSession } from './evidence.ts';
 import type { DocumentationReview } from './documentation.ts';
-export type { WorkRecord, WorkLocation, WorkAssessment, WorkOptions } from './types.ts';
+export type { WorkRecord, WorkLocation, WorkAssessment, WorkOptions, ReportHookResult } from './types.ts';
 export type { WorkExecutionHost } from "./lock.ts";
 export { inspectWorkLock, recoverWorkLock, retryWorkWriter, checkRepository, assessRepositoryCheck };
 
@@ -648,16 +649,39 @@ export async function resumeWork({ repo = process.cwd(), workId }: WorkOptions) 
   return { ...assessment, ...work, nextAction: work.record.workflow.nextAction };
 }
 
-export async function completeWork({ repo = process.cwd(), workId, policyRoot }: WorkOptions) {
-  return mutateWork(repo, workId, async (record, work) => {
+export async function completeWork({ repo = process.cwd(), workId, policyRoot }: WorkOptions): Promise<CurrentWorkLocation & { reportHook?: ReportHookResult }> {
+  const completion: { narrative?: ReportNarrative; previous?: string; reportHook?: ReportHookResult } = {};
+  const saved = await mutateWork(repo, workId, async (record, work) => {
     const assessment = await assessRecord(repo, { ...work, record }, policyRoot);
     if (assessment.legacy || !assessment.complete) throw new Error(`현재 증거로 완료할 수 없습니다: ${assessment.reasons.join("; ")}`);
+    if (assessment.report?.reportId) {
+      const document = await readWorkReport({ repo, reportId: assessment.report.reportId });
+      if (!document.current || document.stale || !document.report.narrative) throw new Error("현재 작업의 저작 서술이 없습니다.");
+      if (work.rawSource === undefined) throw new Error("완료 전 작업 기록 원문이 없습니다.");
+      completion.previous = work.rawSource;
+      completion.narrative = document.report.narrative;
+    }
     const source = await captureSource({ repo, inputs: assessment.source.inputs });
     if (source.digest !== assessment.source.digest) throw new Error("완료 판정 중 소스가 바뀌었습니다.");
     record.status              = "done"     ;
     record.blockedReason       = null       ;
     record.workflow.nextAction = "complete" ;
+  }, async mutate => {
+    const completed = await mutate();
+    if (!completion.narrative) return completed;
+    try {
+      if (completed.rawSource === undefined) throw new Error("완료된 작업의 원문이 없습니다.");
+      const published = await publishWorkReport({ repo, workId, narrative: completion.narrative, event: "complete", expectedWorkRecordHash: hash(completed.rawSource) });
+      completion.reportHook = { status: "written", reportId: published.report.id, created: published.created };
+      return completed;
+    } catch (error) {
+      // 작업 잠금 아래에서 이 호출이 저장한 상태만 되돌린다.
+      if (completion.previous !== undefined && completed.rawSource !== undefined
+        && await fs.readFile(completed.path, "utf8") === completed.rawSource) await atomicWrite(completed.path, completion.previous);
+      throw new Error(`완료 보고서 저장 실패: ${error instanceof Error ? error.message : String(error)}`, { cause: error });
+    }
   });
+  return completion.reportHook ? { ...saved, reportHook: completion.reportHook } : saved;
 }
 
 async function main() {

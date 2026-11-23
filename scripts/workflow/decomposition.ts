@@ -223,7 +223,8 @@ export async function assessDecompositionCompletion(repo: string, record: Curren
         executor: receipt.modelExecution.executor === "process" ? "process" : "injected", attempt: record.workflow.verifications.filter(attempt =>
           typeof completion.recordedAt === "string" && Date.parse(attempt.startedAt) >= Date.parse(completion.recordedAt)
           && attempt.requestedCommand === item.verification.command && JSON.stringify(attempt.args) === JSON.stringify(item.verification.args)
-          && item.criterionIds.every(id => attempt.criterionIds.includes(id))).at(-1) });
+          && item.criterionIds.every(id => attempt.criterionIds.includes(id))
+          && attempt.artifacts?.some(artifact => artifact.path === item.resultPath)).at(-1) });
       reasons.push(...evaluation.reasons.map(reason => `${item.taskId}: ${reason}`));
     }
   } catch (error) { reasons.push(error instanceof Error ? error.message : String(error)); }

@@ -217,3 +217,12 @@ export interface NewWorkOptions {
   approval?  : unknown      ;
   inputs?    : string[]     ;
 }
+
+export type ReportHookResult = {
+  status   : "written" ;
+  reportId : string    ;
+  created  : boolean   ;
+} | {
+  status  : "failed" ;
+  message : string   ;
+};
