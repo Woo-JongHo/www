@@ -19,7 +19,7 @@ concurrency:
 jobs:
   pr_scope:
     name: PR 변경 범위와 집중 검사
-    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main' && github.event.pull_request.draft && github.event.action != 'ready_for_review'
+    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main' && github.event.action != 'ready_for_review'
     permissions:
       contents: read
       issues: read
@@ -38,6 +38,7 @@ jobs:
           node-version: 22.22.3
       - name: GitHub 이슈의 세션 선정 코멘트 조회
         id: register
+        if: github.event.pull_request.draft
         env:
           GH_TOKEN: ${{ github.token }}
           WWW_HEAD_REF: ${{ github.event.pull_request.head.ref }}

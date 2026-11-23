@@ -86,6 +86,17 @@ export function isSessionDraft(event: unknown, repository: string | undefined, r
   return !!members && new Set(members).size === members.length && members.includes(branch[2]);
 }
 
+type PrKind = "full" | "individual" | "session-draft";
+
+export function prKind(event: unknown, repository: string | undefined, registration: unknown): PrKind {
+  if (!repository || !object(event) || !["opened", "reopened", "synchronize", "converted_to_draft"].includes(String(event.action))) return "full";
+  const pr = event.pull_request;
+  if (!object(pr) || !object(pr.base) || pr.base.ref !== "main" || !object(pr.base.repo) || pr.base.repo.full_name !== repository ||
+      !object(pr.head) || typeof pr.head.ref !== "string" || !pr.head.ref) return "full";
+  if (/(?:^|\/)(?:integrate|integration|batch)(?:[-/]|$)/.test(pr.head.ref)) return "full";
+  return isSessionDraft(event, repository, registration) ? "session-draft" : "individual";
+}
+
 const appCases: Record<string, string[]> = {
   "src/input.ts": ["input", "chat-state"],
   "src/chat-composer.tsx": ["input", "chat-state", "chat-status"],
@@ -113,19 +124,20 @@ type Scope = { mode: "full"; reason: string } | {
   mode: "focused" | "session-app"; tests: string[]; base: string; head: string; candidate: string; tree: string; fingerprint: string; files: string[];
 };
 
-export function planPr(repo: string, base: string, head: string, candidate: string, sessionDraft = false): Scope {
+export function planPr(repo: string, base: string, head: string, candidate: string, kind: PrKind = "full"): Scope {
   const full = (reason: string): Scope => ({ mode: "full", reason });
-  if (!sessionDraft) return full("not_session_member_draft");
+  if (kind === "full") return full("full_verification_event_or_integration");
   if (![base, head, candidate].every(value => sha.test(value))) return full("unknown_revision");
   try {
     const parents = git(repo, "show", "-s", "--format=%P", candidate).toString().trim();
     if (parents !== base + " " + head) return full("candidate_parents");
     const ancestor = git(repo, "merge-base", base, head).toString().trim();
+    if (git(repo, "rev-list", "--merges", "--max-count=1", ancestor + ".." + head).length) return full("merged_branch_history");
     const files = changedFiles(repo, base, candidate);
     const branch = changedFiles(repo, ancestor, head);
     if (!files?.size || !branch || JSON.stringify([...branch]) !== JSON.stringify([...files])) return full("mixed_or_structural_change");
     const names = [...files.keys()];
-    const tests = appChecks(names);
+    const tests = kind === "session-draft" ? appChecks(names) : null;
     if (!tests) {
       const manifest = files.get(inventory);
       if (!manifest) return full("unclassified_or_mixed_files");
@@ -167,8 +179,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   let registration: unknown = null;
   try { registration = JSON.parse(process.env.WWW_SESSION_REGISTRATION || "null"); }
   catch { /* 등록을 읽을 수 없으면 전체 검사로 승격한다. */ }
-  const draft = isSessionDraft(event, process.env.GITHUB_REPOSITORY, registration);
-  const scope = planPr(repo, base, head, candidate, draft);
+  const kind = prKind(event, process.env.GITHUB_REPOSITORY, registration);
+  const scope = planPr(repo, base, head, candidate, kind);
   console.log(JSON.stringify(scope));
   if (action === "app-check" && scope.mode !== "session-app") throw new Error("현재 초안과 검사 범위를 재확인할 수 없습니다.");
   if ((action === "app-check" && scope.mode === "session-app") || (action === "verify" && scope.mode === "focused")) {

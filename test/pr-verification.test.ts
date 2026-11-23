@@ -3,13 +3,13 @@ import { execFileSync } from "node:child_process";
 import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { isSessionDraft, planPr } from "../scripts/pr-verification";
+import { isSessionDraft, planPr, prKind } from "../scripts/pr-verification";
 
 const archive = "skill-library/upstream/sample/plan/SKILL.md";
 const manifest = "skill-library/inventory.json";
 const note = "docs/work/Workflow/005-Skills 라이브러리 한국어 대체/verification.md";
 
-function candidate(change: (root: string) => void, translation = true) {
+function candidate(change: (root: string) => void, translation = true, inspectCombined = false) {
   const repo = mkdtempSync(path.join(tmpdir(), "www-pr-scope-"));
   function git(...args: string[]): string {
     return execFileSync("git", args, { cwd: repo, encoding: "utf8" }).trim();
@@ -43,14 +43,28 @@ function candidate(change: (root: string) => void, translation = true) {
     git("commit", "-qm", "candidate");
     const head = git("rev-parse", "HEAD");
     const merge = git("commit-tree", "HEAD^{tree}", "-p", base, "-p", head, "-m", "merge");
-    return { scope: planPr(repo, base, head, merge), draft: planPr(repo, base, head, merge, true), wrongParent: planPr(repo, head, base, merge, true) };
+    let combined: ReturnType<typeof planPr> | null = null;
+    if (inspectCombined) {
+      const other = git("commit-tree", "HEAD^{tree}", "-p", base, "-m", "독립 작업");
+      const integrated = git("commit-tree", "HEAD^{tree}", "-p", head, "-p", other, "-m", "두 작업 결합");
+      const preview = git("commit-tree", "HEAD^{tree}", "-p", base, "-p", integrated, "-m", "결합 PR 후보");
+      combined = planPr(repo, base, integrated, preview, "individual");
+    }
+    return {
+      scope: planPr(repo, base, head, merge, "individual"), draft: planPr(repo, base, head, merge, "session-draft"),
+      wrongParent: planPr(repo, head, base, merge, "session-draft"), full: planPr(repo, base, head, merge, "full"),
+      combined,
+    };
   } finally {
     rmSync(repo, { recursive: true, force: true });
   }
 }
 
 test("기존 번역과 원장 부기의 후보만 지문이 있는 집중 검사로 보낸다", () => {
-  const { draft: scope, wrongParent } = candidate(() => {});
+  const { scope, draft, wrongParent, full, combined } = candidate(() => {}, true, true);
+  expect(draft.mode).toBe("focused");
+  expect(full.mode).toBe("full");
+  expect(combined).toEqual({ mode: "full", reason: "merged_branch_history" });
   expect(scope.mode).toBe("focused");
   if (scope.mode === "focused") expect(scope.fingerprint).toMatch(/^[a-f0-9]{64}$/);
   expect(wrongParent.mode).toBe("full");
@@ -104,6 +118,21 @@ test("같은 저장소의 세션 이슈 초안 이벤트만 허용한다", () =>
   ]) expect(isSessionDraft(draft, repository, invalid)).toBe(false);
 });
 
+test("일반 번역과 ready·결합 브랜치·후보 dispatch를 파일 내용과 독립적으로 구분한다", () => {
+  const ordinary = { ...draft, pull_request: { ...draft.pull_request, draft: false } };
+  expect(prKind(ordinary, repository, null)).toBe("individual");
+  expect(prKind(draft, repository, registration)).toBe("session-draft");
+  expect(prKind(draft, repository, null)).toBe("individual");
+  expect(prKind({ ...ordinary, action: "ready_for_review" }, repository, null)).toBe("full");
+  for (const ref of ["codex/integrate-followup-verification", "codex/batch-25", "integration/cohort"]) {
+    const head = { ...ordinary.pull_request.head, ref };
+    expect(prKind({ ...ordinary, pull_request: { ...ordinary.pull_request, head } }, repository, null)).toBe("full");
+  }
+  for (const event of [null, { inputs: { candidate_sha: "a".repeat(40) } }, { merge_group: {} }]) {
+    expect(prKind(event, repository, null)).toBe("full");
+  }
+});
+
 test("앱 경로와 생성 지도만 매핑하고 테스트·설치·하네스·CI·미분류는 전체로 승격한다", () => {
   const update = (root: string, file: string) => writeFileSync(path.join(root, file), "changed\n");
   const app = (root: string) => {
@@ -125,7 +154,7 @@ test("ready·일반 PR·merge_group의 전체 경로와 초안 영수증 경계�
   const source = readFileSync(path.join(import.meta.dir, "../.github/workflows/ci.yml"), "utf8");
   expect(source).toContain("converted_to_draft, ready_for_review]");
   expect(source).toContain("  merge_group:");
-  expect(source).toContain("github.event.pull_request.draft && github.event.action != 'ready_for_review'");
+  expect(source).toContain("github.event.pull_request.base.ref == 'main' && github.event.action != 'ready_for_review'");
   expect(source).toContain("needs.pr_scope.result != 'success' || needs.pr_scope.outputs.mode != 'focused'");
   expect(source).toContain("needs.pr_scope.outputs.mode == 'session-app' && '세션 초안 앱 검사' || 'validate'");
   expect(source).toContain("if: env.WWW_APP_DRAFT != 'true'\n        id: validate");
