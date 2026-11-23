@@ -645,7 +645,7 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
         ...inverted.workflow, verifications: [...inverted.workflow.verifications, ...order],
       } }));
       const status = await assessWork({ repo, workId: second.workId });
-      assert.ok(status.criteria?.find(item => item.id === "AC-1")?.reasons.includes("source_changed"));
+      assert.ok(!status.legacy && status.criteria.find(item => item.id === "AC-1")?.reasons.includes("source_changed"));
     }
   } finally {
     await writeFile(current.path, current.rawSource ?? JSON.stringify(independentlyVerified));
