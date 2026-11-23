@@ -483,7 +483,7 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
     const receiptBytes = `${JSON.stringify({ eventId, workId: work.record.id, ...requestBinding, sources: context.sources, tools, artifactReviews: context.reviews, modelExecution: execution, host }, null, 2)}\n`;
     await fs.writeFile(receiptFile, receiptBytes, { flag: "wx", mode: 0o600 });
     const receiptHash = createHash("sha256").update(receiptBytes).digest("hex");
-    const recordedHost = await appendEvent({ repo, workId: work.record.id, event: { id: `${eventId}-host`, type: host.ok ? "host_result" : "post_failure", outcome: host.outcome, exitCode: host.code, threadId: host.threadId ?? null, injected: executor === "injected", observedModel: execution.observed.model, observedReason: execution.observed.reason, receiptPath: path.relative(repo, receiptFile).split(path.sep).join("/"), receiptHash, ...(allocation ? { taskId: allocation.taskId, attempt: allocation.attempt } : {}) } });
+    await appendEvent({ repo, workId: work.record.id, event: { id: `${eventId}-host`, type: host.ok ? "host_result" : "post_failure", outcome: host.outcome, exitCode: host.code, threadId: host.threadId ?? null, injected: executor === "injected", observedModel: execution.observed.model, observedReason: execution.observed.reason, receiptPath: path.relative(repo, receiptFile).split(path.sep).join("/"), receiptHash, ...(allocation ? { taskId: allocation.taskId, attempt: allocation.attempt } : {}) } });
     await appendEvent({ repo, workId: work.record.id, event: { id: `${eventId}-stage`, type: "status", status: host.ok ? "completed" : "failed" } });
     const result: WorkflowResult = { executed: environment.ok && host.outcome !== "environment_failed", workId: work.record.id, route, mutation, host, environment, executor, sources: context.sources, tools, artifactReviews: context.reviews, modelExecution: execution, receiptPath: path.relative(repo, receiptFile).split(path.sep).join("/") };
     let verification: VerificationAttempt | undefined;
@@ -500,8 +500,19 @@ export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, depe
     if (!currentUnit) return { ...result, ...(verification ? { verification } : {}) };
     const current = await readWork({ repo, workId: work.record.id });
     if (current.record.schemaVersion !== 2) throw new Error("현재 분업 수용에는 schemaVersion 2가 필요합니다.");
-    const acceptance = await assessUnitAcceptance({ repo, record: current.record, unit: currentUnit, host, executor,
-      hostCompletedAt: recordedHost.event?.recordedAt ?? null, attempt: verification });
+    const recordedVerification = verification
+      ? current.record.workflow.verifications.find(attempt => attempt.id === verification.id)
+      : undefined;
+    if (verification && !recordedVerification) verificationError = "verification_not_recorded";
+    let acceptance: UnitAcceptance;
+    if (recordedVerification) {
+      const assessed = await assessDecompositionCompletion(repo, current.record, [currentUnit.taskId]);
+      const prefix = currentUnit.taskId + ": ";
+      acceptance = { status: assessed.usable ? "accepted" : "rejected",
+        reasons: assessed.reasons.map(reason => reason.startsWith(prefix) ? reason.slice(prefix.length) : reason), attemptId: recordedVerification.id };
+    } else {
+      acceptance = await assessUnitAcceptance({ repo, record: current.record, unit: currentUnit, host, executor });
+    }
     if (verificationError) acceptance.reasons.push(`verification_error: ${verificationError}`);
     await appendEvent({ repo, workId: work.record.id, event: { id: `${eventId}-acceptance`, type: "task_acceptance", taskId: currentUnit.taskId, ...acceptance } });
     return { ...result, ...(verification ? { verification } : {}), acceptance };

@@ -653,6 +653,38 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
   assert.match((await assessDecompositionCompletion(repo, continued)).reasons.join(","), /unit_request_changed/);
 });
 
+
+test("검증이 정상 종료해도 원장 잠금으로 미기록이면 분업을 즉시 수용하지 않는다", { timeout: 15_000 }, async t => {
+  const repo = await repository(t);
+  const marker = join(repo, ".www", "verifier-started");
+  const release = join(repo, ".www", "verifier-release");
+  await mkdir(dirname(marker), { recursive: true });
+  const fixture = "import { existsSync, writeFileSync } from 'node:fs';" +
+    "writeFileSync(" + JSON.stringify(marker) + ", 'started');" +
+    "while(!existsSync(" + JSON.stringify(release) + ")) await new Promise(resolve => setTimeout(resolve, 10));";
+  await writeFile(join(repo, "checks/verify.ts"), fixture);
+  const options = request(repo, { allocation: allocation(), decomposition: { units: [decompositionUnit()] } });
+  const host = "process.stdin.resume();process.stdin.on('end',()=>{require('fs').writeFileSync('src/item.ts','export const value = 2;');console.log(JSON.stringify({type:'thread.started',thread_id:'work-lock-fixture'}));console.log(JSON.stringify({type:'turn.completed'}));});";
+  const execution = runDevelopmentWorkflow(options, { prepareInvocation: invocation => ({ ...invocation, command: process.execPath, args: ["-e", host] }) });
+  void execution.catch(() => undefined);
+  for (let tries = 0; tries < 400; tries++) {
+    try { await access(marker); break; } catch { await new Promise(resolve => setTimeout(resolve, 10)); }
+  }
+  await access(marker);
+  const { withWorkLock } = await import("../scripts/workflow/lock.ts");
+  const result = await withWorkLock(repo, async () => {
+    await writeFile(release, "release");
+    return execution;
+  });
+  assert.ok(result.verification && "result" in result.verification);
+  assert.equal(result.verification.result, "passed");
+  assert.equal((result.verification as { recorded?: boolean }).recorded, false);
+  assert.equal(result.acceptance?.status, "rejected");
+  assert.ok(result.acceptance?.reasons.includes("verification_error: verification_not_recorded"));
+  assert.ok(result.workId);
+  assert.equal((await readWork({ repo, workId: result.workId })).record.workflow?.verifications.length, 0);
+});
+
 test("F03 실제 fixture 프로세스가 정상 종료해도 필수 산출물이 없으면 수용하지 않는다", async t => {
   const repo = await repository(t);
   const item = { ...decompositionUnit(), writePaths: ["src/item.ts", "src/missing.ts"], artifacts: ["src/missing.ts"], resultPath: "src/missing.ts" };
