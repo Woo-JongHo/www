@@ -30,6 +30,7 @@ import      { tmpdir                                         } from "node:os"   
 import      { dirname, join                                  } from "node:path"                       ;
 import      { fileURLToPath                                  } from "node:url"                        ;
 import      { promisify                                      } from "node:util"                       ;
+import { loadTimingInputs, replayTiming } from "../scripts/replay-workflow-timing.ts";
 import test from "node:test";
 import      { once                                           } from "node:events"                     ;
 import      { inspectWorkLock, recoverWorkLock, withWorkLock, retryWorkWriter } from "../scripts/workflow/lock.ts"     ;
@@ -144,6 +145,14 @@ test('세션 실제 실행 pending은 새 프로세스에서도 저장된 관측
   const module = new URL('../scripts/workflow/work.ts', import.meta.url).href;
   const script = `const {appendPending}=await import(${JSON.stringify(module)}); const result=await appendPending(${JSON.stringify({ repo, workId, artifactPath: pending.artifactPath })}); console.log(JSON.stringify({recorded:result.recorded}));`;
   assert.deepEqual(JSON.parse((await exec(process.execPath, ['--input-type=module', '-e', script])).stdout), { recorded: true });
+  const timings = await loadTimingInputs([join(repo, ".www/evidence/workflow-timing")]);
+  const replay = replayTiming("2000-01-01T00:00:00Z", "2100-01-01T00:00:00Z", timings);
+  assert.equal(replay.processStarts, 1);
+  assert.ok(replay.phaseMs.ledger_lock > 0);
+  const registered = replay.requests.flatMap(request => request.events).filter(event => event.event === "registered");
+  assert.deepEqual(registered.map(event => event.value), [pending.id]);
+  assert.equal(replay.outcomes.registration_pending, 1);
+
   assert.equal((await readWork({ repo, workId })).record.criteria[0].result, 'passed');
 });
 

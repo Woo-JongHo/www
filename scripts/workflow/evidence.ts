@@ -2,6 +2,7 @@
  * @architecture arch.development.evidence.verification
  * @implements RESP-DEVELOPMENT-EVIDENCE-VERIFICATION
  */
+import { observeTimedChild, timedPhase, timingEvent } from "./timing.ts";
 import { createHash, randomUUID }    from "node:crypto";
 import { spawn, execFile }           from "node:child_process";
 import { constants, promises as fs } from "node:fs";
@@ -277,6 +278,7 @@ export async function runVerificationCommand(invocation: CommandInvocation, { cw
       windowsHide : true  ,
       stdio       : ["ignore", "pipe", "pipe"]
     });
+    observeTimedChild(child, "verification_process");
     for (const name of ["stdout", "stderr"] as const) child[name].on("data", (chunk) => {
       const value  = Buffer.from    (chunk                                                ) ;
       const sample = value .subarray(0, Math.max(0, OUTPUT_LIMIT - streams[name].captured)) ;
@@ -313,7 +315,11 @@ export async function verify({ repo, record, inputs, command, args = [], criteri
   const startedAt            = new Date().toISOString()                         ;
   let result: CommandResult                                                     ;
   const executableCommand    = executionEnvironment.executable?.path ?? command ;
-  try { result = await (run ?? runVerificationCommand)({ command: executableCommand, args: argv }, { cwd: root, captureOutput: true }); }
+  const invocation = { command: executableCommand, args: argv };
+  try {
+    result = run ? await timedPhase("injected_runner", () => run(invocation, { cwd: root, captureOutput: true }))
+      : await runVerificationCommand(invocation, { cwd: root });
+  }
   catch (error) { result = { code: null, signal: null, error: String(errorCode(error) ?? "runner_error") }; }
   let after: CapturedSource | null = null;
   try { after = await captureSource({ repo: root, inputs }); }
@@ -531,7 +537,7 @@ export async function verifyInSession(session: VerificationSession, options: Par
   const previous = state.tail;
   let release = () => {};
   state.tail = new Promise<void>(resolve => { release = resolve; });
-  await previous;
+  await timedPhase("session_queue", () => previous);
   try {
     const started = performance.now();
     const root = await fs.realpath(options.repo ?? process.cwd());
@@ -570,6 +576,7 @@ export async function verifyInSession(session: VerificationSession, options: Par
     }
     let attempt: VerificationAttempt;
     const reused = candidate !== undefined && reasons.length === 0;
+    for (const reason of reasons) timingEvent({ event: "dispatch_reason", reason });
     if (reused) attempt = structuredClone(candidate.attempt);
     else {
       attempt = await verify(options);

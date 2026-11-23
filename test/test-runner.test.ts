@@ -6,7 +6,7 @@ import { boxboxMode, runTestSuite, testGroups, testSuite } from "../scripts/test
 
 const nodeFiles = [
   "skill-library", "windows-native", "workflow-codex", "workflow-contract", "workflow-development", "workflow-environment",
-  "review-app-server", "workflow-evidence", "workflow-harness", "workflow-review", "workflow-windows-command", "workflow-work",
+  "review-app-server", "workflow-evidence", "workflow-harness", "workflow-review", "workflow-timing", "workflow-windows-command", "workflow-work",
 ].map(name => `${name}.test.ts`);
 const entries = [...nodeFiles, "work-json.test.ts", "boxbox/work-json.test.ts", "nested/feature.test.tsx", "fixture.ts"];
 const mode = (value: string) => ({ tool: "boxbox", command: "mode", scope: "project", ok: true, mode: value });

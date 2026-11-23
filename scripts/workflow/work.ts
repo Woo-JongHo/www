@@ -2,6 +2,7 @@
  * @architecture arch.development.records.state
  * @implements RESP-DEVELOPMENT-RECORDS-STATE
  */
+import { timedPhase, timingEvent, withWorkflowTiming } from "./timing.ts";
 import { createHash, randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
@@ -432,12 +433,19 @@ function verificationContext(record: CurrentWorkRecord) {
   return hash(JSON.stringify({ requestHash: record.workflow.requestHash, authorization: record.workflow.authorization, inputs: record.workflow.inputs, criteria: criteriaDigest(record), verifications: record.workflow.verifications }));
 }
 
-export async function verifyWork({ repo = process.cwd(), workId, command, args = [], criterionIds, artifactPaths, reuseSession }: WorkOptions & { command: string; args?: string[]; criterionIds: string[]; artifactPaths?: string[]; reuseSession?: VerificationSession }) {
+type VerifyOptions = WorkOptions & { command: string; args?: string[]; criterionIds: string[]; artifactPaths?: string[]; reuseSession?: VerificationSession };
+export function verifyWork(options: VerifyOptions) {
+  return withWorkflowTiming(options.repo ?? process.cwd(), "verification", () => executeVerification(options));
+}
+
+async function executeVerification({ repo = process.cwd(), workId, command, args = [], criterionIds, artifactPaths, reuseSession }: VerifyOptions) {
   const work = await readWork({ repo, workId });
   if (work.record.schemaVersion !== 2) throw new Error("현재 검증 연결에는 schemaVersion 2 작업이 필요합니다.");
   const signature = JSON.stringify([command, ...args]);
   if (!work.record.workflow.authorization.verifierCommands.includes(signature)) throw new Error("이 작업에서 허용하지 않은 검증 명령입니다.");
+  timingEvent({ event: "bound", workId: work.record.id, requestHash: work.record.workflow.requestHash });
   const started = performance.now();
+  if (!reuseSession) timingEvent({ event: "dispatch_reason", reason: "explicit_verifier" });
   const options = { repo, record: work.record, inputs: work.record.workflow.inputs, command, args, criterionIds, artifactPaths };
   let execution = reuseSession ? await verifyInSession(reuseSession, options) : null;
   if (reuseSession && execution?.reuse.action === "reused" && work.record.workflow.continuations?.length &&
@@ -445,6 +453,7 @@ export async function verifyWork({ repo = process.cwd(), workId, command, args =
     execution = await verifyInSession(reuseSession, options, true);
   }
   let attempt = execution?.attempt ?? await verify(options);
+  timingEvent({ event: execution?.reuse.action === "reused" ? "reused" : "attempt", attemptId: attempt.id });
   let requestHash = work.record.workflow.requestHash;
   let requestId = work.record.workflow.requestId;
   const reuseGuard = execution?.reuse.action === 'reused' ? { context: verificationContext(work.record), useId: execution.reuse.id } : undefined;
@@ -458,6 +467,7 @@ export async function verifyWork({ repo = process.cwd(), workId, command, args =
     execution = await verifyInSession(reuseSession, { ...options, record: fresh.record, inputs: fresh.record.workflow.inputs }, true);
     execution.reuse.reasons.push('record_changed_before_reuse');
     attempt = execution.attempt;
+    timingEvent({ event: "attempt", attemptId: attempt.id });
     requestHash = fresh.record.workflow.requestHash;
     requestId = fresh.record.workflow.requestId;
     artifactPath = await savePending(repo, workId, "verification", attempt, hash(signature), requestHash, workId, undefined, requestId);
@@ -757,7 +767,12 @@ async function savePending(repo: string, workId: string, kind: "verification" | 
   }
   return path.relative(root, target);
 }
-export async function appendPending({ repo = process.cwd(), workId, artifactPath }: WorkOptions & { artifactPath: string }) {
+type PendingOptions = WorkOptions & { artifactPath: string };
+export function appendPending(options: PendingOptions) {
+  return withWorkflowTiming(options.repo ?? process.cwd(), "registration", () => timedPhase("result_registration", () => registerPending(options)));
+}
+
+async function registerPending({ repo = process.cwd(), workId, artifactPath }: PendingOptions) {
   if (typeof artifactPath !== "string" || !/^\.www[\/]pending-results[\/](?:attempt|review)-[a-zA-Z0-9-]+\.json$/.test(artifactPath)) throw new Error("회수할 결과 artifact 경로 오류");
   const target         = await resolveInside(repo, artifactPath)       ;
   const value: unknown = JSON.parse(await fs.readFile(target, "utf8")) ;
@@ -765,6 +780,8 @@ export async function appendPending({ repo = process.cwd(), workId, artifactPath
   const current = await readWork({ repo, workId });
   if (current.record.schemaVersion !== 2 || !("workRequestHash" in value) || typeof value.workRequestHash !== "string" || current.record.workflow.requestHash !== value.workRequestHash) throw new Error("회수 결과의 요청 hash 불일치");
   const payload = value.payload;
+  const attemptId = payload && typeof payload === "object" && "id" in payload && typeof payload.id === "string" ? payload.id : undefined;
+  timingEvent({ event: "bound", workId: current.record.id, requestHash: current.record.workflow.requestHash });
   const expectedRequestHash = value.workRequestHash;
   const expectedRequestId = "workRequestId" in value && typeof value.workRequestId === "string" ? value.workRequestId : undefined;
   if (expectedRequestId !== undefined ? expectedRequestId !== current.record.workflow.requestId : !!current.record.workflow.continuations?.length) {
@@ -783,10 +800,14 @@ export async function appendPending({ repo = process.cwd(), workId, artifactPath
         reuseGuard = { context: guard.context, useId: guard.useId };
       }
       return appendVerification(repo, workId, payload, value.commandHash, expectedRequestHash, expectedRequestId, reuseGuard);
-    });
+    }, 500, sleep => timedPhase("ledger_lock", sleep));
+    if (attemptId) timingEvent({ event: "registered", attemptId });
     return { recorded: true as const, artifactPath, work };
   } catch (error) {
-    if (error instanceof WorkLockBusyError) return { recorded: false as const, artifactPath, reason: error.code };
+    if (error instanceof WorkLockBusyError) {
+      if (attemptId) timingEvent({ event: "registration_pending", attemptId });
+      return { recorded: false as const, artifactPath, reason: error.code };
+    }
     throw error;
   }
 }
