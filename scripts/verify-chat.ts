@@ -691,6 +691,45 @@ try {
     await fs.writeFile(path.join(directory,'performance.json'),JSON.stringify({metrics,checks,build:JSON.parse(await fs.readFile(path.join(root,'dist/build-info.json'),'utf8')),limitations:['합성 input→다음 frame 근사이며 OS 키보드/IME·React commit 측정과 다름','현재 fixture 실행 상태의 출력 빈도에 한정','최대 사건 2000개 경계는 별도 projection 집중검사']},null,2));
     console.log(JSON.stringify({evidence:directory,metrics}));return;
   }
+  if (process.argv.includes("--steer-tabs-only")) {
+    const active = ".session-surface:not([hidden])";
+    const send = '[data-testid="send-button"]';
+    const draft = '[data-testid="prompt-input"]';
+    const requests = '[data-testid="user-request"]';
+    await session.input("탭 격리 중단 확인");
+    await session.click(send);
+    await session.wait("document.querySelector('[data-testid=send-button]').textContent.includes('Steer')", "첫 탭에서 활성 턴 확인");
+    const prefix = "첫 추가 지시 ";
+    await session.input(prefix + "가");
+    await session.evaluate("(" + dispatchImeGesture.toString() + ")(\"반복\"," + JSON.stringify(prefix) + ")");
+    await session.wait("Array.from(document.querySelectorAll('[data-testid=user-request]')).some(row=>row.textContent.includes('첫 추가 지시') && row.textContent.includes('접수됨'))", "첫 추가 지시 접수");
+    await session.input("대기 추가 지시");
+    await session.click(send);
+    await session.wait("document.querySelector('[data-testid=send-button]').disabled", "두 번째 추가 지시 접수 대기");
+    await session.click(".session-tab-create");
+    await session.wait("document.querySelectorAll('.session-surface').length===2 && !document.querySelectorAll('.session-surface')[1].hidden", "두 번째 탭으로 전환");
+    const otherInput = JSON.stringify(active + " " + draft);
+    await session.evaluate(`(() => { const node=document.querySelector(${otherInput});Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(node,'둘째 탭 초안');node.dispatchEvent(new Event('input',{bubbles:true})); })()`);
+    await fs.writeFile(path.join(workspace,"fixture-steer-release"),"release");
+    await session.wait("Array.from(document.querySelectorAll('.session-surface[hidden] [data-testid=user-request]')).some(row=>row.textContent.includes('대기 추가 지시') && row.textContent.includes('접수됨'))", "배경 첫 탭에서 두 번째 지시 접수");
+    const visibleRows = JSON.stringify(active + " " + requests);
+    await session.wait(`document.querySelector(${otherInput}).value==='둘째 탭 초안' && document.querySelectorAll(${visibleRows}).length===0`, "현재 탭에 첫 탭 지시 유입 없이 초안 보존");
+    await session.click("button[role=tab]");
+    await session.wait("Array.from(document.querySelectorAll('.session-surface:not([hidden]) [data-testid=user-request]')).filter(row=>row.textContent.includes('접수됨')).length===2", "첫 탭 복귀 후 두 지시 각각 한 번 접수");
+    const calls = (await fs.readFile(path.join(workspace,"fixture-calls.jsonl"),"utf8")).trim().split("\n").map(line=>object(JSON.parse(line)));
+    const starts = calls.filter(call=>call.method==="turn/start");
+    const steers = calls.filter(call=>call.method==="turn/steer").map(call=>object(call.params));
+    const turns = steers.map(steer=>steer.expectedTurnId);
+    const ids = steers.map(steer=>steer.clientUserMessageId);
+    const texts = steers.map(steer=>Array.isArray(steer.input) && object(steer.input[0]).text);
+    if (starts.length!==1 || steers.length!==2 || calls.some(call=>call.method==="turn/interrupt") ||
+        !turns[0] || new Set(turns).size!==1 || ids.some(id=>!id) || new Set(ids).size!==2 ||
+        steers.some(steer=>steer.threadId!==object(starts[0]?.params).threadId) ||
+        JSON.stringify(texts)!==JSON.stringify(["첫 추가 지시 각","대기 추가 지시"])) throw Error("탭 사이의 Native 호출 또는 지시 원문 불일치");
+    await session.terminate();session=null;
+    await fs.writeFile(path.join(directory,"steer-tabs.json"),JSON.stringify({checks,starts:starts.length,steers},null,2));
+    console.log(directory);return;
+  }
   if (process.argv.includes('--steer-only')) {
     await session.input('스트리밍 이력 절단 중단 확인');await session.click('[data-testid="send-button"]');
     await session.wait(`(async()=>{const events=await window.www.workspace().then(scope=>window.www.events(scope));

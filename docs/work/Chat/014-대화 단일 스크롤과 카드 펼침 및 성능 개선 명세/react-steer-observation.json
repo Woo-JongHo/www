@@ -1,0 +1,819 @@
+{
+  "결합커밋": "7b7eaf5",
+  "기준렌더러": "0169e47",
+  "입력횟수": 18,
+  "화면": "Electron 39.8.10 · 표시 창 1440×868",
+  "측정방법": "동일한 호스트·fixture에서 각 renderer의 루트에 React.Profiler를 추가하고 CommandView 진입 때 running=false인 블록 ID를 기록했다. 입력마다 다음 두 frame을 기다린 뒤 focus·값을 검사했다. actualDuration은 해당 commit에 든 React render 시간(ms)이다.",
+  "실행": {
+    "후보": {
+      "sha256": "d6ef8272f4c58ed15ae48fafb15a772a7edf344a6a276871d6987b866543caf6",
+      "관찰": [
+        {
+          "label": "idle",
+          "cards": [],
+          "commits": [
+            {
+              "phase": "nested-update",
+              "actualDuration": 30.50000023841858,
+              "startTime": 6183.799999952316,
+              "commitTime": 6214.5
+            },
+            {
+              "phase": "update",
+              "actualDuration": 28.100000143051147,
+              "startTime": 6219.900000095367,
+              "commitTime": 6248.200000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6255.400000095367,
+              "commitTime": 6260.5
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6267.900000095367,
+              "commitTime": 6267.900000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.09999990463256836,
+              "startTime": 6411.900000095367,
+              "commitTime": 6412
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.09999990463256836,
+              "startTime": 6420.100000143051,
+              "commitTime": 6420.200000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6432.5,
+              "commitTime": 6432.600000143051
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.10000014305114746,
+              "startTime": 6446.299999952316,
+              "commitTime": 6446.400000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6460.100000143051,
+              "commitTime": 6460.200000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.20000004768371582,
+              "startTime": 6473.900000095367,
+              "commitTime": 6474.100000143051
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6488,
+              "commitTime": 6488
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.10000014305114746,
+              "startTime": 6502.799999952316,
+              "commitTime": 6502.900000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6517.700000047684,
+              "commitTime": 6517.700000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.09999990463256836,
+              "startTime": 6529.600000143051,
+              "commitTime": 6529.700000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.10000014305114746,
+              "startTime": 6543.5,
+              "commitTime": 6543.600000143051
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6557.299999952316,
+              "commitTime": 6557.299999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.09999990463256836,
+              "startTime": 6571,
+              "commitTime": 6571.200000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.20000004768371582,
+              "startTime": 6584.900000095367,
+              "commitTime": 6585.100000143051
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6600.100000143051,
+              "commitTime": 6600.100000143051
+            }
+          ],
+          "commands": 65,
+          "viewport": [
+            1440,
+            868
+          ]
+        },
+        {
+          "label": "running",
+          "cards": [],
+          "commits": [
+            {
+              "phase": "update",
+              "actualDuration": 2.1000003814697266,
+              "startTime": 6696,
+              "commitTime": 6698.400000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 3.5999999046325684,
+              "startTime": 6707,
+              "commitTime": 6711
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6713.299999952316,
+              "commitTime": 6713.600000143051
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6723.900000095367,
+              "commitTime": 6723.900000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 3.200000047683716,
+              "startTime": 6729,
+              "commitTime": 6732.5
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 6734.600000143051,
+              "commitTime": 6734.900000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.0999999046325684,
+              "startTime": 6736.700000047684,
+              "commitTime": 6739
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6740.200000047684,
+              "commitTime": 6740.5
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.6000001430511475,
+              "startTime": 6750.799999952316,
+              "commitTime": 6753.400000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 3.299999952316284,
+              "startTime": 6754.799999952316,
+              "commitTime": 6758.600000143051
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6762.299999952316,
+              "commitTime": 6762.600000143051
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6765.5,
+              "commitTime": 6765.600000143051
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.700000047683716,
+              "startTime": 6771,
+              "commitTime": 6774.299999952316
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 6776.400000095367,
+              "commitTime": 6776.700000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6779.400000095367,
+              "commitTime": 6779.5
+            },
+            {
+              "phase": "update",
+              "actualDuration": 3.1999998092651367,
+              "startTime": 6793.299999952316,
+              "commitTime": 6796.900000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6800.700000047684,
+              "commitTime": 6801.600000143051
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6806.299999952316,
+              "commitTime": 6806.299999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 3,
+              "startTime": 6814.600000143051,
+              "commitTime": 6817.799999952316
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 6819.799999952316,
+              "commitTime": 6820.200000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.09999990463256836,
+              "startTime": 6822.200000047684,
+              "commitTime": 6822.299999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.20000004768371582,
+              "startTime": 6835,
+              "commitTime": 6835.200000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 3.1000001430511475,
+              "startTime": 6837.5,
+              "commitTime": 6841.100000143051
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0.09999990463256836,
+              "startTime": 6843.100000143051,
+              "commitTime": 6843.5
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.10000014305114746,
+              "startTime": 6848.299999952316,
+              "commitTime": 6848.400000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 3.4000000953674316,
+              "startTime": 6858.600000143051,
+              "commitTime": 6862.299999952316
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 6864.299999952316,
+              "commitTime": 6864.700000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6865,
+              "commitTime": 6865
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6876.799999952316,
+              "commitTime": 6876.799999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.8000001907348633,
+              "startTime": 6880.5,
+              "commitTime": 6883.799999952316
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 6885.900000095367,
+              "commitTime": 6886.299999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6890.5,
+              "commitTime": 6890.600000143051
+            },
+            {
+              "phase": "update",
+              "actualDuration": 3.0999999046325684,
+              "startTime": 6902.700000047684,
+              "commitTime": 6906.100000143051
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 6908.200000047684,
+              "commitTime": 6908.600000143051
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6908.700000047684,
+              "commitTime": 6908.700000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6918.299999952316,
+              "commitTime": 6918.400000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 3,
+              "startTime": 6924.700000047684,
+              "commitTime": 6927.799999952316
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 6930,
+              "commitTime": 6930.299999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 6932.200000047684,
+              "commitTime": 6932.200000047684
+            }
+          ],
+          "commands": 66,
+          "viewport": [
+            1440,
+            868
+          ]
+        }
+      ]
+    },
+    "기준": {
+      "sha256": "e4b9e27b3b4639c10cc18713a00880282d9c725116ac19d37240c023555843d0",
+      "관찰": [
+        {
+          "label": "idle",
+          "cards": [],
+          "commits": [
+            {
+              "phase": "nested-update",
+              "actualDuration": 28.600000381469727,
+              "startTime": 7611.599999904633,
+              "commitTime": 7643.700000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 26.700000047683716,
+              "startTime": 7650.900000095367,
+              "commitTime": 7681
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.10000014305114746,
+              "startTime": 7688.599999904633,
+              "commitTime": 7704.5
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.20000004768371582,
+              "startTime": 7890.599999904633,
+              "commitTime": 7890.900000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.20000004768371582,
+              "startTime": 7901.5,
+              "commitTime": 7901.700000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.19999980926513672,
+              "startTime": 7914.900000095367,
+              "commitTime": 7915.099999904633
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.09999990463256836,
+              "startTime": 7929.400000095367,
+              "commitTime": 7929.599999904633
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.09999990463256836,
+              "startTime": 7942.599999904633,
+              "commitTime": 7942.900000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.19999980926513672,
+              "startTime": 7957.900000095367,
+              "commitTime": 7958.099999904633
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.10000014305114746,
+              "startTime": 7970.299999952316,
+              "commitTime": 7970.400000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.20000004768371582,
+              "startTime": 7985.700000047684,
+              "commitTime": 7985.900000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.20000004768371582,
+              "startTime": 7999.599999904633,
+              "commitTime": 7999.799999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.09999990463256836,
+              "startTime": 8012,
+              "commitTime": 8012.099999904633
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.19999980926513672,
+              "startTime": 8025.900000095367,
+              "commitTime": 8026.099999904633
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.20000004768371582,
+              "startTime": 8039.599999904633,
+              "commitTime": 8039.799999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.19999980926513672,
+              "startTime": 8053.900000095367,
+              "commitTime": 8054.099999904633
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.20000004768371582,
+              "startTime": 8068.099999904633,
+              "commitTime": 8068.299999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.20000004768371582,
+              "startTime": 8081.799999952316,
+              "commitTime": 8082
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.20000004768371582,
+              "startTime": 8095.099999904633,
+              "commitTime": 8095.299999952316
+            }
+          ],
+          "commands": 65,
+          "viewport": [
+            1440,
+            868
+          ]
+        },
+        {
+          "label": "running",
+          "cards": [],
+          "commits": [
+            {
+              "phase": "update",
+              "actualDuration": 1.7999999523162842,
+              "startTime": 8233.700000047684,
+              "commitTime": 8237.700000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 8241.5,
+              "commitTime": 8242.200000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 1.9000000953674316,
+              "startTime": 8244.799999952316,
+              "commitTime": 8248.900000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.5999999046325684,
+              "startTime": 8250.099999904633,
+              "commitTime": 8254.799999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 8256.900000095367,
+              "commitTime": 8257.400000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.799999952316284,
+              "startTime": 8268.099999904633,
+              "commitTime": 8272.799999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 8274.799999952316,
+              "commitTime": 8275.400000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 8283,
+              "commitTime": 8283
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.8000001907348633,
+              "startTime": 8288.299999952316,
+              "commitTime": 8293.200000047684
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 8294.900000095367,
+              "commitTime": 8295.400000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.20000004768371582,
+              "startTime": 8297.5,
+              "commitTime": 8297.700000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.8999998569488525,
+              "startTime": 8311.099999904633,
+              "commitTime": 8315.799999952316
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 8317.5,
+              "commitTime": 8318
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 8318.200000047684,
+              "commitTime": 8318.200000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.09999990463256836,
+              "startTime": 8324.700000047684,
+              "commitTime": 8324.799999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.6999998092651367,
+              "startTime": 8329.400000095367,
+              "commitTime": 8334.5
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 8336.200000047684,
+              "commitTime": 8336.700000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 8339.099999904633,
+              "commitTime": 8339.299999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.5999999046325684,
+              "startTime": 8349.5,
+              "commitTime": 8354.099999904633
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 8356,
+              "commitTime": 8356.5
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.10000014305114746,
+              "startTime": 8356.599999904633,
+              "commitTime": 8356.700000047684
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 8366.799999952316,
+              "commitTime": 8366.900000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.700000286102295,
+              "startTime": 8369.799999952316,
+              "commitTime": 8374.700000047684
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 8376.599999904633,
+              "commitTime": 8377.099999904633
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.10000014305114746,
+              "startTime": 8380.299999952316,
+              "commitTime": 8380.400000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.3999998569488525,
+              "startTime": 8390.799999952316,
+              "commitTime": 8395.299999952316
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 8397.299999952316,
+              "commitTime": 8397.799999952316
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.09999990463256836,
+              "startTime": 8397.900000095367,
+              "commitTime": 8398
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.09999990463256836,
+              "startTime": 8408.400000095367,
+              "commitTime": 8408.5
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.5999996662139893,
+              "startTime": 8411.900000095367,
+              "commitTime": 8416.599999904633
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 8418.5,
+              "commitTime": 8419
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0.09999990463256836,
+              "startTime": 8421.400000095367,
+              "commitTime": 8421.5
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.3000001907348633,
+              "startTime": 8432.099999904633,
+              "commitTime": 8436.5
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 8438.5,
+              "commitTime": 8438.900000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 8439,
+              "commitTime": 8439.099999904633
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 8449.5,
+              "commitTime": 8449.5
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.700000286102295,
+              "startTime": 8452.900000095367,
+              "commitTime": 8457.400000095367
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 8459.400000095367,
+              "commitTime": 8459.900000095367
+            },
+            {
+              "phase": "update",
+              "actualDuration": 0,
+              "startTime": 8464,
+              "commitTime": 8464.099999904633
+            },
+            {
+              "phase": "update",
+              "actualDuration": 2.3000001907348633,
+              "startTime": 8473.900000095367,
+              "commitTime": 8478.299999952316
+            },
+            {
+              "phase": "nested-update",
+              "actualDuration": 0,
+              "startTime": 8480,
+              "commitTime": 8480.599999904633
+            }
+          ],
+          "commands": 66,
+          "viewport": [
+            1440,
+            868
+          ]
+        }
+      ]
+    }
+  },
+  "연속Steer": {
+    "sha256": "114cd5ae58063c3d60759dd80e6e0e316b2d8b8670fd0282056b51704e2ba146",
+    "관찰": {
+      "checks": [
+        "프로젝트 선택 전 전체 보기",
+        "전체 보기에서 Native 자동 실행 없음",
+        "현재 프로젝트 대시보드 진입",
+        "프로젝트 저장 대화 목록",
+        "입력 반영",
+        "첫 탭에서 활성 턴 확인",
+        "입력 반영",
+        "첫 추가 지시 접수",
+        "입력 반영",
+        "두 번째 추가 지시 접수 대기",
+        "두 번째 탭으로 전환",
+        "배경 첫 탭에서 두 번째 지시 접수",
+        "현재 탭에 첫 탭 지시 유입 없이 초안 보존",
+        "첫 탭 복귀 후 두 지시 각각 한 번 접수"
+      ],
+      "starts": 1,
+      "steers": [
+        {
+          "threadId": "thread-new",
+          "expectedTurnId": "live-1795476076919-1",
+          "clientUserMessageId": "6be0c687-1c07-40a3-95ef-1fbeb501d53c",
+          "input": [
+            {
+              "type": "text",
+              "text": "첫 추가 지시 각",
+              "text_elements": []
+            }
+          ]
+        },
+        {
+          "threadId": "thread-new",
+          "expectedTurnId": "live-1795476076919-1",
+          "clientUserMessageId": "37eaab15-77f7-47cd-ac50-35fdd8ba453c",
+          "input": [
+            {
+              "type": "text",
+              "text": "대기 추가 지시",
+              "text_elements": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
