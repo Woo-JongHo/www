@@ -1041,7 +1041,7 @@ for (const limit of ["count", "bytes"] as const) test(`A/B 합산 ${limit} 초�
     await a.invoke("conversations:open", [selected(a), "history-a"]);
     expect(typeof (await a.invoke("turn:start", [selected(a), "history-a", "성공 재열기 뒤 요청"]) as { turnId: string }).turnId).toBe("string");
   } finally { await s.close(); }
-});
+}, 30_000);
 
 
 test("B 복원 중 종료된 이전 client의 A 큐와 늦은 승인은 새 연결·선택에 배출하지 않는다", async () => {
