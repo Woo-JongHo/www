@@ -71,6 +71,22 @@ test("F09/F11: 저작 보고서가 없으면 raw core와 wrapper·공개 CLI 모
   assert.equal((await readWork({ repo, workId })).record.workflow?.verifications[0]?.result, "passed");
 });
 
+test("먼저 시작한 실패가 늦게 저장되어도 최신 통과로 원장 완료를 저장한다", async t => {
+  const { repo, workId, file, verify, review } = await fixture(t);
+  const failure = await verify(7);
+  const success = await verify();
+  assert.ok(Date.parse(failure.startedAt) < Date.parse(success.startedAt));
+  const work = await readWork({ repo, workId });
+  assert.equal(work.record.schemaVersion, 2);
+  if (work.record.schemaVersion !== 2) throw new Error("현재 작업 기록이 필요합니다.");
+  work.record.workflow.verifications.reverse();
+  await fs.writeFile(file, JSON.stringify(work.record));
+  await review();
+  await finishWorkReport({ repo, workId, narrative });
+  assert.equal((await assessWork({ repo, workId })).complete, true);
+  assert.equal((await completeWork({ repo, workId })).record.status, "done");
+});
+
 test("C01/F09: 현재 저작 보고서는 허용하고 보고서 작성 뒤 기록 변경은 거부한다", async t => {
   const context = await fixture(t);
   const { repo, workId } = context;

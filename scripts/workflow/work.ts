@@ -10,7 +10,7 @@ import { validateRequirementRefs, validateWorkRecord, parseWorkRecord } from "./
 import { findWorkRecord, resolveInside, validateWritePaths, workOutputColumns } from "./preflight.ts";
 import { serializeWorkRecord } from "./work-json.ts";
 import { hashRequest, normalizeApproval } from "./route.ts";
-import { captureSource, criteriaDigest, currentVerifications, evaluateEvidence, latestVerificationGroup, renderAttempt, validEnvironmentObservation, verificationCommandFailed, verify, verifyInSession, withVerificationReuse } from "./evidence.ts";
+import { captureSource, criteriaDigest, evaluateEvidence, renderAttempt, validEnvironmentObservation, verificationCommandFailed, verify, verifyInSession, withVerificationReuse } from "./evidence.ts";
 import { loadReviewPolicy, validateReview, durableJson } from "./review.ts";
 import { withWorkLock, inspectWorkLock, recoverWorkLock, retryWorkWriter, WorkLockBusyError } from "./lock.ts";
 import type { WorkExecutionHost } from "./lock.ts";
@@ -20,6 +20,7 @@ import { createArtifactReview } from "./artifacts.ts";
 import { assessCompletionReport } from "./completion-report.ts";
 import { publishWorkReport, readWorkReport, type ReportNarrative } from "./reports.ts";
 import { assessDecompositionCompletion, validateWorkDecomposition } from "./decomposition.ts";
+import { currentVerifications, latestVerificationGroup } from "./types.ts";
 import type { AddVerifierOptions, ContinueWorkOptions, WorkAuthorization, CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions, CriterionAssessment, ReportHookResult } from './types.ts';
 import type { VerificationAttempt, VerificationSession } from './evidence.ts';
 import type { DocumentationReview } from './documentation.ts';

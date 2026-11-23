@@ -6,6 +6,7 @@ import { createHash } from "node:crypto";
 import type { WorkRecord } from "./types.ts";
 import { artifactReviewErrors } from "./artifacts.ts";
 import { parseDecomposition } from "./decomposition.ts";
+import { currentVerifications, latestVerificationGroup } from "./types.ts";
 import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { normalize, resolve, sep } from "node:path";
 
@@ -240,11 +241,16 @@ export function validateWorkRecord(value: unknown, options: ValidationOptions = 
       add(errors, Array.isArray(attempt?.criterionIds) && attempt.criterionIds.length > 0 && new Set(attempt.criterionIds).size === attempt.criterionIds.length && attempt.criterionIds.every((id) => typeof id === "string" && id.trim()), "검증 시도의 수용 기준 연결이 올바르지 않습니다.");
       if (attempt?.id) attempts.set(String(attempt.id), attempt);
     }
+    const continuation = objects(workflow.continuations).at(-1);
+    const chronological = record.status === "done" ? currentVerifications(
+      [...attempts.values()].map(attempt => ({ attempt, startedAt: attempt.startedAt })),
+      continuation && { verificationStart: continuation.verificationStart, authorizedAt: continuation.authorizedAt },
+    ) : [];
     for (const criterion of objects(record.criteria)) {
       for (const evidence of objects(criterion?.evidence)) add(errors, typeof evidence.attemptId === "string" && attempts.has(evidence.attemptId) && list(attempts.get(evidence.attemptId)?.criterionIds).includes(criterion.id), `${criterion.id} 증거가 실제 기록된 검증 시도에 연결돼야 합니다.`);
       if (record.status === "done" && criterion.required) {
-        const latest = [...attempts.values()].filter((attempt) => list(attempt.criterionIds).includes(criterion.id)).at(-1);
-        add(errors, latest?.executor === "process" && latest.result === "passed" && latest.exitCode === 0 && latest.sourceStable === true && latest.environmentStable === true, `done 작업의 ${criterion.id}에는 최근 실제 검증 통과가 필요합니다.`);
+        const latest = latestVerificationGroup(chronological.filter(({ attempt }) => list(attempt.criterionIds).includes(criterion.id)));
+        add(errors, latest.length > 0 && latest.every(({ attempt }) => attempt.executor === "process" && attempt.result === "passed" && attempt.exitCode === 0 && attempt.sourceStable === true && attempt.environmentStable === true), `done 작업의 ${criterion.id}에는 최근 실제 검증 통과가 필요합니다.`);
       }
     }
     if (record.status === "done") add(errors, objects(workflow.reviews).at(-1)?.verdict === "pass", "done 작업에는 독립 검토 기록이 필요합니다. 현재 적용성은 완료 판정 코드에서 확인합니다.");

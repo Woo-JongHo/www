@@ -406,21 +406,6 @@ export async function evaluateEvidence({ repo, record, attempt }: { repo?: strin
 
 function inline(value: unknown) { return String(value).replace(/`/g, "\\`").replace(/[\r\n]/g, " "); }
 
-export function currentVerifications(verifications: readonly VerificationAttempt[], continuation?: { verificationStart?: number; authorizedAt: string }): VerificationAttempt[] {
-  const eligible = !continuation
-    ? verifications
-    : continuation.verificationStart !== undefined
-      ? verifications.slice(continuation.verificationStart)
-      : verifications.filter(attempt => Date.parse(attempt.startedAt) >= Date.parse(continuation.authorizedAt));
-  return [...eligible].sort((left, right) => Date.parse(left.startedAt) - Date.parse(right.startedAt));
-}
-
-/** 시작 시각이 같은 후보는 순서를 입증할 수 없어 모두 검사한다. */
-export function latestVerificationGroup(chronological: readonly VerificationAttempt[]): VerificationAttempt[] {
-  const latest = chronological.at(-1);
-  return latest ? chronological.filter(attempt => Date.parse(attempt.startedAt) === Date.parse(latest.startedAt)) : [];
-}
-
 export function verificationCommandFailed(attempt: VerificationAttempt): boolean {
   return Boolean(attempt.signal || attempt.error || (typeof attempt.exitCode === "number" && attempt.exitCode !== 0));
 }

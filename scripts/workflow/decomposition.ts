@@ -6,8 +6,8 @@ import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { validateWritePaths } from "./preflight.ts";
-import { currentVerifications, evaluateEvidence, latestVerificationGroup, type VerificationAttempt } from "./evidence.ts";
-import type { CurrentWorkRecord } from "./types.ts";
+import { evaluateEvidence, type VerificationAttempt } from "./evidence.ts";
+import { currentVerifications, latestVerificationGroup, type CurrentWorkRecord } from "./types.ts";
 import { readRuntime, runtimePaths } from "./record.ts";
 
 export interface DecompositionUnit {
