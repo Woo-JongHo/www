@@ -34,6 +34,11 @@ function workColumn(card: DashboardWork, response: boolean): Column | "취소" {
   return "대기";
 }
 
+function currentCriteriaLabel(valid: number | undefined, unknown: number | undefined, total: number) {
+  if (unknown === undefined || (total > 0 && unknown === total)) return "현재 미평가";
+  return `현재 유효 ${valid ?? 0}/${total}${unknown ? ` · 미평가 ${unknown}` : ""}`;
+}
+
 export function DashboardView({ snapshot, loading, error, projectKey, onRefresh, onOpenProject, onOpenWork, onLoadWork, responseWorkKeys = [] }: DashboardViewProps) {
   const [filter, setFilter] = useState("");
   const [showCancelled, setShowCancelled] = useState(false);
@@ -68,6 +73,8 @@ export function DashboardView({ snapshot, loading, error, projectKey, onRefresh,
     areas: currentLoad.value.areas,
     blockedReason: currentLoad.value.blockedReason,
     requiredCriteria: currentLoad.value.criteria.filter((criterion) => criterion.required).length,
+    currentCriteria: currentLoad.value.criteria.filter(c => c.required && c.applicability?.status === "current").length,
+    unassessedCriteria: currentLoad.value.criteria.filter(c => c.required && (!c.applicability || c.applicability.status === "unassessed")).length,
     passedCriteria: currentLoad.value.criteria.filter((criterion) => criterion.required && criterion.result === "passed").length,
   } : detail?.card;
   useEffect(() => {
@@ -134,11 +141,11 @@ export function DashboardView({ snapshot, loading, error, projectKey, onRefresh,
       const items = cards.filter(({ card }) => workColumn(card, needsResponse(card)) === column);
       return <section className="dashboard-column" key={column} aria-label={`${column} 작업`}><div className="dashboard-column-heading"><h2>{column}</h2><span aria-label={incomplete ? `확인 ${items.length}개, 전체 미확인` : `${items.length}개`}>{incomplete ? `확인 ${items.length}개` : items.length}</span></div>
         {items.length === 0 ? <p className="dashboard-column-empty">{incomplete ? "수집된 작업 없음 · 전체 미확인" : "표시할 작업 없음"}</p> : <ul>{items.map(({ card, project }) => <li key={`${card.projectKey}:${card.id}`}><button type="button" className="dashboard-card" data-testid="dashboard-work-card" data-project-key={card.projectKey} data-work-id={card.id} onClick={(event) => { cardButton.current = event.currentTarget; if (detailKey !== `${card.projectKey}:${card.id}`) { request.current++; setLoaded(null); setSelected({ card, project, scope }); } }}>
-          <span className="dashboard-card-project">{project.name}</span><strong>{card.title}</strong><span className="dashboard-card-meta"><span>{statusLabels[card.status]}</span>{needsResponse(card) && <span className="dashboard-response">응답 필요</span>}</span>{card.blockedReason && <span className="dashboard-card-blocked">차단: {card.blockedReason}</span>}<small>기록된 필수 기준 {card.passedCriteria}/{card.requiredCriteria}</small>
+          <span className="dashboard-card-project">{project.name}</span><strong>{card.title}</strong><span className="dashboard-card-meta"><span>{statusLabels[card.status]}</span>{needsResponse(card) && <span className="dashboard-response">응답 필요</span>}</span>{card.blockedReason && <span className="dashboard-card-blocked">차단: {card.blockedReason}</span>}<small>기록된 필수 기준 {card.passedCriteria}/{card.requiredCriteria} · {currentCriteriaLabel(card.currentCriteria, card.unassessedCriteria, card.requiredCriteria)}</small>{card.assessmentReason && <small>{card.assessmentReason}</small>}
         </button></li>)}</ul>}
       </section>;
     })}</div>}
-    {detail && detailSummary && <aside className="dashboard-detail" aria-label="작업 상세"><div className="dashboard-detail-heading"><h2 ref={detailHeading} tabIndex={-1}>작업 상세</h2><button type="button" onClick={closeDetail} aria-label="작업 상세 닫기">닫기</button></div><h3>{detailSummary.title}</h3><dl><dt>프로젝트</dt><dd>{detail.project.name}</dd><dt>원본 업무 상태</dt><dd>{statusLabels[detailSummary.status]} ({detailSummary.status})</dd><dt>작업 UUID</dt><dd>{detail.card.id}</dd><dt>원본 경로</dt><dd>{detailSummary.sourcePath}</dd><dt>담당</dt><dd>{detailSummary.owner}</dd><dt>영역</dt><dd>{detailSummary.areas.join(", ") || "없음"}</dd><dt>차단 사유</dt><dd>{detailSummary.blockedReason ?? "없음"}</dd><dt>기록된 필수 기준</dt><dd>{detailSummary.passedCriteria}/{detailSummary.requiredCriteria}</dd></dl><p>기준 수치는 작업 기록에 남은 결과이며 현재 재검증 결과를 뜻하지 않습니다. 현재 적용성은 평가하지 않았습니다.</p>
+    {detail && detailSummary && <aside className="dashboard-detail" aria-label="작업 상세"><div className="dashboard-detail-heading"><h2 ref={detailHeading} tabIndex={-1}>작업 상세</h2><button type="button" onClick={closeDetail} aria-label="작업 상세 닫기">닫기</button></div><h3>{detailSummary.title}</h3><dl><dt>프로젝트</dt><dd>{detail.project.name}</dd><dt>원본 업무 상태</dt><dd>{statusLabels[detailSummary.status]} ({detailSummary.status})</dd><dt>작업 UUID</dt><dd>{detail.card.id}</dd><dt>원본 경로</dt><dd>{detailSummary.sourcePath}</dd><dt>담당</dt><dd>{detailSummary.owner}</dd><dt>영역</dt><dd>{detailSummary.areas.join(", ") || "없음"}</dd><dt>차단 사유</dt><dd>{detailSummary.blockedReason ?? "없음"}</dd><dt>기록된 필수 기준</dt><dd>{detailSummary.passedCriteria}/{detailSummary.requiredCriteria}</dd><dt>현재 유효한 필수 기준</dt><dd>{currentCriteriaLabel(detailSummary.currentCriteria, detailSummary.unassessedCriteria, detailSummary.requiredCriteria)}</dd></dl>
       {selectionIncomplete && !listedDetail && <p role="status">현재 목록 수집이 불완전해 이 작업을 확인하지 못했습니다.{currentLoad?.value ? " 마지막으로 수집한 상세를 표시합니다." : " 상세 조회 결과를 확인해 주세요."}</p>}
       {onLoadWork && (!currentLoad || (!currentLoad.value && currentLoad.loading)) && <p role="status">작업 상세를 불러오는 중입니다.</p>}
       {currentLoad?.value && <p className="dashboard-detail-captured">상세 수집 시각 <time dateTime={currentLoad.value.capturedAt}>{currentLoad.value.capturedAt}</time>{(currentLoad.loading || (currentLoad.snapshot !== snapshot && currentLoad.error === null)) && <span role="status"> · 이전 수집 내용을 표시하며 갱신 중입니다.</span>}{(currentLoad.error !== null || error !== null) && <span> · 갱신 전 수집 내용입니다.</span>}</p>}
@@ -151,12 +158,13 @@ export function DashboardView({ snapshot, loading, error, projectKey, onRefresh,
 
 const resultLabels = { unverified: "미검증", passed: "통과", failed: "실패", blocked: "차단" } as const;
 const nextActionLabels = new Map([ ["spec", "명세 작성"], ["design", "설계"], ["build", "구현"], ["diagnose", "진단"], ["verify", "검증"], ["review", "검토"], ["complete", "완료 처리"] ]);
+const applicabilityLabels = { current: "유효", stale: "유효하지 않음", missing: "근거 없음", unassessed: "미평가" } as const;
 const documentLabels = { spec: "명세", design: "설계", tasks: "계획", verification: "검증 근거" } as const;
 
 export function WorkDetailContent({ detail }: { detail: DashboardWorkDetail }) {
   return <div className="dashboard-detail-content">
     <section><h4>다음 단계</h4><p>{detail.nextAction ? (nextActionLabels.get(detail.nextAction) ?? detail.nextAction) : "기록된 다음 단계 없음"}</p></section>
-    <section><h4>수용 기준 <span>기록된 결과</span></h4>{detail.criteria.length === 0 ? <p>기록된 수용 기준이 없습니다.</p> : <ul className="dashboard-criteria">{detail.criteria.map((criterion) => <li key={criterion.id}><strong>{criterion.id}</strong> {criterion.description}<small>{criterion.required ? "필수" : "선택"} · {resultLabels[criterion.result]} · 증거 {criterion.evidenceCount}개</small></li>)}</ul>}</section>
-    <section><h4>작업 문서</h4><p>문서에 기록된 내용입니다. 현재 소스의 재검증 여부는 평가하지 않았습니다.</p>{detail.documents.map((document) => <details key={document.kind} className="dashboard-document"><summary>{documentLabels[document.kind]} <span>{document.status === "available" ? "읽기 가능" : document.status === "missing" ? "없음" : "읽기 실패"}</span></summary><p className="dashboard-document-path">{document.path}</p>{document.status === "missing" ? <p>{document.kind === "tasks" ? "기록된 계획이 없습니다." : "문서가 없습니다."}</p> : document.status === "failed" ? <p role="alert">{document.message ?? "문서를 읽지 못했습니다."}</p> : !document.content?.trim() ? <p>문서가 비어 있습니다.</p> : <div className="dashboard-markdown"><ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml components={{ a: ({ children }) => <span>{children}</span>, img: () => null }}>{document.content}</ReactMarkdown></div>}</details>)}</section>
+    <section><h4>수용 기준 <span>기록 및 현재 적용성</span></h4>{detail.criteria.length === 0 ? <p>기록된 수용 기준이 없습니다.</p> : <ul className="dashboard-criteria">{detail.criteria.map((criterion) => <li key={criterion.id}><strong>{criterion.id}</strong> {criterion.description}<small>{criterion.required ? "필수" : "선택"} · 기록 {resultLabels[criterion.result]} · 증거 {criterion.evidenceCount}개</small><small>현재 {applicabilityLabels[criterion.applicability?.status ?? "unassessed"]}{criterion.applicability?.reasons.length ? ` · ${criterion.applicability.reasons.join(" · ")}` : ""}</small></li>)}</ul>}</section>
+    <section><h4>작업 문서</h4>{detail.documents.map((document) => <details key={document.kind} className="dashboard-document"><summary>{documentLabels[document.kind]} <span>{document.status === "available" ? "읽기 가능" : document.status === "missing" ? "없음" : "읽기 실패"}</span></summary><p className="dashboard-document-path">{document.path}</p>{document.status === "missing" ? <p>{document.kind === "tasks" ? "기록된 계획이 없습니다." : "문서가 없습니다."}</p> : document.status === "failed" ? <p role="alert">{document.message ?? "문서를 읽지 못했습니다."}</p> : !document.content?.trim() ? <p>문서가 비어 있습니다.</p> : <div className="dashboard-markdown"><ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml components={{ a: ({ children }) => <span>{children}</span>, img: () => null }}>{document.content}</ReactMarkdown></div>}</details>)}</section>
   </div>;
 }

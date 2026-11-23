@@ -192,12 +192,18 @@ function artifactIdentity(artifacts: Artifact[]) {
   return JSON.stringify(artifacts.map(({ path: file, size, digest: hash }) => ({ path: file, size, digest: hash })));
 }
 
-export async function captureSource({ repo, inputs }: { repo?: string; inputs?: unknown } = {}): Promise<CapturedSource> {
+export interface SourceReader {
+  entries(path: string): Promise<string[]>;
+  fileHash(path: string): Promise<string>;
+}
+
+export async function captureSource({ repo, inputs, reader }: { repo?: string; inputs?: unknown; reader?: SourceReader } = {}): Promise<CapturedSource> {
   const root = await fs.realpath(repo ?? process.cwd());
   if (!(await fs.stat(root)).isDirectory()) throw new Error("저장소 경로가 디렉터리가 아닙니다.");
   const selected = inputPaths(inputs)              ;
   const captured = new Map<string, CapturedFile>() ;
   async function visit(relative: string) {
+    if (reader && captured.has(relative)) return;
     const target = path.resolve(root, relative);
     if (target !== root && !target.startsWith(`${root}${path.sep}`)) throw new Error("검증 입력이 저장소를 벗어납니다.");
     let stat;
@@ -210,13 +216,13 @@ export async function captureSource({ repo, inputs }: { repo?: string; inputs?: 
     if (stat.isSymbolicLink()) throw new Error("검증 입력의 심볼릭 링크는 허용되지 않습니다.");
     if (stat.isDirectory()) {
       captured.set(relative, { path: relative, type: "directory" });
-      for (const name of (await fs.readdir(target)).sort()) {
+      for (const name of (await (reader ? reader.entries(target) : fs.readdir(target))).sort()) {
         if (!EXCLUDED.has(name)) await visit(relative === "." ? name : `${relative}/${name}`);
       }
       return;
     }
     if (!stat.isFile()) throw new Error("검증 입력에 일반 파일이 아닌 항목이 있습니다.");
-    captured.set(relative, { path: relative, type: "file", digest: digest(await fs.readFile(target)), mode: stat.mode & 0o777 });
+    captured.set(relative, { path: relative, type: "file", digest: reader ? await reader.fileHash(target) : digest(await fs.readFile(target)), mode: stat.mode & 0o777 });
   }
   for (const relative of selected) {
     await assertParents(root, relative);
@@ -224,7 +230,7 @@ export async function captureSource({ repo, inputs }: { repo?: string; inputs?: 
   }
   const files = [...captured.values()].sort((left, right) => left.path < right.path ? -1 : left.path > right.path ? 1 : 0) ;
   let head    = null                                                                                                       ;
-  try { head = (await exec("git", ["-C", root, "rev-parse", "--verify", "HEAD"])).stdout.trim(); }
+  try { if (!reader) head = (await exec("git", ["-C", root, "rev-parse", "--verify", "HEAD"])).stdout.trim(); }
   catch (error) { if (errorCode(error) !== 128) throw error; }
   return { head, digest: digest(JSON.stringify({ inputs: selected, files })), inputs: selected, files };
 }
@@ -388,7 +394,15 @@ export function criterionEvidence(record: unknown, attempt: VerificationAttempt,
   return { usable: reasons.length === 0, reasons };
 }
 
-export async function evaluateEvidence({ repo, record, attempt, criterionId }: { repo?: string; record?: unknown; attempt?: VerificationAttempt; criterionId?: string } = {}): Promise<EvidenceEvaluation> {
+/** 읽기 전용 화면은 같은 판정에 한도와 경로 제한을 적용한 관측값을 제공한다. */
+export interface EvidenceObservations {
+  source(inputs: string[]): Promise<string>;
+  artifacts(paths: string[]): Promise<Artifact[]>;
+  environment(command: string): Promise<ExecutionEnvironment>;
+  observedEnvironment(observation: VerificationEnvironmentObservation): Promise<string>;
+}
+
+export async function evaluateEvidence({ repo, record, attempt, criterionId, observations }: { repo?: string; record?: unknown; attempt?: VerificationAttempt; criterionId?: string; observations?: EvidenceObservations } = {}): Promise<EvidenceEvaluation> {
   const reasons: string[] = [];
   if (!attempt || typeof attempt.id !== "string" || !/^attempt-[a-f0-9-]+$/i.test(attempt.id) || !HASH.test(attempt.source?.digest ?? "") || !HASH.test(attempt.criteriaDigest ?? "") || typeof attempt.command !== "string" || !attempt.command.trim() || attempt.command.includes("\0")) return { usable: false, reasons: ["invalid_attempt"] };
   if (attempt.executor !== "process") reasons.push("untrusted_executor");
@@ -400,27 +414,35 @@ export async function evaluateEvidence({ repo, record, attempt, criterionId }: {
     if (object(record) && object(record.workflow) && record.workflow.inputs && JSON.stringify(inputPaths(record.workflow.inputs)) !== JSON.stringify(inputPaths(attempt.source.inputs))) reasons.push("scope_changed");
   } catch { reasons.push("invalid_attempt"); }
   const root = await fs.realpath(repo ?? process.cwd());
-  if (!sameEnvironment(attempt.environment, await resolveExecutionEnvironment(root, attempt.environment?.executable?.path ?? attempt.command))) reasons.push("environment_changed");
+  const command = attempt.environment?.executable?.path ?? attempt.command;
+  try {
+    const environment = observations ? await observations.environment(command) : await resolveExecutionEnvironment(root, command);
+    if (!sameEnvironment(attempt.environment, environment)) reasons.push("environment_changed");
+  } catch (error) {
+    if (!observations) throw error;
+    reasons.push("environment_unavailable");
+  }
   if (attempt.environmentObservation !== undefined) {
     const observation = attempt.environmentObservation;
     if (!validEnvironmentObservation(observation)) reasons.push('invalid_environment_observation');
     else if (observation.digest === null) reasons.push('environment_observation_unavailable');
     else {
       try {
-        if (await observeVerificationEnvironment(root, observation) !== observation.digest) reasons.push('observed_environment_changed');
+        if (await (observations ? observations.observedEnvironment(observation) : observeVerificationEnvironment(root, observation)) !== observation.digest) reasons.push('observed_environment_changed');
       } catch { reasons.push('environment_observation_unavailable'); }
     }
   }
   try {
-    const source = await captureSource({ repo, inputs: attempt.source.inputs });
-    if (source.digest !== attempt.source.digest) reasons.push("source_changed");
+    const current = observations ? await observations.source(attempt.source.inputs) : (await captureSource({ repo, inputs: attempt.source.inputs })).digest;
+    if (current !== attempt.source.digest) reasons.push("source_changed");
   } catch { reasons.push("source_unavailable"); }
   if (attempt.artifacts !== undefined) {
     if (!Array.isArray(attempt.artifacts) || !attempt.artifacts.length || attempt.artifacts.some((artifact) => !artifact || typeof artifact.path !== "string" || !Number.isSafeInteger(artifact.size) || artifact.size < 0 || !HASH.test(artifact.digest ?? ""))) reasons.push("artifacts_invalid");
     else {
       if (attempt.artifactsStable !== true) reasons.push("verification_failed");
       try {
-        const current = await captureArtifacts(root, attempt.artifacts.map((artifact) => artifact.path));
+        const paths = attempt.artifacts.map(artifact => artifact.path);
+        const current = observations ? await observations.artifacts(paths) : await captureArtifacts(root, paths);
         if (artifactIdentity(current) !== artifactIdentity(attempt.artifacts)) reasons.push("artifacts_changed");
       } catch { reasons.push("artifacts_unavailable"); }
     }
