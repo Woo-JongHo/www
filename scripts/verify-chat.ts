@@ -172,8 +172,12 @@ async function start(round: number, selectedWorkspace = workspace) {
       await evaluate("(() => { const node=document.querySelector('[data-testid=\"prompt-input\"]'); const setter=Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set; setter.call(node," + JSON.stringify(value) + "); node.dispatchEvent(new Event('input',{bubbles:true})); })()");
       await wait("document.querySelector('[data-testid=\"prompt-input\"]').value===" + JSON.stringify(value), "입력 반영");
     };
-    const screenshot = async (name: string) => {
-      const result = object(await command("Page.captureScreenshot", { format: "png" }));
+    const screenshot = async (name: string, selector?: string) => {
+      const clip = selector ? await evaluate(`(() => {
+        const {x,y,width,height}=document.querySelector(${JSON.stringify(selector)}).getBoundingClientRect();
+        return {x,y,width,height,scale:1};
+      })()`) : undefined;
+      const result = object(await command("Page.captureScreenshot", { format: "png", ...(clip ? {clip} : {}) }));
       if (typeof result.data !== "string") throw Error("화면 캡처가 없습니다.");
       await fs.writeFile(path.join(directory, name + ".png"), Buffer.from(result.data, "base64"));
     };
@@ -641,7 +645,7 @@ try {
     })()`);
     if (!Array.isArray(ratios) || ratios.length !== 9 || ratios.some(row => typeof row.ratio !== "number" || !(row.ratio >= row.minimum))) throw Error("Basic 화면 명암비 부족: " + JSON.stringify(ratios));
     checks.push("Basic 화면 텍스트·초점 명암비 " + JSON.stringify(ratios));
-    await session.screenshot("terminal-basic");
+    await session.screenshot("terminal-basic", ".session-surface:not([hidden]) main.work");
     await openPicker();
     await session.wait("document.querySelector('dialog[open] button[aria-pressed=true]')?.textContent==='Terminal Basic'", "Basic 기본 선택 표시");
     await key("Tab", 9);
