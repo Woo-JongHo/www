@@ -227,7 +227,7 @@ export async function assessDecompositionCompletion(repo: string, record: Curren
       }
       const evaluation = await assessUnitAcceptance({ repo, record, unit: item, host: receipt.host,
         executor: receipt.modelExecution.executor === "process" ? "process" : "injected", attempt: verifications.filter(attempt =>
-          typeof completion.recordedAt === "string" && Date.parse(attempt.startedAt) >= Date.parse(completion.recordedAt)
+          typeof completion.recordedAt === "string" && Date.parse(attempt.startedAt) > Date.parse(completion.recordedAt)
           && attempt.requestedCommand === item.verification.command && JSON.stringify(attempt.args) === JSON.stringify(item.verification.args)
           && item.criterionIds.every(id => attempt.criterionIds.includes(id))
           && attempt.artifacts?.some(artifact => artifact.path === item.resultPath)).at(-1) });

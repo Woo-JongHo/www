@@ -624,6 +624,12 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
   assert.match((await assessDecompositionCompletion(repo, inverted)).reasons.join(","), /fixture-task: verification_failed/);
   later.startedAt = early.startedAt;
   assert.match((await assessDecompositionCompletion(repo, inverted)).reasons.join(","), /fixture-task: verification_failed/);
+  const sameAsHost = structuredClone(independentlyVerified);
+  const host = (await readRuntime(runtimePaths(repo, second.workId))).events.find(event => event.type === "host_result" && event.taskId === "fixture-task");
+  assert.ok(host && typeof host.recordedAt === "string");
+  sameAsHost.workflow.verifications = sameAsHost.workflow.verifications.filter(v => !v.artifacts?.some(artifact => artifact.path === "src/item.ts"));
+  sameAsHost.workflow.verifications.push({ ...early, startedAt: host.recordedAt });
+  assert.match((await assessDecompositionCompletion(repo, sameAsHost)).reasons.join(","), /fixture-task: verification_not_run/);
   const workflow = independentlyVerified.workflow;
   await continueWork({ repo, workId: second.workId, role: "www-dev", direct: true, requestId: "follow-up-fixture",
     request: "같은 입력의 후속 요청", expectedRequestId: workflow.requestId, expectedRequestHash: workflow.requestHash,
