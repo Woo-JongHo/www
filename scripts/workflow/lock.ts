@@ -202,13 +202,13 @@ export class WorkLockBusyError extends Error {
   }
 }
 // action 실패는 재시도하지 않는다. 잠금 생성 충돌만 제한 시간 안에서 재시도한다.
-export async function retryWorkWriter<T>(write: () => Promise<T>, budgetMs = 500) {
+export async function retryWorkWriter<T>(write: () => Promise<T>, budgetMs = 500, wait: (sleep: () => Promise<void>) => Promise<void> = sleep => sleep()) {
   const deadline = Date.now() + budgetMs;
   for (;;) {
     try { return await write(); }
     catch (error) {
       if (!(error instanceof WorkLockBusyError) || Date.now() >= deadline) throw error;
-      await new Promise(resolve => setTimeout(resolve, Math.min(25, Math.max(1, deadline - Date.now()))));
+      await wait(() => new Promise(resolve => setTimeout(resolve, Math.min(25, Math.max(1, deadline - Date.now())))));
     }
   }
 }

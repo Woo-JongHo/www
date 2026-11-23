@@ -2,6 +2,7 @@
  * @architecture arch.development.review
  * @implements RESP-DEVELOPMENT-REVIEW
  */
+import { observeTimedChild, timedPhase, timingEvent, withWorkflowTiming } from "./timing.ts";
 import { createHash, randomUUID } from "node:crypto";
 import { spawn } from "node:child_process";
 import { promises as fs, lstatSync, readFileSync, realpathSync } from "node:fs";
@@ -376,6 +377,7 @@ async function execute(invocation: ReviewInvocation, { cwd, input }: { cwd: stri
     let outputTruncated                                   = false                      ;
 
     const child = spawn(execution.command, execution.args, { cwd, shell: false, stdio: ["pipe", "pipe", "pipe"], windowsHide: true });
+    observeTimedChild(child, "review_process");
     for (const name of ["stdout", "stderr"] as const) child[name].on("data", (chunk) => {
       const buffer    = Buffer.from(chunk                        ) ;
       const remaining = Math  .max (0, OUTPUT_LIMIT - sizes[name]) ;
@@ -469,7 +471,13 @@ async function saveReceipt(root: string, directory: string, kind: string, result
   return { path: path.relative(root, target).split(path.sep).join("/"), hash: hash(source) };
 }
 
-export async function runReview({ repo, source, criteriaDigest, policyInfo, inputPaths, run, receiptDirectory, allowFallback = true, authority, work, directRequest, workPath }: { workPath?: string; authority?: ReviewAuthority; work?: CurrentWorkRecord; directRequest?: { direct: boolean; request: string }; repo?: string; source?: ReviewSource; criteriaDigest?: string; policyInfo?: ReviewPolicyInfo; inputPaths?: string[]; run?: ReviewRunner; receiptDirectory?: string; allowFallback?: boolean } = {}): Promise<ReviewResult> {
+type ReviewOptions = { workPath?: string; authority?: ReviewAuthority; work?: CurrentWorkRecord; directRequest?: { direct: boolean; request: string }; repo?: string; source?: ReviewSource; criteriaDigest?: string; policyInfo?: ReviewPolicyInfo; inputPaths?: string[]; run?: ReviewRunner; receiptDirectory?: string; allowFallback?: boolean };
+export function runReview(options: ReviewOptions = {}): Promise<ReviewResult> {
+  if (!options.repo) return executeReview(options);
+  return withWorkflowTiming(options.repo, "review", () => executeReview(options));
+}
+
+async function executeReview({ repo, source, criteriaDigest, policyInfo, inputPaths, run, receiptDirectory, allowFallback = true, authority, work, directRequest, workPath }: ReviewOptions): Promise<ReviewResult> {
   if (typeof repo !== "string" || !source || !policyInfo || typeof criteriaDigest !== "string" || !HASH.test(source.digest) || !HASH.test(criteriaDigest ?? "") || !HASH.test(policyInfo?.hash ?? "")) throw new Error("검토 대상 소스·기준·정책 식별값이 필요합니다.");
   assertReviewPolicy(policyInfo.policy);
   if (work && digestCriteria(work) !== criteriaDigest) throw new Error("현재 작업의 기준 정의와 지문이 일치해야 합니다.");
@@ -481,6 +489,8 @@ export async function runReview({ repo, source, criteriaDigest, policyInfo, inpu
   const id        = `review-${randomUUID()}`                                                             ;
   const directory = path.resolve(root, receiptDirectory ?? path.join(".www", "evidence", "reviews", id)) ;
   await prepareReceiptDirectory(root, directory);
+  timingEvent({ event: "attempt", attemptId: id });
+  if (work) timingEvent({ event: "bound", workId: work.id, requestHash: work.workflow.requestHash });
   if (source.inputs && (await captureSource({ repo: root, inputs: source.inputs })).digest !== source.digest) throw new Error("검토 시작 전 소스가 바뀌었습니다.");
   const defaultPaths = defaultReviewPaths(root, source, workPath, work);
   const prepareSelection = async () => {
@@ -534,7 +544,7 @@ export async function runReview({ repo, source, criteriaDigest, policyInfo, inpu
     const selectedPrompt = promptFor({ source, criteriaDigest, inputPaths: selectedPaths });
     const boundInput = `${selectedPrompt}\n${SELECTION_NOTICE}\n${JSON.stringify({ ...context, inputPathsHash, authority: authorityRef ?? null, inputSnapshot, inputBundle, inputSelection })}`;
     let result: ReviewExecutionResult;
-    try { result = { ...await (run ? run(invocation, { cwd: root, input: boundInput }) : executeAppServer({ cwd: root, input: boundInput })), promptVersion: APP_PROMPT_VERSION, invocation, context, authority: authorityRef, inputPathsHash, inputPaths: selectedPaths, ...(inputSnapshot ? { inputSnapshot } : {}), inputBundle, inputSelection, reviewSource: source }; }
+    try { result = { ...await (run ? timedPhase("injected_runner", () => run(invocation, { cwd: root, input: boundInput })) : executeAppServer({ cwd: root, input: boundInput })), promptVersion: APP_PROMPT_VERSION, invocation, context, authority: authorityRef, inputPathsHash, inputPaths: selectedPaths, ...(inputSnapshot ? { inputSnapshot } : {}), inputBundle, inputSelection, reviewSource: source }; }
     catch (e) { result = { code: null, error: errorCode(e), promptVersion: APP_PROMPT_VERSION, invocation, context }; }
     let response: Response | null = null;
     try { if (result.appServer) response = inspectAppServer(result.appServer, root); } catch { result.error = "app_server_receipt_invalid"; }
@@ -550,14 +560,18 @@ export async function runReview({ repo, source, criteriaDigest, policyInfo, inpu
     const receipt = await saveReceipt(root, directory, "terra", result);
     return persist(resultFor({ id, selected: reviewer, result, response, source, criteriaDigest, policyInfo, startedAt, injected: Boolean(run), failure, receipt }));
   };
-  if (authority) return terra(selected, null);
+  if (authority) {
+    timingEvent({ event: "dispatch_reason", reason: "direct_review_authority" });
+    return terra(selected, null);
+  }
   const invoke = async (invocation: ReviewInvocation): Promise<ReviewExecutionResult> => {
     const context = { reviewId: id, sourceDigest: source.digest, criteriaDigest, policyHash: policyInfo.hash, provider: invocation.command === "claude" ? "anthropic" : "openai", model: invocation.args[invocation.args.indexOf("--model") + 1], ...currentInputs };
-    try { return { ...await (run ?? execute)(invocation, { cwd: root, input }), invocation, context }; }
+    try { return { ...await (run ? timedPhase("injected_runner", () => run(invocation, { cwd: root, input })) : execute(invocation, { cwd: root, input })), invocation, context }; }
     catch (failure) { return { code: null, signal: null, error: errorCode(failure), stdout: "", stderr: "", outputTruncated: false, invocation, context, ...(run ? {} : { executionPlatform: process.platform }) }; }
   };
   await assertCurrentContext();
   if (!workDocumentsMatch(root, workDocuments)) throw new Error("검토 호출 전 증거 문서 변경");
+  timingEvent({ event: "dispatch_reason", reason: "policy_primary" });
   const primary = await invoke(primaryInvocation(selected.model));
   try {
     if (source.inputs && (await captureSource({ repo: root, inputs: source.inputs })).digest !== source.digest) primary.error = "source_changed";
@@ -568,8 +582,10 @@ export async function runReview({ repo, source, criteriaDigest, policyInfo, inpu
   } catch { primary.error = "review_context_changed"; }
   const primaryReceipt = await saveReceipt(root, directory, "opus", primary) ;
   const failure        = classifyOpusFailure(primary)                        ;
+  if (failure) timingEvent({ event: "provider_failure", reason: failure.kind });
   if (!verifiedQuota(failure) || !allowFallback) return persist(resultFor({ id, selected, result: primary, response: claudeResponse(primary.stdout), source, criteriaDigest, policyInfo, startedAt, injected: Boolean(run), failure, receipt: primaryReceipt }));
   const fallback  = selectReviewer({ policy: policyInfo.policy, opusFailure: failure }) ;
+  timingEvent({ event: "dispatch_reason", reason: "verified_quota_fallback" });
   return terra(fallback, failure);
 }
 

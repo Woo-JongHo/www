@@ -1,6 +1,7 @@
 /**
  * @verifies RESP-DEVELOPMENT-REVIEW
  */
+import { loadTimingInputs, replayTiming } from "../scripts/replay-workflow-timing.ts";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
@@ -379,6 +380,11 @@ test("quota fallback은 Opus 원문 저장 뒤 선택을 검증하고 잘못된 
     const receipt = JSON.parse(await fs.readFile(path.join(receiptDirectory, "opus.json"), "utf8"));
     assert.equal(receipt.stdout, response.stdout);
     assert.equal(classifyOpusFailure(receipt)?.verified, true);
+    const traces = await loadTimingInputs([path.join(directory, ".www/evidence/workflow-timing")]);
+    const timing = replayTiming("2000-01-01T00:00:00Z", "2100-01-01T00:00:00Z", traces);
+    assert.equal(timing.outcomes["provider_failure/quota_exhausted"], 1);
+    assert.equal(timing.processStarts, 0);
+    assert.equal(timing.requests[0]?.terminal, true);
   });
 });
 

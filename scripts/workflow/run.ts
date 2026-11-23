@@ -16,6 +16,7 @@ import type { ModelAllocation } from "./model-allocation.ts";
 import { validateWorkDecomposition, decompositionDigest, assessUnitAcceptance, assessDecompositionCompletion, type DecompositionPlan, type DecompositionUnit, type UnitAcceptance } from "./decomposition.ts";
 import { hashRequest, routeRequest } from "./route.ts";
 import { createCodexInvocation, codexCapabilities, spawnCodex, waitForCodex } from "./adapters/codex.ts";
+import { withWorkflowTiming } from "./timing.ts";
 import { assessWork, advanceWork, authorizationDigest, completeWork, openWork, readWork, recordReview, resumeWork, retryWorkWriter, verifyWork, setDecompositionPlan, withWorkExecutionLease } from "./work.ts";
 import { captureSource, criteriaDigest } from "./evidence.ts";
 import { loadReviewPolicy, runReview } from "./review.ts";
@@ -335,7 +336,15 @@ async function developmentContext(repo: string, work: WorkLocation, skill: strin
   };
 }
 
-export async function runDevelopmentWorkflow(options: WorkflowOptions = {}, dependencies: WorkflowDependencies = {}): Promise<WorkflowResult> {
+export function runDevelopmentWorkflow(options: WorkflowOptions = {}, dependencies: WorkflowDependencies = {}): Promise<WorkflowResult> {
+  const intent = options.decision?.intent;
+  if ((intent === "verify" || intent === "review") && options.execute && options.direct && options.role === "www-dev" && !options.preview && !options.resume) {
+    return withWorkflowTiming(options.repo ?? process.cwd(), intent === "verify" ? "verification" : "review", () => executeDevelopmentWorkflow(options, dependencies));
+  }
+  return executeDevelopmentWorkflow(options, dependencies);
+}
+
+async function executeDevelopmentWorkflow(options: WorkflowOptions, dependencies: WorkflowDependencies): Promise<WorkflowResult> {
   const repo = await fs.realpath(options.repo ?? process.cwd());
   if (options.decomposition !== undefined && !options.allocation) throw new Error("분업 계획 실행에는 현재 단위의 모델 배분이 필요합니다.");
   if (options.allocation !== undefined && (options.resume === true || ["answer", "verify", "review", "complete"].includes(options.decision?.intent ?? ""))) throw new Error("모델 배분은 실제 개발 호스트 실행에만 적용합니다. 검증 명령·독립 검토·완료를 대신하지 않습니다.");
