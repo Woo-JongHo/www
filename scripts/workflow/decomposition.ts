@@ -227,12 +227,22 @@ export async function assessDecompositionCompletion(repo: string, record: Curren
         reasons.push(item.taskId + ": unit_request_changed");
         continue;
       }
-      const evaluation = await assessUnitAcceptance({ repo, record, unit: item, host: receipt.host,
-        executor: receipt.modelExecution.executor === "process" ? "process" : "injected", hostCompletedAt: completion.recordedAt ?? null,
-        attempt: verifications.filter(attempt => attempt.requestedCommand === item.verification.command && JSON.stringify(attempt.args) === JSON.stringify(item.verification.args)
-          && item.criterionIds.every(id => attempt.criterionIds.includes(id))
-          && attempt.artifacts?.some(artifact => artifact.path === item.resultPath)).at(-1) });
-      reasons.push(...evaluation.reasons.map(reason => `${item.taskId}: ${reason}`));
+      const matching = verifications.filter(attempt => attempt.requestedCommand === item.verification.command
+        && JSON.stringify(attempt.args) === JSON.stringify(item.verification.args)
+        && attempt.artifacts?.some(artifact => artifact.path === item.resultPath));
+      const latestByCriterion = new Map<VerificationAttempt | undefined, string[]>();
+      for (const id of item.criterionIds) {
+        const attempt = matching.filter(candidate => candidate.criterionIds.includes(id)).at(-1);
+        const group = latestByCriterion.get(attempt) ?? [];
+        latestByCriterion.set(attempt, [...group, id]);
+      }
+      const unitReasons = new Set<string>();
+      for (const [attempt, criterionIds] of latestByCriterion) {
+        const evaluation = await assessUnitAcceptance({ repo, record, unit: { ...item, criterionIds }, host: receipt.host,
+          executor: receipt.modelExecution.executor === "process" ? "process" : "injected", hostCompletedAt: completion.recordedAt ?? null, attempt });
+        for (const reason of evaluation.reasons) unitReasons.add(reason);
+      }
+      reasons.push(...[...unitReasons].map(reason => `${item.taskId}: ${reason}`));
     }
   } catch (error) { reasons.push(error instanceof Error ? error.message : String(error)); }
   return { usable: reasons.length === 0, reasons };

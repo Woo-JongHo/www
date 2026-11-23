@@ -577,8 +577,12 @@ test("F03 정상 호스트 종료와 미실행·누락 산출물의 업무 수�
 
 test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 수용하고 통합 후 재검증으로 갱신한다", async t => {
   const repo = await repository(t);
-  const units = [decompositionUnit(), decompositionUnit("second", "src/other.ts", ["fixture-task"])];
+  const criterionIds = ["AC-1", "AC-2"];
+  const units = [decompositionUnit(), decompositionUnit("second", "src/other.ts", ["fixture-task"])].map(unit => ({ ...unit, criterionIds }));
+  const defaults = request(repo);
   const base = request(repo, { decomposition: { units }, allocation: allocation(),
+    decision: { ...defaults.decision, criteria: [...defaults.decision.criteria, { id: "AC-2", description: "다른 기준의 통과 기록을 유지한다.", required: true }] },
+    verifier: { ...defaults.verifier, criterionIds },
     approval: { ...request(repo).approval, writePaths: ["src/item.ts", "src/other.ts"] } });
   function processHost(file: string, content: string) {
     // Node fixture가 Codex JSONL 사건을 출력한다. 실제 모델 호출로 표시하지 않는다.
@@ -603,13 +607,13 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
   assert.equal(before.record.schemaVersion, 2);
   assert.ok(before.record.workflow);
   assert.equal((await assessDecompositionCompletion(repo, before.record)).usable, false);
-  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds: ["AC-1"], artifactPaths: ["src/item.ts", "src/other.ts"] });
+  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds, artifactPaths: ["src/item.ts", "src/other.ts"] });
   const after = await readWork({ repo, workId: second.workId });
   assert.equal(after.record.schemaVersion, 2);
   assert.ok(after.record.workflow);
   assert.equal((await assessDecompositionCompletion(repo, after.record)).usable, true);
-  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds: ["AC-1"], artifactPaths: ["src/item.ts"] });
-  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds: ["AC-1"], artifactPaths: ["src/other.ts"] });
+  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds, artifactPaths: ["src/item.ts"] });
+  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds, artifactPaths: ["src/other.ts"] });
   const independentlyVerified = (await readWork({ repo, workId: second.workId })).record;
   assert.equal(independentlyVerified.schemaVersion, 2);
   if (independentlyVerified.schemaVersion !== 2) throw new Error("현재 작업 기록이 필요합니다.");
@@ -619,11 +623,14 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
   const inverted = structuredClone(independentlyVerified);
   const early = inverted.workflow.verifications.filter(v => v.artifacts?.some(a => a.path === "src/item.ts")).at(-1);
   assert.ok(early);
-  const later = { ...early, id: "attempt-22024943-2a31-4414-84dc-8382820358c6", result: "failed" as const, exitCode: 1, startedAt: new Date(Date.parse(early.startedAt) + 1).toISOString() };
+  const later = { ...early, id: "attempt-22024943-2a31-4414-84dc-8382820358c6", criterionIds: ["AC-1"], result: "failed" as const, exitCode: 1, startedAt: new Date(Date.parse(early.startedAt) + 1).toISOString() };
   inverted.workflow.verifications = [...inverted.workflow.verifications.filter(v => v.id !== early.id), later, early];
   assert.match((await assessDecompositionCompletion(repo, inverted)).reasons.join(","), /fixture-task: verification_failed/);
   later.startedAt = early.startedAt;
   assert.match((await assessDecompositionCompletion(repo, inverted)).reasons.join(","), /fixture-task: verification_failed/);
+  const oneCriterionPassed = structuredClone(independentlyVerified);
+  oneCriterionPassed.workflow.verifications.push({ ...later, result: "passed", exitCode: 0, startedAt: new Date(Date.parse(early.startedAt) + 1).toISOString() });
+  assert.equal((await assessDecompositionCompletion(repo, oneCriterionPassed)).usable, true);
   const sameAsHost = structuredClone(independentlyVerified);
   const host = (await readRuntime(runtimePaths(repo, second.workId))).events.find(event => event.type === "host_result" && event.taskId === "fixture-task");
   assert.ok(host && typeof host.recordedAt === "string");
