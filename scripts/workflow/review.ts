@@ -9,7 +9,7 @@ import { promises as fs, lstatSync, readFileSync, realpathSync } from "node:fs";
 import path from "node:path";
 import { executeAppServer, inspectAppServer, appServerInvocation, actualAppServerCommand } from "./review-app-server.ts";
 import type { AppServerReceipt } from "./review-app-server.ts";
-import { captureSource, criteriaDigest as digestCriteria } from "./evidence.ts";
+import { captureSource, criteriaDigest as digestCriteria, criterionDefinitions } from "./evidence.ts";
 import { hashRequest } from "./route.ts";
 import { parseWorkRecord } from "./schema.ts";
 import { WORK_RECORD_JSON_LIMIT } from "./reports.ts";
@@ -17,7 +17,7 @@ import type { CurrentWorkRecord } from "./types.ts";
 import { providerExecution, providerExecutionMatches } from "./adapters/windows-command.ts";
 
 
-import type { CapturedSource } from './evidence.ts';
+import type { CapturedSource, CriterionDefinition } from './evidence.ts';
 export type ReviewSource = Pick<CapturedSource, 'digest'> & Partial<CapturedSource>;
 import type { ActualProviderInvocation } from './adapters/windows-command.ts';
 export interface ReviewPolicy {
@@ -58,6 +58,8 @@ export interface ReviewInvocation {
   args    : string[] ;
 }
 export interface ReviewContext {
+  criteriaSnapshot?: CriterionDefinition[];
+  workDocuments?: ReviewWorkDocuments;
   reviewId       : string ;
   sourceDigest   : string ;
   criteriaDigest : string ;
@@ -73,6 +75,7 @@ export interface ReviewAuthority {
 export interface AuthorityRef { path: string; hash: string }
 export const REVIEW_INLINE_LIMIT = 512 * 1024;
 const APP_PROMPT_VERSION = "literal-read-v1";
+interface ReviewWorkDocuments { workPath: string; files: { path: string; digest: string | null }[] }
 interface InputSelection {
   version: 1; workPath: string | null; totalBytes: number; limit: number;
   selected: { path: string; digest: string; bytes: number }[];
@@ -114,8 +117,8 @@ interface SelectedReviewer {
 }
 export interface ReviewResult {
   workId?: string;
-  workRequestHash?: string;
   workRequestId?: string;
+  workRequestHash?: string;
   authority?: AuthorityRef;
   inputPathsHash?: string;
   observedModelMeaning?: "server-selected";
@@ -331,25 +334,26 @@ export function validateReview({ repo, policy, review, sourceDigest, criteriaDig
       provider : review.provider ,
       model    : review.model    ,
     };
-    if (JSON.stringify(body.context) !== JSON.stringify(context)) reasons.push("receipt_context_mismatch");
+    if (!reviewContextMatches(context, body.context)) reasons.push("receipt_context_mismatch");
     if (!invocationReadOnly(body.invocation, review.provider, review.model)) reasons.push("receipt_not_read_only");
     if (!body.invocation || !(body.appServer ? appExecutionMatches(body) : providerExecutionMatches(body.invocation, body.actualInvocation, body.executionPlatform))) reasons.push("receipt_execution_mismatch");
     const response = review.provider === "anthropic" ? claudeResponse(body.stdout) : body.appServer ? inspectAppServer(body.appServer, realpathSync(repo!)) : terraResponse(body.stdout);
     if (override && (!body.appServer || JSON.stringify(body.authority) !== JSON.stringify(review.authority))) reasons.push("receipt_authority_mismatch");
-    if (body.appServer && (!Array.isArray(body.inputPaths) || hash(JSON.stringify({ inputPaths: body.inputPaths, inputSnapshot: body.inputSnapshot ?? null, inputBundle: body.inputBundle, ...(body.inputSelection ? { inputSelection: body.inputSelection } : {}) })) !== body.inputPathsHash || !appPromptMatches(body, work, repo) || body.inputPathsHash !== review.inputPathsHash || review.observedModelMeaning !== "server-selected" || !HASH.test(body.inputPathsHash ?? ""))) reasons.push("receipt_inputs_mismatch");
+    if (!boundWorkDocumentsMatch(body.context?.workDocuments, repo, work) || (body.appServer && (!Array.isArray(body.inputPaths) || hash(JSON.stringify({ inputPaths: body.inputPaths, inputSnapshot: body.inputSnapshot ?? null, inputBundle: body.inputBundle, ...(body.inputSelection ? { inputSelection: body.inputSelection } : {}) })) !== body.inputPathsHash || !appPromptMatches(body, work, repo) || body.inputPathsHash !== review.inputPathsHash || review.observedModelMeaning !== "server-selected" || !HASH.test(body.inputPathsHash ?? "")))) reasons.push("receipt_inputs_mismatch");
     if (body.code !== 0 || body.signal || body.error || body.outputTruncated || !response || response.verdict !== review.verdict || JSON.stringify(response.findings) !== JSON.stringify(review.findings) || response.observedModel !== review.observedModel) reasons.push("receipt_result_mismatch");
     if (fallback && quota) {
       const opus    = readReceipt        (repo, path.join(path.dirname(receipt.path), "opus.json")) ;
       const failure = classifyOpusFailure(opus.body                                               ) ;
       if (opus.hash !== quota.receiptHash || !verifiedQuota(failure) || failure.code !== quota.code || !invocationReadOnly(opus.body.invocation, checkedPolicy.primary.provider, checkedPolicy.primary.model)) reasons.push("quota_receipt_invalid");
       if (!opus.body.invocation || !providerExecutionMatches(opus.body.invocation, opus.body.actualInvocation, opus.body.executionPlatform)) reasons.push("quota_execution_mismatch");
-      if (JSON.stringify(opus.body.context) !== JSON.stringify({ ...context, provider: checkedPolicy.primary.provider, model: checkedPolicy.primary.model })) reasons.push("quota_receipt_context_mismatch");
+      if (!reviewContextMatches({ ...context, provider: checkedPolicy.primary.provider, model: checkedPolicy.primary.model }, opus.body.context)
+        || JSON.stringify(opus.body.context?.workDocuments) !== JSON.stringify(body.context?.workDocuments)) reasons.push("quota_receipt_context_mismatch");
     }
   } catch { reasons.push("receipt_unavailable"); }
   return { usable: reasons.length === 0, reasons };
 }
 
-function promptFor({ source, criteriaDigest, inputPaths, promptVersion = APP_PROMPT_VERSION }: { source: ReviewSource; criteriaDigest: string; inputPaths: string[]; promptVersion?: "legacy" | typeof APP_PROMPT_VERSION }) {
+function promptFor({ source, criteriaDigest, inputPaths, criteriaSnapshot, workDocuments, promptVersion = APP_PROMPT_VERSION }: { source: ReviewSource; criteriaDigest: string; inputPaths: string[]; criteriaSnapshot?: CriterionDefinition[]; workDocuments?: ReviewWorkDocuments; promptVersion?: "legacy" | typeof APP_PROMPT_VERSION }) {
   return [
     "독립 읽기 전용 검토를 수행한다. cat/sed/rg/git diff/status/show 같은 파일 읽기 명령만 허용한다. 파일 쓰기, 테스트 실행, 네트워크, 게시와 승인 요청은 금지한다.",
     "한 도구 호출에는 단일 literal 읽기 명령만 사용한다. shell 연쇄·치환·파이프는 금지한다. git diff/show에는 --no-ext-diff --no-textconv를 함께 지정한다. inline inputBundle의 content는 실제 UTF-8 파일 내용이다. bundle만 읽었다면 그 범위를 findings에 명시한다. 도구 읽기 실패를 숨기지 않는다.",
@@ -359,7 +363,7 @@ function promptFor({ source, criteriaDigest, inputPaths, promptVersion = APP_PRO
     "현재 수정이 타당하면 pass, 수정이 필요한 구체적 결함이 있으면 fail로 판정한다. 실행하지 않은 테스트를 수행했다고 쓰지 않는다.",
     "findings는 한국어 문자열 배열로 작성하고, 결함에는 위치와 재현 또는 판단 근거를 포함한다.",
     "최종 응답은 verdict와 findings만 가진 JSON 객체다.",
-    JSON.stringify({ sourceDigest: source.digest, criteriaDigest, inputPaths, files: source.files ?? [] }),
+    JSON.stringify({ sourceDigest: source.digest, criteriaDigest, inputPaths, files: source.files ?? [], ...(criteriaSnapshot ? { criteriaSnapshot } : {}), ...(workDocuments ? { workDocuments } : {}) }),
   ].join("\n");
 }
 
@@ -465,11 +469,12 @@ async function saveReceipt(root: string, directory: string, kind: string, result
   return { path: path.relative(root, target).split(path.sep).join("/"), hash: hash(source) };
 }
 
-export async function runReview({ repo, source, criteriaDigest, policyInfo, inputPaths = [], run, receiptDirectory, allowFallback = true, authority, work, directRequest, workPath }: { workPath?: string; authority?: ReviewAuthority; work?: CurrentWorkRecord; directRequest?: { direct: boolean; request: string }; repo?: string; source?: ReviewSource; criteriaDigest?: string; policyInfo?: ReviewPolicyInfo; inputPaths?: string[]; run?: ReviewRunner; receiptDirectory?: string; allowFallback?: boolean } = {}): Promise<ReviewResult> {
+export async function runReview({ repo, source, criteriaDigest, policyInfo, inputPaths, run, receiptDirectory, allowFallback = true, authority, work, directRequest, workPath }: { workPath?: string; authority?: ReviewAuthority; work?: CurrentWorkRecord; directRequest?: { direct: boolean; request: string }; repo?: string; source?: ReviewSource; criteriaDigest?: string; policyInfo?: ReviewPolicyInfo; inputPaths?: string[]; run?: ReviewRunner; receiptDirectory?: string; allowFallback?: boolean } = {}): Promise<ReviewResult> {
   if (typeof repo !== "string" || !source || !policyInfo || typeof criteriaDigest !== "string" || !HASH.test(source.digest) || !HASH.test(criteriaDigest ?? "") || !HASH.test(policyInfo?.hash ?? "")) throw new Error("검토 대상 소스·기준·정책 식별값이 필요합니다.");
   assertReviewPolicy(policyInfo.policy);
+  if (work && digestCriteria(work) !== criteriaDigest) throw new Error("현재 작업의 기준 정의와 지문이 일치해야 합니다.");
   if (authority !== undefined && (!object(authority) || authority.model !== "gpt-6.1-terra" || authority.source !== "cli_direct_user_request")) throw new Error("직접 검토 override 형식이 올바르지 않습니다.");
-  if (!Array.isArray(inputPaths) || inputPaths.some((value) => typeof value !== "string" || path.isAbsolute(value) || value.split(/[\\/]/).includes(".."))) throw new Error("검토 입력은 프로젝트 내부 상대 경로여야 합니다.");
+  if (inputPaths !== undefined && (!Array.isArray(inputPaths) || inputPaths.some((value) => typeof value !== "string" || path.isAbsolute(value) || value.split(/[\\/]/).includes("..")))) throw new Error("검토 입력은 프로젝트 내부 상대 경로여야 합니다.");
   if (run !== undefined && typeof run !== "function") throw new Error("검토 실행기는 함수여야 합니다.");
   if (typeof allowFallback !== "boolean") throw new Error("검토 대체 실행 허용 여부는 boolean이어야 합니다.");
   const root      = await fs.realpath(repo)                                                              ;
@@ -477,11 +482,19 @@ export async function runReview({ repo, source, criteriaDigest, policyInfo, inpu
   const directory = path.resolve(root, receiptDirectory ?? path.join(".www", "evidence", "reviews", id)) ;
   await prepareReceiptDirectory(root, directory);
   if (source.inputs && (await captureSource({ repo: root, inputs: source.inputs })).digest !== source.digest) throw new Error("검토 시작 전 소스가 바뀌었습니다.");
+  const defaultPaths = defaultReviewPaths(root, source, workPath, work);
+  const prepareSelection = async () => {
+    const selectedPaths = inputPaths ?? await fitInlineInputs(root, defaultPaths);
+    return { selectedPaths, ...await prepareInputs(root, source, selectedPaths, workPath, work) };
+  };
   // 직접 Terra는 선행 준비하고, 기본 Opus는 실제 quota fallback 시에만 선택을 준비한다.
-  const bounded = authority && source.files ? await prepareInputs(root, source, inputPaths, workPath, work) : null;
+  const bounded = authority && source.files ? await prepareSelection() : null;
   if (authority && !bounded) throw new Error("실제 검토 실행에는 full source manifest와 파일 선택이 필요합니다.");
   const startedAt = new Date().toISOString()                          ;
-  const input     = promptFor({ source, criteriaDigest, inputPaths }) ;
+  const criteriaSnapshot = work ? criterionDefinitions(work) : undefined;
+  const workDocuments = workPath ? fingerprintWorkDocuments(root, path.relative(root, path.resolve(root, workPath)).split(path.sep).join("/")) : undefined;
+  const currentInputs = { ...(criteriaSnapshot ? { criteriaSnapshot } : {}), ...(workDocuments ? { workDocuments } : {}) };
+  const input = promptFor({ source, criteriaDigest, inputPaths: inputPaths ?? defaultPaths, ...currentInputs });
   let authorityRef: AuthorityRef | undefined;
   if (authority) {
     if (directRequest?.direct !== true || directRequest.request !== authority.request) throw new Error("별도 직접 검토 요청 원문이 필요합니다.");
@@ -508,17 +521,20 @@ export async function runReview({ repo, source, criteriaDigest, policyInfo, inpu
   const selected = authority ? { provider: "openai", model: "gpt-6.1-terra", fallbackReason: null } : selectReviewer({ policy: policyInfo.policy });
   const terra = async (reviewer: SelectedReviewer, failure: ReviewFailure | null) => {
     const invocation = appServerInvocation;
-    const context = { reviewId: id, sourceDigest: source.digest, criteriaDigest, policyHash: policyInfo.hash, provider: reviewer.provider, model: reviewer.model };
+    const context = { reviewId: id, sourceDigest: source.digest, criteriaDigest, policyHash: policyInfo.hash, provider: reviewer.provider, model: reviewer.model,
+      ...currentInputs };
     if (!source.files) throw new Error("선택 검토에는 full source manifest가 필요합니다.");
-    const { inputSnapshot, inputBundle, inputSelection } = bounded ?? await prepareInputs(root, source, inputPaths, workPath, work);
+    const { selectedPaths, inputSnapshot, inputBundle, inputSelection } = bounded ?? await prepareSelection();
     // 권한 artifact 기록 도중의 drift까지 process 시작 전에 재확인한다.
-    if ((await captureSource({ repo: root, inputs: inputSnapshot.inputs })).digest !== inputSnapshot.digest ||
+    if (!workDocumentsMatch(root, workDocuments) ||
+        (await captureSource({ repo: root, inputs: inputSnapshot.inputs })).digest !== inputSnapshot.digest ||
         (source.inputs && (await captureSource({ repo: root, inputs: source.inputs })).digest !== source.digest)) throw new Error("검토 입력 중 drift");
     await assertCurrentContext();
-    const inputPathsHash = hash(JSON.stringify({ inputPaths, inputSnapshot, inputBundle, inputSelection }));
-    const boundInput = `${input}\n${SELECTION_NOTICE}\n${JSON.stringify({ ...context, inputPathsHash, authority: authorityRef ?? null, inputSnapshot, inputBundle, inputSelection })}`;
+    const inputPathsHash = hash(JSON.stringify({ inputPaths: selectedPaths, inputSnapshot, inputBundle, inputSelection }));
+    const selectedPrompt = promptFor({ source, criteriaDigest, inputPaths: selectedPaths });
+    const boundInput = `${selectedPrompt}\n${SELECTION_NOTICE}\n${JSON.stringify({ ...context, inputPathsHash, authority: authorityRef ?? null, inputSnapshot, inputBundle, inputSelection })}`;
     let result: ReviewExecutionResult;
-    try { result = { ...await (run ? run(invocation, { cwd: root, input: boundInput }) : executeAppServer({ cwd: root, input: boundInput })), promptVersion: APP_PROMPT_VERSION, invocation, context, authority: authorityRef, inputPathsHash, inputPaths, ...(inputSnapshot ? { inputSnapshot } : {}), inputBundle, inputSelection, reviewSource: source }; }
+    try { result = { ...await (run ? run(invocation, { cwd: root, input: boundInput }) : executeAppServer({ cwd: root, input: boundInput })), promptVersion: APP_PROMPT_VERSION, invocation, context, authority: authorityRef, inputPathsHash, inputPaths: selectedPaths, ...(inputSnapshot ? { inputSnapshot } : {}), inputBundle, inputSelection, reviewSource: source }; }
     catch (e) { result = { code: null, error: errorCode(e), promptVersion: APP_PROMPT_VERSION, invocation, context }; }
     let response: Response | null = null;
     try { if (result.appServer) response = inspectAppServer(result.appServer, root); } catch { result.error = "app_server_receipt_invalid"; }
@@ -527,17 +543,29 @@ export async function runReview({ repo, source, criteriaDigest, policyInfo, inpu
     catch { result.error = "input_unavailable"; }
     try { if (source.inputs && (await captureSource({ repo: root, inputs: source.inputs })).digest !== source.digest) result.error = "source_changed"; }
     catch { result.error = "source_unavailable"; }
-    try { await assertCurrentContext(); } catch { result.error = "review_context_changed"; }
+    try {
+      await assertCurrentContext();
+      if (!workDocumentsMatch(root, workDocuments)) result.error = "review_evidence_changed";
+    } catch { result.error = "review_context_changed"; }
     const receipt = await saveReceipt(root, directory, "terra", result);
     return persist(resultFor({ id, selected: reviewer, result, response, source, criteriaDigest, policyInfo, startedAt, injected: Boolean(run), failure, receipt }));
   };
   if (authority) return terra(selected, null);
   const invoke = async (invocation: ReviewInvocation): Promise<ReviewExecutionResult> => {
-    const context = { reviewId: id, sourceDigest: source.digest, criteriaDigest, policyHash: policyInfo.hash, provider: invocation.command === "claude" ? "anthropic" : "openai", model: invocation.args[invocation.args.indexOf("--model") + 1] };
+    const context = { reviewId: id, sourceDigest: source.digest, criteriaDigest, policyHash: policyInfo.hash, provider: invocation.command === "claude" ? "anthropic" : "openai", model: invocation.args[invocation.args.indexOf("--model") + 1], ...currentInputs };
     try { return { ...await (run ?? execute)(invocation, { cwd: root, input }), invocation, context }; }
     catch (failure) { return { code: null, signal: null, error: errorCode(failure), stdout: "", stderr: "", outputTruncated: false, invocation, context, ...(run ? {} : { executionPlatform: process.platform }) }; }
   };
-  const primary        = await invoke(primaryInvocation(selected.model))     ;
+  await assertCurrentContext();
+  if (!workDocumentsMatch(root, workDocuments)) throw new Error("검토 호출 전 증거 문서 변경");
+  const primary = await invoke(primaryInvocation(selected.model));
+  try {
+    if (source.inputs && (await captureSource({ repo: root, inputs: source.inputs })).digest !== source.digest) primary.error = "source_changed";
+  } catch { primary.error = "source_unavailable"; }
+  try {
+    await assertCurrentContext();
+    if (!workDocumentsMatch(root, workDocuments)) primary.error = "review_evidence_changed";
+  } catch { primary.error = "review_context_changed"; }
   const primaryReceipt = await saveReceipt(root, directory, "opus", primary) ;
   const failure        = classifyOpusFailure(primary)                        ;
   if (!verifiedQuota(failure) || !allowFallback) return persist(resultFor({ id, selected, result: primary, response: claudeResponse(primary.stdout), source, criteriaDigest, policyInfo, startedAt, injected: Boolean(run), failure, receipt: primaryReceipt }));
@@ -581,7 +609,12 @@ function appPromptMatches(body: ReviewExecutionResult, work?: CurrentWorkRecord,
   for (const captured of [source, snapshot]) {
     if (hash(JSON.stringify({ inputs: captured.inputs, files: captured.files })) !== captured.digest) return false;
   }
-  if (source.digest !== body.context?.sourceDigest) return false;
+  if (!body.context || source.digest !== body.context.sourceDigest) return false;
+  if (body.context.criteriaSnapshot !== undefined) {
+    try {
+      if (digestCriteria({ criteria: body.context.criteriaSnapshot }) !== body.context.criteriaDigest) return false;
+    } catch { return false; }
+  }
   if (body.inputSelection) {
     try {
       assertSelectedPaths(body.inputPaths, source, body.inputSelection.workPath, work);
@@ -642,6 +675,55 @@ function selectionFor(source: ReviewSource, snapshot: ReviewSource, bundle: { pa
   if (snapshot.files?.length !== selected.length) throw new Error("선택 manifest 불일치");
   return { version: 1, workPath, totalBytes, limit: REVIEW_INLINE_LIMIT, selected, omitted: (source.files ?? []).filter(file => !selected.some(entry => entry.path === file.path)) };
 }
+function defaultReviewPaths(root: string, source: ReviewSource, workPath?: string, work?: CurrentWorkRecord): string[] {
+  const relativeWork = workPath ? path.relative(root, path.resolve(root, workPath)).split(path.sep).join("/") : null;
+  if (relativeWork !== null && (!relativeWork || relativeWork.startsWith("../") || path.isAbsolute(relativeWork))) throw new Error("현재 작업 경로 오류");
+  const documents = new Set(relativeWork ? ["spec.md", "verification.md"].map(file => path.posix.join(path.posix.dirname(relativeWork), file)) : []);
+  const recordFiles = new Set(["work.json", "spec.md", "verification.md"]);
+  const candidates = (source.files ?? []).flatMap(file => {
+    if (file.type !== "file") return [];
+    if (file.path.startsWith("docs/work/") && recordFiles.has(path.posix.basename(file.path)) && !documents.has(file.path)) return [];
+    return [file.path];
+  });
+  const writable = work?.workflow.authorization.writePaths ?? [];
+  const primary = new Set(candidates.filter(file => writable.some(scope => file === scope || file.startsWith(scope + "/"))));
+  const declared = new Set(source.inputs ?? []);
+  const code = candidates.filter(file => /\.[cm]?[jt]sx?$/.test(file));
+  const depth = (file: string) => {
+    for (let directory = path.posix.dirname(file); directory !== "." && directory !== "/"; directory = path.posix.dirname(directory)) {
+      if (declared.has(directory)) return directory.split("/").length;
+    }
+    return 0;
+  };
+  const scopedCode = code.map(file => ({ file, depth: depth(file) })).sort((left, right) => right.depth - left.depth);
+  const [spec] = documents;
+  return [...new Set([
+    ...(spec === undefined ? [] : [spec]),
+    ...code.filter(file => primary.has(file)),
+    ...code.filter(file => declared.has(file)),
+    ...scopedCode.map(candidate => candidate.file),
+    ...documents, ...primary, ...candidates,
+  ])];
+}
+
+async function fitInlineInputs(root: string, candidates: string[]): Promise<string[]> {
+  const selected: string[] = [];
+  let remaining = REVIEW_INLINE_LIMIT;
+  for (const file of candidates) {
+    try {
+      const stat = await fs.lstat(path.resolve(root, file));
+      if (!stat.isFile() || stat.size > remaining) continue;
+      const bytes = readSelectedFile(root, file);
+      if (bytes.length > remaining || !Buffer.from(bytes.toString("utf8")).equals(bytes)) continue;
+      selected.push(file);
+      remaining -= bytes.length;
+    } catch (error) {
+      if (!(error instanceof Error && "code" in error && error.code === "ENOENT")) throw error;
+    }
+  }
+  return selected;
+}
+
 async function prepareInputs(root: string, source: ReviewSource, inputPaths: string[], workPath?: string, work?: CurrentWorkRecord) {
   const relativeWork = workPath ? path.relative(root, path.resolve(root, workPath)).split(path.sep).join("/") : null;
   if (relativeWork) {
@@ -664,6 +746,39 @@ async function prepareInputs(root: string, source: ReviewSource, inputPaths: str
   });
   return { inputSnapshot, inputBundle, inputSelection: selectionFor(source, inputSnapshot, inputBundle, relativeWork) };
 }
+function fingerprintWorkDocuments(root: string, workPath: string): ReviewWorkDocuments {
+  if (typeof workPath !== "string" || path.posix.isAbsolute(workPath) || workPath.includes("\\") || workPath.split("/").some(part => !part || part === "." || part === "..")) throw new Error("검토 작업 경로 오류");
+  const directory = path.posix.dirname(workPath);
+  const files = ["spec.md", "verification.md"].map(file => {
+    const relative = path.posix.join(directory, file);
+    try { return { path: relative, digest: hash(readBoundedFile(root, relative, WORK_RECORD_JSON_LIMIT)) }; }
+    catch (error) {
+      if (!(error instanceof Error && "code" in error && error.code === "ENOENT")) throw error;
+      return { path: relative, digest: null };
+    }
+  });
+  return { workPath, files };
+}
+function workDocumentsMatch(root: string, documents?: ReviewWorkDocuments): boolean {
+  return documents === undefined || JSON.stringify(fingerprintWorkDocuments(root, documents.workPath)) === JSON.stringify(documents);
+}
+type ExpectedReviewContext = Pick<ReviewContext, "reviewId"> & Partial<Pick<ReviewContext, "sourceDigest" | "criteriaDigest" | "policyHash">> & { provider: unknown; model: unknown };
+function reviewContextMatches(expected: ExpectedReviewContext, observed: ReviewContext | undefined): boolean {
+  if (!observed) return false;
+  const { criteriaSnapshot, workDocuments } = observed;
+  if (criteriaSnapshot !== undefined && digestCriteria({ criteria: criteriaSnapshot }) !== expected.criteriaDigest) return false;
+  return JSON.stringify(observed) === JSON.stringify({ ...expected, ...(criteriaSnapshot ? { criteriaSnapshot } : {}), ...(workDocuments ? { workDocuments } : {}) });
+}
+function boundWorkDocumentsMatch(documents: ReviewWorkDocuments | undefined, repo?: string, work?: CurrentWorkRecord): boolean {
+  if (documents === undefined) return true;
+  if (!repo || !work) return false;
+  try {
+    const root = realpathSync(repo);
+    if (!workDocumentsMatch(root, documents)) return false;
+    const record = readWorkMetadata(root, documents.workPath);
+    return record.id === work.id && record.workflow?.requestHash === work.workflow.requestHash;
+  } catch { return false; }
+}
 function readSelectedFile(root: string, name: string) {
   return readBoundedFile(root, name, REVIEW_INLINE_LIMIT);
 }
@@ -675,6 +790,6 @@ function readBoundedFile(root: string, name: string, limit: number) {
   let current = root;
   for (const part of name.split("/")) { current = path.join(current, part); if (lstatSync(current).isSymbolicLink()) throw new Error("선택 경로 symlink 금지"); }
   const stat = lstatSync(current);
-  if (!stat.isFile() || stat.size > limit) throw new Error(limit === WORK_RECORD_JSON_LIMIT ? "작업 원장 metadata는 8 MiB 이하 일반 JSON 파일이어야 합니다." : "선택은 512KiB 이하 일반 파일이어야 합니다.");
+  if (!stat.isFile() || stat.size > limit) throw new Error(limit === WORK_RECORD_JSON_LIMIT ? "작업 metadata와 검증 문서는 8 MiB 이하 일반 파일이어야 합니다." : "선택은 512KiB 이하 일반 파일이어야 합니다.");
   return readFileSync(current);
 }
