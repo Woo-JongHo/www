@@ -203,3 +203,64 @@ composer/status/Steer 회귀와 검사 스크립트까지 공식 inputs를 보�
 2026-11-24 `4d634d0`의 앱을 macOS Electron에서 실행하고 `node scripts/verify-chat.ts --editing-layout-only`로 확인했다. 860×680 뷰포트·모션 축소·WWW Mint에서 명령 카드가 최소 65개인 대화를 열었다. 합성 Native가 턴을 실행해 Working이 표시된 동안 Chromium 입력기로 한글 조합을 시작하고 중간 커서에서 확정했다. 선택한 세 글자의 교체, 한도 초과 붙여넣기 거부와 기존 초안 보존, 정상 길이 허용을 확인했다. 여러 줄 교체 후 초점·지난 대화의 스크롤 위치·상태줄의 화면 내 표시를 관찰했다. 답변을 인용하고 예상한 전체 문자열과 대조했다. 턴 중단·다른 대화 전환·원래 대화 복귀 후에도 초안이 일치했다.
 
 처음에는 스트리밍 성능 fixture에서 한 차례 읽기 위치와 상태줄 확인이 실패했다. 최종 시험은 사용자 중단 때까지 활성 상태를 유지하는 fixture를 사용했고, 과거 읽기 위치 선택을 앱의 스크롤 처리기에 전달했다. 상태줄 위치는 편집 후 측정했다. 합성 클립보드 사건으로 앱의 붙여넣기 판단을, CDP 여러 줄 입력으로 Chromium의 실제 선택 교체를 각각 확인했다. 시스템 클립보드 왕복과 물리 키보드로 긴 이력을 편집하는 체감은 남아 있다. AC-7·AC-10 전체 통과로 승격하지 않았다.
+
+<a id="attempt-caf9ece6-842f-455e-8597-8d17c42c4349"></a>
+## 검증 시도 — 2026-11-23T23:56:04.993Z
+
+- 시도 ID: `attempt-caf9ece6-842f-455e-8597-8d17c42c4349`
+- 실행 시각: 2026-11-23T23:56:04.697Z ~ 2026-11-23T23:56:04.993Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import assert from \"node:assert/strict\";import fs from \"node:fs\";import {execFileSync} from \"node:child_process\";import ts from \"typescript\";\nconst folder=\"docs/work/Chat/\"+fs.readdirSync(\"docs/work/Chat\").find(p=>p.startsWith(\"014-\"));const data=name=>JSON.parse(fs.readFileSync(folder+\"/\"+name+\".json\"));\nconst perf=data(\"visible-input-performance\"),react=data(\"react-steer-observation\");assert.deepEqual(perf[\"실행순서\"],[\"baseline-1\",\"candidate-1\",\"candidate-2\",\"baseline-2\",\"baseline-3\",\"candidate-3\"]);\nconst measured=perf[\"시도\"];assert.deepEqual(measured.map(r=>r.variant),perf[\"실행순서\"]);const select=(v,label)=>measured.filter(x=>x.variant.startsWith(v)).map(x=>x.metrics.find(m=>m.label===label));const median=a=>[...a].sort((a,b)=>a-b)[1];\nfor(const r of measured){for(const label of [\"short\",\"long-idle\",\"long-running\"]){const m=r.metrics.find(m=>m.label===label);assert.equal(m.samples,40);assert.equal(m.windowVisible,true);assert.equal(m.visibility,\"visible\");assert.deepEqual(m.viewport,{width:1440,height:868});assert(m.userAgent.includes(\"Electron/39.8.10\"));}assert(r.metrics.find(m=>m.label===\"scroll-long-idle\").scrolled>0);}\nassert(median(select(\"candidate\",\"long-running\").map(m=>m.p95))<median(select(\"baseline\",\"long-running\").map(m=>m.p95)));assert(median(select(\"candidate\",\"long-idle\").map(m=>m.p95))>median(select(\"baseline\",\"long-idle\").map(m=>m.p95)));assert(Math.max(...select(\"candidate\",\"scroll-long-idle\").map(m=>m.max))>Math.max(...select(\"baseline\",\"scroll-long-idle\").map(m=>m.max)));\nfor(const v of [\"baseline\",\"candidate\"])for(const m of select(v,\"stream-command-serialization\")){assert(m.mutations>0);assert(v===\"baseline\"?m.calls>=2112:m.calls===0);}\nfor(const result of Object.values(react[\"실행\"]))for(const row of result[\"관찰\"]){assert.equal(row.cards.length,0);assert(row.commands>=65&&row.commits.length>0);}\nconst decls=s=>{const f=ts.createSourceFile(\"renderer.tsx\",s,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);const found={};function visit(n){if(ts.isVariableDeclaration(n)&&[\"MemoCommandView\",\"activeBlocks\",\"transcriptRows\"].includes(n.name.getText(f)))found[n.name.getText(f)]=n.getText(f);ts.forEachChild(n,visit);}visit(f);assert.equal(Object.keys(found).length,3);assert(s.includes(\": transcriptRows}\"));return found;};\nassert.deepEqual(decls(fs.readFileSync(\"src/renderer.tsx\",\"utf8\")),decls(execFileSync(\"git\",[\"show\",\"575dd02:src/renderer.tsx\"],{encoding:\"utf8\"})));console.log(\"표시창 6회, React 2회, 완료 카드 반복 직렬화 감소와 현재 최적화 경로, 대기 및 휠 미개선 확인\");\n"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-5`
+- 소스 HEAD: `7c69cda0436c6b67385a40eea7d6dd6f820182f6`
+- 검증 입력: `build.ts`, `docs/architecture`, `docs/specs`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/verify-chat.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `src/chat-composer.tsx`, `src/chat-message.tsx`, `src/chat-row-state.tsx`, `src/chat-status.ts`, `src/chat.css`, `src/command-card.tsx`, `src/command-preview.ts`, `src/native-chat.ts`, `src/native-session.ts`, `src/preload.ts`, `src/projection.ts`, `src/renderer.tsx`, `src/session-api.tsx`, `src/shared.ts`, `test`, `test/chat-state.test.ts`, `test/chat-status.test.ts`, `test/command-preview.test.ts`, `test/native-session.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `8a337f22f5a8940e0f3be8c96984d37851ef34c1abd39772f3c60e5fc7707279`
+- 기준 정의 식별: `de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/react-steer-observation.json` (26079바이트, sha256 feef41bec2748308788b2bec5497ce8ecb732c92b92c8e8ffbecebe6745fc7b7), `docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/visible-input-performance.json` (14621바이트, sha256 ce35212eda03d48b69d09fffccae1a080b694d8e1ad49667f5167a642aec48ae)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 126바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-bc51b41c-fe96-4bd3-b448-1fa5b70f7021"></a>
+## 검증 시도 — 2026-11-23T23:56:05.931Z
+
+- 시도 ID: `attempt-bc51b41c-fe96-4bd3-b448-1fa5b70f7021`
+- 실행 시각: 2026-11-23T23:56:05.829Z ~ 2026-11-23T23:56:05.931Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import assert from \"node:assert/strict\";import fs from \"node:fs\";import {createHash} from \"node:crypto\";\nconst folder=\"docs/work/Chat/\"+fs.readdirSync(\"docs/work/Chat\").find(p=>p.startsWith(\"014-\"));const data=name=>JSON.parse(fs.readFileSync(folder+\"/\"+name+\".json\"));const d=data(\"steer-input-p0\"),tabs=data(\"react-steer-observation\")[\"연속Steer\"][\"관찰\"];const p95=arr=>[...arr].sort((a,b)=>a-b)[Math.ceil(.95*arr.length)-1];\nfor(const raw of Object.values(d[\"회수한원본\"])){assert.equal(createHash(\"sha256\").update(JSON.stringify(raw[\"내용\"],null,2)+\"\\n\").digest(\"hex\"),raw.sha256);}\nconst n=d[\"회수한원본\"][\"실제Native\"][\"내용\"].measurement;assert(n.sameTurnAccepted&&n.markerInPublicFinalAfterAcceptance&&n.markerInAssistantDom);assert.equal(n.turnStarts,1);assert.equal(n.interrupts,0);assert.equal(n.completedStatus,\"completed\");\nconst e=d[\"회수한원본\"][\"실패복원\"][\"내용\"];assert.deepEqual(e.proofs.map(x=>x.scenario),[\"unsupported\",\"send-failed\",\"turn-mismatch\",\"end-race\",\"after-send-eof\"]);assert.equal(e.steerInvocations,5);assert(e.checks.some(s=>s.includes(\"줄바꿈을 포함한 원문 복원\")));for(const x of e.proofs){assert(x.original.length>0&&(x.newer===null||x.newer.length>0));assert(x.original!==x.newer);}\nassert.equal(tabs.starts,1);assert.equal(tabs.steers.length,2);assert.equal(new Set(tabs.steers.map(s=>s.expectedTurnId)).size,1);assert.equal(new Set(tabs.steers.map(s=>s.clientUserMessageId)).size,2);assert.equal(tabs.steers[0].input[0].text,\"첫 추가 지시 각\");assert(tabs.checks.some(s=>s.includes(\"초안 보존\")));\nconst rows=d[\"표본\"];assert.deepEqual(rows.map(x=>x.variant),[\"pilot\",\"base1\",\"current1\",\"current2\",\"base2\"]);for(const r of rows){const {metrics:m}=r;assert.deepEqual([r.starts,r.steers,r.uniqueIds],[1,20,20]);assert.equal(m.summary.length,20);assert(m.cards>=65&&m.changes>0&&m.ua.includes(\"Electron/39.8.10\"));assert.deepEqual(m.viewport,[1440,868]);}\nfor(const k of [\"submit\",\"input\"]){const get=(v)=>rows.filter(r=>r.variant.startsWith(v)).map(r=>p95(r.metrics.summary.map(s=>s[k])));assert(Math.max(...get(\"current\"))<=50);assert(Math.max(...get(\"current\"))<Math.min(...get(\"base\")));assert(rows.filter(r=>r.variant.startsWith(\"current\")||r.variant===\"pilot\").every(r=>r.metrics.summary.every(s=>s[k]<100)));}\nconsole.log(\"같은 턴 연속 Steer·IME·탭 격리·실패 원문 복원, 실제 Native 응답 표식, 표시 창의 Enter 및 후속 입력 성능 확인\");\nconst bundle=fs.readFileSync(\"dist/renderer.js\",\"utf8\"),a=bundle.indexOf(\"  // src/architecture.generated.json\"),b=bundle.indexOf(\"\\n  // \",a+25);assert(a>=0&&b>a);assert.equal(bundle.split(\"\\n\").filter(s=>s.startsWith(\"  var appBuildInfo = \")).length,1);const body=(bundle.slice(0,a)+\"\\n\"+bundle.slice(b)).split(\"\\n\").filter(s=>!s.startsWith(\"  var appBuildInfo = \")).join(\"\\n\");assert.equal(createHash(\"sha256\").update(body).digest(\"hex\"),\"84a547d2f791a214df7c01e800aa2f5001b63c90f14c432e3b87e7a3649a1ebe\");\n"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-14`
+- 소스 HEAD: `7c69cda0436c6b67385a40eea7d6dd6f820182f6`
+- 검증 입력: `build.ts`, `docs/architecture`, `docs/specs`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/verify-chat.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `src/chat-composer.tsx`, `src/chat-message.tsx`, `src/chat-row-state.tsx`, `src/chat-status.ts`, `src/chat.css`, `src/command-card.tsx`, `src/command-preview.ts`, `src/native-chat.ts`, `src/native-session.ts`, `src/preload.ts`, `src/projection.ts`, `src/renderer.tsx`, `src/session-api.tsx`, `src/shared.ts`, `test`, `test/chat-state.test.ts`, `test/chat-status.test.ts`, `test/command-preview.test.ts`, `test/native-session.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `8a337f22f5a8940e0f3be8c96984d37851ef34c1abd39772f3c60e5fc7707279`
+- 기준 정의 식별: `de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/react-steer-observation.json` (26079바이트, sha256 feef41bec2748308788b2bec5497ce8ecb732c92b92c8e8ffbecebe6745fc7b7), `docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/steer-input-p0.json` (19307바이트, sha256 2f85288fd9c786bc22b25ea80b826c106dc4ab831261bf565f86df06e01b8eb3)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 145바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+### #27의 AC-5·AC-14 최종 판정
+
+`7c69cda`의 공식 하네스가 AC-5(`attempt-caf9ece6-842f-455e-8597-8d17c42c4349`)와 AC-14(`attempt-bc51b41c-fe96-4bd3-b448-1fa5b70f7021`)를 수용했다. 저장 통과는 12/14, 이 체크아웃에서 현행 유효는 이 두 기준 2/14다. 1차 마감 때의 10/14는 당시 기록이다. 실제 사용자의 장시간 편집·클립보드 왕복 및 기기별 체감은 AC-7·10에서 계속 추적한다.
+
+**AC-5.** #43의 기준·후보 여섯 원문과 #48의 두 React 원문을 SHA-256과 실제 측정 배열로 대조했다. 현재 renderer의 완료 카드 비교·활성 블록·행 재사용 선언은 측정 후보와 동일하다. 스트리밍 입력 p95 중앙값은 52.7→47.4ms, 출력 반복 직렬화는 2,112~2,244→0회였다. 완료 카드 함수 호출은 양쪽 모두 0회였다. 대기 입력 p95 중앙값 8.0→9.1ms, 휠 최대 간격 7.7~8.5→7.6~13.8ms에서 개선이 입증되지 않은 사실까지 원장에 연결했다. AC-5는 이 비교와 미해결 결과의 보고 기준이다.
+
+**AC-14.** #48의 실제 Electron에서 합성 한글 조합으로 보낸 첫 추가 지시와 두 번째 지시가 같은 턴의 서로 다른 ID로 접수된 원문, 배경 탭 접수와 다른 탭 초안 보존을 대조했다. 과거 합성 오류 5종의 실패 원문 복원, 실제 Codex CLI 0.171.0의 같은 턴 접수와 완료 후 공개 응답 및 화면의 최종 표식은 각각 원래 기록의 SHA-256과 일치했다. 실제 Native는 그 시점의 1회 표본이다. 이 기록은 Chromium 조합, 실제 Mac 단독 입력, Windows 사용자 시험의 범위를 구분한다.
+
+표시된 Electron 39.8.10(1440×868)에서 기존에 수치가 없었던 **스트리밍 중 Steer 전송과 바로 다음 입력**만 측정했다. #43의 기준 renderer와 `fa633e8` renderer를 같은 호스트·fixture에 교차로 올렸다. 65개 이상 카드, 20ms 출력 간격, 실제 DOM 포커스·가시성을 확인했다. fixture는 실행 중 자동 종료 한도만 120회에서 3,000회로 늘렸다. 각 실행에서 서로 다른 20개 일반 Enter 입력이 실제 fixture의 같은 턴에 각각 1회 도착했고 매번 접수 표기를 확인했다. 표는 표본 20개 중 19번째 값인 p95와 최댓값이다.
+
+| 실행 순서 | Enter→빈 초안 확인 frame p95 / 최대(ms) | 후속 입력→값·포커스 확인 frame p95 / 최대(ms) |
+|---|---:|---:|
+| 기준 1 | 68.3 / 147.6 | 29.5 / 66.9 |
+| 후보 1 | 16.9 / 24.3 | 14.4 / 14.7 |
+| 후보 2 | 12.8 / 24.6 | 10.1 / 10.1 |
+| 기준 2 | 68.5 / 134.6 | 40.5 / 59.4 |
+
+후보의 네 p95가 제안 기준 50ms 이내였고 100ms 이상 표본도 없었다. 별도 예비 실행의 p95/최대는 전송 32.6/65.0ms, 후속 입력 45.4/64.3ms였다. 합성 DOM 사건→animation frame 시간이고 물리 키보드나 실제 픽셀 표시 지연은 측정하지 않았다. 후보에서 마지막 결합 `7c69cda`까지 renderer를 다시 빌드한 뒤 버전·커밋 식별 상수와 구조 지도 JSON을 제외한 전체 번들 SHA-256 `84a547d2f791a214df7c01e800aa2f5001b63c90f14c432e3b87e7a3649a1ebe` 일치를 확인했다. [개별 측정값과 원문 지문](steer-input-p0.json)
