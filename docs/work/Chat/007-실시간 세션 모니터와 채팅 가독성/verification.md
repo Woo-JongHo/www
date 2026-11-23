@@ -1005,3 +1005,47 @@ GUI summary의 실제 Electron/main/IPC·합성 stdio와 실제 모델·실계�
 - 일반 Hook의 상세 분리, 실패와 완료 두 기록, 별도 오류 문구를 확인했다. 관련 집중 테스트 459개가 통과했다.
 
 두 GUI 검사는 합성 서버를 사용했다. OS 한글 조합 실기와 최종 통합 수용은 각각 `AC-05`와 `AC-10`에 남아 있다. `AC-11`은 현재 기본 다섯·상세 여섯 스킬의 현행 제품 명세와 원장에 남은 기본 여섯 스킬의 기준이 충돌한다. 공식 기준은 변경하지 않았다.
+
+<a id="attempt-22a58a17-2836-4a80-bd4e-f934c25d39a9"></a>
+## 검증 시도 — 2026-11-23T22:30:15.864Z
+
+- 시도 ID: `attempt-22a58a17-2836-4a80-bd4e-f934c25d39a9`
+- 실행 시각: 2026-11-23T22:30:15.746Z ~ 2026-11-23T22:30:15.864Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test","test/agent-overview.test.ts","test/www-activity.test.ts","test/www-activity-view.test.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-11`
+- 소스 HEAD: `403550d33222577ebfca01f5f2b7b133b1659b81`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `d0a43d6cc8a39bc2d4366fc258e339900d6d9c5a9ed9b7d5d53cfdfb6df8e318`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 28바이트, stderr 14027바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-21487614-dff6-42b7-a41f-cc4f76508d67"></a>
+## 검증 시도 — 2026-11-23T22:31:21.466Z
+
+- 시도 ID: `attempt-21487614-dff6-42b7-a41f-cc4f76508d67`
+- 실행 시각: 2026-11-23T22:31:21.355Z ~ 2026-11-23T22:31:21.466Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test","test/agent-overview.test.ts","test/www-activity.test.ts","test/www-activity-view.test.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-11`
+- 소스 HEAD: `403550d33222577ebfca01f5f2b7b133b1659b81`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `9a1f6924acabd5ffa982090cd8e8c78c7a71483fa5d924f82d8b6f331f26e4b3`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 28바이트, stderr 14036바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+## #25의 AC-11 판정
+
+Chat 013의 사용자 결정에 따라 기본 화면 다섯 스킬과 상세 모니터의 두 역할·여섯 스킬을 구분해 원장 기준을 정정했다. 현재 후보에서 기본 개요의 항목과 개수, 상세 모니터가 실제 렌더링한 여덟 식별자, 요청·문서 읽기·명령 관측과 실제 적용의 표시를 집중 검사했다. [해당 시도](#attempt-21487614-dff6-42b7-a41f-cc4f76508d67)는 최종 빌드 후 동일 소스에서 실행됐고 공유 status는 AC-11을 적용 가능으로 판정했다.
+
+1차 마감 당시 9/12 기록과 현재 후보의 적용성은 별도로 본다. 현재 하네스는 전체 기준 정의와 소스 지문을 비교하므로 이 후보에서 직접 재확인한 기준은 AC-11 하나다. AC-05는 현재 macOS 프로세스의 접근성과 OS 키 전송 권한이 모두 꺼져 있어 실제 한글 입력 관측이 남았다. AC-10의 최종 통합 수용과 독립 검토도 열려 있다.
