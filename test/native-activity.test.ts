@@ -860,6 +860,50 @@ describe("실시간 Native 활동 투영", () => {
     }
   });
 
+  for (const boundary of ["completed", "failed", "interrupted", "inProgress", "missing", "EOF"]) for (const final of ["최종 설명", ""]) {
+    test(`종료한 턴의 첫 정식 공개 설명 완료를 반영한다 — ${boundary}/${final ? "본문" : "빈 본문"}`, () => {
+      const scope = { connectionGeneration: 7, processEpoch: "process", sessionId: "session", workspaceKey: "workspace", selectionEpoch: 1 };
+      function scoped(row: AppEvent) { return { ...row, ...scope }; }
+      function snapshot(seq: number, id: string, text?: string) {
+        return scoped(item(seq, "item/completed", { id, type: "agentMessage", phase: "commentary", text }));
+      }
+      const ended = boundary === "EOF" ? event(3, "transport/closed", {})
+        : event(3, "turn/completed", { threadId: "t", turn: { id: "a", status: boundary === "missing" ? undefined : boundary } });
+      const before = [scoped(started(1)), scoped(event(2, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase: "commentary", delta: "초안" })), scoped(ended)];
+      const late = [
+        { ...snapshot(4, "p", "다른 연결"), connectionGeneration: 8 },
+        snapshot(5, "new", "종료 뒤 처음 본 설명"),
+        snapshot(6, "p"),
+        snapshot(7, "p", final),
+        snapshot(8, "p", "두 번째 완료"),
+        scoped(event(9, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase: "commentary", delta: "늦은 조각" })),
+      ];
+      const original = projectNativeActivity(before, "t").turns[0];
+      const [settled] = projectNativeActivity([...before, ...late], "t").turns;
+      expect(settled).toMatchObject({ endedAt: original?.endedAt, status: original?.status });
+
+      expect(settled?.entries).toMatchObject([{ id: "item:p", description: final, status: "completed" }]);
+    });
+  }
+
+  test("실시간 상태 미확인 종료 뒤 저장 이력은 다시 정지시키지 않는다", () => {
+    const before = [
+      started(1),
+      event(2, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase: "commentary", delta: "초안" }),
+      event(3, "turn/completed", { threadId: "t", turn: { id: "a" } }),
+    ];
+    const prior = projectNativeActivity(before, "t").turns[0];
+    const [settled] = projectNativeActivity([
+      ...before,
+      { ...event(4, "turn/completed", { threadId: "t", turn: { id: "a", status: "unknown" } }), historical: true },
+      started(5),
+      item(6, "item/completed", { id: "p", type: "agentMessage", phase: "commentary", text: "최종 설명" }),
+    ], "t").turns;
+    expect(settled).toMatchObject({ endedAt: prior?.endedAt, status: "unknown" });
+
+    expect(settled?.entries).toMatchObject([{ description: "최종 설명", status: "completed" }]);
+  });
+
   test("빈 완료 snapshot은 누적된 공개 설명을 지운다", () => {
     const events = [started(1), event(2, "item/agentMessage/delta", { threadId: "t", turnId: "a", itemId: "p", phase: "commentary", delta: "진행" }), item(3, "item/completed", { id: "p", type: "agentMessage", phase: "commentary", text: "" })];
     expect(projectNativeActivity(events, "t").turns[0]?.entries[0]?.description).toBe("");

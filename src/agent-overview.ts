@@ -273,10 +273,18 @@ export function projectAgentOverview(events: readonly AppEvent[], threadId: stri
       continue;
     }
     if (progressBoundary !== "open" || progressVisibilityClosed) {
-      if (event.method === "item/completed" && item.type === "agentMessage" && item.phase === "commentary" && text(item.id)
+      const id = text(item.id);
+      if (event.method === "item/completed" && item.type === "agentMessage" && item.phase === "commentary" && id
         && (!event.historical || (typeof item.completedAtMs === "number" && Number.isSafeInteger(item.completedAtMs)))) {
-        completedMessages.add(text(item.id));
-        definitiveCompletions.add(text(item.id));
+        if (progressBoundary === "settled") {
+          if (typeof item.text !== "string") continue;
+          if (!current.historical && progress?.source === "commentary"
+            && id === messageId && id === latestMessageId && !definitiveCompletions.has(id)) {
+            progress = item.text ? { text: item.text, planIndex: activeIndex(plan), source: "commentary", at: event.at } : null;
+          }
+        }
+        completedMessages.add(id);
+        definitiveCompletions.add(id);
       }
       continue;
     }
