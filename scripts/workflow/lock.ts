@@ -42,11 +42,16 @@ async function ensureDirectory(directory: string): Promise<void> {
   if (!(await fs.lstat(directory)).isDirectory()) throw new Error("실행 잠금 경로는 실제 디렉터리여야 합니다.");
 }
 
-async function location(repo: string, workId?: string, acquiring = false) {
+async function location(repo: string, workId?: string, acquiring = false, scope: unknown = "records") {
   const root      = await fs.realpath(repo) ;
   const directory = path.join(root, ".www") ;
   await fs.mkdir(directory, { recursive: true });
   if ((await fs.lstat(directory)).isSymbolicLink()) throw new Error("작업 잠금 경로는 심볼릭 링크일 수 없습니다.");
+  if (scope !== "records" && scope !== "issue-loop") throw new Error("지원하지 않는 작업 잠금 범위입니다.");
+  if (scope === "issue-loop") {
+    if (workId !== undefined) throw new Error("이슈 루프 잠금에는 작업 ID를 지정할 수 없습니다.");
+    return { root, file: path.join(directory, "issue-loop.lock") };
+  }
   if (workId !== undefined) {
     if (!/^work-[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(workId)) throw new Error("유효한 work-id가 필요합니다.");
     const runtime = path.join(directory, "runtime");
@@ -113,15 +118,15 @@ function state(value: WorkLockValue | null, execution: boolean): WorkLockState {
   return "owner_exited";
 }
 
-export async function inspectWorkLock({ repo = process.cwd(), workId }: { repo?: string; workId?: string } = {}): Promise<WorkLockInspection> {
-  const { file } = await location(repo, workId);
+export async function inspectWorkLock({ repo = process.cwd(), workId, scope }: { repo?: string; workId?: string; scope?: unknown } = {}): Promise<WorkLockInspection> {
+  const { file } = await location(repo, workId, false, scope);
   const value  = await owner(file) ;
   const status = state(value, workId !== undefined);
   return { status, owner: value, recoverable: status === "owner_exited" };
 }
 
-export async function recoverWorkLock({ repo = process.cwd(), token, workId }: { repo?: string; token?: unknown; workId?: string } = {}) {
-  const { file } = await location(repo, workId);
+export async function recoverWorkLock({ repo = process.cwd(), token, workId, scope }: { repo?: string; token?: unknown; workId?: string; scope?: unknown } = {}) {
+  const { file } = await location(repo, workId, false, scope);
   const gate = `${file}.recovery`;
   let handle;
   try { handle = await fs.open(gate, "wx", 0o600); }
@@ -150,8 +155,8 @@ async function publishOwner(file: string, value: WorkLockOwner, replace = false)
   } finally { await fs.rm(temporary, { force: true }); }
 }
 
-export async function withWorkLock<T>(repo: string, action: (root: string, host: WorkExecutionHost | null) => Promise<T>, { workId, eventId }: { workId?: string; eventId?: string } = {}): Promise<T> {
-  const { root, file } = await location(repo, workId, true);
+export async function withWorkLock<T>(repo: string, action: (root: string, host: WorkExecutionHost | null) => Promise<T>, { workId, eventId, scope }: { workId?: string; eventId?: string; scope?: "records" | "issue-loop" } = {}): Promise<T> {
+  const { root, file } = await location(repo, workId, true, scope);
   const value: WorkLockOwner = { ...metadata(), ...(eventId ? { eventId } : {}), ...(workId ? { host: { state: "idle" } } : {}) };
   const owned = async () => {
     const current = await owner(file);

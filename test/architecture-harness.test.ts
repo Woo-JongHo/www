@@ -20,7 +20,7 @@ function record(value: unknown): Record<string, unknown> {
   return Object.fromEntries(Object.entries(value));
 }
 
-async function fixture(active: boolean, mutate: (repo: string) => void, inspect: (harness: Record<string, unknown>, prompt: string, result: Record<string, unknown>) => void, prepare: (repo: string) => void = () => {}, regenerate = false, denyGeneratedWrite = false) {
+async function fixture(active: boolean, mutate: (repo: string) => void, inspect: (harness: Record<string, unknown>, prompt: string, result: Record<string, unknown>) => void, prepare: (repo: string) => void = () => {}, regenerate = false, denyGeneratedWrite = false, observeCommand?: (args: string[]) => Promise<void>) {
   const previousMode = process.env.BOXBOX_MODE;
   process.env.BOXBOX_MODE = fixtureMode;
   const repo = mkdtempSync(path.join(tmpdir(), "www-architecture-harness-"));
@@ -68,6 +68,7 @@ async function fixture(active: boolean, mutate: (repo: string) => void, inspect:
       inputs   : ["src"]                                                                                                                                                                                                                                                                                                        , writes: ["src/item.ts", "docs/architecture/structure.json", "scripts/check-architecture.ts", "package.json", ...(regenerate ? ["src/architecture.generated.json"] : [])],
     }, {
       runCommand: async (_command, args): Promise<CommandResult> => {
+        await observeCommand?.(args);
         if (args.includes("mode")) return { code: 0, stdout: JSON.stringify({ tool: "boxbox", command: "mode", scope: "project", mode: "check", ok: true }), stderr: "", outputTruncated: false };
         const file = args[args.indexOf("--file") + 1];
         const report = args.includes("guide") ? { tool: "boxbox", command: "guide", file, columnSets: [] }
@@ -86,6 +87,29 @@ async function fixture(active: boolean, mutate: (repo: string) => void, inspect:
     rmSync(repo, { recursive: true, force: true });
   }
 }
+
+test("수정 전후 타입·BoxBox 읽기 검사가 함께 진행되고 모두 끝난 뒤 호스트와 완료로 넘어간다", async () => {
+  let authoring = false;
+  const reached = { pre: new Set<string>(), post: new Set<string>() };
+  const release = new Map<string, () => void>();
+  await fixture(false, () => {
+    expect(reached.pre).toEqual(new Set(["type", "boxbox"]));
+    authoring = true;
+  }, harness => {
+    expect(harness.ok).toBe(true);
+    expect(reached.post).toEqual(new Set(["type", "boxbox"]));
+  }, undefined, false, false, async args => {
+    const gate = args.includes("--project") ? "type" : args.includes("mode") ? "boxbox" : undefined;
+    if (!gate) return;
+    const phase = authoring ? "post" : "pre";
+    reached[phase].add(gate);
+    if (reached[phase].size === 2) return release.get(phase)?.();
+    await new Promise<void>((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error(`${phase} 독립 검사가 같은 시간에 실행되지 않았다.`)), 3_000);
+      release.set(phase, () => { clearTimeout(timer); resolve(); });
+    });
+  });
+}, 15_000);
 
 test("승인된 생성물은 신뢰한 공식 생성기로 갱신한 뒤 사후 검사하며 대상 저장소 생성기는 실행하지 않는다", async () => {
   let root = "";
