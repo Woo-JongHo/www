@@ -1,5 +1,7 @@
 
 
+[표시 창의 입력·휠·명령 카드 측정](visible-input-performance.md)에 #27의 후속 비교 조건, 여섯 실행의 지표와 남은 제한을 기록했다.
+
 ## remote-20261116 — 현재 머신 범위와 미실행
 
 composer/status/Steer 회귀와 검사 스크립트까지 공식 inputs를 보강했다. source-machine GUI와 actual 모델 Steer 의미 미반영 관측을 보존한다. 현 GUI·Native runtime 실패, 실제 OS IME·Windows 미실측을 완료로 바꾸지 않는다.

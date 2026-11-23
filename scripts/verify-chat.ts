@@ -99,7 +99,7 @@ async function start(round: number, selectedWorkspace = workspace) {
   const binary = path.join(root, "node_modules/electron/dist/Electron.app/Contents/MacOS/Electron");
   const child: ChildProcess = spawn(binary, [root, "--remote-debugging-port=" + port, "--user-data-dir=" + path.join(directory, "profile")], {
     cwd: root, stdio: ["ignore", stdout.fd, stderr.fd],
-    env: { ...env, WWW_PROBE_PATH: path.join(directory, "disabled-probe.json"), WWW_NATIVE_PROBE: "1", WWW_PROBE_WORKSPACE: selectedWorkspace, WWW_CODEX_BIN: nativeExecutable?.executable ?? path.join(root, "test/fixtures/chat-ui-app-server.ts"), WWW_PROBE_NATIVE_REPORTS: "0" }
+    env: { ...env, WWW_PROBE_SHOW_WINDOW: process.argv.includes("--performance-only") ? "1" : "0", WWW_PROBE_PATH: path.join(directory, "disabled-probe.json"), WWW_NATIVE_PROBE: "1", WWW_PROBE_WORKSPACE: selectedWorkspace, WWW_CODEX_BIN: nativeExecutable?.executable ?? path.join(root, "test/fixtures/chat-ui-app-server.ts"), WWW_PROBE_NATIVE_REPORTS: "0" }
   });
   let ws: WebSocket | null = null;
   const terminate = async () => {
@@ -597,6 +597,8 @@ try {
     const measure = async (label: string) => {
       const value = await session!.evaluate(`(async()=>{
         const node=document.querySelector('[data-testid="prompt-input"]');
+        const probe=await window.www.probeReady();
+        if (!probe.windowVisible || document.visibilityState!=="visible") throw Error("표시된 Electron 창에서만 입력 성능을 측정합니다.");
         const setter=Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set;
         const durations=[], tasks=[];let mutations=0;
         const observer=new PerformanceObserver(list=>tasks.push(...list.getEntries().map(e=>e.duration)));
@@ -606,11 +608,13 @@ try {
         node.focus();
         for(let i=0;i<40;i++){
           const before=performance.now();setter.call(node,'입력 계측 '+i+' 가운데 편집');node.dispatchEvent(new Event('input',{bubbles:true}));
-          await new Promise(resolve=>requestAnimationFrame(resolve));durations.push(performance.now()-before);
+          await new Promise(resolve=>requestAnimationFrame(resolve));
+          if (document.hidden || document.activeElement!==node) throw Error("표본 수집 중 창 가시성 또는 입력 포커스 변경");
+          durations.push(performance.now()-before);
           if(node.value!=='입력 계측 '+i+' 가운데 편집')throw Error('입력 원문 누락');
         }
         changes.disconnect();observer.disconnect();durations.sort((a,b)=>a-b);
-        return {samples:durations.length,p50:durations[19],p95:durations[37],max:durations.at(-1),longTasks:tasks,commandDomMutations:mutations,commands:document.querySelectorAll('.command-card').length,viewport:{width:innerWidth,height:innerHeight},userAgent:navigator.userAgent};
+        return {windowVisible:probe.windowVisible,visibility:document.visibilityState,samples:durations.length,p50:durations[19],p95:durations[37],max:durations.at(-1),longTasks:tasks,commandDomMutations:mutations,commands:document.querySelectorAll('.command-card').length,viewport:{width:innerWidth,height:innerHeight},userAgent:navigator.userAgent};
       })()`);
       metrics.push({label,...object(value)});
     };
@@ -618,10 +622,45 @@ try {
     await session.click('[data-thread-id="history-a"]');
     await session.wait("document.querySelectorAll('.command-card').length>=65", '성능 최대 보관 출력·완료 카드 60개 복원');
     await measure('long-idle');
+    const scrollStart=await session.evaluate(`(() => {
+      const node=document.querySelector('.transcript');node.scrollTop=0;
+      const r=node.getBoundingClientRect();const intervals=[];let last=performance.now();
+      window.__wwwBenchScroll={intervals,active:true,start:node.scrollTop};
+      const step=now=>{if(!window.__wwwBenchScroll.active)return;intervals.push(now-last);last=now;requestAnimationFrame(step);};
+      requestAnimationFrame(step);
+      return {x:Math.floor(r.x+r.width/2),y:Math.floor(r.y+r.height/2),max:node.scrollHeight-node.clientHeight};
+    })()`);
+    for(let n=0;n<12;n++){
+      await session.command('Input.dispatchMouseEvent',{type:'mouseWheel',x:object(scrollStart).x,y:object(scrollStart).y,deltaX:0,deltaY:120});
+      await pause(20);
+    }
+    const scroll=await session.evaluate(`(() => {
+      const state=window.__wwwBenchScroll;state.active=false;
+      const node=document.querySelector('.transcript');const intervals=state.intervals.slice(1).sort((a,b)=>a-b);
+      return {samples:intervals.length,scrolled:node.scrollTop-state.start,p95:intervals[Math.ceil(intervals.length*.95)-1],max:intervals.at(-1)};
+    })()`);
+    if(Number(object(scroll).scrolled)<=0||Number(object(scroll).samples)<10)throw Error('휠 스크롤 프레임이 확인되지 않았습니다.');
+    metrics.push({label:'scroll-long-idle',...object(scroll)});
     await session.input('성능 스트리밍 중단 확인');
     await session.click('[data-testid="send-button"]');
     await session.wait("document.querySelector('[data-testid=\"interrupt-button\"]')", '성능 실행 중 상태');
     await measure('long-running');
+    const serialization = await session.evaluate(`(async()=>{
+      const original=JSON.stringify;
+      let calls=0, units=0;
+      JSON.stringify=function(value,...rest){
+        if(value?.kind==="command" && typeof value.output==="string"){calls++;units+=value.output.length;}
+        return original.call(JSON,value,...rest);
+      };
+      const transcript=document.querySelector('.transcript');
+      let mutations=0;
+      const observer=new MutationObserver(changes=>{mutations+=changes.length;});
+      observer.observe(transcript,{childList:true,characterData:true,subtree:true});
+      try{await new Promise(done=>setTimeout(done,350));}
+      finally {JSON.stringify=original;observer.disconnect();}
+      return {calls,units,mutations};
+    })()`);
+    metrics.push({label:"stream-command-serialization",...object(serialization)});
     await session.screenshot('performance');await session.terminate();session=null;
     await fs.writeFile(path.join(directory,'performance.json'),JSON.stringify({metrics,checks,build:JSON.parse(await fs.readFile(path.join(root,'dist/build-info.json'),'utf8')),limitations:['합성 input→다음 frame 근사이며 OS 키보드/IME·React commit 측정과 다름','현재 fixture 실행 상태의 출력 빈도에 한정','최대 사건 2000개 경계는 별도 projection 집중검사']},null,2));
     console.log(JSON.stringify({evidence:directory,metrics}));return;
