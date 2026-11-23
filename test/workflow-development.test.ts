@@ -597,7 +597,7 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
     allocation: allocation({ taskId: "second", writePaths: ["src/other.ts"] }) }, processHost("src/other.ts", "export const other = 3;\n"));
   assert.equal(second.acceptance?.status, "accepted", second.acceptance?.reasons.join(","));
   assert.ok(second.workId);
-  const { assessDecompositionCompletion } = await import("../scripts/workflow/decomposition.ts");
+  const { assessDecompositionCompletion, assessUnitAcceptance } = await import("../scripts/workflow/decomposition.ts");
   const { authorizationDigest, continueWork, verifyWork } = await import("../scripts/workflow/work.ts");
   const before = await readWork({ repo, workId: second.workId });
   assert.equal(before.record.schemaVersion, 2);
@@ -628,8 +628,13 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
   const host = (await readRuntime(runtimePaths(repo, second.workId))).events.find(event => event.type === "host_result" && event.taskId === "fixture-task");
   assert.ok(host && typeof host.recordedAt === "string");
   sameAsHost.workflow.verifications = sameAsHost.workflow.verifications.filter(v => !v.artifacts?.some(artifact => artifact.path === "src/item.ts"));
-  sameAsHost.workflow.verifications.push({ ...early, startedAt: host.recordedAt });
+  const simultaneous = { ...early, startedAt: host.recordedAt };
+  sameAsHost.workflow.verifications.push(simultaneous);
   assert.match((await assessDecompositionCompletion(repo, sameAsHost)).reasons.join(","), /fixture-task: verification_not_run/);
+  const immediate = await assessUnitAcceptance({ repo, record: sameAsHost, unit: units[0], host: { ok: true, outcome: "passed" },
+    hostCompletedAt: host.recordedAt, executor: "process", attempt: simultaneous });
+  assert.equal(immediate.status, "rejected");
+  assert.ok(immediate.reasons.includes("verification_not_run"));
   const workflow = independentlyVerified.workflow;
   await continueWork({ repo, workId: second.workId, role: "www-dev", direct: true, requestId: "follow-up-fixture",
     request: "같은 입력의 후속 요청", expectedRequestId: workflow.requestId, expectedRequestHash: workflow.requestHash,

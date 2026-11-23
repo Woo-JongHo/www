@@ -181,11 +181,13 @@ export function validateWorkDecomposition(repo: string, record: CurrentWorkRecor
 export function decompositionDigest(plan: DecompositionPlan): string { return createHash("sha256").update(JSON.stringify(plan)).digest("hex"); }
 
 /** 호스트 종료와 업무 수용을 분리하고 기존 실제 검증/현재성 판정을 그대로 사용한다. */
-export async function assessUnitAcceptance({ repo, record, unit: item, host, executor, attempt }: { repo: string; record: CurrentWorkRecord; unit: DecompositionUnit; host: { ok?: unknown; outcome?: unknown }; executor: "process" | "injected"; attempt?: VerificationAttempt }): Promise<UnitAcceptance> {
+export async function assessUnitAcceptance({ repo, record, unit: item, host, executor, attempt, hostCompletedAt }: { repo: string; record: CurrentWorkRecord; unit: DecompositionUnit; host: { ok?: unknown; outcome?: unknown }; executor: "process" | "injected"; attempt?: VerificationAttempt; hostCompletedAt?: unknown }): Promise<UnitAcceptance> {
   const reasons: string[] = [];
   if (host.ok !== true || host.outcome !== "passed") reasons.push("host_failed");
   if (executor !== "process") reasons.push("injected_host");
-  if (!attempt) reasons.push("verification_not_run");
+  if (!attempt || (hostCompletedAt !== undefined && !(typeof hostCompletedAt === "string" && Date.parse(attempt.startedAt) > Date.parse(hostCompletedAt)))) {
+    reasons.push("verification_not_run");
+  }
   else {
     if (attempt.requestedCommand !== item.verification.command || JSON.stringify(attempt.args) !== JSON.stringify(item.verification.args)) reasons.push("verification_command_changed");
     if (!item.criterionIds.every(id => attempt.criterionIds.includes(id))) reasons.push("criterion_coverage_missing");
@@ -226,9 +228,8 @@ export async function assessDecompositionCompletion(repo: string, record: Curren
         continue;
       }
       const evaluation = await assessUnitAcceptance({ repo, record, unit: item, host: receipt.host,
-        executor: receipt.modelExecution.executor === "process" ? "process" : "injected", attempt: verifications.filter(attempt =>
-          typeof completion.recordedAt === "string" && Date.parse(attempt.startedAt) > Date.parse(completion.recordedAt)
-          && attempt.requestedCommand === item.verification.command && JSON.stringify(attempt.args) === JSON.stringify(item.verification.args)
+        executor: receipt.modelExecution.executor === "process" ? "process" : "injected", hostCompletedAt: completion.recordedAt ?? null,
+        attempt: verifications.filter(attempt => attempt.requestedCommand === item.verification.command && JSON.stringify(attempt.args) === JSON.stringify(item.verification.args)
           && item.criterionIds.every(id => attempt.criterionIds.includes(id))
           && attempt.artifacts?.some(artifact => artifact.path === item.resultPath)).at(-1) });
       reasons.push(...evaluation.reasons.map(reason => `${item.taskId}: ${reason}`));
