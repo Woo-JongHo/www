@@ -26,7 +26,7 @@ async function seedHistory() {
   const output    = Array.from({ length: 11 }, (_, index) => `    명령 출력 ${index + 1}`).join("\n")                                                                                                      ;
   const wideTable = "| " + Array.from({ length: 24 }, (_, index) => `열 ${index + 1}`).join(" | ") + " |\n| " + Array(24).fill("---").join(" | ") + " |\n| " + Array(24).fill("값").join(" | ") + " |\n\n" ;
 
-  const answer = "## 저장된 답변\n\n**이어갈 작업**을 확인했습니다.\n\n| 항목 | 상태 |\n| --- | --- |\n| 저장 | 완료 |\n\n" + wideTable + "```ts\n    const saved = true;\n" + "    // 긴 코드 " + "x".repeat(1200) + "\n```\n\n[긴 URL](https://example.com/" + "path".repeat(400) + ")\n\nhttps://example.com/" + "long".repeat(400) + "\n\n" + Array.from({ length: 35 }, (_, index) => `기록 문단 ${index}\n\n`).join("") + "마지막 문장 접근 확인.";
+  const answer = "## 저장된 답변\n\n**이어갈 작업**을 확인했습니다. [검증 문서](https://example.com/verification)\n\n| 항목 | 상태 |\n| --- | --- |\n| 저장 | 완료 |\n\n" + wideTable + "```ts\n    const saved = true;\n" + "    // 긴 코드 " + "x".repeat(1200) + "\n```\n\n[긴 URL](https://example.com/" + "path".repeat(400) + ")\n\nhttps://example.com/" + "long".repeat(400) + "\n\n" + Array.from({ length: 35 }, (_, index) => `기록 문단 ${index}\n\n`).join("") + "마지막 문장 접근 확인.";
   await fs.writeFile(path.join(workspace, "fixture-history.json"), JSON.stringify({
     "history-a": [{ id: "saved-turn-a", status: "completed", items: [
       ...(process.argv.includes("--performance-only") ? Array.from({length:60}, (_, index) => ({id:`perf-${index}`,type:"commandExecution",command:`printf performance-${index}`,cwd:workspace,status:"completed",exitCode:0,aggregatedOutput:JSON.stringify({index,output:"기록 ".repeat(7500)})})) : []),
@@ -599,35 +599,45 @@ try {
     await session.wait("document.querySelector('.command-card')", "기존 명령 카드가 있는 대화 열기");
     await session.wait(`${basic} && getComputedStyle(document.querySelector('.command-card')).backgroundColor==='rgb(32, 32, 32)'`, "미설정 프로필의 기본 배경색이 채팅과 명령 카드에 적용");
     await session.wait(basicPanels, "넓은 창의 대화 목록과 Agent 패널에 Basic 배경색·글자색 적용");
-    await key("Tab", 9);
-    await session.evaluate(`document.querySelector('.session-surface:not([hidden]) textarea').focus()`);
+    for (let step = 0; step < 160; step++) {
+      await key("Tab", 9);
+      if (await session.evaluate(`document.activeElement.matches('.session-surface:not([hidden]) textarea:focus-visible')`)) break;
+    }
     const ratios = await session.evaluate(`(() => {
       const luminance = rgb => rgb.match(/[\\d.]+/g).slice(0, 3).map(Number).map(channel => {
         const c = channel / 255;
         return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
       }).reduce((sum, c, i) => sum + c * [0.2126, 0.7152, 0.0722][i], 0);
       const surface = document.querySelector('.session-surface:not([hidden])');
-      const sample = document.createElement('div');
-      sample.className = 'chat-markdown theme-contrast-sample';
-      sample.innerHTML = '<a href="#sample">링크</a><span class="chat-working-status is-waiting">대기</span><span class="chat-working-status is-failed">실패</span>';
-      surface.querySelector('main.work').appendChild(sample);
+      const status = surface.querySelector('[data-testid="working-status"]');
+      const original = status?.className;
       const check = (selector, focus = false) => {
         const element = surface.querySelector(selector);
         const minimum = focus ? 3 : 4.5;
-        if (!element || !element.checkVisibility()) return {selector, ratio: 0, minimum};
+        if (!element || !element.checkVisibility({opacityProperty:true, visibilityProperty:true})) return {selector, ratio: 0, minimum};
         let node = element;
         while (node && getComputedStyle(node).backgroundColor === "rgba(0, 0, 0, 0)") node = node.parentElement;
         if (!node) return {selector, ratio: 0, minimum};
         const style = getComputedStyle(element);
         if (focus && (document.activeElement !== element || style.outlineStyle === 'none' || parseFloat(style.outlineWidth) < 2)) return {selector, ratio: 0, minimum};
-        const fg = luminance(focus ? style.outlineColor : style.color), bg = luminance(getComputedStyle(node).backgroundColor);
+        const ink = focus ? style.outlineColor : style.color;
+        if (!ink.startsWith("rgb(") || !getComputedStyle(node).backgroundColor.startsWith("rgb(")) return {selector, ratio: 0, minimum};
+        for (let ancestor = element; ancestor; ancestor = ancestor.parentElement) {
+          if (Number(getComputedStyle(ancestor).opacity) !== 1) return {selector, ratio: 0, minimum};
+        }
+        if (focus && -parseFloat(style.outlineOffset) < parseFloat(style.outlineWidth)) return {selector, ratio: 0, minimum};
+        const fg = luminance(ink), bg = luminance(getComputedStyle(node).backgroundColor);
         return {selector, ratio: (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05), minimum};
       };
       try {
-        const text = ['main.work','textarea','.command-card .cmdline','.target-sidebar','[data-testid="resource-sidebar"]',
-          '.theme-contrast-sample a','.theme-contrast-sample .is-waiting','.theme-contrast-sample .is-failed'];
-        return [...text.map(selector => check(selector)), check('textarea:focus-visible', true)];
-      } finally { sample.remove(); }
+        const text = ['main.work','textarea','.command-card .cmdline','.target-sidebar','[data-testid="resource-sidebar"]','.chat-markdown a'];
+        const rows = text.map(selector => check(selector));
+        for (const tone of ['waiting', 'failed']) {
+          if (status) status.className = 'chat-working-status is-' + tone;
+          rows.push(check('[data-testid="working-status"].is-' + tone));
+        }
+        return [...rows, check('textarea:focus-visible', true)];
+      } finally { if (status) status.className = original; }
     })()`);
     if (!Array.isArray(ratios) || ratios.length !== 9 || ratios.some(row => typeof row.ratio !== "number" || !(row.ratio >= row.minimum))) throw Error("Basic 화면 명암비 부족: " + JSON.stringify(ratios));
     checks.push("Basic 화면 텍스트·초점 명암비 " + JSON.stringify(ratios));
