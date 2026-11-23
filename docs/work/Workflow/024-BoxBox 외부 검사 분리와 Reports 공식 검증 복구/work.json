@@ -7,7 +7,7 @@
     "dev"
   ],
   "owner"        : "dev",
-  "status"       : "verifying",
+  "status"       : "done",
   "blockedReason": null,
   "relations": [],
   "criteria": [
@@ -26,6 +26,26 @@
           "attemptId": "attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
           "path"     : "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
           "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+          "path"     : "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+          "summary"  : "종료 코드 0, 기준 passed"
+        },
+        {
+          "attemptId": "attempt-48ec7195-5d85-4104-af88-748887634aa6",
+          "path"     : "verification.md#attempt-48ec7195-5d85-4104-af88-748887634aa6",
+          "summary"  : "종료 코드 1, 기준 failed"
+        },
+        {
+          "attemptId": "attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+          "path"     : "verification.md#attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+          "summary"  : "종료 코드 1, 기준 failed"
+        },
+        {
+          "attemptId": "attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+          "path"     : "verification.md#attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+          "summary"  : "종료 코드 0, 기준 passed"
         }
       ]
     },
@@ -44,6 +64,26 @@
           "attemptId": "attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
           "path"     : "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
           "summary"  : "실제 검증 passed; 현재 적용 가능"
+        },
+        {
+          "attemptId": "attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+          "path"     : "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+          "summary"  : "종료 코드 0, 기준 passed"
+        },
+        {
+          "attemptId": "attempt-48ec7195-5d85-4104-af88-748887634aa6",
+          "path"     : "verification.md#attempt-48ec7195-5d85-4104-af88-748887634aa6",
+          "summary"  : "종료 코드 1, 기준 failed"
+        },
+        {
+          "attemptId": "attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+          "path"     : "verification.md#attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+          "summary"  : "종료 코드 1, 기준 failed"
+        },
+        {
+          "attemptId": "attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+          "path"     : "verification.md#attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+          "summary"  : "종료 코드 0, 기준 passed"
         }
       ]
     },
@@ -51,8 +91,14 @@
       "id"         : "REGISTER",
       "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
       "required"   : true,
-      "result"     : "unverified",
-      "evidence": []
+      "result"     : "passed",
+      "evidence": [
+        {
+          "attemptId": "attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+          "path"     : "verification.md#attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+          "summary"  : "종료 코드 0, 기준 passed"
+        }
+      ]
     }
   ],
   "workflow": {
@@ -76,7 +122,9 @@
       ],
       "verifierCommands": [
         "[\"bun\",\"test\",\"test/work-json.test.ts\",\"test/test-runner.test.ts\"]",
-        "[\"node\",\"scripts/test.ts\"]"
+        "[\"node\",\"scripts/test.ts\"]",
+        "[\"node\",\".www/evidence/dashboard-W024/verify-registered.ts\"]",
+        "[\"node\",\"--input-type=module\",\"--eval\",\"import {mkdirSync,writeFileSync} from \\\"node:fs\\\";\\nimport {randomUUID} from \\\"node:crypto\\\";\\nimport {spawnSync} from \\\"node:child_process\\\";\\nconst path=\\\".www/evidence/dashboard-W024/product-off-\\\"+randomUUID();\\nmkdirSync(path,{recursive:true,mode:0o700});\\nconst argv=[\\\"scripts/test.ts\\\"], now=new Date().toISOString();\\nconst run=spawnSync(process.execPath,argv,{encoding:\\\"utf8\\\",env:{...process.env,BOXBOX_MODE:\\\"off\\\"},maxBuffer:12*1024*1024});\\nwriteFileSync(path+\\\"/stdout.log\\\",run.stdout??\\\"\\\");\\nwriteFileSync(path+\\\"/stderr.log\\\",run.stderr??\\\"\\\");\\nwriteFileSync(path+\\\"/process.json\\\",JSON.stringify({kind:\\\"process\\\",command:process.execPath,argv,boxboxMode:\\\"off\\\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\\\"\\\\n\\\");\\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\\nprocess.exit(run.status??1);\"]"
       ],
       "commit"     : false,
       "publish"    : false,
@@ -92,7 +140,7 @@
       "test/test-runner.test.ts",
       "test/work-json.test.ts"
     ],
-    "nextAction": "verify",
+    "nextAction": "complete",
     "verifications": [
       {
         "id"         : "attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
@@ -343,9 +391,792 @@
             "contentRetained": false
           }
         }
+      },
+      {
+        "id"         : "attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+        "startedAt"  : "2026-11-22T23:17:14.220Z",
+        "completedAt": "2026-11-22T23:17:14.882Z",
+        "source": {
+          "head": "939c7efcfdbf7d1e6344f01153b857b63bee87d6",
+          "digest": "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "package.json",
+            "scripts/test.ts",
+            "scripts/verify-reports.ts",
+            "test/boxbox/work-json.test.ts",
+            "test/test-runner.test.ts",
+            "test/work-json.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "d32a4fc8e0ce561cd0e6219ed7f8cf0e9d5ce0575cb75f81b268c41b0ad9c47a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "25bcfcddb5203c5f6b5f46c2480d34dfdb073f77a0534f0343170f5a2bd5d8f2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "8c717be482f700d75c8416130eaf70135ec4ebd8ecf60fee3477048f5fa9bd30",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "89e3ea154739b8ad37b317fddf47e429a9aaf24c0329551ad0cee7683ece8369",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/boxbox/work-json.test.ts",
+              "type"  : "file",
+              "digest": "0ccb53efbcd13ab89fef7a0f185bc2af3d70c1959adbd3a03266ec4cc35f719a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/test-runner.test.ts",
+              "type"  : "file",
+              "digest": "98494937a38e92b290f155dbc05a806e8ebc2f828292d35fa8c9c3ad09cb09dd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "f66f4f5d1d0b1e8a77989b35bcb30efd5db66c832fbcf657f069d811cdcc0e4c",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+        "criteriaSnapshot": [
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.bun/bin/bun",
+        "requestedCommand": "bun",
+        "args": [
+          "test",
+          "test/work-json.test.ts",
+          "test/test-runner.test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "BOXBOX",
+          "PRODUCT"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.bun/bin/bun",
+            "digest": "539598c775882420b9d8deb7dc14d845f20f7d26f5600c50ab067dde6ac3f3bf"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 28,
+            "digest"         : "335ab4d3d0d98d4c3b3478fa50c807da6d2740deb186a27fa4aed967dcd71e94",
+            "truncated"      : false,
+            "retainedBytes"  : 28,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 2401,
+            "digest"         : "d7c35434390849b6762fd2856c28538c5271bd53d7d439a6295bf57630da7590",
+            "truncated"      : false,
+            "retainedBytes"  : 2401,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+        "startedAt"  : "2026-11-23T00:23:15.106Z",
+        "completedAt": "2026-11-23T00:23:22.637Z",
+        "source": {
+          "head": "939c7efcfdbf7d1e6344f01153b857b63bee87d6",
+          "digest": "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "package.json",
+            "scripts/test.ts",
+            "scripts/verify-reports.ts",
+            "test/boxbox/work-json.test.ts",
+            "test/test-runner.test.ts",
+            "test/work-json.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "d32a4fc8e0ce561cd0e6219ed7f8cf0e9d5ce0575cb75f81b268c41b0ad9c47a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "25bcfcddb5203c5f6b5f46c2480d34dfdb073f77a0534f0343170f5a2bd5d8f2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "8c717be482f700d75c8416130eaf70135ec4ebd8ecf60fee3477048f5fa9bd30",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "89e3ea154739b8ad37b317fddf47e429a9aaf24c0329551ad0cee7683ece8369",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/boxbox/work-json.test.ts",
+              "type"  : "file",
+              "digest": "0ccb53efbcd13ab89fef7a0f185bc2af3d70c1959adbd3a03266ec4cc35f719a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/test-runner.test.ts",
+              "type"  : "file",
+              "digest": "98494937a38e92b290f155dbc05a806e8ebc2f828292d35fa8c9c3ad09cb09dd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "f66f4f5d1d0b1e8a77989b35bcb30efd5db66c832fbcf657f069d811cdcc0e4c",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+        "criteriaSnapshot": [
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.hermes/node/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          ".www/evidence/dashboard-W024/verify-registered.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "REGISTER"
+        ],
+        "sourceStable": true,
+        "artifacts": [
+          {
+            "path"  : ".www/evidence/dashboard-W024/verify-registered.ts",
+            "size"  : 2211,
+            "digest": "327c855247cb9dae8a7737bd5beb196b92b3a2984a74e8c34214003e6177c7af"
+          }
+        ],
+        "artifactsStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.hermes/node/bin/node",
+            "digest": "2e3f1286a7eb3736346ed1803e458a0ff909e2b2d5bc746144dcb76970e9b99d"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 906,
+            "digest"         : "448172e860d0439b508b5177cce3e27a83824bd1aa4296c59f1c6ba2a0bc2c46",
+            "truncated"      : false,
+            "retainedBytes"  : 906,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 480,
+            "digest"         : "b9f80a9b29d65d7736acb54da80b8c0f00d11a8d5b856ee2051128f3de904c1e",
+            "truncated"      : false,
+            "retainedBytes"  : 480,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-48ec7195-5d85-4104-af88-748887634aa6",
+        "startedAt"  : "2026-11-23T00:26:21.858Z",
+        "completedAt": "2026-11-23T00:27:50.329Z",
+        "source": {
+          "head": "939c7efcfdbf7d1e6344f01153b857b63bee87d6",
+          "digest": "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "package.json",
+            "scripts/test.ts",
+            "scripts/verify-reports.ts",
+            "test/boxbox/work-json.test.ts",
+            "test/test-runner.test.ts",
+            "test/work-json.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "d32a4fc8e0ce561cd0e6219ed7f8cf0e9d5ce0575cb75f81b268c41b0ad9c47a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "25bcfcddb5203c5f6b5f46c2480d34dfdb073f77a0534f0343170f5a2bd5d8f2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "8c717be482f700d75c8416130eaf70135ec4ebd8ecf60fee3477048f5fa9bd30",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "89e3ea154739b8ad37b317fddf47e429a9aaf24c0329551ad0cee7683ece8369",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/boxbox/work-json.test.ts",
+              "type"  : "file",
+              "digest": "0ccb53efbcd13ab89fef7a0f185bc2af3d70c1959adbd3a03266ec4cc35f719a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/test-runner.test.ts",
+              "type"  : "file",
+              "digest": "98494937a38e92b290f155dbc05a806e8ebc2f828292d35fa8c9c3ad09cb09dd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "f66f4f5d1d0b1e8a77989b35bcb30efd5db66c832fbcf657f069d811cdcc0e4c",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+        "criteriaSnapshot": [
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.hermes/node/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "scripts/test.ts"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 1,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "BOXBOX",
+          "PRODUCT"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.hermes/node/bin/node",
+            "digest": "2e3f1286a7eb3736346ed1803e458a0ff909e2b2d5bc746144dcb76970e9b99d"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 2868,
+            "digest"         : "b6780570912d332a23d4969528e3d5e2beba1d1654377a895028adfb0a15164d",
+            "truncated"      : false,
+            "retainedBytes"  : 2868,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 163669,
+            "digest"         : "b1d874f1e3f3ac34d40b7480b3d441a9d8cf2a907e6834c56bd6e203765c3c10",
+            "truncated"      : true,
+            "retainedBytes"  : 65536,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+        "startedAt"  : "2026-11-23T00:32:37.827Z",
+        "completedAt": "2026-11-23T00:34:04.872Z",
+        "source": {
+          "head": "939c7efcfdbf7d1e6344f01153b857b63bee87d6",
+          "digest": "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "package.json",
+            "scripts/test.ts",
+            "scripts/verify-reports.ts",
+            "test/boxbox/work-json.test.ts",
+            "test/test-runner.test.ts",
+            "test/work-json.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "d32a4fc8e0ce561cd0e6219ed7f8cf0e9d5ce0575cb75f81b268c41b0ad9c47a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "25bcfcddb5203c5f6b5f46c2480d34dfdb073f77a0534f0343170f5a2bd5d8f2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "8c717be482f700d75c8416130eaf70135ec4ebd8ecf60fee3477048f5fa9bd30",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "89e3ea154739b8ad37b317fddf47e429a9aaf24c0329551ad0cee7683ece8369",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/boxbox/work-json.test.ts",
+              "type"  : "file",
+              "digest": "0ccb53efbcd13ab89fef7a0f185bc2af3d70c1959adbd3a03266ec4cc35f719a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/test-runner.test.ts",
+              "type"  : "file",
+              "digest": "98494937a38e92b290f155dbc05a806e8ebc2f828292d35fa8c9c3ad09cb09dd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "f66f4f5d1d0b1e8a77989b35bcb30efd5db66c832fbcf657f069d811cdcc0e4c",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+        "criteriaSnapshot": [
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.hermes/node/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--input-type=module",
+          "--eval",
+          "import {mkdirSync,writeFileSync} from \"node:fs\";\nimport {randomUUID} from \"node:crypto\";\nimport {spawnSync} from \"node:child_process\";\nconst path=\".www/evidence/dashboard-W024/product-off-\"+randomUUID();\nmkdirSync(path,{recursive:true,mode:0o700});\nconst argv=[\"scripts/test.ts\"], now=new Date().toISOString();\nconst run=spawnSync(process.execPath,argv,{encoding:\"utf8\",env:{...process.env,BOXBOX_MODE:\"off\"},maxBuffer:12*1024*1024});\nwriteFileSync(path+\"/stdout.log\",run.stdout??\"\");\nwriteFileSync(path+\"/stderr.log\",run.stderr??\"\");\nwriteFileSync(path+\"/process.json\",JSON.stringify({kind:\"process\",command:process.execPath,argv,boxboxMode:\"off\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\"\\n\");\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\nprocess.exit(run.status??1);"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 1,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "failed",
+        "criterionIds": [
+          "BOXBOX",
+          "PRODUCT"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.hermes/node/bin/node",
+            "digest": "2e3f1286a7eb3736346ed1803e458a0ff909e2b2d5bc746144dcb76970e9b99d"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 112,
+            "digest"         : "d885ae55b5caaee2b61b9eafb35d8afe094df8f241180b0813ee2d08ed682c24",
+            "truncated"      : false,
+            "retainedBytes"  : 112,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
+      },
+      {
+        "id"         : "attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+        "startedAt"  : "2026-11-23T00:35:10.700Z",
+        "completedAt": "2026-11-23T00:37:23.943Z",
+        "source": {
+          "head": "939c7efcfdbf7d1e6344f01153b857b63bee87d6",
+          "digest": "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+          "inputs": [
+            "docs/DEVELOPMENT.md",
+            "package.json",
+            "scripts/test.ts",
+            "scripts/verify-reports.ts",
+            "test/boxbox/work-json.test.ts",
+            "test/test-runner.test.ts",
+            "test/work-json.test.ts"
+          ],
+          "files": [
+            {
+              "path"  : "docs/DEVELOPMENT.md",
+              "type"  : "file",
+              "digest": "d32a4fc8e0ce561cd0e6219ed7f8cf0e9d5ce0575cb75f81b268c41b0ad9c47a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "package.json",
+              "type"  : "file",
+              "digest": "25bcfcddb5203c5f6b5f46c2480d34dfdb073f77a0534f0343170f5a2bd5d8f2",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/test.ts",
+              "type"  : "file",
+              "digest": "8c717be482f700d75c8416130eaf70135ec4ebd8ecf60fee3477048f5fa9bd30",
+              "mode"  : 420
+            },
+            {
+              "path"  : "scripts/verify-reports.ts",
+              "type"  : "file",
+              "digest": "89e3ea154739b8ad37b317fddf47e429a9aaf24c0329551ad0cee7683ece8369",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/boxbox/work-json.test.ts",
+              "type"  : "file",
+              "digest": "0ccb53efbcd13ab89fef7a0f185bc2af3d70c1959adbd3a03266ec4cc35f719a",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/test-runner.test.ts",
+              "type"  : "file",
+              "digest": "98494937a38e92b290f155dbc05a806e8ebc2f828292d35fa8c9c3ad09cb09dd",
+              "mode"  : 420
+            },
+            {
+              "path"  : "test/work-json.test.ts",
+              "type"  : "file",
+              "digest": "f66f4f5d1d0b1e8a77989b35bcb30efd5db66c832fbcf657f069d811cdcc0e4c",
+              "mode"  : 420
+            }
+          ]
+        },
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+        "criteriaSnapshot": [
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "requirementRefs": []
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "requirementRefs": []
+          }
+        ],
+        "command": "/Users/woojongho/.hermes/node/bin/node",
+        "requestedCommand": "node",
+        "args": [
+          "--input-type=module",
+          "--eval",
+          "import {mkdirSync,writeFileSync} from \"node:fs\";\nimport {randomUUID} from \"node:crypto\";\nimport {spawnSync} from \"node:child_process\";\nconst path=\".www/evidence/dashboard-W024/product-off-\"+randomUUID();\nmkdirSync(path,{recursive:true,mode:0o700});\nconst argv=[\"scripts/test.ts\"], now=new Date().toISOString();\nconst run=spawnSync(process.execPath,argv,{encoding:\"utf8\",env:{...process.env,BOXBOX_MODE:\"off\"},maxBuffer:12*1024*1024});\nwriteFileSync(path+\"/stdout.log\",run.stdout??\"\");\nwriteFileSync(path+\"/stderr.log\",run.stderr??\"\");\nwriteFileSync(path+\"/process.json\",JSON.stringify({kind:\"process\",command:process.execPath,argv,boxboxMode:\"off\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\"\\n\");\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\nprocess.exit(run.status??1);"
+        ],
+        "argumentsRedacted": false,
+        "exitCode"         : 0,
+        "signal"           : null,
+        "error"            : null,
+        "result"           : "passed",
+        "criterionIds": [
+          "BOXBOX",
+          "PRODUCT"
+        ],
+        "sourceStable": true,
+        "environment": {
+          "platform": "darwin",
+          "arch"    : "arm64",
+          "node"    : "v22.23.1",
+          "executable": {
+            "path": "/Users/woojongho/.hermes/node/bin/node",
+            "digest": "2e3f1286a7eb3736346ed1803e458a0ff909e2b2d5bc746144dcb76970e9b99d"
+          }
+        },
+        "environmentStable": true,
+        "executor": "process",
+        "output": {
+          "stdout": {
+            "bytes"          : 112,
+            "digest"         : "ec5c1b41e2b064004d3d11493f4d725db748b494aabc2042284248f716741d3e",
+            "truncated"      : false,
+            "retainedBytes"  : 112,
+            "contentRetained": false
+          },
+          "stderr": {
+            "bytes"          : 0,
+            "digest"         : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "truncated"      : false,
+            "retainedBytes"  : 0,
+            "contentRetained": false
+          }
+        }
       }
     ],
-    "reviews": [],
+    "reviews": [
+      {
+        "id"                  : "review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36",
+        "inputPathsHash"      : "7932bb99aa9127ec615b6a85555c3f3c522aab307be93a0c605d43ec0ba1673f",
+        "observedModelMeaning": "server-selected",
+        "provider"            : "openai",
+        "model"               : "gpt-6.1-terra",
+        "observedModel"       : "gpt-6.1-terra",
+        "verdict"             : "fail",
+        "readOnly"            : true,
+        "sourceDigest"        : "87a5d81cef87077007ea209255b01cd2fad8cd148f82bd765a572e1a39884185",
+        "criteriaDigest"      : "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+        "policyHash"          : "fec20ffd6a5a286aab02c6a7de12c366ed62066a40814ff05571ad96a1f20787",
+        "executor"            : "process",
+        "fallbackReason": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "usage_limit_reached",
+          "receiptHash": "9e53a110ba9e0aa90b9e127cbf5baf909dbbcbbd796df31fe521548b623bc088",
+          "source"     : "claude-cli"
+        },
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "8527cc8427af9413ed45ad2842e0addd371ec59acdb4d7213d5e9ecf185d705e"
+        },
+        "failure": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "usage_limit_reached",
+          "receiptHash": "9e53a110ba9e0aa90b9e127cbf5baf909dbbcbbd796df31fe521548b623bc088",
+          "source"     : "claude-cli"
+        },
+        "findings": [
+          "`docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md`의 현재 소스 검증 시도 `attempt-8be30523`은 두 테스트 파일만 직접 실행했는데 `PRODUCT` 기준의 통과 근거로 연결되어 있다. `test/test-runner.test.ts`의 전체 runner 검사는 주입된 가짜 실행기를 사용하므로 실제 기본 제품 테스트 전체가 실행됐다는 증거가 아니다. 실제 `scripts/test.ts` 전체 실행의 마지막 통과 `attempt-2278f383`은 소스 식별이 `b2897f...`로 현재 집중 검사의 `15093b...`과 다르며, package.json과 Reports 검증 스크립트 등의 파일 지문도 다르다. 현재 소스에서 실제 기본 runner를 실행한 증거가 필요하다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36/terra.json",
+        "startedAt"      : "2026-11-23T00:24:34.837Z",
+        "completedAt"    : "2026-11-23T00:25:25.151Z",
+        "workId"         : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+        "workRequestHash": "f9f131ad01737ee56bcd9eb2e1459f703810fc35d37eaaca8a50097957660768",
+        "recordingRejection": [
+          "review_not_passed"
+        ]
+      },
+      {
+        "id"                  : "review-f54bf8fb-92f9-4e0c-9b2b-46bef2590c95",
+        "inputPathsHash"      : "7b1cc6a4369f3342eda6ba4e52869409b508b51494223dc1e30eaddd7d68756e",
+        "observedModelMeaning": "server-selected",
+        "provider"            : "openai",
+        "model"               : "gpt-6.1-terra",
+        "observedModel"       : "gpt-6.1-terra",
+        "verdict"             : "fail",
+        "readOnly"            : true,
+        "sourceDigest"        : "87a5d81cef87077007ea209255b01cd2fad8cd148f82bd765a572e1a39884185",
+        "criteriaDigest"      : "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+        "policyHash"          : "fec20ffd6a5a286aab02c6a7de12c366ed62066a40814ff05571ad96a1f20787",
+        "executor"            : "process",
+        "fallbackReason": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "usage_limit_reached",
+          "receiptHash": "bcd941006e4e7412b04d03e80534ae3d6cab61af093087fb615ba8e7e393a594",
+          "source"     : "claude-cli"
+        },
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "a16a0148af501d71bd96bd147a64011569c0cf5e6a37e9f31d4b3337336e1167"
+        },
+        "failure": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "usage_limit_reached",
+          "receiptHash": "bcd941006e4e7412b04d03e80534ae3d6cab61af093087fb615ba8e7e393a594",
+          "source"     : "claude-cli"
+        },
+        "findings": [
+          "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md의 ‘전체 48개 제품 테스트 파일’은 실행 범위를 잘못 기록했다. 해당 시도의 stdout.log에는 Bun 테스트 48개 파일과 Node 테스트 12개 파일이 각각 표시되므로, 전체는 60개 파일이다. 48개가 Bun 실행 범위임을 구분해 수정해야 한다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-f54bf8fb-92f9-4e0c-9b2b-46bef2590c95/terra.json",
+        "startedAt"      : "2026-11-23T00:43:56.517Z",
+        "completedAt"    : "2026-11-23T00:44:30.697Z",
+        "workId"         : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+        "workRequestHash": "f9f131ad01737ee56bcd9eb2e1459f703810fc35d37eaaca8a50097957660768",
+        "recordingRejection": [
+          "review_not_passed"
+        ]
+      },
+      {
+        "id"                  : "review-1bbdc55d-8fbe-42eb-a41f-db14d348da42",
+        "inputPathsHash"      : "aa848f6106bb6687dfa4137d0fca343fbbf68d86397db7e18774d187cd7ec9a2",
+        "observedModelMeaning": "server-selected",
+        "provider"            : "openai",
+        "model"               : "gpt-6.1-terra",
+        "observedModel"       : "gpt-6.1-terra",
+        "verdict"             : "pass",
+        "readOnly"            : true,
+        "sourceDigest"        : "87a5d81cef87077007ea209255b01cd2fad8cd148f82bd765a572e1a39884185",
+        "criteriaDigest"      : "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+        "policyHash"          : "fec20ffd6a5a286aab02c6a7de12c366ed62066a40814ff05571ad96a1f20787",
+        "executor"            : "process",
+        "fallbackReason": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "usage_limit_reached",
+          "receiptHash": "bfa4f9ffbf8474f59c2ddfb4db3800b8c7fd82f4554fe913c92630220b250b05",
+          "source"     : "claude-cli"
+        },
+        "execution": {
+          "exitCode"   : 0,
+          "signal"     : null,
+          "error"      : null,
+          "receiptHash": "fd89a00c49796a7a16dda1f41d44d9709251797c1399975fdc25884d95826e6d"
+        },
+        "failure": {
+          "kind"       : "quota_exhausted",
+          "verified"   : true,
+          "provider"   : "anthropic",
+          "model"      : "opus",
+          "code"       : "usage_limit_reached",
+          "receiptHash": "bfa4f9ffbf8474f59c2ddfb4db3800b8c7fd82f4554fe913c92630220b250b05",
+          "source"     : "claude-cli"
+        },
+        "findings": [
+          "검토 범위는 제공된 inputBundle과 별도로 읽은 BoxBox 외부 검사 파일, 등록 검증 스크립트 및 관련 증거다. 제공된 기록의 테스트 결과를 대조했으며, 이번 검토에서 테스트를 실행하지 않았다."
+        ],
+        "receiptPath"    : ".www/evidence/reviews/review-1bbdc55d-8fbe-42eb-a41f-db14d348da42/terra.json",
+        "startedAt"      : "2026-11-23T00:46:51.034Z",
+        "completedAt"    : "2026-11-23T00:47:46.473Z",
+        "workId"         : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+        "workRequestHash": "f9f131ad01737ee56bcd9eb2e1459f703810fc35d37eaaca8a50097957660768"
+      }
+    ],
     "artifactReviews": [
       {
         "id"        : "artifact-c6110495-0230-4c25-b8f8-38c1bc001044",
@@ -477,6 +1308,172 @@
         ]
       }
     ],
-    "reportingRequired": true
+    "reportingRequired": true,
+    "verifierAuthorizations": [
+      {
+        "version"            : 1,
+        "requestId"          : "dashboard-reports-register-20261123",
+        "requestHash"        : "d978d66ddf8cefc06f86e3d811f4af9dcae9ba29b9fc50d709c1ae73ad84ae30",
+        "originalRequestHash": "f9f131ad01737ee56bcd9eb2e1459f703810fc35d37eaaca8a50097957660768",
+        "payloadDigest"      : "8165d544c3949fed60ffdc114b78ad073bc4231cf52fb3f8b7b0bf57ca4b5835",
+        "authorizedAt"       : "2026-11-23T00:23:14.944Z",
+        "command"            : "node",
+        "args": [
+          ".www/evidence/dashboard-W024/verify-registered.ts"
+        ],
+        "added"       : true,
+        "beforeDigest": "14700a8877f678429c31d2d99d882cc991344c9027bd3ef4521de1498332632c",
+        "afterDigest" : "d2fa74289fc5fffb00255f49f4ef9bdd4989774124bd8faa804f9b117406b972",
+        "before": {
+          "implementation": true,
+          "writePaths": [
+            "test/work-json.test.ts",
+            "test/boxbox/work-json.test.ts",
+            "scripts/test.ts",
+            "test/test-runner.test.ts",
+            "package.json",
+            "docs/DEVELOPMENT.md",
+            "src/architecture.generated.json"
+          ],
+          "mutationSurfaces": [
+            "remote_test_tools",
+            "work_verification"
+          ],
+          "verifierCommands": [
+            "[\"bun\",\"test\",\"test/work-json.test.ts\",\"test/test-runner.test.ts\"]",
+            "[\"node\",\"scripts/test.ts\"]"
+          ],
+          "commit"     : false,
+          "publish"    : false,
+          "source"     : "direct_user_request",
+          "requestHash": "f9f131ad01737ee56bcd9eb2e1459f703810fc35d37eaaca8a50097957660768"
+        },
+        "after": {
+          "implementation": true,
+          "writePaths": [
+            "test/work-json.test.ts",
+            "test/boxbox/work-json.test.ts",
+            "scripts/test.ts",
+            "test/test-runner.test.ts",
+            "package.json",
+            "docs/DEVELOPMENT.md",
+            "src/architecture.generated.json"
+          ],
+          "mutationSurfaces": [
+            "remote_test_tools",
+            "work_verification"
+          ],
+          "verifierCommands": [
+            "[\"bun\",\"test\",\"test/work-json.test.ts\",\"test/test-runner.test.ts\"]",
+            "[\"node\",\"scripts/test.ts\"]",
+            "[\"node\",\".www/evidence/dashboard-W024/verify-registered.ts\"]"
+          ],
+          "commit"     : false,
+          "publish"    : false,
+          "source"     : "direct_user_request",
+          "requestHash": "f9f131ad01737ee56bcd9eb2e1459f703810fc35d37eaaca8a50097957660768"
+        }
+      },
+      {
+        "version"            : 1,
+        "requestId"          : "dashboard-w024-retain-product-run-output-20261123",
+        "requestHash"        : "d978d66ddf8cefc06f86e3d811f4af9dcae9ba29b9fc50d709c1ae73ad84ae30",
+        "originalRequestHash": "f9f131ad01737ee56bcd9eb2e1459f703810fc35d37eaaca8a50097957660768",
+        "payloadDigest"      : "09cce2a734d188754d352e32da0c17178deb50b445db1715ee53bb9dd5d4fa51",
+        "authorizedAt"       : "2026-11-23T00:32:37.636Z",
+        "command"            : "node",
+        "args": [
+          "--input-type=module",
+          "--eval",
+          "import {mkdirSync,writeFileSync} from \"node:fs\";\nimport {randomUUID} from \"node:crypto\";\nimport {spawnSync} from \"node:child_process\";\nconst path=\".www/evidence/dashboard-W024/product-off-\"+randomUUID();\nmkdirSync(path,{recursive:true,mode:0o700});\nconst argv=[\"scripts/test.ts\"], now=new Date().toISOString();\nconst run=spawnSync(process.execPath,argv,{encoding:\"utf8\",env:{...process.env,BOXBOX_MODE:\"off\"},maxBuffer:12*1024*1024});\nwriteFileSync(path+\"/stdout.log\",run.stdout??\"\");\nwriteFileSync(path+\"/stderr.log\",run.stderr??\"\");\nwriteFileSync(path+\"/process.json\",JSON.stringify({kind:\"process\",command:process.execPath,argv,boxboxMode:\"off\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\"\\n\");\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\nprocess.exit(run.status??1);"
+        ],
+        "added"       : true,
+        "beforeDigest": "d2fa74289fc5fffb00255f49f4ef9bdd4989774124bd8faa804f9b117406b972",
+        "afterDigest" : "07775d857015ab47fc24553743f90d8441cc595c6dfb9edf1f93dfc9a0859dbf",
+        "before": {
+          "implementation": true,
+          "writePaths": [
+            "test/work-json.test.ts",
+            "test/boxbox/work-json.test.ts",
+            "scripts/test.ts",
+            "test/test-runner.test.ts",
+            "package.json",
+            "docs/DEVELOPMENT.md",
+            "src/architecture.generated.json"
+          ],
+          "mutationSurfaces": [
+            "remote_test_tools",
+            "work_verification"
+          ],
+          "verifierCommands": [
+            "[\"bun\",\"test\",\"test/work-json.test.ts\",\"test/test-runner.test.ts\"]",
+            "[\"node\",\"scripts/test.ts\"]",
+            "[\"node\",\".www/evidence/dashboard-W024/verify-registered.ts\"]"
+          ],
+          "commit"     : false,
+          "publish"    : false,
+          "source"     : "direct_user_request",
+          "requestHash": "f9f131ad01737ee56bcd9eb2e1459f703810fc35d37eaaca8a50097957660768"
+        },
+        "after": {
+          "implementation": true,
+          "writePaths": [
+            "test/work-json.test.ts",
+            "test/boxbox/work-json.test.ts",
+            "scripts/test.ts",
+            "test/test-runner.test.ts",
+            "package.json",
+            "docs/DEVELOPMENT.md",
+            "src/architecture.generated.json"
+          ],
+          "mutationSurfaces": [
+            "remote_test_tools",
+            "work_verification"
+          ],
+          "verifierCommands": [
+            "[\"bun\",\"test\",\"test/work-json.test.ts\",\"test/test-runner.test.ts\"]",
+            "[\"node\",\"scripts/test.ts\"]",
+            "[\"node\",\".www/evidence/dashboard-W024/verify-registered.ts\"]",
+            "[\"node\",\"--input-type=module\",\"--eval\",\"import {mkdirSync,writeFileSync} from \\\"node:fs\\\";\\nimport {randomUUID} from \\\"node:crypto\\\";\\nimport {spawnSync} from \\\"node:child_process\\\";\\nconst path=\\\".www/evidence/dashboard-W024/product-off-\\\"+randomUUID();\\nmkdirSync(path,{recursive:true,mode:0o700});\\nconst argv=[\\\"scripts/test.ts\\\"], now=new Date().toISOString();\\nconst run=spawnSync(process.execPath,argv,{encoding:\\\"utf8\\\",env:{...process.env,BOXBOX_MODE:\\\"off\\\"},maxBuffer:12*1024*1024});\\nwriteFileSync(path+\\\"/stdout.log\\\",run.stdout??\\\"\\\");\\nwriteFileSync(path+\\\"/stderr.log\\\",run.stderr??\\\"\\\");\\nwriteFileSync(path+\\\"/process.json\\\",JSON.stringify({kind:\\\"process\\\",command:process.execPath,argv,boxboxMode:\\\"off\\\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\\\"\\\\n\\\");\\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\\nprocess.exit(run.status??1);\"]"
+          ],
+          "commit"     : false,
+          "publish"    : false,
+          "source"     : "direct_user_request",
+          "requestHash": "f9f131ad01737ee56bcd9eb2e1459f703810fc35d37eaaca8a50097957660768"
+        }
+      }
+    ],
+    "documentationReviews": [
+      {
+        "id"             : "documentation-6480342c-6ffe-468e-8c8e-662ebc4f3285",
+        "version"        : 1,
+        "reviewedAt"     : "2026-11-23T00:23:24.110Z",
+        "sourceDigest"   : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+        "criteriaDigest" : "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+        "documentsDigest": "bb76ec3da3ef4aa61fcf7cd4570d0bc0a447fda68a0f1722e73ede18d7c292a7",
+        "documents": [
+          {
+            "path"    : "docs/ARCHITECTURE.md",
+            "decision": "unchanged",
+            "reason"  : "현행 제품 검사와 명시 BoxBox 실행, 기존 Reports 원장의 수용 계약을 확인했다."
+          },
+          {
+            "path"    : "docs/DEVELOPMENT.md",
+            "decision": "unchanged",
+            "reason"  : "현행 제품 검사와 명시 BoxBox 실행, 기존 Reports 원장의 수용 계약을 확인했다."
+          },
+          {
+            "path"    : "docs/PRODUCT.md",
+            "decision": "unchanged",
+            "reason"  : "현행 제품 검사와 명시 BoxBox 실행, 기존 Reports 원장의 수용 계약을 확인했다."
+          },
+          {
+            "path"    : "docs/skills/WORKFLOW.md",
+            "decision": "unchanged",
+            "reason"  : "현행 제품 검사와 명시 BoxBox 실행, 기존 Reports 원장의 수용 계약을 확인했다."
+          }
+        ]
+      }
+    ]
   }
 }

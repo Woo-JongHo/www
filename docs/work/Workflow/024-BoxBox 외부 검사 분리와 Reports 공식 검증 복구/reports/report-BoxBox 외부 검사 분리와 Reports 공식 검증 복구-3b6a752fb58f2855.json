@@ -228,6 +228,1697 @@
         "sourceDigest"  : "91ff318198e005708d26fcd5a21bd7be89e2710c3f138be688b249ad82d800fc",
         "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8"
       }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-dcd9be0d-a3d8-4dcb-9aaf-2330268193c5",
+      "workId"        : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+      "title"         : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+      "summary"       : "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-23T00:25:25.721Z",
+      "event"         : "review",
+      "workRecordHash": "8a7c4dd9a4718c661400e1c46f9a9b205be4484ffae60ac11de17a96ab097409",
+      "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+      "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+      "semanticHash"  : "0e0242c5c777c5c29271fc884952587de68dc14b4c432d2d8461fa8b1b314aee",
+      "narrative"     : null,
+      "work": {
+        "status": "verifying",
+        "blockedReason": "독립 검토 fail: quota_exhausted",
+        "criteria": [
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:51:23.089Z"
+          },
+          {
+            "id": "attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:58:55.837Z"
+          },
+          {
+            "id": "attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/work-json.test.ts",
+              "test/test-runner.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-22T23:17:14.882Z"
+          },
+          {
+            "id": "attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+            "command": "node",
+            "args": [
+              ".www/evidence/dashboard-W024/verify-registered.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:23:22.637Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36/terra.json",
+            "findings": [
+              "`docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md`의 현재 소스 검증 시도 `attempt-8be30523`은 두 테스트 파일만 직접 실행했는데 `PRODUCT` 기준의 통과 근거로 연결되어 있다. `test/test-runner.test.ts`의 전체 runner 검사는 주입된 가짜 실행기를 사용하므로 실제 기본 제품 테스트 전체가 실행됐다는 증거가 아니다. 실제 `scripts/test.ts` 전체 실행의 마지막 통과 `attempt-2278f383`은 소스 식별이 `b2897f...`로 현재 집중 검사의 `15093b...`과 다르며, package.json과 Reports 검증 스크립트 등의 파일 지문도 다르다. 현재 소스에서 실제 기본 runner를 실행한 증거가 필요하다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json",
+        "workRecordHash": "8a7c4dd9a4718c661400e1c46f9a9b205be4484ffae60ac11de17a96ab097409",
+        "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-521bf445-0e90-4cd6-8573-2bec8c4a6434",
+      "workId"        : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+      "title"         : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+      "summary"       : "현재 WWW 프로젝트의 TypeScript 전환과 비교 워크플로를 재검증했다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-23T00:25:26.373Z",
+      "event"         : "finish",
+      "workRecordHash": "8a7c4dd9a4718c661400e1c46f9a9b205be4484ffae60ac11de17a96ab097409",
+      "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+      "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+      "semanticHash"  : "a3a6fce0fea89852906a3f87dc7745e9ea09d03847123b206e80802bb1b3352a",
+      "narrative": {
+        "summary": "현재 WWW 프로젝트의 TypeScript 전환과 비교 워크플로를 재검증했다.",
+        "before" : "현재 후보의 타입·테스트·번들 근거가 과거 소스에 묶여 있었다.",
+        "after"  : "현재 소스에서 정책, TypeScript, 제품 테스트, Electron 번들과 Tauri 비교를 직접 실행했다.",
+        "changes": [
+          "현재 소스 정책을 확인했다.",
+          "타입과 기존 앱 테스트, 도구 진입점을 확인했다.",
+          "Tauri 빌드 및 Rust 비교 테스트를 실행했다."
+        ],
+        "decisions": [
+          "실행 코드와 문서의 현재 입력을 같은 작업 UUID에서 대조했다."
+        ],
+        "limitations": [
+          "검증 환경은 현재 macOS이며 Windows 실기와 배포 서명은 별도다."
+        ],
+        "next": [
+          "독립 검토 결과를 확인한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "독립 검토 fail: quota_exhausted",
+        "criteria": [
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:51:23.089Z"
+          },
+          {
+            "id": "attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:58:55.837Z"
+          },
+          {
+            "id": "attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/work-json.test.ts",
+              "test/test-runner.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-22T23:17:14.882Z"
+          },
+          {
+            "id": "attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+            "command": "node",
+            "args": [
+              ".www/evidence/dashboard-W024/verify-registered.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:23:22.637Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36/terra.json",
+            "findings": [
+              "`docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md`의 현재 소스 검증 시도 `attempt-8be30523`은 두 테스트 파일만 직접 실행했는데 `PRODUCT` 기준의 통과 근거로 연결되어 있다. `test/test-runner.test.ts`의 전체 runner 검사는 주입된 가짜 실행기를 사용하므로 실제 기본 제품 테스트 전체가 실행됐다는 증거가 아니다. 실제 `scripts/test.ts` 전체 실행의 마지막 통과 `attempt-2278f383`은 소스 식별이 `b2897f...`로 현재 집중 검사의 `15093b...`과 다르며, package.json과 Reports 검증 스크립트 등의 파일 지문도 다르다. 현재 소스에서 실제 기본 runner를 실행한 증거가 필요하다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json",
+        "workRecordHash": "8a7c4dd9a4718c661400e1c46f9a9b205be4484ffae60ac11de17a96ab097409",
+        "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-b13c39e4-8544-4564-a7cf-4573c95350d4",
+      "workId"        : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+      "title"         : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+      "summary"       : "차단 사항 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-23T00:44:31.187Z",
+      "event"         : "review",
+      "workRecordHash": "4d7e0beed251bf2af73e6d66c44be7182ba04b12ef0b5b3ecb97022daae2a9de",
+      "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+      "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+      "semanticHash"  : "ca924775d61dd4b2acf58b56bfb20fac0d7e0356919de7964e8a441af043cd45",
+      "narrative"     : null,
+      "work": {
+        "status": "verifying",
+        "blockedReason": "독립 검토 fail: quota_exhausted",
+        "criteria": [
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-48ec7195-5d85-4104-af88-748887634aa6",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-48ec7195-5d85-4104-af88-748887634aa6",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:51:23.089Z"
+          },
+          {
+            "id": "attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:58:55.837Z"
+          },
+          {
+            "id": "attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/work-json.test.ts",
+              "test/test-runner.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-22T23:17:14.882Z"
+          },
+          {
+            "id": "attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+            "command": "node",
+            "args": [
+              ".www/evidence/dashboard-W024/verify-registered.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:23:22.637Z"
+          },
+          {
+            "id": "attempt-48ec7195-5d85-4104-af88-748887634aa6",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:27:50.329Z"
+          },
+          {
+            "id": "attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import {mkdirSync,writeFileSync} from \"node:fs\";\nimport {randomUUID} from \"node:crypto\";\nimport {spawnSync} from \"node:child_process\";\nconst path=\".www/evidence/dashboard-W024/product-off-\"+randomUUID();\nmkdirSync(path,{recursive:true,mode:0o700});\nconst argv=[\"scripts/test.ts\"], now=new Date().toISOString();\nconst run=spawnSync(process.execPath,argv,{encoding:\"utf8\",env:{...process.env,BOXBOX_MODE:\"off\"},maxBuffer:12*1024*1024});\nwriteFileSync(path+\"/stdout.log\",run.stdout??\"\");\nwriteFileSync(path+\"/stderr.log\",run.stderr??\"\");\nwriteFileSync(path+\"/process.json\",JSON.stringify({kind:\"process\",command:process.execPath,argv,boxboxMode:\"off\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\"\\n\");\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\nprocess.exit(run.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:34:04.872Z"
+          },
+          {
+            "id": "attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import {mkdirSync,writeFileSync} from \"node:fs\";\nimport {randomUUID} from \"node:crypto\";\nimport {spawnSync} from \"node:child_process\";\nconst path=\".www/evidence/dashboard-W024/product-off-\"+randomUUID();\nmkdirSync(path,{recursive:true,mode:0o700});\nconst argv=[\"scripts/test.ts\"], now=new Date().toISOString();\nconst run=spawnSync(process.execPath,argv,{encoding:\"utf8\",env:{...process.env,BOXBOX_MODE:\"off\"},maxBuffer:12*1024*1024});\nwriteFileSync(path+\"/stdout.log\",run.stdout??\"\");\nwriteFileSync(path+\"/stderr.log\",run.stderr??\"\");\nwriteFileSync(path+\"/process.json\",JSON.stringify({kind:\"process\",command:process.execPath,argv,boxboxMode:\"off\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\"\\n\");\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\nprocess.exit(run.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:37:23.943Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36/terra.json",
+            "findings": [
+              "`docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md`의 현재 소스 검증 시도 `attempt-8be30523`은 두 테스트 파일만 직접 실행했는데 `PRODUCT` 기준의 통과 근거로 연결되어 있다. `test/test-runner.test.ts`의 전체 runner 검사는 주입된 가짜 실행기를 사용하므로 실제 기본 제품 테스트 전체가 실행됐다는 증거가 아니다. 실제 `scripts/test.ts` 전체 실행의 마지막 통과 `attempt-2278f383`은 소스 식별이 `b2897f...`로 현재 집중 검사의 `15093b...`과 다르며, package.json과 Reports 검증 스크립트 등의 파일 지문도 다르다. 현재 소스에서 실제 기본 runner를 실행한 증거가 필요하다."
+            ]
+          },
+          {
+            "id"         : "review-f54bf8fb-92f9-4e0c-9b2b-46bef2590c95",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f54bf8fb-92f9-4e0c-9b2b-46bef2590c95/terra.json",
+            "findings": [
+              "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md의 ‘전체 48개 제품 테스트 파일’은 실행 범위를 잘못 기록했다. 해당 시도의 stdout.log에는 Bun 테스트 48개 파일과 Node 테스트 12개 파일이 각각 표시되므로, 전체는 60개 파일이다. 48개가 Bun 실행 범위임을 구분해 수정해야 한다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json",
+        "workRecordHash": "4d7e0beed251bf2af73e6d66c44be7182ba04b12ef0b5b3ecb97022daae2a9de",
+        "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-ee8a239e-9fef-403d-81ba-8c8ec4c31d08",
+      "workId"        : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+      "title"         : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+      "summary"       : "현재 WWW 프로젝트의 TypeScript 전환과 비교 워크플로를 재검증했다.",
+      "kind"          : "authored",
+      "outcome"       : "blocked",
+      "createdAt"     : "2026-11-23T00:44:31.786Z",
+      "event"         : "finish",
+      "workRecordHash": "4d7e0beed251bf2af73e6d66c44be7182ba04b12ef0b5b3ecb97022daae2a9de",
+      "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+      "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+      "semanticHash"  : "f8ecb7a52f78e51e8e440b4136d5c68655362496b2de1d056f9254749867b396",
+      "narrative": {
+        "summary": "현재 WWW 프로젝트의 TypeScript 전환과 비교 워크플로를 재검증했다.",
+        "before" : "현재 후보의 타입·테스트·번들 근거가 과거 소스에 묶여 있었다.",
+        "after"  : "현재 소스에서 정책, TypeScript, 제품 테스트, Electron 번들과 Tauri 비교를 직접 실행했다.",
+        "changes": [
+          "현재 소스 정책을 확인했다.",
+          "타입과 기존 앱 테스트, 도구 진입점을 확인했다.",
+          "Tauri 빌드 및 Rust 비교 테스트를 실행했다."
+        ],
+        "decisions": [
+          "실행 코드와 문서의 현재 입력을 같은 작업 UUID에서 대조했다."
+        ],
+        "limitations": [
+          "검증 환경은 현재 macOS이며 Windows 실기와 배포 서명은 별도다."
+        ],
+        "next": [
+          "독립 검토 결과를 확인한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": "독립 검토 fail: quota_exhausted",
+        "criteria": [
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-48ec7195-5d85-4104-af88-748887634aa6",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-48ec7195-5d85-4104-af88-748887634aa6",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:51:23.089Z"
+          },
+          {
+            "id": "attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:58:55.837Z"
+          },
+          {
+            "id": "attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/work-json.test.ts",
+              "test/test-runner.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-22T23:17:14.882Z"
+          },
+          {
+            "id": "attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+            "command": "node",
+            "args": [
+              ".www/evidence/dashboard-W024/verify-registered.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:23:22.637Z"
+          },
+          {
+            "id": "attempt-48ec7195-5d85-4104-af88-748887634aa6",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:27:50.329Z"
+          },
+          {
+            "id": "attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import {mkdirSync,writeFileSync} from \"node:fs\";\nimport {randomUUID} from \"node:crypto\";\nimport {spawnSync} from \"node:child_process\";\nconst path=\".www/evidence/dashboard-W024/product-off-\"+randomUUID();\nmkdirSync(path,{recursive:true,mode:0o700});\nconst argv=[\"scripts/test.ts\"], now=new Date().toISOString();\nconst run=spawnSync(process.execPath,argv,{encoding:\"utf8\",env:{...process.env,BOXBOX_MODE:\"off\"},maxBuffer:12*1024*1024});\nwriteFileSync(path+\"/stdout.log\",run.stdout??\"\");\nwriteFileSync(path+\"/stderr.log\",run.stderr??\"\");\nwriteFileSync(path+\"/process.json\",JSON.stringify({kind:\"process\",command:process.execPath,argv,boxboxMode:\"off\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\"\\n\");\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\nprocess.exit(run.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:34:04.872Z"
+          },
+          {
+            "id": "attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import {mkdirSync,writeFileSync} from \"node:fs\";\nimport {randomUUID} from \"node:crypto\";\nimport {spawnSync} from \"node:child_process\";\nconst path=\".www/evidence/dashboard-W024/product-off-\"+randomUUID();\nmkdirSync(path,{recursive:true,mode:0o700});\nconst argv=[\"scripts/test.ts\"], now=new Date().toISOString();\nconst run=spawnSync(process.execPath,argv,{encoding:\"utf8\",env:{...process.env,BOXBOX_MODE:\"off\"},maxBuffer:12*1024*1024});\nwriteFileSync(path+\"/stdout.log\",run.stdout??\"\");\nwriteFileSync(path+\"/stderr.log\",run.stderr??\"\");\nwriteFileSync(path+\"/process.json\",JSON.stringify({kind:\"process\",command:process.execPath,argv,boxboxMode:\"off\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\"\\n\");\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\nprocess.exit(run.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:37:23.943Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36/terra.json",
+            "findings": [
+              "`docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md`의 현재 소스 검증 시도 `attempt-8be30523`은 두 테스트 파일만 직접 실행했는데 `PRODUCT` 기준의 통과 근거로 연결되어 있다. `test/test-runner.test.ts`의 전체 runner 검사는 주입된 가짜 실행기를 사용하므로 실제 기본 제품 테스트 전체가 실행됐다는 증거가 아니다. 실제 `scripts/test.ts` 전체 실행의 마지막 통과 `attempt-2278f383`은 소스 식별이 `b2897f...`로 현재 집중 검사의 `15093b...`과 다르며, package.json과 Reports 검증 스크립트 등의 파일 지문도 다르다. 현재 소스에서 실제 기본 runner를 실행한 증거가 필요하다."
+            ]
+          },
+          {
+            "id"         : "review-f54bf8fb-92f9-4e0c-9b2b-46bef2590c95",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f54bf8fb-92f9-4e0c-9b2b-46bef2590c95/terra.json",
+            "findings": [
+              "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md의 ‘전체 48개 제품 테스트 파일’은 실행 범위를 잘못 기록했다. 해당 시도의 stdout.log에는 Bun 테스트 48개 파일과 Node 테스트 12개 파일이 각각 표시되므로, 전체는 60개 파일이다. 48개가 Bun 실행 범위임을 구분해 수정해야 한다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json",
+        "workRecordHash": "4d7e0beed251bf2af73e6d66c44be7182ba04b12ef0b5b3ecb97022daae2a9de",
+        "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-77edf552-2ddb-48e9-aee0-5d575b4effe1",
+      "workId"        : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+      "title"         : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+      "summary"       : "일부 확인 · 후속 작업 있음. 검증·검토 기록의 자동 스냅샷이며 작성자 설명은 아직 없습니다.",
+      "kind"          : "snapshot",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-23T00:47:47.173Z",
+      "event"         : "review",
+      "workRecordHash": "22d36cdd06c46223476049fe600fa16cd219f3315c136e78572dcfdc718b255e",
+      "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+      "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+      "semanticHash"  : "a3712a8a6e665d95accf5330638331b7ced53f3b932c911354bc47ab585b8596",
+      "narrative"     : null,
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-48ec7195-5d85-4104-af88-748887634aa6",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-48ec7195-5d85-4104-af88-748887634aa6",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:51:23.089Z"
+          },
+          {
+            "id": "attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:58:55.837Z"
+          },
+          {
+            "id": "attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/work-json.test.ts",
+              "test/test-runner.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-22T23:17:14.882Z"
+          },
+          {
+            "id": "attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+            "command": "node",
+            "args": [
+              ".www/evidence/dashboard-W024/verify-registered.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:23:22.637Z"
+          },
+          {
+            "id": "attempt-48ec7195-5d85-4104-af88-748887634aa6",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:27:50.329Z"
+          },
+          {
+            "id": "attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import {mkdirSync,writeFileSync} from \"node:fs\";\nimport {randomUUID} from \"node:crypto\";\nimport {spawnSync} from \"node:child_process\";\nconst path=\".www/evidence/dashboard-W024/product-off-\"+randomUUID();\nmkdirSync(path,{recursive:true,mode:0o700});\nconst argv=[\"scripts/test.ts\"], now=new Date().toISOString();\nconst run=spawnSync(process.execPath,argv,{encoding:\"utf8\",env:{...process.env,BOXBOX_MODE:\"off\"},maxBuffer:12*1024*1024});\nwriteFileSync(path+\"/stdout.log\",run.stdout??\"\");\nwriteFileSync(path+\"/stderr.log\",run.stderr??\"\");\nwriteFileSync(path+\"/process.json\",JSON.stringify({kind:\"process\",command:process.execPath,argv,boxboxMode:\"off\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\"\\n\");\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\nprocess.exit(run.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:34:04.872Z"
+          },
+          {
+            "id": "attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import {mkdirSync,writeFileSync} from \"node:fs\";\nimport {randomUUID} from \"node:crypto\";\nimport {spawnSync} from \"node:child_process\";\nconst path=\".www/evidence/dashboard-W024/product-off-\"+randomUUID();\nmkdirSync(path,{recursive:true,mode:0o700});\nconst argv=[\"scripts/test.ts\"], now=new Date().toISOString();\nconst run=spawnSync(process.execPath,argv,{encoding:\"utf8\",env:{...process.env,BOXBOX_MODE:\"off\"},maxBuffer:12*1024*1024});\nwriteFileSync(path+\"/stdout.log\",run.stdout??\"\");\nwriteFileSync(path+\"/stderr.log\",run.stderr??\"\");\nwriteFileSync(path+\"/process.json\",JSON.stringify({kind:\"process\",command:process.execPath,argv,boxboxMode:\"off\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\"\\n\");\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\nprocess.exit(run.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:37:23.943Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36/terra.json",
+            "findings": [
+              "`docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md`의 현재 소스 검증 시도 `attempt-8be30523`은 두 테스트 파일만 직접 실행했는데 `PRODUCT` 기준의 통과 근거로 연결되어 있다. `test/test-runner.test.ts`의 전체 runner 검사는 주입된 가짜 실행기를 사용하므로 실제 기본 제품 테스트 전체가 실행됐다는 증거가 아니다. 실제 `scripts/test.ts` 전체 실행의 마지막 통과 `attempt-2278f383`은 소스 식별이 `b2897f...`로 현재 집중 검사의 `15093b...`과 다르며, package.json과 Reports 검증 스크립트 등의 파일 지문도 다르다. 현재 소스에서 실제 기본 runner를 실행한 증거가 필요하다."
+            ]
+          },
+          {
+            "id"         : "review-f54bf8fb-92f9-4e0c-9b2b-46bef2590c95",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f54bf8fb-92f9-4e0c-9b2b-46bef2590c95/terra.json",
+            "findings": [
+              "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md의 ‘전체 48개 제품 테스트 파일’은 실행 범위를 잘못 기록했다. 해당 시도의 stdout.log에는 Bun 테스트 48개 파일과 Node 테스트 12개 파일이 각각 표시되므로, 전체는 60개 파일이다. 48개가 Bun 실행 범위임을 구분해 수정해야 한다."
+            ]
+          },
+          {
+            "id"         : "review-1bbdc55d-8fbe-42eb-a41f-db14d348da42",
+            "verdict"    : "pass",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-1bbdc55d-8fbe-42eb-a41f-db14d348da42/terra.json",
+            "findings": [
+              "검토 범위는 제공된 inputBundle과 별도로 읽은 BoxBox 외부 검사 파일, 등록 검증 스크립트 및 관련 증거다. 제공된 기록의 테스트 결과를 대조했으며, 이번 검토에서 테스트를 실행하지 않았다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json",
+        "workRecordHash": "22d36cdd06c46223476049fe600fa16cd219f3315c136e78572dcfdc718b255e",
+        "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-deaf728c-efbf-4e62-bd50-71ee6b17c105",
+      "workId"        : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+      "title"         : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+      "summary"       : "현재 WWW 프로젝트의 TypeScript 전환과 비교 워크플로를 재검증했다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-23T00:47:47.769Z",
+      "event"         : "finish",
+      "workRecordHash": "22d36cdd06c46223476049fe600fa16cd219f3315c136e78572dcfdc718b255e",
+      "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+      "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+      "semanticHash"  : "0d7846380c3da73465769129208816f1a852b7d85d2c5e3892a81f2eb78ba326",
+      "narrative": {
+        "summary": "현재 WWW 프로젝트의 TypeScript 전환과 비교 워크플로를 재검증했다.",
+        "before" : "현재 후보의 타입·테스트·번들 근거가 과거 소스에 묶여 있었다.",
+        "after"  : "현재 소스에서 정책, TypeScript, 제품 테스트, Electron 번들과 Tauri 비교를 직접 실행했다.",
+        "changes": [
+          "현재 소스 정책을 확인했다.",
+          "타입과 기존 앱 테스트, 도구 진입점을 확인했다.",
+          "Tauri 빌드 및 Rust 비교 테스트를 실행했다."
+        ],
+        "decisions": [
+          "실행 코드와 문서의 현재 입력을 같은 작업 UUID에서 대조했다."
+        ],
+        "limitations": [
+          "검증 환경은 현재 macOS이며 Windows 실기와 배포 서명은 별도다."
+        ],
+        "next": []
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-48ec7195-5d85-4104-af88-748887634aa6",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-48ec7195-5d85-4104-af88-748887634aa6",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:51:23.089Z"
+          },
+          {
+            "id": "attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:58:55.837Z"
+          },
+          {
+            "id": "attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/work-json.test.ts",
+              "test/test-runner.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-22T23:17:14.882Z"
+          },
+          {
+            "id": "attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+            "command": "node",
+            "args": [
+              ".www/evidence/dashboard-W024/verify-registered.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:23:22.637Z"
+          },
+          {
+            "id": "attempt-48ec7195-5d85-4104-af88-748887634aa6",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:27:50.329Z"
+          },
+          {
+            "id": "attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import {mkdirSync,writeFileSync} from \"node:fs\";\nimport {randomUUID} from \"node:crypto\";\nimport {spawnSync} from \"node:child_process\";\nconst path=\".www/evidence/dashboard-W024/product-off-\"+randomUUID();\nmkdirSync(path,{recursive:true,mode:0o700});\nconst argv=[\"scripts/test.ts\"], now=new Date().toISOString();\nconst run=spawnSync(process.execPath,argv,{encoding:\"utf8\",env:{...process.env,BOXBOX_MODE:\"off\"},maxBuffer:12*1024*1024});\nwriteFileSync(path+\"/stdout.log\",run.stdout??\"\");\nwriteFileSync(path+\"/stderr.log\",run.stderr??\"\");\nwriteFileSync(path+\"/process.json\",JSON.stringify({kind:\"process\",command:process.execPath,argv,boxboxMode:\"off\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\"\\n\");\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\nprocess.exit(run.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:34:04.872Z"
+          },
+          {
+            "id": "attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import {mkdirSync,writeFileSync} from \"node:fs\";\nimport {randomUUID} from \"node:crypto\";\nimport {spawnSync} from \"node:child_process\";\nconst path=\".www/evidence/dashboard-W024/product-off-\"+randomUUID();\nmkdirSync(path,{recursive:true,mode:0o700});\nconst argv=[\"scripts/test.ts\"], now=new Date().toISOString();\nconst run=spawnSync(process.execPath,argv,{encoding:\"utf8\",env:{...process.env,BOXBOX_MODE:\"off\"},maxBuffer:12*1024*1024});\nwriteFileSync(path+\"/stdout.log\",run.stdout??\"\");\nwriteFileSync(path+\"/stderr.log\",run.stderr??\"\");\nwriteFileSync(path+\"/process.json\",JSON.stringify({kind:\"process\",command:process.execPath,argv,boxboxMode:\"off\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\"\\n\");\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\nprocess.exit(run.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:37:23.943Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36/terra.json",
+            "findings": [
+              "`docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md`의 현재 소스 검증 시도 `attempt-8be30523`은 두 테스트 파일만 직접 실행했는데 `PRODUCT` 기준의 통과 근거로 연결되어 있다. `test/test-runner.test.ts`의 전체 runner 검사는 주입된 가짜 실행기를 사용하므로 실제 기본 제품 테스트 전체가 실행됐다는 증거가 아니다. 실제 `scripts/test.ts` 전체 실행의 마지막 통과 `attempt-2278f383`은 소스 식별이 `b2897f...`로 현재 집중 검사의 `15093b...`과 다르며, package.json과 Reports 검증 스크립트 등의 파일 지문도 다르다. 현재 소스에서 실제 기본 runner를 실행한 증거가 필요하다."
+            ]
+          },
+          {
+            "id"         : "review-f54bf8fb-92f9-4e0c-9b2b-46bef2590c95",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f54bf8fb-92f9-4e0c-9b2b-46bef2590c95/terra.json",
+            "findings": [
+              "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md의 ‘전체 48개 제품 테스트 파일’은 실행 범위를 잘못 기록했다. 해당 시도의 stdout.log에는 Bun 테스트 48개 파일과 Node 테스트 12개 파일이 각각 표시되므로, 전체는 60개 파일이다. 48개가 Bun 실행 범위임을 구분해 수정해야 한다."
+            ]
+          },
+          {
+            "id"         : "review-1bbdc55d-8fbe-42eb-a41f-db14d348da42",
+            "verdict"    : "pass",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-1bbdc55d-8fbe-42eb-a41f-db14d348da42/terra.json",
+            "findings": [
+              "검토 범위는 제공된 inputBundle과 별도로 읽은 BoxBox 외부 검사 파일, 등록 검증 스크립트 및 관련 증거다. 제공된 기록의 테스트 결과를 대조했으며, 이번 검토에서 테스트를 실행하지 않았다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json",
+        "workRecordHash": "22d36cdd06c46223476049fe600fa16cd219f3315c136e78572dcfdc718b255e",
+        "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8"
+      }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-d5d938d9-fc0e-4a1a-8005-6ef932ee660f",
+      "workId"        : "work-cb37dec0-d30f-4c2e-b69f-ddb7734e5f54",
+      "title"         : "BoxBox 외부 검사 분리와 Reports 공식 검증 복구",
+      "summary"       : "현재 WWW 프로젝트의 TypeScript 전환과 비교 워크플로를 재검증했다.",
+      "kind"          : "authored",
+      "outcome"       : "completed",
+      "createdAt"     : "2026-11-23T00:47:51.776Z",
+      "event"         : "complete",
+      "workRecordHash": "6b9aa188b5502ec37600bb986302654370e894d657107363ba016859f7dcc43d",
+      "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+      "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8",
+      "semanticHash"  : "d34621dbe009b4a160c9bca62fbd964d2708455ce63e3b243533345524d5ca45",
+      "narrative": {
+        "summary": "현재 WWW 프로젝트의 TypeScript 전환과 비교 워크플로를 재검증했다.",
+        "before" : "현재 후보의 타입·테스트·번들 근거가 과거 소스에 묶여 있었다.",
+        "after"  : "현재 소스에서 정책, TypeScript, 제품 테스트, Electron 번들과 Tauri 비교를 직접 실행했다.",
+        "changes": [
+          "현재 소스 정책을 확인했다.",
+          "타입과 기존 앱 테스트, 도구 진입점을 확인했다.",
+          "Tauri 빌드 및 Rust 비교 테스트를 실행했다."
+        ],
+        "decisions": [
+          "실행 코드와 문서의 현재 입력을 같은 작업 UUID에서 대조했다."
+        ],
+        "limitations": [
+          "검증 환경은 현재 macOS이며 Windows 실기와 배포 서명은 별도다."
+        ],
+        "next": []
+      },
+      "work": {
+        "status": "done",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "PRODUCT",
+            "description": "BoxBox off에서 제품 검사와 Reports 공식 검증을 기존 경로로 실행한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-48ec7195-5d85-4104-af88-748887634aa6",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "BOXBOX",
+            "description": "외부 BoxBox4시나리오를 보존하고 기본 제품검사와 분리하며 명시실행도 off시 disabled 비성공 처리한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-48ec7195-5d85-4104-af88-748887634aa6",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+                "summary": "종료 코드 1, 기준 failed"
+              },
+              {
+                "path": "verification.md#attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "REGISTER",
+            "description": "기존 Reports3 UUID에 실제 기능·GUI 검증을 정식 기록하고 현재 source 적용성을 확인한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-7e4dcf7f-c945-4322-9ebe-d1ce674f151a",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:51:23.089Z"
+          },
+          {
+            "id": "attempt-2278f383-9f70-463d-a64b-a3e4de0f063b",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-17T01:58:55.837Z"
+          },
+          {
+            "id": "attempt-8be30523-6e9d-4f6d-b7bf-c2b4dbbe07f7",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/work-json.test.ts",
+              "test/test-runner.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-22T23:17:14.882Z"
+          },
+          {
+            "id": "attempt-a555c6a0-9197-4285-9fbc-0f97294cdfb3",
+            "command": "node",
+            "args": [
+              ".www/evidence/dashboard-W024/verify-registered.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:23:22.637Z"
+          },
+          {
+            "id": "attempt-48ec7195-5d85-4104-af88-748887634aa6",
+            "command": "node",
+            "args": [
+              "scripts/test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:27:50.329Z"
+          },
+          {
+            "id": "attempt-d182a187-982f-4f85-aab2-6c1c7479c9b7",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import {mkdirSync,writeFileSync} from \"node:fs\";\nimport {randomUUID} from \"node:crypto\";\nimport {spawnSync} from \"node:child_process\";\nconst path=\".www/evidence/dashboard-W024/product-off-\"+randomUUID();\nmkdirSync(path,{recursive:true,mode:0o700});\nconst argv=[\"scripts/test.ts\"], now=new Date().toISOString();\nconst run=spawnSync(process.execPath,argv,{encoding:\"utf8\",env:{...process.env,BOXBOX_MODE:\"off\"},maxBuffer:12*1024*1024});\nwriteFileSync(path+\"/stdout.log\",run.stdout??\"\");\nwriteFileSync(path+\"/stderr.log\",run.stderr??\"\");\nwriteFileSync(path+\"/process.json\",JSON.stringify({kind:\"process\",command:process.execPath,argv,boxboxMode:\"off\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\"\\n\");\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\nprocess.exit(run.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:34:04.872Z"
+          },
+          {
+            "id": "attempt-d90fbc75-3d41-4ca1-91fe-f28df3b82c02",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "--eval",
+              "import {mkdirSync,writeFileSync} from \"node:fs\";\nimport {randomUUID} from \"node:crypto\";\nimport {spawnSync} from \"node:child_process\";\nconst path=\".www/evidence/dashboard-W024/product-off-\"+randomUUID();\nmkdirSync(path,{recursive:true,mode:0o700});\nconst argv=[\"scripts/test.ts\"], now=new Date().toISOString();\nconst run=spawnSync(process.execPath,argv,{encoding:\"utf8\",env:{...process.env,BOXBOX_MODE:\"off\"},maxBuffer:12*1024*1024});\nwriteFileSync(path+\"/stdout.log\",run.stdout??\"\");\nwriteFileSync(path+\"/stderr.log\",run.stderr??\"\");\nwriteFileSync(path+\"/process.json\",JSON.stringify({kind:\"process\",command:process.execPath,argv,boxboxMode:\"off\",startedAt:now,exit:run.status,signal:run.signal,error:run.error?.message??null},null,2)+\"\\n\");\nconsole.log(JSON.stringify({path,exit:run.status,signal:run.signal}));\nprocess.exit(run.status??1);"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T00:37:23.943Z"
+          }
+        ],
+        "reviews": [
+          {
+            "id"         : "review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f8c6f6cc-9c85-4d47-a000-4699c3d11d36/terra.json",
+            "findings": [
+              "`docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md`의 현재 소스 검증 시도 `attempt-8be30523`은 두 테스트 파일만 직접 실행했는데 `PRODUCT` 기준의 통과 근거로 연결되어 있다. `test/test-runner.test.ts`의 전체 runner 검사는 주입된 가짜 실행기를 사용하므로 실제 기본 제품 테스트 전체가 실행됐다는 증거가 아니다. 실제 `scripts/test.ts` 전체 실행의 마지막 통과 `attempt-2278f383`은 소스 식별이 `b2897f...`로 현재 집중 검사의 `15093b...`과 다르며, package.json과 Reports 검증 스크립트 등의 파일 지문도 다르다. 현재 소스에서 실제 기본 runner를 실행한 증거가 필요하다."
+            ]
+          },
+          {
+            "id"         : "review-f54bf8fb-92f9-4e0c-9b2b-46bef2590c95",
+            "verdict"    : "fail",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-f54bf8fb-92f9-4e0c-9b2b-46bef2590c95/terra.json",
+            "findings": [
+              "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/verification.md의 ‘전체 48개 제품 테스트 파일’은 실행 범위를 잘못 기록했다. 해당 시도의 stdout.log에는 Bun 테스트 48개 파일과 Node 테스트 12개 파일이 각각 표시되므로, 전체는 60개 파일이다. 48개가 Bun 실행 범위임을 구분해 수정해야 한다."
+            ]
+          },
+          {
+            "id"         : "review-1bbdc55d-8fbe-42eb-a41f-db14d348da42",
+            "verdict"    : "pass",
+            "model"      : "gpt-6.1-terra",
+            "executor"   : "process",
+            "receiptPath": ".www/evidence/reviews/review-1bbdc55d-8fbe-42eb-a41f-db14d348da42/terra.json",
+            "findings": [
+              "검토 범위는 제공된 inputBundle과 별도로 읽은 BoxBox 외부 검사 파일, 등록 검증 스크립트 및 관련 증거다. 제공된 기록의 테스트 결과를 대조했으며, 이번 검토에서 테스트를 실행하지 않았다."
+            ]
+          }
+        ]
+      },
+      "source": {
+        "recordPath"    : "docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json",
+        "workRecordHash": "6b9aa188b5502ec37600bb986302654370e894d657107363ba016859f7dcc43d",
+        "sourceDigest"  : "15093b91e13ccb444cd5cacabd5b237dfdc2a4167d24a600dd2aef484e4da687",
+        "criteriaDigest": "10b767421023421bb939ef3d017e7ab4696523c833033d84a90e8700b8c286c8"
+      }
     }
   ]
 }

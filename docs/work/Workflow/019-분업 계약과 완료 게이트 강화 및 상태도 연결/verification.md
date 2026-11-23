@@ -377,3 +377,461 @@ Root의 실제 Electron architecture 실행도 `final/workflow019-gui-v5.process
 ## v6 공통 실제 실행과 공식 수용 한계
 
 `final/node-complete-v6.log` 실제 Node246 PASS/0fail/0skip 및 `final/npm-check-v6.log` 실제 Bun1407 PASS/1fail에서 workflow 완료·분업·상태도 테스트 실행을 확인했다. 실패 1건은 별도 BoxBox pipeline이며 전체 명령은 FAIL이다. 앞선 v5 전용 Core와 GUI는 역사로 보존한다. 현행 정식 exact core는 과거 로그 보존과 명령권한 제약으로 미실행이며, 공통 실행·산출물 결속이나 이후 검토로 기준 전체 수행을 대체하지 않는다. 공식 완료는 미충족이다.
+
+<a id="attempt-2c605ef4-54ee-4825-93da-8dd01d4b0427"></a>
+## 검증 시도 — 2026-11-22T16:30:28.563Z
+
+- 시도 ID: `attempt-2c605ef4-54ee-4825-93da-8dd01d4b0427`
+- 실행 시각: 2026-11-22T16:29:37.000Z ~ 2026-11-22T16:30:28.563Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const steps=[['node',['--test','test/workflow-work.test.ts','test/workflow-development.test.ts']],['bun',['test','test/workflow-completion-faults.test.ts','test/workflow-properties.test.ts','test/workflow-model-allocation.test.ts','test/workflow-statechart.test.ts','test/workflow-statechart-view.test.ts','test/architecture.test.ts','--timeout','30000']]];for(let i=0;i<steps.length;i++){const [cmd,args]=steps[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:8000000});writeFileSync('.www/evidence/remote-20261116/official019-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-ACCEPT`, `FLOW-COMPLETE`, `FLOW-FAULTS`, `FLOW-PLAN`, `FLOW-PROPERTY`, `STATE-CHECK`, `STATE-LINK`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `ec3d046eba1b7b4b7278625d8454b838e64647488e68211c495201cd97d72968`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 0바이트, stderr 732바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-9cfbd485-0d44-4f6a-93b1-c1eca0345925"></a>
+## 검증 시도 — 2026-11-22T16:30:43.197Z
+
+- 시도 ID: `attempt-9cfbd485-0d44-4f6a-93b1-c1eca0345925`
+- 실행 시각: 2026-11-22T16:30:29.727Z ~ 2026-11-22T16:30:43.197Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-architecture.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `MAP-EVIDENCE`, `STATE-VIEW`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `ec3d046eba1b7b4b7278625d8454b838e64647488e68211c495201cd97d72968`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 5438바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-a69d290b-395a-4f8e-b747-1efb126f17d1"></a>
+## 검증 시도 — 2026-11-22T16:35:06.608Z
+
+- 시도 ID: `attempt-a69d290b-395a-4f8e-b747-1efb126f17d1`
+- 실행 시각: 2026-11-22T16:33:49.052Z ~ 2026-11-22T16:35:06.608Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const steps=[['node',['--test','test/workflow-work.test.ts','test/workflow-development.test.ts']],['bun',['test','test/workflow-completion-faults.test.ts','test/workflow-properties.test.ts','test/workflow-model-allocation.test.ts','test/workflow-statechart.test.ts','test/workflow-statechart-view.test.ts','test/architecture.test.ts','--timeout','30000']]];for(let i=0;i<steps.length;i++){const [cmd,args]=steps[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:8000000});writeFileSync('.www/evidence/remote-20261116/official019-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-ACCEPT`, `FLOW-COMPLETE`, `FLOW-FAULTS`, `FLOW-PLAN`, `FLOW-PROPERTY`, `STATE-CHECK`, `STATE-LINK`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `ec3d046eba1b7b4b7278625d8454b838e64647488e68211c495201cd97d72968`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 변경 감지
+- 출력: stdout 25866바이트, stderr 19753바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-a134ac9f-ef1b-4356-b135-acfd1276473c"></a>
+## 검증 시도 — 2026-11-22T16:39:35.105Z
+
+- 시도 ID: `attempt-a134ac9f-ef1b-4356-b135-acfd1276473c`
+- 실행 시각: 2026-11-22T16:38:13.602Z ~ 2026-11-22T16:39:35.105Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const steps=[['node',['--test','test/workflow-work.test.ts','test/workflow-development.test.ts']],['bun',['test','test/workflow-completion-faults.test.ts','test/workflow-properties.test.ts','test/workflow-model-allocation.test.ts','test/workflow-statechart.test.ts','test/workflow-statechart-view.test.ts','test/architecture.test.ts','--timeout','30000']]];for(let i=0;i<steps.length;i++){const [cmd,args]=steps[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:8000000});writeFileSync('.www/evidence/remote-20261116/official019-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-ACCEPT`, `FLOW-COMPLETE`, `FLOW-FAULTS`, `FLOW-PLAN`, `FLOW-PROPERTY`, `STATE-CHECK`, `STATE-LINK`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `900f1cf4526b9e364eb4b90afc16784de5031d52deef82fc6acbff2da8d32e82`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 25855바이트, stderr 9324바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-a7a47bbb-4615-4b9b-8bbb-cb210dec27e7"></a>
+## 검증 시도 — 2026-11-22T16:39:40.369Z
+
+- 시도 ID: `attempt-a7a47bbb-4615-4b9b-8bbb-cb210dec27e7`
+- 실행 시각: 2026-11-22T16:39:37.378Z ~ 2026-11-22T16:39:40.369Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-architecture.ts"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `MAP-EVIDENCE`, `STATE-VIEW`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `900f1cf4526b9e364eb4b90afc16784de5031d52deef82fc6acbff2da8d32e82`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 0바이트, stderr 156바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-8a8f3949-7e0c-4893-acd2-a7f44ebbb868"></a>
+## 검증 시도 — 2026-11-22T16:55:55.666Z
+
+- 시도 ID: `attempt-8a8f3949-7e0c-4893-acd2-a7f44ebbb868`
+- 실행 시각: 2026-11-22T16:54:41.737Z ~ 2026-11-22T16:55:55.666Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const steps=[['node',['--test','test/workflow-work.test.ts','test/workflow-development.test.ts']],['bun',['test','test/workflow-completion-faults.test.ts','test/workflow-properties.test.ts','test/workflow-model-allocation.test.ts','test/workflow-statechart.test.ts','test/workflow-statechart-view.test.ts','test/architecture.test.ts','--timeout','30000']]];for(let i=0;i<steps.length;i++){const [cmd,args]=steps[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:8000000});writeFileSync('.www/evidence/remote-20261116/official019-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-ACCEPT`, `FLOW-COMPLETE`, `FLOW-FAULTS`, `FLOW-PLAN`, `FLOW-PROPERTY`, `STATE-CHECK`, `STATE-LINK`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `c8f7850c82910bb7612b007e705ca92b24604d03f4d33d0f85948430aebfbfb4`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 26087바이트, stderr 5455바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-39d7c806-13ed-41f8-8fda-9d3316df237c"></a>
+## 검증 시도 — 2026-11-22T16:56:10.665Z
+
+- 시도 ID: `attempt-39d7c806-13ed-41f8-8fda-9d3316df237c`
+- 실행 시각: 2026-11-22T16:55:56.848Z ~ 2026-11-22T16:56:10.665Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-architecture.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `MAP-EVIDENCE`, `STATE-VIEW`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `c8f7850c82910bb7612b007e705ca92b24604d03f4d33d0f85948430aebfbfb4`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 5438바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-a9d884aa-845a-4ee0-bd06-ce00b2b16e4b"></a>
+## 검증 시도 — 2026-11-22T17:01:54.564Z
+
+- 시도 ID: `attempt-a9d884aa-845a-4ee0-bd06-ce00b2b16e4b`
+- 실행 시각: 2026-11-22T16:58:58.102Z ~ 2026-11-22T17:01:54.564Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","check"]`
+- 실행 결과: 실패; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-REGRESSION`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `c8f7850c82910bb7612b007e705ca92b24604d03f4d33d0f85948430aebfbfb4`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 변경 감지
+- 출력: stdout 71701바이트, stderr 158666바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-3866e51d-e779-4711-865b-686537e0ccc2"></a>
+## 검증 시도 — 2026-11-22T17:26:23.459Z
+
+- 시도 ID: `attempt-3866e51d-e779-4711-865b-686537e0ccc2`
+- 실행 시각: 2026-11-22T17:25:05.797Z ~ 2026-11-22T17:26:23.459Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const steps=[['node',['--test','test/workflow-work.test.ts','test/workflow-development.test.ts']],['bun',['test','test/workflow-completion-faults.test.ts','test/workflow-properties.test.ts','test/workflow-model-allocation.test.ts','test/workflow-statechart.test.ts','test/workflow-statechart-view.test.ts','test/architecture.test.ts','--timeout','30000']]];for(let i=0;i<steps.length;i++){const [cmd,args]=steps[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:8000000});writeFileSync('.www/evidence/remote-20261116/official019-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-ACCEPT`, `FLOW-COMPLETE`, `FLOW-FAULTS`, `FLOW-PLAN`, `FLOW-PROPERTY`, `STATE-CHECK`, `STATE-LINK`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `162dd4a13966031ae7651fe78571b5edd683a3f639b1cd4849edc4eb8abc5d88`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 26331바이트, stderr 5456바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-1996a59b-41e1-4572-8780-5bf43fb57035"></a>
+## 검증 시도 — 2026-11-22T17:26:38.563Z
+
+- 시도 ID: `attempt-1996a59b-41e1-4572-8780-5bf43fb57035`
+- 실행 시각: 2026-11-22T17:26:24.685Z ~ 2026-11-22T17:26:38.563Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-architecture.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `MAP-EVIDENCE`, `STATE-VIEW`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `162dd4a13966031ae7651fe78571b5edd683a3f639b1cd4849edc4eb8abc5d88`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 5438바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-bf2a9fb4-708e-4c39-be1b-c0834c43c86d"></a>
+## 검증 시도 — 2026-11-22T17:26:43.624Z
+
+- 시도 ID: `attempt-bf2a9fb4-708e-4c39-be1b-c0834c43c86d`
+- 실행 시각: 2026-11-22T17:26:39.768Z ~ 2026-11-22T17:26:43.624Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","check"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-REGRESSION`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `162dd4a13966031ae7651fe78571b5edd683a3f639b1cd4849edc4eb8abc5d88`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 2850바이트, stderr 1003바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-a2ceae71-02f0-46aa-a572-e45d4621f93a"></a>
+## 검증 시도 — 2026-11-22T18:26:28.645Z
+
+- 시도 ID: `attempt-a2ceae71-02f0-46aa-a572-e45d4621f93a`
+- 실행 시각: 2026-11-22T18:25:10.171Z ~ 2026-11-22T18:26:28.645Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const steps=[['node',['--test','test/workflow-work.test.ts','test/workflow-development.test.ts']],['bun',['test','test/workflow-completion-faults.test.ts','test/workflow-properties.test.ts','test/workflow-model-allocation.test.ts','test/workflow-statechart.test.ts','test/workflow-statechart-view.test.ts','test/architecture.test.ts','--timeout','30000']]];for(let i=0;i<steps.length;i++){const [cmd,args]=steps[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:8000000});writeFileSync('.www/evidence/remote-20261116/official019-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-ACCEPT`, `FLOW-COMPLETE`, `FLOW-FAULTS`, `FLOW-PLAN`, `FLOW-PROPERTY`, `STATE-CHECK`, `STATE-LINK`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `c8327ca367fa2349335afd343efe8335f692095df8800b0a09aec05041ebe16d`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 26329바이트, stderr 8085바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-57aba14d-232a-4ce9-bcc8-78b3f137cf6d"></a>
+## 검증 시도 — 2026-11-22T18:26:32.951Z
+
+- 시도 ID: `attempt-57aba14d-232a-4ce9-bcc8-78b3f137cf6d`
+- 실행 시각: 2026-11-22T18:26:30.948Z ~ 2026-11-22T18:26:32.951Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-architecture.ts"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `MAP-EVIDENCE`, `STATE-VIEW`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `c8327ca367fa2349335afd343efe8335f692095df8800b0a09aec05041ebe16d`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 0바이트, stderr 156바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-2a74857f-c244-4508-9cf0-8b3c7f4fa676"></a>
+## 검증 시도 — 2026-11-22T18:26:37.970Z
+
+- 시도 ID: `attempt-2a74857f-c244-4508-9cf0-8b3c7f4fa676`
+- 실행 시각: 2026-11-22T18:26:34.163Z ~ 2026-11-22T18:26:37.970Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","check"]`
+- 실행 결과: 실패; 종료 코드 1, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-REGRESSION`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `c8327ca367fa2349335afd343efe8335f692095df8800b0a09aec05041ebe16d`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 2850바이트, stderr 1003바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-e8b99cf1-e2ff-4ad6-ad67-b6d7889e4914"></a>
+## 검증 시도 — 2026-11-22T18:39:30.723Z
+
+- 시도 ID: `attempt-e8b99cf1-e2ff-4ad6-ad67-b6d7889e4914`
+- 실행 시각: 2026-11-22T18:38:11.465Z ~ 2026-11-22T18:39:30.723Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const steps=[['node',['--test','test/workflow-work.test.ts','test/workflow-development.test.ts']],['bun',['test','test/workflow-completion-faults.test.ts','test/workflow-properties.test.ts','test/workflow-model-allocation.test.ts','test/workflow-statechart.test.ts','test/workflow-statechart-view.test.ts','test/architecture.test.ts','--timeout','30000']]];for(let i=0;i<steps.length;i++){const [cmd,args]=steps[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:8000000});writeFileSync('.www/evidence/remote-20261116/official019-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-ACCEPT`, `FLOW-COMPLETE`, `FLOW-FAULTS`, `FLOW-PLAN`, `FLOW-PROPERTY`, `STATE-CHECK`, `STATE-LINK`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `08b66d9a1b7c5a8abc6cf1ae61a458df95a3afc3fd8a40f6609fc382a614392f`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 26332바이트, stderr 5458바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-5e180eb6-ab59-44b0-9211-7541b7cf8fcd"></a>
+## 검증 시도 — 2026-11-22T18:39:46.742Z
+
+- 시도 ID: `attempt-5e180eb6-ab59-44b0-9211-7541b7cf8fcd`
+- 실행 시각: 2026-11-22T18:39:32.057Z ~ 2026-11-22T18:39:46.742Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-architecture.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `MAP-EVIDENCE`, `STATE-VIEW`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `08b66d9a1b7c5a8abc6cf1ae61a458df95a3afc3fd8a40f6609fc382a614392f`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 5438바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-6dbe5321-7419-414a-82d6-7b54bdefabc5"></a>
+## 검증 시도 — 2026-11-22T18:42:50.121Z
+
+- 시도 ID: `attempt-6dbe5321-7419-414a-82d6-7b54bdefabc5`
+- 실행 시각: 2026-11-22T18:39:48.584Z ~ 2026-11-22T18:42:50.121Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","check"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-REGRESSION`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `08b66d9a1b7c5a8abc6cf1ae61a458df95a3afc3fd8a40f6609fc382a614392f`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 71898바이트, stderr 159385바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-b7ad3d3c-664b-4dac-b6a8-9cad513e2830"></a>
+## 검증 시도 — 2026-11-22T19:38:13.210Z
+
+- 시도 ID: `attempt-b7ad3d3c-664b-4dac-b6a8-9cad513e2830`
+- 실행 시각: 2026-11-22T19:36:54.842Z ~ 2026-11-22T19:38:13.210Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const steps=[['node',['--test','test/workflow-work.test.ts','test/workflow-development.test.ts']],['bun',['test','test/workflow-completion-faults.test.ts','test/workflow-properties.test.ts','test/workflow-model-allocation.test.ts','test/workflow-statechart.test.ts','test/workflow-statechart-view.test.ts','test/architecture.test.ts','--timeout','30000']]];for(let i=0;i<steps.length;i++){const [cmd,args]=steps[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:8000000});writeFileSync('.www/evidence/remote-20261116/official019-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-ACCEPT`, `FLOW-COMPLETE`, `FLOW-FAULTS`, `FLOW-PLAN`, `FLOW-PROPERTY`, `STATE-CHECK`, `STATE-LINK`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `981c5e67e84a7c3e1e384bbe907d51f7663359d0920316d66922aabd5b16f1f9`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 26318바이트, stderr 5456바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-00cee06e-a789-4387-b7dd-fa61b18bb540"></a>
+## 검증 시도 — 2026-11-22T19:38:29.030Z
+
+- 시도 ID: `attempt-00cee06e-a789-4387-b7dd-fa61b18bb540`
+- 실행 시각: 2026-11-22T19:38:14.534Z ~ 2026-11-22T19:38:29.030Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-architecture.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `MAP-EVIDENCE`, `STATE-VIEW`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `981c5e67e84a7c3e1e384bbe907d51f7663359d0920316d66922aabd5b16f1f9`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 5438바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-e6084bb1-1500-44c8-9415-56dea6bb6318"></a>
+## 검증 시도 — 2026-11-22T19:41:26.966Z
+
+- 시도 ID: `attempt-e6084bb1-1500-44c8-9415-56dea6bb6318`
+- 실행 시각: 2026-11-22T19:38:30.351Z ~ 2026-11-22T19:41:26.966Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","check"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-REGRESSION`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `981c5e67e84a7c3e1e384bbe907d51f7663359d0920316d66922aabd5b16f1f9`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 71937바이트, stderr 159630바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-f65f03fb-a2ac-4236-95a2-df23588bb5b4"></a>
+## 검증 시도 — 2026-11-23T00:03:23.775Z
+
+- 시도 ID: `attempt-f65f03fb-a2ac-4236-95a2-df23588bb5b4`
+- 실행 시각: 2026-11-23T00:03:09.944Z ~ 2026-11-23T00:03:23.775Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-architecture.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `MAP-EVIDENCE`, `STATE-VIEW`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `dd814dd1728d89f708c3fedc7db3261b4179c3c1a77c7ae025ef90a8fcf7a07a`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 5438바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-890ea269-e276-41dd-b392-e01d92e7609e"></a>
+## 검증 시도 — 2026-11-23T00:11:10.612Z
+
+- 시도 ID: `attempt-890ea269-e276-41dd-b392-e01d92e7609e`
+- 실행 시각: 2026-11-23T00:09:53.522Z ~ 2026-11-23T00:11:10.612Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const steps=[['node',['--test','test/workflow-work.test.ts','test/workflow-development.test.ts']],['bun',['test','test/workflow-completion-faults.test.ts','test/workflow-properties.test.ts','test/workflow-model-allocation.test.ts','test/workflow-statechart.test.ts','test/workflow-statechart-view.test.ts','test/architecture.test.ts','--timeout','30000']]];for(let i=0;i<steps.length;i++){const [cmd,args]=steps[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:8000000});writeFileSync('.www/evidence/workflow-019-current-20261123/core-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-ACCEPT`, `FLOW-COMPLETE`, `FLOW-FAULTS`, `FLOW-PLAN`, `FLOW-PROPERTY`, `STATE-CHECK`, `STATE-LINK`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `dd814dd1728d89f708c3fedc7db3261b4179c3c1a77c7ae025ef90a8fcf7a07a`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 27441바이트, stderr 5456바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-b041bb81-e4ea-48c8-88da-5b22d3165213"></a>
+## 검증 시도 — 2026-11-23T00:13:55.811Z
+
+- 시도 ID: `attempt-b041bb81-e4ea-48c8-88da-5b22d3165213`
+- 실행 시각: 2026-11-23T00:11:11.888Z ~ 2026-11-23T00:13:55.811Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","check"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-REGRESSION`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `dd814dd1728d89f708c3fedc7db3261b4179c3c1a77c7ae025ef90a8fcf7a07a`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 73341바이트, stderr 159745바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+## 현재 분업·완료 게이트
+
+- 코어 흐름과 결함 주입은 attempt-890ea269, 실제 지도·상태도 시나리오는 attempt-f65f03fb, 전체 저장소 검사는 attempt-b041bb81이다. 각 기준의 현재성과 원문을 공식 작업에서 확인했다.
+- 코어 로그는 이전 고정 원문을 덮어쓰지 않는 경로로 다시 실행했다. 전체 npm 검사로 집중 테스트 밖의 타입·빌드·회귀도 확인했다.
+
+<a id="attempt-3ed495c7-d83a-4878-854e-843333265c1a"></a>
+## 검증 시도 — 2026-11-23T02:58:42.103Z
+
+- 시도 ID: `attempt-3ed495c7-d83a-4878-854e-843333265c1a`
+- 실행 시각: 2026-11-23T02:55:59.335Z ~ 2026-11-23T02:58:42.103Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/lib/node_modules/npm/bin/npm-cli.js","run","check"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-REGRESSION`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `c168f5c54a973f80ce06cc50c8845dd7549f33c3c65ef3fe7aa2c588cba5e6c8`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 73603바이트, stderr 163512바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-7e243d2a-537f-4ef4-9899-160cc9bca12b"></a>
+## 검증 시도 — 2026-11-23T02:59:58.522Z
+
+- 시도 ID: `attempt-7e243d2a-537f-4ef4-9899-160cc9bca12b`
+- 실행 시각: 2026-11-23T02:58:43.367Z ~ 2026-11-23T02:59:58.522Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import {spawnSync} from 'node:child_process';import {writeFileSync} from 'node:fs';const steps=[['node',['--test','test/workflow-work.test.ts','test/workflow-development.test.ts']],['bun',['test','test/workflow-completion-faults.test.ts','test/workflow-properties.test.ts','test/workflow-model-allocation.test.ts','test/workflow-statechart.test.ts','test/workflow-statechart-view.test.ts','test/architecture.test.ts','--timeout','30000']]];for(let i=0;i<steps.length;i++){const [cmd,args]=steps[i];const r=spawnSync(cmd,args,{encoding:'utf8',maxBuffer:8000000});writeFileSync('.www/evidence/workflow-019-current-20261123/core-step-'+i+'.log',(r.stdout??'')+(r.stderr??''));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');if(r.status!==0)process.exit(r.status??1);}"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `FLOW-ACCEPT`, `FLOW-COMPLETE`, `FLOW-FAULTS`, `FLOW-PLAN`, `FLOW-PROPERTY`, `STATE-CHECK`, `STATE-LINK`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `c168f5c54a973f80ce06cc50c8845dd7549f33c3c65ef3fe7aa2c588cba5e6c8`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 27719바이트, stderr 6037바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-82f35313-0864-44ae-94bb-648a38db23ce"></a>
+## 검증 시도 — 2026-11-23T03:00:13.932Z
+
+- 시도 ID: `attempt-82f35313-0864-44ae-94bb-648a38db23ce`
+- 실행 시각: 2026-11-23T02:59:59.809Z ~ 2026-11-23T03:00:13.932Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-architecture.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `MAP-EVIDENCE`, `STATE-VIEW`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/architecture/statecharts`, `docs/architecture/structure.json`, `docs/skills`, `docs/skills/WORKFLOW.md`, `docs/specs/architecture.md`, `package-lock.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/verify-architecture.ts`, `scripts/workflow`, `scripts/workflow.ts`, `skill-library`, `source-policy.json`, `spikes/tauri/build.ts`, `spikes/tauri/package-lock.json`, `spikes/tauri/package.json`, `spikes/tauri/scripts`, `spikes/tauri/src`, `spikes/tauri/src-tauri/Cargo.lock`, `spikes/tauri/src-tauri/Cargo.toml`, `spikes/tauri/src-tauri/src`, `spikes/tauri/src-tauri/tauri.conf.json`, `src/architecture.generated.json`, `src/ecosystem-view.tsx`, `src/ecosystem.css`, `src/workflow-statechart-view.tsx`, `src/workflow-statechart.ts`, `test/architecture.test.ts`, `test/workflow-completion-faults.test.ts`, `test/workflow-development.test.ts`, `test/workflow-model-allocation.test.ts`, `test/workflow-properties.test.ts`, `test/workflow-statechart-view.test.ts`, `test/workflow-statechart.test.ts`, `test/workflow-work.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `c168f5c54a973f80ce06cc50c8845dd7549f33c3c65ef3fe7aa2c588cba5e6c8`
+- 기준 정의 식별: `3e1a74529536b0447ddcb526d50a038540f9b7c1b51fe6d259ecd718d293ae9d`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 5438바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+- 2026-11-23 현재 로컬의 분업·완료 코드와 결속된 세 실행을 확인했다. 현 소스 지문은 `c168f5c54a973f80ce06cc50c8845dd7549f33c3c65ef3fe7aa2c588cba5e6c8`이다. 전체 `npm run check`는 `attempt-3ed495c7-d83a-4878-854e-843333265c1a`, 완료·분업·상태 흐름의 7개 기준은 `attempt-7e243d2a-537f-4ef4-9899-160cc9bca12b`, 실제 Electron의 배치도 증거와 상태도는 `attempt-82f35313-0864-44ae-94bb-648a38db23ce`에 있다.
+- PR #19 완료 게이트 수정은 로컬 기존 변경 위에 얹었다. 기존 근거 요약 문구를 보존하고 최신 결과 판정과 실제 명령 실패 구별을 적용했다. 적용 파일과 검증 대상은 `.www/evidence/dashboard-rollforward-20261123/applied.blob`, main 원본과 병합 이력은 `.www/evidence/workflow019-closeout/main-proof.blob`에서 확인할 수 있다.

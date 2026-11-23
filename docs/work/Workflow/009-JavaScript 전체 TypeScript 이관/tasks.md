@@ -1,3 +1,14 @@
+# 현재 인계 — 2026-11-23
+
+같은 UUID는 `work-62c5ae92-bd4f-4b0c-8ad3-f38c4424308e`이다.
+
+현재 로컬 입력에서 소스 정책 `attempt-02b23981`, strict 타입 `attempt-f2e88e50`, Electron 번들 `attempt-50812564`가 통과했다. 공식 `npm run test:comparison` (`attempt-2740c28b-da9f-488f-9616-62e281c1d7ad`)에서 전체 `npm test`, 비교 스파이크의 UI 번들, Cargo 테스트도 통과했다. AC-2와 AC-3에 이 비교 실행을 연결했다. 현재 독립 검토와 공식 완료 판정으로 이어간다.
+
+커밋·push·전역 설정·인증·BoxBox mode/승인 변경은 금지다.
+
+<details>
+<summary>이전 계획 이력 — 현재 지시가 아님</summary>
+
 # 현재 원격 인계 — 2026-11-16
 
 같은 UUID: work-62c5ae92-bd4f-4b0c-8ad3-f38c4424308e.
@@ -6,8 +17,6 @@
 
 커밋·push·전역 설정·인증·BoxBox mode/승인 변경은 금지다.
 
-<details>
-<summary>이전 계획 이력 — 현재 지시가 아님</summary>
 
 
 
