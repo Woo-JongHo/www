@@ -31,7 +31,7 @@
 
 ## 커밋 전 확인
 
-- [ ] 코드에 비밀이 없습니다(`git diff --cached -i -G'password|secret|api_key|token' --name-only` — 단계적 diff가 일치하는 파일 이름만 나열하고 값 자체는 나열하지 않습니다. 모든 출력은 커밋하기 전에 해당 파일을 검토한다는 의미입니다)
+- [ ] 코드에 비밀이 없습니다(`git diff --cached -i -G'password|secret|api_key|token' --name-only` — 스테이징된 변경에서 패턴과 일치하는 파일 이름만 나열하고 값 자체는 출력하지 않습니다. 출력이 하나라도 있으면 커밋 전에 해당 파일을 검토하세요)
 - [ ] `.gitignore` 커버: `.env`, `.env.local`, `*.pem`, `*.key`
 - [ ] `.env.example`는 자리 표시자 값을 사용합니다(실제 비밀 아님).
 
@@ -168,17 +168,17 @@ cors({ origin: '*' })  // Allows any origin
 
 **특정 시점 스냅샷:** 패키지 관리자 기본값과 명령 이름은 빠르게 변경됩니다. 의존하기 전에 고정된 클라이언트의 현재 공식 문서와 비교하여 이 매트릭스를 확인하세요.
 
-| 관리자 버전 | 기본 정책 |
+| 관리자 버전 | 자체 지원하는 정책 |
 |---|---|
-| 검증된 세부 승인이 없는 npm | `npm ci --ignore-scripts`를 사용하여 부트스트랩하거나 프로젝트 전체 차단을 의도한 경우 `ignore-scripts=true`를 유지합니다. 검토된 종속성 스크립트를 허용하기 전에 스크립트를 비활성화 상태로 유지하거나 의도적으로 업그레이드하십시오. |
-| npm 11.18.x (11.18.0에서 확인) | 검토되지 않은 종속성 스크립트는 기본적으로 경고와 함께 실행됩니다. 일반 설치 전에 `strict-allow-scripts=true`를 적용한 다음 설치 경계에서 작업 공간을 인식하지 못하는 `npm install-scripts ls`를 사용하십시오. 승인은 버전별로 고정되고 거부는 이름 전체에 걸쳐 유지됩니다. |
-| npm 12.x(12.0.1에서 확인됨) | 검토되지 않은 종속성 스크립트는 기본적으로 건너뜁니다. `strict-allow-scripts=true`는 실행 전에 설치에 실패하게 만듭니다. 동일한 `npm install-scripts` 검토 및 승인 흐름을 사용합니다. |
+| 검증된 세부 승인이 없는 npm | `npm ci --ignore-scripts`를 사용하여 부트스트랩하거나 프로젝트 전체 차단을 의도한 경우 프로젝트 설정에 `ignore-scripts=true`를 저장하세요. 검토된 종속성 스크립트를 허용하기 전에 스크립트를 비활성화 상태로 유지하거나 의도적으로 업그레이드하십시오. |
+| npm 11.18.x (11.18.0에서 확인) | 검토되지 않은 종속성 스크립트는 기본적으로 경고와 함께 실행됩니다. 일반 설치 전에 `strict-allow-scripts=true`를 적용한 다음 설치 경계에서 작업 공간을 인식하지 못하는 `npm install-scripts ls`를 사용하십시오. 승인은 특정 버전에 고정하고 거부는 해당 패키지 이름의 모든 버전에 적용하세요. |
+| npm 12.x(12.0.1에서 확인됨) | 검토되지 않은 종속성 스크립트는 기본적으로 건너뜁니다. `strict-allow-scripts=true`를 설정하면 검토되지 않은 스크립트가 있을 때 그 스크립트를 실행하기 전에 설치가 실패합니다. 동일한 `npm install-scripts` 검토 및 승인 흐름을 사용합니다. |
 | pnpm 11+ | `pnpm approve-builds`를 사용하고 `allowBuilds` 결정을 커밋합니다. `strictDepBuilds`의 기본값은 `true`이므로 검토되지 않은 빌드는 실패합니다. |
 | pnpm 10.26–10.x | `allowBuilds`를 명시적으로 구성하거나 레거시 `onlyBuiltDependencies` / `ignoredBuiltDependencies` 목록과 함께 `pnpm approve-builds`를 사용하세요. `strictDepBuilds: true`를 설정하십시오. v10 기본값은 `false`입니다. |
 | pnpm 10.1–10.25 | `pnpm approve-builds`는 레거시 목록을 기록합니다. 지원되는 경우(10.3+) `strictDepBuilds`를 활성화합니다. |
 | 오래되었거나 알 수 없는 pnpm | `pnpm install --frozen-lockfile --ignore-scripts`를 사용한 부트스트랩. 고정된 버전이 시행 가능한 정책을 문서화하지 않는 한 스크립트를 비활성화된 상태로 유지하세요. |
-| Yarn 4.14+ | 종속성 사후 설치는 기본적으로 비활성화되어 있습니다. 최상위 `dependenciesMeta.<package>.built: true`에 필요한 예외만 부여합니다. |
-| Yarn 2–4.13 | `.yarnrc.yml`에 `enableScripts: false`를 설정한 다음 최상위 `dependenciesMeta.<package>.built: true`에 필요한 예외만 부여합니다. 전역적으로 스크립트를 활성화하지 마십시오. |
+| Yarn 4.14+ | 종속성 사후 설치는 기본적으로 비활성화되어 있습니다. 최상위 `dependenciesMeta.<package>.built: true`로 꼭 필요한 예외만 허용하세요. |
+| Yarn 2–4.13 | `.yarnrc.yml`에 `enableScripts: false`를 설정한 다음 최상위 `dependenciesMeta.<package>.built: true`로 꼭 필요한 예외만 허용하세요. 전역적으로 스크립트를 활성화하지 마십시오. |
 | Yarn 1 | `yarn install --ignore-scripts`를 사용한 부트스트랩; 고정된 클라이언트의 문서화된 작업 흐름에 따라 각 필수 예외가 검토되지 않는 한 스크립트를 비활성화된 상태로 유지합니다. |
 
 신뢰할 수 있는 검사: [npm install-scripts](https://docs.npmjs.com/cli/v11/commands/npm-install-scripts/), [설치 정책](https://docs.npmjs.com/cli/v11/commands/npm-install/) 및 [CLI releases](https://github.com/npm/cli/releases); [pnpm 승인-빌드](https://pnpm.io/cli/approve-builds) 및 [빌드 설정](https://pnpm.io/settings#allowbuilds); [Yarn 보안](https://yarnpkg.com/features/security) 및 [manifest](https://yarnpkg.com/configuration/manifest#dependenciesMeta).
@@ -240,7 +240,7 @@ LLM 기능이 있는 앱의 경우. [OWASP GenAI 보안 프로젝트](https://ge
 |---|---|---|
 | LLM01 | 프롬프트 주입 | 시스템 프롬프트를 경계로 신뢰하지 마십시오. 코드에서 권한 적용 |
 | LLM02 | 민감한 정보 공개 | 프롬프트에 비밀/PII를 넣지 않고 출력을 필터링 |
-| LLM03 | 공급망 | 모든 종속성과 같은 모델, 데이터 세트 및 플러그인을 검사합니다 |
+| LLM03 | 공급망 | 모델, 데이터 세트, 플러그인도 다른 의존성처럼 검증하세요 |
 | LLM04 | 데이터 및 모델 중독 | 신뢰할 수 있는 모델 소스를 사용하고 무결성을 확인합니다. 미세 조정 및 RAG 데이터를 검토 |
 | LLM05 | 부적절한 출력 처리 | 모델 출력을 신뢰할 수 없는 것으로 처리합니다. 검증, 매개변수화, 인코딩 |
 | LLM06 | 과도한 자율 권한 | 도구 권한을 제한하고 파괴적인 작업을 확인 |

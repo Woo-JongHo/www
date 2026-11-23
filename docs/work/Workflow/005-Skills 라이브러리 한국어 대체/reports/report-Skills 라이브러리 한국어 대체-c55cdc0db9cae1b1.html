@@ -1,9 +1,1416 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>Skills 라이브러리 한국어 대체 — WWW 작업 보고서</title><style>
-:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
 dd.result-status{font-weight:600}dd.result-passed{color:var(--green)}dd.result-failed{color:var(--red)}dd.result-blocked,dd.result-unverified{color:var(--amber)}
-</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 17일 AM 8:19 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>Skills 라이브러리 한국어 대체</h1><p class="lead">현재 검사기와15개 회귀 검사는 통과했지만 실제 전체 기준 감사가 메뉴 문장 손상과 의미 근거 연결 부족을 지적했다. 134지적·186파일 근거 연결은 보완했으나 정확 경로 저작 승인이 없어 메뉴 교정을 적용하지 못해 부분 완료로 남겼다.</p><div id="report-story" class="story">기존 제한 범위 PASS와 불명확한 coverage 집계 때문에 전체 번역 수용 여부를 확정할 수 없었다.
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 24일 AM 7:50 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>Skills 라이브러리 한국어 대체</h1><p class="lead">스킬 라이브러리의 번역 186개를 고정 원문에 연결했고, 원문 그대로 보존할 15개의 바이트가 일치함을 확인했다. 읽기 전용 독립 검토가 지적한 조건과 절차를 14개 파일에서 교정했다.</p><div id="report-story" class="story">번역본으로 결정을 내리는 사용자가 영어 원문과 같은 옵션과 금지 조건을 보도록 문서를 교정했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 20 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>완료로 기록</strong></p></div><p class="top-next"><strong>다음 행동</strong> 후속 PR의 CI와 병합 여부를 GitHub 이슈에 남긴다.</p><aside class="omission"><strong>일부 원본 항목이 이 보고서에 보관되지 않았습니다.</strong><p>기준 근거 전체 66개 중 32개 표시 (34개 제외), 검사 이력 전체 51개 중 20개 표시 (31개 제외), 검토 이력 전체 15개 중 10개 표시 (5개 제외), 명령 인자 전체 93개 중 38개 표시 (55개 제외), 검토 지적 전체 52개 중 40개 표시 (12개 제외). 제외된 당시 기록 중 실패·차단·미확인 항목이 6건 있습니다. 더 넓은 기록은 근거의 작업 파일과 대조해야 합니다.</p></aside></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>사용자에게 물을 시점, 복구 뒤 재검사할 출력과 도구가 내놓는 상태 문자열이 번역에서 바뀌었다. 기존 검토가 현재 파일에 그대로 적용되는지 파일별로 확인할 수 없었다.</p></div><div><h3>접근과 결과</h3><p>파일별로 현재 지문과 전체 대조·교정 판정을 연결했다. 한국어 지침에서 승인 조건·출력 문자열·검토 재개 단계를 확인할 수 있다.</p></div></div><section class="paper" id="report-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>이미 검토한 파일까지 다시 읽으면 검증 시간이 늘어난다.</h3><p><strong>선택</strong> 같은 입력은 재사용하고 달라진 문맥은 새 Opus 판정을 연결했다.</p><p><strong>판단 근거</strong> 고정 원문과 번역 모두 기존 검토 입력과 같았다.</p><p class="limit"><strong>감수한 점</strong> 묶음 전체 판정과 개별 파일 수용 범위를 구별해야 했다.</p></article><h3>함께 기록된 선택</h3><ul><li>이전 전체 검토와 바이트가 같은 164개 파일에는 당시 기록을 재사용했다. 다른 22개 파일은 별도로 대조하고, 수정이 있던 위치에는 새로운 검토 결과를 연결했다.</li><li>목록·법문·회귀와 문장 의미는 서로 다른 검사로 확인했다. 각 PR에는 해당 문서와 연관된 목록 및 검증 근거만 포함했다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>설계 및 엔지니어링 계획 검토에서는 기준 브랜치, 실제 출력, 복구 게이트, 표 형식과 섹션 참조를 복원했다.</li><li>PR 검토·QA·배포 문구에서는 결정 조건, 소유자, 상태 및 기록 형식을 원문에 맞췄다.</li><li>보안 체크리스트와 API 설계 자료에서는 의존성 승인 범위와 프로세스 비정상 종료 등 기술 용어를 구체화했다.</li></ul></div><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">186개 번역의 의미·구조와 원문 15개 보존</td><td data-label="바뀐 동작">전체 대조와 교정 문맥을 파일 지문에 연결했다.</td><td data-label="근거와 한계">current-review.md<p class="limit">영어 원문 자체의 모호성 네 곳과 한국어 표현의 경미한 차이가 남는다.</p></td></tr><tr><td data-label="항목">검사와 공개 후보 제출</td><td data-label="바뀐 동작">목록과 회귀를 실행하고 커밋 전에 12개 파일과 메시지를 이슈 코멘트로 제출했다.</td><td data-label="근거와 한계">commit-candidate.md</td></tr></tbody></table><h3>저장 당시 수용 기준 판정</h3><dl class="requirements"><div><dt>기존 선택 라이브러리의 문서 본문·UI 설명·절 manifest 자연어를 한국어로 대체하고 생략·중복 영어 읽기판 없이 코드·명령·식별자와 문서 구조를 보존한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>고정 출처 커밋과 원문·로컬 파일 해시·크기를 구분하고 실제 라이선스·저작권 고지·필요한 제3자 법문과 수정 고지를 보존한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>라이브러리 검증기와 집중 회귀 검사를 실제 실행해 경로 탈출·심볼릭 링크·해시 불일치·라이선스 오표기·미검토 파일과 불완전 번역 표기를 거부한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>번역 완전성과 공개 게시 범위·남은 검토 한계를 확인하고 관련 없는 변경·비밀·원시 로그·생성물을 제외한 커밋 후보와 한국어 메시지를 사용자 검사에 제출하며 실제 commit·push하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>원문과 번역</h3><dl><div><dt>확인 방법</dt><dd>원문·번역 SHA-256, 전체 대조 기록, 변경 문맥 독립 검토를 대조했다.</dd></div><div><dt>기대 결과</dt><dd>201개 원문과 186개 번역의 지문과 판정이 연결된다.</dd></div><div><dt>실제 관측</dt><dd>기존 전체 대조 164개, 별도 전체 대조 22개, 원문 보존 15개를 확인했다.</dd></div><div><dt>확인 범위와 한계</dt><dd>각 파일의 판정은 기록된 지문에 적용된다.</dd></div></dl></article><article class="check"><h3>목록 검증기</h3><dl><div><dt>확인 방법</dt><dd>검증기를 실제 라이브러리에 실행하고 회귀 15개를 수행했다.</dd></div><div><dt>기대 결과</dt><dd>정상 목록을 수용하고 이상 입력을 거부한다.</dd></div><div><dt>실제 관측</dt><dd>목록 201개와 테스트 15개가 통과했다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 20건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>원문 자체의 해석이 갈리는 기존 네 지점과 의미를 바꾸지 않는 어색한 표현을 기록했다. 전체 문장의 무오류 보증이나 외부 도구의 실제 동작 검사는 이 번역 작업의 판정 범위를 벗어난다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>후속 PR의 CI와 병합 여부를 GitHub 이슈에 남긴다.</h3><dl><div><dt>담당</dt><dd>상위 세션</dd></div><div><dt>해소 조건</dt><dd>병합 커밋과 검증 결과가 새 코멘트로 연결됨</dd></div><div><dt>영향</dt><dd>저장소와 GitHub에서 종료 근거를 찾을 수 있다.</dd></div></dl></article><h3>기존 서술에 기록된 남은 일</h3><ul><li>최종 PR의 CI 결과와 병합 커밋을 이슈 #29의 새 코멘트에 기록한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 24일 AM 7:50 · 선택한 발행 기록 · 스킬 라이브러리의 번역 186개를 고정 원문에 연결했고, 원문 그대로 보존할 15개의 바이트가 일치함을 확인했다. 읽기 전용 독립 검토가 지적한 조건과 절차를 14개 파일에서 교정했다.</p><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 29개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 24일 AM 7:50 · 작성자 보고서 · 스킬 라이브러리의 번역 186개를 고정 원문에 연결했고, 원문 그대로 보존할 15개의 바이트가 일치함을 확인했다. 읽기 전용 독립 검토가 지적한 조건과 절차를 14개 파일에서 교정했다.</summary><article><h3>Skills 라이브러리 한국어 대체</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><aside class="omission"><strong>일부 원본 항목이 이 보고서에 보관되지 않았습니다.</strong><p>기준 근거 전체 66개 중 32개 표시 (34개 제외), 검사 이력 전체 51개 중 20개 표시 (31개 제외), 검토 이력 전체 15개 중 10개 표시 (5개 제외), 명령 인자 전체 93개 중 38개 표시 (55개 제외), 검토 지적 전체 52개 중 40개 표시 (12개 제외). 제외된 당시 기록 중 실패·차단·미확인 항목이 6건 있습니다. 더 넓은 기록은 근거의 작업 파일과 대조해야 합니다.</p></aside><div class="story">번역본으로 결정을 내리는 사용자가 영어 원문과 같은 옵션과 금지 조건을 보도록 문서를 교정했다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 20 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 통과</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 후속 PR의 CI와 병합 여부를 GitHub 이슈에 남긴다.</p><h3>기록된 변경</h3><ul><li>설계 및 엔지니어링 계획 검토에서는 기준 브랜치, 실제 출력, 복구 게이트, 표 형식과 섹션 참조를 복원했다.</li><li>PR 검토·QA·배포 문구에서는 결정 조건, 소유자, 상태 및 기록 형식을 원문에 맞췄다.</li><li>보안 체크리스트와 API 설계 자료에서는 의존성 승인 범위와 프로세스 비정상 종료 등 기술 용어를 구체화했다.</li></ul><h3>요구와 결과</h3><p class="muted">아래는 작성자의 요구·결과 설명입니다. 연결 근거의 서술은 별도의 검사 판정을 새로 부여하지 않습니다.</p><table class="results"><thead><tr><th>항목</th><th>바뀐 동작</th><th>근거와 한계</th></tr></thead><tbody><tr><td data-label="항목">186개 번역의 의미·구조와 원문 15개 보존</td><td data-label="바뀐 동작">전체 대조와 교정 문맥을 파일 지문에 연결했다.</td><td data-label="근거와 한계">current-review.md<p class="limit">영어 원문 자체의 모호성 네 곳과 한국어 표현의 경미한 차이가 남는다.</p></td></tr><tr><td data-label="항목">검사와 공개 후보 제출</td><td data-label="바뀐 동작">목록과 회귀를 실행하고 커밋 전에 12개 파일과 메시지를 이슈 코멘트로 제출했다.</td><td data-label="근거와 한계">commit-candidate.md</td></tr></tbody></table><section class="paper" id="history-report-ef541fd2-8626-454a-8789-200787480d75-decisions"><h2>중요한 선택과 그 이유</h2><article class="decision"><h3>이미 검토한 파일까지 다시 읽으면 검증 시간이 늘어난다.</h3><p><strong>선택</strong> 같은 입력은 재사용하고 달라진 문맥은 새 Opus 판정을 연결했다.</p><p><strong>판단 근거</strong> 고정 원문과 번역 모두 기존 검토 입력과 같았다.</p><p class="limit"><strong>감수한 점</strong> 묶음 전체 판정과 개별 파일 수용 범위를 구별해야 했다.</p></article><h3>함께 기록된 선택</h3><ul><li>이전 전체 검토와 바이트가 같은 164개 파일에는 당시 기록을 재사용했다. 다른 22개 파일은 별도로 대조하고, 수정이 있던 위치에는 새로운 검토 결과를 연결했다.</li><li>목록·법문·회귀와 문장 의미는 서로 다른 검사로 확인했다. 각 PR에는 해당 문서와 연관된 목록 및 검증 근거만 포함했다.</li></ul></section><section class="paper" id="history-report-ef541fd2-8626-454a-8789-200787480d75-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">검증 설명은 작성자가 기록한 내용이며, 아래 저장 당시 검사·검토 판정과 별개입니다.</p><article class="check"><h3>원문과 번역</h3><dl><div><dt>확인 방법</dt><dd>원문·번역 SHA-256, 전체 대조 기록, 변경 문맥 독립 검토를 대조했다.</dd></div><div><dt>기대 결과</dt><dd>201개 원문과 186개 번역의 지문과 판정이 연결된다.</dd></div><div><dt>실제 관측</dt><dd>기존 전체 대조 164개, 별도 전체 대조 22개, 원문 보존 15개를 확인했다.</dd></div><div><dt>확인 범위와 한계</dt><dd>각 파일의 판정은 기록된 지문에 적용된다.</dd></div></dl></article><article class="check"><h3>목록 검증기</h3><dl><div><dt>확인 방법</dt><dd>검증기를 실제 라이브러리에 실행하고 회귀 15개를 수행했다.</dd></div><div><dt>기대 결과</dt><dd>정상 목록을 수용하고 이상 입력을 거부한다.</dd></div><div><dt>실제 관측</dt><dd>목록 201개와 테스트 15개가 통과했다.</dd></div></dl></article><p class="record-result">저장된 검사 이력의 당시 결과: 통과 20건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 통과로 기록.</p><h3>확인하지 못한 범위</h3><ul><li>원문 자체의 해석이 갈리는 기존 네 지점과 의미를 바꾸지 않는 어색한 표현을 기록했다. 전체 문장의 무오류 보증이나 외부 도구의 실제 동작 검사는 이 번역 작업의 판정 범위를 벗어난다.</li></ul></section><section class="paper" id="history-report-ef541fd2-8626-454a-8789-200787480d75-next"><h2>남은 일과 해소 행동</h2><article class="next"><h3>후속 PR의 CI와 병합 여부를 GitHub 이슈에 남긴다.</h3><dl><div><dt>담당</dt><dd>상위 세션</dd></div><div><dt>해소 조건</dt><dd>병합 커밋과 검증 결과가 새 코멘트로 연결됨</dd></div><div><dt>영향</dt><dd>저장소와 GitHub에서 종료 근거를 찾을 수 있다.</dd></div></dl></article><h3>기존 서술에 기록된 남은 일</h3><ul><li>최종 PR의 CI 결과와 병합 커밋을 이슈 #29의 새 코멘트에 기록한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>파일별 최종 지문과 독립 검토 식별자</p><code>current-review.md</code></li><li><p>PR 게시 전 제출한 후보와 한계</p><code>commit-candidate.md</code></li></ol><details id="history-report-ef541fd2-8626-454a-8789-200787480d75-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-f40cbde5-04ba-4e0a-9c8b-e604be629328<br>report-ef541fd2-8626-454a-8789-200787480d75</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>4f7693079ffc1be75f7bc71ee6f23933e008e9b8ac5f0693835a5f09e801d45a</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>81089bacf72317cefccfceed215695172cc2bdd77072b15a5c8b2aba79f7b091</code></dd></div><div><dt>기준 지문</dt><dd><code>a991d4ee551a9f44f47e04c566a21e0d4d869d44990666e49cbec6bb9451684c</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;기존 선택 라이브러리의 문서 본문·UI 설명·절 manifest 자연어를 한국어로 대체하고 생략·중복 영어 읽기판 없이 코드·명령·식별자와 문서 구조를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-79469a6a-000c-4347-a5a7-42fe45b2621f&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-66b1fc2c-b669-4294-8d96-f706635271c0&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;고정 출처 커밋과 원문·로컬 파일 해시·크기를 구분하고 실제 라이선스·저작권 고지·필요한 제3자 법문과 수정 고지를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7f6342d4-490c-4dde-bb22-cf535372c80d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-64dc28cb-b27e-4600-99fb-92524a2b61c9&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5cbeeb0f-b4f5-4796-9623-97b0754e2096&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f5c1b295-610f-41c9-aee9-066bf4b64316&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-676b294c-ce73-424d-9cea-e19cc5ea2bcc&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a7321118-c25c-41ff-b996-d83f55a24b8a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4a4d85bc-5d9a-45af-ba35-2a433730356d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d4441956-4ada-4e1b-8e39-772ce004e2a6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-90a2ed5a-60d3-4f10-8115-a181bffd916f&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e502039e-af86-4c57-a6aa-b28e364bdd61&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;라이브러리 검증기와 집중 회귀 검사를 실제 실행해 경로 탈출·심볼릭 링크·해시 불일치·라이선스 오표기·미검토 파일과 불완전 번역 표기를 거부한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2b3ec394-2894-40d8-b031-02ad7c5cb0f4&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-676b294c-ce73-424d-9cea-e19cc5ea2bcc&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-b587731a-e9c0-4208-9da7-53daec090550&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a7321118-c25c-41ff-b996-d83f55a24b8a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4a4d85bc-5d9a-45af-ba35-2a433730356d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-93d03123-8fdf-4393-9517-d580617d51d2&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d4441956-4ada-4e1b-8e39-772ce004e2a6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d67e20ba-8f59-4fe4-91d2-2722550d862e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-24922de8-5423-4738-aa44-b9591c438796&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-1645d817-4880-4575-a9ba-86c5d3a18af2&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;번역 완전성과 공개 게시 범위·남은 검토 한계를 확인하고 관련 없는 변경·비밀·원시 로그·생성물을 제외한 커밋 후보와 한국어 메시지를 사용자 검사에 제출하며 실제 commit·push하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ad69174c-32a5-4e5f-899f-88bc9f58bd2e&quot;,
+          &quot;summary&quot;: &quot;당시 검증 passed(2026-11-16T12:13:21.860Z); 현재 source_changed, artifacts_changed 때문에 재검증 필요&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-bbd6dc02-711a-4084-9391-b892f51e9b3c&quot;,
+          &quot;summary&quot;: &quot;당시 검증 passed(2026-11-16T12:31:15.217Z); 현재 source_changed, artifacts_changed 때문에 재검증 필요&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-95668988-38b8-41b9-b527-3f20ca8e086c&quot;,
+          &quot;summary&quot;: &quot;당시 검증 passed(2026-11-16T12:50:15.535Z); 현재 source_changed, artifacts_changed 때문에 재검증 필요&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d94bea36-1579-4d36-b518-07f588fe8fd6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2abf442b-875e-4f40-b750-568112cd19d8&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2294bae4-9252-45c3-8978-b73e6ed112ed&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-b3bfe9b4-9ea2-4f9f-b877-dcb3bd06af7c&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-23da23f7-46d8-4ad9-8b35-42f6b23fd461&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-79469a6a-000c-4347-a5a7-42fe45b2621f&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-66b1fc2c-b669-4294-8d96-f706635271c0&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-54da94c2-022b-4957-8850-98ad827f327e&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:56:43.415Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-b3bfe9b4-9ea2-4f9f-b877-dcb3bd06af7c&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;-e&quot;,
+        &quot;import assert from &#39;node:assert/strict&#39;;import fs from &#39;node:fs&#39;;import {createHash} from &#39;node:crypto&#39;;import {execFileSync} from &#39;node:child_process&#39;;const base=&#39;.www/evidence/resume-20261116/workflow005/&#39;;const manifest=JSON.parse(fs.readFileSync(base+&#39;candidate-current-files.json&#39;,&#39;utf8&#39;));const receipt=JSON.parse(fs.readFileSync(base+&#39;submission-receipt-final-152.json&#39;,&#39;utf8&#39;));const file=&#39;docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md&#39;;const bytes=fs.readFileSync(file);const text=bytes.toString(&#39;utf8&#39;);const sha=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);assert.equal(manifest.files.length,33);assert.equal(manifest.files.filter(x=&gt;x.path.endsWith(&#39;.md&#39;)).length,32);for(const item of manifest.files){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes,item.path);assert(text.includes(item.path),item.path);}assert.equal(manifest.supportingFiles.length,2);for(const item of manifest.supportingFiles){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes);assert(text.includes(item.path));}const actual=execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--name-only&#39;,&#39;-z&#39;,&#39;--&#39;,&#39;skill-library&#39;],{encoding:&#39;utf8&#39;}).split(&#39;\\0&#39;).filter(Boolean).sort();assert.deepEqual(actual,manifest.files.map(x=&gt;x.path).sort());assert.equal(execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--cached&#39;,&#39;--name-only&#39;],{encoding:&#39;utf8&#39;}),&#39;&#39;);assert.equal(receipt.source,&#39;root_observation_of_actual_commentary&#39;);assert.equal(receipt.targetPath,file);assert.equal(receipt.targetSha256,sha(bytes));assert.equal(receipt.commit,false);assert.equal(receipt.push,false);assert(text.includes(&#39;Skills 라이브러리 번역의 조건과 누락을 보완한다&#39;));assert(text.includes(&#39;Skills 라이브러리 최상위의 미검토 파일을 거부한다&#39;));assert(receipt.message.includes(&#39;commit-candidate.md&#39;));assert(text.includes(&#39;원시&#39;)&amp;&amp;text.includes(&#39;제외&#39;)&amp;&amp;text.includes(&#39;감사&#39;));assert(text.includes(&#39;152개&#39;)&amp;&amp;text.includes(&#39;2,828,778&#39;));console.log(JSON.stringify({files:33,markdown:32,indexEmpty:true,submissionSource:receipt.source,limitation:&#39;후보 지문·범위·명시 한계와 root 실제 전달 관찰 확인. 의미 무오류·사용자 승인·commit/push 아님&#39;}));&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:57:53.315Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-5cbeeb0f-b4f5-4796-9623-97b0754e2096&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T15:04:26.862Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f49f4e0d-851a-40ca-ac91-fc0e84d2e474&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T15:04:27.594Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-23da23f7-46d8-4ad9-8b35-42f6b23fd461&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;-e&quot;,
+        &quot;import assert from &#39;node:assert/strict&#39;;import fs from &#39;node:fs&#39;;import {createHash} from &#39;node:crypto&#39;;import {execFileSync} from &#39;node:child_process&#39;;const base=&#39;.www/evidence/resume-20261116/workflow005/&#39;;const manifest=JSON.parse(fs.readFileSync(base+&#39;candidate-current-files.json&#39;,&#39;utf8&#39;));const receipt=JSON.parse(fs.readFileSync(base+&#39;submission-receipt-final-154.json&#39;,&#39;utf8&#39;));const file=&#39;docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md&#39;;const bytes=fs.readFileSync(file);const text=bytes.toString(&#39;utf8&#39;);const sha=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);assert.equal(manifest.files.length,33);assert.equal(manifest.files.filter(x=&gt;x.path.endsWith(&#39;.md&#39;)).length,32);for(const item of manifest.files){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes,item.path);assert(text.includes(item.path),item.path);}assert.equal(manifest.supportingFiles.length,2);for(const item of manifest.supportingFiles){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes);assert(text.includes(item.path));}const actual=execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--name-only&#39;,&#39;-z&#39;,&#39;--&#39;,&#39;skill-library&#39;],{encoding:&#39;utf8&#39;}).split(&#39;\\0&#39;).filter(Boolean).sort();assert.deepEqual(actual,manifest.files.map(x=&gt;x.path).sort());assert.equal(execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--cached&#39;,&#39;--name-only&#39;],{encoding:&#39;utf8&#39;}),&#39;&#39;);assert.equal(receipt.source,&#39;root_observation_of_actual_commentary&#39;);assert.equal(receipt.targetPath,file);assert.equal(receipt.targetSha256,sha(bytes));assert.equal(receipt.commit,false);assert.equal(receipt.push,false);assert(text.includes(&#39;Skills 라이브러리 번역의 조건과 누락을 보완한다&#39;));assert(text.includes(&#39;Skills 라이브러리 최상위의 미검토 파일을 거부한다&#39;));assert(receipt.message.includes(&#39;commit-candidate.md&#39;));assert(text.includes(&#39;원시&#39;)&amp;&amp;text.includes(&#39;제외&#39;)&amp;&amp;text.includes(&#39;감사&#39;));assert(text.includes(&#39;154개&#39;)&amp;&amp;text.includes(&#39;2,828,790&#39;));console.log(JSON.stringify({files:33,markdown:32,indexEmpty:true,submissionSource:receipt.source,limitation:&#39;후보 지문·범위·명시 한계와 root 실제 전달 관찰 확인. 의미 무오류·사용자 승인·commit/push 아님&#39;}));&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T15:05:03.303Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f5c1b295-610f-41c9-aee9-066bf4b64316&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:21:17.901Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-2b3ec394-2894-40d8-b031-02ad7c5cb0f4&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:21:25.503Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-676b294c-ce73-424d-9cea-e19cc5ea2bcc&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:41:30.069Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-b587731a-e9c0-4208-9da7-53daec090550&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:41:36.523Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-a7321118-c25c-41ff-b996-d83f55a24b8a&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:05:02.110Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-4a4d85bc-5d9a-45af-ba35-2a433730356d&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:05:35.829Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-93d03123-8fdf-4393-9517-d580617d51d2&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:05:55.133Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d4441956-4ada-4e1b-8e39-772ce004e2a6&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:19:35.737Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d67e20ba-8f59-4fe4-91d2-2722550d862e&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:19:44.948Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-79469a6a-000c-4347-a5a7-42fe45b2621f&quot;,
+      &quot;command&quot;: &quot;python3&quot;,
+      &quot;args&quot;: [
+        &quot;-c&quot;,
+        &quot;import sys,hashlib,runpy;from pathlib import Path;p=Path(sys.argv[1]);assert hashlib.sha256(p.read_bytes()).hexdigest()==sys.argv[2];runpy.run_path(str(p))&quot;,
+        &quot;.www/evidence/issue29-final/audit.py&quot;,
+        &quot;ae04609aafd435b5a8950973fa009608c5a6596de67cde7e37e5cc5d14ed66fe&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T22:43:59.148Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-90a2ed5a-60d3-4f10-8115-a181bffd916f&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T22:44:00.344Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-24922de8-5423-4738-aa44-b9591c438796&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T22:44:01.518Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-66b1fc2c-b669-4294-8d96-f706635271c0&quot;,
+      &quot;command&quot;: &quot;python3&quot;,
+      &quot;args&quot;: [
+        &quot;-c&quot;,
+        &quot;import sys,hashlib,runpy;from pathlib import Path;p=Path(sys.argv[1]);assert hashlib.sha256(p.read_bytes()).hexdigest()==sys.argv[2];runpy.run_path(str(p))&quot;,
+        &quot;.www/evidence/issue29-final/audit.py&quot;,
+        &quot;c6845cc4abf2f7192e0f9642f78202fced087d352f79b65cb01d53755caa0ef4&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T22:47:42.717Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e502039e-af86-4c57-a6aa-b28e364bdd61&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T22:47:43.423Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-1645d817-4880-4575-a9ba-86c5d3a18af2&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T22:47:44.257Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-feccdbb2-f8f3-4eaa-a788-7f23650901c6&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-feccdbb2-f8f3-4eaa-a788-7f23650901c6/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;skill-library/upstream/gstack/plan-design-review/sections/review-sections.md:161 — 원문은 첫 화면의 등장 또는 스크롤 연동 모션을 이미 보이는 기본 상태에서 ease-out하고, 호버 상태는 정보를 전달하는 곳에만 쓰라고 각각 지시한다. 번역은 ease-out을 호버 상태에 연결해 첫 화면 모션의 시작 상태와 완화 조건을 누락했다.&quot;,
+        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:154 — 원문은 프레임워크가 심벌을 생성하는 경우 클래스 본문의 리터럴 이름 대신 메타 구성 요소를 인용하라고 요구한다. 번역은 해당 문장에 동사가 빠져 메타 구성 요소를 인용해야 한다는 검증 지시를 전달하지 못한다.&quot;,
+        &quot;검토 범위: inline으로 제공된 10개 파일과 도구로 읽은 원문·검증 기록의 일부 행 및 디자인 문서 diff를 대조했다. 나머지 라이브러리 전체의 번역 정확성은 판정하지 않았으며 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-35eda400-8c53-4d22-8505-d70c5fdeca3b&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-35eda400-8c53-4d22-8505-d70c5fdeca3b/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;skill-library/upstream/gstack/plan-design-review/sections/review-sections.md:550 및 skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:1348 — 원문은 커밋 차이가 0이어도 diff 검토의 최신성 근거로 HEAD 일치나 커밋 거리를 대신 사용하지 말라고 명시한다. 번역은 이를 ‘HEAD로 돌아가지 마세요’와 불완전한 문장으로 옮겨 무엇을 대체 근거로 사용하면 안 되는지 전달하지 못한다. 오래된 검토를 현재 검토로 잘못 판정하지 않도록 금지 대상을 복원해야 한다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle과 도구로 읽은 세 gstack 원문의 일부 행 및 두 번역 파일의 diff다. 나머지 생략 파일과 전체 번역의 정확성은 판정하지 않았으며 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-8de98040-5b7b-4f3b-8d2b-427bd447d6d4&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-8de98040-5b7b-4f3b-8d2b-427bd447d6d4/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:521 — 시간적 분해를 실행 순서를 수행하는 것으로 번역해 위험 신호의 핵심이 빠졌다. 보존 원문 559~560행은 모듈을 소유한 지식이 아닌 실행 순서에 따라 분리하는 구조를 지적한다. 현재 문구로는 어떤 구조를 수정해야 하는지 판단할 수 없다.&quot;,
+        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:518 — 정보 유출 예시의 representation, wire detail, re-exported transport types가 각각 ‘대표’, ‘유선’, ‘재수출 운송 유형’으로 번역되어 기술적 의미가 손상됐다. 보존 원문 556~558행은 표현 방식·전송 형식의 세부사항과 재내보낸 전송 타입의 누출을 가리킨다.&quot;,
+        &quot;검토 범위는 제공된 10개 인라인 파일과 추가로 읽은 gstack 원문 일부에 한정된다. 나머지 자료의 번역 전체를 대조하지 않았으며 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-32a18d33-6c1a-4850-a1e3-cee8caba83f0&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-32a18d33-6c1a-4850-a1e3-cee8caba83f0/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:1152에서 P2 작업을 같은 브랜치에 반영해야 한다고 번역했다. 고정 원문 1228행의 “should land same branch”는 권장 강도이므로, 번역은 선택 가능한 처리를 의무로 강화한다. 같은 원문의 P1 배송 차단과도 구분되도록 수정이 필요하다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle과 도구로 읽은 두 gstack 고정 원문의 일부 행이다. 생략된 라이브러리 전체의 번역 정확성은 판정하지 않았으며 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-71b34ccb-b601-4305-9cf3-738253a46013&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-71b34ccb-b601-4305-9cf3-738253a46013/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:771 — QA 테스트 계획 템플릿의 `## Affected Pages/Routes`, `## Key Interactions to Verify`, `## Edge Cases`, `## Critical Paths`가 한국어 제목으로 바뀌었다. 고정 원문은 테스트 계획의 형식을 유지하도록 요구하며, 같은 번역 문서 792행도 `Edge Case`와 `Critical Path` 항목을 참조한다. 원문의 구조 표지를 보존하고 설명을 번역해야 한다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle과 두 gstack 보존 원문의 일부 구간, 검사기 diff에 한정된다. 나머지 라이브러리 전체의 번역 정확성은 판정하지 않았으며 테스트는 실행하지 않았다. QA 원문 디렉터리에서 해당 영문 제목을 검색한 명령은 일치 항목 없이 종료 코드 1을 반환했다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-605e8105-2380-4306-a914-503904ed3281&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-605e8105-2380-4306-a914-503904ed3281/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위는 제공된 inputBundle과 고정 원문의 plan-design-review·plan-eng-review 일부, qa·qa-only의 테스트 계획 참조 구간이다. 이 범위에서 수정이 필요한 구체적 결함은 확인하지 못했다.&quot;,
+        &quot;QA 테스트 계획의 네 제목에 대해 확인한 원문은 정확한 영문 문자열로 파싱해야 한다고 명시하지 않는다. 따라서 이전 감사의 제목 보존 지적만으로 결함을 확정하기 어렵다. 외부 설치본의 소비 구현은 확인하지 않았다.&quot;,
+        &quot;나머지 라이브러리의 번역 전체를 직접 대조하지 않았으며, 테스트는 실행하지 않았다. 이 판정은 전체 번역의 무오류나 수용 기준 전체 통과를 뜻하지 않는다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-84ae2e91-f3b7-44eb-b9e6-57ccf6a02585&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-84ae2e91-f3b7-44eb-b9e6-57ccf6a02585/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;AC-1: skill-library/upstream/gstack/plan-design-review/SKILL.md:51은 AskUserQuestion이 금지된 경우 그대로 출력할 메뉴에 ‘A·B·C로 답하도록 요청하고’라고 적어, 원문의 사용자 대상 응답 요청 ‘Reply with A, B, or C’를 수행자 대상 지시로 바꿨다. 메뉴를 그대로 출력하면 사용자에게 선택을 요청하는 문장이 손상된다. 보존 원문 50행과 대조했으며, 사용자 대상 문장으로 복원해야 한다.&quot;,
+        &quot;AC-1과 AC-4의 전체 수용 근거도 아직 부족하다. current-review.md에 포함된 coverage 보고서는 동일 SHA인 이전 결과에도 미해결 finding과 분류가 불명확한 결과가 있음을 밝히고, 8쌍 대조는 전체 186개 문서의 의미 통과가 아니라고 한정한다. 위 결함을 교정하고 남은 finding 및 현재 번역의 의미 근거를 대조한 뒤 완전성과 제출 후보를 다시 판정해야 한다.&quot;,
+        &quot;검토 범위는 제공된 inline 자료와 별도로 읽은 work.json의 기준 일부, 관련 검토 결과 및 위 원문·번역 문맥이다. 전체 번역과 AC-2·AC-3의 실행 증거를 독립적으로 전수 확인하지 않았으며 테스트는 실행하지 않았다. work.json 검색 출력은 길이 제한으로 잘렸고, 표시된 최초 AC-4 정의만 사용했다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-764186d2-89de-42b2-8aa5-bc3cb1cce5d1&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/issue29-final/final-receipt/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: 읽기 도구(Read/Grep)만 사용했다. 읽은 파일은 commit-candidate.md 전체, spec.md 전체, test/skill-library.test.ts 전체, current-review.md 455~466행과 656~686행(파일이 380KB라 전체를 읽지 못함), verification.md 1060~1147행, work.json 405~434행이다. 그 밖에 work.json·current-review.md를 grep으로 검색했다. git diff 본문과 번역 12개 파일의 내용은 직접 읽지 않았다. 따라서 번역 의미를 원문과 대조하지 않았고 테스트도 실행하지 않았다.&quot;,
+        &quot;일치 확인: commit-candidate.md 111~123행에 #29 후보로 적힌 13개 경로(inventory와 번역 12개)는 git status의 skill-library 변경 목록과 정확히 같다. current-review.md 662~683행 표에 적힌 12개 파일의 SHA-256도 inputBundle digest와 모두 같다. 164+21+1=186은 inventory의 번역 186개와 맞는다. 테스트 파일은 git status 기준으로 변경되지 않았다. 이 파일의 15개 회귀 검사가 경로·심볼릭 링크·해시·라이선스·미검토 파일·한국어 표기를 거부하는 경계를 다루는 것도 확인했다.&quot;,
+        &quot;결함(AC-4 경계 위반): commit-candidate.md 125행은 \&quot;이번 이슈의 PR 게시·머지 요청에 따라 게시한다\&quot;고 쓰고, 109행은 \&quot;커밋에는 이 작업의 검증·후보 문서를 포함한다\&quot;고 쓴다. 그러나 work.json 424~425행의 workflow.authorization은 \&quot;commit\&quot;: false, \&quot;publish\&quot;: false다. AC-4(work.json 300행)도 \&quot;실제 commit·push하지 않는다\&quot;이고, spec.md 45행은 \&quot;현재 직접 재개 요청은 커밋·push·게시를 금지한다\&quot;고 적는다. 그런데 spec.md에는 2026-11-24 #29 게시 권한을 새로 기록한 절이 없다. 결국 후보 문서가 기록된 권한과 기준을 넘는 게시·머지 실행을 예고하고 있다. 게시 권한을 spec·work.json에 정식으로 갱신하거나, 125행을 &#39;사용자 검사 제출, 게시 미실행&#39;으로 고쳐야 한다.&quot;,
+        &quot;결함(증거 범위 확대): commit-candidate.md 125행은 \&quot;목록의 201개 파일을 보존한 고정 원문과 대조했다… 번역 186개는 파일별 전체 대조와 후속 교정 근거로 연결된다\&quot;고 단정한다. 하지만 current-review.md 459행과 465행에는 review-84ae2e91의 menu 결함이 &#39;Root공식typed수정대기&#39;로 남아 있고, AC1/4 수용은 독립 검토자가 판단한다고 적혀 있다. 685행도 일부 표현이 어색하게 남아 있음을 인정한다. verification.md 1088행 역시 \&quot;전체 번역의 최종 수용 판정과 다른 파일의 교정은 이슈 #29에서 이어간다\&quot;고 쓴다. 125행은 한계를 current-review.md로 넘기기만 하고, 미해결 fail과 미수용 상태를 후보 본문에 적지 않았다. 그래서 번역 완전성을 실제보다 강하게 표현한다. 또한 &#39;목록의 201개 파일&#39;은 바로 위 13개 목록을 가리키는 것처럼 읽혀 오해를 부른다. &#39;inventory의 201개&#39;로 고쳐야 한다.&quot;,
+        &quot;결함(현재 후보의 이중 표기): commit-candidate.md 18~24행의 &#39;현재 사용자 검사에 제출하는 후보&#39;에는 37개 Markdown 경로와 304문구 후보가 아직 &#39;현재&#39;로 남아 있고, 22행의 한국어 메시지도 다르다. 이 경로 중 다수는 현재 git diff에 없다. 새 #29 절(107~125행)의 13개 경로·메시지와 함께 놓여 있어, 어느 것이 실제 제출 후보인지 모호하다. 이전 절을 역사 기록으로 표시하거나 #29 절이 대체한다고 밝혀야 한다.&quot;,
+        &quot;참고: verification.md 1090~1145행에 따르면 audit.py·check-skill-library.ts·test 세 시도가 HEAD 1a2e4b8에서 종료 코드 0으로 끝났다. 다만 소스 식별값 7084a5f9…는 이번 검토의 sourceDigest 4da5dfe5…와 다르다. 따라서 이 통과 기록이 현재 소스에 그대로 적용되는지는 확인되지 않았다. 나도 해당 명령을 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-64139a33-1720-4340-ad66-2958a425bbed&quot;,
+      &quot;verdict&quot;: &quot;not_run&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/issue29-final/submitted-receipt/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;읽기 범위: Read/Grep 도구로 `commit-candidate.md`, `spec.md`, `test/skill-library.test.ts`, `verification.md` 1060~1204행, `skill-library/upstream/gstack/ship/sections/pr-body.md` 전체, `skill-library/upstream/matt-pocock/README.md` 전체, `review/sections/adversarial.md` 85~111행, `ship/sections/adversarial.md` 97~98행, `review/SKILL.md` 29~50행을 읽었습니다. 변경된 gstack 파일 8개에서는 영어 문장이 남았는지 정규식으로 검색했습니다. 이 환경에는 Bash가 없어 git diff/status는 실행하지 못했습니다. SHA-256과 바이트 수도 다시 계산하지 못했고 테스트나 검사기도 실행하지 않았습니다.&quot;,
+        &quot;후보 범위가 맞습니다. `commit-candidate.md:114-126`에 적힌 13개 경로(inventory 1개와 번역 12개)는 세션 시작 시 git status에서 수정된 `skill-library/` 경로 13개와 정확히 같습니다. 같은 문서 `:130`에는 commit·push를 실행하지 않았고 Workflow/005의 commit·publish 권한이 false라고 적혀 있어 AC-4의 &#39;실제 commit·push 금지&#39;와 충돌하지 않습니다.&quot;,
+        &quot;`review/sections/adversarial.md:96`과 `:110`에는 한국어 문단 안에 영어 문장 &#39;Think like an attacker and a chaos engineer.&#39;이 남아 있습니다. 그러나 `review/SKILL.md:31`(`match: Think like an attacker and a chaos engineer`)과 `:49`의 완료 계약은 하위 에이전트 프롬프트에 이 영어 문구가 그대로 들어 있어야 한다고 정합니다. 따라서 이 문장은 기계 식별자로 일부러 보존한 것이며 AC-1 위반이 아닙니다.&quot;,
+        &quot;`pr-body.md`의 `## Summary`·`## Blast radius` 같은 영어 제목, `Recommendation:`·`Tests ran:` 같은 영어 레이블, 셸 블록 안의 영어 메시지는 `gstack-prose-lint --sections &#39;Why,Summary,Blast radius&#39;`와 영수증 검사가 읽는 식별자입니다. 이를 보존한 것은 AC-1의 &#39;코드·명령·식별자 보존&#39;에 맞습니다. 확인한 범위에서 생략되거나 영어판이 중복된 곳은 보이지 않았습니다.&quot;,
+        &quot;`test/skill-library.test.ts`의 15개 테스트는 해시 불일치, 법문 세탁, Apache를 MIT로 잘못 표시한 경우, 한국어 고지만 붙인 영어 본문, 원문 해시 누락, 추가 파일, 루트 파일·하위 디렉터리·심볼릭 링크, 외부 파일 링크, schemaVersion, 고정되지 않은 커밋, 제3자 법문, UI/manifest 번역을 거부하는지 검사합니다. AC-3이 요구하는 거부 경계를 덮으며, 이 테스트 파일은 이번 diff에서 바뀌지 않았습니다.&quot;,
+        &quot;증거 한계(결함 아님): `verification.md:1157-1201`의 마지막 실제 실행 세 건(audit.py, check-skill-library, node --test)은 소스 식별값이 `81089bac…`이며 모두 종료 코드 0입니다. 하지만 이번 검토 입력의 sourceDigest는 `2bb822f5…`로 다릅니다. 이후 후보 문서 같은 입력 파일이 바뀐 것으로 보이며, 현재 소스에서 검사기와 테스트가 통과한다는 사실은 다시 실행해야 확인됩니다. 이 검토는 그 실행 결과를 대신하지 않습니다.&quot;,
+        &quot;증거 한계: `commit-candidate.md:128`은 번역 186개 중 22개가 &#39;별도 전체 대조와 교정 기록&#39;을 가진다고 하지만, 이번 #29 절의 파일은 12개이고 PR #33의 파일은 3개입니다. 나머지 7개의 근거가 어느 기록에 있는지 이 문서 안에서는 직접 연결되지 않습니다. 원문의 모호한 곳 네 곳과 엔지니어링 절의 어색한 표기는 남은 한계로 명시되어 있어 근거를 부풀린 서술로 보지는 않았습니다.&quot;,
+        &quot;결론: 읽은 범위에서 잘못된 동작, 빠진 경계, 근거보다 넓은 주장처럼 수정이 필요한 구체적 결함은 찾지 못했습니다. 번역 12개 전체를 원문과 문장 단위로 대조하지는 않았습니다. 해시와 크기가 일치하는지는 검사기를 다시 실행해 확인해야 합니다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-16af5a79-f2d2-4335-9b05-f856db3962b7&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/issue29-final/stable-receipt/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep 도구로 commit-candidate.md 전문, spec.md 전문, test/skill-library.test.ts 전문, verification.md 1060~1203행, current-review.md 656~690행을 읽었고 inventory.json에서 해시 3개를 검색했다. 테스트, 검사기, git diff는 실행하지 않았다(Bash 도구 없음). 따라서 13개 경로 각각의 실제 diff 내용과 원문 보존 필드가 바뀌지 않았는지는 직접 확인하지 못했다.&quot;,
+        &quot;후보 경로 일치: commit-candidate.md:114-126의 13개 경로(inventory.json + 번역 12개)는 git status 스냅샷에서 수정된 skill-library 파일 13개와 정확히 같다. 범위 밖 라이브러리 파일은 섞이지 않았다.&quot;,
+        &quot;지문 일치: current-review.md:662-683의 22행 표에 적힌 현재 SHA-256이 inputBundle의 파일 digest와 같다. 대상 파일은 security-checklist, api-and-interface-design, plan-eng-review/sections/review-sections, qa/sections/preamble, review/checklist, design-checklist, greptile-triage, adversarial, plan-completion, capy-pr, pr-body, matt-pocock/README이다. inventory.json에도 pr-body·matt-pocock README·security-checklist 해시가 실제로 들어 있다. 따라서 commit-candidate.md:128의 &#39;164개 + 22개 = 186개&#39; 집계는 표의 행 수(22)와 맞다.&quot;,
+        &quot;테스트 근거: test/skill-library.test.ts의 test() 15개가 verification.md:1088의 &#39;15개 검사 모두 통과&#39; 및 B 후보 설명의 세 회귀(루트 파일·중첩 디렉터리·루트 심볼릭 링크, 143~166행)와 일치한다. 경로 탈출·심볼릭 링크·해시 불일치·라이선스 오표기·제3자 법문·한국어 미번역 본문·schemaVersion·고정 커밋을 거부하는 회귀가 모두 있다.&quot;,
+        &quot;경미한 표현 과장(수정 권고, 판정 유지): commit-candidate.md:128은 &#39;22개는 별도 전체 대조와 해당 파일에 대한 교정 기록이 있다&#39;고 쓴다. 그러나 current-review.md:662-683에서 9개 파일은 교정 검토 없이 &#39;동일한 번역에 대한 전체 대조 결과를 적용&#39;으로만 기록돼 있다(second-opinion, pr-body, diagnosing-bugs, orchestration-patterns, performance-checklist, testing-patterns, spec-driven-development, clarify 등). 또 second-opinion은 새 대조가 아니라 &#39;직전 전체 대조&#39; 결과다(658행). 이 부분은 &#39;전체 대조 기록, 일부는 교정 후 문맥 재검토&#39;처럼 구분해 적는 것이 정확하다.&quot;,
+        &quot;근거 연결 누락(경미): commit-candidate.md의 #29 절은 파일별 근거가 있는 current-review.md &#39;#29 최종 번역 후보의 파일별 근거&#39; 절을 가리키지 않는다. verification.md에도 이번 12개 파일 이름이 한 번도 나오지 않는다(Grep 0건). 사용자 검사 편의를 위해 링크를 추가하는 것이 좋다.&quot;,
+        &quot;증거 시점 한계: verification.md의 마지막 실제 실행 기록(1147~1202행, HEAD 780c357)의 소스 식별값은 81089bac…이다. 이번 검토의 sourceDigest 2bb822f5…와 다르므로, 기록된 checker·테스트 통과가 현재 소스 상태에 그대로 적용되는지는 확인되지 않았다. 다만 commit-candidate.md 자체는 현재 소스에서 새로 실행했다고 주장하지 않는다.&quot;,
+        &quot;AC-4 권한 경계: commit-candidate.md:130과 spec.md:94 모두 Workflow/005 원장의 commit·publish 권한이 false이고 이 단계에서 commit·push를 실행하지 않았다고 적는다. 사용자 요청 기록(PR·머지는 상위 세션이 맡음)과 모순이 없다. 원시 로그·자격 증명·임시 파일을 제외한다는 범위 설명(112행)도 있다.&quot;
+      ]
+    }
+  ],
+  &quot;omitted&quot;: {
+    &quot;criteria&quot;: 0,
+    &quot;evidence&quot;: 34,
+    &quot;verifications&quot;: 31,
+    &quot;reviews&quot;: 5,
+    &quot;arguments&quot;: 55,
+    &quot;findings&quot;: 12,
+    &quot;unresolved&quot;: 6
+  }
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;스킬 라이브러리의 번역 186개를 고정 원문에 연결했고, 원문 그대로 보존할 15개의 바이트가 일치함을 확인했다. 읽기 전용 독립 검토가 지적한 조건과 절차를 14개 파일에서 교정했다.&quot;,
+  &quot;before&quot;: &quot;사용자에게 물을 시점, 복구 뒤 재검사할 출력과 도구가 내놓는 상태 문자열이 번역에서 바뀌었다. 기존 검토가 현재 파일에 그대로 적용되는지 파일별로 확인할 수 없었다.&quot;,
+  &quot;after&quot;: &quot;파일별로 현재 지문과 전체 대조·교정 판정을 연결했다. 한국어 지침에서 승인 조건·출력 문자열·검토 재개 단계를 확인할 수 있다.&quot;,
+  &quot;changes&quot;: [
+    &quot;설계 및 엔지니어링 계획 검토에서는 기준 브랜치, 실제 출력, 복구 게이트, 표 형식과 섹션 참조를 복원했다.&quot;,
+    &quot;PR 검토·QA·배포 문구에서는 결정 조건, 소유자, 상태 및 기록 형식을 원문에 맞췄다.&quot;,
+    &quot;보안 체크리스트와 API 설계 자료에서는 의존성 승인 범위와 프로세스 비정상 종료 등 기술 용어를 구체화했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;이전 전체 검토와 바이트가 같은 164개 파일에는 당시 기록을 재사용했다. 다른 22개 파일은 별도로 대조하고, 수정이 있던 위치에는 새로운 검토 결과를 연결했다.&quot;,
+    &quot;목록·법문·회귀와 문장 의미는 서로 다른 검사로 확인했다. 각 PR에는 해당 문서와 연관된 목록 및 검증 근거만 포함했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;원문 자체의 해석이 갈리는 기존 네 지점과 의미를 바꾸지 않는 어색한 표현을 기록했다. 전체 문장의 무오류 보증이나 외부 도구의 실제 동작 검사는 이 번역 작업의 판정 범위를 벗어난다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;최종 PR의 CI 결과와 병합 커밋을 이슈 #29의 새 코멘트에 기록한다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;번역본으로 결정을 내리는 사용자가 영어 원문과 같은 옵션과 금지 조건을 보도록 문서를 교정했다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;186개 번역의 의미·구조와 원문 15개 보존&quot;,
+        &quot;result&quot;: &quot;전체 대조와 교정 문맥을 파일 지문에 연결했다.&quot;,
+        &quot;evidence&quot;: &quot;current-review.md&quot;,
+        &quot;limitations&quot;: &quot;영어 원문 자체의 모호성 네 곳과 한국어 표현의 경미한 차이가 남는다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;검사와 공개 후보 제출&quot;,
+        &quot;result&quot;: &quot;목록과 회귀를 실행하고 커밋 전에 12개 파일과 메시지를 이슈 코멘트로 제출했다.&quot;,
+        &quot;evidence&quot;: &quot;commit-candidate.md&quot;,
+        &quot;limitations&quot;: null
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;원문과 번역&quot;,
+        &quot;method&quot;: &quot;원문·번역 SHA-256, 전체 대조 기록, 변경 문맥 독립 검토를 대조했다.&quot;,
+        &quot;expected&quot;: &quot;201개 원문과 186개 번역의 지문과 판정이 연결된다.&quot;,
+        &quot;observed&quot;: &quot;기존 전체 대조 164개, 별도 전체 대조 22개, 원문 보존 15개를 확인했다.&quot;,
+        &quot;limitations&quot;: &quot;각 파일의 판정은 기록된 지문에 적용된다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;목록 검증기&quot;,
+        &quot;method&quot;: &quot;검증기를 실제 라이브러리에 실행하고 회귀 15개를 수행했다.&quot;,
+        &quot;expected&quot;: &quot;정상 목록을 수용하고 이상 입력을 거부한다.&quot;,
+        &quot;observed&quot;: &quot;목록 201개와 테스트 15개가 통과했다.&quot;,
+        &quot;limitations&quot;: null
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;이미 검토한 파일까지 다시 읽으면 검증 시간이 늘어난다.&quot;,
+        &quot;basis&quot;: &quot;고정 원문과 번역 모두 기존 검토 입력과 같았다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;같은 입력은 재사용하고 달라진 문맥은 새 Opus 판정을 연결했다.&quot;,
+        &quot;tradeoff&quot;: &quot;묶음 전체 판정과 개별 파일 수용 범위를 구별해야 했다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;current-review.md&quot;,
+        &quot;purpose&quot;: &quot;파일별 최종 지문과 독립 검토 식별자&quot;
+      },
+      {
+        &quot;path&quot;: &quot;commit-candidate.md&quot;,
+        &quot;purpose&quot;: &quot;PR 게시 전 제출한 후보와 한계&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;후속 PR의 CI와 병합 여부를 GitHub 이슈에 남긴다.&quot;,
+        &quot;owner&quot;: &quot;상위 세션&quot;,
+        &quot;doneWhen&quot;: &quot;병합 커밋과 검증 결과가 새 코멘트로 연결됨&quot;,
+        &quot;impact&quot;: &quot;저장소와 GitHub에서 종료 근거를 찾을 수 있다.&quot;
+      }
+    ]
+  }
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 17일 AM 8:19 · 작성자 보고서 · 현재 검사기와15개 회귀 검사는 통과했지만 실제 전체 기준 감사가 메뉴 문장 손상과 의미 근거 연결 부족을 지적했다. 134지적·186파일 근거 연결은 보완했으나 정확 경로 저작 승인이 없어 메뉴 교정을 적용하지 못해 부분 완료로 남겼다.</summary><article><h3>Skills 라이브러리 한국어 대체</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><aside class="omission"><strong>일부 원본 항목이 이 보고서에 보관되지 않았습니다.</strong><p>기준 근거 전체 58개 중 29개 표시 (29개 제외), 검사 이력 전체 45개 중 20개 표시 (25개 제외), 검토 이력 전체 12개 중 10개 표시 (2개 제외), 명령 인자 전체 79개 중 37개 표시 (42개 제외), 검토 지적 전체 30개 중 27개 표시 (3개 제외). 제외된 당시 기록 중 실패·차단·미확인 항목이 2건 있습니다. 더 넓은 기록은 근거의 작업 파일과 대조해야 합니다.</p></aside><div class="story">기존 제한 범위 PASS와 불명확한 coverage 집계 때문에 전체 번역 수용 여부를 확정할 수 없었다.
 
-134개 지적을46개 파일의 실제 판정과 연결하고18교정의7파일재적용 및186파일결과를 결속했다. 실제 메뉴 결함은 미수정이며 AC1/4 전체수용과 업무완료는 충족하지 않았다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 19 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 기존요청범위와공식저작정확경로권한연결문제를해결한뒤메뉴최소안을공식typed로적용한다.</p><p class="state-note">저장 당시 기준 중 2개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><aside class="omission"><strong>일부 원본 항목이 이 보고서에 보관되지 않았습니다.</strong><p>기준 근거 전체 58개 중 29개 표시 (29개 제외), 검사 이력 전체 45개 중 20개 표시 (25개 제외), 검토 이력 전체 12개 중 10개 표시 (2개 제외), 명령 인자 전체 79개 중 37개 표시 (42개 제외), 검토 지적 전체 30개 중 27개 표시 (3개 제외). 제외된 당시 기록 중 실패·차단·미확인 항목이 2건 있습니다. 더 넓은 기록은 근거의 작업 파일과 대조해야 합니다.</p></aside></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>기존 제한 범위 PASS와 불명확한 coverage 집계 때문에 전체 번역 수용 여부를 확정할 수 없었다.</p></div><div><h3>접근과 결과</h3><p>134개 지적을46개 파일의 실제 판정과 연결하고18교정의7파일재적용 및186파일결과를 결속했다. 실제 메뉴 결함은 미수정이며 AC1/4 전체수용과 업무완료는 충족하지 않았다.</p></div></div><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>005/11의QA제목반박PASS를전체AC1/4수용으로승격하지 않았다.</li><li>46은지적파일수,134는개별지적수다. 집계단위에관한초기오판을정정하고4원문모호성은확정번역결함으로취급하지 않았다.</li><li>기존권한목록을임의수정하거나새UUID로우회하지 않고실제차단을보존한다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>W005 current-review.md에134원finding↔현판정84fixed28reject18applied4rawambiguous를 exact객체로 연결했다.</li><li>16개parser미분류결론을12실제명시무발견본문과4group00전문판독결론으로 정정하고186파일현재지문·원결론·8현재전문읽기 및2대형문서연결을 기록했다.</li><li>메뉴 사용자 대상 요청의 최소 수정안을 작성했으나 공식typed사전검사가정확writePaths부재로거부해 적용하지 않았다.</li></ul></div><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>기존 선택 라이브러리의 문서 본문·UI 설명·절 manifest 자연어를 한국어로 대체하고 생략·중복 영어 읽기판 없이 코드·명령·식별자와 문서 구조를 보존한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>고정 출처 커밋과 원문·로컬 파일 해시·크기를 구분하고 실제 라이선스·저작권 고지·필요한 제3자 법문과 수정 고지를 보존한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>라이브러리 검증기와 집중 회귀 검사를 실제 실행해 경로 탈출·심볼릭 링크·해시 불일치·라이선스 오표기·미검토 파일과 불완전 번역 표기를 거부한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>번역 완전성과 공개 게시 범위·남은 검토 한계를 확인하고 관련 없는 변경·비밀·원시 로그·생성물을 제외한 커밋 후보와 한국어 메시지를 사용자 검사에 제출하며 실제 commit·push하지 않는다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 19건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>actual Terra review-84ae2e91-f3b7-44eb-b9e6-57ccf6a02585 fail. 사용자메뉴문장손상과전체의미근거부족지적이다. 새coverage는그후저작자료이며새독립수용이아니다.</li><li>Root공식typed사전검사에서plan-design-review/SKILL.md정확writePaths부재로거부됐다. 메뉴소스변경없음.</li><li>테스트/무결성통과는전체의미무오류·사용자승인·commit/push가아니다. W023검토를W005로복사하지않는다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>기존요청범위와공식저작정확경로권한연결문제를해결한뒤메뉴최소안을공식typed로적용한다.</li><li>현재후보·제출을새지문에맞춰연결하고134/186coverage를포함한실제전체기준독립검토와정규완료를이어간다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 17일 AM 8:19 · 선택한 발행 기록 · 현재 검사기와15개 회귀 검사는 통과했지만 실제 전체 기준 감사가 메뉴 문장 손상과 의미 근거 연결 부족을 지적했다. 134지적·186파일 근거 연결은 보완했으나 정확 경로 저작 승인이 없어 메뉴 교정을 적용하지 못해 부분 완료로 남겼다.</p><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 27개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 17일 AM 8:16 · 작성자 보고서 · 현재 검사기와15개 회귀 검사는 통과했지만 실제 전체 기준 감사가 메뉴 문장 손상과 의미 근거 연결 부족을 지적했다. 134지적·186파일 근거 연결은 보완했으나 정확 경로 저작 승인이 없어 메뉴 교정을 적용하지 못해 부분 완료로 남겼다.</summary><article><h3>Skills 라이브러리 한국어 대체</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><aside class="omission"><strong>일부 원본 항목이 이 보고서에 보관되지 않았습니다.</strong><p>기준 근거 전체 55개 중 29개 표시 (26개 제외), 검사 이력 전체 43개 중 20개 표시 (23개 제외), 검토 이력 전체 12개 중 10개 표시 (2개 제외), 명령 인자 전체 76개 중 37개 표시 (39개 제외), 검토 지적 전체 30개 중 27개 표시 (3개 제외). 제외된 당시 기록 중 실패·차단·미확인 항목이 2건 있습니다. 더 넓은 기록은 근거의 작업 파일과 대조해야 합니다.</p></aside><div class="story">기존 제한 범위 PASS와 불명확한 coverage 집계 때문에 전체 번역 수용 여부를 확정할 수 없었다.
+134개 지적을46개 파일의 실제 판정과 연결하고18교정의7파일재적용 및186파일결과를 결속했다. 실제 메뉴 결함은 미수정이며 AC1/4 전체수용과 업무완료는 충족하지 않았다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 19 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 기존요청범위와공식저작정확경로권한연결문제를해결한뒤메뉴최소안을공식typed로적용한다.</p><p class="state-note">저장 당시 기준 중 2개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>W005 current-review.md에134원finding↔현판정84fixed28reject18applied4rawambiguous를 exact객체로 연결했다.</li><li>16개parser미분류결론을12실제명시무발견본문과4group00전문판독결론으로 정정하고186파일현재지문·원결론·8현재전문읽기 및2대형문서연결을 기록했다.</li><li>메뉴 사용자 대상 요청의 최소 수정안을 작성했으나 공식typed사전검사가정확writePaths부재로거부해 적용하지 않았다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>기존 선택 라이브러리의 문서 본문·UI 설명·절 manifest 자연어를 한국어로 대체하고 생략·중복 영어 읽기판 없이 코드·명령·식별자와 문서 구조를 보존한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>고정 출처 커밋과 원문·로컬 파일 해시·크기를 구분하고 실제 라이선스·저작권 고지·필요한 제3자 법문과 수정 고지를 보존한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>라이브러리 검증기와 집중 회귀 검사를 실제 실행해 경로 탈출·심볼릭 링크·해시 불일치·라이선스 오표기·미검토 파일과 불완전 번역 표기를 거부한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>번역 완전성과 공개 게시 범위·남은 검토 한계를 확인하고 관련 없는 변경·비밀·원시 로그·생성물을 제외한 커밋 후보와 한국어 메시지를 사용자 검사에 제출하며 실제 commit·push하지 않는다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl><section class="paper" id="history-report-25d513bf-b8e8-4675-8484-79906073556f-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>005/11의QA제목반박PASS를전체AC1/4수용으로승격하지 않았다.</li><li>46은지적파일수,134는개별지적수다. 집계단위에관한초기오판을정정하고4원문모호성은확정번역결함으로취급하지 않았다.</li><li>기존권한목록을임의수정하거나새UUID로우회하지 않고실제차단을보존한다.</li></ul></section><section class="paper" id="history-report-25d513bf-b8e8-4675-8484-79906073556f-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 19건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>actual Terra review-84ae2e91-f3b7-44eb-b9e6-57ccf6a02585 fail. 사용자메뉴문장손상과전체의미근거부족지적이다. 새coverage는그후저작자료이며새독립수용이아니다.</li><li>Root공식typed사전검사에서plan-design-review/SKILL.md정확writePaths부재로거부됐다. 메뉴소스변경없음.</li><li>테스트/무결성통과는전체의미무오류·사용자승인·commit/push가아니다. W023검토를W005로복사하지않는다.</li></ul></section><section class="paper" id="history-report-25d513bf-b8e8-4675-8484-79906073556f-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>기존요청범위와공식저작정확경로권한연결문제를해결한뒤메뉴최소안을공식typed로적용한다.</li><li>현재후보·제출을새지문에맞춰연결하고134/186coverage를포함한실제전체기준독립검토와정규완료를이어간다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-25d513bf-b8e8-4675-8484-79906073556f-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-f40cbde5-04ba-4e0a-9c8b-e604be629328<br>report-25d513bf-b8e8-4675-8484-79906073556f</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>3ced4ad9901486f8c09f27b6b6b9d71cb37850801b139510742addaf050edb5f</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>9ade7655c31a8015a78f66f7c2324436392414b89f0e86dd16f3bffd5cbfe50b</code></dd></div><div><dt>기준 지문</dt><dd><code>a991d4ee551a9f44f47e04c566a21e0d4d869d44990666e49cbec6bb9451684c</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;기존 선택 라이브러리의 문서 본문·UI 설명·절 manifest 자연어를 한국어로 대체하고 생략·중복 영어 읽기판 없이 코드·명령·식별자와 문서 구조를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;고정 출처 커밋과 원문·로컬 파일 해시·크기를 구분하고 실제 라이선스·저작권 고지·필요한 제3자 법문과 수정 고지를 보존한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-881a065c-1070-4af4-86b8-ada582d8d6ab&quot;,
+          &quot;summary&quot;: &quot;당시 검증 passed(2026-11-16T12:50:14.160Z); 현재 source_changed 때문에 재검증 필요&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a28874f3-8400-4e7b-aaf4-3d45fd230bf3&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7f6342d4-490c-4dde-bb22-cf535372c80d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-64dc28cb-b27e-4600-99fb-92524a2b61c9&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-5cbeeb0f-b4f5-4796-9623-97b0754e2096&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f5c1b295-610f-41c9-aee9-066bf4b64316&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-676b294c-ce73-424d-9cea-e19cc5ea2bcc&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a7321118-c25c-41ff-b996-d83f55a24b8a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4a4d85bc-5d9a-45af-ba35-2a433730356d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d4441956-4ada-4e1b-8e39-772ce004e2a6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;라이브러리 검증기와 집중 회귀 검사를 실제 실행해 경로 탈출·심볼릭 링크·해시 불일치·라이선스 오표기·미검토 파일과 불완전 번역 표기를 거부한다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f49f4e0d-851a-40ca-ac91-fc0e84d2e474&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-f5c1b295-610f-41c9-aee9-066bf4b64316&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2b3ec394-2894-40d8-b031-02ad7c5cb0f4&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-676b294c-ce73-424d-9cea-e19cc5ea2bcc&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-b587731a-e9c0-4208-9da7-53daec090550&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-a7321118-c25c-41ff-b996-d83f55a24b8a&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4a4d85bc-5d9a-45af-ba35-2a433730356d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-93d03123-8fdf-4393-9517-d580617d51d2&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d4441956-4ada-4e1b-8e39-772ce004e2a6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d67e20ba-8f59-4fe4-91d2-2722550d862e&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;번역 완전성과 공개 게시 범위·남은 검토 한계를 확인하고 관련 없는 변경·비밀·원시 로그·생성물을 제외한 커밋 후보와 한국어 메시지를 사용자 검사에 제출하며 실제 commit·push하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-efc75bd6-c0c0-4f44-9384-8b89f171d61b&quot;,
+          &quot;summary&quot;: &quot;당시 검증 passed(2026-11-16T12:07:02.025Z); 현재 source_changed, artifacts_changed 때문에 재검증 필요&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-ad69174c-32a5-4e5f-899f-88bc9f58bd2e&quot;,
+          &quot;summary&quot;: &quot;당시 검증 passed(2026-11-16T12:13:21.860Z); 현재 source_changed, artifacts_changed 때문에 재검증 필요&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-bbd6dc02-711a-4084-9391-b892f51e9b3c&quot;,
+          &quot;summary&quot;: &quot;당시 검증 passed(2026-11-16T12:31:15.217Z); 현재 source_changed, artifacts_changed 때문에 재검증 필요&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-95668988-38b8-41b9-b527-3f20ca8e086c&quot;,
+          &quot;summary&quot;: &quot;당시 검증 passed(2026-11-16T12:50:15.535Z); 현재 source_changed, artifacts_changed 때문에 재검증 필요&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-d94bea36-1579-4d36-b518-07f588fe8fd6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2abf442b-875e-4f40-b750-568112cd19d8&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2294bae4-9252-45c3-8978-b73e6ed112ed&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-b3bfe9b4-9ea2-4f9f-b877-dcb3bd06af7c&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-23da23f7-46d8-4ad9-8b35-42f6b23fd461&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-d94bea36-1579-4d36-b518-07f588fe8fd6&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;-e&quot;,
+        &quot;import assert from &#39;node:assert/strict&#39;;import fs from &#39;node:fs&#39;;import {createHash} from &#39;node:crypto&#39;;import {execFileSync} from &#39;node:child_process&#39;;const base=&#39;.www/evidence/resume-20261116/workflow005/&#39;;const manifest=JSON.parse(fs.readFileSync(base+&#39;candidate-current-files.json&#39;,&#39;utf8&#39;));const receipt=JSON.parse(fs.readFileSync(base+&#39;submission-receipt-final-149.json&#39;,&#39;utf8&#39;));const file=&#39;docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md&#39;;const bytes=fs.readFileSync(file);const text=bytes.toString(&#39;utf8&#39;);const sha=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);assert.equal(manifest.files.length,33);assert.equal(manifest.files.filter(x=&gt;x.path.endsWith(&#39;.md&#39;)).length,32);for(const item of manifest.files){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes,item.path);assert(text.includes(item.path),item.path);}assert.equal(manifest.supportingFiles.length,2);for(const item of manifest.supportingFiles){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes);assert(text.includes(item.path));}const actual=execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--name-only&#39;,&#39;-z&#39;,&#39;--&#39;,&#39;skill-library&#39;],{encoding:&#39;utf8&#39;}).split(&#39;\\0&#39;).filter(Boolean).sort();assert.deepEqual(actual,manifest.files.map(x=&gt;x.path).sort());assert.equal(execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--cached&#39;,&#39;--name-only&#39;],{encoding:&#39;utf8&#39;}),&#39;&#39;);assert.equal(receipt.source,&#39;root_observation_of_actual_commentary&#39;);assert.equal(receipt.targetPath,file);assert.equal(receipt.targetSha256,sha(bytes));assert.equal(receipt.commit,false);assert.equal(receipt.push,false);assert(receipt.message.includes(&#39;Skills 라이브러리 번역의 조건과 누락을 보완한다&#39;));assert(receipt.message.includes(&#39;commit-candidate.md&#39;));assert(text.includes(&#39;원시&#39;)&amp;&amp;text.includes(&#39;제외&#39;)&amp;&amp;text.includes(&#39;감사&#39;));assert(text.includes(&#39;149개&#39;)&amp;&amp;text.includes(&#39;2,828,718&#39;));console.log(JSON.stringify({files:33,markdown:32,indexEmpty:true,submissionSource:receipt.source,limitation:&#39;후보 지문·범위·명시 한계와 root 실제 전달 관찰 확인. 의미 무오류·사용자 승인·commit/push 아님&#39;}));&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:00:49.260Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-2abf442b-875e-4f40-b750-568112cd19d8&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;-e&quot;,
+        &quot;import assert from &#39;node:assert/strict&#39;;import fs from &#39;node:fs&#39;;import {createHash} from &#39;node:crypto&#39;;import {execFileSync} from &#39;node:child_process&#39;;const base=&#39;.www/evidence/resume-20261116/workflow005/&#39;;const manifest=JSON.parse(fs.readFileSync(base+&#39;candidate-current-files.json&#39;,&#39;utf8&#39;));const receipt=JSON.parse(fs.readFileSync(base+&#39;submission-receipt-final-149.json&#39;,&#39;utf8&#39;));const file=&#39;docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md&#39;;const bytes=fs.readFileSync(file);const text=bytes.toString(&#39;utf8&#39;);const sha=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);assert.equal(manifest.files.length,33);assert.equal(manifest.files.filter(x=&gt;x.path.endsWith(&#39;.md&#39;)).length,32);for(const item of manifest.files){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes,item.path);assert(text.includes(item.path),item.path);}assert.equal(manifest.supportingFiles.length,2);for(const item of manifest.supportingFiles){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes);assert(text.includes(item.path));}const actual=execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--name-only&#39;,&#39;-z&#39;,&#39;--&#39;,&#39;skill-library&#39;],{encoding:&#39;utf8&#39;}).split(&#39;\\0&#39;).filter(Boolean).sort();assert.deepEqual(actual,manifest.files.map(x=&gt;x.path).sort());assert.equal(execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--cached&#39;,&#39;--name-only&#39;],{encoding:&#39;utf8&#39;}),&#39;&#39;);assert.equal(receipt.source,&#39;root_observation_of_actual_commentary&#39;);assert.equal(receipt.targetPath,file);assert.equal(receipt.targetSha256,sha(bytes));assert.equal(receipt.commit,false);assert.equal(receipt.push,false);assert(text.includes(&#39;Skills 라이브러리 번역의 조건과 누락을 보완한다&#39;));assert(text.includes(&#39;Skills 라이브러리 최상위의 미검토 파일을 거부한다&#39;));assert(receipt.message.includes(&#39;commit-candidate.md&#39;));assert(text.includes(&#39;원시&#39;)&amp;&amp;text.includes(&#39;제외&#39;)&amp;&amp;text.includes(&#39;감사&#39;));assert(text.includes(&#39;149개&#39;)&amp;&amp;text.includes(&#39;2,828,718&#39;));console.log(JSON.stringify({files:33,markdown:32,indexEmpty:true,submissionSource:receipt.source,limitation:&#39;후보 지문·범위·명시 한계와 root 실제 전달 관찰 확인. 의미 무오류·사용자 승인·commit/push 아님&#39;}));&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:04:11.709Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-7f6342d4-490c-4dde-bb22-cf535372c80d&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:37:06.843Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-9f073d45-6f94-4ee2-9585-d48f01ba6fdf&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:37:07.551Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-2294bae4-9252-45c3-8978-b73e6ed112ed&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;-e&quot;,
+        &quot;import assert from &#39;node:assert/strict&#39;;import fs from &#39;node:fs&#39;;import {createHash} from &#39;node:crypto&#39;;import {execFileSync} from &#39;node:child_process&#39;;const base=&#39;.www/evidence/resume-20261116/workflow005/&#39;;const manifest=JSON.parse(fs.readFileSync(base+&#39;candidate-current-files.json&#39;,&#39;utf8&#39;));const receipt=JSON.parse(fs.readFileSync(base+&#39;submission-receipt-final-150.json&#39;,&#39;utf8&#39;));const file=&#39;docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md&#39;;const bytes=fs.readFileSync(file);const text=bytes.toString(&#39;utf8&#39;);const sha=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);assert.equal(manifest.files.length,33);assert.equal(manifest.files.filter(x=&gt;x.path.endsWith(&#39;.md&#39;)).length,32);for(const item of manifest.files){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes,item.path);assert(text.includes(item.path),item.path);}assert.equal(manifest.supportingFiles.length,2);for(const item of manifest.supportingFiles){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes);assert(text.includes(item.path));}const actual=execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--name-only&#39;,&#39;-z&#39;,&#39;--&#39;,&#39;skill-library&#39;],{encoding:&#39;utf8&#39;}).split(&#39;\\0&#39;).filter(Boolean).sort();assert.deepEqual(actual,manifest.files.map(x=&gt;x.path).sort());assert.equal(execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--cached&#39;,&#39;--name-only&#39;],{encoding:&#39;utf8&#39;}),&#39;&#39;);assert.equal(receipt.source,&#39;root_observation_of_actual_commentary&#39;);assert.equal(receipt.targetPath,file);assert.equal(receipt.targetSha256,sha(bytes));assert.equal(receipt.commit,false);assert.equal(receipt.push,false);assert(text.includes(&#39;Skills 라이브러리 번역의 조건과 누락을 보완한다&#39;));assert(text.includes(&#39;Skills 라이브러리 최상위의 미검토 파일을 거부한다&#39;));assert(receipt.message.includes(&#39;commit-candidate.md&#39;));assert(text.includes(&#39;원시&#39;)&amp;&amp;text.includes(&#39;제외&#39;)&amp;&amp;text.includes(&#39;감사&#39;));assert(text.includes(&#39;150개&#39;)&amp;&amp;text.includes(&#39;2,828,729&#39;));console.log(JSON.stringify({files:33,markdown:32,indexEmpty:true,submissionSource:receipt.source,limitation:&#39;후보 지문·범위·명시 한계와 root 실제 전달 관찰 확인. 의미 무오류·사용자 승인·commit/push 아님&#39;}));&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:38:32.152Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-64dc28cb-b27e-4600-99fb-92524a2b61c9&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:56:42.580Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-54da94c2-022b-4957-8850-98ad827f327e&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:56:43.415Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-b3bfe9b4-9ea2-4f9f-b877-dcb3bd06af7c&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;-e&quot;,
+        &quot;import assert from &#39;node:assert/strict&#39;;import fs from &#39;node:fs&#39;;import {createHash} from &#39;node:crypto&#39;;import {execFileSync} from &#39;node:child_process&#39;;const base=&#39;.www/evidence/resume-20261116/workflow005/&#39;;const manifest=JSON.parse(fs.readFileSync(base+&#39;candidate-current-files.json&#39;,&#39;utf8&#39;));const receipt=JSON.parse(fs.readFileSync(base+&#39;submission-receipt-final-152.json&#39;,&#39;utf8&#39;));const file=&#39;docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md&#39;;const bytes=fs.readFileSync(file);const text=bytes.toString(&#39;utf8&#39;);const sha=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);assert.equal(manifest.files.length,33);assert.equal(manifest.files.filter(x=&gt;x.path.endsWith(&#39;.md&#39;)).length,32);for(const item of manifest.files){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes,item.path);assert(text.includes(item.path),item.path);}assert.equal(manifest.supportingFiles.length,2);for(const item of manifest.supportingFiles){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes);assert(text.includes(item.path));}const actual=execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--name-only&#39;,&#39;-z&#39;,&#39;--&#39;,&#39;skill-library&#39;],{encoding:&#39;utf8&#39;}).split(&#39;\\0&#39;).filter(Boolean).sort();assert.deepEqual(actual,manifest.files.map(x=&gt;x.path).sort());assert.equal(execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--cached&#39;,&#39;--name-only&#39;],{encoding:&#39;utf8&#39;}),&#39;&#39;);assert.equal(receipt.source,&#39;root_observation_of_actual_commentary&#39;);assert.equal(receipt.targetPath,file);assert.equal(receipt.targetSha256,sha(bytes));assert.equal(receipt.commit,false);assert.equal(receipt.push,false);assert(text.includes(&#39;Skills 라이브러리 번역의 조건과 누락을 보완한다&#39;));assert(text.includes(&#39;Skills 라이브러리 최상위의 미검토 파일을 거부한다&#39;));assert(receipt.message.includes(&#39;commit-candidate.md&#39;));assert(text.includes(&#39;원시&#39;)&amp;&amp;text.includes(&#39;제외&#39;)&amp;&amp;text.includes(&#39;감사&#39;));assert(text.includes(&#39;152개&#39;)&amp;&amp;text.includes(&#39;2,828,778&#39;));console.log(JSON.stringify({files:33,markdown:32,indexEmpty:true,submissionSource:receipt.source,limitation:&#39;후보 지문·범위·명시 한계와 root 실제 전달 관찰 확인. 의미 무오류·사용자 승인·commit/push 아님&#39;}));&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T14:57:53.315Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-5cbeeb0f-b4f5-4796-9623-97b0754e2096&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T15:04:26.862Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f49f4e0d-851a-40ca-ac91-fc0e84d2e474&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T15:04:27.594Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-23da23f7-46d8-4ad9-8b35-42f6b23fd461&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;-e&quot;,
+        &quot;import assert from &#39;node:assert/strict&#39;;import fs from &#39;node:fs&#39;;import {createHash} from &#39;node:crypto&#39;;import {execFileSync} from &#39;node:child_process&#39;;const base=&#39;.www/evidence/resume-20261116/workflow005/&#39;;const manifest=JSON.parse(fs.readFileSync(base+&#39;candidate-current-files.json&#39;,&#39;utf8&#39;));const receipt=JSON.parse(fs.readFileSync(base+&#39;submission-receipt-final-154.json&#39;,&#39;utf8&#39;));const file=&#39;docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md&#39;;const bytes=fs.readFileSync(file);const text=bytes.toString(&#39;utf8&#39;);const sha=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);assert.equal(manifest.files.length,33);assert.equal(manifest.files.filter(x=&gt;x.path.endsWith(&#39;.md&#39;)).length,32);for(const item of manifest.files){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes,item.path);assert(text.includes(item.path),item.path);}assert.equal(manifest.supportingFiles.length,2);for(const item of manifest.supportingFiles){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes);assert(text.includes(item.path));}const actual=execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--name-only&#39;,&#39;-z&#39;,&#39;--&#39;,&#39;skill-library&#39;],{encoding:&#39;utf8&#39;}).split(&#39;\\0&#39;).filter(Boolean).sort();assert.deepEqual(actual,manifest.files.map(x=&gt;x.path).sort());assert.equal(execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--cached&#39;,&#39;--name-only&#39;],{encoding:&#39;utf8&#39;}),&#39;&#39;);assert.equal(receipt.source,&#39;root_observation_of_actual_commentary&#39;);assert.equal(receipt.targetPath,file);assert.equal(receipt.targetSha256,sha(bytes));assert.equal(receipt.commit,false);assert.equal(receipt.push,false);assert(text.includes(&#39;Skills 라이브러리 번역의 조건과 누락을 보완한다&#39;));assert(text.includes(&#39;Skills 라이브러리 최상위의 미검토 파일을 거부한다&#39;));assert(receipt.message.includes(&#39;commit-candidate.md&#39;));assert(text.includes(&#39;원시&#39;)&amp;&amp;text.includes(&#39;제외&#39;)&amp;&amp;text.includes(&#39;감사&#39;));assert(text.includes(&#39;154개&#39;)&amp;&amp;text.includes(&#39;2,828,790&#39;));console.log(JSON.stringify({files:33,markdown:32,indexEmpty:true,submissionSource:receipt.source,limitation:&#39;후보 지문·범위·명시 한계와 root 실제 전달 관찰 확인. 의미 무오류·사용자 승인·commit/push 아님&#39;}));&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T15:05:03.303Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-f5c1b295-610f-41c9-aee9-066bf4b64316&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:21:17.901Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-2b3ec394-2894-40d8-b031-02ad7c5cb0f4&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:21:25.503Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-676b294c-ce73-424d-9cea-e19cc5ea2bcc&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:41:30.069Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-b587731a-e9c0-4208-9da7-53daec090550&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T21:41:36.523Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-a7321118-c25c-41ff-b996-d83f55a24b8a&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:05:02.110Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-4a4d85bc-5d9a-45af-ba35-2a433730356d&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:05:35.829Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-93d03123-8fdf-4393-9517-d580617d51d2&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:05:55.133Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d4441956-4ada-4e1b-8e39-772ce004e2a6&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:19:35.737Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-d67e20ba-8f59-4fe4-91d2-2722550d862e&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T23:19:44.948Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [
+    {
+      &quot;id&quot;: &quot;review-5175f8bd-1039-4685-b8c3-db53f87bdf54&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-5175f8bd-1039-4685-b8c3-db53f87bdf54/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;scripts/check-skill-library.ts:149는 skill-library/upstream만 순회한다. 예를 들어 skill-library/unreviewed.md가 추가되어도 검사 대상에 들어가지 않아 통과할 수 있다. docs/skills/CATALOG.md:81의 미검토 추가 파일 검사 설명과 달리 라이브러리 루트의 추가 파일은 검출하지 못한다.&quot;,
+        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:734의 ‘예외를 던지지 않는 경우만’은 테스트가 예외를 던지지 않는지만 확인한다는 원문의 ‘non-throw only’를 실행 조건처럼 바꾼다. 이 예시는 앞서 설명한 약한 테스트의 한계를 보여주므로, 단언 범위가 드러나도록 옮겨야 한다.&quot;,
+        &quot;skill-library/upstream/gstack/plan-design-review/sections/review-sections.md:189의 ‘복사본의 30%’는 원문의 ‘30% of the copy’, 즉 문안의 30%를 뜻하지 않는다. 문안을 줄이는 디자인 규칙이 복제물을 삭제하는 지시로 읽힌다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle과 세 번역 파일 중 지정된 고정 원문 일부, 검증 기록의 마지막 60행, 두 파일의 현재 diff 및 관련 행 검색이다. 전체 201개 자료의 의미를 대조하거나 테스트를 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-c0e35b97-04dc-402f-878b-d2c31cb93e72&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-c0e35b97-04dc-402f-878b-d2c31cb93e72/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:552 — 원문은 생성된 사본을 추적해 사람이 작성한 템플릿 또는 리졸버로 돌아가라고 한다. 번역은 ‘다시 작성된 사본으로 돌아가기 템플릿/리졸버’라고 되어 있어 추적 대상을 잘못 전달한다. 보존 원문 586~590행과 대조했다.&quot;,
+        &quot;skill-library/upstream/gstack/plan-design-review/sections/review-sections.md:89 — 원문은 주장 옆의 증거로 수치 행을 대신 쓰지 말라는 문맥인데, 번역은 ‘측정항목 행은 절대 표시되지 않습니다’라고 하여 페이지 전체에서 수치 행을 금지하는 뜻으로 범위를 넓힌다. 보존 원문 95~97행과 대조했다.&quot;,
+        &quot;검토 범위: 제공된 inputBundle과 검증 기록 말미, 검증기·테스트 및 세 번역 파일의 diff, 위 두 보존 원문의 해당 행을 읽었다. 전체 201개 자료의 문장별 정확성은 확인하지 않았고 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-126176e1-2611-4573-8805-46263c429e1b&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-126176e1-2611-4573-8805-46263c429e1b/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;skill-library/upstream/gstack/plan-design-review/sections/review-sections.md:89 — ‘제공받은 고객 정보·인용문·수치를 뒷받침하는 주장’은 주장이 증거를 뒷받침하는 것으로 관계가 뒤집혀 있다. 보존 원문 94행은 고객 사례·인용문·수치가 뒷받침하는 주장 옆에 해당 증거를 두라고 지시한다. 증거가 주장을 뒷받침하도록 문장을 수정해야 한다.&quot;,
+        &quot;검토는 제공된 inputBundle과 도구로 읽은 원문 일부 및 두 파일의 diff에 한정했다. plan-design-review diff 출력은 길이 제한으로 일부 잘렸다. 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-feccdbb2-f8f3-4eaa-a788-7f23650901c6&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-feccdbb2-f8f3-4eaa-a788-7f23650901c6/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;skill-library/upstream/gstack/plan-design-review/sections/review-sections.md:161 — 원문은 첫 화면의 등장 또는 스크롤 연동 모션을 이미 보이는 기본 상태에서 ease-out하고, 호버 상태는 정보를 전달하는 곳에만 쓰라고 각각 지시한다. 번역은 ease-out을 호버 상태에 연결해 첫 화면 모션의 시작 상태와 완화 조건을 누락했다.&quot;,
+        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:154 — 원문은 프레임워크가 심벌을 생성하는 경우 클래스 본문의 리터럴 이름 대신 메타 구성 요소를 인용하라고 요구한다. 번역은 해당 문장에 동사가 빠져 메타 구성 요소를 인용해야 한다는 검증 지시를 전달하지 못한다.&quot;,
+        &quot;검토 범위: inline으로 제공된 10개 파일과 도구로 읽은 원문·검증 기록의 일부 행 및 디자인 문서 diff를 대조했다. 나머지 라이브러리 전체의 번역 정확성은 판정하지 않았으며 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-35eda400-8c53-4d22-8505-d70c5fdeca3b&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-35eda400-8c53-4d22-8505-d70c5fdeca3b/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;skill-library/upstream/gstack/plan-design-review/sections/review-sections.md:550 및 skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:1348 — 원문은 커밋 차이가 0이어도 diff 검토의 최신성 근거로 HEAD 일치나 커밋 거리를 대신 사용하지 말라고 명시한다. 번역은 이를 ‘HEAD로 돌아가지 마세요’와 불완전한 문장으로 옮겨 무엇을 대체 근거로 사용하면 안 되는지 전달하지 못한다. 오래된 검토를 현재 검토로 잘못 판정하지 않도록 금지 대상을 복원해야 한다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle과 도구로 읽은 세 gstack 원문의 일부 행 및 두 번역 파일의 diff다. 나머지 생략 파일과 전체 번역의 정확성은 판정하지 않았으며 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-8de98040-5b7b-4f3b-8d2b-427bd447d6d4&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-8de98040-5b7b-4f3b-8d2b-427bd447d6d4/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:521 — 시간적 분해를 실행 순서를 수행하는 것으로 번역해 위험 신호의 핵심이 빠졌다. 보존 원문 559~560행은 모듈을 소유한 지식이 아닌 실행 순서에 따라 분리하는 구조를 지적한다. 현재 문구로는 어떤 구조를 수정해야 하는지 판단할 수 없다.&quot;,
+        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:518 — 정보 유출 예시의 representation, wire detail, re-exported transport types가 각각 ‘대표’, ‘유선’, ‘재수출 운송 유형’으로 번역되어 기술적 의미가 손상됐다. 보존 원문 556~558행은 표현 방식·전송 형식의 세부사항과 재내보낸 전송 타입의 누출을 가리킨다.&quot;,
+        &quot;검토 범위는 제공된 10개 인라인 파일과 추가로 읽은 gstack 원문 일부에 한정된다. 나머지 자료의 번역 전체를 대조하지 않았으며 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-32a18d33-6c1a-4850-a1e3-cee8caba83f0&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-32a18d33-6c1a-4850-a1e3-cee8caba83f0/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:1152에서 P2 작업을 같은 브랜치에 반영해야 한다고 번역했다. 고정 원문 1228행의 “should land same branch”는 권장 강도이므로, 번역은 선택 가능한 처리를 의무로 강화한다. 같은 원문의 P1 배송 차단과도 구분되도록 수정이 필요하다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle과 도구로 읽은 두 gstack 고정 원문의 일부 행이다. 생략된 라이브러리 전체의 번역 정확성은 판정하지 않았으며 테스트는 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-71b34ccb-b601-4305-9cf3-738253a46013&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-71b34ccb-b601-4305-9cf3-738253a46013/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:771 — QA 테스트 계획 템플릿의 `## Affected Pages/Routes`, `## Key Interactions to Verify`, `## Edge Cases`, `## Critical Paths`가 한국어 제목으로 바뀌었다. 고정 원문은 테스트 계획의 형식을 유지하도록 요구하며, 같은 번역 문서 792행도 `Edge Case`와 `Critical Path` 항목을 참조한다. 원문의 구조 표지를 보존하고 설명을 번역해야 한다.&quot;,
+        &quot;검토 범위는 제공된 inputBundle과 두 gstack 보존 원문의 일부 구간, 검사기 diff에 한정된다. 나머지 라이브러리 전체의 번역 정확성은 판정하지 않았으며 테스트는 실행하지 않았다. QA 원문 디렉터리에서 해당 영문 제목을 검색한 명령은 일치 항목 없이 종료 코드 1을 반환했다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-605e8105-2380-4306-a914-503904ed3281&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-605e8105-2380-4306-a914-503904ed3281/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위는 제공된 inputBundle과 고정 원문의 plan-design-review·plan-eng-review 일부, qa·qa-only의 테스트 계획 참조 구간이다. 이 범위에서 수정이 필요한 구체적 결함은 확인하지 못했다.&quot;,
+        &quot;QA 테스트 계획의 네 제목에 대해 확인한 원문은 정확한 영문 문자열로 파싱해야 한다고 명시하지 않는다. 따라서 이전 감사의 제목 보존 지적만으로 결함을 확정하기 어렵다. 외부 설치본의 소비 구현은 확인하지 않았다.&quot;,
+        &quot;나머지 라이브러리의 번역 전체를 직접 대조하지 않았으며, 테스트는 실행하지 않았다. 이 판정은 전체 번역의 무오류나 수용 기준 전체 통과를 뜻하지 않는다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-84ae2e91-f3b7-44eb-b9e6-57ccf6a02585&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-84ae2e91-f3b7-44eb-b9e6-57ccf6a02585/terra.json&quot;,
+      &quot;findings&quot;: [
+        &quot;AC-1: skill-library/upstream/gstack/plan-design-review/SKILL.md:51은 AskUserQuestion이 금지된 경우 그대로 출력할 메뉴에 ‘A·B·C로 답하도록 요청하고’라고 적어, 원문의 사용자 대상 응답 요청 ‘Reply with A, B, or C’를 수행자 대상 지시로 바꿨다. 메뉴를 그대로 출력하면 사용자에게 선택을 요청하는 문장이 손상된다. 보존 원문 50행과 대조했으며, 사용자 대상 문장으로 복원해야 한다.&quot;,
+        &quot;AC-1과 AC-4의 전체 수용 근거도 아직 부족하다. current-review.md에 포함된 coverage 보고서는 동일 SHA인 이전 결과에도 미해결 finding과 분류가 불명확한 결과가 있음을 밝히고, 8쌍 대조는 전체 186개 문서의 의미 통과가 아니라고 한정한다. 위 결함을 교정하고 남은 finding 및 현재 번역의 의미 근거를 대조한 뒤 완전성과 제출 후보를 다시 판정해야 한다.&quot;,
+        &quot;검토 범위는 제공된 inline 자료와 별도로 읽은 work.json의 기준 일부, 관련 검토 결과 및 위 원문·번역 문맥이다. 전체 번역과 AC-2·AC-3의 실행 증거를 독립적으로 전수 확인하지 않았으며 테스트는 실행하지 않았다. work.json 검색 출력은 길이 제한으로 잘렸고, 표시된 최초 AC-4 정의만 사용했다.&quot;
+      ]
+    }
+  ],
+  &quot;omitted&quot;: {
+    &quot;criteria&quot;: 0,
+    &quot;evidence&quot;: 29,
+    &quot;verifications&quot;: 25,
+    &quot;reviews&quot;: 2,
+    &quot;arguments&quot;: 42,
+    &quot;findings&quot;: 3,
+    &quot;unresolved&quot;: 2
+  }
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;현재 검사기와15개 회귀 검사는 통과했지만 실제 전체 기준 감사가 메뉴 문장 손상과 의미 근거 연결 부족을 지적했다. 134지적·186파일 근거 연결은 보완했으나 정확 경로 저작 승인이 없어 메뉴 교정을 적용하지 못해 부분 완료로 남겼다.&quot;,
+  &quot;before&quot;: &quot;기존 제한 범위 PASS와 불명확한 coverage 집계 때문에 전체 번역 수용 여부를 확정할 수 없었다.&quot;,
+  &quot;after&quot;: &quot;134개 지적을46개 파일의 실제 판정과 연결하고18교정의7파일재적용 및186파일결과를 결속했다. 실제 메뉴 결함은 미수정이며 AC1/4 전체수용과 업무완료는 충족하지 않았다.&quot;,
+  &quot;changes&quot;: [
+    &quot;W005 current-review.md에134원finding↔현판정84fixed28reject18applied4rawambiguous를 exact객체로 연결했다.&quot;,
+    &quot;16개parser미분류결론을12실제명시무발견본문과4group00전문판독결론으로 정정하고186파일현재지문·원결론·8현재전문읽기 및2대형문서연결을 기록했다.&quot;,
+    &quot;메뉴 사용자 대상 요청의 최소 수정안을 작성했으나 공식typed사전검사가정확writePaths부재로거부해 적용하지 않았다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;005/11의QA제목반박PASS를전체AC1/4수용으로승격하지 않았다.&quot;,
+    &quot;46은지적파일수,134는개별지적수다. 집계단위에관한초기오판을정정하고4원문모호성은확정번역결함으로취급하지 않았다.&quot;,
+    &quot;기존권한목록을임의수정하거나새UUID로우회하지 않고실제차단을보존한다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;actual Terra review-84ae2e91-f3b7-44eb-b9e6-57ccf6a02585 fail. 사용자메뉴문장손상과전체의미근거부족지적이다. 새coverage는그후저작자료이며새독립수용이아니다.&quot;,
+    &quot;Root공식typed사전검사에서plan-design-review/SKILL.md정확writePaths부재로거부됐다. 메뉴소스변경없음.&quot;,
+    &quot;테스트/무결성통과는전체의미무오류·사용자승인·commit/push가아니다. W023검토를W005로복사하지않는다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;기존요청범위와공식저작정확경로권한연결문제를해결한뒤메뉴최소안을공식typed로적용한다.&quot;,
+    &quot;현재후보·제출을새지문에맞춰연결하고134/186coverage를포함한실제전체기준독립검토와정규완료를이어간다.&quot;
+  ]
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 17일 AM 8:16 · 작성자 보고서 · 현재 검사기와15개 회귀 검사는 통과했지만 실제 전체 기준 감사가 메뉴 문장 손상과 의미 근거 연결 부족을 지적했다. 134지적·186파일 근거 연결은 보완했으나 정확 경로 저작 승인이 없어 메뉴 교정을 적용하지 못해 부분 완료로 남겼다.</summary><article><h3>Skills 라이브러리 한국어 대체</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><aside class="omission"><strong>일부 원본 항목이 이 보고서에 보관되지 않았습니다.</strong><p>기준 근거 전체 55개 중 29개 표시 (26개 제외), 검사 이력 전체 43개 중 20개 표시 (23개 제외), 검토 이력 전체 12개 중 10개 표시 (2개 제외), 명령 인자 전체 76개 중 37개 표시 (39개 제외), 검토 지적 전체 30개 중 27개 표시 (3개 제외). 제외된 당시 기록 중 실패·차단·미확인 항목이 2건 있습니다. 더 넓은 기록은 근거의 작업 파일과 대조해야 합니다.</p></aside><div class="story">기존 제한 범위 PASS와 불명확한 coverage 집계 때문에 전체 번역 수용 여부를 확정할 수 없었다.
 
 134개 지적을46개 파일의 실제 판정과 연결하고18교정의7파일재적용 및186파일결과를 결속했다. 실제 메뉴 결함은 미수정이며 AC1/4 전체수용과 업무완료는 충족하지 않았다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 19 · 실패 1 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>당시 수정 필요</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 기존요청범위와공식저작정확경로권한연결문제를해결한뒤메뉴최소안을공식typed로적용한다.</p><p class="state-note">저장 당시 기준 중 2개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>W005 current-review.md에134원finding↔현판정84fixed28reject18applied4rawambiguous를 exact객체로 연결했다.</li><li>16개parser미분류결론을12실제명시무발견본문과4group00전문판독결론으로 정정하고186파일현재지문·원결론·8현재전문읽기 및2대형문서연결을 기록했다.</li><li>메뉴 사용자 대상 요청의 최소 수정안을 작성했으나 공식typed사전검사가정확writePaths부재로거부해 적용하지 않았다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>기존 선택 라이브러리의 문서 본문·UI 설명·절 manifest 자연어를 한국어로 대체하고 생략·중복 영어 읽기판 없이 코드·명령·식별자와 문서 구조를 보존한다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>고정 출처 커밋과 원문·로컬 파일 해시·크기를 구분하고 실제 라이선스·저작권 고지·필요한 제3자 법문과 수정 고지를 보존한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>라이브러리 검증기와 집중 회귀 검사를 실제 실행해 경로 탈출·심볼릭 링크·해시 불일치·라이선스 오표기·미검토 파일과 불완전 번역 표기를 거부한다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>번역 완전성과 공개 게시 범위·남은 검토 한계를 확인하고 관련 없는 변경·비밀·원시 로그·생성물을 제외한 커밋 후보와 한국어 메시지를 사용자 검사에 제출하며 실제 commit·push하지 않는다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div></dl><section class="paper" id="history-report-aa2bec15-76af-43a2-a2fe-364fea7866d3-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>005/11의QA제목반박PASS를전체AC1/4수용으로승격하지 않았다.</li><li>46은지적파일수,134는개별지적수다. 집계단위에관한초기오판을정정하고4원문모호성은확정번역결함으로취급하지 않았다.</li><li>기존권한목록을임의수정하거나새UUID로우회하지 않고실제차단을보존한다.</li></ul></section><section class="paper" id="history-report-aa2bec15-76af-43a2-a2fe-364fea7866d3-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 19건, 실패 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">독립 검토: 당시 수정 필요로 기록.</p><p class="limit">수정이 필요한 것으로 기록되어 후속 확인이 남아 있습니다. 지적 전문은 아래 원시 근거에서 확인할 수 있습니다.</p><h3>확인하지 못한 범위</h3><ul><li>actual Terra review-84ae2e91-f3b7-44eb-b9e6-57ccf6a02585 fail. 사용자메뉴문장손상과전체의미근거부족지적이다. 새coverage는그후저작자료이며새독립수용이아니다.</li><li>Root공식typed사전검사에서plan-design-review/SKILL.md정확writePaths부재로거부됐다. 메뉴소스변경없음.</li><li>테스트/무결성통과는전체의미무오류·사용자승인·commit/push가아니다. W023검토를W005로복사하지않는다.</li></ul></section><section class="paper" id="history-report-aa2bec15-76af-43a2-a2fe-364fea7866d3-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>기존요청범위와공식저작정확경로권한연결문제를해결한뒤메뉴최소안을공식typed로적용한다.</li><li>현재후보·제출을새지문에맞춰연결하고134/186coverage를포함한실제전체기준독립검토와정규완료를이어간다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-aa2bec15-76af-43a2-a2fe-364fea7866d3-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-f40cbde5-04ba-4e0a-9c8b-e604be629328<br>report-aa2bec15-76af-43a2-a2fe-364fea7866d3</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>4ccad400d16628fa8b8676e9d4bb9cd583384fc53486aeddea552820212de17c</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>9ade7655c31a8015a78f66f7c2324436392414b89f0e86dd16f3bffd5cbfe50b</code></dd></div><div><dt>기준 지문</dt><dd><code>a991d4ee551a9f44f47e04c566a21e0d4d869d44990666e49cbec6bb9451684c</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
   &quot;status&quot;: &quot;verifying&quot;,
@@ -15184,16 +16591,25 @@ HTTP 200 원문 201개의 SHA와 바이트가 inventory와 일치하며 현재 �
     &quot;전체 번역의 의미·누락·구조 보존을 현재 원문과 대조하고 기준별 공식 검증을 연결한다.&quot;,
     &quot;공유 소스 동결 후 문서 검토 적용성을 확인하고 직접 Terra 독립 감사를 실행한다.&quot;
   ]
-}</pre></div></details></article></details></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Workflow/005-Skills 라이브러리 한국어 대체/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-f40cbde5-04ba-4e0a-9c8b-e604be629328<br>report-25d513bf-b8e8-4675-8484-79906073556f</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>3ced4ad9901486f8c09f27b6b6b9d71cb37850801b139510742addaf050edb5f</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>9ade7655c31a8015a78f66f7c2324436392414b89f0e86dd16f3bffd5cbfe50b</code></dd></div><div><dt>기준 지문</dt><dd><code>a991d4ee551a9f44f47e04c566a21e0d4d869d44990666e49cbec6bb9451684c</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
-  &quot;status&quot;: &quot;verifying&quot;,
+}</pre></div></details></article></details></section><h3>판단을 되짚는 근거</h3><ol class="references"><li><p>파일별 최종 지문과 독립 검토 식별자</p><code>current-review.md</code></li><li><p>PR 게시 전 제출한 후보와 한계</p><code>commit-candidate.md</code></li></ol><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Workflow/005-Skills 라이브러리 한국어 대체/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-f40cbde5-04ba-4e0a-9c8b-e604be629328<br>report-89644436-b403-4412-a471-16c0697425cd</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>31b27245ea28870a5926a47a78cfbc5bae9af9e1e215dd5a62549d0e680ea99c</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>81089bacf72317cefccfceed215695172cc2bdd77072b15a5c8b2aba79f7b091</code></dd></div><div><dt>기준 지문</dt><dd><code>a991d4ee551a9f44f47e04c566a21e0d4d869d44990666e49cbec6bb9451684c</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>done</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;done&quot;,
   &quot;blockedReason&quot;: null,
   &quot;criteria&quot;: [
     {
       &quot;id&quot;: &quot;AC-1&quot;,
       &quot;description&quot;: &quot;기존 선택 라이브러리의 문서 본문·UI 설명·절 manifest 자연어를 한국어로 대체하고 생략·중복 영어 읽기판 없이 코드·명령·식별자와 문서 구조를 보존한다.&quot;,
       &quot;required&quot;: true,
-      &quot;result&quot;: &quot;unverified&quot;,
-      &quot;evidence&quot;: []
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-79469a6a-000c-4347-a5a7-42fe45b2621f&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-66b1fc2c-b669-4294-8d96-f706635271c0&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        }
+      ]
     },
     {
       &quot;id&quot;: &quot;AC-2&quot;,
@@ -15201,14 +16617,6 @@ HTTP 200 원문 201개의 SHA와 바이트가 inventory와 일치하며 현재 �
       &quot;required&quot;: true,
       &quot;result&quot;: &quot;passed&quot;,
       &quot;evidence&quot;: [
-        {
-          &quot;path&quot;: &quot;verification.md#attempt-881a065c-1070-4af4-86b8-ada582d8d6ab&quot;,
-          &quot;summary&quot;: &quot;당시 검증 passed(2026-11-16T12:50:14.160Z); 현재 source_changed 때문에 재검증 필요&quot;
-        },
-        {
-          &quot;path&quot;: &quot;verification.md#attempt-a28874f3-8400-4e7b-aaf4-3d45fd230bf3&quot;,
-          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
-        },
         {
           &quot;path&quot;: &quot;verification.md#attempt-7f6342d4-490c-4dde-bb22-cf535372c80d&quot;,
           &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
@@ -15240,6 +16648,14 @@ HTTP 200 원문 201개의 SHA와 바이트가 inventory와 일치하며 현재 �
         {
           &quot;path&quot;: &quot;verification.md#attempt-d4441956-4ada-4e1b-8e39-772ce004e2a6&quot;,
           &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-90a2ed5a-60d3-4f10-8115-a181bffd916f&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-e502039e-af86-4c57-a6aa-b28e364bdd61&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
         }
       ]
     },
@@ -15249,14 +16665,6 @@ HTTP 200 원문 201개의 SHA와 바이트가 inventory와 일치하며 현재 �
       &quot;required&quot;: true,
       &quot;result&quot;: &quot;passed&quot;,
       &quot;evidence&quot;: [
-        {
-          &quot;path&quot;: &quot;verification.md#attempt-f49f4e0d-851a-40ca-ac91-fc0e84d2e474&quot;,
-          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
-        },
-        {
-          &quot;path&quot;: &quot;verification.md#attempt-f5c1b295-610f-41c9-aee9-066bf4b64316&quot;,
-          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
-        },
         {
           &quot;path&quot;: &quot;verification.md#attempt-2b3ec394-2894-40d8-b031-02ad7c5cb0f4&quot;,
           &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
@@ -15288,6 +16696,14 @@ HTTP 200 원문 201개의 SHA와 바이트가 inventory와 일치하며 현재 �
         {
           &quot;path&quot;: &quot;verification.md#attempt-d67e20ba-8f59-4fe4-91d2-2722550d862e&quot;,
           &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-24922de8-5423-4738-aa44-b9591c438796&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-1645d817-4880-4575-a9ba-86c5d3a18af2&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
         }
       ]
     },
@@ -15295,12 +16711,8 @@ HTTP 200 원문 201개의 SHA와 바이트가 inventory와 일치하며 현재 �
       &quot;id&quot;: &quot;AC-4&quot;,
       &quot;description&quot;: &quot;번역 완전성과 공개 게시 범위·남은 검토 한계를 확인하고 관련 없는 변경·비밀·원시 로그·생성물을 제외한 커밋 후보와 한국어 메시지를 사용자 검사에 제출하며 실제 commit·push하지 않는다.&quot;,
       &quot;required&quot;: true,
-      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;result&quot;: &quot;passed&quot;,
       &quot;evidence&quot;: [
-        {
-          &quot;path&quot;: &quot;verification.md#attempt-efc75bd6-c0c0-4f44-9384-8b89f171d61b&quot;,
-          &quot;summary&quot;: &quot;당시 검증 passed(2026-11-16T12:07:02.025Z); 현재 source_changed, artifacts_changed 때문에 재검증 필요&quot;
-        },
         {
           &quot;path&quot;: &quot;verification.md#attempt-ad69174c-32a5-4e5f-899f-88bc9f58bd2e&quot;,
           &quot;summary&quot;: &quot;당시 검증 passed(2026-11-16T12:13:21.860Z); 현재 source_changed, artifacts_changed 때문에 재검증 필요&quot;
@@ -15332,120 +16744,19 @@ HTTP 200 원문 201개의 SHA와 바이트가 inventory와 일치하며 현재 �
         {
           &quot;path&quot;: &quot;verification.md#attempt-23da23f7-46d8-4ad9-8b35-42f6b23fd461&quot;,
           &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-79469a6a-000c-4347-a5a7-42fe45b2621f&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-66b1fc2c-b669-4294-8d96-f706635271c0&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
         }
       ]
     }
   ],
   &quot;verifications&quot;: [
-    {
-      &quot;id&quot;: &quot;attempt-d94bea36-1579-4d36-b518-07f588fe8fd6&quot;,
-      &quot;command&quot;: &quot;node&quot;,
-      &quot;args&quot;: [
-        &quot;--input-type=module&quot;,
-        &quot;-e&quot;,
-        &quot;import assert from &#39;node:assert/strict&#39;;import fs from &#39;node:fs&#39;;import {createHash} from &#39;node:crypto&#39;;import {execFileSync} from &#39;node:child_process&#39;;const base=&#39;.www/evidence/resume-20261116/workflow005/&#39;;const manifest=JSON.parse(fs.readFileSync(base+&#39;candidate-current-files.json&#39;,&#39;utf8&#39;));const receipt=JSON.parse(fs.readFileSync(base+&#39;submission-receipt-final-149.json&#39;,&#39;utf8&#39;));const file=&#39;docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md&#39;;const bytes=fs.readFileSync(file);const text=bytes.toString(&#39;utf8&#39;);const sha=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);assert.equal(manifest.files.length,33);assert.equal(manifest.files.filter(x=&gt;x.path.endsWith(&#39;.md&#39;)).length,32);for(const item of manifest.files){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes,item.path);assert(text.includes(item.path),item.path);}assert.equal(manifest.supportingFiles.length,2);for(const item of manifest.supportingFiles){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes);assert(text.includes(item.path));}const actual=execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--name-only&#39;,&#39;-z&#39;,&#39;--&#39;,&#39;skill-library&#39;],{encoding:&#39;utf8&#39;}).split(&#39;\\0&#39;).filter(Boolean).sort();assert.deepEqual(actual,manifest.files.map(x=&gt;x.path).sort());assert.equal(execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--cached&#39;,&#39;--name-only&#39;],{encoding:&#39;utf8&#39;}),&#39;&#39;);assert.equal(receipt.source,&#39;root_observation_of_actual_commentary&#39;);assert.equal(receipt.targetPath,file);assert.equal(receipt.targetSha256,sha(bytes));assert.equal(receipt.commit,false);assert.equal(receipt.push,false);assert(receipt.message.includes(&#39;Skills 라이브러리 번역의 조건과 누락을 보완한다&#39;));assert(receipt.message.includes(&#39;commit-candidate.md&#39;));assert(text.includes(&#39;원시&#39;)&amp;&amp;text.includes(&#39;제외&#39;)&amp;&amp;text.includes(&#39;감사&#39;));assert(text.includes(&#39;149개&#39;)&amp;&amp;text.includes(&#39;2,828,718&#39;));console.log(JSON.stringify({files:33,markdown:32,indexEmpty:true,submissionSource:receipt.source,limitation:&#39;후보 지문·범위·명시 한계와 root 실제 전달 관찰 확인. 의미 무오류·사용자 승인·commit/push 아님&#39;}));&quot;
-      ],
-      &quot;environment&quot;: {
-        &quot;platform&quot;: &quot;darwin&quot;,
-        &quot;arch&quot;: &quot;arm64&quot;,
-        &quot;node&quot;: &quot;v22.23.1&quot;
-      },
-      &quot;result&quot;: &quot;failed&quot;,
-      &quot;executor&quot;: &quot;process&quot;,
-      &quot;exitCode&quot;: 1,
-      &quot;sourceStable&quot;: true,
-      &quot;completedAt&quot;: &quot;2026-11-16T14:00:49.260Z&quot;
-    },
-    {
-      &quot;id&quot;: &quot;attempt-2abf442b-875e-4f40-b750-568112cd19d8&quot;,
-      &quot;command&quot;: &quot;node&quot;,
-      &quot;args&quot;: [
-        &quot;--input-type=module&quot;,
-        &quot;-e&quot;,
-        &quot;import assert from &#39;node:assert/strict&#39;;import fs from &#39;node:fs&#39;;import {createHash} from &#39;node:crypto&#39;;import {execFileSync} from &#39;node:child_process&#39;;const base=&#39;.www/evidence/resume-20261116/workflow005/&#39;;const manifest=JSON.parse(fs.readFileSync(base+&#39;candidate-current-files.json&#39;,&#39;utf8&#39;));const receipt=JSON.parse(fs.readFileSync(base+&#39;submission-receipt-final-149.json&#39;,&#39;utf8&#39;));const file=&#39;docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md&#39;;const bytes=fs.readFileSync(file);const text=bytes.toString(&#39;utf8&#39;);const sha=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);assert.equal(manifest.files.length,33);assert.equal(manifest.files.filter(x=&gt;x.path.endsWith(&#39;.md&#39;)).length,32);for(const item of manifest.files){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes,item.path);assert(text.includes(item.path),item.path);}assert.equal(manifest.supportingFiles.length,2);for(const item of manifest.supportingFiles){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes);assert(text.includes(item.path));}const actual=execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--name-only&#39;,&#39;-z&#39;,&#39;--&#39;,&#39;skill-library&#39;],{encoding:&#39;utf8&#39;}).split(&#39;\\0&#39;).filter(Boolean).sort();assert.deepEqual(actual,manifest.files.map(x=&gt;x.path).sort());assert.equal(execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--cached&#39;,&#39;--name-only&#39;],{encoding:&#39;utf8&#39;}),&#39;&#39;);assert.equal(receipt.source,&#39;root_observation_of_actual_commentary&#39;);assert.equal(receipt.targetPath,file);assert.equal(receipt.targetSha256,sha(bytes));assert.equal(receipt.commit,false);assert.equal(receipt.push,false);assert(text.includes(&#39;Skills 라이브러리 번역의 조건과 누락을 보완한다&#39;));assert(text.includes(&#39;Skills 라이브러리 최상위의 미검토 파일을 거부한다&#39;));assert(receipt.message.includes(&#39;commit-candidate.md&#39;));assert(text.includes(&#39;원시&#39;)&amp;&amp;text.includes(&#39;제외&#39;)&amp;&amp;text.includes(&#39;감사&#39;));assert(text.includes(&#39;149개&#39;)&amp;&amp;text.includes(&#39;2,828,718&#39;));console.log(JSON.stringify({files:33,markdown:32,indexEmpty:true,submissionSource:receipt.source,limitation:&#39;후보 지문·범위·명시 한계와 root 실제 전달 관찰 확인. 의미 무오류·사용자 승인·commit/push 아님&#39;}));&quot;
-      ],
-      &quot;environment&quot;: {
-        &quot;platform&quot;: &quot;darwin&quot;,
-        &quot;arch&quot;: &quot;arm64&quot;,
-        &quot;node&quot;: &quot;v22.23.1&quot;
-      },
-      &quot;result&quot;: &quot;passed&quot;,
-      &quot;executor&quot;: &quot;process&quot;,
-      &quot;exitCode&quot;: 0,
-      &quot;sourceStable&quot;: true,
-      &quot;completedAt&quot;: &quot;2026-11-16T14:04:11.709Z&quot;
-    },
-    {
-      &quot;id&quot;: &quot;attempt-7f6342d4-490c-4dde-bb22-cf535372c80d&quot;,
-      &quot;command&quot;: &quot;node&quot;,
-      &quot;args&quot;: [
-        &quot;scripts/check-skill-library.ts&quot;
-      ],
-      &quot;environment&quot;: {
-        &quot;platform&quot;: &quot;darwin&quot;,
-        &quot;arch&quot;: &quot;arm64&quot;,
-        &quot;node&quot;: &quot;v22.23.1&quot;
-      },
-      &quot;result&quot;: &quot;passed&quot;,
-      &quot;executor&quot;: &quot;process&quot;,
-      &quot;exitCode&quot;: 0,
-      &quot;sourceStable&quot;: true,
-      &quot;completedAt&quot;: &quot;2026-11-16T14:37:06.843Z&quot;
-    },
-    {
-      &quot;id&quot;: &quot;attempt-9f073d45-6f94-4ee2-9585-d48f01ba6fdf&quot;,
-      &quot;command&quot;: &quot;node&quot;,
-      &quot;args&quot;: [
-        &quot;--test&quot;,
-        &quot;test/skill-library.test.ts&quot;
-      ],
-      &quot;environment&quot;: {
-        &quot;platform&quot;: &quot;darwin&quot;,
-        &quot;arch&quot;: &quot;arm64&quot;,
-        &quot;node&quot;: &quot;v22.23.1&quot;
-      },
-      &quot;result&quot;: &quot;passed&quot;,
-      &quot;executor&quot;: &quot;process&quot;,
-      &quot;exitCode&quot;: 0,
-      &quot;sourceStable&quot;: true,
-      &quot;completedAt&quot;: &quot;2026-11-16T14:37:07.551Z&quot;
-    },
-    {
-      &quot;id&quot;: &quot;attempt-2294bae4-9252-45c3-8978-b73e6ed112ed&quot;,
-      &quot;command&quot;: &quot;node&quot;,
-      &quot;args&quot;: [
-        &quot;--input-type=module&quot;,
-        &quot;-e&quot;,
-        &quot;import assert from &#39;node:assert/strict&#39;;import fs from &#39;node:fs&#39;;import {createHash} from &#39;node:crypto&#39;;import {execFileSync} from &#39;node:child_process&#39;;const base=&#39;.www/evidence/resume-20261116/workflow005/&#39;;const manifest=JSON.parse(fs.readFileSync(base+&#39;candidate-current-files.json&#39;,&#39;utf8&#39;));const receipt=JSON.parse(fs.readFileSync(base+&#39;submission-receipt-final-150.json&#39;,&#39;utf8&#39;));const file=&#39;docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md&#39;;const bytes=fs.readFileSync(file);const text=bytes.toString(&#39;utf8&#39;);const sha=b=&gt;createHash(&#39;sha256&#39;).update(b).digest(&#39;hex&#39;);assert.equal(manifest.files.length,33);assert.equal(manifest.files.filter(x=&gt;x.path.endsWith(&#39;.md&#39;)).length,32);for(const item of manifest.files){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes,item.path);assert(text.includes(item.path),item.path);}assert.equal(manifest.supportingFiles.length,2);for(const item of manifest.supportingFiles){const b=fs.readFileSync(item.path);assert.equal(sha(b),item.sha256,item.path);assert.equal(b.length,item.bytes);assert(text.includes(item.path));}const actual=execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--name-only&#39;,&#39;-z&#39;,&#39;--&#39;,&#39;skill-library&#39;],{encoding:&#39;utf8&#39;}).split(&#39;\\0&#39;).filter(Boolean).sort();assert.deepEqual(actual,manifest.files.map(x=&gt;x.path).sort());assert.equal(execFileSync(&#39;git&#39;,[&#39;diff&#39;,&#39;--cached&#39;,&#39;--name-only&#39;],{encoding:&#39;utf8&#39;}),&#39;&#39;);assert.equal(receipt.source,&#39;root_observation_of_actual_commentary&#39;);assert.equal(receipt.targetPath,file);assert.equal(receipt.targetSha256,sha(bytes));assert.equal(receipt.commit,false);assert.equal(receipt.push,false);assert(text.includes(&#39;Skills 라이브러리 번역의 조건과 누락을 보완한다&#39;));assert(text.includes(&#39;Skills 라이브러리 최상위의 미검토 파일을 거부한다&#39;));assert(receipt.message.includes(&#39;commit-candidate.md&#39;));assert(text.includes(&#39;원시&#39;)&amp;&amp;text.includes(&#39;제외&#39;)&amp;&amp;text.includes(&#39;감사&#39;));assert(text.includes(&#39;150개&#39;)&amp;&amp;text.includes(&#39;2,828,729&#39;));console.log(JSON.stringify({files:33,markdown:32,indexEmpty:true,submissionSource:receipt.source,limitation:&#39;후보 지문·범위·명시 한계와 root 실제 전달 관찰 확인. 의미 무오류·사용자 승인·commit/push 아님&#39;}));&quot;
-      ],
-      &quot;environment&quot;: {
-        &quot;platform&quot;: &quot;darwin&quot;,
-        &quot;arch&quot;: &quot;arm64&quot;,
-        &quot;node&quot;: &quot;v22.23.1&quot;
-      },
-      &quot;result&quot;: &quot;passed&quot;,
-      &quot;executor&quot;: &quot;process&quot;,
-      &quot;exitCode&quot;: 0,
-      &quot;sourceStable&quot;: true,
-      &quot;completedAt&quot;: &quot;2026-11-16T14:38:32.152Z&quot;
-    },
-    {
-      &quot;id&quot;: &quot;attempt-64dc28cb-b27e-4600-99fb-92524a2b61c9&quot;,
-      &quot;command&quot;: &quot;node&quot;,
-      &quot;args&quot;: [
-        &quot;scripts/check-skill-library.ts&quot;
-      ],
-      &quot;environment&quot;: {
-        &quot;platform&quot;: &quot;darwin&quot;,
-        &quot;arch&quot;: &quot;arm64&quot;,
-        &quot;node&quot;: &quot;v22.23.1&quot;
-      },
-      &quot;result&quot;: &quot;passed&quot;,
-      &quot;executor&quot;: &quot;process&quot;,
-      &quot;exitCode&quot;: 0,
-      &quot;sourceStable&quot;: true,
-      &quot;completedAt&quot;: &quot;2026-11-16T14:56:42.580Z&quot;
-    },
     {
       &quot;id&quot;: &quot;attempt-54da94c2-022b-4957-8850-98ad827f327e&quot;,
       &quot;command&quot;: &quot;node&quot;,
@@ -15693,45 +17004,119 @@ HTTP 200 원문 201개의 SHA와 바이트가 inventory와 일치하며 현재 �
       &quot;exitCode&quot;: 0,
       &quot;sourceStable&quot;: true,
       &quot;completedAt&quot;: &quot;2026-11-16T23:19:44.948Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-79469a6a-000c-4347-a5a7-42fe45b2621f&quot;,
+      &quot;command&quot;: &quot;python3&quot;,
+      &quot;args&quot;: [
+        &quot;-c&quot;,
+        &quot;import sys,hashlib,runpy;from pathlib import Path;p=Path(sys.argv[1]);assert hashlib.sha256(p.read_bytes()).hexdigest()==sys.argv[2];runpy.run_path(str(p))&quot;,
+        &quot;.www/evidence/issue29-final/audit.py&quot;,
+        &quot;ae04609aafd435b5a8950973fa009608c5a6596de67cde7e37e5cc5d14ed66fe&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T22:43:59.148Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-90a2ed5a-60d3-4f10-8115-a181bffd916f&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T22:44:00.344Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-24922de8-5423-4738-aa44-b9591c438796&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T22:44:01.518Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-66b1fc2c-b669-4294-8d96-f706635271c0&quot;,
+      &quot;command&quot;: &quot;python3&quot;,
+      &quot;args&quot;: [
+        &quot;-c&quot;,
+        &quot;import sys,hashlib,runpy;from pathlib import Path;p=Path(sys.argv[1]);assert hashlib.sha256(p.read_bytes()).hexdigest()==sys.argv[2];runpy.run_path(str(p))&quot;,
+        &quot;.www/evidence/issue29-final/audit.py&quot;,
+        &quot;c6845cc4abf2f7192e0f9642f78202fced087d352f79b65cb01d53755caa0ef4&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T22:47:42.717Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-e502039e-af86-4c57-a6aa-b28e364bdd61&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/check-skill-library.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T22:47:43.423Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-1645d817-4880-4575-a9ba-86c5d3a18af2&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--test&quot;,
+        &quot;test/skill-library.test.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T22:47:44.257Z&quot;
     }
   ],
   &quot;reviews&quot;: [
-    {
-      &quot;id&quot;: &quot;review-5175f8bd-1039-4685-b8c3-db53f87bdf54&quot;,
-      &quot;verdict&quot;: &quot;fail&quot;,
-      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
-      &quot;executor&quot;: &quot;process&quot;,
-      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-5175f8bd-1039-4685-b8c3-db53f87bdf54/terra.json&quot;,
-      &quot;findings&quot;: [
-        &quot;scripts/check-skill-library.ts:149는 skill-library/upstream만 순회한다. 예를 들어 skill-library/unreviewed.md가 추가되어도 검사 대상에 들어가지 않아 통과할 수 있다. docs/skills/CATALOG.md:81의 미검토 추가 파일 검사 설명과 달리 라이브러리 루트의 추가 파일은 검출하지 못한다.&quot;,
-        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:734의 ‘예외를 던지지 않는 경우만’은 테스트가 예외를 던지지 않는지만 확인한다는 원문의 ‘non-throw only’를 실행 조건처럼 바꾼다. 이 예시는 앞서 설명한 약한 테스트의 한계를 보여주므로, 단언 범위가 드러나도록 옮겨야 한다.&quot;,
-        &quot;skill-library/upstream/gstack/plan-design-review/sections/review-sections.md:189의 ‘복사본의 30%’는 원문의 ‘30% of the copy’, 즉 문안의 30%를 뜻하지 않는다. 문안을 줄이는 디자인 규칙이 복제물을 삭제하는 지시로 읽힌다.&quot;,
-        &quot;검토 범위는 제공된 inputBundle과 세 번역 파일 중 지정된 고정 원문 일부, 검증 기록의 마지막 60행, 두 파일의 현재 diff 및 관련 행 검색이다. 전체 201개 자료의 의미를 대조하거나 테스트를 실행하지 않았다.&quot;
-      ]
-    },
-    {
-      &quot;id&quot;: &quot;review-c0e35b97-04dc-402f-878b-d2c31cb93e72&quot;,
-      &quot;verdict&quot;: &quot;fail&quot;,
-      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
-      &quot;executor&quot;: &quot;process&quot;,
-      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-c0e35b97-04dc-402f-878b-d2c31cb93e72/terra.json&quot;,
-      &quot;findings&quot;: [
-        &quot;skill-library/upstream/gstack/plan-eng-review/sections/review-sections.md:552 — 원문은 생성된 사본을 추적해 사람이 작성한 템플릿 또는 리졸버로 돌아가라고 한다. 번역은 ‘다시 작성된 사본으로 돌아가기 템플릿/리졸버’라고 되어 있어 추적 대상을 잘못 전달한다. 보존 원문 586~590행과 대조했다.&quot;,
-        &quot;skill-library/upstream/gstack/plan-design-review/sections/review-sections.md:89 — 원문은 주장 옆의 증거로 수치 행을 대신 쓰지 말라는 문맥인데, 번역은 ‘측정항목 행은 절대 표시되지 않습니다’라고 하여 페이지 전체에서 수치 행을 금지하는 뜻으로 범위를 넓힌다. 보존 원문 95~97행과 대조했다.&quot;,
-        &quot;검토 범위: 제공된 inputBundle과 검증 기록 말미, 검증기·테스트 및 세 번역 파일의 diff, 위 두 보존 원문의 해당 행을 읽었다. 전체 201개 자료의 문장별 정확성은 확인하지 않았고 테스트는 실행하지 않았다.&quot;
-      ]
-    },
-    {
-      &quot;id&quot;: &quot;review-126176e1-2611-4573-8805-46263c429e1b&quot;,
-      &quot;verdict&quot;: &quot;fail&quot;,
-      &quot;model&quot;: &quot;gpt-6.1-terra&quot;,
-      &quot;executor&quot;: &quot;process&quot;,
-      &quot;receiptPath&quot;: &quot;.www/evidence/reviews/review-126176e1-2611-4573-8805-46263c429e1b/terra.json&quot;,
-      &quot;findings&quot;: [
-        &quot;skill-library/upstream/gstack/plan-design-review/sections/review-sections.md:89 — ‘제공받은 고객 정보·인용문·수치를 뒷받침하는 주장’은 주장이 증거를 뒷받침하는 것으로 관계가 뒤집혀 있다. 보존 원문 94행은 고객 사례·인용문·수치가 뒷받침하는 주장 옆에 해당 증거를 두라고 지시한다. 증거가 주장을 뒷받침하도록 문장을 수정해야 한다.&quot;,
-        &quot;검토는 제공된 inputBundle과 도구로 읽은 원문 일부 및 두 파일의 diff에 한정했다. plan-design-review diff 출력은 길이 제한으로 일부 잘렸다. 테스트는 실행하지 않았다.&quot;
-      ]
-    },
     {
       &quot;id&quot;: &quot;review-feccdbb2-f8f3-4eaa-a788-7f23650901c6&quot;,
       &quot;verdict&quot;: &quot;fail&quot;,
@@ -15812,38 +17197,143 @@ HTTP 200 원문 201개의 SHA와 바이트가 inventory와 일치하며 현재 �
         &quot;AC-1과 AC-4의 전체 수용 근거도 아직 부족하다. current-review.md에 포함된 coverage 보고서는 동일 SHA인 이전 결과에도 미해결 finding과 분류가 불명확한 결과가 있음을 밝히고, 8쌍 대조는 전체 186개 문서의 의미 통과가 아니라고 한정한다. 위 결함을 교정하고 남은 finding 및 현재 번역의 의미 근거를 대조한 뒤 완전성과 제출 후보를 다시 판정해야 한다.&quot;,
         &quot;검토 범위는 제공된 inline 자료와 별도로 읽은 work.json의 기준 일부, 관련 검토 결과 및 위 원문·번역 문맥이다. 전체 번역과 AC-2·AC-3의 실행 증거를 독립적으로 전수 확인하지 않았으며 테스트는 실행하지 않았다. work.json 검색 출력은 길이 제한으로 잘렸고, 표시된 최초 AC-4 정의만 사용했다.&quot;
       ]
+    },
+    {
+      &quot;id&quot;: &quot;review-764186d2-89de-42b2-8aa5-bc3cb1cce5d1&quot;,
+      &quot;verdict&quot;: &quot;fail&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/issue29-final/final-receipt/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: 읽기 도구(Read/Grep)만 사용했다. 읽은 파일은 commit-candidate.md 전체, spec.md 전체, test/skill-library.test.ts 전체, current-review.md 455~466행과 656~686행(파일이 380KB라 전체를 읽지 못함), verification.md 1060~1147행, work.json 405~434행이다. 그 밖에 work.json·current-review.md를 grep으로 검색했다. git diff 본문과 번역 12개 파일의 내용은 직접 읽지 않았다. 따라서 번역 의미를 원문과 대조하지 않았고 테스트도 실행하지 않았다.&quot;,
+        &quot;일치 확인: commit-candidate.md 111~123행에 #29 후보로 적힌 13개 경로(inventory와 번역 12개)는 git status의 skill-library 변경 목록과 정확히 같다. current-review.md 662~683행 표에 적힌 12개 파일의 SHA-256도 inputBundle digest와 모두 같다. 164+21+1=186은 inventory의 번역 186개와 맞는다. 테스트 파일은 git status 기준으로 변경되지 않았다. 이 파일의 15개 회귀 검사가 경로·심볼릭 링크·해시·라이선스·미검토 파일·한국어 표기를 거부하는 경계를 다루는 것도 확인했다.&quot;,
+        &quot;결함(AC-4 경계 위반): commit-candidate.md 125행은 \&quot;이번 이슈의 PR 게시·머지 요청에 따라 게시한다\&quot;고 쓰고, 109행은 \&quot;커밋에는 이 작업의 검증·후보 문서를 포함한다\&quot;고 쓴다. 그러나 work.json 424~425행의 workflow.authorization은 \&quot;commit\&quot;: false, \&quot;publish\&quot;: false다. AC-4(work.json 300행)도 \&quot;실제 commit·push하지 않는다\&quot;이고, spec.md 45행은 \&quot;현재 직접 재개 요청은 커밋·push·게시를 금지한다\&quot;고 적는다. 그런데 spec.md에는 2026-11-24 #29 게시 권한을 새로 기록한 절이 없다. 결국 후보 문서가 기록된 권한과 기준을 넘는 게시·머지 실행을 예고하고 있다. 게시 권한을 spec·work.json에 정식으로 갱신하거나, 125행을 &#39;사용자 검사 제출, 게시 미실행&#39;으로 고쳐야 한다.&quot;,
+        &quot;결함(증거 범위 확대): commit-candidate.md 125행은 \&quot;목록의 201개 파일을 보존한 고정 원문과 대조했다… 번역 186개는 파일별 전체 대조와 후속 교정 근거로 연결된다\&quot;고 단정한다. 하지만 current-review.md 459행과 465행에는 review-84ae2e91의 menu 결함이 &#39;Root공식typed수정대기&#39;로 남아 있고, AC1/4 수용은 독립 검토자가 판단한다고 적혀 있다. 685행도 일부 표현이 어색하게 남아 있음을 인정한다. verification.md 1088행 역시 \&quot;전체 번역의 최종 수용 판정과 다른 파일의 교정은 이슈 #29에서 이어간다\&quot;고 쓴다. 125행은 한계를 current-review.md로 넘기기만 하고, 미해결 fail과 미수용 상태를 후보 본문에 적지 않았다. 그래서 번역 완전성을 실제보다 강하게 표현한다. 또한 &#39;목록의 201개 파일&#39;은 바로 위 13개 목록을 가리키는 것처럼 읽혀 오해를 부른다. &#39;inventory의 201개&#39;로 고쳐야 한다.&quot;,
+        &quot;결함(현재 후보의 이중 표기): commit-candidate.md 18~24행의 &#39;현재 사용자 검사에 제출하는 후보&#39;에는 37개 Markdown 경로와 304문구 후보가 아직 &#39;현재&#39;로 남아 있고, 22행의 한국어 메시지도 다르다. 이 경로 중 다수는 현재 git diff에 없다. 새 #29 절(107~125행)의 13개 경로·메시지와 함께 놓여 있어, 어느 것이 실제 제출 후보인지 모호하다. 이전 절을 역사 기록으로 표시하거나 #29 절이 대체한다고 밝혀야 한다.&quot;,
+        &quot;참고: verification.md 1090~1145행에 따르면 audit.py·check-skill-library.ts·test 세 시도가 HEAD 1a2e4b8에서 종료 코드 0으로 끝났다. 다만 소스 식별값 7084a5f9…는 이번 검토의 sourceDigest 4da5dfe5…와 다르다. 따라서 이 통과 기록이 현재 소스에 그대로 적용되는지는 확인되지 않았다. 나도 해당 명령을 실행하지 않았다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-64139a33-1720-4340-ad66-2958a425bbed&quot;,
+      &quot;verdict&quot;: &quot;not_run&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/issue29-final/submitted-receipt/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;읽기 범위: Read/Grep 도구로 `commit-candidate.md`, `spec.md`, `test/skill-library.test.ts`, `verification.md` 1060~1204행, `skill-library/upstream/gstack/ship/sections/pr-body.md` 전체, `skill-library/upstream/matt-pocock/README.md` 전체, `review/sections/adversarial.md` 85~111행, `ship/sections/adversarial.md` 97~98행, `review/SKILL.md` 29~50행을 읽었습니다. 변경된 gstack 파일 8개에서는 영어 문장이 남았는지 정규식으로 검색했습니다. 이 환경에는 Bash가 없어 git diff/status는 실행하지 못했습니다. SHA-256과 바이트 수도 다시 계산하지 못했고 테스트나 검사기도 실행하지 않았습니다.&quot;,
+        &quot;후보 범위가 맞습니다. `commit-candidate.md:114-126`에 적힌 13개 경로(inventory 1개와 번역 12개)는 세션 시작 시 git status에서 수정된 `skill-library/` 경로 13개와 정확히 같습니다. 같은 문서 `:130`에는 commit·push를 실행하지 않았고 Workflow/005의 commit·publish 권한이 false라고 적혀 있어 AC-4의 &#39;실제 commit·push 금지&#39;와 충돌하지 않습니다.&quot;,
+        &quot;`review/sections/adversarial.md:96`과 `:110`에는 한국어 문단 안에 영어 문장 &#39;Think like an attacker and a chaos engineer.&#39;이 남아 있습니다. 그러나 `review/SKILL.md:31`(`match: Think like an attacker and a chaos engineer`)과 `:49`의 완료 계약은 하위 에이전트 프롬프트에 이 영어 문구가 그대로 들어 있어야 한다고 정합니다. 따라서 이 문장은 기계 식별자로 일부러 보존한 것이며 AC-1 위반이 아닙니다.&quot;,
+        &quot;`pr-body.md`의 `## Summary`·`## Blast radius` 같은 영어 제목, `Recommendation:`·`Tests ran:` 같은 영어 레이블, 셸 블록 안의 영어 메시지는 `gstack-prose-lint --sections &#39;Why,Summary,Blast radius&#39;`와 영수증 검사가 읽는 식별자입니다. 이를 보존한 것은 AC-1의 &#39;코드·명령·식별자 보존&#39;에 맞습니다. 확인한 범위에서 생략되거나 영어판이 중복된 곳은 보이지 않았습니다.&quot;,
+        &quot;`test/skill-library.test.ts`의 15개 테스트는 해시 불일치, 법문 세탁, Apache를 MIT로 잘못 표시한 경우, 한국어 고지만 붙인 영어 본문, 원문 해시 누락, 추가 파일, 루트 파일·하위 디렉터리·심볼릭 링크, 외부 파일 링크, schemaVersion, 고정되지 않은 커밋, 제3자 법문, UI/manifest 번역을 거부하는지 검사합니다. AC-3이 요구하는 거부 경계를 덮으며, 이 테스트 파일은 이번 diff에서 바뀌지 않았습니다.&quot;,
+        &quot;증거 한계(결함 아님): `verification.md:1157-1201`의 마지막 실제 실행 세 건(audit.py, check-skill-library, node --test)은 소스 식별값이 `81089bac…`이며 모두 종료 코드 0입니다. 하지만 이번 검토 입력의 sourceDigest는 `2bb822f5…`로 다릅니다. 이후 후보 문서 같은 입력 파일이 바뀐 것으로 보이며, 현재 소스에서 검사기와 테스트가 통과한다는 사실은 다시 실행해야 확인됩니다. 이 검토는 그 실행 결과를 대신하지 않습니다.&quot;,
+        &quot;증거 한계: `commit-candidate.md:128`은 번역 186개 중 22개가 &#39;별도 전체 대조와 교정 기록&#39;을 가진다고 하지만, 이번 #29 절의 파일은 12개이고 PR #33의 파일은 3개입니다. 나머지 7개의 근거가 어느 기록에 있는지 이 문서 안에서는 직접 연결되지 않습니다. 원문의 모호한 곳 네 곳과 엔지니어링 절의 어색한 표기는 남은 한계로 명시되어 있어 근거를 부풀린 서술로 보지는 않았습니다.&quot;,
+        &quot;결론: 읽은 범위에서 잘못된 동작, 빠진 경계, 근거보다 넓은 주장처럼 수정이 필요한 구체적 결함은 찾지 못했습니다. 번역 12개 전체를 원문과 문장 단위로 대조하지는 않았습니다. 해시와 크기가 일치하는지는 검사기를 다시 실행해 확인해야 합니다.&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;review-16af5a79-f2d2-4335-9b05-f856db3962b7&quot;,
+      &quot;verdict&quot;: &quot;pass&quot;,
+      &quot;model&quot;: &quot;claude-opus-5-5&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;receiptPath&quot;: &quot;.www/evidence/issue29-final/stable-receipt/opus.json&quot;,
+      &quot;findings&quot;: [
+        &quot;검토 범위: Read/Grep 도구로 commit-candidate.md 전문, spec.md 전문, test/skill-library.test.ts 전문, verification.md 1060~1203행, current-review.md 656~690행을 읽었고 inventory.json에서 해시 3개를 검색했다. 테스트, 검사기, git diff는 실행하지 않았다(Bash 도구 없음). 따라서 13개 경로 각각의 실제 diff 내용과 원문 보존 필드가 바뀌지 않았는지는 직접 확인하지 못했다.&quot;,
+        &quot;후보 경로 일치: commit-candidate.md:114-126의 13개 경로(inventory.json + 번역 12개)는 git status 스냅샷에서 수정된 skill-library 파일 13개와 정확히 같다. 범위 밖 라이브러리 파일은 섞이지 않았다.&quot;,
+        &quot;지문 일치: current-review.md:662-683의 22행 표에 적힌 현재 SHA-256이 inputBundle의 파일 digest와 같다. 대상 파일은 security-checklist, api-and-interface-design, plan-eng-review/sections/review-sections, qa/sections/preamble, review/checklist, design-checklist, greptile-triage, adversarial, plan-completion, capy-pr, pr-body, matt-pocock/README이다. inventory.json에도 pr-body·matt-pocock README·security-checklist 해시가 실제로 들어 있다. 따라서 commit-candidate.md:128의 &#39;164개 + 22개 = 186개&#39; 집계는 표의 행 수(22)와 맞다.&quot;,
+        &quot;테스트 근거: test/skill-library.test.ts의 test() 15개가 verification.md:1088의 &#39;15개 검사 모두 통과&#39; 및 B 후보 설명의 세 회귀(루트 파일·중첩 디렉터리·루트 심볼릭 링크, 143~166행)와 일치한다. 경로 탈출·심볼릭 링크·해시 불일치·라이선스 오표기·제3자 법문·한국어 미번역 본문·schemaVersion·고정 커밋을 거부하는 회귀가 모두 있다.&quot;,
+        &quot;경미한 표현 과장(수정 권고, 판정 유지): commit-candidate.md:128은 &#39;22개는 별도 전체 대조와 해당 파일에 대한 교정 기록이 있다&#39;고 쓴다. 그러나 current-review.md:662-683에서 9개 파일은 교정 검토 없이 &#39;동일한 번역에 대한 전체 대조 결과를 적용&#39;으로만 기록돼 있다(second-opinion, pr-body, diagnosing-bugs, orchestration-patterns, performance-checklist, testing-patterns, spec-driven-development, clarify 등). 또 second-opinion은 새 대조가 아니라 &#39;직전 전체 대조&#39; 결과다(658행). 이 부분은 &#39;전체 대조 기록, 일부는 교정 후 문맥 재검토&#39;처럼 구분해 적는 것이 정확하다.&quot;,
+        &quot;근거 연결 누락(경미): commit-candidate.md의 #29 절은 파일별 근거가 있는 current-review.md &#39;#29 최종 번역 후보의 파일별 근거&#39; 절을 가리키지 않는다. verification.md에도 이번 12개 파일 이름이 한 번도 나오지 않는다(Grep 0건). 사용자 검사 편의를 위해 링크를 추가하는 것이 좋다.&quot;,
+        &quot;증거 시점 한계: verification.md의 마지막 실제 실행 기록(1147~1202행, HEAD 780c357)의 소스 식별값은 81089bac…이다. 이번 검토의 sourceDigest 2bb822f5…와 다르므로, 기록된 checker·테스트 통과가 현재 소스 상태에 그대로 적용되는지는 확인되지 않았다. 다만 commit-candidate.md 자체는 현재 소스에서 새로 실행했다고 주장하지 않는다.&quot;,
+        &quot;AC-4 권한 경계: commit-candidate.md:130과 spec.md:94 모두 Workflow/005 원장의 commit·publish 권한이 false이고 이 단계에서 commit·push를 실행하지 않았다고 적는다. 사용자 요청 기록(PR·머지는 상위 세션이 맡음)과 모순이 없다. 원시 로그·자격 증명·임시 파일을 제외한다는 범위 설명(112행)도 있다.&quot;
+      ]
     }
   ],
   &quot;omitted&quot;: {
     &quot;criteria&quot;: 0,
-    &quot;evidence&quot;: 29,
-    &quot;verifications&quot;: 25,
-    &quot;reviews&quot;: 2,
-    &quot;arguments&quot;: 42,
-    &quot;findings&quot;: 3,
-    &quot;unresolved&quot;: 2
+    &quot;evidence&quot;: 34,
+    &quot;verifications&quot;: 31,
+    &quot;reviews&quot;: 5,
+    &quot;arguments&quot;: 55,
+    &quot;findings&quot;: 12,
+    &quot;unresolved&quot;: 6
   }
 }</pre><h3>원래 작성 서술</h3><pre>{
-  &quot;summary&quot;: &quot;현재 검사기와15개 회귀 검사는 통과했지만 실제 전체 기준 감사가 메뉴 문장 손상과 의미 근거 연결 부족을 지적했다. 134지적·186파일 근거 연결은 보완했으나 정확 경로 저작 승인이 없어 메뉴 교정을 적용하지 못해 부분 완료로 남겼다.&quot;,
-  &quot;before&quot;: &quot;기존 제한 범위 PASS와 불명확한 coverage 집계 때문에 전체 번역 수용 여부를 확정할 수 없었다.&quot;,
-  &quot;after&quot;: &quot;134개 지적을46개 파일의 실제 판정과 연결하고18교정의7파일재적용 및186파일결과를 결속했다. 실제 메뉴 결함은 미수정이며 AC1/4 전체수용과 업무완료는 충족하지 않았다.&quot;,
+  &quot;summary&quot;: &quot;스킬 라이브러리의 번역 186개를 고정 원문에 연결했고, 원문 그대로 보존할 15개의 바이트가 일치함을 확인했다. 읽기 전용 독립 검토가 지적한 조건과 절차를 14개 파일에서 교정했다.&quot;,
+  &quot;before&quot;: &quot;사용자에게 물을 시점, 복구 뒤 재검사할 출력과 도구가 내놓는 상태 문자열이 번역에서 바뀌었다. 기존 검토가 현재 파일에 그대로 적용되는지 파일별로 확인할 수 없었다.&quot;,
+  &quot;after&quot;: &quot;파일별로 현재 지문과 전체 대조·교정 판정을 연결했다. 한국어 지침에서 승인 조건·출력 문자열·검토 재개 단계를 확인할 수 있다.&quot;,
   &quot;changes&quot;: [
-    &quot;W005 current-review.md에134원finding↔현판정84fixed28reject18applied4rawambiguous를 exact객체로 연결했다.&quot;,
-    &quot;16개parser미분류결론을12실제명시무발견본문과4group00전문판독결론으로 정정하고186파일현재지문·원결론·8현재전문읽기 및2대형문서연결을 기록했다.&quot;,
-    &quot;메뉴 사용자 대상 요청의 최소 수정안을 작성했으나 공식typed사전검사가정확writePaths부재로거부해 적용하지 않았다.&quot;
+    &quot;설계 및 엔지니어링 계획 검토에서는 기준 브랜치, 실제 출력, 복구 게이트, 표 형식과 섹션 참조를 복원했다.&quot;,
+    &quot;PR 검토·QA·배포 문구에서는 결정 조건, 소유자, 상태 및 기록 형식을 원문에 맞췄다.&quot;,
+    &quot;보안 체크리스트와 API 설계 자료에서는 의존성 승인 범위와 프로세스 비정상 종료 등 기술 용어를 구체화했다.&quot;
   ],
   &quot;decisions&quot;: [
-    &quot;005/11의QA제목반박PASS를전체AC1/4수용으로승격하지 않았다.&quot;,
-    &quot;46은지적파일수,134는개별지적수다. 집계단위에관한초기오판을정정하고4원문모호성은확정번역결함으로취급하지 않았다.&quot;,
-    &quot;기존권한목록을임의수정하거나새UUID로우회하지 않고실제차단을보존한다.&quot;
+    &quot;이전 전체 검토와 바이트가 같은 164개 파일에는 당시 기록을 재사용했다. 다른 22개 파일은 별도로 대조하고, 수정이 있던 위치에는 새로운 검토 결과를 연결했다.&quot;,
+    &quot;목록·법문·회귀와 문장 의미는 서로 다른 검사로 확인했다. 각 PR에는 해당 문서와 연관된 목록 및 검증 근거만 포함했다.&quot;
   ],
   &quot;limitations&quot;: [
-    &quot;actual Terra review-84ae2e91-f3b7-44eb-b9e6-57ccf6a02585 fail. 사용자메뉴문장손상과전체의미근거부족지적이다. 새coverage는그후저작자료이며새독립수용이아니다.&quot;,
-    &quot;Root공식typed사전검사에서plan-design-review/SKILL.md정확writePaths부재로거부됐다. 메뉴소스변경없음.&quot;,
-    &quot;테스트/무결성통과는전체의미무오류·사용자승인·commit/push가아니다. W023검토를W005로복사하지않는다.&quot;
+    &quot;원문 자체의 해석이 갈리는 기존 네 지점과 의미를 바꾸지 않는 어색한 표현을 기록했다. 전체 문장의 무오류 보증이나 외부 도구의 실제 동작 검사는 이 번역 작업의 판정 범위를 벗어난다.&quot;
   ],
   &quot;next&quot;: [
-    &quot;기존요청범위와공식저작정확경로권한연결문제를해결한뒤메뉴최소안을공식typed로적용한다.&quot;,
-    &quot;현재후보·제출을새지문에맞춰연결하고134/186coverage를포함한실제전체기준독립검토와정규완료를이어간다.&quot;
-  ]
+    &quot;최종 PR의 CI 결과와 병합 커밋을 이슈 #29의 새 코멘트에 기록한다.&quot;
+  ],
+  &quot;reader&quot;: {
+    &quot;story&quot;: &quot;번역본으로 결정을 내리는 사용자가 영어 원문과 같은 옵션과 금지 조건을 보도록 문서를 교정했다.&quot;,
+    &quot;requirements&quot;: [
+      {
+        &quot;requirement&quot;: &quot;186개 번역의 의미·구조와 원문 15개 보존&quot;,
+        &quot;result&quot;: &quot;전체 대조와 교정 문맥을 파일 지문에 연결했다.&quot;,
+        &quot;evidence&quot;: &quot;current-review.md&quot;,
+        &quot;limitations&quot;: &quot;영어 원문 자체의 모호성 네 곳과 한국어 표현의 경미한 차이가 남는다.&quot;
+      },
+      {
+        &quot;requirement&quot;: &quot;검사와 공개 후보 제출&quot;,
+        &quot;result&quot;: &quot;목록과 회귀를 실행하고 커밋 전에 12개 파일과 메시지를 이슈 코멘트로 제출했다.&quot;,
+        &quot;evidence&quot;: &quot;commit-candidate.md&quot;,
+        &quot;limitations&quot;: null
+      }
+    ],
+    &quot;checks&quot;: [
+      {
+        &quot;target&quot;: &quot;원문과 번역&quot;,
+        &quot;method&quot;: &quot;원문·번역 SHA-256, 전체 대조 기록, 변경 문맥 독립 검토를 대조했다.&quot;,
+        &quot;expected&quot;: &quot;201개 원문과 186개 번역의 지문과 판정이 연결된다.&quot;,
+        &quot;observed&quot;: &quot;기존 전체 대조 164개, 별도 전체 대조 22개, 원문 보존 15개를 확인했다.&quot;,
+        &quot;limitations&quot;: &quot;각 파일의 판정은 기록된 지문에 적용된다.&quot;
+      },
+      {
+        &quot;target&quot;: &quot;목록 검증기&quot;,
+        &quot;method&quot;: &quot;검증기를 실제 라이브러리에 실행하고 회귀 15개를 수행했다.&quot;,
+        &quot;expected&quot;: &quot;정상 목록을 수용하고 이상 입력을 거부한다.&quot;,
+        &quot;observed&quot;: &quot;목록 201개와 테스트 15개가 통과했다.&quot;,
+        &quot;limitations&quot;: null
+      }
+    ],
+    &quot;decisions&quot;: [
+      {
+        &quot;problem&quot;: &quot;이미 검토한 파일까지 다시 읽으면 검증 시간이 늘어난다.&quot;,
+        &quot;basis&quot;: &quot;고정 원문과 번역 모두 기존 검토 입력과 같았다.&quot;,
+        &quot;alternatives&quot;: [],
+        &quot;choice&quot;: &quot;같은 입력은 재사용하고 달라진 문맥은 새 Opus 판정을 연결했다.&quot;,
+        &quot;tradeoff&quot;: &quot;묶음 전체 판정과 개별 파일 수용 범위를 구별해야 했다.&quot;
+      }
+    ],
+    &quot;references&quot;: [
+      {
+        &quot;path&quot;: &quot;current-review.md&quot;,
+        &quot;purpose&quot;: &quot;파일별 최종 지문과 독립 검토 식별자&quot;
+      },
+      {
+        &quot;path&quot;: &quot;commit-candidate.md&quot;,
+        &quot;purpose&quot;: &quot;PR 게시 전 제출한 후보와 한계&quot;
+      }
+    ],
+    &quot;nextActions&quot;: [
+      {
+        &quot;action&quot;: &quot;후속 PR의 CI와 병합 여부를 GitHub 이슈에 남긴다.&quot;,
+        &quot;owner&quot;: &quot;상위 세션&quot;,
+        &quot;doneWhen&quot;: &quot;병합 커밋과 검증 결과가 새 코멘트로 연결됨&quot;,
+        &quot;impact&quot;: &quot;저장소와 GitHub에서 종료 근거를 찾을 수 있다.&quot;
+      }
+    ]
+  }
 }</pre></div></details></section></article></div></main></body></html>

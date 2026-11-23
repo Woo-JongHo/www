@@ -88,3 +88,7 @@
 ### 현재154패치 — 최신성 판단의 대체근거 금지
 
 공식감사7이확인한두Content-first문단을보존원문design556~565/eng1416~1425와직접대조했다. diff근거를HEAD일치·커밋거리로대체하지말것(evenzero),status사용·reason표시명령,review_freshness누락=UNVERIFIED,coverage불명=통과불가를정확복원했다. 승인2MD+inventory로컬지문만공식주입Sol저작콜백으로수정했으며실제모델CLI새호출이아니다. 현재154patch31MD+별도세션2문구추가1MD/201자료186한국어15원문/2,828,790바이트다. 실제post ok/sourceStabletrue/errors0/pre·post strict각2code0/generatorExecutedfalse/BoxBoxdisabled. 자료동결후Root공유코드wave의사후동결을기다려감사8과AC1수용을진행한다. AC1미검증과과거fail/not_run은보존한다.
+
+## 2026-11-24 이슈 #29와 게시 주체
+
+11월 16일의 게시 보류는 그때의 직접 재개 요청을 기록한 것이다. 이번 세션에서 사용자는 “변경하고 PR올리고 머지까지 진행”을 요청했고, “코멘트를 추가로 달라는거지 원문을 바꾸라는건아니였어”라고 기록 방식을 지정했다. 상위 세션이 교정이 검토된 세 파일을 분리해 PR #33으로 게시했다. Workflow/005의 기계 원장은 후보 검사·제출을 담당하여 commit·publish 권한을 false로 유지한다. 이번 후속 번역 후보 역시 사용자에게 검사 범위와 한계를 제출한 후, 독립 검토가 수용한 범위를 상위 게시 단계에 인계한다.
