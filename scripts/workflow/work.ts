@@ -10,7 +10,7 @@ import { validateRequirementRefs, validateWorkRecord, parseWorkRecord } from "./
 import { findWorkRecord, resolveInside, validateWritePaths, workOutputColumns } from "./preflight.ts";
 import { serializeWorkRecord } from "./work-json.ts";
 import { hashRequest, normalizeApproval } from "./route.ts";
-import { captureSource, criteriaDigest, evaluateEvidence, renderAttempt, validEnvironmentObservation, verificationCommandFailed, verify, verifyInSession, withVerificationReuse } from "./evidence.ts";
+import { captureSource, criteriaDigest, evaluateEvidence, renderAttempt, validEnvironmentObservation, criterionEvidence, verificationCommandFailed, verify, verifyInSession, withVerificationReuse } from "./evidence.ts";
 import { loadReviewPolicy, validateReview, durableJson } from "./review.ts";
 import { withWorkLock, inspectWorkLock, recoverWorkLock, retryWorkWriter, WorkLockBusyError } from "./lock.ts";
 import type { WorkExecutionHost } from "./lock.ts";
@@ -522,10 +522,15 @@ async function appendVerification(repo: string, workId: string, attempt: Verific
 /** 완료 판정과 다음 행동이 같은 필수 기준의 최신 실제 검증을 평가한다. */
 async function assessRequiredCriteria(repo: string, record: CurrentWorkRecord) {
   const criteria = [];
+  const evaluated = new Map<string, Awaited<ReturnType<typeof evaluateEvidence>>>();
   const verifications = currentVerifications(record.workflow.verifications, record.workflow.continuations?.at(-1));
   for (const criterion of record.criteria.filter(item => item.required)) {
     const latest = latestVerificationGroup(verifications.filter(item => item.criterionIds.includes(criterion.id)));
-    const evaluations = await Promise.all(latest.map(attempt => evaluateEvidence({ repo, record, attempt })));
+    const evaluations = await Promise.all(latest.map(async attempt => {
+      const evaluation = evaluated.get(attempt.id) ?? await evaluateEvidence({ repo, record, attempt });
+      evaluated.set(attempt.id, evaluation);
+      return criterionEvidence(record, attempt, criterion.id, evaluation);
+    }));
     const reasons = latest.length ? [...new Set(evaluations.flatMap(evaluation => evaluation.reasons))] : ["검증 시도 없음"];
     criteria.push({ id: criterion.id, usable: reasons.length === 0, reasons });
   }
