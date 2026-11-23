@@ -58,7 +58,10 @@ function ActivityInventory({ activityState, events, threadId, hidden = false, on
   onShowEvents?   : () => void          ;
 }) {
   const effectiveThreadId = useMemo(() => threadId ?? configuredThread(events), [events, threadId]);
-  const projection        = useMemo(() => activityState ? projectActivitySidebarState(activityState, effectiveThreadId) : projectActivitySidebar(events, effectiveThreadId), [activityState, effectiveThreadId]);
+  const fallbackEvents = activityState ? undefined : events;
+  const projection = useMemo(() => activityState
+    ? projectActivitySidebarState(activityState, effectiveThreadId)
+    : projectActivitySidebar(fallbackEvents ?? [], effectiveThreadId), [activityState, fallbackEvents, effectiveThreadId]);
   const [reactions, setReactions]       = useState<ReadonlyMap<string, ReactionPhase>>(() => new Map());
   const [announcement, setAnnouncement] = useState("");
   const processed = useRef(new Set<string>());
