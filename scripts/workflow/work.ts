@@ -18,11 +18,13 @@ import { checkRepository, assessRepositoryCheck } from "./consistency.ts";
 import { createDocumentationReview, assessDocumentation } from "./documentation.ts";
 import { createArtifactReview } from "./artifacts.ts";
 import { assessCompletionReport } from "./completion-report.ts";
+import { publishWorkReport, readWorkReport, type ReportNarrative } from "./reports.ts";
 import { assessDecompositionCompletion, validateWorkDecomposition } from "./decomposition.ts";
-import type { AddVerifierOptions, ContinueWorkOptions, WorkAuthorization, CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions, CriterionAssessment } from './types.ts';
+import { currentVerifications, latestVerificationGroup } from "./types.ts";
+import type { AddVerifierOptions, ContinueWorkOptions, WorkAuthorization, CurrentWorkRecord, CurrentWorkLocation, WorkRecord, WorkLocation, WorkOptions, WorkAssessment, WorkDecision, NewWorkOptions, CriterionAssessment, ReportHookResult } from './types.ts';
 import type { VerificationAttempt, VerificationSession } from './evidence.ts';
 import type { DocumentationReview } from './documentation.ts';
-export type { WorkRecord, WorkLocation, WorkAssessment, WorkOptions } from './types.ts';
+export type { WorkRecord, WorkLocation, WorkAssessment, WorkOptions, ReportHookResult } from './types.ts';
 export type { WorkExecutionHost } from "./lock.ts";
 export { inspectWorkLock, recoverWorkLock, retryWorkWriter, checkRepository, assessRepositoryCheck };
 
@@ -439,7 +441,7 @@ export async function verifyWork({ repo = process.cwd(), workId, command, args =
   const options = { repo, record: work.record, inputs: work.record.workflow.inputs, command, args, criterionIds, artifactPaths };
   let execution = reuseSession ? await verifyInSession(reuseSession, options) : null;
   if (reuseSession && execution?.reuse.action === "reused" && work.record.workflow.continuations?.length &&
-    !currentVerifications(work.record).some(item => item.id === execution?.attempt.id)) {
+    !currentVerifications(work.record.workflow.verifications, work.record.workflow.continuations?.at(-1)).some(item => item.id === execution?.attempt.id)) {
     execution = await verifyInSession(reuseSession, options, true);
   }
   let attempt = execution?.attempt ?? await verify(options);
@@ -492,32 +494,40 @@ async function appendVerification(repo: string, workId: string, attempt: Verific
     if (!old.includes(`id="${attempt.id}"`) && !old.includes(`## ${attempt.id}`)) await atomicWrite(report, `${old.trimEnd()}\n\n${renderAttempt(attempt)}\n`);
     record.workflow.verifications.push(attempt);
     const applicable = await evaluateEvidence({ repo, record, attempt });
+    const attemptedResult = applicable.usable ? "passed" : isCurrentCommandFailure(attempt, applicable.reasons) ? "failed" : "unverified";
+    const chronological = currentVerifications(record.workflow.verifications, record.workflow.continuations?.at(-1));
+    let currentObservation = false;
     for (const criterion of record.criteria) {
       if (!attempt.criterionIds.includes(criterion.id)) continue;
-      criterion.result = applicable.usable ? "passed" : isCurrentCommandFailure(attempt, applicable.reasons) ? "failed" : "unverified";
-      criterion.evidence.push({ attemptId: attempt.id, path: `verification.md#${attempt.id}`, summary: `종료 코드 ${attempt.exitCode ?? "미확인"}, 기준 ${criterion.result}` });
+      const latest = latestVerificationGroup(chronological.filter(item => item.criterionIds.includes(criterion.id)));
+      if (latest.some(item => item.id === attempt.id)) {
+        criterion.result = attemptedResult;
+        if (latest.length > 1) {
+          const outcomes = await Promise.all(latest.map(async item => {
+            const evaluation = item.id === attempt.id ? applicable : await evaluateEvidence({ repo, record, attempt: item });
+            return evaluation.usable ? "passed" : isCurrentCommandFailure(item, evaluation.reasons) ? "failed" : "unverified";
+          }));
+          criterion.result = outcomes.includes("failed") ? "failed" : outcomes.includes("unverified") ? "unverified" : "passed";
+        }
+        currentObservation = true;
+      }
+      criterion.evidence.push({ attemptId: attempt.id, path: `verification.md#${attempt.id}`, summary: `종료 코드 ${attempt.exitCode ?? "미확인"}, 기준 ${attemptedResult}` });
     }
     record.status              = "verifying"                                                ;
-    record.blockedReason       = applicable.usable ? null : applicable.reasons.join("; ")   ;
+    if (currentObservation) record.blockedReason = applicable.usable ? null : applicable.reasons.join("; ");
     record.workflow.nextAction = await requiredEvidenceAction(repo, record, await assessRequiredCriteria(repo, record), "review");
   }, reuseGuard ? mutate => withVerificationReuse(reuseGuard.useId, repo, attempt, mutate) : undefined);
-}
-
-function currentVerifications(record: CurrentWorkRecord): VerificationAttempt[] {
-  const { verifications, continuations } = record.workflow;
-  const current = continuations?.at(-1);
-  if (!current) return verifications;
-  if (current.verificationStart !== undefined) return verifications.slice(current.verificationStart);
-  return verifications.filter(attempt => Date.parse(attempt.startedAt) >= Date.parse(current.authorizedAt));
 }
 
 /** 완료 판정과 다음 행동이 같은 필수 기준의 최신 실제 검증을 평가한다. */
 async function assessRequiredCriteria(repo: string, record: CurrentWorkRecord) {
   const criteria = [];
-  for (const criterion of record.criteria.filter((item) => item.required)) {
-    const attempt    = currentVerifications(record).filter((item) => item.criterionIds.includes(criterion.id)).at(-1)              ;
-    const evaluation = attempt ? await evaluateEvidence({ repo, record, attempt }) : { usable: false, reasons: ["검증 시도 없음"] } ;
-    criteria.push({ id: criterion.id, ...evaluation });
+  const verifications = currentVerifications(record.workflow.verifications, record.workflow.continuations?.at(-1));
+  for (const criterion of record.criteria.filter(item => item.required)) {
+    const latest = latestVerificationGroup(verifications.filter(item => item.criterionIds.includes(criterion.id)));
+    const evaluations = await Promise.all(latest.map(attempt => evaluateEvidence({ repo, record, attempt })));
+    const reasons = latest.length ? [...new Set(evaluations.flatMap(evaluation => evaluation.reasons))] : ["검증 시도 없음"];
+    criteria.push({ id: criterion.id, usable: reasons.length === 0, reasons });
   }
   return criteria;
 }
@@ -532,9 +542,11 @@ function isCurrentCommandFailure(attempt: VerificationAttempt | undefined, reaso
 
 /** 필수 검증을 먼저 판정하고 분업의 현재 수용까지 갖춰야 다음 단계로 안내한다. */
 async function requiredEvidenceAction(repo: string, record: CurrentWorkRecord, criteria: CriterionAssessment[], ready: "review" | "complete") {
+  const verifications = currentVerifications(record.workflow.verifications, record.workflow.continuations?.at(-1));
   const failures = criteria.filter(criterion => {
-    const attempt = currentVerifications(record).filter(item => item.criterionIds.includes(criterion.id)).at(-1);
-    return isCurrentCommandFailure(attempt, criterion.reasons);
+    const latest = latestVerificationGroup(verifications.filter(item => item.criterionIds.includes(criterion.id)));
+    // 단일 최신 시도의 실제 명령 실패가 확정된 경우만 구현으로 돌린다.
+    return latest.length === 1 && isCurrentCommandFailure(latest[0], criterion.reasons);
   });
   if (failures.length) {
     record.blockedReason = failures.map(criterion => `${criterion.id}: verification_failed`).join("; ");
@@ -648,16 +660,45 @@ export async function resumeWork({ repo = process.cwd(), workId }: WorkOptions) 
   return { ...assessment, ...work, nextAction: work.record.workflow.nextAction };
 }
 
-export async function completeWork({ repo = process.cwd(), workId, policyRoot }: WorkOptions) {
-  return mutateWork(repo, workId, async (record, work) => {
+export async function completeWork({ repo = process.cwd(), workId, policyRoot }: WorkOptions): Promise<CurrentWorkLocation & { reportHook?: ReportHookResult }> {
+  const completion: { narrative?: ReportNarrative; previous?: string; source?: { digest: string; inputs: string[] }; reportHook?: ReportHookResult } = {};
+  const saved = await mutateWork(repo, workId, async (record, work) => {
     const assessment = await assessRecord(repo, { ...work, record }, policyRoot);
     if (assessment.legacy || !assessment.complete) throw new Error(`현재 증거로 완료할 수 없습니다: ${assessment.reasons.join("; ")}`);
+    if (assessment.report?.reportId) {
+      const document = await readWorkReport({ repo, reportId: assessment.report.reportId });
+      if (!document.current || document.stale || !document.report.narrative) throw new Error("현재 작업의 저작 서술이 없습니다.");
+      if (work.rawSource === undefined) throw new Error("완료 전 작업 기록 원문이 없습니다.");
+      completion.previous = work.rawSource;
+      completion.narrative = document.report.narrative;
+    }
     const source = await captureSource({ repo, inputs: assessment.source.inputs });
     if (source.digest !== assessment.source.digest) throw new Error("완료 판정 중 소스가 바뀌었습니다.");
+    completion.source = source;
     record.status              = "done"     ;
     record.blockedReason       = null       ;
     record.workflow.nextAction = "complete" ;
+  }, async mutate => {
+    const completed = await mutate();
+    if (!completion.narrative) return completed;
+    try {
+      if (completed.rawSource === undefined || completion.source === undefined) throw new Error("완료된 작업의 원문 또는 소스 식별이 없습니다.");
+      const completionSource = { workRecordHash: hash(completed.rawSource), sourceDigest: completion.source.digest, inputs: completion.source.inputs };
+      const published = await publishWorkReport({ repo, workId, narrative: completion.narrative, event: "complete", completionSource });
+      const current = await readWork({ repo, workId });
+      if (current.rawSource !== completed.rawSource) throw new Error("완료 판정 중 작업 기록이 바뀌었습니다.");
+      const final = await assessRecord(repo, current, policyRoot);
+      if (!final.complete) throw new Error("완료 직전 현재 증거가 바뀌었습니다: " + final.reasons.join("; "));
+      completion.reportHook = { status: "written", reportId: published.report.id, created: published.created };
+      return completed;
+    } catch (error) {
+      // 작업 잠금 아래에서 이 호출이 저장한 상태만 되돌린다.
+      if (completion.previous !== undefined && completed.rawSource !== undefined
+        && await fs.readFile(completed.path, "utf8") === completed.rawSource) await atomicWrite(completed.path, completion.previous);
+      throw new Error(`완료 보고서 저장 실패: ${error instanceof Error ? error.message : String(error)}`, { cause: error });
+    }
   });
+  return completion.reportHook ? { ...saved, reportHook: completion.reportHook } : saved;
 }
 
 async function main() {
