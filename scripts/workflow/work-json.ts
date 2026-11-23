@@ -50,7 +50,8 @@ function emit(value: unknown, depth: number): string {
 
 function serialize(value: WorkRecord | WorkReport | ReportBundle, columns: boolean): string {
   // 새 의미 객체를 한 번만 관찰해 getter/toJSON과 native 오류 의미를 보존한다.
-  const fresh = JSON.stringify(value, null, 2);
+  // 열 정렬 모드는 emit이 최종 들여쓰기를 적용하므로 중간 JSON은 압축한다.
+  const fresh = JSON.stringify(value, null, columns ? undefined : 2);
   if (!columns || fresh === undefined) return `${fresh}\n`;
   const normalized: unknown = JSON.parse(fresh);
   return `${emit(normalized, 0)}\n`;
