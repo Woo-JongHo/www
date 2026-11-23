@@ -622,6 +622,8 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
   const later = { ...early, id: "attempt-22024943-2a31-4414-84dc-8382820358c6", result: "failed" as const, exitCode: 1, startedAt: new Date(Date.parse(early.startedAt) + 1).toISOString() };
   inverted.workflow.verifications = [...inverted.workflow.verifications.filter(v => v.id !== early.id), later, early];
   assert.match((await assessDecompositionCompletion(repo, inverted)).reasons.join(","), /fixture-task: verification_failed/);
+  later.startedAt = early.startedAt;
+  assert.match((await assessDecompositionCompletion(repo, inverted)).reasons.join(","), /fixture-task: verification_failed/);
   const workflow = independentlyVerified.workflow;
   await continueWork({ repo, workId: second.workId, role: "www-dev", direct: true, requestId: "follow-up-fixture",
     request: "같은 입력의 후속 요청", expectedRequestId: workflow.requestId, expectedRequestHash: workflow.requestHash,

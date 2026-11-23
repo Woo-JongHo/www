@@ -412,7 +412,11 @@ export function currentVerifications(verifications: readonly VerificationAttempt
     : continuation.verificationStart !== undefined
       ? verifications.slice(continuation.verificationStart)
       : verifications.filter(attempt => Date.parse(attempt.startedAt) >= Date.parse(continuation.authorizedAt));
-  return [...eligible].sort((left, right) => Date.parse(left.startedAt) - Date.parse(right.startedAt));
+  return [...eligible].sort((left, right) => {
+    const started = Date.parse(left.startedAt) - Date.parse(right.startedAt);
+    // 같은 기록 시각의 통과는 순서를 입증할 수 없어 비통과보다 앞에 둔다.
+    return started || Number(left.result !== "passed") - Number(right.result !== "passed");
+  });
 }
 
 export function verificationCommandFailed(attempt: VerificationAttempt): boolean {

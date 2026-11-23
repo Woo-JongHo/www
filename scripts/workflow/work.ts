@@ -675,6 +675,10 @@ export async function completeWork({ repo = process.cwd(), workId, policyRoot }:
       if (completed.rawSource === undefined || completion.source === undefined) throw new Error("완료된 작업의 원문 또는 소스 식별이 없습니다.");
       const completionSource = { workRecordHash: hash(completed.rawSource), sourceDigest: completion.source.digest, inputs: completion.source.inputs };
       const published = await publishWorkReport({ repo, workId, narrative: completion.narrative, event: "complete", completionSource });
+      const current = await readWork({ repo, workId });
+      if (current.rawSource !== completed.rawSource) throw new Error("완료 판정 중 작업 기록이 바뀌었습니다.");
+      const final = await assessRecord(repo, current, policyRoot);
+      if (!final.complete) throw new Error("완료 직전 현재 증거가 바뀌었습니다: " + final.reasons.join("; "));
       completion.reportHook = { status: "written", reportId: published.report.id, created: published.created };
       return completed;
     } catch (error) {

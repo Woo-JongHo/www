@@ -115,10 +115,14 @@ test("완료 보고서 잠금이 끝나지 않으면 앱 실패를 반환하고 
   assert.equal((await app.complete(workId)).status, "done");
 });
 
-for (const changed of ["원장", "소스"] as const) test("완료 보고서 대기 중 외부 " + changed + " 변경을 보존하고 성공을 응답하지 않는다", { timeout: 15_000 }, async t => {
+for (const changed of ["원장", "소스", "산출물"] as const) test("완료 보고서 대기 중 외부 " + changed + " 변경을 보존하고 성공을 응답하지 않는다", { timeout: 15_000 }, async t => {
   const context = await fixture(t);
   const { repo, workId } = context;
-  await context.verify();
+  const artifact = path.join(repo, "extra", "verified.txt");
+  if (changed === "산출물") {
+    await fs.writeFile(artifact, "검사 시점 산출물");
+    await verifyWork({ repo, workId, command: process.execPath, args: ["-e", "process.exit(0)"], criterionIds: ["AC-1"], artifactPaths: ["extra/verified.txt"] });
+  } else await context.verify();
   await context.review();
   await finishWorkReport({ repo, workId, narrative });
   const lock = path.join(path.dirname(context.file), "reports", ".report-write.lock");
@@ -136,8 +140,10 @@ for (const changed of ["원장", "소스"] as const) test("완료 보고서 대�
   if (changed === "원장") {
     edited.record.title = "보고서 대기 중 외부 변경";
     await fs.writeFile(context.file, JSON.stringify(edited.record));
-  } else {
+  } else if (changed === "소스") {
     await fs.writeFile(sourceFile, "export const value = 9;\n");
+  } else {
+    await fs.writeFile(artifact, "외부에서 변경한 산출물");
   }
   await fs.unlink(lock);
   const error = String(await completion);
@@ -146,9 +152,13 @@ for (const changed of ["원장", "소스"] as const) test("완료 보고서 대�
   if (changed === "원장") {
     assert.match(error, /작업 기록이 바뀌었습니다/);
     assert.equal(current.title, "보고서 대기 중 외부 변경");
-  } else {
+  } else if (changed === "소스") {
     assert.match(error, /검사 소스가 바뀌었습니다/);
     assert.equal(await fs.readFile(sourceFile, "utf8"), "export const value = 9;\n");
+    assert.notEqual(current.status, "done");
+  } else {
+    assert.match(error, /artifacts_changed/);
+    assert.equal(await fs.readFile(artifact, "utf8"), "외부에서 변경한 산출물");
     assert.notEqual(current.status, "done");
   }
   assert.equal((await assessWork({ repo, workId })).complete, false);
