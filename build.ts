@@ -3,9 +3,9 @@
  * @implements RESP-TOOLING-BUNDLE
  */
 import { copyFileSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { writeArchitecture } from "./scripts/generate-architecture.ts";
-import { buildInfo } from "./scripts/release.ts";
+import { buildInfo, ovisNoticePath } from "./scripts/release.ts";
 const root = import.meta.dir    ;
 const out  = join(root, "dist") ;
 writeArchitecture(root);
@@ -38,6 +38,9 @@ copyFileSync(join(root, "src", "ecosystem.css"), join(out, "ecosystem.css"));
 const policyDirectory = join(out, "agents", "www");
 mkdirSync(policyDirectory, { recursive: true });
 copyFileSync(join(root, "agents", "www", "review-policy.json"), join(policyDirectory, "review-policy.json"));
+const notice = join(out, ovisNoticePath);
+mkdirSync(dirname(notice), { recursive: true });
+copyFileSync(join(root, "docs", ovisNoticePath), notice);
 console.log(`built ${out}`);
 
 writeFileSync(join(out, "build-info.json"), JSON.stringify(info));

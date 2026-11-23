@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "97b6921745c3eaf9eec28e20034622cf4e6571caae7b3a1707004247d5bf8e84",
+  "digest"       : "e4af5c7c69cae4d52534b18586f88868c79b1fe86a3f2005509217c49b941da3",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -48,8 +48,8 @@
       "layer"      : "tooling",
       "role"       : "앱 모듈 · build",
       "line"       : 1,
-      "lines"      : 44,
-      "digest"     : "6ea477ae8e582c635d5eb14a21f95828849a3fde6a8dd244b9ce00f12ced1acf",
+      "lines"      : 47,
+      "digest"     : "0621a1e02a0330f2aa08b21825d069c8a432cf109787d71c5e77c20a7ba4ff9c",
       "structureId": "arch.tooling.bundle"
     },
     {
@@ -935,7 +935,7 @@
   ],
   "edges": [
     {
-      "id"       : "build.ts:188",
+      "id"       : "build.ts:197",
       "from"     : "build.ts",
       "to"       : "scripts/generate-architecture.ts",
       "mode"     : "runtime",
