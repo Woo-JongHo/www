@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "1111df687f5312704bf2d8d1dcd8cc721b8bb8665aa622a8d67a5ca38cea174d",
+  "digest"       : "c66dd6a3bbdeede4dc352fdd9bed82ede8788b1461589cee7742f8508eaf2549",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -214,7 +214,7 @@
       "role"       : "개발 절차 모듈 · evidence",
       "line"       : 1,
       "lines"      : 638,
-      "digest"     : "b9c66407d936fd7174be2f1a7733446c4e94db47090b845609890432fed197a2",
+      "digest"     : "80b5e963b9cba909f5138a54aa76720ce13ab3120dc062910c5f7f4e114f9206",
       "structureId": "arch.development.evidence.verification"
     },
     {
@@ -323,8 +323,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · review",
       "line"       : 1,
-      "lines"      : 681,
-      "digest"     : "4e2f06117b313f332e145448197e19f7bc174062b0931b339aa866dc07736461",
+      "lines"      : 796,
+      "digest"     : "65d55213dc05fa6186a0263eb9317583d0007daaf44aec19ea25c81d7e936bae",
       "structureId": "arch.development.review"
     },
     {
@@ -345,8 +345,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · run",
       "line"       : 1,
-      "lines"      : 895,
-      "digest"     : "e244b29adb8325f4f564a2d27c93d78931839cca2b959a9f25f203b69dd95ca8",
+      "lines"      : 891,
+      "digest"     : "ee80ceaff8587755c8e096a5bdb344f50ece3c3eb95ab50d0791f28d2172a86d",
       "structureId": "arch.development.execution"
     },
     {
@@ -1504,10 +1504,10 @@
       "specifier": "./evidence.ts",
       "line"     : 12,
       "endLine"  : 12,
-      "statement": "import { captureSource, criteriaDigest as digestCriteria } from \"./evidence.ts\";"
+      "statement": "import { captureSource, criteriaDigest as digestCriteria, criterionDefinitions } from \"./evidence.ts\";"
     },
     {
-      "id"       : "scripts/workflow/review.ts:565",
+      "id"       : "scripts/workflow/review.ts:587",
       "from"     : "scripts/workflow/review.ts",
       "to"       : "scripts/workflow/route.ts",
       "mode"     : "runtime",
@@ -1518,7 +1518,7 @@
       "statement": "import { hashRequest } from \"./route.ts\";"
     },
     {
-      "id"       : "scripts/workflow/review.ts:607",
+      "id"       : "scripts/workflow/review.ts:629",
       "from"     : "scripts/workflow/review.ts",
       "to"       : "scripts/workflow/schema.ts",
       "mode"     : "runtime",
@@ -1529,7 +1529,7 @@
       "statement": "import { parseWorkRecord } from \"./schema.ts\";"
     },
     {
-      "id"       : "scripts/workflow/review.ts:654",
+      "id"       : "scripts/workflow/review.ts:676",
       "from"     : "scripts/workflow/review.ts",
       "to"       : "scripts/workflow/reports.ts",
       "mode"     : "runtime",
@@ -1540,7 +1540,7 @@
       "statement": "import { WORK_RECORD_JSON_LIMIT } from \"./reports.ts\";"
     },
     {
-      "id"       : "scripts/workflow/review.ts:709",
+      "id"       : "scripts/workflow/review.ts:731",
       "from"     : "scripts/workflow/review.ts",
       "to"       : "scripts/workflow/types.ts",
       "mode"     : "type",
@@ -1551,7 +1551,7 @@
       "statement": "import type { CurrentWorkRecord } from \"./types.ts\";"
     },
     {
-      "id"       : "scripts/workflow/review.ts:762",
+      "id"       : "scripts/workflow/review.ts:784",
       "from"     : "scripts/workflow/review.ts",
       "to"       : "scripts/workflow/adapters/windows-command.ts",
       "mode"     : "runtime",
@@ -1562,7 +1562,7 @@
       "statement": "import { providerExecution, providerExecutionMatches } from \"./adapters/windows-command.ts\";"
     },
     {
-      "id"       : "scripts/workflow/review.ts:857",
+      "id"       : "scripts/workflow/review.ts:879",
       "from"     : "scripts/workflow/review.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "type",
@@ -1570,10 +1570,10 @@
       "specifier": "./evidence.ts",
       "line"     : 20,
       "endLine"  : 20,
-      "statement": "import type { CapturedSource } from './evidence.ts';"
+      "statement": "import type { CapturedSource, CriterionDefinition } from './evidence.ts';"
     },
     {
-      "id"       : "scripts/workflow/review.ts:995",
+      "id"       : "scripts/workflow/review.ts:1038",
       "from"     : "scripts/workflow/review.ts",
       "to"       : "scripts/workflow/adapters/windows-command.ts",
       "mode"     : "type",
@@ -6711,7 +6711,7 @@
         "line": 2
       }
     ],
-    "digest": "eae32a6274854f14b98482fdadb45b2265bb3a7cb8ce9c68532f5148510d3884",
+    "digest": "34cac1355916f432872491e920a3584694585a8cbf8c1204a67b0c2981f7e47e",
     "statecharts": {
       "models": [
         {
@@ -6961,7 +6961,7 @@
         }
       ],
       "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-      "sourceDigest": "5d71f751b8f653fccb0c19164767b081b87355fb8f3599b66e48c6fbfce9b1ed",
+      "sourceDigest": "6f6926199de3c135d81341f301c99628fb99dc67a9574b9aec874c5b2767a0df",
       "sources": [
         {
           "file": "scripts/workflow/completion-report.ts",
@@ -6973,15 +6973,15 @@
         },
         {
           "file": "scripts/workflow/evidence.ts",
-          "digest": "b9c66407d936fd7174be2f1a7733446c4e94db47090b845609890432fed197a2"
+          "digest": "80b5e963b9cba909f5138a54aa76720ce13ab3120dc062910c5f7f4e114f9206"
         },
         {
           "file": "scripts/workflow/review.ts",
-          "digest": "4e2f06117b313f332e145448197e19f7bc174062b0931b339aa866dc07736461"
+          "digest": "65d55213dc05fa6186a0263eb9317583d0007daaf44aec19ea25c81d7e936bae"
         },
         {
           "file": "scripts/workflow/run.ts",
-          "digest": "e244b29adb8325f4f564a2d27c93d78931839cca2b959a9f25f203b69dd95ca8"
+          "digest": "ee80ceaff8587755c8e096a5bdb344f50ece3c3eb95ab50d0791f28d2172a86d"
         },
         {
           "file": "scripts/workflow/statechart.ts",
@@ -7263,7 +7263,7 @@
       }
     ],
     "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-    "sourceDigest": "5d71f751b8f653fccb0c19164767b081b87355fb8f3599b66e48c6fbfce9b1ed",
+    "sourceDigest": "6f6926199de3c135d81341f301c99628fb99dc67a9574b9aec874c5b2767a0df",
     "sources": [
       {
         "file": "scripts/workflow/completion-report.ts",
@@ -7275,15 +7275,15 @@
       },
       {
         "file": "scripts/workflow/evidence.ts",
-        "digest": "b9c66407d936fd7174be2f1a7733446c4e94db47090b845609890432fed197a2"
+        "digest": "80b5e963b9cba909f5138a54aa76720ce13ab3120dc062910c5f7f4e114f9206"
       },
       {
         "file": "scripts/workflow/review.ts",
-        "digest": "4e2f06117b313f332e145448197e19f7bc174062b0931b339aa866dc07736461"
+        "digest": "65d55213dc05fa6186a0263eb9317583d0007daaf44aec19ea25c81d7e936bae"
       },
       {
         "file": "scripts/workflow/run.ts",
-        "digest": "e244b29adb8325f4f564a2d27c93d78931839cca2b959a9f25f203b69dd95ca8"
+        "digest": "ee80ceaff8587755c8e096a5bdb344f50ece3c3eb95ab50d0791f28d2172a86d"
       },
       {
         "file": "scripts/workflow/statechart.ts",
