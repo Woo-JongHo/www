@@ -207,7 +207,7 @@ function finish(item: ActivityEntry, next: ActivityStatus, at: string, duration:
 function nativeItemOutcome(item: Record<string, unknown>, complete: boolean): ActivityStatus {
   if (!complete) return "running";
   let outcome = status(item.status);
-  if (item.type === "commandExecution" && typeof item.exitCode === "number" && Number.isSafeInteger(item.exitCode)) {
+  if (outcome !== "failed" && item.type === "commandExecution" && typeof item.exitCode === "number" && Number.isSafeInteger(item.exitCode)) {
     outcome = item.exitCode === 0 ? "completed" : "failed";
   }
   if (item.success === false || item.error) outcome = "failed";

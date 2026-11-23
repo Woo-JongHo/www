@@ -577,8 +577,12 @@ test("F03 정상 호스트 종료와 미실행·누락 산출물의 업무 수�
 
 test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 수용하고 통합 후 재검증으로 갱신한다", async t => {
   const repo = await repository(t);
-  const units = [decompositionUnit(), decompositionUnit("second", "src/other.ts", ["fixture-task"])];
+  const criterionIds = ["AC-1", "AC-2"];
+  const units = [decompositionUnit(), decompositionUnit("second", "src/other.ts", ["fixture-task"])].map(unit => ({ ...unit, criterionIds }));
+  const defaults = request(repo);
   const base = request(repo, { decomposition: { units }, allocation: allocation(),
+    decision: { ...defaults.decision, criteria: [...defaults.decision.criteria, { id: "AC-2", description: "다른 기준의 통과 기록을 유지한다.", required: true }] },
+    verifier: { ...defaults.verifier, criterionIds },
     approval: { ...request(repo).approval, writePaths: ["src/item.ts", "src/other.ts"] } });
   function processHost(file: string, content: string) {
     // Node fixture가 Codex JSONL 사건을 출력한다. 실제 모델 호출로 표시하지 않는다.
@@ -597,17 +601,114 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
     allocation: allocation({ taskId: "second", writePaths: ["src/other.ts"] }) }, processHost("src/other.ts", "export const other = 3;\n"));
   assert.equal(second.acceptance?.status, "accepted", second.acceptance?.reasons.join(","));
   assert.ok(second.workId);
-  const { assessDecompositionCompletion } = await import("../scripts/workflow/decomposition.ts");
-  const { verifyWork } = await import("../scripts/workflow/work.ts");
+  const { assessDecompositionCompletion, assessUnitAcceptance } = await import("../scripts/workflow/decomposition.ts");
+  const { assessWork, authorizationDigest, continueWork, verifyWork } = await import("../scripts/workflow/work.ts");
   const before = await readWork({ repo, workId: second.workId });
   assert.equal(before.record.schemaVersion, 2);
   assert.ok(before.record.workflow);
   assert.equal((await assessDecompositionCompletion(repo, before.record)).usable, false);
-  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds: ["AC-1"], artifactPaths: ["src/item.ts", "src/other.ts"] });
+  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds, artifactPaths: ["src/item.ts", "src/other.ts"] });
   const after = await readWork({ repo, workId: second.workId });
   assert.equal(after.record.schemaVersion, 2);
   assert.ok(after.record.workflow);
   assert.equal((await assessDecompositionCompletion(repo, after.record)).usable, true);
+  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds, artifactPaths: ["src/item.ts"] });
+  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds, artifactPaths: ["src/other.ts"] });
+  const independentlyVerified = (await readWork({ repo, workId: second.workId })).record;
+  assert.equal(independentlyVerified.schemaVersion, 2);
+  if (independentlyVerified.schemaVersion !== 2) throw new Error("현재 작업 기록이 필요합니다.");
+  const acceptance = await assessDecompositionCompletion(repo, independentlyVerified);
+  assert.equal(acceptance.usable, true, acceptance.reasons.join(","));
+  // 기록 완료 순서가 시작 순서와 뒤바뀐 fixture다.
+  const inverted = structuredClone(independentlyVerified);
+  const early = inverted.workflow.verifications.filter(v => v.artifacts?.some(a => a.path === "src/item.ts")).at(-1);
+  assert.ok(early);
+  const later = { ...early, id: "attempt-22024943-2a31-4414-84dc-8382820358c6", criterionIds: ["AC-1"], result: "failed" as const, exitCode: 1, startedAt: new Date(Date.parse(early.startedAt) + 1).toISOString() };
+  inverted.workflow.verifications = [...inverted.workflow.verifications.filter(v => v.id !== early.id), later, early];
+  assert.match((await assessDecompositionCompletion(repo, inverted)).reasons.join(","), /fixture-task: verification_failed/);
+  later.startedAt = early.startedAt;
+  assert.match((await assessDecompositionCompletion(repo, inverted)).reasons.join(","), /fixture-task: verification_failed/);
+  const stale = { ...later, result: "passed" as const, exitCode: 0, source: { ...later.source, digest: "0".repeat(64) } };
+  for (const tied of [[stale, early], [early, stale]]) {
+    inverted.workflow.verifications = [...inverted.workflow.verifications.filter(v => v.id !== early.id && v.id !== later.id), ...tied];
+    assert.match((await assessDecompositionCompletion(repo, inverted)).reasons.join(","), /fixture-task: source_changed/);
+  }
+  const current = await readWork({ repo, workId: second.workId });
+  const latestStartedAt = Math.max(...inverted.workflow.verifications.map(v => Date.parse(v.startedAt)));
+  const tiedAt = new Date(latestStartedAt + 1).toISOString();
+  const finalTwo = inverted.workflow.verifications.splice(-2);
+  finalTwo.forEach(v => { v.startedAt = tiedAt; });
+  // 저장 순서가 현재 근거를 고르는 기준이 되는지도 공개 상태 판정으로 확인한다.
+  try {
+    for (const order of [finalTwo, [...finalTwo].reverse()]) {
+      await writeFile(current.path, JSON.stringify({ ...inverted, workflow: {
+        ...inverted.workflow, verifications: [...inverted.workflow.verifications, ...order],
+      } }));
+      const status = await assessWork({ repo, workId: second.workId });
+      assert.ok(!status.legacy && status.criteria.find(item => item.id === "AC-1")?.reasons.includes("source_changed"));
+    }
+  } finally {
+    await writeFile(current.path, current.rawSource ?? JSON.stringify(independentlyVerified));
+  }
+  const oneCriterionPassed = structuredClone(independentlyVerified);
+  oneCriterionPassed.workflow.verifications.push({ ...later, result: "passed", exitCode: 0, startedAt: new Date(Date.parse(early.startedAt) + 1).toISOString() });
+  assert.equal((await assessDecompositionCompletion(repo, oneCriterionPassed)).usable, true);
+  const sameAsHost = structuredClone(independentlyVerified);
+  const host = (await readRuntime(runtimePaths(repo, second.workId))).events.find(event => event.type === "host_result" && event.taskId === "fixture-task");
+  assert.ok(host && typeof host.recordedAt === "string");
+  sameAsHost.workflow.verifications = sameAsHost.workflow.verifications.filter(v => !v.artifacts?.some(artifact => artifact.path === "src/item.ts"));
+  const simultaneous = { ...early, startedAt: host.recordedAt };
+  sameAsHost.workflow.verifications.push(simultaneous);
+  assert.match((await assessDecompositionCompletion(repo, sameAsHost)).reasons.join(","), /fixture-task: verification_not_run/);
+  const immediate = await assessUnitAcceptance({ repo, record: sameAsHost, unit: units[0], host: { ok: true, outcome: "passed" },
+    hostCompletedAt: host.recordedAt, executor: "process", attempt: simultaneous });
+  assert.equal(immediate.status, "rejected");
+  assert.ok(immediate.reasons.includes("verification_not_run"));
+  const workflow = independentlyVerified.workflow;
+  await continueWork({ repo, workId: second.workId, role: "www-dev", direct: true, requestId: "follow-up-fixture",
+    request: "같은 입력의 후속 요청", expectedRequestId: workflow.requestId, expectedRequestHash: workflow.requestHash,
+    expectedAuthorizationDigest: authorizationDigest(workflow.authorization), inputs: workflow.inputs,
+    approval: { ...workflow.authorization, commit: false, publish: false } });
+  await verifyWork({ repo, workId: second.workId, command: process.execPath, args: ["checks/verify.ts"], criterionIds: ["AC-1"] });
+  const continued = (await readWork({ repo, workId: second.workId })).record;
+  if (continued.schemaVersion !== 2) throw new Error("현재 작업 기록이 필요합니다.");
+  assert.match((await assessDecompositionCompletion(repo, continued)).reasons.join(","), /unit_request_changed/);
+});
+
+
+test("검증이 정상 종료해도 원장 잠금으로 미기록이면 분업을 즉시 수용하지 않는다", { timeout: 15_000 }, async t => {
+  const repo = await repository(t);
+  const marker = join(repo, ".www", "verifier-started");
+  const release = join(repo, ".www", "verifier-release");
+  await mkdir(dirname(marker), { recursive: true });
+  const fixture = "import { existsSync, writeFileSync } from 'node:fs';" +
+    "writeFileSync(" + JSON.stringify(marker) + ", 'started');" +
+    "while(!existsSync(" + JSON.stringify(release) + ")) await new Promise(resolve => setTimeout(resolve, 10));";
+  await writeFile(join(repo, "checks/verify.ts"), fixture);
+  const options = request(repo, { allocation: allocation(), decomposition: { units: [decompositionUnit()] } });
+  const host = "process.stdin.resume();process.stdin.on('end',()=>{require('fs').writeFileSync('src/item.ts','export const value = 2;');console.log(JSON.stringify({type:'thread.started',thread_id:'work-lock-fixture'}));console.log(JSON.stringify({type:'turn.completed'}));});";
+  const execution = runDevelopmentWorkflow(options, { prepareInvocation: invocation => ({ ...invocation, command: process.execPath, args: ["-e", host] }) });
+  void execution.catch(() => undefined);
+  for (let tries = 0; tries < 400; tries++) {
+    try { await access(marker); break; } catch { await new Promise(resolve => setTimeout(resolve, 10)); }
+  }
+  await access(marker);
+  const { withWorkLock } = await import("../scripts/workflow/lock.ts");
+  const result = await withWorkLock(repo, async () => {
+    await writeFile(release, "release");
+    return execution;
+  });
+  assert.ok(result.verification && "result" in result.verification);
+  assert.equal(result.verification.result, "passed");
+  assert.equal((result.verification as { recorded?: boolean }).recorded, false);
+  assert.equal(result.acceptance?.status, "rejected");
+  assert.ok(result.acceptance?.reasons.includes("verification_error: verification_not_recorded"));
+  const { exitCode } = await import("../scripts/workflow.ts");
+  assert.equal(exitCode({ ...result }), 1);
+  // 실제 호스트 종료는 성공이고 단위 검증 자체가 없을 때도 CLI 전체 성공은 아니다.
+  assert.equal(exitCode({ ...result, verification: undefined, acceptance: { status: "rejected", reasons: ["verification_not_run"] } }), 1);
+  assert.ok(result.workId);
+  assert.equal((await readWork({ repo, workId: result.workId })).record.workflow?.verifications.length, 0);
 });
 
 test("F03 실제 fixture 프로세스가 정상 종료해도 필수 산출물이 없으면 수용하지 않는다", async t => {

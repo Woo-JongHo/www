@@ -71,6 +71,22 @@ test("F09/F11: 저작 보고서가 없으면 raw core와 wrapper·공개 CLI 모
   assert.equal((await readWork({ repo, workId })).record.workflow?.verifications[0]?.result, "passed");
 });
 
+test("먼저 시작한 실패가 늦게 저장되어도 최신 통과로 원장 완료를 저장한다", async t => {
+  const { repo, workId, file, verify, review } = await fixture(t);
+  const failure = await verify(7);
+  const success = await verify();
+  assert.ok(Date.parse(failure.startedAt) < Date.parse(success.startedAt));
+  const work = await readWork({ repo, workId });
+  assert.equal(work.record.schemaVersion, 2);
+  if (work.record.schemaVersion !== 2) throw new Error("현재 작업 기록이 필요합니다.");
+  work.record.workflow.verifications.reverse();
+  await fs.writeFile(file, JSON.stringify(work.record));
+  await review();
+  await finishWorkReport({ repo, workId, narrative });
+  assert.equal((await assessWork({ repo, workId })).complete, true);
+  assert.equal((await completeWork({ repo, workId })).record.status, "done");
+});
+
 test("C01/F09: 현재 저작 보고서는 허용하고 보고서 작성 뒤 기록 변경은 거부한다", async t => {
   const context = await fixture(t);
   const { repo, workId } = context;
@@ -91,6 +107,77 @@ test("C01/F09: 현재 저작 보고서는 허용하고 보고서 작성 뒤 기�
   const completed = await completeReportedWork({ repo, workId });
   assert.equal(completed.record.status, "done");
   assert.equal((await assessWork({ repo, workId })).complete, true);
+  const edited = await readWork({ repo, workId });
+  edited.record.title = "완료 저장 이후 변경한 업무 제목";
+  await fs.writeFile(context.file, JSON.stringify(edited.record));
+  assert.equal((await assessWork({ repo, workId })).report?.usable, false);
+  await assert.rejects(completeReportedWork({ repo, workId }), /저작 작업 보고서/);
+});
+
+test("완료 보고서 잠금이 끝나지 않으면 앱 실패를 반환하고 원장을 되돌린다", { timeout: 15_000 }, async t => {
+  const context = await fixture(t);
+  const { repo, workId } = context;
+  await context.verify();
+  await context.review();
+  await finishWorkReport({ repo, workId, narrative });
+  const before = await fs.readFile(context.file, "utf8");
+  const lock = path.join(path.dirname(context.file), "reports", ".report-write.lock");
+  await fs.writeFile(lock, JSON.stringify({ token: "held", pid: process.pid, hostname: os.hostname(), createdAt: new Date().toISOString() }), { flag: "wx" });
+  const app = createDevelopmentService({ policyRoot: repo, workspace: () => repo });
+  await assert.rejects(app.complete(workId), /완료 보고서 저장 실패.*잠금/);
+  assert.equal(await fs.readFile(context.file, "utf8"), before);
+  assert.notEqual((await readWork({ repo, workId })).record.status, "done");
+  await fs.unlink(lock);
+  assert.equal((await app.complete(workId)).status, "done");
+});
+
+for (const changed of ["원장", "소스", "산출물"] as const) test("완료 보고서 대기 중 외부 " + changed + " 변경을 보존하고 성공을 응답하지 않는다", { timeout: 15_000 }, async t => {
+  const context = await fixture(t);
+  const { repo, workId } = context;
+  const artifact = path.join(repo, "extra", "verified.txt");
+  if (changed === "산출물") {
+    await fs.writeFile(artifact, "검사 시점 산출물");
+    await verifyWork({ repo, workId, command: process.execPath, args: ["-e", "process.exit(0)"], criterionIds: ["AC-1"], artifactPaths: ["extra/verified.txt"] });
+  } else await context.verify();
+  await context.review();
+  await finishWorkReport({ repo, workId, narrative });
+  const lock = path.join(path.dirname(context.file), "reports", ".report-write.lock");
+  await fs.writeFile(lock, JSON.stringify({ token: "held", pid: process.pid, hostname: os.hostname(), createdAt: new Date().toISOString() }), { flag: "wx" });
+  const app = createDevelopmentService({ policyRoot: repo, workspace: () => repo });
+  const completion = app.complete(workId).then(() => null, error => error);
+  let edited = await readWork({ repo, workId });
+  for (let attempt = 0; edited.record.status !== "done" && attempt < 100; attempt++) {
+    await new Promise(resolve => setTimeout(resolve, 10));
+    edited = await readWork({ repo, workId });
+  }
+  assert.equal(edited.record.status, "done");
+  // 잠금을 따르지 않는 외부 편집을 주입한다.
+  const sourceFile = path.join(repo, "src/item.ts");
+  if (changed === "원장") {
+    edited.record.title = "보고서 대기 중 외부 변경";
+    await fs.writeFile(context.file, JSON.stringify(edited.record));
+  } else if (changed === "소스") {
+    await fs.writeFile(sourceFile, "export const value = 9;\n");
+  } else {
+    await fs.writeFile(artifact, "외부에서 변경한 산출물");
+  }
+  await fs.unlink(lock);
+  const error = String(await completion);
+  assert.match(error, /완료 보고서 저장 실패/);
+  const current = (await readWork({ repo, workId })).record;
+  if (changed === "원장") {
+    assert.match(error, /작업 기록이 바뀌었습니다/);
+    assert.equal(current.title, "보고서 대기 중 외부 변경");
+  } else if (changed === "소스") {
+    assert.match(error, /검사 소스가 바뀌었습니다/);
+    assert.equal(await fs.readFile(sourceFile, "utf8"), "export const value = 9;\n");
+    assert.notEqual(current.status, "done");
+  } else {
+    assert.match(error, /artifacts_changed/);
+    assert.equal(await fs.readFile(artifact, "utf8"), "외부에서 변경한 산출물");
+    assert.notEqual(current.status, "done");
+  }
+  assert.equal((await assessWork({ repo, workId })).complete, false);
 });
 
 async function rejectBoth(repo: string, workId: string, reason: RegExp) {

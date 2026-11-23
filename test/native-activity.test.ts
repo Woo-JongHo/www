@@ -608,12 +608,13 @@ describe("실시간 Native 활동 투영", () => {
       item(3, "item/completed", { id: "mention", type: "commandExecution", command: "echo skill SKILL.md", exitCode: 0 }),
       item(4, "item/completed", { id: "read", type: "commandExecution", command: "cat", exitCode: 0, commandActions: [{ type: "read", path: "/skills/demo/SKILL.md" }] }),
       item(5, "item/completed", { id: "bad", type: "commandExecution", exitCode: 1, commandActions: [{ type: "read", path: "/skills/bad/SKILL.md" }] }),
-      item(6, "item/completed", { id: "user", type: "userMessage", content: [{ type: "skill", name: "demo", path: "/skills/demo" }] }),
-      event(7, "skills/changed", {}),
+      item(6, "item/completed", { id: "failed-status", type: "commandExecution", status: "failed", exitCode: 0, commandActions: [{ type: "read", path: "/skills/failed/SKILL.md" }] }),
+      item(7, "item/completed", { id: "user", type: "userMessage", content: [{ type: "skill", name: "demo", path: "/skills/demo" }] }),
+      event(8, "skills/changed", {}),
     ]);
     const skills = result.turns[0]?.entries.filter((row) => row.kind === "skill");
-    expect(skills?.map((row) => row.source)).toEqual(["file_read", "file_read", "request"]);
-    expect(skills?.map((row) => row.status)).toEqual(["completed", "failed", "pending"]);
+    expect(skills?.map((row) => row.source)).toEqual(["file_read", "file_read", "file_read", "request"]);
+    expect(skills?.map((row) => row.status)).toEqual(["completed", "failed", "failed", "pending"]);
   });
 
   test("선택 저장소의 전용 역할·스킬 읽기를 이름과 근거로 보존한다", () => {
