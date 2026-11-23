@@ -200,20 +200,20 @@ html,body,#root{width:100%;height:100%;min-height:0;overflow:hidden;overscroll-b
 
 [data-chat-theme="terminal-basic"],
 .session-surface:has(> .work[data-chat-theme="terminal-basic"]:not([hidden])) {
-  color-scheme: light;
-  --bg:#fff;
-  --surface:#f6f6f6;
-  --raised:#ebebeb;
-  --row:#ebebeb;
-  --border:#c6c6c6;
-  --text:#171717;
-  --muted:#535353;
-  --accent:#174ea6;
-  --ok:#237a37;
-  --warn:#855a12;
-  --error:#a12823;
-  --info:#195a70;
-  --chat-steel:#535353;
+  color-scheme: dark;
+  --bg:#151515;
+  --surface:#202020;
+  --raised:#2a2a2a;
+  --row:#2a2a2a;
+  --border:#626262;
+  --text:#ededed;
+  --muted:#b2b2b2;
+  --accent:#d6d6d6;
+  --ok:#8dd49a;
+  --warn:#e6bf79;
+  --error:#f38c86;
+  --info:#9bc6ef;
+  --chat-steel:#b2b2b2;
   --chat-card-surface:var(--surface);
   --chat-card-border:var(--border);
   --chat-state-running:var(--accent);

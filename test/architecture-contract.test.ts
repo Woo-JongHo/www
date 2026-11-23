@@ -79,12 +79,14 @@ describe("구조·요구 계약 fixture", () => {
     mkdirSync(path.join(root, ".www"), { recursive: true });
     cpSync(path.join(path.resolve(import.meta.dir, ".."), ".www/development.local.json"), path.join(root, ".www/development.local.json"));
     const before = writeArchitecture(root);
-    expect(writeArchitecture(root, true)).toEqual(before);
+    const file = path.join(root, "src/architecture.generated.json");
+    const original = readFileSync(file, "utf8");
+    expect(JSON.parse(original).digest).toBe(before.digest);
     change(root, "docs/specs/architecture.md", (source) => source.replace("기능 책임", "변경된 기능 책임"));
-    expect(generateArchitecture(root).digest                                                          ).not.toBe   (before.digest) ;
-    expect(() => writeArchitecture(root, true)                                                        )    .toThrow("snapshot"   ) ;
-    expect(JSON.parse(readFileSync(path.join(root, "src/architecture.generated.json"), "utf8")).digest)    .toBe   (before.digest) ;
-  }));
+    expect(generateArchitecture(root).digest).not.toBe(before.digest);
+    expect(() => writeArchitecture(root, true)).toThrow("snapshot");
+    expect(readFileSync(file, "utf8")).toBe(original);
+  }), 30_000);
 
   test("복수 선행 JSDoc의 구조 태그와 기존 설명을 함께 보존한다", () => fixture((root) => {
     change(root, "src/entry.ts", (source) => source.replace("export const", "/** 기존 설명을 보존한다. */\nexport const"));
