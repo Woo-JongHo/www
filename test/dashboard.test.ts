@@ -2,6 +2,7 @@
  * @verifies RESP-NATIVE-PROJECTS
  * @verifies RESP-CHAT-WORKSPACE
  */
+import { verify, evaluateEvidence } from "../scripts/workflow/evidence.ts";
 import { expect, test } from "bun:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -281,7 +282,7 @@ test("상세는 원본 기준과 네 문서를 읽기 전용으로 반환한다"
     expect(detail.workId).toBe(value.id);
     expect(detail.title).toBe(value.title);
     expect(detail.nextAction).toBe("검증 확인");
-    expect(detail.criteria[0]).toEqual({ id: "C1", description: "상태를 보존한다", required: true, result: "passed", evidenceCount: 0 });
+    expect(detail.criteria[0]).toEqual({ id: "C1", description: "상태를 보존한다", required: true, result: "passed", evidenceCount: 0, applicability: { status: "unassessed", reasons: ["외부 프로젝트의 검증 입력은 조회하지 않습니다."] } });
     expect(detail.documents.map(item => item.status)).toEqual(["available", "missing", "failed", "missing"]);
     expect(detail.documents[0]?.content).toBe(original);
     expect(await fs.readFile(file, "utf8")).toBe(JSON.stringify(value));
@@ -373,6 +374,31 @@ test("상세 Markdown은 HTML·링크·이미지를 실행하지 않고 누락�
     expect(html).toContain("<strong>강조</strong>");
     expect(html).toContain("문서가 비어 있습니다.");
     expect(html).toContain("기록된 계획이 없습니다.");
-    expect(html).toContain("현재 소스의 재검증 여부는 평가하지 않았습니다.");
+    expect(html).toContain("현재 미평가");
+    expect(html).toContain("외부 프로젝트의 검증 입력은 조회하지 않습니다.");
+  });
+});
+
+test("같은 실제 시도의 기준 정의 변경을 목록·상세와 공식 판정에서 동일하게 처리한다", async () => {
+  await fixture(async (external, _base, save) => {
+    const project: DashboardProject = { ...external, kind: "www", key: "www" };
+    const value = record();
+    const inputs = ["feature.txt"];
+    await fs.writeFile(join(project.path, inputs[0]!), "현재 동작");
+    const attempt = await verify({ repo: project.path, record: value, inputs, command: "node", args: ["-e", "process.exit(0)"], criterionIds: ["C1", "C2"] });
+    const criteria = value.criteria.map(c => c.id === "C2" ? { ...c, description: "변경된 동작" } : c);
+    const changed = { ...value, criteria, workflow: { inputs, verifications: [attempt] } };
+    await save("actual", changed);
+    const list = await readDashboard([project]);
+    const detail = await readDashboardWork([project], project.key, value.id);
+    expect(list.projects[0]?.cards[0]).toMatchObject({ currentCriteria: 1, unassessedCriteria: 0 });
+    for (const c of detail.criteria) {
+      const official = await evaluateEvidence({ repo: project.path, record: changed, attempt, criterionId: c.id });
+      expect(c.applicability?.status === "current").toBe(official.usable);
+    }
+    expect(detail.criteria[1]?.applicability).toEqual({ status: "stale", reasons: ["수용 기준 변경"] });
+    await fs.writeFile(join(project.path, inputs[0]!), "다른 동작");
+    expect((await readDashboard([project])).projects[0]?.cards[0]?.currentCriteria).toBe(0);
+    expect((await readDashboard([external])).projects[0]?.cards[0]?.unassessedCriteria).toBe(2);
   });
 });

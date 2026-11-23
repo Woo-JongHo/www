@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "ac62d5384aad527f6b21917808b0a4450eff9f1abb61ad9ce5b9302d31d10d5c",
+  "digest"       : "152361f856b204fb4994130e8e944a0b7f623adbe051796fbf0249b47030bf89",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -213,8 +213,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · evidence",
       "line"       : 1,
-      "lines"      : 657,
-      "digest"     : "52908d32f70f9fadd6d0843d95ea44478434c27badade2e784bc0625b0ce42ec",
+      "lines"      : 678,
+      "digest"     : "79f4f628f9751f97b9f6172dd27d73db9e009afb35cbac31ffbdcf3294dee0be",
       "structureId": "arch.development.evidence.verification"
     },
     {
@@ -592,14 +592,25 @@
       "structureId": "arch.chat.sessions.restore"
     },
     {
+      "id"         : "src/dashboard-evidence.ts",
+      "file"       : "src/dashboard-evidence.ts",
+      "title"      : "dashboard-evidence",
+      "layer"      : "host",
+      "role"       : "앱 모듈 · dashboard-evidence",
+      "line"       : 1,
+      "lines"      : 144,
+      "digest"     : "483b0af2c90ba978ad789b44f3b73a121112804d5995d7d63049740331f0de88",
+      "structureId": "arch.native.projects"
+    },
+    {
       "id"         : "src/dashboard-view.tsx",
       "file"       : "src/dashboard-view.tsx",
       "title"      : "dashboard-view",
       "layer"      : "presentation",
       "role"       : "앱 모듈 · dashboard-view",
       "line"       : 1,
-      "lines"      : 163,
-      "digest"     : "1763c15da62cc2c963fbe0de9fae4ee2b94c94053eee935c100af255363515eb",
+      "lines"      : 171,
+      "digest"     : "18847c0977e2178464ff971f2f995008b3befd46a56bdc518c44c8131a11175e",
       "structureId": "arch.chat.workspace"
     },
     {
@@ -609,8 +620,8 @@
       "layer"      : "host",
       "role"       : "앱 모듈 · dashboard",
       "line"       : 1,
-      "lines"      : 268,
-      "digest"     : "aa889ef2ce376778bdd60dc748c77da926b450a115d849cbbc158409d6922433",
+      "lines"      : 292,
+      "digest"     : "f163805a9becbebcfb1f3d0c941594264bbdfd61864bb1592c34fd088e1bbbdd",
       "structureId": "arch.native.projects"
     },
     {
@@ -917,8 +928,8 @@
       "layer"      : "contract",
       "role"       : "프로세스 간 공용 타입 계약",
       "line"       : 1,
-      "lines"      : 307,
-      "digest"     : "70de014767efbbaad52c8800b59e227fc6183115ba362622c3002e81c88d25ad",
+      "lines"      : 308,
+      "digest"     : "ede0e1d5fed5883207176e234e76e89472bf169622a34c29e979e6ae282a6850",
       "structureId": "arch.native.protocol"
     },
     {
@@ -2530,6 +2541,50 @@
       "statement": "import type { AppEvent, ConversationCatalog, ConversationSummary } from \"./shared\";"
     },
     {
+      "id"       : "src/dashboard-evidence.ts:207",
+      "from"     : "src/dashboard-evidence.ts",
+      "to"       : "scripts/workflow/evidence.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "../scripts/workflow/evidence.ts",
+      "line"     : 8,
+      "endLine"  : 8,
+      "statement": "import { captureSource, criterionEvidence, evaluateEvidence } from \"../scripts/workflow/evidence.ts\";"
+    },
+    {
+      "id"       : "src/dashboard-evidence.ts:309",
+      "from"     : "src/dashboard-evidence.ts",
+      "to"       : "scripts/workflow/evidence.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "../scripts/workflow/evidence.ts",
+      "line"     : 9,
+      "endLine"  : 9,
+      "statement": "import type { Artifact, EvidenceEvaluation, EvidenceObservations, ExecutionEnvironment, VerificationAttempt } from \"../scripts/workflow/evidence.ts\";"
+    },
+    {
+      "id"       : "src/dashboard-evidence.ts:459",
+      "from"     : "src/dashboard-evidence.ts",
+      "to"       : "scripts/workflow/types.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "../scripts/workflow/types.ts",
+      "line"     : 10,
+      "endLine"  : 10,
+      "statement": "import { currentVerifications, latestVerificationGroup } from \"../scripts/workflow/types.ts\";"
+    },
+    {
+      "id"       : "src/dashboard-evidence.ts:553",
+      "from"     : "src/dashboard-evidence.ts",
+      "to"       : "src/shared.ts",
+      "mode"     : "type",
+      "syntax"   : "import",
+      "specifier": "./shared",
+      "line"     : 11,
+      "endLine"  : 11,
+      "statement": "import type { DashboardApplicability } from \"./shared\";"
+    },
+    {
       "id"       : "src/dashboard-view.tsx:213",
       "from"     : "src/dashboard-view.tsx",
       "to"       : "src/shared.ts",
@@ -2543,12 +2598,23 @@
     {
       "id"       : "src/dashboard.ts:324",
       "from"     : "src/dashboard.ts",
+      "to"       : "src/dashboard-evidence.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./dashboard-evidence",
+      "line"     : 10,
+      "endLine"  : 10,
+      "statement": "import { dashboardApplicability, dashboardObservations } from \"./dashboard-evidence\";"
+    },
+    {
+      "id"       : "src/dashboard.ts:410",
+      "from"     : "src/dashboard.ts",
       "to"       : "src/shared.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./shared",
-      "line"     : 10,
-      "endLine"  : 10,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import type { DashboardIssue, DashboardProject, DashboardProjectSnapshot, DashboardSnapshot, DashboardWork, DashboardWorkDetail, WorkStatus } from \"./shared\";"
     },
     {
@@ -3983,7 +4049,7 @@
     },
     {
       "file"     : "scripts/workflow/evidence.ts",
-      "line"     : 516,
+      "line"     : 537,
       "specifier": "node:os",
       "reason"   : "external"
     },
@@ -4378,6 +4444,24 @@
       "reason"   : "external"
     },
     {
+      "file"     : "src/dashboard-evidence.ts",
+      "line"     : 5,
+      "specifier": "node:crypto",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/dashboard-evidence.ts",
+      "line"     : 6,
+      "specifier": "node:fs",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/dashboard-evidence.ts",
+      "line"     : 7,
+      "specifier": "node:path",
+      "reason"   : "external"
+    },
+    {
       "file"     : "src/dashboard-view.tsx",
       "line"     : 5,
       "specifier": "react",
@@ -4732,7 +4816,9 @@
         "title"      : "로컬 프로젝트 인덱스",
         "description": "main 단일 소유자가 실제 경로별 프로젝트 인덱스를 보전하고 승인된 프로젝트의 작업 기록을 제한된 읽기 보드로 투영한다.",
         "allowedDependencies": [
-          "arch.native.protocol"
+          "arch.native.protocol",
+          "arch.development.evidence.verification",
+          "arch.development.records.protocol"
         ]
       },
       {
@@ -6269,6 +6355,14 @@
         "line": 2
       },
       {
+        "file": "src/dashboard-evidence.ts",
+        "nodeId": "arch.native.projects",
+        "requirementIds": [
+          "RESP-NATIVE-PROJECTS"
+        ],
+        "line": 2
+      },
+      {
         "file": "src/dashboard-view.tsx",
         "nodeId": "arch.chat.workspace",
         "requirementIds": [
@@ -6959,7 +7053,7 @@
         "line": 2
       }
     ],
-    "digest": "739c6d8a960a986d8b63db7648cdd32de674f3b67058caefafb43af7fb038e6d",
+    "digest": "089eeb73b4e21392bd365f72bb845829d2027f3c6ec891b834e16256ffea1206",
     "statecharts": {
       "models": [
         {
@@ -7209,7 +7303,7 @@
         }
       ],
       "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-      "sourceDigest": "1a1487a5ac3563c6d30b8f6659093b7a309dd28224a85145a8eb5fb3c1131e45",
+      "sourceDigest": "43de201cef35720c08d00215b992db69787ff0f4c87b498039bc731d6a0784e4",
       "sources": [
         {
           "file": "scripts/workflow/completion-report.ts",
@@ -7221,7 +7315,7 @@
         },
         {
           "file": "scripts/workflow/evidence.ts",
-          "digest": "52908d32f70f9fadd6d0843d95ea44478434c27badade2e784bc0625b0ce42ec"
+          "digest": "79f4f628f9751f97b9f6172dd27d73db9e009afb35cbac31ffbdcf3294dee0be"
         },
         {
           "file": "scripts/workflow/review.ts",
@@ -7511,7 +7605,7 @@
       }
     ],
     "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-    "sourceDigest": "1a1487a5ac3563c6d30b8f6659093b7a309dd28224a85145a8eb5fb3c1131e45",
+    "sourceDigest": "43de201cef35720c08d00215b992db69787ff0f4c87b498039bc731d6a0784e4",
     "sources": [
       {
         "file": "scripts/workflow/completion-report.ts",
@@ -7523,7 +7617,7 @@
       },
       {
         "file": "scripts/workflow/evidence.ts",
-        "digest": "52908d32f70f9fadd6d0843d95ea44478434c27badade2e784bc0625b0ce42ec"
+        "digest": "79f4f628f9751f97b9f6172dd27d73db9e009afb35cbac31ffbdcf3294dee0be"
       },
       {
         "file": "scripts/workflow/review.ts",

@@ -76,7 +76,11 @@
       "parent"     : "arch.native",
       "title"      : "로컬 프로젝트 인덱스",
       "description": "main 단일 소유자가 실제 경로별 프로젝트 인덱스를 보전하고 승인된 프로젝트의 작업 기록을 제한된 읽기 보드로 투영한다.",
-      "allowedDependencies": ["arch.native.protocol"]
+      "allowedDependencies": [
+        "arch.native.protocol",
+        "arch.development.evidence.verification",
+        "arch.development.records.protocol"
+      ]
     },
     {
       "id"         : "arch.development",

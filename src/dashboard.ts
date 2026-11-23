@@ -7,6 +7,7 @@ import { constants } from "node:fs";
 import { createHash } from "node:crypto";
 import * as fs from "node:fs/promises";
 import { isAbsolute, join, relative, resolve, sep } from "node:path";
+import { dashboardApplicability, dashboardObservations } from "./dashboard-evidence";
 import type { DashboardIssue, DashboardProject, DashboardProjectSnapshot, DashboardSnapshot, DashboardWork, DashboardWorkDetail, WorkStatus } from "./shared";
 
 export const DASHBOARD_LIMITS = {
@@ -61,7 +62,7 @@ async function directory(root: string, path: string): Promise<void> {
   if (await fs.realpath(path) !== path) throw new ReadFailure("unsafe_path", "실제 경로가 프로젝트 읽기 범위와 다릅니다.");
 }
 
-function parseWork(bytes: Buffer, projectKey: string, source: string): DashboardWork {
+function parseWork(bytes: Buffer, projectKey: string, source: string): { card: DashboardWork; value: Record<string, unknown> } {
   const raw = bytes.toString("utf8");
   if (!bytes.equals(Buffer.from(raw, "utf8"))) throw new ReadFailure("invalid_utf8", "UTF-8 작업 기록이 아닙니다.");
   let value: unknown;
@@ -81,10 +82,10 @@ function parseWork(bytes: Buffer, projectKey: string, source: string): Dashboard
   const ids = value.criteria.map((criterion: Record<string, unknown>) => criterion.id);
   if (new Set(ids).size !== ids.length) throw new ReadFailure("invalid_record", "작업의 수용 기준 ID가 중복됩니다.");
   const required = value.criteria.filter((criterion: Record<string, unknown>) => criterion.required);
-  return { id: value.id, projectKey, title: value.title, status: value.status as WorkStatus,
+  return { value, card: { id: value.id, projectKey, title: value.title, status: value.status as WorkStatus,
     blockedReason: value.blockedReason as string | null, sourcePath: source, areas: value.areas,
     owner: value.owner, requiredCriteria: required.length,
-    passedCriteria: required.filter((criterion: Record<string, unknown>) => criterion.result === "passed").length };
+    passedCriteria: required.filter((criterion: Record<string, unknown>) => criterion.result === "passed").length } };
 }
 
 async function readBytes(root: string, file: string, budget: { bytes: number }, limit: number): Promise<Buffer> {
@@ -123,11 +124,13 @@ async function readBytes(root: string, file: string, budget: { bytes: number }, 
   }
 }
 
-async function readWork(root: string, file: string, projectKey: string, budget: { bytes: number }): Promise<DashboardWork> {
-  return parseWork(await readBytes(root, file, budget, DASHBOARD_LIMITS.fileBytes), projectKey, sourcePath(root, file));
+function observations(project: DashboardProject, budget: { bytes: number }) {
+  if (project.kind !== "www" || project.key !== "www") return undefined;
+  return dashboardObservations(project.path, file => readBytes(project.path, file, budget, DASHBOARD_LIMITS.fileBytes), dir => directory(project.path, dir));
 }
 
-async function readProject(project: DashboardProject, budget: { bytes: number }): Promise<DashboardProjectSnapshot> {
+async function readProject(project: DashboardProject, budget: { bytes: number }, assessments?: (() => Promise<void>)[]): Promise<DashboardProjectSnapshot> {
+  const pending = new Map<DashboardWork, Record<string, unknown>>();
   const cards: DashboardWork[] = [];
   const issues: DashboardIssue[] = [];
   const root = project.path;
@@ -163,7 +166,12 @@ async function readProject(project: DashboardProject, budget: { bytes: number })
             if (++files > DASHBOARD_LIMITS.files) {
               limited = true; add(new ReadFailure("file_count_limit", "프로젝트의 작업 기록 한도(500개)를 넘었습니다."), path); break;
             }
-            try { cards.push(await readWork(root, file, project.key, budget)); } catch (error) { add(error, file); }
+            try {
+              const bytes = await readBytes(root, file, budget, DASHBOARD_LIMITS.fileBytes);
+              const { card, value } = parseWork(bytes, project.key, sourcePath(root, file));
+              cards.push(card);
+              if (assessments) pending.set(card, value);
+            } catch (error) { add(error, file); }
           } else if (entry.isDirectory()) {
             if (depth >= DASHBOARD_LIMITS.depth) add(new ReadFailure("depth_limit", "작업 기록 탐색 깊이 한도를 넘었습니다."), file);
             else await visit(file, depth + 1);
@@ -180,18 +188,32 @@ async function readProject(project: DashboardProject, budget: { bytes: number })
     add(new ReadFailure("duplicate_work_id", "동일 프로젝트의 작업 UUID가 중복되어 모호한 카드를 제외했습니다."), join(root, card.sourcePath));
     return false;
   }).sort((a, b) => a.sourcePath.localeCompare(b.sourcePath));
+  assessments?.push(async () => {
+    const reader = observations(project, budget);
+    for (const card of unique) {
+      const value = pending.get(card)!;
+      const states = await dashboardApplicability(root, value, reader);
+      const required = (value.criteria as { id: string; required: boolean }[]).filter(c => c.required).map(c => states.get(c.id)!);
+      card.currentCriteria = required.filter(c => c.status === "current").length;
+      card.unassessedCriteria = required.filter(c => c.status === "unassessed").length;
+      card.assessmentReason = [...new Set(required.flatMap(c => c.reasons))].slice(0, 2).join(" · ");
+    }
+  });
   return { project, coverage: issues.length ? (unique.length ? "partial" : "failed") : (unique.length ? "complete" : "empty"), cards: unique, issues };
 }
 
 /** IPC에서 받은 경로를 전달하지 않는다. 호출자는 main의 등록 목록과 고정 WWW 범위만 제공한다. */
 export async function readDashboard(projects: readonly DashboardProject[]): Promise<DashboardSnapshot> {
   const snapshots: DashboardProjectSnapshot[] = [];
+  const assessments: (() => Promise<void>)[] = [];
   const budget = { bytes: DASHBOARD_LIMITS.totalBytes as number };
   for (const [index, project] of projects.entries()) {
     if (index >= DASHBOARD_LIMITS.projects) {
       snapshots.push({ project, coverage: "failed", cards: [], issues: [{ code: "project_count_limit", path: "docs/work", message: "전체 프로젝트 수집 한도(100개)를 넘었습니다." }] });
-    } else snapshots.push(await readProject(project, budget));
+    } else snapshots.push(await readProject(project, budget, assessments));
   }
+  // 원장 수집을 먼저 마쳐 증거 읽기 한도가 다른 프로젝트의 카드를 가리지 않게 한다.
+  for (const assess of assessments) await assess();
   return { capturedAt: new Date().toISOString(), projects: snapshots };
 }
 
@@ -205,7 +227,7 @@ export async function readDashboardPlan(project: DashboardProject, workId: strin
   const path = sourcePath(project.path, plan);
   const workLimit = DASHBOARD_LIMITS.fileBytes;
   const work = await readBytes(project.path, file, { bytes: workLimit }, workLimit);
-  if (parseWork(work, project.key, card.sourcePath).id !== workId) throw new Error("계획 작업의 UUID가 바뀌었습니다.");
+  if (parseWork(work, project.key, card.sourcePath).card.id !== workId) throw new Error("계획 작업의 UUID가 바뀌었습니다.");
   let status: "available" | "missing" | "failed" | "changed";
   let content: string | null = null;
   try {
@@ -228,19 +250,21 @@ export async function readDashboardWork(projects: readonly DashboardProject[], p
   const matches = projects.filter(project => project.key === projectKey);
   if (matches.length !== 1 || !WORK_ID.test(workId)) throw new Error("프로젝트 또는 작업 식별자가 올바르지 않습니다.");
   const project = matches[0]!;
-  const snapshot = await readProject(project, { bytes: DASHBOARD_LIMITS.totalBytes });
+  const evidenceBudget = { bytes: DASHBOARD_LIMITS.totalBytes as number };
+  const snapshot = await readProject(project, evidenceBudget);
   if (snapshot.coverage !== "complete") throw new Error("프로젝트 작업 목록이 불완전하여 작업의 유일성을 확인할 수 없습니다.");
   const card = snapshot.cards.find(item => item.id.toLowerCase() === workId.toLowerCase());
   if (!card) throw new Error("해당 프로젝트에서 작업을 찾을 수 없습니다.");
   const file = join(project.path, card.sourcePath);
   const bytes = await readBytes(project.path, file, { bytes: DASHBOARD_LIMITS.fileBytes }, DASHBOARD_LIMITS.fileBytes);
-  const current = parseWork(bytes, project.key, card.sourcePath);
+  const { card: current, value } = parseWork(bytes, project.key, card.sourcePath);
   if (current.id !== card.id) throw new Error("작업 기록이 수집 중 변경되었습니다.");
-  const value: unknown = JSON.parse(bytes.toString("utf8"));
-  if (!object(value) || !Array.isArray(value.criteria)) throw new Error("작업 기준이 올바르지 않습니다.");
+  if (!Array.isArray(value.criteria)) throw new Error("작업 기준이 올바르지 않습니다.");
+  const states = await dashboardApplicability(project.path, value, observations(project, evidenceBudget));
   const criteria: DashboardWorkDetail["criteria"] = value.criteria.map((criterion: Record<string, unknown>) => ({
     id: criterion.id as string, description: criterion.description as string, required: criterion.required as boolean,
     result: criterion.result as DashboardWorkDetail["criteria"][number]["result"],
+    applicability: states.get(criterion.id as string),
     evidenceCount: Array.isArray(criterion.evidence) ? criterion.evidence.length : 0,
   }));
   const budget = { bytes: 1024 * 1024 };
