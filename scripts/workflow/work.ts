@@ -765,15 +765,16 @@ async function savePending(repo: string, workId: string, kind: "verification" | 
   catch (error) {
     if (!(error instanceof Error && "code" in error && error.code === "EEXIST") || await fs.readFile(target, "utf8") !== text) throw error;
   }
-  return path.relative(root, target);
+  return path.relative(root, target).split(path.sep).join("/");
 }
 type PendingOptions = WorkOptions & { artifactPath: string };
 export function appendPending(options: PendingOptions) {
   return withWorkflowTiming(options.repo ?? process.cwd(), "registration", () => timedPhase("result_registration", () => registerPending(options)));
 }
 
-async function registerPending({ repo = process.cwd(), workId, artifactPath }: PendingOptions) {
-  if (typeof artifactPath !== "string" || !/^\.www[\/]pending-results[\/](?:attempt|review)-[a-zA-Z0-9-]+\.json$/.test(artifactPath)) throw new Error("회수할 결과 artifact 경로 오류");
+async function registerPending({ repo = process.cwd(), workId, artifactPath: supplied }: PendingOptions) {
+  const artifactPath = typeof supplied === "string" ? supplied.replaceAll("\\", "/") : "";
+  if (!/^\.www\/pending-results\/(?:attempt|review)-[a-zA-Z0-9-]+\.json$/.test(artifactPath)) throw new Error("회수할 결과 artifact 경로 오류");
   const target         = await resolveInside(repo, artifactPath)       ;
   const value: unknown = JSON.parse(await fs.readFile(target, "utf8")) ;
   if (!value || typeof value !== "object" || !("version" in value) || value.version !== 1 || !("workId" in value) || value.workId !== workId || !("payload" in value) || !("kind" in value)) throw new Error("회수 결과의 작업 불일치");
