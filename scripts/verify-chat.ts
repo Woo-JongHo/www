@@ -475,6 +475,34 @@ try {
     console.log(JSON.stringify({ evidence: directory, checks }));
     return;
   }
+  if (process.argv.includes("--renderer-timing-only")) {
+    await session.input("프레임 계측 확인");
+    await session.click('[data-testid="send-button"]');
+    const timingSummary = `(async () => {
+      const events = await window.www.events(await window.www.workspace());
+      const timings = events.filter(e => !e.historical && e.method === 'diagnostics/timing');
+      const first = timings.find(e => e.params.phase === 'first-native' && e.params.status === 'completed');
+      if (!first) return null;
+      const trace = timings.filter(e => e.params.traceId === first.params.traceId);
+      if (!trace.some(e => e.params.phase === 'request' && e.params.status === 'completed')) return null;
+      if (!events.some(e => e.seq >= first.seq && e.method === 'turn/completed' && e.params?.threadId === first.params.threadId)) return null;
+      const expected = trace.map(e => e.seq);
+      const details = performance.getEntriesByName('www:renderer-commit-frame').map(e => e.detail);
+      const actual = details.filter(e => e.traceId === first.params.traceId).map(e => e.seq);
+      return { expected, actual };
+    })()`;
+    await session.wait(`(async () => {
+      const summary = await ${timingSummary};
+      return summary && summary.expected.length > 1 && summary.expected.length === summary.actual.length
+        && summary.expected.every((seq, i) => seq === summary.actual[i]);
+    })()`, "새 대화의 모든 timing 사건이 같은 순서로 프레임에 한 번씩 연결됨");
+    const summary = await session.evaluate(timingSummary);
+    await fs.writeFile(path.join(directory, "renderer-timing.json"), JSON.stringify(summary));
+    console.log(JSON.stringify({ evidence: directory, summary }));
+    await session.terminate();
+    session = null;
+    return;
+  }
   if (process.argv.includes("--theme-only")) {
     const openPicker = async () => {
       await session!.input("/theme");

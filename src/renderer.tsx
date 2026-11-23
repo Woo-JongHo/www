@@ -528,7 +528,7 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
   }, [active, modelPicker, themePickerOpen]);
   const [pendingPrompt, setPendingPrompt] = useState<string | null>(null);
   const [sendEventStart, setSendEventStart] = useState<number>(Infinity);
-  const timingReceipts = useRef(new Map<number, number>());
+  const timingReceipts = useRef(new Map<string, number | null>());
   const [failedDraft, setFailedDraft] = useState<string | null>(null);
   const failedDraftRef = useRef<string | null>(null);
   const transcriptRef       = useRef<HTMLDivElement>(null)             ;
@@ -686,18 +686,20 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
     let disposed = false;
     const acceptEvent = (event: ScopedAppEvent) => {
       if (disposed) return;
+      const timing = timingParams(event);
+      if (timing && !event.historical) {
+        const key = timing.traceId + ":" + event.seq;
+        const receipts = timingReceipts.current;
+        if (!receipts.has(key)) receipts.set(key, performance.now());
+        if (receipts.size > 128) {
+          const oldest = receipts.keys().next().value;
+          if (oldest !== undefined) receipts.delete(oldest);
+        }
+      }
       if (switchingRef.current || bootstrapPending.current || !selectionRef.current) { queuedEvents.current.push(event); return; }
       if (!matchesSelection(event) || event.connectionGeneration < liveConnection.current) return;
       if (event.method === "thread/configured" && sendingRef.current && threadRef.current === null) threadRef.current = eventThreadId(event);
       if (!belongsToConversation(event, threadRef.current)) return;
-      if (timingParams(event) && !event.historical) {
-        timingReceipts.current.set(event.seq, performance.now());
-        while (timingReceipts.current.size > 128) {
-          const oldest = timingReceipts.current.keys().next().value;
-          if (oldest === undefined) break;
-          timingReceipts.current.delete(oldest);
-        }
-      }
       consumeEvents([], [event]);
       if (event.method === "turn/completed") void refreshConversations();
       if (event.method === "activity/resourcesUnavailable") setError("리소스 복원 실패 · 채팅은 계속 사용할 수 있습니다.");
@@ -741,26 +743,41 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
       }
       if (!disposed) setError(String(failure));
     });
-    return () => { disposed = true; unsubscribe(); unsubscribeResources(); };
+    return () => {
+      disposed = true;
+      timingReceipts.current = new Map();
+      unsubscribe();
+      unsubscribeResources();
+    };
   }, []);
 
   useEffect(() => {
-    const event = [...events].reverse().find(item => !item.historical && item.seq >= sendEventStart && timingParams(item));
-    if (!event) return;
-    const timing = timingParams(event);
-    const receivedAt = timingReceipts.current.get(event.seq);
-    if (!timing || receivedAt === undefined) return;
-    let cancelled = false;
+    const receipts = timingReceipts.current;
+    if (!receipts.size || !Number.isFinite(sendEventStart)) return;
+    const committed: { seq: number; timing: NativeTimingEvent; receivedAt: number }[] = [];
+    for (const event of events) {
+      if (event.historical || event.seq < sendEventStart) continue;
+      const timing = timingParams(event);
+      if (!timing) continue;
+      const key = timing.traceId + ":" + event.seq;
+      const receivedAt = receipts.get(key);
+      if (typeof receivedAt !== "number") continue;
+      committed.push({ seq: event.seq, timing, receivedAt });
+      receipts.set(key, null);
+    }
+    if (!committed.length) return;
     void afterTwoFrames().then(() => {
-      if (cancelled) return;
-      if (performance.getEntriesByName("www:renderer-commit-frame").length >= 128) performance.clearMarks("www:renderer-commit-frame");
-      performance.mark("www:renderer-commit-frame", { detail: {
-        traceId: timing.traceId, phase: timing.phase, status: timing.status, seq: event.seq,
-        mainElapsedMs: timing.elapsedMs, rendererReceiveToFrameMs: performance.now() - receivedAt,
-        chatVisible: view === "chat", definition: "renderer receive to second animation frame after React commit; main clock is separate",
-      } });
+      if (timingReceipts.current !== receipts) return;
+      const frameAt = performance.now();
+      for (const { seq, timing, receivedAt } of committed) {
+        if (performance.getEntriesByName("www:renderer-commit-frame").length >= 128) performance.clearMarks("www:renderer-commit-frame");
+        performance.mark("www:renderer-commit-frame", { detail: {
+          traceId: timing.traceId, phase: timing.phase, status: timing.status, seq,
+          mainElapsedMs: timing.elapsedMs, rendererReceiveToFrameMs: frameAt - receivedAt,
+          chatVisible: view === "chat", definition: "renderer receive to second animation frame after React commit; main clock is separate",
+        } });
+      }
     });
-    return () => { cancelled = true; };
   }, [events, sendEventStart, view]);
 
   const refreshProjects = async () => {

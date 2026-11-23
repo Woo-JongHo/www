@@ -603,6 +603,413 @@
         "sourceDigest"  : "3920c3115d66f9fa8887fa049bf563c2f0248784f04e09d9a51b8af153e2080b",
         "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f"
       }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-49ed19b8-f66f-4000-8047-7702cbf05551",
+      "workId"        : "work-632e43ce-dcb8-4726-ad34-8fe85034b6fd",
+      "title"         : "스크롤과 첫 응답 및 진행 설명 개선 논의",
+      "summary"       : "이슈 #26의 현재 Electron 계측 누락을 교정하고 사이드바·명령 카드·진행 설명 기준 세 개를 검증했다. 11월 16일의 첫 응답 전 122.414초 공백은 원인 미확정 상태로 남긴다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-23T23:08:49.078Z",
+      "event"         : "finish",
+      "workRecordHash": "8042bd00a1c50d492ef29a5a9f443dba0b0b2c6320fe10430766d329e99d67b8",
+      "sourceDigest"  : "b4a631d4937ba07f52d65600fb897403aaf94fdd92dab265afb5bfa7342557d8",
+      "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f",
+      "semanticHash"  : "9dd9fd6a8afc703aa151b4c0ae00e93f17f74e244bd558a8fd640140ca6e400d",
+      "narrative": {
+        "summary": "이슈 #26의 현재 Electron 계측 누락을 교정하고 사이드바·명령 카드·진행 설명 기준 세 개를 검증했다. 11월 16일의 첫 응답 전 122.414초 공백은 원인 미확정 상태로 남긴다.",
+        "before" : "한 번에 도착한 timing 사건 여러 개 중 가장 최근 것만 프레임에 연결됐다. 새 스레드가 선택되기 전에 도착한 완료 사건도 빠져 실제 응답과 화면 표시 사이의 경계를 신뢰하기 어려웠다.",
+        "after"  : "같은 새 대화에서 main이 낸 timing 순번 12개를 renderer 프레임 관측과 일대일로 대조했다. RPC 응답의 단조 시각은 즉시 보관하고 완료 사건은 스레드 구성 통지 뒤에 공개한다.",
+        "changes": [
+          "같은 커밋의 각 timing 사건을 한 번씩 소비하며 다음 렌더가 기존 측정을 취소하지 않도록 했다.",
+          "기존 원장에 빠졌던 1차 마감 이력과 현재 Electron 검사 결과를 연결했다.",
+          "보관물과 SQLite를 사건 시각·지문만으로 조사하고 해당 머신의 진단 범위를 기록했다."
+        ],
+        "decisions": [
+          "같은 입력을 실제 Electron에서 수정 전후 대조했다. 과거 원인과 현재 계측 결함은 증거의 시점이 달라 별도로 판정했다.",
+          "새 스레드가 공개되기 전에 측정한 응답 시간을 이후에 보내어 소유권 전환·큐 처리가 RPC 지연에 포함되지 않게 했다."
+        ],
+        "limitations": [
+          "보관된 초기 원장은 Native 기록 시각만 남기며 최초 전송 클릭, 같은 사건의 IPC 수신·renderer 관측 시각이 없다. 현재 fixture로 과거 모델 지연을 입증할 수 없다.",
+          "animation frame 관측은 실제 픽셀 표시 또는 사용자 체감 시간의 직접 측정이 아니다."
+        ],
+        "next": [
+          "원본 또는 같은 지연을 재현한 표본에서 요청·Native 수신·renderer 프레임 경계를 연결할 때 AC-2를 재판정한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-73362f9c-945f-4bf3-9179-e733cb97af99",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-7b9014e5-76c4-4888-bfc0-4d680509198d",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-98a8fe33-3ae7-4ecc-a62e-1ad163b073a7",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-2c53ef5b-eb8c-4fe2-9056-ed7bdf3c1523",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9c16dbd9-f4e2-47b9-a6e0-a7d782c8eab5",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-4f4afd6c-82d3-4645-9c69-301c3124b36c",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-1b076433-2e91-4ade-b99b-7471f543fb6b",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-3",
+            "description": "명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-73362f9c-945f-4bf3-9179-e733cb97af99",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-7b9014e5-76c4-4888-bfc0-4d680509198d",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-98a8fe33-3ae7-4ecc-a62e-1ad163b073a7",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-2c53ef5b-eb8c-4fe2-9056-ed7bdf3c1523",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9c16dbd9-f4e2-47b9-a6e0-a7d782c8eab5",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-4f4afd6c-82d3-4645-9c69-301c3124b36c",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-1b076433-2e91-4ade-b99b-7471f543fb6b",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-73362f9c-945f-4bf3-9179-e733cb97af99",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-7b9014e5-76c4-4888-bfc0-4d680509198d",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5",
+                "summary": "실제 검증 failed; 현재 적용 불가"
+              },
+              {
+                "path": "verification.md#attempt-98a8fe33-3ae7-4ecc-a62e-1ad163b073a7",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-2c53ef5b-eb8c-4fe2-9056-ed7bdf3c1523",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-9c16dbd9-f4e2-47b9-a6e0-a7d782c8eab5",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-4f4afd6c-82d3-4645-9c69-301c3124b36c",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-1b076433-2e91-4ade-b99b-7471f543fb6b",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-fe6bd98d-0285-4d96-b888-de6822907cd7",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T02:28:08.347Z"
+          },
+          {
+            "id": "attempt-96182bae-0734-47b1-be31-2af09b9a653f",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:22:28.833Z"
+          },
+          {
+            "id": "attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T03:36:54.809Z"
+          },
+          {
+            "id": "attempt-73362f9c-945f-4bf3-9179-e733cb97af99",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T04:45:22.174Z"
+          },
+          {
+            "id": "attempt-7b9014e5-76c4-4888-bfc0-4d680509198d",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:06:52.609Z"
+          },
+          {
+            "id": "attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.22.3"
+            },
+            "result"      : "failed",
+            "executor"    : "process",
+            "exitCode"    : 1,
+            "sourceStable": true,
+            "completedAt" : "2026-11-16T05:13:03.783Z"
+          },
+          {
+            "id": "attempt-98a8fe33-3ae7-4ecc-a62e-1ad163b073a7",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T01:02:52.947Z"
+          },
+          {
+            "id": "attempt-2c53ef5b-eb8c-4fe2-9056-ed7bdf3c1523",
+            "command": "node",
+            "args": [
+              ".www/evidence/dashboard-rollforward-20261123/chat012-ui-current-audit.mts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T04:09:59.518Z"
+          },
+          {
+            "id": "attempt-9c16dbd9-f4e2-47b9-a6e0-a7d782c8eab5",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {createHash} from 'node:crypto';for(const [p,d] of Object.entries(JSON.parse(process.argv[1])))assert.equal(createHash('sha256').update(readFileSync(p)).digest('hex'),d);await import('./.www/evidence/issue26/accept-ui.mts');",
+              "{\".www/evidence/issue26/accept-ui.mts\":\"c9d6dda04933c150ae1bd2df001239ff66e2ed2d4388f4fb9cf7f26b45df323b\",\".www/evidence/dashboard-rollforward-20261123/chat012-ui-confirmation.mts\":\"a3c58c62011ee7bd2fbf49eeba46e2a6b2915a866ce10c58e27c0ed90145b741\",\".www/evidence/dashboard-rollforward-20261123/chat012-ui-fixture.mts\":\"fc8f766fbef6fe3bbeeecaec402140a942d84b82fb477a49712647fe815d42fb\"}"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:02:55.061Z"
+          },
+          {
+            "id": "attempt-4f4afd6c-82d3-4645-9c69-301c3124b36c",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {createHash} from 'node:crypto';for(const [p,d] of Object.entries(JSON.parse(process.argv[1])))assert.equal(createHash('sha256').update(readFileSync(p)).digest('hex'),d);await import('./.www/evidence/issue26/accept-ui.mts');",
+              "{\".www/evidence/issue26/accept-ui.mts\":\"c9d6dda04933c150ae1bd2df001239ff66e2ed2d4388f4fb9cf7f26b45df323b\",\".www/evidence/dashboard-rollforward-20261123/chat012-ui-confirmation.mts\":\"a3c58c62011ee7bd2fbf49eeba46e2a6b2915a866ce10c58e27c0ed90145b741\",\".www/evidence/dashboard-rollforward-20261123/chat012-ui-fixture.mts\":\"fc8f766fbef6fe3bbeeecaec402140a942d84b82fb477a49712647fe815d42fb\"}"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:05:26.910Z"
+          },
+          {
+            "id": "attempt-1b076433-2e91-4ade-b99b-7471f543fb6b",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {createHash} from 'node:crypto';for(const [p,d] of Object.entries(JSON.parse(process.argv[1])))assert.equal(createHash('sha256').update(readFileSync(p)).digest('hex'),d);await import('./.www/evidence/issue26/accept-ui.mts');",
+              "{\".www/evidence/issue26/accept-ui.mts\":\"c9d6dda04933c150ae1bd2df001239ff66e2ed2d4388f4fb9cf7f26b45df323b\",\".www/evidence/dashboard-rollforward-20261123/chat012-ui-confirmation.mts\":\"a3c58c62011ee7bd2fbf49eeba46e2a6b2915a866ce10c58e27c0ed90145b741\",\".www/evidence/dashboard-rollforward-20261123/chat012-ui-fixture.mts\":\"fc8f766fbef6fe3bbeeecaec402140a942d84b82fb477a49712647fe815d42fb\"}"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:07:46.695Z"
+          }
+        ],
+        "reviews": [],
+        "omitted": {
+          "criteria"     : 0,
+          "evidence"     : 3,
+          "verifications": 0,
+          "reviews"      : 0,
+          "arguments"    : 0,
+          "findings"     : 0,
+          "unresolved"   : 0
+        }
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/work.json",
+        "workRecordHash": "8042bd00a1c50d492ef29a5a9f443dba0b0b2c6320fe10430766d329e99d67b8",
+        "sourceDigest"  : "b4a631d4937ba07f52d65600fb897403aaf94fdd92dab265afb5bfa7342557d8",
+        "criteriaDigest": "b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f"
+      }
     }
   ]
 }
