@@ -650,7 +650,7 @@ export async function resumeWork({ repo = process.cwd(), workId }: WorkOptions) 
 }
 
 export async function completeWork({ repo = process.cwd(), workId, policyRoot }: WorkOptions): Promise<CurrentWorkLocation & { reportHook?: ReportHookResult }> {
-  const completion: { narrative?: ReportNarrative; previous?: string; reportHook?: ReportHookResult } = {};
+  const completion: { narrative?: ReportNarrative; previous?: string; source?: { digest: string; inputs: string[] }; reportHook?: ReportHookResult } = {};
   const saved = await mutateWork(repo, workId, async (record, work) => {
     const assessment = await assessRecord(repo, { ...work, record }, policyRoot);
     if (assessment.legacy || !assessment.complete) throw new Error(`현재 증거로 완료할 수 없습니다: ${assessment.reasons.join("; ")}`);
@@ -663,6 +663,7 @@ export async function completeWork({ repo = process.cwd(), workId, policyRoot }:
     }
     const source = await captureSource({ repo, inputs: assessment.source.inputs });
     if (source.digest !== assessment.source.digest) throw new Error("완료 판정 중 소스가 바뀌었습니다.");
+    completion.source = source;
     record.status              = "done"     ;
     record.blockedReason       = null       ;
     record.workflow.nextAction = "complete" ;
@@ -670,8 +671,9 @@ export async function completeWork({ repo = process.cwd(), workId, policyRoot }:
     const completed = await mutate();
     if (!completion.narrative) return completed;
     try {
-      if (completed.rawSource === undefined) throw new Error("완료된 작업의 원문이 없습니다.");
-      const published = await publishWorkReport({ repo, workId, narrative: completion.narrative, event: "complete", expectedWorkRecordHash: hash(completed.rawSource) });
+      if (completed.rawSource === undefined || completion.source === undefined) throw new Error("완료된 작업의 원문 또는 소스 식별이 없습니다.");
+      const completionSource = { workRecordHash: hash(completed.rawSource), sourceDigest: completion.source.digest, inputs: completion.source.inputs };
+      const published = await publishWorkReport({ repo, workId, narrative: completion.narrative, event: "complete", completionSource });
       completion.reportHook = { status: "written", reportId: published.report.id, created: published.created };
       return completed;
     } catch (error) {

@@ -705,16 +705,23 @@ function bundleSource(entries: WorkReport[], columns: boolean): string {
   return json;
 }
 
-async function publish({ repo = process.cwd(), workId, narrative = null, event, kind, expectedWorkRecordHash }: { repo?: string; workId: string; narrative?: ReportNarrative | null; event: string; kind: "authored" | "snapshot"; expectedWorkRecordHash?: string }): Promise<ReportResult> {
+async function publish({ repo = process.cwd(), workId, narrative = null, event, kind, completionSource }: { repo?: string; workId: string; narrative?: ReportNarrative | null; event: string; kind: "authored" | "snapshot"; completionSource?: { workRecordHash: string; sourceDigest: string; inputs: string[] } }): Promise<ReportResult> {
   text(event, 100);
   const work           = await locateWork(repo, workId)                                                           ;
   const details        = narrative === null ? null : narrativeValue(narrative)                                    ;
   const identity       = await sourceIdentity(work.root, work.record)                                             ;
   const workRecordHash = digest(work.source)                                                                      ;
-  if (expectedWorkRecordHash !== undefined && workRecordHash !== expectedWorkRecordHash) throw new Error("완료 보고서를 저장하기 전에 작업 기록이 바뀌었습니다.");
-  const assertCompletionRecord = async () => {
-    if (expectedWorkRecordHash !== undefined && digest(await fs.readFile(work.path, "utf8")) !== expectedWorkRecordHash) {
+  if (completionSource) {
+    if (workRecordHash !== completionSource.workRecordHash) throw new Error("완료 보고서를 저장하기 전에 작업 기록이 바뀌었습니다.");
+  }
+  const assertCompletionCurrent = async () => {
+    if (!completionSource) return;
+    if (digest(await fs.readFile(work.path, "utf8")) !== completionSource.workRecordHash) {
       throw new Error("완료 보고서를 저장하는 동안 작업 기록이 바뀌었습니다.");
+    }
+    const source = await captureSource({ repo: work.root, inputs: completionSource.inputs });
+    if (source.digest !== completionSource.sourceDigest || (await sourceIdentity(work.root, work.record)).sourceDigest !== identity.sourceDigest) {
+      throw new Error("완료 보고서를 저장하는 동안 검사 소스가 바뀌었습니다.");
     }
   };
   const semanticHash   = digest(JSON.stringify({ kind, event, workRecordHash, ...identity, narrative: details })) ;
@@ -725,7 +732,7 @@ async function publish({ repo = process.cwd(), workId, narrative = null, event, 
   await inside(work.root, directory);
   const lease = await reportLease(work.root, directory);
   try {
-    await assertCompletionRecord();
+    await assertCompletionCurrent();
     const warnings: string[] = []                                             ;
     const entries            = await storedReports(work.root, work, warnings) ;
     if (warnings.length) throw new Error(`기존 보고서 확인 실패: ${warnings.join("; ")}`);
@@ -733,7 +740,7 @@ async function publish({ repo = process.cwd(), workId, narrative = null, event, 
     if (existing) {
       const plans = (await migrationGroups(work.root, [work])).filter((group) => sameTitle(group.entries[0]?.title ?? "", existing.title));
       await applyReportGroups(work.root, plans);
-      await assertCompletionRecord();
+      await assertCompletionCurrent();
       return { report: existing, html: renderWorkReport(existing, undefined, entries.filter((entry) => sameTitle(entry.title, existing.title))), created: false };
     }
     const id     = `report-${randomUUID()}`                                                                                   ;
@@ -756,18 +763,18 @@ async function publish({ repo = process.cwd(), workId, narrative = null, event, 
     if (oldJson) reportEntries(JSON.parse(oldJson.toString("utf8")));
     const oldHtml = await reportBytes(work.root, htmlFile, BUNDLE_HTML_LIMIT);
     if (!oldJson && oldHtml) throw new Error("묶음 JSON 없이 기존 HTML이 있어 임의 덮어쓰지 않습니다.");
-    await assertCompletionRecord();
+    await assertCompletionCurrent();
     await atomicReportFile(work.root, jsonFile, json, oldJson);
     await atomicReportFile(work.root, htmlFile, html, oldHtml);
     const plans = (await migrationGroups(work.root, [work])).filter((group) => sameTitle(group.entries[0]?.title ?? "", report.title));
     await applyReportGroups(work.root, plans);
-    await assertCompletionRecord();
+    await assertCompletionCurrent();
     return { report, html, created: true };
   } finally { await lease.close(); }
 }
 
-export async function publishWorkReport({ repo, workId, narrative, event = "finish", expectedWorkRecordHash }: { repo?: string; workId: string; narrative: ReportNarrative; event?: string; expectedWorkRecordHash?: string }): Promise<ReportResult> {
-  return publish({ repo, workId, narrative: narrativeValue(narrative), event, kind: "authored", expectedWorkRecordHash });
+export async function publishWorkReport({ repo, workId, narrative, event = "finish", completionSource }: { repo?: string; workId: string; narrative: ReportNarrative; event?: string; completionSource?: { workRecordHash: string; sourceDigest: string; inputs: string[] } }): Promise<ReportResult> {
+  return publish({ repo, workId, narrative: narrativeValue(narrative), event, kind: "authored", completionSource });
 }
 
 export async function captureWorkReport({ repo, workId, event = "state-change" }: { repo?: string; workId: string; event?: string }): Promise<ReportResult> {
