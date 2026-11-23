@@ -1,0 +1,184 @@
+{
+  "criterion": "AC-11",
+  "attempt": "attempt-eabc8fb6-9bed-4368-98c5-a379f09c0ca2",
+  "gitCandidateComparisons": [
+    {
+      "head": "89af4451fa776883e646c4a6d09b554e57005a52",
+      "attempt": "attempt-190cd690-fa59-48c4-adca-f2a48e10ba00",
+      "sourceDigest": "ea3ca70bcfbabd585dc21c2384a5054045f932ecfc4bd34935d29b69da1dbd72"
+    },
+    {
+      "head": "6878c8cc8de9dc0d0859eda35f49024a7d352097",
+      "attempt": "attempt-d6b478ba-1a35-4a6c-adc3-5ab3d560226f",
+      "sourceDigest": "9765fa58d4874f8fadd45a0cae4a7029a0959bd23b0148e02e5bcae9596cbeed"
+    }
+  ],
+  "historicalChanged": [
+    "scripts/pr-verification.ts",
+    "scripts/verify-chat.ts"
+  ],
+  "otherHistoricalInputs": 143,
+  "observedStages": {
+    "verifier": [
+      "scripts/verification/chat007-contract.ts",
+      "scripts/verification/chat007-inputs.ts",
+      "scripts/verification/chat007-loader.ts",
+      "scripts/verification/chat007-monitor.ts"
+    ],
+    "build": [
+      "scripts/architecture-contract.ts",
+      "scripts/generate-architecture.ts",
+      "scripts/release.ts",
+      "scripts/verification/chat007-inputs.ts",
+      "scripts/verification/chat007-loader.ts",
+      "scripts/workflow/statechart.ts"
+    ],
+    "build-data": [
+      "scripts/architecture-contract.ts",
+      "scripts/check-architecture.ts",
+      "scripts/generate-architecture.ts",
+      "scripts/source-policy.ts",
+      "scripts/workflow.ts",
+      "scripts/workflow/",
+      "scripts/workflow/adapters/",
+      "scripts/workflow/adapters/codex.ts",
+      "scripts/workflow/adapters/gjc.ts",
+      "scripts/workflow/adapters/windows-command.ts",
+      "scripts/workflow/artifacts.ts",
+      "scripts/workflow/completion-report.ts",
+      "scripts/workflow/consistency.ts",
+      "scripts/workflow/decomposition.ts",
+      "scripts/workflow/documentation.ts",
+      "scripts/workflow/environment.ts",
+      "scripts/workflow/evidence.ts",
+      "scripts/workflow/issue-loop.ts",
+      "scripts/workflow/issue-workspace.ts",
+      "scripts/workflow/lock.ts",
+      "scripts/workflow/model-allocation.ts",
+      "scripts/workflow/preflight.ts",
+      "scripts/workflow/record.ts",
+      "scripts/workflow/report-lifecycle.ts",
+      "scripts/workflow/report-names.ts",
+      "scripts/workflow/report-view.ts",
+      "scripts/workflow/reports.ts",
+      "scripts/workflow/review-app-server.ts",
+      "scripts/workflow/review.ts",
+      "scripts/workflow/route.ts",
+      "scripts/workflow/run.ts",
+      "scripts/workflow/schema.ts",
+      "scripts/workflow/statechart.ts",
+      "scripts/workflow/timing.ts",
+      "scripts/workflow/types.ts",
+      "scripts/workflow/work-json.ts",
+      "scripts/workflow/work.ts"
+    ],
+    "node": [
+      "scripts/verification/chat007-contract.ts",
+      "scripts/verification/chat007-loader.ts",
+      "scripts/verify-native-activity.ts",
+      "scripts/workflow/adapters/windows-command.ts",
+      "scripts/workflow/artifacts.ts",
+      "scripts/workflow/completion-report.ts",
+      "scripts/workflow/consistency.ts",
+      "scripts/workflow/decomposition.ts",
+      "scripts/workflow/documentation.ts",
+      "scripts/workflow/evidence.ts",
+      "scripts/workflow/lock.ts",
+      "scripts/workflow/preflight.ts",
+      "scripts/workflow/record.ts",
+      "scripts/workflow/report-names.ts",
+      "scripts/workflow/report-view.ts",
+      "scripts/workflow/reports.ts",
+      "scripts/workflow/review-app-server.ts",
+      "scripts/workflow/review.ts",
+      "scripts/workflow/route.ts",
+      "scripts/workflow/schema.ts",
+      "scripts/workflow/timing.ts",
+      "scripts/workflow/types.ts",
+      "scripts/workflow/work-json.ts",
+      "scripts/workflow/work.ts"
+    ],
+    "fixture": [
+      "scripts/verification/chat007-loader.ts",
+      "test/fixtures/activity-app-server.ts",
+      "test/fixtures/fake-app-server.ts"
+    ],
+    "main.ts": [
+      "scripts/verification/chat007-contract.ts",
+      "scripts/workflow/adapters/windows-command.ts",
+      "scripts/workflow/artifacts.ts",
+      "scripts/workflow/completion-report.ts",
+      "scripts/workflow/consistency.ts",
+      "scripts/workflow/decomposition.ts",
+      "scripts/workflow/documentation.ts",
+      "scripts/workflow/evidence.ts",
+      "scripts/workflow/lock.ts",
+      "scripts/workflow/preflight.ts",
+      "scripts/workflow/record.ts",
+      "scripts/workflow/report-lifecycle.ts",
+      "scripts/workflow/report-names.ts",
+      "scripts/workflow/report-view.ts",
+      "scripts/workflow/reports.ts",
+      "scripts/workflow/review-app-server.ts",
+      "scripts/workflow/review.ts",
+      "scripts/workflow/route.ts",
+      "scripts/workflow/schema.ts",
+      "scripts/workflow/timing.ts",
+      "scripts/workflow/types.ts",
+      "scripts/workflow/work-json.ts",
+      "scripts/workflow/work.ts"
+    ],
+    "preload.ts": [],
+    "renderer.tsx": []
+  },
+  "rows": [
+    {
+      "label": "89af4451fa776883e646c4a6d09b554e57005a52",
+      "gitFiles": {
+        "scripts/verify-chat.ts": "ff7625a7bd9da2c252c1ce0967f8546de633451076dd133ec3e2db47f475ac27",
+        "scripts/pr-verification.ts": "a09515ead77250a37f8b61ff58313e863993b376e5c8e9adfe80d1d3c0ab7a90"
+      },
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "label": "6878c8cc8de9dc0d0859eda35f49024a7d352097",
+      "gitFiles": {
+        "scripts/verify-chat.ts": "9c700e865eca3a06286580f0631c49ee5e500059dd78c795e6e72b72ceb9cf66",
+        "scripts/pr-verification.ts": "227d074a756a13c5296b9cf102718ecf8a4c6083dbdfb1c0d8341570b27d5c74"
+      },
+      "usable": true,
+      "reasons": []
+    },
+    {
+      "label": "observed-script-change",
+      "gitFiles": {
+        "changed": "scripts/verify-native-activity.ts"
+      },
+      "usable": false,
+      "reasons": [
+        "source_changed"
+      ]
+    },
+    {
+      "label": "build-data-change",
+      "gitFiles": {
+        "changed": "scripts/check-architecture.ts"
+      },
+      "usable": false,
+      "reasons": [
+        "source_changed"
+      ]
+    },
+    {
+      "label": "enumerated-directory-added",
+      "gitFiles": {
+        "added": "scripts/workflow/added-check.ts"
+      },
+      "usable": false,
+      "reasons": [
+        "source_changed"
+      ]
+    }
+  ]
+}

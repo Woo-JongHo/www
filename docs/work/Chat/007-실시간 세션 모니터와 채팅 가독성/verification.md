@@ -1225,3 +1225,69 @@ AC-10의 전체 구현 수용은 보류다. 이번 시행의 전송 상대는 �
 - 검증 중 실행 환경 유지: 확인
 - 출력: stdout 921바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-b388b4ce-58b5-4d91-bcf9-5aa3bd81bd3a"></a>
+## 검증 시도 — 2026-11-23T23:48:26.055Z
+
+- 시도 ID: `attempt-b388b4ce-58b5-4d91-bcf9-5aa3bd81bd3a`
+- 실행 시각: 2026-11-23T23:48:21.831Z ~ 2026-11-23T23:48:26.055Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","scripts/verification/chat007-monitor.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-11`
+- AC-11 화면 관찰값: `{"agent":"WWW Agent","sidebar":["spec:명세","design:설계","build:구현","diagnose:진단","verify:검증"],"detail":[["www-dev","개발 접수·통합","agents/www/AGENT.md","관측 없음"],["www-design-agent","화면·디자인 인계","agents/www-design/AGENT.md","관측 없음"],["www-spec","요구·수용 기준","skills/www/www-spec/SKILL.md","요청됨"],["www-design","구조·검증 설계","skills/www/www-design/SKILL.md","읽기 명령 관측"],["www-build","허용된 구현","skills/www/www-build/SKILL.md","읽기 완료"],["www-diagnose","원인 진단","skills/www/www-diagnose/SKILL.md","관측 없음"],["www-verify","동작·근거 검증","skills/www/www-verify/SKILL.md","관측 없음"],["www-commit","커밋·게시 절차","skills/www/www-commit/SKILL.md","관측 없음"]],"applicationEvidence":"문서 읽기 관측을 실제 역할·스킬 적용 완료로 표시하지 않습니다."}`
+- 소스 HEAD: `e1ff2df0b44845d6cab4ae1217c18f6d5437aa86`
+- 검증 입력: `agents/www-design/AGENT.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `bunfig.toml`, `docs/architecture`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts/architecture-contract.ts`, `scripts/generate-architecture.ts`, `scripts/package.json`, `scripts/release.ts`, `scripts/tsconfig.json`, `scripts/verification/chat007-contract.ts`, `scripts/verification/chat007-inputs.ts`, `scripts/verification/chat007-loader.ts`, `scripts/verification/chat007-monitor.ts`, `scripts/verification/package.json`, `scripts/verification/tsconfig.json`, `scripts/verify-native-activity.ts`, `scripts/workflow/adapters/package.json`, `scripts/workflow/adapters/tsconfig.json`, `scripts/workflow/adapters/windows-command.ts`, `scripts/workflow/artifacts.ts`, `scripts/workflow/completion-report.ts`, `scripts/workflow/consistency.ts`, `scripts/workflow/decomposition.ts`, `scripts/workflow/documentation.ts`, `scripts/workflow/evidence.ts`, `scripts/workflow/lock.ts`, `scripts/workflow/package.json`, `scripts/workflow/preflight.ts`, `scripts/workflow/record.ts`, `scripts/workflow/report-lifecycle.ts`, `scripts/workflow/report-names.ts`, `scripts/workflow/report-view.ts`, `scripts/workflow/reports.ts`, `scripts/workflow/review-app-server.ts`, `scripts/workflow/review.ts`, `scripts/workflow/route.ts`, `scripts/workflow/schema.ts`, `scripts/workflow/statechart.ts`, `scripts/workflow/timing.ts`, `scripts/workflow/tsconfig.json`, `scripts/workflow/types.ts`, `scripts/workflow/work-json.ts`, `scripts/workflow/work.ts`, `skills/www/www-build/SKILL.md`, `skills/www/www-commit/SKILL.md`, `skills/www/www-design/SKILL.md`, `skills/www/www-diagnose/SKILL.md`, `skills/www/www-spec/SKILL.md`, `skills/www/www-verify/SKILL.md`, `src`, `test/fixtures/activity-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/fixtures/package.json`, `test/package.json`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `427c0ce6614fc05b1597ef0c37fc61ff86f747804f5d839eb70e5b83b801ef6f`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 2967바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-23f9440b-1ffe-4b36-98d6-0c81424acd79"></a>
+## 검증 시도 — 2026-11-23T23:51:09.019Z
+
+- 시도 ID: `attempt-23f9440b-1ffe-4b36-98d6-0c81424acd79`
+- 실행 시각: 2026-11-23T23:51:03.652Z ~ 2026-11-23T23:51:09.019Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","scripts/verification/chat007-monitor.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-11`
+- AC-11 화면 관찰값: `{"agent":"WWW Agent","sidebar":["spec:명세","design:설계","build:구현","diagnose:진단","verify:검증"],"detail":[["www-dev","개발 접수·통합","agents/www/AGENT.md","관측 없음"],["www-design-agent","화면·디자인 인계","agents/www-design/AGENT.md","관측 없음"],["www-spec","요구·수용 기준","skills/www/www-spec/SKILL.md","요청됨"],["www-design","구조·검증 설계","skills/www/www-design/SKILL.md","읽기 명령 관측"],["www-build","허용된 구현","skills/www/www-build/SKILL.md","읽기 완료"],["www-diagnose","원인 진단","skills/www/www-diagnose/SKILL.md","관측 없음"],["www-verify","동작·근거 검증","skills/www/www-verify/SKILL.md","관측 없음"],["www-commit","커밋·게시 절차","skills/www/www-commit/SKILL.md","관측 없음"]],"applicationEvidence":"문서 읽기 관측을 실제 역할·스킬 적용 완료로 표시하지 않습니다."}`
+- 소스 HEAD: `e1ff2df0b44845d6cab4ae1217c18f6d5437aa86`
+- 검증 입력: `agents/www-design/AGENT.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `bunfig.toml`, `docs/architecture`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts/architecture-contract.ts`, `scripts/check-architecture.ts`, `scripts/generate-architecture.ts`, `scripts/package.json`, `scripts/release.ts`, `scripts/source-policy.ts`, `scripts/tsconfig.json`, `scripts/verification/chat007-contract.ts`, `scripts/verification/chat007-inputs.ts`, `scripts/verification/chat007-loader.ts`, `scripts/verification/chat007-monitor.ts`, `scripts/verification/package.json`, `scripts/verification/tsconfig.json`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `scripts/workflow.ts`, `scripts/workflow/adapters`, `scripts/workflow/adapters/codex.ts`, `scripts/workflow/adapters/gjc.ts`, `scripts/workflow/adapters/package.json`, `scripts/workflow/adapters/tsconfig.json`, `scripts/workflow/adapters/windows-command.ts`, `scripts/workflow/artifacts.ts`, `scripts/workflow/completion-report.ts`, `scripts/workflow/consistency.ts`, `scripts/workflow/decomposition.ts`, `scripts/workflow/documentation.ts`, `scripts/workflow/environment.ts`, `scripts/workflow/evidence.ts`, `scripts/workflow/issue-loop.ts`, `scripts/workflow/issue-workspace.ts`, `scripts/workflow/lock.ts`, `scripts/workflow/model-allocation.ts`, `scripts/workflow/package.json`, `scripts/workflow/preflight.ts`, `scripts/workflow/record.ts`, `scripts/workflow/report-lifecycle.ts`, `scripts/workflow/report-names.ts`, `scripts/workflow/report-view.ts`, `scripts/workflow/reports.ts`, `scripts/workflow/review-app-server.ts`, `scripts/workflow/review.ts`, `scripts/workflow/route.ts`, `scripts/workflow/run.ts`, `scripts/workflow/schema.ts`, `scripts/workflow/statechart.ts`, `scripts/workflow/timing.ts`, `scripts/workflow/tsconfig.json`, `scripts/workflow/types.ts`, `scripts/workflow/work-json.ts`, `scripts/workflow/work.ts`, `skills/www/www-build/SKILL.md`, `skills/www/www-commit/SKILL.md`, `skills/www/www-design/SKILL.md`, `skills/www/www-diagnose/SKILL.md`, `skills/www/www-spec/SKILL.md`, `skills/www/www-verify/SKILL.md`, `src`, `test/fixtures/activity-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/fixtures/package.json`, `test/package.json`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `bee50b4bcc97db26cb5d00ce7954a507233f5c348b68ae4f22a7da68a7121fb2`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 4308바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-eabc8fb6-9bed-4368-98c5-a379f09c0ca2"></a>
+## 검증 시도 — 2026-11-23T23:52:58.050Z
+
+- 시도 ID: `attempt-eabc8fb6-9bed-4368-98c5-a379f09c0ca2`
+- 실행 시각: 2026-11-23T23:52:53.810Z ~ 2026-11-23T23:52:58.050Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","scripts/verification/chat007-monitor.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-11`
+- AC-11 화면 관찰값: `{"agent":"WWW Agent","sidebar":["spec:명세","design:설계","build:구현","diagnose:진단","verify:검증"],"detail":[["www-dev","개발 접수·통합","agents/www/AGENT.md","관측 없음"],["www-design-agent","화면·디자인 인계","agents/www-design/AGENT.md","관측 없음"],["www-spec","요구·수용 기준","skills/www/www-spec/SKILL.md","요청됨"],["www-design","구조·검증 설계","skills/www/www-design/SKILL.md","읽기 명령 관측"],["www-build","허용된 구현","skills/www/www-build/SKILL.md","읽기 완료"],["www-diagnose","원인 진단","skills/www/www-diagnose/SKILL.md","관측 없음"],["www-verify","동작·근거 검증","skills/www/www-verify/SKILL.md","관측 없음"],["www-commit","커밋·게시 절차","skills/www/www-commit/SKILL.md","관측 없음"]],"applicationEvidence":"문서 읽기 관측을 실제 역할·스킬 적용 완료로 표시하지 않습니다."}`
+- 소스 HEAD: `e1ff2df0b44845d6cab4ae1217c18f6d5437aa86`
+- 검증 입력: `agents/www-design/AGENT.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `bunfig.toml`, `docs/architecture`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts/architecture-contract.ts`, `scripts/check-architecture.ts`, `scripts/generate-architecture.ts`, `scripts/package.json`, `scripts/release.ts`, `scripts/source-policy.ts`, `scripts/tsconfig.json`, `scripts/verification/chat007-contract.ts`, `scripts/verification/chat007-inputs.ts`, `scripts/verification/chat007-loader.ts`, `scripts/verification/chat007-monitor.ts`, `scripts/verification/package.json`, `scripts/verification/tsconfig.json`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `scripts/workflow.ts`, `scripts/workflow/adapters`, `scripts/workflow/adapters/codex.ts`, `scripts/workflow/adapters/gjc.ts`, `scripts/workflow/adapters/package.json`, `scripts/workflow/adapters/tsconfig.json`, `scripts/workflow/adapters/windows-command.ts`, `scripts/workflow/artifacts.ts`, `scripts/workflow/completion-report.ts`, `scripts/workflow/consistency.ts`, `scripts/workflow/decomposition.ts`, `scripts/workflow/documentation.ts`, `scripts/workflow/environment.ts`, `scripts/workflow/evidence.ts`, `scripts/workflow/issue-loop.ts`, `scripts/workflow/issue-workspace.ts`, `scripts/workflow/lock.ts`, `scripts/workflow/model-allocation.ts`, `scripts/workflow/package.json`, `scripts/workflow/preflight.ts`, `scripts/workflow/record.ts`, `scripts/workflow/report-lifecycle.ts`, `scripts/workflow/report-names.ts`, `scripts/workflow/report-view.ts`, `scripts/workflow/reports.ts`, `scripts/workflow/review-app-server.ts`, `scripts/workflow/review.ts`, `scripts/workflow/route.ts`, `scripts/workflow/run.ts`, `scripts/workflow/schema.ts`, `scripts/workflow/statechart.ts`, `scripts/workflow/timing.ts`, `scripts/workflow/tsconfig.json`, `scripts/workflow/types.ts`, `scripts/workflow/work-json.ts`, `scripts/workflow/work.ts`, `skills/www/www-build/SKILL.md`, `skills/www/www-commit/SKILL.md`, `skills/www/www-design/SKILL.md`, `skills/www/www-diagnose/SKILL.md`, `skills/www/www-spec/SKILL.md`, `skills/www/www-verify/SKILL.md`, `src`, `test/fixtures/activity-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/fixtures/package.json`, `test/package.json`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `d184c198e252a2b72b5250cfb5c523110220a4fd55902846fceff6f1cf4e994e`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 4308바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+### AC-11의 실행 스크립트 지문
+
+[공식 v2 시도](#attempt-eabc8fb6-9bed-4368-98c5-a379f09c0ca2)는 실제 화면 관찰과 단계별 의존 경로를 같은 프로세스 출력 지문에 묶었다. 생성기가 실제 읽는 구조 검사 스크립트와 열거 디렉터리도 포함한다. v1 기록에는 당시 전체 스크립트 지문을 적용하며, 새 범위를 과거 기록에 소급하지 않는다.
+
+[과거 후보의 실제 Git 파일 대조](../../Workflow/021-누적%20요구사항%20사용성%20개선과%20병렬%20통합%20검증/evidence/chat007-script-replay.json)에서 89af445와 6878c8c의 입력 145개 중 달라진 것은 PR 분류기와 일반 채팅 검증기 두 파일뿐이었다. 현재 AC-11 시도의 다른 입력을 고정한 사본에 각 후보의 실제 두 파일을 복원하자 양쪽 모두 유효했다. 실제 Electron 검증기 변경, 구조 생성기가 읽는 파일 변경, 열거된 디렉터리에 파일 추가는 각각 재검사 대상으로 판정했다.
