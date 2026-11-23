@@ -581,7 +581,7 @@ try {
     };
     const themeFile = path.join(directory, "profile", "chat-theme.json");
     const mint = `document.querySelector('.session-surface:not([hidden]) main.work').dataset.chatTheme==='www-mint'`;
-    const basic = 'getComputedStyle(document.querySelector(".session-surface:not([hidden]) main.work")).backgroundColor==="rgb(255, 255, 255)"';
+    const basic = 'getComputedStyle(document.querySelector(".session-surface:not([hidden]) main.work")).backgroundColor==="rgb(21, 21, 21)"';
     const focused = "document.activeElement===document.querySelector('[data-testid=\"prompt-input\"]')";
     const panelColors = (background: string, foreground: string) => `(() => {
       const surface=document.querySelector('.session-surface:not([hidden])');
@@ -593,12 +593,45 @@ try {
         return style.backgroundColor===${JSON.stringify(background)} && style.color===${JSON.stringify(foreground)};
       });
     })()`;
-    const basicPanels = panelColors("rgb(255, 255, 255)", "rgb(23, 23, 23)");
+    const basicPanels = panelColors("rgb(21, 21, 21)", "rgb(237, 237, 237)");
     const mintPanels = panelColors("rgb(12, 14, 13)", "rgb(230, 232, 230)");
     await session.click('[data-thread-id="history-a"]');
     await session.wait("document.querySelector('.command-card')", "기존 명령 카드가 있는 대화 열기");
-    await session.wait(`${basic} && getComputedStyle(document.querySelector('.command-card')).backgroundColor==='rgb(246, 246, 246)'`, "미설정 프로필의 기본 배경색이 채팅과 명령 카드에 적용");
+    await session.wait(`${basic} && getComputedStyle(document.querySelector('.command-card')).backgroundColor==='rgb(32, 32, 32)'`, "미설정 프로필의 기본 배경색이 채팅과 명령 카드에 적용");
     await session.wait(basicPanels, "넓은 창의 대화 목록과 Agent 패널에 Basic 배경색·글자색 적용");
+    await key("Tab", 9);
+    await session.evaluate(`document.querySelector('.session-surface:not([hidden]) textarea').focus()`);
+    const ratios = await session.evaluate(`(() => {
+      const luminance = rgb => rgb.match(/[\\d.]+/g).slice(0, 3).map(Number).map(channel => {
+        const c = channel / 255;
+        return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+      }).reduce((sum, c, i) => sum + c * [0.2126, 0.7152, 0.0722][i], 0);
+      const surface = document.querySelector('.session-surface:not([hidden])');
+      const sample = document.createElement('div');
+      sample.className = 'chat-markdown theme-contrast-sample';
+      sample.innerHTML = '<a href="#sample">링크</a><span class="chat-working-status is-waiting">대기</span><span class="chat-working-status is-failed">실패</span>';
+      surface.querySelector('main.work').appendChild(sample);
+      const check = (selector, focus = false) => {
+        const element = surface.querySelector(selector);
+        const minimum = focus ? 3 : 4.5;
+        if (!element || !element.checkVisibility()) return {selector, ratio: 0, minimum};
+        let node = element;
+        while (node && getComputedStyle(node).backgroundColor === "rgba(0, 0, 0, 0)") node = node.parentElement;
+        if (!node) return {selector, ratio: 0, minimum};
+        const style = getComputedStyle(element);
+        if (focus && (document.activeElement !== element || style.outlineStyle === 'none' || parseFloat(style.outlineWidth) < 2)) return {selector, ratio: 0, minimum};
+        const fg = luminance(focus ? style.outlineColor : style.color), bg = luminance(getComputedStyle(node).backgroundColor);
+        return {selector, ratio: (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05), minimum};
+      };
+      try {
+        const text = ['main.work','textarea','.command-card .cmdline','.target-sidebar','[data-testid="resource-sidebar"]',
+          '.theme-contrast-sample a','.theme-contrast-sample .is-waiting','.theme-contrast-sample .is-failed'];
+        return [...text.map(selector => check(selector)), check('textarea:focus-visible', true)];
+      } finally { sample.remove(); }
+    })()`);
+    if (!Array.isArray(ratios) || ratios.length !== 9 || ratios.some(row => typeof row.ratio !== "number" || !(row.ratio >= row.minimum))) throw Error("Basic 화면 명암비 부족: " + JSON.stringify(ratios));
+    checks.push("Basic 화면 텍스트·초점 명암비 " + JSON.stringify(ratios));
+    await session.screenshot("terminal-basic");
     await openPicker();
     await session.wait("document.querySelector('dialog[open] button[aria-pressed=true]')?.textContent==='Terminal Basic'", "Basic 기본 선택 표시");
     await key("Tab", 9);
