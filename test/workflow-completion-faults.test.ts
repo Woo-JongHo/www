@@ -233,6 +233,7 @@ test("F06: 같은 기준 ID의 설명 또는 필수 여부 변경은 옛 증거�
       await rejectBoth(context.repo, context.workId, /AC-1: criteria_changed/);
     } else {
       const assessment = await assessWork(context);
+      assert.ok("criteria" in assessment);
       assert.equal(assessment.criteria.find(item => item.id === "AC-1")?.usable, true);
       await rejectBoth(context.repo, context.workId, /AC-2: 검증 시도 없음/);
     }
