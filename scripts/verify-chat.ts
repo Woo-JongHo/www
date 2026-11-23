@@ -582,12 +582,12 @@ try {
     await session.evaluate("Array.from(document.querySelectorAll('dialog[open] button')).find(b=>b.textContent==='WWW Mint').click()");
     await session.click('[data-thread-id="history-a"]');
     await session.wait("document.querySelectorAll('.command-card').length>=65 && innerWidth===860 && matchMedia('(prefers-reduced-motion: reduce)').matches && document.querySelector('main.work').dataset.chatTheme==='www-mint'", "좁은 창과 모션 축소, Mint에서 긴 대화 복원");
-    await session.input("성능 스트리밍 중단 확인");
+    await session.input("편집 상태 중단 확인");
     await session.click('[data-testid="send-button"]');
     const status = "document.querySelector('[data-testid=working-status]')";
     await session.wait(status + ".textContent.includes('Working')", "긴 대화의 실제 실행 상태 표시");
     const transcript = "document.querySelector('.transcript')";
-    await session.evaluate(transcript + ".scrollTop=0;" + input + ".focus()");
+    await session.evaluate(input + ".focus({preventScroll:true});" + transcript + ".scrollTop=0;" + transcript + ".dispatchEvent(new Event('scroll'))");
     await session.command("Input.insertText", { text: "첫 끝" });
     await session.evaluate(input + ".setSelectionRange(2, 2)");
     await session.evaluate(input + ".addEventListener('compositionstart', () => document.body.dataset.editingComposition='started', { once: true })");
@@ -596,12 +596,26 @@ try {
     await session.command("Input.insertText", { text: "가운데 " });
     await session.wait(input + ".value==='첫 가운데 끝' && " + input + ".selectionStart===6", "커서 위치에서 중간 편집 후 캐럿 보존");
     await session.evaluate(input + ".setSelectionRange(2, 5)");
+    const pasteAllowed = await session.evaluate(`(() => {
+      const node = ${input};
+      const dispatch = text => {
+        const clipboardData = new DataTransfer();
+        clipboardData.setData('text/plain', text);
+        return node.dispatchEvent(new ClipboardEvent('paste', { clipboardData, bubbles: true, cancelable: true }));
+      };
+      return !dispatch('가'.repeat(node.maxLength + 1)) && node.value === '첫 가운데 끝' && dispatch('두 줄\\n내용');
+    })()`);
+    if (!pasteAllowed) throw Error("붙여넣기 한도 초과 보호 또는 선택 범위 허용 실패");
+    checks.push("합성 클립보드 사건으로 초과 붙여넣기 거부·초안 보존·정상 길이 허용");
     await session.command("Input.insertText", { text: "두 줄\n내용" });
     await session.wait(input + ".value===" + JSON.stringify("첫 두 줄\n내용 끝") + " && document.activeElement===" + input, "선택 구간 여러 줄 교체와 포커스 보존");
     await session.wait(transcript + ".scrollHeight>" + transcript + ".clientHeight+100 && " + transcript + ".scrollTop<40 && (()=>{const r=" + status + ".getBoundingClientRect();return r.height>0 && r.top>=0 && r.bottom<=innerHeight})()", "지난 대화를 읽는 위치와 고정 상태줄 유지");
     await session.click('.chat-message-actions button:last-child');
-    await session.wait(input + ".value.includes('>') && " + input + ".value.includes(" + JSON.stringify("첫 두 줄\n내용 끝") + ")", "현재 초안에 답변 인용 추가");
-    const draft = String(await session.evaluate(input + ".value"));
+    const history = JSON.parse(await fs.readFile(path.join(workspace, "fixture-history.json"), "utf8"));
+    const answer = history["history-a"][0].items.find((item: Data) => item.id === "saved-answer")?.text;
+    if (typeof answer !== "string" || !answer.startsWith("## 저장된 답변")) throw Error("인용 원문을 확인할 수 없습니다.");
+    const draft = "첫 두 줄\n내용 끝\n\n" + answer.split("\n").map(line => "> " + line).join("\n") + "\n\n";
+    await session.wait(input + ".value===" + JSON.stringify(draft), "현재 초안에 원래 답변 전체가 인용됨");
     await session.click('[data-testid="interrupt-button"]');
     await session.wait("!document.querySelector('[data-testid=interrupt-button]') && !" + status + ".textContent.includes('Working') && " + input + ".value===" + JSON.stringify(draft), "중단 후 상태가 바뀌고 편집 초안 보존");
     await session.click('[data-thread-id="history-b"]');
