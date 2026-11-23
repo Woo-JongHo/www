@@ -29,7 +29,7 @@ async function seedHistory() {
   const answer = "## 저장된 답변\n\n**이어갈 작업**을 확인했습니다. [검증 문서](https://example.com/verification)\n\n| 항목 | 상태 |\n| --- | --- |\n| 저장 | 완료 |\n\n" + wideTable + "```ts\n    const saved = true;\n" + "    // 긴 코드 " + "x".repeat(1200) + "\n```\n\n[긴 URL](https://example.com/" + "path".repeat(400) + ")\n\nhttps://example.com/" + "long".repeat(400) + "\n\n" + Array.from({ length: 35 }, (_, index) => `기록 문단 ${index}\n\n`).join("") + "마지막 문장 접근 확인.";
   await fs.writeFile(path.join(workspace, "fixture-history.json"), JSON.stringify({
     "history-a": [{ id: "saved-turn-a", status: "completed", items: [
-      ...(process.argv.includes("--performance-only") ? Array.from({length:60}, (_, index) => ({id:`perf-${index}`,type:"commandExecution",command:`printf performance-${index}`,cwd:workspace,status:"completed",exitCode:0,aggregatedOutput:JSON.stringify({index,output:"기록 ".repeat(7500)})})) : []),
+      ...((process.argv.includes("--performance-only") || process.argv.includes("--editing-layout-only")) ? Array.from({length:60}, (_, index) => ({id:`perf-${index}`,type:"commandExecution",command:`printf performance-${index}`,cwd:workspace,status:"completed",exitCode:0,aggregatedOutput:JSON.stringify({index,output:"기록 ".repeat(7500)})})) : []),
       {
         id: "saved-user", type: "userMessage",
         content: [{ type: "text", text: "저장된 작업 요청" }]
@@ -570,6 +570,49 @@ try {
     console.log(JSON.stringify({ evidence: directory, summary }));
     await session.terminate();
     session = null;
+    return;
+  }
+  if (process.argv.includes("--editing-layout-only")) {
+    const input = "document.querySelector('[data-testid=prompt-input]')";
+    await session.command("Emulation.setDeviceMetricsOverride", { width: 860, height: 680, deviceScaleFactor: 1, mobile: false });
+    await session.command("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
+    await session.input("/theme");
+    await session.click('[data-testid="send-button"]');
+    await session.wait("document.querySelector('dialog[open]')", "테마 선택기 열림");
+    await session.evaluate("Array.from(document.querySelectorAll('dialog[open] button')).find(b=>b.textContent==='WWW Mint').click()");
+    await session.click('[data-thread-id="history-a"]');
+    await session.wait("document.querySelectorAll('.command-card').length>=65 && innerWidth===860 && matchMedia('(prefers-reduced-motion: reduce)').matches && document.querySelector('main.work').dataset.chatTheme==='www-mint'", "좁은 창과 모션 축소, Mint에서 긴 대화 복원");
+    await session.input("성능 스트리밍 중단 확인");
+    await session.click('[data-testid="send-button"]');
+    const status = "document.querySelector('[data-testid=working-status]')";
+    await session.wait(status + ".textContent.includes('Working')", "긴 대화의 실제 실행 상태 표시");
+    const transcript = "document.querySelector('.transcript')";
+    await session.evaluate(transcript + ".scrollTop=0;" + input + ".focus()");
+    await session.command("Input.insertText", { text: "첫 끝" });
+    await session.evaluate(input + ".setSelectionRange(2, 2)");
+    await session.evaluate(input + ".addEventListener('compositionstart', () => document.body.dataset.editingComposition='started', { once: true })");
+    await session.command("Input.imeSetComposition", { text: "가운", selectionStart: 2, selectionEnd: 2 });
+    await session.wait("document.body.dataset.editingComposition==='started' && " + input + ".value.includes('가운')", "실행 중 입력칸에서 Chromium 한글 조합 시작");
+    await session.command("Input.insertText", { text: "가운데 " });
+    await session.wait(input + ".value==='첫 가운데 끝' && " + input + ".selectionStart===6", "커서 위치에서 중간 편집 후 캐럿 보존");
+    await session.evaluate(input + ".setSelectionRange(2, 5)");
+    await session.command("Input.insertText", { text: "두 줄\n내용" });
+    await session.wait(input + ".value===" + JSON.stringify("첫 두 줄\n내용 끝") + " && document.activeElement===" + input, "선택 구간 여러 줄 교체와 포커스 보존");
+    await session.wait(transcript + ".scrollHeight>" + transcript + ".clientHeight+100 && " + transcript + ".scrollTop<40 && (()=>{const r=" + status + ".getBoundingClientRect();return r.height>0 && r.top>=0 && r.bottom<=innerHeight})()", "지난 대화를 읽는 위치와 고정 상태줄 유지");
+    await session.click('.chat-message-actions button:last-child');
+    await session.wait(input + ".value.includes('>') && " + input + ".value.includes(" + JSON.stringify("첫 두 줄\n내용 끝") + ")", "현재 초안에 답변 인용 추가");
+    const draft = String(await session.evaluate(input + ".value"));
+    await session.click('[data-testid="interrupt-button"]');
+    await session.wait("!document.querySelector('[data-testid=interrupt-button]') && !" + status + ".textContent.includes('Working') && " + input + ".value===" + JSON.stringify(draft), "중단 후 상태가 바뀌고 편집 초안 보존");
+    await session.click('[data-thread-id="history-b"]');
+    await session.wait("document.querySelector('.transcript').textContent.includes('두 번째 저장 대화') && " + input + ".value!==" + JSON.stringify(draft), "다른 대화로 전환해 초안 격리 확인");
+    await session.click('[data-thread-id="history-a"]');
+    await session.wait(input + ".value===" + JSON.stringify(draft), "원래 대화에 돌아와 인용과 여러 줄 초안 복원");
+    const summary = { checks, viewport: [860, 680], theme: "www-mint", reducedMotion: true, limits: ["여러 줄 입력은 CDP Input.insertText로 전달했다. OS 시스템 클립보드와 실제 IME는 별도 관찰 대상이다."] };
+    await fs.writeFile(path.join(directory, "editing-layout.json"), JSON.stringify(summary, null, 2));
+    await session.terminate();
+    session = null;
+    console.log(JSON.stringify({ directory, summary }));
     return;
   }
   if (process.argv.includes("--theme-only")) {
