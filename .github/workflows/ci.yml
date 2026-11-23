@@ -1,6 +1,11 @@
 name: WWW CI
 on:
   workflow_dispatch:
+    inputs:
+      candidate_sha:
+        description: 전체 검증할 결합 후보 커밋 SHA (생략하면 선택한 ref의 기본 동작)
+        type: string
+        required: false
   pull_request:
   merge_group:
   push:
@@ -8,17 +13,50 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.ref }}-${{ github.event_name == 'workflow_dispatch' && inputs.candidate_sha || 'ref' }}
   cancel-in-progress: true
 jobs:
+  pr_scope:
+    name: PR 변경 범위와 집중 검사
+    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    outputs:
+      mode: ${{ steps.scope.outputs.mode }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.3
+      - name: 기준 브랜치의 판정기로 PR 범위 확인
+        id: scope
+        env:
+          WWW_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          WWW_PR_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          policy="$RUNNER_TEMP/www-pr-verification.mts"
+          if ! git show "$WWW_BASE_SHA:scripts/pr-verification.ts" > "$policy"; then
+            echo 'mode=full' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          node "$policy" verify "$WWW_BASE_SHA" "$WWW_PR_HEAD" "$GITHUB_SHA"
   validate:
+    needs: pr_scope
+    if: ${{ !cancelled() && needs.pr_scope.outputs.mode != 'focused' }}
     runs-on: macos-15
     timeout-minutes: 45
     env:
       BOXBOX_MODE: check
+      WWW_CHECKOUT_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.candidate_sha || github.sha }}
     steps:
+      - name: 전체 검사 대상 SHA 확인
+        run: '[[ "$WWW_CHECKOUT_SHA" =~ ^[0-9a-f]{40}$ ]]'
       - uses: actions/checkout@v4
         with:
+          ref: ${{ env.WWW_CHECKOUT_SHA }}
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@v4
@@ -45,12 +83,12 @@ jobs:
       - name: 체크아웃 검증 및 필요한 패키징
         id: validate
         env:
-          WWW_PACKAGE: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
+          WWW_PACKAGE: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && !inputs.candidate_sha)) }}
           WWW_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
           WWW_PR_HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           verify_checkout() {
-            test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+            test "$(git rev-parse HEAD)" = "$WWW_CHECKOUT_SHA"
             git diff --exit-code HEAD --
             untracked=$(git ls-files --others --exclude-standard)
             if [ -n "$untracked" ]; then
@@ -66,9 +104,9 @@ jobs:
           fi
           verify_checkout
           checked_tree=$(git rev-parse 'HEAD^{tree}')
-          checked_parents=$(git show -s --format=%P "$GITHUB_SHA")
-          printf 'WWW_VERIFIED_TREE %s %s %s %s\n' "$GITHUB_SHA" "$checked_tree" "${WWW_BASE_SHA:-없음}" "${WWW_PR_HEAD:-없음}" | tee -a "$GITHUB_STEP_SUMMARY"
-          printf 'WWW_VERIFIED_PARENTS %s %s\n' "$GITHUB_SHA" "$checked_parents" | tee -a "$GITHUB_STEP_SUMMARY"
+          checked_parents=$(git show -s --format=%P "$WWW_CHECKOUT_SHA")
+          printf 'WWW_VERIFIED_TREE %s %s %s %s\n' "$WWW_CHECKOUT_SHA" "$checked_tree" "${WWW_BASE_SHA:-없음}" "${WWW_PR_HEAD:-없음}" | tee -a "$GITHUB_STEP_SUMMARY"
+          printf 'WWW_VERIFIED_PARENTS %s %s\n' "$WWW_CHECKOUT_SHA" "$checked_parents" | tee -a "$GITHUB_STEP_SUMMARY"
       - if: steps.validate.outcome == 'success' && steps.validate.outputs.path != ''
         uses: actions/upload-artifact@v4
         with:
