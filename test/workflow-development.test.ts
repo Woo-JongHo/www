@@ -681,6 +681,10 @@ test("검증이 정상 종료해도 원장 잠금으로 미기록이면 분업�
   assert.equal((result.verification as { recorded?: boolean }).recorded, false);
   assert.equal(result.acceptance?.status, "rejected");
   assert.ok(result.acceptance?.reasons.includes("verification_error: verification_not_recorded"));
+  const { exitCode } = await import("../scripts/workflow.ts");
+  assert.equal(exitCode({ ...result }), 1);
+  // 실제 호스트 종료는 성공이고 단위 검증 자체가 없을 때도 CLI 전체 성공은 아니다.
+  assert.equal(exitCode({ ...result, verification: undefined, acceptance: { status: "rejected", reasons: ["verification_not_run"] } }), 1);
   assert.ok(result.workId);
   assert.equal((await readWork({ repo, workId: result.workId })).record.workflow?.verifications.length, 0);
 });

@@ -890,7 +890,7 @@ async function main() {
   else if (result.environment?.ok === false) process.exitCode = 1;
   else if (result.mutation?.ok === false || result.confirmation === true) process.exitCode = 2;
   else if (options.role === "www-dev") {
-    if (result.host?.ok === false || property(result.verification, "result") === "failed" || (result.review && result.review.verdict !== "pass")) process.exitCode = 1;
+    if (result.host?.ok === false || result.acceptance?.status === "rejected" || property(result.verification, "result") === "failed" || (result.review && result.review.verdict !== "pass")) process.exitCode = 1;
   } else if (result.executed && (!result.host?.ok || result.postError || result.verificationSummary?.result !== "passed")) process.exitCode = 1;
 }
 
