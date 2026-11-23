@@ -43,7 +43,7 @@ function textBlob(repo: string, id: string) {
 function header(markdown: string) {
   markdown = markdown.replaceAll("\r\n", "\n");
   if (!markdown.startsWith("---\n")) {
-    if (/^---[ \t\r]*(?:\n|$)/.test(markdown)) throw new Error("unknown_frontmatter");
+    if (/^\s*---[ \t\r]*(?:\n|$)/.test(markdown)) throw new Error("unknown_frontmatter");
     return null;
   }
   const end = markdown.indexOf("\n---\n", 4);

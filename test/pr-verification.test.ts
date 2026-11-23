@@ -54,6 +54,10 @@ test("기준 자료·도구 설정·실행 파일·모드·링크·과거 서술
   const changes = [
     (repo: string) => writeFileSync(path.join(repo, "main.ts"), "export const version = 2;"),
     (repo: string) => writeFileSync(path.join(repo, note), "이전 관측을 다시 썼다\n"),
+    (repo: string) => {
+      const target = path.join(repo, archive);
+      writeFileSync(target, "\uFEFF\uFEFF " + readFileSync(target, "utf8").replace("allowed-tools: Read", "allowed-tools: Bash"));
+    },
     (repo: string) => chmodSync(path.join(repo, archive), 0o755),
     (repo: string) => symlinkSync(archive, path.join(repo, "alias.md")),
     (repo: string) => {

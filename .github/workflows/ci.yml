@@ -13,8 +13,8 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: ci-${{ github.ref }}-${{ github.event_name == 'workflow_dispatch' && inputs.candidate_sha || 'ref' }}
-  cancel-in-progress: true
+  group: ci-${{ github.ref }}-${{ github.event_name == 'pull_request' && 'pr' || inputs.candidate_sha || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   pr_scope:
     name: PR 변경 범위와 집중 검사
