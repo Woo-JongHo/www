@@ -335,3 +335,157 @@ Mac 실제 Native 전체 시나리오는 동결된 현재 코드로 다시 실�
 - 검증 중 소스 유지: 확인
 - 출력: stdout 815바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-db12f86e-ea6e-47b7-af23-cac6525933e8"></a>
+## 검증 시도 — 2026-11-23T01:06:16.362Z
+
+- 시도 ID: `attempt-db12f86e-ea6e-47b7-af23-cac6525933e8`
+- 실행 시각: 2026-11-23T01:06:16.273Z ~ 2026-11-23T01:06:16.362Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test","test/projection.test.ts","test/input.test.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-5`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `.gitattributes`, `AGENTS.md`, `agents/www`, `build.ts`, `docs/DEVELOPMENT.md`, `docs/architecture`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/chat.md`, `docs/windows.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/check-workflow.mjs`, `scripts/check-workflow.ts`, `scripts/verify-eight-items.mjs`, `scripts/verify-eight-items.ts`, `scripts/windows-package.mjs`, `scripts/windows-package.ts`, `scripts/windows-setup.mjs`, `scripts/windows-setup.ts`, `scripts/workflow`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `3c74beb9a5c1a63e9080f0ba826329b8b178d1d76d6be259d8b9460979de0252`
+- 기준 정의 식별: `656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 28바이트, stderr 23460바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-1c6737f8-ad5c-4647-9c0e-c63f71f6eca8"></a>
+## 검증 시도 — 2026-11-23T01:07:03.316Z
+
+- 시도 ID: `attempt-1c6737f8-ad5c-4647-9c0e-c63f71f6eca8`
+- 실행 시각: 2026-11-23T01:06:18.384Z ~ 2026-11-23T01:07:03.316Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--test","test/workflow-work.test.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-6`, `AC-8`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `.gitattributes`, `AGENTS.md`, `agents/www`, `build.ts`, `docs/DEVELOPMENT.md`, `docs/architecture`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/chat.md`, `docs/windows.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/check-workflow.mjs`, `scripts/check-workflow.ts`, `scripts/verify-eight-items.mjs`, `scripts/verify-eight-items.ts`, `scripts/windows-package.mjs`, `scripts/windows-package.ts`, `scripts/windows-setup.mjs`, `scripts/windows-setup.ts`, `scripts/workflow`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `3c74beb9a5c1a63e9080f0ba826329b8b178d1d76d6be259d8b9460979de0252`
+- 기준 정의 식별: `656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 18644바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-ab07483f-db8c-4f56-b217-3a6ca3a3412e"></a>
+## 검증 시도 — 2026-11-23T03:32:25.859Z
+
+- 시도 ID: `attempt-ab07483f-db8c-4f56-b217-3a6ca3a3412e`
+- 실행 시각: 2026-11-23T03:32:24.856Z ~ 2026-11-23T03:32:25.859Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/dashboard-rollforward-20261123/development001-verify-review-model.mts","work-e9007dfb-f546-426b-88c6-58174641acc8",".www/evidence/dashboard-rollforward-20261123/development001-model-binding-opus/result.json"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-7`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `.gitattributes`, `AGENTS.md`, `agents/www`, `build.ts`, `docs/DEVELOPMENT.md`, `docs/architecture`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/chat.md`, `docs/windows.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/check-workflow.mjs`, `scripts/check-workflow.ts`, `scripts/verify-eight-items.mjs`, `scripts/verify-eight-items.ts`, `scripts/windows-package.mjs`, `scripts/windows-package.ts`, `scripts/windows-setup.mjs`, `scripts/windows-setup.ts`, `scripts/workflow`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `354a8ea67fffaaaadc45808a0f383e404513b7934c49ca7e833230a6726a3128`
+- 기준 정의 식별: `656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/dashboard-rollforward-20261123/development001-model-binding-opus/opus.json` (8714바이트, sha256 145ef46552b5d4e9d70e675215b5fe4b31fd8b88918803471f5defa59515d59f), `.www/evidence/dashboard-rollforward-20261123/development001-model-binding-opus/result.json` (3682바이트, sha256 a0eceac5892a24f78ef4a65079c52bcab04668ae8fe92d89fb6cf42e53a2296a), `.www/evidence/dashboard-rollforward-20261123/development001-model-binding-scope.md` (529바이트, sha256 714444fd26297e0d87fd38c9c989c3b5c44ddc0f597af810eac0f48e3d2ff1cf), `.www/evidence/dashboard-rollforward-20261123/development001-verify-review-model.mts` (2098바이트, sha256 f48b8dd98f5b93598e5d46bd291bc0f6a1b034827e6431a13850dc7796e6c496)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 983바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+- 2026-11-23 AC-7을 `attempt-ab07483f-db8c-4f56-b217-3a6ca3a3412e`로 확인했다. 현재 소스에 실제 읽기 전용 `claude-opus-5-5` 응답 `review-39756bc8-2c5b-4f8a-8551-af2ce612c0e7`의 원문이 연결된다. 같은 원문의 복사본에 관측 모델명 누락과 불일치를 주입해 `observed_model_missing` 및 `observed_model_mismatch`를 확인하고, 필수 검토 없는 완료와 근거 없는 통과 검토의 거부를 두 회귀로 확인했다. 실제 Opus 실행은 이 기준의 검토기 검증 표본이며, Development/001 전체 플랫폼 최종 감사에 해당하지 않는다.
+
+- 2026-11-23 macOS의 실제 OS IME를 확인하기 위해 두 격리 Electron 프로필에서 입력 관측기를 실행했다. 앱과 기록기의 시작은 확인했으나 Computer Use가 창에 연결하지 못해 조합 이벤트는 0건이다. 주 작업 영역 및 시스템 입력 설정을 변경하지 않았으며 자체 테스트 프로세스를 종료했다. `.www/evidence/dashboard-rollforward-20261123/mac-ime-ui-attempt.blob`은 이 시도의 원문이다. AC-4는 미검증이다.
+
+<a id="attempt-b3bca30a-9b37-4a6f-8056-91797b912f7c"></a>
+## 검증 시도 — 2026-11-23T03:43:11.743Z
+
+- 시도 ID: `attempt-b3bca30a-9b37-4a6f-8056-91797b912f7c`
+- 실행 시각: 2026-11-23T03:43:11.626Z ~ 2026-11-23T03:43:11.743Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/dashboard-rollforward-20261123/development001-native-ac1-evidence.mts",".www/evidence/dashboard-rollforward-20261123/native-ac1-current-approval.log"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `.gitattributes`, `AGENTS.md`, `agents/www`, `build.ts`, `docs/DEVELOPMENT.md`, `docs/architecture`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/chat.md`, `docs/windows.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/check-workflow.mjs`, `scripts/check-workflow.ts`, `scripts/verify-eight-items.mjs`, `scripts/verify-eight-items.ts`, `scripts/windows-package.mjs`, `scripts/windows-package.ts`, `scripts/windows-setup.mjs`, `scripts/windows-setup.ts`, `scripts/workflow`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `354a8ea67fffaaaadc45808a0f383e404513b7934c49ca7e833230a6726a3128`
+- 기준 정의 식별: `656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/chat-ui-BDClyK/initial.json` (1187바이트, sha256 0f6c4080378e1c8b3b0e58449c09b7ec6f928d37fedf8002442a8b72bc296b07), `.www/evidence/chat-ui-BDClyK/native-ac1-policy.ndjson` (388바이트, sha256 425a7d87585cdfe644c4b34c82799cd190d53cf4e519bdb65580e5efb2c7fb33), `.www/evidence/chat-ui-BDClyK/native-executable.json` (174바이트, sha256 4e71851315a26863757eed6d0dac6516d398a14aec70e41652d204cd47cb08d9), `.www/evidence/chat-ui-BDClyK/workspace/fixture.txt` (35바이트, sha256 d408dba461467c5091ca7c50eb87681fbb94fd940e59435847acc7e85c084a0a), `.www/evidence/chat-ui-g3dYO5/ac1-summary.json` (1244바이트, sha256 084ae504edd44a113016b647239b5c196d3a78f41f0246f71ac4c0e11a34bfe0), `.www/evidence/chat-ui-g3dYO5/accept.json` (719바이트, sha256 8083dd68b6261271114f76279b23a76bd92af5a456363df958779963a40ce9b4), `.www/evidence/chat-ui-g3dYO5/approval-accept.png` (158395바이트, sha256 9314d0f32477ec79374615690f1245b04cd46c95043c20ce02fae01618ce0904), `.www/evidence/chat-ui-g3dYO5/approval-decline.png` (168847바이트, sha256 69882ab2a4996a5acc291296e5f99e252e4cdce545302a5be2c9cb5d0e51cae0), `.www/evidence/chat-ui-g3dYO5/decline.json` (824바이트, sha256 11969ba5083cd9e9dabc495b497a1ab9320867dee888c26a9830a67605e939cd), `.www/evidence/chat-ui-g3dYO5/interrupt.json` (585바이트, sha256 34d9bb2693953861c8e08d893b362de9d045d592204b5d5b99799987eddcf4b1), `.www/evidence/chat-ui-g3dYO5/native-ac1-accept.txt` (15바이트, sha256 a2d00dbc8b03c78978f692ae0a950fc2e8377af7161ac6fba0082ef3fce56ca6), `.www/evidence/chat-ui-g3dYO5/native-ac1-policy.ndjson` (819바이트, sha256 07b13c244a4339016151a731886fbe7d046ab55f4a1296978c4f6f7b2e7cbdab), `.www/evidence/chat-ui-g3dYO5/native-executable.json` (174바이트, sha256 4e71851315a26863757eed6d0dac6516d398a14aec70e41652d204cd47cb08d9), `.www/evidence/dashboard-rollforward-20261123/development001-native-ac1-evidence.mts` (3453바이트, sha256 79155c0b45a3a1838557444fc8c7119f043006ebcfb3ae0f3abeab5be09c061e), `.www/evidence/dashboard-rollforward-20261123/native-ac1-approval-probe.mts` (120974바이트, sha256 21d6e14477f82a7792a68bd3fd941a69ee1c7753ac90b5b55a8e2d8012b9d502), `.www/evidence/dashboard-rollforward-20261123/native-ac1-current-approval.log` (1090바이트, sha256 66d15eccd61c07732d181081911b9ffddf7a94e600aeb149363b78e4eb8bb222), `.www/evidence/dashboard-rollforward-20261123/native-ac1-policy-proxy-approved-shape.mts` (2660바이트, sha256 1523bf6fdd3fce5c36d81bf67465cbb9207f4c22164fefc0c47e6142b74d21e3), `.www/evidence/dashboard-rollforward-20261123/native-ac1-policy-proxy.mts` (2616바이트, sha256 24c56cf50add9e1245d3048b20f95322fd9c1679e5a1c72e67519a810e2c83f5), `.www/evidence/dashboard-rollforward-20261123/native-ac1-probe.mts` (121538바이트, sha256 03cc8f08055a451ed166fee4c708f82d98419b4747ac32c7f0f1ffb5add9f0a4), `dist/build-info.json` (218바이트, sha256 4b4658543ba9fbe6872081c1a8f8878751256fdf17200c9f8fe1c4732fadbab5), `dist/main.js` (824675바이트, sha256 ed674e3f1c453ef5ffd828ec5f4274dfda1d9ca877e0d67ab77cf4dccdc3debc), `dist/preload.js` (5172바이트, sha256 b7530d1c41cc14dcc10f81be801588ba1a6dfbffaacf704341eece31b750733e), `dist/renderer.js` (2410533바이트, sha256 db8ba28927676c64e053970ed08b151cc6ffd6bc6dde110434f64972fb8b06e7)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 344바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+- 2026-11-23 AC-1을 `attempt-b3bca30a-9b37-4a6f-8056-91797b912f7c`로 확인했다. 현재 실제 Electron에서 설치된 Codex CLI 0.171.0의 Native를 사용했다. `.www/evidence/chat-ui-BDClyK`에서 한국어 파일을 읽고 `apply_patch`로 둘째 줄을 추가했다. 원래 바이트와 추가 줄, 의도한 exit 7과 공개 출력을 대조했다. 첫 승인 시도는 프로브가 `/bin/zsh -lc`로 표시된 명령 문자열을 일치시키지 못해 거절로 종료했다. 그 읽기·변경·실패 원문을 유지하고 승인·중단만 `.www/evidence/chat-ui-g3dYO5`에서 별도 수행했다.
+- 같은 Electron 빌드에서 허용한 명령만 시험 파일을 썼다. 거절한 명령은 `declined`와 파일 부재를 확인했다. 중단 버튼을 눌러 요청·수락·실제 `interrupted`를 확인했다. 시험 전용 중계는 새 대화만 `workspace-write`·`on-request`로 제한했고, 허용은 정확한 시험 파일 명령 하나에만 적용했다. 앱 제품 설정, Windows 또는 실제 OS IME까지 이 시도에 포함하지 않는다.
+
+<a id="attempt-7ad6ac03-e462-4edd-89cd-193cacf253f7"></a>
+## 검증 시도 — 2026-11-23T04:12:54.589Z
+
+- 시도 ID: `attempt-7ad6ac03-e462-4edd-89cd-193cacf253f7`
+- 실행 시각: 2026-11-23T04:12:54.501Z ~ 2026-11-23T04:12:54.589Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test","test/projection.test.ts","test/input.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-5`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `.gitattributes`, `AGENTS.md`, `agents/www`, `build.ts`, `docs/DEVELOPMENT.md`, `docs/architecture`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/chat.md`, `docs/windows.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/check-workflow.mjs`, `scripts/check-workflow.ts`, `scripts/verify-eight-items.mjs`, `scripts/verify-eight-items.ts`, `scripts/windows-package.mjs`, `scripts/windows-package.ts`, `scripts/windows-setup.mjs`, `scripts/windows-setup.ts`, `scripts/workflow`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `354a8ea67fffaaaadc45808a0f383e404513b7934c49ca7e833230a6726a3128`
+- 기준 정의 식별: `656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 28바이트, stderr 23442바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-196d3d22-7bb7-4f73-93db-dafe650d0402"></a>
+## 검증 시도 — 2026-11-23T04:13:39.854Z
+
+- 시도 ID: `attempt-196d3d22-7bb7-4f73-93db-dafe650d0402`
+- 실행 시각: 2026-11-23T04:12:55.239Z ~ 2026-11-23T04:13:39.854Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--test","test/workflow-work.test.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-6`, `AC-8`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `.gitattributes`, `AGENTS.md`, `agents/www`, `build.ts`, `docs/DEVELOPMENT.md`, `docs/architecture`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/chat.md`, `docs/windows.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/check-workflow.mjs`, `scripts/check-workflow.ts`, `scripts/verify-eight-items.mjs`, `scripts/verify-eight-items.ts`, `scripts/windows-package.mjs`, `scripts/windows-package.ts`, `scripts/windows-setup.mjs`, `scripts/windows-setup.ts`, `scripts/workflow`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `354a8ea67fffaaaadc45808a0f383e404513b7934c49ca7e833230a6726a3128`
+- 기준 정의 식별: `656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 18635바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+- 2026-11-23 오래된 AC-5·AC-6·AC-8만 현재 입력에 다시 결속했다. `attempt-7ad6ac03-e462-4edd-89cd-193cacf253f7`의 투영·입력 집중 검사로 중단 요청·접수·불확실·종료와 늦은 사건을 확인했다. `attempt-196d3d22-7bb7-4f73-93db-dafe650d0402`의 작업 흐름 테스트는 실제 자식 강제 종료 뒤 잠금 회수·동시 실행 보호, 기능 검증과 저장소 일관성 결과의 변경 후 적용성 구분을 포함한다. 현재 적용 가능한 기준은 AC-1·5·6·7·8이다. Windows·실제 IME 검증은 이 실행에 포함하지 않는다.
+
+<a id="attempt-5ea1c9fb-9ec7-4852-ad7c-4d62ab9c3093"></a>
+## 검증 시도 — 2026-11-23T22:44:51.214Z
+
+- 시도 ID: `attempt-5ea1c9fb-9ec7-4852-ad7c-4d62ab9c3093`
+- 실행 시각: 2026-11-23T22:44:50.891Z ~ 2026-11-23T22:44:51.214Z
+- 명령과 인자: `["node","-e","const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),sha=b=>require('node:crypto').createHash('sha256').update(b).digest('hex');\nconst [f,raw]=process.argv.slice(1),j=JSON.parse(fs.readFileSync(f)),b=fs.readFileSync(raw),r=JSON.parse(b);\nassert.equal(process.platform,'win32');assert.equal(process.arch,'x64');assert.equal(sha(b),j.nativeReceiptSha256);\nassert.equal(require('node:child_process').execFileSync('git.exe',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),j.sourceCommit);\nassert.equal(sha(fs.readFileSync(r.packageInfo.executable)),j.executableSha256);\nconst policy=path.join('agents','www','review-policy.json'),dp=path.join('dist',policy),archive=path.join(path.dirname(r.packageInfo.executable),'resources','app.asar');\nfor(const s of [sha(fs.readFileSync(policy)),sha(fs.readFileSync(dp)),sha(require('@electron/asar').extractFile(archive,dp)),r.app.policy.hash,...Object.values(j.policySha256)])assert.equal(s,j.policySha256.source);\nassert.equal(r.app.workspace.path,r.workspace);assert.match(r.workspace,/한글 공백 작업장$/);assert.deepEqual(r.app.projectPaths,[r.workspace]);assert.deepEqual(r.initialWorkspaceEntries,[]);\nassert.equal(r.codexEnvironmentOverride,false);assert.equal(r.native.terminalMethod,'turn/completed');assert.equal(r.native.terminalStatus,'completed');assert.equal(r.native.session.busy,false);\nassert.ok(r.native.items.some(e=>e.method==='item/completed'&&e.itemType==='commandExecution'&&e.itemStatus==='completed'));assert.deepEqual(r.workspaceEntries,['도구 생성 확인.txt']);\nassert.equal(fs.readFileSync(path.join(r.workspace,'도구 생성 확인.txt'),'utf8').trim(),'WINDOWS_한글_공백_검증_403550d');assert.equal(r.file.exactContent,true);\nassert.equal(r.naturallyExited,true);assert.equal(r.childExitCode,0);console.log(JSON.stringify({source:j.sourceCommit,receipt:j.nativeReceiptSha256,policy:j.policySha256.ipc,packageSha256:j.executableSha256,terminal:r.native.terminalStatus,exit:r.childExitCode,actualIme:false}));","docs/work/Development/001-Mac과 Windows 실사용 및 검증 신뢰성 완성/windows-native-403550d.json",".www/scratchpad/issue28/native-host-test/native-result.json"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`, `AC-3`
+- 소스 HEAD: `403550d33222577ebfca01f5f2b7b133b1659b81`
+- 검증 입력: `.gitattributes`, `AGENTS.md`, `agents/www`, `build.ts`, `docs/DEVELOPMENT.md`, `docs/architecture`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/chat.md`, `docs/windows.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/check-workflow.mjs`, `scripts/check-workflow.ts`, `scripts/verify-eight-items.mjs`, `scripts/verify-eight-items.ts`, `scripts/windows-package.mjs`, `scripts/windows-package.ts`, `scripts/windows-setup.mjs`, `scripts/windows-setup.ts`, `scripts/workflow`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `16f24dfe4f03e8e1c18e1a7ef39e9cb299008e7c89ff262458bc225564045ce2`
+- 기준 정의 식별: `656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `.www/scratchpad/issue28/native-host-test/native-result.json` (5827바이트, sha256 86ad1f7543829f6ec2aba54da4f6927b52958cdd23415dab171c88b2bdecb572), `docs/work/Development/001-Mac과 Windows 실사용 및 검증 신뢰성 완성/windows-native-403550d.json` (1882바이트, sha256 c7de7bf3a2215ff73cc99fc89185f3d26876f6e384a97a822f0da43afba654c6)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 340바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+### Windows 패키지와 Native 파일 작업의 실제 관찰 (2026-11-24 KST)
+
+1차 마감에서 확인한 다섯 기준의 작업 원장을 원격 기록에 회수했다. 기존 14개 시도와 독립 리뷰는 동일했고 여섯 시도가 뒤에 추가됐다. AC-1에 연결한 원문 23개, AC-7에 연결한 원문 네 개의 SHA-256을 다시 대조했다.
+
+`403550d33222577ebfca01f5f2b7b133b1659b81`의 별도 Windows x64 체크아웃에서 Electron 39.8.10 패키지를 생성하고 실행했다. 배포 정책의 원본, dist, app.asar 및 실제 앱 IPC가 반환한 해시가 일치했다. 격리한 한글·공백 경로에서 실제 Native가 도구를 실행해 시험 파일을 만들었고 해당 파일의 내용을 직접 확인했다. 턴 종료가 `completed`, 자체 앱 종료 코드가 0이었다. 화면에서 최종 응답 문구의 표시까지 관찰하지는 못했다. 패키지·정책 및 관찰값은 [Windows 실행 근거](windows-native-403550d.json)에 담았다.
+
+공식 Windows 검증 시도 `attempt-5ea1c9fb-9ec7-4852-ad7c-4d62ab9c3093`은 위 원문과 패키지 실행 파일·정책·시험 파일을 실제 바이트로 대조해 종료 코드 0을 기록했다. 하네스가 돌려준 역슬래시 경로를 후속 회수 단계에서 거부해, 이미 저장된 같은 시도를 슬래시 경로로 회수했다. 패키지 시험을 다시 실행하지 않았다.
+
+이 시점의 원장에는 AC-2·AC-3을 더해 여덟 기준 중 일곱 기준의 통과 기록이 있다. 이 Windows 결과의 대상은 위 패키지 커밋이다. `windows-setup.ts`의 발견 링크 수정은 별도 [PR #32](https://github.com/Woo-JongHo/www/pull/32)에서 검사했다. AC-4는 열려 있다. 확인 당시 Windows 사용자 세션은 연결이 끊겨 있었고 콘솔에는 로그인된 사용자가 없었다. 실제 OS 한국어 조합 확정 Enter·줄바꿈·포커스 관찰은 두 OS 모두 별도로 확보해야 한다.
