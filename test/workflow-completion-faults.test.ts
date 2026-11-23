@@ -229,7 +229,13 @@ test("F06: 같은 기준 ID의 설명 또는 필수 여부 변경은 옛 증거�
     if (change === "description") criterion.description = "변경된 현행 기준";
     else criterion.required = true;
     await fs.writeFile(context.file, JSON.stringify(changed.record));
-    await rejectBoth(context.repo, context.workId, /criteria_changed/);
+    if (change === "description") {
+      await rejectBoth(context.repo, context.workId, /AC-1: criteria_changed/);
+    } else {
+      const assessment = await assessWork(context);
+      assert.equal(assessment.criteria.find(item => item.id === "AC-1")?.usable, true);
+      await rejectBoth(context.repo, context.workId, /AC-2: 검증 시도 없음/);
+    }
   }
 });
 
