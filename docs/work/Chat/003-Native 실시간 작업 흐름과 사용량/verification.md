@@ -486,3 +486,263 @@ UI summary는 실제 Electron+합성 subprocess의 목록·순서·읽기/Hook·
 - 검증 중 소스 유지: 확인
 - 출력: stdout 973바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-68ad3fbf-58f7-4b8a-b7ca-9172279627e8"></a>
+## 검증 시도 — 2026-11-22T16:29:43.153Z
+
+- 시도 ID: `attempt-68ad3fbf-58f7-4b8a-b7ca-9172279627e8`
+- 실행 시각: 2026-11-22T16:29:36.873Z ~ 2026-11-22T16:29:43.153Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-native-activity.ts","--ui-only"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/design.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/spec.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/tasks.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `0a4a163f0e130ff58ece2e9e9abffe0babae65c3011d1568a945df204b78ea78`
+- 기준 정의 식별: `1b3fcbbd3f71cb3dd2b4e59b26637dd8ebb43b8deae2c1ff38aa9b7cb8e68114`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 973바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-e77a95a6-05d2-400a-909e-45fc195f3882"></a>
+## 검증 시도 — 2026-11-22T23:45:10.316Z
+
+- 시도 ID: `attempt-e77a95a6-05d2-400a-909e-45fc195f3882`
+- 실행 시각: 2026-11-22T23:45:10.169Z ~ 2026-11-22T23:45:10.316Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test","test/native-activity.test.ts","test/projection.test.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/design.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/spec.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/tasks.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `3e1368f5adfe591bcbaff80bf1055c3583604997355b752c2f6f9024f7826a29`
+- 기준 정의 식별: `1b3fcbbd3f71cb3dd2b4e59b26637dd8ebb43b8deae2c1ff38aa9b7cb8e68114`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 28바이트, stderr 40393바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-a5a39a3c-1c73-4386-982b-9d7ab01c5b0b"></a>
+## 검증 시도 — 2026-11-23T00:01:43.492Z
+
+- 시도 ID: `attempt-a5a39a3c-1c73-4386-982b-9d7ab01c5b0b`
+- 실행 시각: 2026-11-23T00:01:31.678Z ~ 2026-11-23T00:01:43.492Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync,mkdirSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/native-activity.test.ts\", \"test/activity-sidebar.test.ts\", \"test/agent-overview.test.ts\", \"test/www-activity-view.test.ts\", \"test/www-activity.test.ts\", \"test/native-chat.test.ts\", \"test/native-session.test.ts\", \"test/projection.test.ts\", \"test/chat-state.test.ts\", \"test/input.test.ts\"];mkdirSync(\".www/evidence/resume-20261116/chat008/chat003-recovery\",{recursive:true});const startedAt=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:32*1024*1024});const base=\".www/evidence/resume-20261116/chat008/chat003-recovery/official-focused-\"+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`, `AC-5`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/design.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/spec.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/tasks.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `3e1368f5adfe591bcbaff80bf1055c3583604997355b752c2f6f9024f7826a29`
+- 기준 정의 식별: `1b3fcbbd3f71cb3dd2b4e59b26637dd8ebb43b8deae2c1ff38aa9b7cb8e68114`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 166바이트, stderr 65536바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-14fa9cc2-7bca-4463-b466-766f6d2228e5"></a>
+## 검증 시도 — 2026-11-23T00:52:28.212Z
+
+- 시도 ID: `attempt-14fa9cc2-7bca-4463-b466-766f6d2228e5`
+- 실행 시각: 2026-11-23T00:49:58.044Z ~ 2026-11-23T00:52:28.212Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-native-activity.ts"]`
+- 명령 결과: 실패, 종료 코드 1, 신호 없음
+- 검증 시도 결과: 증거 불충족
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`, `AC-5`, `AC-6`, `AC-7`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/design.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/spec.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/tasks.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `3e1368f5adfe591bcbaff80bf1055c3583604997355b752c2f6f9024f7826a29`
+- 기준 정의 식별: `1b3fcbbd3f71cb3dd2b4e59b26637dd8ebb43b8deae2c1ff38aa9b7cb8e68114`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 0바이트, stderr 142바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-1140697a-2bce-416a-823a-97f07972abf6"></a>
+## 검증 시도 — 2026-11-23T00:53:51.750Z
+
+- 시도 ID: `attempt-1140697a-2bce-416a-823a-97f07972abf6`
+- 실행 시각: 2026-11-23T00:53:39.997Z ~ 2026-11-23T00:53:51.750Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync,mkdirSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/native-activity.test.ts\", \"test/activity-sidebar.test.ts\", \"test/agent-overview.test.ts\", \"test/www-activity-view.test.ts\", \"test/www-activity.test.ts\", \"test/native-chat.test.ts\", \"test/native-session.test.ts\", \"test/projection.test.ts\", \"test/chat-state.test.ts\", \"test/input.test.ts\"];mkdirSync(\".www/evidence/resume-20261116/chat008/chat003-recovery\",{recursive:true});const startedAt=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:32*1024*1024});const base=\".www/evidence/resume-20261116/chat008/chat003-recovery/official-focused-\"+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`, `AC-5`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/design.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/spec.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/tasks.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `3e1368f5adfe591bcbaff80bf1055c3583604997355b752c2f6f9024f7826a29`
+- 기준 정의 식별: `1b3fcbbd3f71cb3dd2b4e59b26637dd8ebb43b8deae2c1ff38aa9b7cb8e68114`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 166바이트, stderr 65536바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-9a726937-c125-4b79-a2ee-602fc90025a0"></a>
+## 검증 시도 — 2026-11-23T00:54:00.922Z
+
+- 시도 ID: `attempt-9a726937-c125-4b79-a2ee-602fc90025a0`
+- 실행 시각: 2026-11-23T00:53:55.007Z ~ 2026-11-23T00:54:00.922Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-native-activity.ts","--ui-only"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-6`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/design.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/spec.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/tasks.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `3e1368f5adfe591bcbaff80bf1055c3583604997355b752c2f6f9024f7826a29`
+- 기준 정의 식별: `1b3fcbbd3f71cb3dd2b4e59b26637dd8ebb43b8deae2c1ff38aa9b7cb8e68114`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 973바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-b08e2252-3372-4732-a173-2f16ee0dc3f5"></a>
+## 검증 시도 — 2026-11-23T00:56:01.462Z
+
+- 시도 ID: `attempt-b08e2252-3372-4732-a173-2f16ee0dc3f5`
+- 실행 시각: 2026-11-23T00:55:48.293Z ~ 2026-11-23T00:56:01.462Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/dashboard-chat/accept-current-native-activity.mts",".www/evidence/native-activity-rYtOaf/summary.json"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-7`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/design.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/spec.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/tasks.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `3e1368f5adfe591bcbaff80bf1055c3583604997355b752c2f6f9024f7826a29`
+- 기준 정의 식별: `1b3fcbbd3f71cb3dd2b4e59b26637dd8ebb43b8deae2c1ff38aa9b7cb8e68114`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `.www/evidence/dashboard-chat/accept-current-native-activity.mts` (2013바이트, sha256 1984ae04441000a6dc8b55583bf10c8a60d886beb401d11700e65d36303f1ef5), `.www/evidence/native-activity-rYtOaf/activity-narrow.png` (79326바이트, sha256 349485afa3f1e32440f11609989131a16beda749c8c39bc463bb6279e897e5fe), `.www/evidence/native-activity-rYtOaf/electron-chat.png` (87165바이트, sha256 156f0d77a346147f8de36fc4d70109b3e0a7f7dbb823c332101f97417d4c3c88), `.www/evidence/native-activity-rYtOaf/summary.json` (1168바이트, sha256 881dd7727a854004174440c0fec2b9504e429f6de3389bd764779966412990cd)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 1278바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+## 현재 UI와 Native의 적용 범위
+
+- 전체 도구는 150초 내부 타임아웃으로 repository 단계에서 중단했다. AC1~5 집중의 attempt-1140697a와 AC6 실제 Electron attempt-9a726937는 현재 통과다. AC7 attempt-b08e2252는 UI 원본 summary의 stdout 식별을 대조한 후 그 증거의 빌드·집중 검사만 회수하고 새로운 strict 타입 검사와 실제 Native 표본을 실행했다.
+- Electron의 private-reasoning 화면 비표시는 실제 화면 fixture의 결과다. renderer가 수신하는 원본 파라미터와 공개 UI의 표시 범위는 구분한다. 전체 원본 이벤트 수신의 배제 및 Windows 실기는 여기서 별도 입증하지 않았다.
+- 원본 UI와 샘플, 실제 Node·Bun 실행 경로, 현재 소스와 증거 적용성은 공식 시도에 있다.
+
+<a id="attempt-3438260d-444b-4614-ad85-89b7ab4583da"></a>
+## 검증 시도 — 2026-11-23T03:11:06.818Z
+
+- 시도 ID: `attempt-3438260d-444b-4614-ad85-89b7ab4583da`
+- 실행 시각: 2026-11-23T03:10:55.542Z ~ 2026-11-23T03:11:06.818Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","--eval","import{spawnSync}from'node:child_process';import{writeFileSync,mkdirSync}from'node:fs';import{randomUUID}from'node:crypto';const command=\"bun\",args=[\"test\", \"test/native-activity.test.ts\", \"test/activity-sidebar.test.ts\", \"test/agent-overview.test.ts\", \"test/www-activity-view.test.ts\", \"test/www-activity.test.ts\", \"test/native-chat.test.ts\", \"test/native-session.test.ts\", \"test/projection.test.ts\", \"test/chat-state.test.ts\", \"test/input.test.ts\"];mkdirSync(\".www/evidence/resume-20261116/chat008/chat003-recovery\",{recursive:true});const startedAt=new Date().toISOString();const r=spawnSync(command,args,{cwd:process.cwd(),encoding:'utf8',maxBuffer:32*1024*1024});const base=\".www/evidence/resume-20261116/chat008/chat003-recovery/official-focused-\"+randomUUID();writeFileSync(base+'.stdout',r.stdout??'');writeFileSync(base+'.stderr',r.stderr??'');writeFileSync(base+'.process.json',JSON.stringify({command,args,cwd:process.cwd(),startedAt,completedAt:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null},null,2));process.stdout.write(r.stdout??'');process.stderr.write(r.stderr??'');console.log(JSON.stringify({rawPrefix:base,exitCode:r.status}));process.exit(r.status??1);"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`, `AC-5`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/design.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/spec.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/tasks.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `d561fbc1cbf9d12ee7589c426459d1270b333c2bc57d287b985d62930c2647f4`
+- 기준 정의 식별: `1b3fcbbd3f71cb3dd2b4e59b26637dd8ebb43b8deae2c1ff38aa9b7cb8e68114`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 166바이트, stderr 65536바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-8f87a792-8084-4721-a77b-56bbf0da9ad4"></a>
+## 검증 시도 — 2026-11-23T03:11:12.591Z
+
+- 시도 ID: `attempt-8f87a792-8084-4721-a77b-56bbf0da9ad4`
+- 실행 시각: 2026-11-23T03:11:07.482Z ~ 2026-11-23T03:11:12.591Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-native-activity.ts","--ui-only"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-6`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/design.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/spec.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/tasks.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `d561fbc1cbf9d12ee7589c426459d1270b333c2bc57d287b985d62930c2647f4`
+- 기준 정의 식별: `1b3fcbbd3f71cb3dd2b4e59b26637dd8ebb43b8deae2c1ff38aa9b7cb8e68114`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 973바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-0adfca1f-c57d-4ac0-bc85-4dd8eeb5559c"></a>
+## 검증 시도 — 2026-11-23T03:12:13.137Z
+
+- 시도 ID: `attempt-0adfca1f-c57d-4ac0-bc85-4dd8eeb5559c`
+- 실행 시각: 2026-11-23T03:12:00.350Z ~ 2026-11-23T03:12:13.137Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/dashboard-rollforward-20261123/chat003-accept-attempt-8f87a792-8084-4721-a77b-56bbf0da9ad4.mts",".www/evidence/native-activity-k4PchQ/summary.json"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-7`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/design.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/spec.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/tasks.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `d561fbc1cbf9d12ee7589c426459d1270b333c2bc57d287b985d62930c2647f4`
+- 기준 정의 식별: `1b3fcbbd3f71cb3dd2b4e59b26637dd8ebb43b8deae2c1ff38aa9b7cb8e68114`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/dashboard-rollforward-20261123/chat003-accept-attempt-8f87a792-8084-4721-a77b-56bbf0da9ad4.mts` (2013바이트, sha256 ebe2ed79fe28fa4371e05dd8440930c444f82eca022e207573f58fc5b54f6156), `.www/evidence/native-activity-k4PchQ/activity-narrow.png` (78641바이트, sha256 8979f3fc587b287d72d4b7d4636d6426429bdba422e3c9995ed13592b786fde0), `.www/evidence/native-activity-k4PchQ/electron-chat.png` (86407바이트, sha256 20927de4bc1fbaf3aa54ca4834ac57eaaf0a4fd5610d0217f4524dd71fbc1d58), `.www/evidence/native-activity-k4PchQ/summary.json` (1168바이트, sha256 3cc45dc6ea3131bd97d7232cf5f9447fea1d9d3e5aea44949ac9b81fadb734fd)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 1278바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+- 2026-11-23 공용 수정 이후 현재 입력에서 활동·사용량 집중 검증 `attempt-3438260d-444b-4614-ad85-89b7ab4583da`, 실제 Electron 합성 Native `attempt-8f87a792-8084-4721-a77b-56bbf0da9ad4`, UI 영수증과 strict 타입 및 실제 설치 Native `attempt-0adfca1f-c57d-4ac0-bc85-4dd8eeb5559c`를 확인했다. 세 시도는 같은 소스 지문 `d561fbc1cbf9d12ee7589c426459d1270b333c2bc57d287b985d62930c2647f4`에 연결된다. 각 실행은 ACK·명시 실패·실제 종료와 현재/과거 활동을 구분한다.
+- 이전 감사가 지적한 명시 실패 우선순위와 기본 props 활동 갱신은 PR #20에 포함되어 현재 로컬 트리에도 반영했다. 현재 Electron 요약·캡처와 raw stdout 지문의 대응은 `.www/evidence/dashboard-rollforward-20261123/chat003-current-ui.blob`에 보존했다. Electron에서 Native subprocess는 합성이며 실제 설치 Native는 별도 읽기 전용 1회 표본이다. Windows·OS IME와 실제 Native Hook 전반으로 확대하지 않는다.
+
+<a id="attempt-f33be543-4275-47b8-980b-310328aa3c3a"></a>
+## 검증 시도 — 2026-11-23T03:14:10.123Z
+
+- 시도 ID: `attempt-f33be543-4275-47b8-980b-310328aa3c3a`
+- 실행 시각: 2026-11-23T03:14:07.290Z ~ 2026-11-23T03:14:10.123Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-native-activity.ts","--observability"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-6`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/design.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/spec.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/tasks.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `d561fbc1cbf9d12ee7589c426459d1270b333c2bc57d287b985d62930c2647f4`
+- 기준 정의 식별: `1b3fcbbd3f71cb3dd2b4e59b26637dd8ebb43b8deae2c1ff38aa9b7cb8e68114`
+- 검증 중 소스 유지: 확인
+- 출력: stdout 1851바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-b45d7aa2-cb71-4fa0-9bfd-6daf61e8d633"></a>
+## 검증 시도 — 2026-11-23T03:15:32.563Z
+
+- 시도 ID: `attempt-b45d7aa2-cb71-4fa0-9bfd-6daf61e8d633`
+- 실행 시각: 2026-11-23T03:15:32.264Z ~ 2026-11-23T03:15:32.563Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/dashboard-rollforward-20261123/chat003-bind-current-20261123.mts","work-005bdf73-4e11-441b-a485-51468cc8acf4"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-7`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/design.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/spec.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/tasks.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `d561fbc1cbf9d12ee7589c426459d1270b333c2bc57d287b985d62930c2647f4`
+- 기준 정의 식별: `1b3fcbbd3f71cb3dd2b4e59b26637dd8ebb43b8deae2c1ff38aa9b7cb8e68114`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/dashboard-rollforward-20261123/chat003-bind-current-20261123.mts` (2133바이트, sha256 04f782fa7bd9f1260591611110fa3156f9f3b636cafa95c6424a4cc277e412f1), `.www/evidence/dashboard-rollforward-20261123/chat003-native-proof.blob` (358바이트, sha256 b9ac3fefe4bbb3f608aea24293be3c58b460fae5ab884f5eea6aaf915ac13fca), `.www/evidence/dashboard-rollforward-20261123/chat003-native-stdout.blob` (1278바이트, sha256 0ff80708d568734ed3c582cf8b458fffe88ba7e1e414a8388deed61988b63b52), `.www/evidence/dashboard-rollforward-20261123/chat003-observability-proof.blob` (330바이트, sha256 dc7133c123034a0d5b3ca2dbdec34d66fcf5f8c196176f7ffdd6fc12a81b6baf), `.www/evidence/dashboard-rollforward-20261123/chat003-observability-stdout.blob` (1851바이트, sha256 bc4fe8a11fdc069d9a4b0e50f2b5740ee613ba731130cb94363e5cb3c05fc8df), `.www/evidence/native-activity-9CkHjw/summary.json` (2061바이트, sha256 ec0369ac5568884f7d9e27f37a97230afdecabced342f781445b96b9a9deb573), `.www/evidence/native-activity-live-hAOWc5/summary.json` (823바이트, sha256 98668a47f717bda78be410050521eeae683686336c97acb99fff3a7f197672fc)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 193바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+- 2026-11-23 `review-f716f8d6`이 지적한 340px·포커스 범위를 공식 `--observability` 실행 `attempt-f33be543-4275-47b8-980b-310328aa3c3a`로 AC-6에 결속했다. 실제 Electron 모니터 컨테이너 폭 340px에서 넘침이 없고 같은 내용, 조작 초점 및 모션 축소를 확인했다. 이전 `--ui-only`의 820px 요약은 별도의 Electron 활동 통합 결과다. `chat003-current-ui.blob`의 `sha256`은 파일 해시와 구분되는 해당 실행 stdout의 지문이다.
+- AC-7의 `attempt-b45d7aa2-cb71-4fa0-9bfd-6daf61e8d633`는 실제 설치 Native `attempt-0adfca1f-c57d-4ac0-bc85-4dd8eeb5559c`의 stdout을 원장의 1278바이트 및 SHA-256 `0ff80708d568734ed3c582cf8b458fffe88ba7e1e414a8388deed61988b63b52`에 대조했다. 같은 stdout에 포함된 Native 요약은 `.www/evidence/native-activity-live-hAOWc5/summary.json`와 일치한다. 실제 공개 답변, 사용량, 명령의 읽기 액션과 Skill 투영을 확인했다. 이 표본의 모델명은 `thread/start` 응답의 설정 값(`basis: configured`)이다. 실제 모델 전환과 Hook 알림은 관측되지 않았다. 이 문구는 독립 검토 `review-01d69648`의 범위 지적을 반영했다. 본 작업의 Electron 관측 요약과 stdout도 각각 일치했다. 두 실행의 산출물 위치·지문은 `.www/evidence/dashboard-rollforward-20261123/chat003-native-proof.blob`, `.www/evidence/dashboard-rollforward-20261123/chat003-observability-proof.blob`에 남겼다. 기존 타입·Native·UI 실행은 유지하고 실제 출력의 대응만 재확인했다.
+
+<a id="attempt-8061f596-27c5-40a3-8deb-16279c1fce1c"></a>
+## 검증 시도 — 2026-11-23T03:17:18.420Z
+
+- 시도 ID: `attempt-8061f596-27c5-40a3-8deb-16279c1fce1c`
+- 실행 시각: 2026-11-23T03:17:18.123Z ~ 2026-11-23T03:17:18.420Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/dashboard-rollforward-20261123/chat003-bind-current-model-source-20261123.mts","work-005bdf73-4e11-441b-a485-51468cc8acf4"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-7`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `AGENTS.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`, `docs/PRODUCT.md`, `docs/skills/WORKFLOW.md`, `docs/specs/chat.md`, `docs/third-party/ovis.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/design.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/spec.md`, `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/tasks.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `scripts/workflow`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `d561fbc1cbf9d12ee7589c426459d1270b333c2bc57d287b985d62930c2647f4`
+- 기준 정의 식별: `1b3fcbbd3f71cb3dd2b4e59b26637dd8ebb43b8deae2c1ff38aa9b7cb8e68114`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/dashboard-rollforward-20261123/chat003-bind-current-model-source-20261123.mts` (2448바이트, sha256 e8af2104243b2ff48a144af0dd362e930f9e073301809e5c51d80863df8268fd), `.www/evidence/dashboard-rollforward-20261123/chat003-native-proof.blob` (358바이트, sha256 b9ac3fefe4bbb3f608aea24293be3c58b460fae5ab884f5eea6aaf915ac13fca), `.www/evidence/dashboard-rollforward-20261123/chat003-native-stdout.blob` (1278바이트, sha256 0ff80708d568734ed3c582cf8b458fffe88ba7e1e414a8388deed61988b63b52), `.www/evidence/dashboard-rollforward-20261123/chat003-observability-proof.blob` (330바이트, sha256 dc7133c123034a0d5b3ca2dbdec34d66fcf5f8c196176f7ffdd6fc12a81b6baf), `.www/evidence/dashboard-rollforward-20261123/chat003-observability-stdout.blob` (1851바이트, sha256 bc4fe8a11fdc069d9a4b0e50f2b5740ee613ba731130cb94363e5cb3c05fc8df), `.www/evidence/native-activity-9CkHjw/summary.json` (2061바이트, sha256 ec0369ac5568884f7d9e27f37a97230afdecabced342f781445b96b9a9deb573), `.www/evidence/native-activity-live-hAOWc5/summary.json` (823바이트, sha256 98668a47f717bda78be410050521eeae683686336c97acb99fff3a7f197672fc)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 225바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+- 2026-11-23 `review-f716f8d6`이 지적한 340px·포커스 범위를 공식 `--observability` 실행 `attempt-f33be543-4275-47b8-980b-310328aa3c3a`로 AC-6에 결속했다. 실제 Electron 모니터 컨테이너 폭 340px에서 넘침이 없고 같은 내용, 조작 초점 및 모션 축소를 확인했다. 이전 `--ui-only`의 820px 요약은 별도의 Electron 활동 통합 결과다. `chat003-current-ui.blob`의 `sha256`은 파일 해시와 구분되는 해당 실행 stdout의 지문이다.
+- AC-7의 `attempt-8061f596-27c5-40a3-8deb-16279c1fce1c`는 실제 설치 Native `attempt-0adfca1f-c57d-4ac0-bc85-4dd8eeb5559c`의 stdout을 원장의 1278바이트 및 SHA-256 `0ff80708d568734ed3c582cf8b458fffe88ba7e1e414a8388deed61988b63b52`에 대조했다. 같은 stdout에 포함된 Native 요약은 `.www/evidence/native-activity-live-hAOWc5/summary.json`와 일치한다. 실제 공개 답변·사용량·명령 읽기·Skill 투영을 확인했다. `thread/start`의 설정 모델명은 `basis: configured`로 수신됐다. 이 실계정 표본에서 동적 모델 전환은 미관측이며 실제 Hook 알림은 0건이다. 합성 Electron `modelRerouted` 검사를 실계정 결과와 구분한다. 본 작업의 Electron 관측 요약과 stdout도 각각 일치했다. 두 실행의 산출물 위치·지문은 `.www/evidence/dashboard-rollforward-20261123/chat003-native-proof.blob`, `.www/evidence/dashboard-rollforward-20261123/chat003-observability-proof.blob`에 남겼다. 기존 타입·Native·UI 실행은 유지하고 실제 출력의 대응만 재확인했다.
