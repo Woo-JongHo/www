@@ -11,6 +11,18 @@ function setup() {
   return { timing, events, advance(ms: number) { time += ms; }, valid: () => valid, invalidate() { valid = false; } };
 }
 
+test("스레드 구성 후 공개한 완료 사건은 RPC 응답 시각을 보존한다", () => {
+  const s = setup();
+  const trace = s.timing.begin(null, s.valid);
+  trace.mark("thread/start", "started");
+  s.advance(12);
+  const responseElapsedMs = trace.elapsed();
+  s.advance(48);
+  trace.setThread("thread");
+  trace.mark("thread/start", "completed", responseElapsedMs);
+  expect(s.events.at(-1)?.elapsedMs).toBe(12);
+});
+
 test("새 스레드와 첫 턴은 한 main 시간축에 연결하고 후속 턴은 새 trace다", () => {
   const s = setup();
   const trace = s.timing.begin(null, s.valid);

@@ -986,12 +986,12 @@ export function createNativeSession(options: NativeSessionOptions) {
       trace.mark("thread/start", "started");
       const stageAvailable = developmentAvailable();
       const result   = record(await client.request("thread/start", nativeThreadStartParams(workspace, stageAvailable))) ;
+      const responseElapsedMs = trace.elapsed();
       const threadId = requiredString(record(result.thread).id, "thread ID")                            ;
       assertSelection(expected);
       if (rpc !== client) throw new Error("Native 연결이 종료됐습니다.");
       assertThreadTransition();
       trace.setThread(threadId);
-      trace.mark("thread/start", "completed");
       const reservation = options.ownership.reserve(options.id, selection().workspaceKey, threadId);
       reservation.commit();
       lifecycle.markReady(client, workspace, threadId);
@@ -1009,6 +1009,7 @@ export function createNativeSession(options: NativeSessionOptions) {
         if (isCurrent(expected)) publish({ kind: "notification", method: "activity/resourcesUnavailable", params: { threadId, message: String(error) } });
       });
       publish({ kind: "notification", method: "thread/configured", params: { threadId, model: typeof result.model === "string" ? result.model : null, modelProvider: typeof result.modelProvider === "string" ? result.modelProvider : null, approvalPolicy: typeof result.approvalPolicy === "string" ? result.approvalPolicy : null, sandbox: result.sandbox && typeof result.sandbox === "object" && "type" in result.sandbox && typeof result.sandbox.type === "string" ? result.sandbox.type : null, isNew: true, developmentStage: stageAvailable ? "available" : "other_workspace" } });
+      trace.mark("thread/start", "completed", responseElapsedMs);
       void loadHooks(client, threadId);
       return { threadId };
     } catch (error) { trace.cancel("failed"); throw error; }

@@ -9,6 +9,7 @@ export interface NativeTimingTrace {
   readonly threadId: string | null;
   readonly armed: boolean;
   readonly current: boolean;
+  elapsed(): number;
   mark(phase: NativeTimingPhase, status: NativeTimingStatus, elapsedMs?: number): void;
   setThread(id: string): void;
   arm(): void;
@@ -46,7 +47,8 @@ export function createNativeTiming(options: { now(): number; id(): string; emit(
     const candidates = new Map<string, number>();
     const pending = new Set<NativeTimingPhase>();
     const current = () => !ended && valid();
-    const mark = (phase: NativeTimingPhase, status: NativeTimingStatus, elapsedMs = options.now() - started) => {
+    const elapsed = () => options.now() - started;
+    const mark = (phase: NativeTimingPhase, status: NativeTimingStatus, elapsedMs = elapsed()) => {
       if (!current()) return;
       if (status === "started") pending.add(phase); else pending.delete(phase);
       options.emit({ traceId, threadId: thread, phase, status, elapsedMs, source: phase === "first-native" && status === "completed" ? "native" : "www" });
@@ -61,6 +63,7 @@ export function createNativeTiming(options: { now(): number; id(): string; emit(
       get threadId() { return thread; },
       get armed() { return armed; },
       get current() { return current(); },
+      elapsed,
       mark,
       setThread(id: string) { if (current()) thread = id; },
       arm() { if (current()) { armed = true; mark("first-native", "started"); } },
