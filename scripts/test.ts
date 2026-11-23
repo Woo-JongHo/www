@@ -18,7 +18,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 // .mjs 시절 Node로 실행하던 테스트는 같은 실행기를 유지한다.
 const nodeTests = new Set([
   "skill-library", "windows-native", "workflow-codex", "workflow-contract", "workflow-development", "workflow-environment",
-  "review-app-server", "workflow-evidence", "workflow-harness", "workflow-review", "workflow-windows-command", "workflow-work",
+  "review-app-server", "workflow-evidence", "workflow-harness", "workflow-review", "workflow-timing", "workflow-windows-command", "workflow-work",
 ].map(name => path.posix.join("test", `${name}.test.ts`)));
 
 export function testSuite(args: string[]): Suite {

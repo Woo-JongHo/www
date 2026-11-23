@@ -2,6 +2,7 @@
  * @architecture arch.development.review
  * @implements RESP-DEVELOPMENT-REVIEW
  */
+import { observeTimedChild } from "./timing.ts";
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFileSync, realpathSync } from 'node:fs';
@@ -187,6 +188,7 @@ export async function executeAppServer({ cwd, input, timeoutMs = 180_000 }: { cw
   const actualInvocation = actualAppServerCommand();
   const receipt: AppServerReceipt = { frames: [], cwd, threadId: null, turnId: null, selectedModelMeaning: 'server-selected', finalResponse: null, actualInvocation };
   const child = spawn(actualInvocation.command, actualInvocation.args, { cwd, shell: false, stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true });
+  observeTimedChild(child, "review_process");
   let buffer = '', stderr = '', bytes = 0, nextId = 1, error: string | null = null, turnCompleted = false, stopping = false;
   const pending = new Map<number, { resolve(v: unknown): void; reject(e: Error): void }>();
   let finish!: () => void, fail!: (e: Error) => void;
