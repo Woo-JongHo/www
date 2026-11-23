@@ -1,6 +1,6 @@
 # W023 교정 전 7파일 전문과 실제 원문·재적용 대조
 
-현재 실행에서201raw를고정SHA/bytes와직접대조하고before-inventory의source/originPath/originalSha256/originalBytes/language필드가현재와일치함을assert했다. original15는raw/local bytes완전일치다. 각7before에서18old/new를정확횟수로적용해현재7file bytes와직접비교했다. 이것은해시목록존재가아닌실제내용대조이며아래before전문으로독립재확인할수있다. 코드실행/테스트를새로실행한것으로주장하지않는다.
+변경 전 보존본에 작성 당시 201개 업스트림 자료의 고정 출처와 해시 대조가 기록돼 있다. 이번 검증은 아래 일곱 개 변경 전 파일의 저장 지문을 대조하고 18개 지정 교정을 다시 적용해 현재 파일과 비교한다. 201개 원문의 현재 수집 상태와 무결성 검사 범위는 current-review.md와 검증 기록에서 확인한다.
 
 ## skill-library/upstream/addy-osmani/references/performance-checklist.md — before SHA 1cf8b22309ed595ee8b6a00df7b229da72ce9398fda3911782fad2329408ce14
 

@@ -52,9 +52,10 @@ export type RpaStandardSnapshot = {
 } | null;
 
 export interface DashboardProject { key: string; name: string; path: string; kind: "rpa" | "www" }
+export interface DashboardApplicability { status: "current" | "stale" | "missing" | "unassessed"; reasons: string[] }
 export interface DashboardWork {
   id: string; projectKey: string; title: string; status: WorkStatus; blockedReason: string | null;
-  sourcePath: string; areas: string[]; owner: string; requiredCriteria: number; passedCriteria: number;
+  sourcePath: string; areas: string[]; owner: string; requiredCriteria: number; passedCriteria: number; currentCriteria?: number; unassessedCriteria?: number; assessmentReason?: string;
 }
 export interface DashboardIssue { code: string; path: string; message: string }
 export interface DashboardProjectSnapshot {
@@ -66,7 +67,7 @@ export interface DashboardWorkDetail {
   projectKey: string; workId: string; title: string; sourcePath: string; status: WorkStatus;
   owner: string; areas: string[];
   blockedReason: string | null; nextAction: string | null; capturedAt: string;
-  criteria: { id: string; description: string; required: boolean; result: "unverified" | "passed" | "failed" | "blocked"; evidenceCount: number }[];
+  criteria: { id: string; description: string; required: boolean; result: "unverified" | "passed" | "failed" | "blocked"; evidenceCount: number; applicability?: DashboardApplicability }[];
   documents: { kind: "spec" | "design" | "tasks" | "verification"; path: string; status: "available" | "missing" | "failed"; content: string | null; message: string | null }[];
 }
 

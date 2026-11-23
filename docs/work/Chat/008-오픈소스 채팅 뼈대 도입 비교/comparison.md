@@ -15,13 +15,17 @@ Herdr 같은 완성 앱의 실행·세션·채팅 경계를 비교한 결과, **
 | 사용자 흐름 | 직접 읽은 현재 책임 | 실제 근거와 남은 한계 |
 |---|---|---|
 | 프로젝트/새 대화/저장 대화 선택 | renderer/preload의 제한 IPC, native-session의 선택/소유 guard, conversations의 list/read/resume/turns-list | cwd·originator=www·비임시 thread를 검증한다. sameWorkspace는 실행 플랫폼의 Node path.isAbsolute/resolve를 사용한다. Windows drive/UNC의 win32 주입 대조와 실제 Windows OS 미실행을 구분한다. 다른 앱의 모든 원장을 가져오는 기능이 아니다. |
-| 자동 재연결·명시적 열기 | 둘 다 현재 thread raw bounded queue를 snapshot과 대조해 배출한다. terminal 같은 turn/item late started/delta는 내용과 관계없이 억제한다. | read 응답 전 live 유실과 explicit open의 terminal 재활성화를 실제 stdio 합성 red로 먼저 입증한 뒤 수정했다. 현재 승인·새 turn·변경된 정식 완료와 다른 thread를 구분하는 회귀가 있다. 실제 Native/GUI의 임의 race 전체는 미측정이다. |
+| 자동 재연결·명시적 열기 | 둘 다 현재 thread의 제한된 원본 큐를 snapshot과 대조해 배출한다. completed·interrupted·failed 턴은 같은 thread의 턴 시작과 상태가 같은 턴 완료를 큐 재생에서 제외한다. 이 턴의 최종 snapshot에 있는 같은 item은 item 시작, 코드에 열거된 답변·요약·명령·파일 델타, 공개 필드가 일치하고 선택 공개 필드가 보강되지 않은 item 완료를 제외한다. snapshot에 없는 item의 알림, 목록 밖 델타, 상태나 공개 필드가 바뀐 완료 및 다른 thread·미완료 턴은 이 필터를 통과한다. | read 응답 전 live 유실과 explicit open의 terminal 재활성화를 실제 stdio 합성 red로 먼저 입증한 뒤 수정했다. 현재 승인·새 turn·변경된 정식 완료와 다른 thread를 구분하는 회귀가 있다. 실제 Native/GUI의 임의 race 전체는 미측정이다. |
 | 복원 실패 뒤 재시도 | lifecycle.open의 준비와 accept를 분리한다. main이 queue/예약/snapshot/drain 및 현재 scope를 수용한 뒤 ready/interrupted를 확정한다. | active disconnect와 idle 기존ready 모두 동일대화 overflow 뒤 전송을 차단하고 성공 재열기 뒤에만 허용하는 실제 stdio 회귀를 실행했다. 2000건/4MiB 초과는 명시 실패이며 이미 유실된 사건을 되찾는 기능은 아니다. |
 | unknown 이력과 현재 진행 | 현재 설치 schema의 유효 completedAtMs 또는 지원되는 terminal status를 보존하고 확인된 완료 항목은 닫힘을 유지한다. 미완료 잠정 항목만 같은 scope의 실제 live 시작에서 재개한다. |0은 유효 안전정수 시각이며 unknown과 다르다.0은 합성 경계값 검사이지 실제 Native가0을 보냈다는 관측이 아니다. 누락/null/invalid timestamp와 완료정보 없는 legacy의 실완료 여부를 발명하지 않는다. |
-| 답변/공개 요약/파일 변경 읽기 | Markdown/GFM·코드복사·인용·초안/펼침은 WWW 구성요소가 맡는다. live item/completed 투영에서 본문/출력의 explicit empty와 빈 changes 배열은 기존 값을 교체한다. 혼합 malformed live changes가 유효 항목만 남겨 기존 목록을 지운 반례는 과거 실패다. 현재 수용 요구는 명시 빈 배열의 제거·전체 유효 배열의 교체와 omitted/null/malformed의 보존을 구분하는 것이며, 교정 완료와 실제 결과는 최신 verification/status에서 확인한다. 저장 parser와 live projection의 검증 범위를 혼동하지 않는다. fileChange declined도 거절된 종료로 보존한다. | completed/failed/declined 파일의 late started는 상태와 diff를 바꾸지 않으며 새 authoritative 완료는 갱신한다. 저장 reasoning.summary와 live 완료 요약은 배열 전체가 문자열일 때만 유효한 공개 요약으로 받는다. 예를 들어 ["공개",42]처럼 혼합된 배열은 기존 요약을 덮어쓰지 않으며 명시 빈 배열은 공개 요약을 비운다. 저장 parser와 live projection의 해당 보존·빈값 경계는 각각 회귀로 확인하며, 다른 항목의 모든 정규화가 동등하다고 확대하지 않는다. 비공개 추론 본문은 복원하지 않는다. HTML 실행·외부 링크/이미지 처리는 기존 제한을 따른다. |
+| 답변/공개 요약/파일 변경 읽기 | Markdown/GFM·코드복사·인용·초안/펼침은 WWW 구성요소가 맡는다. live item/completed 투영에서 본문/출력의 explicit empty와 빈 changes 배열은 기존 값을 교체한다. 혼합 malformed live changes가 유효 항목만 남겨 기존 목록을 지운 반례는 과거 실패다. 현재 수용 요구는 명시 빈 배열의 제거·전체 유효 배열의 교체와 omitted/null/malformed의 보존을 구분하는 것이며, 교정 완료와 실제 결과는 최신 verification/status에서 확인한다. 저장 parser와 live projection의 검증 범위를 혼동하지 않는다. fileChange declined도 거절된 종료로 보존한다. | completed/failed/declined 파일의 late started는 상태와 diff를 바꾸지 않으며 새 authoritative 완료는 갱신한다. 저장 reasoning.summary와 live 완료 요약은 배열 전체가 문자열일 때만 유효한 공개 요약으로 받는다. 예를 들어 ["공개",42]처럼 혼합된 배열은 기존 요약을 덮어쓰지 않으며 명시 빈 배열은 공개 요약을 비운다. 저장 parser와 live projection의 해당 보존·빈값 경계는 각각 회귀로 확인하며, 다른 항목의 모든 정규화가 동등하다고 확대하지 않는다. 저장 이력의 정규화는 공개 요약만 복원한다. 전환 중 수신한 사건의 재생 경계는 아래 한계에 포함한다. HTML 실행·외부 링크/이미지 처리는 기존 제한을 따른다. |
 | 승인·중단·리소스/모니터·리포트 | typed ID/token·서버 해소·실제 종료와 요청 접수를 구분한다. 리소스 읽기/역할 선언/하네스·업무완료는 다른 사실이다. | 현재 구조와 회귀를 확인한 범위다. 실제 모델의 일반 승인/변경 전 구간·모든 Hook 실행·비동기 내부 작업·Windows/OS IME까지 통과했다고 쓰지 않는다. |
 
-출처 고지는 `docs/third-party/ovis.md`다. 고정 Ovis의 chatRowState/composerLength/chatQuote를 WWW 행·100,000자 입력·thread/cwd 초안에 맞게 개작했고 Ovis의 전역 store·PTY·터미널 전송·DB 읽기층은 반입하지 않았다.
+대화 전환 중 늦은 리소스가 들어오는 경계는 남아 있다. 현재 drainPreviousThread는 이전 대화의 원장 쓰기를 비동기로 예약한다. 같은 전환에서 reserve의 commit 또는 release가 먼저 완료될 수 있다. 이전 탭의 리소스 쓰기가 늦으면 새 탭의 currentResources가 이전 탭의 pending 수집을 기다리지 않아 첫 조회에서 빠진 항목을 볼 수 있다. src/native-session.ts의 배출·소유권 변경·조회 순서를 읽어 확인한 한계다. 지연된 저장과 탭 교대를 함께 재현하는 현재 테스트는 이 비교에서 실행하지 않았다. 구현 후속 범위는 Chat/006의 다른 탭 재열기·동일 대화 보존에 연결한다.
+
+복원 큐에서 공개 요약이 달라진 reasoning 완료 사건은 저장 snapshot과 달라 이벤트 로그로 재생될 수 있다. 이 경로에서 원본 item이 넘어가면 서버가 함께 보낸 비공개 필드까지 renderer 경계에 들어갈 수 있다. src/native-lifecycle.ts의 중복 판정과 src/native-session.ts의 배출을 정적으로 확인한 결과다. 기존 테스트는 요약이 동일해 해당 사건을 제거하는 경우를 다룬다. 일반 live 알림에도 같은 전달 경계가 있다. 현재 thread의 일반 알림은 params를 그대로 publish하므로 비공개 추론 delta 또는 비공개 필드가 포함된 item도 로그와 renderer의 이벤트 입력에 들어갈 수 있다. 이 판단은 입력 전달 코드에 대한 정적 대조다. 화면 표시나 실제 Native 계정에서의 수신은 여기서 검증하지 않았다. 일반 알림과 복원 큐의 공개 필드 제한, 이를 증명할 합성 재현은 제품 보완 범위다.
+
+출처 고지는 `docs/third-party/ovis.md`다. main 패키징 커밋 `956b848fde782b91c22197717302f9141772c46e`는 이 파일을 앱에 포함하고, 정식 ZIP을 만들기 전에 패키지 내부 고지를 저장소 원문과 바이트 단위로 비교했다. 고정 Ovis의 chatRowState/composerLength/chatQuote를 WWW 행·100,000자 입력·thread/cwd 초안에 맞게 개작했고 Ovis의 전역 store·PTY·터미널 전송·DB 읽기층은 반입하지 않았다. [실제 main 배포 실행](https://github.com/Woo-JongHo/www/actions/runs/45099232114)
 
 ### 검사와 provenance
 
@@ -43,7 +47,7 @@ Native 수정은 별도 부모 Workflow021(`work-40ae2dc5-86db-4b52-b1fc-09ca61c
 
 ## 완성 앱의 고정 소스 비교 — AC-2
 
-2026-11-15에 선택한 아래 고정 revision을 이번 2026-11-16에 공식 raw 소스에서 다시 회수했다. 재개 전 comparison.md의 commit 고정 URL 45개가 모두 HTTP 200으로 저장됐고, 각 URL·resolved URL·시각·bytes·SHA는 `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json`에 있다. 누락된 과거 원문 복구가 아니라 이번 새 증거다. 버전은 해당 revision의 manifest 선언으로, 설치된 버전·배포 최신 버전·WWW 호환 성공을 뜻하지 않는다. 별 수는 2026-11-12의 과거 인지도 관측만 이력에 보존하고 현재 추천 점수로 사용하지 않는다.
+2026-11-15에 선택한 고정 revision의 참조를 보존 Git 문서에서 확인했다. 2026-11-23에 원문 참조 45개를 GitHub의 같은 고정 commit URL에서 새로 받아 모두 HTTP 200을 관찰했다. 각 문서 URL, 요청한 raw URL, 수집 시각, 바이트와 SHA256은 `.www/evidence/resume-20261116/chat008/upstream-fetch-manifest.json`에 있다. 초기 수집은 당시 이력으로 남기며 현재 매니페스트는 이번 재수집의 근거다. 버전은 해당 revision의 manifest 선언으로, 설치된 버전·배포 최신 버전·WWW 호환 성공을 뜻하지 않는다. 별 수는 2026-11-12의 과거 인지도 관측만 이력에 보존하고 현재 추천 점수로 사용하지 않는다.
 
 | 후보·고정 revision | 실제 코드·패키지·라이선스 근거 | 가져오는 실행 경계와 WWW 비용 |
 |---|---|---|
