@@ -8,9 +8,8 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 // 현재 체크아웃에서 Git이 추적하는 스킬 링크만 복구한다.
 const entries = execFileSync("git.exe", ["ls-files", "--stage", "-z", "--", ".agents/skills"], { cwd: root, encoding: "utf8" });
 for (const entry of entries.split("\0")) {
-  const match = /^120000 [0-9a-f]+ 0\t\.agents\/skills\/([^/]+)$/.exec(entry);
-  if (!match) continue;
-  const name = match[1]!;
+  const name = /^120000 [0-9a-f]+ 0\t\.agents\/skills\/([^/]+)$/.exec(entry)?.[1];
+  if (!name) continue;
   const link      = join        (root, ".agents", "skills", name) ;
   const target    = join        (  root, "skills", "www", name  ) ;
   const canonical = realpathSync(            target             ) ;
