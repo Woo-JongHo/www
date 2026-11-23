@@ -1086,3 +1086,117 @@ checker 실제201/186/15/2,828,729bytes 통과와 원문15bytes·original필드 
 - 교정 검토 `eng-ref` · `review-67a4fd47-fa86-4987-ac6a-15490d91c205` · pass · 영수증 SHA-256 `64d96fd0dd1b7c7772de763c78e7f85fbbca67560dbb9427262afa7686873a8b`
 
 PR 후보에서 목록 검사 `bun scripts/check-skill-library.ts`가 201개 파일(번역 186개, 원문 보존 15개)을 확인했고 `node --experimental-strip-types --test test/skill-library.test.ts`의 15개 검사가 모두 통과했다. 전체 번역의 최종 수용 판정과 다른 파일의 교정은 [이슈 #29](https://github.com/Woo-JongHo/www/issues/29)에서 이어간다.
+
+<a id="attempt-79469a6a-000c-4347-a5a7-42fe45b2621f"></a>
+## 검증 시도 — 2026-11-23T22:43:59.148Z
+
+- 시도 ID: `attempt-79469a6a-000c-4347-a5a7-42fe45b2621f`
+- 실행 시각: 2026-11-23T22:43:58.895Z ~ 2026-11-23T22:43:59.148Z
+- 명령과 인자: `["/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/bin/python3.14","-c","import sys,hashlib,runpy;from pathlib import Path;p=Path(sys.argv[1]);assert hashlib.sha256(p.read_bytes()).hexdigest()==sys.argv[2];runpy.run_path(str(p))",".www/evidence/issue29-final/audit.py","ae04609aafd435b5a8950973fa009608c5a6596de67cde7e37e5cc5d14ed66fe"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-4`
+- 소스 HEAD: `1a2e4b8c3589dd1b7d3f45b4480039ef1eaf5e8a`
+- 검증 입력: `docs/skills/CATALOG.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/current-review.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/spec.md`, `package.json`, `scripts/check-skill-library.ts`, `skill-library`, `test/skill-library.test.ts`
+- 소스 식별: `7084a5f90418726c9bb501c419758544eab2dcb8a046d12bf4270ee368bbd836`
+- 기준 정의 식별: `a991d4ee551a9f44f47e04c566a21e0d4d869d44990666e49cbec6bb9451684c`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 104바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-90a2ed5a-60d3-4f10-8115-a181bffd916f"></a>
+## 검증 시도 — 2026-11-23T22:44:00.344Z
+
+- 시도 ID: `attempt-90a2ed5a-60d3-4f10-8115-a181bffd916f`
+- 실행 시각: 2026-11-23T22:44:00.141Z ~ 2026-11-23T22:44:00.344Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/check-skill-library.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`
+- 소스 HEAD: `1a2e4b8c3589dd1b7d3f45b4480039ef1eaf5e8a`
+- 검증 입력: `docs/skills/CATALOG.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/current-review.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/spec.md`, `package.json`, `scripts/check-skill-library.ts`, `skill-library`, `test/skill-library.test.ts`
+- 소스 식별: `7084a5f90418726c9bb501c419758544eab2dcb8a046d12bf4270ee368bbd836`
+- 기준 정의 식별: `a991d4ee551a9f44f47e04c566a21e0d4d869d44990666e49cbec6bb9451684c`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 285바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-24922de8-5423-4738-aa44-b9591c438796"></a>
+## 검증 시도 — 2026-11-23T22:44:01.518Z
+
+- 시도 ID: `attempt-24922de8-5423-4738-aa44-b9591c438796`
+- 실행 시각: 2026-11-23T22:44:01.211Z ~ 2026-11-23T22:44:01.518Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--test","test/skill-library.test.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `1a2e4b8c3589dd1b7d3f45b4480039ef1eaf5e8a`
+- 검증 입력: `docs/skills/CATALOG.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/current-review.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/spec.md`, `package.json`, `scripts/check-skill-library.ts`, `skill-library`, `test/skill-library.test.ts`
+- 소스 식별: `7084a5f90418726c9bb501c419758544eab2dcb8a046d12bf4270ee368bbd836`
+- 기준 정의 식별: `a991d4ee551a9f44f47e04c566a21e0d4d869d44990666e49cbec6bb9451684c`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 3593바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-66b1fc2c-b669-4294-8d96-f706635271c0"></a>
+## 검증 시도 — 2026-11-23T22:47:42.717Z
+
+- 시도 ID: `attempt-66b1fc2c-b669-4294-8d96-f706635271c0`
+- 실행 시각: 2026-11-23T22:47:42.568Z ~ 2026-11-23T22:47:42.717Z
+- 명령과 인자: `["/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/bin/python3.14","-c","import sys,hashlib,runpy;from pathlib import Path;p=Path(sys.argv[1]);assert hashlib.sha256(p.read_bytes()).hexdigest()==sys.argv[2];runpy.run_path(str(p))",".www/evidence/issue29-final/audit.py","c6845cc4abf2f7192e0f9642f78202fced087d352f79b65cb01d53755caa0ef4"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-4`
+- 소스 HEAD: `780c357cbd3b17386cff02392161271bbc6519e2`
+- 검증 입력: `docs/skills/CATALOG.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/current-review.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/spec.md`, `package.json`, `scripts/check-skill-library.ts`, `skill-library`, `test/skill-library.test.ts`
+- 소스 식별: `81089bacf72317cefccfceed215695172cc2bdd77072b15a5c8b2aba79f7b091`
+- 기준 정의 식별: `a991d4ee551a9f44f47e04c566a21e0d4d869d44990666e49cbec6bb9451684c`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 104바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-e502039e-af86-4c57-a6aa-b28e364bdd61"></a>
+## 검증 시도 — 2026-11-23T22:47:43.423Z
+
+- 시도 ID: `attempt-e502039e-af86-4c57-a6aa-b28e364bdd61`
+- 실행 시각: 2026-11-23T22:47:43.273Z ~ 2026-11-23T22:47:43.423Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/check-skill-library.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-2`
+- 소스 HEAD: `780c357cbd3b17386cff02392161271bbc6519e2`
+- 검증 입력: `docs/skills/CATALOG.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/current-review.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/spec.md`, `package.json`, `scripts/check-skill-library.ts`, `skill-library`, `test/skill-library.test.ts`
+- 소스 식별: `81089bacf72317cefccfceed215695172cc2bdd77072b15a5c8b2aba79f7b091`
+- 기준 정의 식별: `a991d4ee551a9f44f47e04c566a21e0d4d869d44990666e49cbec6bb9451684c`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 285바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-1645d817-4880-4575-a9ba-86c5d3a18af2"></a>
+## 검증 시도 — 2026-11-23T22:47:44.257Z
+
+- 시도 ID: `attempt-1645d817-4880-4575-a9ba-86c5d3a18af2`
+- 실행 시각: 2026-11-23T22:47:44.032Z ~ 2026-11-23T22:47:44.257Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--test","test/skill-library.test.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-3`
+- 소스 HEAD: `780c357cbd3b17386cff02392161271bbc6519e2`
+- 검증 입력: `docs/skills/CATALOG.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/commit-candidate.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/current-review.md`, `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/spec.md`, `package.json`, `scripts/check-skill-library.ts`, `skill-library`, `test/skill-library.test.ts`
+- 소스 식별: `81089bacf72317cefccfceed215695172cc2bdd77072b15a5c8b2aba79f7b091`
+- 기준 정의 식별: `a991d4ee551a9f44f47e04c566a21e0d4d869d44990666e49cbec6bb9451684c`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 3590바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.

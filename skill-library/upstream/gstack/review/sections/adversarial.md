@@ -84,9 +84,7 @@ Claude 적대적 하위 에이전트는 항상 실행됩니다.
 ### Claude 적대적 하위 에이전트(항상 실행됨)
 
 파견하기 전에 `~/.claude/skills/gstack/bin/gstack-review-log --start adversarial-review`를 실행하십시오.
-이 네이티브 시도에 반환된 토큰을 저장하세요. 각 외부 적대적 검토 또는 구조화된 검토 패스가 diff를 읽기 전에도 같은 작업을 하세요. 토큰은 각 시도와 함께 보관하고 부모의 REVIEW_START를 덮어쓰지 마세요. 재실행할 때는 결과 저장 시점이 아니라 diff를 읽기 전에 새 토큰을 발급받아야 합니다. 각 항목에 무시되지 않은 추적되지 않은 소스를 포함합니다.
-리뷰어의 컨텍스트 또는 읽기 지침(`git ls-files --others --exclude-standard`).
-해당 파일도 기록된 콘텐츠의 일부입니다.
+이 네이티브 시도에 반환된 토큰을 저장하세요. 각 외부 적대적 검토 또는 구조화된 검토 패스가 diff를 읽기 전에도 같은 작업을 하세요. 토큰은 각 시도와 함께 보관하고 부모의 REVIEW_START를 덮어쓰지 마세요. 재실행할 때는 결과 저장 시점이 아니라 diff를 읽기 전에 새 토큰을 발급받아야 합니다. 무시되지 않은 추적되지 않은 소스를 각 리뷰어의 컨텍스트 또는 읽기 지침에 포함하세요(`git ls-files --others --exclude-standard`). 해당 파일도 기록된 콘텐츠의 일부입니다.
 
 사용 가능한 경우 `run_in_background: false`를 사용하여 에이전트 도구를 통해 발송합니다(Claude Code v2.1.198 이후 배경은 기본값입니다). 검토가 완료되기 전에 결과가 도착해야 합니다. 실행 영수증은 백그라운드로 전환되었음을 의미합니다. 완료 알림을 기다리세요. 새로운 컨텍스트는 체크리스트 편향을 방지하지만 런타임 ID가 달리 입증되지 않는 한 이는 독립적인 모델이 아닌 동일한 하네스입니다.
 
@@ -95,7 +93,7 @@ Claude 적대적 하위 에이전트는 항상 실행됩니다.
 
 이 지점의 차이점을 읽어보세요. 첫 번째 목록 변경 파일: `DIFF_BASE=$(git merge-base origin/<base> HEAD) && git diff --name-status "$DIFF_BASE"`. 비픽스처 소스 코드의 경우 전체 내용(`git diff "$DIFF_BASE" -- . ':(exclude)*test*' ':(exclude)*fixture*' ':(exclude)*.spec.*'`)을 읽어보세요. 픽스쳐/테스트 파일의 경우 요약 모드(`git diff --stat "$DIFF_BASE" -- '*test*' '*fixture*' '*.spec.*'`)에서만 검토합니다. 변경된 내용과 다루는 내용을 참고하세요. 하지만 원시 페이로드 바이트를 적대적 추론으로 가져오지는 마세요. 픽스처를 요약 모드로 검토했다는 사실을 출력에 명시하여 검토 범위 축소가 숨겨지지 않고 드러나게 하세요.
 
-Think like an attacker and a chaos engineer. 공격자와 카오스 엔지니어의 관점으로 생각합니다. 당신의 임무는 이 코드가 프로덕션에서 실패하는 방식을 찾는 것입니다. 다음을 찾으십시오: 엣지 케이스, 경쟁 조건, 보안 허점, 리소스 누수, 실패 모드, 조용한 데이터 손상, 자동으로 잘못된 결과를 생성하는 논리 오류, 실패를 삼키는 오류 처리 및 신뢰 경계 위반. 칭찬은 없습니다. 문제만 있을 뿐입니다. 각 결과에 대해 FIXABLE(수정 방법을 알고 있음) 또는 INVESTIGATE(사람의 판단 필요)로 분류합니다. 테스트에 실패하거나, 생산이 중단되거나, 데이터나 비밀이 손실되는 경우에만 결과가 차단됩니다. `Severity: Critical|High|Medium|Low` 및 `Blocks: yes|no`로 각 결과를 종료합니다. 결과를 나열한 후 표준 형식 `Recommendation: <action> because <one-line reason naming the most exploitable finding>`(예: `Recommendation: Fix the unbounded retry at queue.ts:78 because it'll DoS the worker pool under sustained 429s` 또는 `Recommendation: Ship as-is because the strongest finding is a theoretical race that requires conditions we can't trigger in production`)의 한 줄로 출력을 종료합니다. 이유는 특정 결과(또는 수정하지 않아도 되는 근거)를 가리켜야 합니다. '더 안전하기 때문에'와 같은 일반적인 이유는 적합하지 않습니다."
+Think like an attacker and a chaos engineer. 당신의 임무는 이 코드가 프로덕션에서 실패하는 방식을 찾는 것입니다. 다음을 찾으십시오: 엣지 케이스, 경쟁 조건, 보안 허점, 리소스 누수, 실패 모드, 조용한 데이터 손상, 자동으로 잘못된 결과를 생성하는 논리 오류, 실패를 삼키는 오류 처리 및 신뢰 경계 위반. 칭찬은 없습니다. 문제만 있을 뿐입니다. 각 결과에 대해 FIXABLE(수정 방법을 알고 있음) 또는 INVESTIGATE(사람의 판단 필요)로 분류합니다. 테스트에 실패하거나, 생산이 중단되거나, 데이터나 비밀이 손실되는 경우에만 결과가 차단됩니다. `Severity: Critical|High|Medium|Low` 및 `Blocks: yes|no`로 각 결과를 종료합니다. 결과를 나열한 후 표준 형식 `Recommendation: <action> because <one-line reason naming the most exploitable finding>`(예: `Recommendation: Fix the unbounded retry at queue.ts:78 because it'll DoS the worker pool under sustained 429s` 또는 `Recommendation: Ship as-is because the strongest finding is a theoretical race that requires conditions we can't trigger in production`)의 한 줄로 출력을 종료합니다. 이유는 특정 결과(또는 수정하지 않아도 되는 근거)를 가리켜야 합니다. '더 안전하기 때문에'와 같은 일반적인 이유는 적합하지 않습니다."
 
 `ADVERSARIAL REVIEW (Claude subagent):` 헤더 아래에 결과를 제시합니다. **FIXABLE 또는 `Blocks: yes` 발견 사항**은 CRITICAL이며 5단계에서 상위 항목의 Fix-First 처리를 위해 대기열에 있습니다. 4.8단계에서는 편집하지 마십시오. **그 밖의 INVESTIGATE 발견 사항**은 INFORMATIONAL입니다. `Blocks: no`는 FIXABLE을 낮추지 않습니다.
 
@@ -155,7 +153,7 @@ Bash `timeout: 600000`를 사용하세요. `tool-output` 펜스에 전체 응답
 
 전체 출력을 그대로 표시합니다. Critical·High 또는 `Blocks: yes` 발견 사항은 CRITICAL입니다. `Blocks: no`는 절대로 하나를 낮추지 않으며 명명된 정책 기반에서만 이를 떨어뜨립니다. 이 외부 챌린지는 정보 제공용입니다. 지원되는 결과는 여전히 승인 및 수렴 게이트가 적용되는 5단계 Fix-First에 들어갑니다.
 
-**오류 처리:** 이 선택적 외부 적대 패스만 비차단입니다. 기본 완료 및 구조화된 검토 결정은 여전히 ​​적용됩니다.
+**오류 처리:** 이 선택적 외부 적대 패스만 비차단입니다. 기본 완료 및 구조화된 검토 결정은 여전히 적용됩니다.
 - **인증 실패:** stderr에 "auth", "login", "unauthorized" 또는 "API key"가 포함된 경우: "Codex authentication failed. Run \`codex login\` to authenticate."
 - **시간 초과:** "Codex timed out after 9 minutes and was terminated; this pass produced NO findings." 시간 초과된 패스는 문제가 없다는 판정이 아니라 검토 범위 누락입니다. 마치 Codex가 검토한 것처럼 계속하기보다는 명시적으로 말하십시오.
 - **빈 응답:** "Codex returned no response. Stderr: <paste relevant error>."
@@ -237,14 +235,13 @@ B인 경우: 승인된 결과와 실패한 게이트를 유지합니다. 깨끗�
 
 ### 검토 결과 유지
 
-시작된 모든 작업이 완료되거나 중지된 것으로 확인될 때까지 기다립니다. 그럼 하나 저장해
-상위가 대기 중인 수정 사항을 적용하기 전에 소스, 단계 및 시도별로 기록합니다.
-완료된 응답 없이 중지된 작업은 여전히 ​​불완전한 적용 범위를 갖습니다.
+시작된 모든 작업이 완료되거나 중지된 것으로 확인될 때까지 기다립니다. 그런 다음 상위가 대기 중인 수정 사항을
+적용하기 전에 소스, 단계 및 시도별로 레코드 하나를 저장합니다.
+완료된 응답 없이 중지된 작업은 여전히 불완전한 적용 범위를 갖습니다.
 
-시도당 한 번씩 템플릿을 사용하세요. 시작된 경우 `--finish PASS_START`는 소비합니다.
-원래 토큰입니다. 사용할 수 없거나, 비활성화되었거나, 시작되지 않은 경우
-크기 제한, `--finish PASS_START` 생략 및 완료/수렴 false 설정.
-단지 결과를 저장하기 위해 토큰을 생성하거나 차용하지 마십시오.
+시도당 한 번씩 템플릿을 사용하세요. 시도가 시작됐다면 `--finish PASS_START`가 원래 토큰을 소비합니다.
+사용 불가, 비활성화 또는 크기 제한 때문에 전혀 시작되지 않았다면 `--finish PASS_START`를 생략하고
+completed/converged를 false로 설정합니다. 단지 결과를 저장하기 위해 토큰을 생성하거나 빌리지 마세요.
 ```bash
 ~/.claude/skills/gstack/bin/gstack-review-log '{"skill":"adversarial-review","timestamp":"'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'","status":"STATUS","source":"SOURCE","host":"claude","outside_provider":"codex","outside_status":"OUTSIDE_STATUS","phase":"PHASE","tier":"always","gate":"GATE","commit":"'"$(git rev-parse --short HEAD)"'","completed":COMPLETED,"converged":CONVERGED}' --finish PASS_START
 ```
@@ -257,7 +254,7 @@ PASS_START는 해당 시도에 속하며 부모의 REVIEW_START에 속하지 않
 
 ---
 
-기록 검토 로그 기술 ID를 유지합니다. `"host":"claude","outside_provider":"codex","outside_status":"completed|unavailable|disabled|skipped","phase":"adversarial"`를 추가하세요. 다양한 시도 결과를 별도로 기록합니다. `source:"codex"`에는 완료된 CLI 출력이 필요합니다. 네이티브는 `source:"in-host"`(역사적 `source:"claude"`: 네이티브 Claude)를 사용합니다. 가용성 확인이나 네이티브 폴백은 외부 검토 완료가 아닙니다. 보고된 모든 modelUsage를 보존합니다. 알 수 없는 모델 신원은 알 수 없는 상태로 유지됩니다. `GSTACK_CODEX_NO_SANDBOX=1` 아래에 `"codex_sandbox":"danger-full-access"`를 추가합니다.
+기존 review-log 스킬 ID를 유지하고 `"host":"claude","outside_provider":"codex","outside_status":"completed|unavailable|disabled|skipped","phase":"adversarial"`를 추가하세요. 서로 다른 시도 결과는 별도로 기록합니다. `source:"codex"`에는 완료된 CLI 출력이 필요합니다. 네이티브는 `source:"in-host"`(역사적 `source:"claude"`: 네이티브 Claude)를 사용합니다. 가용성 확인이나 네이티브 폴백은 외부 검토 완료가 아닙니다. 보고된 모든 modelUsage를 보존합니다. 알 수 없는 모델 신원은 알 수 없는 상태로 유지됩니다. `GSTACK_CODEX_NO_SANDBOX=1`일 때 `"codex_sandbox":"danger-full-access"`를 추가합니다.
 
 ### 교차 모델 합성
 

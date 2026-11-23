@@ -652,3 +652,38 @@ actual review-84ae2e91은 메뉴 사용자 요청 손상 및 coverage 설명 불
 ["skill-library/upstream/superpowers/skills/writing-plans/SKILL.md","690c3adc6231b71f4f3a1f82d5de785e97e80837b4be45312ef1f2d533d1528e","의미 누락, 제약 역전, 실질적인 오역 또는 절 삭제를 발견하지 못함","004.jsonl:3","이전실제결과+현재SHA대조",[]]
 
 `````
+
+## #29 최종 번역 후보의 파일별 근거 (2026-11-24)
+
+이전 전체 대조와 현행 번역·원문의 바이트가 일치한 164개 파일에는 위 파일별 결과와 지적 처분을 적용했다. 영어 원문과 번역 전체를 새로 대조한 묶음 21개 파일과 직전 전체 대조에서 의미 결함이 없었던 한 파일을 아래에 연결한다. 지문은 현재 한국어 파일의 SHA-256이다. 묶음 판정이 fail이어도, 해당 파일에 대한 명시적 수용과 문제를 교정한 후속 검토를 구분해 기록했다.
+
+| 파일 (skill-library/upstream 기준) | 현재 지문 | 전체 대조 실행 | 교정 문맥 대조 실행(시간순) |
+|---|---|---|---|
+| `gstack/office-hours/sections/second-opinion.md` | `e4d30474b0b7e0088cf7802296fbe2533f58d67512deb5ee662e50b46240d311` | `review-fccc2476-ff6a-4a3f-9f5a-ede699aebb01` | 동일한 번역에 대한 전체 대조 결과를 적용 |
+| `gstack/plan-design-review/SKILL.md` | `2583391a227c32f6621e35e1e6a1dea4d15053b36cbcbaf4ecdbe7368b82f284` | `review-ad078e20-f211-48e9-bd65-2614e6358129` | `review-ad70b2fc-01d7-4e23-bff0-3cffad96f3e9` |
+| `gstack/plan-design-review/sections/review-sections.md` | `aad9571337b9e4438112087197bfea587f6f56802bcc262bf10574472f5b2923` | `review-d1c1b56e-9983-41d9-8123-d3cc265f491b` | `review-ad70b2fc-01d7-4e23-bff0-3cffad96f3e9` |
+| `gstack/plan-eng-review/SKILL.md` | `e899efedd6dfb71cd8465629e549a65e7e9533dc6c4e815e38033bc13159aa97` | `review-29e2e3aa-9996-4e6f-b4bc-80764dd03661` | `review-9ad57f95-e03e-4dd3-9ba7-982a311ce0e2` → `review-67a4fd47-fa86-4987-ac6a-15490d91c205` |
+| `gstack/plan-eng-review/sections/review-sections.md` | `748e1a32f8ce26821a75fc7f4304fe339b6f5c3c7e7e55ee74c3b5b94b753076` | `review-7b6f33ab-f820-4ab3-82e3-7410c474fd77` | `review-0d05b9d5-e230-410c-9c9a-5eaf255d5f97` |
+| `gstack/qa/sections/preamble.md` | `36d0e6339edec34a38599f2f22cfedfe31598be04e725ee5be91ac8f6c80b7c0` | `review-12beedba-9a06-40de-9ecc-ad7e22046be9` | `review-eac3d83e-5a06-411e-bfd9-496f40352045` |
+| `gstack/review/checklist.md` | `06157cd0afc686345a3871d867a168153298f9d6f352ab9e00882e3e41c2b62d` | `review-12beedba-9a06-40de-9ecc-ad7e22046be9` | `review-eac3d83e-5a06-411e-bfd9-496f40352045` |
+| `gstack/review/design-checklist.md` | `7cc8253030187b8c0043e0c54dfdb1c2dd98ce8cecb9255430e67d245d59bb1f` | `review-12beedba-9a06-40de-9ecc-ad7e22046be9` | `review-eac3d83e-5a06-411e-bfd9-496f40352045` |
+| `gstack/review/greptile-triage.md` | `3ec80fca46f58b033b3b1594f95b15efe1597fbe9133baf418f4383da1b51c52` | `review-14e71fcd-df67-4eb5-b304-8b7b51b418fa` | `review-2dc6efb1-c2d5-418d-acf4-dd9b9e885c40` |
+| `gstack/review/sections/adversarial.md` | `76b31681c7b18e1f68369b6e7d2461eae83f923b7c0a4a9c34937635225a3f91` | `review-14e71fcd-df67-4eb5-b304-8b7b51b418fa` | `review-2dc6efb1-c2d5-418d-acf4-dd9b9e885c40` → `review-243695f9-e481-4738-9ad9-b1b9f9286054` |
+| `gstack/review/sections/plan-completion.md` | `87f6e52562e2defcb8a70941689ce48bf03f7a886d5f6705214e2054c35e2464` | `review-14e71fcd-df67-4eb5-b304-8b7b51b418fa` | `review-c9a3466c-43f0-4aac-afda-fcffdcf1ab47` |
+| `gstack/ship/sections/capy-pr.md` | `ac48d0c7bd8b9a175cff27932c1d6c69d3dde31a29ac49421a4886f1572855c8` | `review-14e71fcd-df67-4eb5-b304-8b7b51b418fa` | `review-c9a3466c-43f0-4aac-afda-fcffdcf1ab47` |
+| `gstack/ship/sections/pr-body.md` | `e71133c2d5256c03b5d47f9cc4da413b1d8040a1d472456211e7a263c4cf30c5` | `review-8a0758f0-284e-4f6e-9bc0-79a133d0bc52` | 동일한 번역에 대한 전체 대조 결과를 적용 |
+| `matt-pocock/README.md` | `62bfc60719afe26d9ec7758acea962902c36f7c45b191ae23034198a1d109ed3` | `review-8a0758f0-284e-4f6e-9bc0-79a133d0bc52` | `review-dd253b12-31c2-460d-a282-17b46e0feed0` |
+| `matt-pocock/skills/engineering/diagnosing-bugs/SKILL.md` | `ec937cc1071b3f9bb1732c764fa01f6aeb6be4f54f7d646b21b766ef12109489` | `review-8a0758f0-284e-4f6e-9bc0-79a133d0bc52` | 동일한 번역에 대한 전체 대조 결과를 적용 |
+| `addy-osmani/references/orchestration-patterns.md` | `8b27e9a121a21ec6068b4c5367b05e1bc046530335b11fc5f0bff397deb04187` | `review-beed710a-3803-4798-b829-c54b439df88f` | 동일한 번역에 대한 전체 대조 결과를 적용 |
+| `addy-osmani/references/performance-checklist.md` | `a349b48cc396f75ed5ab80fad20f5a39cd389093437d9363636e20107d40a808` | `review-beed710a-3803-4798-b829-c54b439df88f` | 동일한 번역에 대한 전체 대조 결과를 적용 |
+| `addy-osmani/references/security-checklist.md` | `83da2ffb1c45f8094d86af68a2251e2490f8b253b76469ed03afdf0a7beb8259` | `review-beed710a-3803-4798-b829-c54b439df88f` | `review-09e4ea24-208e-440f-9315-a306bb8464b7` |
+| `addy-osmani/references/testing-patterns.md` | `25de9eee4fddb6639ab62c745e6f0efb048b44f5df924c9d4e9b0c89b2c8de00` | `review-beed710a-3803-4798-b829-c54b439df88f` | 동일한 번역에 대한 전체 대조 결과를 적용 |
+| `addy-osmani/skills/api-and-interface-design/SKILL.md` | `d13b9c3320dfd85c8eb9343b6d74ed55994220de20b539850cc285db2d7852bc` | `review-646f1575-e53a-4c8c-b4ac-b2d4882772f7` | `review-09e4ea24-208e-440f-9315-a306bb8464b7` |
+| `addy-osmani/skills/spec-driven-development/SKILL.md` | `d2f29f7e981c359c62c877df6ef355ef794640d53c7ec9b1ee9eb477b4950d31` | `review-646f1575-e53a-4c8c-b4ac-b2d4882772f7` | 동일한 번역에 대한 전체 대조 결과를 적용 |
+| `spec-kit/templates/commands/clarify.md` | `2b1fa42a26f5d338537ff858fba3efccddbee0e9114f8e46a04ac77f5b679230` | `review-646f1575-e53a-4c8c-b4ac-b2d4882772f7` | 동일한 번역에 대한 전체 대조 결과를 적용 |
+
+계획 엔지니어링 절의 변경 문맥은 Opus가 통과로 판정했다. 이 파일에는 같은 뜻의 “저장되지 않음” 표기가 위치에 따라 다르고 일부 표현은 어색하게 남아 있다. 상위 문서의 절 제목과 영어 계약 문자열을 참조하는 부분은 별도로 대조했다. 과거 기록이 원문 자체의 모호성으로 분류한 네 지점도 위의 기각·수용 기록과 함께 보존한다.
+
+### 과거 실패와 현재 파일의 관계
+
+이전 감사 review-84ae2e91이 발견한 메뉴 결함은 당시 사용자 답변 요청이 빠졌던 내용이다. plan-design-review/SKILL.md의 해당 문구를 되살린 뒤 review-03981cde-b4d1-44f5-8c95-f58abd313e24가 고정 원문 발췌 “Reply with A, B, or C.”와 사용자에게 답을 요청하는 실제 번역을 대조해 통과로 판정했다. 이후 이 문서 전체를 읽은 위 전체 대조 및 design-pass가 지금 지문까지의 변경을 연결하며 PR #33에 반영됐다. 당시 “수정 대기”는 그 시점의 결론으로 보존한다. 1차 마감의 한계는 이 최종 후보의 파일별 근거·후속 검토와 함께 읽는다.
