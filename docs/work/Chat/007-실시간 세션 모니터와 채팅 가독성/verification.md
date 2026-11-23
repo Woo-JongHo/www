@@ -1155,3 +1155,32 @@ Chat 013의 사용자 결정에 따라 기본 화면 다섯 스킬과 상세 모
 - 검증 중 실행 환경 유지: 확인
 - 출력: stdout 921바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-db9f1a84-2135-4343-b0c8-5f1f66a3e275"></a>
+## 검증 시도 — 2026-11-23T23:37:35.395Z
+
+- 시도 ID: `attempt-db9f1a84-2135-4343-b0c8-5f1f66a3e275`
+- 실행 시각: 2026-11-23T23:37:25.681Z ~ 2026-11-23T23:37:35.395Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test/probes/ime-failed-send.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-05`
+- 소스 HEAD: `4d634d0925ecab445d48addac5cc3c8d9a165afa`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `58e00045147102cea589eef8c78a52f169ea1aa32f1f98de054c68ff4ecbb363`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/evidence/macos-physical-enter.json` (9343바이트, sha256 47d9e79cb21aa165af124589ef1acb75a21f5dec617b7b707bedd016bbf2a7e8)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 954바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+### AC-05 한글 확정·전송 실패와 초안 보존
+
+[macOS 두벌식 실물 기록](evidence/macos-physical-enter.json)은 #45의 수정 시험본에서 사용자가 직접 입력한 ‘가’가 로컬 Native fixture에 한 번 전달된 관찰이다. 이후 입력 순서를 보완한 현행 소스는 합성 composition·키 입력을 실제 Electron에서 검증했다. 조합 취소와 Shift+Enter는 전송 0회였고, 반복·재전달 및 확정 우선 순서는 최종 음절 ‘각’을 포함한 본문 각각 1회였다.
+
+[현재 실패 관찰](evidence/ime-enter-failed-send.json)은 Enter 직후 반복 키와 전송 버튼 클릭을 겹친 시행이다. Native fixture는 정규화한 본문 한 건을 받았고, 명시적 오류를 돌려준 뒤 입력창에는 양끝 공백·개행을 포함한 초안이 복원됐다. 500ms 뒤 요청 수는 한 건이었다. [공식 시도](#attempt-db9f1a84-2135-4343-b0c8-5f1f66a3e275)는 실물 원문을 고정하고 현재 Electron에서 두 경로를 실행해 AC-05를 통과로 등록했다.
+
+AC-10의 전체 구현 수용은 보류다. 이번 시행의 전송 상대는 로컬 fixture다. 현재 후보의 Windows 실물 한글 입력 결과와 필수 기준 전체를 대상으로 한 읽기 전용 Opus 최종 검토는 이 시행으로 확인하지 않았다.
