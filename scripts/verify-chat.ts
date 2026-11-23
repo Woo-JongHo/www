@@ -99,7 +99,7 @@ async function start(round: number, selectedWorkspace = workspace) {
   const binary = path.join(root, "node_modules/electron/dist/Electron.app/Contents/MacOS/Electron");
   const child: ChildProcess = spawn(binary, [root, "--remote-debugging-port=" + port, "--user-data-dir=" + path.join(directory, "profile")], {
     cwd: root, stdio: ["ignore", stdout.fd, stderr.fd],
-    env: { ...env, WWW_PROBE_PATH: path.join(directory, "disabled-probe.json"), WWW_NATIVE_PROBE: "1", WWW_PROBE_WORKSPACE: selectedWorkspace, WWW_CODEX_BIN: nativeExecutable?.executable ?? path.join(root, "test/fixtures/chat-ui-app-server.ts"), WWW_PROBE_NATIVE_REPORTS: "0" }
+    env: { ...env, WWW_PROBE_SHOW_WINDOW: process.argv.includes("--performance-only") ? "1" : "0", WWW_PROBE_PATH: path.join(directory, "disabled-probe.json"), WWW_NATIVE_PROBE: "1", WWW_PROBE_WORKSPACE: selectedWorkspace, WWW_CODEX_BIN: nativeExecutable?.executable ?? path.join(root, "test/fixtures/chat-ui-app-server.ts"), WWW_PROBE_NATIVE_REPORTS: "0" }
   });
   let ws: WebSocket | null = null;
   const terminate = async () => {
@@ -437,11 +437,76 @@ async function verifyNativeBoundaries(session: Awaited<ReturnType<typeof start>>
   await fs.writeFile(path.join(directory, "native-boundaries.json"), JSON.stringify({ repeatedApprovalIds: repeatedResponses.map((call) => call.id), repeatedApprovalPid: repeatedResponses[0]?.pid, staleTokensRejected: true, resolvedBeforeTurnCompleted: true, idleNativePid: idleCall.pid, resumedNativePid: resumedTurn.pid, threadId: "history-a", restoreMarkerSeq: marker.seq, freshPromptSeq: freshPrompt.seq, historicalSnapshotEvents: snapshot.length, replayedHookPulses: reactions.length, interruptedTurnSentOnce: true }, null, 2));
 }
 
+type ImeScenario = "반복" | "확정 우선" | "취소" | "줄바꿈";
+
+// CDP에서 실행한다. 비신뢰 키 이벤트는 OS IME를 구동하지 않아 조합 확정 input도 명시한다.
+function dispatchImeGesture(scenario: ImeScenario, prefix: string) {
+  const input = document.querySelector('[data-testid="prompt-input"]');
+  if (!(input instanceof HTMLTextAreaElement)) throw Error("입력창이 없습니다.");
+  input.focus();
+  const key = (type: string, code: number, composing = false, repeat = false) => input.dispatchEvent(new KeyboardEvent(type, {
+    bubbles: true, cancelable: true, key: code === 229 ? "Process" : "Enter", code: "Enter",
+    keyCode: code, isComposing: composing, repeat, shiftKey: scenario === "줄바꿈",
+  }));
+  const compose = (type: string, data: string) => input.dispatchEvent(new CompositionEvent(type, { bubbles: true, data }));
+  const commitText = (text: string) => {
+    const setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value")?.set;
+    if (!setter) throw Error("입력값 설정자를 찾을 수 없습니다.");
+    setter.call(input, text);
+    input.dispatchEvent(new InputEvent("input", { bubbles: true, data: "각", inputType: "insertCompositionText" }));
+  };
+  compose("compositionstart", "가");
+  if (scenario !== "확정 우선") key("keydown", 229, true);
+  if (scenario === "반복") key("keydown", 229, true, true);
+  compose("compositionend", scenario === "취소" ? "" : "각");
+  commitText(scenario === "취소" ? prefix : prefix + "각");
+  if (scenario === "확정 우선") key("keydown", 229);
+  if (scenario === "반복") key("keydown", 13);
+  key("keyup", 13);
+}
+
+async function verifyImeEnter(session: Awaited<ReturnType<typeof start>>) {
+  const readStarts = async () => {
+    const log = await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8");
+    return log.trim().split("\n").filter(Boolean).map(line => object(JSON.parse(line))).filter(call => call.method === "turn/start").map(call => {
+      const input = object(call.params).input;
+      return Array.isArray(input) ? object(input[0]).text : null;
+    });
+  };
+  const before = (await readStarts()).length;
+  const expected: string[] = [];
+  const field = "document.querySelector('[data-testid=\u0022prompt-input\u0022]')";
+  const scenarios: ImeScenario[] = ["취소", "줄바꿈", "반복", "확정 우선"];
+  for (const scenario of scenarios) {
+    const prefix = "합성 한글 " + scenario + " ";
+    await session.input(prefix + "가");
+    await session.evaluate("(" + dispatchImeGesture.toString() + ")(" + JSON.stringify(scenario) + "," + JSON.stringify(prefix) + ")");
+    if (scenario === "취소" || scenario === "줄바꿈") {
+      await session.wait(field + ".value===" + JSON.stringify(scenario === "취소" ? prefix : prefix + "각"), scenario + "는 조합 입력을 전송하지 않음");
+      continue;
+    }
+    expected.push(prefix + "각");
+    await session.wait(field + ".value==='' && document.querySelector('.transcript').textContent.includes(" + JSON.stringify(prefix + "각") + ") && !document.querySelector('[data-testid=\u0022new-conversation\u0022]').disabled", scenario + " Enter 한 번으로 최종 받침 전송 완료");
+    const actual = (await readStarts()).slice(before);
+    if (JSON.stringify(actual) !== JSON.stringify(expected)) throw Error("조합 요청의 횟수 또는 본문 불일치 " + JSON.stringify({ expected, actual }));
+  }
+  checks.push("IME 확정 순서별 최종 본문을 fixture turn/start에서 각각 1회 확인");
+}
+
 let session: Awaited<ReturnType<typeof start>> | null = null;
 async function verifyChat() {
 try {
   if (!nativeProbe) await seedHistory();
   session = await start(1);
+  if (process.argv.includes("--ime-enter-only")) {
+    await verifyImeEnter(session);
+    await session.terminate();
+    session = null;
+    const summary = { result: "passed", scope: "ime-enter-only", evidence: directory, checks };
+    await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify(summary));
+    return;
+  }
   if (nativeSteer) {
     await session.input("도구를 사용하지 말고 001부터 250까지 숫자를 한 줄에 하나씩 출력하세요.");
     await session.click('[data-testid="send-button"]');
@@ -473,6 +538,34 @@ try {
     await session.terminate();
     session = null;
     console.log(JSON.stringify({ evidence: directory, checks }));
+    return;
+  }
+  if (process.argv.includes("--renderer-timing-only")) {
+    await session.input("프레임 계측 확인");
+    await session.click('[data-testid="send-button"]');
+    const timingSummary = `(async () => {
+      const events = await window.www.events(await window.www.workspace());
+      const timings = events.filter(e => !e.historical && e.method === 'diagnostics/timing');
+      const first = timings.find(e => e.params.phase === 'first-native' && e.params.status === 'completed');
+      if (!first) return null;
+      const trace = timings.filter(e => e.params.traceId === first.params.traceId);
+      if (!trace.some(e => e.params.phase === 'request' && e.params.status === 'completed')) return null;
+      if (!events.some(e => e.seq >= first.seq && e.method === 'turn/completed' && e.params?.threadId === first.params.threadId)) return null;
+      const expected = trace.map(e => e.seq);
+      const details = performance.getEntriesByName('www:renderer-commit-frame').map(e => e.detail);
+      const actual = details.filter(e => e.traceId === first.params.traceId).map(e => e.seq);
+      return { expected, actual };
+    })()`;
+    await session.wait(`(async () => {
+      const summary = await ${timingSummary};
+      return summary && summary.expected.length > 1 && summary.expected.length === summary.actual.length
+        && summary.expected.every((seq, i) => seq === summary.actual[i]);
+    })()`, "새 대화의 모든 timing 사건이 같은 순서로 프레임에 한 번씩 연결됨");
+    const summary = await session.evaluate(timingSummary);
+    await fs.writeFile(path.join(directory, "renderer-timing.json"), JSON.stringify(summary));
+    console.log(JSON.stringify({ evidence: directory, summary }));
+    await session.terminate();
+    session = null;
     return;
   }
   if (process.argv.includes("--theme-only")) {
@@ -597,6 +690,8 @@ try {
     const measure = async (label: string) => {
       const value = await session!.evaluate(`(async()=>{
         const node=document.querySelector('[data-testid="prompt-input"]');
+        const probe=await window.www.probeReady();
+        if (!probe.windowVisible || document.visibilityState!=="visible") throw Error("표시된 Electron 창에서만 입력 성능을 측정합니다.");
         const setter=Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set;
         const durations=[], tasks=[];let mutations=0;
         const observer=new PerformanceObserver(list=>tasks.push(...list.getEntries().map(e=>e.duration)));
@@ -606,11 +701,13 @@ try {
         node.focus();
         for(let i=0;i<40;i++){
           const before=performance.now();setter.call(node,'입력 계측 '+i+' 가운데 편집');node.dispatchEvent(new Event('input',{bubbles:true}));
-          await new Promise(resolve=>requestAnimationFrame(resolve));durations.push(performance.now()-before);
+          await new Promise(resolve=>requestAnimationFrame(resolve));
+          if (document.hidden || document.activeElement!==node) throw Error("표본 수집 중 창 가시성 또는 입력 포커스 변경");
+          durations.push(performance.now()-before);
           if(node.value!=='입력 계측 '+i+' 가운데 편집')throw Error('입력 원문 누락');
         }
         changes.disconnect();observer.disconnect();durations.sort((a,b)=>a-b);
-        return {samples:durations.length,p50:durations[19],p95:durations[37],max:durations.at(-1),longTasks:tasks,commandDomMutations:mutations,commands:document.querySelectorAll('.command-card').length,viewport:{width:innerWidth,height:innerHeight},userAgent:navigator.userAgent};
+        return {windowVisible:probe.windowVisible,visibility:document.visibilityState,samples:durations.length,p50:durations[19],p95:durations[37],max:durations.at(-1),longTasks:tasks,commandDomMutations:mutations,commands:document.querySelectorAll('.command-card').length,viewport:{width:innerWidth,height:innerHeight},userAgent:navigator.userAgent};
       })()`);
       metrics.push({label,...object(value)});
     };
@@ -618,10 +715,45 @@ try {
     await session.click('[data-thread-id="history-a"]');
     await session.wait("document.querySelectorAll('.command-card').length>=65", '성능 최대 보관 출력·완료 카드 60개 복원');
     await measure('long-idle');
+    const scrollStart=await session.evaluate(`(() => {
+      const node=document.querySelector('.transcript');node.scrollTop=0;
+      const r=node.getBoundingClientRect();const intervals=[];let last=performance.now();
+      window.__wwwBenchScroll={intervals,active:true,start:node.scrollTop};
+      const step=now=>{if(!window.__wwwBenchScroll.active)return;intervals.push(now-last);last=now;requestAnimationFrame(step);};
+      requestAnimationFrame(step);
+      return {x:Math.floor(r.x+r.width/2),y:Math.floor(r.y+r.height/2),max:node.scrollHeight-node.clientHeight};
+    })()`);
+    for(let n=0;n<12;n++){
+      await session.command('Input.dispatchMouseEvent',{type:'mouseWheel',x:object(scrollStart).x,y:object(scrollStart).y,deltaX:0,deltaY:120});
+      await pause(20);
+    }
+    const scroll=await session.evaluate(`(() => {
+      const state=window.__wwwBenchScroll;state.active=false;
+      const node=document.querySelector('.transcript');const intervals=state.intervals.slice(1).sort((a,b)=>a-b);
+      return {samples:intervals.length,scrolled:node.scrollTop-state.start,p95:intervals[Math.ceil(intervals.length*.95)-1],max:intervals.at(-1)};
+    })()`);
+    if(Number(object(scroll).scrolled)<=0||Number(object(scroll).samples)<10)throw Error('휠 스크롤 프레임이 확인되지 않았습니다.');
+    metrics.push({label:'scroll-long-idle',...object(scroll)});
     await session.input('성능 스트리밍 중단 확인');
     await session.click('[data-testid="send-button"]');
     await session.wait("document.querySelector('[data-testid=\"interrupt-button\"]')", '성능 실행 중 상태');
     await measure('long-running');
+    const serialization = await session.evaluate(`(async()=>{
+      const original=JSON.stringify;
+      let calls=0, units=0;
+      JSON.stringify=function(value,...rest){
+        if(value?.kind==="command" && typeof value.output==="string"){calls++;units+=value.output.length;}
+        return original.call(JSON,value,...rest);
+      };
+      const transcript=document.querySelector('.transcript');
+      let mutations=0;
+      const observer=new MutationObserver(changes=>{mutations+=changes.length;});
+      observer.observe(transcript,{childList:true,characterData:true,subtree:true});
+      try{await new Promise(done=>setTimeout(done,350));}
+      finally {JSON.stringify=original;observer.disconnect();}
+      return {calls,units,mutations};
+    })()`);
+    metrics.push({label:"stream-command-serialization",...object(serialization)});
     await session.screenshot('performance');await session.terminate();session=null;
     await fs.writeFile(path.join(directory,'performance.json'),JSON.stringify({metrics,checks,build:JSON.parse(await fs.readFile(path.join(root,'dist/build-info.json'),'utf8')),limitations:['합성 input→다음 frame 근사이며 OS 키보드/IME·React commit 측정과 다름','현재 fixture 실행 상태의 출력 빈도에 한정','최대 사건 2000개 경계는 별도 projection 집중검사']},null,2));
     console.log(JSON.stringify({evidence:directory,metrics}));return;
@@ -858,14 +990,7 @@ try {
   await session.command("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", text: "\r", unmodifiedText: "\r", modifiers: 8, windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
   await session.command("Input.dispatchKeyEvent", { type: "keyUp", key: "Enter", code: "Enter", text: "\r", unmodifiedText: "\r", modifiers: 8, windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
   await session.wait("document.querySelector('[data-testid=\"prompt-input\"]').value==='Shift 줄바꿈\\n'", "Electron Shift+Enter 줄바꿈");
-  await session.input("한글 합성 조합 확인");
-  await session.evaluate("(() => { const t=document.querySelector('[data-testid=\"prompt-input\"]'); t.dispatchEvent(new CompositionEvent('compositionstart',{bubbles:true,data:'인'})); t.dispatchEvent(new KeyboardEvent('keydown',{bubbles:true,key:'Enter',code:'Enter',isComposing:true,keyCode:229})); })()");
-  await session.wait("document.querySelector('[data-testid=\"prompt-input\"]').value==='한글 합성 조합 확인'", "합성 한국어 조합 Enter는 전송하지 않음");
-  await session.evaluate("document.querySelector('[data-testid=\"prompt-input\"]').dispatchEvent(new CompositionEvent('compositionend',{bubbles:true,data:'인'}))");
-  await pause(20);
-  await session.evaluate("(() => { const t=document.querySelector('[data-testid=\"prompt-input\"]'); t.dispatchEvent(new KeyboardEvent('keydown',{bubbles:true,cancelable:true,key:'Enter',code:'Enter',keyCode:13})); t.dispatchEvent(new KeyboardEvent('keydown',{bubbles:true,cancelable:true,key:'Enter',code:'Enter',keyCode:13})); })()");
-  await session.wait("document.querySelector('[data-testid=\"prompt-input\"]').value===''", "합성 조합 종료 후 별도 Enter 전송");
-  await session.wait("!document.querySelector('[data-testid=\"new-conversation\"]')?.disabled", "합성 조합 전송 종료");
+  await verifyImeEnter(session);
   await session.input("전송 실패 확인");
   await session.click('[data-testid="send-button"]');
   await session.wait("document.querySelector('[data-testid=\"prompt-input\"]').value==='전송 실패 확인' && document.querySelector('.status')?.innerText.includes('합성 전송 실패')", "전송 실패 뒤 초안 보존과 오류 표시");
@@ -1039,9 +1164,6 @@ try {
   const resumed  = calls.some((call) => call.method === "thread/resume" && object(call.params).threadId === "history-a")                               ;
   const followed = calls.some((call) => call.method === "turn/start" && object(call.params).threadId === "history-a")                                  ;
   if (!resumed || !followed) throw Error("동일 Native thread 요청 근거가 없습니다.");
-  const repeated = calls.filter((call) => call.method === "turn/start" && JSON.stringify(call.params).includes("한글 합성 조합 확인"));
-  if (repeated.length !== 1) throw Error("반복 Enter가 요청을 중복 전송했습니다: " + repeated.length);
-  checks.push("반복 Enter는 실제 stdio 요청 1개");
   const summary = { result: "passed", evidence: path.relative(root, directory), coverage: "실제 Electron DOM·preload IPC·stdio·합성 Native 원장·앱 재시작. 창 크기 검사는 CDP renderer viewport이며 폭 999px 이하는 실제 Native 최소 창보다 작은 합성 viewport다. 실제 모델·Windows·실제 한국어 IME는 미검증.", checks, metrics, sameNativeThread: true };
   await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
   console.log(JSON.stringify(summary));

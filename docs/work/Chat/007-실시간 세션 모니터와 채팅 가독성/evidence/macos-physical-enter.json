@@ -1,0 +1,406 @@
+{
+  "platform": "macOS",
+  "input": "사용자 실제 키보드 두벌식",
+  "transport": "실제 Electron IPC 및 로컬 Native fixture",
+  "before": {
+    "candidate": "04bc7d3b2f005cae7de6ad9dc84d7d7096f597b7",
+    "observationSha256": "4fe35c4fcb4d52028c2a1e845a54a841c07a193f6f63ba4172920ae8b627ae9c",
+    "turnStartCount": 1,
+    "submittedTextMatchesGa": true,
+    "events": [
+      {
+        "seq": 8,
+        "type": "compositionstart",
+        "trusted": true,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "빈 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 9,
+        "type": "compositionupdate",
+        "trusted": true,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "빈 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 12,
+        "type": "compositionupdate",
+        "trusted": true,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "다른 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 15,
+        "type": "keydown",
+        "trusted": true,
+        "enter": true,
+        "shift": true,
+        "composing": true,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 16,
+        "type": "compositionupdate",
+        "trusted": true,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 18,
+        "type": "compositionend",
+        "trusted": false,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 19,
+        "type": "keydown",
+        "trusted": true,
+        "enter": true,
+        "shift": true,
+        "composing": false,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 21,
+        "type": "enter-settled",
+        "trusted": null,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "가+줄바꿈",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 22,
+        "type": "enter-settled",
+        "trusted": null,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "가+줄바꿈",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 28,
+        "type": "compositionstart",
+        "trusted": true,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "빈 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 29,
+        "type": "compositionupdate",
+        "trusted": true,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "빈 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 32,
+        "type": "compositionupdate",
+        "trusted": true,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "다른 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 34,
+        "type": "keydown",
+        "trusted": true,
+        "enter": true,
+        "shift": false,
+        "composing": true,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 35,
+        "type": "compositionupdate",
+        "trusted": true,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 37,
+        "type": "compositionend",
+        "trusted": false,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 38,
+        "type": "keydown",
+        "trusted": true,
+        "enter": true,
+        "shift": false,
+        "composing": false,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 39,
+        "type": "enter-settled",
+        "trusted": null,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 40,
+        "type": "enter-settled",
+        "trusted": null,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 42,
+        "type": "keydown",
+        "trusted": true,
+        "enter": true,
+        "shift": true,
+        "composing": false,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 44,
+        "type": "enter-settled",
+        "trusted": null,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "가+줄바꿈",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 45,
+        "type": "keydown",
+        "trusted": true,
+        "enter": true,
+        "shift": false,
+        "composing": false,
+        "expectedValue": "가+줄바꿈",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 46,
+        "type": "enter-settled",
+        "trusted": null,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "빈 값",
+        "requests": 0,
+        "focus": true
+      }
+    ]
+  },
+  "afterFirstFix": {
+    "candidate": "issue25-single-enter-local",
+    "observationSha256": "c2776894284e02cea6f4cb5be6398a143c78b722561756b644b8860ca38a5495",
+    "turnStartCount": 1,
+    "submittedTextMatchesGa": true,
+    "events": [
+      {
+        "seq": 4,
+        "type": "compositionstart",
+        "trusted": true,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "빈 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 5,
+        "type": "compositionupdate",
+        "trusted": true,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "빈 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 9,
+        "type": "compositionupdate",
+        "trusted": true,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "다른 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 12,
+        "type": "keydown",
+        "trusted": true,
+        "enter": true,
+        "shift": false,
+        "composing": true,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 13,
+        "type": "compositionupdate",
+        "trusted": true,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 15,
+        "type": "compositionend",
+        "trusted": false,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 16,
+        "type": "keyup",
+        "trusted": true,
+        "enter": true,
+        "shift": false,
+        "composing": false,
+        "expectedValue": "가",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 17,
+        "type": "keydown",
+        "trusted": true,
+        "enter": true,
+        "shift": false,
+        "composing": false,
+        "expectedValue": "빈 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 18,
+        "type": "enter-settled",
+        "trusted": null,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "빈 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 19,
+        "type": "enter-settled",
+        "trusted": null,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "빈 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 20,
+        "type": "keyup",
+        "trusted": true,
+        "enter": true,
+        "shift": false,
+        "composing": false,
+        "expectedValue": "빈 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 21,
+        "type": "enter-settled",
+        "trusted": null,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "빈 값",
+        "requests": 0,
+        "focus": true
+      },
+      {
+        "seq": 22,
+        "type": "enter-settled",
+        "trusted": null,
+        "enter": false,
+        "shift": false,
+        "composing": null,
+        "expectedValue": "빈 값",
+        "requests": 1,
+        "focus": true
+      }
+    ]
+  }
+}

@@ -1,8 +1,11 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>스크롤과 첫 응답 및 진행 설명 개선 논의 — WWW 작업 보고서</title><style>
-:root{--sky:#edf6fc;--paper:#fff;--ink:#203b4b;--muted:#536d7c;--line:#c8dce8;--blue:#245f91;--yellow:#f4ce62;--red:#b73836;--green:#236b58;--round:"Arial Rounded MT Bold","Apple SD Gothic Neo","Malgun Gothic",sans-serif;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--sky);color:var(--ink);font:16px/1.8 var(--body)}.page{width:min(1180px,calc(100% - 64px));margin:auto;padding:0 0 48px}header{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:800}.written{color:var(--muted)}.hero{padding:36px 0 12px}h1{max-width:920px;font:800 clamp(29px,4.3vw,48px)/1.25 var(--round);letter-spacing:-.045em;margin:8px 0 20px;overflow-wrap:anywhere}.lead{font-size:19px;max-width:860px;word-break:keep-all;margin:0 0 24px}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;border:1px solid var(--line);border-radius:15px;background:var(--paper);padding:14px 20px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:16px}.state-note{font-size:14px;color:var(--muted);margin:12px 0}.blocker{border-left:4px solid var(--red);background:#fff0ed;border-radius:6px;padding:12px 16px;font-size:14px}.blocker strong{display:block}.story{font-size:17px;line-height:1.9;white-space:pre-wrap;max-width:860px;margin:28px 0 20px;word-break:keep-all;overflow-wrap:anywhere}.legacy-changes{max-width:860px;margin-bottom:26px}.paper{padding:28px;border:1px solid var(--line);background:var(--paper);border-radius:22px;margin:22px 0;box-shadow:0 5px 0 #dfecf5}h2{font:800 24px/1.4 var(--round);letter-spacing:-.025em;margin:0 0 20px}h3{font-size:17px;line-height:1.5;margin:18px 0 10px}h4{font-size:14px;margin:15px 0 8px}p,li,dd,dt{overflow-wrap:anywhere}p{margin:10px 0}ul,ol{padding-left:22px}li+li{margin-top:10px}.muted{color:var(--muted);font-size:14px}.requirement,.decision,.check,.next{padding:10px 0 22px;border-bottom:1px solid var(--line)}.requirement:last-child,.decision:last-child,.check:last-child,.next:last-child{border-bottom:0;padding-bottom:0}.result{font-weight:600}.support,.limit{font-size:14px;color:var(--muted)}dl{margin:12px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:14px;padding:10px 0}dt{font-weight:600;font-size:14px}dd{margin:0;white-space:pre-wrap}.requirements>div{border-bottom:1px solid var(--line);grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{font-size:14px;border-left:3px solid var(--blue);padding:9px 14px;background:var(--sky);margin-bottom:24px}.record-result,.review-state{font-size:14px}.references li{padding:8px 0}.references p{margin:0 0 5px}code{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}.omission{padding:16px 20px;border:1px dashed var(--red);border-radius:12px;font-size:14px;margin:22px 0}.omission p{margin-bottom:0}details{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:13px}summary{cursor:pointer;color:var(--blue);font-weight:600;padding:8px 0}summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}.raw{padding:14px 0;color:var(--muted)}pre{max-height:460px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace;background:#e7f0f6;padding:16px;border-radius:10px}.source{padding:15px 0;font-size:14px}.source p{margin:0 0 5px}@media(max-width:700px){.page{width:calc(100% - 28px)}header{flex-wrap:wrap;gap:5px;padding:18px 0}.hero{padding-top:22px}.lead{font-size:17px}.state-grid{grid-template-columns:1fr;padding:14px}.paper{padding:20px;border-radius:17px}h2{font-size:22px}.story{font-size:16px}.requirements>div,dl>div{grid-template-columns:1fr;gap:4px}dd{padding-left:0}pre{padding:12px}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:white;color:#162d3c;font-size:11pt}.page{width:100%;padding:0}.hero{padding-top:18px}h1{font-size:25pt}.lead{font-size:13pt}.story{font-size:11pt;line-height:1.65}.paper{box-shadow:none;border-color:#9baeb9;padding:16px;break-inside:auto}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw{display:none!important}pre{max-height:none;overflow:visible;white-space:pre-wrap;font-size:8pt}.state-grid{break-inside:avoid}.omission{break-inside:avoid}summary{color:#162d3c}}
-</style></head><body><main class="page"><header><span class="book">WWW 작업 보고서</span><span class="written">2026년 11월 16일 오후 12:42 · 한국 시간 · 작성자 보고서</span></header><section class="hero" id="report-conclusion"><h1>스크롤과 첫 응답 및 진행 설명 개선 논의</h1><p class="lead">Chat 스크롤·명령 출력과 공개 진행 표시를 개선하고 최신 Electron 회귀를 통과했다. 과거 122초 지연은 원인을 확정하지 못해 부분 완료로 유지한다.</p><div id="report-story" class="story">앱 전체 스크롤이 이동하고 명령 출력 미리보기와 전체 출력이 중복되며 첫 응답 지연의 경계별 기록이 부족했다.
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'; base-uri 'none'; form-action 'none'"><title>스크롤과 첫 응답 및 진행 설명 개선 논의 — WWW 작업 보고서</title><style>
+:root{color-scheme:light dark;--canvas:#f5f7f4;--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c;--body:"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:500 14px/1.7 var(--body)}.page{max-width:1180px;margin:24px auto;padding:0 24px}header{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);font-size:13px}.book{font-weight:700}.written,.muted,.support,.limit{color:var(--muted)}.layout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:28px}.toc{padding-top:32px}.toc ol{list-style:none;margin:0;padding:0;position:sticky;top:16px}.toc a{display:flex;align-items:center;gap:9px;min-height:44px;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:6px}.toc a:hover,.toc a:focus-visible{background:var(--soft);color:var(--green)}.toc span{font-size:12px}.document{min-width:0;padding:32px 38px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}.chapter+.chapter{border-top:1px solid var(--line);margin-top:27px;padding-top:27px}.chapter h2{font-size:17px;line-height:1.4;margin:0 0 16px}.number{color:var(--green);margin-right:8px}h1{font-size:28px;line-height:1.3;margin:8px 0 14px;overflow-wrap:anywhere}h3{font-size:14px;margin:16px 0 8px}h4{font-size:13px;margin:12px 0 6px}p{margin:8px 0}p,li,dd,dt,td,th{overflow-wrap:anywhere}.lead{font-size:16px}.story{white-space:pre-wrap;overflow-wrap:anywhere;margin:20px 0}.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;background:var(--soft);padding:12px 16px}.state-grid p{margin:0}.state-grid span{display:block;color:var(--muted);font-size:12px}.state-grid strong{font-size:14px}.state-note,.top-next,.record-result,.review-state{font-size:13px}.blocker,.omission{border-left:3px solid var(--red);padding:10px 14px;background:var(--warn)}.blocker strong{display:block}.approach{display:grid;grid-template-columns:1fr 1fr;gap:24px}.paper{margin:12px 0}.paper h2{font-size:15px}.results{border-collapse:collapse;width:100%;table-layout:fixed}.results th,.results td{text-align:left;vertical-align:top;padding:10px;border-bottom:1px solid var(--line)}.results th{color:var(--muted)}.requirement,.decision,.check,.next{padding:8px 0;border-bottom:1px solid var(--line)}dl{margin:8px 0}dl>div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:5px 0}dt{font-weight:600}dd{margin:0;white-space:pre-wrap}.requirements>div{grid-template-columns:minmax(0,1fr) minmax(130px,.45fr)}.applicability{border-left:3px solid var(--green);padding:8px 12px;background:var(--soft)}ul,ol{padding-left:20px}li+li{margin-top:6px}details{margin-top:18px;border-top:1px solid var(--line)}summary{min-height:44px;display:list-item;cursor:pointer;color:var(--green);font-weight:600;padding:10px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--green);outline-offset:3px}.raw{color:var(--muted)}code,pre{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;white-space:pre-wrap}pre{max-height:460px;overflow:auto;background:var(--soft);padding:12px}.source{padding:12px 0}.print-note{display:none}@media(max-width:790px){.layout{display:block}.toc{padding:12px 0}.toc ol{position:static;display:flex;flex-wrap:wrap;gap:4px}.toc li{margin:0}.document{padding:27px 28px 20px}}@media(max-width:540px){.page{margin:0;padding:0 12px}header{flex-wrap:wrap}.document{padding:22px 18px 16px}h1{font-size:23px}.chapter h2{font-size:16px}.approach,.state-grid{grid-template-columns:1fr}.results thead{display:none}.results,.results tbody,.results tr,.results td{display:block}.results tr{border-bottom:1px solid var(--line);padding:8px 0}.results td{border:0;padding:3px 0}.results td::before{content:attr(data-label) ": ";font-weight:700}dl>div,.requirements>div{grid-template-columns:1fr;gap:2px}}@media(prefers-color-scheme:dark){:root{--canvas:#141714;--paper:#181c19;--ink:#edf1eb;--muted:#b0b9ad;--line:#343d32;--green:#a7cdb1;--soft:#222821;--amber:#edc77b;--warn:#3a301e;--red:#ffb4a8}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{:root{--paper:#fff;--ink:#26312b;--muted:#637067;--line:#e2e8df;--green:#35654a;--soft:#f3f6f2;--amber:#805a17;--warn:#fff4db;--red:#a22e2c}body{background:white;color:#26312b}.page{max-width:none;margin:0;padding:0}.layout{display:block}.toc{display:none}.document{border:0;padding:0}.chapter+.chapter{break-inside:auto}.state-grid{break-inside:avoid}.check,.requirement,.decision,.next{break-inside:avoid}#report-raw,.history-entry details[id$="-raw"]{display:none!important}.history-entry:not([open]){display:none}.print-note{display:block}.document{color:#26312b}.state-grid,.applicability{background:#f3f6f2}summary{color:#35654a}}
+dd.result-status{font-weight:600}dd.result-passed{color:var(--green)}dd.result-failed{color:var(--red)}dd.result-blocked,dd.result-unverified{color:var(--amber)}
+</style></head><body><main class="page"><header><span class="book">WWW / 작업 보고서</span><span class="written">2026년 11월 24일 AM 8:08 · 한국 시간 · 작성자 보고서</span></header><div class="layout"><nav class="toc" aria-label="읽는 순서"><ol><li><a href="#section-1"><span>01</span> 결론과 상태</a></li><li><a href="#section-2"><span>02</span> 문제와 접근</a></li><li><a href="#section-3"><span>03</span> 변경 결과</a></li><li><a href="#section-4"><span>04</span> 검증과 한계</a></li><li><a href="#section-5"><span>05</span> 남은 일과 완료 조건</a></li><li><a href="#section-6"><span>06</span> 변경 이력과 상세 근거</a></li></ol></nav><article class="document"><section class="chapter" id="section-1"><h2><span class="number">01</span>결론과 상태</h2><h1>스크롤과 첫 응답 및 진행 설명 개선 논의</h1><p class="lead">이슈 #26의 현재 Electron 계측 누락을 교정하고 사이드바·명령 카드·진행 설명 기준 세 개를 검증했다. 11월 16일의 첫 응답 전 122.414초 공백은 원인 미확정 상태로 남긴다.</p><div id="report-story" class="story">한 번에 도착한 timing 사건 여러 개 중 가장 최근 것만 프레임에 연결됐다. 새 스레드가 선택되기 전에 도착한 완료 사건도 빠져 실제 응답과 화면 표시 사이의 경계를 신뢰하기 어려웠다.
 
-본문·사이드바·출력은 내부에서 스크롤하고 카드별 Ctrl+T로 한 영역을 펼친다. 관측 사건에 근거한 진행 설명과 연결·대화 준비·턴 전달·첫 Native 사건 계측을 제공한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 3 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.</p><p class="blocker"><strong>남은 차단 사항</strong> AC-2: 과거 122.414초 지연의 구간별 기록이 없어 원인 미확정. 새 계측·실제 표본은 확보했으나 같은 지연 재현과 원인 확인은 미완료.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>최신 source-bound Electron 검사 256개를 실제 IPC·stdio 합성 Native에서 확인했다.</li><li>공개 설명과 앱 관측 출처를 구분하고 짧은 원문 출력의 끝 개행·들여쓰기를 보존했다.</li><li>탭별 읽기·초안·펼침 상태를 유지하고 세션별 사건 격리를 연결했다.</li><li>구조 스냅샷 갱신 후 최신 실제 Electron 256개 검사를 다시 실행해 sourceStable:true로 AC-1·3·4 근거를 연결했다.</li></ul></div></section><section class="paper" id="report-requirements"><h2>요구와 결과</h2><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.</dt><dd>당시 통과로 기록</dd></div><div><dt>실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.</dt><dd>당시 차단으로 기록</dd></div><div><dt>명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.</dt><dd>당시 통과로 기록</dd></div><div><dt>Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.</dt><dd>당시 통과로 기록</dd></div></dl></section><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>수신하지 않은 이유나 내부 추론을 만들어 표시하지 않는다.</li><li>과거 지연 원장을 새 3.57초/10초대 실행 표본으로 대체하거나 개선율로 해석하지 않는다.</li><li>검토 일반 정책과 직접 사용자 지침의 최종 대체 금지를 문서에서 분리했다. 이번 완료 감사는 Opus 고정이며 이 Chat 작업은 AC-2 미완료로 완료 판정하지 않는다.</li></ul></section><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 3건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>AC-2: 과거122.414초 원장에는 IPC/renderer 경계가 없어 원인 미확정이다.</li><li>두 번째 animation frame 근사는 첫 콘텐츠 paint나 main과 동기화된 IPC 지연이 아니다.</li><li>이 작업의 필수 독립 완료 감사는 미충족이며 완료로 전환하지 않았다. 실제 Native 변경·승인 전체와 Windows/OS 한국어 IME 실기는 이번 GUI 근거에 포함하지 않는다.</li></ul></section><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><ul><li>동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.</li><li>원인 수정 후 AC-2 재검증과 해당 소스의 독립 완료 감사를 수행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><section class="paper" id="report-references"><h2>판단을 되짚는 근거</h2><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/work.json</code></div><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-632e43ce-dcb8-4726-ad34-8fe85034b6fd<br>report-e830868a-b72f-4127-9195-0d686c8d8e17</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>1d180db33a9a6b0d4ec7a6119179e8d69d3d5da08c0d691dda4f4253f2ad96ed</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>3920c3115d66f9fa8887fa049bf563c2f0248784f04e09d9a51b8af153e2080b</code></dd></div><div><dt>기준 지문</dt><dd><code>b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+같은 새 대화에서 main이 낸 timing 순번 12개를 renderer 프레임 관측과 일대일로 대조했다. RPC 응답의 단조 시각은 즉시 보관하고 완료 사건은 스레드 구성 통지 뒤에 공개한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 9 · 실패 2 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>일부 확인</strong></p></div><p class="top-next"><strong>다음 행동</strong> 원본 또는 같은 지연을 재현한 표본에서 요청·Native 수신·renderer 프레임 경계를 연결할 때 AC-2를 재판정한다.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><aside class="omission"><strong>일부 원본 항목이 이 보고서에 보관되지 않았습니다.</strong><p>기준 근거 전체 33개 중 30개 표시 (3개 제외). 더 넓은 기록은 근거의 작업 파일과 대조해야 합니다.</p></aside></section><section class="chapter" id="section-2"><h2><span class="number">02</span>문제와 접근</h2><div class="approach"><div><h3>시작점</h3><p>한 번에 도착한 timing 사건 여러 개 중 가장 최근 것만 프레임에 연결됐다. 새 스레드가 선택되기 전에 도착한 완료 사건도 빠져 실제 응답과 화면 표시 사이의 경계를 신뢰하기 어려웠다.</p></div><div><h3>접근과 결과</h3><p>같은 새 대화에서 main이 낸 timing 순번 12개를 renderer 프레임 관측과 일대일로 대조했다. RPC 응답의 단조 시각은 즉시 보관하고 완료 사건은 스레드 구성 통지 뒤에 공개한다.</p></div></div><section class="paper" id="report-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>같은 입력을 실제 Electron에서 수정 전후 대조했다. 과거 원인과 현재 계측 결함은 증거의 시점이 달라 별도로 판정했다.</li><li>새 스레드가 공개되기 전에 측정한 응답 시간을 이후에 보내어 소유권 전환·큐 처리가 RPC 지연에 포함되지 않게 했다.</li></ul></section></section><section class="chapter" id="section-3"><h2><span class="number">03</span>변경 결과</h2><div class="legacy-changes"><h3>기록된 변경</h3><ul><li>같은 커밋의 각 timing 사건을 한 번씩 소비하며 다음 렌더가 기존 측정을 취소하지 않도록 했다.</li><li>기존 원장에 빠졌던 1차 마감 이력과 현재 Electron 검사 결과를 연결했다.</li><li>보관물과 SQLite를 사건 시각·지문만으로 조사하고 해당 머신의 진단 범위를 기록했다.</li></ul></div><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div></dl></section><section class="chapter" id="section-4"><h2><span class="number">04</span>검증과 한계</h2><section class="paper" id="report-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 9건, 실패 2건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>보관된 초기 원장은 Native 기록 시각만 남기며 최초 전송 클릭, 같은 사건의 IPC 수신·renderer 관측 시각이 없다. 현재 fixture로 과거 모델 지연을 입증할 수 없다.</li><li>animation frame 관측은 실제 픽셀 표시 또는 사용자 체감 시간의 직접 측정이 아니다.</li></ul></section></section><section class="chapter" id="section-5"><h2><span class="number">05</span>남은 일과 완료 조건</h2><section class="paper" id="report-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>원본 또는 같은 지연을 재현한 표본에서 요청·Native 수신·renderer 프레임 경계를 연결할 때 AC-2를 재판정한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section></section><section class="chapter" id="section-6"><h2><span class="number">06</span>변경 이력과 상세 근거</h2><p>2026년 11월 24일 AM 8:08 · 선택한 발행 기록 · 이슈 #26의 현재 Electron 계측 누락을 교정하고 사이드바·명령 카드·진행 설명 기준 세 개를 검증했다. 11월 16일의 첫 응답 전 122.414초 공백은 원인 미확정 상태로 남긴다.</p><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 4개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 16일 PM 12:42 · 작성자 보고서 · Chat 스크롤·명령 출력과 공개 진행 표시를 개선하고 최신 Electron 회귀를 통과했다. 과거 122초 지연은 원인을 확정하지 못해 부분 완료로 유지한다.</summary><article><h3>스크롤과 첫 응답 및 진행 설명 개선 논의</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">앱 전체 스크롤이 이동하고 명령 출력 미리보기와 전체 출력이 중복되며 첫 응답 지연의 경계별 기록이 부족했다.
+
+본문·사이드바·출력은 내부에서 스크롤하고 카드별 Ctrl+T로 한 영역을 펼친다. 관측 사건에 근거한 진행 설명과 연결·대화 준비·턴 전달·첫 Native 사건 계측을 제공한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 3 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.</p><p class="blocker"><strong>남은 차단 사항</strong> AC-2: 과거 122.414초 지연의 구간별 기록이 없어 원인 미확정. 새 계측·실제 표본은 확보했으나 같은 지연 재현과 원인 확인은 미완료.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>최신 source-bound Electron 검사 256개를 실제 IPC·stdio 합성 Native에서 확인했다.</li><li>공개 설명과 앱 관측 출처를 구분하고 짧은 원문 출력의 끝 개행·들여쓰기를 보존했다.</li><li>탭별 읽기·초안·펼침 상태를 유지하고 세션별 사건 격리를 연결했다.</li><li>구조 스냅샷 갱신 후 최신 실제 Electron 256개 검사를 다시 실행해 sourceStable:true로 AC-1·3·4 근거를 연결했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.</dt><dd class="result-status result-blocked">당시 차단으로 기록</dd></div><div><dt>명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div></dl><section class="paper" id="history-report-e830868a-b72f-4127-9195-0d686c8d8e17-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>수신하지 않은 이유나 내부 추론을 만들어 표시하지 않는다.</li><li>과거 지연 원장을 새 3.57초/10초대 실행 표본으로 대체하거나 개선율로 해석하지 않는다.</li><li>검토 일반 정책과 직접 사용자 지침의 최종 대체 금지를 문서에서 분리했다. 이번 완료 감사는 Opus 고정이며 이 Chat 작업은 AC-2 미완료로 완료 판정하지 않는다.</li></ul></section><section class="paper" id="history-report-e830868a-b72f-4127-9195-0d686c8d8e17-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 3건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>AC-2: 과거122.414초 원장에는 IPC/renderer 경계가 없어 원인 미확정이다.</li><li>두 번째 animation frame 근사는 첫 콘텐츠 paint나 main과 동기화된 IPC 지연이 아니다.</li><li>이 작업의 필수 독립 완료 감사는 미충족이며 완료로 전환하지 않았다. 실제 Native 변경·승인 전체와 Windows/OS 한국어 IME 실기는 이번 GUI 근거에 포함하지 않는다.</li></ul></section><section class="paper" id="history-report-e830868a-b72f-4127-9195-0d686c8d8e17-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.</li><li>원인 수정 후 AC-2 재검증과 해당 소스의 독립 완료 감사를 수행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-e830868a-b72f-4127-9195-0d686c8d8e17-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-632e43ce-dcb8-4726-ad34-8fe85034b6fd<br>report-e830868a-b72f-4127-9195-0d686c8d8e17</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>1d180db33a9a6b0d4ec7a6119179e8d69d3d5da08c0d691dda4f4253f2ad96ed</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>3920c3115d66f9fa8887fa049bf563c2f0248784f04e09d9a51b8af153e2080b</code></dd></div><div><dt>기준 지문</dt><dd><code>b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
   &quot;status&quot;: &quot;verifying&quot;,
   &quot;blockedReason&quot;: &quot;AC-2: 과거 122.414초 지연의 구간별 기록이 없어 원인 미확정. 새 계측·실제 표본은 확보했으나 같은 지연 재현과 원인 확인은 미완료.&quot;,
   &quot;criteria&quot;: [
@@ -152,9 +155,9 @@
     &quot;동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.&quot;,
     &quot;원인 수정 후 AC-2 재검증과 해당 소스의 독립 완료 감사를 수행한다.&quot;
   ]
-}</pre></div></details></section><section class="paper" id="report-history"><h2>같은 제목에 쌓인 기록</h2><p>현재 펼친 기록 외 3개의 기록을 이 파일에 함께 보관합니다.</p><details class="history-entry"><summary>2026년 11월 16일 오후 12:37 · 작성자 보고서 · Chat 스크롤·명령 출력과 공개 진행 표시를 개선하고 최신 Electron 회귀를 통과했다. 과거 122초 지연은 원인을 확정하지 못해 부분 완료로 유지한다.</summary><article><h3>스크롤과 첫 응답 및 진행 설명 개선 논의</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">앱 전체 스크롤이 이동하고 명령 출력 미리보기와 전체 출력이 중복되며 첫 응답 지연의 경계별 기록이 부족했다.
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 PM 12:37 · 작성자 보고서 · Chat 스크롤·명령 출력과 공개 진행 표시를 개선하고 최신 Electron 회귀를 통과했다. 과거 122초 지연은 원인을 확정하지 못해 부분 완료로 유지한다.</summary><article><h3>스크롤과 첫 응답 및 진행 설명 개선 논의</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">앱 전체 스크롤이 이동하고 명령 출력 미리보기와 전체 출력이 중복되며 첫 응답 지연의 경계별 기록이 부족했다.
 
-본문·사이드바·출력은 내부에서 스크롤하고 카드별 Ctrl+T로 한 영역을 펼친다. 관측 사건에 근거한 진행 설명과 연결·대화 준비·턴 전달·첫 Native 사건 계측을 제공한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 3 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.</p><p class="blocker"><strong>남은 차단 사항</strong> AC-2: 과거 122.414초 지연의 구간별 기록이 없어 원인 미확정. 새 계측·실제 표본은 확보했으나 같은 지연 재현과 원인 확인은 미완료.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>최신 source-bound Electron 검사 256개를 실제 IPC·stdio 합성 Native에서 확인했다.</li><li>공개 설명과 앱 관측 출처를 구분하고 짧은 원문 출력의 끝 개행·들여쓰기를 보존했다.</li><li>탭별 읽기·초안·펼침 상태를 유지하고 세션별 사건 격리를 연결했다.</li><li>구조 스냅샷 갱신 후 최신 실제 Electron 256개 검사를 다시 실행해 sourceStable:true로 AC-1·3·4 근거를 연결했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.</dt><dd>당시 통과로 기록</dd></div><div><dt>실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.</dt><dd>당시 차단으로 기록</dd></div><div><dt>명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.</dt><dd>당시 통과로 기록</dd></div><div><dt>Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.</dt><dd>당시 통과로 기록</dd></div></dl><section class="paper" id="history-report-0f750f49-1ac2-4ac6-b7af-3a8107f5c8e9-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>수신하지 않은 이유나 내부 추론을 만들어 표시하지 않는다.</li><li>과거 지연 원장을 새 3.57초/10초대 실행 표본으로 대체하거나 개선율로 해석하지 않는다.</li></ul></section><section class="paper" id="history-report-0f750f49-1ac2-4ac6-b7af-3a8107f5c8e9-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 3건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>AC-2: 과거122.414초 원장에는 IPC/renderer 경계가 없어 원인 미확정이다.</li><li>두 번째 animation frame 근사는 첫 콘텐츠 paint나 main과 동기화된 IPC 지연이 아니다.</li><li>이 작업의 필수 독립 완료 감사는 미충족이며 완료로 전환하지 않았다. 실제 Native 변경·승인 전체와 Windows/OS 한국어 IME 실기는 이번 GUI 근거에 포함하지 않는다.</li></ul></section><section class="paper" id="history-report-0f750f49-1ac2-4ac6-b7af-3a8107f5c8e9-next"><h2>남은 일과 해소 행동</h2><ul><li>동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.</li><li>원인 수정 후 AC-2 재검증과 해당 소스의 독립 완료 감사를 수행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-0f750f49-1ac2-4ac6-b7af-3a8107f5c8e9-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-632e43ce-dcb8-4726-ad34-8fe85034b6fd<br>report-0f750f49-1ac2-4ac6-b7af-3a8107f5c8e9</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>843a8a7bebb3afb34a7ae7c49706c52e959a918ae8c7774edb83bc6e10f34b51</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>3920c3115d66f9fa8887fa049bf563c2f0248784f04e09d9a51b8af153e2080b</code></dd></div><div><dt>기준 지문</dt><dd><code>b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+본문·사이드바·출력은 내부에서 스크롤하고 카드별 Ctrl+T로 한 영역을 펼친다. 관측 사건에 근거한 진행 설명과 연결·대화 준비·턴 전달·첫 Native 사건 계측을 제공한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 3 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.</p><p class="blocker"><strong>남은 차단 사항</strong> AC-2: 과거 122.414초 지연의 구간별 기록이 없어 원인 미확정. 새 계측·실제 표본은 확보했으나 같은 지연 재현과 원인 확인은 미완료.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>최신 source-bound Electron 검사 256개를 실제 IPC·stdio 합성 Native에서 확인했다.</li><li>공개 설명과 앱 관측 출처를 구분하고 짧은 원문 출력의 끝 개행·들여쓰기를 보존했다.</li><li>탭별 읽기·초안·펼침 상태를 유지하고 세션별 사건 격리를 연결했다.</li><li>구조 스냅샷 갱신 후 최신 실제 Electron 256개 검사를 다시 실행해 sourceStable:true로 AC-1·3·4 근거를 연결했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.</dt><dd class="result-status result-blocked">당시 차단으로 기록</dd></div><div><dt>명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div></dl><section class="paper" id="history-report-0f750f49-1ac2-4ac6-b7af-3a8107f5c8e9-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>수신하지 않은 이유나 내부 추론을 만들어 표시하지 않는다.</li><li>과거 지연 원장을 새 3.57초/10초대 실행 표본으로 대체하거나 개선율로 해석하지 않는다.</li></ul></section><section class="paper" id="history-report-0f750f49-1ac2-4ac6-b7af-3a8107f5c8e9-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 3건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>AC-2: 과거122.414초 원장에는 IPC/renderer 경계가 없어 원인 미확정이다.</li><li>두 번째 animation frame 근사는 첫 콘텐츠 paint나 main과 동기화된 IPC 지연이 아니다.</li><li>이 작업의 필수 독립 완료 감사는 미충족이며 완료로 전환하지 않았다. 실제 Native 변경·승인 전체와 Windows/OS 한국어 IME 실기는 이번 GUI 근거에 포함하지 않는다.</li></ul></section><section class="paper" id="history-report-0f750f49-1ac2-4ac6-b7af-3a8107f5c8e9-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.</li><li>원인 수정 후 AC-2 재검증과 해당 소스의 독립 완료 감사를 수행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-0f750f49-1ac2-4ac6-b7af-3a8107f5c8e9-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-632e43ce-dcb8-4726-ad34-8fe85034b6fd<br>report-0f750f49-1ac2-4ac6-b7af-3a8107f5c8e9</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>843a8a7bebb3afb34a7ae7c49706c52e959a918ae8c7774edb83bc6e10f34b51</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>3920c3115d66f9fa8887fa049bf563c2f0248784f04e09d9a51b8af153e2080b</code></dd></div><div><dt>기준 지문</dt><dd><code>b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
   &quot;status&quot;: &quot;verifying&quot;,
   &quot;blockedReason&quot;: &quot;AC-2: 과거 122.414초 지연의 구간별 기록이 없어 원인 미확정. 새 계측·실제 표본은 확보했으나 같은 지연 재현과 원인 확인은 미완료.&quot;,
   &quot;criteria&quot;: [
@@ -303,9 +306,9 @@
     &quot;동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.&quot;,
     &quot;원인 수정 후 AC-2 재검증과 해당 소스의 독립 완료 감사를 수행한다.&quot;
   ]
-}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 오후 12:23 · 작성자 보고서 · Chat 스크롤·명령 출력과 공개 진행 표시를 개선하고 최신 Electron 회귀를 통과했다. 과거 122초 지연은 원인을 확정하지 못해 부분 완료로 유지한다.</summary><article><h3>스크롤과 첫 응답 및 진행 설명 개선 논의</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">앱 전체 스크롤이 이동하고 명령 출력 미리보기와 전체 출력이 중복되며 첫 응답 지연의 경계별 기록이 부족했다.
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 PM 12:23 · 작성자 보고서 · Chat 스크롤·명령 출력과 공개 진행 표시를 개선하고 최신 Electron 회귀를 통과했다. 과거 122초 지연은 원인을 확정하지 못해 부분 완료로 유지한다.</summary><article><h3>스크롤과 첫 응답 및 진행 설명 개선 논의</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">앱 전체 스크롤이 이동하고 명령 출력 미리보기와 전체 출력이 중복되며 첫 응답 지연의 경계별 기록이 부족했다.
 
-본문·사이드바·출력은 내부에서 스크롤하고 카드별 Ctrl+T로 한 영역을 펼친다. 관측 사건에 근거한 진행 설명과 연결·대화 준비·턴 전달·첫 Native 사건 계측을 제공한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 2 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.</p><p class="blocker"><strong>남은 차단 사항</strong> AC-2: 과거 122.414초 지연의 구간별 기록이 없어 원인 미확정. 새 계측·실제 표본은 확보했으나 같은 지연 재현과 원인 확인은 미완료.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>최신 source-bound Electron 검사 256개를 실제 IPC·stdio 합성 Native에서 확인했다.</li><li>공개 설명과 앱 관측 출처를 구분하고 짧은 원문 출력의 끝 개행·들여쓰기를 보존했다.</li><li>탭별 읽기·초안·펼침 상태를 유지하고 세션별 사건 격리를 연결했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.</dt><dd>당시 통과로 기록</dd></div><div><dt>실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.</dt><dd>당시 차단으로 기록</dd></div><div><dt>명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.</dt><dd>당시 통과로 기록</dd></div><div><dt>Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.</dt><dd>당시 통과로 기록</dd></div></dl><section class="paper" id="history-report-b1fa73e7-ebba-41f9-8d02-fcbb50a106ae-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>수신하지 않은 이유나 내부 추론을 만들어 표시하지 않는다.</li><li>과거 지연 원장을 새 3.57초/10초대 실행 표본으로 대체하거나 개선율로 해석하지 않는다.</li></ul></section><section class="paper" id="history-report-b1fa73e7-ebba-41f9-8d02-fcbb50a106ae-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 2건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>AC-2: 과거122.414초 원장에는 IPC/renderer 경계가 없어 원인 미확정이다.</li><li>두 번째 animation frame 근사는 첫 콘텐츠 paint나 main과 동기화된 IPC 지연이 아니다.</li><li>이 작업의 필수 독립 완료 감사는 미충족이며 완료로 전환하지 않았다. 실제 Native 변경·승인 전체와 Windows/OS 한국어 IME 실기는 이번 GUI 근거에 포함하지 않는다.</li></ul></section><section class="paper" id="history-report-b1fa73e7-ebba-41f9-8d02-fcbb50a106ae-next"><h2>남은 일과 해소 행동</h2><ul><li>동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.</li><li>원인 수정 후 AC-2 재검증과 해당 소스의 독립 완료 감사를 수행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-b1fa73e7-ebba-41f9-8d02-fcbb50a106ae-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-632e43ce-dcb8-4726-ad34-8fe85034b6fd<br>report-b1fa73e7-ebba-41f9-8d02-fcbb50a106ae</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>c65165d4ee6bdb1c7f86c03a9d898d295488930c1ce4fa0dc5382cbdb1895977</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>85503940ed9493375727cf27a4597689d551044ae82869f5e91239841002c385</code></dd></div><div><dt>기준 지문</dt><dd><code>b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+본문·사이드바·출력은 내부에서 스크롤하고 카드별 Ctrl+T로 한 영역을 펼친다. 관측 사건에 근거한 진행 설명과 연결·대화 준비·턴 전달·첫 Native 사건 계측을 제공한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 2 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.</p><p class="blocker"><strong>남은 차단 사항</strong> AC-2: 과거 122.414초 지연의 구간별 기록이 없어 원인 미확정. 새 계측·실제 표본은 확보했으나 같은 지연 재현과 원인 확인은 미완료.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>최신 source-bound Electron 검사 256개를 실제 IPC·stdio 합성 Native에서 확인했다.</li><li>공개 설명과 앱 관측 출처를 구분하고 짧은 원문 출력의 끝 개행·들여쓰기를 보존했다.</li><li>탭별 읽기·초안·펼침 상태를 유지하고 세션별 사건 격리를 연결했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.</dt><dd class="result-status result-blocked">당시 차단으로 기록</dd></div><div><dt>명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div></dl><section class="paper" id="history-report-b1fa73e7-ebba-41f9-8d02-fcbb50a106ae-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>수신하지 않은 이유나 내부 추론을 만들어 표시하지 않는다.</li><li>과거 지연 원장을 새 3.57초/10초대 실행 표본으로 대체하거나 개선율로 해석하지 않는다.</li></ul></section><section class="paper" id="history-report-b1fa73e7-ebba-41f9-8d02-fcbb50a106ae-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 2건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>AC-2: 과거122.414초 원장에는 IPC/renderer 경계가 없어 원인 미확정이다.</li><li>두 번째 animation frame 근사는 첫 콘텐츠 paint나 main과 동기화된 IPC 지연이 아니다.</li><li>이 작업의 필수 독립 완료 감사는 미충족이며 완료로 전환하지 않았다. 실제 Native 변경·승인 전체와 Windows/OS 한국어 IME 실기는 이번 GUI 근거에 포함하지 않는다.</li></ul></section><section class="paper" id="history-report-b1fa73e7-ebba-41f9-8d02-fcbb50a106ae-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.</li><li>원인 수정 후 AC-2 재검증과 해당 소스의 독립 완료 감사를 수행한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-b1fa73e7-ebba-41f9-8d02-fcbb50a106ae-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-632e43ce-dcb8-4726-ad34-8fe85034b6fd<br>report-b1fa73e7-ebba-41f9-8d02-fcbb50a106ae</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>c65165d4ee6bdb1c7f86c03a9d898d295488930c1ce4fa0dc5382cbdb1895977</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>85503940ed9493375727cf27a4597689d551044ae82869f5e91239841002c385</code></dd></div><div><dt>기준 지문</dt><dd><code>b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
   &quot;status&quot;: &quot;verifying&quot;,
   &quot;blockedReason&quot;: &quot;AC-2: 과거 122.414초 지연의 구간별 기록이 없어 원인 미확정. 새 계측·실제 표본은 확보했으나 같은 지연 재현과 원인 확인은 미완료.&quot;,
   &quot;criteria&quot;: [
@@ -424,9 +427,9 @@
     &quot;동일한 긴 지연이 재현될 때 trace별 main 연결·대화 준비·턴 전달·첫 Native 사건과 renderer 수신 경계를 대조해 원인을 확인한다.&quot;,
     &quot;원인 수정 후 AC-2 재검증과 해당 소스의 독립 완료 감사를 수행한다.&quot;
   ]
-}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 오전 11:32 · 작성자 보고서 · 스크롤 프레임 고정, 명령 출력 한 영역 전환과 앱 관측 진행 설명을 구현했다. 공식 실제 Electron·합성 Native 256조건 검사에서 AC-1·AC-3·AC-4가 통과했고 소스·환경·실행 번들 해시가 검사 중 유지됐다. AC-2의 과거 122초 지연 원인은 확정하지 못해 전체 완료가 아니다.</summary><article><h3>스크롤과 첫 응답 및 진행 설명 개선 논의</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">여백·경계 스크롤로 프레임이 밀린다는 사용자 관측이 있었고 명령 미리보기와 전체 출력이 중복 표시됐다. 초기 요청 전 공백의 앱/Native 경계 시각은 없었다.
+}</pre></div></details></article></details><details class="history-entry"><summary>2026년 11월 16일 AM 11:32 · 작성자 보고서 · 스크롤 프레임 고정, 명령 출력 한 영역 전환과 앱 관측 진행 설명을 구현했다. 공식 실제 Electron·합성 Native 256조건 검사에서 AC-1·AC-3·AC-4가 통과했고 소스·환경·실행 번들 해시가 검사 중 유지됐다. AC-2의 과거 122초 지연 원인은 확정하지 못해 전체 완료가 아니다.</summary><article><h3>스크롤과 첫 응답 및 진행 설명 개선 논의</h3><p class="muted">각 기록의 상태·검사·근거는 저장 당시의 관측입니다. 현재 상태를 다시 검증한 결과가 아닙니다.</p><div class="story">여백·경계 스크롤로 프레임이 밀린다는 사용자 관측이 있었고 명령 미리보기와 전체 출력이 중복 표시됐다. 초기 요청 전 공백의 앱/Native 경계 시각은 없었다.
 
-프레임·입력은 화면에 고정하고 내부 영역만 스크롤한다. 카드별 Ctrl+T와 같은 자리의 단일 출력으로 전환하며 짧은 원문의 끝 개행도 보존한다. 준비 trace와 앱 관측 설명의 출처를 구분한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 1 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 새 계측으로 동일 장기 지연 표본을 확보해 초기 준비·Native·화면 경계를 판별한다.</p><p class="blocker"><strong>남은 차단 사항</strong> 과거 122초 초기 지연의 동일 증상은 재현되지 않아 AC-2 원인 확정이 남았다. 현재 실제 Native 단일 표본은 첫 사건 3.57초이며 이를 과거 원인 해소로 승격하지 않는다.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>프레임 overflow와 내부 overscroll 경계를 정리했다.</li><li>명령 출력 전환·짧은 원문 개행·카드별 수동 선택을 유지했다.</li><li>main 요청 준비·첫 Native와 renderer 수신→두 번째 animation frame을 별도 시간축으로 계측했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.</dt><dd>당시 통과로 기록</dd></div><div><dt>실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.</dt><dd>미검증으로 기록</dd></div><div><dt>명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.</dt><dd>당시 통과로 기록</dd></div><div><dt>Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.</dt><dd>당시 통과로 기록</dd></div></dl><section class="paper" id="history-report-8170009e-ced0-4c20-8a95-e60c0b609640-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>실제 사건에서 확인한 사실만 앱 설명으로 표시한다.</li><li>단일 실제 Native 표본을 과거 긴 지연의 원인 해소로 승격하지 않는다.</li></ul></section><section class="paper" id="history-report-8170009e-ced0-4c20-8a95-e60c0b609640-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>실제 Native 한 번에서 첫 사건 3571.97ms, 연결949.36ms·대화준비224.54ms, 해당 renderer 프레임 근사91.7ms를 관측했지만 이는 수정 전 빌드의 표본이다.</li><li>과거 약122초 동일 증상은 재현되지 않아 AC-2는 미검증이다.</li><li>이 UUID의 제품 전체 독립 감사와 업무 수용은 미완료다.</li><li>Windows와 실제 OS 한국어 IME는 이번 검사 범위가 아니다.</li><li>커밋·push는 실행하지 않았다.</li></ul></section><section class="paper" id="history-report-8170009e-ced0-4c20-8a95-e60c0b609640-next"><h2>남은 일과 해소 행동</h2><ul><li>새 계측으로 동일 장기 지연 표본을 확보해 초기 준비·Native·화면 경계를 판별한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-8170009e-ced0-4c20-8a95-e60c0b609640-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-632e43ce-dcb8-4726-ad34-8fe85034b6fd<br>report-8170009e-ced0-4c20-8a95-e60c0b609640</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>35dff2a5cc0965fe028e9fe298cd48a7f2ce09aade488aa20b62d322bee7cf7c</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>1bf6a800b9cb2505c31cc9d8bcf11f901af7678f92c8d39d2a95b66169c086a7</code></dd></div><div><dt>기준 지문</dt><dd><code>b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+프레임·입력은 화면에 고정하고 내부 영역만 스크롤한다. 카드별 Ctrl+T와 같은 자리의 단일 출력으로 전환하며 짧은 원문의 끝 개행도 보존한다. 준비 trace와 앱 관측 설명의 출처를 구분한다.</div><div class="state-grid"><p><span>저장 당시 검사</span><strong>통과 1 · 실패 0 · 미확인 0건</strong></p><p><span>보고서 자료 현재성 · 검사 유효성과 별개</span><strong>발행 시점 스냅샷</strong></p><p><span>저장 당시 독립 검토</span><strong>미실행 · 연결 기록 없음</strong></p><p><span>저장 당시 업무 상태</span><strong>차단 사항 남음</strong></p></div><p class="top-next"><strong>다음 행동</strong> 새 계측으로 동일 장기 지연 표본을 확보해 초기 준비·Native·화면 경계를 판별한다.</p><p class="blocker"><strong>남은 차단 사항</strong> 과거 122초 초기 지연의 동일 증상은 재현되지 않아 AC-2 원인 확정이 남았다. 현재 실제 Native 단일 표본은 첫 사건 3.57초이며 이를 과거 원인 해소로 승격하지 않는다.</p><p class="state-note">저장 당시 기준 중 1개가 실패·차단·미검증 또는 미확인으로 남았습니다.</p><h3>기록된 변경</h3><ul><li>프레임 overflow와 내부 overscroll 경계를 정리했다.</li><li>명령 출력 전환·짧은 원문 개행·카드별 수동 선택을 유지했다.</li><li>main 요청 준비·첫 Native와 renderer 수신→두 번째 animation frame을 별도 시간축으로 계측했다.</li></ul><h3>요구와 결과</h3><p class="muted">구조화된 요구·결과 설명이 없어 저장된 수용 기준과 당시 상태를 그대로 보여 줍니다.</p><dl class="requirements"><div><dt>채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.</dt><dd class="result-status result-unverified">미검증으로 기록</dd></div><div><dt>명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div><div><dt>Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.</dt><dd class="result-status result-passed">당시 통과로 기록</dd></div></dl><section class="paper" id="history-report-8170009e-ced0-4c20-8a95-e60c0b609640-decisions"><h2>기록에 남은 주요 선택</h2><ul><li>실제 사건에서 확인한 사실만 앱 설명으로 표시한다.</li><li>단일 실제 Native 표본을 과거 긴 지연의 원인 해소로 승격하지 않는다.</li></ul></section><section class="paper" id="history-report-8170009e-ced0-4c20-8a95-e60c0b609640-verification"><h2>무엇을 어떻게 확인했나요</h2><p class="applicability"><strong>당시 관측과 현재 적용성은 다릅니다.</strong> 발행 당시 기록입니다. 이 HTML 사본은 현재 파일 상태를 조회하지 않습니다.</p><p class="muted">구체적인 검증 대상·방법·기대·관측 설명이 기록되지 않았습니다. 명령이나 종료 코드만으로 사용자 행동을 확인했다고 추정하지 않습니다.</p><p class="record-result">저장된 검사 이력의 당시 결과: 통과 1건. 실제 프로세스 실행과 실제 모델·GUI·플랫폼 확인 범위는 각 검사 설명에서 구분합니다.</p><h3>독립 검토</h3><p class="review-state">연결된 독립 검토가 없습니다. 미실행입니다.</p><h3>확인하지 못한 범위</h3><ul><li>실제 Native 한 번에서 첫 사건 3571.97ms, 연결949.36ms·대화준비224.54ms, 해당 renderer 프레임 근사91.7ms를 관측했지만 이는 수정 전 빌드의 표본이다.</li><li>과거 약122초 동일 증상은 재현되지 않아 AC-2는 미검증이다.</li><li>이 UUID의 제품 전체 독립 감사와 업무 수용은 미완료다.</li><li>Windows와 실제 OS 한국어 IME는 이번 검사 범위가 아니다.</li><li>커밋·push는 실행하지 않았다.</li></ul></section><section class="paper" id="history-report-8170009e-ced0-4c20-8a95-e60c0b609640-next"><h2>남은 일과 해소 행동</h2><h3>기존 서술에 기록된 남은 일</h3><ul><li>새 계측으로 동일 장기 지연 표본을 확보해 초기 준비·Native·화면 경계를 판별한다.</li></ul><p class="muted">담당·해소 조건·영향은 별도로 기록되지 않았습니다.</p></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><details id="history-report-8170009e-ced0-4c20-8a95-e60c0b609640-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-632e43ce-dcb8-4726-ad34-8fe85034b6fd<br>report-8170009e-ced0-4c20-8a95-e60c0b609640</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>35dff2a5cc0965fe028e9fe298cd48a7f2ce09aade488aa20b62d322bee7cf7c</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>1bf6a800b9cb2505c31cc9d8bcf11f901af7678f92c8d39d2a95b66169c086a7</code></dd></div><div><dt>기준 지문</dt><dd><code>b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
   &quot;status&quot;: &quot;verifying&quot;,
   &quot;blockedReason&quot;: &quot;과거 122초 초기 지연의 동일 증상은 재현되지 않아 AC-2 원인 확정이 남았다. 현재 실제 Native 단일 표본은 첫 사건 3.57초이며 이를 과거 원인 해소로 승격하지 않는다.&quot;,
   &quot;criteria&quot;: [
@@ -517,4 +520,388 @@
   &quot;next&quot;: [
     &quot;새 계측으로 동일 장기 지연 표본을 확보해 초기 준비·Native·화면 경계를 판별한다.&quot;
   ]
-}</pre></div></details></article></details></section></main></body></html>
+}</pre></div></details></article></details></section><h3>판단을 되짚는 근거</h3><p class="muted">목적이 연결된 추가 근거 설명은 기록되지 않았습니다.</p><div class="source"><p>작업의 기준·실행 기록과 이 보고서의 출처를 대조할 때 확인할 파일입니다.</p><code>docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/work.json</code></div><p class="print-note">인쇄에는 접힌 과거 이력과 원시 상세가 포함되지 않습니다. 전체 근거는 HTML에서 펼쳐 확인하세요.</p><details id="report-raw"><summary>저장 당시 원시 근거와 식별 정보</summary><div class="raw"><p>아래 문구는 기록 시점의 원문입니다. ‘현재 적용 가능’ 같은 과거 요약도 현행 판정이 아닙니다.</p><dl><div><dt>작업·보고서 ID</dt><dd><code>work-632e43ce-dcb8-4726-ad34-8fe85034b6fd<br>report-49ed19b8-f66f-4000-8047-7702cbf05551</code></dd></div><div><dt>작업 기록 지문</dt><dd><code>8042bd00a1c50d492ef29a5a9f443dba0b0b2c6320fe10430766d329e99d67b8</code></dd></div><div><dt>검사 입력 지문</dt><dd><code>b4a631d4937ba07f52d65600fb897403aaf94fdd92dab265afb5bfa7342557d8</code></dd></div><div><dt>기준 지문</dt><dd><code>b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f</code></dd></div><div><dt>작업 상태 원문</dt><dd><code>verifying</code></dd></div></dl><h3>저장 당시 기준·명령·환경·실행 및 검토 이력</h3><pre>{
+  &quot;status&quot;: &quot;verifying&quot;,
+  &quot;blockedReason&quot;: null,
+  &quot;criteria&quot;: [
+    {
+      &quot;id&quot;: &quot;AC-1&quot;,
+      &quot;description&quot;: &quot;채팅·사이드바의 내용과 여백에서 스크롤하거나 내부 끝에 도달해도 앱 전체가 밀리지 않고 탐색·입력 영역에 접근할 수 있다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-73362f9c-945f-4bf3-9179-e733cb97af99&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7b9014e5-76c4-4888-bfc0-4d680509198d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-98a8fe33-3ae7-4ecc-a62e-1ad163b073a7&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2c53ef5b-eb8c-4fe2-9056-ed7bdf3c1523&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-9c16dbd9-f4e2-47b9-a6e0-a7d782c8eab5&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4f4afd6c-82d3-4645-9c69-301c3124b36c&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-1b076433-2e91-4ade-b99b-7471f543fb6b&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-2&quot;,
+      &quot;description&quot;: &quot;실행 표시·시간은 있지만 첫 설명·명령까지 길게 비고 이후에는 개별 표시되는 현상의 원인을 연결·스레드 준비·턴 요청·Native 사건 수신·채팅 반영으로 나누어 확인한다. 04의 실시간 작업 흐름 표시와 연결해 개선하며 대기 카드 추가만으로 해결됐다고 판정하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;unverified&quot;,
+      &quot;evidence&quot;: []
+    },
+    {
+      &quot;id&quot;: &quot;AC-3&quot;,
+      &quot;description&quot;: &quot;명령 출력은 같은 자리의 한 영역에서 미리보기와 전체 출력 사이를 전환하여 동일 내용이 중복되지 않는다. Ctrl+T to expand와 같은 키보드 펼침·접힘은 선택한 명령 출력 하나에만 적용하며 다른 출력의 상태는 유지한다. 이미 전체 내용이 보이는 짧은 출력에는 불필요한 확장을 제공하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-73362f9c-945f-4bf3-9179-e733cb97af99&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7b9014e5-76c4-4888-bfc0-4d680509198d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-98a8fe33-3ae7-4ecc-a62e-1ad163b073a7&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2c53ef5b-eb8c-4fe2-9056-ed7bdf3c1523&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-9c16dbd9-f4e2-47b9-a6e0-a7d782c8eab5&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4f4afd6c-82d3-4645-9c69-301c3124b36c&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-1b076433-2e91-4ade-b99b-7471f543fb6b&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;AC-4&quot;,
+      &quot;description&quot;: &quot;Native의 공개 설명·공개 판단 요약을 수신하는 즉시 채팅에 표시하고, 앱도 실제 관측한 파일 확인·명령 실행·결과 등의 사건을 연결한 진행 설명을 제공한다. 앱 설명의 출처를 구분하며 관측하지 않은 작업이나 판단 이유를 사실로 생성하지 않는다.&quot;,
+      &quot;required&quot;: true,
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;evidence&quot;: [
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-96182bae-0734-47b1-be31-2af09b9a653f&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-73362f9c-945f-4bf3-9179-e733cb97af99&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-7b9014e5-76c4-4888-bfc0-4d680509198d&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5&quot;,
+          &quot;summary&quot;: &quot;실제 검증 failed; 현재 적용 불가&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-98a8fe33-3ae7-4ecc-a62e-1ad163b073a7&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-2c53ef5b-eb8c-4fe2-9056-ed7bdf3c1523&quot;,
+          &quot;summary&quot;: &quot;실제 검증 passed; 현재 적용 가능&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-9c16dbd9-f4e2-47b9-a6e0-a7d782c8eab5&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-4f4afd6c-82d3-4645-9c69-301c3124b36c&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        },
+        {
+          &quot;path&quot;: &quot;verification.md#attempt-1b076433-2e91-4ade-b99b-7471f543fb6b&quot;,
+          &quot;summary&quot;: &quot;종료 코드 0, 기준 passed&quot;
+        }
+      ]
+    }
+  ],
+  &quot;verifications&quot;: [
+    {
+      &quot;id&quot;: &quot;attempt-fe6bd98d-0285-4d96-b888-de6822907cd7&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-chat.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T02:28:08.347Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-96182bae-0734-47b1-be31-2af09b9a653f&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-chat.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T03:22:28.833Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-aacdc682-c0ea-4de9-b1f9-c5eb83a843d6&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-chat.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T03:36:54.809Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-73362f9c-945f-4bf3-9179-e733cb97af99&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-chat.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T04:45:22.174Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-7b9014e5-76c4-4888-bfc0-4d680509198d&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-chat.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T05:06:52.609Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-4cd36d4a-bfa4-48c1-9af3-5bb85d1733d5&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-chat.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.22.3&quot;
+      },
+      &quot;result&quot;: &quot;failed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 1,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-16T05:13:03.783Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-98a8fe33-3ae7-4ecc-a62e-1ad163b073a7&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;scripts/verify-chat.ts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T01:02:52.947Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-2c53ef5b-eb8c-4fe2-9056-ed7bdf3c1523&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;.www/evidence/dashboard-rollforward-20261123/chat012-ui-current-audit.mts&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T04:09:59.518Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-9c16dbd9-f4e2-47b9-a6e0-a7d782c8eab5&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;-e&quot;,
+        &quot;import assert from &#39;node:assert/strict&#39;;import {readFileSync} from &#39;node:fs&#39;;import {createHash} from &#39;node:crypto&#39;;for(const [p,d] of Object.entries(JSON.parse(process.argv[1])))assert.equal(createHash(&#39;sha256&#39;).update(readFileSync(p)).digest(&#39;hex&#39;),d);await import(&#39;./.www/evidence/issue26/accept-ui.mts&#39;);&quot;,
+        &quot;{\&quot;.www/evidence/issue26/accept-ui.mts\&quot;:\&quot;c9d6dda04933c150ae1bd2df001239ff66e2ed2d4388f4fb9cf7f26b45df323b\&quot;,\&quot;.www/evidence/dashboard-rollforward-20261123/chat012-ui-confirmation.mts\&quot;:\&quot;a3c58c62011ee7bd2fbf49eeba46e2a6b2915a866ce10c58e27c0ed90145b741\&quot;,\&quot;.www/evidence/dashboard-rollforward-20261123/chat012-ui-fixture.mts\&quot;:\&quot;fc8f766fbef6fe3bbeeecaec402140a942d84b82fb477a49712647fe815d42fb\&quot;}&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T23:02:55.061Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-4f4afd6c-82d3-4645-9c69-301c3124b36c&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;-e&quot;,
+        &quot;import assert from &#39;node:assert/strict&#39;;import {readFileSync} from &#39;node:fs&#39;;import {createHash} from &#39;node:crypto&#39;;for(const [p,d] of Object.entries(JSON.parse(process.argv[1])))assert.equal(createHash(&#39;sha256&#39;).update(readFileSync(p)).digest(&#39;hex&#39;),d);await import(&#39;./.www/evidence/issue26/accept-ui.mts&#39;);&quot;,
+        &quot;{\&quot;.www/evidence/issue26/accept-ui.mts\&quot;:\&quot;c9d6dda04933c150ae1bd2df001239ff66e2ed2d4388f4fb9cf7f26b45df323b\&quot;,\&quot;.www/evidence/dashboard-rollforward-20261123/chat012-ui-confirmation.mts\&quot;:\&quot;a3c58c62011ee7bd2fbf49eeba46e2a6b2915a866ce10c58e27c0ed90145b741\&quot;,\&quot;.www/evidence/dashboard-rollforward-20261123/chat012-ui-fixture.mts\&quot;:\&quot;fc8f766fbef6fe3bbeeecaec402140a942d84b82fb477a49712647fe815d42fb\&quot;}&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T23:05:26.910Z&quot;
+    },
+    {
+      &quot;id&quot;: &quot;attempt-1b076433-2e91-4ade-b99b-7471f543fb6b&quot;,
+      &quot;command&quot;: &quot;node&quot;,
+      &quot;args&quot;: [
+        &quot;--input-type=module&quot;,
+        &quot;-e&quot;,
+        &quot;import assert from &#39;node:assert/strict&#39;;import {readFileSync} from &#39;node:fs&#39;;import {createHash} from &#39;node:crypto&#39;;for(const [p,d] of Object.entries(JSON.parse(process.argv[1])))assert.equal(createHash(&#39;sha256&#39;).update(readFileSync(p)).digest(&#39;hex&#39;),d);await import(&#39;./.www/evidence/issue26/accept-ui.mts&#39;);&quot;,
+        &quot;{\&quot;.www/evidence/issue26/accept-ui.mts\&quot;:\&quot;c9d6dda04933c150ae1bd2df001239ff66e2ed2d4388f4fb9cf7f26b45df323b\&quot;,\&quot;.www/evidence/dashboard-rollforward-20261123/chat012-ui-confirmation.mts\&quot;:\&quot;a3c58c62011ee7bd2fbf49eeba46e2a6b2915a866ce10c58e27c0ed90145b741\&quot;,\&quot;.www/evidence/dashboard-rollforward-20261123/chat012-ui-fixture.mts\&quot;:\&quot;fc8f766fbef6fe3bbeeecaec402140a942d84b82fb477a49712647fe815d42fb\&quot;}&quot;
+      ],
+      &quot;environment&quot;: {
+        &quot;platform&quot;: &quot;darwin&quot;,
+        &quot;arch&quot;: &quot;arm64&quot;,
+        &quot;node&quot;: &quot;v22.23.1&quot;
+      },
+      &quot;result&quot;: &quot;passed&quot;,
+      &quot;executor&quot;: &quot;process&quot;,
+      &quot;exitCode&quot;: 0,
+      &quot;sourceStable&quot;: true,
+      &quot;completedAt&quot;: &quot;2026-11-23T23:07:46.695Z&quot;
+    }
+  ],
+  &quot;reviews&quot;: [],
+  &quot;omitted&quot;: {
+    &quot;criteria&quot;: 0,
+    &quot;evidence&quot;: 3,
+    &quot;verifications&quot;: 0,
+    &quot;reviews&quot;: 0,
+    &quot;arguments&quot;: 0,
+    &quot;findings&quot;: 0,
+    &quot;unresolved&quot;: 0
+  }
+}</pre><h3>원래 작성 서술</h3><pre>{
+  &quot;summary&quot;: &quot;이슈 #26의 현재 Electron 계측 누락을 교정하고 사이드바·명령 카드·진행 설명 기준 세 개를 검증했다. 11월 16일의 첫 응답 전 122.414초 공백은 원인 미확정 상태로 남긴다.&quot;,
+  &quot;before&quot;: &quot;한 번에 도착한 timing 사건 여러 개 중 가장 최근 것만 프레임에 연결됐다. 새 스레드가 선택되기 전에 도착한 완료 사건도 빠져 실제 응답과 화면 표시 사이의 경계를 신뢰하기 어려웠다.&quot;,
+  &quot;after&quot;: &quot;같은 새 대화에서 main이 낸 timing 순번 12개를 renderer 프레임 관측과 일대일로 대조했다. RPC 응답의 단조 시각은 즉시 보관하고 완료 사건은 스레드 구성 통지 뒤에 공개한다.&quot;,
+  &quot;changes&quot;: [
+    &quot;같은 커밋의 각 timing 사건을 한 번씩 소비하며 다음 렌더가 기존 측정을 취소하지 않도록 했다.&quot;,
+    &quot;기존 원장에 빠졌던 1차 마감 이력과 현재 Electron 검사 결과를 연결했다.&quot;,
+    &quot;보관물과 SQLite를 사건 시각·지문만으로 조사하고 해당 머신의 진단 범위를 기록했다.&quot;
+  ],
+  &quot;decisions&quot;: [
+    &quot;같은 입력을 실제 Electron에서 수정 전후 대조했다. 과거 원인과 현재 계측 결함은 증거의 시점이 달라 별도로 판정했다.&quot;,
+    &quot;새 스레드가 공개되기 전에 측정한 응답 시간을 이후에 보내어 소유권 전환·큐 처리가 RPC 지연에 포함되지 않게 했다.&quot;
+  ],
+  &quot;limitations&quot;: [
+    &quot;보관된 초기 원장은 Native 기록 시각만 남기며 최초 전송 클릭, 같은 사건의 IPC 수신·renderer 관측 시각이 없다. 현재 fixture로 과거 모델 지연을 입증할 수 없다.&quot;,
+    &quot;animation frame 관측은 실제 픽셀 표시 또는 사용자 체감 시간의 직접 측정이 아니다.&quot;
+  ],
+  &quot;next&quot;: [
+    &quot;원본 또는 같은 지연을 재현한 표본에서 요청·Native 수신·renderer 프레임 경계를 연결할 때 AC-2를 재판정한다.&quot;
+  ]
+}</pre></div></details></section></article></div></main></body></html>

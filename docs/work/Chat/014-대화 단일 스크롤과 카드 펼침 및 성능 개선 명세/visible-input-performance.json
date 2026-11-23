@@ -1,0 +1,447 @@
+{
+  "기준커밋": "0169e47b52977063e7bac6d8fbf1d5c6a5cc73af",
+  "rendererSource": {
+    "baseline": "09ce2c182ecf3d5a54511d47c00f8de1f71cd0b1ae3865bcec09a80c38efec00",
+    "candidate": "20556461ae020f322e7504239d862c1d1b8f6bbff8cb53472ab44bd79d852b84"
+  },
+  "rendererBundle": {
+    "baseline": "541bccb41da2b8a9eb3ee66e048d8442ff3dbb52afd3dfdd8ab5fe6c51926476",
+    "candidate": "3589c534dacea48fd1deec02e7992fc2234206b631f0c046c75d018979fc7d02"
+  },
+  "fixtureSha256": "cda3e9961c94e3f3e2ecac51b60d020247143a82cc48ac92722a6e89d4d02a99",
+  "measurementSha256": "b32231f51309f10605dc3bc8965dfc37cd830f998df5fad85130f1801c8bd8d1",
+  "실행순서": [
+    "baseline-1",
+    "candidate-1",
+    "candidate-2",
+    "baseline-2",
+    "baseline-3",
+    "candidate-3"
+  ],
+  "시도": [
+    {
+      "variant": "baseline-1",
+      "원문SHA256": "a83b4ff0d1194a3ffbc67e8b1db96cac9053fbdc395efa363ffd59538a944924",
+      "metrics": [
+        {
+          "label": "short",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 6.900000095367432,
+          "p95": 7.200000047683716,
+          "max": 7.800000190734863,
+          "longTasks": [],
+          "commandDomMutations": 0,
+          "commands": 0,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "long-idle",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 7.599999904632568,
+          "p95": 7.900000095367432,
+          "max": 38.09999990463257,
+          "longTasks": [],
+          "commandDomMutations": 0,
+          "commands": 65,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "scroll-long-idle",
+          "samples": 47,
+          "scrolled": 1440,
+          "p95": 7.100000000000364,
+          "max": 7.699999999999818
+        },
+        {
+          "label": "long-running",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 8.599999904632568,
+          "p95": 52.69999980926514,
+          "max": 53,
+          "longTasks": [],
+          "commandDomMutations": 32,
+          "commands": 66,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "stream-command-serialization",
+          "calls": 2244,
+          "units": 47105436,
+          "mutations": 34
+        }
+      ]
+    },
+    {
+      "variant": "candidate-1",
+      "원문SHA256": "efb0738e0a54512366efb923d4f54845bd0cef3fb4bee69e875587056d6f0850",
+      "metrics": [
+        {
+          "label": "short",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 6.900000095367432,
+          "p95": 7.700000047683716,
+          "max": 7.900000095367432,
+          "longTasks": [],
+          "commandDomMutations": 0,
+          "commands": 0,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "long-idle",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 7.6000001430511475,
+          "p95": 8.800000190734863,
+          "max": 36.299999952316284,
+          "longTasks": [],
+          "commandDomMutations": 0,
+          "commands": 65,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "scroll-long-idle",
+          "samples": 47,
+          "scrolled": 1440,
+          "p95": 7.100000000000364,
+          "max": 13.800000000000182
+        },
+        {
+          "label": "long-running",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 6.900000095367432,
+          "p95": 47.700000047683716,
+          "max": 48,
+          "longTasks": [],
+          "commandDomMutations": 30,
+          "commands": 66,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "stream-command-serialization",
+          "calls": 0,
+          "units": 0,
+          "mutations": 34
+        }
+      ]
+    },
+    {
+      "variant": "candidate-2",
+      "원문SHA256": "32a00c9082fa710ad55ce24798838c90cbbbda2ef21f64f080f23ac294fb6436",
+      "metrics": [
+        {
+          "label": "short",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 6.900000095367432,
+          "p95": 7.099999904632568,
+          "max": 7.299999952316284,
+          "longTasks": [],
+          "commandDomMutations": 0,
+          "commands": 0,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "long-idle",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 7.599999904632568,
+          "p95": 11.200000047683716,
+          "max": 37.200000047683716,
+          "longTasks": [],
+          "commandDomMutations": 0,
+          "commands": 65,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "scroll-long-idle",
+          "samples": 48,
+          "scrolled": 1440,
+          "p95": 7.200000000000728,
+          "max": 7.599999999999454
+        },
+        {
+          "label": "long-running",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 6.400000095367432,
+          "p95": 47.40000009536743,
+          "max": 50,
+          "longTasks": [],
+          "commandDomMutations": 29,
+          "commands": 66,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "stream-command-serialization",
+          "calls": 0,
+          "units": 0,
+          "mutations": 34
+        }
+      ]
+    },
+    {
+      "variant": "baseline-2",
+      "원문SHA256": "fd6460fea00c5f4dd3de68f721d2e84a1e93b367973faadaf4d4a76d6681c74e",
+      "metrics": [
+        {
+          "label": "short",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 6.900000095367432,
+          "p95": 7.799999952316284,
+          "max": 8.700000047683716,
+          "longTasks": [],
+          "commandDomMutations": 0,
+          "commands": 0,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "long-idle",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 7.700000047683716,
+          "p95": 8.399999856948853,
+          "max": 38.799999952316284,
+          "longTasks": [],
+          "commandDomMutations": 0,
+          "commands": 65,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "scroll-long-idle",
+          "samples": 49,
+          "scrolled": 1440,
+          "p95": 7.899999999999636,
+          "max": 8
+        },
+        {
+          "label": "long-running",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 8.799999952316284,
+          "p95": 48.40000009536743,
+          "max": 48.80000019073486,
+          "longTasks": [],
+          "commandDomMutations": 33,
+          "commands": 66,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "stream-command-serialization",
+          "calls": 2112,
+          "units": 44334624,
+          "mutations": 32
+        }
+      ]
+    },
+    {
+      "variant": "baseline-3",
+      "원문SHA256": "925b5ed79b9431daf353a4249acc5f166800929f334d9081819788314f2c1276",
+      "metrics": [
+        {
+          "label": "short",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 6.900000095367432,
+          "p95": 7.200000047683716,
+          "max": 8.399999856948853,
+          "longTasks": [],
+          "commandDomMutations": 0,
+          "commands": 0,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "long-idle",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 7.5,
+          "p95": 8,
+          "max": 39,
+          "longTasks": [],
+          "commandDomMutations": 0,
+          "commands": 65,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "scroll-long-idle",
+          "samples": 48,
+          "scrolled": 1440,
+          "p95": 7.800000000000182,
+          "max": 8.5
+        },
+        {
+          "label": "long-running",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 7.200000047683716,
+          "p95": 52.799999952316284,
+          "max": 54.799999952316284,
+          "longTasks": [
+            50,
+            50,
+            52
+          ],
+          "commandDomMutations": 31,
+          "commands": 66,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "stream-command-serialization",
+          "calls": 2112,
+          "units": 44334432,
+          "mutations": 32
+        }
+      ]
+    },
+    {
+      "variant": "candidate-3",
+      "원문SHA256": "92230bf7382534546cd3365cd6c887b770f3ccae862a0c5d4a608c02697bdfdf",
+      "metrics": [
+        {
+          "label": "short",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 6.900000095367432,
+          "p95": 7.599999904632568,
+          "max": 9.200000047683716,
+          "longTasks": [],
+          "commandDomMutations": 0,
+          "commands": 0,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "long-idle",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 7.299999952316284,
+          "p95": 9.100000143051147,
+          "max": 31.899999856948853,
+          "longTasks": [],
+          "commandDomMutations": 0,
+          "commands": 65,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "scroll-long-idle",
+          "samples": 47,
+          "scrolled": 1440,
+          "p95": 8.399999999999636,
+          "max": 8.699999999999818
+        },
+        {
+          "label": "long-running",
+          "windowVisible": true,
+          "visibility": "visible",
+          "samples": 40,
+          "p50": 7.299999952316284,
+          "p95": 43.10000014305115,
+          "max": 44.59999990463257,
+          "longTasks": [],
+          "commandDomMutations": 32,
+          "commands": 66,
+          "viewport": {
+            "width": 1440,
+            "height": 868
+          },
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+        },
+        {
+          "label": "stream-command-serialization",
+          "calls": 0,
+          "units": 0,
+          "mutations": 34
+        }
+      ]
+    }
+  ]
+}

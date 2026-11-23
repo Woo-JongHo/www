@@ -250,7 +250,7 @@ export interface WwwApi {
   activityResources(selection: SelectionRef): Promise<ResourceSnapshot | null>;
   onActivityResources(listener: (snapshot: ResourceSnapshot) => void): () => void;
   onEvent(listener: (event: ScopedAppEvent) => void): () => void;
-  probeReady             ()                                   : Promise<{ enabled: boolean; readinessMs?: number; developmentPolicyAvailable?: boolean; developmentWorkId?: string; expectDevelopmentComplete?: boolean; checkInterruptPending?: boolean; checkReports?: boolean; checkNativeReports?: boolean; checkActivity?: boolean }>;
+  probeReady             ()                                   : Promise<{ enabled: boolean; windowVisible?: boolean; readinessMs?: number; developmentPolicyAvailable?: boolean; developmentWorkId?: string; expectDevelopmentComplete?: boolean; checkInterruptPending?: boolean; checkReports?: boolean; checkNativeReports?: boolean; checkActivity?: boolean }>;
   probeFinish            (result: Record<string, unknown>    ): Promise<void>;
   developmentPolicy      (sessionId?: string)                                   : Promise<DevelopmentPolicyInfo>;
   developmentStatus      (workId: string, sessionId?: string): Promise<DevelopmentWorkStatus>;

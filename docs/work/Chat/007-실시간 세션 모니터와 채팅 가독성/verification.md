@@ -1049,3 +1049,89 @@ GUI summary의 실제 Electron/main/IPC·합성 stdio와 실제 모델·실계�
 Chat 013의 사용자 결정에 따라 기본 화면 다섯 스킬과 상세 모니터의 두 역할·여섯 스킬을 구분해 원장 기준을 정정했다. 현재 후보에서 기본 개요의 항목과 개수, 상세 모니터가 실제 렌더링한 여덟 식별자, 요청·문서 읽기·명령 관측과 실제 적용의 표시를 집중 검사했다. [해당 시도](#attempt-21487614-dff6-42b7-a41f-cc4f76508d67)는 최종 빌드 후 동일 소스에서 실행됐고 공유 status는 AC-11을 적용 가능으로 판정했다.
 
 1차 마감 당시 9/12 기록과 현재 후보의 적용성은 별도로 본다. 현재 하네스는 전체 기준 정의와 소스 지문을 비교하므로 이 후보에서 직접 재확인한 기준은 AC-11 하나다. AC-05는 현재 macOS 프로세스의 접근성과 OS 키 전송 권한이 모두 꺼져 있어 실제 한글 입력 관측이 남았다. AC-10의 최종 통합 수용과 독립 검토도 열려 있다.
+
+## macOS 실기에서 확인한 한글 Enter 한 번 전송
+
+2026-11-24 사용자가 직접 두벌식으로 입력했다. 이전 후보는 ‘가’를 조합 중 Enter로 확정했지만 입력칸에 남겼다. 사용자는 첫 Enter로 전송하는 동작을 요청했다. 수정 시험본에서 같은 조합과 Enter의 키를 뗀 뒤 입력칸이 비었고, 실제 Electron IPC를 거친 로컬 Native fixture가 본문 ‘가’를 정확히 한 번 받았다. [실기 관찰](evidence/macos-physical-enter.json)에 두 시행을 구분해 보존했다.
+
+이후 키 반복·재전달, 확정이 먼저 오는 순서와 취소 처리를 보완했다. 최종 코드의 숨김 Electron 회귀에서는 조합 취소와 Shift+Enter 전송 0회, 재전달 및 순서 역전 각각 최종 음절 ‘각’ 1회 전송을 확인했다. Windows 실기는 사용자 시험 결과를 기다린다.
+
+<a id="attempt-a5f37c1b-5534-4529-864b-cc80438ce89d"></a>
+## 검증 시도 — 2026-11-23T23:06:56.579Z
+
+- 시도 ID: `attempt-a5f37c1b-5534-4529-864b-cc80438ce89d`
+- 실행 시각: 2026-11-23T23:06:56.306Z ~ 2026-11-23T23:06:56.579Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","scripts/verification/chat007-monitor.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-11`
+- AC-11 화면 관찰값: `{"agent":true,"sidebar":["www-spec","www-design","www-build","www-diagnose","www-verify"],"detail":["www-dev","www-design-agent","www-spec","www-design","www-build","www-diagnose","www-verify","www-commit"],"request":"요청됨","documentRead":"읽기 완료","commandRead":"읽기 명령 관측","applicationEvidence":true}`
+- 소스 HEAD: `66293a459a87c9f6c264d62a85b3453f96378d48`
+- 검증 입력: `agents/www-design/AGENT.md`, `agents/www/AGENT.md`, `build.ts`, `bunfig.toml`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts/verification/chat007-contract.ts`, `scripts/verification/chat007-monitor.ts`, `scripts/workflow/evidence.ts`, `skills/www/www-build/SKILL.md`, `skills/www/www-commit/SKILL.md`, `skills/www/www-design/SKILL.md`, `skills/www/www-diagnose/SKILL.md`, `skills/www/www-spec/SKILL.md`, `skills/www/www-verify/SKILL.md`, `src/activity-sidebar.cjs`, `src/activity-sidebar.cts`, `src/activity-sidebar.js`, `src/activity-sidebar.json`, `src/activity-sidebar.jsx`, `src/activity-sidebar.mjs`, `src/activity-sidebar.mts`, `src/activity-sidebar.ts`, `src/activity-sidebar.tsx`, `src/activity-sidebar/package.json`, `src/agent-overview-view.cjs`, `src/agent-overview-view.cts`, `src/agent-overview-view.js`, `src/agent-overview-view.json`, `src/agent-overview-view.jsx`, `src/agent-overview-view.mjs`, `src/agent-overview-view.mts`, `src/agent-overview-view.ts`, `src/agent-overview-view.tsx`, `src/agent-overview-view/package.json`, `src/agent-overview.cjs`, `src/agent-overview.cts`, `src/agent-overview.js`, `src/agent-overview.json`, `src/agent-overview.jsx`, `src/agent-overview.mjs`, `src/agent-overview.mts`, `src/agent-overview.ts`, `src/agent-overview.tsx`, `src/agent-overview/package.json`, `src/native-activity-view.cjs`, `src/native-activity-view.cts`, `src/native-activity-view.js`, `src/native-activity-view.json`, `src/native-activity-view.jsx`, `src/native-activity-view.mjs`, `src/native-activity-view.mts`, `src/native-activity-view.ts`, `src/native-activity-view.tsx`, `src/native-activity-view/package.json`, `src/native-activity.cjs`, `src/native-activity.cts`, `src/native-activity.js`, `src/native-activity.json`, `src/native-activity.jsx`, `src/native-activity.mjs`, `src/native-activity.mts`, `src/native-activity.ts`, `src/native-activity.tsx`, `src/native-activity/package.json`, `src/package.json`, `src/renderer.tsx`, `src/shared.cjs`, `src/shared.cts`, `src/shared.js`, `src/shared.json`, `src/shared.jsx`, `src/shared.mjs`, `src/shared.mts`, `src/shared.ts`, `src/shared.tsx`, `src/shared/package.json`, `src/tsconfig.json`, `src/www-activity.cjs`, `src/www-activity.cts`, `src/www-activity.js`, `src/www-activity.json`, `src/www-activity.jsx`, `src/www-activity.mjs`, `src/www-activity.mts`, `src/www-activity.ts`, `src/www-activity.tsx`, `src/www-activity/package.json`, `test/fixtures/chat007-monitor.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `3ba45a7bd87d7f4fa3546cfd24092ba1bb7811dbb3aaf0d68cb283b0be6a71f8`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 325바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-7e859cdf-5502-4ee1-9bf6-a3c131351d51"></a>
+## 검증 시도 — 2026-11-23T23:14:49.311Z
+
+- 시도 ID: `attempt-7e859cdf-5502-4ee1-9bf6-a3c131351d51`
+- 실행 시각: 2026-11-23T23:14:45.421Z ~ 2026-11-23T23:14:49.311Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","scripts/verification/chat007-monitor.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-11`
+- AC-11 화면 관찰값: `{"agent":"WWW Agent","sidebar":["spec:명세","design:설계","build:구현","diagnose:진단","verify:검증"],"detail":[["www-dev","개발 접수·통합","agents/www/AGENT.md","관측 없음"],["www-design-agent","화면·디자인 인계","agents/www-design/AGENT.md","관측 없음"],["www-spec","요구·수용 기준","skills/www/www-spec/SKILL.md","요청됨"],["www-design","구조·검증 설계","skills/www/www-design/SKILL.md","읽기 명령 관측"],["www-build","허용된 구현","skills/www/www-build/SKILL.md","읽기 완료"],["www-diagnose","원인 진단","skills/www/www-diagnose/SKILL.md","관측 없음"],["www-verify","동작·근거 검증","skills/www/www-verify/SKILL.md","관측 없음"],["www-commit","커밋·게시 절차","skills/www/www-commit/SKILL.md","관측 없음"]],"applicationEvidence":"문서 읽기 관측을 실제 역할·스킬 적용 완료로 표시하지 않습니다."}`
+- 소스 HEAD: `66293a459a87c9f6c264d62a85b3453f96378d48`
+- 검증 입력: `agents/www-design/AGENT.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `bunfig.toml`, `docs/architecture`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts`, `skills/www/www-build/SKILL.md`, `skills/www/www-commit/SKILL.md`, `skills/www/www-design/SKILL.md`, `skills/www/www-diagnose/SKILL.md`, `skills/www/www-spec/SKILL.md`, `skills/www/www-verify/SKILL.md`, `src`, `test/fixtures/activity-app-server.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `9345a2c8cee1ffe4512b3106424a9e4c1d1510f3ffc4a3054060b08f37d3e886`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 921바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-b40541dc-24a4-45da-a664-50b762684f9d"></a>
+## 검증 시도 — 2026-11-23T23:17:12.098Z
+
+- 시도 ID: `attempt-b40541dc-24a4-45da-a664-50b762684f9d`
+- 실행 시각: 2026-11-23T23:17:05.971Z ~ 2026-11-23T23:17:12.098Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","scripts/verification/chat007-monitor.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-11`
+- AC-11 화면 관찰값: `{"agent":"WWW Agent","sidebar":["spec:명세","design:설계","build:구현","diagnose:진단","verify:검증"],"detail":[["www-dev","개발 접수·통합","agents/www/AGENT.md","관측 없음"],["www-design-agent","화면·디자인 인계","agents/www-design/AGENT.md","관측 없음"],["www-spec","요구·수용 기준","skills/www/www-spec/SKILL.md","요청됨"],["www-design","구조·검증 설계","skills/www/www-design/SKILL.md","읽기 명령 관측"],["www-build","허용된 구현","skills/www/www-build/SKILL.md","읽기 완료"],["www-diagnose","원인 진단","skills/www/www-diagnose/SKILL.md","관측 없음"],["www-verify","동작·근거 검증","skills/www/www-verify/SKILL.md","관측 없음"],["www-commit","커밋·게시 절차","skills/www/www-commit/SKILL.md","관측 없음"]],"applicationEvidence":"문서 읽기 관측을 실제 역할·스킬 적용 완료로 표시하지 않습니다."}`
+- 소스 HEAD: `66293a459a87c9f6c264d62a85b3453f96378d48`
+- 검증 입력: `agents/www-design/AGENT.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `bunfig.toml`, `docs/architecture`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts`, `skills/www/www-build/SKILL.md`, `skills/www/www-commit/SKILL.md`, `skills/www/www-design/SKILL.md`, `skills/www/www-diagnose/SKILL.md`, `skills/www/www-spec/SKILL.md`, `skills/www/www-verify/SKILL.md`, `src`, `test/fixtures/activity-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/fixtures/package.json`, `test/package.json`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `dd5f87ca9783cd040edc74386f396cf0eca9b98c5bb58d890b3899b908fae01c`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 921바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-cebd3662-e384-4787-8c7b-cca59990cf87"></a>
+## 검증 시도 — 2026-11-23T23:23:50.157Z
+
+- 시도 ID: `attempt-cebd3662-e384-4787-8c7b-cca59990cf87`
+- 실행 시각: 2026-11-23T23:23:45.786Z ~ 2026-11-23T23:23:50.157Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","scripts/verification/chat007-monitor.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-11`
+- AC-11 화면 관찰값: `{"agent":"WWW Agent","sidebar":["spec:명세","design:설계","build:구현","diagnose:진단","verify:검증"],"detail":[["www-dev","개발 접수·통합","agents/www/AGENT.md","관측 없음"],["www-design-agent","화면·디자인 인계","agents/www-design/AGENT.md","관측 없음"],["www-spec","요구·수용 기준","skills/www/www-spec/SKILL.md","요청됨"],["www-design","구조·검증 설계","skills/www/www-design/SKILL.md","읽기 명령 관측"],["www-build","허용된 구현","skills/www/www-build/SKILL.md","읽기 완료"],["www-diagnose","원인 진단","skills/www/www-diagnose/SKILL.md","관측 없음"],["www-verify","동작·근거 검증","skills/www/www-verify/SKILL.md","관측 없음"],["www-commit","커밋·게시 절차","skills/www/www-commit/SKILL.md","관측 없음"]],"applicationEvidence":"문서 읽기 관측을 실제 역할·스킬 적용 완료로 표시하지 않습니다."}`
+- 소스 HEAD: `f997589a5eca39169b07ac46c9a747b283e898c1`
+- 검증 입력: `agents/www-design/AGENT.md`, `agents/www/AGENT.md`, `agents/www/review-policy.json`, `build.ts`, `bunfig.toml`, `docs/architecture`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts`, `skills/www/www-build/SKILL.md`, `skills/www/www-commit/SKILL.md`, `skills/www/www-design/SKILL.md`, `skills/www/www-diagnose/SKILL.md`, `skills/www/www-spec/SKILL.md`, `skills/www/www-verify/SKILL.md`, `src`, `test/fixtures/activity-app-server.ts`, `test/fixtures/fake-app-server.ts`, `test/fixtures/package.json`, `test/package.json`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `a75a5b931498f1c40da289e4325e697c8a1c496ed952a6031e15a0a113e02240`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 921바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.

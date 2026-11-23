@@ -5,6 +5,7 @@
 import { copyFileSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { writeArchitecture } from "./scripts/generate-architecture.ts";
+import { verifyMonitorBundle } from "./scripts/verification/chat007-inputs.ts";
 import { buildInfo, ovisNoticePath } from "./scripts/release.ts";
 const root = import.meta.dir    ;
 const out  = join(root, "dist") ;
@@ -15,6 +16,7 @@ mkdirSync(out, { recursive: true });
 async function bundle(entry: string, target: "node" | "browser", format: "cjs" | "iife") {
   const result = await Bun.build({
     entrypoints : [join(root, "src", entry)] ,
+    metafile: process.env.WWW_CHAT007_OBSERVE_INPUTS === "1",
     outdir      : out                        ,
     target                                   ,
     format                                   ,
@@ -23,6 +25,10 @@ async function bundle(entry: string, target: "node" | "browser", format: "cjs" |
     naming   : entry.replace(/\.tsx?$/, ".js") ,
     external : target === "node" ? ["electron"] : []
   });
+  if (process.env.WWW_CHAT007_OBSERVE_INPUTS === "1") {
+    if (!result.metafile) throw Error("AC-11 실제 번들 입력 누락");
+    verifyMonitorBundle(root, result.metafile.inputs, result.metafile.outputs);
+  }
   if (!result.success) throw new AggregateError(result.logs, `Failed to build ${entry}`);
 }
 await bundle(  "main.ts"   ,  "node"  , "cjs" );
