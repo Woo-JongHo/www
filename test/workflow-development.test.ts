@@ -602,7 +602,7 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
   assert.equal(second.acceptance?.status, "accepted", second.acceptance?.reasons.join(","));
   assert.ok(second.workId);
   const { assessDecompositionCompletion, assessUnitAcceptance } = await import("../scripts/workflow/decomposition.ts");
-  const { authorizationDigest, continueWork, verifyWork } = await import("../scripts/workflow/work.ts");
+  const { assessWork, authorizationDigest, continueWork, verifyWork } = await import("../scripts/workflow/work.ts");
   const before = await readWork({ repo, workId: second.workId });
   assert.equal(before.record.schemaVersion, 2);
   assert.ok(before.record.workflow);
@@ -628,6 +628,28 @@ test("C02 실제 fixture 프로세스의 독립 산출물과 현재 검증을 �
   assert.match((await assessDecompositionCompletion(repo, inverted)).reasons.join(","), /fixture-task: verification_failed/);
   later.startedAt = early.startedAt;
   assert.match((await assessDecompositionCompletion(repo, inverted)).reasons.join(","), /fixture-task: verification_failed/);
+  const stale = { ...later, result: "passed" as const, exitCode: 0, source: { ...later.source, digest: "0".repeat(64) } };
+  for (const tied of [[stale, early], [early, stale]]) {
+    inverted.workflow.verifications = [...inverted.workflow.verifications.filter(v => v.id !== early.id && v.id !== later.id), ...tied];
+    assert.match((await assessDecompositionCompletion(repo, inverted)).reasons.join(","), /fixture-task: source_changed/);
+  }
+  const current = await readWork({ repo, workId: second.workId });
+  const latestStartedAt = Math.max(...inverted.workflow.verifications.map(v => Date.parse(v.startedAt)));
+  const tiedAt = new Date(latestStartedAt + 1).toISOString();
+  const finalTwo = inverted.workflow.verifications.splice(-2);
+  finalTwo.forEach(v => { v.startedAt = tiedAt; });
+  // 저장 순서가 현재 근거를 고르는 기준이 되는지도 공개 상태 판정으로 확인한다.
+  try {
+    for (const order of [finalTwo, [...finalTwo].reverse()]) {
+      await writeFile(current.path, JSON.stringify({ ...inverted, workflow: {
+        ...inverted.workflow, verifications: [...inverted.workflow.verifications, ...order],
+      } }));
+      const status = await assessWork({ repo, workId: second.workId });
+      assert.ok(status.criteria?.find(item => item.id === "AC-1")?.reasons.includes("source_changed"));
+    }
+  } finally {
+    await writeFile(current.path, current.rawSource ?? JSON.stringify(independentlyVerified));
+  }
   const oneCriterionPassed = structuredClone(independentlyVerified);
   oneCriterionPassed.workflow.verifications.push({ ...later, result: "passed", exitCode: 0, startedAt: new Date(Date.parse(early.startedAt) + 1).toISOString() });
   assert.equal((await assessDecompositionCompletion(repo, oneCriterionPassed)).usable, true);

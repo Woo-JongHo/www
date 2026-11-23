@@ -10,7 +10,7 @@ import { validateRequirementRefs, validateWorkRecord, parseWorkRecord } from "./
 import { findWorkRecord, resolveInside, validateWritePaths, workOutputColumns } from "./preflight.ts";
 import { serializeWorkRecord } from "./work-json.ts";
 import { hashRequest, normalizeApproval } from "./route.ts";
-import { captureSource, criteriaDigest, currentVerifications, evaluateEvidence, renderAttempt, validEnvironmentObservation, verificationCommandFailed, verify, verifyInSession, withVerificationReuse } from "./evidence.ts";
+import { captureSource, criteriaDigest, currentVerifications, evaluateEvidence, latestVerificationGroup, renderAttempt, validEnvironmentObservation, verificationCommandFailed, verify, verifyInSession, withVerificationReuse } from "./evidence.ts";
 import { loadReviewPolicy, validateReview, durableJson } from "./review.ts";
 import { withWorkLock, inspectWorkLock, recoverWorkLock, retryWorkWriter, WorkLockBusyError } from "./lock.ts";
 import type { WorkExecutionHost } from "./lock.ts";
@@ -498,9 +498,16 @@ async function appendVerification(repo: string, workId: string, attempt: Verific
     let currentObservation = false;
     for (const criterion of record.criteria) {
       if (!attempt.criterionIds.includes(criterion.id)) continue;
-      const latest = chronological.filter(item => item.criterionIds.includes(criterion.id)).at(-1);
-      if (latest?.id === attempt.id) {
+      const latest = latestVerificationGroup(chronological.filter(item => item.criterionIds.includes(criterion.id)));
+      if (latest.some(item => item.id === attempt.id)) {
         criterion.result = attemptedResult;
+        if (latest.length > 1) {
+          const outcomes = await Promise.all(latest.map(async item => {
+            const evaluation = item.id === attempt.id ? applicable : await evaluateEvidence({ repo, record, attempt: item });
+            return evaluation.usable ? "passed" : isCurrentCommandFailure(item, evaluation.reasons) ? "failed" : "unverified";
+          }));
+          criterion.result = outcomes.includes("failed") ? "failed" : outcomes.includes("unverified") ? "unverified" : "passed";
+        }
         currentObservation = true;
       }
       criterion.evidence.push({ attemptId: attempt.id, path: `verification.md#${attempt.id}`, summary: `종료 코드 ${attempt.exitCode ?? "미확인"}, 기준 ${attemptedResult}` });
@@ -516,9 +523,10 @@ async function assessRequiredCriteria(repo: string, record: CurrentWorkRecord) {
   const criteria = [];
   const verifications = currentVerifications(record.workflow.verifications, record.workflow.continuations?.at(-1));
   for (const criterion of record.criteria.filter(item => item.required)) {
-    const attempt = verifications.filter(item => item.criterionIds.includes(criterion.id)).at(-1);
-    const evaluation = attempt ? await evaluateEvidence({ repo, record, attempt }) : { usable: false, reasons: ["검증 시도 없음"] } ;
-    criteria.push({ id: criterion.id, ...evaluation });
+    const latest = latestVerificationGroup(verifications.filter(item => item.criterionIds.includes(criterion.id)));
+    const evaluations = await Promise.all(latest.map(attempt => evaluateEvidence({ repo, record, attempt })));
+    const reasons = latest.length ? [...new Set(evaluations.flatMap(evaluation => evaluation.reasons))] : ["검증 시도 없음"];
+    criteria.push({ id: criterion.id, usable: reasons.length === 0, reasons });
   }
   return criteria;
 }
@@ -535,8 +543,9 @@ function isCurrentCommandFailure(attempt: VerificationAttempt | undefined, reaso
 async function requiredEvidenceAction(repo: string, record: CurrentWorkRecord, criteria: CriterionAssessment[], ready: "review" | "complete") {
   const verifications = currentVerifications(record.workflow.verifications, record.workflow.continuations?.at(-1));
   const failures = criteria.filter(criterion => {
-    const attempt = verifications.filter(item => item.criterionIds.includes(criterion.id)).at(-1);
-    return isCurrentCommandFailure(attempt, criterion.reasons);
+    const latest = latestVerificationGroup(verifications.filter(item => item.criterionIds.includes(criterion.id)));
+    // 단일 최신 시도의 실제 명령 실패가 확정된 경우만 구현으로 돌린다.
+    return latest.length === 1 && isCurrentCommandFailure(latest[0], criterion.reasons);
   });
   if (failures.length) {
     record.blockedReason = failures.map(criterion => `${criterion.id}: verification_failed`).join("; ");

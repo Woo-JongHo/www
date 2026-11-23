@@ -6,7 +6,7 @@ import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { validateWritePaths } from "./preflight.ts";
-import { currentVerifications, evaluateEvidence, type VerificationAttempt } from "./evidence.ts";
+import { currentVerifications, evaluateEvidence, latestVerificationGroup, type VerificationAttempt } from "./evidence.ts";
 import type { CurrentWorkRecord } from "./types.ts";
 import { readRuntime, runtimePaths } from "./record.ts";
 
@@ -232,9 +232,11 @@ export async function assessDecompositionCompletion(repo: string, record: Curren
         && attempt.artifacts?.some(artifact => artifact.path === item.resultPath));
       const latestByCriterion = new Map<VerificationAttempt | undefined, string[]>();
       for (const id of item.criterionIds) {
-        const attempt = matching.filter(candidate => candidate.criterionIds.includes(id)).at(-1);
-        const group = latestByCriterion.get(attempt) ?? [];
-        latestByCriterion.set(attempt, [...group, id]);
+        const latest = latestVerificationGroup(matching.filter(candidate => candidate.criterionIds.includes(id)));
+        for (const attempt of latest.length ? latest : [undefined]) {
+          const group = latestByCriterion.get(attempt) ?? [];
+          latestByCriterion.set(attempt, [...group, id]);
+        }
       }
       const unitReasons = new Set<string>();
       for (const [attempt, criterionIds] of latestByCriterion) {
