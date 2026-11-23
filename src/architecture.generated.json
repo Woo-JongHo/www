@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "152361f856b204fb4994130e8e944a0b7f623adbe051796fbf0249b47030bf89",
+  "digest"       : "2a1d8bc36df5fa515c11b9fda3e331b8a4c68e9951c3736ea2a09c0d267ff6ef",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -213,8 +213,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · evidence",
       "line"       : 1,
-      "lines"      : 678,
-      "digest"     : "79f4f628f9751f97b9f6172dd27d73db9e009afb35cbac31ffbdcf3294dee0be",
+      "lines"      : 679,
+      "digest"     : "e73ff6faf63a9e9d7852043a27f1b21b6d70458d23c2280da9cfa3c07b2fa4ec",
       "structureId": "arch.development.evidence.verification"
     },
     {
@@ -598,8 +598,8 @@
       "layer"      : "host",
       "role"       : "앱 모듈 · dashboard-evidence",
       "line"       : 1,
-      "lines"      : 144,
-      "digest"     : "483b0af2c90ba978ad789b44f3b73a121112804d5995d7d63049740331f0de88",
+      "lines"      : 177,
+      "digest"     : "ebc0d24721eeece8af22878be82ba25fecd11ddc840bfcd23578a2bcdafd11bb",
       "structureId": "arch.native.projects"
     },
     {
@@ -621,7 +621,7 @@
       "role"       : "앱 모듈 · dashboard",
       "line"       : 1,
       "lines"      : 292,
-      "digest"     : "f163805a9becbebcfb1f3d0c941594264bbdfd61864bb1592c34fd088e1bbbdd",
+      "digest"     : "9b377a4b1d362aaab9279e7296edac3bce0f6239ed1b19825fab07a48fa7ea62",
       "structureId": "arch.native.projects"
     },
     {
@@ -2541,47 +2541,47 @@
       "statement": "import type { AppEvent, ConversationCatalog, ConversationSummary } from \"./shared\";"
     },
     {
-      "id"       : "src/dashboard-evidence.ts:207",
+      "id"       : "src/dashboard-evidence.ts:242",
       "from"     : "src/dashboard-evidence.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "../scripts/workflow/evidence.ts",
-      "line"     : 8,
-      "endLine"  : 8,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import { captureSource, criterionEvidence, evaluateEvidence } from \"../scripts/workflow/evidence.ts\";"
     },
     {
-      "id"       : "src/dashboard-evidence.ts:309",
+      "id"       : "src/dashboard-evidence.ts:344",
       "from"     : "src/dashboard-evidence.ts",
       "to"       : "scripts/workflow/evidence.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "../scripts/workflow/evidence.ts",
-      "line"     : 9,
-      "endLine"  : 9,
+      "line"     : 10,
+      "endLine"  : 10,
       "statement": "import type { Artifact, EvidenceEvaluation, EvidenceObservations, ExecutionEnvironment, VerificationAttempt } from \"../scripts/workflow/evidence.ts\";"
     },
     {
-      "id"       : "src/dashboard-evidence.ts:459",
+      "id"       : "src/dashboard-evidence.ts:494",
       "from"     : "src/dashboard-evidence.ts",
       "to"       : "scripts/workflow/types.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "../scripts/workflow/types.ts",
-      "line"     : 10,
-      "endLine"  : 10,
+      "line"     : 11,
+      "endLine"  : 11,
       "statement": "import { currentVerifications, latestVerificationGroup } from \"../scripts/workflow/types.ts\";"
     },
     {
-      "id"       : "src/dashboard-evidence.ts:553",
+      "id"       : "src/dashboard-evidence.ts:588",
       "from"     : "src/dashboard-evidence.ts",
       "to"       : "src/shared.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./shared",
-      "line"     : 11,
-      "endLine"  : 11,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import type { DashboardApplicability } from \"./shared\";"
     },
     {
@@ -4049,7 +4049,7 @@
     },
     {
       "file"     : "scripts/workflow/evidence.ts",
-      "line"     : 537,
+      "line"     : 538,
       "specifier": "node:os",
       "reason"   : "external"
     },
@@ -4459,6 +4459,12 @@
       "file"     : "src/dashboard-evidence.ts",
       "line"     : 7,
       "specifier": "node:path",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/dashboard-evidence.ts",
+      "line"     : 8,
+      "specifier": "node:os",
       "reason"   : "external"
     },
     {
@@ -7053,7 +7059,7 @@
         "line": 2
       }
     ],
-    "digest": "089eeb73b4e21392bd365f72bb845829d2027f3c6ec891b834e16256ffea1206",
+    "digest": "915a8e6eccdf0759a00cdc1bfc726a1bfdc4ae116e3029aac1401866420a1a61",
     "statecharts": {
       "models": [
         {
@@ -7303,7 +7309,7 @@
         }
       ],
       "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-      "sourceDigest": "43de201cef35720c08d00215b992db69787ff0f4c87b498039bc731d6a0784e4",
+      "sourceDigest": "e5c3b9a57f76d8cc1bb3256cabd09230bfa4361f58079ce8fa8e11dbe38fd591",
       "sources": [
         {
           "file": "scripts/workflow/completion-report.ts",
@@ -7315,7 +7321,7 @@
         },
         {
           "file": "scripts/workflow/evidence.ts",
-          "digest": "79f4f628f9751f97b9f6172dd27d73db9e009afb35cbac31ffbdcf3294dee0be"
+          "digest": "e73ff6faf63a9e9d7852043a27f1b21b6d70458d23c2280da9cfa3c07b2fa4ec"
         },
         {
           "file": "scripts/workflow/review.ts",
@@ -7605,7 +7611,7 @@
       }
     ],
     "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-    "sourceDigest": "43de201cef35720c08d00215b992db69787ff0f4c87b498039bc731d6a0784e4",
+    "sourceDigest": "e5c3b9a57f76d8cc1bb3256cabd09230bfa4361f58079ce8fa8e11dbe38fd591",
     "sources": [
       {
         "file": "scripts/workflow/completion-report.ts",
@@ -7617,7 +7623,7 @@
       },
       {
         "file": "scripts/workflow/evidence.ts",
-        "digest": "79f4f628f9751f97b9f6172dd27d73db9e009afb35cbac31ffbdcf3294dee0be"
+        "digest": "e73ff6faf63a9e9d7852043a27f1b21b6d70458d23c2280da9cfa3c07b2fa4ec"
       },
       {
         "file": "scripts/workflow/review.ts",

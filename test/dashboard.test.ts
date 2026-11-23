@@ -385,7 +385,10 @@ test("같은 실제 시도의 기준 정의 변경을 목록·상세와 공식 �
     const value = record();
     const inputs = ["feature.txt"];
     await fs.writeFile(join(project.path, inputs[0]!), "현재 동작");
-    const attempt = await verify({ repo: project.path, record: value, inputs, command: "node", args: ["-e", "process.exit(0)"], criterionIds: ["C1", "C2"] });
+    const raw = join(project.path, "receipt.txt");
+    await fs.writeFile(raw, "프로세스 시험 원문");
+    const args = ["-e", "require('node:assert/strict').equal(require('node:fs').readFileSync('feature.txt','utf8'),'현재 동작')"];
+    const attempt = await verify({ repo: project.path, record: value, inputs, command: "node", args, criterionIds: ["C1", "C2"], artifactPaths: ["receipt.txt"] });
     const criteria = value.criteria.map(c => c.id === "C2" ? { ...c, description: "변경된 동작" } : c);
     const changed = { ...value, criteria, workflow: { inputs, verifications: [attempt] } };
     await save("actual", changed);
@@ -397,6 +400,11 @@ test("같은 실제 시도의 기준 정의 변경을 목록·상세와 공식 �
       expect(c.applicability?.status === "current").toBe(official.usable);
     }
     expect(detail.criteria[1]?.applicability).toEqual({ status: "stale", reasons: ["수용 기준 변경"] });
+    await fs.writeFile(raw, Buffer.alloc(DASHBOARD_LIMITS.fileBytes + 1));
+    expect((await readDashboardWork([project], project.key, value.id)).criteria[0]?.applicability?.status).toBe("unassessed");
+    await fs.rm(raw);
+    expect((await readDashboardWork([project], project.key, value.id)).criteria[0]?.applicability).toEqual({ status: "stale", reasons: ["검증 원문 누락"] });
+    await fs.writeFile(raw, "프로세스 시험 원문");
     await fs.writeFile(join(project.path, inputs[0]!), "다른 동작");
     expect((await readDashboard([project])).projects[0]?.cards[0]?.currentCriteria).toBe(0);
     expect((await readDashboard([external])).projects[0]?.cards[0]?.unassessedCriteria).toBe(2);

@@ -95,7 +95,7 @@ async function readBytes(root: string, file: string, budget: { bytes: number }, 
   if (info.size > limit) throw new ReadFailure("file_size_limit", "파일 하나의 읽기 크기 한도를 넘었습니다.");
   if (info.size > budget.bytes) throw new ReadFailure("total_size_limit", "이번 읽기의 전체 크기 한도를 넘었습니다.");
   if (await fs.realpath(file) !== file) throw new ReadFailure("unsafe_path", "작업 기록의 실제 경로가 바뀌었습니다.");
-  const handle = await fs.open(file, constants.O_RDONLY | constants.O_NOFOLLOW);
+  const handle = await fs.open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
   try {
     const opened = await handle.stat();
     if (!opened.isFile() || opened.nlink !== 1 || opened.dev !== info.dev || opened.ino !== info.ino) throw new ReadFailure("changed_during_read", "읽기 전에 작업 기록이 교체되었습니다.");

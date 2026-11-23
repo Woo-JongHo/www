@@ -202,6 +202,7 @@ export async function captureSource({ repo, inputs, reader }: { repo?: string; i
   const selected = inputPaths(inputs)              ;
   const captured = new Map<string, CapturedFile>() ;
   async function visit(relative: string) {
+    if (reader && captured.has(relative)) return;
     const target = path.resolve(root, relative);
     if (target !== root && !target.startsWith(`${root}${path.sep}`)) throw new Error("검증 입력이 저장소를 벗어납니다.");
     let stat;
