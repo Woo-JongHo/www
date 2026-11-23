@@ -1291,3 +1291,24 @@ AC-10의 전체 구현 수용은 보류다. 이번 시행의 전송 상대는 �
 [공식 v2 시도](#attempt-eabc8fb6-9bed-4368-98c5-a379f09c0ca2)는 실제 화면 관찰과 단계별 의존 경로를 같은 프로세스 출력 지문에 묶었다. 생성기가 실제 읽는 구조 검사 스크립트와 열거 디렉터리도 포함한다. v1 기록에는 당시 전체 스크립트 지문을 적용하며, 새 범위를 과거 기록에 소급하지 않는다.
 
 [과거 후보의 실제 Git 파일 대조](../../Workflow/021-누적%20요구사항%20사용성%20개선과%20병렬%20통합%20검증/evidence/chat007-script-replay.json)에서 89af445와 6878c8c의 입력 145개 중 달라진 것은 PR 분류기와 일반 채팅 검증기 두 파일뿐이었다. 현재 AC-11 시도의 다른 입력을 고정한 사본에 각 후보의 실제 두 파일을 복원하자 양쪽 모두 유효했다. 실제 Electron 검증기 변경, 구조 생성기가 읽는 파일 변경, 열거된 디렉터리에 파일 추가는 각각 재검사 대상으로 판정했다.
+
+<a id="attempt-79c6af69-89d4-47a8-b2ca-6bcc9691c4db"></a>
+## 검증 시도 — 2026-11-23T23:57:12.932Z
+
+- 시도 ID: `attempt-79c6af69-89d4-47a8-b2ca-6bcc9691c4db`
+- 실행 시각: 2026-11-23T23:57:01.640Z ~ 2026-11-23T23:57:12.932Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test/probes/ime-failed-send.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-05`
+- 소스 HEAD: `7c69cda0436c6b67385a40eea7d6dd6f820182f6`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `e93e99c378468f7908f0710b7092bd19474693cb70466821172ab8664ac86a2b`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/evidence/macos-physical-enter.json` (9343바이트, sha256 47d9e79cb21aa165af124589ef1acb75a21f5dec617b7b707bedd016bbf2a7e8)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 948바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
