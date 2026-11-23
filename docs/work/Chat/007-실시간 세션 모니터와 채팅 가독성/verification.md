@@ -913,3 +913,139 @@ GUI summary의 실제 Electron/main/IPC·합성 stdio와 실제 모델·실계�
 - 검증 중 소스 유지: 확인
 - 출력: stdout 973바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-d162c58c-5cb3-49d2-b988-6e6eca50f4ed"></a>
+## 검증 시도 — 2026-11-23T01:05:40.928Z
+
+- 시도 ID: `attempt-d162c58c-5cb3-49d2-b988-6e6eca50f4ed`
+- 실행 시각: 2026-11-23T01:05:06.354Z ~ 2026-11-23T01:05:40.928Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-chat.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-03`, `AC-04`, `AC-06`, `AC-07`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `8d7f6f1f2087462f23e015f7720f95c63a85fbc4ad001e18d6de863b72838a01`
+- 기준 정의 식별: `772044fccf72bd02d84b48fd2ed1c299972102805b280aa760f6ed7bcaa45f42`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 30730바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-6acaadd1-c9b9-4a95-8ccd-68d5a6420880"></a>
+## 검증 시도 — 2026-11-23T01:05:48.921Z
+
+- 시도 ID: `attempt-6acaadd1-c9b9-4a95-8ccd-68d5a6420880`
+- 실행 시각: 2026-11-23T01:05:44.075Z ~ 2026-11-23T01:05:48.921Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-native-activity.ts","--ui-only"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-01`, `AC-02`, `AC-03`, `AC-04`, `AC-11`, `AC-12`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `8d7f6f1f2087462f23e015f7720f95c63a85fbc4ad001e18d6de863b72838a01`
+- 기준 정의 식별: `772044fccf72bd02d84b48fd2ed1c299972102805b280aa760f6ed7bcaa45f42`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 973바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-3a48ee57-a4dd-4209-9587-4fccded4fe28"></a>
+## 검증 시도 — 2026-11-23T03:20:07.367Z
+
+- 시도 ID: `attempt-3a48ee57-a4dd-4209-9587-4fccded4fe28`
+- 실행 시각: 2026-11-23T03:20:06.561Z ~ 2026-11-23T03:20:07.367Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/check-workflow.ts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-08`, `AC-09`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `34e202608b63d04f5b9936a506239b3b4e7a30d647ec80cd9bdea2040d9f4da2`
+- 기준 정의 식별: `772044fccf72bd02d84b48fd2ed1c299972102805b280aa760f6ed7bcaa45f42`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/work-eed41da3-f22e-4fb9-b9df-9a1a7d76c44f/design-research.md` (4726바이트, sha256 ac74ca6bbef2c60efc778463b6c660403350f00abbba50276e1747f61dcd2a71), `.www/evidence/work-eed41da3-f22e-4fb9-b9df-9a1a7d76c44f/gjc-reference.txt` (67872바이트, sha256 533fc0a9feb1e42067b9ed5ff886d62e18ad9f16b447482f09d87e72d39d7da3)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 96바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+- 2026-11-23 디자인 역할의 현재 입력·출력·사용자 권한과 구현·독립 검토 인계를 `agents/www-design/AGENT.md`에서, 의미 토큰·접근성을 `docs/design-system.md`와 `src/chat.css`에서, 명령 카드 상태·Ctrl+T·`aria-expanded`·출력 초점 적용을 `src/command-card.tsx`에서 대조했다. 역할 계약과 UI 파일럿의 수용을 확인한다. 역할의 호스트 자동 등록·호출을 이 근거로 주장하지 않는다.
+- AC-09의 현재 비교 문서에 Ovis·assistant-ui·T3 Code의 공식 고정 리비전, 라이선스, 채택 범위, GJC 실제 TUI 관측과 기존 Ovis 고지 범위가 들어 있다. 보존본의 GJC 출력과 조사 원문을 이전 영수증 `attempt-1e21ced6-a95d-4abc-a4c2-3019e223723c`의 바이트·SHA-256에 맞춰 복구하고 현재 문서 검사 `attempt-3a48ee57-a4dd-4209-9587-4fccded4fe28`에 결속했다. GJC 관측은 실제 당시 실행 기록이다. 새 후보 앱 설치 또는 API 실행을 이 명령에서 수행하지 않았다.
+
+<a id="attempt-bc8a3d33-9488-4ad5-81b5-f668821b2cf3"></a>
+## 검증 시도 — 2026-11-23T04:22:01.235Z
+
+- 시도 ID: `attempt-bc8a3d33-9488-4ad5-81b5-f668821b2cf3`
+- 실행 시각: 2026-11-23T04:22:00.623Z ~ 2026-11-23T04:22:01.235Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/dashboard-rollforward-20261123/chat007-current-shared-ui.mts"]`
+- 실행 결과: 통과; 종료 코드 0, 신호 없음
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-01`, `AC-02`, `AC-03`, `AC-04`, `AC-06`, `AC-07`, `AC-12`
+- 소스 HEAD: `939c7efcfdbf7d1e6344f01153b857b63bee87d6`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `34e202608b63d04f5b9936a506239b3b4e7a30d647ec80cd9bdea2040d9f4da2`
+- 기준 정의 식별: `772044fccf72bd02d84b48fd2ed1c299972102805b280aa760f6ed7bcaa45f42`
+- 검증 중 소스 유지: 확인
+- 검증 의존 원문: `.www/evidence/chat006-closeout/gui-stdout.blob` (30730바이트, sha256 759b21f8773a8c5d2d1eeb20184e8c418d2971d78988d555bfb2cb1bff7650c7), `.www/evidence/dashboard-rollforward-20261123/chat007-command-path.tsx` (925바이트, sha256 49e4995347ae550c182e0a382e74b9174ec8e87bc34affbc69e01e71bfcffedd), `.www/evidence/dashboard-rollforward-20261123/chat007-current-shared-ui.mts` (5630바이트, sha256 e6f263a9e6efdb85f7baa462f4493375c625348a634c06e1f6b6c08aa8a3b2e0), `.www/evidence/native-activity-k4PchQ/summary.json` (1168바이트, sha256 3cc45dc6ea3131bd97d7232cf5f9447fea1d9d3e5aea44949ac9b81fadb734fd)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 551바이트, stderr 55718바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+
+### 현재 소스의 공용 Electron 관찰 재연결
+
+2026-11-23 시도 `attempt-bc8a3d33-9488-4ad5-81b5-f668821b2cf3`에서 `AC-01`, `AC-02`, `AC-03`, `AC-04`, `AC-06`, `AC-07`, `AC-12`의 현재 결과를 갱신했다. 실제 Electron과 합성 Native stdio로 실행했던 Chat/006 `attempt-e83889b1`, Chat/003 `attempt-8f87a792` 두 시도를 공유 core로 재평가했다. 두 원본 stdout의 바이트 길이와 SHA-256이 각 공식 시도와 일치했고 시험 조건을 기준별로 대조했다.
+
+- 턴 선택과 읽기 위치 및 대화별 초안 보존, 재접속 때 과거 Hook 반복 방지, Skill 읽기와 적용 근거 구분을 확인했다.
+- 현재 요청의 경과 시간·마지막 활동·승인·연결 경고·결과 미확인, 스트리밍 전후 공개 설명·요약·명령·답변을 대조했다.
+- 마지막 문장과 표·코드 접근, 10줄 출력의 들여쓰기·전체 보관 출력·실패·거절·중단을 기존 창에서 관찰했다. 명령과 한글이 포함된 작업 경로는 현재 투영에서 실제 컴포넌트 정적 렌더까지 좁혀 다시 검사했다.
+- 일반 Hook의 상세 분리, 실패와 완료 두 기록, 별도 오류 문구를 확인했다. 관련 집중 테스트 459개가 통과했다.
+
+두 GUI 검사는 합성 서버를 사용했다. OS 한글 조합 실기와 최종 통합 수용은 각각 `AC-05`와 `AC-10`에 남아 있다. `AC-11`은 현재 기본 다섯·상세 여섯 스킬의 현행 제품 명세와 원장에 남은 기본 여섯 스킬의 기준이 충돌한다. 공식 기준은 변경하지 않았다.
+
+<a id="attempt-22a58a17-2836-4a80-bd4e-f934c25d39a9"></a>
+## 검증 시도 — 2026-11-23T22:30:15.864Z
+
+- 시도 ID: `attempt-22a58a17-2836-4a80-bd4e-f934c25d39a9`
+- 실행 시각: 2026-11-23T22:30:15.746Z ~ 2026-11-23T22:30:15.864Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test","test/agent-overview.test.ts","test/www-activity.test.ts","test/www-activity-view.test.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-11`
+- 소스 HEAD: `403550d33222577ebfca01f5f2b7b133b1659b81`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `d0a43d6cc8a39bc2d4366fc258e339900d6d9c5a9ed9b7d5d53cfdfb6df8e318`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 28바이트, stderr 14027바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-21487614-dff6-42b7-a41f-cc4f76508d67"></a>
+## 검증 시도 — 2026-11-23T22:31:21.466Z
+
+- 시도 ID: `attempt-21487614-dff6-42b7-a41f-cc4f76508d67`
+- 실행 시각: 2026-11-23T22:31:21.355Z ~ 2026-11-23T22:31:21.466Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test","test/agent-overview.test.ts","test/www-activity.test.ts","test/www-activity-view.test.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-11`
+- 소스 HEAD: `403550d33222577ebfca01f5f2b7b133b1659b81`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `9a1f6924acabd5ffa982090cd8e8c78c7a71483fa5d924f82d8b6f331f26e4b3`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 28바이트, stderr 14036바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+## #25의 AC-11 판정
+
+Chat 013의 사용자 결정에 따라 기본 화면 다섯 스킬과 상세 모니터의 두 역할·여섯 스킬을 구분해 원장 기준을 정정했다. 현재 후보에서 기본 개요의 항목과 개수, 상세 모니터가 실제 렌더링한 여덟 식별자, 요청·문서 읽기·명령 관측과 실제 적용의 표시를 집중 검사했다. [해당 시도](#attempt-21487614-dff6-42b7-a41f-cc4f76508d67)는 최종 빌드 후 동일 소스에서 실행됐고 공유 status는 AC-11을 적용 가능으로 판정했다.
+
+1차 마감 당시 9/12 기록과 현재 후보의 적용성은 별도로 본다. 현재 하네스는 전체 기준 정의와 소스 지문을 비교하므로 이 후보에서 직접 재확인한 기준은 AC-11 하나다. AC-05는 현재 macOS 프로세스의 접근성과 OS 키 전송 권한이 모두 꺼져 있어 실제 한글 입력 관측이 남았다. AC-10의 최종 통합 수용과 독립 검토도 열려 있다.
