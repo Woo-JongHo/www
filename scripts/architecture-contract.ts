@@ -3,7 +3,7 @@
  * @implements RESP-TOOLING-STRUCTURE-CONTRACT
  */
 import { createHash } from "node:crypto";
-import { existsSync, lstatSync, readFileSync, readdirSync, realpathSync } from "node:fs";
+import { appendFileSync, existsSync, lstatSync, readFileSync, readdirSync, realpathSync } from "node:fs";
 import path from "node:path";
 import ts from "typescript";
 import { collectWorkflowStatecharts } from "./workflow/statechart.ts";
@@ -82,8 +82,18 @@ export function architecturePath(root: string, file: string): string {
   }
   return current;
 }
-function read(root: string, file: string): string { return readFileSync(architecturePath(root, file), "utf8"); }
+function observeBuildData(file: string) {
+  const trace = process.env.WWW_CHAT007_SCRIPT_TRACE;
+  if (trace && process.env.WWW_CHAT007_SCRIPT_PHASE === "build" && file.startsWith("scripts/")) {
+    appendFileSync(trace, JSON.stringify(["build-data", file]) + "\n");
+  }
+}
+function read(root: string, file: string): string {
+  observeBuildData(file);
+  return readFileSync(architecturePath(root, file), "utf8");
+}
 function sources(root: string, directory: string): string[] {
+  observeBuildData(directory + "/");
   return readdirSync(architecturePath(root, directory), { withFileTypes: true }).flatMap((entry) => {
     const file = `${directory}/${entry.name}`;
     architecturePath(root, file);

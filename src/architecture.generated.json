@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "cf5fa982e13b70d9d835f6dfa297b8189a3d39d7b3ab85cd1936625b4375494c",
+  "digest"       : "89d5d1bef1236adbe1c1f60b47fe6ba0dea13d8560daddd1758a818c8a84607c",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -49,7 +49,7 @@
       "role"       : "앱 모듈 · build",
       "line"       : 1,
       "lines"      : 53,
-      "digest"     : "cb76259d687d196713832b03936002e91c092cc220d5d08d35f0321b7e4cc37b",
+      "digest"     : "271070d79a7c5b80b5472cf7ad6a79cecbc23e513e3b6b8328a6289a6e02db39",
       "structureId": "arch.tooling.bundle"
     },
     {
@@ -59,8 +59,8 @@
       "layer"      : "tooling",
       "role"       : "구조 ID·요구 선언과 허용 의존 계약 검사",
       "line"       : 1,
-      "lines"      : 345,
-      "digest"     : "fd16561a9c5451a564a24253e920eaa5c7126f3f26a9b4809ccb760dcd905bd4",
+      "lines"      : 355,
+      "digest"     : "3f6a433957b949dab12fa1a7ea3b251703f26b645ec36d3e872184da14bd8a0f",
       "structureId": "arch.tooling.structure-contract"
     },
     {
@@ -213,8 +213,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · evidence",
       "line"       : 1,
-      "lines"      : 721,
-      "digest"     : "8db85b5fe10382cf5818ea104672685e71eac284889deaa3c4e06988dfcfb568",
+      "lines"      : 746,
+      "digest"     : "7b811c0872d7031a4bb920100fc70b2b4ec697d0bc272496d98a47be0a7c3693",
       "structureId": "arch.development.evidence.verification"
     },
     {
@@ -990,7 +990,7 @@
       "statement": "import { writeArchitecture } from \"./scripts/generate-architecture.ts\";"
     },
     {
-      "id"       : "scripts/architecture-contract.ts:295",
+      "id"       : "scripts/architecture-contract.ts:311",
       "from"     : "scripts/architecture-contract.ts",
       "to"       : "scripts/workflow/statechart.ts",
       "mode"     : "runtime",
@@ -1364,7 +1364,7 @@
       "statement": "import { checkSourcePolicy } from \"../source-policy.ts\";"
     },
     {
-      "id"       : "scripts/workflow/evidence.ts:222",
+      "id"       : "scripts/workflow/evidence.ts:281",
       "from"     : "scripts/workflow/evidence.ts",
       "to"       : "scripts/workflow/timing.ts",
       "mode"     : "runtime",
@@ -4127,7 +4127,7 @@
     },
     {
       "file"     : "scripts/workflow/evidence.ts",
-      "line"     : 577,
+      "line"     : 602,
       "specifier": "node:os",
       "reason"   : "external"
     },
@@ -7182,7 +7182,7 @@
         "line": 2
       }
     ],
-    "digest": "fcbf1f8d8a623fa58d8a8098a6af3e7547cbfc95bac4915233d9f2be773cd93b",
+    "digest": "0ce5e5ab6a44a48b05c9ed7b760efc1aee9c4bbe3c80959d2582bb820cf2f5de",
     "statecharts": {
       "models": [
         {
@@ -7432,7 +7432,7 @@
         }
       ],
       "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-      "sourceDigest": "166110fd5327bfffd2bec3a0d850e738fe24c8b150963b6ffa03d7797faeb50b",
+      "sourceDigest": "2c846571fc671e6eae85acfc9e02380b4d54dd1baecc12e45293658e68620028",
       "sources": [
         {
           "file": "scripts/workflow/completion-report.ts",
@@ -7444,7 +7444,7 @@
         },
         {
           "file": "scripts/workflow/evidence.ts",
-          "digest": "8db85b5fe10382cf5818ea104672685e71eac284889deaa3c4e06988dfcfb568"
+          "digest": "7b811c0872d7031a4bb920100fc70b2b4ec697d0bc272496d98a47be0a7c3693"
         },
         {
           "file": "scripts/workflow/review.ts",
@@ -7734,7 +7734,7 @@
       }
     ],
     "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-    "sourceDigest": "166110fd5327bfffd2bec3a0d850e738fe24c8b150963b6ffa03d7797faeb50b",
+    "sourceDigest": "2c846571fc671e6eae85acfc9e02380b4d54dd1baecc12e45293658e68620028",
     "sources": [
       {
         "file": "scripts/workflow/completion-report.ts",
@@ -7746,7 +7746,7 @@
       },
       {
         "file": "scripts/workflow/evidence.ts",
-        "digest": "8db85b5fe10382cf5818ea104672685e71eac284889deaa3c4e06988dfcfb568"
+        "digest": "7b811c0872d7031a4bb920100fc70b2b4ec697d0bc272496d98a47be0a7c3693"
       },
       {
         "file": "scripts/workflow/review.ts",

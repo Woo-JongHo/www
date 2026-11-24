@@ -2,7 +2,7 @@
  * @architecture arch.development.evidence.verification
  * @implements RESP-DEVELOPMENT-EVIDENCE-VERIFICATION
  */
-import { monitorContract, monitorCriterion, monitorInputs } from "../verification/chat007-contract.ts";
+import { monitorContract, monitorCriterion, monitorInputs, monitorSourceInputs, validMonitorTrace, type MonitorTrace } from "../verification/chat007-contract.ts";
 import { observeTimedChild, timedPhase, timingEvent } from "./timing.ts";
 import { createHash, randomUUID }    from "node:crypto";
 import { spawn, execFile }           from "node:child_process";
@@ -90,7 +90,7 @@ export interface VerificationAttempt {
   artifactsStable?  : boolean                 ;
   environment       : ExecutionEnvironment    ;
   environmentStable : boolean                 ;
-  monitorObservation?: { version: 1; declaredScopeDigest: string; values: typeof monitorContract.observations };
+  monitorObservation?: ({ version: 1 } | { version: 2; scripts: MonitorTrace }) & { declaredScopeDigest: string; values: typeof monitorContract.observations };
   environmentObservation?: VerificationEnvironmentObservation;
   executor          : 'injected' | 'process'  ;
   output?           : CommandResult['output'] ;
@@ -204,7 +204,7 @@ export async function captureSource({ repo, inputs, reader, scope }: { repo?: st
   if (!(await fs.stat(root)).isDirectory()) throw new Error("저장소 경로가 디렉터리가 아닙니다.");
   const selected = inputPaths(inputs)              ;
   const captured = new Map<string, CapturedFile>() ;
-  const omitGeneratedMap = scope === "chat007-monitor" && JSON.stringify(selected) === JSON.stringify(monitorInputs);
+  const omitGeneratedMap = scope === "chat007-monitor";
   async function visit(relative: string) {
     if (omitGeneratedMap && relative === "src/architecture.generated.json") return;
     if (reader && captured.has(relative)) return;
@@ -271,7 +271,7 @@ function outputSummary(value: unknown = "", truncated = false): OutputSummary {
 
 function streamSummary(value: { bytes: number; captured: number; hash: ReturnType<typeof createHash> }): OutputSummary { return { bytes: value.bytes, digest: value.hash.digest("hex"), truncated: value.bytes > OUTPUT_LIMIT, retainedBytes: value.captured, contentRetained: false }; }
 
-export async function runVerificationCommand(invocation: CommandInvocation, { cwd }: { cwd: string }): Promise<CommandResult> {
+export async function runVerificationCommand(invocation: CommandInvocation, { cwd, captureMonitor = false }: { cwd: string; captureMonitor?: boolean }): Promise<CommandResult> {
   return new Promise((resolve) => {
     const streams = Object.fromEntries(["stdout", "stderr"].map((name) => [
       name,
@@ -281,6 +281,7 @@ export async function runVerificationCommand(invocation: CommandInvocation, { cw
         hash     : createHash("sha256")
       }
     ]));
+    const observedStdout: Buffer[] = [];
     let spawnError: string | null = null;
     const child = spawn(invocation.command, invocation.args, {
       cwd,
@@ -292,6 +293,7 @@ export async function runVerificationCommand(invocation: CommandInvocation, { cw
     for (const name of ["stdout", "stderr"] as const) child[name].on("data", (chunk) => {
       const value  = Buffer.from    (chunk                                                ) ;
       const sample = value .subarray(0, Math.max(0, OUTPUT_LIMIT - streams[name].captured)) ;
+      if (captureMonitor && name === "stdout" && sample.length) observedStdout.push(sample);
       streams[name].bytes += value.length;
       streams[name].captured += sample.length;
       streams[name].hash.update(sample);
@@ -299,6 +301,7 @@ export async function runVerificationCommand(invocation: CommandInvocation, { cw
     child.once("error", (error) => { spawnError = String(errorCode(error) ?? "spawn_error"); });
     child.once("close", (code, signal) => resolve({
       code, signal, error: spawnError,
+      ...(captureMonitor && streams.stdout.bytes <= OUTPUT_LIMIT ? { stdout: Buffer.concat(observedStdout).toString("utf8") } : {}),
       output: { stdout: streamSummary(streams.stdout), stderr: streamSummary(streams.stderr) },
     }));
   });
@@ -318,9 +321,27 @@ function monitorInvocation(record: unknown, command: unknown, args: unknown, ids
   return criterion?.required && criterion.description === monitorCriterion && JSON.stringify(criterion.requirementRefs) === '["docs/specs/chat.md#chat-activity-01"]';
 }
 
-function observedMonitorOutput(output: OutputSummary | undefined) {
-  const line = JSON.stringify(monitorContract.observations) + "\n";
+function observedMonitorOutput(output: OutputSummary | undefined, scripts?: MonitorTrace) {
+  const values = monitorContract.observations;
+  const line = JSON.stringify(scripts ? { values, scripts } : values) + "\n";
   return output?.digest === digest(line) && output.bytes === Buffer.byteLength(line) && output.truncated === false;
+}
+
+function monitorExecutionTrace(result: CommandResult): MonitorTrace | undefined {
+  if (typeof result.stdout !== "string") return;
+  try {
+    const parsed = JSON.parse(result.stdout);
+    if (validMonitorTrace(parsed?.scripts) && observedMonitorOutput(result.output?.stdout, parsed.scripts)) return parsed.scripts;
+  } catch { /* 미관찰·불완전한 출력은 좁은 근거를 만들 수 없다. */ }
+}
+
+function projectMonitorInputs(baseline: CapturedSource, trace: MonitorTrace): CapturedSource {
+  const inputs = monitorSourceInputs(trace);
+  const files = baseline.files.filter(file => inputs.some(selected => file.path === selected || file.path.startsWith(selected + "/")));
+  const found = new Set(files.map(file => file.path));
+  for (const selected of inputs) if (!found.has(selected)) files.push({ path: selected, type: "missing" });
+  files.sort((a,b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
+  return { head: baseline.head, inputs, files, digest: digest(JSON.stringify({ inputs, files })) };
 }
 
 export async function verify({ repo, record, inputs, command, args = [], criterionIds, artifactPaths = [], run }: { repo?: string; record?: unknown; inputs?: unknown; command?: string; args?: string[]; criterionIds?: string[]; artifactPaths?: unknown; run?: VerificationRunner } = {}): Promise<VerificationAttempt> {
@@ -331,7 +352,7 @@ export async function verify({ repo, record, inputs, command, args = [], criteri
   const root                 = await fs.realpath(repo ?? process.cwd())         ;
   const scoped = !run && monitorInvocation(record, command, args, covered);
   const sourceInputs = scoped ? monitorInputs : inputs;
-  const source               = await captureSource({ repo: root, inputs: sourceInputs, scope: scoped ? "chat007-monitor" : undefined })      ;
+  let source                 = await captureSource({ repo: root, inputs: sourceInputs, scope: scoped ? "chat007-monitor" : undefined })      ;
   const artifacts            = await captureArtifacts(root, artifactPaths)      ;
   const criteria             = criteriaDigest(record)                           ;
   const executionEnvironment = await resolveExecutionEnvironment(root, command) ;
@@ -341,11 +362,13 @@ export async function verify({ repo, record, inputs, command, args = [], criteri
   const invocation = { command: executableCommand, args: argv };
   try {
     result = run ? await timedPhase("injected_runner", () => run(invocation, { cwd: root, captureOutput: true }))
-      : await runVerificationCommand(invocation, { cwd: root });
+      : await runVerificationCommand(invocation, { cwd: root, captureMonitor: !!scoped });
   }
   catch (error) { result = { code: null, signal: null, error: String(errorCode(error) ?? "runner_error") }; }
+  const scripts = scoped ? monitorExecutionTrace(result) : undefined;
+  if (scripts) source = projectMonitorInputs(source, scripts);
   let after: CapturedSource | null = null;
-  try { after = await captureSource({ repo: root, inputs: sourceInputs, scope: scoped ? "chat007-monitor" : undefined }); }
+  try { after = await captureSource({ repo: root, inputs: source.inputs, scope: scoped ? "chat007-monitor" : undefined }); }
   catch { /* 실행 후 입력을 읽을 수 없어도 실패 시도 자체는 보존한다. */ }
   const sourceStable                    = source.digest === after?.digest ;
   let artifactsAfter: Artifact[] | null = null                            ;
@@ -363,7 +386,7 @@ export async function verify({ repo, record, inputs, command, args = [], criteri
     startedAt                                ,
     completedAt  : new Date().toISOString()  ,
     source                                   ,
-    ...(scoped && observedMonitorOutput(result.output?.stdout) ? { monitorObservation: { version: 1 as const, declaredScopeDigest: digest(JSON.stringify(inputPaths(inputs))), values: structuredClone(monitorContract.observations) } } : {}),
+    ...(scripts ? { monitorObservation: { version: 2 as const, scripts, declaredScopeDigest: digest(JSON.stringify(inputPaths(inputs))), values: structuredClone(monitorContract.observations) } } : {}),
     criteriaDigest    : criteria                                                                                                ,
     criteriaSnapshot  : criterionDefinitions(record)                                                                                     ,
     command           : redactArgument(executableCommand)                                                                       ,
@@ -376,7 +399,7 @@ export async function verify({ repo, record, inputs, command, args = [], criteri
     result       :    result?.code === 0
                   && !result.signal
                   && !result.error
-                  && (!scoped || observedMonitorOutput(result.output?.stdout))
+                  && (!scoped || !!scripts)
                   &&  sourceStable
                   &&  artifactsStable
                   &&  environmentStable
@@ -435,8 +458,10 @@ export async function evaluateEvidence({ repo, record, attempt, criterionId, obs
   try {
     if (attempt.monitorObservation !== undefined) {
       const receipt = attempt.monitorObservation;
-      if (!receipt || receipt.version !== 1 || attempt.command !== attempt.environment?.executable?.path || !monitorInvocation(record, attempt.requestedCommand, attempt.args, attempt.criterionIds)
-        || JSON.stringify(attempt.source.inputs) !== JSON.stringify(monitorInputs) || !observedMonitorOutput(attempt.output?.stdout)
+      const scripts = receipt?.version === 2 && validMonitorTrace(receipt.scripts) ? receipt.scripts : undefined;
+      const expectedInputs = scripts ? monitorSourceInputs(scripts) : monitorInputs;
+      if (!receipt || (receipt.version !== 1 && !scripts) || attempt.command !== attempt.environment?.executable?.path || !monitorInvocation(record, attempt.requestedCommand, attempt.args, attempt.criterionIds)
+        || JSON.stringify(attempt.source.inputs) !== JSON.stringify(expectedInputs) || !observedMonitorOutput(attempt.output?.stdout, scripts)
         || JSON.stringify(receipt.values) !== JSON.stringify(monitorContract.observations)) reasons.push("monitor_observation_mismatch");
       if (!object(record) || !object(record.workflow) || receipt?.declaredScopeDigest !== digest(JSON.stringify(inputPaths(record.workflow.inputs)))) reasons.push("scope_changed");
     } else {
@@ -644,7 +669,7 @@ export async function verifyInSession(session: VerificationSession, options: Par
       }
       const proof = candidate.attempt.monitorObservation;
       if (proof && proof.declaredScopeDigest !== digest(JSON.stringify(inputPaths(options.inputs)))) reasons.push("requested_scope_changed");
-      const requestedSource = await captureSource({ repo: root, inputs: proof ? monitorInputs : options.inputs, scope: proof ? "chat007-monitor" : undefined });
+      const requestedSource = await captureSource({ repo: root, inputs: proof?.version === 2 && validMonitorTrace(proof.scripts) ? monitorSourceInputs(proof.scripts) : proof ? monitorInputs : options.inputs, scope: proof ? "chat007-monitor" : undefined });
       if (JSON.stringify(requestedSource.inputs) !== JSON.stringify(candidate.attempt.source.inputs)) reasons.push('requested_scope_changed');
       if (requestedSource.digest !== candidate.attempt.source.digest) reasons.push('source_changed');
       const evaluation = await evaluateEvidence({ repo: root, record: options.record, attempt: candidate.attempt });

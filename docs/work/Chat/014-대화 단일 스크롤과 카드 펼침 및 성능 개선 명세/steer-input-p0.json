@@ -1,0 +1,647 @@
+{
+  "후보": "fa633e8",
+  "기준Renderer": "541bccb41da2b8a9eb3ee66e048d8442ff3dbb52afd3dfdd8ab5fe6c51926476",
+  "후보Renderer": "7eabba7b0430476fce4690c7ff36657c5e6f0e926382b6d5b012164188a1becf",
+  "probeSha256": "2fba78e9b014e2ec71048d77c66f39b6fbb521f47b4ca1566353ddb37c044391",
+  "fixtureSha256": "8f51f7e67275c39f08ad72f7bcdbb3118e38bdda8b268406ad93c6dc01844d6f",
+  "회수한원본": {
+    "실제Native": {
+      "sha256": "3e11def53fac938a52b02b5e960b4532ec480d4bb12aafd17ef047d575444b80",
+      "내용": {
+        "result": "measured",
+        "scope": "actual-native-steer-response",
+        "evidence": ".www/evidence/chat-ui-4eMVLT",
+        "nativeVersion": "codex-cli 0.171.0",
+        "build": {
+          "version": "0.1.48",
+          "commit": "939c7efcfdbf7d1e6344f01153b857b63bee87d6",
+          "dirty": true,
+          "sourceDigest": "e3fec430d22c10b6dac3434a9eb11176b0f71f4e8f9b76b5a00fd22b1f8c9108",
+          "label": "0.1.48-dirty · 939c7efc · e3fec430d22c"
+        },
+        "measurement": {
+          "sameTurnAccepted": true,
+          "turnStarts": 1,
+          "interrupts": 0,
+          "completedStatus": "completed",
+          "publicFinalItems": 1,
+          "markerInPublicFinalAfterAcceptance": true,
+          "markerInAssistantDom": true
+        },
+        "checks": [
+          "프로젝트 선택 전 전체 보기",
+          "전체 보기에서 Native 자동 실행 없음",
+          "현재 프로젝트 대시보드 진입",
+          "입력 반영",
+          "실제 공개 응답 스트리밍 시작",
+          "입력 반영",
+          "실제 Native가 같은 thread·turn으로 접수",
+          "실제 Native 턴 종료"
+        ],
+        "limitations": [
+          "한 번의 시험 요청이며 임의 후속 응답 동작을 보장하지 않는다. 실제 OS IME와 성능 비교는 별도다."
+        ]
+      }
+    },
+    "실패복원": {
+      "sha256": "485e9be255f3825ca0b23414ffacfc5cadc0eddb01c33db0f362c0d96a19f4d0",
+      "내용": {
+        "result": "passed",
+        "scope": "steer-errors",
+        "evidence": ".www/evidence/chat-ui-oPO0jF",
+        "checks": [
+          "프로젝트 선택 전 전체 보기",
+          "전체 보기에서 Native 자동 실행 없음",
+          "현재 프로젝트 대시보드 진입",
+          "프로젝트 저장 대화 목록",
+          "입력 반영",
+          "현재 실행에서 Steer 표시",
+          "입력 반영",
+          "입력 반영",
+          "접수 대기 중 다음 초안 허용 및 중복 차단 unsupported",
+          "서버 사건 unsupported",
+          "UI 오류 분류 unsupported",
+          "원문과 새 초안을 따로 보존 unsupported",
+          "입력 반영",
+          "원문 수동 복원 가능 unsupported",
+          "공백·줄바꿈을 포함한 원문 복원 unsupported",
+          "입력 반영",
+          "서버 사건 send-failed",
+          "UI 오류 분류 send-failed",
+          "공백·줄바꿈을 포함한 원문 복원 send-failed",
+          "입력 반영",
+          "서버 사건 turn-mismatch",
+          "UI 오류 분류 turn-mismatch",
+          "공백·줄바꿈을 포함한 원문 복원 turn-mismatch",
+          "입력 반영",
+          "서버 사건 end-race",
+          "UI 오류 분류 end-race",
+          "공백·줄바꿈을 포함한 원문 복원 end-race",
+          "종료 경합 후 새 전송은 수동",
+          "입력 반영",
+          "현재 실행에서 Steer 표시",
+          "입력 반영",
+          "입력 반영",
+          "접수 대기 중 다음 초안 허용 및 중복 차단 after-send-eof",
+          "서버 사건 after-send-eof",
+          "UI 오류 분류 after-send-eof",
+          "원문과 새 초안을 따로 보존 after-send-eof",
+          "입력 반영",
+          "원문 수동 복원 가능 after-send-eof",
+          "공백·줄바꿈을 포함한 원문 복원 after-send-eof"
+        ],
+        "proofs": [
+          {
+            "scenario": "unsupported",
+            "method": "turn/steerFailed",
+            "message": "Error: {\"code\":-32601,\"message\":\"Native Steer 미지원\"}",
+            "clientUserMessageId": "d6a570c8-8427-4ef1-b34d-4038d260a36d",
+            "original": "  AC13:U 원문\n",
+            "newer": "  다음 초안 A\n"
+          },
+          {
+            "scenario": "send-failed",
+            "method": "turn/steerFailed",
+            "message": "Error: {\"code\":-32001,\"message\":\"합성 Steer 전송 실패\"}",
+            "clientUserMessageId": "b0624249-47e4-48ce-ae4f-60577575fd52",
+            "original": "  AC13:F 원문\n",
+            "newer": null
+          },
+          {
+            "scenario": "turn-mismatch",
+            "method": "turn/steerUncertain",
+            "message": "Error: 추가 지시 응답의 턴이 일치하지 않습니다.",
+            "clientUserMessageId": "9d92374a-5acd-47c3-bbc4-015d20f2d11b",
+            "original": "mismatch",
+            "newer": null
+          },
+          {
+            "scenario": "end-race",
+            "method": "turn/steerFailed",
+            "message": "Error: {\"code\":-32602,\"message\":\"턴 종료\"}",
+            "clientUserMessageId": "81bf180c-7585-4a1d-a21b-c31030fdc9a3",
+            "original": "종료 경합",
+            "newer": null
+          },
+          {
+            "scenario": "after-send-eof",
+            "method": "turn/steerUncertain",
+            "message": "Error: Codex app-server closed (0); pending mutations were not retried",
+            "clientUserMessageId": "c07a5a84-52b4-43f4-9e9f-cfb272f27bbb",
+            "original": "  AC13:E 원문\n",
+            "newer": "  다음 초안 B\n"
+          }
+        ],
+        "explicitStarts": 2,
+        "steerInvocations": 5,
+        "build": {
+          "version": "0.1.48",
+          "commit": "939c7efcfdbf7d1e6344f01153b857b63bee87d6",
+          "dirty": true,
+          "sourceDigest": "e3fec430d22c10b6dac3434a9eb11176b0f71f4e8f9b76b5a00fd22b1f8c9108",
+          "label": "0.1.48-dirty · 939c7efc · e3fec430d22c"
+        },
+        "limitations": [
+          "실제 Electron과 합성 Native fixture의 조작·실패 경계다."
+        ]
+      }
+    }
+  },
+  "표본": [
+    {
+      "variant": "pilot",
+      "sourceSha256": "d5ece424f6268e80c3e9e550fbd32bd9b5a49c74ee9253bc54b48e4f48f2e6b7",
+      "callsSha256": "c3c6f21a49e00d2c3b12373bef6c05cef18bd8a4b267d9d9f94aa3471c3d8fd0",
+      "starts": 1,
+      "steers": 20,
+      "uniqueIds": 20,
+      "metrics": {
+        "summary": [
+          {
+            "submit": 15.400000095367432,
+            "input": 9.299999952316284
+          },
+          {
+            "submit": 7.599999904632568,
+            "input": 15.200000047683716
+          },
+          {
+            "submit": 13.399999856948853,
+            "input": 15.799999952316284
+          },
+          {
+            "submit": 9.100000143051147,
+            "input": 12.899999856948853
+          },
+          {
+            "submit": 12.200000047683716,
+            "input": 15.799999952316284
+          },
+          {
+            "submit": 13.599999904632568,
+            "input": 9
+          },
+          {
+            "submit": 12.5,
+            "input": 9.200000047683716
+          },
+          {
+            "submit": 10.300000190734863,
+            "input": 14
+          },
+          {
+            "submit": 14.700000047683716,
+            "input": 9
+          },
+          {
+            "submit": 10.199999809265137,
+            "input": 15.400000095367432
+          },
+          {
+            "submit": 16.5,
+            "input": 45.39999985694885
+          },
+          {
+            "submit": 11.799999952316284,
+            "input": 9.700000047683716
+          },
+          {
+            "submit": 8.200000047683716,
+            "input": 9.700000047683716
+          },
+          {
+            "submit": 11.799999952316284,
+            "input": 12.799999952316284
+          },
+          {
+            "submit": 10.600000143051147,
+            "input": 15.099999904632568
+          },
+          {
+            "submit": 16.600000143051147,
+            "input": 10.299999952316284
+          },
+          {
+            "submit": 32.59999990463257,
+            "input": 64.29999995231628
+          },
+          {
+            "submit": 65,
+            "input": 11.599999904632568
+          },
+          {
+            "submit": 10,
+            "input": 11.200000047683716
+          },
+          {
+            "submit": 7.8999998569488525,
+            "input": 9.700000047683716
+          }
+        ],
+        "changes": 82,
+        "viewport": [
+          1440,
+          868
+        ],
+        "cards": 66,
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+      }
+    },
+    {
+      "variant": "base1",
+      "sourceSha256": "8fc36c3f12a358bd8a0cacc7b165d90b8656db54048dad12b23e26a9a9378070",
+      "callsSha256": "5213edb9e8c3bc59c1bc60f211feb7b9894e632bf98d8c2a5bac0c3824063af0",
+      "starts": 1,
+      "steers": 20,
+      "uniqueIds": 20,
+      "metrics": {
+        "summary": [
+          {
+            "submit": 147.60000014305115,
+            "input": 14.099999904632568
+          },
+          {
+            "submit": 11.699999809265137,
+            "input": 13
+          },
+          {
+            "submit": 11.900000095367432,
+            "input": 13.200000047683716
+          },
+          {
+            "submit": 17.299999952316284,
+            "input": 13.700000047683716
+          },
+          {
+            "submit": 12.200000047683716,
+            "input": 13.200000047683716
+          },
+          {
+            "submit": 11.799999952316284,
+            "input": 12.600000143051147
+          },
+          {
+            "submit": 11.099999904632568,
+            "input": 12.299999952316284
+          },
+          {
+            "submit": 11.700000047683716,
+            "input": 13.299999952316284
+          },
+          {
+            "submit": 11.5,
+            "input": 12.800000190734863
+          },
+          {
+            "submit": 12.300000190734863,
+            "input": 12.5
+          },
+          {
+            "submit": 17.90000009536743,
+            "input": 13.299999952316284
+          },
+          {
+            "submit": 11.399999856948853,
+            "input": 12.799999952316284
+          },
+          {
+            "submit": 12.099999904632568,
+            "input": 12.799999952316284
+          },
+          {
+            "submit": 11.5,
+            "input": 13.200000047683716
+          },
+          {
+            "submit": 12.900000095367432,
+            "input": 13.700000047683716
+          },
+          {
+            "submit": 11.599999904632568,
+            "input": 66.90000009536743
+          },
+          {
+            "submit": 68.30000019073486,
+            "input": 29.5
+          },
+          {
+            "submit": 14.599999904632568,
+            "input": 13.300000190734863
+          },
+          {
+            "submit": 11.700000047683716,
+            "input": 13.5
+          },
+          {
+            "submit": 11.900000095367432,
+            "input": 12.599999904632568
+          }
+        ],
+        "changes": 83,
+        "viewport": [
+          1440,
+          868
+        ],
+        "cards": 66,
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+      }
+    },
+    {
+      "variant": "current1",
+      "sourceSha256": "4a70f7b76c92d32f8b1e4f515421a64d6a50e90f6225e3f8d6e6a6f68bcefbcf",
+      "callsSha256": "efb66f50c5db365b6b25e1bfc087a9fb42cd31ca3512482010af8c11e9b8cd9b",
+      "starts": 1,
+      "steers": 20,
+      "uniqueIds": 20,
+      "metrics": {
+        "summary": [
+          {
+            "submit": 16.899999856948853,
+            "input": 14.399999856948853
+          },
+          {
+            "submit": 12,
+            "input": 8
+          },
+          {
+            "submit": 6.699999809265137,
+            "input": 14
+          },
+          {
+            "submit": 15.200000047683716,
+            "input": 8.700000047683716
+          },
+          {
+            "submit": 6.8999998569488525,
+            "input": 13.100000143051147
+          },
+          {
+            "submit": 11.900000095367432,
+            "input": 9.200000047683716
+          },
+          {
+            "submit": 7,
+            "input": 14.699999809265137
+          },
+          {
+            "submit": 12.700000047683716,
+            "input": 10
+          },
+          {
+            "submit": 8.199999809265137,
+            "input": 14.200000047683716
+          },
+          {
+            "submit": 12.099999904632568,
+            "input": 8.299999952316284
+          },
+          {
+            "submit": 24.300000190734863,
+            "input": 9.099999904632568
+          },
+          {
+            "submit": 6.6000001430511475,
+            "input": 8.799999952316284
+          },
+          {
+            "submit": 7,
+            "input": 8.599999904632568
+          },
+          {
+            "submit": 7.700000047683716,
+            "input": 9.899999856948853
+          },
+          {
+            "submit": 7.200000047683716,
+            "input": 14.299999952316284
+          },
+          {
+            "submit": 8.200000047683716,
+            "input": 9.099999904632568
+          },
+          {
+            "submit": 11.799999952316284,
+            "input": 9.300000190734863
+          },
+          {
+            "submit": 10,
+            "input": 8.599999904632568
+          },
+          {
+            "submit": 7,
+            "input": 9.399999856948853
+          },
+          {
+            "submit": 7.200000047683716,
+            "input": 9
+          }
+        ],
+        "changes": 62,
+        "viewport": [
+          1440,
+          868
+        ],
+        "cards": 66,
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+      }
+    },
+    {
+      "variant": "current2",
+      "sourceSha256": "e698108d1038b2ddac49f7310ec87d3b378809977a812c1e1ba470a808bd0586",
+      "callsSha256": "5346cac2ce22ddcb1455abcb67fe5910bee52a9b0ee66b6384ee55ff1c293f9a",
+      "starts": 1,
+      "steers": 20,
+      "uniqueIds": 20,
+      "metrics": {
+        "summary": [
+          {
+            "submit": 7.5,
+            "input": 8.799999952316284
+          },
+          {
+            "submit": 7,
+            "input": 9
+          },
+          {
+            "submit": 6.200000047683716,
+            "input": 8.200000047683716
+          },
+          {
+            "submit": 6.900000095367432,
+            "input": 9.5
+          },
+          {
+            "submit": 7.299999952316284,
+            "input": 8.5
+          },
+          {
+            "submit": 7.200000047683716,
+            "input": 8
+          },
+          {
+            "submit": 9.900000095367432,
+            "input": 8.599999904632568
+          },
+          {
+            "submit": 6.799999952316284,
+            "input": 9.200000047683716
+          },
+          {
+            "submit": 7.3999998569488525,
+            "input": 9.300000190734863
+          },
+          {
+            "submit": 10.099999904632568,
+            "input": 9.5
+          },
+          {
+            "submit": 7.599999904632568,
+            "input": 10.100000143051147
+          },
+          {
+            "submit": 24.59999990463257,
+            "input": 9.5
+          },
+          {
+            "submit": 6.8999998569488525,
+            "input": 8.700000047683716
+          },
+          {
+            "submit": 7,
+            "input": 8.600000143051147
+          },
+          {
+            "submit": 12.799999952316284,
+            "input": 10.099999904632568
+          },
+          {
+            "submit": 10.5,
+            "input": 9.199999809265137
+          },
+          {
+            "submit": 8,
+            "input": 9.199999809265137
+          },
+          {
+            "submit": 7.599999904632568,
+            "input": 9.299999952316284
+          },
+          {
+            "submit": 7.200000047683716,
+            "input": 9.099999904632568
+          },
+          {
+            "submit": 8,
+            "input": 9.299999952316284
+          }
+        ],
+        "changes": 57,
+        "viewport": [
+          1440,
+          868
+        ],
+        "cards": 66,
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+      }
+    },
+    {
+      "variant": "base2",
+      "sourceSha256": "0fe195cce0a86f83810911f0ad8ec4340973d5bbfecd614221f91a60ede7402a",
+      "callsSha256": "47bf13c1f3c7dc5ec469bc8855398226220fd835d329bf1796a31af1213303d8",
+      "starts": 1,
+      "steers": 20,
+      "uniqueIds": 20,
+      "metrics": {
+        "summary": [
+          {
+            "submit": 134.59999990463257,
+            "input": 15.100000143051147
+          },
+          {
+            "submit": 18.299999952316284,
+            "input": 13.200000047683716
+          },
+          {
+            "submit": 18.700000047683716,
+            "input": 14.099999904632568
+          },
+          {
+            "submit": 24.799999952316284,
+            "input": 14
+          },
+          {
+            "submit": 11.900000095367432,
+            "input": 13.399999856948853
+          },
+          {
+            "submit": 11.5,
+            "input": 12.5
+          },
+          {
+            "submit": 11.099999904632568,
+            "input": 12.900000095367432
+          },
+          {
+            "submit": 11.900000095367432,
+            "input": 13.199999809265137
+          },
+          {
+            "submit": 11.599999904632568,
+            "input": 12.700000047683716
+          },
+          {
+            "submit": 12.099999904632568,
+            "input": 13.099999904632568
+          },
+          {
+            "submit": 14.299999952316284,
+            "input": 12.600000143051147
+          },
+          {
+            "submit": 13,
+            "input": 13.5
+          },
+          {
+            "submit": 13.900000095367432,
+            "input": 12.900000095367432
+          },
+          {
+            "submit": 13.599999904632568,
+            "input": 14.400000095367432
+          },
+          {
+            "submit": 15.400000095367432,
+            "input": 40.5
+          },
+          {
+            "submit": 68.5,
+            "input": 59.39999985694885
+          },
+          {
+            "submit": 13,
+            "input": 13.300000190734863
+          },
+          {
+            "submit": 12.299999952316284,
+            "input": 13.899999856948853
+          },
+          {
+            "submit": 12.399999856948853,
+            "input": 13.299999952316284
+          },
+          {
+            "submit": 11.600000143051147,
+            "input": 14
+          }
+        ],
+        "changes": 86,
+        "viewport": [
+          1440,
+          868
+        ],
+        "cards": 66,
+        "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) www/0.1.0 Chrome/142.0.7444.265 Electron/39.8.10 Safari/537.36"
+      }
+    }
+  ]
+}

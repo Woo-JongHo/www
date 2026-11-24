@@ -548,6 +548,427 @@
         "sourceDigest"  : "b57891b14b5cb3c8c609d0842da362c593d6c470c58963280130f45cce167e69",
         "criteriaDigest": "de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff"
       }
+    },
+    {
+      "schemaVersion" : 1,
+      "id"            : "report-19afe2bc-1023-4adc-b399-5ca5ac5023e0",
+      "workId"        : "work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118",
+      "title"         : "대화 단일 스크롤과 카드 펼침 및 성능 개선 명세",
+      "summary"       : "표시 창 전후 성능 비교 AC-5와 연속 Steer·복원·입력 성능 AC-14를 결합 후보에서 공식 수용했다. Chat/014의 저장 통과는 12/14이고 이 후보에서 유효한 기준은 2/14다.",
+      "kind"          : "authored",
+      "outcome"       : "partial",
+      "createdAt"     : "2026-11-23T23:57:01.631Z",
+      "event"         : "finish",
+      "workRecordHash": "222a0a91933b591d01ecdc578207080ac456e82800b72a41e6b679fd604397c8",
+      "sourceDigest"  : "8a337f22f5a8940e0f3be8c96984d37851ef34c1abd39772f3c60e5fc7707279",
+      "criteriaDigest": "de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff",
+      "semanticHash"  : "e47102cccfeb5edeae316d2379179b46307f5949b32d1b7c226b73a7df72e3e7",
+      "narrative": {
+        "summary": "표시 창 전후 성능 비교 AC-5와 연속 Steer·복원·입력 성능 AC-14를 결합 후보에서 공식 수용했다. Chat/014의 저장 통과는 12/14이고 이 후보에서 유효한 기준은 2/14다.",
+        "before" : "스트리밍 입력과 스크롤 수치, React 호출과 실제 Native 응답 관찰은 여러 차례 기록됐지만 추가 지시 Enter 직후의 입력 성능 근거가 없었다.",
+        "after"  : "기존 6회 표시창 비교와 React·Steer·오류 원문을 재사용했다. 빠진 전송 구간은 실제 Electron과 합성 Native로 대조해 최종 후보 p95 12.8~16.9ms, 후속 입력 10.1~14.4ms를 관찰했다.",
+        "changes": [
+          "두 기준의 공식 검증 시도와 수용 범위를 원장에 추가했다.",
+          "개별 표본, Native 공개 응답 반영과 API 접수, 오류 원문, fixture 지문을 추적할 수 있게 했다."
+        ],
+        "decisions": [
+          "대기·휠 입력 개선을 입증하지 못한 결과도 AC-5 비교에 포함했다.",
+          "마지막 결합의 renderer 실행 코드 동일성을 확인해 기존 측정을 재사용했다."
+        ],
+        "limitations": [
+          "실제 Native는 기록 시점의 단일 관찰, 전송 성능과 연속 입력은 합성 fixture다.",
+          "실기 한글 편집·OS 클립보드 왕복·장기 사용 체감과 Windows 실기는 별도다."
+        ],
+        "next": [
+          "AC-7·AC-10의 긴 대화 실사용 조건은 #27에서 추적한다."
+        ]
+      },
+      "work": {
+        "status": "verifying",
+        "blockedReason": null,
+        "criteria": [
+          {
+            "id"         : "AC-1",
+            "description": "Chat 본문은 대화 전체만 세로 스크롤하며 명령·코드·diff 카드에 독립 세로 스크롤이 없고 입력창은 고정된다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-b18c9a0e-6974-4d46-928d-f8fd16218d9d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6fdc0131-7f91-446b-a10f-c23372dc9e9f",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-94f95952-1c64-44ff-a17a-71c3bc3a17fb",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-2",
+            "description": "선택한 명령 출력은 ^T 표시 버튼과 Control+T로 같은 자리에서 펼침·접힘을 전환하며 다른 카드와 입력창의 상태를 바꾸지 않는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-b18c9a0e-6974-4d46-928d-f8fd16218d9d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6fdc0131-7f91-446b-a10f-c23372dc9e9f",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-94f95952-1c64-44ff-a17a-71c3bc3a17fb",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-3",
+            "description": "펼침은 보관된 원문 최대 32768 UTF-16 코드 단위 범위로 제한하고 생략·보관 초과를 명시하며 원문 복사와 JSON 보기의 의미를 보존한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-b18c9a0e-6974-4d46-928d-f8fd16218d9d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6fdc0131-7f91-446b-a10f-c23372dc9e9f",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-94f95952-1c64-44ff-a17a-71c3bc3a17fb",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-4",
+            "description": "출력 증가·펼침·접힘·대화 전환에서 최신 추적과 과거 읽기 위치 및 카드별 수동 선택을 보존한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-b18c9a0e-6974-4d46-928d-f8fd16218d9d",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              },
+              {
+                "path": "verification.md#attempt-6fdc0131-7f91-446b-a10f-c23372dc9e9f",
+                "summary": "종료 코드 0, 기준 passed"
+              },
+              {
+                "path": "verification.md#attempt-94f95952-1c64-44ff-a17a-71c3bc3a17fb",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-5",
+            "description": "동일 환경·fixture의 변경 전후 입력·스크롤·스트리밍을 계측하고 불필요한 완료 카드 재렌더와 반복 계산을 줄이며 입력 지연과 긴 프레임의 개선 및 미해결을 보고한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-caf9ece6-842f-455e-8597-8d17c42c4349",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-6",
+            "description": "실제 Electron에서 휠·키보드·긴 출력·실시간 출력·실패·대화 전환 시나리오와 관련 집중 테스트·소스 정책·타입 검사·빌드를 검증한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-fe3a2e28-a4f7-4c8e-91b6-ba78f4e3882e",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-7",
+            "description": "P0: 입력 중 한글 조합·Enter·커서 편집·붙여넣기·인용·초안 복원을 보존하고, 스트리밍 유무별 입력 표시 지연을 계측해 입력으로 인한 불필요한 대화 전체 처리를 제거한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-8",
+            "description": "현재 대화의 Working 상태를 입력창 위 고정 줄에서 확인하고 전송·시작 대기·실행·승인·중단 확인·종료·실패·연결 미확인을 실제 상태에 맞게 구분한다. 과거 스크롤·모니터 접힘·대화 전환에서도 해당 상태가 정확히 보인다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-8acec2d5-4c01-4406-a42a-b280e857a98c",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-9",
+            "description": "99_www의 기본 WWW Mint 팔레트를 매트릭스 계열 기본안으로 앱 공통 의미 토큰에 연결하고 본문·보조·진행·정보·대기·오류·구문 역할을 구분한다. 실제 배경별 대비와 색 외 상태 문구·아이콘을 검증한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-27c5890c-74e7-4e44-be11-a06598743572",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-10",
+            "description": "Working 상태 갱신과 테마 적용 후에도 Input P0 성능 기준 및 한글 조합·스크롤·포커스를 보존하며 과거 읽기·좁은 창·모션 축소·상태 전이 시나리오를 실제 Electron에서 검증한다.",
+            "required"   : true,
+            "result"     : "unverified",
+            "evidence": []
+          },
+          {
+            "id"         : "AC-11",
+            "description": "활성 턴이 확인된 작업 중 입력창의 Steer 동작으로 같은 턴에 추가 지시를 보내며 원래 실행 중단·새 턴 시작 없이 Working을 유지하고 대기 중 일반 전송과 구분한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-70449ddc-92ad-49df-bac3-cad3b1792b1f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-12",
+            "description": "Steer를 세션 API·preload IPC·main·Native turn/steer에 연결하고 session/selection/thread/expectedTurnId를 검사하며 응답 turnId를 확인한다. 추가 메시지 ID로 pending·접수·이력을 연결해 중복과 다른 세션 전달을 방지한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-70449ddc-92ad-49df-bac3-cad3b1792b1f",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-13",
+            "description": "Steer의 시작 대기·승인·중단·턴 종료 경합·불일치·미지원·전송 실패·접수 미확인을 구분하고 입력 원문과 새 초안을 보존한다. 자동 재전송·새 턴 전환을 하지 않고 중복 전송을 막는다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-dbb8e653-bd0f-49e2-9219-cd9ecb11ac88",
+                "summary": "실제 검증 passed; 현재 적용 가능"
+              }
+            ]
+          },
+          {
+            "id"         : "AC-14",
+            "description": "Steer의 같은 턴 전달·연속 입력·IME·원문 복원·다른 세션 격리를 집중 테스트와 실제 Electron에서 검증하며 실제 Native 후속 행동 반영과 API 접수 성공을 구분하고 Input P0 성능을 보존한다.",
+            "required"   : true,
+            "result"     : "passed",
+            "evidence": [
+              {
+                "path": "verification.md#attempt-bc51b41c-fe96-4bd3-b448-1fa5b70f7021",
+                "summary": "종료 코드 0, 기준 passed"
+              }
+            ]
+          }
+        ],
+        "verifications": [
+          {
+            "id": "attempt-b18c9a0e-6974-4d46-928d-f8fd16218d9d",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts",
+              "--command-cards"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-22T16:38:18.544Z"
+          },
+          {
+            "id": "attempt-6fdc0131-7f91-446b-a10f-c23372dc9e9f",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts",
+              "--command-cards"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T01:04:15.348Z"
+          },
+          {
+            "id": "attempt-70449ddc-92ad-49df-bac3-cad3b1792b1f",
+            "command": "bun",
+            "args": [
+              "test",
+              "test/native-session.test.ts",
+              "test/chat-status.test.ts",
+              "test/chat-state.test.ts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T03:18:26.682Z"
+          },
+          {
+            "id": "attempt-27c5890c-74e7-4e44-be11-a06598743572",
+            "command": "node",
+            "args": [
+              ".www/evidence/dashboard-rollforward-20261123/chat014-mint-audit.mts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T03:49:58.573Z"
+          },
+          {
+            "id": "attempt-8acec2d5-4c01-4406-a42a-b280e857a98c",
+            "command": "node",
+            "args": [
+              ".www/evidence/dashboard-rollforward-20261123/chat014-working-audit.mts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T03:54:59.501Z"
+          },
+          {
+            "id": "attempt-fe3a2e28-a4f7-4c8e-91b6-ba78f4e3882e",
+            "command": "node",
+            "args": [
+              ".www/evidence/dashboard-rollforward-20261123/chat014-electron-regression-current.mts"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T03:56:50.694Z"
+          },
+          {
+            "id": "attempt-dbb8e653-bd0f-49e2-9219-cd9ecb11ac88",
+            "command": "node",
+            "args": [
+              ".www/evidence/dashboard-rollforward-20261123/chat014-steer-errors-audit.mts",
+              "work-2d8887e6-0a74-40e4-8dc7-f000f8b3b118"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T04:04:54.217Z"
+          },
+          {
+            "id": "attempt-94f95952-1c64-44ff-a17a-71c3bc3a17fb",
+            "command": "node",
+            "args": [
+              "scripts/verify-chat.ts",
+              "--command-cards"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T04:11:47.864Z"
+          },
+          {
+            "id": "attempt-caf9ece6-842f-455e-8597-8d17c42c4349",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import assert from \"node:assert/strict\";import fs from \"node:fs\";import {execFileSync} from \"node:child_process\";import ts from \"typescript\";\nconst folder=\"docs/work/Chat/\"+fs.readdirSync(\"docs/work/Chat\").find(p=>p.startsWith(\"014-\"));const data=name=>JSON.parse(fs.readFileSync(folder+\"/\"+name+\".json\"));\nconst perf=data(\"visible-input-performance\"),react=data(\"react-steer-observation\");assert.deepEqual(perf[\"실행순서\"],[\"baseline-1\",\"candidate-1\",\"candidate-2\",\"baseline-2\",\"baseline-3\",\"candidate-3\"]);\nconst measured=perf[\"시도\"];assert.deepEqual(measured.map(r=>r.variant),perf[\"실행순서\"]);const select=(v,label)=>measured.filter(x=>x.variant.startsWith(v)).map(x=>x.metrics.find(m=>m.label===label));const median=a=>[...a].sort((a,b)=>a-b)[1];\nfor(const r of measured){for(const label of [\"short\",\"long-idle\",\"long-running\"]){const m=r.metrics.find(m=>m.label===label);assert.equal(m.samples,40);assert.equal(m.windowVisible,true);assert.equal(m.visibility,\"visible\");assert.deepEqual(m.viewport,{width:1440,height:868});assert(m.userAgent.includes(\"Electron/39.8.10\"));}assert(r.metrics.find(m=>m.label===\"scroll-long-idle\").scrolled>0);}\nassert(median(select(\"candidate\",\"long-running\").map(m=>m.p95))<median(select(\"baseline\",\"long-running\").map(m=>m.p95)));assert(median(select(\"candidate\",\"long-idle\").map(m=>m.p95))>median(select(\"baseline\",\"long-idle\").map(m=>m.p95)));assert(Math.max(...select(\"candidate\",\"scroll-long-idle\").map(m=>m.max))>Math.max(...select(\"baseline\",\"scroll-long-idle\").map(m=>m.max)));\nfor(const v of [\"baseline\",\"candidate\"])for(const m of select(v,\"stream-command-serialization\")){assert(m.mutations>0);assert(v===\"baseline\"?m.calls>=2112:m.calls===0);}\nfor(const result of Object.values(react[\"실행\"]))for(const row of result[\"관찰\"]){assert.equal(row.cards.length,0);assert(row.commands>=65&&row.commits.length>0);}\nconst decls=s=>{const f=ts.createSourceFile(\"renderer.tsx\",s,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);const found={};function visit(n){if(ts.isVariableDeclaration(n)&&[\"MemoCommandView\",\"activeBlocks\",\"transcriptRows\"].includes(n.name.getText(f)))found[n.name.getText(f)]=n.getText(f);ts.forEachChild(n,visit);}visit(f);assert.equal(Object.keys(found).length,3);assert(s.includes(\": transcriptRows}\"));return found;};\nassert.deepEqual(decls(fs.readFileSync(\"src/renderer.tsx\",\"utf8\")),decls(execFileSync(\"git\",[\"show\",\"575dd02:src/renderer.tsx\"],{encoding:\"utf8\"})));console.log(\"표시창 6회, React 2회, 완료 카드 반복 직렬화 감소와 현재 최적화 경로, 대기 및 휠 미개선 확인\");\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:56:04.993Z"
+          },
+          {
+            "id": "attempt-bc51b41c-fe96-4bd3-b448-1fa5b70f7021",
+            "command": "node",
+            "args": [
+              "--input-type=module",
+              "-e",
+              "import assert from \"node:assert/strict\";import fs from \"node:fs\";import {createHash} from \"node:crypto\";\nconst folder=\"docs/work/Chat/\"+fs.readdirSync(\"docs/work/Chat\").find(p=>p.startsWith(\"014-\"));const data=name=>JSON.parse(fs.readFileSync(folder+\"/\"+name+\".json\"));const d=data(\"steer-input-p0\"),tabs=data(\"react-steer-observation\")[\"연속Steer\"][\"관찰\"];const p95=arr=>[...arr].sort((a,b)=>a-b)[Math.ceil(.95*arr.length)-1];\nfor(const raw of Object.values(d[\"회수한원본\"])){assert.equal(createHash(\"sha256\").update(JSON.stringify(raw[\"내용\"],null,2)+\"\\n\").digest(\"hex\"),raw.sha256);}\nconst n=d[\"회수한원본\"][\"실제Native\"][\"내용\"].measurement;assert(n.sameTurnAccepted&&n.markerInPublicFinalAfterAcceptance&&n.markerInAssistantDom);assert.equal(n.turnStarts,1);assert.equal(n.interrupts,0);assert.equal(n.completedStatus,\"completed\");\nconst e=d[\"회수한원본\"][\"실패복원\"][\"내용\"];assert.deepEqual(e.proofs.map(x=>x.scenario),[\"unsupported\",\"send-failed\",\"turn-mismatch\",\"end-race\",\"after-send-eof\"]);assert.equal(e.steerInvocations,5);assert(e.checks.some(s=>s.includes(\"줄바꿈을 포함한 원문 복원\")));for(const x of e.proofs){assert(x.original.length>0&&(x.newer===null||x.newer.length>0));assert(x.original!==x.newer);}\nassert.equal(tabs.starts,1);assert.equal(tabs.steers.length,2);assert.equal(new Set(tabs.steers.map(s=>s.expectedTurnId)).size,1);assert.equal(new Set(tabs.steers.map(s=>s.clientUserMessageId)).size,2);assert.equal(tabs.steers[0].input[0].text,\"첫 추가 지시 각\");assert(tabs.checks.some(s=>s.includes(\"초안 보존\")));\nconst rows=d[\"표본\"];assert.deepEqual(rows.map(x=>x.variant),[\"pilot\",\"base1\",\"current1\",\"current2\",\"base2\"]);for(const r of rows){const {metrics:m}=r;assert.deepEqual([r.starts,r.steers,r.uniqueIds],[1,20,20]);assert.equal(m.summary.length,20);assert(m.cards>=65&&m.changes>0&&m.ua.includes(\"Electron/39.8.10\"));assert.deepEqual(m.viewport,[1440,868]);}\nfor(const k of [\"submit\",\"input\"]){const get=(v)=>rows.filter(r=>r.variant.startsWith(v)).map(r=>p95(r.metrics.summary.map(s=>s[k])));assert(Math.max(...get(\"current\"))<=50);assert(Math.max(...get(\"current\"))<Math.min(...get(\"base\")));assert(rows.filter(r=>r.variant.startsWith(\"current\")||r.variant===\"pilot\").every(r=>r.metrics.summary.every(s=>s[k]<100)));}\nconsole.log(\"같은 턴 연속 Steer·IME·탭 격리·실패 원문 복원, 실제 Native 응답 표식, 표시 창의 Enter 및 후속 입력 성능 확인\");\nconst bundle=fs.readFileSync(\"dist/renderer.js\",\"utf8\"),a=bundle.indexOf(\"  // src/architecture.generated.json\"),b=bundle.indexOf(\"\\n  // \",a+25);assert(a>=0&&b>a);assert.equal(bundle.split(\"\\n\").filter(s=>s.startsWith(\"  var appBuildInfo = \")).length,1);const body=(bundle.slice(0,a)+\"\\n\"+bundle.slice(b)).split(\"\\n\").filter(s=>!s.startsWith(\"  var appBuildInfo = \")).join(\"\\n\");assert.equal(createHash(\"sha256\").update(body).digest(\"hex\"),\"84a547d2f791a214df7c01e800aa2f5001b63c90f14c432e3b87e7a3649a1ebe\");\n"
+            ],
+            "environment": {
+              "platform": "darwin",
+              "arch"    : "arm64",
+              "node"    : "v22.23.1"
+            },
+            "result"      : "passed",
+            "executor"    : "process",
+            "exitCode"    : 0,
+            "sourceStable": true,
+            "completedAt" : "2026-11-23T23:56:05.931Z"
+          }
+        ],
+        "reviews": []
+      },
+      "source": {
+        "recordPath"    : "docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/work.json",
+        "workRecordHash": "222a0a91933b591d01ecdc578207080ac456e82800b72a41e6b679fd604397c8",
+        "sourceDigest"  : "8a337f22f5a8940e0f3be8c96984d37851ef34c1abd39772f3c60e5fc7707279",
+        "criteriaDigest": "de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff"
+      }
     }
   ]
 }

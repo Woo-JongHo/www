@@ -27,7 +27,7 @@ async function bundle(entry: string, target: "node" | "browser", format: "cjs" |
   });
   if (process.env.WWW_CHAT007_OBSERVE_INPUTS === "1") {
     if (!result.metafile) throw Error("AC-11 실제 번들 입력 누락");
-    verifyMonitorBundle(root, result.metafile.inputs, result.metafile.outputs);
+    verifyMonitorBundle(root, result.metafile.inputs, result.metafile.outputs, entry);
   }
   if (!result.success) throw new AggregateError(result.logs, `Failed to build ${entry}`);
 }
