@@ -489,3 +489,41 @@ Mac 실제 Native 전체 시나리오는 동결된 현재 코드로 다시 실�
 공식 Windows 검증 시도 `attempt-5ea1c9fb-9ec7-4852-ad7c-4d62ab9c3093`은 위 원문과 패키지 실행 파일·정책·시험 파일을 실제 바이트로 대조해 종료 코드 0을 기록했다. 하네스가 돌려준 역슬래시 경로를 후속 회수 단계에서 거부해, 이미 저장된 같은 시도를 슬래시 경로로 회수했다. 패키지 시험을 다시 실행하지 않았다.
 
 이 시점의 원장에는 AC-2·AC-3을 더해 여덟 기준 중 일곱 기준의 통과 기록이 있다. 이 Windows 결과의 대상은 위 패키지 커밋이다. `windows-setup.ts`의 발견 링크 수정은 별도 [PR #32](https://github.com/Woo-JongHo/www/pull/32)에서 검사했다. AC-4는 열려 있다. 확인 당시 Windows 사용자 세션은 연결이 끊겨 있었고 콘솔에는 로그인된 사용자가 없었다. 실제 OS 한국어 조합 확정 Enter·줄바꿈·포커스 관찰은 두 OS 모두 별도로 확보해야 한다.
+
+<a id="attempt-d0890b35-8764-4deb-8526-dab1ca3126a6"></a>
+## 검증 시도 — 2026-11-24T00:44:22.444Z
+
+- 시도 ID: `attempt-d0890b35-8764-4deb-8526-dab1ca3126a6`
+- 실행 시각: 2026-11-24T00:44:22.348Z ~ 2026-11-24T00:44:22.444Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test","test/projection.test.ts","test/input.test.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-5`
+- 소스 HEAD: `34db58cdd7df3c5b27eab25385254e25a85d5676`
+- 검증 입력: `.gitattributes`, `AGENTS.md`, `agents/www`, `build.ts`, `docs/DEVELOPMENT.md`, `docs/architecture`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/chat.md`, `docs/windows.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/check-workflow.mjs`, `scripts/check-workflow.ts`, `scripts/verify-eight-items.mjs`, `scripts/verify-eight-items.ts`, `scripts/windows-package.mjs`, `scripts/windows-package.ts`, `scripts/windows-setup.mjs`, `scripts/windows-setup.ts`, `scripts/workflow`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `38273a8b0f8dcfeb423b7b2e0a39f81aadda539780430120b07c66c737fbfa58`
+- 기준 정의 식별: `656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 28바이트, stderr 23487바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-3e6c67d7-1972-4363-bca0-49a278071da6"></a>
+## 검증 시도 — 2026-11-24T00:45:09.692Z
+
+- 시도 ID: `attempt-3e6c67d7-1972-4363-bca0-49a278071da6`
+- 실행 시각: 2026-11-24T00:44:23.101Z ~ 2026-11-24T00:45:09.692Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--test","test/workflow-work.test.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-6`, `AC-8`
+- 소스 HEAD: `34db58cdd7df3c5b27eab25385254e25a85d5676`
+- 검증 입력: `.gitattributes`, `AGENTS.md`, `agents/www`, `build.ts`, `docs/DEVELOPMENT.md`, `docs/architecture`, `docs/skills/WORKFLOW.md`, `docs/specs`, `docs/specs/chat.md`, `docs/windows.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/check-workflow.mjs`, `scripts/check-workflow.ts`, `scripts/verify-eight-items.mjs`, `scripts/verify-eight-items.ts`, `scripts/windows-package.mjs`, `scripts/windows-package.ts`, `scripts/windows-setup.mjs`, `scripts/windows-setup.ts`, `scripts/workflow`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `38273a8b0f8dcfeb423b7b2e0a39f81aadda539780430120b07c66c737fbfa58`
+- 기준 정의 식별: `656a9e4f2290ccc467a992c7f4a142cfb099497377c1a946299f3c2bf4d2efba`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 18654바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
