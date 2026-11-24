@@ -158,6 +158,9 @@ jobs:
     timeout-minutes: 45
     env:
       BOXBOX_MODE: check
+      GIT_CONFIG_COUNT: 1
+      GIT_CONFIG_KEY_0: core.autocrlf
+      GIT_CONFIG_VALUE_0: 'false'
       WWW_CHECKOUT_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.candidate_sha || github.sha }}
     steps:
       - name: 전체 검사 대상 SHA 확인
@@ -168,19 +171,15 @@ jobs:
           ref: ${{ env.WWW_CHECKOUT_SHA }}
           fetch-depth: 0
           persist-credentials: false
-      - name: 동결 소스 바이트 정규화
+      - name: 동결 소스 바이트 감사
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
           $PSNativeCommandUseErrorActionPreference = $true
-          git config --local core.autocrlf false
-          if ($LASTEXITCODE -ne 0) { throw "Git 줄바꿈 설정 실패: $LASTEXITCODE" }
-          git reset --hard $env:WWW_CHECKOUT_SHA
-          if ($LASTEXITCODE -ne 0) { throw "검증 대상 checkout 복원 실패: $LASTEXITCODE" }
           foreach ($file in @('spikes/tauri/build.ts', 'spikes/tauri/src/bridge.ts')) {
             $blob = git rev-parse ('{0}:{1}' -f $env:WWW_CHECKOUT_SHA, $file)
             if ($LASTEXITCODE -ne 0) { throw "정본 blob 조회 실패: $file ($LASTEXITCODE)" }
-            $working = git hash-object -- $file
+            $working = git hash-object --no-filters -- $file
             if ($LASTEXITCODE -ne 0) { throw "작업 파일 해시 조회 실패: $file ($LASTEXITCODE)" }
             if ($working -ne $blob) { throw "동결 소스 바이트가 정본과 다릅니다: $file" }
           }
