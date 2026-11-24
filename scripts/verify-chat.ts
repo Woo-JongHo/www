@@ -742,6 +742,117 @@ try {
     console.log(JSON.stringify({ evidence: directory, checks }));
     return;
   }
+  if (process.argv.includes("--reading-colors-only")) {
+    const openThemePicker = async () => {
+      await session!.input("/theme");
+      await session!.click('[data-testid="send-button"]');
+      await session!.wait("document.querySelector('dialog[open] h2')?.textContent==='채팅 테마 선택'", "테마 선택기 열기");
+    };
+    const verifyReadingColors = async (themeLabel: string) => {
+      await session!.click('[data-thread-id="history-a"]');
+      await session!.wait("document.querySelector('.chat-markdown h2')?.textContent==='저장된 답변'", themeLabel + " 저장 답변 복원");
+      const reading = object(await session!.evaluate(`(() => {
+        const surface = document.querySelector('.session-surface:not([hidden])');
+        const work = surface?.querySelector('main.work');
+        const question = surface?.querySelector('[data-testid="user-request"]');
+        const answer = surface?.querySelector('.agent');
+        const color = selector => getComputedStyle(answer.querySelector(selector)).color;
+        const background = element => {
+          for (let node = element; node; node = node.parentElement) {
+            const value = getComputedStyle(node).backgroundColor;
+            if (value !== 'rgba(0, 0, 0, 0)') return value;
+          }
+          return '';
+        };
+        const channels = value => {
+          const values = value.match(/[\\d.]+/g)?.slice(0, 3).map(Number);
+          if (!values || values.length !== 3) return null;
+          return value.startsWith('color(srgb') ? values.map(channel => channel * 255) : values;
+        };
+        const luminance = value => {
+          const rgb = channels(value);
+          if (!rgb) return null;
+          return rgb.map(channel => {
+            const normalized = channel / 255;
+            return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
+          }).reduce((sum, channel, index) => sum + channel * [0.2126, 0.7152, 0.0722][index], 0);
+        };
+        const ratio = (foreground, backdrop) => {
+          const fg = luminance(foreground), bg = luminance(backdrop);
+          return fg === null || bg === null ? 0 : (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05);
+        };
+        const contrast = selector => {
+          const element = answer.querySelector(selector);
+          return ratio(getComputedStyle(element).color, background(element));
+        };
+        return {
+          theme: work?.dataset.chatTheme,
+          scheme: getComputedStyle(work).colorScheme,
+          roles: [question?.querySelector('.chat-role-question')?.textContent, answer?.querySelector('.chat-role-answer')?.textContent],
+          questionBorder: getComputedStyle(question).borderInlineStartWidth,
+          questionBackground: getComputedStyle(question).backgroundColor,
+          answerBackground: getComputedStyle(answer).backgroundColor,
+          questionContrast: (() => {
+            const label = question.querySelector('.chat-role-question');
+            return ratio(getComputedStyle(label).color, background(label));
+          })(),
+          colors: ['h2', 'strong', 'a', 'th'].map(selector => color('.chat-markdown ' + selector)),
+          contrasts: ['h2', 'strong', 'a', 'th'].map(selector => contrast('.chat-markdown ' + selector)),
+          underline: getComputedStyle(answer.querySelector('.chat-markdown a')).textDecorationLine,
+          tableScrollable: (() => {
+            const table = Array.from(answer.querySelectorAll('.chat-markdown table')).at(-1);
+            if (!table) return false;
+            const before = table.scrollLeft;
+            table.scrollLeft = 48;
+            const moved = table.scrollLeft > before;
+            table.scrollLeft = before;
+            return table.scrollWidth > table.clientWidth && moved && ['auto', 'scroll'].includes(getComputedStyle(table).overflowX);
+          })()
+        };
+      })()`));
+      if (reading.theme !== (themeLabel === "Terminal Basic" ? "terminal-basic" : "www-mint") ||
+          !Array.isArray(reading.roles) || reading.roles.join("|") !== "내 질문|Codex 답변" ||
+          reading.questionBorder !== "3px" || reading.questionBackground === reading.answerBackground ||
+          typeof reading.questionContrast !== "number" || reading.questionContrast < 4.5 ||
+          !Array.isArray(reading.colors) || new Set(reading.colors).size !== 4 ||
+          !Array.isArray(reading.contrasts) || reading.contrasts.some(value => typeof value !== "number" || value < 4.5) ||
+          typeof reading.underline !== "string" || !reading.underline.includes("underline") ||
+          reading.tableScrollable !== true) {
+        throw Error(themeLabel + " 질문·답변·Markdown 읽기 색상 오류: " + JSON.stringify(reading));
+      }
+      checks.push(themeLabel + " 질문·답변 화자 표시, Markdown 제목·강조·링크·표 헤더 색상과 4.5:1 대비");
+      await session!.evaluate("document.querySelector('[data-testid=\\\"user-request\\\"] .chat-role-question').scrollIntoView({block:'start'})");
+      await session!.evaluate("new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
+      await session!.screenshot("reading-question-" + reading.theme, ".session-surface:not([hidden]) main.work");
+      await session!.evaluate("document.querySelector('.agent .chat-role-answer').scrollIntoView({block:'start'})");
+      await session!.evaluate("new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
+      await session!.screenshot("reading-answer-" + reading.theme, ".session-surface:not([hidden]) main.work");
+      await session!.evaluate("document.querySelector('.chat-markdown h2').scrollIntoView({block:'start'})");
+      await session!.evaluate("new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
+      await session!.screenshot("reading-markdown-" + reading.theme, ".session-surface:not([hidden]) main.work");
+    };
+    await verifyReadingColors("Terminal Basic");
+    await openThemePicker();
+    await session.click('dialog[open] .chat-model-options button:nth-child(2)');
+    await session.wait("document.querySelector('.session-surface:not([hidden]) main.work').dataset.chatTheme==='www-mint'", "WWW Mint 전환");
+    await verifyReadingColors("WWW Mint");
+    await session.click('.chat-code button');
+    await session.wait("document.querySelector('.chat-code button')?.textContent.includes('복사됨')", "Markdown 코드 복사 상태 표시");
+    await session.click('.chat-message-actions button:last-child');
+    await session.wait("document.querySelector('[data-testid=\"prompt-input\"]').value.includes('> ## 저장된 답변')", "Markdown 답변 인용이 초안에 추가");
+    await session.input("");
+    await session.input("스트리밍 이력 절단 중단 확인");
+    await session.click('[data-testid="send-button"]');
+    await session.wait("document.querySelector('.agent.streaming .chat-role-answer')?.textContent==='Codex 답변' && document.querySelector('.agent.streaming .chat-markdown')?.textContent.includes('이력 절단 뒤에도 들어온 응답')", "스트리밍 답변에도 Codex 화자 표시");
+    await session.click('[data-testid="interrupt-button"]');
+    await session.wait("!document.querySelector('.agent.streaming')", "스트리밍 중단 뒤 화자 표시 상태 정산");
+    await session.terminate();
+    session = null;
+    const summary = { result: "passed", scope: "reading-colors-only", evidence: directory, checks };
+    await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify(summary));
+    return;
+  }
   if (process.argv.includes("--slash-only")) {
     const submit = async (value: string) => {
       await session!.input(value);
