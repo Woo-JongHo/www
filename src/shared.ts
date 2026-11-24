@@ -53,20 +53,32 @@ export type RpaStandardSnapshot = {
 
 export interface DashboardProject { key: string; name: string; path: string; kind: "rpa" | "www" }
 export interface DashboardApplicability { status: "current" | "stale" | "missing" | "unassessed"; reasons: string[] }
+export type DashboardLegacyKind = "native-summary" | "legacy";
 export interface DashboardWork {
   id: string; projectKey: string; title: string; status: WorkStatus; blockedReason: string | null;
   sourcePath: string; areas: string[]; owner: string; requiredCriteria: number; passedCriteria: number; currentCriteria?: number; unassessedCriteria?: number; assessmentReason?: string;
+  nextAction?: string | null; legacyKind?: DashboardLegacyKind;
 }
 export interface DashboardIssue { code: string; path: string; message: string }
 export interface DashboardProjectSnapshot {
   project: DashboardProject; coverage: "complete" | "empty" | "partial" | "failed";
-  cards: DashboardWork[]; issues: DashboardIssue[];
+  cards: DashboardWork[]; issues: DashboardIssue[]; canonicalKey?: string;
 }
-export interface DashboardSnapshot { capturedAt: string; projects: DashboardProjectSnapshot[] }
+export interface DashboardGitHubIssues {
+  repository: string | null;
+  links: { number: number; workId: string }[];
+  status: "available" | "missing" | "failed" | "invalid";
+  checkedAt?: string;
+  open?: number;
+  unlinkedOpen?: number;
+}
+export interface DashboardSnapshot {
+  capturedAt: string; projects: DashboardProjectSnapshot[]; githubIssues?: DashboardGitHubIssues;
+}
 export interface DashboardWorkDetail {
   projectKey: string; workId: string; title: string; sourcePath: string; status: WorkStatus;
   owner: string; areas: string[];
-  blockedReason: string | null; nextAction: string | null; capturedAt: string;
+  blockedReason: string | null; nextAction: string | null; legacyKind?: DashboardLegacyKind; capturedAt: string;
   criteria: { id: string; description: string; required: boolean; result: "unverified" | "passed" | "failed" | "blocked"; evidenceCount: number; applicability?: DashboardApplicability }[];
   documents: { kind: "spec" | "design" | "tasks" | "verification"; path: string; status: "available" | "missing" | "failed"; content: string | null; message: string | null }[];
 }
