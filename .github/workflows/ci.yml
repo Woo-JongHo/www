@@ -157,6 +157,7 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 45
     env:
+      BOXBOX_MODE: check
       WWW_CHECKOUT_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.candidate_sha || github.sha }}
     steps:
       - name: 전체 검사 대상 SHA 확인
@@ -167,6 +168,22 @@ jobs:
           ref: ${{ env.WWW_CHECKOUT_SHA }}
           fetch-depth: 0
           persist-credentials: false
+      - name: 동결 소스 바이트 정규화
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          git config --local core.autocrlf false
+          if ($LASTEXITCODE -ne 0) { throw "Git 줄바꿈 설정 실패: $LASTEXITCODE" }
+          git reset --hard $env:WWW_CHECKOUT_SHA
+          if ($LASTEXITCODE -ne 0) { throw "검증 대상 checkout 복원 실패: $LASTEXITCODE" }
+          foreach ($file in @('spikes/tauri/build.ts', 'spikes/tauri/src/bridge.ts')) {
+            $blob = git rev-parse ('{0}:{1}' -f $env:WWW_CHECKOUT_SHA, $file)
+            if ($LASTEXITCODE -ne 0) { throw "정본 blob 조회 실패: $file ($LASTEXITCODE)" }
+            $working = git hash-object -- $file
+            if ($LASTEXITCODE -ne 0) { throw "작업 파일 해시 조회 실패: $file ($LASTEXITCODE)" }
+            if ($working -ne $blob) { throw "동결 소스 바이트가 정본과 다릅니다: $file" }
+          }
       - uses: actions/setup-node@v4
         with:
           node-version: 22.22.3
@@ -179,7 +196,10 @@ jobs:
       - name: 공개 BoxBox headless 설치
         shell: pwsh
         run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
           npm.cmd exec --yes --package=boxbox-plugin@0.2.9 -- boxbox --engine-only
+          if ($LASTEXITCODE -ne 0) { throw "BoxBox 설치 실패: $LASTEXITCODE" }
           $boxboxRoot = Join-Path $env:LOCALAPPDATA 'BoxBox\Codex\0.2.9'
           if (-not (Test-Path (Join-Path $boxboxRoot 'plugin\scripts\boxbox.mjs'))) { throw "BoxBox Codex 엔진 설치를 찾을 수 없습니다: $boxboxRoot" }
           "BOXBOX_CI_ROOT=$boxboxRoot" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
@@ -187,16 +207,26 @@ jobs:
       - name: Windows 네이티브 검사와 x64 패키지
         shell: pwsh
         run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
           function Assert-CleanCheckout {
-            if ((git rev-parse HEAD) -ne $env:WWW_CHECKOUT_SHA) { throw '검증 대상 커밋이 다릅니다.' }
+            $head = git rev-parse HEAD
+            if ($LASTEXITCODE -ne 0) { throw "Git HEAD 조회 실패: $LASTEXITCODE" }
+            if ($head -ne $env:WWW_CHECKOUT_SHA) { throw '검증 대상 커밋이 다릅니다.' }
             git diff --exit-code HEAD --
+            if ($LASTEXITCODE -ne 0) { throw "추적 파일 변경 확인 실패: $LASTEXITCODE" }
             $untracked = git ls-files --others --exclude-standard
+            if ($LASTEXITCODE -ne 0) { throw "미추적 파일 확인 실패: $LASTEXITCODE" }
             if ($untracked) { throw "검증 체크아웃에 추적되지 않는 경로가 있습니다.`n$untracked" }
           }
           Assert-CleanCheckout
           node scripts/windows-setup.ts
+          if ($LASTEXITCODE -ne 0) { throw "Windows setup 실패: $LASTEXITCODE" }
           npm.cmd run check
+          if ($LASTEXITCODE -ne 0) { throw "전체 검사 실패: $LASTEXITCODE" }
           node scripts/windows-package.ts
+          if ($LASTEXITCODE -ne 0) { throw "Windows 패키징 실패: $LASTEXITCODE" }
           Assert-CleanCheckout
           $tree = git rev-parse 'HEAD^{tree}'
+          if ($LASTEXITCODE -ne 0) { throw "Git tree 조회 실패: $LASTEXITCODE" }
           "WWW_WINDOWS_VERIFIED_TREE $env:WWW_CHECKOUT_SHA $tree" | Tee-Object -FilePath $env:GITHUB_STEP_SUMMARY -Append
