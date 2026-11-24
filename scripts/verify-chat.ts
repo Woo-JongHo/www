@@ -642,7 +642,7 @@ try {
     };
     const themeFile = path.join(directory, "profile", "chat-theme.json");
     const mint = `document.querySelector('.session-surface:not([hidden]) main.work').dataset.chatTheme==='www-mint'`;
-    const basic = 'getComputedStyle(document.querySelector(".session-surface:not([hidden]) main.work")).backgroundColor==="rgb(21, 21, 21)"';
+    const basic = 'getComputedStyle(document.querySelector(".session-surface:not([hidden]) main.work")).backgroundColor==="rgb(245, 244, 240)"';
     const focused = "document.activeElement===document.querySelector('[data-testid=\"prompt-input\"]')";
     const panelColors = (background: string, foreground: string) => `(() => {
       const surface=document.querySelector('.session-surface:not([hidden])');
@@ -654,12 +654,39 @@ try {
         return style.backgroundColor===${JSON.stringify(background)} && style.color===${JSON.stringify(foreground)};
       });
     })()`;
-    const basicPanels = panelColors("rgb(21, 21, 21)", "rgb(237, 237, 237)");
+    const basicPanels = panelColors("rgb(245, 244, 240)", "rgb(32, 33, 30)");
     const mintPanels = panelColors("rgb(12, 14, 13)", "rgb(230, 232, 230)");
+    const themed = (selector: string, background: string, foreground: string) => `(() => {
+      const node=document.querySelector(${JSON.stringify(selector)});
+      const shell=document.querySelector('.session-shell');
+      if(!node||!shell||!node.checkVisibility({opacityProperty:true,visibilityProperty:true})) return false;
+      const style=getComputedStyle(node), root=getComputedStyle(shell);
+      return style.getPropertyValue('--bg').trim()===${JSON.stringify(background)}
+        && style.getPropertyValue('--text').trim()===${JSON.stringify(foreground)}
+        && root.getPropertyValue('--bg').trim()===${JSON.stringify(background)}
+        && root.getPropertyValue('--text').trim()===${JSON.stringify(foreground)};
+    })()`;
+    const verifyAppSurfaces = async (background: string, foreground: string, label: string) => {
+      await session!.wait(themed('.session-tabs-bar', background, foreground), `${label} 세션 탭에 테마 토큰 적용`);
+      await session!.click('[data-testid="view-page-nav"]');
+      await session!.wait(themed('.home-sidebar', background, foreground), `${label} 프로젝트 목록에 테마 토큰 적용`);
+      await session!.click('[data-testid="project-list-close"]');
+      await session!.click('[data-testid="dashboard-nav"]');
+      await session!.wait(`${themed('[data-testid="dashboard"]', background, foreground)} && getComputedStyle(document.querySelector('[data-testid="dashboard"]')).backgroundColor===${JSON.stringify(background === '#f5f4f0' ? 'rgb(245, 244, 240)' : 'rgb(12, 14, 13)')}`, `${label} 대시보드에 테마 적용`);
+      await session!.click('[data-testid="ecosystem-nav"]');
+      await session!.wait(themed('.ecosystem-work', background, foreground), `${label} 생태계에 테마 토큰 적용`);
+      await session!.click('[data-testid="reports-nav"]');
+      await session!.wait(`${themed('.reports-work', background, foreground)} && getComputedStyle(document.querySelector('.reports-work')).backgroundColor===${JSON.stringify(background === '#f5f4f0' ? 'rgb(245, 244, 240)' : 'rgb(12, 14, 13)')}`, `${label} 보고서에 테마 적용`);
+      await session!.click('[data-testid="monitoring-nav"]');
+      await session!.wait(`${themed('[data-testid="session-monitoring"]', background, foreground)} && getComputedStyle(document.querySelector('.native-activity-panel')).backgroundColor===${JSON.stringify(background === '#f5f4f0' ? 'rgb(245, 244, 240)' : 'rgb(12, 14, 13)')}`, `${label} 모니터링에 테마 적용`);
+      await session!.click('[data-testid="chat-nav"]');
+      await session!.wait(`${themed('main.work', background, foreground)} && document.querySelector('main.work:not([hidden])')`, `${label} 대화로 돌아와 테마 유지`);
+    };
     await session.click('[data-thread-id="history-a"]');
     await session.wait("document.querySelector('.command-card')", "기존 명령 카드가 있는 대화 열기");
-    await session.wait(`${basic} && getComputedStyle(document.querySelector('.command-card')).backgroundColor==='rgb(32, 32, 32)'`, "미설정 프로필의 기본 배경색이 채팅과 명령 카드에 적용");
+    await session.wait(`${basic} && getComputedStyle(document.querySelector('.command-card')).backgroundColor==='rgb(255, 254, 253)'`, "미설정 프로필의 밝은 Basic 배경색이 채팅과 명령 카드에 적용");
     await session.wait(basicPanels, "넓은 창의 대화 목록과 Agent 패널에 Basic 배경색·글자색 적용");
+    await verifyAppSurfaces('#f5f4f0', '#20211e', 'Basic');
     for (let step = 0; step < 160; step++) {
       await key("Tab", 9);
       if (await session.evaluate(`document.activeElement.matches('.session-surface:not([hidden]) textarea:focus-visible')`)) break;
@@ -711,6 +738,7 @@ try {
     await session.wait(`${mint} && ${focused} && !document.querySelector('dialog[open]')`, "키보드 적용·입력창 초점 복귀");
     await session.wait(mintPanels, "테마를 선택하면 대화 목록과 Agent 패널도 Mint로 전환");
     await session.wait("getComputedStyle(document.querySelector('.command-card')).backgroundColor==='rgb(20, 24, 21)'", "명령 카드의 배경색도 Mint로 전환");
+    await verifyAppSurfaces('#0c0e0d', '#e6e8e6', 'Mint');
     await openPicker();
     await key("Escape", 27);
     await session.wait(`${mint} && ${focused} && !document.querySelector('dialog[open]')`, "Escape 취소 시 테마·입력창 초점 유지");
