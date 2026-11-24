@@ -250,6 +250,17 @@ test("데이터 없는 미수집·기록 없음·수집 실패를 서로 다르�
   });
 });
 
+test("중앙 보드는 프로젝트 진입 버튼 없이 수집 상태와 오류를 유지한다", async () => {
+  await fixture(async (project, base) => {
+    const failed = await readDashboard([{ ...project, path: join(base, "missing") }]);
+    const html = renderToStaticMarkup(createElement(DashboardView, { snapshot: failed, loading: false, error: null, onRefresh() {} }));
+    expect(html).toContain("수집 실패");
+    expect(html).toContain("전체 미확인");
+    expect(html).not.toContain("프로젝트 열기");
+    expect(html).not.toContain("dashboard-project-open");
+  });
+});
+
 test("상태별 열은 실제 원본만 표시하고 악성 텍스트는 이스케이프한다", async () => {
   await fixture(async (project, _base, save) => {
     const waiting = record("in_progress", { blockedReason: "서비스 점검 중" });
