@@ -54,7 +54,7 @@ export const ChatComposer = memo(function ChatComposer(props: ComposerProps) {
     setSelectedSlash(0);
   }, [props.snapshot]);
   const actionBlocked = props.blocked || props.disabled || props.sending || !draft.trim() || draft.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer);
-  const slashOptions = ['/model', '/compact', '/theme'].filter((value) => /^\/\S*$/.test(draft) && value.startsWith(draft));
+  const slashOptions = ['/model', '/compact', '/goal', '/theme'].filter((value) => /^\/\S*$/.test(draft) && value.startsWith(draft));
   const slashOpen = !actionBlocked && !props.working && slashOptions.length > 0 && dismissedSlash !== draft;
   const chooseSlash = (value: string) => {
     if (actionBlocked || props.working) return;

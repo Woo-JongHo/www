@@ -195,6 +195,12 @@ export interface NativeModelOption {
   isDefault: boolean;
 }
 
+export type NativeGoalAction = { operation: "get" | "pause" | "resume" | "clear" } | { operation: "set"; objective: string };
+
+export type NativeGoalStatus = "active" | "paused" | "blocked" | "usageLimited" | "budgetLimited" | "complete";
+
+export type NativeGoalResult = { goal: { objective: string; status: NativeGoalStatus } | null } | { cleared: boolean };
+
 export type NativeCompaction =
   | { state: "idle" | "pending" | "running" | "completed" }
   | { state: "failed"; message: string };
@@ -242,6 +248,7 @@ export interface WwwApi {
   startTurn(selection: SelectionRef, threadId: string, text: string, model?: string): Promise<{ turnId: string }>;
   listModels(selection: SelectionRef): Promise<NativeModelOption[]>;
   compactThread(selection: SelectionRef, threadId: string): Promise<void>;
+  controlGoal(selection: SelectionRef, threadId: string, action: NativeGoalAction): Promise<NativeGoalResult>;
   steerTurn(selection: SelectionRef, threadId: string, expectedTurnId: string, text: string, clientUserMessageId: string): Promise<{ turnId: string }>;
   interrupt(selection: SelectionRef, threadId: string, turnId: string): Promise<void>;
   respond(selection: SelectionRef, requestId: RpcId, decision: string, approvalToken: string): Promise<void>;

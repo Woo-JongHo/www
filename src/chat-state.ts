@@ -5,16 +5,24 @@
 // 입력 한도와 인용 결합은 Ovis에서 개작. Copyright (c) 2026 devswha, MIT.
 // 원본 revision: d505c75e26c54f31573057d1e9aa431ecc56677f
 // src/lib/composerLength.ts, src/lib/chatQuote.ts. docs/third-party/ovis.md 참고.
-import type { AppEvent, InterruptState, NativeSessionSummary, ScopedAppEvent, SelectionRef, TransportState, TurnState } from "./shared";
+import type { AppEvent, InterruptState, NativeGoalAction, NativeSessionSummary, ScopedAppEvent, SelectionRef, TransportState, TurnState } from "./shared";
 
 export const MAX_PROMPT_CHARS = 100_000;
 
-export function slashCommand(text: string): "model" | "compact" | "theme" | null {
+export function slashCommand(text: string): "model" | "compact" | "theme" | "goal" | null {
   const value = text.trim();
   if (value === "/model") return "model";
   if (value === "/compact") return "compact";
   if (value === "/theme") return "theme";
+  if (/^\/goal(?:\s|$)/.test(value)) return "goal";
   return null;
+}
+
+export function goalAction(command: string): NativeGoalAction {
+  const objective = command.slice("/goal".length).trim();
+  if (!objective) return { operation: "get" };
+  if (objective === "pause" || objective === "resume" || objective === "clear") return { operation: objective };
+  return { operation: "set", objective };
 }
 
 export function composerFull(length: number, max: number): boolean {
