@@ -150,3 +150,53 @@ jobs:
           retention-days: 14
           include-hidden-files: true
           if-no-files-found: error
+  windows_validate:
+    name: Windows x64 검사와 패키징
+    needs: pr_scope
+    if: ${{ !cancelled() && (needs.pr_scope.result != 'success' || needs.pr_scope.outputs.mode != 'focused') }}
+    runs-on: windows-latest
+    timeout-minutes: 45
+    env:
+      WWW_CHECKOUT_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.candidate_sha || github.sha }}
+    steps:
+      - name: 전체 검사 대상 SHA 확인
+        shell: pwsh
+        run: 'if ("$env:WWW_CHECKOUT_SHA" -notmatch ''^[0-9a-f]{40}$'') { throw "전체 커밋 SHA가 필요합니다." }'
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.WWW_CHECKOUT_SHA }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.3
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+      - run: npm.cmd ci
+      - run: npm.cmd install --global @openai/codex@0.167.2
+      - name: 공개 BoxBox headless 설치
+        shell: pwsh
+        run: |
+          $boxboxRoot = Join-Path $env:RUNNER_TEMP 'boxbox-engine'
+          $env:XDG_DATA_HOME = $boxboxRoot
+          npm.cmd exec --yes --package=boxbox-plugin@0.2.9 -- boxbox --engine-only
+          "BOXBOX_CI_ROOT=$boxboxRoot/boxbox/codex/0.2.9" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+      - run: npm.cmd run setup:ci
+      - name: Windows 네이티브 검사와 x64 패키지
+        shell: pwsh
+        run: |
+          function Assert-CleanCheckout {
+            if ((git rev-parse HEAD) -ne $env:WWW_CHECKOUT_SHA) { throw '검증 대상 커밋이 다릅니다.' }
+            git diff --exit-code HEAD --
+            $untracked = git ls-files --others --exclude-standard
+            if ($untracked) { throw "검증 체크아웃에 추적되지 않는 경로가 있습니다.`n$untracked" }
+          }
+          Assert-CleanCheckout
+          node scripts/windows-setup.ts
+          npm.cmd run check
+          node scripts/windows-package.ts
+          Assert-CleanCheckout
+          $tree = git rev-parse 'HEAD^{tree}'
+          "WWW_WINDOWS_VERIFIED_TREE $env:WWW_CHECKOUT_SHA $tree" | Tee-Object -FilePath $env:GITHUB_STEP_SUMMARY -Append
