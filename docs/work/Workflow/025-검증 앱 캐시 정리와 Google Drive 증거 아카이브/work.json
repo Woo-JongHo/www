@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "id"           : "work-3fb2af51-691e-408e-b73a-134b9b2d9145",
+  "title"        : "검증 앱 캐시 정리와 Google Drive 증거 아카이브",
+  "kind"         : "feature",
+  "areas": [
+    "dev"
+  ],
+  "owner"        : "dev",
+  "status"       : "verifying",
+  "blockedReason": null,
+  "relations": [],
+  "criteria": [
+    {
+      "id"         : "AC-1",
+      "description": "검증 앱 종료 뒤 격리 프로필의 캐시만 정리한다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-2",
+      "description": "보유 기간과 영수증 참조를 검사하고 대상과 용량을 미리 보여준다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    },
+    {
+      "id"         : "AC-3",
+      "description": "Google Drive에서 복사본 무결성을 확인한 뒤 이동할 수 있고 원래 경로로 복원할 수 있다.",
+      "required"   : true,
+      "result"     : "unverified",
+      "evidence": []
+    }
+  ],
+  "workflow": {
+    "role"       : "www-dev",
+    "requestId"  : "20261124-www-evidence-retention-google-drive",
+    "requestHash": "853f4ee9a7e09c25fb456ac4696bcba9c48b8d50769dd2e8de399c058d1d21f7",
+    "authorization": {
+      "implementation": true,
+      "writePaths": [
+        "scripts/evidence-retention.ts",
+        "scripts/verify-chat.ts",
+        "scripts/verify-home.ts",
+        "docs/DEVELOPMENT.md",
+        "test/evidence-retention.test.ts",
+        "src/architecture.generated.json"
+      ],
+      "mutationSurfaces": [
+        "edit"
+      ],
+      "verifierCommands": [
+        "[\"bun\",\"test\",\"test/evidence-retention.test.ts\"]",
+        "[\"npm\",\"run\",\"typecheck\"]",
+        "[\"npm\",\"run\",\"build\"]"
+      ],
+      "commit"     : false,
+      "publish"    : false,
+      "source"     : "direct_user_request",
+      "requestHash": "853f4ee9a7e09c25fb456ac4696bcba9c48b8d50769dd2e8de399c058d1d21f7"
+    },
+    "inputs": [
+      "docs/DEVELOPMENT.md",
+      "scripts/evidence-retention.ts",
+      "scripts/verify-chat.ts",
+      "scripts/verify-home.ts",
+      "scripts/workflow/evidence.ts",
+      "test/evidence-retention.test.ts"
+    ],
+    "nextAction": "verify",
+    "verifications": [],
+    "reviews": []
+  }
+}

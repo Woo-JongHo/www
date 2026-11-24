@@ -5,6 +5,7 @@ import { promises as fs } from "node:fs";
 import { createServer } from "node:net";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { cleanVerificationCaches, stopVerificationApp } from "./evidence-retention.ts";
 
 type Data = Record<string, unknown>;
 const object = (value: unknown): Data => value && typeof value === "object" && !Array.isArray(value) ? value as Data : {};
@@ -295,11 +296,9 @@ try {
   failure = error;
 } finally {
   socket?.close();
-  child.kill("SIGTERM");
-  await Promise.race([new Promise<void>(resolve => child.once("close", () => resolve())), pause(3000)]);
-  if (child.exitCode === null) child.kill("SIGKILL");
-  await stdout.close();
-  await stderr.close();
+  try { await stopVerificationApp(child); }
+  finally { await Promise.all([stdout.close(), stderr.close()]); }
+  await cleanVerificationCaches(evidence);
 }
 
 if (failure) throw failure;
