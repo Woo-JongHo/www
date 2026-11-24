@@ -198,3 +198,79 @@ WWW_VERIFIED_TREE b095341fdd939f55edcb37328e28d97daeff6c41 0d5c08ecae5e463a67d1e
 ### 부분 마감 판정
 
 SESSION-PLAN의 최종 계획 조회, SESSION-INTEGRATION의 #47 원격 검사 원문 대조(`attempt-c7695c6a-e91b-474c-b19f-32eba4fc5eb6`), SESSION-CLOSEOUT의 12개 칸반 상세·공식 판정·보고서 원문 대조(`attempt-2cffa84a-3613-43d7-8ae0-4ae95ceba018`)가 통과했다. SESSION-USABILITY의 남은 실사용 조건을 유지해 Workflow/021 상태는 검증 중이다.
+
+<a id="attempt-9d2e9f95-f2be-481c-be4f-add87501fd6f"></a>
+## 검증 시도 — 2026-11-24T00:53:22.429Z
+
+- 시도 ID: `attempt-9d2e9f95-f2be-481c-be4f-add87501fd6f`
+- 실행 시각: 2026-11-24T00:53:21.894Z ~ 2026-11-24T00:53:22.429Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","-e","import assert from \"node:assert/strict\";\nimport {readFileSync} from \"node:fs\";\nimport {createHash} from \"node:crypto\";\nimport {readDashboardWork,readDashboardPlan} from \"./src/dashboard.ts\";\nconst project={key:\"www\",path:process.cwd(),name:\"WWW\",kind:\"www\"};\nconst sessionId=\"work-40ae2dc5-86db-4b52-b1fc-09ca61c58898\";\nconst details=await readDashboardWork([project],project.key,sessionId);\nconst file=details.sourcePath;\nconst record=JSON.parse(readFileSync(file,\"utf8\"));\nconst task=details.documents.find(x=>x.kind===\"tasks\");\nassert.equal(task?.status,\"available\");\nassert.deepEqual(details.criteria.map(c=>c.id),[\"SESSION-PLAN\",\"SESSION-INTEGRATION\",\"SESSION-USABILITY\",\"SESSION-CLOSEOUT\"]);\nconst sha=createHash(\"sha256\").update(task.content).digest(\"hex\");\nconst opened=await readDashboardPlan(project,sessionId,sha);\nassert.equal(opened.content,task.content);\nassert.equal(opened.status,\"available\");\nassert.equal(new Set(record.relations.map(r=>r.target)).size,30);\nfor(const r of record.relations){assert(task.content.includes(r.target),r.target);}\nfor(const word of [\"#43\",\"#44\",\"#45\",\"#46\",\"Windows\",\"122.414초\",\"소유\",\"의존성\",\"gpt-6.1-terra\"]){assert(task.content.includes(word),word);}\nconst reopened=await readDashboardWork([project],project.key,sessionId);\nassert.equal(reopened.documents.find(x=>x.kind===\"tasks\")?.content,opened.content);\nconsole.log(JSON.stringify({sessionId,sha256:sha,relations:record.relations.length,reopened:true}));\n"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `SESSION-PLAN`
+- 소스 HEAD: `b76206be6fac582f5b196ce5b08179cd22f39503`
+- 검증 입력: `agents`, `docs/architecture`, `docs/skills`, `docs/specs`, `package.json`, `scripts`, `skills`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `0697ee7bbee8fe9cb4352711d00172f78eb1082fe9ffacf9ac0f7535f2fc8253`
+- 기준 정의 식별: `5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/tasks.md` (22871바이트, sha256 96823205b401605a6eec1fc1b3bdd9bb80b4afe3a7400fcb2bd8c6b94e0c9d27)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 165바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-ac3dcc84-dac9-48a7-ac7d-14651829f13d"></a>
+## 검증 시도 — 2026-11-24T00:54:02.523Z
+
+- 시도 ID: `attempt-ac3dcc84-dac9-48a7-ac7d-14651829f13d`
+- 실행 시각: 2026-11-24T00:54:00.395Z ~ 2026-11-24T00:54:02.523Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","-e","import assert from \"node:assert/strict\";import {execFileSync} from \"node:child_process\";import {createHash} from \"node:crypto\";\nconst sha=\"931c79ba3ab2fd1d90bc23d453ac05924793ff7d\",runId=\"45293209017\",jobId=\"138107067047\",repo=\"Woo-JongHo/www\";\nconst git=(...args)=>execFileSync(\"git\",args,{encoding:\"utf8\"}).trim(),api=p=>JSON.parse(execFileSync(\"gh\",[\"api\",\"repos/\"+repo+\"/\"+p],{encoding:\"utf8\"}));\nconst run=api(\"actions/runs/\"+runId),job=api(\"actions/jobs/\"+jobId);assert.equal(run.head_sha,sha);assert.equal(job.run_id,Number(runId));assert.equal(job.name,\"validate\");assert.equal(job.conclusion,\"success\");assert.equal(job.steps.find(s=>s.name===\"체크아웃 검증 및 필요한 패키징\")?.conclusion,\"success\");\nfor(const part of [\"src\",\"test\",\"scripts\",\"package.json\",\".github/workflows/ci.yml\"]){assert.equal(git(\"rev-parse\",\"HEAD:\"+part),git(\"rev-parse\",sha+\":\"+part));}\nconst log=execFileSync(\"gh\",[\"run\",\"view\",runId,\"--repo\",repo,\"--job\",jobId,\"--log\"],{maxBuffer:32*1024*1024,encoding:\"utf8\"});const markers=[...log.matchAll(/WWW_VERIFIED_TREE ([0-9a-f]{40}) ([0-9a-f]{40}) ([0-9a-f]{40}) ([0-9a-f]{40})/g)];assert(markers.some(m=>m[2]===git(\"rev-parse\",sha+\"^{tree}\")&&m[4]===sha));for(const stage of [\"check:architecture\",\"check:source\",\"typecheck\",\"test\",\"build\"]){assert(log.includes(\" \"+stage),stage);}\nconsole.log(JSON.stringify({head:sha,tree:git(\"rev-parse\",sha+\"^{tree}\"),runId,jobId,started:job.started_at,finished:job.completed_at,logSha256:createHash(\"sha256\").update(log).digest(\"hex\")}));\n"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `SESSION-INTEGRATION`
+- 소스 HEAD: `b76206be6fac582f5b196ce5b08179cd22f39503`
+- 검증 입력: `agents`, `docs/architecture`, `docs/skills`, `docs/specs`, `package.json`, `scripts`, `skills`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `0697ee7bbee8fe9cb4352711d00172f78eb1082fe9ffacf9ac0f7535f2fc8253`
+- 기준 정의 식별: `5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/tasks.md` (22871바이트, sha256 96823205b401605a6eec1fc1b3bdd9bb80b4afe3a7400fcb2bd8c6b94e0c9d27)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 293바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-847e110a-a017-48a1-adfb-119aa16cd0aa"></a>
+## 검증 시도 — 2026-11-24T00:55:16.899Z
+
+- 시도 ID: `attempt-847e110a-a017-48a1-adfb-119aa16cd0aa`
+- 실행 시각: 2026-11-24T00:54:59.671Z ~ 2026-11-24T00:55:16.899Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun",".www/evidence/final-session/verify-closeout.mts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `SESSION-CLOSEOUT`
+- 소스 HEAD: `b76206be6fac582f5b196ce5b08179cd22f39503`
+- 검증 입력: `agents`, `docs/architecture`, `docs/skills`, `docs/specs`, `package.json`, `scripts`, `skills`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `0697ee7bbee8fe9cb4352711d00172f78eb1082fe9ffacf9ac0f7535f2fc8253`
+- 기준 정의 식별: `5113844c159263a140d271d35b3159d089ccc07b9cfbdaf97d4c24644cca59ed`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `.www/evidence/final-session/verify-closeout.mts` (2761바이트, sha256 8f3e7b37f5f0460e57f0575560e88a3cca7edd58e0d45754154d98871957b669), `docs/work/Chat/003-Native 실시간 작업 흐름과 사용량/work.json` (1498890바이트, sha256 6665fa32fe4475b9ec3216f0f41db1e7560e0b6475b11d4b60baa212801dd6b3), `docs/work/Chat/006-오픈소스 채팅 뼈대와 Native 대화 재개 통합/work.json` (1220595바이트, sha256 329df819c2859b20daa9ddf49ba81bcf6a35d502cae89e0efbeb54241b8dca19), `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/work.json` (2219198바이트, sha256 aca0cae6a6d69ef1b52de232a2f0ee5cb2654ba9993afe4f30bc03f1354585cc), `docs/work/Chat/008-오픈소스 채팅 뼈대 도입 비교/work.json` (2649376바이트, sha256 b8eb630e65afd48975167cb21bd11fa6ea42575ceb755f1e383a24566676a38c), `docs/work/Chat/012-스크롤과 첫 응답 및 진행 설명 개선 논의/work.json` (478578바이트, sha256 3cc33f4185ea8b40f57b364d7c9cb7598b7eed2cb47fc7b0b975788d40a91526), `docs/work/Chat/014-대화 단일 스크롤과 카드 펼침 및 성능 개선 명세/work.json` (1138062바이트, sha256 0a41d29a5a6f41cb33e3daaef3c3435bb660da9f6815dfdadf1c48792a59d848), `docs/work/Development/001-Mac과 Windows 실사용 및 검증 신뢰성 완성/work.json` (1006657바이트, sha256 0c3afed86d61b116506704cf8645f23f6bc98b8667b87da600e5b7add3824d16), `docs/work/Workflow/005-Skills 라이브러리 한국어 대체/work.json` (4162112바이트, sha256 31b27245ea28870a5926a47a78cfbc5bae9af9e1e215dd5a62549d0e680ea99c), `docs/work/Workflow/009-JavaScript 전체 TypeScript 이관/work.json` (5430808바이트, sha256 c237fe4fd862b33e9ce6559592cee1a9dc3895f57e27fb8829cc821e4451d7fc), `docs/work/Workflow/019-분업 계약과 완료 게이트 강화 및 상태도 연결/work.json` (3028252바이트, sha256 ed119bbd2385a5377ed43dc22bda9556aa1ebcd98b3489872245fc5e99b5d1fa), `docs/work/Workflow/021-누적 요구사항 사용성 개선과 병렬 통합 검증/tasks.md` (22871바이트, sha256 96823205b401605a6eec1fc1b3bdd9bb80b4afe3a7400fcb2bd8c6b94e0c9d27), `docs/work/Workflow/023-선택 라이브러리 잔여 의미 18문구 교정/work.json` (2153025바이트, sha256 9fb054f5c2d6c87c81b47d9c704b1361fa1714c0dbb2d700039a3336343db5bd), `docs/work/Workflow/024-BoxBox 외부 검사 분리와 Reports 공식 검증 복구/work.json` (63452바이트, sha256 6b9aa188b5502ec37600bb986302654370e894d657107363ba016859f7dcc43d)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 5969바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+## 최종 기록 재대조
+
+2026-11-24 저장소 원장과 대시보드 상세, 보고서 JSON을 열어 12개 작업 UUID를 다시 대조했다. 완료 이력은 8건이다. 열린 네 작업의 기준은 증거 원문을 복구한 로컬 작업공간에서 다시 평가했다.
+
+| 이슈 | 저장 통과 | 현재 유효 | 남은 검증 |
+| --- | ---: | ---: | --- |
+| #25 | 11/12 | 11/12 | Windows 실기 및 Opus 최종 검토 |
+| #26 | 3/4 | 3/4 | 과거 122.414초 지연 구간의 원인 |
+| #27 | 12/14 | 12/14 | 긴 대화에서 실제 한글 편집·시스템 클립보드와 입력 체감 |
+| #28 | 7/8 | 3/8 | Native 실사용·Windows 현재 후보의 근거와 Opus 관측 |
+
+계획과 작업 연결은 공식 시도 `attempt-9d2e9f95-f2be-481c-be4f-add87501fd6f`에서 재조회했다. 통합 검사는 제품·검사 소스가 같은 #58 Git 트리의 전체 CI 영수증을 `attempt-ac3dcc84-dac9-48a7-ac7d-14651829f13d`에서 대조했다. 마감 기록은 `attempt-847e110a-a017-48a1-adfb-119aa16cd0aa`에서 12개 원장·보고서와 대시보드의 현재 표시를 대조했다. 현재 대시보드의 스킬 번역 AC-1·AC-4는 공식 검증 원장에서 유효하고 화면은 실행 파일 확인 범위를 이유로 미평가 상태다. 실제 사용자 입력이 필요한 SESSION-USABILITY는 열린 상태다.
