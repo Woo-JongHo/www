@@ -120,6 +120,6 @@ export const ChatComposer = memo(function ChatComposer(props: ComposerProps) {
       }, 0);
     }} placeholder={props.status.steer ? '현재 작업에 추가 지시' : 'Codex에게 작업 요청'}/>
       <div className="actions">{props.working && <button data-testid="interrupt-button" className="secondary" onClick={props.onInterrupt} disabled={props.interruptPending}>중단{props.interruptPending ? ' 확인 중' : ''}</button>}<button data-testid="send-button" className="primary" onClick={props.onSubmit} disabled={actionBlocked}>{props.sending ? '전송 중' : props.status.steer ? 'Steer · 추가 지시' : '보내기'}</button></div>
-    </div><div className="chat-compose-note" role="status">{notice || props.notice || `Enter ${props.status.steer ? '추가 지시' : '전송'} · Shift+Enter 줄바꿈 · ${draft.length.toLocaleString('ko-KR')}/${MAX_PROMPT_CHARS.toLocaleString('ko-KR')}`}</div>
+    </div><div className="chat-compose-note" role="status">{notice || props.notice}</div>
   </>;
 });

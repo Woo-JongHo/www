@@ -502,6 +502,45 @@ async function verifyChat() {
 try {
   if (!nativeProbe) await seedHistory();
   session = await start(1);
+  if (process.argv.includes("--compose-note-only")) {
+    const input = '[data-testid="prompt-input"]';
+    const note = ".chat-compose-note";
+    const emptyNote = `(()=>{const node=document.querySelector(${JSON.stringify(note)});return node?.textContent === '' && node.getBoundingClientRect().height === 0;})()`;
+    const turnStarts = async () => (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8").catch(() => ""))
+      .split("\n").filter(Boolean).map(line => object(JSON.parse(line))).filter(call => call.method === "turn/start").length;
+    const enter = async () => {
+      await session!.evaluate(`document.querySelector(${JSON.stringify(input)}).focus()`);
+      const event = { key: "Enter", code: "Enter", windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 };
+      await session!.command("Input.dispatchKeyEvent", { type: "keyDown", ...event });
+      await session!.command("Input.dispatchKeyEvent", { type: "keyUp", ...event });
+    };
+    await session.wait(emptyNote, "빈 입력에서 상시 안내와 빈 줄 높이 제거");
+    await session.input("작성 중인 초안");
+    await session.wait(emptyNote, "작성 중인 초안의 글자 수와 단축키가 표시되지 않음");
+    await session.input("Enter 전송 확인");
+    const before = await turnStarts();
+    await enter();
+    await session.wait(`document.querySelector(${JSON.stringify(input)}).value === '' && document.querySelector('.transcript')?.textContent.includes('Enter 전송 확인')`, "Enter 전송 유지");
+    for (let attempt = 0; attempt < 50 && await turnStarts() !== before + 1; attempt += 1) await pause(20);
+    if (await turnStarts() !== before + 1) throw Error("Enter 전송이 fixture turn/start 한 번과 일치하지 않습니다.");
+    await session.input("붙여넣기 전 초안");
+    const rejected = await session.evaluate(`(() => {
+      const field = document.querySelector(${JSON.stringify(input)});
+      if (!(field instanceof HTMLTextAreaElement)) return false;
+      const data = new DataTransfer();
+      data.setData("text/plain", "가".repeat(field.maxLength + 1));
+      return !field.dispatchEvent(new ClipboardEvent("paste", { bubbles: true, cancelable: true, clipboardData: data }));
+    })()`);
+    if (!rejected) throw Error("한도 초과 붙여넣기 이벤트가 차단되지 않았습니다.");
+    await session.wait(`document.querySelector(${JSON.stringify(input)}).value === "붙여넣기 전 초안" && document.querySelector(${JSON.stringify(note)})?.textContent.includes("입력 한도를")`, "붙여넣기 한도 초과 알림과 기존 초안 유지");
+    checks.push("빈·작성 중 입력의 기본 안내와 빈 높이 없음, Enter 한 번 전송, 초과 붙여넣기 알림·초안 보존");
+    await session.terminate();
+    session = null;
+    const summary = { result: "passed", scope: "compose-note-only", evidence: directory, checks };
+    await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify(summary));
+    return;
+  }
   if (process.argv.includes("--ime-enter-only")) {
     await verifyImeEnter(session);
     await session.terminate();

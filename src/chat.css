@@ -50,6 +50,7 @@ html,body,#root{width:100%;height:100%;min-height:0;overflow:hidden;overscroll-b
 .chat-markdown hr{border:0;border-top:1px solid var(--border);margin:20px 0}
 .chat-image-note{color:var(--muted);font-size:12px}
 .chat-compose-note{padding:0 14px 10px;font-size:10px;line-height:1.5;color:var(--muted);min-height:15px}
+.chat-compose-note:empty{padding:0;min-height:0}
 @media(max-width:1000px){.chat-conversations{padding:0 8px}.chat-conversation-heading{flex-wrap:wrap}.chat-message{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.chat-message *{scroll-behavior:auto!important;animation:none!important}}
 
