@@ -1312,3 +1312,22 @@ AC-10의 전체 구현 수용은 보류다. 이번 시행의 전송 상대는 �
 - 검증 중 원문 유지: 확인
 - 출력: stdout 948바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-8e4f4bf5-1034-49fd-8aa6-3075f8e6b6cd"></a>
+## 검증 시도 — 2026-11-24T00:25:44.588Z
+
+- 시도 ID: `attempt-8e4f4bf5-1034-49fd-8aa6-3075f8e6b6cd`
+- 실행 시각: 2026-11-24T00:25:09.630Z ~ 2026-11-24T00:25:44.588Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-chat.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-03`, `AC-06`, `AC-07`
+- 소스 HEAD: `649cb88da7e551eda2e40be2db2410e0e6da03ae`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `e93e99c378468f7908f0710b7092bd19474693cb70466821172ab8664ac86a2b`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 30966바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
