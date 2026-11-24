@@ -2,8 +2,12 @@
  * @architecture arch.chat.messages.preview
  * @implements RESP-CHAT-MESSAGES-PREVIEW
  */
-export function commandPreview(output: string, running: boolean): { text: string; hiddenLines: number } {
+export function commandPreview(output: string, running: boolean, preserveLineEndings = false): { text: string; hiddenLines: number } {
   if (!output) return { text: "", hiddenLines: 0 };
+  if (preserveLineEndings) {
+    const lines = output.match(/[^\n]*\n|[^\n]+$/g) ?? [];
+    return { text: (running ? lines.slice(-10) : lines.slice(0, 10)).join(""), hiddenLines: Math.max(0, lines.length - 10) };
+  }
   const lines = output.replace(/\r\n/g, "\n").split("\n");
   if (lines.at(-1) === "") lines.pop();
   return {
@@ -30,6 +34,45 @@ export function shellTokens(text: string): SyntaxToken[] {
     text: token,
     kind: /^["']/.test(token) ? 'string' : /^--?[a-zA-Z]/.test(token) ? 'option' : 'plain',
   }));
+}
+
+function addLogText(tokens: SyntaxToken[], line: string): void {
+  const trace = /^([ \t]*)(at[ \t]+\S[^\r\n]*|File[ \t]+"[^"\r\n]+", line \d+[^\r\n]*)/.exec(line);
+  if (trace) {
+    const [prefix, indent, frame] = trace;
+    if (indent) tokens.push({ text: indent, kind: "plain" });
+    if (frame) tokens.push({ text: frame, kind: "option" });
+    if (line.length > prefix.length) tokens.push({ text: line.slice(prefix.length), kind: "plain" });
+    return;
+  }
+
+  let start = 0;
+  for (const marker of line.matchAll(/<\/?[A-Z][^<>\r\n]*>|<!DOCTYPE[ \t]+html[^<>\r\n]*>|\b(?:ERROR|WARN(?:ING)?|INFO|DEBUG|FATAL|[A-Z][A-Z0-9_]{0,64}(?:Error|Exception))(?=[\s:\]])/gi)) {
+    const index = marker.index!;
+    if (index > start) tokens.push({ text: line.slice(start, index), kind: "plain" });
+    tokens.push({ text: marker[0], kind: marker[0].startsWith("<") ? "key" : "literal" });
+    start = index + marker[0].length;
+  }
+  if (start < line.length) tokens.push({ text: line.slice(start), kind: "plain" });
+}
+
+/** 렌더러에 텍스트 토큰만 전달하고, 혼합 출력의 공백과 구분자를 보존한다. */
+export function commandLogTokens(text: string): SyntaxToken[] {
+  const tokens: SyntaxToken[] = [];
+  for (const line of text.match(/[^\n]*\n|[^\n]+$/g) ?? []) {
+    const start = line.search(/[\[{](?=[ \t]*(?:["{[}\]\d-]|true|false|null))/);
+    if (start >= 0 && line.length - start <= 32768) {
+      const fragment = line.slice(start);
+      try {
+        JSON.parse(fragment);
+        addLogText(tokens, line.slice(0, start));
+        tokens.push(...jsonTokens(fragment));
+        continue;
+      } catch { /* 불완전한 조각은 로그 텍스트로 보존한다. */ }
+    }
+    addLogText(tokens, line);
+  }
+  return tokens;
 }
 
 export function commandOutput(output: string, running: boolean, truncated: boolean): {
