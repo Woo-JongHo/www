@@ -743,6 +743,38 @@ try {
     return;
   }
   if (process.argv.includes("--slash-only")) {
+    const input = '[data-testid="prompt-input"]';
+    const key = async (name: string, code: number) => {
+      await session!.command("Input.dispatchKeyEvent", { type: "keyDown", key: name, code: name, windowsVirtualKeyCode: code, nativeVirtualKeyCode: code });
+      await session!.command("Input.dispatchKeyEvent", { type: "keyUp", key: name, code: name, windowsVirtualKeyCode: code, nativeVirtualKeyCode: code });
+    };
+    const focusInput = async () => { await session!.evaluate("document.querySelector(" + JSON.stringify(input) + ").focus()"); };
+    const turnStarts = async () => (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8").catch(() => "")).split("\n").filter(Boolean).map((line) => object(JSON.parse(line))).filter((call) => call.method === "turn/start").length;
+    await session.input("/");
+    await session.wait("document.querySelectorAll('[data-testid=slash-command-option]').length===3 && document.querySelector('[data-testid=slash-command-list]')", "빈 입력의 슬래시 명령 세 개 표시");
+    await session.screenshot("slash-command-menu", '[data-testid="slash-command-list"]');
+    await session.input("/mo");
+    await session.wait("document.querySelectorAll('[data-testid=slash-command-option]').length===1 && document.querySelector('[data-testid=slash-command-option]').textContent==='/model'", "접두어에 따른 슬래시 명령 필터링");
+    await focusInput();
+    await key("Escape", 27);
+    await session.wait("!document.querySelector('[data-testid=slash-command-list]') && document.querySelector(" + JSON.stringify(input) + ").value==='/mo'", "Escape로 메뉴만 닫고 초안 유지");
+    await session.input("/");
+    await focusInput();
+    await key("ArrowUp", 38);
+    await session.wait("document.querySelectorAll('[data-testid=slash-command-option]')[2]?.getAttribute('aria-selected')==='true'", "방향키로 앞 명령 선택");
+    const before = await turnStarts();
+    await key("Enter", 13);
+    await session.wait("document.querySelector('dialog[open] h2')?.textContent==='채팅 테마 선택'", "Enter 선택은 기존 테마 명령 실행");
+    if (await turnStarts() !== before) throw Error("슬래시 메뉴의 Enter 선택이 일반 turn/start를 발행했습니다.");
+    await session.click("dialog[open] button:last-child");
+    await session.wait("!document.querySelector('dialog[open]') && document.activeElement===document.querySelector(" + JSON.stringify(input) + ")", "테마 명령 취소 뒤 입력창 초점 복귀");
+    await session.input("/the");
+    await session.wait("document.querySelectorAll('[data-testid=slash-command-option]').length===1 && document.querySelector('[data-testid=slash-command-option]').textContent==='/theme'", "마우스 선택 전 theme 후보 확인");
+    await session.click('[data-testid="slash-command-option"]');
+    await session.wait("document.querySelector('dialog[open] h2')?.textContent==='채팅 테마 선택'", "마우스 선택은 기존 테마 명령 실행");
+    if (await turnStarts() !== before) throw Error("슬래시 메뉴의 마우스 선택이 일반 turn/start를 발행했습니다.");
+    await session.click("dialog[open] button:last-child");
+    await session.wait("!document.querySelector('dialog[open]') && document.activeElement===document.querySelector(" + JSON.stringify(input) + ")", "마우스 테마 명령 취소 뒤 입력창 초점 복귀");
     const submit = async (value: string) => {
       await session!.input(value);
       await session!.click('[data-testid="send-button"]');
@@ -778,16 +810,24 @@ try {
     await submit("/compact");
     await session.wait("document.querySelector('.chat-compose-note').textContent.includes('대화 압축 중')", "Native 압축 진행 표시");
     await session.wait("document.querySelector('.chat-compose-note').textContent.includes('대화 압축 완료')", "Native 압축 완료 표시");
+    await submit("성능 스트리밍 중단 확인");
+    await session.wait("document.querySelector('[data-testid=interrupt-button]')", "실행 중 입력 상태");
+    await session.input("/");
+    await session.wait("!document.querySelector('[data-testid=slash-command-list]')", "실행 중에는 슬래시 명령을 열지 않음");
+    await session.click('[data-testid="interrupt-button"]');
+    await session.wait("!document.querySelector('[data-testid=interrupt-button]')", "중단 뒤 슬래시 명령 입력 게이트 해제");
     const calls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
     const turns = calls.filter(call => call.method === "turn/start");
     const compactions = calls.filter(call => call.method === "thread/compact/start");
-    if (turns.length !== 1 || compactions.length !== 2 || object(turns[0]?.params).model !== "fixture-other" ||
-      compactions.some(call => object(call.params).threadId !== object(turns[0]?.params).threadId) || calls.some(call => call.method === "turn/steer")) {
+    if (turns.length !== 2 || compactions.length !== 2 || object(turns[1]?.params).model !== "fixture-other" ||
+      compactions.some(call => object(call.params).threadId !== object(turns[1]?.params).threadId) || calls.some(call => call.method === "turn/steer")) {
       throw Error("슬래시 명령의 stdio 전달 범위가 일치하지 않습니다.");
     }
     await session.terminate();
     session = null;
-    console.log(JSON.stringify({ evidence: directory, checks }));
+    const summary = { result: "passed", scope: "slash-only", evidence: directory, checks: [...checks, "슬래시 메뉴의 키보드·마우스 선택은 기존 명령을 실행하고 turn/start를 발행하지 않음"] };
+    await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify(summary));
     return;
   }
   if (process.argv.includes('--performance-only')) {

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "89d5d1bef1236adbe1c1f60b47fe6ba0dea13d8560daddd1758a818c8a84607c",
+  "digest"       : "1c9dfad4830bccaae89485ae69532f788438df172bd4defa23ad21716223cdca",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -521,8 +521,8 @@
       "layer"      : "presentation",
       "role"       : "앱 모듈 · chat-composer",
       "line"       : 1,
-      "lines"      : 126,
-      "digest"     : "bf0098bb866a7370f9936ae5de610480ed4d67cc92a4cfa6a0beac23825e4c5d",
+      "lines"      : 157,
+      "digest"     : "2a2b57491a57f8aeefc2afceddfe20a9c0793ee6af0f079829d104b6646aa7de",
       "structureId": "arch.chat.workspace"
     },
     {
@@ -2486,7 +2486,7 @@
       "statement": "import { parseWwwDevelopmentStage, parseWwwHarnessAttempt, parseWwwPlanSnapshot, type WwwDevelopmentStage, type WwwPlanSnapshot } from \"./www-activity\";"
     },
     {
-      "id"       : "src/chat-composer.tsx:172",
+      "id"       : "src/chat-composer.tsx:179",
       "from"     : "src/chat-composer.tsx",
       "to"       : "src/chat-state.ts",
       "mode"     : "runtime",
@@ -2494,10 +2494,10 @@
       "specifier": "./chat-state",
       "line"     : 6,
       "endLine"  : 6,
-      "statement": "import { MAX_PROMPT_CHARS, composerFull, pasteOverflow } from './chat-state';"
+      "statement": "import { MAX_PROMPT_CHARS, composerFull, pasteOverflow, slashCommand } from './chat-state';"
     },
     {
-      "id"       : "src/chat-composer.tsx:250",
+      "id"       : "src/chat-composer.tsx:271",
       "from"     : "src/chat-composer.tsx",
       "to"       : "src/input.ts",
       "mode"     : "runtime",
@@ -2508,7 +2508,7 @@
       "statement": "import { handlePromptKeyDown, normalizeCompositionEnd } from './input';"
     },
     {
-      "id"       : "src/chat-composer.tsx:322",
+      "id"       : "src/chat-composer.tsx:343",
       "from"     : "src/chat-composer.tsx",
       "to"       : "src/chat-status.ts",
       "mode"     : "type",
