@@ -264,3 +264,125 @@ composer/status/Steer 회귀와 검사 스크립트까지 공식 inputs를 보�
 | 기준 2 | 68.5 / 134.6 | 40.5 / 59.4 |
 
 후보의 네 p95가 제안 기준 50ms 이내였고 100ms 이상 표본도 없었다. 별도 예비 실행의 p95/최대는 전송 32.6/65.0ms, 후속 입력 45.4/64.3ms였다. 합성 DOM 사건→animation frame 시간이고 물리 키보드나 실제 픽셀 표시 지연은 측정하지 않았다. 후보에서 마지막 결합 `7c69cda`까지 renderer를 다시 빌드한 뒤 버전·커밋 식별 상수와 구조 지도 JSON을 제외한 전체 번들 SHA-256 `84a547d2f791a214df7c01e800aa2f5001b63c90f14c432e3b87e7a3649a1ebe` 일치를 확인했다. [개별 측정값과 원문 지문](steer-input-p0.json)
+
+<a id="attempt-609ced9b-5478-4ae3-a853-80ce4a6c2c79"></a>
+## 검증 시도 — 2026-11-24T00:39:21.532Z
+
+- 시도 ID: `attempt-609ced9b-5478-4ae3-a853-80ce4a6c2c79`
+- 실행 시각: 2026-11-24T00:39:16.462Z ~ 2026-11-24T00:39:21.532Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-chat.ts","--command-cards"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-2`, `AC-3`, `AC-4`
+- 소스 HEAD: `cfcb117a8024d5e7d513edc0871a6bd67f18933e`
+- 검증 입력: `build.ts`, `docs/architecture`, `docs/specs`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/verify-chat.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `src/chat-composer.tsx`, `src/chat-message.tsx`, `src/chat-row-state.tsx`, `src/chat-status.ts`, `src/chat.css`, `src/command-card.tsx`, `src/command-preview.ts`, `src/native-chat.ts`, `src/native-session.ts`, `src/preload.ts`, `src/projection.ts`, `src/renderer.tsx`, `src/session-api.tsx`, `src/shared.ts`, `test`, `test/chat-state.test.ts`, `test/chat-status.test.ts`, `test/command-preview.test.ts`, `test/native-session.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `8a337f22f5a8940e0f3be8c96984d37851ef34c1abd39772f3c60e5fc7707279`
+- 기준 정의 식별: `de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 20044바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-5d567cf3-b173-48e3-80d2-c5962097fc92"></a>
+## 검증 시도 — 2026-11-24T00:39:44.622Z
+
+- 시도 ID: `attempt-5d567cf3-b173-48e3-80d2-c5962097fc92`
+- 실행 시각: 2026-11-24T00:39:34.014Z ~ 2026-11-24T00:39:44.622Z
+- 명령과 인자: `["/Users/woojongho/.bun/bin/bun","test","test/native-session.test.ts","test/chat-status.test.ts","test/chat-state.test.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-11`, `AC-12`
+- 소스 HEAD: `cfcb117a8024d5e7d513edc0871a6bd67f18933e`
+- 검증 입력: `build.ts`, `docs/architecture`, `docs/specs`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/verify-chat.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `src/chat-composer.tsx`, `src/chat-message.tsx`, `src/chat-row-state.tsx`, `src/chat-status.ts`, `src/chat.css`, `src/command-card.tsx`, `src/command-preview.ts`, `src/native-chat.ts`, `src/native-session.ts`, `src/preload.ts`, `src/projection.ts`, `src/renderer.tsx`, `src/session-api.tsx`, `src/shared.ts`, `test`, `test/chat-state.test.ts`, `test/chat-status.test.ts`, `test/command-preview.test.ts`, `test/native-session.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `8a337f22f5a8940e0f3be8c96984d37851ef34c1abd39772f3c60e5fc7707279`
+- 기준 정의 식별: `de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 28바이트, stderr 12401바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-51ce9dea-e229-4c9d-8265-e1b3f40c8d42"></a>
+## 검증 시도 — 2026-11-24T00:41:00.792Z
+
+- 시도 ID: `attempt-51ce9dea-e229-4c9d-8265-e1b3f40c8d42`
+- 실행 시각: 2026-11-24T00:40:09.176Z ~ 2026-11-24T00:41:00.792Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/issue27-current/verify-electron.mts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-6`
+- 소스 HEAD: `cfcb117a8024d5e7d513edc0871a6bd67f18933e`
+- 검증 입력: `build.ts`, `docs/architecture`, `docs/specs`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/verify-chat.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `src/chat-composer.tsx`, `src/chat-message.tsx`, `src/chat-row-state.tsx`, `src/chat-status.ts`, `src/chat.css`, `src/command-card.tsx`, `src/command-preview.ts`, `src/native-chat.ts`, `src/native-session.ts`, `src/preload.ts`, `src/projection.ts`, `src/renderer.tsx`, `src/session-api.tsx`, `src/shared.ts`, `test`, `test/chat-state.test.ts`, `test/chat-status.test.ts`, `test/command-preview.test.ts`, `test/native-session.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `8a337f22f5a8940e0f3be8c96984d37851ef34c1abd39772f3c60e5fc7707279`
+- 기준 정의 식별: `de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `.www/evidence/issue27-current/verify-electron.mts` (1469바이트, sha256 37b1ea28aa92578bb35f5891e34bafcf4a1b232810e40d648ef57850cfb26b67)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 383바이트, stderr 35170바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-c2057c79-ccbe-4d5c-93d8-b21360bfd44e"></a>
+## 검증 시도 — 2026-11-24T00:41:58.846Z
+
+- 시도 ID: `attempt-c2057c79-ccbe-4d5c-93d8-b21360bfd44e`
+- 실행 시각: 2026-11-24T00:41:51.811Z ~ 2026-11-24T00:41:58.846Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/dashboard-rollforward-20261123/chat014-working-probe.mts","--working-only"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-8`
+- 소스 HEAD: `cfcb117a8024d5e7d513edc0871a6bd67f18933e`
+- 검증 입력: `build.ts`, `docs/architecture`, `docs/specs`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/verify-chat.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `src/chat-composer.tsx`, `src/chat-message.tsx`, `src/chat-row-state.tsx`, `src/chat-status.ts`, `src/chat.css`, `src/command-card.tsx`, `src/command-preview.ts`, `src/native-chat.ts`, `src/native-session.ts`, `src/preload.ts`, `src/projection.ts`, `src/renderer.tsx`, `src/session-api.tsx`, `src/shared.ts`, `test`, `test/chat-state.test.ts`, `test/chat-status.test.ts`, `test/command-preview.test.ts`, `test/native-session.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `8a337f22f5a8940e0f3be8c96984d37851ef34c1abd39772f3c60e5fc7707279`
+- 기준 정의 식별: `de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `.www/evidence/dashboard-rollforward-20261123/chat014-working-fixture.mts` (20841바이트, sha256 709cee7e8e69d27d290df73ea28c56502c44ae70336c78a061302cfbf23e05db), `.www/evidence/dashboard-rollforward-20261123/chat014-working-probe.mts` (120647바이트, sha256 5ab02913f6bad503efb8a000f27c52cc112bf4f856e869ea91f4cc6989d4d519)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 4186바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-fae8b168-f5fa-4dd9-b9f8-cfaaebb71dbe"></a>
+## 검증 시도 — 2026-11-24T00:42:05.799Z
+
+- 시도 ID: `attempt-fae8b168-f5fa-4dd9-b9f8-cfaaebb71dbe`
+- 실행 시각: 2026-11-24T00:41:59.784Z ~ 2026-11-24T00:42:05.799Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/issue27-current/verify-mint.mts","--theme-only"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-9`
+- 소스 HEAD: `cfcb117a8024d5e7d513edc0871a6bd67f18933e`
+- 검증 입력: `build.ts`, `docs/architecture`, `docs/specs`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/verify-chat.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `src/chat-composer.tsx`, `src/chat-message.tsx`, `src/chat-row-state.tsx`, `src/chat-status.ts`, `src/chat.css`, `src/command-card.tsx`, `src/command-preview.ts`, `src/native-chat.ts`, `src/native-session.ts`, `src/preload.ts`, `src/projection.ts`, `src/renderer.tsx`, `src/session-api.tsx`, `src/shared.ts`, `test`, `test/chat-state.test.ts`, `test/chat-status.test.ts`, `test/command-preview.test.ts`, `test/native-session.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `8a337f22f5a8940e0f3be8c96984d37851ef34c1abd39772f3c60e5fc7707279`
+- 기준 정의 식별: `de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `.www/evidence/dashboard-rollforward-20261123/99-www-mint-palette.blob` (14879바이트, sha256 71d4db891af18758211a0a2ce562541466b4d934689a40fe0dfe2a06e81ff9e4), `.www/evidence/issue27-current/verify-mint.mts` (119823바이트, sha256 8b5007842a32b565db0c71960065b34e447c617492a07cacf5cc88d138b78c19)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 1548바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-319a1cac-7728-45e2-a2b9-67aef98c45ac"></a>
+## 검증 시도 — 2026-11-24T00:42:11.690Z
+
+- 시도 ID: `attempt-319a1cac-7728-45e2-a2b9-67aef98c45ac`
+- 실행 시각: 2026-11-24T00:42:06.726Z ~ 2026-11-24T00:42:11.690Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/dashboard-rollforward-20261123/chat014-steer-errors-probe.mts","--steer-errors"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-13`
+- 소스 HEAD: `cfcb117a8024d5e7d513edc0871a6bd67f18933e`
+- 검증 입력: `build.ts`, `docs/architecture`, `docs/specs`, `docs/specs/chat.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/verify-chat.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `src/chat-composer.tsx`, `src/chat-message.tsx`, `src/chat-row-state.tsx`, `src/chat-status.ts`, `src/chat.css`, `src/command-card.tsx`, `src/command-preview.ts`, `src/native-chat.ts`, `src/native-session.ts`, `src/preload.ts`, `src/projection.ts`, `src/renderer.tsx`, `src/session-api.tsx`, `src/shared.ts`, `test`, `test/chat-state.test.ts`, `test/chat-status.test.ts`, `test/command-preview.test.ts`, `test/native-session.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `8a337f22f5a8940e0f3be8c96984d37851ef34c1abd39772f3c60e5fc7707279`
+- 기준 정의 식별: `de4e752ca41cfec76466ff6eeed5fe421d875d40e2c889157a72bcbd776868ff`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `.www/evidence/dashboard-rollforward-20261123/chat014-steer-errors-fixture.mts` (20888바이트, sha256 7a1b6046685fcb44fa32e67ea7795ce6ee13b8b131f372d9013cb7fceb392662), `.www/evidence/dashboard-rollforward-20261123/chat014-steer-errors-probe.mts` (120657바이트, sha256 7064072c4e733bcbaf34cd187189ca8b298dc34bc64632f1f24743c0008f42ee)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 3061바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
