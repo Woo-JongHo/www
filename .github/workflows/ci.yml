@@ -179,10 +179,10 @@ jobs:
       - name: 공개 BoxBox headless 설치
         shell: pwsh
         run: |
-          $boxboxRoot = Join-Path $env:RUNNER_TEMP 'boxbox-engine'
-          $env:XDG_DATA_HOME = $boxboxRoot
           npm.cmd exec --yes --package=boxbox-plugin@0.2.9 -- boxbox --engine-only
-          "BOXBOX_CI_ROOT=$boxboxRoot/boxbox/codex/0.2.9" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          $boxboxRoot = Join-Path $env:LOCALAPPDATA 'BoxBox\Codex\0.2.9'
+          if (-not (Test-Path (Join-Path $boxboxRoot 'plugin\scripts\boxbox.mjs'))) { throw "BoxBox Codex 엔진 설치를 찾을 수 없습니다: $boxboxRoot" }
+          "BOXBOX_CI_ROOT=$boxboxRoot" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
       - run: npm.cmd run setup:ci
       - name: Windows 네이티브 검사와 x64 패키지
         shell: pwsh
