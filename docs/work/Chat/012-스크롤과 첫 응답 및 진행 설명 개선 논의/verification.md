@@ -223,3 +223,24 @@ main에 없던 1차 마감의 세 기준과 검증 이력을 회수했다. 이�
 검증 실행 `attempt-1b076433-2e91-4ade-b99b-7471f543fb6b`에서 AC-1·3·4가 수용됐다. AC-2는 122.414초 구간의 원인이 확인되지 않아 미검증이다. 실제 Electron에서 합성 Native 사건 12개가 순서대로 한 번씩 기록됐고 Native 집중 테스트는 69개가 통과했다. 타입 검사·빌드·소스 정책·구조 검사를 통과했다.
 
 독립 읽기 전용 검토 `review-7d6fde48-a3a2-42a6-be80-2cb4c38d025f`는 Claude 제공량 소진 뒤 대체 모델 `gpt-6.1-terra`로 통과했다. 검토자는 코드·테스트·진단 문서를 대조했고 실제 측정은 검증 실행에서 수행했다. BoxBox 비교에서 renderer의 자동 판정 거부 그룹이 54개에서 55개로, Native 테스트의 미정렬 그룹이 7개에서 8개로 늘었다.
+
+<a id="attempt-398ac9a5-eff7-40cf-a6fa-1c46c9bfe30d"></a>
+## 검증 시도 — 2026-11-24T00:20:11.491Z
+
+- 시도 ID: `attempt-398ac9a5-eff7-40cf-a6fa-1c46c9bfe30d`
+- 실행 시각: 2026-11-24T00:20:01.998Z ~ 2026-11-24T00:20:11.491Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","--input-type=module","-e","import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';import {createHash} from 'node:crypto';for(const [p,d] of Object.entries(JSON.parse(process.argv[1])))assert.equal(createHash('sha256').update(readFileSync(p)).digest('hex'),d);await import('./.www/evidence/issue26/accept-ui.mts');","{\".www/evidence/issue26/accept-ui.mts\":\"c9d6dda04933c150ae1bd2df001239ff66e2ed2d4388f4fb9cf7f26b45df323b\",\".www/evidence/dashboard-rollforward-20261123/chat012-ui-confirmation.mts\":\"a3c58c62011ee7bd2fbf49eeba46e2a6b2915a866ce10c58e27c0ed90145b741\",\".www/evidence/dashboard-rollforward-20261123/chat012-ui-fixture.mts\":\"fc8f766fbef6fe3bbeeecaec402140a942d84b82fb477a49712647fe815d42fb\"}"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-1`, `AC-3`, `AC-4`
+- 소스 HEAD: `931c79ba3ab2fd1d90bc23d453ac05924793ff7d`
+- 검증 입력: `build.ts`, `docs/architecture`, `docs/specs`, `docs/specs/chat.md`, `docs/specs/dashboard.md`, `package-lock.json`, `package.json`, `scripts`, `scripts/verify-chat.ts`, `source-policy.json`, `spikes/tauri/scripts`, `src`, `test`, `test/chat-state.test.ts`, `test/command-preview.test.ts`, `test/fixtures/chat-ui-app-server.ts`, `test/native-lifecycle.test.ts`, `test/native-timing.test.ts`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `dec7f7a8522a7c3c46eed5477d2a6d9869ea069c04dd6eafc8073b5d8f56d3b5`
+- 기준 정의 식별: `b399f3d53d866f439401455d2e42a6ddb0867d10275a18febd5874cca2d4f58f`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `.www/evidence/dashboard-rollforward-20261123/chat012-ui-confirmation.mts` (119752바이트, sha256 a3c58c62011ee7bd2fbf49eeba46e2a6b2915a866ce10c58e27c0ed90145b741), `.www/evidence/dashboard-rollforward-20261123/chat012-ui-fixture.mts` (21160바이트, sha256 fc8f766fbef6fe3bbeeecaec402140a942d84b82fb477a49712647fe815d42fb), `.www/evidence/issue26/accept-ui.mts` (1867바이트, sha256 c9d6dda04933c150ae1bd2df001239ff66e2ed2d4388f4fb9cf7f26b45df323b)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 58바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
