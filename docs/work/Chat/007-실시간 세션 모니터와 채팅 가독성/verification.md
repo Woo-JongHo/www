@@ -1312,3 +1312,64 @@ AC-10의 전체 구현 수용은 보류다. 이번 시행의 전송 상대는 �
 - 검증 중 원문 유지: 확인
 - 출력: stdout 948바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
 - 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-8e4f4bf5-1034-49fd-8aa6-3075f8e6b6cd"></a>
+## 검증 시도 — 2026-11-24T00:25:44.588Z
+
+- 시도 ID: `attempt-8e4f4bf5-1034-49fd-8aa6-3075f8e6b6cd`
+- 실행 시각: 2026-11-24T00:25:09.630Z ~ 2026-11-24T00:25:44.588Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/verify-chat.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-03`, `AC-06`, `AC-07`
+- 소스 HEAD: `649cb88da7e551eda2e40be2db2410e0e6da03ae`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `e93e99c378468f7908f0710b7092bd19474693cb70466821172ab8664ac86a2b`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 출력: stdout 30966바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-3e94213d-72ff-4d08-8933-11bcc74fb295"></a>
+## 검증 시도 — 2026-11-24T00:29:00.386Z
+
+- 시도 ID: `attempt-3e94213d-72ff-4d08-8933-11bcc74fb295`
+- 실행 시각: 2026-11-24T00:28:19.656Z ~ 2026-11-24T00:29:00.386Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node",".www/evidence/issue25-current/verify-activity.mts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-01`, `AC-02`, `AC-04`, `AC-12`
+- 소스 HEAD: `78b27f63e525b5b9c739fee00248474c3d20f68f`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `e93e99c378468f7908f0710b7092bd19474693cb70466821172ab8664ac86a2b`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `.www/evidence/issue25-current/verify-activity.mts` (2036바이트, sha256 b00e8b239707d566b142bb40db17bf3392c3071ba325dfc6f8543462c58059d0)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 134바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
+
+<a id="attempt-65b3559c-fdd1-402f-a7f6-a58dcb2d997f"></a>
+## 검증 시도 — 2026-11-24T00:29:15.892Z
+
+- 시도 ID: `attempt-65b3559c-fdd1-402f-a7f6-a58dcb2d997f`
+- 실행 시각: 2026-11-24T00:29:15.257Z ~ 2026-11-24T00:29:15.892Z
+- 명령과 인자: `["/Users/woojongho/.hermes/node/bin/node","scripts/check-workflow.ts"]`
+- 명령 결과: 정상 종료, 종료 코드 0, 신호 없음
+- 검증 시도 결과: 통과
+- 실행기: 실제 자식 프로세스
+- 관련 기준: `AC-08`, `AC-09`
+- 소스 HEAD: `78b27f63e525b5b9c739fee00248474c3d20f68f`
+- 검증 입력: `agents/www-design/AGENT.md`, `build.ts`, `docs/design-system.md`, `docs/specs/chat.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/comparison.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/design.md`, `docs/work/Chat/007-실시간 세션 모니터와 채팅 가독성/spec.md`, `package-lock.json`, `package.json`, `scripts/verify-chat.ts`, `scripts/verify-native-activity.ts`, `source-policy.json`, `src`, `test`, `tsconfig.json`, `tsconfig.tools.json`
+- 소스 식별: `e93e99c378468f7908f0710b7092bd19474693cb70466821172ab8664ac86a2b`
+- 기준 정의 식별: `ec2386172c4a434c7ddae5b6303bff0bed2d2fb6584be8fa813c6497efb5b657`
+- 검증 중 소스 유지: 확인
+- 검증 중 실행 환경 유지: 확인
+- 검증 의존 원문: `.www/evidence/work-eed41da3-f22e-4fb9-b9df-9a1a7d76c44f/design-research.md` (4726바이트, sha256 ac74ca6bbef2c60efc778463b6c660403350f00abbba50276e1747f61dcd2a71), `.www/evidence/work-eed41da3-f22e-4fb9-b9df-9a1a7d76c44f/gjc-reference.txt` (67872바이트, sha256 533fc0a9feb1e42067b9ed5ff886d62e18ad9f16b447482f09d87e72d39d7da3)
+- 검증 중 원문 유지: 확인
+- 출력: stdout 96바이트, stderr 0바이트. 비밀 노출을 피하도록 원문을 보관하지 않음.
+- 한계: 선언한 입력과 기준만 검사한다. 명령 종료와 기준 연결의 적절성은 별도 검토하며 현재 적용 여부는 소스·기준·실행 환경을 다시 대조한다.
