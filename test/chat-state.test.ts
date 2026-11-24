@@ -31,6 +31,12 @@ describe("Ovis에서 개작한 Chat 입력과 대화 경계", () => {
     expect(composerFull(MAX_PROMPT_CHARS, MAX_PROMPT_CHARS)    ).toBe(true ) ;
   });
 
+  test("사이드 질문 슬래시 명령은 질문 인자와 함께만 인식한다", () => {
+    expect(slashCommand("/btw")).toBe("btw");
+    expect(slashCommand("/btw 현재 작업은?")).toBe("btw");
+    expect(slashCommand("/btw-not-command")).toBeNull();
+  });
+
   test("대화 상태 키는 작업 폴더와 Native 스레드를 함께 격리한다", () => {
     expect(conversationKey("/repo-a", "thread")).not.toBe(conversationKey("/repo-b", "thread"));
     expect(conversationKey("/repo-a", null)).not.toBe(conversationKey("/repo-a", "null"));

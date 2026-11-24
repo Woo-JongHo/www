@@ -9,11 +9,12 @@ import type { AppEvent, InterruptState, NativeSessionSummary, ScopedAppEvent, Se
 
 export const MAX_PROMPT_CHARS = 100_000;
 
-export function slashCommand(text: string): "model" | "compact" | "theme" | null {
+export function slashCommand(text: string): "model" | "compact" | "theme" | "btw" | null {
   const value = text.trim();
   if (value === "/model") return "model";
   if (value === "/compact") return "compact";
   if (value === "/theme") return "theme";
+  if (/^\/btw(?:\s|$)/.test(value)) return "btw";
   return null;
 }
 

@@ -33,6 +33,7 @@ const api: WwwApi = {
   startTurn: (selection, threadId, text, model) => ipcRenderer.invoke("turn:start", selection, threadId, text, model),
   listModels: (selection) => ipcRenderer.invoke("models:list", selection),
   compactThread: (selection, threadId) => ipcRenderer.invoke("thread:compact", selection, threadId),
+  askSideQuestion: (selection, threadId, question, context) => ipcRenderer.invoke("thread:side-question", selection, threadId, question, context),
   steerTurn: (selection, threadId, turnId, text, id) => ipcRenderer.invoke("turn:steer", selection, threadId, turnId, text, id),
   interrupt: (selection, threadId, turnId) => ipcRenderer.invoke("turn:interrupt", selection, threadId, turnId),
   respond: (selection, requestId, decision, approvalToken) => ipcRenderer.invoke("approval:respond", selection, requestId, decision, approvalToken),

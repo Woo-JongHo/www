@@ -3,10 +3,23 @@
 import { createInterface } from "node:readline";
 import { randomUUID } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 
 type Data = Record<string, unknown>;
 const cwd = process.cwd();
+if (process.argv.includes("exec")) {
+  const input = JSON.parse(readFileSync(0, "utf8"));
+  const argv = process.argv;
+  if (!basename(cwd).startsWith("www-side-question-") || !argv.includes("read-only") || !argv.includes("--ignore-user-config")
+    || !argv.includes("--ephemeral") || !argv.includes("mcp_servers={}") || !argv.includes("hooks") || !argv.includes("shell_tool")) process.exit(2);
+  if (input.question === "사이드 실패 확인") process.exit(3);
+  const context = JSON.stringify(input.context);
+  if (!context.includes("저장된 작업 요청") || !context.includes("이어갈 작업") || context.includes("PRIVATE_REASONING_DO_NOT_RENDER") || context.includes("saved output")) process.exit(4);
+  await new Promise(resolve => setTimeout(resolve, 120));
+  console.log(JSON.stringify({ type: "item.completed", item: { type: "agent_message", text: "저장 대화 맥락에서 읽은 별도 답변" } }));
+  console.log(JSON.stringify({ type: "turn.completed" }));
+  process.exit(0);
+}
 const storePath = join(cwd, "fixture-history.json");
 const callsPath = join(cwd, "fixture-calls.jsonl");
 const initialItems = [
@@ -150,6 +163,9 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
           finish();
         }
       }, 20);
+    }
+    else if (prompt === "경계 사이드 질문 승인 대기") {
+      send({ jsonrpc: "2.0", id: 42, method: "item/commandExecution/requestApproval", params: { threadId, turnId, command: "printf side-question-approval" } });
     }
     else if (prompt === "경계 승인 ID 재사용") {
       boundaryApproval = 0;

@@ -941,6 +941,42 @@ try {
     await fs.writeFile(path.join(directory,"steer-tabs.json"),JSON.stringify({checks,starts:starts.length,steers},null,2));
     console.log(directory);return;
   }
+  if (process.argv.includes("--side-question-only")) {
+    const active = '[role=tabpanel]:not([hidden])';
+    const side = active + ' [data-testid="side-question"]';
+    const approval = active + " .approval.open";
+    await session.click('[data-thread-id="history-a"]');
+    await session.wait("document.querySelector('[data-thread-id=history-a]')?.getAttribute('aria-current')==='true' && document.querySelector('.transcript')?.textContent.includes('이어갈 작업')", "현재 저장 대화의 공개 맥락 준비");
+    await session.input("/bt");
+    await session.wait("document.querySelector('[data-testid=slash-command-option]')?.textContent==='/btw'", "슬래시 목록에서 사이드 질문 발견");
+    await session.click('[data-testid="slash-command-option"]');
+    await session.wait("document.querySelector('.chat-compose-note')?.textContent.includes('짧은 질문을 입력')", "인자 없는 사이드 명령 사용법 안내");
+    await session.input("경계 사이드 질문 승인 대기");
+    await session.click('[data-testid="send-button"]');
+    await session.wait(`document.querySelector(${JSON.stringify(approval)})?.textContent.includes('printf side-question-approval')`, "기본 턴의 승인 요청을 열린 상태로 유지");
+    await session.input("/btw 저장된 대화의 다음 작업은?");
+    await session.click(active + ' [data-testid="send-button"]');
+    await session.wait(`document.querySelector(${JSON.stringify(side)})?.textContent.includes('저장 대화 맥락에서 읽은 별도 답변') && !!document.querySelector(${JSON.stringify(approval)}) && !document.querySelector(${JSON.stringify(active + ' .transcript')})?.textContent.includes('저장 대화 맥락에서 읽은 별도 답변')`, "실행 중 별도 답변 완료, 원래 승인과 이력 유지");
+    await session.click(".session-tab-create");
+    await session.wait(`document.querySelectorAll('[role=tab]').length===2 && document.querySelector('[role=tablist] .session-tab-item:last-child [role=tab]').getAttribute('aria-selected')==='true' && !document.querySelector(${JSON.stringify(side)})`, "새 탭에서 원래 사이드 질문과 답변이 보이지 않음");
+    await session.click('[role=tablist] .session-tab-item:first-child [role=tab]');
+    await session.wait(`!!document.querySelector(${JSON.stringify(side)}) && !!document.querySelector(${JSON.stringify(approval)})`, "원래 탭의 질문·답변과 승인이 유지됨");
+    await session.click(approval + ' [data-decision="accept"]');
+    await session.wait(`!document.querySelector(${JSON.stringify(approval)}) && document.querySelector(${JSON.stringify(active + ' .transcript')})?.textContent.includes('후속 요청 완료')`, "사이드 답변 후 기본 턴을 계속 완료");
+    await session.evaluate(`(()=>{const input=document.querySelector(${JSON.stringify(active + " textarea")});Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(input,'/btw 사이드 실패 확인');input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
+    await session.click(active + ' [data-testid="send-button"]');
+    await session.wait(`document.querySelector(${JSON.stringify(side)})?.textContent.includes('사이드 질문 실행에 실패')`, "사이드 프로세스 오류를 해당 탭에 표시");
+    const calls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
+    const turns = calls.filter(call => call.method === "turn/start");
+    if (turns.length !== 1 || !JSON.stringify(turns[0]).includes("경계 사이드 질문 승인 대기") || calls.some(call => call.method === "turn/steer" || call.method === "thread/fork")) throw Error("사이드 질문이 기본 Native 턴으로 전달되었습니다.");
+    checks.push("기본 Native 연결에는 초기 턴 1회, 사이드 질문과 추가 지시 0회");
+    await session.terminate();
+    session = null;
+    const summary = { result: "passed", scope: "side-question-only", evidence: directory, checks };
+    await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify(summary));
+    return;
+  }
   if (process.argv.includes('--steer-only')) {
     await session.input('스트리밍 이력 절단 중단 확인');await session.click('[data-testid="send-button"]');
     await session.wait(`(async()=>{const events=await window.www.workspace().then(scope=>window.www.events(scope));
