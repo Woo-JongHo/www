@@ -3,6 +3,8 @@
  * @implements RESP-NATIVE-PROTOCOL
  */
 export type RpcId = string | number;
+export const MAX_CHAT_IMAGE_BYTES = 8 * 1024 * 1024;
+export const CHAT_IMAGE_TYPES: readonly string[] = ["image/png", "image/jpeg", "image/webp"];
 
 export type NativeTimingPhase = "request" | "connect" | "initialize" | "thread/start" | "thread/read" | "thread/resume" | "thread/turns/list" | "turn/start" | "first-native";
 export type NativeTimingStatus = "started" | "completed" | "failed" | "cancelled";
@@ -239,10 +241,10 @@ export interface WwwApi {
   setProjectFavorite(selection: SelectionRef, workspaceKey: string, favorite: boolean): Promise<void>;
   switchProject(selection: SelectionRef, workspaceKey: string): Promise<ConversationSelection>;
   startThread(selection: SelectionRef): Promise<{ threadId: string }>;
-  startTurn(selection: SelectionRef, threadId: string, text: string, model?: string): Promise<{ turnId: string }>;
+  startTurn(selection: SelectionRef, threadId: string, text: string, model?: string, image?: string): Promise<{ turnId: string }>;
   listModels(selection: SelectionRef): Promise<NativeModelOption[]>;
   compactThread(selection: SelectionRef, threadId: string): Promise<void>;
-  steerTurn(selection: SelectionRef, threadId: string, expectedTurnId: string, text: string, clientUserMessageId: string): Promise<{ turnId: string }>;
+  steerTurn(selection: SelectionRef, threadId: string, expectedTurnId: string, text: string, clientUserMessageId: string, image?: string): Promise<{ turnId: string }>;
   interrupt(selection: SelectionRef, threadId: string, turnId: string): Promise<void>;
   respond(selection: SelectionRef, requestId: RpcId, decision: string, approvalToken: string): Promise<void>;
   events(selection: SelectionRef): Promise<ScopedAppEvent[]>;

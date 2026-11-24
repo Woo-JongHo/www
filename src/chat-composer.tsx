@@ -5,12 +5,17 @@
 import { memo, useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import { MAX_PROMPT_CHARS, composerFull, pasteOverflow } from './chat-state';
 import { handlePromptKeyDown, normalizeCompositionEnd } from './input';
+import { CHAT_IMAGE_TYPES, MAX_CHAT_IMAGE_BYTES } from './shared';
 import type { chatStatus } from './chat-status';
 
 interface ComposerProps {
   snapshot: { text: string; revision: number };
   inputRef: RefObject<HTMLTextAreaElement | null>;
   onDraft: (text: string) => void;
+  image?: string;
+  imageReading: boolean;
+  onImage: (file: File) => Promise<boolean>;
+  onRemoveImage: () => void;
   onSubmit: () => void;
   onInterrupt: () => void;
   status: ReturnType<typeof chatStatus>;
@@ -52,16 +57,34 @@ export const ChatComposer = memo(function ChatComposer(props: ComposerProps) {
     const text = input.value;
     enterGesture.current = null;
     endedInHangul.current = false;
-    if (document.activeElement !== input || props.blocked || props.disabled || props.sending
-      || !text.trim() || text.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer)) return;
+    if (document.activeElement !== input || props.blocked || props.disabled || props.sending || props.imageReading
+      || (!text.trim() && !props.image) || text.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer)) return;
     props.onDraft(text);
     props.onSubmit();
   };
-  const actionBlocked = props.blocked || props.disabled || props.sending || !draft.trim() || draft.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer);
+  const actionBlocked = props.blocked || props.disabled || props.sending || props.imageReading
+    || (!draft.trim() && !props.image) || draft.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer);
   return <>
     <WorkingIndicator status={props.status} startedAt={props.startedAt} lastActivityAt={props.lastActivityAt}/>
     {props.working && <div className="chat-steer-notice" data-testid="steer-notice">{props.status.reason}</div>}
+    {props.image && <div className="chat-attachment" data-testid="chat-attachment">
+      <img src={props.image} alt="첨부 이미지 미리보기"/>
+      <button type="button" className="secondary" onClick={props.onRemoveImage}>이미지 제거</button>
+    </div>}
     <div className="compose"><span className="prompt" aria-hidden="true">›</span><textarea ref={props.inputRef} data-testid="prompt-input" value={draft} maxLength={MAX_PROMPT_CHARS} disabled={props.disabled} aria-label="Codex에게 작업 요청" onChange={(event) => { const text = event.currentTarget.value; setDraft(text); props.onDraft(text); setNotice(composerFull(text.length, MAX_PROMPT_CHARS) ? '입력 한도에 도달했습니다.' : ''); }} onPaste={(event) => {
+      const image = Array.from(event.clipboardData.files).find(file => file.type.startsWith('image/'))
+        ?? Array.from(event.clipboardData.items).find(item => item.kind === 'file' && item.type.startsWith('image/'))?.getAsFile();
+      if (image) {
+        event.preventDefault();
+        if (props.image || props.imageReading) { setNotice('이미지는 메시지당 한 장 보낼 수 있습니다.'); return; }
+        if (!CHAT_IMAGE_TYPES.includes(image.type) || image.size === 0 || image.size > MAX_CHAT_IMAGE_BYTES) {
+          setNotice('8MiB 이하의 PNG, JPEG, WebP 이미지만 첨부할 수 있습니다.');
+          return;
+        }
+        setNotice('');
+        void props.onImage(image).then(added => { if (added) setNotice(''); }, () => setNotice('이미지를 읽지 못했습니다.'));
+        return;
+      }
       const count = pasteOverflow(draft, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, event.clipboardData.getData('text/plain'), MAX_PROMPT_CHARS);
       if (count > 0) { event.preventDefault(); setNotice(`붙여넣을 내용이 입력 한도를 ${count.toLocaleString('ko-KR')}자 넘어서 추가하지 않았습니다.`); }
     }} onCompositionStart={() => {
