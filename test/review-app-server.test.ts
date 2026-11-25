@@ -112,7 +112,7 @@ async function compileWindowsFixture(directory: string, name: string, source: st
   const bun = stdout.trim();
   assert.ok(path.isAbsolute(bun), 'Bun 네이티브 실행 경로가 필요합니다.');
   await fs.writeFile(entry, source);
-  await run(bun, ['build', '--compile', '--compile-executable-path', bun, entry, '--outfile', executable], { cwd: directory, timeout: 30_000 });
+  await run(bun, ['build', '--compile', '--compile-executable-path', bun, entry, '--outfile', executable], { cwd: directory, timeout: 120_000 });
   return executable;
 }
 
@@ -311,8 +311,9 @@ test('wrong model/provider/sandbox/cwd와 읽기·도구·protocol·EOF·timeout
   const modes = ['model', 'provider', 'sandbox', 'cwd', 'read-failure', 'write-command', 'tool', 'turn-error', 'approval', 'protocol', 'EOF', 'timeout', 'stderr', 'no-final', 'bad-final', 'reroute', 'foreign-tool', 'no-read'];
   for (const mode of modes) {
     process.env.WWW_REVIEW_FIXTURE_MODE = mode;
-    const result = await executeAppServer({ cwd: repo, input: 'fixture', timeoutMs: 400 });
+    const result = await executeAppServer({ cwd: repo, input: 'fixture', timeoutMs: 3_000 });
     assert.ok(result.error, mode);
+    assert.equal(result.error === 'app-server timeout', mode === 'timeout', mode);
     assert.notEqual(result.code, 0, mode);
     assert.throws(() => inspectAppServer(result.appServer, repo), Error, mode);
   }
