@@ -101,14 +101,17 @@ after(async () => {
 });
 
 async function buildWindowsFixture(): Promise<string> {
-  const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'review-rpc-exe-'));
-  fixtureDirectory = directory;
-  const entry = path.join(directory, 'review-fixture.ts');
-  const executable = path.join(directory, 'codex.exe');
+  fixtureDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'review-rpc-exe-'));
+  return compileWindowsFixture(fixtureDirectory, 'codex', fixture);
+}
+
+async function compileWindowsFixture(directory: string, name: string, source: string): Promise<string> {
+  const entry = path.join(directory, `${name}-fixture.ts`);
+  const executable = path.join(directory, `${name}.exe`);
   const { stdout } = await run('bun', ['--print', 'process.execPath'], { encoding: 'utf8', timeout: 5_000 });
   const bun = stdout.trim();
   assert.ok(path.isAbsolute(bun), 'Bun 네이티브 실행 경로가 필요합니다.');
-  await fs.writeFile(entry, fixture);
+  await fs.writeFile(entry, source);
   await run(bun, ['build', '--compile', '--compile-executable-path', bun, entry, '--outfile', executable], { cwd: directory, timeout: 30_000 });
   return executable;
 }
@@ -337,18 +340,34 @@ test('별도 직접 요청 원문·hash·work·단계 권한과 실행 중 소�
 
 test('실제 quota 원문 뒤에만 새 app-server fallback을 실행한다', async t => {
   const repo = await setup(t), opts = await options(repo);
-  await fs.writeFile(path.join(repo, 'claude'), '#!/usr/bin/env node\nconsole.log(JSON.stringify({type:"result",is_error:true,error:{code:"quota_exhausted"}}));process.exitCode=1;\n', { mode: 0o700 });
+  const claudeFixture = String.raw`#!/usr/bin/env node
+const error = process.env.WWW_REVIEW_FIXTURE_MODE === 'claude-unstructured'
+  ? { result: 'quota_exhausted but no structured code' }
+  : { error: { code: 'quota_exhausted' } };
+console.log(JSON.stringify({ type: 'result', is_error: true, ...error }));
+process.exitCode = 1;
+`;
+  if (process.platform === 'win32') {
+    assert.ok(fixtureDirectory);
+    const executable = await compileWindowsFixture(fixtureDirectory, 'claude', claudeFixture);
+    await fs.link(executable, path.join(repo, 'claude.exe'));
+  } else {
+    await fs.writeFile(path.join(repo, 'claude'), claudeFixture, { mode: 0o700 });
+  }
   const review = await runReview({ ...opts, authority: undefined, directRequest: undefined });
-  assert.equal(review.verdict, 'pass');
+  assert.equal(review.verdict, 'pass', review.execution.error ?? undefined);
   assert.equal(review.fallbackReason?.verified, true);
   assert.equal(validateReview({ repo, work: opts.work, policy: opts.policyInfo.policy, policyHash: opts.policyInfo.hash, review, sourceDigest: opts.source.digest, criteriaDigest: opts.criteriaDigest }).usable, true);
   const opusPath = path.join(repo, path.dirname(review.receiptPath), 'opus.json');
   const original = await fs.readFile(opusPath);
-  const authentication = '#!/usr/bin/env node\nconsole.log(JSON.stringify({type:"result",is_error:true,result:"quota_exhausted but no structured code"}));process.exitCode=1;\n';
-  await fs.writeFile(path.join(repo, 'claude'), authentication);
+  const starts = await fs.readFile(path.join(repo, '.www/process-starts'), 'utf8');
+  process.env.WWW_REVIEW_FIXTURE_MODE = 'claude-unstructured';
   const rejected = await runReview({ ...opts, authority: undefined, directRequest: undefined });
   assert.equal(rejected.provider, 'anthropic');
   assert.equal(rejected.verdict, 'not_run');
+  const rejectedReceipt = JSON.parse(await fs.readFile(path.join(repo, rejected.receiptPath), 'utf8'));
+  assert.match(rejectedReceipt.stdout, /quota_exhausted but no structured code/);
+  assert.equal(await fs.readFile(path.join(repo, '.www/process-starts'), 'utf8'), starts);
   assert.deepEqual(await fs.readFile(opusPath), original);
 });
 
