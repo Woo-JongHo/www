@@ -346,8 +346,8 @@ for (const appendGuidance of [false, true]) for (const earlyClose of [false, tru
 }
 
 
-test("원문 전체의 동일·append 전달만 제공이고 절단·변경·선두삽입·metadata 단독은 미제공이다", async () => {
-  for(const mode of ["same","append","truncate","change-middle","prepend","metadata-only"]) {
+for (const mode of ["same", "append", "truncate", "change-middle", "prepend", "metadata-only"] as const) {
+  test(`원문 전체의 동일·append 전달만 제공으로 기록한다 (${mode})`, async () => {
     const {repo,options}=await deliveryFixture();
     const suffix="\n\n작성 하네스 관찰 데이터\n"+JSON.stringify({fixture:true});
     const result=await runDevelopmentWorkflow(options,{prepareInvocation:invocation=>{
@@ -360,8 +360,8 @@ test("원문 전체의 동일·append 전달만 제공이고 절단·변경·선
     console.info(JSON.stringify({appendOnlyCase:mode,expected,provided:result.tools?.[0]?.provided,inputDelivered:result.host?.inputDelivered}));
     expect(result.tools).toHaveLength(7);expect(result.tools?.every(item=>item.provided===expected&&item.hostAcceptance==="unconfirmed")).toBe(true);
     const receipt=await deliveryReceipt(repo,result.receiptPath);expect(receipt.host.inputDelivered).toBe(true);expect(receipt.tools.every(item=>item.provided===expected)).toBe(true);
-  }
-});
+  });
+}
 
 
 for (const [name, bytes] of [

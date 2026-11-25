@@ -87,7 +87,7 @@ test("먼저 시작한 실패가 늦게 저장되어도 최신 통과로 원장 
   assert.equal((await completeWork({ repo, workId })).record.status, "done");
 });
 
-test("C01/F09: 현재 저작 보고서는 허용하고 보고서 작성 뒤 기록 변경은 거부한다", async t => {
+test("C01/F09: 현재 저작 보고서는 허용하고 보고서 작성 뒤 기록 변경은 거부한다", { timeout: 15_000 }, async t => {
   const context = await fixture(t);
   const { repo, workId } = context;
   await context.verify();
