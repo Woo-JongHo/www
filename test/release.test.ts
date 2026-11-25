@@ -103,7 +103,11 @@ test("실제 ZIP의 manifest·SHA256SUMS와 실행별 출력 격리", () => {
   const f = fixture(); const stage = mkdtempSync(join(tmpdir(), "www-zip-test-"));
   try {
     writeFileSync(join(stage, "payload"), "실제 배포 바이트");
-    execFileSync("zip", ["-q", "artifact.zip", "payload"], { cwd: stage });
+    if (process.platform === "win32") {
+      execFileSync("tar.exe", ["-caf", "artifact.zip", "payload"], { cwd: stage });
+    } else {
+      execFileSync("zip", ["-q", "artifact.zip", "payload"], { cwd: stage });
+    }
     const zip = join(stage, "artifact.zip"); const bytes = readFileSync(zip);
     const sha = createHash("sha256").update(bytes).digest("hex");
     const info = buildInfo(f.root); const parent = join(stage, "output");
