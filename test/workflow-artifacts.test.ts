@@ -208,8 +208,8 @@ test("환경 실패와 preview는 호스트에 제공하지 않은 문서를 제
   expect(receipt.tools.every((item: { provided: boolean }) => item.provided === false)).toBe(true);
 });
 
-test("주입 실행의 재환경 실패·spawn/stdin 오류·throw·미확인 결과는 실제 제공으로 승격하지 않는다", async () => {
-  for (const outcome of ["environment_failed", "spawn_error", "stdin_error", "spool_error", "unknown", "throw"]) {
+for (const outcome of ["environment_failed", "spawn_error", "stdin_error", "spool_error", "unknown", "throw"]) {
+  test(`주입 실행의 ${outcome} 결과는 실제 제공으로 승격하지 않는다`, async () => {
     const { repo, options } = await deliveryFixture();
     let calls = 0;
     const result = await runDevelopmentWorkflow(options, { runProcess: async invocation => {
@@ -222,8 +222,8 @@ test("주입 실행의 재환경 실패·spawn/stdin 오류·throw·미확인 �
     expect(result.executor).toBe("injected");
     expect(result.tools?.every(item => item.provided === false)).toBe(true);
     expect((await deliveryReceipt(repo, result.receiptPath)).tools.every((item: { provided: boolean }) => item.provided === false)).toBe(true);
-  }
-});
+  });
+}
 
 test("전달된 문서와 비정상 호스트 종료·의미적 수용은 별도로 보존한다", async () => {
   const { repo, options } = await deliveryFixture();
