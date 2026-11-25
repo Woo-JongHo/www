@@ -12,6 +12,7 @@ import { createDevelopmentService } from "../src/development";
 import { runInNewContext } from "node:vm";
 import type { ConversationEvent } from "../src/conversations";
 import type { RpcId } from "../src/shared";
+import { watchConversationRestart } from "./fixtures/conversations-watchdog";
 
 const cwd      = "/workspace/project" ;
 const threadId = "thread-persisted"   ;
@@ -266,33 +267,37 @@ test("main과 같은 lifecycle seam은 실제 subprocess 재시작 때 resume �
       if (child.exitCode === null && child.signalCode === null) child.kill();
       await closed;
     };
-    return { client, stop };
+    return { child, client, stop };
   };
   let running = start();
   let current: JsonRpcClient | null = running.client;
+  const trace = watchConversationRestart("native-lifecycle", () => running.child);
   try {
-    await running.client.request("initialize", {});
-    await running.client.request("thread/start", { cwd });
+    await trace.step("first/initialize", () => running.client.request("initialize", {}));
+    await trace.step("first/thread-start", () => running.client.request("thread/start", { cwd }));
     lifecycle.markReady(running.client, cwd, threadId);
-    await running.stop();
+    await trace.step("first/close", () => running.stop());
     running = start();
     current = running.client;
-    await current.request("initialize", {});
-    await expect(current.request("turn/start", { threadId, input: [{ type: "text", text: "복원 없이 거부" }] })).rejects.toThrow("resume");
+    const restarted = running.client;
+    await trace.step("second/initialize", () => restarted.request("initialize", {}));
+    await trace.step("second/turn-before-resume", () => expect(restarted.request("turn/start", { threadId, input: [{ type: "text", text: "복원 없이 거부" }] })).rejects.toThrow("resume"));
     let restored = false;
-    await lifecycle.start({
+    await trace.step("second/lifecycle-start", () => lifecycle.start({
       connect: async () => running.client, valid: (client) => client === current,
       cwd, threadId, prompt: "재시작 뒤 새 요청",
       restored(value) { restored = true; expect(value.approvalPolicy).toBe("on-request"); },
       beforeStart() { expect(restored).toBe(true); }
-    });
-    const opened = await lifecycle.open(current, cwd, threadId, () => true);
+    }));
+    const opened = await trace.step("second/lifecycle-open", () => lifecycle.open(restarted, cwd, threadId, () => true));
     expect(opened.events.filter((event) => event.method === "turn/userPrompt")).toHaveLength(1);
     expect(JSON.stringify(opened.events)).toContain("재시작 뒤 새 요청");
   } finally {
     current = null;
-    await running.stop();
-    await rm(directory, { recursive: true, force: true });
+    try {
+      await trace.step("cleanup/close", () => running.stop());
+      await trace.step("cleanup/remove-temp", () => rm(directory, { recursive: true, force: true }));
+    } finally { trace.dispose(); }
   }
 }, 10_000);
 

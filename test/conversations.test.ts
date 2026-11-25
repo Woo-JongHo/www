@@ -12,6 +12,7 @@ import { createConversationService, restoreConversationEvents } from "../src/con
 import { project } from "../src/projection";
 import { JsonRpcClient } from "../src/rpc";
 import type { AppEvent } from "../src/shared";
+import { watchConversationRestart } from "./fixtures/conversations-watchdog";
 
 const cwd    = "/workspace/project"                                                                                                                             ;
 const thread = { id: "thread-1", cwd, originator: "www", source: "vscode", preview: "첫 요청", updatedAt: 50, status: { type: "notLoaded" }, ephemeral: false } ;
@@ -145,28 +146,31 @@ test("실제 stdio subprocess를 재시작한 뒤 같은 Native thread ID와 누
       if (child.exitCode === null && child.signalCode === null) child.kill();
       await closed;
     };
-    return { client: new JsonRpcClient(child), stop };
+    return { child, client: new JsonRpcClient(child), stop };
   };
   let running = start();
+  const trace = watchConversationRestart("conversations", () => running.child);
   try {
-    await running.client.request("initialize", {});
-    await running.client.request("thread/start", { cwd });
-    await running.client.request("turn/start", { threadId: "thread-persisted", input: [{ type: "text", text: "재시작 전 요청" }] });
-    await running.stop();
+    await trace.step("first/initialize", () => running.client.request("initialize", {}));
+    await trace.step("first/thread-start", () => running.client.request("thread/start", { cwd }));
+    await trace.step("first/turn-start", () => running.client.request("turn/start", { threadId: "thread-persisted", input: [{ type: "text", text: "재시작 전 요청" }] }));
+    await trace.step("first/close", () => running.stop());
     running = start();
-    await running.client.request("initialize", {});
-    await expect(running.client.request("turn/start", { threadId: "thread-persisted", input: [{ type: "text", text: "복원 전 거부" }] })).rejects.toThrow("thread/resume");
+    await trace.step("second/initialize", () => running.client.request("initialize", {}));
+    await trace.step("second/turn-before-resume", () => expect(running.client.request("turn/start", { threadId: "thread-persisted", input: [{ type: "text", text: "복원 전 거부" }] })).rejects.toThrow("thread/resume"));
     const service = createConversationService(running.client, cwd) ;
-    const listed  = await service.list()                           ;
+    const listed = await trace.step("second/thread-list", () => service.list());
     expect(listed.threads[0]?.id).toBe("thread-persisted");
-    const opened = await service.open("thread-persisted");
+    const opened = await trace.step("second/thread-open", () => service.open("thread-persisted"));
     expect(project(events(opened.events)).blocks).toContainEqual(expect.objectContaining({ kind: "user", text: "재시작 전 요청" }));
-    await running.client.request("turn/start", { threadId: opened.threadId, input: [{ type: "text", text: "이어가는 요청" }] });
-    const reopened = await service.open(opened.threadId);
+    await trace.step("second/turn-after-resume", () => running.client.request("turn/start", { threadId: opened.threadId, input: [{ type: "text", text: "이어가는 요청" }] }));
+    const reopened = await trace.step("second/thread-reopen", () => service.open(opened.threadId));
     expect(project(events(reopened.events)).blocks.filter((block) => block.kind === "user")).toHaveLength(2);
   } finally {
-    await running.stop();
-    await rm(directory, { recursive: true, force: true });
+    try {
+      await trace.step("cleanup/close", () => running.stop());
+      await trace.step("cleanup/remove-temp", () => rm(directory, { recursive: true, force: true }));
+    } finally { trace.dispose(); }
   }
 }, 10_000);
 
