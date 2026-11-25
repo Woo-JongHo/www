@@ -50,7 +50,7 @@ function observeReports() {
     states.push(job);
     events.emit("state");
   }
-  async function terminal(count: number, expected: "saved" | "skipped"): Promise<NativeReportJob[]> {
+  async function terminal(count: number, expected: "saved" | "skipped" | "failed"): Promise<NativeReportJob[]> {
     const deadline = new AbortController();
     const timer = setTimeout(() => deadline.abort(), 4_000);
     try {
@@ -336,10 +336,16 @@ test("판단기의 안정 코드로 응답·입력·시간 초과·실행 오류
     { error : new Error("PRIVATE_ANSWER_MARKER model transport")                                                , label : /LLM 판단 실행에 실패/       },
   ];
   for (const entry of cases) {
-    const repo    = await repository(t)                                                      ;
-    const harness = createNativeReportHarness({ judge: async () => { throw entry.error; } }) ;
-    const queued  = await harness.enqueue({ repository: repo, input: input() })              ;
-    const failed  = await waitFor(harness, repo, queued.key, "failed")                       ;
+    const repo = await repository(t);
+    const observer = observeReports();
+    const harness = createNativeReportHarness({ judge: async () => { throw entry.error; }, onState: observer.onState });
+    const queued = await harness.enqueue({ repository: repo, input: input() });
+    const [failed] = await observer.terminal(1, "failed");
+    assert.ok(failed);
+    assert.equal(failed.key, queued.key);
+    const stored = JSON.parse(await fs.readFile(path.join(repo, ".www/native-report-jobs", `${queued.key}.json`), "utf8"));
+    assert.equal(stored.status, "failed");
+    assert.equal(stored.reason, failed.reason);
     assert.match(failed.reason, entry.label);
     assert.match(failed.reason, /이 앱이 실행 중일 때만/);
     assert.doesNotMatch(await allText(repo), /PRIVATE_PROMPT_MARKER|PRIVATE_ANSWER_MARKER|model transport|JSON token/);

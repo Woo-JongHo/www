@@ -620,24 +620,27 @@ test('원장 잠금 대기 중 새 실패가 기록되면 이전 성공을 붙�
   const target = works[1];
   assert.ok(target.record.workflow);
   const failure = await verify({ repo, record: target.record, inputs: target.record.workflow.inputs, command, args: ['-e', 'process.exit(7)'], criterionIds: ['AC-1'] });
-  const directory = path.join(repo, '.www/pending-results');
+  assert.equal(failure.result, 'failed');
+  const directory = path.join(repo, '.www/evidence/workflow-timing');
   const existing = new Set(await readdir(directory));
+  const latest = await readWork({ repo, workId: target.record.id });
+  assert.ok(latest.record.workflow);
+  latest.record.workflow.verifications.push(failure);
+  latest.record.criteria[0].result = 'failed';
+  const temporary = latest.path + '.pending';
+  await writeFile(temporary, JSON.stringify(latest.record), { flag: 'wx' });
   let pending: ReturnType<typeof verifyWork> | undefined;
   await withWorkLock(repo, async () => {
     pending = verifyWork({ repo, workId: target.record.id, command, args, criterionIds: ['AC-1'], reuseSession: session });
     void pending.catch(() => undefined);
     const deadline = Date.now() + 2_000;
-    while (!(await readdir(directory)).some(file => !existing.has(file))) {
-      if (Date.now() > deadline) throw new Error('재사용 pending 대기 초과');
+    // 잠금 대기 표식은 회수의 잠금 전 원장 읽기가 끝난 뒤 기록된다.
+    for (;;) {
+      const trace = (await readdir(directory)).find(file => !existing.has(file));
+      if (trace && (await readFile(path.join(directory, trace), 'utf8')).includes('"event":"phase","phase":"ledger_lock"')) break;
+      if (Date.now() > deadline) throw new Error('재사용 원장 잠금 대기 초과');
       await new Promise(resolve => setTimeout(resolve, 5));
     }
-    const latest = await readWork({ repo, workId: target.record.id });
-    assert.ok(latest.record.workflow);
-    latest.record.workflow.verifications.push(failure);
-    latest.record.criteria[0].result = 'failed';
-    // 실제 원장 저장처럼 교체해 읽는 실행이 중간 바이트를 보지 않게 한다.
-    const temporary = latest.path + '.pending';
-    await writeFile(temporary, JSON.stringify(latest.record), { flag: 'wx' });
     await rename(temporary, latest.path);
   });
   assert.ok(pending);
