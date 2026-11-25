@@ -2,85 +2,18 @@
  * @verifies RESP-NATIVE-LIFECYCLE
  */
 import { describe, expect, test } from "bun:test";
-import { randomUUID } from "node:crypto";
-import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
-import { mkdtemp, mkdir, readFile, realpath, rm, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import type { ChildProcessWithoutNullStreams } from "node:child_process";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { runInNewContext } from "node:vm";
-import { createActivityLedger } from "../src/activity-ledger";
-import { createNativeSession } from "../src/native-session";
-import { createSessionRegistry } from "../src/session-registry";
-import { createProjectRegistry, type ProjectRegistryIO } from "../src/projects";
-import { createNativeReportHarness } from "../src/native-reports";
-import { judgeNativeReport } from "../src/report-judge";
 import { reduceConversationEvents, liveChatInput } from "../src/chat-state";
 import { chatStatus } from "../src/chat-status";
 import { project } from "../src/projection";
 import { projectNativeActivity } from "../src/native-activity";
-import type { ConversationSelection, NativeSessionSummary, ResourceSnapshot, ScopedAppEvent, SelectionRef } from "../src/shared";
-
-type Session = ReturnType<typeof createNativeSession>;
-async function until(check: () => boolean): Promise<void> {
-  const deadline = Date.now() + 5000;
-  while (!check()) {
-    if (Date.now() >= deadline) throw new Error("Native fixture 사건 대기 시간 초과");
-    await new Promise(resolve => setTimeout(resolve, 10));
-  }
-}
-async function setup(hooks: { beforeUpsert?: () => Promise<void>; projectIO?: ProjectRegistryIO; stageProbe?: boolean; compactionTimeoutMs?: number; onChild?: (child: ChildProcessWithoutNullStreams, count: number) => void } = {}) {
-  const root = await realpath(await mkdtemp(join(tmpdir(), "www-sessions-")));
-  const userData = join(root, "profile");
-  const first = join(root, "first");
-  const second = join(root, "second");
-  await Promise.all([mkdir(userData), mkdir(first), mkdir(second)]);
-  const sessions = createSessionRegistry<Session>();
-  const events: ScopedAppEvent[] = [];
-  const resources: ResourceSnapshot[] = [];
-  const children: ChildProcessWithoutNullStreams[] = [];
-  let publishedSummaries: NativeSessionSummary[] = [];
-  const interruptSnapshots: NativeSessionSummary[] = [];
-  const processEpoch = randomUUID();
-  const projects = createProjectRegistry({ userData, io: hooks.projectIO });
-  await Promise.all([projects.register(first), projects.register(second)]);
-  const actualLedger = createActivityLedger({ userData, processEpoch, onSnapshot: snapshot => {
-    for (const session of sessions.list()) session.acceptResourceSnapshot(snapshot);
-  } });
-  const ledger = { ...actualLedger, async upsert(...args: Parameters<typeof actualLedger.upsert>) { await hooks.beforeUpsert?.(); return actualLedger.upsert(...args); } };
-  const reports = createNativeReportHarness({ judge: input => judgeNativeReport(input) });
-  let directory: string | null = null;
-  let changes = 0;
-  function add(id: string, workspace: string, workspaceMetadata?: (workspace: string) => { branch: string | null; changes: number }, registrationError?: string) {
-    const session = createNativeSession({
-      id, workspace, processEpoch, appVersion: "test", ledger, projects, workspaceMetadata, registrationError, wwwRoot: first, dist: root,
-      reports: { enabled: false }, reportHarness: () => reports, ownership: sessions, compactionTimeoutMs: hooks.compactionTimeoutMs,
-      onEvent: event => {
-        events.push(event);
-        if (event.method === "turn/interruptRequested") interruptSnapshots.push(...publishedSummaries);
-      }, onResources: snapshot => resources.push(snapshot), onChanged() { changes++; publishedSummaries = sessions.list().map(existing => existing.summary()); },
-      chooseDirectory: async () => directory, exportReport: async () => null, openExternal: async () => {},
-      spawnNative(cwd) {
-        const child = spawn(process.execPath, [join(import.meta.dir, hooks.stageProbe ? "fixtures/activity-app-server.ts" : "fixtures/chat-ui-app-server.ts")], { cwd, stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, ...(hooks.stageProbe ? { WWW_STAGE_PROBE: "1" } : {}) } });
-        children.push(child);
-        hooks.onChild?.(child, children.length);
-        return child;
-      }
-    });
-    sessions.add(session);
-    return session;
-  }
-  async function close() {
-    await Promise.all(sessions.list().map(session => session.stop()));
-    await ledger.close();
-    await rm(root, { recursive: true, force: true });
-  }
-  return { root, first, second, add, close, sessions, events, resources, children, interruptSnapshots, latestSummaries: () => publishedSummaries, changes: () => changes, choose(path: string | null) { directory = path; } };
-}
-const selected = (session: Session): SelectionRef => session.workspaceInfo();
-async function start(session: Session): Promise<string> {
-  const result = await session.invoke("thread:start", [selected(session)]) as { threadId: string };
-  return result.threadId;
-}
+import { createProjectRegistry } from "../src/projects";
+import type { ConversationSelection, ResourceSnapshot, ScopedAppEvent, SelectionRef } from "../src/shared";
+import { runNodeFixture } from "./fixtures/conversations-restart-runner";
+import { selected, setup, start, until, type Session } from "./fixtures/native-session-setup";
 
 test("이력 절단 뒤 현재 Native 턴에 추가 지시를 보내며 닫힌 연결이나 다른 선택은 사용할 수 없다", async () => {
   const fixture = await setup();
@@ -316,20 +249,7 @@ test("다른 탭의 실행은 유휴 탭 프로젝트 전환을 막지 않고 �
   } finally { await s.close(); }
 });
 
-test("실패 표시는 실제 전송 실패를 관측한 탭에만 남고 새 대화에서 초기화한다", async () => {
-  const s = await setup();
-  try {
-    const a = s.add("tab-a", s.first);
-    const b = s.add("tab-b", s.second);
-    const thread = await start(a);
-    await expect(a.invoke("turn:start", [selected(a), thread, "전송 실패 확인"])).rejects.toThrow("합성 전송 실패");
-    expect(a.summary().failed).toBe(true);
-    expect(b.summary().failed).toBe(false);
-    expect(a.summary().busy).toBe(false);
-    await a.invoke("conversations:new", [selected(a)]);
-    expect(a.summary().failed).toBe(false);
-  } finally { await s.close(); }
-});
+test("실패 표시는 실제 전송 실패를 관측한 탭에만 남고 새 대화에서 초기화한다", () => runNodeFixture("native-session-node.ts", ["failure-isolation", join(import.meta.dir, "fixtures")], 4_750), 5_000);
 
 test("세션 summary와 사건·IPC 경계는 git 메타데이터를 다시 조회하지 않는다", async () => {
   const s = await setup();
@@ -739,30 +659,7 @@ describe("프로젝트 폴더 추가의 실제 runtime·registry 경계", () => 
   });
 });
 
-test("Steer는 같은 턴에 원문과 ID를 한 번만 보내고 불일치·종료 경합을 구분한다", async () => {
-  const s = await setup();
-  try {
-    const session = s.add("steer", s.first);
-    const thread = await start(session);
-    const turn = await session.invoke("turn:start", [selected(session), thread, "Steer 중단 확인"]) as { turnId: string };
-    const selection = selected(session);
-    const text = "  추가 지시\n";
-    expect(await session.invoke("turn:steer", [selection, thread, turn.turnId, text, "steer-1"])).toEqual({ turnId: turn.turnId });
-    await expect(session.invoke("turn:steer", [selection, thread, turn.turnId, text, "steer-1"])).rejects.toThrow();
-    await expect(session.invoke("turn:steer", [selection, thread, "wrong", text, "steer-2"])).rejects.toThrow();
-    await expect(session.invoke("turn:steer", [selection, thread, turn.turnId, "mismatch", "steer-3"])).rejects.toThrow();
-    await expect(session.invoke("turn:steer", [selection, thread, turn.turnId, "종료 경합", "steer-4"])).rejects.toThrow();
-    await until(() => !session.summary().busy);
-    const events = s.events.filter(event => event.method.startsWith("turn/steer"));
-    expect(events.some(event => event.method === "turn/steerAccepted" && (event.params as { text?: string }).text === text)).toBe(true);
-    expect(events.some(event => event.method === "turn/steerUncertain" && (event.params as { clientUserMessageId?: string }).clientUserMessageId === "steer-3")).toBe(true);
-    const calls = (await readFile(join(s.first, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => JSON.parse(line));
-    const requests = calls.filter(call => call.method === "turn/steer");
-    expect(requests).toHaveLength(3);
-    expect(requests[0].params).toEqual({ threadId: thread, expectedTurnId: turn.turnId, clientUserMessageId: "steer-1", input: [{ type: "text", text, text_elements: [] }] });
-    expect(calls.filter(call => call.method === "turn/start")).toHaveLength(1);
-  } finally { await s.close(); }
-});
+test("Steer는 같은 턴에 원문과 ID를 한 번만 보내고 불일치·종료 경합을 구분한다", () => runNodeFixture("native-session-node.ts", ["steer", join(import.meta.dir, "fixtures")], 4_750), 5_000);
 
 test("Steer 대기·승인·중단·연결 종료와 다른 세션은 자동 재전송 없이 차단한다", async () => {
   const s = await setup();

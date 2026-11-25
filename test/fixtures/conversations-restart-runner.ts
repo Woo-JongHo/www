@@ -4,11 +4,11 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-export async function runConversationRestart(scenario: "conversations" | "native-lifecycle"): Promise<void> {
-  const directory = await mkdtemp(join(tmpdir(), "www-conversations-bundle-"));
+export async function runNodeFixture(entry: string, args: string[], timeout: number): Promise<void> {
+  const directory = await mkdtemp(join(tmpdir(), "www-native-bundle-"));
   try {
     const build = await Bun.build({
-      entrypoints: [join(import.meta.dir, "conversations-node-probe.ts")],
+      entrypoints: [join(import.meta.dir, entry)],
       target: "node", format: "esm", outdir: directory, naming: "[name].mjs",
     });
     assert.ok(build.success, build.logs.map((log) => log.message).join("\n"));
@@ -16,9 +16,13 @@ export async function runConversationRestart(scenario: "conversations" | "native
     const [bundle] = build.outputs;
     assert.ok(bundle);
     const result = spawnSync(process.env.npm_node_execpath || "node",
-      [bundle.path, scenario, join(import.meta.dir, "conversations-app-server.ts")],
-      { shell: false, windowsHide: true, stdio: ["ignore", "inherit", "inherit"], timeout: 9_500 });
+      [bundle.path, ...args],
+      { shell: false, windowsHide: true, stdio: ["ignore", "inherit", "inherit"], timeout });
     if (result.error) throw result.error;
-    assert.equal(result.status, 0, `Node ${scenario} 실패 (${result.signal ?? result.status})`);
+    assert.equal(result.status, 0, `Node ${entry} 실패 (${result.signal ?? result.status})`);
   } finally { await rm(directory, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 }); }
+}
+
+export function runConversationRestart(scenario: "conversations" | "native-lifecycle"): Promise<void> {
+  return runNodeFixture("conversations-node-probe.ts", [scenario, join(import.meta.dir, "conversations-app-server.ts")], 9_500);
 }
