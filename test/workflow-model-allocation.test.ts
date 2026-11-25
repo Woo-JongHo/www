@@ -111,6 +111,19 @@ test("디렉터리 내부 파일과 외부 파일·다른 디렉터리의 하드
   } finally { await rm(repo, { recursive: true, force: true }); }
 });
 
+test("기존 디렉터리와 아직 없는 상하위 경로는 서로 다른 단위가 소유할 수 없다", async () => {
+  const { mkdir, rm } = await import("node:fs/promises");
+  const { join } = await import("node:path");
+  const repo = await ownershipFixture();
+  try {
+    await mkdir(join(repo, "src/owned"));
+    await expect(checkOwnership(repo, ["src/owned", "src/owned/new"])).rejects.toThrow("소유 충돌");
+    await expect(checkOwnership(repo, ["src/owned/new", "src/owned"])).rejects.toThrow("소유 충돌");
+    await expect(checkOwnership(repo, ["src/future", "src/future/nested"])).rejects.toThrow("소유 충돌");
+    expect((await checkOwnership(repo, ["src/owned", "src/owned-neighbor"])).units).toHaveLength(2);
+  } finally { await rm(repo, { recursive: true, force: true }); }
+});
+
 test("실제 a/A 별개 하드링크 항목을 대소문자 lookup 별칭으로 오판하지 않는다", async () => {
   const { mkdir, writeFile, link, lstat, readdir, rm } = await import("node:fs/promises");
   const { join } = await import("node:path");
@@ -144,22 +157,34 @@ test("디렉터리 내부 심볼릭 링크와 읽을 수 없는 하위 디렉터
     await symlink(repo, join(repo, "src/owned/alias"));
     await expect(checkOwnership(repo, ["src/owned"])).rejects.toThrow("심볼릭 링크");
     await rm(join(repo, "src/owned/alias"));
-    await mkdir(join(repo, "src/owned/locked"));
-    await chmod(join(repo, "src/owned/locked"), 0);
-    try { await expect(checkOwnership(repo, ["src/owned"])).rejects.toThrow(/EACCES|EPERM/); }
-    finally { await chmod(join(repo, "src/owned/locked"), 0o700); }
+    const locked = join(repo, "src/owned/locked");
+    await mkdir(locked);
+    if (process.platform === "win32") {
+      const { execFileSync } = await import("node:child_process");
+      const identity = execFileSync("whoami.exe", ["/user", "/fo", "csv", "/nh"], { encoding: "utf8" });
+      const sid = /,\s*"(S-\d+(?:-\d+)+)"\s*$/i.exec(identity)?.[1];
+      if (!sid) throw new Error("Windows 테스트 계정 SID를 확인할 수 없습니다.");
+      try {
+        execFileSync("icacls.exe", [locked, "/deny", `*${sid}:(RD)`]);
+        await expect(checkOwnership(repo, ["src/owned"])).rejects.toThrow(/EACCES|EPERM/);
+      } finally { execFileSync("icacls.exe", [locked, "/remove:d", `*${sid}`]); }
+    } else {
+      try {
+        await chmod(locked, 0);
+        await expect(checkOwnership(repo, ["src/owned"])).rejects.toThrow(/EACCES|EPERM/);
+      } finally { await chmod(locked, 0o700); }
+    }
     expect((await checkOwnership(repo, ["src/owned"])).units).toHaveLength(1);
   } finally { await rm(repo, { recursive: true, force: true }); }
 });
 
 test("소유 디렉터리 조사 한도를 넘으면 부분 검사로 통과시키지 않는다", async () => {
-  const { mkdir, writeFile, link, rm } = await import("node:fs/promises");
+  const { mkdir, writeFile, rm } = await import("node:fs/promises");
   const { join } = await import("node:path");
   const repo = await ownershipFixture();
   try {
     await mkdir(join(repo, "src/owned"));
-    await writeFile(join(repo, "src/origin"), "한도 검증 파일");
-    for (let index = 0; index < 10_001; index++) await link(join(repo, "src/origin"), join(repo, `src/owned/entry-${index}`));
+    for (let index = 0; index < 10_001; index++) await writeFile(join(repo, `src/owned/entry-${index}`), "");
     await expect(checkOwnership(repo, ["src/owned"])).rejects.toThrow("조사 한도");
   } finally { await rm(repo, { recursive: true, force: true }); }
 }, 60_000);
