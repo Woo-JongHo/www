@@ -6,6 +6,7 @@ import { promises as fs } from "node:fs";
 import { createServer } from "node:net";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { cleanVerificationCaches, stopVerificationApp } from "./evidence-retention.ts";
 
 type Data = Record<string, unknown>;
 const object    = (value: unknown): Data => value && typeof value === "object" && !Array.isArray(value) ? value as Data : {} ;
@@ -104,13 +105,8 @@ async function start(round: number, selectedWorkspace = workspace) {
   let ws: WebSocket | null = null;
   const terminate = async () => {
     ws?.close();
-    if (child.exitCode === null) {
-      child.kill("SIGTERM");
-      await Promise.race([new Promise<void>((resolve) => child.once("close", () => resolve())), pause(3000)]);
-      if (child.exitCode === null) child.kill("SIGKILL");
-    }
-    await stdout.close();
-    await stderr.close();
+    try { await stopVerificationApp(child); }
+    finally { await Promise.all([stdout.close(), stderr.close()]); }
   };
   try {
     const deadline = Date.now() + 25_000 ;
@@ -1249,7 +1245,7 @@ try {
     cwd: root, stdio: "ignore", env: { ...secondaryEnv, WWW_PROBE_PATH: path.join(directory, "secondary-disabled-probe.json"), WWW_NATIVE_PROBE: "1", WWW_PROBE_WORKSPACE: workspaceB, WWW_CODEX_BIN: path.join(root, "test/fixtures/chat-ui-app-server.ts"), WWW_PROBE_NATIVE_REPORTS: "0" }
   });
   const secondaryExit = await Promise.race([new Promise<number | null>((resolve, reject) => { secondary.once("error", reject); secondary.once("close", resolve); }), pause(5000).then(() => null)]);
-  if (secondaryExit !== 0) { secondary.kill("SIGTERM"); throw Error("비소유 Electron main이 정상 종료하지 않았습니다: " + secondaryExit); }
+  if (secondaryExit !== 0) { await stopVerificationApp(secondary); throw Error("비소유 Electron main이 정상 종료하지 않았습니다: " + secondaryExit); }
   if (await initializations() !== ownerInitializations) throw Error("비소유 main이 두 번째 Native를 시작했습니다.");
   const switchA = `button[title=${JSON.stringify(workspace)}]`  ;
   const switchB = `button[title=${JSON.stringify(workspaceB)}]` ;
@@ -1328,3 +1324,4 @@ try {
 }
 
 await verifyChat();
+await cleanVerificationCaches(directory);
