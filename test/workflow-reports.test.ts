@@ -702,12 +702,19 @@ test("실제 subprocess의 JSON commit 직후 종료는 명시 잠금 회수와 
   const first = await captureWorkReport({ ...f, event: "before-crash" });
   const moduleUrl = new URL("../scripts/workflow/reports.ts", import.meta.url).href;
   const script = `import { promises as fs } from "node:fs";
+    import { basename, dirname } from "node:path";
     import { captureWorkReport } from ${JSON.stringify(moduleUrl)};
     const rename = fs.rename;
-    fs.rename = async (source, target) => { await rename(source, target); if (target.endsWith(".json") && target.includes("/reports/")) process.kill(process.pid, "SIGKILL"); };
+    fs.rename = async (source, target) => {
+      await rename(source, target);
+      if (!target.endsWith(".json") || basename(dirname(target)) !== "reports") return;
+      if (process.platform === "win32") process.exit(86);
+      process.kill(process.pid, "SIGKILL");
+    };
     await captureWorkReport({ repo: process.argv[1], workId: process.argv[2], event: "crash-event" });`;
   const child = spawnSync(process.execPath, ["--input-type=module", "-e", script, f.repo, f.workId], { encoding: "utf8" });
-  assert.equal(child.signal, "SIGKILL", child.stderr);
+  if (process.platform === "win32") assert.equal(child.status, 86, child.stderr);
+  else assert.equal(child.signal, "SIGKILL", child.stderr);
   const locked = await inspectReportLocks(f);
   assert.equal(locked.locks[0].status, "owner_exited");
   const owner = locked.locks[0].owner;
