@@ -21,6 +21,7 @@ export class JsonRpcClient extends EventEmitter {
 
   constructor(private readonly child: Pick<ChildProcessWithoutNullStreams, "stdin" | "stdout" | "stderr" | "once">) {
     super();
+    child.stdin.on("error", (error: Error) => this.close(`Codex app-server input failed: ${error.message}`));
     child.stdout.setEncoding("utf8");
     child.stdout.on("data", (chunk: string) => this.consume(chunk));
     child.stderr.setEncoding("utf8");
