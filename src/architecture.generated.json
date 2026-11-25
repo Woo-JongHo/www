@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "0421a6f3bed0ac44320d8448d3bcf0c1f5232b530373dd9fc04e18f92499e5a2",
+  "digest"       : "6ce6973a4484d485ed3b82a303cbe795553d35b60b66aa09196a3a56e83e3ec7",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -180,8 +180,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · decomposition",
       "line"       : 1,
-      "lines"      : 252,
-      "digest"     : "1b67efcaf8e56b6d5f9c0e90937044c5e19fb8cf366602baf2b497047a7deb65",
+      "lines"      : 255,
+      "digest"     : "3efee1b729f4ec8f61fa42ced5e036e8ea96c8ef408f9dd8cae059d92acd5542",
       "structureId": "arch.development.execution"
     },
     {
@@ -213,8 +213,8 @@
       "layer"      : "workflow",
       "role"       : "개발 절차 모듈 · evidence",
       "line"       : 1,
-      "lines"      : 746,
-      "digest"     : "7b811c0872d7031a4bb920100fc70b2b4ec697d0bc272496d98a47be0a7c3693",
+      "lines"      : 749,
+      "digest"     : "329e076a4c5ceb109b80f081c6fd76d27b5f021eea9779bbca5d5ba4bca314a7",
       "structureId": "arch.development.evidence.verification"
     },
     {
@@ -4193,7 +4193,7 @@
     },
     {
       "file"     : "scripts/workflow/evidence.ts",
-      "line"     : 602,
+      "line"     : 605,
       "specifier": "node:os",
       "reason"   : "external"
     },
@@ -7300,7 +7300,7 @@
         "line": 2
       }
     ],
-    "digest": "d83ace35f65d98ff5e5dbdff82ceb40b0d971c023b11145abb3f60fa24b6b4d9",
+    "digest": "76d24b58b15b4afee7b684af21472d2a19f4477b80e9145c6f9e9fbb0f889e57",
     "statecharts": {
       "models": [
         {
@@ -7550,7 +7550,7 @@
         }
       ],
       "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-      "sourceDigest": "2c846571fc671e6eae85acfc9e02380b4d54dd1baecc12e45293658e68620028",
+      "sourceDigest": "8e821d134d4b7a46472f756546404a0b0f00f927a3a4ff876eac279adf8d512a",
       "sources": [
         {
           "file": "scripts/workflow/completion-report.ts",
@@ -7558,11 +7558,11 @@
         },
         {
           "file": "scripts/workflow/decomposition.ts",
-          "digest": "1b67efcaf8e56b6d5f9c0e90937044c5e19fb8cf366602baf2b497047a7deb65"
+          "digest": "3efee1b729f4ec8f61fa42ced5e036e8ea96c8ef408f9dd8cae059d92acd5542"
         },
         {
           "file": "scripts/workflow/evidence.ts",
-          "digest": "7b811c0872d7031a4bb920100fc70b2b4ec697d0bc272496d98a47be0a7c3693"
+          "digest": "329e076a4c5ceb109b80f081c6fd76d27b5f021eea9779bbca5d5ba4bca314a7"
         },
         {
           "file": "scripts/workflow/review.ts",
@@ -7852,7 +7852,7 @@
       }
     ],
     "modelDigest": "a6e87a9317d0b36fe151ed30d7e85a73c7ad84f49ca2b5cbe6b0e24f630c33e6",
-    "sourceDigest": "2c846571fc671e6eae85acfc9e02380b4d54dd1baecc12e45293658e68620028",
+    "sourceDigest": "8e821d134d4b7a46472f756546404a0b0f00f927a3a4ff876eac279adf8d512a",
     "sources": [
       {
         "file": "scripts/workflow/completion-report.ts",
@@ -7860,11 +7860,11 @@
       },
       {
         "file": "scripts/workflow/decomposition.ts",
-        "digest": "1b67efcaf8e56b6d5f9c0e90937044c5e19fb8cf366602baf2b497047a7deb65"
+        "digest": "3efee1b729f4ec8f61fa42ced5e036e8ea96c8ef408f9dd8cae059d92acd5542"
       },
       {
         "file": "scripts/workflow/evidence.ts",
-        "digest": "7b811c0872d7031a4bb920100fc70b2b4ec697d0bc272496d98a47be0a7c3693"
+        "digest": "329e076a4c5ceb109b80f081c6fd76d27b5f021eea9779bbca5d5ba4bca314a7"
       },
       {
         "file": "scripts/workflow/review.ts",
