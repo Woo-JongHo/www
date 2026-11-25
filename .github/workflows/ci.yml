@@ -158,15 +158,16 @@ jobs:
     timeout-minutes: 45
     env:
       BOXBOX_MODE: check
-      GIT_CONFIG_COUNT: 1
-      GIT_CONFIG_KEY_0: core.autocrlf
-      GIT_CONFIG_VALUE_0: 'false'
       WWW_CHECKOUT_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.candidate_sha || github.sha }}
     steps:
       - name: 전체 검사 대상 SHA 확인
         shell: pwsh
         run: 'if ("$env:WWW_CHECKOUT_SHA" -notmatch ''^[0-9a-f]{40}$'') { throw "전체 커밋 SHA가 필요합니다." }'
       - uses: actions/checkout@v4
+        env:
+          GIT_CONFIG_COUNT: 1
+          GIT_CONFIG_KEY_0: core.autocrlf
+          GIT_CONFIG_VALUE_0: 'false'
         with:
           ref: ${{ env.WWW_CHECKOUT_SHA }}
           fetch-depth: 0
@@ -176,6 +177,8 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $PSNativeCommandUseErrorActionPreference = $true
+          git config --local core.autocrlf false
+          if ($LASTEXITCODE -ne 0) { throw "Git 줄바꿈 설정 실패: $LASTEXITCODE" }
           foreach ($file in @('spikes/tauri/build.ts', 'spikes/tauri/src/bridge.ts')) {
             $blob = git rev-parse ('{0}:{1}' -f $env:WWW_CHECKOUT_SHA, $file)
             if ($LASTEXITCODE -ne 0) { throw "정본 blob 조회 실패: $file ($LASTEXITCODE)" }
@@ -203,7 +206,30 @@ jobs:
           if (-not (Test-Path (Join-Path $boxboxRoot 'plugin\scripts\boxbox.mjs'))) { throw "BoxBox Codex 엔진 설치를 찾을 수 없습니다: $boxboxRoot" }
           "BOXBOX_CI_ROOT=$boxboxRoot" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
       - run: npm.cmd run setup:ci
-      - name: Windows 네이티브 검사와 x64 패키지
+      - name: Windows checkout 준비
+        id: windows_setup
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          node scripts/windows-setup.ts
+          if ($LASTEXITCODE -ne 0) { throw "Windows setup 실패: $LASTEXITCODE" }
+      - name: Windows Codex 네이티브 바이너리 smoke
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          $executionJson = node --input-type=module -e "import { providerExecution } from './scripts/workflow/adapters/windows-command.ts'; process.stdout.write(JSON.stringify(providerExecution({ command: 'codex', args: ['--version'] })));"
+          if ($LASTEXITCODE -ne 0) { throw "Codex provider 해석 실패: $LASTEXITCODE" }
+          $execution = $executionJson | ConvertFrom-Json
+          if ($execution.executionPlatform -ne 'win32' -or $null -eq $execution.actualInvocation) { throw 'Windows Codex 실제 실행 경로를 확인하지 못했습니다.' }
+          $codexExe = [string]$execution.command
+          if (-not (Test-Path -LiteralPath $codexExe -PathType Leaf)) { throw "해석한 Codex 네이티브 exe를 찾을 수 없습니다: $codexExe" }
+          $codexVersion = & $codexExe @($execution.args)
+          if ($LASTEXITCODE -ne 0) { throw "Codex 네이티브 버전 확인 실패: $LASTEXITCODE" }
+          "WWW_WINDOWS_CODEX_BINARY $codexExe $($execution.actualInvocation.executableDigest) $codexVersion" | Tee-Object -FilePath $env:GITHUB_STEP_SUMMARY -Append
+      - name: Windows x64 패키지
+        id: windows_package
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
@@ -219,13 +245,29 @@ jobs:
             if ($untracked) { throw "검증 체크아웃에 추적되지 않는 경로가 있습니다.`n$untracked" }
           }
           Assert-CleanCheckout
-          node scripts/windows-setup.ts
-          if ($LASTEXITCODE -ne 0) { throw "Windows setup 실패: $LASTEXITCODE" }
-          npm.cmd run check
-          if ($LASTEXITCODE -ne 0) { throw "전체 검사 실패: $LASTEXITCODE" }
           node scripts/windows-package.ts
           if ($LASTEXITCODE -ne 0) { throw "Windows 패키징 실패: $LASTEXITCODE" }
           Assert-CleanCheckout
+          $package = Join-Path $PWD '.www\packages\WWW-Electron-win32-x64\WWW-Electron.exe'
+          if (-not (Test-Path -LiteralPath $package -PathType Leaf)) { throw "Windows 패키지 실행 파일을 찾을 수 없습니다: $package" }
+          $packageHash = (Get-FileHash -LiteralPath $package -Algorithm SHA256).Hash.ToLowerInvariant()
           $tree = git rev-parse 'HEAD^{tree}'
           if ($LASTEXITCODE -ne 0) { throw "Git tree 조회 실패: $LASTEXITCODE" }
-          "WWW_WINDOWS_VERIFIED_TREE $env:WWW_CHECKOUT_SHA $tree" | Tee-Object -FilePath $env:GITHUB_STEP_SUMMARY -Append
+          "WWW_WINDOWS_PACKAGE $env:WWW_CHECKOUT_SHA $tree $package $packageHash" | Tee-Object -FilePath $env:GITHUB_STEP_SUMMARY -Append
+      - name: Windows x64 패키지 보관
+        if: ${{ steps.windows_package.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: www-${{ github.sha }}-win32-x64
+          path: .www/packages/WWW-Electron-win32-x64
+          retention-days: 14
+          include-hidden-files: true
+          if-no-files-found: error
+      - name: Windows 전체 회귀 검사
+        if: ${{ !cancelled() && steps.windows_setup.outcome == 'success' }}
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          npm.cmd run check
+          if ($LASTEXITCODE -ne 0) { throw "전체 검사 실패: $LASTEXITCODE" }
