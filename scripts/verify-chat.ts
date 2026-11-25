@@ -22,6 +22,13 @@ const metrics : Data[]   = []                                                   
 const pause              = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)) ;
 
 const reviewOutput = '{"id":"review-readable","provider":"anthropic","model":"opus","verdict":"not_run","readOnly":true,"execution":{"exitCode":1,"error":null},"large":9007199254740993,"path":"' + 'long-path/'.repeat(70) + '","findings":[]}\n';
+const mixedCommand = Array.from({ length: 20 }, () => "printf mixed").join("\n");
+const mixedOutput = [
+  '[ERROR] 변환 실패 {"code":42}',
+  '    at convert (test.ts:9:2)',
+  '<img src="/verify-cannot-load.png" onerror="window.__commandOutputExecuted=1">&amp;',
+  '긴 출력 ' + 'data-'.repeat(1300),
+].join("\r\n") + "\r\n";
 
 async function seedHistory() {
   const output    = Array.from({ length: 11 }, (_, index) => `    명령 출력 ${index + 1}`).join("\n")                                                                                                      ;
@@ -51,6 +58,10 @@ async function seedHistory() {
         id: "truncated-command", type: "commandExecution", command: "printf truncated", cwd: workspace,
         status: "failed", exitCode: 1, aggregatedOutput: Array.from({ length: 5000 }, (_, index) => `    긴 출력 ${index + 1}`).join("\n")
       },
+      ...(process.argv.includes("--command-cards") ? [{
+        id: "mixed-command", type: "commandExecution", command: mixedCommand, cwd: workspace,
+        status: "failed", exitCode: 42, aggregatedOutput: mixedOutput,
+      }] : []),
       {
         id: "auto-transition-command", type: "commandExecution", command: "printf auto-transition", cwd: workspace,
         status: "completed", exitCode: 0, aggregatedOutput: "자동 상태 전환 확인"
@@ -1096,7 +1107,7 @@ try {
   await session.wait("document.querySelector('[data-testid=\"command-preview\"]')?.textContent.startsWith('    명령 출력 1')", "명령 출력 들여쓰기와 종료 후 앞 10줄");
   const savedCard = '.command-card:has(.cmdline[aria-label="실행 명령"])';
   await session.wait("Array.from(document.querySelectorAll('.command-card')).some(c=>c.querySelector('.cmdline')?.textContent==='printf failed' && c.querySelectorAll('pre').length===1 && !c.querySelector('[aria-expanded]') && c.querySelector('pre').textContent.includes('오류 확인'))", "짧은 실패 출력은 단일 pre에 전체 표시하고 확장 버튼 없음");
-  await session.wait("Array.from(document.querySelectorAll('.command-card')).some(c=>c.innerText.includes('printf truncated') && c.innerText.includes('제거된 원본 줄 수는 미확인') && c.querySelector('[aria-expanded]')?.getAttribute('aria-expanded')==='true' && c.querySelectorAll('pre').length===1)", "한도 초과 실패 출력 자동 펼침과 보관 범위 안내");
+  await session.wait("Array.from(document.querySelectorAll('.command-card')).some(c=>c.innerText.includes('printf truncated') && c.innerText.includes('제거된 원본 줄 수는 미확인') && c.querySelector('[aria-expanded]')?.getAttribute('aria-expanded')==='false' && c.querySelectorAll('pre').length===1)", "한도 초과 실패 출력 기본 접힘과 보관 범위 안내");
   await session.click(savedCard + ' [aria-expanded]');
   await session.wait("document.querySelector('.command-card.item-completed [aria-expanded]')?.getAttribute('aria-expanded')==='true'", "보관된 전체 출력 펼치기");
   await session.click(savedCard + ' [aria-expanded]');
@@ -1137,12 +1148,26 @@ try {
   await session.command("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", text: "\r", unmodifiedText: "\r", windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
   await session.command("Input.dispatchKeyEvent", { type: "keyUp", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
   await session.wait(`document.querySelector('${reviewCard} button[aria-pressed]').getAttribute('aria-pressed')==='true' && document.querySelector('${reviewCard} pre').textContent===` + JSON.stringify(reviewOutput), "키보드 원문 전환과 종료 개행까지 원본 일치");
-  await activateByKey(reviewCard + ' .command-output-tools button:last-of-type', '원문 복사 Enter');
+  await activateByKey(reviewCard + ' .command-output-tools button:not([aria-expanded]):not([aria-pressed])', '원문 복사 Enter');
   await session.wait(`document.querySelector('${reviewCard} [role="status"]').textContent==='원문 복사됨'`, "원문 클립보드 쓰기 성공 안내");
   await session.wait("navigator.clipboard.readText().then(text=>text===" + JSON.stringify(reviewOutput) + ")", "실제 클립보드 원문 완전 일치");
   await session.click(reviewCard + ' button[aria-pressed]');
   await activateByKey(reviewCard + ' [aria-expanded]', '출력 접기 Space', true);
   await session.wait(`document.querySelector('${reviewCard} [aria-expanded]').getAttribute('aria-expanded')==='false' && document.querySelector('${reviewCard} [data-testid="command-preview"]').getBoundingClientRect().height>0`, 'Space로 출력 한 번 접기·미리보기 유지');
+  if (process.argv.includes("--command-cards")) {
+    await session.evaluate("Array.from(document.querySelectorAll('.command-card')).find(c=>c.querySelector('.cmdline').textContent.startsWith('printf mixed')).dataset.verifyOutput68='mixed'");
+    const mixedCard = '[data-verify-output68="mixed"]';
+    await session.wait(`(() => { const c=document.querySelector('${mixedCard}'); const p=c.querySelector('pre'); const m=c.querySelector('.cmdline'); return c.innerText.includes('종료 코드 42') && c.querySelector('[aria-expanded]').getAttribute('aria-expanded')==='false' && p.clientHeight<p.scrollHeight && m.clientHeight<m.scrollHeight; })()`, '긴 실패 명령과 한 줄 길이가 긴 출력의 미리보기 높이 제한');
+    await session.wait(`(() => { const p=document.querySelector('${mixedCard} pre'); return p.querySelector('.syntax-option').textContent.includes('at convert') && p.querySelector('.syntax-number').textContent==='42' && p.querySelector('.syntax-key') && p.textContent.includes('&amp;') && !p.querySelector('img,script') && !window.__commandOutputExecuted; })()`, '혼합 로그 스택·JSON·HTML 강조 및 활성 HTML 부재');
+    await toggleShortcut(mixedCard + ' .cmdline');
+    await session.wait(`(() => { const c=document.querySelector('${mixedCard}'); return c.querySelector('[aria-expanded]').getAttribute('aria-expanded')==='true' && getComputedStyle(c.querySelector('pre')).maxHeight==='none'; })()`, 'Ctrl+T는 명령과 출력을 함께 펼침');
+    await activateByKey(mixedCard + ' button[aria-pressed]', '혼합 원문 전환 Enter');
+    await session.wait(`document.querySelector('${mixedCard} pre').textContent===` + JSON.stringify(mixedOutput), '원문 보기는 CRLF와 엔티티를 보존');
+    await activateByKey(mixedCard + ' .command-output-tools button:not([aria-expanded]):not([aria-pressed])', '혼합 원문 복사 Enter');
+    await session.wait("navigator.clipboard.readText().then(text=>text===" + JSON.stringify(mixedOutput) + ")", "실제 혼합 원문 클립보드 일치");
+    await activateByKey(mixedCard + ' .command-output-tools button[aria-expanded]', '혼합 출력 접기 Space', true);
+    await session.wait(`document.querySelector('${mixedCard} [aria-expanded]').getAttribute('aria-expanded')==='false'`, '키보드 접기 뒤 미리보기 복원');
+  }
   await session.evaluate("(() => { const c=Array.from(document.querySelectorAll('.command-card')).find(n=>n.innerText.includes('printf truncated')); c.scrollIntoView({block:'start'}); c.querySelector('pre').scrollTop=c.querySelector('pre').scrollHeight; })()");
   const wheelBefore = object(await session.evaluate(`(() => { const t=document.querySelector('.transcript'); const p=Array.from(document.querySelectorAll('.command-card')).find(n=>n.innerText.includes('printf truncated')).querySelector('pre'); const r=p.getBoundingClientRect(); const input=document.querySelector('[data-testid="prompt-input"]').getBoundingClientRect(); return { x:r.left+Math.min(20,r.width/2), y:Math.max(0,Math.min(innerHeight-1,r.top+Math.min(20,r.height/2))), transcript:t.scrollTop, document:document.documentElement.scrollTop, body:document.body.scrollTop, input:{x:input.x,y:input.y,width:input.width,height:input.height} }; })()`));
   await session.command('Input.dispatchMouseEvent', { type: 'mouseWheel', x: wheelBefore.x, y: wheelBefore.y, deltaX: 0, deltaY: 400 });
