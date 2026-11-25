@@ -43,24 +43,22 @@ async function waitFor(harness: Harness, repo: string, key: string, status: Nati
   throw new Error(`Native 보고서 상태 대기 초과: ${status}`);
 }
 
-function observeSaves() {
+function observeReports() {
   const states: NativeReportJob[] = [];
   const events = new EventEmitter();
   function onState(job: NativeReportJob) {
     states.push(job);
     events.emit("state");
   }
-  async function saved(count: number): Promise<NativeReportJob[]> {
+  async function terminal(count: number, expected: "saved" | "skipped"): Promise<NativeReportJob[]> {
     const deadline = new AbortController();
     const timer = setTimeout(() => deadline.abort(), 4_000);
     try {
       for (;;) {
-        const terminal = states.filter(job => job.status !== "queued" && job.status !== "judging");
-        if (terminal.length >= count) {
-          const unexpected = terminal.find(job => job.status !== "saved");
-          if (unexpected) throw new Error(`Native 보고서 저장 실패 (${unexpected.status}): ${unexpected.reason}`);
-          return terminal;
-        }
+        const completed = states.filter(job => job.status !== "queued" && job.status !== "judging");
+        const unexpected = completed.find(job => job.status !== expected);
+        if (unexpected) throw new Error(`Native 보고서 상태 불일치 (${unexpected.status}): ${unexpected.reason}`);
+        if (completed.length >= count) return completed;
         await once(events, "state", { signal: deadline.signal });
       }
     } catch (error) {
@@ -68,7 +66,7 @@ function observeSaves() {
       throw new Error(`Native 보고서 저장 알림 시간 초과: ${states.map(job => job.status).join(", ") || "알림 없음"}`);
     } finally { clearTimeout(timer); }
   }
-  return { states, onState, saved };
+  return { states, onState, terminal };
 }
 
 async function readSavedJob(repo: string, key: string, notice: NativeReportJob): Promise<NativeReportJob> {
@@ -92,14 +90,14 @@ test("필요 판단은 실제 보고서를 저장하며 원문·검증 통과를
   const repo                      = await repository(t) ;
   await fs.mkdir(path.join(repo, "docs/architecture"), { recursive: true });
   await fs.writeFile(path.join(repo, "docs/architecture/work-output.json"), JSON.stringify({ version: 1, format: "boxbox-scalar-columns-v1", scope: "docs/work/**/*.json", approvalRef: ".www/architecture-contract/boxbox-side/human-approvals-20261114.json#json" }));
-  const observer                   = observeSaves();
+  const observer                   = observeReports();
   let calls                       = 0          ;
   const authored                  = decision() ;
   if (authored.narrative) authored.narrative.reader = { story: "구현 결과를 보고서로 연결했습니다.", requirements: [], checks: [], decisions: [], references: [], nextActions: [] };
   const harness = createNativeReportHarness({ judge: async () => { calls++; return authored; }, onState: observer.onState }) ;
   const queued  = await harness.enqueue({ repository: repo, input: input() })                                                              ;
   assert.equal(queued.status, "queued");
-  const [notice] = await observer.saved(1);
+  const [notice] = await observer.terminal(1, "saved");
   assert.ok(notice);
   const saved = await readSavedJob(repo, queued.key, notice);
   assert.equal(calls, 1);
@@ -141,11 +139,14 @@ test("생략 판단은 메타만 보존하고 docs/work를 만들지 않는다",
 
 test("동시 중복 enqueue는 한 번만 판단·저작한다", async (t) => {
   const repo    = await repository(t)                                                                                       ;
+  const observer = observeReports();
   let calls     = 0                                                                                                         ;
-  const harness = createNativeReportHarness({ judge: async () => { calls++; return decision(); } })                         ;
+  const harness = createNativeReportHarness({ judge: async () => { calls++; return decision(); }, onState: observer.onState }) ;
   const jobs    = await Promise.all(Array.from({ length: 5 }, () => harness.enqueue({ repository: repo, input: input() }))) ;
   assert.equal(new Set(jobs.map((job) => job.key)).size, 1);
-  await waitFor(harness, repo, jobs[0].key, "saved");
+  const [notice] = await observer.terminal(1, "saved");
+  assert.ok(notice);
+  await readSavedJob(repo, jobs[0].key, notice);
   assert.equal(calls, 1);
   assert.equal((await listWorkReports({ repo })).reports.length, 1);
 });
@@ -244,7 +245,7 @@ test("큐는 저장소별 원래 경로를 유지하고 전역으로 직렬 실�
   const second = await repository(t) ;
   let running  = 0                   ;
   let maximum  = 0                   ;
-  const observer = observeSaves();
+  const observer = observeReports();
   const harness = createNativeReportHarness({ onState: observer.onState, judge: async () => {
     running++;
     maximum = Math.max(maximum, running);
@@ -255,7 +256,7 @@ test("큐는 저장소별 원래 경로를 유지하고 전역으로 직렬 실�
   const one = await harness.enqueue({ repository: first , input: input()}) ;
   const two = await harness.enqueue({ repository: second, input: input()}) ;
   assert.equal(one.key, two.key);
-  const [firstNotice, secondNotice] = await observer.saved(2);
+  const [firstNotice, secondNotice] = await observer.terminal(2, "saved");
   assert.ok(firstNotice && secondNotice);
   await readSavedJob(first, one.key, firstNotice);
   await readSavedJob(second, two.key, secondNotice);
@@ -268,19 +269,22 @@ test("큐는 저장소별 원래 경로를 유지하고 전역으로 직렬 실�
 
 test("pending 10개·96k 입력·쓰기 경로의 심볼릭 링크를 선행 거부한다", async (t) => {
   const repo                                          = await repository(t)                                                    ;
+  const observer = observeReports();
   let release : (value: NativeReportDecision) => void = () => {}                                                               ;
   const gate                                          = new Promise<NativeReportDecision>((resolve) => { release = resolve; }) ;
-  const harness                                       = createNativeReportHarness({ judge: () => gate })                       ;
+  const harness                                       = createNativeReportHarness({ judge: () => gate, onState: observer.onState });
   const jobs  : NativeReportJob[]                     = []                                                                     ;
   for (let number = 0; number < 10; number++) jobs.push(await harness.enqueue({ repository: repo, input: input(`turn-${number}`) }));
   await assert.rejects(harness.enqueue({ repository: repo, input: input("overflow") }), /10개/);
   const oversized = { ...input("large"), prompt: "한".repeat(40_000) };
   await assert.rejects(harness.enqueue({ repository: repo, input: oversized }), /96,000/);
   release(decision(false));
-  await waitFor(harness, repo, jobs[9].key, "skipped");
+  const notices = await observer.terminal(jobs.length, "skipped");
+  assert.deepEqual(notices.map((job) => job.key), jobs.map((job) => job.key));
   const linked  = await repository(t) ;
   const outside = await repository(t) ;
   await fs.symlink(outside, path.join(linked, ".www"), "dir");
+  assert.ok((await fs.lstat(path.join(linked, ".www"))).isSymbolicLink());
   await assert.rejects(harness.enqueue({ repository: linked, input: input() }), /심볼릭 링크/);
   assert.deepEqual(await fs.readdir(outside), []);
   await assert.rejects(harness.retry(repo, "../../private"), /키가 올바르지/);
