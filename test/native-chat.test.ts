@@ -4,7 +4,7 @@
 import { expect, test } from "bun:test";
 import { spawn } from "node:child_process";
 import { join } from "node:path";
-import { nativeThreadStartParams, nativeTurnStartParams } from "../src/native-chat";
+import { nativeThreadStartParams, nativeTurnStartParams, nativeTurnSteerParams, validateChatImage } from "../src/native-chat";
 import { project } from "../src/projection";
 import { JsonRpcClient } from "../src/rpc";
 import type { AppEvent } from "../src/shared";
@@ -19,6 +19,17 @@ test("Native params는 Bypass와 진행 설명을 적용하고 턴 입력과 det
   expect(thread.developerInstructions                     ).toContain("매 도구 호출마다 상투적인 문장을 반복하지"                                                                                    ) ;
   expect(thread.developerInstructions                     ).toContain("결론, 실제로 한 일, 확인한 결과, 남은 문제"                                                                                    ) ;
   expect(nativeTurnStartParams("thread", " 사용자 원문\n")).toEqual  ({ threadId: "thread", input: [{ type: "text", text: " 사용자 원문\n", text_elements: [] }], summary: "detailed" }              ) ;
+});
+
+test("Native 이미지 입력은 텍스트와 함께 또는 이미지 단독으로 보낼 수 있다", () => {
+  const url = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j0f0AAAAASUVORK5CYII=";
+  const image = { type: "image", url };
+  expect(validateChatImage(url)).toBe(url);
+  expect(nativeTurnStartParams("thread", "", undefined, url).input).toEqual([image]);
+  expect(nativeTurnSteerParams("thread", "turn", "설명", "message", url).input).toEqual([{ type: "text", text: "설명", text_elements: [] }, image]);
+  expect(() => validateChatImage("https://example.com/screenshot.png")).toThrow();
+  expect(() => validateChatImage("data:image/png;base64,QUJDRA==")).toThrow();
+  expect(() => validateChatImage(url.replace("image/png", "image/svg+xml"))).toThrow();
 });
 
 test("실제 stdio 사건의 공개 요약과 commentary를 투영하고 비공개 원문을 제외한다", async () => {

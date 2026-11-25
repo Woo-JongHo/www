@@ -6,6 +6,7 @@ import { promises as fs } from "node:fs";
 import { createServer } from "node:net";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { cleanVerificationCaches, stopVerificationApp } from "./evidence-retention.ts";
 
 type Data = Record<string, unknown>;
 const object    = (value: unknown): Data => value && typeof value === "object" && !Array.isArray(value) ? value as Data : {} ;
@@ -21,6 +22,13 @@ const metrics : Data[]   = []                                                   
 const pause              = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)) ;
 
 const reviewOutput = '{"id":"review-readable","provider":"anthropic","model":"opus","verdict":"not_run","readOnly":true,"execution":{"exitCode":1,"error":null},"large":9007199254740993,"path":"' + 'long-path/'.repeat(70) + '","findings":[]}\n';
+const mixedCommand = Array.from({ length: 20 }, () => "printf mixed").join("\n");
+const mixedOutput = [
+  '[ERROR] 변환 실패 {"code":42}',
+  '    at convert (test.ts:9:2)',
+  '<img src="/verify-cannot-load.png" onerror="window.__commandOutputExecuted=1">&amp;',
+  '긴 출력 ' + 'data-'.repeat(1300),
+].join("\r\n") + "\r\n";
 
 async function seedHistory() {
   const output    = Array.from({ length: 11 }, (_, index) => `    명령 출력 ${index + 1}`).join("\n")                                                                                                      ;
@@ -50,6 +58,10 @@ async function seedHistory() {
         id: "truncated-command", type: "commandExecution", command: "printf truncated", cwd: workspace,
         status: "failed", exitCode: 1, aggregatedOutput: Array.from({ length: 5000 }, (_, index) => `    긴 출력 ${index + 1}`).join("\n")
       },
+      ...(process.argv.includes("--command-cards") ? [{
+        id: "mixed-command", type: "commandExecution", command: mixedCommand, cwd: workspace,
+        status: "failed", exitCode: 42, aggregatedOutput: mixedOutput,
+      }] : []),
       {
         id: "auto-transition-command", type: "commandExecution", command: "printf auto-transition", cwd: workspace,
         status: "completed", exitCode: 0, aggregatedOutput: "자동 상태 전환 확인"
@@ -104,13 +116,8 @@ async function start(round: number, selectedWorkspace = workspace) {
   let ws: WebSocket | null = null;
   const terminate = async () => {
     ws?.close();
-    if (child.exitCode === null) {
-      child.kill("SIGTERM");
-      await Promise.race([new Promise<void>((resolve) => child.once("close", () => resolve())), pause(3000)]);
-      if (child.exitCode === null) child.kill("SIGKILL");
-    }
-    await stdout.close();
-    await stderr.close();
+    try { await stopVerificationApp(child); }
+    finally { await Promise.all([stdout.close(), stderr.close()]); }
   };
   try {
     const deadline = Date.now() + 25_000 ;
@@ -497,11 +504,111 @@ async function verifyImeEnter(session: Awaited<ReturnType<typeof start>>) {
   checks.push("IME 확정 순서별 최종 본문을 fixture turn/start에서 각각 1회 확인");
 }
 
+async function verifyClipboardImage(session: Awaited<ReturnType<typeof start>>) {
+  const png = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j0f0AAAAASUVORK5CYII=";
+  const input = "document.querySelector('[data-testid=prompt-input]')";
+  const preview = "document.querySelector('[data-testid=chat-attachment] img')";
+  await session.evaluate(input + ".focus()");
+  const pasteFixtureImage = () => session.evaluate(`(() => {
+    const data = new DataTransfer();
+    const bytes = Uint8Array.from(atob(${JSON.stringify(png)}), character => character.charCodeAt(0));
+    data.items.add(new File([bytes], "screenshot.png", {type:"image/png"}));
+    ${input}.dispatchEvent(new ClipboardEvent("paste", {clipboardData:data,bubbles:true,cancelable:true}));
+  })()`);
+  const textPasteUnblocked = await session.evaluate(`(() => {
+    const data = new DataTransfer(); data.setData("text/plain", "여러 줄\\n텍스트");
+    const event = new ClipboardEvent("paste", {clipboardData:data,bubbles:true,cancelable:true});
+    ${input}.dispatchEvent(event); return !event.defaultPrevented;
+  })()`);
+  if (textPasteUnblocked !== true) throw Error("기존 텍스트 붙여넣기를 이미지 첨부가 가로챘습니다.");
+  await pasteFixtureImage();
+  await session.wait(`!!${preview} && !document.querySelector('[data-testid=send-button]').disabled`, "이미지 미리보기와 단독 전송 가능");
+  await session.click("[data-testid=chat-attachment] button");
+  await session.wait(`!${preview} && document.querySelector('[data-testid=send-button]').disabled`, "이미지 제거 후 빈 입력 전송 차단");
+  await pasteFixtureImage();
+  await session.wait(`!!${preview}`, "이미지 다시 첨부");
+  await session.input("이미지 전송 실패 확인");
+  await session.click("[data-testid=send-button]");
+  await session.wait(`!!${preview} && ${input}.value==='이미지 전송 실패 확인' && document.body.innerText.includes('합성 전송 실패')`, "전송 실패 시 이미지와 텍스트 복원");
+  await session.input("");
+  await session.click("[data-testid=send-button]");
+  await session.wait(`!${preview} && ${input}.value===''`, "이미지만 보내고 초안 비우기");
+  const calls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
+  const turns = calls.filter(call => call.method === "turn/start").map(call => object(call.params).input);
+  const url = "data:image/png;base64," + png;
+  if (!Array.isArray(turns[0]) || turns[0].length !== 2 || object(turns[0][0]).text !== "이미지 전송 실패 확인"
+      || object(turns[0][1]).url !== url || object(turns[0][1]).type !== "image"
+      || !Array.isArray(turns[1]) || turns[1].length !== 1 || object(turns[1][0]).type !== "image" || object(turns[1][0]).url !== url) {
+    throw Error("텍스트와 이미지의 Native stdio 요청이 일치하지 않습니다.");
+  }
+  await session.wait("document.querySelector('[data-testid=working-status]')?.textContent.includes('응답 종료')", "단독 이미지 요청 응답 종료");
+  await pasteFixtureImage();
+  await session.wait(`!!${preview}`, "명령 접두어와 함께 보낼 이미지 첨부");
+  await session.input("/model");
+  await session.wait("!document.querySelector('[data-testid=slash-command-list]') && !document.querySelector('[data-testid=send-button]').disabled", "이미지와 슬래시 텍스트를 함께 일반 메시지로 보낼 수 있음");
+  await session.click("[data-testid=send-button]");
+  await session.wait("document.querySelector('[data-testid=working-status]')?.textContent.includes('응답 종료') && !document.querySelector('dialog[open]')", "이미지가 붙은 슬래시 텍스트로 일반 응답을 받고 모델 선택기는 열지 않음");
+  const mixedCalls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
+  const mixed = object(mixedCalls.filter(call => call.method === "turn/start").at(-1)?.params).input;
+  if (!Array.isArray(mixed) || object(mixed[0]).text !== "/model" || object(mixed[1]).url !== url) {
+    throw Error("이미지가 붙은 슬래시 텍스트가 일반 Native 요청과 일치하지 않습니다.");
+  }
+  checks.push("텍스트·이미지 혼합 전송, 이미지 단독 전송, 슬래시 텍스트가 붙은 이미지 전송, 제거와 실패 초안 복원, 텍스트 붙여넣기 비차단 확인");
+}
+
 let session: Awaited<ReturnType<typeof start>> | null = null;
 async function verifyChat() {
 try {
   if (!nativeProbe) await seedHistory();
   session = await start(1);
+  if (process.argv.includes("--compose-note-only")) {
+    const input = '[data-testid="prompt-input"]';
+    const note = ".chat-compose-note";
+    const emptyNote = `(()=>{const node=document.querySelector(${JSON.stringify(note)});return node?.textContent === '' && node.getBoundingClientRect().height === 0;})()`;
+    const turnStarts = async () => (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8").catch(() => ""))
+      .split("\n").filter(Boolean).map(line => object(JSON.parse(line))).filter(call => call.method === "turn/start").length;
+    const enter = async () => {
+      await session!.evaluate(`document.querySelector(${JSON.stringify(input)}).focus()`);
+      const event = { key: "Enter", code: "Enter", windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 };
+      await session!.command("Input.dispatchKeyEvent", { type: "keyDown", ...event });
+      await session!.command("Input.dispatchKeyEvent", { type: "keyUp", ...event });
+    };
+    await session.wait(emptyNote, "빈 입력에서 상시 안내와 빈 줄 높이 제거");
+    await session.input("작성 중인 초안");
+    await session.wait(emptyNote, "작성 중인 초안의 글자 수와 단축키가 표시되지 않음");
+    await session.input("Enter 전송 확인");
+    const before = await turnStarts();
+    await enter();
+    await session.wait(`document.querySelector(${JSON.stringify(input)}).value === '' && document.querySelector('.transcript')?.textContent.includes('Enter 전송 확인')`, "Enter 전송 유지");
+    for (let attempt = 0; attempt < 50 && await turnStarts() !== before + 1; attempt += 1) await pause(20);
+    if (await turnStarts() !== before + 1) throw Error("Enter 전송이 fixture turn/start 한 번과 일치하지 않습니다.");
+    await session.input("붙여넣기 전 초안");
+    const rejected = await session.evaluate(`(() => {
+      const field = document.querySelector(${JSON.stringify(input)});
+      if (!(field instanceof HTMLTextAreaElement)) return false;
+      const data = new DataTransfer();
+      data.setData("text/plain", "가".repeat(field.maxLength + 1));
+      return !field.dispatchEvent(new ClipboardEvent("paste", { bubbles: true, cancelable: true, clipboardData: data }));
+    })()`);
+    if (!rejected) throw Error("한도 초과 붙여넣기 이벤트가 차단되지 않았습니다.");
+    await session.wait(`document.querySelector(${JSON.stringify(input)}).value === "붙여넣기 전 초안" && document.querySelector(${JSON.stringify(note)})?.textContent.includes("입력 한도를")`, "붙여넣기 한도 초과 알림과 기존 초안 유지");
+    checks.push("빈·작성 중 입력의 기본 안내와 빈 높이 없음, Enter 한 번 전송, 초과 붙여넣기 알림·초안 보존");
+    await session.terminate();
+    session = null;
+    const summary = { result: "passed", scope: "compose-note-only", evidence: directory, checks };
+    await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify(summary));
+    return;
+  }
+  if (process.argv.includes("--clipboard-image-only")) {
+    await verifyClipboardImage(session);
+    await session.terminate();
+    session = null;
+    const summary = { result: "passed", scope: "clipboard-image-only", checks };
+    await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify({ evidence: directory, summary }));
+    return;
+  }
   if (process.argv.includes("--ime-enter-only")) {
     await verifyImeEnter(session);
     await session.terminate();
@@ -539,6 +646,9 @@ try {
     await session.input("/compact");
     await session.click('[data-testid="send-button"]');
     await session.wait("document.querySelector('.chat-compose-note').textContent.includes('대화 압축 완료')", "실제 Native 압축 완료 표시", 80_000);
+    await session.input("도구를 사용하지 말고 압축 이후 이어가기 확인이라고 답하세요.");
+    await session.click('[data-testid="send-button"]');
+    await session.wait("document.querySelector('[data-testid=\"working-status\"]').textContent.includes('응답 종료') && Array.from(document.querySelectorAll('.chat-message:not(.is-streaming)')).some(message=>message.textContent.includes('압축 이후 이어가기 확인'))", "압축 후 같은 탭에서 일반 응답 종료", 45_000);
     await session.terminate();
     session = null;
     console.log(JSON.stringify({ evidence: directory, checks }));
@@ -642,7 +752,7 @@ try {
     };
     const themeFile = path.join(directory, "profile", "chat-theme.json");
     const mint = `document.querySelector('.session-surface:not([hidden]) main.work').dataset.chatTheme==='www-mint'`;
-    const basic = 'getComputedStyle(document.querySelector(".session-surface:not([hidden]) main.work")).backgroundColor==="rgb(21, 21, 21)"';
+    const basic = 'getComputedStyle(document.querySelector(".session-surface:not([hidden]) main.work")).backgroundColor==="rgb(245, 244, 240)"';
     const focused = "document.activeElement===document.querySelector('[data-testid=\"prompt-input\"]')";
     const panelColors = (background: string, foreground: string) => `(() => {
       const surface=document.querySelector('.session-surface:not([hidden])');
@@ -654,12 +764,39 @@ try {
         return style.backgroundColor===${JSON.stringify(background)} && style.color===${JSON.stringify(foreground)};
       });
     })()`;
-    const basicPanels = panelColors("rgb(21, 21, 21)", "rgb(237, 237, 237)");
+    const basicPanels = panelColors("rgb(245, 244, 240)", "rgb(32, 33, 30)");
     const mintPanels = panelColors("rgb(12, 14, 13)", "rgb(230, 232, 230)");
+    const themed = (selector: string, background: string, foreground: string) => `(() => {
+      const node=document.querySelector(${JSON.stringify(selector)});
+      const shell=document.querySelector('.session-shell');
+      if(!node||!shell||!node.checkVisibility({opacityProperty:true,visibilityProperty:true})) return false;
+      const style=getComputedStyle(node), root=getComputedStyle(shell);
+      return style.getPropertyValue('--bg').trim()===${JSON.stringify(background)}
+        && style.getPropertyValue('--text').trim()===${JSON.stringify(foreground)}
+        && root.getPropertyValue('--bg').trim()===${JSON.stringify(background)}
+        && root.getPropertyValue('--text').trim()===${JSON.stringify(foreground)};
+    })()`;
+    const verifyAppSurfaces = async (background: string, foreground: string, label: string) => {
+      await session!.wait(themed('.session-tabs-bar', background, foreground), `${label} 세션 탭에 테마 토큰 적용`);
+      await session!.click('[data-testid="view-page-nav"]');
+      await session!.wait(themed('.home-sidebar', background, foreground), `${label} 프로젝트 목록에 테마 토큰 적용`);
+      await session!.click('[data-testid="project-list-close"]');
+      await session!.click('[data-testid="dashboard-nav"]');
+      await session!.wait(`${themed('[data-testid="dashboard"]', background, foreground)} && getComputedStyle(document.querySelector('[data-testid="dashboard"]')).backgroundColor===${JSON.stringify(background === '#f5f4f0' ? 'rgb(245, 244, 240)' : 'rgb(12, 14, 13)')}`, `${label} 대시보드에 테마 적용`);
+      await session!.click('[data-testid="ecosystem-nav"]');
+      await session!.wait(themed('.ecosystem-work', background, foreground), `${label} 생태계에 테마 토큰 적용`);
+      await session!.click('[data-testid="reports-nav"]');
+      await session!.wait(`${themed('.reports-work', background, foreground)} && getComputedStyle(document.querySelector('.reports-work')).backgroundColor===${JSON.stringify(background === '#f5f4f0' ? 'rgb(245, 244, 240)' : 'rgb(12, 14, 13)')}`, `${label} 보고서에 테마 적용`);
+      await session!.click('[data-testid="monitoring-nav"]');
+      await session!.wait(`${themed('[data-testid="session-monitoring"]', background, foreground)} && getComputedStyle(document.querySelector('.native-activity-panel')).backgroundColor===${JSON.stringify(background === '#f5f4f0' ? 'rgb(245, 244, 240)' : 'rgb(12, 14, 13)')}`, `${label} 모니터링에 테마 적용`);
+      await session!.click('[data-testid="chat-nav"]');
+      await session!.wait(`${themed('main.work', background, foreground)} && document.querySelector('main.work:not([hidden])')`, `${label} 대화로 돌아와 테마 유지`);
+    };
     await session.click('[data-thread-id="history-a"]');
     await session.wait("document.querySelector('.command-card')", "기존 명령 카드가 있는 대화 열기");
-    await session.wait(`${basic} && getComputedStyle(document.querySelector('.command-card')).backgroundColor==='rgb(32, 32, 32)'`, "미설정 프로필의 기본 배경색이 채팅과 명령 카드에 적용");
+    await session.wait(`${basic} && getComputedStyle(document.querySelector('.command-card')).backgroundColor==='rgb(255, 254, 253)'`, "미설정 프로필의 밝은 Basic 배경색이 채팅과 명령 카드에 적용");
     await session.wait(basicPanels, "넓은 창의 대화 목록과 Agent 패널에 Basic 배경색·글자색 적용");
+    await verifyAppSurfaces('#f5f4f0', '#20211e', 'Basic');
     for (let step = 0; step < 160; step++) {
       await key("Tab", 9);
       if (await session.evaluate(`document.activeElement.matches('.session-surface:not([hidden]) textarea:focus-visible')`)) break;
@@ -711,6 +848,7 @@ try {
     await session.wait(`${mint} && ${focused} && !document.querySelector('dialog[open]')`, "키보드 적용·입력창 초점 복귀");
     await session.wait(mintPanels, "테마를 선택하면 대화 목록과 Agent 패널도 Mint로 전환");
     await session.wait("getComputedStyle(document.querySelector('.command-card')).backgroundColor==='rgb(20, 24, 21)'", "명령 카드의 배경색도 Mint로 전환");
+    await verifyAppSurfaces('#0c0e0d', '#e6e8e6', 'Mint');
     await openPicker();
     await key("Escape", 27);
     await session.wait(`${mint} && ${focused} && !document.querySelector('dialog[open]')`, "Escape 취소 시 테마·입력창 초점 유지");
@@ -742,7 +880,195 @@ try {
     console.log(JSON.stringify({ evidence: directory, checks }));
     return;
   }
+  if (process.argv.includes("--reading-colors-only")) {
+    const openThemePicker = async () => {
+      await session!.input("/theme");
+      await session!.click('[data-testid="send-button"]');
+      await session!.wait("document.querySelector('dialog[open] h2')?.textContent==='채팅 테마 선택'", "테마 선택기 열기");
+    };
+    const verifyReadingColors = async (themeLabel: string) => {
+      await session!.click('[data-thread-id="history-a"]');
+      await session!.wait("document.querySelector('.chat-markdown h2')?.textContent==='저장된 답변'", themeLabel + " 저장 답변 복원");
+      const reading = object(await session!.evaluate(`(() => {
+        const surface = document.querySelector('.session-surface:not([hidden])');
+        const work = surface?.querySelector('main.work');
+        const question = surface?.querySelector('[data-testid="user-request"]');
+        const answer = surface?.querySelector('.agent');
+        const color = selector => getComputedStyle(answer.querySelector(selector)).color;
+        const background = element => {
+          for (let node = element; node; node = node.parentElement) {
+            const value = getComputedStyle(node).backgroundColor;
+            if (value !== 'rgba(0, 0, 0, 0)') return value;
+          }
+          return '';
+        };
+        const channels = value => {
+          const values = value.match(/[\\d.]+/g)?.slice(0, 3).map(Number);
+          if (!values || values.length !== 3) return null;
+          return value.startsWith('color(srgb') ? values.map(channel => channel * 255) : values;
+        };
+        const luminance = value => {
+          const rgb = channels(value);
+          if (!rgb) return null;
+          return rgb.map(channel => {
+            const normalized = channel / 255;
+            return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
+          }).reduce((sum, channel, index) => sum + channel * [0.2126, 0.7152, 0.0722][index], 0);
+        };
+        const ratio = (foreground, backdrop) => {
+          const fg = luminance(foreground), bg = luminance(backdrop);
+          return fg === null || bg === null ? 0 : (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05);
+        };
+        const contrast = selector => {
+          const element = answer.querySelector(selector);
+          return ratio(getComputedStyle(element).color, background(element));
+        };
+        return {
+          theme: work?.dataset.chatTheme,
+          scheme: getComputedStyle(work).colorScheme,
+          roles: [question?.querySelector('.chat-role-question')?.textContent, answer?.querySelector('.chat-role-answer')?.textContent],
+          questionBorder: getComputedStyle(question).borderInlineStartWidth,
+          questionBackground: getComputedStyle(question).backgroundColor,
+          answerBackground: getComputedStyle(answer).backgroundColor,
+          questionContrast: (() => {
+            const label = question.querySelector('.chat-role-question');
+            return ratio(getComputedStyle(label).color, background(label));
+          })(),
+          colors: ['h2', 'strong', 'a', 'th'].map(selector => color('.chat-markdown ' + selector)),
+          contrasts: ['h2', 'strong', 'a', 'th'].map(selector => contrast('.chat-markdown ' + selector)),
+          underline: getComputedStyle(answer.querySelector('.chat-markdown a')).textDecorationLine,
+          tableScrollable: (() => {
+            const table = Array.from(answer.querySelectorAll('.chat-markdown table')).at(-1);
+            if (!table) return false;
+            const before = table.scrollLeft;
+            table.scrollLeft = 48;
+            const moved = table.scrollLeft > before;
+            table.scrollLeft = before;
+            return table.scrollWidth > table.clientWidth && moved && ['auto', 'scroll'].includes(getComputedStyle(table).overflowX);
+          })()
+        };
+      })()`));
+      if (reading.theme !== (themeLabel === "Terminal Basic" ? "terminal-basic" : "www-mint") ||
+          !Array.isArray(reading.roles) || reading.roles.join("|") !== "내 질문|Codex 답변" ||
+          reading.questionBorder !== "3px" || reading.questionBackground === reading.answerBackground ||
+          typeof reading.questionContrast !== "number" || reading.questionContrast < 4.5 ||
+          !Array.isArray(reading.colors) || new Set(reading.colors).size !== 4 ||
+          !Array.isArray(reading.contrasts) || reading.contrasts.some(value => typeof value !== "number" || value < 4.5) ||
+          typeof reading.underline !== "string" || !reading.underline.includes("underline") ||
+          reading.tableScrollable !== true) {
+        throw Error(themeLabel + " 질문·답변·Markdown 읽기 색상 오류: " + JSON.stringify(reading));
+      }
+      checks.push(themeLabel + " 질문·답변 화자 표시, Markdown 제목·강조·링크·표 헤더 색상과 4.5:1 대비");
+      await session!.evaluate("document.querySelector('[data-testid=\\\"user-request\\\"] .chat-role-question').scrollIntoView({block:'start'})");
+      await session!.evaluate("new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
+      await session!.screenshot("reading-question-" + reading.theme, ".session-surface:not([hidden]) main.work");
+      await session!.evaluate("document.querySelector('.agent .chat-role-answer').scrollIntoView({block:'start'})");
+      await session!.evaluate("new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
+      await session!.screenshot("reading-answer-" + reading.theme, ".session-surface:not([hidden]) main.work");
+      await session!.evaluate("document.querySelector('.chat-markdown h2').scrollIntoView({block:'start'})");
+      await session!.evaluate("new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))");
+      await session!.screenshot("reading-markdown-" + reading.theme, ".session-surface:not([hidden]) main.work");
+    };
+    await verifyReadingColors("Terminal Basic");
+    await openThemePicker();
+    await session.click('dialog[open] .chat-model-options button:nth-child(2)');
+    await session.wait("document.querySelector('.session-surface:not([hidden]) main.work').dataset.chatTheme==='www-mint'", "WWW Mint 전환");
+    await verifyReadingColors("WWW Mint");
+    await session.click('.chat-code button');
+    await session.wait("document.querySelector('.chat-code button')?.textContent.includes('복사됨')", "Markdown 코드 복사 상태 표시");
+    await session.click('.chat-message-actions button:last-child');
+    await session.wait("document.querySelector('[data-testid=\"prompt-input\"]').value.includes('> ## 저장된 답변')", "Markdown 답변 인용이 초안에 추가");
+    await session.input("");
+    await session.input("스트리밍 이력 절단 중단 확인");
+    await session.click('[data-testid="send-button"]');
+    await session.wait("document.querySelector('.agent.streaming .chat-role-answer')?.textContent==='Codex 답변' && document.querySelector('.agent.streaming .chat-markdown')?.textContent.includes('이력 절단 뒤에도 들어온 응답')", "스트리밍 답변에도 Codex 화자 표시");
+    await session.click('[data-testid="interrupt-button"]');
+    await session.wait("!document.querySelector('.agent.streaming')", "스트리밍 중단 뒤 화자 표시 상태 정산");
+    await session.terminate();
+    session = null;
+    const summary = { result: "passed", scope: "reading-colors-only", evidence: directory, checks };
+    await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify(summary));
+    return;
+  }
+  if (process.argv.includes("--goal-only")) {
+    const active = '[role=tabpanel]:not([hidden])';
+    const submitGoal = async (command: string, expected: string, label: string) => {
+      await session!.evaluate(`(()=>{const input=document.querySelector(${JSON.stringify(active + " textarea")});Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(input,${JSON.stringify(command)});input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
+      await session!.click(active + ' [data-testid="send-button"]');
+      await session!.wait(`document.querySelector(${JSON.stringify(active + ' .chat-compose-note')})?.textContent.includes(${JSON.stringify(expected)})`, label);
+    };
+    await session.input("/go");
+    await session.wait("document.querySelector('[data-testid=slash-command-option]')?.textContent==='/goal'", "슬래시 추천에서 목표 명령 발견");
+    await session.click('[data-testid=slash-command-option]');
+    await session.wait("document.querySelector('.chat-compose-note')?.textContent.includes('설정된 대화 목표가 없습니다')", "빈 새 대화의 목표 조회");
+    const objective = "회귀 검사 통과를 확인한다";
+    await submitGoal("/goal " + objective, "활성 · " + objective, "빈 새 대화에서 스레드와 목표 설정");
+    await submitGoal("/goal pause", "일시정지 · " + objective, "현재 대화 목표 일시정지");
+    await submitGoal("/goal resume", "활성 · " + objective, "현재 대화 목표 재개");
+    await session.click(active + ' [data-thread-id="history-a"]');
+    await session.wait("document.querySelector('[data-thread-id=history-a]')?.getAttribute('aria-current')==='true'", "다른 저장 대화 선택");
+    await submitGoal("/goal", "설정된 대화 목표가 없습니다", "다른 대화에 목표가 전파되지 않음");
+    await session.click(active + ' [data-thread-id="thread-new"]');
+    await session.wait("document.querySelector('[data-thread-id=thread-new]')?.getAttribute('aria-current')==='true'", "기존 목표가 있는 저장 대화 다시 열기");
+    await submitGoal("/goal", "활성 · " + objective, "같은 스레드의 호스트 목표 복원");
+    await session.click(".session-tab-create");
+    await session.wait("document.querySelectorAll('[role=tab]').length===2 && document.querySelector('[role=tablist] .session-tab-item:last-child [role=tab]').getAttribute('aria-selected')==='true'", "별도 대화 탭 준비");
+    await submitGoal("/goal", "설정된 대화 목표가 없습니다", "새 탭에는 원래 탭의 목표가 없음");
+    await session.click('[role=tablist] .session-tab-item:first-child [role=tab]');
+    await submitGoal("/goal clear", "대화 목표를 해제했습니다", "원래 스레드의 목표 해제");
+    await submitGoal("/goal", "설정된 대화 목표가 없습니다", "해제 후 목표 없음");
+    await submitGoal("/goal pause", "설정된 목표가 없습니다", "목표 없는 스레드의 일시정지 실패 표시");
+    const unsupported = path.join(workspace, "fixture-goals-unsupported");
+    await fs.writeFile(unsupported, "unsupported");
+    try {
+      await submitGoal("/goal", "현재 Native 호스트가 대화 목표를 지원하지 않습니다", "호스트 미지원 표시");
+    } finally { await fs.rm(unsupported); }
+    const calls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
+    const mutations = calls.filter(call => call.method === "thread/goal/set" || call.method === "thread/goal/clear").map(call => object(call.params));
+    if (calls.some(call => call.method === "turn/start" || call.method === "turn/steer") || mutations.length !== 5 ||
+      mutations.some(params => params.origin !== "user" || params.threadId !== "thread-new")) throw Error("목표가 해당 스레드의 직접 지시로만 전달되지 않았습니다.");
+    checks.push("목표 명령에서 일반 턴·추가 지시 0회, 현재 스레드의 명시적 목표 변경만 전송");
+    await session.terminate();
+    session = null;
+    const summary = { result: "passed", scope: "goal-only", evidence: directory, checks };
+    await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify(summary));
+    return;
+  }
   if (process.argv.includes("--slash-only")) {
+    const input = '[data-testid="prompt-input"]';
+    const key = async (name: string, code: number) => {
+      await session!.command("Input.dispatchKeyEvent", { type: "keyDown", key: name, code: name, windowsVirtualKeyCode: code, nativeVirtualKeyCode: code });
+      await session!.command("Input.dispatchKeyEvent", { type: "keyUp", key: name, code: name, windowsVirtualKeyCode: code, nativeVirtualKeyCode: code });
+    };
+    const focusInput = async () => { await session!.evaluate("document.querySelector(" + JSON.stringify(input) + ").focus()"); };
+    const turnStarts = async () => (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8").catch(() => "")).split("\n").filter(Boolean).map((line) => object(JSON.parse(line))).filter((call) => call.method === "turn/start").length;
+    await session.input("/");
+    await session.wait("Array.from(document.querySelectorAll('[data-testid=slash-command-option]'), option => option.textContent).join(',')==='/model,/compact,/btw,/goal,/theme'", "빈 입력의 슬래시 명령 다섯 개 표시");
+    await session.screenshot("slash-command-menu", '[data-testid="slash-command-list"]');
+    await session.input("/mo");
+    await session.wait("document.querySelectorAll('[data-testid=slash-command-option]').length===1 && document.querySelector('[data-testid=slash-command-option]').textContent==='/model'", "접두어에 따른 슬래시 명령 필터링");
+    await focusInput();
+    await key("Escape", 27);
+    await session.wait("!document.querySelector('[data-testid=slash-command-list]') && document.querySelector(" + JSON.stringify(input) + ").value==='/mo'", "Escape로 메뉴만 닫고 초안 유지");
+    await session.input("/");
+    await focusInput();
+    await key("ArrowUp", 38);
+    await session.wait("document.querySelectorAll('[data-testid=slash-command-option]')[4]?.getAttribute('aria-selected')==='true'", "방향키로 앞 명령 선택");
+    const before = await turnStarts();
+    await key("Enter", 13);
+    await session.wait("document.querySelector('dialog[open] h2')?.textContent==='채팅 테마 선택'", "Enter 선택은 기존 테마 명령 실행");
+    if (await turnStarts() !== before) throw Error("슬래시 메뉴의 Enter 선택이 일반 turn/start를 발행했습니다.");
+    await session.click("dialog[open] button:last-child");
+    await session.wait("!document.querySelector('dialog[open]') && document.activeElement===document.querySelector(" + JSON.stringify(input) + ")", "테마 명령 취소 뒤 입력창 초점 복귀");
+    await session.input("/the");
+    await session.wait("document.querySelectorAll('[data-testid=slash-command-option]').length===1 && document.querySelector('[data-testid=slash-command-option]').textContent==='/theme'", "마우스 선택 전 theme 후보 확인");
+    await session.click('[data-testid="slash-command-option"]');
+    await session.wait("document.querySelector('dialog[open] h2')?.textContent==='채팅 테마 선택'", "마우스 선택은 기존 테마 명령 실행");
+    if (await turnStarts() !== before) throw Error("슬래시 메뉴의 마우스 선택이 일반 turn/start를 발행했습니다.");
+    await session.click("dialog[open] button:last-child");
+    await session.wait("!document.querySelector('dialog[open]') && document.activeElement===document.querySelector(" + JSON.stringify(input) + ")", "마우스 테마 명령 취소 뒤 입력창 초점 복귀");
     const submit = async (value: string) => {
       await session!.input(value);
       await session!.click('[data-testid="send-button"]');
@@ -778,16 +1104,27 @@ try {
     await submit("/compact");
     await session.wait("document.querySelector('.chat-compose-note').textContent.includes('대화 압축 중')", "Native 압축 진행 표시");
     await session.wait("document.querySelector('.chat-compose-note').textContent.includes('대화 압축 완료')", "Native 압축 완료 표시");
+    await submit("성능 스트리밍 중단 확인");
+    await session.wait("document.querySelector('[data-testid=interrupt-button]')", "실행 중 입력 상태");
+    await session.input("/");
+    await session.wait(
+      "document.querySelector('[data-testid=interrupt-button]') && Array.from(document.querySelectorAll('[data-testid=slash-command-option]'), option => option.textContent).join(',')==='/btw'",
+      "실행 중에는 사이드 질문만 슬래시 메뉴에 표시",
+    );
+    await session.click('[data-testid="interrupt-button"]');
+    await session.wait("!document.querySelector('[data-testid=interrupt-button]')", "중단 뒤 슬래시 명령 입력 게이트 해제");
     const calls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
     const turns = calls.filter(call => call.method === "turn/start");
     const compactions = calls.filter(call => call.method === "thread/compact/start");
-    if (turns.length !== 1 || compactions.length !== 2 || object(turns[0]?.params).model !== "fixture-other" ||
-      compactions.some(call => object(call.params).threadId !== object(turns[0]?.params).threadId) || calls.some(call => call.method === "turn/steer")) {
+    if (turns.length !== 2 || compactions.length !== 2 || object(turns[1]?.params).model !== "fixture-other" ||
+      compactions.some(call => object(call.params).threadId !== object(turns[1]?.params).threadId) || calls.some(call => call.method === "turn/steer")) {
       throw Error("슬래시 명령의 stdio 전달 범위가 일치하지 않습니다.");
     }
     await session.terminate();
     session = null;
-    console.log(JSON.stringify({ evidence: directory, checks }));
+    const summary = { result: "passed", scope: "slash-only", evidence: directory, checks: [...checks, "슬래시 메뉴의 키보드·마우스 선택은 기존 명령을 실행하고 turn/start를 발행하지 않음"] };
+    await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify(summary));
     return;
   }
   if (process.argv.includes('--performance-only')) {
@@ -901,6 +1238,42 @@ try {
     await fs.writeFile(path.join(directory,"steer-tabs.json"),JSON.stringify({checks,starts:starts.length,steers},null,2));
     console.log(directory);return;
   }
+  if (process.argv.includes("--side-question-only")) {
+    const active = '[role=tabpanel]:not([hidden])';
+    const side = active + ' [data-testid="side-question"]';
+    const approval = active + " .approval.open";
+    await session.click('[data-thread-id="history-a"]');
+    await session.wait("document.querySelector('[data-thread-id=history-a]')?.getAttribute('aria-current')==='true' && document.querySelector('.transcript')?.textContent.includes('이어갈 작업')", "현재 저장 대화의 공개 맥락 준비");
+    await session.input("/bt");
+    await session.wait("document.querySelector('[data-testid=slash-command-option]')?.textContent==='/btw'", "슬래시 목록에서 사이드 질문 발견");
+    await session.click('[data-testid="slash-command-option"]');
+    await session.wait("document.querySelector('.chat-compose-note')?.textContent.includes('짧은 질문을 입력')", "인자 없는 사이드 명령 사용법 안내");
+    await session.input("경계 사이드 질문 승인 대기");
+    await session.click('[data-testid="send-button"]');
+    await session.wait(`document.querySelector(${JSON.stringify(approval)})?.textContent.includes('printf side-question-approval')`, "기본 턴의 승인 요청을 열린 상태로 유지");
+    await session.input("/btw 저장된 대화의 다음 작업은?");
+    await session.click(active + ' [data-testid="send-button"]');
+    await session.wait(`document.querySelector(${JSON.stringify(side)})?.textContent.includes('저장 대화 맥락에서 읽은 별도 답변') && !!document.querySelector(${JSON.stringify(approval)}) && !document.querySelector(${JSON.stringify(active + ' .transcript')})?.textContent.includes('저장 대화 맥락에서 읽은 별도 답변')`, "실행 중 별도 답변 완료, 원래 승인과 이력 유지");
+    await session.click(".session-tab-create");
+    await session.wait(`document.querySelectorAll('[role=tab]').length===2 && document.querySelector('[role=tablist] .session-tab-item:last-child [role=tab]').getAttribute('aria-selected')==='true' && !document.querySelector(${JSON.stringify(side)})`, "새 탭에서 원래 사이드 질문과 답변이 보이지 않음");
+    await session.click('[role=tablist] .session-tab-item:first-child [role=tab]');
+    await session.wait(`!!document.querySelector(${JSON.stringify(side)}) && !!document.querySelector(${JSON.stringify(approval)})`, "원래 탭의 질문·답변과 승인이 유지됨");
+    await session.click(approval + ' [data-decision="accept"]');
+    await session.wait(`!document.querySelector(${JSON.stringify(approval)}) && document.querySelector(${JSON.stringify(active + ' .transcript')})?.textContent.includes('후속 요청 완료')`, "사이드 답변 후 기본 턴을 계속 완료");
+    await session.evaluate(`(()=>{const input=document.querySelector(${JSON.stringify(active + " textarea")});Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(input,'/btw 사이드 실패 확인');input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
+    await session.click(active + ' [data-testid="send-button"]');
+    await session.wait(`document.querySelector(${JSON.stringify(side)})?.textContent.includes('사이드 질문 실행에 실패')`, "사이드 프로세스 오류를 해당 탭에 표시");
+    const calls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
+    const turns = calls.filter(call => call.method === "turn/start");
+    if (turns.length !== 1 || !JSON.stringify(turns[0]).includes("경계 사이드 질문 승인 대기") || calls.some(call => call.method === "turn/steer" || call.method === "thread/fork")) throw Error("사이드 질문이 기본 Native 턴으로 전달되었습니다.");
+    checks.push("기본 Native 연결에는 초기 턴 1회, 사이드 질문과 추가 지시 0회");
+    await session.terminate();
+    session = null;
+    const summary = { result: "passed", scope: "side-question-only", evidence: directory, checks };
+    await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify(summary));
+    return;
+  }
   if (process.argv.includes('--steer-only')) {
     await session.input('스트리밍 이력 절단 중단 확인');await session.click('[data-testid="send-button"]');
     await session.wait(`(async()=>{const events=await window.www.workspace().then(scope=>window.www.events(scope));
@@ -961,7 +1334,7 @@ try {
   await session.wait("document.querySelector('[data-testid=\"command-preview\"]')?.textContent.startsWith('    명령 출력 1')", "명령 출력 들여쓰기와 종료 후 앞 10줄");
   const savedCard = '.command-card:has(.cmdline[aria-label="실행 명령"])';
   await session.wait("Array.from(document.querySelectorAll('.command-card')).some(c=>c.querySelector('.cmdline')?.textContent==='printf failed' && c.querySelectorAll('pre').length===1 && !c.querySelector('[aria-expanded]') && c.querySelector('pre').textContent.includes('오류 확인'))", "짧은 실패 출력은 단일 pre에 전체 표시하고 확장 버튼 없음");
-  await session.wait("Array.from(document.querySelectorAll('.command-card')).some(c=>c.innerText.includes('printf truncated') && c.innerText.includes('제거된 원본 줄 수는 미확인') && c.querySelector('[aria-expanded]')?.getAttribute('aria-expanded')==='true' && c.querySelectorAll('pre').length===1)", "한도 초과 실패 출력 자동 펼침과 보관 범위 안내");
+  await session.wait("Array.from(document.querySelectorAll('.command-card')).some(c=>c.innerText.includes('printf truncated') && c.innerText.includes('제거된 원본 줄 수는 미확인') && c.querySelector('[aria-expanded]')?.getAttribute('aria-expanded')==='false' && c.querySelectorAll('pre').length===1)", "한도 초과 실패 출력 기본 접힘과 보관 범위 안내");
   await session.click(savedCard + ' [aria-expanded]');
   await session.wait("document.querySelector('.command-card.item-completed [aria-expanded]')?.getAttribute('aria-expanded')==='true'", "보관된 전체 출력 펼치기");
   await session.click(savedCard + ' [aria-expanded]');
@@ -1002,12 +1375,26 @@ try {
   await session.command("Input.dispatchKeyEvent", { type: "keyDown", key: "Enter", code: "Enter", text: "\r", unmodifiedText: "\r", windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
   await session.command("Input.dispatchKeyEvent", { type: "keyUp", key: "Enter", code: "Enter", windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
   await session.wait(`document.querySelector('${reviewCard} button[aria-pressed]').getAttribute('aria-pressed')==='true' && document.querySelector('${reviewCard} pre').textContent===` + JSON.stringify(reviewOutput), "키보드 원문 전환과 종료 개행까지 원본 일치");
-  await activateByKey(reviewCard + ' .command-output-tools button:last-of-type', '원문 복사 Enter');
+  await activateByKey(reviewCard + ' .command-output-tools button:not([aria-expanded]):not([aria-pressed])', '원문 복사 Enter');
   await session.wait(`document.querySelector('${reviewCard} [role="status"]').textContent==='원문 복사됨'`, "원문 클립보드 쓰기 성공 안내");
   await session.wait("navigator.clipboard.readText().then(text=>text===" + JSON.stringify(reviewOutput) + ")", "실제 클립보드 원문 완전 일치");
   await session.click(reviewCard + ' button[aria-pressed]');
   await activateByKey(reviewCard + ' [aria-expanded]', '출력 접기 Space', true);
   await session.wait(`document.querySelector('${reviewCard} [aria-expanded]').getAttribute('aria-expanded')==='false' && document.querySelector('${reviewCard} [data-testid="command-preview"]').getBoundingClientRect().height>0`, 'Space로 출력 한 번 접기·미리보기 유지');
+  if (process.argv.includes("--command-cards")) {
+    await session.evaluate("Array.from(document.querySelectorAll('.command-card')).find(c=>c.querySelector('.cmdline').textContent.startsWith('printf mixed')).dataset.verifyOutput68='mixed'");
+    const mixedCard = '[data-verify-output68="mixed"]';
+    await session.wait(`(() => { const c=document.querySelector('${mixedCard}'); const p=c.querySelector('pre'); const m=c.querySelector('.cmdline'); return c.innerText.includes('종료 코드 42') && c.querySelector('[aria-expanded]').getAttribute('aria-expanded')==='false' && p.clientHeight<p.scrollHeight && m.clientHeight<m.scrollHeight; })()`, '긴 실패 명령과 한 줄 길이가 긴 출력의 미리보기 높이 제한');
+    await session.wait(`(() => { const p=document.querySelector('${mixedCard} pre'); return p.querySelector('.syntax-option').textContent.includes('at convert') && p.querySelector('.syntax-number').textContent==='42' && p.querySelector('.syntax-key') && p.textContent.includes('&amp;') && !p.querySelector('img,script') && !window.__commandOutputExecuted; })()`, '혼합 로그 스택·JSON·HTML 강조 및 활성 HTML 부재');
+    await toggleShortcut(mixedCard + ' .cmdline');
+    await session.wait(`(() => { const c=document.querySelector('${mixedCard}'); return c.querySelector('[aria-expanded]').getAttribute('aria-expanded')==='true' && getComputedStyle(c.querySelector('pre')).maxHeight==='none'; })()`, 'Ctrl+T는 명령과 출력을 함께 펼침');
+    await activateByKey(mixedCard + ' button[aria-pressed]', '혼합 원문 전환 Enter');
+    await session.wait(`document.querySelector('${mixedCard} pre').textContent===` + JSON.stringify(mixedOutput), '원문 보기는 CRLF와 엔티티를 보존');
+    await activateByKey(mixedCard + ' .command-output-tools button:not([aria-expanded]):not([aria-pressed])', '혼합 원문 복사 Enter');
+    await session.wait("navigator.clipboard.readText().then(text=>text===" + JSON.stringify(mixedOutput) + ")", "실제 혼합 원문 클립보드 일치");
+    await activateByKey(mixedCard + ' .command-output-tools button[aria-expanded]', '혼합 출력 접기 Space', true);
+    await session.wait(`document.querySelector('${mixedCard} [aria-expanded]').getAttribute('aria-expanded')==='false'`, '키보드 접기 뒤 미리보기 복원');
+  }
   await session.evaluate("(() => { const c=Array.from(document.querySelectorAll('.command-card')).find(n=>n.innerText.includes('printf truncated')); c.scrollIntoView({block:'start'}); c.querySelector('pre').scrollTop=c.querySelector('pre').scrollHeight; })()");
   const wheelBefore = object(await session.evaluate(`(() => { const t=document.querySelector('.transcript'); const p=Array.from(document.querySelectorAll('.command-card')).find(n=>n.innerText.includes('printf truncated')).querySelector('pre'); const r=p.getBoundingClientRect(); const input=document.querySelector('[data-testid="prompt-input"]').getBoundingClientRect(); return { x:r.left+Math.min(20,r.width/2), y:Math.max(0,Math.min(innerHeight-1,r.top+Math.min(20,r.height/2))), transcript:t.scrollTop, document:document.documentElement.scrollTop, body:document.body.scrollTop, input:{x:input.x,y:input.y,width:input.width,height:input.height} }; })()`));
   await session.command('Input.dispatchMouseEvent', { type: 'mouseWheel', x: wheelBefore.x, y: wheelBefore.y, deltaX: 0, deltaY: 400 });
@@ -1249,7 +1636,7 @@ try {
     cwd: root, stdio: "ignore", env: { ...secondaryEnv, WWW_PROBE_PATH: path.join(directory, "secondary-disabled-probe.json"), WWW_NATIVE_PROBE: "1", WWW_PROBE_WORKSPACE: workspaceB, WWW_CODEX_BIN: path.join(root, "test/fixtures/chat-ui-app-server.ts"), WWW_PROBE_NATIVE_REPORTS: "0" }
   });
   const secondaryExit = await Promise.race([new Promise<number | null>((resolve, reject) => { secondary.once("error", reject); secondary.once("close", resolve); }), pause(5000).then(() => null)]);
-  if (secondaryExit !== 0) { secondary.kill("SIGTERM"); throw Error("비소유 Electron main이 정상 종료하지 않았습니다: " + secondaryExit); }
+  if (secondaryExit !== 0) { await stopVerificationApp(secondary); throw Error("비소유 Electron main이 정상 종료하지 않았습니다: " + secondaryExit); }
   if (await initializations() !== ownerInitializations) throw Error("비소유 main이 두 번째 Native를 시작했습니다.");
   const switchA = `button[title=${JSON.stringify(workspace)}]`  ;
   const switchB = `button[title=${JSON.stringify(workspaceB)}]` ;
@@ -1328,3 +1715,4 @@ try {
 }
 
 await verifyChat();
+await cleanVerificationCaches(directory);

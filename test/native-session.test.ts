@@ -151,10 +151,17 @@ test("모델 적용과 압축의 요청·성공·실패는 한 Native 대화와 
     expect(["pending", "running"]).toContain(a.summary().compaction.state);
     expect(b.summary().compaction.state).toBe("idle");
     await expect(a.invoke("turn:start", [selectionA, threadA, "압축 중 요청"])).rejects.toThrow("압축이 끝난 뒤");
+    await b.invoke("turn:start", [selectionB, threadB, "다른 탭의 압축 중 요청"]);
+    await until(() => !b.summary().busy);
+    expect(b.summary().compaction.state).toBe("idle");
     await until(() => a.summary().compaction.state === "completed");
+    await a.invoke("turn:start", [selectionA, threadA, "압축 뒤 같은 탭 요청"]);
+    await until(() => !a.summary().busy);
+    expect(a.summary().compaction.state).toBe("idle");
     await writeFile(join(fixture.first, "fixture-compact-fail"), "fail");
     await a.invoke("thread:compact", [selectionA, threadA]);
     await until(() => a.summary().compaction.state === "failed");
+    expect(a.summary().compaction).toEqual({ state: "failed", message: "대화 압축을 완료했다는 확인을 받지 못했습니다." });
     const calls = await Promise.all([fixture.first, fixture.second].map(async (path) =>
       (await readFile(join(path, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => JSON.parse(line))));
     expect(calls[0]?.find(call => call.method === "turn/start")?.params.model).toBe("fixture-other");

@@ -8,7 +8,7 @@ import { CommandView } from "./command-card";
 import { NativeActivityView, ResourceActivitySidebar } from "./native-activity-view";
 import { ChatMessage } from "./chat-message";
 import { ChatDetails, ChatRowMemoryContext, type ChatRowMemory } from "./chat-row-state";
-import { reduceConversationEvents, liveChatInput, slashCommand, type ConversationEventState, blankReadingState, belongsToConversation, conversationKey, currentTurnEvents, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, type ConversationReadingState } from "./chat-state";
+import { reduceConversationEvents, liveChatInput, slashCommand, goalAction, type ConversationEventState, blankReadingState, belongsToConversation, conversationKey, currentTurnEvents, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, type ConversationReadingState } from "./chat-state";
 import { createActivitySidebarState, projectActivitySidebar, updateActivitySidebarSnapshot } from "./activity-sidebar";
 import { ReportsView } from "./reports-view";
 import { EcosystemView } from "./ecosystem-view";
@@ -22,7 +22,7 @@ import { memo, useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, 
 import { createRoot } from "react-dom/client";
 import { executionResultCounts, MAX_OUTPUT_CODE_UNITS, project, type Block, type Projection } from "./projection";
 import type { AppEvent, ConversationSummary, TurnState, WorkspaceSelection, SelectionRef, ScopedAppEvent, ResourceSnapshot, ResourceScope, ProjectInfo, ConversationSelection, WwwApi } from "./shared";
-import type { NativeTimingEvent, ChatTheme, DashboardSnapshot, DashboardWork, NativeModelOption, NativeSessionSummary } from "./shared";
+import type { NativeTimingEvent, ChatTheme, DashboardSnapshot, DashboardWork, NativeGoalStatus, NativeModelOption, NativeSessionSummary, SideQuestionContext } from "./shared";
 
 document.title = `WWW ${appBuildInfo.label}`;
 
@@ -60,13 +60,13 @@ function fileStatus(block: Extract<Block, { kind: "files" }>): string {
 
 function BlockView({ block, decide, quote }: { block: Exclude<Block, { kind: "command" }>; decide(id: string | number, decision: string, approvalToken: string | null): void; quote(text: string): void }) {
   if (block.kind === "user") {
-    return <div className={`user request-${block.state}`} data-testid="user-request"><div>{block.text}</div><span className="muted">{block.steerStatus ? block.steerStatus === "pending" ? "추가 지시 · 전송 중" : block.steerStatus === "accepted" ? "추가 지시 · 접수됨 · 반영 여부는 후속 행동에서 확인" : block.steerStatus === "uncertain" ? `추가 지시 · 접수 여부 미확인 · ${block.error ?? "다시 보내기 전 결과를 확인하세요"}` : `추가 지시 · 전송 실패 · ${block.error ?? "원인 미확인"}` : block.state === "sending" ? "요청을 보내는 중" : block.state === "accepted" ? "요청을 받았습니다" : `요청을 보내지 못했습니다 · ${block.error ?? "원인 미확인"}`}</span></div>;
+    return <div className={`user request-${block.state}`} data-testid="user-request"><span className="chat-role chat-role-question">내 질문</span><div>{block.text}</div><span className="muted">{block.steerStatus ? block.steerStatus === "pending" ? "추가 지시 · 전송 중" : block.steerStatus === "accepted" ? "추가 지시 · 접수됨 · 반영 여부는 후속 행동에서 확인" : block.steerStatus === "uncertain" ? `추가 지시 · 접수 여부 미확인 · ${block.error ?? "다시 보내기 전 결과를 확인하세요"}` : `추가 지시 · 전송 실패 · ${block.error ?? "원인 미확인"}` : block.state === "sending" ? "요청을 보내는 중" : block.state === "accepted" ? "요청을 받았습니다" : `요청을 보내지 못했습니다 · ${block.error ?? "원인 미확인"}`}</span></div>;
   }
   if (block.kind === "explanation") {
     if (!block.text) return null;
     return <div aria-label={block.source === "reasoningSummary" ? "Native 공개 추론 요약" : block.source === "commentary" ? "Native 공개 설명" : "Native 공개 계획"} className={`explanation ${block.streaming ? "streaming" : ""}`} data-testid="public-explanation"><ChatMessage text={block.text} streaming={block.streaming} label="Native 공개 설명"/>{block.summaryTruncated && <div className="muted">공개 요약은 앞 {MAX_OUTPUT_CODE_UNITS.toLocaleString("ko-KR")} UTF-16 코드 단위까지만 표시합니다. 나머지는 생략됐습니다.</div>}</div>;
   }
-  if (block.kind === "answer" ) return <div className={`agent ${block.streaming ? "streaming" : ""}`}><ChatMessage text={block.text} streaming={block.streaming} onQuote={quote}/></div>;
+  if (block.kind === "answer" ) return <div className={`agent ${block.streaming ? "streaming" : ""}`}><span className="chat-role chat-role-answer">Codex 답변</span><ChatMessage text={block.text} streaming={block.streaming} onQuote={quote}/></div>;
   if (block.kind === "files"  ) return <div className={`files item-${block.status}`} data-testid="file-change"><div>파일 변경 · {fileStatus(block)}</div>{block.changes.length ? block.changes.map((change) => <ChatDetails key={change.path} memoryKey={`${block.id}:${change.path}`}><summary>{change.path}</summary>{change.diff === null ? <div className="muted">변경 내용 미제공</div> : <pre data-testid="file-diff">{change.diff || "제공된 변경 내용이 비어 있습니다."}</pre>}{change.truncated && <div className="muted">변경 내용의 최근 {MAX_OUTPUT_CODE_UNITS.toLocaleString("ko-KR")} UTF-16 코드 단위만 보관합니다. 앞부분은 복원할 수 없습니다.</div>}</ChatDetails>) : "파일 정보 미제공"}</div>;
   const approvalToken = "approvalToken" in block && typeof block.approvalToken === "string" ? block.approvalToken : null;
   return <div className={`approval ${block.open ? "open" : ""}`} data-testid="approval-card"><div className="ahead">{!block.supported ? "지원하지 않는 요청" : block.state === "open" && block.open && approvalToken !== null ? "승인 필요" : block.state === "responding" ? "응답 전송 중" : block.state === "responded" ? "응답 전송됨" : "응답 결과 미확인"}</div><div className="abody">{block.summary}</div>{block.supported && block.open && approvalToken !== null && <div className="aact"><button data-decision="accept" onClick={() => decide(block.requestId, "accept", approvalToken)}>허용</button><button data-decision="acceptForSession" onClick={() => decide(block.requestId, "acceptForSession", approvalToken)}>세션 허용</button><button data-decision="decline" onClick={() => decide(block.requestId, "decline", approvalToken)}>거절</button><button data-decision="cancel" onClick={() => decide(block.requestId, "cancel", approvalToken)}>중단</button></div>}</div>;
@@ -379,6 +379,10 @@ function LineIcon({ kind }: { kind: "folder" | "star" | "refresh" | "chat" | "ma
 
 interface SessionCloseState { allowed: boolean; reason?: string }
 
+const goalStatusLabels: Record<NativeGoalStatus, string> = {
+  active: "활성", paused: "일시정지", blocked: "차단", usageLimited: "사용량 제한", budgetLimited: "예산 제한", complete: "완료",
+};
+
 const chatThemes = [
   { value: "terminal-basic", label: "Terminal Basic" },
   { value: "www-mint", label: "WWW Mint" },
@@ -519,6 +523,8 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
   const [modelPicker, setModelPicker] = useState<{ models: NativeModelOption[]; current: string | null } | null>(null);
   const modelChoice = useRef<string | undefined>(undefined);
   const [themePickerOpen, setThemePickerOpen] = useState(false);
+  const [sideQuestion, setSideQuestion] = useState<{ selection: SelectionRef; thread: string; question: string; answer?: string; error?: string } | null>(null);
+  const sidePending = useRef<{ selection: SelectionRef; thread: string } | null>(null);
   const [savingTheme, setSavingTheme] = useState(false);
   const returnPromptFocus = useRef(false);
   useLayoutEffect(() => {
@@ -532,6 +538,12 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
   const timingReceipts = useRef(new Map<string, number | null>());
   const [failedDraft, setFailedDraft] = useState<string | null>(null);
   const failedDraftRef = useRef<string | null>(null);
+  const failedImageRef = useRef<string | undefined>(undefined);
+  const imageRef = useRef<string | undefined>(undefined);
+  const imageReader = useRef<FileReader | null>(null);
+  const [draftImage, setDraftImage] = useState<string | undefined>(undefined);
+  const [imageReading, setImageReading] = useState(false);
+  const setImage = (image?: string) => { imageRef.current = image; setDraftImage(image); };
   const transcriptRef       = useRef<HTMLDivElement>(null)             ;
   const transcriptScrollTop = useRef(0)                                ;
   const followTail          = useRef(true)                             ;
@@ -602,6 +614,7 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
   useEffect(() => {
     readingStates.current.set(currentKey, {
       draft: promptRef.current,
+      image: imageRef.current,
       scrollTop: transcriptScrollTop.current,
       followTail: followTail.current
     });
@@ -610,6 +623,7 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
   const rememberReading = () => {
     readingStates.current.set(currentKey, {
       draft: promptRef.current,
+      image: imageRef.current,
       scrollTop: transcriptRef.current?.scrollTop ?? transcriptScrollTop.current,
       followTail: followTail.current
     });
@@ -620,6 +634,7 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
     transcriptScrollTop.current = remembered.scrollTop;
     followTail.current = remembered.followTail;
     promptRef.current = remembered.draft;
+    setImage(remembered.image);
     setPrompt(remembered.draft);
     setNewContent(false);
     setInputNotice("");
@@ -928,7 +943,63 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
     }
   };
 
-  const runSlash = async (command: NonNullable<ReturnType<typeof slashCommand>>) => {
+  const startSelectedThread = async (selected: SelectionRef, currentRequest: () => boolean) => {
+    const id = (await api.startThread(selected)).threadId;
+    if (!currentRequest()) return null;
+    threadRef.current = id;
+    readingStates.current.set(conversationKey(workspace?.path ?? "", id), { draft: "", scrollTop: 0, followTail: true });
+    readingStates.current.delete(conversationKey(workspace?.path ?? "", null));
+    setThreadId(id);
+    const version = resourceVersion.current;
+    void api.activityResources(selected).then((snapshot) => {
+      if (snapshot && matchesSelection(selected) && (version === resourceVersion.current || !resourceRef.current || snapshot.revision > resourceRef.current.revision || snapshot.durableRevision > resourceRef.current.durableRevision)) acceptResources(snapshot);
+    }).catch((failure: unknown) => { if (matchesSelection(selected)) setError(`리소스 복원 실패: ${String(failure)}`); });
+    return id;
+  };
+
+  const runSideQuestion = async (text: string) => {
+    const question = text.slice("/btw".length).trim();
+    if (!question) {
+      setInputNotice("/btw 뒤에 짧은 질문을 입력해 주세요.");
+      promptRef.current = "/btw ";
+      setPrompt("/btw ");
+      return;
+    }
+    const thread = threadRef.current;
+    if (!thread) { setInputNotice("사이드 질문을 할 대화를 먼저 시작하거나 열어 주세요."); return; }
+    if (question.length > 4_000) { setInputNotice("사이드 질문은 4,000자 이내로 입력해 주세요."); return; }
+    if (sidePending.current?.thread === thread && matchesSelection(sidePending.current.selection)) {
+      setInputNotice("현재 탭의 사이드 질문이 진행 중입니다.");
+      return;
+    }
+    const selected = requireSelection();
+    const request = { selection: selected, thread };
+    sidePending.current = request;
+    setSideQuestion({ ...request, question });
+    setInputNotice("");
+    promptRef.current = "";
+    setPrompt("");
+    try {
+      const context = projection.blocks.flatMap<SideQuestionContext>(block => {
+        if (block.threadId !== thread) return [];
+        if (block.kind === "user" && block.state === "accepted" && block.text.trim()) return [{ role: "user" as const, text: block.text.slice(0, 2_000) }];
+        if (block.kind === "answer" && !block.streaming && block.text.trim()) return [{ role: "assistant" as const, text: block.text.slice(0, 2_000) }];
+        return [];
+      }).slice(-8);
+      const answer = await api.askSideQuestion(selected, thread, question, context);
+      if (matchesSelection(selected) && threadRef.current === thread) setSideQuestion({ ...request, question, answer });
+    } catch (error) {
+      if (matchesSelection(selected) && threadRef.current === thread) setSideQuestion({ ...request, question, error: error instanceof Error ? error.message : String(error) });
+    } finally {
+      if (sidePending.current === request) sidePending.current = null;
+    }
+  };
+
+  const runSlash = async (command: NonNullable<ReturnType<typeof slashCommand>>, text: string) => {
+    if (command === "btw") {
+      await runSideQuestion(text);
+      return;
+    }
     if (command === "theme") {
       if (!themeReady) { setInputNotice("테마 설정을 불러오는 중입니다."); return; }
       setInputNotice("");
@@ -942,7 +1013,8 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
       return;
     }
     const selected = requireSelection();
-    const thread = threadRef.current;
+    let thread = threadRef.current;
+    const action = command === "goal" ? goalAction(text) : null;
     if (command === "compact" && thread === null) {
       setInputNotice("압축할 이력이 있는 대화를 먼저 열어 주세요.");
       return;
@@ -954,6 +1026,24 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
     promptRef.current = "";
     setPrompt("");
     try {
+      if (action) {
+        if (thread === null && action.operation === "set") {
+          thread = await startSelectedThread(selected, () => matchesSelection(selected));
+          if (!isCurrent()) return;
+        }
+        if (thread === null) {
+          setInputNotice("설정된 대화 목표가 없습니다. /goal <목표>로 설정할 수 있습니다.");
+          return;
+        }
+        const result = await api.controlGoal(selected, thread, action);
+        if (!isCurrent()) return;
+        const notice = "cleared" in result && result.cleared ? "대화 목표를 해제했습니다."
+          : "goal" in result && result.goal ? `대화 목표 · ${goalStatusLabels[result.goal.status]} · ${result.goal.objective}`
+          : "설정된 대화 목표가 없습니다.";
+        setInputNotice(notice);
+        if (action.operation === "set") void refreshConversations();
+        return;
+      }
       if (command === "compact" && thread !== null) {
         await api.compactThread(selected, thread);
         return;
@@ -978,10 +1068,11 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
   const run = async () => {
     const draft = promptRef.current;
     const text = draft.trim();
-    if (!selectionRef.current || !text || failedDraftRef.current !== null || sendingRef.current || switchingRef.current || text.length > MAX_PROMPT_CHARS) return;
-    const command = slashCommand(text);
+    const image = imageRef.current;
+    if (!selectionRef.current || (!text && !image) || imageReader.current || failedDraftRef.current !== null || sendingRef.current || switchingRef.current || text.length > MAX_PROMPT_CHARS) return;
+    const command = image ? null : slashCommand(text);
     if (command) {
-      await runSlash(command);
+      await runSlash(command, text);
       return;
     }
     const current = latestSession.current;
@@ -998,13 +1089,14 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
     performance.clearMarks("www:renderer-send");
     performance.mark("www:renderer-send");
     setSending(true);
-    if (!steerTarget) setPendingPrompt(text);
+    if (!steerTarget) setPendingPrompt(text || "이미지 첨부");
     setError("");
     promptRef.current = "";
+    setImage();
     setPrompt("");
     try {
       if (steerTarget) {
-        const response = await api.steerTurn(selected, steerTarget.thread, steerTarget.turn, draft, steerTarget.message);
+        const response = await api.steerTurn(selected, steerTarget.thread, steerTarget.turn, draft, steerTarget.message, image);
         if (!currentRequest()) return;
         if (response.turnId !== steerTarget.turn) throw new Error('추가 지시의 접수 턴이 일치하지 않습니다. 접수 여부 미확인');
         return;
@@ -1022,16 +1114,18 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
           if (snapshot && matchesSelection(selected) && (version === resourceVersion.current || !resourceRef.current || snapshot.revision > resourceRef.current.revision || snapshot.durableRevision > resourceRef.current.durableRevision)) acceptResources(snapshot);
         }).catch((failure: unknown) => { if (matchesSelection(selected)) setError(`리소스 복원 실패: ${String(failure)}`); });
       }
-      await api.startTurn(selected, id, text, modelChoice.current);
+      await api.startTurn(selected, id, text, modelChoice.current, image);
       if (!currentRequest()) return;
       void refreshConversations();
     } catch (failure) {
       if (!currentRequest()) return;
-      if (promptRef.current !== "") {
+      if (promptRef.current !== "" || imageRef.current || imageReader.current) {
         failedDraftRef.current = draft;
+        failedImageRef.current = image;
         setFailedDraft(draft);
       } else {
         promptRef.current = draft;
+        setImage(image);
         setPrompt(draft);
       }
       setError(String(failure));
@@ -1043,17 +1137,45 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
       }
     }
   };
+  const attachImage = async (file: File): Promise<boolean> => {
+    const selected = selectionRef.current;
+    if (!selected || imageReader.current || imageRef.current || switchingRef.current) return false;
+    const generation = switchGeneration.current;
+    const sendAtStart = sendGeneration.current;
+    const reader = new FileReader();
+    imageReader.current = reader;
+    setImageReading(true);
+    try {
+      const image = await new Promise<string>((resolve, reject) => {
+        reader.onload = () => typeof reader.result === "string" ? resolve(reader.result) : reject(new Error("이미지 데이터 없음"));
+        reader.onerror = () => reject(reader.error);
+        reader.onabort = () => reject(new Error("이미지 읽기 중단"));
+        reader.readAsDataURL(file);
+      });
+      if (!matchesSelection(selected) || switchGeneration.current !== generation || sendGeneration.current !== sendAtStart) return false;
+      setImage(image);
+      setHasDraft(true);
+      return true;
+    } finally {
+      imageReader.current = null;
+      setImageReading(false);
+    }
+  };
   const restoreFailedDraft = () => {
     const draft = failedDraftRef.current;
-    if (draft === null || promptRef.current !== "") return;
+    if (draft === null || promptRef.current !== "" || imageRef.current) return;
     promptRef.current = draft;
+    setImage(failedImageRef.current);
+    setHasDraft(draft.length > 0 || Boolean(failedImageRef.current));
     setPrompt(draft);
     failedDraftRef.current = null;
+    failedImageRef.current = undefined;
     setFailedDraft(null);
     promptInput.current?.focus();
   };
   const discardFailedDraft = () => {
     failedDraftRef.current = null;
+    failedImageRef.current = undefined;
     setFailedDraft(null);
   };
   const choose = () => changeProject();
@@ -1361,10 +1483,10 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
       onCancel={closeModelPicker} onChoose={(model) => { modelChoice.current = model; closeModelPicker(); }}/>}
     {projectListOpen && <aside ref={listPanel} onKeyDown={(event) => { if (event.key === "Escape" && view !== "home") closeProjectList(); }} className="sidebar home-sidebar" aria-label="프로젝트 선택"><div className="brand">WWW <small>{appBuildInfo.label}</small></div><div className="home-list-actions">{view !== "home" && <button className="secondary" data-testid="project-list-close" onClick={closeProjectList}>현재 화면으로 돌아가기</button>}<button className="secondary" data-testid="global-dashboard-nav" onClick={() => { setView("home"); setProjectListOpen(true); }}>전체 대시보드</button></div><div className="home-project-heading"><strong>RPA</strong><button className="secondary" aria-label="RPA 프로젝트 추가" onClick={choose} disabled={selectionBlocked || !workspace}>+</button></div><div className="home-project-list">{projects.filter(item => item.path !== dashboard?.projects.find(entry => entry.project.kind === "www")?.project.path).map(item => <div className="home-project-row" key={item.workspaceKey}><button className="secondary grow" data-testid={item.workspaceKey === workspace?.workspaceKey ? "open-current-workspace" : undefined} disabled={selectionBlocked && item.workspaceKey !== workspace?.workspaceKey} onClick={() => openDashboardProject(item.workspaceKey)} title={item.path}>{item.name}</button><button className="icon" aria-label={`${item.name} 즐겨찾기 ${item.favorite ? "해제" : "추가"}`} aria-pressed={item.favorite} onClick={() => { void toggleFavorite(item); }} disabled={favoritePending}>☆</button></div>)}{!projectLoading && projects.filter(item => item.path !== dashboard?.projects.find(entry => entry.project.kind === "www")?.project.path).length === 0 && <p className="muted">등록된 RPA 프로젝트가 없습니다.</p>}</div><button className="secondary home-www" data-testid={dashboard?.projects.find(item => item.project.kind === "www")?.project.path === workspace?.path ? "open-current-workspace" : "open-www"} disabled={!workspace || (selectionBlocked && dashboard?.projects.find(item => item.project.kind === "www")?.project.path !== workspace.path)} onClick={() => openDashboardProject("www")}>WWW</button>{projectError && <p role="alert">{projectError}</p>}<p className="muted home-scope-note">프로젝트를 선택하기 전 전체 작업 기록을 볼 수 있습니다.</p></aside>}
     <aside id={`workspace-sidebar-${sessionId}`} className="sidebar target-sidebar" hidden={projectListOpen}><div className="brand" title={`커밋 ${appBuildInfo.commit} · 소스 ${appBuildInfo.sourceDigest}`} >WWW <small data-testid="build-version">{appBuildInfo.label}</small></div><div className="sec"><button className="secondary" ref={projectListButton} data-testid="view-page-nav" onClick={() => setProjectListOpen(true)}>← 프로젝트 목록</button><button className="icon" aria-label="프로젝트 폴더 선택" onClick={choose} disabled={selectionBlocked || !workspace}><LineIcon kind="folder"/></button></div><div><div className="srow active"><span className="avatar">W</span><span className="name">{workspace?.name ?? "선택 중"}</span><span className="right">{workspace?.branch ?? "git 아님"}</span></div><nav className="workspace-nav" aria-label="화면 선택"><button aria-current={view === "dashboard" ? "page" : undefined} onClick={() => setView("dashboard")} data-testid="dashboard-nav"><LineIcon kind="map"/><span className="nav-label">대시보드</span></button>{showRpaStandard && <button data-testid="rpa-standard-nav" aria-current={view === "rpa-standard" ? "page" : undefined} onClick={() => setView("rpa-standard")}><LineIcon kind="map"/><span className="nav-label">RPA 표준</span></button>}<button data-testid="chat-nav" aria-label="대화" title="대화" aria-current={view === "chat" ? "page" : undefined} onClick={() => setView("chat")}><LineIcon kind="chat"/><span className="nav-label">대화</span>{failedDraft !== null && <span className="nav-hint">실패한 요청 확인</span>}</button><button aria-label="생태계 구조 지도" title="생태계 구조 지도" aria-current={view === "ecosystem" ? "page" : undefined} onClick={() => setView("ecosystem")} data-testid="ecosystem-nav"><LineIcon kind="map"/><span className="nav-label">생태계</span><span className="nav-hint">구조 지도</span></button><button aria-label="리포트" title="리포트" aria-current={view === "reports" ? "page" : undefined} onClick={() => { setView("reports"); setAutoReportHint(""); }} data-testid="reports-nav"><LineIcon kind="report"/><span className="nav-label">리포트</span><span className="nav-hint">{autoReportHint || "작업 이야기"}</span></button><button ref={monitorButton} aria-label="세션 모니터링" title="세션 모니터링" aria-current={view === 'monitoring' ? 'page' : undefined} onClick={() => { setView('monitoring'); setPanel('activity'); }} data-testid="monitoring-nav"><LineIcon kind="map"/><span className="nav-label">모니터링</span></button></nav></div><div className="agents"><div className="group">CODEX</div><div className="srow"><span className="agentmark"/><span>{statusText}</span></div><section className="chat-conversations" aria-label="저장된 대화" hidden={view !== "chat" && view !== "ecosystem"}><div className="chat-conversation-heading"><strong>대화</strong><button type="button" data-testid="new-conversation" disabled={selectionBlocked} onClick={() => { void selectConversation(null); }}>새 대화</button></div><label className="chat-search"><span className="sr-only">불러온 대화 검색</span><input data-testid="conversation-search" value={conversationSearch} onChange={(event) => setConversationSearch(event.target.value)} placeholder="불러온 대화 검색"/></label><div className="chat-list-tools"><span>{listLoading ? "불러오는 중…" : `불러온 대화 ${conversations.length}개`}</span><button type="button" disabled={listLoading || switching} onClick={() => { void refreshConversations(); }} aria-label="대화 목록 새로고침">새로고침</button></div>{listError && <div role="status" className="chat-list-error">{listError}</div>}<div className="chat-conversation-list" data-testid="conversation-list">{conversations.filter((item) => `${item.title} ${item.preview}`.toLocaleLowerCase("ko-KR").includes(conversationSearch.toLocaleLowerCase("ko-KR"))).map((item) => <button type="button" key={item.id} data-testid="conversation-item" data-thread-id={item.id} className={item.id === threadId ? "is-current" : ""} aria-current={item.id === threadId ? "true" : undefined} disabled={selectionBlocked} onClick={() => { void selectConversation(item.id); }}><strong>{item.title || item.preview || "제목 없는 대화"}</strong><span>{item.preview || "내용 미제공"}</span>{item.updatedAt !== null && Number.isFinite(new Date(item.updatedAt * 1000).getTime()) && <time dateTime={new Date(item.updatedAt * 1000).toISOString()}>{new Date(item.updatedAt * 1000).toLocaleDateString("ko-KR")}</time>}</button>)}</div>{!listLoading && conversations.length === 0 && !listError && <p className="muted">이 작업 폴더에 저장된 대화가 없습니다.</p>}{conversations.length > 0 && conversationSearch && !conversations.some((item) => `${item.title} ${item.preview}`.toLocaleLowerCase("ko-KR").includes(conversationSearch.toLocaleLowerCase("ko-KR"))) && <p className="muted">불러온 대화 중 일치하는 항목이 없습니다.</p>}{listCursor && <button type="button" className="chat-load-more" data-testid="load-more-conversations" disabled={listLoading || switching} onClick={() => { void refreshConversations(listCursor); }}>이전 대화 더 불러오기</button>}</section></div><div className="footer"><span className="muted">{workspace?.path}</span><span>{workspace?.changes ?? 0} changes</span></div></aside>
-    <section className="dashboard-shell" hidden={view !== "home" && view !== "dashboard"} data-testid={view === "home" ? "view-page" : "target-dashboard"}><DashboardView key={`${workspace?.workspaceKey}:${workspace?.selectionEpoch}`} snapshot={dashboard} loading={dashboardLoading} error={dashboardError || null} projectKey={view === "dashboard" ? targetKey ?? dashboard?.projects.find(item => item.project.path === workspace?.path)?.project.key ?? workspace?.workspaceKey : undefined} onRefresh={() => { void refreshDashboard(); }} onOpenProject={openDashboardProject} onLoadWork={loadDashboardWork}/>{view === "dashboard" && targetKey !== "www" && <p className="dashboard-scope-note">생태계는 현재 WWW 빌드의 구조를 표시합니다. 선택 프로젝트의 자동 분석은 제공하지 않습니다.</p>}</section>
+    <section className="dashboard-shell" hidden={view !== "home" && view !== "dashboard"} data-testid={view === "home" ? "view-page" : "target-dashboard"}><DashboardView key={`${workspace?.workspaceKey}:${workspace?.selectionEpoch}`} snapshot={dashboard} loading={dashboardLoading} error={dashboardError || null} projectKey={view === "dashboard" ? targetKey ?? dashboard?.projects.find(item => item.project.path === workspace?.path)?.project.key ?? workspace?.workspaceKey : undefined} onRefresh={() => { void refreshDashboard(); }} onLoadWork={loadDashboardWork}/>{view === "dashboard" && targetKey !== "www" && <p className="dashboard-scope-note">생태계는 현재 WWW 빌드의 구조를 표시합니다. 선택 프로젝트의 자동 분석은 제공하지 않습니다.</p>}</section>
     <main className="work" data-chat-theme={theme} hidden={view !== "chat"}><div className="tabrow"><button className="tab active">대화</button><span className="spacer"/>{/* 기존 상세 모니터·세션 모니터 토글은 모니터링 메뉴로 통합했습니다.
 <button ref={monitorButton} className="tool" data-testid="detail-monitor-toggle" aria-label="상세 실행 모니터" aria-pressed={detailsVisible} onClick={() => setDetailsVisible((visible) => !visible)}>상세 모니터 {detailsVisible ? "닫기" : "열기"}</button><button className="tool" data-testid="resource-sidebar-toggle" aria-label="실시간 리소스 사이드바" aria-pressed={monitorVisible} onClick={() => setMonitorVisible((visible) => !visible)}>세션 모니터 {monitorVisible ? "접기" : "열기"}</button>
-*/}<span className="tool selected">Codex app-server</span></div><section className="stage"><div className="pane focused"><div className="title"><span className="name">Codex</span><span className="path">{workspace?.name}</span></div><div className="body conversation"><div className="transcript" tabIndex={0} aria-label="대화 내용" ref={transcriptRef} onScroll={(event) => { if (view !== "chat") return; const element = event.currentTarget; transcriptScrollTop.current = element.scrollTop; followTail.current = element.scrollHeight - element.scrollTop - element.clientHeight < 48; readingStates.current.set(currentKey, { draft: promptRef.current, scrollTop: element.scrollTop, followTail: followTail.current }); if (followTail.current) setNewContent(false); }}>{projection.historyTruncated && <div className="history-warning">최근 {MAX_RAW_EVENTS.toLocaleString("ko-KR")}개 사건만 있어 이전 흐름은 완전히 복원할 수 없습니다.</div>}<div className="transcript-content"><ChatRowMemoryContext.Provider value={rowMemory}>{pendingPrompt && !projection.blocks.some((block) => block.kind === "user" && block.text === pendingPrompt && block.state === "sending") && <div className="chat-flow-item"><div className="user request-sending" data-testid="pending-user-request"><div>{pendingPrompt}</div><span className="muted">요청을 보내는 중</span></div><WorkFlow turn="starting" blocks={[]} events={[]} transport={chatInput.transport} interrupt={chatInput.interrupt} /></div>}{projection.blocks.length === 0 && !pendingPrompt ? <div className="empty">{switching ? "대화를 불러오는 중입니다." : "작업 폴더를 확인하고 메시지를 입력하거나 저장된 대화를 여세요."}</div> : transcriptRows}<NativePreparation events={events} sinceSeq={sendEventStart}/><ResultSummary blocks={activeBlocks} turn={projection.turn}/></ChatRowMemoryContext.Provider></div></div>{newContent && <button className="secondary new-content" onClick={() => { followTail.current = true; transcriptRef.current?.scrollTo({ top: transcriptRef.current.scrollHeight, behavior: "smooth" }); setNewContent(false); }}>새 내용으로 이동</button>}{failedDraft !== null && <section className="history-warning" data-testid="failed-request" aria-label="실패한 요청" style={{ margin: "0 14px", maxHeight: 180, overflow: "auto" }}><strong>실패한 요청</strong><pre data-testid="failed-request-text" style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{failedDraft}</pre><p role="status">{hasDraft ? "새 초안이 있습니다. 입력창을 비운 뒤 원문을 복원할 수 있습니다." : "실패한 원문을 복원하거나 버려 주세요."} 해결 전에는 다음 전송과 대화·프로젝트 전환이 일시 중지됩니다.</p><button type="button" className="secondary" data-testid="restore-failed-request" onClick={restoreFailedDraft} disabled={hasDraft}>입력창으로 복원</button><button type="button" className="secondary" data-testid="discard-failed-request" onClick={discardFailedDraft}>실패한 요청 버리기</button></section>}<ChatComposer snapshot={promptSnapshot} inputRef={promptInput} onDraft={(text) => { promptRef.current = text; setHasDraft(text.length > 0); readingStates.current.set(currentKey, { draft: text, scrollTop: transcriptScrollTop.current, followTail: followTail.current }); }} onSubmit={() => { void run(); }} onInterrupt={() => { void interrupt(); }} status={chatStatus({ ...chatInput, sending, switching })} disabled={switching || compacting} blocked={!workspace || failedDraft !== null} sending={sending} working={chatInput.working} interruptPending={chatInput.interrupt === 'requested' || chatInput.interrupt === 'accepted'} notice={inputNotice || compactionNotice} startedAt={startedEvent ? Date.parse(startedEvent.at) : null} lastActivityAt={liveTurnEvents.length ? Date.parse(liveTurnEvents.at(-1)!.at) : null}/></div></div></section></main>
+*/}<span className="tool selected">Codex app-server</span></div><section className="stage"><div className="pane focused"><div className="title"><span className="name">Codex</span><span className="path">{workspace?.name}</span></div><div className="body conversation"><div className="transcript" tabIndex={0} aria-label="대화 내용" ref={transcriptRef} onScroll={(event) => { if (view !== "chat") return; const element = event.currentTarget; transcriptScrollTop.current = element.scrollTop; followTail.current = element.scrollHeight - element.scrollTop - element.clientHeight < 48; readingStates.current.set(currentKey, { draft: promptRef.current, image: imageRef.current, scrollTop: element.scrollTop, followTail: followTail.current }); if (followTail.current) setNewContent(false); }}>{projection.historyTruncated && <div className="history-warning">최근 {MAX_RAW_EVENTS.toLocaleString("ko-KR")}개 사건만 있어 이전 흐름은 완전히 복원할 수 없습니다.</div>}<div className="transcript-content"><ChatRowMemoryContext.Provider value={rowMemory}>{pendingPrompt && !projection.blocks.some((block) => block.kind === "user" && block.text === pendingPrompt && block.state === "sending") && <div className="chat-flow-item"><div className="user request-sending" data-testid="pending-user-request"><span className="chat-role chat-role-question">내 질문</span><div>{pendingPrompt}</div><span className="muted">요청을 보내는 중</span></div><WorkFlow turn="starting" blocks={[]} events={[]} transport={chatInput.transport} interrupt={chatInput.interrupt} /></div>}{projection.blocks.length === 0 && !pendingPrompt ? <div className="empty">{switching ? "대화를 불러오는 중입니다." : "작업 폴더를 확인하고 메시지를 입력하거나 저장된 대화를 여세요."}</div> : transcriptRows}<NativePreparation events={events} sinceSeq={sendEventStart}/><ResultSummary blocks={activeBlocks} turn={projection.turn}/></ChatRowMemoryContext.Provider></div></div>{newContent && <button className="secondary new-content" onClick={() => { followTail.current = true; transcriptRef.current?.scrollTo({ top: transcriptRef.current.scrollHeight, behavior: "smooth" }); setNewContent(false); }}>새 내용으로 이동</button>}{failedDraft !== null && <section className="history-warning" data-testid="failed-request" aria-label="실패한 요청" style={{ margin: "0 14px", maxHeight: 180, overflow: "auto" }}><strong>실패한 요청</strong><pre data-testid="failed-request-text" style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{failedDraft}</pre>{failedImageRef.current && <div className="chat-attachment"><img src={failedImageRef.current} alt="실패한 요청의 첨부 이미지"/></div>}<p role="status">{hasDraft ? "새 초안이 있습니다. 입력창을 비운 뒤 원문을 복원할 수 있습니다." : "실패한 원문을 복원하거나 버려 주세요."} 해결 전에는 다음 전송과 대화·프로젝트 전환이 일시 중지됩니다.</p><button type="button" className="secondary" data-testid="restore-failed-request" onClick={restoreFailedDraft} disabled={hasDraft}>입력창으로 복원</button><button type="button" className="secondary" data-testid="discard-failed-request" onClick={discardFailedDraft}>실패한 요청 버리기</button></section>}{sideQuestion && sideQuestion.thread === threadId && matchesSelection(sideQuestion.selection) && <section className="chat-side-question" aria-label="사이드 질문" data-testid="side-question"><div className="chat-side-question-heading"><strong>사이드 질문</strong>{(sideQuestion.answer || sideQuestion.error) && <button type="button" className="secondary" onClick={() => setSideQuestion(null)}>닫기</button>}</div><p>{sideQuestion.question}</p><div role="status">{sideQuestion.error || sideQuestion.answer || "사이드 답변을 기다리는 중입니다."}</div></section>}<ChatComposer snapshot={promptSnapshot} inputRef={promptInput} image={draftImage} imageReading={imageReading} onImage={attachImage} onRemoveImage={() => { setImage(); setHasDraft(promptRef.current.length > 0); promptInput.current?.focus(); }} onDraft={(text) => { promptRef.current = text; setHasDraft(text.length > 0 || Boolean(imageRef.current)); readingStates.current.set(currentKey, { draft: text, image: imageRef.current, scrollTop: transcriptScrollTop.current, followTail: followTail.current }); }} onSubmit={() => { void run(); }} onInterrupt={() => { void interrupt(); }} status={chatStatus({ ...chatInput, sending, switching })} disabled={switching || compacting} blocked={!workspace || failedDraft !== null} sending={sending} working={chatInput.working} interruptPending={chatInput.interrupt === 'requested' || chatInput.interrupt === 'accepted'} notice={inputNotice || compactionNotice} startedAt={startedEvent ? Date.parse(startedEvent.at) : null} lastActivityAt={liveTurnEvents.length ? Date.parse(liveTurnEvents.at(-1)!.at) : null}/></div></div></section></main>
     <ResourceActivitySidebar events={events} resources={resources} threadId={threadId} workspacePath={workspace?.path} sending={sending || pendingPrompt !== null} hidden={!active || view !== "chat" || !monitorVisible} onOpenMonitor={() => { setView("monitoring"); setPanel("activity"); }}/>
     <section className="monitoring-work" data-chat-theme={theme} hidden={!active || view !== 'monitoring'} data-testid="session-monitoring" aria-label="현재 세션 모니터링">
       <header className="monitoring-identity"><h1>세션 모니터링</h1><p>{workspace?.name ?? '프로젝트 준비 중'} · 세션 <code>{sessionId}</code> · 대화 <code>{threadId ?? '새 대화 · 아직 생성하지 않음'}</code></p><p>현재 선택한 탭의 공개 관측입니다. 실행 종료와 업무 완료는 다릅니다.</p><button className="secondary" data-testid="monitoring-return-chat" onClick={() => { setView('chat'); requestAnimationFrame(() => promptInput.current?.focus()); }}>대화로 돌아가기{approvals.length ? ` · 승인 ${approvals.length}건 처리` : ''}</button></header>
@@ -1453,12 +1575,12 @@ function SessionShell() {
       requestAnimationFrame(() => document.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')?.focus());
     } catch (failure) { setError(String(failure)); }
   };
-  return <div className="session-shell">
+  return <div className="session-shell" data-chat-theme={theme ?? "terminal-basic"}>
     <SessionTabs tabs={sessions} activeId={activeId ?? ""} creating={creating} canCreate={activeId !== null} error={error || undefined}
       onSelect={setActiveId} onCreate={() => { void create(); }} onClose={(id) => { void close(id); }} canClose={canClose}/>
     <div className="session-surfaces">{sessions.length === 0 && <p role="status">{error || "대화 탭을 준비하고 있습니다."}</p>}
       {sessions.map(session => <section key={session.id} id={`session-panel-${session.id}`} role="tabpanel" aria-labelledby={`session-tab-${session.id}`}
-        data-session-id={session.id} className="session-surface" hidden={session.id !== activeId}>
+        data-session-id={session.id} data-chat-theme={theme ?? "terminal-basic"} className="session-surface" hidden={session.id !== activeId}>
         <SessionApiProvider id={session.id}><App session={session} theme={theme ?? "terminal-basic"} themeReady={theme !== null} onThemeChange={saveTheme} active={session.id === activeId} initial={session.id === defaultId.current} onCloseState={onCloseState}/></SessionApiProvider>
       </section>)}
     </div>

@@ -2,15 +2,20 @@
  * @architecture arch.chat.workspace
  * @implements RESP-CHAT-WORKSPACE
  */
-import { memo, useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react';
-import { MAX_PROMPT_CHARS, composerFull, pasteOverflow } from './chat-state';
+import { memo, useEffect, useId, useLayoutEffect, useRef, useState, type RefObject } from 'react';
+import { MAX_PROMPT_CHARS, composerFull, pasteOverflow, slashCommand } from './chat-state';
 import { handlePromptKeyDown, normalizeCompositionEnd } from './input';
+import { CHAT_IMAGE_TYPES, MAX_CHAT_IMAGE_BYTES } from './shared';
 import type { chatStatus } from './chat-status';
 
 interface ComposerProps {
   snapshot: { text: string; revision: number };
   inputRef: RefObject<HTMLTextAreaElement | null>;
   onDraft: (text: string) => void;
+  image?: string;
+  imageReading: boolean;
+  onImage: (file: File) => Promise<boolean>;
+  onRemoveImage: () => void;
   onSubmit: () => void;
   onInterrupt: () => void;
   status: ReturnType<typeof chatStatus>;
@@ -38,6 +43,9 @@ function WorkingIndicator({ status, startedAt, lastActivityAt }: Pick<ComposerPr
 export const ChatComposer = memo(function ChatComposer(props: ComposerProps) {
   const [draft, setDraft] = useState(props.snapshot.text);
   const [notice, setNotice] = useState('');
+  const [dismissedSlash, setDismissedSlash] = useState('');
+  const [selectedSlash, setSelectedSlash] = useState(0);
+  const slashListId = useId();
   const composing = useRef(false);
   const compositionEnd = useRef<number | null>(null);
   const endedInHangul = useRef(false);
@@ -47,21 +55,54 @@ export const ChatComposer = memo(function ChatComposer(props: ComposerProps) {
     endedInHangul.current = false;
     setDraft(props.snapshot.text);
     setNotice('');
+    setDismissedSlash('');
+    setSelectedSlash(0);
   }, [props.snapshot]);
+  const sideCommand = !props.image && slashCommand(draft) === 'btw';
+  const actionBlocked = props.blocked || props.disabled || props.sending || props.imageReading
+    || (!draft.trim() && !props.image) || draft.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer && !sideCommand);
+  const slashOptions = ['/model', '/compact', '/btw', '/goal', '/theme']
+    .filter((value) => /^\/\S*$/.test(draft) && value.startsWith(draft) && (!props.working || value === '/btw'));
+  const slashOpen = !props.image && !actionBlocked && slashOptions.length > 0 && dismissedSlash !== draft;
+  const chooseSlash = (value: string) => {
+    const command = slashCommand(value);
+    if (actionBlocked || (props.working && command !== 'btw')) return;
+    if (!command) return;
+    setDismissedSlash(value);
+    setDraft(value);
+    props.onDraft(value);
+    props.onSubmit();
+  };
   const sendCommitted = (input: HTMLTextAreaElement) => {
     const text = input.value;
     enterGesture.current = null;
     endedInHangul.current = false;
-    if (document.activeElement !== input || props.blocked || props.disabled || props.sending
-      || !text.trim() || text.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer)) return;
+    if (document.activeElement !== input || props.blocked || props.disabled || props.sending || props.imageReading
+      || (!text.trim() && !props.image) || text.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer && (props.image || slashCommand(text) !== 'btw'))) return;
     props.onDraft(text);
     props.onSubmit();
   };
-  const actionBlocked = props.blocked || props.disabled || props.sending || !draft.trim() || draft.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer);
   return <>
     <WorkingIndicator status={props.status} startedAt={props.startedAt} lastActivityAt={props.lastActivityAt}/>
     {props.working && <div className="chat-steer-notice" data-testid="steer-notice">{props.status.reason}</div>}
-    <div className="compose"><span className="prompt" aria-hidden="true">›</span><textarea ref={props.inputRef} data-testid="prompt-input" value={draft} maxLength={MAX_PROMPT_CHARS} disabled={props.disabled} aria-label="Codex에게 작업 요청" onChange={(event) => { const text = event.currentTarget.value; setDraft(text); props.onDraft(text); setNotice(composerFull(text.length, MAX_PROMPT_CHARS) ? '입력 한도에 도달했습니다.' : ''); }} onPaste={(event) => {
+    {props.image && <div className="chat-attachment" data-testid="chat-attachment">
+      <img src={props.image} alt="첨부 이미지 미리보기"/>
+      <button type="button" className="secondary" onClick={props.onRemoveImage}>이미지 제거</button>
+    </div>}
+    <div className="compose-shell"><div className="compose"><span className="prompt" aria-hidden="true">›</span><textarea ref={props.inputRef} data-testid="prompt-input" value={draft} maxLength={MAX_PROMPT_CHARS} disabled={props.disabled} aria-label="Codex에게 작업 요청" aria-expanded={slashOpen} aria-controls={slashOpen ? slashListId : undefined} onChange={(event) => { const text = event.currentTarget.value; setDraft(text); setDismissedSlash(''); setSelectedSlash(0); props.onDraft(text); setNotice(composerFull(text.length, MAX_PROMPT_CHARS) ? '입력 한도에 도달했습니다.' : ''); }} onPaste={(event) => {
+      const image = Array.from(event.clipboardData.files).find(file => file.type.startsWith('image/'))
+        ?? Array.from(event.clipboardData.items).find(item => item.kind === 'file' && item.type.startsWith('image/'))?.getAsFile();
+      if (image) {
+        event.preventDefault();
+        if (props.image || props.imageReading) { setNotice('이미지는 메시지당 한 장 보낼 수 있습니다.'); return; }
+        if (!CHAT_IMAGE_TYPES.includes(image.type) || image.size === 0 || image.size > MAX_CHAT_IMAGE_BYTES) {
+          setNotice('8MiB 이하의 PNG, JPEG, WebP 이미지만 첨부할 수 있습니다.');
+          return;
+        }
+        setNotice('');
+        void props.onImage(image).then(added => { if (added) setNotice(''); }, () => setNotice('이미지를 읽지 못했습니다.'));
+        return;
+      }
       const count = pasteOverflow(draft, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, event.clipboardData.getData('text/plain'), MAX_PROMPT_CHARS);
       if (count > 0) { event.preventDefault(); setNotice(`붙여넣을 내용이 입력 한도를 ${count.toLocaleString('ko-KR')}자 넘어서 추가하지 않았습니다.`); }
     }} onCompositionStart={() => {
@@ -88,6 +129,16 @@ export const ChatComposer = memo(function ChatComposer(props: ComposerProps) {
       composing.current = false;
       enterGesture.current = null;
     }} onKeyDown={(event) => {
+      if (slashOpen && !composing.current && !event.nativeEvent.isComposing && event.nativeEvent.keyCode !== 229 && ['ArrowDown', 'ArrowUp'].includes(event.key)) {
+        event.preventDefault();
+        setSelectedSlash((current) => (current + (event.key === 'ArrowDown' ? 1 : slashOptions.length - 1)) % slashOptions.length);
+        return;
+      }
+      if (slashOpen && !composing.current && !event.nativeEvent.isComposing && event.nativeEvent.keyCode !== 229 && event.key === 'Escape') {
+        event.preventDefault();
+        setDismissedSlash(draft);
+        return;
+      }
       const enter = event.key === 'Enter' || event.code === 'Enter' || event.code === 'NumpadEnter';
       if (!enter || event.shiftKey) {
         endedInHangul.current = false;
@@ -108,6 +159,11 @@ export const ChatComposer = memo(function ChatComposer(props: ComposerProps) {
         return;
       }
       if (enterGesture.current || event.repeat) { event.preventDefault(); return; }
+      if (slashOpen) {
+        event.preventDefault();
+        chooseSlash(slashOptions[selectedSlash] ?? slashOptions[0]!);
+        return;
+      }
       handlePromptKeyDown(event, () => { if (!actionBlocked) props.onSubmit(); }, false, compositionEnd.current);
     }} onKeyUp={(event) => {
       const gesture = enterGesture.current;
@@ -119,7 +175,7 @@ export const ChatComposer = memo(function ChatComposer(props: ComposerProps) {
         if (enterGesture.current === gesture) enterGesture.current = null;
       }, 0);
     }} placeholder={props.status.steer ? '현재 작업에 추가 지시' : 'Codex에게 작업 요청'}/>
-      <div className="actions">{props.working && <button data-testid="interrupt-button" className="secondary" onClick={props.onInterrupt} disabled={props.interruptPending}>중단{props.interruptPending ? ' 확인 중' : ''}</button>}<button data-testid="send-button" className="primary" onClick={props.onSubmit} disabled={actionBlocked}>{props.sending ? '전송 중' : props.status.steer ? 'Steer · 추가 지시' : '보내기'}</button></div>
-    </div><div className="chat-compose-note" role="status">{notice || props.notice || `Enter ${props.status.steer ? '추가 지시' : '전송'} · Shift+Enter 줄바꿈 · ${draft.length.toLocaleString('ko-KR')}/${MAX_PROMPT_CHARS.toLocaleString('ko-KR')}`}</div>
+      <div className="actions">{props.working && <button data-testid="interrupt-button" className="secondary" onClick={props.onInterrupt} disabled={props.interruptPending}>중단{props.interruptPending ? ' 확인 중' : ''}</button>}<button data-testid="send-button" className="primary" onClick={props.onSubmit} disabled={actionBlocked}>{sideCommand ? '사이드 질문' : props.sending ? '전송 중' : props.status.steer ? 'Steer · 추가 지시' : '보내기'}</button></div>
+    </div>{slashOpen && <div id={slashListId} className="slash-command-list" data-testid="slash-command-list" role="listbox" aria-label="슬래시 명령 목록">{slashOptions.map((value, index) => <button key={value} type="button" role="option" aria-selected={index === selectedSlash} data-testid="slash-command-option" onMouseDown={(event) => event.preventDefault()} onClick={() => chooseSlash(value)}>{value}</button>)}</div>}</div><div className="chat-compose-note" role="status">{notice || props.notice}</div>
   </>;
 });

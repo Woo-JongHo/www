@@ -14,7 +14,8 @@ import { createReportService } from "./reports-service";
 import type { createNativeReportHarness } from "./native-reports";
 import { NativeCompletionCollector } from "./native-report-input";
 import { resolveNativeCodex } from "./native-command";
-import { nativeThreadStartParams, nativeTurnSteerParams, WWW_HARNESS_TOOL, WWW_PLAN_TOOL, WWW_STAGE_TOOL } from "./native-chat";
+import { runNativeSideQuestion } from "./native-side-question";
+import { nativeThreadStartParams, nativeTurnSteerParams, validateChatImage, WWW_HARNESS_TOOL, WWW_PLAN_TOOL, WWW_STAGE_TOOL } from "./native-chat";
 import { parseWwwDevelopmentStage, parseWwwHarnessAttempt, parseWwwPlanLink, requestedWwwPlanWorkIds } from "./www-activity";
 import { createNativeLifecycle, createRestoredMessageFilter } from "./native-lifecycle";
 import { createNativeTiming } from "./native-timing";
@@ -24,7 +25,7 @@ import { createProjectRegistry } from "./projects";
 import { readDashboard, readDashboardPlan, readDashboardWork } from "./dashboard";
 import { readRpaStandard } from "./rpa-standard";
 import { normalizeNativeResources } from "./native-activity";
-import type { AppEvent, ScopedAppEvent, SelectionRef, WorkspaceSelection, ResourceScope, ResourceSnapshot, RpcId, NativeSessionSummary, NativeReportJob, WorkReportDocument } from "./shared";
+import type { AppEvent, ScopedAppEvent, SelectionRef, WorkspaceSelection, ResourceScope, ResourceSnapshot, RpcId, SideQuestionContext, NativeGoalResult, NativeGoalStatus, NativeSessionSummary, NativeReportJob, WorkReportDocument } from "./shared";
 
 
 export interface NativeSessionOptions {
@@ -72,6 +73,7 @@ export function createNativeSession(options: NativeSessionOptions) {
   const handle = (channel: string, handler: Handler) => { handlers.set(channel, handler); };
   let selectionEpoch = 0;
   let stopping = false;
+  let sideRequest: AbortController | null = null;
   let stopPromise: Promise<void> | null = null;
   let childProcess: ChildProcessWithoutNullStreams | null = null;
   const nativeChildren = new Set<ChildProcessWithoutNullStreams>();
@@ -93,6 +95,7 @@ export function createNativeSession(options: NativeSessionOptions) {
   let interruptingTurn: string | null = null;
   let steering = false;
   const steerIds = new Set<string>();
+  let goalPending = false;
   let turnStarting                  = false;
   let switchingConversation         = false;
   type ThreadTransition = { kind: "open" | "start" | "clear" | "reconnect"; candidate: string | null; previous: string | null; selection: SelectionRef; client: JsonRpcClient | null; messages: RpcMessage[]; bytes: number; error: Error | null };
@@ -168,7 +171,7 @@ export function createNativeSession(options: NativeSessionOptions) {
       title,
       workspace: workspaceSnapshot(),
       threadId: activeThreadId,
-      busy: turnStarting || steering || activeTurnId !== null || switchingConversation || compactTurn !== null,
+      busy: goalPending || turnStarting || steering || activeTurnId !== null || switchingConversation || compactTurn !== null,
       approvalCount: lifecycle.approvalCount,
       failed,
       compaction,
@@ -601,6 +604,7 @@ export function createNativeSession(options: NativeSessionOptions) {
   function assertConversationIdle(): void {
     if (switchingConversation) throw new Error("대화를 전환하고 있습니다. 잠시 기다려 주세요.");
     if (compactTurn) throw new Error("대화 압축이 끝난 뒤 다시 시도해 주세요.");
+    if (goalPending) throw new Error("대화 목표 요청이 끝난 뒤 다시 시도해 주세요.");
     if (turnStarting || steering || activeTurnId !== null || lifecycle.approvalCount > 0) throw new Error("실행 또는 승인 요청이 끝난 뒤 대화를 전환할 수 있습니다.");
   }
 
@@ -758,6 +762,8 @@ export function createNativeSession(options: NativeSessionOptions) {
       title = "새 대화";
       failed = false;
       workspace = actual;
+      sideRequest?.abort();
+      sideRequest = null;
       selectionEpoch++;
       pendingApprovalEvents.clear();
       activeThreadId = null;
@@ -875,6 +881,8 @@ export function createNativeSession(options: NativeSessionOptions) {
       assertThreadTransition();
       if (turnStarting || steering || activeTurnId !== null || lifecycle.approvalCount > 0 || interruptingTurn !== null) throw new Error("새 실행 또는 승인 요청이 생겨 대화 전환을 취소했습니다.");
       nativeTiming.cancel();
+      sideRequest?.abort();
+      sideRequest = null;
       selectionEpoch++;
       pendingApprovalEvents.clear();
       reservation.commit();
@@ -923,6 +931,8 @@ export function createNativeSession(options: NativeSessionOptions) {
       title = "새 대화";
       failed = false;
       nativeTiming.cancel();
+      sideRequest?.abort();
+      sideRequest = null;
       selectionEpoch++;
       pendingApprovalEvents.clear();
       activeThreadId = null;
@@ -1041,6 +1051,56 @@ export function createNativeSession(options: NativeSessionOptions) {
     return [...models.values()];
   });
 
+  handle("thread:goal", async (_event, expected: unknown, threadId: unknown, raw: unknown): Promise<NativeGoalResult> => {
+    assertSelection(expected);
+    assertConversationIdle();
+    if (typeof threadId !== "string" || threadId !== activeThreadId) throw new Error("현재 선택한 대화의 목표만 처리할 수 있습니다.");
+    const action    = optionalRecord(raw) ;
+    const operation = action?.operation   ;
+    if (operation !== "get" && operation !== "set" && operation !== "pause" && operation !== "resume" && operation !== "clear") {
+      throw new Error("지원하지 않는 목표 명령입니다.");
+    }
+    const objective = typeof action?.objective === "string" ? action.objective.trim() : "";
+    if (operation === "set" && (!objective || objective.length > 100_000)) throw new Error("목표를 100,000자 이내로 입력해 주세요.");
+
+    goalPending = true;
+    options.onChanged();
+    try {
+      const client = await connect();
+      assertSelection(expected);
+      if (rpc !== client || threadId !== activeThreadId) throw new Error("현재 Native 대화 연결이 변경됐습니다.");
+      if (activeTurnId !== null || lifecycle.approvalCount > 0) throw new Error("실행 또는 승인 요청이 끝난 뒤 다시 시도해 주세요.");
+      const mutation = { threadId, origin: "user" };
+      const response = record(await (operation === "get" ? client.request("thread/goal/get", { threadId })
+        : operation === "clear" ? client.request("thread/goal/clear", mutation)
+        : client.request("thread/goal/set", operation === "set" ? { ...mutation, objective, status: "active" }
+          : { ...mutation, status: operation === "pause" ? "paused" : "active" })));
+      assertSelection(expected);
+      if (rpc !== client || threadId !== activeThreadId) throw new Error("현재 Native 대화 연결이 변경됐습니다.");
+
+      if (operation === "clear" && typeof response.cleared === "boolean") return { cleared: response.cleared };
+      if (operation === "get" && response.goal === null) return { goal: null };
+      const goal = optionalRecord(response.goal);
+      if (operation === "clear" || !goal || goal.threadId !== threadId || typeof goal.objective !== "string") {
+        throw new Error("Native 대화 목표 응답을 확인할 수 없습니다.");
+      }
+      const statuses: readonly NativeGoalStatus[] = ["active", "paused", "blocked", "usageLimited", "budgetLimited", "complete"];
+      const resultStatus = statuses.find(value => value === goal.status);
+      if (!resultStatus) throw new Error("Native 대화 목표 응답을 확인할 수 없습니다.");
+      return { goal: { objective: goal.objective, status: resultStatus } };
+    } catch (error) {
+      let rpcCode: unknown;
+      if (error instanceof Error) {
+        try { rpcCode = optionalRecord(JSON.parse(error.message))?.code; } catch { /* 로컬 오류에는 RPC 코드가 없다. */ }
+      }
+      if (rpcCode === -32601) throw new Error("현재 Native 호스트가 대화 목표를 지원하지 않습니다.");
+      throw error;
+    } finally {
+      goalPending = false;
+      options.onChanged();
+    }
+  });
+
   handle("thread:compact", async (_event, expected: unknown, threadId: unknown) => {
     assertSelection(expected);
     assertConversationIdle();
@@ -1073,13 +1133,40 @@ export function createNativeSession(options: NativeSessionOptions) {
     }
   });
 
-  handle("turn:start", async (_event, expected: unknown, threadId: unknown, text: unknown, model: unknown) => {
+  handle("thread:side-question", async (_event, expected: unknown, threadId: unknown, question: unknown, rawContext: unknown) => {
+    assertSelection(expected);
+    if (switchingConversation || typeof threadId !== "string" || threadId !== activeThreadId) throw new Error("사이드 질문을 할 현재 대화를 선택해 주세요.");
+    if (sideRequest) throw new Error("현재 탭의 사이드 질문이 진행 중입니다.");
+    if (typeof question !== "string" || !question.trim() || question.length > 4_000) throw new Error("사이드 질문은 4,000자 이내로 입력해 주세요.");
+    if (!Array.isArray(rawContext) || rawContext.length > 8) throw new Error("사이드 질문의 대화 참고 범위를 확인할 수 없습니다.");
+    const context: SideQuestionContext[] = [];
+    for (const value of rawContext) {
+      const item = optionalRecord(value);
+      if ((item?.role !== "user" && item?.role !== "assistant") || typeof item.text !== "string" || item.text.length > 2_000) {
+        throw new Error("사이드 질문의 대화 참고 범위를 확인할 수 없습니다.");
+      }
+      context.push({ role: item.role, text: item.text });
+    }
+    const request = new AbortController();
+    sideRequest = request;
+    try {
+      const answer = await runNativeSideQuestion(question.trim(), context, request.signal);
+      assertSelection(expected);
+      if (activeThreadId !== threadId) throw new Error("사이드 질문을 한 대화가 변경됐습니다.");
+      return answer;
+    } finally {
+      if (sideRequest === request) sideRequest = null;
+    }
+  });
+
+  handle("turn:start", async (_event, expected: unknown, threadId: unknown, text: unknown, model: unknown, image: unknown) => {
     assertSelection(expected);
     const validThreadId = requiredString(threadId, "thread ID");
     assertSelection(expected);
     assertConversationIdle();
     if (validThreadId !== activeThreadId) throw new Error("현재 선택한 대화에만 요청을 보낼 수 있습니다.");
-    if (typeof text !== "string" || !text.trim() || text.length > 100_000) throw new Error("Invalid prompt");
+    const chatImage = validateChatImage(image);
+    if (typeof text !== "string" || (!text.trim() && !chatImage) || text.length > 100_000) throw new Error("Invalid prompt");
     if (model !== undefined && (typeof model !== "string" || !model.trim() || model.length > 200)) throw new Error("유효한 모델을 선택해 주세요.");
     const prompt          = text.trim () ;
     const clientRequestId = randomUUID() ;
@@ -1107,7 +1194,7 @@ export function createNativeSession(options: NativeSessionOptions) {
           return client;
         },
         valid: (client) => isCurrent(expected) && rpc === client && workspace === root && activeThreadId === validThreadId,
-        cwd: root, threadId: validThreadId, prompt, ...(typeof model === "string" ? { model } : {}),
+        cwd: root, threadId: validThreadId, prompt, ...(typeof model === "string" ? { model } : {}), ...(chatImage ? { image: chatImage } : {}),
         requestBoundary: (method, status) => {
           if (method === "thread/read" || method === "thread/resume" || method === "thread/turns/list" || method === "turn/start") trace.mark(method, status);
         },
@@ -1156,12 +1243,13 @@ export function createNativeSession(options: NativeSessionOptions) {
       if (isCurrent(expected)) turnStarting = false;
     }
   });
-  handle("turn:steer", async (_event, expected: unknown, threadId: unknown, turnId: unknown, text: unknown, messageId: unknown) => {
+  handle("turn:steer", async (_event, expected: unknown, threadId: unknown, turnId: unknown, text: unknown, messageId: unknown, image: unknown) => {
     assertSelection(expected);
     const thread = requiredString(threadId, "thread ID");
     const turn = requiredString(turnId, "turn ID");
     const id = requiredString(messageId, "client user message ID");
-    if (id.length > 200 || typeof text !== "string" || !text.trim() || text.length > 100_000) throw new Error("Invalid steer input");
+    const chatImage = validateChatImage(image);
+    if (id.length > 200 || typeof text !== "string" || (!text.trim() && !chatImage) || text.length > 100_000) throw new Error("Invalid steer input");
     if (steerIds.has(id)) throw new Error("이미 전송한 추가 지시 ID입니다.");
     if (steering) throw new Error("이전 추가 지시의 접수를 확인하고 있습니다.");
     if (switchingConversation || turnStarting || compactTurn || lifecycle.approvalCount > 0 || interruptingTurn !== null) throw new Error("시작·승인·중단·압축 처리가 끝난 뒤 추가 지시를 보낼 수 있습니다.");
@@ -1184,7 +1272,7 @@ export function createNativeSession(options: NativeSessionOptions) {
       let value: unknown;
       try {
         value = await Promise.race([
-          client.request("turn/steer", nativeTurnSteerParams(thread, turn, text, id)),
+          client.request("turn/steer", nativeTurnSteerParams(thread, turn, text, id, chatImage)),
           new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new RpcClosedError("추가 지시 응답 시간 초과", true)), 30_000); })
         ]);
       } finally { if (timer) clearTimeout(timer); }
@@ -1260,7 +1348,7 @@ export function createNativeSession(options: NativeSessionOptions) {
     readReport: reports.read,
     assertClosable() {
       if (stopping) throw new Error("대화 탭을 닫고 있습니다.");
-      if (turnStarting || steering || activeTurnId !== null || switchingConversation || compactTurn || lifecycle.approvalCount > 0) throw new Error("실행 또는 승인 요청이 남아 있습니다. 중단하고 승인 요청을 처리한 뒤 탭을 닫아 주세요.");
+      if (goalPending || turnStarting || steering || activeTurnId !== null || switchingConversation || compactTurn || lifecycle.approvalCount > 0) throw new Error("실행 또는 승인 요청이 남아 있습니다. 중단하고 승인 요청을 처리한 뒤 탭을 닫아 주세요.");
     },
     async invoke(channel: string, args: unknown[]): Promise<unknown> {
       if (stopping) throw new Error("대화 탭을 닫고 있습니다.");
@@ -1282,6 +1370,7 @@ export function createNativeSession(options: NativeSessionOptions) {
     stop(): Promise<void> {
       if (stopPromise) return stopPromise;
       stopping = true;
+      sideRequest?.abort();
       if (compactTurn) clearTimeout(compactTurn.timeout);
       nativeTiming.cancel();
       clientToken++;
