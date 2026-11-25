@@ -188,6 +188,26 @@ html,body,#root{width:100%;height:100%;min-height:0;overflow:hidden;overscroll-b
 .transcript .user>.muted{color:var(--chat-steel)}
 .transcript .explanation .chat-message-actions{color:var(--info)}
 
+/* 대화의 화자와 Markdown 문서 계층을 텍스트와 색으로 함께 구별한다. */
+.transcript{--chat-question:#a9dbf7;--chat-heading:#ffb88c;--chat-key-point:#f497b2;--chat-link:#9bbfff;--chat-table-heading:#f4d99a}
+.transcript .user{border-inline-start:3px solid var(--chat-question);background:color-mix(in srgb,var(--chat-question) 8%,var(--surface));overflow-wrap:anywhere}
+.chat-role{display:block;margin-bottom:5px;font-size:11px;font-weight:700;line-height:1.5}
+.chat-role-question{color:var(--chat-question)}
+.chat-role-answer{color:var(--text)}
+.transcript .agent .chat-markdown :is(h1,h2,h3,h4,h5,h6){color:var(--chat-heading)}
+.transcript .agent .chat-markdown strong{color:var(--chat-key-point)}
+.transcript .agent .chat-markdown a,.transcript .agent .chat-markdown a strong{color:var(--chat-link)}
+.transcript .agent .chat-markdown th{color:var(--chat-table-heading)}
+
+/* Terminal Basic은 #65가 설정하는 light color-scheme에 맞춰 진한 읽기 색을 쓴다. */
+[data-chat-theme="terminal-basic"] .transcript{
+  --chat-question:light-dark(#1b6b9a,#a9dbf7);
+  --chat-heading:light-dark(#9c3f13,#ffb88c);
+  --chat-key-point:light-dark(#a02d57,#f497b2);
+  --chat-link:light-dark(#205db8,#9bbfff);
+  --chat-table-heading:light-dark(#775308,#f4d99a);
+}
+
 /* 작은 창의 Agent 개요는 모니터링 메뉴에서 조회한다. 입력과 개입 버튼을 가리지 않는다. */
 @media(max-width:999px){.session-surface>.agent-sidebar{display:none!important}}
 
