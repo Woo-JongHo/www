@@ -209,6 +209,12 @@ export interface NativeModelOption {
   isDefault: boolean;
 }
 
+export type NativeGoalAction = { operation: "get" | "pause" | "resume" | "clear" } | { operation: "set"; objective: string };
+
+export type NativeGoalStatus = "active" | "paused" | "blocked" | "usageLimited" | "budgetLimited" | "complete";
+
+export type NativeGoalResult = { goal: { objective: string; status: NativeGoalStatus } | null } | { cleared: boolean };
+
 export type SideQuestionContext = { role: "user" | "assistant"; text: string };
 
 export type NativeCompaction =
@@ -258,6 +264,7 @@ export interface WwwApi {
   startTurn(selection: SelectionRef, threadId: string, text: string, model?: string, image?: string): Promise<{ turnId: string }>;
   listModels(selection: SelectionRef): Promise<NativeModelOption[]>;
   compactThread(selection: SelectionRef, threadId: string): Promise<void>;
+  controlGoal(selection: SelectionRef, threadId: string, action: NativeGoalAction): Promise<NativeGoalResult>;
   askSideQuestion(selection: SelectionRef, threadId: string, question: string, context: SideQuestionContext[]): Promise<string>;
   steerTurn(selection: SelectionRef, threadId: string, expectedTurnId: string, text: string, clientUserMessageId: string, image?: string): Promise<{ turnId: string }>;
   interrupt(selection: SelectionRef, threadId: string, turnId: string): Promise<void>;

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "5008c1d7211731fd60d1657e92738117394e6f071128cdd3302bf5f3955e87c0",
+  "digest"       : "ae2955eee1f689654de5ea98db17f272a9b7caa9b2d1d6e77c27427d1e241fa7",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -522,7 +522,7 @@
       "role"       : "앱 모듈 · chat-composer",
       "line"       : 1,
       "lines"      : 182,
-      "digest"     : "f332b7576d0b378e15fd1b950a09672ef643cba0186c3cffc0001b1718260143",
+      "digest"     : "9d02adedf02ca931bca6243101382492b1158362cc16150f67eedfe311823126",
       "structureId": "arch.chat.workspace"
     },
     {
@@ -554,8 +554,8 @@
       "layer"      : "model",
       "role"       : "앱 모듈 · chat-state",
       "line"       : 1,
-      "lines"      : 227,
-      "digest"     : "4078f728a28fa065ff1ae339013a97ba3c829ae959b5c44c0e2bfda3382cb693",
+      "lines"      : 235,
+      "digest"     : "d0b57ef20dd8a7e943beb9ac584c6b3fc90679f7aea551af32a925c4cf1037ab",
       "structureId": "arch.chat.sessions.reading"
     },
     {
@@ -698,7 +698,7 @@
       "role"       : "앱·Native 수명주기와 IPC 처리",
       "line"       : 1,
       "lines"      : 342,
-      "digest"     : "3a8363a5480eab5f1164e9ce2bcf2a132ffa00a5f182b8f287905782844e7065",
+      "digest"     : "7abd712378db478d0fa2c01258f9686e28bf3fdb10e77f55cb13ddad2c00ffaa",
       "structureId": "arch.native.lifecycle"
     },
     {
@@ -785,8 +785,8 @@
       "layer"      : "host",
       "role"       : "앱 모듈 · native-session",
       "line"       : 1,
-      "lines"      : 1333,
-      "digest"     : "a43e43d292c0eb0ffbeff8ee8d3ac9a94c6618e69bde0fcd9fa8644478e6f4cf",
+      "lines"      : 1385,
+      "digest"     : "06ae9dedfc0b16a34e61df649fa86740e3f67d646b316b33e6e7e782b178080a",
       "structureId": "arch.native.lifecycle"
     },
     {
@@ -818,8 +818,8 @@
       "layer"      : "contract",
       "role"       : "제한된 WwwApi 노출",
       "line"       : 1,
-      "lines"      : 67,
-      "digest"     : "6f1f0c9f5f02f67e2315ae62df7a470dc4e527532d85980830319e209a6d7dc5",
+      "lines"      : 68,
+      "digest"     : "5c66ef01855d58442163eed7e6bb7d3027e47ee0c1d669d0986b408c5fa713de",
       "structureId": "arch.native.bridge"
     },
     {
@@ -851,8 +851,8 @@
       "layer"      : "presentation",
       "role"       : "화면 전환과 대화 상태 통합",
       "line"       : 1,
-      "lines"      : 1554,
-      "digest"     : "d8c2062c987dedc9863adacd6ce18d2c44054aab88f5647c06b2e79d3c9b9064",
+      "lines"      : 1591,
+      "digest"     : "f0e175573e4ecd0d50f5e1ff1aba0f277caa66272ff6e71de26748164b05a5ee",
       "structureId": "arch.chat.workspace"
     },
     {
@@ -961,8 +961,8 @@
       "layer"      : "contract",
       "role"       : "프로세스 간 공용 타입 계약",
       "line"       : 1,
-      "lines"      : 325,
-      "digest"     : "3a00bd28e29058c8deaf3679eb7aa259301e94e0f5caf63628f75e34b330b577",
+      "lines"      : 332,
+      "digest"     : "396e0878e29e03c31ba5956a1328b23386c3f484b1f411b64da7cd44932159c7",
       "structureId": "arch.native.protocol"
     },
     {
@@ -2571,7 +2571,7 @@
       "specifier": "./shared",
       "line"     : 8,
       "endLine"  : 8,
-      "statement": "import type { AppEvent, InterruptState, NativeSessionSummary, ScopedAppEvent, SelectionRef, TransportState, TurnState } from \"./shared\";"
+      "statement": "import type { AppEvent, InterruptState, NativeGoalAction, NativeSessionSummary, ScopedAppEvent, SelectionRef, TransportState, TurnState } from \"./shared\";"
     },
     {
       "id"       : "src/chat-status.ts:80",
@@ -3385,7 +3385,7 @@
       "specifier": "./shared",
       "line"     : 28,
       "endLine"  : 28,
-      "statement": "import type { AppEvent, ScopedAppEvent, SelectionRef, WorkspaceSelection, ResourceScope, ResourceSnapshot, RpcId, SideQuestionContext, NativeSessionSummary, NativeReportJob, WorkReportDocument } from \"./shared\";"
+      "statement": "import type { AppEvent, ScopedAppEvent, SelectionRef, WorkspaceSelection, ResourceScope, ResourceSnapshot, RpcId, SideQuestionContext, NativeGoalResult, NativeGoalStatus, NativeSessionSummary, NativeReportJob, WorkReportDocument } from \"./shared\";"
     },
     {
       "id"       : "src/native-side-question.ts:274",
@@ -3517,10 +3517,10 @@
       "specifier": "./chat-state",
       "line"     : 11,
       "endLine"  : 11,
-      "statement": "import { reduceConversationEvents, liveChatInput, slashCommand, type ConversationEventState, blankReadingState, belongsToConversation, conversationKey, currentTurnEvents, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, type ConversationReadingState } from \"./chat-state\";"
+      "statement": "import { reduceConversationEvents, liveChatInput, slashCommand, goalAction, type ConversationEventState, blankReadingState, belongsToConversation, conversationKey, currentTurnEvents, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, type ConversationReadingState } from \"./chat-state\";"
     },
     {
-      "id"       : "src/renderer.tsx:725",
+      "id"       : "src/renderer.tsx:737",
       "from"     : "src/renderer.tsx",
       "to"       : "src/activity-sidebar.ts",
       "mode"     : "runtime",
@@ -3531,7 +3531,7 @@
       "statement": "import { createActivitySidebarState, projectActivitySidebar, updateActivitySidebarSnapshot } from \"./activity-sidebar\";"
     },
     {
-      "id"       : "src/renderer.tsx:845",
+      "id"       : "src/renderer.tsx:857",
       "from"     : "src/renderer.tsx",
       "to"       : "src/reports-view.tsx",
       "mode"     : "runtime",
@@ -3542,7 +3542,7 @@
       "statement": "import { ReportsView } from \"./reports-view\";"
     },
     {
-      "id"       : "src/renderer.tsx:891",
+      "id"       : "src/renderer.tsx:903",
       "from"     : "src/renderer.tsx",
       "to"       : "src/ecosystem-view.tsx",
       "mode"     : "runtime",
@@ -3553,7 +3553,7 @@
       "statement": "import { EcosystemView } from \"./ecosystem-view\";"
     },
     {
-      "id"       : "src/renderer.tsx:941",
+      "id"       : "src/renderer.tsx:953",
       "from"     : "src/renderer.tsx",
       "to"       : "src/rpa-standard-view.tsx",
       "mode"     : "runtime",
@@ -3564,7 +3564,7 @@
       "statement": "import { RpaStandardView } from \"./rpa-standard-view\";"
     },
     {
-      "id"       : "src/renderer.tsx:996",
+      "id"       : "src/renderer.tsx:1008",
       "from"     : "src/renderer.tsx",
       "to"       : "src/dashboard-view.tsx",
       "mode"     : "runtime",
@@ -3575,7 +3575,7 @@
       "statement": "import { DashboardView } from \"./dashboard-view\";"
     },
     {
-      "id"       : "src/renderer.tsx:1046",
+      "id"       : "src/renderer.tsx:1058",
       "from"     : "src/renderer.tsx",
       "to"       : "src/session-api.tsx",
       "mode"     : "runtime",
@@ -3586,7 +3586,7 @@
       "statement": "import { SessionApiProvider, useSessionApi } from \"./session-api\";"
     },
     {
-      "id"       : "src/renderer.tsx:1113",
+      "id"       : "src/renderer.tsx:1125",
       "from"     : "src/renderer.tsx",
       "to"       : "src/session-tabs.tsx",
       "mode"     : "runtime",
@@ -3597,7 +3597,7 @@
       "statement": "import { SessionTabs } from \"./session-tabs\";"
     },
     {
-      "id"       : "src/renderer.tsx:1159",
+      "id"       : "src/renderer.tsx:1171",
       "from"     : "src/renderer.tsx",
       "to"       : "src/chat-composer.tsx",
       "mode"     : "runtime",
@@ -3608,7 +3608,7 @@
       "statement": "import { ChatComposer } from \"./chat-composer\";"
     },
     {
-      "id"       : "src/renderer.tsx:1207",
+      "id"       : "src/renderer.tsx:1219",
       "from"     : "src/renderer.tsx",
       "to"       : "src/chat-status.ts",
       "mode"     : "runtime",
@@ -3619,7 +3619,7 @@
       "statement": "import { chatStatus, isVerificationCommand } from \"./chat-status\";"
     },
     {
-      "id"       : "src/renderer.tsx:1426",
+      "id"       : "src/renderer.tsx:1438",
       "from"     : "src/renderer.tsx",
       "to"       : "src/projection.ts",
       "mode"     : "mixed",
@@ -3630,7 +3630,7 @@
       "statement": "import { executionResultCounts, MAX_OUTPUT_CODE_UNITS, project, type Block, type Projection } from \"./projection\";"
     },
     {
-      "id"       : "src/renderer.tsx:1541",
+      "id"       : "src/renderer.tsx:1553",
       "from"     : "src/renderer.tsx",
       "to"       : "src/shared.ts",
       "mode"     : "type",
@@ -3641,7 +3641,7 @@
       "statement": "import type { AppEvent, ConversationSummary, TurnState, WorkspaceSelection, SelectionRef, ScopedAppEvent, ResourceSnapshot, ResourceScope, ProjectInfo, ConversationSelection, WwwApi } from \"./shared\";"
     },
     {
-      "id"       : "src/renderer.tsx:1742",
+      "id"       : "src/renderer.tsx:1754",
       "from"     : "src/renderer.tsx",
       "to"       : "src/shared.ts",
       "mode"     : "type",
@@ -3649,7 +3649,7 @@
       "specifier": "./shared",
       "line"     : 25,
       "endLine"  : 25,
-      "statement": "import type { NativeTimingEvent, ChatTheme, DashboardSnapshot, DashboardWork, NativeModelOption, NativeSessionSummary, SideQuestionContext } from \"./shared\";"
+      "statement": "import type { NativeTimingEvent, ChatTheme, DashboardSnapshot, DashboardWork, NativeGoalStatus, NativeModelOption, NativeSessionSummary, SideQuestionContext } from \"./shared\";"
     },
     {
       "id"       : "src/report-judge.ts:228",

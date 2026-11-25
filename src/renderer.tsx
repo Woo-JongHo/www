@@ -8,7 +8,7 @@ import { CommandView } from "./command-card";
 import { NativeActivityView, ResourceActivitySidebar } from "./native-activity-view";
 import { ChatMessage } from "./chat-message";
 import { ChatDetails, ChatRowMemoryContext, type ChatRowMemory } from "./chat-row-state";
-import { reduceConversationEvents, liveChatInput, slashCommand, type ConversationEventState, blankReadingState, belongsToConversation, conversationKey, currentTurnEvents, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, type ConversationReadingState } from "./chat-state";
+import { reduceConversationEvents, liveChatInput, slashCommand, goalAction, type ConversationEventState, blankReadingState, belongsToConversation, conversationKey, currentTurnEvents, draftWithQuote, eventThreadId, MAX_PROMPT_CHARS, type ConversationReadingState } from "./chat-state";
 import { createActivitySidebarState, projectActivitySidebar, updateActivitySidebarSnapshot } from "./activity-sidebar";
 import { ReportsView } from "./reports-view";
 import { EcosystemView } from "./ecosystem-view";
@@ -22,7 +22,7 @@ import { memo, useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, 
 import { createRoot } from "react-dom/client";
 import { executionResultCounts, MAX_OUTPUT_CODE_UNITS, project, type Block, type Projection } from "./projection";
 import type { AppEvent, ConversationSummary, TurnState, WorkspaceSelection, SelectionRef, ScopedAppEvent, ResourceSnapshot, ResourceScope, ProjectInfo, ConversationSelection, WwwApi } from "./shared";
-import type { NativeTimingEvent, ChatTheme, DashboardSnapshot, DashboardWork, NativeModelOption, NativeSessionSummary, SideQuestionContext } from "./shared";
+import type { NativeTimingEvent, ChatTheme, DashboardSnapshot, DashboardWork, NativeGoalStatus, NativeModelOption, NativeSessionSummary, SideQuestionContext } from "./shared";
 
 document.title = `WWW ${appBuildInfo.label}`;
 
@@ -378,6 +378,10 @@ function LineIcon({ kind }: { kind: "folder" | "star" | "refresh" | "chat" | "ma
 }
 
 interface SessionCloseState { allowed: boolean; reason?: string }
+
+const goalStatusLabels: Record<NativeGoalStatus, string> = {
+  active: "활성", paused: "일시정지", blocked: "차단", usageLimited: "사용량 제한", budgetLimited: "예산 제한", complete: "완료",
+};
 
 const chatThemes = [
   { value: "terminal-basic", label: "Terminal Basic" },
@@ -939,6 +943,20 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
     }
   };
 
+  const startSelectedThread = async (selected: SelectionRef, currentRequest: () => boolean) => {
+    const id = (await api.startThread(selected)).threadId;
+    if (!currentRequest()) return null;
+    threadRef.current = id;
+    readingStates.current.set(conversationKey(workspace?.path ?? "", id), { draft: "", scrollTop: 0, followTail: true });
+    readingStates.current.delete(conversationKey(workspace?.path ?? "", null));
+    setThreadId(id);
+    const version = resourceVersion.current;
+    void api.activityResources(selected).then((snapshot) => {
+      if (snapshot && matchesSelection(selected) && (version === resourceVersion.current || !resourceRef.current || snapshot.revision > resourceRef.current.revision || snapshot.durableRevision > resourceRef.current.durableRevision)) acceptResources(snapshot);
+    }).catch((failure: unknown) => { if (matchesSelection(selected)) setError(`리소스 복원 실패: ${String(failure)}`); });
+    return id;
+  };
+
   const runSideQuestion = async (text: string) => {
     const question = text.slice("/btw".length).trim();
     if (!question) {
@@ -995,7 +1013,8 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
       return;
     }
     const selected = requireSelection();
-    const thread = threadRef.current;
+    let thread = threadRef.current;
+    const action = command === "goal" ? goalAction(text) : null;
     if (command === "compact" && thread === null) {
       setInputNotice("압축할 이력이 있는 대화를 먼저 열어 주세요.");
       return;
@@ -1007,6 +1026,24 @@ function App({ session, active, initial, theme, themeReady, onThemeChange, onClo
     promptRef.current = "";
     setPrompt("");
     try {
+      if (action) {
+        if (thread === null && action.operation === "set") {
+          thread = await startSelectedThread(selected, () => matchesSelection(selected));
+          if (!isCurrent()) return;
+        }
+        if (thread === null) {
+          setInputNotice("설정된 대화 목표가 없습니다. /goal <목표>로 설정할 수 있습니다.");
+          return;
+        }
+        const result = await api.controlGoal(selected, thread, action);
+        if (!isCurrent()) return;
+        const notice = "cleared" in result && result.cleared ? "대화 목표를 해제했습니다."
+          : "goal" in result && result.goal ? `대화 목표 · ${goalStatusLabels[result.goal.status]} · ${result.goal.objective}`
+          : "설정된 대화 목표가 없습니다.";
+        setInputNotice(notice);
+        if (action.operation === "set") void refreshConversations();
+        return;
+      }
       if (command === "compact" && thread !== null) {
         await api.compactThread(selected, thread);
         return;

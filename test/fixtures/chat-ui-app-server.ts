@@ -22,6 +22,7 @@ if (process.argv.includes("exec")) {
 }
 const storePath = join(cwd, "fixture-history.json");
 const callsPath = join(cwd, "fixture-calls.jsonl");
+const goalsPath = join(cwd, "fixture-goals.json");
 const initialItems = [
   { id: "saved-user", type: "userMessage", content: [{ type: "text", text: "저장된 작업 요청" }] },
   { id: "saved-summary", type: "reasoning", summary: ["공개 요약입니다."], content: ["PRIVATE_REASONING_DO_NOT_RENDER"] },
@@ -93,6 +94,34 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
     ],
     nextCursor: null
   });
+  else if (typeof message.method === "string" && message.method.startsWith("thread/goal/")) {
+    if (existsSync(join(cwd, "fixture-goals-unsupported"))) {
+      send({ jsonrpc: "2.0", id: message.id, error: { code: -32601, message: "Method not found" } });
+      continue;
+    }
+    const threadId = String(params.threadId);
+    const goals = existsSync(goalsPath) ? object(JSON.parse(readFileSync(goalsPath, "utf8"))) : {};
+    if (message.method === "thread/goal/get") {
+      result(message.id, { goal: goals[threadId] ?? null });
+    } else if (params.origin !== "user") {
+      send({ jsonrpc: "2.0", id: message.id, error: { code: -32602, message: "사용자 지시 출처 누락" } });
+    } else if (message.method === "thread/goal/clear") {
+      const cleared = Boolean(goals[threadId]);
+      delete goals[threadId];
+      writeFileSync(goalsPath, JSON.stringify(goals));
+      result(message.id, { cleared });
+    } else {
+      const objective = params.objective ?? object(goals[threadId]).objective;
+      if (typeof objective !== "string") {
+        send({ jsonrpc: "2.0", id: message.id, error: { code: -32602, message: "설정된 목표가 없습니다." } });
+        continue;
+      }
+      const goal = { threadId, objective, status: params.status, createdAt: 0, updatedAt: 0, tokensUsed: 0, timeUsedSeconds: 0 };
+      goals[threadId] = goal;
+      writeFileSync(goalsPath, JSON.stringify(goals));
+      result(message.id, { goal });
+    }
+  }
   else if (message.method === "thread/compact/start") {
     if (existsSync(join(cwd, "fixture-compact-reject"))) {
       send({ jsonrpc: "2.0", id: message.id, error: { code: -32603, message: "합성 압축 요청 거절" } });

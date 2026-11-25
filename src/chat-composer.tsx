@@ -61,7 +61,7 @@ export const ChatComposer = memo(function ChatComposer(props: ComposerProps) {
   const sideCommand = !props.image && slashCommand(draft) === 'btw';
   const actionBlocked = props.blocked || props.disabled || props.sending || props.imageReading
     || (!draft.trim() && !props.image) || draft.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer && !sideCommand);
-  const slashOptions = ['/model', '/compact', '/btw', '/theme']
+  const slashOptions = ['/model', '/compact', '/btw', '/goal', '/theme']
     .filter((value) => /^\/\S*$/.test(draft) && value.startsWith(draft) && (!props.working || value === '/btw'));
   const slashOpen = !props.image && !actionBlocked && slashOptions.length > 0 && dismissedSlash !== draft;
   const chooseSlash = (value: string) => {

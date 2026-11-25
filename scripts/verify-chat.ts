@@ -976,6 +976,51 @@ try {
     console.log(JSON.stringify(summary));
     return;
   }
+  if (process.argv.includes("--goal-only")) {
+    const active = '[role=tabpanel]:not([hidden])';
+    const submitGoal = async (command: string, expected: string, label: string) => {
+      await session!.evaluate(`(()=>{const input=document.querySelector(${JSON.stringify(active + " textarea")});Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(input,${JSON.stringify(command)});input.dispatchEvent(new Event('input',{bubbles:true}));})()`);
+      await session!.click(active + ' [data-testid="send-button"]');
+      await session!.wait(`document.querySelector(${JSON.stringify(active + ' .chat-compose-note')})?.textContent.includes(${JSON.stringify(expected)})`, label);
+    };
+    await session.input("/go");
+    await session.wait("document.querySelector('[data-testid=slash-command-option]')?.textContent==='/goal'", "슬래시 추천에서 목표 명령 발견");
+    await session.click('[data-testid=slash-command-option]');
+    await session.wait("document.querySelector('.chat-compose-note')?.textContent.includes('설정된 대화 목표가 없습니다')", "빈 새 대화의 목표 조회");
+    const objective = "회귀 검사 통과를 확인한다";
+    await submitGoal("/goal " + objective, "활성 · " + objective, "빈 새 대화에서 스레드와 목표 설정");
+    await submitGoal("/goal pause", "일시정지 · " + objective, "현재 대화 목표 일시정지");
+    await submitGoal("/goal resume", "활성 · " + objective, "현재 대화 목표 재개");
+    await session.click(active + ' [data-thread-id="history-a"]');
+    await session.wait("document.querySelector('[data-thread-id=history-a]')?.getAttribute('aria-current')==='true'", "다른 저장 대화 선택");
+    await submitGoal("/goal", "설정된 대화 목표가 없습니다", "다른 대화에 목표가 전파되지 않음");
+    await session.click(active + ' [data-thread-id="thread-new"]');
+    await session.wait("document.querySelector('[data-thread-id=thread-new]')?.getAttribute('aria-current')==='true'", "기존 목표가 있는 저장 대화 다시 열기");
+    await submitGoal("/goal", "활성 · " + objective, "같은 스레드의 호스트 목표 복원");
+    await session.click(".session-tab-create");
+    await session.wait("document.querySelectorAll('[role=tab]').length===2 && document.querySelector('[role=tablist] .session-tab-item:last-child [role=tab]').getAttribute('aria-selected')==='true'", "별도 대화 탭 준비");
+    await submitGoal("/goal", "설정된 대화 목표가 없습니다", "새 탭에는 원래 탭의 목표가 없음");
+    await session.click('[role=tablist] .session-tab-item:first-child [role=tab]');
+    await submitGoal("/goal clear", "대화 목표를 해제했습니다", "원래 스레드의 목표 해제");
+    await submitGoal("/goal", "설정된 대화 목표가 없습니다", "해제 후 목표 없음");
+    await submitGoal("/goal pause", "설정된 목표가 없습니다", "목표 없는 스레드의 일시정지 실패 표시");
+    const unsupported = path.join(workspace, "fixture-goals-unsupported");
+    await fs.writeFile(unsupported, "unsupported");
+    try {
+      await submitGoal("/goal", "현재 Native 호스트가 대화 목표를 지원하지 않습니다", "호스트 미지원 표시");
+    } finally { await fs.rm(unsupported); }
+    const calls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
+    const mutations = calls.filter(call => call.method === "thread/goal/set" || call.method === "thread/goal/clear").map(call => object(call.params));
+    if (calls.some(call => call.method === "turn/start" || call.method === "turn/steer") || mutations.length !== 5 ||
+      mutations.some(params => params.origin !== "user" || params.threadId !== "thread-new")) throw Error("목표가 해당 스레드의 직접 지시로만 전달되지 않았습니다.");
+    checks.push("목표 명령에서 일반 턴·추가 지시 0회, 현재 스레드의 명시적 목표 변경만 전송");
+    await session.terminate();
+    session = null;
+    const summary = { result: "passed", scope: "goal-only", evidence: directory, checks };
+    await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify(summary));
+    return;
+  }
   if (process.argv.includes("--slash-only")) {
     const input = '[data-testid="prompt-input"]';
     const key = async (name: string, code: number) => {
@@ -985,7 +1030,7 @@ try {
     const focusInput = async () => { await session!.evaluate("document.querySelector(" + JSON.stringify(input) + ").focus()"); };
     const turnStarts = async () => (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8").catch(() => "")).split("\n").filter(Boolean).map((line) => object(JSON.parse(line))).filter((call) => call.method === "turn/start").length;
     await session.input("/");
-    await session.wait("document.querySelectorAll('[data-testid=slash-command-option]').length===3 && document.querySelector('[data-testid=slash-command-list]')", "빈 입력의 슬래시 명령 세 개 표시");
+    await session.wait("Array.from(document.querySelectorAll('[data-testid=slash-command-option]'), option => option.textContent).join(',')==='/model,/compact,/btw,/goal,/theme'", "빈 입력의 슬래시 명령 다섯 개 표시");
     await session.screenshot("slash-command-menu", '[data-testid="slash-command-list"]');
     await session.input("/mo");
     await session.wait("document.querySelectorAll('[data-testid=slash-command-option]').length===1 && document.querySelector('[data-testid=slash-command-option]').textContent==='/model'", "접두어에 따른 슬래시 명령 필터링");
@@ -995,7 +1040,7 @@ try {
     await session.input("/");
     await focusInput();
     await key("ArrowUp", 38);
-    await session.wait("document.querySelectorAll('[data-testid=slash-command-option]')[2]?.getAttribute('aria-selected')==='true'", "방향키로 앞 명령 선택");
+    await session.wait("document.querySelectorAll('[data-testid=slash-command-option]')[4]?.getAttribute('aria-selected')==='true'", "방향키로 앞 명령 선택");
     const before = await turnStarts();
     await key("Enter", 13);
     await session.wait("document.querySelector('dialog[open] h2')?.textContent==='채팅 테마 선택'", "Enter 선택은 기존 테마 명령 실행");
