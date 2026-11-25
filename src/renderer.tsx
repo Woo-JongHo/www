@@ -1453,12 +1453,12 @@ function SessionShell() {
       requestAnimationFrame(() => document.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')?.focus());
     } catch (failure) { setError(String(failure)); }
   };
-  return <div className="session-shell">
+  return <div className="session-shell" data-chat-theme={theme ?? "terminal-basic"}>
     <SessionTabs tabs={sessions} activeId={activeId ?? ""} creating={creating} canCreate={activeId !== null} error={error || undefined}
       onSelect={setActiveId} onCreate={() => { void create(); }} onClose={(id) => { void close(id); }} canClose={canClose}/>
     <div className="session-surfaces">{sessions.length === 0 && <p role="status">{error || "대화 탭을 준비하고 있습니다."}</p>}
       {sessions.map(session => <section key={session.id} id={`session-panel-${session.id}`} role="tabpanel" aria-labelledby={`session-tab-${session.id}`}
-        data-session-id={session.id} className="session-surface" hidden={session.id !== activeId}>
+        data-session-id={session.id} data-chat-theme={theme ?? "terminal-basic"} className="session-surface" hidden={session.id !== activeId}>
         <SessionApiProvider id={session.id}><App session={session} theme={theme ?? "terminal-basic"} themeReady={theme !== null} onThemeChange={saveTheme} active={session.id === activeId} initial={session.id === defaultId.current} onCloseState={onCloseState}/></SessionApiProvider>
       </section>)}
     </div>
