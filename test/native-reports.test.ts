@@ -4,6 +4,7 @@
 import { reportFileStem } from "../scripts/workflow/report-names.ts";
 import { createHash } from "node:crypto";
 import assert from "node:assert/strict";
+import { EventEmitter, once } from "node:events";
 import { promises as fs, readdirSync, symlinkSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -42,6 +43,45 @@ async function waitFor(harness: Harness, repo: string, key: string, status: Nati
   throw new Error(`Native 보고서 상태 대기 초과: ${status}`);
 }
 
+function observeSaves() {
+  const states: NativeReportJob[] = [];
+  const events = new EventEmitter();
+  function onState(job: NativeReportJob) {
+    states.push(job);
+    events.emit("state");
+  }
+  async function saved(count: number): Promise<NativeReportJob[]> {
+    const deadline = new AbortController();
+    const timer = setTimeout(() => deadline.abort(), 4_000);
+    try {
+      for (;;) {
+        const terminal = states.filter(job => job.status !== "queued" && job.status !== "judging");
+        if (terminal.length >= count) {
+          const unexpected = terminal.find(job => job.status !== "saved");
+          if (unexpected) throw new Error(`Native 보고서 저장 실패 (${unexpected.status}): ${unexpected.reason}`);
+          return terminal;
+        }
+        await once(events, "state", { signal: deadline.signal });
+      }
+    } catch (error) {
+      if (!deadline.signal.aborted) throw error;
+      throw new Error(`Native 보고서 저장 알림 시간 초과: ${states.map(job => job.status).join(", ") || "알림 없음"}`);
+    } finally { clearTimeout(timer); }
+  }
+  return { states, onState, saved };
+}
+
+async function readSavedJob(repo: string, key: string, notice: NativeReportJob): Promise<NativeReportJob> {
+  const reader = createNativeReportHarness({ judge: async () => { throw new Error("저장 검사 중 판단을 실행했습니다."); } });
+  const job = (await reader.list(repo)).find(entry => entry.key === key);
+  assert.ok(job);
+  assert.equal(job.status, "saved");
+  assert.ok(job.reportId);
+  assert.equal(notice.key, key);
+  assert.equal(job.reportId, notice.reportId);
+  return job;
+}
+
 async function allText(directory: string): Promise<string> {
   const entries = await fs.readdir(directory, { withFileTypes: true })                                                                                                                                                          ;
   const parts   = await Promise.all(entries.filter((entry) => !entry.isSymbolicLink()).map((entry) => entry.isDirectory() ? allText(path.join(directory, entry.name)) : fs.readFile(path.join(directory, entry.name), "utf8"))) ;
@@ -52,14 +92,16 @@ test("필요 판단은 실제 보고서를 저장하며 원문·검증 통과를
   const repo                      = await repository(t) ;
   await fs.mkdir(path.join(repo, "docs/architecture"), { recursive: true });
   await fs.writeFile(path.join(repo, "docs/architecture/work-output.json"), JSON.stringify({ version: 1, format: "boxbox-scalar-columns-v1", scope: "docs/work/**/*.json", approvalRef: ".www/architecture-contract/boxbox-side/human-approvals-20261114.json#json" }));
-  const states: NativeReportJob[] = []         ;
+  const observer                   = observeSaves();
   let calls                       = 0          ;
   const authored                  = decision() ;
   if (authored.narrative) authored.narrative.reader = { story: "구현 결과를 보고서로 연결했습니다.", requirements: [], checks: [], decisions: [], references: [], nextActions: [] };
-  const harness = createNativeReportHarness({ judge: async () => { calls++; return authored; }, onState: (job) => { states.push(job); } }) ;
+  const harness = createNativeReportHarness({ judge: async () => { calls++; return authored; }, onState: observer.onState }) ;
   const queued  = await harness.enqueue({ repository: repo, input: input() })                                                              ;
   assert.equal(queued.status, "queued");
-  const saved = await waitFor(harness, repo, queued.key, "saved");
+  const [notice] = await observer.saved(1);
+  assert.ok(notice);
+  const saved = await readSavedJob(repo, queued.key, notice);
   assert.equal(calls, 1);
   assert.ok(saved.reportId);
   const report = await readWorkReport({ repo, reportId: saved.reportId ?? "" });
@@ -75,7 +117,7 @@ test("필요 판단은 실제 보고서를 저장하며 원문·검증 통과를
   assert.equal(report.report.sourceDigest, null);
   assert.equal(report.report.work.criteria[0].result, "unverified");
   assert.equal(report.report.work.reviews.length, 0);
-  assert.ok(states.some((job) => job.status === "judging"));
+  assert.ok(observer.states.some((job) => job.status === "judging"));
   const disk = await allText(repo);
   assert.doesNotMatch(disk, /PRIVATE_PROMPT_MARKER|PRIVATE_ANSWER_MARKER/);
   assert.match(disk, /AC-NATIVE/);
@@ -202,7 +244,8 @@ test("큐는 저장소별 원래 경로를 유지하고 전역으로 직렬 실�
   const second = await repository(t) ;
   let running  = 0                   ;
   let maximum  = 0                   ;
-  const harness = createNativeReportHarness({ judge: async () => {
+  const observer = observeSaves();
+  const harness = createNativeReportHarness({ onState: observer.onState, judge: async () => {
     running++;
     maximum = Math.max(maximum, running);
     await new Promise((resolve) => setTimeout(resolve, 30));
@@ -211,8 +254,13 @@ test("큐는 저장소별 원래 경로를 유지하고 전역으로 직렬 실�
   } });
   const one = await harness.enqueue({ repository: first , input: input()}) ;
   const two = await harness.enqueue({ repository: second, input: input()}) ;
-  await waitFor(harness, first, one.key, "saved");
-  await waitFor(harness, second, two.key, "saved");
+  assert.equal(one.key, two.key);
+  const [firstNotice, secondNotice] = await observer.saved(2);
+  assert.ok(firstNotice && secondNotice);
+  await readSavedJob(first, one.key, firstNotice);
+  await readSavedJob(second, two.key, secondNotice);
+  const ordered = observer.states.filter(job => job.status === "saved" || (job.status === "judging" && !job.workId));
+  assert.deepEqual(ordered.map(job => job.status), ["judging", "saved", "judging", "saved"]);
   assert.equal(maximum, 1);
   assert.equal((await listWorkReports({ repo: first })).reports.length, 1);
   assert.equal((await listWorkReports({ repo: second })).reports.length, 1);
