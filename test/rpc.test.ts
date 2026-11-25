@@ -36,4 +36,20 @@ describe("JsonRpcClient", () => {
     expect(() => rpc.notify("initialized", {})).toThrow(RpcClosedError);
     await expect(rpc.respond("closed", { decision: "decline" })).rejects.toBeInstanceOf(RpcClosedError);
   });
+
+  test("입력 파이프가 끊기면 진행 중인 요청을 불확실로 종료하고 재전송하지 않는다", async () => {
+    const child = new FakeChild();
+    const rpc = new JsonRpcClient(child as never);
+    const closed: RpcClosedError[] = [];
+    rpc.on("closed", (error: RpcClosedError) => closed.push(error));
+
+    const pending = rpc.request("turn/start", { threadId: "x" });
+    child.stdin.destroy(Object.assign(new Error("broken pipe"), { code: "EPIPE" }));
+    await expect(pending).rejects.toMatchObject({ uncertain: true, message: expect.stringContaining("broken pipe") });
+    child.emit("exit", 1, null);
+
+    expect(closed).toHaveLength(1);
+    await expect(rpc.request("turn/start", { threadId: "x" })).rejects.toMatchObject({ uncertain: false });
+    expect(child.writes).toHaveLength(1);
+  });
 });

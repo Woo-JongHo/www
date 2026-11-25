@@ -3,7 +3,7 @@
  */
 import { describe, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
-import { resolve } from "node:path";
+import { join, resolve } from "node:path";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { NativeActivityView } from "../src/native-activity-view";
@@ -363,7 +363,7 @@ describe("Native 원장 입력 정규화", () => {
   });
 
   test("서로 다른 비공개 문서는 실제 hash로 구별하고 같은 경로의 중복·재전달·복원 identity는 유지한다", () => {
-    const paths   = ["/synthetic/private-alpha/SKILL.md", "/synthetic/private-beta/SKILL.md"]                                                                     ;
+    const paths   = [resolve(root, "/synthetic/private-alpha/SKILL.md"), resolve(root, "/synthetic/private-beta/SKILL.md")];
     const options = { documentIdentity: (path: string, cwd: string) => `document-sha256:${createHash("sha256").update(resolve(root, cwd, path)).digest("hex")}` } ;
     const fields = {
       id: "private-read", type: "commandExecution", cwd: root,
@@ -392,11 +392,16 @@ describe("Native 원장 입력 정규화", () => {
     const failed = normalizeNativeResources(item(7, "item/completed", { ...fields, exitCode: 1 }), root, options);
     expect(failed.observations).toEqual(end.observations.map((row) => ({ ...row, status: "failed" })));
     const json = JSON.stringify([start, end, redelivery, restored, other, historicalStart, failed]);
-    for (const value of [...paths, "SYNTHETIC_PRIVATE_COMMAND", "SYNTHETIC_PRIVATE_OUTPUT", "SYNTHETIC_PRIVATE_REASONING"]) expect(json).not.toContain(value);
+    for (const value of [...paths, "SYNTHETIC_PRIVATE_COMMAND", "SYNTHETIC_PRIVATE_OUTPUT", "SYNTHETIC_PRIVATE_REASONING"]) expect(json).not.toContain(JSON.stringify(value).slice(1, -1));
     for (const result of [start, end, redelivery, restored, other, historicalStart, failed]) expect(result.gaps).toEqual([]);
   });
 
   test("상대 read는 실제 cwd로 구별하고 같은 문서의 상대·절대 표기와 빈 cwd는 정규화한다", () => {
+    const alphaDirectory = resolve(root, "/synthetic/private-alpha");
+    const betaDirectory = resolve(root, "/synthetic/private-beta");
+    const relativeDirectory = join("synthetic", "private-alpha");
+    const alphaPath = join(alphaDirectory, "SKILL.md");
+    const fallbackPath = resolve(root, "SKILL.md");
     const calls: { path: string; cwd: string }[] = [];
     const options = { documentIdentity: (path: string, cwd: string) => {
       calls.push({ path, cwd });
@@ -406,11 +411,11 @@ describe("Native 원장 입력 정규화", () => {
       id: "cwd-read", type: "commandExecution", cwd, exitCode: 0,
       commandActions: paths.map((path) => ({ type: "read", path })),
     }), root, options);
-    const alpha       = normalize("/synthetic/private-alpha", ["SKILL.md", "/synthetic/private-alpha/SKILL.md"]) ;
-    const beta        = normalize("/synthetic/private-beta", ["SKILL.md"])                                       ;
-    const fallback    = normalize("", ["SKILL.md", `${root}/SKILL.md`])                                          ;
-    const relativeCwd = normalize("synthetic/private-alpha", ["SKILL.md"])                                       ;
-    const results     = [alpha, beta, fallback, relativeCwd]                                                     ;
+    const alpha       = normalize(alphaDirectory, ["SKILL.md", alphaPath]) ;
+    const beta        = normalize(betaDirectory, ["SKILL.md"])             ;
+    const fallback    = normalize("", ["SKILL.md", fallbackPath])          ;
+    const relativeCwd = normalize(relativeDirectory, ["SKILL.md"])         ;
+    const results     = [alpha, beta, fallback, relativeCwd]                ;
     const identities = results.map((result) => {
       const reads = result.observations.filter((row) => row.action === "read");
       expect(reads).toHaveLength(1);
@@ -418,19 +423,19 @@ describe("Native 원장 입력 정규화", () => {
       return reads[0]?.resource.identity;
     });
     expect(identities).toEqual([
-      "/synthetic/private-alpha/SKILL.md", "/synthetic/private-beta/SKILL.md", `${root}/SKILL.md`, `${root}/synthetic/private-alpha/SKILL.md`,
+      alphaPath, join(betaDirectory, "SKILL.md"), fallbackPath, join(resolve(root), relativeDirectory, "SKILL.md"),
     ].map((path) => `document-sha256:${createHash("sha256").update(path).digest("hex")}`));
     expect(identities[0]).not.toBe(identities[1]);
     expect(calls).toEqual([
-      { path: "SKILL.md", cwd: "/synthetic/private-alpha" },
-      { path: "/synthetic/private-alpha/SKILL.md", cwd: "/synthetic/private-alpha" },
-      { path: "SKILL.md", cwd: "/synthetic/private-beta" },
+      { path: "SKILL.md", cwd: alphaDirectory },
+      { path: alphaPath, cwd: alphaDirectory },
+      { path: "SKILL.md", cwd: betaDirectory },
       { path: "SKILL.md", cwd: root },
-      { path: `${root}/SKILL.md`, cwd: root },
-      { path: "SKILL.md", cwd: "synthetic/private-alpha" },
+      { path: fallbackPath, cwd: root },
+      { path: "SKILL.md", cwd: relativeDirectory },
     ]);
     const json = JSON.stringify(results);
-    for (const path of ["/synthetic/private-alpha", "/synthetic/private-beta", root, "synthetic/private-alpha"]) expect(json).not.toContain(path);
+    for (const path of [alphaDirectory, betaDirectory, root, resolve(root), relativeDirectory]) expect(json).not.toContain(JSON.stringify(path).slice(1, -1));
   });
 
   test("문서 identity 경계는 정본·명령 참조·일반 파일에 호출하지 않고 정본 path와 id를 유지한다", () => {

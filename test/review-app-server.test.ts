@@ -7,7 +7,8 @@ import { createHash } from 'node:crypto';
 import { promises as fs } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import test from 'node:test';
+import test, { after } from 'node:test';
+import { promisify } from 'node:util';
 import { executeAppServer, inspectAppServer, readonlyCommand } from '../scripts/workflow/review-app-server.ts';
 import { loadReviewPolicy, runReview, validateReview, REVIEW_INLINE_LIMIT } from '../scripts/workflow/review.ts';
 import type { ReviewAuthority } from '../scripts/workflow/review.ts';
@@ -91,6 +92,29 @@ readline.createInterface({input:process.stdin}).on('line', line=>{
 `;
 const root = path.resolve(import.meta.dirname, '..');
 const hash = (v: string) => createHash('sha256').update(v).digest('hex');
+const run = promisify(execFile);
+let fixtureDirectory: string | undefined;
+let windowsFixture: Promise<string> | undefined;
+
+after(async () => {
+  if (fixtureDirectory) await fs.rm(fixtureDirectory, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
+});
+
+async function buildWindowsFixture(): Promise<string> {
+  fixtureDirectory = await fs.mkdtemp(path.join(os.tmpdir(), 'review-rpc-exe-'));
+  return compileWindowsFixture(fixtureDirectory, 'codex', fixture);
+}
+
+async function compileWindowsFixture(directory: string, name: string, source: string): Promise<string> {
+  const entry = path.join(directory, `${name}-fixture.ts`);
+  const executable = path.join(directory, `${name}.exe`);
+  const { stdout } = await run('bun', ['--print', 'process.execPath'], { encoding: 'utf8', timeout: 5_000 });
+  const bun = stdout.trim();
+  assert.ok(path.isAbsolute(bun), 'Bun 네이티브 실행 경로가 필요합니다.');
+  await fs.writeFile(entry, source);
+  await run(bun, ['build', '--compile', '--compile-executable-path', bun, entry, '--outfile', executable], { cwd: directory, timeout: 120_000 });
+  return executable;
+}
 
 test('실제 Terra userMessage echo 축약 재생은 입력과 턴을 결합하고 최종 fail을 보존한다', () => {
   // 실원문 SHA-256 b745d3830451256fe30b74821578d263860e2eccc8becc3983c2ff27ec864b99.
@@ -138,7 +162,9 @@ async function setup(t: import('node:test').TestContext) {
   const repo = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), 'review-rpc-')));
   const oldPath = process.env.PATH, oldMode = process.env.WWW_REVIEW_FIXTURE_MODE;
   t.after(async () => { process.env.PATH = oldPath; if (oldMode === undefined) delete process.env.WWW_REVIEW_FIXTURE_MODE; else process.env.WWW_REVIEW_FIXTURE_MODE = oldMode; await fs.rm(repo, { recursive: true, force: true }); });
-  await fs.writeFile(path.join(repo, 'codex'), fixture, { mode: 0o700 });
+  if (process.platform === 'win32') {
+    await fs.link(await (windowsFixture ??= buildWindowsFixture()), path.join(repo, 'codex.exe'));
+  } else await fs.writeFile(path.join(repo, 'codex'), fixture, { mode: 0o700 });
   await fs.writeFile(path.join(repo, 'input.ts'), 'export const input = 1;');
   process.env.PATH = `${repo}${path.delimiter}${oldPath}`;
   process.env.WWW_REVIEW_FIXTURE_MODE = 'commentary';
@@ -169,6 +195,8 @@ test('실제 subprocess RPC와 빠른 완료를 대조하고 server-selected Ter
   assert.equal(receipt.promptVersion, 'literal-read-v1');
   assert.deepEqual(receipt.invocation, { command: 'codex', args: ['app-server', '--listen', 'stdio://'] });
   assert.ok(path.isAbsolute(receipt.appServer.actualInvocation.command));
+  const expectedFixture = path.join(repo, process.platform === 'win32' ? 'codex.exe' : 'codex');
+  assert.equal(await fs.realpath(receipt.appServer.actualInvocation.command), await fs.realpath(expectedFixture));
   assert.deepEqual(receipt.appServer.readScope, { bundleOnly: true, commandsObserved: [] });
   assert.deepEqual(receipt.inputBundle, [{ path: 'input.ts', content: 'export const input = 1;' }]);
   assert.equal(receipt.inputSnapshot.files[0].digest, hash(receipt.inputBundle[0].content));
@@ -280,13 +308,16 @@ test('합성 과거 영수증은 정확한 legacy/guided 템플릿만 받고 fai
 
 test('wrong model/provider/sandbox/cwd와 읽기·도구·protocol·EOF·timeout을 불수용한다', async t => {
   const repo = await setup(t);
-  for (const mode of ['model', 'provider', 'sandbox', 'cwd', 'read-failure', 'write-command', 'tool', 'turn-error', 'approval', 'protocol', 'EOF', 'timeout', 'stderr', 'no-final', 'bad-final', 'reroute', 'foreign-tool', 'no-read']) {
+  const modes = ['model', 'provider', 'sandbox', 'cwd', 'read-failure', 'write-command', 'tool', 'turn-error', 'approval', 'protocol', 'EOF', 'timeout', 'stderr', 'no-final', 'bad-final', 'reroute', 'foreign-tool', 'no-read'];
+  for (const mode of modes) {
     process.env.WWW_REVIEW_FIXTURE_MODE = mode;
-    const result = await executeAppServer({ cwd: repo, input: 'fixture', timeoutMs: 400 });
+    const result = await executeAppServer({ cwd: repo, input: 'fixture', timeoutMs: 3_000 });
     assert.ok(result.error, mode);
+    assert.equal(result.error === 'app-server timeout', mode === 'timeout', mode);
     assert.notEqual(result.code, 0, mode);
     assert.throws(() => inspectAppServer(result.appServer, repo), Error, mode);
   }
+  assert.equal(await fs.readFile(path.join(repo, '.www/process-starts'), 'utf8'), 'started\n'.repeat(modes.length));
 });
 
 test('별도 직접 요청 원문·hash·work·단계 권한과 실행 중 소스 변경을 검사한다', async t => {
@@ -310,18 +341,34 @@ test('별도 직접 요청 원문·hash·work·단계 권한과 실행 중 소�
 
 test('실제 quota 원문 뒤에만 새 app-server fallback을 실행한다', async t => {
   const repo = await setup(t), opts = await options(repo);
-  await fs.writeFile(path.join(repo, 'claude'), '#!/usr/bin/env node\nconsole.log(JSON.stringify({type:"result",is_error:true,error:{code:"quota_exhausted"}}));process.exitCode=1;\n', { mode: 0o700 });
+  const claudeFixture = String.raw`#!/usr/bin/env node
+const error = process.env.WWW_REVIEW_FIXTURE_MODE === 'claude-unstructured'
+  ? { result: 'quota_exhausted but no structured code' }
+  : { error: { code: 'quota_exhausted' } };
+console.log(JSON.stringify({ type: 'result', is_error: true, ...error }));
+process.exitCode = 1;
+`;
+  if (process.platform === 'win32') {
+    assert.ok(fixtureDirectory);
+    const executable = await compileWindowsFixture(fixtureDirectory, 'claude', claudeFixture);
+    await fs.link(executable, path.join(repo, 'claude.exe'));
+  } else {
+    await fs.writeFile(path.join(repo, 'claude'), claudeFixture, { mode: 0o700 });
+  }
   const review = await runReview({ ...opts, authority: undefined, directRequest: undefined });
-  assert.equal(review.verdict, 'pass');
+  assert.equal(review.verdict, 'pass', review.execution.error ?? undefined);
   assert.equal(review.fallbackReason?.verified, true);
   assert.equal(validateReview({ repo, work: opts.work, policy: opts.policyInfo.policy, policyHash: opts.policyInfo.hash, review, sourceDigest: opts.source.digest, criteriaDigest: opts.criteriaDigest }).usable, true);
   const opusPath = path.join(repo, path.dirname(review.receiptPath), 'opus.json');
   const original = await fs.readFile(opusPath);
-  const authentication = '#!/usr/bin/env node\nconsole.log(JSON.stringify({type:"result",is_error:true,result:"quota_exhausted but no structured code"}));process.exitCode=1;\n';
-  await fs.writeFile(path.join(repo, 'claude'), authentication);
+  const starts = await fs.readFile(path.join(repo, '.www/process-starts'), 'utf8');
+  process.env.WWW_REVIEW_FIXTURE_MODE = 'claude-unstructured';
   const rejected = await runReview({ ...opts, authority: undefined, directRequest: undefined });
   assert.equal(rejected.provider, 'anthropic');
   assert.equal(rejected.verdict, 'not_run');
+  const rejectedReceipt = JSON.parse(await fs.readFile(path.join(repo, rejected.receiptPath), 'utf8'));
+  assert.match(rejectedReceipt.stdout, /quota_exhausted but no structured code/);
+  assert.equal(await fs.readFile(path.join(repo, '.www/process-starts'), 'utf8'), starts);
   assert.deepEqual(await fs.readFile(opusPath), original);
 });
 

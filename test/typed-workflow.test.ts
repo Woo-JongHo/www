@@ -5,7 +5,7 @@ import { afterEach, test } from 'bun:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
-import { chmod, copyFile, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { chmod, copyFile, mkdir, mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -14,7 +14,7 @@ import { runTypedWorkflow, type CommandResult } from '../scripts/workflow.ts';
 const sourceRoot         = fileURLToPath(new URL('../', import.meta.url)) ;
 const fixtures: string[] = []                                             ;
 afterEach(async () => {
-  await Promise.all(fixtures.splice(0).map(repo => rm(repo, { recursive: true, force: true })));
+  await Promise.all(fixtures.splice(0).map(repo => rm(repo, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 })));
 });
 
 async function put(repo: string, file: string, body: string): Promise<void> {
@@ -396,8 +396,11 @@ test('선언하지 않은 타입 검사 설정 변경도 사후에 거부한다'
 
 test('표준 typed guidance append는 실제 Node stdio에 정본을 제공하고 의미 수용은 미확인으로 둔다', async () => {
   const repo=await fixture(),tools=fakeTools();tools.faults.mode='off';
-  const directory=path.join(repo,'.www/fixture/bin'),executable=path.join(directory,'codex');
-  await put(repo,'.www/fixture/bin/codex',`#!/usr/bin/env node
+  const windows = process.platform === 'win32';
+  const directory = path.join(repo, '.www/fixture/bin');
+  const executable = path.join(directory, windows ? 'codex.exe' : 'codex');
+  const entry = windows ? path.join(directory, 'codex-fixture.cjs') : executable;
+  await put(repo, path.relative(repo, entry), `#!/usr/bin/env node
 const fs=require('node:fs');let input='';process.stdin.setEncoding('utf8');
 process.stdin.on('data',chunk=>input+=chunk);
 process.stdin.on('end',()=>{
@@ -405,11 +408,27 @@ process.stdin.on('end',()=>{
  for(const event of [{type:'thread.started',thread_id:'typed-guidance-fixture'},{type:'fixture.runtime',node:process.version,bun:process.versions.bun??null},{type:'turn.completed'}])console.log(JSON.stringify(event));
 });
 `);
-  await chmod(executable,0o700);
+  if (windows) {
+    const node = execFileSync('node', ['-p', 'process.execPath'], { encoding: 'utf8', timeout: 5_000 }).trim();
+    const launcher = path.join(directory, 'codex-launcher.ts');
+    await put(repo, path.relative(repo, launcher), `import { spawnSync } from 'node:child_process';
+const child = spawnSync(${JSON.stringify(node)}, [${JSON.stringify(entry)}], { shell: false, stdio: 'inherit', timeout: 8_000 });
+if (child.error) console.error(child.error.message);
+process.exitCode = child.status ?? 1;
+`);
+    execFileSync(process.execPath, ['build', '--compile', '--compile-executable-path', process.execPath, launcher, '--outfile', executable], { cwd: repo, timeout: 30_000 });
+  } else {
+    await chmod(executable, 0o700);
+  }
   const result=await runTypedWorkflow(options(repo,{env:{PATH:directory+path.delimiter+(process.env.PATH??'')}}),{runCommand:tools.runCommand});
   const harness=record(result.harness),host=record(result.host);
   assert.equal(harness.ok,true);assert.equal(harness.executor,'process');assert.equal(harness.toolExecutor,'injected');
   assert.equal(result.executor,'process');assert.equal(host.inputDelivered,true);assert.equal(host.outcome,'passed');
+  if (windows) {
+    const command = record(host.actualInvocation).command;
+    assert(typeof command === 'string');
+    assert.equal(await realpath(command), await realpath(executable));
+  }
   assert.equal(record(record(result.modelExecution).observed).model,null);
   const input=await readFile(path.join(repo,'.www/typed-received.txt'),'utf8');
   assert(input.includes('\n\n작성 하네스 관찰 데이터\n'));
@@ -424,4 +443,4 @@ process.stdin.on('end',()=>{
   const runtime=output.split('\n').filter(Boolean).map((line):unknown=>JSON.parse(line)).find(item=>isRecord(item)&&item.type==='fixture.runtime');
   assert(isRecord(runtime));assert.equal(runtime.bun,null);assert(typeof runtime.node==='string');
   console.log(JSON.stringify({typedGuidanceFixture:{runtime:runtime.node,executor:result.executor,inputDelivered:host.inputDelivered,provided:5,hostAcceptance:'unconfirmed',modelObserved:null,scope:'실제 Node fake-Codex stdio, compiler/BoxBox는 명시 test double; 모델호출 아님'}}));
-});
+}, 45_000);

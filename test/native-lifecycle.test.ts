@@ -2,16 +2,14 @@
  * @verifies RESP-NATIVE-LIFECYCLE
  */
 import { expect, test } from "bun:test";
-import { spawn } from "node:child_process";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { createNativeLifecycle, createRestoredMessageFilter } from "../src/native-lifecycle";
-import { JsonRpcClient } from "../src/rpc";
 import { createDevelopmentService } from "../src/development";
 import { runInNewContext } from "node:vm";
 import type { ConversationEvent } from "../src/conversations";
 import type { RpcId } from "../src/shared";
+import { runConversationRestart } from "./fixtures/conversations-restart-runner";
 
 const cwd      = "/workspace/project" ;
 const threadId = "thread-persisted"   ;
@@ -251,39 +249,7 @@ test("실제 main은 같은 lifecycle seam을 사용하고 closed에서 준비 �
   expect(main).toContain('if (rpc !== startedClient) throw');
 });
 
-test("main과 같은 lifecycle seam은 실제 subprocess 재시작 때 resume 선행 후 한 번만 전송한다", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "www-lifecycle-"));
-  const lifecycle = createNativeLifecycle(() => {});
-  const start = () => {
-    const child = spawn(process.execPath, [join(import.meta.dir, "fixtures/conversations-app-server.ts")], {
-      stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, WWW_CONVERSATION_FIXTURE_STORE: join(directory, "history.json") }
-    });
-    return { child, client: new JsonRpcClient(child) };
-  };
-  let running = start();
-  let current: JsonRpcClient | null = running.client;
-  try {
-    await running.client.request("initialize", {});
-    await running.client.request("thread/start", { cwd });
-    lifecycle.markReady(running.client, cwd, threadId);
-    running.child.kill();
-    lifecycle.closed(running.client, "restart");
-    running = start();
-    current = running.client;
-    await current.request("initialize", {});
-    await expect(current.request("turn/start", { threadId, input: [{ type: "text", text: "복원 없이 거부" }] })).rejects.toThrow("resume");
-    let restored = false;
-    await lifecycle.start({
-      connect: async () => running.client, valid: (client) => client === current,
-      cwd, threadId, prompt: "재시작 뒤 새 요청",
-      restored(value) { restored = true; expect(value.approvalPolicy).toBe("on-request"); },
-      beforeStart() { expect(restored).toBe(true); }
-    });
-    const opened = await lifecycle.open(current, cwd, threadId, () => true);
-    expect(opened.events.filter((event) => event.method === "turn/userPrompt")).toHaveLength(1);
-    expect(JSON.stringify(opened.events)).toContain("재시작 뒤 새 요청");
-  } finally { current = null; running.child.kill(); await rm(directory, { recursive: true, force: true }); }
-}, 10_000);
+test("main과 같은 lifecycle seam은 실제 subprocess 재시작 때 resume 선행 후 한 번만 전송한다", () => runConversationRestart("native-lifecycle"), 10_000);
 
 test("pending connect closed 중에도 첫 start가 정리되기 전 중첩 전송을 거부한다", async () => {
   const s = setup();

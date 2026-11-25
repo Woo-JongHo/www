@@ -2,16 +2,15 @@
  * @verifies RESP-CHAT-SESSIONS-RESTORE
  */
 import { expect, test } from "bun:test";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { isAbsolute, join, resolve, win32 } from "node:path";
-import { spawn } from "node:child_process";
 import { runInNewContext } from "node:vm";
 import ts from "typescript";
 import { createConversationService, restoreConversationEvents } from "../src/conversations";
 import { project } from "../src/projection";
-import { JsonRpcClient } from "../src/rpc";
 import type { AppEvent } from "../src/shared";
+import { runConversationRestart } from "./fixtures/conversations-restart-runner";
 
 const cwd    = "/workspace/project"                                                                                                                             ;
 const thread = { id: "thread-1", cwd, originator: "www", source: "vscode", preview: "첫 요청", updatedAt: 50, status: { type: "notLoaded" }, ephemeral: false } ;
@@ -132,35 +131,7 @@ for (const status of ["completed", "failed", "interrupted", "declined", "inProgr
   });
 }
 
-test("실제 stdio subprocess를 재시작한 뒤 같은 Native thread ID와 누적 대화를 다시 연다", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "www-conversations-")) ;
-  const store     = join(directory, "history.json")                     ;
-  const start = () => {
-    const child = spawn(process.execPath, [join(import.meta.dir, "fixtures/conversations-app-server.ts")], { stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, WWW_CONVERSATION_FIXTURE_STORE: store } });
-    return { child, client: new JsonRpcClient(child) };
-  };
-  let running = start();
-  try {
-    await running.client.request("initialize", {});
-    await running.client.request("thread/start", { cwd });
-    await running.client.request("turn/start", { threadId: "thread-persisted", input: [{ type: "text", text: "재시작 전 요청" }] });
-    running.child.kill();
-    running = start();
-    await running.client.request("initialize", {});
-    await expect(running.client.request("turn/start", { threadId: "thread-persisted", input: [{ type: "text", text: "복원 전 거부" }] })).rejects.toThrow("thread/resume");
-    const service = createConversationService(running.client, cwd) ;
-    const listed  = await service.list()                           ;
-    expect(listed.threads[0]?.id).toBe("thread-persisted");
-    const opened = await service.open("thread-persisted");
-    expect(project(events(opened.events)).blocks).toContainEqual(expect.objectContaining({ kind: "user", text: "재시작 전 요청" }));
-    await running.client.request("turn/start", { threadId: opened.threadId, input: [{ type: "text", text: "이어가는 요청" }] });
-    const reopened = await service.open(opened.threadId);
-    expect(project(events(reopened.events)).blocks.filter((block) => block.kind === "user")).toHaveLength(2);
-  } finally {
-    running.child.kill();
-    await rm(directory, { recursive: true, force: true });
-  }
-}, 10_000);
+test("실제 stdio subprocess를 재시작한 뒤 같은 Native thread ID와 누적 대화를 다시 연다", () => runConversationRestart("conversations"), 10_000);
 
 
 test("저장 공개 항목의 유효 완료 시각은 보존하고 비공개 필드와 invalid 시각은 제외한다", () => {

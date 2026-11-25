@@ -2,7 +2,7 @@
  * @architecture arch.reports.judgement
  * @implements RESP-REPORTS-JUDGEMENT
  */
-import { spawn } from "node:child_process";
+import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
 import { promises as fs } from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -237,21 +237,31 @@ interface ObservedTurn {
   messages: Map<string, string>;
 }
 
-export async function judgeNativeReport(input: NativeReportInput, options: { binary?: string; timeoutMs?: number; signal?: AbortSignal } = {}): Promise<NativeReportDecision> {
+export async function judgeNativeReport(
+  input: NativeReportInput,
+  options: { binary?: string; timeoutMs?: number; signal?: AbortSignal } = {},
+  // 내부 테스트가 실제 stdio 자식 프로세스를 연결하는 경계다.
+  startChild?: (cwd: string) => ChildProcessWithoutNullStreams,
+): Promise<NativeReportDecision> {
   let source: string;
   try { source = encodedInput(input); }
   catch (error: unknown) { throw new ReportJudgeError("REPORT_JUDGE_INVALID_INPUT", error instanceof Error ? error.message : String(error)); }
   if (options.signal?.aborted) throw new ReportJudgeError("REPORT_JUDGE_CANCELLED", "보고서 판단이 취소됐습니다.");
   const timeoutMs = options.timeoutMs ?? 90_000;
   if (!Number.isFinite(timeoutMs) || timeoutMs < 10 || timeoutMs > 120_000) throw new ReportJudgeError("REPORT_JUDGE_INVALID_INPUT", "보고서 판단 제한 시간은 10~120,000ms여야 합니다.");
-  const binary    = resolveNativeCodex(options.binary)                            ;
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "www-report-judge-")) ;
-  const child = spawn(binary, ["app-server"], {
-    cwd         : directory ,
-    shell       : false     ,
-    windowsHide : true      ,
-    stdio       : ["pipe", "pipe", "pipe"]
-  });
+  let child: ChildProcessWithoutNullStreams;
+  try {
+    child = startChild ? startChild(directory) : spawn(resolveNativeCodex(options.binary), ["app-server"], {
+      cwd         : directory ,
+      shell       : false     ,
+      windowsHide : true      ,
+      stdio       : ["pipe", "pipe", "pipe"]
+    });
+  } catch (error) {
+    await fs.rm(directory, { recursive: true, force: true });
+    throw error;
+  }
   const client                 = new JsonRpcClient(child)        ;
   let timer    : ReturnType<typeof setTimeout> | undefined       ;
   let stopped                  = false                           ;

@@ -167,7 +167,10 @@ export async function validateDecomposition(value: unknown, context: PlanContext
   const owned: (OwnershipIdentity & { taskId: string; file: string })[] = [];
   for (const item of units) for (const file of item.writePaths) {
     const current = { taskId: item.taskId, file, ...await identity(scan, file) };
-    const conflict = owned.find(previous => previous.taskId !== item.taskId && (overlap(previous.canonical, current.canonical) || ([...current.inodes].some(value => previous.inodes.has(value)))));
+    const conflict = owned.find(previous => previous.taskId !== item.taskId && (
+      inside(previous.canonical, current.canonical) || inside(current.canonical, previous.canonical)
+      || [...current.inodes].some(value => previous.inodes.has(value))
+    ));
     if (conflict) throw new Error(`분업 소유 충돌: ${conflict.taskId}:${conflict.file} ↔ ${item.taskId}:${file}`);
     owned.push(current);
   }

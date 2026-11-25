@@ -21,9 +21,10 @@ test("실제 Electron 영수증에서 관찰·명령·소스 경계를 독립적
     // 원장의 실제 화면 출력과 명령을 사용하고 비교 대상 소스·실행기만 격리 fixture에 연결한다.
     const {resolveExecutionEnvironment} = await import("../scripts/workflow/evidence");
     const environment = await resolveExecutionEnvironment(repo, "bun");
+    expect(environment.executable?.path).toEqual(expect.any(String));
     const proof = { ...receipt, command: environment.executable?.path, environment, source: await captureSource({ repo, inputs: monitorSourceInputs(receipt.monitorObservation.scripts), scope: "chat007-monitor" }) };
     const assess = (attempt = proof) => evaluateEvidence({ repo, record, attempt, criterionId: "AC-11" });
-    expect((await assess()).usable).toBe(true);
+    expect(await assess()).toEqual({ usable: true, reasons: [] });
     await mkdir(path.join(repo, "scripts"));
     const older = { ...legacy, command: environment.executable?.path, environment, source: await captureSource({ repo, inputs: monitorInputs, scope: "chat007-monitor" }) };
     expect((await assess(older)).usable).toBe(true);
@@ -92,5 +93,6 @@ test("새로 import한 스크립트를 Bun 실행기와 자식 Node fixture에�
     const rows = (await readFile(trace, "utf8")).trim().split("\n").map(row => JSON.parse(row));
     expect(rows).toContainEqual(["build", "scripts/new-helper.ts"]);
     expect(rows).toContainEqual(["fixture", "scripts/new-helper.ts"]);
+    expect(rows.every(([, file]) => !/^(?:\.\.(?:\/|$)|\/|[A-Za-z]:)/.test(file))).toBe(true);
   } finally { await rm(repo, { recursive: true, force: true }); }
 });

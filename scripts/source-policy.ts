@@ -150,18 +150,19 @@ export async function checkSourcePolicy(repo: string): Promise<SourcePolicyResul
   };
   const readConfig = (file: string): string | undefined => {
     try {
-      if (!inside(realpathSync(file))) {
+      const resolved = realpathSync.native(file);
+      if (!inside(resolved)) {
         errors.push(`${file}: 저장소 외부 설정 파일은 읽을 수 없습니다.`);
         return undefined;
       }
-      return ts.sys.readFile(file);
+      return ts.sys.readFile(resolved);
     } catch { return undefined; }
   };
   const baseline = new Map(policy.legacyJavaScript.map(entry => [entry.path, entry.sha256]));
   for (const file of files.sort()) {
     if (policy.excludedVendorPaths.some(prefix => file.startsWith(prefix))) continue;
     if (!javascript.test(file) && !typescript.test(file)) continue;
-    const fullPath = path.resolve(repo, file);
+    const fullPath = path.resolve(root, file);
     let stat;
     try { stat = await lstat(fullPath); } catch (error: unknown) {
       if (object(error) && error.code === 'ENOENT') continue;
@@ -191,7 +192,7 @@ export async function checkSourcePolicy(repo: string): Promise<SourcePolicyResul
   const covered  = new Set<string>()                                                           ;
   for (const project of policy.typecheckProjects) {
     projects.push(project);
-    const configPath = path.resolve       (repo, project         ) ;
+    const configPath = path.resolve       (root, project         ) ;
     const config     = ts  .readConfigFile(configPath, readConfig) ;
     if (config.error) {
       errors.push(`${project}: ${ts.flattenDiagnosticMessageText(config.error.messageText, '\n')}`);
@@ -216,7 +217,7 @@ export async function checkSourcePolicy(repo: string): Promise<SourcePolicyResul
     if (parsed.errors.length === 0) for (const file of parsed.fileNames) covered.add(path.resolve(file));
   }
   for (const file of typescriptFiles) {
-    if (!archived.has(file) && !covered.has(path.resolve(repo, file))) errors.push(`${file}: strict/noEmit 타입 검사 프로젝트에 포함되지 않았습니다.`);
+    if (!archived.has(file) && !covered.has(path.resolve(root, file))) errors.push(`${file}: strict/noEmit 타입 검사 프로젝트에 포함되지 않았습니다.`);
   }
   return result();
 }

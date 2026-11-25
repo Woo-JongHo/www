@@ -1357,8 +1357,20 @@ test("부모가 종료되어도 실제 실행 호스트가 남아 있으면 잠�
   const script = `
     const { withWorkExecutionLease } = await import(${JSON.stringify(lockModule)});
     const { runProcess } = await import(${JSON.stringify(runModule)});
-    await withWorkExecutionLease(${JSON.stringify(repo)}, ${JSON.stringify(workId)}, "orphan-host", host =>
-      runProcess({ command:process.execPath, args:["-e", ${JSON.stringify(worker)}] }, {cwd:${JSON.stringify(repo)}}, host));
+    const cwd = ${JSON.stringify(repo)};
+    const args = ["-e", ${JSON.stringify(worker)}];
+    await withWorkExecutionLease(cwd, ${JSON.stringify(workId)}, "orphan-host", async host => {
+      if (process.platform !== "win32") return runProcess({ command: process.execPath, args }, { cwd }, host);
+      // Windows libuv의 기본 job은 부모 종료 시 일반 자식도 종료한다.
+      const { spawn } = await import("node:child_process");
+      await host.beforeSpawn();
+      const child = spawn(process.execPath, args, { cwd, detached: true, stdio: "ignore", windowsHide: true });
+      const closed = new Promise(resolve => child.once("close", resolve));
+      child.once("error", error => console.error(error));
+      if (child.pid !== undefined) await host.register(child.pid);
+      await closed;
+      await host.finished();
+    });
   `;
   const parent = spawn(process.execPath, ["--input-type=module", "-e", script], { stdio: ["ignore", "ignore", "pipe"] });
   let parentError = "";
@@ -1395,6 +1407,7 @@ test("부모가 종료되어도 실제 실행 호스트가 남아 있으면 잠�
   const exited = once(parent, "exit");
   parent.kill("SIGKILL");
   await exited;
+  assert.equal(process.kill(hostPid, 0), true);
   assert.equal((await inspectWorkLock({ repo, workId })).status, "host_alive");
   await assert.rejects(recoverWorkLock({ repo, workId, token: active.owner.token }), /종료가 확인/);
   await assert.rejects(withWorkExecutionLease(repo, workId, "next-host", async () => undefined), /같은 작업이 실행 중/);

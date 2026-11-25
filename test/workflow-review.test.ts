@@ -491,7 +491,7 @@ test("인라인에서 생략한 공식 검증 문서가 검토 중 바뀌면 대
       inputs: ["src"], approval: {} });
     const { record: work, path: workPath } = await advanceWork({ repo: directory, workId: opened.record.id, intent: "review" });
     const document = path.join(path.dirname(workPath), "verification.md");
-    const relative = path.relative(await fs.realpath(directory), document);
+    const relative = path.relative(await fs.realpath(directory), document).split(path.sep).join("/");
     let captured: { inputBundle: { path: string }[]; workDocuments: { files: { path: string; digest: string }[] } } | undefined;
     let primaryDocuments: unknown;
     await fs.writeFile(document, "v".repeat(512 * 1024 + 1));

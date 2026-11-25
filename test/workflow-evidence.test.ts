@@ -79,12 +79,18 @@ test('세션 확장 환경의 관측 실패·손상은 현재 환경으로 보�
   const configuration = { checkId: 'unavailable-observation', scenario: '확장 환경 실패 보존', phase: 'focused' as const, maxAgeMs: 60_000, tools: [tool], environmentPaths: [], environmentObserved: true };
   const valid = (await verifyInSession(createVerificationSession(configuration), options(repo))).attempt;
   assert.equal(valid.result, 'passed');
-  await chmod(tool, 0o644);
+  const windows = process.platform === 'win32';
+  const parkedTool = tool + '.unavailable';
+  // Windows chmod는 실행 권한을 제거할 수 없다.
+  if (windows) await rename(tool, parkedTool);
+  else await chmod(tool, 0o644);
   assert.ok((await evaluateEvidence({ repo, record: record(), attempt: valid })).reasons.includes('environment_observation_unavailable'));
   const unavailable = (await verifyInSession(createVerificationSession(configuration), options(repo))).attempt;
   assert.equal(unavailable.exitCode, 0);
   assert.equal(unavailable.result, 'failed');
-  await chmod(tool, 0o755);
+  assert.equal(unavailable.environmentObservation?.digest, null);
+  if (windows) await rename(parkedTool, tool);
+  else await chmod(tool, 0o755);
   assert.equal((await evaluateEvidence({ repo, record: record(), attempt: unavailable })).usable, false);
   assert.ok(valid.environmentObservation);
   Object.assign(valid.environmentObservation, { version: 2 });
@@ -495,16 +501,15 @@ test('재사용은 구현·테스트·설정·기준·범위·환경·도구·�
     ['source_changed', () => writeFile(path.join(repo, 'config.json'), '{"mode":"changed"}')],
     ['artifacts_changed', () => writeFile(path.join(repo, '.www/artifact'), '새 원문')],
     ['observed_environment_changed', () => writeFile(path.join(repo, 'node_modules/dependency.txt'), 'v2')],
-    ['observed_environment_changed', () => chmod(tool, 0o644)],
+    ['observed_environment_changed', () => appendFile(tool, '관측 도구 바이트 변경')],
   ];
   for (const [reason, mutate] of mutations) {
     await mutate();
     const result = await invoke();
     assert.equal(result.reuse.action, 'executed');
-    // 실행 불가 도구도 관측 실패로 재실행한다.
-    assert.ok(result.reuse.reasons.includes(reason) || result.reuse.reasons.includes('environment_observation_unavailable'), result.reuse.reasons.join(','));
+    assert.equal(result.attempt.result, 'passed');
+    assert.ok(result.reuse.reasons.includes(reason), result.reuse.reasons.join(','));
   }
-  await chmod(tool, 0o755); await invoke();
   const prior = process.env.WWW_REUSE_TEST_ENV;
   try {
     process.env.WWW_REUSE_TEST_ENV = 'changed';
@@ -615,24 +620,27 @@ test('원장 잠금 대기 중 새 실패가 기록되면 이전 성공을 붙�
   const target = works[1];
   assert.ok(target.record.workflow);
   const failure = await verify({ repo, record: target.record, inputs: target.record.workflow.inputs, command, args: ['-e', 'process.exit(7)'], criterionIds: ['AC-1'] });
-  const directory = path.join(repo, '.www/pending-results');
+  assert.equal(failure.result, 'failed');
+  const directory = path.join(repo, '.www/evidence/workflow-timing');
   const existing = new Set(await readdir(directory));
+  const latest = await readWork({ repo, workId: target.record.id });
+  assert.ok(latest.record.workflow);
+  latest.record.workflow.verifications.push(failure);
+  latest.record.criteria[0].result = 'failed';
+  const temporary = latest.path + '.pending';
+  await writeFile(temporary, JSON.stringify(latest.record), { flag: 'wx' });
   let pending: ReturnType<typeof verifyWork> | undefined;
   await withWorkLock(repo, async () => {
     pending = verifyWork({ repo, workId: target.record.id, command, args, criterionIds: ['AC-1'], reuseSession: session });
     void pending.catch(() => undefined);
     const deadline = Date.now() + 2_000;
-    while (!(await readdir(directory)).some(file => !existing.has(file))) {
-      if (Date.now() > deadline) throw new Error('재사용 pending 대기 초과');
+    // 잠금 대기 표식은 회수의 잠금 전 원장 읽기가 끝난 뒤 기록된다.
+    for (;;) {
+      const trace = (await readdir(directory)).find(file => !existing.has(file));
+      if (trace && (await readFile(path.join(directory, trace), 'utf8')).includes('"event":"phase","phase":"ledger_lock"')) break;
+      if (Date.now() > deadline) throw new Error('재사용 원장 잠금 대기 초과');
       await new Promise(resolve => setTimeout(resolve, 5));
     }
-    const latest = await readWork({ repo, workId: target.record.id });
-    assert.ok(latest.record.workflow);
-    latest.record.workflow.verifications.push(failure);
-    latest.record.criteria[0].result = 'failed';
-    // 실제 원장 저장처럼 교체해 읽는 실행이 중간 바이트를 보지 않게 한다.
-    const temporary = latest.path + '.pending';
-    await writeFile(temporary, JSON.stringify(latest.record), { flag: 'wx' });
     await rename(temporary, latest.path);
   });
   assert.ok(pending);

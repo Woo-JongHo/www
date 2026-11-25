@@ -4,7 +4,7 @@
  */
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { chmodSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, statSync, symlinkSync, writeFileSync } from "node:fs";
+import { chmodSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -32,6 +32,15 @@ function repository(t: import("node:test").TestContext) {
 function failed(report: ReturnType<typeof checkEnvironment>, code: string) {
   assert.equal(report.ok, false);
   assert.ok(report.checks.some((check) => check.code === code && check.status === "failed"), JSON.stringify(report));
+}
+
+function assertSpoolFile(file: string, directory: string): void {
+  const stat = lstatSync(file);
+  assert.equal(stat.isFile(), true);
+  assert.equal(stat.nlink, 1);
+  assert.equal(realpathSync.native(path.dirname(file)), realpathSync.native(directory));
+  // Windows stat은 ACL의 소유자 권한을 POSIX 비트로 표현하지 않는다.
+  assert.equal(stat.mode & 0o777, process.platform === "win32" ? 0o666 : 0o600);
 }
 
 function developmentFixture(t: import("node:test").TestContext) {
@@ -163,7 +172,9 @@ test("상속 PATH를 유지하고 overrides만 병합하며 진단은 파일을 
   const { repo, options } = repository(t);
   const before = readdirSync(repo);
   const env = mergeEnvironment({ WWW_FIXTURE: "override" });
-  assert.equal(env.PATH, process.env.PATH);
+  const pathKey = process.platform === "win32" ? Object.keys(process.env).find(key => key.toLowerCase() === "path") : "PATH";
+  assert.ok(pathKey);
+  assert.equal(env[pathKey], process.env[pathKey]);
   assert.equal(env.WWW_FIXTURE, "override");
   assert.equal(checkEnvironment({ ...options, env: { WWW_FIXTURE: "override" } }).ok, true);
   assert.deepEqual(readdirSync(repo), before);
@@ -188,6 +199,9 @@ test("unknown 설정과 CLI는 알 수 없는 옵션·잘못된 타입을 struct
 
 test("Git ref·tracked index·얕은 이력의 실패를 독립적으로 진단한다", (t) => {
   const { repo, git, options } = repository(t);
+  const nested = path.join(repo, "nested");
+  mkdirSync(nested);
+  failed(checkEnvironment({ ...options, repo: nested }), "repository");
   failed(checkEnvironment({ ...options, git: { refs: ["missing-ref"] } }), "git_ref");
   failed(checkEnvironment({ ...options, git: { refs: ["--help"] } }), "git_ref");
   const head = git(["rev-parse", "HEAD"]);
@@ -266,7 +280,7 @@ process.stderr.write('stderr 원문');
 }
 
 test("1MiB 초과 JSONL 원문은 완전 spool하고 bounded 요약 뒤 완료와 실제 usage를 관측한다", async (t) => {
-  const { result } = await subprocess(t, "many");
+  const { result, outputDirectory } = await subprocess(t, "many");
   assert.equal(result.ok, true, result.error ?? "");
   assert.equal(result.turnCompleted, true);
   assert.ok(result.events.some((event) => event.type === "fixture.environment" && event.pathPresent === true && event.override === "forwarded"));
@@ -288,7 +302,7 @@ test("1MiB 초과 JSONL 원문은 완전 spool하고 bounded 요약 뒤 완료�
   assert.equal(typeof command.item.aggregated_output, "string");
   assert.ok(typeof command.item.aggregated_output === "string" && command.item.aggregated_output.length > 1_048_576);
   assert.match(raw.toString("utf8"), /turn.completed/);
-  assert.equal(statSync(result.outputFiles.stdout.path).mode & 0o777, 0o600);
+  assertSpoolFile(result.outputFiles.stdout.path, outputDirectory);
   assert.equal(readFileSync(result.outputFiles.stderr.path, "utf8"), "stderr 원문");
 });
 
@@ -320,7 +334,7 @@ test("직접 Codex는 읽기 전용 비Git cwd를 변경하지 않고 명시한 
   assert.deepEqual(result.usage, { input_tokens: 7, output_tokens: 3 });
   assert.ok(result.outputFiles);
   assert.ok(readFileSync(result.outputFiles.stdout.path).length > 1_048_576);
-  assert.equal(statSync(result.outputFiles.stdout.path).mode & 0o777, 0o600);
+  assertSpoolFile(result.outputFiles.stdout.path, outputDirectory);
   assert.deepEqual(readdirSync(cwd), []);
 });
 

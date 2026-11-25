@@ -115,9 +115,12 @@ const OUTPUT_LIMIT = 65_536                                            ;
 
 function digest(value: string | Uint8Array) { return createHash("sha256").update(value).digest("hex"); }
 export async function resolveExecutionEnvironment(root: string, command: string): Promise<ExecutionEnvironment> {
-  const candidates = path.isAbsolute(command) || command.includes("/")
+  const windows = process.platform === "win32";
+  const explicit = path.isAbsolute(command) || command.includes("/") || (windows && command.includes("\\"));
+  const bases = explicit
     ? [path.resolve(root, command)]
     : (process.env.PATH ?? "").split(path.delimiter).map((directory) => path.resolve(root, directory || ".", command));
+  const candidates = windows && !explicit && !path.extname(command) ? bases.map(base => base + ".exe") : bases;
   let executable: ExecutionEnvironment["executable"] = null;
   for (const candidate of candidates) {
     try {

@@ -33,6 +33,7 @@ async function repository(t: TestContext, setup?: string) {
   const repo = join(temporary, "원본 저장소");
   await mkdir(join(repo, ".www"), { recursive: true });
   await git(repo, "init", "-q");
+  await git(repo, "config", "--local", "core.autocrlf", "false");
   const config = setup === undefined ? {} : {
     isolationSetup: { command: process.execPath, args: ["-e", setup, "$(echo literal)"] },
   };

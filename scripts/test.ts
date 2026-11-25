@@ -73,6 +73,7 @@ export async function runTestSuite(options: SuiteOptions = {}): Promise<number> 
   }
   const groups = testGroups(await readdir(path.join(repo, "test"), { recursive: true }), suite);
   const run = options.run ?? ((command, args, cwd) => spawnSync(command, args, { cwd, stdio: "inherit", shell: false }));
+  let exitCode = 0;
   for (const runner of ["bun:test", "node:test"] as const) {
     const files = groups[runner];
     if (!files.length) continue;
@@ -81,9 +82,10 @@ export async function runTestSuite(options: SuiteOptions = {}): Promise<number> 
     output(`${suite} ${runner}: ${files.length}개 파일`);
     const result = run(command, args, repo);
     if (result.error) throw result.error;
-    if (result.signal || result.status !== 0) return result.status || 1;
+    if (result.signal || result.status === null) return result.status || 1;
+    exitCode ||= result.status;
   }
-  return 0;
+  return exitCode;
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

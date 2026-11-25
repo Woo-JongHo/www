@@ -41,7 +41,7 @@ function existing(file: string): boolean {
   }
 }
 function projected(file: string): string {
-  if (existing(file)) return realpathSync(file);
+  if (existing(file)) return realpathSync.native(file);
   const parent = path.dirname(file);
   if (parent === file) throw new Error("기존 부모 경로를 찾지 못했습니다.");
   return path.join(projected(parent), path.basename(file));
@@ -69,11 +69,11 @@ export function checkEnvironment(input: unknown): EnvironmentReport {
   const env = mergeEnvironment(input.env);
   const searchPath = env[Object.keys(env).find((key) => key.toLowerCase() === "path") ?? "PATH"] ?? "";
   if ((input.commands ?? []).some((command) => !path.isAbsolute(command) && !/[\\/]/.test(command))) add("path", Boolean(searchPath.trim()), "명령 검색에는 비어 있지 않은 PATH가 필요합니다.");
-  const git = (args: string[]) => spawnSync("git", ["--no-optional-locks", "-C", input.repo, ...args], { env, encoding: "utf8", maxBuffer: 1_048_576 });
   try {
-    const repo = realpathSync(input.repo);
+    const repo = realpathSync.native(input.repo);
+    const git = (args: string[]) => spawnSync("git", ["--no-optional-locks", "-C", repo, ...args], { env, encoding: "utf8", maxBuffer: 1_048_576 });
     const root = git(["rev-parse", "--show-toplevel"]);
-    if (root.status !== 0 || realpathSync(root.stdout.trim()) !== repo) throw new Error("Git 저장소 루트가 아니거나 Git을 실행할 수 없습니다.");
+    if (root.status !== 0 || realpathSync.native(root.stdout.trim()) !== repo) throw new Error("Git 저장소 루트가 아니거나 Git을 실행할 수 없습니다.");
     add("repository", true, "Git 저장소 루트를 확인했습니다.", repo);
     const ignored = (file: string): boolean => {
       if (!inside(repo, file) || file === repo) return false;
