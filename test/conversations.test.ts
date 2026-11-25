@@ -2,17 +2,15 @@
  * @verifies RESP-CHAT-SESSIONS-RESTORE
  */
 import { expect, test } from "bun:test";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { isAbsolute, join, resolve, win32 } from "node:path";
-import { spawn } from "node:child_process";
 import { runInNewContext } from "node:vm";
 import ts from "typescript";
 import { createConversationService, restoreConversationEvents } from "../src/conversations";
 import { project } from "../src/projection";
-import { JsonRpcClient } from "../src/rpc";
 import type { AppEvent } from "../src/shared";
-import { watchConversationRestart, watchConversationWire } from "./fixtures/conversations-watchdog";
+import { runConversationRestart } from "./fixtures/conversations-restart-runner";
 
 const cwd    = "/workspace/project"                                                                                                                             ;
 const thread = { id: "thread-1", cwd, originator: "www", source: "vscode", preview: "첫 요청", updatedAt: 50, status: { type: "notLoaded" }, ephemeral: false } ;
@@ -133,50 +131,7 @@ for (const status of ["completed", "failed", "interrupted", "declined", "inProgr
   });
 }
 
-test("실제 stdio subprocess를 재시작한 뒤 같은 Native thread ID와 누적 대화를 다시 연다", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "www-conversations-")) ;
-  const store     = join(directory, "history.json")                     ;
-  const fixtureNode = process.env.npm_node_execpath || "node";
-  const start = () => {
-    const child = spawn(fixtureNode, [join(import.meta.dir, "fixtures/conversations-app-server.ts")], {
-      shell: false, stdio: ["pipe", "pipe", "pipe"],
-      env: { ...process.env, WWW_CONVERSATION_FIXTURE_STORE: store, WWW_CONVERSATION_FIXTURE_TRACE: "1" }
-    });
-    const closed = new Promise<void>(resolve => child.once("close", () => resolve()));
-    const stop = async () => {
-      if (child.exitCode === null && child.signalCode === null) child.kill();
-      await closed;
-    };
-    return { child, client: new JsonRpcClient(child), wire: watchConversationWire(child), stop };
-  };
-  let running = start();
-  const trace = watchConversationRestart("conversations", () => running);
-  try {
-    await trace.step("first/initialize", () => running.client.request("initialize", {}));
-    await trace.step("first/thread-start", () => running.client.request("thread/start", { cwd }));
-    await trace.step("first/turn-start", () => running.client.request("turn/start", { threadId: "thread-persisted", input: [{ type: "text", text: "재시작 전 요청" }] }));
-    await trace.step("first/close", () => running.stop());
-    running = start();
-    await trace.step("second/initialize", () => running.client.request("initialize", {}));
-    await trace.step("second/turn-before-resume", () => {
-      const request = running.wire.trackRequest(running.client.request("turn/start", { threadId: "thread-persisted", input: [{ type: "text", text: "복원 전 거부" }] }));
-      return expect(request).rejects.toThrow("thread/resume");
-    });
-    const service = createConversationService(running.client, cwd) ;
-    const listed = await trace.step("second/thread-list", () => service.list());
-    expect(listed.threads[0]?.id).toBe("thread-persisted");
-    const opened = await trace.step("second/thread-open", () => service.open("thread-persisted"));
-    expect(project(events(opened.events)).blocks).toContainEqual(expect.objectContaining({ kind: "user", text: "재시작 전 요청" }));
-    await trace.step("second/turn-after-resume", () => running.client.request("turn/start", { threadId: opened.threadId, input: [{ type: "text", text: "이어가는 요청" }] }));
-    const reopened = await trace.step("second/thread-reopen", () => service.open(opened.threadId));
-    expect(project(events(reopened.events)).blocks.filter((block) => block.kind === "user")).toHaveLength(2);
-  } finally {
-    try {
-      await trace.step("cleanup/close", () => running.stop());
-      await trace.step("cleanup/remove-temp", () => rm(directory, { recursive: true, force: true }));
-    } finally { trace.dispose(); }
-  }
-}, 10_000);
+test("실제 stdio subprocess를 재시작한 뒤 같은 Native thread ID와 누적 대화를 다시 연다", () => runConversationRestart("conversations"), 10_000);
 
 
 test("저장 공개 항목의 유효 완료 시각은 보존하고 비공개 필드와 invalid 시각은 제외한다", () => {

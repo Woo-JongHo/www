@@ -2,17 +2,14 @@
  * @verifies RESP-NATIVE-LIFECYCLE
  */
 import { expect, test } from "bun:test";
-import { spawn } from "node:child_process";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { createNativeLifecycle, createRestoredMessageFilter } from "../src/native-lifecycle";
-import { JsonRpcClient } from "../src/rpc";
 import { createDevelopmentService } from "../src/development";
 import { runInNewContext } from "node:vm";
 import type { ConversationEvent } from "../src/conversations";
 import type { RpcId } from "../src/shared";
-import { watchConversationRestart, watchConversationWire } from "./fixtures/conversations-watchdog";
+import { runConversationRestart } from "./fixtures/conversations-restart-runner";
 
 const cwd      = "/workspace/project" ;
 const threadId = "thread-persisted"   ;
@@ -252,58 +249,7 @@ test("실제 main은 같은 lifecycle seam을 사용하고 closed에서 준비 �
   expect(main).toContain('if (rpc !== startedClient) throw');
 });
 
-test("main과 같은 lifecycle seam은 실제 subprocess 재시작 때 resume 선행 후 한 번만 전송한다", async () => {
-  const directory = await mkdtemp(join(tmpdir(), "www-lifecycle-"));
-  const lifecycle = createNativeLifecycle(() => {});
-  const fixtureNode = process.env.npm_node_execpath || "node";
-  const start = () => {
-    const child = spawn(fixtureNode, [join(import.meta.dir, "fixtures/conversations-app-server.ts")], {
-      shell: false, stdio: ["pipe", "pipe", "pipe"],
-      env: { ...process.env, WWW_CONVERSATION_FIXTURE_STORE: join(directory, "history.json"), WWW_CONVERSATION_FIXTURE_TRACE: "1" }
-    });
-    const client = new JsonRpcClient(child);
-    client.once("closed", (error: Error) => lifecycle.closed(client, error.message));
-    const closed = new Promise<void>(resolve => child.once("close", () => resolve()));
-    const stop = async () => {
-      if (child.exitCode === null && child.signalCode === null) child.kill();
-      await closed;
-    };
-    return { child, client, wire: watchConversationWire(child), stop };
-  };
-  let running = start();
-  let current: JsonRpcClient | null = running.client;
-  const trace = watchConversationRestart("native-lifecycle", () => running);
-  try {
-    await trace.step("first/initialize", () => running.client.request("initialize", {}));
-    await trace.step("first/thread-start", () => running.client.request("thread/start", { cwd }));
-    lifecycle.markReady(running.client, cwd, threadId);
-    await trace.step("first/close", () => running.stop());
-    running = start();
-    current = running.client;
-    const restarted = running.client;
-    await trace.step("second/initialize", () => restarted.request("initialize", {}));
-    await trace.step("second/turn-before-resume", () => {
-      const request = running.wire.trackRequest(restarted.request("turn/start", { threadId, input: [{ type: "text", text: "복원 없이 거부" }] }));
-      return expect(request).rejects.toThrow("resume");
-    });
-    let restored = false;
-    await trace.step("second/lifecycle-start", () => lifecycle.start({
-      connect: async () => running.client, valid: (client) => client === current,
-      cwd, threadId, prompt: "재시작 뒤 새 요청",
-      restored(value) { restored = true; expect(value.approvalPolicy).toBe("on-request"); },
-      beforeStart() { expect(restored).toBe(true); }
-    }));
-    const opened = await trace.step("second/lifecycle-open", () => lifecycle.open(restarted, cwd, threadId, () => true));
-    expect(opened.events.filter((event) => event.method === "turn/userPrompt")).toHaveLength(1);
-    expect(JSON.stringify(opened.events)).toContain("재시작 뒤 새 요청");
-  } finally {
-    current = null;
-    try {
-      await trace.step("cleanup/close", () => running.stop());
-      await trace.step("cleanup/remove-temp", () => rm(directory, { recursive: true, force: true }));
-    } finally { trace.dispose(); }
-  }
-}, 10_000);
+test("main과 같은 lifecycle seam은 실제 subprocess 재시작 때 resume 선행 후 한 번만 전송한다", () => runConversationRestart("native-lifecycle"), 10_000);
 
 test("pending connect closed 중에도 첫 start가 정리되기 전 중첩 전송을 거부한다", async () => {
   const s = setup();

@@ -6,16 +6,11 @@ const store = process.env.WWW_CONVERSATION_FIXTURE_STORE;
 if (!store) throw new Error("대화 fixture 저장 경로가 필요합니다.");
 let thread: Record<string, unknown> | null = existsSync(store) ? JSON.parse(readFileSync(store, "utf8")) : null;
 let loaded = false;
-const traced = process.env.WWW_CONVERSATION_FIXTURE_TRACE === "1";
-const trace = (phase: string, id: unknown) => {
-  if (traced && typeof id === "number") process.stderr.write(`[www-conversation-fixture] ${phase} ${id}\n`);
-};
-const send = (value: unknown, afterWrite?: (error?: Error | null) => void) => process.stdout.write(`${JSON.stringify(value)}\n`, afterWrite);
+const send = (value: unknown) => process.stdout.write(`${JSON.stringify(value)}\n`);
 
 createInterface({ input: process.stdin }).on("line", (line) => {
   const message = JSON.parse(line);
   if (message.id === undefined) return;
-  if (message.method === "turn/start") trace("turn-received", message.id);
   let result: unknown = {};
   if (message.method === "thread/start") {
     thread = {
@@ -26,11 +21,7 @@ createInterface({ input: process.stdin }).on("line", (line) => {
     writeFileSync(store, JSON.stringify(thread));
     result = { thread };
   } else if (message.method === "turn/start" && thread && message.params.threadId === thread.id) {
-    if (!loaded) {
-      send({ id: message.id, error: { code: -32000, message: "thread/resume이 먼저 필요합니다." } },
-        traced ? (error) => trace(error ? "error-write-failed" : "error-write-ok", message.id) : undefined);
-      return;
-    }
+    if (!loaded) { send({ id: message.id, error: { code: -32000, message: "thread/resume이 먼저 필요합니다." } }); return; }
     const turns = Array.isArray(thread.turns) ? thread.turns : [];
     const id = `turn-${turns.length + 1}`;
     const input = message.params.input[0].text;
