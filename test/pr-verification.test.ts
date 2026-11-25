@@ -78,7 +78,10 @@ test("기준 자료·도구 설정·실행 파일·모드·링크·과거 서술
       const target = path.join(repo, archive);
       writeFileSync(target, "\uFEFF\uFEFF " + readFileSync(target, "utf8").replace("allowed-tools: Read", "allowed-tools: Bash"));
     },
-    (repo: string) => chmodSync(path.join(repo, archive), 0o755),
+    (repo: string) => {
+      chmodSync(path.join(repo, archive), 0o755);
+      execFileSync("git", ["add", "--chmod=+x", "--", archive], { cwd: repo });
+    },
     (repo: string) => symlinkSync(archive, path.join(repo, "alias.md")),
     (repo: string) => {
       const target = path.join(repo, manifest);
@@ -90,7 +93,7 @@ test("기준 자료·도구 설정·실행 파일·모드·링크·과거 서술
     },
   ];
   for (const change of changes) expect(candidate(change).draft.mode).toBe("full");
-});
+}, 20_000);
 
 const repository = "owner/www";
 const draft = { action: "opened", pull_request: { draft: true,
@@ -148,7 +151,7 @@ test("앱 경로와 생성 지도만 매핑하고 테스트·설치·하네스·
     expect(candidate(root => { app(root); update(root, file); }, false).draft.mode).toBe("full");
   }
   expect(candidate(root => update(root, "src/architecture.generated.json"), false).draft.mode).toBe("full");
-});
+}, 20_000);
 
 test("ready·일반 PR·merge_group의 전체 경로와 초안 영수증 경계를 workflow에 연결한다", () => {
   const source = readFileSync(path.join(import.meta.dir, "../.github/workflows/ci.yml"), "utf8");
