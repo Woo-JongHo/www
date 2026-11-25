@@ -79,12 +79,18 @@ test('세션 확장 환경의 관측 실패·손상은 현재 환경으로 보�
   const configuration = { checkId: 'unavailable-observation', scenario: '확장 환경 실패 보존', phase: 'focused' as const, maxAgeMs: 60_000, tools: [tool], environmentPaths: [], environmentObserved: true };
   const valid = (await verifyInSession(createVerificationSession(configuration), options(repo))).attempt;
   assert.equal(valid.result, 'passed');
-  await chmod(tool, 0o644);
+  const windows = process.platform === 'win32';
+  const parkedTool = tool + '.unavailable';
+  // Windows chmod는 실행 권한을 제거할 수 없다.
+  if (windows) await rename(tool, parkedTool);
+  else await chmod(tool, 0o644);
   assert.ok((await evaluateEvidence({ repo, record: record(), attempt: valid })).reasons.includes('environment_observation_unavailable'));
   const unavailable = (await verifyInSession(createVerificationSession(configuration), options(repo))).attempt;
   assert.equal(unavailable.exitCode, 0);
   assert.equal(unavailable.result, 'failed');
-  await chmod(tool, 0o755);
+  assert.equal(unavailable.environmentObservation?.digest, null);
+  if (windows) await rename(parkedTool, tool);
+  else await chmod(tool, 0o755);
   assert.equal((await evaluateEvidence({ repo, record: record(), attempt: unavailable })).usable, false);
   assert.ok(valid.environmentObservation);
   Object.assign(valid.environmentObservation, { version: 2 });
@@ -495,16 +501,15 @@ test('재사용은 구현·테스트·설정·기준·범위·환경·도구·�
     ['source_changed', () => writeFile(path.join(repo, 'config.json'), '{"mode":"changed"}')],
     ['artifacts_changed', () => writeFile(path.join(repo, '.www/artifact'), '새 원문')],
     ['observed_environment_changed', () => writeFile(path.join(repo, 'node_modules/dependency.txt'), 'v2')],
-    ['observed_environment_changed', () => chmod(tool, 0o644)],
+    ['observed_environment_changed', () => appendFile(tool, '관측 도구 바이트 변경')],
   ];
   for (const [reason, mutate] of mutations) {
     await mutate();
     const result = await invoke();
     assert.equal(result.reuse.action, 'executed');
-    // 실행 불가 도구도 관측 실패로 재실행한다.
-    assert.ok(result.reuse.reasons.includes(reason) || result.reuse.reasons.includes('environment_observation_unavailable'), result.reuse.reasons.join(','));
+    assert.equal(result.attempt.result, 'passed');
+    assert.ok(result.reuse.reasons.includes(reason), result.reuse.reasons.join(','));
   }
-  await chmod(tool, 0o755); await invoke();
   const prior = process.env.WWW_REUSE_TEST_ENV;
   try {
     process.env.WWW_REUSE_TEST_ENV = 'changed';
