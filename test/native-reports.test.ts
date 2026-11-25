@@ -14,8 +14,6 @@ import type { NativeReportDecision, NativeReportInput } from "../src/report-judg
 import { ReportJudgeError } from "../src/report-judge";
 import { listWorkReports, readWorkReport } from "../scripts/workflow/reports.ts";
 
-type Harness = ReturnType<typeof createNativeReportHarness>;
-
 async function repository(t: TestContext): Promise<string> {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "www-native-report-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));
@@ -34,15 +32,6 @@ function decision(needed = true): NativeReportDecision {
   };
 }
 
-async function waitFor(harness: Harness, repo: string, key: string, status: NativeReportJob["status"]): Promise<NativeReportJob> {
-  for (let attempt = 0; attempt < 250; attempt++) {
-    const job = (await harness.list(repo)).find((entry) => entry.key === key);
-    if (job?.status === status) return job;
-    await new Promise((resolve) => setTimeout(resolve, 20));
-  }
-  throw new Error(`Native 보고서 상태 대기 초과: ${status}`);
-}
-
 function observeReports() {
   const states: NativeReportJob[] = [];
   const events = new EventEmitter();
@@ -50,15 +39,13 @@ function observeReports() {
     states.push(job);
     events.emit("state");
   }
-  async function terminal(count: number, expected: "saved" | "skipped" | "failed"): Promise<NativeReportJob[]> {
+  async function until<T>(find: () => T | undefined): Promise<T> {
     const deadline = new AbortController();
     const timer = setTimeout(() => deadline.abort(), 4_000);
     try {
       for (;;) {
-        const completed = states.filter(job => job.status !== "queued" && job.status !== "judging");
-        const unexpected = completed.find(job => job.status !== expected);
-        if (unexpected) throw new Error(`Native 보고서 상태 불일치 (${unexpected.status}): ${unexpected.reason}`);
-        if (completed.length >= count) return completed;
+        const match = find();
+        if (match !== undefined) return match;
         await once(events, "state", { signal: deadline.signal });
       }
     } catch (error) {
@@ -66,7 +53,21 @@ function observeReports() {
       throw new Error(`Native 보고서 저장 알림 시간 초과: ${states.map(job => job.status).join(", ") || "알림 없음"}`);
     } finally { clearTimeout(timer); }
   }
-  return { states, onState, terminal };
+  function terminal(count: number, expected: "saved" | "skipped" | "failed"): Promise<NativeReportJob[]> {
+    return until(() => {
+      const completed = states.filter(job => job.status !== "queued" && job.status !== "judging");
+      const unexpected = completed.find(job => job.status !== expected);
+      if (unexpected) throw new Error(`Native 보고서 상태 불일치 (${unexpected.status}): ${unexpected.reason}`);
+      return completed.length >= count ? completed : undefined;
+    });
+  }
+  async function persisted(repo: string, key: string, status: NativeReportJob["status"], occurrence = 1): Promise<NativeReportJob> {
+    const job = await until(() => states.filter(entry => entry.key === key && entry.status === status)[occurrence - 1]);
+    const stored: unknown = JSON.parse(await fs.readFile(path.join(repo, ".www/native-report-jobs", `${key}.json`), "utf8"));
+    assert.deepEqual(stored, job);
+    return job;
+  }
+  return { states, onState, terminal, persisted };
 }
 
 async function readSavedJob(repo: string, key: string, notice: NativeReportJob): Promise<NativeReportJob> {
@@ -126,9 +127,10 @@ test("필요 판단은 실제 보고서를 저장하며 원문·검증 통과를
 test("생략 판단은 메타만 보존하고 docs/work를 만들지 않는다", async (t) => {
   const repo    = await repository(t)                                                                    ;
   let calls     = 0                                                                                      ;
-  const harness = createNativeReportHarness({ judge: async () => { calls++; return decision(false); } }) ;
+  const observer = observeReports();
+  const harness = createNativeReportHarness({ onState: observer.onState, judge: async () => { calls++; return decision(false); } }) ;
   const queued  = await harness.enqueue({ repository: repo, input: input() })                            ;
-  const skipped = await waitFor(harness, repo, queued.key, "skipped")                                    ;
+  const skipped = await observer.persisted(repo, queued.key, "skipped")                                    ;
   assert.equal(skipped.reportId, null);
   await assert.rejects(fs.stat(path.join(repo, "docs/work")), /ENOENT/);
   assert.equal((await harness.enqueue({ repository: repo, input: input() })).status, "skipped");
@@ -154,14 +156,15 @@ test("동시 중복 enqueue는 한 번만 판단·저작한다", async (t) => {
 test("판단 실패는 자동 재실행하지 않고 명시 retry만 다시 판단한다", async (t) => {
   const repo    = await repository(t)                                                                                                                  ;
   let calls     = 0                                                                                                                                    ;
-  const harness = createNativeReportHarness({ judge: async (value) => { if (++calls === 1) throw new Error(value.prompt); return decision(false); } }) ;
+  const observer = observeReports();
+  const harness = createNativeReportHarness({ onState: observer.onState, judge: async (value) => { if (++calls === 1) throw new Error(value.prompt); return decision(false); } }) ;
   const queued  = await harness.enqueue({ repository: repo, input: input() })                                                                          ;
-  const failed  = await waitFor(harness, repo, queued.key, "failed")                                                                                   ;
+  const failed  = await observer.persisted(repo, queued.key, "failed")                                                                                   ;
   assert.doesNotMatch(failed.reason, /PRIVATE_PROMPT_MARKER/);
   assert.equal((await harness.enqueue({ repository: repo, input: input() })).status, "failed");
   assert.equal(calls, 1);
   await harness.retry(repo, queued.key);
-  await waitFor(harness, repo, queued.key, "skipped");
+  await observer.persisted(repo, queued.key, "skipped");
   assert.equal(calls, 2);
 });
 
@@ -171,9 +174,11 @@ test("작업 등록 후 저장 실패를 retry하면 같은 작업 UUID를 재�
   let injection: string | null = null                ;
   let injected                 = false               ;
   let calls                    = 0                   ;
+  const observer = observeReports();
   const harness = createNativeReportHarness({
     judge: async () => { calls++; return decision(); },
     onState: (job) => {
+      observer.onState(job);
       if (!job.workId || injected) return;
       const folder = readdirSync(path.join(repo, "docs/work/Native"))[0];
       injection = path.join(repo, "docs/work/Native", folder, "reports");
@@ -182,7 +187,7 @@ test("작업 등록 후 저장 실패를 retry하면 같은 작업 UUID를 재�
     },
   });
   const queued = await harness.enqueue({ repository: repo, input: input() }) ;
-  const failed = await waitFor(harness, repo, queued.key, "failed")          ;
+  const failed = await observer.persisted(repo, queued.key, "failed")          ;
   assert.ok(failed.workId);
   assert.match(failed.reason, /보고서 또는 작업 상태 저장에 실패/);
   assert.ok(injection);
@@ -194,7 +199,7 @@ test("작업 등록 후 저장 실패를 retry하면 같은 작업 UUID를 재�
   const original = await fs.readFile(workFile);
   assert.ok(original.byteLength > 1_048_576 && original.byteLength <= 8_388_608);
   await harness.retry(repo, queued.key);
-  const saved = await waitFor(harness, repo, queued.key, "saved");
+  const saved = await observer.persisted(repo, queued.key, "saved");
   assert.equal(saved.workId, failed.workId);
   assert.equal(calls, 1);
   assert.equal((await fs.readdir(path.join(repo, "docs/work/Native"))).length, 1);
@@ -210,7 +215,7 @@ test("작업 등록 후 저장 실패를 retry하면 같은 작업 UUID를 재�
   const oversized = await fs.readFile(workFile);
   assert.equal(oversized.byteLength, 8_388_609);
   const rejected = await harness.enqueue({ repository: repo, input: input("oversized-turn") }) ;
-  const boundary = await waitFor(harness, repo, rejected.key, "failed")                        ;
+  const boundary = await observer.persisted(repo, rejected.key, "failed")                        ;
   assert.match(boundary.reason, /보고서 또는 작업 상태 저장에 실패/);
   assert.equal(boundary.workId, undefined);
   assert.equal(boundary.reportId, null);
@@ -224,9 +229,10 @@ test("재시작에서 남은 judging은 interrupted이며 원문 없이 자동 �
   const repo                                         = await repository(t)                                                    ;
   let release: (value: NativeReportDecision) => void = () => {}                                                               ;
   const gate                                         = new Promise<NativeReportDecision>((resolve) => { release = resolve; }) ;
-  const original                                     = createNativeReportHarness({ judge: () => gate })                       ;
+  const observer = observeReports();
+  const original                                     = createNativeReportHarness({ onState: observer.onState, judge: () => gate })                       ;
   const queued                                       = await original.enqueue({ repository: repo, input: input() })           ;
-  await waitFor(original, repo, queued.key, "judging");
+  await observer.persisted(repo, queued.key, "judging");
   let restartCalls  = 0                                                                                        ;
   const restarted   = createNativeReportHarness({ judge: async () => { restartCalls++; return decision(); } }) ;
   const interrupted = (await restarted.list(repo))[0]                                                          ;
@@ -234,7 +240,7 @@ test("재시작에서 남은 judging은 interrupted이며 원문 없이 자동 �
   await assert.rejects(restarted.retry(repo, queued.key), /원문이 메모리에/);
   assert.equal(restartCalls, 0);
   release(decision(false));
-  await waitFor(original, repo, queued.key, "skipped");
+  await observer.persisted(repo, queued.key, "skipped");
   const again = createNativeReportHarness({ judge: async () => { restartCalls++; return decision(); } });
   assert.equal((await again.enqueue({ repository: repo, input: input() })).status, "skipped");
   assert.equal(restartCalls, 0);
@@ -292,16 +298,17 @@ test("pending 10개·96k 입력·쓰기 경로의 심볼릭 링크를 선행 거
 
 test("원문 메모리는 최근 20개로 제한되고 오래된 실패는 retry하지 않는다", async (t) => {
   const repo           = await repository(t)                                                                        ;
-  const harness        = createNativeReportHarness({ judge: async () => { throw new Error("의도한 판단 실패"); } }) ;
+  const observer = observeReports();
+  const harness        = createNativeReportHarness({ onState: observer.onState, judge: async () => { throw new Error("의도한 판단 실패"); } }) ;
   const keys: string[] = []                                                                                         ;
   for (let number = 0; number < 22; number++) {
     const job = await harness.enqueue({ repository: repo, input: input(`turn-${number}`) });
     keys.push(job.key);
-    await waitFor(harness, repo, job.key, "failed");
+    await observer.persisted(repo, job.key, "failed");
   }
   await assert.rejects(harness.retry(repo, keys[0]), /원문이 메모리에/);
-  await harness.retry(repo, keys[21]);
-  await waitFor(harness, repo, keys[21], "failed");
+  assert.equal((await harness.retry(repo, keys[21])).status, "queued");
+  await observer.persisted(repo, keys[21], "failed", 2);
   assert.doesNotMatch(await allText(repo), /PRIVATE_PROMPT_MARKER|PRIVATE_ANSWER_MARKER/);
 });
 
@@ -309,9 +316,10 @@ test("안전한 작업명과 Native 목차 영역을 유지하고 저장 상태 
   const repo = await repository(t);
   await fs.mkdir(path.join(repo, "docs/work"), { recursive: true });
   await fs.writeFile(path.join(repo, "docs/work/INDEX.md"), "# 작업 목차\n\n## Native\n\n기존 항목\n\n## Other\n\n다른 영역\n");
-  const harness = createNativeReportHarness({ judge: async () => ({ ...decision(), title: "../새 작업: <변경> / 확인?" }) }) ;
+  const observer = observeReports();
+  const harness = createNativeReportHarness({ onState: observer.onState, judge: async () => ({ ...decision(), title: "../새 작업: <변경> / 확인?" }) }) ;
   const queued  = await harness.enqueue({ repository: repo, input: input() })                                                ;
-  await waitFor(harness, repo, queued.key, "saved");
+  await observer.persisted(repo, queued.key, "saved");
   const folder = (await fs.readdir(path.join(repo, "docs/work/Native")))[0];
   assert.doesNotMatch(folder, /[<>:"\\|?*]/);
   const index = await fs.readFile(path.join(repo, "docs/work/INDEX.md"), "utf8");
@@ -357,10 +365,11 @@ test("persisted interrupted와 live pending 경계에서도 retry는 거부한�
   let release: (value: NativeReportDecision) => void = () => { throw new Error("judge 준비 전입니다."); }                        ;
   const deferred                                     = new Promise<NativeReportDecision>((resolve) => { release = resolve; })    ;
   let calls                                          = 0                                                                         ;
-  const harness                                      = createNativeReportHarness({ judge: () => { calls++; return deferred; } }) ;
+  const observer = observeReports();
+  const harness                                      = createNativeReportHarness({ onState: observer.onState, judge: () => { calls++; return deferred; } }) ;
   const queued                                       = await harness.enqueue({ repository: repo, input: input() })               ;
   try {
-    const judging = await waitFor(harness, repo, queued.key, "judging");
+    const judging = await observer.persisted(repo, queued.key, "judging");
     assert.equal((await harness.retry(repo, queued.key)).status, "judging");
     // state의 영속화 이후 schedule.finally 이전에 존재하는 디스크 상태를 고정한다.
     // judge가 해제되지 않아 pending은 반드시 살아 있으며 전역 FS/test hook은 쓰지 않는다.
@@ -372,7 +381,7 @@ test("persisted interrupted와 live pending 경계에서도 retry는 거부한�
     assert.equal(calls, 1);
   } finally {
     release(decision(false));
-    await waitFor(harness, repo, queued.key, "skipped");
+    await observer.persisted(repo, queued.key, "skipped");
   }
 });
 
@@ -380,13 +389,14 @@ test("앱 종료 취소는 interrupted로 저장하고 현재·재시작 모두 
   for (const error of [new DOMException("PRIVATE_ANSWER_MARKER", "AbortError"), new ReportJudgeError("REPORT_JUDGE_CANCELLED", "PRIVATE_ANSWER_MARKER cancelled")]) {
     const repo  = await repository(t)   ;
     const abort = new AbortController() ;
-    const harness = createNativeReportHarness({ judge: () => new Promise<NativeReportDecision>((_resolve, reject) => {
+    const observer = observeReports();
+    const harness = createNativeReportHarness({ onState: observer.onState, judge: () => new Promise<NativeReportDecision>((_resolve, reject) => {
       abort.signal.addEventListener("abort", () => reject(error), { once: true });
     }) });
     const queued = await harness.enqueue({ repository: repo, input: input() });
-    await waitFor(harness, repo, queued.key, "judging");
+    await observer.persisted(repo, queued.key, "judging");
     abort.abort();
-    const interrupted = await waitFor(harness, repo, queued.key, "interrupted");
+    const interrupted = await observer.persisted(repo, queued.key, "interrupted");
     assert.match(interrupted.reason, /중단됐습니다/);
     assert.match(interrupted.reason, /재시도할 수 없습니다/);
     await assert.rejects(harness.retry(repo, queued.key), /원문이 메모리에/);
@@ -402,11 +412,13 @@ test("앱 종료 취소는 interrupted로 저장하고 현재·재시작 모두 
 
 test("재시작·메모리 만료로 원문이 없는 실패는 재시도 가능 안내를 남기지 않는다", async (t) => {
   const repo    = await repository(t)                                                                                                                         ;
-  const harness = createNativeReportHarness({ judge: async () => { throw new ReportJudgeError("REPORT_JUDGE_INVALID_RESPONSE", "PRIVATE_PROMPT_MARKER"); } }) ;
+  const observer = observeReports();
+  const harness = createNativeReportHarness({ onState: observer.onState, judge: async () => { throw new ReportJudgeError("REPORT_JUDGE_INVALID_RESPONSE", "PRIVATE_PROMPT_MARKER"); } }) ;
   const queued  = await harness.enqueue({ repository: repo, input: input() })                                                                                 ;
-  const failed  = await waitFor(harness, repo, queued.key, "failed")                                                                                          ;
+  const failed  = await observer.persisted(repo, queued.key, "failed")                                                                                          ;
   assert.match(failed.reason, /이 앱이 실행 중일 때만/);
-  assert.equal(failed.retryAvailable, true);
+  const live = (await harness.list(repo)).find(job => job.key === queued.key);
+  assert.equal(live?.retryAvailable, true);
   const restarted = createNativeReportHarness({ judge: async () => decision(false) }) ;
   const after     = (await restarted.list(repo))[0]                                   ;
   assert.equal(after.status, "failed");
