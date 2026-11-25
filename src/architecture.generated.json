@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "0b25144cc38b5b98cf4cfebdf85641663b5a339bf3cbb45bfabd9234f7eb765c",
+  "digest"       : "4d555afaf33c63b2818e7d56d06aa967be920bd9b8e99ab369548345f6561e4e",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -862,8 +862,8 @@
       "layer"      : "host",
       "role"       : "별도 읽기 전용 Native 보고서 판단",
       "line"       : 1,
-      "lines"      : 347,
-      "digest"     : "64beede27c0addfab97447d00492d7c7965673b05de739a014412af15a8537fe",
+      "lines"      : 357,
+      "digest"     : "1c106dc1aee7a4fb171547f3ad9ff35293015ed811cb7bc51a89e1c64c4fccc0",
       "structureId": "arch.reports.judgement"
     },
     {
@@ -3652,7 +3652,7 @@
       "statement": "import type { NativeTimingEvent, ChatTheme, DashboardSnapshot, DashboardWork, NativeGoalStatus, NativeModelOption, NativeSessionSummary, SideQuestionContext } from \"./shared\";"
     },
     {
-      "id"       : "src/report-judge.ts:228",
+      "id"       : "src/report-judge.ts:265",
       "from"     : "src/report-judge.ts",
       "to"       : "scripts/workflow/reports.ts",
       "mode"     : "mixed",
@@ -3663,7 +3663,7 @@
       "statement": "import { parseReportReader, type ReportNarrative } from \"../scripts/workflow/reports.ts\";"
     },
     {
-      "id"       : "src/report-judge.ts:318",
+      "id"       : "src/report-judge.ts:355",
       "from"     : "src/report-judge.ts",
       "to"       : "src/native-command.ts",
       "mode"     : "runtime",
@@ -3674,7 +3674,7 @@
       "statement": "import { resolveNativeCodex } from \"./native-command\";"
     },
     {
-      "id"       : "src/report-judge.ts:373",
+      "id"       : "src/report-judge.ts:410",
       "from"     : "src/report-judge.ts",
       "to"       : "src/rpc.ts",
       "mode"     : "mixed",
@@ -7300,7 +7300,7 @@
         "line": 2
       }
     ],
-    "digest": "d45d7d03b1daa8bc3c05361d89dfdd147f65594327d72561414610fa091f987f",
+    "digest": "659ba57d176e8ad78828fa6d5104040d0299815128c77a15be89c7fb8b7703e5",
     "statecharts": {
       "models": [
         {

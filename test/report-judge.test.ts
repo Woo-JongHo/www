@@ -2,6 +2,7 @@
  * @verifies RESP-REPORTS-JUDGEMENT
  */
 import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
 import { promises as fs } from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -9,6 +10,8 @@ import test, { type TestContext } from "node:test";
 import { judgeNativeReport, ReportJudgeError, type NativeReportInput } from "../src/report-judge";
 import { createNativeReportHarness, type NativeReportJob } from "../src/native-reports";
 import { parseReportReader, type ReportReader } from "../scripts/workflow/reports.ts";
+
+const fixtureNode = process.versions.bun ? (process.env.npm_node_execpath || "node") : process.execPath;
 
 const input: NativeReportInput = {
   threadId  : "source-thread"                                             ,
@@ -34,12 +37,11 @@ const reader: ReportReader = {
 async function server(t: TestContext, mode: string, response: unknown = report) {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "www-judge-fixture-"));
   t.after(() => fs.rm(directory, { recursive: true, force: true }));
-  const binary  = path.join(directory, "codex-judge-fixture")                        ;
+  const script  = path.join(directory, "codex-judge-fixture.cts")                    ;
   const log     = path.join(directory, "requests.jsonl")                             ;
   const pidFile = path.join(directory, "pid.txt")                                    ;
   const payload = typeof response === "string" ? response : JSON.stringify(response) ;
-  await fs.writeFile(binary, `#!${process.execPath}
-const { createInterface } = require('node:readline');
+  await fs.writeFile(script, `const { createInterface } = require('node:readline');
 const { appendFileSync, writeFileSync } = require('node:fs');
 writeFileSync(${JSON.stringify(pidFile)},String(process.pid));
 const mode = ${JSON.stringify(mode)};
@@ -75,13 +77,17 @@ createInterface({input:process.stdin}).on('line',line=>{
     }
   }
 });
-`, { mode: 0o700 });
-  return { binary, log, pidFile };
+`);
+  const judge = (source: NativeReportInput, options: { timeoutMs?: number; signal?: AbortSignal } = {}) =>
+    judgeNativeReport(source, { timeoutMs: 2000, ...options }, (cwd) => spawn(fixtureNode, [script, "app-server"], {
+      cwd, shell: false, windowsHide: true, stdio: ["pipe", "pipe", "pipe"],
+    }));
+  return { judge, log, pidFile };
 }
 
 test("실제 별도 subprocess에서 읽기 전용 판단과 구조화 최종 서술을 받는다", async (t) => {
   const fixture = await server(t, "normal")                                                   ;
-  const result  = await judgeNativeReport(input, { binary: fixture.binary, timeoutMs: 2000 }) ;
+  const result  = await fixture.judge(input) ;
   assert.equal(result.needed, true);
   assert.equal(result.narrative?.summary, report.narrative.summary);
   const requests: unknown[] = (await fs.readFile(fixture.log, "utf8")).trim().split("\n").map((line) => JSON.parse(line))                                ;
@@ -105,12 +111,12 @@ test("실제 별도 subprocess에서 읽기 전용 판단과 구조화 최종 �
 
 test("작은 작업을 불필요로 판단한 결과는 보고서를 발명하지 않는다", async (t) => {
   const fixture = await server(t, "normal", { needed: false, reason: "짧은 확인 응답입니다.", title: "", narrative: null });
-  assert.deepEqual(await judgeNativeReport(input, { binary: fixture.binary, timeoutMs: 2000 }), { needed: false, reason: "짧은 확인 응답입니다.", title: "", narrative: null });
+  assert.deepEqual(await fixture.judge(input), { needed: false, reason: "짧은 확인 응답입니다.", title: "", narrative: null });
 });
 
 test("새 독자 양식은 실제 subprocess를 거쳐 보존하고 다음 출력 스키마에 필수로 요청한다", async (t) => {
   const fixture = await server(t, "normal", { ...report, narrative: { ...report.narrative, reader } }) ;
-  const result  = await judgeNativeReport(input, { binary: fixture.binary, timeoutMs: 2000 })          ;
+  const result  = await fixture.judge(input)          ;
   assert.deepEqual(result.narrative?.reader, reader);
   const requests = (await fs.readFile(fixture.log, "utf8")).trim().split("\n").map((line): unknown => JSON.parse(line)) ;
   const turn     = requests.find((value) => JSON.stringify(value).includes('"turn/start"'))                             ;
@@ -129,45 +135,48 @@ test("독자 양식의 nullable 필드와 빈 배열은 허용하고 누락·nul
   for (const value of [null, {}, { ...reader, story: "x".repeat(8001) }, { ...reader, checks: [{ target: "대상", method: "방법", expected: null, observed: null }] }, { ...reader, requirements: Array(21).fill(reader.requirements[0]) }, { ...reader, references: [{ path: "x".repeat(4001), purpose: "확인" }] }]) {
     assert.throws(() => parseReportReader(value));
     const fixture = await server(t, "normal", { ...report, narrative: { ...report.narrative, reader: value } });
-    await assert.rejects(judgeNativeReport(input, { binary: fixture.binary, timeoutMs: 2000 }), { code: "REPORT_JUDGE_INVALID_RESPONSE" });
+    await assert.rejects(fixture.judge(input), { code: "REPORT_JUDGE_INVALID_RESPONSE" });
   }
 });
 
 test("완료 알림이 turn/start 접수보다 먼저 와도 실제 최종 JSON을 보존한다", async (t) => {
   const fixture = await server(t, "race");
-  assert.equal((await judgeNativeReport(input, { binary: fixture.binary, timeoutMs: 2000 })).title, report.title);
+  assert.equal((await fixture.judge(input)).title, report.title);
   const nullable = await server(t, "null-phase");
-  assert.equal((await judgeNativeReport(input, { binary: nullable.binary, timeoutMs: 2000 })).title, report.title);
+  assert.equal((await nullable.judge(input)).title, report.title);
 });
 
 test("JSON 오류·모순된 필요 여부·과대 서술을 성공으로 받지 않는다", async (t) => {
   for (const response of ["not-json", { ...report, needed: false }, { ...report, narrative: null }, { ...report, title: "길".repeat(121) }, { ...report, extra: "허용 안 됨" }, { ...report, narrative: { ...report.narrative, changes: Array(31).fill("너무 많은 변경") } }]) {
     const fixture = await server(t, "normal", response);
-    await assert.rejects(judgeNativeReport(input, { binary: fixture.binary, timeoutMs: 2000 }), { code: "REPORT_JUDGE_INVALID_RESPONSE" });
+    await assert.rejects(fixture.judge(input), { code: "REPORT_JUDGE_INVALID_RESPONSE" });
   }
 });
 
 test("도구·승인 요청·실패 완료·델타만 있는 결과·프로토콜 오류를 거부한다", async (t) => {
   for (const mode of ["tool", "approval", "failed", "delta-only", "protocol"]) {
     const fixture = await server(t, mode);
-    if (mode === "protocol" || mode === "delta-only") await assert.rejects(judgeNativeReport(input, { binary: fixture.binary, timeoutMs: 2000 }), { code: "REPORT_JUDGE_INVALID_RESPONSE" });
-    else await assert.rejects(judgeNativeReport(input, { binary: fixture.binary, timeoutMs: 2000 }));
+    if (mode === "protocol" || mode === "delta-only") await assert.rejects(fixture.judge(input), { code: "REPORT_JUDGE_INVALID_RESPONSE" });
+    else await assert.rejects(fixture.judge(input));
     const requests = await fs.readFile(fixture.log, "utf8");
     assert.equal(requests.includes('"decision":"accept"'), false);
   }
 });
 
 test("EOF·제한 시간·취소를 별도 실패로 종료한다", async (t) => {
-  await assert.rejects(judgeNativeReport(input, { binary: "/www-report-judge-does-not-exist", timeoutMs: 2000 }), /app-server error/);
+  await assert.rejects(judgeNativeReport(input, { timeoutMs: 2000 }, (cwd) =>
+    spawn(path.join(cwd, "www-report-judge-does-not-exist.exe"), [], {
+      cwd, shell: false, windowsHide: true, stdio: ["pipe", "pipe", "pipe"],
+    })), /app-server error/);
   const eof = await server(t, "eof");
-  await assert.rejects(judgeNativeReport(input, { binary: eof.binary, timeoutMs: 2000 }), /closed/);
+  await assert.rejects(eof.judge(input), /closed/);
   const timeout = await server(t, "timeout");
-  await assert.rejects(judgeNativeReport(input, { binary: timeout.binary, timeoutMs: 50 }), { code: "REPORT_JUDGE_TIMEOUT" });
+  await assert.rejects(timeout.judge(input, { timeoutMs: 50 }), { code: "REPORT_JUDGE_TIMEOUT" });
   const abort   = new AbortController()                                                                       ;
-  const pending = judgeNativeReport(input, { binary: timeout.binary, timeoutMs: 2000, signal: abort.signal }) ;
+  const pending = timeout.judge(input, { signal: abort.signal }) ;
   setTimeout(() => abort.abort(), 30);
   await assert.rejects(pending, { code: "REPORT_JUDGE_CANCELLED" });
-  await assert.rejects(judgeNativeReport(input, { binary: timeout.binary, signal: abort.signal }), { code: "REPORT_JUDGE_CANCELLED" });
+  await assert.rejects(timeout.judge(input, { signal: abort.signal }), { code: "REPORT_JUDGE_CANCELLED" });
 });
 
 test("과대한 입력은 모델 subprocess를 시작하기 전에 거부한다", async () => {
@@ -185,7 +194,7 @@ test("실제 판단기의 모순·빈 응답·과대 응답은 하네스의 고�
     let timer   : ReturnType<typeof setTimeout> | undefined                                                                                                            ;
     const failed = new Promise<NativeReportJob>((resolve, reject) => { failure = resolve; timer = setTimeout(() => reject(new Error("실패 상태 대기 초과")), 3000); }) ;
     const harness = createNativeReportHarness({
-      judge: (value) => judgeNativeReport(value, { binary: fixture.binary, timeoutMs: 2000 }),
+      judge: fixture.judge,
       onState: (job) => { if (job.status === "failed") failure?.(job); },
     });
     try {
