@@ -60,10 +60,10 @@ test("모든 기준의 작업 연결과 빈 연결을 보고하고 누락 파일
   const status = (await artifactStatus(repo, saved))[1];
   expect(status.status).toBe("current");
   expect(status.findings).toHaveLength(2);
-  await put(repo, path.relative(repo, path.join(path.dirname(work.path), "tasks.md")), "# 구현 작업\n- AC-1 저장·복원 구현과 재시작 검사\n- AC-2 누락 폴더 안내와 오류 검사\n");
+  const taskPath = path.relative(repo, path.join(path.dirname(work.path), "tasks.md")).split(path.sep).join("/");
+  await put(repo, taskPath, "# 구현 작업\n- AC-1 저장·복원 구현과 재시작 검사\n- AC-2 누락 폴더 안내와 오류 검사\n");
   expect((await artifactStatus(repo, saved))[1].status).toBe("stale");
   const updated = await submission(repo, saved, "consistency");
-  const taskPath = path.relative(repo, path.join(path.dirname(work.path), "tasks.md"));
   updated.coverage[0].tasks.push({ path: taskPath, line: 2 });
   updated.coverage[1].tasks.push({ path: taskPath, line: 3 });
   const linked = await recordArtifactReview({ repo, workId: work.record.id, review: updated });
@@ -237,8 +237,8 @@ test("전달된 문서와 비정상 호스트 종료·의미적 수용은 별도
   expect((await deliveryReceipt(repo, result.receiptPath)).tools.every((item: { provided: boolean }) => item.provided === true)).toBe(true);
 });
 
-test("주입 호스트의 종료 결과만으로 정본 전달을 추정하지 않는다", async () => {
-  for (const outcome of ["passed", "nonzero", "signal", "protocol_error", "host_error", "incomplete"]) {
+for (const outcome of ["passed", "nonzero", "signal", "protocol_error", "host_error", "incomplete"]) {
+  test(`주입 호스트의 종료 결과만으로 정본 전달을 추정하지 않는다 (${outcome})`, async () => {
     for (const inputDelivered of [undefined, false, true]) {
       const { repo, options } = await deliveryFixture();
       const result = await runDevelopmentWorkflow(options, { runProcess: async invocation => {
@@ -249,8 +249,8 @@ test("주입 호스트의 종료 결과만으로 정본 전달을 추정하지 �
       expect(result.tools?.every(item => item.provided === (inputDelivered === true) && item.hostAcceptance === "unconfirmed")).toBe(true);
       expect((await deliveryReceipt(repo, result.receiptPath)).tools.every(item => item.provided === (inputDelivered === true))).toBe(true);
     }
-  }
-});
+  });
+}
 
 test("실제 Node stdin 전달은 비정상 종료에도 보존하고 조기 입력 종료는 제공으로 기록하지 않는다", async () => {
   for (const earlyClose of [false, true]) {
@@ -302,8 +302,8 @@ test("실제 runProcess 내부 환경 재검사 실패를 제공으로 기록하
   expect((await deliveryReceipt(repo, result.receiptPath)).tools.every(item => item.provided === false)).toBe(true);
 });
 
-test("실제 stdio의 출력 보존 실패는 입력 EOF 전달·조기 중단과 독립적으로 제공에 반영한다", async () => {
-  for (const appendGuidance of [false, true]) for (const earlyClose of [false, true]) {
+for (const appendGuidance of [false, true]) for (const earlyClose of [false, true]) {
+  test(`실제 stdio의 출력 보존 실패는 입력 EOF 전달·조기 중단과 독립적으로 제공에 반영한다 (${appendGuidance ? "안내 추가" : "원문 그대로"}, ${earlyClose ? "조기 중단" : "EOF 전달"})`, async () => {
     const { repo, options } = await deliveryFixture();
     if (earlyClose) await put(repo, "AGENTS.md", "전달 대상\n" + "한".repeat(200_000));
     const child = earlyClose
@@ -321,12 +321,14 @@ test("실제 stdio의 출력 보존 실패는 입력 EOF 전달·조기 중단�
       };
       syncBuiltinESMExports();
       try {
-        const {runDevelopmentWorkflow}=await import(${JSON.stringify(path.resolve(import.meta.dir, "../scripts/workflow/run.ts"))});
+        const {runDevelopmentWorkflow}=await import(${JSON.stringify(new URL("../scripts/workflow/run.ts", import.meta.url).href)});
         const result=await runDevelopmentWorkflow(${JSON.stringify(options)},{prepareInvocation:invocation=>({...invocation,stdin:invocation.stdin+${JSON.stringify(appendGuidance ? '\n\n작성 하네스 관찰 데이터\n'+JSON.stringify({fixture:true}) : '')},command:process.execPath,args:['-e',${JSON.stringify(child)}]})});
         console.log(JSON.stringify({result,faults,runtime:process.version}));
       } finally {fs.writeSync=original;syncBuiltinESMExports();}
     `;
-    const raw: unknown = JSON.parse(execFileSync("node", ["--input-type=module", "-e", script], { encoding: "utf8", maxBuffer: 4_000_000 }));
+    const raw: unknown = JSON.parse(execFileSync("node", ["--input-type=module", "-e", script], {
+      encoding: "utf8", maxBuffer: 4_000_000, timeout: 8_000,
+    }));
     if (!deliveryObject(raw) || !deliveryObject(raw.result)) throw new Error("실제 주입 결과가 필요합니다.");
     const result = raw.result;
     if (!deliveryObject(result.host) || !Array.isArray(result.tools)) throw new Error("실제 제공 영수증 구조가 필요합니다.");
@@ -340,8 +342,8 @@ test("실제 stdio의 출력 보존 실패는 입력 EOF 전달·조기 중단�
     const receipt = await deliveryReceipt(repo, result.receiptPath);
     expect(receipt.host.inputDelivered).toBe(!earlyClose);
     expect(receipt.tools.every(item => item.provided === !earlyClose)).toBe(true);
-  }
-});
+  }, 10_000);
+}
 
 
 test("원문 전체의 동일·append 전달만 제공이고 절단·변경·선두삽입·metadata 단독은 미제공이다", async () => {
