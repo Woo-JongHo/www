@@ -263,6 +263,10 @@ jobs:
           retention-days: 14
           include-hidden-files: true
           if-no-files-found: error
+      - name: Windows Node의 Native 응답 전송 확인
+        if: ${{ !cancelled() && steps.windows_setup.outcome == 'success' }}
+        shell: pwsh
+        run: node --experimental-transform-types test/fixtures/conversations-node-probe.ts
       - name: Windows 전체 회귀 검사
         if: ${{ !cancelled() && steps.windows_setup.outcome == 'success' }}
         shell: pwsh
