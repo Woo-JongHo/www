@@ -128,6 +128,7 @@ export function createNativeLifecycle(emit: Emit) {
       threadId: string;
       prompt: string;
       model?: string;
+      image?: string;
       restored(value: RestoredConversation): void;
       beforeStart(): void;
       requestBoundary?(method: string, status: "started" | "completed" | "failed"): void;
@@ -155,7 +156,7 @@ export function createNativeLifecycle(emit: Emit) {
         if (pending.size > 0) throw new Error("복원 중 도착한 승인 요청을 먼저 처리해 주세요.");
         options.beforeStart();
         mutation = { client, threadId: options.threadId };
-        return await transport.request("turn/start", nativeTurnStartParams(options.threadId, options.prompt, options.model));
+        return await transport.request("turn/start", nativeTurnStartParams(options.threadId, options.prompt, options.model, options.image));
       } finally { mutation = null; starting = false; }
     },
     approval(client: Client, requestId: RpcId, threadId: unknown): string | null {

@@ -244,6 +244,11 @@ Native와의 대화에서 실행 흐름을 통제하고 진행·근거·승인·
 - [명세](Workflow/024-BoxBox%20%EC%99%B8%EB%B6%80%20%EA%B2%80%EC%82%AC%20%EB%B6%84%EB%A6%AC%EC%99%80%20Reports%20%EA%B3%B5%EC%8B%9D%20%EA%B2%80%EC%A6%9D%20%EB%B3%B5%EA%B5%AC/spec.md)
 - [작업 레코드](Workflow/024-BoxBox%20%EC%99%B8%EB%B6%80%20%EA%B2%80%EC%82%AC%20%EB%B6%84%EB%A6%AC%EC%99%80%20Reports%20%EA%B3%B5%EC%8B%9D%20%EA%B2%80%EC%A6%9D%20%EB%B3%B5%EA%B5%AC/work.json)
 
+### 025 — 검증 앱 캐시 정리와 Google Drive 증거 아카이브
+
+- [명세](Workflow/025-%EA%B2%80%EC%A6%9D%20%EC%95%B1%20%EC%BA%90%EC%8B%9C%20%EC%A0%95%EB%A6%AC%EC%99%80%20Google%20Drive%20%EC%A6%9D%EA%B1%B0%20%EC%95%84%EC%B9%B4%EC%9D%B4%EB%B8%8C/spec.md)
+- [작업 레코드](Workflow/025-%EA%B2%80%EC%A6%9D%20%EC%95%B1%20%EC%BA%90%EC%8B%9C%20%EC%A0%95%EB%A6%AC%EC%99%80%20Google%20Drive%20%EC%A6%9D%EA%B1%B0%20%EC%95%84%EC%B9%B4%EC%9D%B4%EB%B8%8C/work.json)
+
 ## Development
 
 ### 001 — Mac과 Windows 실사용 및 검증 신뢰성 완성

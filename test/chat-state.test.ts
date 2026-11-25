@@ -31,12 +31,19 @@ describe("Ovis에서 개작한 Chat 입력과 대화 경계", () => {
     expect(composerFull(MAX_PROMPT_CHARS, MAX_PROMPT_CHARS)    ).toBe(true ) ;
   });
 
+  test("사이드 질문 슬래시 명령은 질문 인자와 함께만 인식한다", () => {
+    expect(slashCommand("/btw")).toBe("btw");
+    expect(slashCommand("/btw 현재 작업은?")).toBe("btw");
+    expect(slashCommand("/btw-not-command")).toBeNull();
+  });
+
   test("대화 상태 키는 작업 폴더와 Native 스레드를 함께 격리한다", () => {
     expect(conversationKey("/repo-a", "thread")).not.toBe(conversationKey("/repo-b", "thread"));
     expect(conversationKey("/repo-a", null)).not.toBe(conversationKey("/repo-a", "null"));
     const first = blankReadingState();
     first.draft = "저장할 초안";
     expect(blankReadingState().draft).toBe("");
+    expect(blankReadingState().image).toBeUndefined();
   });
 
   test("늦은 다른 스레드 사건을 버리고 연결 사건은 같은 세션 상태로 받는다", () => {
@@ -235,6 +242,12 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
       const prompt = state.prompt;
       const promptRef = { get current() { return state.prompt; }, set current(value) { state.prompt = value; } };
       const failedDraftRef = { get current() { return state.failed; }, set current(value) { state.failed = value; } };
+      const imageRef = { current: undefined };
+      const failedImageRef = { current: undefined };
+      const imageReader = { current: null };
+      const setImage = value => { imageRef.current = value; };
+      const setImageReading = () => {};
+      const setHasDraft = () => {};
       const setFailedDraft = value => { state.failed = value; };
       const sendingRef = { current: false };
       const switchingRef = { current: false };

@@ -33,6 +33,14 @@ npm start
 
 `WWW_CODEX_BIN`은 실행 파일 경로만 바꾼다. 사용자 입력으로 임의 spawn 옵션이나 환경을 받지 않는다.
 
+## 검증 앱 캐시와 증거 아카이브
+
+채팅·홈 검증은 Electron 종료를 확인한 뒤 해당 실행의 격리 프로필에서 Chromium 캐시만 정리한다. 검증 중 재시작에는 같은 프로필을 쓰며, 설정·원장·스크린샷·실패 기록·하네스 영수증은 보존한다.
+
+저장소 루트의 `node scripts/evidence-retention.ts plan`은 검사 종류·범위·검사 목록이 같은 후속 성공 실행이 있는 채팅·홈 증거의 이동 후보, 후속 실행 이름, 원본 바이트 수를 보여준다. 경과 일수는 조건에 쓰지 않는다. 최신본, 실패나 부분 실행, 작업 문서·하네스 영수증이 참조하는 실행과 영수증·요약은 현 위치에 둔다. 후보는 해당 저장소의 작업 문서와 실행 기록을 기준으로 계산한다.
+
+이동을 실행하려면 [rclone Google Drive 원격](https://rclone.org/drive/)을 설정하고 `WWW_EVIDENCE_DRIVE`에 `drive:WWW/evidence-archive`처럼 전용 원격 폴더를 지정한다. `node scripts/evidence-retention.ts move <후보의 상대 경로>`는 원본을 해시 주소로 복사하고 원격에서 다시 읽은 SHA-256과 크기를 확인한다. 이동 영수증을 `.www/evidence/archive-index`에 기록한 뒤에만 로컬 파일을 제거한다. 같은 내용은 한 주소에 보관한다. `node scripts/evidence-retention.ts restore <원래 상대 경로>`는 이동 영수증으로 원본을 검증해 복원한다. 이미 존재하는 파일에는 덮어쓰지 않는다.
+
 ## TypeScript 작성 및 하네스
 
 WWW가 소유하는 새 실행 코드·테스트·개발 도구는 TypeScript(`.ts`, `.tsx`, 명시적 ESM 확장자가 필요할 때 `.mts`)로 작성하고 실제 strict 타입 검사 대상에 포함한다. 새 `.js`·`.jsx`·`.mjs`·`.cjs`는 허용하지 않는다. 기존 JavaScript는 `source-policy.json`의 정확한 경로와 SHA로 현재 내용을 동결한다. 그 파일을 수정해야 하면 호출부·테스트와 함께 TypeScript로 이관하며, baseline 자동 갱신이나 새 JavaScript 허용으로 검사를 통과시키지 않는다. 하네스는 저작 전 동결 목록을 보관하고, `source-policy.json`을 쓰기 계획에 선언했더라도 허용 항목 추가·해시 갱신은 거부한다. 예외 제거는 선언된 파일 삭제 또는 과거 TS 실험의 실제 검사 편입에만 허용한다. 직접 관리하던 JavaScript 소스·테스트·fixture·비교 도구는 TypeScript로 이관했고 현재 legacyJavaScript 허용 목록은 비어 있다. 외부 vendor와 빌드 생성물은 이관 대상이 아니다.

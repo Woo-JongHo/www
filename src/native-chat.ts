@@ -2,6 +2,29 @@
  * @architecture arch.chat.sessions.requests
  * @implements RESP-CHAT-SESSIONS-REQUESTS
  */
+const MAX_CHAT_IMAGE_BYTES = 8 * 1024 * 1024;
+
+export function validateChatImage(value: unknown): string | undefined {
+  if (value === undefined) return undefined;
+  const invalid = () => new Error("8MiB 이하의 PNG, JPEG, WebP 이미지만 보낼 수 있습니다.");
+  if (typeof value !== "string" || value.length > Math.ceil(MAX_CHAT_IMAGE_BYTES / 3) * 4 + 32) throw invalid();
+  const match = /^data:image\/(png|jpeg|webp);base64,([A-Za-z0-9+/]+={0,2})$/.exec(value);
+  if (!match?.[2]) throw invalid();
+  const bytes = Buffer.from(match[2], "base64");
+  if (bytes.length > MAX_CHAT_IMAGE_BYTES || bytes.toString("base64") !== match[2]) throw invalid();
+  const valid = match[1] === "png" ? bytes.subarray(0, 8).toString("hex") === "89504e470d0a1a0a"
+    : match[1] === "jpeg" ? bytes.subarray(0, 3).toString("hex") === "ffd8ff"
+    : bytes.toString("ascii", 0, 4) === "RIFF" && bytes.toString("ascii", 8, 12) === "WEBP";
+  if (!valid) throw invalid();
+  return value;
+}
+
+function nativeUserInput(text: string, image?: string) {
+  const message = { type: "text", text, text_elements: [] };
+  if (!image) return [message];
+  const attachment = { type: "image", url: image };
+  return text.trim() ? [message, attachment] : [attachment];
+}
 /** 새 Native 대화에서 요청하는 사용자용 진행 설명. 원문 사고는 요청하지 않는다. */
 export const NATIVE_PROGRESS_INSTRUCTIONS = [
   "진행 상황은 자연스러운 한국어 문장으로 자주, 충분히 자세히 설명하세요. 단순 인사나 즉시 답할 수 있는 짧은 질문이 아니라면 첫 도구 호출 전에 무엇을 확인할지 먼저 알려 주세요.",
@@ -79,15 +102,15 @@ export function nativeThreadStartParams(cwd: string, developmentStage = false) {
   };
 }
 
-export function nativeTurnStartParams(threadId: string, text: string, model?: string) {
+export function nativeTurnStartParams(threadId: string, text: string, model?: string, image?: string) {
   return {
     threadId                                              ,
-    input   : [{ type: "text", text, text_elements: [] }] ,
+    input   : nativeUserInput(text, image),
     summary : "detailed",
     ...(model === undefined ? {} : { model })
   };
 }
 
-export function nativeTurnSteerParams(threadId: string, expectedTurnId: string, text: string, clientUserMessageId: string) {
-  return { threadId, expectedTurnId, clientUserMessageId, input: [{ type: "text", text, text_elements: [] }] };
+export function nativeTurnSteerParams(threadId: string, expectedTurnId: string, text: string, clientUserMessageId: string, image?: string) {
+  return { threadId, expectedTurnId, clientUserMessageId, input: nativeUserInput(text, image) };
 }

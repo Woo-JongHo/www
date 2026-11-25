@@ -3,12 +3,26 @@
 import { createInterface } from "node:readline";
 import { randomUUID } from "node:crypto";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 
 type Data = Record<string, unknown>;
 const cwd = process.cwd();
+if (process.argv.includes("exec")) {
+  const input = JSON.parse(readFileSync(0, "utf8"));
+  const argv = process.argv;
+  if (!basename(cwd).startsWith("www-side-question-") || !argv.includes("read-only") || !argv.includes("--ignore-user-config")
+    || !argv.includes("--ephemeral") || !argv.includes("mcp_servers={}") || !argv.includes("hooks") || !argv.includes("shell_tool")) process.exit(2);
+  if (input.question === "사이드 실패 확인") process.exit(3);
+  const context = JSON.stringify(input.context);
+  if (!context.includes("저장된 작업 요청") || !context.includes("이어갈 작업") || context.includes("PRIVATE_REASONING_DO_NOT_RENDER") || context.includes("saved output")) process.exit(4);
+  await new Promise(resolve => setTimeout(resolve, 120));
+  console.log(JSON.stringify({ type: "item.completed", item: { type: "agent_message", text: "저장 대화 맥락에서 읽은 별도 답변" } }));
+  console.log(JSON.stringify({ type: "turn.completed" }));
+  process.exit(0);
+}
 const storePath = join(cwd, "fixture-history.json");
 const callsPath = join(cwd, "fixture-calls.jsonl");
+const goalsPath = join(cwd, "fixture-goals.json");
 const initialItems = [
   { id: "saved-user", type: "userMessage", content: [{ type: "text", text: "저장된 작업 요청" }] },
   { id: "saved-summary", type: "reasoning", summary: ["공개 요약입니다."], content: ["PRIVATE_REASONING_DO_NOT_RENDER"] },
@@ -80,6 +94,34 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
     ],
     nextCursor: null
   });
+  else if (typeof message.method === "string" && message.method.startsWith("thread/goal/")) {
+    if (existsSync(join(cwd, "fixture-goals-unsupported"))) {
+      send({ jsonrpc: "2.0", id: message.id, error: { code: -32601, message: "Method not found" } });
+      continue;
+    }
+    const threadId = String(params.threadId);
+    const goals = existsSync(goalsPath) ? object(JSON.parse(readFileSync(goalsPath, "utf8"))) : {};
+    if (message.method === "thread/goal/get") {
+      result(message.id, { goal: goals[threadId] ?? null });
+    } else if (params.origin !== "user") {
+      send({ jsonrpc: "2.0", id: message.id, error: { code: -32602, message: "사용자 지시 출처 누락" } });
+    } else if (message.method === "thread/goal/clear") {
+      const cleared = Boolean(goals[threadId]);
+      delete goals[threadId];
+      writeFileSync(goalsPath, JSON.stringify(goals));
+      result(message.id, { cleared });
+    } else {
+      const objective = params.objective ?? object(goals[threadId]).objective;
+      if (typeof objective !== "string") {
+        send({ jsonrpc: "2.0", id: message.id, error: { code: -32602, message: "설정된 목표가 없습니다." } });
+        continue;
+      }
+      const goal = { threadId, objective, status: params.status, createdAt: 0, updatedAt: 0, tokensUsed: 0, timeUsedSeconds: 0 };
+      goals[threadId] = goal;
+      writeFileSync(goalsPath, JSON.stringify(goals));
+      result(message.id, { goal });
+    }
+  }
   else if (message.method === "thread/compact/start") {
     if (existsSync(join(cwd, "fixture-compact-reject"))) {
       send({ jsonrpc: "2.0", id: message.id, error: { code: -32603, message: "합성 압축 요청 거절" } });
@@ -150,6 +192,9 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
           finish();
         }
       }, 20);
+    }
+    else if (prompt === "경계 사이드 질문 승인 대기") {
+      send({ jsonrpc: "2.0", id: 42, method: "item/commandExecution/requestApproval", params: { threadId, turnId, command: "printf side-question-approval" } });
     }
     else if (prompt === "경계 승인 ID 재사용") {
       boundaryApproval = 0;

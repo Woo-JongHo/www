@@ -3,7 +3,7 @@
  * @verifies RESP-CHAT-MESSAGES-PREVIEW
  */
 import { describe, expect, test } from "bun:test";
-import { commandOutput, commandPreview, jsonTokens, shellTokens } from "../src/command-preview";
+import { commandLogTokens, commandOutput, commandPreview, jsonTokens, shellTokens } from "../src/command-preview";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { CommandView } from "../src/command-card";
@@ -52,13 +52,47 @@ test("긴 출력은 한 영역에서 펼치며 짧은 출력에는 전환이 없
   }
 });
 
-test("실패 명령은 기본 펼침이며 개별 기억은 기본값보다 우선한다", () => {
+test("실패 명령은 상태와 종료 코드를 유지하며 기본 접힘과 개별 펼침을 구분한다", () => {
   const output = Array.from({ length: 11 }, (_, index) => `실패-${index}`).join("\n");
   const block = project([{ seq: 1, at: "2026-11-13T00:00:00Z", kind: "notification", method: "item/completed", params: { item: { id: "failed", type: "commandExecution", status: "failed", exitCode: 1, aggregatedOutput: output } } }]).blocks[0];
   if (block?.kind !== "command") throw Error("명령 없음");
   const render = (memory: Map<string, boolean>) => renderToStaticMarkup(createElement(ChatRowMemoryContext.Provider, { value: memory }, createElement(CommandView, { block })));
-  expect(render(new Map())).toContain("실패-10");
-  expect(render(new Map([[block.id, false]]))).not.toContain("실패-10");
+  const collapsed = render(new Map());
+  expect(collapsed).toContain("종료 코드 1");
+  expect(collapsed).toContain('aria-expanded="false"');
+  expect(collapsed).not.toContain("실패-10");
+  expect(render(new Map([[block.id, true]]))).toContain("실패-10");
+});
+
+test("HTML과 혼합 로그는 태그·스택·JSON을 색 토큰으로만 구분하며 CRLF와 엔티티를 보존한다", () => {
+  const raw = '[ERROR] 검사 실패 {"code":42}\r\n    at check (test.ts:9:2)\r\n<img src=x onerror=alert(1)>&amp;\r\n';
+  const tokens = commandLogTokens(raw);
+  expect(tokens.map(({ text }) => text).join("")).toBe(raw);
+  expect(tokens).toContainEqual({ text: "ERROR", kind: "literal" });
+  expect(tokens).toContainEqual({ text: "at check (test.ts:9:2)", kind: "option" });
+  expect(tokens).toContainEqual({ text: "42", kind: "number" });
+  expect(tokens).toContainEqual({ text: "<img src=x onerror=alert(1)>", kind: "key" });
+
+  const block = project([{ seq: 1, at: "2026-11-13T00:00:00Z", kind: "notification", method: "item/completed", params: {
+    item: { id: "raw-log", type: "commandExecution", status: "failed", exitCode: 42, aggregatedOutput: raw },
+  } }]).blocks[0];
+  if (block?.kind !== "command") throw Error("명령 없음");
+  const highlighted = renderToStaticMarkup(createElement(CommandView, { block }));
+  expect(highlighted).toContain("로그 · 구문 강조");
+  expect(highlighted).toContain('class="syntax-option">at check');
+  expect(highlighted).toContain("&lt;img src=x onerror=alert(1)&gt;");
+  expect(highlighted).toContain("&amp;amp;");
+  expect(highlighted).not.toContain("<img");
+  const memory = new Map([[`${block.id}:raw-output`, true]]);
+  const original = renderToStaticMarkup(createElement(ChatRowMemoryContext.Provider, { value: memory }, createElement(CommandView, { block })));
+  expect(original).not.toContain('class="syntax-option">at check');
+  expect(original).toContain(raw.replaceAll('"', "&quot;").replace("<img src=x onerror=alert(1)>&amp;", "&lt;img src=x onerror=alert(1)&gt;&amp;amp;"));
+});
+
+test("접힌 원문 미리보기에도 보관된 구분자를 그대로 사용한다", () => {
+  const lines = Array.from({ length: 12 }, (_, index) => `  로그 ${index}\r\n`);
+  expect(commandPreview(lines.join(""), false, true)).toEqual({ text: lines.slice(0, 10).join(""), hiddenLines: 2 });
+  expect(commandPreview(lines.join(""), true, true)).toEqual({ text: lines.slice(-10).join(""), hiddenLines: 2 });
 });
 
 test("짧은 원문 출력은 끝 개행과 들여쓰기를 그대로 표시한다", () => {

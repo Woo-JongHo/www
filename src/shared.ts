@@ -3,6 +3,8 @@
  * @implements RESP-NATIVE-PROTOCOL
  */
 export type RpcId = string | number;
+export const MAX_CHAT_IMAGE_BYTES = 8 * 1024 * 1024;
+export const CHAT_IMAGE_TYPES: readonly string[] = ["image/png", "image/jpeg", "image/webp"];
 
 export type NativeTimingPhase = "request" | "connect" | "initialize" | "thread/start" | "thread/read" | "thread/resume" | "thread/turns/list" | "turn/start" | "first-native";
 export type NativeTimingStatus = "started" | "completed" | "failed" | "cancelled";
@@ -53,20 +55,32 @@ export type RpaStandardSnapshot = {
 
 export interface DashboardProject { key: string; name: string; path: string; kind: "rpa" | "www" }
 export interface DashboardApplicability { status: "current" | "stale" | "missing" | "unassessed"; reasons: string[] }
+export type DashboardLegacyKind = "native-summary" | "legacy";
 export interface DashboardWork {
   id: string; projectKey: string; title: string; status: WorkStatus; blockedReason: string | null;
   sourcePath: string; areas: string[]; owner: string; requiredCriteria: number; passedCriteria: number; currentCriteria?: number; unassessedCriteria?: number; assessmentReason?: string;
+  nextAction?: string | null; legacyKind?: DashboardLegacyKind;
 }
 export interface DashboardIssue { code: string; path: string; message: string }
 export interface DashboardProjectSnapshot {
   project: DashboardProject; coverage: "complete" | "empty" | "partial" | "failed";
-  cards: DashboardWork[]; issues: DashboardIssue[];
+  cards: DashboardWork[]; issues: DashboardIssue[]; canonicalKey?: string;
 }
-export interface DashboardSnapshot { capturedAt: string; projects: DashboardProjectSnapshot[] }
+export interface DashboardGitHubIssues {
+  repository: string | null;
+  links: { number: number; workId: string }[];
+  status: "available" | "missing" | "failed" | "invalid";
+  checkedAt?: string;
+  open?: number;
+  unlinkedOpen?: number;
+}
+export interface DashboardSnapshot {
+  capturedAt: string; projects: DashboardProjectSnapshot[]; githubIssues?: DashboardGitHubIssues;
+}
 export interface DashboardWorkDetail {
   projectKey: string; workId: string; title: string; sourcePath: string; status: WorkStatus;
   owner: string; areas: string[];
-  blockedReason: string | null; nextAction: string | null; capturedAt: string;
+  blockedReason: string | null; nextAction: string | null; legacyKind?: DashboardLegacyKind; capturedAt: string;
   criteria: { id: string; description: string; required: boolean; result: "unverified" | "passed" | "failed" | "blocked"; evidenceCount: number; applicability?: DashboardApplicability }[];
   documents: { kind: "spec" | "design" | "tasks" | "verification"; path: string; status: "available" | "missing" | "failed"; content: string | null; message: string | null }[];
 }
@@ -195,6 +209,14 @@ export interface NativeModelOption {
   isDefault: boolean;
 }
 
+export type NativeGoalAction = { operation: "get" | "pause" | "resume" | "clear" } | { operation: "set"; objective: string };
+
+export type NativeGoalStatus = "active" | "paused" | "blocked" | "usageLimited" | "budgetLimited" | "complete";
+
+export type NativeGoalResult = { goal: { objective: string; status: NativeGoalStatus } | null } | { cleared: boolean };
+
+export type SideQuestionContext = { role: "user" | "assistant"; text: string };
+
 export type NativeCompaction =
   | { state: "idle" | "pending" | "running" | "completed" }
   | { state: "failed"; message: string };
@@ -239,10 +261,12 @@ export interface WwwApi {
   setProjectFavorite(selection: SelectionRef, workspaceKey: string, favorite: boolean): Promise<void>;
   switchProject(selection: SelectionRef, workspaceKey: string): Promise<ConversationSelection>;
   startThread(selection: SelectionRef): Promise<{ threadId: string }>;
-  startTurn(selection: SelectionRef, threadId: string, text: string, model?: string): Promise<{ turnId: string }>;
+  startTurn(selection: SelectionRef, threadId: string, text: string, model?: string, image?: string): Promise<{ turnId: string }>;
   listModels(selection: SelectionRef): Promise<NativeModelOption[]>;
   compactThread(selection: SelectionRef, threadId: string): Promise<void>;
-  steerTurn(selection: SelectionRef, threadId: string, expectedTurnId: string, text: string, clientUserMessageId: string): Promise<{ turnId: string }>;
+  controlGoal(selection: SelectionRef, threadId: string, action: NativeGoalAction): Promise<NativeGoalResult>;
+  askSideQuestion(selection: SelectionRef, threadId: string, question: string, context: SideQuestionContext[]): Promise<string>;
+  steerTurn(selection: SelectionRef, threadId: string, expectedTurnId: string, text: string, clientUserMessageId: string, image?: string): Promise<{ turnId: string }>;
   interrupt(selection: SelectionRef, threadId: string, turnId: string): Promise<void>;
   respond(selection: SelectionRef, requestId: RpcId, decision: string, approvalToken: string): Promise<void>;
   events(selection: SelectionRef): Promise<ScopedAppEvent[]>;
