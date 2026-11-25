@@ -6,12 +6,14 @@ import { verify, evaluateEvidence } from "../scripts/workflow/evidence.ts";
 import { expect, test } from "bun:test";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { execFileSync } from "node:child_process";
 import { createHash, randomUUID } from "node:crypto";
 import * as fs from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { DASHBOARD_LIMITS, readDashboard, readDashboardPlan, readDashboardWork } from "../src/dashboard";
 import { DashboardView, WorkDetailContent } from "../src/dashboard-view";
+import { githubIssueRows } from "../src/dashboard-github.mts";
 import type { DashboardProject, DashboardSnapshot, WorkStatus } from "../src/shared";
 
 function record(status: WorkStatus = "in_progress", extra: Record<string, unknown> = {}) {
@@ -99,6 +101,103 @@ test("등록한 읽기 범위만 수집하고 같은 UUID도 프로젝트별로 
     expect(result.projects).toHaveLength(2);
     expect(result.projects.map((item) => item.cards[0]!.projectKey)).toEqual([project.key, second.key]);
     expect(result.projects.map((item) => item.cards[0]!.id)).toEqual([value.id, value.id]);
+  });
+});
+
+test("같은 Git 공통 디렉터리의 WWW 작업은 정본을 우선하고 연결 체크아웃 전용 작업은 남긴다", async () => {
+  await fixture(async (project, base, save) => {
+    const canonical: DashboardProject = { ...project, kind: "www", key: "www", name: "WWW" };
+    const linked: DashboardProject = { ...project, key: "linked", name: "연결 실험", path: join(base, "연결 실험") };
+    const separate: DashboardProject = { ...project, key: "separate", name: "독립 클론", path: join(base, "separate") };
+    const origin = "https://github.com/example/www.git";
+    const git = (cwd: string, ...args: string[]) => execFileSync("git", args, { cwd, stdio: "pipe" });
+    git(canonical.path, "init", "-q");
+    git(canonical.path, "remote", "add", "origin", origin);
+    git(canonical.path, "-c", "user.name=Test", "-c", "user.email=test@example.invalid", "commit", "-q", "--allow-empty", "--no-verify", "-m", "fixture");
+    git(canonical.path, "worktree", "add", "-q", "--detach", linked.path);
+    await fs.mkdir(separate.path);
+    git(separate.path, "init", "-q");
+    git(separate.path, "remote", "add", "origin", origin);
+    const primary = record("done", { title: "정본의 작업" });
+    const onlyLinked = record("verifying", { title: "연결 전용 작업" });
+    const write = async (project: DashboardProject, folder: string, value: object) => {
+      const path = join(project.path, "docs", "work", folder);
+      await fs.mkdir(path, { recursive: true });
+      await fs.writeFile(join(path, "work.json"), JSON.stringify(value));
+      await fs.writeFile(join(path, "spec.md"), `# ${project.name}`);
+    };
+    await save("001", primary);
+    await write(linked, "001", { ...primary, id: primary.id.toUpperCase(), status: "draft", title: "중복 작업" });
+    await write(linked, "002", onlyLinked);
+    await write(separate, "001", { ...primary, status: "draft", title: "독립 원본 작업" });
+
+    const projects = [linked, canonical, separate];
+    const snapshot = await readDashboard(projects);
+    expect(snapshot.projects.map(({ canonicalKey, cards }) => ({ canonicalKey, cards: cards.map(({ id, status }) => [id, status]) }))).toEqual([
+      { canonicalKey: "www", cards: [[onlyLinked.id, "verifying"]] },
+      { canonicalKey: undefined, cards: [[primary.id, "done"]] },
+      { canonicalKey: undefined, cards: [[primary.id, "draft"]] },
+    ]);
+    const html = renderToStaticMarkup(createElement(DashboardView, {
+      snapshot, loading: false, error: null, projectKey: linked.key, onRefresh: () => {},
+    }));
+    expect(html).toContain("정본의 작업");
+    expect(html).toContain("연결 체크아웃 · 연결 실험");
+    expect(html).toContain("연결 전용 작업");
+    expect(html).not.toContain("독립 원본 작업");
+    await expect(readDashboardWork(projects, linked.key, primary.id)).resolves.toMatchObject({ projectKey: canonical.key, status: "done" });
+    for (const key of [canonical.key, linked.key]) {
+      await expect(readDashboardWork(projects, key, onlyLinked.id)).resolves.toMatchObject({
+        projectKey: linked.key, status: "verifying", documents: expect.arrayContaining([expect.objectContaining({ kind: "spec", content: "# 연결 실험" })]),
+      });
+    }
+    await expect(readDashboardWork(projects, separate.key, primary.id)).resolves.toMatchObject({ projectKey: separate.key, status: "draft" });
+  });
+});
+
+test("WWW 보드는 명시 이슈 연결과 GitHub 조회 집계를 로컬 작업 집계와 분리한다", async () => {
+  await fixture(async (project, _base, save) => {
+    const www: DashboardProject = { ...project, kind: "www", key: "www" };
+    const work = record("done", { title: "이슈에 연결된 완료 기록" });
+    await save("linked", work);
+    await save("unlinked", record());
+    const config = { schemaVersion: 1, repository: "owner/www", repositoryId: 123, links: [{ workId: work.id, number: 64 }] };
+    const file = join(project.path, "docs", "github-issues.json");
+    await fs.writeFile(file, JSON.stringify(config));
+    const appData = join(project.path, ".www");
+    await fs.mkdir(appData);
+    const snapshot = join(appData, "github-issues.snapshot.json");
+    const checkedAt = "2026-11-24T00:00:00.000Z";
+    const available = { schemaVersion: 1, repositoryId: 123, checkedAt, status: "available", issues: [
+      { number: 64, state: "open" }, { number: 65, state: "open" }, { number: 66, state: "open" }, { number: 67, state: "closed" },
+    ] };
+    const render = async () => renderToStaticMarkup(createElement(DashboardView, {
+      snapshot: await readDashboard([www]), loading: false, error: null, onRefresh: () => {},
+    }));
+
+    expect(githubIssueRows([[{ number: 64, state: "open" }, { number: 99, state: "open", pull_request: {} }], [{ number: 65, state: "closed" }]])).toEqual([
+      { number: 64, state: "open" }, { number: 65, state: "closed" },
+    ]);
+    expect(() => githubIssueRows([[{ number: 64, state: "open" }], null])).toThrow();
+    expect(await render()).toContain("조회 기록 없음");
+    await fs.writeFile(snapshot, JSON.stringify(available));
+    const html = await render();
+    expect(html).toContain("GitHub 열린 이슈 3개");
+    expect(html).toContain("미연결 2개");
+    expect(html).toContain("업무 단계별 집계");
+    expect(html).toContain("GitHub #64");
+    expect(html).toContain("GitHub 이슈 미연결");
+    expect((await readDashboard([www])).projects[0]?.cards).toHaveLength(2);
+    expect((await readDashboard([project])).githubIssues).toBeUndefined();
+
+    await fs.writeFile(snapshot, JSON.stringify({ ...available, status: "failed" }));
+    const failed = await render();
+    expect(failed).toContain("GitHub 열린 이슈 수 미확인 · 조회 실패");
+    expect(failed).not.toContain("GitHub 열린 이슈 0개");
+    await fs.writeFile(snapshot, JSON.stringify({ ...available, repositoryId: 9 }));
+    expect(await render()).toContain("조회 기록 또는 연결 설정 오류");
+    await fs.writeFile(file, JSON.stringify({ ...config, links: [...config.links, config.links[0]] }));
+    expect((await readDashboard([www])).githubIssues).toMatchObject({ status: "invalid", links: [] });
   });
 });
 
@@ -324,11 +423,32 @@ test("목록 수집 뒤 변경된 담당·영역·경로와 기준은 같은 상
   });
 });
 
-test("다음 단계는 비계약 최상위 필드보다 workflow 정본을 따른다", async () => {
+test("검토 필요 카드와 상세에서 원본 상태를 유지하며 실제 다음 행동과 이전 기록을 구분한다", async () => {
   await fixture(async (project, _base, save) => {
-    const value = record("verifying", { nextAction: "complete", workflow: { nextAction: "build" } });
-    await save("stages", value);
-    expect((await readDashboardWork([project], project.key, value.id)).nextAction).toBe("build");
+    const cases = [
+      { extra: { workflow: { nextAction: "verify" } }, action: "verify", label: "검증 대기" },
+      { extra: { workflow: { nextAction: "review" } }, action: "review", label: "리뷰 대기" },
+      { extra: { nextAction: "complete", workflow: { nextAction: "build" } }, action: "build", label: "수정 대기" },
+      { extra: { workflow: { nextAction: "complete" } }, action: "complete", label: "완료 처리 대기" },
+      { extra: { schemaVersion: 1, native: { turnId: "recorded" } }, action: null, label: "이전 실행 요약 · 다음 단계 미기록" },
+      { extra: { schemaVersion: 1 }, action: null, label: "이전 형식 기록 · 다음 단계 미기록" },
+      { extra: { nextAction: "verify" }, action: null, label: "기록된 다음 단계 없음" },
+    ];
+    const works = cases.map(({ extra, ...rest }) => ({ source: record("verifying", extra), ...rest }));
+    for (const work of works) await save(work.source.id, work.source);
+
+    const snapshot = await readDashboard([project]);
+    const html = renderToStaticMarkup(createElement(DashboardView, { snapshot, loading: false, error: null, onRefresh: () => {} }));
+    expect(html).toContain('aria-label="검토 필요 작업"');
+    for (const { source, action, label } of works) {
+      const card = snapshot.projects[0]?.cards.find(({ id }) => id === source.id);
+      expect(card).toMatchObject({ status: "verifying", nextAction: action });
+      const cardMarkup = html.split(`data-work-id="${source.id}"`)[1]?.split("</button>")[0];
+      expect(cardMarkup).toContain(`data-testid="dashboard-next-action">${label}</span>`);
+      const detail = await readDashboardWork([project], project.key, source.id);
+      expect(detail).toMatchObject({ status: "verifying", nextAction: action });
+      expect(renderToStaticMarkup(createElement(WorkDetailContent, { detail }))).toContain(`<h4>다음 단계</h4><p>${label}</p>`);
+    }
   });
 });
 

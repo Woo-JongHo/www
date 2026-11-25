@@ -204,7 +204,7 @@ try {
     await wait("(()=>{const detail=document.querySelector('.dashboard-detail'),heading=detail?.querySelector('h2'),title=detail?.querySelector('h3'),container=document.querySelector('.dashboard');if(!detail||!heading||!title||!container)return false;const d=detail.getBoundingClientRect(),h=heading.getBoundingClientRect(),t=title.getBoundingClientRect(),c=container.getBoundingClientRect();return h.top>=c.top+8&&h.bottom<c.bottom&&t.bottom<c.bottom&&d.bottom>c.top+200&&d.left>=c.left&&d.right<=innerWidth+1&&document.documentElement.scrollWidth<=innerWidth+1})()", "640px 실제 휠로 상세 제목과 본문을 가시 영역에 배치");
     await fs.writeFile(path.join(evidence,'kanban-detail-narrow-bounds.json'),JSON.stringify({before:narrowBefore,after:await narrowBounds()},null,2));
     await screenshot('kanban-detail-narrow');
-    await wait("document.querySelector('.dashboard-detail')?.textContent.includes('현재 적용성은 평가하지 않았습니다.') && document.querySelector('.dashboard-detail')?.getBoundingClientRect().width>0 && document.documentElement.scrollWidth<=window.innerWidth+1", "640px 좁은 화면에서 전체 가로 넘침 없이 근거·적용성 표시");
+    await wait("document.querySelector('.dashboard-detail')?.textContent.includes('현재 미평가') && document.querySelector('.dashboard-detail')?.textContent.includes('외부 프로젝트의 검증 입력은 조회하지 않습니다.') && document.querySelector('.dashboard-detail')?.getBoundingClientRect().width>0 && document.documentElement.scrollWidth<=window.innerWidth+1", "640px 좁은 화면에서 전체 가로 넘침 없이 근거·적용성 표시");
     await command('Emulation.clearDeviceMetricsOverride');
     await click('[aria-label="작업 상세 닫기"]');
     await wait(`!document.querySelector('.dashboard-detail') && document.activeElement===document.querySelector(${JSON.stringify(workA)})`, "상태 변경으로 카드 열이 바뀐 뒤에도 현재 카드로 초점 복귀");

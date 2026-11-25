@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "89d5d1bef1236adbe1c1f60b47fe6ba0dea13d8560daddd1758a818c8a84607c",
+  "digest"       : "4d869bc6779fcc0390d72e4017f13d79a19e500577801df7ecba2c4cca0415a7",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -614,14 +614,25 @@
       "structureId": "arch.native.projects"
     },
     {
+      "id"         : "src/dashboard-github.mts",
+      "file"       : "src/dashboard-github.mts",
+      "title"      : "dashboard-github",
+      "layer"      : "host",
+      "role"       : "앱 모듈 · dashboard-github",
+      "line"       : 1,
+      "lines"      : 69,
+      "digest"     : "a5982783d0aa195c47004dff5ee5248c53cb7ce499fdf9e43760136a071da12a",
+      "structureId": "arch.native.projects"
+    },
+    {
       "id"         : "src/dashboard-view.tsx",
       "file"       : "src/dashboard-view.tsx",
       "title"      : "dashboard-view",
       "layer"      : "presentation",
       "role"       : "앱 모듈 · dashboard-view",
       "line"       : 1,
-      "lines"      : 171,
-      "digest"     : "18847c0977e2178464ff971f2f995008b3befd46a56bdc518c44c8131a11175e",
+      "lines"      : 194,
+      "digest"     : "0063f1e8d0ea8649ad2ca425a1191f00997a2fe882baec31e525ce4bba4fd09e",
       "structureId": "arch.chat.workspace"
     },
     {
@@ -631,8 +642,8 @@
       "layer"      : "host",
       "role"       : "앱 모듈 · dashboard",
       "line"       : 1,
-      "lines"      : 292,
-      "digest"     : "9b377a4b1d362aaab9279e7296edac3bce0f6239ed1b19825fab07a48fa7ea62",
+      "lines"      : 386,
+      "digest"     : "e878aa357ef04201c4d312de2cb8e8d16459010b048268fba88014415b5daf4a",
       "structureId": "arch.native.projects"
     },
     {
@@ -939,8 +950,8 @@
       "layer"      : "contract",
       "role"       : "프로세스 간 공용 타입 계약",
       "line"       : 1,
-      "lines"      : 308,
-      "digest"     : "4c4cec2b8be2d68a5f7c1d0c673b0bc5885150564da9947f0a736210cc8c66c8",
+      "lines"      : 320,
+      "digest"     : "5499d27ef1465eea9c5f1a0c055096cd1ca38b51ed29395d4cb20fac5c5284c5",
       "structureId": "arch.native.protocol"
     },
     {
@@ -2662,26 +2673,37 @@
       "statement": "import type { DashboardProject, DashboardSnapshot, DashboardWork, DashboardWorkDetail, WorkStatus } from \"./shared\";"
     },
     {
-      "id"       : "src/dashboard.ts:324",
+      "id"       : "src/dashboard.ts:419",
       "from"     : "src/dashboard.ts",
       "to"       : "src/dashboard-evidence.ts",
       "mode"     : "runtime",
       "syntax"   : "import",
       "specifier": "./dashboard-evidence",
-      "line"     : 10,
-      "endLine"  : 10,
+      "line"     : 12,
+      "endLine"  : 12,
       "statement": "import { dashboardApplicability, dashboardObservations } from \"./dashboard-evidence\";"
     },
     {
-      "id"       : "src/dashboard.ts:410",
+      "id"       : "src/dashboard.ts:505",
+      "from"     : "src/dashboard.ts",
+      "to"       : "src/dashboard-github.mts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./dashboard-github.mts",
+      "line"     : 13,
+      "endLine"  : 13,
+      "statement": "import { parseGitHubIssueConfig, parseGitHubIssueSnapshot } from \"./dashboard-github.mts\";"
+    },
+    {
+      "id"       : "src/dashboard.ts:596",
       "from"     : "src/dashboard.ts",
       "to"       : "src/shared.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./shared",
-      "line"     : 11,
-      "endLine"  : 11,
-      "statement": "import type { DashboardIssue, DashboardProject, DashboardProjectSnapshot, DashboardSnapshot, DashboardWork, DashboardWorkDetail, WorkStatus } from \"./shared\";"
+      "line"     : 14,
+      "endLine"  : 14,
+      "statement": "import type { DashboardGitHubIssues, DashboardIssue, DashboardProject, DashboardProjectSnapshot, DashboardSnapshot, DashboardWork, DashboardWorkDetail, WorkStatus } from \"./shared\";"
     },
     {
       "id"       : "src/development.ts:90",
@@ -4596,25 +4618,37 @@
     {
       "file"     : "src/dashboard.ts",
       "line"     : 6,
-      "specifier": "node:fs",
+      "specifier": "node:child_process",
       "reason"   : "external"
     },
     {
       "file"     : "src/dashboard.ts",
       "line"     : 7,
-      "specifier": "node:crypto",
+      "specifier": "node:fs",
       "reason"   : "external"
     },
     {
       "file"     : "src/dashboard.ts",
       "line"     : 8,
-      "specifier": "node:fs/promises",
+      "specifier": "node:crypto",
       "reason"   : "external"
     },
     {
       "file"     : "src/dashboard.ts",
       "line"     : 9,
+      "specifier": "node:fs/promises",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/dashboard.ts",
+      "line"     : 10,
       "specifier": "node:path",
+      "reason"   : "external"
+    },
+    {
+      "file"     : "src/dashboard.ts",
+      "line"     : 11,
+      "specifier": "node:util",
       "reason"   : "external"
     },
     {
@@ -6485,6 +6519,14 @@
         "line": 2
       },
       {
+        "file": "src/dashboard-github.mts",
+        "nodeId": "arch.native.projects",
+        "requirementIds": [
+          "RESP-NATIVE-PROJECTS"
+        ],
+        "line": 2
+      },
+      {
         "file": "src/dashboard-view.tsx",
         "nodeId": "arch.chat.workspace",
         "requirementIds": [
@@ -7182,7 +7224,7 @@
         "line": 2
       }
     ],
-    "digest": "0ce5e5ab6a44a48b05c9ed7b760efc1aee9c4bbe3c80959d2582bb820cf2f5de",
+    "digest": "42a700708071a54931557e623c8dceb1ed9962506f89dd81bb17840013613a9b",
     "statecharts": {
       "models": [
         {

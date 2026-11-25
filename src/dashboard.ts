@@ -3,12 +3,15 @@
  * @architecture arch.native.projects
  * @implements RESP-NATIVE-PROJECTS
  */
+import { execFile } from "node:child_process";
 import { constants } from "node:fs";
 import { createHash } from "node:crypto";
 import * as fs from "node:fs/promises";
-import { isAbsolute, join, relative, resolve, sep } from "node:path";
+import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
+import { promisify } from "node:util";
 import { dashboardApplicability, dashboardObservations } from "./dashboard-evidence";
-import type { DashboardIssue, DashboardProject, DashboardProjectSnapshot, DashboardSnapshot, DashboardWork, DashboardWorkDetail, WorkStatus } from "./shared";
+import { parseGitHubIssueConfig, parseGitHubIssueSnapshot } from "./dashboard-github.mts";
+import type { DashboardGitHubIssues, DashboardIssue, DashboardProject, DashboardProjectSnapshot, DashboardSnapshot, DashboardWork, DashboardWorkDetail, WorkStatus } from "./shared";
 
 export const DASHBOARD_LIMITS = {
   projects: 100, files: 500, entries: 5000, depth: 5,
@@ -82,7 +85,9 @@ function parseWork(bytes: Buffer, projectKey: string, source: string): { card: D
   const ids = value.criteria.map((criterion: Record<string, unknown>) => criterion.id);
   if (new Set(ids).size !== ids.length) throw new ReadFailure("invalid_record", "작업의 수용 기준 ID가 중복됩니다.");
   const required = value.criteria.filter((criterion: Record<string, unknown>) => criterion.required);
-  return { value, card: { id: value.id, projectKey, title: value.title, status: value.status as WorkStatus,
+  const nextAction = value.schemaVersion === 2 && object(value.workflow) && text(value.workflow.nextAction, 8000) ? value.workflow.nextAction : null;
+  const legacyKind = value.schemaVersion === 1 ? object(value.native) ? "native-summary" : "legacy" : undefined;
+  return { value, card: { id: value.id, projectKey, title: value.title, status: value.status as WorkStatus, nextAction, legacyKind,
     blockedReason: value.blockedReason as string | null, sourcePath: source, areas: value.areas,
     owner: value.owner, requiredCriteria: required.length,
     passedCriteria: required.filter((criterion: Record<string, unknown>) => criterion.result === "passed").length } };
@@ -202,11 +207,90 @@ async function readProject(project: DashboardProject, budget: { bytes: number },
   return { project, coverage: issues.length ? (unique.length ? "partial" : "failed") : (unique.length ? "complete" : "empty"), cards: unique, issues };
 }
 
+const git = promisify(execFile);
+
+async function gitMetadata(root: string, args: string[]): Promise<string> {
+  const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => !/^GIT_/i.test(name)));
+  const options = { cwd: root, env: { ...env, GIT_OPTIONAL_LOCKS: "0", GIT_CEILING_DIRECTORIES: dirname(root) }, timeout: 2_000, maxBuffer: 256 * 1024 };
+  return (await git("git", args, options)).stdout;
+}
+
+async function commonGitDirectory(root: string): Promise<string | null> {
+  try {
+    await directory(root, root);
+    const marker = await fs.lstat(join(root, ".git"));
+    if (!marker.isDirectory() && !marker.isFile()) return null;
+    const stdout = await gitMetadata(root, ["rev-parse", "--path-format=absolute", "--git-common-dir", "--show-toplevel"]);
+    const lines = stdout.split(/\r?\n/);
+    const [common, top] = lines;
+    if (lines.length !== 3 || !common || !top || !isAbsolute(common) || await fs.realpath(top) !== root) return null;
+    const real = await fs.realpath(common);
+    return (await fs.stat(real)).isDirectory() ? real : null;
+  } catch { return null; }
+}
+
+/** 같은 물리 Git 저장소의 등록된 worktree만 WWW 정본과 묶는다. */
+async function wwwWorktrees(projects: readonly DashboardProject[]): Promise<DashboardProject[]> {
+  const canonical = projects.find((project) => project.kind === "www");
+  if (!canonical || projects.length < 2) return [];
+  const common = await commonGitDirectory(canonical.path);
+  if (!common) return [];
+  try {
+    const listing = await gitMetadata(canonical.path, ["worktree", "list", "--porcelain", "-z"]);
+    const paths = new Set(listing.split("\0").filter((field) => field.startsWith("worktree ")).map((field) => resolve(field.slice(9))));
+    const candidates = projects.filter((project) => project.path !== canonical.path && paths.has(project.path));
+    const aliases = await Promise.all(candidates.map(async (project) => await commonGitDirectory(project.path) === common ? project : null));
+    return [canonical, ...aliases.filter((project) => project !== null).sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0)];
+  } catch { return []; }
+}
+
+function collapseWorktrees(snapshots: DashboardProjectSnapshot[], group: DashboardProject[]): void {
+  const primary = group[0];
+  if (!primary) return;
+  const byKey = new Map(snapshots.map((snapshot) => [snapshot.project.key, snapshot]));
+  const seen = new Set<string>();
+  for (const project of group) {
+    const snapshot = byKey.get(project.key);
+    if (!snapshot) continue;
+    if (project.key !== primary.key) snapshot.canonicalKey = primary.key;
+    snapshot.cards = snapshot.cards.filter((card) => {
+      const id = card.id.toLowerCase();
+      if (seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    });
+  }
+}
+
+async function readDashboardGitHubIssues(root: string): Promise<DashboardGitHubIssues> {
+  const readJson = async (...parts: string[]): Promise<unknown> => {
+    const limit = 64 * 1024;
+    const bytes = await readBytes(root, join(root, ...parts), { bytes: limit }, limit);
+    return JSON.parse(bytes.toString("utf8"));
+  };
+  let config: ReturnType<typeof parseGitHubIssueConfig>;
+  try { config = parseGitHubIssueConfig(await readJson("docs", "github-issues.json")); }
+  catch (error) { return { repository: null, links: [], status: code(error) === "ENOENT" ? "missing" : "invalid" }; }
+
+  const { repository, links, repositoryId } = config;
+  try {
+    const snapshot = parseGitHubIssueSnapshot(await readJson(".www", "github-issues.snapshot.json"), repositoryId);
+    const base = { repository, links, checkedAt: snapshot.checkedAt };
+    if (snapshot.status === "failed") return { ...base, status: "failed" };
+    const open = snapshot.issues.filter(issue => issue.state === "open");
+    const linked = new Set(links.map(link => link.number));
+    return { ...base, status: "available", open: open.length, unlinkedOpen: open.filter(issue => !linked.has(issue.number)).length };
+  } catch (error) {
+    return { repository, links, status: code(error) === "ENOENT" ? "missing" : "invalid" };
+  }
+}
+
 /** IPC에서 받은 경로를 전달하지 않는다. 호출자는 main의 등록 목록과 고정 WWW 범위만 제공한다. */
 export async function readDashboard(projects: readonly DashboardProject[]): Promise<DashboardSnapshot> {
   const snapshots: DashboardProjectSnapshot[] = [];
   const assessments: (() => Promise<void>)[] = [];
   const budget = { bytes: DASHBOARD_LIMITS.totalBytes as number };
+  const group = wwwWorktrees(projects.slice(0, DASHBOARD_LIMITS.projects));
   for (const [index, project] of projects.entries()) {
     if (index >= DASHBOARD_LIMITS.projects) {
       snapshots.push({ project, coverage: "failed", cards: [], issues: [{ code: "project_count_limit", path: "docs/work", message: "전체 프로젝트 수집 한도(100개)를 넘었습니다." }] });
@@ -214,7 +298,10 @@ export async function readDashboard(projects: readonly DashboardProject[]): Prom
   }
   // 원장 수집을 먼저 마쳐 증거 읽기 한도가 다른 프로젝트의 카드를 가리지 않게 한다.
   for (const assess of assessments) await assess();
-  return { capturedAt: new Date().toISOString(), projects: snapshots };
+  collapseWorktrees(snapshots, await group);
+  const www = projects.slice(0, DASHBOARD_LIMITS.projects).find(project => project.kind === "www" && project.key === "www");
+  const githubIssues = www && await readDashboardGitHubIssues(www.path);
+  return { capturedAt: new Date().toISOString(), projects: snapshots, ...(githubIssues && { githubIssues }) };
 }
 
 /** 목록과 같은 작업의 식별을 재확인한 뒤 고정 이름의 계획 파일만 읽는다. */
@@ -249,12 +336,19 @@ export async function readDashboardPlan(project: DashboardProject, workId: strin
 export async function readDashboardWork(projects: readonly DashboardProject[], projectKey: string, workId: string): Promise<DashboardWorkDetail> {
   const matches = projects.filter(project => project.key === projectKey);
   if (matches.length !== 1 || !WORK_ID.test(workId)) throw new Error("프로젝트 또는 작업 식별자가 올바르지 않습니다.");
-  const project = matches[0]!;
+  const requested = matches[0]!;
   const evidenceBudget = { bytes: DASHBOARD_LIMITS.totalBytes as number };
-  const snapshot = await readProject(project, evidenceBudget);
-  if (snapshot.coverage !== "complete") throw new Error("프로젝트 작업 목록이 불완전하여 작업의 유일성을 확인할 수 없습니다.");
-  const card = snapshot.cards.find(item => item.id.toLowerCase() === workId.toLowerCase());
-  if (!card) throw new Error("해당 프로젝트에서 작업을 찾을 수 없습니다.");
+  const group = await wwwWorktrees(projects.slice(0, DASHBOARD_LIMITS.projects));
+  const candidates = group.some((project) => project.key === projectKey) ? group : [requested];
+  let source: { project: DashboardProject; card: DashboardWork } | undefined;
+  for (const project of candidates) {
+    const snapshot = await readProject(project, evidenceBudget);
+    if (snapshot.coverage === "partial" || snapshot.coverage === "failed") throw new Error("프로젝트 작업 목록이 불완전하여 작업의 유일성을 확인할 수 없습니다.");
+    const card = snapshot.cards.find(item => item.id.toLowerCase() === workId.toLowerCase());
+    if (card) { source = { project, card }; break; }
+  }
+  if (!source) throw new Error("해당 프로젝트에서 작업을 찾을 수 없습니다.");
+  const { project, card } = source;
   const file = join(project.path, card.sourcePath);
   const bytes = await readBytes(project.path, file, { bytes: DASHBOARD_LIMITS.fileBytes }, DASHBOARD_LIMITS.fileBytes);
   const { card: current, value } = parseWork(bytes, project.key, card.sourcePath);
@@ -284,8 +378,8 @@ export async function readDashboardWork(projects: readonly DashboardProject[], p
   }
   const finalBytes = await readBytes(project.path, file, { bytes: DASHBOARD_LIMITS.fileBytes }, DASHBOARD_LIMITS.fileBytes);
   if (!finalBytes.equals(bytes)) throw new Error("작업 기록이 수집 중 변경되었습니다.");
-  return { projectKey, workId: current.id, title: current.title, sourcePath: current.sourcePath, status: current.status,
+  return { projectKey: project.key, workId: current.id, title: current.title, sourcePath: current.sourcePath, status: current.status,
     owner: current.owner, areas: current.areas,
-    blockedReason: current.blockedReason, nextAction: object(value.workflow) && text(value.workflow.nextAction, 8000) ? value.workflow.nextAction : null,
+    blockedReason: current.blockedReason, nextAction: current.nextAction ?? null, legacyKind: current.legacyKind,
     capturedAt: new Date().toISOString(), criteria, documents };
 }
