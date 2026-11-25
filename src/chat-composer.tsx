@@ -58,13 +58,15 @@ export const ChatComposer = memo(function ChatComposer(props: ComposerProps) {
     setDismissedSlash('');
     setSelectedSlash(0);
   }, [props.snapshot]);
+  const sideCommand = !props.image && slashCommand(draft) === 'btw';
   const actionBlocked = props.blocked || props.disabled || props.sending || props.imageReading
-    || (!draft.trim() && !props.image) || draft.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer);
-  const slashOptions = ['/model', '/compact', '/theme'].filter((value) => /^\/\S*$/.test(draft) && value.startsWith(draft));
-  const slashOpen = !actionBlocked && !props.working && slashOptions.length > 0 && dismissedSlash !== draft;
+    || (!draft.trim() && !props.image) || draft.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer && !sideCommand);
+  const slashOptions = ['/model', '/compact', '/btw', '/theme']
+    .filter((value) => /^\/\S*$/.test(draft) && value.startsWith(draft) && (!props.working || value === '/btw'));
+  const slashOpen = !props.image && !actionBlocked && slashOptions.length > 0 && dismissedSlash !== draft;
   const chooseSlash = (value: string) => {
-    if (actionBlocked || props.working) return;
     const command = slashCommand(value);
+    if (actionBlocked || (props.working && command !== 'btw')) return;
     if (!command) return;
     setDismissedSlash(value);
     setDraft(value);
@@ -76,7 +78,7 @@ export const ChatComposer = memo(function ChatComposer(props: ComposerProps) {
     enterGesture.current = null;
     endedInHangul.current = false;
     if (document.activeElement !== input || props.blocked || props.disabled || props.sending || props.imageReading
-      || (!text.trim() && !props.image) || text.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer)) return;
+      || (!text.trim() && !props.image) || text.length > MAX_PROMPT_CHARS || (props.working && !props.status.steer && (props.image || slashCommand(text) !== 'btw'))) return;
     props.onDraft(text);
     props.onSubmit();
   };
@@ -173,7 +175,7 @@ export const ChatComposer = memo(function ChatComposer(props: ComposerProps) {
         if (enterGesture.current === gesture) enterGesture.current = null;
       }, 0);
     }} placeholder={props.status.steer ? '현재 작업에 추가 지시' : 'Codex에게 작업 요청'}/>
-      <div className="actions">{props.working && <button data-testid="interrupt-button" className="secondary" onClick={props.onInterrupt} disabled={props.interruptPending}>중단{props.interruptPending ? ' 확인 중' : ''}</button>}<button data-testid="send-button" className="primary" onClick={props.onSubmit} disabled={actionBlocked}>{props.sending ? '전송 중' : props.status.steer ? 'Steer · 추가 지시' : '보내기'}</button></div>
+      <div className="actions">{props.working && <button data-testid="interrupt-button" className="secondary" onClick={props.onInterrupt} disabled={props.interruptPending}>중단{props.interruptPending ? ' 확인 중' : ''}</button>}<button data-testid="send-button" className="primary" onClick={props.onSubmit} disabled={actionBlocked}>{sideCommand ? '사이드 질문' : props.sending ? '전송 중' : props.status.steer ? 'Steer · 추가 지시' : '보내기'}</button></div>
     </div>{slashOpen && <div id={slashListId} className="slash-command-list" data-testid="slash-command-list" role="listbox" aria-label="슬래시 명령 목록">{slashOptions.map((value, index) => <button key={value} type="button" role="option" aria-selected={index === selectedSlash} data-testid="slash-command-option" onMouseDown={(event) => event.preventDefault()} onClick={() => chooseSlash(value)}>{value}</button>)}</div>}</div><div className="chat-compose-note" role="status">{notice || props.notice}</div>
   </>;
 });

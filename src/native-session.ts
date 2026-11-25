@@ -14,6 +14,7 @@ import { createReportService } from "./reports-service";
 import type { createNativeReportHarness } from "./native-reports";
 import { NativeCompletionCollector } from "./native-report-input";
 import { resolveNativeCodex } from "./native-command";
+import { runNativeSideQuestion } from "./native-side-question";
 import { nativeThreadStartParams, nativeTurnSteerParams, validateChatImage, WWW_HARNESS_TOOL, WWW_PLAN_TOOL, WWW_STAGE_TOOL } from "./native-chat";
 import { parseWwwDevelopmentStage, parseWwwHarnessAttempt, parseWwwPlanLink, requestedWwwPlanWorkIds } from "./www-activity";
 import { createNativeLifecycle, createRestoredMessageFilter } from "./native-lifecycle";
@@ -24,7 +25,7 @@ import { createProjectRegistry } from "./projects";
 import { readDashboard, readDashboardPlan, readDashboardWork } from "./dashboard";
 import { readRpaStandard } from "./rpa-standard";
 import { normalizeNativeResources } from "./native-activity";
-import type { AppEvent, ScopedAppEvent, SelectionRef, WorkspaceSelection, ResourceScope, ResourceSnapshot, RpcId, NativeSessionSummary, NativeReportJob, WorkReportDocument } from "./shared";
+import type { AppEvent, ScopedAppEvent, SelectionRef, WorkspaceSelection, ResourceScope, ResourceSnapshot, RpcId, SideQuestionContext, NativeSessionSummary, NativeReportJob, WorkReportDocument } from "./shared";
 
 
 export interface NativeSessionOptions {
@@ -72,6 +73,7 @@ export function createNativeSession(options: NativeSessionOptions) {
   const handle = (channel: string, handler: Handler) => { handlers.set(channel, handler); };
   let selectionEpoch = 0;
   let stopping = false;
+  let sideRequest: AbortController | null = null;
   let stopPromise: Promise<void> | null = null;
   let childProcess: ChildProcessWithoutNullStreams | null = null;
   const nativeChildren = new Set<ChildProcessWithoutNullStreams>();
@@ -758,6 +760,8 @@ export function createNativeSession(options: NativeSessionOptions) {
       title = "새 대화";
       failed = false;
       workspace = actual;
+      sideRequest?.abort();
+      sideRequest = null;
       selectionEpoch++;
       pendingApprovalEvents.clear();
       activeThreadId = null;
@@ -875,6 +879,8 @@ export function createNativeSession(options: NativeSessionOptions) {
       assertThreadTransition();
       if (turnStarting || steering || activeTurnId !== null || lifecycle.approvalCount > 0 || interruptingTurn !== null) throw new Error("새 실행 또는 승인 요청이 생겨 대화 전환을 취소했습니다.");
       nativeTiming.cancel();
+      sideRequest?.abort();
+      sideRequest = null;
       selectionEpoch++;
       pendingApprovalEvents.clear();
       reservation.commit();
@@ -923,6 +929,8 @@ export function createNativeSession(options: NativeSessionOptions) {
       title = "새 대화";
       failed = false;
       nativeTiming.cancel();
+      sideRequest?.abort();
+      sideRequest = null;
       selectionEpoch++;
       pendingApprovalEvents.clear();
       activeThreadId = null;
@@ -1070,6 +1078,32 @@ export function createNativeSession(options: NativeSessionOptions) {
         options.onChanged();
       }
       throw error;
+    }
+  });
+
+  handle("thread:side-question", async (_event, expected: unknown, threadId: unknown, question: unknown, rawContext: unknown) => {
+    assertSelection(expected);
+    if (switchingConversation || typeof threadId !== "string" || threadId !== activeThreadId) throw new Error("사이드 질문을 할 현재 대화를 선택해 주세요.");
+    if (sideRequest) throw new Error("현재 탭의 사이드 질문이 진행 중입니다.");
+    if (typeof question !== "string" || !question.trim() || question.length > 4_000) throw new Error("사이드 질문은 4,000자 이내로 입력해 주세요.");
+    if (!Array.isArray(rawContext) || rawContext.length > 8) throw new Error("사이드 질문의 대화 참고 범위를 확인할 수 없습니다.");
+    const context: SideQuestionContext[] = [];
+    for (const value of rawContext) {
+      const item = optionalRecord(value);
+      if ((item?.role !== "user" && item?.role !== "assistant") || typeof item.text !== "string" || item.text.length > 2_000) {
+        throw new Error("사이드 질문의 대화 참고 범위를 확인할 수 없습니다.");
+      }
+      context.push({ role: item.role, text: item.text });
+    }
+    const request = new AbortController();
+    sideRequest = request;
+    try {
+      const answer = await runNativeSideQuestion(question.trim(), context, request.signal);
+      assertSelection(expected);
+      if (activeThreadId !== threadId) throw new Error("사이드 질문을 한 대화가 변경됐습니다.");
+      return answer;
+    } finally {
+      if (sideRequest === request) sideRequest = null;
     }
   });
 
@@ -1284,6 +1318,7 @@ export function createNativeSession(options: NativeSessionOptions) {
     stop(): Promise<void> {
       if (stopPromise) return stopPromise;
       stopping = true;
+      sideRequest?.abort();
       if (compactTurn) clearTimeout(compactTurn.timeout);
       nativeTiming.cancel();
       clientToken++;

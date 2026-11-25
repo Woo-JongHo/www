@@ -209,6 +209,8 @@ export interface NativeModelOption {
   isDefault: boolean;
 }
 
+export type SideQuestionContext = { role: "user" | "assistant"; text: string };
+
 export type NativeCompaction =
   | { state: "idle" | "pending" | "running" | "completed" }
   | { state: "failed"; message: string };
@@ -256,6 +258,7 @@ export interface WwwApi {
   startTurn(selection: SelectionRef, threadId: string, text: string, model?: string, image?: string): Promise<{ turnId: string }>;
   listModels(selection: SelectionRef): Promise<NativeModelOption[]>;
   compactThread(selection: SelectionRef, threadId: string): Promise<void>;
+  askSideQuestion(selection: SelectionRef, threadId: string, question: string, context: SideQuestionContext[]): Promise<string>;
   steerTurn(selection: SelectionRef, threadId: string, expectedTurnId: string, text: string, clientUserMessageId: string, image?: string): Promise<{ turnId: string }>;
   interrupt(selection: SelectionRef, threadId: string, turnId: string): Promise<void>;
   respond(selection: SelectionRef, requestId: RpcId, decision: string, approvalToken: string): Promise<void>;
