@@ -634,6 +634,9 @@ try {
     await session.input("/compact");
     await session.click('[data-testid="send-button"]');
     await session.wait("document.querySelector('.chat-compose-note').textContent.includes('대화 압축 완료')", "실제 Native 압축 완료 표시", 80_000);
+    await session.input("도구를 사용하지 말고 압축 이후 이어가기 확인이라고 답하세요.");
+    await session.click('[data-testid="send-button"]');
+    await session.wait("document.querySelector('[data-testid=\"working-status\"]').textContent.includes('응답 종료') && Array.from(document.querySelectorAll('.chat-message:not(.is-streaming)')).some(message=>message.textContent.includes('압축 이후 이어가기 확인'))", "압축 후 같은 탭에서 일반 응답 종료", 45_000);
     await session.terminate();
     session = null;
     console.log(JSON.stringify({ evidence: directory, checks }));
