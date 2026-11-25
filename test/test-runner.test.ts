@@ -90,13 +90,28 @@ test("잘못된 mode 응답·도구 오류·설정 누락은 외부 검사 실�
   expect(launches).toBe(0);
 });
 
-test("실행기 실패와 signal을 성공으로 바꾸거나 다음 그룹을 실행하지 않는다", async () => {
+test("제품 실행기는 한 그룹 실패 뒤에도 각 그룹을 한 번 실행하고 첫 실패 코드를 반환한다", async () => {
   await fixture(async root => {
-    for (const failed of [{ status: 7 }, { status: null, signal: "SIGTERM" }]) {
-      let calls = 0;
-      expect(await runTestSuite({ root, run: () => { calls++; return failed; }, output: () => {} })).toBe(failed.status ?? 1);
-      expect(calls).toBe(1);
+    for (const [bunStatus, nodeStatus, expected] of [[7, 0, 7], [0, 3, 3], [7, 3, 7]]) {
+      const calls: string[] = [];
+      const result = await runTestSuite({ root, run: (_command, [flag]) => {
+        calls.push(flag);
+        return { status: flag === "test" ? bunStatus : nodeStatus };
+      }, output: () => {} });
+      expect(calls).toEqual(["test", "--test"]);
+      expect(result).toBe(expected);
     }
-    await expect(runTestSuite({ root, run: () => ({ status: null, error: new Error("spawn failure") }), output: () => {} })).rejects.toThrow("spawn failure");
+  });
+});
+
+test("signal이나 실행기 시작 오류가 발생하면 다음 그룹을 시작하지 않는다", async () => {
+  await fixture(async root => {
+    let calls = 0;
+    const interrupted = await runTestSuite({ root, run: () => { calls++; return { status: null, signal: "SIGTERM" }; }, output: () => {} });
+    expect(interrupted).toBe(1);
+    expect(calls).toBe(1);
+    calls = 0;
+    await expect(runTestSuite({ root, run: () => { calls++; return { status: null, error: new Error("spawn failure") }; }, output: () => {} })).rejects.toThrow("spawn failure");
+    expect(calls).toBe(1);
   });
 });
