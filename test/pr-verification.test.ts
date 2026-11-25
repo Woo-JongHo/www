@@ -9,7 +9,10 @@ const archive = "skill-library/upstream/sample/plan/SKILL.md";
 const manifest = "skill-library/inventory.json";
 const note = "docs/work/Workflow/005-Skills 라이브러리 한국어 대체/verification.md";
 
-function candidate(change: (root: string) => void, translation = true, inspectCombined = false) {
+type Change = (repo: string) => void;
+type Candidate = { repo: string; base: string; head: string; merge: string; git: (...args: string[]) => string };
+
+function candidate(change: Change, inspect: (candidate: Candidate) => void, translation = true) {
   const repo = mkdtempSync(path.join(tmpdir(), "www-pr-scope-"));
   function git(...args: string[]): string {
     return execFileSync("git", args, { cwd: repo, encoding: "utf8" }).trim();
@@ -18,6 +21,7 @@ function candidate(change: (root: string) => void, translation = true, inspectCo
   const content = (description: string, text: string) => `---\ndescription: ${description}\nallowed-tools: Read\n---\n${text}\n`;
   try {
     git("init", "-q");
+    git("config", "core.autocrlf", "false");
     git("config", "user.name", "시험");
     git("config", "user.email", "test@example.invalid");
     mkdirSync(path.dirname(file(archive)), { recursive: true });
@@ -43,57 +47,61 @@ function candidate(change: (root: string) => void, translation = true, inspectCo
     git("commit", "-qm", "candidate");
     const head = git("rev-parse", "HEAD");
     const merge = git("commit-tree", "HEAD^{tree}", "-p", base, "-p", head, "-m", "merge");
-    let combined: ReturnType<typeof planPr> | null = null;
-    if (inspectCombined) {
-      const other = git("commit-tree", "HEAD^{tree}", "-p", base, "-m", "독립 작업");
-      const integrated = git("commit-tree", "HEAD^{tree}", "-p", head, "-p", other, "-m", "두 작업 결합");
-      const preview = git("commit-tree", "HEAD^{tree}", "-p", base, "-p", integrated, "-m", "결합 PR 후보");
-      combined = planPr(repo, base, integrated, preview, "individual");
-    }
-    return {
-      scope: planPr(repo, base, head, merge, "individual"), draft: planPr(repo, base, head, merge, "session-draft"),
-      wrongParent: planPr(repo, head, base, merge, "session-draft"), full: planPr(repo, base, head, merge, "full"),
-      combined,
-    };
+    inspect({ repo, base, head, merge, git });
   } finally {
     rmSync(repo, { recursive: true, force: true });
   }
 }
 
-test("기존 번역과 원장 부기의 후보만 지문이 있는 집중 검사로 보낸다", () => {
-  const { scope, draft, wrongParent, full, combined } = candidate(() => {}, true, true);
-  expect(draft.mode).toBe("focused");
-  expect(full.mode).toBe("full");
-  expect(combined).toEqual({ mode: "full", reason: "merged_branch_history" });
-  expect(scope.mode).toBe("focused");
-  if (scope.mode === "focused") expect(scope.fingerprint).toMatch(/^[a-f0-9]{64}$/);
-  expect(wrongParent.mode).toBe("full");
-});
+function expectDraftFull(change: Change, translation: boolean, reason: string) {
+  candidate(change, ({ repo, base, head, merge }) => {
+    expect(planPr(repo, base, head, merge, "session-draft")).toEqual({ mode: "full", reason });
+  }, translation);
+}
 
-test("기준 자료·도구 설정·실행 파일·모드·링크·과거 서술 변경은 전체 검사로 보낸다", () => {
-  const changes = [
-    (repo: string) => writeFileSync(path.join(repo, "main.ts"), "export const version = 2;"),
-    (repo: string) => writeFileSync(path.join(repo, note), "이전 관측을 다시 썼다\n"),
-    (repo: string) => {
-      const target = path.join(repo, archive);
-      writeFileSync(target, "\uFEFF\uFEFF " + readFileSync(target, "utf8").replace("allowed-tools: Read", "allowed-tools: Bash"));
-    },
-    (repo: string) => {
-      chmodSync(path.join(repo, archive), 0o755);
-      execFileSync("git", ["add", "--chmod=+x", "--", archive], { cwd: repo });
-    },
-    (repo: string) => symlinkSync(archive, path.join(repo, "alias.md")),
-    (repo: string) => {
-      const target = path.join(repo, manifest);
-      writeFileSync(target, readFileSync(target, "utf8").replace("fixed", "changed"));
-    },
-    (repo: string) => {
-      const target = path.join(repo, archive);
-      writeFileSync(target, readFileSync(target, "utf8").replace("allowed-tools: Read", "allowed-tools: Bash"));
-    },
-  ];
-  for (const change of changes) expect(candidate(change).draft.mode).toBe("full");
+test("기존 번역과 원장 부기의 후보만 지문이 있는 집중 검사로 보낸다", () => {
+  candidate(() => {}, ({ repo, base, head, merge }) => {
+    expect(planPr(repo, base, head, merge, "session-draft")).toMatchObject({ mode: "focused" });
+    expect(planPr(repo, base, head, merge, "individual")).toMatchObject({ mode: "focused", fingerprint: expect.stringMatching(/^[a-f0-9]{64}$/) });
+    expect(planPr(repo, head, base, merge, "session-draft")).toMatchObject({ mode: "full" });
+    expect(planPr(repo, base, head, merge, "full")).toMatchObject({ mode: "full" });
+  });
 }, 20_000);
+
+test("합쳐진 브랜치 이력은 전체 검사로 보낸다", () => {
+  candidate(() => {}, ({ repo, base, head, git }) => {
+    const other = git("commit-tree", "HEAD^{tree}", "-p", base, "-m", "독립 작업");
+    const integrated = git("commit-tree", "HEAD^{tree}", "-p", head, "-p", other, "-m", "두 작업 결합");
+    const preview = git("commit-tree", "HEAD^{tree}", "-p", base, "-p", integrated, "-m", "결합 PR 후보");
+    expect(planPr(repo, base, integrated, preview, "individual")).toEqual({ mode: "full", reason: "merged_branch_history" });
+  });
+}, 20_000);
+
+const fullVerificationChanges: [label: string, reason: string, change: Change][] = [
+  ["실행 파일 추가", "mixed_or_structural_change", repo => writeFileSync(path.join(repo, "main.ts"), "export const version = 2;")],
+  ["과거 서술 변경", "verification_history_changed", repo => writeFileSync(path.join(repo, note), "이전 관측을 다시 썼다\n")],
+  ["잘못된 헤더와 도구 설정 변경", "unreadable_or_unknown_input", repo => {
+    const target = path.join(repo, archive);
+    writeFileSync(target, "\uFEFF\uFEFF " + readFileSync(target, "utf8").replace("allowed-tools: Read", "allowed-tools: Bash"));
+  }],
+  ["실행 모드 변경", "mixed_or_structural_change", repo => {
+    chmodSync(path.join(repo, archive), 0o755);
+    execFileSync("git", ["add", "--chmod=+x", "--", archive], { cwd: repo });
+  }],
+  ["심볼릭 링크 추가", "mixed_or_structural_change", repo => symlinkSync(archive, path.join(repo, "alias.md"))],
+  ["번역 기준 자료 변경", "inventory_contract_changed", repo => {
+    const target = path.join(repo, manifest);
+    writeFileSync(target, readFileSync(target, "utf8").replace("fixed", "changed"));
+  }],
+  ["도구 설정 변경", "skill_metadata_changed", repo => {
+    const target = path.join(repo, archive);
+    writeFileSync(target, readFileSync(target, "utf8").replace("allowed-tools: Read", "allowed-tools: Bash"));
+  }],
+];
+
+for (const [label, reason, change] of fullVerificationChanges) {
+  test(label + " 시 전체 검사로 보낸다", () => expectDraftFull(change, true, reason), 20_000);
+}
 
 const repository = "owner/www";
 const draft = { action: "opened", pull_request: { draft: true,
@@ -142,15 +150,18 @@ test("앱 경로와 생성 지도만 매핑하고 테스트·설치·하네스·
     update(root, "src/chat-composer.tsx");
     update(root, "src/architecture.generated.json");
   };
-  const { scope, draft, wrongParent } = candidate(app, false);
-  expect(scope.mode).toBe("full");
-  expect(wrongParent.mode).toBe("full");
-  expect(draft.mode).toBe("session-app");
-  if (draft.mode === "session-app") expect(draft.tests).toEqual(["test/chat-state.test.ts", "test/chat-status.test.ts", "test/input.test.ts"]);
-  for (const file of ["test/input.test.ts", "scripts/verify-chat.ts", ".github/workflows/ci.yml", "package-lock.json", "src/new.ts"]) {
-    expect(candidate(root => { app(root); update(root, file); }, false).draft.mode).toBe("full");
+  candidate(app, ({ repo, base, head, merge }) => {
+    expect(planPr(repo, base, head, merge, "individual")).toMatchObject({ mode: "full" });
+    expect(planPr(repo, head, base, merge, "session-draft")).toMatchObject({ mode: "full" });
+    expect(planPr(repo, base, head, merge, "session-draft")).toMatchObject({
+      mode: "session-app", tests: ["test/chat-state.test.ts", "test/chat-status.test.ts", "test/input.test.ts"],
+    });
+  }, false);
+  for (const file of ["test/input.test.ts", "scripts/verify-chat.ts", ".github/workflows/ci.yml", "package-lock.json"]) {
+    expectDraftFull(root => { app(root); update(root, file); }, false, "unclassified_or_mixed_files");
   }
-  expect(candidate(root => update(root, "src/architecture.generated.json"), false).draft.mode).toBe("full");
+  expectDraftFull(root => { app(root); update(root, "src/new.ts"); }, false, "mixed_or_structural_change");
+  expectDraftFull(root => update(root, "src/architecture.generated.json"), false, "unclassified_or_mixed_files");
 }, 20_000);
 
 test("ready·일반 PR·merge_group의 전체 경로와 초안 영수증 경계를 workflow에 연결한다", () => {
