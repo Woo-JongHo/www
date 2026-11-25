@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "79d9f1e34dffb08100143982412768c3610f46620be4e829a245d048ac3781ad",
+  "digest"       : "d7eedc5fe2e254c77278ab4ef8e9d67fdd4129c7d021509dc0c3da0262c4617d",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -521,8 +521,8 @@
       "layer"      : "presentation",
       "role"       : "앱 모듈 · chat-composer",
       "line"       : 1,
-      "lines"      : 149,
-      "digest"     : "d565b218df1ce537ce066d74fe7451cea4da2118c624c337b8d014e24b97bfae",
+      "lines"      : 180,
+      "digest"     : "1dca978ea71f2abca63a86d216563a7d83b1cd2cca3e816a0cdea7257d7022ff",
       "structureId": "arch.chat.workspace"
     },
     {
@@ -2497,7 +2497,7 @@
       "statement": "import { parseWwwDevelopmentStage, parseWwwHarnessAttempt, parseWwwPlanSnapshot, type WwwDevelopmentStage, type WwwPlanSnapshot } from \"./www-activity\";"
     },
     {
-      "id"       : "src/chat-composer.tsx:172",
+      "id"       : "src/chat-composer.tsx:179",
       "from"     : "src/chat-composer.tsx",
       "to"       : "src/chat-state.ts",
       "mode"     : "runtime",
@@ -2505,10 +2505,10 @@
       "specifier": "./chat-state",
       "line"     : 6,
       "endLine"  : 6,
-      "statement": "import { MAX_PROMPT_CHARS, composerFull, pasteOverflow } from './chat-state';"
+      "statement": "import { MAX_PROMPT_CHARS, composerFull, pasteOverflow, slashCommand } from './chat-state';"
     },
     {
-      "id"       : "src/chat-composer.tsx:250",
+      "id"       : "src/chat-composer.tsx:271",
       "from"     : "src/chat-composer.tsx",
       "to"       : "src/input.ts",
       "mode"     : "runtime",
@@ -2519,7 +2519,7 @@
       "statement": "import { handlePromptKeyDown, normalizeCompositionEnd } from './input';"
     },
     {
-      "id"       : "src/chat-composer.tsx:322",
+      "id"       : "src/chat-composer.tsx:343",
       "from"     : "src/chat-composer.tsx",
       "to"       : "src/shared.ts",
       "mode"     : "runtime",
@@ -2530,7 +2530,7 @@
       "statement": "import { CHAT_IMAGE_TYPES, MAX_CHAT_IMAGE_BYTES } from './shared';"
     },
     {
-      "id"       : "src/chat-composer.tsx:389",
+      "id"       : "src/chat-composer.tsx:410",
       "from"     : "src/chat-composer.tsx",
       "to"       : "src/chat-status.ts",
       "mode"     : "type",
