@@ -541,7 +541,19 @@ async function verifyClipboardImage(session: Awaited<ReturnType<typeof start>>) 
       || !Array.isArray(turns[1]) || turns[1].length !== 1 || object(turns[1][0]).type !== "image" || object(turns[1][0]).url !== url) {
     throw Error("텍스트와 이미지의 Native stdio 요청이 일치하지 않습니다.");
   }
-  checks.push("텍스트·이미지 혼합 전송, 이미지 단독 전송, 제거와 실패 초안 복원, 텍스트 붙여넣기 비차단 확인");
+  await session.wait("document.querySelector('[data-testid=working-status]')?.textContent.includes('응답 종료')", "단독 이미지 요청 응답 종료");
+  await pasteFixtureImage();
+  await session.wait(`!!${preview}`, "명령 접두어와 함께 보낼 이미지 첨부");
+  await session.input("/model");
+  await session.wait("!document.querySelector('[data-testid=slash-command-list]') && !document.querySelector('[data-testid=send-button]').disabled", "이미지와 슬래시 텍스트를 함께 일반 메시지로 보낼 수 있음");
+  await session.click("[data-testid=send-button]");
+  await session.wait("document.querySelector('[data-testid=working-status]')?.textContent.includes('응답 종료') && !document.querySelector('dialog[open]')", "이미지가 붙은 슬래시 텍스트로 일반 응답을 받고 모델 선택기는 열지 않음");
+  const mixedCalls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
+  const mixed = object(mixedCalls.filter(call => call.method === "turn/start").at(-1)?.params).input;
+  if (!Array.isArray(mixed) || object(mixed[0]).text !== "/model" || object(mixed[1]).url !== url) {
+    throw Error("이미지가 붙은 슬래시 텍스트가 일반 Native 요청과 일치하지 않습니다.");
+  }
+  checks.push("텍스트·이미지 혼합 전송, 이미지 단독 전송, 슬래시 텍스트가 붙은 이미지 전송, 제거와 실패 초안 복원, 텍스트 붙여넣기 비차단 확인");
 }
 
 let session: Awaited<ReturnType<typeof start>> | null = null;
@@ -1095,7 +1107,10 @@ try {
     await submit("성능 스트리밍 중단 확인");
     await session.wait("document.querySelector('[data-testid=interrupt-button]')", "실행 중 입력 상태");
     await session.input("/");
-    await session.wait("!document.querySelector('[data-testid=slash-command-list]')", "실행 중에는 슬래시 명령을 열지 않음");
+    await session.wait(
+      "document.querySelector('[data-testid=interrupt-button]') && Array.from(document.querySelectorAll('[data-testid=slash-command-option]'), option => option.textContent).join(',')==='/btw'",
+      "실행 중에는 사이드 질문만 슬래시 메뉴에 표시",
+    );
     await session.click('[data-testid="interrupt-button"]');
     await session.wait("!document.querySelector('[data-testid=interrupt-button]')", "중단 뒤 슬래시 명령 입력 게이트 해제");
     const calls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
