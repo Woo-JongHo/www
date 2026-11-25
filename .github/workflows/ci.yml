@@ -195,6 +195,15 @@ jobs:
           bun-version: 1.4.0
       - run: npm.cmd ci
       - run: npm.cmd install --global @openai/codex@0.167.2
+      - name: 검토 읽기 검사에 필요한 ripgrep 준비
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $true
+          if (-not (Get-Command rg.exe -CommandType Application -ErrorAction SilentlyContinue)) {
+            choco install ripgrep --version=15.2.0 --yes --no-progress
+          }
+          rg.exe --version
       - name: 공개 BoxBox headless 설치
         shell: pwsh
         run: |
