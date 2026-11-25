@@ -10,6 +10,7 @@ import { cleanVerificationCaches, stopVerificationApp } from "./evidence-retenti
 type Data = Record<string, unknown>;
 const object = (value: unknown): Data => value && typeof value === "object" && !Array.isArray(value) ? value as Data : {};
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const projectNavigationOnly = process.argv.includes("--project-navigation-only");
 async function run(mode: "empty" | "multiple") {
 const evidence = await fs.mkdtemp(path.join(root, `.www/evidence/home-${mode}-`));
 const workspace = path.join(evidence, "rpa-a");
@@ -116,6 +117,7 @@ try {
     await screenshot("empty-www-dashboard");
   } else {
     await wait("document.querySelectorAll('.home-project-row').length===2 && document.querySelector('[data-testid=\"open-current-workspace\"]')?.disabled===false && document.querySelector('.dashboard-captured')", "등록 RPA 두 개와 전체 보드 준비");
+    await wait("document.querySelectorAll('.dashboard-coverage-item button').length===0 && document.querySelector('.dashboard-coverage')?.textContent.includes('수집 완료')", "중앙 수집 상태를 유지하고 프로젝트 열기 진입 버튼 제거");
     const cards = `Array.from(document.querySelectorAll('.dashboard-card')).map(n=>({project:n.querySelector('.dashboard-card-project').textContent,title:n.querySelector('strong').textContent}))`;
     await wait(`(()=>{const x=${cards};return x.some(c=>c.project==='rpa-a'&&c.title==='RPA A 고유 카드')&&x.some(c=>c.project==='rpa-b'&&c.title==='RPA B 고유 카드')&&x.some(c=>c.project==='WWW')})()`, "전체 보드에 RPA A·B와 WWW 실제 카드");
     const globalCards = await evalPage(cards);
@@ -125,6 +127,7 @@ try {
     const cardsB = group("rpa-b");
     const cardsWww = group("WWW");
     if (cardsA.length !== 1 || cardsB.length !== 1 || !cardsWww.length) throw Error("전체 보드 프로젝트별 fixture 집합 오류");
+    if (!projectNavigationOnly) {
     const scopedCards = await evalPage("Array.from(document.querySelectorAll('.dashboard-card')).map(n=>({project:n.querySelector('.dashboard-card-project')?.textContent,key:n.dataset.projectKey,id:n.dataset.workId}))");
     if (!Array.isArray(scopedCards)) throw Error("프로젝트별 카드 식별 없음");
     const scopedCard = (name: string): string => {
@@ -273,8 +276,23 @@ try {
     await wait(visible('[data-testid="view-page"]'), "WWW 보드에서 전체 보기 복귀");
     await wait("!document.querySelector('.dashboard-detail')", '전체 보기 복귀에도 이전 프로젝트 상세가 나타나지 않음');
     await noNative("WWW 보드에서 전체 보기 복귀");
-    await click(`button[title=${JSON.stringify(workspace)}]`);
+    }
+    await command('Emulation.setDeviceMetricsOverride', { width: 720, height: 680, deviceScaleFactor: 1, mobile: false });
+    await evalPage(`document.querySelector(${JSON.stringify(`button[title=${JSON.stringify(workspace)}]`)})?.focus()`);
+    await wait(`document.activeElement===document.querySelector(${JSON.stringify(`button[title=${JSON.stringify(workspace)}]`)})`, "좁은 창의 RPA 목록 키보드 초점");
+    await command('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', text: '\r', unmodifiedText: '\r', windowsVirtualKeyCode: 13 });
+    await command('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 });
     await target("RPA", workspace);
+    await click('[data-testid="chat-nav"]');
+    await wait(`${visible('main.work')} && document.querySelector('[data-testid="prompt-input"]')`, "RPA 대화 화면과 입력창");
+    await click('[data-testid="prompt-input"]');
+    await command('Input.insertText', { text: '목록 왕복 뒤에도 남을 초안' });
+    await wait("document.querySelector('[data-testid=\"prompt-input\"]')?.value==='목록 왕복 뒤에도 남을 초안'", "대화 초안 입력");
+    await click('[data-testid="view-page-nav"]');
+    await wait(`${visible('.home-sidebar')} && ${visible('main.work')} && document.querySelector('[data-testid="prompt-input"]')?.value==='목록 왕복 뒤에도 남을 초안'`, "프로젝트 목록을 열어도 중앙 대화와 초안 유지");
+    await click('[data-testid="project-list-close"]');
+    await wait(`${visible('main.work')} && document.querySelector('[data-testid="prompt-input"]')?.value==='목록 왕복 뒤에도 남을 초안'`, "프로젝트 목록을 닫아도 중앙 대화와 초안 유지");
+    await command('Emulation.clearDeviceMetricsOverride');
     await click('[data-testid="view-page-nav"]');
     await click('[data-testid="global-dashboard-nav"]');
     await wait(visible('[data-testid="view-page"]'), "RPA에서 전체 보기 복귀");
@@ -304,5 +322,8 @@ try {
 if (failure) throw failure;
 }
 
-await run("empty");
-await run("multiple");
+if (projectNavigationOnly) await run("multiple");
+else {
+  await run("empty");
+  await run("multiple");
+}

@@ -13,7 +13,6 @@ interface DashboardViewProps {
   error: string | null;
   projectKey?: string;
   onRefresh: () => void;
-  onOpenProject?: (projectKey: string) => void;
   onOpenWork?: (card: DashboardWork) => void;
   onLoadWork?: (card: DashboardWork) => Promise<DashboardWorkDetail>;
   responseWorkKeys?: readonly string[];
@@ -39,7 +38,7 @@ function currentCriteriaLabel(valid: number | undefined, unknown: number | undef
   return `현재 유효 ${valid ?? 0}/${total}${unknown ? ` · 미평가 ${unknown}` : ""}`;
 }
 
-export function DashboardView({ snapshot, loading, error, projectKey, onRefresh, onOpenProject, onOpenWork, onLoadWork, responseWorkKeys = [] }: DashboardViewProps) {
+export function DashboardView({ snapshot, loading, error, projectKey, onRefresh, onOpenWork, onLoadWork, responseWorkKeys = [] }: DashboardViewProps) {
   const [filter, setFilter] = useState("");
   const [showCancelled, setShowCancelled] = useState(false);
   const [selected, setSelected] = useState<{ card: DashboardWork; project: DashboardProject; scope: string } | null>(null);
@@ -143,7 +142,7 @@ export function DashboardView({ snapshot, loading, error, projectKey, onRefresh,
     {!snapshot && !loading && !error && <p className="dashboard-notice">작업 기록을 아직 수집하지 않았습니다.</p>}
     {snapshot && visible.length === 0 && <p className="dashboard-notice">이 범위의 프로젝트 정보가 없습니다.</p>}
     {visible.length > 0 && <div className="dashboard-coverage" aria-label="프로젝트 수집 상태">{visible.map(({ project, coverage, issues, canonicalKey }) => <section key={project.key} className={`dashboard-coverage-item is-${coverage}`}>
-      <div><strong>{project.name}</strong>{canonicalKey && <span>WWW 연결 체크아웃</span>}<span>{coverage === "complete" ? "수집 완료" : coverage === "empty" ? "작업 기록 없음" : coverage === "partial" ? "일부 수집 실패" : "수집 실패"}</span>{onOpenProject && <button type="button" onClick={() => onOpenProject(project.key)}>프로젝트 열기</button>}</div>
+      <div><strong>{project.name}</strong>{canonicalKey && <span>WWW 연결 체크아웃</span>}<span>{coverage === "complete" ? "수집 완료" : coverage === "empty" ? "작업 기록 없음" : coverage === "partial" ? "일부 수집 실패" : "수집 실패"}</span></div>
       {issues.length > 0 && <ul>{issues.map((issue, index) => <li key={`${issue.code}:${issue.path}:${index}`}><strong>{issue.code}</strong> · {issue.path} · {issue.message}</li>)}</ul>}
     </section>)}</div>}
     {incomplete && <p className="dashboard-notice">일부 프로젝트의 작업을 수집하지 못해 전체 작업 수는 확인되지 않았습니다.</p>}
