@@ -37,6 +37,7 @@ describe("Ovis에서 개작한 Chat 입력과 대화 경계", () => {
     const first = blankReadingState();
     first.draft = "저장할 초안";
     expect(blankReadingState().draft).toBe("");
+    expect(blankReadingState().image).toBeUndefined();
   });
 
   test("늦은 다른 스레드 사건을 버리고 연결 사건은 같은 세션 상태로 받는다", () => {
@@ -235,6 +236,12 @@ describe("실제 renderer 전송의 재연결 실패 초안 복구", () => {
       const prompt = state.prompt;
       const promptRef = { get current() { return state.prompt; }, set current(value) { state.prompt = value; } };
       const failedDraftRef = { get current() { return state.failed; }, set current(value) { state.failed = value; } };
+      const imageRef = { current: undefined };
+      const failedImageRef = { current: undefined };
+      const imageReader = { current: null };
+      const setImage = value => { imageRef.current = value; };
+      const setImageReading = () => {};
+      const setHasDraft = () => {};
       const setFailedDraft = value => { state.failed = value; };
       const sendingRef = { current: false };
       const switchingRef = { current: false };

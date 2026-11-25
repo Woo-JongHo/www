@@ -14,7 +14,7 @@ import { createReportService } from "./reports-service";
 import type { createNativeReportHarness } from "./native-reports";
 import { NativeCompletionCollector } from "./native-report-input";
 import { resolveNativeCodex } from "./native-command";
-import { nativeThreadStartParams, nativeTurnSteerParams, WWW_HARNESS_TOOL, WWW_PLAN_TOOL, WWW_STAGE_TOOL } from "./native-chat";
+import { nativeThreadStartParams, nativeTurnSteerParams, validateChatImage, WWW_HARNESS_TOOL, WWW_PLAN_TOOL, WWW_STAGE_TOOL } from "./native-chat";
 import { parseWwwDevelopmentStage, parseWwwHarnessAttempt, parseWwwPlanLink, requestedWwwPlanWorkIds } from "./www-activity";
 import { createNativeLifecycle, createRestoredMessageFilter } from "./native-lifecycle";
 import { createNativeTiming } from "./native-timing";
@@ -1073,13 +1073,14 @@ export function createNativeSession(options: NativeSessionOptions) {
     }
   });
 
-  handle("turn:start", async (_event, expected: unknown, threadId: unknown, text: unknown, model: unknown) => {
+  handle("turn:start", async (_event, expected: unknown, threadId: unknown, text: unknown, model: unknown, image: unknown) => {
     assertSelection(expected);
     const validThreadId = requiredString(threadId, "thread ID");
     assertSelection(expected);
     assertConversationIdle();
     if (validThreadId !== activeThreadId) throw new Error("현재 선택한 대화에만 요청을 보낼 수 있습니다.");
-    if (typeof text !== "string" || !text.trim() || text.length > 100_000) throw new Error("Invalid prompt");
+    const chatImage = validateChatImage(image);
+    if (typeof text !== "string" || (!text.trim() && !chatImage) || text.length > 100_000) throw new Error("Invalid prompt");
     if (model !== undefined && (typeof model !== "string" || !model.trim() || model.length > 200)) throw new Error("유효한 모델을 선택해 주세요.");
     const prompt          = text.trim () ;
     const clientRequestId = randomUUID() ;
@@ -1107,7 +1108,7 @@ export function createNativeSession(options: NativeSessionOptions) {
           return client;
         },
         valid: (client) => isCurrent(expected) && rpc === client && workspace === root && activeThreadId === validThreadId,
-        cwd: root, threadId: validThreadId, prompt, ...(typeof model === "string" ? { model } : {}),
+        cwd: root, threadId: validThreadId, prompt, ...(typeof model === "string" ? { model } : {}), ...(chatImage ? { image: chatImage } : {}),
         requestBoundary: (method, status) => {
           if (method === "thread/read" || method === "thread/resume" || method === "thread/turns/list" || method === "turn/start") trace.mark(method, status);
         },
@@ -1156,12 +1157,13 @@ export function createNativeSession(options: NativeSessionOptions) {
       if (isCurrent(expected)) turnStarting = false;
     }
   });
-  handle("turn:steer", async (_event, expected: unknown, threadId: unknown, turnId: unknown, text: unknown, messageId: unknown) => {
+  handle("turn:steer", async (_event, expected: unknown, threadId: unknown, turnId: unknown, text: unknown, messageId: unknown, image: unknown) => {
     assertSelection(expected);
     const thread = requiredString(threadId, "thread ID");
     const turn = requiredString(turnId, "turn ID");
     const id = requiredString(messageId, "client user message ID");
-    if (id.length > 200 || typeof text !== "string" || !text.trim() || text.length > 100_000) throw new Error("Invalid steer input");
+    const chatImage = validateChatImage(image);
+    if (id.length > 200 || typeof text !== "string" || (!text.trim() && !chatImage) || text.length > 100_000) throw new Error("Invalid steer input");
     if (steerIds.has(id)) throw new Error("이미 전송한 추가 지시 ID입니다.");
     if (steering) throw new Error("이전 추가 지시의 접수를 확인하고 있습니다.");
     if (switchingConversation || turnStarting || compactTurn || lifecycle.approvalCount > 0 || interruptingTurn !== null) throw new Error("시작·승인·중단·압축 처리가 끝난 뒤 추가 지시를 보낼 수 있습니다.");
@@ -1184,7 +1186,7 @@ export function createNativeSession(options: NativeSessionOptions) {
       let value: unknown;
       try {
         value = await Promise.race([
-          client.request("turn/steer", nativeTurnSteerParams(thread, turn, text, id)),
+          client.request("turn/steer", nativeTurnSteerParams(thread, turn, text, id, chatImage)),
           new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new RpcClosedError("추가 지시 응답 시간 초과", true)), 30_000); })
         ]);
       } finally { if (timer) clearTimeout(timer); }

@@ -77,6 +77,7 @@ export function currentTurnEvents(events: readonly AppEvent[], turnId: string | 
 
 export interface ConversationReadingState {
   draft     : string  ;
+  image?    : string  ;
   scrollTop : number  ;
   followTail: boolean ;
 }

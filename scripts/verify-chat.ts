@@ -504,6 +504,46 @@ async function verifyImeEnter(session: Awaited<ReturnType<typeof start>>) {
   checks.push("IME 확정 순서별 최종 본문을 fixture turn/start에서 각각 1회 확인");
 }
 
+async function verifyClipboardImage(session: Awaited<ReturnType<typeof start>>) {
+  const png = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+j0f0AAAAASUVORK5CYII=";
+  const input = "document.querySelector('[data-testid=prompt-input]')";
+  const preview = "document.querySelector('[data-testid=chat-attachment] img')";
+  await session.evaluate(input + ".focus()");
+  const pasteFixtureImage = () => session.evaluate(`(() => {
+    const data = new DataTransfer();
+    const bytes = Uint8Array.from(atob(${JSON.stringify(png)}), character => character.charCodeAt(0));
+    data.items.add(new File([bytes], "screenshot.png", {type:"image/png"}));
+    ${input}.dispatchEvent(new ClipboardEvent("paste", {clipboardData:data,bubbles:true,cancelable:true}));
+  })()`);
+  const textPasteUnblocked = await session.evaluate(`(() => {
+    const data = new DataTransfer(); data.setData("text/plain", "여러 줄\\n텍스트");
+    const event = new ClipboardEvent("paste", {clipboardData:data,bubbles:true,cancelable:true});
+    ${input}.dispatchEvent(event); return !event.defaultPrevented;
+  })()`);
+  if (textPasteUnblocked !== true) throw Error("기존 텍스트 붙여넣기를 이미지 첨부가 가로챘습니다.");
+  await pasteFixtureImage();
+  await session.wait(`!!${preview} && !document.querySelector('[data-testid=send-button]').disabled`, "이미지 미리보기와 단독 전송 가능");
+  await session.click("[data-testid=chat-attachment] button");
+  await session.wait(`!${preview} && document.querySelector('[data-testid=send-button]').disabled`, "이미지 제거 후 빈 입력 전송 차단");
+  await pasteFixtureImage();
+  await session.wait(`!!${preview}`, "이미지 다시 첨부");
+  await session.input("이미지 전송 실패 확인");
+  await session.click("[data-testid=send-button]");
+  await session.wait(`!!${preview} && ${input}.value==='이미지 전송 실패 확인' && document.body.innerText.includes('합성 전송 실패')`, "전송 실패 시 이미지와 텍스트 복원");
+  await session.input("");
+  await session.click("[data-testid=send-button]");
+  await session.wait(`!${preview} && ${input}.value===''`, "이미지만 보내고 초안 비우기");
+  const calls = (await fs.readFile(path.join(workspace, "fixture-calls.jsonl"), "utf8")).trim().split("\n").map(line => object(JSON.parse(line)));
+  const turns = calls.filter(call => call.method === "turn/start").map(call => object(call.params).input);
+  const url = "data:image/png;base64," + png;
+  if (!Array.isArray(turns[0]) || turns[0].length !== 2 || object(turns[0][0]).text !== "이미지 전송 실패 확인"
+      || object(turns[0][1]).url !== url || object(turns[0][1]).type !== "image"
+      || !Array.isArray(turns[1]) || turns[1].length !== 1 || object(turns[1][0]).type !== "image" || object(turns[1][0]).url !== url) {
+    throw Error("텍스트와 이미지의 Native stdio 요청이 일치하지 않습니다.");
+  }
+  checks.push("텍스트·이미지 혼합 전송, 이미지 단독 전송, 제거와 실패 초안 복원, 텍스트 붙여넣기 비차단 확인");
+}
+
 let session: Awaited<ReturnType<typeof start>> | null = null;
 async function verifyChat() {
 try {
@@ -546,6 +586,15 @@ try {
     const summary = { result: "passed", scope: "compose-note-only", evidence: directory, checks };
     await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
     console.log(JSON.stringify(summary));
+    return;
+  }
+  if (process.argv.includes("--clipboard-image-only")) {
+    await verifyClipboardImage(session);
+    await session.terminate();
+    session = null;
+    const summary = { result: "passed", scope: "clipboard-image-only", checks };
+    await fs.writeFile(path.join(directory, "summary.json"), JSON.stringify(summary, null, 2));
+    console.log(JSON.stringify({ evidence: directory, summary }));
     return;
   }
   if (process.argv.includes("--ime-enter-only")) {

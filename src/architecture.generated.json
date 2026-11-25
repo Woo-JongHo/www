@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "digest"       : "8aa96d643ad4a45152ec975befc0120fa280c9a168f97fc2947744cf17bd6768",
+  "digest"       : "39a76c554549db7afe3608c3c58172ff156643dd3b593ca6fb30d43fe9a0a102",
   "scope"        : "src와 scripts/workflow의 TypeScript (선언 파일 제외), build.ts, workflow.ts, source-policy.ts, generate-architecture.ts, architecture-contract.ts, check-architecture.ts",
   "layers": [
     {
@@ -521,8 +521,8 @@
       "layer"      : "presentation",
       "role"       : "앱 모듈 · chat-composer",
       "line"       : 1,
-      "lines"      : 126,
-      "digest"     : "e111bc8246097561a55abd16d4e7cce15f615502ec0572486f9f13482607fbd0",
+      "lines"      : 149,
+      "digest"     : "d565b218df1ce537ce066d74fe7451cea4da2118c624c337b8d014e24b97bfae",
       "structureId": "arch.chat.workspace"
     },
     {
@@ -554,8 +554,8 @@
       "layer"      : "model",
       "role"       : "앱 모듈 · chat-state",
       "line"       : 1,
-      "lines"      : 225,
-      "digest"     : "68cc8b0e3873e302ea21e9b5b8695075e55673d53c0b5237e061df0a2ef2bff9",
+      "lines"      : 226,
+      "digest"     : "b4e5774fd20fa9203796944372ebd70c637e054cfed2fe7583f29eef77aede84",
       "structureId": "arch.chat.sessions.reading"
     },
     {
@@ -730,8 +730,8 @@
       "layer"      : "model",
       "role"       : "앱 모듈 · native-chat",
       "line"       : 1,
-      "lines"      : 94,
-      "digest"     : "ba010e42269e397c79f7e5548f95e419fc9c2c02488878d0607a071c141ee431",
+      "lines"      : 117,
+      "digest"     : "1df3a89937f155ce5b0232c76bec3ea0ebe2764ee780d1d94e61661aca7ed13d",
       "structureId": "arch.chat.sessions.requests"
     },
     {
@@ -752,8 +752,8 @@
       "layer"      : "host",
       "role"       : "앱 모듈 · native-lifecycle",
       "line"       : 1,
-      "lines"      : 202,
-      "digest"     : "5e749c66a8bea6aafc5ffc2aa4e6ee4af73f745b57826016d42c855945487f59",
+      "lines"      : 203,
+      "digest"     : "7880b2291fd931083c8743e2937ac03f07caf13a011ec7f2d96878906f701ba5",
       "structureId": "arch.native.lifecycle"
     },
     {
@@ -785,8 +785,8 @@
       "layer"      : "host",
       "role"       : "앱 모듈 · native-session",
       "line"       : 1,
-      "lines"      : 1296,
-      "digest"     : "065fd85c6dbb769c1c149b441234fecdfff1ea32ae4b4869f10e175225afc9b9",
+      "lines"      : 1298,
+      "digest"     : "840e8f0aec99f4f301b34426df2b5782f323b7e7f481a8b45271ac74b34ee4dd",
       "structureId": "arch.native.lifecycle"
     },
     {
@@ -808,7 +808,7 @@
       "role"       : "제한된 WwwApi 노출",
       "line"       : 1,
       "lines"      : 66,
-      "digest"     : "80f1d5ac82b1c8dda9c8ef2c3d2cc0b33cc99cbc935a3c9a26581f668480efb8",
+      "digest"     : "d21bd012e1122e5524ec51dee9183f90e167492cd5314e36a88f7b39c3752227",
       "structureId": "arch.native.bridge"
     },
     {
@@ -840,8 +840,8 @@
       "layer"      : "presentation",
       "role"       : "화면 전환과 대화 상태 통합",
       "line"       : 1,
-      "lines"      : 1469,
-      "digest"     : "9a4dd1a4d5a800cf6685c6cc398c030285782b8dc7ce1ac788e6d773a0997265",
+      "lines"      : 1510,
+      "digest"     : "8a5a1a1874d410ed9e26c682a3f4e051349f8f8fe2255e42bde6e98f36227b67",
       "structureId": "arch.chat.workspace"
     },
     {
@@ -918,7 +918,7 @@
       "role"       : "앱 모듈 · session-api",
       "line"       : 1,
       "lines"      : 50,
-      "digest"     : "3e20cd508dfe5e87f7adbfc0b60e0acf65b92be59adda7cc971d6c7e7f295bec",
+      "digest"     : "7485db0e0c4ec14c85009931995c08c70825dcf11eb6dcb54ee94373bd6ea172",
       "structureId": "arch.native.protocol"
     },
     {
@@ -950,8 +950,8 @@
       "layer"      : "contract",
       "role"       : "프로세스 간 공용 타입 계약",
       "line"       : 1,
-      "lines"      : 320,
-      "digest"     : "5499d27ef1465eea9c5f1a0c055096cd1ca38b51ed29395d4cb20fac5c5284c5",
+      "lines"      : 322,
+      "digest"     : "bb417a10ed8541a021dd32cfe01b2b6636d7b1c236f62396f5036985555ac593",
       "structureId": "arch.native.protocol"
     },
     {
@@ -2521,12 +2521,23 @@
     {
       "id"       : "src/chat-composer.tsx:322",
       "from"     : "src/chat-composer.tsx",
+      "to"       : "src/shared.ts",
+      "mode"     : "runtime",
+      "syntax"   : "import",
+      "specifier": "./shared",
+      "line"     : 8,
+      "endLine"  : 8,
+      "statement": "import { CHAT_IMAGE_TYPES, MAX_CHAT_IMAGE_BYTES } from './shared';"
+    },
+    {
+      "id"       : "src/chat-composer.tsx:389",
+      "from"     : "src/chat-composer.tsx",
       "to"       : "src/chat-status.ts",
       "mode"     : "type",
       "syntax"   : "import",
       "specifier": "./chat-status",
-      "line"     : 8,
-      "endLine"  : 8,
+      "line"     : 9,
+      "endLine"  : 9,
       "statement": "import type { chatStatus } from './chat-status';"
     },
     {
@@ -3242,10 +3253,10 @@
       "specifier": "./native-chat",
       "line"     : 17,
       "endLine"  : 17,
-      "statement": "import { nativeThreadStartParams, nativeTurnSteerParams, WWW_HARNESS_TOOL, WWW_PLAN_TOOL, WWW_STAGE_TOOL } from \"./native-chat\";"
+      "statement": "import { nativeThreadStartParams, nativeTurnSteerParams, validateChatImage, WWW_HARNESS_TOOL, WWW_PLAN_TOOL, WWW_STAGE_TOOL } from \"./native-chat\";"
     },
     {
-      "id"       : "src/native-session.ts:967",
+      "id"       : "src/native-session.ts:986",
       "from"     : "src/native-session.ts",
       "to"       : "src/www-activity.ts",
       "mode"     : "runtime",
@@ -3256,7 +3267,7 @@
       "statement": "import { parseWwwDevelopmentStage, parseWwwHarnessAttempt, parseWwwPlanLink, requestedWwwPlanWorkIds } from \"./www-activity\";"
     },
     {
-      "id"       : "src/native-session.ts:1093",
+      "id"       : "src/native-session.ts:1112",
       "from"     : "src/native-session.ts",
       "to"       : "src/native-lifecycle.ts",
       "mode"     : "runtime",
@@ -3267,7 +3278,7 @@
       "statement": "import { createNativeLifecycle, createRestoredMessageFilter } from \"./native-lifecycle\";"
     },
     {
-      "id"       : "src/native-session.ts:1182",
+      "id"       : "src/native-session.ts:1201",
       "from"     : "src/native-session.ts",
       "to"       : "src/native-timing.ts",
       "mode"     : "runtime",
@@ -3278,7 +3289,7 @@
       "statement": "import { createNativeTiming } from \"./native-timing\";"
     },
     {
-      "id"       : "src/native-session.ts:1236",
+      "id"       : "src/native-session.ts:1255",
       "from"     : "src/native-session.ts",
       "to"       : "src/activity-sidebar.ts",
       "mode"     : "runtime",
@@ -3289,7 +3300,7 @@
       "statement": "import { parseHooksListResponse, parseSkillsListResponse } from \"./activity-sidebar\";"
     },
     {
-      "id"       : "src/native-session.ts:1322",
+      "id"       : "src/native-session.ts:1341",
       "from"     : "src/native-session.ts",
       "to"       : "src/activity-ledger.ts",
       "mode"     : "type",
@@ -3300,7 +3311,7 @@
       "statement": "import type { ActivityLedger } from \"./activity-ledger\";"
     },
     {
-      "id"       : "src/native-session.ts:1379",
+      "id"       : "src/native-session.ts:1398",
       "from"     : "src/native-session.ts",
       "to"       : "src/projects.ts",
       "mode"     : "runtime",
@@ -3311,7 +3322,7 @@
       "statement": "import { createProjectRegistry } from \"./projects\";"
     },
     {
-      "id"       : "src/native-session.ts:1431",
+      "id"       : "src/native-session.ts:1450",
       "from"     : "src/native-session.ts",
       "to"       : "src/dashboard.ts",
       "mode"     : "runtime",
@@ -3322,7 +3333,7 @@
       "statement": "import { readDashboard, readDashboardPlan, readDashboardWork } from \"./dashboard\";"
     },
     {
-      "id"       : "src/native-session.ts:1514",
+      "id"       : "src/native-session.ts:1533",
       "from"     : "src/native-session.ts",
       "to"       : "src/rpa-standard.ts",
       "mode"     : "runtime",
@@ -3333,7 +3344,7 @@
       "statement": "import { readRpaStandard } from \"./rpa-standard\";"
     },
     {
-      "id"       : "src/native-session.ts:1564",
+      "id"       : "src/native-session.ts:1583",
       "from"     : "src/native-session.ts",
       "to"       : "src/native-activity.ts",
       "mode"     : "runtime",
@@ -3344,7 +3355,7 @@
       "statement": "import { normalizeNativeResources } from \"./native-activity\";"
     },
     {
-      "id"       : "src/native-session.ts:1626",
+      "id"       : "src/native-session.ts:1645",
       "from"     : "src/native-session.ts",
       "to"       : "src/shared.ts",
       "mode"     : "type",
@@ -7224,7 +7235,7 @@
         "line": 2
       }
     ],
-    "digest": "eb9c91e21cd96f0964d21e1daf8fc2db0fa3b1a7b61f09cdb9e4cc37620227ed",
+    "digest": "b4fa7408fe347340d84ee03e4ffd0296f91d7befa3137d8079a535e7bcf0e070",
     "statecharts": {
       "models": [
         {
