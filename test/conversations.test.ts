@@ -135,16 +135,24 @@ for (const status of ["completed", "failed", "interrupted", "declined", "inProgr
 test("실제 stdio subprocess를 재시작한 뒤 같은 Native thread ID와 누적 대화를 다시 연다", async () => {
   const directory = await mkdtemp(join(tmpdir(), "www-conversations-")) ;
   const store     = join(directory, "history.json")                     ;
+  const fixtureNode = process.env.npm_node_execpath || "node";
   const start = () => {
-    const child = spawn(process.execPath, [join(import.meta.dir, "fixtures/conversations-app-server.ts")], { stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, WWW_CONVERSATION_FIXTURE_STORE: store } });
-    return { child, client: new JsonRpcClient(child) };
+    const child = spawn(fixtureNode, [join(import.meta.dir, "fixtures/conversations-app-server.ts")], {
+      shell: false, stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, WWW_CONVERSATION_FIXTURE_STORE: store }
+    });
+    const closed = new Promise<void>(resolve => child.once("close", () => resolve()));
+    const stop = async () => {
+      if (child.exitCode === null && child.signalCode === null) child.kill();
+      await closed;
+    };
+    return { client: new JsonRpcClient(child), stop };
   };
   let running = start();
   try {
     await running.client.request("initialize", {});
     await running.client.request("thread/start", { cwd });
     await running.client.request("turn/start", { threadId: "thread-persisted", input: [{ type: "text", text: "재시작 전 요청" }] });
-    running.child.kill();
+    await running.stop();
     running = start();
     await running.client.request("initialize", {});
     await expect(running.client.request("turn/start", { threadId: "thread-persisted", input: [{ type: "text", text: "복원 전 거부" }] })).rejects.toThrow("thread/resume");
@@ -157,7 +165,7 @@ test("실제 stdio subprocess를 재시작한 뒤 같은 Native thread ID와 누
     const reopened = await service.open(opened.threadId);
     expect(project(events(reopened.events)).blocks.filter((block) => block.kind === "user")).toHaveLength(2);
   } finally {
-    running.child.kill();
+    await running.stop();
     await rm(directory, { recursive: true, force: true });
   }
 }, 10_000);

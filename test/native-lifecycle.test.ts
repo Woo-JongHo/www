@@ -254,11 +254,19 @@ test("실제 main은 같은 lifecycle seam을 사용하고 closed에서 준비 �
 test("main과 같은 lifecycle seam은 실제 subprocess 재시작 때 resume 선행 후 한 번만 전송한다", async () => {
   const directory = await mkdtemp(join(tmpdir(), "www-lifecycle-"));
   const lifecycle = createNativeLifecycle(() => {});
+  const fixtureNode = process.env.npm_node_execpath || "node";
   const start = () => {
-    const child = spawn(process.execPath, [join(import.meta.dir, "fixtures/conversations-app-server.ts")], {
-      stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, WWW_CONVERSATION_FIXTURE_STORE: join(directory, "history.json") }
+    const child = spawn(fixtureNode, [join(import.meta.dir, "fixtures/conversations-app-server.ts")], {
+      shell: false, stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, WWW_CONVERSATION_FIXTURE_STORE: join(directory, "history.json") }
     });
-    return { child, client: new JsonRpcClient(child) };
+    const client = new JsonRpcClient(child);
+    client.once("closed", (error: Error) => lifecycle.closed(client, error.message));
+    const closed = new Promise<void>(resolve => child.once("close", () => resolve()));
+    const stop = async () => {
+      if (child.exitCode === null && child.signalCode === null) child.kill();
+      await closed;
+    };
+    return { client, stop };
   };
   let running = start();
   let current: JsonRpcClient | null = running.client;
@@ -266,8 +274,7 @@ test("main과 같은 lifecycle seam은 실제 subprocess 재시작 때 resume �
     await running.client.request("initialize", {});
     await running.client.request("thread/start", { cwd });
     lifecycle.markReady(running.client, cwd, threadId);
-    running.child.kill();
-    lifecycle.closed(running.client, "restart");
+    await running.stop();
     running = start();
     current = running.client;
     await current.request("initialize", {});
@@ -282,7 +289,11 @@ test("main과 같은 lifecycle seam은 실제 subprocess 재시작 때 resume �
     const opened = await lifecycle.open(current, cwd, threadId, () => true);
     expect(opened.events.filter((event) => event.method === "turn/userPrompt")).toHaveLength(1);
     expect(JSON.stringify(opened.events)).toContain("재시작 뒤 새 요청");
-  } finally { current = null; running.child.kill(); await rm(directory, { recursive: true, force: true }); }
+  } finally {
+    current = null;
+    await running.stop();
+    await rm(directory, { recursive: true, force: true });
+  }
 }, 10_000);
 
 test("pending connect closed 중에도 첫 start가 정리되기 전 중첩 전송을 거부한다", async () => {
