@@ -12,7 +12,7 @@ import { createConversationService, restoreConversationEvents } from "../src/con
 import { project } from "../src/projection";
 import { JsonRpcClient } from "../src/rpc";
 import type { AppEvent } from "../src/shared";
-import { watchConversationRestart } from "./fixtures/conversations-watchdog";
+import { watchConversationRestart, watchConversationWire } from "./fixtures/conversations-watchdog";
 
 const cwd    = "/workspace/project"                                                                                                                             ;
 const thread = { id: "thread-1", cwd, originator: "www", source: "vscode", preview: "첫 요청", updatedAt: 50, status: { type: "notLoaded" }, ephemeral: false } ;
@@ -139,17 +139,18 @@ test("실제 stdio subprocess를 재시작한 뒤 같은 Native thread ID와 누
   const fixtureNode = process.env.npm_node_execpath || "node";
   const start = () => {
     const child = spawn(fixtureNode, [join(import.meta.dir, "fixtures/conversations-app-server.ts")], {
-      shell: false, stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, WWW_CONVERSATION_FIXTURE_STORE: store }
+      shell: false, stdio: ["pipe", "pipe", "pipe"],
+      env: { ...process.env, WWW_CONVERSATION_FIXTURE_STORE: store, WWW_CONVERSATION_FIXTURE_TRACE: "1" }
     });
     const closed = new Promise<void>(resolve => child.once("close", () => resolve()));
     const stop = async () => {
       if (child.exitCode === null && child.signalCode === null) child.kill();
       await closed;
     };
-    return { child, client: new JsonRpcClient(child), stop };
+    return { child, client: new JsonRpcClient(child), wire: watchConversationWire(child), stop };
   };
   let running = start();
-  const trace = watchConversationRestart("conversations", () => running.child);
+  const trace = watchConversationRestart("conversations", () => running);
   try {
     await trace.step("first/initialize", () => running.client.request("initialize", {}));
     await trace.step("first/thread-start", () => running.client.request("thread/start", { cwd }));
@@ -157,7 +158,10 @@ test("실제 stdio subprocess를 재시작한 뒤 같은 Native thread ID와 누
     await trace.step("first/close", () => running.stop());
     running = start();
     await trace.step("second/initialize", () => running.client.request("initialize", {}));
-    await trace.step("second/turn-before-resume", () => expect(running.client.request("turn/start", { threadId: "thread-persisted", input: [{ type: "text", text: "복원 전 거부" }] })).rejects.toThrow("thread/resume"));
+    await trace.step("second/turn-before-resume", () => {
+      const request = running.wire.trackRequest(running.client.request("turn/start", { threadId: "thread-persisted", input: [{ type: "text", text: "복원 전 거부" }] }));
+      return expect(request).rejects.toThrow("thread/resume");
+    });
     const service = createConversationService(running.client, cwd) ;
     const listed = await trace.step("second/thread-list", () => service.list());
     expect(listed.threads[0]?.id).toBe("thread-persisted");

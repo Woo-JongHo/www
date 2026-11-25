@@ -12,7 +12,7 @@ import { createDevelopmentService } from "../src/development";
 import { runInNewContext } from "node:vm";
 import type { ConversationEvent } from "../src/conversations";
 import type { RpcId } from "../src/shared";
-import { watchConversationRestart } from "./fixtures/conversations-watchdog";
+import { watchConversationRestart, watchConversationWire } from "./fixtures/conversations-watchdog";
 
 const cwd      = "/workspace/project" ;
 const threadId = "thread-persisted"   ;
@@ -258,7 +258,8 @@ test("main과 같은 lifecycle seam은 실제 subprocess 재시작 때 resume �
   const fixtureNode = process.env.npm_node_execpath || "node";
   const start = () => {
     const child = spawn(fixtureNode, [join(import.meta.dir, "fixtures/conversations-app-server.ts")], {
-      shell: false, stdio: ["pipe", "pipe", "pipe"], env: { ...process.env, WWW_CONVERSATION_FIXTURE_STORE: join(directory, "history.json") }
+      shell: false, stdio: ["pipe", "pipe", "pipe"],
+      env: { ...process.env, WWW_CONVERSATION_FIXTURE_STORE: join(directory, "history.json"), WWW_CONVERSATION_FIXTURE_TRACE: "1" }
     });
     const client = new JsonRpcClient(child);
     client.once("closed", (error: Error) => lifecycle.closed(client, error.message));
@@ -267,11 +268,11 @@ test("main과 같은 lifecycle seam은 실제 subprocess 재시작 때 resume �
       if (child.exitCode === null && child.signalCode === null) child.kill();
       await closed;
     };
-    return { child, client, stop };
+    return { child, client, wire: watchConversationWire(child), stop };
   };
   let running = start();
   let current: JsonRpcClient | null = running.client;
-  const trace = watchConversationRestart("native-lifecycle", () => running.child);
+  const trace = watchConversationRestart("native-lifecycle", () => running);
   try {
     await trace.step("first/initialize", () => running.client.request("initialize", {}));
     await trace.step("first/thread-start", () => running.client.request("thread/start", { cwd }));
@@ -281,7 +282,10 @@ test("main과 같은 lifecycle seam은 실제 subprocess 재시작 때 resume �
     current = running.client;
     const restarted = running.client;
     await trace.step("second/initialize", () => restarted.request("initialize", {}));
-    await trace.step("second/turn-before-resume", () => expect(restarted.request("turn/start", { threadId, input: [{ type: "text", text: "복원 없이 거부" }] })).rejects.toThrow("resume"));
+    await trace.step("second/turn-before-resume", () => {
+      const request = running.wire.trackRequest(restarted.request("turn/start", { threadId, input: [{ type: "text", text: "복원 없이 거부" }] }));
+      return expect(request).rejects.toThrow("resume");
+    });
     let restored = false;
     await trace.step("second/lifecycle-start", () => lifecycle.start({
       connect: async () => running.client, valid: (client) => client === current,
